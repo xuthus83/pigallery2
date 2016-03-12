@@ -3,6 +3,7 @@
 import * as _express from 'express';
 import * as _debug from 'debug';
 import * as _http from 'http';
+import * as path from 'path';
 
 
 export class Server {
@@ -23,8 +24,14 @@ export class Server {
         }
 
 
-        this.app.use(_express.static(__dirname +'./../frontend'));
-        this.app.use('/node_modules',_express.static(__dirname +'./../node_modules'));
+        this.app.use(_express.static(path.resolve(__dirname, './../frontend')));
+        this.app.use('/node_modules',_express.static(path.resolve(__dirname, './../node_modules')));
+        this.app.use('/common',_express.static(path.resolve(__dirname, './../common'))); //TODO:remove after adding webpack
+
+        var renderIndex = (req: _express.Request, res: _express.Response) => {
+            res.sendFile(path.resolve(__dirname, './../frontend/index.html'));
+        };
+        this.app.get('/*', renderIndex);
 
 
 

@@ -1,4 +1,7 @@
+///<reference path="../../../typings/tsd.d.ts"/>
+
 import { Component, OnInit } from 'angular2/core';
+import {User} from '../../../common/enities/User';
 
 @Component({
     selector: 'login',
@@ -6,6 +9,9 @@ import { Component, OnInit } from 'angular2/core';
     styleUrls: ['app/login/login.component.css']
 })
 export class LoginComponent{
-    constructor() { }
+    user:User;
+    constructor() {
+        this.user = new User();
+    }
 }
 
