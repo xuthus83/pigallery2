@@ -1,7 +1,8 @@
 ///<reference path="../../../typings/tsd.d.ts"/>
 
 import { Component, OnInit } from 'angular2/core';
-import {User} from '../../../common/enities/User';
+import {LoginCredential} from '../../../common/entities/LoginCredential';
+import {LoginService} from "./login.service";
 
 @Component({
     selector: 'login',
@@ -9,9 +10,9 @@ import {User} from '../../../common/enities/User';
     styleUrls: ['app/login/login.component.css']
 })
 export class LoginComponent{
-    user:User;
-    constructor() {
-        this.user = new User();
+    user: LoginCredential;
+    constructor(private _loginService: LoginService) {
+        this.user = new LoginCredential();
     }
 }
 

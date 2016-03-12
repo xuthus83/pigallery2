@@ -3,6 +3,8 @@
 import { Component } from 'angular2/core';
 import { RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS } from 'angular2/router';
 import {LoginComponent} from "./login/login.component";
+import {NetworkService} from "./model/network.service";
+import {LoginService} from "./login/login.service";
 
 
 
@@ -12,7 +14,9 @@ import {LoginComponent} from "./login/login.component";
     template: `<router-outlet></router-outlet>`,
     directives: [ROUTER_DIRECTIVES],
     providers: [
-        ROUTER_PROVIDERS
+        ROUTER_PROVIDERS,
+        NetworkService,
+        LoginService
     ]
 })
 @RouteConfig([

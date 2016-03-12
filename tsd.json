@@ -19,6 +19,12 @@
     },
     "serve-static/serve-static.d.ts": {
       "commit": "0d622d857f97d44ea7dcad2b3edec1f23c48fe9e"
+    },
+    "socket.io/socket.io.d.ts": {
+      "commit": "d22516f9f089de107d7e7d5938566377370631f6"
+    },
+    "socket.io-client/socket.io-client.d.ts": {
+      "commit": "d22516f9f089de107d7e7d5938566377370631f6"
     }
   }
 }
