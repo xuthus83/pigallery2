@@ -10,6 +10,15 @@
     },
     "node/node.d.ts": {
       "commit": "0d622d857f97d44ea7dcad2b3edec1f23c48fe9e"
+    },
+    "debug/debug.d.ts": {
+      "commit": "0d622d857f97d44ea7dcad2b3edec1f23c48fe9e"
+    },
+    "mime/mime.d.ts": {
+      "commit": "0d622d857f97d44ea7dcad2b3edec1f23c48fe9e"
+    },
+    "serve-static/serve-static.d.ts": {
+      "commit": "0d622d857f97d44ea7dcad2b3edec1f23c48fe9e"
     }
   }
 }

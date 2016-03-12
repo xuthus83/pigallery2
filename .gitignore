@@ -4,6 +4,8 @@ node_modules/
 typings/
 frontend/*/*.js
 frontend/*/*.js.map
+frontend/*.js
+frontend/*.js.map
 backend/*/*.js
 backend/*/*.js.map
 backend/*.js
