@@ -5,6 +5,11 @@ import { RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS } from 'angular2/route
 import {LoginComponent} from "./login/login.component";
 import {NetworkService} from "./model/network.service";
 import {LoginService} from "./login/login.service";
+import {AuthenticationService} from "./model/authentication.service";
+import {GalleryComponent} from "./gallery/gallery.component";
+import {OnInit} from "angular2/core";
+import {User} from "../../common/entities/User";
+import {Router} from "angular2/router";
 
 
 
@@ -16,6 +21,7 @@ import {LoginService} from "./login/login.service";
     providers: [
         ROUTER_PROVIDERS,
         NetworkService,
+        AuthenticationService,
         LoginService
     ]
 })
@@ -25,10 +31,22 @@ import {LoginService} from "./login/login.service";
         name: 'Login',
         component: LoginComponent,
         useAsDefault: true
+    },
+    {
+        path: '/gallery',
+        name: 'Gallery',
+        component: GalleryComponent
     }
 ])
-export class AppComponent {
-    constructor(){
+export class AppComponent  implements OnInit{
 
+    constructor(private _router: Router ,private _authenticationService: AuthenticationService){
+    }
+
+    ngOnInit() {
+        this._authenticationService.OnAuthenticated.on((user:User) =>
+        {
+            this._router.navigate(["Gallery"]);
+        });
     }
 }

@@ -4,6 +4,7 @@ import * as _express from 'express';
 import * as _debug from 'debug';
 import * as _http from 'http';
 import * as path from 'path';
+import {NetworkManager} from "./NetworkManager";
 
 
 export class Server {
@@ -46,6 +47,7 @@ export class Server {
         this.server.on('error', this.onError);
         this.server.on('listening', this.onListening);
 
+        new NetworkManager(this.server);
 
     }
 

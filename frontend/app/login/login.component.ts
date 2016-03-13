@@ -14,5 +14,9 @@ export class LoginComponent{
     constructor(private _loginService: LoginService) {
         this.user = new LoginCredential();
     }
+
+    onLogin(){
+        this._loginService.login(this.user);
+    }
 }
 
