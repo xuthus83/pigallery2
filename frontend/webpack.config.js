@@ -2,10 +2,10 @@ var webpack = require('webpack');
 var CommonsChunkPlugin = require("webpack/lib/optimize/CommonsChunkPlugin");
 module.exports = {
     entry: {
-        'app': './main.ts'
+        'app': __dirname+'./main.ts'
     },
     output: {
-        filename: './dist/[name]-bundle.js',
+        filename: __dirname+'./dist/[name]-bundle.js',
         library: ['peer']
     },
     // Turn on sourcemaps
