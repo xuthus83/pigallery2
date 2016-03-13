@@ -27,12 +27,8 @@ module.exports = function(config) {
         webpack: testWebpackConfig,
 
         coverageReporter: {
-            dir : 'coverage/',
-            reporters: [
-                { type: 'text-summary' },
-                { type: 'json' },
-                { type: 'html' }
-            ]
+            type: 'lcov', // lcov or lcovonly are required for generating lcov.info files
+            dir: 'coverage/'
         },
 
         // Webpack please don't spam the console when running in karma!
@@ -41,7 +37,7 @@ module.exports = function(config) {
         // test results reporter to use
         // possible values: 'dots', 'progress'
         // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-        reporters: [ 'mocha', 'coverage' ],
+        reporters: [ 'mocha', 'coverage', 'coveralls' ],
 
         // web server port
         port: 9876,

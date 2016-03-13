@@ -14,3 +14,4 @@ backend/*.js.map
 common/*/*.js
 common/*/*.js.map
 test/coverage
+.coveralls.yml
