@@ -5,7 +5,7 @@ module.exports = {
         'app': __dirname+'/main.ts'
     },
     output: {
-        filename: __dirname+'./dist/[name]-bundle.js',
+        filename: __dirname+'/dist/[name]-bundle.js',
         library: ['peer']
     },
     // Turn on sourcemaps
