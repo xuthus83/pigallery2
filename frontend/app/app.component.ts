@@ -1,4 +1,4 @@
-///<reference path="../../typings/browser.d.ts"/>
+///<reference path="../browser.d.ts"/>
 
 import { Component } from 'angular2/core';
 import { RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS } from 'angular2/router';

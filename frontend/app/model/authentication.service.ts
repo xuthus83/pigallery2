@@ -1,4 +1,4 @@
-///<reference path="../../../typings/browser.d.ts"/>
+///<reference path="../../browser.d.ts"/>
 
 import * as io  from 'socket.io-client';
 import {Injectable} from 'angular2/core';

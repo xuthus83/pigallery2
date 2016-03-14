@@ -1,4 +1,4 @@
-///<reference path="../../../typings/browser.d.ts"/>
+///<reference path="../../browser.d.ts"/>
 
 import {Injectable} from 'angular2/core';
 import {NetworkService} from "../model/network.service";
