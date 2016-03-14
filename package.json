@@ -8,7 +8,7 @@
   "license": "MIT",
   "main": "./backend/server.js",
   "scripts": {
-    "install": "typings install && tsc -p backend && tsc - common && webpack --config ./frontend/webpack.config.js ",
+    "install": "typings install && tsc -p backend && tsc -p common && webpack --config ./frontend/webpack.config.js ",
     "pretest": "typings install",
     "test": "karma start ./karma.conf.js",
     "start": "node ./backend/server"
