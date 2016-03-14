@@ -1,4 +1,4 @@
-///<reference path="../../../typings/tsd.d.ts"/>
+///<reference path="../../../typings/browser.d.ts"/>
 
 import { Component, OnInit } from 'angular2/core';
 import {LoginCredential} from '../../../common/entities/LoginCredential';

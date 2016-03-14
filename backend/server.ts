@@ -1,4 +1,4 @@
-///<reference path="../typings/tsd.d.ts"/>
+///<reference path="../typings/main.d.ts"/>
 
 import * as _express from 'express';
 import * as _debug from 'debug';

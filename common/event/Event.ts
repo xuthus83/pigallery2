@@ -1,4 +1,4 @@
-///<reference path="../../typings/tsd.d.ts"/>
+///<reference path="../../typings/main.d.ts"/>
 
 function isFunction(functionToCheck) {
     var getType = {};
