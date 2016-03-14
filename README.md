@@ -6,3 +6,7 @@
 [![devDependency Status](https://david-dm.org/bpatrik/PiGallery2/dev-status.svg)](https://david-dm.org/bpatrik/PiGallery2#info=devDependencies)
 
 This is a photo gallery optimised for running low resource servers (especially on raspberry pi)
+
+Work in progess.... Estimated first release 2016 summer
+
+Live Demo @ heroku: https://pigallery2.herokuapp.com/
