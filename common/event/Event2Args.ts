@@ -1,5 +1,3 @@
-///<reference path="../../typings/main.d.ts"/>
-
 export class Event2Args<T,M> {
     private handlers: { (data?: T,data2?: M): void; }[] = [];
 

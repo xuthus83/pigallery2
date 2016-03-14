@@ -1,5 +1,3 @@
-///<reference path="../../typings/main.d.ts"/>
-
 export class EventLimit<T> {
 
     private lastTriggerValue:T = null;

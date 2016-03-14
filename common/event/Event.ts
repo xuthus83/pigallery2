@@ -1,5 +1,3 @@
-///<reference path="../../typings/main.d.ts"/>
-
 function isFunction(functionToCheck) {
     var getType = {};
     return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]';
