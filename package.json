@@ -6,6 +6,7 @@
   "author": "Braun Patrik",
   "homepage": "https://github.com/bpatrik/PiGallery2",
   "license": "MIT",
+  "main": "./backend/server.js",
   "scripts": {
     "build": "typings install && webpack frontend/webpack.config.js -P && tsc -p backend",
     "pretest": "typings install",
