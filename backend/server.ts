@@ -1,10 +1,11 @@
 ///<reference path="../typings/main.d.ts"/>
 
 import * as _express from 'express';
+import * as _session from 'express-session';
 import * as _debug from 'debug';
 import * as _http from 'http';
-import * as path from 'path';
-import {NetworkManager} from "./NetworkManager";
+import {PublicRouter} from "./routes/PublicRouter";
+import {UserRouter} from "./routes/UserRouter";
 
 
 export class Server {
@@ -24,14 +25,23 @@ export class Server {
             this.app.use(_morgan('dev'));
         }
 
+        /**
+         * Session above all
+         */
+        this.app.use(_session({
 
-        this.app.use(_express.static(path.resolve(__dirname, './../frontend')));
-        this.app.use('/node_modules',_express.static(path.resolve(__dirname, './../node_modules')));
+            secret: 'keyboard cat',
+            cookie: {
+                maxAge: 60000
+            },
+            resave: true,
+            saveUninitialized: false
+        }));
+ 
 
-        var renderIndex = (req: _express.Request, res: _express.Response) => {
-            res.sendFile(path.resolve(__dirname, './../frontend/index.html'));
-        };
-        this.app.get('/*', renderIndex);
+        new PublicRouter(this.app);
+        new UserRouter(this.app);
+
 
 
 
@@ -47,7 +57,6 @@ export class Server {
         this.server.on('error', this.onError);
         this.server.on('listening', this.onListening);
 
-        new NetworkManager(this.server);
 
     }
 

@@ -1,6 +1,6 @@
 {
   "name": "PiGallery2",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": true,
   "description": "This is a photo gallery optimised for running low resource servers (especially on raspberry pi)",
   "author": "Braun Patrik",
@@ -27,6 +27,7 @@
     "es6-shim": "^0.33.13",
     "es7-reflect-metadata": "^1.6.0",
     "express": "^4.13.4",
+    "express-session": "^1.13.0",
     "karma-jasmine": "^0.3.8",
     "morgan": "^1.7.0",
     "protractor": "^3.2.0",
