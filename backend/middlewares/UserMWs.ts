@@ -1,20 +1,22 @@
 
 import {UserManager} from "../model/UserManager";
 import {NextFunction, Request, Response} from "express";
+import {BaseMWs} from "./BaseMWs";
+import {Error, ErrorCodes} from "../../common/entities/Error";
 
-export class UserMWs {
+export class UserMWs extends BaseMWs{
 
     
     public static authenticate(req:Request, res:Response, next:NextFunction){
         if (typeof req.session.user === 'undefined') {
-            return res.redirect('/');
+            return super.renderError(res,new Error(ErrorCodes.NOT_AUTHENTICATED));
         }
         return next();
     }
     
     public static inverseAuthenticate(req:Request, res:Response, next:NextFunction){
         if (typeof req.session.user !== 'undefined') {
-            return res.redirect('/');
+            return super.renderError(res,new Error(ErrorCodes.ALREADY_AUTHENTICATED));
         }
         return next();
     }
@@ -54,7 +56,7 @@ export class UserMWs {
 
 
     public static renderUser(req:Request, res:Response, next:NextFunction){
-        res.json(req.session.user);
+        super.renderMessage(res,req.session.user);
     }
     
 

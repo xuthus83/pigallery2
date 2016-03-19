@@ -1,13 +1,13 @@
-<form>
+<form name="LoginForm">
     <div class="group">
-        <input type="text" [(ngModel)]="user.username" required><span class="highlight"></span><span class="bar"></span>
-        <label *ngIf="!user.username">Username (or e-mail)</label>
+        <input type="text" [(ngModel)]="loginCredential.username" required><span class="highlight"></span><span class="bar"></span>
+        <label *ngIf="!loginCredential.username">Username (or e-mail)</label>
     </div>
     <div class="group">
-        <input type="password" [(ngModel)]="user.password" required><span class="highlight"></span><span class="bar"></span>
-        <label *ngIf="!user.password">Password</label>
+        <input type="password" [(ngModel)]="loginCredential.password" required><span class="highlight"></span><span class="bar"></span>
+        <label *ngIf="!loginCredential.password">Password</label>
     </div>
-    <button type="button" class="button buttonBlue" (click)="onLogin()">Login
+    <button type="button" class="button buttonBlue" (disabled)="LoginForm.$invalid" (click)="onLogin()">Login
         <div class="ripples buttonRipples"><span class="ripplesCircle"></span></div>
     </button>
 </form>

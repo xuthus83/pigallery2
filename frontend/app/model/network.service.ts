@@ -1,39 +1,33 @@
 ///<reference path="../../browser.d.ts"/>
 
-import * as io  from 'socket.io-client';
-import {Injectable} from 'angular2/core';
-import {OnInit} from "angular2/core";
-import {LoginCredential} from "../../../common/entities/LoginCredential";
-import {MessageTypes} from "../../../common/MessageTypes";
-import {Event} from "../../../common/event/Event";
-import {User} from "../../../common/entities/User";
+import {Http, Headers, RequestOptions, Response} from "angular2/http";
 import {Message} from "../../../common/entities/Message";
+import "rxjs/Rx";
 
-@Injectable()
 export class NetworkService{
 
-    private _socketIO: SocketIOClient.Socket;
+    _baseUrl = "/api";
 
-    public OnAuthenticated:Event<User>;
-
-    constructor(){
-        this._socketIO = io();
-        this.OnAuthenticated = new Event();
-        this._subscribeMessages();
+    constructor(protected _http:Http){
     }
 
+    
 
-    public login(credential:LoginCredential){
-        this._socketIO.emit(MessageTypes.Client.Login.Authenticate,credential);
+    protected postJson(url:string, data:any  = {}){
+        let body = JSON.stringify({ data });
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let options = new RequestOptions({ headers: headers });
+        console.log(this._http.post(this._baseUrl+url, body, options));
+        return this._http.post(this._baseUrl+url, body, options)
+            .toPromise()
+            .then(res => <Message<any>> res.json())
+            .catch(NetworkService.handleError);
     }
 
-    private _subscribeMessages(){
-        this._socketIO.on(MessageTypes.Server.Login.Authenticated, (message:Message<User>) =>{
-            if(message.error){
-                //TODO: Handle error
-            }else{
-                this.OnAuthenticated.trigger(message.result);
-            }
-        });
+    private static handleError (error: any) {
+        // in a real world app, we may send the error to some remote logging infrastructure
+        // instead of just logging it to the console
+        console.error(error);
+        return Promise.reject(error.message || error.json().error || 'Server error');
     }
 }

@@ -1,28 +1,38 @@
 ///<reference path="../../browser.d.ts"/>
 
-import * as io  from 'socket.io-client';
 import {Injectable} from 'angular2/core';
-import {OnInit} from "angular2/core";
-import {NetworkService} from "./network.service";
 import {User} from "../../../common/entities/User";
 import {Event} from "../../../common/event/Event";
+import {UserService} from "./user.service";
+import {LoginCredential} from "../../../common/entities/LoginCredential";
+import {Message} from "../../../common/entities/Message";
 
 @Injectable()
 export class AuthenticationService{
 
-    private _user:User;
+    private _user:User = null;
     public OnAuthenticated:Event<User>;
 
-    constructor(private _networkService: NetworkService){
+    constructor(private _userService: UserService){
         this.OnAuthenticated = new Event();
-        this._networkService.OnAuthenticated.on(this.onAuthenticated);
     }
 
-
-    private onAuthenticated = (user:User) => {
-        this._user=user;
-        this.OnAuthenticated.trigger(this._user);
+    public login(credential:LoginCredential){
+        this._userService.login(credential).then( (message:Message<User>) =>{
+            console.log(message);
+            if(message.errors && message.errors.length > 0){
+                console.log(message.errors);
+            }else{
+                this._user = message.result;
+                this.OnAuthenticated.trigger(this._user);
+            }
+        });
     }
+
+    public isAuthenticated():boolean{
+        return this._user && this._user != null;
+    }
+ 
 
 
 }

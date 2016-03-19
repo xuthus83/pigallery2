@@ -4,6 +4,7 @@ import * as _express from 'express';
 import * as _session from 'express-session';
 import * as _debug from 'debug';
 import * as _http from 'http';
+import * as _path from 'path';
 import {PublicRouter} from "./routes/PublicRouter";
 import {UserRouter} from "./routes/UserRouter";
 
@@ -42,6 +43,10 @@ export class Server {
         new PublicRouter(this.app);
         new UserRouter(this.app);
 
+        var renderIndex = (req: _express.Request, res: _express.Response) => {
+            res.sendFile(_path.resolve(__dirname, './../frontend/index.html'));
+        };
+        this.app.get(['/login',"/gallery"], renderIndex);
 
 
 

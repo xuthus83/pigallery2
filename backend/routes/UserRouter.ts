@@ -9,7 +9,7 @@ export class UserRouter{
     }
 
     private initLogin() {
-        this.app.get("/api/login",
+        this.app.post("/api/login",
             UserMWs.inverseAuthenticate,
             UserMWs.login,
             UserMWs.renderUser
