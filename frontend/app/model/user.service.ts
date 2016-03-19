@@ -16,7 +16,7 @@ export class UserService extends NetworkService{
 
 
     public login(credential:LoginCredential){
-        return this.postJson("/login",credential);
+        return this.postJson("/user/login",credential);
     }
 
   

@@ -1,7 +1,16 @@
 
 export enum ErrorCodes{
     NOT_AUTHENTICATED,
-    ALREADY_AUTHENTICATED
+    ALREADY_AUTHENTICATED,
+    NOT_AUTHORISED,
+    CREDENTIAL_NOT_FOUND,
+
+
+    USER_CREATION_ERROR,
+
+
+    GENERAL_ERROR
+    
 }
 
 export class Error{
