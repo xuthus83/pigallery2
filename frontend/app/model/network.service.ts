@@ -16,7 +16,7 @@ export class NetworkService{
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
         console.log(this._http.post(this._baseUrl+url, body, options));
-        return this._http['method'](this._baseUrl+url, body, options)
+        return this._http[method](this._baseUrl+url, body, options)
             .toPromise()
             .then(res => <Message<any>> res.json())
             .catch(NetworkService.handleError);

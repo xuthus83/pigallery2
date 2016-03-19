@@ -1,6 +1,7 @@
 ///<reference path="../../typings/main.d.ts"/>
 
 import {AuthenticationMWs} from "../middlewares/AuthenticationMWs";
+import {GalleryMWs} from "../middlewares/GalleryMWs";
 
 export class GalleryRouter{
     constructor(private app){
@@ -15,37 +16,37 @@ export class GalleryRouter{
 
     private addDirectoryList() {
         this.app.get("/api/gallery/:directory",
-            AuthenticationMWs.authenticate
-            //TODO: implement
+            AuthenticationMWs.authenticate,
+            GalleryMWs.listDirectory
         );
     };
 
 
     private addGetImage() {
         this.app.get("/api/gallery/:directory/:image",
-            AuthenticationMWs.authenticate
-            //TODO: implement
+            AuthenticationMWs.authenticate,
+            GalleryMWs.renderImage
         );
     };
 
     private addGetImageThumbnail() {
         this.app.get("/api/gallery/:directory/:image/thumbnail",
-            AuthenticationMWs.authenticate
-            //TODO: implement
+            AuthenticationMWs.authenticate,
+            GalleryMWs.renderThumbnail
         );
     };
 
     private addSearch() {
         this.app.get("/api/gallery/search",
-            AuthenticationMWs.authenticate
-            //TODO: implement
+            AuthenticationMWs.authenticate,
+            GalleryMWs.search
         );
     };
 
     private addAutoComplete() {
         this.app.get("/api/gallery/autocomplete",
-            AuthenticationMWs.authenticate
-            //TODO: implement
+            AuthenticationMWs.authenticate,
+            GalleryMWs.autocomplete
         );
     };
 

@@ -7,7 +7,7 @@ export class AdminRouter{
     constructor(private app) {
 
         this.addResetDB();
-        this.addIndexGalery();
+        this.addIndexGallery();
     }
 
     private addResetDB() {
@@ -18,7 +18,7 @@ export class AdminRouter{
         );
     };
 
-    private addIndexGalery() {
+    private addIndexGallery() {
         this.app.post("/api/admin/gallery/index",
             AuthenticationMWs.authenticate,
             AuthenticationMWs.authorise(UserRoles.Admin)
