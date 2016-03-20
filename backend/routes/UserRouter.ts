@@ -8,6 +8,7 @@ import {UserRequestConstrainsMWs} from "../middlewares/UserRequestConstrainsMWs"
 export class UserRouter{
     constructor(private app){
         this.addLogin();
+        this.addGetSessionUser();
         this.addChangePassword();
         
         
@@ -21,6 +22,13 @@ export class UserRouter{
         this.app.post("/api/user/login",
             AuthenticationMWs.inverseAuthenticate,
             AuthenticationMWs.login,
+            AuthenticationMWs.renderUser
+        );
+    };
+
+    private addGetSessionUser() {
+        this.app.get("/api/user/login",
+            AuthenticationMWs.authenticate,
             AuthenticationMWs.renderUser
         );
     };

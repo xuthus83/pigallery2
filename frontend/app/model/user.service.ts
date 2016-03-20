@@ -21,5 +21,8 @@ export class UserService extends NetworkService{
         return this.postJson("/user/login",{"loginCredential": credential});
     }
 
+    public getSessionUser(): Promise<Message<User>>{
+        return this.getJson("/user/login");
+    }
   
 }

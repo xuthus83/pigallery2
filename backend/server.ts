@@ -32,10 +32,11 @@ export class Server {
          * Session above all
          */
         this.app.use(_session({
-
-            secret: 'keyboard cat',
+            name:"pigallery2-session",
+            secret: 'PiGallery2 secret',
             cookie: {
-                maxAge: 60000
+                maxAge: 60000,
+                httpOnly: false
             },
             resave: true,
             saveUninitialized: false
