@@ -8,3 +8,5 @@
 ///<reference path="./entities/LoginCredential.ts"/>
 ///<reference path="./entities/User.ts"/>
 ///<reference path="./entities/Message.ts"/>
+///<reference path="./entities/Directory.ts"/>
+///<reference path="./entities/Photo.ts"/>

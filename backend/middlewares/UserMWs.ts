@@ -3,7 +3,6 @@ import {UserManager} from "../model/UserManager";
 import {NextFunction, Request, Response} from "express";
 import {BaseMWs} from "./BaseMWs";
 import {Error, ErrorCodes} from "../../common/entities/Error";
-import Util = jasmine.Util;
 
 export class UserMWs extends BaseMWs{
 

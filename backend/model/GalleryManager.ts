@@ -1,31 +1,64 @@
-import {User} from "../../common/entities/User";
-export class UserManager {
+import * as fs from 'fs';
+import * as path from 'path';
+import * as mime from 'mime';
 
-    private static  users = [new User(1,"TestUser","test@test.hu","122345")];
+import {Directory} from "../../common/entities/Directory";
+import {Photo} from "../../common/entities/Photo";
 
-    public static findOne(filter,cb:(error: any,result:User) => void){
-        return cb(null, UserManager.users[0]);
+export class GalleryManager {
+
+
+    public static listDirectory(relativeDirectoryName, cb:(error: any,result:Directory) => void){
+        let directoryName = path.basename(relativeDirectoryName);
+        let directoryParent = path.join( path.dirname(relativeDirectoryName),"/");
+        let absoluteDirectoryName = path.join(__dirname,"/../../demo/images", relativeDirectoryName);
+
+        let directory = new Directory(1,directoryName,directoryParent,new Date(),[],[]);
+
+        fs.readdir(absoluteDirectoryName, function (err, list) {
+
+            if(err){
+                return cb(err,null);
+            }
+
+
+            for (let i = 0; i < list.length; i++) {
+                let file = list[i];
+                let fullFilePath = path.resolve(absoluteDirectoryName, file);
+                if(fs.statSync(fullFilePath).isDirectory()){
+                    directory.directories.push(new Directory(2,file,relativeDirectoryName,new Date(),[],[]));
+                }
+
+                if(GalleryManager.isImage(fullFilePath)){
+                    directory.photos.push(new Photo(1,file));
+                }
+            }
+
+            return cb(err, directory);
+
+        });
     }
 
-    public static find(filter,cb:(error: any,result:Array<User>) => void){
-        return cb(null, UserManager.users);
-    }
+    private static isImage(fullPath){
+        let imageMimeTypes = [
+            'image/bmp',
+            'image/gif',
+            'image/jpeg',
+            'image/png',
+            'image/pjpeg',
+            'image/tiff',
+            'image/webp',
+            'image/x-tiff',
+            'image/x-windows-bmp'
+        ];
 
-    public static createUser(user,cb:(error: any,result:User) => void){
-        UserManager.users.push(user);
-        return cb(null, user);
-    }
+        var extension = mime.lookup(fullPath);
 
-    public static deleteUser(id:number,cb:(error: any,result:string) => void){
-        UserManager.users = UserManager.users.filter(u => u.id != id);
-        return cb(null, "ok");
-    }
-    
-    public static changeRole(request:any,cb:(error: any,result:string) => void){
-        return cb(null,"ok");
-    }
-    public static changePassword(request:any,cb:(error: any,result:string) => void){
-        return cb(null,"ok");
+        if (imageMimeTypes.indexOf(extension) !== -1) {
+            return true;
+        }
+
+        return false;
     }
 
 }

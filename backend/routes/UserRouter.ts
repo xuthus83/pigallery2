@@ -27,7 +27,7 @@ export class UserRouter{
 
 
     private addChangePassword() {
-        this.app.update("/api/user/:id/password",
+        this.app.post("/api/user/:id/password",
             AuthenticationMWs.authenticate,
             UserRequestConstrainsMWs.forceSelfRequest,
             UserMWs.changePassword,
@@ -65,7 +65,7 @@ export class UserRouter{
     };
 
     private addChangeRole() {
-        this.app.update("/api/user/:id/role",
+        this.app.post("/api/user/:id/role",
             AuthenticationMWs.authenticate,
             AuthenticationMWs.authorise(UserRoles.Admin),
             UserRequestConstrainsMWs.notSelfRequestOr2Admins,

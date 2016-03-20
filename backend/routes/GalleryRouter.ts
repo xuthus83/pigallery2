@@ -15,16 +15,16 @@ export class GalleryRouter{
     }
 
     private addDirectoryList() {
-        this.app.get("/api/gallery/:directory",
-            AuthenticationMWs.authenticate,
+        this.app.get(["/api/gallery/:directory","/api/gallery/"],
+         //   AuthenticationMWs.authenticate,
             GalleryMWs.listDirectory
         );
     };
 
 
     private addGetImage() {
-        this.app.get("/api/gallery/:directory/:image",
-            AuthenticationMWs.authenticate,
+        this.app.get(["/api/gallery/:directory/:image","/api/gallery/:image"],
+          //  AuthenticationMWs.authenticate,
             GalleryMWs.renderImage
         );
     };

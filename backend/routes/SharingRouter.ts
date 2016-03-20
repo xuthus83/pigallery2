@@ -19,7 +19,7 @@ export class AdminRouter{
     };
 
     private addUpdateSharing() {
-        this.app.update("/api/share/:directory",
+        this.app.post("/api/share/:directory",
             AuthenticationMWs.authenticate,
             AuthenticationMWs.authorise(UserRoles.User)
             //TODO: implement

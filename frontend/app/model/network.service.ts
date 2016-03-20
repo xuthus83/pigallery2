@@ -33,9 +33,6 @@ export class NetworkService{
         return this.callJson("get",url,data);
     }
 
-    protected updateJson(url:string, data:any  = {}){
-        return this.callJson("update",url,data);
-    }
 
     protected deleteJson(url:string, data:any  = {}){
         return this.callJson("delete",url,data);
