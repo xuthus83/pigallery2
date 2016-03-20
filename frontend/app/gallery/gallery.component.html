@@ -1,4 +1,8 @@
 <h1>Gallery</h1>
+
+<div *ngIf="directory" *ngFor="#directory of directory.directories" >
+  <gallery-directory *ngIf="directory" [directory]="directory" ></gallery-directory>
+</div>
 <div *ngIf="directory" *ngFor="#photo of directory.photos" >
-  <gallery-photo *ngIf="photo" [photo]="photo" >a photo</gallery-photo>
+  <gallery-photo *ngIf="photo" [photo]="photo" ></gallery-photo>
 </div>
