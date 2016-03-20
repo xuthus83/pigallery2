@@ -10,7 +10,7 @@ export class PublicRouter{
         this.app.use('/node_modules',_express.static(_path.resolve(__dirname, './../../node_modules')));
 
         var renderIndex = (req: _express.Request, res: _express.Response) => {
-            res.sendFile(_path.resolve(__dirname, './../frontend/index.html'));
+            res.sendFile(_path.resolve(__dirname, './../../frontend/index.html'));
         };
         this.app.get(['/login',"/gallery"], renderIndex);
 

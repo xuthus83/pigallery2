@@ -10,6 +10,7 @@ import {User} from "../../common/entities/User";
 import {Router, Location} from "angular2/router";
 import {HTTP_PROVIDERS} from "angular2/http";
 import {UserService} from "./model/user.service";
+import {GalleryService} from "./gallery/gallery.service";
 
 
 
@@ -22,6 +23,7 @@ import {UserService} from "./model/user.service";
         HTTP_PROVIDERS,
         ROUTER_PROVIDERS,
         UserService,
+        GalleryService,
         AuthenticationService
     ]
 })

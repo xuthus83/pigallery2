@@ -34,23 +34,20 @@ export class AuthenticationMWs extends BaseMWs{
     
     public static login(req:Request, res:Response, next:NextFunction){
         //not enough parameter
-       if ((typeof req.body === 'undefined') || (typeof req.body.logincredential === 'undefined') || (typeof req.body.logincredential.username === 'undefined') ||
-            (typeof req.body.logincredential.password === 'undefined')) {
+       if ((typeof req.body === 'undefined') || (typeof req.body.loginCredential === 'undefined') || (typeof req.body.loginCredential.username === 'undefined') ||
+            (typeof req.body.loginCredential.password === 'undefined')) {
             return next();
         }
 
         //lets find the user
         UserManager.findOne({
-              username: req.body.logincredential.username
+              username: req.body.loginCredential.username,
+              password: req.body.loginCredential.password
         }, (err, result) => {
             if ((err) || (!result)) {
                 return super.renderError(res,new Error(ErrorCodes.CREDENTIAL_NOT_FOUND));
             }
 
-            //check password
-            if (result.password !== req.body.logincredential.password) {
-                return super.renderError(res,new Error(ErrorCodes.CREDENTIAL_NOT_FOUND));
-            }
 
             req.session.user = result;
 
@@ -61,6 +58,10 @@ export class AuthenticationMWs extends BaseMWs{
 
 
     public static renderUser(req:Request, res:Response, next:NextFunction){
+        if(!(req.session.user)){
+            return super.renderError(res,new Error(ErrorCodes.GENERAL_ERROR));
+        }
+
         let user = Utils.clone(req.session.user);
         delete user.password;
         super.renderMessage(res,user);

@@ -2,6 +2,7 @@
 
 import * as _express from 'express';
 import * as _session from 'express-session';
+import * as _bodyParser from 'body-parser';
 import * as _debug from 'debug';
 import * as _http from 'http';
 import {PublicRouter} from "./routes/PublicRouter";
@@ -39,7 +40,12 @@ export class Server {
             resave: true,
             saveUninitialized: false
         }));
- 
+
+        /**
+         * Parse parameters in POST
+         */
+        // for parsing application/json
+        this.app.use(_bodyParser.json());
 
         new PublicRouter(this.app);
         new UserRouter(this.app);

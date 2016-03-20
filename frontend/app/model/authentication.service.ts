@@ -20,7 +20,7 @@ export class AuthenticationService{
     public login(credential:LoginCredential){
         this._userService.login(credential).then( (message:Message<User>) =>{
             console.log(message);
-            if(message.errors && message.errors.length > 0){
+            if(message.errors){
                 console.log(message.errors);
             }else{
                 this._user = message.result;

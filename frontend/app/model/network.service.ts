@@ -11,30 +11,37 @@ export class NetworkService{
     constructor(protected _http:Http){
     }
 
-    private callJson(method:string, url:string, data:any = {}){
-        let body = JSON.stringify({ data });
+    private callJson<T>(method:string, url:string, data:any = {}): Promise<T>{
+        let body = JSON.stringify( data );
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
-        console.log(this._http.post(this._baseUrl+url, body, options));
+
+        if(method == "get"){
+            return this._http[method](this._baseUrl+url, options)
+                .toPromise()
+                .then(res => <Message<any>> res.json())
+                .catch(NetworkService.handleError);
+        }
+        
         return this._http[method](this._baseUrl+url, body, options)
             .toPromise()
             .then(res => <Message<any>> res.json())
             .catch(NetworkService.handleError);
     }
 
-    protected postJson(url:string, data:any  = {}){
+    protected postJson<T>(url:string, data:any  = {}): Promise<T>{
         return this.callJson("post",url,data);
     }
 
-    protected putJson(url:string, data:any  = {}){
+    protected putJson<T>(url:string, data:any  = {}): Promise<T>{
         return this.callJson("put",url,data);
     }
-    protected getJson(url:string, data:any  = {}){
-        return this.callJson("get",url,data);
+    protected getJson<T>(url:string): Promise<T>{
+        return this.callJson("get",url);
     }
 
 
-    protected deleteJson(url:string, data:any  = {}){
+    protected deleteJson<T>(url:string, data:any  = {}): Promise<T>{
         return this.callJson("delete",url,data);
     }
 
