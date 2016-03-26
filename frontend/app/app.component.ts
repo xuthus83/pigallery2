@@ -14,7 +14,6 @@ import {GalleryService} from "./gallery/gallery.service";
 
 
 
-
 @Component({
     selector: 'pi-gallery2-app',
     template: `<router-outlet></router-outlet>`,

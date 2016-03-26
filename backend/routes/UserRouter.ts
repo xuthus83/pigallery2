@@ -4,6 +4,7 @@ import {UserMWs} from "../middlewares/UserMWs";
 import {UserRoles} from "../../common/entities/User";
 import {AuthenticationMWs} from "../middlewares/AuthenticationMWs";
 import {UserRequestConstrainsMWs} from "../middlewares/UserRequestConstrainsMWs";
+import {RenderingMWs} from "../middlewares/RenderingMWs";
 
 export class UserRouter{
     constructor(private app){
@@ -22,14 +23,14 @@ export class UserRouter{
         this.app.post("/api/user/login",
             AuthenticationMWs.inverseAuthenticate,
             AuthenticationMWs.login,
-            AuthenticationMWs.renderUser
+            RenderingMWs.renderSessionUser
         );
     };
 
     private addGetSessionUser() {
         this.app.get("/api/user/login",
             AuthenticationMWs.authenticate,
-            AuthenticationMWs.renderUser
+            RenderingMWs.renderSessionUser
         );
     };
 
@@ -39,7 +40,7 @@ export class UserRouter{
             AuthenticationMWs.authenticate,
             UserRequestConstrainsMWs.forceSelfRequest,
             UserMWs.changePassword,
-            UserMWs.renderOK
+            RenderingMWs.renderOK
         );
     };
 
@@ -49,7 +50,7 @@ export class UserRouter{
             AuthenticationMWs.authenticate,
             AuthenticationMWs.authorise(UserRoles.Admin),
             UserMWs.createUser,
-            UserMWs.renderOK
+            RenderingMWs.renderOK
         );
     };
 
@@ -59,7 +60,7 @@ export class UserRouter{
             AuthenticationMWs.authorise(UserRoles.Admin),
             UserRequestConstrainsMWs.notSelfRequest,
             UserMWs.deleteUser,
-            UserMWs.renderOK
+            RenderingMWs.renderOK
         );
     };
 
@@ -68,7 +69,8 @@ export class UserRouter{
         this.app.post("/api/user/list",
             AuthenticationMWs.authenticate,
             AuthenticationMWs.authorise(UserRoles.Admin),
-            UserMWs.listUsers
+            UserMWs.listUsers,
+            RenderingMWs.renderResult
         );
     };
 
@@ -78,7 +80,7 @@ export class UserRouter{
             AuthenticationMWs.authorise(UserRoles.Admin),
             UserRequestConstrainsMWs.notSelfRequestOr2Admins,
             UserMWs.changeRole,
-            UserMWs.renderOK
+            RenderingMWs.renderOK
         );
     };
 

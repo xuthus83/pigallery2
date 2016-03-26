@@ -1,11 +1,10 @@
 
 import {UserManager} from "../model/UserManager";
 import {NextFunction, Request, Response} from "express";
-import {BaseMWs} from "./BaseMWs";
 import {Error, ErrorCodes} from "../../common/entities/Error";
 import {UserRoles} from "../../common/entities/User";
 
-export class UserRequestConstrainsMWs extends BaseMWs{
+export class UserRequestConstrainsMWs {
 
 
     public static forceSelfRequest(req:Request, res:Response, next:NextFunction){
@@ -13,7 +12,7 @@ export class UserRequestConstrainsMWs extends BaseMWs{
             return next();
         }
         if(req.session.user.id !== req.params.id){
-            return super.renderError(res,new Error(ErrorCodes.NOT_AUTHORISED));            
+            return next(new Error(ErrorCodes.NOT_AUTHORISED));
         }
         
         return next();
@@ -26,7 +25,7 @@ export class UserRequestConstrainsMWs extends BaseMWs{
         }
         
         if(req.session.user.id === req.params.id){
-            return super.renderError(res,new Error(ErrorCodes.NOT_AUTHORISED));
+            return next(new Error(ErrorCodes.NOT_AUTHORISED));
         }
 
         return next();
@@ -43,10 +42,10 @@ export class UserRequestConstrainsMWs extends BaseMWs{
 
         UserManager.find({minRole:UserRoles.Admin}, (err, result) =>{
             if ((err) || (!result)) {
-                return super.renderError(res,new Error(ErrorCodes.GENERAL_ERROR));
+                return next(new Error(ErrorCodes.GENERAL_ERROR));
             }
             if(result.length <= 1) {
-                return super.renderError(res, new Error(ErrorCodes.GENERAL_ERROR));
+                return next(new Error(ErrorCodes.GENERAL_ERROR));
             }
             
         });

@@ -27,8 +27,8 @@ export class AuthenticationService{
     private getSessionUser(){
         this._userService.getSessionUser().then( (message:Message<User>) =>{
             console.log(message);
-            if(message.errors){
-                console.log(message.errors);
+            if(message.error){
+                console.log(message.error);
             }else{
                 this._user = message.result;
                 this.OnAuthenticated.trigger(this._user);
@@ -39,8 +39,8 @@ export class AuthenticationService{
     public login(credential:LoginCredential){
         this._userService.login(credential).then( (message:Message<User>) =>{
             console.log(message);
-            if(message.errors){
-                console.log(message.errors);
+            if(message.error){
+                console.log(message.error);
             }else{
                 this._user = message.result;
                 this.OnAuthenticated.trigger(this._user);

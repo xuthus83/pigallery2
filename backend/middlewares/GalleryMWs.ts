@@ -2,15 +2,14 @@
 import * as path from 'path';
 import * as fs from 'fs';
 import {NextFunction, Request, Response} from "express";
-import {BaseMWs} from "./BaseMWs";
 import {Error, ErrorCodes} from "../../common/entities/Error";
 import {GalleryManager} from "../model/GalleryManager";
 import {Directory} from "../../common/entities/Directory";
 
-export class GalleryMWs extends BaseMWs{
+export class GalleryMWs {
 
-  
-    public static listDirectory(req:Request, res:Response, next:NextFunction){
+
+    public static listDirectory(req:Request, res:Response, next:NextFunction){ 
         let directoryName = "/";
         if(req.params.directory){
             directoryName = req.params.directory;
@@ -23,15 +22,15 @@ export class GalleryMWs extends BaseMWs{
 
         GalleryManager.listDirectory(directoryName,(err,directory:Directory) => {
            if(err || !directory){
-               return super.renderError(res,new Error(ErrorCodes.GENERAL_ERROR,err));
+               return next(new Error(ErrorCodes.GENERAL_ERROR,err));
            }
-
-            return super.renderMessage(res,directory);
+            req.resultPipe = directory;
+            return next();
         });
     }
 
 
-    public static renderImage(req:Request, res:Response, next:NextFunction){
+    public static loadImage(req:Request, res:Response, next:NextFunction){ 
         let directoryName = "/";
         if(req.params.directory){
             directoryName = req.params.directory;
@@ -44,23 +43,24 @@ export class GalleryMWs extends BaseMWs{
         if(fs.statSync(fullImagePath).isDirectory()){
             return next();
         }
-
-        return res.sendFile(fullImagePath);
+        
+        req.resultPipe = fullImagePath;
+        return next();
     }
 
-    public static renderThumbnail(req:Request, res:Response, next:NextFunction){
+    public static loadThumbnail(req:Request, res:Response, next:NextFunction){
         //TODO: implement
-        return super.renderError(res,new Error(ErrorCodes.GENERAL_ERROR));
+        return next(new Error(ErrorCodes.GENERAL_ERROR));
     }
 
     public static search(req:Request, res:Response, next:NextFunction){
         //TODO: implement
-        return super.renderError(res,new Error(ErrorCodes.GENERAL_ERROR));
+        return next(new Error(ErrorCodes.GENERAL_ERROR));
     }
 
     public static autocomplete(req:Request, res:Response, next:NextFunction){
         //TODO: implement
-        return super.renderError(res,new Error(ErrorCodes.GENERAL_ERROR));
+        return next(new Error(ErrorCodes.GENERAL_ERROR));
     }
 
 

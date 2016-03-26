@@ -2,6 +2,7 @@
 
 import {AuthenticationMWs} from "../middlewares/AuthenticationMWs";
 import {GalleryMWs} from "../middlewares/GalleryMWs";
+import {RenderingMWs} from "../middlewares/RenderingMWs";
 
 export class GalleryRouter{
     constructor(private app){
@@ -17,7 +18,8 @@ export class GalleryRouter{
     private addDirectoryList() {
         this.app.get(["/api/gallery/:directory","/api/gallery/"],
             AuthenticationMWs.authenticate,
-            GalleryMWs.listDirectory
+            GalleryMWs.listDirectory,
+            RenderingMWs.renderResult
         );
     };
 
@@ -25,28 +27,32 @@ export class GalleryRouter{
     private addGetImage() {
         this.app.get(["/api/gallery/:directory/:image","/api/gallery/:image"],
             AuthenticationMWs.authenticate,
-            GalleryMWs.renderImage
+            GalleryMWs.loadImage,
+            RenderingMWs.renderFile
         );
     };
 
     private addGetImageThumbnail() {
         this.app.get("/api/gallery/:directory/:image/thumbnail",
             AuthenticationMWs.authenticate,
-            GalleryMWs.renderThumbnail
+            GalleryMWs.loadThumbnail,
+            RenderingMWs.renderFile
         );
     };
 
     private addSearch() {
         this.app.get("/api/gallery/search",
             AuthenticationMWs.authenticate,
-            GalleryMWs.search
+            GalleryMWs.search,
+            RenderingMWs.renderResult
         );
     };
 
     private addAutoComplete() {
         this.app.get("/api/gallery/autocomplete",
             AuthenticationMWs.authenticate,
-            GalleryMWs.autocomplete
+            GalleryMWs.autocomplete,
+            RenderingMWs.renderResult
         );
     };
 

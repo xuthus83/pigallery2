@@ -1,5 +1,10 @@
 import {Error} from "./Error";
 
 export class Message<T>{
-    constructor(public errors:Error,public result:T){}
+    public error:Error = null;
+    public result:T = null;
+    constructor(error:Error, result:T){
+        this.error = error;
+        this.result = result;
+    }
 }

@@ -9,6 +9,10 @@ import {PublicRouter} from "./routes/PublicRouter";
 import {UserRouter} from "./routes/UserRouter";
 import {GalleryRouter} from "./routes/GalleryRouter";
 import {AdminRouter} from "./routes/AdminRouter";
+import {Error} from "../common/entities/Error";
+import {json} from "body-parser";
+import {ErrorRouter} from "./routes/ErrorRouter";
+import {SharingRouter} from "./routes/SharingRouter";
 
 
 export class Server {
@@ -47,11 +51,16 @@ export class Server {
          */
         // for parsing application/json
         this.app.use(_bodyParser.json());
+   
 
         new PublicRouter(this.app);
+        
         new UserRouter(this.app);
         new GalleryRouter(this.app);
+        new SharingRouter(this.app);
         new AdminRouter(this.app);
+        
+        new ErrorRouter(this.app);
 
     
 
@@ -103,7 +112,7 @@ export class Server {
             ? 'Pipe ' + this.port
             : 'Port ' + this.port;
 
-        // handle specific listen errors with friendly messages
+        // handle specific listen error with friendly messages
         switch (error.code) {
             case 'EACCES':
                 console.error(bind + ' requires elevated privileges');
