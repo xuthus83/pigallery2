@@ -17,7 +17,7 @@ import {GalleryDirectoryComponent} from "./directory/directory.gallery.component
 })
 export class GalleryComponent implements OnInit{
 
-    directory:Directory = new Directory(-1,"","/",new Date(),[],[]);
+    currentDirectory:Directory = new Directory(-1,"","/",new Date(),[],[]);
     
     constructor(private _galleryService:GalleryService,
                 private _params: RouteParams,
@@ -41,7 +41,7 @@ export class GalleryComponent implements OnInit{
                 return;
             }
 
-            this.directory = message.result;
+            this.currentDirectory = message.result;
         });
     }
     

@@ -1,7 +1,7 @@
 ///<reference path="../browser.d.ts"/>
 
 import { Component } from 'angular2/core';
-import { RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS } from 'angular2/router';
+import {RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS, RouterLink} from 'angular2/router';
 import {LoginComponent} from "./login/login.component";
 import {AuthenticationService} from "./model/authentication.service";
 import {GalleryComponent} from "./gallery/gallery.component";
@@ -34,7 +34,7 @@ import {GalleryService} from "./gallery/gallery.service";
         useAsDefault: true
     },
     {
-        path: '/gallery',
+        path: '/gallery/:directory',
         name: 'Gallery',
         component: GalleryComponent
     }
@@ -48,7 +48,7 @@ export class AppComponent  implements OnInit{
         this._authenticationService.OnAuthenticated.on((user:User) =>
         {
             this._location.replaceState('/'); // clears browser history so they can't navigate with back button
-            this._router.navigate(["Gallery"]);
+            this._router.navigate(["Gallery",{directory:"/"}]);
         });
 
     }

@@ -2,6 +2,8 @@
 
 import {Component, Input, OnInit} from 'angular2/core';
 import {Photo} from "../../../../common/entities/Photo";
+import {Directory} from "../../../../common/entities/Directory";
+import {Utils} from "../../../../common/Utils"; 
 
 @Component({
     selector: 'gallery-photo',
@@ -9,12 +11,14 @@ import {Photo} from "../../../../common/entities/Photo";
 })
 export class GalleryPhotoComponent{
     @Input() photo: Photo;
+    @Input() directory: Directory;
     
     constructor() {
     }
 
     getPhotoPath(){
-        return "/api/gallery/"+this.photo.name;
+        console.log(Utils.concatUrls("/api/gallery",this.directory.path,this.directory.name,this.photo.name));
+        return Utils.concatUrls("/api/gallery",this.directory.path,this.directory.name,this.photo.name); 
     }
     
 }

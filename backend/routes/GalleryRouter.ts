@@ -16,7 +16,7 @@ export class GalleryRouter{
     }
 
     private addDirectoryList() {
-        this.app.get(["/api/gallery/:directory","/api/gallery/"],
+        this.app.get(["/api/gallery/:directory","/api/gallery/","/api/gallery//"],
             AuthenticationMWs.authenticate,
             GalleryMWs.listDirectory,
             RenderingMWs.renderResult
