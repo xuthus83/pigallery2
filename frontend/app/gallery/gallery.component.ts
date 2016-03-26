@@ -33,6 +33,7 @@ export class GalleryComponent implements OnInit{
             this._router.navigate(['Login']);
             return;
         }
+        console.log(this._params.get('directory'));
         let directoryName = this._params.get('directory');
         directoryName = directoryName ? directoryName : "";
         this._galleryService.getDirectory(directoryName).then(( message:Message<Directory>) => {

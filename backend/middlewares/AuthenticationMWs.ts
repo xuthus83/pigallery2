@@ -10,10 +10,10 @@ import {UserRoles} from "../../common/entities/User";
 export class AuthenticationMWs {
 
     
-    public static authenticate(req:Request, res:Response, next:NextFunction){ 
-        if (typeof req.session.user === 'undefined') {
+    public static authenticate(req:Request, res:Response, next:NextFunction){
+     /*   if (typeof req.session.user === 'undefined') {
             return next(new Error(ErrorCodes.NOT_AUTHENTICATED));
-        }
+        }*/
         return next();
     }
     

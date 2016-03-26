@@ -9,7 +9,9 @@ import {Directory} from "../../common/entities/Directory";
 export class GalleryMWs {
 
 
-    public static listDirectory(req:Request, res:Response, next:NextFunction){ 
+    public static listDirectory(req:Request, res:Response, next:NextFunction){
+        console.log("listDirectory");
+        console.log(req.params);
         let directoryName = "/";
         if(req.params.directory){
             directoryName = req.params.directory;
@@ -30,16 +32,14 @@ export class GalleryMWs {
     }
 
 
-    public static loadImage(req:Request, res:Response, next:NextFunction){ 
-        let directoryName = "/";
-        if(req.params.directory){
-            directoryName = req.params.directory;
-        }
-        if(!(req.params.image)){
+    public static loadImage(req:Request, res:Response, next:NextFunction){
+        console.log("loadImage");
+        console.log(req.params);
+        if(!(req.params.imagePath)){
             return next();
         }
 
-        let fullImagePath =  path.join(__dirname,"/../../demo/images", directoryName,req.params.image);
+        let fullImagePath =  path.join(__dirname,"/../../demo/images", req.params.imagePath);
         if(fs.statSync(fullImagePath).isDirectory()){
             return next();
         }

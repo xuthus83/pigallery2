@@ -12,7 +12,7 @@ export class PublicRouter{
         var renderIndex = (req: _express.Request, res: _express.Response) => {
             res.sendFile(_path.resolve(__dirname, './../../frontend/index.html'));
         };
-        this.app.get(['/login',"/gallery"], renderIndex);
+        this.app.get(['/login',"/gallery*"], renderIndex);
 
 
     }

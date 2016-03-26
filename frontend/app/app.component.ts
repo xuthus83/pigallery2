@@ -11,6 +11,7 @@ import {Router, Location} from "angular2/router";
 import {HTTP_PROVIDERS} from "angular2/http";
 import {UserService} from "./model/user.service";
 import {GalleryService} from "./gallery/gallery.service";
+import {GeneratedUrl} from "angular2/src/router/rules/route_paths/route_path";
 
 
 
@@ -32,10 +33,13 @@ import {GalleryService} from "./gallery/gallery.service";
         name: 'Login',
         component: LoginComponent,
         useAsDefault: true
-    },
+    }, 
     {
-        path: '/gallery/:directory',
+        regex: '/gallery(/([\S]*))?',
         name: 'Gallery',
+        serializer: (params): GeneratedUrl => {
+            return new GeneratedUrl(`/gallery/${params['directory']}`, {})
+        },
         component: GalleryComponent
     }
 ])
