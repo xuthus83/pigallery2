@@ -23,18 +23,17 @@ export class GalleryComponent implements OnInit{
                 private _params: RouteParams,
                 private _authService: AuthenticationService,
                 private _router: Router,
-                private _location:Location) {
-        
+                private _location:Location) { 
     }
 
     ngOnInit(){
         if (!this._authService.isAuthenticated()) {
-            this._location.replaceState('/'); // clears browser history so they can't navigate with back button
+          //  this._location.replaceState('/'); // clears browser history so they can't navigate with back button
             this._router.navigate(['Login']);
             return;
         }
-        console.log(this._params.get('directory'));
-        let directoryName = this._params.get('directory');
+ 
+        let directoryName = this._params.get('directory'); 
         directoryName = directoryName ? directoryName : "";
         this._galleryService.getDirectory(directoryName).then(( message:Message<Directory>) => {
             if(message.error){

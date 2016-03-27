@@ -18,7 +18,7 @@ import {GeneratedUrl} from "angular2/src/router/rules/route_paths/route_path";
 @Component({
     selector: 'pi-gallery2-app',
     template: `<router-outlet></router-outlet>`,
-    directives: [ROUTER_DIRECTIVES],
+    directives: [ROUTER_DIRECTIVES, RouterLink],
     providers: [
         HTTP_PROVIDERS,
         ROUTER_PROVIDERS,
@@ -33,12 +33,17 @@ import {GeneratedUrl} from "angular2/src/router/rules/route_paths/route_path";
         name: 'Login',
         component: LoginComponent,
         useAsDefault: true
-    }, 
+    },
     {
-        regex: '/gallery(/([\S]*))?',
+        path: '/gallery',
+        name: 'GalleryBase',
+        component: GalleryComponent
+    },
+    {
+        regex: 'gallery/([\w]*)',
         name: 'Gallery',
         serializer: (params): GeneratedUrl => {
-            return new GeneratedUrl(`/gallery/${params['directory']}`, {})
+            return new GeneratedUrl(`gallery/${params['directory']}`, {})
         },
         component: GalleryComponent
     }
@@ -46,13 +51,14 @@ import {GeneratedUrl} from "angular2/src/router/rules/route_paths/route_path";
 export class AppComponent  implements OnInit{
 
     constructor(private _router: Router, private _location:Location, private _authenticationService: AuthenticationService){
+ 
     }
 
     ngOnInit() {
         this._authenticationService.OnAuthenticated.on((user:User) =>
         {
-            this._location.replaceState('/'); // clears browser history so they can't navigate with back button
-            this._router.navigate(["Gallery",{directory:"/"}]);
+         //   this._location.replaceState('/'); // clears browser history so they can't navigate with back button
+            this._router.navigate(["GalleryBase"]);
         });
 
     }

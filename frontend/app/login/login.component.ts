@@ -18,7 +18,7 @@ export class LoginComponent implements OnInit{
 
     ngOnInit(){
         if (this._authService.isAuthenticated()) {
-            this._location.replaceState('/'); // clears browser history so they can't navigate with back button
+          //  this._location.replaceState('/'); // clears browser history so they can't navigate with back button
             this._router.navigate(['Gallery']);
         }
     }
