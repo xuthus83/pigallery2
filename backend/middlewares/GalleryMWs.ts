@@ -4,7 +4,7 @@ import * as fs from 'fs';
 import {NextFunction, Request, Response} from "express";
 import {Error, ErrorCodes} from "../../common/entities/Error";
 import {GalleryManager} from "../model/GalleryManager";
-import {Directory} from "../../common/entities/Directory";
+import {Directory} from "../../common/entities/Directory"; 
 
 export class GalleryMWs {
 
@@ -33,8 +33,6 @@ export class GalleryMWs {
 
 
     public static loadImage(req:Request, res:Response, next:NextFunction){
-        console.log("loadImage");
-        console.log(req.params);
         if(!(req.params.imagePath)){
             return next();
         }
@@ -48,10 +46,8 @@ export class GalleryMWs {
         return next();
     }
 
-    public static loadThumbnail(req:Request, res:Response, next:NextFunction){
-        //TODO: implement
-        return next(new Error(ErrorCodes.GENERAL_ERROR));
-    }
+    
+  
 
     public static search(req:Request, res:Response, next:NextFunction){
         //TODO: implement

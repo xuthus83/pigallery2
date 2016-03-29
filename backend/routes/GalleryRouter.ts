@@ -3,6 +3,7 @@
 import {AuthenticationMWs} from "../middlewares/AuthenticationMWs";
 import {GalleryMWs} from "../middlewares/GalleryMWs";
 import {RenderingMWs} from "../middlewares/RenderingMWs";
+import {ThumbnailGeneratorMWs} from "../middlewares/ThumbnailGeneratorMWs";
 
 export class GalleryRouter{
     constructor(private app){
@@ -33,9 +34,10 @@ export class GalleryRouter{
     };
 
     private addGetImageThumbnail() {
-        this.app.get("/api/gallery/:directory/:image/thumbnail",
+        this.app.get("/api/gallery/:imagePath(*\.(jpg|bmp|png|gif|jpeg))/thumbnail/:size?",
             AuthenticationMWs.authenticate,
-            GalleryMWs.loadThumbnail,
+            GalleryMWs.loadImage,
+            ThumbnailGeneratorMWs.generateThumbnail,
             RenderingMWs.renderFile
         );
     };
