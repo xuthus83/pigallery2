@@ -27,6 +27,11 @@ export class ThumbnailGeneratorMWs {
             return next();
         }
 
+        let tmpDir = path.join(__dirname,"/../../demo/TEMP");
+        if (!fs.existsSync(tmpDir)){
+            fs.mkdirSync(tmpDir);
+        }
+
         Jimp.read(imagePath).then( (image) => {
             if (image.bitmap.with < image.bitmap.height) {
                 image.resize(size, Jimp.AUTO);   // resize

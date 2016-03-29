@@ -10,14 +10,9 @@ export class GalleryMWs {
 
 
     public static listDirectory(req:Request, res:Response, next:NextFunction){
-        console.log("listDirectory");
-        console.log(req.params);
-        let directoryName = "/";
-        if(req.params.directory){
-            directoryName = req.params.directory;
-        }
-
+        let directoryName = req.params.directory || "/";
         let absoluteDirectoryName = path.join(__dirname,"/../../demo/images", directoryName);
+        
         if(!fs.statSync(absoluteDirectoryName).isDirectory()){
             return next();
         }
