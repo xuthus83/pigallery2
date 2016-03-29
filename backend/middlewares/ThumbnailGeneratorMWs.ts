@@ -1,3 +1,5 @@
+///<reference path="jimp.d.ts"/>
+
 
 import * as path from 'path';
 import * as Jimp from 'jimp';
@@ -5,6 +7,8 @@ import * as crypto from 'crypto';
 import * as fs from 'fs';
 import {NextFunction, Request, Response} from "express";
 import {Error, ErrorCodes} from "../../common/entities/Error";
+
+
 
 export class ThumbnailGeneratorMWs {
 
