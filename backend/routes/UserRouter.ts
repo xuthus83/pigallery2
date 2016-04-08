@@ -4,7 +4,7 @@ import {UserMWs} from "../middlewares/UserMWs";
 import {UserRoles} from "../../common/entities/User";
 import {AuthenticationMWs} from "../middlewares/AuthenticationMWs";
 import {UserRequestConstrainsMWs} from "../middlewares/UserRequestConstrainsMWs";
-import {RenderingMWs} from "../middlewares/RenderingMWs";
+import {RenderingMWs} from "../middlewares/RenderingMWs"; 
 
 export class UserRouter{
     constructor(private app){

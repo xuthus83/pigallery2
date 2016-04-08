@@ -33,7 +33,6 @@ export class UserMWs {
                 return next(new Error(ErrorCodes.USER_CREATION_ERROR));
             }
 
-
             return next();
         });
 

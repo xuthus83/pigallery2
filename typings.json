@@ -5,7 +5,7 @@
     "body-parser": "registry:dt/body-parser#0.0.0+20160317120654",
     "debug": "github:DefinitelyTyped/DefinitelyTyped/debug/debug.d.ts#0d622d857f97d44ea7dcad2b3edec1f23c48fe9e",
     "express": "github:DefinitelyTyped/DefinitelyTyped/express/express.d.ts#0d622d857f97d44ea7dcad2b3edec1f23c48fe9e",
-    "express-session": "registry:dt/express-session#0.0.0+20160317120654",
+    "express-session": "registry:dt/express-session#0.0.0+20160331200931",
     "jasmine": "github:DefinitelyTyped/DefinitelyTyped/jasmine/jasmine.d.ts#d22516f9f089de107d7e7d5938566377370631f6",
     "mime": "github:DefinitelyTyped/DefinitelyTyped/mime/mime.d.ts#0d622d857f97d44ea7dcad2b3edec1f23c48fe9e",
     "node": "github:DefinitelyTyped/DefinitelyTyped/node/node.d.ts#0d622d857f97d44ea7dcad2b3edec1f23c48fe9e",

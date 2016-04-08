@@ -12,6 +12,7 @@ export class UserManager {
     }
 
     public static createUser(user,cb:(error: any,result:User) => void){
+        
         UserManager.users.push(user);
         return cb(null, user);
     }

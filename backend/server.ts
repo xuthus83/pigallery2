@@ -52,19 +52,7 @@ export class Server {
         // for parsing application/json
         this.app.use(_bodyParser.json());
 
-        this.app.use("/testDir/:img(*\.(jpg|bmp))",(req,res,next)=>{
-            console.log(req.params);
-            res.send(req.params);
-        });
-        this.app.use("/testDir/:dir(*)",(req,res,next)=>{
-            console.log(req.params);
-            res.send(req.params);
-        });
 
-        this.app.use("/testDir/*",(req,res,next)=>{
-            console.log(req.params);
-            res.send(req.params);
-        });
 
         new PublicRouter(this.app);
         
