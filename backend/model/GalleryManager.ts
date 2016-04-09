@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import * as mime from 'mime';
+import * as sizeOf  from 'image-size';
 
 import {Directory} from "../../common/entities/Directory";
 import {Photo} from "../../common/entities/Photo";
@@ -30,7 +31,8 @@ export class GalleryManager {
                 }
 
                 if(GalleryManager.isImage(fullFilePath)){
-                    directory.photos.push(new Photo(1,file));
+                    let dimensions = sizeOf(fullFilePath);
+                    directory.photos.push(new Photo(1,file,dimensions.width,dimensions.height));
                 }
             }
 

@@ -8,11 +8,12 @@ import {Directory} from "../../../common/entities/Directory";
 import {Message} from "../../../common/entities/Message";
 import {GalleryPhotoComponent} from "./photo/photo.gallery.component";
 import {GalleryDirectoryComponent} from "./directory/directory.gallery.component";
+import {GalleryGridComponent} from "./grid/grid.gallery.component";
 
 @Component({
     selector: 'gallery',
     templateUrl: 'app/gallery/gallery.component.html',
-    directives:[GalleryPhotoComponent,
+    directives:[GalleryGridComponent,
                 GalleryDirectoryComponent]
 })
 export class GalleryComponent implements OnInit{

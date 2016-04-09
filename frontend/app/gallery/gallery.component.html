@@ -3,6 +3,4 @@
 <div *ngIf="currentDirectory" *ngFor="#directory of currentDirectory.directories" >
   <gallery-directory *ngIf="directory" [directory]="directory" ></gallery-directory>
 </div>
-<div *ngIf="currentDirectory" *ngFor="#photo of currentDirectory.photos" >
-  <gallery-photo *ngIf="photo" [photo]="photo" [directory]="currentDirectory"></gallery-photo>
-</div>
+<gallery-grid [directory]="currentDirectory"></gallery-grid>
