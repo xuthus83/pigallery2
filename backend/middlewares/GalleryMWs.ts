@@ -4,14 +4,19 @@ import * as fs from 'fs';
 import {NextFunction, Request, Response} from "express";
 import {Error, ErrorCodes} from "../../common/entities/Error";
 import {GalleryManager} from "../model/GalleryManager";
-import {Directory} from "../../common/entities/Directory"; 
+import {Directory} from "../../common/entities/Directory";
+import {Config} from "../config/Config";
 
 export class GalleryMWs {
 
 
+    private static getImageFolder(){
+        return path.join(__dirname,"/../../",Config.imagesFolder);
+    }
+
     public static listDirectory(req:Request, res:Response, next:NextFunction){
         let directoryName = req.params.directory || "/";
-        let absoluteDirectoryName = path.join(__dirname,"/../../demo/images", directoryName);
+        let absoluteDirectoryName = path.join(GalleryMWs.getImageFolder(), directoryName);
         
         if(!fs.statSync(absoluteDirectoryName).isDirectory()){
             return next();
@@ -32,7 +37,7 @@ export class GalleryMWs {
             return next();
         }
 
-        let fullImagePath =  path.join(__dirname,"/../../demo/images", req.params.imagePath);
+        let fullImagePath =  path.join(GalleryMWs.getImageFolder(), req.params.imagePath);
         if(fs.statSync(fullImagePath).isDirectory()){
             return next();
         }
