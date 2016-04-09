@@ -27,6 +27,8 @@ export class Server {
         this.debug = _debug("PiGallery2:server");
         this.app = _express();
 
+        this.app.set('view engine', 'ejs');
+
         if(process.env.DEBUG) {
             var _morgan = require('morgan');
             this.app.use(_morgan('dev'));
@@ -51,6 +53,8 @@ export class Server {
          */
         // for parsing application/json
         this.app.use(_bodyParser.json());
+        
+  
 
 
 

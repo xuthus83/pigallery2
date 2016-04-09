@@ -8,6 +8,9 @@
 <body>
 <pi-gallery2-app>Loading...</pi-gallery2-app>
 </body>
+<script>
+    var ServerInject = {user: <%- JSON.stringify(user)%>}
+</script>
 <script src="https://code.angularjs.org/2.0.0-beta.12/angular2-polyfills.js"></script>
 <script src="dist/app-bundle.js"></script>
 </html>

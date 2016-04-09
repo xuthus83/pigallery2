@@ -14,6 +14,7 @@ export class AuthenticationMWs {
      /*   if (typeof req.session.user === 'undefined') {
             return next(new Error(ErrorCodes.NOT_AUTHENTICATED));
         }*/
+        //TODO: uncomment
         return next();
     }
     

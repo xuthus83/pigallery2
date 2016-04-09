@@ -5,8 +5,12 @@ declare module Express {
         body?:{
             loginCredential
         }
-    }       
+    }
     
+    export interface Response{
+        tpl?:any
+    }
+
     export interface Session  {
         user?;
     }

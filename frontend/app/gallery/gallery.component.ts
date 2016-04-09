@@ -34,7 +34,9 @@ export class GalleryComponent implements OnInit{
             return;
         }
  
-        let directoryName = this._params.get('directory'); 
+        let directoryName = this._params.get('directory');
+        console.log(this._params);
+        console.log(directoryName);
         directoryName = directoryName ? directoryName : "";
         this._galleryService.getDirectory(directoryName).then(( message:Message<Directory>) => {
             if(message.error){

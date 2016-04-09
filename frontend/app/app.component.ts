@@ -29,6 +29,10 @@ import {GeneratedUrl} from "angular2/src/router/rules/route_paths/route_path";
 })
 @RouteConfig([
     {
+        path: '/',
+        redirectTo: ["Login"]
+    },
+    {
         path: '/login',
         name: 'Login',
         component: LoginComponent,
@@ -36,17 +40,13 @@ import {GeneratedUrl} from "angular2/src/router/rules/route_paths/route_path";
     },
     {
         path: '/gallery',
-        name: 'GalleryBase',
+        redirectTo: ["Gallery",{directory:""}]
+    }, 
+   {
+        path: '/gallery/:directory',
+        name: 'Gallery',
         component: GalleryComponent
     },
-    {
-        regex: 'gallery/([\w]*)',
-        name: 'Gallery',
-        serializer: (params): GeneratedUrl => {
-            return new GeneratedUrl(`gallery/${params['directory']}`, {})
-        },
-        component: GalleryComponent
-    }
 ])
 export class AppComponent  implements OnInit{
 
@@ -55,10 +55,11 @@ export class AppComponent  implements OnInit{
     }
 
     ngOnInit() {
-        this._authenticationService.OnAuthenticated.on((user:User) =>
-        {
-         //   this._location.replaceState('/'); // clears browser history so they can't navigate with back button
-            this._router.navigate(["GalleryBase"]);
+        this._authenticationService.OnAuthenticated.on((user:User) => {
+            if (this._router.isRouteActive(this._router.generate(['Login']))) {
+                console.log("routing");
+                this._router.navigate(["Gallery",{directory:""}]);
+            }
         });
 
     }

@@ -42,9 +42,9 @@ module.exports = {
                 },
                 exclude: [ /\.e2e\.ts$/ ]
             },
-            { test: /\.json$/, loader: 'json-loader', exclude: [ root('frontend/index.html') ] },
-            { test: /\.html$/, loader: 'raw-loader', exclude: [ root('frontend/index.html') ] },
-            { test: /\.css$/,  loader: 'raw-loader', exclude: [ root('frontend/index.html') ] }
+            { test: /\.json$/, loader: 'json-loader', exclude: [ root('frontend/index.ejs') ] },
+            { test: /\.html$/, loader: 'raw-loader', exclude: [ root('frontend/index.ejs') ] },
+            { test: /\.css$/,  loader: 'raw-loader', exclude: [ root('frontend/index.ejs') ] }
         ],
         postLoaders: [
             // instrument only testing sources with Istanbul
