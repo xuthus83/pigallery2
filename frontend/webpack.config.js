@@ -20,9 +20,6 @@ module.exports = {
     },
     // Add minification
     plugins: [
-       // new CommonsChunkPlugin("dist/admin-commons-bundle.js",['demo','missionControl']),
-       // new CommonsChunkPlugin("dist/commons-bundle.js")
-       // ,new webpack.optimize.UglifyJsPlugin()
     ],
     module: {
         loaders: [
