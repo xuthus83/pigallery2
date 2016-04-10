@@ -4,12 +4,14 @@ import {ConfigLoader} from "./ConfigLoader";
 export class ConfigClass{
 
     constructor(){
-        ConfigLoader.init(this,__dirname+'./../../../config.json');
+        ConfigLoader.init(this,__dirname+'./../../config.json');
     }
 
-    public thumbnailSizes = [200];
-    public imagesFolder = "/demo/images";
-    public thumbnailFolder = "/demo/TEMP";
+    public port:number = 80;
+
+    public thumbnailSizes:Array<number> = [200];
+    public imagesFolder:string = "/demo/images";
+    public thumbnailFolder:string = "/demo/TEMP";
 }
 
 

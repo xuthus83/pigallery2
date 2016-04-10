@@ -8,11 +8,10 @@ import * as _http from 'http';
 import {PublicRouter} from "./routes/PublicRouter";
 import {UserRouter} from "./routes/UserRouter";
 import {GalleryRouter} from "./routes/GalleryRouter";
-import {AdminRouter} from "./routes/AdminRouter";
-import {Error} from "../common/entities/Error";
-import {json} from "body-parser";
+import {AdminRouter} from "./routes/AdminRouter"; 
 import {ErrorRouter} from "./routes/ErrorRouter";
 import {SharingRouter} from "./routes/SharingRouter";
+import {Config} from "./config/Config";
 
 
 export class Server {
@@ -70,15 +69,14 @@ export class Server {
     
 
 
-        // Get port from environment and store in Express.
-        this.port = Server.normalizePort(process.env.PORT || '80');
-        this.app.set('port', this.port);
+        // Get port from environment and store in Express. 
+        this.app.set('port', Config.port);
 
         // Create HTTP server.
         this.server = _http.createServer(this.app);
 
         //Listen on provided port, on all network interfaces.
-        this.server.listen(this.port);
+        this.server.listen(Config.port);
         this.server.on('error', this.onError);
         this.server.on('listening', this.onListening);
 
@@ -86,24 +84,7 @@ export class Server {
     }
 
 
-    /**
-     * Normalize a port into a number, string, or false.
-     */
-    private static normalizePort(val) {
-        var port = parseInt(val, 10);
-
-        if (isNaN(port)) {
-            // named pipe
-            return val;
-        }
-
-        if (port >= 0) {
-            // port number
-            return port;
-        }
-
-        return false;
-    }
+    
 
     /**
      * Event listener for HTTP server "error" event.
@@ -113,9 +94,9 @@ export class Server {
             throw error;
         }
 
-        var bind = typeof this.port === 'string'
-            ? 'Pipe ' + this.port
-            : 'Port ' + this.port;
+        var bind = typeof Config.port === 'string'
+            ? 'Pipe ' + Config.port
+            : 'Port ' + Config.port;
 
         // handle specific listen error with friendly messages
         switch (error.code) {
