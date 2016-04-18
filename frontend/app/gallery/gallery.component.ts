@@ -6,15 +6,19 @@ import {Router, Location, RouteParams} from "angular2/router";
 import {GalleryService} from "./gallery.service";
 import {Directory} from "../../../common/entities/Directory";
 import {Message} from "../../../common/entities/Message";
-import {GalleryPhotoComponent} from "./photo/photo.gallery.component";
 import {GalleryDirectoryComponent} from "./directory/directory.gallery.component";
 import {GalleryGridComponent} from "./grid/grid.gallery.component";
+import {MATERIAL_DIRECTIVES} from "ng2-material/all";
+import {SidenavService} from "ng2-material/all";
 
 @Component({
     selector: 'gallery',
     templateUrl: 'app/gallery/gallery.component.html',
+    styleUrls: ['app/gallery/gallery.component.css'],
     directives:[GalleryGridComponent,
-                GalleryDirectoryComponent]
+                GalleryDirectoryComponent,
+                MATERIAL_DIRECTIVES],
+    providers: [SidenavService]
 })
 export class GalleryComponent implements OnInit{
 
@@ -24,7 +28,7 @@ export class GalleryComponent implements OnInit{
                 private _params: RouteParams,
                 private _authService: AuthenticationService,
                 private _router: Router,
-                private _location:Location) { 
+                public sidenav: SidenavService) {
     }
 
     ngOnInit(){
@@ -46,6 +50,9 @@ export class GalleryComponent implements OnInit{
 
             this.currentDirectory = message.result;
         });
+    }
+    public showSideNav(){ 
+        this.sidenav.show("menu");
     }
     
 }

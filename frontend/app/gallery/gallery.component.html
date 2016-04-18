@@ -1,6 +1,39 @@
-<h1>Gallery</h1>
+<md-sidenav-container layout="row">
 
-<div *ngIf="currentDirectory" *ngFor="#directory of currentDirectory.directories" >
-  <gallery-directory *ngIf="directory" [directory]="directory" ></gallery-directory>
-</div>
-<gallery-grid [directory]="currentDirectory"></gallery-grid>
+    <md-sidenav name="menu" align="left" layout="column">
+        <md-toolbar class="md-theme-light">
+            <img width="25px" src="/icon.png"/>
+            <h1 class="md-toolbar-tools">PiGallery2</h1>
+        </md-toolbar>
+        <md-content layout-padding>
+            <button md-raised-button (click)="close('menu')" class="md-primary">
+                Close Sidenav Right
+            </button>
+        </md-content>
+    </md-sidenav>
+
+    <md-content flex>
+        <div layout="column" style="height: 100vh; overflow-y: hidden;">
+            <md-toolbar mdScrollShrink>
+                <div class="md-toolbar-tools">
+                    <button md-button class="md-icon-button md-primary" aria-label="Settings" (click)="showSideNav()">
+                        <i md-icon>more_vert</i>
+                    </button>
+                    <h3>
+                        <span>PiGallery2</span>
+                    </h3>
+                    <span flex></span>
+                </div>
+            </md-toolbar>
+
+            <md-content flex id="content">
+                <div *ngIf="currentDirectory" *ngFor="#directory of currentDirectory.directories">
+                    <gallery-directory *ngIf="directory" [directory]="directory"></gallery-directory>
+                </div>
+                <gallery-grid [directory]="currentDirectory"></gallery-grid>
+
+            </md-content>
+        </div>
+    </md-content>
+
+</md-sidenav-container>

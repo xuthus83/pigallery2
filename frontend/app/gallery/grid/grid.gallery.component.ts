@@ -34,6 +34,7 @@ export class GalleryGridComponent implements OnChanges{
 
          this.photosToRender = [];
          let i = 0;
+
          while (i < this.directory.photos.length ) {
 
              let photoRowBuilder = new GridRowBuilder(this.directory.photos,i,this.IMAGE_MARGIN,this.getContainerWidth());

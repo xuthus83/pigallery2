@@ -1,7 +1,7 @@
 div {
-    display: block;
+    /*display: block;*/
 }
 gallery-photo {
-    display: inline-block;
-    overflow: hidden;
+  /*  display: inline-block;
+    overflow: hidden;*/
 }

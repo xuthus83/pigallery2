@@ -11,20 +11,21 @@ import {Router, Location} from "angular2/router";
 import {HTTP_PROVIDERS} from "angular2/http";
 import {UserService} from "./model/user.service";
 import {GalleryService} from "./gallery/gallery.service";
-import {GeneratedUrl} from "angular2/src/router/rules/route_paths/route_path";
+import {MATERIAL_BROWSER_PROVIDERS} from "ng2-material/all";
+import {ViewportHelper} from "ng2-material/core/util/viewport"; 
 
-
-
+        
 @Component({
     selector: 'pi-gallery2-app',
     template: `<router-outlet></router-outlet>`,
-    directives: [ROUTER_DIRECTIVES, RouterLink],
+    directives: [ROUTER_DIRECTIVES, RouterLink], 
     providers: [
         HTTP_PROVIDERS,
         ROUTER_PROVIDERS,
         UserService,
         GalleryService,
-        AuthenticationService
+        AuthenticationService,MATERIAL_BROWSER_PROVIDERS,ViewportHelper
+
     ]
 })
 @RouteConfig([
@@ -51,7 +52,6 @@ import {GeneratedUrl} from "angular2/src/router/rules/route_paths/route_path";
 export class AppComponent  implements OnInit{
 
     constructor(private _router: Router, private _location:Location, private _authenticationService: AuthenticationService){
- 
     }
 
     ngOnInit() {
@@ -61,6 +61,7 @@ export class AppComponent  implements OnInit{
                 this._router.navigate(["Gallery",{directory:""}]);
             }
         });
+        
 
     }
 }

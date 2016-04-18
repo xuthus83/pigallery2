@@ -40,7 +40,7 @@ export class Server {
             name:"pigallery2-session",
             secret: 'PiGallery2 secret',
             cookie: {
-                maxAge: 60000,
+                maxAge: 60000*10,
                 httpOnly: false
             },
             resave: true,
