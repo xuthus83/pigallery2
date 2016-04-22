@@ -1,6 +1,10 @@
 
 import {ConfigLoader} from "./ConfigLoader";
 
+export enum DatabaseType{
+    memory, mongoDB
+}
+
 export class ConfigClass{
 
     constructor(){
@@ -12,6 +16,7 @@ export class ConfigClass{
     public thumbnailSizes:Array<number> = [200];
     public imagesFolder:string = "/demo/images";
     public thumbnailFolder:string = "/demo/TEMP";
+    public databaseType:DatabaseType = DatabaseType.mongoDB;
 }
 
 

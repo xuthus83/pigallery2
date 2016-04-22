@@ -6,6 +6,7 @@ export class ErrorRouter{
     constructor(private app) {
 
         this.addApiErrorHandler();
+        this.addGenericHandler();
     }
 
     private addApiErrorHandler() {

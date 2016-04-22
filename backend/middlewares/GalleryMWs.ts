@@ -3,9 +3,10 @@ import * as path from 'path';
 import * as fs from 'fs';
 import {NextFunction, Request, Response} from "express";
 import {Error, ErrorCodes} from "../../common/entities/Error";
-import {GalleryManager} from "../model/GalleryManager";
+import {GalleryManager} from "../model/memory/GalleryManager";
 import {Directory} from "../../common/entities/Directory";
 import {Config} from "../config/Config";
+import {ObjectManagerRepository} from "../model/ObjectManagerRepository";
 
 export class GalleryMWs {
 
@@ -22,7 +23,7 @@ export class GalleryMWs {
             return next();
         }
 
-        GalleryManager.listDirectory(directoryName,(err,directory:Directory) => {
+        ObjectManagerRepository.getInstance().getGalleryManager().listDirectory(directoryName,(err,directory:Directory) => {
            if(err || !directory){
                return next(new Error(ErrorCodes.GENERAL_ERROR,err));
            }

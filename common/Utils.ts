@@ -19,4 +19,27 @@ export class Utils {
         return url.substring(0, url.length - 1);
     }
 
+    public static updateKeys(targetObject,sourceObject){
+        Object.keys(sourceObject).forEach((key)=> {
+            if(typeof targetObject[key] === "undefined"){
+                return;
+            }
+            if(typeof targetObject[key] === "object"){
+                Utils.updateKeys(targetObject[key],sourceObject[key] );
+            }else {
+                targetObject[key] = sourceObject[key];
+            }
+        });
+    }
+
+    public static setKeys(targetObject,sourceObject){
+        Object.keys(sourceObject).forEach((key)=> {
+            if(typeof targetObject[key] === "object"){
+                Utils.updateKeys(targetObject[key],sourceObject[key] );
+            }else {
+                targetObject[key] = sourceObject[key];
+            }
+        });
+    }
+
 }

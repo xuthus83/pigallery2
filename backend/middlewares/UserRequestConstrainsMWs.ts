@@ -1,8 +1,9 @@
 
-import {UserManager} from "../model/UserManager";
+import {UserManager} from "../model/memory/UserManager";
 import {NextFunction, Request, Response} from "express";
 import {Error, ErrorCodes} from "../../common/entities/Error";
 import {UserRoles} from "../../common/entities/User";
+import {ObjectManagerRepository} from "../model/ObjectManagerRepository";
 
 export class UserRequestConstrainsMWs {
 
@@ -40,7 +41,7 @@ export class UserRequestConstrainsMWs {
             return next();
         }
 
-        UserManager.find({minRole:UserRoles.Admin}, (err, result) =>{
+        ObjectManagerRepository.getInstance().getUserManager().find({minRole:UserRoles.Admin}, (err, result) =>{
             if ((err) || (!result)) {
                 return next(new Error(ErrorCodes.GENERAL_ERROR));
             }

@@ -11,7 +11,11 @@ import {GalleryRouter} from "./routes/GalleryRouter";
 import {AdminRouter} from "./routes/AdminRouter"; 
 import {ErrorRouter} from "./routes/ErrorRouter";
 import {SharingRouter} from "./routes/SharingRouter";
-import {Config} from "./config/Config";
+import {Config, DatabaseType} from "./config/Config";
+import {ObjectManagerRepository} from "./model/ObjectManagerRepository";
+import {MongoGalleryManager} from "./model/mongoose/MongoGalleryManager";
+import {MongoUserManager} from "./model/mongoose/MongoUserManager";
+import {DatabaseManager} from "./model/mongoose/DatabaseManager";
 
 
 export class Server {
@@ -52,10 +56,21 @@ export class Server {
          */
         // for parsing application/json
         this.app.use(_bodyParser.json());
-        
-  
 
 
+        if(Config.databaseType === DatabaseType.memory){
+            ObjectManagerRepository.MemoryMongoManagers();
+        }else {
+            if (DatabaseManager.getInstance(()=>{
+                    console.error("MongoDB connection error. Falling back to memory Object Managers");
+                    ObjectManagerRepository.MemoryMongoManagers();
+                }).isConnectionError()) {
+                console.error("MongoDB connection error. Falling back to memory Object Managers");
+                ObjectManagerRepository.MemoryMongoManagers();
+            } else {
+                ObjectManagerRepository.InitMongoManagers();
+            }
+        }
 
         new PublicRouter(this.app);
         

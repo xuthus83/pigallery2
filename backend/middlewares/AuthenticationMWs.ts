@@ -2,10 +2,10 @@
 ///<reference path="../../typings/main.d.ts"/>
 
 
-import {UserManager} from "../model/UserManager";
 import {NextFunction, Request, Response} from "express";
 import {Error, ErrorCodes} from "../../common/entities/Error";
 import {UserRoles} from "../../common/entities/User";
+import {ObjectManagerRepository} from "../model/ObjectManagerRepository";
 
 export class AuthenticationMWs {
 
@@ -40,10 +40,9 @@ export class AuthenticationMWs {
             (typeof req.body.loginCredential.password === 'undefined')) {
             return next();
         }
-
         //lets find the user
-        UserManager.findOne({
-              username: req.body.loginCredential.username,
+        ObjectManagerRepository.getInstance().getUserManager().findOne({
+              name: req.body.loginCredential.username,
               password: req.body.loginCredential.password
         }, (err, result) => {
             if ((err) || (!result)) {
