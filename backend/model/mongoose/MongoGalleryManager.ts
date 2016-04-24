@@ -1,11 +1,7 @@
-import * as fs from 'fs';
 import * as path from 'path';
-import * as mime from 'mime';
-import * as sizeOf  from 'image-size';
 import {Schema} from "mongoose";
 
 import {Directory} from "../../../common/entities/Directory";
-import {Photo} from "../../../common/entities/Photo";
 import {IGalleryManager} from "../IGalleryManager";
 import {DatabaseManager} from "./DatabaseManager";
 import {DiskManager} from "../DiskManger";

@@ -1,3 +1,5 @@
+///<reference path="../../../typings/main.d.ts"/>
+
 import * as mongoose from 'mongoose';
 import {Schema} from "mongoose";
 export class DatabaseManager{
