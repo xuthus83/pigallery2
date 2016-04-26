@@ -1,13 +1,10 @@
 ///<reference path="../../browser.d.ts"/>
 
-import {Component, OnInit} from 'angular2/core';
-import {LoginCredential} from '../../../common/entities/LoginCredential';
+import {Component, OnInit} from 'angular2/core'; 
 import {AuthenticationService} from "../model/authentication.service";
 import {Router} from "angular2/router";
-import {MATERIAL_DIRECTIVES} from "ng2-material/all";
-import {FORM_DIRECTIVES} from "angular2/common"; 
-import {MATERIAL_BROWSER_PROVIDERS} from "ng2-material/all";
-import {ViewportHelper} from "ng2-material/all";
+import {MATERIAL_DIRECTIVES} from "ng2-material/all"; 
+import {MATERIAL_BROWSER_PROVIDERS} from "ng2-material/all"; 
 import {FrameComponent} from "../frame/frame.component";
  
 @Component({
