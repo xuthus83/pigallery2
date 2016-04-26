@@ -12,7 +12,8 @@ import {HTTP_PROVIDERS} from "angular2/http";
 import {UserService} from "./model/user.service";
 import {GalleryService} from "./gallery/gallery.service";
 import {MATERIAL_BROWSER_PROVIDERS} from "ng2-material/all";
-import {ViewportHelper} from "ng2-material/core/util/viewport"; 
+import {ViewportHelper} from "ng2-material/core/util/viewport";
+import {AdminComponent} from "./admin/admin.component"; 
 
         
 @Component({
@@ -38,6 +39,11 @@ import {ViewportHelper} from "ng2-material/core/util/viewport";
         name: 'Login',
         component: LoginComponent,
         useAsDefault: true
+    },
+    {
+        path: '/admin',
+        name: 'Admin',
+        component: AdminComponent
     },
     {
         path: '/gallery',

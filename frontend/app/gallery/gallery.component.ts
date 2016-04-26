@@ -10,6 +10,7 @@ import {GalleryDirectoryComponent} from "./directory/directory.gallery.component
 import {GalleryGridComponent} from "./grid/grid.gallery.component";
 import {MATERIAL_DIRECTIVES} from "ng2-material/all";
 import {SidenavService} from "ng2-material/all";
+import {FrameComponent} from "../frame/frame.component";
 
 @Component({
     selector: 'gallery',
@@ -17,8 +18,8 @@ import {SidenavService} from "ng2-material/all";
     styleUrls: ['app/gallery/gallery.component.css'],
     directives:[GalleryGridComponent,
                 GalleryDirectoryComponent,
-                MATERIAL_DIRECTIVES],
-    providers: [SidenavService]
+                FrameComponent,
+                MATERIAL_DIRECTIVES]
 })
 export class GalleryComponent implements OnInit{
 
@@ -27,8 +28,7 @@ export class GalleryComponent implements OnInit{
     constructor(private _galleryService:GalleryService,
                 private _params: RouteParams,
                 private _authService: AuthenticationService,
-                private _router: Router,
-                public sidenav: SidenavService) {
+                private _router: Router) {
     }
 
     ngOnInit(){
@@ -50,9 +50,7 @@ export class GalleryComponent implements OnInit{
             this.currentDirectory = message.result;
         });
     }
-    public showSideNav(){ 
-        this.sidenav.show("menu");
-    }
+
     
 }
 

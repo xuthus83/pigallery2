@@ -1,0 +1,35 @@
+<md-sidenav-container layout="row">
+
+    <md-sidenav name="menu" align="left" layout="column">
+        <md-toolbar class="md-theme-light">
+            <h1 class="md-toolbar-tools">PiGallery2</h1>
+        </md-toolbar>
+        <md-content layout-padding>
+            <button md-raised-button [routerLink]="['Gallery',{directory: '/'}]" class="md-primary">
+                Gallery
+            </button>
+            <button md-raised-button [routerLink]="['Admin']" class="md-primary">
+                Admin
+            </button>
+        </md-content>
+    </md-sidenav>
+
+    <md-content flex>
+        <div layout="column" style="height: 100vh; overflow-y: hidden;">
+            <md-toolbar mdScrollShrink>
+                <div class="md-toolbar-tools">
+                    <button md-button class="md-icon-button md-primary" aria-label="Settings" (click)="showSideNav()">
+                        <i md-icon>more_vert</i>
+                    </button>
+                    <h3>
+                        <span>PiGallery2</span>
+                    </h3>
+                    <span flex></span>
+                </div>
+            </md-toolbar>
+
+            <ng-content></ng-content>
+        </div>
+    </md-content>
+
+</md-sidenav-container>
