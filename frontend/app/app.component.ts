@@ -7,7 +7,7 @@ import {AuthenticationService} from "./model/authentication.service";
 import {GalleryComponent} from "./gallery/gallery.component";
 import {OnInit} from "angular2/core";
 import {User} from "../../common/entities/User";
-import {Router, Location} from "angular2/router";
+import {Router} from "angular2/router";
 import {HTTP_PROVIDERS} from "angular2/http";
 import {UserService} from "./model/user.service";
 import {GalleryService} from "./gallery/gallery.service";
@@ -51,7 +51,7 @@ import {ViewportHelper} from "ng2-material/core/util/viewport";
 ])
 export class AppComponent  implements OnInit{
 
-    constructor(private _router: Router, private _location:Location, private _authenticationService: AuthenticationService){
+    constructor(private _router: Router, private _authenticationService: AuthenticationService){
     }
 
     ngOnInit() {

@@ -2,7 +2,7 @@
 
 import {Component, OnInit} from 'angular2/core';
 import {AuthenticationService} from "../model/authentication.service";
-import {Router, Location, RouteParams} from "angular2/router";
+import {Router,  RouteParams} from "angular2/router";
 import {GalleryService} from "./gallery.service";
 import {Directory} from "../../../common/entities/Directory";
 import {Message} from "../../../common/entities/Message";
@@ -33,7 +33,6 @@ export class GalleryComponent implements OnInit{
 
     ngOnInit(){
         if (!this._authService.isAuthenticated()) {
-          //  this._location.replaceState('/'); // clears browser history so they can't navigate with back button
             this._router.navigate(['Login']);
             return;
         }

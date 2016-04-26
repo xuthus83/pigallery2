@@ -22,7 +22,7 @@
     "url": "https://github.com/bpatrik/PiGallery2/issues"
   },
   "dependencies": {
-    "angular2": "^2.0.0-beta.15",
+    "angular2": "^2.0.0-beta.16",
     "body-parser": "^1.15.0",
     "core-js": "^2.3.0",
     "debug": "^2.2.0",
@@ -39,14 +39,15 @@
     "ng2-cookies": "^0.1.5",
     "ng2-material": "^0.3.7",
     "optimist": "^0.6.1",
+    "protractor": "^3.3.0",
     "remap-istanbul": "^0.6.3",
     "rxjs": "5.0.0-beta.2",
     "style-loader": "^0.13.1",
     "ts-loader": "^0.8.2",
-    "tslint": "^3.8.0",
+    "tslint": "^3.8.1",
     "tslint-loader": "^2.1.4",
     "typescript": "^1.8.10",
-    "typings": "^0.7.9",
+    "typings": "^0.8.1",
     "webpack": "^1.13.0",
     "zone.js": "^0.6.12"
   },
