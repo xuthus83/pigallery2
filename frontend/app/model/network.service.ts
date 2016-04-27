@@ -3,6 +3,7 @@
 import {Http, Headers, RequestOptions, Response} from "angular2/http";
 import {Message} from "../../../common/entities/Message";
 import "rxjs/Rx";
+import {Utils} from "../../../common/Utils";
 
 export class NetworkService{
 

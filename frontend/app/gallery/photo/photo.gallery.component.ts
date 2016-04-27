@@ -19,6 +19,8 @@ export class GalleryPhotoComponent{
     getPhotoPath(){
         return Utils.concatUrls("/api/gallery",this.directory.path,this.directory.name,this.photo.name,"thumbnail");
     }
+
+ 
     
 }
 

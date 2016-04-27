@@ -1,10 +1,12 @@
 ///<reference path="../../../browser.d.ts"/>
 
-import {Component, Input,  ElementRef, OnChanges} from 'angular2/core';
+import {Component, Input, ElementRef, OnChanges, ViewChild, ContentChild} from 'angular2/core';
 import {Directory} from "../../../../common/entities/Directory";
 import {Photo} from "../../../../common/entities/Photo";
 import {GalleryPhotoComponent} from "../photo/photo.gallery.component";
 import {GridRowBuilder} from "./GridRowBuilder";
+import {AnimationBuilder} from "angular2/animate";
+import {Utils} from "../../../../common/Utils";
 
 @Component({
     selector: 'gallery-grid',
@@ -13,7 +15,9 @@ import {GridRowBuilder} from "./GridRowBuilder";
     directives:[GalleryPhotoComponent]
 })
 export class GalleryGridComponent implements OnChanges{
-    
+
+    @ViewChild('lightbox') lightBoxDiv:ElementRef;
+    @ViewChild('gridContainer') gridContainer:ElementRef;
     @Input() directory:Directory;
     photosToRender:Array<GridPhoto> = [];
     private IMAGE_MARGIN = 2;
@@ -21,7 +25,7 @@ export class GalleryGridComponent implements OnChanges{
     private MIN_ROW_COUNT = 2;
     private MAX_ROW_COUNT = 5;
     
-    constructor(private elementRef: ElementRef) {
+    constructor(private elementRef: ElementRef,private animBuilder: AnimationBuilder) {
     }
 
     ngOnChanges(){
@@ -45,7 +49,7 @@ export class GalleryGridComponent implements OnChanges{
              let imageHeight = rowHeight - (this.IMAGE_MARGIN * 2);
 
              photoRowBuilder.getPhotoRow().forEach((photo) => {
-                 let imageWidth = imageHeight * (photo.width / photo.height);
+                 let imageWidth = imageHeight * (photo.width / photo.height); 
                  this.photosToRender.push(new GridPhoto(photo,imageWidth,imageHeight));
              });
 
@@ -58,11 +62,39 @@ export class GalleryGridComponent implements OnChanges{
     }
     
     private getContainerWidth(): number{
-        if(typeof this.elementRef.nativeElement.firstElementChild === 'undefined' || 
-            this.elementRef.nativeElement.firstElementChild  === null){
-            return 0;
-        }
-        return this.elementRef.nativeElement.firstElementChild.clientWidth;
+        return this.gridContainer.nativeElement.clientWidth;
+    }
+
+    public lightboxModel = {top:0,left:0, image:{width:0, height:0,src:""}, visible: false};
+    
+    public showLightBox(event,gridPhoto:GridPhoto){
+        gridPhoto = Utils.clone(gridPhoto);
+ 
+        this.lightboxModel.visible = true;
+
+        this.lightboxModel.image.src = Photo.getThumbnailPath(this.directory,gridPhoto.photo);
+        console.log( this.gridContainer);
+
+        let animation0 = this.animBuilder.css();
+        animation0.setDuration(0);
+        animation0.setToStyles({height: gridPhoto.renderHeight+"px", width:gridPhoto.renderWidth+"px",
+            "top":event.target.offsetTop+"px", "left":event.target.offsetLeft+"px"});
+        animation0.start(this.lightBoxDiv.nativeElement).onComplete(()=>{
+            
+            let animation = this.animBuilder.css();
+            animation.setDuration(1000); 
+            animation.setFromStyles({height: gridPhoto.renderHeight+"px", width:gridPhoto.renderWidth+"px",
+                                    "top":event.target.offsetTop+"px", "left":event.target.offsetLeft+"px"});
+            animation.setToStyles({height: "100%", width: "100%",
+                                    "top":"0px","left": "0px"});
+            animation.start(this.lightBoxDiv.nativeElement);
+        });
+    }
+
+    public hideLightBox(event) {
+        this.lightBoxDiv.nativeElement.style.width = 0;
+
+        this.lightBoxDiv.nativeElement.style.height = 0;
     }
 
  

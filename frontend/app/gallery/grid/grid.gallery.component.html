@@ -1,13 +1,25 @@
-<div *ngIf="directory" (window:resize)="onResize()" >
+<div class="lightboxCss"
+     #lightbox
+
+     (click)="hideLightBox($event)"
+     [style.top.px]="lightboxModel.top"
+     [style.left.px]="lightboxModel.left"
+     [style.width.px]="lightboxModel.image.width"
+     [style.height.px]="lightboxModel.image.height">
+    <img [src]="lightboxModel.image.src" width="100%" height="100%"/>
+</div>
+
+<div #gridContainer *ngIf="directory" (window:resize)="onResize()" >
     <gallery-photo
-            *ngFor="#gridPhoto of photosToRender"
+                    *ngFor="#gridPhoto of photosToRender"
                     *ngIf="gridPhoto"
+                    (click)="showLightBox($event,gridPhoto)"
                    [photo]="gridPhoto.photo"
                    [directory]="directory"
                    [style.width.px]="gridPhoto.renderWidth"
                    [style.height.px]="gridPhoto.renderHeight"
-                    [style.marginLeft.px]="IMAGE_MARGIN"
-                    [style.marginRight.px]="IMAGE_MARGIN">
+                   [style.marginLeft.px]="IMAGE_MARGIN"
+                   [style.marginRight.px]="IMAGE_MARGIN">
 
     </gallery-photo>
 </div>
