@@ -12,5 +12,7 @@ backend/**/*.js.map
 common/**/*.js
 common/**/*.js.map
 test/coverage
+test/backend/**/*.js
+test/backend/**/*.js.map
 demo/TEMP/
 config.json
