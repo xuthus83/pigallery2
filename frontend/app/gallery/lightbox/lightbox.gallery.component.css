@@ -1,10 +1,23 @@
-.lightboxCss{
+.lightbox {
     position: fixed; /* Stay in place */
     z-index: 1100; /* Sit on top */
     left: 0;
     top: 0;
     width: 0px; /* Full width */
     height: 0px; /* Full height */
-    background-color: #000066;
-    overflow:hidden;
+    overflow: hidden;
+    display: flex; /* add */
+    justify-content: center; /* add to align horizontal */
+    align-items: center; /* add to align vertical */
+    cursor: pointer;
+}
+.blackCanvas{
+    display: none;
+    position: fixed; /* Stay in place */
+    z-index: 1099; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    background-color: black;
 }
