@@ -1,3 +1,7 @@
-<a md-raised-button class="md-raised " [routerLink]="['Gallery',{directory: getDirectoryPath()}]" aria-label="More">
+<!--<a md-raised-button class="md-raised " [routerLink]="['Gallery',{directory: getDirectoryPath()}]" aria-label="More">
     <i md-icon>folder</i> {{directory.name}}
+</a>-->
+<a  class="button " [routerLink]="['Gallery',{directory: getDirectoryPath()}]" >
+  {{directory.name}}
 </a>
+

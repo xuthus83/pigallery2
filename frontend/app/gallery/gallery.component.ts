@@ -1,7 +1,7 @@
 ///<reference path="../../browser.d.ts"/>
 
-import {Component, OnInit} from 'angular2/core';
-import {AuthenticationService} from "../model/authentication.service";
+import {Component, OnInit, QueryList, ViewChild, AfterViewInit} from 'angular2/core';
+import {AuthenticationService} from "../model/network/authentication.service.ts";
 import {Router,  RouteParams} from "angular2/router";
 import {GalleryService} from "./gallery.service";
 import {Directory} from "../../../common/entities/Directory";
@@ -9,8 +9,8 @@ import {Message} from "../../../common/entities/Message";
 import {GalleryDirectoryComponent} from "./directory/directory.gallery.component";
 import {GalleryGridComponent} from "./grid/grid.gallery.component";
 import {MATERIAL_DIRECTIVES} from "ng2-material/all";
-import {SidenavService} from "ng2-material/all";
 import {FrameComponent} from "../frame/frame.component";
+import {GalleryLightboxComponent} from "./lightbox/lightbox.gallery.component";
 
 @Component({
     selector: 'gallery',
@@ -18,12 +18,14 @@ import {FrameComponent} from "../frame/frame.component";
     styleUrls: ['app/gallery/gallery.component.css'],
     directives:[GalleryGridComponent,
                 GalleryDirectoryComponent,
+                GalleryLightboxComponent,
                 FrameComponent,
                 MATERIAL_DIRECTIVES]
 })
 export class GalleryComponent implements OnInit{
 
     currentDirectory:Directory = new Directory(-1,"","/",new Date(),[],[]);
+    
     
     constructor(private _galleryService:GalleryService,
                 private _params: RouteParams,
@@ -50,6 +52,8 @@ export class GalleryComponent implements OnInit{
             this.currentDirectory = message.result;
         });
     }
+    
+
 
     
 }

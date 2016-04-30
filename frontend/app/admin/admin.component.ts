@@ -1,7 +1,7 @@
 ///<reference path="../../browser.d.ts"/>
 
 import {Component, OnInit} from 'angular2/core'; 
-import {AuthenticationService} from "../model/authentication.service";
+import {AuthenticationService} from "../model/network/authentication.service.ts";
 import {Router} from "angular2/router";
 import {MATERIAL_DIRECTIVES} from "ng2-material/all"; 
 import {MATERIAL_BROWSER_PROVIDERS} from "ng2-material/all"; 

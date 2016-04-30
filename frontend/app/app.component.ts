@@ -3,13 +3,13 @@
 import { Component } from 'angular2/core';
 import {RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS, RouterLink} from 'angular2/router';
 import {LoginComponent} from "./login/login.component";
-import {AuthenticationService} from "./model/authentication.service";
+import {AuthenticationService} from "./model/network/authentication.service.ts";
 import {GalleryComponent} from "./gallery/gallery.component";
 import {OnInit} from "angular2/core";
 import {User} from "../../common/entities/User";
 import {Router} from "angular2/router";
 import {HTTP_PROVIDERS} from "angular2/http";
-import {UserService} from "./model/user.service";
+import {UserService} from "./model/network/user.service.ts";
 import {GalleryService} from "./gallery/gallery.service";
 import {MATERIAL_BROWSER_PROVIDERS} from "ng2-material/all";
 import {ViewportHelper} from "ng2-material/core/util/viewport";

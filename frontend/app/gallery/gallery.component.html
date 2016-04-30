@@ -1,9 +1,8 @@
+<gallery-lightbox  #lightbox></gallery-lightbox>
 <app-frame>
-    <md-content flex id="content">
         <div *ngIf="currentDirectory" *ngFor="let directory of currentDirectory.directories">
             <gallery-directory *ngIf="directory" [directory]="directory"></gallery-directory>
         </div>
-        <gallery-grid [directory]="currentDirectory"></gallery-grid>
+        <gallery-grid [directory]="currentDirectory" [lightbox]="lightbox" ></gallery-grid>
 
-    </md-content>
 </app-frame>

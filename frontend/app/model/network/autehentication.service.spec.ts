@@ -1,4 +1,4 @@
-///<reference path="../../browser.d.ts"/>
+///<reference path="../../../browser.d.ts"/>
 
 import {
     it,
@@ -9,12 +9,12 @@ import {
 } from 'angular2/testing';
 
 import {provide} from 'angular2/core';
-import {AuthenticationService} from "./authentication.service";
-import {UserService} from "./user.service";
-import {User} from "../../../common/entities/User";
-import {Message} from "../../../common/entities/Message";
+import {AuthenticationService} from "./authentication.service.ts";
+import {UserService} from "./user.service.ts";
+import {User} from "../../../../common/entities/User";
+import {Message} from "../../../../common/entities/Message";
 import "rxjs/Rx";
-import {LoginCredential} from "../../../common/entities/LoginCredential";
+import {LoginCredential} from "../../../../common/entities/LoginCredential";
 
 class MockUserService {
     public login(credential:LoginCredential){

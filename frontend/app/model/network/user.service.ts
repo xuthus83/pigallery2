@@ -1,11 +1,11 @@
-///<reference path="../../browser.d.ts"/>
+///<reference path="../../../browser.d.ts"/>
 
 import {Injectable} from 'angular2/core';
-import {LoginCredential} from "../../../common/entities/LoginCredential"; 
+import {LoginCredential} from "../../../../common/entities/LoginCredential"; 
 import {Http} from "angular2/http";
-import {NetworkService} from "./network.service";
-import {User} from "../../../common/entities/User";
-import {Message} from "../../../common/entities/Message";
+import {NetworkService} from "./network.service.ts";
+import {User} from "../../../../common/entities/User";
+import {Message} from "../../../../common/entities/Message";
 
 @Injectable()
 export class UserService extends NetworkService{

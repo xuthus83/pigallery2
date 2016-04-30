@@ -1,7 +1,7 @@
 ///<reference path="../../browser.d.ts"/>
 
 import {Injectable} from 'angular2/core'; 
-import {NetworkService} from "../model/network.service";
+import {NetworkService} from "../model/network/network.service.ts";
 import {Http} from "angular2/http";
 import {Message} from "../../../common/entities/Message";
 import {Directory} from "../../../common/entities/Directory"; 

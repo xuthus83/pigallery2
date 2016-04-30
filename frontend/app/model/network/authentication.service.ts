@@ -1,11 +1,11 @@
-///<reference path="../../browser.d.ts"/>
+///<reference path="../../../browser.d.ts"/>
 
 import {Injectable} from 'angular2/core';
-import {User} from "../../../common/entities/User";
-import {Event} from "../../../common/event/Event";
-import {UserService} from "./user.service";
-import {LoginCredential} from "../../../common/entities/LoginCredential";
-import {Message} from "../../../common/entities/Message";
+import {User} from "../../../../common/entities/User";
+import {Event} from "../../../../common/event/Event";
+import {UserService} from "./user.service.ts";
+import {LoginCredential} from "../../../../common/entities/LoginCredential";
+import {Message} from "../../../../common/entities/Message";
 import { Cookie } from 'ng2-cookies/ng2-cookies';
 
 declare module ServerInject{

@@ -2,7 +2,7 @@
 
 import {Component, OnInit} from 'angular2/core';
 import {LoginCredential} from '../../../common/entities/LoginCredential';
-import {AuthenticationService} from "../model/authentication.service";
+import {AuthenticationService} from "../model/network/authentication.service.ts";
 import {Router} from "angular2/router";
 import {MATERIAL_DIRECTIVES} from "ng2-material/all";
 import {FORM_DIRECTIVES} from "angular2/common"; 

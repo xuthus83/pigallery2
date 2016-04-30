@@ -1,19 +1,22 @@
 ///<reference path="../../../browser.d.ts"/>
 
-import {Component, Input, ElementRef} from 'angular2/core';
+import {Component, Input, ElementRef, ViewChild} from 'angular2/core';
 import {Photo} from "../../../../common/entities/Photo";
 import {Directory} from "../../../../common/entities/Directory";
-import {Utils} from "../../../../common/Utils"; 
+import {Utils} from "../../../../common/Utils";
+import {IRenderable, Dimension} from "../../model/IRenderable"; 
 
 @Component({
     selector: 'gallery-photo',
-    templateUrl: 'app/gallery/photo/photo.gallery.component.html'
+    templateUrl: 'app/gallery/photo/photo.gallery.component.html',
+    styleUrls: ['app/gallery/photo/photo.gallery.component.css'],
 })
-export class GalleryPhotoComponent{
+export class GalleryPhotoComponent implements IRenderable{
     @Input() photo: Photo;
     @Input() directory: Directory;
+    @ViewChild("image") imageRef:ElementRef;
     
-    constructor(public elementRef: ElementRef) {
+    constructor() {
     }
 
     getPhotoPath(){
@@ -21,6 +24,14 @@ export class GalleryPhotoComponent{
     }
 
  
+    public getDimension():Dimension{
+        console.log(this.imageRef);
+        console.log(this.imageRef.nativeElement);
+        return new Dimension(this.imageRef.nativeElement.offsetTop,
+                           this.imageRef.nativeElement.offsetLeft,
+                           this.imageRef.nativeElement.width,
+                           this.imageRef.nativeElement.height);
+    }
     
 }
 
