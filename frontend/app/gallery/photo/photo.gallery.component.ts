@@ -24,9 +24,7 @@ export class GalleryPhotoComponent implements IRenderable{
     }
 
  
-    public getDimension():Dimension{
-        console.log(this.imageRef);
-        console.log(this.imageRef.nativeElement);
+    public getDimension():Dimension{ 
         return new Dimension(this.imageRef.nativeElement.offsetTop,
                            this.imageRef.nativeElement.offsetLeft,
                            this.imageRef.nativeElement.width,

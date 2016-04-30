@@ -1,4 +1,5 @@
 <div
+        [hidden]="!activePhoto"
         (click)="hide()">
     <div class="blackCanvas"
          #blackCanvas>
@@ -6,6 +7,9 @@
     </div>
     <div class="lightbox"
          #lightbox>
-        <img [src]="getThumbnailPath()" [style.width]="photoStyle.width" [style.height]="photoStyle.height"/>
-    </div>
-</div>
+         <div   class="imgContainer">
+            <img #thImage [src]="getThumbnailPath()" />
+            <img #image [src]="getPhotoPath()" style="position:absolute;"/>
+          </div>
+     </div>
+ </div>

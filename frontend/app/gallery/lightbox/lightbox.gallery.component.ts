@@ -1,47 +1,39 @@
 ///<reference path="../../../browser.d.ts"/>
 
-import {Component, Input, ElementRef, ViewChild, QueryList} from 'angular2/core';
+import {Component, ElementRef, ViewChild, QueryList} from "angular2/core";
 import {Photo} from "../../../../common/entities/Photo";
-import {Directory} from "../../../../common/entities/Directory";
-import {Utils} from "../../../../common/Utils";
-import {IRenderable, Dimension} from "../../model/IRenderable";
 import {GalleryPhotoComponent} from "../photo/photo.gallery.component";
-import {AnimationBuilder, CssAnimationBuilder} from "angular2/animate";
+import {AnimationBuilder} from "angular2/animate";
 import {BrowserDomAdapter} from "angular2/src/platform/browser/browser_adapter";
+import {Dimension} from "../../model/IRenderable";
 
 @Component({
     selector: 'gallery-lightbox',
     styleUrls: ['app/gallery/lightbox/lightbox.gallery.component.css'],
     templateUrl: 'app/gallery/lightbox/lightbox.gallery.component.html'
 })
-export class GalleryLightboxComponent{
+export class GalleryLightboxComponent {
 
     @ViewChild('lightbox') lightBoxDiv:ElementRef;
     @ViewChild('blackCanvas') blackCanvasDiv:ElementRef;
+    @ViewChild('thImage') thIMageImg:ElementRef;
+    @ViewChild('image') imageImg:ElementRef;
 
-    private activePhoto:GalleryPhotoComponent  = null;
+    private activePhoto:GalleryPhotoComponent = null;
     public gridPhotoQL:QueryList<GalleryPhotoComponent>;
 
     private dom:BrowserDomAdapter;
-    private photoStyle = {width:"100%",height:"100%"};
-    
-    
-    constructor(private animBuilder: AnimationBuilder) {
+
+
+    constructor(private animBuilder:AnimationBuilder) {
         this.dom = new BrowserDomAdapter();
 
- 
+
     }
 
-    public show(photo:Photo){
-        let galleryPhotoComponents = this.gridPhotoQL.toArray();
-        let selectedPhoto:GalleryPhotoComponent = null;
-        for(let i= 0; i < galleryPhotoComponents.length; i++){
-            if(galleryPhotoComponents[i].photo == photo){
-                selectedPhoto = galleryPhotoComponents[i];
-                break;
-            }
-        }
-        if(selectedPhoto === null){
+    public show(photo:Photo) {
+        let selectedPhoto = this.findPhotoComponenet(photo);
+        if (selectedPhoto === null) {
             throw new Error("Can't find Photo");
         }
 
@@ -53,37 +45,27 @@ export class GalleryLightboxComponent{
         from.top -= this.getBodyScrollTop();
 
 
-        if(from.height > from.width){
-            this.photoStyle.height = "100%";
-            this.photoStyle.width = "auto";
-        }else{
-            this.photoStyle.height = "auto";
-            this.photoStyle.width = "100%";
-        }
-        
-        let anim0 = this.animBuilder.css();
-        anim0.setDuration(0);
-        anim0.setToStyles(from.toStyle());
-        anim0.start(this.lightBoxDiv.nativeElement).onComplete(()=>{
 
-            let anim1 = this.animBuilder.css();
-            anim1.setDuration(800);
-            anim1.setFromStyles(from.toStyle());
-            anim1.setToStyles({height: "100%", width: "100%", "top":"0px","left": "0px"});
-            anim1.start(this.lightBoxDiv.nativeElement);
-        });
+        let fromImage = {width: from.width + "px", height: from.height + "px", top: "0px", left:"0px"};
+        let toImage = this.calcLightBoxPhotoDimension(this.activePhoto.photo).toStyle();
 
-        let anim2 = this.animBuilder.css();
-        anim2.setDuration(0);
-        anim2.setToStyles({opacity:"0", display:"block"});
-        anim2.start(this.blackCanvasDiv.nativeElement).onComplete(()=>{
+        this.forceAnimateFrom(fromImage,
+            toImage,
+            this.thIMageImg.nativeElement);
 
-            let anim3 = this.animBuilder.css();
-            anim3.setDuration(800);
-            anim3.setFromStyles({opacity:"0"});
-            anim3.setToStyles({opacity:"1"});
-            anim3.start(this.blackCanvasDiv.nativeElement);
-        });
+        this.forceAnimateFrom(fromImage,
+            toImage,
+            this.imageImg.nativeElement);
+
+        this.forceAnimateFrom(from.toStyle(),
+            {height: "100%", width: "100%", "top": "0px", "left": "0px"},
+            this.lightBoxDiv.nativeElement);
+
+
+        this.forceAnimateFrom({opacity: "0", display: "block"},
+            {opacity: "1"},
+            this.blackCanvasDiv.nativeElement);
+
     }
 
     public hide() {
@@ -91,49 +73,121 @@ export class GalleryLightboxComponent{
         let to = this.activePhoto.getDimension();
         to.top -= this.getBodyScrollTop();
 
+
+        this.forceAnimateTo({height: "100%", width: "100%", "top": "0px", "left": "0px"},
+            to.toStyle(),
+            this.lightBoxDiv.nativeElement,
+            {height: "0px", width: "0px", "top": "0px", "left": "0px"},
+            ()=> {
+                this.activePhoto = null;
+            });
+
+        this.dom.setStyle(this.dom.query('body'), 'overflow', 'auto');
+
+        this.forceAnimateTo({opacity: "1.0", display: "block"},
+            {opacity: "0.0", display: "block"},
+            this.blackCanvasDiv.nativeElement,
+            {display: "none"});
+
+
+        let fromImage = this.calcLightBoxPhotoDimension(this.activePhoto.photo).toStyle();
+        let toImage = {width: to.width + "px", height: to.height + "px", top: "0px", left:"0px"};
+
+        this.forceAnimateTo(fromImage,
+            toImage,
+            this.thIMageImg.nativeElement);
+
+        this.forceAnimateTo(fromImage,
+            toImage,
+            this.imageImg.nativeElement);
+
+    }
+
+    private findPhotoComponenet(photo){
+        let galleryPhotoComponents = this.gridPhotoQL.toArray();
+        let selectedPhoto:GalleryPhotoComponent = null;
+        for (let i = 0; i < galleryPhotoComponents.length; i++) {
+            if (galleryPhotoComponents[i].photo == photo) {
+                selectedPhoto = galleryPhotoComponents[i];
+                break;
+            }
+        }
+        return selectedPhoto;
+    }
+
+    private forceAnimateFrom(from, to, elemnet) {
         let anim0 = this.animBuilder.css();
-        anim0.setDuration(800);
-        anim0.setFromStyles({height: "100%", width: "100%", "top":"0px","left": "0px"});
-        anim0.setToStyles(to.toStyle());
-        anim0.start(this.lightBoxDiv.nativeElement).onComplete(()=>{
+        anim0.setDuration(0);
+        anim0.setToStyles(from);
+        anim0.start(elemnet).onComplete(()=> {
+
+            let anim1 = this.animBuilder.css();
+            anim1.setDuration(500);
+            anim1.setFromStyles(from);
+            anim1.setToStyles(to);
+            anim1.start(elemnet);
+        });
+    }
+
+    private forceAnimateTo(from, to, elemnet, innerTo = null, onComplete = ()=> {
+    }) {
+        if (innerTo == null) {
+            innerTo = to;
+        }
+
+        let anim0 = this.animBuilder.css();
+        anim0.setDuration(500);
+        anim0.setFromStyles(from);
+        anim0.setToStyles(to);
+        anim0.start(elemnet).onComplete(()=> {
             let anim1 = this.animBuilder.css();
             anim1.setDuration(0);
-            anim1.setToStyles({height: "0px", width: "0px", "top":"0px","left": "0px"});
-            anim1.start(this.lightBoxDiv.nativeElement);
-            this.dom.setStyle(this.dom.query('body'), 'overflow', 'auto');
-        });
-
-
-        let anim2 = this.animBuilder.css();
-        anim2.setDuration(800);
-        anim2.setFromStyles({opacity:"1"});
-        anim2.setToStyles({opacity:"0"});
-        anim2.start(this.blackCanvasDiv.nativeElement).onComplete(()=>{
-            let anim4 = this.animBuilder.css();
-            anim4.setDuration(0);
-            anim4.setToStyles({opacity:"0", display:"none"});
-            anim4.start(this.blackCanvasDiv.nativeElement);
+            anim1.setToStyles(innerTo);
+            anim1.start(elemnet).onComplete(onComplete);
         });
     }
 
-
-    getPhotoPath(){
-        if(!this.activePhoto){
+    getPhotoPath() {
+        if (!this.activePhoto) {
             return "";
         }
-        return Photo.getPhotoPath(this.activePhoto.directory,this.activePhoto.photo); 
+        return Photo.getPhotoPath(this.activePhoto.directory, this.activePhoto.photo);
     }
 
-    getThumbnailPath(){
-        if(!this.activePhoto){
+    getThumbnailPath() {
+        if (!this.activePhoto) {
             return "";
         }
-        return Photo.getThumbnailPath(this.activePhoto.directory,this.activePhoto.photo);
+        return Photo.getThumbnailPath(this.activePhoto.directory, this.activePhoto.photo);
     }
-    
-    private getBodyScrollTop(){
-        return this.dom.getProperty(this.dom.query('body'),'scrollTop');
+
+    private getBodyScrollTop() {
+        return this.dom.getProperty(this.dom.query('body'), 'scrollTop');
     }
-    
+
+    private getScreenWidth() {
+        return window.innerWidth;
+    }
+
+    private getScreenHeight() {
+        return window.innerHeight;
+    }
+
+ 
+    private calcLightBoxPhotoDimension(photo:Photo):Dimension{
+        let width = 0;
+        let height = 0;
+        if (photo.height > photo.width) {
+            width= Math.round(photo.width * (this.getScreenHeight() / photo.height));
+            height= this.getScreenHeight();
+        } else {
+            width= this.getScreenWidth();
+            height= Math.round(photo.height * (this.getScreenWidth() / photo.width));
+        }
+        let top = (this.getScreenHeight() / 2 - height / 2);
+        let left = (this.getScreenWidth() / 2 - width / 2);
+
+        return new Dimension(top,left,width,height);
+    }
 }
 

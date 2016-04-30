@@ -41,8 +41,11 @@ export class GalleryGridComponent implements OnChanges,AfterViewInit{
     
     ngAfterViewInit(){ 
         this.lightbox.gridPhotoQL = this.gridPhotoQL;
-        this.gridPhotoQL.changes.subscribe(
+       this.gridPhotoQL.changes.subscribe(
             (x)=> {
+                if(this.gridPhotoQL.length < this.photosToRender.length){
+                    return;
+                }
                 if(this.renderedConteinerWidth != this.getContainerWidth()){
                     this.renderPhotos();
                 }
@@ -62,7 +65,7 @@ export class GalleryGridComponent implements OnChanges,AfterViewInit{
 
          while (i < this.directory.photos.length ) {
 
-             let photoRowBuilder = new GridRowBuilder(this.directory.photos,i,this.IMAGE_MARGIN,containerWidth);
+             let photoRowBuilder = new GridRowBuilder(this.directory.photos,i,this.IMAGE_MARGIN,this.getContainerWidth());
              photoRowBuilder.addPhotos(this.TARGET_COL_COUNT);
              photoRowBuilder.adjustRowHeightBetween(minRowHeight,maxRowHeight);
 
@@ -86,6 +89,8 @@ export class GalleryGridComponent implements OnChanges,AfterViewInit{
         if(!this.gridContainer){
             return 0;
         }
+        console.log(this.gridContainer);
+        console.log(this.gridContainer.nativeElement.clientWidth);
         return this.gridContainer.nativeElement.clientWidth;
     }
 
