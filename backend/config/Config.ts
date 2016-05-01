@@ -11,7 +11,7 @@ export class ConfigClass{
         ConfigLoader.init(this,__dirname+'./../../config.json');
     }
 
-    public port:number = 80;
+    public PORT:number = 80;
 
     public thumbnailSizes:Array<number> = [200];
     public imagesFolder:string = "/demo/images";
