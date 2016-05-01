@@ -1,8 +1,9 @@
-<gallery-lightbox  #lightbox></gallery-lightbox>
+<gallery-lightbox #lightbox></gallery-lightbox>
 <app-frame>
+    <div class="container" style="width: 100%; padding:0">
         <div *ngIf="currentDirectory" *ngFor="let directory of currentDirectory.directories">
             <gallery-directory *ngIf="directory" [directory]="directory"></gallery-directory>
         </div>
-        <gallery-grid [directory]="currentDirectory" [lightbox]="lightbox" ></gallery-grid>
-
+        <gallery-grid [directory]="currentDirectory" [lightbox]="lightbox"></gallery-grid>
+    </div>
 </app-frame>

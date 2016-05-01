@@ -1,59 +1,21 @@
-<md-sidenav-container layout="row">
-
-    <md-sidenav name="menu" align="left" layout="column">
-        <md-toolbar class="md-theme-light">
-            <h1 class="md-toolbar-tools">PiGallery2</h1>
-        </md-toolbar>
-        <md-content layout-padding>
-            <button md-raised-button [routerLink]="['Gallery',{directory: '/'}]" class="md-primary">
-                Gallery
+<nav class="navbar navbar-inverse navbar-static-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
             </button>
-            <button md-raised-button [routerLink]="['Admin']" class="md-primary">
-                Admin
-            </button>
-        </md-content>
-    </md-sidenav>
-
-      <!--  <div layout="column" style="height: 100vh; overflow-y: hidden;">
-            <md-toolbar mdScrollShrink>
-                <div class="md-toolbar-tools">
-                    <button md-button class="md-icon-button md-primary" aria-label="Settings" (click)="showSideNav()">
-                        <i md-icon>more_vert</i>
-                    </button>
-                    <h3>
-                        <span>PiGallery2</span>
-                    </h3>
-                    <span flex></span>
-                </div>
-            </md-toolbar>
-
-            <ng-content></ng-content>
-        </div>-->
-    <md-content felx>
-        <nav class="navbar navbar-inverse navbar-static-top">
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="#">Project name</a>
-                </div>
-                <div id="navbar" class="collapse navbar-collapse">
-                    <ul class="nav navbar-nav">
-                        <li class="active"><a href="#">Gallery</a></li>
-                    </ul>
-                </div><!--/.nav-collapse -->
-            </div>
-        </nav>
-
-        <div class="container" style="width: 100%; padding:0px">
-
-
-            <ng-content></ng-content>
-
-        </div><!-- /.container -->
-        </md-content >
-</md-sidenav-container>
+            <a class="navbar-brand" href="#"><img src="icon_inv.png" style="max-height: 26px; display: inline;"/> PiGallery2</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li class="active"><a [routerLink]="['Gallery',{directory: '/'}]">Gallery</a></li>
+                <li><a [routerLink]="['Admin']">Admin</a></li>
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div>
+</nav>
+<ng-content></ng-content>

@@ -1,26 +1,13 @@
-
-
-<md-content class="md-padding" layout="row" layout-wrap layout-align="center start">
-    <div flex-gt-lg="25" flex="50" flex-xs="100" layout="column">
-        <md-card>
-            <md-card-title>Login</md-card-title>
-            <md-card-content>
-                <form  (ngSubmit)="onSubmit()" #LoginForm="ngForm">
-                    <md-input-container class="md-block" flex-gt-sm>
-                        <label>Username (or e-mail)</label>
-                        <input md-input  type="text" [(value)]="loginCredential.username"
-                               ngControl="name"  #name="ngForm" required >
-                    </md-input-container>
-                    <md-input-container class="md-block" flex-gt-sm>
-                        <label>Password</label>
-                        <input md-input  type="password" [(value)]="loginCredential.password"
-                               ngControl="password"  #name="ngForm" required>
-                    </md-input-container>
-                </form>
-            </md-card-content>
-            <md-card-actions layout="row" layout-align="end center">
-                <button md-button  [disabled]="!LoginForm.form.valid" (click)="onLogin()">LOGIN</button>
-            </md-card-actions>
-        </md-card>
+<div class="container">
+    <div class="col-sm-offset-3  col-sm-6 col-lg-4 col-lg-offset-4">
+    <form class="form-signin" (ngSubmit)="onSubmit()" #LoginForm="ngForm">
+        <h2 class="form-signin-heading">Please sign in</h2>
+        <input type="email" class="form-control" placeholder="Email address"  autofocus
+               [(value)]="loginCredential.username"  ngControl="name"  #name="ngForm" required>
+        <input type="password"  class="form-control" placeholder="Password"
+               [(value)]="loginCredential.password"  ngControl="password"  #name="ngForm" required>
+        <br/>
+        <button class="btn btn-lg btn-primary btn-block"  [disabled]="!LoginForm.form.valid" (click)="onLogin()">Sign in</button>
+    </form>
     </div>
-</md-content>
+</div> <!-- /container -->

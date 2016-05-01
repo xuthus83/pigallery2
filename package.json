@@ -35,7 +35,6 @@
     "mongoose": "^4.4.14",
     "morgan": "^1.7.0",
     "ng2-cookies": "^0.1.5",
-    "ng2-material": "^0.3.7",
     "optimist": "^0.6.1",
     "rxjs": "5.0.0-beta.6",
     "ts-loader": "^0.8.2",

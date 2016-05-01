@@ -8,7 +8,6 @@ import {Directory} from "../../../common/entities/Directory";
 import {Message} from "../../../common/entities/Message";
 import {GalleryDirectoryComponent} from "./directory/directory.gallery.component";
 import {GalleryGridComponent} from "./grid/grid.gallery.component";
-import {MATERIAL_DIRECTIVES} from "ng2-material/all";
 import {FrameComponent} from "../frame/frame.component";
 import {GalleryLightboxComponent} from "./lightbox/lightbox.gallery.component";
 
@@ -19,8 +18,7 @@ import {GalleryLightboxComponent} from "./lightbox/lightbox.gallery.component";
     directives:[GalleryGridComponent,
                 GalleryDirectoryComponent,
                 GalleryLightboxComponent,
-                FrameComponent,
-                MATERIAL_DIRECTIVES]
+                FrameComponent]
 })
 export class GalleryComponent implements OnInit{
 

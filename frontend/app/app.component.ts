@@ -10,9 +10,7 @@ import {User} from "../../common/entities/User";
 import {Router} from "angular2/router";
 import {HTTP_PROVIDERS} from "angular2/http";
 import {UserService} from "./model/network/user.service.ts";
-import {GalleryService} from "./gallery/gallery.service";
-import {MATERIAL_BROWSER_PROVIDERS} from "ng2-material/all";
-import {ViewportHelper} from "ng2-material/core/util/viewport";
+import {GalleryService} from "./gallery/gallery.service"; 
 import {AdminComponent} from "./admin/admin.component"; 
 
         
@@ -25,9 +23,7 @@ import {AdminComponent} from "./admin/admin.component";
         ROUTER_PROVIDERS,
         UserService,
         GalleryService,
-        AuthenticationService,MATERIAL_BROWSER_PROVIDERS,ViewportHelper
-
-    ]
+        AuthenticationService]
 })
 @RouteConfig([
     {
