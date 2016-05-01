@@ -39,7 +39,7 @@ module.exports = function(config) {
         // available reporters: https://npmjs.org/browse/keyword/karma-reporter
         reporters: [ 'mocha', 'coverage', 'coveralls' ],
 
-        // web server port
+        // web server PORT
         port: 9876,
 
         // enable / disable colors in the output (reporters and logs)

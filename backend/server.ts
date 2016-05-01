@@ -84,14 +84,14 @@ export class Server {
     
 
 
-        // Get port from environment and store in Express. 
-        this.app.set('port', Config.port);
+        // Get PORT from environment and store in Express.
+        this.app.set('port', Config.PORT);
 
         // Create HTTP server.
         this.server = _http.createServer(this.app);
 
-        //Listen on provided port, on all network interfaces.
-        this.server.listen(Config.port);
+        //Listen on provided PORT, on all network interfaces.
+        this.server.listen(Config.PORT);
         this.server.on('error', this.onError);
         this.server.on('listening', this.onListening);
 
@@ -109,9 +109,9 @@ export class Server {
             throw error;
         }
 
-        var bind = typeof Config.port === 'string'
-            ? 'Pipe ' + Config.port
-            : 'Port ' + Config.port;
+        var bind = typeof Config.PORT === 'string'
+            ? 'Pipe ' + Config.PORT
+            : 'Port ' + Config.PORT;
 
         // handle specific listen error with friendly messages
         switch (error.code) {
