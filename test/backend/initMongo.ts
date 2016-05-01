@@ -12,4 +12,9 @@ DatabaseManager.getInstance((err)=>{
         DatabaseManager.getInstance().disconnect();
         process.exit()
     });
+
+    userManager.createUser(new User(0,"admin","admin@admin.hu","admin",UserRoles.Developer),(err)=>{
+        DatabaseManager.getInstance().disconnect();
+        process.exit()
+    });
 });

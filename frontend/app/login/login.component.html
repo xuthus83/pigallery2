@@ -1,11 +1,11 @@
 <div class="container">
     <div class="col-sm-offset-3  col-sm-6 col-lg-4 col-lg-offset-4">
-    <form class="form-signin" (ngSubmit)="onSubmit()" #LoginForm="ngForm">
+    <form class="form-signin"  #LoginForm="ngForm">
         <h2 class="form-signin-heading">Please sign in</h2>
-        <input type="email" class="form-control" placeholder="Email address"  autofocus
-               [(value)]="loginCredential.username"  ngControl="name"  #name="ngForm" required>
+        <input type="text" class="form-control" placeholder="Username"  autofocus
+               [(ngModel)]="loginCredential.username"  ngControl="name"  #name="ngForm" required>
         <input type="password"  class="form-control" placeholder="Password"
-               [(value)]="loginCredential.password"  ngControl="password"  #name="ngForm" required>
+               [(ngModel)]="loginCredential.password"  ngControl="password"  #name="ngForm" required>
         <br/>
         <button class="btn btn-lg btn-primary btn-block"  [disabled]="!LoginForm.form.valid" (click)="onLogin()">Sign in</button>
     </form>

@@ -62,6 +62,9 @@ export class AuthenticationService{
         return (this._user && this._user != null) ? true : false;
     }
  
+    public getUser(){
+        return this._user;
+    }
 
 
 }

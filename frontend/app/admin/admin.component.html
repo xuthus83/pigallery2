@@ -5,7 +5,41 @@
                 <h3 class="panel-title">User management</h3>
             </div>
             <div class="panel-body">
-                <button class="button button-primary" (click)="addUser()">+ add user</button>
+                <button class="btn btn-default" data-toggle="modal" data-target="#myModal" (click)="initNewUser()">+ add
+                    user
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                </div>
+                <form (ngSubmit)="onSubmit()" #NewUserForm="ngForm">
+                    <div class="modal-body">
+                        <input type="text" class="form-control" placeholder="Username" autofocus
+                               [(ngModel)]="newUser.name" ngControl="name" #name="ngForm" required>
+                        <input type="password" class="form-control" placeholder="Password"
+                               [(ngModel)]="newUser.password" ngControl="password" #name="ngForm" required>
+                        <select class="form-control" [(ngModel)]="newUser.role" required>
+                            <option *ngFor="let repository of userRoles" [value]="repository.key">{{repository.value}}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal"
+                                (click)="addNewUser()"
+                                [disabled]="!NewUserForm.form.valid">Add User
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

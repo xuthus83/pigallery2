@@ -3,19 +3,19 @@
 import {Injectable} from 'angular2/core'; 
 import {NetworkService} from "../model/network/network.service.ts";
 import {Http} from "angular2/http";
-import {Message} from "../../../common/entities/Message";
-import {Directory} from "../../../common/entities/Directory"; 
+import {Message} from "../../../common/entities/Message"; 
+import {User} from "../../../common/entities/User"; 
 
 @Injectable()
-export class GalleryService  extends NetworkService{
+export class AdminService  extends NetworkService{
  
 
     constructor(_http:Http){
         super(_http);
     }
 
-    public getDirectory(directoryName:string): Promise<Message<Directory>>{
-        return this.getJson("/gallery/"+directoryName);
+    public createUser(user:User): Promise<Message<string>>{
+        return this.putJson("/user",{newUser:user});
     }
 
 
