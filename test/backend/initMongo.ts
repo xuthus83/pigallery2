@@ -8,12 +8,27 @@ DatabaseManager.getInstance((err)=>{
     process.exit()
 },()=>{
     let userManager  = new MongoUserManager(); 
-    userManager.createUser(new User(0,"demo","demo@demo.hu","demo",UserRoles.Developer),(err)=>{
+    userManager.createUser(new User(0,"demo","demo",UserRoles.Developer),(err)=>{
         DatabaseManager.getInstance().disconnect();
         process.exit()
     });
 
-    userManager.createUser(new User(0,"admin","admin@admin.hu","admin",UserRoles.Developer),(err)=>{
+    userManager.createUser(new User(1,"developer","developer",UserRoles.Developer),(err)=>{
+        DatabaseManager.getInstance().disconnect();
+        process.exit()
+    });
+
+    userManager.createUser(new User(1,"admin","admin",UserRoles.Admin),(err)=>{
+        DatabaseManager.getInstance().disconnect();
+        process.exit()
+    });
+
+    userManager.createUser(new User(1,"user","user",UserRoles.User),(err)=>{
+        DatabaseManager.getInstance().disconnect();
+        process.exit()
+    });
+
+    userManager.createUser(new User(1,"guest","guest",UserRoles.Guest),(err)=>{
         DatabaseManager.getInstance().disconnect();
         process.exit()
     });
