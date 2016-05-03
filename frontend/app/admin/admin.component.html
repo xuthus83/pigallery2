@@ -5,7 +5,38 @@
                 <h3 class="panel-title">User management</h3>
             </div>
             <div class="panel-body">
-                <button class="btn btn-default" data-toggle="modal" data-target="#myModal" (click)="initNewUser()">+ add
+
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Role</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tr *ngFor="let user of users">
+                        <td>{{user.name}}</td>
+                        <td *ngIf="canModifyUser(user)">
+                            <select class="form-control" [(ngModel)]="user.role"  (ngModelChange)="updateRole(user)" required>
+                                <option *ngFor="let repository of userRoles" [value]="repository.key">
+                                    {{repository.value}}
+                                </option>
+                            </select>
+                        </td>
+                        <td *ngIf="!canModifyUser(user)">
+                            {{user.role | stringifyRole}}
+                        </td>
+                        <td>
+                            <button *ngIf="canModifyUser(user)" (click)="deleteUser(user)"
+                                    class="btn btn-danger pull-right">
+                                <span class="glyphicon glyphicon-trash" aria-hidden="true" aria-label="Delete"></span>
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+
+                <button class="btn btn-default  pull-right" data-toggle="modal" data-target="#myModal"
+                        (click)="initNewUser()">+ Add
                     user
                 </button>
             </div>

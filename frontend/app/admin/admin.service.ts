@@ -19,7 +19,16 @@ export class AdminService  extends NetworkService{
     }
 
 
- 
+    public getUsers():Promise<Message<Array<User>>>{
+        return this.getJson("/user/list");
+    }
 
 
+    public deleteUser(user:User) {
+        return this.deleteJson("/user/"+user.id);        
+    }
+
+    public updateRole(user:User) {
+        return this.postJson("/user/"+user.id+"/role",{newRole:user.role});
+    }
 }

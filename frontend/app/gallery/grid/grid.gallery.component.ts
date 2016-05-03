@@ -88,9 +88,7 @@ export class GalleryGridComponent implements OnChanges,AfterViewInit{
     private getContainerWidth(): number{
         if(!this.gridContainer){
             return 0;
-        }
-        console.log(this.gridContainer);
-        console.log(this.gridContainer.nativeElement.clientWidth);
+        } 
         return this.gridContainer.nativeElement.clientWidth;
     }
 

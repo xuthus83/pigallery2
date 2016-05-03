@@ -66,7 +66,7 @@ export class UserRouter{
 
 
     private addListUsers() {
-        this.app.post("/api/user/list",
+        this.app.get("/api/user/list",
             AuthenticationMWs.authenticate,
             AuthenticationMWs.authorise(UserRoles.Admin),
             UserMWs.listUsers,

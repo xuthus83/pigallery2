@@ -20,7 +20,7 @@ export class LoginComponent implements OnInit{
 
     ngOnInit(){
         if (this._authService.isAuthenticated()) {
-            this._router.navigate(['Gallery']);
+            this._router.navigate(['Gallery',{directory:"/"}]);
         }
     }
 

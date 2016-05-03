@@ -40,7 +40,7 @@ export class UserRequestConstrainsMWs {
         if(req.session.user.id !== req.params.id){
             return next();
         }
-
+        //TODO: fix it!
         ObjectManagerRepository.getInstance().getUserManager().find({minRole:UserRoles.Admin}, (err, result) =>{
             if ((err) || (!result)) {
                 return next(new Error(ErrorCodes.GENERAL_ERROR));

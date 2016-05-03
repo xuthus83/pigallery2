@@ -3,6 +3,7 @@ import {UserManager} from "../model/memory/UserManager";
 import {NextFunction, Request, Response} from "express";
 import {Error, ErrorCodes} from "../../common/entities/Error";
 import {ObjectManagerRepository} from "../model/ObjectManagerRepository";
+import {User} from "../../common/entities/User";
 
 export class UserMWs {
 
@@ -40,12 +41,11 @@ export class UserMWs {
     }
 
     public static deleteUser(req:Request, res:Response, next:NextFunction){
-        if ((typeof req.body === 'undefined') || (typeof req.body.newUser === 'undefined')
-            || (typeof req.body.userModReq.id === 'undefined')) {
+        if ((typeof req.params === 'undefined') || (typeof req.params.id === 'undefined')) {
             return next();
         }
 
-        ObjectManagerRepository.getInstance().getUserManager().deleteUser(req.body.userModReq.id, (err, result) =>{
+        ObjectManagerRepository.getInstance().getUserManager().deleteUser(req.params.id, (err, result) =>{
             if ((err) || (!result)) {
                 return next(new Error(ErrorCodes.GENERAL_ERROR));
             }
@@ -57,13 +57,12 @@ export class UserMWs {
     }
 
     public static changeRole(req:Request, res:Response, next:NextFunction){
-        if ((typeof req.body === 'undefined') || (typeof req.body.userModReq === 'undefined')
-            || (typeof req.body.userModReq.id === 'undefined')
-            || (typeof req.body.userModReq.newRole === 'undefined')) {
+        if ((typeof req.params === 'undefined') || (typeof req.params.id === 'undefined')
+            || (typeof req.body === 'undefined') || (typeof req.body.newRole === 'undefined')) {
             return next();
         }
 
-        ObjectManagerRepository.getInstance().getUserManager().changeRole(req.body.userModReq, (err) =>{
+        ObjectManagerRepository.getInstance().getUserManager().changeRole(req.params.id,req.body.newRole, (err) =>{
             if (err) {
                 return next(new Error(ErrorCodes.GENERAL_ERROR));
             }
@@ -74,11 +73,14 @@ export class UserMWs {
 
 
     public static listUsers(req:Request, res:Response, next:NextFunction){
-        ObjectManagerRepository.getInstance().getUserManager().find({}, (err, result) =>{
+        ObjectManagerRepository.getInstance().getUserManager().find({}, (err, result:Array<User>) =>{
             if ((err) || (!result)) {
                 return next(new Error(ErrorCodes.GENERAL_ERROR));
             }
-
+            for(let i = 0; i < result.length; i++){
+                result[i].password = "";
+            }
+            
             req.resultPipe = result;
             return next();
         });

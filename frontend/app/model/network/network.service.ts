@@ -17,7 +17,7 @@ export class NetworkService{
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
 
-        if(method == "get"){
+        if(method == "get" || method == "delete"){
             return this._http[method](this._baseUrl+url, options)
                 .toPromise()
                 .then(res => <Message<any>> res.json())
