@@ -15,7 +15,8 @@
                 <li class="active"><a [routerLink]="['Gallery',{directory: '/'}]">Gallery</a></li>
                 <li><a [routerLink]="['Admin']">Admin</a></li>
             </ul>
+            <ng-content select="[navbar]"></ng-content>
         </div><!--/.nav-collapse -->
     </div>
 </nav>
-<ng-content></ng-content>
+<ng-content select="[body]"></ng-content>

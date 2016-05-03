@@ -10,6 +10,7 @@ import {GalleryDirectoryComponent} from "./directory/directory.gallery.component
 import {GalleryGridComponent} from "./grid/grid.gallery.component";
 import {FrameComponent} from "../frame/frame.component";
 import {GalleryLightboxComponent} from "./lightbox/lightbox.gallery.component";
+import {GallerySearchComponent} from "./search/search.gallery.component";
 
 @Component({
     selector: 'gallery',
@@ -18,7 +19,8 @@ import {GalleryLightboxComponent} from "./lightbox/lightbox.gallery.component";
     directives:[GalleryGridComponent,
                 GalleryDirectoryComponent,
                 GalleryLightboxComponent,
-                FrameComponent]
+                FrameComponent,
+                GallerySearchComponent]
 })
 export class GalleryComponent implements OnInit{
 
