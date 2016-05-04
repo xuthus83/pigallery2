@@ -1,14 +1,12 @@
 ///<reference path="../browser.d.ts"/>
 
-import { Component } from 'angular2/core';
-import {RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS, RouterLink} from 'angular2/router';
+import { Component,OnInit } from '@angular/core'; 
 import {LoginComponent} from "./login/login.component";
 import {AuthenticationService} from "./model/network/authentication.service.ts";
-import {GalleryComponent} from "./gallery/gallery.component";
-import {OnInit} from "angular2/core";
+import {GalleryComponent} from "./gallery/gallery.component"; 
 import {User} from "../../common/entities/User";
-import {Router} from "angular2/router";
-import {HTTP_PROVIDERS} from "angular2/http";
+import {Router, RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS} from "@angular/router-deprecated"; 
+import {HTTP_PROVIDERS} from "@angular/http";
 import {UserService} from "./model/network/user.service.ts";
 import {GalleryService} from "./gallery/gallery.service"; 
 import {AdminComponent} from "./admin/admin.component"; 
@@ -17,7 +15,7 @@ import {AdminComponent} from "./admin/admin.component";
 @Component({
     selector: 'pi-gallery2-app',
     template: `<router-outlet></router-outlet>`,
-    directives: [ROUTER_DIRECTIVES, RouterLink], 
+    directives: [ROUTER_DIRECTIVES],
     providers: [
         HTTP_PROVIDERS,
         ROUTER_PROVIDERS,

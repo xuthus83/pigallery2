@@ -1,6 +1,6 @@
 ///<reference path="../../../browser.d.ts"/>
 
-import {Component, Input, ElementRef, ViewChild} from 'angular2/core';
+import {Component, Input, ElementRef, ViewChild} from '@angular/core';
 import {Photo} from "../../../../common/entities/Photo";
 import {Directory} from "../../../../common/entities/Directory";
 import {Utils} from "../../../../common/Utils";

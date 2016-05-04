@@ -1,9 +1,8 @@
 ///<reference path="../../../browser.d.ts"/>
 
-import {Http, Headers, RequestOptions, Response} from "angular2/http";
+import {Http, Headers, RequestOptions} from "@angular/http";
 import {Message} from "../../../../common/entities/Message";
-import "rxjs/Rx";
-import {Utils} from "../../../../common/Utils";
+import "rxjs/Rx"; 
 
 export class NetworkService{
 

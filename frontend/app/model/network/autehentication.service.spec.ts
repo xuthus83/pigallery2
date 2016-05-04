@@ -4,11 +4,11 @@ import {
     it,
     inject,
     injectAsync,
-    beforeEachProviders,
-    TestComponentBuilder
-} from 'angular2/testing';
+    beforeEachProviders
+} from '@angular/core/testing';
+ 
 
-import {provide} from 'angular2/core';
+import {provide} from '@angular/core';
 import {AuthenticationService} from "./authentication.service.ts";
 import {UserService} from "./user.service.ts";
 import {User} from "../../../../common/entities/User";

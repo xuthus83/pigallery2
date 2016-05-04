@@ -1,15 +1,15 @@
 ///<reference path="../../browser.d.ts"/>
 
-import {Component, OnInit, Pipe, PipeTransform} from "angular2/core";
+import {Component, OnInit} from "@angular/core";
 import {AuthenticationService} from "../model/network/authentication.service.ts";
-import {Router} from "angular2/router";
+import {Router} from "@angular/router-deprecated";
 import {FrameComponent} from "../frame/frame.component";
 import {User, UserRoles} from "../../../common/entities/User";
-import {FORM_DIRECTIVES} from "angular2/common";
+import {FORM_DIRECTIVES} from "@angular/common";
 import {Utils} from "../../../common/Utils";
 import {AdminService} from "./admin.service";
 import {Message} from "../../../common/entities/Message";
-import {StringifyRole} from "./StringifyRolePipe"; 
+import {StringifyRole} from "./StringifyRolePipe";
 
 @Component({
     selector: 'admin',
@@ -36,44 +36,44 @@ export class AdminComponent implements OnInit {
         this.userRoles = Utils.enumToArray(UserRoles).filter(r => r.key <= this._authService.getUser().role);
         this.getUsersList();
     }
-    
-    private getUsersList(){
-        this._adminService.getUsers().then((result:Message<Array<User>>) =>{
+
+    private getUsersList() {
+        this._adminService.getUsers().then((result:Message<Array<User>>) => {
             this.users = result.result;
         });
     }
 
-    
-    canModifyUser(user:User):boolean{
-        let currentUser =  this._authService.getUser();
-        if(!currentUser){
+
+    canModifyUser(user:User):boolean {
+        let currentUser = this._authService.getUser();
+        if (!currentUser) {
             return false;
         }
-        
+
         return currentUser.name != user.name && currentUser.role >= user.role;
     }
-    
-    initNewUser() { 
+
+    initNewUser() {
         this.newUser = new User();
-        this.newUser.role = UserRoles.User; 
+        this.newUser.role = UserRoles.User;
     }
 
-    addNewUser(){
-        this._adminService.createUser(this.newUser).then(() =>{
+    addNewUser() {
+        this._adminService.createUser(this.newUser).then(() => {
             this.getUsersList();
         });
     }
 
-    updateRole(user:User){
-        this._adminService.updateRole(user).then(() =>{
+    updateRole(user:User) {
+        this._adminService.updateRole(user).then(() => {
             this.getUsersList();
         });
     }
-    
-    deleteUser(user:User){
-        this._adminService.deleteUser(user).then(() =>{
+
+    deleteUser(user:User) {
+        this._adminService.deleteUser(user).then(() => {
             this.getUsersList();
-        });   
+        });
     }
 }
 

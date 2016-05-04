@@ -1,10 +1,10 @@
 ///<reference path="../../browser.d.ts"/>
 
-import {Component, OnInit} from 'angular2/core';
+import {Component, OnInit} from '@angular/core';
 import {LoginCredential} from '../../../common/entities/LoginCredential';
 import {AuthenticationService} from "../model/network/authentication.service.ts";
-import {Router} from "angular2/router"; 
-import {FORM_DIRECTIVES} from "angular2/common";  
+import {Router} from "@angular/router-deprecated"; 
+import {FORM_DIRECTIVES} from "@angular/common";  
  
 @Component({
     selector: 'login',

@@ -1,10 +1,10 @@
 ///<reference path="../../../browser.d.ts"/>
 
-import {Component, ElementRef, ViewChild, QueryList} from "angular2/core";
+import {Component, ElementRef, ViewChild, QueryList} from "@angular/core";
 import {Photo} from "../../../../common/entities/Photo";
 import {GalleryPhotoComponent} from "../photo/photo.gallery.component";
-import {AnimationBuilder} from "angular2/animate";
-import {BrowserDomAdapter} from "angular2/src/platform/browser/browser_adapter";
+import {AnimationBuilder} from "@angular/platform-browser/src/animate/animation_builder";
+import {BrowserDomAdapter} from "@angular/platform-browser/src/browser_common";
 import {Dimension} from "../../model/IRenderable";
 
 @Component({

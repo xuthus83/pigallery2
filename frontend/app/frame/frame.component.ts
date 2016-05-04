@@ -1,7 +1,7 @@
 ///<reference path="../../browser.d.ts"/>
 
-import {Component,  ViewEncapsulation} from 'angular2/core'; 
-import {RouterLink} from "angular2/router";
+import {Component,  ViewEncapsulation} from '@angular/core'; 
+import {RouterLink} from "@angular/router-deprecated";
  
 @Component({
     selector: 'app-frame',

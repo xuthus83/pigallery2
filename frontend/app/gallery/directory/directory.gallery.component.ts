@@ -1,8 +1,8 @@
 ///<reference path="../../../browser.d.ts"/>
 
-import {Component, Input, OnInit} from 'angular2/core'; 
+import {Component, Input} from '@angular/core'; 
 import {Directory} from "../../../../common/entities/Directory";
-import {RouterLink} from "angular2/router";
+import {RouterLink} from "@angular/router-deprecated";
 import {Utils} from "../../../../common/Utils";
 
 @Component({
