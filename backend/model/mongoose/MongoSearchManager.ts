@@ -14,13 +14,13 @@ export class MongoSearchManager implements ISearchManager{
 
         console.log("autocomplete: " + text);
         let items:Array<AutoCompleteItem> = [];
-        PhotoModel.find({name:  { $regex: text, $options: "i" } }).limit(10).select('name').exec( (err,res) =>{
+        PhotoModel.find({name:  { $regex: text, $options: "i" } }).limit(10).select('name').exec( (err,res:Array<any>) =>{
             if(err || !res){
                 return cb(err,null);
             }
             items = items.concat(this.encapsulateAutoComplete(res.map(r => r.name),AutoCompeleteTypes.image));
 
-            DirectoryModel.find({name:  { $regex: text, $options: "i" } }).limit(10).select('name').exec( (err,res) =>{
+            DirectoryModel.find({name:  { $regex: text, $options: "i" } }).limit(10).select('name').exec( (err,res:Array<any>) =>{
                 if(err || !res){
                     return cb(err,null);
                 }

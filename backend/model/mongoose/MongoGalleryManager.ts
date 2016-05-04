@@ -16,7 +16,7 @@ export class MongoGalleryManager implements IGalleryManager{
         let directoryName = path.basename(relativeDirectoryName);
         let directoryParent = path.join( path.dirname(relativeDirectoryName),"/");
 
-        DirectoryModel.findOne({name:directoryName, path: directoryParent}).populate('photos').populate('directories').exec( (err,res) =>{
+        DirectoryModel.findOne({name:directoryName, path: directoryParent}).populate('photos').populate('directories').exec( (err,res:any) =>{
             if(err || !res){
                 return  this.indexDirectory(relativeDirectoryName,cb);
             }

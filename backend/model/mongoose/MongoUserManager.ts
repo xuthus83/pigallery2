@@ -9,13 +9,13 @@ export class MongoUserManager implements IUserManager {
     }
 
     public findOne(filter, cb:(error:any, result:User) => void) {
-        return UserModel.findOne(filter, function (err, result) {
+        return UserModel.findOne(filter, function (err, result:any) {
             return cb(err, result);
         });
     }
 
     public find(filter, cb:(error:any, result:Array<User>) => void) {
-        UserModel.find(filter, function (err, result) {
+        UserModel.find(filter, function (err, result:Array<any>) {
             return cb(err, result);
         });
     }
