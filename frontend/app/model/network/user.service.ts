@@ -8,21 +8,20 @@ import {User} from "../../../../common/entities/User";
 import {Message} from "../../../../common/entities/Message";
 
 @Injectable()
-export class UserService extends NetworkService{
+export class UserService{
 
  
 
-    constructor(_http:Http){ 
-        super(_http);
+    constructor(private _networkService:NetworkService){
     }
 
 
     public login(credential:LoginCredential): Promise<Message<User>>{
-        return this.postJson("/user/login",{"loginCredential": credential});
+        return this._networkService.postJson("/user/login",{"loginCredential": credential});
     }
 
     public getSessionUser(): Promise<Message<User>>{
-        return this.getJson("/user/login");
+        return this._networkService.getJson("/user/login");
     }
   
 }
