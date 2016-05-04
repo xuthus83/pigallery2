@@ -44,7 +44,12 @@ export class AuthenticationService{
         });
     }
 
-    public login(credential:LoginCredential){
+    private setUser(user:User){
+        this._user = user;
+        this.OnAuthenticated.trigger(this._user);
+    }
+
+    public login(credential:LoginCredential) {
         this._userService.login(credential).then( (message:Message<User>) =>{
             if(message.error){
                 console.log(ErrorCodes[message.error.code] + "message: "+ message.error.message);
@@ -53,11 +58,7 @@ export class AuthenticationService{
             }
         });
     }
-    
-    private setUser(user:User){
-        this._user = user;
-        this.OnAuthenticated.trigger(this._user);
-    }
+
 
     public isAuthenticated():boolean{
         return (this._user && this._user != null) ? true : false;

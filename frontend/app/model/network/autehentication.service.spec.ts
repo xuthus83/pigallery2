@@ -37,5 +37,21 @@ describe('AuthenticationService', () => {
         expect(userService.login).toHaveBeenCalled();
     }));
 
+    it('should have NO Authenticated use', inject([ AuthenticationService ], (authService) => {
+        expect(authService.getUser()).toBe(null);
+        expect(authService.isAuthenticated()).toBe(false);
+    }));
+
+
+    it('should have Authenticated use', inject([ AuthenticationService ], (authService) => {
+        spyOn(authService.OnAuthenticated,"trigger").and.callThrough();
+        authService.login();
+        authService.OnAuthenticated.on(() =>{
+            expect(authService.getUser()).not.toBe(null);
+            expect(authService.isAuthenticated()).toBe(true);
+        });
+
+    }));
+
 
 });
