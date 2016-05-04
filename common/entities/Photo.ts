@@ -5,9 +5,9 @@ export class Photo {
     }
 
     public static getThumbnailPath(directory:Directory,photo:Photo){
-        return Utils.concatUrls("/api/gallery",directory.path,directory.name,photo.name,"thumbnail");
+        return Utils.concatUrls("/api/gallery/content/",directory.path,directory.name,photo.name,"thumbnail");
     }
     public static  getPhotoPath(directory:Directory,photo:Photo){
-        return Utils.concatUrls("/api/gallery",directory.path,directory.name,photo.name);
+        return Utils.concatUrls("/api/gallery/content/",directory.path,directory.name,photo.name);
     }
 }

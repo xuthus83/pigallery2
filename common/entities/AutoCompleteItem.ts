@@ -5,6 +5,6 @@ export enum AutoCompeleteTypes {
 }
 
 export class AutoCompleteItem{
-    constructor(text:string, type:AutoCompeleteTypes){}
+    constructor(public text:string,public  type:AutoCompeleteTypes){}
 }
 

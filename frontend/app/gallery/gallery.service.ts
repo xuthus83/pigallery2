@@ -15,7 +15,7 @@ export class GalleryService  extends NetworkService{
     }
 
     public getDirectory(directoryName:string): Promise<Message<Directory>>{
-        return this.getJson("/gallery/"+directoryName);
+        return this.getJson("/gallery/content/"+directoryName);
     }
 
 

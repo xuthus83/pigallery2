@@ -7,6 +7,7 @@ import {GalleryManager} from "../model/memory/GalleryManager";
 import {Directory} from "../../common/entities/Directory";
 import {Config} from "../config/Config";
 import {ObjectManagerRepository} from "../model/ObjectManagerRepository";
+import {AutoCompleteItem} from "../../common/entities/AutoCompleteItem";
 
 export class GalleryMWs {
 
@@ -56,8 +57,17 @@ export class GalleryMWs {
     }
 
     public static autocomplete(req:Request, res:Response, next:NextFunction){
-        //TODO: implement
-        return next(new Error(ErrorCodes.GENERAL_ERROR));
+        if(!(req.params.text)){
+            return next();
+        }
+
+        ObjectManagerRepository.getInstance().getSearchManager().autocomplete(req.params.text,(err,items:Array<AutoCompleteItem>) => {
+            if(err || !items){
+                return next(new Error(ErrorCodes.GENERAL_ERROR,err));
+            }
+            req.resultPipe = items;
+            return next();
+        });
     }
 
 

@@ -20,7 +20,7 @@ export class GalleryPhotoComponent implements IRenderable{
     }
 
     getPhotoPath(){
-        return Utils.concatUrls("/api/gallery",this.directory.path,this.directory.name,this.photo.name,"thumbnail");
+        return Photo.getThumbnailPath(this.directory,this.photo);
     }
 
  

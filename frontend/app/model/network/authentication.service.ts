@@ -7,6 +7,7 @@ import {UserService} from "./user.service.ts";
 import {LoginCredential} from "../../../../common/entities/LoginCredential";
 import {Message} from "../../../../common/entities/Message";
 import { Cookie } from 'ng2-cookies/ng2-cookies';
+import {ErrorCodes} from "../../../../common/entities/Error";
 
 declare module ServerInject{
    export var user;
@@ -46,7 +47,7 @@ export class AuthenticationService{
     public login(credential:LoginCredential){
         this._userService.login(credential).then( (message:Message<User>) =>{
             if(message.error){
-                console.log(message.error);
+                console.log(ErrorCodes[message.error.code] + "message: "+ message.error.message);
             }else{
                 this.setUser(message.result);
             }

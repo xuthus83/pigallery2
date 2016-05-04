@@ -2,6 +2,8 @@
 
 import {Component} from "@angular/core";
 import {AutoCompleteService} from "./autocomplete.service";
+import {AutoCompleteItem} from "../../../../common/entities/AutoCompleteItem";
+import {Message} from "../../../../common/entities/Message";
 
 @Component({
     selector: 'gallery-search',
@@ -11,32 +13,37 @@ import {AutoCompleteService} from "./autocomplete.service";
 })
 export class GallerySearchComponent {
  
-    autoCompleteItems:Array<AutoCompleteItem> = [];
+    autoCompleteItems:Array<AutoCompleteRenderItem> = [];
     constructor(private _autoCompleteService:AutoCompleteService) {
     }
 
     getSuggestions(event:KeyboardEvent){ 
-        let searchText = (<HTMLInputElement>event.target).value;
-        let result = [];
+        let searchText = (<HTMLInputElement>event.target).value; 
         if(searchText.length > 0) {
-            result = this._autoCompleteService.autoComplete(searchText);
+            this._autoCompleteService.autoComplete(searchText).then((message:Message<Array<AutoCompleteItem>>) =>{
+                if(message.error){
+                    //TODO: implement
+                    console.error(message.error);
+                    return;
+                }
+                this.showSuggestions(message.result,searchText);
+            });
         }
-        this.showSuggestions(result,searchText);
     }
 
-    private showSuggestions(suggestions:Array<string>,searchText:string){
+    private showSuggestions(suggestions:Array<AutoCompleteItem>,searchText:string){
         this.autoCompleteItems = [];
-        suggestions.forEach((value)=>{
-            let preIndex = value.toLowerCase().indexOf(searchText.toLowerCase());
-            let item = new AutoCompleteItem();
+        suggestions.forEach((item)=>{
+            let preIndex = item.text.toLowerCase().indexOf(searchText.toLowerCase());
+            let renderItem = new AutoCompleteRenderItem();
             if(preIndex > -1){
-                item.preText = value.substring(0,preIndex);
-                item.highLightText = value.substring(preIndex, preIndex + searchText.length);
-                item.postText = value.substring(preIndex + searchText.length);                
+                renderItem.preText = item.text.substring(0,preIndex);
+                renderItem.highLightText = item.text.substring(preIndex, preIndex + searchText.length);
+                renderItem.postText = item.text.substring(preIndex + searchText.length);                
             }else{
-                item.postText = value;
+                renderItem.postText = item.text;
             }
-            this.autoCompleteItems.push(item);
+            this.autoCompleteItems.push(renderItem);
         });
     }
 
@@ -45,7 +52,7 @@ export class GallerySearchComponent {
 
 }
 
-class AutoCompleteItem{
+class AutoCompleteRenderItem{
     constructor(public preText:string = "",public  highLightText:string = "", public postText:string = ""){
         
     }

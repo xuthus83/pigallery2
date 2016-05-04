@@ -1,6 +1,6 @@
 ///<reference path="../../browser.d.ts"/>
 
-import {Component, OnInit, QueryList, ViewChild, AfterViewInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AuthenticationService} from "../model/network/authentication.service.ts";
 import {Router,  RouteParams} from "@angular/router-deprecated";
 import {GalleryService} from "./gallery.service";

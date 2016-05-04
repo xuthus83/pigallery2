@@ -17,7 +17,7 @@ export class GalleryRouter{
     }
 
     private addDirectoryList() {
-        this.app.get(["/api/gallery/:directory(*)","/api/gallery/","/api/gallery//"],
+        this.app.get(["/api/gallery/content/:directory(*)","/api/gallery/","/api/gallery//"],
             AuthenticationMWs.authenticate,
             GalleryMWs.listDirectory,
             RenderingMWs.renderResult
@@ -26,7 +26,7 @@ export class GalleryRouter{
 
 
     private addGetImage() {
-        this.app.get(["/api/gallery/:imagePath(*\.(jpg|bmp|png|gif|jpeg))"],
+        this.app.get(["/api/gallery/content/:imagePath(*\.(jpg|bmp|png|gif|jpeg))"],
             AuthenticationMWs.authenticate,
             GalleryMWs.loadImage,
             RenderingMWs.renderFile
@@ -34,7 +34,7 @@ export class GalleryRouter{
     };
 
     private addGetImageThumbnail() {
-        this.app.get("/api/gallery/:imagePath(*\.(jpg|bmp|png|gif|jpeg))/thumbnail/:size?",
+        this.app.get("/api/gallery/content/:imagePath(*\.(jpg|bmp|png|gif|jpeg))/thumbnail/:size?",
             AuthenticationMWs.authenticate,
             GalleryMWs.loadImage,
             ThumbnailGeneratorMWs.generateThumbnail,
@@ -51,8 +51,8 @@ export class GalleryRouter{
     };
 
     private addAutoComplete() {
-        this.app.get("/api/gallery/autocomplete",
-            AuthenticationMWs.authenticate,
+        this.app.get("/api/gallery/autocomplete/:text",
+          //  AuthenticationMWs.authenticate,
             GalleryMWs.autocomplete,
             RenderingMWs.renderResult
         );
