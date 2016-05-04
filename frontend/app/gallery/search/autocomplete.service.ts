@@ -14,7 +14,7 @@ export class AutoCompleteService extends NetworkService {
         super(_http);
     }
  
-    public autoComplete(text:string): Promise<Message<Array<AutoCompleteItem> >>{
+    public autoComplete(text:string): Promise<Message<Array<AutoCompleteItem> >> {
        return  this.getJson("/gallery/autocomplete/"+text);
     }
 

@@ -52,7 +52,7 @@ export class GalleryRouter{
 
     private addAutoComplete() {
         this.app.get("/api/gallery/autocomplete/:text",
-          //  AuthenticationMWs.authenticate,
+            AuthenticationMWs.authenticate,
             GalleryMWs.autocomplete,
             RenderingMWs.renderResult
         );

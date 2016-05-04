@@ -24,7 +24,7 @@ import {GallerySearchComponent} from "./search/search.gallery.component";
 })
 export class GalleryComponent implements OnInit{
 
-    currentDirectory:Directory = new Directory(-1,"","/",new Date(),[],[]);
+    currentDirectory:Directory = new Directory();
     
     
     constructor(private _galleryService:GalleryService,

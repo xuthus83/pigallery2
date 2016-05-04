@@ -19,7 +19,7 @@ export class GallerySearchComponent {
 
     getSuggestions(event:KeyboardEvent){ 
         let searchText = (<HTMLInputElement>event.target).value; 
-        if(searchText.length > 0) {
+        if(searchText.trim().length > 0) {
             this._autoCompleteService.autoComplete(searchText).then((message:Message<Array<AutoCompleteItem>>) =>{
                 if(message.error){
                     //TODO: implement
@@ -28,11 +28,13 @@ export class GallerySearchComponent {
                 }
                 this.showSuggestions(message.result,searchText);
             });
+        }else{
+            this.emptyAutoComplete();            
         }
     }
 
     private showSuggestions(suggestions:Array<AutoCompleteItem>,searchText:string){
-        this.autoCompleteItems = [];
+        this.emptyAutoComplete();
         suggestions.forEach((item)=>{
             let preIndex = item.text.toLowerCase().indexOf(searchText.toLowerCase());
             let renderItem = new AutoCompleteRenderItem();
@@ -45,6 +47,14 @@ export class GallerySearchComponent {
             }
             this.autoCompleteItems.push(renderItem);
         });
+    }
+    
+    public onFocusLost(event){
+        this.autoCompleteItems = [];
+    }
+    
+    private emptyAutoComplete(){
+        this.autoCompleteItems = [];        
     }
 
 

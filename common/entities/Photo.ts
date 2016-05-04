@@ -1,7 +1,7 @@
 import {Utils} from "../Utils";
 import {Directory} from "./Directory";
 export class Photo {
-    constructor(public id:number, public name:string, public width:number, public height:number) {
+    constructor(public id:string, public name:string, public width:number, public height:number) {
     }
 
     public static getThumbnailPath(directory:Directory,photo:Photo){

@@ -2,8 +2,7 @@
 
 import {Component, Input, ElementRef, ViewChild} from '@angular/core';
 import {Photo} from "../../../../common/entities/Photo";
-import {Directory} from "../../../../common/entities/Directory";
-import {Utils} from "../../../../common/Utils";
+import {Directory} from "../../../../common/entities/Directory"; 
 import {IRenderable, Dimension} from "../../model/IRenderable"; 
 
 @Component({

@@ -8,5 +8,5 @@ export enum UserRoles{
 }
 
 export class User { 
-    constructor(public id?:number,public name?:string, public password?:string, public role:UserRoles = UserRoles.User){}
+    constructor(public id?:string,public name?:string, public password?:string, public role:UserRoles = UserRoles.User){}
 }
