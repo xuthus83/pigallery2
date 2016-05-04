@@ -8,13 +8,13 @@ import {
 } from '@angular/core/testing';
  
 
-import {provide} from '@angular/core';
-import {AuthenticationService} from "./authentication.service.ts";
+import {provide} from '@angular/core'; 
 import {UserService} from "./user.service.ts";
 import {User} from "../../../../common/entities/User";
 import {Message} from "../../../../common/entities/Message";
 import "rxjs/Rx";
 import {LoginCredential} from "../../../../common/entities/LoginCredential";
+import {AuthenticationService} from "./authentication.service";
 
 class MockUserService {
     public login(credential:LoginCredential){
