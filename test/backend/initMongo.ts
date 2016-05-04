@@ -18,17 +18,17 @@ DatabaseManager.getInstance((err)=>{
         process.exit()
     });
 
-    userManager.createUser(new User(1,"admin","admin",UserRoles.Admin),(err)=>{
+    userManager.createUser(new User(2,"admin","admin",UserRoles.Admin),(err)=>{
         DatabaseManager.getInstance().disconnect();
         process.exit()
     });
 
-    userManager.createUser(new User(1,"user","user",UserRoles.User),(err)=>{
+    userManager.createUser(new User(3,"user","user",UserRoles.User),(err)=>{
         DatabaseManager.getInstance().disconnect();
         process.exit()
     });
 
-    userManager.createUser(new User(1,"guest","guest",UserRoles.Guest),(err)=>{
+    userManager.createUser(new User(4,"guest","guest",UserRoles.Guest),(err)=>{
         DatabaseManager.getInstance().disconnect();
         process.exit()
     });
