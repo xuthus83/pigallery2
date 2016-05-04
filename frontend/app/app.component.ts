@@ -9,7 +9,8 @@ import {Router, RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS} from "@angular
 import {HTTP_PROVIDERS} from "@angular/http";
 import {UserService} from "./model/network/user.service.ts";
 import {GalleryService} from "./gallery/gallery.service"; 
-import {AdminComponent} from "./admin/admin.component"; 
+import {AdminComponent} from "./admin/admin.component";
+import {NetworkService} from "./model/network/network.service"; 
 
         
 @Component({
@@ -19,6 +20,7 @@ import {AdminComponent} from "./admin/admin.component";
     providers: [
         HTTP_PROVIDERS,
         ROUTER_PROVIDERS,
+        NetworkService,
         UserService,
         GalleryService,
         AuthenticationService]
