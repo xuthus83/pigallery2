@@ -22,7 +22,7 @@ class MockUserService {
     }
 }
 
-describe('LoginService', () => {
+describe('AuthenticationService', () => {
     beforeEachProviders(() => [
         provide(UserService, {useClass: MockUserService}),
         AuthenticationService

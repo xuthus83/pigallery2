@@ -1,9 +1,11 @@
 ///<reference path="../../../browser.d.ts"/>
 
+import {Injectable} from '@angular/core';
 import {Http, Headers, RequestOptions} from "@angular/http";
 import {Message} from "../../../../common/entities/Message";
-import "rxjs/Rx"; 
+import "rxjs/Rx";
 
+@Injectable()
 export class NetworkService{
 
     _baseUrl = "/api";
@@ -29,20 +31,20 @@ export class NetworkService{
             .catch(NetworkService.handleError);
     }
 
-    protected postJson<T>(url:string, data:any  = {}): Promise<T>{
+    public postJson<T>(url:string, data:any  = {}): Promise<T>{
         return this.callJson("post",url,data);
     }
 
-    protected putJson<T>(url:string, data:any  = {}): Promise<T>{
+    public putJson<T>(url:string, data:any  = {}): Promise<T>{
         return this.callJson("put",url,data);
     }
-    protected getJson<T>(url:string): Promise<T>{
+    public getJson<T>(url:string): Promise<T>{
         return this.callJson("get",url);
     }
 
 
-    protected deleteJson<T>(url:string, data:any  = {}): Promise<T>{
-        return this.callJson("delete",url,data);
+    public deleteJson<T>(url:string): Promise<T>{
+        return this.callJson("delete",url);
     }
 
     private static handleError (error: any) {
