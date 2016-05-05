@@ -3,8 +3,8 @@
     z-index: 1100; /* Sit on top */
     left: 0;
     top: 0;
-    width: 0px; /* Full width */
-    height: 0px; /* Full height */
+    width: 0; /* Full width */
+    height: 0; /* Full height */
     overflow: hidden;
     display: flex; /* add */
     justify-content: center; /* add to align horizontal */
