@@ -35,7 +35,7 @@ describe('UserService', () => {
         spyOn(networkService,"postJson");
         let credential = new LoginCredential("name","pass");
         userService.login(credential);
-        expect(networkService.getJson).toHaveBeenCalled();
+        expect(networkService.postJson).toHaveBeenCalled();
         expect(networkService.postJson.calls.argsFor(0)).toEqual(["/user/login",{"loginCredential": credential}]);
     }));
     

@@ -45,8 +45,8 @@ describe('AuthenticationService', () => {
     it('should have Authenticated use', inject([ AuthenticationService ], (authService) => {
         spyOn(authService.OnAuthenticated,"trigger").and.callThrough();
         authService.login();
-        expect(authService.OnAuthenticated.trigger).toHaveBeenCalled();
         authService.OnAuthenticated.on(() =>{
+            expect(authService.OnAuthenticated.trigger).toHaveBeenCalled();
             expect(authService.getUser()).not.toBe(null);
             expect(authService.isAuthenticated()).toBe(true);
         });
