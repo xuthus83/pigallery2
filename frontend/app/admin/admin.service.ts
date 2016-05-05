@@ -7,28 +7,27 @@ import {Message} from "../../../common/entities/Message";
 import {User} from "../../../common/entities/User"; 
 
 @Injectable()
-export class AdminService  extends NetworkService{
- 
+export class AdminService {
 
-    constructor(_http:Http){
-        super(_http);
+
+    constructor(private _networkService:NetworkService){
     }
 
     public createUser(user:User): Promise<Message<string>>{
-        return this.putJson("/user",{newUser:user});
+        return this._networkService.putJson("/user",{newUser:user});
     }
 
 
     public getUsers():Promise<Message<Array<User>>>{
-        return this.getJson("/user/list");
+        return this._networkService.getJson("/user/list");
     }
 
 
     public deleteUser(user:User) {
-        return this.deleteJson("/user/"+user.id);        
+        return this._networkService.deleteJson("/user/"+user.id);
     }
 
     public updateRole(user:User) {
-        return this.postJson("/user/"+user.id+"/role",{newRole:user.role});
+        return this._networkService.postJson("/user/"+user.id+"/role",{newRole:user.role});
     }
 }

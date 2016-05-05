@@ -7,15 +7,15 @@ import {Message} from "../../../common/entities/Message";
 import {Directory} from "../../../common/entities/Directory"; 
 
 @Injectable()
-export class GalleryService  extends NetworkService{
- 
+export class GalleryService{
 
-    constructor(_http:Http){
-        super(_http);
+
+
+    constructor(private _networkService:NetworkService){
     }
 
     public getDirectory(directoryName:string): Promise<Message<Directory>>{
-        return this.getJson("/gallery/content/"+directoryName);
+        return this._networkService.getJson("/gallery/content/"+directoryName);
     }
 
 

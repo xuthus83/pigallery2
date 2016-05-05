@@ -38,6 +38,7 @@ export class NetworkService{
     public putJson<T>(url:string, data:any  = {}): Promise<T>{
         return this.callJson("put",url,data);
     }
+    
     public getJson<T>(url:string): Promise<T>{
         return this.callJson("get",url);
     }
@@ -48,7 +49,7 @@ export class NetworkService{
     }
 
     private static handleError (error: any) {
-        // in a real world app, we may send the error to some remote logging infrastructure
+        // TODO: in a real world app, we may send the error to some remote logging infrastructure
         // instead of just logging it to the console
         console.error(error);
         return Promise.reject(error.message || error.json().error || 'Server error');

@@ -7,15 +7,14 @@ import {AutoCompleteItem} from "../../../../common/entities/AutoCompleteItem";
 import {Message} from "../../../../common/entities/Message";
 
 @Injectable()
-export class AutoCompleteService extends NetworkService {
+export class AutoCompleteService {
 
 
-    constructor(_http:Http) {
-        super(_http);
+    constructor(private _networkService:NetworkService){
     }
  
     public autoComplete(text:string): Promise<Message<Array<AutoCompleteItem> >> {
-       return  this.getJson("/gallery/autocomplete/"+text);
+       return  this._networkService.getJson("/gallery/autocomplete/"+text);
     }
 
 
