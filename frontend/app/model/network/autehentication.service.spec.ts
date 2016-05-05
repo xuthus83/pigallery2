@@ -3,7 +3,6 @@
 import {
     it,
     inject,
-    injectAsync,
     beforeEachProviders
 } from '@angular/core/testing';
  
@@ -18,7 +17,7 @@ import {AuthenticationService} from "./authentication.service";
 
 class MockUserService {
     public login(credential:LoginCredential){
-        return  Promise.resolve(new Message<User>(null,new User()))
+        return  Promise.resolve(new Message<User>(null,new User(0,"testUserName")))
     }
 }
 
@@ -46,6 +45,7 @@ describe('AuthenticationService', () => {
     it('should have Authenticated use', inject([ AuthenticationService ], (authService) => {
         spyOn(authService.OnAuthenticated,"trigger").and.callThrough();
         authService.login();
+        expect(authService.OnAuthenticated.trigger).toHaveBeenCalled();
         authService.OnAuthenticated.on(() =>{
             expect(authService.getUser()).not.toBe(null);
             expect(authService.isAuthenticated()).toBe(true);
