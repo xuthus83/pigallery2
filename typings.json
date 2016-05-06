@@ -14,8 +14,5 @@
     "node": "github:DefinitelyTyped/DefinitelyTyped/node/node.d.ts#0d622d857f97d44ea7dcad2b3edec1f23c48fe9e",
     "optimist": "registry:dt/optimist#0.0.0+20160316171810",
     "serve-static": "github:DefinitelyTyped/DefinitelyTyped/serve-static/serve-static.d.ts#0d622d857f97d44ea7dcad2b3edec1f23c48fe9e"
-  },
-  "dependencies": {
-    "es6-promise": "registry:npm/es6-promise#3.0.0+20160211003958"
   }
 }
