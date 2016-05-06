@@ -9,7 +9,8 @@ export enum ErrorCodes{
     USER_CREATION_ERROR,
 
 
-    GENERAL_ERROR
+    GENERAL_ERROR,
+    SERVER_ERROR
     
 }
 

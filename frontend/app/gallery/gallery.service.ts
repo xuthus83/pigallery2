@@ -9,17 +9,11 @@ import {Directory} from "../../../common/entities/Directory";
 @Injectable()
 export class GalleryService{
 
-
-
     constructor(private _networkService:NetworkService){
     }
 
     public getDirectory(directoryName:string): Promise<Message<Directory>>{
         return this._networkService.getJson("/gallery/content/"+directoryName);
     }
-
-
- 
-
 
 }
