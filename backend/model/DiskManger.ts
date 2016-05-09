@@ -30,7 +30,7 @@ export class DiskManager {
 
                 if (DiskManager.isImage(fullFilePath)) {
                     let dimensions = sizeOf(fullFilePath);
-                    directory.photos.push(new Photo(1, file, dimensions.width, dimensions.height));
+                    directory.photos.push(new Photo(1, file, directory, dimensions.width, dimensions.height));
                 }
             }
 

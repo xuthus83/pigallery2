@@ -2,6 +2,7 @@ import {AutoCompleteItem, AutoCompeleteTypes} from "../../../common/entities/Aut
 import {ISearchManager} from "../ISearchManager";
 import {DirectoryModel} from "./entities/DirectoryModel";
 import {PhotoModel} from "./entities/PhotoModel";
+import {SearchResult} from "../../../common/entities/SearchResult";
 
 export class MongoSearchManager implements ISearchManager {
 
@@ -29,6 +30,70 @@ export class MongoSearchManager implements ISearchManager {
                 }
                 items = items.concat(this.encapsulateAutoComplete(res.map(r => r.name), AutoCompeleteTypes.directory));
                 return cb(null, items);
+            });
+
+
+        });
+    }
+
+    search(text, cb:(error:any, result:SearchResult) => void) {
+        console.log("instantSearch: " + text);
+        let result:SearchResult = new SearchResult();
+        result.searchText = text;
+        PhotoModel.find({
+            name: {
+                $regex: text,
+                $options: "i"
+            }
+        }).populate('directory', 'name path').exec((err, res:Array<any>) => {
+            if (err || !res) {
+                return cb(err, null);
+            }
+            result.photos = res;
+
+            DirectoryModel.find({
+                name: {
+                    $regex: text,
+                    $options: "i"
+                }
+            }).select('name').exec((err, res:Array<any>) => {
+                if (err || !res) {
+                    return cb(err, null);
+                }
+                result.directories = res;
+                return cb(null, result);
+            });
+
+
+        });
+    }
+
+    instantSearch(text, cb:(error:any, result:SearchResult) => void) {
+        console.log("instantSearch: " + text);
+        let result:SearchResult = new SearchResult();
+        result.searchText = text;
+        PhotoModel.find({
+            name: {
+                $regex: text,
+                $options: "i"
+            }
+        }).limit(10).populate('directory', 'name path').exec((err, res:Array<any>) => {
+            if (err || !res) {
+                return cb(err, null);
+            }
+            result.photos = res;
+
+            DirectoryModel.find({
+                name: {
+                    $regex: text,
+                    $options: "i"
+                }
+            }).limit(10).exec((err, res:Array<any>) => {
+                if (err || !res) {
+                    return cb(err, null);
+                }
+                result.directories = res;
+                return cb(null, result);
             });
 
 

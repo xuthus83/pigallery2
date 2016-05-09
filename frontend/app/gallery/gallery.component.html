@@ -7,6 +7,14 @@
         <div *ngFor="let directory of _galleryService.content.directory.directories">
             <gallery-directory *ngIf="directory" [directory]="directory"></gallery-directory>
         </div>
-        <gallery-grid [directory]="_galleryService.content.directory" [lightbox]="lightbox"></gallery-grid>
+        <gallery-grid [photos]="_galleryService.content.directory.photos" [lightbox]="lightbox"></gallery-grid>
+    </div>
+
+    <div body class="container" style="width: 100%; padding:0" *ngIf="_galleryService.content.searchResult">
+        <div> Searching for: {{_galleryService.content.searchResult.searchText}}</div>
+        <div *ngFor="let directory of _galleryService.content.searchResult.directories">
+            <gallery-directory *ngIf="directory" [directory]="directory"></gallery-directory>
+        </div>
+        <gallery-grid [photos]="_galleryService.content.searchResult.photos" [lightbox]="lightbox"></gallery-grid>
     </div>
 </app-frame>

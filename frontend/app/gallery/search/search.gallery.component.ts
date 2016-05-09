@@ -4,21 +4,25 @@ import {Component} from "@angular/core";
 import {AutoCompleteService} from "./autocomplete.service";
 import {AutoCompleteItem} from "../../../../common/entities/AutoCompleteItem";
 import {Message} from "../../../../common/entities/Message";
+import {GalleryService} from "../gallery.service";
+import {FORM_DIRECTIVES} from "@angular/common";
 
 @Component({
     selector: 'gallery-search',
     templateUrl: 'app/gallery/search/search.gallery.component.html',
     styleUrls: ['app/gallery/search/search.gallery.component.css'],
-    providers: [AutoCompleteService]
+    providers: [AutoCompleteService],
+    directives: [FORM_DIRECTIVES]
 })
 export class GallerySearchComponent {
 
     autoCompleteItems:Array<AutoCompleteRenderItem> = [];
+    private searchText:string = "";
 
-    constructor(private _autoCompleteService:AutoCompleteService) {
+    constructor(private _autoCompleteService:AutoCompleteService, private _galleryService:GalleryService) {
     }
 
-    getSuggestions(event:KeyboardEvent) {
+    onSearchChange(event:KeyboardEvent) {
         let searchText = (<HTMLInputElement>event.target).value;
         if (searchText.trim().length > 0) {
             this._autoCompleteService.autoComplete(searchText).then((message:Message<Array<AutoCompleteItem>>) => {
@@ -32,8 +36,14 @@ export class GallerySearchComponent {
         } else {
             this.emptyAutoComplete();
         }
+
+        this._galleryService.instantSearch(searchText);
     }
 
+    public onSearch() {
+        this._galleryService.search(this.searchText);
+    }
+    
     private showSuggestions(suggestions:Array<AutoCompleteItem>, searchText:string) {
         this.emptyAutoComplete();
         suggestions.forEach((item)=> {

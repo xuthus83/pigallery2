@@ -150,14 +150,14 @@ export class GalleryLightboxComponent {
         if (!this.activePhoto) {
             return "";
         }
-        return Photo.getPhotoPath(this.activePhoto.directory, this.activePhoto.photo);
+        return Photo.getPhotoPath(this.activePhoto.photo);
     }
 
     getThumbnailPath() {
         if (!this.activePhoto) {
             return "";
         }
-        return Photo.getThumbnailPath(this.activePhoto.directory, this.activePhoto.photo);
+        return Photo.getThumbnailPath(this.activePhoto.photo);
     }
 
     private getBodyScrollTop() {

@@ -10,7 +10,6 @@ import {
     QueryList,
     AfterViewInit
 } from "@angular/core";
-import {Directory} from "../../../../common/entities/Directory";
 import {Photo} from "../../../../common/entities/Photo";
 import {GalleryPhotoComponent} from "../photo/photo.gallery.component";
 import {GridRowBuilder} from "./GridRowBuilder";
@@ -27,7 +26,7 @@ export class GalleryGridComponent implements OnChanges,AfterViewInit {
     @ViewChild('gridContainer') gridContainer:ElementRef;
     @ViewChildren(GalleryPhotoComponent) gridPhotoQL:QueryList<GalleryPhotoComponent>;
 
-    @Input() directory:Directory;
+    @Input() photos:Array<Photo>;
     @Input() lightbox:GalleryLightboxComponent;
 
     photosToRender:Array<GridPhoto> = [];
@@ -41,7 +40,7 @@ export class GalleryGridComponent implements OnChanges,AfterViewInit {
     }
 
     ngOnChanges() {
-        //   this.renderPhotos();
+        this.renderPhotos();
     }
 
     onResize() {
@@ -92,9 +91,9 @@ export class GalleryGridComponent implements OnChanges,AfterViewInit {
         this.photosToRender = [];
         let i = 0;
 
-        while (i < this.directory.photos.length) {
+        while (i < this.photos.length) {
 
-            let photoRowBuilder = new GridRowBuilder(this.directory.photos, i, this.IMAGE_MARGIN, containerWidth);
+            let photoRowBuilder = new GridRowBuilder(this.photos, i, this.IMAGE_MARGIN, containerWidth);
             photoRowBuilder.addPhotos(this.TARGET_COL_COUNT);
             photoRowBuilder.adjustRowHeightBetween(minRowHeight, maxRowHeight);
 

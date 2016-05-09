@@ -3,7 +3,6 @@
                     *ngFor="let gridPhoto of photosToRender"
                    (click)="lightbox.show(gridPhoto.photo)"
                    [photo]="gridPhoto.photo"
-                   [directory]="directory"
                    [style.width.px]="gridPhoto.renderWidth"
                    [style.height.px]="gridPhoto.renderHeight"
                    [style.marginLeft.px]="IMAGE_MARGIN"

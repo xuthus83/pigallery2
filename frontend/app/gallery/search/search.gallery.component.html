@@ -1,8 +1,9 @@
 <div class="col-sm-4 col-md-5 pull-right">
-    <form class="navbar-form" role="search">
+    <form class="navbar-form" role="search" #SearchForm="ngForm">
         <div class="input-group">
-                <input type="text" class="form-control" placeholder="Search" (keyup)="getSuggestions($event)" (blur)="onFocusLost($event)"
-                       name="srch-term" id="srch-term" autocomplete="off" >
+            <input type="text" class="form-control" placeholder="Search" (keyup)="onSearchChange($event)"
+                   (blur)="onFocusLost($event)" [(ngModel)]="searchText" #name="ngForm" ngControl="search"
+                   name="srch-term" id="srch-term" autocomplete="off" >
 
                 <div class="autocomplete-list" *ngIf="autoCompleteItems.length > 0" >
                     <div class="autocomplete-item" *ngFor="let item of autoCompleteItems">
@@ -11,7 +12,8 @@
                 </div>
 
             <div class="input-group-btn" style="display: block">
-                <button class="btn btn-default dropdown-toggle" type="button"><i class="glyphicon glyphicon-search"></i>
+                <button class="btn btn-default dropdown-toggle" type="button" (click)="onSearch()"><i
+                        class="glyphicon glyphicon-search"></i>
                 </button>
             </div>
         </div>

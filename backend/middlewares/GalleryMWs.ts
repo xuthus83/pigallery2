@@ -7,6 +7,8 @@ import {Config} from "../config/Config";
 import {ObjectManagerRepository} from "../model/ObjectManagerRepository";
 import {AutoCompleteItem} from "../../common/entities/AutoCompleteItem";
 import {ContentWrapper} from "../../common/entities/ConentWrapper";
+import {SearchResult} from "../../common/entities/SearchResult";
+import {Photo} from "../../common/entities/Photo";
 
 export class GalleryMWs {
 
@@ -27,10 +29,17 @@ export class GalleryMWs {
             if (err || !directory) {
                 return next(new Error(ErrorCodes.GENERAL_ERROR, err));
             }
+
+            //remove cyclic reference
+            directory.photos.forEach((photo:Photo) => {
+                photo.directory = null;
+            });
+
             req.resultPipe = new ContentWrapper(directory, null);
             return next();
         });
     }
+
 
 
     public static loadImage(req:Request, res:Response, next:NextFunction) {
@@ -49,14 +58,29 @@ export class GalleryMWs {
 
 
     public static search(req:Request, res:Response, next:NextFunction) {
-        //TODO: implement
-        return next(new Error(ErrorCodes.GENERAL_ERROR));
+
+        ObjectManagerRepository.getInstance().getSearchManager().search(req.params.text, (err, result:SearchResult) => {
+            if (err || !result) {
+                return next(new Error(ErrorCodes.GENERAL_ERROR, err));
+            }
+            req.resultPipe = new ContentWrapper(null, result);
+            return next();
+        });
     }
 
 
     public static instantSearch(req:Request, res:Response, next:NextFunction) {
-        //TODO: implement
-        return next(new Error(ErrorCodes.GENERAL_ERROR));
+        if (!(req.params.text)) {
+            return next();
+        }
+
+        ObjectManagerRepository.getInstance().getSearchManager().instantSearch(req.params.text, (err, result:SearchResult) => {
+            if (err || !result) {
+                return next(new Error(ErrorCodes.GENERAL_ERROR, err));
+            }
+            req.resultPipe = new ContentWrapper(null, result);
+            return next();
+        });
     }
 
     public static autocomplete(req:Request, res:Response, next:NextFunction) {

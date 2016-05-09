@@ -5,6 +5,7 @@ import {DiskManager} from "../DiskManger";
 import {Utils} from "../../../common/Utils";
 import {DirectoryModel} from "./entities/DirectoryModel";
 import {PhotoModel} from "./entities/PhotoModel";
+import {Photo} from "../../../common/entities/Photo";
 
 export class MongoGalleryManager implements IGalleryManager {
 
@@ -22,7 +23,7 @@ export class MongoGalleryManager implements IGalleryManager {
             if (err || !res) {
                 return this.indexDirectory(relativeDirectoryName, cb);
             }
-            return cb(err, res);
+            return cb(err, this.modelToEntity(res));
         });
 
     }
@@ -46,12 +47,38 @@ export class MongoGalleryManager implements IGalleryManager {
             });
 
             scannedDirectory.photos = arr;
-            DirectoryModel.create(scannedDirectory, (err)=> {
-                return cb(err, scannedDirectory);
+            DirectoryModel.create(scannedDirectory, (err, savedDir)=> {
+                scannedDirectory.photos.forEach((value:any) => {
+                    value['directory'] = savedDir;
+                    value.save();
+                });
+                return cb(err, this.modelToEntity(scannedDirectory));
             });
 
         });
     }
 
 
+    private modelToEntity(directroy:any):Directory {
+        console.log("modelToEntity");
+        //   console.log(directroy);
+        let directoryEntity = new Directory(directroy._id);
+        Utils.updateKeys(directoryEntity, directroy);
+        directroy.photos.forEach((photo) => {
+            let photoEntity = new Photo(null, null, null, null, null);
+            Utils.updateKeys(photoEntity, photo);
+            console.log(photoEntity);
+            directoryEntity.photos.push(photoEntity);
+        });
+        directroy.directories.forEach((dir) => {
+            let dirEntity = new Directory(null, null, null, null, null, null);
+            Utils.updateKeys(dirEntity, dir);
+            console.log(dir);
+            console.log(dirEntity);
+            directoryEntity.directories.push(dirEntity);
+        });
+
+        return directoryEntity;
+
+    }
 }

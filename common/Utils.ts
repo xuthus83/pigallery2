@@ -20,7 +20,7 @@ export class Utils {
     }
 
     public static updateKeys(targetObject, sourceObject) {
-        Object.keys(sourceObject).forEach((key)=> {
+        Object.keys(sourceObject).forEach((key)=> { 
             if (typeof targetObject[key] === "undefined") {
                 return;
             }

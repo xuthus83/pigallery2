@@ -2,7 +2,6 @@
 
 import {Component, Input, ElementRef, ViewChild} from "@angular/core";
 import {Photo} from "../../../../common/entities/Photo";
-import {Directory} from "../../../../common/entities/Directory";
 import {IRenderable, Dimension} from "../../model/IRenderable";
 
 @Component({
@@ -11,15 +10,14 @@ import {IRenderable, Dimension} from "../../model/IRenderable";
     styleUrls: ['app/gallery/photo/photo.gallery.component.css'],
 })
 export class GalleryPhotoComponent implements IRenderable {
-    @Input() photo:Photo;
-    @Input() directory:Directory;
+    @Input() photo:Photo; 
     @ViewChild("image") imageRef:ElementRef;
 
     constructor() {
     }
 
     getPhotoPath() {
-        return Photo.getThumbnailPath(this.directory, this.photo);
+        return Photo.getThumbnailPath(this.photo);
     }
 
 
