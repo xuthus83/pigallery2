@@ -1,13 +1,13 @@
 export var MessageTypes = {
-    Client:{
-        Login:{
-            Authenticate:"Authenticate"
+    Client: {
+        Login: {
+            Authenticate: "Authenticate"
         }
 
     },
-    Server:{
-        Login:{
-            Authenticated:"Authenticated"
+    Server: {
+        Login: {
+            Authenticated: "Authenticated"
         }
 
     }

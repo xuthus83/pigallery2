@@ -4,7 +4,6 @@ import {UserModel} from "./entities/UserModel";
 
 export class MongoUserManager implements IUserManager {
 
-
     constructor() {
     }
 
@@ -27,7 +26,7 @@ export class MongoUserManager implements IUserManager {
     public deleteUser(id:number, cb:(error:any) => void) {
         UserModel.remove({id: id}, cb);
     }
- 
+
 
     public changeRole(id:number, newRole:UserRoles, cb:(error:any, result:string) => void) {
         return UserModel.update({id: id}, {role: newRole}, function (err) {

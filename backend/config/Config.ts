@@ -1,4 +1,3 @@
-
 import {ConfigLoader} from "./ConfigLoader";
 import * as path from "path";
 
@@ -6,10 +5,10 @@ export enum DatabaseType{
     memory, mongoDB
 }
 
-export class ConfigClass{
+export class ConfigClass {
 
-    constructor(){
-        ConfigLoader.init(this,path.join(__dirname,'./../../config.json'));
+    constructor() {
+        ConfigLoader.init(this, path.join(__dirname, './../../config.json'));
     }
 
     public PORT:number = 80;

@@ -1,7 +1,7 @@
 ///<reference path="../../../browser.d.ts"/>
 
 import {it, inject, beforeEachProviders, beforeEach, afterEach} from "@angular/core/testing";
-import {BaseRequestOptions, Http, Response, ResponseOptions, ResponseType, BaseResponseOptions} from "@angular/http";
+import {BaseRequestOptions, Http, Response, ResponseOptions} from "@angular/http";
 import {MockBackend, MockConnection} from "@angular/http/testing";
 import {provide} from "@angular/core";
 import "rxjs/Rx";
@@ -114,9 +114,9 @@ describe('NetworkService Fail tests', () => {
     beforeEach(inject([MockBackend], (backend) => {
 
         backend.connections.subscribe((c) => {
-            connection = c; 
-            connection.mockError({name :"errorName",message:testError});
-            
+            connection = c;
+            connection.mockError({name: "errorName", message: testError});
+
         });
     }));
 
@@ -161,7 +161,7 @@ describe('NetworkService Fail tests', () => {
 
         networkService.deleteJson(testUrl).then((res:Message<any>) => {
             expect(res).toBe(null);
-        }).catch((err) => {  
+        }).catch((err) => {
             expect(err).toBe(testError);
         });
     }));

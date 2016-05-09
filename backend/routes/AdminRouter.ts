@@ -3,7 +3,7 @@
 import {AuthenticationMWs} from "../middlewares/AuthenticationMWs";
 import {UserRoles} from "../../common/entities/User";
 
-export class AdminRouter{
+export class AdminRouter {
     constructor(private app) {
 
         this.addResetDB();
@@ -25,9 +25,6 @@ export class AdminRouter{
             //TODO: implement
         );
     };
-
-
-
 
 
 }

@@ -4,7 +4,8 @@ export enum AutoCompeleteTypes {
     imageTag
 }
 
-export class AutoCompleteItem{
-    constructor(public text:string,public  type:AutoCompeleteTypes){}
+export class AutoCompleteItem {
+    constructor(public text:string, public  type:AutoCompeleteTypes) {
+    }
 }
 

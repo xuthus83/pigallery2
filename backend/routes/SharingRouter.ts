@@ -3,7 +3,7 @@
 import {AuthenticationMWs} from "../middlewares/AuthenticationMWs";
 import {UserRoles} from "../../common/entities/User";
 
-export class SharingRouter{
+export class SharingRouter {
     constructor(private app) {
 
         this.addGetSharing();
@@ -25,9 +25,6 @@ export class SharingRouter{
             //TODO: implement
         );
     };
-
-
-
 
 
 }

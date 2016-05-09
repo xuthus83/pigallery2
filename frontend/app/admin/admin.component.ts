@@ -9,7 +9,7 @@ import {FORM_DIRECTIVES} from "@angular/common";
 import {Utils} from "../../../common/Utils";
 import {AdminService} from "./admin.service";
 import {Message} from "../../../common/entities/Message";
-import {StringifyRole} from "./StringifyRolePipe";
+import {StringifyRole} from "./../pipes/StringifyRolePipe";
 
 @Component({
     selector: 'admin',

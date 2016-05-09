@@ -1,17 +1,16 @@
-
 declare module Express {
-    export interface Request{
+    export interface Request {
         resultPipe?:any
         body?:{
             loginCredential
         }
     }
-    
-    export interface Response{
+
+    export interface Response {
         tpl?:any
     }
 
-    export interface Session  {
+    export interface Session {
         user?;
     }
 }

@@ -1,4 +1,3 @@
-
 export enum ErrorCodes{
     NOT_AUTHENTICATED,
     ALREADY_AUTHENTICATED,
@@ -11,9 +10,10 @@ export enum ErrorCodes{
 
     GENERAL_ERROR,
     SERVER_ERROR
-    
+
 }
 
-export class Error{
-    constructor(public code:ErrorCodes, public message?:String) {}
+export class Error {
+    constructor(public code:ErrorCodes, public message?:String) {
+    }
 }

@@ -45,8 +45,7 @@ export class GalleryLightboxComponent {
         from.top -= this.getBodyScrollTop();
 
 
-
-        let fromImage = {width: from.width + "px", height: from.height + "px", top: "0px", left:"0px"};
+        let fromImage = {width: from.width + "px", height: from.height + "px", top: "0px", left: "0px"};
         let toImage = this.calcLightBoxPhotoDimension(this.activePhoto.photo).toStyle();
 
         this.forceAnimateFrom(fromImage,
@@ -91,7 +90,7 @@ export class GalleryLightboxComponent {
 
 
         let fromImage = this.calcLightBoxPhotoDimension(this.activePhoto.photo).toStyle();
-        let toImage = {width: to.width + "px", height: to.height + "px", top: "0px", left:"0px"};
+        let toImage = {width: to.width + "px", height: to.height + "px", top: "0px", left: "0px"};
 
         this.forceAnimateTo(fromImage,
             toImage,
@@ -103,7 +102,7 @@ export class GalleryLightboxComponent {
 
     }
 
-    private findPhotoComponenet(photo){
+    private findPhotoComponenet(photo) {
         let galleryPhotoComponents = this.gridPhotoQL.toArray();
         let selectedPhoto:GalleryPhotoComponent = null;
         for (let i = 0; i < galleryPhotoComponents.length; i++) {
@@ -173,21 +172,21 @@ export class GalleryLightboxComponent {
         return window.innerHeight;
     }
 
- 
-    private calcLightBoxPhotoDimension(photo:Photo):Dimension{
+
+    private calcLightBoxPhotoDimension(photo:Photo):Dimension {
         let width = 0;
         let height = 0;
         if (photo.height > photo.width) {
-            width= Math.round(photo.width * (this.getScreenHeight() / photo.height));
-            height= this.getScreenHeight();
+            width = Math.round(photo.width * (this.getScreenHeight() / photo.height));
+            height = this.getScreenHeight();
         } else {
-            width= this.getScreenWidth();
-            height= Math.round(photo.height * (this.getScreenWidth() / photo.width));
+            width = this.getScreenWidth();
+            height = Math.round(photo.height * (this.getScreenWidth() / photo.width));
         }
         let top = (this.getScreenHeight() / 2 - height / 2);
         let left = (this.getScreenWidth() / 2 - width / 2);
 
-        return new Dimension(top,left,width,height);
+        return new Dimension(top, left, width, height);
     }
 }
 

@@ -5,8 +5,8 @@ import {GalleryMWs} from "../middlewares/GalleryMWs";
 import {RenderingMWs} from "../middlewares/RenderingMWs";
 import {ThumbnailGeneratorMWs} from "../middlewares/ThumbnailGeneratorMWs";
 
-export class GalleryRouter{
-    constructor(private app){
+export class GalleryRouter {
+    constructor(private app) {
 
         this.addGetImageThumbnail();
         this.addGetImage();
@@ -17,7 +17,7 @@ export class GalleryRouter{
     }
 
     private addDirectoryList() {
-        this.app.get(["/api/gallery/content/:directory(*)","/api/gallery/","/api/gallery//"],
+        this.app.get(["/api/gallery/content/:directory(*)", "/api/gallery/", "/api/gallery//"],
             AuthenticationMWs.authenticate,
             GalleryMWs.listDirectory,
             RenderingMWs.renderResult
@@ -57,7 +57,6 @@ export class GalleryRouter{
             RenderingMWs.renderResult
         );
     };
-
 
 
 }

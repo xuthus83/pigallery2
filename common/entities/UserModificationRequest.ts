@@ -1,3 +1,4 @@
-export class UserModificationRequest{
-    constructor(public id:number){}
+export class UserModificationRequest {
+    constructor(public id:number) {
+    }
 }

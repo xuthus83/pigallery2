@@ -8,27 +8,27 @@ import {ISearchManager} from "./ISearchManager";
 import {MongoSearchManager} from "./mongoose/MongoSearchManager";
 import {SearchManager} from "./memory/SearchManager";
 
-export class ObjectManagerRepository{
-    
+export class ObjectManagerRepository {
+
     private _galleryManager:IGalleryManager;
     private _userManager:IUserManager;
     private _searchManager:ISearchManager;
     private static _instance:ObjectManagerRepository = null;
 
-    public static InitMongoManagers(){
+    public static InitMongoManagers() {
         ObjectManagerRepository.getInstance().setGalleryManager(new MongoGalleryManager());
         ObjectManagerRepository.getInstance().setUserManager(new MongoUserManager());
         ObjectManagerRepository.getInstance().setSearchManager(new MongoSearchManager());
     }
 
-    public static MemoryMongoManagers(){
+    public static MemoryMongoManagers() {
         ObjectManagerRepository.getInstance().setGalleryManager(new GalleryManager());
         ObjectManagerRepository.getInstance().setUserManager(new UserManager());
         ObjectManagerRepository.getInstance().setSearchManager(new SearchManager());
     }
-    
-    public static getInstance(){
-        if(this._instance === null){
+
+    public static getInstance() {
+        if (this._instance === null) {
             this._instance = new ObjectManagerRepository();
         }
         return this._instance;

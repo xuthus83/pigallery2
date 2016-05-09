@@ -55,7 +55,7 @@ export class Server {
         // for parsing application/json
         this.app.use(_bodyParser.json());
 
- 
+
         if (Config.databaseType === DatabaseType.memory) {
             ObjectManagerRepository.MemoryMongoManagers();
         } else {
