@@ -6,6 +6,7 @@ import {Directory} from "../../common/entities/Directory";
 import {Config} from "../config/Config";
 import {ObjectManagerRepository} from "../model/ObjectManagerRepository";
 import {AutoCompleteItem} from "../../common/entities/AutoCompleteItem";
+import {ContentWrapper} from "../../common/entities/ConentWrapper";
 
 export class GalleryMWs {
 
@@ -26,7 +27,7 @@ export class GalleryMWs {
             if (err || !directory) {
                 return next(new Error(ErrorCodes.GENERAL_ERROR, err));
             }
-            req.resultPipe = directory;
+            req.resultPipe = new ContentWrapper(directory, null);
             return next();
         });
     }
@@ -48,6 +49,12 @@ export class GalleryMWs {
 
 
     public static search(req:Request, res:Response, next:NextFunction) {
+        //TODO: implement
+        return next(new Error(ErrorCodes.GENERAL_ERROR));
+    }
+
+
+    public static instantSearch(req:Request, res:Response, next:NextFunction) {
         //TODO: implement
         return next(new Error(ErrorCodes.GENERAL_ERROR));
     }

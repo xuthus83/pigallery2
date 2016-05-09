@@ -41,37 +41,60 @@ export class GalleryGridComponent implements OnChanges,AfterViewInit {
     }
 
     ngOnChanges() {
+        //   this.renderPhotos();
+    }
+
+    onResize() {
         this.renderPhotos();
     }
 
     ngAfterViewInit() {
         this.lightbox.gridPhotoQL = this.gridPhotoQL;
-        this.gridPhotoQL.changes.subscribe(
-            (x)=> {
-                if (this.gridPhotoQL.length < this.photosToRender.length) {
-                    return;
-                }
-                if (this.renderedConteinerWidth != this.getContainerWidth()) {
-                    this.renderPhotos();
-                }
-            });
+        /*   this.gridPhotoQL.changes.subscribe(
+         (x)=> {
+         console.log("changed");
+         if (!this.directory || this.gridPhotoQL.length < this.directory.photos.length) {
+         console.log("bad");
+         console.log(this.directory ? this.gridPhotoQL.length + " < "+this.directory.photos.length : "no dir");
+         return;
+         }
+         if (this.renderedContainerWidth != this.getContainerWidth()) {
+         this.renderPhotos();
+         }
+         },
+         (err) => {
+         console.log('Error: %s', err);
+         },
+         () =>{
+         console.log('Completed');
+         }
 
+         ); */
+
+
+        setImmediate(() => {
+            this.renderPhotos();
+        });
     }
 
-    private renderedConteinerWidth = 0;
+
+    private renderedContainerWidth = 0;
 
     private renderPhotos() {
+        if (this.getContainerWidth() == 0) {
+            return;
+        }
         let maxRowHeight = window.innerHeight / this.MIN_ROW_COUNT;
         let minRowHeight = window.innerHeight / this.MAX_ROW_COUNT;
         let containerWidth = this.getContainerWidth();
-        this.renderedConteinerWidth = containerWidth;
+        this.renderedContainerWidth = containerWidth;
 
         this.photosToRender = [];
         let i = 0;
 
         while (i < this.directory.photos.length) {
 
-            let photoRowBuilder = new GridRowBuilder(this.directory.photos, i, this.IMAGE_MARGIN, this.getContainerWidth());
+            let photoRowBuilder = new GridRowBuilder(this.directory.photos, i, this.IMAGE_MARGIN, containerWidth);
             photoRowBuilder.addPhotos(this.TARGET_COL_COUNT);
             photoRowBuilder.adjustRowHeightBetween(minRowHeight, maxRowHeight);
 
@@ -87,9 +110,6 @@ export class GalleryGridComponent implements OnChanges,AfterViewInit {
         }
     }
 
-    onResize() {
-        this.renderPhotos();
-    }
 
     private getContainerWidth():number {
         if (!this.gridContainer) {

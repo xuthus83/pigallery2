@@ -13,6 +13,7 @@ export class GalleryRouter {
         this.addDirectoryList();
 
         this.addSearch();
+        this.addInstantSearch();
         this.addAutoComplete();
     }
 
@@ -43,9 +44,17 @@ export class GalleryRouter {
     };
 
     private addSearch() {
-        this.app.get("/api/gallery/search",
+        this.app.get("/api/gallery/search/:text",
             AuthenticationMWs.authenticate,
             GalleryMWs.search,
+            RenderingMWs.renderResult
+        );
+    };
+
+    private addInstantSearch() {
+        this.app.get("/api/gallery/instant-search/:text",
+            AuthenticationMWs.authenticate,
+            GalleryMWs.instantSearch,
             RenderingMWs.renderResult
         );
     };

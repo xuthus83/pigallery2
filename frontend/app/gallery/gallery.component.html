@@ -3,10 +3,10 @@
     <div navbar>
         <gallery-search></gallery-search>
     </div>
-    <div body class="container" style="width: 100%; padding:0" *ngIf="currentDirectory">
-        <div  *ngFor="let directory of currentDirectory.directories">
+    <div body class="container" style="width: 100%; padding:0" *ngIf="_galleryService.content.directory">
+        <div *ngFor="let directory of _galleryService.content.directory.directories">
             <gallery-directory *ngIf="directory" [directory]="directory"></gallery-directory>
         </div>
-        <gallery-grid  [directory]="currentDirectory" [lightbox]="lightbox"></gallery-grid>
+        <gallery-grid [directory]="_galleryService.content.directory" [lightbox]="lightbox"></gallery-grid>
     </div>
 </app-frame>

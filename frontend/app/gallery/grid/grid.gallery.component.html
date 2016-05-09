@@ -1,7 +1,6 @@
-<div #gridContainer *ngIf="directory" (window:resize)="onResize()" >
+<div #gridContainer (window:resize)="onResize()">
     <gallery-photo
                     *ngFor="let gridPhoto of photosToRender"
-                    *ngIf="gridPhoto"
                    (click)="lightbox.show(gridPhoto.photo)"
                    [photo]="gridPhoto.photo"
                    [directory]="directory"
