@@ -2,11 +2,12 @@
     <form class="navbar-form" role="search" #SearchForm="ngForm">
         <div class="input-group">
             <input type="text" class="form-control" placeholder="Search" (keyup)="onSearchChange($event)"
-                   (blur)="onFocusLost($event)" [(ngModel)]="searchText" #name="ngForm" ngControl="search"
+                   (blur)="onFocusLost($event)" (focus)="onFocus($evnet)" [(ngModel)]="searchText" #name="ngForm"
+                   ngControl="search"
                    name="srch-term" id="srch-term" autocomplete="off" >
 
                 <div class="autocomplete-list" *ngIf="autoCompleteItems.length > 0" >
-                    <div class="autocomplete-item" *ngFor="let item of autoCompleteItems">
+                    <div class="autocomplete-item" *ngFor="let item of autoCompleteItems" (mousedown)="search(item)">
                         {{item.preText}}<strong>{{item.highLightText}}</strong>{{item.postText}}
                     </div>
                 </div>

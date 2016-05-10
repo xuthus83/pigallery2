@@ -34,6 +34,7 @@ export class GalleryService {
 
     //TODO: cache
     public search(text:string):Promise<Message<ContentWrapper>> {
+        clearTimeout(this.searchId);
         if (text === null || text === '') {
             return Promise.resolve(new Message(null, null));
         }

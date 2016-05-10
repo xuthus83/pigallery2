@@ -23,7 +23,44 @@ export class GallerySearchComponent {
     }
 
     onSearchChange(event:KeyboardEvent) {
+
         let searchText = (<HTMLInputElement>event.target).value;
+        this.autocomplete(searchText);
+
+        this._galleryService.instantSearch(searchText);
+    }
+
+    public onSearch() {
+        this._galleryService.search(this.searchText);
+    }
+
+    public search(item:AutoCompleteItem) {
+        console.log("clicked");
+        this.searchText = item.text;
+        this.onSearch();
+    }
+
+    private showSuggestions(suggestions:Array<AutoCompleteItem>, searchText:string) {
+        this.emptyAutoComplete();
+        suggestions.forEach((item)=> {
+            let renderItem = new AutoCompleteRenderItem(item.text, searchText);
+            this.autoCompleteItems.push(renderItem);
+        });
+    }
+
+    public onFocusLost(event) {
+        this.autoCompleteItems = [];
+    }
+
+    public onFocus(event) {
+        this.autocomplete(this.searchText);
+    }
+
+    private emptyAutoComplete() {
+        this.autoCompleteItems = [];
+    }
+
+    private autocomplete(searchText:string) {
         if (searchText.trim().length > 0) {
             this._autoCompleteService.autoComplete(searchText).then((message:Message<Array<AutoCompleteItem>>) => {
                 if (message.error) {
@@ -36,44 +73,24 @@ export class GallerySearchComponent {
         } else {
             this.emptyAutoComplete();
         }
-
-        this._galleryService.instantSearch(searchText);
     }
-
-    public onSearch() {
-        this._galleryService.search(this.searchText);
-    }
-    
-    private showSuggestions(suggestions:Array<AutoCompleteItem>, searchText:string) {
-        this.emptyAutoComplete();
-        suggestions.forEach((item)=> {
-            let preIndex = item.text.toLowerCase().indexOf(searchText.toLowerCase());
-            let renderItem = new AutoCompleteRenderItem();
-            if (preIndex > -1) {
-                renderItem.preText = item.text.substring(0, preIndex);
-                renderItem.highLightText = item.text.substring(preIndex, preIndex + searchText.length);
-                renderItem.postText = item.text.substring(preIndex + searchText.length);
-            } else {
-                renderItem.postText = item.text;
-            }
-            this.autoCompleteItems.push(renderItem);
-        });
-    }
-
-    public onFocusLost(event) {
-        this.autoCompleteItems = [];
-    }
-
-    private emptyAutoComplete() {
-        this.autoCompleteItems = [];
-    }
-
 
 }
 
 class AutoCompleteRenderItem {
-    constructor(public preText:string = "", public  highLightText:string = "", public postText:string = "") {
+    public preText:string = "";
+    public highLightText:string = "";
+    public postText:string = "";
 
+    constructor(public text:string, searchText:string) {
+        let preIndex = text.toLowerCase().indexOf(searchText.toLowerCase());
+        if (preIndex > -1) {
+            this.preText = text.substring(0, preIndex);
+            this.highLightText = text.substring(preIndex, preIndex + searchText.length);
+            this.postText = text.substring(preIndex + searchText.length);
+        } else {
+            this.postText = text;
+        }
     }
 }
 
