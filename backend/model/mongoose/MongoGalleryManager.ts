@@ -52,29 +52,24 @@ export class MongoGalleryManager implements IGalleryManager {
                     value['directory'] = savedDir;
                     value.save();
                 });
-                return cb(err, this.modelToEntity(scannedDirectory));
+                return cb(err, this.modelToEntity(savedDir));
             });
 
         });
     }
 
 
-    private modelToEntity(directroy:any):Directory {
-        console.log("modelToEntity");
-        //   console.log(directroy);
-        let directoryEntity = new Directory(directroy._id);
-        Utils.updateKeys(directoryEntity, directroy);
-        directroy.photos.forEach((photo) => {
-            let photoEntity = new Photo(null, null, null, null, null);
-            Utils.updateKeys(photoEntity, photo);
-            console.log(photoEntity);
+    private modelToEntity(directoryModel:any):Directory {
+
+        let directoryEntity = new Directory(directoryModel._id, directoryModel.name, directoryModel.path, directoryModel.lastupdate, [], []);
+
+        directoryModel.photos.forEach((photo) => {
+            let photoEntity = new Photo(photo._id, photo.name, null, photo.width, photo.height);
             directoryEntity.photos.push(photoEntity);
         });
-        directroy.directories.forEach((dir) => {
-            let dirEntity = new Directory(null, null, null, null, null, null);
-            Utils.updateKeys(dirEntity, dir);
-            console.log(dir);
-            console.log(dirEntity);
+
+        directoryModel.directories.forEach((dir) => {
+            let dirEntity = new Directory(dir._id, dir.name, dir.path, dir.lastupdate, [], []);
             directoryEntity.directories.push(dirEntity);
         });
 
