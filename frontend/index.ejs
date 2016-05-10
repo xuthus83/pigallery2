@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <base href="/" />
+    <base href="/"/>
     <meta charset="UTF-8">
     <title>PiGallery2</title>
     <link rel="shortcut icon" href="icon.png">
@@ -15,7 +15,10 @@
 <pi-gallery2-app>Loading...</pi-gallery2-app>
 </body>
 <script>
-    var ServerInject = {user: <%- JSON.stringify(user)%>}
+    var ServerInject = {
+        user: <%- JSON.stringify(user); %>,
+        ConfigInject: <%- JSON.stringify(clientConfig); %>
+    }
 </script>
 
 <script

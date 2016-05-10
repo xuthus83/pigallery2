@@ -1,7 +1,7 @@
 <gallery-lightbox #lightbox></gallery-lightbox>
 <app-frame>
     <div navbar>
-        <gallery-search></gallery-search>
+        <gallery-search *ngIf="showSearchBar"></gallery-search>
     </div>
     <div body class="container" style="width: 100%; padding:0" *ngIf="_galleryService.content.directory">
         <div *ngFor="let directory of _galleryService.content.directory.directories">

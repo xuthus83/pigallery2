@@ -3,18 +3,18 @@ import * as fs from "fs";
 import {NextFunction, Request, Response} from "express";
 import {Error, ErrorCodes} from "../../common/entities/Error";
 import {Directory} from "../../common/entities/Directory";
-import {Config} from "../config/Config";
 import {ObjectManagerRepository} from "../model/ObjectManagerRepository";
 import {AutoCompleteItem} from "../../common/entities/AutoCompleteItem";
 import {ContentWrapper} from "../../common/entities/ConentWrapper";
 import {SearchResult} from "../../common/entities/SearchResult";
 import {Photo} from "../../common/entities/Photo";
+import {Config} from "../config/Config";
 
 export class GalleryMWs {
 
 
     private static getImageFolder() {
-        return path.join(__dirname, "/../../", Config.imagesFolder);
+        return path.join(__dirname, "/../../", Config.Server.imagesFolder);
     }
 
     public static listDirectory(req:Request, res:Response, next:NextFunction) {
@@ -58,7 +58,14 @@ export class GalleryMWs {
 
 
     public static search(req:Request, res:Response, next:NextFunction) {
+        if (Config.Client.Search.searchEnabled === false) {
+            return next();
+        }
 
+        if (!(req.params.text)) {
+            return next();
+        }
+        
         ObjectManagerRepository.getInstance().getSearchManager().search(req.params.text, (err, result:SearchResult) => {
             if (err || !result) {
                 return next(new Error(ErrorCodes.GENERAL_ERROR, err));
@@ -70,6 +77,10 @@ export class GalleryMWs {
 
 
     public static instantSearch(req:Request, res:Response, next:NextFunction) {
+        if (Config.Client.Search.instantSearchEnabled === false) {
+            return next();
+        }
+        
         if (!(req.params.text)) {
             return next();
         }
@@ -84,6 +95,9 @@ export class GalleryMWs {
     }
 
     public static autocomplete(req:Request, res:Response, next:NextFunction) {
+        if (Config.Client.Search.autocompleteEnabled === false) {
+            return next();
+        }
         if (!(req.params.text)) {
             return next();
         }

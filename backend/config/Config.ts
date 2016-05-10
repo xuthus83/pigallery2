@@ -1,23 +1,18 @@
-import {ConfigLoader} from "./ConfigLoader";
+///<reference path="../../typings/main.d.ts"/>
+
+import {ConfigLoader} from "./../../backend/config/ConfigLoader";
 import * as path from "path";
-
-export enum DatabaseType{
-    memory, mongoDB
-}
-
-export class ConfigClass {
-
-    constructor() {
-        ConfigLoader.init(this, path.join(__dirname, './../../config.json'));
-    }
-
-    public PORT:number = 80;
-
-    public thumbnailSizes:Array<number> = [200];
-    public imagesFolder:string = "/demo/images";
-    public thumbnailFolder:string = "/demo/TEMP";
-    public databaseType:DatabaseType = DatabaseType.mongoDB;
-}
-
+import {ConfigClass, DatabaseType} from "../../common/config/Config";
 
 export var Config = new ConfigClass();
+
+Config.Server = {
+    port: 80,
+    thumbnailSizes: [200],
+    imagesFolder: "/demo/images",
+    thumbnailFolder: "/demo/TEMP",
+    databaseType: DatabaseType.mongoDB
+};
+
+ConfigLoader.init(Config, path.join(__dirname, './../../config.json'), [["PORT", "Server-port"]]);
+ 

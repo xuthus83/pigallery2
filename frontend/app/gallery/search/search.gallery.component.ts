@@ -6,6 +6,7 @@ import {AutoCompleteItem} from "../../../../common/entities/AutoCompleteItem";
 import {Message} from "../../../../common/entities/Message";
 import {GalleryService} from "../gallery.service";
 import {FORM_DIRECTIVES} from "@angular/common";
+import {Config} from "../../config/Config";
 
 @Component({
     selector: 'gallery-search',
@@ -25,13 +26,20 @@ export class GallerySearchComponent {
     onSearchChange(event:KeyboardEvent) {
 
         let searchText = (<HTMLInputElement>event.target).value;
-        this.autocomplete(searchText);
 
-        this._galleryService.instantSearch(searchText);
+        if (Config.Client.Search.autocompleteEnabled) {
+            this.autocomplete(searchText);
+        }
+
+        if (Config.Client.Search.instantSearchEnabled) {
+            this._galleryService.instantSearch(searchText);
+        }
     }
 
     public onSearch() {
-        this._galleryService.search(this.searchText);
+        if (Config.Client.Search.searchEnabled) {
+            this._galleryService.search(this.searchText);
+        }
     }
 
     public search(item:AutoCompleteItem) {
@@ -40,13 +48,7 @@ export class GallerySearchComponent {
         this.onSearch();
     }
 
-    private showSuggestions(suggestions:Array<AutoCompleteItem>, searchText:string) {
-        this.emptyAutoComplete();
-        suggestions.forEach((item)=> {
-            let renderItem = new AutoCompleteRenderItem(item.text, searchText);
-            this.autoCompleteItems.push(renderItem);
-        });
-    }
+
 
     public onFocusLost(event) {
         this.autoCompleteItems = [];
@@ -61,6 +63,9 @@ export class GallerySearchComponent {
     }
 
     private autocomplete(searchText:string) {
+        if (!Config.Client.Search.autocompleteEnabled) {
+            return
+        }
         if (searchText.trim().length > 0) {
             this._autoCompleteService.autoComplete(searchText).then((message:Message<Array<AutoCompleteItem>>) => {
                 if (message.error) {
@@ -73,6 +78,14 @@ export class GallerySearchComponent {
         } else {
             this.emptyAutoComplete();
         }
+    }
+
+    private showSuggestions(suggestions:Array<AutoCompleteItem>, searchText:string) {
+        this.emptyAutoComplete();
+        suggestions.forEach((item)=> {
+            let renderItem = new AutoCompleteRenderItem(item.text, searchText);
+            this.autoCompleteItems.push(renderItem);
+        });
     }
 
 }

@@ -3,14 +3,21 @@ import * as optimist from "optimist";
 
 export class ConfigLoader {
 
-    static init(configObject:any, configFilePath?:string) {
+    static init(configObject:any, configFilePath?:string, envAlias:Array<Array<string>> = []) {
         this.processConfigFile(configFilePath, configObject);
         this.processArguments(configObject);
-        this.processEnvVariables(configObject);
+        this.processEnvVariables(configObject, envAlias);
 
     }
 
-    private static processEnvVariables(configObject:any) {
+    private static processEnvVariables(configObject:any, envAlias:Array<Array<string>>) {
+        let varAliases = {};
+        envAlias.forEach((alias)=> {
+            if (process.env[alias[0]]) {
+                varAliases[alias[1]] = process.env[alias[0]];
+            }
+        });
+        this.processHierarchyVar(configObject, varAliases);
         this.loadObject(configObject, process.env);
     };
 
@@ -18,11 +25,15 @@ export class ConfigLoader {
         let argv = optimist.argv;
         delete(argv._);
         delete(argv.$0);
+        this.processHierarchyVar(configObject, argv);
+    };
+
+    private static processHierarchyVar(configObject:any, vars:any) {
         let config = {};
 
-        Object.keys(argv).forEach((key)=> {
+        Object.keys(vars).forEach((key)=> {
             let keyArray = key.split("-");
-            let value = argv[key];
+            let value = vars[key];
 
             let setObject = (object, keyArray, value) => {
                 let key = keyArray.shift();
@@ -37,7 +48,7 @@ export class ConfigLoader {
 
         });
         this.loadObject(configObject, config);
-    };
+    }
 
     private static processConfigFile(configFilePath:string, configObject:any) {
         if (typeof configFilePath !== 'undefined') {

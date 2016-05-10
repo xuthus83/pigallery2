@@ -13,7 +13,7 @@ import {Config} from "../config/Config";
 export class ThumbnailGeneratorMWs {
 
     private static getThumbnailFolder() {
-        return path.join(__dirname, "/../../", Config.thumbnailFolder);
+        return path.join(__dirname, "/../../", Config.Server.thumbnailFolder);
     }
 
     public static generateThumbnail(req:Request, res:Response, next:NextFunction) {
@@ -21,11 +21,11 @@ export class ThumbnailGeneratorMWs {
             return next();
 
         let imagePath = req.resultPipe;
-        let size:number = parseInt(req.params.size) || Config.thumbnailSizes[0];
+        let size:number = parseInt(req.params.size) || Config.Server.thumbnailSizes[0];
         let thumbnailFolder = ThumbnailGeneratorMWs.getThumbnailFolder();
 
-        if (Config.thumbnailSizes.indexOf(size) === -1) {
-            size = Config.thumbnailSizes[0];
+        if (Config.Server.thumbnailSizes.indexOf(size) === -1) {
+            size = Config.Server.thumbnailSizes[0];
         }
 
         let thPath = path.join(thumbnailFolder, ThumbnailGeneratorMWs.generateThumbnailName(imagePath, size));

@@ -4,6 +4,7 @@ import * as _express from "express";
 import {NextFunction, Request, Response} from "express";
 import * as _path from "path";
 import {Utils} from "../../common/Utils";
+import {Config} from "../config/Config";
 
 export class PublicRouter {
     constructor(private app) {
@@ -16,6 +17,7 @@ export class PublicRouter {
                 delete user.password;
                 res.tpl.user = user;
             }
+            res.tpl.clientConfig = Config.Client;
 
             return next();
         });

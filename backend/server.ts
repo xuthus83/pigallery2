@@ -11,9 +11,10 @@ import {GalleryRouter} from "./routes/GalleryRouter";
 import {AdminRouter} from "./routes/AdminRouter";
 import {ErrorRouter} from "./routes/ErrorRouter";
 import {SharingRouter} from "./routes/SharingRouter";
-import {Config, DatabaseType} from "./config/Config";
+import {DatabaseType} from "./../common/config/Config";
 import {ObjectManagerRepository} from "./model/ObjectManagerRepository";
 import {DatabaseManager} from "./model/mongoose/DatabaseManager";
+import {Config} from "./config/Config";
 
 
 export class Server {
@@ -21,7 +22,6 @@ export class Server {
     private debug:any;
     private app:any;
     private server:any;
-    private port:number;
 
     constructor() {
 
@@ -56,7 +56,7 @@ export class Server {
         this.app.use(_bodyParser.json());
 
 
-        if (Config.databaseType === DatabaseType.memory) {
+        if (Config.Server.databaseType === DatabaseType.memory) {
             ObjectManagerRepository.MemoryMongoManagers();
         } else {
             ObjectManagerRepository.InitMongoManagers();
@@ -64,8 +64,8 @@ export class Server {
                 ()=> {
                     console.error("MongoDB connection error. Falling back to memory Object Managers");
                     ObjectManagerRepository.MemoryMongoManagers();
+                    Config.setDatabaseType(DatabaseType.memory);
                 });
-
         }
 
         new PublicRouter(this.app);
@@ -79,13 +79,13 @@ export class Server {
 
 
         // Get PORT from environment and store in Express.
-        this.app.set('port', Config.PORT);
+        this.app.set('port', Config.Server.port);
 
         // Create HTTP server.
         this.server = _http.createServer(this.app);
 
         //Listen on provided PORT, on all network interfaces.
-        this.server.listen(Config.PORT);
+        this.server.listen(Config.Server.port);
         this.server.on('error', this.onError);
         this.server.on('listening', this.onListening);
 
@@ -101,9 +101,9 @@ export class Server {
             throw error;
         }
 
-        var bind = typeof Config.PORT === 'string'
-            ? 'Pipe ' + Config.PORT
-            : 'Port ' + Config.PORT;
+        var bind = typeof Config.Server.port === 'string'
+            ? 'Pipe ' + Config.Server.port
+            : 'Port ' + Config.Server.port;
 
         // handle specific listen error with friendly messages
         switch (error.code) {

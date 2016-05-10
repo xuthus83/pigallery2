@@ -9,6 +9,7 @@ import {GalleryGridComponent} from "./grid/grid.gallery.component";
 import {FrameComponent} from "../frame/frame.component";
 import {GalleryLightboxComponent} from "./lightbox/lightbox.gallery.component";
 import {GallerySearchComponent} from "./search/search.gallery.component";
+import {Config} from "../config/Config";
 
 @Component({
     selector: 'gallery',
@@ -23,10 +24,14 @@ import {GallerySearchComponent} from "./search/search.gallery.component";
 export class GalleryComponent implements OnInit {
 
 
+    public showSearchBar:boolean = true;
+    
     constructor(private _galleryService:GalleryService,
                 private _params:RouteParams,
                 private _authService:AuthenticationService,
                 private _router:Router) {
+
+        this.showSearchBar = Config.Client.Search.searchEnabled;
     }
 
     ngOnInit() {
