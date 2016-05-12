@@ -52,6 +52,11 @@ export class GalleryMWs {
             return next();
         }
 
+        //check if thumbnail already exist
+        if (fs.existsSync(fullImagePath) === false) {
+            return next(new Error(ErrorCodes.GENERAL_ERROR, "no such file :" + fullImagePath));
+        }
+
         req.resultPipe = fullImagePath;
         return next();
     }

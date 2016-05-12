@@ -16,9 +16,10 @@ export class GalleryLightboxComponent {
 
     @ViewChild('lightbox') lightBoxDiv:ElementRef;
     @ViewChild('blackCanvas') blackCanvasDiv:ElementRef;
-    @ViewChild('thImage') thIMageImg:ElementRef;
-    @ViewChild('image') imageImg:ElementRef;
+    @ViewChild('imgContainer') imgContainer:ElementRef;
 
+
+    public imageSize = {width: "auto", height: "100"};
     private activePhoto:GalleryPhotoComponent = null;
     public gridPhotoQL:QueryList<GalleryPhotoComponent>;
 
@@ -31,6 +32,54 @@ export class GalleryLightboxComponent {
 
     }
 
+    public nextImage() {
+
+        let pcList = this.gridPhotoQL.toArray();
+        for (let i = 0; i < pcList.length; i++) {
+            if (pcList[i] === this.activePhoto && i + 1 < pcList.length) {
+                this.activePhoto = pcList[i + 1];
+
+                let toImage = this.calcLightBoxPhotoDimension(this.activePhoto.gridPhoto.photo).toStyle();
+
+                this.forceAnimateFrom(toImage,
+                    {},
+                    this.imgContainer.nativeElement);
+
+
+                this.setImageSize();
+                return;
+            }
+        }
+    }
+
+    public prevImage() {
+        let pcList = this.gridPhotoQL.toArray();
+        for (let i = 0; i < pcList.length; i++) {
+            if (pcList[i] === this.activePhoto && i > 0) {
+                this.activePhoto = pcList[i - 1];
+
+                let toImage = this.calcLightBoxPhotoDimension(this.activePhoto.gridPhoto.photo).toStyle();
+
+                this.forceAnimateFrom(toImage,
+                    {},
+                    this.imgContainer.nativeElement);
+
+                this.setImageSize();
+                return;
+            }
+        }
+    }
+
+    private setImageSize() {
+        if (this.activePhoto.gridPhoto.photo.metadata.size.height > this.activePhoto.gridPhoto.photo.metadata.size.width) {
+            this.imageSize.height = "100";
+            this.imageSize.width = null;
+        } else {
+            this.imageSize.height = null;
+            this.imageSize.width = "100";
+        }
+    }
+
     public show(photo:Photo) {
         let selectedPhoto = this.findPhotoComponenet(photo);
         if (selectedPhoto === null) {
@@ -39,6 +88,7 @@ export class GalleryLightboxComponent {
 
         this.dom.setStyle(this.dom.query('body'), 'overflow', 'hidden');
         this.activePhoto = selectedPhoto;
+        this.setImageSize();
 
 
         let from = this.activePhoto.getDimension();
@@ -50,11 +100,7 @@ export class GalleryLightboxComponent {
 
         this.forceAnimateFrom(fromImage,
             toImage,
-            this.thIMageImg.nativeElement);
-
-        this.forceAnimateFrom(fromImage,
-            toImage,
-            this.imageImg.nativeElement);
+            this.imgContainer.nativeElement);
 
         this.forceAnimateFrom(from.toStyle(),
             {height: "100%", width: "100%", "top": "0px", "left": "0px"},
@@ -94,11 +140,8 @@ export class GalleryLightboxComponent {
 
         this.forceAnimateTo(fromImage,
             toImage,
-            this.thIMageImg.nativeElement);
-
-        this.forceAnimateTo(fromImage,
-            toImage,
-            this.imageImg.nativeElement);
+            this.imgContainer.nativeElement);
+       
 
     }
 

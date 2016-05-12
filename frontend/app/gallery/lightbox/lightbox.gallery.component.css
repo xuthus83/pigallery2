@@ -21,12 +21,42 @@
     height: 100%; /* Full height */
     background-color: black;
 }
-img {
-    width: 100%;
-    height: 100%;
+
+.imgContainer img {
+    position: absolute;
 }
 .imgContainer{
     justify-content: center; /* add to align horizontal */
     align-items: center; /* add to align vertical */
+}
 
+.navigation-arrow {
+    font-size: x-large;
+    width: 50%;
+    height: 100%;
+    position: static;
+    display: inline-block;
+    padding: 15px;
+    color: white;
+    opacity: 0.4;
+}
+
+.navigation-arrow span {
+    top: 50%;
+}
+
+.navigation-arrow:hover {
+    opacity: 1.0;
+}
+
+#navigation-arrow-container {
+    width: 100%;
+    height: 100%;
+    left: 0;
+    position: fixed;;
+}
+
+#rightArrow {
+    float: right;
+    text-align: right;
 }

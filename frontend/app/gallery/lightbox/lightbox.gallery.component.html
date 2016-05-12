@@ -1,15 +1,27 @@
 <div
         [hidden]="!activePhoto"
-        (click)="hide()">
-    <div class="blackCanvas"
-         #blackCanvas>
+>
+    <div class="blackCanvas" #blackCanvas>
 
     </div>
-    <div class="lightbox"
-         #lightbox>
-         <div   class="imgContainer">
-            <img #thImage [src]="getThumbnailPath()" />
-            <img #image [src]="getPhotoPath()" style="position:absolute;"/>
-          </div>
-     </div>
- </div>
+    <div class="lightbox" #lightbox>
+        <div #imgContainer class="imgContainer">
+            <img *ngIf="activePhoto"
+                 [style.width.%]="imageSize.width"
+                 [style.height.%]="imageSize.height"
+                 [src]="activePhoto.gridPhoto.getThumbnailPath()"/>
+
+            <img *ngIf="activePhoto"
+                 [style.width.%]="imageSize.width"
+                 [style.height.%]="imageSize.height"
+                 [src]="activePhoto.gridPhoto.getPhotoPath()"/>
+        </div>
+
+        <div id="navigation-arrow-container">
+            <div class="navigation-arrow" id="leftArrow" (click)="prevImage()"><span
+                    class="glyphicon glyphicon-chevron-left"></span></div>
+            <div class="navigation-arrow" id="rightArrow" (click)="nextImage()"><span
+                    class="glyphicon glyphicon-chevron-right"></span></div>
+        </div>
+    </div>
+</div>
