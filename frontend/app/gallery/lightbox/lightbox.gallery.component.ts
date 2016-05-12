@@ -2,7 +2,7 @@
 
 import {Component, ElementRef, ViewChild, QueryList} from "@angular/core";
 import {Photo} from "../../../../common/entities/Photo";
-import {GalleryPhotoComponent} from "../photo/photo.gallery.component";
+import {GalleryPhotoComponent} from "../grid/photo/photo.grid.gallery.component.ts";
 import {AnimationBuilder} from "@angular/platform-browser/src/animate/animation_builder";
 import {BrowserDomAdapter} from "@angular/platform-browser/src/browser_common";
 import {Dimension} from "../../model/IRenderable";
@@ -46,7 +46,7 @@ export class GalleryLightboxComponent {
 
 
         let fromImage = {width: from.width + "px", height: from.height + "px", top: "0px", left: "0px"};
-        let toImage = this.calcLightBoxPhotoDimension(this.activePhoto.photo).toStyle();
+        let toImage = this.calcLightBoxPhotoDimension(this.activePhoto.gridPhoto.photo).toStyle();
 
         this.forceAnimateFrom(fromImage,
             toImage,
@@ -89,7 +89,7 @@ export class GalleryLightboxComponent {
             {display: "none"});
 
 
-        let fromImage = this.calcLightBoxPhotoDimension(this.activePhoto.photo).toStyle();
+        let fromImage = this.calcLightBoxPhotoDimension(this.activePhoto.gridPhoto.photo).toStyle();
         let toImage = {width: to.width + "px", height: to.height + "px", top: "0px", left: "0px"};
 
         this.forceAnimateTo(fromImage,
@@ -106,7 +106,7 @@ export class GalleryLightboxComponent {
         let galleryPhotoComponents = this.gridPhotoQL.toArray();
         let selectedPhoto:GalleryPhotoComponent = null;
         for (let i = 0; i < galleryPhotoComponents.length; i++) {
-            if (galleryPhotoComponents[i].photo == photo) {
+            if (galleryPhotoComponents[i].gridPhoto.photo == photo) {
                 selectedPhoto = galleryPhotoComponents[i];
                 break;
             }
@@ -150,14 +150,14 @@ export class GalleryLightboxComponent {
         if (!this.activePhoto) {
             return "";
         }
-        return Photo.getPhotoPath(this.activePhoto.photo);
+        return this.activePhoto.gridPhoto.getPhotoPath();
     }
 
     getThumbnailPath() {
         if (!this.activePhoto) {
             return "";
         }
-        return Photo.getThumbnailPath(this.activePhoto.photo);
+        return this.activePhoto.gridPhoto.getThumbnailPath();
     }
 
     private getBodyScrollTop() {

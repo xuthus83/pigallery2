@@ -3,7 +3,6 @@
 import * as _express from "express";
 import * as _session from "express-session";
 import * as _bodyParser from "body-parser";
-import * as _compress from "compression";
 import * as _debug from "debug";
 import * as _http from "http";
 import {PublicRouter} from "./routes/PublicRouter";
@@ -29,6 +28,7 @@ export class Server {
         this.debug = _debug("PiGallery2:server");
         this.app = _express();
 
+
         this.app.set('view engine', 'ejs');
 
         if (process.env.DEBUG) {
@@ -36,9 +36,7 @@ export class Server {
             this.app.use(_morgan('dev'));
         }
 
-        //enable gzip
-        this.app.use(_compress());
-        
+
         /**
          * Session above all
          */

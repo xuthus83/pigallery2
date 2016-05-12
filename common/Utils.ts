@@ -20,7 +20,7 @@ export class Utils {
     }
 
     public static updateKeys(targetObject, sourceObject) {
-        Object.keys(sourceObject).forEach((key)=> { 
+        Object.keys(sourceObject).forEach((key)=> {
             if (typeof targetObject[key] === "undefined") {
                 return;
             }
@@ -54,6 +54,26 @@ export class Utils {
             }
         }
         return arr;
+    }
+
+
+    public static findClosest(number:number, arr:Array<number>) {
+
+        let curr = arr[0];
+        let diff = Math.abs(number - curr);
+
+        arr.forEach((value)=> {
+
+            let newDiff = Math.abs(number - value);
+
+            if (newDiff < diff) {
+                diff = newDiff;
+                curr = value;
+            }
+
+        });
+
+        return curr;
     }
 
 }

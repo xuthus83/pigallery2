@@ -4,7 +4,6 @@ export enum DatabaseType{
 
 interface ServerConfig {
     port:number;
-    thumbnailSizes:Array<number>;
     imagesFolder:string;
     thumbnailFolder:string;
     databaseType:DatabaseType;
@@ -17,6 +16,7 @@ interface SearchConfig {
 }
 
 interface ClientConfig {
+    thumbnailSizes:Array<number>;
     Search:SearchConfig;
 }
 export class ConfigClass {
@@ -24,6 +24,7 @@ export class ConfigClass {
     public Server:ServerConfig = null;
 
     public Client:ClientConfig = {
+        thumbnailSizes: [200, 400, 600],
         Search: {
             searchEnabled: true,
             instantSearchEnabled: true,

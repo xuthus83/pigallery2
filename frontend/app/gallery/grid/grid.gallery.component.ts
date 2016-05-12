@@ -11,9 +11,10 @@ import {
     AfterViewInit
 } from "@angular/core";
 import {Photo} from "../../../../common/entities/Photo";
-import {GalleryPhotoComponent} from "../photo/photo.gallery.component";
 import {GridRowBuilder} from "./GridRowBuilder";
 import {GalleryLightboxComponent} from "../lightbox/lightbox.gallery.component";
+import {GridPhoto} from "./GridPhoto";
+import {GalleryPhotoComponent} from "./photo/photo.grid.gallery.component";
 
 @Component({
     selector: 'gallery-grid',
@@ -49,6 +50,8 @@ export class GalleryGridComponent implements OnChanges,AfterViewInit {
 
     ngAfterViewInit() {
         this.lightbox.gridPhotoQL = this.gridPhotoQL;
+
+        //TODO: implement scroll detection
         /*   this.gridPhotoQL.changes.subscribe(
          (x)=> {
          console.log("changed");
@@ -121,8 +124,4 @@ export class GalleryGridComponent implements OnChanges,AfterViewInit {
 }
 
 
-class GridPhoto {
-    constructor(public photo:Photo, public renderWidth:number, public renderHeight:number) {
 
-    }
-}

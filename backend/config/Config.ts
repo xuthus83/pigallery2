@@ -8,7 +8,6 @@ export var Config = new ConfigClass();
 
 Config.Server = {
     port: 80,
-    thumbnailSizes: [200],
     imagesFolder: "/demo/images",
     thumbnailFolder: "/demo/TEMP",
     databaseType: DatabaseType.mongoDB

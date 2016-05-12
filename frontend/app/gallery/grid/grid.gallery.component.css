@@ -3,7 +3,8 @@ div {
     line-height: normal;
     font-size: 0;
 }
-gallery-photo {
+
+gallery-grid-photo {
     display: inline-block;
 
     cursor: pointer;
