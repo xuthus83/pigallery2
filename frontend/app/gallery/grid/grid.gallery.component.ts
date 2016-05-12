@@ -104,7 +104,7 @@ export class GalleryGridComponent implements OnChanges,AfterViewInit {
             let imageHeight = rowHeight - (this.IMAGE_MARGIN * 2);
 
             photoRowBuilder.getPhotoRow().forEach((photo) => {
-                let imageWidth = imageHeight * (photo.width / photo.height);
+                let imageWidth = imageHeight * (photo.metadata.size.width / photo.metadata.size.height);
                 this.photosToRender.push(new GridPhoto(photo, imageWidth, imageHeight));
             });
 

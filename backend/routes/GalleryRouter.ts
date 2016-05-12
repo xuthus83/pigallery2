@@ -19,7 +19,7 @@ export class GalleryRouter {
 
     private addDirectoryList() {
         this.app.get(["/api/gallery/content/:directory(*)", "/api/gallery/", "/api/gallery//"],
-            AuthenticationMWs.authenticate,
+            // AuthenticationMWs.authenticate,
             GalleryMWs.listDirectory,
             RenderingMWs.renderResult
         );

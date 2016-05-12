@@ -176,12 +176,12 @@ export class GalleryLightboxComponent {
     private calcLightBoxPhotoDimension(photo:Photo):Dimension {
         let width = 0;
         let height = 0;
-        if (photo.height > photo.width) {
-            width = Math.round(photo.width * (this.getScreenHeight() / photo.height));
+        if (photo.metadata.size.height > photo.metadata.size.width) {
+            width = Math.round(photo.metadata.size.width * (this.getScreenHeight() / photo.metadata.size.height));
             height = this.getScreenHeight();
         } else {
             width = this.getScreenWidth();
-            height = Math.round(photo.height * (this.getScreenWidth() / photo.width));
+            height = Math.round(photo.metadata.size.height * (this.getScreenWidth() / photo.metadata.size.width));
         }
         let top = (this.getScreenHeight() / 2 - height / 2);
         let left = (this.getScreenWidth() / 2 - width / 2);

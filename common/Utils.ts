@@ -35,7 +35,20 @@ export class Utils {
     public static setKeys(targetObject, sourceObject) {
         Object.keys(sourceObject).forEach((key)=> {
             if (typeof targetObject[key] === "object") {
-                Utils.updateKeys(targetObject[key], sourceObject[key]);
+                Utils.setKeys(targetObject[key], sourceObject[key]);
+            } else {
+                targetObject[key] = sourceObject[key];
+            }
+        });
+    }
+
+    public static setKeysForced(targetObject, sourceObject) {
+        Object.keys(sourceObject).forEach((key)=> {
+            if (typeof sourceObject[key] === "object") {
+                if (typeof targetObject[key] === "undefined") {
+                    targetObject[key] = {};
+                }
+                Utils.setKeysForced(targetObject[key], sourceObject[key]);
             } else {
                 targetObject[key] = sourceObject[key];
             }

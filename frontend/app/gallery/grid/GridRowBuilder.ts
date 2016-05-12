@@ -55,7 +55,7 @@ export class GridRowBuilder {
     public calcRowHeight():number {
         let width = 0;
         for (let i = 0; i < this.photoRow.length; i++) {
-            width += ((this.photoRow[i].width) / (this.photoRow[i].height)); //summing up aspect ratios
+            width += ((this.photoRow[i].metadata.size.width) / (this.photoRow[i].metadata.size.height)); //summing up aspect ratios
         }
         let height = (this.containerWidth - this.photoRow.length * (this.photoMargin * 2) - 1) / width; //cant be equal -> width-1
 

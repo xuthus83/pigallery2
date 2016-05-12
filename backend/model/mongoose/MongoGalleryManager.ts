@@ -16,6 +16,7 @@ export class MongoGalleryManager implements IGalleryManager {
         let directoryName = path.basename(relativeDirectoryName);
         let directoryParent = path.join(path.dirname(relativeDirectoryName), "/");
 
+
         DirectoryModel.findOne({
             name: directoryName,
             path: directoryParent
@@ -64,7 +65,7 @@ export class MongoGalleryManager implements IGalleryManager {
         let directoryEntity = new Directory(directoryModel._id, directoryModel.name, directoryModel.path, directoryModel.lastupdate, [], []);
 
         directoryModel.photos.forEach((photo) => {
-            let photoEntity = new Photo(photo._id, photo.name, null, photo.width, photo.height);
+            let photoEntity = new Photo(photo._id, photo.name, directoryEntity, photo.metadata); 
             directoryEntity.photos.push(photoEntity);
         });
 

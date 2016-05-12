@@ -31,7 +31,7 @@ export class GalleryMWs {
             }
 
             //remove cyclic reference
-            directory.photos.forEach((photo:Photo) => {
+            directory.photos.forEach((photo:Photo) => { 
                 photo.directory = null;
             });
 
