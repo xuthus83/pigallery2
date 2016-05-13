@@ -91,6 +91,17 @@ export class GalleryGridComponent implements OnChanges,AfterViewInit {
         let containerWidth = this.getContainerWidth();
         this.renderedContainerWidth = containerWidth;
 
+        this.photos.sort((a:Photo, b:Photo) => {
+            if (a.metadata.creationDate > b.metadata.creationDate) {
+                return 1;
+            }
+            if (a.metadata.creationDate < b.metadata.creationDate) {
+                return -1;
+            }
+            // a must be equal to b
+            return 0;
+        });
+        
         this.photosToRender = [];
         let i = 0;
 

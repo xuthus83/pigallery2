@@ -31,6 +31,7 @@
     display: inline-block;
     padding: 15px;
     cursor: pointer;
+    font-size: x-large;
 }
 
 .navigation-arrow span {
@@ -44,7 +45,6 @@
     left: 0;
     position: fixed;;
     color: white;
-    font-size: x-large;
 }
 
 #rightArrow {
@@ -58,11 +58,12 @@
     text-align: right;
     width: 100%;
     padding: 5px;
+    font-size: large;
 }
 
 #controls span {
-    margin-left: 2px;
-    margin-right: 2px;
+    margin-left: 6px;
+    margin-right: 6px;
     color: white;
     cursor: pointer;
 }

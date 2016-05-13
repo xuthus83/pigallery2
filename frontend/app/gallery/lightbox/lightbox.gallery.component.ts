@@ -136,6 +136,10 @@ export class GalleryLightboxComponent {
     public hide() {
         console.log("hiding");
         let to = this.activePhoto.getDimension();
+        //iff target image out of screen -> scroll to there
+        if (this.getBodyScrollTop() > to.top || this.getBodyScrollTop() + this.getScreenHeight() < to.top) {
+            this.setBodyScrollTop(to.top);
+        }
         to.top -= this.getBodyScrollTop();
 
 
@@ -162,6 +166,7 @@ export class GalleryLightboxComponent {
 
         let fromImage = this.calcLightBoxPhotoDimension(this.activePhoto.gridPhoto.photo).toStyle();
         let toImage = {width: to.width + "px", height: to.height + "px", top: "0px", left: "0px"};
+
 
         this.forceAnimateTo(fromImage,
             toImage,
@@ -218,6 +223,10 @@ export class GalleryLightboxComponent {
 
     private getBodyScrollTop() {
         return this.dom.getProperty(this.dom.query('body'), 'scrollTop');
+    }
+
+    private setBodyScrollTop(value) {
+        return this.dom.setProperty(this.dom.query('body'), 'scrollTop', value);
     }
 
     private getScreenWidth() {
