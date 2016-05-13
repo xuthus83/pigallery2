@@ -1,0 +1,9 @@
+.imgContainer img {
+    position: absolute;
+}
+
+.imgContainer {
+    justify-content: center; /* add to align horizontal */
+    align-items: center; /* add to align vertical */
+}
+

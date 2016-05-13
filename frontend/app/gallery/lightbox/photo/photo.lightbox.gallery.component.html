@@ -1,0 +1,13 @@
+<div class="imgContainer" #imgContainer>
+    <img *ngIf="gridPhoto"
+         [style.width.%]="imageSize.width"
+         [style.height.%]="imageSize.height"
+         [src]="gridPhoto.getThumbnailPath()"/>
+
+    <img *ngIf="gridPhoto"
+         [style.width.%]="imageSize.width"
+         [style.height.%]="imageSize.height"
+         [src]="gridPhoto.getPhotoPath()"/>
+</div>
+
+

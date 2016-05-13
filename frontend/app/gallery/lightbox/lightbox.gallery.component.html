@@ -1,27 +1,27 @@
-<div
-        [hidden]="!activePhoto"
->
+<div [hidden]="!activePhoto">
+
     <div class="blackCanvas" #blackCanvas>
-
     </div>
+
     <div class="lightbox" #lightbox>
-        <div #imgContainer class="imgContainer">
-            <img *ngIf="activePhoto"
-                 [style.width.%]="imageSize.width"
-                 [style.height.%]="imageSize.height"
-                 [src]="activePhoto.gridPhoto.getThumbnailPath()"/>
+        <gallery-lightbox-photo #imgContainer [gridPhoto]="activePhoto ? activePhoto.gridPhoto : null">
+        </gallery-lightbox-photo>
+    </div>
 
-            <img *ngIf="activePhoto"
-                 [style.width.%]="imageSize.width"
-                 [style.height.%]="imageSize.height"
-                 [src]="activePhoto.gridPhoto.getPhotoPath()"/>
+
+    <div id="controllers-container" #controls>
+        <div id="controls">
+            <a *ngIf="activePhoto" [href]="activePhoto.gridPhoto.getPhotoPath()"
+               [download]="activePhoto.gridPhoto.photo.name"><span class="glyphicon glyphicon-download-alt highlight"
+                                                                   title="download"></span></a>
+            <span class="glyphicon glyphicon-info-sign highlight" title="info"></span>
+            <span class="glyphicon glyphicon-fullscreen highlight" title="toggle fullscreen"></span>
+            <span class="glyphicon glyphicon-remove highlight" (click)="hide()" title="close"></span>
         </div>
 
-        <div id="navigation-arrow-container">
-            <div class="navigation-arrow" id="leftArrow" (click)="prevImage()"><span
-                    class="glyphicon glyphicon-chevron-left"></span></div>
-            <div class="navigation-arrow" id="rightArrow" (click)="nextImage()"><span
-                    class="glyphicon glyphicon-chevron-right"></span></div>
-        </div>
+        <div class="navigation-arrow highlight" *ngIf="navigation.hasPrev" id="leftArrow" (click)="prevImage()"><span
+                class="glyphicon glyphicon-chevron-left"></span></div>
+        <div class="navigation-arrow highlight" *ngIf="navigation.hasNext" id="rightArrow" (click)="nextImage()"><span
+                class="glyphicon glyphicon-chevron-right"></span></div>
     </div>
 </div>
