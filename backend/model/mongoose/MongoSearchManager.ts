@@ -71,10 +71,14 @@ export class MongoSearchManager implements ISearchManager {
         let result:SearchResult = new SearchResult();
         result.searchText = text;
         PhotoModel.find({
-            name: {
-                $regex: text,
-                $options: "i"
-            }
+            $or: [
+                {name: {$regex: text, $options: "i"}},
+                {"metadata.positionData.city": {$regex: text, $options: "i"}},
+                {"metadata.positionData.state": {$regex: text, $options: "i"}},
+                {"metadata.positionData.country": {$regex: text, $options: "i"}},
+                {"metadata.keywords": {$regex: text, $options: "i"}}
+            ]
+
         }).populate('directory', 'name path').exec((err, res:Array<any>) => {
             if (err || !res) {
                 return cb(err, null);
@@ -103,10 +107,14 @@ export class MongoSearchManager implements ISearchManager {
         let result:SearchResult = new SearchResult();
         result.searchText = text;
         PhotoModel.find({
-            name: {
-                $regex: text,
-                $options: "i"
-            }
+            $or: [
+                {name: {$regex: text, $options: "i"}},
+                {"metadata.positionData.city": {$regex: text, $options: "i"}},
+                {"metadata.positionData.state": {$regex: text, $options: "i"}},
+                {"metadata.positionData.country": {$regex: text, $options: "i"}},
+                {"metadata.keywords": {$regex: text, $options: "i"}}
+            ]
+
         }).limit(10).populate('directory', 'name path').exec((err, res:Array<any>) => {
             if (err || !res) {
                 return cb(err, null);
