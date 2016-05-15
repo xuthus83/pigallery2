@@ -1,7 +1,6 @@
 ///<reference path="../../../../browser.d.ts"/>
 
 import {Component, Input, ElementRef, ViewChild} from "@angular/core";
-import {AnimationBuilder} from "@angular/platform-browser/src/animate/animation_builder";
 import {IRenderable, Dimension} from "../../../model/IRenderable";
 import {GridPhoto} from "../GridPhoto";
 
@@ -14,23 +13,25 @@ export class GalleryPhotoComponent implements IRenderable {
     @Input() gridPhoto:GridPhoto;
     @ViewChild("image") imageRef:ElementRef;
     @ViewChild("info") infoDiv:ElementRef;
-    infoHeight:number = 0;
-    infobackground = "";
 
+    infoStyle = {
+        height: 0,
+        background: ""
+    };
 
-    constructor(private animBuilder:AnimationBuilder) {
+    constructor() {
     }
 
 
     hover() {
-        this.infoHeight = this.infoDiv.nativeElement.clientHeight;
-        this.infobackground = "rgba(0,0,0,0.8)";
+        this.infoStyle.height = this.infoDiv.nativeElement.clientHeight;
+        this.infoStyle.background = "rgba(0,0,0,0.8)";
  
     }
 
     mouseOut() {
-        this.infoHeight = 0;
-        this.infobackground = "rgba(0,0,0,0.0)";
+        this.infoStyle.height = 0;
+        this.infoStyle.background = "rgba(0,0,0,0.0)";
 
     }
     

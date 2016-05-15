@@ -1,6 +1,6 @@
 <div class="photo-container" (mouseover)="hover()" (mouseout)="mouseOut()">
     <img #image [src]="gridPhoto.getThumbnailPath()">
-    <div class="info" #info [style.margin-top.px]="-infoHeight" [style.background]="infobackground">
+    <div class="info" #info [style.margin-top.px]="-infoStyle.height" [style.background]="infoStyle.background">
         <div class="photo-name">{{gridPhoto.photo.name}}</div>
 
         <div class="photo-position" *ngIf="gridPhoto.photo.metadata.positionData">
