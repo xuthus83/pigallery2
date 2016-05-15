@@ -4,13 +4,19 @@
             <input type="text" class="form-control" placeholder="Search" (keyup)="onSearchChange($event)"
                    (blur)="onFocusLost($event)" (focus)="onFocus($evnet)" [(ngModel)]="searchText" #name="ngForm"
                    ngControl="search"
-                   name="srch-term" id="srch-term" autocomplete="off" >
+                   name="srch-term" id="srch-term" autocomplete="off">
 
-                <div class="autocomplete-list" *ngIf="autoCompleteItems.length > 0" >
-                    <div class="autocomplete-item" *ngFor="let item of autoCompleteItems" (mousedown)="search(item)">
-                        {{item.preText}}<strong>{{item.highLightText}}</strong>{{item.postText}}
-                    </div>
+            <div class="autocomplete-list" *ngIf="autoCompleteItems.length > 0">
+                <div class="autocomplete-item" *ngFor="let item of autoCompleteItems" (mousedown)="search(item)">
+                    <span [ngSwitch]="item.type">
+                        <span *ngSwitchWhen="0" class="glyphicon glyphicon-picture"></span>
+                        <span *ngSwitchWhen="1" class="glyphicon glyphicon-folder-open"></span>
+                        <span *ngSwitchWhen="2" class="glyphicon glyphicon-tag"></span>
+                        <span *ngSwitchWhen="3" class="glyphicon glyphicon-map-marker"></span>
+                    </span>
+                    {{item.preText}}<strong>{{item.highLightText}}</strong>{{item.postText}}
                 </div>
+            </div>
 
             <div class="input-group-btn" style="display: block">
                 <button class="btn btn-default dropdown-toggle" type="button" (click)="onSearch()"><i

@@ -4,7 +4,7 @@
         <div class="photo-name">{{gridPhoto.photo.name}}</div>
 
         <div class="photo-position" *ngIf="gridPhoto.photo.metadata.positionData">
-            <span class="glyphicon glyphicon-globe"></span>
+            <span class="glyphicon glyphicon-map-marker"></span>
             <a *ngIf="gridPhoto.photo.metadata.positionData.city || gridPhoto.photo.metadata.positionData.state || gridPhoto.photo.metadata.positionData.country">
                 {{gridPhoto.photo.metadata.positionData.city || gridPhoto.photo.metadata.positionData.state ||
                 gridPhoto.photo.metadata.positionData.country}}

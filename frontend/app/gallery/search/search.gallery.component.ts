@@ -2,7 +2,7 @@
 
 import {Component} from "@angular/core";
 import {AutoCompleteService} from "./autocomplete.service";
-import {AutoCompleteItem} from "../../../../common/entities/AutoCompleteItem";
+import {AutoCompleteItem, AutoCompeleteTypes} from "../../../../common/entities/AutoCompleteItem";
 import {Message} from "../../../../common/entities/Message";
 import {GalleryService} from "../gallery.service";
 import {FORM_DIRECTIVES} from "@angular/common";
@@ -82,8 +82,8 @@ export class GallerySearchComponent {
 
     private showSuggestions(suggestions:Array<AutoCompleteItem>, searchText:string) {
         this.emptyAutoComplete();
-        suggestions.forEach((item)=> {
-            let renderItem = new AutoCompleteRenderItem(item.text, searchText);
+        suggestions.forEach((item:AutoCompleteItem)=> {
+            let renderItem = new AutoCompleteRenderItem(item.text, searchText, item.type);
             this.autoCompleteItems.push(renderItem);
         });
     }
@@ -94,8 +94,9 @@ class AutoCompleteRenderItem {
     public preText:string = "";
     public highLightText:string = "";
     public postText:string = "";
+    public type:AutoCompeleteTypes;
 
-    constructor(public text:string, searchText:string) {
+    constructor(public text:string, searchText:string, type:AutoCompeleteTypes) {
         let preIndex = text.toLowerCase().indexOf(searchText.toLowerCase());
         if (preIndex > -1) {
             this.preText = text.substring(0, preIndex);
@@ -104,6 +105,7 @@ class AutoCompleteRenderItem {
         } else {
             this.postText = text;
         }
+        this.type = type;
     }
 }
 
