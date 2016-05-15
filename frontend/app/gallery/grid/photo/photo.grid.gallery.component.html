@@ -1,1 +1,23 @@
-<img #image [src]="gridPhoto.getThumbnailPath()">
+<div class="photo-container" (mouseover)="hover()" (mouseout)="mouseOut()">
+    <img #image [src]="gridPhoto.getThumbnailPath()">
+    <div class="info" #info [style.margin-top.px]="-infoHeight" [style.background]="infobackground">
+        <div class="photo-name">{{gridPhoto.photo.name}}</div>
+
+        <div class="photo-position" *ngIf="gridPhoto.photo.metadata.positionData">
+            <span class="glyphicon glyphicon-globe"></span>
+            <a *ngIf="gridPhoto.photo.metadata.positionData.city || gridPhoto.photo.metadata.positionData.state || gridPhoto.photo.metadata.positionData.country">
+                {{gridPhoto.photo.metadata.positionData.city || gridPhoto.photo.metadata.positionData.state ||
+                gridPhoto.photo.metadata.positionData.country}}
+            </a>
+        </div>
+
+
+        <div class="photo-keywords">
+            <template ngFor let-keyword [ngForOf]="gridPhoto.photo.metadata.keywords" let-last="last">
+                #<a>{{keyword}}</a>
+                <template [ngIf]="!last">,</template>
+            </template>
+
+        </div>
+    </div>
+</div>

@@ -1,6 +1,7 @@
 ///<reference path="../../../../browser.d.ts"/>
 
 import {Component, Input, ElementRef, ViewChild} from "@angular/core";
+import {AnimationBuilder} from "@angular/platform-browser/src/animate/animation_builder";
 import {IRenderable, Dimension} from "../../../model/IRenderable";
 import {GridPhoto} from "../GridPhoto";
 
@@ -12,18 +13,27 @@ import {GridPhoto} from "../GridPhoto";
 export class GalleryPhotoComponent implements IRenderable {
     @Input() gridPhoto:GridPhoto;
     @ViewChild("image") imageRef:ElementRef;
+    @ViewChild("info") infoDiv:ElementRef;
+    infoHeight:number = 0;
+    infobackground = "";
 
-    constructor() {
+
+    constructor(private animBuilder:AnimationBuilder) {
     }
 
-    /* getPhotoPath() {
 
-     let renderSize = Math.sqrt(this.gridPhoto.renderWidth * this.gridPhoto.renderHeight);
-     let size = Utils.findClosest(renderSize, Config.Client.thumbnailSizes);
-     return Utils.concatUrls("/api/gallery/content/", this.gridPhoto.photo.directory.path, this.gridPhoto.photo.directory.name, this.gridPhoto.photo.name, "thumbnail", size.toString());
+    hover() {
+        this.infoHeight = this.infoDiv.nativeElement.clientHeight;
+        this.infobackground = "rgba(0,0,0,0.8)";
+ 
     }
-     */
 
+    mouseOut() {
+        this.infoHeight = 0;
+        this.infobackground = "rgba(0,0,0,0.0)";
+
+    }
+    
     public getDimension():Dimension {
         return new Dimension(this.imageRef.nativeElement.offsetTop,
             this.imageRef.nativeElement.offsetLeft,

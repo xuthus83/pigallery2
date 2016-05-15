@@ -2,3 +2,46 @@ img {
     width: inherit;
     height: inherit;
 }
+
+.info {
+    background-color: transparent;
+    color: white;
+    font-size: medium;
+    position: relative;
+    padding: 5px;
+    margin-top: -50px;
+
+    transition: all .3s ease-out;
+    -moz-transition: all .3s ease-out;
+    -webkit-transition: all .3s ease-out;
+    -o-transition: all .3s ease-out;
+}
+
+.photo-container {
+    width: inherit;
+    height: inherit;
+    overflow: hidden;
+}
+
+.photo-name {
+    display: inline-block;
+}
+
+.photo-position {
+    display: inline-block;
+    float: right;
+}
+
+a {
+    color: white;
+
+}
+
+.photo-keywords {
+    margin-top: 5px;
+    font-size: small;
+    text-align: right;
+    display: inline-block;
+    width: 100%;
+}
+
