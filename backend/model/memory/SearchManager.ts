@@ -1,4 +1,4 @@
-import {AutoCompleteItem} from "../../../common/entities/AutoCompleteItem";
+import {AutoCompleteItem, SearchTypes} from "../../../common/entities/AutoCompleteItem";
 import {ISearchManager} from "../ISearchManager";
 import {SearchResult} from "../../../common/entities/SearchResult";
 
@@ -9,7 +9,7 @@ export class SearchManager implements ISearchManager {
         throw new Error("not implemented");
     }
 
-    search(text, cb:(error:any, result:SearchResult) => void) {
+    search(text, searchType:SearchTypes, cb:(error:any, result:SearchResult) => void) {
         throw new Error("not implemented");
     }
 

@@ -5,16 +5,16 @@
 
         <div class="photo-position" *ngIf="gridPhoto.photo.metadata.positionData">
             <span class="glyphicon glyphicon-map-marker"></span>
-            <a *ngIf="gridPhoto.photo.metadata.positionData.city || gridPhoto.photo.metadata.positionData.state || gridPhoto.photo.metadata.positionData.country">
-                {{gridPhoto.photo.metadata.positionData.city || gridPhoto.photo.metadata.positionData.state ||
-                gridPhoto.photo.metadata.positionData.country}}
+            <a [routerLink]="['Search',{searchText: getPositionText(), type:SearchTypes[SearchTypes.position]}]"
+               *ngIf="getPositionText()">
+                {{getPositionText()}}
             </a>
         </div>
 
 
         <div class="photo-keywords">
             <template ngFor let-keyword [ngForOf]="gridPhoto.photo.metadata.keywords" let-last="last">
-                #<a>{{keyword}}</a>
+                <a [routerLink]="['Search',{searchText: keyword, type: SearchTypes[SearchTypes.keyword]}]">#{{keyword}}</a>
                 <template [ngIf]="!last">,</template>
             </template>
 

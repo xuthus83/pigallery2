@@ -29,7 +29,7 @@ export class PublicRouter {
             res.render(_path.resolve(__dirname, './../../frontend/index.ejs'), res.tpl);
         };
 
-        this.app.get(['/', '/login', "/gallery*", "/admin"], renderIndex);
+        this.app.get(['/', '/login', "/gallery*", "/admin", "/search*"], renderIndex);
 
 
     }

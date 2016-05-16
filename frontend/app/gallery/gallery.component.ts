@@ -1,6 +1,6 @@
 ///<reference path="../../browser.d.ts"/>
 
-import {Component, OnInit} from "@angular/core";
+import {Component, OnInit, ViewChild} from "@angular/core";
 import {AuthenticationService} from "../model/network/authentication.service.ts";
 import {Router, RouteParams} from "@angular/router-deprecated";
 import {GalleryService} from "./gallery.service";
@@ -10,6 +10,7 @@ import {FrameComponent} from "../frame/frame.component";
 import {GalleryLightboxComponent} from "./lightbox/lightbox.gallery.component";
 import {GallerySearchComponent} from "./search/search.gallery.component";
 import {Config} from "../config/Config";
+import {SearchTypes} from "../../../common/entities/AutoCompleteItem";
 
 @Component({
     selector: 'gallery',
@@ -23,9 +24,10 @@ import {Config} from "../config/Config";
 })
 export class GalleryComponent implements OnInit {
 
+    @ViewChild(GallerySearchComponent) search:GallerySearchComponent;
 
     public showSearchBar:boolean = true;
-    
+
     constructor(private _galleryService:GalleryService,
                 private _params:RouteParams,
                 private _authService:AuthenticationService,
@@ -40,12 +42,30 @@ export class GalleryComponent implements OnInit {
             return;
         }
 
-        let directoryName = this._params.get('directory');
         console.log(this._params);
-        console.log(directoryName);
+
+        let searchText = this._params.get('searchText');
+        if (searchText && searchText != "") {
+            console.log("searching");
+            let typeString = this._params.get('type');
+
+            if (typeString && typeString != "") {
+                console.log("with type");
+                let type:SearchTypes = SearchTypes[typeString];
+                this._galleryService.search(searchText, type);
+                return;
+            }
+
+            this._galleryService.search(searchText);
+            return;
+        }
+
+
+        let directoryName = this._params.get('directory');
         directoryName = directoryName ? directoryName : "";
-        
         this._galleryService.getDirectory(directoryName);
+
+
     }
 
 

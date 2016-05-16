@@ -2,7 +2,8 @@
 
 import {Component} from "@angular/core";
 import {AutoCompleteService} from "./autocomplete.service";
-import {AutoCompleteItem, AutoCompeleteTypes} from "../../../../common/entities/AutoCompleteItem";
+import {AutoCompleteItem, SearchTypes} from "../../../../common/entities/AutoCompleteItem";
+import {RouteParams, RouterLink} from "@angular/router-deprecated";
 import {Message} from "../../../../common/entities/Message";
 import {GalleryService} from "../gallery.service";
 import {FORM_DIRECTIVES} from "@angular/common";
@@ -13,14 +14,22 @@ import {Config} from "../../config/Config";
     templateUrl: 'app/gallery/search/search.gallery.component.html',
     styleUrls: ['app/gallery/search/search.gallery.component.css'],
     providers: [AutoCompleteService],
-    directives: [FORM_DIRECTIVES]
+    directives: [FORM_DIRECTIVES, RouterLink]
 })
 export class GallerySearchComponent {
 
     autoCompleteItems:Array<AutoCompleteRenderItem> = [];
     private searchText:string = "";
 
-    constructor(private _autoCompleteService:AutoCompleteService, private _galleryService:GalleryService) {
+    SearchTypes:any = [];
+
+    constructor(private _autoCompleteService:AutoCompleteService, private _galleryService:GalleryService, private _params:RouteParams) {
+
+        this.SearchTypes = SearchTypes;
+        let searchText = this._params.get('searchText');
+        if (searchText && searchText != "") {
+            this.searchText = searchText;
+        }
     }
 
     onSearchChange(event:KeyboardEvent) {
@@ -49,9 +58,16 @@ export class GallerySearchComponent {
     }
 
 
+    mouseOverAutoComplete:boolean = false;
 
+    public setMouseOverAutoComplete(value) {
+        this.mouseOverAutoComplete = value;
+    }
+    
     public onFocusLost(event) {
-        this.autoCompleteItems = [];
+        if (this.mouseOverAutoComplete == false) {
+            this.autoCompleteItems = [];
+        }
     }
 
     public onFocus(event) {
@@ -88,15 +104,19 @@ export class GallerySearchComponent {
         });
     }
 
+    public setSearchText(searchText:string) {
+        this.searchText = searchText;
+    }
+
 }
 
 class AutoCompleteRenderItem {
     public preText:string = "";
     public highLightText:string = "";
     public postText:string = "";
-    public type:AutoCompeleteTypes;
+    public type:SearchTypes;
 
-    constructor(public text:string, searchText:string, type:AutoCompeleteTypes) {
+    constructor(public text:string, searchText:string, type:SearchTypes) {
         let preIndex = text.toLowerCase().indexOf(searchText.toLowerCase());
         if (preIndex > -1) {
             this.preText = text.substring(0, preIndex);

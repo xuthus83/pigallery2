@@ -50,6 +50,11 @@ import {NetworkService} from "./model/network/network.service";
         name: 'Gallery',
         component: GalleryComponent
     },
+    {
+        path: '/search/:searchText',
+        name: 'Search',
+        component: GalleryComponent
+    },
 ])
 export class AppComponent implements OnInit {
 

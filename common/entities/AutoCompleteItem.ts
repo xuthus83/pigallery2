@@ -1,4 +1,4 @@
-export enum AutoCompeleteTypes {
+export enum SearchTypes {
     image,
     directory,
     keyword,
@@ -6,7 +6,7 @@ export enum AutoCompeleteTypes {
 }
 
 export class AutoCompleteItem {
-    constructor(public text:string, public  type:AutoCompeleteTypes) {
+    constructor(public text:string, public  type:SearchTypes) {
     }
 
     equals(other:AutoCompleteItem) {
