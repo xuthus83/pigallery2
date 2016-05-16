@@ -40,7 +40,7 @@ export class GalleryService {
             return Promise.resolve(new Message(null, null));
         }
 
-        let queryString = "/gallery/search/" + text;
+        let queryString = "/search/" + text;
         if (type) {
             queryString += "?type=" + type;
         }
@@ -72,7 +72,7 @@ export class GalleryService {
             this.searchId = null;
         }, 3000); //TODO: set timeout to config
 
-        return this._networkService.getJson("/gallery/instant-search/" + text).then(
+        return this._networkService.getJson("/instant-search/" + text).then(
             (message:Message<ContentWrapper>) => {
                 if (!message.error && message.result) {
                     this.content = message.result;

@@ -72,7 +72,6 @@ export class GalleryMWs {
         }
 
         let type:SearchTypes;
-        console.log()
         if (req.query.type) {
             type = parseInt(req.query.type);
         }

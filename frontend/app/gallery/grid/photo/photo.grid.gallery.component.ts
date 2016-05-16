@@ -5,6 +5,7 @@ import {IRenderable, Dimension} from "../../../model/IRenderable";
 import {GridPhoto} from "../GridPhoto";
 import {SearchTypes} from "../../../../../common/entities/AutoCompleteItem";
 import {RouterLink} from "@angular/router-deprecated";
+import {Config} from "../../../config/Config";
 
 @Component({
     selector: 'gallery-grid-photo',
@@ -22,9 +23,11 @@ export class GalleryPhotoComponent implements IRenderable {
         background: ""
     };
     SearchTypes:any = [];
+    searchEnabled:boolean = true;
 
     constructor() {
         this.SearchTypes = SearchTypes;
+        this.searchEnabled = Config.Client.Search.searchEnabled;
     }
 
     getPositionText():string {

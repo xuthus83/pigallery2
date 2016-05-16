@@ -13,7 +13,7 @@ export class AutoCompleteService {
     }
 
     public autoComplete(text:string):Promise<Message<Array<AutoCompleteItem> >> {
-        return this._networkService.getJson("/gallery/autocomplete/" + text);
+        return this._networkService.getJson("/autocomplete/" + text);
     }
 
 

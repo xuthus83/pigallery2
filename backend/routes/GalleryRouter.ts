@@ -44,15 +44,15 @@ export class GalleryRouter {
     };
 
     private addSearch() {
-        this.app.get("/api/gallery/search/:text",
-            //   AuthenticationMWs.authenticate,
+        this.app.get("/api/search/:text",
+            AuthenticationMWs.authenticate,
             GalleryMWs.search,
             RenderingMWs.renderResult
         );
     };
 
     private addInstantSearch() {
-        this.app.get("/api/gallery/instant-search/:text",
+        this.app.get("/api/instant-search/:text",
             AuthenticationMWs.authenticate,
             GalleryMWs.instantSearch,
             RenderingMWs.renderResult
@@ -60,7 +60,7 @@ export class GalleryRouter {
     };
 
     private addAutoComplete() {
-        this.app.get("/api/gallery/autocomplete/:text",
+        this.app.get("/api/autocomplete/:text",
             AuthenticationMWs.authenticate,
             GalleryMWs.autocomplete,
             RenderingMWs.renderResult
