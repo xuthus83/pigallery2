@@ -17,10 +17,10 @@ declare module ServerInject {
 export class AuthenticationService {
 
     private _user:User = null;
-    public OnAuthenticated:Event<User>;
+    public OnUserChanged:Event<User>;
 
     constructor(private _userService:UserService) {
-        this.OnAuthenticated = new Event();
+        this.OnUserChanged = new Event();
 
         //picking up session..
         if (this.isAuthenticated() == false && Cookie.getCookie('pigallery2-session') != null) {
@@ -39,14 +39,14 @@ export class AuthenticationService {
                 console.log(message.error);
             } else {
                 this._user = message.result;
-                this.OnAuthenticated.trigger(this._user);
+                this.OnUserChanged.trigger(this._user);
             }
         });
     }
 
     private setUser(user:User) {
         this._user = user;
-        this.OnAuthenticated.trigger(this._user);
+        this.OnUserChanged.trigger(this._user);
     }
 
     public login(credential:LoginCredential) {
@@ -66,6 +66,11 @@ export class AuthenticationService {
 
     public getUser() {
         return this._user;
+    }
+
+    public logout() {
+        this._userService.logout();
+        this.setUser(null);
     }
 
 

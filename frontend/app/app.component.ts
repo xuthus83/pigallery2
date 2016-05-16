@@ -62,11 +62,19 @@ export class AppComponent implements OnInit {
     }
 
     ngOnInit() {
-        this._authenticationService.OnAuthenticated.on((user:User) => {
-            if (this._router.isRouteActive(this._router.generate(['Login']))) {
-                console.log("routing");
-                this._router.navigate(["Gallery", {directory: ""}]);
+        this._authenticationService.OnUserChanged.on((user:User) => {
+            if (user != null) {
+                if (this._router.isRouteActive(this._router.generate(['Login']))) {
+                    console.log("routing");
+                    this._router.navigate(["Gallery", {directory: ""}]);
+                }
+            } else {
+                if (!this._router.isRouteActive(this._router.generate(['Login']))) {
+                    console.log("routing");
+                    this._router.navigate(["Login"]);
+                }
             }
+
         });
 
 

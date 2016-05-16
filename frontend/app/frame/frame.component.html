@@ -15,7 +15,17 @@
                 <li class="active"><a [routerLink]="['Gallery',{directory: '/'}]">Gallery</a></li>
                 <li><a [routerLink]="['Admin']">Admin</a></li>
             </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <p class="navbar-text">{{user.name}}</p>
+                </li>
+                <li>
+                    <a style="cursor: pointer" (click)="logout()">Logout</a>
+                </li>
+            </ul>
+
             <ng-content select="[navbar]"></ng-content>
+
         </div><!--/.nav-collapse -->
     </div>
 </nav>

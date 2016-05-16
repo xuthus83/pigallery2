@@ -20,12 +20,15 @@ export class GalleryService {
     }
 
     public getDirectory(directoryName:string):Promise<Message<ContentWrapper>> {
+        this.content = new ContentWrapper();
         return this._networkService.getJson("/gallery/content/" + directoryName).then(
             (message:Message<ContentWrapper>) => {
                 if (!message.error && message.result) {
+
                     message.result.directory.photos.forEach((photo:Photo) => {
                         photo.directory = message.result.directory;
                     });
+
                     this.lastDirectory = message.result.directory;
                     this.content = message.result;
                 }

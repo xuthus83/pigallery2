@@ -9,6 +9,7 @@ import {RenderingMWs} from "../middlewares/RenderingMWs";
 export class UserRouter {
     constructor(private app) {
         this.addLogin();
+        this.addLogout();
         this.addGetSessionUser();
         this.addChangePassword();
 
@@ -26,6 +27,15 @@ export class UserRouter {
             RenderingMWs.renderSessionUser
         );
     };
+
+    private addLogout() {
+        this.app.post("/api/user/logout",
+            AuthenticationMWs.authenticate,
+            AuthenticationMWs.logout,
+            RenderingMWs.renderOK
+        );
+    };
+
 
     private addGetSessionUser() {
         this.app.get("/api/user/login",

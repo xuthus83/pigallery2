@@ -13,6 +13,10 @@ export class UserService {
     constructor(private _networkService:NetworkService) {
     }
 
+    public logout():Promise<Message<string>> {
+        console.log("call logout");
+        return this._networkService.postJson("/user/logout");
+    }
 
     public login(credential:LoginCredential):Promise<Message<User>> {
         return this._networkService.postJson("/user/login", {"loginCredential": credential});

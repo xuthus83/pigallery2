@@ -9,9 +9,9 @@ import {ObjectManagerRepository} from "../model/ObjectManagerRepository";
 export class AuthenticationMWs {
 
     public static authenticate(req:Request, res:Response, next:NextFunction) {
-        /*   if (typeof req.session.user === 'undefined') {
-         return next(new Error(ErrorCodes.NOT_AUTHENTICATED));
-         }*/
+        if (typeof req.session.user === 'undefined') {
+            return next(new Error(ErrorCodes.NOT_AUTHENTICATED));
+        }
         //TODO: uncomment
         return next();
     }
@@ -38,6 +38,7 @@ export class AuthenticationMWs {
             (typeof req.body.loginCredential.password === 'undefined')) {
             return next();
         }
+
         //lets find the user
         ObjectManagerRepository.getInstance().getUserManager().findOne({
             name: req.body.loginCredential.username,
@@ -54,5 +55,9 @@ export class AuthenticationMWs {
         });
     }
 
+    public static logout(req:Request, res:Response, next:NextFunction) {
+        delete req.session.user;
+        return next();
+    }
 
 }
