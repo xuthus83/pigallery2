@@ -23,7 +23,7 @@ export class NetworkService {
                 .toPromise()
                 .then(res => <Message<any>> res.json())
                 .catch(NetworkService.handleError);
-        }
+        } 
 
         return this._http[method](this._baseUrl + url, body, options)
             .toPromise()

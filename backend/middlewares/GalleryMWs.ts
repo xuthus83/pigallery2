@@ -4,7 +4,7 @@ import {NextFunction, Request, Response} from "express";
 import {Error, ErrorCodes} from "../../common/entities/Error";
 import {Directory} from "../../common/entities/Directory";
 import {ObjectManagerRepository} from "../model/ObjectManagerRepository";
-import {AutoCompleteItem} from "../../common/entities/AutoCompleteItem";
+import {AutoCompleteItem, SearchTypes} from "../../common/entities/AutoCompleteItem";
 import {ContentWrapper} from "../../common/entities/ConentWrapper";
 import {SearchResult} from "../../common/entities/SearchResult";
 import {Photo} from "../../common/entities/Photo";
@@ -70,8 +70,14 @@ export class GalleryMWs {
         if (!(req.params.text)) {
             return next();
         }
-        
-        ObjectManagerRepository.getInstance().getSearchManager().search(req.params.text, (err, result:SearchResult) => {
+
+        let type:SearchTypes;
+        console.log()
+        if (req.query.type) {
+            type = parseInt(req.query.type);
+        }
+
+        ObjectManagerRepository.getInstance().getSearchManager().search(req.params.text, type, (err, result:SearchResult) => {
             if (err || !result) {
                 return next(new Error(ErrorCodes.GENERAL_ERROR, err));
             }
@@ -89,6 +95,7 @@ export class GalleryMWs {
         if (!(req.params.text)) {
             return next();
         }
+
 
         ObjectManagerRepository.getInstance().getSearchManager().instantSearch(req.params.text, (err, result:SearchResult) => {
             if (err || !result) {

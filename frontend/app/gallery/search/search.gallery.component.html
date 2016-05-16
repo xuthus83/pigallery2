@@ -6,8 +6,10 @@
                    ngControl="search"
                    name="srch-term" id="srch-term" autocomplete="off">
 
-            <div class="autocomplete-list" *ngIf="autoCompleteItems.length > 0">
-                <div class="autocomplete-item" *ngFor="let item of autoCompleteItems" (mousedown)="search(item)">
+            <div class="autocomplete-list" *ngIf="autoCompleteItems.length > 0"
+                 (mouseover)="setMouseOverAutoComplete(true)" (mouseout)="setMouseOverAutoComplete(false)">
+                <div class="autocomplete-item" *ngFor="let item of autoCompleteItems">
+                    <a [routerLink]="['Search',{searchText: item.text, type: SearchTypes[item.type]}]">
                     <span [ngSwitch]="item.type">
                         <span *ngSwitchWhen="0" class="glyphicon glyphicon-picture"></span>
                         <span *ngSwitchWhen="1" class="glyphicon glyphicon-folder-open"></span>
@@ -15,6 +17,7 @@
                         <span *ngSwitchWhen="3" class="glyphicon glyphicon-map-marker"></span>
                     </span>
                     {{item.preText}}<strong>{{item.highLightText}}</strong>{{item.postText}}
+                    </a>
                 </div>
             </div>
 

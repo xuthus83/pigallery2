@@ -1,7 +1,7 @@
 <gallery-lightbox #lightbox></gallery-lightbox>
 <app-frame>
     <div navbar>
-        <gallery-search *ngIf="showSearchBar"></gallery-search>
+        <gallery-search #search *ngIf="showSearchBar"></gallery-search>
     </div>
     <div body class="container" style="width: 100%; padding:0" *ngIf="_galleryService.content.directory">
         <gallery-directory *ngFor="let directory of _galleryService.content.directory.directories"
@@ -11,7 +11,16 @@
 
     <div body class="container" style="width: 100%; padding:0" *ngIf="_galleryService.content.searchResult">
         <ol class="breadcrumb">
-            <li class="active"> Searching for: <strong>{{_galleryService.content.searchResult.searchText}}</strong></li>
+            <li class="active">
+                Searching for:
+                <span [ngSwitch]="_galleryService.content.searchResult.searchType">
+                        <span *ngSwitchWhen="0" class="glyphicon glyphicon-picture"></span>
+                        <span *ngSwitchWhen="1" class="glyphicon glyphicon-folder-open"></span>
+                        <span *ngSwitchWhen="2" class="glyphicon glyphicon-tag"></span>
+                        <span *ngSwitchWhen="3" class="glyphicon glyphicon-map-marker"></span>
+                    </span>
+                <strong>{{_galleryService.content.searchResult.searchText}}</strong>
+            </li>
         </ol>
         <div *ngFor="let directory of _galleryService.content.searchResult.directories">
             <gallery-directory *ngIf="directory" [directory]="directory"></gallery-directory>

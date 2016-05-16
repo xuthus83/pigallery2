@@ -6,6 +6,7 @@ import {Message} from "../../../common/entities/Message";
 import {ContentWrapper} from "../../../common/entities/ConentWrapper";
 import {Photo} from "../../../common/entities/Photo";
 import {Directory} from "../../../common/entities/Directory";
+import {SearchTypes} from "../../../common/entities/AutoCompleteItem";
 
 @Injectable()
 export class GalleryService {
@@ -33,12 +34,18 @@ export class GalleryService {
     }
 
     //TODO: cache
-    public search(text:string):Promise<Message<ContentWrapper>> {
+    public search(text:string, type?:SearchTypes):Promise<Message<ContentWrapper>> {
         clearTimeout(this.searchId);
         if (text === null || text === '') {
             return Promise.resolve(new Message(null, null));
         }
-        return this._networkService.getJson("/gallery/search/" + text).then(
+
+        let queryString = "/gallery/search/" + text;
+        if (type) {
+            queryString += "?type=" + type;
+        }
+
+        return this._networkService.getJson(queryString).then(
             (message:Message<ContentWrapper>) => {
                 if (!message.error && message.result) {
                     this.content = message.result;

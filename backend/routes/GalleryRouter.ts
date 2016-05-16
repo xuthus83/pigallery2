@@ -45,7 +45,7 @@ export class GalleryRouter {
 
     private addSearch() {
         this.app.get("/api/gallery/search/:text",
-            AuthenticationMWs.authenticate,
+            //   AuthenticationMWs.authenticate,
             GalleryMWs.search,
             RenderingMWs.renderResult
         );
@@ -61,7 +61,7 @@ export class GalleryRouter {
 
     private addAutoComplete() {
         this.app.get("/api/gallery/autocomplete/:text",
-            //   AuthenticationMWs.authenticate,
+            AuthenticationMWs.authenticate,
             GalleryMWs.autocomplete,
             RenderingMWs.renderResult
         );
