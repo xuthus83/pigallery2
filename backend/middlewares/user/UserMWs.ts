@@ -1,7 +1,7 @@
 import {NextFunction, Request, Response} from "express";
-import {Error, ErrorCodes} from "../../common/entities/Error";
-import {ObjectManagerRepository} from "../model/ObjectManagerRepository";
-import {User} from "../../common/entities/User";
+import {Error, ErrorCodes} from "../../../common/entities/Error";
+import {ObjectManagerRepository} from "../../model/ObjectManagerRepository";
+import {User} from "../../../common/entities/User";
 
 export class UserMWs {
 

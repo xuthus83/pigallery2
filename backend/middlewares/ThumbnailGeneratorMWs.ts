@@ -1,4 +1,4 @@
-///<reference path="jimp.d.ts"/>
+///<reference path="customtypings/jimp.d.ts"/>
 
 
 import * as path from "path";

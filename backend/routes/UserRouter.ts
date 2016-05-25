@@ -1,9 +1,9 @@
 ///<reference path="../../typings/main.d.ts"/>
 
-import {UserMWs} from "../middlewares/UserMWs";
+import {UserMWs} from "../middlewares/user/UserMWs";
 import {UserRoles} from "../../common/entities/User";
-import {AuthenticationMWs} from "../middlewares/AuthenticationMWs";
-import {UserRequestConstrainsMWs} from "../middlewares/UserRequestConstrainsMWs";
+import {AuthenticationMWs} from "../middlewares/user/AuthenticationMWs";
+import {UserRequestConstrainsMWs} from "../middlewares/user/UserRequestConstrainsMWs";
 import {RenderingMWs} from "../middlewares/RenderingMWs";
 
 export class UserRouter {

@@ -1,6 +1,6 @@
 ///<reference path="../../typings/main.d.ts"/>
 
-import {AuthenticationMWs} from "../middlewares/AuthenticationMWs";
+import {AuthenticationMWs} from "../middlewares/user/AuthenticationMWs";
 import {GalleryMWs} from "../middlewares/GalleryMWs";
 import {RenderingMWs} from "../middlewares/RenderingMWs";
 import {ThumbnailGeneratorMWs} from "../middlewares/ThumbnailGeneratorMWs";

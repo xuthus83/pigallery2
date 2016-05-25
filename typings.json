@@ -3,6 +3,7 @@
   "version": false,
   "ambientDependencies": {
     "body-parser": "registry:dt/body-parser#0.0.0+20160317120654",
+    "chai": "registry:dt/chai#3.4.0+20160317120654",
     "core-js": "registry:dt/core-js#0.0.0+20160317120654",
     "debug": "github:DefinitelyTyped/DefinitelyTyped/debug/debug.d.ts#0d622d857f97d44ea7dcad2b3edec1f23c48fe9e",
     "express": "github:DefinitelyTyped/DefinitelyTyped/express/express.d.ts#0d622d857f97d44ea7dcad2b3edec1f23c48fe9e",

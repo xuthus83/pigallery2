@@ -1,18 +1,17 @@
-///<reference path="ExtendedRequest.d.ts"/>
-///<reference path="../../typings/main.d.ts"/>
+///<reference path="../customtypings/ExtendedRequest.d.ts"/>
+///<reference path="../../../typings/main.d.ts"/>
 
 import {NextFunction, Request, Response} from "express";
-import {Error, ErrorCodes} from "../../common/entities/Error";
-import {UserRoles} from "../../common/entities/User";
-import {ObjectManagerRepository} from "../model/ObjectManagerRepository";
+import {Error, ErrorCodes} from "../../../common/entities/Error";
+import {UserRoles} from "../../../common/entities/User";
+import {ObjectManagerRepository} from "../../model/ObjectManagerRepository";
 
 export class AuthenticationMWs {
 
     public static authenticate(req:Request, res:Response, next:NextFunction) {
         if (typeof req.session.user === 'undefined') {
             return next(new Error(ErrorCodes.NOT_AUTHENTICATED));
-        }
-        //TODO: uncomment
+        } 
         return next();
     }
 

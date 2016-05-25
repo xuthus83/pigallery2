@@ -34,6 +34,10 @@ export class ObjectManagerRepository {
         return this._instance;
     }
 
+    public static reset() {
+        this._instance = null;
+    }
+
 
     getGalleryManager():IGalleryManager {
         return this._galleryManager;

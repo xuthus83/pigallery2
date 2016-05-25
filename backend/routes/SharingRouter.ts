@@ -1,6 +1,6 @@
 ///<reference path="../../typings/main.d.ts"/>
 
-import {AuthenticationMWs} from "../middlewares/AuthenticationMWs";
+import {AuthenticationMWs} from "../middlewares/user/AuthenticationMWs";
 import {UserRoles} from "../../common/entities/User";
 
 export class SharingRouter {

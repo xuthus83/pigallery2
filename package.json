@@ -9,8 +9,8 @@
   "main": "./backend/server.js",
   "scripts": {
     "install": "typings install && tsc -p backend && tsc -p test/backend && tsc -p common && webpack --config ./frontend/webpack.config.js -p",
-    "pretest": "typings install",
-    "test": "karma start ./karma.conf.js",
+    "pretest": "typings install && tsc -p test/backend",
+    "test": "karma start ./karma.conf.js && mocha --recursive test/backend/unit",
     "start": "node ./backend/server",
     "postinstall": "node ./test/backend/initMongo.js"
   },
@@ -54,6 +54,7 @@
     "zone.js": "^0.6.12"
   },
   "devDependencies": {
+    "chai": "^3.5.0",
     "compression-webpack-plugin": "^0.3.0",
     "css-loader": "^0.23.1",
     "es6-promise-loader": "^1.0.1",
@@ -74,6 +75,7 @@
     "karma-phantomjs-launcher": "^1.0.0",
     "karma-sourcemap-loader": "^0.3.7",
     "karma-webpack": "1.7.0",
+    "mocha": "^2.4.5",
     "ng2lint": "0.0.10",
     "phantomjs-prebuilt": "^2.1.7",
     "protractor": "^3.2.2",

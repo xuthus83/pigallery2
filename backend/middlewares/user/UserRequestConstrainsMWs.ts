@@ -1,7 +1,7 @@
 import {NextFunction, Request, Response} from "express";
-import {Error, ErrorCodes} from "../../common/entities/Error";
-import {UserRoles} from "../../common/entities/User";
-import {ObjectManagerRepository} from "../model/ObjectManagerRepository";
+import {Error, ErrorCodes} from "../../../common/entities/Error";
+import {UserRoles} from "../../../common/entities/User";
+import {ObjectManagerRepository} from "../../model/ObjectManagerRepository";
 
 export class UserRequestConstrainsMWs {
 
