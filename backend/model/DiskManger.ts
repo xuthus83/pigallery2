@@ -1,8 +1,11 @@
+///<reference path="exif.d.ts"/>
+
+
 import * as fs from "fs";
 import * as path from "path";
 import * as mime from "mime";
-import * as  iptc from "node-iptc";
-import * as  exif_parser from "exif-parser";
+import * as iptc from "node-iptc";
+import * as exif_parser from "exif-parser";
 import {Directory} from "../../common/entities/Directory";
 import {
     Photo,
