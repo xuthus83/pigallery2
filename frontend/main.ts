@@ -1,4 +1,4 @@
-///<reference path="../typings/browser.d.ts"/>
+///<reference path="./browser.d.ts"/>
 
 import {bootstrap} from "@angular/platform-browser-dynamic";
 import {AppComponent} from "./app/app.component.ts";

@@ -1,5 +1,5 @@
 ///<reference path="../customtypings/ExtendedRequest.d.ts"/>
-///<reference path="../../../typings/main.d.ts"/>
+///<reference path="../../../typings/index.d.ts"/>
 
 import {NextFunction, Request, Response} from "express";
 import {Error, ErrorCodes} from "../../../common/entities/Error";

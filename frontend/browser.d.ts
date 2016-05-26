@@ -1,4 +1,4 @@
-/// <reference path="../typings/browser.d.ts"/>
+/// <reference path="../typings/index.d.ts"/>
 /// <reference path="../common/common-classes.d.ts" /> 
 /// <reference path="../node_modules/tslint/lib/tslint.d.ts" />
 /// <reference path="../node_modules/@angular/core/index.d.ts" />

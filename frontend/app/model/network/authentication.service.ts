@@ -23,7 +23,7 @@ export class AuthenticationService {
         this.OnUserChanged = new Event();
 
         //picking up session..
-        if (this.isAuthenticated() == false && Cookie.getCookie('pigallery2-session') != null) {
+        if (this.isAuthenticated() == false && Cookie.get('pigallery2-session') != null) {
             if (typeof ServerInject !== "undefined" && typeof ServerInject.user !== "undefined") {
                 console.log("user found");
                 this.setUser(ServerInject.user);

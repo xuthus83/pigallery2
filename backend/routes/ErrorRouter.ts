@@ -1,4 +1,4 @@
-///<reference path="../../typings/main.d.ts"/>
+///<reference path="../../typings/index.d.ts"/>
 
 import {RenderingMWs} from "../middlewares/RenderingMWs";
 import {Error, ErrorCodes} from "../../common/entities/Error";
