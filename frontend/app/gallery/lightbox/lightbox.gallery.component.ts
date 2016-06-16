@@ -3,8 +3,7 @@
 import {Component, ElementRef, ViewChild, QueryList} from "@angular/core";
 import {Photo} from "../../../../common/entities/Photo";
 import {GalleryPhotoComponent} from "../grid/photo/photo.grid.gallery.component.ts";
-import {AnimationBuilder} from "@angular/platform-browser/src/animate/animation_builder";
-import {BrowserDomAdapter} from "@angular/platform-browser/src/browser_common";
+import {BrowserDomAdapter} from "@angular/platform-browser/src/browser/browser_adapter";
 import {Dimension} from "../../model/IRenderable";
 import {GalleryLightboxPhotoComponent} from "./photo/photo.lightbox.gallery.component";
 
@@ -30,7 +29,7 @@ export class GalleryLightboxComponent {
     private dom:BrowserDomAdapter;
 
 
-    constructor(private animBuilder:AnimationBuilder) {
+    constructor() {
         this.dom = new BrowserDomAdapter();
 
 
@@ -171,7 +170,7 @@ export class GalleryLightboxComponent {
         this.forceAnimateTo(fromImage,
             toImage,
             this.imgContainer.nativeElement.nativeElement);
-       
+
 
     }
 
@@ -188,7 +187,7 @@ export class GalleryLightboxComponent {
     }
 
     private forceAnimateFrom(from, to, elemnet) {
-        let anim0 = this.animBuilder.css();
+        /* let anim0 = this.animBuilder.css();
         anim0.setDuration(0);
         anim0.setToStyles(from);
         anim0.start(elemnet).onComplete(()=> {
@@ -198,12 +197,12 @@ export class GalleryLightboxComponent {
             anim1.setFromStyles(from);
             anim1.setToStyles(to);
             anim1.start(elemnet);
-        });
+         });*/
     }
 
     private forceAnimateTo(from, to, elemnet, innerTo = null, onComplete = ()=> {
     }) {
-        if (innerTo == null) {
+        /*   if (innerTo == null) {
             innerTo = to;
         }
 
@@ -216,9 +215,9 @@ export class GalleryLightboxComponent {
             anim1.setDuration(0);
             anim1.setToStyles(innerTo);
             anim1.start(elemnet).onComplete(onComplete);
-        });
+         });*/
+        onComplete();
     }
-
 
 
     private getBodyScrollTop() {
