@@ -13,7 +13,6 @@ import {ErrorRouter} from "./routes/ErrorRouter";
 import {SharingRouter} from "./routes/SharingRouter";
 import {DatabaseType} from "./../common/config/Config";
 import {ObjectManagerRepository} from "./model/ObjectManagerRepository";
-import {DatabaseManager} from "./model/mongoose/DatabaseManager";
 import {Config} from "./config/Config";
 
 
@@ -61,13 +60,7 @@ export class Server {
         if (Config.Server.databaseType === DatabaseType.memory) {
             ObjectManagerRepository.MemoryMongoManagers();
         } else {
-            ObjectManagerRepository.InitMongoManagers();
-            DatabaseManager.getInstance().onConnectionError(
-                ()=> {
-                    console.error("MongoDB connection error. Falling back to memory Object Managers");
-                    ObjectManagerRepository.MemoryMongoManagers();
-                    Config.setDatabaseType(DatabaseType.memory);
-                });
+            throw new Error("not implemented alternative mangers");
         }
 
         new PublicRouter(this.app);

@@ -11,7 +11,7 @@ module.exports = {
         library: ['peer']
     },
     // Turn on sourcemaps
-    //devtool: 'source-map',
+    devtool: 'source-map',
     resolve: {
         extensions: ['', '.webpack.js', '.web.js', '.ts', '.js'],
 

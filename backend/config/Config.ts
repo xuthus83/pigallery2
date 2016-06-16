@@ -10,7 +10,7 @@ Config.Server = {
     port: 80,
     imagesFolder: "/demo/images",
     thumbnailFolder: "/demo/TEMP",
-    databaseType: DatabaseType.mongoDB
+    databaseType: DatabaseType.memory
 };
 
 ConfigLoader.init(Config, path.join(__dirname, './../../config.json'), [["PORT", "Server-port"]]);

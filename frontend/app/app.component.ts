@@ -11,6 +11,7 @@ import {UserService} from "./model/network/user.service.ts";
 import {GalleryService} from "./gallery/gallery.service";
 import {AdminComponent} from "./admin/admin.component";
 import {NetworkService} from "./model/network/network.service";
+import {ThumbnailLoaderService} from "./gallery/grid/thumnailLoader.service";
 
 
 @Component({
@@ -23,7 +24,8 @@ import {NetworkService} from "./model/network/network.service";
         NetworkService,
         UserService,
         GalleryService,
-        AuthenticationService]
+        AuthenticationService,
+        ThumbnailLoaderService]
 })
 @RouteConfig([
     {

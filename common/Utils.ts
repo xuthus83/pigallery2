@@ -15,6 +15,7 @@ export class Utils {
 
             url += part + "/";
         }
+        url = url.replace("//", "/");
 
         return url.substring(0, url.length - 1);
     }

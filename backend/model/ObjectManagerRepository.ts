@@ -11,19 +11,11 @@ export class ObjectManagerRepository {
     private _searchManager:ISearchManager;
     private static _instance:ObjectManagerRepository = null;
 
-    public static InitMongoManagers() {
-        let MongoGalleryManager = require("./mongoose/MongoGalleryManager");
-        let MongoUserManager = require("./mongoose/MongoUserManager");
-        let MongoSearchManager = require("./mongoose/MongoSearchManager");
-        ObjectManagerRepository.getInstance().setGalleryManager(new MongoGalleryManager());
-        ObjectManagerRepository.getInstance().setUserManager(new MongoUserManager());
-        ObjectManagerRepository.getInstance().setSearchManager(new MongoSearchManager());
-    }
 
     public static MemoryMongoManagers() {
-        let GalleryManager = require("./memory/GalleryManager");
-        let UserManager = require("./memory/UserManager");
-        let SearchManager = require("./memory/SearchManager");
+        let GalleryManager = require("./memory/GalleryManager").GalleryManager;
+        let UserManager = require("./memory/UserManager").UserManager;
+        let SearchManager = require("./memory/SearchManager").SearchManager;
         ObjectManagerRepository.getInstance().setGalleryManager(new GalleryManager());
         ObjectManagerRepository.getInstance().setUserManager(new UserManager());
         ObjectManagerRepository.getInstance().setSearchManager(new SearchManager());

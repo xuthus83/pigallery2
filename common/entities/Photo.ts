@@ -4,7 +4,8 @@ export class Photo {
     constructor(public id?:number,
                 public name?:string,
                 public directory?:Directory,
-                public metadata?:PhotoMetadata) {
+                public metadata?:PhotoMetadata,
+                public readyThumbnails:Array<number> = []) {
     }
 }
 

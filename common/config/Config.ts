@@ -1,5 +1,5 @@
 export enum DatabaseType{
-    memory, mongoDB
+    memory
 }
 
 interface ServerConfig {
