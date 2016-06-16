@@ -11,8 +11,7 @@
     "postinstall": "typings install && tsc -p backend && tsc -p test/backend && tsc -p common && webpack --config ./frontend/webpack.config.js -p",
     "pretest": "typings install && tsc -p test/backend",
     "test": "karma start ./karma.conf.js && mocha --recursive test/backend/unit",
-    "start": "node ./backend/server",
-    "postinstall": "node ./test/backend/initMongo.js"
+    "start": "node ./backend/server"
   },
   "repository": {
     "type": "git",
