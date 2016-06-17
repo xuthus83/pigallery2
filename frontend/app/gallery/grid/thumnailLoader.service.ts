@@ -2,64 +2,66 @@
 
 import {Injectable} from "@angular/core";
 import {GridPhoto} from "./GridPhoto";
+import {Config} from "../../config/Config";
 
 @Injectable()
 export class ThumbnailLoaderService {
 
     que:Array<ThumbnailTask> = [];
+    runningRequests:number = 0;
 
     constructor() {
     }
 
-    loadImage(gridPhoto:GridPhoto):Promise<void> {
+    loadImage(gridPhoto:GridPhoto, onStartedLoading, onLoad, onError):void {
         console.log("[LOAD IMG]" + gridPhoto.photo.name);
-        return new Promise<void>((resolve:Function, reject:Function)=> {
-            let tmp:ThumbnailTask = null;
-            for (let i = 0; i < this.que.length; i++) {
-                if (this.que[i].src == gridPhoto.getThumbnailPath()) {
-                    tmp = this.que[i];
-                    break;
-                }
+        let tmp:ThumbnailTask = null;
+        for (let i = 0; i < this.que.length; i++) {
+            if (this.que[i].gridPhoto.getThumbnailPath() == gridPhoto.getThumbnailPath()) {
+                tmp = this.que[i];
+                break;
             }
-            if (tmp != null) {
-                tmp.resolve.push(resolve);
-                tmp.reject.push(reject);
-            } else {
-                this.que.push({src: gridPhoto.getThumbnailPath(), resolve: [resolve], reject: [reject]});
-            }
-            this.run();
-        });
+        }
+        if (tmp != null) {
+            tmp.onStartedLoading.push(onStartedLoading);
+            tmp.onLoad.push(onLoad);
+            tmp.onError.push(onError);
+        } else {
+            this.que.push({
+                gridPhoto: gridPhoto,
+                onStartedLoading: [onStartedLoading],
+                onLoad: [onLoad],
+                onError: [onError]
+            });
+        }
+        this.run();
 
     }
 
-    isRunning:boolean = false;
 
     run() {
-        if (this.que.length === 0 || this.isRunning === true) {
+        if (this.que.length === 0 || this.runningRequests >= Config.Client.concurrentThumbnailGenerations) {
             return;
         }
-        this.isRunning = true;
+        this.runningRequests++;
         let task = this.que.shift();
-        console.log("loadingstarted: " + task.src);
+        task.onStartedLoading.forEach(cb=>cb());
+        console.log("loadingstarted: " + task.gridPhoto.getThumbnailPath());
 
         let curImg = new Image();
-        curImg.src = task.src;
+        curImg.src = task.gridPhoto.getThumbnailPath();
         curImg.onload = () => {
-            console.log(task.src + "done");
-            task.resolve.forEach((resolve:()=>{}) => {
-                resolve();
-
-            });
-            this.isRunning = false;
+            console.log(task.gridPhoto.getThumbnailPath() + "done");
+            task.gridPhoto.thumbnailLoaded();
+            task.onLoad.forEach(cb=>cb());
+            this.runningRequests--;
             this.run();
         };
 
         curImg.onerror = (error) => {
-            console.error(task.src + "error");
-            task.reject.forEach((reject:(error)=>{}) => {
-                reject(error);
-            });
-            this.isRunning = false;
+            console.error(task.gridPhoto.getThumbnailPath() + "error");
+            task.onLoad.forEach(cb=>cb(error));
+            this.runningRequests--;
             this.run();
         };
     }
@@ -67,7 +69,8 @@ export class ThumbnailLoaderService {
 }
 
 interface ThumbnailTask {
-    src:string;
-    resolve:Array<Function>;
-    reject:Array<Function>;
+    gridPhoto:GridPhoto;
+    onStartedLoading:Array<Function>;
+    onLoad:Array<Function>;
+    onError:Array<Function>;
 }

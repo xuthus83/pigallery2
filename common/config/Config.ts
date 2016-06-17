@@ -18,6 +18,7 @@ interface SearchConfig {
 interface ClientConfig {
     thumbnailSizes:Array<number>;
     Search:SearchConfig;
+    concurrentThumbnailGenerations:number;
 }
 export class ConfigClass {
 
@@ -29,7 +30,8 @@ export class ConfigClass {
             searchEnabled: true,
             instantSearchEnabled: true,
             autocompleteEnabled: true
-        }
+        },
+        concurrentThumbnailGenerations: 1
     };
 
     public setDatabaseType(type:DatabaseType) {
