@@ -23,6 +23,7 @@ export class GalleryPhotoComponent implements IRenderable, AfterViewInit {
 
     imageSrc = "#";
     showImage = false;
+    showLoading = false;
     infoStyle = {
         height: 0,
         background: "rgba(0,0,0,0.0)"
@@ -42,7 +43,9 @@ export class GalleryPhotoComponent implements IRenderable, AfterViewInit {
             if (this.gridPhoto.isThumbnailAvailable()) {
                 this.imageSrc = this.gridPhoto.getThumbnailPath();
                 this.showImage = true;
+                this.showLoading = false;
             } else {
+                this.showLoading = true;
                 this.thumbnailService.loadImage(this.gridPhoto,
                     ()=> { //onLoadStarted
                         this.loading.startAnimation();
@@ -50,6 +53,7 @@ export class GalleryPhotoComponent implements IRenderable, AfterViewInit {
                     ()=> {//onLoaded
                         this.imageSrc = this.gridPhoto.getThumbnailPath();
                         this.showImage = true;
+                        this.showLoading = false;
                     },
                     ()=> {//onError
                         console.error("something bad happened");
