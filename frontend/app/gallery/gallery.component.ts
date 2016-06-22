@@ -42,7 +42,6 @@ export class GalleryComponent implements OnInit {
             return;
         }
 
-        console.log(this._params);
 
         let searchText = this._params.get('searchText');
         if (searchText && searchText != "") {
@@ -63,6 +62,7 @@ export class GalleryComponent implements OnInit {
 
         let directoryName = this._params.get('directory');
         directoryName = directoryName ? directoryName : "";
+
         this._galleryService.getDirectory(directoryName);
 
 

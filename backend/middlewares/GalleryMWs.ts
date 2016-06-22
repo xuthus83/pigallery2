@@ -9,17 +9,14 @@ import {ContentWrapper} from "../../common/entities/ConentWrapper";
 import {SearchResult} from "../../common/entities/SearchResult";
 import {Photo} from "../../common/entities/Photo";
 import {Config} from "../config/Config";
+import {ProjectPath} from "../ProjectPath";
 
 export class GalleryMWs {
 
 
-    private static getImageFolder() {
-        return path.join(__dirname, "/../../", Config.Server.imagesFolder);
-    }
-
     public static listDirectory(req:Request, res:Response, next:NextFunction) {
         let directoryName = req.params.directory || "/";
-        let absoluteDirectoryName = path.join(GalleryMWs.getImageFolder(), directoryName);
+        let absoluteDirectoryName = path.join(ProjectPath.ImageFolder, directoryName);
 
         if (!fs.statSync(absoluteDirectoryName).isDirectory()) {
             return next();
@@ -29,17 +26,26 @@ export class GalleryMWs {
             if (err || !directory) {
                 return next(new Error(ErrorCodes.GENERAL_ERROR, err));
             }
-
-            //remove cyclic reference
-            directory.photos.forEach((photo:Photo) => { 
-                photo.directory = null;
-            });
-
+            
             req.resultPipe = new ContentWrapper(directory, null);
             return next();
         });
     }
 
+
+    public static removeCyclicDirectoryReferences(req:Request, res:Response, next:NextFunction) {
+        if (!req.resultPipe)
+            return next();
+
+        let cw:ContentWrapper = req.resultPipe;
+        if (cw.directory) {
+            cw.directory.photos.forEach((photo:Photo) => {
+                photo.directory = null;
+            });
+        }
+
+        return next();
+    }
 
 
     public static loadImage(req:Request, res:Response, next:NextFunction) {
@@ -47,7 +53,7 @@ export class GalleryMWs {
             return next();
         }
 
-        let fullImagePath = path.join(GalleryMWs.getImageFolder(), req.params.imagePath);
+        let fullImagePath = path.join(ProjectPath.ImageFolder, req.params.imagePath);
         if (fs.statSync(fullImagePath).isDirectory()) {
             return next();
         }

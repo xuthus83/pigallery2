@@ -188,33 +188,33 @@ export class GalleryLightboxComponent {
 
     private forceAnimateFrom(from, to, elemnet) {
         /* let anim0 = this.animBuilder.css();
-        anim0.setDuration(0);
-        anim0.setToStyles(from);
-        anim0.start(elemnet).onComplete(()=> {
+         anim0.setDuration(0);
+         anim0.setToStyles(from);
+         anim0.start(elemnet).onComplete(()=> {
 
-            let anim1 = this.animBuilder.css();
-            anim1.setDuration(500);
-            anim1.setFromStyles(from);
-            anim1.setToStyles(to);
-            anim1.start(elemnet);
+         let anim1 = this.animBuilder.css();
+         anim1.setDuration(500);
+         anim1.setFromStyles(from);
+         anim1.setToStyles(to);
+         anim1.start(elemnet);
          });*/
     }
 
     private forceAnimateTo(from, to, elemnet, innerTo = null, onComplete = ()=> {
     }) {
         /*   if (innerTo == null) {
-            innerTo = to;
-        }
+         innerTo = to;
+         }
 
-        let anim0 = this.animBuilder.css();
-        anim0.setDuration(500);
-        anim0.setFromStyles(from);
-        anim0.setToStyles(to);
-        anim0.start(elemnet).onComplete(()=> {
-            let anim1 = this.animBuilder.css();
-            anim1.setDuration(0);
-            anim1.setToStyles(innerTo);
-            anim1.start(elemnet).onComplete(onComplete);
+         let anim0 = this.animBuilder.css();
+         anim0.setDuration(500);
+         anim0.setFromStyles(from);
+         anim0.setToStyles(to);
+         anim0.start(elemnet).onComplete(()=> {
+         let anim1 = this.animBuilder.css();
+         anim1.setDuration(0);
+         anim1.setToStyles(innerTo);
+         anim1.start(elemnet).onComplete(onComplete);
          });*/
         onComplete();
     }

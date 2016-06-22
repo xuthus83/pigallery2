@@ -25,7 +25,7 @@ export class GalleryPhotoComponent implements IRenderable, AfterViewInit {
     showImage = false;
     infoStyle = {
         height: 0,
-        background: ""
+        background: "rgba(0,0,0,0.0)"
     };
 
     SearchTypes:any = [];

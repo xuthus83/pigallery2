@@ -27,9 +27,9 @@ export class ConfigClass {
     public Client:ClientConfig = {
         thumbnailSizes: [200, 400, 600],
         Search: {
-            searchEnabled: true,
-            instantSearchEnabled: true,
-            autocompleteEnabled: true
+            searchEnabled: false,
+            instantSearchEnabled: false,
+            autocompleteEnabled: false
         },
         concurrentThumbnailGenerations: 1
     };

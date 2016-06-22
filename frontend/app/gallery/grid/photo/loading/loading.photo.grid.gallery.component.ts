@@ -12,7 +12,6 @@ export class GalleryPhotoLoadingComponent {
     animate = false;
 
     startAnimation() {
-        console.log("animate");
         this.animate = true;
     }
 }

@@ -13,8 +13,7 @@ export class ThumbnailLoaderService {
     constructor() {
     }
 
-    loadImage(gridPhoto:GridPhoto, onStartedLoading, onLoad, onError):void {
-        console.log("[LOAD IMG]" + gridPhoto.photo.name);
+    loadImage(gridPhoto:GridPhoto, onStartedLoading, onLoad, onError):void { 
         let tmp:ThumbnailTask = null;
         for (let i = 0; i < this.que.length; i++) {
             if (this.que[i].gridPhoto.getThumbnailPath() == gridPhoto.getThumbnailPath()) {
@@ -45,21 +44,18 @@ export class ThumbnailLoaderService {
         }
         this.runningRequests++;
         let task = this.que.shift();
-        task.onStartedLoading.forEach(cb=>cb());
-        console.log("loadingstarted: " + task.gridPhoto.getThumbnailPath());
+        task.onStartedLoading.forEach(cb=>cb()); 
 
         let curImg = new Image();
         curImg.src = task.gridPhoto.getThumbnailPath();
-        curImg.onload = () => {
-            console.log(task.gridPhoto.getThumbnailPath() + "done");
+        curImg.onload = () => { 
             task.gridPhoto.thumbnailLoaded();
             task.onLoad.forEach(cb=>cb());
             this.runningRequests--;
             this.run();
         };
 
-        curImg.onerror = (error) => {
-            console.error(task.gridPhoto.getThumbnailPath() + "error");
+        curImg.onerror = (error) => { 
             task.onLoad.forEach(cb=>cb(error));
             this.runningRequests--;
             this.run();

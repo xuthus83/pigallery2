@@ -21,6 +21,8 @@ export class GalleryRouter {
         this.app.get(["/api/gallery/content/:directory(*)", "/api/gallery/", "/api/gallery//"],
             AuthenticationMWs.authenticate,
             GalleryMWs.listDirectory,
+            ThumbnailGeneratorMWs.addThumbnailInformation,
+            GalleryMWs.removeCyclicDirectoryReferences,
             RenderingMWs.renderResult
         );
     };
@@ -47,6 +49,8 @@ export class GalleryRouter {
         this.app.get("/api/search/:text",
             AuthenticationMWs.authenticate,
             GalleryMWs.search,
+            ThumbnailGeneratorMWs.addThumbnailInformation,
+            GalleryMWs.removeCyclicDirectoryReferences,
             RenderingMWs.renderResult
         );
     };
@@ -55,6 +59,8 @@ export class GalleryRouter {
         this.app.get("/api/instant-search/:text",
             AuthenticationMWs.authenticate,
             GalleryMWs.instantSearch,
+            ThumbnailGeneratorMWs.addThumbnailInformation,
+            GalleryMWs.removeCyclicDirectoryReferences,
             RenderingMWs.renderResult
         );
     };

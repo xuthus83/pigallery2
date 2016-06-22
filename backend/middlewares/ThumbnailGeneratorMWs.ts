@@ -8,12 +8,53 @@ import * as fs from "fs";
 import {NextFunction, Request, Response} from "express";
 import {Error, ErrorCodes} from "../../common/entities/Error";
 import {Config} from "../config/Config";
+import {ContentWrapper} from "../../common/entities/ConentWrapper";
+import {Directory} from "../../common/entities/Directory";
+import {ProjectPath} from "../ProjectPath";
+import {Photo} from "../../common/entities/Photo";
 
 
 export class ThumbnailGeneratorMWs {
 
-    private static getThumbnailFolder() {
-        return path.join(__dirname, "/../../", Config.Server.thumbnailFolder);
+
+    private static addThInfoTODir(directory:Directory) {
+        ThumbnailGeneratorMWs.addThInfoToPhotos(directory.photos);
+
+        for (let i = 0; i < directory.directories.length; i++) {
+            ThumbnailGeneratorMWs.addThInfoTODir(directory.directories[i]);
+        }
+
+    }
+
+    private static addThInfoToPhotos(photos:Array<Photo>) {
+        let thumbnailFolder = ProjectPath.ThumbnailFolder;
+        for (let j = 0; j < Config.Client.thumbnailSizes.length; j++) {
+            let size = Config.Client.thumbnailSizes[j];
+            for (let i = 0; i < photos.length; i++) {
+                let fullImagePath = path.join(ProjectPath.ImageFolder, photos[i].directory.path, photos[i].directory.name, photos[i].name);
+                let thPath = path.join(thumbnailFolder, ThumbnailGeneratorMWs.generateThumbnailName(fullImagePath, size));
+                if (fs.existsSync(thPath) === true) {
+                    photos[i].readyThumbnails.push(size);
+                }
+            }
+        }
+    }
+
+    public static addThumbnailInformation(req:Request, res:Response, next:NextFunction) {
+        if (!req.resultPipe)
+            return next();
+
+        let cw:ContentWrapper = req.resultPipe;
+        if (cw.directory) {
+            ThumbnailGeneratorMWs.addThInfoTODir(cw.directory);
+        }
+        if (cw.searchResult) {
+            ThumbnailGeneratorMWs.addThInfoToPhotos(cw.searchResult.photos);
+        }
+
+
+        return next();
+        
     }
 
     public static generateThumbnail(req:Request, res:Response, next:NextFunction) {
@@ -22,8 +63,7 @@ export class ThumbnailGeneratorMWs {
 
         //load parameters
         let imagePath = req.resultPipe;
-        let size:number = parseInt(req.params.size) || Config.Client.thumbnailSizes[0];
-        let thumbnailFolder = ThumbnailGeneratorMWs.getThumbnailFolder();
+        let size:number = parseInt(req.params.size) || Config.Client.thumbnailSizes[0]; 
 
         //validate size
         if (Config.Client.thumbnailSizes.indexOf(size) === -1) {
@@ -31,7 +71,7 @@ export class ThumbnailGeneratorMWs {
         }
 
         //generate thumbnail path
-        let thPath = path.join(thumbnailFolder, ThumbnailGeneratorMWs.generateThumbnailName(imagePath, size));
+        let thPath = path.join(ProjectPath.ThumbnailFolder, ThumbnailGeneratorMWs.generateThumbnailName(imagePath, size));
 
 
         req.resultPipe = thPath;
@@ -42,8 +82,8 @@ export class ThumbnailGeneratorMWs {
         }
 
         //create thumbnail folder if not exist
-        if (!fs.existsSync(thumbnailFolder)) {
-            fs.mkdirSync(thumbnailFolder);
+        if (!fs.existsSync(ProjectPath.ThumbnailFolder)) {
+            fs.mkdirSync(ProjectPath.ThumbnailFolder);
         }
 
         //generate thumbnail
