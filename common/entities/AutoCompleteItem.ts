@@ -6,7 +6,7 @@ export enum SearchTypes {
 }
 
 export class AutoCompleteItem {
-    constructor(public text:string, public  type:SearchTypes) {
+    constructor(public text:string, public type:SearchTypes) {
     }
 
     equals(other:AutoCompleteItem) {
