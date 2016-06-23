@@ -22,7 +22,7 @@ export class GalleryPhotoComponent implements IRenderable, AfterViewInit {
 
 
     image = {
-        src: "#",
+        src: '',
         show: false
     };
 
@@ -51,6 +51,22 @@ export class GalleryPhotoComponent implements IRenderable, AfterViewInit {
                 this.image.src = this.gridPhoto.getThumbnailPath();
                 this.image.show = true;
                 this.loading.show = false;
+            } else if (this.gridPhoto.isReplacementThumbnailAvailable()) {
+
+                this.image.src = this.gridPhoto.getReplacementThumbnailPath();
+                this.image.show = true;
+                this.loading.show = false;
+                this.thumbnailService.loadImage(this.gridPhoto,
+                    ()=> { //onLoadStarted
+                    },
+                    ()=> {//onLoaded
+                        this.image.src = this.gridPhoto.getThumbnailPath();
+                    },
+                    (error)=> {//onError
+                        //TODO: handle error
+                        console.error("something bad happened");
+                        console.error(error);
+                    });
             } else {
                 this.loading.show = true; 
                 this.thumbnailService.loadImage(this.gridPhoto,
