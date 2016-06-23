@@ -17,13 +17,20 @@ import {GalleryPhotoLoadingComponent} from "./loading/loading.photo.grid.gallery
 })
 export class GalleryPhotoComponent implements IRenderable, AfterViewInit {
     @Input() gridPhoto:GridPhoto;
-    @ViewChild("image") imageRef:ElementRef;
+    @ViewChild("img") imageRef:ElementRef;
     @ViewChild("info") infoDiv:ElementRef;
-    @ViewChild(GalleryPhotoLoadingComponent) loading:GalleryPhotoLoadingComponent;
 
-    imageSrc = "#";
-    showImage = false;
-    showLoading = false;
+
+    image = {
+        src: "#",
+        show: false
+    };
+
+    loading = {
+        animate: false,
+        show: false
+    };
+    
     infoStyle = {
         height: 0,
         background: "rgba(0,0,0,0.0)"
@@ -41,22 +48,24 @@ export class GalleryPhotoComponent implements IRenderable, AfterViewInit {
         //schedule change after Angular checks the model
         setImmediate(() => {
             if (this.gridPhoto.isThumbnailAvailable()) {
-                this.imageSrc = this.gridPhoto.getThumbnailPath();
-                this.showImage = true;
-                this.showLoading = false;
+                this.image.src = this.gridPhoto.getThumbnailPath();
+                this.image.show = true;
+                this.loading.show = false;
             } else {
-                this.showLoading = true;
+                this.loading.show = true; 
                 this.thumbnailService.loadImage(this.gridPhoto,
                     ()=> { //onLoadStarted
-                        this.loading.startAnimation();
+                        this.loading.animate = true;
                     },
                     ()=> {//onLoaded
-                        this.imageSrc = this.gridPhoto.getThumbnailPath();
-                        this.showImage = true;
-                        this.showLoading = false;
+                        this.image.src = this.gridPhoto.getThumbnailPath();
+                        this.image.show = true;
+                        this.loading.show = false; 
                     },
-                    ()=> {//onError
+                    (error)=> {//onError
+                        //TODO: handle error
                         console.error("something bad happened");
+                        console.error(error);
                     });
             }
         });

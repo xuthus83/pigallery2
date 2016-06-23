@@ -1,6 +1,6 @@
 ///<reference path="../../../../../browser.d.ts"/>
 
-import {Component} from "@angular/core";
+import {Component, Input} from "@angular/core";
 
 @Component({
     selector: 'gallery-grid-photo-loading',
@@ -9,10 +9,8 @@ import {Component} from "@angular/core";
 })
 export class GalleryPhotoLoadingComponent {
 
-    animate = false;
+    @Input() animate:boolean;
 
-    startAnimation() {
-        this.animate = true;
-    }
+
 }
 

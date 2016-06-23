@@ -1,11 +1,11 @@
 <div class="photo-container" (mouseover)="hover()" (mouseout)="mouseOut()">
-    <img #image [src]="imageSrc" [hidden]="!showImage">
+    <img #img [src]="image.src" [hidden]="!image.show">
 
-    <gallery-grid-photo-loading #loading [hidden]="!showLoading">
+    <gallery-grid-photo-loading [animate]="loading.animate" *ngIf="loading.show">
     </gallery-grid-photo-loading>
 
     <!--Info box -->
-    <div #info [hidden]="!showImage" class="info" [style.margin-top.px]="-infoStyle.height"
+    <div #info class="info" [style.margin-top.px]="-infoStyle.height"
          [style.background]="infoStyle.background">
         <div class="photo-name">{{gridPhoto.photo.name}}</div>
 

@@ -13,21 +13,33 @@ export class ThumbnailLoaderService {
     constructor() {
     }
 
-    loadImage(gridPhoto:GridPhoto, onStartedLoading, onLoad, onError):void { 
+    removeTasks() {
+        this.que = [];
+    }
+
+    loadImage(gridPhoto:GridPhoto, onStartedLoading:()=>void, onLoad:()=>void, onError:(error)=>void):void {
         let tmp:ThumbnailTask = null;
+        //is image already qued?
         for (let i = 0; i < this.que.length; i++) {
             if (this.que[i].gridPhoto.getThumbnailPath() == gridPhoto.getThumbnailPath()) {
                 tmp = this.que[i];
                 break;
             }
         }
+        //add to previous
         if (tmp != null) {
             tmp.onStartedLoading.push(onStartedLoading);
             tmp.onLoad.push(onLoad);
             tmp.onError.push(onError);
-        } else {
+            if (tmp.inProgress == true) {
+                onStartedLoading();
+            }
+
+
+        } else {//create new task
             this.que.push({
                 gridPhoto: gridPhoto,
+                inProgress: false,
                 onStartedLoading: [onStartedLoading],
                 onLoad: [onLoad],
                 onError: [onError]
@@ -43,20 +55,28 @@ export class ThumbnailLoaderService {
             return;
         }
         this.runningRequests++;
-        let task = this.que.shift();
-        task.onStartedLoading.forEach(cb=>cb()); 
-
+        let task = this.que[0];
+        task.onStartedLoading.forEach(cb=>cb());
+        task.inProgress = true;
+        
         let curImg = new Image();
         curImg.src = task.gridPhoto.getThumbnailPath();
-        curImg.onload = () => { 
+        
+        curImg.onload = () => {
+            
             task.gridPhoto.thumbnailLoaded();
             task.onLoad.forEach(cb=>cb());
+
+            this.que.shift();
             this.runningRequests--;
             this.run();
         };
 
-        curImg.onerror = (error) => { 
+        curImg.onerror = (error) => {
+            
             task.onLoad.forEach(cb=>cb(error));
+
+            this.que.shift();
             this.runningRequests--;
             this.run();
         };
@@ -66,6 +86,7 @@ export class ThumbnailLoaderService {
 
 interface ThumbnailTask {
     gridPhoto:GridPhoto;
+    inProgress:boolean;
     onStartedLoading:Array<Function>;
     onLoad:Array<Function>;
     onError:Array<Function>;
