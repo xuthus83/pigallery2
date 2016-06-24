@@ -2,6 +2,9 @@ import {Photo} from "../../../../common/entities/Photo";
 import {Config} from "../../config/Config";
 import {Utils} from "../../../../common/Utils";
 export class GridPhoto {
+
+    private replacementSizeCache:boolean|number = false;
+
     constructor(public photo:Photo, public renderWidth:number, public renderHeight:number) {
 
     }
@@ -19,19 +22,25 @@ export class GridPhoto {
     }
 
     getReplacementThumbnailSize() {
-        let size = this.getThumbnailSize();
-        for (let i = 0; i < this.photo.readyThumbnails.length; i++) {
-            if (this.photo.readyThumbnails[i] < size) {
-                return this.photo.readyThumbnails[i];
+
+        if (this.replacementSizeCache === false) {
+            this.replacementSizeCache = null;
+
+            let size = this.getThumbnailSize();
+            for (let i = 0; i < this.photo.readyThumbnails.length; i++) {
+                if (this.photo.readyThumbnails[i] < size) {
+                    this.replacementSizeCache = this.photo.readyThumbnails[i];
+                    break;
+                }
             }
         }
-        return null;
+        return this.replacementSizeCache;
     }
 
     isReplacementThumbnailAvailable() {
         return this.getReplacementThumbnailSize() !== null;
     }
-    
+
     isThumbnailAvailable() {
         return this.photo.readyThumbnails.indexOf(this.getThumbnailSize()) != -1;
     }
@@ -41,7 +50,7 @@ export class GridPhoto {
         return Utils.concatUrls("/api/gallery/content/", this.photo.directory.path, this.photo.directory.name, this.photo.name, "thumbnail", size.toString());
 
     }
-    
+
     getThumbnailPath() {
         let size = this.getThumbnailSize();
         return Utils.concatUrls("/api/gallery/content/", this.photo.directory.path, this.photo.directory.name, this.photo.name, "thumbnail", size.toString());

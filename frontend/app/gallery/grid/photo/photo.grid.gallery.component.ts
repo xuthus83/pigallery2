@@ -1,12 +1,17 @@
 ///<reference path="../../../../browser.d.ts"/>
 
-import {Component, Input, ElementRef, ViewChild, AfterViewInit} from "@angular/core";
+import {Component, Input, ElementRef, ViewChild, OnInit, AfterViewInit, OnDestroy, HostListener} from "@angular/core";
 import {IRenderable, Dimension} from "../../../model/IRenderable";
 import {GridPhoto} from "../GridPhoto";
 import {SearchTypes} from "../../../../../common/entities/AutoCompleteItem";
 import {RouterLink} from "@angular/router-deprecated";
 import {Config} from "../../../config/Config";
-import {ThumbnailLoaderService} from "../thumnailLoader.service";
+import {
+    ThumbnailLoaderService,
+    ThumbnailTaskEntity,
+    ThumbnailLoadingListener,
+    ThumbnailLoadingPriority
+} from "../thumnailLoader.service";
 import {GalleryPhotoLoadingComponent} from "./loading/loading.photo.grid.gallery.component";
 
 @Component({
@@ -15,10 +20,11 @@ import {GalleryPhotoLoadingComponent} from "./loading/loading.photo.grid.gallery
     styleUrls: ['app/gallery/grid/photo/photo.grid.gallery.component.css'],
     directives: [RouterLink, GalleryPhotoLoadingComponent],
 })
-export class GalleryPhotoComponent implements IRenderable, AfterViewInit {
+export class GalleryPhotoComponent implements IRenderable, OnInit, AfterViewInit, OnDestroy {
     @Input() gridPhoto:GridPhoto;
     @ViewChild("img") imageRef:ElementRef;
     @ViewChild("info") infoDiv:ElementRef;
+    @ViewChild("photoContainer") container:ElementRef;
 
 
     image = {
@@ -30,7 +36,9 @@ export class GalleryPhotoComponent implements IRenderable, AfterViewInit {
         animate: false,
         show: false
     };
-    
+
+    thumbnailTask:ThumbnailTaskEntity = null;
+
     infoStyle = {
         height: 0,
         background: "rgba(0,0,0,0.0)"
@@ -44,49 +52,89 @@ export class GalleryPhotoComponent implements IRenderable, AfterViewInit {
         this.searchEnabled = Config.Client.Search.searchEnabled;
     }
 
-    ngAfterViewInit() {
-        //schedule change after Angular checks the model
-        setImmediate(() => {
-            if (this.gridPhoto.isThumbnailAvailable()) {
-                this.image.src = this.gridPhoto.getThumbnailPath();
-                this.image.show = true;
-                this.loading.show = false;
-            } else if (this.gridPhoto.isReplacementThumbnailAvailable()) {
+    ngOnInit() {
+        //set up befoar adding task to thumbnail generator
+        if (this.gridPhoto.isThumbnailAvailable()) {
+            this.image.src = this.gridPhoto.getThumbnailPath();
+            this.image.show = true;
+            this.loading.show = false;
 
+        } else {
+            if (this.gridPhoto.isReplacementThumbnailAvailable()) {
                 this.image.src = this.gridPhoto.getReplacementThumbnailPath();
                 this.image.show = true;
                 this.loading.show = false;
-                this.thumbnailService.loadImage(this.gridPhoto,
-                    ()=> { //onLoadStarted
-                    },
-                    ()=> {//onLoaded
-                        this.image.src = this.gridPhoto.getThumbnailPath();
-                    },
-                    (error)=> {//onError
-                        //TODO: handle error
-                        console.error("something bad happened");
-                        console.error(error);
-                    });
             } else {
-                this.loading.show = true; 
-                this.thumbnailService.loadImage(this.gridPhoto,
-                    ()=> { //onLoadStarted
-                        this.loading.animate = true;
-                    },
-                    ()=> {//onLoaded
-                        this.image.src = this.gridPhoto.getThumbnailPath();
-                        this.image.show = true;
-                        this.loading.show = false; 
-                    },
-                    (error)=> {//onError
-                        //TODO: handle error
-                        console.error("something bad happened");
-                        console.error(error);
-                    });
+                this.loading.show = true;
             }
-        });
+        }
     }
 
+    ngAfterViewInit() {
+        //schedule change after Angular checks the model
+        if (!this.gridPhoto.isThumbnailAvailable()) {
+            setImmediate(() => {
+
+                let listener:ThumbnailLoadingListener = {
+                    onStartedLoading: ()=> { //onLoadStarted
+                        this.loading.animate = true;
+                    },
+                    onLoad: ()=> {//onLoaded
+                        this.image.src = this.gridPhoto.getThumbnailPath();
+                        this.image.show = true;
+                        this.loading.show = false;
+                        this.thumbnailTask = null;
+                    },
+                    onError: (error)=> {//onError
+                        this.thumbnailTask = null;
+                        //TODO: handle error
+                        console.error("something bad happened");
+                        console.error(error);
+                    }
+                };
+
+                if (this.gridPhoto.isReplacementThumbnailAvailable()) {
+                    this.thumbnailTask = this.thumbnailService.loadImage(this.gridPhoto, ThumbnailLoadingPriority.medium, listener);
+                } else {
+                    this.thumbnailTask = this.thumbnailService.loadImage(this.gridPhoto, ThumbnailLoadingPriority.high, listener);
+                }
+
+
+            });
+        }
+    }
+
+    ngOnDestroy() {
+        if (this.thumbnailTask != null) {
+            this.thumbnailService.removeTask(this.thumbnailTask);
+            this.thumbnailTask = null;
+        }
+    }
+
+
+    isInView():boolean {
+        return document.body.scrollTop < this.container.nativeElement.offsetTop + this.container.nativeElement.clientHeight
+            && document.body.scrollTop + window.innerHeight > this.container.nativeElement.offsetTop;
+    }
+
+    @HostListener('window:scroll')
+    onScroll() {
+        if (this.thumbnailTask != null) {
+            if (this.isInView() == true) {
+                if (this.gridPhoto.isReplacementThumbnailAvailable()) {
+                    this.thumbnailTask.priority = ThumbnailLoadingPriority.medium;
+                } else {
+                    this.thumbnailTask.priority = ThumbnailLoadingPriority.high;
+                }
+            } else {
+                if (this.gridPhoto.isReplacementThumbnailAvailable()) {
+                    this.thumbnailTask.priority = ThumbnailLoadingPriority.low;
+                } else {
+                    this.thumbnailTask.priority = ThumbnailLoadingPriority.medium;
+                }
+            }
+        }
+    }
 
     getPositionText():string {
         if (!this.gridPhoto) {
