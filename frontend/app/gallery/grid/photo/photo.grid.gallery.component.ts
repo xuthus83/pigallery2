@@ -121,6 +121,9 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, AfterViewInit
             this.thumbnailService.removeTask(this.thumbnailTask);
             this.thumbnailTask = null;
         }
+        if (this.scrollListener) {
+            this.scrollListener();
+        }
     }
 
 
