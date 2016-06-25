@@ -8,8 +8,8 @@ export var Config = new ConfigClass();
 
 Config.Server = {
     port: 80,
-    imagesFolder: "/demo/images",
-    thumbnailFolder: "/demo/TEMP",
+    imagesFolder: "demo/images",
+    thumbnailFolder: "demo/TEMP",
     databaseType: DatabaseType.memory
 };
 
