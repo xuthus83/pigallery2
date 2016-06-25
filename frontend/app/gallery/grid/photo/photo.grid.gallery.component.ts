@@ -47,7 +47,7 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, AfterViewInit
     SearchTypes:any = [];
     searchEnabled:boolean = true;
 
-    scrollListener = null;
+    wasInView:boolean = null;
 
     constructor(private thumbnailService:ThumbnailLoaderService, private renderer:Renderer) {
         this.SearchTypes = SearchTypes;
@@ -88,23 +88,17 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, AfterViewInit
                         this.image.show = true;
                         this.loading.show = false;
                         this.thumbnailTask = null;
-                        if (this.scrollListener) {
-                            this.scrollListener();
-                        }
                     },
                     onError: (error)=> {//onError
                         this.thumbnailTask = null;
-                        if (this.scrollListener) {
-                            this.scrollListener();
-                        }
                         //TODO: handle error
                         console.error("something bad happened");
                         console.error(error);
                     }
                 };
-                this.scrollListener = this.renderer.listenGlobal('window', 'scroll', () => {
-                    this.onScroll();
-                });
+                /*  this.scrollListener = this.renderer.listenGlobal('window', 'scroll', () => {
+                 this.onScroll();
+                 });*/
                 if (this.gridPhoto.isReplacementThumbnailAvailable()) {
                     this.thumbnailTask = this.thumbnailService.loadImage(this.gridPhoto, ThumbnailLoadingPriority.medium, listener);
                 } else {
@@ -121,9 +115,6 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, AfterViewInit
             this.thumbnailService.removeTask(this.thumbnailTask);
             this.thumbnailTask = null;
         }
-        if (this.scrollListener) {
-            this.scrollListener();
-        }
     }
 
 
@@ -132,19 +123,24 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, AfterViewInit
             && document.body.scrollTop + window.innerHeight > this.container.nativeElement.offsetTop;
     }
 
+
     onScroll() {
         if (this.thumbnailTask != null) {
-            if (this.isInView() == true) {
-                if (this.gridPhoto.isReplacementThumbnailAvailable()) {
-                    this.thumbnailTask.priority = ThumbnailLoadingPriority.medium;
+            let isInView = this.isInView();
+            if (this.wasInView != isInView) {
+                this.wasInView = isInView;
+                if (isInView == true) {
+                    if (this.gridPhoto.isReplacementThumbnailAvailable()) {
+                        this.thumbnailTask.priority = ThumbnailLoadingPriority.medium;
+                    } else {
+                        this.thumbnailTask.priority = ThumbnailLoadingPriority.high;
+                    }
                 } else {
-                    this.thumbnailTask.priority = ThumbnailLoadingPriority.high;
-                }
-            } else {
-                if (this.gridPhoto.isReplacementThumbnailAvailable()) {
-                    this.thumbnailTask.priority = ThumbnailLoadingPriority.low;
-                } else {
-                    this.thumbnailTask.priority = ThumbnailLoadingPriority.medium;
+                    if (this.gridPhoto.isReplacementThumbnailAvailable()) {
+                        this.thumbnailTask.priority = ThumbnailLoadingPriority.low;
+                    } else {
+                        this.thumbnailTask.priority = ThumbnailLoadingPriority.medium;
+                    }
                 }
             }
         }

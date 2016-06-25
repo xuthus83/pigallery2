@@ -6,10 +6,14 @@ class ProjectPathClass {
     public ImageFolder:string;
     public ThumbnailFolder:string;
 
+    isAbsolutePath(pathStr) {
+        return path.resolve(pathStr) === path.normalize(pathStr).replace(RegExp(pathStr.sep + '$'), '');
+    }
+
     constructor() {
         this.Root = path.join(__dirname, "/../");
-        this.ImageFolder = path.join(this.Root, Config.Server.imagesFolder);
-        this.ThumbnailFolder = path.join(this.Root, Config.Server.thumbnailFolder);
+        this.ImageFolder = this.isAbsolutePath(Config.Server.imagesFolder) ? Config.Server.imagesFolder : path.join(this.Root, Config.Server.imagesFolder);
+        this.ThumbnailFolder = this.isAbsolutePath(Config.Server.thumbnailFolder) ? Config.Server.thumbnailFolder : path.join(this.Root, Config.Server.thumbnailFolder);
     }
 }
 

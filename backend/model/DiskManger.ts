@@ -15,13 +15,14 @@ import {
     PositionMetaData,
     GPSMetadata
 } from "../../common/entities/Photo";
+import {ProjectPath} from "../ProjectPath";
 
 export class DiskManager {
     public static scanDirectory(relativeDirectoryName, cb:(error:any, result:Directory) => void) {
         console.log("DiskManager: scanDirectory");
         let directoryName = path.basename(relativeDirectoryName);
         let directoryParent = path.join(path.dirname(relativeDirectoryName), "/");
-        let absoluteDirectoryName = path.join(__dirname, "/../../demo/images", relativeDirectoryName);
+        let absoluteDirectoryName = path.join(ProjectPath.ImageFolder, relativeDirectoryName);
 
         let directory = new Directory(1, directoryName, directoryParent, new Date(), [], []);
 

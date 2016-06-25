@@ -1,4 +1,4 @@
-<div #gridContainer (window:resize)="onResize()">
+<div #gridContainer>
     <gallery-grid-photo
             *ngFor="let gridPhoto of photosToRender"
             (click)="lightbox.show(gridPhoto.photo)"

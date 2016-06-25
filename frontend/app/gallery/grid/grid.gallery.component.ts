@@ -42,12 +42,21 @@ export class GalleryGridComponent implements OnChanges,AfterViewInit {
     }
 
     ngOnChanges() {
+        if (this.isAfterViewInit == false) {
+            return;
+        } 
         this.onPhotosChanged();
     }
 
+    @HostListener('window:resize')
     onResize() {
+        if (this.isAfterViewInit == false) {
+            return;
+        }
         this.onPhotosChanged();
     }
+
+    isAfterViewInit:boolean = false;
 
     ngAfterViewInit() {
         this.lightbox.gridPhotoQL = this.gridPhotoQL;
@@ -56,6 +65,7 @@ export class GalleryGridComponent implements OnChanges,AfterViewInit {
 
 
         this.onPhotosChanged();
+        this.isAfterViewInit = true;
     }
 
 
@@ -89,7 +99,7 @@ export class GalleryGridComponent implements OnChanges,AfterViewInit {
 
         let renderedContentHeight = 0;
 
-        while (this.renderedPhotoIndex < this.photos.length && this.shouldRenderMore(renderedContentHeight)) {
+        while (this.renderedPhotoIndex < this.photos.length && this.shouldRenderMore(renderedContentHeight) === true) {
 
             let photoRowBuilder = new GridRowBuilder(this.photos, this.renderedPhotoIndex, this.IMAGE_MARGIN, this.getContainerWidth());
             photoRowBuilder.addPhotos(this.TARGET_COL_COUNT);
@@ -105,20 +115,23 @@ export class GalleryGridComponent implements OnChanges,AfterViewInit {
 
             renderedContentHeight += rowHeight;
             this.renderedPhotoIndex += photoRowBuilder.getPhotoRow().length;
-        
+
         }
     }
 
 
     private shouldRenderMore(offset:number = 0):boolean {
         return document.body.scrollTop >= (document.body.clientHeight + offset - window.innerHeight) * 0.7
-            || document.body.clientHeight + offset < window.innerHeight;
+            || (document.body.clientHeight + offset) * 0.85 < window.innerHeight;
 
     }
 
     @HostListener('window:scroll')
     onScroll() {
         this.renderPhotos();
+        this.gridPhotoQL.toArray().forEach((pc:GalleryPhotoComponent) => {
+            pc.onScroll();
+        });
     }
 
     private getContainerWidth():number {
