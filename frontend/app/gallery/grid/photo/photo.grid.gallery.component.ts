@@ -1,6 +1,6 @@
 ///<reference path="../../../../browser.d.ts"/>
 
-import {Component, Input, ElementRef, ViewChild, OnInit, AfterViewInit, OnDestroy, HostListener} from "@angular/core";
+import {Component, Input, ElementRef, ViewChild, OnInit, AfterViewInit, OnDestroy, Renderer} from "@angular/core";
 import {IRenderable, Dimension} from "../../../model/IRenderable";
 import {GridPhoto} from "../GridPhoto";
 import {SearchTypes} from "../../../../../common/entities/AutoCompleteItem";
@@ -34,7 +34,7 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, AfterViewInit
 
     loading = {
         animate: false,
-        show: false
+        show: true
     };
 
     thumbnailTask:ThumbnailTaskEntity = null;
@@ -47,9 +47,13 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, AfterViewInit
     SearchTypes:any = [];
     searchEnabled:boolean = true;
 
-    constructor(private thumbnailService:ThumbnailLoaderService) {
+    scrollListener = null;
+
+    constructor(private thumbnailService:ThumbnailLoaderService, private renderer:Renderer) {
         this.SearchTypes = SearchTypes;
         this.searchEnabled = Config.Client.Search.searchEnabled;
+
+
     }
 
     ngOnInit() {
@@ -57,7 +61,7 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, AfterViewInit
         if (this.gridPhoto.isThumbnailAvailable()) {
             this.image.src = this.gridPhoto.getThumbnailPath();
             this.image.show = true;
-            this.loading.show = false;
+            //  this.loading.show = false;
 
         } else {
             if (this.gridPhoto.isReplacementThumbnailAvailable()) {
@@ -84,15 +88,23 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, AfterViewInit
                         this.image.show = true;
                         this.loading.show = false;
                         this.thumbnailTask = null;
+                        if (this.scrollListener) {
+                            this.scrollListener();
+                        }
                     },
                     onError: (error)=> {//onError
                         this.thumbnailTask = null;
+                        if (this.scrollListener) {
+                            this.scrollListener();
+                        }
                         //TODO: handle error
                         console.error("something bad happened");
                         console.error(error);
                     }
                 };
-
+                this.scrollListener = this.renderer.listenGlobal('window', 'scroll', () => {
+                    this.onScroll();
+                });
                 if (this.gridPhoto.isReplacementThumbnailAvailable()) {
                     this.thumbnailTask = this.thumbnailService.loadImage(this.gridPhoto, ThumbnailLoadingPriority.medium, listener);
                 } else {
@@ -117,7 +129,6 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, AfterViewInit
             && document.body.scrollTop + window.innerHeight > this.container.nativeElement.offsetTop;
     }
 
-    @HostListener('window:scroll')
     onScroll() {
         if (this.thumbnailTask != null) {
             if (this.isInView() == true) {
@@ -155,6 +166,10 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, AfterViewInit
         this.infoStyle.height = 0;
         this.infoStyle.background = "rgba(0,0,0,0.0)";
 
+    }
+
+    onImageLoad() {
+        this.loading.show = false;
     }
 
     public getDimension():Dimension {

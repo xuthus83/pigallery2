@@ -8,7 +8,8 @@ import {
     ViewChild,
     ViewChildren,
     QueryList,
-    AfterViewInit
+    AfterViewInit,
+    HostListener
 } from "@angular/core";
 import {Photo} from "../../../../common/entities/Photo";
 import {GridRowBuilder} from "./GridRowBuilder";
@@ -41,56 +42,24 @@ export class GalleryGridComponent implements OnChanges,AfterViewInit {
     }
 
     ngOnChanges() {
-        this.renderPhotos();
+        this.onPhotosChanged();
     }
 
     onResize() {
-        this.renderPhotos();
+        this.onPhotosChanged();
     }
 
     ngAfterViewInit() {
         this.lightbox.gridPhotoQL = this.gridPhotoQL;
 
         //TODO: implement scroll detection
-        /*   this.gridPhotoQL.changes.subscribe(
-         (x)=> {
-         console.log("changed");
-         if (!this.directory || this.gridPhotoQL.length < this.directory.photos.length) {
-         console.log("bad");
-         console.log(this.directory ? this.gridPhotoQL.length + " < "+this.directory.photos.length : "no dir");
-         return;
-         }
-         if (this.renderedContainerWidth != this.getContainerWidth()) {
-         this.renderPhotos();
-         }
-         },
-         (err) => {
-         console.log('Error: %s', err);
-         },
-         () =>{
-         console.log('Completed');
-         }
-
-         ); */
 
 
-        setImmediate(() => {
-            this.renderPhotos();
-        });
+        this.onPhotosChanged();
     }
 
 
-    private renderedContainerWidth = 0;
-
-    private renderPhotos() {
-        if (this.getContainerWidth() == 0) {
-            return;
-        }
-        let maxRowHeight = window.innerHeight / this.MIN_ROW_COUNT;
-        let minRowHeight = window.innerHeight / this.MAX_ROW_COUNT;
-        let containerWidth = this.getContainerWidth();
-        this.renderedContainerWidth = containerWidth;
-
+    private onPhotosChanged() {
         this.photos.sort((a:Photo, b:Photo) => {
             if (a.metadata.creationDate > b.metadata.creationDate) {
                 return 1;
@@ -101,13 +70,28 @@ export class GalleryGridComponent implements OnChanges,AfterViewInit {
             // a must be equal to b
             return 0;
         });
-        
         this.photosToRender = [];
-        let i = 0;
+        this.renderedPhotoIndex = 0;
+        setImmediate(() => {
+            this.renderPhotos();
+        });
+    }
 
-        while (i < this.photos.length) {
+    private renderedPhotoIndex:number = 0;
 
-            let photoRowBuilder = new GridRowBuilder(this.photos, i, this.IMAGE_MARGIN, containerWidth);
+    private renderPhotos() {
+        if (this.getContainerWidth() == 0 || this.renderedPhotoIndex >= this.photos.length || !this.shouldRenderMore()) {
+            return;
+        }
+
+        let maxRowHeight = window.innerHeight / this.MIN_ROW_COUNT;
+        let minRowHeight = window.innerHeight / this.MAX_ROW_COUNT;
+
+        let renderedContentHeight = 0;
+
+        while (this.renderedPhotoIndex < this.photos.length && this.shouldRenderMore(renderedContentHeight)) {
+
+            let photoRowBuilder = new GridRowBuilder(this.photos, this.renderedPhotoIndex, this.IMAGE_MARGIN, this.getContainerWidth());
             photoRowBuilder.addPhotos(this.TARGET_COL_COUNT);
             photoRowBuilder.adjustRowHeightBetween(minRowHeight, maxRowHeight);
 
@@ -119,10 +103,23 @@ export class GalleryGridComponent implements OnChanges,AfterViewInit {
                 this.photosToRender.push(new GridPhoto(photo, imageWidth, imageHeight));
             });
 
-            i += photoRowBuilder.getPhotoRow().length;
+            renderedContentHeight += rowHeight;
+            this.renderedPhotoIndex += photoRowBuilder.getPhotoRow().length;
+        
         }
     }
 
+
+    private shouldRenderMore(offset:number = 0):boolean {
+        return document.body.scrollTop >= (document.body.clientHeight + offset - window.innerHeight) * 0.7
+            || document.body.clientHeight + offset < window.innerHeight;
+
+    }
+
+    @HostListener('window:scroll')
+    onScroll() {
+        this.renderPhotos();
+    }
 
     private getContainerWidth():number {
         if (!this.gridContainer) {
