@@ -3,6 +3,7 @@
 import {Injectable} from "@angular/core";
 import {GridPhoto} from "./GridPhoto";
 import {Config} from "../../config/Config";
+import {GalleryCacheService} from "../cache.gallery.service";
 
 export enum ThumbnailLoadingPriority{
     high, medium, low
@@ -14,7 +15,7 @@ export class ThumbnailLoaderService {
     que:Array<ThumbnailTask> = [];
     runningRequests:number = 0;
 
-    constructor() {
+    constructor(private galleryChacheService:GalleryCacheService) {
     }
 
     removeTasks() {
@@ -126,6 +127,7 @@ export class ThumbnailLoaderService {
         curImg.onload = () => {
 
             task.gridPhoto.thumbnailLoaded();
+            this.galleryChacheService.photoUpdated(task.gridPhoto.photo);
             task.taskEntities.forEach(te=>te.listener.onLoad());
 
             this.taskReady(task);
