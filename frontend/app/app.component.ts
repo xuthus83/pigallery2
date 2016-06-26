@@ -12,6 +12,7 @@ import {GalleryService} from "./gallery/gallery.service";
 import {AdminComponent} from "./admin/admin.component";
 import {NetworkService} from "./model/network/network.service";
 import {ThumbnailLoaderService} from "./gallery/grid/thumnailLoader.service";
+import {GalleryCacheService} from "./gallery/cache.gallery.service";
 
 
 @Component({
@@ -23,6 +24,7 @@ import {ThumbnailLoaderService} from "./gallery/grid/thumnailLoader.service";
         ROUTER_PROVIDERS,
         NetworkService,
         UserService,
+        GalleryCacheService,
         GalleryService,
         AuthenticationService,
         ThumbnailLoaderService]

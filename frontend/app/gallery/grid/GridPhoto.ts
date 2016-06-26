@@ -5,7 +5,7 @@ export class GridPhoto {
 
     private replacementSizeCache:boolean|number = false;
 
-    constructor(public photo:Photo, public renderWidth:number, public renderHeight:number) {
+    constructor(public photo:Photo, public renderWidth:number, public renderHeight:number, public rowId:number) {
 
     }
 
@@ -58,5 +58,20 @@ export class GridPhoto {
 
     getPhotoPath() {
         return Utils.concatUrls("/api/gallery/content/", this.photo.directory.path, this.photo.directory.name, this.photo.name);
+    }
+
+
+    equals(other:any) {
+        //is gridphoto
+        if (other.photo) {
+            return this.photo.directory.path === other.photo.directory.path && this.photo.directory.name === other.photo.directory.name && this.photo.name === other.photo.name
+        }
+
+        //is photo
+        if (other.directory) {
+            return this.photo.directory.path === other.directory.path && this.photo.directory.name === other.directory.name && this.photo.name === other.name
+        }
+
+        return false;
     }
 }

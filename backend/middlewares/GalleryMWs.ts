@@ -28,7 +28,8 @@ export class GalleryMWs {
             }
             
             req.resultPipe = new ContentWrapper(directory, null);
-            return next();
+
+            return;
         });
     }
 

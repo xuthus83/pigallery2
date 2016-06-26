@@ -44,7 +44,7 @@ export class GalleryGridComponent implements OnChanges,AfterViewInit {
     ngOnChanges() {
         if (this.isAfterViewInit == false) {
             return;
-        } 
+        }
         this.onPhotosChanged();
     }
 
@@ -70,6 +70,8 @@ export class GalleryGridComponent implements OnChanges,AfterViewInit {
 
 
     private onPhotosChanged() {
+
+        //sort pohots by date
         this.photos.sort((a:Photo, b:Photo) => {
             if (a.metadata.creationDate > b.metadata.creationDate) {
                 return 1;
@@ -80,8 +82,30 @@ export class GalleryGridComponent implements OnChanges,AfterViewInit {
             // a must be equal to b
             return 0;
         });
-        this.photosToRender = [];
-        this.renderedPhotoIndex = 0;
+
+        //merge new data with old one
+        let lastSameIndex = 0;
+        let lastRowId = null;
+        for (let i = 0; i < this.photos.length && i < this.photosToRender.length; i++) {
+
+            //thIf a photo changed the whole row has to be removed
+            if (this.photosToRender[i].rowId != lastRowId) {
+                lastSameIndex = i;
+                lastRowId = this.photosToRender[i].rowId;
+            }
+            if (this.photosToRender[i].equals(this.photos[i]) == false) {
+                break;
+            }
+        }
+
+        if (lastSameIndex > 0) {
+            this.photosToRender.splice(lastSameIndex, this.photosToRender.length - lastSameIndex);
+            this.renderedPhotoIndex = lastSameIndex;
+        } else {
+            this.photosToRender = [];
+            this.renderedPhotoIndex = 0;
+        }
+
         setImmediate(() => {
             this.renderPhotos();
         });
@@ -110,7 +134,7 @@ export class GalleryGridComponent implements OnChanges,AfterViewInit {
 
             photoRowBuilder.getPhotoRow().forEach((photo) => {
                 let imageWidth = imageHeight * (photo.metadata.size.width / photo.metadata.size.height);
-                this.photosToRender.push(new GridPhoto(photo, imageWidth, imageHeight));
+                this.photosToRender.push(new GridPhoto(photo, imageWidth, imageHeight, this.renderedPhotoIndex));
             });
 
             renderedContentHeight += rowHeight;

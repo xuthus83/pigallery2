@@ -7,6 +7,7 @@ import {ContentWrapper} from "../../../common/entities/ConentWrapper";
 import {Photo} from "../../../common/entities/Photo";
 import {Directory} from "../../../common/entities/Directory";
 import {SearchTypes} from "../../../common/entities/AutoCompleteItem";
+import {GalleryCacheService} from "./cache.gallery.service";
 
 @Injectable()
 export class GalleryService {
@@ -15,15 +16,28 @@ export class GalleryService {
     private lastDirectory:Directory;
     private searchId:any;
 
-    constructor(private _networkService:NetworkService) {
+    constructor(private networkService:NetworkService, private galleryCacheService:GalleryCacheService) {
         this.content = new ContentWrapper();
     }
 
+    lastRequest = {
+        directory: null
+    };
     public getDirectory(directoryName:string):Promise<Message<ContentWrapper>> {
         this.content = new ContentWrapper();
-        return this._networkService.getJson("/gallery/content/" + directoryName).then(
+
+        this.content.directory = this.galleryCacheService.getDirectory(directoryName);
+        this.content.searchResult = null;
+        this.lastRequest.directory = directoryName;
+        return this.networkService.getJson("/gallery/content/" + directoryName).then(
             (message:Message<ContentWrapper>) => {
                 if (!message.error && message.result) {
+
+                    this.galleryCacheService.setDirectory(message.result.directory); //save it before adding references 
+
+                    if (this.lastRequest.directory != directoryName) {
+                        return;
+                    }
 
                     message.result.directory.photos.forEach((photo:Photo) => {
                         photo.directory = message.result.directory;
@@ -48,7 +62,7 @@ export class GalleryService {
             queryString += "?type=" + type;
         }
 
-        return this._networkService.getJson(queryString).then(
+        return this.networkService.getJson(queryString).then(
             (message:Message<ContentWrapper>) => {
                 if (!message.error && message.result) {
                     this.content = message.result;
@@ -75,7 +89,7 @@ export class GalleryService {
             this.searchId = null;
         }, 3000); //TODO: set timeout to config
 
-        return this._networkService.getJson("/instant-search/" + text).then(
+        return this.networkService.getJson("/instant-search/" + text).then(
             (message:Message<ContentWrapper>) => {
                 if (!message.error && message.result) {
                     this.content = message.result;
