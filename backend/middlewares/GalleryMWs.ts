@@ -29,7 +29,7 @@ export class GalleryMWs {
             
             req.resultPipe = new ContentWrapper(directory, null);
 
-            return;
+            return next();
         });
     }
 
