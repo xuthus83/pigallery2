@@ -1,6 +1,6 @@
 ///<reference path="../../../../browser.d.ts"/>
 
-import {Component, Input, ElementRef, ViewChild, OnInit, AfterViewInit, OnDestroy, Renderer} from "@angular/core";
+import {Component, Input, ElementRef, ViewChild, OnInit, AfterViewInit, OnDestroy} from "@angular/core";
 import {IRenderable, Dimension} from "../../../model/IRenderable";
 import {GridPhoto} from "../GridPhoto";
 import {SearchTypes} from "../../../../../common/entities/AutoCompleteItem";
@@ -49,7 +49,7 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, AfterViewInit
 
     wasInView:boolean = null;
 
-    constructor(private thumbnailService:ThumbnailLoaderService, private renderer:Renderer) {
+    constructor(private thumbnailService:ThumbnailLoaderService) {
         this.SearchTypes = SearchTypes;
         this.searchEnabled = Config.Client.Search.searchEnabled;
 
@@ -92,13 +92,11 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, AfterViewInit
                     onError: (error)=> {//onError
                         this.thumbnailTask = null;
                         //TODO: handle error
+                        //TODO: not an error if its from cache
                         console.error("something bad happened");
                         console.error(error);
                     }
                 };
-                /*  this.scrollListener = this.renderer.listenGlobal('window', 'scroll', () => {
-                 this.onScroll();
-                 });*/
                 if (this.gridPhoto.isReplacementThumbnailAvailable()) {
                     this.thumbnailTask = this.thumbnailService.loadImage(this.gridPhoto, ThumbnailLoadingPriority.medium, listener);
                 } else {

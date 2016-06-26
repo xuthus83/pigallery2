@@ -45,7 +45,11 @@ export class GalleryGridComponent implements OnChanges,AfterViewInit {
         if (this.isAfterViewInit == false) {
             return;
         }
-        this.onPhotosChanged();
+        this.sortPhotos();
+        this.mergeNewPhotos();
+        setImmediate(() => {
+            this.renderPhotos();
+        });
     }
 
     @HostListener('window:resize')
@@ -53,7 +57,11 @@ export class GalleryGridComponent implements OnChanges,AfterViewInit {
         if (this.isAfterViewInit == false) {
             return;
         }
-        this.onPhotosChanged();
+        this.sortPhotos();
+        this.clearRenderedPhotos();
+        setImmediate(() => {
+            this.renderPhotos();
+        });
     }
 
     isAfterViewInit:boolean = false;
@@ -64,13 +72,16 @@ export class GalleryGridComponent implements OnChanges,AfterViewInit {
         //TODO: implement scroll detection
 
 
-        this.onPhotosChanged();
+        this.sortPhotos();
+        this.clearRenderedPhotos();
+        setImmediate(() => {
+            this.renderPhotos();
+        });
         this.isAfterViewInit = true;
     }
 
 
-    private onPhotosChanged() {
-
+    private sortPhotos() {
         //sort pohots by date
         this.photos.sort((a:Photo, b:Photo) => {
             if (a.metadata.creationDate > b.metadata.creationDate) {
@@ -83,6 +94,14 @@ export class GalleryGridComponent implements OnChanges,AfterViewInit {
             return 0;
         });
 
+    }
+
+    private clearRenderedPhotos() {
+        this.photosToRender = [];
+        this.renderedPhotoIndex = 0;
+    }
+
+    private mergeNewPhotos() {
         //merge new data with old one
         let lastSameIndex = 0;
         let lastRowId = null;
@@ -102,14 +121,10 @@ export class GalleryGridComponent implements OnChanges,AfterViewInit {
             this.photosToRender.splice(lastSameIndex, this.photosToRender.length - lastSameIndex);
             this.renderedPhotoIndex = lastSameIndex;
         } else {
-            this.photosToRender = [];
-            this.renderedPhotoIndex = 0;
+            this.clearRenderedPhotos();
         }
-
-        setImmediate(() => {
-            this.renderPhotos();
-        });
     }
+
 
     private renderedPhotoIndex:number = 0;
 
