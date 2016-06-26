@@ -19,6 +19,9 @@ interface ClientConfig {
     thumbnailSizes:Array<number>;
     Search:SearchConfig;
     concurrentThumbnailGenerations:number;
+    enableCache:boolean;
+    enableOnScrollRendering:boolean;
+    enableOnScrollThumbnailPrioritising:boolean;
 }
 export class ConfigClass {
 
@@ -31,7 +34,10 @@ export class ConfigClass {
             instantSearchEnabled: false,
             autocompleteEnabled: false
         },
-        concurrentThumbnailGenerations: 1
+        concurrentThumbnailGenerations: 1,
+        enableCache: false,
+        enableOnScrollRendering: true,
+        enableOnScrollThumbnailPrioritising: true
     };
 
     public setDatabaseType(type:DatabaseType) {

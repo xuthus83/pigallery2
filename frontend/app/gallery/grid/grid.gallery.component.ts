@@ -16,6 +16,7 @@ import {GridRowBuilder} from "./GridRowBuilder";
 import {GalleryLightboxComponent} from "../lightbox/lightbox.gallery.component";
 import {GridPhoto} from "./GridPhoto";
 import {GalleryPhotoComponent} from "./photo/photo.grid.gallery.component";
+import {Config} from "../../config/Config";
 
 @Component({
     selector: 'gallery-grid',
@@ -159,8 +160,15 @@ export class GalleryGridComponent implements OnChanges,AfterViewInit {
     }
 
 
+    /**
+     * Returns true, if scroll is >= 70% to render more images.
+     * Or of onscroll renderin is off: return always to render all the images at once
+     * @param offset Add height to the client height (conent is not yet added to the dom, but calculate with it)
+     * @returns {boolean}
+     */
     private shouldRenderMore(offset:number = 0):boolean {
-        return document.body.scrollTop >= (document.body.clientHeight + offset - window.innerHeight) * 0.7
+        return Config.Client.enableOnScrollRendering == false ||
+            document.body.scrollTop >= (document.body.clientHeight + offset - window.innerHeight) * 0.7
             || (document.body.clientHeight + offset) * 0.85 < window.innerHeight;
 
     }
@@ -168,9 +176,11 @@ export class GalleryGridComponent implements OnChanges,AfterViewInit {
     @HostListener('window:scroll')
     onScroll() {
         this.renderPhotos();
-        this.gridPhotoQL.toArray().forEach((pc:GalleryPhotoComponent) => {
-            pc.onScroll();
-        });
+        if (Config.Client.enableOnScrollThumbnailPrioritising == true) {
+            this.gridPhotoQL.toArray().forEach((pc:GalleryPhotoComponent) => {
+                pc.onScroll();
+            });
+        }
     }
 
     private getContainerWidth():number {
