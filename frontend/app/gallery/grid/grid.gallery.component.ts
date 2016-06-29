@@ -176,6 +176,7 @@ export class GalleryGridComponent implements OnChanges,AfterViewInit {
     @HostListener('window:scroll')
     onScroll() {
         this.renderPhotos();
+
         if (Config.Client.enableOnScrollThumbnailPrioritising == true) {
             this.gridPhotoQL.toArray().forEach((pc:GalleryPhotoComponent) => {
                 pc.onScroll();

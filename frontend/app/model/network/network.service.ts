@@ -49,7 +49,7 @@ export class NetworkService {
     }
 
     private static handleError(error:any) {
-        // TODO: in a real world app, we may send the error to some remote logging infrastructure
+        // TODO: in a real world app do smthing better
         // instead of just logging it to the console
         console.error(error);
         return Promise.reject(error.message || error.json().error || 'Server error');

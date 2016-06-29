@@ -4,6 +4,7 @@
         <gallery-search #search *ngIf="showSearchBar"></gallery-search>
     </div>
     <div body class="container" style="width: 100%; padding:0" *ngIf="_galleryService.content.directory">
+        <gallery-navbar [directory]="_galleryService.content.directory"></gallery-navbar>
         <gallery-directory *ngFor="let directory of _galleryService.content.directory.directories"
                            [directory]="directory"></gallery-directory>
         <gallery-grid [photos]="_galleryService.content.directory.photos" [lightbox]="lightbox"></gallery-grid>

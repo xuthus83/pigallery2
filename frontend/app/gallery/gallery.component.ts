@@ -11,6 +11,7 @@ import {GalleryLightboxComponent} from "./lightbox/lightbox.gallery.component";
 import {GallerySearchComponent} from "./search/search.gallery.component";
 import {Config} from "../config/Config";
 import {SearchTypes} from "../../../common/entities/AutoCompleteItem";
+import {GalleryNavigatorComponent} from "./navigator/navigator.gallery.component";
 
 @Component({
     selector: 'gallery',
@@ -20,7 +21,8 @@ import {SearchTypes} from "../../../common/entities/AutoCompleteItem";
         GalleryDirectoryComponent,
         GalleryLightboxComponent,
         FrameComponent,
-        GallerySearchComponent]
+        GallerySearchComponent,
+        GalleryNavigatorComponent]
 })
 export class GalleryComponent implements OnInit {
 
