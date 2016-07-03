@@ -43,7 +43,7 @@ export class GalleryGridComponent implements OnChanges,AfterViewInit {
     }
 
     ngOnChanges() {
-        if (this.isAfterViewInit == false) {
+        if (this.isAfterViewInit === false) {
             return;
         }
         this.sortPhotos();
@@ -55,7 +55,7 @@ export class GalleryGridComponent implements OnChanges,AfterViewInit {
 
     @HostListener('window:resize')
     onResize() {
-        if (this.isAfterViewInit == false) {
+        if (this.isAfterViewInit === false) {
             return;
         }
         this.sortPhotos();
@@ -113,7 +113,7 @@ export class GalleryGridComponent implements OnChanges,AfterViewInit {
                 lastSameIndex = i;
                 lastRowId = this.photosToRender[i].rowId;
             }
-            if (this.photosToRender[i].equals(this.photos[i]) == false) {
+            if (this.photosToRender[i].equals(this.photos[i]) === false) {
                 break;
             }
         }
@@ -167,7 +167,7 @@ export class GalleryGridComponent implements OnChanges,AfterViewInit {
      * @returns {boolean}
      */
     private shouldRenderMore(offset:number = 0):boolean {
-        return Config.Client.enableOnScrollRendering == false ||
+        return Config.Client.enableOnScrollRendering === false ||
             document.body.scrollTop >= (document.body.clientHeight + offset - window.innerHeight) * 0.7
             || (document.body.clientHeight + offset) * 0.85 < window.innerHeight;
 
@@ -177,7 +177,7 @@ export class GalleryGridComponent implements OnChanges,AfterViewInit {
     onScroll() {
         this.renderPhotos();
 
-        if (Config.Client.enableOnScrollThumbnailPrioritising == true) {
+        if (Config.Client.enableOnScrollThumbnailPrioritising === true) {
             this.gridPhotoQL.toArray().forEach((pc:GalleryPhotoComponent) => {
                 pc.onScroll();
             });

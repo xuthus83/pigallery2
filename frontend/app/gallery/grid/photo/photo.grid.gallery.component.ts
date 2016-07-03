@@ -127,7 +127,7 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, AfterViewInit
             let isInView = this.isInView();
             if (this.wasInView != isInView) {
                 this.wasInView = isInView;
-                if (isInView == true) {
+                if (isInView === true) {
                     if (this.gridPhoto.isReplacementThumbnailAvailable()) {
                         this.thumbnailTask.priority = ThumbnailLoadingPriority.medium;
                     } else {
