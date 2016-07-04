@@ -39,6 +39,11 @@ export class GalleryService {
                         return;
                     }
 
+
+                    message.result.directory.photos.forEach((photo:Photo) => {
+                        photo.metadata.creationDate = new Date(<any>photo.metadata.creationDate);
+                    });
+
                     message.result.directory.photos.forEach((photo:Photo) => {
                         photo.directory = message.result.directory;
                     });

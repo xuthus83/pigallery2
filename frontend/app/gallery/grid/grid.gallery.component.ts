@@ -76,6 +76,7 @@ export class GalleryGridComponent implements OnChanges,AfterViewInit {
 
 
         this.updateContainerWidth();
+        this.sortPhotos();
         this.clearRenderedPhotos();
         setImmediate(() => {
             this.renderPhotos();
@@ -87,14 +88,7 @@ export class GalleryGridComponent implements OnChanges,AfterViewInit {
     private sortPhotos() {
         //sort pohots by date
         this.photos.sort((a:Photo, b:Photo) => {
-            if (a.metadata.creationDate > b.metadata.creationDate) {
-                return 1;
-            }
-            if (a.metadata.creationDate < b.metadata.creationDate) {
-                return -1;
-            }
-            // a must be equal to b
-            return 0;
+            return a.metadata.creationDate.getTime() - b.metadata.creationDate.getTime();
         });
 
     }
@@ -171,7 +165,10 @@ export class GalleryGridComponent implements OnChanges,AfterViewInit {
     }
 
     public renderARow():number {
-
+        if (this.renderedPhotoIndex + 1 >= this.photos.length) {
+            return 0;
+        }
+        
         let maxRowHeight = window.innerHeight / this.MIN_ROW_COUNT;
         let minRowHeight = window.innerHeight / this.MAX_ROW_COUNT;
 
@@ -188,7 +185,6 @@ export class GalleryGridComponent implements OnChanges,AfterViewInit {
         });
 
         this.renderedPhotoIndex += photoRowBuilder.getPhotoRow().length;
-        console.log(this.photosToRender.length);
         return rowHeight;
     }
 

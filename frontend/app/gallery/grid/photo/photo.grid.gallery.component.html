@@ -19,7 +19,7 @@
                 <span *ngIf="!searchEnabled">{{getPositionText()}}</span>
             </template>
         </div>
-
+        {{gridPhoto.photo.metadata.creationDate | date:"yy-MM-dd HH:mm:ss"}}
 
         <div class="photo-keywords">
             <template ngFor let-keyword [ngForOf]="gridPhoto.photo.metadata.keywords" let-last="last">
