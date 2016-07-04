@@ -1,8 +1,10 @@
-<gallery-lightbox #lightbox></gallery-lightbox>
+<gallery-lightbox #lightbox (onLastElement)="onLightboxLastElement()"></gallery-lightbox>
 <app-frame>
+
     <div navbar>
         <gallery-search #search *ngIf="showSearchBar"></gallery-search>
     </div>
+
     <div body class="container" style="width: 100%; padding:0" *ngIf="_galleryService.content.directory">
         <gallery-navbar [directory]="_galleryService.content.directory"></gallery-navbar>
         <gallery-directory *ngFor="let directory of _galleryService.content.directory.directories"

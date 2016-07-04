@@ -3,16 +3,16 @@
     z-index: 1100; /* Sit on top */
     left: 0;
     top: 0;
-    width: 0; /* Full width */
-    height: 0; /* Full height */
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
     overflow: hidden;
     display: flex; /* add */
     justify-content: center; /* add to align horizontal */
     align-items: center; /* add to align vertical */
     cursor: pointer;
 }
+
 .blackCanvas{
-    display: none;
     position: fixed; /* Stay in place */
     z-index: 1099; /* Sit on top */
     left: 0;

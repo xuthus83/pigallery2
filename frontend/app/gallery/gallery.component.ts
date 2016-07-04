@@ -27,6 +27,7 @@ import {GalleryNavigatorComponent} from "./navigator/navigator.gallery.component
 export class GalleryComponent implements OnInit {
 
     @ViewChild(GallerySearchComponent) search:GallerySearchComponent;
+    @ViewChild(GalleryGridComponent) grid:GalleryGridComponent;
 
     public showSearchBar:boolean = true;
 
@@ -68,6 +69,10 @@ export class GalleryComponent implements OnInit {
         this._galleryService.getDirectory(directoryName);
 
 
+    }
+
+    onLightboxLastElement() {
+        this.grid.renderARow();
     }
 
 

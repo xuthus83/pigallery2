@@ -33,6 +33,7 @@ export class GalleryGridComponent implements OnChanges,AfterViewInit {
     @Input() lightbox:GalleryLightboxComponent;
 
     photosToRender:Array<GridPhoto> = [];
+    containerWidth:number = 0;
 
     private IMAGE_MARGIN = 2;
     private TARGET_COL_COUNT = 5;
@@ -58,6 +59,7 @@ export class GalleryGridComponent implements OnChanges,AfterViewInit {
         if (this.isAfterViewInit === false) {
             return;
         }
+        this.updateContainerWidth();
         this.sortPhotos();
         this.clearRenderedPhotos();
         setImmediate(() => {
@@ -73,7 +75,7 @@ export class GalleryGridComponent implements OnChanges,AfterViewInit {
         //TODO: implement scroll detection
 
 
-        this.sortPhotos();
+        this.updateContainerWidth();
         this.clearRenderedPhotos();
         setImmediate(() => {
             this.renderPhotos();
@@ -130,31 +132,15 @@ export class GalleryGridComponent implements OnChanges,AfterViewInit {
     private renderedPhotoIndex:number = 0;
 
     private renderPhotos() {
-        if (this.getContainerWidth() == 0 || this.renderedPhotoIndex >= this.photos.length || !this.shouldRenderMore()) {
+        if (this.containerWidth == 0 || this.renderedPhotoIndex >= this.photos.length || !this.shouldRenderMore()) {
             return;
         }
 
-        let maxRowHeight = window.innerHeight / this.MIN_ROW_COUNT;
-        let minRowHeight = window.innerHeight / this.MAX_ROW_COUNT;
 
         let renderedContentHeight = 0;
 
         while (this.renderedPhotoIndex < this.photos.length && this.shouldRenderMore(renderedContentHeight) === true) {
-
-            let photoRowBuilder = new GridRowBuilder(this.photos, this.renderedPhotoIndex, this.IMAGE_MARGIN, this.getContainerWidth());
-            photoRowBuilder.addPhotos(this.TARGET_COL_COUNT);
-            photoRowBuilder.adjustRowHeightBetween(minRowHeight, maxRowHeight);
-
-            let rowHeight = photoRowBuilder.calcRowHeight();
-            let imageHeight = rowHeight - (this.IMAGE_MARGIN * 2);
-
-            photoRowBuilder.getPhotoRow().forEach((photo) => {
-                let imageWidth = imageHeight * (photo.metadata.size.width / photo.metadata.size.height);
-                this.photosToRender.push(new GridPhoto(photo, imageWidth, imageHeight, this.renderedPhotoIndex));
-            });
-
-            renderedContentHeight += rowHeight;
-            this.renderedPhotoIndex += photoRowBuilder.getPhotoRow().length;
+            renderedContentHeight += this.renderARow();
 
         }
     }
@@ -184,11 +170,33 @@ export class GalleryGridComponent implements OnChanges,AfterViewInit {
         }
     }
 
-    private getContainerWidth():number {
+    public renderARow():number {
+
+        let maxRowHeight = window.innerHeight / this.MIN_ROW_COUNT;
+        let minRowHeight = window.innerHeight / this.MAX_ROW_COUNT;
+
+        let photoRowBuilder = new GridRowBuilder(this.photos, this.renderedPhotoIndex, this.IMAGE_MARGIN, this.containerWidth);
+        photoRowBuilder.addPhotos(this.TARGET_COL_COUNT);
+        photoRowBuilder.adjustRowHeightBetween(minRowHeight, maxRowHeight);
+
+        let rowHeight = photoRowBuilder.calcRowHeight();
+        let imageHeight = rowHeight - (this.IMAGE_MARGIN * 2);
+
+        photoRowBuilder.getPhotoRow().forEach((photo) => {
+            let imageWidth = imageHeight * (photo.metadata.size.width / photo.metadata.size.height);
+            this.photosToRender.push(new GridPhoto(photo, imageWidth, imageHeight, this.renderedPhotoIndex));
+        });
+
+        this.renderedPhotoIndex += photoRowBuilder.getPhotoRow().length;
+        console.log(this.photosToRender.length);
+        return rowHeight;
+    }
+
+    private updateContainerWidth():number {
         if (!this.gridContainer) {
-            return 0;
+            return;
         }
-        return this.gridContainer.nativeElement.clientWidth;
+        this.containerWidth = this.gridContainer.nativeElement.clientWidth;
     }
 
 

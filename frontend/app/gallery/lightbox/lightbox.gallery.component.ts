@@ -1,6 +1,6 @@
 ///<reference path="../../../browser.d.ts"/>
 
-import {Component, ElementRef, ViewChild, QueryList} from "@angular/core";
+import {Component, QueryList, Output, EventEmitter} from "@angular/core";
 import {Photo} from "../../../../common/entities/Photo";
 import {GalleryPhotoComponent} from "../grid/photo/photo.grid.gallery.component.ts";
 import {BrowserDomAdapter} from "@angular/platform-browser/src/browser/browser_adapter";
@@ -14,15 +14,11 @@ import {GalleryLightboxPhotoComponent} from "./photo/photo.lightbox.gallery.comp
     directives: [GalleryLightboxPhotoComponent]
 })
 export class GalleryLightboxComponent {
+    @Output('onLastElement') onLastElement = new EventEmitter();
 
-    @ViewChild('lightbox') lightBoxDiv:ElementRef;
-    @ViewChild('blackCanvas') blackCanvasDiv:ElementRef;
-    @ViewChild('controls') controlsDiv:ElementRef;
-    @ViewChild('imgContainer') imgContainer:GalleryLightboxPhotoComponent;
-
-
-    public imageSize = {width: "auto", height: "100"};
     public navigation = {hasPrev: true, hasNext: true};
+    public photoDimension:Dimension = new Dimension(0, 0, 0, 0);
+
     private activePhoto:GalleryPhotoComponent;
     public gridPhotoQL:QueryList<GalleryPhotoComponent>;
 
@@ -42,20 +38,16 @@ export class GalleryLightboxComponent {
             if (pcList[i] === this.activePhoto && i + 1 < pcList.length) {
                 this.activePhoto = pcList[i + 1];
                 this.navigation.hasPrev = true;
-                if (i + 2 < pcList.length) {
-                    this.navigation.hasNext = true;
-                } else {
-                    this.navigation.hasNext = false;
+
+                this.navigation.hasNext = i + 2 < pcList.length;
+
+                if (i + 3 === pcList.length) {
+                    this.onLastElement.emit({}); //trigger to render more photos if there are
                 }
 
-                let toImage = this.calcLightBoxPhotoDimension(this.activePhoto.gridPhoto.photo).toStyle();
-
-                this.forceAnimateFrom(toImage,
-                    {},
-                    this.imgContainer.nativeElement.nativeElement);
+                this.photoDimension = this.calcLightBoxPhotoDimension(this.activePhoto.gridPhoto.photo);
 
 
-                this.setImageSize();
                 return;
             }
         }
@@ -67,33 +59,16 @@ export class GalleryLightboxComponent {
             if (pcList[i] === this.activePhoto && i > 0) {
                 this.activePhoto = pcList[i - 1];
                 this.navigation.hasNext = true;
-                if (i - 1 > 0) {
-                    this.navigation.hasPrev = true;
-                } else {
-                    this.navigation.hasPrev = false;
-                }
+                this.navigation.hasPrev = i - 1 > 0;
 
-                let toImage = this.calcLightBoxPhotoDimension(this.activePhoto.gridPhoto.photo).toStyle();
+                this.photoDimension = this.calcLightBoxPhotoDimension(this.activePhoto.gridPhoto.photo);
 
-                this.forceAnimateFrom(toImage,
-                    {},
-                    this.imgContainer.nativeElement.nativeElement);
 
-                this.setImageSize();
                 return;
             }
         }
     }
 
-    private setImageSize() {
-        if (this.activePhoto.gridPhoto.photo.metadata.size.height > this.activePhoto.gridPhoto.photo.metadata.size.width) {
-            this.imageSize.height = "100";
-            this.imageSize.width = null;
-        } else {
-            this.imageSize.height = null;
-            this.imageSize.width = "100";
-        }
-    }
 
     public show(photo:Photo) {
         let selectedPhoto = this.findPhotoComponent(photo);
@@ -103,73 +78,20 @@ export class GalleryLightboxComponent {
 
         this.dom.setStyle(this.dom.query('body'), 'overflow', 'hidden');
         this.activePhoto = selectedPhoto;
-        this.setImageSize();
-
-
-        let from = this.activePhoto.getDimension();
-        from.top -= this.getBodyScrollTop();
-
-
-        let fromImage = {width: from.width + "px", height: from.height + "px", top: "0px", left: "0px"};
-        let toImage = this.calcLightBoxPhotoDimension(this.activePhoto.gridPhoto.photo).toStyle();
-
-        this.forceAnimateFrom(fromImage,
-            toImage,
-            this.imgContainer.nativeElement.nativeElement);
-
-        this.forceAnimateFrom(from.toStyle(),
-            {height: "100%", width: "100%", "top": "0px", "left": "0px"},
-            this.lightBoxDiv.nativeElement);
-
-
-        this.forceAnimateFrom({opacity: "0", display: "block"},
-            {opacity: "1"},
-            this.blackCanvasDiv.nativeElement);
-
-        this.forceAnimateFrom({opacity: "0", display: "block"},
-            {opacity: "1"},
-            this.controlsDiv.nativeElement);
+        this.photoDimension = this.calcLightBoxPhotoDimension(this.activePhoto.gridPhoto.photo);
 
     }
 
     public hide() {
-        console.log("hiding");
         let to = this.activePhoto.getDimension();
+
         //iff target image out of screen -> scroll to there
         if (this.getBodyScrollTop() > to.top || this.getBodyScrollTop() + this.getScreenHeight() < to.top) {
             this.setBodyScrollTop(to.top);
         }
-        to.top -= this.getBodyScrollTop();
-
-
-        this.forceAnimateTo({height: "100%", width: "100%", "top": "0px", "left": "0px"},
-            to.toStyle(),
-            this.lightBoxDiv.nativeElement,
-            {height: "0px", width: "0px", "top": "0px", "left": "0px"},
-            ()=> {
-                this.activePhoto = null;
-            });
 
         this.dom.setStyle(this.dom.query('body'), 'overflow', 'auto');
-
-        this.forceAnimateTo({opacity: "1.0", display: "block"},
-            {opacity: "0.0", display: "block"},
-            this.blackCanvasDiv.nativeElement,
-            {display: "none"});
-
-        this.forceAnimateTo({opacity: "1.0", display: "block"},
-            {opacity: "0.0", display: "block"},
-            this.controlsDiv.nativeElement,
-            {display: "none"});
-
-
-        let fromImage = this.calcLightBoxPhotoDimension(this.activePhoto.gridPhoto.photo).toStyle();
-        let toImage = {width: to.width + "px", height: to.height + "px", top: "0px", left: "0px"};
-
-
-        this.forceAnimateTo(fromImage,
-            toImage,
-            this.imgContainer.nativeElement.nativeElement);
+        this.activePhoto = null;
 
 
     }
@@ -184,39 +106,6 @@ export class GalleryLightboxComponent {
             }
         }
         return selectedPhoto;
-    }
-
-    private forceAnimateFrom(from, to, elemnet) {
-        /* let anim0 = this.animBuilder.css();
-         anim0.setDuration(0);
-         anim0.setToStyles(from);
-         anim0.start(elemnet).onComplete(()=> {
-
-         let anim1 = this.animBuilder.css();
-         anim1.setDuration(500);
-         anim1.setFromStyles(from);
-         anim1.setToStyles(to);
-         anim1.start(elemnet);
-         });*/
-    }
-
-    private forceAnimateTo(from, to, elemnet, innerTo = null, onComplete = ()=> {
-    }) {
-        /*   if (innerTo == null) {
-         innerTo = to;
-         }
-
-         let anim0 = this.animBuilder.css();
-         anim0.setDuration(500);
-         anim0.setFromStyles(from);
-         anim0.setToStyles(to);
-         anim0.start(elemnet).onComplete(()=> {
-         let anim1 = this.animBuilder.css();
-         anim1.setDuration(0);
-         anim1.setToStyles(innerTo);
-         anim1.start(elemnet).onComplete(onComplete);
-         });*/
-        onComplete();
     }
 
 

@@ -15,11 +15,14 @@ export class GalleryLightboxPhotoComponent implements OnChanges {
     public imageSize = {width: "auto", height: "100"};
     @ViewChild('imgContainer') nativeElement:ElementRef;
 
+    imageLoaded:boolean = false;
 
     constructor() {
     }
 
     ngOnChanges() {
+
+        this.imageLoaded = false;
         this.setImageSize();
     }
 
@@ -35,6 +38,30 @@ export class GalleryLightboxPhotoComponent implements OnChanges {
             this.imageSize.height = null;
             this.imageSize.width = "100";
         }
+    }
+
+
+    onImageLoad() {
+        this.imageLoaded = true;
+    }
+
+    onImageError() {
+        //TODO:handle error
+        console.error("cant load image");
+    }
+
+    public showThumbnail():boolean {
+        return this.gridPhoto && !this.imageLoaded &&
+            (this.gridPhoto.isThumbnailAvailable() || this.gridPhoto.isReplacementThumbnailAvailable());
+    }
+
+    public thumbnailPath():string {
+        if (this.gridPhoto.isThumbnailAvailable() === true)
+            return this.gridPhoto.getThumbnailPath();
+
+        if (this.gridPhoto.isReplacementThumbnailAvailable() === true)
+            return this.gridPhoto.getReplacementThumbnailPath();
+        return null
     }
 
 }

@@ -1,10 +1,14 @@
 <div [hidden]="!activePhoto">
 
-    <div class="blackCanvas" #blackCanvas>
+    <div class="blackCanvas">
     </div>
 
-    <div class="lightbox" #lightbox>
-        <gallery-lightbox-photo #imgContainer [gridPhoto]="activePhoto ? activePhoto.gridPhoto : null">
+    <div class="lightbox">
+        <gallery-lightbox-photo [gridPhoto]="activePhoto ? activePhoto.gridPhoto : null"
+                                [style.top.px]="photoDimension.top"
+                                [style.left.px]="photoDimension.left"
+                                [style.width.px]="photoDimension.width"
+                                [style.height.px]="photoDimension.height">
         </gallery-lightbox-photo>
     </div>
 

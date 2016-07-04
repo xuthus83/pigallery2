@@ -1,13 +1,15 @@
 <div class="imgContainer" #imgContainer>
-    <img *ngIf="gridPhoto"
+    <img *ngIf="showThumbnail()"
          [style.width.%]="imageSize.width"
          [style.height.%]="imageSize.height"
-         [src]="gridPhoto.getThumbnailPath()"/>
+         [src]="thumbnailPath()"/>
 
     <img *ngIf="gridPhoto"
          [style.width.%]="imageSize.width"
          [style.height.%]="imageSize.height"
-         [src]="gridPhoto.getPhotoPath()"/>
+         [src]="gridPhoto.getPhotoPath()"
+         (load)="onImageLoad()"
+         (error)="onImageError()"/>
 </div>
 
 
