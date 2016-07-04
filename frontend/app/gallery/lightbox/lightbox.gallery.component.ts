@@ -36,17 +36,11 @@ export class GalleryLightboxComponent {
         let pcList = this.gridPhotoQL.toArray();
         for (let i = 0; i < pcList.length; i++) {
             if (pcList[i] === this.activePhoto && i + 1 < pcList.length) {
-                this.activePhoto = pcList[i + 1];
-                this.navigation.hasPrev = true;
-
-                this.navigation.hasNext = i + 2 < pcList.length;
-
+                this.showPhoto(pcList[i + 1]);
+                
                 if (i + 3 === pcList.length) {
                     this.onLastElement.emit({}); //trigger to render more photos if there are
                 }
-
-                this.photoDimension = this.calcLightBoxPhotoDimension(this.activePhoto.gridPhoto.photo);
-
 
                 return;
             }
@@ -57,18 +51,26 @@ export class GalleryLightboxComponent {
         let pcList = this.gridPhotoQL.toArray();
         for (let i = 0; i < pcList.length; i++) {
             if (pcList[i] === this.activePhoto && i > 0) {
-                this.activePhoto = pcList[i - 1];
-                this.navigation.hasNext = true;
-                this.navigation.hasPrev = i - 1 > 0;
-
-                this.photoDimension = this.calcLightBoxPhotoDimension(this.activePhoto.gridPhoto.photo);
-
-
+                this.showPhoto(pcList[i - 1]);
                 return;
             }
         }
     }
 
+
+    private showPhoto(photoComponent:GalleryPhotoComponent) {
+        let pcList = this.gridPhotoQL.toArray();
+
+        let index = pcList.indexOf(photoComponent);
+        if (index == -1) {
+            throw new Error("Can't find the photo");
+        }
+
+        this.navigation.hasPrev = index > 0;
+        this.navigation.hasNext = index + 1 < pcList.length;
+        this.activePhoto = photoComponent;
+        this.photoDimension = this.calcLightBoxPhotoDimension(this.activePhoto.gridPhoto.photo);
+    }
 
     public show(photo:Photo) {
         let selectedPhoto = this.findPhotoComponent(photo);
@@ -76,10 +78,8 @@ export class GalleryLightboxComponent {
             throw new Error("Can't find Photo");
         }
 
+        this.showPhoto(selectedPhoto);
         this.dom.setStyle(this.dom.query('body'), 'overflow', 'hidden');
-        this.activePhoto = selectedPhoto;
-        this.photoDimension = this.calcLightBoxPhotoDimension(this.activePhoto.gridPhoto.photo);
-
     }
 
     public hide() {
@@ -98,14 +98,12 @@ export class GalleryLightboxComponent {
 
     private findPhotoComponent(photo) {
         let galleryPhotoComponents = this.gridPhotoQL.toArray();
-        let selectedPhoto:GalleryPhotoComponent = null;
         for (let i = 0; i < galleryPhotoComponents.length; i++) {
             if (galleryPhotoComponents[i].gridPhoto.photo == photo) {
-                selectedPhoto = galleryPhotoComponents[i];
-                break;
+                return galleryPhotoComponents[i];
             }
         }
-        return selectedPhoto;
+        return null;
     }
 
 
