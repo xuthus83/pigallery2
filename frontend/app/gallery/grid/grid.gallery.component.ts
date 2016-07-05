@@ -40,6 +40,8 @@ export class GalleryGridComponent implements OnChanges,AfterViewInit {
     private MIN_ROW_COUNT = 2;
     private MAX_ROW_COUNT = 5;
 
+    onScrollFired = false;
+
     constructor() {
     }
 
@@ -125,7 +127,7 @@ export class GalleryGridComponent implements OnChanges,AfterViewInit {
 
     private renderedPhotoIndex:number = 0;
 
-    private renderPhotos() {
+    private renderPhotos() { 
         if (this.containerWidth == 0 || this.renderedPhotoIndex >= this.photos.length || !this.shouldRenderMore()) {
             return;
         }
@@ -134,8 +136,11 @@ export class GalleryGridComponent implements OnChanges,AfterViewInit {
         let renderedContentHeight = 0;
 
         while (this.renderedPhotoIndex < this.photos.length && this.shouldRenderMore(renderedContentHeight) === true) {
-            renderedContentHeight += this.renderARow();
-
+            let ret = this.renderARow();
+            if (ret === null) {
+                throw new Error("Gridphotos rendering failed");
+            }
+            renderedContentHeight += ret;
         }
     }
 
@@ -148,27 +153,34 @@ export class GalleryGridComponent implements OnChanges,AfterViewInit {
      */
     private shouldRenderMore(offset:number = 0):boolean {
         return Config.Client.enableOnScrollRendering === false ||
-            document.body.scrollTop >= (document.body.clientHeight + offset - window.innerHeight) * 0.7
+            window.scrollY >= (document.body.clientHeight + offset - window.innerHeight) * 0.7
             || (document.body.clientHeight + offset) * 0.85 < window.innerHeight;
 
     }
 
+
     @HostListener('window:scroll')
     onScroll() {
-        this.renderPhotos();
+        if (!this.onScrollFired) {
+            window.requestAnimationFrame(() => {
+                this.renderPhotos();
 
-        if (Config.Client.enableOnScrollThumbnailPrioritising === true) {
-            this.gridPhotoQL.toArray().forEach((pc:GalleryPhotoComponent) => {
-                pc.onScroll();
+                if (Config.Client.enableOnScrollThumbnailPrioritising === true) {
+                    this.gridPhotoQL.toArray().forEach((pc:GalleryPhotoComponent) => {
+                        pc.onScroll();
+                    });
+                }
+                this.onScrollFired = false;
             });
+            this.onScrollFired = true;
         }
     }
 
     public renderARow():number {
-        if (this.renderedPhotoIndex + 1 >= this.photos.length) {
-            return 0;
+        if (this.renderedPhotoIndex >= this.photos.length) {
+            return null;
         }
-        
+
         let maxRowHeight = window.innerHeight / this.MIN_ROW_COUNT;
         let minRowHeight = window.innerHeight / this.MAX_ROW_COUNT;
 

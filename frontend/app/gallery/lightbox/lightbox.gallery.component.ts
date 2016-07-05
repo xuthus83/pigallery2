@@ -107,12 +107,12 @@ export class GalleryLightboxComponent {
     }
 
 
-    private getBodyScrollTop() {
-        return this.dom.getProperty(this.dom.query('body'), 'scrollTop');
+    private getBodyScrollTop():number {
+        return window.scrollY;
     }
 
-    private setBodyScrollTop(value) {
-        return this.dom.setProperty(this.dom.query('body'), 'scrollTop', value);
+    private setBodyScrollTop(value:number) {
+        window.scrollTo(window.scrollX, value);
     }
 
     private getScreenWidth() {
