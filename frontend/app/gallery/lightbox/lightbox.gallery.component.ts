@@ -117,7 +117,7 @@ export class GalleryLightboxComponent {
         return null;
     }
 
-    @HostListener('window:keydown')
+    @HostListener('window:keydown', ['$event'])
     onKeyPress(e) {
         let event = window.event ? window.event : e;
         switch (event.keyCode) {
