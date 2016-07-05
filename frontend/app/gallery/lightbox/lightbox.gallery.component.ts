@@ -1,6 +1,6 @@
 ///<reference path="../../../browser.d.ts"/>
 
-import {Component, QueryList, Output, EventEmitter} from "@angular/core";
+import {Component, QueryList, Output, EventEmitter, HostListener} from "@angular/core";
 import {Photo} from "../../../../common/entities/Photo";
 import {GalleryPhotoComponent} from "../grid/photo/photo.grid.gallery.component.ts";
 import {BrowserDomAdapter} from "@angular/platform-browser/src/browser/browser_adapter";
@@ -23,6 +23,7 @@ export class GalleryLightboxComponent {
     public gridPhotoQL:QueryList<GalleryPhotoComponent>;
 
     private dom:BrowserDomAdapter;
+    private visible = false;
 
 
     constructor() {
@@ -35,13 +36,14 @@ export class GalleryLightboxComponent {
 
         let pcList = this.gridPhotoQL.toArray();
         for (let i = 0; i < pcList.length; i++) {
-            if (pcList[i] === this.activePhoto && i + 1 < pcList.length) {
-                this.showPhoto(pcList[i + 1]);
-                
-                if (i + 3 === pcList.length) {
-                    this.onLastElement.emit({}); //trigger to render more photos if there are
-                }
+            if (pcList[i] === this.activePhoto) {
+                if (i + 1 < pcList.length) {
+                    this.showPhoto(pcList[i + 1]);
 
+                    if (i + 3 === pcList.length) {
+                        this.onLastElement.emit({}); //trigger to render more photos if there are
+                    }
+                }
                 return;
             }
         }
@@ -50,8 +52,10 @@ export class GalleryLightboxComponent {
     public prevImage() {
         let pcList = this.gridPhotoQL.toArray();
         for (let i = 0; i < pcList.length; i++) {
-            if (pcList[i] === this.activePhoto && i > 0) {
-                this.showPhoto(pcList[i - 1]);
+            if (pcList[i] === this.activePhoto) {
+                if (i > 0) {
+                    this.showPhoto(pcList[i - 1]);
+                }
                 return;
             }
         }
@@ -59,30 +63,37 @@ export class GalleryLightboxComponent {
 
 
     private showPhoto(photoComponent:GalleryPhotoComponent) {
-        let pcList = this.gridPhotoQL.toArray();
+        this.activePhoto = null;
+        setImmediate(()=> {
+            let pcList = this.gridPhotoQL.toArray();
 
-        let index = pcList.indexOf(photoComponent);
-        if (index == -1) {
-            throw new Error("Can't find the photo");
-        }
+            let index = pcList.indexOf(photoComponent);
+            if (index == -1) {
+                throw new Error("Can't find the photo");
+            }
 
-        this.navigation.hasPrev = index > 0;
-        this.navigation.hasNext = index + 1 < pcList.length;
-        this.activePhoto = photoComponent;
-        this.photoDimension = this.calcLightBoxPhotoDimension(this.activePhoto.gridPhoto.photo);
+            this.photoDimension = this.calcLightBoxPhotoDimension(photoComponent.gridPhoto.photo);
+            this.navigation.hasPrev = index > 0;
+            this.navigation.hasNext = index + 1 < pcList.length;
+            this.activePhoto = photoComponent;
+        });
     }
 
     public show(photo:Photo) {
+        this.visible = true;
         let selectedPhoto = this.findPhotoComponent(photo);
         if (selectedPhoto === null) {
             throw new Error("Can't find Photo");
         }
+
 
         this.showPhoto(selectedPhoto);
         this.dom.setStyle(this.dom.query('body'), 'overflow', 'hidden');
     }
 
     public hide() {
+
+        this.visible = false;
         let to = this.activePhoto.getDimension();
 
         //iff target image out of screen -> scroll to there
@@ -106,6 +117,18 @@ export class GalleryLightboxComponent {
         return null;
     }
 
+    @HostListener('window:keydown')
+    onKeyPress(e) {
+        let event = window.event ? window.event : e;
+        switch (event.keyCode) {
+            case 37:
+                this.prevImage();
+                break;
+            case 39:
+                this.nextImage();
+                break;
+        }
+    }
 
     private getBodyScrollTop():number {
         return window.scrollY;
