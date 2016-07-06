@@ -1,4 +1,4 @@
-<div [hidden]="!visible">
+<div [hidden]="!visible" #root>
 
     <div class="blackCanvas">
     </div>
@@ -19,7 +19,15 @@
                [download]="activePhoto.gridPhoto.photo.name"><span class="glyphicon glyphicon-download-alt highlight"
                                                                    title="download"></span></a>
             <span class="glyphicon glyphicon-info-sign highlight" title="info"></span>
-            <span class="glyphicon glyphicon-fullscreen highlight" title="toggle fullscreen"></span>
+
+            <span class=" glyphicon glyphicon-resize-small highlight"
+                  *ngIf="fullScreenService.isFullScreenEnabled()"
+                  (click)="fullScreenService.exitFullScreen()" title="toggle fullscreen"></span>
+
+            <span class="glyphicon glyphicon-fullscreen highlight"
+                  *ngIf="!fullScreenService.isFullScreenEnabled()"
+                  (click)="fullScreenService.showFullScreen(root)" title="toggle fullscreen"></span>
+
             <span class="glyphicon glyphicon-remove highlight" (click)="hide()" title="close"></span>
         </div>
 

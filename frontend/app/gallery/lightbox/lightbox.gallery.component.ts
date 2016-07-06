@@ -1,11 +1,12 @@
 ///<reference path="../../../browser.d.ts"/>
 
-import {Component, QueryList, Output, EventEmitter, HostListener} from "@angular/core";
+import {Component, QueryList, Output, EventEmitter, HostListener, ElementRef, ViewChild} from "@angular/core";
 import {Photo} from "../../../../common/entities/Photo";
 import {GalleryPhotoComponent} from "../grid/photo/photo.grid.gallery.component.ts";
 import {BrowserDomAdapter} from "@angular/platform-browser/src/browser/browser_adapter";
 import {Dimension} from "../../model/IRenderable";
 import {GalleryLightboxPhotoComponent} from "./photo/photo.lightbox.gallery.component";
+import {FullScreenService} from "../fullscreen.service";
 
 @Component({
     selector: 'gallery-lightbox',
@@ -25,8 +26,10 @@ export class GalleryLightboxComponent {
     private dom:BrowserDomAdapter;
     private visible = false;
 
+    @ViewChild("root") elementRef:ElementRef;
 
-    constructor() {
+
+    constructor(private fullScreenService:FullScreenService) {
         this.dom = new BrowserDomAdapter();
 
 
@@ -92,7 +95,7 @@ export class GalleryLightboxComponent {
     }
 
     public hide() {
-
+        this.fullScreenService.exitFullScreen();
         this.visible = false;
         let to = this.activePhoto.getDimension();
 
@@ -106,6 +109,7 @@ export class GalleryLightboxComponent {
 
 
     }
+
 
     private findPhotoComponent(photo) {
         let galleryPhotoComponents = this.gridPhotoQL.toArray();

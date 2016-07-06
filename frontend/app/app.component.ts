@@ -13,6 +13,7 @@ import {AdminComponent} from "./admin/admin.component";
 import {NetworkService} from "./model/network/network.service";
 import {ThumbnailLoaderService} from "./gallery/grid/thumnailLoader.service";
 import {GalleryCacheService} from "./gallery/cache.gallery.service";
+import {FullScreenService} from "./gallery/fullscreen.service";
 
 
 @Component({
@@ -27,7 +28,8 @@ import {GalleryCacheService} from "./gallery/cache.gallery.service";
         GalleryCacheService,
         GalleryService,
         AuthenticationService,
-        ThumbnailLoaderService]
+        ThumbnailLoaderService,
+        FullScreenService]
 })
 @RouteConfig([
     {
