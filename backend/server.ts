@@ -27,7 +27,6 @@ export class Server {
         this.debug = _debug("PiGallery2:server");
         this.app = _express();
 
-
         this.app.set('view engine', 'ejs');
 
         if (process.env.DEBUG) {

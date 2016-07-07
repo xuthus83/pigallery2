@@ -7,6 +7,8 @@ export enum UserRoles{
 }
 
 export class User {
-    constructor(public id?:number, public name?:string, public password?:string, public role:UserRoles = UserRoles.User) {
+    public id:number;
+
+    constructor(public name?:string, public password?:string, public role:UserRoles = UserRoles.User) {
     }
 }

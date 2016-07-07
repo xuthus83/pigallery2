@@ -11,7 +11,7 @@ import {AuthenticationService} from "./authentication.service";
 
 class MockUserService {
     public login(credential:LoginCredential) {
-        return Promise.resolve(new Message<User>(null, new User(0, "testUserName")))
+        return Promise.resolve(new Message<User>(null, new User("testUserName")))
     }
 }
 

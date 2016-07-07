@@ -9,6 +9,7 @@ import {ObjectManagerRepository} from "../../model/ObjectManagerRepository";
 export class AuthenticationMWs {
 
     public static authenticate(req:Request, res:Response, next:NextFunction) {
+        
         if (typeof req.session.user === 'undefined') {
             return next(new Error(ErrorCodes.NOT_AUTHENTICATED));
         } 

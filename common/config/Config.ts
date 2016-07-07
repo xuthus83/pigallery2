@@ -22,6 +22,7 @@ interface ClientConfig {
     enableCache:boolean;
     enableOnScrollRendering:boolean;
     enableOnScrollThumbnailPrioritising:boolean;
+    authenticationRequired:boolean;
 }
 export class ConfigClass {
 
@@ -37,7 +38,8 @@ export class ConfigClass {
         concurrentThumbnailGenerations: 1,
         enableCache: false,
         enableOnScrollRendering: true,
-        enableOnScrollThumbnailPrioritising: true
+        enableOnScrollThumbnailPrioritising: true,
+        authenticationRequired: true
     };
 
     public setDatabaseType(type:DatabaseType) {

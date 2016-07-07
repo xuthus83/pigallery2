@@ -1,7 +1,21 @@
 export class Utils {
 
+
     static clone<T>(object:T):T {
         return JSON.parse(JSON.stringify(object));
+    }
+
+    static equalsFilter(object:any, filter:any):boolean {
+
+        let keys = Object.keys(filter);
+        for (let i = 0; i < keys.length; i++) {
+            let key = keys[i];
+            if (object[key] !== filter[key]) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
 

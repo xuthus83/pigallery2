@@ -1,13 +1,14 @@
 ///<reference path="../../../browser.d.ts"/>
 
 import {Injectable} from "@angular/core";
-import {User} from "../../../../common/entities/User";
+import {User, UserRoles} from "../../../../common/entities/User";
 import {Event} from "../../../../common/event/Event";
 import {UserService} from "./user.service.ts";
 import {LoginCredential} from "../../../../common/entities/LoginCredential";
 import {Message} from "../../../../common/entities/Message";
 import {Cookie} from "ng2-cookies/ng2-cookies";
 import {ErrorCodes} from "../../../../common/entities/Error";
+import {Config} from "../../config/Config";
 
 declare module ServerInject {
     export var user;
@@ -52,7 +53,7 @@ export class AuthenticationService {
     public login(credential:LoginCredential) {
         this._userService.login(credential).then((message:Message<User>) => {
             if (message.error) {
-                console.log(ErrorCodes[message.error.code] + "message: " + message.error.message);
+                console.log(ErrorCodes[message.error.code] + ", message: " + message.error.message);
             } else {
                 this.setUser(message.result);
             }
@@ -61,10 +62,16 @@ export class AuthenticationService {
 
 
     public isAuthenticated():boolean {
+        if (Config.Client.authenticationRequired === false) {
+            return true;
+        }
         return (this._user && this._user != null) ? true : false;
     }
 
     public getUser() {
+        if (Config.Client.authenticationRequired === false) {
+            return new User("", "", UserRoles.Admin);
+        }
         return this._user;
     }
 

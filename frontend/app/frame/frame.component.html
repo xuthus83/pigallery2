@@ -15,7 +15,7 @@
                 <li class="active"><a [routerLink]="['Gallery',{directory: '/'}]">Gallery</a></li>
                 <li><a [routerLink]="['Admin']">Admin</a></li>
             </ul>
-            <ul class="nav navbar-nav navbar-right">
+            <ul class="nav navbar-nav navbar-right" *ngIf="authenticationRequired">
                 <li>
                     <p class="navbar-text" *ngIf="user">{{user.name}}</p>
                 </li>
