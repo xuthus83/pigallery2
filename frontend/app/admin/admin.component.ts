@@ -10,6 +10,7 @@ import {Utils} from "../../../common/Utils";
 import {AdminService} from "./admin.service";
 import {Message} from "../../../common/entities/Message";
 import {StringifyRole} from "./../pipes/StringifyRolePipe";
+import {Config} from "../config/Config";
 
 @Component({
     selector: 'admin',
@@ -24,8 +25,11 @@ export class AdminComponent implements OnInit {
     private newUser = new User();
     private userRoles:Array<any> = [];
     private users:Array<User> = [];
+    userManagementEnable:boolean = false;
 
     constructor(private _authService:AuthenticationService, private _router:Router, private _adminService:AdminService) {
+
+        this.userManagementEnable = Config.Client.authenticationRequired;
     }
 
     ngOnInit() {
@@ -33,8 +37,10 @@ export class AdminComponent implements OnInit {
             this._router.navigate(['Login']);
             return;
         }
-        this.userRoles = Utils.enumToArray(UserRoles).filter(r => r.key <= this._authService.getUser().role);
-        this.getUsersList();
+        if (Config.Client.authenticationRequired === true) {
+            this.userRoles = Utils.enumToArray(UserRoles).filter(r => r.key <= this._authService.getUser().role);
+            this.getUsersList();
+        }
     }
 
     private getUsersList() {

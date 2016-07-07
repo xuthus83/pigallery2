@@ -3,13 +3,17 @@
 
 import {NextFunction, Request, Response} from "express";
 import {Error, ErrorCodes} from "../../../common/entities/Error";
-import {UserRoles} from "../../../common/entities/User";
+import {UserRoles, User} from "../../../common/entities/User";
 import {ObjectManagerRepository} from "../../model/ObjectManagerRepository";
+import {Config} from "../../config/Config";
 
 export class AuthenticationMWs {
 
     public static authenticate(req:Request, res:Response, next:NextFunction) {
-        
+        if (Config.Client.authenticationRequired === false) {
+            req.session.user = new User("", "", UserRoles.Admin);
+            return next();
+        }
         if (typeof req.session.user === 'undefined') {
             return next(new Error(ErrorCodes.NOT_AUTHENTICATED));
         } 

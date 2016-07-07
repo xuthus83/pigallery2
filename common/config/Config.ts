@@ -39,7 +39,7 @@ export class ConfigClass {
         enableCache: false,
         enableOnScrollRendering: true,
         enableOnScrollThumbnailPrioritising: true,
-        authenticationRequired: true
+        authenticationRequired: false
     };
 
     public setDatabaseType(type:DatabaseType) {

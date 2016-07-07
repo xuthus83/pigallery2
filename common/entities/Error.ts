@@ -9,7 +9,9 @@ export enum ErrorCodes{
 
 
     GENERAL_ERROR,
-    SERVER_ERROR
+    SERVER_ERROR,
+
+    USER_MANAGEMENT_DISABLED
 
 }
 
