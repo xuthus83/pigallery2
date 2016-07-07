@@ -1,3 +1,6 @@
+///<reference path="flat-file-db.ts"/>
+
+
 import {User, UserRoles} from "../../../common/entities/User";
 import {IUserManager} from "../IUserManager";
 import {ProjectPath} from "../../ProjectPath";

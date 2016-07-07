@@ -16,3 +16,4 @@ test/backend/**/*.js
 test/backend/**/*.js.map
 demo/TEMP/
 config.json
+users.db
