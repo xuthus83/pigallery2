@@ -23,7 +23,6 @@ export class UserManager implements IUserManager {
     }
 
     constructor() {
-        console.log("ctor");
         this.db = flatfile.sync(path.join(ProjectPath.Root, 'users.db'));
 
         if (!this.db.has("idCounter")) {
@@ -33,6 +32,7 @@ export class UserManager implements IUserManager {
 
         if (!this.db.has("users")) {
             this.db.put("users", []);
+            //TODO: remove defaults
             this.createUser(new User("developer", "developer", UserRoles.Developer));
             this.createUser(new User("admin", "admin", UserRoles.Admin));
             this.createUser(new User("user", "user", UserRoles.User));

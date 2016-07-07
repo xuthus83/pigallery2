@@ -25,6 +25,7 @@ export class ConfigLoader {
         let argv = optimist.argv;
         delete(argv._);
         delete(argv.$0);
+        console.log(argv);
         this.processHierarchyVar(configObject, argv);
     };
 
@@ -35,13 +36,23 @@ export class ConfigLoader {
             let keyArray = key.split("-");
             let value = vars[key];
 
+            //recursive settings
             let setObject = (object, keyArray, value) => {
                 let key = keyArray.shift();
                 object[key] = {};
+
                 if (keyArray.length == 0) {
+                    //convert to boolean 
+                    if (value.toLowerCase && value.toLowerCase() === "false") {
+                        value = false;
+                    }
+                    if (value.toLowerCase && value.toLowerCase() === "true") {
+                        value = true;
+                    }
                     object[key] = value;
                     return;
                 }
+
                 return setObject(object[key], keyArray, value);
             };
             setObject(config, keyArray, value);
