@@ -49,6 +49,7 @@ export class GalleryGridComponent implements OnChanges,AfterViewInit {
         if (this.isAfterViewInit === false) {
             return;
         }
+        this.updateContainerWidth();
         this.sortPhotos();
         this.mergeNewPhotos();
         setImmediate(() => {

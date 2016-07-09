@@ -3,8 +3,8 @@ import {BaseRequestOptions, Http} from "@angular/http";
 import {MockBackend} from "@angular/http/testing";
 import {provide} from "@angular/core";
 import "rxjs/Rx";
-import {NetworkService} from "../model/network/network.service";
-import {AdminService} from "./admin.service";
+import {NetworkService} from "../../model/network/network.service";
+import {UserManagerSettingsService} from "./usermanager.settings.service";
 
 
 describe('AdminService', () => {
@@ -19,7 +19,7 @@ describe('AdminService', () => {
             }, deps: [MockBackend, BaseRequestOptions]
         }),
         NetworkService,
-        AdminService
+        UserManagerSettingsService
     ]);
 
 

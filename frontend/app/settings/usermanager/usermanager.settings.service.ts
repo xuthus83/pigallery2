@@ -1,12 +1,12 @@
-///<reference path="../../browser.d.ts"/>
+///<reference path="../../../browser.d.ts"/>
 
 import {Injectable} from "@angular/core";
-import {NetworkService} from "../model/network/network.service.ts";
-import {Message} from "../../../common/entities/Message";
-import {User} from "../../../common/entities/User";
+import {User} from "../../../../common/entities/User";
+import {NetworkService} from "../../model/network/network.service";
+import {Message} from "../../../../common/entities/Message";
 
 @Injectable()
-export class AdminService {
+export class UserManagerSettingsService {
 
 
     constructor(private _networkService:NetworkService) {

@@ -26,7 +26,6 @@ export class AuthenticationService {
         //picking up session..
         if (this.isAuthenticated() == false && Cookie.get('pigallery2-session') != null) {
             if (typeof ServerInject !== "undefined" && typeof ServerInject.user !== "undefined") {
-                console.log("user found");
                 this.setUser(ServerInject.user);
             }
             this.getSessionUser();
@@ -51,12 +50,13 @@ export class AuthenticationService {
     }
 
     public login(credential:LoginCredential) {
-        this._userService.login(credential).then((message:Message<User>) => {
+        return this._userService.login(credential).then((message:Message<User>) => {
             if (message.error) {
                 console.log(ErrorCodes[message.error.code] + ", message: " + message.error.message);
             } else {
                 this.setUser(message.result);
             }
+            return message;
         });
     }
 

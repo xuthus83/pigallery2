@@ -57,21 +57,16 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, AfterViewInit
     }
 
     ngOnInit() {
+        this.loading.show = true;
         //set up befoar adding task to thumbnail generator
         if (this.gridPhoto.isThumbnailAvailable()) {
             this.image.src = this.gridPhoto.getThumbnailPath();
             this.image.show = true;
-            //  this.loading.show = false;
-
-        } else {
-            if (this.gridPhoto.isReplacementThumbnailAvailable()) {
-                this.image.src = this.gridPhoto.getReplacementThumbnailPath();
-                this.image.show = true;
-                this.loading.show = false;
-            } else {
-                this.loading.show = true;
-            }
+        } else if (this.gridPhoto.isReplacementThumbnailAvailable()) {
+            this.image.src = this.gridPhoto.getReplacementThumbnailPath();
+            this.image.show = true;
         }
+
     }
 
     ngAfterViewInit() {

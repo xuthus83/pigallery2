@@ -1,0 +1,73 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">User management</h3>
+    </div>
+    <div class="panel-body">
+
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Role</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tr *ngFor="let user of users">
+                <td>{{user.name}}</td>
+                <td *ngIf="canModifyUser(user)">
+                    <select class="form-control" [(ngModel)]="user.role" (ngModelChange)="updateRole(user)" required>
+                        <option *ngFor="let repository of userRoles" [value]="repository.key">
+                            {{repository.value}}
+                        </option>
+                    </select>
+                </td>
+                <td *ngIf="!canModifyUser(user)">
+                    {{user.role | stringifyRole}}
+                </td>
+                <td>
+                    <button *ngIf="canModifyUser(user)" (click)="deleteUser(user)"
+                            class="btn btn-danger pull-right">
+                        <span class="glyphicon glyphicon-trash" aria-hidden="true" aria-label="Delete"></span>
+                    </button>
+                </td>
+            </tr>
+        </table>
+
+        <button class="btn btn-default  pull-right" data-toggle="modal" data-target="#myModal"
+                (click)="initNewUser()">+ Add
+            user
+        </button>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+            </div>
+            <form (ngSubmit)="onSubmit()" #NewUserForm="ngForm">
+                <div class="modal-body">
+                    <input type="text" class="form-control" placeholder="Username" autofocus
+                           [(ngModel)]="newUser.name" ngControl="name" #name="ngForm" required>
+                    <input type="password" class="form-control" placeholder="Password"
+                           [(ngModel)]="newUser.password" ngControl="password" #name="ngForm" required>
+                    <select class="form-control" [(ngModel)]="newUser.role" required>
+                        <option *ngFor="let repository of userRoles" [value]="repository.key">{{repository.value}}
+                        </option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal"
+                            (click)="addNewUser()"
+                            [disabled]="!NewUserForm.form.valid">Add User
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

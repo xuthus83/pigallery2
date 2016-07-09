@@ -3,6 +3,7 @@ import {Error, ErrorCodes} from "../../../common/entities/Error";
 import {ObjectManagerRepository} from "../../model/ObjectManagerRepository";
 import {User} from "../../../common/entities/User";
 import {Config} from "../../config/Config";
+import {Utils} from "../../../common/Utils";
 
 export class UserMWs {
 
@@ -91,6 +92,7 @@ export class UserMWs {
             if ((err) || (!result)) {
                 return next(new Error(ErrorCodes.GENERAL_ERROR));
             }
+            result = Utils.clone(result);
             for (let i = 0; i < result.length; i++) {
                 result[i].password = "";
             }

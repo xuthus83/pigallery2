@@ -5,6 +5,9 @@ import {LoginCredential} from "../../../common/entities/LoginCredential";
 import {AuthenticationService} from "../model/network/authentication.service.ts";
 import {Router} from "@angular/router-deprecated";
 import {FORM_DIRECTIVES} from "@angular/common";
+import {Message} from "../../../common/entities/Message";
+import {User} from "../../../common/entities/User";
+import {ErrorCodes} from "../../../common/entities/Error";
 
 @Component({
     selector: 'login',
@@ -14,6 +17,7 @@ import {FORM_DIRECTIVES} from "@angular/common";
 })
 export class LoginComponent implements OnInit {
     loginCredential:LoginCredential;
+    loginError = null;
 
     constructor(private _authService:AuthenticationService, private _router:Router) {
         this.loginCredential = new LoginCredential();
@@ -26,7 +30,14 @@ export class LoginComponent implements OnInit {
     }
 
     onLogin() {
-        this._authService.login(this.loginCredential);
+        this.loginError = null;
+        this._authService.login(this.loginCredential).then((message:Message<User>) => {
+            if (message.error) {
+                if (message.error.code === ErrorCodes.CREDENTIAL_NOT_FOUND) {
+                    this.loginError = "Wrong username or password";
+                }
+            }
+        });
     }
 }
 

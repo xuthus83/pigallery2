@@ -25,7 +25,6 @@ export class ConfigLoader {
         let argv = optimist.argv;
         delete(argv._);
         delete(argv.$0);
-        console.log(argv);
         this.processHierarchyVar(configObject, argv);
     };
 
