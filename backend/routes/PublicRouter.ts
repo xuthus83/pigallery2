@@ -1,5 +1,3 @@
-///<reference path="../../typings/index.d.ts"/>
-
 import * as _express from "express";
 import {NextFunction, Request, Response} from "express";
 import * as _path from "path";
@@ -24,8 +22,9 @@ export class PublicRouter {
 
         this.app.use(_express.static(_path.resolve(__dirname, './../../frontend')));
         this.app.use('/node_modules', _express.static(_path.resolve(__dirname, './../../node_modules')));
+        this.app.use('/common', _express.static(_path.resolve(__dirname, './../../common')));
 
-        var renderIndex = (req:Request, res:Response) => {
+        const renderIndex = (req: Request, res: Response) => {
             res.render(_path.resolve(__dirname, './../../frontend/index.ejs'), res.tpl);
         };
 

@@ -5,10 +5,10 @@
         <div *ngIf="loginError">
             {{loginError}}
         </div>
-        <input type="text" class="form-control" placeholder="Username"  autofocus
-               [(ngModel)]="loginCredential.username"  ngControl="name"  #name="ngForm" required>
-        <input type="password"  class="form-control" placeholder="Password"
-               [(ngModel)]="loginCredential.password"  ngControl="password"  #name="ngForm" required>
+        <input type="text" class="form-control" placeholder="Username" autofocus
+               [(ngModel)]="loginCredential.username" name="name" required>
+        <input type="password" class="form-control" placeholder="Password"
+               [(ngModel)]="loginCredential.password" name="password" required>
         <br/>
         <button class="btn btn-lg btn-primary btn-block"  [disabled]="!LoginForm.form.valid" (click)="onLogin()">Sign in</button>
     </form>

@@ -1,5 +1,3 @@
-///<reference path="../typings/index.d.ts"/>
-
 import * as _express from "express";
 import * as _session from "express-session";
 import * as _bodyParser from "body-parser";
@@ -11,16 +9,16 @@ import {GalleryRouter} from "./routes/GalleryRouter";
 import {AdminRouter} from "./routes/AdminRouter";
 import {ErrorRouter} from "./routes/ErrorRouter";
 import {SharingRouter} from "./routes/SharingRouter";
-import {DatabaseType} from "./../common/config/Config";
+import {DatabaseType} from "../common/config/Config";
 import {ObjectManagerRepository} from "./model/ObjectManagerRepository";
 import {Config} from "./config/Config";
 
 
 export class Server {
 
-    private debug:any;
-    private app:any;
-    private server:any;
+    private debug: any;
+    private app: any;
+    private server: any;
 
     constructor() {
 
@@ -30,7 +28,7 @@ export class Server {
         this.app.set('view engine', 'ejs');
 
         if (process.env.DEBUG) {
-            var _morgan = require('morgan');
+            let _morgan = require('morgan');
             this.app.use(_morgan('dev'));
         }
 
@@ -90,7 +88,7 @@ export class Server {
     /**
      * Event listener for HTTP server "error" event.
      */
-    private onError = (error) => {
+    private onError = (error: any) => {
         if (error.syscall !== 'listen') {
             throw error;
         }

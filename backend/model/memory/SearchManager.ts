@@ -5,15 +5,15 @@ import {SearchResult} from "../../../common/entities/SearchResult";
 export class SearchManager implements ISearchManager {
 
 
-    autocomplete(text, cb:(error:any, result:Array<AutoCompleteItem>) => void) {
+    autocomplete(text: string, cb: (error: any, result: Array<AutoCompleteItem>) => void) {
         throw new Error("not implemented");
     }
 
-    search(text, searchType:SearchTypes, cb:(error:any, result:SearchResult) => void) {
+    search(text: string, searchType: SearchTypes, cb: (error: any, result: SearchResult) => void) {
         throw new Error("not implemented");
     }
 
-    instantSearch(text, cb:(error:any, result:SearchResult) => void) {
+    instantSearch(text: string, cb: (error: any, result: SearchResult) => void) {
         throw new Error("not implemented");
     }
 

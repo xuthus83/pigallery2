@@ -52,10 +52,10 @@
             <form (ngSubmit)="onSubmit()" #NewUserForm="ngForm">
                 <div class="modal-body">
                     <input type="text" class="form-control" placeholder="Username" autofocus
-                           [(ngModel)]="newUser.name" ngControl="name" #name="ngForm" required>
+                           [(ngModel)]="newUser.name" name="name" required>
                     <input type="password" class="form-control" placeholder="Password"
-                           [(ngModel)]="newUser.password" ngControl="password" #name="ngForm" required>
-                    <select class="form-control" [(ngModel)]="newUser.role" required>
+                           [(ngModel)]="newUser.password" name="password" required>
+                    <select class="form-control" [(ngModel)]="newUser.role" name="role" required>
                         <option *ngFor="let repository of userRoles" [value]="repository.key">{{repository.value}}
                         </option>
                     </select>

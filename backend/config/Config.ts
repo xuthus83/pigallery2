@@ -1,10 +1,8 @@
-///<reference path="../../typings/index.d.ts"/>
-
-import {ConfigLoader} from "./../../backend/config/ConfigLoader";
+import {ConfigLoader} from "./ConfigLoader";
 import * as path from "path";
 import {ConfigClass, DatabaseType} from "../../common/config/Config";
 
-export var Config = new ConfigClass();
+export let Config = new ConfigClass();
 
 Config.Server = {
     port: 80,

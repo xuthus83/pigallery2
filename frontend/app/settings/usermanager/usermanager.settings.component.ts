@@ -1,31 +1,24 @@
-///<reference path="../../../browser.d.ts"/>
-
 import {Component, OnInit} from "@angular/core";
-import {AuthenticationService} from "../../model/network/authentication.service.ts";
-import {Router} from "@angular/router-deprecated";
-import {FrameComponent} from "../../frame/frame.component";
+import {AuthenticationService} from "../../model/network/authentication.service";
+import {Router} from "@angular/router";
 import {User, UserRoles} from "../../../../common/entities/User";
-import {FORM_DIRECTIVES} from "@angular/common";
 import {Utils} from "../../../../common/Utils";
 import {Message} from "../../../../common/entities/Message";
-import {StringifyRole} from "./../../pipes/StringifyRolePipe";
 import {UserManagerSettingsService} from "./usermanager.settings.service";
 
 @Component({
     selector: 'settings-usermanager',
     templateUrl: 'app/settings/usermanager/usermanager.settings.component.html',
     styleUrls: ['app/settings/usermanager/usermanager.settings.component.css'],
-    directives: [FrameComponent, FORM_DIRECTIVES],
     providers: [UserManagerSettingsService],
-    pipes: [StringifyRole]
 })
 export class UserMangerSettingsComponent implements OnInit {
 
     private newUser = new User();
-    private userRoles:Array<any> = [];
-    private users:Array<User> = [];
+    private userRoles: Array<any> = [];
+    private users: Array<User> = [];
 
-    constructor(private _authService:AuthenticationService, private _router:Router, private _userSettings:UserManagerSettingsService) {
+    constructor(private _authService: AuthenticationService, private _router: Router, private _userSettings: UserManagerSettingsService) {
     }
 
     ngOnInit() {
@@ -38,13 +31,13 @@ export class UserMangerSettingsComponent implements OnInit {
     }
 
     private getUsersList() {
-        this._userSettings.getUsers().then((result:Message<Array<User>>) => {
+        this._userSettings.getUsers().then((result: Message<Array<User>>) => {
             this.users = result.result;
         });
     }
 
 
-    canModifyUser(user:User):boolean {
+    canModifyUser(user: User): boolean {
         let currentUser = this._authService.getUser();
         if (!currentUser) {
             return false;
@@ -64,13 +57,13 @@ export class UserMangerSettingsComponent implements OnInit {
         });
     }
 
-    updateRole(user:User) {
+    updateRole(user: User) {
         this._userSettings.updateRole(user).then(() => {
             this.getUsersList();
         });
     }
 
-    deleteUser(user:User) {
+    deleteUser(user: User) {
         this._userSettings.deleteUser(user).then(() => {
             this.getUsersList();
         });

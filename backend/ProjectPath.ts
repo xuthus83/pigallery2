@@ -2,12 +2,12 @@ import * as path from "path";
 import {Config} from "./config/Config";
 
 class ProjectPathClass {
-    public Root:string;
-    public ImageFolder:string;
-    public ThumbnailFolder:string;
+    public Root: string;
+    public ImageFolder: string;
+    public ThumbnailFolder: string;
 
-    isAbsolutePath(pathStr) {
-        return path.resolve(pathStr) === path.normalize(pathStr).replace(RegExp(pathStr.sep + '$'), '');
+    isAbsolutePath(pathStr: string) {
+        return path.resolve(pathStr) === path.normalize(pathStr);
     }
 
     constructor() {
@@ -17,4 +17,4 @@ class ProjectPathClass {
     }
 }
 
-export var ProjectPath = new ProjectPathClass();
+export let ProjectPath = new ProjectPathClass();

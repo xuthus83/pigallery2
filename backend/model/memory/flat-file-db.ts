@@ -1,13 +1,13 @@
 declare module "flat-file-db" {
-    export function sync(path:string):DB;
+    export function sync(path: string): DB;
 }
 
 declare interface DB {
-    sync();
-    put();
-    get();
-    del();
-    has();
-    keys();
-    close();
+    sync(): any;
+    put(): any;
+    get(): any;
+    del(): any;
+    has(): any;
+    keys(): any;
+    close(): any;
 }

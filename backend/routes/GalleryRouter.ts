@@ -1,12 +1,10 @@
-///<reference path="../../typings/index.d.ts"/>
-
 import {AuthenticationMWs} from "../middlewares/user/AuthenticationMWs";
 import {GalleryMWs} from "../middlewares/GalleryMWs";
 import {RenderingMWs} from "../middlewares/RenderingMWs";
 import {ThumbnailGeneratorMWs} from "../middlewares/ThumbnailGeneratorMWs";
 
 export class GalleryRouter {
-    constructor(private app) {
+    constructor(private app: any) {
 
         this.addGetImageThumbnail();
         this.addGetImage();

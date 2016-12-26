@@ -1,10 +1,8 @@
-///<reference path="../../typings/index.d.ts"/>
-
 import {AuthenticationMWs} from "../middlewares/user/AuthenticationMWs";
 import {UserRoles} from "../../common/entities/User";
 
 export class AdminRouter {
-    constructor(private app) {
+    constructor(private app: any) {
 
         this.addResetDB();
         this.addIndexGallery();

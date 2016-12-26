@@ -1,5 +1,3 @@
-///<reference path="../../typings/index.d.ts"/>
-
 import {IUserManager} from "./IUserManager";
 import {IGalleryManager} from "./IGalleryManager";
 import {ISearchManager} from "./ISearchManager";

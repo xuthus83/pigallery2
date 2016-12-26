@@ -1,14 +1,12 @@
-///<reference path="../../../browser.d.ts"/>
-
 import {Component, Input} from "@angular/core";
 import {Directory} from "../../../../common/entities/Directory";
-import {RouterLink} from "@angular/router-deprecated";
+import {RouterLink} from "@angular/router";
 import {Utils} from "../../../../common/Utils";
 
 @Component({
     selector: 'gallery-directory',
     templateUrl: 'app/gallery/directory/directory.gallery.component.html',
-    directives: [RouterLink],
+    providers: [RouterLink],
 })
 export class GalleryDirectoryComponent {
     @Input() directory:Directory;

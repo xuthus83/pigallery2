@@ -3,16 +3,16 @@ import * as optimist from "optimist";
 
 export class ConfigLoader {
 
-    static init(configObject:any, configFilePath?:string, envAlias:Array<Array<string>> = []) {
+    static init(configObject: any, configFilePath?: string, envAlias: Array<Array<string>> = []) {
         this.processConfigFile(configFilePath, configObject);
         this.processArguments(configObject);
         this.processEnvVariables(configObject, envAlias);
 
     }
 
-    private static processEnvVariables(configObject:any, envAlias:Array<Array<string>>) {
+    private static processEnvVariables(configObject: any, envAlias: Array<Array<string>>) {
         let varAliases = {};
-        envAlias.forEach((alias)=> {
+        envAlias.forEach((alias) => {
             if (process.env[alias[0]]) {
                 varAliases[alias[1]] = process.env[alias[0]];
             }
@@ -21,24 +21,25 @@ export class ConfigLoader {
         this.loadObject(configObject, process.env);
     };
 
-    private static processArguments(configObject:any) {
+    private static processArguments(configObject: any) {
         let argv = optimist.argv;
         delete(argv._);
         delete(argv.$0);
         this.processHierarchyVar(configObject, argv);
     };
 
-    private static processHierarchyVar(configObject:any, vars:any) {
+
+    private static processHierarchyVar(configObject: any, vars: any) {
         let config = {};
 
-        Object.keys(vars).forEach((key)=> {
+        Object.keys(vars).forEach((key) => {
             let keyArray = key.split("-");
             let value = vars[key];
 
             //recursive settings
-            let setObject = (object, keyArray, value) => {
+            let setObject = (object: any, keyArray: Array<string>, value: any): void => {
                 let key = keyArray.shift();
-                object[key] = {};
+                object[key] = object[key] || {};
 
                 if (keyArray.length == 0) {
                     //convert to boolean 
@@ -48,6 +49,7 @@ export class ConfigLoader {
                     if (value.toLowerCase && value.toLowerCase() === "true") {
                         value = true;
                     }
+
                     object[key] = value;
                     return;
                 }
@@ -57,10 +59,11 @@ export class ConfigLoader {
             setObject(config, keyArray, value);
 
         });
+
         this.loadObject(configObject, config);
     }
 
-    private static processConfigFile(configFilePath:string, configObject:any) {
+    private static processConfigFile(configFilePath: string, configObject: any) {
         if (typeof configFilePath !== 'undefined') {
             if (ConfigLoader.loadConfigFile(configFilePath, configObject) === false) {
                 ConfigLoader.saveConfigFile(configFilePath, configObject);
@@ -68,7 +71,7 @@ export class ConfigLoader {
         }
     };
 
-    private static loadConfigFile(configFilePath, configObject):boolean {
+    private static loadConfigFile(configFilePath: string, configObject: any): boolean {
         if (fs.existsSync(configFilePath) === false) {
             return false;
         }
@@ -84,7 +87,7 @@ export class ConfigLoader {
     }
 
 
-    private static saveConfigFile(configFilePath, configObject) {
+    private static saveConfigFile(configFilePath: string, configObject: any) {
         try {
             fs.writeFileSync(configFilePath, JSON.stringify(configObject, null, 4));
         } catch (err) {
@@ -92,8 +95,8 @@ export class ConfigLoader {
         }
     }
 
-    private static loadObject(targetObject, sourceObject) {
-        Object.keys(sourceObject).forEach((key)=> {
+    private static loadObject(targetObject: any, sourceObject: any) {
+        Object.keys(sourceObject).forEach((key) => {
             if (typeof targetObject[key] === "undefined") {
                 return;
             }

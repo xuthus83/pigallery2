@@ -17,10 +17,10 @@
             <li class="active">
                 Searching for:
                 <span [ngSwitch]="_galleryService.content.searchResult.searchType">
-                        <span *ngSwitchWhen="0" class="glyphicon glyphicon-picture"></span>
-                        <span *ngSwitchWhen="1" class="glyphicon glyphicon-folder-open"></span>
-                        <span *ngSwitchWhen="2" class="glyphicon glyphicon-tag"></span>
-                        <span *ngSwitchWhen="3" class="glyphicon glyphicon-map-marker"></span>
+                        <span *ngSwitchCase="0" class="glyphicon glyphicon-picture"></span>
+                        <span *ngSwitchCase="1" class="glyphicon glyphicon-folder-open"></span>
+                        <span *ngSwitchCase="2" class="glyphicon glyphicon-tag"></span>
+                        <span *ngSwitchCase="3" class="glyphicon glyphicon-map-marker"></span>
                     </span>
                 <strong>{{_galleryService.content.searchResult.searchText}}</strong>
             </li>

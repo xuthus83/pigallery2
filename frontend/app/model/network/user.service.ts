@@ -1,8 +1,6 @@
-///<reference path="../../../browser.d.ts"/>
-
 import {Injectable} from "@angular/core";
 import {LoginCredential} from "../../../../common/entities/LoginCredential";
-import {NetworkService} from "./network.service.ts";
+import {NetworkService} from "./network.service";
 import {User} from "../../../../common/entities/User";
 import {Message} from "../../../../common/entities/Message";
 
@@ -10,19 +8,19 @@ import {Message} from "../../../../common/entities/Message";
 export class UserService {
 
 
-    constructor(private _networkService:NetworkService) {
+    constructor(private _networkService: NetworkService) {
     }
 
-    public logout():Promise<Message<string>> {
+    public logout(): Promise<Message<string>> {
         console.log("call logout");
         return this._networkService.postJson("/user/logout");
     }
 
-    public login(credential:LoginCredential):Promise<Message<User>> {
+    public login(credential: LoginCredential): Promise<Message<User>> {
         return this._networkService.postJson("/user/login", {"loginCredential": credential});
     }
 
-    public getSessionUser():Promise<Message<User>> {
+    public getSessionUser(): Promise<Message<User>> {
         return this._networkService.getJson("/user/login");
     }
 

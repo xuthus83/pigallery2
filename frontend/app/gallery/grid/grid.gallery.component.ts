@@ -1,5 +1,3 @@
-///<reference path="../../../browser.d.ts"/>
-
 import {
     Component,
     Input,
@@ -22,7 +20,6 @@ import {Config} from "../../config/Config";
     selector: 'gallery-grid',
     templateUrl: 'app/gallery/grid/grid.gallery.component.html',
     styleUrls: ['app/gallery/grid/grid.gallery.component.css'],
-    directives: [GalleryPhotoComponent]
 })
 export class GalleryGridComponent implements OnChanges,AfterViewInit {
 

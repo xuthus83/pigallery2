@@ -1,5 +1,3 @@
-///<reference path="../../../browser.d.ts"/>
-
 import {Injectable} from "@angular/core";
 import {Http, Headers, RequestOptions} from "@angular/http";
 import {Message} from "../../../../common/entities/Message";
@@ -19,7 +17,7 @@ export class NetworkService {
         let options = new RequestOptions({headers: headers});
 
         if (method == "get" || method == "delete") {
-            return this._http[method](this._baseUrl + url, options)
+            return <any>this._http[method](this._baseUrl + url, options)
                 .toPromise()
                 .then(res => <Message<any>> res.json())
                 .catch(NetworkService.handleError);
@@ -27,7 +25,7 @@ export class NetworkService {
 
         return this._http[method](this._baseUrl + url, body, options)
             .toPromise()
-            .then(res => <Message<any>> res.json())
+            .then((res: any) => <Message<any>> res.json())
             .catch(NetworkService.handleError);
     }
 

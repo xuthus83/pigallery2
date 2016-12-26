@@ -1,10 +1,8 @@
-///<reference path="../../../../browser.d.ts"/>
-
 import {Component, Input, ElementRef, ViewChild, OnInit, AfterViewInit, OnDestroy} from "@angular/core";
 import {IRenderable, Dimension} from "../../../model/IRenderable";
 import {GridPhoto} from "../GridPhoto";
 import {SearchTypes} from "../../../../../common/entities/AutoCompleteItem";
-import {RouterLink} from "@angular/router-deprecated";
+import {RouterLink} from "@angular/router";
 import {Config} from "../../../config/Config";
 import {
     ThumbnailLoaderService,
@@ -12,19 +10,18 @@ import {
     ThumbnailLoadingListener,
     ThumbnailLoadingPriority
 } from "../thumnailLoader.service";
-import {GalleryPhotoLoadingComponent} from "./loading/loading.photo.grid.gallery.component";
 
 @Component({
     selector: 'gallery-grid-photo',
     templateUrl: 'app/gallery/grid/photo/photo.grid.gallery.component.html',
     styleUrls: ['app/gallery/grid/photo/photo.grid.gallery.component.css'],
-    directives: [RouterLink, GalleryPhotoLoadingComponent],
+    providers: [RouterLink],
 })
 export class GalleryPhotoComponent implements IRenderable, OnInit, AfterViewInit, OnDestroy {
-    @Input() gridPhoto:GridPhoto;
-    @ViewChild("img") imageRef:ElementRef;
-    @ViewChild("info") infoDiv:ElementRef;
-    @ViewChild("photoContainer") container:ElementRef;
+    @Input() gridPhoto: GridPhoto;
+    @ViewChild("img") imageRef: ElementRef;
+    @ViewChild("info") infoDiv: ElementRef;
+    @ViewChild("photoContainer") container: ElementRef;
 
 
     image = {
@@ -37,19 +34,19 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, AfterViewInit
         show: true
     };
 
-    thumbnailTask:ThumbnailTaskEntity = null;
+    thumbnailTask: ThumbnailTaskEntity = null;
 
     infoStyle = {
         height: 0,
         background: "rgba(0,0,0,0.0)"
     };
 
-    SearchTypes:any = [];
-    searchEnabled:boolean = true;
+    SearchTypes: any = [];
+    searchEnabled: boolean = true;
 
-    wasInView:boolean = null;
+    wasInView: boolean = null;
 
-    constructor(private thumbnailService:ThumbnailLoaderService) {
+    constructor(private thumbnailService: ThumbnailLoaderService) {
         this.SearchTypes = SearchTypes;
         this.searchEnabled = Config.Client.Search.searchEnabled;
 
@@ -74,17 +71,17 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, AfterViewInit
         if (!this.gridPhoto.isThumbnailAvailable()) {
             setImmediate(() => {
 
-                let listener:ThumbnailLoadingListener = {
-                    onStartedLoading: ()=> { //onLoadStarted
+                let listener: ThumbnailLoadingListener = {
+                    onStartedLoading: () => { //onLoadStarted
                         this.loading.animate = true;
                     },
-                    onLoad: ()=> {//onLoaded
+                    onLoad: () => {//onLoaded
                         this.image.src = this.gridPhoto.getThumbnailPath();
                         this.image.show = true;
                         this.loading.show = false;
                         this.thumbnailTask = null;
                     },
-                    onError: (error)=> {//onError
+                    onError: (error) => {//onError
                         this.thumbnailTask = null;
                         //TODO: handle error
                         //TODO: not an error if its from cache
@@ -111,7 +108,7 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, AfterViewInit
     }
 
 
-    isInView():boolean {
+    isInView(): boolean {
         return document.body.scrollTop < this.container.nativeElement.offsetTop + this.container.nativeElement.clientHeight
             && document.body.scrollTop + window.innerHeight > this.container.nativeElement.offsetTop;
     }
@@ -139,7 +136,7 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, AfterViewInit
         }
     }
 
-    getPositionText():string {
+    getPositionText(): string {
         if (!this.gridPhoto) {
             return ""
         }
@@ -164,7 +161,7 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, AfterViewInit
         this.loading.show = false;
     }
 
-    public getDimension():Dimension {
+    public getDimension(): Dimension {
         return new Dimension(this.imageRef.nativeElement.offsetTop,
             this.imageRef.nativeElement.offsetLeft,
             this.imageRef.nativeElement.width,

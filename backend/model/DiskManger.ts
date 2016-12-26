@@ -1,6 +1,4 @@
 ///<reference path="exif.d.ts"/>
-
-
 import * as fs from "fs";
 import * as path from "path";
 import * as mime from "mime";
@@ -18,7 +16,7 @@ import {
 import {ProjectPath} from "../ProjectPath";
 
 export class DiskManager {
-    public static scanDirectory(relativeDirectoryName, cb:(error:any, result:Directory) => void) {
+    public static scanDirectory(relativeDirectoryName: string, cb: (error: any, result: Directory) => void) {
         console.log("DiskManager: scanDirectory");
         let directoryName = path.basename(relativeDirectoryName);
         let directoryParent = path.join(path.dirname(relativeDirectoryName), "/");
@@ -26,7 +24,7 @@ export class DiskManager {
 
         let directory = new Directory(1, directoryName, directoryParent, new Date(), [], []);
 
-        let promises:Array< Promise<any> > = [];
+        let promises: Array< Promise<any> > = [];
         fs.readdir(absoluteDirectoryName, function (err, list) {
 
             if (err) {
@@ -44,7 +42,7 @@ export class DiskManager {
                 if (DiskManager.isImage(fullFilePath)) {
 
 
-                    let promise = DiskManager.loadPhotoMetadata(fullFilePath).then((photoMetadata)=> {
+                    let promise = DiskManager.loadPhotoMetadata(fullFilePath).then((photoMetadata) => {
                         directory.photos.push(new Photo(1, file, directory, photoMetadata));
                     });
 
@@ -52,14 +50,14 @@ export class DiskManager {
                 }
             }
 
-            Promise.all(promises).then(()=> {
+            Promise.all(promises).then(() => {
                 return cb(err, directory);
             });
 
         });
     }
 
-    private static isImage(fullPath) {
+    private static isImage(fullPath: string) {
         let imageMimeTypes = [
             'image/bmp',
             'image/gif',
@@ -72,7 +70,7 @@ export class DiskManager {
             'image/x-windows-bmp'
         ];
 
-        var extension = mime.lookup(fullPath);
+        let extension = mime.lookup(fullPath);
 
         if (imageMimeTypes.indexOf(extension) !== -1) {
             return true;
@@ -113,8 +111,8 @@ export class DiskManager {
      }
 
      };*/
-    private static loadPhotoMetadata(fullPath):Promise<PhotoMetadata> {
-        return new Promise<PhotoMetadata>((resolve:(metadata:PhotoMetadata)=>void, reject) => {
+    private static loadPhotoMetadata(fullPath: string): Promise<PhotoMetadata> {
+        return new Promise<PhotoMetadata>((resolve: (metadata: PhotoMetadata) => void, reject) => {
             fs.readFile(fullPath, function (err, data) {
                 if (err) {
                     reject(err);
@@ -122,8 +120,8 @@ export class DiskManager {
                     let exif = exif_parser.create(data).parse();
                     let iptcData = iptc(data);
 
-                    let imageSize:ImageSize = {width: exif.imageSize.width, height: exif.imageSize.height};
-                    let cameraData:CameraMetadata = {
+                    let imageSize: ImageSize = {width: exif.imageSize.width, height: exif.imageSize.height};
+                    let cameraData: CameraMetadata = {
                         ISO: exif.tags.ISO,
                         model: exif.tags.Modeol,
                         maker: exif.tags.Make,
@@ -132,14 +130,14 @@ export class DiskManager {
                         focalLength: exif.tags.FocalLength,
                         lens: exif.tags.LensModel,
                     };
-                    let GPS:GPSMetadata = {
+                    let GPS: GPSMetadata = {
                         latitude: exif.tags.GPSLatitude,
                         longitude: exif.tags.GPSLongitude,
                         altitude: exif.tags.GPSAltitude
 
                     };
 
-                    let positionData:PositionMetaData = {
+                    let positionData: PositionMetaData = {
                         GPSData: GPS,
                         country: iptcData.country_or_primary_location_name,
                         state: iptcData.province_or_state,
@@ -147,24 +145,21 @@ export class DiskManager {
                     };
 
                     //Decode characters to UTF8
-                    let decode = (s)=> {
-                        for (var a, b, i = -1, l = (s = s.split("")).length, o = String.fromCharCode, c = "charCodeAt"; ++i < l;
-
+                    let decode = (s: any) => {
+                        for (let a, b, i = -1, l = (s = s.split("")).length, o = String.fromCharCode, c = "charCodeAt"; ++i < l;
                              ((a = s[i][c](0)) & 0x80) &&
-
                              (s[i] = (a & 0xfc) == 0xc0 && ((b = s[i + 1][c](0)) & 0xc0) == 0x80 ?
-
                                  o(((a & 0x03) << 6) + (b & 0x3f)) : o(128), s[++i] = "")
                         );
                         return s.join("");
                     };
 
-                    let keywords:[string] = iptcData.keywords.map(s => decode(s));
-                    let creationDate:Date = iptcData.date_time;
+                    let keywords: [string] = iptcData.keywords.map((s: string) => decode(s));
+                    let creationDate: Date = iptcData.date_time;
                     console.log(keywords);
 
 
-                    let metadata:PhotoMetadata = new PhotoMetadata(keywords, cameraData, positionData, imageSize, creationDate);
+                    let metadata: PhotoMetadata = new PhotoMetadata(keywords, cameraData, positionData, imageSize, creationDate);
                     resolve(metadata);
                 }
             });

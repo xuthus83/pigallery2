@@ -1,10 +1,8 @@
-///<reference path="../../typings/index.d.ts"/>
-
 import {AuthenticationMWs} from "../middlewares/user/AuthenticationMWs";
 import {UserRoles} from "../../common/entities/User";
 
 export class SharingRouter {
-    constructor(private app) {
+    constructor(private app: any) {
 
         this.addGetSharing();
         this.addUpdateSharing();

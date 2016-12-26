@@ -1,6 +1,4 @@
 ///<reference path="../customtypings/ExtendedRequest.d.ts"/>
-///<reference path="../../../typings/index.d.ts"/>
-
 import {NextFunction, Request, Response} from "express";
 import {Error, ErrorCodes} from "../../../common/entities/Error";
 import {UserRoles, User} from "../../../common/entities/User";
@@ -12,6 +10,7 @@ export class AuthenticationMWs {
     public static authenticate(req:Request, res:Response, next:NextFunction) {
         if (Config.Client.authenticationRequired === false) {
             req.session.user = new User("", "", UserRoles.Admin);
+
             return next();
         }
         if (typeof req.session.user === 'undefined') {

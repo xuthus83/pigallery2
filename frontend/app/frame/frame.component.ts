@@ -1,7 +1,5 @@
-///<reference path="../../browser.d.ts"/>
-
 import {Component, ViewEncapsulation} from "@angular/core";
-import {RouterLink} from "@angular/router-deprecated";
+import {RouterLink} from "@angular/router";
 import {AuthenticationService} from "../model/network/authentication.service";
 import {User} from "../../../common/entities/User";
 import {Config} from "../config/Config";
@@ -9,7 +7,7 @@ import {Config} from "../config/Config";
 @Component({
     selector: 'app-frame',
     templateUrl: 'app/frame/frame.component.html',
-    directives: [RouterLink],
+    providers: [RouterLink],
     encapsulation: ViewEncapsulation.Emulated
 })
 export class FrameComponent {

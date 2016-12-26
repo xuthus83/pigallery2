@@ -1,5 +1,3 @@
-///<reference path="../../../browser.d.ts"/>
-
 import {Injectable} from "@angular/core";
 import {GridPhoto} from "./GridPhoto";
 import {Config} from "../../config/Config";
@@ -12,17 +10,17 @@ export enum ThumbnailLoadingPriority{
 @Injectable()
 export class ThumbnailLoaderService {
 
-    que:Array<ThumbnailTask> = [];
-    runningRequests:number = 0;
+    que: Array<ThumbnailTask> = [];
+    runningRequests: number = 0;
 
-    constructor(private galleryChacheService:GalleryCacheService) {
+    constructor(private galleryChacheService: GalleryCacheService) {
     }
 
     removeTasks() {
         this.que = [];
     }
 
-    removeTask(taskEntry:ThumbnailTaskEntity) {
+    removeTask(taskEntry: ThumbnailTaskEntity) {
 
         for (let i = 0; i < this.que.length; i++) {
             let index = this.que[i].taskEntities.indexOf(taskEntry);
@@ -38,9 +36,9 @@ export class ThumbnailLoaderService {
 
     }
 
-    loadImage(gridPhoto:GridPhoto, priority:ThumbnailLoadingPriority, listener:ThumbnailLoadingListener):ThumbnailTaskEntity {
+    loadImage(gridPhoto: GridPhoto, priority: ThumbnailLoadingPriority, listener: ThumbnailLoadingListener): ThumbnailTaskEntity {
 
-        let tmp:ThumbnailTask = null;
+        let tmp: ThumbnailTask = null;
         //is image already qued?
         for (let i = 0; i < this.que.length; i++) {
             if (this.que[i].gridPhoto.getThumbnailPath() == gridPhoto.getThumbnailPath()) {
@@ -71,7 +69,7 @@ export class ThumbnailLoaderService {
     }
 
 
-    private getNextTask():ThumbnailTask {
+    private getNextTask(): ThumbnailTask {
         if (this.que.length === 0) {
             return null;
         }
@@ -95,7 +93,7 @@ export class ThumbnailLoaderService {
         return this.que[0];
     }
 
-    private taskReady(task:ThumbnailTask) {
+    private taskReady(task: ThumbnailTask) {
         let i = this.que.indexOf(task);
         if (i == -1) {
             if (task.taskEntities.length !== 0) {
@@ -118,7 +116,7 @@ export class ThumbnailLoaderService {
         }
 
         this.runningRequests++;
-        task.taskEntities.forEach(te=>te.listener.onStartedLoading());
+        task.taskEntities.forEach(te => te.listener.onStartedLoading());
         task.inProgress = true;
 
         let curImg = new Image();
@@ -128,7 +126,7 @@ export class ThumbnailLoaderService {
 
             task.gridPhoto.thumbnailLoaded();
             this.galleryChacheService.photoUpdated(task.gridPhoto.photo);
-            task.taskEntities.forEach(te=>te.listener.onLoad());
+            task.taskEntities.forEach((te: ThumbnailTaskEntity) => te.listener.onLoad());
 
             this.taskReady(task);
             this.runningRequests--;
@@ -136,7 +134,7 @@ export class ThumbnailLoaderService {
         };
 
         curImg.onerror = (error) => {
-            task.taskEntities.forEach(te=>te.listener.onError(error));
+            task.taskEntities.forEach((te: ThumbnailTaskEntity) => te.listener.onError(error));
 
             this.taskReady(task);
             this.runningRequests--;
@@ -147,21 +145,21 @@ export class ThumbnailLoaderService {
 
 
 export interface ThumbnailLoadingListener {
-    onStartedLoading:()=>void;
-    onLoad:()=>void;
-    onError:(error)=>void;
+    onStartedLoading: () => void;
+    onLoad: () => void;
+    onError: (error: any) => void;
 }
 
 
 export interface ThumbnailTaskEntity {
 
-    priority:ThumbnailLoadingPriority;
-    listener:ThumbnailLoadingListener;
+    priority: ThumbnailLoadingPriority;
+    listener: ThumbnailLoadingListener;
 }
 
 interface ThumbnailTask {
-    gridPhoto:GridPhoto;
-    inProgress:boolean;
-    taskEntities:Array<ThumbnailTaskEntity>;
+    gridPhoto: GridPhoto;
+    inProgress: boolean;
+    taskEntities: Array<ThumbnailTaskEntity>;
 
 }

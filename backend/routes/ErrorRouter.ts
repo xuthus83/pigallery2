@@ -1,10 +1,10 @@
-///<reference path="../../typings/index.d.ts"/>
-
 import {RenderingMWs} from "../middlewares/RenderingMWs";
 import {Error, ErrorCodes} from "../../common/entities/Error";
+import Request = Express.Request;
+import Response = Express.Response;
 
 export class ErrorRouter {
-    constructor(private app) {
+    constructor(private app: any) {
 
         this.addApiErrorHandler();
         this.addGenericHandler();
@@ -17,7 +17,7 @@ export class ErrorRouter {
     };
 
     private addGenericHandler() {
-        this.app.use((err, req, res, next) => {
+        this.app.use((err: any, req: Request, res: Response, next: Function) => {
 
                 //Flush out the stack to the console
                 console.error(err.stack);

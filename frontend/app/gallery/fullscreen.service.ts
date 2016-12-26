@@ -1,16 +1,14 @@
-///<reference path="../../browser.d.ts"/>
-
 import {Injectable} from "@angular/core";
 
 @Injectable()
 export class FullScreenService {
 
 
-    public isFullScreenEnabled():boolean {
+    public isFullScreenEnabled(): boolean {
         return !!(document.fullscreenElement || document['mozFullScreenElement'] || document.webkitFullscreenElement);
     }
 
-    public showFullScreen(element:any) {
+    public showFullScreen(element: any) {
         if (this.isFullScreenEnabled()) {
             return;
         }

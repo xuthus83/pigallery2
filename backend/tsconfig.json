@@ -1,15 +1,15 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "sourceMap": false,
     "module": "commonjs",
     "moduleResolution": "node",
+    "sourceMap": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "removeComments": false
-  },
-  "exclude": [
-    "node_modules",
-    "typings"
-  ]
+    "lib": [
+      "es2015",
+      "dom"
+    ],
+    "suppressImplicitAnyIndexErrors": true
+  }
 }

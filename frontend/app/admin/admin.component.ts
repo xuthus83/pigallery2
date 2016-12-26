@@ -1,26 +1,17 @@
-///<reference path="../../browser.d.ts"/>
-
 import {Component, OnInit} from "@angular/core";
-import {AuthenticationService} from "../model/network/authentication.service.ts";
-import {Router} from "@angular/router-deprecated";
-import {FrameComponent} from "../frame/frame.component";
+import {AuthenticationService} from "../model/network/authentication.service";
+import {Router} from "@angular/router";
 import {UserRoles} from "../../../common/entities/User";
-import {FORM_DIRECTIVES} from "@angular/common";
-import {StringifyRole} from "./../pipes/StringifyRolePipe";
 import {Config} from "../config/Config";
-import {UserMangerSettingsComponent} from "../settings/usermanager/usermanager.settings.component";
-
 @Component({
     selector: 'admin',
     templateUrl: 'app/admin/admin.component.html',
-    styleUrls: ['app/admin/admin.component.css'],
-    directives: [FrameComponent, FORM_DIRECTIVES, UserMangerSettingsComponent],
-    pipes: [StringifyRole]
+    styleUrls: ['app/admin/admin.component.css']
 })
 export class AdminComponent implements OnInit {
-    userManagementEnable:boolean = false;
+    userManagementEnable: boolean = false;
 
-    constructor(private _authService:AuthenticationService, private _router:Router) {
+    constructor(private _authService: AuthenticationService, private _router: Router) {
         this.userManagementEnable = Config.Client.authenticationRequired;
     }
 

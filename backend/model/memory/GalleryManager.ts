@@ -5,7 +5,7 @@ import {DiskManager} from "../DiskManger";
 export class GalleryManager implements IGalleryManager {
 
 
-    public listDirectory(relativeDirectoryName, cb:(error:any, result:Directory) => void) {
+    public listDirectory(relativeDirectoryName: string, cb: (error: any, result: Directory) => void) {
         return DiskManager.scanDirectory(relativeDirectoryName, cb);
     }
 

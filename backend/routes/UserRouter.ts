@@ -1,5 +1,3 @@
-///<reference path="../../typings/index.d.ts"/>
-
 import {UserMWs} from "../middlewares/user/UserMWs";
 import {UserRoles} from "../../common/entities/User";
 import {AuthenticationMWs} from "../middlewares/user/AuthenticationMWs";

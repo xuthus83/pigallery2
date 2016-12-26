@@ -1,36 +1,29 @@
-///<reference path="../../../browser.d.ts"/>
-
 import {Component, QueryList, Output, EventEmitter, HostListener, ElementRef, ViewChild} from "@angular/core";
 import {Photo} from "../../../../common/entities/Photo";
-import {GalleryPhotoComponent} from "../grid/photo/photo.grid.gallery.component.ts";
-import {BrowserDomAdapter} from "@angular/platform-browser/src/browser/browser_adapter";
+import {GalleryPhotoComponent} from "../grid/photo/photo.grid.gallery.component";
 import {Dimension} from "../../model/IRenderable";
-import {GalleryLightboxPhotoComponent} from "./photo/photo.lightbox.gallery.component";
 import {FullScreenService} from "../fullscreen.service";
 
 @Component({
     selector: 'gallery-lightbox',
     styleUrls: ['app/gallery/lightbox/lightbox.gallery.component.css'],
     templateUrl: 'app/gallery/lightbox/lightbox.gallery.component.html',
-    directives: [GalleryLightboxPhotoComponent]
 })
 export class GalleryLightboxComponent {
     @Output('onLastElement') onLastElement = new EventEmitter();
 
     public navigation = {hasPrev: true, hasNext: true};
-    public photoDimension:Dimension = new Dimension(0, 0, 0, 0);
+    public photoDimension: Dimension = new Dimension(0, 0, 0, 0);
 
-    private activePhoto:GalleryPhotoComponent;
-    public gridPhotoQL:QueryList<GalleryPhotoComponent>;
+    private activePhoto: GalleryPhotoComponent;
+    public gridPhotoQL: QueryList<GalleryPhotoComponent>;
 
-    private dom:BrowserDomAdapter;
     private visible = false;
 
-    @ViewChild("root") elementRef:ElementRef;
+    @ViewChild("root") elementRef: ElementRef;
 
 
-    constructor(private fullScreenService:FullScreenService) {
-        this.dom = new BrowserDomAdapter();
+    constructor(private fullScreenService: FullScreenService) {
 
 
     }
@@ -65,9 +58,9 @@ export class GalleryLightboxComponent {
     }
 
 
-    private showPhoto(photoComponent:GalleryPhotoComponent) {
+    private showPhoto(photoComponent: GalleryPhotoComponent) {
         this.activePhoto = null;
-        setImmediate(()=> {
+        setImmediate(() => {
             let pcList = this.gridPhotoQL.toArray();
 
             let index = pcList.indexOf(photoComponent);
@@ -82,7 +75,7 @@ export class GalleryLightboxComponent {
         });
     }
 
-    public show(photo:Photo) {
+    public show(photo: Photo) {
         this.visible = true;
         let selectedPhoto = this.findPhotoComponent(photo);
         if (selectedPhoto === null) {
@@ -91,7 +84,7 @@ export class GalleryLightboxComponent {
 
 
         this.showPhoto(selectedPhoto);
-        this.dom.setStyle(this.dom.query('body'), 'overflow', 'hidden');
+        document.getElementsByTagName('body')[0].style.overflow = 'hidden';
     }
 
     public hide() {
@@ -104,14 +97,14 @@ export class GalleryLightboxComponent {
             this.setBodyScrollTop(to.top);
         }
 
-        this.dom.setStyle(this.dom.query('body'), 'overflow', 'auto');
+        document.getElementsByTagName('body')[0].style.overflow = 'auto';
         this.activePhoto = null;
 
 
     }
 
 
-    private findPhotoComponent(photo) {
+    private findPhotoComponent(photo: any) {
         let galleryPhotoComponents = this.gridPhotoQL.toArray();
         for (let i = 0; i < galleryPhotoComponents.length; i++) {
             if (galleryPhotoComponents[i].gridPhoto.photo == photo) {
@@ -122,8 +115,8 @@ export class GalleryLightboxComponent {
     }
 
     @HostListener('window:keydown', ['$event'])
-    onKeyPress(e) {
-        let event = window.event ? window.event : e;
+    onKeyPress(e: KeyboardEvent) {
+        let event: KeyboardEvent = window.event ? <any>window.event : e;
         switch (event.keyCode) {
             case 37:
                 this.prevImage();
@@ -134,11 +127,11 @@ export class GalleryLightboxComponent {
         }
     }
 
-    private getBodyScrollTop():number {
+    private getBodyScrollTop(): number {
         return window.scrollY;
     }
 
-    private setBodyScrollTop(value:number) {
+    private setBodyScrollTop(value: number) {
         window.scrollTo(window.scrollX, value);
     }
 
@@ -151,7 +144,7 @@ export class GalleryLightboxComponent {
     }
 
 
-    private calcLightBoxPhotoDimension(photo:Photo):Dimension {
+    private calcLightBoxPhotoDimension(photo: Photo): Dimension {
         let width = 0;
         let height = 0;
         if (photo.metadata.size.height > photo.metadata.size.width) {

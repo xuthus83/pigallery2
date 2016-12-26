@@ -1,7 +1,5 @@
-///<reference path="../../browser.d.ts"/>
-
 import {Injectable} from "@angular/core";
-import {NetworkService} from "../model/network/network.service.ts";
+import {NetworkService} from "../model/network/network.service";
 import {Message} from "../../../common/entities/Message";
 import {ContentWrapper} from "../../../common/entities/ConentWrapper";
 import {Photo} from "../../../common/entities/Photo";
@@ -20,7 +18,7 @@ export class GalleryService {
         this.content = new ContentWrapper();
     }
 
-    lastRequest = {
+    lastRequest: {directory: any} = {
         directory: null
     };
     public getDirectory(directoryName:string):Promise<Message<ContentWrapper>> {
