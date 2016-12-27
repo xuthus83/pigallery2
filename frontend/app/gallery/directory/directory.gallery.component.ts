@@ -1,5 +1,5 @@
 import {Component, Input} from "@angular/core";
-import {Directory} from "../../../../common/entities/Directory";
+import {DirectoryDTO} from "../../../../common/entities/DirectoryDTO";
 import {RouterLink} from "@angular/router";
 import {Utils} from "../../../../common/Utils";
 
@@ -9,7 +9,7 @@ import {Utils} from "../../../../common/Utils";
     providers: [RouterLink],
 })
 export class GalleryDirectoryComponent {
-    @Input() directory:Directory;
+    @Input() directory: DirectoryDTO;
 
     constructor() {
     }

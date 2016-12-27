@@ -23,7 +23,7 @@ export class ObjectManagerRepository {
     public static InitMySQLManagers(): Promise<boolean> {
         return new Promise<boolean>((resolve, reject) => {
             MySQLConnection.init().then(() => {
-                const GalleryManager = require("./memory/GalleryManager").GalleryManager;
+                const GalleryManager = require("./mysql/GalleryManager").GalleryManager;
                 const UserManager = require("./mysql/UserManager").UserManager;
                 const SearchManager = require("./memory/SearchManager").SearchManager;
                 ObjectManagerRepository.getInstance().setGalleryManager(new GalleryManager());

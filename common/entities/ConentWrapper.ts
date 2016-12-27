@@ -1,11 +1,11 @@
-import {Directory} from "./Directory";
+import {DirectoryDTO} from "./DirectoryDTO";
 import {SearchResult} from "./SearchResult";
 export class ContentWrapper {
 
-    public directory:Directory;
+    public directory: DirectoryDTO;
     public searchResult:SearchResult;
 
-    constructor(directory:Directory = null, searchResult:SearchResult = null) {
+    constructor(directory: DirectoryDTO = null, searchResult: SearchResult = null) {
         this.directory = directory;
         this.searchResult = searchResult;
     }

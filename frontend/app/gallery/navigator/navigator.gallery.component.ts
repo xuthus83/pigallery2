@@ -1,5 +1,5 @@
 import {Component, Input, OnChanges} from "@angular/core";
-import {Directory} from "../../../../common/entities/Directory";
+import {DirectoryDTO} from "../../../../common/entities/DirectoryDTO";
 import {RouterLink} from "@angular/router";
 
 @Component({
@@ -8,7 +8,7 @@ import {RouterLink} from "@angular/router";
     providers: [RouterLink],
 })
 export class GalleryNavigatorComponent implements OnChanges {
-    @Input() directory: Directory;
+    @Input() directory: DirectoryDTO;
 
     routes: Array<any> = [];
 

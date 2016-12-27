@@ -2,8 +2,8 @@ import {Injectable} from "@angular/core";
 import {NetworkService} from "../model/network/network.service";
 import {Message} from "../../../common/entities/Message";
 import {ContentWrapper} from "../../../common/entities/ConentWrapper";
-import {Photo} from "../../../common/entities/Photo";
-import {Directory} from "../../../common/entities/Directory";
+import {PhotoDTO} from "../../../common/entities/PhotoDTO";
+import {DirectoryDTO} from "../../../common/entities/DirectoryDTO";
 import {SearchTypes} from "../../../common/entities/AutoCompleteItem";
 import {GalleryCacheService} from "./cache.gallery.service";
 
@@ -11,7 +11,7 @@ import {GalleryCacheService} from "./cache.gallery.service";
 export class GalleryService {
 
     public content:ContentWrapper;
-    private lastDirectory:Directory;
+    private lastDirectory: DirectoryDTO;
     private searchId:any;
 
     constructor(private networkService:NetworkService, private galleryCacheService:GalleryCacheService) {
@@ -38,11 +38,11 @@ export class GalleryService {
                     }
 
 
-                    message.result.directory.photos.forEach((photo:Photo) => {
+                    message.result.directory.photos.forEach((photo: PhotoDTO) => {
                         photo.metadata.creationDate = new Date(<any>photo.metadata.creationDate);
                     });
 
-                    message.result.directory.photos.forEach((photo:Photo) => {
+                    message.result.directory.photos.forEach((photo: PhotoDTO) => {
                         photo.directory = message.result.directory;
                     });
 

@@ -1,4 +1,4 @@
-import {Directory} from "../../../common/entities/Directory";
+import {DirectoryDTO} from "../../../common/entities/DirectoryDTO";
 export interface IGalleryManager {
-    listDirectory(relativeDirectoryName: string, cb: (error: any, result: Directory) => void): void;
+    listDirectory(relativeDirectoryName: string, cb: (error: any, result: DirectoryDTO) => void): void;
 }

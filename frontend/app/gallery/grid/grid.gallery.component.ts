@@ -9,7 +9,7 @@ import {
     AfterViewInit,
     HostListener
 } from "@angular/core";
-import {Photo} from "../../../../common/entities/Photo";
+import {PhotoDTO} from "../../../../common/entities/PhotoDTO";
 import {GridRowBuilder} from "./GridRowBuilder";
 import {GalleryLightboxComponent} from "../lightbox/lightbox.gallery.component";
 import {GridPhoto} from "./GridPhoto";
@@ -26,7 +26,7 @@ export class GalleryGridComponent implements OnChanges,AfterViewInit {
     @ViewChild('gridContainer') gridContainer:ElementRef;
     @ViewChildren(GalleryPhotoComponent) gridPhotoQL:QueryList<GalleryPhotoComponent>;
 
-    @Input() photos:Array<Photo>;
+    @Input() photos: Array<PhotoDTO>;
     @Input() lightbox:GalleryLightboxComponent;
 
     photosToRender:Array<GridPhoto> = [];
@@ -87,7 +87,7 @@ export class GalleryGridComponent implements OnChanges,AfterViewInit {
 
     private sortPhotos() {
         //sort pohots by date
-        this.photos.sort((a:Photo, b:Photo) => {
+        this.photos.sort((a: PhotoDTO, b: PhotoDTO) => {
             return a.metadata.creationDate.getTime() - b.metadata.creationDate.getTime();
         });
 

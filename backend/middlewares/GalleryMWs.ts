@@ -2,12 +2,12 @@ import * as path from "path";
 import * as fs from "fs";
 import {NextFunction, Request, Response} from "express";
 import {Error, ErrorCodes} from "../../common/entities/Error";
-import {Directory} from "../../common/entities/Directory";
+import {DirectoryDTO} from "../../common/entities/DirectoryDTO";
 import {ObjectManagerRepository} from "../model/ObjectManagerRepository";
 import {AutoCompleteItem, SearchTypes} from "../../common/entities/AutoCompleteItem";
 import {ContentWrapper} from "../../common/entities/ConentWrapper";
 import {SearchResult} from "../../common/entities/SearchResult";
-import {Photo} from "../../common/entities/Photo";
+import {PhotoDTO} from "../../common/entities/PhotoDTO";
 import {Config} from "../config/Config";
 import {ProjectPath} from "../ProjectPath";
 
@@ -22,7 +22,7 @@ export class GalleryMWs {
             return next();
         }
 
-        ObjectManagerRepository.getInstance().getGalleryManager().listDirectory(directoryName, (err, directory:Directory) => {
+        ObjectManagerRepository.getInstance().getGalleryManager().listDirectory(directoryName, (err, directory: DirectoryDTO) => {
             if (err || !directory) {
                 return next(new Error(ErrorCodes.GENERAL_ERROR, err));
             }
@@ -40,8 +40,12 @@ export class GalleryMWs {
 
         let cw:ContentWrapper = req.resultPipe;
         if (cw.directory) {
-            cw.directory.photos.forEach((photo:Photo) => {
+            cw.directory.photos.forEach((photo: PhotoDTO) => {
                 photo.directory = null;
+            });
+
+            cw.directory.directories.forEach((photo: DirectoryDTO) => {
+                photo.parent = null;
             });
         }
 

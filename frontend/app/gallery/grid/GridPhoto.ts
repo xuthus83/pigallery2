@@ -1,11 +1,11 @@
-import {Photo} from "../../../../common/entities/Photo";
+import {PhotoDTO} from "../../../../common/entities/PhotoDTO";
 import {Config} from "../../config/Config";
 import {Utils} from "../../../../common/Utils";
 export class GridPhoto {
 
     private replacementSizeCache:boolean|number = false;
 
-    constructor(public photo:Photo, public renderWidth:number, public renderHeight:number, public rowId:number) {
+    constructor(public photo: PhotoDTO, public renderWidth: number, public renderHeight: number, public rowId: number) {
 
     }
 

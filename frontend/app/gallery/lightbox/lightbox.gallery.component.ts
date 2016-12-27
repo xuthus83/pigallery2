@@ -1,5 +1,5 @@
 import {Component, QueryList, Output, EventEmitter, HostListener, ElementRef, ViewChild} from "@angular/core";
-import {Photo} from "../../../../common/entities/Photo";
+import {PhotoDTO} from "../../../../common/entities/PhotoDTO";
 import {GalleryPhotoComponent} from "../grid/photo/photo.grid.gallery.component";
 import {Dimension} from "../../model/IRenderable";
 import {FullScreenService} from "../fullscreen.service";
@@ -75,11 +75,11 @@ export class GalleryLightboxComponent {
         });
     }
 
-    public show(photo: Photo) {
+    public show(photo: PhotoDTO) {
         this.visible = true;
         let selectedPhoto = this.findPhotoComponent(photo);
         if (selectedPhoto === null) {
-            throw new Error("Can't find Photo");
+            throw new Error("Can't find PhotoDTO");
         }
 
 
@@ -144,7 +144,7 @@ export class GalleryLightboxComponent {
     }
 
 
-    private calcLightBoxPhotoDimension(photo: Photo): Dimension {
+    private calcLightBoxPhotoDimension(photo: PhotoDTO): Dimension {
         let width = 0;
         let height = 0;
         if (photo.metadata.size.height > photo.metadata.size.width) {

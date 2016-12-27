@@ -1,6 +1,4 @@
 ///<reference path="customtypings/jimp.d.ts"/>
-
-
 import * as path from "path";
 import * as Jimp from "jimp";
 import * as crypto from "crypto";
@@ -9,15 +7,21 @@ import {NextFunction, Request, Response} from "express";
 import {Error, ErrorCodes} from "../../common/entities/Error";
 import {Config} from "../config/Config";
 import {ContentWrapper} from "../../common/entities/ConentWrapper";
-import {Directory} from "../../common/entities/Directory";
+import {DirectoryDTO} from "../../common/entities/DirectoryDTO";
 import {ProjectPath} from "../ProjectPath";
-import {Photo} from "../../common/entities/Photo";
+import {PhotoDTO} from "../../common/entities/PhotoDTO";
 
 
 export class ThumbnailGeneratorMWs {
 
 
-    private static addThInfoTODir(directory:Directory) {
+    private static addThInfoTODir(directory: DirectoryDTO) {
+        if (typeof  directory.photos == "undefined") {
+            directory.photos = [];
+        }
+        if (typeof  directory.directories == "undefined") {
+            directory.directories = [];
+        }
         ThumbnailGeneratorMWs.addThInfoToPhotos(directory.photos);
 
         for (let i = 0; i < directory.directories.length; i++) {
@@ -26,7 +30,7 @@ export class ThumbnailGeneratorMWs {
 
     }
 
-    private static addThInfoToPhotos(photos:Array<Photo>) {
+    private static addThInfoToPhotos(photos: Array<PhotoDTO>) {
         let thumbnailFolder = ProjectPath.ThumbnailFolder;
         for (let j = 0; j < Config.Client.thumbnailSizes.length; j++) {
             let size = Config.Client.thumbnailSizes[j];
@@ -34,17 +38,20 @@ export class ThumbnailGeneratorMWs {
                 let fullImagePath = path.join(ProjectPath.ImageFolder, photos[i].directory.path, photos[i].directory.name, photos[i].name);
                 let thPath = path.join(thumbnailFolder, ThumbnailGeneratorMWs.generateThumbnailName(fullImagePath, size));
                 if (fs.existsSync(thPath) === true) {
+                    if (typeof  photos[i].readyThumbnails == "undefined") {
+                        photos[i].readyThumbnails = [];
+                    }
                     photos[i].readyThumbnails.push(size);
                 }
             }
         }
     }
 
-    public static addThumbnailInformation(req:Request, res:Response, next:NextFunction) {
+    public static addThumbnailInformation(req: Request, res: Response, next: NextFunction) {
         if (!req.resultPipe)
             return next();
 
-        let cw:ContentWrapper = req.resultPipe;
+        let cw: ContentWrapper = req.resultPipe;
         if (cw.directory) {
             ThumbnailGeneratorMWs.addThInfoTODir(cw.directory);
         }
@@ -54,16 +61,16 @@ export class ThumbnailGeneratorMWs {
 
 
         return next();
-        
+
     }
 
-    public static generateThumbnail(req:Request, res:Response, next:NextFunction) {
+    public static generateThumbnail(req: Request, res: Response, next: NextFunction) {
         if (!req.resultPipe)
             return next();
 
         //load parameters
         let imagePath = req.resultPipe;
-        let size:number = parseInt(req.params.size) || Config.Client.thumbnailSizes[0]; 
+        let size: number = parseInt(req.params.size) || Config.Client.thumbnailSizes[0];
 
         //validate size
         if (Config.Client.thumbnailSizes.indexOf(size) === -1) {
@@ -112,7 +119,7 @@ export class ThumbnailGeneratorMWs {
 
     }
 
-    private static generateThumbnailName(imagePath:string, size:number):string {
+    private static generateThumbnailName(imagePath: string, size: number): string {
         return crypto.createHash('md5').update(imagePath).digest('hex') + "_" + size + ".jpg";
     }
 }

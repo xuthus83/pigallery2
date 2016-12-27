@@ -3,6 +3,8 @@ import {createConnection, Connection} from "typeorm";
 import {Config} from "../../config/Config";
 import {UserEntity} from "./enitites/UserEntity";
 import {UserRoles} from "../../../common/entities/UserDTO";
+import {PhotoEntity, PhotoMetadataEntity} from "./enitites/PhotoEntity";
+import {DirectoryEnitity} from "./enitites/DirectoryEntity";
 
 
 export class MySQLConnection {
@@ -31,9 +33,18 @@ export class MySQLConnection {
                     database: Config.Server.database.mysql.database
                 },
                 entities: [
-                    UserEntity
+                    UserEntity,
+                    DirectoryEnitity,
+                    PhotoMetadataEntity,
+                    PhotoEntity
                 ],
                 autoSchemaSync: true,
+                logging: {
+                    logQueries: true,
+                    logOnlyFailedQueries: true,
+                    logFailedQueryError: true,
+                    logSchemaCreation: true
+                }
             }).then((conn) => {
                 this.connection = conn;
                 return resolve(this.connection);

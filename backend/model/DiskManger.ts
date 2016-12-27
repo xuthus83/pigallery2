@@ -4,25 +4,32 @@ import * as path from "path";
 import * as mime from "mime";
 import * as iptc from "node-iptc";
 import * as exif_parser from "exif-parser";
-import {Directory} from "../../common/entities/Directory";
+import {DirectoryDTO} from "../../common/entities/DirectoryDTO";
 import {
-    Photo,
+    PhotoDTO,
     PhotoMetadata,
     ImageSize,
     CameraMetadata,
     PositionMetaData,
     GPSMetadata
-} from "../../common/entities/Photo";
+} from "../../common/entities/PhotoDTO";
 import {ProjectPath} from "../ProjectPath";
 
 export class DiskManager {
-    public static scanDirectory(relativeDirectoryName: string, cb: (error: any, result: Directory) => void) {
+    public static scanDirectory(relativeDirectoryName: string, cb: (error: any, result: DirectoryDTO) => void) {
         console.log("DiskManager: scanDirectory");
-        let directoryName = path.basename(relativeDirectoryName);
-        let directoryParent = path.join(path.dirname(relativeDirectoryName), "/");
-        let absoluteDirectoryName = path.join(ProjectPath.ImageFolder, relativeDirectoryName);
+        let directoryName = path.normalize(path.basename(relativeDirectoryName));
+        let directoryParent = path.normalize(path.join(path.dirname(relativeDirectoryName), "/"));
+        let absoluteDirectoryName = path.normalize(path.join(ProjectPath.ImageFolder, relativeDirectoryName));
+        console.log(directoryName, directoryParent, path.dirname(relativeDirectoryName), path.join(path.dirname(relativeDirectoryName), "/"));
 
-        let directory = new Directory(1, directoryName, directoryParent, new Date(), [], []);
+        let directory = <DirectoryDTO>{
+            name: directoryName,
+            path: directoryParent,
+            lastUpdate: new Date(),
+            directories: [],
+            photos: []
+        };
 
         let promises: Array< Promise<any> > = [];
         fs.readdir(absoluteDirectoryName, function (err, list) {
@@ -34,16 +41,22 @@ export class DiskManager {
 
             for (let i = 0; i < list.length; i++) {
                 let file = list[i];
-                let fullFilePath = path.resolve(absoluteDirectoryName, file);
+                let fullFilePath = path.normalize(path.resolve(absoluteDirectoryName, file));
                 if (fs.statSync(fullFilePath).isDirectory()) {
-                    directory.directories.push(new Directory(2, file, relativeDirectoryName, new Date(), [], []));
+                    directory.directories.push(<DirectoryDTO>{
+                        name: file,
+                        path: relativeDirectoryName,
+                        lastUpdate: new Date(),
+                        directories: [],
+                        photos: []
+                    });
                 }
 
                 if (DiskManager.isImage(fullFilePath)) {
 
 
                     let promise = DiskManager.loadPhotoMetadata(fullFilePath).then((photoMetadata) => {
-                        directory.photos.push(new Photo(1, file, directory, photoMetadata));
+                        directory.photos.push(<PhotoDTO>{name: file, directory: directory, metadata: photoMetadata});
                     });
 
                     promises.push(promise);
@@ -156,10 +169,15 @@ export class DiskManager {
 
                     let keywords: [string] = iptcData.keywords.map((s: string) => decode(s));
                     let creationDate: Date = iptcData.date_time;
-                    console.log(keywords);
 
 
-                    let metadata: PhotoMetadata = new PhotoMetadata(keywords, cameraData, positionData, imageSize, creationDate);
+                    let metadata: PhotoMetadata = <PhotoMetadata>{
+                        keywords: keywords,
+                        cameraData: cameraData,
+                        positionData: positionData,
+                        size: imageSize,
+                        creationDate: creationDate
+                    };
                     resolve(metadata);
                 }
             });

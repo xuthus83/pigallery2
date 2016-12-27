@@ -54,8 +54,9 @@ export class Server {
         this.app.use(_bodyParser.json());
 
 
-        ObjectManagerRepository.InitMySQLManagers().catch(() => {
+        ObjectManagerRepository.InitMySQLManagers().catch((err) => {
             console.error("Erro during initailizing mysql falling back to memory DB");
+            console.log(err);
             Config.setDatabaseType(DatabaseType.memory);
             ObjectManagerRepository.InitMemoryManagers();
         });

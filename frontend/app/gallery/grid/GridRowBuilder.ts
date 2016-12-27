@@ -1,13 +1,13 @@
-import {Photo} from "../../../../common/entities/Photo";
+import {PhotoDTO} from "../../../../common/entities/PhotoDTO";
 
 export class GridRowBuilder {
 
-    private photoRow:Array<Photo> = [];
+    private photoRow: Array<PhotoDTO> = [];
 
     private photoIndex:number = 0; //index of the last pushed photo to the photoRow
 
 
-    constructor(private photos:Array<Photo>, private startIndex:number, private photoMargin:number, private containerWidth:number) {
+    constructor(private photos: Array<PhotoDTO>, private startIndex: number, private photoMargin: number, private containerWidth: number) {
         this.photoIndex = startIndex;
     }
 
@@ -35,7 +35,7 @@ export class GridRowBuilder {
         return true;
     }
 
-    public getPhotoRow():Array<Photo> {
+    public getPhotoRow(): Array<PhotoDTO> {
         return this.photoRow;
     }
 
