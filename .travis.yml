@@ -1,4 +1,7 @@
 language: node_js
+env:
+- NPM_CONFIG_PRODUCTION=false
+- NODE_ENV=develpoment
 node_js:
 - '6'
 - '4'
