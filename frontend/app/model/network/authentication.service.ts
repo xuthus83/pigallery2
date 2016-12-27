@@ -1,5 +1,5 @@
 import {Injectable} from "@angular/core";
-import {User, UserRoles} from "../../../../common/entities/User";
+import {UserDTO, UserRoles} from "../../../../common/entities/UserDTO";
 import {Event} from "../../../../common/event/Event";
 import {UserService} from "./user.service";
 import {LoginCredential} from "../../../../common/entities/LoginCredential";
@@ -9,14 +9,14 @@ import {ErrorCodes} from "../../../../common/entities/Error";
 import {Config} from "../../config/Config";
 
 declare module ServerInject {
-    export let user: User;
+    export let user: UserDTO;
 }
 
 @Injectable()
 export class AuthenticationService {
 
-    private _user: User = null;
-    public OnUserChanged: Event<User>;
+    private _user: UserDTO = null;
+    public OnUserChanged: Event<UserDTO>;
 
     constructor(private _userService: UserService) {
         this.OnUserChanged = new Event();
@@ -34,7 +34,7 @@ export class AuthenticationService {
     }
 
     private getSessionUser() {
-        this._userService.getSessionUser().then((message: Message<User>) => {
+        this._userService.getSessionUser().then((message: Message<UserDTO>) => {
             if (message.error) {
                 console.log(message.error);
             } else {
@@ -44,13 +44,13 @@ export class AuthenticationService {
         });
     }
 
-    private setUser(user: User) {
+    private setUser(user: UserDTO) {
         this._user = user;
         this.OnUserChanged.trigger(this._user);
     }
 
     public login(credential: LoginCredential) {
-        return this._userService.login(credential).then((message: Message<User>) => {
+        return this._userService.login(credential).then((message: Message<UserDTO>) => {
             if (message.error) {
                 console.log(ErrorCodes[message.error.code] + ", message: ", message.error.message);
             } else {
@@ -70,7 +70,7 @@ export class AuthenticationService {
 
     public getUser() {
         if (Config.Client.authenticationRequired === false) {
-            return new User("", "", UserRoles.Admin);
+            return <UserDTO>{name: "", password: "", role: UserRoles.Admin};
         }
         return this._user;
     }

@@ -1,7 +1,7 @@
 import {Component, ViewEncapsulation} from "@angular/core";
 import {RouterLink} from "@angular/router";
 import {AuthenticationService} from "../model/network/authentication.service";
-import {User} from "../../../common/entities/User";
+import {UserDTO} from "../../../common/entities/UserDTO";
 import {Config} from "../config/Config";
 
 @Component({
@@ -12,7 +12,7 @@ import {Config} from "../config/Config";
 })
 export class FrameComponent {
 
-    user:User;
+    user: UserDTO;
     authenticationRequired:boolean = false;
 
     constructor(private _authService:AuthenticationService) {

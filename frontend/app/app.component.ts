@@ -1,6 +1,6 @@
 import {Component, OnInit} from "@angular/core";
 import {AuthenticationService} from "./model/network/authentication.service";
-import {User} from "../../common/entities/User";
+import {UserDTO} from "../../common/entities/UserDTO";
 import {Router} from "@angular/router";
 
 @Component({
@@ -14,7 +14,7 @@ export class AppComponent implements OnInit {
     }
 
     ngOnInit() {
-        this._authenticationService.OnUserChanged.on((user: User) => {
+        this._authenticationService.OnUserChanged.on((user: UserDTO) => {
             if (user != null) {
                 if (this._router.isActive('login', true)) {
                     console.log("routing");

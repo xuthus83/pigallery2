@@ -1,6 +1,6 @@
 import {inject, TestBed} from "@angular/core/testing";
 import {UserService} from "./user.service";
-import {User} from "../../../../common/entities/User";
+import {UserDTO} from "../../../../common/entities/UserDTO";
 import {Message} from "../../../../common/entities/Message";
 import "rxjs/Rx";
 import {LoginCredential} from "../../../../common/entities/LoginCredential";
@@ -8,7 +8,7 @@ import {AuthenticationService} from "./authentication.service";
 
 class MockUserService {
     public login(credential: LoginCredential) {
-        return Promise.resolve(new Message<User>(null, new User("testUserName")))
+        return Promise.resolve(new Message<UserDTO>(null, <UserDTO>{name: "testUserName"}))
     }
 }
 
@@ -22,7 +22,7 @@ describe('AuthenticationService', () => {
     });
 
 
-    it('should call User service login', inject([AuthenticationService, UserService], (authService, userService) => {
+    it('should call UserDTO service login', inject([AuthenticationService, UserService], (authService, userService) => {
         spyOn(userService, "login").and.callThrough();
 
         expect(userService.login).not.toHaveBeenCalled();

@@ -1,7 +1,7 @@
 import {Component, OnInit} from "@angular/core";
 import {AuthenticationService} from "../../model/network/authentication.service";
 import {Router} from "@angular/router";
-import {User, UserRoles} from "../../../../common/entities/User";
+import {UserDTO, UserRoles} from "../../../../common/entities/UserDTO";
 import {Utils} from "../../../../common/Utils";
 import {Message} from "../../../../common/entities/Message";
 import {UserManagerSettingsService} from "./usermanager.settings.service";
@@ -14,16 +14,16 @@ import {UserManagerSettingsService} from "./usermanager.settings.service";
 })
 export class UserMangerSettingsComponent implements OnInit {
 
-    private newUser = new User();
+    private newUser = <UserDTO>{};
     private userRoles: Array<any> = [];
-    private users: Array<User> = [];
+    private users: Array<UserDTO> = [];
 
     constructor(private _authService: AuthenticationService, private _router: Router, private _userSettings: UserManagerSettingsService) {
     }
 
     ngOnInit() {
         if (!this._authService.isAuthenticated() || this._authService.getUser().role < UserRoles.Admin) {
-            this._router.navigate(['Login']);
+            this._router.navigate(['login']);
             return;
         }
         this.userRoles = Utils.enumToArray(UserRoles).filter(r => r.key <= this._authService.getUser().role);
@@ -31,13 +31,13 @@ export class UserMangerSettingsComponent implements OnInit {
     }
 
     private getUsersList() {
-        this._userSettings.getUsers().then((result: Message<Array<User>>) => {
+        this._userSettings.getUsers().then((result: Message<Array<UserDTO>>) => {
             this.users = result.result;
         });
     }
 
 
-    canModifyUser(user: User): boolean {
+    canModifyUser(user: UserDTO): boolean {
         let currentUser = this._authService.getUser();
         if (!currentUser) {
             return false;
@@ -47,8 +47,7 @@ export class UserMangerSettingsComponent implements OnInit {
     }
 
     initNewUser() {
-        this.newUser = new User();
-        this.newUser.role = UserRoles.User;
+        this.newUser = <UserDTO>{role: UserRoles.User};
     }
 
     addNewUser() {
@@ -57,13 +56,13 @@ export class UserMangerSettingsComponent implements OnInit {
         });
     }
 
-    updateRole(user: User) {
+    updateRole(user: UserDTO) {
         this._userSettings.updateRole(user).then(() => {
             this.getUsersList();
         });
     }
 
-    deleteUser(user: User) {
+    deleteUser(user: UserDTO) {
         this._userSettings.deleteUser(user).then(() => {
             this.getUsersList();
         });

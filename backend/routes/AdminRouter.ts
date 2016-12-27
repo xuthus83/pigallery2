@@ -1,5 +1,5 @@
 import {AuthenticationMWs} from "../middlewares/user/AuthenticationMWs";
-import {UserRoles} from "../../common/entities/User";
+import {UserRoles} from "../../common/entities/UserDTO";
 
 export class AdminRouter {
     constructor(private app: any) {

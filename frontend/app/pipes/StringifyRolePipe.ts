@@ -1,5 +1,5 @@
 import {Pipe, PipeTransform} from "@angular/core";
-import {UserRoles} from "../../../common/entities/User";
+import {UserRoles} from "../../../common/entities/UserDTO";
 
 
 @Pipe({name: 'stringifyRole'})

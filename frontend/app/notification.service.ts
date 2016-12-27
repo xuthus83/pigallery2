@@ -1,5 +1,3 @@
-///<reference path="../browser.d.ts"/>
-
 import {Injectable} from "@angular/core";
 
 @Injectable()

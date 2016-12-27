@@ -1,12 +1,23 @@
 export enum DatabaseType{
-    memory
+    memory = 0, mysql = 1
+}
+
+interface MySQLConfig {
+    host: string;
+    database: string;
+    username: string;
+    password: string;
+}
+interface DataBaseConfig {
+    type: DatabaseType;
+    mysql?: MySQLConfig;
 }
 
 interface ServerConfig {
     port:number;
     imagesFolder:string;
     thumbnailFolder:string;
-    databaseType:DatabaseType;
+    database: DataBaseConfig;
 }
 
 interface SearchConfig {
@@ -43,7 +54,7 @@ export class ConfigClass {
     };
 
     public setDatabaseType(type:DatabaseType) {
-        this.Server.databaseType = type;
+        this.Server.database.type = type;
         if (type === DatabaseType.memory) {
             this.Client.Search.searchEnabled = false;
             this.Client.Search.instantSearchEnabled = false;

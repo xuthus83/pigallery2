@@ -1,5 +1,5 @@
 import {Directory} from "../../../common/entities/Directory";
-import {IGalleryManager} from "../IGalleryManager";
+import {IGalleryManager} from "../interfaces/IGalleryManager";
 import {DiskManager} from "../DiskManger";
 
 export class GalleryManager implements IGalleryManager {

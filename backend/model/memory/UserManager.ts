@@ -1,6 +1,6 @@
 ///<reference path="flat-file-db.ts"/>
-import {User, UserRoles} from "../../../common/entities/User";
-import {IUserManager} from "../IUserManager";
+import {UserDTO, UserRoles} from "../../../common/entities/UserDTO";
+import {IUserManager} from "../interfaces/IUserManager";
 import {ProjectPath} from "../../ProjectPath";
 import {Utils} from "../../../common/Utils";
 import * as flatfile from "flat-file-db";
@@ -31,37 +31,37 @@ export class UserManager implements IUserManager {
         if (!this.db.has("users")) {
             this.db.put("users", []);
             //TODO: remove defaults
-            this.createUser(new User("developer", "developer", UserRoles.Developer));
-            this.createUser(new User("admin", "admin", UserRoles.Admin));
-            this.createUser(new User("user", "user", UserRoles.User));
-            this.createUser(new User("guest", "guest", UserRoles.Guest));
+            this.createUser(<UserDTO>{name: "developer", password: "developer", role: UserRoles.Developer});
+            this.createUser(<UserDTO>{name: "admin", password: "admin", role: UserRoles.Admin});
+            this.createUser(<UserDTO>{name: "user", password: "user", role: UserRoles.User});
+            this.createUser(<UserDTO>{name: "guest", password: "guest", role: UserRoles.Guest});
         }
 
 
     }
 
 
-    public findOne(filter: any, cb: (error: any, result: User) => void) {
-        this.find(filter, (error, result: Array<User>) => {
+    public findOne(filter: any, cb: (error: any, result: UserDTO) => void) {
+        this.find(filter, (error, result: Array<UserDTO>) => {
             if (error) {
                 return cb(error, null);
             }
             if (result.length == 0) {
-                return cb("User not found", null);
+                return cb("UserDTO not found", null);
             }
             return cb(null, result[0]);
 
         });
     }
 
-    public find(filter: any, cb: (error: any, result: Array<User>) => void) {
+    public find(filter: any, cb: (error: any, result: Array<UserDTO>) => void) {
 
-        let users = this.db.get("users").filter((u: User) => Utils.equalsFilter(u, filter));
+        let users = this.db.get("users").filter((u: UserDTO) => Utils.equalsFilter(u, filter));
 
         return cb(null, users);
     }
 
-    public createUser(user: User, cb: (error: any, result: User) => void = (e, r) => {
+    public createUser(user: UserDTO, cb: (error: any, result: UserDTO) => void = (e, r) => {
     }) {
         user.id = parseInt(this.db.get("idCounter")) + 1;
         this.db.put("idCounter", user.id);
@@ -73,14 +73,14 @@ export class UserManager implements IUserManager {
     }
 
     public deleteUser(id: number, cb: (error: any) => void) {
-        let users = this.db.get("users").filter((u: User) => u.id != id);
+        let users = this.db.get("users").filter((u: UserDTO) => u.id != id);
         this.db.put("users", users);
         return cb(null);
     }
 
     public changeRole(id: number, newRole: UserRoles, cb: (error: any, result: string) => void) {
 
-        let users: Array<User> = this.db.get("users");
+        let users: Array<UserDTO> = this.db.get("users");
 
         for (let i = 0; i < users.length; i++) {
             if (users[i].id == id) {

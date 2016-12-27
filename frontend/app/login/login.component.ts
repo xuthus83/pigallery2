@@ -3,7 +3,7 @@ import {LoginCredential} from "../../../common/entities/LoginCredential";
 import {AuthenticationService} from "../model/network/authentication.service";
 import {Router} from "@angular/router";
 import {Message} from "../../../common/entities/Message";
-import {User} from "../../../common/entities/User";
+import {UserDTO} from "../../../common/entities/UserDTO";
 import {ErrorCodes} from "../../../common/entities/Error";
 
 @Component({
@@ -27,7 +27,7 @@ export class LoginComponent implements OnInit {
 
     onLogin() {
         this.loginError = null;
-        this._authService.login(this.loginCredential).then((message: Message<User>) => {
+        this._authService.login(this.loginCredential).then((message: Message<UserDTO>) => {
             if (message.error) {
                 if (message.error.code === ErrorCodes.CREDENTIAL_NOT_FOUND) {
                     this.loginError = "Wrong username or password";

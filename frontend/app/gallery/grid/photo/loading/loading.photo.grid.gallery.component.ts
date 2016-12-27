@@ -1,5 +1,3 @@
-///<reference path="../../../../../browser.d.ts"/>
-
 import {Component, Input} from "@angular/core";
 
 @Component({

@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
 import {LoginCredential} from "../../../../common/entities/LoginCredential";
 import {NetworkService} from "./network.service";
-import {User} from "../../../../common/entities/User";
+import {UserDTO} from "../../../../common/entities/UserDTO";
 import {Message} from "../../../../common/entities/Message";
 
 @Injectable()
@@ -16,11 +16,11 @@ export class UserService {
         return this._networkService.postJson("/user/logout");
     }
 
-    public login(credential: LoginCredential): Promise<Message<User>> {
+    public login(credential: LoginCredential): Promise<Message<UserDTO>> {
         return this._networkService.postJson("/user/login", {"loginCredential": credential});
     }
 
-    public getSessionUser(): Promise<Message<User>> {
+    public getSessionUser(): Promise<Message<UserDTO>> {
         return this._networkService.getJson("/user/login");
     }
 

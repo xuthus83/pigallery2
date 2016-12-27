@@ -1,5 +1,3 @@
-///<reference path="../../../browser.d.ts"/>
-
 import {Injectable} from "@angular/core";
 import {NetworkService} from "../../model/network/network.service";
 import {AutoCompleteItem} from "../../../../common/entities/AutoCompleteItem";

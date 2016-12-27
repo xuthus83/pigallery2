@@ -1,5 +1,5 @@
 import {UserMWs} from "../middlewares/user/UserMWs";
-import {UserRoles} from "../../common/entities/User";
+import {UserRoles} from "../../common/entities/UserDTO";
 import {AuthenticationMWs} from "../middlewares/user/AuthenticationMWs";
 import {UserRequestConstrainsMWs} from "../middlewares/user/UserRequestConstrainsMWs";
 import {RenderingMWs} from "../middlewares/RenderingMWs";

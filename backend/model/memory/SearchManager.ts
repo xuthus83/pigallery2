@@ -1,5 +1,5 @@
 import {AutoCompleteItem, SearchTypes} from "../../../common/entities/AutoCompleteItem";
-import {ISearchManager} from "../ISearchManager";
+import {ISearchManager} from "../interfaces/ISearchManager";
 import {SearchResult} from "../../../common/entities/SearchResult";
 
 export class SearchManager implements ISearchManager {

@@ -1,5 +1,3 @@
-///<reference path="../../../../browser.d.ts"/>
-
 import {Component, OnChanges, Input, ViewChild, ElementRef} from "@angular/core";
 import {GridPhoto} from "../../grid/GridPhoto";
 

@@ -54,11 +54,11 @@ export class Server {
         this.app.use(_bodyParser.json());
 
 
-        if (Config.Server.databaseType === DatabaseType.memory) {
-            ObjectManagerRepository.MemoryMongoManagers();
-        } else {
-            throw new Error("not implemented alternative mangers");
-        }
+        ObjectManagerRepository.InitMySQLManagers().catch(() => {
+            console.error("Erro during initailizing mysql falling back to memory DB");
+            Config.setDatabaseType(DatabaseType.memory);
+            ObjectManagerRepository.InitMemoryManagers();
+        });
 
         new PublicRouter(this.app);
 

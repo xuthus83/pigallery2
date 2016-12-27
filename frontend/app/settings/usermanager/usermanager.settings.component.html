@@ -15,7 +15,7 @@
             <tr *ngFor="let user of users">
                 <td>{{user.name}}</td>
                 <td *ngIf="canModifyUser(user)">
-                    <select class="form-control" [(ngModel)]="user.role" (ngModelChange)="updateRole(user)" required>
+                    <select class="form-control" [(ngModel)]="user.role" (change)="updateRole(user)" required>
                         <option *ngFor="let repository of userRoles" [value]="repository.key">
                             {{repository.value}}
                         </option>

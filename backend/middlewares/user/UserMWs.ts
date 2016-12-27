@@ -1,7 +1,7 @@
 import {NextFunction, Request, Response} from "express";
 import {Error, ErrorCodes} from "../../../common/entities/Error";
 import {ObjectManagerRepository} from "../../model/ObjectManagerRepository";
-import {User} from "../../../common/entities/User";
+import {UserDTO} from "../../../common/entities/UserDTO";
 import {Config} from "../../config/Config";
 import {Utils} from "../../../common/Utils";
 
@@ -88,7 +88,7 @@ export class UserMWs {
         if (Config.Client.authenticationRequired === false) {
             return next(new Error(ErrorCodes.USER_MANAGEMENT_DISABLED));
         }
-        ObjectManagerRepository.getInstance().getUserManager().find({}, (err, result:Array<User>) => {
+        ObjectManagerRepository.getInstance().getUserManager().find({}, (err, result: Array<UserDTO>) => {
             if ((err) || (!result)) {
                 return next(new Error(ErrorCodes.GENERAL_ERROR));
             }

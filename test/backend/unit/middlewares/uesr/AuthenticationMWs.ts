@@ -1,7 +1,7 @@
 import {expect} from "chai";
 import {AuthenticationMWs} from "../../../../../backend/middlewares/user/AuthenticationMWs";
 import {Error, ErrorCodes} from "../../../../../common/entities/Error";
-import {UserRoles} from "../../../../../common/entities/User";
+import {UserRoles} from "../../../../../common/entities/UserDTO";
 import {ObjectManagerRepository} from "../../../../../backend/model/ObjectManagerRepository";
 import {UserManager} from "../../../../../backend/model/memory/UserManager";
 

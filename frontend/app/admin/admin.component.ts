@@ -1,7 +1,7 @@
 import {Component, OnInit} from "@angular/core";
 import {AuthenticationService} from "../model/network/authentication.service";
 import {Router} from "@angular/router";
-import {UserRoles} from "../../../common/entities/User";
+import {UserRoles} from "../../../common/entities/UserDTO";
 import {Config} from "../config/Config";
 @Component({
     selector: 'admin',
@@ -17,7 +17,7 @@ export class AdminComponent implements OnInit {
 
     ngOnInit() {
         if (!this._authService.isAuthenticated() || this._authService.getUser().role < UserRoles.Admin) {
-            this._router.navigate(['Login']);
+            this._router.navigate(['login']);
             return;
         }
     }
