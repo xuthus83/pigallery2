@@ -6,37 +6,40 @@ import {MySQLConnection} from "./MySQLConnection";
 import {DiskManager} from "../DiskManger";
 import {PhotoEntity} from "./enitites/PhotoEntity";
 import {Utils} from "../../../common/Utils";
+import {ProjectPath} from "../../ProjectPath";
 
 export class GalleryManager implements IGalleryManager {
 
 
     public listDirectory(relativeDirectoryName, cb: (error: any, result: DirectoryDTO) => void) {
-        let directoryName = path.normalize(path.basename(relativeDirectoryName));
-        let directoryParent = path.normalize(path.join(path.dirname(relativeDirectoryName), "/"));
+        relativeDirectoryName = path.normalize(path.join("." + path.sep, relativeDirectoryName));
+        let directoryName = path.basename(relativeDirectoryName);
+        let directoryParent = path.join(path.dirname(relativeDirectoryName), path.sep);
         console.log("GalleryManager:listDirectory");
-        console.log(directoryName, directoryParent, path.dirname(relativeDirectoryName), path.join(path.dirname(relativeDirectoryName), "/"));
+        console.log(directoryName, directoryParent, path.dirname(relativeDirectoryName), ProjectPath.normalizeRelative(path.dirname(relativeDirectoryName)));
         MySQLConnection.getConnection().then(async connection => {
 
             let dir = await connection
                 .getRepository(DirectoryEntity)
-                .createQueryBuilder("directory_entity")
-                .where("directory_entity.name = :name AND directory_entity.path = :path", {
+                .createQueryBuilder("directory")
+                .where("directory.name = :name AND directory.path = :path", {
                     name: directoryName,
                     path: directoryParent
                 })
-                .innerJoinAndSelect("directory_entity.directories", "directories")
-                .innerJoinAndSelect("directory_entity.photos", "photos")
+                .leftJoinAndSelect("directory.directories", "directories")
+                .leftJoinAndSelect("directory.photos", "photos")
                 .getOne();
 
 
-            console.log(dir);
             if (dir) {
-                for (let i = 0; i < dir.photos.length; i++) {
-                    dir.photos[i].directory = dir;
-                    dir.photos[i].metadata.keywords = <any>JSON.parse(<any>dir.photos[i].metadata.keywords);
-                    dir.photos[i].metadata.cameraData = <any>JSON.parse(<any>dir.photos[i].metadata.cameraData);
-                    dir.photos[i].metadata.positionData = <any>JSON.parse(<any>dir.photos[i].metadata.positionData);
-                    dir.photos[i].metadata.size = <any>JSON.parse(<any>dir.photos[i].metadata.size);
+                if (dir.photos) {
+                    for (let i = 0; i < dir.photos.length; i++) {
+                        dir.photos[i].directory = dir;
+                        dir.photos[i].metadata.keywords = <any>JSON.parse(<any>dir.photos[i].metadata.keywords);
+                        dir.photos[i].metadata.cameraData = <any>JSON.parse(<any>dir.photos[i].metadata.cameraData);
+                        dir.photos[i].metadata.positionData = <any>JSON.parse(<any>dir.photos[i].metadata.positionData);
+                        dir.photos[i].metadata.size = <any>JSON.parse(<any>dir.photos[i].metadata.size);
+                    }
                 }
                 return cb(null, dir);
             }
@@ -77,7 +80,6 @@ export class GalleryManager implements IGalleryManager {
                     photo.metadata.size = <any>JSON.stringify(photo.metadata.size);
                     await photosRepository.persist(photo);
                 }
-
 
                 return cb(null, parentDir);
 

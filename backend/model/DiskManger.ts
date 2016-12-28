@@ -18,10 +18,9 @@ import {ProjectPath} from "../ProjectPath";
 export class DiskManager {
     public static scanDirectory(relativeDirectoryName: string, cb: (error: any, result: DirectoryDTO) => void) {
         console.log("DiskManager: scanDirectory");
-        let directoryName = path.normalize(path.basename(relativeDirectoryName));
-        let directoryParent = path.normalize(path.join(path.dirname(relativeDirectoryName), "/"));
-        let absoluteDirectoryName = path.normalize(path.join(ProjectPath.ImageFolder, relativeDirectoryName));
-        console.log(directoryName, directoryParent, path.dirname(relativeDirectoryName), path.join(path.dirname(relativeDirectoryName), "/"));
+        let directoryName = path.basename(relativeDirectoryName);
+        let directoryParent = path.join(path.dirname(relativeDirectoryName), path.sep);
+        let absoluteDirectoryName = path.join(ProjectPath.ImageFolder, relativeDirectoryName);
 
         let directory = <DirectoryDTO>{
             name: directoryName,
@@ -45,7 +44,7 @@ export class DiskManager {
                 if (fs.statSync(fullFilePath).isDirectory()) {
                     directory.directories.push(<DirectoryDTO>{
                         name: file,
-                        path: relativeDirectoryName,
+                        path: path.join(relativeDirectoryName, path.sep),
                         lastUpdate: Date.now(),
                         directories: [],
                         photos: []

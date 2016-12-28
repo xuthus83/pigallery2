@@ -10,6 +10,10 @@ class ProjectPathClass {
         return path.resolve(pathStr) === path.normalize(pathStr);
     }
 
+    normalizeRelative(pathStr: string) {
+        return path.join(pathStr, path.sep);
+    }
+
     constructor() {
         this.Root = path.join(__dirname, "/../");
         this.ImageFolder = this.isAbsolutePath(Config.Server.imagesFolder) ? Config.Server.imagesFolder : path.join(this.Root, Config.Server.imagesFolder);
