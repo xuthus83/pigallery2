@@ -8,7 +8,8 @@
     "experimentalDecorators": true,
     "lib": [
       "es2015",
-      "dom"
+      "dom",
+      "es2015.promise"
     ],
     "suppressImplicitAnyIndexErrors": false,
     "typeRoots": [
@@ -16,7 +17,6 @@
     ]
   },
   "exclude": [
-    "node_modules",
-    "node_modules/@types"
+    "node_modules"
   ]
 }

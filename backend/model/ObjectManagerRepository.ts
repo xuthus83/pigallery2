@@ -25,7 +25,7 @@ export class ObjectManagerRepository {
             MySQLConnection.init().then(() => {
                 const GalleryManager = require("./mysql/GalleryManager").GalleryManager;
                 const UserManager = require("./mysql/UserManager").UserManager;
-                const SearchManager = require("./memory/SearchManager").SearchManager;
+                const SearchManager = require("./mysql/SearchManager").SearchManager;
                 ObjectManagerRepository.getInstance().setGalleryManager(new GalleryManager());
                 ObjectManagerRepository.getInstance().setUserManager(new UserManager());
                 ObjectManagerRepository.getInstance().setSearchManager(new SearchManager());

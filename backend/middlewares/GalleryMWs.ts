@@ -6,7 +6,7 @@ import {DirectoryDTO} from "../../common/entities/DirectoryDTO";
 import {ObjectManagerRepository} from "../model/ObjectManagerRepository";
 import {AutoCompleteItem, SearchTypes} from "../../common/entities/AutoCompleteItem";
 import {ContentWrapper} from "../../common/entities/ConentWrapper";
-import {SearchResult} from "../../common/entities/SearchResult";
+import {SearchResultDTO} from "../../common/entities/SearchResult";
 import {PhotoDTO} from "../../common/entities/PhotoDTO";
 import {Config} from "../config/Config";
 import {ProjectPath} from "../ProjectPath";
@@ -87,7 +87,7 @@ export class GalleryMWs {
             type = parseInt(req.query.type);
         }
 
-        ObjectManagerRepository.getInstance().getSearchManager().search(req.params.text, type, (err, result:SearchResult) => {
+        ObjectManagerRepository.getInstance().getSearchManager().search(req.params.text, type, (err, result: SearchResultDTO) => {
             if (err || !result) {
                 return next(new Error(ErrorCodes.GENERAL_ERROR, err));
             }
@@ -107,7 +107,7 @@ export class GalleryMWs {
         }
 
 
-        ObjectManagerRepository.getInstance().getSearchManager().instantSearch(req.params.text, (err, result:SearchResult) => {
+        ObjectManagerRepository.getInstance().getSearchManager().instantSearch(req.params.text, (err, result: SearchResultDTO) => {
             if (err || !result) {
                 return next(new Error(ErrorCodes.GENERAL_ERROR, err));
             }
