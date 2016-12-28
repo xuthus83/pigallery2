@@ -30,8 +30,7 @@ export class GalleryManager implements IGalleryManager {
                 .leftJoinAndSelect("directory.photos", "photos")
                 .getOne();
 
-
-            if (dir) {
+            if (dir && dir.scanned == true) {
                 if (dir.photos) {
                     for (let i = 0; i < dir.photos.length; i++) {
                         dir.photos[i].directory = dir;
@@ -41,7 +40,11 @@ export class GalleryManager implements IGalleryManager {
                         dir.photos[i].metadata.size = <any>JSON.parse(<any>dir.photos[i].metadata.size);
                     }
                 }
-                return cb(null, dir);
+
+                cb(null, dir); //WARNING: only on the fly indexing should happen after this point
+
+                //on the fly updating
+                this.indexDirectory(relativeDirectoryName, cb);
             }
             return this.indexDirectory(relativeDirectoryName, cb);
 
@@ -60,15 +63,44 @@ export class GalleryManager implements IGalleryManager {
                 let directoryRepository = connection.getRepository(DirectoryEntity);
                 let photosRepository = connection.getRepository(PhotoEntity);
 
-                let parentDir = await directoryRepository.persist(scannedDirectory);
+
+                let parentDir = await directoryRepository.createQueryBuilder("directory")
+                    .where("directory.name = :name AND directory.path = :path", {
+                        name: scannedDirectory.name,
+                        path: scannedDirectory.path
+                    }).getOne();
+
+                if (!!parentDir) {
+                    parentDir.scanned = true;
+                    parentDir.lastUpdate = Date.now();
+                    parentDir = await directoryRepository.persist(parentDir);
+                } else {
+                    (<DirectoryEntity>scannedDirectory).scanned = true;
+                    parentDir = await directoryRepository.persist(<DirectoryEntity>scannedDirectory);
+                }
 
                 for (let i = 0; i < scannedDirectory.directories.length; i++) {
+                    if ((await directoryRepository.createQueryBuilder("directory")
+                            .where("directory.name = :name AND directory.path = :path", {
+                                name: scannedDirectory.directories[i].name,
+                                path: scannedDirectory.directories[i].path
+                            }).getCount()) > 0) {
+                        continue;
+                    }
                     scannedDirectory.directories[i].parent = parentDir;
-                    await directoryRepository.persist(scannedDirectory.directories[i]);
+                    (<DirectoryEntity>scannedDirectory.directories[i]).scanned = false;
+                    await directoryRepository.persist(<DirectoryEntity>scannedDirectory.directories[i]);
                 }
 
                 for (let i = 0; i < scannedDirectory.photos.length; i++) {
-
+                    //TODO: load as batch
+                    if ((await photosRepository.createQueryBuilder("photo")
+                            .where("photo.name = :name AND photo.directory = :dir", {
+                                name: scannedDirectory.photos[i].name,
+                                dir: parentDir.id
+                            }).getCount()) > 0) {
+                        continue;
+                    }
                     //typeorm not supports recursive embended: TODO:fix it
                     scannedDirectory.photos[i].directory = null;
                     let photo = Utils.clone(scannedDirectory.photos[i]);
@@ -81,7 +113,7 @@ export class GalleryManager implements IGalleryManager {
                     await photosRepository.persist(photo);
                 }
 
-                return cb(null, parentDir);
+                return cb(null, scannedDirectory);
 
 
             }).catch((error) => {

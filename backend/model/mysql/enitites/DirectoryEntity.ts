@@ -22,6 +22,9 @@ export class DirectoryEntity implements DirectoryDTO {
     @Column('number')
     public lastUpdate: number;
 
+    @Column({type: 'smallint', length: 1})
+    public scanned: boolean;
+
     @ManyToOne(type => DirectoryEntity, directory => directory.directories)
     public parent: DirectoryEntity;
 

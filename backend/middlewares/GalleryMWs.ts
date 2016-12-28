@@ -24,6 +24,7 @@ export class GalleryMWs {
 
         ObjectManagerRepository.getInstance().getGalleryManager().listDirectory(directoryName, (err, directory: DirectoryDTO) => {
             if (err || !directory) {
+                console.error(err);
                 return next(new Error(ErrorCodes.GENERAL_ERROR, err));
             }
             
