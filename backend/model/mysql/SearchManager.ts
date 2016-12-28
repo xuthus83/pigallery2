@@ -3,7 +3,7 @@ import {ISearchManager} from "../interfaces/ISearchManager";
 import {SearchResultDTO} from "../../../common/entities/SearchResult";
 import {MySQLConnection} from "./MySQLConnection";
 import {PhotoEntity} from "./enitites/PhotoEntity";
-import {DirectoryEnitity} from "./enitites/DirectoryEntity";
+import {DirectoryEntity} from "./enitites/DirectoryEntity";
 import {PositionMetaData} from "../../../common/entities/PhotoDTO";
 
 export class SearchManager implements ISearchManager {
@@ -15,7 +15,7 @@ export class SearchManager implements ISearchManager {
             try {
                 let result: Array<AutoCompleteItem> = [];
                 let photoRepository = connection.getRepository(PhotoEntity);
-                let directoryRepository = connection.getRepository(DirectoryEnitity);
+                let directoryRepository = connection.getRepository(DirectoryEntity);
 
 
                 (await photoRepository
@@ -71,11 +71,101 @@ export class SearchManager implements ISearchManager {
     }
 
     search(text: string, searchType: SearchTypes, cb: (error: any, result: SearchResultDTO) => void) {
-        throw new Error("not implemented");
+        MySQLConnection.getConnection().then(async connection => {
+
+            let result: SearchResultDTO = <SearchResultDTO>{
+                searchText: text,
+                searchType: searchType,
+                directories: [],
+                photos: []
+            };
+
+            let query = connection
+                .getRepository(PhotoEntity)
+                .createQueryBuilder("photo");
+
+
+            if (!searchType || searchType === SearchTypes.image) {
+                query.orWhere('photo.name LIKE :text COLLATE utf8_general_ci', {text: "%" + text + "%"});
+            }
+
+            if (!searchType || searchType === SearchTypes.position) {
+                query.orWhere('photo.metadata.positionData LIKE :text COLLATE utf8_general_ci', {text: "%" + text + "%"});
+            }
+            if (!searchType || searchType === SearchTypes.keyword) {
+                query.orWhere('photo.metadata.keywords LIKE :text COLLATE utf8_general_ci', {text: "%" + text + "%"});
+            }
+            let photos = await query
+                .innerJoinAndSelect("photo.directory", "directory")
+                .getMany();
+
+
+            if (photos) {
+                for (let i = 0; i < photos.length; i++) {
+                    photos[i].metadata.keywords = <any>JSON.parse(<any>photos[i].metadata.keywords);
+                    photos[i].metadata.cameraData = <any>JSON.parse(<any>photos[i].metadata.cameraData);
+                    photos[i].metadata.positionData = <any>JSON.parse(<any>photos[i].metadata.positionData);
+                    photos[i].metadata.size = <any>JSON.parse(<any>photos[i].metadata.size);
+                }
+                result.photos = photos;
+            }
+
+            result.directories = await connection
+                .getRepository(DirectoryEntity)
+                .createQueryBuilder("dir")
+                .where('dir.name LIKE :text COLLATE utf8_general_ci', {text: "%" + text + "%"})
+                .getMany();
+
+
+            return cb(null, result);
+        }).catch((error) => {
+            return cb(error, null);
+        });
     }
 
     instantSearch(text: string, cb: (error: any, result: SearchResultDTO) => void) {
-        throw new Error("not implemented");
+        MySQLConnection.getConnection().then(async connection => {
+
+            let result: SearchResultDTO = <SearchResultDTO>{
+                searchText: text,
+                directories: [],
+                photos: []
+            };
+
+            let photos = await connection
+                .getRepository(PhotoEntity)
+                .createQueryBuilder("photo")
+                .where('photo.metadata.keywords LIKE :text COLLATE utf8_general_ci', {text: "%" + text + "%"})
+                .orWhere('photo.metadata.positionData LIKE :text COLLATE utf8_general_ci', {text: "%" + text + "%"})
+                .orWhere('photo.name LIKE :text COLLATE utf8_general_ci', {text: "%" + text + "%"})
+                .innerJoinAndSelect("photo.directory", "directory")
+                .setLimit(10)
+                .getMany();
+
+
+            if (photos) {
+                for (let i = 0; i < photos.length; i++) {
+                    photos[i].metadata.keywords = <any>JSON.parse(<any>photos[i].metadata.keywords);
+                    photos[i].metadata.cameraData = <any>JSON.parse(<any>photos[i].metadata.cameraData);
+                    photos[i].metadata.positionData = <any>JSON.parse(<any>photos[i].metadata.positionData);
+                    photos[i].metadata.size = <any>JSON.parse(<any>photos[i].metadata.size);
+                }
+                result.photos = photos;
+            }
+
+            let directories = await connection
+                .getRepository(DirectoryEntity)
+                .createQueryBuilder("dir")
+                .where('dir.name LIKE :text COLLATE utf8_general_ci', {text: "%" + text + "%"})
+                .setLimit(10)
+                .getMany();
+
+            result.directories = directories;
+
+            return cb(null, result);
+        }).catch((error) => {
+            return cb(error, null);
+        });
     }
 
     private encapsulateAutoComplete(values: Array<string>, type: SearchTypes) {

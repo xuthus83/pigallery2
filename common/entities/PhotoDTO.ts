@@ -13,7 +13,7 @@ export interface PhotoMetadata {
     cameraData: CameraMetadata;
     positionData: PositionMetaData;
     size: ImageSize;
-    creationDate: Date;
+    creationDate: number;
 }
 
 export interface ImageSize {

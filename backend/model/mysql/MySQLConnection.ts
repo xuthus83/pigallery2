@@ -4,7 +4,7 @@ import {Config} from "../../config/Config";
 import {UserEntity} from "./enitites/UserEntity";
 import {UserRoles} from "../../../common/entities/UserDTO";
 import {PhotoEntity, PhotoMetadataEntity} from "./enitites/PhotoEntity";
-import {DirectoryEnitity} from "./enitites/DirectoryEntity";
+import {DirectoryEntity} from "./enitites/DirectoryEntity";
 
 
 export class MySQLConnection {
@@ -34,7 +34,7 @@ export class MySQLConnection {
                 },
                 entities: [
                     UserEntity,
-                    DirectoryEnitity,
+                    DirectoryEntity,
                     PhotoMetadataEntity,
                     PhotoEntity
                 ],

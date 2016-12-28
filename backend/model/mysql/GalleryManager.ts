@@ -1,7 +1,7 @@
 import {IGalleryManager} from "../interfaces/IGalleryManager";
 import {DirectoryDTO} from "../../../common/entities/DirectoryDTO";
 import * as path from "path";
-import {DirectoryEnitity} from "./enitites/DirectoryEntity";
+import {DirectoryEntity} from "./enitites/DirectoryEntity";
 import {MySQLConnection} from "./MySQLConnection";
 import {DiskManager} from "../DiskManger";
 import {PhotoEntity} from "./enitites/PhotoEntity";
@@ -18,7 +18,7 @@ export class GalleryManager implements IGalleryManager {
         MySQLConnection.getConnection().then(async connection => {
 
             let dir = await connection
-                .getRepository(DirectoryEnitity)
+                .getRepository(DirectoryEntity)
                 .createQueryBuilder("directory_entity")
                 .where("directory_entity.name = :name AND directory_entity.path = :path", {
                     name: directoryName,
@@ -54,7 +54,7 @@ export class GalleryManager implements IGalleryManager {
         DiskManager.scanDirectory(relativeDirectoryName, (err, scannedDirectory) => {
             MySQLConnection.getConnection().then(async connection => {
 
-                let directoryRepository = connection.getRepository(DirectoryEnitity);
+                let directoryRepository = connection.getRepository(DirectoryEntity);
                 let photosRepository = connection.getRepository(PhotoEntity);
 
                 let parentDir = await directoryRepository.persist(scannedDirectory);

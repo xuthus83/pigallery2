@@ -4,7 +4,7 @@ export interface DirectoryDTO {
     id: number;
     name: string;
     path: string;
-    lastUpdate: Date;
+    lastUpdate: number;
     parent: DirectoryDTO;
     directories: Array<DirectoryDTO>;
     photos: Array<PhotoDTO>;

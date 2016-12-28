@@ -1,8 +1,8 @@
 export enum SearchTypes {
-    image,
-    directory,
-    keyword,
-    position
+    directory = 1,
+    keyword = 2,
+    position = 3,
+    image = 4
 }
 
 export class AutoCompleteItem {

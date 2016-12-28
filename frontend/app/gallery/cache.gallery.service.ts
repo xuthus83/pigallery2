@@ -17,9 +17,6 @@ export class GalleryCacheService {
             let directory: DirectoryDTO = JSON.parse(value);
 
 
-            directory.photos.forEach((photo: PhotoDTO) => {
-                photo.metadata.creationDate = new Date(<any>photo.metadata.creationDate);
-            });
 
             directory.photos.forEach((photo: PhotoDTO) => {
                 photo.directory = directory;

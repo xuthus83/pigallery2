@@ -94,7 +94,7 @@ export class Server {
             throw error;
         }
 
-        var bind = typeof Config.Server.port === 'string'
+        const bind = typeof Config.Server.port === 'string'
             ? 'Pipe ' + Config.Server.port
             : 'Port ' + Config.Server.port;
 
@@ -118,8 +118,8 @@ export class Server {
      * Event listener for HTTP server "listening" event.
      */
     private onListening = () => {
-        var addr = this.server.address();
-        var bind = typeof addr === 'string'
+        let addr = this.server.address();
+        const bind = typeof addr === 'string'
             ? 'pipe ' + addr
             : 'port ' + addr.port;
         this.debug('Listening on ' + bind);

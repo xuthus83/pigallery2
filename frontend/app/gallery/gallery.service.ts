@@ -39,10 +39,6 @@ export class GalleryService {
 
 
                     message.result.directory.photos.forEach((photo: PhotoDTO) => {
-                        photo.metadata.creationDate = new Date(<any>photo.metadata.creationDate);
-                    });
-
-                    message.result.directory.photos.forEach((photo: PhotoDTO) => {
                         photo.directory = message.result.directory;
                     });
 

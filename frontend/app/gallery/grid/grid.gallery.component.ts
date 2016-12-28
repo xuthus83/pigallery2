@@ -88,7 +88,7 @@ export class GalleryGridComponent implements OnChanges,AfterViewInit {
     private sortPhotos() {
         //sort pohots by date
         this.photos.sort((a: PhotoDTO, b: PhotoDTO) => {
-            return a.metadata.creationDate.getTime() - b.metadata.creationDate.getTime();
+            return a.metadata.creationDate - b.metadata.creationDate;
         });
 
     }

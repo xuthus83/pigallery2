@@ -7,7 +7,7 @@ import {
     ImageSize,
     PositionMetaData
 } from "../../../../common/entities/PhotoDTO";
-import {DirectoryEnitity} from "./DirectoryEntity";
+import {DirectoryEntity} from "./DirectoryEntity";
 
 @Table()
 export class PhotoEntity implements PhotoDTO {
@@ -18,7 +18,7 @@ export class PhotoEntity implements PhotoDTO {
     @Column("string")
     name: string;
 
-    @ManyToOne(type => DirectoryEnitity, directory => directory.photos)
+    @ManyToOne(type => DirectoryEntity, directory => directory.photos)
     directory: DirectoryDTO;
 
     @Embedded(type => PhotoMetadataEntity)
@@ -44,8 +44,8 @@ export class PhotoMetadataEntity implements PhotoMetadata {
     @Column("string")
     size: ImageSize;
 
-    @Column("datetime")
-    creationDate: Date;
+    @Column("number")
+    creationDate: number;
 }
 
 /*

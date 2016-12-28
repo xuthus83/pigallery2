@@ -16,6 +16,10 @@ export class GallerySearchComponent {
 
     autoCompleteItems: Array<AutoCompleteRenderItem> = [];
     private searchText: string = "";
+    private cache = {
+        lastAutocomplete: "",
+        lastInstantSearch: ""
+    };
 
     SearchTypes: any = [];
 
@@ -37,13 +41,15 @@ export class GallerySearchComponent {
 
     onSearchChange(event: KeyboardEvent) {
 
-        let searchText = (<HTMLInputElement>event.target).value;
+        let searchText = (<HTMLInputElement>event.target).value.trim();
 
-        if (Config.Client.Search.autocompleteEnabled) {
+        if (Config.Client.Search.autocompleteEnabled && this.cache.lastAutocomplete != searchText) {
+            this.cache.lastAutocomplete = searchText;
             this.autocomplete(searchText);
         }
 
-        if (Config.Client.Search.instantSearchEnabled) {
+        if (Config.Client.Search.instantSearchEnabled && this.cache.lastInstantSearch != searchText) {
+            this.cache.lastInstantSearch = searchText;
             this._galleryService.instantSearch(searchText);
         }
     }

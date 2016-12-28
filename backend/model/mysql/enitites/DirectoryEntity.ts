@@ -3,7 +3,7 @@ import {DirectoryDTO} from "../../../../common/entities/DirectoryDTO";
 import {PhotoEntity} from "./PhotoEntity";
 
 @Table()
-export class DirectoryEnitity implements DirectoryDTO {
+export class DirectoryEntity implements DirectoryDTO {
 
     @PrimaryGeneratedColumn()
     id: number;
@@ -19,14 +19,14 @@ export class DirectoryEnitity implements DirectoryDTO {
     path: string;
 
 
-    @Column('datetime')
-    public lastUpdate: Date;
+    @Column('number')
+    public lastUpdate: number;
 
-    @ManyToOne(type => DirectoryEnitity, directory => directory.directories)
-    public parent: DirectoryEnitity;
+    @ManyToOne(type => DirectoryEntity, directory => directory.directories)
+    public parent: DirectoryEntity;
 
-    @OneToMany(type => DirectoryEnitity, dir => dir.parent)
-    public directories: Array<DirectoryEnitity>;
+    @OneToMany(type => DirectoryEntity, dir => dir.parent)
+    public directories: Array<DirectoryEntity>;
 
     @OneToMany(type => PhotoEntity, photo => photo.directory)
     public photos: Array<PhotoEntity>;

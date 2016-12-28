@@ -26,7 +26,7 @@ export class DiskManager {
         let directory = <DirectoryDTO>{
             name: directoryName,
             path: directoryParent,
-            lastUpdate: new Date(),
+            lastUpdate: Date.now(),
             directories: [],
             photos: []
         };
@@ -46,7 +46,7 @@ export class DiskManager {
                     directory.directories.push(<DirectoryDTO>{
                         name: file,
                         path: relativeDirectoryName,
-                        lastUpdate: new Date(),
+                        lastUpdate: Date.now(),
                         directories: [],
                         photos: []
                     });
@@ -85,11 +85,9 @@ export class DiskManager {
 
         let extension = mime.lookup(fullPath);
 
-        if (imageMimeTypes.indexOf(extension) !== -1) {
-            return true;
-        }
+        return imageMimeTypes.indexOf(extension) !== -1;
 
-        return false;
+
     }
 
     /*
@@ -168,7 +166,7 @@ export class DiskManager {
                     };
 
                     let keywords: [string] = iptcData.keywords.map((s: string) => decode(s));
-                    let creationDate: Date = iptcData.date_time;
+                    let creationDate: number = iptcData.date_time.getTime();
 
 
                     let metadata: PhotoMetadata = <PhotoMetadata>{
