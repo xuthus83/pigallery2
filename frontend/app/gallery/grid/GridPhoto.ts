@@ -27,10 +27,12 @@ export class GridPhoto {
             this.replacementSizeCache = null;
 
             let size = this.getThumbnailSize();
-            for (let i = 0; i < this.photo.readyThumbnails.length; i++) {
-                if (this.photo.readyThumbnails[i] < size) {
-                    this.replacementSizeCache = this.photo.readyThumbnails[i];
-                    break;
+            if (!!this.photo.readyThumbnails) {
+                for (let i = 0; i < this.photo.readyThumbnails.length; i++) {
+                    if (this.photo.readyThumbnails[i] < size) {
+                        this.replacementSizeCache = this.photo.readyThumbnails[i];
+                        break;
+                    }
                 }
             }
         }
@@ -42,7 +44,7 @@ export class GridPhoto {
     }
 
     isThumbnailAvailable() {
-        return this.photo.readyThumbnails.indexOf(this.getThumbnailSize()) != -1;
+        return this.photo.readyThumbnails && this.photo.readyThumbnails.indexOf(this.getThumbnailSize()) != -1;
     }
 
     getReplacementThumbnailPath() {

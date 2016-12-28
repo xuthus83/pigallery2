@@ -44,7 +44,7 @@ export class GalleryManager implements IGalleryManager {
                 cb(null, dir); //WARNING: only on the fly indexing should happen after this point
 
                 //on the fly updating
-                this.indexDirectory(relativeDirectoryName, cb);
+                return this.indexDirectory(relativeDirectoryName, cb);
             }
             return this.indexDirectory(relativeDirectoryName, cb);
 
