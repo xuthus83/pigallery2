@@ -38,6 +38,7 @@ export class GalleryManager implements IGalleryManager {
                         dir.photos[i].metadata.cameraData = <any>JSON.parse(<any>dir.photos[i].metadata.cameraData);
                         dir.photos[i].metadata.positionData = <any>JSON.parse(<any>dir.photos[i].metadata.positionData);
                         dir.photos[i].metadata.size = <any>JSON.parse(<any>dir.photos[i].metadata.size);
+                        dir.photos[i].readyThumbnails = [];
                     }
                 }
 
@@ -69,6 +70,7 @@ export class GalleryManager implements IGalleryManager {
             MySQLConnection.getConnection().then(async connection => {
 
                 //returning with the result
+                scannedDirectory.photos.forEach(p => p.readyThumbnails = []);
                 cb(null, scannedDirectory);
 
                 //saving to db
@@ -94,16 +96,20 @@ export class GalleryManager implements IGalleryManager {
 
                 for (let i = 0; i < scannedDirectory.directories.length; i++) {
                     //TODO: simplify algorithm
-                    if ((await directoryRepository.createQueryBuilder("directory")
-                            .where("directory.name = :name AND directory.path = :path", {
-                                name: scannedDirectory.directories[i].name,
-                                path: scannedDirectory.directories[i].path
-                            }).getCount()) > 0) {
-                        continue;
+                    let dir = await directoryRepository.createQueryBuilder("directory")
+                        .where("directory.name = :name AND directory.path = :path", {
+                            name: scannedDirectory.directories[i].name,
+                            path: scannedDirectory.directories[i].path
+                        }).getOne();
+
+                    if (dir) {
+                        dir.parent = parentDir;
+                        await directoryRepository.persist(dir);
+                    } else {
+                        scannedDirectory.directories[i].parent = parentDir;
+                        (<DirectoryEntity>scannedDirectory.directories[i]).scanned = false;
+                        await directoryRepository.persist(<DirectoryEntity>scannedDirectory.directories[i]);
                     }
-                    scannedDirectory.directories[i].parent = parentDir;
-                    (<DirectoryEntity>scannedDirectory.directories[i]).scanned = false;
-                    await directoryRepository.persist(<Array<DirectoryEntity>>scannedDirectory.directories);
                 }
 
 
