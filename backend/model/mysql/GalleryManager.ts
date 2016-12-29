@@ -44,7 +44,11 @@ export class GalleryManager implements IGalleryManager {
                 cb(null, dir); //WARNING: only on the fly indexing should happen after this point
 
                 //on the fly updating
-                return this.indexDirectory(relativeDirectoryName, cb);
+                return this.indexDirectory(relativeDirectoryName, (err, res) => {
+                    if (!!err || !res) {
+                        console.error(err);
+                    }
+                });
             }
             return this.indexDirectory(relativeDirectoryName, cb);
 
@@ -58,8 +62,16 @@ export class GalleryManager implements IGalleryManager {
 
     public indexDirectory(relativeDirectoryName, cb: (error: any, result: DirectoryDTO) => void) {
         DiskManager.scanDirectory(relativeDirectoryName, (err, scannedDirectory) => {
+            if (!!err || !scannedDirectory) {
+                return cb(err, null);
+            }
+
             MySQLConnection.getConnection().then(async connection => {
 
+                //returning with the result
+                cb(null, scannedDirectory);
+
+                //saving to db
                 let directoryRepository = connection.getRepository(DirectoryEntity);
                 let photosRepository = connection.getRepository(PhotoEntity);
 
@@ -79,7 +91,9 @@ export class GalleryManager implements IGalleryManager {
                     parentDir = await directoryRepository.persist(<DirectoryEntity>scannedDirectory);
                 }
 
+
                 for (let i = 0; i < scannedDirectory.directories.length; i++) {
+                    //TODO: simplify algorithm
                     if ((await directoryRepository.createQueryBuilder("directory")
                             .where("directory.name = :name AND directory.path = :path", {
                                 name: scannedDirectory.directories[i].name,
@@ -89,31 +103,53 @@ export class GalleryManager implements IGalleryManager {
                     }
                     scannedDirectory.directories[i].parent = parentDir;
                     (<DirectoryEntity>scannedDirectory.directories[i]).scanned = false;
-                    await directoryRepository.persist(<DirectoryEntity>scannedDirectory.directories[i]);
+                    await directoryRepository.persist(<Array<DirectoryEntity>>scannedDirectory.directories);
                 }
 
+
+                let indexedPhotos = await photosRepository.createQueryBuilder("photo")
+                    .where("photo.directory = :dir", {
+                        dir: parentDir.id
+                    }).getMany();
+
+
+                let photosToSave = [];
                 for (let i = 0; i < scannedDirectory.photos.length; i++) {
-                    //TODO: load as batch
-                    if ((await photosRepository.createQueryBuilder("photo")
-                            .where("photo.name = :name AND photo.directory = :dir", {
-                                name: scannedDirectory.photos[i].name,
-                                dir: parentDir.id
-                            }).getCount()) > 0) {
-                        continue;
+                    let photo = null;
+                    for (let j = 0; j < indexedPhotos.length; j++) {
+                        if (indexedPhotos[j].name == scannedDirectory.photos[i].name) {
+                            photo = indexedPhotos[j];
+                            indexedPhotos.splice(j, 1);
+                            break;
+                        }
                     }
-                    //typeorm not supports recursive embended: TODO:fix it
-                    scannedDirectory.photos[i].directory = null;
-                    let photo = Utils.clone(scannedDirectory.photos[i]);
-                    scannedDirectory.photos[i].directory = scannedDirectory;
-                    photo.directory = parentDir;
-                    photo.metadata.keywords = <any>JSON.stringify(photo.metadata.keywords);
-                    photo.metadata.cameraData = <any>JSON.stringify(photo.metadata.cameraData);
-                    photo.metadata.positionData = <any>JSON.stringify(photo.metadata.positionData);
-                    photo.metadata.size = <any>JSON.stringify(photo.metadata.size);
-                    await photosRepository.persist(photo);
-                }
+                    if (photo == null) {
+                        scannedDirectory.photos[i].directory = null;
+                        photo = Utils.clone(scannedDirectory.photos[i]);
+                        scannedDirectory.photos[i].directory = scannedDirectory;
+                        photo.directory = parentDir;
+                    }
 
-                return cb(null, scannedDirectory);
+                    //typeorm not supports recursive embended: TODO:fix it
+                    let keyStr = <any>JSON.stringify(scannedDirectory.photos[i].metadata.keywords);
+                    let camStr = <any>JSON.stringify(scannedDirectory.photos[i].metadata.cameraData);
+                    let posStr = <any>JSON.stringify(scannedDirectory.photos[i].metadata.positionData);
+                    let sizeStr = <any>JSON.stringify(scannedDirectory.photos[i].metadata.size);
+
+                    if (photo.metadata.keywords != keyStr ||
+                        photo.metadata.cameraData != camStr ||
+                        photo.metadata.positionData != posStr ||
+                        photo.metadata.size != sizeStr) {
+
+                        photo.metadata.keywords = keyStr;
+                        photo.metadata.cameraData = camStr;
+                        photo.metadata.positionData = posStr;
+                        photo.metadata.size = sizeStr;
+                        photosToSave.push(photo);
+                    }
+                }
+                await photosRepository.persist(photosToSave);
+                await photosRepository.remove(indexedPhotos);
 
 
             }).catch((error) => {

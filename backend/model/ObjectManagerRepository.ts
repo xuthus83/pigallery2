@@ -29,6 +29,7 @@ export class ObjectManagerRepository {
                 ObjectManagerRepository.getInstance().setGalleryManager(new GalleryManager());
                 ObjectManagerRepository.getInstance().setUserManager(new UserManager());
                 ObjectManagerRepository.getInstance().setSearchManager(new SearchManager());
+                console.log("MySQL DB inited");
                 resolve(true);
             }).catch(err => reject(err));
         });

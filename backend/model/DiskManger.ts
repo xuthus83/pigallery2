@@ -31,7 +31,7 @@ export class DiskManager {
         };
 
         let promises: Array< Promise<any> > = [];
-        fs.readdir(absoluteDirectoryName, function (err, list) {
+        fs.readdir(absoluteDirectoryName, (err, list) => {
 
             if (err) {
                 return cb(err, null);
@@ -63,6 +63,7 @@ export class DiskManager {
             }
 
             Promise.all(promises).then(() => {
+                console.log("DiskManager: scanDirectory finished");
                 return cb(err, directory);
             });
 
@@ -125,7 +126,7 @@ export class DiskManager {
         return new Promise<PhotoMetadata>((resolve: (metadata: PhotoMetadata) => void, reject) => {
             fs.readFile(fullPath, function (err, data) {
                 if (err) {
-                    reject(err);
+                    return reject(err);
                 } else {
                     let exif = exif_parser.create(data).parse();
                     let iptcData = iptc(data);
@@ -175,7 +176,7 @@ export class DiskManager {
                         size: imageSize,
                         creationDate: creationDate
                     };
-                    resolve(metadata);
+                    return resolve(metadata);
                 }
             });
         });
