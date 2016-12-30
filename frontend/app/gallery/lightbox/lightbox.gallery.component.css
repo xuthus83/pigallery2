@@ -10,6 +10,12 @@
     justify-content: center; /* add to align horizontal */
     align-items: center; /* add to align vertical */
     cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+gallery-lightbox-photo {
+    transition: all 0.3s ease-in-out;
+    overflow: hidden;
 }
 
 .blackCanvas{
@@ -20,6 +26,7 @@
     width: 100%; /* Full width */
     height: 100%; /* Full height */
     background-color: black;
+    transition: all 0.3s ease-in-out;
 }
 
 

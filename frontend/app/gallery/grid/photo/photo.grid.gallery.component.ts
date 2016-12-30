@@ -162,10 +162,12 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, AfterViewInit
     }
 
     public getDimension(): Dimension {
-        return new Dimension(this.imageRef.nativeElement.offsetTop,
-            this.imageRef.nativeElement.offsetLeft,
-            this.imageRef.nativeElement.width,
-            this.imageRef.nativeElement.height);
+        return <Dimension>{
+            top: this.imageRef.nativeElement.offsetTop,
+            left: this.imageRef.nativeElement.offsetLeft,
+            width: this.imageRef.nativeElement.width,
+            height: this.imageRef.nativeElement.height
+        };
     }
 
 }

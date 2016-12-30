@@ -13,7 +13,10 @@ export class GalleryLightboxComponent {
     @Output('onLastElement') onLastElement = new EventEmitter();
 
     public navigation = {hasPrev: true, hasNext: true};
-    public photoDimension: Dimension = new Dimension(0, 0, 0, 0);
+    public photoDimension: Dimension = <Dimension>{top: 0, left: 0, width: 0, height: 0};
+    public lightboxDimension: Dimension = <Dimension>{top: 0, left: 0, width: 0, height: 0};
+    private transition: string = "";
+    public blackCanvasOpacity: any = 0;
 
     private activePhoto: GalleryPhotoComponent;
     public gridPhotoQL: QueryList<GalleryPhotoComponent>;
@@ -30,6 +33,7 @@ export class GalleryLightboxComponent {
 
     public nextImage() {
 
+        this.disableAnimation();
         let pcList = this.gridPhotoQL.toArray();
         for (let i = 0; i < pcList.length; i++) {
             if (pcList[i] === this.activePhoto) {
@@ -46,6 +50,7 @@ export class GalleryLightboxComponent {
     }
 
     public prevImage() {
+        this.disableAnimation();
         let pcList = this.gridPhotoQL.toArray();
         for (let i = 0; i < pcList.length; i++) {
             if (pcList[i] === this.activePhoto) {
@@ -59,37 +64,49 @@ export class GalleryLightboxComponent {
 
 
     private showPhoto(photoComponent: GalleryPhotoComponent) {
-        this.activePhoto = null;
-        setImmediate(() => {
-            let pcList = this.gridPhotoQL.toArray();
+        let pcList = this.gridPhotoQL.toArray();
 
-            let index = pcList.indexOf(photoComponent);
-            if (index == -1) {
-                throw new Error("Can't find the photo");
-            }
+        let index = pcList.indexOf(photoComponent);
+        if (index == -1) {
+            throw new Error("Can't find the photo");
+        }
 
-            this.photoDimension = this.calcLightBoxPhotoDimension(photoComponent.gridPhoto.photo);
-            this.navigation.hasPrev = index > 0;
-            this.navigation.hasNext = index + 1 < pcList.length;
-            this.activePhoto = photoComponent;
-        });
+        this.photoDimension = this.calcLightBoxPhotoDimension(photoComponent.gridPhoto.photo);
+        this.navigation.hasPrev = index > 0;
+        this.navigation.hasNext = index + 1 < pcList.length;
+        this.activePhoto = photoComponent;
     }
 
     public show(photo: PhotoDTO) {
+        this.enableAnimation();
         this.visible = true;
         let selectedPhoto = this.findPhotoComponent(photo);
         if (selectedPhoto === null) {
-            throw new Error("Can't find PhotoDTO");
+            throw new Error("Can't find Photo");
         }
 
+        this.lightboxDimension = selectedPhoto.getDimension();
+        this.lightboxDimension.top -= this.getBodyScrollTop();
+        this.blackCanvasOpacity = 0;
+        this.photoDimension = selectedPhoto.getDimension();
 
-        this.showPhoto(selectedPhoto);
         document.getElementsByTagName('body')[0].style.overflow = 'hidden';
+
+        setImmediate(() => {
+            this.lightboxDimension = <Dimension>{
+                top: 0,
+                left: 0,
+                width: this.getScreenWidth(),
+                height: this.getScreenHeight()
+            };
+            this.blackCanvasOpacity = 1.0;
+            this.showPhoto(selectedPhoto);
+        });
     }
 
     public hide() {
+        this.enableAnimation();
         this.fullScreenService.exitFullScreen();
-        this.visible = false;
         let to = this.activePhoto.getDimension();
 
         //iff target image out of screen -> scroll to there
@@ -97,8 +114,15 @@ export class GalleryLightboxComponent {
             this.setBodyScrollTop(to.top);
         }
 
-        document.getElementsByTagName('body')[0].style.overflow = 'auto';
-        this.activePhoto = null;
+        this.lightboxDimension = this.activePhoto.getDimension();
+        this.lightboxDimension.top -= this.getBodyScrollTop();
+        this.blackCanvasOpacity = 0;
+        this.photoDimension = this.activePhoto.getDimension();
+        setTimeout(() => {
+            this.visible = false;
+            this.activePhoto = null;
+            document.getElementsByTagName('body')[0].style.overflow = 'scroll';
+        }, 500);
 
 
     }
@@ -126,6 +150,15 @@ export class GalleryLightboxComponent {
                 break;
         }
     }
+
+    private enableAnimation() {
+        this.transition = null;
+    }
+
+    private disableAnimation() {
+        this.transition = "initial";
+    }
+
 
     private getBodyScrollTop(): number {
         return window.scrollY;
@@ -157,7 +190,7 @@ export class GalleryLightboxComponent {
         let top = (this.getScreenHeight() / 2 - height / 2);
         let left = (this.getScreenWidth() / 2 - width / 2);
 
-        return new Dimension(top, left, width, height);
+        return <Dimension>{top: top, left: left, width: width, height: height};
     }
 }
 

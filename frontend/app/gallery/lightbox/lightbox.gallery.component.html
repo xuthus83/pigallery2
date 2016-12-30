@@ -1,14 +1,20 @@
 <div [hidden]="!visible" #root>
 
-    <div class="blackCanvas">
+    <div class="blackCanvas"
+         [style.opacity]="blackCanvasOpacity">
     </div>
 
-    <div class="lightbox">
+    <div class="lightbox"
+         [style.width.px]="lightboxDimension.width"
+         [style.height.px]="lightboxDimension.height"
+         [style.top.px]="lightboxDimension.top"
+         [style.left.px]="lightboxDimension.left">
         <gallery-lightbox-photo [gridPhoto]="activePhoto ? activePhoto.gridPhoto : null"
                                 [style.top.px]="photoDimension.top"
                                 [style.left.px]="photoDimension.left"
                                 [style.width.px]="photoDimension.width"
-                                [style.height.px]="photoDimension.height">
+                                [style.height.px]="photoDimension.height"
+                                [style.transition]="transition">
         </gallery-lightbox-photo>
     </div>
 

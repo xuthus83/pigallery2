@@ -12,6 +12,7 @@ export class GridPhoto {
 
     thumbnailLoaded() {
         if (!this.isThumbnailAvailable()) {
+            this.photo.readyThumbnails = this.photo.readyThumbnails || [];
             this.photo.readyThumbnails.push(this.getThumbnailSize());
         }
     }
