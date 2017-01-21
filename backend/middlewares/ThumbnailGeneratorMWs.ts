@@ -1,6 +1,5 @@
 ///<reference path="customtypings/jimp.d.ts"/>
 import * as path from "path";
-import * as Jimp from "jimp";
 import * as crypto from "crypto";
 import * as fs from "fs";
 import {NextFunction, Request, Response} from "express";
@@ -11,6 +10,38 @@ import {DirectoryDTO} from "../../common/entities/DirectoryDTO";
 import {ProjectPath} from "../ProjectPath";
 import {PhotoDTO} from "../../common/entities/PhotoDTO";
 
+const Pool = require('threads').Pool;
+const pool = new Pool();
+
+pool.run(
+    (input: {imagePath: string, size: number, thPath: string}, done) => {
+
+        //generate thumbnail
+        let Jimp = require("jimp");
+        Jimp.read(input.imagePath).then((image) => {
+            /**
+             * newWidth * newHeight = size*size
+             * newHeight/newWidth = height/width
+             *
+             * newHeight = (height/width)*newWidth
+             * newWidth * newWidth = (size*size) / (height/width)
+             *
+             * @type {number}
+             */
+            let ratio = image.bitmap.height / image.bitmap.width;
+            let newWidth = Math.sqrt((input.size * input.size) / ratio);
+
+            image.resize(newWidth, Jimp.AUTO, Jimp.RESIZE_BEZIER);
+
+            image.quality(60);        // set JPEG quality
+            image.write(input.thPath, () => { // save
+                return done();
+            });
+        }).catch(function (err) {
+            return done(new Error(ErrorCodes.GENERAL_ERROR));
+        });
+    }
+);
 
 export class ThumbnailGeneratorMWs {
 
@@ -93,29 +124,17 @@ export class ThumbnailGeneratorMWs {
             fs.mkdirSync(ProjectPath.ThumbnailFolder);
         }
 
-        //generate thumbnail
-        Jimp.read(imagePath).then((image) => {
-            /**
-             * newWidth * newHeight = size*size
-             * newHeight/newWidth = height/width
-             *
-             * newHeight = (height/width)*newWidth
-             * newWidth * newWidth = (size*size) / (height/width)
-             *
-             * @type {number}
-             */
-            let ratio = image.bitmap.height / image.bitmap.width;
-            let newWidth = Math.sqrt((size * size) / ratio);
 
-            image.resize(newWidth, Jimp.AUTO, Jimp.RESIZE_BEZIER);
-
-            image.quality(60);        // set JPEG quality
-            image.write(thPath, () => { // save
-                return next();
-            });
-        }).catch(function (err) {
-            return next(new Error(ErrorCodes.GENERAL_ERROR));
+        //run on other thread
+        pool.send({imagePath: imagePath, size: size, thPath: thPath})
+            .on('done', (out) => {
+                return next(out);
+            }).on('error', (job, error) => {
+            return next(new Error(ErrorCodes.GENERAL_ERROR, error));
         });
+
+
+
 
     }
 
