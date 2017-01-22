@@ -34,6 +34,7 @@ interface ClientConfig {
     enableOnScrollRendering:boolean;
     enableOnScrollThumbnailPrioritising:boolean;
     authenticationRequired:boolean;
+    googleApiKey: string;
 }
 export class ConfigClass {
 
@@ -50,7 +51,8 @@ export class ConfigClass {
         enableCache: false,
         enableOnScrollRendering: true,
         enableOnScrollThumbnailPrioritising: true,
-        authenticationRequired: true
+        authenticationRequired: true,
+        googleApiKey: ""
     };
 
     public setDatabaseType(type:DatabaseType) {

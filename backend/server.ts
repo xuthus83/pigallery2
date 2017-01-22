@@ -21,6 +21,8 @@ export class Server {
     private server: any;
 
     constructor() {
+        console.log("using config");
+        console.log(Config);
 
         this.debug = _debug("PiGallery2:server");
         this.app = _express();

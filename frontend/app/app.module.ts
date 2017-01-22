@@ -2,6 +2,7 @@ import {NgModule} from "@angular/core";
 import {BrowserModule} from "@angular/platform-browser";
 import {FormsModule} from "@angular/forms";
 import {HttpModule} from "@angular/http";
+import {AgmCoreModule} from "angular2-google-maps/core";
 import {AppComponent} from "./app.component";
 import {appRoutes} from "./app.routing";
 import {UserService} from "./model/network/user.service";
@@ -25,13 +26,18 @@ import {LoginComponent} from "./login/login.component";
 import {AdminComponent} from "./admin/admin.component";
 import {GalleryComponent} from "./gallery/gallery.component";
 import {StringifyRole} from "./pipes/StringifyRolePipe";
+import {Config} from "./config/Config";
+import {GalleryMapComponent} from "./gallery/map/map.gallery.component";
 
 @NgModule({
     imports: [
         BrowserModule,
         FormsModule,
         HttpModule,
-        appRoutes
+        appRoutes,
+        AgmCoreModule.forRoot({
+            apiKey: Config.Client.googleApiKey
+        })
     ],
     declarations: [AppComponent,
         LoginComponent,
@@ -44,6 +50,7 @@ import {StringifyRole} from "./pipes/StringifyRolePipe";
         GalleryGridComponent,
         GalleryDirectoryComponent,
         GalleryLightboxComponent,
+        GalleryMapComponent,
         FrameComponent,
         GallerySearchComponent,
         GalleryNavigatorComponent,

@@ -7,6 +7,7 @@
 
     <div body class="container" style="width: 100%; padding:0" *ngIf="_galleryService.content.directory">
         <gallery-navbar [directory]="_galleryService.content.directory"></gallery-navbar>
+        <gallery-map [photos]="_galleryService.content.directory.photos"></gallery-map>
         <gallery-directory *ngFor="let directory of _galleryService.content.directory.directories"
                            [directory]="directory"></gallery-directory>
         <gallery-grid [photos]="_galleryService.content.directory.photos" [lightbox]="lightbox"></gallery-grid>
@@ -25,6 +26,9 @@
                 <strong>{{_galleryService.content.searchResult.searchText}}</strong>
             </li>
         </ol>
+
+        <gallery-map [photos]="_galleryService.content.searchResult.photos"></gallery-map>
+
         <div *ngFor="let directory of _galleryService.content.searchResult.directories">
             <gallery-directory *ngIf="directory" [directory]="directory"></gallery-directory>
         </div>

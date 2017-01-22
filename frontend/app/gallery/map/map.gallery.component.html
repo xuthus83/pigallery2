@@ -1,0 +1,9 @@
+<sebm-google-map [zoom]="0">
+    <sebm-google-map-marker
+
+            *ngFor="let photo of mapPhotos"
+            [latitude]="photo.latitude"
+            [longitude]="photo.longitude"
+            [iconUrl]="photo.iconUrl">
+    </sebm-google-map-marker>
+</sebm-google-map>

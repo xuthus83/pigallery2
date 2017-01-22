@@ -18,7 +18,7 @@ const Pool = require('threads').Pool;
 const pool = new Pool(Config.Client.concurrentThumbnailGenerations);
 
 pool.run(
-    (input: {imagePath: string, size: number, thPath: string}, done) => {
+    (input: {imagePath: string, size: number, makeSquare: boolean, thPath: string}, done) => {
 
         //generate thumbnail
         let Jimp = require("jimp");
@@ -32,11 +32,16 @@ pool.run(
              *
              * @type {number}
              */
-            let ratio = image.bitmap.height / image.bitmap.width;
-            let newWidth = Math.sqrt((input.size * input.size) / ratio);
+            if (input.makeSquare == false) {
+                let ratio = image.bitmap.height / image.bitmap.width;
+                let newWidth = Math.sqrt((input.size * input.size) / ratio);
 
-            image.resize(newWidth, Jimp.AUTO, Jimp.RESIZE_BEZIER);
-
+                image.resize(newWidth, Jimp.AUTO, Jimp.RESIZE_BEZIER);
+            } else {
+                let ratio = image.bitmap.height / image.bitmap.width;
+                image.resize(input.size / Math.min(ratio, 1), Jimp.AUTO, Jimp.RESIZE_BEZIER);
+                image.crop(0, 0, input.size, input.size);
+            }
             image.quality(60);        // set JPEG quality
             image.write(input.thPath, () => { // save
                 return done();
@@ -113,6 +118,25 @@ export class ThumbnailGeneratorMWs {
             size = Config.Client.thumbnailSizes[0];
         }
 
+        ThumbnailGeneratorMWs.generateImage(imagePath, size, false, req, res, next);
+
+
+    }
+
+    public static generateIcon(req: Request, res: Response, next: NextFunction) {
+        if (!req.resultPipe)
+            return next();
+
+        //load parameters
+        let imagePath = req.resultPipe;
+        let size: number = 30;
+        ThumbnailGeneratorMWs.generateImage(imagePath, size, true, req, res, next);
+
+
+    }
+
+    private static generateImage(imagePath, size, makeSquare, req: Request, res: Response, next: NextFunction) {
+
         //generate thumbnail path
         let thPath = path.join(ProjectPath.ThumbnailFolder, ThumbnailGeneratorMWs.generateThumbnailName(imagePath, size));
 
@@ -130,14 +154,12 @@ export class ThumbnailGeneratorMWs {
         }
 
         //run on other thread
-        pool.send({imagePath: imagePath, size: size, thPath: thPath})
+        pool.send({imagePath: imagePath, size: size, thPath: thPath, makeSquare: makeSquare})
             .on('done', (out) => {
                 return next(out);
             }).on('error', (job, error) => {
             return next(new Error(ErrorCodes.GENERAL_ERROR, error));
         });
-
-
     }
 
     private static generateThumbnailName(imagePath: string, size: number): string {

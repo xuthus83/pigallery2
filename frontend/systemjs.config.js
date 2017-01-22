@@ -25,6 +25,7 @@
 
             // other libraries
             'rxjs': 'npm:rxjs',
+            'angular2-google-maps': 'npm:angular2-google-maps',
             'ng2-cookies': 'npm:ng2-cookies/ng2-cookies'
         },
         // packages tells the System loader how to load when no filename and/or no extension
@@ -35,6 +36,10 @@
             },
             rxjs: {
                 defaultExtension: 'js'
+            },
+            "angular2-google-maps/core": {
+                "defaultExtension": "js",
+                "main": "index.js"
             }
         }
     });

@@ -6,6 +6,7 @@ import {ThumbnailGeneratorMWs} from "../middlewares/ThumbnailGeneratorMWs";
 export class GalleryRouter {
     constructor(private app: any) {
 
+        this.addGetImageIcon();
         this.addGetImageThumbnail();
         this.addGetImage();
         this.addDirectoryList();
@@ -39,6 +40,15 @@ export class GalleryRouter {
             AuthenticationMWs.authenticate,
             GalleryMWs.loadImage,
             ThumbnailGeneratorMWs.generateThumbnail,
+            RenderingMWs.renderFile
+        );
+    };
+
+    private addGetImageIcon() {
+        this.app.get("/api/gallery/content/:imagePath(*\.(jpg|bmp|png|gif|jpeg))/icon",
+            AuthenticationMWs.authenticate,
+            GalleryMWs.loadImage,
+            ThumbnailGeneratorMWs.generateIcon,
             RenderingMWs.renderFile
         );
     };
