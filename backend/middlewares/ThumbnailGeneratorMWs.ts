@@ -2,6 +2,7 @@
 import * as path from "path";
 import * as crypto from "crypto";
 import * as fs from "fs";
+import * as os from "os";
 import {NextFunction, Request, Response} from "express";
 import {Error, ErrorCodes} from "../../common/entities/Error";
 import {Config} from "../config/Config";
@@ -10,8 +11,11 @@ import {DirectoryDTO} from "../../common/entities/DirectoryDTO";
 import {ProjectPath} from "../ProjectPath";
 import {PhotoDTO} from "../../common/entities/PhotoDTO";
 
+
+Config.Client.concurrentThumbnailGenerations = Math.max(1, os.cpus().length - 1);
+
 const Pool = require('threads').Pool;
-const pool = new Pool();
+const pool = new Pool(Config.Client.concurrentThumbnailGenerations);
 
 pool.run(
     (input: {imagePath: string, size: number, thPath: string}, done) => {
@@ -42,6 +46,7 @@ pool.run(
         });
     }
 );
+
 
 export class ThumbnailGeneratorMWs {
 
@@ -117,6 +122,7 @@ export class ThumbnailGeneratorMWs {
         //check if thumbnail already exist
         if (fs.existsSync(thPath) === true) {
             return next();
+            //return setTimeout(()=>{next();},2000);
         }
 
         //create thumbnail folder if not exist
@@ -124,7 +130,7 @@ export class ThumbnailGeneratorMWs {
             fs.mkdirSync(ProjectPath.ThumbnailFolder);
         }
 
-
+        console.log("generating thumbnail", imagePath, size);
         //run on other thread
         pool.send({imagePath: imagePath, size: size, thPath: thPath})
             .on('done', (out) => {
@@ -132,8 +138,6 @@ export class ThumbnailGeneratorMWs {
             }).on('error', (job, error) => {
             return next(new Error(ErrorCodes.GENERAL_ERROR, error));
         });
-
-
 
 
     }

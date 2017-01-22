@@ -76,7 +76,7 @@ export class ThumbnailLoaderService {
 
         for (let i = 0; i < this.que.length; i++) {
             for (let j = 0; j < this.que[i].taskEntities.length; j++) {
-                if (this.que[i].taskEntities[j].priority === ThumbnailLoadingPriority.high) {
+                if (this.que[i].inProgress == false && this.que[i].taskEntities[j].priority === ThumbnailLoadingPriority.high) {
                     return this.que[i];
                 }
             }
@@ -84,13 +84,21 @@ export class ThumbnailLoaderService {
 
         for (let i = 0; i < this.que.length; i++) {
             for (let j = 0; j < this.que[i].taskEntities.length; j++) {
-                if (this.que[i].taskEntities[j].priority === ThumbnailLoadingPriority.medium) {
+                if (this.que[i].inProgress == false && this.que[i].taskEntities[j].priority === ThumbnailLoadingPriority.medium) {
                     return this.que[i];
                 }
             }
         }
 
-        return this.que[0];
+
+        for (let i = 0; i < this.que.length; i++) {
+            if (this.que[i].inProgress == false) {
+                return this.que[i];
+            }
+
+        }
+
+        return null;
     }
 
     private taskReady(task: ThumbnailTask) {
@@ -119,10 +127,10 @@ export class ThumbnailLoaderService {
         task.taskEntities.forEach(te => te.listener.onStartedLoading());
         task.inProgress = true;
 
+        console.log("loading", task.gridPhoto.getThumbnailPath());
         let curImg = new Image();
-        curImg.src = task.gridPhoto.getThumbnailPath();
-
         curImg.onload = () => {
+            console.log("loaded", task.gridPhoto.getThumbnailPath());
 
             task.gridPhoto.thumbnailLoaded();
             this.galleryChacheService.photoUpdated(task.gridPhoto.photo);
@@ -134,12 +142,15 @@ export class ThumbnailLoaderService {
         };
 
         curImg.onerror = (error) => {
+            console.log("error", task.gridPhoto.getThumbnailPath());
             task.taskEntities.forEach((te: ThumbnailTaskEntity) => te.listener.onError(error));
 
             this.taskReady(task);
             this.runningRequests--;
             this.run();
         };
+
+        curImg.src = task.gridPhoto.getThumbnailPath();
     };
 }
 
