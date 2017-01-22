@@ -122,7 +122,6 @@ export class ThumbnailGeneratorMWs {
         //check if thumbnail already exist
         if (fs.existsSync(thPath) === true) {
             return next();
-            //return setTimeout(()=>{next();},2000);
         }
 
         //create thumbnail folder if not exist
@@ -130,7 +129,6 @@ export class ThumbnailGeneratorMWs {
             fs.mkdirSync(ProjectPath.ThumbnailFolder);
         }
 
-        console.log("generating thumbnail", imagePath, size);
         //run on other thread
         pool.send({imagePath: imagePath, size: size, thPath: thPath})
             .on('done', (out) => {

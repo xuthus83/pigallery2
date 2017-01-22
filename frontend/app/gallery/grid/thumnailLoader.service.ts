@@ -127,11 +127,8 @@ export class ThumbnailLoaderService {
         task.taskEntities.forEach(te => te.listener.onStartedLoading());
         task.inProgress = true;
 
-        console.log("loading", task.gridPhoto.getThumbnailPath());
         let curImg = new Image();
         curImg.onload = () => {
-            console.log("loaded", task.gridPhoto.getThumbnailPath());
-
             task.gridPhoto.thumbnailLoaded();
             this.galleryChacheService.photoUpdated(task.gridPhoto.photo);
             task.taskEntities.forEach((te: ThumbnailTaskEntity) => te.listener.onLoad());
@@ -142,7 +139,6 @@ export class ThumbnailLoaderService {
         };
 
         curImg.onerror = (error) => {
-            console.log("error", task.gridPhoto.getThumbnailPath());
             task.taskEntities.forEach((te: ThumbnailTaskEntity) => te.listener.onError(error));
 
             this.taskReady(task);
