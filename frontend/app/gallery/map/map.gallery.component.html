@@ -1,4 +1,10 @@
-<sebm-google-map [zoom]="0">
+<sebm-google-map
+        [disableDefaultUI]="true"
+        [zoomControl]="false"
+        [streetViewControl]="false"
+        [zoom]="0"
+        [latitude]="mapCenter.latitude"
+        [longitude]="mapCenter.longitude">
     <sebm-google-map-marker
 
             *ngFor="let photo of mapPhotos"
