@@ -18,7 +18,7 @@ export class ConfigLoader {
             }
         });
         this.processHierarchyVar(configObject, varAliases);
-        this.loadObject(configObject, process.env);
+        this.processHierarchyVar(configObject, process.env);
     };
 
     private static processArguments(configObject: any) {
@@ -95,16 +95,22 @@ export class ConfigLoader {
         }
     }
 
-    private static loadObject(targetObject: any, sourceObject: any) {
+
+    private static loadObject(targetObject, sourceObject) {
         Object.keys(sourceObject).forEach((key) => {
             if (typeof targetObject[key] === "undefined") {
                 return;
             }
-            if (typeof targetObject[key] === "object") {
-                this.loadObject(targetObject[key], sourceObject[key]);
-            } else {
-                targetObject[key] = sourceObject[key];
+
+            if (Array.isArray(targetObject[key])) {
+                return targetObject[key] = sourceObject[key];
             }
+
+            if (typeof targetObject[key] === "object") {
+                return this.loadObject(targetObject[key], sourceObject[key]);
+            }
+
+            targetObject[key] = sourceObject[key];
         });
     }
 }
