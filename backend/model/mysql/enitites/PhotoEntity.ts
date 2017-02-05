@@ -1,4 +1,4 @@
-import {Table, EmbeddableTable, Column, Embedded, PrimaryGeneratedColumn, ManyToOne} from "typeorm";
+import {Entity, EmbeddableEntity, Column, Embedded, PrimaryGeneratedColumn, ManyToOne} from "typeorm";
 import {DirectoryDTO} from "../../../../common/entities/DirectoryDTO";
 import {
     PhotoDTO,
@@ -9,7 +9,7 @@ import {
 } from "../../../../common/entities/PhotoDTO";
 import {DirectoryEntity} from "./DirectoryEntity";
 
-@Table()
+@Entity()
 export class PhotoEntity implements PhotoDTO {
 
     @PrimaryGeneratedColumn()
@@ -29,7 +29,7 @@ export class PhotoEntity implements PhotoDTO {
 }
 
 
-@EmbeddableTable()
+@EmbeddableEntity()
 export class PhotoMetadataEntity implements PhotoMetadata {
 
     @Column("string")
@@ -73,7 +73,7 @@ export class PhotoMetadataEntity implements PhotoMetadata {
  @Column("string")
  lens: string;
  }
-
+ /*
 
  @EmbeddableTable()
  export class PositionMetaDataEntity implements PositionMetaData {

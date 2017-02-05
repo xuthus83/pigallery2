@@ -1,8 +1,8 @@
-import {Table, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne} from "typeorm";
+import {Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne} from "typeorm";
 import {DirectoryDTO} from "../../../../common/entities/DirectoryDTO";
 import {PhotoEntity} from "./PhotoEntity";
 
-@Table()
+@Entity()
 export class DirectoryEntity implements DirectoryDTO {
 
     @PrimaryGeneratedColumn()

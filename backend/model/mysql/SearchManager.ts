@@ -23,7 +23,7 @@ export class SearchManager implements ISearchManager {
                     .select('DISTINCT(photo.metadataKeywords)')
                     .where('photo.metadata.keywords LIKE :text COLLATE utf8_general_ci', {text: "%" + text + "%"})
                     .setLimit(5)
-                    .getRawMany<{metadataKeywords: string}>())
+                    .getRawMany())
                     .map(r => <Array<string>>JSON.parse(r.metadataKeywords))
                     .forEach(keywords => {
                         result = result.concat(this.encapsulateAutoComplete(keywords.filter(k => k.toLowerCase().indexOf(text.toLowerCase()) != -1), SearchTypes.keyword));
@@ -35,7 +35,7 @@ export class SearchManager implements ISearchManager {
                     .select('DISTINCT(photo.metadataPositionData)')
                     .where('photo.metadata.positionData LIKE :text COLLATE utf8_general_ci', {text: "%" + text + "%"})
                     .setLimit(5)
-                    .getRawMany<{metadataPositionData: string}>())
+                    .getRawMany())
                     .map(r => <PositionMetaData>JSON.parse(r.metadataPositionData))
                     .map(pm => <Array<string>>[pm.city || "", pm.country || "", pm.state || ""])
                     .forEach(positions => {
@@ -48,7 +48,7 @@ export class SearchManager implements ISearchManager {
                     .select('DISTINCT(photo.name)')
                     .where('photo.name LIKE :text COLLATE utf8_general_ci', {text: "%" + text + "%"})
                     .setLimit(5)
-                    .getRawMany<{name: string}>())
+                    .getRawMany())
                     .map(r => r.name), SearchTypes.image));
 
                 result = result.concat(this.encapsulateAutoComplete((await directoryRepository
@@ -56,7 +56,7 @@ export class SearchManager implements ISearchManager {
                     .select('DISTINCT(dir.name)')
                     .where('dir.name LIKE :text COLLATE utf8_general_ci', {text: "%" + text + "%"})
                     .setLimit(5)
-                    .getRawMany<{name: string}>())
+                    .getRawMany())
                     .map(r => r.name), SearchTypes.directory));
 
 
