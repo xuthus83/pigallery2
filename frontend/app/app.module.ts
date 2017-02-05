@@ -28,6 +28,7 @@ import {GalleryComponent} from "./gallery/gallery.component";
 import {StringifyRole} from "./pipes/StringifyRolePipe";
 import {Config} from "./config/Config";
 import {GalleryMapComponent} from "./gallery/map/map.gallery.component";
+import {GalleryMapLightboxComponent} from "./gallery/map/lightbox/lightbox.map.gallery.component";
 
 @NgModule({
     imports: [
@@ -51,6 +52,7 @@ import {GalleryMapComponent} from "./gallery/map/map.gallery.component";
         GalleryDirectoryComponent,
         GalleryLightboxComponent,
         GalleryMapComponent,
+        GalleryMapLightboxComponent,
         FrameComponent,
         GallerySearchComponent,
         GalleryNavigatorComponent,

@@ -1,15 +1,19 @@
+<gallery-map-lightbox [photos]="photos"></gallery-map-lightbox>
+<div id="map" #map>
 <sebm-google-map
+        (click)="click()"
         [disableDefaultUI]="true"
         [zoomControl]="false"
         [streetViewControl]="false"
+        [usePanning]="false"
+        [draggable]="false"
         [zoom]="0"
         [latitude]="mapCenter.latitude"
         [longitude]="mapCenter.longitude">
     <sebm-google-map-marker
-
             *ngFor="let photo of mapPhotos"
             [latitude]="photo.latitude"
-            [longitude]="photo.longitude"
-            [iconUrl]="photo.iconUrl">
+            [longitude]="photo.longitude">
     </sebm-google-map-marker>
 </sebm-google-map>
+</div>

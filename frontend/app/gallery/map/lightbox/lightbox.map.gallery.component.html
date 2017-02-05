@@ -1,0 +1,44 @@
+<div [hidden]="!visible" #root>
+
+
+    <div class="lightbox"
+         [style.width.px]="lightboxDimension.width"
+         [style.height.px]="lightboxDimension.height"
+         [style.top.px]="lightboxDimension.top"
+         [style.left.px]="lightboxDimension.left"
+         [style.opacity]="opacity">
+        <sebm-google-map
+                [style.width.px]="mapDimension.width"
+                [style.height.px]="mapDimension.height"
+                [zoom]="5"
+                [latitude]="mapCenter.latitude"
+                [longitude]="mapCenter.longitude">
+            <sebm-google-map-marker
+                    *ngFor="let photo of mapPhotos"
+                    [latitude]="photo.latitude"
+                    [longitude]="photo.longitude"
+                    [iconUrl]="photo.iconUrl">
+            </sebm-google-map-marker>
+        </sebm-google-map>
+    </div>
+
+
+    <div id="controllers-container" #controls>
+        <div id="controls">
+            <span>
+                <span class=" glyphicon glyphicon-resize-small highlight"
+                      *ngIf="fullScreenService.isFullScreenEnabled()"
+                      (click)="fullScreenService.exitFullScreen()" title="toggle fullscreen"></span>
+                </span>
+            <span>
+             <span class="glyphicon glyphicon-fullscreen highlight"
+                   *ngIf="!fullScreenService.isFullScreenEnabled()"
+                   (click)="fullScreenService.showFullScreen(root)" title="toggle fullscreen"></span>
+                </span>
+            <span>
+             <span class="glyphicon glyphicon-remove highlight" (click)="hide()" title="close"></span>
+             </span>
+        </div>
+
+    </div>
+</div>

@@ -1,17 +1,21 @@
-import {Component, OnChanges, Input} from "@angular/core";
+import {Component, OnChanges, Input, ViewChild, ElementRef} from "@angular/core";
 import {PhotoDTO} from "../../../../common/entities/PhotoDTO";
 import {Utils} from "../../../../common/Utils";
+import {IRenderable, Dimension} from "../../model/IRenderable";
+import {GalleryMapLightboxComponent} from "./lightbox/lightbox.map.gallery.component";
 @Component({
     selector: 'gallery-map',
     templateUrl: 'app/gallery/map/map.gallery.component.html',
     styleUrls: ['app/gallery/map/map.gallery.component.css']
 })
-export class GalleryMapComponent implements OnChanges {
+export class GalleryMapComponent implements OnChanges, IRenderable {
 
     @Input() photos: Array<PhotoDTO>;
+    @ViewChild(GalleryMapLightboxComponent) mapLightbox: GalleryMapLightboxComponent;
 
     mapPhotos: Array<{latitude: string, longitude: string, iconUrl}> = [];
     mapCenter = {latitude: "0", longitude: "0"};
+    @ViewChild("map") map: ElementRef;
 
     //TODO: fix zooming
     ngOnChanges() {
@@ -30,6 +34,19 @@ export class GalleryMapComponent implements OnChanges {
         }
 
 
+    }
+
+    click() {
+        this.mapLightbox.show(this.getDimension());
+    }
+
+    public getDimension(): Dimension {
+        return <Dimension>{
+            top: this.map.nativeElement.offsetTop,
+            left: this.map.nativeElement.offsetLeft,
+            width: this.map.nativeElement.offsetWidth,
+            height: this.map.nativeElement.offsetHeight
+        };
     }
 }
 
