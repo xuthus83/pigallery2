@@ -36,11 +36,21 @@ export class GalleryService {
                     if (this.lastRequest.directory != directoryName) {
                         return;
                     }
+                    let addDir = (dir: DirectoryDTO) => {
+                        dir.photos.forEach((photo: PhotoDTO) => {
+                            photo.directory = dir;
+                        });
+
+                        dir.directories.forEach((directory: DirectoryDTO) => {
+                            addDir(directory);
+                            directory.parent = dir;
+                        });
 
 
-                    message.result.directory.photos.forEach((photo: PhotoDTO) => {
-                        photo.directory = message.result.directory;
-                    });
+                    };
+                    addDir(message.result.directory);
+
+
 
                     this.lastDirectory = message.result.directory;
                     this.content = message.result;

@@ -14,7 +14,7 @@ import {ProjectPath} from "../ProjectPath";
 export class GalleryMWs {
 
 
-    public static listDirectory(req:Request, res:Response, next:NextFunction) {
+    public static listDirectory(req: Request, res: Response, next: NextFunction) {
         let directoryName = req.params.directory || "/";
         let absoluteDirectoryName = path.join(ProjectPath.ImageFolder, directoryName);
 
@@ -27,7 +27,7 @@ export class GalleryMWs {
                 console.error(err);
                 return next(new Error(ErrorCodes.GENERAL_ERROR, err));
             }
-            
+
             req.resultPipe = new ContentWrapper(directory, null);
 
             return next();
@@ -35,26 +35,33 @@ export class GalleryMWs {
     }
 
 
-    public static removeCyclicDirectoryReferences(req:Request, res:Response, next:NextFunction) {
+    public static removeCyclicDirectoryReferences(req: Request, res: Response, next: NextFunction) {
         if (!req.resultPipe)
             return next();
 
-        let cw:ContentWrapper = req.resultPipe;
-        if (cw.directory) {
-            cw.directory.photos.forEach((photo: PhotoDTO) => {
+        let cw: ContentWrapper = req.resultPipe;
+        let removeDirs = (dir) => {
+            dir.photos.forEach((photo: PhotoDTO) => {
                 photo.directory = null;
             });
 
-            cw.directory.directories.forEach((photo: DirectoryDTO) => {
-                photo.parent = null;
+            dir.directories.forEach((directory: DirectoryDTO) => {
+                removeDirs(directory);
+                directory.parent = null;
             });
+
+        };
+
+        if (cw.directory) {
+            removeDirs(cw.directory);
         }
+
 
         return next();
     }
 
 
-    public static loadImage(req:Request, res:Response, next:NextFunction) {
+    public static loadImage(req: Request, res: Response, next: NextFunction) {
         if (!(req.params.imagePath)) {
             return next();
         }
@@ -74,7 +81,7 @@ export class GalleryMWs {
     }
 
 
-    public static search(req:Request, res:Response, next:NextFunction) {
+    public static search(req: Request, res: Response, next: NextFunction) {
         if (Config.Client.Search.searchEnabled === false) {
             return next();
         }
@@ -83,7 +90,7 @@ export class GalleryMWs {
             return next();
         }
 
-        let type:SearchTypes;
+        let type: SearchTypes;
         if (req.query.type) {
             type = parseInt(req.query.type);
         }
@@ -98,11 +105,11 @@ export class GalleryMWs {
     }
 
 
-    public static instantSearch(req:Request, res:Response, next:NextFunction) {
+    public static instantSearch(req: Request, res: Response, next: NextFunction) {
         if (Config.Client.Search.instantSearchEnabled === false) {
             return next();
         }
-        
+
         if (!(req.params.text)) {
             return next();
         }
@@ -117,7 +124,7 @@ export class GalleryMWs {
         });
     }
 
-    public static autocomplete(req:Request, res:Response, next:NextFunction) {
+    public static autocomplete(req: Request, res: Response, next: NextFunction) {
         if (Config.Client.Search.autocompleteEnabled === false) {
             return next();
         }
@@ -125,7 +132,7 @@ export class GalleryMWs {
             return next();
         }
 
-        ObjectManagerRepository.getInstance().getSearchManager().autocomplete(req.params.text, (err, items:Array<AutoCompleteItem>) => {
+        ObjectManagerRepository.getInstance().getSearchManager().autocomplete(req.params.text, (err, items: Array<AutoCompleteItem>) => {
             if (err || !items) {
                 return next(new Error(ErrorCodes.GENERAL_ERROR, err));
             }
