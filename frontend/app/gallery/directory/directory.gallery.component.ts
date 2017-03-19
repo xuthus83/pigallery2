@@ -1,8 +1,9 @@
-import {Component, Input, OnChanges} from "@angular/core";
+import {Component, Input, OnInit, OnDestroy, ViewChild, ElementRef} from "@angular/core";
 import {DirectoryDTO} from "../../../../common/entities/DirectoryDTO";
 import {RouterLink} from "@angular/router";
 import {Utils} from "../../../../common/Utils";
 import {Photo} from "../Photo";
+import {Thumbnail, ThumbnailManagerService} from "../grid/thumnailManager.service";
 
 @Component({
     selector: 'gallery-directory',
@@ -10,26 +11,36 @@ import {Photo} from "../Photo";
     styleUrls: ['app/gallery/directory/directory.gallery.component.css'],
     providers: [RouterLink],
 })
-export class GalleryDirectoryComponent implements OnChanges {
+export class GalleryDirectoryComponent implements OnInit,OnDestroy {
     @Input() directory: DirectoryDTO;
-    photo: Photo = null;
+    @ViewChild("dirContainer") container: ElementRef;
+    thumbnail: Thumbnail = null;
 
-    constructor() {
+    constructor(private thumbnailService: ThumbnailManagerService) {
     }
 
-    ngOnChanges() {
-        setImmediate(() => {
-            if (this.directory.photos.length > 0) {
-                this.photo = new Photo(this.directory.photos[0], 100, 100);
-                console.log(this.photo);
-            }
-        });
+    ngOnInit() {
+        if (this.directory.photos.length > 0) {
+            this.thumbnail = this.thumbnailService.getThumbnail(new Photo(this.directory.photos[0], 100, 100));
+
+        }
+    }
+
+    //TODO: implement scroll
+    isInView(): boolean {
+        return document.body.scrollTop < this.container.nativeElement.offsetTop + this.container.nativeElement.clientHeight
+            && document.body.scrollTop + window.innerHeight > this.container.nativeElement.offsetTop;
     }
 
     getDirectoryPath() {
         return Utils.concatUrls(this.directory.path, this.directory.name);
     }
 
+    ngOnDestroy() {
+        if (this.thumbnail != null) {
+            this.thumbnail.destroy();
+        }
+    }
 
 }
 

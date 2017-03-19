@@ -13,8 +13,8 @@ export class GalleryMapComponent implements OnChanges, IRenderable {
     @Input() photos: Array<PhotoDTO>;
     @ViewChild(GalleryMapLightboxComponent) mapLightbox: GalleryMapLightboxComponent;
 
-    mapPhotos: Array<{latitude: string, longitude: string, iconUrl}> = [];
-    mapCenter = {latitude: "0", longitude: "0"};
+    mapPhotos: Array<{latitude: number, longitude: number, iconUrl}> = [];
+    mapCenter = {latitude: 0, longitude: 0};
     @ViewChild("map") map: ElementRef;
 
     //TODO: fix zooming

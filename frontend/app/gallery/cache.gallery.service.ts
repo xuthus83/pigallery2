@@ -17,10 +17,21 @@ export class GalleryCacheService {
             let directory: DirectoryDTO = JSON.parse(value);
 
 
+            //Add references
+            let addDir = (dir: DirectoryDTO) => {
+                dir.photos.forEach((photo: PhotoDTO) => {
+                    photo.directory = dir;
+                });
 
-            directory.photos.forEach((photo: PhotoDTO) => {
-                photo.directory = directory;
-            });
+                dir.directories.forEach((directory: DirectoryDTO) => {
+                    addDir(directory);
+                    directory.parent = dir;
+                });
+
+
+            };
+            addDir(directory);
+
 
             return directory;
         }

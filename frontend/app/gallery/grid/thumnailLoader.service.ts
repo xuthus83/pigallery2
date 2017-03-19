@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
-import {GridPhoto} from "./GridPhoto";
 import {Config} from "../../config/Config";
 import {GalleryCacheService} from "../cache.gallery.service";
+import {Photo} from "../Photo";
 
 export enum ThumbnailLoadingPriority{
     high, medium, low
@@ -36,12 +36,12 @@ export class ThumbnailLoaderService {
 
     }
 
-    loadImage(gridPhoto: GridPhoto, priority: ThumbnailLoadingPriority, listener: ThumbnailLoadingListener): ThumbnailTaskEntity {
+    loadImage(photo: Photo, priority: ThumbnailLoadingPriority, listener: ThumbnailLoadingListener): ThumbnailTaskEntity {
 
         let tmp: ThumbnailTask = null;
         //is image already qued?
         for (let i = 0; i < this.que.length; i++) {
-            if (this.que[i].gridPhoto.getThumbnailPath() == gridPhoto.getThumbnailPath()) {
+            if (this.que[i].photo.getThumbnailPath() == photo.getThumbnailPath()) {
                 tmp = this.que[i];
                 break;
             }
@@ -58,7 +58,7 @@ export class ThumbnailLoaderService {
 
         } else {//create new task
             this.que.push({
-                gridPhoto: gridPhoto,
+                photo: photo,
                 inProgress: false,
                 taskEntities: [thumbnailTaskEntity]
             });
@@ -129,8 +129,8 @@ export class ThumbnailLoaderService {
 
         let curImg = new Image();
         curImg.onload = () => {
-            task.gridPhoto.thumbnailLoaded();
-            this.galleryChacheService.photoUpdated(task.gridPhoto.photo);
+            task.photo.thumbnailLoaded();
+            this.galleryChacheService.photoUpdated(task.photo.photo);
             task.taskEntities.forEach((te: ThumbnailTaskEntity) => te.listener.onLoad());
 
             this.taskReady(task);
@@ -146,7 +146,7 @@ export class ThumbnailLoaderService {
             this.run();
         };
 
-        curImg.src = task.gridPhoto.getThumbnailPath();
+        curImg.src = task.photo.getThumbnailPath();
     };
 }
 
@@ -159,13 +159,12 @@ export interface ThumbnailLoadingListener {
 
 
 export interface ThumbnailTaskEntity {
-
     priority: ThumbnailLoadingPriority;
     listener: ThumbnailLoadingListener;
 }
 
 interface ThumbnailTask {
-    gridPhoto: GridPhoto;
+    photo: Photo;
     inProgress: boolean;
     taskEntities: Array<ThumbnailTaskEntity>;
 

@@ -29,6 +29,7 @@ import {StringifyRole} from "./pipes/StringifyRolePipe";
 import {Config} from "./config/Config";
 import {GalleryMapComponent} from "./gallery/map/map.gallery.component";
 import {GalleryMapLightboxComponent} from "./gallery/map/lightbox/lightbox.map.gallery.component";
+import {ThumbnailManagerService} from "./gallery/grid/thumnailManager.service";
 
 @NgModule({
     imports: [
@@ -66,6 +67,7 @@ import {GalleryMapLightboxComponent} from "./gallery/map/lightbox/lightbox.map.g
         GalleryService,
         AuthenticationService,
         ThumbnailLoaderService,
+        ThumbnailManagerService,
         FullScreenService],
 
     bootstrap: [AppComponent]

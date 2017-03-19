@@ -6,12 +6,12 @@
     "sourceMap": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "suppressImplicitAnyIndexErrors": false,
     "lib": [
       "es2015",
       "dom",
       "es2015.promise"
     ],
-    "suppressImplicitAnyIndexErrors": false,
     "typeRoots": [
       "./node_modules/@types"
     ]

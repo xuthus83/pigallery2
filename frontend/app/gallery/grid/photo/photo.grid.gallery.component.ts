@@ -1,15 +1,10 @@
-import {Component, Input, ElementRef, ViewChild, OnInit, AfterViewInit, OnDestroy} from "@angular/core";
+import {Component, Input, ElementRef, ViewChild, OnInit, OnDestroy} from "@angular/core";
 import {IRenderable, Dimension} from "../../../model/IRenderable";
 import {GridPhoto} from "../GridPhoto";
 import {SearchTypes} from "../../../../../common/entities/AutoCompleteItem";
 import {RouterLink} from "@angular/router";
 import {Config} from "../../../config/Config";
-import {
-    ThumbnailLoaderService,
-    ThumbnailTaskEntity,
-    ThumbnailLoadingListener,
-    ThumbnailLoadingPriority
-} from "../thumnailLoader.service";
+import {Thumbnail, ThumbnailManagerService} from "../thumnailManager.service";
 
 @Component({
     selector: 'gallery-grid-photo',
@@ -17,24 +12,24 @@ import {
     styleUrls: ['app/gallery/grid/photo/photo.grid.gallery.component.css'],
     providers: [RouterLink],
 })
-export class GalleryPhotoComponent implements IRenderable, OnInit, AfterViewInit, OnDestroy {
+export class GalleryPhotoComponent implements IRenderable, OnInit,  OnDestroy {
     @Input() gridPhoto: GridPhoto;
     @ViewChild("img") imageRef: ElementRef;
     @ViewChild("info") infoDiv: ElementRef;
     @ViewChild("photoContainer") container: ElementRef;
 
+    thumbnail: Thumbnail;
+    /*
+     image = {
+     src: '',
+     show: false
+     };
 
-    image = {
-        src: '',
-        show: false
-    };
-
-    loading = {
-        animate: false,
-        show: true
-    };
-
-    thumbnailTask: ThumbnailTaskEntity = null;
+     loading = {
+     animate: false,
+     show: true
+     };
+     */
 
     infoStyle = {
         height: 0,
@@ -46,65 +41,67 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, AfterViewInit
 
     wasInView: boolean = null;
 
-    constructor(private thumbnailService: ThumbnailLoaderService) {
+    constructor(private thumbnailService: ThumbnailManagerService) {
         this.SearchTypes = SearchTypes;
         this.searchEnabled = Config.Client.Search.searchEnabled;
-
-
     }
 
     ngOnInit() {
-        this.loading.show = true;
-        //set up befoar adding task to thumbnail generator
-        if (this.gridPhoto.isThumbnailAvailable()) {
-            this.image.src = this.gridPhoto.getThumbnailPath();
-            this.image.show = true;
-        } else if (this.gridPhoto.isReplacementThumbnailAvailable()) {
-            this.image.src = this.gridPhoto.getReplacementThumbnailPath();
-            this.image.show = true;
-        }
+        this.thumbnail = this.thumbnailService.getThumbnail(this.gridPhoto);
+        /*  this.loading.show = true;
+         //set up before adding task to thumbnail generator
+         if (this.gridPhoto.isThumbnailAvailable()) {
+         this.image.src = this.gridPhoto.getThumbnailPath();
+         this.image.show = true;
+         } else if (this.gridPhoto.isReplacementThumbnailAvailable()) {
+         this.image.src = this.gridPhoto.getReplacementThumbnailPath();
+         this.image.show = true;
+         }*/
 
     }
 
-    ngAfterViewInit() {
-        //schedule change after Angular checks the model
-        if (!this.gridPhoto.isThumbnailAvailable()) {
-            setImmediate(() => {
+    /*
+     ngAfterViewInit() {
+     //schedule change after Angular checks the model
+     if (!this.gridPhoto.isThumbnailAvailable()) {
+     setImmediate(() => {
 
-                let listener: ThumbnailLoadingListener = {
-                    onStartedLoading: () => { //onLoadStarted
-                        this.loading.animate = true;
-                    },
-                    onLoad: () => {//onLoaded
-                        this.image.src = this.gridPhoto.getThumbnailPath();
-                        this.image.show = true;
-                        this.loading.show = false;
-                        this.thumbnailTask = null;
-                    },
-                    onError: (error) => {//onError
-                        this.thumbnailTask = null;
-                        //TODO: handle error
-                        //TODO: not an error if its from cache
-                        console.error("something bad happened");
-                        console.error(error);
-                    }
-                };
-                if (this.gridPhoto.isReplacementThumbnailAvailable()) {
-                    this.thumbnailTask = this.thumbnailService.loadImage(this.gridPhoto, ThumbnailLoadingPriority.medium, listener);
-                } else {
-                    this.thumbnailTask = this.thumbnailService.loadImage(this.gridPhoto, ThumbnailLoadingPriority.high, listener);
-                }
+     let listener: ThumbnailLoadingListener = {
+     onStartedLoading: () => { //onLoadStarted
+     this.loading.animate = true;
+     },
+     onLoad: () => {//onLoaded
+     this.image.src = this.gridPhoto.getThumbnailPath();
+     this.image.show = true;
+     this.loading.show = false;
+     this.thumbnailTask = null;
+     },
+     onError: (error) => {//onError
+     this.thumbnailTask = null;
+     //TODO: handle error
+     //TODO: not an error if its from cache
+     console.error("something bad happened");
+     console.error(error);
+     }
+     };
+     if (this.gridPhoto.isReplacementThumbnailAvailable()) {
+     this.thumbnailTask = this.thumbnailService.loadImage(this.gridPhoto, ThumbnailLoadingPriority.medium, listener);
+     } else {
+     this.thumbnailTask = this.thumbnailService.loadImage(this.gridPhoto, ThumbnailLoadingPriority.high, listener);
+     }
 
 
-            });
-        }
-    }
+     });
+     }
+     }*/
 
     ngOnDestroy() {
-        if (this.thumbnailTask != null) {
-            this.thumbnailService.removeTask(this.thumbnailTask);
-            this.thumbnailTask = null;
-        }
+        this.thumbnail.destroy();
+        /*
+         if (this.thumbnailTask != null) {
+         this.thumbnailService.removeTask(this.thumbnailTask);
+         this.thumbnailTask = null;
+         }*/
     }
 
 
@@ -115,24 +112,10 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, AfterViewInit
 
 
     onScroll() {
-        if (this.thumbnailTask != null) {
-            let isInView = this.isInView();
-            if (this.wasInView != isInView) {
-                this.wasInView = isInView;
-                if (isInView === true) {
-                    if (this.gridPhoto.isReplacementThumbnailAvailable()) {
-                        this.thumbnailTask.priority = ThumbnailLoadingPriority.medium;
-                    } else {
-                        this.thumbnailTask.priority = ThumbnailLoadingPriority.high;
-                    }
-                } else {
-                    if (this.gridPhoto.isReplacementThumbnailAvailable()) {
-                        this.thumbnailTask.priority = ThumbnailLoadingPriority.low;
-                    } else {
-                        this.thumbnailTask.priority = ThumbnailLoadingPriority.medium;
-                    }
-                }
-            }
+        let isInView = this.isInView();
+        if (this.wasInView != isInView) {
+            this.wasInView = isInView;
+            this.thumbnail.Visible = isInView;
         }
     }
 
@@ -157,10 +140,11 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, AfterViewInit
 
     }
 
-    onImageLoad() {
-        this.loading.show = false;
-    }
-
+    /*
+     onImageLoad() {
+     this.loading.show = false;
+     }
+     */
     public getDimension(): Dimension {
         return <Dimension>{
             top: this.imageRef.nativeElement.offsetTop,

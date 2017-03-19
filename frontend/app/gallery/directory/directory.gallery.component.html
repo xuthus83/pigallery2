@@ -1,12 +1,14 @@
-<a class="button btn btn-default" [routerLink]="['/gallery', getDirectoryPath()]"
+<a #dirContainer class="button btn btn-default" [routerLink]="['/gallery', getDirectoryPath()]"
    style="display: inline-block;">
 
 
     <div class="photo-container">
 
-        <div class="photo" *ngIf="photo" [style.background-image]="'url('+photo.getThumbnailPath()+')'"></div>
+        <div class="photo" *ngIf="thumbnail && thumbnail.available"
+             [style.background-image]="'url('+thumbnail.src+')'"></div>
 
-        <span *ngIf="!photo" class="glyphicon glyphicon-folder-open no-image" aria-hidden="true">
+        <span *ngIf="!thumbnail || !thumbnail.available" class="glyphicon glyphicon-folder-open no-image"
+              aria-hidden="true">
 
     </span>
     </div>

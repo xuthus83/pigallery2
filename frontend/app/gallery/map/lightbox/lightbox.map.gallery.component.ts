@@ -18,8 +18,8 @@ export class GalleryMapLightboxComponent implements OnChanges {
     public mapDimension: Dimension = <Dimension>{top: 0, left: 0, width: 0, height: 0};
     private visible = false;
     private opacity = 1.0;
-    mapPhotos: Array<{latitude: string, longitude: string, iconUrl}> = [];
-    mapCenter = {latitude: "0", longitude: "0"};
+    mapPhotos: Array<{latitude: number, longitude: number, iconUrl}> = [];
+    mapCenter = {latitude: 0, longitude: 0};
 
     @ViewChild("root") elementRef: ElementRef;
 
@@ -33,21 +33,10 @@ export class GalleryMapLightboxComponent implements OnChanges {
 
 //TODO: fix zooming
     ngOnChanges() {
-        this.mapPhotos = this.photos.filter(p => {
-            return p.metadata && p.metadata.positionData && p.metadata.positionData.GPSData;
-        }).map(p => {
-            return {
-                latitude: p.metadata.positionData.GPSData.latitude,
-                longitude: p.metadata.positionData.GPSData.longitude,
-                iconUrl: Utils.concatUrls("/api/gallery/content/", p.directory.path, p.directory.name, p.name, "icon")
-            };
-        });
-
-        if (this.mapPhotos.length > 0) {
-            this.mapCenter = this.mapPhotos[0];
+        if (this.visible == false) {
+            return;
         }
-
-
+        this.showImages();
     }
 
     public show(position: Dimension) {
@@ -65,6 +54,7 @@ export class GalleryMapLightboxComponent implements OnChanges {
         this.map.triggerResize();
 
         document.getElementsByTagName('body')[0].style.overflow = 'hidden';
+        this.showImages();
 
         setImmediate(() => {
             this.lightboxDimension = <Dimension>{
@@ -91,9 +81,26 @@ export class GalleryMapLightboxComponent implements OnChanges {
         this.opacity = 0.0;
         setTimeout(() => {
             this.visible = false;
+            this.mapPhotos = [];
         }, 500);
 
 
+    }
+
+    showImages() {
+        this.mapPhotos = this.photos.filter(p => {
+            return p.metadata && p.metadata.positionData && p.metadata.positionData.GPSData;
+        }).map(p => {
+            return {
+                latitude: p.metadata.positionData.GPSData.latitude,
+                longitude: p.metadata.positionData.GPSData.longitude,
+                iconUrl: Utils.concatUrls("/api/gallery/content/", p.directory.path, p.directory.name, p.name, "icon")
+            };
+        });
+
+        if (this.mapPhotos.length > 0) {
+            this.mapCenter = this.mapPhotos[0];
+        }
     }
 
 
