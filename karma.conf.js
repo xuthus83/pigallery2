@@ -28,13 +28,14 @@ module.exports = function(config) {
 
 
         files: [
-            // System.js for module loading
-            'node_modules/systemjs/dist/system-polyfills.js',
-            'node_modules/systemjs/dist/system.src.js',
 
             // Polyfills
             'node_modules/core-js/client/shim.js',
             'node_modules/reflect-metadata/Reflect.js',
+
+            // System.js for module loading
+            'node_modules/systemjs/dist/system.js',
+
 
             // zone.js
             'node_modules/zone.js/dist/zone.js',

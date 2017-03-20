@@ -4,6 +4,7 @@ import {Error, ErrorCodes} from "../../../../../common/entities/Error";
 import {UserRoles} from "../../../../../common/entities/UserDTO";
 import {ObjectManagerRepository} from "../../../../../backend/model/ObjectManagerRepository";
 import {UserManager} from "../../../../../backend/model/memory/UserManager";
+import {Config} from "../../../../../backend/config/Config";
 
 
 describe('Authentication middleware', () => {
@@ -31,6 +32,7 @@ describe('Authentication middleware', () => {
             let req:any = {
                 session: {}
             };
+            Config.Client.authenticationRequired = true;
             let res:any = {};
             let next:any = (err:Error) => {
                 expect(err).not.to.be.undefined;
