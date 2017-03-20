@@ -1,7 +1,9 @@
 import {Injectable} from "@angular/core";
-import {Config} from "../../config/Config";
-import {GalleryCacheService} from "../cache.gallery.service";
-import {Photo} from "../Photo";
+import {Config} from "../config/Config";
+import {GalleryCacheService} from "./cache.gallery.service";
+import {Photo} from "./Photo";
+import {IconPhoto} from "./IconPhoto";
+import {PhotoDTO} from "../../../common/entities/PhotoDTO";
 
 export enum ThumbnailLoadingPriority{
     high, medium, low
@@ -36,12 +38,46 @@ export class ThumbnailLoaderService {
 
     }
 
+    loadIcon(photo: IconPhoto, priority: ThumbnailLoadingPriority, listener: ThumbnailLoadingListener): ThumbnailTaskEntity {
+        let tmp: ThumbnailTask = null;
+        //is image already qued?
+        for (let i = 0; i < this.que.length; i++) {
+            if (this.que[i].path == photo.getIconPath()) {
+                tmp = this.que[i];
+                break;
+            }
+        }
+
+        let thumbnailTaskEntity = {priority: priority, listener: listener};
+        //add to previous
+        if (tmp != null) {
+            tmp.taskEntities.push(thumbnailTaskEntity);
+            if (tmp.inProgress == true) {
+                listener.onStartedLoading();
+            }
+
+
+        } else {//create new task
+            this.que.push(<ThumbnailTask>{
+                photo: photo.photo,
+                inProgress: false,
+                taskEntities: [thumbnailTaskEntity],
+                onLoaded: () => {
+                    photo.iconLoaded();
+                },
+                path: photo.getIconPath()
+            });
+        }
+        setImmediate(this.run);
+        return thumbnailTaskEntity;
+    }
+
     loadImage(photo: Photo, priority: ThumbnailLoadingPriority, listener: ThumbnailLoadingListener): ThumbnailTaskEntity {
 
         let tmp: ThumbnailTask = null;
         //is image already qued?
         for (let i = 0; i < this.que.length; i++) {
-            if (this.que[i].photo.getThumbnailPath() == photo.getThumbnailPath()) {
+            if (this.que[i].path == photo.getThumbnailPath()) {
                 tmp = this.que[i];
                 break;
             }
@@ -58,9 +94,13 @@ export class ThumbnailLoaderService {
 
         } else {//create new task
             this.que.push({
-                photo: photo,
+                photo: photo.photo,
                 inProgress: false,
-                taskEntities: [thumbnailTaskEntity]
+                taskEntities: [thumbnailTaskEntity],
+                onLoaded: () => {
+                    photo.thumbnailLoaded();
+                },
+                path: photo.getThumbnailPath()
             });
         }
         setImmediate(this.run);
@@ -129,8 +169,8 @@ export class ThumbnailLoaderService {
 
         let curImg = new Image();
         curImg.onload = () => {
-            task.photo.thumbnailLoaded();
-            this.galleryChacheService.photoUpdated(task.photo.photo);
+            task.onLoaded();
+            this.galleryChacheService.photoUpdated(task.photo);
             task.taskEntities.forEach((te: ThumbnailTaskEntity) => te.listener.onLoad());
 
             this.taskReady(task);
@@ -146,7 +186,7 @@ export class ThumbnailLoaderService {
             this.run();
         };
 
-        curImg.src = task.photo.getThumbnailPath();
+        curImg.src = task.path;
     };
 }
 
@@ -164,8 +204,10 @@ export interface ThumbnailTaskEntity {
 }
 
 interface ThumbnailTask {
-    photo: Photo;
+    photo: PhotoDTO;
     inProgress: boolean;
     taskEntities: Array<ThumbnailTaskEntity>;
-
+    path: string;
+    onLoaded: Function;
 }
+

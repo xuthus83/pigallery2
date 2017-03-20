@@ -6,6 +6,7 @@ export interface PhotoDTO {
     directory: DirectoryDTO;
     metadata: PhotoMetadata;
     readyThumbnails: Array<number>;
+    readyIcon: boolean;
 }
 
 export interface PhotoMetadata {

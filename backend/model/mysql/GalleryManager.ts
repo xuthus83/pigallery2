@@ -39,6 +39,7 @@ export class GalleryManager implements IGalleryManager {
                         dir.photos[i].metadata.positionData = <any>JSON.parse(<any>dir.photos[i].metadata.positionData);
                         dir.photos[i].metadata.size = <any>JSON.parse(<any>dir.photos[i].metadata.size);
                         dir.photos[i].readyThumbnails = [];
+                        dir.photos[i].readyIcon = false;
                     }
                 }
 

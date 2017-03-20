@@ -14,34 +14,36 @@ interface DataBaseConfig {
 }
 
 interface ServerConfig {
-    port:number;
-    imagesFolder:string;
-    thumbnailFolder:string;
+    port: number;
+    imagesFolder: string;
+    thumbnailFolder: string;
     database: DataBaseConfig;
 }
 
 interface SearchConfig {
-    searchEnabled:boolean
-    instantSearchEnabled:boolean
-    autocompleteEnabled:boolean
+    searchEnabled: boolean
+    instantSearchEnabled: boolean
+    autocompleteEnabled: boolean
 }
 
 interface ClientConfig {
-    thumbnailSizes:Array<number>;
-    Search:SearchConfig;
-    concurrentThumbnailGenerations:number;
-    enableCache:boolean;
-    enableOnScrollRendering:boolean;
-    enableOnScrollThumbnailPrioritising:boolean;
-    authenticationRequired:boolean;
+    iconSize: number;
+    thumbnailSizes: Array<number>;
+    Search: SearchConfig;
+    concurrentThumbnailGenerations: number;
+    enableCache: boolean;
+    enableOnScrollRendering: boolean;
+    enableOnScrollThumbnailPrioritising: boolean;
+    authenticationRequired: boolean;
     googleApiKey: string;
 }
 export class ConfigClass {
 
-    public Server:ServerConfig = null;
+    public Server: ServerConfig = null;
 
-    public Client:ClientConfig = {
+    public Client: ClientConfig = {
         thumbnailSizes: [200, 400, 600],
+        iconSize: 30,
         Search: {
             searchEnabled: true,
             instantSearchEnabled: true,
@@ -55,7 +57,7 @@ export class ConfigClass {
         googleApiKey: ""
     };
 
-    public setDatabaseType(type:DatabaseType) {
+    public setDatabaseType(type: DatabaseType) {
         this.Server.database.type = type;
         if (type === DatabaseType.memory) {
             this.Client.Search.searchEnabled = false;

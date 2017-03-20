@@ -2,8 +2,9 @@ import {Component, Input, OnChanges, ElementRef, ViewChild} from "@angular/core"
 import {PhotoDTO} from "../../../../../common/entities/PhotoDTO";
 import {Dimension} from "../../../model/IRenderable";
 import {FullScreenService} from "../../fullscreen.service";
-import {Utils} from "../../../../../common/Utils";
 import {SebmGoogleMap} from "angular2-google-maps/core";
+import {ThumbnailManagerService, IconThumbnail} from "../../thumnailManager.service";
+import {IconPhoto} from "../../IconPhoto";
 
 @Component({
     selector: 'gallery-map-lightbox',
@@ -18,7 +19,7 @@ export class GalleryMapLightboxComponent implements OnChanges {
     public mapDimension: Dimension = <Dimension>{top: 0, left: 0, width: 0, height: 0};
     private visible = false;
     private opacity = 1.0;
-    mapPhotos: Array<{latitude: number, longitude: number, iconUrl}> = [];
+    mapPhotos: Array<{latitude: number, longitude: number, iconUrl?: string, thumbnail: IconThumbnail}> = [];
     mapCenter = {latitude: 0, longitude: 0};
 
     @ViewChild("root") elementRef: ElementRef;
@@ -26,7 +27,7 @@ export class GalleryMapLightboxComponent implements OnChanges {
     @ViewChild(SebmGoogleMap) map: SebmGoogleMap;
 
 
-    constructor(private fullScreenService: FullScreenService) {
+    constructor(private fullScreenService: FullScreenService, private thumbnailService: ThumbnailManagerService) {
 
 
     }
@@ -81,26 +82,43 @@ export class GalleryMapLightboxComponent implements OnChanges {
         this.opacity = 0.0;
         setTimeout(() => {
             this.visible = false;
-            this.mapPhotos = [];
+            this.hideImages();
         }, 500);
 
 
     }
 
     showImages() {
+        this.hideImages();
+
         this.mapPhotos = this.photos.filter(p => {
             return p.metadata && p.metadata.positionData && p.metadata.positionData.GPSData;
         }).map(p => {
-            return {
+            let th = this.thumbnailService.getIcon(new IconPhoto(p));
+            let obj: {latitude: number, longitude: number, iconUrl?: string, thumbnail: IconThumbnail} = {
                 latitude: p.metadata.positionData.GPSData.latitude,
                 longitude: p.metadata.positionData.GPSData.longitude,
-                iconUrl: Utils.concatUrls("/api/gallery/content/", p.directory.path, p.directory.name, p.name, "icon")
+                thumbnail: th
+
             };
+            if (th.Available == true) {
+                obj.iconUrl = th.Src;
+            } else {
+                th.OnLoad = () => {
+                    obj.iconUrl = th.Src;
+                };
+            }
+            return obj;
         });
 
         if (this.mapPhotos.length > 0) {
             this.mapCenter = this.mapPhotos[0];
         }
+    }
+
+    hideImages() {
+        this.mapPhotos.forEach(mp => mp.thumbnail.destroy());
+        this.mapPhotos = [];
     }
 
 

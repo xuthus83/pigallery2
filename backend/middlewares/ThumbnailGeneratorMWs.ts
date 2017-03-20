@@ -73,10 +73,10 @@ export class ThumbnailGeneratorMWs {
 
     private static addThInfoToPhotos(photos: Array<PhotoDTO>) {
         let thumbnailFolder = ProjectPath.ThumbnailFolder;
-        for (let j = 0; j < Config.Client.thumbnailSizes.length; j++) {
-            let size = Config.Client.thumbnailSizes[j];
-            for (let i = 0; i < photos.length; i++) {
-                let fullImagePath = path.join(ProjectPath.ImageFolder, photos[i].directory.path, photos[i].directory.name, photos[i].name);
+        for (let i = 0; i < photos.length; i++) {
+            let fullImagePath = path.join(ProjectPath.ImageFolder, photos[i].directory.path, photos[i].directory.name, photos[i].name);
+            for (let j = 0; j < Config.Client.thumbnailSizes.length; j++) {
+                let size = Config.Client.thumbnailSizes[j];
                 let thPath = path.join(thumbnailFolder, ThumbnailGeneratorMWs.generateThumbnailName(fullImagePath, size));
                 if (fs.existsSync(thPath) === true) {
                     if (typeof  photos[i].readyThumbnails == "undefined") {
@@ -85,6 +85,11 @@ export class ThumbnailGeneratorMWs {
                     photos[i].readyThumbnails.push(size);
                 }
             }
+            let iconPath = path.join(thumbnailFolder, ThumbnailGeneratorMWs.generateThumbnailName(fullImagePath, Config.Client.iconSize));
+            if (fs.existsSync(iconPath) === true) {
+                photos[i].readyIcon = true;
+            }
+
         }
     }
 
@@ -129,13 +134,13 @@ export class ThumbnailGeneratorMWs {
 
         //load parameters
         let imagePath = req.resultPipe;
-        let size: number = 30;
+        let size: number = Config.Client.iconSize;
         ThumbnailGeneratorMWs.generateImage(imagePath, size, true, req, res, next);
 
 
     }
 
-    private static generateImage(imagePath, size, makeSquare, req: Request, res: Response, next: NextFunction) {
+    private static generateImage(imagePath: string, size: number, makeSquare: boolean, req: Request, res: Response, next: NextFunction) {
 
         //generate thumbnail path
         let thPath = path.join(ProjectPath.ThumbnailFolder, ThumbnailGeneratorMWs.generateThumbnailName(imagePath, size));

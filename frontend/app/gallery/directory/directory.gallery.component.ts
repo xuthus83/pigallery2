@@ -3,7 +3,7 @@ import {DirectoryDTO} from "../../../../common/entities/DirectoryDTO";
 import {RouterLink} from "@angular/router";
 import {Utils} from "../../../../common/Utils";
 import {Photo} from "../Photo";
-import {Thumbnail, ThumbnailManagerService} from "../grid/thumnailManager.service";
+import {Thumbnail, ThumbnailManagerService} from "../thumnailManager.service";
 
 @Component({
     selector: 'gallery-directory',

@@ -4,7 +4,7 @@ import {GridPhoto} from "../GridPhoto";
 import {SearchTypes} from "../../../../../common/entities/AutoCompleteItem";
 import {RouterLink} from "@angular/router";
 import {Config} from "../../../config/Config";
-import {Thumbnail, ThumbnailManagerService} from "../thumnailManager.service";
+import {Thumbnail, ThumbnailManagerService} from "../../thumnailManager.service";
 
 @Component({
     selector: 'gallery-grid-photo',

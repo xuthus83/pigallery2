@@ -26,6 +26,8 @@ export class PhotoEntity implements PhotoDTO {
 
     readyThumbnails: Array<number> = [];
 
+    readyIcon: boolean = false;
+
 }
 
 

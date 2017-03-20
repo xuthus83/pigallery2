@@ -1,12 +1,12 @@
 import {PhotoDTO} from "../../../common/entities/PhotoDTO";
 import {Utils} from "../../../common/Utils";
 import {Config} from "../config/Config";
-export class Photo {
+import {IconPhoto} from "./IconPhoto";
+export class Photo extends IconPhoto {
 
-    protected replacementSizeCache: boolean|number = false;
 
-    constructor(public photo: PhotoDTO, public renderWidth: number, public renderHeight: number) {
-
+    constructor(photo: PhotoDTO, public renderWidth: number, public renderHeight: number) {
+        super(photo);
     }
 
 
@@ -22,7 +22,7 @@ export class Photo {
         return Utils.findClosest(renderSize, Config.Client.thumbnailSizes);
     }
 
-    getReplacementThumbnailSize() {
+    getReplacementThumbnailSize(): number {
 
         if (this.replacementSizeCache === false) {
             this.replacementSizeCache = null;
@@ -37,7 +37,7 @@ export class Photo {
                 }
             }
         }
-        return this.replacementSizeCache;
+        return <number>this.replacementSizeCache;
     }
 
     isReplacementThumbnailAvailable() {
@@ -59,22 +59,5 @@ export class Photo {
         return Utils.concatUrls("/api/gallery/content/", this.photo.directory.path, this.photo.directory.name, this.photo.name, "thumbnail", size.toString());
     }
 
-    getPhotoPath() {
-        return Utils.concatUrls("/api/gallery/content/", this.photo.directory.path, this.photo.directory.name, this.photo.name);
-    }
 
-
-    equals(other: any) {
-        //is gridphoto
-        if (other.photo) {
-            return this.photo.directory.path === other.photo.directory.path && this.photo.directory.name === other.photo.directory.name && this.photo.name === other.photo.name
-        }
-
-        //is photo
-        if (other.directory) {
-            return this.photo.directory.path === other.directory.path && this.photo.directory.name === other.directory.name && this.photo.name === other.name
-        }
-
-        return false;
-    }
 }

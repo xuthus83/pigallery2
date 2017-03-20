@@ -8,7 +8,7 @@ import {appRoutes} from "./app.routing";
 import {UserService} from "./model/network/user.service";
 import {GalleryService} from "./gallery/gallery.service";
 import {NetworkService} from "./model/network/network.service";
-import {ThumbnailLoaderService} from "./gallery/grid/thumnailLoader.service";
+import {ThumbnailLoaderService} from "./gallery/thumnailLoader.service";
 import {GalleryCacheService} from "./gallery/cache.gallery.service";
 import {FullScreenService} from "./gallery/fullscreen.service";
 import {AuthenticationService} from "./model/network/authentication.service";
@@ -29,7 +29,7 @@ import {StringifyRole} from "./pipes/StringifyRolePipe";
 import {Config} from "./config/Config";
 import {GalleryMapComponent} from "./gallery/map/map.gallery.component";
 import {GalleryMapLightboxComponent} from "./gallery/map/lightbox/lightbox.map.gallery.component";
-import {ThumbnailManagerService} from "./gallery/grid/thumnailManager.service";
+import {ThumbnailManagerService} from "./gallery/thumnailManager.service";
 
 @NgModule({
     imports: [

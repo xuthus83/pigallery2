@@ -1,6 +1,5 @@
 import {Component, OnChanges, Input, ViewChild, ElementRef} from "@angular/core";
 import {PhotoDTO} from "../../../../common/entities/PhotoDTO";
-import {Utils} from "../../../../common/Utils";
 import {IRenderable, Dimension} from "../../model/IRenderable";
 import {GalleryMapLightboxComponent} from "./lightbox/lightbox.map.gallery.component";
 @Component({
@@ -13,7 +12,7 @@ export class GalleryMapComponent implements OnChanges, IRenderable {
     @Input() photos: Array<PhotoDTO>;
     @ViewChild(GalleryMapLightboxComponent) mapLightbox: GalleryMapLightboxComponent;
 
-    mapPhotos: Array<{latitude: number, longitude: number, iconUrl}> = [];
+    mapPhotos: Array<{latitude: number, longitude: number}> = [];
     mapCenter = {latitude: 0, longitude: 0};
     @ViewChild("map") map: ElementRef;
 
@@ -24,8 +23,7 @@ export class GalleryMapComponent implements OnChanges, IRenderable {
         }).map(p => {
             return {
                 latitude: p.metadata.positionData.GPSData.latitude,
-                longitude: p.metadata.positionData.GPSData.longitude,
-                iconUrl: Utils.concatUrls("/api/gallery/content/", p.directory.path, p.directory.name, p.name, "icon")
+                longitude: p.metadata.positionData.GPSData.longitude
             };
         });
 
