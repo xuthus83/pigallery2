@@ -20,7 +20,7 @@ Feature list:
      * supporting most common image formats
      * showing **tag/keywords, locations, GPS coordinates** for photos
      * rendering photos on demand (on scroll)
- * On the **fly thumbnail generation** in several sizes
+ * **On the fly thumbnail generation** in several sizes
    * prioritizes thumbnail generation (generating thumbnail first for the visible photos)
    * saving generated thumbnails to TEMP folder for reuse
    * supporting several core CPU
@@ -29,12 +29,13 @@ Feature list:
    * keyboard support for navigation - `In progress`
    * showing low-res thumbnail while full image loads
    * Information panel for showing **Exif info** - `In progress`
- * Client side caching (folders and search results)
+ * Client side caching (directories and search results)
  * Rendering **photos** with GPS coordinates **on google map**
    * .gpx file support - `In progress`
- * **Two modes: SQL database and no-database-mode**
-   * both modes: user management
-   * password protection can be disabled/enabled
+ * **Two modes: SQL database and no-database mode**
+   * both modes supports
+     * user management
+     * password protection can be disabled/enabled
    * database mode supports:
      * faster directory listing
      * searching
@@ -45,5 +46,5 @@ Feature list:
     * responsive design (phone, tablet desktop support)
  * Setup page - `In progress`
  * **Markdown based blogging support** - `In progress`
-  * you can write some note in the blog.md for every directory
+   * you can write some note in the blog.md for every directory
  * bug free :) - `In progress`
