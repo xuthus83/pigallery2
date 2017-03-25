@@ -1,13 +1,14 @@
 import {
-    Component,
-    Input,
-    ElementRef,
-    OnChanges,
-    ViewChild,
-    ViewChildren,
-    QueryList,
     AfterViewInit,
-    HostListener
+    ChangeDetectorRef,
+    Component,
+    ElementRef,
+    HostListener,
+    Input,
+    OnChanges,
+    QueryList,
+    ViewChild,
+    ViewChildren
 } from "@angular/core";
 import {PhotoDTO} from "../../../../common/entities/PhotoDTO";
 import {GridRowBuilder} from "./GridRowBuilder";
@@ -15,31 +16,33 @@ import {GalleryLightboxComponent} from "../lightbox/lightbox.gallery.component";
 import {GridPhoto} from "./GridPhoto";
 import {GalleryPhotoComponent} from "./photo/photo.grid.gallery.component";
 import {Config} from "../../config/Config";
+import {OverlayService} from "../overlay.service";
 
 @Component({
     selector: 'gallery-grid',
     templateUrl: 'app/gallery/grid/grid.gallery.component.html',
     styleUrls: ['app/gallery/grid/grid.gallery.component.css'],
 })
-export class GalleryGridComponent implements OnChanges,AfterViewInit {
+export class GalleryGridComponent implements OnChanges, AfterViewInit {
 
-    @ViewChild('gridContainer') gridContainer:ElementRef;
-    @ViewChildren(GalleryPhotoComponent) gridPhotoQL:QueryList<GalleryPhotoComponent>;
+    @ViewChild('gridContainer') gridContainer: ElementRef;
+    @ViewChildren(GalleryPhotoComponent) gridPhotoQL: QueryList<GalleryPhotoComponent>;
 
     @Input() photos: Array<PhotoDTO>;
-    @Input() lightbox:GalleryLightboxComponent;
+    @Input() lightbox: GalleryLightboxComponent;
 
-    photosToRender:Array<GridPhoto> = [];
-    containerWidth:number = 0;
+    photosToRender: Array<GridPhoto> = [];
+    containerWidth: number = 0;
 
     private IMAGE_MARGIN = 2;
     private TARGET_COL_COUNT = 5;
     private MIN_ROW_COUNT = 2;
     private MAX_ROW_COUNT = 5;
 
-    onScrollFired = false;
+    private onScrollFired = false;
+    private scrollbarWidth = 0;
 
-    constructor() {
+    constructor(private overlayService: OverlayService, private changeDetector: ChangeDetectorRef) {
     }
 
     ngOnChanges() {
@@ -61,16 +64,17 @@ export class GalleryGridComponent implements OnChanges,AfterViewInit {
         }
         this.updateContainerWidth();
         this.sortPhotos();
+        //render the same amount of images on resize
+        let renderedIndex = this.renderedPhotoIndex;
         this.clearRenderedPhotos();
-        setImmediate(() => {
-            this.renderPhotos();
-        });
+        this.renderPhotos(renderedIndex);
     }
 
-    isAfterViewInit:boolean = false;
+
+    isAfterViewInit: boolean = false;
 
     ngAfterViewInit() {
-        this.lightbox.gridPhotoQL = this.gridPhotoQL;
+        this.lightbox.setGridPhotoQL(this.gridPhotoQL);
 
         //TODO: implement scroll detection
 
@@ -96,6 +100,7 @@ export class GalleryGridComponent implements OnChanges,AfterViewInit {
     private clearRenderedPhotos() {
         this.photosToRender = [];
         this.renderedPhotoIndex = 0;
+        this.changeDetector.detectChanges();
     }
 
     private mergeNewPhotos() {
@@ -123,9 +128,9 @@ export class GalleryGridComponent implements OnChanges,AfterViewInit {
     }
 
 
-    private renderedPhotoIndex:number = 0;
+    private renderedPhotoIndex: number = 0;
 
-    private renderPhotos() { 
+    private renderPhotos(numberOfPhotos: number = 0) {
         if (this.containerWidth == 0 || this.renderedPhotoIndex >= this.photos.length || !this.shouldRenderMore()) {
             return;
         }
@@ -133,7 +138,7 @@ export class GalleryGridComponent implements OnChanges,AfterViewInit {
 
         let renderedContentHeight = 0;
 
-        while (this.renderedPhotoIndex < this.photos.length && this.shouldRenderMore(renderedContentHeight) === true) {
+        while (this.renderedPhotoIndex < this.photos.length && (this.shouldRenderMore(renderedContentHeight) === true || this.renderedPhotoIndex < numberOfPhotos)) {
             let ret = this.renderARow();
             if (ret === null) {
                 throw new Error("Gridphotos rendering failed");
@@ -149,7 +154,7 @@ export class GalleryGridComponent implements OnChanges,AfterViewInit {
      * @param offset Add height to the client height (conent is not yet added to the dom, but calculate with it)
      * @returns {boolean}
      */
-    private shouldRenderMore(offset:number = 0):boolean {
+    private shouldRenderMore(offset: number = 0): boolean {
         return Config.Client.enableOnScrollRendering === false ||
             window.scrollY >= (document.body.clientHeight + offset - window.innerHeight) * 0.7
             || (document.body.clientHeight + offset) * 0.85 < window.innerHeight;
@@ -164,7 +169,7 @@ export class GalleryGridComponent implements OnChanges,AfterViewInit {
                 this.renderPhotos();
 
                 if (Config.Client.enableOnScrollThumbnailPrioritising === true) {
-                    this.gridPhotoQL.toArray().forEach((pc:GalleryPhotoComponent) => {
+                    this.gridPhotoQL.toArray().forEach((pc: GalleryPhotoComponent) => {
                         pc.onScroll();
                     });
                 }
@@ -174,15 +179,16 @@ export class GalleryGridComponent implements OnChanges,AfterViewInit {
         }
     }
 
-    public renderARow():number {
+    public renderARow(): number {
         if (this.renderedPhotoIndex >= this.photos.length) {
             return null;
         }
 
+
         let maxRowHeight = window.innerHeight / this.MIN_ROW_COUNT;
         let minRowHeight = window.innerHeight / this.MAX_ROW_COUNT;
 
-        let photoRowBuilder = new GridRowBuilder(this.photos, this.renderedPhotoIndex, this.IMAGE_MARGIN, this.containerWidth);
+        let photoRowBuilder = new GridRowBuilder(this.photos, this.renderedPhotoIndex, this.IMAGE_MARGIN, this.containerWidth - this.overlayService.getPhantomScrollbarWidth());
         photoRowBuilder.addPhotos(this.TARGET_COL_COUNT);
         photoRowBuilder.adjustRowHeightBetween(minRowHeight, maxRowHeight);
 
@@ -198,7 +204,7 @@ export class GalleryGridComponent implements OnChanges,AfterViewInit {
         return rowHeight;
     }
 
-    private updateContainerWidth():number {
+    private updateContainerWidth(): number {
         if (!this.gridContainer) {
             return;
         }

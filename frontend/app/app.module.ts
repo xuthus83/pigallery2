@@ -30,6 +30,7 @@ import {Config} from "./config/Config";
 import {GalleryMapComponent} from "./gallery/map/map.gallery.component";
 import {GalleryMapLightboxComponent} from "./gallery/map/lightbox/lightbox.map.gallery.component";
 import {ThumbnailManagerService} from "./gallery/thumnailManager.service";
+import {OverlayService} from "./gallery/overlay.service";
 
 @NgModule({
     imports: [
@@ -68,7 +69,8 @@ import {ThumbnailManagerService} from "./gallery/thumnailManager.service";
         AuthenticationService,
         ThumbnailLoaderService,
         ThumbnailManagerService,
-        FullScreenService],
+        FullScreenService,
+        OverlayService],
 
     bootstrap: [AppComponent]
 })

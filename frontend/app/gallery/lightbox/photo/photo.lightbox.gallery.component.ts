@@ -1,4 +1,4 @@
-import {Component, OnChanges, Input, ViewChild, ElementRef} from "@angular/core";
+import {Component, Input, OnChanges} from "@angular/core";
 import {GridPhoto} from "../../grid/GridPhoto";
 
 @Component({
@@ -8,12 +8,11 @@ import {GridPhoto} from "../../grid/GridPhoto";
 })
 export class GalleryLightboxPhotoComponent implements OnChanges {
 
-    @Input() gridPhoto:GridPhoto;
+    @Input() gridPhoto: GridPhoto;
 
     public imageSize = {width: "auto", height: "100"};
-    @ViewChild('imgContainer') nativeElement:ElementRef;
 
-    imageLoaded:boolean = false;
+    imageLoaded: boolean = false;
 
     constructor() {
     }
@@ -48,12 +47,12 @@ export class GalleryLightboxPhotoComponent implements OnChanges {
         console.error("cant load image");
     }
 
-    public showThumbnail():boolean {
+    public showThumbnail(): boolean {
         return this.gridPhoto && !this.imageLoaded &&
             (this.gridPhoto.isThumbnailAvailable() || this.gridPhoto.isReplacementThumbnailAvailable());
     }
 
-    public thumbnailPath():string {
+    public thumbnailPath(): string {
         if (this.gridPhoto.isThumbnailAvailable() === true)
             return this.gridPhoto.getThumbnailPath();
 

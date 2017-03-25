@@ -1,8 +1,11 @@
 import {Injectable} from "@angular/core";
+import {Event} from "../../../common/event/Event";
 
 @Injectable()
 export class FullScreenService {
 
+
+    OnFullScreenChange = new Event<boolean>();
 
     public isFullScreenEnabled(): boolean {
         return !!(document.fullscreenElement || document['mozFullScreenElement'] || document.webkitFullscreenElement);
@@ -22,6 +25,7 @@ export class FullScreenService {
         } else if (element.msRequestFullscreen) {
             element.msRequestFullscreen();
         }
+        this.OnFullScreenChange.trigger(true);
     }
 
     public exitFullScreen() {
@@ -36,6 +40,7 @@ export class FullScreenService {
         } else if (document.webkitExitFullscreen) {
             document.webkitExitFullscreen();
         }
+        this.OnFullScreenChange.trigger(false);
     }
 
 }

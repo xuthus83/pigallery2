@@ -37,9 +37,11 @@
             <span class="glyphicon glyphicon-remove highlight" (click)="hide()" title="close"></span>
         </div>
 
-        <div class="navigation-arrow highlight" *ngIf="navigation.hasPrev" id="leftArrow" (click)="prevImage()"><span
+        <div class="navigation-arrow highlight" *ngIf="navigation.hasPrev" title="key: left arrow" id="leftArrow"
+             (click)="prevImage()"><span
                 class="glyphicon glyphicon-chevron-left"></span></div>
-        <div class="navigation-arrow highlight" *ngIf="navigation.hasNext" id="rightArrow" (click)="nextImage()"><span
+        <div class="navigation-arrow highlight" *ngIf="navigation.hasNext" title="key: right arrow" id="rightArrow"
+             (click)="nextImage()"><span
                 class="glyphicon glyphicon-chevron-right"></span></div>
     </div>
 </div>

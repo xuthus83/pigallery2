@@ -4,12 +4,13 @@
          [style.height.%]="imageSize.height"
          [src]="thumbnailPath()"/>
 
-    <img *ngIf="gridPhoto"
+    <img *ngIf="gridPhoto !== null"
          [style.width.%]="imageSize.width"
          [style.height.%]="imageSize.height"
          [src]="gridPhoto.getPhotoPath()"
          (load)="onImageLoad()"
          (error)="onImageError()"/>
+
 </div>
 
 

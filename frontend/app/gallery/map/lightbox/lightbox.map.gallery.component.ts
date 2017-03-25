@@ -1,9 +1,9 @@
-import {Component, Input, OnChanges, ElementRef, ViewChild} from "@angular/core";
+import {Component, ElementRef, HostListener, Input, OnChanges, ViewChild} from "@angular/core";
 import {PhotoDTO} from "../../../../../common/entities/PhotoDTO";
 import {Dimension} from "../../../model/IRenderable";
 import {FullScreenService} from "../../fullscreen.service";
 import {SebmGoogleMap} from "angular2-google-maps/core";
-import {ThumbnailManagerService, IconThumbnail} from "../../thumnailManager.service";
+import {IconThumbnail, ThumbnailManagerService} from "../../thumnailManager.service";
 import {IconPhoto} from "../../IconPhoto";
 
 @Component({
@@ -136,6 +136,20 @@ export class GalleryMapLightboxComponent implements OnChanges {
 
     private getScreenHeight() {
         return window.innerHeight;
+    }
+
+    //noinspection JSUnusedGlobalSymbols
+    @HostListener('window:keydown', ['$event'])
+    onKeyPress(e: KeyboardEvent) {
+        if (this.visible != true) {
+            return;
+        }
+        let event: KeyboardEvent = window.event ? <any>window.event : e;
+        switch (event.keyCode) {
+            case 27: //escape
+                this.hide();
+                break;
+        }
     }
 
 
