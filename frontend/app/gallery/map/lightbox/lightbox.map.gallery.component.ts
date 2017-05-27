@@ -2,7 +2,7 @@ import {Component, ElementRef, HostListener, Input, OnChanges, ViewChild} from "
 import {PhotoDTO} from "../../../../../common/entities/PhotoDTO";
 import {Dimension} from "../../../model/IRenderable";
 import {FullScreenService} from "../../fullscreen.service";
-import {SebmGoogleMap} from "angular2-google-maps/core";
+import {AgmMap} from "@agm/core";
 import {IconThumbnail, ThumbnailManagerService} from "../../thumnailManager.service";
 import {IconPhoto} from "../../IconPhoto";
 
@@ -24,7 +24,7 @@ export class GalleryMapLightboxComponent implements OnChanges {
 
     @ViewChild("root") elementRef: ElementRef;
 
-    @ViewChild(SebmGoogleMap) map: SebmGoogleMap;
+    @ViewChild(AgmMap) map: AgmMap;
 
 
     constructor(private fullScreenService: FullScreenService, private thumbnailService: ThumbnailManagerService) {

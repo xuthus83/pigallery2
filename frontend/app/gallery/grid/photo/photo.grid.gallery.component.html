@@ -11,22 +11,22 @@
 
         <div class="photo-position" *ngIf="gridPhoto.photo.metadata.positionData">
             <span class="glyphicon glyphicon-map-marker"></span>
-            <template [ngIf]="getPositionText()">
+            <ng-template [ngIf]="getPositionText()">
                 <a [routerLink]="['/search', getPositionText(), {type:SearchTypes[SearchTypes.position]}]"
                    *ngIf="searchEnabled">
                     {{getPositionText()}}
                 </a>
                 <span *ngIf="!searchEnabled">{{getPositionText()}}</span>
-            </template>
+            </ng-template>
         </div>
 
         <div class="photo-keywords">
-            <template ngFor let-keyword [ngForOf]="gridPhoto.photo.metadata.keywords" let-last="last">
+            <ng-template ngFor let-keyword [ngForOf]="gridPhoto.photo.metadata.keywords" let-last="last">
                 <a *ngIf="searchEnabled"
                    [routerLink]="['/search', keyword, {type: SearchTypes[SearchTypes.keyword]}]">#{{keyword}}</a>
                 <span *ngIf="!searchEnabled">#{{keyword}}</span>
-                <template [ngIf]="!last">,</template>
-            </template>
+                <ng-template [ngIf]="!last">,</ng-template>
+            </ng-template>
 
         </div>
     </div>
