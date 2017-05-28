@@ -12,11 +12,15 @@ interface DataBaseConfig {
     type: DatabaseType;
     mysql?: MySQLConfig;
 }
+interface ThumbnailConfig {
+    folder: string;
+    hardwareAcceleration: boolean;
+}
 
 interface ServerConfig {
     port: number;
     imagesFolder: string;
-    thumbnailFolder: string;
+    thumbnail: ThumbnailConfig;
     database: DataBaseConfig;
 }
 

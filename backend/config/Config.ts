@@ -7,7 +7,10 @@ export let Config = new ConfigClass();
 Config.Server = {
     port: 80,
     imagesFolder: "demo/images",
-    thumbnailFolder: "demo/TEMP",
+    thumbnail: {
+        folder: "demo/TEMP",
+        hardwareAcceleration: true
+    },
     database: {
         type: DatabaseType.mysql,
         mysql: {

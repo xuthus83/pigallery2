@@ -17,7 +17,7 @@ class ProjectPathClass {
     constructor() {
         this.Root = path.join(__dirname, "/../");
         this.ImageFolder = this.isAbsolutePath(Config.Server.imagesFolder) ? Config.Server.imagesFolder : path.join(this.Root, Config.Server.imagesFolder);
-        this.ThumbnailFolder = this.isAbsolutePath(Config.Server.thumbnailFolder) ? Config.Server.thumbnailFolder : path.join(this.Root, Config.Server.thumbnailFolder);
+        this.ThumbnailFolder = this.isAbsolutePath(Config.Server.thumbnail.folder) ? Config.Server.thumbnail.folder : path.join(this.Root, Config.Server.thumbnail.folder);
     }
 }
 

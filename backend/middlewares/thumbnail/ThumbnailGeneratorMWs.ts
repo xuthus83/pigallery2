@@ -1,15 +1,16 @@
-///<reference path="customtypings/jimp.d.ts"/>
+///<reference path="../customtypings/jimp.d.ts"/>
 import * as path from "path";
 import * as crypto from "crypto";
 import * as fs from "fs";
 import * as os from "os";
 import {NextFunction, Request, Response} from "express";
-import {Error, ErrorCodes} from "../../common/entities/Error";
-import {Config} from "../config/Config";
-import {ContentWrapper} from "../../common/entities/ConentWrapper";
-import {DirectoryDTO} from "../../common/entities/DirectoryDTO";
-import {ProjectPath} from "../ProjectPath";
-import {PhotoDTO} from "../../common/entities/PhotoDTO";
+import {Error, ErrorCodes} from "../../../common/entities/Error";
+import {Config} from "../../config/Config";
+import {ContentWrapper} from "../../../common/entities/ConentWrapper";
+import {DirectoryDTO} from "../../../common/entities/DirectoryDTO";
+import {ProjectPath} from "../../ProjectPath";
+import {PhotoDTO} from "../../../common/entities/PhotoDTO";
+import {hardwareRenderer, softwareRenderer} from "./THRenderers";
 
 
 Config.Client.concurrentThumbnailGenerations = Math.max(1, os.cpus().length - 1);
@@ -17,41 +18,11 @@ Config.Client.concurrentThumbnailGenerations = Math.max(1, os.cpus().length - 1)
 const Pool = require('threads').Pool;
 const pool = new Pool(Config.Client.concurrentThumbnailGenerations);
 
-pool.run(
-    (input: {imagePath: string, size: number, makeSquare: boolean, thPath: string}, done) => {
-
-        //generate thumbnail
-        let Jimp = require("jimp");
-        Jimp.read(input.imagePath).then((image) => {
-            /**
-             * newWidth * newHeight = size*size
-             * newHeight/newWidth = height/width
-             *
-             * newHeight = (height/width)*newWidth
-             * newWidth * newWidth = (size*size) / (height/width)
-             *
-             * @type {number}
-             */
-            if (input.makeSquare == false) {
-                let ratio = image.bitmap.height / image.bitmap.width;
-                let newWidth = Math.sqrt((input.size * input.size) / ratio);
-
-                image.resize(newWidth, Jimp.AUTO, Jimp.RESIZE_BEZIER);
-            } else {
-                let ratio = image.bitmap.height / image.bitmap.width;
-                image.resize(input.size / Math.min(ratio, 1), Jimp.AUTO, Jimp.RESIZE_BEZIER);
-                image.crop(0, 0, input.size, input.size);
-            }
-            image.quality(60);        // set JPEG quality
-            image.write(input.thPath, () => { // save
-                return done();
-            });
-        }).catch(function (err) {
-            return done(new Error(ErrorCodes.GENERAL_ERROR));
-        });
-    }
-);
-
+if (Config.Server.thumbnail.hardwareAcceleration == true) {
+    pool.run(hardwareRenderer);
+} else {
+    pool.run(softwareRenderer);
+}
 
 export class ThumbnailGeneratorMWs {
 
@@ -159,11 +130,12 @@ export class ThumbnailGeneratorMWs {
         }
 
         //run on other thread
-        pool.send({imagePath: imagePath, size: size, thPath: thPath, makeSquare: makeSquare})
+        pool.send({imagePath: imagePath, size: size, thPath: thPath, makeSquare: makeSquare, __dirname: __dirname})
             .on('done', (out) => {
                 return next(out);
-            }).on('error', (job, error) => {
-            return next(new Error(ErrorCodes.GENERAL_ERROR, error));
+            }).on('error', (error) => {
+            console.log(error);
+            return next(new Error(ErrorCodes.THUMBNAIL_GENERATION_ERROR, error));
         });
     }
 

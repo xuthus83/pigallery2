@@ -1,7 +1,7 @@
 import {AuthenticationMWs} from "../middlewares/user/AuthenticationMWs";
 import {GalleryMWs} from "../middlewares/GalleryMWs";
 import {RenderingMWs} from "../middlewares/RenderingMWs";
-import {ThumbnailGeneratorMWs} from "../middlewares/ThumbnailGeneratorMWs";
+import {ThumbnailGeneratorMWs} from "../middlewares/thumbnail/ThumbnailGeneratorMWs";
 
 export class GalleryRouter {
     constructor(private app: any) {

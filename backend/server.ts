@@ -63,6 +63,17 @@ export class Server {
             ObjectManagerRepository.InitMemoryManagers();
         });
 
+        if (Config.Server.thumbnail.hardwareAcceleration == true) {
+            try {
+                const sharp = require.resolve("sharp");
+            } catch (err) {
+                console.error("Thumbnail hardware acceleration is not possible." +
+                    " 'Sharp' node module is not found." +
+                    " Falling back to JS based thumbnail generation");
+                Config.Server.thumbnail.hardwareAcceleration = false;
+            }
+        }
+
         new PublicRouter(this.app);
 
         new UserRouter(this.app);
