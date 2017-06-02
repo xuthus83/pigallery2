@@ -9,3 +9,5 @@ users.db
 .travis.yml
 *.ts
 PiGallery2.iml
+pigallery2.zip
+*.js.map
