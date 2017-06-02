@@ -2,14 +2,38 @@ language: node_js
 node_js:
 - '7'
 - '6'
+
+before_deploy:
+  script:
+    - npm i gulp -g
+    - gulp build-release
+  on:
+    repo: bpatrik/PiGallery2
+    tags: true
+
+
+
 deploy:
+  provider: releases
+  api_key:
+    secure: NrgDMoHY4j9r4Ht9oPT6cYiGkcpbNsvR6DxEk51kD5qVRPtUq+V5gpIo0tSwIFfPzgY+5hsqK6Onl2AdSsaotHB8PT2CoZ9oZPJO8BlZFvD7iT83Qi49QcsMo6jjmgqByg6EwzhHLeAiMfYrNSqw1gT0tEONc9Ygq5deFolYSqf6yfplBkcT0HEFSncnDhn5i+s4SS/wOy/UppXJxKk9DE0GaRwaIuBC/aSAtDfoFUuxVwjahTiTb8YuqwguzoZA5lYC/EcoCxbSyb5y58XrsMB13AZmH271NlbSTYmo3c4+HGO4BkcIB/WATw9VcI1NU/huTgSNZnVzAalbtF9oWKG+IKyfa9gMbe6fj07CvB7KwCkaeJmToi5Hw3Eiw0+ioadEzD3KXRr0dchUjlYuYnmZEUxSAVW9jD+tJSdCxQKyna3PxtIcD7QvRlu8/ZXurcerZXVib5FbwmoXUzLZvbMeyaFHEMbawepp5xups/YYqp+I6H0SUqbMcNIAntENb/0doteXKwdOgsSUkdtMVoEM0p6PhFngFJLFPYAdq0yZiC8WQNwHNTBHcSME3CrIWk1sjrDjN8WylFTPljy7fNm2Rl2UFHvdtGHo5e5YEltHGdlcnSD4ZhXKCn3blR7O87taNUEAjljgjxdridbUrAJ3ooJRVPicVfeslVCM+OQ=
+  file: release/pigallery2.zip
+  skip_cleanup: true
+  on:
+    repo: bpatrik/PiGallery2
+    tags: true
+
   provider: heroku
   api_key:
     secure: blREfw45CnFXyS1BJKY8pgQ1ZiMDYV5nLWqVMLUufBiO85CRataJNRzyjkPC1E53AkavXB9HQPAzc6bzFlbZZ21xsrfDxmhjhPcUrAeaOWN9uSj68D5hlGyFJGc6P6hEu4n/UrX4H6F2hW0lWfLcl1Mtc62VMpmn5OjBOFdxhk+KtQaXpHN4j5YTeMeUh3U6HTpSfgg6rrGvmLUp5+zCxFzzMZ8Wp1MnRAf5N4oOW3Wj8ax9JB/c4EljQO4sb2LWZk9iSUYxQcXMTK6KmMhY+tGBrKqLz37ZK1DLp3jmFEcUyy+bUGgajIsFW0dLCPlB0bVKjK2Ry1u7SSZ/zpfDlma/nwQ1vVYLhmxhE+LnXxyfIjWN8IXqa6EcovpDbBe7arQ2mxsYf4WMebteDszMPPCcF2FgKE44Re83fzIVJk3R69D1gBxGzXlarPtV8k11L09ZoCSz9RCDBn2ng1ZOaprKpopp3bBPFD+LRwON9/ZRyRa4YbYkMPWxgj8krYNo50VSRrMz/3xR9py9hgVNnK5H/5QQTcdT0bPQf6lbJn3Q86QTUBxWI12FwKrcr2Nvw/setSACwRucGbbx9hLhrSmjYetsENWba1F2ouBdSpENvpjxETvyE2Z+GRNu4xbuFD9aSttogjJqjTYvRc/RJejvbENIc2/UIqnv/ra0PPY=
   app: pigallery2
   on:
     repo: bpatrik/PiGallery2
+
 cache:
   directories:
-    - "node_modules"
-script: npm run build
+  - node_modules
+
+script:
+- npm run build
+- npm test

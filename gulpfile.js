@@ -2,10 +2,10 @@ var ts = require('gulp-typescript');
 var del = require('del');
 var gulp = require('gulp');
 var merge = require('merge2');
+var zip = require('gulp-zip');
 var runSequence = require('run-sequence');
 
 
-var tsProject = ts.createProject('tsconfig.json');
 
 gulp.task('clean', function () {
     return del('release/');
@@ -34,9 +34,14 @@ gulp.task('compile-release', function () {
         })
     );
 });
+gulp.task('zip-release', function () {
+    return gulp.src('release/**/*')
+        .pipe(zip('pigallery2.zip'))
+        .pipe(gulp.dest('release'))
+});
 
 gulp.task('build-release', function (done) {
-    runSequence('clean', 'copy-files', 'compile-release', function () {
+    runSequence('clean', 'copy-files', 'compile-release', 'zip-release', function () {
         console.log('Run something else');
         done();
     });
