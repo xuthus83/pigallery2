@@ -4,12 +4,8 @@ node_js:
 - '6'
 
 before_deploy:
-  script:
-    - npm i gulp -g
-    - gulp build-release
-  on:
-    repo: bpatrik/PiGallery2
-    tags: true
+- npm i gulp -g
+- gulp build-release
 
 
 
