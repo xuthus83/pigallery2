@@ -2,12 +2,12 @@
 import * as path from "path";
 import {DirectoryDTO} from "../../common/entities/DirectoryDTO";
 import {
+    CameraMetadata,
+    GPSMetadata,
+    ImageSize,
     PhotoDTO,
     PhotoMetadata,
-    ImageSize,
-    CameraMetadata,
-    PositionMetaData,
-    GPSMetadata
+    PositionMetaData
 } from "../../common/entities/PhotoDTO";
 import {ProjectPath} from "../ProjectPath";
 
@@ -170,7 +170,6 @@ pool.run(
 
 
         parseDir(input).then((dir) => {
-            console.log(dir);
             done(null, dir);
         }).catch((err) => {
             done(err, null);

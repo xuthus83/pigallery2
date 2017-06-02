@@ -64,8 +64,7 @@ export const hardwareRenderer = (input: RendererInput, done) => {
                 const ratio = metadata.height / metadata.width;
                 if (input.makeSquare == false) {
                     const newWidth = Math.round(Math.sqrt((input.size * input.size) / ratio));
-                    console.log(image
-                        .resize(newWidth));
+                    image.resize(newWidth);
 
                 } else {
                     image

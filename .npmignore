@@ -1,0 +1,11 @@
+.idea/
+node_modules/
+demo
+test
+karma-test-shim.js
+karma.conf.js
+Procfile
+users.db
+.travis.yml
+*.ts
+PiGallery2.iml
