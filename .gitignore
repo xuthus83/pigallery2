@@ -1,8 +1,7 @@
 .idea/
-release
 PiGallery2.iml
 node_modules/
-typings/
+pigallery2.zip
 frontend/app/**/*.js
 frontend/app/**/*.js.map
 frontend/main.js

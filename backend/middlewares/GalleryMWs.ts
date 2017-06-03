@@ -10,7 +10,10 @@ import {SearchResultDTO} from "../../common/entities/SearchResult";
 import {PhotoDTO} from "../../common/entities/PhotoDTO";
 import {Config} from "../config/Config";
 import {ProjectPath} from "../ProjectPath";
+import {Logger} from "../Logger";
 
+
+const LOG_TAG = "[GalleryMWs]";
 export class GalleryMWs {
 
 
@@ -24,6 +27,7 @@ export class GalleryMWs {
 
         ObjectManagerRepository.getInstance().getGalleryManager().listDirectory(directoryName, (err, directory: DirectoryDTO) => {
             if (err || !directory) {
+                Logger.warn(LOG_TAG, "Error during listing the directory", err);
                 console.error(err);
                 return next(new Error(ErrorCodes.GENERAL_ERROR, err));
             }

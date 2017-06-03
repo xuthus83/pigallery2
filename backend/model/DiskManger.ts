@@ -10,9 +10,13 @@ import {
     PositionMetaData
 } from "../../common/entities/PhotoDTO";
 import {ProjectPath} from "../ProjectPath";
+import {Logger} from "../Logger";
 
 const Pool = require('threads').Pool;
 const pool = new Pool();
+
+const LOG_TAG = "[DiskManager]";
+
 pool.run(
     (input: {
         relativeDirectoryName: string,
@@ -49,13 +53,15 @@ pool.run(
             return new Promise<PhotoMetadata>((resolve: (metadata: PhotoMetadata) => void, reject) => {
                 fs.readFile(fullPath, function (err, data) {
                     if (err) {
-                        return reject(err);
-                    } else {
-                        let exif = exif_parser.create(data).parse();
-                        let iptcData = iptc(data);
+                        return reject({file: fullPath, error: err});
+                    }
+                    try {
 
-                        let imageSize: ImageSize = {width: exif.imageSize.width, height: exif.imageSize.height};
-                        let cameraData: CameraMetadata = {
+                        const exif = exif_parser.create(data).parse();
+                        const iptcData = iptc(data);
+
+                        const imageSize: ImageSize = {width: exif.imageSize.width, height: exif.imageSize.height};
+                        const cameraData: CameraMetadata = {
                             ISO: exif.tags.ISO,
                             model: exif.tags.Modeol,
                             maker: exif.tags.Make,
@@ -64,14 +70,14 @@ pool.run(
                             focalLength: exif.tags.FocalLength,
                             lens: exif.tags.LensModel,
                         };
-                        let GPS: GPSMetadata = {
+                        const GPS: GPSMetadata = {
                             latitude: exif.tags.GPSLatitude,
                             longitude: exif.tags.GPSLongitude,
                             altitude: exif.tags.GPSAltitude
 
                         };
 
-                        let positionData: PositionMetaData = {
+                        const positionData: PositionMetaData = {
                             GPSData: GPS,
                             country: iptcData.country_or_primary_location_name,
                             state: iptcData.province_or_state,
@@ -79,7 +85,7 @@ pool.run(
                         };
 
                         //Decode characters to UTF8
-                        let decode = (s: any) => {
+                        const decode = (s: any) => {
                             for (let a, b, i = -1, l = (s = s.split("")).length, o = String.fromCharCode, c = "charCodeAt"; ++i < l;
                                  ((a = s[i][c](0)) & 0x80) &&
                                  (s[i] = (a & 0xfc) == 0xc0 && ((b = s[i + 1][c](0)) & 0xc0) == 0x80 ?
@@ -88,11 +94,12 @@ pool.run(
                             return s.join("");
                         };
 
-                        let keywords: [string] = iptcData.keywords.map((s: string) => decode(s));
-                        let creationDate: number = iptcData.date_time.getTime();
+
+                        const keywords: string[] = (iptcData.keywords || []).map((s: string) => decode(s));
+                        const creationDate: number = iptcData.date_time ? iptcData.date_time.getTime() : 0;
 
 
-                        let metadata: PhotoMetadata = <PhotoMetadata>{
+                        const metadata: PhotoMetadata = <PhotoMetadata>{
                             keywords: keywords,
                             cameraData: cameraData,
                             positionData: positionData,
@@ -100,6 +107,8 @@ pool.run(
                             creationDate: creationDate
                         };
                         return resolve(metadata);
+                    } catch (err) {
+                        return reject({file: fullPath, error: err});
                     }
                 });
             });
@@ -111,7 +120,6 @@ pool.run(
             directoryParent: string,
             absoluteDirectoryName: string
         }, maxPhotos: number = null, photosOnly: boolean = false): Promise<DirectoryDTO> => {
-
             return new Promise<DirectoryDTO>((resolve, reject) => {
                 let promises: Array<Promise<any>> = [];
                 let directory = <DirectoryDTO>{
@@ -127,41 +135,49 @@ pool.run(
                         return reject(err);
                     }
 
+                    try {
+                        for (let i = 0; i < list.length; i++) {
+                            let file = list[i];
+                            console.log(list[i]);
+                            let fullFilePath = path.normalize(path.resolve(directoryInfo.absoluteDirectoryName, file));
+                            if (photosOnly == false && fs.statSync(fullFilePath).isDirectory()) {
+                                let promise = parseDir({
+                                        relativeDirectoryName: path.join(directoryInfo.relativeDirectoryName, path.sep),
+                                        directoryName: file,
+                                        directoryParent: path.join(directoryInfo.relativeDirectoryName, path.sep),
+                                        absoluteDirectoryName: fullFilePath
+                                    },
+                                    5, true
+                                ).then((dir) => {
+                                    directory.directories.push(dir);
+                                });
+                                promises.push(promise);
+                            } else if (isImage(fullFilePath)) {
 
-                    for (let i = 0; i < list.length; i++) {
-                        let file = list[i];
-                        let fullFilePath = path.normalize(path.resolve(directoryInfo.absoluteDirectoryName, file));
-                        if (photosOnly == false && fs.statSync(fullFilePath).isDirectory()) {
-                            let promise = parseDir({
-                                    relativeDirectoryName: path.join(directoryInfo.relativeDirectoryName, path.sep),
-                                    directoryName: file,
-                                    directoryParent: path.join(directoryInfo.relativeDirectoryName, path.sep),
-                                    absoluteDirectoryName: fullFilePath
-                                },
-                                5, true
-                            ).then((dir) => {
-                                directory.directories.push(dir);
-                            });
-                            promises.push(promise);
-                        } else if (isImage(fullFilePath)) {
 
+                                let promise = loadPhotoMetadata(fullFilePath).then((photoMetadata) => {
+                                    directory.photos.push(<PhotoDTO>{
+                                        name: file,
+                                        directory: null,
+                                        metadata: photoMetadata
+                                    });
+                                });
 
-                            let promise = loadPhotoMetadata(fullFilePath).then((photoMetadata) => {
-                                directory.photos.push(<PhotoDTO>{name: file, directory: null, metadata: photoMetadata});
-                            });
-
-                            promises.push(promise);
-                            if (maxPhotos != null && promises.length > maxPhotos) {
-                                break;
+                                promises.push(promise);
+                                if (maxPhotos != null && promises.length > maxPhotos) {
+                                    break;
+                                }
                             }
                         }
-                    }
 
-                    Promise.all(promises).then(() => {
-                        return resolve(directory);
-                    }).catch((err) => {
-                        console.error(err);
-                    });
+                        Promise.all(promises).then(() => {
+                            return resolve(directory);
+                        }).catch((err) => {
+                            return reject({directoryInfo: directoryInfo, error: err});
+                        });
+                    } catch (err) {
+                        return reject({directoryInfo: directoryInfo, error: err});
+                    }
 
                 });
 
@@ -179,7 +195,7 @@ pool.run(
 
 export class DiskManager {
     public static scanDirectory(relativeDirectoryName: string, cb: (error: any, result: DirectoryDTO) => void) {
-        console.log("DiskManager: scanDirectory");
+        Logger.silly(LOG_TAG, "scanDirectory");
         let directoryName = path.basename(relativeDirectoryName);
         let directoryParent = path.join(path.dirname(relativeDirectoryName), path.sep);
         let absoluteDirectoryName = path.join(ProjectPath.ImageFolder, relativeDirectoryName);
@@ -189,7 +205,11 @@ export class DiskManager {
             directoryName,
             directoryParent,
             absoluteDirectoryName
-        }) .on('done', (error: any, result: DirectoryDTO) => {
+        }).on('done', (error: any, result: DirectoryDTO) => {
+            if (error || !result) {
+                return cb(error, result);
+            }
+
             let addDirs = (dir: DirectoryDTO) => {
                 dir.photos.forEach((ph) => {
                     ph.directory = dir;
@@ -199,9 +219,8 @@ export class DiskManager {
                 });
             };
             addDirs(result);
-
             return cb(error, result);
-        }).on('error', (job, error) => {
+        }).on('error', (error) => {
             return cb(error, null);
         });
     }

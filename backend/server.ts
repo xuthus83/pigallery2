@@ -12,8 +12,9 @@ import {SharingRouter} from "./routes/SharingRouter";
 import {DatabaseType} from "../common/config/Config";
 import {ObjectManagerRepository} from "./model/ObjectManagerRepository";
 import {Config} from "./config/Config";
+import {Logger} from "./Logger";
 
-
+const LOG_TAG = "[server]";
 export class Server {
 
     private debug: any;
@@ -21,8 +22,8 @@ export class Server {
     private server: any;
 
     constructor() {
-        console.log("using config");
-        console.log(Config);
+        Logger.info(LOG_TAG, "config:");
+        Logger.info(LOG_TAG, JSON.stringify(Config, null, '\t'));
 
         this.debug = _debug("PiGallery2:server");
         this.app = _express();
@@ -55,19 +56,21 @@ export class Server {
         // for parsing application/json
         this.app.use(_bodyParser.json());
 
-
-        ObjectManagerRepository.InitMySQLManagers().catch((err) => {
-            console.error("Erro during initailizing mysql falling back to memory DB");
-            console.log(err);
-            Config.setDatabaseType(DatabaseType.memory);
+        if (Config.Server.database.type == DatabaseType.mysql) {
+            ObjectManagerRepository.InitMySQLManagers().catch((err) => {
+                Logger.warn(LOG_TAG, "Error during initailizing mysql falling back to memory DB", err);
+                Config.setDatabaseType(DatabaseType.memory);
+                ObjectManagerRepository.InitMemoryManagers();
+            });
+        } else {
             ObjectManagerRepository.InitMemoryManagers();
-        });
+        }
 
         if (Config.Server.thumbnail.hardwareAcceleration == true) {
             try {
                 const sharp = require.resolve("sharp");
             } catch (err) {
-                console.error("Thumbnail hardware acceleration is not possible." +
+                Logger.warn(LOG_TAG, "Thumbnail hardware acceleration is not possible." +
                     " 'Sharp' node module is not found." +
                     " Falling back to JS based thumbnail generation");
                 Config.Server.thumbnail.hardwareAcceleration = false;
@@ -114,11 +117,11 @@ export class Server {
         // handle specific listen error with friendly messages
         switch (error.code) {
             case 'EACCES':
-                console.error(bind + ' requires elevated privileges');
+                Logger.error(LOG_TAG, bind + ' requires elevated privileges');
                 process.exit(1);
                 break;
             case 'EADDRINUSE':
-                console.error(bind + ' is already in use');
+                Logger.error(LOG_TAG, bind + ' is already in use');
                 process.exit(1);
                 break;
             default:
@@ -135,14 +138,14 @@ export class Server {
         const bind = typeof addr === 'string'
             ? 'pipe ' + addr
             : 'port ' + addr.port;
-        this.debug('Listening on ' + bind);
+        Logger.debug(LOG_TAG, 'Listening on ' + bind);
     };
 
 }
 
 
 if (process.env.DEBUG) {
-    console.log("Running in DEBUG mode");
+    Logger.debug(LOG_TAG, "Running in DEBUG mode");
 }
 
 new Server();
