@@ -9,12 +9,48 @@
 
 This is a directory-first photo gallery website, optimised for running on low resource servers (especially on raspberry pi)
 
-
-Work in progess.... Estimated first beta in 2017 summer 
-
+## Live Demo
 Live Demo @ heroku: https://pigallery2.herokuapp.com/
 
-Feature list:
+
+
+## Install (on Raspberry Pi 1)
+### Install NodeJs
+Download and extract
+```bash
+cd ~
+wget https://nodejs.org/dist/v6.10.3/node-v6.10.3-linux-armv6l.tar.gz
+tar -xzf node-v6.10.3-linux-armv6l.tar.gz
+```
+Copy it to /usr/local: 
+```bash
+cd node-v6.10.3-linux-armv6l/
+sudo cp -R * /usr/local/
+```
+Add to path. Add the following line to  `~/.bashrc`
+```bash
+PATH=$PATH:/usr/local/bin
+```
+Full node install description: https://raspberrypi.stackexchange.com/questions/48303/install-nodejs-for-all-raspberry-pi
+ 
+### Install PiGallery2
+```bash
+cd ~
+wget https://github.com/bpatrik/PiGallery2/archive/1.0.0-beta.0.tar.gz
+tar -xzvf 1.0.0-beta.0.tar.gz
+cd PiGallery2-1.0.0-beta.0
+npm install
+npm run build
+```
+### Run PiGallery2
+```bash
+npm start
+```
+To configure it. Run `PiGallery2` first to create `config.json` file, then edit it and restart. 
+
+
+## Feature list
+
  * **Rendering directories as it is**
    * Listing subdirectories recursively
    * Listing photos in a nice grid layout
