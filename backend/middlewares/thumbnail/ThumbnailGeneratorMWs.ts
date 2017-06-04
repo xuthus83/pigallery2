@@ -139,7 +139,14 @@ export class ThumbnailGeneratorMWs {
 
         this.initPools();
         //run on other thread
-        pool.send({imagePath: imagePath, size: size, thPath: thPath, makeSquare: makeSquare, __dirname: __dirname})
+        pool.send({
+            imagePath: imagePath,
+            size: size,
+            thPath: thPath,
+            makeSquare: makeSquare,
+            qualityPriority: Config.Server.thumbnail.qualityPriority,
+            __dirname: __dirname,
+        })
             .on('done', (out) => {
                 return next(out);
             }).on('error', (error) => {

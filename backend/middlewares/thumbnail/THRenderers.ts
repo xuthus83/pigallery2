@@ -5,6 +5,7 @@ export interface RendererInput {
     size: number;
     makeSquare: boolean;
     thPath: string;
+    qualityPriority: boolean,
     __dirname: string;
 }
 
@@ -13,6 +14,9 @@ export const softwareRenderer = (input: RendererInput, done) => {
     //generate thumbnail
     const Jimp = require("jimp");
     Jimp.read(input.imagePath).then((image) => {
+
+        const Logger = require(input.__dirname + "/../../Logger").Logger;
+        Logger.silly("[SoftwareThRenderer] rendering thumbnail:", input.imagePath);
         /**
          * newWidth * newHeight = size*size
          * newHeight/newWidth = height/width
@@ -23,12 +27,13 @@ export const softwareRenderer = (input: RendererInput, done) => {
          * @type {number}
          */
         const ratio = image.bitmap.height / image.bitmap.width;
+        const algo = input.qualityPriority == true ? Jimp.RESIZE_BEZIER : Jimp.RESIZE_NEAREST_NEIGHBOR;
         if (input.makeSquare == false) {
             let newWidth = Math.sqrt((input.size * input.size) / ratio);
 
-            image.resize(newWidth, Jimp.AUTO, Jimp.RESIZE_BEZIER);
+            image.resize(newWidth, Jimp.AUTO, algo);
         } else {
-            image.resize(input.size / Math.min(ratio, 1), Jimp.AUTO, Jimp.RESIZE_BEZIER);
+            image.resize(input.size / Math.min(ratio, 1), Jimp.AUTO, algo);
             image.crop(0, 0, input.size, input.size);
         }
         image.quality(60);        // set JPEG quality
@@ -51,6 +56,9 @@ export const hardwareRenderer = (input: RendererInput, done) => {
     image
         .metadata()
         .then((metadata: Metadata) => {
+
+            const Logger = require(input.__dirname + "/../../Logger").Logger;
+            Logger.silly("[SoftwareThRenderer] rendering thumbnail:", input.imagePath);
             /**
              * newWidth * newHeight = size*size
              * newHeight/newWidth = height/width
@@ -62,13 +70,21 @@ export const hardwareRenderer = (input: RendererInput, done) => {
              */
             try {
                 const ratio = metadata.height / metadata.width;
+                const kernel = input.qualityPriority == true ? sharp.kernel.lanczos3 : sharp.kernel.nearest;
+                const interpolator = input.qualityPriority == true ? sharp.interpolator.bicubic : sharp.interpolator.nearest;
                 if (input.makeSquare == false) {
                     const newWidth = Math.round(Math.sqrt((input.size * input.size) / ratio));
-                    image.resize(newWidth);
+                    image.resize(newWidth, null, {
+                        kernel: kernel,
+                        interpolator: interpolator
+                    });
 
                 } else {
                     image
-                        .resize(input.size, input.size)
+                        .resize(input.size, input.size, {
+                            kernel: kernel,
+                            interpolator: interpolator
+                        })
                         .crop(sharp.strategy.center);
                 }
                 image

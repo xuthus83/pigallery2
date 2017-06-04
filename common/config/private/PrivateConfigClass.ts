@@ -12,7 +12,8 @@ export class PrivateConfigClass extends PublicConfigClass {
         imagesFolder: "demo/images",
         thumbnail: {
             folder: "demo/TEMP",
-            hardwareAcceleration: true
+            hardwareAcceleration: true,
+            qualityPriority: true
         },
         database: {
             type: DatabaseType.mysql,

@@ -18,6 +18,7 @@ export interface DataBaseConfig {
 export interface ThumbnailConfig {
     folder: string;
     hardwareAcceleration: boolean;
+    qualityPriority: boolean;
 }
 
 export interface ServerConfig {
