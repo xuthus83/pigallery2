@@ -2,22 +2,22 @@ import {AuthenticationMWs} from "../middlewares/user/AuthenticationMWs";
 import {UserRoles} from "../../common/entities/UserDTO";
 
 export class AdminRouter {
-    constructor(private app: any) {
+    public static route(app: any) {
 
-        this.addResetDB();
-        this.addIndexGallery();
+        this.addResetDB(app);
+        this.addIndexGallery(app);
     }
 
-    private addResetDB() {
-        this.app.post("/api/admin/db/reset",
+    private static addResetDB(app) {
+        app.post("/api/admin/db/reset",
             AuthenticationMWs.authenticate,
             AuthenticationMWs.authorise(UserRoles.Admin)
             //TODO: implement
         );
     };
 
-    private addIndexGallery() {
-        this.app.post("/api/admin/gallery/index",
+    private static addIndexGallery(app) {
+        app.post("/api/admin/gallery/index",
             AuthenticationMWs.authenticate,
             AuthenticationMWs.authorise(UserRoles.Admin)
             //TODO: implement

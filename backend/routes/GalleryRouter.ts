@@ -4,20 +4,20 @@ import {RenderingMWs} from "../middlewares/RenderingMWs";
 import {ThumbnailGeneratorMWs} from "../middlewares/thumbnail/ThumbnailGeneratorMWs";
 
 export class GalleryRouter {
-    constructor(private app: any) {
+    public static route(app: any) {
 
-        this.addGetImageIcon();
-        this.addGetImageThumbnail();
-        this.addGetImage();
-        this.addDirectoryList();
+        this.addGetImageIcon(app);
+        this.addGetImageThumbnail(app);
+        this.addGetImage(app);
+        this.addDirectoryList(app);
 
-        this.addSearch();
-        this.addInstantSearch();
-        this.addAutoComplete();
+        this.addSearch(app);
+        this.addInstantSearch(app);
+        this.addAutoComplete(app);
     }
 
-    private addDirectoryList() {
-        this.app.get(["/api/gallery/content/:directory(*)", "/api/gallery/", "/api/gallery//"],
+    private static addDirectoryList(app) {
+        app.get(["/api/gallery/content/:directory(*)", "/api/gallery/", "/api/gallery//"],
             AuthenticationMWs.authenticate,
             GalleryMWs.listDirectory,
             ThumbnailGeneratorMWs.addThumbnailInformation,
@@ -27,16 +27,16 @@ export class GalleryRouter {
     };
 
 
-    private addGetImage() {
-        this.app.get(["/api/gallery/content/:imagePath(*\.(jpg|bmp|png|gif|jpeg))"],
+    private static addGetImage(app) {
+        app.get(["/api/gallery/content/:imagePath(*\.(jpg|bmp|png|gif|jpeg))"],
             AuthenticationMWs.authenticate,
             GalleryMWs.loadImage,
             RenderingMWs.renderFile
         );
     };
 
-    private addGetImageThumbnail() {
-        this.app.get("/api/gallery/content/:imagePath(*\.(jpg|bmp|png|gif|jpeg))/thumbnail/:size?",
+    private static addGetImageThumbnail(app) {
+        app.get("/api/gallery/content/:imagePath(*\.(jpg|bmp|png|gif|jpeg))/thumbnail/:size?",
             AuthenticationMWs.authenticate,
             GalleryMWs.loadImage,
             ThumbnailGeneratorMWs.generateThumbnail,
@@ -44,8 +44,8 @@ export class GalleryRouter {
         );
     };
 
-    private addGetImageIcon() {
-        this.app.get("/api/gallery/content/:imagePath(*\.(jpg|bmp|png|gif|jpeg))/icon",
+    private static addGetImageIcon(app) {
+        app.get("/api/gallery/content/:imagePath(*\.(jpg|bmp|png|gif|jpeg))/icon",
             AuthenticationMWs.authenticate,
             GalleryMWs.loadImage,
             ThumbnailGeneratorMWs.generateIcon,
@@ -53,8 +53,8 @@ export class GalleryRouter {
         );
     };
 
-    private addSearch() {
-        this.app.get("/api/search/:text",
+    private static addSearch(app) {
+        app.get("/api/search/:text",
             AuthenticationMWs.authenticate,
             GalleryMWs.search,
             ThumbnailGeneratorMWs.addThumbnailInformation,
@@ -63,8 +63,8 @@ export class GalleryRouter {
         );
     };
 
-    private addInstantSearch() {
-        this.app.get("/api/instant-search/:text",
+    private static addInstantSearch(app) {
+        app.get("/api/instant-search/:text",
             AuthenticationMWs.authenticate,
             GalleryMWs.instantSearch,
             ThumbnailGeneratorMWs.addThumbnailInformation,
@@ -73,8 +73,8 @@ export class GalleryRouter {
         );
     };
 
-    private addAutoComplete() {
-        this.app.get("/api/autocomplete/:text",
+    private static addAutoComplete(app) {
+        app.get("/api/autocomplete/:text",
             AuthenticationMWs.authenticate,
             GalleryMWs.autocomplete,
             RenderingMWs.renderResult

@@ -5,29 +5,29 @@ import {UserRequestConstrainsMWs} from "../middlewares/user/UserRequestConstrain
 import {RenderingMWs} from "../middlewares/RenderingMWs";
 
 export class UserRouter {
-    constructor(private app) {
-        this.addLogin();
-        this.addLogout();
-        this.addGetSessionUser();
-        this.addChangePassword();
+    public static route(app) {
+        this.addLogin(app);
+        this.addLogout(app);
+        this.addGetSessionUser(app);
+        this.addChangePassword(app);
 
 
-        this.addCreateUser();
-        this.addDeleteUser();
-        this.addListUsers();
-        this.addChangeRole();
+        this.addCreateUser(app);
+        this.addDeleteUser(app);
+        this.addListUsers(app);
+        this.addChangeRole(app);
     }
 
-    private addLogin() {
-        this.app.post("/api/user/login",
+    private static addLogin(app) {
+        app.post("/api/user/login",
             AuthenticationMWs.inverseAuthenticate,
             AuthenticationMWs.login,
             RenderingMWs.renderSessionUser
         );
     };
 
-    private addLogout() {
-        this.app.post("/api/user/logout",
+    private static addLogout(app) {
+        app.post("/api/user/logout",
             AuthenticationMWs.authenticate,
             AuthenticationMWs.logout,
             RenderingMWs.renderOK
@@ -35,16 +35,16 @@ export class UserRouter {
     };
 
 
-    private addGetSessionUser() {
-        this.app.get("/api/user/login",
+    private static addGetSessionUser(app) {
+        app.get("/api/user/login",
             AuthenticationMWs.authenticate,
             RenderingMWs.renderSessionUser
         );
     };
 
 
-    private addChangePassword() {
-        this.app.post("/api/user/:id/password",
+    private static addChangePassword(app) {
+        app.post("/api/user/:id/password",
             AuthenticationMWs.authenticate,
             UserRequestConstrainsMWs.forceSelfRequest,
             UserMWs.changePassword,
@@ -53,8 +53,8 @@ export class UserRouter {
     };
 
 
-    private addCreateUser() {
-        this.app.put("/api/user",
+    private static addCreateUser(app) {
+        app.put("/api/user",
             AuthenticationMWs.authenticate,
             AuthenticationMWs.authorise(UserRoles.Admin),
             UserMWs.createUser,
@@ -62,8 +62,8 @@ export class UserRouter {
         );
     };
 
-    private addDeleteUser() {
-        this.app.delete("/api/user/:id",
+    private static addDeleteUser(app) {
+        app.delete("/api/user/:id",
             AuthenticationMWs.authenticate,
             AuthenticationMWs.authorise(UserRoles.Admin),
             UserRequestConstrainsMWs.notSelfRequest,
@@ -73,8 +73,8 @@ export class UserRouter {
     };
 
 
-    private addListUsers() {
-        this.app.get("/api/user/list",
+    private static addListUsers(app) {
+        app.get("/api/user/list",
             AuthenticationMWs.authenticate,
             AuthenticationMWs.authorise(UserRoles.Admin),
             UserMWs.listUsers,
@@ -82,8 +82,8 @@ export class UserRouter {
         );
     };
 
-    private addChangeRole() {
-        this.app.post("/api/user/:id/role",
+    private static addChangeRole(app) {
+        app.post("/api/user/:id/role",
             AuthenticationMWs.authenticate,
             AuthenticationMWs.authorise(UserRoles.Admin),
             UserRequestConstrainsMWs.notSelfRequestOr2Admins,

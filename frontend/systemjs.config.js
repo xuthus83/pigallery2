@@ -27,7 +27,8 @@
             'rxjs': 'npm:rxjs',
 
             '@agm/core': 'npm:@agm/core/core.umd.js',
-            'ng2-cookies': 'npm:ng2-cookies/ng2-cookies'
+            'ng2-cookies': 'npm:ng2-cookies/ng2-cookies',
+            'typeconfig': 'npm:typeconfig'
         },
         // packages tells the System loader how to load when no filename and/or no extension
         packages: {

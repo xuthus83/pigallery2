@@ -1,29 +1,3 @@
-export enum DatabaseType{
-    memory = 0, mysql = 1
-}
-
-interface MySQLConfig {
-    host: string;
-    database: string;
-    username: string;
-    password: string;
-}
-interface DataBaseConfig {
-    type: DatabaseType;
-    mysql?: MySQLConfig;
-}
-interface ThumbnailConfig {
-    folder: string;
-    hardwareAcceleration: boolean;
-}
-
-interface ServerConfig {
-    port: number;
-    imagesFolder: string;
-    thumbnail: ThumbnailConfig;
-    database: DataBaseConfig;
-}
-
 interface SearchConfig {
     searchEnabled: boolean
     instantSearchEnabled: boolean
@@ -41,9 +15,11 @@ interface ClientConfig {
     authenticationRequired: boolean;
     googleApiKey: string;
 }
-export class ConfigClass {
 
-    public Server: ServerConfig = null;
+/**
+ * These configuration will be available at frontend and backend too
+ */
+export class PublicConfigClass {
 
     public Client: ClientConfig = {
         thumbnailSizes: [200, 400, 600],
@@ -61,14 +37,5 @@ export class ConfigClass {
         googleApiKey: ""
     };
 
-    public setDatabaseType(type: DatabaseType) {
-        this.Server.database.type = type;
-        if (type === DatabaseType.memory) {
-            this.Client.Search.searchEnabled = false;
-            this.Client.Search.instantSearchEnabled = false;
-            this.Client.Search.autocompleteEnabled = false;
-        }
-    }
 }
 
- 

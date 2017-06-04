@@ -1,10 +1,10 @@
 import {Component} from "@angular/core";
 import {AutoCompleteService} from "./autocomplete.service";
 import {AutoCompleteItem, SearchTypes} from "../../../../common/entities/AutoCompleteItem";
-import {RouterLink, ActivatedRoute, Params} from "@angular/router";
+import {ActivatedRoute, Params, RouterLink} from "@angular/router";
 import {Message} from "../../../../common/entities/Message";
 import {GalleryService} from "../gallery.service";
-import {Config} from "../../config/Config";
+import {Config} from "../../../../common/config/public/Config";
 
 @Component({
     selector: 'gallery-search',

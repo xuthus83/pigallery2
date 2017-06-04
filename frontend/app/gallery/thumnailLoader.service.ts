@@ -1,9 +1,9 @@
 import {Injectable} from "@angular/core";
-import {Config} from "../config/Config";
 import {GalleryCacheService} from "./cache.gallery.service";
 import {Photo} from "./Photo";
 import {IconPhoto} from "./IconPhoto";
 import {PhotoDTO} from "../../../common/entities/PhotoDTO";
+import {Config} from "../../../common/config/public/Config";
 
 export enum ThumbnailLoadingPriority{
     high, medium, low

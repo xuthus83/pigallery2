@@ -1,18 +1,19 @@
 import * as _express from "express";
 import * as _session from "express-session";
 import * as _bodyParser from "body-parser";
-import * as _debug from "debug";
 import * as _http from "http";
+import * as winston from "winston";
+import * as expressWinston from "express-winston";
 import {PublicRouter} from "./routes/PublicRouter";
 import {UserRouter} from "./routes/UserRouter";
 import {GalleryRouter} from "./routes/GalleryRouter";
 import {AdminRouter} from "./routes/AdminRouter";
 import {ErrorRouter} from "./routes/ErrorRouter";
 import {SharingRouter} from "./routes/SharingRouter";
-import {DatabaseType} from "../common/config/Config";
 import {ObjectManagerRepository} from "./model/ObjectManagerRepository";
-import {Config} from "./config/Config";
 import {Logger} from "./Logger";
+import {Config} from "../common/config/private/Config";
+import {DatabaseType} from "../common/config/private/IPrivateConfig";
 
 const LOG_TAG = "[server]";
 export class Server {
@@ -22,18 +23,46 @@ export class Server {
     private server: any;
 
     constructor() {
+        this.init();
+    }
+
+    async init() {
         Logger.info(LOG_TAG, "config:");
         Logger.info(LOG_TAG, JSON.stringify(Config, null, '\t'));
 
-        this.debug = _debug("PiGallery2:server");
         this.app = _express();
 
-        this.app.set('view engine', 'ejs');
+        this.app.use(expressWinston.logger({
+            transports: [
+                new winston.transports.Console({
+                    level: 'silly',
+                    json: false,
+                    colorize: true,
+                    timestamp: function () {
+                        return (new Date()).toLocaleString();
+                    },
+                    formatter: (options) => {
+                        // Return string will be passed to logger.
+                        return options.timestamp() + '[' + winston['config']['colorize'](options.level, options.level.toUpperCase()) + '] ' +
+                            (undefined !== options.message ? options.message : '') +
+                            (options.meta && Object.keys(options.meta).length ? '\n\t' + JSON.stringify(options.meta) : '' );
+                    },
+                    debugStdout: true
+                })
+            ],
+            meta: false, // optional: control whether you want to log the meta data about the request (default to true)
+            msg: "HTTP {{req.method}} {{req.url}}", // optional: customize the default logging message. E.g. "{{res.statusCode}} {{req.method}} {{res.responseTime}}ms {{req.url}}"
+            expressFormat: true, // Use the default Express/morgan request formatting. Enabling this will override any msg if true. Will only output colors with colorize set to true
+            colorize: true, // Color the text and status code, using the Express/morgan color palette (text: gray, status: default green, 3XX cyan, 4XX yellow, 5XX red).
+            level: (req) => {
+                if (req.url.indexOf("/api/") !== -1) {
+                    return "verbose";
+                }
+                return req.url.indexOf("node_modules") !== -1 ? "silly" : "debug"
+            }
+        }));
 
-        if (process.env.DEBUG) {
-            let _morgan = require('morgan');
-            this.app.use(_morgan('dev'));
-        }
+        this.app.set('view engine', 'ejs');
 
 
         /**
@@ -57,19 +86,26 @@ export class Server {
         this.app.use(_bodyParser.json());
 
         if (Config.Server.database.type == DatabaseType.mysql) {
-            ObjectManagerRepository.InitMySQLManagers().catch((err) => {
-                Logger.warn(LOG_TAG, "Error during initailizing mysql falling back to memory DB", err);
+            try {
+                await ObjectManagerRepository.InitMySQLManagers();
+            } catch (err) {
+                Logger.warn(LOG_TAG, "[MYSQL error]", err);
+                Logger.warn(LOG_TAG, "Error during initializing mysql falling back to memory DB");
                 Config.setDatabaseType(DatabaseType.memory);
-                ObjectManagerRepository.InitMemoryManagers();
-            });
+                await ObjectManagerRepository.InitMemoryManagers();
+            }
         } else {
-            ObjectManagerRepository.InitMemoryManagers();
+            await ObjectManagerRepository.InitMemoryManagers();
         }
 
         if (Config.Server.thumbnail.hardwareAcceleration == true) {
             try {
-                const sharp = require.resolve("sharp");
+                const sharp = require("sharp");
+                sharp();
+
             } catch (err) {
+                Logger.warn(LOG_TAG, "[Thumbnail hardware acceleration] sharp module error: ", err);
+
                 Logger.warn(LOG_TAG, "Thumbnail hardware acceleration is not possible." +
                     " 'Sharp' node module is not found." +
                     " Falling back to JS based thumbnail generation");
@@ -77,14 +113,14 @@ export class Server {
             }
         }
 
-        new PublicRouter(this.app);
+        PublicRouter.route(this.app);
 
-        new UserRouter(this.app);
-        new GalleryRouter(this.app);
-        new SharingRouter(this.app);
-        new AdminRouter(this.app);
+        UserRouter.route(this.app);
+        GalleryRouter.route(this.app);
+        SharingRouter.route(this.app);
+        AdminRouter.route(this.app);
 
-        new ErrorRouter(this.app);
+        ErrorRouter.route(this.app);
 
 
         // Get PORT from environment and store in Express.
@@ -138,7 +174,7 @@ export class Server {
         const bind = typeof addr === 'string'
             ? 'pipe ' + addr
             : 'port ' + addr.port;
-        Logger.debug(LOG_TAG, 'Listening on ' + bind);
+        Logger.info(LOG_TAG, 'Listening on ' + bind);
     };
 
 }

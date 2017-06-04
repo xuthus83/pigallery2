@@ -15,8 +15,8 @@ import {GridRowBuilder} from "./GridRowBuilder";
 import {GalleryLightboxComponent} from "../lightbox/lightbox.gallery.component";
 import {GridPhoto} from "./GridPhoto";
 import {GalleryPhotoComponent} from "./photo/photo.grid.gallery.component";
-import {Config} from "../../config/Config";
 import {OverlayService} from "../overlay.service";
+import {Config} from "../../../../common/config/public/Config";
 
 @Component({
     selector: 'gallery-grid',

@@ -5,12 +5,12 @@ import * as fs from "fs";
 import * as os from "os";
 import {NextFunction, Request, Response} from "express";
 import {Error, ErrorCodes} from "../../../common/entities/Error";
-import {Config} from "../../config/Config";
 import {ContentWrapper} from "../../../common/entities/ConentWrapper";
 import {DirectoryDTO} from "../../../common/entities/DirectoryDTO";
 import {ProjectPath} from "../../ProjectPath";
 import {PhotoDTO} from "../../../common/entities/PhotoDTO";
 import {hardwareRenderer, softwareRenderer} from "./THRenderers";
+import {Config} from "../../../common/config/private/Config";
 
 
 Config.Client.concurrentThumbnailGenerations = Math.max(1, os.cpus().length - 1);
@@ -18,14 +18,21 @@ Config.Client.concurrentThumbnailGenerations = Math.max(1, os.cpus().length - 1)
 const Pool = require('threads').Pool;
 const pool = new Pool(Config.Client.concurrentThumbnailGenerations);
 
-if (Config.Server.thumbnail.hardwareAcceleration == true) {
-    pool.run(hardwareRenderer);
-} else {
-    pool.run(softwareRenderer);
-}
 
 export class ThumbnailGeneratorMWs {
+    private static poolsInited = false;
 
+    private static initPools() {
+        if (this.poolsInited == true) {
+            return
+        }
+        if (Config.Server.thumbnail.hardwareAcceleration == true) {
+            pool.run(hardwareRenderer);
+        } else {
+            pool.run(softwareRenderer);
+        }
+        this.poolsInited = true;
+    }
 
     private static addThInfoTODir(directory: DirectoryDTO) {
         if (typeof  directory.photos == "undefined") {
@@ -111,6 +118,7 @@ export class ThumbnailGeneratorMWs {
 
     }
 
+
     private static generateImage(imagePath: string, size: number, makeSquare: boolean, req: Request, res: Response, next: NextFunction) {
 
         //generate thumbnail path
@@ -129,6 +137,7 @@ export class ThumbnailGeneratorMWs {
             fs.mkdirSync(ProjectPath.ThumbnailFolder);
         }
 
+        this.initPools();
         //run on other thread
         pool.send({imagePath: imagePath, size: size, thPath: thPath, makeSquare: makeSquare, __dirname: __dirname})
             .on('done', (out) => {

@@ -2,22 +2,22 @@ import {AuthenticationMWs} from "../middlewares/user/AuthenticationMWs";
 import {UserRoles} from "../../common/entities/UserDTO";
 
 export class SharingRouter {
-    constructor(private app: any) {
+    public static route(app: any) {
 
-        this.addGetSharing();
-        this.addUpdateSharing();
+        this.addGetSharing(app);
+        this.addUpdateSharing(app);
     }
 
-    private addGetSharing() {
-        this.app.get("/api/share/:directory",
+    private static addGetSharing(app) {
+        app.get("/api/share/:directory",
             AuthenticationMWs.authenticate,
             AuthenticationMWs.authorise(UserRoles.User)
             //TODO: implement
         );
     };
 
-    private addUpdateSharing() {
-        this.app.post("/api/share/:directory",
+    private static addUpdateSharing(app) {
+        app.post("/api/share/:directory",
             AuthenticationMWs.authenticate,
             AuthenticationMWs.authorise(UserRoles.User)
             //TODO: implement

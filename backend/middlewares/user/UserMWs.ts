@@ -2,8 +2,8 @@ import {NextFunction, Request, Response} from "express";
 import {Error, ErrorCodes} from "../../../common/entities/Error";
 import {ObjectManagerRepository} from "../../model/ObjectManagerRepository";
 import {UserDTO} from "../../../common/entities/UserDTO";
-import {Config} from "../../config/Config";
 import {Utils} from "../../../common/Utils";
+import {Config} from "../../../common/config/private/Config";
 
 export class UserMWs {
 

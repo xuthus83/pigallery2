@@ -1,9 +1,9 @@
 ///<reference path="../customtypings/ExtendedRequest.d.ts"/>
 import {NextFunction, Request, Response} from "express";
 import {Error, ErrorCodes} from "../../../common/entities/Error";
-import {UserRoles, UserDTO} from "../../../common/entities/UserDTO";
+import {UserDTO, UserRoles} from "../../../common/entities/UserDTO";
 import {ObjectManagerRepository} from "../../model/ObjectManagerRepository";
-import {Config} from "../../config/Config";
+import {Config} from "../../../common/config/private/Config";
 
 export class AuthenticationMWs {
 

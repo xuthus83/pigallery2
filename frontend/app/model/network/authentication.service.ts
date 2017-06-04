@@ -6,7 +6,7 @@ import {LoginCredential} from "../../../../common/entities/LoginCredential";
 import {Message} from "../../../../common/entities/Message";
 import {Cookie} from "ng2-cookies";
 import {ErrorCodes} from "../../../../common/entities/Error";
-import {Config} from "../../config/Config";
+import {Config} from "../../../../common/config/public/Config";
 
 declare module ServerInject {
     export let user: UserDTO;

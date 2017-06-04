@@ -1,10 +1,10 @@
-import {Component, Input, ElementRef, ViewChild, OnInit, OnDestroy} from "@angular/core";
-import {IRenderable, Dimension} from "../../../model/IRenderable";
+import {Component, ElementRef, Input, OnDestroy, OnInit, ViewChild} from "@angular/core";
+import {Dimension, IRenderable} from "../../../model/IRenderable";
 import {GridPhoto} from "../GridPhoto";
 import {SearchTypes} from "../../../../../common/entities/AutoCompleteItem";
 import {RouterLink} from "@angular/router";
-import {Config} from "../../../config/Config";
 import {Thumbnail, ThumbnailManagerService} from "../../thumnailManager.service";
+import {Config} from "../../../../../common/config/public/Config";
 
 @Component({
     selector: 'gallery-grid-photo',

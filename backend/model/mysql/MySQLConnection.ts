@@ -1,10 +1,10 @@
 import "reflect-metadata";
-import {createConnection, Connection} from "typeorm";
-import {Config} from "../../config/Config";
+import {Connection, createConnection} from "typeorm";
 import {UserEntity} from "./enitites/UserEntity";
 import {UserRoles} from "../../../common/entities/UserDTO";
 import {PhotoEntity, PhotoMetadataEntity} from "./enitites/PhotoEntity";
 import {DirectoryEntity} from "./enitites/DirectoryEntity";
+import {Config} from "../../../common/config/private/Config";
 
 
 export class MySQLConnection {

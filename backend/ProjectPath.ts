@@ -1,5 +1,5 @@
 import * as path from "path";
-import {Config} from "./config/Config";
+import {Config} from "../common/config/private/Config";
 
 class ProjectPathClass {
     public Root: string;

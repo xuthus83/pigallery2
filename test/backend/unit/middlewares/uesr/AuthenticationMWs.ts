@@ -4,7 +4,7 @@ import {Error, ErrorCodes} from "../../../../../common/entities/Error";
 import {UserRoles} from "../../../../../common/entities/UserDTO";
 import {ObjectManagerRepository} from "../../../../../backend/model/ObjectManagerRepository";
 import {UserManager} from "../../../../../backend/model/memory/UserManager";
-import {Config} from "../../../../../backend/config/Config";
+import {Config} from "../../../../../common/config/private/Config";
 
 
 describe('Authentication middleware', () => {

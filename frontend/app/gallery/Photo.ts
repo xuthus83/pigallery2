@@ -1,7 +1,7 @@
 import {PhotoDTO} from "../../../common/entities/PhotoDTO";
 import {Utils} from "../../../common/Utils";
-import {Config} from "../config/Config";
 import {IconPhoto} from "./IconPhoto";
+import {Config} from "../../../common/config/public/Config";
 export class Photo extends IconPhoto {
 
 

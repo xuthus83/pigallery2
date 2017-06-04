@@ -26,11 +26,11 @@ import {LoginComponent} from "./login/login.component";
 import {AdminComponent} from "./admin/admin.component";
 import {GalleryComponent} from "./gallery/gallery.component";
 import {StringifyRole} from "./pipes/StringifyRolePipe";
-import {Config} from "./config/Config";
 import {GalleryMapComponent} from "./gallery/map/map.gallery.component";
 import {GalleryMapLightboxComponent} from "./gallery/map/lightbox/lightbox.map.gallery.component";
 import {ThumbnailManagerService} from "./gallery/thumnailManager.service";
 import {OverlayService} from "./gallery/overlay.service";
+import {Config} from "../../common/config/public/Config";
 
 @NgModule({
     imports: [

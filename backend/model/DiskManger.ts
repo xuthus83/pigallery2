@@ -138,7 +138,6 @@ pool.run(
                     try {
                         for (let i = 0; i < list.length; i++) {
                             let file = list[i];
-                            console.log(list[i]);
                             let fullFilePath = path.normalize(path.resolve(directoryInfo.absoluteDirectoryName, file));
                             if (photosOnly == false && fs.statSync(fullFilePath).isDirectory()) {
                                 let promise = parseDir({
@@ -195,7 +194,7 @@ pool.run(
 
 export class DiskManager {
     public static scanDirectory(relativeDirectoryName: string, cb: (error: any, result: DirectoryDTO) => void) {
-        Logger.silly(LOG_TAG, "scanDirectory");
+        Logger.silly(LOG_TAG, "scanning directory:", relativeDirectoryName);
         let directoryName = path.basename(relativeDirectoryName);
         let directoryParent = path.join(path.dirname(relativeDirectoryName), path.sep);
         let absoluteDirectoryName = path.join(ProjectPath.ImageFolder, relativeDirectoryName);

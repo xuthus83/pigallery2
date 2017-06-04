@@ -2,7 +2,7 @@ import {Component, ViewEncapsulation} from "@angular/core";
 import {RouterLink} from "@angular/router";
 import {AuthenticationService} from "../model/network/authentication.service";
 import {UserDTO} from "../../../common/entities/UserDTO";
-import {Config} from "../config/Config";
+import {Config} from "../../../common/config/public/Config";
 
 @Component({
     selector: 'app-frame',

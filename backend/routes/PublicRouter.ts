@@ -2,11 +2,12 @@ import * as _express from "express";
 import {NextFunction, Request, Response} from "express";
 import * as _path from "path";
 import {Utils} from "../../common/Utils";
-import {Config} from "../config/Config";
+import {Config} from "../../common/config/private/Config";
 
 export class PublicRouter {
-    constructor(private app) {
-        this.app.use((req:Request, res:Response, next:NextFunction) => {
+
+    public static route(app) {
+        app.use((req: Request, res: Response, next: NextFunction) => {
             res.tpl = {};
 
             res.tpl.user = null;
@@ -20,15 +21,15 @@ export class PublicRouter {
             return next();
         });
 
-        this.app.use(_express.static(_path.resolve(__dirname, './../../frontend')));
-        this.app.use('/node_modules', _express.static(_path.resolve(__dirname, './../../node_modules')));
-        this.app.use('/common', _express.static(_path.resolve(__dirname, './../../common')));
+        app.use(_express.static(_path.resolve(__dirname, './../../frontend')));
+        app.use('/node_modules', _express.static(_path.resolve(__dirname, './../../node_modules')));
+        app.use('/common', _express.static(_path.resolve(__dirname, './../../common')));
 
         const renderIndex = (req: Request, res: Response) => {
             res.render(_path.resolve(__dirname, './../../frontend/index.ejs'), res.tpl);
         };
 
-        this.app.get(['/', '/login', "/gallery*", "/admin", "/search*"], renderIndex);
+        app.get(['/', '/login', "/gallery*", "/admin", "/search*"], renderIndex);
 
 
     }

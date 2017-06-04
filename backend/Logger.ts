@@ -7,8 +7,7 @@ declare module 'winston' {
     }
 }
 
-
-export const Logger = new winston.Logger({
+export const winstonSettings = {
     transports: [
         new winston.transports.Console({
             level: 'silly',
@@ -29,4 +28,6 @@ export const Logger = new winston.Logger({
         })
     ],
     exitOnError: false
-});
+};
+
+export const Logger = new winston.Logger(winstonSettings);

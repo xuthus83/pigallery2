@@ -2,7 +2,7 @@ import {Injectable} from "@angular/core";
 import {PhotoDTO} from "../../../common/entities/PhotoDTO";
 import {DirectoryDTO} from "../../../common/entities/DirectoryDTO";
 import {Utils} from "../../../common/Utils";
-import {Config} from "../config/Config";
+import {Config} from "../../../common/config/public/Config";
 
 @Injectable()
 export class GalleryCacheService {

@@ -1,11 +1,11 @@
 import {Component, OnInit, ViewChild} from "@angular/core";
 import {AuthenticationService} from "../model/network/authentication.service";
-import {Router, ActivatedRoute, Params} from "@angular/router";
+import {ActivatedRoute, Params, Router} from "@angular/router";
 import {GalleryService} from "./gallery.service";
 import {GalleryGridComponent} from "./grid/grid.gallery.component";
 import {GallerySearchComponent} from "./search/search.gallery.component";
-import {Config} from "../config/Config";
 import {SearchTypes} from "../../../common/entities/AutoCompleteItem";
+import {Config} from "../../../common/config/public/Config";
 
 @Component({
     selector: 'gallery',

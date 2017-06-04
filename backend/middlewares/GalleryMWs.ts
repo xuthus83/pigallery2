@@ -8,9 +8,9 @@ import {AutoCompleteItem, SearchTypes} from "../../common/entities/AutoCompleteI
 import {ContentWrapper} from "../../common/entities/ConentWrapper";
 import {SearchResultDTO} from "../../common/entities/SearchResult";
 import {PhotoDTO} from "../../common/entities/PhotoDTO";
-import {Config} from "../config/Config";
 import {ProjectPath} from "../ProjectPath";
 import {Logger} from "../Logger";
+import {Config} from "../../common/config/private/Config";
 
 
 const LOG_TAG = "[GalleryMWs]";
