@@ -51,6 +51,7 @@ module.exports = function(config) {
             {pattern: 'node_modules/rxjs/**/*.js.map', included: false, watched: false},
             //Other libs
             {pattern: 'node_modules/ng2-cookies/**/*.js', included: false, watched: false},
+            {pattern: 'node_modules/typeconfig/**/*.js', included: false, watched: false},
 
 
             // Paths loaded via module imports:

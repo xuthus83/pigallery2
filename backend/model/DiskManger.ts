@@ -17,13 +17,15 @@ const pool = new Pool();
 
 const LOG_TAG = "[DiskManager]";
 
+interface PoolInput {
+    relativeDirectoryName: string;
+    directoryName: string;
+    directoryParent: string;
+    absoluteDirectoryName: string;
+}
+
 pool.run(
-    (input: {
-        relativeDirectoryName: string,
-        directoryName: string,
-        directoryParent: string,
-        absoluteDirectoryName: string
-    }, done) => {
+    (input: PoolInput, done) => {
         const fs = require("fs");
         const path = require("path");
         const mime = require("mime");
@@ -153,7 +155,6 @@ pool.run(
                                 promises.push(promise);
                             } else if (isImage(fullFilePath)) {
 
-
                                 let promise = loadPhotoMetadata(fullFilePath).then((photoMetadata) => {
                                     directory.photos.push(<PhotoDTO>{
                                         name: file,
@@ -161,8 +162,8 @@ pool.run(
                                         metadata: photoMetadata
                                     });
                                 });
-
                                 promises.push(promise);
+
                                 if (maxPhotos != null && promises.length > maxPhotos) {
                                     break;
                                 }
