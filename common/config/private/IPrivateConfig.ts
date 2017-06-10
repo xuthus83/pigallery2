@@ -26,4 +26,5 @@ export interface ServerConfig {
     imagesFolder: string;
     thumbnail: ThumbnailConfig;
     database: DataBaseConfig;
+    enableThreading:boolean;
 }

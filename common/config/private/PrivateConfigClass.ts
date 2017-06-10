@@ -24,7 +24,8 @@ export class PrivateConfigClass extends PublicConfigClass {
                 database: "pigallery2"
 
             }
-        }
+        },
+        enableThreading: true
     };
 
     public setDatabaseType(type: DatabaseType) {

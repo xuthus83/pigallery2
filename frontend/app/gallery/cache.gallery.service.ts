@@ -8,79 +8,79 @@ import {Config} from "../../../common/config/public/Config";
 export class GalleryCacheService {
 
 
-    public getDirectory(directoryName: string): DirectoryDTO {
-        if (Config.Client.enableCache == false) {
-            return null;
-        }
-        let value = localStorage.getItem(directoryName);
-        if (value != null) {
-            let directory: DirectoryDTO = JSON.parse(value);
-
-
-            //Add references
-            let addDir = (dir: DirectoryDTO) => {
-                dir.photos.forEach((photo: PhotoDTO) => {
-                    photo.directory = dir;
-                });
-
-                dir.directories.forEach((directory: DirectoryDTO) => {
-                    addDir(directory);
-                    directory.parent = dir;
-                });
-
-
-            };
-            addDir(directory);
-
-
-            return directory;
-        }
-        return null;
+  public getDirectory(directoryName: string): DirectoryDTO {
+    if (Config.Client.enableCache == false) {
+      return null;
     }
+    let value = localStorage.getItem(directoryName);
+    if (value != null) {
+      let directory: DirectoryDTO = JSON.parse(value);
 
-    public setDirectory(directory: DirectoryDTO): void {
-        if (Config.Client.enableCache == false) {
-            return;
-        }
 
-        localStorage.setItem(Utils.concatUrls(directory.path, directory.name), JSON.stringify(directory));
-
-        directory.directories.forEach((dir: DirectoryDTO) => {
-            let name = Utils.concatUrls(dir.path, dir.name);
-            if (localStorage.getItem(name) == null) { //don't override existing
-                localStorage.setItem(Utils.concatUrls(dir.path, dir.name), JSON.stringify(dir));
-            }
+      //Add references
+      let addDir = (dir: DirectoryDTO) => {
+        dir.photos.forEach((photo: PhotoDTO) => {
+          photo.directory = dir;
         });
 
+        dir.directories.forEach((directory: DirectoryDTO) => {
+          addDir(directory);
+          directory.parent = dir;
+        });
+
+
+      };
+      addDir(directory);
+
+
+      return directory;
+    }
+    return null;
+  }
+
+  public setDirectory(directory: DirectoryDTO): void {
+    if (Config.Client.enableCache == false) {
+      return;
     }
 
-    /**
-     * Update photo state at cache too (Eg.: thumbnail rendered)
-     * @param photo
-     */
-    public photoUpdated(photo: PhotoDTO): void {
+    localStorage.setItem(Utils.concatUrls(directory.path, directory.name), JSON.stringify(directory));
 
-        if (Config.Client.enableCache == false) {
-            return;
-        }
+    directory.directories.forEach((dir: DirectoryDTO) => {
+      let name = Utils.concatUrls(dir.path, dir.name);
+      if (localStorage.getItem(name) == null) { //don't override existing
+        localStorage.setItem(Utils.concatUrls(dir.path, dir.name), JSON.stringify(dir));
+      }
+    });
 
-        let directoryName = Utils.concatUrls(photo.directory.path, photo.directory.name);
-        let value = localStorage.getItem(directoryName);
-        if (value != null) {
-            let directory: DirectoryDTO = JSON.parse(value);
-            directory.photos.forEach((p) => {
-                if (p.name === photo.name) {
-                    //update data
-                    p.metadata = photo.metadata;
-                    p.readyThumbnails = photo.readyThumbnails;
+  }
 
-                    //save changes
-                    localStorage.setItem(directoryName, JSON.stringify(directory));
-                    return;
-                }
-            });
-        }
+  /**
+   * Update photo state at cache too (Eg.: thumbnail rendered)
+   * @param photo
+   */
+  public photoUpdated(photo: PhotoDTO): void {
 
+    if (Config.Client.enableCache == false) {
+      return;
     }
+
+    let directoryName = Utils.concatUrls(photo.directory.path, photo.directory.name);
+    let value = localStorage.getItem(directoryName);
+    if (value != null) {
+      let directory: DirectoryDTO = JSON.parse(value);
+      directory.photos.forEach((p) => {
+        if (p.name === photo.name) {
+          //update data
+          p.metadata = photo.metadata;
+          p.readyThumbnails = photo.readyThumbnails;
+
+          //save changes
+          localStorage.setItem(directoryName, JSON.stringify(directory));
+          return;
+        }
+      });
+    }
+
+  }
 
 }

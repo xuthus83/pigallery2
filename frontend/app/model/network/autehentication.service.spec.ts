@@ -7,45 +7,49 @@ import {LoginCredential} from "../../../../common/entities/LoginCredential";
 import {AuthenticationService} from "./authentication.service";
 
 class MockUserService {
-    public login(credential: LoginCredential) {
-        return Promise.resolve(new Message<UserDTO>(null, <UserDTO>{name: "testUserName"}))
-    }
+  public login(credential: LoginCredential) {
+    return Promise.resolve(new Message<UserDTO>(null, <UserDTO>{name: "testUserName"}))
+  }
+
+  public async getSessionUser() {
+    return null;
+  }
 }
 
 describe('AuthenticationService', () => {
-    beforeEach(() => {
-        TestBed.configureTestingModule({
-            providers: [
-                {provide: UserService, useClass: MockUserService},
-                AuthenticationService]
-        });
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [
+        {provide: UserService, useClass: MockUserService},
+        AuthenticationService]
+    });
+  });
+
+
+  it('should call UserDTO service login', inject([AuthenticationService, UserService], (authService, userService) => {
+    spyOn(userService, "login").and.callThrough();
+
+    expect(userService.login).not.toHaveBeenCalled();
+    authService.login();
+    expect(userService.login).toHaveBeenCalled();
+  }));
+
+  it('should have NO Authenticated use', inject([AuthenticationService], (authService) => {
+    expect(authService.getUser()).toBe(null);
+    expect(authService.isAuthenticated()).toBe(false);
+  }));
+
+
+  it('should have Authenticated use', inject([AuthenticationService], (authService) => {
+    spyOn(authService.OnUserChanged, "trigger").and.callThrough();
+    authService.login();
+    authService.OnUserChanged.on(() => {
+      expect(authService.OnUserChanged.trigger).toHaveBeenCalled();
+      expect(authService.getUser()).not.toBe(null);
+      expect(authService.isAuthenticated()).toBe(true);
     });
 
-
-    it('should call UserDTO service login', inject([AuthenticationService, UserService], (authService, userService) => {
-        spyOn(userService, "login").and.callThrough();
-
-        expect(userService.login).not.toHaveBeenCalled();
-        authService.login();
-        expect(userService.login).toHaveBeenCalled();
-    }));
-
-    it('should have NO Authenticated use', inject([AuthenticationService], (authService) => {
-        expect(authService.getUser()).toBe(null);
-        expect(authService.isAuthenticated()).toBe(false);
-    }));
-
-
-    it('should have Authenticated use', inject([AuthenticationService], (authService) => {
-        spyOn(authService.OnUserChanged, "trigger").and.callThrough();
-        authService.login();
-        authService.OnUserChanged.on(() => {
-            expect(authService.OnUserChanged.trigger).toHaveBeenCalled();
-            expect(authService.getUser()).not.toBe(null);
-            expect(authService.isAuthenticated()).toBe(true);
-        });
-
-    }));
+  }));
 
 
 });

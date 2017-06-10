@@ -6,32 +6,37 @@ import {Config} from "../../common/config/private/Config";
 
 export class PublicRouter {
 
-    public static route(app) {
-        app.use((req: Request, res: Response, next: NextFunction) => {
-            res.tpl = {};
+  public static route(app) {
+    app.use((req: Request, res: Response, next: NextFunction) => {
+      res.tpl = {};
 
-            res.tpl.user = null;
-            if (req.session.user) {
-                let user = Utils.clone(req.session.user);
-                delete user.password;
-                res.tpl.user = user;
-            }
-            res.tpl.clientConfig = Config.Client;
+      res.tpl.user = null;
+      if (req.session.user) {
+        let user = Utils.clone(req.session.user);
+        delete user.password;
+        res.tpl.user = user;
+      }
+      res.tpl.clientConfig = Config.Client;
 
-            return next();
-        });
+      return next();
+    });
 
-        app.use(_express.static(_path.resolve(__dirname, './../../frontend')));
-        app.use('/node_modules', _express.static(_path.resolve(__dirname, './../../node_modules')));
-        app.use('/common', _express.static(_path.resolve(__dirname, './../../common')));
+    app.get('/config_inject.js', (req: Request, res: Response) => {
+      res.render(_path.resolve(__dirname, './../../dist/config_inject.ejs'), res.tpl);
+    });
+    app.get(['/', '/login', "/gallery*", "/admin", "/search*"], (req: Request, res: Response) => {
+      res.sendFile(_path.resolve(__dirname, './../../dist/index.html'));
+    });
 
-        const renderIndex = (req: Request, res: Response) => {
-            res.render(_path.resolve(__dirname, './../../frontend/index.ejs'), res.tpl);
-        };
+    app.use(_express.static(_path.resolve(__dirname, './../../dist')));
+    app.use('/node_modules', _express.static(_path.resolve(__dirname, './../../node_modules')));
+    app.use('/common', _express.static(_path.resolve(__dirname, './../../common')));
 
-        app.get(['/', '/login', "/gallery*", "/admin", "/search*"], renderIndex);
+    const renderIndex = (req: Request, res: Response) => {
+      res.render(_path.resolve(__dirname, './../../dist/index.html'));
+    };
 
 
-    }
+  }
 
 }

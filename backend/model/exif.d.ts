@@ -1,15 +1,15 @@
 declare module "node-iptc" {
 
-    function e(data):any;
+  function e(data): any;
 
-    module e {
-    }
+  module e {
+  }
 
-    export =  e;
+  export =  e;
 }
 
 
 declare module "exif-parser" {
-    export function create(data):any;
+  export function create(data): any;
 }
  

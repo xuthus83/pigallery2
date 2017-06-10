@@ -3,9 +3,9 @@ import {Photo} from "../Photo";
 export class GridPhoto extends Photo {
 
 
-    constructor(photo: PhotoDTO, renderWidth: number, renderHeight: number, public rowId: number) {
-        super(photo, renderWidth, renderHeight);
-    }
+  constructor(photo: PhotoDTO, renderWidth: number, renderHeight: number, public rowId: number) {
+    super(photo, renderWidth, renderHeight);
+  }
 
 
 }

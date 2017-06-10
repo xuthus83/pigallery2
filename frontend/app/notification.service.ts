@@ -4,24 +4,24 @@ import {Injectable} from "@angular/core";
 export class NotificationService {
 
 
-    constructor() {
+  constructor() {
 
-    }
+  }
 
-    public showException(message:string) {
+  public showException(message: string) {
 
-    }
+  }
 
-    public showError(message:string) {
+  public showError(message: string) {
 
-    }
+  }
 
-    public showWarn(message:string) {
+  public showWarn(message: string) {
 
-    }
+  }
 
-    public showInfo(message:string) {
+  public showInfo(message: string) {
 
-    }
+  }
 
 }

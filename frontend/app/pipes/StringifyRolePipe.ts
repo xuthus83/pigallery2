@@ -4,8 +4,8 @@ import {UserRoles} from "../../../common/entities/UserDTO";
 
 @Pipe({name: 'stringifyRole'})
 export class StringifyRole implements PipeTransform {
-    transform(role:string):number {
-        return UserRoles[role];
-    }
+  transform(role: string): number {
+    return UserRoles[role];
+  }
 }
 

@@ -9,7 +9,7 @@ import {ContentWrapper} from "../../../common/entities/ConentWrapper";
 import {DirectoryDTO} from "../../../common/entities/DirectoryDTO";
 import {ProjectPath} from "../../ProjectPath";
 import {PhotoDTO} from "../../../common/entities/PhotoDTO";
-import {hardwareRenderer, softwareRenderer} from "./THRenderers";
+import {hardwareRenderer, RendererInput, softwareRenderer} from "./THRenderers";
 import {Config} from "../../../common/config/private/Config";
 
 
@@ -139,20 +139,35 @@ export class ThumbnailGeneratorMWs {
 
         this.initPools();
         //run on other thread
-        pool.send({
+
+        let input = <RendererInput>{
             imagePath: imagePath,
             size: size,
             thPath: thPath,
             makeSquare: makeSquare,
             qualityPriority: Config.Server.thumbnail.qualityPriority,
             __dirname: __dirname,
-        })
-            .on('done', (out) => {
-                return next(out);
-            }).on('error', (error) => {
-            console.log(error);
-            return next(new Error(ErrorCodes.THUMBNAIL_GENERATION_ERROR, error));
-        });
+        };
+        if (Config.Server.enableThreading == true) {
+            pool.send(imagePath)
+                .on('done', (out) => {
+                    return next(out);
+                }).on('error', (error) => {
+                console.log(error);
+                return next(new Error(ErrorCodes.THUMBNAIL_GENERATION_ERROR, error));
+            });
+        } else {
+            try {
+                if (Config.Server.thumbnail.hardwareAcceleration == true) {
+                    hardwareRenderer(input, out => next(out));
+                } else {
+                    softwareRenderer(input, out => next(out));
+                }
+            }catch (error){
+                console.log(error);
+                return next(new Error(ErrorCodes.THUMBNAIL_GENERATION_ERROR, error));
+            }
+        }
     }
 
     private static generateThumbnailName(imagePath: string, size: number): string {

@@ -7,24 +7,24 @@ import {Message} from "../../../../common/entities/Message";
 export class UserManagerSettingsService {
 
 
-    constructor(private _networkService:NetworkService) {
-    }
+  constructor(private _networkService: NetworkService) {
+  }
 
-    public createUser(user: UserDTO): Promise<Message<string>> {
-        return this._networkService.putJson("/user", {newUser: user});
-    }
-
-
-    public getUsers(): Promise<Message<Array<UserDTO>>> {
-        return this._networkService.getJson("/user/list");
-    }
+  public createUser(user: UserDTO): Promise<Message<string>> {
+    return this._networkService.putJson("/user", {newUser: user});
+  }
 
 
-    public deleteUser(user: UserDTO) {
-        return this._networkService.deleteJson("/user/" + user.id);
-    }
+  public getUsers(): Promise<Message<Array<UserDTO>>> {
+    return this._networkService.getJson("/user/list");
+  }
 
-    public updateRole(user: UserDTO) {
-        return this._networkService.postJson("/user/" + user.id + "/role", {newRole: user.role});
-    }
+
+  public deleteUser(user: UserDTO) {
+    return this._networkService.deleteJson("/user/" + user.id);
+  }
+
+  public updateRole(user: UserDTO) {
+    return this._networkService.postJson("/user/" + user.id + "/role", {newRole: user.role});
+  }
 }

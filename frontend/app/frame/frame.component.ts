@@ -5,25 +5,25 @@ import {UserDTO} from "../../../common/entities/UserDTO";
 import {Config} from "../../../common/config/public/Config";
 
 @Component({
-    selector: 'app-frame',
-    templateUrl: 'app/frame/frame.component.html',
-    providers: [RouterLink],
-    encapsulation: ViewEncapsulation.Emulated
+  selector: 'app-frame',
+  templateUrl: './frame.component.html',
+  providers: [RouterLink],
+  encapsulation: ViewEncapsulation.Emulated
 })
 export class FrameComponent {
 
-    user: UserDTO;
-    authenticationRequired:boolean = false;
+  user: UserDTO;
+  authenticationRequired: boolean = false;
 
-    constructor(private _authService:AuthenticationService) {
-        this.user = this._authService.getUser();
-        this.authenticationRequired = Config.Client.authenticationRequired;
-    }
+  constructor(private _authService: AuthenticationService) {
+    this.user = this._authService.getUser();
+    this.authenticationRequired = Config.Client.authenticationRequired;
+  }
 
 
-    logout() {
-        this._authService.logout();
-    }
-    
+  logout() {
+    this._authService.logout();
+  }
+
 }
 

@@ -8,20 +8,20 @@ import {Message} from "../../../../common/entities/Message";
 export class UserService {
 
 
-    constructor(private _networkService: NetworkService) {
-    }
+  constructor(private _networkService: NetworkService) {
+  }
 
-    public logout(): Promise<Message<string>> {
-        console.log("call logout");
-        return this._networkService.postJson("/user/logout");
-    }
+  public logout(): Promise<Message<string>> {
+    console.log("call logout");
+    return this._networkService.postJson("/user/logout");
+  }
 
-    public login(credential: LoginCredential): Promise<Message<UserDTO>> {
-        return this._networkService.postJson("/user/login", {"loginCredential": credential});
-    }
+  public login(credential: LoginCredential): Promise<Message<UserDTO>> {
+    return this._networkService.postJson("/user/login", {"loginCredential": credential});
+  }
 
-    public getSessionUser(): Promise<Message<UserDTO>> {
-        return this._networkService.getJson("/user/login");
-    }
+  public getSessionUser(): Promise<Message<UserDTO>> {
+    return this._networkService.getJson("/user/login");
+  }
 
 }

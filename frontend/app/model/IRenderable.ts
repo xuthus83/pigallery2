@@ -1,10 +1,10 @@
 export interface IRenderable {
-    getDimension():Dimension;
+  getDimension(): Dimension;
 }
 
 export interface Dimension {
-    top: number;
-    left: number;
-    width: number;
-    height: number;
+  top: number;
+  left: number;
+  width: number;
+  height: number;
 }

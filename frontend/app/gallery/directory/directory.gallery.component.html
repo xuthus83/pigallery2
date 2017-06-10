@@ -4,10 +4,10 @@
 
     <div class="photo-container">
 
-        <div class="photo" *ngIf="thumbnail && thumbnail.available"
+        <div class="photo" *ngIf="thumbnail && thumbnail.Available"
              [style.background-image]="'url('+thumbnail.src+')'"></div>
 
-        <span *ngIf="!thumbnail || !thumbnail.available" class="glyphicon glyphicon-folder-open no-image"
+        <span *ngIf="!thumbnail || !thumbnail.Available" class="glyphicon glyphicon-folder-open no-image"
               aria-hidden="true">
 
     </span>

@@ -1,4 +1,4 @@
-import {NgModule} from "@angular/core";
+import {Injectable, NgModule} from "@angular/core";
 import {BrowserModule} from "@angular/platform-browser";
 import {FormsModule} from "@angular/forms";
 import {HttpModule} from "@angular/http";
@@ -31,48 +31,58 @@ import {GalleryMapLightboxComponent} from "./gallery/map/lightbox/lightbox.map.g
 import {ThumbnailManagerService} from "./gallery/thumnailManager.service";
 import {OverlayService} from "./gallery/overlay.service";
 import {Config} from "../../common/config/public/Config";
+import {LAZY_MAPS_API_CONFIG} from "@agm/core/services";
+
+
+@Injectable()
+export class GoogleMapsConfig {
+  apiKey: string;
+
+  constructor() {
+    this.apiKey = Config.Client.googleApiKey;
+  }
+}
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        FormsModule,
-        HttpModule,
-        appRoutes,
-        AgmCoreModule.forRoot({
-            apiKey: Config.Client.googleApiKey
-        })
-    ],
-    declarations: [AppComponent,
-        LoginComponent,
-        AdminComponent,
-        GalleryComponent,
-        FrameComponent,
-        UserMangerSettingsComponent,
-        GalleryLightboxPhotoComponent,
-        GalleryPhotoLoadingComponent,
-        GalleryGridComponent,
-        GalleryDirectoryComponent,
-        GalleryLightboxComponent,
-        GalleryMapComponent,
-        GalleryMapLightboxComponent,
-        FrameComponent,
-        GallerySearchComponent,
-        GalleryNavigatorComponent,
-        GalleryPhotoComponent,
-        FrameComponent,
-        StringifyRole],
-    providers: [
-        NetworkService,
-        UserService,
-        GalleryCacheService,
-        GalleryService,
-        AuthenticationService,
-        ThumbnailLoaderService,
-        ThumbnailManagerService,
-        FullScreenService,
-        OverlayService],
+  imports: [
+    BrowserModule,
+    FormsModule,
+    HttpModule,
+    appRoutes,
+    AgmCoreModule.forRoot()
+  ],
+  declarations: [AppComponent,
+    LoginComponent,
+    AdminComponent,
+    GalleryComponent,
+    FrameComponent,
+    UserMangerSettingsComponent,
+    GalleryLightboxPhotoComponent,
+    GalleryPhotoLoadingComponent,
+    GalleryGridComponent,
+    GalleryDirectoryComponent,
+    GalleryLightboxComponent,
+    GalleryMapComponent,
+    GalleryMapLightboxComponent,
+    FrameComponent,
+    GallerySearchComponent,
+    GalleryNavigatorComponent,
+    GalleryPhotoComponent,
+    FrameComponent,
+    StringifyRole],
+  providers: [
+    {provide: LAZY_MAPS_API_CONFIG, useClass: GoogleMapsConfig},
+    NetworkService,
+    UserService,
+    GalleryCacheService,
+    GalleryService,
+    AuthenticationService,
+    ThumbnailLoaderService,
+    ThumbnailManagerService,
+    FullScreenService,
+    OverlayService],
 
-    bootstrap: [AppComponent]
+  bootstrap: [AppComponent]
 })
 export class AppModule {
 }

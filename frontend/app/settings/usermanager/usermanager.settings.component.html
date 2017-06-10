@@ -49,7 +49,8 @@
                         aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="myModalLabel">Modal title</h4>
             </div>
-            <form (ngSubmit)="onSubmit()" #NewUserForm="ngForm">
+
+            <form  #NewUserForm="ngForm">
                 <div class="modal-body">
                     <input type="text" class="form-control" placeholder="Username" autofocus
                            [(ngModel)]="newUser.name" name="name" required>

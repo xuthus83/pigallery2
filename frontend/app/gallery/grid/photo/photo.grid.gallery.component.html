@@ -1,7 +1,7 @@
 <div #photoContainer class="photo-container" (mouseover)="hover()" (mouseout)="mouseOut()">
-    <img #img [src]="thumbnail.src" [hidden]="!thumbnail.available">
+    <img #img [src]="thumbnail.Src" [hidden]="!thumbnail.Available">
 
-    <gallery-grid-photo-loading [animate]="thumbnail.loading" *ngIf="!thumbnail.available">
+    <gallery-grid-photo-loading [animate]="thumbnail.loading" *ngIf="!thumbnail.Available">
     </gallery-grid-photo-loading>
 
     <!--Info box -->

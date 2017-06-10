@@ -7,12 +7,12 @@ import {Message} from "../../../../common/entities/Message";
 export class AutoCompleteService {
 
 
-    constructor(private _networkService:NetworkService) {
-    }
+  constructor(private _networkService: NetworkService) {
+  }
 
-    public autoComplete(text:string):Promise<Message<Array<AutoCompleteItem> >> {
-        return this._networkService.getJson("/autocomplete/" + text);
-    }
+  public autoComplete(text: string): Promise<Message<Array<AutoCompleteItem>>> {
+    return this._networkService.getJson("/autocomplete/" + text);
+  }
 
 
 }

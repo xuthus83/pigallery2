@@ -8,65 +8,63 @@ import {SearchTypes} from "../../../common/entities/AutoCompleteItem";
 import {Config} from "../../../common/config/public/Config";
 
 @Component({
-    selector: 'gallery',
-    templateUrl: 'app/gallery/gallery.component.html',
-    styleUrls: ['app/gallery/gallery.component.css']
+  selector: 'gallery',
+  templateUrl: './gallery.component.html',
+  styleUrls: ['./gallery.component.css']
 })
 export class GalleryComponent implements OnInit {
 
-    @ViewChild(GallerySearchComponent) search: GallerySearchComponent;
-    @ViewChild(GalleryGridComponent) grid: GalleryGridComponent;
+  @ViewChild(GallerySearchComponent) search: GallerySearchComponent;
+  @ViewChild(GalleryGridComponent) grid: GalleryGridComponent;
 
-    public showSearchBar: boolean = true;
+  public showSearchBar: boolean = true;
 
-    constructor(private _galleryService: GalleryService,
-                private _authService: AuthenticationService,
-                private _router: Router,
-                private _route: ActivatedRoute) {
+  constructor(public _galleryService: GalleryService,
+              private _authService: AuthenticationService,
+              private _router: Router,
+              private _route: ActivatedRoute) {
 
-        this.showSearchBar = Config.Client.Search.searchEnabled;
+    this.showSearchBar = Config.Client.Search.searchEnabled;
+  }
+
+  ngOnInit() {
+    if (!this._authService.isAuthenticated()) {
+      this._router.navigate(['login']);
+      return;
     }
 
-    ngOnInit() {
-        if (!this._authService.isAuthenticated()) {
-            this._router.navigate(['login']);
+    this._route.params
+      .subscribe((params: Params) => {
+        let searchText = params['searchText'];
+        if (searchText && searchText != "") {
+          console.log("searching");
+          let typeString = params['type'];
+
+          if (typeString && typeString != "") {
+            console.log("with type");
+            let type: SearchTypes = <any>SearchTypes[typeString];
+            this._galleryService.search(searchText, type);
             return;
+          }
+
+          this._galleryService.search(searchText);
+          return;
         }
 
-        this._route.params
-            .subscribe((params: Params) => {
-                let searchText = params['searchText'];
-                if (searchText && searchText != "") {
-                    console.log("searching");
-                    let typeString = params['type'];
 
-                    if (typeString && typeString != "") {
-                        console.log("with type");
-                        let type: SearchTypes = <any>SearchTypes[typeString];
-                        this._galleryService.search(searchText, type);
-                        return;
-                    }
+        let directoryName = params['directory'];
+        directoryName = directoryName ? directoryName : "";
 
-                    this._galleryService.search(searchText);
-                    return;
-                }
+        this._galleryService.getDirectory(directoryName);
+
+      });
 
 
-                let directoryName = params['directory'];
-                directoryName = directoryName ? directoryName : "";
+  }
 
-                this._galleryService.getDirectory(directoryName);
-
-            });
-
-
-
-
-    }
-
-    onLightboxLastElement() {
-        this.grid.renderARow();
-    }
+  onLightboxLastElement() {
+    this.grid.renderARow();
+  }
 
 
 }
