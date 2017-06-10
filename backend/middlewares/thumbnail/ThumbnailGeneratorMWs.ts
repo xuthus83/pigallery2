@@ -149,7 +149,7 @@ export class ThumbnailGeneratorMWs {
             __dirname: __dirname,
         };
         if (Config.Server.enableThreading == true) {
-            pool.send(imagePath)
+          pool.send(input)
                 .on('done', (out) => {
                     return next(out);
                 }).on('error', (error) => {

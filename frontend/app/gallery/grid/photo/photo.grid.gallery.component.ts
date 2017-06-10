@@ -64,7 +64,7 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, OnDestroy {
    ngAfterViewInit() {
    //schedule change after Angular checks the model
    if (!this.gridPhoto.isThumbnailAvailable()) {
-   setImmediate(() => {
+   set Timeout(() => {
 
    let listener: ThumbnailLoadingListener = {
    onStartedLoading: () => { //onLoadStarted

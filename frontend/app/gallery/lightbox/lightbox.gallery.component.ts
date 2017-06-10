@@ -121,7 +121,7 @@ export class GalleryLightboxComponent {
 
     //disable scroll
     this.overlayService.showOverlay();
-    setImmediate(() => {
+    setTimeout(() => {
       this.lightboxDimension = <Dimension>{
         top: 0,
         left: 0,
@@ -130,7 +130,7 @@ export class GalleryLightboxComponent {
       };
       this.blackCanvasOpacity = 1.0;
       this.showPhoto(this.gridPhotoQL.toArray().indexOf(selectedPhoto));
-    });
+    }, 0);
   }
 
   public hide() {

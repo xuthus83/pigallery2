@@ -77,7 +77,7 @@ export class IconThumbnail extends ThumbnailBase {
     }
 
     if (!this.photo.isIconAvailable()) {
-      setImmediate(() => {
+      setTimeout(() => {
 
         let listener: ThumbnailLoadingListener = {
           onStartedLoading: () => { //onLoadStarted
@@ -101,7 +101,7 @@ export class IconThumbnail extends ThumbnailBase {
         this.thumbnailTask = this.thumbnailService.loadIcon(this.photo, ThumbnailLoadingPriority.high, listener);
 
 
-      });
+      }, 0);
     }
 
   }
@@ -134,7 +134,7 @@ export class Thumbnail extends ThumbnailBase {
     }
 
     if (!this.photo.isThumbnailAvailable()) {
-      setImmediate(() => {
+      setTimeout(() => {
 
         let listener: ThumbnailLoadingListener = {
           onStartedLoading: () => { //onLoadStarted
@@ -162,7 +162,7 @@ export class Thumbnail extends ThumbnailBase {
         }
 
 
-      });
+      }, 0);
     }
 
   }

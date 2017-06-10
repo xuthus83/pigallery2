@@ -57,14 +57,14 @@ export class GalleryMapLightboxComponent implements OnChanges {
     document.getElementsByTagName('body')[0].style.overflow = 'hidden';
     this.showImages();
 
-    setImmediate(() => {
+    setTimeout(() => {
       this.lightboxDimension = <Dimension>{
         top: 0,
         left: 0,
         width: this.getScreenWidth(),
         height: this.getScreenHeight()
       };
-    });
+    }, 0);
   }
 
   public hide() {

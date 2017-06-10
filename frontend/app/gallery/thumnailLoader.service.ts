@@ -68,7 +68,7 @@ export class ThumbnailLoaderService {
         path: photo.getIconPath()
       });
     }
-    setImmediate(this.run);
+    setTimeout(this.run, 0);
     return thumbnailTaskEntity;
   }
 
@@ -103,7 +103,7 @@ export class ThumbnailLoaderService {
         path: photo.getThumbnailPath()
       });
     }
-    setImmediate(this.run);
+    setTimeout(this.run, 0);
     return thumbnailTaskEntity;
 
   }
