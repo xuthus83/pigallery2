@@ -13,7 +13,7 @@ import {SharingRouter} from "./routes/SharingRouter";
 import {ObjectManagerRepository} from "./model/ObjectManagerRepository";
 import {Logger} from "./Logger";
 import {Config} from "../common/config/private/Config";
-import {DatabaseType} from "../common/config/private/IPrivateConfig";
+import {DatabaseType, ThumbnailProcessingLib} from "../common/config/private/IPrivateConfig";
 
 const LOG_TAG = "[server]";
 export class Server {
@@ -98,7 +98,7 @@ export class Server {
       await ObjectManagerRepository.InitMemoryManagers();
     }
 
-    if (Config.Server.thumbnail.hardwareAcceleration == true) {
+    if (Config.Server.thumbnail.processingLibrary == ThumbnailProcessingLib.sharp) {
       try {
         const sharp = require("sharp");
         sharp();
@@ -109,7 +109,29 @@ export class Server {
         Logger.warn(LOG_TAG, "Thumbnail hardware acceleration is not possible." +
           " 'Sharp' node module is not found." +
           " Falling back to JS based thumbnail generation");
-        Config.Server.thumbnail.hardwareAcceleration = false;
+        Config.Server.thumbnail.processingLibrary = ThumbnailProcessingLib.Jimp;
+      }
+    }
+
+
+    if (Config.Server.thumbnail.processingLibrary == ThumbnailProcessingLib.gm) {
+      try {
+        const gm = require("gm");
+        gm(1, 1).stream((err) => {
+          Logger.warn(LOG_TAG, "[Thumbnail hardware acceleration] gm module error: ", err);
+          Logger.warn(LOG_TAG, "Thumbnail hardware acceleration is not possible." +
+            " 'gm' node module is not found." +
+            " Falling back to JS based thumbnail generation");
+          Config.Server.thumbnail.processingLibrary = ThumbnailProcessingLib.Jimp;
+        });
+
+      } catch (err) {
+        Logger.warn(LOG_TAG, "[Thumbnail hardware acceleration] gm module error: ", err);
+
+        Logger.warn(LOG_TAG, "Thumbnail hardware acceleration is not possible." +
+          " 'gm' node module is not found." +
+          " Falling back to JS based thumbnail generation");
+        Config.Server.thumbnail.processingLibrary = ThumbnailProcessingLib.Jimp;
       }
     }
 

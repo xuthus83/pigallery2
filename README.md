@@ -61,7 +61,7 @@ To configure it. Run `PiGallery2` first to create `config.json` file, then edit 
    * prioritizes thumbnail generation (generating thumbnail first for the visible photos)
    * saving generated thumbnails to TEMP folder for reuse
    * supporting several core CPU
-   * supporting hardware acceleration ([sharp](https://github.com/lovell/sharp) as optional and JS-based [Jimp](https://github.com/oliver-moran/jimp)  as fallback)   
+   * supporting hardware acceleration ([sharp](https://github.com/lovell/sharp) and [gm](https://github.com/aheckmann/gm) as optional and JS-based [Jimp](https://github.com/oliver-moran/jimp)  as fallback)   
  * Custom lightbox for full screen photo viewing
    * keyboard support for navigation - `In progress`
    * showing low-res thumbnail while full image loads

@@ -1,30 +1,36 @@
 export enum DatabaseType{
-    memory = 0, mysql = 1
+  memory = 0, mysql = 1
 }
 export enum LogLevel {
-    error, warn, info, debug, verbose
+  error, warn, info, debug, verbose
+}
+
+export enum ThumbnailProcessingLib{
+  Jimp = 0,
+  gm = 1,
+  sharp = 2
 }
 
 export interface MySQLConfig {
-    host: string;
-    database: string;
-    username: string;
-    password: string;
+  host: string;
+  database: string;
+  username: string;
+  password: string;
 }
 export interface DataBaseConfig {
-    type: DatabaseType;
-    mysql?: MySQLConfig;
+  type: DatabaseType;
+  mysql?: MySQLConfig;
 }
 export interface ThumbnailConfig {
-    folder: string;
-    hardwareAcceleration: boolean;
-    qualityPriority: boolean;
+  folder: string;
+  processingLibrary: ThumbnailProcessingLib;
+  qualityPriority: boolean;
 }
 
 export interface ServerConfig {
-    port: number;
-    imagesFolder: string;
-    thumbnail: ThumbnailConfig;
-    database: DataBaseConfig;
-    enableThreading:boolean;
+  port: number;
+  imagesFolder: string;
+  thumbnail: ThumbnailConfig;
+  database: DataBaseConfig;
+  enableThreading: boolean;
 }

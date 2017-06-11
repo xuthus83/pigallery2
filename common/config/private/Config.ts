@@ -7,6 +7,5 @@ export let Config = new PrivateConfigClass();
 
 
 ConfigLoader.loadBackendConfig(Config,
-    path.join(__dirname, './../../../config.json'),
-    [["PORT", "Server-port"]]);
- 
+  path.join(__dirname, './../../../config.json'),
+  [["PORT", "Server-port"]]);

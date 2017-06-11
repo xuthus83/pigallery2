@@ -9,8 +9,10 @@ import {ContentWrapper} from "../../../common/entities/ConentWrapper";
 import {DirectoryDTO} from "../../../common/entities/DirectoryDTO";
 import {ProjectPath} from "../../ProjectPath";
 import {PhotoDTO} from "../../../common/entities/PhotoDTO";
-import {hardwareRenderer, RendererInput, softwareRenderer} from "./THRenderers";
+import {ThumbnailRenderers} from "./THRenderers";
 import {Config} from "../../../common/config/private/Config";
+import {ThumbnailProcessingLib} from "../../../common/config/private/IPrivateConfig";
+import RendererInput = ThumbnailRenderers.RendererInput;
 
 
 Config.Client.concurrentThumbnailGenerations = Math.max(1, os.cpus().length - 1);
@@ -20,157 +22,165 @@ const pool = new Pool(Config.Client.concurrentThumbnailGenerations);
 
 
 export class ThumbnailGeneratorMWs {
-    private static poolsInited = false;
+  private static poolsInited = false;
+  private static ThumbnailFunction = null
 
-    private static initPools() {
-        if (this.poolsInited == true) {
-            return
-        }
-        if (Config.Server.thumbnail.hardwareAcceleration == true) {
-            pool.run(hardwareRenderer);
-        } else {
-            pool.run(softwareRenderer);
-        }
-        this.poolsInited = true;
+  private static initPools() {
+    if (this.poolsInited == true) {
+      return
+    }
+    switch (Config.Server.thumbnail.processingLibrary) {
+      case ThumbnailProcessingLib.Jimp:
+        this.ThumbnailFunction = ThumbnailRenderers.jimp;
+        break;
+      case ThumbnailProcessingLib.gm:
+        this.ThumbnailFunction = ThumbnailRenderers.gm;
+        break;
+      case ThumbnailProcessingLib.sharp:
+        this.ThumbnailFunction = ThumbnailRenderers.sharp;
+
+        break;
+      default:
+        throw "Unknown thumbnail processing lib";
+    }
+    pool.run(this.ThumbnailFunction);
+
+    this.poolsInited = true;
+  }
+
+  private static addThInfoTODir(directory: DirectoryDTO) {
+    if (typeof  directory.photos == "undefined") {
+      directory.photos = [];
+    }
+    if (typeof  directory.directories == "undefined") {
+      directory.directories = [];
+    }
+    ThumbnailGeneratorMWs.addThInfoToPhotos(directory.photos);
+
+    for (let i = 0; i < directory.directories.length; i++) {
+      ThumbnailGeneratorMWs.addThInfoTODir(directory.directories[i]);
     }
 
-    private static addThInfoTODir(directory: DirectoryDTO) {
-        if (typeof  directory.photos == "undefined") {
-            directory.photos = [];
-        }
-        if (typeof  directory.directories == "undefined") {
-            directory.directories = [];
-        }
-        ThumbnailGeneratorMWs.addThInfoToPhotos(directory.photos);
+  }
 
-        for (let i = 0; i < directory.directories.length; i++) {
-            ThumbnailGeneratorMWs.addThInfoTODir(directory.directories[i]);
-        }
-
-    }
-
-    private static addThInfoToPhotos(photos: Array<PhotoDTO>) {
-        let thumbnailFolder = ProjectPath.ThumbnailFolder;
-        for (let i = 0; i < photos.length; i++) {
-            let fullImagePath = path.join(ProjectPath.ImageFolder, photos[i].directory.path, photos[i].directory.name, photos[i].name);
-            for (let j = 0; j < Config.Client.thumbnailSizes.length; j++) {
-                let size = Config.Client.thumbnailSizes[j];
-                let thPath = path.join(thumbnailFolder, ThumbnailGeneratorMWs.generateThumbnailName(fullImagePath, size));
-                if (fs.existsSync(thPath) === true) {
-                    if (typeof  photos[i].readyThumbnails == "undefined") {
-                        photos[i].readyThumbnails = [];
-                    }
-                    photos[i].readyThumbnails.push(size);
-                }
-            }
-            let iconPath = path.join(thumbnailFolder, ThumbnailGeneratorMWs.generateThumbnailName(fullImagePath, Config.Client.iconSize));
-            if (fs.existsSync(iconPath) === true) {
-                photos[i].readyIcon = true;
-            }
-
-        }
-    }
-
-    public static addThumbnailInformation(req: Request, res: Response, next: NextFunction) {
-        if (!req.resultPipe)
-            return next();
-
-        let cw: ContentWrapper = req.resultPipe;
-        if (cw.directory) {
-            ThumbnailGeneratorMWs.addThInfoTODir(cw.directory);
-        }
-        if (cw.searchResult) {
-            ThumbnailGeneratorMWs.addThInfoToPhotos(cw.searchResult.photos);
-        }
-
-
-        return next();
-
-    }
-
-    public static generateThumbnail(req: Request, res: Response, next: NextFunction) {
-        if (!req.resultPipe)
-            return next();
-
-        //load parameters
-        let imagePath = req.resultPipe;
-        let size: number = parseInt(req.params.size) || Config.Client.thumbnailSizes[0];
-
-        //validate size
-        if (Config.Client.thumbnailSizes.indexOf(size) === -1) {
-            size = Config.Client.thumbnailSizes[0];
-        }
-
-        ThumbnailGeneratorMWs.generateImage(imagePath, size, false, req, res, next);
-
-
-    }
-
-    public static generateIcon(req: Request, res: Response, next: NextFunction) {
-        if (!req.resultPipe)
-            return next();
-
-        //load parameters
-        let imagePath = req.resultPipe;
-        let size: number = Config.Client.iconSize;
-        ThumbnailGeneratorMWs.generateImage(imagePath, size, true, req, res, next);
-
-
-    }
-
-
-    private static generateImage(imagePath: string, size: number, makeSquare: boolean, req: Request, res: Response, next: NextFunction) {
-
-        //generate thumbnail path
-        let thPath = path.join(ProjectPath.ThumbnailFolder, ThumbnailGeneratorMWs.generateThumbnailName(imagePath, size));
-
-
-        req.resultPipe = thPath;
-
-        //check if thumbnail already exist
+  private static addThInfoToPhotos(photos: Array<PhotoDTO>) {
+    let thumbnailFolder = ProjectPath.ThumbnailFolder;
+    for (let i = 0; i < photos.length; i++) {
+      let fullImagePath = path.join(ProjectPath.ImageFolder, photos[i].directory.path, photos[i].directory.name, photos[i].name);
+      for (let j = 0; j < Config.Client.thumbnailSizes.length; j++) {
+        let size = Config.Client.thumbnailSizes[j];
+        let thPath = path.join(thumbnailFolder, ThumbnailGeneratorMWs.generateThumbnailName(fullImagePath, size));
         if (fs.existsSync(thPath) === true) {
-            return next();
+          if (typeof  photos[i].readyThumbnails == "undefined") {
+            photos[i].readyThumbnails = [];
+          }
+          photos[i].readyThumbnails.push(size);
         }
+      }
+      let iconPath = path.join(thumbnailFolder, ThumbnailGeneratorMWs.generateThumbnailName(fullImagePath, Config.Client.iconSize));
+      if (fs.existsSync(iconPath) === true) {
+        photos[i].readyIcon = true;
+      }
 
-        //create thumbnail folder if not exist
-        if (!fs.existsSync(ProjectPath.ThumbnailFolder)) {
-            fs.mkdirSync(ProjectPath.ThumbnailFolder);
-        }
+    }
+  }
 
-        this.initPools();
-        //run on other thread
+  public static addThumbnailInformation(req: Request, res: Response, next: NextFunction) {
+    if (!req.resultPipe)
+      return next();
 
-        let input = <RendererInput>{
-            imagePath: imagePath,
-            size: size,
-            thPath: thPath,
-            makeSquare: makeSquare,
-            qualityPriority: Config.Server.thumbnail.qualityPriority,
-            __dirname: __dirname,
-        };
-        if (Config.Server.enableThreading == true) {
-          pool.send(input)
-                .on('done', (out) => {
-                    return next(out);
-                }).on('error', (error) => {
-                console.log(error);
-                return next(new Error(ErrorCodes.THUMBNAIL_GENERATION_ERROR, error));
-            });
-        } else {
-            try {
-                if (Config.Server.thumbnail.hardwareAcceleration == true) {
-                    hardwareRenderer(input, out => next(out));
-                } else {
-                    softwareRenderer(input, out => next(out));
-                }
-            }catch (error){
-                console.log(error);
-                return next(new Error(ErrorCodes.THUMBNAIL_GENERATION_ERROR, error));
-            }
-        }
+    let cw: ContentWrapper = req.resultPipe;
+    if (cw.directory) {
+      ThumbnailGeneratorMWs.addThInfoTODir(cw.directory);
+    }
+    if (cw.searchResult) {
+      ThumbnailGeneratorMWs.addThInfoToPhotos(cw.searchResult.photos);
     }
 
-    private static generateThumbnailName(imagePath: string, size: number): string {
-        return crypto.createHash('md5').update(imagePath).digest('hex') + "_" + size + ".jpg";
+
+    return next();
+
+  }
+
+  public static generateThumbnail(req: Request, res: Response, next: NextFunction) {
+    if (!req.resultPipe)
+      return next();
+
+    //load parameters
+    let imagePath = req.resultPipe;
+    let size: number = parseInt(req.params.size) || Config.Client.thumbnailSizes[0];
+
+    //validate size
+    if (Config.Client.thumbnailSizes.indexOf(size) === -1) {
+      size = Config.Client.thumbnailSizes[0];
     }
+
+    ThumbnailGeneratorMWs.generateImage(imagePath, size, false, req, res, next);
+
+
+  }
+
+  public static generateIcon(req: Request, res: Response, next: NextFunction) {
+    if (!req.resultPipe)
+      return next();
+
+    //load parameters
+    let imagePath = req.resultPipe;
+    let size: number = Config.Client.iconSize;
+    ThumbnailGeneratorMWs.generateImage(imagePath, size, true, req, res, next);
+
+
+  }
+
+
+  private static generateImage(imagePath: string, size: number, makeSquare: boolean, req: Request, res: Response, next: NextFunction) {
+
+    //generate thumbnail path
+    let thPath = path.join(ProjectPath.ThumbnailFolder, ThumbnailGeneratorMWs.generateThumbnailName(imagePath, size));
+
+
+    req.resultPipe = thPath;
+
+    //check if thumbnail already exist
+    if (fs.existsSync(thPath) === true) {
+      return next();
+    }
+
+    //create thumbnail folder if not exist
+    if (!fs.existsSync(ProjectPath.ThumbnailFolder)) {
+      fs.mkdirSync(ProjectPath.ThumbnailFolder);
+    }
+
+    this.initPools();
+    //run on other thread
+
+    let input = <RendererInput>{
+      imagePath: imagePath,
+      size: size,
+      thPath: thPath,
+      makeSquare: makeSquare,
+      qualityPriority: Config.Server.thumbnail.qualityPriority,
+      __dirname: __dirname,
+    };
+    if (Config.Server.enableThreading == true) {
+      pool.send(input)
+        .on('done', (out) => {
+          return next(out);
+        }).on('error', (error) => {
+        console.log(error);
+        return next(new Error(ErrorCodes.THUMBNAIL_GENERATION_ERROR, error));
+      });
+    } else {
+      try {
+        ThumbnailGeneratorMWs.ThumbnailFunction(input, out => next(out));
+      } catch (error) {
+        console.log(error);
+        return next(new Error(ErrorCodes.THUMBNAIL_GENERATION_ERROR, error));
+      }
+    }
+  }
+
+  private static generateThumbnailName(imagePath: string, size: number): string {
+    return crypto.createHash('md5').update(imagePath).digest('hex') + "_" + size + ".jpg";
+  }
 }
