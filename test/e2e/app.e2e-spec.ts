@@ -7,8 +7,9 @@ describe('test-project App', () => {
     page = new TestProjectPage();
   });
 
-  it('should display welcome message', () => {
+  it('should display welcome message', async (done) => {
     page.navigateTo();
-    expect(page.getParagraphText()).toEqual('Welcome to app!!');
+    expect(await page.getParagraphText()).toEqual('Welcome to app!!');
+    done();
   });
 });
