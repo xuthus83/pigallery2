@@ -14,7 +14,7 @@ export class ThumbnailManagerService {
   constructor(private thumbnailLoader: ThumbnailLoaderService) {
   }
 
-  public getThumbnail(photo: Photo) {
+  public getThumbnail(photo: Photo): Thumbnail {
     return new Thumbnail(photo, this.thumbnailLoader);
   }
 

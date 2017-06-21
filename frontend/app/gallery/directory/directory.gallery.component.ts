@@ -1,4 +1,5 @@
 import {Component, ElementRef, Input, OnDestroy, OnInit, ViewChild} from "@angular/core";
+import {DomSanitizer} from "@angular/platform-browser";
 import {DirectoryDTO} from "../../../../common/entities/DirectoryDTO";
 import {RouterLink} from "@angular/router";
 import {Utils} from "../../../../common/Utils";
@@ -16,14 +17,17 @@ export class GalleryDirectoryComponent implements OnInit, OnDestroy {
   @ViewChild("dirContainer") container: ElementRef;
   thumbnail: Thumbnail = null;
 
-  constructor(private thumbnailService: ThumbnailManagerService) {
+  constructor(private thumbnailService: ThumbnailManagerService, private _sanitizer: DomSanitizer) {
   }
 
   ngOnInit() {
     if (this.directory.photos.length > 0) {
       this.thumbnail = this.thumbnailService.getThumbnail(new Photo(this.directory.photos[0], 100, 100));
-
     }
+  }
+
+  getSanitizedThUrl() {
+    return this._sanitizer.bypassSecurityTrustStyle('url(' + encodeURI(this.thumbnail.Src).replace(/\(/g, "%28").replace(/\)/g, "%29") + ')');
   }
 
   //TODO: implement scroll

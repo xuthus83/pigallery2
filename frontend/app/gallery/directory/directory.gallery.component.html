@@ -2,10 +2,10 @@
    style="display: inline-block;">
 
 
-    <div class="photo-container">
 
+    <div class="photo-container">
         <div class="photo" *ngIf="thumbnail && thumbnail.Available"
-             [style.background-image]="'url('+thumbnail.src+')'"></div>
+             [style.background-image]="getSanitizedThUrl()"></div>
 
         <span *ngIf="!thumbnail || !thumbnail.Available" class="glyphicon glyphicon-folder-open no-image"
               aria-hidden="true">
