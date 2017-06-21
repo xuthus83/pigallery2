@@ -2,8 +2,6 @@ import * as _express from "express";
 import * as _session from "express-session";
 import * as _bodyParser from "body-parser";
 import * as _http from "http";
-import * as winston from "winston";
-import * as expressWinston from "express-winston";
 import {PublicRouter} from "./routes/PublicRouter";
 import {UserRouter} from "./routes/UserRouter";
 import {GalleryRouter} from "./routes/GalleryRouter";
@@ -14,6 +12,7 @@ import {ObjectManagerRepository} from "./model/ObjectManagerRepository";
 import {Logger} from "./Logger";
 import {Config} from "../common/config/private/Config";
 import {DatabaseType, ThumbnailProcessingLib} from "../common/config/private/IPrivateConfig";
+import {LoggerRouter} from "./routes/LoggerRouter";
 
 const LOG_TAG = "[server]";
 export class Server {
@@ -32,35 +31,7 @@ export class Server {
 
     this.app = _express();
 
-    this.app.use(expressWinston.logger({
-      transports: [
-        new winston.transports.Console({
-          level: 'silly',
-          json: false,
-          colorize: true,
-          timestamp: function () {
-            return (new Date()).toLocaleString();
-          },
-          formatter: (options) => {
-            // Return string will be passed to logger.
-            return options.timestamp() + '[' + winston['config']['colorize'](options.level, options.level.toUpperCase()) + '] ' +
-              (undefined !== options.message ? options.message : '') +
-              (options.meta && Object.keys(options.meta).length ? '\n\t' + JSON.stringify(options.meta) : '' );
-          },
-          debugStdout: true
-        })
-      ],
-      meta: false, // optional: control whether you want to log the meta data about the request (default to true)
-      msg: "HTTP {{req.method}} {{req.url}}", // optional: customize the default logging message. E.g. "{{res.statusCode}} {{req.method}} {{res.responseTime}}ms {{req.url}}"
-      expressFormat: true, // Use the default Express/morgan request formatting. Enabling this will override any msg if true. Will only output colors with colorize set to true
-      colorize: true, // Color the text and status code, using the Express/morgan color palette (text: gray, status: default green, 3XX cyan, 4XX yellow, 5XX red).
-      level: (req) => {
-        if (req.url.indexOf("/api/") !== -1) {
-          return "verbose";
-        }
-        return req.url.indexOf("node_modules") !== -1 ? "silly" : "debug"
-      }
-    }));
+    LoggerRouter.route(this.app);
 
     this.app.set('view engine', 'ejs');
 
