@@ -7,7 +7,7 @@ import {diskManagerTask, DiskManagerTask} from "./DiskMangerTask";
 import {Config} from "../../common/config/private/Config";
 
 const Pool = require('threads').Pool;
-const pool = new Pool();
+const pool = new Pool(1);
 
 const LOG_TAG = "[DiskManager]";
 

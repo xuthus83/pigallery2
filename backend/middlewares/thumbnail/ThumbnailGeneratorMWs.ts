@@ -15,20 +15,19 @@ import {ThumbnailProcessingLib} from "../../../common/config/private/IPrivateCon
 import RendererInput = ThumbnailRenderers.RendererInput;
 
 
-Config.Client.concurrentThumbnailGenerations = Math.max(1, os.cpus().length - 1);
-
-const Pool = require('threads').Pool;
-const pool = new Pool(Config.Client.concurrentThumbnailGenerations);
-
-
 export class ThumbnailGeneratorMWs {
-  private static poolsInited = false;
-  private static ThumbnailFunction = null
+  private static initDone = false;
+  private static ThumbnailFunction = null;
+  private static thPool = null;
 
-  private static initPools() {
-    if (this.poolsInited == true) {
+  public static init() {
+    if (this.initDone == true) {
       return
     }
+
+    Config.Client.concurrentThumbnailGenerations = Math.max(1, os.cpus().length - 1);
+
+
     switch (Config.Server.thumbnail.processingLibrary) {
       case ThumbnailProcessingLib.Jimp:
         this.ThumbnailFunction = ThumbnailRenderers.jimp;
@@ -43,9 +42,15 @@ export class ThumbnailGeneratorMWs {
       default:
         throw "Unknown thumbnail processing lib";
     }
-    pool.run(this.ThumbnailFunction);
 
-    this.poolsInited = true;
+    if (Config.Server.enableThreading == true &&
+      Config.Server.thumbnail.processingLibrary == ThumbnailProcessingLib.Jimp) {
+      const Pool = require('threads').Pool;
+      this.thPool = new Pool(Config.Client.concurrentThumbnailGenerations);
+      this.thPool.run(this.ThumbnailFunction);
+    }
+
+    this.initDone = true;
   }
 
   private static addThInfoTODir(directory: DirectoryDTO) {
@@ -151,7 +156,6 @@ export class ThumbnailGeneratorMWs {
       fs.mkdirSync(ProjectPath.ThumbnailFolder);
     }
 
-    this.initPools();
     //run on other thread
 
     let input = <RendererInput>{
@@ -162,8 +166,8 @@ export class ThumbnailGeneratorMWs {
       qualityPriority: Config.Server.thumbnail.qualityPriority,
       __dirname: __dirname,
     };
-    if (Config.Server.enableThreading == true) {
-      pool.send(input)
+    if (this.thPool !== null) {
+      this.thPool.send(input)
         .on('done', (out) => {
           return next(out);
         }).on('error', (error) => {
@@ -184,3 +188,5 @@ export class ThumbnailGeneratorMWs {
     return crypto.createHash('md5').update(imagePath).digest('hex') + "_" + size + ".jpg";
   }
 }
+
+ThumbnailGeneratorMWs.init();

@@ -1,5 +1,7 @@
 import {Metadata, SharpInstance} from "@types/sharp";
 import {Dimensions, State} from "@types/gm";
+import {Logger} from "../../Logger";
+import {Error, ErrorCodes} from "../../../common/entities/Error";
 
 export module ThumbnailRenderers {
 
@@ -60,7 +62,7 @@ export module ThumbnailRenderers {
       .metadata()
       .then((metadata: Metadata) => {
 
-        const Logger = require(input.__dirname + "/../../Logger").Logger;
+        //   const Logger = require(input.__dirname + "/../../Logger").Logger;
         Logger.silly("[SharpThRenderer] rendering thumbnail:", input.imagePath);
         /**
          * newWidth * newHeight = size*size
@@ -95,13 +97,13 @@ export module ThumbnailRenderers {
             .toFile(input.thPath).then(() => {
             return done();
           }).catch(function (err) {
-            const Error = require(input.__dirname + "/../../../common/entities/Error").Error;
-            const ErrorCodes = require(input.__dirname + "/../../../common/entities/Error").ErrorCodes;
+            //      const Error = require(input.__dirname + "/../../../common/entities/Error").Error;
+            //       const ErrorCodes = require(input.__dirname + "/../../../common/entities/Error").ErrorCodes;
             return done(new Error(ErrorCodes.GENERAL_ERROR, err));
           });
         } catch (err) {
-          const Error = require(input.__dirname + "/../../../common/entities/Error").Error;
-          const ErrorCodes = require(input.__dirname + "/../../../common/entities/Error").ErrorCodes;
+          //  const Error = require(input.__dirname + "/../../../common/entities/Error").Error;
+          // const ErrorCodes = require(input.__dirname + "/../../../common/entities/Error").ErrorCodes;
           return done(new Error(ErrorCodes.GENERAL_ERROR, err));
         }
       });
