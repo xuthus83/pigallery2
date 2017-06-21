@@ -3,6 +3,7 @@ import {AuthenticationService} from "./model/network/authentication.service";
 import {UserDTO} from "../../common/entities/UserDTO";
 import {Router} from "@angular/router";
 
+
 @Component({
   selector: 'pi-gallery2-app',
   template: `<router-outlet></router-outlet>`,
@@ -31,4 +32,6 @@ export class AppComponent implements OnInit {
 
 
   }
+
+
 }

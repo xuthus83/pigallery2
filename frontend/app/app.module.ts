@@ -32,6 +32,7 @@ import {ThumbnailManagerService} from "./gallery/thumnailManager.service";
 import {OverlayService} from "./gallery/overlay.service";
 import {Config} from "../../common/config/public/Config";
 import {LAZY_MAPS_API_CONFIG} from "@agm/core/services";
+import {SlimLoadingBarModule} from "ng2-slim-loading-bar";
 
 
 @Injectable()
@@ -49,7 +50,8 @@ export class GoogleMapsConfig {
     FormsModule,
     HttpModule,
     appRoutes,
-    AgmCoreModule.forRoot()
+    AgmCoreModule.forRoot(),
+    SlimLoadingBarModule.forRoot()
   ],
   declarations: [AppComponent,
     LoginComponent,

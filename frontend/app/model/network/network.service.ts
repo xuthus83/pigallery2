@@ -3,12 +3,13 @@ import {Headers, Http, RequestOptions} from "@angular/http";
 import {Message} from "../../../../common/entities/Message";
 import "rxjs/Rx";
 
+import {SlimLoadingBarService} from "ng2-slim-loading-bar";
 @Injectable()
 export class NetworkService {
 
   _baseUrl = "/api";
 
-  constructor(protected _http: Http) {
+  constructor(protected _http: Http, private slimLoadingBarService: SlimLoadingBarService) {
   }
 
   private callJson<T>(method: string, url: string, data: any = {}): Promise<T> {
@@ -16,17 +17,31 @@ export class NetworkService {
     let headers = new Headers({'Content-Type': 'application/json'});
     let options = new RequestOptions({headers: headers});
 
+    this.slimLoadingBarService.visible = true;
+    this.slimLoadingBarService.start(() => {
+      this.slimLoadingBarService.visible = false;
+    });
+
+    const process = (res: any) => {
+      this.slimLoadingBarService.complete();
+      return <Message<any>> res.json();
+    };
+
+    const err = (err) => {
+      NetworkService.handleError(err);
+      this.slimLoadingBarService.complete();
+    };
+
     if (method == "get" || method == "delete") {
       return <any>this._http[method](this._baseUrl + url, options)
         .toPromise()
-        .then(res => <Message<any>> res.json())
-        .catch(NetworkService.handleError);
+        .then(process)
+        .catch(err);
     }
-
     return this._http[method](this._baseUrl + url, body, options)
       .toPromise()
-      .then((res: any) => <Message<any>> res.json())
-      .catch(NetworkService.handleError);
+      .then(process)
+      .catch(err);
   }
 
   public postJson<T>(url: string, data: any = {}): Promise<T> {

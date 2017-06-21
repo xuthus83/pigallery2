@@ -48,60 +48,12 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, OnDestroy {
 
   ngOnInit() {
     this.thumbnail = this.thumbnailService.getThumbnail(this.gridPhoto);
-    /*  this.loading.show = true;
-     //set up before adding task to thumbnail generator
-     if (this.gridPhoto.isThumbnailAvailable()) {
-     this.image.src = this.gridPhoto.getThumbnailPath();
-     this.image.show = true;
-     } else if (this.gridPhoto.isReplacementThumbnailAvailable()) {
-     this.image.src = this.gridPhoto.getReplacementThumbnailPath();
-     this.image.show = true;
-     }*/
 
   }
 
-  /*
-   ngAfterViewInit() {
-   //schedule change after Angular checks the model
-   if (!this.gridPhoto.isThumbnailAvailable()) {
-   set Timeout(() => {
-
-   let listener: ThumbnailLoadingListener = {
-   onStartedLoading: () => { //onLoadStarted
-   this.loading.animate = true;
-   },
-   onLoad: () => {//onLoaded
-   this.image.src = this.gridPhoto.getThumbnailPath();
-   this.image.show = true;
-   this.loading.show = false;
-   this.thumbnailTask = null;
-   },
-   onError: (error) => {//onError
-   this.thumbnailTask = null;
-   //TODO: handle error
-   //TODO: not an error if its from cache
-   console.error("something bad happened");
-   console.error(error);
-   }
-   };
-   if (this.gridPhoto.isReplacementThumbnailAvailable()) {
-   this.thumbnailTask = this.thumbnailService.loadImage(this.gridPhoto, ThumbnailLoadingPriority.medium, listener);
-   } else {
-   this.thumbnailTask = this.thumbnailService.loadImage(this.gridPhoto, ThumbnailLoadingPriority.high, listener);
-   }
-
-
-   });
-   }
-   }*/
 
   ngOnDestroy() {
     this.thumbnail.destroy();
-    /*
-     if (this.thumbnailTask != null) {
-     this.thumbnailService.removeTask(this.thumbnailTask);
-     this.thumbnailTask = null;
-     }*/
   }
 
 
@@ -112,6 +64,9 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, OnDestroy {
 
 
   onScroll() {
+    if (this.thumbnail.Available == true) {
+      return;
+    }
     let isInView = this.isInView();
     if (this.wasInView != isInView) {
       this.wasInView = isInView;

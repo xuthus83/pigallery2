@@ -7,6 +7,7 @@ import {Config} from "../../../common/config/public/Config";
 @Component({
   selector: 'app-frame',
   templateUrl: './frame.component.html',
+  styleUrls: ['./frame.component.css'],
   providers: [RouterLink],
   encapsulation: ViewEncapsulation.Emulated
 })

@@ -30,6 +30,7 @@ export abstract class ThumbnailBase {
   protected available: boolean = false;
   protected src: string = null;
   protected loading: boolean = false;
+  protected error: boolean = true;
   protected onLoad: Function = null;
   protected thumbnailTask: ThumbnailTaskEntity;
 
@@ -70,6 +71,7 @@ export class IconThumbnail extends ThumbnailBase {
   constructor(private photo: IconPhoto, thumbnailService: ThumbnailLoaderService) {
     super(thumbnailService);
     this.src = "";
+    this.error = false;
     if (this.photo.isIconAvailable()) {
       this.src = this.photo.getIconPath();
       this.available = true;
@@ -92,6 +94,8 @@ export class IconThumbnail extends ThumbnailBase {
           },
           onError: (error) => {//onError
             this.thumbnailTask = null;
+            this.loading = false;
+            this.error = true;
             //TODO: handle error
             //TODO: not an error if its from cache
             console.error("something bad happened");

@@ -19,7 +19,8 @@ export class GalleryMapComponent implements OnChanges, IRenderable {
   //TODO: fix zooming
   ngOnChanges() {
     this.mapPhotos = this.photos.filter(p => {
-      return p.metadata && p.metadata.positionData && p.metadata.positionData.GPSData;
+      return p.metadata && p.metadata.positionData && p.metadata.positionData.GPSData &&
+        p.metadata.positionData.GPSData.latitude && p.metadata.positionData.GPSData.longitude;
     }).map(p => {
       return {
         latitude: p.metadata.positionData.GPSData.latitude,
@@ -30,7 +31,6 @@ export class GalleryMapComponent implements OnChanges, IRenderable {
     if (this.mapPhotos.length > 0) {
       this.mapCenter = this.mapPhotos[0];
     }
-
 
   }
 
