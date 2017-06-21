@@ -11,7 +11,7 @@
     <gallery-directory *ngFor="let directory of directories"
                        [directory]="directory"></gallery-directory>
 
-    <gallery-map [photos]="_galleryService.content.value.directory.photos"></gallery-map>
+    <gallery-map *ngIf="isPhotoWithLocation" [photos]="_galleryService.content.value.directory.photos"></gallery-map>
     <gallery-grid [photos]="_galleryService.content.value.directory.photos" [lightbox]="lightbox"></gallery-grid>
   </div>
 
@@ -29,7 +29,7 @@
       </li>
     </ol>
 
-    <gallery-map [photos]="_galleryService.content.value.searchResult.photos"></gallery-map>
+    <gallery-map *ngIf="isPhotoWithLocation" [photos]="_galleryService.content.value.searchResult.photos"></gallery-map>
 
     <div *ngFor="let directory of directories">
       <gallery-directory *ngIf="directory" [directory]="directory"></gallery-directory>

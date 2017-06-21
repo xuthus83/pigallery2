@@ -7,6 +7,7 @@ import {GallerySearchComponent} from "./search/search.gallery.component";
 import {SearchTypes} from "../../../common/entities/AutoCompleteItem";
 import {Config} from "../../../common/config/public/Config";
 import {DirectoryDTO} from "../../../common/entities/DirectoryDTO";
+import {SearchResultDTO} from "../../../common/entities/SearchResult";
 
 @Component({
   selector: 'gallery',
@@ -20,6 +21,7 @@ export class GalleryComponent implements OnInit {
 
   public showSearchBar: boolean = true;
   public directories: DirectoryDTO[] = [];
+  public isPhotoWithLocation = false;
 
   constructor(public _galleryService: GalleryService,
               private _authService: AuthenticationService,
@@ -39,8 +41,23 @@ export class GalleryComponent implements OnInit {
       const dirSorter = (a: DirectoryDTO, b: DirectoryDTO) => {
         return a.name.localeCompare(b.name);
       };
-      const dirs = <DirectoryDTO[]>(content.searchResult || content.directory || {directories: []}).directories;
-      this.directories = dirs.sort(dirSorter);
+
+      const tmp = <DirectoryDTO | SearchResultDTO>(content.searchResult || content.directory || {
+        directories: [],
+        photos: []
+      });
+      this.directories = tmp.directories.sort(dirSorter);
+      this.isPhotoWithLocation = false;
+      for (let i = 0; i < tmp.photos.length; i++) {
+        if (tmp.photos[i].metadata &&
+          tmp.photos[i].metadata.positionData &&
+          tmp.photos[i].metadata.positionData.GPSData &&
+          tmp.photos[i].metadata.positionData.GPSData.longitude
+        ) {
+          this.isPhotoWithLocation = true;
+          break;
+        }
+      }
     });
 
     this._route.params
@@ -71,6 +88,7 @@ export class GalleryComponent implements OnInit {
 
 
   }
+
 
   onLightboxLastElement() {
     this.grid.renderARow();

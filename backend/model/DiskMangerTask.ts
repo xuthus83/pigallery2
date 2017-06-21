@@ -40,12 +40,7 @@ export const diskManagerTask = (input: DiskManagerTask.PoolInput, done) => {
               const metadata: PhotoMetadata = <PhotoMetadata>{
                 keywords: {},
                 cameraData: {},
-                positionData: {
-                  GPSData: {},
-                  country: null,
-                  state: null,
-                  city: null
-                },
+                positionData: null,
                 size: {},
                 creationDate: {}
               };
@@ -63,12 +58,14 @@ export const diskManagerTask = (input: DiskManagerTask.PoolInput, done) => {
                     focalLength: exif.tags.FocalLength,
                     lens: exif.tags.LensModel,
                   };
-                  metadata.positionData.GPSData = <GPSMetadata> {
-                    latitude: exif.tags.GPSLatitude,
-                    longitude: exif.tags.GPSLongitude,
-                    altitude: exif.tags.GPSAltitude
-
-                  };
+                  if (!isNaN(exif.tags.GPSLatitude) || exif.tags.GPSLongitude || exif.tags.GPSAltitude) {
+                    metadata.positionData = metadata.positionData || {};
+                    metadata.positionData.GPSData = <GPSMetadata> {
+                      latitude: exif.tags.GPSLatitude,
+                      longitude: exif.tags.GPSLongitude,
+                      altitude: exif.tags.GPSAltitude
+                    };
+                  }
 
                   metadata.size = <ImageSize> {width: exif.imageSize.width, height: exif.imageSize.height};
                 } catch (err) {
@@ -89,9 +86,12 @@ export const diskManagerTask = (input: DiskManagerTask.PoolInput, done) => {
                     return s.join("");
                   };
 
-                  metadata.positionData.country = iptcData.country_or_primary_location_name;
-                  metadata.positionData.state = iptcData.province_or_state;
-                  metadata.positionData.city = iptcData.city;
+                  if (iptcData.country_or_primary_location_name || iptcData.province_or_state || iptcData.city) {
+                    metadata.positionData = metadata.positionData || {};
+                    metadata.positionData.country = iptcData.country_or_primary_location_name;
+                    metadata.positionData.state = iptcData.province_or_state;
+                    metadata.positionData.city = iptcData.city;
+                  }
 
 
                   metadata.keywords = <string[]> (iptcData.keywords || []).map((s: string) => decode(s));
