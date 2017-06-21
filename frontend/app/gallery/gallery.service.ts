@@ -6,59 +6,64 @@ import {PhotoDTO} from "../../../common/entities/PhotoDTO";
 import {DirectoryDTO} from "../../../common/entities/DirectoryDTO";
 import {SearchTypes} from "../../../common/entities/AutoCompleteItem";
 import {GalleryCacheService} from "./cache.gallery.service";
+import {BehaviorSubject} from "rxjs/BehaviorSubject";
 
 @Injectable()
 export class GalleryService {
 
-  public content: ContentWrapper;
+  public content: BehaviorSubject<ContentWrapper>;
   private lastDirectory: DirectoryDTO;
   private searchId: any;
 
   constructor(private networkService: NetworkService, private galleryCacheService: GalleryCacheService) {
-    this.content = new ContentWrapper();
+    this.content = new BehaviorSubject<ContentWrapper>(new ContentWrapper());
   }
 
   lastRequest: { directory: string } = {
     directory: null
   };
 
-  public getDirectory(directoryName: string): Promise<Message<ContentWrapper>> {
-    this.content = new ContentWrapper();
+  public async getDirectory(directoryName: string): Promise<Message<ContentWrapper>> {
+    const content = new ContentWrapper();
 
-    this.content.directory = this.galleryCacheService.getDirectory(directoryName);
-    this.content.searchResult = null;
+    content.directory = this.galleryCacheService.getDirectory(directoryName);
+    content.searchResult = null;
+
+    this.content.next(content);
     this.lastRequest.directory = directoryName;
-    return this.networkService.getJson("/gallery/content/" + directoryName).then(
-      (message: Message<ContentWrapper>) => {
-        if (!message.error && message.result) {
 
-          this.galleryCacheService.setDirectory(message.result.directory); //save it before adding references 
+    let message: Message<ContentWrapper> = await this.networkService.getJson<Message<ContentWrapper>>("/gallery/content/" + directoryName);
 
-          if (this.lastRequest.directory != directoryName) {
-            return;
-          }
+    if (!message.error && message.result) {
 
-          //Add references
-          let addDir = (dir: DirectoryDTO) => {
-            dir.photos.forEach((photo: PhotoDTO) => {
-              photo.directory = dir;
-            });
+      this.galleryCacheService.setDirectory(message.result.directory); //save it before adding references
 
-            dir.directories.forEach((directory: DirectoryDTO) => {
-              addDir(directory);
-              directory.parent = dir;
-            });
+      if (this.lastRequest.directory != directoryName) {
+        return;
+      }
 
+      //Add references
+      let addDir = (dir: DirectoryDTO) => {
+        dir.photos.forEach((photo: PhotoDTO) => {
+          photo.directory = dir;
+        });
 
-          };
-          addDir(message.result.directory);
+        dir.directories.forEach((directory: DirectoryDTO) => {
+          addDir(directory);
+          directory.parent = dir;
+        });
 
 
-          this.lastDirectory = message.result.directory;
-          this.content = message.result;
-        }
-        return message;
-      });
+      };
+      addDir(message.result.directory);
+
+
+      this.lastDirectory = message.result.directory;
+      this.content.next(message.result);
+    }
+
+    return message;
+
   }
 
   //TODO: cache
@@ -76,7 +81,7 @@ export class GalleryService {
     return this.networkService.getJson(queryString).then(
       (message: Message<ContentWrapper>) => {
         if (!message.error && message.result) {
-          this.content = message.result;
+          this.content.next(message.result);
         }
         return message;
       });
@@ -85,8 +90,10 @@ export class GalleryService {
   //TODO: cache (together with normal search)
   public instantSearch(text: string): Promise<Message<ContentWrapper>> {
     if (text === null || text === '') {
-      this.content.directory = this.lastDirectory;
-      this.content.searchResult = null;
+      const content = new ContentWrapper();
+      content.directory = this.lastDirectory;
+      content.searchResult = null;
+      this.content.next(content);
       clearTimeout(this.searchId);
       return Promise.resolve(new Message(null, null));
     }
@@ -103,7 +110,7 @@ export class GalleryService {
     return this.networkService.getJson("/instant-search/" + text).then(
       (message: Message<ContentWrapper>) => {
         if (!message.error && message.result) {
-          this.content = message.result;
+          this.content.next(message.result);
         }
         return message;
       });

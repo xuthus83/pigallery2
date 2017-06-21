@@ -35,12 +35,16 @@ export class GalleryComponent implements OnInit {
       return;
     }
 
-    const dirSorter = (a: DirectoryDTO, b: DirectoryDTO) => {
-      return a.name.localeCompare(b.name);
-    };
+    this._galleryService.content.subscribe((content) => {
+      const dirSorter = (a: DirectoryDTO, b: DirectoryDTO) => {
+        return a.name.localeCompare(b.name);
+      };
+      const dirs = <DirectoryDTO[]>(content.searchResult || content.directory || {directories: []}).directories;
+      this.directories = dirs.sort(dirSorter);
+    });
 
     this._route.params
-      .subscribe(async (params: Params) => {
+      .subscribe((params: Params) => {
         let searchText = params['searchText'];
         if (searchText && searchText != "") {
           console.log("searching");
@@ -49,13 +53,11 @@ export class GalleryComponent implements OnInit {
           if (typeString && typeString != "") {
             console.log("with type");
             let type: SearchTypes = <any>SearchTypes[typeString];
-            await this._galleryService.search(searchText, type);
-            this.directories = this._galleryService.content.searchResult.directories.sort(dirSorter);
+            this._galleryService.search(searchText, type);
             return;
           }
 
-          await this._galleryService.search(searchText);
-          this.directories = this._galleryService.content.searchResult.directories.sort(dirSorter);
+          this._galleryService.search(searchText);
           return;
         }
 
@@ -63,8 +65,7 @@ export class GalleryComponent implements OnInit {
         let directoryName = params['directory'];
         directoryName = directoryName ? directoryName : "";
 
-        await this._galleryService.getDirectory(directoryName);
-        this.directories = this._galleryService.content.directory.directories.sort(dirSorter);
+        this._galleryService.getDirectory(directoryName);
 
       });
 

@@ -5,21 +5,21 @@
     <gallery-search #search *ngIf="showSearchBar"></gallery-search>
   </div>
 
-  <div body class="container" style="width: 100%; padding:0" *ngIf="_galleryService.content.directory">
-    <gallery-navbar [directory]="_galleryService.content.directory"></gallery-navbar>
+  <div body class="container" style="width: 100%; padding:0" *ngIf="_galleryService.content.value.directory">
+    <gallery-navbar [directory]="_galleryService.content.value.directory"></gallery-navbar>
 
     <gallery-directory *ngFor="let directory of directories"
                        [directory]="directory"></gallery-directory>
 
-    <gallery-map [photos]="_galleryService.content.directory.photos"></gallery-map>
-    <gallery-grid [photos]="_galleryService.content.directory.photos" [lightbox]="lightbox"></gallery-grid>
+    <gallery-map [photos]="_galleryService.content.value.directory.photos"></gallery-map>
+    <gallery-grid [photos]="_galleryService.content.value.directory.photos" [lightbox]="lightbox"></gallery-grid>
   </div>
 
-  <div body class="container" style="width: 100%; padding:0" *ngIf="_galleryService.content.searchResult">
+  <div body class="container" style="width: 100%; padding:0" *ngIf="_galleryService.content.value.searchResult">
     <ol class="breadcrumb">
       <li class="active">
         Searching for:
-        <span [ngSwitch]="_galleryService.content.searchResult.searchType">
+        <span [ngSwitch]="_galleryService.content.value.searchResult.searchType">
                         <span *ngSwitchCase="0" class="glyphicon glyphicon-picture"></span>
                         <span *ngSwitchCase="1" class="glyphicon glyphicon-folder-open"></span>
                         <span *ngSwitchCase="2" class="glyphicon glyphicon-tag"></span>
@@ -29,11 +29,11 @@
       </li>
     </ol>
 
-    <gallery-map [photos]="_galleryService.content.searchResult.photos"></gallery-map>
+    <gallery-map [photos]="_galleryService.content.value.searchResult.photos"></gallery-map>
 
     <div *ngFor="let directory of directories">
       <gallery-directory *ngIf="directory" [directory]="directory"></gallery-directory>
     </div>
-    <gallery-grid [photos]="_galleryService.content.searchResult.photos" [lightbox]="lightbox"></gallery-grid>
+    <gallery-grid [photos]="_galleryService.content.value.searchResult.photos" [lightbox]="lightbox"></gallery-grid>
   </div>
 </app-frame>
