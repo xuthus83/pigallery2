@@ -6,6 +6,7 @@ import {GalleryGridComponent} from "./grid/grid.gallery.component";
 import {GallerySearchComponent} from "./search/search.gallery.component";
 import {SearchTypes} from "../../../common/entities/AutoCompleteItem";
 import {Config} from "../../../common/config/public/Config";
+import {DirectoryDTO} from "../../../common/entities/DirectoryDTO";
 
 @Component({
   selector: 'gallery',
@@ -18,6 +19,7 @@ export class GalleryComponent implements OnInit {
   @ViewChild(GalleryGridComponent) grid: GalleryGridComponent;
 
   public showSearchBar: boolean = true;
+  public directories: DirectoryDTO[] = [];
 
   constructor(public _galleryService: GalleryService,
               private _authService: AuthenticationService,
@@ -33,8 +35,12 @@ export class GalleryComponent implements OnInit {
       return;
     }
 
+    const dirSorter = (a: DirectoryDTO, b: DirectoryDTO) => {
+      return a.name.localeCompare(b.name);
+    };
+
     this._route.params
-      .subscribe((params: Params) => {
+      .subscribe(async (params: Params) => {
         let searchText = params['searchText'];
         if (searchText && searchText != "") {
           console.log("searching");
@@ -43,11 +49,13 @@ export class GalleryComponent implements OnInit {
           if (typeString && typeString != "") {
             console.log("with type");
             let type: SearchTypes = <any>SearchTypes[typeString];
-            this._galleryService.search(searchText, type);
+            await this._galleryService.search(searchText, type);
+            this.directories = this._galleryService.content.searchResult.directories.sort(dirSorter);
             return;
           }
 
-          this._galleryService.search(searchText);
+          await this._galleryService.search(searchText);
+          this.directories = this._galleryService.content.searchResult.directories.sort(dirSorter);
           return;
         }
 
@@ -55,7 +63,8 @@ export class GalleryComponent implements OnInit {
         let directoryName = params['directory'];
         directoryName = directoryName ? directoryName : "";
 
-        this._galleryService.getDirectory(directoryName);
+        await this._galleryService.getDirectory(directoryName);
+        this.directories = this._galleryService.content.directory.directories.sort(dirSorter);
 
       });
 
