@@ -25,9 +25,8 @@ export class ThumbnailGeneratorMWs {
       return
     }
 
-    Config.Client.concurrentThumbnailGenerations = Math.max(1, os.cpus().length - 1);
 
-
+    Config.Client.concurrentThumbnailGenerations = 1;
     switch (Config.Server.thumbnail.processingLibrary) {
       case ThumbnailProcessingLib.Jimp:
         this.ThumbnailFunction = ThumbnailRenderers.jimp;
@@ -45,6 +44,7 @@ export class ThumbnailGeneratorMWs {
 
     if (Config.Server.enableThreading == true &&
       Config.Server.thumbnail.processingLibrary == ThumbnailProcessingLib.Jimp) {
+      Config.Client.concurrentThumbnailGenerations = Math.max(1, os.cpus().length - 1);
       const Pool = require('threads').Pool;
       this.thPool = new Pool(Config.Client.concurrentThumbnailGenerations);
       this.thPool.run(this.ThumbnailFunction);
