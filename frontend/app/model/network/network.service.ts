@@ -1,9 +1,9 @@
 import {Injectable} from "@angular/core";
 import {Headers, Http, RequestOptions} from "@angular/http";
 import {Message} from "../../../../common/entities/Message";
+import {SlimLoadingBarService} from "ng2-slim-loading-bar";
 import "rxjs/Rx";
 
-import {SlimLoadingBarService} from "ng2-slim-loading-bar";
 @Injectable()
 export class NetworkService {
 
@@ -28,8 +28,8 @@ export class NetworkService {
     };
 
     const err = (err) => {
-      NetworkService.handleError(err);
       this.slimLoadingBarService.complete();
+      return NetworkService.handleError(err);
     };
 
     if (method == "get" || method == "delete") {

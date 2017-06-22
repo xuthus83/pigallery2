@@ -4,6 +4,7 @@ import {MockBackend, MockConnection} from "@angular/http/testing";
 import "rxjs/Rx";
 import {NetworkService} from "./network.service";
 import {Message} from "../../../../common/entities/Message";
+import {SlimLoadingBarService} from "ng2-slim-loading-bar";
 
 
 describe('NetworkService Success tests', () => {
@@ -20,6 +21,7 @@ describe('NetworkService Success tests', () => {
       providers: [
         MockBackend,
         BaseRequestOptions,
+        SlimLoadingBarService,
         {
           provide: Http, useFactory: (backend, options) => {
           return new Http(backend, options);
@@ -108,6 +110,8 @@ describe('NetworkService Fail tests', () => {
       providers: [
         MockBackend,
         BaseRequestOptions,
+        SlimLoadingBarService,
+
         {
           provide: Http, useFactory: (backend, options) => {
           return new Http(backend, options);
@@ -172,4 +176,4 @@ describe('NetworkService Fail tests', () => {
       expect(err).toBe(testError);
     });
   }));
-}); 
+});

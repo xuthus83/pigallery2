@@ -131,14 +131,18 @@ export class GalleryGridComponent implements OnChanges, AfterViewInit {
   private renderedPhotoIndex: number = 0;
 
   private renderPhotos(numberOfPhotos: number = 0) {
-    if (this.containerWidth == 0 || this.renderedPhotoIndex >= this.photos.length || !this.shouldRenderMore()) {
+    if (this.containerWidth == 0 ||
+      this.renderedPhotoIndex >= this.photos.length ||
+      !this.shouldRenderMore()) {
       return;
     }
 
 
     let renderedContentHeight = 0;
 
-    while (this.renderedPhotoIndex < this.photos.length && (this.shouldRenderMore(renderedContentHeight) === true || this.renderedPhotoIndex < numberOfPhotos)) {
+    while (this.renderedPhotoIndex < this.photos.length &&
+    (this.shouldRenderMore(renderedContentHeight) === true ||
+    this.renderedPhotoIndex < numberOfPhotos)) {
       let ret = this.renderARow();
       if (ret === null) {
         throw new Error("Gridphotos rendering failed");
@@ -150,7 +154,7 @@ export class GalleryGridComponent implements OnChanges, AfterViewInit {
 
   /**
    * Returns true, if scroll is >= 70% to render more images.
-   * Or of onscroll renderin is off: return always to render all the images at once
+   * Or of onscroll rendering is off: return always to render all the images at once
    * @param offset Add height to the client height (conent is not yet added to the dom, but calculate with it)
    * @returns {boolean}
    */
