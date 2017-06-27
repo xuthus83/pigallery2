@@ -15,94 +15,93 @@ export class ThumbnailLoaderService {
   que: Array<ThumbnailTask> = [];
   runningRequests: number = 0;
 
-  constructor(private galleryChacheService: GalleryCacheService) {
+  constructor(private galleryCacheService: GalleryCacheService) {
   }
 
-  removeTasks() {
-    this.que = [];
-  }
 
   removeTask(taskEntry: ThumbnailTaskEntity) {
 
-    for (let i = 0; i < this.que.length; i++) {
-      let index = this.que[i].taskEntities.indexOf(taskEntry);
-      if (index == -1) {
-        this.que[i].taskEntities.splice(index, 1);
-        if (this.que[i].taskEntities.length == 0) {
-          this.que.splice(i, 1);
+    let index = taskEntry.parentTask.taskEntities.indexOf(taskEntry);
+    if (index == -1) {
+      throw "ThumbnailTaskEntity not exist on Task";
+    }
+    taskEntry.parentTask.taskEntities.splice(index, 1);
 
-        }
-        return;
+    if (taskEntry.parentTask.taskEntities.length == 0
+      && taskEntry.parentTask.inProgress == false) {
+      let i = this.que.indexOf(taskEntry.parentTask);
+      if (i == -1) {
+        throw "ThumbnailTask not exist";
       }
+      this.que.splice(i, 1);
     }
 
   }
 
   loadIcon(photo: IconPhoto, priority: ThumbnailLoadingPriority, listener: ThumbnailLoadingListener): ThumbnailTaskEntity {
-    let tmp: ThumbnailTask = null;
+    let thTask: ThumbnailTask = null;
     //is image already qued?
     for (let i = 0; i < this.que.length; i++) {
       if (this.que[i].path == photo.getIconPath()) {
-        tmp = this.que[i];
+        thTask = this.que[i];
         break;
       }
     }
-
-    let thumbnailTaskEntity = {priority: priority, listener: listener};
-    //add to previous
-    if (tmp != null) {
-      tmp.taskEntities.push(thumbnailTaskEntity);
-      if (tmp.inProgress == true) {
-        listener.onStartedLoading();
-      }
-
-
-    } else {//create new task
-      this.que.push(<ThumbnailTask>{
+    if (thTask == null) {
+      thTask = {
         photo: photo.photo,
         inProgress: false,
-        taskEntities: [thumbnailTaskEntity],
+        taskEntities: [],
         onLoaded: () => {
           photo.iconLoaded();
         },
         path: photo.getIconPath()
-      });
+      };
+      this.que.push(thTask);
     }
+
+    let thumbnailTaskEntity = {priority: priority, listener: listener, parentTask: thTask};
+    thTask.taskEntities.push(thumbnailTaskEntity);
+    if (thTask.inProgress == true) {
+      listener.onStartedLoading();
+    }
+
+
     setTimeout(this.run, 0);
     return thumbnailTaskEntity;
   }
 
   loadImage(photo: Photo, priority: ThumbnailLoadingPriority, listener: ThumbnailLoadingListener): ThumbnailTaskEntity {
 
-    let tmp: ThumbnailTask = null;
+    let thTask: ThumbnailTask = null;
     //is image already qued?
     for (let i = 0; i < this.que.length; i++) {
       if (this.que[i].path == photo.getThumbnailPath()) {
-        tmp = this.que[i];
+        thTask = this.que[i];
         break;
       }
     }
-
-    let thumbnailTaskEntity = {priority: priority, listener: listener};
-    //add to previous
-    if (tmp != null) {
-      tmp.taskEntities.push(thumbnailTaskEntity);
-      if (tmp.inProgress == true) {
-        listener.onStartedLoading();
-      }
-
-
-    } else {//create new task
-      this.que.push({
+    if (thTask == null) {
+      thTask = {
         photo: photo.photo,
         inProgress: false,
-        taskEntities: [thumbnailTaskEntity],
+        taskEntities: [],
         onLoaded: () => {
           photo.thumbnailLoaded();
         },
         path: photo.getThumbnailPath()
-      });
+      };
+      this.que.push(thTask);
     }
+
+    let thumbnailTaskEntity = {priority: priority, listener: listener, parentTask: thTask};
+
+    //add to task
+    thTask.taskEntities.push(thumbnailTaskEntity);
+    if (thTask.inProgress == true) {
+      listener.onStartedLoading();
+    }
+
     setTimeout(this.run, 0);
     return thumbnailTaskEntity;
 
@@ -166,11 +165,12 @@ export class ThumbnailLoaderService {
     this.runningRequests++;
     task.taskEntities.forEach(te => te.listener.onStartedLoading());
     task.inProgress = true;
+    console.log("loading", task.path);
 
     let curImg = new Image();
     curImg.onload = () => {
       task.onLoaded();
-      this.galleryChacheService.photoUpdated(task.photo);
+      this.galleryCacheService.photoUpdated(task.photo);
       task.taskEntities.forEach((te: ThumbnailTaskEntity) => te.listener.onLoad());
 
       this.taskReady(task);
@@ -201,6 +201,7 @@ export interface ThumbnailLoadingListener {
 export interface ThumbnailTaskEntity {
   priority: ThumbnailLoadingPriority;
   listener: ThumbnailLoadingListener;
+  parentTask: ThumbnailTask;
 }
 
 interface ThumbnailTask {
