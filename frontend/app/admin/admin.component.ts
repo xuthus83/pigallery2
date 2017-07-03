@@ -16,7 +16,7 @@ export class AdminComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (!this._authService.isAuthenticated() || this._authService.getUser().role < UserRoles.Admin) {
+    if (!this._authService.isAuthenticated() || this._authService.user.value.role < UserRoles.Admin) {
       this._router.navigate(['login']);
       return;
     }

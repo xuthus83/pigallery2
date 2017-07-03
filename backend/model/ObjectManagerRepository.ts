@@ -2,12 +2,15 @@ import {IUserManager} from "./interfaces/IUserManager";
 import {IGalleryManager} from "./interfaces/IGalleryManager";
 import {ISearchManager} from "./interfaces/ISearchManager";
 import {MySQLConnection} from "./mysql/MySQLConnection";
+import {ISharingManager} from "./interfaces/ISharingManager";
+import {Logger} from "../Logger";
 
 export class ObjectManagerRepository {
 
   private _galleryManager: IGalleryManager;
   private _userManager: IUserManager;
   private _searchManager: ISearchManager;
+  private _sharingManager: ISharingManager;
   private static _instance: ObjectManagerRepository = null;
 
 
@@ -15,24 +18,24 @@ export class ObjectManagerRepository {
     const GalleryManager = require("./memory/GalleryManager").GalleryManager;
     const UserManager = require("./memory/UserManager").UserManager;
     const SearchManager = require("./memory/SearchManager").SearchManager;
-    ObjectManagerRepository.getInstance().setGalleryManager(new GalleryManager());
-    ObjectManagerRepository.getInstance().setUserManager(new UserManager());
-    ObjectManagerRepository.getInstance().setSearchManager(new SearchManager());
+    const SharingManager = require("./memory/SharingManager").SharingManager;
+    ObjectManagerRepository.getInstance().GalleryManager = new GalleryManager();
+    ObjectManagerRepository.getInstance().UserManager = new UserManager();
+    ObjectManagerRepository.getInstance().SearchManager = new SearchManager();
+    ObjectManagerRepository.getInstance().SharingManager = new SharingManager();
   }
 
-  public static InitMySQLManagers(): Promise<boolean> {
-    return new Promise<boolean>((resolve, reject) => {
-      MySQLConnection.init().then(() => {
-        const GalleryManager = require("./mysql/GalleryManager").GalleryManager;
-        const UserManager = require("./mysql/UserManager").UserManager;
-        const SearchManager = require("./mysql/SearchManager").SearchManager;
-        ObjectManagerRepository.getInstance().setGalleryManager(new GalleryManager());
-        ObjectManagerRepository.getInstance().setUserManager(new UserManager());
-        ObjectManagerRepository.getInstance().setSearchManager(new SearchManager());
-        console.log("MySQL DB inited");
-        resolve(true);
-      }).catch(err => reject(err));
-    });
+  public static async InitMySQLManagers() {
+    await MySQLConnection.init();
+    const GalleryManager = require("./mysql/GalleryManager").GalleryManager;
+    const UserManager = require("./mysql/UserManager").UserManager;
+    const SearchManager = require("./mysql/SearchManager").SearchManager;
+    const SharingManager = require("./mysql/SharingManager").SharingManager;
+    ObjectManagerRepository.getInstance().GalleryManager = new GalleryManager();
+    ObjectManagerRepository.getInstance().UserManager = new UserManager();
+    ObjectManagerRepository.getInstance().SearchManager = new SearchManager();
+    ObjectManagerRepository.getInstance().SharingManager = new SharingManager();
+    Logger.debug("MySQL DB inited");
   }
 
   public static getInstance() {
@@ -47,28 +50,36 @@ export class ObjectManagerRepository {
   }
 
 
-  getGalleryManager(): IGalleryManager {
+  get GalleryManager(): IGalleryManager {
     return this._galleryManager;
   }
 
-  setGalleryManager(value: IGalleryManager) {
+  set GalleryManager(value: IGalleryManager) {
     this._galleryManager = value;
   }
 
-  getUserManager(): IUserManager {
+  get UserManager(): IUserManager {
     return this._userManager;
   }
 
-  setUserManager(value: IUserManager) {
+  set UserManager(value: IUserManager) {
     this._userManager = value;
   }
 
-  getSearchManager(): ISearchManager {
+  get SearchManager(): ISearchManager {
     return this._searchManager;
   }
 
-  setSearchManager(value: ISearchManager) {
+  set SearchManager(value: ISearchManager) {
     this._searchManager = value;
+  }
+
+  get SharingManager(): ISharingManager {
+    return this._sharingManager;
+  }
+
+  set SharingManager(value: ISharingManager) {
+    this._sharingManager = value;
   }
 
 }

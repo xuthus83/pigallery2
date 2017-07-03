@@ -4,10 +4,16 @@ interface SearchConfig {
   autocompleteEnabled: boolean
 }
 
+interface SharingConfig {
+  enabled: boolean;
+  passwordProtected: boolean;
+}
+
 interface ClientConfig {
   iconSize: number;
   thumbnailSizes: Array<number>;
   Search: SearchConfig;
+  Sharing: SharingConfig;
   concurrentThumbnailGenerations: number;
   enableCache: boolean;
   enableOnScrollRendering: boolean;
@@ -28,6 +34,10 @@ export class PublicConfigClass {
       searchEnabled: true,
       instantSearchEnabled: true,
       autocompleteEnabled: true
+    },
+    Sharing: {
+      enabled: true,
+      passwordProtected: true
     },
     concurrentThumbnailGenerations: 1,
     enableCache: false,

@@ -5,6 +5,7 @@ import {RouterLink} from "@angular/router";
 import {Utils} from "../../../../common/Utils";
 import {Photo} from "../Photo";
 import {Thumbnail, ThumbnailManagerService} from "../thumnailManager.service";
+import {ShareService} from "../share.service";
 
 @Component({
   selector: 'gallery-directory',
@@ -17,7 +18,10 @@ export class GalleryDirectoryComponent implements OnInit, OnDestroy {
   @ViewChild("dirContainer") container: ElementRef;
   thumbnail: Thumbnail = null;
 
-  constructor(private thumbnailService: ThumbnailManagerService, private _sanitizer: DomSanitizer) {
+  constructor(private thumbnailService: ThumbnailManagerService,
+              private _sanitizer: DomSanitizer,
+              public _shareService: ShareService) {
+
   }
 
   ngOnInit() {

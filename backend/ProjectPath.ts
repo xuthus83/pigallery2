@@ -5,6 +5,7 @@ class ProjectPathClass {
   public Root: string;
   public ImageFolder: string;
   public ThumbnailFolder: string;
+  public FrontendFolder: string;
 
   isAbsolutePath(pathStr: string) {
     return path.resolve(pathStr) === path.normalize(pathStr);
@@ -18,6 +19,7 @@ class ProjectPathClass {
     this.Root = path.join(__dirname, "/../");
     this.ImageFolder = this.isAbsolutePath(Config.Server.imagesFolder) ? Config.Server.imagesFolder : path.join(this.Root, Config.Server.imagesFolder);
     this.ThumbnailFolder = this.isAbsolutePath(Config.Server.thumbnail.folder) ? Config.Server.thumbnail.folder : path.join(this.Root, Config.Server.thumbnail.folder);
+    this.FrontendFolder = path.join(this.Root, 'dist')
   }
 }
 

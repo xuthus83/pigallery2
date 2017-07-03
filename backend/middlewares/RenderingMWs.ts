@@ -2,6 +2,7 @@ import {NextFunction, Request, Response} from "express";
 import {Error, ErrorCodes} from "../../common/entities/Error";
 import {Utils} from "../../common/Utils";
 import {Message} from "../../common/entities/Message";
+import {SharingDTO} from "../../common/entities/SharingDTO";
 
 export class RenderingMWs {
 
@@ -15,12 +16,21 @@ export class RenderingMWs {
 
   public static renderSessionUser(req: Request, res: Response, next: NextFunction) {
     if (!(req.session.user)) {
-      return next(new Error(ErrorCodes.GENERAL_ERROR));
+      return next(new Error(ErrorCodes.GENERAL_ERROR, "User not exists"));
     }
 
-    let user = Utils.clone(req.session.user);
+    const user = Utils.clone(req.session.user);
     delete user.password;
     RenderingMWs.renderMessage(res, user);
+  }
+
+  public static renderSharing(req: Request, res: Response, next: NextFunction) {
+    if (!req.resultPipe)
+      return next();
+
+    const sharing = Utils.clone<SharingDTO>(req.resultPipe);
+    delete sharing.password;
+    RenderingMWs.renderMessage(res, sharing);
   }
 
   public static renderFile(req: Request, res: Response, next: NextFunction) {

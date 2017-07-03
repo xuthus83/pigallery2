@@ -1,6 +1,9 @@
 import {Component, Input, OnChanges} from "@angular/core";
 import {DirectoryDTO} from "../../../../common/entities/DirectoryDTO";
 import {RouterLink} from "@angular/router";
+import {UserUtil} from "../../../../common/entities/UserDTO";
+import {AuthenticationService} from "../../model/network/authentication.service";
+import {ShareService} from "../share.service";
 
 @Component({
   selector: 'gallery-navbar',
@@ -10,9 +13,10 @@ import {RouterLink} from "@angular/router";
 export class GalleryNavigatorComponent implements OnChanges {
   @Input() directory: DirectoryDTO;
 
-  routes: Array<any> = [];
+  routes: Array<NavigatorPath> = [];
 
-  constructor() {
+  constructor(private _authService: AuthenticationService,
+              public _shareService: ShareService) {
   }
 
 
@@ -38,24 +42,24 @@ export class GalleryNavigatorComponent implements OnChanges {
       }
     }
 
-
-    let arr: any = [];
+    const user = this._authService.user.value;
+    let arr: NavigatorPath[] = [];
 
     //create root link
     if (dirs.length == 0) {
       arr.push({name: "Images", route: null});
     } else {
-      arr.push({name: "Images", route: "/"});
+      arr.push({name: "Images", route: UserUtil.isPathAvailable("/", user.permissions) ? "/" : null});
 
     }
 
     //create rest navigation
     dirs.forEach((name, index) => {
-      let route = dirs.slice(0, dirs.indexOf(name) + 1).join("/");
+      const route = dirs.slice(0, dirs.indexOf(name) + 1).join("/");
       if (dirs.length - 1 == index) {
         arr.push({name: name, route: null});
       } else {
-        arr.push({name: name, route: route});
+        arr.push({name: name, route: UserUtil.isPathAvailable(route, user.permissions) ? route : null});
       }
     });
 
@@ -66,5 +70,10 @@ export class GalleryNavigatorComponent implements OnChanges {
   }
 
 
+}
+
+interface NavigatorPath {
+  name: string;
+  route: string;
 }
 

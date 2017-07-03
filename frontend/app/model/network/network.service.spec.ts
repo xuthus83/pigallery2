@@ -138,7 +138,7 @@ describe('NetworkService Fail tests', () => {
 
   it('should call GET with error', inject([NetworkService], (networkService) => {
 
-    networkService.getJson(testUrl).then((res: Message<any>) => {
+    networkService.getJson(testUrl).then((res: any) => {
       expect(res).toBe(null);
     }).catch((err) => {
       expect(err).toBe(testError);
@@ -148,7 +148,7 @@ describe('NetworkService Fail tests', () => {
 
   it('should call POST with error', inject([NetworkService, MockBackend], (networkService) => {
 
-    networkService.postJson(testUrl, testData).then((res: Message<any>) => {
+    networkService.postJson(testUrl, testData).then((res: any) => {
       expect(res).toBe(null);
     }).catch((err) => {
       expect(err).toBe(testError);
@@ -158,7 +158,7 @@ describe('NetworkService Fail tests', () => {
 
   it('should call PUT with error', inject([NetworkService, MockBackend], (networkService) => {
 
-    networkService.putJson(testUrl, testData).then((res: Message<any>) => {
+    networkService.putJson(testUrl, testData).then((res: any) => {
       expect(res).toBe(null);
     }).catch((err) => {
       expect(err).toBe(testError);
@@ -170,7 +170,7 @@ describe('NetworkService Fail tests', () => {
 
   it('should call DELETE with error', inject([NetworkService, MockBackend], (networkService) => {
 
-    networkService.deleteJson(testUrl).then((res: Message<any>) => {
+    networkService.deleteJson(testUrl).then((res: any) => {
       expect(res).toBe(null);
     }).catch((err) => {
       expect(err).toBe(testError);

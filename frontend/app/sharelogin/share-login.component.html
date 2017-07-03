@@ -1,0 +1,15 @@
+<div class="container">
+  <div class="col-sm-offset-3  col-sm-6 col-lg-4 col-lg-offset-4">
+    <form class="form-signin" #LoginForm="ngForm">
+      <h2 class="form-signin-heading">The link is password protected</h2>
+      <div *ngIf="loginError">
+        {{loginError}}
+      </div>
+      <input type="password" class="form-control" placeholder="Password"
+             [(ngModel)]="loginCredential.password" name="password" required>
+      <br/>
+      <button class="btn btn-lg btn-primary btn-block" [disabled]="!LoginForm.form.valid" (click)="onLogin()">OK
+      </button>
+    </form>
+  </div>
+</div> <!-- /container -->

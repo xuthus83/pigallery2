@@ -33,6 +33,9 @@ import {OverlayService} from "./gallery/overlay.service";
 import {Config} from "../../common/config/public/Config";
 import {LAZY_MAPS_API_CONFIG} from "@agm/core/services";
 import {SlimLoadingBarModule} from "ng2-slim-loading-bar";
+import {GalleryShareComponent} from "./gallery/share/share.gallery.component";
+import {ShareLoginComponent} from "./sharelogin/share-login.component";
+import {ShareService} from "./gallery/share.service";
 
 
 @Injectable()
@@ -55,6 +58,7 @@ export class GoogleMapsConfig {
   ],
   declarations: [AppComponent,
     LoginComponent,
+    ShareLoginComponent,
     AdminComponent,
     GalleryComponent,
     FrameComponent,
@@ -68,6 +72,7 @@ export class GoogleMapsConfig {
     GalleryMapLightboxComponent,
     FrameComponent,
     GallerySearchComponent,
+    GalleryShareComponent,
     GalleryNavigatorComponent,
     GalleryPhotoComponent,
     FrameComponent,
@@ -75,6 +80,7 @@ export class GoogleMapsConfig {
   providers: [
     {provide: LAZY_MAPS_API_CONFIG, useClass: GoogleMapsConfig},
     NetworkService,
+    ShareService,
     UserService,
     GalleryCacheService,
     GalleryService,

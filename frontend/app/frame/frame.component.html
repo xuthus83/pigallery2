@@ -16,9 +16,10 @@
         <li class="active"><a [routerLink]="['/gallery','/']">Gallery</a></li>
         <li><a [routerLink]="['/admin']">Admin</a></li>
       </ul>
+
       <ul class="nav navbar-nav navbar-right" *ngIf="authenticationRequired">
         <li>
-          <p class="navbar-text" *ngIf="user">{{user.name}}</p>
+          <p class="navbar-text" *ngIf="user.value">{{user.value.name}}</p>
         </li>
         <li>
           <a style="cursor: pointer" (click)="logout()">Logout</a>

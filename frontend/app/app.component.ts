@@ -15,7 +15,7 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    this._authenticationService.OnUserChanged.on((user: UserDTO) => {
+    this._authenticationService.user.subscribe((user: UserDTO) => {
       if (user != null) {
         if (this._router.isActive('login', true)) {
           console.log("routing");

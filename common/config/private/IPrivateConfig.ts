@@ -26,11 +26,14 @@ export interface ThumbnailConfig {
   processingLibrary: ThumbnailProcessingLib;
   qualityPriority: boolean;
 }
-
+export interface SharingConfig {
+  updateTimeout: number;
+}
 export interface ServerConfig {
   port: number;
   imagesFolder: string;
   thumbnail: ThumbnailConfig;
   database: DataBaseConfig;
   enableThreading: boolean;
+  sharing: SharingConfig;
 }

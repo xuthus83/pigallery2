@@ -13,6 +13,7 @@ import {Logger} from "./Logger";
 import {Config} from "../common/config/private/Config";
 import {DatabaseType, ThumbnailProcessingLib} from "../common/config/private/IPrivateConfig";
 import {LoggerRouter} from "./routes/LoggerRouter";
+import {ProjectPath} from "./ProjectPath";
 
 const LOG_TAG = "[server]";
 export class Server {
@@ -88,7 +89,11 @@ export class Server {
     if (Config.Server.thumbnail.processingLibrary == ThumbnailProcessingLib.gm) {
       try {
         const gm = require("gm");
-        gm(1, 1).stream((err) => {
+        gm(ProjectPath.FrontendFolder + "/assets/icon.png").size((err, value) => {
+          console.log(err, value);
+          if (!err) {
+            return;
+          }
           Logger.warn(LOG_TAG, "[Thumbnail hardware acceleration] gm module error: ", err);
           Logger.warn(LOG_TAG, "Thumbnail hardware acceleration is not possible." +
             " 'gm' node module is not found." +

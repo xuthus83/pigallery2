@@ -1,7 +1,8 @@
 <ol id="directory-path" class="breadcrumb">
-    <li *ngFor="let path of routes">
-        <a *ngIf="path.route" [routerLink]="['/gallery',path.route]">{{path.name}}</a>
-        <span *ngIf="!path.route">{{path.name}}</span>
-    </li>
+  <li *ngFor="let path of routes">
+    <a *ngIf="path.route" [routerLink]="['/gallery',path.route]"
+       [queryParams]="_shareService.isSharing() ? { sk: _shareService.getSharingKey() }:{}">{{path.name}}</a>
+    <span *ngIf="!path.route">{{path.name}}</span>
+  </li>
 
 </ol>

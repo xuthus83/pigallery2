@@ -5,11 +5,11 @@ import {Router} from "@angular/router";
 import {ErrorCodes} from "../../../common/entities/Error";
 
 @Component({
-  selector: 'login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css'],
+  selector: 'share-login',
+  templateUrl: './share-login.component.html',
+  styleUrls: ['./share-login.component.css'],
 })
-export class LoginComponent implements OnInit {
+export class ShareLoginComponent implements OnInit {
   loginCredential: LoginCredential;
   loginError: any = null;
 

@@ -4,10 +4,8 @@ import {DiskManager} from "../DiskManger";
 
 export class GalleryManager implements IGalleryManager {
 
-
-    public listDirectory(relativeDirectoryName: string, cb: (error: any, result: DirectoryDTO) => void) {
-        return DiskManager.scanDirectory(relativeDirectoryName, cb);
-    }
-
+  public listDirectory(relativeDirectoryName: string): Promise<DirectoryDTO> {
+    return DiskManager.scanDirectory(relativeDirectoryName);
+  }
 
 }

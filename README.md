@@ -1,11 +1,11 @@
 # PiGallery2
 [![npm version](https://badge.fury.io/js/pigallery2.svg)](https://badge.fury.io/js/pigallery2)
-[![Build Status](https://travis-ci.org/bpatrik/PiGallery2.svg?branch=master)](https://travis-ci.org/bpatrik/PiGallery2)
-[![Coverage Status](https://coveralls.io/repos/github/bpatrik/PiGallery2/badge.svg?branch=master)](https://coveralls.io/github/bpatrik/PiGallery2?branch=master)
+[![Build Status](https://travis-ci.org/bpatrik/pigallery2.svg?branch=master)](https://travis-ci.org/bpatrik/pigallery2)
+[![Coverage Status](https://coveralls.io/repos/github/bpatrik/pigallery2/badge.svg?branch=master)](https://coveralls.io/github/bpatrik/pigallery2?branch=master)
 [![Heroku](https://heroku-badge.herokuapp.com/?app=pigallery2&style=flat)](https://pigallery2.herokuapp.com)
-[![Code Climate](https://codeclimate.com/github/bpatrik/PiGallery2/badges/gpa.svg)](https://codeclimate.com/github/bpatrik/PiGallery2)
-[![Dependency Status](https://david-dm.org/bpatrik/PiGallery2.svg)](https://david-dm.org/bpatrik/PiGallery2)
-[![devDependency Status](https://david-dm.org/bpatrik/PiGallery2/dev-status.svg)](https://david-dm.org/bpatrik/PiGallery2#info=devDependencies)
+[![Code Climate](https://codeclimate.com/github/bpatrik/pigallery2/badges/gpa.svg)](https://codeclimate.com/github/bpatrik/pigallery2)
+[![Dependency Status](https://david-dm.org/bpatrik/pigallery2.svg)](https://david-dm.org/bpatrik/pigallery2)
+[![devDependency Status](https://david-dm.org/bpatrik/pigallery2/dev-status.svg)](https://david-dm.org/bpatrik/pigallery2#info=devDependencies)
 
 This is a directory-first photo gallery website, optimised for running on low resource servers (especially on raspberry pi)
 
@@ -36,7 +36,7 @@ Full node install description: https://raspberrypi.stackexchange.com/questions/4
 ### Install PiGallery2
 ```bash
 cd ~
-wget https://github.com/bpatrik/PiGallery2/archive/1.0.0-beta.0.tar.gz
+wget https://github.com/bpatrik/pigallery2/archive/1.0.0-beta.0.tar.gz
 tar -xzvf 1.0.0-beta.0.tar.gz
 cd PiGallery2-1.0.0-beta.0
 npm install

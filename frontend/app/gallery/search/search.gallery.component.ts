@@ -2,7 +2,6 @@ import {Component} from "@angular/core";
 import {AutoCompleteService} from "./autocomplete.service";
 import {AutoCompleteItem, SearchTypes} from "../../../../common/entities/AutoCompleteItem";
 import {ActivatedRoute, Params, RouterLink} from "@angular/router";
-import {Message} from "../../../../common/entities/Message";
 import {GalleryService} from "../gallery.service";
 import {Config} from "../../../../common/config/public/Config";
 
@@ -23,20 +22,27 @@ export class GallerySearchComponent {
 
   SearchTypes: any = [];
 
+  private subscription = null;
+
   constructor(private _autoCompleteService: AutoCompleteService,
               private _galleryService: GalleryService,
               private _route: ActivatedRoute) {
 
     this.SearchTypes = SearchTypes;
 
-    this._route.params
-      .subscribe((params: Params) => {
-        let searchText = params['searchText'];
-        if (searchText && searchText != "") {
-          this.searchText = searchText;
-        }
+    this.subscription = this._route.params.subscribe((params: Params) => {
+      let searchText = params['searchText'];
+      if (searchText && searchText != "") {
+        this.searchText = searchText;
+      }
+    });
+  }
 
-      });
+
+  ngOnDestroy() {
+    if (this.subscription !== null) {
+      this.subscription.unsubscribe()
+    }
   }
 
   onSearchChange(event: KeyboardEvent) {
@@ -87,19 +93,19 @@ export class GallerySearchComponent {
     this.autoCompleteItems = [];
   }
 
-  private autocomplete(searchText: string) {
+  private async autocomplete(searchText: string) {
     if (!Config.Client.Search.autocompleteEnabled) {
       return
     }
+
     if (searchText.trim().length > 0) {
-      this._autoCompleteService.autoComplete(searchText).then((message: Message<Array<AutoCompleteItem>>) => {
-        if (message.error) {
-          //TODO: implement
-          console.error(message.error);
-          return;
-        }
-        this.showSuggestions(message.result, searchText);
-      });
+      try {
+        const items = await this._autoCompleteService.autoComplete(searchText);
+        this.showSuggestions(items, searchText);
+      } catch (error) {
+        console.error(error);
+      }
+
     } else {
       this.emptyAutoComplete();
     }

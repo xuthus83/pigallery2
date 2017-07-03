@@ -25,6 +25,9 @@ export class PrivateConfigClass extends PublicConfigClass {
 
       }
     },
+    sharing: {
+      updateTimeout: 1000 * 60 * 5
+    },
     enableThreading: true
   };
 

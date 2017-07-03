@@ -3,7 +3,6 @@ import {AuthenticationService} from "../../model/network/authentication.service"
 import {Router} from "@angular/router";
 import {UserDTO, UserRoles} from "../../../../common/entities/UserDTO";
 import {Utils} from "../../../../common/Utils";
-import {Message} from "../../../../common/entities/Message";
 import {UserManagerSettingsService} from "./usermanager.settings.service";
 
 @Component({
@@ -22,23 +21,21 @@ export class UserMangerSettingsComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (!this._authService.isAuthenticated() || this._authService.getUser().role < UserRoles.Admin) {
+    if (!this._authService.isAuthenticated() || this._authService.user.value.role < UserRoles.Admin) {
       this._router.navigate(['login']);
       return;
     }
-    this.userRoles = Utils.enumToArray(UserRoles).filter(r => r.key <= this._authService.getUser().role);
+    this.userRoles = Utils.enumToArray(UserRoles).filter(r => r.key <= this._authService.user.value.role);
     this.getUsersList();
   }
 
-  private getUsersList() {
-    this._userSettings.getUsers().then((result: Message<Array<UserDTO>>) => {
-      this.users = result.result;
-    });
+  private async getUsersList() {
+    this.users = await this._userSettings.getUsers();
   }
 
 
   canModifyUser(user: UserDTO): boolean {
-    let currentUser = this._authService.getUser();
+    let currentUser = this._authService.user.value;
     if (!currentUser) {
       return false;
     }

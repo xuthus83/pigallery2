@@ -1,5 +1,5 @@
-import {Metadata, SharpInstance} from "@types/sharp";
-import {Dimensions, State} from "@types/gm";
+import {Metadata, SharpInstance} from "sharp";
+import {Dimensions, State} from "gm";
 import {Logger} from "../../Logger";
 import {Error, ErrorCodes} from "../../../common/entities/Error";
 
@@ -15,7 +15,6 @@ export module ThumbnailRenderers {
   }
 
   export const jimp = (input: RendererInput, done) => {
-
     //generate thumbnail
     const Jimp = require("jimp");
     Jimp.read(input.imagePath).then((image) => {
@@ -53,7 +52,6 @@ export module ThumbnailRenderers {
   };
 
   export const sharp = (input: RendererInput, done) => {
-
     //generate thumbnail
     const sharp = require("sharp");
 
@@ -99,11 +97,13 @@ export module ThumbnailRenderers {
           }).catch(function (err) {
             //      const Error = require(input.__dirname + "/../../../common/entities/Error").Error;
             //       const ErrorCodes = require(input.__dirname + "/../../../common/entities/Error").ErrorCodes;
+            console.error(err);
             return done(new Error(ErrorCodes.GENERAL_ERROR, err));
           });
         } catch (err) {
           //  const Error = require(input.__dirname + "/../../../common/entities/Error").Error;
           // const ErrorCodes = require(input.__dirname + "/../../../common/entities/Error").ErrorCodes;
+          console.error(err);
           return done(new Error(ErrorCodes.GENERAL_ERROR, err));
         }
       });
@@ -112,7 +112,6 @@ export module ThumbnailRenderers {
 
 
   export const gm = (input: RendererInput, done) => {
-
     //generate thumbnail
     const gm = require("gm");
 

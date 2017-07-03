@@ -139,7 +139,7 @@ export class ThumbnailGeneratorMWs {
 
 
   private static generateImage(imagePath: string, size: number, makeSquare: boolean, req: Request, res: Response, next: NextFunction) {
-
+    ThumbnailGeneratorMWs.init();
     //generate thumbnail path
     let thPath = path.join(ProjectPath.ThumbnailFolder, ThumbnailGeneratorMWs.generateThumbnailName(imagePath, size));
 
@@ -189,4 +189,3 @@ export class ThumbnailGeneratorMWs {
   }
 }
 
-ThumbnailGeneratorMWs.init();

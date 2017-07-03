@@ -1,6 +1,7 @@
 {
   "compileOnSave": true,
   "compilerOptions": {
+    "skipLibCheck": true,
     "sourceMap": true,
     "declaration": false,
     "moduleResolution": "node",

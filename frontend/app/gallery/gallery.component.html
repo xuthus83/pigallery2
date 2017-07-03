@@ -2,6 +2,7 @@
 <app-frame>
 
   <div navbar>
+    <gallery-share *ngIf="showShare"></gallery-share>
     <gallery-search #search *ngIf="showSearchBar"></gallery-search>
   </div>
 

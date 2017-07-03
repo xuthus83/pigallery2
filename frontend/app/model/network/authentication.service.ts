@@ -1,9 +1,8 @@
 import {Injectable} from "@angular/core";
 import {UserDTO, UserRoles} from "../../../../common/entities/UserDTO";
-import {Event} from "../../../../common/event/Event";
+import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import {UserService} from "./user.service";
 import {LoginCredential} from "../../../../common/entities/LoginCredential";
-import {Message} from "../../../../common/entities/Message";
 import {Cookie} from "ng2-cookies";
 import {ErrorCodes} from "../../../../common/entities/Error";
 import {Config} from "../../../../common/config/public/Config";
@@ -15,49 +14,45 @@ declare module ServerInject {
 @Injectable()
 export class AuthenticationService {
 
-  private _user: UserDTO = null;
-  public OnUserChanged: Event<UserDTO>;
+  public user: BehaviorSubject<UserDTO>;
 
   constructor(private _userService: UserService) {
-    this.OnUserChanged = new Event();
+    this.user = new BehaviorSubject(null);
 
     //picking up session..
     if (this.isAuthenticated() == false && Cookie.get('pigallery2-session') != null) {
       if (typeof ServerInject !== "undefined" && typeof ServerInject.user !== "undefined") {
-        this.setUser(ServerInject.user);
+        this.user.next(ServerInject.user);
       }
       this.getSessionUser();
     } else {
-      this.OnUserChanged.trigger(this._user);
+      if (Config.Client.authenticationRequired === false) {
+        this.user.next(<UserDTO>{name: "", password: "", role: UserRoles.Admin});
+      }
     }
 
   }
 
-  private getSessionUser() {
-    this._userService.getSessionUser().then((message: Message<UserDTO>) => {
-      if (message.error) {
-        console.log(message.error);
-      } else {
-        this._user = message.result;
-        this.OnUserChanged.trigger(this._user);
-      }
-    });
+  private async getSessionUser(): Promise<void> {
+    try {
+      this.user.next(await this._userService.getSessionUser());
+    } catch (error) {
+      console.log(error);
+    }
+
   }
 
-  private setUser(user: UserDTO) {
-    this._user = user;
-    this.OnUserChanged.trigger(this._user);
-  }
 
-  public login(credential: LoginCredential) {
-    return this._userService.login(credential).then((message: Message<UserDTO>) => {
-      if (message.error) {
-        console.log(ErrorCodes[message.error.code] + ", message: ", message.error.message);
-      } else {
-        this.setUser(message.result);
+  public async login(credential: LoginCredential): Promise<UserDTO> {
+    try {
+      const user = await this._userService.login(credential);
+      this.user.next(user);
+      return user;
+    } catch (error) {
+      if (typeof error.code !== "undefined") {
+        console.log(ErrorCodes[error.code] + ", message: ", error.message);
       }
-      return message;
-    });
+    }
   }
 
 
@@ -65,19 +60,14 @@ export class AuthenticationService {
     if (Config.Client.authenticationRequired === false) {
       return true;
     }
-    return !!(this._user && this._user != null);
+    return !!(this.user.value && this.user.value != null);
   }
 
-  public getUser() {
-    if (Config.Client.authenticationRequired === false) {
-      return <UserDTO>{name: "", password: "", role: UserRoles.Admin};
-    }
-    return this._user;
-  }
+
 
   public logout() {
     this._userService.logout();
-    this.setUser(null);
+    this.user.next(null);
   }
 
 

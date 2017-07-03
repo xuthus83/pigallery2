@@ -11,13 +11,14 @@ import {PhotoDTO} from "../../common/entities/PhotoDTO";
 import {ProjectPath} from "../ProjectPath";
 import {Logger} from "../Logger";
 import {Config} from "../../common/config/private/Config";
+import {UserUtil} from "../../common/entities/UserDTO";
 
 
 const LOG_TAG = "[GalleryMWs]";
 export class GalleryMWs {
 
 
-  public static listDirectory(req: Request, res: Response, next: NextFunction) {
+  public static async listDirectory(req: Request, res: Response, next: NextFunction) {
     let directoryName = req.params.directory || "/";
     let absoluteDirectoryName = path.join(ProjectPath.ImageFolder, directoryName);
 
@@ -25,17 +26,23 @@ export class GalleryMWs {
       return next();
     }
 
-    ObjectManagerRepository.getInstance().getGalleryManager().listDirectory(directoryName, (err, directory: DirectoryDTO) => {
-      if (err || !directory) {
-        Logger.warn(LOG_TAG, "Error during listing the directory", err);
-        console.error(err);
-        return next(new Error(ErrorCodes.GENERAL_ERROR, err));
+    try {
+
+      const directory = await ObjectManagerRepository.getInstance().GalleryManager.listDirectory(directoryName);
+      if (req.session.user.permissions &&
+        req.session.user.permissions.length > 0 &&
+        req.session.user.permissions[0] != "/") {
+        directory.directories = directory.directories.filter(d =>
+          UserUtil.isDirectoryAvailable(d, req.session.user.permissions));
       }
-
       req.resultPipe = new ContentWrapper(directory, null);
-
       return next();
-    });
+
+    } catch (err) {
+      Logger.warn(LOG_TAG, "Error during listing the directory", err);
+      console.error(err);
+      return next(new Error(ErrorCodes.GENERAL_ERROR, err));
+    }
   }
 
 
@@ -99,7 +106,7 @@ export class GalleryMWs {
       type = parseInt(req.query.type);
     }
 
-    ObjectManagerRepository.getInstance().getSearchManager().search(req.params.text, type, (err, result: SearchResultDTO) => {
+    ObjectManagerRepository.getInstance().SearchManager.search(req.params.text, type, (err, result: SearchResultDTO) => {
       if (err || !result) {
         return next(new Error(ErrorCodes.GENERAL_ERROR, err));
       }
@@ -119,7 +126,7 @@ export class GalleryMWs {
     }
 
 
-    ObjectManagerRepository.getInstance().getSearchManager().instantSearch(req.params.text, (err, result: SearchResultDTO) => {
+    ObjectManagerRepository.getInstance().SearchManager.instantSearch(req.params.text, (err, result: SearchResultDTO) => {
       if (err || !result) {
         return next(new Error(ErrorCodes.GENERAL_ERROR, err));
       }
@@ -136,7 +143,7 @@ export class GalleryMWs {
       return next();
     }
 
-    ObjectManagerRepository.getInstance().getSearchManager().autocomplete(req.params.text, (err, items: Array<AutoCompleteItem>) => {
+    ObjectManagerRepository.getInstance().SearchManager.autocomplete(req.params.text, (err, items: Array<AutoCompleteItem>) => {
       if (err || !items) {
         return next(new Error(ErrorCodes.GENERAL_ERROR, err));
       }

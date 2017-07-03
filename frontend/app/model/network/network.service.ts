@@ -3,6 +3,7 @@ import {Headers, Http, RequestOptions} from "@angular/http";
 import {Message} from "../../../../common/entities/Message";
 import {SlimLoadingBarService} from "ng2-slim-loading-bar";
 import "rxjs/Rx";
+import {ErrorCodes} from "../../../../common/entities/Error";
 
 @Injectable()
 export class NetworkService {
@@ -22,9 +23,16 @@ export class NetworkService {
       this.slimLoadingBarService.visible = false;
     });
 
-    const process = (res: any) => {
+    const process = (data: any): T => {
       this.slimLoadingBarService.complete();
-      return <Message<any>> res.json();
+      let res = <Message<any>> data.json();
+      if (!!res.error) {
+        if (res.error.code) {
+          res.error['title'] = ErrorCodes[res.error.code];
+        }
+        throw res.error;
+      }
+      return res.result;
     };
 
     const err = (err) => {
@@ -62,9 +70,9 @@ export class NetworkService {
   }
 
   private static handleError(error: any) {
-    // TODO: in a real world app do smthing better
+    // TODO: in a real world app do something better
     // instead of just logging it to the console
     console.error(error);
-    return Promise.reject(error.message || error.json().error || 'Server error');
+    return Promise.reject(error.message || error || 'Server error');
   }
 }
