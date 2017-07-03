@@ -53,37 +53,37 @@ describe('NetworkService Success tests', () => {
 
   it('should call GET', inject([NetworkService], (networkService) => {
 
-    networkService.getJson(testUrl).then((res: Message<any>) => {
-      expect(res.result).toBe(testResponse);
+    networkService.getJson(testUrl).then((res: any) => {
+      expect(res).toBe(testResponse);
     });
 
   }));
 
   it('should call POST', inject([NetworkService, MockBackend], (networkService) => {
 
-    networkService.postJson(testUrl, testData).then((res: Message<any>) => {
-      expect(res.result).toBe(testResponse);
+    networkService.postJson(testUrl, testData).then((res: any) => {
+      expect(res).toBe(testResponse);
     });
     expect(connection.request.text()).toBe(JSON.stringify(testData));
 
 
-    networkService.postJson(testUrl).then((res: Message<any>) => {
-      expect(res.result).toBe(testResponse);
+    networkService.postJson(testUrl).then((res: any) => {
+      expect(res).toBe(testResponse);
     });
     expect(connection.request.text()).toBe(JSON.stringify({}));
   }));
 
   it('should call PUT', inject([NetworkService, MockBackend], (networkService) => {
 
-    networkService.putJson(testUrl, testData).then((res: Message<any>) => {
-      expect(res.result).toBe(testResponse);
+    networkService.putJson(testUrl, testData).then((res: any) => {
+      expect(res).toBe(testResponse);
     });
 
     expect(connection.request.text()).toBe(JSON.stringify(testData));
 
 
-    networkService.putJson(testUrl).then((res: Message<any>) => {
-      expect(res.result).toBe(testResponse);
+    networkService.putJson(testUrl).then((res: any) => {
+      expect(res).toBe(testResponse);
     });
     expect(connection.request.text()).toBe(JSON.stringify({}));
 
@@ -91,8 +91,8 @@ describe('NetworkService Success tests', () => {
 
   it('should call DELETE', inject([NetworkService, MockBackend], (networkService) => {
 
-    networkService.deleteJson(testUrl).then((res: Message<any>) => {
-      expect(res.result).toBe(testResponse);
+    networkService.deleteJson(testUrl).then((res: any) => {
+      expect(res).toBe(testResponse);
     });
   }));
 });

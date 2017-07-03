@@ -1,14 +1,13 @@
 import {inject, TestBed} from "@angular/core/testing";
 import {UserService} from "./user.service";
 import {UserDTO} from "../../../../common/entities/UserDTO";
-import {Message} from "../../../../common/entities/Message";
 import "rxjs/Rx";
 import {LoginCredential} from "../../../../common/entities/LoginCredential";
 import {AuthenticationService} from "./authentication.service";
 
 class MockUserService {
-  public login(credential: LoginCredential) {
-    return Promise.resolve(new Message<UserDTO>(null, <UserDTO>{name: "testUserName"}))
+  public login(credential: LoginCredential): Promise<UserDTO> {
+    return Promise.resolve(<UserDTO>{name: "testUserName"})
   }
 
   public async getSessionUser() {
@@ -34,20 +33,23 @@ describe('AuthenticationService', () => {
     expect(userService.login).toHaveBeenCalled();
   }));
 
-  it('should have NO Authenticated use', inject([AuthenticationService], (authService) => {
-    expect(authService.getUser()).toBe(null);
+  it('should have NO Authenticated use', inject([AuthenticationService], (authService: AuthenticationService) => {
+    expect(authService.user.value).toBe(null);
     expect(authService.isAuthenticated()).toBe(false);
   }));
 
 
-  it('should have Authenticated use', inject([AuthenticationService], (authService) => {
-    spyOn(authService.OnUserChanged, "trigger").and.callThrough();
-    authService.login();
-    authService.OnUserChanged.on(() => {
-      expect(authService.OnUserChanged.trigger).toHaveBeenCalled();
-      expect(authService.getUser()).not.toBe(null);
+  it('should have Authenticated use', inject([AuthenticationService], (authService: AuthenticationService) => {
+    spyOn(authService.user, "next").and.callThrough();
+    authService.user.subscribe((user) => {
+      if (user == null) {
+        return;
+      }
+      expect(authService.user.next).toHaveBeenCalled();
+      expect(authService.user.value).not.toBe(null);
       expect(authService.isAuthenticated()).toBe(true);
     });
+    authService.login(<any>{});
 
   }));
 
