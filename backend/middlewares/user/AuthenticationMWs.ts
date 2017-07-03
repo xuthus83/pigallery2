@@ -8,6 +8,7 @@ import {Config} from "../../../common/config/private/Config";
 export class AuthenticationMWs {
 
   private static async getSharingUser(req: Request) {
+    console.log(req);
     if (Config.Client.Sharing.enabled === true &&
       Config.Client.Sharing.passwordProtected === false &&
       (!!req.query.sk || !!req.params.sharingKey)) {

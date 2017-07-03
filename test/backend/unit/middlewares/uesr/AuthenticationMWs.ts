@@ -1,7 +1,7 @@
 import {expect} from "chai";
 import {AuthenticationMWs} from "../../../../../backend/middlewares/user/AuthenticationMWs";
 import {Error, ErrorCodes} from "../../../../../common/entities/Error";
-import {UserRoles} from "../../../../../common/entities/UserDTO";
+import {UserDTO, UserRoles} from "../../../../../common/entities/UserDTO";
 import {ObjectManagerRepository} from "../../../../../backend/model/ObjectManagerRepository";
 import {UserManager} from "../../../../../backend/model/memory/UserManager";
 import {Config} from "../../../../../common/config/private/Config";
@@ -18,7 +18,9 @@ describe('Authentication middleware', () => {
       let req: any = {
         session: {
           user: "A user"
-        }
+        },
+        query: {},
+        params: {}
       };
       let next: any = (err) => {
         expect(err).to.be.undefined;
@@ -30,7 +32,9 @@ describe('Authentication middleware', () => {
 
     it('should call next with error on not authenticated', (done) => {
       let req: any = {
-        session: {}
+        session: {},
+        query: {},
+        params: {}
       };
       Config.Client.authenticationRequired = true;
       let res: any = {};
@@ -117,11 +121,15 @@ describe('Authentication middleware', () => {
       ObjectManagerRepository.reset();
     });
 
-    describe('should call next on missing...', () => {
+    describe('should call input Error next on missing...', () => {
       it('body', (done) => {
-        let req: any = {};
-        let next: any = (err) => {
-          expect(err).to.be.undefined;
+        let req: any = {
+          query: {},
+          params: {}
+        };
+        let next: any = (err: Error) => {
+          expect(err).not.to.be.undefined;
+          expect(err.code).to.be.eql(ErrorCodes.INPUT_ERROR);
           done();
         };
         AuthenticationMWs.login(req, null, next);
@@ -130,10 +138,13 @@ describe('Authentication middleware', () => {
 
       it('loginCredential', (done) => {
         let req: any = {
-          body: {}
+          body: {},
+          query: {},
+          params: {}
         };
-        let next: any = (err) => {
-          expect(err).to.be.undefined;
+        let next: any = (err: Error) => {
+          expect(err).not.to.be.undefined;
+          expect(err.code).to.be.eql(ErrorCodes.INPUT_ERROR);
           done();
         };
         AuthenticationMWs.login(req, null, next);
@@ -144,10 +155,13 @@ describe('Authentication middleware', () => {
 
       it('loginCredential content', (done) => {
         let req: any = {
-          body: {loginCredential: {}}
+          body: {loginCredential: {}},
+          query: {},
+          params: {}
         };
-        let next: any = (err) => {
-          expect(err).to.be.undefined;
+        let next: any = (err: Error) => {
+          expect(err).not.to.be.undefined;
+          expect(err.code).to.be.eql(ErrorCodes.INPUT_ERROR);
           done();
         };
         AuthenticationMWs.login(req, null, next);
@@ -163,7 +177,9 @@ describe('Authentication middleware', () => {
             username: "aa",
             password: "bb"
           }
-        }
+        },
+        query: {},
+        params: {}
       };
       let next: any = (err: Error) => {
         expect(err).not.to.be.undefined;
@@ -171,8 +187,8 @@ describe('Authentication middleware', () => {
         done();
       };
       ObjectManagerRepository.getInstance().UserManager = <UserManager>{
-        findOne: (filter, cb) => {
-          cb(null, null);
+        findOne: (filter): Promise<UserDTO> => {
+          return Promise.reject(null);
         }
       };
       AuthenticationMWs.login(req, null, next);
@@ -188,7 +204,9 @@ describe('Authentication middleware', () => {
             username: "aa",
             password: "bb"
           }
-        }
+        },
+        query: {},
+        params: {}
       };
       let next: any = (err: Error) => {
         expect(err).to.be.undefined;
@@ -196,8 +214,8 @@ describe('Authentication middleware', () => {
         done();
       };
       ObjectManagerRepository.getInstance().UserManager = <UserManager>{
-        findOne: (filter, cb: any) => {
-          cb(null, "test user");
+        findOne: (filter) => {
+          return Promise.resolve("test user");
         }
       };
       AuthenticationMWs.login(req, null, next);
