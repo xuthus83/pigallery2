@@ -96,7 +96,7 @@ export class ThumbnailLoaderService {
 
     let thumbnailTaskEntity = {priority: priority, listener: listener, parentTask: thTask};
 
-    //add to task
+    //add to poolTask
     thTask.taskEntities.push(thumbnailTaskEntity);
     if (thTask.inProgress == true) {
       listener.onStartedLoading();
@@ -144,7 +144,7 @@ export class ThumbnailLoaderService {
     let i = this.que.indexOf(task);
     if (i == -1) {
       if (task.taskEntities.length !== 0) {
-        console.error("ThumbnailLoader: can't find task to remove");
+        console.error("ThumbnailLoader: can't find poolTask to remove");
       }
       return;
     }

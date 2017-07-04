@@ -9,16 +9,16 @@ import {ContentWrapper} from "../../../common/entities/ConentWrapper";
 import {DirectoryDTO} from "../../../common/entities/DirectoryDTO";
 import {ProjectPath} from "../../ProjectPath";
 import {PhotoDTO} from "../../../common/entities/PhotoDTO";
-import {ThumbnailRenderers} from "./THRenderers";
 import {Config} from "../../../common/config/private/Config";
 import {ThumbnailProcessingLib} from "../../../common/config/private/IPrivateConfig";
-import RendererInput = ThumbnailRenderers.RendererInput;
+import {ThumbnailTH} from "../../model/threading/ThreadPool";
+import {RendererFactory, RendererInput} from "../../model/threading/ThumbnailWoker";
 
 
 export class ThumbnailGeneratorMWs {
   private static initDone = false;
-  private static ThumbnailFunction = null;
-  private static thPool = null;
+  private static ThumbnailFunction: (input: RendererInput) => Promise<void> = null;
+  private static threadPool: ThumbnailTH = null;
 
   public static init() {
     if (this.initDone == true) {
@@ -26,28 +26,18 @@ export class ThumbnailGeneratorMWs {
     }
 
 
-    Config.Client.concurrentThumbnailGenerations = 1;
-    switch (Config.Server.thumbnail.processingLibrary) {
-      case ThumbnailProcessingLib.Jimp:
-        this.ThumbnailFunction = ThumbnailRenderers.jimp;
-        break;
-      case ThumbnailProcessingLib.gm:
-        this.ThumbnailFunction = ThumbnailRenderers.gm;
-        break;
-      case ThumbnailProcessingLib.sharp:
-        this.ThumbnailFunction = ThumbnailRenderers.sharp;
-
-        break;
-      default:
-        throw "Unknown thumbnail processing lib";
+    if (Config.Server.enableThreading == true ||
+      Config.Server.thumbnail.processingLibrary != ThumbnailProcessingLib.Jimp) {
+      Config.Client.concurrentThumbnailGenerations = Math.max(1, os.cpus().length - 1);
+    } else {
+      Config.Client.concurrentThumbnailGenerations = 1;
     }
+
+    this.ThumbnailFunction = RendererFactory.build(Config.Server.thumbnail.processingLibrary);
 
     if (Config.Server.enableThreading == true &&
       Config.Server.thumbnail.processingLibrary == ThumbnailProcessingLib.Jimp) {
-      Config.Client.concurrentThumbnailGenerations = Math.max(1, os.cpus().length - 1);
-      const Pool = require('threads').Pool;
-      this.thPool = new Pool(Config.Client.concurrentThumbnailGenerations);
-      this.thPool.run(this.ThumbnailFunction);
+      this.threadPool = new ThumbnailTH(Config.Client.concurrentThumbnailGenerations);
     }
 
     this.initDone = true;
@@ -138,8 +128,7 @@ export class ThumbnailGeneratorMWs {
   }
 
 
-  private static generateImage(imagePath: string, size: number, makeSquare: boolean, req: Request, res: Response, next: NextFunction) {
-    ThumbnailGeneratorMWs.init();
+  private static async generateImage(imagePath: string, size: number, makeSquare: boolean, req: Request, res: Response, next: NextFunction) {
     //generate thumbnail path
     let thPath = path.join(ProjectPath.ThumbnailFolder, ThumbnailGeneratorMWs.generateThumbnailName(imagePath, size));
 
@@ -157,30 +146,24 @@ export class ThumbnailGeneratorMWs {
     }
 
     //run on other thread
-
     let input = <RendererInput>{
       imagePath: imagePath,
       size: size,
       thPath: thPath,
       makeSquare: makeSquare,
-      qualityPriority: Config.Server.thumbnail.qualityPriority,
-      __dirname: __dirname,
+      qualityPriority: Config.Server.thumbnail.qualityPriority
     };
-    if (this.thPool !== null) {
-      this.thPool.send(input)
-        .on('done', (out) => {
-          return next(out);
-        }).on('error', (error) => {
-        console.log(error);
-        return next(new Error(ErrorCodes.THUMBNAIL_GENERATION_ERROR, error));
-      });
-    } else {
-      try {
-        ThumbnailGeneratorMWs.ThumbnailFunction(input, out => next(out));
-      } catch (error) {
-        console.log(error);
-        return next(new Error(ErrorCodes.THUMBNAIL_GENERATION_ERROR, error));
+    try {
+      if (this.threadPool !== null) {
+        await this.threadPool.execute(input);
+        return next();
+      } else {
+        await ThumbnailGeneratorMWs.ThumbnailFunction(input);
+        return next();
       }
+    } catch (error) {
+      console.log(error);
+      return next(new Error(ErrorCodes.THUMBNAIL_GENERATION_ERROR, error));
     }
   }
 
