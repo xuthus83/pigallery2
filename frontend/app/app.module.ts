@@ -36,7 +36,7 @@ import {SlimLoadingBarModule} from "ng2-slim-loading-bar";
 import {GalleryShareComponent} from "./gallery/share/share.gallery.component";
 import {ShareLoginComponent} from "./sharelogin/share-login.component";
 import {ShareService} from "./gallery/share.service";
-
+import "hammerjs";
 
 @Injectable()
 export class GoogleMapsConfig {

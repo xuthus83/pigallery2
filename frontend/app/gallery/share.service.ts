@@ -30,7 +30,6 @@ export class ShareService {
         this.sharingKey = this.param || this.queryParam;
         if (this.resolve) {
           this.resolve();
-          console.log("resolving", this.sharingKey);
           this.inited = true;
         }
 

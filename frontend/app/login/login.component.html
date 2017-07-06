@@ -1,16 +1,94 @@
 <div class="container">
-    <div class="col-sm-offset-3  col-sm-6 col-lg-4 col-lg-offset-4">
-    <form class="form-signin"  #LoginForm="ngForm">
-        <h2 class="form-signin-heading">Please sign in</h2>
-        <div *ngIf="loginError">
-            {{loginError}}
+
+  <div class="row title">
+    <h1><img src="assets/icon.png"/>{{title}}</h1>
+  </div>
+
+  <div class="row card">
+    <div class="col-md-12">
+      <h1>Please log in</h1>
+      <form name="form" id="form" class="form-horizontal" #LoginForm="ngForm" (submit)="onLogin()">
+        <div class="error-message">
+          {{loginError}}&nbsp;
         </div>
-        <input type="text" class="form-control" placeholder="Username" autofocus
-               [(ngModel)]="loginCredential.username" name="name" required>
-        <input type="password" class="form-control" placeholder="Password"
-               [(ngModel)]="loginCredential.password" name="password" required>
-        <br/>
-        <button class="btn btn-lg btn-primary btn-block"  [disabled]="!LoginForm.form.valid" (click)="onLogin()">Sign in</button>
-    </form>
+        <div class="input-group has-margin">
+          <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+          <input id="username"
+                 type="text"
+                 class="form-control"
+                 placeholder="Username"
+                 autofocus
+                 [(ngModel)]="loginCredential.username"
+                 name="username" required>
+        </div>
+
+        <div class="input-group">
+          <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+          <input id="password"
+                 class="form-control"
+                 type="password"
+                 [(ngModel)]="loginCredential.password"
+                 name="password"
+                 placeholder="Password"
+                 required>
+        </div>
+
+        <div class="checkbox">
+          <label><input type="checkbox" name="rememberMe" [(ngModel)]="loginCredential.rememberMe" value="">Remember me</label>
+        </div>
+
+        <div class="form-group">
+          <!-- Button -->
+          <div class="col-sm-12 controls">
+            <button class="btn btn-primary pull-right"
+                    [disabled]="!LoginForm.form.valid"
+                    type="submit"
+                    name="action">Login
+            </button>
+          </div>
+        </div>
+      </form>
+
     </div>
-</div> <!-- /container -->
+  </div>
+</div>
+
+<!--
+<div class="login mat-typography" fxLayoutGap="80px" fxLayoutAlign="start center" fxFlexFill fxLayout="column">
+  <h1><img src="assets/icon.png">PiGallery 2</h1>
+  <form class="form-signin" #LoginForm="ngForm" (submit)="onLogin()" fxLayout="row">
+    <md-card fxFlex="400px">
+      <md-card-header>
+        <md-card-title>Please sign in</md-card-title>
+      </md-card-header>
+      <md-card-content fxFlexFill fxLayoutAlign="center center" fxLayout="column">
+        <div *ngIf="loginError">
+          {{loginError}}
+        </div>
+        <md-input-container>
+          <input fxFlexFill mdInput autofocus [(ngModel)]="loginCredential.username" name="name" required>
+          <md-placeholder>
+            <i class="material-icons app-input-icon">face</i> Username
+          </md-placeholder>
+        </md-input-container>
+        <md-input-container>
+          <input fxFlexFill mdInput type="password" [(ngModel)]="loginCredential.password" name="password" required>
+          <md-placeholder>
+            <i class="material-icons app-input-icon">lock_open</i> Password
+          </md-placeholder>
+        </md-input-container>
+        <div fxLayout="row" fxLayoutAlign="start center">
+          <md-checkbox [(ngModel)]="loginCredential.rememberM">Remember me</md-checkbox>
+        </div>
+      </md-card-content>
+      <md-card-actions fxLayout="row" fxLayoutAlign="end center">
+        <button md-raised-button color="primary"
+                [disabled]="!LoginForm.form.valid"
+                type="submit"
+                name="action">Login
+        </button>
+      </md-card-actions>
+    </md-card>
+  </form>
+</div>
+-->

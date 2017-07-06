@@ -16,10 +16,12 @@ export class FrameComponent {
 
   user: BehaviorSubject<UserDTO>;
   authenticationRequired: boolean = false;
+  public title: string;
 
   constructor(private _authService: AuthenticationService) {
     this.user = this._authService.user;
     this.authenticationRequired = Config.Client.authenticationRequired;
+    this.title = Config.Client.applicationTitle;
   }
 
 

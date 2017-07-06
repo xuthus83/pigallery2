@@ -10,6 +10,7 @@ interface SharingConfig {
 }
 
 interface ClientConfig {
+  applicationTitle: string;
   iconSize: number;
   thumbnailSizes: Array<number>;
   Search: SearchConfig;
@@ -28,6 +29,7 @@ interface ClientConfig {
 export class PublicConfigClass {
 
   public Client: ClientConfig = {
+    applicationTitle: "PiGallery 2",
     thumbnailSizes: [200, 400, 600],
     iconSize: 30,
     Search: {

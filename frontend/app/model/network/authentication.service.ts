@@ -4,7 +4,6 @@ import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import {UserService} from "./user.service";
 import {LoginCredential} from "../../../../common/entities/LoginCredential";
 import {Cookie} from "ng2-cookies";
-import {ErrorCodes} from "../../../../common/entities/Error";
 import {Config} from "../../../../common/config/public/Config";
 
 declare module ServerInject {
@@ -44,15 +43,9 @@ export class AuthenticationService {
 
 
   public async login(credential: LoginCredential): Promise<UserDTO> {
-    try {
       const user = await this._userService.login(credential);
       this.user.next(user);
       return user;
-    } catch (error) {
-      if (typeof error.code !== "undefined") {
-        console.log(ErrorCodes[error.code] + ", message: ", error.message);
-      }
-    }
   }
 
 
