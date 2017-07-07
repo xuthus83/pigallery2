@@ -9,3 +9,16 @@ export interface DirectoryDTO {
   directories: Array<DirectoryDTO>;
   photos: Array<PhotoDTO>;
 }
+
+export module DirectoryUtil {
+  export const addReferences = (dir: DirectoryDTO) => {
+    dir.photos.forEach((photo: PhotoDTO) => {
+      photo.directory = dir;
+    });
+
+    dir.directories.forEach((directory: DirectoryDTO) => {
+      addReferences(directory);
+      directory.parent = dir;
+    });
+  }
+}

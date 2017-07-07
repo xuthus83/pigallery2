@@ -1,8 +1,7 @@
 import {Injectable} from "@angular/core";
 import {NetworkService} from "../model/network/network.service";
 import {ContentWrapper} from "../../../common/entities/ConentWrapper";
-import {PhotoDTO} from "../../../common/entities/PhotoDTO";
-import {DirectoryDTO} from "../../../common/entities/DirectoryDTO";
+import {DirectoryDTO, DirectoryUtil} from "../../../common/entities/DirectoryDTO";
 import {SearchTypes} from "../../../common/entities/AutoCompleteItem";
 import {GalleryCacheService} from "./cache.gallery.service";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
@@ -42,6 +41,7 @@ export class GalleryService {
         cw = await this.networkService.getJson<ContentWrapper>("/gallery/content/" + directoryName + "?sk=" + this._shareService.getSharingKey());
       }
     }
+
     if (cw == null) {
       cw = await this.networkService.getJson<ContentWrapper>("/gallery/content/" + directoryName);
     }
@@ -52,20 +52,8 @@ export class GalleryService {
       return;
     }
 
-    //Add references
-    let addDir = (dir: DirectoryDTO) => {
-      dir.photos.forEach((photo: PhotoDTO) => {
-        photo.directory = dir;
-      });
 
-      dir.directories.forEach((directory: DirectoryDTO) => {
-        addDir(directory);
-        directory.parent = dir;
-      });
-
-
-    };
-    addDir(cw.directory);
+    DirectoryUtil.addReferences(cw.directory);
 
 
     this.lastDirectory = cw.directory;
@@ -79,7 +67,7 @@ export class GalleryService {
   //TODO: cache
   public async search(text: string, type?: SearchTypes): Promise<ContentWrapper> {
     clearTimeout(this.searchId);
-    if (text === null || text === '') {
+    if (text === null || text === '' || text.trim() == ".") {
       return null
     }
 
@@ -94,7 +82,7 @@ export class GalleryService {
 
   //TODO: cache (together with normal search)
   public async instantSearch(text: string): Promise<ContentWrapper> {
-    if (text === null || text === '') {
+    if (text === null || text === '' || text.trim() == ".") {
       const content = new ContentWrapper();
       content.directory = this.lastDirectory;
       content.searchResult = null;

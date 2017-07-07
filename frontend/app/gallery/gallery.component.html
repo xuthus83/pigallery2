@@ -14,9 +14,10 @@
   <div body class="container" style="width: 100%; padding:0" *ngIf="_galleryService.content.value.directory">
     <gallery-navbar [directory]="_galleryService.content.value.directory"></gallery-navbar>
 
-    <gallery-directory *ngFor="let directory of directories"
-                       [directory]="directory"></gallery-directory>
-
+    <div class="directories">
+      <gallery-directory *ngFor="let directory of directories"
+                         [directory]="directory"></gallery-directory>
+    </div>
     <gallery-map *ngIf="isPhotoWithLocation" [photos]="_galleryService.content.value.directory.photos"></gallery-map>
     <gallery-grid [photos]="_galleryService.content.value.directory.photos" [lightbox]="lightbox"></gallery-grid>
   </div>
@@ -31,14 +32,15 @@
                         <span *ngSwitchCase="2" class="glyphicon glyphicon-tag"></span>
                         <span *ngSwitchCase="3" class="glyphicon glyphicon-map-marker"></span>
                     </span>
-        <strong>{{_galleryService.content.searchResult.searchText}}</strong>
+        <strong>{{_galleryService.content.value.searchResult.searchText}}</strong>
       </li>
     </ol>
 
     <gallery-map *ngIf="isPhotoWithLocation" [photos]="_galleryService.content.value.searchResult.photos"></gallery-map>
 
-    <div *ngFor="let directory of directories">
-      <gallery-directory *ngIf="directory" [directory]="directory"></gallery-directory>
+    <div class="directories">
+      <gallery-directory *ngFor="let directory of directories"
+                         [directory]="directory"></gallery-directory>
     </div>
     <gallery-grid [photos]="_galleryService.content.value.searchResult.photos" [lightbox]="lightbox"></gallery-grid>
   </div>

@@ -97,6 +97,10 @@ export class GallerySearchComponent {
     if (!Config.Client.Search.autocompleteEnabled) {
       return
     }
+    if (searchText.trim() == ".") {
+      return;
+    }
+
 
     if (searchText.trim().length > 0) {
       try {

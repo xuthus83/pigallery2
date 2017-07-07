@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
 import {PhotoDTO} from "../../../common/entities/PhotoDTO";
-import {DirectoryDTO} from "../../../common/entities/DirectoryDTO";
+import {DirectoryDTO, DirectoryUtil} from "../../../common/entities/DirectoryDTO";
 import {Utils} from "../../../common/Utils";
 import {Config} from "../../../common/config/public/Config";
 
@@ -16,23 +16,7 @@ export class GalleryCacheService {
     if (value != null) {
       let directory: DirectoryDTO = JSON.parse(value);
 
-
-      //Add references
-      let addDir = (dir: DirectoryDTO) => {
-        dir.photos.forEach((photo: PhotoDTO) => {
-          photo.directory = dir;
-        });
-
-        dir.directories.forEach((directory: DirectoryDTO) => {
-          addDir(directory);
-          directory.parent = dir;
-        });
-
-
-      };
-      addDir(directory);
-
-
+      DirectoryUtil.addReferences(directory);
       return directory;
     }
     return null;

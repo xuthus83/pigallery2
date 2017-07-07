@@ -4,9 +4,8 @@ import {NextFunction, Request, Response} from "express";
 import {Error, ErrorCodes} from "../../common/entities/Error";
 import {DirectoryDTO} from "../../common/entities/DirectoryDTO";
 import {ObjectManagerRepository} from "../model/ObjectManagerRepository";
-import {AutoCompleteItem, SearchTypes} from "../../common/entities/AutoCompleteItem";
+import {SearchTypes} from "../../common/entities/AutoCompleteItem";
 import {ContentWrapper} from "../../common/entities/ConentWrapper";
-import {SearchResultDTO} from "../../common/entities/SearchResult";
 import {PhotoDTO} from "../../common/entities/PhotoDTO";
 import {ProjectPath} from "../ProjectPath";
 import {Logger} from "../Logger";
@@ -92,7 +91,7 @@ export class GalleryMWs {
   }
 
 
-  public static search(req: Request, res: Response, next: NextFunction) {
+  public static async search(req: Request, res: Response, next: NextFunction) {
     if (Config.Client.Search.searchEnabled === false) {
       return next();
     }
@@ -105,18 +104,21 @@ export class GalleryMWs {
     if (req.query.type) {
       type = parseInt(req.query.type);
     }
+    try {
+      const result = await ObjectManagerRepository.getInstance().SearchManager.search(req.params.text, type);
 
-    ObjectManagerRepository.getInstance().SearchManager.search(req.params.text, type, (err, result: SearchResultDTO) => {
-      if (err || !result) {
-        return next(new Error(ErrorCodes.GENERAL_ERROR, err));
-      }
+      result.directories.forEach(dir => dir.photos = dir.photos || []);
       req.resultPipe = new ContentWrapper(null, result);
       return next();
-    });
+    } catch (err) {
+
+      Logger.warn(LOG_TAG, "Error during searching", err);
+      console.error(err);
+      return next(new Error(ErrorCodes.GENERAL_ERROR, err));
+    }
   }
 
-
-  public static instantSearch(req: Request, res: Response, next: NextFunction) {
+  public static async instantSearch(req: Request, res: Response, next: NextFunction) {
     if (Config.Client.Search.instantSearchEnabled === false) {
       return next();
     }
@@ -125,17 +127,20 @@ export class GalleryMWs {
       return next();
     }
 
+    try {
+      const result = await  ObjectManagerRepository.getInstance().SearchManager.instantSearch(req.params.text);
 
-    ObjectManagerRepository.getInstance().SearchManager.instantSearch(req.params.text, (err, result: SearchResultDTO) => {
-      if (err || !result) {
-        return next(new Error(ErrorCodes.GENERAL_ERROR, err));
-      }
+      result.directories.forEach(dir => dir.photos = dir.photos || []);
       req.resultPipe = new ContentWrapper(null, result);
       return next();
-    });
+    } catch (err) {
+      Logger.warn(LOG_TAG, "Error during searching", err);
+      console.error(err);
+      return next(new Error(ErrorCodes.GENERAL_ERROR, err));
+    }
   }
 
-  public static autocomplete(req: Request, res: Response, next: NextFunction) {
+  public static async autocomplete(req: Request, res: Response, next: NextFunction) {
     if (Config.Client.Search.autocompleteEnabled === false) {
       return next();
     }
@@ -143,13 +148,15 @@ export class GalleryMWs {
       return next();
     }
 
-    ObjectManagerRepository.getInstance().SearchManager.autocomplete(req.params.text, (err, items: Array<AutoCompleteItem>) => {
-      if (err || !items) {
-        return next(new Error(ErrorCodes.GENERAL_ERROR, err));
-      }
-      req.resultPipe = items;
+    try {
+      req.resultPipe = await ObjectManagerRepository.getInstance().SearchManager.autocomplete(req.params.text);
       return next();
-    });
+    } catch (err) {
+      Logger.warn(LOG_TAG, "Error during searching", err);
+      console.error(err);
+      return next(new Error(ErrorCodes.GENERAL_ERROR, err));
+    }
+
   }
 
 

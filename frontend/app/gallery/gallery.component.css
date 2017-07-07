@@ -5,3 +5,8 @@ gallery-map {
     height: 80px;
     width: 100px;
 }
+
+.directories {
+  margin-right: 1px;
+  margin-left: 1px;
+}
