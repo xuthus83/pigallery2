@@ -9,3 +9,7 @@ body {
 * {
   border-radius: 0 !important;
 }
+
+.navbar-right {
+  margin-right: 0;
+}

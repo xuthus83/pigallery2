@@ -143,6 +143,19 @@ export class Server {
         Config.Server.thumbnail.processingLibrary = ThumbnailProcessingLib.Jimp;
       }
     }
+
+    if (Config.Client.Search.searchEnabled == true &&
+      ObjectManagerRepository.getInstance().SearchManager.isSupported() == false) {
+
+      Logger.warn(LOG_TAG, "Search is not supported with these settings, switching off..");
+      Config.Client.Search.searchEnabled = false;
+    }
+    if (Config.Client.Sharing.enabled == true &&
+      ObjectManagerRepository.getInstance().SharingManager.isSupported() == false) {
+
+      Logger.warn(LOG_TAG, "Sharing is not supported with these settings, switching off..");
+      Config.Client.Sharing.enabled = false;
+    }
   }
 
 

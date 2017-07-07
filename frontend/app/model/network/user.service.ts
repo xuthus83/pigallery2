@@ -14,7 +14,6 @@ export class UserService {
   }
 
   public logout(): Promise<string> {
-    console.log("call logout");
     return this._networkService.postJson("/user/logout");
   }
 

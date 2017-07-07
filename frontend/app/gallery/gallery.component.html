@@ -1,10 +1,15 @@
 <gallery-lightbox #lightbox (onLastElement)="onLightboxLastElement()"></gallery-lightbox>
 <app-frame>
 
-  <div navbar>
-    <gallery-share *ngIf="showShare"></gallery-share>
-    <gallery-search #search *ngIf="showSearchBar"></gallery-search>
-  </div>
+  <ng-container navbar>
+    <li *ngIf="showSearchBar">
+      <gallery-search #search></gallery-search>
+    </li>
+    <li *ngIf="showShare">
+      <gallery-share></gallery-share>
+    </li>
+    -
+  </ng-container>
 
   <div body class="container" style="width: 100%; padding:0" *ngIf="_galleryService.content.value.directory">
     <gallery-navbar [directory]="_galleryService.content.value.directory"></gallery-navbar>

@@ -1,7 +1,7 @@
 import {Component, ViewEncapsulation} from "@angular/core";
 import {RouterLink} from "@angular/router";
 import {AuthenticationService} from "../model/network/authentication.service";
-import {UserDTO} from "../../../common/entities/UserDTO";
+import {UserDTO, UserRoles} from "../../../common/entities/UserDTO";
 import {Config} from "../../../common/config/public/Config";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
 
@@ -17,6 +17,7 @@ export class FrameComponent {
   user: BehaviorSubject<UserDTO>;
   authenticationRequired: boolean = false;
   public title: string;
+  isIn: boolean = false;
 
   constructor(private _authService: AuthenticationService) {
     this.user = this._authService.user;
@@ -24,10 +25,17 @@ export class FrameComponent {
     this.title = Config.Client.applicationTitle;
   }
 
+  toggleState() { // click handler
+    this.isIn = !this.isIn;
+  }
+
+  isAdmin() {
+    return this.user.value && this.user.value.role >= UserRoles.Admin;
+  }
+
 
   logout() {
     this._authService.logout();
   }
-
 }
 

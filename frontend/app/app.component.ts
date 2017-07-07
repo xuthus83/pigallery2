@@ -22,7 +22,7 @@ export class AppComponent implements OnInit {
           this._router.navigate(["gallery", ""]);
         }
       } else {
-        if (this._router.isActive('login', true)) {
+        if (!this._router.isActive('login', true)) {
           console.log("routing");
           this._router.navigate(["login"]);
         }

@@ -1,31 +1,30 @@
-<div class="col-sm-3 col-md-4 pull-right">
-    <form class="navbar-form" role="search" #SearchForm="ngForm">
-        <div class="input-group">
-            <input type="text" class="form-control" placeholder="Search" (keyup)="onSearchChange($event)"
-                   (blur)="onFocusLost()" (focus)="onFocus()" [(ngModel)]="searchText" #name="ngModel"
-                   ngControl="search"
-                   name="srch-term" id="srch-term" autocomplete="off">
+<form class="navbar-form" role="search" #SearchForm="ngForm">
+  <div class="input-group">
+    <input type="text" class="form-control" placeholder="Search" (keyup)="onSearchChange($event)"
+           (blur)="onFocusLost()" (focus)="onFocus()" [(ngModel)]="searchText" #name="ngModel"
+           ngControl="search"
+           name="srch-term" id="srch-term" autocomplete="off">
 
-            <div class="autocomplete-list" *ngIf="autoCompleteItems.length > 0"
-                 (mouseover)="setMouseOverAutoComplete(true)" (mouseout)="setMouseOverAutoComplete(false)">
-                <div class="autocomplete-item" *ngFor="let item of autoCompleteItems">
-                    <a [routerLink]="['/search', item.text, {type: SearchTypes[item.type]}]">
+    <div class="autocomplete-list" *ngIf="autoCompleteItems.length > 0"
+         (mouseover)="setMouseOverAutoComplete(true)" (mouseout)="setMouseOverAutoComplete(false)">
+      <div class="autocomplete-item" *ngFor="let item of autoCompleteItems">
+        <a [routerLink]="['/search', item.text, {type: SearchTypes[item.type]}]">
                     <span [ngSwitch]="item.type">
                         <span *ngSwitchCase="0" class="glyphicon glyphicon-picture"></span>
                         <span *ngSwitchCase="1" class="glyphicon glyphicon-folder-open"></span>
                         <span *ngSwitchCase="2" class="glyphicon glyphicon-tag"></span>
                         <span *ngSwitchCase="3" class="glyphicon glyphicon-map-marker"></span>
                     </span>
-                        {{item.preText}}<strong>{{item.highLightText}}</strong>{{item.postText}}
-                    </a>
-                </div>
-            </div>
+          {{item.preText}}<strong>{{item.highLightText}}</strong>{{item.postText}}
+        </a>
+      </div>
+    </div>
 
-            <div class="input-group-btn" style="display: block">
-                <button class="btn btn-default dropdown-toggle" type="button" (click)="onSearch()"><i
-                        class="glyphicon glyphicon-search"></i>
-                </button>
-            </div>
-        </div>
-    </form>
-</div>
+    <div class="input-group-btn" style="display: block">
+      <button class="btn btn-default dropdown-toggle" type="button" (click)="onSearch()"><i
+        class="glyphicon glyphicon-search"></i>
+      </button>
+    </div>
+  </div>
+</form>
+

@@ -20,7 +20,7 @@ export class UserEntity implements UserDTO {
   @Column("int")
   role: UserRoles;
 
-  @Column("string")
+  @Column("string", {nullable: true})
   permissions: string[];
 
 }

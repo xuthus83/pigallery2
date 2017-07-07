@@ -6,6 +6,10 @@ import {Config} from "../../../common/config/private/Config";
 
 export class SharingManager implements ISharingManager {
 
+  isSupported(): boolean {
+    return true;
+  }
+
   private async removeExpiredLink() {
     const connection = await MySQLConnection.getConnection();
     return connection

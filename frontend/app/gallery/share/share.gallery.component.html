@@ -1,10 +1,9 @@
-<div class="col-sm-2 col-md-2 pull-right">
-  <button id="shareButton" class="btn btn-default navbar-btn btn-link" type="button"
-          data-toggle="modal" data-target="#shareModal" [disabled]="!enabled" (click)="get()">
-    <span class="glyphicon glyphicon-share-alt"></span>
-    Share
-  </button>
-</div>
+<button id="shareButton" class="btn btn-default navbar-btn btn-link" type="button"
+        data-toggle="modal" data-target="#shareModal" [disabled]="!enabled" (click)="get()">
+  <span class="glyphicon glyphicon-share-alt"></span>
+  Share
+</button>
+
 <!-- sharing Modal-->
 <div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-labelledby="shareModalLabel"
      data-backdrop="false"

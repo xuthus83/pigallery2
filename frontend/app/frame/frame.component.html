@@ -1,32 +1,45 @@
 <nav class="navbar navbar-inverse navbar-static-top">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
-              aria-expanded="false" aria-controls="navbar">
+      <button type="button" class="navbar-toggle collapsed"
+              data-toggle="collapse" data-target="#navbar"
+              aria-expanded="false" aria-controls="navbar"
+              (click)="toggleState()">
         <span class="sr-only">Toggle navigation</span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#"><img src="assets/icon_inv.png" style="max-height: 26px; display: inline;"/>
+      <a class="navbar-brand" [routerLink]="['/gallery','/']"><img src="assets/icon_inv.png"
+                                                                   style="max-height: 26px; display: inline;"/>
         {{title}}</a>
     </div>
-    <div id="navbar" class="collapse navbar-collapse">
+    <div id="navbar" class="collapse navbar-collapse" [ngClass]="{ 'in': isIn }">
       <ul class="nav navbar-nav">
-        <li class="active"><a [routerLink]="['/gallery','/']">Gallery</a></li>
-        <li><a [routerLink]="['/admin']">Admin</a></li>
       </ul>
 
-      <ul class="nav navbar-nav navbar-right" *ngIf="authenticationRequired">
-        <li>
-          <p class="navbar-text" *ngIf="user.value">{{user.value.name}}</p>
+      <ul class="nav navbar-nav navbar-right">
+        <ng-content select="[navbar]"></ng-content>
+        <li class="divider-vertical">
         </li>
         <li>
-          <a style="cursor: pointer" (click)="logout()">Logout</a>
+          <p class="navbar-text" *ngIf="user.value">
+            <span class="glyphicon glyphicon-user" aria-hidden="true"></span> {{user.value.name}}</p>
+        </li>
+        <li *ngIf="isAdmin()">
+          <a style="cursor: pointer"
+             class="admin-link"
+             [routerLink]="['/admin']"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+          </a>
+        </li>
+        <li *ngIf="authenticationRequired">
+          <button class="btn btn-default navbar-btn"
+                  style="cursor: pointer"
+                  (click)="logout()">Logout <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>
+          </button>
         </li>
       </ul>
 
-      <ng-content select="[navbar]"></ng-content>
 
     </div><!--/.nav-collapse -->
   </div>
