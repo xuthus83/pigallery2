@@ -5,6 +5,7 @@
            ngControl="search"
            name="srch-term" id="srch-term" autocomplete="off">
 
+
     <div class="autocomplete-list" *ngIf="autoCompleteItems.length > 0"
          (mouseover)="setMouseOverAutoComplete(true)" (mouseout)="setMouseOverAutoComplete(false)">
       <div class="autocomplete-item" *ngFor="let item of autoCompleteItems">

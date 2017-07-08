@@ -36,6 +36,7 @@ import {SlimLoadingBarModule} from "ng2-slim-loading-bar";
 import {GalleryShareComponent} from "./gallery/share/share.gallery.component";
 import {ShareLoginComponent} from "./sharelogin/share-login.component";
 import {ShareService} from "./gallery/share.service";
+import {TypeaheadModule} from "ngx-bootstrap";
 
 @Injectable()
 export class GoogleMapsConfig {
@@ -52,6 +53,7 @@ export class GoogleMapsConfig {
     FormsModule,
     HttpModule,
     appRoutes,
+    TypeaheadModule.forRoot(),
     AgmCoreModule.forRoot(),
     SlimLoadingBarModule.forRoot()
   ],

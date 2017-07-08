@@ -116,6 +116,7 @@ export class GallerySearchComponent {
   }
 
   private showSuggestions(suggestions: Array<AutoCompleteItem>, searchText: string) {
+    console.log(suggestions);
     this.emptyAutoComplete();
     suggestions.forEach((item: AutoCompleteItem) => {
       let renderItem = new AutoCompleteRenderItem(item.text, searchText, item.type);

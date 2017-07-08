@@ -88,6 +88,7 @@ export class AuthenticationMWs {
       (typeof req.body.loginCredential.password === 'undefined')) {
       return next(new Error(ErrorCodes.INPUT_ERROR));
     }
+    //TODO: implement remember me
     try {
       //lets find the user
       req.session.user = await ObjectManagerRepository.getInstance().UserManager.findOne({
