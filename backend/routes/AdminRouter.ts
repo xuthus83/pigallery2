@@ -1,11 +1,14 @@
 import {AuthenticationMWs} from "../middlewares/user/AuthenticationMWs";
 import {UserRoles} from "../../common/entities/UserDTO";
+import {RenderingMWs} from "../middlewares/RenderingMWs";
+import {AdminMWs} from "../middlewares/AdminMWs";
 
 export class AdminRouter {
   public static route(app: any) {
 
     this.addResetDB(app);
     this.addIndexGallery(app);
+    this.addSettings(app);
   }
 
   private static addResetDB(app) {
@@ -21,6 +24,29 @@ export class AdminRouter {
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Admin)
       //TODO: implement
+    );
+  };
+
+  private static addSettings(app) {
+    app.get("/api/settings",
+      AuthenticationMWs.authenticate,
+      AuthenticationMWs.authorise(UserRoles.Admin),
+      RenderingMWs.renderConfig
+    );
+
+
+    app.put("/api/settings/database",
+      AuthenticationMWs.authenticate,
+      AuthenticationMWs.authorise(UserRoles.Admin),
+      AdminMWs.updateDatabaseSettings,
+      RenderingMWs.renderOK
+    );
+
+    app.post("/api/settings/test/database",
+      AuthenticationMWs.authenticate,
+      AuthenticationMWs.authorise(UserRoles.Admin),
+      AdminMWs.testDatabaseSettings,
+      RenderingMWs.renderOK
     );
   };
 

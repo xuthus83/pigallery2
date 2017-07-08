@@ -3,6 +3,8 @@ import {Error, ErrorCodes} from "../../common/entities/Error";
 import {Utils} from "../../common/Utils";
 import {Message} from "../../common/entities/Message";
 import {SharingDTO} from "../../common/entities/SharingDTO";
+import {Config} from "../../common/config/private/Config";
+import {PrivateConfigClass} from "../../common/config/private/PrivateConfigClass";
 
 export class RenderingMWs {
 
@@ -44,6 +46,13 @@ export class RenderingMWs {
     let message = new Message<string>(null, "ok");
     res.json(message);
   }
+
+
+  public static renderConfig(req: Request, res: Response, next: NextFunction) {
+    let message = new Message<PrivateConfigClass>(null, Config);
+    res.json(message);
+  }
+
 
   public static renderError(err: any, req: Request, res: Response, next: NextFunction): any {
     if (err instanceof Error) {

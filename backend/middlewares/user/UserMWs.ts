@@ -96,8 +96,8 @@ export class UserMWs {
       for (let i = 0; i < result.length; i++) {
         result[i].password = "";
       }
-
       req.resultPipe = result;
+      next();
     } catch (err) {
       return next(new Error(ErrorCodes.GENERAL_ERROR));
     }

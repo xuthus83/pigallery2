@@ -9,7 +9,7 @@ interface SharingConfig {
   passwordProtected: boolean;
 }
 
-interface ClientConfig {
+export interface ClientConfig {
   applicationTitle: string;
   iconSize: number;
   thumbnailSizes: Array<number>;

@@ -36,7 +36,11 @@ import {SlimLoadingBarModule} from "ng2-slim-loading-bar";
 import {GalleryShareComponent} from "./gallery/share/share.gallery.component";
 import {ShareLoginComponent} from "./sharelogin/share-login.component";
 import {ShareService} from "./gallery/share.service";
-import {TypeaheadModule} from "ngx-bootstrap";
+import {ModalModule} from "ngx-bootstrap/modal";
+import {DatabaseSettingsComponent} from "./settings/database/database.settings.component";
+import {ToastModule} from "ng2-toastr/ng2-toastr";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {NotificationService} from "./model/notification.service";
 
 @Injectable()
 export class GoogleMapsConfig {
@@ -52,18 +56,19 @@ export class GoogleMapsConfig {
     BrowserModule,
     FormsModule,
     HttpModule,
+    BrowserAnimationsModule,
     appRoutes,
-    TypeaheadModule.forRoot(),
+    ToastModule.forRoot(),
+    ModalModule.forRoot(),
     AgmCoreModule.forRoot(),
     SlimLoadingBarModule.forRoot()
   ],
   declarations: [AppComponent,
     LoginComponent,
     ShareLoginComponent,
-    AdminComponent,
     GalleryComponent,
     FrameComponent,
-    UserMangerSettingsComponent,
+    //Gallery
     GalleryLightboxPhotoComponent,
     GalleryPhotoLoadingComponent,
     GalleryGridComponent,
@@ -76,7 +81,10 @@ export class GoogleMapsConfig {
     GalleryShareComponent,
     GalleryNavigatorComponent,
     GalleryPhotoComponent,
-    FrameComponent,
+    AdminComponent,
+    //Settings
+    UserMangerSettingsComponent,
+    DatabaseSettingsComponent,
     StringifyRole],
   providers: [
     {provide: LAZY_MAPS_API_CONFIG, useClass: GoogleMapsConfig},
@@ -88,6 +96,7 @@ export class GoogleMapsConfig {
     AuthenticationService,
     ThumbnailLoaderService,
     ThumbnailManagerService,
+    NotificationService,
     FullScreenService,
     OverlayService],
 

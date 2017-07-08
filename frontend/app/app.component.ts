@@ -1,9 +1,10 @@
-import {Component, OnInit} from "@angular/core";
+import {Component, OnInit, ViewContainerRef} from "@angular/core";
 import {AuthenticationService} from "./model/network/authentication.service";
 import {UserDTO} from "../../common/entities/UserDTO";
 import {Router} from "@angular/router";
 import {Config} from "../../common/config/public/Config";
 import {Title} from "@angular/platform-browser";
+import {NotificationService} from "./model/notification.service";
 
 
 @Component({
@@ -13,7 +14,11 @@ import {Title} from "@angular/platform-browser";
 })
 export class AppComponent implements OnInit {
 
-  constructor(private _router: Router, private _authenticationService: AuthenticationService, private  _title: Title) {
+  constructor(private _router: Router,
+              private _authenticationService: AuthenticationService,
+              private  _title: Title, vcr: ViewContainerRef,
+              notificatin: NotificationService) {
+    notificatin.setRootViewContainerRef(vcr);
   }
 
   ngOnInit() {

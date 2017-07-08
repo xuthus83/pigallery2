@@ -6,12 +6,16 @@ export class Utils {
   }
 
   static equalsFilter(object: any, filter: any): boolean {
-
-    let keys = Object.keys(filter);
+    const keys = Object.keys(filter);
     for (let i = 0; i < keys.length; i++) {
-      let key = keys[i];
-      if (object[key] !== filter[key]) {
+      const key = keys[i];
+      if (typeof filter[key] === "object") {
+        if (Utils.equalsFilter(object[key], filter[key]) == false) {
+          return false;
+        }
+      } else if (object[key] !== filter[key]) {
         return false;
+
       }
     }
 
@@ -19,7 +23,8 @@ export class Utils {
   }
 
 
-  static concatUrls(...args: Array<string>) {
+  static
+  concatUrls(...args: Array<string>) {
     let url = "";
     for (let i = 0; i < args.length; i++) {
       if (args[i] === "" || typeof args[i] === "undefined") continue;
@@ -34,7 +39,8 @@ export class Utils {
     return url.substring(0, url.length - 1);
   }
 
-  public static updateKeys(targetObject: any, sourceObject: any) {
+  public static
+  updateKeys(targetObject: any, sourceObject: any) {
     Object.keys(sourceObject).forEach((key) => {
       if (typeof targetObject[key] === "undefined") {
         return;
@@ -47,7 +53,8 @@ export class Utils {
     });
   }
 
-  public static setKeys(targetObject: any, sourceObject: any) {
+  public static
+  setKeys(targetObject: any, sourceObject: any) {
     Object.keys(sourceObject).forEach((key) => {
       if (typeof targetObject[key] === "object") {
         Utils.setKeys(targetObject[key], sourceObject[key]);
@@ -57,7 +64,8 @@ export class Utils {
     });
   }
 
-  public static setKeysForced(targetObject: any, sourceObject: any) {
+  public static
+  setKeysForced(targetObject: any, sourceObject: any) {
     Object.keys(sourceObject).forEach((key) => {
       if (typeof sourceObject[key] === "object") {
         if (typeof targetObject[key] === "undefined") {
@@ -70,7 +78,11 @@ export class Utils {
     });
   }
 
-  public static enumToArray(EnumType: any): Array<{ key: number; value: string; }> {
+  public static
+  enumToArray(EnumType: any): Array<{
+    key: number;
+    value: string;
+  }> {
     let arr: Array<{ key: number; value: string; }> = [];
     for (let enumMember in EnumType) {
       if (!EnumType.hasOwnProperty(enumMember)) {
@@ -85,7 +97,8 @@ export class Utils {
   }
 
 
-  public static findClosest(number: number, arr: Array<number>) {
+  public static
+  findClosest(number: number, arr: Array<number>) {
 
     let curr = arr[0];
     let diff = Math.abs(number - curr);

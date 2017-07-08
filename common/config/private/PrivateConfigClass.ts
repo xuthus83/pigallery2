@@ -1,11 +1,12 @@
 import {PublicConfigClass} from "../public/ConfigClass";
-import {DatabaseType, ServerConfig, ThumbnailProcessingLib} from "./IPrivateConfig";
-
+import {DatabaseType, IPrivateConfig, ServerConfig, ThumbnailProcessingLib} from "./IPrivateConfig";
+import * as path from "path";
+import {ConfigLoader} from "typeconfig";
 
 /**
  * This configuration will be only at backend
  */
-export class PrivateConfigClass extends PublicConfigClass {
+export class PrivateConfigClass extends PublicConfigClass implements IPrivateConfig {
 
   public Server: ServerConfig = {
     port: 80,
@@ -30,6 +31,7 @@ export class PrivateConfigClass extends PublicConfigClass {
     },
     enableThreading: true
   };
+  private ConfigLoader: any;
 
   public setDatabaseType(type: DatabaseType) {
     this.Server.database.type = type;
@@ -40,5 +42,15 @@ export class PrivateConfigClass extends PublicConfigClass {
     }
   }
 
+  public load() {
+    ConfigLoader.loadBackendConfig(this,
+      path.join(__dirname, './../../../config.json'),
+      [["PORT", "Server-port"]]);
+
+  }
+
+  public save() {
+    ConfigLoader.saveConfigFile(path.join(__dirname, './../../../config.json'), this);
+  }
 }
 

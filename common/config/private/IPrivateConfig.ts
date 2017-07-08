@@ -1,3 +1,4 @@
+import {ClientConfig} from "../public/ConfigClass";
 export enum DatabaseType{
   memory = 0, mysql = 1
 }
@@ -36,4 +37,8 @@ export interface ServerConfig {
   database: DataBaseConfig;
   enableThreading: boolean;
   sharing: SharingConfig;
+}
+export interface IPrivateConfig {
+  Server: ServerConfig;
+  Client: ClientConfig;
 }

@@ -15,8 +15,9 @@ export enum ErrorCodes{
 
   USER_MANAGEMENT_DISABLED = 9,
 
-  INPUT_ERROR = 10
+  INPUT_ERROR = 10,
 
+  SETTINGS_ERROR = 11
 }
 
 export class Error {
