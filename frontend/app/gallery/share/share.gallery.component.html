@@ -1,70 +1,98 @@
-<button id="shareButton" class="btn btn-default navbar-btn btn-link" type="button"
-        data-toggle="modal" data-target="#shareModal" [disabled]="!enabled" (click)="get()">
+<button id="shareButton" class="btn btn-default navbar-btn btn-link"
+        type="button" [disabled]="!enabled" (click)="showModal()">
   <span class="glyphicon glyphicon-share-alt"></span>
   Share
 </button>
 
 <!-- sharing Modal-->
-<div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-labelledby="shareModalLabel"
-     data-backdrop="false"
+<div bsModal #shareModal="bs-modal"
+     class="modal fade" id="shareModal"
+     tabindex="-1" role="dialog" aria-labelledby="shareModalLabel"
+     [config]="{ backdrop: false }"
      aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+        <button type="button" class="close" (click)="shareModal.hide()" aria-label="Close"><span
           aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="shareModalLabel">Share</h4>
       </div>
       <div class="modal-body">
         <div class="row">
           <div class="col-sm-10">
-            <input id="shareLink" name="shareLink" placeholder="link" class="form-control input-md" type="text"
+            <input id="shareLink"
+                   name="shareLink"
+                   placeholder="link"
+                   class="form-control input-md"
+                   type="text"
                    [ngModel]="url">
           </div>
           <div class="col-sm-2 pull-right">
-            <button id="copyButton" name="copyButton" data-clipboard-target="shareLink" class="btn btn-primary">Copy
+            <button id="copyButton" name="copyButton"
+                    ngxClipboard [cbContent]="url"
+                    (cbOnSuccess)="onCopy()"
+                    class="btn btn-primary">Copy
             </button>
           </div>
         </div>
         <hr/>
-        <div class="form-horizontal">
-          <div class="form-group" style="padding: 0 15px 0 15px;">
-
-            <div style="display: inline;">
-              <label class="control-label">sharing:</label>
-              <div class="form-control-static" id="sharingPath">{{currentDir}}</div>
-            </div>
-
-            <label class="checkbox pull-right">
-              <input id="recursiveShareBox" type="checkbox" (change)="update()" [(ngModel)]="input.includeSubfolders"
-                     checked="true" value="remember-me"> Include subfolders
-            </label>
-
-
+        <div class="row">
+          <div class="col-sm-2">
+            <label class="control-label">Sharing:</label>
+          </div>
+          <div class="col-sm-10">
+            <input disabled type="text"
+                   class="full-width form-control"
+                   [ngModel]="currentDir">
           </div>
         </div>
+
         <div class="row">
-          <div class="col-sm-4">
-            Valid:
-            <p id="sliderText"></p>
+          <div class="col-sm-2">
+            <label class="control-label">Include subfolders:</label>
           </div>
           <div class="col-sm-4">
-            <input id="shareSlider" data-slider-id='shareSlider' [(ngModel)]="input.valid.amount" (change)="update()"
+            <input id="recursiveShareBox"
+                   type="checkbox"
+                   (change)="update()"
+                   [(ngModel)]="input.includeSubfolders"
+                   checked="checked"
+                   value="remember-me">
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-2">
+            <label class="control-label">Password:</label>
+          </div>
+          <div class="col-sm-4">
+            <input id="password"
+                   class="form-control"
+                   type="password"
+                   (change)="update()"
+                   [(ngModel)]="input.password"
+                   placeholder="Password">
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-2">
+            <label class="control-label">Valid:</label>
+          </div>
+          <div class="col-sm-3" style="padding-right: 1px">
+            <input class="form-control" [(ngModel)]="input.valid.amount" (change)="update()"
                    name="validAmount"
                    type="number" min="0" step="1"/>
           </div>
-          <div class="col-sm-4">
-            <select class="form-control" [(ngModel)]="input.valid.type" (change)="update()" name="validType" required>
+          <div class="col-sm-3" style="padding-left: 1px">
+            <select class="form-control  col-md-3" [(ngModel)]="input.valid.type" (change)="update()" name="validType"
+                    required>
               <option *ngFor="let repository of validityTypes" [value]="repository.key">{{repository.value}}
               </option>
             </select>
           </div>
         </div>
-        <div class="row">
-          <div class="col-sm-2 col-sm-push-10">
-            <button id="updatebutton" name="updatebutton" class="btn btn-primary">Update</button>
-          </div>
-        </div>
+
 
       </div>
     </div>

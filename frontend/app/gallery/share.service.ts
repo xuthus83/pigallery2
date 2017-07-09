@@ -2,10 +2,12 @@ import {Injectable} from "@angular/core";
 import {NetworkService} from "../model/network/network.service";
 import {CreateSharingDTO, SharingDTO} from "../../../common/entities/SharingDTO";
 import {Router, RoutesRecognized} from "@angular/router";
+import {BehaviorSubject} from "rxjs/BehaviorSubject";
 
 @Injectable()
 export class ShareService {
 
+  public sharing: BehaviorSubject<SharingDTO>;
   param = null;
   queryParam = null;
   sharingKey = null;
@@ -15,7 +17,7 @@ export class ShareService {
 
 
   constructor(private _networkService: NetworkService, private router: Router) {
-
+    this.sharing = new BehaviorSubject(null);
     this.ReadyPR = new Promise((resolve) => {
       if (this.inited == true) {
         return resolve();
@@ -27,7 +29,11 @@ export class ShareService {
       if (val instanceof RoutesRecognized) {
         this.param = val.state.root.firstChild.params["sharingKey"] || null;
         this.queryParam = val.state.root.firstChild.queryParams["sk"] || null;
-        this.sharingKey = this.param || this.queryParam;
+        const changed = this.sharingKey != this.param || this.queryParam;
+        if (changed) {
+          this.sharingKey = this.param || this.queryParam;
+          this.getSharing();
+        }
         if (this.resolve) {
           this.resolve();
           this.inited = true;
@@ -43,7 +49,7 @@ export class ShareService {
     return this.ReadyPR;
   }
 
-  public getSharing(dir: string, includeSubfolders: boolean, valid: number): Promise<SharingDTO> {
+  public createSharing(dir: string, includeSubfolders: boolean, valid: number): Promise<SharingDTO> {
     return this._networkService.postJson("/share/" + dir, {
       createSharing: <CreateSharingDTO>{
         includeSubfolders: includeSubfolders,
@@ -69,5 +75,11 @@ export class ShareService {
   public isSharing(): boolean {
     return this.sharingKey != null;
 
+  }
+
+  public async getSharing(): Promise<SharingDTO> {
+    const sharing = await this._networkService.getJson<SharingDTO>("/share/" + this.getSharingKey());
+    this.sharing.next(sharing);
+    return sharing;
   }
 }

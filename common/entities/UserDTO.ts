@@ -1,8 +1,8 @@
 import {DirectoryDTO} from "./DirectoryDTO";
 import {Utils} from "../Utils";
 export enum UserRoles{
-  Guest = 0,
-  TrustedGuest = 1,
+  LimitedGuest = 0,
+  Guest = 1,
   User = 2,
   Admin = 3,
   Developer = 4,
@@ -17,7 +17,7 @@ export interface UserDTO {
   permissions: string[]; //user can only see these permissions. if ends with *, its recursive
 }
 
-export module UserUtil {
+export module UserDTO {
 
   export const isPathAvailable = (path: string, permissions: string[]): boolean => {
     if (permissions == null || permissions.length == 0 || permissions[0] == "/") {

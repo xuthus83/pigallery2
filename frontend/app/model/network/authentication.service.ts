@@ -43,9 +43,16 @@ export class AuthenticationService {
 
 
   public async login(credential: LoginCredential): Promise<UserDTO> {
-      const user = await this._userService.login(credential);
-      this.user.next(user);
-      return user;
+    const user = await this._userService.login(credential);
+    this.user.next(user);
+    return user;
+  }
+
+
+  public async shareLogin(password: string): Promise<UserDTO> {
+    const user = await this._userService.shareLogin(password);
+    this.user.next(user);
+    return user;
   }
 
 
@@ -56,7 +63,9 @@ export class AuthenticationService {
     return !!(this.user.value && this.user.value != null);
   }
 
-
+  public isAuthorized(role: UserRoles) {
+    return this.user.value && this.user.value.role >= role;
+  }
 
   public logout() {
     this._userService.logout();

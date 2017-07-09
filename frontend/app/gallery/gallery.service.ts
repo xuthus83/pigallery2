@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
 import {NetworkService} from "../model/network/network.service";
 import {ContentWrapper} from "../../../common/entities/ConentWrapper";
-import {DirectoryDTO, DirectoryUtil} from "../../../common/entities/DirectoryDTO";
+import {DirectoryDTO} from "../../../common/entities/DirectoryDTO";
 import {SearchTypes} from "../../../common/entities/AutoCompleteItem";
 import {GalleryCacheService} from "./cache.gallery.service";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
@@ -53,7 +53,7 @@ export class GalleryService {
     }
 
 
-    DirectoryUtil.addReferences(cw.directory);
+    DirectoryDTO.addReferences(cw.directory);
 
 
     this.lastDirectory = cw.directory;

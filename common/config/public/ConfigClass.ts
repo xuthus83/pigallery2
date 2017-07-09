@@ -21,6 +21,7 @@ export interface ClientConfig {
   enableOnScrollThumbnailPrioritising: boolean;
   authenticationRequired: boolean;
   googleApiKey: string;
+  publicUrl: string;
 }
 
 /**
@@ -46,7 +47,8 @@ export class PublicConfigClass {
     enableOnScrollRendering: true,
     enableOnScrollThumbnailPrioritising: true,
     authenticationRequired: true,
-    googleApiKey: ""
+    googleApiKey: "",
+    publicUrl: ""
   };
 
 }

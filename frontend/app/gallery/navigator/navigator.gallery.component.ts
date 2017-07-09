@@ -1,7 +1,7 @@
 import {Component, Input, OnChanges} from "@angular/core";
 import {DirectoryDTO} from "../../../../common/entities/DirectoryDTO";
 import {RouterLink} from "@angular/router";
-import {UserUtil} from "../../../../common/entities/UserDTO";
+import {UserDTO} from "../../../../common/entities/UserDTO";
 import {AuthenticationService} from "../../model/network/authentication.service";
 import {ShareService} from "../share.service";
 
@@ -49,7 +49,7 @@ export class GalleryNavigatorComponent implements OnChanges {
     if (dirs.length == 0) {
       arr.push({name: "Images", route: null});
     } else {
-      arr.push({name: "Images", route: UserUtil.isPathAvailable("/", user.permissions) ? "/" : null});
+      arr.push({name: "Images", route: UserDTO.isPathAvailable("/", user.permissions) ? "/" : null});
 
     }
 
@@ -59,7 +59,7 @@ export class GalleryNavigatorComponent implements OnChanges {
       if (dirs.length - 1 == index) {
         arr.push({name: name, route: null});
       } else {
-        arr.push({name: name, route: UserUtil.isPathAvailable(route, user.permissions) ? route : null});
+        arr.push({name: name, route: UserDTO.isPathAvailable(route, user.permissions) ? route : null});
       }
     });
 

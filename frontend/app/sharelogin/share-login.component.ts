@@ -1,8 +1,8 @@
 import {Component, OnInit} from "@angular/core";
-import {LoginCredential} from "../../../common/entities/LoginCredential";
 import {AuthenticationService} from "../model/network/authentication.service";
-import {Router} from "@angular/router";
 import {ErrorCodes} from "../../../common/entities/Error";
+import {Config} from "../../../common/config/public/Config";
+import {NavigationService} from "../model/navigation.service";
 
 @Component({
   selector: 'share-login',
@@ -10,16 +10,17 @@ import {ErrorCodes} from "../../../common/entities/Error";
   styleUrls: ['./share-login.component.css'],
 })
 export class ShareLoginComponent implements OnInit {
-  loginCredential: LoginCredential;
+  password: string;
   loginError: any = null;
+  title: string;
 
-  constructor(private _authService: AuthenticationService, private _router: Router) {
-    this.loginCredential = new LoginCredential();
+  constructor(private _authService: AuthenticationService, private _navigation: NavigationService) {
+    this.title = Config.Client.applicationTitle;
   }
 
   ngOnInit() {
     if (this._authService.isAuthenticated()) {
-      this._router.navigate(['gallery', "/"]);
+      this._navigation.toGallery();
     }
   }
 
@@ -27,11 +28,11 @@ export class ShareLoginComponent implements OnInit {
     this.loginError = null;
 
     try {
-      await this._authService.login(this.loginCredential);
+      await this._authService.shareLogin(this.password);
 
     } catch (error) {
       if (error && error.code === ErrorCodes.CREDENTIAL_NOT_FOUND) {
-        this.loginError = "Wrong username or password";
+        this.loginError = "Wrong password";
       }
     }
   }

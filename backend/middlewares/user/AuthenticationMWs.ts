@@ -1,7 +1,7 @@
 ///<reference path="../customtypings/ExtendedRequest.d.ts"/>
 import {NextFunction, Request, Response} from "express";
 import {Error, ErrorCodes} from "../../../common/entities/Error";
-import {UserDTO, UserRoles, UserUtil} from "../../../common/entities/UserDTO";
+import {UserDTO, UserRoles} from "../../../common/entities/UserDTO";
 import {ObjectManagerRepository} from "../../model/ObjectManagerRepository";
 import {Config} from "../../../common/config/private/Config";
 
@@ -9,12 +9,15 @@ export class AuthenticationMWs {
 
   private static async getSharingUser(req: Request) {
     if (Config.Client.Sharing.enabled === true &&
-      Config.Client.Sharing.passwordProtected === false &&
       (!!req.query.sk || !!req.params.sharingKey)) {
       const sharing = await ObjectManagerRepository.getInstance().SharingManager.findOne({
         sharingKey: req.query.sk || req.params.sharingKey,
       });
-      if (!sharing) {
+      if (!sharing || sharing.expires < Date.now()) {
+        return null;
+      }
+
+      if (Config.Client.Sharing.passwordProtected === true && sharing.password) {
         return null;
       }
 
@@ -22,7 +25,7 @@ export class AuthenticationMWs {
       if (sharing.includeSubfolders == true) {
         path += "*";
       }
-      return <UserDTO>{name: "Guest", role: UserRoles.Guest, permissions: [path]};
+      return <UserDTO>{name: "Guest", role: UserRoles.LimitedGuest, permissions: [path]};
 
     }
     return null;
@@ -67,7 +70,7 @@ export class AuthenticationMWs {
     }
 
     const directoryName = req.params.directory || "/";
-    if (UserUtil.isPathAvailable(directoryName, req.session.user.permissions) == true) {
+    if (UserDTO.isPathAvailable(directoryName, req.session.user.permissions) == true) {
       return next();
 
     }
@@ -114,6 +117,42 @@ export class AuthenticationMWs {
       return next(new Error(ErrorCodes.CREDENTIAL_NOT_FOUND));
     }
 
+
+  }
+
+
+  public static async shareLogin(req: Request, res: Response, next: NextFunction) {
+
+    if (Config.Client.Sharing.enabled === false) {
+      return next();
+    }
+    //not enough parameter
+    if ((!req.query.sk && !req.params.sharingKey)) {
+      return next(new Error(ErrorCodes.INPUT_ERROR));
+    }
+
+    try {
+      const password = (req.body ? req.body.password : null) || null;
+
+      const sharing = await ObjectManagerRepository.getInstance().SharingManager.findOne({
+        sharingKey: req.query.sk || req.params.sharingKey,
+      });
+      if (!sharing || sharing.expires < Date.now() ||
+        (Config.Client.Sharing.passwordProtected === true && sharing.password !== password)) {
+        return next(new Error(ErrorCodes.CREDENTIAL_NOT_FOUND));
+      }
+
+      let path = sharing.path;
+      if (sharing.includeSubfolders == true) {
+        path += "*";
+      }
+
+      req.session.user = <UserDTO>{name: "Guest", role: UserRoles.LimitedGuest, permissions: [path]};
+      return next();
+
+    } catch (err) {
+      return next(new Error(ErrorCodes.GENERAL_ERROR));
+    }
 
   }
 

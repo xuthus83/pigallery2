@@ -10,8 +10,8 @@ export interface DirectoryDTO {
   photos: Array<PhotoDTO>;
 }
 
-export module DirectoryUtil {
-  export const addReferences = (dir: DirectoryDTO) => {
+export module DirectoryDTO {
+  export const addReferences = (dir: DirectoryDTO): void => {
     dir.photos.forEach((photo: PhotoDTO) => {
       photo.directory = dir;
     });

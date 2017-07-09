@@ -86,7 +86,7 @@ describe('Authentication middleware', () => {
       let req: any = {
         session: {
           user: {
-            role: UserRoles.Guest
+            role: UserRoles.LimitedGuest
           }
         }
       };
@@ -94,7 +94,7 @@ describe('Authentication middleware', () => {
         expect(err).to.be.undefined;
         done();
       };
-      AuthenticationMWs.authorise(UserRoles.Guest)(req, null, next);
+      AuthenticationMWs.authorise(UserRoles.LimitedGuest)(req, null, next);
 
     });
 
@@ -102,7 +102,7 @@ describe('Authentication middleware', () => {
       let req: any = {
         session: {
           user: {
-            role: UserRoles.Guest
+            role: UserRoles.LimitedGuest
           }
         }
       };
@@ -230,7 +230,7 @@ describe('Authentication middleware', () => {
       let req: any = {
         session: {
           user: {
-            role: UserRoles.Guest
+            role: UserRoles.LimitedGuest
           }
         }
       };

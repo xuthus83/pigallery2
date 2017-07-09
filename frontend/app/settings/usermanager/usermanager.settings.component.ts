@@ -1,10 +1,10 @@
 import {Component, OnInit, ViewChild} from "@angular/core";
 import {AuthenticationService} from "../../model/network/authentication.service";
-import {Router} from "@angular/router";
 import {UserDTO, UserRoles} from "../../../../common/entities/UserDTO";
 import {Utils} from "../../../../common/Utils";
 import {UserManagerSettingsService} from "./usermanager.settings.service";
 import {ModalDirective} from "ngx-bootstrap/modal";
+import {NavigationService} from "../../model/navigation.service";
 
 @Component({
   selector: 'settings-usermanager',
@@ -18,16 +18,18 @@ export class UserMangerSettingsComponent implements OnInit {
   public userRoles: Array<any> = [];
   public users: Array<UserDTO> = [];
 
-  constructor(private _authService: AuthenticationService, private _router: Router, private _userSettings: UserManagerSettingsService) {
+  constructor(private _authService: AuthenticationService, private _navigation: NavigationService, private _userSettings: UserManagerSettingsService) {
   }
 
   ngOnInit() {
-    if (!this._authService.isAuthenticated() || this._authService.user.value.role < UserRoles.Admin) {
-      this._router.navigate(['login']);
+    if (!this._authService.isAuthenticated() ||
+      this._authService.user.value.role < UserRoles.Admin) {
+      this._navigation.toLogin();
       return;
     }
     this.userRoles = Utils
       .enumToArray(UserRoles)
+      .filter(r => r.key != UserRoles.LimitedGuest)
       .filter(r => r.key <= this._authService.user.value.role)
       .sort((a, b) => a.key - b.key);
 

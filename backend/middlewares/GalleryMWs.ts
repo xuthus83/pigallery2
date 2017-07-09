@@ -10,7 +10,7 @@ import {PhotoDTO} from "../../common/entities/PhotoDTO";
 import {ProjectPath} from "../ProjectPath";
 import {Logger} from "../Logger";
 import {Config} from "../../common/config/private/Config";
-import {UserUtil} from "../../common/entities/UserDTO";
+import {UserDTO} from "../../common/entities/UserDTO";
 
 
 const LOG_TAG = "[GalleryMWs]";
@@ -32,7 +32,7 @@ export class GalleryMWs {
         req.session.user.permissions.length > 0 &&
         req.session.user.permissions[0] != "/") {
         directory.directories = directory.directories.filter(d =>
-          UserUtil.isDirectoryAvailable(d, req.session.user.permissions));
+          UserDTO.isDirectoryAvailable(d, req.session.user.permissions));
       }
       req.resultPipe = new ContentWrapper(directory, null);
       return next();

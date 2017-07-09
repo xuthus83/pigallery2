@@ -2,6 +2,12 @@
 <app-frame>
 
   <ng-container navbar>
+
+    <li *ngIf="countDown">
+      <p class="navbar-text">Link availability: {{countDown.day}} days,
+        {{("0"+countDown.hour).slice(-2)}}:{{("0"+countDown.minute).slice(-2)}}:{{("0"+countDown.second).slice(-2)}}
+      </p>
+    </li>
     <li *ngIf="showSearchBar">
       <gallery-search #search></gallery-search>
     </li>

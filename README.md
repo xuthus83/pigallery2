@@ -63,12 +63,12 @@ To configure it. Run `PiGallery2` first to create `config.json` file, then edit 
    * supporting several core CPU
    * supporting hardware acceleration ([sharp](https://github.com/lovell/sharp) and [gm](https://github.com/aheckmann/gm) as optional and JS-based [Jimp](https://github.com/oliver-moran/jimp)  as fallback)   
  * Custom lightbox for full screen photo viewing
-   * keyboard support for navigation - `In progress`
+   * keyboard support for navigation  
    * showing low-res thumbnail while full image loads
    * Information panel for showing **Exif info** - `In progress`
  * Client side caching (directories and search results)
  * Rendering **photos** with GPS coordinates **on google map**
-   * .gpx file support - `In progress`
+   * .gpx file support - `future plan`
  * **Two modes: SQL database and no-database mode**
    * both modes supports
      * user management
@@ -77,11 +77,11 @@ To configure it. Run `PiGallery2` first to create `config.json` file, then edit 
      * faster directory listing
      * searching
        * instant search, auto complete
-     * sharing - `In progress`
+     * sharing 
        * setting link expiration time
  * Nice design - `In progress`
     * responsive design (phone, tablet desktop support)
  * Setup page - `In progress`
- * **Markdown based blogging support** - `In progress`
+ * **Markdown based blogging support** - `future plan`
    * you can write some note in the blog.md for every directory
  * bug free :) - `In progress`

@@ -18,7 +18,11 @@ export class UserService {
   }
 
   public login(credential: LoginCredential): Promise<UserDTO> {
-    return this._networkService.postJson("/user/login", {"loginCredential": credential});
+    return this._networkService.postJson<UserDTO>("/user/login", {"loginCredential": credential});
+  }
+
+  public async shareLogin(password: string): Promise<UserDTO> {
+    return this._networkService.postJson<UserDTO>("/share/login?sk=" + this._shareService.getSharingKey(), {"password": password});
   }
 
   public async getSessionUser(): Promise<UserDTO> {

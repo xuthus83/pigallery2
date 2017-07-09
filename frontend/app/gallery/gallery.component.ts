@@ -9,6 +9,9 @@ import {Config} from "../../../common/config/public/Config";
 import {DirectoryDTO} from "../../../common/entities/DirectoryDTO";
 import {SearchResultDTO} from "../../../common/entities/SearchResult";
 import {ShareService} from "./share.service";
+import {NavigationService} from "../model/navigation.service";
+import {UserRoles} from "../../../common/entities/UserDTO";
+import {Observable} from "rxjs/Rx";
 
 @Component({
   selector: 'gallery',
@@ -20,41 +23,60 @@ export class GalleryComponent implements OnInit, OnDestroy {
   @ViewChild(GallerySearchComponent) search: GallerySearchComponent;
   @ViewChild(GalleryGridComponent) grid: GalleryGridComponent;
 
-  public showSearchBar: boolean = true;
-  public showShare: boolean = true;
+  public showSearchBar: boolean = false;
+  public showShare: boolean = false;
   public directories: DirectoryDTO[] = [];
   public isPhotoWithLocation = false;
+  private $counter;
   private subscription = {
     content: null,
-    route: null
+    route: null,
+    timer: null
   };
+  public countDown = null;
 
   constructor(public _galleryService: GalleryService,
               private _authService: AuthenticationService,
               private _router: Router,
               private shareService: ShareService,
-              private _route: ActivatedRoute) {
+              private _route: ActivatedRoute,
+              private _navigation: NavigationService) {
 
-    this.showSearchBar = Config.Client.Search.searchEnabled;
-    this.showShare = Config.Client.Sharing.enabled;
   }
 
-
-  ngOnInit() {
-    if (!this._authService.isAuthenticated() &&
-      (!this.shareService.isSharing() ||
-      (this.shareService.isSharing() && Config.Client.Sharing.passwordProtected == true))
-    ) {
-      if (this.shareService.isSharing()) {
-        this._router.navigate(['shareLogin']);
-      } else {
-        this._router.navigate(['login']);
-      }
+  updateTimer(t: number) {
+    if (this.shareService.sharing.value == null) {
       return;
     }
+    t = Math.floor((this.shareService.sharing.value.expires - Date.now()) / 1000);
+    this.countDown = {};
+    this.countDown.day = Math.floor(t / 86400);
+    t -= this.countDown.day * 86400;
+    this.countDown.hour = Math.floor(t / 3600) % 24;
+    t -= this.countDown.hour * 3600;
+    this.countDown.minute = Math.floor(t / 60) % 60;
+    t -= this.countDown.minute * 60;
+    this.countDown.second = t % 60;
+  }
+
+  async ngOnInit() {
+    await this.shareService.wait();
+    if (!this._authService.isAuthenticated() &&
+      (!this.shareService.isSharing() ||
+      (this.shareService.isSharing() && Config.Client.Sharing.passwordProtected == true))) {
+
+      return this._navigation.toLogin();
+    }
+    this.showSearchBar = Config.Client.Search.searchEnabled && this._authService.isAuthorized(UserRoles.Guest);
+    this.showShare = Config.Client.Sharing.enabled && this._authService.isAuthorized(UserRoles.User);
 
     this.subscription.content = this._galleryService.content.subscribe(this.onContentChange);
     this.subscription.route = this._route.params.subscribe(this.onRoute);
+
+    if (this.shareService.isSharing()) {
+      this.$counter = Observable.interval(1000);
+      this.subscription.timer = this.$counter.subscribe((x) => this.updateTimer(x));
+    }
 
   }
 
@@ -109,7 +131,7 @@ export class GalleryComponent implements OnInit, OnDestroy {
     }
 
     if (params['sharingKey'] && params['sharingKey'] != "") {
-      const sharing = await this._galleryService.getSharing(this.shareService.getSharingKey());
+      const sharing = await this.shareService.getSharing();
       this._router.navigate(['/gallery', sharing.path], {queryParams: {sk: this.shareService.getSharingKey()}});
       return;
     }

@@ -42,6 +42,9 @@ import {ToastModule} from "ng2-toastr/ng2-toastr";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {NotificationService} from "./model/notification.service";
 
+import {ClipboardModule} from "ngx-clipboard";
+import {NavigationService} from "./model/navigation.service";
+
 @Injectable()
 export class GoogleMapsConfig {
   apiKey: string;
@@ -58,6 +61,7 @@ export class GoogleMapsConfig {
     HttpModule,
     BrowserAnimationsModule,
     appRoutes,
+    ClipboardModule,
     ToastModule.forRoot(),
     ModalModule.forRoot(),
     AgmCoreModule.forRoot(),
@@ -98,6 +102,7 @@ export class GoogleMapsConfig {
     ThumbnailManagerService,
     NotificationService,
     FullScreenService,
+    NavigationService,
     OverlayService],
 
   bootstrap: [AppComponent]

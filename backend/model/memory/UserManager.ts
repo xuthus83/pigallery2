@@ -34,7 +34,7 @@ export class UserManager implements IUserManager {
       this.createUser(<UserDTO>{name: "developer", password: "developer", role: UserRoles.Developer});
       this.createUser(<UserDTO>{name: "admin", password: "admin", role: UserRoles.Admin});
       this.createUser(<UserDTO>{name: "user", password: "user", role: UserRoles.User});
-      this.createUser(<UserDTO>{name: "guest", password: "guest", role: UserRoles.Guest});
+      this.createUser(<UserDTO>{name: "guest", password: "guest", role: UserRoles.LimitedGuest});
     }
 
 

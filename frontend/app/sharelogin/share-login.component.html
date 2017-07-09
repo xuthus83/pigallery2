@@ -1,15 +1,41 @@
 <div class="container">
-  <div class="col-sm-offset-3  col-sm-6 col-lg-4 col-lg-offset-4">
-    <form class="form-signin" #LoginForm="ngForm">
-      <h2 class="form-signin-heading">The link is password protected</h2>
-      <div *ngIf="loginError">
-        {{loginError}}
-      </div>
-      <input type="password" class="form-control" placeholder="Password"
-             [(ngModel)]="loginCredential.password" name="password" required>
-      <br/>
-      <button class="btn btn-lg btn-primary btn-block" [disabled]="!LoginForm.form.valid" (click)="onLogin()">OK
-      </button>
-    </form>
+
+  <div class="row title">
+    <h1><img src="assets/icon.png"/>{{title}}</h1>
   </div>
-</div> <!-- /container -->
+
+  <div class="row card">
+    <div class="col-md-12">
+      <form name="form" id="form" class="form-horizontal" #LoginForm="ngForm" (submit)="onLogin()">
+        <div class="error-message">
+          {{loginError}}&nbsp;
+        </div>
+
+        <div class="input-group  has-margin">
+          <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+          <input id="password"
+                 class="form-control"
+                 type="password"
+                 [(ngModel)]="password"
+                 name="password"
+                 placeholder="Password"
+                 required>
+        </div>
+
+
+        <div class="form-group">
+          <!-- Button -->
+          <div class="col-sm-12 controls">
+            <button class="btn btn-primary pull-right"
+                    [disabled]="!LoginForm.form.valid"
+                    type="submit"
+                    name="action">Enter
+            </button>
+          </div>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>
+
