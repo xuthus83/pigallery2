@@ -34,7 +34,7 @@ export class AuthenticationMWs {
   public static async authenticate(req: Request, res: Response, next: NextFunction) {
 
     if (Config.Client.authenticationRequired === false) {
-      req.session.user = <UserDTO>{name: "", role: UserRoles.Admin};
+      req.session.user = <UserDTO>{name: "Admin", role: UserRoles.Admin};
       return next();
     }
     try {

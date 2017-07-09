@@ -1,0 +1,94 @@
+<div class="content">
+  <div class="row">
+    <div class="col-sm-12">
+      <h1>Info</h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-2">
+      <span class="details-icon glyphicon glyphicon-picture"></span>
+    </div>
+    <div class="col-sm-10">
+      <div class="details-main">
+        {{photo.name}}
+      </div>
+      <div class="details-sub">
+        <div class="col-sm-4">{{photo.metadata.size.width}} x {{photo.metadata.size.height}}</div>
+        <div class="col-sm-4">{{calcMpx()}}MP</div>
+        <div class="col-sm-4" *ngIf="photo.metadata.fileSize">{{calcFileSize()}}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-2">
+      <span class="details-icon glyphicon glyphicon-calendar"></span>
+    </div>
+    <div class="col-sm-10">
+      <div class="details-main">
+        <ng-container *ngIf="getYear() !== getCurrentYear()">
+          {{getYear()}}
+        </ng-container>
+        {{getDate()}}
+      </div>
+      <div class="details-sub">
+        <div class="col-sm-12">{{getDay()}}, {{getTime()}}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-2">
+      <span class="details-icon glyphicon glyphicon-camera"></span>
+    </div>
+    <div class="col-sm-10">
+      <div class="details-main">
+        {{photo.metadata.cameraData.model || "Camera"}}
+      </div>
+      <div class="details-sub">
+        <div class="col-sm-3" *ngIf="photo.metadata.cameraData.ISO">ISO{{photo.metadata.cameraData.ISO}}</div>
+        <div class="col-sm-3" *ngIf="photo.metadata.cameraData.fStop">f/{{photo.metadata.cameraData.fStop}}</div>
+        <div class="col-sm-3" *ngIf="photo.metadata.cameraData.exposure">
+          {{toFraction(photo.metadata.cameraData.exposure)}}s
+        </div>
+        <div class="col-sm-3" *ngIf="photo.metadata.cameraData.focalLength">
+          {{photo.metadata.cameraData.focalLength}}mm
+        </div>
+        <div class="col-sm-12" *ngIf="photo.metadata.cameraData.lens">{{photo.metadata.cameraData.lens}}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-2">
+      <span class="details-icon glyphicon glyphicon-map-marker"></span>
+    </div>
+    <div class="col-sm-10">
+      <div class="details-main">
+        {{getPositionText() || "Position"}}
+      </div>
+      <div class="details-sub">
+        <div class="col-sm-12"
+             *ngIf="hasGPS()">
+          {{photo.metadata.positionData.GPSData.latitude.toFixed(3)}},
+          {{photo.metadata.positionData.GPSData.longitude.toFixed(3)}}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="map" *ngIf="hasGPS()">
+    <agm-map
+      [disableDefaultUI]="true"
+      [zoomControl]="false"
+      [streetViewControl]="false"
+      [zoom]="5"
+      [latitude]="photo.metadata.positionData.GPSData.latitude"
+      [longitude]="photo.metadata.positionData.GPSData.longitude">
+      <agm-marker
+        [latitude]="photo.metadata.positionData.GPSData.latitude"
+        [longitude]="photo.metadata.positionData.GPSData.longitude">
+      </agm-marker>
+    </agm-map>
+  </div>
+</div>

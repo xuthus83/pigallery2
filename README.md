@@ -65,7 +65,7 @@ To configure it. Run `PiGallery2` first to create `config.json` file, then edit 
  * Custom lightbox for full screen photo viewing
    * keyboard support for navigation  
    * showing low-res thumbnail while full image loads
-   * Information panel for showing **Exif info** - `In progress`
+   * Information panel for showing **Exif info**  
  * Client side caching (directories and search results)
  * Rendering **photos** with GPS coordinates **on google map**
    * .gpx file support - `future plan`

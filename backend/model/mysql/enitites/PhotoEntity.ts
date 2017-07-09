@@ -1,32 +1,32 @@
-import {Entity, EmbeddableEntity, Column, Embedded, PrimaryGeneratedColumn, ManyToOne} from "typeorm";
+import {Column, EmbeddableEntity, Embedded, Entity, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
 import {DirectoryDTO} from "../../../../common/entities/DirectoryDTO";
 import {
-    PhotoDTO,
-    PhotoMetadata,
-    CameraMetadata,
-    ImageSize,
-    PositionMetaData
+  CameraMetadata,
+  ImageSize,
+  PhotoDTO,
+  PhotoMetadata,
+  PositionMetaData
 } from "../../../../common/entities/PhotoDTO";
 import {DirectoryEntity} from "./DirectoryEntity";
 
 @Entity()
 export class PhotoEntity implements PhotoDTO {
 
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column("string")
-    name: string;
+  @Column("string")
+  name: string;
 
-    @ManyToOne(type => DirectoryEntity, directory => directory.photos)
-    directory: DirectoryDTO;
+  @ManyToOne(type => DirectoryEntity, directory => directory.photos)
+  directory: DirectoryDTO;
 
-    @Embedded(type => PhotoMetadataEntity)
-    metadata: PhotoMetadataEntity;
+  @Embedded(type => PhotoMetadataEntity)
+  metadata: PhotoMetadataEntity;
 
-    readyThumbnails: Array<number> = [];
+  readyThumbnails: Array<number> = [];
 
-    readyIcon: boolean = false;
+  readyIcon: boolean = false;
 
 }
 
@@ -34,20 +34,23 @@ export class PhotoEntity implements PhotoDTO {
 @EmbeddableEntity()
 export class PhotoMetadataEntity implements PhotoMetadata {
 
-    @Column("string")
-    keywords: Array<string>;
+  @Column("string")
+  keywords: Array<string>;
 
-    @Column("string")
-    cameraData: CameraMetadata;
+  @Column("string")
+  cameraData: CameraMetadata;
 
-    @Column("string")
-    positionData: PositionMetaData;
+  @Column("string")
+  positionData: PositionMetaData;
 
-    @Column("string")
-    size: ImageSize;
+  @Column("string")
+  size: ImageSize;
 
-    @Column("number")
-    creationDate: number;
+  @Column("number")
+  creationDate: number;
+
+  @Column("number")
+  fileSize: number;
 }
 
 /*

@@ -44,6 +44,7 @@ import {NotificationService} from "./model/notification.service";
 
 import {ClipboardModule} from "ngx-clipboard";
 import {NavigationService} from "./model/navigation.service";
+import {InfoPanelLightboxComponent} from "./gallery/lightbox/infopanel/info-panel.lightbox.gallery.component";
 
 @Injectable()
 export class GoogleMapsConfig {
@@ -86,6 +87,7 @@ export class GoogleMapsConfig {
     GalleryNavigatorComponent,
     GalleryPhotoComponent,
     AdminComponent,
+    InfoPanelLightboxComponent,
     //Settings
     UserMangerSettingsComponent,
     DatabaseSettingsComponent,

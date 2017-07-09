@@ -15,6 +15,7 @@ export interface PhotoMetadata {
   positionData: PositionMetaData;
   size: ImageSize;
   creationDate: number;
+  fileSize: number;
 }
 
 export interface ImageSize {

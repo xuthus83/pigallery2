@@ -32,7 +32,7 @@ export class DiskMangerWorker {
 
   private static loadPhotoMetadata(fullPath: string): Promise<PhotoMetadata> {
     return new Promise<PhotoMetadata>((resolve, reject) => {
-        fs.readFile(fullPath, function (err, data) {
+      fs.readFile(fullPath, (err, data) => {
           if (err) {
             return reject({file: fullPath, error: err});
           }
@@ -41,11 +41,15 @@ export class DiskMangerWorker {
             cameraData: {},
             positionData: null,
             size: {},
-            creationDate: 0
+            creationDate: 0,
+            fileSize: 0
           };
 
           try {
 
+            fs.stat(fullPath, (err, data) => {
+              metadata.fileSize = data.size;
+            });
             try {
               const exif = exif_parser.create(data).parse();
               metadata.cameraData = <CameraMetadata> {

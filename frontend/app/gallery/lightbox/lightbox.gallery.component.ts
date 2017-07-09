@@ -4,6 +4,7 @@ import {
   ElementRef,
   EventEmitter,
   HostListener,
+  OnDestroy,
   Output,
   QueryList,
   ViewChild
@@ -20,8 +21,9 @@ import {Subscription} from "rxjs";
   styleUrls: ['./lightbox.gallery.component.css'],
   templateUrl: './lightbox.gallery.component.html',
 })
-export class GalleryLightboxComponent {
+export class GalleryLightboxComponent implements OnDestroy {
   @Output('onLastElement') onLastElement = new EventEmitter();
+  @ViewChild("root") elementRef: ElementRef;
 
   public navigation = {hasPrev: true, hasNext: true};
   public photoDimension: Dimension = <Dimension>{top: 0, left: 0, width: 0, height: 0};
@@ -35,14 +37,23 @@ export class GalleryLightboxComponent {
   public visible = false;
   private changeSubscription: Subscription = null;
 
-  @ViewChild("root") elementRef: ElementRef;
+
+  public infoPanelVisible = false;
+  public infoPanelWidth = 0;
+  public contentWidth = 0;
 
 
   constructor(public fullScreenService: FullScreenService, private changeDetector: ChangeDetectorRef, private overlayService: OverlayService) {
   }
 
 
-  //noinspection JSUnusedGlobalSymbols
+  ngOnDestroy(): void {
+    if (this.changeSubscription != null) {
+      this.changeSubscription.unsubscribe();
+    }
+  }
+
+//noinspection JSUnusedGlobalSymbols
   @HostListener('window:resize', ['$event'])
   onResize() {
     if (this.activePhoto) {
@@ -130,11 +141,13 @@ export class GalleryLightboxComponent {
       };
       this.blackCanvasOpacity = 1.0;
       this.showPhoto(this.gridPhotoQL.toArray().indexOf(selectedPhoto));
+      this.contentWidth = this.getScreenWidth();
     }, 0);
   }
 
   public hide() {
     this.enableAnimation();
+    this.hideInfoPanel();
     this.fullScreenService.exitFullScreen();
 
     this.lightboxDimension = this.activePhoto.getDimension();
@@ -196,6 +209,52 @@ export class GalleryLightboxComponent {
     }
   }
 
+  iPvisibilityTimer = null;
+
+  public toggleInfoPanel() {
+
+
+    if (this.infoPanelWidth != 400) {
+      this.showInfoPanel();
+    } else {
+      this.hideInfoPanel();
+    }
+
+  }
+
+  recalcPositions() {
+
+    this.photoDimension = this.calcLightBoxPhotoDimension(this.activePhoto.gridPhoto.photo);
+    this.contentWidth = this.getScreenWidth();
+    this.lightboxDimension = <Dimension>{
+      top: 0,
+      left: 0,
+      width: this.getScreenWidth(),
+      height: this.getScreenHeight()
+    };
+  };
+
+  showInfoPanel() {
+    this.infoPanelVisible = true;
+    this.infoPanelWidth = 0;
+    setTimeout(() => {
+      this.infoPanelWidth = 400;
+      this.recalcPositions();
+    }, 0);
+    if (this.iPvisibilityTimer != null) {
+      clearTimeout(this.iPvisibilityTimer);
+    }
+  }
+
+  hideInfoPanel() {
+    this.infoPanelWidth = 0;
+    this.iPvisibilityTimer = setTimeout(() => {
+      this.iPvisibilityTimer = null;
+      this.infoPanelVisible = false;
+    }, 1000);
+    this.recalcPositions();
+  }
+
   private enableAnimation() {
     this.transition = null;
   }
@@ -214,7 +273,7 @@ export class GalleryLightboxComponent {
   }
 
   private getScreenWidth() {
-    return window.innerWidth;
+    return Math.max(window.innerWidth - this.infoPanelWidth, 0);
   }
 
   private getScreenHeight() {
