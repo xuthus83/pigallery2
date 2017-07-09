@@ -3,6 +3,7 @@ import {SharingDTO} from "../../../common/entities/SharingDTO";
 import {MySQLConnection} from "./MySQLConnection";
 import {SharingEntity} from "./enitites/SharingEntity";
 import {Config} from "../../../common/config/private/Config";
+import {PasswordHelper} from "../PasswordHelper";
 
 export class SharingManager implements ISharingManager {
 
@@ -29,6 +30,9 @@ export class SharingManager implements ISharingManager {
   async createSharing(sharing: SharingDTO): Promise<SharingDTO> {
     await this.removeExpiredLink();
     const connection = await MySQLConnection.getConnection();
+    if (sharing.password) {
+      sharing.password = await PasswordHelper.cryptPassword(sharing.password);
+    }
     return await connection.getRepository(SharingEntity).persist(sharing);
 
 

@@ -58,12 +58,13 @@ export class ShareService {
     });
   }
 
-  public updateSharing(dir: string, sharingId: number, includeSubfolders: boolean, valid: number): Promise<SharingDTO> {
+  public updateSharing(dir: string, sharingId: number, includeSubfolders: boolean, password: string, valid: number): Promise<SharingDTO> {
     return this._networkService.putJson("/share/" + dir, {
       updateSharing: <CreateSharingDTO>{
         id: sharingId,
         includeSubfolders: includeSubfolders,
-        valid: valid
+        valid: valid,
+        password: password
       }
     });
   }

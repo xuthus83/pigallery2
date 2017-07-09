@@ -66,6 +66,7 @@ To configure it. Run `PiGallery2` first to create `config.json` file, then edit 
    * keyboard support for navigation  
    * showing low-res thumbnail while full image loads
    * Information panel for showing **Exif info**  
+   * Automatic playing - `In progress`
  * Client side caching (directories and search results)
  * Rendering **photos** with GPS coordinates **on google map**
    * .gpx file support - `future plan`

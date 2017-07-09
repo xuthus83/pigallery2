@@ -4,6 +4,7 @@ import {Error, ErrorCodes} from "../../../common/entities/Error";
 import {UserDTO, UserRoles} from "../../../common/entities/UserDTO";
 import {ObjectManagerRepository} from "../../model/ObjectManagerRepository";
 import {Config} from "../../../common/config/private/Config";
+import {PasswordHelper} from "../../model/PasswordHelper";
 
 export class AuthenticationMWs {
 
@@ -135,7 +136,7 @@ export class AuthenticationMWs {
         sharingKey: req.query.sk || req.params.sharingKey,
       });
       if (!sharing || sharing.expires < Date.now() ||
-        (Config.Client.Sharing.passwordProtected === true && sharing.password !== password)) {
+        (Config.Client.Sharing.passwordProtected === true && sharing.password && !PasswordHelper.comparePassword(password, sharing.password))) {
         return next(new Error(ErrorCodes.CREDENTIAL_NOT_FOUND));
       }
 

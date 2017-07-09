@@ -7,6 +7,7 @@ import {DirectoryEntity} from "./enitites/DirectoryEntity";
 import {Config} from "../../../common/config/private/Config";
 import {SharingEntity} from "./enitites/SharingEntity";
 import {DataBaseConfig} from "../../../common/config/private/IPrivateConfig";
+import {PasswordHelper} from "../PasswordHelper";
 
 
 export class MySQLConnection {
@@ -88,7 +89,7 @@ export class MySQLConnection {
     if (admins.length == 0) {
       let a = new UserEntity();
       a.name = "admin";
-      a.password = "admin";
+      a.password = await PasswordHelper.cryptPassword("admin");
       a.role = UserRoles.Admin;
       await userRepository.persist(a);
     }

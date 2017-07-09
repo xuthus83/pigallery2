@@ -25,7 +25,8 @@ export class GalleryShareComponent implements OnInit, OnDestroy {
     valid: {
       amount: 30,
       type: ValidityTypes.Days
-    }
+    },
+    password: ""
   };
   validityTypes = [];
   currentDir: string = "";
@@ -75,7 +76,7 @@ export class GalleryShareComponent implements OnInit, OnDestroy {
 
   async update() {
     this.url = "loading..";
-    this.sharing = await this._sharingService.updateSharing(this.currentDir, this.sharing.id, this.input.includeSubfolders, this.calcValidity());
+    this.sharing = await this._sharingService.updateSharing(this.currentDir, this.sharing.id, this.input.includeSubfolders, this.input.password, this.calcValidity());
     console.log(this.sharing);
     this.url = Config.Client.publicUrl + "/share/" + this.sharing.sharingKey
   }

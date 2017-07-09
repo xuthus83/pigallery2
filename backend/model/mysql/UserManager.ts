@@ -2,6 +2,8 @@ import {UserDTO, UserRoles} from "../../../common/entities/UserDTO";
 import {IUserManager} from "../interfaces/IUserManager";
 import {UserEntity} from "./enitites/UserEntity";
 import {MySQLConnection} from "./MySQLConnection";
+import {PasswordHelper} from "../PasswordHelper";
+
 
 export class UserManager implements IUserManager {
 
@@ -11,9 +13,16 @@ export class UserManager implements IUserManager {
 
   public async findOne(filter: any) {
     const connection = await MySQLConnection.getConnection();
+    let pass = filter.password;
+    delete filter.password;
     const user = (await connection.getRepository(UserEntity).findOne(filter));
+
     if (user.permissions && user.permissions != null) {
       user.permissions = <any>JSON.parse(<any>user.permissions);
+    }
+
+    if (pass && !PasswordHelper.comparePassword(pass, user.password)) {
+      throw "No entry found";
     }
     return user;
 
@@ -34,6 +43,7 @@ export class UserManager implements IUserManager {
     if (user.permissions && user.permissions != null) {
       user.permissions = <any>JSON.stringify(<any>user.permissions);
     }
+    user.password = await PasswordHelper.cryptPassword(user.password);
     return await connection.getRepository(UserEntity).persist(user);
   }
 

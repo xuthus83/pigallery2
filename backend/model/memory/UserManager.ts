@@ -5,6 +5,7 @@ import {ProjectPath} from "../../ProjectPath";
 import {Utils} from "../../../common/Utils";
 import * as flatfile from "flat-file-db";
 import * as path from "path";
+import {PasswordHelper} from "../PasswordHelper";
 
 
 export class UserManager implements IUserManager {
@@ -51,13 +52,21 @@ export class UserManager implements IUserManager {
   }
 
   public async find(filter: any) {
-    return this.db.get("users").filter((u: UserDTO) => Utils.equalsFilter(u, filter));
+    let pass = filter.password;
+    delete filter.password;
+    return this.db.get("users").filter((u: UserDTO) => {
+      if (pass && !PasswordHelper.comparePassword(pass, u.password)) {
+        return false;
+      }
+      Utils.equalsFilter(u, filter)
+    });
   }
 
   public async createUser(user: UserDTO) {
     user.id = parseInt(this.db.get("idCounter")) + 1;
     this.db.put("idCounter", user.id);
     let users = this.db.get("users");
+    user.password = await PasswordHelper.cryptPassword(user.password);
     users.push(user);
     this.db.put("users", users);
 
