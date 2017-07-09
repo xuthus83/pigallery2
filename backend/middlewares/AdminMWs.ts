@@ -37,8 +37,7 @@ export class AdminMWs {
 
       return next();
     } catch (err) {
-      Logger.warn(LOG_TAG, "Error saving database settings", err);
-      return next(new Error(ErrorCodes.SETTINGS_ERROR, err));
+      return next(new Error(ErrorCodes.SETTINGS_ERROR, "Error saving database settings", err));
     }
   }
 
@@ -56,8 +55,7 @@ export class AdminMWs {
       }
       return next();
     } catch (err) {
-      Logger.warn(LOG_TAG, "Error saving database settings", err);
-      return next(new Error(ErrorCodes.SETTINGS_ERROR, err));
+      return next(new Error(ErrorCodes.SETTINGS_ERROR, "Error saving database settings", err));
     }
   }
 }

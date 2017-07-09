@@ -8,7 +8,6 @@ import {SearchTypes} from "../../common/entities/AutoCompleteItem";
 import {ContentWrapper} from "../../common/entities/ConentWrapper";
 import {PhotoDTO} from "../../common/entities/PhotoDTO";
 import {ProjectPath} from "../ProjectPath";
-import {Logger} from "../Logger";
 import {Config} from "../../common/config/private/Config";
 import {UserDTO} from "../../common/entities/UserDTO";
 
@@ -38,9 +37,7 @@ export class GalleryMWs {
       return next();
 
     } catch (err) {
-      Logger.warn(LOG_TAG, "Error during listing the directory", err);
-      console.error(err);
-      return next(new Error(ErrorCodes.GENERAL_ERROR, err));
+      return next(new Error(ErrorCodes.GENERAL_ERROR, "Error during listing the directory", err));
     }
   }
 
@@ -111,10 +108,7 @@ export class GalleryMWs {
       req.resultPipe = new ContentWrapper(null, result);
       return next();
     } catch (err) {
-
-      Logger.warn(LOG_TAG, "Error during searching", err);
-      console.error(err);
-      return next(new Error(ErrorCodes.GENERAL_ERROR, err));
+      return next(new Error(ErrorCodes.GENERAL_ERROR, "Error during searching", err));
     }
   }
 
@@ -134,9 +128,7 @@ export class GalleryMWs {
       req.resultPipe = new ContentWrapper(null, result);
       return next();
     } catch (err) {
-      Logger.warn(LOG_TAG, "Error during searching", err);
-      console.error(err);
-      return next(new Error(ErrorCodes.GENERAL_ERROR, err));
+      return next(new Error(ErrorCodes.GENERAL_ERROR, "Error during searching", err));
     }
   }
 
@@ -152,9 +144,7 @@ export class GalleryMWs {
       req.resultPipe = await ObjectManagerRepository.getInstance().SearchManager.autocomplete(req.params.text);
       return next();
     } catch (err) {
-      Logger.warn(LOG_TAG, "Error during searching", err);
-      console.error(err);
-      return next(new Error(ErrorCodes.GENERAL_ERROR, err));
+      return next(new Error(ErrorCodes.GENERAL_ERROR, "Error during searching", err));
     }
 
   }

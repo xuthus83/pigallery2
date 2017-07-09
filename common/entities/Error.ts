@@ -21,6 +21,6 @@ export enum ErrorCodes{
 }
 
 export class Error {
-  constructor(public code: ErrorCodes, public message?: string) {
+  constructor(public code: ErrorCodes, public message?: string, public details?: any) {
   }
 }

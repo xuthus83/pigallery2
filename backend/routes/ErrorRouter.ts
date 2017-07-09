@@ -19,10 +19,9 @@ export class ErrorRouter {
 
   private static addGenericHandler(app) {
     app.use((err: any, req: Request, res: Response, next: Function) => {
-
         //Flush out the stack to the console
-        Logger.error(err);
-        next(new Error(ErrorCodes.SERVER_ERROR, "Unknown server side error"));
+        Logger.error("Unexpected error:", err);
+        next(new Error(ErrorCodes.SERVER_ERROR, "Unknown server side error", err));
       },
       RenderingMWs.renderError
     );

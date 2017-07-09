@@ -38,3 +38,9 @@ ng2-slim-loading-bar {
     display: none;
   }
 }
+
+.badge {
+  margin-left: -5px;
+  padding: 0;
+  background-color: transparent;
+}

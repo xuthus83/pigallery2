@@ -29,7 +29,9 @@
         <li *ngIf="isAdmin()">
           <a style="cursor: pointer"
              class="admin-link"
-             [routerLink]="['/admin']"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+             [routerLink]="['/admin']">
+            <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+            <span *ngIf="notificationService.notifications.length>0" class="badge">{{notificationService.notifications.length}}</span>
           </a>
         </li>
         <li *ngIf="authenticationRequired">

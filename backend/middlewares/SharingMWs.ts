@@ -1,7 +1,6 @@
 import {NextFunction, Request, Response} from "express";
 import {CreateSharingDTO, SharingDTO} from "../../common/entities/SharingDTO";
 import {ObjectManagerRepository} from "../model/ObjectManagerRepository";
-import {Logger} from "../Logger";
 import {Error, ErrorCodes} from "../../common/entities/Error";
 
 const LOG_TAG = "[SharingMWs]";
@@ -27,9 +26,7 @@ export class SharingMWs {
       return next();
 
     } catch (err) {
-      Logger.warn(LOG_TAG, "Error during retrieving sharing link", err);
-      console.error(err);
-      return next(new Error(ErrorCodes.GENERAL_ERROR, err));
+      return next(new Error(ErrorCodes.GENERAL_ERROR, "Error during retrieving sharing link", err));
     }
 
   }
@@ -71,9 +68,7 @@ export class SharingMWs {
       return next();
 
     } catch (err) {
-      Logger.warn(LOG_TAG, "Error during creating sharing link", err);
-      console.error(err);
-      return next(new Error(ErrorCodes.GENERAL_ERROR, err));
+      return next(new Error(ErrorCodes.GENERAL_ERROR, "Error during creating sharing link", err));
     }
   }
 
@@ -100,9 +95,7 @@ export class SharingMWs {
       return next();
 
     } catch (err) {
-      Logger.warn(LOG_TAG, "Error during creating sharing link", err);
-      console.error(err);
-      return next(new Error(ErrorCodes.GENERAL_ERROR, err));
+      return next(new Error(ErrorCodes.GENERAL_ERROR, "Error during creating sharing link", err));
     }
 
   }

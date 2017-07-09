@@ -44,8 +44,7 @@ export class AuthenticationMWs {
         return next();
       }
     } catch (err) {
-      console.error(err);
-      return next(new Error(ErrorCodes.CREDENTIAL_NOT_FOUND));
+      return next(new Error(ErrorCodes.CREDENTIAL_NOT_FOUND, null, err));
     }
     if (typeof req.session.user === 'undefined') {
       return next(new Error(ErrorCodes.NOT_AUTHENTICATED));
@@ -109,11 +108,9 @@ export class AuthenticationMWs {
           return next();
         }
       } catch (err) {
-        console.error(err);
-        return next(new Error(ErrorCodes.CREDENTIAL_NOT_FOUND));
+        return next(new Error(ErrorCodes.CREDENTIAL_NOT_FOUND, null, err));
       }
 
-      console.error(err);
       return next(new Error(ErrorCodes.CREDENTIAL_NOT_FOUND));
     }
 
@@ -128,7 +125,7 @@ export class AuthenticationMWs {
     }
     //not enough parameter
     if ((!req.query.sk && !req.params.sharingKey)) {
-      return next(new Error(ErrorCodes.INPUT_ERROR));
+      return next(new Error(ErrorCodes.INPUT_ERROR, "no sharing key provided"));
     }
 
     try {
@@ -151,7 +148,7 @@ export class AuthenticationMWs {
       return next();
 
     } catch (err) {
-      return next(new Error(ErrorCodes.GENERAL_ERROR));
+      return next(new Error(ErrorCodes.GENERAL_ERROR, null, err));
     }
 
   }

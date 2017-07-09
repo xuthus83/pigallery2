@@ -22,7 +22,7 @@ export class UserMWs {
       return next();
 
     } catch (err) {
-      return next(new Error(ErrorCodes.GENERAL_ERROR));
+      return next(new Error(ErrorCodes.GENERAL_ERROR, null, err));
     }
   }
 
@@ -40,7 +40,7 @@ export class UserMWs {
       return next();
 
     } catch (err) {
-      return next(new Error(ErrorCodes.USER_CREATION_ERROR));
+      return next(new Error(ErrorCodes.USER_CREATION_ERROR, null, err));
     }
 
 
@@ -60,7 +60,7 @@ export class UserMWs {
       return next();
 
     } catch (err) {
-      return next(new Error(ErrorCodes.GENERAL_ERROR));
+      return next(new Error(ErrorCodes.GENERAL_ERROR, null, err));
     }
 
 
@@ -80,7 +80,7 @@ export class UserMWs {
       return next();
 
     } catch (err) {
-      return next(new Error(ErrorCodes.GENERAL_ERROR));
+      return next(new Error(ErrorCodes.GENERAL_ERROR, null, err));
     }
   }
 
@@ -99,7 +99,7 @@ export class UserMWs {
       req.resultPipe = result;
       next();
     } catch (err) {
-      return next(new Error(ErrorCodes.GENERAL_ERROR));
+      return next(new Error(ErrorCodes.GENERAL_ERROR, null, err));
     }
   }
 

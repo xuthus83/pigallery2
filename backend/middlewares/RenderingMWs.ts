@@ -5,6 +5,8 @@ import {Message} from "../../common/entities/Message";
 import {SharingDTO} from "../../common/entities/SharingDTO";
 import {Config} from "../../common/config/private/Config";
 import {PrivateConfigClass} from "../../common/config/private/PrivateConfigClass";
+import {UserRoles} from "../../common/entities/UserDTO";
+import {NotificationManager} from "../model/NotifocationManager";
 
 export class RenderingMWs {
 
@@ -55,10 +57,15 @@ export class RenderingMWs {
 
 
   public static renderError(err: any, req: Request, res: Response, next: NextFunction): any {
+
     if (err instanceof Error) {
+      if (!(req.session.user && req.session.user.role >= UserRoles.Developer)) {
+        delete (err.details);
+      }
       let message = new Message<any>(err, null);
       return res.json(message);
     }
+    NotificationManager.error("unknown server error", err);
     return next(err);
   }
 

@@ -162,8 +162,7 @@ export class ThumbnailGeneratorMWs {
         return next();
       }
     } catch (error) {
-      console.log(error);
-      return next(new Error(ErrorCodes.THUMBNAIL_GENERATION_ERROR, error));
+      return next(new Error(ErrorCodes.THUMBNAIL_GENERATION_ERROR, "Error during generating thumbnail", error));
     }
   }
 

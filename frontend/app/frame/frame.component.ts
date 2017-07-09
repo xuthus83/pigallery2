@@ -4,6 +4,7 @@ import {AuthenticationService} from "../model/network/authentication.service";
 import {UserDTO, UserRoles} from "../../../common/entities/UserDTO";
 import {Config} from "../../../common/config/public/Config";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
+import {NotificationService} from "../model/notification.service";
 
 @Component({
   selector: 'app-frame',
@@ -19,7 +20,8 @@ export class FrameComponent {
   public title: string;
   isIn: boolean = false;
 
-  constructor(private _authService: AuthenticationService) {
+  constructor(private _authService: AuthenticationService,
+              public notificationService: NotificationService) {
     this.user = this._authService.user;
     this.authenticationRequired = Config.Client.authenticationRequired;
     this.title = Config.Client.applicationTitle;
