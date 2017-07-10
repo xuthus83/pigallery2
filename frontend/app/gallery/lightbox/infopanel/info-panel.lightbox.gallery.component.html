@@ -26,10 +26,10 @@
     </div>
     <div class="col-sm-10">
       <div class="details-main">
-        <ng-container *ngIf="getYear() !== getCurrentYear()">
-          {{getYear()}}
-        </ng-container>
         {{getDate()}}
+        <ng-container *ngIf="getYear() !== getCurrentYear()">
+          ,{{getYear()}}
+        </ng-container>
       </div>
       <div class="details-sub">
         <div class="col-sm-12">{{getDay()}}, {{getTime()}}</div>
@@ -43,7 +43,7 @@
     </div>
     <div class="col-sm-10">
       <div class="details-main">
-        {{photo.metadata.cameraData.model || "Camera"}}
+        {{photo.metadata.cameraData.model || photo.metadata.cameraData.make || "Camera"}}
       </div>
       <div class="details-sub">
         <div class="col-sm-3" *ngIf="photo.metadata.cameraData.ISO">ISO{{photo.metadata.cameraData.ISO}}</div>
@@ -67,9 +67,8 @@
       <div class="details-main">
         {{getPositionText() || "Position"}}
       </div>
-      <div class="details-sub">
-        <div class="col-sm-12"
-             *ngIf="hasGPS()">
+      <div class="details-sub" *ngIf="hasGPS()">
+        <div class="col-sm-12">
           {{photo.metadata.positionData.GPSData.latitude.toFixed(3)}},
           {{photo.metadata.positionData.GPSData.longitude.toFixed(3)}}
         </div>

@@ -26,7 +26,7 @@ export interface ImageSize {
 export interface CameraMetadata {
   ISO?: number;
   model?: string;
-  maker?: string;
+  make?: string;
   fStop?: number;
   exposure?: number;
   focalLength?: number;

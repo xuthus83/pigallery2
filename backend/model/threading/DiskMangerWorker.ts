@@ -54,8 +54,8 @@ export class DiskMangerWorker {
               const exif = exif_parser.create(data).parse();
               metadata.cameraData = <CameraMetadata> {
                 ISO: exif.tags.ISO,
-                model: exif.tags.Modeol,
-                maker: exif.tags.Make,
+                model: exif.tags.Model,
+                make: exif.tags.Make,
                 fStop: exif.tags.FNumber,
                 exposure: exif.tags.ExposureTime,
                 focalLength: exif.tags.FocalLength,

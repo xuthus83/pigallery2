@@ -1,4 +1,4 @@
-import {Component, Input} from "@angular/core";
+import {Component, ElementRef, Input} from "@angular/core";
 import {PhotoDTO} from "../../../../../common/entities/PhotoDTO";
 
 @Component({
@@ -10,7 +10,7 @@ export class InfoPanelLightboxComponent {
   @Input() photo: PhotoDTO;
 
 
-  constructor() {
+  constructor(public elementRef: ElementRef) {
   }
 
   calcMpx() {
@@ -40,7 +40,7 @@ export class InfoPanelLightboxComponent {
   getDate() {
     const date = new Date(this.photo.metadata.creationDate);
     let locale = "en-us";
-    return date.toLocaleString(locale, {month: "long"}) + " " + date.getDay();
+    return date.toLocaleString(locale, {month: "long"}) + " " + date.getDate();
   }
 
   getTime() {
@@ -58,7 +58,7 @@ export class InfoPanelLightboxComponent {
     if (f > 1) {
       return f;
     }
-    return "1/" + Math.ceil(((f < 1.0) ? f : (f % Math.floor(f))) * 10000)
+    return "1/" + (1 / f);
   }
 
   hasGPS() {

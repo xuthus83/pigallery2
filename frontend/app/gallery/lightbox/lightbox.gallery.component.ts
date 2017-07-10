@@ -15,20 +15,21 @@ import {Dimension} from "../../model/IRenderable";
 import {FullScreenService} from "../fullscreen.service";
 import {OverlayService} from "../overlay.service";
 import {Subscription} from "rxjs";
+import {animate, AnimationBuilder, style} from "@angular/animations";
+import {GalleryLightboxPhotoComponent} from "./photo/photo.lightbox.gallery.component";
 
 @Component({
   selector: 'gallery-lightbox',
   styleUrls: ['./lightbox.gallery.component.css'],
-  templateUrl: './lightbox.gallery.component.html',
+  templateUrl: './lightbox.gallery.component.html'
 })
 export class GalleryLightboxComponent implements OnDestroy {
   @Output('onLastElement') onLastElement = new EventEmitter();
   @ViewChild("root") elementRef: ElementRef;
+  @ViewChild("photo") photoElement: GalleryLightboxPhotoComponent;
+  @ViewChild("lightbox") lightboxElement: ElementRef;
 
   public navigation = {hasPrev: true, hasNext: true};
-  public photoDimension: Dimension = <Dimension>{top: 0, left: 0, width: 0, height: 0};
-  public lightboxDimension: Dimension = <Dimension>{top: 0, left: 0, width: 0, height: 0};
-  public transition: string = "";
   public blackCanvasOpacity: any = 0;
 
   public activePhoto: GalleryPhotoComponent;
@@ -43,7 +44,10 @@ export class GalleryLightboxComponent implements OnDestroy {
   public contentWidth = 0;
 
 
-  constructor(public fullScreenService: FullScreenService, private changeDetector: ChangeDetectorRef, private overlayService: OverlayService) {
+  constructor(public fullScreenService: FullScreenService,
+              private changeDetector: ChangeDetectorRef, private overlayService: OverlayService,
+              private _builder: AnimationBuilder) {
+    this.contentWidth = this.getScreenWidth();
   }
 
 
@@ -57,15 +61,12 @@ export class GalleryLightboxComponent implements OnDestroy {
   @HostListener('window:resize', ['$event'])
   onResize() {
     if (this.activePhoto) {
-      this.disableAnimation();
-      this.lightboxDimension.width = this.getScreenWidth();
-      this.lightboxDimension.height = this.getScreenHeight();
+      this.animateLightbox();
       this.updateActivePhoto(this.activePhotoId);
     }
   }
 
   public nextImage() {
-    this.disableAnimation();
     if (this.activePhotoId + 1 < this.gridPhotoQL.length) {
       this.showPhoto(this.activePhotoId + 1);
       if (this.activePhotoId + 3 >= this.gridPhotoQL.length) {
@@ -77,7 +78,6 @@ export class GalleryLightboxComponent implements OnDestroy {
   }
 
   public prevImage() {
-    this.disableAnimation();
     if (this.activePhotoId > 0) {
       this.showPhoto(this.activePhotoId - 1);
       return;
@@ -88,13 +88,13 @@ export class GalleryLightboxComponent implements OnDestroy {
 
   activePhotoId: number = null;
 
-  private showPhoto(photoIndex: number) {
+  private showPhoto(photoIndex: number, resize: boolean = true) {
     this.activePhoto = null;
     this.changeDetector.detectChanges();
-    this.updateActivePhoto(photoIndex);
+    this.updateActivePhoto(photoIndex, resize);
   }
 
-  private updateActivePhoto(photoIndex: number) {
+  private updateActivePhoto(photoIndex: number, resize: boolean = true) {
     let pcList = this.gridPhotoQL.toArray();
 
 
@@ -104,7 +104,9 @@ export class GalleryLightboxComponent implements OnDestroy {
     this.activePhotoId = photoIndex;
     this.activePhoto = pcList[photoIndex];
 
-    this.photoDimension = this.calcLightBoxPhotoDimension(this.activePhoto.gridPhoto.photo);
+    if (resize) {
+      this.animatePhoto(this.calcLightBoxPhotoDimension(this.activePhoto.gridPhoto.photo));
+    }
     this.navigation.hasPrev = photoIndex > 0;
     this.navigation.hasNext = photoIndex + 1 < pcList.length;
 
@@ -117,49 +119,85 @@ export class GalleryLightboxComponent implements OnDestroy {
 
   }
 
+  startPhotoDimension: Dimension = <Dimension>{top: 0, left: 0, width: 0, height: 0};
+
   public show(photo: PhotoDTO) {
-    this.enableAnimation();
+    console.log(this.photoElement);
     this.visible = true;
     let selectedPhoto = this.findPhotoComponent(photo);
     if (selectedPhoto === null) {
       throw new Error("Can't find Photo");
     }
 
-    this.lightboxDimension = selectedPhoto.getDimension();
-    this.lightboxDimension.top -= this.getBodyScrollTop();
-    this.blackCanvasOpacity = 0;
-    this.photoDimension = selectedPhoto.getDimension();
-
-    //disable scroll
-    this.overlayService.showOverlay();
-    setTimeout(() => {
-      this.lightboxDimension = <Dimension>{
+    const lightboxDimension = selectedPhoto.getDimension();
+    lightboxDimension.top -= this.getBodyScrollTop();
+    this.animatePhoto(selectedPhoto.getDimension(), this.calcLightBoxPhotoDimension(selectedPhoto.gridPhoto.photo));
+    this.animateLightbox(
+      lightboxDimension,
+      <Dimension>{
         top: 0,
         left: 0,
         width: this.getScreenWidth(),
         height: this.getScreenHeight()
-      };
-      this.blackCanvasOpacity = 1.0;
-      this.showPhoto(this.gridPhotoQL.toArray().indexOf(selectedPhoto));
-      this.contentWidth = this.getScreenWidth();
-    }, 0);
+      });
+
+
+    this.blackCanvasOpacity = 0;
+    this.startPhotoDimension = selectedPhoto.getDimension();
+    //disable scroll
+    this.overlayService.showOverlay();
+    this.blackCanvasOpacity = 1.0;
+    this.showPhoto(this.gridPhotoQL.toArray().indexOf(selectedPhoto), false);
+    this.contentWidth = this.getScreenWidth();
   }
 
   public hide() {
-    this.enableAnimation();
     this.hideInfoPanel();
     this.fullScreenService.exitFullScreen();
 
-    this.lightboxDimension = this.activePhoto.getDimension();
-    this.lightboxDimension.top -= this.getBodyScrollTop();
+    const lightboxDimension = this.activePhoto.getDimension();
+    lightboxDimension.top -= this.getBodyScrollTop();
     this.blackCanvasOpacity = 0;
-    this.photoDimension = this.activePhoto.getDimension();
+
+    this.animatePhoto(this.calcLightBoxPhotoDimension(this.activePhoto.gridPhoto.photo), this.activePhoto.getDimension());
+    this.animateLightbox(<Dimension>{
+      top: 0,
+      left: 0,
+      width: this.getScreenWidth(),
+      height: this.getScreenHeight()
+    }, lightboxDimension);
+
     setTimeout(() => {
       this.visible = false;
       this.activePhoto = null;
       this.overlayService.hideOverlay();
     }, 500);
 
+  }
+
+  animatePhoto(from: Dimension, to: Dimension = from) {
+    this._builder.build([
+      style(<any>Dimension.toString(from)),
+      animate(300,
+        style(<any>Dimension.toString(to)))
+    ])
+      .create(this.photoElement.elementRef.nativeElement)
+      .play();
+  }
+
+  animateLightbox(from: Dimension = <Dimension>{
+    top: 0,
+    left: 0,
+    width: this.getScreenWidth(),
+    height: this.getScreenHeight()
+  }, to: Dimension = from) {
+    this._builder.build([
+      style(<any>Dimension.toString(from)),
+      animate(300,
+        style(<any>Dimension.toString(to)))
+    ])
+      .create(this.lightboxElement.nativeElement)
+      .play();
   }
 
 
@@ -175,7 +213,7 @@ export class GalleryLightboxComponent implements OnDestroy {
     });
   }
 
-  private findPhotoComponent(photo: any) {
+  private findPhotoComponent(photo: any): GalleryPhotoComponent {
     let galleryPhotoComponents = this.gridPhotoQL.toArray();
     for (let i = 0; i < galleryPhotoComponents.length; i++) {
       if (galleryPhotoComponents[i].gridPhoto.photo == photo) {
@@ -222,45 +260,54 @@ export class GalleryLightboxComponent implements OnDestroy {
 
   }
 
-  recalcPositions() {
-
-    this.photoDimension = this.calcLightBoxPhotoDimension(this.activePhoto.gridPhoto.photo);
-    this.contentWidth = this.getScreenWidth();
-    this.lightboxDimension = <Dimension>{
-      top: 0,
-      left: 0,
-      width: this.getScreenWidth(),
-      height: this.getScreenHeight()
-    };
-  };
-
   showInfoPanel() {
     this.infoPanelVisible = true;
-    this.infoPanelWidth = 0;
-    setTimeout(() => {
-      this.infoPanelWidth = 400;
-      this.recalcPositions();
-    }, 0);
+
+    const starPhotoPos = this.calcLightBoxPhotoDimension(this.activePhoto.gridPhoto.photo);
+    this.infoPanelWidth = 400;
+    const endPhotoPos = this.calcLightBoxPhotoDimension(this.activePhoto.gridPhoto.photo);
+    this.animatePhoto(starPhotoPos, endPhotoPos);
+    this.contentWidth = this.getScreenWidth();
+    this.animateLightbox(<Dimension>{
+        top: 0,
+        left: 0,
+        width: this.getScreenWidth() + 400,
+        height: this.getScreenHeight()
+      },
+      <Dimension>{
+        top: 0,
+        left: 0,
+        width: this.getScreenWidth(),
+        height: this.getScreenHeight()
+      });
     if (this.iPvisibilityTimer != null) {
       clearTimeout(this.iPvisibilityTimer);
     }
   }
 
   hideInfoPanel() {
-    this.infoPanelWidth = 0;
     this.iPvisibilityTimer = setTimeout(() => {
       this.iPvisibilityTimer = null;
       this.infoPanelVisible = false;
     }, 1000);
-    this.recalcPositions();
-  }
 
-  private enableAnimation() {
-    this.transition = null;
-  }
-
-  private disableAnimation() {
-    this.transition = "initial";
+    const starPhotoPos = this.calcLightBoxPhotoDimension(this.activePhoto.gridPhoto.photo);
+    this.infoPanelWidth = 0;
+    const endPhotoPos = this.calcLightBoxPhotoDimension(this.activePhoto.gridPhoto.photo);
+    this.animatePhoto(starPhotoPos, endPhotoPos);
+    this.contentWidth = this.getScreenWidth();
+    this.animateLightbox(<Dimension>{
+        top: 0,
+        left: 0,
+        width: this.getScreenWidth() - 400,
+        height: this.getScreenHeight()
+      },
+      <Dimension>{
+        top: 0,
+        left: 0,
+        width: this.getScreenWidth(),
+        height: this.getScreenHeight()
+      });
   }
 
 

@@ -10,11 +10,9 @@
   justify-content: center; /* add to align horizontal */
   align-items: center; /* add to align vertical */
   cursor: pointer;
-  transition: all 0.3s ease-in-out;
 }
 
 gallery-lightbox-photo {
-  transition: all 0.3s ease-in-out;
   overflow: hidden;
 }
 
@@ -92,5 +90,7 @@ info-panel {
   position: fixed;
   height: 100vh;
   right: 0;
+  width: 0;
+  top: 0;
   transition: all 0.3s ease-in-out;
 }

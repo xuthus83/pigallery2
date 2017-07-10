@@ -4,21 +4,24 @@
        [style.opacity]="blackCanvasOpacity">
   </div>
 
-  <div class="lightbox"
-       [style.width.px]="lightboxDimension.width"
-       [style.height.px]="lightboxDimension.height"
-       [style.top.px]="lightboxDimension.top"
-       [style.left.px]="lightboxDimension.left">
+  <div class="lightbox" #lightbox>
     <gallery-lightbox-photo [gridPhoto]="activePhoto ? activePhoto.gridPhoto : null"
-                            [style.top.px]="photoDimension.top"
-                            [style.left.px]="photoDimension.left"
-                            [style.width.px]="photoDimension.width"
-                            [style.height.px]="photoDimension.height"
-                            [style.transition]="transition">
+                            #photo>
     </gallery-lightbox-photo>
   </div>
 
-
+  <!--
+  [@photoState]="{value:visible?'active':'inactive',
+                              params:{
+                              startWidth:startPhotoDimension.width,
+                              startHeight:startPhotoDimension.height,
+                              startTop:startPhotoDimension.top,
+                              startLeft:startPhotoDimension.left,
+                              endWidth:photoDimension.width,
+                              endHeight:photoDimension.height,
+                              endTop:photoDimension.top,
+                              endLeft:photoDimension.left}}"
+  -->
   <div id="controllers-container" #controls
        [style.width.px]="contentWidth">
     <div id="controls">
