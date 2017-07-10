@@ -23,7 +23,7 @@
                               endLeft:photoDimension.left}}"
   -->
   <div id="controllers-container" #controls
-       [style.width.px]="contentWidth">
+       [style.width.px]="getScreenWidth()">
     <div id="controls">
       <a *ngIf="activePhoto" [href]="activePhoto.gridPhoto.getPhotoPath()"
          [download]="activePhoto.gridPhoto.photo.name"><span class="glyphicon glyphicon-download-alt highlight"

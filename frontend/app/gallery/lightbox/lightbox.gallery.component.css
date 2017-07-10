@@ -90,7 +90,6 @@ info-panel {
   position: fixed;
   height: 100vh;
   right: 0;
-  width: 0;
   top: 0;
   transition: all 0.3s ease-in-out;
 }
