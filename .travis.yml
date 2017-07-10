@@ -14,7 +14,7 @@ deploy:
     secure: bMv+DrQgqKtx3RNsHqZUOl9L3Bp/i/MSZ52ix8rWXfl1QYFzo7nCnFdHxeq67qCCApdsBrPnOqRsnR5IjLSJGiKwyOxlXNCawLJRKJ+EoM8IAolrZP0zg5DhyifZJ40M0QS8fCetDqKVSO6S52rs4I0nc5whFZ6E9j4EfmkBRoGyPGoTPmGCJdK6JrlN7oftCVm18r7kt7lXcr1EvBqDloJC+M4BukQc4v0iAY/psMEgExvvroCwweQEhumWma7DO1hdiixRh8Pclz+VUQwAggVdP1yZGabqnX80/G+KrmpbNrAGIUdgzMHGG5HkiMrxPUU6LAcDQ+IzZ08u3MzVy//ij4zcom7C99oy5/AL4oWh6tZQtefji9MlOOX4SJNikmsfD2D9skHeGwbFuqEPjrjpUPWtUhW9RS5kr5Dt/LJwMs3ADi9nEsAYAkTip1nH9Ts1Yw+ooy3lCfzuMJGMBzZ6vNlMoAGNyTkrjIkGDL76XuBYvn0X3e3USn+KuKF9qO+N6wCw8zTxI2aetx+z6/5gGiiAHPKkFGGz+2jkl+2ZO4DcOX1lR6AgrHwT/52bQF3UQVT02mUohqfUnpn6rSpYkvh+u3e3GE59sqAPcRleEKdkp68KFSFDstzwF/m7uoAjOIHSfKUjN22s7FP818BulikEhHiCknMJsnOYUZ4=
   on:
     tags: true
-    repo: bpatrik/PiGallery2
+    repo: bpatrik/pigallery2
 
   provider: releases
   api_key:
@@ -22,7 +22,7 @@ deploy:
   file: pigallery2.zip
   skip_cleanup: true
   on:
-    repo: bpatrik/PiGallery2
+    repo: bpatrik/pigallery2
     tags: true
 
   provider: heroku
@@ -30,7 +30,7 @@ deploy:
     secure: blREfw45CnFXyS1BJKY8pgQ1ZiMDYV5nLWqVMLUufBiO85CRataJNRzyjkPC1E53AkavXB9HQPAzc6bzFlbZZ21xsrfDxmhjhPcUrAeaOWN9uSj68D5hlGyFJGc6P6hEu4n/UrX4H6F2hW0lWfLcl1Mtc62VMpmn5OjBOFdxhk+KtQaXpHN4j5YTeMeUh3U6HTpSfgg6rrGvmLUp5+zCxFzzMZ8Wp1MnRAf5N4oOW3Wj8ax9JB/c4EljQO4sb2LWZk9iSUYxQcXMTK6KmMhY+tGBrKqLz37ZK1DLp3jmFEcUyy+bUGgajIsFW0dLCPlB0bVKjK2Ry1u7SSZ/zpfDlma/nwQ1vVYLhmxhE+LnXxyfIjWN8IXqa6EcovpDbBe7arQ2mxsYf4WMebteDszMPPCcF2FgKE44Re83fzIVJk3R69D1gBxGzXlarPtV8k11L09ZoCSz9RCDBn2ng1ZOaprKpopp3bBPFD+LRwON9/ZRyRa4YbYkMPWxgj8krYNo50VSRrMz/3xR9py9hgVNnK5H/5QQTcdT0bPQf6lbJn3Q86QTUBxWI12FwKrcr2Nvw/setSACwRucGbbx9hLhrSmjYetsENWba1F2ouBdSpENvpjxETvyE2Z+GRNu4xbuFD9aSttogjJqjTYvRc/RJejvbENIc2/UIqnv/ra0PPY=
   app: pigallery2
   on:
-    repo: bpatrik/PiGallery2
+    repo: bpatrik/pigallery2
 cache:
   directories:
   - node_modules
