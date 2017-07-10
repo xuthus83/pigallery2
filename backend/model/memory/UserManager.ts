@@ -54,12 +54,18 @@ export class UserManager implements IUserManager {
   public async find(filter: any) {
     let pass = filter.password;
     delete filter.password;
-    return this.db.get("users").filter((u: UserDTO) => {
-      if (pass && !PasswordHelper.comparePassword(pass, u.password)) {
-        return false;
+    const users = await this.db.get("users");
+    let i = users.length;
+    while (i--) {
+      if (pass && !(await PasswordHelper.comparePassword(pass, users[i].password))) {
+        users.splice(i, 1);
+        continue;
       }
-      Utils.equalsFilter(u, filter)
-    });
+      if (Utils.equalsFilter(users[i], filter) == false) {
+        users.splice(i, 1);
+      }
+    }
+    return users;
   }
 
   public async createUser(user: UserDTO) {
