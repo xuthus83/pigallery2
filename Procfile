@@ -1,1 +1,1 @@
-web: node ./backend/server.js --Client-authenticationRequired=false
+web: node ./backend/index.js --Client-authenticationRequired=false
