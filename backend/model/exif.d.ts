@@ -15,14 +15,13 @@ declare module "exif-parser" {
     imageSize: any;
   }
   export interface ExifObject {
+    enableTagNames(value: boolean);
+    enableImageSize(value: boolean);
+    enableReturnTags(value: boolean);
     parse(): ExifData;
+
   }
   export function create(data: any): ExifObject;
 
-  export function enableTagNames(value: boolean);
-
-  export function enableImageSize(value: boolean);
-
-  export function enableReturnTags(value: boolean);
 }
 

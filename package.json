@@ -8,7 +8,7 @@
   "main": "./backend/index.js",
   "bin": "./backend/index.js",
   "scripts": {
-    "build": "ng build",
+    "build": "tsc && ng build",
     "pretest": "tsc",
     "test": "ng test --single-run && mocha --recursive test/backend/unit",
     "start": "node ./backend/index",
