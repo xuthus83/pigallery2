@@ -89,7 +89,7 @@ export class MySQLConnection {
     if (admins.length == 0) {
       let a = new UserEntity();
       a.name = "admin";
-      a.password = await PasswordHelper.cryptPassword("admin");
+      a.password = PasswordHelper.cryptPassword("admin");
       a.role = UserRoles.Admin;
       await userRepository.persist(a);
     }

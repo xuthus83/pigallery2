@@ -1,12 +1,12 @@
-import * as bcrypt from "bcrypt";
+import * as bcrypt from "bcryptjs";
 
 export class PasswordHelper {
-  public static async cryptPassword(password) {
-    const salt = await bcrypt.genSalt(10);
-    return await bcrypt.hash(password, salt);
+  public static cryptPassword(password) {
+    const salt = bcrypt.genSaltSync(10);
+    return bcrypt.hashSync(password, salt);
   }
 
-  public static async comparePassword(password, encryptedPassword) {
-    return bcrypt.compare(password, encryptedPassword);
+  public static comparePassword(password, encryptedPassword) {
+    return bcrypt.compareSync(password, encryptedPassword);
   }
 }

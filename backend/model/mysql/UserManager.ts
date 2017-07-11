@@ -43,7 +43,7 @@ export class UserManager implements IUserManager {
     if (user.permissions && user.permissions != null) {
       user.permissions = <any>JSON.stringify(<any>user.permissions);
     }
-    user.password = await PasswordHelper.cryptPassword(user.password);
+    user.password = PasswordHelper.cryptPassword(user.password);
     return await connection.getRepository(UserEntity).persist(user);
   }
 

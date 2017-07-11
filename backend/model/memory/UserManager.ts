@@ -57,7 +57,7 @@ export class UserManager implements IUserManager {
     const users = await this.db.get("users");
     let i = users.length;
     while (i--) {
-      if (pass && !(await PasswordHelper.comparePassword(pass, users[i].password))) {
+      if (pass && !(PasswordHelper.comparePassword(pass, users[i].password))) {
         users.splice(i, 1);
         continue;
       }
@@ -72,7 +72,7 @@ export class UserManager implements IUserManager {
     user.id = parseInt(this.db.get("idCounter")) + 1;
     this.db.put("idCounter", user.id);
     let users = this.db.get("users");
-    user.password = await PasswordHelper.cryptPassword(user.password);
+    user.password = PasswordHelper.cryptPassword(user.password);
     users.push(user);
     this.db.put("users", users);
 

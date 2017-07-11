@@ -136,7 +136,8 @@ export class AuthenticationMWs {
         sharingKey: req.query.sk || req.params.sharingKey,
       });
       if (!sharing || sharing.expires < Date.now() ||
-        (Config.Client.Sharing.passwordProtected === true && sharing.password && !PasswordHelper.comparePassword(password, sharing.password))) {
+        (Config.Client.Sharing.passwordProtected === true
+        && sharing.password && !PasswordHelper.comparePassword(password, sharing.password))) {
         return next(new Error(ErrorCodes.CREDENTIAL_NOT_FOUND));
       }
 

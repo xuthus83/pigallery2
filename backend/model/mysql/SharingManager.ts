@@ -31,7 +31,7 @@ export class SharingManager implements ISharingManager {
     await this.removeExpiredLink();
     const connection = await MySQLConnection.getConnection();
     if (sharing.password) {
-      sharing.password = await PasswordHelper.cryptPassword(sharing.password);
+      sharing.password = PasswordHelper.cryptPassword(sharing.password);
     }
     return await connection.getRepository(SharingEntity).persist(sharing);
 
