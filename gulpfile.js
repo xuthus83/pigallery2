@@ -46,7 +46,7 @@ gulp.task('copy-package', function () {
 
 
 gulp.task('zip-release', function () {
-  return gulp.src(['release/*'], {base: "."})
+  return gulp.src(['release/**/*'], {base: "./release"})
     .pipe(zip('pigallery2.zip'))
     .pipe(gulp.dest('.'));
 });

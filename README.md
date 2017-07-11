@@ -36,9 +36,9 @@ Full node install description: https://raspberrypi.stackexchange.com/questions/4
 ### Install PiGallery2
 ```bash
 cd ~
-wget https://github.com/bpatrik/pigallery2/archive/1.0.0-beta.0.tar.gz
-tar -xzvf 1.0.0-beta.0.tar.gz
-cd PiGallery2-1.0.0-beta.0
+wget https://github.com/bpatrik/pigallery2/releases/download/1.0.0-beta.3/pigallery2.zip
+tar -xzvf pigallery2.zip
+unzip pigallery2
 npm install
 npm run build
 ```
@@ -66,7 +66,7 @@ To configure it. Run `PiGallery2` first to create `config.json` file, then edit 
    * keyboard support for navigation  
    * showing low-res thumbnail while full image loads
    * Information panel for showing **Exif info**  
-   * Automatic playing - `In progress`
+   * Automatic playing
  * Client side caching (directories and search results)
  * Rendering **photos** with GPS coordinates **on google map**
    * .gpx file support - `future plan`
