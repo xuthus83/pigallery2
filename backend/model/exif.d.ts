@@ -10,6 +10,19 @@ declare module "node-iptc" {
 
 
 declare module "exif-parser" {
-  export function create(data): any;
+  export interface ExifData {
+    tags: any;
+    imageSize: any;
+  }
+  export interface ExifObject {
+    parse(): ExifData;
+  }
+  export function create(data: any): ExifObject;
+
+  export function enableTagNames(value: boolean);
+
+  export function enableImageSize(value: boolean);
+
+  export function enableReturnTags(value: boolean);
 }
- 
+

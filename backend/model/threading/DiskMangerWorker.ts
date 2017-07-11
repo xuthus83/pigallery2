@@ -11,6 +11,9 @@ import {ProjectPath} from "../../ProjectPath";
 
 const LOG_TAG = "[DiskManagerTask]";
 
+exif_parser.enableTagNames(true);
+exif_parser.enableImageSize(true);
+exif_parser.enableReturnTags(true);
 export class DiskMangerWorker {
   private static isImage(fullPath: string) {
     let imageMimeTypes = [
@@ -50,8 +53,10 @@ export class DiskMangerWorker {
             fs.stat(fullPath, (err, data) => {
               metadata.fileSize = data.size;
             });
+
             try {
               const exif = exif_parser.create(data).parse();
+              Logger.debug(LOG_TAG, "exif data", exif);
               metadata.cameraData = <CameraMetadata> {
                 ISO: exif.tags.ISO,
                 model: exif.tags.Model,
