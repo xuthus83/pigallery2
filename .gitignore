@@ -18,3 +18,4 @@ demo/TEMP/
 config.json
 users.db
 dist/
+release/
