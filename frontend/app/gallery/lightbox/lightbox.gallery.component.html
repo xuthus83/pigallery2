@@ -10,43 +10,54 @@
     </gallery-lightbox-photo>
   </div>
 
-  <!--
-  [@photoState]="{value:visible?'active':'inactive',
-                              params:{
-                              startWidth:startPhotoDimension.width,
-                              startHeight:startPhotoDimension.height,
-                              startTop:startPhotoDimension.top,
-                              startLeft:startPhotoDimension.left,
-                              endWidth:photoDimension.width,
-                              endHeight:photoDimension.height,
-                              endTop:photoDimension.top,
-                              endLeft:photoDimension.left}}"
-  -->
-  <div id="controllers-container" #controls
-       [style.width.px]="getScreenWidth()">
-    <div id="controls">
+  <div
+    *ngIf="controllersVisible"
+    id="controllers-container" #controls [style.width.px]="getScreenWidth()"
+    [ngClass]="!controllersDimmed ? 'dim-controls':  ''">
+    <div class="controls controls-top">
       <a *ngIf="activePhoto" [href]="activePhoto.gridPhoto.getPhotoPath()"
-         [download]="activePhoto.gridPhoto.photo.name"><span class="glyphicon glyphicon-download-alt highlight"
-                                                             title="download"></span></a>
-      <span class="glyphicon glyphicon-info-sign highlight" (click)="toggleInfoPanel()" title="info"></span>
+         [download]="activePhoto.gridPhoto.photo.name">
+        <span class="glyphicon glyphicon-download-alt highlight control-button"
+              title="download"></span>
+      </a>
+      <span class="glyphicon glyphicon-info-sign highlight control-button" (click)="toggleInfoPanel()"
+            title="info"></span>
 
-      <span class=" glyphicon glyphicon-resize-small highlight"
+      <span class=" glyphicon glyphicon-resize-small highlight control-button"
             *ngIf="fullScreenService.isFullScreenEnabled()"
             (click)="fullScreenService.exitFullScreen()" title="toggle fullscreen"></span>
 
-      <span class="glyphicon glyphicon-fullscreen highlight"
+      <span class="glyphicon glyphicon-fullscreen highlight control-button"
             *ngIf="!fullScreenService.isFullScreenEnabled()"
             (click)="fullScreenService.showFullScreen(root)" title="toggle fullscreen"></span>
 
       <span class="glyphicon glyphicon-remove highlight" (click)="hide()" title="close"></span>
     </div>
 
-    <div class="navigation-arrow highlight" *ngIf="navigation.hasPrev" title="key: left arrow" id="leftArrow"
+    <div class="navigation-arrow highlight"
+         *ngIf="navigation.hasPrev" title="key: left arrow" id="leftArrow"
          (click)="prevImage()"><span
       class="glyphicon glyphicon-chevron-left"></span></div>
-    <div class="navigation-arrow highlight" *ngIf="navigation.hasNext" title="key: right arrow" id="rightArrow"
+    <div class="navigation-arrow highlight"
+         *ngIf="navigation.hasNext" title="key: right arrow" id="rightArrow"
          (click)="nextImage()"><span
       class="glyphicon glyphicon-chevron-right"></span></div>
+
+    <div class="controls controls-playback">
+      <span class="glyphicon glyphicon-pause highlight control-button"
+            [ngClass]="playBackState == 0 ? 'button-disabled':''"
+            (click)="pause()"
+            title="pause"></span>
+      <span
+        class="glyphicon glyphicon-play highlight control-button"
+        [ngClass]="playBackState == 1 ? 'button-active':''"
+        (click)="play()"
+        title="auto play"></span>
+      <span class="glyphicon glyphicon-forward highlight control-button"
+            [ngClass]="playBackState == 2 ? 'button-active':''"
+            (click)="fastForward()"
+            title="fast auto play"></span>
+    </div>
   </div>
   <info-panel *ngIf="activePhoto && infoPanelVisible"
               id="info-panel"

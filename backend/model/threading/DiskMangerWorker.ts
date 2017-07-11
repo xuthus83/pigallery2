@@ -52,14 +52,7 @@ export class DiskMangerWorker {
             });
 
             try {
-              const exif_obj = exif_parser.create(data);
-
-              exif_obj.enableTagNames(true);
-              exif_obj.enableImageSize(true);
-              exif_obj.enableReturnTags(true);
-              const exif = exif_obj.parse();
-
-              Logger.debug(LOG_TAG, "exif data", exif);
+              const exif = exif_parser.create(data).parse();
               metadata.cameraData = <CameraMetadata> {
                 ISO: exif.tags.ISO,
                 model: exif.tags.Model,

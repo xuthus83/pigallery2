@@ -17,6 +17,7 @@ import {OverlayService} from "../overlay.service";
 import {Subscription} from "rxjs";
 import {animate, AnimationBuilder, style} from "@angular/animations";
 import {GalleryLightboxPhotoComponent} from "./photo/photo.lightbox.gallery.component";
+import {Observable} from "rxjs/Observable";
 
 @Component({
   selector: 'gallery-lightbox',
@@ -37,7 +38,11 @@ export class GalleryLightboxComponent implements OnDestroy {
 
   public visible = false;
   private changeSubscription: Subscription = null;
-
+  private timer: Observable<number>;
+  private timerSub: Subscription;
+  public playBackState: number = 0;
+  public controllersDimmed = true;
+  public controllersVisible = true;
 
   public infoPanelVisible = false;
   public infoPanelWidth = 0;
@@ -48,8 +53,12 @@ export class GalleryLightboxComponent implements OnDestroy {
               private _builder: AnimationBuilder) {
   }
 
+  ngOnInit(): void {
+    this.timer = Observable.timer(1000, 2000);
+  }
 
   ngOnDestroy(): void {
+    this.pause();
     if (this.changeSubscription != null) {
       this.changeSubscription.unsubscribe();
     }
@@ -76,6 +85,7 @@ export class GalleryLightboxComponent implements OnDestroy {
   }
 
   public prevImage() {
+    this.pause();
     if (this.activePhotoId > 0) {
       this.showPhoto(this.activePhotoId - 1);
       return;
@@ -87,6 +97,7 @@ export class GalleryLightboxComponent implements OnDestroy {
   activePhotoId: number = null;
 
   private showPhoto(photoIndex: number, resize: boolean = true) {
+    console.log("showing photo");
     this.activePhoto = null;
     this.changeDetector.detectChanges();
     this.updateActivePhoto(photoIndex, resize);
@@ -120,6 +131,8 @@ export class GalleryLightboxComponent implements OnDestroy {
   startPhotoDimension: Dimension = <Dimension>{top: 0, left: 0, width: 0, height: 0};
 
   public show(photo: PhotoDTO) {
+    this.controllersVisible = true;
+    this.showControls();
     console.log(this.photoElement);
     this.visible = true;
     let selectedPhoto = this.findPhotoComponent(photo);
@@ -149,6 +162,7 @@ export class GalleryLightboxComponent implements OnDestroy {
   }
 
   public hide() {
+    this.controllersVisible = false;
     this.fullScreenService.exitFullScreen();
 
     const lightboxDimension = this.activePhoto.getDimension();
@@ -342,6 +356,59 @@ export class GalleryLightboxComponent implements OnDestroy {
     let left = (this.getScreenWidth() / 2 - width / 2);
 
     return <Dimension>{top: top, left: left, width: width, height: height};
+  }
+
+  visibilityTimer = null;
+
+  @HostListener('mousemove')
+  onMousemove() {
+    this.showControls();
+  }
+
+  private showControls() {
+    this.controllersDimmed = true;
+    if (this.visibilityTimer != null) {
+      clearTimeout(this.visibilityTimer);
+    }
+    this.visibilityTimer = setTimeout(this.hideControls, 2000);
+  }
+
+  private hideControls = () => {
+
+    this.controllersDimmed = false;
+  };
+
+  public pause() {
+    if (this.timerSub != null) {
+      this.timerSub.unsubscribe();
+    }
+    this.playBackState = 0;
+  }
+
+  public play() {
+    console.log("play");
+    this.pause();
+    this.timerSub = this.timer.filter(t => t % 2 == 0).subscribe(() => {
+      if (this.navigation.hasNext) {
+        this.nextImage();
+      } else {
+        this.showPhoto(0);
+      }
+    });
+    this.playBackState = 1;
+  }
+
+  public fastForward() {
+    console.log("fastForward");
+    this.pause();
+    this.timerSub = this.timer.subscribe(() => {
+      if (this.navigation.hasNext) {
+        this.nextImage();
+      } else {
+        this.showPhoto(0);
+      }
+    });
+    this.playBackState = 2;
   }
 }
 

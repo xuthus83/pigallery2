@@ -29,12 +29,12 @@ gallery-lightbox-photo {
 
 .navigation-arrow {
   width: 30%;
-  height: 100%;
+  height: calc(100% - 75px);
   position: static;
   display: inline-block;
   padding: 15px;
   cursor: pointer;
-  font-size: x-large;
+  font-size: xx-large;
 }
 
 .navigation-arrow span {
@@ -47,9 +47,14 @@ gallery-lightbox-photo {
   height: 100%;
   left: 0;
   top: 0;
+  opacity: 1.0;
   position: fixed;
   color: white;
-  transition: all 0.3s ease-in-out;
+  transition: width 0.3s ease-in-out, opacity 1s;
+}
+
+#controllers-container.dim-controls {
+  opacity: 0.1;
 }
 
 #rightArrow {
@@ -57,8 +62,7 @@ gallery-lightbox-photo {
   text-align: right;
 }
 
-#controls {
-  top: 0;
+.controls {
   height: initial;
   text-align: right;
   width: 100%;
@@ -66,15 +70,30 @@ gallery-lightbox-photo {
   font-size: large;
 }
 
-#controls span {
+.controls .control-button {
   margin-left: 6px;
   margin-right: 6px;
   color: white;
   cursor: pointer;
 }
 
+.controls .button-disabled {
+  color: #888;
+}
+
+.controls-top {
+  top: 0;
+
+}
+
+.controls-playback {
+  padding-right: 15px;
+  bottom: 0;
+  position: absolute;
+}
+
 .highlight {
-  opacity: 0.4;
+  opacity: 0.5;
   transition: opacity .2s ease-out;
   -moz-transition: opacity .2s ease-out;
   -webkit-transition: opacity .2s ease-out;
@@ -83,6 +102,25 @@ gallery-lightbox-photo {
 
 .highlight:hover {
   opacity: 1.0;
+}
+
+@-webkit-keyframes blink {
+  0% {
+    opacity: 0.5;
+  }
+  25% {
+    opacity: 1.0;
+  }
+  75% {
+    opacity: 1.0;
+  }
+  100% {
+    opacity: 0.5;
+  }
+}
+
+.button-active {
+  animation: blink 3s ease-in-out infinite;
 }
 
 info-panel {
