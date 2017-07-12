@@ -34,14 +34,25 @@ PATH=$PATH:/usr/local/bin
 Full node install description: https://raspberrypi.stackexchange.com/questions/48303/install-nodejs-for-all-raspberry-pi
  
 ### Install PiGallery2
+#### Install from release
+
 ```bash
 cd ~
 wget https://github.com/bpatrik/pigallery2/releases/download/1.0.0-beta.3/pigallery2.zip
-tar -xzvf pigallery2.zip
 unzip pigallery2
+cd pigallery2
 npm install
-npm run build
 ```
+#### Install from source
+```bash
+cd ~
+wget https://github.com/bpatrik/pigallery2/archive/master.zip
+unzip master.zip
+cd pigallery2 # enter the unzipped directory
+npm install
+npm run build #explicitly building the project (releases are prebuilt)
+```
+
 ### Run PiGallery2
 ```bash
 npm start
