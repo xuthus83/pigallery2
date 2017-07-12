@@ -20,7 +20,7 @@ export class AdminMWs {
     const databaseSettings = <DataBaseConfig>req.body.databaseSettings;
 
     try {
-      if (Config.Server.database.type == DatabaseType.mysql) {
+      if (databaseSettings.type == DatabaseType.mysql) {
         await MySQLConnection.tryConnection(databaseSettings);
       }
       Config.Server.database = databaseSettings;
@@ -50,12 +50,12 @@ export class AdminMWs {
     const databaseSettings = <DataBaseConfig>req.body.databaseSettings;
 
     try {
-      if (Config.Server.database.type == DatabaseType.mysql) {
+      if (databaseSettings.type == DatabaseType.mysql) {
         await MySQLConnection.tryConnection(databaseSettings);
       }
       return next();
     } catch (err) {
-      return next(new Error(ErrorCodes.SETTINGS_ERROR, "Error saving database settings", err));
+      return next(new Error(ErrorCodes.SETTINGS_ERROR, "Settings error: " + JSON.stringify(err, null, '  '), err));
     }
   }
 }

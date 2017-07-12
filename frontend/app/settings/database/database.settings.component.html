@@ -7,7 +7,7 @@
     <form #settingsForm="ngForm">
       <p class="title">Type:</p>
       <select class="form-control" [(ngModel)]="settings.type" name="type" required>
-        <option *ngFor="let type of types" [value]="type.key">{{type.value}}
+        <option *ngFor="let type of types" [ngValue]="type.key">{{type.value}}
         </option>
       </select>
       <ng-container *ngIf="settings.type == DatabaseType.mysql">
@@ -25,12 +25,12 @@
     </form>
     <button class="btn btn-primary pull-right"
             *ngIf="tested==false"
-            [disabled]="!settingsForm.form.valid || !changed"
+            [disabled]="!settingsForm.form.valid || !changed || inProgress"
             (click)="test()">Test
     </button>
     <button class="btn btn-success pull-right"
             *ngIf="tested==true"
-            [disabled]="!settingsForm.form.valid || !changed"
+            [disabled]="!settingsForm.form.valid || !changed || inProgress"
             (click)="save()">Save
     </button>
     <button class="btn btn-default pull-right"

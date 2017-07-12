@@ -70,6 +70,9 @@ export class NetworkService {
   }
 
   private static handleError(error: any) {
+    if (error.code) {
+      return Promise.reject(error);
+    }
     // TODO: in a real world app do something better
     // instead of just logging it to the console
     console.error(error);

@@ -164,6 +164,7 @@ export class GalleryLightboxComponent implements OnDestroy {
   public hide() {
     this.controllersVisible = false;
     this.fullScreenService.exitFullScreen();
+    this.pause();
 
     const lightboxDimension = this.activePhoto.getDimension();
     lightboxDimension.top -= this.getBodyScrollTop();

@@ -51,7 +51,7 @@ export class RenderingMWs {
 
 
   public static renderConfig(req: Request, res: Response, next: NextFunction) {
-    let message = new Message<PrivateConfigClass>(null, Config);
+    let message = new Message<PrivateConfigClass>(null, Config.original());
     res.json(message);
   }
 

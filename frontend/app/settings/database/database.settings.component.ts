@@ -21,6 +21,7 @@ export class DatabaseSettingsComponent implements OnInit {
     type: DatabaseType.memory,
     mysql: {}
   };
+  inProgress = false;
   private original: DataBaseConfig;
   public types: Array<any> = [];
   public DatabaseType: any;
@@ -65,23 +66,31 @@ export class DatabaseSettingsComponent implements OnInit {
     this.getSettings();
   }
 
+
   public async test() {
+    this.inProgress = true;
     try {
+      this.error = "";
       await this._dbSettings.testSettings(this.settings);
       this.tested = true;
     } catch (err) {
-      if (err.message)
+      console.log(err);
+      if (err.message) {
         this.error = (<Error>err).message;
+      }
     }
+    this.inProgress = false;
   }
 
   public async save() {
     if (typeof this.settings.type == "undefined" || !this.tested) {
       return;
     }
+    this.inProgress = true;
     await this._dbSettings.updateSettings(this.settings);
     await this.getSettings();
     this.notification.success('Database settings saved', "Success");
+    this.inProgress = false;
   }
 
 }

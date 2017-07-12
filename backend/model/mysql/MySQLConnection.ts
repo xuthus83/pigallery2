@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import {Connection, createConnection} from "typeorm";
+import {Connection, createConnection, getConnection} from "typeorm";
 import {UserEntity} from "./enitites/UserEntity";
 import {UserRoles} from "../../../common/entities/UserDTO";
 import {PhotoEntity, PhotoMetadataEntity} from "./enitites/PhotoEntity";
@@ -53,6 +53,10 @@ export class MySQLConnection {
   }
 
   public static async tryConnection(config: DataBaseConfig) {
+    try {
+      await getConnection("test").close();
+    } catch (err) {
+    }
     const conn = await createConnection({
       name: "test",
       driver: {

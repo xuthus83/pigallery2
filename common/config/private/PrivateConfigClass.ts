@@ -52,5 +52,11 @@ export class PrivateConfigClass extends PublicConfigClass implements IPrivateCon
   public save() {
     ConfigLoader.saveConfigFile(path.join(__dirname, './../../../config.json'), this);
   }
+
+  public original(): PrivateConfigClass {
+    let cfg = new PrivateConfigClass();
+    cfg.load();
+    return cfg;
+  }
 }
 
