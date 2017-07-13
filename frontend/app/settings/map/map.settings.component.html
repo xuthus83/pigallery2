@@ -1,0 +1,42 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Map settings</h3>
+  </div>
+  <div class="panel-body">
+    <div [hidden]="!error" class="alert alert-danger" role="alert"><strong>Error: </strong>{{error}}</div>
+    <form #settingsForm="ngForm">
+      <p>
+        <bSwitch
+          name="enabled"
+          [switch-on-color]="'success'"
+          [switch-inverse]="'inverse'"
+          [switch-off-text]="'Disabled'"
+          [switch-on-text]="'Enabled'"
+          [switch-handle-width]="'100'"
+          [switch-label-width]="'20'"
+          [(ngModel)]="settings.enabled">
+        </bSwitch>
+      </p>
+      <input type="text" class="form-control" placeholder="Google api key" autofocus
+             [(ngModel)]="settings.googleApiKey"
+             [disabled]="!settings.enabled"
+             name="googleApiKey" required>
+      <span class="help-block">To show the images on a map, <a
+        href="https://developers.google.com/maps/documentation/javascript/get-api-key">google api key</a> is need</span>
+
+    </form>
+    <button class="btn btn-primary pull-right"
+            *ngIf="tested==false"
+            [disabled]="!settingsForm.form.valid || !changed || inProgress"
+            (click)="test()">Test
+    </button>
+    <button class="btn btn-success pull-right"
+            *ngIf="tested==true"
+            [disabled]="!settingsForm.form.valid || !changed || inProgress"
+            (click)="save()">Save
+    </button>
+    <button class="btn btn-default pull-right"
+            (click)="reset()">Reset
+    </button>
+  </div>
+</div>

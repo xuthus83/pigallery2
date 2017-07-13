@@ -22,7 +22,7 @@
         <ng-content select="[navbar]"></ng-content>
         <li class="divider-vertical">
         </li>
-        <li>
+        <li *ngIf="authenticationRequired">
           <p class="navbar-text" *ngIf="user.value">
             <span class="glyphicon glyphicon-user" aria-hidden="true"></span> {{user.value.name}}</p>
         </li>

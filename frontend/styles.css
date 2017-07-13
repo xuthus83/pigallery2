@@ -7,3 +7,7 @@
   margin-right: 0;
 }
 
+.bootstrap-switch-label {
+  margin-right: -4px;
+  margin-left: -4px;
+}

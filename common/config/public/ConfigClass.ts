@@ -1,12 +1,17 @@
-interface SearchConfig {
-  searchEnabled: boolean
+export interface SearchConfig {
+  enabled: boolean
   instantSearchEnabled: boolean
   autocompleteEnabled: boolean
 }
 
-interface SharingConfig {
+export interface SharingConfig {
   enabled: boolean;
   passwordProtected: boolean;
+}
+
+export interface MapConfig {
+  enabled: boolean;
+  googleApiKey: string;
 }
 
 export interface ClientConfig {
@@ -15,12 +20,12 @@ export interface ClientConfig {
   thumbnailSizes: Array<number>;
   Search: SearchConfig;
   Sharing: SharingConfig;
+  Map: MapConfig;
   concurrentThumbnailGenerations: number;
   enableCache: boolean;
   enableOnScrollRendering: boolean;
   enableOnScrollThumbnailPrioritising: boolean;
   authenticationRequired: boolean;
-  googleApiKey: string;
   publicUrl: string;
 }
 
@@ -34,7 +39,7 @@ export class PublicConfigClass {
     thumbnailSizes: [200, 400, 600],
     iconSize: 30,
     Search: {
-      searchEnabled: true,
+      enabled: true,
       instantSearchEnabled: true,
       autocompleteEnabled: true
     },
@@ -42,12 +47,15 @@ export class PublicConfigClass {
       enabled: true,
       passwordProtected: true
     },
+    Map: {
+      enabled: true,
+      googleApiKey: ""
+    },
     concurrentThumbnailGenerations: 1,
     enableCache: false,
     enableOnScrollRendering: true,
     enableOnScrollThumbnailPrioritising: true,
     authenticationRequired: true,
-    googleApiKey: "",
     publicUrl: ""
   };
 

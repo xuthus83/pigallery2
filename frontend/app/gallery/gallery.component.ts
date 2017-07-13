@@ -34,6 +34,7 @@ export class GalleryComponent implements OnInit, OnDestroy {
     timer: null
   };
   public countDown = null;
+  public mapEnabled = true;
 
   constructor(public _galleryService: GalleryService,
               private _authService: AuthenticationService,
@@ -41,6 +42,7 @@ export class GalleryComponent implements OnInit, OnDestroy {
               private shareService: ShareService,
               private _route: ActivatedRoute,
               private _navigation: NavigationService) {
+    this.mapEnabled = Config.Client.Map.enabled;
 
   }
 
@@ -67,7 +69,7 @@ export class GalleryComponent implements OnInit, OnDestroy {
 
       return this._navigation.toLogin();
     }
-    this.showSearchBar = Config.Client.Search.searchEnabled && this._authService.isAuthorized(UserRoles.Guest);
+    this.showSearchBar = Config.Client.Search.enabled && this._authService.isAuthorized(UserRoles.Guest);
     this.showShare = Config.Client.Sharing.enabled && this._authService.isAuthorized(UserRoles.User);
 
     this.subscription.content = this._galleryService.content.subscribe(this.onContentChange);

@@ -19,10 +19,10 @@ export class PrivateConfigClass extends PublicConfigClass implements IPrivateCon
     database: {
       type: DatabaseType.mysql,
       mysql: {
-        host: "localhost",
-        username: "root",
-        password: "root",
-        database: "pigallery2"
+        host: "",
+        username: "",
+        password: "",
+        database: ""
 
       }
     },
@@ -36,9 +36,10 @@ export class PrivateConfigClass extends PublicConfigClass implements IPrivateCon
   public setDatabaseType(type: DatabaseType) {
     this.Server.database.type = type;
     if (type === DatabaseType.memory) {
-      this.Client.Search.searchEnabled = false;
+      this.Client.Search.enabled = false;
       this.Client.Search.instantSearchEnabled = false;
       this.Client.Search.autocompleteEnabled = false;
+      this.Client.Sharing.enabled = false;
     }
   }
 

@@ -14,7 +14,8 @@ export class ObjectManagerRepository {
   private static _instance: ObjectManagerRepository = null;
 
 
-  public static InitMemoryManagers() {
+  public static async InitMemoryManagers() {
+    await ObjectManagerRepository.reset();
     const GalleryManager = require("./memory/GalleryManager").GalleryManager;
     const UserManager = require("./memory/UserManager").UserManager;
     const SearchManager = require("./memory/SearchManager").SearchManager;
@@ -26,6 +27,7 @@ export class ObjectManagerRepository {
   }
 
   public static async InitMySQLManagers() {
+    await ObjectManagerRepository.reset();
     await MySQLConnection.init();
     const GalleryManager = require("./mysql/GalleryManager").GalleryManager;
     const UserManager = require("./mysql/UserManager").UserManager;
@@ -45,7 +47,8 @@ export class ObjectManagerRepository {
     return this._instance;
   }
 
-  public static reset() {
+  public static async reset() {
+    await MySQLConnection.close();
     this._instance = null;
   }
 

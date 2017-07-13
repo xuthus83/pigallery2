@@ -48,6 +48,20 @@ export class AdminRouter {
       AdminMWs.testDatabaseSettings,
       RenderingMWs.renderOK
     );
+
+    app.put("/api/settings/map",
+      AuthenticationMWs.authenticate,
+      AuthenticationMWs.authorise(UserRoles.Admin),
+      AdminMWs.updateMapSettings,
+      RenderingMWs.renderOK
+    );
+
+    app.post("/api/settings/test/map",
+      AuthenticationMWs.authenticate,
+      AuthenticationMWs.authorise(UserRoles.Admin),
+      AdminMWs.testMapSettings,
+      RenderingMWs.renderOK
+    );
   };
 
 

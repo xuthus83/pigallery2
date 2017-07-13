@@ -76,7 +76,7 @@
     </div>
   </div>
 
-  <div id="map" *ngIf="hasGPS()">
+  <div id="map" *ngIf="hasGPS() && mapEnabled">
     <agm-map
       [disableDefaultUI]="true"
       [zoomControl]="false"

@@ -32,6 +32,24 @@ export class AuthenticationMWs {
     return null;
   }
 
+
+  public static async tryAuthenticate(req: Request, res: Response, next: NextFunction) {
+    if (Config.Client.authenticationRequired === false) {
+      req.session.user = <UserDTO>{name: "Admin", role: UserRoles.Admin};
+      return next();
+    }
+    try {
+      const user = await AuthenticationMWs.getSharingUser(req);
+      if (!!user) {
+        req.session.user = user;
+        return next();
+      }
+    } catch (err) {
+    }
+
+    return next();
+
+  }
   public static async authenticate(req: Request, res: Response, next: NextFunction) {
 
     if (Config.Client.authenticationRequired === false) {

@@ -9,24 +9,21 @@ import * as exif_parser from "exif-parser";
 import {ProjectPath} from "../../ProjectPath";
 
 const LOG_TAG = "[DiskManagerTask]";
-
-
 export class DiskMangerWorker {
   private static isImage(fullPath: string) {
-    let imageMimeTypes = [
-      'bmp',
-      'gif',
-      'jpeg', 'jpg', 'jpe',
-      'png',
-      'tiff', 'tif',
-      'webp',
-      'ico',
-      'tga'
+    const extensions = [
+      '.bmp',
+      '.gif',
+      '.jpeg', '.jpg', '.jpe',
+      '.png',
+      '.tiff', '.tif',
+      '.webp',
+      '.ico',
+      '.tga'
     ];
 
-    let extension = path.extname(fullPath).toLowerCase();
-
-    return imageMimeTypes.indexOf(extension) !== -1;
+    const extension = path.extname(fullPath).toLowerCase();
+    return extensions.indexOf(extension) !== -1;
   }
 
   private static loadPhotoMetadata(fullPath: string): Promise<PhotoMetadata> {

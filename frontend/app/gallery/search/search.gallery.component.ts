@@ -61,7 +61,7 @@ export class GallerySearchComponent {
   }
 
   public onSearch() {
-    if (Config.Client.Search.searchEnabled) {
+    if (Config.Client.Search.enabled) {
       this._galleryService.search(this.searchText);
     }
   }

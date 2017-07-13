@@ -11,13 +11,12 @@ import {SharingRouter} from "./routes/SharingRouter";
 import {ObjectManagerRepository} from "./model/ObjectManagerRepository";
 import {Logger} from "./Logger";
 import {Config} from "../common/config/private/Config";
-import {DatabaseType, ThumbnailProcessingLib} from "../common/config/private/IPrivateConfig";
+import {DatabaseType} from "../common/config/private/IPrivateConfig";
 import {LoggerRouter} from "./routes/LoggerRouter";
-import {ProjectPath} from "./ProjectPath";
 import {ThumbnailGeneratorMWs} from "./middlewares/thumbnail/ThumbnailGeneratorMWs";
 import {DiskManager} from "./model/DiskManger";
 import {NotificationRouter} from "./routes/NotificationRouter";
-import {NotificationManager} from "./model/NotifocationManager";
+import {ConfigDiagnostics} from "./model/ConfigDiagnostics";
 
 const LOG_TAG = "[server]";
 export class Server {
@@ -34,7 +33,7 @@ export class Server {
 
   async init() {
     Logger.info(LOG_TAG, "running diagnostics...");
-    await this.runDiagnostics();
+    await ConfigDiagnostics.runDiagnostics();
     Logger.info(LOG_TAG, "using config:");
     Logger.info(LOG_TAG, JSON.stringify(Config, null, '\t'));
 
@@ -67,6 +66,11 @@ export class Server {
 
     DiskManager.init();
     ThumbnailGeneratorMWs.init();
+    if (Config.Server.database.type == DatabaseType.mysql) {
+      await  ObjectManagerRepository.InitMySQLManagers();
+    } else {
+      await  ObjectManagerRepository.InitMemoryManagers();
+    }
 
     PublicRouter.route(this.app);
 
@@ -91,87 +95,6 @@ export class Server {
     this.server.on('listening', this.onListening);
 
 
-  }
-
-  async runDiagnostics() {
-
-
-    if (Config.Server.database.type == DatabaseType.mysql) {
-      try {
-        await ObjectManagerRepository.InitMySQLManagers();
-      } catch (err) {
-        Logger.warn(LOG_TAG, "[MYSQL error]", err);
-        Logger.warn(LOG_TAG, "Error during initializing mysql falling back to memory DB");
-
-        NotificationManager.warning("Error during initializing mysql falling back to memory DB", err);
-        Config.setDatabaseType(DatabaseType.memory);
-        await ObjectManagerRepository.InitMemoryManagers();
-      }
-    } else {
-      await ObjectManagerRepository.InitMemoryManagers();
-    }
-
-    if (Config.Server.thumbnail.processingLibrary == ThumbnailProcessingLib.sharp) {
-      try {
-        const sharp = require("sharp");
-        sharp();
-
-      } catch (err) {
-        NotificationManager.warning("Thumbnail hardware acceleration is not possible." +
-          " 'Sharp' node module is not found." +
-          " Falling back to JS based thumbnail generation", err);
-        Logger.warn(LOG_TAG, "[Thumbnail hardware acceleration] sharp module error: ", err);
-        Logger.warn(LOG_TAG, "Thumbnail hardware acceleration is not possible." +
-          " 'Sharp' node module is not found." +
-          " Falling back to JS based thumbnail generation");
-        Config.Server.thumbnail.processingLibrary = ThumbnailProcessingLib.Jimp;
-      }
-    }
-
-
-    if (Config.Server.thumbnail.processingLibrary == ThumbnailProcessingLib.gm) {
-      try {
-        const gm = require("gm");
-        gm(ProjectPath.FrontendFolder + "/assets/icon.png").size((err, value) => {
-          if (!err) {
-            return;
-          }
-          NotificationManager.warning("Thumbnail hardware acceleration is not possible." +
-            " 'gm' node module is not found." +
-            " Falling back to JS based thumbnail generation", err);
-          Logger.warn(LOG_TAG, "[Thumbnail hardware acceleration] gm module error: ", err);
-          Logger.warn(LOG_TAG, "Thumbnail hardware acceleration is not possible." +
-            " 'gm' node module is not found." +
-            " Falling back to JS based thumbnail generation");
-          Config.Server.thumbnail.processingLibrary = ThumbnailProcessingLib.Jimp;
-        });
-
-      } catch (err) {
-        NotificationManager.warning("Thumbnail hardware acceleration is not possible." +
-          " 'gm' node module is not found." +
-          " Falling back to JS based thumbnail generation", err);
-        Logger.warn(LOG_TAG, "[Thumbnail hardware acceleration] gm module error: ", err);
-        Logger.warn(LOG_TAG, "Thumbnail hardware acceleration is not possible." +
-          " 'gm' node module is not found." +
-          " Falling back to JS based thumbnail generation");
-        Config.Server.thumbnail.processingLibrary = ThumbnailProcessingLib.Jimp;
-      }
-    }
-
-    if (Config.Client.Search.searchEnabled == true &&
-      ObjectManagerRepository.getInstance().SearchManager.isSupported() == false) {
-
-      NotificationManager.warning("Search is not supported with these settings, switching off..");
-      Logger.warn(LOG_TAG, "Search is not supported with these settings, switching off..");
-      Config.Client.Search.searchEnabled = false;
-    }
-    if (Config.Client.Sharing.enabled == true &&
-      ObjectManagerRepository.getInstance().SharingManager.isSupported() == false) {
-
-      NotificationManager.warning("Sharing is not supported with these settings, switching off..");
-      Logger.warn(LOG_TAG, "Sharing is not supported with these settings, switching off..");
-      Config.Client.Sharing.enabled = false;
-    }
   }
 
 

@@ -86,7 +86,7 @@ export class MySQLConnection {
     return true;
   }
 
-  public static async  init(): Promise<void> {
+  public static async init(): Promise<void> {
     const connection = await this.getConnection();
     let userRepository = connection.getRepository(UserEntity);
     let admins = await userRepository.find({role: UserRoles.Admin});
@@ -98,6 +98,13 @@ export class MySQLConnection {
       await userRepository.persist(a);
     }
 
+  }
+
+  public static async close() {
+    try {
+      await getConnection().close();
+    } catch (err) {
+    }
   }
 
 

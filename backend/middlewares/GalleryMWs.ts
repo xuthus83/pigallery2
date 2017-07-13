@@ -89,7 +89,7 @@ export class GalleryMWs {
 
 
   public static async search(req: Request, res: Response, next: NextFunction) {
-    if (Config.Client.Search.searchEnabled === false) {
+    if (Config.Client.Search.enabled === false) {
       return next();
     }
 

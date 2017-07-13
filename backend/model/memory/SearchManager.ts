@@ -15,10 +15,4 @@ export class SearchManager implements ISearchManager {
     throw new Error("Method not implemented.");
   }
 
-  isSupported(): boolean {
-    return false;
-  }
-
-
-
 }

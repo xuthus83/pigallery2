@@ -3,5 +3,4 @@ export interface ISharingManager {
   findOne(filter: any): Promise<SharingDTO>;
   createSharing(sharing: SharingDTO): Promise<SharingDTO>;
   updateSharing(sharing: SharingDTO): Promise<SharingDTO>;
-  isSupported(): boolean;
 }

@@ -1,5 +1,6 @@
 import {Component, ElementRef, Input} from "@angular/core";
 import {PhotoDTO} from "../../../../../common/entities/PhotoDTO";
+import {Config} from "../../../../../common/config/public/Config";
 
 @Component({
   selector: 'info-panel',
@@ -9,8 +10,10 @@ import {PhotoDTO} from "../../../../../common/entities/PhotoDTO";
 export class InfoPanelLightboxComponent {
   @Input() photo: PhotoDTO;
 
+  public mapEnabled = true;
 
   constructor(public elementRef: ElementRef) {
+    this.mapEnabled = Config.Client.Map.enabled;
   }
 
   calcMpx() {

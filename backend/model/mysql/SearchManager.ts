@@ -8,10 +8,6 @@ import {PositionMetaData} from "../../../common/entities/PhotoDTO";
 
 export class SearchManager implements ISearchManager {
 
-  isSupported(): boolean {
-    return true;
-  }
-
   async autocomplete(text: string) {
 
     const connection = await MySQLConnection.getConnection();

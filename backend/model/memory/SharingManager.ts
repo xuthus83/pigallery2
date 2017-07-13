@@ -3,9 +3,6 @@ import {SharingDTO} from "../../../common/entities/SharingDTO";
 
 export class SharingManager implements ISharingManager {
 
-  isSupported(): boolean {
-    return false;
-  }
 
   findOne(filter: any): Promise<SharingDTO> {
     throw new Error("not implemented");

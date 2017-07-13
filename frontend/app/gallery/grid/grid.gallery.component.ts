@@ -34,7 +34,7 @@ export class GalleryGridComponent implements OnChanges, AfterViewInit {
   photosToRender: Array<GridPhoto> = [];
   containerWidth: number = 0;
 
-  private IMAGE_MARGIN = 2;
+  public IMAGE_MARGIN = 2;
   private TARGET_COL_COUNT = 5;
   private MIN_ROW_COUNT = 2;
   private MAX_ROW_COUNT = 5;

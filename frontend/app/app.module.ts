@@ -41,17 +41,18 @@ import {DatabaseSettingsComponent} from "./settings/database/database.settings.c
 import {ToastModule} from "ng2-toastr/ng2-toastr";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {NotificationService} from "./model/notification.service";
-
+import {JWBootstrapSwitchModule} from "jw-bootstrap-switch-ng2";
 import {ClipboardModule} from "ngx-clipboard";
 import {NavigationService} from "./model/navigation.service";
 import {InfoPanelLightboxComponent} from "./gallery/lightbox/infopanel/info-panel.lightbox.gallery.component";
+import {MapSettingsComponent} from "./settings/map/map.settings.component";
 
 @Injectable()
 export class GoogleMapsConfig {
   apiKey: string;
 
   constructor() {
-    this.apiKey = Config.Client.googleApiKey;
+    this.apiKey = Config.Client.Map.googleApiKey;
   }
 }
 
@@ -63,6 +64,7 @@ export class GoogleMapsConfig {
     BrowserAnimationsModule,
     appRoutes,
     ClipboardModule,
+    JWBootstrapSwitchModule,
     ToastModule.forRoot(),
     ModalModule.forRoot(),
     AgmCoreModule.forRoot(),
@@ -91,6 +93,7 @@ export class GoogleMapsConfig {
     //Settings
     UserMangerSettingsComponent,
     DatabaseSettingsComponent,
+    MapSettingsComponent,
     StringifyRole],
   providers: [
     {provide: LAZY_MAPS_API_CONFIG, useClass: GoogleMapsConfig},

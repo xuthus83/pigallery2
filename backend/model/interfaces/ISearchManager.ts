@@ -4,5 +4,4 @@ export interface ISearchManager {
   autocomplete(text: string): Promise<AutoCompleteItem[]>;
   search(text: string, searchType: SearchTypes): Promise<SearchResultDTO>;
   instantSearch(text: string): Promise<SearchResultDTO>;
-  isSupported(): boolean;
 }

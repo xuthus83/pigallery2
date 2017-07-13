@@ -7,6 +7,7 @@ import {Config} from "../../common/config/private/Config";
 import {PrivateConfigClass} from "../../common/config/private/PrivateConfigClass";
 import {UserRoles} from "../../common/entities/UserDTO";
 import {NotificationManager} from "../model/NotifocationManager";
+import {Logger} from "../Logger";
 
 export class RenderingMWs {
 
@@ -59,8 +60,17 @@ export class RenderingMWs {
   public static renderError(err: any, req: Request, res: Response, next: NextFunction): any {
 
     if (err instanceof Error) {
-      if (!(req.session.user && req.session.user.role >= UserRoles.Developer)) {
-        delete (err.details);
+      if (err.details) {
+        if (!(req.session.user && req.session.user.role >= UserRoles.Developer)) {
+          Logger.warn("Handled error:", err.details.toString() || err.details);
+          delete (err.details);
+        } else {
+          try {
+            err.details = err.details.toString() || err.details;
+          } catch (err) {
+            console.error(err);
+          }
+        }
       }
       let message = new Message<any>(err, null);
       return res.json(message);

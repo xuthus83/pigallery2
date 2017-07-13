@@ -43,7 +43,7 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, OnDestroy {
 
   constructor(private thumbnailService: ThumbnailManagerService) {
     this.SearchTypes = SearchTypes;
-    this.searchEnabled = Config.Client.Search.searchEnabled;
+    this.searchEnabled = Config.Client.Search.enabled;
   }
 
   ngOnInit() {
