@@ -4,28 +4,27 @@ import {CameraMetadata, GPSMetadata, ImageSize, PhotoDTO, PhotoMetadata} from ".
 import {Logger} from "../../Logger";
 import * as fs from "fs";
 import * as path from "path";
-import * as  mime from "mime";
 import * as iptc from "node-iptc";
 import * as exif_parser from "exif-parser";
 import {ProjectPath} from "../../ProjectPath";
 
 const LOG_TAG = "[DiskManagerTask]";
 
+
 export class DiskMangerWorker {
   private static isImage(fullPath: string) {
     let imageMimeTypes = [
-      'image/bmp',
-      'image/gif',
-      'image/jpeg',
-      'image/png',
-      'image/pjpeg',
-      'image/tiff',
-      'image/webp',
-      'image/x-tiff',
-      'image/x-windows-bmp'
+      'bmp',
+      'gif',
+      'jpeg', 'jpg', 'jpe',
+      'png',
+      'tiff', 'tif',
+      'webp',
+      'ico',
+      'tga'
     ];
 
-    let extension = mime.lookup(fullPath);
+    let extension = path.extname(fullPath).toLowerCase();
 
     return imageMimeTypes.indexOf(extension) !== -1;
   }
