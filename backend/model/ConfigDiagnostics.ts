@@ -43,6 +43,7 @@ export class ConfigDiagnostics {
 
   static async testThumbnailFolder(folder: string) {
     await new Promise((resolve, reject) => {
+      folder = ProjectPath.getAbsolutePath(folder);
       if (!fs.existsSync(folder)) {
         reject("Thumbnail folder not exists: '" + folder + "'");
       }
@@ -57,6 +58,7 @@ export class ConfigDiagnostics {
 
   static async testImageFolder(folder: string) {
     await new Promise((resolve, reject) => {
+      folder = ProjectPath.getAbsolutePath(folder);
       if (!fs.existsSync(folder)) {
         reject("Images folder not exists: '" + folder + "'");
       }

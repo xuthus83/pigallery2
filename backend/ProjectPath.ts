@@ -15,10 +15,14 @@ class ProjectPathClass {
     return path.join(pathStr, path.sep);
   }
 
+  getAbsolutePath(pathStr: string): string {
+    return this.isAbsolutePath(pathStr) ? pathStr : path.join(this.Root, pathStr);
+  }
+
   constructor() {
     this.Root = path.join(__dirname, "/../");
-    this.ImageFolder = this.isAbsolutePath(Config.Server.imagesFolder) ? Config.Server.imagesFolder : path.join(this.Root, Config.Server.imagesFolder);
-    this.ThumbnailFolder = this.isAbsolutePath(Config.Server.thumbnail.folder) ? Config.Server.thumbnail.folder : path.join(this.Root, Config.Server.thumbnail.folder);
+    this.ImageFolder = this.getAbsolutePath(Config.Server.imagesFolder);
+    this.ThumbnailFolder = this.getAbsolutePath(Config.Server.thumbnail.folder);
     this.FrontendFolder = path.join(this.Root, 'dist')
   }
 }
