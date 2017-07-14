@@ -8,7 +8,7 @@
       <div class="panel-body">
         <ng-container *ngFor="let notification of notificationService.notifications">
 
-          <div class="alert alert-{{NotificationType[notification.type]}}" role="alert">
+          <div class="alert alert-{{getCss(notification.type)}}" role="alert">
             {{notification.message}}
             <br *ngIf="notification.details"/>
             {{notification.details | json}}

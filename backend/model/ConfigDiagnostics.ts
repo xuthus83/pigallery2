@@ -44,9 +44,9 @@ export class ConfigDiagnostics {
   static async testThumbnailFolder(folder: string) {
     await new Promise((resolve, reject) => {
       if (!fs.existsSync(folder)) {
-        reject("Thumbnail folder not exists: " + folder);
+        reject("Thumbnail folder not exists: '" + folder + "'");
       }
-      fs.access(folder, fs.constants.W_OK, function (err) {
+      fs.access(folder, fs.constants.W_OK, (err) => {
         if (err) {
           reject({message: "Error during getting write access to temp folder", error: err});
         }
@@ -58,9 +58,9 @@ export class ConfigDiagnostics {
   static async testImageFolder(folder: string) {
     await new Promise((resolve, reject) => {
       if (!fs.existsSync(folder)) {
-        reject("Images folder not exists: " + folder);
+        reject("Images folder not exists: '" + folder + "'");
       }
-      fs.access(folder, fs.constants.R_OK, function (err) {
+      fs.access(folder, fs.constants.R_OK, (err) => {
         if (err) {
           reject({message: "Error during getting read access to images folder", error: err});
         }
@@ -103,8 +103,8 @@ export class ConfigDiagnostics {
         await ConfigDiagnostics.testDatabase(Config.Server.database);
       } catch (err) {
         Logger.warn(LOG_TAG, "[MYSQL error]", err);
-        Logger.warn(LOG_TAG, "Error during initializing mysql falling back to memory DB");
-        NotificationManager.warning("Error during initializing mysql falling back to memory DB", err);
+        Logger.warn(LOG_TAG, "Error during initializing mysql falling back temporally to memory DB");
+        NotificationManager.warning("Error during initializing mysql falling back temporally to memory DB", err);
         Config.setDatabaseType(DatabaseType.memory);
       }
     }
@@ -115,11 +115,11 @@ export class ConfigDiagnostics {
       } catch (err) {
         NotificationManager.warning("Thumbnail hardware acceleration is not possible." +
           " '" + ThumbnailProcessingLib[Config.Server.thumbnail.processingLibrary] + "' node module is not found." +
-          " Falling back to JS based thumbnail generation", err);
+          " Falling back temporally to JS based thumbnail generation", err);
         Logger.warn(LOG_TAG, "[Thumbnail hardware acceleration] module error: ", err);
         Logger.warn(LOG_TAG, "Thumbnail hardware acceleration is not possible." +
           " '" + ThumbnailProcessingLib[Config.Server.thumbnail.processingLibrary] + "' node module is not found." +
-          " Falling back to JS based thumbnail generation");
+          " Falling back temporally to JS based thumbnail generation");
         Config.Server.thumbnail.processingLibrary = ThumbnailProcessingLib.Jimp;
       }
     }
@@ -143,7 +143,7 @@ export class ConfigDiagnostics {
     try {
       await ConfigDiagnostics.testSearchConfig(Config.Client.Search);
     } catch (err) {
-      NotificationManager.warning("Search is not supported with these settings, switching off..", err);
+      NotificationManager.warning("Search is not supported with these settings. Disabling temporally. Please adjust the config properly.", err);
       Logger.warn(LOG_TAG, "Search is not supported with these settings, switching off..", err);
       Config.Client.Search.enabled = false;
     }
@@ -151,7 +151,7 @@ export class ConfigDiagnostics {
     try {
       await ConfigDiagnostics.testSharingConfig(Config.Client.Sharing);
     } catch (err) {
-      NotificationManager.warning("Sharing is not supported with these settings, switching off..", err);
+      NotificationManager.warning("Sharing is not supported with these settings. Disabling temporally. Please adjust the config properly.", err);
       Logger.warn(LOG_TAG, "Sharing is not supported with these settings, switching off..", err);
       Config.Client.Sharing.enabled = false;
     }
@@ -159,8 +159,8 @@ export class ConfigDiagnostics {
     try {
       await ConfigDiagnostics.testMapConfig(Config.Client.Map);
     } catch (err) {
-      NotificationManager.warning("Maps is not supported with these settings, switching off..", err);
-      Logger.warn(LOG_TAG, "Maps is not supported with these settings, switching off..", err);
+      NotificationManager.warning("Maps is not supported with these settings. Disabling temporally. Please adjust the config properly.", err);
+      Logger.warn(LOG_TAG, "Maps is not supported with these settings. Disabling temporally. Please adjust the config properly.", err);
       Config.Client.Map.enabled = false;
     }
 
