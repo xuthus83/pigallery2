@@ -18,11 +18,9 @@ export class AuthenticationService {
   constructor(private _userService: UserService) {
     this.user = new BehaviorSubject(null);
 
-    console.log(ServerInject.user);
     //picking up session..
     if (this.isAuthenticated() == false && Cookie.get('pigallery2-session') != null) {
       if (typeof ServerInject !== "undefined" && typeof ServerInject.user !== "undefined") {
-        console.log(ServerInject.user);
         this.user.next(ServerInject.user);
       }
       this.getSessionUser();
