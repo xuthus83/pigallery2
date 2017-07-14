@@ -36,7 +36,7 @@
     "mysql": "2.13.0",
     "node-iptc": "1.0.4",
     "reflect-metadata": "0.1.10",
-    "typeconfig": "1.0.3",
+    "typeconfig": "1.0.4",
     "typeorm": "0.0.11",
     "winston": "2.3.1"
   },
