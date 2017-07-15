@@ -5,7 +5,8 @@
     </div>
     <div class="panel-body">
       <div [hidden]="!error" class="alert alert-danger" role="alert"><strong>Error: </strong>{{error}}</div>
-      <div [hidden]="settings.server.processingLibrary!=ThumbnailProcessingLib.Jimp" class="alert alert-warning"
+      <div [hidden]="_settingsService.settings.server.processingLibrary!=ThumbnailProcessingLib.Jimp"
+           class="alert alert-warning"
            role="alert">It is highly recommended to use hardware accelerated (sharp or gm) lib for thumbnail generation
       </div>
 
@@ -13,12 +14,15 @@
         <div class="form-group">
           <label class="col-sm-2 control-label" for="lib">Thumbnail generation library</label>
           <div class="col-sm-10">
-            <select id="lib" class="form-control" [(ngModel)]="settings.server.processingLibrary" name="type" required>
+            <select id="lib" class="form-control" [(ngModel)]="_settingsService.settings.server.processingLibrary"
+                    name="type" required>
               <option *ngFor="let type of types" [ngValue]="type.key">{{type.value}}
               </option>
             </select>
-            <span *ngIf="settings.server.processingLibrary==ThumbnailProcessingLib.sharp" class="help-block">Make sure that sharp node module is installed (npm install sharp)</span>
-            <span *ngIf="settings.server.processingLibrary==ThumbnailProcessingLib.gm" class="help-block">Make sure that gm node module and <a
+            <span *ngIf="_settingsService.settings.server.processingLibrary==ThumbnailProcessingLib.sharp"
+                  class="help-block">Make sure that sharp node module is installed (npm install sharp)</span>
+            <span *ngIf="_settingsService.settings.server.processingLibrary==ThumbnailProcessingLib.gm"
+                  class="help-block">Make sure that gm node module and <a
               href="http://www.graphicsmagick.org/">GraphicsMagick</a> are installed (npm install sharp)</span>
 
           </div>
@@ -29,7 +33,7 @@
           <div class="col-sm-10">
             <input type="text" class="form-control" placeholder="path"
                    id="folder"
-                   [(ngModel)]="settings.server.folder"
+                   [(ngModel)]="_settingsService.settings.server.folder"
                    name="path" required>
             <span class="help-block">Thumbnails will be saved in this folder. Write access is required</span>
 
@@ -48,7 +52,7 @@
               [switch-on-text]="'High'"
               [switch-handle-width]="'100'"
               [switch-label-width]="'20'"
-              [(ngModel)]="settings.server.qualityPriority">
+              [(ngModel)]="_settingsService.settings.server.qualityPriority">
             </bSwitch>
             <span class="help-block">High quality may be slow. Especially with Jimp.</span>
 
@@ -60,7 +64,7 @@
           <div class="col-sm-10">
             <input type="number" class="form-control" placeholder="30"
                    id="icon"
-                   [(ngModel)]="settings.client.iconSize"
+                   [(ngModel)]="_settingsService.settings.client.iconSize"
                    min="1"
                    max="100"
                    step="1"

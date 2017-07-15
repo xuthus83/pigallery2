@@ -1,18 +1,17 @@
 import {Injectable} from "@angular/core";
 import {NetworkService} from "../../model/network/network.service";
 import {ClientConfig} from "../../../../common/config/public/ConfigClass";
-import {IPrivateConfig, ThumbnailConfig} from "../../../../common/config/private/IPrivateConfig";
-import {ISettingsService} from "../_abstract/abstract.settings.service";
+import {ThumbnailConfig} from "../../../../common/config/private/IPrivateConfig";
+import {AbstractSettingsService} from "../_abstract/abstract.settings.service";
+import {SettingsService} from "../settings.service";
 
 @Injectable()
-export class ThumbnailSettingsService implements ISettingsService<{ server: ThumbnailConfig, client: ClientConfig.ThumbnailConfig }> {
-  constructor(private _networkService: NetworkService) {
+export class ThumbnailSettingsService extends AbstractSettingsService<{ server: ThumbnailConfig, client: ClientConfig.ThumbnailConfig }> {
+  constructor(private _networkService: NetworkService,
+              _settingsService: SettingsService) {
+    super(_settingsService, s => ({client: s.Client.Thumbnail, server: s.Server.thumbnail}));
   }
 
-  public async  getSettings(): Promise<{ server: ThumbnailConfig, client: ClientConfig.ThumbnailConfig }> {
-    const settings = (await <Promise<IPrivateConfig>>this._networkService.getJson("/settings"));
-    return {server: settings.Server.thumbnail, client: settings.Client.Thumbnail};
-  }
 
   public updateSettings(settings: { server: ThumbnailConfig, client: ClientConfig.ThumbnailConfig }): Promise<void> {
     return this._networkService.putJson("/settings/thumbnail", {settings: settings});

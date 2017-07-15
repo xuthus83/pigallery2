@@ -16,35 +16,24 @@ import {Utils} from "../../../../common/Utils";
   providers: [ThumbnailSettingsService],
 })
 export class ThumbnailSettingsComponent extends SettingsComponent<{ server: ThumbnailConfig, client: ClientConfig.ThumbnailConfig }> {
-  public settings: { server: ThumbnailConfig, client: ClientConfig.ThumbnailConfig } = <{ server: ThumbnailConfig, client: ClientConfig.ThumbnailConfig }> {
-    server: {
-      folder: "",
-      processingLibrary: ThumbnailProcessingLib.Jimp,
-      qualityPriority: true
-    },
-    client: {
-      iconSize: null,
-      thumbnailSizes: []
-    }
-  };
   types: Array<any> = [];
   ThumbnailProcessingLib: any;
 
   constructor(_authService: AuthenticationService,
               _navigation: NavigationService,
-              _settingsSettings: ThumbnailSettingsService,
+              _settingsService: ThumbnailSettingsService,
               notification: NotificationService) {
-    super("Thumbnail", _authService, _navigation, _settingsSettings, notification);
+    super("Thumbnail", _authService, _navigation, _settingsService, notification);
   }
 
   get ThumbnailSizes(): string {
-    return this.settings.client.thumbnailSizes.join("; ");
+    return this._settingsService.settings.client.thumbnailSizes.join("; ");
   }
 
   set ThumbnailSizes(value: string) {
     value = value.replace(new RegExp(',', 'g'), ";");
     value = value.replace(new RegExp(' ', 'g'), ";");
-    this.settings.client.thumbnailSizes = value.split(";").map(s => parseInt(s)).filter(i => !isNaN(i) && i > 0);
+    this._settingsService.settings.client.thumbnailSizes = value.split(";").map(s => parseInt(s)).filter(i => !isNaN(i) && i > 0);
   }
 
   ngOnInit() {

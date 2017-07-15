@@ -2,6 +2,7 @@ import {Config} from "../../common/config/private/Config";
 import {
   DataBaseConfig,
   DatabaseType,
+  IPrivateConfig,
   ThumbnailConfig,
   ThumbnailProcessingLib
 } from "../../common/config/private/IPrivateConfig";
@@ -89,15 +90,15 @@ export class ConfigDiagnostics {
   }
 
 
-  static async testSearchConfig(search: ClientConfig.SearchConfig) {
-    if (search.enabled == true && Config.Server.database.type == DatabaseType.memory) {
+  static async testSearchConfig(search: ClientConfig.SearchConfig, config: IPrivateConfig) {
+    if (search.enabled == true && config.Server.database.type == DatabaseType.memory) {
       throw "Memory Database do not support searching";
     }
   }
 
 
-  static async testSharingConfig(sharing: ClientConfig.SharingConfig) {
-    if (sharing.enabled == true && Config.Server.database.type == DatabaseType.memory) {
+  static async testSharingConfig(sharing: ClientConfig.SharingConfig, config: IPrivateConfig) {
+    if (sharing.enabled == true && config.Server.database.type == DatabaseType.memory) {
       throw "Memory Database do not support sharing";
     }
   }
@@ -160,7 +161,7 @@ export class ConfigDiagnostics {
 
 
     try {
-      await ConfigDiagnostics.testSearchConfig(Config.Client.Search);
+      await ConfigDiagnostics.testSearchConfig(Config.Client.Search, Config);
     } catch (err) {
       NotificationManager.warning("Search is not supported with these settings. Disabling temporally. Please adjust the config properly.", err);
       Logger.warn(LOG_TAG, "Search is not supported with these settings, switching off..", err);
@@ -168,7 +169,7 @@ export class ConfigDiagnostics {
     }
 
     try {
-      await ConfigDiagnostics.testSharingConfig(Config.Client.Sharing);
+      await ConfigDiagnostics.testSharingConfig(Config.Client.Sharing, Config);
     } catch (err) {
       NotificationManager.warning("Sharing is not supported with these settings. Disabling temporally. Please adjust the config properly.", err);
       Logger.warn(LOG_TAG, "Sharing is not supported with these settings, switching off..", err);

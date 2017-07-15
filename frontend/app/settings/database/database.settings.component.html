@@ -6,20 +6,20 @@
     <div [hidden]="!error" class="alert alert-danger" role="alert"><strong>Error: </strong>{{error}}</div>
     <form #settingsForm="ngForm">
       <p class="title">Type:</p>
-      <select class="form-control" [(ngModel)]="settings.type" name="type" required>
+      <select class="form-control" [(ngModel)]="_settingsService.settings.type" name="type" required>
         <option *ngFor="let type of types" [ngValue]="type.key">{{type.value}}
         </option>
       </select>
-      <ng-container *ngIf="settings.type == DatabaseType.mysql">
+      <ng-container *ngIf="_settingsService.settings.type == DatabaseType.mysql">
         <p class="title">MySQL settings:</p>
         <input type="text" class="form-control" placeholder="Host" autofocus
-               [(ngModel)]="settings.mysql.host" name="host" required>
+               [(ngModel)]="_settingsService.settings.mysql.host" name="host" required>
         <input type="text" class="form-control" placeholder="Database" autofocus
-               [(ngModel)]="settings.mysql.database" name="database" required>
+               [(ngModel)]="_settingsService.settings.mysql.database" name="database" required>
         <input type="text" class="form-control" placeholder="Username"
-               [(ngModel)]="settings.mysql.username" name="username">
+               [(ngModel)]="_settingsService.settings.mysql.username" name="username">
         <input type="password" class="form-control" placeholder="Password"
-               [(ngModel)]="settings.mysql.password" name="password">
+               [(ngModel)]="_settingsService.settings.mysql.password" name="password">
       </ng-container>
 
     </form>

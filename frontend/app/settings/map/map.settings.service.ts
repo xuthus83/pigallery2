@@ -1,15 +1,15 @@
 import {Injectable} from "@angular/core";
 import {NetworkService} from "../../model/network/network.service";
-import {IPrivateConfig} from "../../../../common/config/private/IPrivateConfig";
 import {ClientConfig} from "../../../../common/config/public/ConfigClass";
+import {SettingsService} from "../settings.service";
+import {AbstractSettingsService} from "../_abstract/abstract.settings.service";
 
 @Injectable()
-export class MapSettingsService {
-  constructor(private _networkService: NetworkService) {
-  }
+export class MapSettingsService extends AbstractSettingsService<ClientConfig.MapConfig> {
+  constructor(private _networkService: NetworkService,
+              _settingsService: SettingsService) {
+    super(_settingsService, s => s.Client.Map);
 
-  public async  getSettings(): Promise<ClientConfig.MapConfig> {
-    return (await <Promise<IPrivateConfig>>this._networkService.getJson("/settings")).Client.Map;
   }
 
   public updateSettings(settings: ClientConfig.MapConfig): Promise<void> {

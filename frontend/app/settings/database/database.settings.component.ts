@@ -15,18 +15,15 @@ import {DatabaseSettingsService} from "./database.settings.service";
   providers: [DatabaseSettingsService],
 })
 export class DatabaseSettingsComponent extends SettingsComponent<DataBaseConfig> {
-  public settings: DataBaseConfig = <DataBaseConfig> {
-    type: DatabaseType.memory,
-    mysql: {}
-  };
+
   public types: Array<any> = [];
   public DatabaseType: any;
 
   constructor(_authService: AuthenticationService,
               _navigation: NavigationService,
-              _dbSettings: DatabaseSettingsService,
+              _settingsService: DatabaseSettingsService,
               notification: NotificationService) {
-    super("Database", _authService, _navigation, _dbSettings, notification);
+    super("Database", _authService, _navigation, _settingsService, notification);
   }
 
   ngOnInit() {

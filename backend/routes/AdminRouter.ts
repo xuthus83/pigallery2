@@ -61,6 +61,12 @@ export class AdminRouter {
       AdminMWs.updateThumbnailSettings,
       RenderingMWs.renderOK
     );
+    app.put("/api/settings/search",
+      AuthenticationMWs.authenticate,
+      AuthenticationMWs.authorise(UserRoles.Admin),
+      AdminMWs.updateSearchSettings,
+      RenderingMWs.renderOK
+    );
 
   };
 

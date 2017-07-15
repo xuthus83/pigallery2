@@ -48,6 +48,8 @@ import {InfoPanelLightboxComponent} from "./gallery/lightbox/infopanel/info-pane
 import {MapSettingsComponent} from "./settings/map/map.settings.component";
 import {TooltipModule} from "ngx-bootstrap/tooltip";
 import {ThumbnailSettingsComponent} from "./settings/thumbnail/thumbanil.settings.component";
+import {SearchSettingsComponent} from "./settings/search/search.settings.component";
+import {SettingsService} from "./settings/settings.service";
 @Injectable()
 export class GoogleMapsConfig {
   apiKey: string;
@@ -97,6 +99,7 @@ export class GoogleMapsConfig {
     DatabaseSettingsComponent,
     MapSettingsComponent,
     ThumbnailSettingsComponent,
+    SearchSettingsComponent,
     StringifyRole],
   providers: [
     {provide: LAZY_MAPS_API_CONFIG, useClass: GoogleMapsConfig},
@@ -111,6 +114,7 @@ export class GoogleMapsConfig {
     NotificationService,
     FullScreenService,
     NavigationService,
+    SettingsService,
     OverlayService],
 
   bootstrap: [AppComponent]

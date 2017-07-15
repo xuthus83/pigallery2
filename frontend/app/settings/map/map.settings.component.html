@@ -13,7 +13,7 @@
           [switch-disabled]="inProgress"
           [switch-handle-width]="'100'"
           [switch-label-width]="'20'"
-          [(ngModel)]="settings.enabled">
+          [(ngModel)]="_settingsService.settings.enabled">
         </bSwitch>
       </div>
     </div>
@@ -22,8 +22,8 @@
 
 
       <input type="text" class="form-control" placeholder="Google api key" autofocus
-             [(ngModel)]="settings.googleApiKey"
-             [disabled]="!settings.enabled"
+             [(ngModel)]="_settingsService.settings.googleApiKey"
+             [disabled]="!_settingsService.settings.enabled"
              name="googleApiKey" required>
       <span class="help-block">To show the images on a map, <a
         href="https://developers.google.com/maps/documentation/javascript/get-api-key">google api key</a> is need</span>

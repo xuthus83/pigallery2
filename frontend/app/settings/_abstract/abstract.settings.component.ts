@@ -5,15 +5,13 @@ import {Utils} from "../../../../common/Utils";
 import {ErrorDTO} from "../../../../common/entities/Error";
 import {NotificationService} from "../../model/notification.service";
 import {NavigationService} from "../../model/navigation.service";
-import {ISettingsService} from "./abstract.settings.service";
+import {AbstractSettingsService} from "./abstract.settings.service";
 
 
 export abstract class SettingsComponent<T> implements OnInit, OnDestroy {
 
   @ViewChild('settingsForm') form;
-  public settings: T = <T>{};
   public inProgress = false;
-  private original: T = <T>{};
   public error: string = null;
   public changed: boolean = false;
   private subscription = null;
@@ -21,7 +19,7 @@ export abstract class SettingsComponent<T> implements OnInit, OnDestroy {
   constructor(private name,
               private _authService: AuthenticationService,
               private _navigation: NavigationService,
-              protected _settingsService: ISettingsService<T>,
+              public _settingsService: AbstractSettingsService<T>,
               private notification: NotificationService) {
   }
 
@@ -31,11 +29,10 @@ export abstract class SettingsComponent<T> implements OnInit, OnDestroy {
       this._navigation.toLogin();
       return;
     }
-    this.original = Utils.clone(this.settings);
     this.getSettings();
 
     this.subscription = this.form.valueChanges.subscribe((data) => {
-      this.changed = !Utils.equalsFilter(this.settings, this.original);
+      this.changed = !Utils.equalsFilter(this._settingsService.settings, this._settingsService.original);
     });
   }
 
@@ -46,10 +43,7 @@ export abstract class SettingsComponent<T> implements OnInit, OnDestroy {
   }
 
   private async getSettings() {
-    const s = await this._settingsService.getSettings();
-    this.original = Utils.clone(s);
-    this.settings = s;
-    console.log(this.settings);
+    await this._settingsService.getSettings();
     this.changed = false;
   }
 
@@ -58,12 +52,11 @@ export abstract class SettingsComponent<T> implements OnInit, OnDestroy {
   }
 
 
-
   public async save() {
     this.inProgress = true;
     this.error = "";
     try {
-      await this._settingsService.updateSettings(this.settings);
+      await this._settingsService.updateSettings(this._settingsService.settings);
       await this.getSettings();
       this.notification.success(this.name + ' settings saved', "Success");
     } catch (err) {

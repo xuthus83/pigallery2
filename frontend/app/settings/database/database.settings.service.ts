@@ -1,15 +1,16 @@
 import {Injectable} from "@angular/core";
 import {NetworkService} from "../../model/network/network.service";
-import {DataBaseConfig, IPrivateConfig} from "../../../../common/config/private/IPrivateConfig";
+import {DataBaseConfig} from "../../../../common/config/private/IPrivateConfig";
+import {AbstractSettingsService} from "../_abstract/abstract.settings.service";
+import {SettingsService} from "../settings.service";
 
 @Injectable()
-export class DatabaseSettingsService {
-  constructor(private _networkService: NetworkService) {
+export class DatabaseSettingsService extends AbstractSettingsService<DataBaseConfig> {
+  constructor(private _networkService: NetworkService,
+              _settingsService: SettingsService) {
+    super(_settingsService, s => s.Server.database);
   }
 
-  public async  getSettings(): Promise<DataBaseConfig> {
-    return (await <Promise<IPrivateConfig>>this._networkService.getJson("/settings")).Server.database;
-  }
 
   public updateSettings(settings: DataBaseConfig): Promise<void> {
     return this._networkService.putJson("/settings/database", {settings: settings});
