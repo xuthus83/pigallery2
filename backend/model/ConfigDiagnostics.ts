@@ -43,10 +43,6 @@ export class ConfigDiagnostics {
 
   static async testThumbnailFolder(folder: string) {
     await new Promise((resolve, reject) => {
-      folder = ProjectPath.getAbsolutePath(folder);
-      if (!fs.existsSync(folder)) {
-        reject("Thumbnail folder not exists: '" + folder + "'");
-      }
       fs.access(folder, fs.constants.W_OK, (err) => {
         if (err) {
           reject({message: "Error during getting write access to temp folder", error: err});
@@ -58,7 +54,6 @@ export class ConfigDiagnostics {
 
   static async testImageFolder(folder: string) {
     await new Promise((resolve, reject) => {
-      folder = ProjectPath.getAbsolutePath(folder);
       if (!fs.existsSync(folder)) {
         reject("Images folder not exists: '" + folder + "'");
       }
