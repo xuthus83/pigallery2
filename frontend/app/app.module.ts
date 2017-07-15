@@ -50,6 +50,7 @@ import {TooltipModule} from "ngx-bootstrap/tooltip";
 import {ThumbnailSettingsComponent} from "./settings/thumbnail/thumbanil.settings.component";
 import {SearchSettingsComponent} from "./settings/search/search.settings.component";
 import {SettingsService} from "./settings/settings.service";
+import {ShareSettingsComponent} from "./settings/share/share.settings.component";
 @Injectable()
 export class GoogleMapsConfig {
   apiKey: string;
@@ -100,6 +101,7 @@ export class GoogleMapsConfig {
     MapSettingsComponent,
     ThumbnailSettingsComponent,
     SearchSettingsComponent,
+    ShareSettingsComponent,
     StringifyRole],
   providers: [
     {provide: LAZY_MAPS_API_CONFIG, useClass: GoogleMapsConfig},

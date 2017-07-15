@@ -2,7 +2,7 @@
   <div class="panel panel-default"
        [ngClass]="_settingsService.settings.enabled && !_settingsService.isSupported()?'panel-warning':''">
     <div class="panel-heading">
-      <h3 class="panel-title col-sm-4">Search settings</h3>
+      <h3 class="panel-title col-sm-4">Share settings</h3>
       <div class="switch-wrapper col-sm-8">
         <bSwitch
           class="switch"
@@ -22,14 +22,13 @@
       <div [hidden]="!error" class="alert alert-danger" role="alert"><strong>Error: </strong>{{error}}</div>
 
       <ng-container *ngIf="_settingsService.settings.enabled  || _settingsService.isSupported()">
-
         <div class="form-group">
-          <label class="col-sm-2 control-label" for="autocompleteEnabled">Autocomplete</label>
+          <label class="col-sm-2 control-label" for="passwordProtected">Password protected</label>
           <div class="col-sm-10">
             <bSwitch
-              id="autocompleteEnabled"
+              id="passwordProtected"
               class="switch"
-              name="autocompleteEnabled"
+              name="passwordProtected"
               [switch-on-color]="'primary'"
               [switch-disabled]="!_settingsService.settings.enabled"
               [switch-inverse]="'inverse'"
@@ -37,34 +36,14 @@
               [switch-on-text]="'Enabled'"
               [switch-handle-width]="'100'"
               [switch-label-width]="'20'"
-              [(ngModel)]="_settingsService.settings.autocompleteEnabled">
-            </bSwitch>
-          </div>
-        </div>
-
-
-        <div class="form-group">
-          <label class="col-sm-2 control-label" for="instantSearchEnabled">Instant search</label>
-          <div class="col-sm-10">
-            <bSwitch
-              id="instantSearchEnabled"
-              class="switch"
-              name="instantSearchEnabled"
-              [switch-on-color]="'primary'"
-              [switch-disabled]="!_settingsService.settings.enabled"
-              [switch-inverse]="'inverse'"
-              [switch-off-text]="'Disabled'"
-              [switch-on-text]="'Enabled'"
-              [switch-handle-width]="'100'"
-              [switch-label-width]="'20'"
-              [(ngModel)]="_settingsService.settings.instantSearchEnabled">
+              [(ngModel)]="_settingsService.settings.passwordProtected">
             </bSwitch>
           </div>
         </div>
 
       </ng-container>
       <div class="panel-info" *ngIf="(!_settingsService.settings.enabled && !_settingsService.isSupported())">
-        Search is not supported with these settings
+        Sharing is not supported with these settings
       </div>
       <button class="btn btn-success pull-right"
               [disabled]="!settingsForm.form.valid || !changed || inProgress"
