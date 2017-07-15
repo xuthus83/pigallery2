@@ -1,4 +1,4 @@
-import {Component, ElementRef, Input, OnChanges} from "@angular/core";
+import {Component, Input, OnChanges} from "@angular/core";
 import {GridPhoto} from "../../grid/GridPhoto";
 
 @Component({
@@ -9,12 +9,13 @@ import {GridPhoto} from "../../grid/GridPhoto";
 export class GalleryLightboxPhotoComponent implements OnChanges {
 
   @Input() gridPhoto: GridPhoto;
+  @Input() loadImage: boolean = false;
 
   public imageSize = {width: "auto", height: "100"};
 
   imageLoaded: boolean = false;
 
-  constructor(public elementRef: ElementRef) {
+  constructor() {
   }
 
   ngOnChanges() {

@@ -6,6 +6,7 @@
 
   <div class="lightbox" #lightbox>
     <gallery-lightbox-photo [gridPhoto]="activePhoto ? activePhoto.gridPhoto : null"
+                            [loadImage]="!animating"
                             #photo>
     </gallery-lightbox-photo>
   </div>

@@ -15,7 +15,7 @@ import {Dimension} from "../../model/IRenderable";
 import {FullScreenService} from "../fullscreen.service";
 import {OverlayService} from "../overlay.service";
 import {Subscription} from "rxjs";
-import {animate, AnimationBuilder, style} from "@angular/animations";
+import {animate, AnimationBuilder, AnimationPlayer, style} from "@angular/animations";
 import {GalleryLightboxPhotoComponent} from "./photo/photo.lightbox.gallery.component";
 import {Observable} from "rxjs/Observable";
 
@@ -46,6 +46,7 @@ export class GalleryLightboxComponent implements OnDestroy {
 
   public infoPanelVisible = false;
   public infoPanelWidth = 0;
+  public animating = false
 
 
   constructor(public fullScreenService: FullScreenService,
@@ -132,7 +133,6 @@ export class GalleryLightboxComponent implements OnDestroy {
   public show(photo: PhotoDTO) {
     this.controllersVisible = true;
     this.showControls();
-    console.log(this.photoElement);
     this.visible = true;
     let selectedPhoto = this.findPhotoComponent(photo);
     if (selectedPhoto === null) {
@@ -141,7 +141,10 @@ export class GalleryLightboxComponent implements OnDestroy {
 
     const lightboxDimension = selectedPhoto.getDimension();
     lightboxDimension.top -= this.getBodyScrollTop();
-    this.animatePhoto(selectedPhoto.getDimension(), this.calcLightBoxPhotoDimension(selectedPhoto.gridPhoto.photo));
+    this.animating = true;
+    this.animatePhoto(selectedPhoto.getDimension(), this.calcLightBoxPhotoDimension(selectedPhoto.gridPhoto.photo)).onDone(() => {
+      this.animating = false;
+    });
     this.animateLightbox(
       lightboxDimension,
       <Dimension>{
@@ -165,6 +168,7 @@ export class GalleryLightboxComponent implements OnDestroy {
     this.fullScreenService.exitFullScreen();
     this.pause();
 
+    this.animating = true;
     const lightboxDimension = this.activePhoto.getDimension();
     lightboxDimension.top -= this.getBodyScrollTop();
     this.blackCanvasOpacity = 0;
@@ -175,26 +179,28 @@ export class GalleryLightboxComponent implements OnDestroy {
       left: 0,
       width: this.getScreenWidth(),
       height: this.getScreenHeight()
-    }, lightboxDimension);
+    }, lightboxDimension).onDone(() => {
 
-    setTimeout(() => {
       this.visible = false;
       this.activePhoto = null;
       this.overlayService.hideOverlay();
-    }, 500);
+    });
+
 
     this.hideInfoPanel(false);
 
   }
 
-  animatePhoto(from: Dimension, to: Dimension = from) {
-    this._builder.build([
+
+  animatePhoto(from: Dimension, to: Dimension = from): AnimationPlayer {
+    const elem = this._builder.build([
       style(<any>Dimension.toString(from)),
       animate(300,
         style(<any>Dimension.toString(to)))
     ])
-      .create(this.photoElement.elementRef.nativeElement)
-      .play();
+      .create(this.photoElement.elementRef.nativeElement);
+    elem.play();
+    return elem;
   }
 
   animateLightbox(from: Dimension = <Dimension>{
@@ -202,14 +208,15 @@ export class GalleryLightboxComponent implements OnDestroy {
     left: 0,
     width: this.getScreenWidth(),
     height: this.getScreenHeight()
-  }, to: Dimension = from) {
-    this._builder.build([
+  }, to: Dimension = from): AnimationPlayer {
+    const elem = this._builder.build([
       style(<any>Dimension.toString(from)),
       animate(300,
         style(<any>Dimension.toString(to)))
     ])
-      .create(this.lightboxElement.nativeElement)
-      .play();
+      .create(this.lightboxElement.nativeElement);
+    elem.play();
+    return elem;
   }
 
 
