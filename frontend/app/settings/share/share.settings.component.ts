@@ -19,7 +19,7 @@ export class ShareSettingsComponent extends SettingsComponent<ClientConfig.Shari
               _navigation: NavigationService,
               _settingsService: ShareSettingsService,
               notification: NotificationService) {
-    super("Share", _authService, _navigation, _settingsService, notification);
+    super("Share", _authService, _navigation, _settingsService, notification, s => s.Client.Sharing);
   }
 
 

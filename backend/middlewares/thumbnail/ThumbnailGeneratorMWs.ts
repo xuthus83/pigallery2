@@ -162,7 +162,7 @@ export class ThumbnailGeneratorMWs {
         return next();
       }
     } catch (error) {
-      return next(new ErrorDTO(ErrorCodes.THUMBNAIL_GENERATION_ERROR, "ErrorDTO during generating thumbnail", error));
+      return next(new ErrorDTO(ErrorCodes.THUMBNAIL_GENERATION_ERROR, "Error during generating thumbnail", error));
     }
   }
 

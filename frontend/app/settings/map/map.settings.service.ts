@@ -8,7 +8,7 @@ import {AbstractSettingsService} from "../_abstract/abstract.settings.service";
 export class MapSettingsService extends AbstractSettingsService<ClientConfig.MapConfig> {
   constructor(private _networkService: NetworkService,
               _settingsService: SettingsService) {
-    super(_settingsService, s => s.Client.Map);
+    super(_settingsService);
 
   }
 

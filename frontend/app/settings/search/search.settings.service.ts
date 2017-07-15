@@ -9,12 +9,10 @@ import {AbstractSettingsService} from "../_abstract/abstract.settings.service";
 export class SearchSettingsService extends AbstractSettingsService<ClientConfig.SearchConfig> {
   constructor(private _networkService: NetworkService,
               _settingsService: SettingsService) {
-    super(_settingsService, s => s.Client.Search);
-
+    super(_settingsService)
   }
 
-
-  public   isSupported(): boolean {
+  public isSupported(): boolean {
     return this._settingsService.settings.value.Server.database.type != DatabaseType.memory;
   }
 

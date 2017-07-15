@@ -32,6 +32,10 @@ export class AdminMWs {
       //only updating explicitly set config (not saving config set by the diagnostics)
       const original = Config.original();
       original.Server.database = databaseSettings;
+      if (databaseSettings.type == DatabaseType.memory) {
+        original.Client.Sharing.enabled = false;
+        original.Client.Search.enabled = false;
+      }
       original.save();
       await ConfigDiagnostics.runDiagnostics();
       Logger.info(LOG_TAG, "new config:");
@@ -46,7 +50,10 @@ export class AdminMWs {
 
       return next();
     } catch (err) {
-      return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, "ErrorDTO saving database settings", err));
+      if (err instanceof Error) {
+        return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, "Error while saving database settings: " + err.toString(), err));
+      }
+      return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, "Error while saving database settings", err));
     }
   }
 

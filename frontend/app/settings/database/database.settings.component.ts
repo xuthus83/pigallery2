@@ -23,7 +23,7 @@ export class DatabaseSettingsComponent extends SettingsComponent<DataBaseConfig>
               _navigation: NavigationService,
               _settingsService: DatabaseSettingsService,
               notification: NotificationService) {
-    super("Database", _authService, _navigation, _settingsService, notification);
+    super("Database", _authService, _navigation, _settingsService, notification, s => s.Server.database);
   }
 
   ngOnInit() {

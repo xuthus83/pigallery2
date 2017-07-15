@@ -26,7 +26,7 @@ export class SharingMWs {
       return next();
 
     } catch (err) {
-      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, "ErrorDTO during retrieving sharing link", err));
+      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, "Error during retrieving sharing link", err));
     }
 
   }
@@ -68,7 +68,7 @@ export class SharingMWs {
       return next();
 
     } catch (err) {
-      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, "ErrorDTO during creating sharing link", err));
+      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, "Error during creating sharing link", err));
     }
   }
 
@@ -95,7 +95,7 @@ export class SharingMWs {
       return next();
 
     } catch (err) {
-      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, "ErrorDTO during creating sharing link", err));
+      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, "Error during creating sharing link", err));
     }
 
   }

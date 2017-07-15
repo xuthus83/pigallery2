@@ -19,7 +19,7 @@ export class MapSettingsComponent extends SettingsComponent<ClientConfig.MapConf
               _navigation: NavigationService,
               _settingsService: MapSettingsService,
               notification: NotificationService) {
-    super("Map", _authService, _navigation, <any>_settingsService, notification);
+    super("Map", _authService, _navigation, <any>_settingsService, notification, s => s.Client.Map);
   }
 
 

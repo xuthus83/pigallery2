@@ -47,7 +47,7 @@ export class ConfigDiagnostics {
     await new Promise((resolve, reject) => {
       fs.access(folder, fs.constants.W_OK, (err) => {
         if (err) {
-          reject({message: "ErrorDTO during getting write access to temp folder", error: err.toString()});
+          reject({message: "Error during getting write access to temp folder", error: err.toString()});
         }
       });
       resolve();
@@ -61,7 +61,7 @@ export class ConfigDiagnostics {
       }
       fs.access(folder, fs.constants.R_OK, (err) => {
         if (err) {
-          reject({message: "ErrorDTO during getting read access to images folder", error: err.toString()});
+          reject({message: "Error during getting read access to images folder", error: err.toString()});
         }
       });
       resolve();
@@ -117,8 +117,8 @@ export class ConfigDiagnostics {
         await ConfigDiagnostics.testDatabase(Config.Server.database);
       } catch (err) {
         Logger.warn(LOG_TAG, "[MYSQL error]", err);
-        Logger.warn(LOG_TAG, "ErrorDTO during initializing mysql falling back temporally to memory DB");
-        NotificationManager.warning("ErrorDTO during initializing mysql falling back temporally to memory DB", err);
+        Logger.warn(LOG_TAG, "Error during initializing mysql falling back temporally to memory DB");
+        NotificationManager.warning("Error during initializing mysql falling back temporally to memory DB", err);
         Config.setDatabaseType(DatabaseType.memory);
       }
     }

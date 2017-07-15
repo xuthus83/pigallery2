@@ -37,7 +37,7 @@ export class GalleryMWs {
       return next();
 
     } catch (err) {
-      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, "ErrorDTO during listing the directory", err));
+      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, "Error during listing the directory", err));
     }
   }
 
@@ -108,7 +108,7 @@ export class GalleryMWs {
       req.resultPipe = new ContentWrapper(null, result);
       return next();
     } catch (err) {
-      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, "ErrorDTO during searching", err));
+      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, "Error during searching", err));
     }
   }
 
@@ -128,7 +128,7 @@ export class GalleryMWs {
       req.resultPipe = new ContentWrapper(null, result);
       return next();
     } catch (err) {
-      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, "ErrorDTO during searching", err));
+      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, "Error during searching", err));
     }
   }
 
@@ -144,7 +144,7 @@ export class GalleryMWs {
       req.resultPipe = await ObjectManagerRepository.getInstance().SearchManager.autocomplete(req.params.text);
       return next();
     } catch (err) {
-      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, "ErrorDTO during searching", err));
+      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, "Error during searching", err));
     }
 
   }

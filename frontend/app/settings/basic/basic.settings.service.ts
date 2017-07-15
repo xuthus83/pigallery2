@@ -8,12 +8,7 @@ import {BasicConfigDTO} from "../../../../common/entities/settings/BasicConfigDT
 export class BasicSettingsService extends AbstractSettingsService<BasicConfigDTO> {
   constructor(private _networkService: NetworkService,
               _settingsService: SettingsService) {
-    super(_settingsService, s => ({
-      port: s.Server.port,
-      imagesFolder: s.Server.imagesFolder,
-      applicationTitle: s.Client.applicationTitle,
-      publicUrl: s.Client.publicUrl
-    }));
+    super(_settingsService);
   }
 
 

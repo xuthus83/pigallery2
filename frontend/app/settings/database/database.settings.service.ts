@@ -8,7 +8,7 @@ import {SettingsService} from "../settings.service";
 export class DatabaseSettingsService extends AbstractSettingsService<DataBaseConfig> {
   constructor(private _networkService: NetworkService,
               _settingsService: SettingsService) {
-    super(_settingsService, s => s.Server.database);
+    super(_settingsService);
   }
 
 

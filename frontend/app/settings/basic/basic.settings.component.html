@@ -7,16 +7,16 @@
       <div [hidden]="!error" class="alert alert-danger" role="alert"><strong>Error: </strong>{{error}}</div>
 
 
-      <div class="form-group">
+      <div class="form-group" [hidden]="simplifiedMode">
         <label class="col-sm-2 control-label" for="applicationTitle">Page title</label>
         <div class="col-sm-10">
           <input type="text" class="form-control" placeholder="Pigallery 2"
                  id="applicationTitle"
-                 [(ngModel)]="_settingsService.settings.applicationTitle"
+                 [(ngModel)]="settings.applicationTitle"
                  name="applicationTitle" required>
         </div>
       </div>
-      <div class="form-group">
+      <div class="form-group" [hidden]="simplifiedMode">
         <label class="col-sm-2 control-label" for="port">Port</label>
         <div class="col-sm-10">
           <input type="number" class="form-control" placeholder="80"
@@ -24,7 +24,7 @@
                  min="0"
                  step="1"
                  max="65535"
-                 [(ngModel)]="_settingsService.settings.port"
+                 [(ngModel)]="settings.port"
                  name="port" required>
           <span class="help-block">Port number. Port 80 is usually what you need.</span>
         </div>
@@ -35,18 +35,18 @@
         <div class="col-sm-10">
           <input type="text" class="form-control" placeholder="path"
                  id="folder"
-                 [(ngModel)]="_settingsService.settings.imagesFolder"
+                 [(ngModel)]="settings.imagesFolder"
                  name="folder" required>
           <span class="help-block">Images are loaded from this folder (read permission required)</span>
         </div>
       </div>
 
-      <div class="form-group">
+      <div class="form-group" [hidden]="simplifiedMode">
         <label class="col-sm-2 control-label" for="publicUrl">Page public url</label>
         <div class="col-sm-10">
           <input type="url" class="form-control" placeholder="{{urlPlaceholder}}"
                  id="publicUrl"
-                 [(ngModel)]="_settingsService.settings.publicUrl"
+                 [(ngModel)]="settings.publicUrl"
                  name="publicUrl">
           <span class="help-block">If you access the page form local network its good to know the public url for creating sharing link</span>
         </div>

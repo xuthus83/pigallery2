@@ -20,14 +20,35 @@
         To dismiss these notifications, restart the server.
       </div>
     </div>
-
-    <settings-basic></settings-basic>
+    <div class="form-horizontal">
+      <div class="form-group">
+        <label class="col-sm-10 control-label" for="simplifiedMode">Mode</label>
+        <div class="col-sm-2">
+          <bSwitch
+            id="simplifiedMode"
+            class="switch"
+            name="simplifiedMode"
+            [switch-off-color]="'warning'"
+            [switch-on-color]="'primary'"
+            [switch-inverse]="'inverse'"
+            [switch-off-text]="'Advanced'"
+            [switch-on-text]="'Simplified'"
+            [switch-handle-width]="'100'"
+            [switch-label-width]="'20'"
+            [(ngModel)]="simplifiedMode">
+          </bSwitch>
+        </div>
+      </div>
+    </div>
+    <settings-basic [simplifiedMode]="simplifiedMode"></settings-basic>
     <settings-usermanager></settings-usermanager>
-    <settings-database></settings-database>
-    <settings-thumbnail></settings-thumbnail>
-    <settings-search></settings-search>
-    <settings-share></settings-share>
-    <settings-map></settings-map>
-    <settings-other></settings-other>
+    <settings-database [simplifiedMode]="simplifiedMode"></settings-database>
+    <settings-thumbnail #thumbnail [hidden]="!thumbnail.hasAvailableSettings"
+                        [simplifiedMode]="simplifiedMode"></settings-thumbnail>
+    <settings-search #search [hidden]="!search.hasAvailableSettings"
+                     [simplifiedMode]="simplifiedMode"></settings-search>
+    <settings-share #share [hidden]="!share.hasAvailableSettings" [simplifiedMode]="simplifiedMode"></settings-share>
+    <settings-map #map [hidden]="!map.hasAvailableSettings" [simplifiedMode]="simplifiedMode"></settings-map>
+    <settings-other #other [hidden]="!other.hasAvailableSettings" [simplifiedMode]="simplifiedMode"></settings-other>
   </div>
 </app-frame>

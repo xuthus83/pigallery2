@@ -20,7 +20,7 @@
             [switch-on-text]="'Enabled'"
             [switch-handle-width]="'100'"
             [switch-label-width]="'20'"
-            [(ngModel)]="_settingsService.settings.enableThreading">
+            [(ngModel)]="settings.enableThreading">
           </bSwitch>
           <span class="help-block">Runs directory scanning and thumbnail generation (only for Jimp) in a different thread</span>
         </div>
@@ -40,7 +40,7 @@
             [switch-on-text]="'Enabled'"
             [switch-handle-width]="'100'"
             [switch-label-width]="'20'"
-            [(ngModel)]="_settingsService.settings.enableOnScrollThumbnailPrioritising">
+            [(ngModel)]="settings.enableOnScrollThumbnailPrioritising">
           </bSwitch>
           <span class="help-block">Those thumbnails get higher priority that are visible on the screen</span>
         </div>
@@ -59,7 +59,7 @@
             [switch-on-text]="'Enabled'"
             [switch-handle-width]="'100'"
             [switch-label-width]="'20'"
-            [(ngModel)]="_settingsService.settings.enableOnScrollRendering">
+            [(ngModel)]="settings.enableOnScrollRendering">
           </bSwitch>
           <span class="help-block">Shows only the required amount of photos at once. Renders more if page bottom is reached</span>
         </div>
@@ -79,7 +79,7 @@
             [switch-on-text]="'Enabled'"
             [switch-handle-width]="'100'"
             [switch-label-width]="'20'"
-            [(ngModel)]="_settingsService.settings.enableCache">
+            [(ngModel)]="settings.enableCache">
           </bSwitch>
           <span class="help-block">Caches directory contents and search results for better performance</span>
         </div>

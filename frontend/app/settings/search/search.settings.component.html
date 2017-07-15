@@ -1,6 +1,6 @@
 <form #settingsForm="ngForm">
   <div class="panel panel-default"
-       [ngClass]="_settingsService.settings.enabled && !_settingsService.isSupported()?'panel-warning':''">
+       [ngClass]="settings.enabled && !_settingsService.isSupported()?'panel-warning':''">
     <div class="panel-heading">
       <h3 class="panel-title col-sm-4">Search settings</h3>
       <div class="switch-wrapper col-sm-8">
@@ -11,17 +11,17 @@
           [switch-inverse]="'inverse'"
           [switch-off-text]="'Disabled'"
           [switch-on-text]="'Enabled'"
-          [switch-disabled]="inProgress || (!_settingsService.settings.enabled && !_settingsService.isSupported())"
+          [switch-disabled]="inProgress || (!settings.enabled && !_settingsService.isSupported())"
           [switch-handle-width]="'100'"
           [switch-label-width]="'20'"
-          [(ngModel)]="_settingsService.settings.enabled">
+          [(ngModel)]="settings.enabled">
         </bSwitch>
       </div>
     </div>
     <div class="panel-body">
       <div [hidden]="!error" class="alert alert-danger" role="alert"><strong>Error: </strong>{{error}}</div>
 
-      <ng-container *ngIf="_settingsService.settings.enabled  || _settingsService.isSupported()">
+      <ng-container *ngIf="settings.enabled  || _settingsService.isSupported()">
 
         <div class="form-group">
           <label class="col-sm-2 control-label" for="autocompleteEnabled">Autocomplete</label>
@@ -31,13 +31,13 @@
               class="switch"
               name="autocompleteEnabled"
               [switch-on-color]="'primary'"
-              [switch-disabled]="!_settingsService.settings.enabled"
+              [switch-disabled]="!settings.enabled"
               [switch-inverse]="'inverse'"
               [switch-off-text]="'Disabled'"
               [switch-on-text]="'Enabled'"
               [switch-handle-width]="'100'"
               [switch-label-width]="'20'"
-              [(ngModel)]="_settingsService.settings.autocompleteEnabled">
+              [(ngModel)]="settings.autocompleteEnabled">
             </bSwitch>
           </div>
         </div>
@@ -51,19 +51,19 @@
               class="switch"
               name="instantSearchEnabled"
               [switch-on-color]="'primary'"
-              [switch-disabled]="!_settingsService.settings.enabled"
+              [switch-disabled]="!settings.enabled"
               [switch-inverse]="'inverse'"
               [switch-off-text]="'Disabled'"
               [switch-on-text]="'Enabled'"
               [switch-handle-width]="'100'"
               [switch-label-width]="'20'"
-              [(ngModel)]="_settingsService.settings.instantSearchEnabled">
+              [(ngModel)]="settings.instantSearchEnabled">
             </bSwitch>
           </div>
         </div>
 
       </ng-container>
-      <div class="panel-info" *ngIf="(!_settingsService.settings.enabled && !_settingsService.isSupported())">
+      <div class="panel-info" *ngIf="(!settings.enabled && !_settingsService.isSupported())">
         Search is not supported with these settings
       </div>
       <button class="btn btn-success pull-right"

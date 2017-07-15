@@ -9,7 +9,7 @@ import {SettingsService} from "../settings.service";
 export class ThumbnailSettingsService extends AbstractSettingsService<{ server: ThumbnailConfig, client: ClientConfig.ThumbnailConfig }> {
   constructor(private _networkService: NetworkService,
               _settingsService: SettingsService) {
-    super(_settingsService, s => ({client: s.Client.Thumbnail, server: s.Server.thumbnail}));
+    super(_settingsService);
   }
 
 

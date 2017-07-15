@@ -19,7 +19,7 @@ export class SearchSettingsComponent extends SettingsComponent<ClientConfig.Sear
               _navigation: NavigationService,
               _settingsService: SearchSettingsService,
               notification: NotificationService) {
-    super("Search", _authService, _navigation, _settingsService, notification);
+    super("Search", _authService, _navigation, _settingsService, notification, s => s.Client.Search);
   }
 
 

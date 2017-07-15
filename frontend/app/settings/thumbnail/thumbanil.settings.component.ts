@@ -23,17 +23,20 @@ export class ThumbnailSettingsComponent extends SettingsComponent<{ server: Thum
               _navigation: NavigationService,
               _settingsService: ThumbnailSettingsService,
               notification: NotificationService) {
-    super("Thumbnail", _authService, _navigation, _settingsService, notification);
+    super("Thumbnail", _authService, _navigation, _settingsService, notification, s => ({
+      client: s.Client.Thumbnail,
+      server: s.Server.thumbnail
+    }));
   }
 
   get ThumbnailSizes(): string {
-    return this._settingsService.settings.client.thumbnailSizes.join("; ");
+    return this.settings.client.thumbnailSizes.join("; ");
   }
 
   set ThumbnailSizes(value: string) {
     value = value.replace(new RegExp(',', 'g'), ";");
     value = value.replace(new RegExp(' ', 'g'), ";");
-    this._settingsService.settings.client.thumbnailSizes = value.split(";").map(s => parseInt(s)).filter(i => !isNaN(i) && i > 0);
+    this.settings.client.thumbnailSizes = value.split(";").map(s => parseInt(s)).filter(i => !isNaN(i) && i > 0);
   }
 
   ngOnInit() {

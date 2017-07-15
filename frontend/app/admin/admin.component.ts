@@ -11,6 +11,8 @@ import {NavigationService} from "../model/navigation.service";
 })
 export class AdminComponent implements OnInit {
 
+  simplifiedMode = true;
+
   constructor(private _authService: AuthenticationService,
               private _navigation: NavigationService,
               public notificationService: NotificationService) {

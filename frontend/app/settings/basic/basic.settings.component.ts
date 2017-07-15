@@ -21,7 +21,12 @@ export class BasicSettingsComponent extends SettingsComponent<BasicConfigDTO> {
               _navigation: NavigationService,
               _settingsService: BasicSettingsService,
               notification: NotificationService) {
-    super("Basic", _authService, _navigation, _settingsService, notification);
+    super("Basic", _authService, _navigation, _settingsService, notification, s => ({
+      port: s.Server.port,
+      imagesFolder: s.Server.imagesFolder,
+      applicationTitle: s.Client.applicationTitle,
+      publicUrl: s.Client.publicUrl
+    }));
   }
 
   public async save(): Promise<boolean> {

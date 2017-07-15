@@ -9,7 +9,7 @@ import {AbstractSettingsService} from "../_abstract/abstract.settings.service";
 export class ShareSettingsService extends AbstractSettingsService<ClientConfig.SharingConfig> {
   constructor(private _networkService: NetworkService,
               _settingsService: SettingsService) {
-    super(_settingsService, s => s.Client.Sharing);
+    super(_settingsService);
 
   }
 

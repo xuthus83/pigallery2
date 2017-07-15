@@ -37,8 +37,6 @@ export class PrivateConfigClass extends PublicConfigClass implements IPrivateCon
     this.Server.database.type = type;
     if (type === DatabaseType.memory) {
       this.Client.Search.enabled = false;
-      this.Client.Search.instantSearchEnabled = false;
-      this.Client.Search.autocompleteEnabled = false;
       this.Client.Sharing.enabled = false;
     }
   }

@@ -1,4 +1,4 @@
-import {Component} from "@angular/core";
+import {Component, OnChanges} from "@angular/core";
 import {SettingsComponent} from "../_abstract/abstract.settings.component";
 import {AuthenticationService} from "../../model/network/authentication.service";
 import {NavigationService} from "../../model/navigation.service";
@@ -13,13 +13,22 @@ import {OtherConfigDTO} from "../../../../common/entities/settings/OtherConfigDT
     './../_abstract/abstract.settings.component.css'],
   providers: [OtherSettingsService],
 })
-export class OtherSettingsComponent extends SettingsComponent<OtherConfigDTO> {
+export class OtherSettingsComponent extends SettingsComponent<OtherConfigDTO> implements OnChanges {
 
   constructor(_authService: AuthenticationService,
               _navigation: NavigationService,
               _settingsService: OtherSettingsService,
               notification: NotificationService) {
-    super("Other", _authService, _navigation, _settingsService, notification);
+    super("Other", _authService, _navigation, _settingsService, notification, s => ({
+      enableThreading: s.Server.enableThreading,
+      enableOnScrollThumbnailPrioritising: s.Client.enableOnScrollThumbnailPrioritising,
+      enableOnScrollRendering: s.Client.enableOnScrollRendering,
+      enableCache: s.Client.enableCache
+    }));
+  }
+
+  ngOnChanges(): void {
+    this.hasAvailableSettings = !this.simplifiedMode;
   }
 
 

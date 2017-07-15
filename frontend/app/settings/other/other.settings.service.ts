@@ -8,12 +8,7 @@ import {OtherConfigDTO} from "../../../../common/entities/settings/OtherConfigDT
 export class OtherSettingsService extends AbstractSettingsService<OtherConfigDTO> {
   constructor(private _networkService: NetworkService,
               _settingsService: SettingsService) {
-    super(_settingsService, s => ({
-      enableThreading: s.Server.enableThreading,
-      enableOnScrollThumbnailPrioritising: s.Client.enableOnScrollThumbnailPrioritising,
-      enableOnScrollRendering: s.Client.enableOnScrollRendering,
-      enableCache: s.Client.enableCache
-    }));
+    super(_settingsService);
   }
 
 
