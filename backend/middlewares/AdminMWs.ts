@@ -8,6 +8,7 @@ import {Config} from "../../common/config/private/Config";
 import {ConfigDiagnostics} from "../model/ConfigDiagnostics";
 import {ClientConfig} from "../../common/config/public/ConfigClass";
 import {BasicConfigDTO} from "../../common/entities/settings/BasicConfigDTO";
+import {OtherConfigDTO} from "../../common/entities/settings/OtherConfigDTO";
 import set = Reflect.set;
 
 
@@ -188,6 +189,34 @@ export class AdminMWs {
       original.Server.imagesFolder = settings.imagesFolder;
       original.Client.publicUrl = settings.publicUrl;
       original.Client.applicationTitle = settings.applicationTitle;
+      original.save();
+      await ConfigDiagnostics.runDiagnostics();
+      Logger.info(LOG_TAG, "new config:");
+      Logger.info(LOG_TAG, JSON.stringify(Config, null, '\t'));
+      return next();
+    } catch (err) {
+      return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, "Settings error: " + JSON.stringify(err, null, '  '), err));
+    }
+  }
+
+
+  public static async  updateOtherSettings(req: Request, res: Response, next: NextFunction) {
+    if ((typeof req.body === 'undefined') || (typeof req.body.settings === 'undefined')) {
+      return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, "settings is needed"));
+    }
+
+    try {
+      const settings: OtherConfigDTO = req.body.settings;
+      Config.Client.enableCache = settings.enableCache;
+      Config.Client.enableOnScrollRendering = settings.enableOnScrollRendering;
+      Config.Client.enableOnScrollThumbnailPrioritising = settings.enableOnScrollThumbnailPrioritising;
+
+      //only updating explicitly set config (not saving config set by the diagnostics)
+      const original = Config.original();
+      original.Client.enableCache = settings.enableCache;
+      original.Client.enableOnScrollRendering = settings.enableOnScrollRendering;
+      original.Client.enableOnScrollThumbnailPrioritising = settings.enableOnScrollThumbnailPrioritising;
+      original.Server.enableThreading = settings.enableThreading;
       original.save();
       await ConfigDiagnostics.runDiagnostics();
       Logger.info(LOG_TAG, "new config:");

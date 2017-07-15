@@ -1,0 +1,100 @@
+<form #settingsForm="ngForm" class="form-horizontal">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Other settings</h3>
+    </div>
+    <div class="panel-body">
+      <div [hidden]="!error" class="alert alert-danger" role="alert"><strong>Error: </strong>{{error}}</div>
+
+
+      <div class="form-group">
+        <label class="col-sm-2 control-label" for="enableThreading">Threading</label>
+        <div class="col-sm-10">
+          <bSwitch
+            id="enableThreading"
+            class="switch"
+            name="enableThreading"
+            [switch-on-color]="'primary'"
+            [switch-inverse]="'inverse'"
+            [switch-off-text]="'Disabled'"
+            [switch-on-text]="'Enabled'"
+            [switch-handle-width]="'100'"
+            [switch-label-width]="'20'"
+            [(ngModel)]="_settingsService.settings.enableThreading">
+          </bSwitch>
+          <span class="help-block">Runs directory scanning and thumbnail generation (only for Jimp) in a different thread</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-sm-2 control-label" for="enableOnScrollThumbnailPrioritising">Scroll based thumbnail
+          generation</label>
+        <div class="col-sm-10">
+          <bSwitch
+            id="enableOnScrollThumbnailPrioritising"
+            class="switch"
+            name="enableOnScrollThumbnailPrioritising"
+            [switch-on-color]="'primary'"
+            [switch-inverse]="'inverse'"
+            [switch-off-text]="'Disabled'"
+            [switch-on-text]="'Enabled'"
+            [switch-handle-width]="'100'"
+            [switch-label-width]="'20'"
+            [(ngModel)]="_settingsService.settings.enableOnScrollThumbnailPrioritising">
+          </bSwitch>
+          <span class="help-block">Those thumbnails get higher priority that are visible on the screen</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="col-sm-2 control-label" for="enableOnScrollRendering">Lazy image rendering</label>
+        <div class="col-sm-10">
+          <bSwitch
+            id="enableOnScrollRendering"
+            class="switch"
+            name="enableOnScrollRendering"
+            [switch-on-color]="'primary'"
+            [switch-inverse]="'inverse'"
+            [switch-off-text]="'Disabled'"
+            [switch-on-text]="'Enabled'"
+            [switch-handle-width]="'100'"
+            [switch-label-width]="'20'"
+            [(ngModel)]="_settingsService.settings.enableOnScrollRendering">
+          </bSwitch>
+          <span class="help-block">Shows only the required amount of photos at once. Renders more if page bottom is reached</span>
+        </div>
+      </div>
+
+
+      <div class="form-group">
+        <label class="col-sm-2 control-label" for="enableCache">Cache</label>
+        <div class="col-sm-10">
+          <bSwitch
+            id="enableCache"
+            class="switch"
+            name="enableCache"
+            [switch-on-color]="'primary'"
+            [switch-inverse]="'inverse'"
+            [switch-off-text]="'Disabled'"
+            [switch-on-text]="'Enabled'"
+            [switch-handle-width]="'100'"
+            [switch-label-width]="'20'"
+            [(ngModel)]="_settingsService.settings.enableCache">
+          </bSwitch>
+          <span class="help-block">Caches directory contents and search results for better performance</span>
+        </div>
+      </div>
+
+
+      <button class="btn btn-success pull-right"
+              [disabled]="!settingsForm.form.valid || !changed || inProgress"
+              (click)="save()">Save
+      </button>
+      <button class="btn btn-default pull-right"
+              (click)="reset()">Reset
+      </button>
+    </div>
+  </div>
+
+
+</form>

@@ -79,6 +79,12 @@ export class AdminRouter {
       AdminMWs.updateBasicSettings,
       RenderingMWs.renderOK
     );
+    app.put("/api/settings/other",
+      AuthenticationMWs.authenticate,
+      AuthenticationMWs.authorise(UserRoles.Admin),
+      AdminMWs.updateOtherSettings,
+      RenderingMWs.renderOK
+    );
 
   };
 

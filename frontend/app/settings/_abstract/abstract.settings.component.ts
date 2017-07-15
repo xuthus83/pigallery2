@@ -20,7 +20,7 @@ export abstract class SettingsComponent<T> implements OnInit, OnDestroy {
               private _authService: AuthenticationService,
               private _navigation: NavigationService,
               public _settingsService: AbstractSettingsService<T>,
-              private notification: NotificationService) {
+              protected notification: NotificationService) {
   }
 
   ngOnInit() {
@@ -59,14 +59,17 @@ export abstract class SettingsComponent<T> implements OnInit, OnDestroy {
       await this._settingsService.updateSettings(this._settingsService.settings);
       await this.getSettings();
       this.notification.success(this.name + ' settings saved', "Success");
+      this.inProgress = false;
+      return true;
     } catch (err) {
       console.log(err);
       if (err.message) {
         this.error = (<ErrorDTO>err).message;
       }
     }
-    this.inProgress = false;
 
+    this.inProgress = false;
+    return false;
   }
 
 }
