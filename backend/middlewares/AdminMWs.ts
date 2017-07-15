@@ -185,7 +185,7 @@ export class AdminMWs {
 
     try {
       const settings: BasicConfigDTO = req.body.settings;
-      await ConfigDiagnostics.testThumbnailFolder(settings.imagesFolder);
+      await ConfigDiagnostics.testImageFolder(settings.imagesFolder);
       Config.Server.port = settings.port;
       Config.Server.imagesFolder = settings.imagesFolder;
       Config.Client.publicUrl = settings.publicUrl;
