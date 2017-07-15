@@ -43,15 +43,17 @@ export class DiskMangerWorker {
 
           try {
 
-            fs.stat(fullPath, (err, data) => {
-              metadata.fileSize = data.size;
-            });
+            try {
+              const stat = fs.statSync(fullPath);
+              metadata.fileSize = stat.size;
+            } catch (err) {
+            }
 
             try {
               const exif = exif_parser.create(data).parse();
               metadata.cameraData = <CameraMetadata> {
                 ISO: exif.tags.ISO,
-                model: exif.tags.Model,
+                model: exif.tags.Model.toString("utf8"),
                 make: exif.tags.Make,
                 fStop: exif.tags.FNumber,
                 exposure: exif.tags.ExposureTime,
@@ -99,7 +101,6 @@ export class DiskMangerWorker {
             } catch (err) {
               Logger.info(LOG_TAG, "Error parsing iptc data", fullPath);
             }
-
 
             return resolve(metadata);
           } catch (err) {

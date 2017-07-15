@@ -97,7 +97,6 @@ export class GalleryLightboxComponent implements OnDestroy {
   activePhotoId: number = null;
 
   private showPhoto(photoIndex: number, resize: boolean = true) {
-    console.log("showing photo");
     this.activePhoto = null;
     this.changeDetector.detectChanges();
     this.updateActivePhoto(photoIndex, resize);
