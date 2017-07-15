@@ -7,6 +7,7 @@ import {DataBaseConfig, DatabaseType, ThumbnailConfig} from "../../common/config
 import {Config} from "../../common/config/private/Config";
 import {ConfigDiagnostics} from "../model/ConfigDiagnostics";
 import {ClientConfig} from "../../common/config/public/ConfigClass";
+import {BasicConfigDTO} from "../../common/entities/settings/BasicConfigDTO";
 import set = Reflect.set;
 
 
@@ -164,6 +165,35 @@ export class AdminMWs {
       if (err instanceof Error) {
         return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, "Settings error: " + err.toString(), err));
       }
+      return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, "Settings error: " + JSON.stringify(err, null, '  '), err));
+    }
+  }
+
+
+  public static async  updateBasicSettings(req: Request, res: Response, next: NextFunction) {
+    if ((typeof req.body === 'undefined') || (typeof req.body.settings === 'undefined')) {
+      return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, "settings is needed"));
+    }
+
+    try {
+      const settings: BasicConfigDTO = req.body.settings;
+      await ConfigDiagnostics.testThumbnailFolder(settings.imagesFolder);
+      Config.Server.port = settings.port;
+      Config.Server.imagesFolder = settings.imagesFolder;
+      Config.Client.publicUrl = settings.publicUrl;
+      Config.Client.applicationTitle = settings.applicationTitle;
+      //only updating explicitly set config (not saving config set by the diagnostics)
+      const original = Config.original();
+      original.Server.port = settings.port;
+      original.Server.imagesFolder = settings.imagesFolder;
+      original.Client.publicUrl = settings.publicUrl;
+      original.Client.applicationTitle = settings.applicationTitle;
+      original.save();
+      await ConfigDiagnostics.runDiagnostics();
+      Logger.info(LOG_TAG, "new config:");
+      Logger.info(LOG_TAG, JSON.stringify(Config, null, '\t'));
+      return next();
+    } catch (err) {
       return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, "Settings error: " + JSON.stringify(err, null, '  '), err));
     }
   }

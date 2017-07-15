@@ -21,7 +21,7 @@
       <div [hidden]="!error" class="alert alert-danger" role="alert"><strong>Error: </strong>{{error}}</div>
 
 
-      <input type="text" class="form-control" placeholder="Google api key" autofocus
+      <input type="text" class="form-control" placeholder="Google api key"
              [(ngModel)]="_settingsService.settings.googleApiKey"
              [disabled]="!_settingsService.settings.enabled"
              name="googleApiKey" required>

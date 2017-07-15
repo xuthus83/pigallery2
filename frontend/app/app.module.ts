@@ -51,6 +51,7 @@ import {ThumbnailSettingsComponent} from "./settings/thumbnail/thumbanil.setting
 import {SearchSettingsComponent} from "./settings/search/search.settings.component";
 import {SettingsService} from "./settings/settings.service";
 import {ShareSettingsComponent} from "./settings/share/share.settings.component";
+import {BasicSettingsComponent} from "./settings/basic/basic.settings.component";
 @Injectable()
 export class GoogleMapsConfig {
   apiKey: string;
@@ -102,6 +103,7 @@ export class GoogleMapsConfig {
     ThumbnailSettingsComponent,
     SearchSettingsComponent,
     ShareSettingsComponent,
+    BasicSettingsComponent,
     StringifyRole],
   providers: [
     {provide: LAZY_MAPS_API_CONFIG, useClass: GoogleMapsConfig},

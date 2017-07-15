@@ -73,6 +73,12 @@ export class AdminRouter {
       AdminMWs.updateShareSettings,
       RenderingMWs.renderOK
     );
+    app.put("/api/settings/basic",
+      AuthenticationMWs.authenticate,
+      AuthenticationMWs.authorise(UserRoles.Admin),
+      AdminMWs.updateBasicSettings,
+      RenderingMWs.renderOK
+    );
 
   };
 

@@ -25,20 +25,22 @@ export class SettingsService {
         Map: {
           enabled: true,
           googleApiKey: ""
-        }, publicUrl: "",
+        },
+        publicUrl: "",
         applicationTitle: "",
         enableCache: true,
         enableOnScrollRendering: true,
         enableOnScrollThumbnailPrioritising: true,
         authenticationRequired: true
-      }, Server: {
+      },
+      Server: {
         database: {
           type: DatabaseType.memory
         },
-        imagesFolder: "",
         sharing: {
           updateTimeout: 2000
         },
+        imagesFolder: "",
         enableThreading: true,
         port: 80,
         thumbnail: {
