@@ -6,6 +6,9 @@ export class Utils {
   }
 
   static equalsFilter(object: any, filter: any): boolean {
+    if (typeof filter !== "object" || filter == null) {
+      return object == filter;
+    }
     const keys = Object.keys(filter);
     for (let i = 0; i < keys.length; i++) {
       const key = keys[i];

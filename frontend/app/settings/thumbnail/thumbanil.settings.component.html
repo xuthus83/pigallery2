@@ -1,0 +1,101 @@
+<form #settingsForm="ngForm" class="form-horizontal">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Thumbnail settings</h3>
+    </div>
+    <div class="panel-body">
+      <div [hidden]="!error" class="alert alert-danger" role="alert"><strong>Error: </strong>{{error}}</div>
+      <div [hidden]="settings.server.processingLibrary!=ThumbnailProcessingLib.Jimp" class="alert alert-warning"
+           role="alert">It is highly recommended to use hardware accelerated (sharp or gm) lib for thumbnail generation
+      </div>
+
+      <fieldset>
+        <div class="form-group">
+          <label class="col-sm-2 control-label" for="lib">Thumbnail generation library</label>
+          <div class="col-sm-10">
+            <select id="lib" class="form-control" [(ngModel)]="settings.server.processingLibrary" name="type" required>
+              <option *ngFor="let type of types" [ngValue]="type.key">{{type.value}}
+              </option>
+            </select>
+            <span *ngIf="settings.server.processingLibrary==ThumbnailProcessingLib.sharp" class="help-block">Make sure that sharp node module is installed (npm install sharp)</span>
+            <span *ngIf="settings.server.processingLibrary==ThumbnailProcessingLib.gm" class="help-block">Make sure that gm node module and <a
+              href="http://www.graphicsmagick.org/">GraphicsMagick</a> are installed (npm install sharp)</span>
+
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label" for="folder">Thumbnail folder</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" placeholder="path"
+                   id="folder"
+                   [(ngModel)]="settings.server.folder"
+                   name="path" required>
+            <span class="help-block">Thumbnails will be saved in this folder. Write access is required</span>
+
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label" for="quality">Thumbnail Quality</label>
+          <div class="col-sm-10">
+            <bSwitch
+              id="quality"
+              class="switch"
+              name="enabled"
+              [switch-on-color]="'primary'"
+              [switch-inverse]="'inverse'"
+              [switch-off-text]="'Low'"
+              [switch-on-text]="'High'"
+              [switch-handle-width]="'100'"
+              [switch-label-width]="'20'"
+              [(ngModel)]="settings.server.qualityPriority">
+            </bSwitch>
+            <span class="help-block">High quality may be slow. Especially with Jimp.</span>
+
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label" for="icon">Icon size</label>
+          <div class="col-sm-10">
+            <input type="number" class="form-control" placeholder="30"
+                   id="icon"
+                   [(ngModel)]="settings.client.iconSize"
+                   min="1"
+                   max="100"
+                   step="1"
+                   name="icon" required>
+            <span class="help-block">Icon size (used on maps)</span>
+
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-2 control-label" for="thumbnailSizes">Thumbnail sizes</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" placeholder="200; 400"
+                   id="thumbnailSizes"
+                   [(ngModel)]="ThumbnailSizes"
+                   name="thumbnailSizes" required>
+            <span class="help-block">
+              Size of the thumbnails.<br/>
+              The best matching size will be generated. (More size gives better quality, but use storage to store and CPU to render.)<br/>
+              ';' separated integers. If size is 200, tha thumbnail will have 200^2 pixels.
+            </span>
+
+          </div>
+        </div>
+      </fieldset>
+
+      <button class="btn btn-success pull-right"
+              [disabled]="!settingsForm.form.valid || !changed || inProgress"
+              (click)="save()">Save
+      </button>
+      <button class="btn btn-default pull-right"
+              (click)="reset()">Reset
+      </button>
+    </div>
+  </div>
+
+
+</form>

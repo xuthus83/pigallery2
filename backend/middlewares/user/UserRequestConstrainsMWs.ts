@@ -1,5 +1,5 @@
 import {NextFunction, Request, Response} from "express";
-import {Error, ErrorCodes} from "../../../common/entities/Error";
+import {ErrorCodes, ErrorDTO} from "../../../common/entities/Error";
 import {UserRoles} from "../../../common/entities/UserDTO";
 import {ObjectManagerRepository} from "../../model/ObjectManagerRepository";
 
@@ -10,7 +10,7 @@ export class UserRequestConstrainsMWs {
       return next();
     }
     if (req.session.user.id !== req.params.id) {
-      return next(new Error(ErrorCodes.NOT_AUTHORISED));
+      return next(new ErrorDTO(ErrorCodes.NOT_AUTHORISED));
     }
 
     return next();
@@ -23,7 +23,7 @@ export class UserRequestConstrainsMWs {
     }
 
     if (req.session.user.id === req.params.id) {
-      return next(new Error(ErrorCodes.NOT_AUTHORISED));
+      return next(new ErrorDTO(ErrorCodes.NOT_AUTHORISED));
     }
 
     return next();
@@ -42,12 +42,12 @@ export class UserRequestConstrainsMWs {
     try {
       const result = await ObjectManagerRepository.getInstance().UserManager.find({minRole: UserRoles.Admin});
       if (result.length <= 1) {
-        return next(new Error(ErrorCodes.GENERAL_ERROR));
+        return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR));
       }
       return next();
 
     } catch (err) {
-      return next(new Error(ErrorCodes.GENERAL_ERROR));
+      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR));
     }
 
   }

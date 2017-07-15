@@ -35,7 +35,7 @@ export class UserManager implements IUserManager {
       this.createUser(<UserDTO>{name: "developer", password: "developer", role: UserRoles.Developer});
       this.createUser(<UserDTO>{name: "admin", password: "admin", role: UserRoles.Admin});
       this.createUser(<UserDTO>{name: "user", password: "user", role: UserRoles.User});
-      this.createUser(<UserDTO>{name: "guest", password: "guest", role: UserRoles.LimitedGuest});
+      this.createUser(<UserDTO>{name: "guest", password: "guest", role: UserRoles.Guest});
     }
 
 
@@ -54,8 +54,10 @@ export class UserManager implements IUserManager {
   public async find(filter: any) {
     let pass = filter.password;
     delete filter.password;
-    const users = await this.db.get("users");
+    const users = (await this.db.get("users")).slice();
     let i = users.length;
+    console.log("filer", filter);
+    console.log(users);
     while (i--) {
       if (pass && !(PasswordHelper.comparePassword(pass, users[i].password))) {
         users.splice(i, 1);
@@ -65,6 +67,7 @@ export class UserManager implements IUserManager {
         users.splice(i, 1);
       }
     }
+    console.log(users);
     return users;
   }
 

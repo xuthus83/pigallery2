@@ -10,7 +10,8 @@ import {DatabaseSettingsService} from "./database.settings.service";
 @Component({
   selector: 'settings-database',
   templateUrl: './database.settings.component.html',
-  styleUrls: ['./database.settings.component.css'],
+  styleUrls: ['./database.settings.component.css',
+    './../_abstract/abstract.settings.component.css'],
   providers: [DatabaseSettingsService],
 })
 export class DatabaseSettingsComponent extends SettingsComponent<DataBaseConfig> {

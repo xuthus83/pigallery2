@@ -1,7 +1,7 @@
 import {NextFunction, Request, Response} from "express";
 import {CreateSharingDTO, SharingDTO} from "../../common/entities/SharingDTO";
 import {ObjectManagerRepository} from "../model/ObjectManagerRepository";
-import {Error, ErrorCodes} from "../../common/entities/Error";
+import {ErrorCodes, ErrorDTO} from "../../common/entities/Error";
 
 const LOG_TAG = "[SharingMWs]";
 export class SharingMWs {
@@ -26,14 +26,14 @@ export class SharingMWs {
       return next();
 
     } catch (err) {
-      return next(new Error(ErrorCodes.GENERAL_ERROR, "Error during retrieving sharing link", err));
+      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, "ErrorDTO during retrieving sharing link", err));
     }
 
   }
 
   public static async createSharing(req: Request, res: Response, next: NextFunction) {
     if ((typeof req.body === 'undefined') || (typeof req.body.createSharing === 'undefined')) {
-      return next(new Error(ErrorCodes.INPUT_ERROR, "createSharing filed is missing"));
+      return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, "createSharing filed is missing"));
     }
     const createSharing: CreateSharingDTO = req.body.createSharing;
     let sharingKey = SharingMWs.generateKey();
@@ -68,13 +68,13 @@ export class SharingMWs {
       return next();
 
     } catch (err) {
-      return next(new Error(ErrorCodes.GENERAL_ERROR, "Error during creating sharing link", err));
+      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, "ErrorDTO during creating sharing link", err));
     }
   }
 
   public static async updateSharing(req: Request, res: Response, next: NextFunction) {
     if ((typeof req.body === 'undefined') || (typeof req.body.updateSharing === 'undefined')) {
-      return next(new Error(ErrorCodes.INPUT_ERROR, "updateSharing filed is missing"));
+      return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, "updateSharing filed is missing"));
     }
     const updateSharing: CreateSharingDTO = req.body.updateSharing;
     const directoryName = req.params.directory || "/";
@@ -95,7 +95,7 @@ export class SharingMWs {
       return next();
 
     } catch (err) {
-      return next(new Error(ErrorCodes.GENERAL_ERROR, "Error during creating sharing link", err));
+      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, "ErrorDTO during creating sharing link", err));
     }
 
   }

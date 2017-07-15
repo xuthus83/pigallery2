@@ -40,5 +40,5 @@ export interface ServerConfig {
 }
 export interface IPrivateConfig {
   Server: ServerConfig;
-  Client: ClientConfig;
+  Client: ClientConfig.Config;
 }

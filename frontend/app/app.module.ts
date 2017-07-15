@@ -46,7 +46,8 @@ import {ClipboardModule} from "ngx-clipboard";
 import {NavigationService} from "./model/navigation.service";
 import {InfoPanelLightboxComponent} from "./gallery/lightbox/infopanel/info-panel.lightbox.gallery.component";
 import {MapSettingsComponent} from "./settings/map/map.settings.component";
-
+import {TooltipModule} from "ngx-bootstrap/tooltip";
+import {ThumbnailSettingsComponent} from "./settings/thumbnail/thumbanil.settings.component";
 @Injectable()
 export class GoogleMapsConfig {
   apiKey: string;
@@ -65,6 +66,7 @@ export class GoogleMapsConfig {
     appRoutes,
     ClipboardModule,
     JWBootstrapSwitchModule,
+    TooltipModule.forRoot(),
     ToastModule.forRoot(),
     ModalModule.forRoot(),
     AgmCoreModule.forRoot(),
@@ -94,6 +96,7 @@ export class GoogleMapsConfig {
     UserMangerSettingsComponent,
     DatabaseSettingsComponent,
     MapSettingsComponent,
+    ThumbnailSettingsComponent,
     StringifyRole],
   providers: [
     {provide: LAZY_MAPS_API_CONFIG, useClass: GoogleMapsConfig},

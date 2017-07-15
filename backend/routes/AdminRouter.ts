@@ -42,13 +42,6 @@ export class AdminRouter {
       RenderingMWs.renderOK
     );
 
-    app.post("/api/settings/test/database",
-      AuthenticationMWs.authenticate,
-      AuthenticationMWs.authorise(UserRoles.Admin),
-      AdminMWs.testDatabaseSettings,
-      RenderingMWs.renderOK
-    );
-
     app.put("/api/settings/map",
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Admin),
@@ -56,12 +49,19 @@ export class AdminRouter {
       RenderingMWs.renderOK
     );
 
-    app.post("/api/settings/test/map",
+    app.put("/api/settings/authentication",
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Admin),
-      AdminMWs.testMapSettings,
+      AdminMWs.updateAuthenticationSettings,
       RenderingMWs.renderOK
     );
+    app.put("/api/settings/thumbnail",
+      AuthenticationMWs.authenticate,
+      AuthenticationMWs.authorise(UserRoles.Admin),
+      AdminMWs.updateThumbnailSettings,
+      RenderingMWs.renderOK
+    );
+
   };
 
 

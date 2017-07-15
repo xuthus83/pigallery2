@@ -2,7 +2,7 @@ import {OnDestroy, OnInit, ViewChild} from "@angular/core";
 import {AuthenticationService} from "../../model/network/authentication.service";
 import {UserRoles} from "../../../../common/entities/UserDTO";
 import {Utils} from "../../../../common/Utils";
-import {Error} from "../../../../common/entities/Error";
+import {ErrorDTO} from "../../../../common/entities/Error";
 import {NotificationService} from "../../model/notification.service";
 import {NavigationService} from "../../model/navigation.service";
 import {ISettingsService} from "./abstract.settings.service";
@@ -11,13 +11,12 @@ import {ISettingsService} from "./abstract.settings.service";
 export abstract class SettingsComponent<T> implements OnInit, OnDestroy {
 
   @ViewChild('settingsForm') form;
-  public settings: T;
+  public settings: T = <T>{};
   public inProgress = false;
-  private original: T;
-  public tested = false;
+  private original: T = <T>{};
   public error: string = null;
   public changed: boolean = false;
-  private subscription;
+  private subscription = null;
 
   constructor(private name,
               private _authService: AuthenticationService,
@@ -37,8 +36,6 @@ export abstract class SettingsComponent<T> implements OnInit, OnDestroy {
 
     this.subscription = this.form.valueChanges.subscribe((data) => {
       this.changed = !Utils.equalsFilter(this.settings, this.original);
-
-      this.tested = false;
     });
   }
 
@@ -52,7 +49,7 @@ export abstract class SettingsComponent<T> implements OnInit, OnDestroy {
     const s = await this._settingsService.getSettings();
     this.original = Utils.clone(s);
     this.settings = s;
-    this.tested = false;
+    console.log(this.settings);
     this.changed = false;
   }
 
@@ -61,30 +58,22 @@ export abstract class SettingsComponent<T> implements OnInit, OnDestroy {
   }
 
 
-  public async test() {
+
+  public async save() {
     this.inProgress = true;
+    this.error = "";
     try {
-      this.error = "";
-      await this._settingsService.testSettings(this.settings);
-      this.tested = true;
+      await this._settingsService.updateSettings(this.settings);
+      await this.getSettings();
+      this.notification.success(this.name + ' settings saved', "Success");
     } catch (err) {
       console.log(err);
       if (err.message) {
-        this.error = (<Error>err).message;
+        this.error = (<ErrorDTO>err).message;
       }
     }
     this.inProgress = false;
-  }
 
-  public async save() {
-    if (!this.tested) {
-      return;
-    }
-    this.inProgress = true;
-    await this._settingsService.updateSettings(this.settings);
-    await this.getSettings();
-    this.notification.success(this.name + ' settings saved', "Success");
-    this.inProgress = false;
   }
 
 }

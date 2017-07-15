@@ -1,5 +1,5 @@
 import {NextFunction, Request, Response} from "express";
-import {Error, ErrorCodes} from "../../common/entities/Error";
+import {ErrorCodes, ErrorDTO} from "../../common/entities/Error";
 import {Utils} from "../../common/Utils";
 import {Message} from "../../common/entities/Message";
 import {SharingDTO} from "../../common/entities/SharingDTO";
@@ -21,7 +21,7 @@ export class RenderingMWs {
 
   public static renderSessionUser(req: Request, res: Response, next: NextFunction) {
     if (!(req.session.user)) {
-      return next(new Error(ErrorCodes.GENERAL_ERROR, "User not exists"));
+      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, "User not exists"));
     }
 
     const user = Utils.clone(req.session.user);
@@ -59,7 +59,7 @@ export class RenderingMWs {
 
   public static renderError(err: any, req: Request, res: Response, next: NextFunction): any {
 
-    if (err instanceof Error) {
+    if (err instanceof ErrorDTO) {
       if (err.details) {
         if (!(req.session.user && req.session.user.role >= UserRoles.Developer)) {
           Logger.warn("Handled error:", err.details.toString() || err.details);

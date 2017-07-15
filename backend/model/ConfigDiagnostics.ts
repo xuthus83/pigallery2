@@ -10,7 +10,7 @@ import {NotificationManager} from "./NotifocationManager";
 import {ProjectPath} from "../ProjectPath";
 import {MySQLConnection} from "./mysql/MySQLConnection";
 import * as fs from "fs";
-import {MapConfig, SearchConfig, SharingConfig} from "../../common/config/public/ConfigClass";
+import {ClientConfig} from "../../common/config/public/ConfigClass";
 
 const LOG_TAG = "[ConfigDiagnostics]";
 export class ConfigDiagnostics {
@@ -32,9 +32,10 @@ export class ConfigDiagnostics {
         const gm = require("gm");
         await new Promise((resolve, reject) => {
           gm(ProjectPath.FrontendFolder + "/assets/icon.png").size((err, value) => {
-            if (!err) {
-              return reject(err);
+            if (err) {
+              return reject(err.toString());
             }
+            return resolve();
           });
         });
         break;
@@ -45,7 +46,7 @@ export class ConfigDiagnostics {
     await new Promise((resolve, reject) => {
       fs.access(folder, fs.constants.W_OK, (err) => {
         if (err) {
-          reject({message: "Error during getting write access to temp folder", error: err});
+          reject({message: "ErrorDTO during getting write access to temp folder", error: err.toString()});
         }
       });
       resolve();
@@ -59,7 +60,7 @@ export class ConfigDiagnostics {
       }
       fs.access(folder, fs.constants.R_OK, (err) => {
         if (err) {
-          reject({message: "Error during getting read access to images folder", error: err});
+          reject({message: "ErrorDTO during getting read access to images folder", error: err.toString()});
         }
       });
       resolve();
@@ -67,26 +68,41 @@ export class ConfigDiagnostics {
   }
 
 
-  static async testThumbnailConfig(thumbnailConfig: ThumbnailConfig) {
+  static async testServerThumbnailConfig(thumbnailConfig: ThumbnailConfig) {
     await ConfigDiagnostics.testThumbnailLib(thumbnailConfig.processingLibrary);
     await ConfigDiagnostics.testThumbnailFolder(thumbnailConfig.folder);
   }
 
+  static async testClientThumbnailConfig(thumbnailConfig: ClientConfig.ThumbnailConfig) {
+    if (isNaN(thumbnailConfig.iconSize) || thumbnailConfig.iconSize <= 0) {
+      throw "IconSize has to be >= 0 integer, got: " + thumbnailConfig.iconSize;
+    }
 
-  static async testSearchConfig(search: SearchConfig) {
+    if (!thumbnailConfig.thumbnailSizes.length) {
+      throw "At least one thumbnail size is needed";
+    }
+    for (let i = 0; i < thumbnailConfig.thumbnailSizes.length; i++) {
+      if (isNaN(thumbnailConfig.thumbnailSizes[i]) || thumbnailConfig.thumbnailSizes[i] <= 0) {
+        throw "Thumbnail size has to be >= 0 integer, got: " + thumbnailConfig.thumbnailSizes[i];
+      }
+    }
+  }
+
+
+  static async testSearchConfig(search: ClientConfig.SearchConfig) {
     if (search.enabled == true && Config.Server.database.type == DatabaseType.memory) {
       throw "Memory Database do not support searching";
     }
   }
 
 
-  static async testSharingConfig(sharing: SharingConfig) {
+  static async testSharingConfig(sharing: ClientConfig.SharingConfig) {
     if (sharing.enabled == true && Config.Server.database.type == DatabaseType.memory) {
       throw "Memory Database do not support sharing";
     }
   }
 
-  static async testMapConfig(map: MapConfig) {
+  static async testMapConfig(map: ClientConfig.MapConfig) {
     if (map.enabled == true && (!map.googleApiKey || map.googleApiKey.length == 0)) {
       throw "Maps need a valid google api key";
     }
@@ -100,8 +116,8 @@ export class ConfigDiagnostics {
         await ConfigDiagnostics.testDatabase(Config.Server.database);
       } catch (err) {
         Logger.warn(LOG_TAG, "[MYSQL error]", err);
-        Logger.warn(LOG_TAG, "Error during initializing mysql falling back temporally to memory DB");
-        NotificationManager.warning("Error during initializing mysql falling back temporally to memory DB", err);
+        Logger.warn(LOG_TAG, "ErrorDTO during initializing mysql falling back temporally to memory DB");
+        NotificationManager.warning("ErrorDTO during initializing mysql falling back temporally to memory DB", err);
         Config.setDatabaseType(DatabaseType.memory);
       }
     }
@@ -134,6 +150,12 @@ export class ConfigDiagnostics {
     } catch (err) {
       NotificationManager.error("Images folder error", err);
       Logger.error(LOG_TAG, "Images folder error", err);
+    }
+    try {
+      await ConfigDiagnostics.testClientThumbnailConfig(Config.Client.Thumbnail)
+    } catch (err) {
+      NotificationManager.error("Thumbnail settings error", err);
+      Logger.error(LOG_TAG, "Thumbnail settings error", err);
     }
 
 

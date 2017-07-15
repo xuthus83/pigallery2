@@ -19,7 +19,7 @@ export class Photo extends IconPhoto {
 
   getThumbnailSize() {
     let renderSize = Math.sqrt(this.renderWidth * this.renderHeight);
-    return Utils.findClosest(renderSize, Config.Client.thumbnailSizes);
+    return Utils.findClosest(renderSize, Config.Client.Thumbnail.thumbnailSizes);
   }
 
   getReplacementThumbnailSize(): number {

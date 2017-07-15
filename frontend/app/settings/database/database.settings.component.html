@@ -23,13 +23,7 @@
       </ng-container>
 
     </form>
-    <button class="btn btn-primary pull-right"
-            *ngIf="tested==false"
-            [disabled]="!settingsForm.form.valid || !changed || inProgress"
-            (click)="test()">Test
-    </button>
     <button class="btn btn-success pull-right"
-            *ngIf="tested==true"
             [disabled]="!settingsForm.form.valid || !changed || inProgress"
             (click)="save()">Save
     </button>

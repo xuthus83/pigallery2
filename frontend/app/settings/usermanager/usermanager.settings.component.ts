@@ -5,11 +5,14 @@ import {Utils} from "../../../../common/Utils";
 import {UserManagerSettingsService} from "./usermanager.settings.service";
 import {ModalDirective} from "ngx-bootstrap/modal";
 import {NavigationService} from "../../model/navigation.service";
+import {NotificationService} from "../../model/notification.service";
+import {ErrorCodes, ErrorDTO} from "../../../../common/entities/Error";
 
 @Component({
   selector: 'settings-usermanager',
   templateUrl: './usermanager.settings.component.html',
-  styleUrls: ['./usermanager.settings.component.css'],
+  styleUrls: ['./usermanager.settings.component.css',
+    './../_abstract/abstract.settings.component.css'],
   providers: [UserManagerSettingsService],
 })
 export class UserMangerSettingsComponent implements OnInit {
@@ -17,9 +20,16 @@ export class UserMangerSettingsComponent implements OnInit {
   public newUser = <UserDTO>{};
   public userRoles: Array<any> = [];
   public users: Array<UserDTO> = [];
+  public enabled = true;
+  public error: string = null;
+  public inProgress = false;
 
-  constructor(private _authService: AuthenticationService, private _navigation: NavigationService, private _userSettings: UserManagerSettingsService) {
+  constructor(private _authService: AuthenticationService,
+              private _navigation: NavigationService,
+              private _userSettings: UserManagerSettingsService,
+              private notification: NotificationService) {
   }
+
 
   ngOnInit() {
     if (!this._authService.isAuthenticated() ||
@@ -33,11 +43,23 @@ export class UserMangerSettingsComponent implements OnInit {
       .filter(r => r.key <= this._authService.user.value.role)
       .sort((a, b) => a.key - b.key);
 
+    this.getSettings();
     this.getUsersList();
   }
 
   private async getUsersList() {
-    this.users = await this._userSettings.getUsers();
+    try {
+      this.users = await this._userSettings.getUsers();
+    } catch (err) {
+      this.users = [];
+      if ((<ErrorDTO>err).code != ErrorCodes.USER_MANAGEMENT_DISABLED) {
+        throw err;
+      }
+    }
+  }
+
+  private async getSettings() {
+    this.enabled = await this._userSettings.getSettings();
   }
 
 
@@ -71,6 +93,28 @@ export class UserMangerSettingsComponent implements OnInit {
     await this._userSettings.deleteUser(user);
     await this.getUsersList();
     this.childModal.hide();
+  }
+
+  async switched(event: { previousValue: false, currentValue: true }) {
+    this.inProgress = true;
+    this.error = "";
+    this.enabled = event.currentValue;
+    try {
+      await this._userSettings.updateSettings(this.enabled);
+      await this.getSettings();
+      if (this.enabled == true) {
+        this.notification.success('Password protection enabled', "Success");
+        this.getUsersList();
+      } else {
+        this.notification.success('Password protection disabled', "Success");
+      }
+    } catch (err) {
+      console.log(err);
+      if (err.message) {
+        this.error = (<ErrorDTO>err).message;
+      }
+    }
+    this.inProgress = false;
   }
 }
 

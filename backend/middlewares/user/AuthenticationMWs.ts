@@ -1,6 +1,6 @@
 ///<reference path="../customtypings/ExtendedRequest.d.ts"/>
 import {NextFunction, Request, Response} from "express";
-import {Error, ErrorCodes} from "../../../common/entities/Error";
+import {ErrorCodes, ErrorDTO} from "../../../common/entities/Error";
 import {UserDTO, UserRoles} from "../../../common/entities/UserDTO";
 import {ObjectManagerRepository} from "../../model/ObjectManagerRepository";
 import {Config} from "../../../common/config/private/Config";
@@ -63,10 +63,10 @@ export class AuthenticationMWs {
         return next();
       }
     } catch (err) {
-      return next(new Error(ErrorCodes.CREDENTIAL_NOT_FOUND, null, err));
+      return next(new ErrorDTO(ErrorCodes.CREDENTIAL_NOT_FOUND, null, err));
     }
     if (typeof req.session.user === 'undefined') {
-      return next(new Error(ErrorCodes.NOT_AUTHENTICATED));
+      return next(new ErrorDTO(ErrorCodes.NOT_AUTHENTICATED));
     }
     return next();
   }
@@ -74,7 +74,7 @@ export class AuthenticationMWs {
   public static authorise(role: UserRoles) {
     return (req: Request, res: Response, next: NextFunction) => {
       if (req.session.user.role < role) {
-        return next(new Error(ErrorCodes.NOT_AUTHORISED));
+        return next(new ErrorDTO(ErrorCodes.NOT_AUTHORISED));
       }
       return next();
     };
@@ -92,12 +92,12 @@ export class AuthenticationMWs {
       return next();
 
     }
-    return next(new Error(ErrorCodes.PERMISSION_DENIED));
+    return next(new ErrorDTO(ErrorCodes.PERMISSION_DENIED));
   }
 
   public static inverseAuthenticate(req: Request, res: Response, next: NextFunction) {
     if (typeof req.session.user !== 'undefined') {
-      return next(new Error(ErrorCodes.ALREADY_AUTHENTICATED));
+      return next(new ErrorDTO(ErrorCodes.ALREADY_AUTHENTICATED));
     }
     return next();
   }
@@ -107,7 +107,7 @@ export class AuthenticationMWs {
     //not enough parameter
     if ((typeof req.body === 'undefined') || (typeof req.body.loginCredential === 'undefined') || (typeof req.body.loginCredential.username === 'undefined') ||
       (typeof req.body.loginCredential.password === 'undefined')) {
-      return next(new Error(ErrorCodes.INPUT_ERROR));
+      return next(new ErrorDTO(ErrorCodes.INPUT_ERROR));
     }
     //TODO: implement remember me
     try {
@@ -127,10 +127,10 @@ export class AuthenticationMWs {
           return next();
         }
       } catch (err) {
-        return next(new Error(ErrorCodes.CREDENTIAL_NOT_FOUND, null, err));
+        return next(new ErrorDTO(ErrorCodes.CREDENTIAL_NOT_FOUND, null, err));
       }
 
-      return next(new Error(ErrorCodes.CREDENTIAL_NOT_FOUND));
+      return next(new ErrorDTO(ErrorCodes.CREDENTIAL_NOT_FOUND));
     }
 
 
@@ -144,7 +144,7 @@ export class AuthenticationMWs {
     }
     //not enough parameter
     if ((!req.query.sk && !req.params.sharingKey)) {
-      return next(new Error(ErrorCodes.INPUT_ERROR, "no sharing key provided"));
+      return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, "no sharing key provided"));
     }
 
     try {
@@ -156,7 +156,7 @@ export class AuthenticationMWs {
       if (!sharing || sharing.expires < Date.now() ||
         (Config.Client.Sharing.passwordProtected === true
         && sharing.password && !PasswordHelper.comparePassword(password, sharing.password))) {
-        return next(new Error(ErrorCodes.CREDENTIAL_NOT_FOUND));
+        return next(new ErrorDTO(ErrorCodes.CREDENTIAL_NOT_FOUND));
       }
 
       let path = sharing.path;
@@ -168,7 +168,7 @@ export class AuthenticationMWs {
       return next();
 
     } catch (err) {
-      return next(new Error(ErrorCodes.GENERAL_ERROR, null, err));
+      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, null, err));
     }
 
   }

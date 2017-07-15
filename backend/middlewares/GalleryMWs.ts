@@ -1,7 +1,7 @@
 import * as path from "path";
 import * as fs from "fs";
 import {NextFunction, Request, Response} from "express";
-import {Error, ErrorCodes} from "../../common/entities/Error";
+import {ErrorCodes, ErrorDTO} from "../../common/entities/Error";
 import {DirectoryDTO} from "../../common/entities/DirectoryDTO";
 import {ObjectManagerRepository} from "../model/ObjectManagerRepository";
 import {SearchTypes} from "../../common/entities/AutoCompleteItem";
@@ -37,7 +37,7 @@ export class GalleryMWs {
       return next();
 
     } catch (err) {
-      return next(new Error(ErrorCodes.GENERAL_ERROR, "Error during listing the directory", err));
+      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, "ErrorDTO during listing the directory", err));
     }
   }
 
@@ -80,7 +80,7 @@ export class GalleryMWs {
 
     //check if thumbnail already exist
     if (fs.existsSync(fullImagePath) === false) {
-      return next(new Error(ErrorCodes.GENERAL_ERROR, "no such file:" + fullImagePath));
+      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, "no such file:" + fullImagePath));
     }
 
     req.resultPipe = fullImagePath;
@@ -108,7 +108,7 @@ export class GalleryMWs {
       req.resultPipe = new ContentWrapper(null, result);
       return next();
     } catch (err) {
-      return next(new Error(ErrorCodes.GENERAL_ERROR, "Error during searching", err));
+      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, "ErrorDTO during searching", err));
     }
   }
 
@@ -128,7 +128,7 @@ export class GalleryMWs {
       req.resultPipe = new ContentWrapper(null, result);
       return next();
     } catch (err) {
-      return next(new Error(ErrorCodes.GENERAL_ERROR, "Error during searching", err));
+      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, "ErrorDTO during searching", err));
     }
   }
 
@@ -144,7 +144,7 @@ export class GalleryMWs {
       req.resultPipe = await ObjectManagerRepository.getInstance().SearchManager.autocomplete(req.params.text);
       return next();
     } catch (err) {
-      return next(new Error(ErrorCodes.GENERAL_ERROR, "Error during searching", err));
+      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, "ErrorDTO during searching", err));
     }
 
   }

@@ -1,5 +1,5 @@
 import {RenderingMWs} from "../middlewares/RenderingMWs";
-import {Error, ErrorCodes} from "../../common/entities/Error";
+import {ErrorCodes, ErrorDTO} from "../../common/entities/Error";
 import {Logger} from "../Logger";
 import Request = Express.Request;
 import Response = Express.Response;
@@ -21,7 +21,7 @@ export class ErrorRouter {
     app.use((err: any, req: Request, res: Response, next: Function) => {
         //Flush out the stack to the console
         Logger.error("Unexpected error:", err);
-        next(new Error(ErrorCodes.SERVER_ERROR, "Unknown server side error", err));
+        next(new ErrorDTO(ErrorCodes.SERVER_ERROR, "Unknown server side error", err));
       },
       RenderingMWs.renderError
     );

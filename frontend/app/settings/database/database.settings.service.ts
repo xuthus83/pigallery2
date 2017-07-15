@@ -15,7 +15,4 @@ export class DatabaseSettingsService {
     return this._networkService.putJson("/settings/database", {settings: settings});
   }
 
-  public testSettings(settings: DataBaseConfig): Promise<void> {
-    return this._networkService.postJson<void>("/settings/test/database", {settings: settings});
-  }
 }

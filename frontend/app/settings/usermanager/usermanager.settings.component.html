@@ -1,43 +1,64 @@
 <div class="panel panel-default">
   <div class="panel-heading">
-    <h3 class="panel-title">User management</h3>
+    <h3 class="panel-title col-sm-4">Password protection </h3>
+    <div class="switch-wrapper col-sm-8">
+      <bSwitch
+        class="switch"
+        name="enabled"
+        [switch-on-color]="'success'"
+        [switch-inverse]="'inverse'"
+        [switch-off-text]="'Disabled'"
+        [switch-on-text]="'Enabled'"
+        [switch-handle-width]="'100'"
+        [switch-label-width]="'20'"
+        [switch-disabled]="inProgress"
+        [(ngModel)]="enabled"
+        (onChangeState)="switched($event)">
+      </bSwitch>
+    </div>
   </div>
   <div class="panel-body">
+    <div [hidden]="!error" class="alert alert-danger" role="alert"><strong>Error: </strong>{{error}}</div>
 
-    <table class="table table-hover">
-      <thead>
-      <tr>
-        <th>Name</th>
-        <th>Role</th>
-        <th></th>
-      </tr>
-      </thead>
-      <tr *ngFor="let user of users">
-        <td>{{user.name}}</td>
-        <td *ngIf="canModifyUser(user)">
-          <select class="form-control" [(ngModel)]="user.role" (change)="updateRole(user)" required>
-            <option *ngFor="let repository of userRoles" [value]="repository.key">
-              {{repository.value}}
-            </option>
-          </select>
-        </td>
-        <td *ngIf="!canModifyUser(user)">
-          {{user.role | stringifyRole}}
-        </td>
-        <td>
-          <button [disabled]="!canModifyUser(user)" (click)="deleteUser(user)"
-                  [ngClass]="canModifyUser(user)? 'btn-danger':'btn-default'"
-                  class="btn  pull-right">
-            <span class="glyphicon glyphicon-trash" aria-hidden="true" aria-label="Delete"></span>
-          </button>
-        </td>
-      </tr>
-    </table>
+    <ng-container *ngIf="enabled">
+      <table class="table table-hover">
+        <thead>
+        <tr>
+          <th>Name</th>
+          <th>Role</th>
+          <th></th>
+        </tr>
+        </thead>
+        <tr *ngFor="let user of users">
+          <td>{{user.name}}</td>
+          <td *ngIf="canModifyUser(user)">
+            <select class="form-control" [(ngModel)]="user.role" (change)="updateRole(user)" required>
+              <option *ngFor="let repository of userRoles" [value]="repository.key">
+                {{repository.value}}
+              </option>
+            </select>
+          </td>
+          <td *ngIf="!canModifyUser(user)">
+            {{user.role | stringifyRole}}
+          </td>
+          <td>
+            <button [disabled]="!canModifyUser(user)" (click)="deleteUser(user)"
+                    [ngClass]="canModifyUser(user)? 'btn-danger':'btn-default'"
+                    class="btn  pull-right">
+              <span class="glyphicon glyphicon-trash" aria-hidden="true" aria-label="Delete"></span>
+            </button>
+          </td>
+        </tr>
+      </table>
 
-    <button class="btn btn-primary pull-right"
-            (click)="initNewUser()">+ Add
-      user
-    </button>
+      <button class="btn btn-primary pull-right"
+              (click)="initNewUser()">+ Add
+        user
+      </button>
+    </ng-container>
+    <div class="panel-info" *ngIf="!enabled">
+      To protect the site with password / have login enable this
+    </div>
   </div>
 </div>
 

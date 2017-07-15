@@ -20,7 +20,7 @@ export enum ErrorCodes{
   SETTINGS_ERROR = 11
 }
 
-export class Error {
+export class ErrorDTO {
   constructor(public code: ErrorCodes, public message?: string, public details?: any) {
   }
 }

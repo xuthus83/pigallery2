@@ -4,7 +4,7 @@ import * as crypto from "crypto";
 import * as fs from "fs";
 import * as os from "os";
 import {NextFunction, Request, Response} from "express";
-import {Error, ErrorCodes} from "../../../common/entities/Error";
+import {ErrorCodes, ErrorDTO} from "../../../common/entities/Error";
 import {ContentWrapper} from "../../../common/entities/ConentWrapper";
 import {DirectoryDTO} from "../../../common/entities/DirectoryDTO";
 import {ProjectPath} from "../../ProjectPath";
@@ -62,8 +62,8 @@ export class ThumbnailGeneratorMWs {
     let thumbnailFolder = ProjectPath.ThumbnailFolder;
     for (let i = 0; i < photos.length; i++) {
       let fullImagePath = path.join(ProjectPath.ImageFolder, photos[i].directory.path, photos[i].directory.name, photos[i].name);
-      for (let j = 0; j < Config.Client.thumbnailSizes.length; j++) {
-        let size = Config.Client.thumbnailSizes[j];
+      for (let j = 0; j < Config.Client.Thumbnail.thumbnailSizes.length; j++) {
+        let size = Config.Client.Thumbnail.thumbnailSizes[j];
         let thPath = path.join(thumbnailFolder, ThumbnailGeneratorMWs.generateThumbnailName(fullImagePath, size));
         if (fs.existsSync(thPath) === true) {
           if (typeof  photos[i].readyThumbnails == "undefined") {
@@ -72,7 +72,7 @@ export class ThumbnailGeneratorMWs {
           photos[i].readyThumbnails.push(size);
         }
       }
-      let iconPath = path.join(thumbnailFolder, ThumbnailGeneratorMWs.generateThumbnailName(fullImagePath, Config.Client.iconSize));
+      let iconPath = path.join(thumbnailFolder, ThumbnailGeneratorMWs.generateThumbnailName(fullImagePath, Config.Client.Thumbnail.iconSize));
       if (fs.existsSync(iconPath) === true) {
         photos[i].readyIcon = true;
       }
@@ -103,11 +103,11 @@ export class ThumbnailGeneratorMWs {
 
     //load parameters
     let imagePath = req.resultPipe;
-    let size: number = parseInt(req.params.size) || Config.Client.thumbnailSizes[0];
+    let size: number = parseInt(req.params.size) || Config.Client.Thumbnail.thumbnailSizes[0];
 
     //validate size
-    if (Config.Client.thumbnailSizes.indexOf(size) === -1) {
-      size = Config.Client.thumbnailSizes[0];
+    if (Config.Client.Thumbnail.thumbnailSizes.indexOf(size) === -1) {
+      size = Config.Client.Thumbnail.thumbnailSizes[0];
     }
 
     ThumbnailGeneratorMWs.generateImage(imagePath, size, false, req, res, next);
@@ -121,7 +121,7 @@ export class ThumbnailGeneratorMWs {
 
     //load parameters
     let imagePath = req.resultPipe;
-    let size: number = Config.Client.iconSize;
+    let size: number = Config.Client.Thumbnail.iconSize;
     ThumbnailGeneratorMWs.generateImage(imagePath, size, true, req, res, next);
 
 
@@ -162,7 +162,7 @@ export class ThumbnailGeneratorMWs {
         return next();
       }
     } catch (error) {
-      return next(new Error(ErrorCodes.THUMBNAIL_GENERATION_ERROR, "Error during generating thumbnail", error));
+      return next(new ErrorDTO(ErrorCodes.THUMBNAIL_GENERATION_ERROR, "ErrorDTO during generating thumbnail", error));
     }
   }
 

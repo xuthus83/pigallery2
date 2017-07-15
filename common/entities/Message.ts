@@ -1,10 +1,10 @@
-import {Error} from "./Error";
+import {ErrorDTO} from "./Error";
 
 export class Message<T> {
-  public error: Error = null;
+  public error: ErrorDTO = null;
   public result: T = null;
 
-  constructor(error: Error, result: T) {
+  constructor(error: ErrorDTO, result: T) {
     this.error = error;
     this.result = result;
   }
