@@ -4,12 +4,11 @@ a {
 
 .photo-container {
     border: 2px solid #333;
-    width: 150px;
-    height: 150px;
+  width: 180px;
+  height: 180px;
 
     background-color: #bbbbbb;
 }
-
 .no-image {
 
     color: #7f7f7f;
@@ -49,4 +48,9 @@ a:hover .info {
 
 a:hover .photo-container {
     border-color: #000;
+}
+
+.directory-name {
+  width: 180px;
+  white-space: normal;
 }
