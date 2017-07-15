@@ -5,12 +5,12 @@ import {SearchTypes} from "../../../../../common/entities/AutoCompleteItem";
 import {RouterLink} from "@angular/router";
 import {Thumbnail, ThumbnailManagerService} from "../../thumnailManager.service";
 import {Config} from "../../../../../common/config/public/Config";
-
+import {AnimationBuilder} from "@angular/animations";
 @Component({
   selector: 'gallery-grid-photo',
   templateUrl: './photo.grid.gallery.component.html',
   styleUrls: ['./photo.grid.gallery.component.css'],
-  providers: [RouterLink],
+  providers: [RouterLink]
 })
 export class GalleryPhotoComponent implements IRenderable, OnInit, OnDestroy {
   @Input() gridPhoto: GridPhoto;
@@ -31,24 +31,26 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, OnDestroy {
    };
    */
 
-  infoStyle = {
-    height: 0,
+  infoBar = {
+    marginTop: 0,
+    visible: false,
     background: "rgba(0,0,0,0.0)"
   };
+  animationTimer = null;
 
   SearchTypes: any = [];
   searchEnabled: boolean = true;
 
   wasInView: boolean = null;
 
-  constructor(private thumbnailService: ThumbnailManagerService) {
+  constructor(private thumbnailService: ThumbnailManagerService,
+              private _animationBuilder: AnimationBuilder) {
     this.SearchTypes = SearchTypes;
     this.searchEnabled = Config.Client.Search.enabled;
   }
 
   ngOnInit() {
     this.thumbnail = this.thumbnailService.getThumbnail(this.gridPhoto);
-
   }
 
 
@@ -83,15 +85,28 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, OnDestroy {
       this.gridPhoto.photo.metadata.positionData.country;
   }
 
+
   hover() {
-    this.infoStyle.height = this.infoDiv.nativeElement.clientHeight;
-    this.infoStyle.background = "rgba(0,0,0,0.8)";
+    this.infoBar.visible = true;
+    if (this.animationTimer != null) {
+      clearTimeout(this.animationTimer);
+    }
+    this.animationTimer = setTimeout(() => {
+      this.infoBar.marginTop = -this.infoDiv.nativeElement.clientHeight;
+      this.infoBar.background = "rgba(0,0,0,0.8)";
+    }, 1);
 
   }
 
   mouseOut() {
-    this.infoStyle.height = 0;
-    this.infoStyle.background = "rgba(0,0,0,0.0)";
+    this.infoBar.marginTop = 0;
+    this.infoBar.background = "rgba(0,0,0,0.0)";
+    if (this.animationTimer != null) {
+      clearTimeout(this.animationTimer);
+    }
+    this.animationTimer = setTimeout(() => {
+      this.infoBar.visible = false;
+    }, 500);
 
   }
 

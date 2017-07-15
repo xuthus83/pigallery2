@@ -1,51 +1,51 @@
 img {
-    width: inherit;
-    height: inherit;
+  width: inherit;
+  height: inherit;
 
-    -webkit-animation: fadein 2s; /* Safari, Chrome and Opera > 12.1 */
-    -moz-animation: fadein 2s; /* Firefox < 16 */
-    -ms-animation: fadein 2s; /* Internet Explorer */
-    -o-animation: fadein 2s; /* Opera < 12.1 */
-    animation: fadein 2s;
+  -webkit-animation: fadein 2s; /* Safari, Chrome and Opera > 12.1 */
+  -moz-animation: fadein 2s; /* Firefox < 16 */
+  -ms-animation: fadein 2s; /* Internet Explorer */
+  -o-animation: fadein 2s; /* Opera < 12.1 */
+  animation: fadein 2s;
 }
 
 @keyframes fadein {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 /* Firefox < 16 */
 @-moz-keyframes fadein {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 /* Safari, Chrome and Opera > 12.1 */
 @-webkit-keyframes fadein {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 /* Internet Explorer */
 @-ms-keyframes fadein {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .info {
@@ -54,38 +54,38 @@ img {
     font-size: medium;
     position: relative;
     padding: 5px;
-    margin-top: -50px;
+  margin-top: 0;
 
-    transition: all .3s ease-out;
-    -moz-transition: all .3s ease-out;
-    -webkit-transition: all .3s ease-out;
-    -o-transition: all .3s ease-out;
+  transition: margin .3s ease-out, background-color .3s ease-out;
+  -moz-transition: margin .3s ease-out, background-color .3s ease-out;
+  -webkit-transition: margin .3s ease-out, background-color .3s ease-out;
+  -o-transition: margin .3s ease-out, background-color .3s ease-out;
 }
 
 .photo-container {
-    width: inherit;
-    height: inherit;
-    overflow: hidden;
+  width: inherit;
+  height: inherit;
+  overflow: hidden;
 }
 
 .photo-name {
-    display: inline-block;
+  display: inline-block;
 }
 
 .photo-position {
-    display: inline-block;
-    float: right;
+  display: inline-block;
+  float: right;
 }
 
 a {
-    color: white;
+  color: white;
 
 }
 
 .photo-keywords {
-    margin-top: 5px;
-    font-size: small;
-    text-align: right;
-    display: inline-block;
-    width: 100%;
+  margin-top: 5px;
+  font-size: small;
+  text-align: right;
+  display: inline-block;
+  width: 100%;
 }

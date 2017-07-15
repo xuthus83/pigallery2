@@ -1,33 +1,37 @@
 <div #photoContainer class="photo-container" (mouseover)="hover()" (mouseout)="mouseOut()">
   <img #img [src]="thumbnail.Src" *ngIf="thumbnail.Available">
 
-    <gallery-grid-photo-loading [animate]="thumbnail.loading" *ngIf="!thumbnail.Available">
-    </gallery-grid-photo-loading>
+  <gallery-grid-photo-loading
+    [animate]="thumbnail.loading"
+    *ngIf="!thumbnail.Available">
+  </gallery-grid-photo-loading>
 
-    <!--Info box -->
-    <div #info class="info" [style.margin-top.px]="-infoStyle.height"
-         [style.background]="infoStyle.background">
-        <div class="photo-name">{{gridPhoto.photo.name}}</div>
+  <!--Info box -->
+  <div #info class="info"
+       *ngIf="infoBar.visible"
+       [style.margin-top.px]="infoBar.marginTop"
+       [style.background]="infoBar.background">
+    <div class="photo-name">{{gridPhoto.photo.name}}</div>
 
-        <div class="photo-position" *ngIf="gridPhoto.photo.metadata.positionData">
-            <span class="glyphicon glyphicon-map-marker"></span>
-            <ng-template [ngIf]="getPositionText()">
-                <a [routerLink]="['/search', getPositionText(), {type:SearchTypes[SearchTypes.position]}]"
-                   *ngIf="searchEnabled">
-                    {{getPositionText()}}
-                </a>
-                <span *ngIf="!searchEnabled">{{getPositionText()}}</span>
-            </ng-template>
-        </div>
-
-        <div class="photo-keywords">
-            <ng-template ngFor let-keyword [ngForOf]="gridPhoto.photo.metadata.keywords" let-last="last">
-                <a *ngIf="searchEnabled"
-                   [routerLink]="['/search', keyword, {type: SearchTypes[SearchTypes.keyword]}]">#{{keyword}}</a>
-                <span *ngIf="!searchEnabled">#{{keyword}}</span>
-                <ng-template [ngIf]="!last">,</ng-template>
-            </ng-template>
-
-        </div>
+    <div class="photo-position" *ngIf="gridPhoto.photo.metadata.positionData">
+      <span class="glyphicon glyphicon-map-marker"></span>
+      <ng-template [ngIf]="getPositionText()">
+        <a [routerLink]="['/search', getPositionText(), {type:SearchTypes[SearchTypes.position]}]"
+           *ngIf="searchEnabled">
+          {{getPositionText()}}
+        </a>
+        <span *ngIf="!searchEnabled">{{getPositionText()}}</span>
+      </ng-template>
     </div>
+
+    <div class="photo-keywords">
+      <ng-template ngFor let-keyword [ngForOf]="gridPhoto.photo.metadata.keywords" let-last="last">
+        <a *ngIf="searchEnabled"
+           [routerLink]="['/search', keyword, {type: SearchTypes[SearchTypes.keyword]}]">#{{keyword}}</a>
+        <span *ngIf="!searchEnabled">#{{keyword}}</span>
+        <ng-template [ngIf]="!last">,</ng-template>
+      </ng-template>
+
+    </div>
+  </div>
 </div>

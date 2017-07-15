@@ -165,7 +165,6 @@ export class ThumbnailLoaderService {
     this.runningRequests++;
     task.taskEntities.forEach(te => te.listener.onStartedLoading());
     task.inProgress = true;
-    console.log("loading", task.path);
 
     let curImg = new Image();
     curImg.onload = () => {
