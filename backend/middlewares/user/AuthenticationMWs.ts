@@ -50,6 +50,7 @@ export class AuthenticationMWs {
     return next();
 
   }
+
   public static async authenticate(req: Request, res: Response, next: NextFunction) {
 
     if (Config.Client.authenticationRequired === false) {
