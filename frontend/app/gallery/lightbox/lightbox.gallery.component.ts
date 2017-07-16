@@ -26,7 +26,6 @@ import {Observable} from "rxjs/Observable";
 })
 export class GalleryLightboxComponent implements OnDestroy {
   @Output('onLastElement') onLastElement = new EventEmitter();
-  @ViewChild("root") elementRef: ElementRef;
   @ViewChild("photo") photoElement: GalleryLightboxPhotoComponent;
   @ViewChild("lightbox") lightboxElement: ElementRef;
 
@@ -46,7 +45,7 @@ export class GalleryLightboxComponent implements OnDestroy {
 
   public infoPanelVisible = false;
   public infoPanelWidth = 0;
-  public animating = false
+  public animating = false;
 
 
   constructor(public fullScreenService: FullScreenService,
@@ -122,7 +121,7 @@ export class GalleryLightboxComponent implements OnDestroy {
     let to = this.activePhoto.getDimension();
 
     //if target image out of screen -> scroll to there
-    if (this.getBodyScrollTop() > to.top || this.getBodyScrollTop() + this.getScreenHeight() < to.top) {
+    if (this.getBodyScrollTop() > to.top || this.getBodyScrollTop() + this.getPhotoFrameHeight() < to.top) {
       this.setBodyScrollTop(to.top);
     }
 
@@ -150,8 +149,8 @@ export class GalleryLightboxComponent implements OnDestroy {
       <Dimension>{
         top: 0,
         left: 0,
-        width: this.getScreenWidth(),
-        height: this.getScreenHeight()
+        width: this.getPhotoFrameWidth(),
+        height: this.getPhotoFrameHeight()
       });
 
 
@@ -177,8 +176,8 @@ export class GalleryLightboxComponent implements OnDestroy {
     this.animateLightbox(<Dimension>{
       top: 0,
       left: 0,
-      width: this.getScreenWidth(),
-      height: this.getScreenHeight()
+      width: this.getPhotoFrameWidth(),
+      height: this.getPhotoFrameHeight()
     }, lightboxDimension).onDone(() => {
 
       this.visible = false;
@@ -206,8 +205,8 @@ export class GalleryLightboxComponent implements OnDestroy {
   animateLightbox(from: Dimension = <Dimension>{
     top: 0,
     left: 0,
-    width: this.getScreenWidth(),
-    height: this.getScreenHeight()
+    width: this.getPhotoFrameWidth(),
+    height: this.getPhotoFrameHeight()
   }, to: Dimension = from): AnimationPlayer {
     const elem = this._builder.build([
       style(<any>Dimension.toString(from)),
@@ -289,14 +288,14 @@ export class GalleryLightboxComponent implements OnDestroy {
     this.animateLightbox(<Dimension>{
         top: 0,
         left: 0,
-        width: this.getScreenWidth() + 400,
-        height: this.getScreenHeight()
+        width: this.getPhotoFrameWidth() + 400,
+        height: this.getPhotoFrameHeight()
       },
       <Dimension>{
         top: 0,
         left: 0,
-        width: this.getScreenWidth(),
-        height: this.getScreenHeight()
+        width: this.getPhotoFrameWidth(),
+        height: this.getPhotoFrameHeight()
       });
     if (this.iPvisibilityTimer != null) {
       clearTimeout(this.iPvisibilityTimer);
@@ -319,14 +318,14 @@ export class GalleryLightboxComponent implements OnDestroy {
       this.animateLightbox(<Dimension>{
           top: 0,
           left: 0,
-          width: this.getScreenWidth() - 400,
-          height: this.getScreenHeight()
+          width: this.getPhotoFrameWidth() - 400,
+          height: this.getPhotoFrameHeight()
         },
         <Dimension>{
           top: 0,
           left: 0,
-          width: this.getScreenWidth(),
-          height: this.getScreenHeight()
+          width: this.getPhotoFrameWidth(),
+          height: this.getPhotoFrameHeight()
         });
     }
   }
@@ -340,11 +339,11 @@ export class GalleryLightboxComponent implements OnDestroy {
     window.scrollTo(window.scrollX, value);
   }
 
-  private getScreenWidth() {
+  private getPhotoFrameWidth() {
     return Math.max(window.innerWidth - this.infoPanelWidth, 0);
   }
 
-  private getScreenHeight() {
+  private getPhotoFrameHeight() {
     return window.innerHeight;
   }
 
@@ -352,15 +351,17 @@ export class GalleryLightboxComponent implements OnDestroy {
   private calcLightBoxPhotoDimension(photo: PhotoDTO): Dimension {
     let width = 0;
     let height = 0;
-    if (photo.metadata.size.height > photo.metadata.size.width) {
-      width = Math.round(photo.metadata.size.width * (this.getScreenHeight() / photo.metadata.size.height));
-      height = this.getScreenHeight();
+    const photoAspect = photo.metadata.size.width / photo.metadata.size.height;
+    const windowAspect = this.getPhotoFrameWidth() / this.getPhotoFrameHeight();
+    if (photoAspect < windowAspect) {
+      width = Math.round(photo.metadata.size.width * (this.getPhotoFrameHeight() / photo.metadata.size.height));
+      height = this.getPhotoFrameHeight();
     } else {
-      width = this.getScreenWidth();
-      height = Math.round(photo.metadata.size.height * (this.getScreenWidth() / photo.metadata.size.width));
+      width = this.getPhotoFrameWidth();
+      height = Math.round(photo.metadata.size.height * (this.getPhotoFrameWidth() / photo.metadata.size.width));
     }
-    let top = (this.getScreenHeight() / 2 - height / 2);
-    let left = (this.getScreenWidth() / 2 - width / 2);
+    let top = (this.getPhotoFrameHeight() / 2 - height / 2);
+    let left = (this.getPhotoFrameWidth() / 2 - width / 2);
 
     return <Dimension>{top: top, left: left, width: width, height: height};
   }
@@ -385,6 +386,7 @@ export class GalleryLightboxComponent implements OnDestroy {
     this.controllersDimmed = false;
   };
 
+
   public pause() {
     if (this.timerSub != null) {
       this.timerSub.unsubscribe();
@@ -393,7 +395,6 @@ export class GalleryLightboxComponent implements OnDestroy {
   }
 
   public play() {
-    console.log("play");
     this.pause();
     this.timerSub = this.timer.filter(t => t % 2 == 0).subscribe(() => {
       if (this.navigation.hasNext) {
@@ -406,7 +407,6 @@ export class GalleryLightboxComponent implements OnDestroy {
   }
 
   public fastForward() {
-    console.log("fastForward");
     this.pause();
     this.timerSub = this.timer.subscribe(() => {
       if (this.navigation.hasNext) {

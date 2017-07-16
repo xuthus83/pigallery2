@@ -10,6 +10,7 @@ export class GalleryLightboxPhotoComponent implements OnChanges {
 
   @Input() gridPhoto: GridPhoto;
   @Input() loadImage: boolean = false;
+  @Input() windowAspect: number = 1;
 
   public imageSize = {width: "auto", height: "100"};
 
@@ -29,7 +30,10 @@ export class GalleryLightboxPhotoComponent implements OnChanges {
       return;
     }
 
-    if (this.gridPhoto.photo.metadata.size.height > this.gridPhoto.photo.metadata.size.width) {
+
+    const photoAspect = this.gridPhoto.photo.metadata.size.width / this.gridPhoto.photo.metadata.size.height;
+
+    if (photoAspect < this.windowAspect) {
       this.imageSize.height = "100";
       this.imageSize.width = null;
     } else {

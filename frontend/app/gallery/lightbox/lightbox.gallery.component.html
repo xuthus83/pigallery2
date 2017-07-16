@@ -7,13 +7,13 @@
   <div class="lightbox" #lightbox>
     <gallery-lightbox-photo [gridPhoto]="activePhoto ? activePhoto.gridPhoto : null"
                             [loadImage]="!animating"
+                            [windowAspect]="getPhotoFrameWidth()/getPhotoFrameHeight()"
                             #photo>
     </gallery-lightbox-photo>
   </div>
-
   <div
     *ngIf="controllersVisible"
-    id="controllers-container" #controls [style.width.px]="getScreenWidth()"
+    id="controllers-container" #controls [style.width.px]="getPhotoFrameWidth()"
     [ngClass]="!controllersDimmed ? 'dim-controls':  ''">
     <div class="controls controls-top">
       <a *ngIf="activePhoto" [href]="activePhoto.gridPhoto.getPhotoPath()"
