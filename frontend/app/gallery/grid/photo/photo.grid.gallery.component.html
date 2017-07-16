@@ -1,4 +1,4 @@
-<div #photoContainer class="photo-container" (mouseover)="hover()" (mouseout)="mouseOut()">
+<div #photoContainer class="photo-container" (mouseover)="mouseOver()" (mouseout)="mouseOut()">
   <img #img [src]="thumbnail.Src" *ngIf="thumbnail.Available">
 
   <gallery-grid-photo-loading
@@ -24,7 +24,7 @@
       </ng-template>
     </div>
 
-    <div class="photo-keywords">
+    <div class="photo-keywords" *ngIf="gridPhoto.photo.metadata.keywords && gridPhoto.photo.metadata.keywords.length">
       <ng-template ngFor let-keyword [ngForOf]="gridPhoto.photo.metadata.keywords" let-last="last">
         <a *ngIf="searchEnabled"
            [routerLink]="['/search', keyword, {type: SearchTypes[SearchTypes.keyword]}]">#{{keyword}}</a>

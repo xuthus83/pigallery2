@@ -86,14 +86,24 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, OnDestroy {
   }
 
 
-  hover() {
+  mouseOver() {
     this.infoBar.visible = true;
     if (this.animationTimer != null) {
       clearTimeout(this.animationTimer);
     }
     this.animationTimer = setTimeout(() => {
-      this.infoBar.marginTop = -this.infoDiv.nativeElement.clientHeight;
       this.infoBar.background = "rgba(0,0,0,0.8)";
+
+      if (!this.infoDiv) {
+        this.animationTimer = setTimeout(() => {
+          if (!this.infoDiv) {
+            this.infoBar.marginTop = -50;
+            return;
+          }
+          this.infoBar.marginTop = -this.infoDiv.nativeElement.clientHeight;
+        }, 10);
+        return;
+      }
     }, 1);
 
   }
