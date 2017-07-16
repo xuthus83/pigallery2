@@ -1,5 +1,4 @@
 import * as _express from "express";
-import * as _session from "cookie-session";
 import * as _bodyParser from "body-parser";
 import * as _http from "http";
 import {PublicRouter} from "./routes/PublicRouter";
@@ -17,6 +16,7 @@ import {ThumbnailGeneratorMWs} from "./middlewares/thumbnail/ThumbnailGeneratorM
 import {DiskManager} from "./model/DiskManger";
 import {NotificationRouter} from "./routes/NotificationRouter";
 import {ConfigDiagnostics} from "./model/ConfigDiagnostics";
+import _session = require('cookie-session');
 
 const LOG_TAG = "[server]";
 export class Server {

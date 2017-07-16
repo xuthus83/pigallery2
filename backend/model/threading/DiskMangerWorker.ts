@@ -4,7 +4,7 @@ import {CameraMetadata, GPSMetadata, ImageSize, PhotoDTO, PhotoMetadata} from ".
 import {Logger} from "../../Logger";
 import * as fs from "fs";
 import * as path from "path";
-import * as iptc from "node-iptc";
+import {IptcParser} from "ts-node-iptc";
 import * as exif_parser from "exif-parser";
 import {ProjectPath} from "../../ProjectPath";
 
@@ -53,7 +53,7 @@ export class DiskMangerWorker {
               const exif = exif_parser.create(data).parse();
               metadata.cameraData = <CameraMetadata> {
                 ISO: exif.tags.ISO,
-                model: exif.tags.Model.toString("utf8"),
+                model: exif.tags.Model,
                 make: exif.tags.Make,
                 fStop: exif.tags.FNumber,
                 exposure: exif.tags.ExposureTime,
@@ -76,18 +76,7 @@ export class DiskMangerWorker {
             }
 
             try {
-
-              const iptcData = iptc(data);
-              //Decode characters to UTF8
-              const decode = (s: any) => {
-                for (let a, b, i = -1, l = (s = s.split("")).length, o = String.fromCharCode, c = "charCodeAt"; ++i < l;
-                     ((a = s[i][c](0)) & 0x80) &&
-                     (s[i] = (a & 0xfc) == 0xc0 && ((b = s[i + 1][c](0)) & 0xc0) == 0x80 ?
-                       o(((a & 0x03) << 6) + (b & 0x3f)) : o(128), s[++i] = "")
-                );
-                return s.join("");
-              };
-
+              const iptcData = IptcParser.parse(data);
               if (iptcData.country_or_primary_location_name || iptcData.province_or_state || iptcData.city) {
                 metadata.positionData = metadata.positionData || {};
                 metadata.positionData.country = iptcData.country_or_primary_location_name;
@@ -95,11 +84,10 @@ export class DiskMangerWorker {
                 metadata.positionData.city = iptcData.city;
               }
 
-
-              metadata.keywords = <string[]> (iptcData.keywords || []).map((s: string) => decode(s));
-              metadata.creationDate = <number> iptcData.date_time ? iptcData.date_time.getTime() : 0;
+              metadata.keywords = <string[]> (iptcData.keywords || []);
+              metadata.creationDate = <number> (iptcData.date_time ? iptcData.date_time.getTime() : 0);
             } catch (err) {
-              Logger.info(LOG_TAG, "Error parsing iptc data", fullPath);
+              Logger.info(LOG_TAG, "Error parsing iptc data", fullPath, err);
             }
 
             return resolve(metadata);

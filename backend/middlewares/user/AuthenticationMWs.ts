@@ -116,7 +116,6 @@ export class AuthenticationMWs {
       (typeof req.body.loginCredential.password === 'undefined')) {
       return next(new ErrorDTO(ErrorCodes.INPUT_ERROR));
     }
-    //TODO: implement remember me
     try {
       //lets find the user
       const user = Utils.clone(await ObjectManagerRepository.getInstance().UserManager.findOne({
