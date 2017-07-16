@@ -37,6 +37,7 @@ export interface ServerConfig {
   database: DataBaseConfig;
   enableThreading: boolean;
   sharing: SharingConfig;
+  sessionTimeout: number
 }
 export interface IPrivateConfig {
   Server: ServerConfig;

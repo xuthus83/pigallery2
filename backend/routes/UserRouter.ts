@@ -28,7 +28,6 @@ export class UserRouter {
 
   private static addLogout(app) {
     app.post("/api/user/logout",
-      AuthenticationMWs.authenticate,
       AuthenticationMWs.logout,
       RenderingMWs.renderOK
     );

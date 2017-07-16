@@ -30,11 +30,11 @@ export class LoginComponent implements OnInit {
     this.loginError = null;
 
     try {
-      console.log(await this._authService.login(this.loginCredential));
+      await this._authService.login(this.loginCredential);
     } catch (error) {
-      console.log(error);
       if (error && error.code === ErrorCodes.CREDENTIAL_NOT_FOUND) {
         this.loginError = "Wrong username or password";
+        return;
       }
     }
   }

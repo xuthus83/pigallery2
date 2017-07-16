@@ -1,5 +1,5 @@
 import * as _express from "express";
-import * as _session from "express-session";
+import * as _session from "cookie-session";
 import * as _bodyParser from "body-parser";
 import * as _http from "http";
 import {PublicRouter} from "./routes/PublicRouter";
@@ -47,15 +47,15 @@ export class Server {
     /**
      * Session above all
      */
+    function s4() {
+      return Math.floor((1 + Math.random()) * 0x10000)
+        .toString(16)
+        .substring(1);
+    }
+
     this.app.use(_session({
       name: "pigallery2-session",
-      secret: 'PiGallery2 secret',
-      cookie: {
-        maxAge: 60000 * 10,
-        httpOnly: false
-      },
-      resave: true,
-      saveUninitialized: false
+      keys: ["key1" + s4() + s4() + s4() + s4(), "key2" + s4() + s4() + s4() + s4(), "key3" + s4() + s4() + s4() + s4()]
     }));
 
     /**

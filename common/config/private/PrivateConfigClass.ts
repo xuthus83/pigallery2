@@ -16,6 +16,7 @@ export class PrivateConfigClass extends PublicConfigClass implements IPrivateCon
       processingLibrary: ThumbnailProcessingLib.sharp,
       qualityPriority: true
     },
+    sessionTimeout: 1000 * 60 * 60 * 24 * 7,
     database: {
       type: DatabaseType.mysql,
       mysql: {

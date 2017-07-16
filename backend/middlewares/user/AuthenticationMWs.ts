@@ -5,6 +5,7 @@ import {UserDTO, UserRoles} from "../../../common/entities/UserDTO";
 import {ObjectManagerRepository} from "../../model/ObjectManagerRepository";
 import {Config} from "../../../common/config/private/Config";
 import {PasswordHelper} from "../../model/PasswordHelper";
+import {Utils} from "../../../common/Utils";
 
 export class AuthenticationMWs {
 
@@ -69,6 +70,11 @@ export class AuthenticationMWs {
     if (typeof req.session.user === 'undefined') {
       return next(new ErrorDTO(ErrorCodes.NOT_AUTHENTICATED));
     }
+    if (req.session.rememberMe === true) {
+      req.sessionOptions.expires = new Date(Date.now() + Config.Server.sessionTimeout);
+    } else {
+      delete(req.sessionOptions.expires);
+    }
     return next();
   }
 
@@ -113,23 +119,29 @@ export class AuthenticationMWs {
     //TODO: implement remember me
     try {
       //lets find the user
-      req.session.user = await ObjectManagerRepository.getInstance().UserManager.findOne({
+      const user = Utils.clone(await ObjectManagerRepository.getInstance().UserManager.findOne({
         name: req.body.loginCredential.username,
         password: req.body.loginCredential.password
-      });
+      }));
+      delete (user.password);
+      req.session.user = user;
+      if (req.body.loginCredential.rememberMe) {
+        req.sessionOptions.expires = new Date(Date.now() + Config.Server.sessionTimeout);
+      }
       return next();
 
     } catch (err) {
       //if its a shared link, login as guest
-      try {
-        const user = await AuthenticationMWs.getSharingUser(req);
-        if (user) {
-          req.session.user = user;
-          return next();
-        }
-      } catch (err) {
-        return next(new ErrorDTO(ErrorCodes.CREDENTIAL_NOT_FOUND, null, err));
-      }
+      /* try {
+       const user = Utils.clone(await AuthenticationMWs.getSharingUser(req));
+       if (user) {
+       delete (user.password);
+       req.session.user = user;
+       return next();
+       }
+       } catch (err) {
+       return next(new ErrorDTO(ErrorCodes.CREDENTIAL_NOT_FOUND, null, err));
+       }*/
 
       return next(new ErrorDTO(ErrorCodes.CREDENTIAL_NOT_FOUND));
     }
@@ -176,6 +188,7 @@ export class AuthenticationMWs {
 
   public static logout(req: Request, res: Response, next: NextFunction) {
     delete req.session.user;
+    delete req.session.rememberMe;
     return next();
   }
 

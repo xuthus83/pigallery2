@@ -3,15 +3,18 @@ import {Headers, Http, RequestOptions} from "@angular/http";
 import {Message} from "../../../../common/entities/Message";
 import {SlimLoadingBarService} from "ng2-slim-loading-bar";
 import "rxjs/Rx";
-import {ErrorCodes} from "../../../../common/entities/Error";
+import {ErrorCodes, ErrorDTO} from "../../../../common/entities/Error";
 
 @Injectable()
 export class NetworkService {
 
   _baseUrl = "/api";
+  private globalErrorHandlers: Array<(error: ErrorDTO) => boolean> = [];
 
-  constructor(protected _http: Http, private slimLoadingBarService: SlimLoadingBarService) {
+  constructor(protected _http: Http,
+              private slimLoadingBarService: SlimLoadingBarService) {
   }
+
 
   private callJson<T>(method: string, url: string, data: any = {}): Promise<T> {
     let body = JSON.stringify(data);
@@ -37,7 +40,7 @@ export class NetworkService {
 
     const err = (err) => {
       this.slimLoadingBarService.complete();
-      return NetworkService.handleError(err);
+      return this.handleError(err);
     };
 
     if (method == "get" || method == "delete") {
@@ -69,13 +72,23 @@ export class NetworkService {
     return this.callJson("delete", url);
   }
 
-  private static handleError(error: any) {
-    if (error.code) {
+  private handleError(error: any) {
+    if (typeof error.code !== "undefined") {
+      for (let i = 0; i < this.globalErrorHandlers.length; i++) {
+        if (this.globalErrorHandlers[i](error) == true) {
+          return;
+        }
+      }
       return Promise.reject(error);
     }
     // TODO: in a real world app do something better
     // instead of just logging it to the console
     console.error(error);
     return Promise.reject(error.message || error || 'Server error');
+  }
+
+
+  addGlobalErrorHandler(fn: (error: ErrorDTO) => boolean) {
+    this.globalErrorHandlers.push(fn);
   }
 }

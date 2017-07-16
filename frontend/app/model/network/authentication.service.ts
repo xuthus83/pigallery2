@@ -5,6 +5,8 @@ import {UserService} from "./user.service";
 import {LoginCredential} from "../../../../common/entities/LoginCredential";
 import {Cookie} from "ng2-cookies";
 import {Config} from "../../../../common/config/public/Config";
+import {NetworkService} from "./network.service";
+import {ErrorCodes, ErrorDTO} from "../../../../common/entities/Error";
 
 declare module ServerInject {
   export let user: UserDTO;
@@ -15,7 +17,8 @@ export class AuthenticationService {
 
   public user: BehaviorSubject<UserDTO>;
 
-  constructor(private _userService: UserService) {
+  constructor(private _userService: UserService,
+              private _networkService: NetworkService) {
     this.user = new BehaviorSubject(null);
 
     //picking up session..
@@ -26,9 +29,21 @@ export class AuthenticationService {
       this.getSessionUser();
     } else {
       if (Config.Client.authenticationRequired === false) {
-        this.user.next(<UserDTO>{name: "", password: "", role: UserRoles.Admin});
+        this.user.next(<UserDTO>{name: "", role: UserRoles.Admin});
       }
     }
+
+    _networkService.addGlobalErrorHandler((error: ErrorDTO) => {
+      if (error.code == ErrorCodes.NOT_AUTHENTICATED) {
+        this.user.next(null);
+        return true;
+      }
+      if (error.code == ErrorCodes.NOT_AUTHORISED) {
+        this.logout();
+        return true;
+      }
+      return false;
+    });
 
   }
 

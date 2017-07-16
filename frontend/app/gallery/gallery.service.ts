@@ -46,6 +46,10 @@ export class GalleryService {
       cw = await this.networkService.getJson<ContentWrapper>("/gallery/content/" + directoryName);
     }
 
+    if (!cw) {
+      return;
+    }
+
     this.galleryCacheService.setDirectory(cw.directory); //save it before adding references
 
     if (this.lastRequest.directory != directoryName) {

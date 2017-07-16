@@ -12,6 +12,7 @@ declare module Express {
 
   export interface Session {
     user?;
+    rememberMe?: boolean;
   }
 }
 
