@@ -10,7 +10,7 @@ declare module 'winston' {
 export const winstonSettings = {
   transports: [
     new winston.transports.Console({
-      level: 'silly',
+      level: process.env.NODE_ENV == "production" ? "info" : 'silly',
       handleExceptions: true,
       json: false,
       colorize: true,

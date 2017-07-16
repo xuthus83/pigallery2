@@ -56,8 +56,6 @@ export class UserManager implements IUserManager {
     delete filter.password;
     const users = (await this.db.get("users")).slice();
     let i = users.length;
-    console.log("filer", filter);
-    console.log(users);
     while (i--) {
       if (pass && !(PasswordHelper.comparePassword(pass, users[i].password))) {
         users.splice(i, 1);

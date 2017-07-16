@@ -25,7 +25,7 @@ export class Server {
   private server: any;
 
   constructor() {
-    if (process.env.DEBUG) {
+    if (!(process.env.NODE_ENV == "production")) {
       Logger.debug(LOG_TAG, "Running in DEBUG mode");
     }
     this.init();
