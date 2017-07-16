@@ -7,7 +7,10 @@ export class GridRowBuilder {
   private photoIndex: number = 0; //index of the last pushed photo to the photoRow
 
 
-  constructor(private photos: Array<PhotoDTO>, private startIndex: number, private photoMargin: number, private containerWidth: number) {
+  constructor(private photos: Array<PhotoDTO>,
+              private startIndex: number,
+              private photoMargin: number,
+              private containerWidth: number) {
     this.photoIndex = startIndex;
   }
 
@@ -17,7 +20,7 @@ export class GridRowBuilder {
     }
   }
 
-  public addPhoto(): boolean {
+  private addPhoto(): boolean {
     if (this.photoIndex + 1 > this.photos.length) {
       return false;
     }

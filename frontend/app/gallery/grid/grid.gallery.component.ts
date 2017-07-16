@@ -192,11 +192,19 @@ export class GalleryGridComponent implements OnChanges, AfterViewInit {
     let maxRowHeight = window.innerHeight / this.MIN_ROW_COUNT;
     let minRowHeight = window.innerHeight / this.MAX_ROW_COUNT;
 
-    let photoRowBuilder = new GridRowBuilder(this.photos, this.renderedPhotoIndex, this.IMAGE_MARGIN, this.containerWidth - this.overlayService.getPhantomScrollbarWidth());
+    let photoRowBuilder = new GridRowBuilder(this.photos,
+      this.renderedPhotoIndex,
+      this.IMAGE_MARGIN,
+      this.containerWidth - this.overlayService.getPhantomScrollbarWidth()
+    );
+
     photoRowBuilder.addPhotos(this.TARGET_COL_COUNT);
     photoRowBuilder.adjustRowHeightBetween(minRowHeight, maxRowHeight);
 
-    let rowHeight = photoRowBuilder.calcRowHeight();
+    if (photoRowBuilder.getPhotoRow().length > 1) { //little trick: We don't want too big single images. But if a little extra height helps fit the row, its ok
+      maxRowHeight *= 1.2;
+    }
+    let rowHeight = Math.min(photoRowBuilder.calcRowHeight(), maxRowHeight);
     let imageHeight = rowHeight - (this.IMAGE_MARGIN * 2);
 
     photoRowBuilder.getPhotoRow().forEach((photo) => {
