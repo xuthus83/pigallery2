@@ -1,12 +1,14 @@
 import {IGalleryManager} from "../interfaces/IGalleryManager";
 import {DirectoryDTO} from "../../../common/entities/DirectoryDTO";
 import * as path from "path";
+import * as fs from "fs";
 import {DirectoryEntity} from "./enitites/DirectoryEntity";
 import {MySQLConnection} from "./MySQLConnection";
 import {DiskManager} from "../DiskManger";
-import {PhotoEntity} from "./enitites/PhotoEntity";
+import {PhotoEntity, PhotoMetadataEntity} from "./enitites/PhotoEntity";
 import {Utils} from "../../../common/Utils";
 import {ProjectPath} from "../../ProjectPath";
+import {Config} from "../../../common/config/private/Config";
 
 export class GalleryManager implements IGalleryManager {
 
@@ -15,8 +17,6 @@ export class GalleryManager implements IGalleryManager {
     relativeDirectoryName = path.normalize(path.join("." + path.sep, relativeDirectoryName));
     const directoryName = path.basename(relativeDirectoryName);
     const directoryParent = path.join(path.dirname(relativeDirectoryName), path.sep);
-    console.log("GalleryManager:listDirectory");
-    console.log(directoryName, directoryParent, path.dirname(relativeDirectoryName), ProjectPath.normalizeRelative(path.dirname(relativeDirectoryName)));
     const connection = await MySQLConnection.getConnection();
     let dir = await connection
       .getRepository(DirectoryEntity)
@@ -33,18 +33,41 @@ export class GalleryManager implements IGalleryManager {
       if (dir.photos) {
         for (let i = 0; i < dir.photos.length; i++) {
           dir.photos[i].directory = dir;
-          dir.photos[i].metadata.keywords = <any>JSON.parse(<any>dir.photos[i].metadata.keywords);
-          dir.photos[i].metadata.cameraData = <any>JSON.parse(<any>dir.photos[i].metadata.cameraData);
-          dir.photos[i].metadata.positionData = <any>JSON.parse(<any>dir.photos[i].metadata.positionData);
-          dir.photos[i].metadata.size = <any>JSON.parse(<any>dir.photos[i].metadata.size);
+          PhotoMetadataEntity.open(dir.photos[i].metadata);
           dir.photos[i].readyThumbnails = [];
           dir.photos[i].readyIcon = false;
         }
       }
+      if (dir.directories) {
+        for (let i = 0; i < dir.directories.length; i++) {
+          dir.directories[i].photos = await connection
+            .getRepository(PhotoEntity)
+            .createQueryBuilder("photo")
+            .where("photo.directory = :dir", {
+              dir: dir.directories[i].id
+            })
+            .setLimit(Config.Server.folderPreviewSize)
+            .getMany();
 
+          for (let j = 0; j < dir.directories[i].photos.length; j++) {
+            dir.directories[i].photos[j].directory = dir.directories[i];
+            PhotoMetadataEntity.open(dir.directories[i].photos[j].metadata);
+            dir.directories[i].photos[j].readyThumbnails = [];
+            dir.directories[i].photos[j].readyIcon = false;
+          }
+        }
+      }
+
+      const stat = fs.statSync(path.join(ProjectPath.ImageFolder, relativeDirectoryName));
+      const lastUpdate = Math.max(stat.ctime.getTime(), stat.mtime.getTime());
+
+      if (dir.lastUpdate != lastUpdate) {
+        return this.indexDirectory(relativeDirectoryName);
+      }
+
+      console.log("lazy");
       //on the fly updating
       this.indexDirectory(relativeDirectoryName).catch((err) => {
-
         console.error(err);
       });
 
@@ -57,12 +80,10 @@ export class GalleryManager implements IGalleryManager {
 
   }
 
-  public   indexDirectory(relativeDirectoryName): Promise<DirectoryDTO> {
+  public indexDirectory(relativeDirectoryName): Promise<DirectoryDTO> {
     return new Promise(async (resolve, reject) => {
       try {
         const scannedDirectory = await DiskManager.scanDirectory(relativeDirectoryName);
-
-
         const connection = await MySQLConnection.getConnection();
 
         //returning with the result
@@ -82,31 +103,49 @@ export class GalleryManager implements IGalleryManager {
 
         if (!!parentDir) {
           parentDir.scanned = true;
-          parentDir.lastUpdate = Date.now();
+          parentDir.lastUpdate = scannedDirectory.lastUpdate;
           parentDir = await directoryRepository.persist(parentDir);
         } else {
           (<DirectoryEntity>scannedDirectory).scanned = true;
           parentDir = await directoryRepository.persist(<DirectoryEntity>scannedDirectory);
         }
 
+        let indexedDirectories = await directoryRepository.createQueryBuilder("directory")
+          .where("directory.parent = :dir", {
+            dir: parentDir.id
+          }).getMany();
 
         for (let i = 0; i < scannedDirectory.directories.length; i++) {
-          //TODO: simplify algorithm
-          let dir = await directoryRepository.createQueryBuilder("directory")
-            .where("directory.name = :name AND directory.path = :path", {
-              name: scannedDirectory.directories[i].name,
-              path: scannedDirectory.directories[i].path
-            }).getOne();
 
-          if (dir) {
-            dir.parent = parentDir;
-            await directoryRepository.persist(dir);
+          let directory: DirectoryEntity = null;
+          for (let j = 0; j < indexedDirectories.length; j++) {
+            if (indexedDirectories[j].name == scannedDirectory.directories[i].name) {
+              directory = indexedDirectories[j];
+              indexedDirectories.splice(j, 1);
+              break;
+            }
+          }
+
+          if (directory) { //update existing directory
+            if (!directory.parent && !directory.parent.id) {
+              directory.parent = parentDir;
+              delete directory.photos;
+              await directoryRepository.persist(directory);
+            }
           } else {
             scannedDirectory.directories[i].parent = parentDir;
             (<DirectoryEntity>scannedDirectory.directories[i]).scanned = false;
-            await directoryRepository.persist(<DirectoryEntity>scannedDirectory.directories[i]);
+            const d = await directoryRepository.persist(<DirectoryEntity>scannedDirectory.directories[i]);
+            for (let j = 0; j < scannedDirectory.directories[i].photos.length; j++) {
+              PhotoMetadataEntity.close(scannedDirectory.directories[i].photos[j].metadata);
+              scannedDirectory.directories[i].photos[j].directory = d;
+
+            }
+            await photosRepository.persist(scannedDirectory.directories[i].photos);
           }
         }
+
+        await directoryRepository.remove(indexedDirectories);
 
 
         let indexedPhotos = await photosRepository.createQueryBuilder("photo")
@@ -133,20 +172,17 @@ export class GalleryManager implements IGalleryManager {
           }
 
           //typeorm not supports recursive embended: TODO:fix it
-          let keyStr = <any>JSON.stringify(scannedDirectory.photos[i].metadata.keywords);
-          let camStr = <any>JSON.stringify(scannedDirectory.photos[i].metadata.cameraData);
-          let posStr = <any>JSON.stringify(scannedDirectory.photos[i].metadata.positionData);
-          let sizeStr = <any>JSON.stringify(scannedDirectory.photos[i].metadata.size);
+          PhotoMetadataEntity.close(scannedDirectory.photos[i].metadata);
 
-          if (photo.metadata.keywords != keyStr ||
-            photo.metadata.cameraData != camStr ||
-            photo.metadata.positionData != posStr ||
-            photo.metadata.size != sizeStr) {
+          if (photo.metadata.keywords != scannedDirectory.photos[i].metadata.keywords ||
+            photo.metadata.cameraData != scannedDirectory.photos[i].metadata.cameraData ||
+            photo.metadata.positionData != scannedDirectory.photos[i].metadata.positionData ||
+            photo.metadata.size != scannedDirectory.photos[i].metadata.size) {
 
-            photo.metadata.keywords = keyStr;
-            photo.metadata.cameraData = camStr;
-            photo.metadata.positionData = posStr;
-            photo.metadata.size = sizeStr;
+            photo.metadata.keywords = scannedDirectory.photos[i].metadata.keywords;
+            photo.metadata.cameraData = scannedDirectory.photos[i].metadata.cameraData;
+            photo.metadata.positionData = scannedDirectory.photos[i].metadata.positionData;
+            photo.metadata.size = scannedDirectory.photos[i].metadata.size;
             photosToSave.push(photo);
           }
         }

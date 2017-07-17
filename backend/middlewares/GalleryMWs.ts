@@ -74,14 +74,16 @@ export class GalleryMWs {
     }
 
     let fullImagePath = path.join(ProjectPath.ImageFolder, req.params.imagePath);
-    if (fs.statSync(fullImagePath).isDirectory()) {
-      return next();
-    }
 
     //check if thumbnail already exist
     if (fs.existsSync(fullImagePath) === false) {
       return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, "no such file:" + fullImagePath));
     }
+    if (fs.statSync(fullImagePath).isDirectory()) {
+      return next();
+    }
+
+
 
     req.resultPipe = fullImagePath;
     return next();

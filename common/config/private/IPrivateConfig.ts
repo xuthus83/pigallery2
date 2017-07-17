@@ -38,6 +38,7 @@ export interface ServerConfig {
   enableThreading: boolean;
   sharing: SharingConfig;
   sessionTimeout: number
+  folderPreviewSize: number;
 }
 export interface IPrivateConfig {
   Server: ServerConfig;

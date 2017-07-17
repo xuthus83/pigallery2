@@ -7,6 +7,7 @@ import * as path from "path";
 import {IptcParser} from "ts-node-iptc";
 import * as exif_parser from "exif-parser";
 import {ProjectPath} from "../../ProjectPath";
+import {Config} from "../../../common/config/private/Config";
 
 const LOG_TAG = "[DiskManagerTask]";
 export class DiskMangerWorker {
@@ -51,7 +52,6 @@ export class DiskMangerWorker {
 
             try {
               const exif = exif_parser.create(data).parse();
-              console.log(exif);
               metadata.cameraData = <CameraMetadata> {
                 ISO: exif.tags.ISO,
                 model: exif.tags.Model,
@@ -120,11 +120,11 @@ export class DiskMangerWorker {
       const directoryParent = path.join(path.dirname(relativeDirectoryName), path.sep);
       const absoluteDirectoryName = path.join(ProjectPath.ImageFolder, relativeDirectoryName);
 
-      // let promises: Array<Promise<any>> = [];
+      const stat = fs.statSync(path.join(ProjectPath.ImageFolder, relativeDirectoryName));
       let directory = <DirectoryDTO>{
         name: directoryName,
         path: directoryParent,
-        lastUpdate: Date.now(),
+        lastUpdate: Math.max(stat.ctime.getTime(), stat.mtime.getTime()),
         directories: [],
         photos: []
       };
@@ -139,7 +139,7 @@ export class DiskMangerWorker {
             let fullFilePath = path.normalize(path.resolve(absoluteDirectoryName, file));
             if (photosOnly == false && fs.statSync(fullFilePath).isDirectory()) {
               directory.directories.push(await DiskMangerWorker.scanDirectory(path.join(relativeDirectoryName, file),
-                5, true
+                Config.Server.folderPreviewSize, true
               ));
             } else if (DiskMangerWorker.isImage(fullFilePath)) {
               directory.photos.push(<PhotoDTO>{

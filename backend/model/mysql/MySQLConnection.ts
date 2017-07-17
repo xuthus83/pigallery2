@@ -40,12 +40,12 @@ export class MySQLConnection {
           SharingEntity
         ],
         autoSchemaSync: true,
-        logging: {
+        /*  logging: {
           logQueries: true,
           logOnlyFailedQueries: true,
           logFailedQueryError: true,
           logSchemaCreation: true
-        }
+         }*/
       });
     }
     return this.connection;
@@ -66,20 +66,6 @@ export class MySQLConnection {
         username: config.mysql.username,
         password: config.mysql.password,
         database: config.mysql.database
-      },
-      entities: [
-        UserEntity,
-        DirectoryEntity,
-        PhotoMetadataEntity,
-        PhotoEntity,
-        SharingEntity
-      ],
-      autoSchemaSync: true,
-      logging: {
-        logQueries: true,
-        logOnlyFailedQueries: true,
-        logFailedQueryError: true,
-        logSchemaCreation: true
       }
     });
     await conn.close();

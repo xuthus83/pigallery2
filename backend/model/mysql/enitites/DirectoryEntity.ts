@@ -25,7 +25,7 @@ export class DirectoryEntity implements DirectoryDTO {
   @Column({type: 'smallint', length: 1})
   public scanned: boolean;
 
-  @ManyToOne(type => DirectoryEntity, directory => directory.directories)
+  @ManyToOne(type => DirectoryEntity, directory => directory.directories, {onDelete: "CASCADE"})
   public parent: DirectoryEntity;
 
   @OneToMany(type => DirectoryEntity, dir => dir.parent)

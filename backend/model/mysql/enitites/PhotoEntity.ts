@@ -18,7 +18,7 @@ export class PhotoEntity implements PhotoDTO {
   @Column("string")
   name: string;
 
-  @ManyToOne(type => DirectoryEntity, directory => directory.photos)
+  @ManyToOne(type => DirectoryEntity, directory => directory.photos, {onDelete: "CASCADE"})
   directory: DirectoryDTO;
 
   @Embedded(type => PhotoMetadataEntity)
@@ -51,6 +51,22 @@ export class PhotoMetadataEntity implements PhotoMetadata {
 
   @Column("number")
   fileSize: number;
+
+  //TODO: fixit after typeorm update
+  public static open(m: PhotoMetadataEntity) {
+    m.keywords = <any>JSON.parse(<any>m.keywords);
+    m.cameraData = <any>JSON.parse(<any>m.cameraData);
+    m.positionData = <any>JSON.parse(<any>m.positionData);
+    m.size = <any>JSON.parse(<any>m.size);
+  }
+
+  //TODO: fixit after typeorm update
+  public static close(m: PhotoMetadataEntity) {
+    m.keywords = <any>JSON.stringify(<any>m.keywords);
+    m.cameraData = <any>JSON.stringify(<any>m.cameraData);
+    m.positionData = <any>JSON.stringify(<any>m.positionData);
+    m.size = <any>JSON.stringify(<any>m.size);
+  }
 }
 
 /*
