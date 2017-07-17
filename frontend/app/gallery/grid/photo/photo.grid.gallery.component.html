@@ -2,6 +2,7 @@
   <img #img [src]="thumbnail.Src" *ngIf="thumbnail.Available">
 
   <gallery-grid-photo-loading
+    [error]="thumbnail.Error"
     [animate]="thumbnail.loading"
     *ngIf="!thumbnail.Available">
   </gallery-grid-photo-loading>

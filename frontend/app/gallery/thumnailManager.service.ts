@@ -30,7 +30,7 @@ export abstract class ThumbnailBase {
   protected available: boolean = false;
   protected src: string = null;
   protected loading: boolean = false;
-  protected error: boolean = true;
+  protected error: boolean = false;
   protected onLoad: Function = null;
   protected thumbnailTask: ThumbnailTaskEntity;
 
@@ -45,16 +45,20 @@ export abstract class ThumbnailBase {
   }
 
 
-  get Available() {
+  get Available(): boolean {
     return this.available;
   }
 
-  get Src() {
+  get Src(): string {
     return this.src;
   }
 
-  get Loading() {
+  get Loading(): boolean {
     return this.loading;
+  }
+
+  get Error(): boolean {
+    return this.error;
   }
 
   destroy() {
@@ -96,10 +100,6 @@ export class IconThumbnail extends ThumbnailBase {
             this.thumbnailTask = null;
             this.loading = false;
             this.error = true;
-            //TODO: handle error
-            //TODO: not an error if its from cache
-            console.error("something bad happened");
-            console.error(error);
           }
         };
         this.thumbnailTask = this.thumbnailService.loadIcon(this.photo, ThumbnailLoadingPriority.high, listener);
@@ -153,10 +153,8 @@ export class Thumbnail extends ThumbnailBase {
           },
           onError: (error) => {//onError
             this.thumbnailTask = null;
-            //TODO: handle error
-            //TODO: not an error if its from cache
-            console.error("something bad happened");
-            console.error(error);
+            this.loading = false;
+            this.error = true;
           }
         };
         if (this.photo.isReplacementThumbnailAvailable()) {
