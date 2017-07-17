@@ -6,8 +6,7 @@ import {Config} from "../../common/config/public/Config";
 import {Title} from "@angular/platform-browser";
 import {NotificationService} from "./model/notification.service";
 import {ShareService} from "./gallery/share.service";
-
-
+import "hammerjs";
 @Component({
   selector: 'pi-gallery2-app',
   template: `<router-outlet></router-outlet>`,

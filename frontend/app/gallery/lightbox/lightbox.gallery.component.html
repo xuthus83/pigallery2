@@ -12,6 +12,7 @@
     </gallery-lightbox-photo>
   </div>
   <div
+    (swipeleft)="nextImage()" (swiperight)="prevImage()" (swipeup)="hide()"
     *ngIf="controllersVisible"
     id="controllers-container" #controls [style.width.px]="getPhotoFrameWidth()"
     [ngClass]="!controllersDimmed ? 'dim-controls':  ''">
@@ -63,7 +64,8 @@
   <info-panel *ngIf="activePhoto && infoPanelVisible"
               id="info-panel"
               [style.width.px]="infoPanelWidth"
-              [photo]="activePhoto.gridPhoto.photo">
+              [photo]="activePhoto.gridPhoto.photo"
+              (onClose)="hideInfoPanel()">
 
   </info-panel>
 </div>

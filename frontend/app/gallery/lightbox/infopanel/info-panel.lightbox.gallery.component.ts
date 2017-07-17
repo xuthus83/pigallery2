@@ -1,4 +1,4 @@
-import {Component, ElementRef, Input} from "@angular/core";
+import {Component, ElementRef, EventEmitter, Input, Output} from "@angular/core";
 import {PhotoDTO} from "../../../../../common/entities/PhotoDTO";
 import {Config} from "../../../../../common/config/public/Config";
 
@@ -9,7 +9,7 @@ import {Config} from "../../../../../common/config/public/Config";
 })
 export class InfoPanelLightboxComponent {
   @Input() photo: PhotoDTO;
-
+  @Output('onClose') onClose = new EventEmitter();
   public mapEnabled = true;
 
   constructor(public elementRef: ElementRef) {
@@ -82,6 +82,10 @@ export class InfoPanelLightboxComponent {
     str += this.photo.metadata.positionData.country;
 
     return str;
+  }
+
+  close() {
+    this.onClose.emit();
   }
 }
 

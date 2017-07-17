@@ -1,5 +1,5 @@
 import {Injectable, NgModule} from "@angular/core";
-import {BrowserModule} from "@angular/platform-browser";
+import {BrowserModule, HAMMER_GESTURE_CONFIG, HammerGestureConfig} from "@angular/platform-browser";
 import {FormsModule} from "@angular/forms";
 import {HttpModule} from "@angular/http";
 import {AgmCoreModule} from "@agm/core";
@@ -53,12 +53,19 @@ import {SettingsService} from "./settings/settings.service";
 import {ShareSettingsComponent} from "./settings/share/share.settings.component";
 import {BasicSettingsComponent} from "./settings/basic/basic.settings.component";
 import {OtherSettingsComponent} from "./settings/other/other.settings.component";
+
 @Injectable()
 export class GoogleMapsConfig {
   apiKey: string;
 
   constructor() {
     this.apiKey = Config.Client.Map.googleApiKey;
+  }
+}
+
+export class MyHammerConfig extends HammerGestureConfig {
+  overrides = <any>{
+    'swipe': {direction: 31} // enable swipe up
   }
 }
 
@@ -109,6 +116,7 @@ export class GoogleMapsConfig {
     StringifyRole],
   providers: [
     {provide: LAZY_MAPS_API_CONFIG, useClass: GoogleMapsConfig},
+    {provide: HAMMER_GESTURE_CONFIG, useClass: MyHammerConfig},
     NetworkService,
     ShareService,
     UserService,

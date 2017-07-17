@@ -1,6 +1,7 @@
 .content {
   background-color: #F7F7F7;
   height: 100%;
+  overflow-y: scroll;
 }
 
 .row {
@@ -35,4 +36,10 @@
 #map {
   width: 400px;
   height: 400px;
+}
+
+.close {
+  margin-top: 5px;
+  margin-right: 12px;
+  font-size: 36px;
 }

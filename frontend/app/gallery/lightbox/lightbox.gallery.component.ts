@@ -25,6 +25,8 @@ import {Observable} from "rxjs/Observable";
   templateUrl: './lightbox.gallery.component.html'
 })
 export class GalleryLightboxComponent implements OnDestroy {
+
+
   @Output('onLastElement') onLastElement = new EventEmitter();
   @ViewChild("photo") photoElement: GalleryLightboxPhotoComponent;
   @ViewChild("lightbox") lightboxElement: ElementRef;
@@ -81,7 +83,6 @@ export class GalleryLightboxComponent implements OnDestroy {
       }
       return;
     }
-    console.warn("can't find photo to show next");
   }
 
   public prevImage() {
@@ -90,7 +91,6 @@ export class GalleryLightboxComponent implements OnDestroy {
       this.showPhoto(this.activePhotoId - 1);
       return;
     }
-    console.warn("can't find photo to show prev");
   }
 
 
