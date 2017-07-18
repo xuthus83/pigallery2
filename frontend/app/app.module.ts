@@ -53,6 +53,7 @@ import {SettingsService} from "./settings/settings.service";
 import {ShareSettingsComponent} from "./settings/share/share.settings.component";
 import {BasicSettingsComponent} from "./settings/basic/basic.settings.component";
 import {OtherSettingsComponent} from "./settings/other/other.settings.component";
+import {DefaultUrlSerializer, UrlSerializer, UrlTree} from '@angular/router';
 
 @Injectable()
 export class GoogleMapsConfig {
@@ -66,6 +67,21 @@ export class GoogleMapsConfig {
 export class MyHammerConfig extends HammerGestureConfig {
   overrides = <any>{
     'swipe': {direction: 31} // enable swipe up
+  }
+}
+
+class CustomUrlSerializer implements UrlSerializer {
+  private _defaultUrlSerializer: DefaultUrlSerializer = new DefaultUrlSerializer();
+
+  parse(url: string): UrlTree {
+    // Encode parentheses
+    url = url.replace(/\(/g, '%28').replace(/\)/g, '%29');
+    // Use the default serializer.
+    return this._defaultUrlSerializer.parse(url)
+  }
+
+  serialize(tree: UrlTree): string {
+    return this._defaultUrlSerializer.serialize(tree).replace(/%28/g, '(').replace(/%29/g, ')');
   }
 }
 
@@ -115,6 +131,7 @@ export class MyHammerConfig extends HammerGestureConfig {
     OtherSettingsComponent,
     StringifyRole],
   providers: [
+    {provide: UrlSerializer, useClass: CustomUrlSerializer},
     {provide: LAZY_MAPS_API_CONFIG, useClass: GoogleMapsConfig},
     {provide: HAMMER_GESTURE_CONFIG, useClass: MyHammerConfig},
     NetworkService,
