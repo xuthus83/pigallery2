@@ -43,6 +43,6 @@ export interface PositionMetaData {
 export interface GPSMetadata {
   latitude?: number;
   longitude?: number;
-  altitude?: string;
+  altitude?: number;
 
 }

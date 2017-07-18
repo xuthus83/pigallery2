@@ -1,11 +1,10 @@
-///<reference path="../exif.d.ts"/>
 import {DirectoryDTO} from "../../../common/entities/DirectoryDTO";
 import {CameraMetadata, GPSMetadata, ImageSize, PhotoDTO, PhotoMetadata} from "../../../common/entities/PhotoDTO";
 import {Logger} from "../../Logger";
 import * as fs from "fs";
 import * as path from "path";
 import {IptcParser} from "ts-node-iptc";
-import * as exif_parser from "exif-parser";
+import {ExifParserFactory} from "ts-exif-parser";
 import {ProjectPath} from "../../ProjectPath";
 import {Config} from "../../../common/config/private/Config";
 
@@ -51,7 +50,7 @@ export class DiskMangerWorker {
             }
 
             try {
-              const exif = exif_parser.create(data).parse();
+              const exif = ExifParserFactory.create(data).parse();
               metadata.cameraData = <CameraMetadata> {
                 ISO: exif.tags.ISO,
                 model: exif.tags.Model,
