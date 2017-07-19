@@ -1,4 +1,5 @@
 import {ClientConfig} from "../public/ConfigClass";
+
 export enum DatabaseType{
   memory = 0, mysql = 1
 }
@@ -39,6 +40,7 @@ export interface ServerConfig {
   sharing: SharingConfig;
   sessionTimeout: number
   folderPreviewSize: number;
+  cachedFolderTimeout: number;//Do not rescans the folder if seems ok
 }
 export interface IPrivateConfig {
   Server: ServerConfig;

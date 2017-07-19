@@ -7,6 +7,7 @@ import {SharingDTO} from "../../../../common/entities/SharingDTO";
 import {ModalDirective} from "ngx-bootstrap/modal";
 import {Config} from "../../../../common/config/public/Config";
 import {NotificationService} from "../../model/notification.service";
+import {DirectoryDTO} from "../../../../common/entities/DirectoryDTO";
 
 
 @Component({
@@ -49,7 +50,7 @@ export class GalleryShareComponent implements OnInit, OnDestroy {
       if (!this.enabled) {
         return;
       }
-      this.currentDir = Utils.concatUrls(content.directory.path, content.directory.name);
+      this.currentDir = Utils.concatUrls((<DirectoryDTO>content.directory).path, (<DirectoryDTO>content.directory).name);
     });
     this.passwordProtection = Config.Client.Sharing.passwordProtected;
   }

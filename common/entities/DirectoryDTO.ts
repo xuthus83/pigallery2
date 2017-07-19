@@ -4,10 +4,15 @@ export interface DirectoryDTO {
   id: number;
   name: string;
   path: string;
-  lastUpdate: number;
+  lastModified: number;
+  lastScanned: number;
   parent: DirectoryDTO;
   directories: Array<DirectoryDTO>;
   photos: Array<PhotoDTO>;
+}
+
+export interface NotModifiedDirectoryDTO {
+  notModified: boolean;
 }
 
 export module DirectoryDTO {

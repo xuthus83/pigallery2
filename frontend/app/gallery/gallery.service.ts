@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
 import {NetworkService} from "../model/network/network.service";
 import {ContentWrapper} from "../../../common/entities/ConentWrapper";
-import {DirectoryDTO} from "../../../common/entities/DirectoryDTO";
+import {DirectoryDTO, NotModifiedDirectoryDTO} from "../../../common/entities/DirectoryDTO";
 import {SearchTypes} from "../../../common/entities/AutoCompleteItem";
 import {GalleryCacheService} from "./cache.gallery.service";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
@@ -35,32 +35,37 @@ export class GalleryService {
     this.content.next(content);
     this.lastRequest.directory = directoryName;
 
-    let cw: ContentWrapper = null;
+    const params = {};
     if (Config.Client.Sharing.enabled == true) {
       if (this._shareService.isSharing()) {
-        cw = await this.networkService.getJson<ContentWrapper>("/gallery/content/" + directoryName + "?sk=" + this._shareService.getSharingKey());
+        params['sk'] = this._shareService.getSharingKey();
       }
     }
 
-    if (cw == null) {
-      cw = await this.networkService.getJson<ContentWrapper>("/gallery/content/" + directoryName);
+    if (content.directory && content.directory.lastModified && content.directory.lastScanned) {
+      params['knownLastModified'] = content.directory.lastModified;
+      params['knownLastScanned'] = content.directory.lastScanned;
     }
 
-    if (!cw) {
+
+    const cw = await this.networkService.getJson<ContentWrapper>("/gallery/content/" + directoryName, params);
+
+
+    if (!cw || (<NotModifiedDirectoryDTO>cw.directory).notModified == true) {
       return;
     }
 
-    this.galleryCacheService.setDirectory(cw.directory); //save it before adding references
+    this.galleryCacheService.setDirectory(<DirectoryDTO>cw.directory); //save it before adding references
 
     if (this.lastRequest.directory != directoryName) {
       return;
     }
 
 
-    DirectoryDTO.addReferences(cw.directory);
+    DirectoryDTO.addReferences(<DirectoryDTO>cw.directory);
 
 
-    this.lastDirectory = cw.directory;
+    this.lastDirectory = <DirectoryDTO>cw.directory;
     this.content.next(cw);
 
 
@@ -75,11 +80,7 @@ export class GalleryService {
       return null
     }
 
-    let queryString = "/search/" + text;
-    if (type) {
-      queryString += "?type=" + type;
-    }
-    const cw: ContentWrapper = await this.networkService.getJson<ContentWrapper>(queryString);
+    const cw: ContentWrapper = await this.networkService.getJson<ContentWrapper>("/search/" + text, {type: type});
     this.content.next(cw);
     return cw;
   }

@@ -63,7 +63,19 @@ export class NetworkService {
     return this.callJson("put", url, data);
   }
 
-  public getJson<T>(url: string): Promise<T> {
+  public getJson<T>(url: string, data?: { [key: string]: any }): Promise<T> {
+    if (data) {
+      const keys = Object.getOwnPropertyNames(data);
+      if (keys.length > 0) {
+        url += "?";
+        for (let i = 0; i < keys.length; i++) {
+          url += keys[i] + "=" + data[keys[i]];
+          if (i < keys.length - 1) {
+            url += "&";
+          }
+        }
+      }
+    }
     return this.callJson("get", url);
   }
 

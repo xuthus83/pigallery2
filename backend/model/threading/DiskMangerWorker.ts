@@ -9,6 +9,7 @@ import {ProjectPath} from "../../ProjectPath";
 import {Config} from "../../../common/config/private/Config";
 
 const LOG_TAG = "[DiskManagerTask]";
+
 export class DiskMangerWorker {
   private static isImage(fullPath: string) {
     const extensions = [
@@ -24,6 +25,60 @@ export class DiskMangerWorker {
 
     const extension = path.extname(fullPath).toLowerCase();
     return extensions.indexOf(extension) !== -1;
+  }
+
+  public static scanDirectory(relativeDirectoryName: string, maxPhotos: number = null, photosOnly: boolean = false): Promise<DirectoryDTO> {
+    return new Promise<DirectoryDTO>((resolve, reject) => {
+
+      const directoryName = path.basename(relativeDirectoryName);
+      const directoryParent = path.join(path.dirname(relativeDirectoryName), path.sep);
+      const absoluteDirectoryName = path.join(ProjectPath.ImageFolder, relativeDirectoryName);
+
+      const stat = fs.statSync(path.join(ProjectPath.ImageFolder, relativeDirectoryName));
+      let directory = <DirectoryDTO>{
+        name: directoryName,
+        path: directoryParent,
+        lastModified: Math.max(stat.ctime.getTime(), stat.mtime.getTime()),
+        lastScanned: Date.now(),
+        directories: [],
+        photos: []
+      };
+      fs.readdir(absoluteDirectoryName, async (err, list) => {
+        if (err) {
+          return reject(err);
+        }
+
+        try {
+          for (let i = 0; i < list.length; i++) {
+            let file = list[i];
+            let fullFilePath = path.normalize(path.resolve(absoluteDirectoryName, file));
+            if (photosOnly == false && fs.statSync(fullFilePath).isDirectory()) {
+              const d = await DiskMangerWorker.scanDirectory(path.join(relativeDirectoryName, file),
+                Config.Server.folderPreviewSize, true
+              );
+              d.lastScanned = 0; //it was not a fully scan
+              directory.directories.push(d);
+            } else if (DiskMangerWorker.isImage(fullFilePath)) {
+              directory.photos.push(<PhotoDTO>{
+                name: file,
+                directory: null,
+                metadata: await DiskMangerWorker.loadPhotoMetadata(fullFilePath)
+              });
+
+              if (maxPhotos != null && directory.photos.length > maxPhotos) {
+                break;
+              }
+            }
+          }
+
+          return resolve(directory);
+        } catch (err) {
+          return reject({error: err});
+        }
+
+      });
+    });
+
   }
 
   private static loadPhotoMetadata(fullPath: string): Promise<PhotoMetadata> {
@@ -110,56 +165,5 @@ export class DiskMangerWorker {
         });
       }
     );
-  }
-
-  public static  scanDirectory(relativeDirectoryName: string, maxPhotos: number = null, photosOnly: boolean = false): Promise<DirectoryDTO> {
-    return new Promise<DirectoryDTO>((resolve, reject) => {
-
-      const directoryName = path.basename(relativeDirectoryName);
-      const directoryParent = path.join(path.dirname(relativeDirectoryName), path.sep);
-      const absoluteDirectoryName = path.join(ProjectPath.ImageFolder, relativeDirectoryName);
-
-      const stat = fs.statSync(path.join(ProjectPath.ImageFolder, relativeDirectoryName));
-      let directory = <DirectoryDTO>{
-        name: directoryName,
-        path: directoryParent,
-        lastUpdate: Math.max(stat.ctime.getTime(), stat.mtime.getTime()),
-        directories: [],
-        photos: []
-      };
-      fs.readdir(absoluteDirectoryName, async (err, list) => {
-        if (err) {
-          return reject(err);
-        }
-
-        try {
-          for (let i = 0; i < list.length; i++) {
-            let file = list[i];
-            let fullFilePath = path.normalize(path.resolve(absoluteDirectoryName, file));
-            if (photosOnly == false && fs.statSync(fullFilePath).isDirectory()) {
-              directory.directories.push(await DiskMangerWorker.scanDirectory(path.join(relativeDirectoryName, file),
-                Config.Server.folderPreviewSize, true
-              ));
-            } else if (DiskMangerWorker.isImage(fullFilePath)) {
-              directory.photos.push(<PhotoDTO>{
-                name: file,
-                directory: null,
-                metadata: await DiskMangerWorker.loadPhotoMetadata(fullFilePath)
-              });
-
-              if (maxPhotos != null && directory.photos.length > maxPhotos) {
-                break;
-              }
-            }
-          }
-
-          return resolve(directory);
-        } catch (err) {
-          return reject({error: err});
-        }
-
-      });
-    });
-
   }
 }

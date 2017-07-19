@@ -12,7 +12,7 @@ export class GalleryCacheService {
     if (Config.Client.enableCache == false) {
       return null;
     }
-    let value = localStorage.getItem(directoryName);
+    let value = localStorage.getItem(Utils.concatUrls(directoryName));
     if (value != null) {
       let directory: DirectoryDTO = JSON.parse(value);
 

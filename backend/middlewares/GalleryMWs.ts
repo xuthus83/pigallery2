@@ -2,7 +2,7 @@ import * as path from "path";
 import * as fs from "fs";
 import {NextFunction, Request, Response} from "express";
 import {ErrorCodes, ErrorDTO} from "../../common/entities/Error";
-import {DirectoryDTO} from "../../common/entities/DirectoryDTO";
+import {DirectoryDTO, NotModifiedDirectoryDTO} from "../../common/entities/DirectoryDTO";
 import {ObjectManagerRepository} from "../model/ObjectManagerRepository";
 import {SearchTypes} from "../../common/entities/AutoCompleteItem";
 import {ContentWrapper} from "../../common/entities/ConentWrapper";
@@ -13,6 +13,7 @@ import {UserDTO} from "../../common/entities/UserDTO";
 
 
 const LOG_TAG = "[GalleryMWs]";
+
 export class GalleryMWs {
 
 
@@ -26,11 +27,15 @@ export class GalleryMWs {
 
     try {
 
-      const directory = await ObjectManagerRepository.getInstance().GalleryManager.listDirectory(directoryName);
+      const directory = await ObjectManagerRepository.getInstance().GalleryManager.listDirectory(directoryName, req.query.knownLastModified, req.query.knownLastScanned);
+      if ((<NotModifiedDirectoryDTO>directory).notModified == true) {
+        req.resultPipe = new ContentWrapper(directory, null);
+        return next();
+      }
       if (req.session.user.permissions &&
         req.session.user.permissions.length > 0 &&
         req.session.user.permissions[0] != "/") {
-        directory.directories = directory.directories.filter(d =>
+        (<DirectoryDTO>directory).directories = (<DirectoryDTO>directory).directories.filter(d =>
           UserDTO.isDirectoryAvailable(d, req.session.user.permissions));
       }
       req.resultPipe = new ContentWrapper(directory, null);
@@ -47,6 +52,9 @@ export class GalleryMWs {
       return next();
 
     let cw: ContentWrapper = req.resultPipe;
+    if ((<NotModifiedDirectoryDTO>cw.directory).notModified == true) {
+      return next();
+    }
     let removeDirs = (dir) => {
       dir.photos.forEach((photo: PhotoDTO) => {
         photo.directory = null;
@@ -82,7 +90,6 @@ export class GalleryMWs {
     if (fs.statSync(fullImagePath).isDirectory()) {
       return next();
     }
-
 
 
     req.resultPipe = fullImagePath;

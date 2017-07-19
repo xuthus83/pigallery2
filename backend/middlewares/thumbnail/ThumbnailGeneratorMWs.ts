@@ -6,7 +6,7 @@ import * as os from "os";
 import {NextFunction, Request, Response} from "express";
 import {ErrorCodes, ErrorDTO} from "../../../common/entities/Error";
 import {ContentWrapper} from "../../../common/entities/ConentWrapper";
-import {DirectoryDTO} from "../../../common/entities/DirectoryDTO";
+import {DirectoryDTO, NotModifiedDirectoryDTO} from "../../../common/entities/DirectoryDTO";
 import {ProjectPath} from "../../ProjectPath";
 import {PhotoDTO} from "../../../common/entities/PhotoDTO";
 import {Config} from "../../../common/config/private/Config";
@@ -85,8 +85,11 @@ export class ThumbnailGeneratorMWs {
       return next();
 
     let cw: ContentWrapper = req.resultPipe;
+    if ((<NotModifiedDirectoryDTO>cw.directory).notModified == true) {
+      return next();
+    }
     if (cw.directory) {
-      ThumbnailGeneratorMWs.addThInfoTODir(cw.directory);
+      ThumbnailGeneratorMWs.addThInfoTODir(<DirectoryDTO>cw.directory);
     }
     if (cw.searchResult) {
       ThumbnailGeneratorMWs.addThInfoToPhotos(cw.searchResult.photos);

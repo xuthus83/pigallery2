@@ -26,8 +26,7 @@ export class Utils {
   }
 
 
-  static
-  concatUrls(...args: Array<string>) {
+  static concatUrls(...args: Array<string>) {
     let url = "";
     for (let i = 0; i < args.length; i++) {
       if (args[i] === "" || typeof args[i] === "undefined") continue;
@@ -39,11 +38,14 @@ export class Utils {
     }
     url = url.replace("//", "/");
 
+    if (url.trim() == "") {
+      url = "./";
+    }
+
     return url.substring(0, url.length - 1);
   }
 
-  public static
-  updateKeys(targetObject: any, sourceObject: any) {
+  public static updateKeys(targetObject: any, sourceObject: any) {
     Object.keys(sourceObject).forEach((key) => {
       if (typeof targetObject[key] === "undefined") {
         return;
@@ -56,8 +58,7 @@ export class Utils {
     });
   }
 
-  public static
-  setKeys(targetObject: any, sourceObject: any) {
+  public static setKeys(targetObject: any, sourceObject: any) {
     Object.keys(sourceObject).forEach((key) => {
       if (typeof targetObject[key] === "object") {
         Utils.setKeys(targetObject[key], sourceObject[key]);
@@ -67,8 +68,7 @@ export class Utils {
     });
   }
 
-  public static
-  setKeysForced(targetObject: any, sourceObject: any) {
+  public static setKeysForced(targetObject: any, sourceObject: any) {
     Object.keys(sourceObject).forEach((key) => {
       if (typeof sourceObject[key] === "object") {
         if (typeof targetObject[key] === "undefined") {
@@ -81,8 +81,7 @@ export class Utils {
     });
   }
 
-  public static
-  enumToArray(EnumType: any): Array<{
+  public static enumToArray(EnumType: any): Array<{
     key: number;
     value: string;
   }> {
@@ -100,8 +99,7 @@ export class Utils {
   }
 
 
-  public static
-  findClosest(number: number, arr: Array<number>) {
+  public static findClosest(number: number, arr: Array<number>) {
 
     let curr = arr[0];
     let diff = Math.abs(number - curr);

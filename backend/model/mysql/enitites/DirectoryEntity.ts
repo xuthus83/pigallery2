@@ -20,7 +20,9 @@ export class DirectoryEntity implements DirectoryDTO {
 
 
   @Column('number')
-  public lastUpdate: number;
+  public lastModified: number;
+  @Column('number')
+  public lastScanned: number;
 
   @Column({type: 'smallint', length: 1})
   public scanned: boolean;

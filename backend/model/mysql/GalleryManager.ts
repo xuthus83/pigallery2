@@ -1,5 +1,5 @@
 import {IGalleryManager} from "../interfaces/IGalleryManager";
-import {DirectoryDTO} from "../../../common/entities/DirectoryDTO";
+import {DirectoryDTO, NotModifiedDirectoryDTO} from "../../../common/entities/DirectoryDTO";
 import * as path from "path";
 import * as fs from "fs";
 import {DirectoryEntity} from "./enitites/DirectoryEntity";
@@ -13,11 +13,15 @@ import {Config} from "../../../common/config/private/Config";
 export class GalleryManager implements IGalleryManager {
 
 
-  public async listDirectory(relativeDirectoryName): Promise<DirectoryDTO> {
+  public async listDirectory(relativeDirectoryName: string,
+                             knownLastModified?: number,
+                             knownLastScanned?: number): Promise<DirectoryDTO | NotModifiedDirectoryDTO> {
     relativeDirectoryName = path.normalize(path.join("." + path.sep, relativeDirectoryName));
     const directoryName = path.basename(relativeDirectoryName);
     const directoryParent = path.join(path.dirname(relativeDirectoryName), path.sep);
     const connection = await MySQLConnection.getConnection();
+    const stat = fs.statSync(path.join(ProjectPath.ImageFolder, relativeDirectoryName));
+    const lastModified = Math.max(stat.ctime.getTime(), stat.mtime.getTime());
     let dir = await connection
       .getRepository(DirectoryEntity)
       .createQueryBuilder("directory")
@@ -29,7 +33,16 @@ export class GalleryManager implements IGalleryManager {
       .leftJoinAndSelect("directory.photos", "photos")
       .getOne();
 
+
     if (dir && dir.scanned == true) {
+      //iF it seems that the content did not changed, do not work on it
+      if (knownLastModified && knownLastScanned) {
+        if (Date.now() - knownLastScanned <= Config.Server.cachedFolderTimeout &&
+          lastModified == knownLastModified &&
+          dir.lastScanned == knownLastScanned) {
+          return Promise.resolve(<NotModifiedDirectoryDTO>{notModified: true});
+        }
+      }
       if (dir.photos) {
         for (let i = 0; i < dir.photos.length; i++) {
           dir.photos[i].directory = dir;
@@ -58,19 +71,17 @@ export class GalleryManager implements IGalleryManager {
         }
       }
 
-      const stat = fs.statSync(path.join(ProjectPath.ImageFolder, relativeDirectoryName));
-      const lastUpdate = Math.max(stat.ctime.getTime(), stat.mtime.getTime());
 
-      if (dir.lastUpdate != lastUpdate) {
+      if (dir.lastModified != lastModified) {
         return this.indexDirectory(relativeDirectoryName);
       }
 
-      console.log("lazy");
-      //on the fly updating
-      this.indexDirectory(relativeDirectoryName).catch((err) => {
-        console.error(err);
-      });
-
+      if (Date.now() - dir.lastScanned > Config.Server.cachedFolderTimeout) {
+        //on the fly reindexing
+        this.indexDirectory(relativeDirectoryName).catch((err) => {
+          console.error(err);
+        });
+      }
       return dir;
 
 
@@ -103,7 +114,8 @@ export class GalleryManager implements IGalleryManager {
 
         if (!!parentDir) {
           parentDir.scanned = true;
-          parentDir.lastUpdate = scannedDirectory.lastUpdate;
+          parentDir.lastModified = scannedDirectory.lastModified;
+          parentDir.lastScanned = scannedDirectory.lastScanned;
           parentDir = await directoryRepository.persist(parentDir);
         } else {
           (<DirectoryEntity>scannedDirectory).scanned = true;
