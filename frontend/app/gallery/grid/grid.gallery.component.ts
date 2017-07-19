@@ -6,6 +6,7 @@ import {
   HostListener,
   Input,
   OnChanges,
+  OnDestroy,
   QueryList,
   ViewChild,
   ViewChildren
@@ -23,7 +24,7 @@ import {Config} from "../../../../common/config/public/Config";
   templateUrl: './grid.gallery.component.html',
   styleUrls: ['./grid.gallery.component.css'],
 })
-export class GalleryGridComponent implements OnChanges, AfterViewInit {
+export class GalleryGridComponent implements OnChanges, AfterViewInit, OnDestroy {
 
   @ViewChild('gridContainer') gridContainer: ElementRef;
   @ViewChildren(GalleryPhotoComponent) gridPhotoQL: QueryList<GalleryPhotoComponent>;
@@ -41,8 +42,10 @@ export class GalleryGridComponent implements OnChanges, AfterViewInit {
 
   private onScrollFired = false;
   private scrollbarWidth = 0;
+  private helperTime = null;
 
-  constructor(private overlayService: OverlayService, private changeDetector: ChangeDetectorRef) {
+  constructor(private overlayService: OverlayService,
+              private changeDetector: ChangeDetectorRef) {
   }
 
   ngOnChanges() {
@@ -52,9 +55,16 @@ export class GalleryGridComponent implements OnChanges, AfterViewInit {
     this.updateContainerWidth();
     this.sortPhotos();
     this.mergeNewPhotos();
-    setTimeout(() => {
+    this.helperTime = setTimeout(() => {
       this.renderPhotos();
     }, 0);
+  }
+
+  ngOnDestroy() {
+
+    if (this.helperTime != null) {
+      clearTimeout(this.helperTime);
+    }
   }
 
   @HostListener('window:resize')
@@ -73,6 +83,7 @@ export class GalleryGridComponent implements OnChanges, AfterViewInit {
 
   isAfterViewInit: boolean = false;
 
+
   ngAfterViewInit() {
     this.lightbox.setGridPhotoQL(this.gridPhotoQL);
 
@@ -82,7 +93,7 @@ export class GalleryGridComponent implements OnChanges, AfterViewInit {
     this.updateContainerWidth();
     this.sortPhotos();
     this.clearRenderedPhotos();
-    setTimeout(() => {
+    this.helperTime = setTimeout(() => {
       this.renderPhotos();
     }, 0);
     this.isAfterViewInit = true;
@@ -142,7 +153,7 @@ export class GalleryGridComponent implements OnChanges, AfterViewInit {
 
     while (this.renderedPhotoIndex < this.photos.length &&
     (this.shouldRenderMore(renderedContentHeight) === true ||
-    this.renderedPhotoIndex < numberOfPhotos)) {
+      this.renderedPhotoIndex < numberOfPhotos)) {
       let ret = this.renderARow();
       if (ret === null) {
         throw "Gridphotos rendering failed";

@@ -6,6 +6,7 @@ import {RouterLink} from "@angular/router";
 import {Thumbnail, ThumbnailManagerService} from "../../thumnailManager.service";
 import {Config} from "../../../../../common/config/public/Config";
 import {AnimationBuilder} from "@angular/animations";
+
 @Component({
   selector: 'gallery-grid-photo',
   templateUrl: './photo.grid.gallery.component.html',
@@ -56,6 +57,10 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.thumbnail.destroy();
+
+    if (this.animationTimer != null) {
+      clearTimeout(this.animationTimer);
+    }
   }
 
 
@@ -93,7 +98,6 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, OnDestroy {
     }
     this.animationTimer = setTimeout(() => {
       this.infoBar.background = "rgba(0,0,0,0.8)";
-
       if (!this.infoDiv) {
         this.animationTimer = setTimeout(() => {
           if (!this.infoDiv) {
@@ -104,6 +108,7 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, OnDestroy {
         }, 10);
         return;
       }
+      this.infoBar.marginTop = -this.infoDiv.nativeElement.clientHeight;
     }, 1);
 
   }

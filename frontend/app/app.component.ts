@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewContainerRef} from "@angular/core";
+import {Component, OnDestroy, OnInit, ViewContainerRef} from "@angular/core";
 import {AuthenticationService} from "./model/network/authentication.service";
 import {UserDTO} from "../../common/entities/UserDTO";
 import {Router} from "@angular/router";
@@ -7,12 +7,15 @@ import {Title} from "@angular/platform-browser";
 import {NotificationService} from "./model/notification.service";
 import {ShareService} from "./gallery/share.service";
 import "hammerjs";
+
 @Component({
   selector: 'pi-gallery2-app',
   template: `<router-outlet></router-outlet>`,
 
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
+
+  private subscription = null;
 
   constructor(private _router: Router,
               private _authenticationService: AuthenticationService,
@@ -25,7 +28,7 @@ export class AppComponent implements OnInit {
   async ngOnInit() {
     this._title.setTitle(Config.Client.applicationTitle);
     await this._shareService.wait();
-    this._authenticationService.user.subscribe((user: UserDTO) => {
+    this.subscription = this._authenticationService.user.subscribe((user: UserDTO) => {
       if (this._authenticationService.isAuthenticated()) {
         if (this.isLoginPage()) {
           return this.toGallery();
@@ -38,7 +41,12 @@ export class AppComponent implements OnInit {
 
     });
 
+  }
 
+  ngOnDestroy() {
+    if (this.subscription != null) {
+      this.subscription.unsubscribe();
+    }
   }
 
   private isLoginPage() {

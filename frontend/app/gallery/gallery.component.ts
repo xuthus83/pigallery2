@@ -89,6 +89,9 @@ export class GalleryComponent implements OnInit, OnDestroy {
     if (this.subscription.route !== null) {
       this.subscription.route.unsubscribe();
     }
+    if (this.subscription.timer !== null) {
+      this.subscription.timer.unsubscribe();
+    }
   }
 
   private onContentChange = (content) => {

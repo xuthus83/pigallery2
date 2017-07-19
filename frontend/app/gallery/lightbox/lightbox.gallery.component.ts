@@ -34,6 +34,7 @@ export class GalleryLightboxComponent implements OnDestroy {
   public navigation = {hasPrev: true, hasNext: true};
   public blackCanvasOpacity: any = 0;
 
+  private activePhotoId: number = null;
   public activePhoto: GalleryPhotoComponent;
   private gridPhotoQL: QueryList<GalleryPhotoComponent>;
 
@@ -64,6 +65,13 @@ export class GalleryLightboxComponent implements OnDestroy {
     if (this.changeSubscription != null) {
       this.changeSubscription.unsubscribe();
     }
+
+    if (this.visibilityTimer != null) {
+      clearTimeout(this.visibilityTimer);
+    }
+    if (this.iPvisibilityTimer != null) {
+      clearTimeout(this.iPvisibilityTimer);
+    }
   }
 
 //noinspection JSUnusedGlobalSymbols
@@ -93,8 +101,6 @@ export class GalleryLightboxComponent implements OnDestroy {
     }
   }
 
-
-  activePhotoId: number = null;
 
   private showPhoto(photoIndex: number, resize: boolean = true) {
     this.activePhoto = null;
@@ -182,6 +188,7 @@ export class GalleryLightboxComponent implements OnDestroy {
 
       this.visible = false;
       this.activePhoto = null;
+      this.activePhotoId = null;
       this.overlayService.hideOverlay();
     });
 

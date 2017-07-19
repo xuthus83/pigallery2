@@ -24,6 +24,7 @@ export abstract class SettingsComponent<T> implements OnInit, OnDestroy, OnChang
   public error: string = null;
   public changed: boolean = false;
   private subscription = null;
+  private settingsSubscription = null;
 
   public settings: T = <any>{};
   public original: T = <any>{};
@@ -34,7 +35,7 @@ export abstract class SettingsComponent<T> implements OnInit, OnDestroy, OnChang
               public _settingsService: AbstractSettingsService<T>,
               protected notification: NotificationService,
               private sliceFN: (s: IPrivateConfig) => T) {
-    this._settingsService.Settings.subscribe(this.onNewSettings);
+    this.settingsSubscription = this._settingsService.Settings.subscribe(this.onNewSettings);
     this.onNewSettings(this._settingsService._settingsService.settings.value);
   }
 
@@ -66,6 +67,9 @@ export abstract class SettingsComponent<T> implements OnInit, OnDestroy, OnChang
   ngOnDestroy() {
     if (this.subscription != null) {
       this.subscription.unsubscribe();
+    }
+    if (this.settingsSubscription != null) {
+      this.settingsSubscription.unsubscribe();
     }
   }
 
