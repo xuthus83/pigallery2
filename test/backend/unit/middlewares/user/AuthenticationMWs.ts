@@ -19,6 +19,7 @@ describe('Authentication middleware', () => {
         session: {
           user: "A user"
         },
+        sessionOptions: {},
         query: {},
         params: {}
       };
@@ -33,6 +34,7 @@ describe('Authentication middleware', () => {
     it('should call next with error on not authenticated', (done) => {
       let req: any = {
         session: {},
+        sessionOptions: {},
         query: {},
         params: {}
       };
@@ -52,7 +54,8 @@ describe('Authentication middleware', () => {
 
     it('should call next with error on authenticated', (done) => {
       let req: any = {
-        session: {}
+        session: {},
+        sessionOptions: {},
       };
       let res: any = {};
       let next: any = (err) => {
@@ -68,7 +71,8 @@ describe('Authentication middleware', () => {
       let req: any = {
         session: {
           user: "A user"
-        }
+        },
+        sessionOptions: {},
       };
       let res: any = {};
       let next: any = (err: ErrorDTO) => {
@@ -88,7 +92,8 @@ describe('Authentication middleware', () => {
           user: {
             role: UserRoles.LimitedGuest
           }
-        }
+        },
+        sessionOptions: {}
       };
       let next: any = (err) => {
         expect(err).to.be.undefined;
@@ -104,7 +109,8 @@ describe('Authentication middleware', () => {
           user: {
             role: UserRoles.LimitedGuest
           }
-        }
+        },
+        sessionOptions: {}
       };
       let next: any = (err: ErrorDTO) => {
         expect(err).not.to.be.undefined;
