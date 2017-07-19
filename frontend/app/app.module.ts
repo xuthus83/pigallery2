@@ -70,7 +70,7 @@ export class MyHammerConfig extends HammerGestureConfig {
   }
 }
 
-class CustomUrlSerializer implements UrlSerializer {
+export class CustomUrlSerializer implements UrlSerializer {
   private _defaultUrlSerializer: DefaultUrlSerializer = new DefaultUrlSerializer();
 
   parse(url: string): UrlTree {

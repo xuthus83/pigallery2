@@ -339,11 +339,11 @@ export class GalleryLightboxComponent implements OnDestroy {
     window.scrollTo(window.scrollX, value);
   }
 
-  private getPhotoFrameWidth() {
+  public getPhotoFrameWidth() {
     return Math.max(window.innerWidth - this.infoPanelWidth, 0);
   }
 
-  private getPhotoFrameHeight() {
+  public getPhotoFrameHeight() {
     return window.innerHeight;
   }
 
