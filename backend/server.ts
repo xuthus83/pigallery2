@@ -19,6 +19,7 @@ import {ConfigDiagnostics} from "./model/ConfigDiagnostics";
 import _session = require('cookie-session');
 
 const LOG_TAG = "[server]";
+
 export class Server {
 
   private app: any;
@@ -103,6 +104,7 @@ export class Server {
    */
   private onError = (error: any) => {
     if (error.syscall !== 'listen') {
+      Logger.error(LOG_TAG, 'Server error', error);
       throw error;
     }
 

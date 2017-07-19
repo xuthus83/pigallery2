@@ -14,6 +14,7 @@ export class LoginComponent implements OnInit {
   loginCredential: LoginCredential;
   loginError: any = null;
   title: string;
+  inProgress = false;
 
   constructor(private _authService: AuthenticationService, private _navigation: NavigationService) {
     this.loginCredential = new LoginCredential();
@@ -29,14 +30,16 @@ export class LoginComponent implements OnInit {
   async onLogin() {
     this.loginError = null;
 
+    this.inProgress = true;
     try {
       await this._authService.login(this.loginCredential);
     } catch (error) {
       if (error && error.code === ErrorCodes.CREDENTIAL_NOT_FOUND) {
         this.loginError = "Wrong username or password";
-        return;
       }
     }
+
+    this.inProgress = false;
   }
 }
 

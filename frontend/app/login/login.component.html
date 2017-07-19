@@ -41,7 +41,7 @@
           <!-- Button -->
           <div class="col-sm-12 controls">
             <button class="btn btn-primary pull-right"
-                    [disabled]="!LoginForm.form.valid"
+                    [disabled]="!LoginForm.form.valid || inProgress"
                     type="submit"
                     name="action">Login
             </button>

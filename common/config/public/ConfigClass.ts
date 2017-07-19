@@ -59,7 +59,7 @@ export class PublicConfigClass {
       googleApiKey: ""
     },
     concurrentThumbnailGenerations: 1,
-    enableCache: false,
+    enableCache: true,
     enableOnScrollRendering: true,
     enableOnScrollThumbnailPrioritising: true,
     authenticationRequired: true,

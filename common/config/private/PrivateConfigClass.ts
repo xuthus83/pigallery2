@@ -31,7 +31,7 @@ export class PrivateConfigClass extends PublicConfigClass implements IPrivateCon
       updateTimeout: 1000 * 60 * 5
     },
     enableThreading: true,
-    folderPreviewSize: 5
+    folderPreviewSize: 2
   };
   private ConfigLoader: any;
 

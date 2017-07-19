@@ -20,6 +20,10 @@ class ProjectPathClass {
   }
 
   constructor() {
+    this.reset();
+  }
+
+  reset() {
     this.Root = path.join(__dirname, "/../");
     this.ImageFolder = this.getAbsolutePath(Config.Server.imagesFolder);
     this.ThumbnailFolder = this.getAbsolutePath(Config.Server.thumbnail.folder);

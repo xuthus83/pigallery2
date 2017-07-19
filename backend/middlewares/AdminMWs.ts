@@ -9,7 +9,7 @@ import {ConfigDiagnostics} from "../model/ConfigDiagnostics";
 import {ClientConfig} from "../../common/config/public/ConfigClass";
 import {BasicConfigDTO} from "../../common/entities/settings/BasicConfigDTO";
 import {OtherConfigDTO} from "../../common/entities/settings/OtherConfigDTO";
-import set = Reflect.set;
+import {ProjectPath} from "../ProjectPath";
 
 
 const LOG_TAG = "[AdminMWs]";
@@ -165,6 +165,7 @@ export class AdminMWs {
       original.Server.thumbnail = settings.server;
       original.Client.Thumbnail = settings.client;
       original.save();
+      ProjectPath.reset();
       await ConfigDiagnostics.runDiagnostics();
       Logger.info(LOG_TAG, "new config:");
       Logger.info(LOG_TAG, JSON.stringify(Config, null, '\t'));
@@ -197,6 +198,7 @@ export class AdminMWs {
       original.Client.publicUrl = settings.publicUrl;
       original.Client.applicationTitle = settings.applicationTitle;
       original.save();
+      ProjectPath.reset();
       await ConfigDiagnostics.runDiagnostics();
       Logger.info(LOG_TAG, "new config:");
       Logger.info(LOG_TAG, JSON.stringify(Config, null, '\t'));
