@@ -4,6 +4,8 @@ import {UserDTO} from "../../../../common/entities/UserDTO";
 import "rxjs/Rx";
 import {LoginCredential} from "../../../../common/entities/LoginCredential";
 import {AuthenticationService} from "./authentication.service";
+import {NetworkService} from "./network.service";
+import {ErrorDTO} from "../../../../common/entities/Error";
 
 class MockUserService {
   public login(credential: LoginCredential): Promise<UserDTO> {
@@ -15,12 +17,19 @@ class MockUserService {
   }
 }
 
+class MockNetworkService {
+  addGlobalErrorHandler(fn: (error: ErrorDTO) => boolean) {
+  }
+}
+
 describe('AuthenticationService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
+        {provide: NetworkService, useClass: MockNetworkService},
         {provide: UserService, useClass: MockUserService},
-        AuthenticationService]
+        AuthenticationService,
+      ]
     });
   });
 
