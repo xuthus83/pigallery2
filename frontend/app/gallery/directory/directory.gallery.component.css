@@ -12,9 +12,9 @@ a {
 .no-image {
 
   color: #7f7f7f;
-  font-size: 50px;
-  top: calc(50% - 25px);
-  left: calc(50% - 25px);
+  font-size: 80px;
+  top: calc(50% - 40px);
+  left: calc(50% - 40px);
 }
 
 .photo {

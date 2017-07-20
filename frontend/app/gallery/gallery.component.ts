@@ -7,7 +7,7 @@ import {GallerySearchComponent} from "./search/search.gallery.component";
 import {SearchTypes} from "../../../common/entities/AutoCompleteItem";
 import {Config} from "../../../common/config/public/Config";
 import {DirectoryDTO} from "../../../common/entities/DirectoryDTO";
-import {SearchResultDTO} from "../../../common/entities/SearchResult";
+import {SearchResultDTO} from "../../../common/entities/SearchResultDTO";
 import {ShareService} from "./share.service";
 import {NavigationService} from "../model/navigation.service";
 import {UserRoles} from "../../../common/entities/UserDTO";

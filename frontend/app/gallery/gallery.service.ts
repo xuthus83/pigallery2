@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
 import {NetworkService} from "../model/network/network.service";
 import {ContentWrapper} from "../../../common/entities/ConentWrapper";
-import {DirectoryDTO, NotModifiedDirectoryDTO} from "../../../common/entities/DirectoryDTO";
+import {DirectoryDTO} from "../../../common/entities/DirectoryDTO";
 import {SearchTypes} from "../../../common/entities/AutoCompleteItem";
 import {GalleryCacheService} from "./cache.gallery.service";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
@@ -51,11 +51,11 @@ export class GalleryService {
     const cw = await this.networkService.getJson<ContentWrapper>("/gallery/content/" + directoryName, params);
 
 
-    if (!cw || (<NotModifiedDirectoryDTO>cw.directory).notModified == true) {
+    if (!cw || cw.notModified == true) {
       return;
     }
 
-    this.galleryCacheService.setDirectory(<DirectoryDTO>cw.directory); //save it before adding references
+    this.galleryCacheService.setDirectory(cw.directory); //save it before adding references
 
     if (this.lastRequest.directory != directoryName) {
       return;

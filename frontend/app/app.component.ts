@@ -21,8 +21,8 @@ export class AppComponent implements OnInit, OnDestroy {
               private _authenticationService: AuthenticationService,
               private _shareService: ShareService,
               private  _title: Title, vcr: ViewContainerRef,
-              notificatin: NotificationService) {
-    notificatin.setRootViewContainerRef(vcr);
+              notificationService: NotificationService) {
+    notificationService.setRootViewContainerRef(vcr);
   }
 
   async ngOnInit() {

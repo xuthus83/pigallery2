@@ -4,8 +4,8 @@
 
 
   <div class="photo-container"
-       [style.width.px]="size()"
-       [style.height.px]="size()">
+       [style.width.px]="calcSize()"
+       [style.height.px]="calcSize()">
     <div class="photo" *ngIf="thumbnail && thumbnail.Available"
          [style.background-image]="getSanitizedThUrl()"></div>
 

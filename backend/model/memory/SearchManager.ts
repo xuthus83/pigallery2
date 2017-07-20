@@ -1,6 +1,6 @@
 import {AutoCompleteItem, SearchTypes} from "../../../common/entities/AutoCompleteItem";
 import {ISearchManager} from "../interfaces/ISearchManager";
-import {SearchResultDTO} from "../../../common/entities/SearchResult";
+import {SearchResultDTO} from "../../../common/entities/SearchResultDTO";
 
 export class SearchManager implements ISearchManager {
   autocomplete(text: string): Promise<AutoCompleteItem[]> {

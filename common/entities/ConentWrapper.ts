@@ -1,14 +1,9 @@
-import {DirectoryDTO, NotModifiedDirectoryDTO} from "./DirectoryDTO";
-import {SearchResultDTO} from "./SearchResult";
+import {DirectoryDTO} from "./DirectoryDTO";
+import {SearchResultDTO} from "./SearchResultDTO";
 
 export class ContentWrapper {
-
-  public directory: DirectoryDTO | NotModifiedDirectoryDTO;
-  public searchResult: SearchResultDTO;
-
-  constructor(directory: DirectoryDTO | NotModifiedDirectoryDTO = null, searchResult: SearchResultDTO = null) {
-    this.directory = directory;
-    this.searchResult = searchResult;
+  constructor(public directory: DirectoryDTO = null,
+              public searchResult: SearchResultDTO = null,
+              public notModified?: boolean) {
   }
-
 }

@@ -2,7 +2,7 @@ import * as path from "path";
 import * as fs from "fs";
 import {NextFunction, Request, Response} from "express";
 import {ErrorCodes, ErrorDTO} from "../../common/entities/Error";
-import {DirectoryDTO, NotModifiedDirectoryDTO} from "../../common/entities/DirectoryDTO";
+import {DirectoryDTO} from "../../common/entities/DirectoryDTO";
 import {ObjectManagerRepository} from "../model/ObjectManagerRepository";
 import {SearchTypes} from "../../common/entities/AutoCompleteItem";
 import {ContentWrapper} from "../../common/entities/ConentWrapper";
@@ -28,8 +28,8 @@ export class GalleryMWs {
     try {
 
       const directory = await ObjectManagerRepository.getInstance().GalleryManager.listDirectory(directoryName, req.query.knownLastModified, req.query.knownLastScanned);
-      if ((<NotModifiedDirectoryDTO>directory).notModified == true) {
-        req.resultPipe = new ContentWrapper(directory, null);
+      if (directory == null) {
+        req.resultPipe = new ContentWrapper(null, null, true);
         return next();
       }
       if (req.session.user.permissions &&
@@ -52,7 +52,7 @@ export class GalleryMWs {
       return next();
 
     let cw: ContentWrapper = req.resultPipe;
-    if ((<NotModifiedDirectoryDTO>cw.directory).notModified == true) {
+    if (cw.notModified == true) {
       return next();
     }
     let removeDirs = (dir) => {

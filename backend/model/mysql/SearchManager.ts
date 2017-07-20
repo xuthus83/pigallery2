@@ -1,6 +1,6 @@
 import {AutoCompleteItem, SearchTypes} from "../../../common/entities/AutoCompleteItem";
 import {ISearchManager} from "../interfaces/ISearchManager";
-import {SearchResultDTO} from "../../../common/entities/SearchResult";
+import {SearchResultDTO} from "../../../common/entities/SearchResultDTO";
 import {MySQLConnection} from "./MySQLConnection";
 import {PhotoEntity} from "./enitites/PhotoEntity";
 import {DirectoryEntity} from "./enitites/DirectoryEntity";

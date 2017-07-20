@@ -11,10 +11,6 @@ export interface DirectoryDTO {
   photos: Array<PhotoDTO>;
 }
 
-export interface NotModifiedDirectoryDTO {
-  notModified: boolean;
-}
-
 export module DirectoryDTO {
   export const addReferences = (dir: DirectoryDTO): void => {
     dir.photos.forEach((photo: PhotoDTO) => {

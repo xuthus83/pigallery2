@@ -24,11 +24,7 @@ export class GalleryDirectoryComponent implements OnInit, OnDestroy {
 
   }
 
-  ngOnInit() {
-    if (this.directory.photos.length > 0) {
-      this.thumbnail = this.thumbnailService.getThumbnail(new Photo(this.directory.photos[0], this.size(), this.size()));
-    }
-  }
+  size: number = null;
 
   getSanitizedThUrl() {
     return this._sanitizer.bypassSecurityTrustStyle('url(' + encodeURI(this.thumbnail.Src).replace(/\(/g, "%28").replace(/\)/g, "%29") + ')');
@@ -50,13 +46,20 @@ export class GalleryDirectoryComponent implements OnInit, OnDestroy {
     }
   }
 
-  size() {
-    let size = 220 + 5;
-    const containerWidth = this.container.nativeElement.parentElement.parentElement.clientWidth;
-    size = containerWidth / Math.round((containerWidth / size));
+  ngOnInit() {
+    if (this.directory.photos.length > 0) {
+      this.thumbnail = this.thumbnailService.getThumbnail(new Photo(this.directory.photos[0], this.calcSize(), this.calcSize()));
+    }
+  }
 
-
-    return Math.floor(size - 5);
+  calcSize() {
+    if (this.size == null ||
+      document.getElementsByTagName('body')[0].style.overflowY == 'scroll') {
+      let size = 220 + 5;
+      const containerWidth = this.container.nativeElement.parentElement.parentElement.clientWidth;
+      this.size = containerWidth / Math.round((containerWidth / size));
+    }
+    return Math.floor(this.size - 5);
   }
 
 }

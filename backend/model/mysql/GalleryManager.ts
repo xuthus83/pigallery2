@@ -1,5 +1,5 @@
 import {IGalleryManager} from "../interfaces/IGalleryManager";
-import {DirectoryDTO, NotModifiedDirectoryDTO} from "../../../common/entities/DirectoryDTO";
+import {DirectoryDTO} from "../../../common/entities/DirectoryDTO";
 import * as path from "path";
 import * as fs from "fs";
 import {DirectoryEntity} from "./enitites/DirectoryEntity";
@@ -15,7 +15,7 @@ export class GalleryManager implements IGalleryManager {
 
   public async listDirectory(relativeDirectoryName: string,
                              knownLastModified?: number,
-                             knownLastScanned?: number): Promise<DirectoryDTO | NotModifiedDirectoryDTO> {
+                             knownLastScanned?: number): Promise<DirectoryDTO> {
     relativeDirectoryName = path.normalize(path.join("." + path.sep, relativeDirectoryName));
     const directoryName = path.basename(relativeDirectoryName);
     const directoryParent = path.join(path.dirname(relativeDirectoryName), path.sep);
@@ -40,7 +40,7 @@ export class GalleryManager implements IGalleryManager {
         if (Date.now() - knownLastScanned <= Config.Server.cachedFolderTimeout &&
           lastModified == knownLastModified &&
           dir.lastScanned == knownLastScanned) {
-          return Promise.resolve(<NotModifiedDirectoryDTO>{notModified: true});
+          return null;
         }
       }
       if (dir.photos) {

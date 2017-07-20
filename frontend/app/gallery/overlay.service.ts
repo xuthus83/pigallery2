@@ -10,7 +10,7 @@ export class OverlayService {
   public showOverlay() {
 
     //disable scrolling
-    document.getElementsByTagName('body')[0].style.overflow = 'hidden';
+    document.getElementsByTagName('body')[0].style.overflowY = 'hidden';
     this.OnOverlayChange.trigger(true);
   }
 
@@ -33,7 +33,7 @@ export class OverlayService {
 
       let widthNoScroll = outer.offsetWidth;
       // force scrollbars
-      outer.style.overflow = "scroll";
+      outer.style.overflowY = "scroll";
 
       // add innerdiv
       let inner = document.createElement("div");
@@ -51,7 +51,7 @@ export class OverlayService {
   }
 
   getPhantomScrollbarWidth() {
-    if (document.getElementsByTagName('body')[0].style.overflow == 'hidden') {
+    if (document.getElementsByTagName('body')[0].style.overflowY == 'hidden') {
       return this.getScrollbarWidth();
     }
     return 0;

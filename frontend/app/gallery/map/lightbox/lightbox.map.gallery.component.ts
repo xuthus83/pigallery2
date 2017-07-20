@@ -55,7 +55,7 @@ export class GalleryMapLightboxComponent implements OnChanges {
     };
     this.map.triggerResize();
 
-    document.getElementsByTagName('body')[0].style.overflow = 'hidden';
+    document.getElementsByTagName('body')[0].style.overflowY = 'hidden';
     this.showImages();
 
     setTimeout(() => {
@@ -79,7 +79,7 @@ export class GalleryMapLightboxComponent implements OnChanges {
 
     this.lightboxDimension = this.startPosition;
     this.lightboxDimension.top -= this.getBodyScrollTop();
-    document.getElementsByTagName('body')[0].style.overflow = 'scroll';
+    document.getElementsByTagName('body')[0].style.overflowY = 'scroll';
     this.opacity = 0.0;
     setTimeout(() => {
       this.visible = false;
