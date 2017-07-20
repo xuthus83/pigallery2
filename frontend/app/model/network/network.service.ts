@@ -21,6 +21,7 @@ export class NetworkService {
     let headers = new Headers({'Content-Type': 'application/json'});
     let options = new RequestOptions({headers: headers});
 
+    //TODO handle long loading time
     this.slimLoadingBarService.visible = true;
     this.slimLoadingBarService.start(() => {
       this.slimLoadingBarService.visible = false;

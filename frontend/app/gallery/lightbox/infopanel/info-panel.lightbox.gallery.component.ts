@@ -48,6 +48,7 @@ export class InfoPanelLightboxComponent {
 
   getTime() {
     const date = new Date(this.photo.metadata.creationDate);
+    //TODO: pad with zeros
     return date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
   }
 

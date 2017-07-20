@@ -18,6 +18,11 @@
                     [latitude]="photo.latitude"
                     [longitude]="photo.longitude"
                     [iconUrl]="photo.iconUrl">
+              <agm-info-window>
+                <img [style.width.px]="photo.preview.width"
+                     [style.height.px]="photo.preview.height"
+                     [src]="photo.preview.url">
+              </agm-info-window>
             </agm-marker>
         </agm-map>
     </div>

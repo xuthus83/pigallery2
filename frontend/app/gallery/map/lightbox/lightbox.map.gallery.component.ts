@@ -5,6 +5,7 @@ import {FullScreenService} from "../../fullscreen.service";
 import {AgmMap} from "@agm/core";
 import {IconThumbnail, ThumbnailManagerService} from "../../thumnailManager.service";
 import {IconPhoto} from "../../IconPhoto";
+import {Photo} from "../../Photo";
 
 @Component({
   selector: 'gallery-map-lightbox',
@@ -19,7 +20,7 @@ export class GalleryMapLightboxComponent implements OnChanges {
   public mapDimension: Dimension = <Dimension>{top: 0, left: 0, width: 0, height: 0};
   public visible = false;
   public opacity = 1.0;
-  mapPhotos: Array<{ latitude: number, longitude: number, iconUrl?: string, thumbnail: IconThumbnail }> = [];
+  mapPhotos: MapPhoto[] = [];
   mapCenter = {latitude: 0, longitude: 0};
 
   @ViewChild("root") elementRef: ElementRef;
@@ -94,18 +95,30 @@ export class GalleryMapLightboxComponent implements OnChanges {
     this.mapPhotos = this.photos.filter(p => {
       return p.metadata && p.metadata.positionData && p.metadata.positionData.GPSData;
     }).map(p => {
-      let th = this.thumbnailService.getIcon(new IconPhoto(p));
-      let obj: { latitude: number, longitude: number, iconUrl?: string, thumbnail: IconThumbnail } = {
+      let width = 500;
+      let height = 500;
+      if (p.metadata.size.width > p.metadata.size.height) {
+        height = width * (p.metadata.size.height / p.metadata.size.width);
+      } else {
+        width = height * (p.metadata.size.width / p.metadata.size.height);
+      }
+      const iconTh = this.thumbnailService.getIcon(new IconPhoto(p));
+      const obj: MapPhoto = {
         latitude: p.metadata.positionData.GPSData.latitude,
         longitude: p.metadata.positionData.GPSData.longitude,
-        thumbnail: th
+        iconThumbnail: iconTh,
+        preview: {
+          width: width,
+          height: height,
+          url: (new Photo(p, width, height)).getThumbnailPath()
+        }
 
       };
-      if (th.Available == true) {
-        obj.iconUrl = th.Src;
+      if (iconTh.Available == true) {
+        obj.iconUrl = iconTh.Src;
       } else {
-        th.OnLoad = () => {
-          obj.iconUrl = th.Src;
+        iconTh.OnLoad = () => {
+          obj.iconUrl = iconTh.Src;
         };
       }
       return obj;
@@ -117,7 +130,7 @@ export class GalleryMapLightboxComponent implements OnChanges {
   }
 
   hideImages() {
-    this.mapPhotos.forEach(mp => mp.thumbnail.destroy());
+    this.mapPhotos.forEach((mp) => mp.iconThumbnail.destroy());
     this.mapPhotos = [];
   }
 
@@ -153,5 +166,17 @@ export class GalleryMapLightboxComponent implements OnChanges {
   }
 
 
+}
+
+export interface MapPhoto {
+  latitude: number;
+  longitude: number;
+  iconUrl?: string;
+  iconThumbnail: IconThumbnail;
+  preview: {
+    width: number;
+    height: number;
+    url: string;
+  }
 }
 
