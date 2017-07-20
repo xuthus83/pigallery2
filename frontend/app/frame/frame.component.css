@@ -1,10 +1,14 @@
 .navbar {
-  margin-bottom: 0px;
+  margin-bottom: 20px;
 }
 
 ng2-slim-loading-bar {
-  margin-bottom: 20px;
-  display: block;
+  /* display: block; */
+  z-index: 999999;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
 }
 
 .container {

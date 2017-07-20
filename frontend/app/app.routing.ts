@@ -34,7 +34,8 @@ const ROUTES: Routes = [
     path: 'share/:sharingKey',
     component: GalleryComponent
   },
-  {path: '', redirectTo: '/login', pathMatch: 'full'}
+  {path: '', redirectTo: '/login', pathMatch: 'full'},
+  {path: '**', redirectTo: '/login', pathMatch: 'full'}
 ];
 
 export const appRoutes: ModuleWithProviders = RouterModule.forRoot(ROUTES);

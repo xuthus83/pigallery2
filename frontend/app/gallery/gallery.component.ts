@@ -12,6 +12,7 @@ import {ShareService} from "./share.service";
 import {NavigationService} from "../model/navigation.service";
 import {UserRoles} from "../../../common/entities/UserDTO";
 import {Observable} from "rxjs/Rx";
+import {ContentWrapper} from "../../../common/entities/ConentWrapper";
 
 @Component({
   selector: 'gallery',
@@ -94,7 +95,7 @@ export class GalleryComponent implements OnInit, OnDestroy {
     }
   }
 
-  private onContentChange = (content) => {
+  private onContentChange = (content: ContentWrapper) => {
     const dirSorter = (a: DirectoryDTO, b: DirectoryDTO) => {
       return a.name.localeCompare(b.name);
     };
