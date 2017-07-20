@@ -57,8 +57,7 @@
   <div body class="container"
        style="width: 100%; padding:0"
        *ngIf="(!_galleryService.content.value.directory ||
-        (_galleryService.content.value.directory.photos.length == 0
-        && _galleryService.content.value.directory.directories.length == 0))
+        (!_galleryService.content.value.directory.scanned)
        && !_galleryService.content.value.searchResult">
     <div class="spinner">
 
