@@ -26,7 +26,7 @@ export class GalleryDirectoryComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     if (this.directory.photos.length > 0) {
-      this.thumbnail = this.thumbnailService.getThumbnail(new Photo(this.directory.photos[0], 100, 100));
+      this.thumbnail = this.thumbnailService.getThumbnail(new Photo(this.directory.photos[0], this.size(), this.size()));
     }
   }
 
@@ -48,6 +48,15 @@ export class GalleryDirectoryComponent implements OnInit, OnDestroy {
     if (this.thumbnail != null) {
       this.thumbnail.destroy();
     }
+  }
+
+  size() {
+    let size = 220 + 5;
+    const containerWidth = this.container.nativeElement.parentElement.parentElement.clientWidth;
+    size = containerWidth / Math.round((containerWidth / size));
+
+
+    return Math.floor(size - 5);
   }
 
 }

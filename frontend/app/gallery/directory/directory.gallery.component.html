@@ -3,7 +3,9 @@
    style="display: inline-block;">
 
 
-  <div class="photo-container">
+  <div class="photo-container"
+       [style.width.px]="size()"
+       [style.height.px]="size()">
     <div class="photo" *ngIf="thumbnail && thumbnail.Available"
          [style.background-image]="getSanitizedThUrl()"></div>
 
