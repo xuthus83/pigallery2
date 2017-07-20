@@ -17,5 +17,6 @@ test/e2e/**/*.js.map
 demo/TEMP/
 config.json
 users.db
+sqlite.db
 dist/
 release/

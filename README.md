@@ -50,7 +50,6 @@ wget https://github.com/bpatrik/pigallery2/archive/master.zip
 unzip master.zip
 cd pigallery2 # enter the unzipped directory
 npm install
-npm run build #explicitly building the project (releases are prebuilt)
 ```
 
 ### Run PiGallery2
