@@ -1,16 +1,17 @@
 import "reflect-metadata";
-import {Connection, createConnection, getConnection} from "typeorm";
+import {Connection, createConnection, DriverOptions, getConnection} from "typeorm";
 import {UserEntity} from "./enitites/UserEntity";
 import {UserRoles} from "../../../common/entities/UserDTO";
 import {PhotoEntity, PhotoMetadataEntity} from "./enitites/PhotoEntity";
 import {DirectoryEntity} from "./enitites/DirectoryEntity";
 import {Config} from "../../../common/config/private/Config";
 import {SharingEntity} from "./enitites/SharingEntity";
-import {DataBaseConfig} from "../../../common/config/private/IPrivateConfig";
+import {DataBaseConfig, DatabaseType} from "../../../common/config/private/IPrivateConfig";
 import {PasswordHelper} from "../PasswordHelper";
+import {ProjectPath} from "../../ProjectPath";
 
 
-export class MySQLConnection {
+export class SQLConnection {
 
   constructor() {
 
@@ -22,16 +23,10 @@ export class MySQLConnection {
   public static async getConnection(): Promise<Connection> {
 
     if (this.connection == null) {
+
       this.connection = await createConnection({
         name: "main",
-        driver: {
-          type: "mysql",
-          host: Config.Server.database.mysql.host,
-          port: 3306,
-          username: Config.Server.database.mysql.username,
-          password: Config.Server.database.mysql.password,
-          database: Config.Server.database.mysql.database
-        },
+        driver: this.getDriver(Config.Server.database),
         entities: [
           UserEntity,
           DirectoryEntity,
@@ -59,17 +54,30 @@ export class MySQLConnection {
     }
     const conn = await createConnection({
       name: "test",
-      driver: {
+      driver: this.getDriver(config)
+    });
+    await conn.close();
+    return true;
+  }
+
+  private static getDriver(config: DataBaseConfig): DriverOptions {
+    let driver: DriverOptions = null;
+    if (config.type == DatabaseType.mysql) {
+      driver = {
         type: "mysql",
         host: config.mysql.host,
         port: 3306,
         username: config.mysql.username,
         password: config.mysql.password,
         database: config.mysql.database
-      }
-    });
-    await conn.close();
-    return true;
+      };
+    } else if (config.type == DatabaseType.sqlite) {
+      driver = {
+        type: "sqlite",
+        storage: ProjectPath.getAbsolutePath(config.sqlite.storage)
+      };
+    }
+    return driver;
   }
 
   public static async init(): Promise<void> {

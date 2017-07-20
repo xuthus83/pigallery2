@@ -1,7 +1,7 @@
 import {AutoCompleteItem, SearchTypes} from "../../../common/entities/AutoCompleteItem";
 import {ISearchManager} from "../interfaces/ISearchManager";
 import {SearchResultDTO} from "../../../common/entities/SearchResultDTO";
-import {MySQLConnection} from "./MySQLConnection";
+import {SQLConnection} from "./SQLConnection";
 import {PhotoEntity} from "./enitites/PhotoEntity";
 import {DirectoryEntity} from "./enitites/DirectoryEntity";
 import {PositionMetaData} from "../../../common/entities/PhotoDTO";
@@ -10,7 +10,7 @@ export class SearchManager implements ISearchManager {
 
   async autocomplete(text: string) {
 
-    const connection = await MySQLConnection.getConnection();
+    const connection = await SQLConnection.getConnection();
 
     let result: Array<AutoCompleteItem> = [];
     let photoRepository = connection.getRepository(PhotoEntity);
@@ -64,7 +64,7 @@ export class SearchManager implements ISearchManager {
   }
 
   async  search(text: string, searchType: SearchTypes) {
-    const connection = await MySQLConnection.getConnection();
+    const connection = await SQLConnection.getConnection();
 
     let result: SearchResultDTO = <SearchResultDTO>{
       searchText: text,
@@ -119,7 +119,7 @@ export class SearchManager implements ISearchManager {
   }
 
   async  instantSearch(text: string) {
-    const connection = await MySQLConnection.getConnection();
+    const connection = await SQLConnection.getConnection();
 
     let result: SearchResultDTO = <SearchResultDTO>{
       searchText: text,

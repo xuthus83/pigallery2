@@ -1,7 +1,7 @@
 import {UserDTO, UserRoles} from "../../../common/entities/UserDTO";
 import {IUserManager} from "../interfaces/IUserManager";
 import {UserEntity} from "./enitites/UserEntity";
-import {MySQLConnection} from "./MySQLConnection";
+import {SQLConnection} from "./SQLConnection";
 import {PasswordHelper} from "../PasswordHelper";
 
 
@@ -12,7 +12,7 @@ export class UserManager implements IUserManager {
 
 
   public async findOne(filter: any) {
-    const connection = await MySQLConnection.getConnection();
+    const connection = await SQLConnection.getConnection();
     let pass = filter.password;
     delete filter.password;
     const user = (await connection.getRepository(UserEntity).findOne(filter));
@@ -29,7 +29,7 @@ export class UserManager implements IUserManager {
   };
 
   public async find(filter: any) {
-    const connection = await MySQLConnection.getConnection();
+    const connection = await SQLConnection.getConnection();
     return (await connection.getRepository(UserEntity).find(filter)).map(user => {
       if (user.permissions && user.permissions != null) {
         user.permissions = <any>JSON.parse(<any>user.permissions);
@@ -39,7 +39,7 @@ export class UserManager implements IUserManager {
   }
 
   public async createUser(user: UserDTO) {
-    const connection = await MySQLConnection.getConnection();
+    const connection = await SQLConnection.getConnection();
     if (user.permissions && user.permissions != null) {
       user.permissions = <any>JSON.stringify(<any>user.permissions);
     }
@@ -48,14 +48,14 @@ export class UserManager implements IUserManager {
   }
 
   public async deleteUser(id: number) {
-    const connection = await MySQLConnection.getConnection();
+    const connection = await SQLConnection.getConnection();
     const user = await connection.getRepository(UserEntity).findOne({id: id});
     return await connection.getRepository(UserEntity).remove(user);
   }
 
   public async changeRole(id: number, newRole: UserRoles) {
 
-    const connection = await MySQLConnection.getConnection();
+    const connection = await SQLConnection.getConnection();
     let userRepository = connection.getRepository(UserEntity);
     const user = await userRepository.findOne({id: id});
     user.role = newRole;

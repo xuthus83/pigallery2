@@ -18,13 +18,16 @@ export class PrivateConfigClass extends PublicConfigClass implements IPrivateCon
     },
     sessionTimeout: 1000 * 60 * 60 * 24 * 7,
     database: {
-      type: DatabaseType.mysql,
+      type: DatabaseType.sqlite,
       mysql: {
         host: "",
         username: "",
         password: "",
         database: ""
 
+      },
+      sqlite: {
+        storage: "sqlite.db"
       }
     },
     sharing: {

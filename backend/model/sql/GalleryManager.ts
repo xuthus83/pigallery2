@@ -3,7 +3,7 @@ import {DirectoryDTO} from "../../../common/entities/DirectoryDTO";
 import * as path from "path";
 import * as fs from "fs";
 import {DirectoryEntity} from "./enitites/DirectoryEntity";
-import {MySQLConnection} from "./MySQLConnection";
+import {SQLConnection} from "./SQLConnection";
 import {DiskManager} from "../DiskManger";
 import {PhotoEntity, PhotoMetadataEntity} from "./enitites/PhotoEntity";
 import {Utils} from "../../../common/Utils";
@@ -19,7 +19,7 @@ export class GalleryManager implements IGalleryManager {
     relativeDirectoryName = path.normalize(path.join("." + path.sep, relativeDirectoryName));
     const directoryName = path.basename(relativeDirectoryName);
     const directoryParent = path.join(path.dirname(relativeDirectoryName), path.sep);
-    const connection = await MySQLConnection.getConnection();
+    const connection = await SQLConnection.getConnection();
     const stat = fs.statSync(path.join(ProjectPath.ImageFolder, relativeDirectoryName));
     const lastModified = Math.max(stat.ctime.getTime(), stat.mtime.getTime());
     let dir = await connection
@@ -95,7 +95,7 @@ export class GalleryManager implements IGalleryManager {
     return new Promise(async (resolve, reject) => {
       try {
         const scannedDirectory = await DiskManager.scanDirectory(relativeDirectoryName);
-        const connection = await MySQLConnection.getConnection();
+        const connection = await SQLConnection.getConnection();
 
         //returning with the result
         scannedDirectory.photos.forEach(p => p.readyThumbnails = []);

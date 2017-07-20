@@ -67,8 +67,8 @@ export class Server {
 
     DiskManager.init();
     ThumbnailGeneratorMWs.init();
-    if (Config.Server.database.type == DatabaseType.mysql) {
-      await  ObjectManagerRepository.InitMySQLManagers();
+    if (Config.Server.database.type != DatabaseType.memory) {
+      await  ObjectManagerRepository.InitSQLManagers();
     } else {
       await  ObjectManagerRepository.InitMemoryManagers();
     }

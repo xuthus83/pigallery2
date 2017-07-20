@@ -9,7 +9,7 @@ import {
 import {Logger} from "../Logger";
 import {NotificationManager} from "./NotifocationManager";
 import {ProjectPath} from "../ProjectPath";
-import {MySQLConnection} from "./mysql/MySQLConnection";
+import {SQLConnection} from "./sql/SQLConnection";
 import * as fs from "fs";
 import {ClientConfig} from "../../common/config/public/ConfigClass";
 
@@ -17,8 +17,8 @@ const LOG_TAG = "[ConfigDiagnostics]";
 export class ConfigDiagnostics {
 
   static async testDatabase(databaseConfig: DataBaseConfig) {
-    if (databaseConfig.type == DatabaseType.mysql) {
-      await MySQLConnection.tryConnection(databaseConfig);
+    if (databaseConfig.type != DatabaseType.memory) {
+      await SQLConnection.tryConnection(databaseConfig);
     }
   }
 
@@ -112,13 +112,13 @@ export class ConfigDiagnostics {
 
   static async runDiagnostics() {
 
-    if (Config.Server.database.type == DatabaseType.mysql) {
+    if (Config.Server.database.type != DatabaseType.memory) {
       try {
         await ConfigDiagnostics.testDatabase(Config.Server.database);
       } catch (err) {
-        Logger.warn(LOG_TAG, "[MYSQL error]", err);
-        Logger.warn(LOG_TAG, "Error during initializing mysql falling back temporally to memory DB");
-        NotificationManager.warning("Error during initializing mysql falling back temporally to memory DB", err);
+        Logger.warn(LOG_TAG, "[SQL error]", err);
+        Logger.warn(LOG_TAG, "Error during initializing SQL falling back temporally to memory DB");
+        NotificationManager.warning("Error during initializing SQL falling back temporally to memory DB", err);
         Config.setDatabaseType(DatabaseType.memory);
       }
     }

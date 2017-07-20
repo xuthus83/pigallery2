@@ -10,6 +10,9 @@
         <option *ngFor="let type of types" [ngValue]="type.key">{{type.value}}
         </option>
       </select>
+      <span *ngIf="settings.type == DatabaseType.mysql"
+            class="help-block">Install manually mysql node module to use mysql (npm install mysql)</span>
+
       <ng-container *ngIf="settings.type == DatabaseType.mysql">
         <p class="title">MySQL settings:</p>
         <input type="text" class="form-control" placeholder="Host" autofocus
@@ -20,6 +23,11 @@
                [(ngModel)]="settings.mysql.username" name="username">
         <input type="password" class="form-control" placeholder="Password"
                [(ngModel)]="settings.mysql.password" name="password">
+      </ng-container>
+      <ng-container *ngIf="settings.type == DatabaseType.sqlite">
+        <p class="title">SQLie settings:</p>
+        <input type="text" class="form-control" placeholder="storage" autofocus
+               [(ngModel)]="settings.sqlite.storage" name="host" required>
       </ng-container>
 
     </form>

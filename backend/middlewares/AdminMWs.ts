@@ -2,7 +2,7 @@ import {NextFunction, Request, Response} from "express";
 import {ErrorCodes, ErrorDTO} from "../../common/entities/Error";
 import {ObjectManagerRepository} from "../model/ObjectManagerRepository";
 import {Logger} from "../Logger";
-import {MySQLConnection} from "../model/mysql/MySQLConnection";
+import {SQLConnection} from "../model/sql/SQLConnection";
 import {DataBaseConfig, DatabaseType, ThumbnailConfig} from "../../common/config/private/IPrivateConfig";
 import {Config} from "../../common/config/private/Config";
 import {ConfigDiagnostics} from "../model/ConfigDiagnostics";
@@ -25,8 +25,8 @@ export class AdminMWs {
     const databaseSettings = <DataBaseConfig>req.body.settings;
 
     try {
-      if (databaseSettings.type == DatabaseType.mysql) {
-        await MySQLConnection.tryConnection(databaseSettings);
+      if (databaseSettings.type != DatabaseType.memory) {
+        await SQLConnection.tryConnection(databaseSettings);
       }
       Config.Server.database = databaseSettings;
       //only updating explicitly set config (not saving config set by the diagnostics)
@@ -42,8 +42,8 @@ export class AdminMWs {
       Logger.info(LOG_TAG, JSON.stringify(Config, null, '\t'));
 
       ObjectManagerRepository.reset();
-      if (Config.Server.database.type == DatabaseType.mysql) {
-        await ObjectManagerRepository.InitMySQLManagers();
+      if (Config.Server.database.type != DatabaseType.memory) {
+        await ObjectManagerRepository.InitSQLManagers();
       } else {
         await ObjectManagerRepository.InitMemoryManagers();
       }

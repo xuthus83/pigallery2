@@ -1,7 +1,7 @@
 import {IUserManager} from "./interfaces/IUserManager";
 import {IGalleryManager} from "./interfaces/IGalleryManager";
 import {ISearchManager} from "./interfaces/ISearchManager";
-import {MySQLConnection} from "./mysql/MySQLConnection";
+import {SQLConnection} from "./sql/SQLConnection";
 import {ISharingManager} from "./interfaces/ISharingManager";
 import {Logger} from "../Logger";
 
@@ -26,18 +26,18 @@ export class ObjectManagerRepository {
     ObjectManagerRepository.getInstance().SharingManager = new SharingManager();
   }
 
-  public static async InitMySQLManagers() {
+  public static async InitSQLManagers() {
     await ObjectManagerRepository.reset();
-    await MySQLConnection.init();
-    const GalleryManager = require("./mysql/GalleryManager").GalleryManager;
-    const UserManager = require("./mysql/UserManager").UserManager;
-    const SearchManager = require("./mysql/SearchManager").SearchManager;
-    const SharingManager = require("./mysql/SharingManager").SharingManager;
+    await SQLConnection.init();
+    const GalleryManager = require("./sql/GalleryManager").GalleryManager;
+    const UserManager = require("./sql/UserManager").UserManager;
+    const SearchManager = require("./sql/SearchManager").SearchManager;
+    const SharingManager = require("./sql/SharingManager").SharingManager;
     ObjectManagerRepository.getInstance().GalleryManager = new GalleryManager();
     ObjectManagerRepository.getInstance().UserManager = new UserManager();
     ObjectManagerRepository.getInstance().SearchManager = new SearchManager();
     ObjectManagerRepository.getInstance().SharingManager = new SharingManager();
-    Logger.debug("MySQL DB inited");
+    Logger.debug("SQL DB inited");
   }
 
   public static getInstance() {
@@ -48,7 +48,7 @@ export class ObjectManagerRepository {
   }
 
   public static async reset() {
-    await MySQLConnection.close();
+    await SQLConnection.close();
     this._instance = null;
   }
 
