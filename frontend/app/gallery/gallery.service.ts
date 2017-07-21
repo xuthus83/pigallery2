@@ -42,7 +42,8 @@ export class GalleryService {
       }
     }
 
-    if (content.directory && content.directory.lastModified && content.directory.lastScanned) {
+    if (content.directory && content.directory.lastModified && content.directory.lastScanned &&
+      !content.directory.isPartial) {
       params['knownLastModified'] = content.directory.lastModified;
       params['knownLastScanned'] = content.directory.lastScanned;
     }

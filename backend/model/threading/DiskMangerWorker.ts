@@ -41,6 +41,7 @@ export class DiskMangerWorker {
         lastModified: Math.max(stat.ctime.getTime(), stat.mtime.getTime()),
         lastScanned: Date.now(),
         directories: [],
+        isPartial: false,
         photos: []
       };
       fs.readdir(absoluteDirectoryName, async (err, list) => {
@@ -57,6 +58,7 @@ export class DiskMangerWorker {
                 Config.Server.folderPreviewSize, true
               );
               d.lastScanned = 0; //it was not a fully scan
+              d.isPartial = true;
               directory.directories.push(d);
             } else if (DiskMangerWorker.isImage(fullFilePath)) {
               directory.photos.push(<PhotoDTO>{

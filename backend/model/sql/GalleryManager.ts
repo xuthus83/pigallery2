@@ -59,8 +59,10 @@ export class GalleryManager implements IGalleryManager {
             .where("photo.directory = :dir", {
               dir: dir.directories[i].id
             })
+            .orderBy("photo.metadata.creationDate", "ASC")
             .setLimit(Config.Server.folderPreviewSize)
             .getMany();
+          dir.directories[i].isPartial = true;
 
           for (let j = 0; j < dir.directories[i].photos.length; j++) {
             dir.directories[i].photos[j].directory = dir.directories[i];

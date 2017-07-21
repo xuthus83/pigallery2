@@ -27,7 +27,12 @@ export class GalleryCacheService {
       return;
     }
 
-    localStorage.setItem(Utils.concatUrls(directory.path, directory.name), JSON.stringify(directory));
+    const key = Utils.concatUrls(directory.path, directory.name);
+    if (directory.isPartial == true && localStorage.getItem(key)) {
+      return;
+    }
+
+    localStorage.setItem(key, JSON.stringify(directory));
 
     directory.directories.forEach((dir: DirectoryDTO) => {
       let name = Utils.concatUrls(dir.path, dir.name);

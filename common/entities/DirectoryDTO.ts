@@ -6,7 +6,7 @@ export interface DirectoryDTO {
   path: string;
   lastModified: number;
   lastScanned: number;
-  scanned: boolean;
+  isPartial?: boolean;
   parent: DirectoryDTO;
   directories: Array<DirectoryDTO>;
   photos: Array<PhotoDTO>;

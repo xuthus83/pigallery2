@@ -7,17 +7,13 @@ export class UserEntity implements UserDTO {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({
-    length: 500
-  })
+  @Column()
   name: string;
 
-  @Column({
-    length: 500
-  })
+  @Column()
   password: string;
 
-  @Column("int")
+  @Column("smallint")
   role: UserRoles;
 
   @Column("string", {nullable: true})

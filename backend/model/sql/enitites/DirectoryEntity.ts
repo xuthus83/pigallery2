@@ -8,24 +8,21 @@ export class DirectoryEntity implements DirectoryDTO {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({
-    length: 500
-  })
+  @Column()
   name: string;
 
-  @Column({
-    length: 500
-  })
+  @Column()
   path: string;
 
-
-  @Column('number')
+  @Column()
   public lastModified: number;
-  @Column('number')
+  @Column()
   public lastScanned: number;
 
-  @Column({type: 'smallint', length: 1})
+  @Column()
   public scanned: boolean;
+
+  isPartial?: boolean;
 
   @ManyToOne(type => DirectoryEntity, directory => directory.directories, {onDelete: "CASCADE"})
   public parent: DirectoryEntity;
