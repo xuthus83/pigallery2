@@ -3,6 +3,7 @@ export module ClientConfig {
     enabled: boolean
     instantSearchEnabled: boolean
     autocompleteEnabled: boolean
+    InstantSearchTimeout: number;
   }
 
   export interface SharingConfig {
@@ -48,7 +49,8 @@ export class PublicConfigClass {
     Search: {
       enabled: true,
       instantSearchEnabled: true,
-      autocompleteEnabled: true
+      autocompleteEnabled: true,
+      InstantSearchTimeout: 3000
     },
     Sharing: {
       enabled: true,

@@ -104,7 +104,7 @@ export class GalleryService {
     this.searchId = setTimeout(() => {
       this.search(text);
       this.searchId = null;
-    }, 3000); //TODO: set timeout to config
+    }, Config.Client.Search.InstantSearchTimeout); //TODO: set timeout to config
 
     const cw = await this.networkService.getJson<ContentWrapper>("/instant-search/" + text);
     this.content.next(cw);

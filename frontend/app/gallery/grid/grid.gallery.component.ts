@@ -87,8 +87,6 @@ export class GalleryGridComponent implements OnChanges, AfterViewInit, OnDestroy
   ngAfterViewInit() {
     this.lightbox.setGridPhotoQL(this.gridPhotoQL);
 
-    //TODO: implement scroll detection
-
 
     this.updateContainerWidth();
     this.sortPhotos();

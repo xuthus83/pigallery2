@@ -21,7 +21,6 @@ export class NetworkService {
     let headers = new Headers({'Content-Type': 'application/json'});
     let options = new RequestOptions({headers: headers});
 
-    //TODO handle long loading time
     this.slimLoadingBarService.visible = true;
     this.slimLoadingBarService.start(() => {
       this.slimLoadingBarService.visible = false;
@@ -94,7 +93,6 @@ export class NetworkService {
       }
       return Promise.reject(error);
     }
-    // TODO: in a real world app do something better
     // instead of just logging it to the console
     console.error(error);
     return Promise.reject(error.message || error || 'Server error');
