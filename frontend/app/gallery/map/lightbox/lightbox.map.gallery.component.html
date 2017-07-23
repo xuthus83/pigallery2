@@ -1,49 +1,60 @@
 <div [hidden]="!visible" #root>
 
 
-    <div class="lightbox"
-         [style.width.px]="lightboxDimension.width"
-         [style.height.px]="lightboxDimension.height"
-         [style.top.px]="lightboxDimension.top"
-         [style.left.px]="lightboxDimension.left"
-         [style.opacity]="opacity">
-        <agm-map
-                [style.width.px]="mapDimension.width"
-                [style.height.px]="mapDimension.height"
-                [zoom]="5"
-                [latitude]="mapCenter.latitude"
-                [longitude]="mapCenter.longitude">
-            <agm-marker
-                    *ngFor="let photo of mapPhotos"
-                    [latitude]="photo.latitude"
-                    [longitude]="photo.longitude"
-                    [iconUrl]="photo.iconUrl">
-              <agm-info-window>
-                <img [style.width.px]="photo.preview.width"
-                     [style.height.px]="photo.preview.height"
-                     [src]="photo.preview.url">
-              </agm-info-window>
-            </agm-marker>
-        </agm-map>
-    </div>
+  <div class="lightbox"
+       [style.width.px]="lightboxDimension.width"
+       [style.height.px]="lightboxDimension.height"
+       [style.top.px]="lightboxDimension.top"
+       [style.left.px]="lightboxDimension.left"
+       [style.opacity]="opacity">
+    <agm-map
+      [style.width.px]="mapDimension.width"
+      [style.height.px]="mapDimension.height"
+      [zoom]="5"
+      [latitude]="mapCenter.latitude"
+      [longitude]="mapCenter.longitude">
+      <agm-marker
+        *ngFor="let photo of mapPhotos"
+        [latitude]="photo.latitude"
+        [longitude]="photo.longitude"
+        [iconUrl]="photo.iconUrl"
+        (markerClick)="loadPreview(photo)">
+        <agm-info-window>
+          <img *ngIf="photo.preview.thumbnail.Src"
+               [style.width.px]="photo.preview.width"
+               [style.height.px]="photo.preview.height"
+               [src]="photo.preview.thumbnail.Src">
+          <div class="preview-loading"
+               [style.width.px]="photo.preview.width"
+               [style.height.px]="photo.preview.height"
+               *ngIf="!photo.preview.thumbnail.Src">
+              <span class="glyphicon"
+                    [ngClass]="photo.preview.thumbnail.Error ? 'glyphicon-warning-sign' :  'glyphicon-picture'"
+                    aria-hidden="true">
+              </span>
+          </div>
+        </agm-info-window>
+      </agm-marker>
+    </agm-map>
+  </div>
 
 
-    <div id="controllers-container" #controls>
-        <div id="controls">
+  <div id="controllers-container" *ngIf="visible">
+    <div id="controls">
             <span>
                 <span class=" glyphicon glyphicon-resize-small highlight"
                       *ngIf="fullScreenService.isFullScreenEnabled()"
                       (click)="fullScreenService.exitFullScreen()" title="toggle fullscreen"></span>
                 </span>
-            <span>
+      <span>
              <span class="glyphicon glyphicon-fullscreen highlight"
                    *ngIf="!fullScreenService.isFullScreenEnabled()"
                    (click)="fullScreenService.showFullScreen(root)" title="toggle fullscreen"></span>
                 </span>
-            <span>
+      <span>
              <span class="glyphicon glyphicon-remove highlight" (click)="hide()" title="close"></span>
              </span>
-        </div>
-
     </div>
+
+  </div>
 </div>

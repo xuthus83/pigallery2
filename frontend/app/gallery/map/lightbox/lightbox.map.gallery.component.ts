@@ -3,7 +3,7 @@ import {PhotoDTO} from "../../../../../common/entities/PhotoDTO";
 import {Dimension} from "../../../model/IRenderable";
 import {FullScreenService} from "../../fullscreen.service";
 import {AgmMap} from "@agm/core";
-import {IconThumbnail, ThumbnailManagerService} from "../../thumnailManager.service";
+import {IconThumbnail, Thumbnail, ThumbnailManagerService} from "../../thumnailManager.service";
 import {IconPhoto} from "../../IconPhoto";
 import {Photo} from "../../Photo";
 
@@ -28,7 +28,8 @@ export class GalleryMapLightboxComponent implements OnChanges {
   @ViewChild(AgmMap) map: AgmMap;
 
 
-  constructor(public fullScreenService: FullScreenService, private thumbnailService: ThumbnailManagerService) {
+  constructor(public fullScreenService: FullScreenService,
+              private thumbnailService: ThumbnailManagerService) {
 
 
   }
@@ -85,8 +86,6 @@ export class GalleryMapLightboxComponent implements OnChanges {
       this.visible = false;
       this.hideImages();
     }, 500);
-
-
   }
 
   showImages() {
@@ -103,6 +102,7 @@ export class GalleryMapLightboxComponent implements OnChanges {
         width = height * (p.metadata.size.width / p.metadata.size.height);
       }
       const iconTh = this.thumbnailService.getIcon(new IconPhoto(p));
+      iconTh.Visible = true;
       const obj: MapPhoto = {
         latitude: p.metadata.positionData.GPSData.latitude,
         longitude: p.metadata.positionData.GPSData.longitude,
@@ -110,7 +110,7 @@ export class GalleryMapLightboxComponent implements OnChanges {
         preview: {
           width: width,
           height: height,
-          url: (new Photo(p, width, height)).getThumbnailPath()
+          thumbnail: this.thumbnailService.getLazyThumbnail(new Photo(p, width, height))
         }
 
       };
@@ -129,8 +129,15 @@ export class GalleryMapLightboxComponent implements OnChanges {
     }
   }
 
+  public loadPreview(mp: MapPhoto) {
+    mp.preview.thumbnail.load();
+  }
+
   hideImages() {
-    this.mapPhotos.forEach((mp) => mp.iconThumbnail.destroy());
+    this.mapPhotos.forEach((mp) => {
+      mp.iconThumbnail.destroy();
+      mp.preview.thumbnail.destroy();
+    });
     this.mapPhotos = [];
   }
 
@@ -176,7 +183,7 @@ export interface MapPhoto {
   preview: {
     width: number;
     height: number;
-    url: string;
+    thumbnail: Thumbnail;
   }
 }
 

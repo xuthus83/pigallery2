@@ -18,6 +18,10 @@ export class ThumbnailManagerService {
     return new Thumbnail(photo, this.thumbnailLoader);
   }
 
+  public getLazyThumbnail(photo: Photo): Thumbnail {
+    return new Thumbnail(photo, this.thumbnailLoader, false);
+  }
+
 
   public getIcon(photo: IconPhoto) {
     return new IconThumbnail(photo, this.thumbnailLoader);
@@ -32,7 +36,7 @@ export abstract class ThumbnailBase {
   protected loading: boolean = false;
   protected error: boolean = false;
   protected onLoad: Function = null;
-  protected thumbnailTask: ThumbnailTaskEntity;
+  protected thumbnailTask: ThumbnailTaskEntity = null;
 
 
   constructor(protected thumbnailService: ThumbnailLoaderService) {
@@ -126,7 +130,7 @@ export class IconThumbnail extends ThumbnailBase {
 export class Thumbnail extends ThumbnailBase {
 
 
-  constructor(private photo: Photo, thumbnailService: ThumbnailLoaderService) {
+  constructor(private photo: Photo, thumbnailService: ThumbnailLoaderService, autoLoad: boolean = true) {
     super(thumbnailService);
     if (this.photo.isThumbnailAvailable()) {
       this.src = this.photo.getThumbnailPath();
@@ -136,10 +140,14 @@ export class Thumbnail extends ThumbnailBase {
       this.src = this.photo.getReplacementThumbnailPath();
       this.available = true;
     }
+    if (autoLoad) {
+      this.load();
+    }
+  }
 
-    if (!this.photo.isThumbnailAvailable()) {
+  public load() {
+    if (!this.photo.isThumbnailAvailable() && this.thumbnailTask == null) {
       setTimeout(() => {
-
         let listener: ThumbnailLoadingListener = {
           onStartedLoading: () => { //onLoadStarted
             this.loading = true;
@@ -162,11 +170,8 @@ export class Thumbnail extends ThumbnailBase {
         } else {
           this.thumbnailTask = this.thumbnailService.loadImage(this.photo, ThumbnailLoadingPriority.high, listener);
         }
-
-
       }, 0);
     }
-
   }
 
   set Visible(visible: boolean) {

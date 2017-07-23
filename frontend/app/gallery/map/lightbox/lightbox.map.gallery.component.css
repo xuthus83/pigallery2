@@ -63,3 +63,14 @@
 .highlight:hover {
     opacity: 1.0;
 }
+
+.preview-loading {
+  background-color: #bbbbbb;
+  color: #7f7f7f;
+  font-size: 50px;
+}
+
+.preview-loading span {
+  top: calc(50% - 25px);
+  left: calc(50% - 25px);
+}
