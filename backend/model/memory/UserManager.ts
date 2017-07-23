@@ -65,7 +65,6 @@ export class UserManager implements IUserManager {
         users.splice(i, 1);
       }
     }
-    console.log(users);
     return users;
   }
 

@@ -16,7 +16,8 @@ import {ThumbnailGeneratorMWs} from "./middlewares/thumbnail/ThumbnailGeneratorM
 import {DiskManager} from "./model/DiskManger";
 import {NotificationRouter} from "./routes/NotificationRouter";
 import {ConfigDiagnostics} from "./model/ConfigDiagnostics";
-import _session = require('cookie-session');
+
+const _session = require('cookie-session');
 
 const LOG_TAG = "[server]";
 

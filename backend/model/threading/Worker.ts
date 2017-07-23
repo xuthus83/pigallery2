@@ -2,6 +2,7 @@ import {DiskMangerWorker} from "./DiskMangerWorker";
 import {Logger} from "../../Logger";
 import {RendererInput, ThumbnailWoker} from "./ThumbnailWoker";
 import {ThumbnailProcessingLib} from "../../../common/config/private/IPrivateConfig";
+
 export class Worker {
 
 
@@ -13,6 +14,9 @@ export class Worker {
         switch (task.type) {
           case WorkerTaskTypes.diskManager:
             result = await DiskMangerWorker.scanDirectory((<DiskManagerTask>task).relativeDirectoryName);
+            if (global.gc) {
+              global.gc();
+            }
             break;
           case WorkerTaskTypes.thumbnail:
             result = await ThumbnailWoker.render((<ThumbnailTask>task).input, (<ThumbnailTask>task).renderer);
@@ -34,7 +38,7 @@ export class Worker {
 }
 
 
-export enum WorkerTaskTypes{
+export enum WorkerTaskTypes {
   thumbnail, diskManager
 }
 

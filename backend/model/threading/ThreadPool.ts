@@ -4,6 +4,7 @@ import {DiskManagerTask, ThumbnailTask, WorkerMessage, WorkerTask, WorkerTaskTyp
 import {DirectoryDTO} from "../../../common/entities/DirectoryDTO";
 import {RendererInput} from "./ThumbnailWoker";
 import {Config} from "../../../common/config/private/Config";
+import {ITaskQue} from "./TaskQue";
 
 
 interface PoolTask {
@@ -26,7 +27,6 @@ export class ThreadPool {
     Logger.silly("Creating thread pool with", size, "workers");
     for (let i = 0; i < size; i++) {
       this.startWorker();
-
     }
   }
 
@@ -83,14 +83,14 @@ export class ThreadPool {
       return;
     }
 
-    const poolTask = this.tasks.pop();
+    const poolTask = this.tasks.shift();
     worker.poolTask = poolTask;
     worker.worker.send(poolTask.task);
   };
 
 }
 
-export class DiskManagerTH extends ThreadPool {
+export class DiskManagerTH extends ThreadPool implements ITaskQue {
   execute(relativeDirectoryName: string): Promise<DirectoryDTO> {
     return super.executeTask(<DiskManagerTask>{
       type: WorkerTaskTypes.diskManager,
@@ -99,7 +99,7 @@ export class DiskManagerTH extends ThreadPool {
   }
 }
 
-export class ThumbnailTH extends ThreadPool {
+export class ThumbnailTH extends ThreadPool implements ITaskQue {
   execute(input: RendererInput): Promise<void> {
     return super.executeTask(<ThumbnailTask>{
       type: WorkerTaskTypes.thumbnail,

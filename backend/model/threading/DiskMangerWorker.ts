@@ -35,7 +35,7 @@ export class DiskMangerWorker {
       const absoluteDirectoryName = path.join(ProjectPath.ImageFolder, relativeDirectoryName);
 
       const stat = fs.statSync(path.join(ProjectPath.ImageFolder, relativeDirectoryName));
-      let directory = <DirectoryDTO>{
+      const directory = <DirectoryDTO>{
         name: directoryName,
         path: directoryParent,
         lastModified: Math.max(stat.ctime.getTime(), stat.mtime.getTime()),
@@ -51,8 +51,8 @@ export class DiskMangerWorker {
 
         try {
           for (let i = 0; i < list.length; i++) {
-            let file = list[i];
-            let fullFilePath = path.normalize(path.resolve(absoluteDirectoryName, file));
+            const file = list[i];
+            const fullFilePath = path.normalize(path.resolve(absoluteDirectoryName, file));
             if (photosOnly == false && fs.statSync(fullFilePath).isDirectory()) {
               const d = await DiskMangerWorker.scanDirectory(path.join(relativeDirectoryName, file),
                 Config.Server.folderPreviewSize, true

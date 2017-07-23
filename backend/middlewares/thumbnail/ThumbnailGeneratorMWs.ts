@@ -12,13 +12,13 @@ import {PhotoDTO} from "../../../common/entities/PhotoDTO";
 import {Config} from "../../../common/config/private/Config";
 import {ThumbnailProcessingLib} from "../../../common/config/private/IPrivateConfig";
 import {ThumbnailTH} from "../../model/threading/ThreadPool";
-import {RendererFactory, RendererInput} from "../../model/threading/ThumbnailWoker";
+import {RendererInput} from "../../model/threading/ThumbnailWoker";
+import {ITaskQue, TaskQue} from "../../model/threading/TaskQue";
 
 
 export class ThumbnailGeneratorMWs {
   private static initDone = false;
-  private static ThumbnailFunction: (input: RendererInput) => Promise<void> = null;
-  private static threadPool: ThumbnailTH = null;
+  private static taskQue: ITaskQue = null;
 
   public static init() {
     if (this.initDone == true) {
@@ -33,11 +33,11 @@ export class ThumbnailGeneratorMWs {
       Config.Client.concurrentThumbnailGenerations = 1;
     }
 
-    this.ThumbnailFunction = RendererFactory.build(Config.Server.thumbnail.processingLibrary);
-
     if (Config.Server.enableThreading == true &&
       Config.Server.thumbnail.processingLibrary == ThumbnailProcessingLib.Jimp) {
-      this.threadPool = new ThumbnailTH(Config.Client.concurrentThumbnailGenerations);
+      this.taskQue = new ThumbnailTH(Config.Client.concurrentThumbnailGenerations);
+    } else {
+      this.taskQue = new TaskQue(Config.Client.concurrentThumbnailGenerations);
     }
 
     this.initDone = true;
@@ -157,13 +157,8 @@ export class ThumbnailGeneratorMWs {
       qualityPriority: Config.Server.thumbnail.qualityPriority
     };
     try {
-      if (this.threadPool !== null) {
-        await this.threadPool.execute(input);
-        return next();
-      } else {
-        await ThumbnailGeneratorMWs.ThumbnailFunction(input);
-        return next();
-      }
+      await this.taskQue.execute(input);
+      return next();
     } catch (error) {
       return next(new ErrorDTO(ErrorCodes.THUMBNAIL_GENERATION_ERROR, "Error during generating thumbnail", error));
     }
