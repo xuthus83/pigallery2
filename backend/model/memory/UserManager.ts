@@ -1,15 +1,15 @@
-///<reference path="flat-file-db.ts"/>
 import {UserDTO, UserRoles} from "../../../common/entities/UserDTO";
 import {IUserManager} from "../interfaces/IUserManager";
 import {ProjectPath} from "../../ProjectPath";
 import {Utils} from "../../../common/Utils";
-import * as flatfile from "flat-file-db";
 import * as path from "path";
+import * as fs from "fs";
 import {PasswordHelper} from "../PasswordHelper";
 
 
 export class UserManager implements IUserManager {
-  private db: any = null;
+  private db: { users?: UserDTO[], idCounter?: number } = {};
+  private dbPath;
 
   generateId(): string {
     function s4() {
@@ -22,22 +22,22 @@ export class UserManager implements IUserManager {
   }
 
   constructor() {
-    this.db = flatfile.sync(path.join(ProjectPath.Root, 'users.db'));
+    this.dbPath = path.join(ProjectPath.Root, 'users.db');
+    if (fs.existsSync(this.dbPath)) {
+      this.loadDB();
+    }
 
-    if (!this.db.has("idCounter")) {
+    if (!this.db.idCounter) {
       console.log("creating counter");
-      this.db.put("idCounter", 1);
+      this.db.idCounter = 1;
     }
 
-    if (!this.db.has("users")) {
-      this.db.put("users", []);
+    if (!this.db.users) {
+      this.db.users = [];
       //TODO: remove defaults
-      this.createUser(<UserDTO>{name: "developer", password: "developer", role: UserRoles.Developer});
       this.createUser(<UserDTO>{name: "admin", password: "admin", role: UserRoles.Admin});
-      this.createUser(<UserDTO>{name: "user", password: "user", role: UserRoles.User});
-      this.createUser(<UserDTO>{name: "guest", password: "guest", role: UserRoles.Guest});
     }
-
+    this.saveDB();
 
   }
 
@@ -54,7 +54,7 @@ export class UserManager implements IUserManager {
   public async find(filter: any) {
     let pass = filter.password;
     delete filter.password;
-    const users = (await this.db.get("users")).slice();
+    const users = this.db.users.slice();
     let i = users.length;
     while (i--) {
       if (pass && !(PasswordHelper.comparePassword(pass, users[i].password))) {
@@ -69,20 +69,17 @@ export class UserManager implements IUserManager {
   }
 
   public async createUser(user: UserDTO) {
-    user.id = parseInt(this.db.get("idCounter")) + 1;
-    this.db.put("idCounter", user.id);
-    let users = this.db.get("users");
+    user.id = this.db.idCounter++;
     user.password = PasswordHelper.cryptPassword(user.password);
-    users.push(user);
-    this.db.put("users", users);
-
+    this.db.users.push(user);
+    this.saveDB();
     return user;
   }
 
-  public deleteUser(id: number) {
-    let deleted = this.db.get("users").filter((u: UserDTO) => u.id == id);
-    let users = this.db.get("users").filter((u: UserDTO) => u.id != id);
-    this.db.put("users", users);
+  public async deleteUser(id: number) {
+    let deleted = this.db.users.filter((u: UserDTO) => u.id == id);
+    this.db.users = this.db.users.filter((u: UserDTO) => u.id != id);
+    this.saveDB();
     if (deleted.length > 0) {
       return deleted[0];
     }
@@ -90,20 +87,26 @@ export class UserManager implements IUserManager {
   }
 
   public async changeRole(id: number, newRole: UserRoles): Promise<UserDTO> {
-
-    let users: Array<UserDTO> = this.db.get("users");
-
-    for (let i = 0; i < users.length; i++) {
-      if (users[i].id == id) {
-        users[i].role = newRole;
-        this.db.put("users", users);
-        return users[i];
+    for (let i = 0; i < this.db.users.length; i++) {
+      if (this.db.users[i].id == id) {
+        this.db.users[i].role = newRole;
+        this.saveDB();
+        return this.db.users[i];
       }
     }
   }
 
   public async changePassword(request: any) {
     throw new Error("not implemented"); //TODO: implement
+  }
+
+  private loadDB() {
+    const data = fs.readFileSync(this.dbPath, 'utf8');
+    this.db = JSON.parse(data);
+  }
+
+  private saveDB() {
+    fs.writeFileSync(this.dbPath, JSON.stringify(this.db));
   }
 
 }

@@ -57,7 +57,7 @@ npm install
 npm start
 ```
 To configure it. Run `PiGallery2` first to create `config.json` file, then edit it and restart. 
-
+Default user: `admin` pass: `admin`
 
 ## Feature list
 
