@@ -7,4 +7,5 @@ export interface SearchResultDTO {
   searchType: SearchTypes;
   directories: Array<DirectoryDTO>;
   photos: Array<PhotoDTO>;
+  resultOverflow: boolean;
 }

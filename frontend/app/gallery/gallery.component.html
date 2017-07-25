@@ -31,6 +31,10 @@
   </div>
 
   <div body class="container" style="width: 100%; padding:0" *ngIf="_galleryService.content.value.searchResult">
+    <div class="alert alert-info" role="alert"
+         *ngIf="_galleryService.content.value.searchResult.resultOverflow == true">
+      Too many results to show. Refine your search.
+    </div>
     <ol class="breadcrumb">
       <li class="active">
         Searching for:

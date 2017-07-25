@@ -82,6 +82,8 @@ export class GalleryService {
     }
 
     const cw: ContentWrapper = await this.networkService.getJson<ContentWrapper>("/search/" + text, {type: type});
+    console.log("photos", cw.searchResult.photos.length);
+    console.log("direcotries", cw.searchResult.directories.length);
     this.content.next(cw);
     return cw;
   }

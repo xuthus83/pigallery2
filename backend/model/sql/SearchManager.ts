@@ -63,14 +63,15 @@ export class SearchManager implements ISearchManager {
     return this.autoCompleteItemsUnique(result);
   }
 
-  async  search(text: string, searchType: SearchTypes) {
+  async search(text: string, searchType: SearchTypes) {
     const connection = await SQLConnection.getConnection();
 
     let result: SearchResultDTO = <SearchResultDTO>{
       searchText: text,
       searchType: searchType,
       directories: [],
-      photos: []
+      photos: [],
+      resultOverflow: false
     };
 
     let query = connection
@@ -95,6 +96,7 @@ export class SearchManager implements ISearchManager {
       query.orWhere('photo.metadata.keywords LIKE :text COLLATE utf8_general_ci', {text: "%" + text + "%"});
     }
     let photos = await query
+      .setLimit(2001)
       .getMany();
 
 
@@ -106,25 +108,33 @@ export class SearchManager implements ISearchManager {
         photos[i].metadata.size = <any>JSON.parse(<any>photos[i].metadata.size);
       }
       result.photos = photos;
+      if (result.photos.length > 2000) {
+        result.resultOverflow = true;
+      }
     }
 
     result.directories = await connection
       .getRepository(DirectoryEntity)
       .createQueryBuilder("dir")
       .where('dir.name LIKE :text COLLATE utf8_general_ci', {text: "%" + text + "%"})
+      .setLimit(201)
       .getMany();
 
+    if (result.directories.length > 200) {
+      result.resultOverflow = true;
+    }
 
     return result;
   }
 
-  async  instantSearch(text: string) {
+  async instantSearch(text: string) {
     const connection = await SQLConnection.getConnection();
 
     let result: SearchResultDTO = <SearchResultDTO>{
       searchText: text,
       directories: [],
-      photos: []
+      photos: [],
+      resultOverflow: false
     };
 
     let photos = await connection
