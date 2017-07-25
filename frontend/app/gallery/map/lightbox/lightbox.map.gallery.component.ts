@@ -131,6 +131,7 @@ export class GalleryMapLightboxComponent implements OnChanges {
 
   public loadPreview(mp: MapPhoto) {
     mp.preview.thumbnail.load();
+    mp.preview.thumbnail.CurrentlyWaiting = true;
   }
 
   hideImages() {

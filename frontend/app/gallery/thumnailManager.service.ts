@@ -1,11 +1,13 @@
 import {Injectable} from "@angular/core";
-import {ThumbnailLoaderService, ThumbnailLoadingListener, ThumbnailTaskEntity} from "./thumnailLoader.service";
+import {
+  ThumbnailLoaderService,
+  ThumbnailLoadingListener,
+  ThumbnailLoadingPriority,
+  ThumbnailTaskEntity
+} from "./thumnailLoader.service";
 import {Photo} from "./Photo";
 import {IconPhoto} from "./IconPhoto";
 
-export enum ThumbnailLoadingPriority{
-  high, medium, low
-}
 
 @Injectable()
 export class ThumbnailManagerService {
@@ -121,7 +123,6 @@ export class IconThumbnail extends ThumbnailBase {
     } else {
       this.thumbnailTask.priority = ThumbnailLoadingPriority.medium;
     }
-
   }
 
 
@@ -145,9 +146,26 @@ export class Thumbnail extends ThumbnailBase {
     }
   }
 
+  set CurrentlyWaiting(value: boolean) {
+    if (!this.thumbnailTask) return;
+    if (value === true) {
+      if (this.photo.isReplacementThumbnailAvailable()) {
+        this.thumbnailTask.priority = ThumbnailLoadingPriority.medium;
+      } else {
+        this.thumbnailTask.priority = ThumbnailLoadingPriority.extraHigh;
+      }
+    } else {
+      if (this.photo.isReplacementThumbnailAvailable()) {
+        this.thumbnailTask.priority = ThumbnailLoadingPriority.low;
+      } else {
+        this.thumbnailTask.priority = ThumbnailLoadingPriority.medium;
+      }
+    }
+  }
+
   public load() {
     if (!this.photo.isThumbnailAvailable() && this.thumbnailTask == null) {
-      setTimeout(() => {
+      //    setTimeout(() => {
         let listener: ThumbnailLoadingListener = {
           onStartedLoading: () => { //onLoadStarted
             this.loading = true;
@@ -170,7 +188,7 @@ export class Thumbnail extends ThumbnailBase {
         } else {
           this.thumbnailTask = this.thumbnailService.loadImage(this.photo, ThumbnailLoadingPriority.high, listener);
         }
-      }, 0);
+      // }, 0);
     }
   }
 

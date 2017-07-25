@@ -5,8 +5,8 @@ import {IconPhoto} from "./IconPhoto";
 import {PhotoDTO} from "../../../common/entities/PhotoDTO";
 import {Config} from "../../../common/config/public/Config";
 
-export enum ThumbnailLoadingPriority{
-  high, medium, low
+export enum ThumbnailLoadingPriority {
+  extraHigh = 4, high = 3, medium = 2, low = 1
 }
 
 @Injectable()
@@ -113,31 +113,23 @@ export class ThumbnailLoaderService {
       return null;
     }
 
+    let highestPriority: ThumbnailTask = null;
+    let currentPriority: ThumbnailLoadingPriority = Number.MAX_SAFE_INTEGER;
     for (let i = 0; i < this.que.length; i++) {
       for (let j = 0; j < this.que[i].taskEntities.length; j++) {
-        if (this.que[i].inProgress == false && this.que[i].taskEntities[j].priority === ThumbnailLoadingPriority.high) {
-          return this.que[i];
+        if (this.que[i].inProgress == false) {
+          if (highestPriority == null || currentPriority < this.que[i].taskEntities[j].priority) {
+            highestPriority = this.que[i];
+            currentPriority = this.que[i].taskEntities[j].priority;
+            if (currentPriority == ThumbnailLoadingPriority.extraHigh) {
+              return highestPriority;
+            }
+          }
         }
       }
     }
 
-    for (let i = 0; i < this.que.length; i++) {
-      for (let j = 0; j < this.que[i].taskEntities.length; j++) {
-        if (this.que[i].inProgress == false && this.que[i].taskEntities[j].priority === ThumbnailLoadingPriority.medium) {
-          return this.que[i];
-        }
-      }
-    }
-
-
-    for (let i = 0; i < this.que.length; i++) {
-      if (this.que[i].inProgress == false) {
-        return this.que[i];
-      }
-
-    }
-
-    return null;
+    return highestPriority;
   }
 
   private taskReady(task: ThumbnailTask) {
