@@ -9,8 +9,9 @@ import {PhotoEntity, PhotoMetadataEntity} from "./enitites/PhotoEntity";
 import {Utils} from "../../../common/Utils";
 import {ProjectPath} from "../../ProjectPath";
 import {Config} from "../../../common/config/private/Config";
+import {ISQLGalleryManager} from "./IGalleryManager";
 
-export class GalleryManager implements IGalleryManager {
+export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
 
 
   public async listDirectory(relativeDirectoryName: string,

@@ -34,9 +34,11 @@ export abstract class SettingsComponent<T> implements OnInit, OnDestroy, OnChang
               private _navigation: NavigationService,
               public _settingsService: AbstractSettingsService<T>,
               protected notification: NotificationService,
-              private sliceFN: (s: IPrivateConfig) => T) {
-    this.settingsSubscription = this._settingsService.Settings.subscribe(this.onNewSettings);
-    this.onNewSettings(this._settingsService._settingsService.settings.value);
+              private sliceFN?: (s: IPrivateConfig) => T) {
+    if (this.sliceFN) {
+      this.settingsSubscription = this._settingsService.Settings.subscribe(this.onNewSettings);
+      this.onNewSettings(this._settingsService._settingsService.settings.value);
+    }
   }
 
   onNewSettings = (s) => {

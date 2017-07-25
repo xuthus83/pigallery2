@@ -7,8 +7,6 @@ import {DiskMangerWorker} from "./threading/DiskMangerWorker";
 
 
 const LOG_TAG = "[DiskManager]";
-
-
 export class DiskManager {
   static threadPool: DiskManagerTH = null;
 

@@ -6,24 +6,35 @@ import {AdminMWs} from "../middlewares/AdminMWs";
 export class AdminRouter {
   public static route(app: any) {
 
-    this.addResetDB(app);
     this.addIndexGallery(app);
     this.addSettings(app);
   }
 
-  private static addResetDB(app) {
-    app.post("/api/admin/db/reset",
-      AuthenticationMWs.authenticate,
-      AuthenticationMWs.authorise(UserRoles.Admin)
-      //TODO: implement
-    );
-  };
 
   private static addIndexGallery(app) {
-    app.post("/api/admin/gallery/index",
+    app.get("/api/admin/indexes/job/progress",
       AuthenticationMWs.authenticate,
-      AuthenticationMWs.authorise(UserRoles.Admin)
-      //TODO: implement
+      AuthenticationMWs.authorise(UserRoles.Admin),
+      AdminMWs.getIndexingProgress,
+      RenderingMWs.renderResult
+    );
+    app.put("/api/admin/indexes/job",
+      AuthenticationMWs.authenticate,
+      AuthenticationMWs.authorise(UserRoles.Admin),
+      AdminMWs.startIndexing,
+      RenderingMWs.renderResult
+    );
+    app.delete("/api/admin/indexes/job",
+      AuthenticationMWs.authenticate,
+      AuthenticationMWs.authorise(UserRoles.Admin),
+      AdminMWs.cancelIndexing,
+      RenderingMWs.renderResult
+    );
+    app.delete("/api/admin/indexes",
+      AuthenticationMWs.authenticate,
+      AuthenticationMWs.authorise(UserRoles.Admin),
+      AdminMWs.resetIndexes,
+      RenderingMWs.renderResult
     );
   };
 

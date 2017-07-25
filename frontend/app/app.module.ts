@@ -54,6 +54,7 @@ import {ShareSettingsComponent} from "./settings/share/share.settings.component"
 import {BasicSettingsComponent} from "./settings/basic/basic.settings.component";
 import {OtherSettingsComponent} from "./settings/other/other.settings.component";
 import {DefaultUrlSerializer, UrlSerializer, UrlTree} from '@angular/router';
+import {IndexingSettingsComponent} from "./settings/indexing/indexing.settings.component";
 
 @Injectable()
 export class GoogleMapsConfig {
@@ -129,6 +130,7 @@ export class CustomUrlSerializer implements UrlSerializer {
     ShareSettingsComponent,
     BasicSettingsComponent,
     OtherSettingsComponent,
+    IndexingSettingsComponent,
     StringifyRole],
   providers: [
     {provide: UrlSerializer, useClass: CustomUrlSerializer},

@@ -1,0 +1,47 @@
+<form #settingsForm="ngForm" class="form-horizontal">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title col-xs-4">Folder indexing</h3>
+    </div>
+    <div class="panel-body">
+      <div [hidden]="!error" class="alert alert-danger" role="alert"><strong>Error: </strong>{{error}}</div>
+
+      If you add a new folder to your gallery, the site indexes it automatically.
+      If you would like to trigger indexing manually, click index button.<br/>
+      (Note: search ony searched among the indexed directories)<br/>
+
+      <div *ngIf="_settingsService.progress.value != null">
+        indexing: {{_settingsService.progress.value.current}}
+        <div class="progress">
+          <div class="progress-bar  progress-bar-success"
+               role="progressbar"
+               aria-valuenow="2"
+               aria-valuemin="0"
+               aria-valuemax="100"
+               style="min-width: 2em;"
+               [style.width.%]="(_settingsService.progress.value.indexed/(_settingsService.progress.value.left+_settingsService.progress.value.indexed))*100">
+            {{_settingsService.progress.value.indexed}}/{{_settingsService.progress.value.indexed+_settingsService.progress.value.left}}
+          </div>
+        </div>
+      </div>
+
+      <div class="row buttons">
+        <button class="btn btn-success"
+                *ngIf="_settingsService.progress.value == null"
+                [disabled]="inProgress"
+                (click)="index()">Index
+        </button>
+        <button class="btn btn-default"
+                *ngIf="_settingsService.progress.value != null"
+                [disabled]="inProgress"
+                (click)="cancel()">Cancel
+        </button>
+        <button class="btn btn-danger"
+                [disabled]="inProgress"
+                (click)="reset()">Reset Indexes
+        </button>
+      </div>
+    </div>
+  </div>
+
+</form>

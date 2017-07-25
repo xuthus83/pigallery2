@@ -12,7 +12,7 @@ import {Logger} from "../Logger";
 export class RenderingMWs {
 
   public static renderResult(req: Request, res: Response, next: NextFunction) {
-    if (!req.resultPipe)
+    if (typeof req.resultPipe == "undefined")
       return next();
 
     return RenderingMWs.renderMessage(res, req.resultPipe);

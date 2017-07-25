@@ -13,6 +13,7 @@ import {ProjectPath} from "../ProjectPath";
 
 
 const LOG_TAG = "[AdminMWs]";
+
 export class AdminMWs {
 
 
@@ -125,7 +126,7 @@ export class AdminMWs {
   }
 
 
-  public static async  updateAuthenticationSettings(req: Request, res: Response, next: NextFunction) {
+  public static async updateAuthenticationSettings(req: Request, res: Response, next: NextFunction) {
     if ((typeof req.body === 'undefined') || (typeof req.body.settings === 'undefined')) {
       return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, "settings is needed"));
     }
@@ -145,7 +146,7 @@ export class AdminMWs {
     }
   }
 
-  public static async  updateThumbnailSettings(req: Request, res: Response, next: NextFunction) {
+  public static async updateThumbnailSettings(req: Request, res: Response, next: NextFunction) {
     if ((typeof req.body === 'undefined') || (typeof req.body.settings === 'undefined')) {
       return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, "settings is needed"));
     }
@@ -179,7 +180,7 @@ export class AdminMWs {
   }
 
 
-  public static async  updateBasicSettings(req: Request, res: Response, next: NextFunction) {
+  public static async updateBasicSettings(req: Request, res: Response, next: NextFunction) {
     if ((typeof req.body === 'undefined') || (typeof req.body.settings === 'undefined')) {
       return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, "settings is needed"));
     }
@@ -209,7 +210,7 @@ export class AdminMWs {
   }
 
 
-  public static async  updateOtherSettings(req: Request, res: Response, next: NextFunction) {
+  public static async updateOtherSettings(req: Request, res: Response, next: NextFunction) {
     if ((typeof req.body === 'undefined') || (typeof req.body.settings === 'undefined')) {
       return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, "settings is needed"));
     }
@@ -237,4 +238,42 @@ export class AdminMWs {
   }
 
 
+  public static startIndexing(req: Request, res: Response, next: NextFunction) {
+    try {
+      ObjectManagerRepository.getInstance().IndexingManager.startIndexing();
+      req.resultPipe = "ok";
+      return next();
+    } catch (err) {
+      return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, "Indexing error: " + JSON.stringify(err, null, '  '), err));
+    }
+  }
+
+  public static getIndexingProgress(req: Request, res: Response, next: NextFunction) {
+    try {
+      req.resultPipe = ObjectManagerRepository.getInstance().IndexingManager.getProgress();
+      return next();
+    } catch (err) {
+      return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, "Indexing error: " + JSON.stringify(err, null, '  '), err));
+    }
+  }
+
+  public static cancelIndexing(req: Request, res: Response, next: NextFunction) {
+    try {
+      ObjectManagerRepository.getInstance().IndexingManager.cancelIndexing();
+      req.resultPipe = "ok";
+      return next();
+    } catch (err) {
+      return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, "Indexing error: " + JSON.stringify(err, null, '  '), err));
+    }
+  }
+
+  public static async resetIndexes(req: Request, res: Response, next: NextFunction) {
+    try {
+      await ObjectManagerRepository.getInstance().IndexingManager.reset();
+      req.resultPipe = "ok";
+      return next();
+    } catch (err) {
+      return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, "Indexing error: " + JSON.stringify(err, null, '  '), err));
+    }
+  }
 }
