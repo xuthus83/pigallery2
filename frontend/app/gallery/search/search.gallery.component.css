@@ -27,6 +27,7 @@
   padding: 0 20px;
   line-height: 1.42857143;
   font-weight: 400;
+  display: block;
 }
 
 .autocomplete-item:hover {
