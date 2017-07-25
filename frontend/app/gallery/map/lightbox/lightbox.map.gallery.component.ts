@@ -30,8 +30,6 @@ export class GalleryMapLightboxComponent implements OnChanges {
 
   constructor(public fullScreenService: FullScreenService,
               private thumbnailService: ThumbnailManagerService) {
-
-
   }
 
 //TODO: fix zooming
@@ -43,6 +41,7 @@ export class GalleryMapLightboxComponent implements OnChanges {
   }
 
   public show(position: Dimension) {
+    this.hideImages();
     this.visible = true;
     this.opacity = 1.0;
     this.startPosition = position;
@@ -57,7 +56,6 @@ export class GalleryMapLightboxComponent implements OnChanges {
     this.map.triggerResize();
 
     document.getElementsByTagName('body')[0].style.overflowY = 'hidden';
-    this.showImages();
 
     setTimeout(() => {
       this.lightboxDimension = <Dimension>{
@@ -66,6 +64,7 @@ export class GalleryMapLightboxComponent implements OnChanges {
         width: this.getScreenWidth(),
         height: this.getScreenHeight()
       };
+      this.showImages();
     }, 0);
   }
 
@@ -129,11 +128,13 @@ export class GalleryMapLightboxComponent implements OnChanges {
     }
   }
 
+
   public loadPreview(mp: MapPhoto) {
     mp.preview.thumbnail.load();
   }
 
   hideImages() {
+    this.mapCenter = {longitude: 0, latitude: 0};
     this.mapPhotos.forEach((mp) => {
       mp.iconThumbnail.destroy();
       mp.preview.thumbnail.destroy();
