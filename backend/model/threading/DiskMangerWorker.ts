@@ -1,8 +1,8 @@
+import * as fs from "fs";
+import * as path from "path";
 import {DirectoryDTO} from "../../../common/entities/DirectoryDTO";
 import {CameraMetadata, GPSMetadata, ImageSize, PhotoDTO, PhotoMetadata} from "../../../common/entities/PhotoDTO";
 import {Logger} from "../../Logger";
-import * as fs from "fs";
-import * as path from "path";
 import {IptcParser} from "ts-node-iptc";
 import {ExifParserFactory} from "ts-exif-parser";
 import {ProjectPath} from "../../ProjectPath";
@@ -85,7 +85,7 @@ export class DiskMangerWorker {
 
   private static loadPhotoMetadata(fullPath: string): Promise<PhotoMetadata> {
     return new Promise<PhotoMetadata>((resolve, reject) => {
-      fs.readFile(fullPath, (err, data) => {
+        fs.readFile(fullPath, (err, data) => {
           if (err) {
             return reject({file: fullPath, error: err});
           }

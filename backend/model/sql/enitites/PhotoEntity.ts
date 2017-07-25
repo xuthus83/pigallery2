@@ -9,27 +9,6 @@ import {
 } from "../../../../common/entities/PhotoDTO";
 import {DirectoryEntity} from "./DirectoryEntity";
 
-@Entity()
-export class PhotoEntity implements PhotoDTO {
-
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @Column("string")
-  name: string;
-
-  @ManyToOne(type => DirectoryEntity, directory => directory.photos, {onDelete: "CASCADE"})
-  directory: DirectoryDTO;
-
-  @Embedded(type => PhotoMetadataEntity)
-  metadata: PhotoMetadataEntity;
-
-  readyThumbnails: Array<number> = [];
-
-  readyIcon: boolean = false;
-
-}
-
 
 @EmbeddableEntity()
 export class PhotoMetadataEntity implements PhotoMetadata {
@@ -68,6 +47,28 @@ export class PhotoMetadataEntity implements PhotoMetadata {
     m.size = <any>JSON.stringify(<any>m.size);
   }
 }
+
+@Entity()
+export class PhotoEntity implements PhotoDTO {
+
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column("string")
+  name: string;
+
+  @ManyToOne(type => DirectoryEntity, directory => directory.photos, {onDelete: "CASCADE"})
+  directory: DirectoryDTO;
+
+  @Embedded(type => PhotoMetadataEntity)
+  metadata: PhotoMetadataEntity;
+
+  readyThumbnails: Array<number> = [];
+
+  readyIcon: boolean = false;
+
+}
+
 
 /*
  @EmbeddableTable()

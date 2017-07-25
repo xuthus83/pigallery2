@@ -1,10 +1,9 @@
 import * as cluster from "cluster";
-import {Worker} from "./model/threading/Worker";
-import {Server} from "./server";
-
 
 if (cluster.isMaster) {
+  const Server = require("./server").Server;
   new Server();
 } else {
+  const Worker = require("./model/threading/Worker").Worker;
   Worker.process();
 }
