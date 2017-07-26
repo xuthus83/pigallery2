@@ -1,6 +1,6 @@
 {
   "name": "pigallery2",
-  "version": "1.0.0-beta.4",
+  "version": "1.0.0-rc.1",
   "description": "This is a photo gallery optimised for running low resource servers (especially on raspberry pi)",
   "author": "Patrik J. Braun",
   "homepage": "https://github.com/bpatrik/PiGallery2",
