@@ -5,6 +5,7 @@ import {UserDTO, UserRoles} from "../../../../../common/entities/UserDTO";
 import {ObjectManagerRepository} from "../../../../../backend/model/ObjectManagerRepository";
 import {UserManager} from "../../../../../backend/model/memory/UserManager";
 import {Config} from "../../../../../common/config/private/Config";
+import {IUserManager} from "../../../../../backend/model/interfaces/IUserManager";
 
 
 describe('Authentication middleware', () => {
@@ -219,9 +220,9 @@ describe('Authentication middleware', () => {
         expect(req.session.user).to.be.eql("test user");
         done();
       };
-      ObjectManagerRepository.getInstance().UserManager = <UserManager>{
+      ObjectManagerRepository.getInstance().UserManager = <IUserManager>{
         findOne: (filter) => {
-          return Promise.resolve("test user");
+          return Promise.resolve(<any>"test user");
         }
       };
       AuthenticationMWs.login(req, null, next);
