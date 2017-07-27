@@ -55,7 +55,7 @@ export class DiskMangerWorker {
             const fullFilePath = path.normalize(path.resolve(absoluteDirectoryName, file));
             if (photosOnly == false && fs.statSync(fullFilePath).isDirectory()) {
               const d = await DiskMangerWorker.scanDirectory(path.join(relativeDirectoryName, file),
-                Config.Server.folderPreviewSize, true
+                Config.Server.indexing.folderPreviewSize, true
               );
               d.lastScanned = 0; //it was not a fully scan
               d.isPartial = true;

@@ -1,5 +1,11 @@
 import {PublicConfigClass} from "../public/ConfigClass";
-import {DatabaseType, IPrivateConfig, ServerConfig, ThumbnailProcessingLib} from "./IPrivateConfig";
+import {
+  DatabaseType,
+  IPrivateConfig,
+  ReIndexingSensitivity,
+  ServerConfig,
+  ThumbnailProcessingLib
+} from "./IPrivateConfig";
 import * as path from "path";
 import {ConfigLoader} from "typeconfig";
 
@@ -33,9 +39,12 @@ export class PrivateConfigClass extends PublicConfigClass implements IPrivateCon
     sharing: {
       updateTimeout: 1000 * 60 * 5
     },
-    enableThreading: true,
-    folderPreviewSize: 2,
-    cachedFolderTimeout: 1000 * 60 * 60
+    indexing: {
+      folderPreviewSize: 2,
+      cachedFolderTimeout: 1000 * 60 * 60,
+      reIndexingSensitivity: ReIndexingSensitivity.high
+    },
+    enableThreading: true
   };
   private ConfigLoader: any;
 

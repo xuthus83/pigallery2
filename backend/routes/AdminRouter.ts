@@ -96,6 +96,12 @@ export class AdminRouter {
       AdminMWs.updateOtherSettings,
       RenderingMWs.renderOK
     );
+    app.put("/api/settings/indexing",
+      AuthenticationMWs.authenticate,
+      AuthenticationMWs.authorise(UserRoles.Admin),
+      AdminMWs.updateIndexingSettings,
+      RenderingMWs.renderOK
+    );
 
   };
 

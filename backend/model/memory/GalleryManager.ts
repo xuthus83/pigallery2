@@ -5,6 +5,7 @@ import * as fs from "fs";
 import {DiskManager} from "../DiskManger";
 import {ProjectPath} from "../../ProjectPath";
 import {Config} from "../../../common/config/private/Config";
+import {ReIndexingSensitivity} from "../../../common/config/private/IPrivateConfig";
 
 export class GalleryManager implements IGalleryManager {
 
@@ -13,7 +14,9 @@ export class GalleryManager implements IGalleryManager {
     if (knownLastModified && knownLastScanned) {
       const stat = fs.statSync(path.join(ProjectPath.ImageFolder, relativeDirectoryName));
       const lastModified = Math.max(stat.ctime.getTime(), stat.mtime.getTime());
-      if (Date.now() - knownLastScanned <= Config.Server.cachedFolderTimeout && lastModified == knownLastModified) {
+      if (Date.now() - knownLastScanned <= Config.Server.indexing.cachedFolderTimeout &&
+        lastModified == knownLastModified &&
+        Config.Server.indexing.reIndexingSensitivity < ReIndexingSensitivity.high) {
         return Promise.resolve(null);
       }
     }

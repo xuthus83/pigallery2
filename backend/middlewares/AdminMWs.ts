@@ -3,7 +3,12 @@ import {ErrorCodes, ErrorDTO} from "../../common/entities/Error";
 import {ObjectManagerRepository} from "../model/ObjectManagerRepository";
 import {Logger} from "../Logger";
 import {SQLConnection} from "../model/sql/SQLConnection";
-import {DataBaseConfig, DatabaseType, ThumbnailConfig} from "../../common/config/private/IPrivateConfig";
+import {
+  DataBaseConfig,
+  DatabaseType,
+  IndexingConfig,
+  ThumbnailConfig
+} from "../../common/config/private/IPrivateConfig";
 import {Config} from "../../common/config/private/Config";
 import {ConfigDiagnostics} from "../model/ConfigDiagnostics";
 import {ClientConfig} from "../../common/config/public/ConfigClass";
@@ -227,6 +232,28 @@ export class AdminMWs {
       original.Client.enableOnScrollRendering = settings.enableOnScrollRendering;
       original.Client.enableOnScrollThumbnailPrioritising = settings.enableOnScrollThumbnailPrioritising;
       original.Server.enableThreading = settings.enableThreading;
+      original.save();
+      await ConfigDiagnostics.runDiagnostics();
+      Logger.info(LOG_TAG, "new config:");
+      Logger.info(LOG_TAG, JSON.stringify(Config, null, '\t'));
+      return next();
+    } catch (err) {
+      return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, "Settings error: " + JSON.stringify(err, null, '  '), err));
+    }
+  }
+
+  public static async updateIndexingSettings(req: Request, res: Response, next: NextFunction) {
+    if ((typeof req.body === 'undefined') || (typeof req.body.settings === 'undefined')) {
+      return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, "settings is needed"));
+    }
+
+    try {
+      const settings: IndexingConfig = req.body.settings;
+      Config.Server.indexing = settings;
+
+      //only updating explicitly set config (not saving config set by the diagnostics)
+      const original = Config.original();
+      original.Server.indexing = settings;
       original.save();
       await ConfigDiagnostics.runDiagnostics();
       Logger.info(LOG_TAG, "new config:");

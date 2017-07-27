@@ -2,12 +2,12 @@ import {Injectable} from "@angular/core";
 import {NetworkService} from "../../model/network/network.service";
 import {SettingsService} from "../settings.service";
 import {AbstractSettingsService} from "../_abstract/abstract.settings.service";
-import {DatabaseType} from "../../../../common/config/private/IPrivateConfig";
+import {DatabaseType, IndexingConfig} from "../../../../common/config/private/IPrivateConfig";
 import {IndexingProgressDTO} from "../../../../common/entities/settings/IndexingProgressDTO";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
 
 @Injectable()
-export class IndexingSettingsService extends AbstractSettingsService<void> {
+export class IndexingSettingsService extends AbstractSettingsService<IndexingConfig> {
 
 
   public progress: BehaviorSubject<IndexingProgressDTO>;
@@ -17,6 +17,11 @@ export class IndexingSettingsService extends AbstractSettingsService<void> {
     super(_settingsService);
     this.progress = new BehaviorSubject(null);
   }
+
+  public updateSettings(settings: IndexingConfig): Promise<void> {
+    return this._networkService.putJson("/settings/indexing", {settings: settings});
+  }
+
 
   public isSupported(): boolean {
     return this._settingsService.settings.value.Server.database.type != DatabaseType.memory;
@@ -39,7 +44,4 @@ export class IndexingSettingsService extends AbstractSettingsService<void> {
   }
 
 
-  updateSettings(settings: void): Promise<void> {
-    throw new Error("Method not implemented.");
-  }
 }

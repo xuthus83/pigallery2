@@ -41,6 +41,16 @@ export interface SharingConfig {
   updateTimeout: number;
 }
 
+export enum ReIndexingSensitivity {
+  low, medium, high
+}
+
+export interface IndexingConfig {
+  folderPreviewSize: number;
+  cachedFolderTimeout: number;//Do not rescans the folder if seems ok
+  reIndexingSensitivity: ReIndexingSensitivity;
+}
+
 export interface ServerConfig {
   port: number;
   imagesFolder: string;
@@ -49,8 +59,7 @@ export interface ServerConfig {
   enableThreading: boolean;
   sharing: SharingConfig;
   sessionTimeout: number
-  folderPreviewSize: number;
-  cachedFolderTimeout: number;//Do not rescans the folder if seems ok
+  indexing: IndexingConfig;
 }
 
 export interface IPrivateConfig {

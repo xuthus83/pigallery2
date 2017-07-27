@@ -10,6 +10,7 @@ import {Utils} from "../../../common/Utils";
 import {ProjectPath} from "../../ProjectPath";
 import {Config} from "../../../common/config/private/Config";
 import {ISQLGalleryManager} from "./IGalleryManager";
+import {ReIndexingSensitivity} from "../../../common/config/private/IPrivateConfig";
 
 export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
 
@@ -37,10 +38,15 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
 
     if (dir && dir.scanned == true) {
       //iF it seems that the content did not changed, do not work on it
-      if (knownLastModified && knownLastScanned) {
-        if (Date.now() - knownLastScanned <= Config.Server.cachedFolderTimeout &&
-          lastModified == knownLastModified &&
-          dir.lastScanned == knownLastScanned) {
+      if (knownLastModified && knownLastScanned
+        && lastModified == knownLastModified &&
+        dir.lastScanned == knownLastScanned) {
+
+        if (Config.Server.indexing.reIndexingSensitivity == ReIndexingSensitivity.low) {
+          return null;
+        }
+        if (Date.now() - knownLastScanned <= Config.Server.indexing.cachedFolderTimeout &&
+          Config.Server.indexing.reIndexingSensitivity == ReIndexingSensitivity.medium) {
           return null;
         }
       }
@@ -61,7 +67,7 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
               dir: dir.directories[i].id
             })
             .orderBy("photo.metadata.creationDate", "ASC")
-            .setLimit(Config.Server.folderPreviewSize)
+            .setLimit(Config.Server.indexing.folderPreviewSize)
             .getMany();
           dir.directories[i].isPartial = true;
 
@@ -79,7 +85,9 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
         return this.indexDirectory(relativeDirectoryName);
       }
 
-      if (Date.now() - dir.lastScanned > Config.Server.cachedFolderTimeout) {
+      if ((Date.now() - dir.lastScanned > Config.Server.indexing.cachedFolderTimeout &&
+          Config.Server.indexing.reIndexingSensitivity >= ReIndexingSensitivity.medium) ||
+        Config.Server.indexing.reIndexingSensitivity >= ReIndexingSensitivity.high) {
         //on the fly reindexing
         this.indexDirectory(relativeDirectoryName).catch((err) => {
           console.error(err);
