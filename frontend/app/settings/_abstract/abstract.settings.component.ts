@@ -9,7 +9,8 @@ import {AbstractSettingsService} from "./abstract.settings.service";
 import {IPrivateConfig} from "../../../../common/config/private/IPrivateConfig";
 
 
-export abstract class SettingsComponent<T> implements OnInit, OnDestroy, OnChanges {
+export abstract class SettingsComponent<T, S extends AbstractSettingsService<T>=AbstractSettingsService<T>>
+  implements OnInit, OnDestroy, OnChanges {
 
   @Input()
   public simplifiedMode: boolean = true;
@@ -32,7 +33,7 @@ export abstract class SettingsComponent<T> implements OnInit, OnDestroy, OnChang
   constructor(private name,
               private _authService: AuthenticationService,
               private _navigation: NavigationService,
-              public _settingsService: AbstractSettingsService<T>,
+              public _settingsService: S,
               protected notification: NotificationService,
               private sliceFN?: (s: IPrivateConfig) => T) {
     if (this.sliceFN) {

@@ -16,7 +16,7 @@ import {Utils} from "../../../../common/Utils";
     './../_abstract/abstract.settings.component.css'],
   providers: [IndexingSettingsService],
 })
-export class IndexingSettingsComponent extends SettingsComponent<IndexingConfig> {
+export class IndexingSettingsComponent extends SettingsComponent<IndexingConfig, IndexingSettingsService> {
 
 
   types: Array<any> = [];
@@ -79,7 +79,7 @@ export class IndexingSettingsComponent extends SettingsComponent<IndexingConfig>
     this.inProgress = true;
     this.error = "";
     try {
-      await (<IndexingSettingsService>this._settingsService).index();
+      await this._settingsService.index();
       this.updateProgress();
       this.notification.success("Folder indexed", "Success");
       this.inProgress = false;

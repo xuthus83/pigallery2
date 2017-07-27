@@ -404,6 +404,9 @@ export class GalleryLightboxComponent implements OnDestroy {
   public play() {
     this.pause();
     this.timerSub = this.timer.filter(t => t % 2 == 0).subscribe(() => {
+      if (this.photoElement.imageLoadFinished == false) {
+        return;
+      }
       if (this.navigation.hasNext) {
         this.nextImage();
       } else {
@@ -416,6 +419,9 @@ export class GalleryLightboxComponent implements OnDestroy {
   public fastForward() {
     this.pause();
     this.timerSub = this.timer.subscribe(() => {
+      if (this.photoElement.imageLoadFinished == false) {
+        return;
+      }
       if (this.navigation.hasNext) {
         this.nextImage();
       } else {

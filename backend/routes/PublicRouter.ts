@@ -10,7 +10,7 @@ export class PublicRouter {
 
   public static route(app) {
     const renderIndex = (req: Request, res: Response) => {
-      res.sendFile(_path.resolve(__dirname, './../../dist/index.html'));
+      res.sendFile(_path.resolve(ProjectPath.FrontendFolder, 'index.html'), {maxAge: 31536000});
     };
 
     app.use(
@@ -29,18 +29,16 @@ export class PublicRouter {
       });
 
     app.get('/config_inject.js', (req: Request, res: Response) => {
-      res.render(_path.resolve(__dirname, './../../dist/config_inject.ejs'), res.tpl);
+      res.render(_path.resolve(ProjectPath.FrontendFolder, 'config_inject.ejs'), res.tpl);
     });
     app.get(['/', '/login', "/gallery*", "/share*", "/admin", "/search*"],
       AuthenticationMWs.tryAuthenticate,
       renderIndex
     );
 
-    app.use(_express.static(ProjectPath.FrontendFolder));
-    app.use('/node_modules', _express.static(_path.resolve(__dirname, './../../node_modules')));
-    app.use('/common', _express.static(_path.resolve(__dirname, './../../common')));
-
-
+    app.use(_express.static(ProjectPath.FrontendFolder, {maxAge: 31536000}));
+    // app.use('/node_modules', _express.static(_path.resolve(__dirname, './../../node_modules')));
+    //  app.use('/common', _express.static(_path.resolve(__dirname, './../../common')));
   }
 
 }

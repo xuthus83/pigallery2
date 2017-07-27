@@ -15,6 +15,7 @@ export class GalleryLightboxPhotoComponent implements OnChanges {
   public imageSize = {width: "auto", height: "100"};
 
   imageLoaded: boolean = false;
+  public imageLoadFinished: boolean = false;
 
   constructor(public elementRef: ElementRef) {
   }
@@ -22,6 +23,7 @@ export class GalleryLightboxPhotoComponent implements OnChanges {
   ngOnChanges() {
 
     this.imageLoaded = false;
+    this.imageLoadFinished = false;
     this.setImageSize();
   }
 
@@ -44,11 +46,13 @@ export class GalleryLightboxPhotoComponent implements OnChanges {
 
 
   onImageLoad() {
+    this.imageLoadFinished = true;
     this.imageLoaded = true;
   }
 
   onImageError() {
     //TODO:handle error
+    this.imageLoadFinished = true;
     console.error("cant load image");
   }
 

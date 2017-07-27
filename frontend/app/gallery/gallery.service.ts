@@ -81,6 +81,7 @@ export class GalleryService {
       return null
     }
 
+    this.content.next(null);
     const cw: ContentWrapper = await this.networkService.getJson<ContentWrapper>("/search/" + text, {type: type});
     console.log("photos", cw.searchResult.photos.length);
     console.log("direcotries", cw.searchResult.directories.length);
@@ -106,7 +107,7 @@ export class GalleryService {
     this.searchId = setTimeout(() => {
       this.search(text);
       this.searchId = null;
-    }, Config.Client.Search.InstantSearchTimeout); //TODO: set timeout to config
+    }, Config.Client.Search.InstantSearchTimeout);
 
     const cw = await this.networkService.getJson<ContentWrapper>("/instant-search/" + text);
     this.content.next(cw);

@@ -31,7 +31,7 @@ export class GalleryShareComponent implements OnInit, OnDestroy {
   };
   validityTypes = [];
   currentDir: string = "";
-  sharing: SharingDTO;
+  sharing: SharingDTO = null;
   contentSubscription = null;
   passwordProtection = false;
 
@@ -76,6 +76,9 @@ export class GalleryShareComponent implements OnInit, OnDestroy {
   }
 
   async update() {
+    if (this.sharing == null) {
+      return;
+    }
     this.url = "loading..";
     this.sharing = await this._sharingService.updateSharing(this.currentDir, this.sharing.id, this.input.includeSubfolders, this.input.password, this.calcValidity());
     console.log(this.sharing);

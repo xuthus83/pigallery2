@@ -42,7 +42,7 @@ export class RenderingMWs {
     if (!req.resultPipe)
       return next();
 
-    return res.sendFile(req.resultPipe);
+    return res.sendFile(req.resultPipe, {maxAge: 31536000});
   }
 
   public static renderOK(req: Request, res: Response, next: NextFunction) {
