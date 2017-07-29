@@ -19,7 +19,8 @@ export class SettingsService {
           enabled: true,
           autocompleteEnabled: true,
           instantSearchEnabled: true,
-          InstantSearchTimeout: 0
+          InstantSearchTimeout: 0,
+          autocompleteCacheTimeout: 1000 * 60 * 60
         },
         concurrentThumbnailGenerations: null,
         Thumbnail: {

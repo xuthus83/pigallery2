@@ -3,16 +3,47 @@ import {PhotoDTO} from "../../../common/entities/PhotoDTO";
 import {DirectoryDTO} from "../../../common/entities/DirectoryDTO";
 import {Utils} from "../../../common/Utils";
 import {Config} from "../../../common/config/public/Config";
+import {AutoCompleteItem} from "../../../common/entities/AutoCompleteItem";
+
+interface AutoCompleteCacheItem {
+  timestamp: number;
+  items: Array<AutoCompleteItem>;
+}
 
 @Injectable()
 export class GalleryCacheService {
 
+  private static CONTENT_PREFIX = "content:";
+  private static AUTO_COMPLETE_PREFIX = "content:";
+
+
+  public getAutoComplete(text: string): Array<AutoCompleteItem> {
+    const key = GalleryCacheService.AUTO_COMPLETE_PREFIX + text;
+    const tmp = localStorage.getItem(key);
+    if (tmp != null) {
+      const value: AutoCompleteCacheItem = JSON.parse(tmp);
+      if (value.timestamp < Date.now() - Config.Client.Search.autocompleteCacheTimeout) {
+        localStorage.removeItem(key);
+        return null;
+      }
+      return value.items;
+    }
+    return null;
+  }
+
+  public setAutoComplete(text, items: Array<AutoCompleteItem>): void {
+    const tmp: AutoCompleteCacheItem = {
+      timestamp: Date.now(),
+      items: items
+    };
+    localStorage.setItem(GalleryCacheService.AUTO_COMPLETE_PREFIX + text, JSON.stringify(tmp));
+  }
 
   public getDirectory(directoryName: string): DirectoryDTO {
     if (Config.Client.enableCache == false) {
       return null;
     }
-    let value = localStorage.getItem(Utils.concatUrls(directoryName));
+    let value = localStorage.getItem(GalleryCacheService.CONTENT_PREFIX + Utils.concatUrls(directoryName));
     if (value != null) {
       let directory: DirectoryDTO = JSON.parse(value);
 
@@ -27,7 +58,7 @@ export class GalleryCacheService {
       return;
     }
 
-    const key = Utils.concatUrls(directory.path, directory.name);
+    const key = GalleryCacheService.CONTENT_PREFIX + Utils.concatUrls(directory.path, directory.name);
     if (directory.isPartial == true && localStorage.getItem(key)) {
       return;
     }

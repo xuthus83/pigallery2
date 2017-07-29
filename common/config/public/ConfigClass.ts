@@ -4,6 +4,7 @@ export module ClientConfig {
     instantSearchEnabled: boolean
     autocompleteEnabled: boolean
     InstantSearchTimeout: number;
+    autocompleteCacheTimeout: number;
   }
 
   export interface SharingConfig {
@@ -15,6 +16,7 @@ export module ClientConfig {
     enabled: boolean;
     googleApiKey: string;
   }
+
   export interface ThumbnailConfig {
     iconSize: number;
     thumbnailSizes: Array<number>;
@@ -35,6 +37,7 @@ export module ClientConfig {
   }
 
 }
+
 /**
  * These configuration will be available at frontend and backend too
  */
@@ -50,7 +53,8 @@ export class PublicConfigClass {
       enabled: true,
       instantSearchEnabled: true,
       autocompleteEnabled: true,
-      InstantSearchTimeout: 3000
+      InstantSearchTimeout: 3000,
+      autocompleteCacheTimeout: 1000 * 60 * 60
     },
     Sharing: {
       enabled: true,

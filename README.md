@@ -38,7 +38,7 @@ Full node install description: https://raspberrypi.stackexchange.com/questions/4
 
 ```bash
 cd ~
-wget https://github.com/bpatrik/pigallery2/releases/download/1.0.0-beta.3/pigallery2.zip
+wget https://github.com/bpatrik/pigallery2/releases/download/1.0.0-rc.1/pigallery2.zip
 unzip pigallery2
 cd pigallery2
 npm install
@@ -58,6 +58,12 @@ npm start
 ```
 To configure it. Run `PiGallery2` first to create `config.json` file, then edit it and restart. 
 Default user: `admin` pass: `admin`
+
+
+### Using nginx
+https://stackoverflow.com/questions/5009324/node-js-nginx-what-now
+### making https
+https://certbot.eff.org/
 
 ## Feature list
 
@@ -91,9 +97,10 @@ Default user: `admin` pass: `admin`
        * instant search, auto complete
      * sharing 
        * setting link expiration time
- * Nice design - `In progress`
+ * Nice design 
     * responsive design (phone, tablet desktop support)
- * Setup page - `In progress`
+ * Setup page
+ * video support - `future plan`
  * **Markdown based blogging support** - `future plan`
    * you can write some note in the blog.md for every directory
  * bug free :) - `In progress`

@@ -81,7 +81,6 @@ export class GalleryShareComponent implements OnInit, OnDestroy {
     }
     this.url = "loading..";
     this.sharing = await this._sharingService.updateSharing(this.currentDir, this.sharing.id, this.input.includeSubfolders, this.input.password, this.calcValidity());
-    console.log(this.sharing);
     this.url = Config.Client.publicUrl + "/share/" + this.sharing.sharingKey
   }
 
@@ -101,9 +100,15 @@ export class GalleryShareComponent implements OnInit, OnDestroy {
     this._notification.success("Url has been copied to clipboard");
   }
 
+  hodiModel() {
+    this.childModal.hide();
+    this.sharing = null;
+  }
+
+
 }
 
 
-export enum ValidityTypes{
+export enum ValidityTypes {
   Minutes = 0, Hours = 1, Days = 2, Months = 3
 }
