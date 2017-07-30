@@ -100,7 +100,7 @@ export class GalleryShareComponent implements OnInit, OnDestroy {
     this._notification.success("Url has been copied to clipboard");
   }
 
-  hodiModel() {
+  public hodeModal() {
     this.childModal.hide();
     this.sharing = null;
   }

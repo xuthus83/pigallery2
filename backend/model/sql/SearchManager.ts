@@ -159,7 +159,7 @@ export class SearchManager implements ISearchManager {
       result.photos = photos;
     }
 
-    let directories = await connection
+    const directories = await connection
       .getRepository(DirectoryEntity)
       .createQueryBuilder("dir")
       .where('dir.name LIKE :text COLLATE utf8_general_ci', {text: "%" + text + "%"})

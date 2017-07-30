@@ -74,43 +74,72 @@ export class GalleryService {
 
   }
 
-  //TODO: cache
   public async search(text: string, type?: SearchTypes): Promise<ContentWrapper> {
-    clearTimeout(this.searchId);
+    if (this.searchId != null) {
+      clearTimeout(this.searchId);
+    }
     if (text === null || text === '' || text.trim() == ".") {
       return null
     }
 
     this.content.next(new ContentWrapper());
-    const cw: ContentWrapper = await this.networkService.getJson<ContentWrapper>("/search/" + text, {type: type});
-    console.log("photos", cw.searchResult.photos.length);
-    console.log("direcotries", cw.searchResult.directories.length);
+    const cw = new ContentWrapper();
+    cw.searchResult = this.galleryCacheService.getSearch(text, type);
+    if (cw.searchResult == null) {
+      const params = {};
+      if (typeof type != "undefined") {
+        params['type'] = type;
+      }
+      cw.searchResult = (await this.networkService.getJson<ContentWrapper>("/search/" + text, params)).searchResult;
+      this.galleryCacheService.setSearch(text, type, cw.searchResult);
+    }
     this.content.next(cw);
     return cw;
   }
 
-  //TODO: cache (together with normal search)
   public async instantSearch(text: string): Promise<ContentWrapper> {
     if (text === null || text === '' || text.trim() == ".") {
-      const content = new ContentWrapper();
-      content.directory = this.lastDirectory;
-      content.searchResult = null;
+      const content = new ContentWrapper(this.lastDirectory);
       this.content.next(content);
-      clearTimeout(this.searchId);
+      if (this.searchId != null) {
+        clearTimeout(this.searchId);
+      }
+      if (!this.lastDirectory) {
+        this.getDirectory("/");
+      }
       return null
     }
 
     if (this.searchId != null) {
       clearTimeout(this.searchId);
-
     }
-    this.searchId = setTimeout(() => {
-      this.search(text);
-      this.searchId = null;
-    }, Config.Client.Search.InstantSearchTimeout);
 
-    const cw = await this.networkService.getJson<ContentWrapper>("/instant-search/" + text);
+
+    const cw = new ContentWrapper();
+    cw.directory = null;
+    cw.searchResult = this.galleryCacheService.getSearch(text);
+    if (cw.searchResult == null) {
+      //If result is not search cache, try to load load more
+      this.searchId = setTimeout(() => {
+        this.search(text);
+        this.searchId = null;
+      }, Config.Client.Search.InstantSearchTimeout);
+
+      cw.searchResult = this.galleryCacheService.getInstantSearch(text);
+
+      if (cw.searchResult == null) {
+        cw.searchResult = (await this.networkService.getJson<ContentWrapper>("/instant-search/" + text)).searchResult;
+        this.galleryCacheService.setInstantSearch(text, cw.searchResult);
+      }
+    }
     this.content.next(cw);
+
+    //if instant search do not have a result, do not do a search
+    if (cw.searchResult.photos.length == 0 && cw.searchResult.directories.length == 0) {
+      if (this.searchId != null) {
+        clearTimeout(this.searchId);
+      }
+    }
     return cw;
 
   }

@@ -3,41 +3,98 @@ import {PhotoDTO} from "../../../common/entities/PhotoDTO";
 import {DirectoryDTO} from "../../../common/entities/DirectoryDTO";
 import {Utils} from "../../../common/Utils";
 import {Config} from "../../../common/config/public/Config";
-import {AutoCompleteItem} from "../../../common/entities/AutoCompleteItem";
+import {AutoCompleteItem, SearchTypes} from "../../../common/entities/AutoCompleteItem";
+import {SearchResultDTO} from "../../../common/entities/SearchResultDTO";
 
-interface AutoCompleteCacheItem {
+interface CacheItem<T> {
   timestamp: number;
-  items: Array<AutoCompleteItem>;
+  item: T;
 }
 
 @Injectable()
 export class GalleryCacheService {
 
   private static CONTENT_PREFIX = "content:";
-  private static AUTO_COMPLETE_PREFIX = "content:";
+  private static AUTO_COMPLETE_PREFIX = "autocomplete:";
+  private static INSTANT_SEARCH_PREFIX = "instant_search:";
+  private static SEARCH_PREFIX = "search:";
+  private static SEARCH_TYPE_PREFIX = ":type:";
 
 
   public getAutoComplete(text: string): Array<AutoCompleteItem> {
     const key = GalleryCacheService.AUTO_COMPLETE_PREFIX + text;
     const tmp = localStorage.getItem(key);
     if (tmp != null) {
-      const value: AutoCompleteCacheItem = JSON.parse(tmp);
+      const value: CacheItem<Array<AutoCompleteItem>> = JSON.parse(tmp);
       if (value.timestamp < Date.now() - Config.Client.Search.autocompleteCacheTimeout) {
         localStorage.removeItem(key);
         return null;
       }
-      return value.items;
+      return value.item;
     }
     return null;
   }
 
-  public setAutoComplete(text, items: Array<AutoCompleteItem>): void {
-    const tmp: AutoCompleteCacheItem = {
+  public setAutoComplete(text: string, items: Array<AutoCompleteItem>): void {
+    const tmp: CacheItem<Array<AutoCompleteItem>> = {
       timestamp: Date.now(),
-      items: items
+      item: items
     };
     localStorage.setItem(GalleryCacheService.AUTO_COMPLETE_PREFIX + text, JSON.stringify(tmp));
   }
+
+  public getInstantSearch(text: string): SearchResultDTO {
+    const key = GalleryCacheService.INSTANT_SEARCH_PREFIX + text;
+    const tmp = localStorage.getItem(key);
+    if (tmp != null) {
+      const value: CacheItem<SearchResultDTO> = JSON.parse(tmp);
+      if (value.timestamp < Date.now() - Config.Client.Search.instantSearchCacheTimeout) {
+        localStorage.removeItem(key);
+        return null;
+      }
+      return value.item;
+    }
+    return null;
+  }
+
+  public setInstantSearch(text: string, searchResult: SearchResultDTO): void {
+    const tmp: CacheItem<SearchResultDTO> = {
+      timestamp: Date.now(),
+      item: searchResult
+    };
+    localStorage.setItem(GalleryCacheService.INSTANT_SEARCH_PREFIX + text, JSON.stringify(tmp));
+  }
+
+
+  public getSearch(text: string, type?: SearchTypes): SearchResultDTO {
+    let key = GalleryCacheService.SEARCH_PREFIX + text;
+    if (typeof type != "undefined") {
+      key += GalleryCacheService.SEARCH_TYPE_PREFIX + type;
+    }
+    const tmp = localStorage.getItem(key);
+    if (tmp != null) {
+      const value: CacheItem<SearchResultDTO> = JSON.parse(tmp);
+      if (value.timestamp < Date.now() - Config.Client.Search.searchCacheTimeout) {
+        localStorage.removeItem(key);
+        return null;
+      }
+      return value.item;
+    }
+    return null;
+  }
+
+  public setSearch(text: string, type: SearchTypes, searchResult: SearchResultDTO): void {
+    const tmp: CacheItem<SearchResultDTO> = {
+      timestamp: Date.now(),
+      item: searchResult
+    };
+    let key = GalleryCacheService.SEARCH_PREFIX + text;
+    if (typeof type != "undefined") {
+      key += GalleryCacheService.SEARCH_TYPE_PREFIX + type;
+    }
+    localStorage.setItem(key, JSON.stringify(tmp));
+  }
+
 
   public getDirectory(directoryName: string): DirectoryDTO {
     if (Config.Client.enableCache == false) {
