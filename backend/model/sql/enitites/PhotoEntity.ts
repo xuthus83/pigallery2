@@ -1,7 +1,8 @@
-import {Column, EmbeddableEntity, Embedded, Entity, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
+import {Column, Entity, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
 import {DirectoryDTO} from "../../../../common/entities/DirectoryDTO";
 import {
   CameraMetadata,
+  GPSMetadata,
   ImageSize,
   PhotoDTO,
   PhotoMetadata,
@@ -9,58 +10,19 @@ import {
 } from "../../../../common/entities/PhotoDTO";
 import {DirectoryEntity} from "./DirectoryEntity";
 
-
-@EmbeddableEntity()
-export class PhotoMetadataEntity implements PhotoMetadata {
-
-  @Column("string")
-  keywords: Array<string>;
-
-  @Column("string")
-  cameraData: CameraMetadata;
-
-  @Column("string")
-  positionData: PositionMetaData;
-
-  @Column("string")
-  size: ImageSize;
-
-  @Column("number")
-  creationDate: number;
-
-  @Column("number")
-  fileSize: number;
-
-  //TODO: fixit after typeorm update
-  public static open(m: PhotoMetadataEntity) {
-    m.keywords = <any>JSON.parse(<any>m.keywords);
-    m.cameraData = <any>JSON.parse(<any>m.cameraData);
-    m.positionData = <any>JSON.parse(<any>m.positionData);
-    m.size = <any>JSON.parse(<any>m.size);
-  }
-
-  //TODO: fixit after typeorm update
-  public static close(m: PhotoMetadataEntity) {
-    m.keywords = <any>JSON.stringify(<any>m.keywords);
-    m.cameraData = <any>JSON.stringify(<any>m.cameraData);
-    m.positionData = <any>JSON.stringify(<any>m.positionData);
-    m.size = <any>JSON.stringify(<any>m.size);
-  }
-}
-
 @Entity()
 export class PhotoEntity implements PhotoDTO {
 
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column("string")
+  @Column("text")
   name: string;
 
   @ManyToOne(type => DirectoryEntity, directory => directory.photos, {onDelete: "CASCADE"})
   directory: DirectoryDTO;
 
-  @Embedded(type => PhotoMetadataEntity)
+  @Column(type => PhotoMetadataEntity)
   metadata: PhotoMetadataEntity;
 
   readyThumbnails: Array<number> = [];
@@ -70,67 +32,105 @@ export class PhotoEntity implements PhotoDTO {
 }
 
 
-/*
- @EmbeddableTable()
- export class CameraMetadataEntity implements CameraMetadata {
+@Entity()
+export class PhotoMetadataEntity implements PhotoMetadata {
 
- @Column("string")
- ISO: number;
+  @Column("simple-array")
+  keywords: Array<string>;
 
- @Column("string")
- model: string;
+  @Column(type => CameraMetadataEntity)
+  cameraData: CameraMetadataEntity;
 
- @Column("string")
- maker: string;
+  @Column(type => PositionMetaDataEntity)
+  positionData: PositionMetaDataEntity;
 
- @Column("int")
- fStop: number;
+  @Column(type => ImageSizeEntity)
+  size: ImageSizeEntity;
 
- @Column("int")
- exposure: number;
+  @Column("bigint")
+  creationDate: number;
 
- @Column("int")
- focalLength: number;
+  @Column("int")
+  fileSize: number;
+  /*
+    //TODO: fixit after typeorm update
+    public static open(m: PhotoMetadataEntity) {
+      m.keywords = <any>JSON.parse(<any>m.keywords);
+      m.cameraData = <any>JSON.parse(<any>m.cameraData);
+      m.positionData = <any>JSON.parse(<any>m.positionData);
+      m.size = <any>JSON.parse(<any>m.size);
+    }
 
- @Column("string")
- lens: string;
- }
- /*
-
- @EmbeddableTable()
- export class PositionMetaDataEntity implements PositionMetaData {
-
- @Embedded(type => GPSMetadataEntity)
- GPSData: GPSMetadataEntity;
-
- @Column("string")
- country: string;
-
- @Column("string")
- state: string;
-
- @Column("string")
- city: string;
- }
+    //TODO: fixit after typeorm update
+    public static close(m: PhotoMetadataEntity) {
+      m.keywords = <any>JSON.stringify(<any>m.keywords);
+      m.cameraData = <any>JSON.stringify(<any>m.cameraData);
+      m.positionData = <any>JSON.stringify(<any>m.positionData);
+      m.size = <any>JSON.stringify(<any>m.size);
+    }*/
+}
 
 
- @EmbeddableTable()
- export class GPSMetadataEntity implements GPSMetadata {
+@Entity()
+export class CameraMetadataEntity implements CameraMetadata {
 
- @Column("string")
- latitude: string;
- @Column("string")
- longitude: string;
- @Column("string")
- altitude: string;
- }
+  @Column("text", {nullable: true})
+  ISO: number;
 
- @EmbeddableTable()
- export class ImageSizeEntity implements ImageSize {
+  @Column("text", {nullable: true})
+  model: string;
 
- @Column("int")
- width: number;
+  @Column("text", {nullable: true})
+  maker: string;
 
- @Column("int")
- height: number;
- }*/
+  @Column("int", {nullable: true})
+  fStop: number;
+
+  @Column("int", {nullable: true})
+  exposure: number;
+
+  @Column("int", {nullable: true})
+  focalLength: number;
+
+  @Column("text", {nullable: true})
+  lens: string;
+}
+
+
+@Entity()
+export class PositionMetaDataEntity implements PositionMetaData {
+
+  @Column(type => GPSMetadataEntity)
+  GPSData: GPSMetadataEntity;
+
+  @Column("text", {nullable: true})
+  country: string;
+
+  @Column("text", {nullable: true})
+  state: string;
+
+  @Column("text", {nullable: true})
+  city: string;
+}
+
+
+@Entity()
+export class GPSMetadataEntity implements GPSMetadata {
+
+  @Column("int", {nullable: true})
+  latitude: number;
+  @Column("int", {nullable: true})
+  longitude: number;
+  @Column("int", {nullable: true})
+  altitude: number;
+}
+
+@Entity()
+export class ImageSizeEntity implements ImageSize {
+
+  @Column("int")
+  width: number;
+
+  @Column("int")
+  height: number;
+}

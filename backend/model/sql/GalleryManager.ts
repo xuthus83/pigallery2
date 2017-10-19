@@ -5,7 +5,7 @@ import * as fs from "fs";
 import {DirectoryEntity} from "./enitites/DirectoryEntity";
 import {SQLConnection} from "./SQLConnection";
 import {DiskManager} from "../DiskManger";
-import {PhotoEntity, PhotoMetadataEntity} from "./enitites/PhotoEntity";
+import {PhotoEntity} from "./enitites/PhotoEntity";
 import {Utils} from "../../../common/Utils";
 import {ProjectPath} from "../../ProjectPath";
 import {Config} from "../../../common/config/private/Config";
@@ -37,7 +37,7 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
 
 
     if (dir && dir.scanned == true) {
-      //iF it seems that the content did not changed, do not work on it
+      //If it seems that the content did not changed, do not work on it
       if (knownLastModified && knownLastScanned
         && lastModified == knownLastModified &&
         dir.lastScanned == knownLastScanned) {
@@ -53,7 +53,7 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
       if (dir.photos) {
         for (let i = 0; i < dir.photos.length; i++) {
           dir.photos[i].directory = dir;
-          PhotoMetadataEntity.open(dir.photos[i].metadata);
+          //PhotoMetadataEntity.open(dir.photos[i].metadata);
           dir.photos[i].readyThumbnails = [];
           dir.photos[i].readyIcon = false;
         }
@@ -67,13 +67,13 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
               dir: dir.directories[i].id
             })
             .orderBy("photo.metadata.creationDate", "ASC")
-            .setLimit(Config.Server.indexing.folderPreviewSize)
+            .limit(Config.Server.indexing.folderPreviewSize)
             .getMany();
           dir.directories[i].isPartial = true;
 
           for (let j = 0; j < dir.directories[i].photos.length; j++) {
             dir.directories[i].photos[j].directory = dir.directories[i];
-            PhotoMetadataEntity.open(dir.directories[i].photos[j].metadata);
+            //  PhotoMetadataEntity.open(dir.directories[i].photos[j].metadata);
             dir.directories[i].photos[j].readyThumbnails = [];
             dir.directories[i].photos[j].readyIcon = false;
           }
@@ -123,14 +123,14 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
             path: scannedDirectory.path
           }).getOne();
 
-        if (!!parentDir) {
+        if (!!parentDir) {//Updated parent dir (if it was in the DB previously)
           parentDir.scanned = true;
           parentDir.lastModified = scannedDirectory.lastModified;
           parentDir.lastScanned = scannedDirectory.lastScanned;
-          parentDir = await directoryRepository.persist(parentDir);
+          parentDir = await directoryRepository.save(parentDir);
         } else {
           (<DirectoryEntity>scannedDirectory).scanned = true;
-          parentDir = await directoryRepository.persist(<DirectoryEntity>scannedDirectory);
+          parentDir = await directoryRepository.save(<DirectoryEntity>scannedDirectory);
         }
 
         let indexedDirectories = await directoryRepository.createQueryBuilder("directory")
@@ -140,6 +140,7 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
 
         for (let i = 0; i < scannedDirectory.directories.length; i++) {
 
+          //Was this child Dir already indexed before?
           let directory: DirectoryEntity = null;
           for (let j = 0; j < indexedDirectories.length; j++) {
             if (indexedDirectories[j].name == scannedDirectory.directories[i].name) {
@@ -149,25 +150,26 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
             }
           }
 
-          if (directory) { //update existing directory
+          if (directory != null) { //update existing directory
             if (!directory.parent && !directory.parent.id) {
               directory.parent = parentDir;
               delete directory.photos;
-              await directoryRepository.persist(directory);
+              await directoryRepository.save(directory);
             }
           } else {
             scannedDirectory.directories[i].parent = parentDir;
             (<DirectoryEntity>scannedDirectory.directories[i]).scanned = false;
-            const d = await directoryRepository.persist(<DirectoryEntity>scannedDirectory.directories[i]);
+            const d = await directoryRepository.save(<DirectoryEntity>scannedDirectory.directories[i]);
             for (let j = 0; j < scannedDirectory.directories[i].photos.length; j++) {
-              PhotoMetadataEntity.close(scannedDirectory.directories[i].photos[j].metadata);
+              //  PhotoMetadataEntity.close(scannedDirectory.directories[i].photos[j].metadata);
               scannedDirectory.directories[i].photos[j].directory = d;
-
             }
-            await photosRepository.persist(scannedDirectory.directories[i].photos);
+
+            await photosRepository.save(scannedDirectory.directories[i].photos);
           }
         }
 
+        //Remove child Dirs that are not anymore in the parent dir
         await directoryRepository.remove(indexedDirectories);
 
 
@@ -195,7 +197,7 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
           }
 
           //typeorm not supports recursive embended: TODO:fix it
-          PhotoMetadataEntity.close(scannedDirectory.photos[i].metadata);
+          //   PhotoMetadataEntity.close(scannedDirectory.photos[i].metadata);
 
           if (photo.metadata.keywords != scannedDirectory.photos[i].metadata.keywords ||
             photo.metadata.cameraData != scannedDirectory.photos[i].metadata.cameraData ||
@@ -209,7 +211,7 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
             photosToSave.push(photo);
           }
         }
-        await photosRepository.persist(photosToSave);
+        await photosRepository.save(photosToSave);
         await photosRepository.remove(indexedPhotos);
 
 

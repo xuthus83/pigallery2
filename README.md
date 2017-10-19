@@ -59,11 +59,18 @@ npm start
 To configure it. Run `PiGallery2` first to create `config.json` file, then edit it and restart. 
 Default user: `admin` pass: `admin`
 
-
 ### Using nginx
 https://stackoverflow.com/questions/5009324/node-js-nginx-what-now
+
 ### making https
 https://certbot.eff.org/
+
+### node install error:
+If you get error during module installation, make sure you have everything to build node modules from source
+```bash
+apt-get install build-essential  libkrb5-dev gcc g++
+```
+
 
 ## Feature list
 

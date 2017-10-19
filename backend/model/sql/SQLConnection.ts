@@ -1,8 +1,8 @@
 import "reflect-metadata";
-import {Connection, createConnection, DriverOptions, getConnection} from "typeorm";
+import {Connection, ConnectionOptions, createConnection, getConnection} from "typeorm";
 import {UserEntity} from "./enitites/UserEntity";
 import {UserRoles} from "../../../common/entities/UserDTO";
-import {PhotoEntity, PhotoMetadataEntity} from "./enitites/PhotoEntity";
+import {PhotoEntity} from "./enitites/PhotoEntity";
 import {DirectoryEntity} from "./enitites/DirectoryEntity";
 import {Config} from "../../../common/config/private/Config";
 import {SharingEntity} from "./enitites/SharingEntity";
@@ -24,24 +24,20 @@ export class SQLConnection {
 
     if (this.connection == null) {
 
-      this.connection = await createConnection({
-        name: "main",
-        driver: this.getDriver(Config.Server.database),
-        entities: [
-          UserEntity,
-          DirectoryEntity,
-          PhotoMetadataEntity,
-          PhotoEntity,
-          SharingEntity
-        ],
-        autoSchemaSync: true,
-        /*  logging: {
-          logQueries: true,
-          logOnlyFailedQueries: true,
-          logFailedQueryError: true,
-          logSchemaCreation: true
-         }*/
-      });
+      let options: any = this.getDriver(Config.Server.database);
+      options.name = "main";
+      options.entities = [
+        UserEntity,
+        DirectoryEntity,
+        PhotoEntity,
+        SharingEntity
+      ];
+      options.synchronize = true;
+
+      //options.logging = "all" ;
+
+
+      this.connection = await createConnection(options);
     }
     return this.connection;
 
@@ -52,16 +48,29 @@ export class SQLConnection {
       await getConnection("test").close();
     } catch (err) {
     }
-    const conn = await createConnection({
-      name: "test",
-      driver: this.getDriver(config)
-    });
+    let options: any = this.getDriver(config);
+    options.name = "test";
+    const conn = await createConnection(options);
     await conn.close();
     return true;
   }
 
-  private static getDriver(config: DataBaseConfig): DriverOptions {
-    let driver: DriverOptions = null;
+  public static async init(): Promise<void> {
+    const connection = await this.getConnection();
+    let userRepository = connection.getRepository(UserEntity);
+    let admins = await userRepository.find({role: UserRoles.Admin});
+    if (admins.length == 0) {
+      let a = new UserEntity();
+      a.name = "admin";
+      a.password = PasswordHelper.cryptPassword("admin");
+      a.role = UserRoles.Admin;
+      await userRepository.save(a);
+    }
+
+  }
+
+  private static getDriver(config: DataBaseConfig): ConnectionOptions {
+    let driver: ConnectionOptions = null;
     if (config.type == DatabaseType.mysql) {
       driver = {
         type: "mysql",
@@ -74,24 +83,10 @@ export class SQLConnection {
     } else if (config.type == DatabaseType.sqlite) {
       driver = {
         type: "sqlite",
-        storage: ProjectPath.getAbsolutePath(config.sqlite.storage)
+        database: ProjectPath.getAbsolutePath(config.sqlite.storage)
       };
     }
     return driver;
-  }
-
-  public static async init(): Promise<void> {
-    const connection = await this.getConnection();
-    let userRepository = connection.getRepository(UserEntity);
-    let admins = await userRepository.find({role: UserRoles.Admin});
-    if (admins.length == 0) {
-      let a = new UserEntity();
-      a.name = "admin";
-      a.password = PasswordHelper.cryptPassword("admin");
-      a.role = UserRoles.Admin;
-      await userRepository.persist(a);
-    }
-
   }
 
   public static async close() {

@@ -14,9 +14,9 @@ export class DirectoryEntity implements DirectoryDTO {
   @Column()
   path: string;
 
-  @Column()
+  @Column('bigint')
   public lastModified: number;
-  @Column()
+  @Column('bigint')
   public lastScanned: number;
 
   @Column()

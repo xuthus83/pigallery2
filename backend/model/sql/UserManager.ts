@@ -44,7 +44,7 @@ export class UserManager implements IUserManager {
       user.permissions = <any>JSON.stringify(<any>user.permissions);
     }
     user.password = PasswordHelper.cryptPassword(user.password);
-    return await connection.getRepository(UserEntity).persist(user);
+    return await connection.getRepository(UserEntity).save(user);
   }
 
   public async deleteUser(id: number) {
@@ -59,7 +59,7 @@ export class UserManager implements IUserManager {
     let userRepository = connection.getRepository(UserEntity);
     const user = await userRepository.findOne({id: id});
     user.role = newRole;
-    return await userRepository.persist(user);
+    return await userRepository.save(user);
 
   }
 

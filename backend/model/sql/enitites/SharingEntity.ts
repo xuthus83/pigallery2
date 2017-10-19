@@ -1,4 +1,4 @@
-import {Column, EmbeddableEntity, Embedded, Entity, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
+import {Column, Entity, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
 import {SharingDTO} from "../../../../common/entities/SharingDTO";
 import {UserEntity} from "./UserEntity";
 import {UserDTO} from "../../../../common/entities/UserDTO";
@@ -8,22 +8,22 @@ export class SharingEntity implements SharingDTO {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column("string")
+  @Column()
   sharingKey: string;
 
-  @Column("string")
+  @Column()
   path: string;
 
-  @Column("string", {nullable: true})
+  @Column({type: "text", nullable: true})
   password: string;
 
-  @Column("number")
+  @Column()
   expires: number;
 
-  @Column("number")
+  @Column()
   timeStamp: number;
 
-  @Column("boolean")
+  @Column()
   includeSubfolders: boolean;
 
   @ManyToOne(type => UserEntity)

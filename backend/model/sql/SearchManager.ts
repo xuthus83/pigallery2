@@ -21,7 +21,7 @@ export class SearchManager implements ISearchManager {
       .createQueryBuilder('photo')
       .select('DISTINCT(photo.metadataKeywords)')
       .where('photo.metadata.keywords LIKE :text COLLATE utf8_general_ci', {text: "%" + text + "%"})
-      .setLimit(5)
+      .limit(5)
       .getRawMany())
       .map(r => <Array<string>>JSON.parse(r.metadataKeywords))
       .forEach(keywords => {
@@ -33,7 +33,7 @@ export class SearchManager implements ISearchManager {
       .createQueryBuilder('photo')
       .select('DISTINCT(photo.metadataPositionData)')
       .where('photo.metadata.positionData LIKE :text COLLATE utf8_general_ci', {text: "%" + text + "%"})
-      .setLimit(5)
+      .limit(5)
       .getRawMany())
       .map(r => <PositionMetaData>JSON.parse(r.metadataPositionData))
       .filter(pm => !!pm)
@@ -47,7 +47,7 @@ export class SearchManager implements ISearchManager {
       .createQueryBuilder('photo')
       .select('DISTINCT(photo.name)')
       .where('photo.name LIKE :text COLLATE utf8_general_ci', {text: "%" + text + "%"})
-      .setLimit(5)
+      .limit(5)
       .getRawMany())
       .map(r => r.name), SearchTypes.image));
 
@@ -55,7 +55,7 @@ export class SearchManager implements ISearchManager {
       .createQueryBuilder('dir')
       .select('DISTINCT(dir.name)')
       .where('dir.name LIKE :text COLLATE utf8_general_ci', {text: "%" + text + "%"})
-      .setLimit(5)
+      .limit(5)
       .getRawMany())
       .map(r => r.name), SearchTypes.directory));
 
@@ -96,7 +96,7 @@ export class SearchManager implements ISearchManager {
       query.orWhere('photo.metadata.keywords LIKE :text COLLATE utf8_general_ci', {text: "%" + text + "%"});
     }
     let photos = await query
-      .setLimit(2001)
+      .limit(2001)
       .getMany();
 
 
@@ -117,7 +117,7 @@ export class SearchManager implements ISearchManager {
       .getRepository(DirectoryEntity)
       .createQueryBuilder("dir")
       .where('dir.name LIKE :text COLLATE utf8_general_ci', {text: "%" + text + "%"})
-      .setLimit(201)
+      .limit(201)
       .getMany();
 
     if (result.directories.length > 200) {
@@ -145,7 +145,7 @@ export class SearchManager implements ISearchManager {
       .orWhere('photo.metadata.positionData LIKE :text COLLATE utf8_general_ci', {text: "%" + text + "%"})
       .orWhere('photo.name LIKE :text COLLATE utf8_general_ci', {text: "%" + text + "%"})
       .innerJoinAndSelect("photo.directory", "directory")
-      .setLimit(10)
+      .limit(10)
       .getMany();
 
 
@@ -163,7 +163,7 @@ export class SearchManager implements ISearchManager {
       .getRepository(DirectoryEntity)
       .createQueryBuilder("dir")
       .where('dir.name LIKE :text COLLATE utf8_general_ci', {text: "%" + text + "%"})
-      .setLimit(10)
+      .limit(10)
       .getMany();
 
     result.directories = directories;

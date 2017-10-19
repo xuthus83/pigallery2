@@ -19,7 +19,7 @@ export class SharingManager implements ISharingManager {
     if (sharing.password) {
       sharing.password = PasswordHelper.cryptPassword(sharing.password);
     }
-    return await connection.getRepository(SharingEntity).persist(sharing);
+    return await connection.getRepository(SharingEntity).save(sharing);
 
 
   }
@@ -29,7 +29,7 @@ export class SharingManager implements ISharingManager {
 
     let sharing = await connection.getRepository(SharingEntity).findOne({
       id: inSharing.id,
-      creator: inSharing.creator.id,
+      creator: inSharing.creator,
       path: inSharing.path
     });
 
@@ -41,7 +41,7 @@ export class SharingManager implements ISharingManager {
     sharing.includeSubfolders = inSharing.includeSubfolders;
     sharing.expires = inSharing.expires;
 
-    return await connection.getRepository(SharingEntity).persist(sharing);
+    return await connection.getRepository(SharingEntity).save(sharing);
   }
 
   private async removeExpiredLink() {
