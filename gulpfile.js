@@ -5,7 +5,7 @@ var runSequence = require('run-sequence');
 var jsonModify = require('gulp-json-modify');
 var exec = require('child_process').exec;
 
-var tsBackendProject = ts.createProject('backend/tsconfig.json');
+var tsBackendProject = ts.createProject('tsconfig.json');
 gulp.task('build-backend', function () {
   return gulp.src([
     "common/**/*.ts",
