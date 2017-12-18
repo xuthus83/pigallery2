@@ -37,7 +37,7 @@
     "ts-exif-parser": "0.1.23",
     "ts-node-iptc": "1.0.9",
     "typeconfig": "1.0.5",
-    "typeorm": "0.1.9",
+    "typeorm": "0.1.1",
     "winston": "2.4.0"
   },
   "devDependencies": {

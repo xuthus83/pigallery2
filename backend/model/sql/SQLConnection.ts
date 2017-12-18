@@ -28,15 +28,12 @@ export class SQLConnection {
       options.name = "main";
       options.entities = [
         UserEntity,
-        DirectoryEntity,
         PhotoEntity,
+        DirectoryEntity,
         SharingEntity
       ];
       options.synchronize = true;
-
-      //options.logging = "all" ;
-
-
+      //  options.logging = "all" ;
       this.connection = await createConnection(options);
     }
     return this.connection;
@@ -48,8 +45,16 @@ export class SQLConnection {
       await getConnection("test").close();
     } catch (err) {
     }
-    let options: any = this.getDriver(config);
+    const options: any = this.getDriver(config);
     options.name = "test";
+    options.entities = [
+      UserEntity,
+      PhotoEntity,
+      DirectoryEntity,
+      SharingEntity
+    ];
+    options.synchronize = true;
+    options.logging = "all";
     const conn = await createConnection(options);
     await conn.close();
     return true;
@@ -91,8 +96,11 @@ export class SQLConnection {
 
   public static async close() {
     try {
-      await getConnection().close();
+      if (this.connection != null) {
+        await this.connection.close();
+      }
     } catch (err) {
+      console.error(err);
     }
   }
 

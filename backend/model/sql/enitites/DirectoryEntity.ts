@@ -16,11 +16,9 @@ export class DirectoryEntity implements DirectoryDTO {
 
   @Column('bigint')
   public lastModified: number;
-  @Column('bigint')
-  public lastScanned: number;
 
-  @Column()
-  public scanned: boolean;
+  @Column({type: "bigint", nullable: true})
+  public lastScanned: number;
 
   isPartial?: boolean;
 
