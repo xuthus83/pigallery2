@@ -10,6 +10,7 @@ deploy:
   app: pigallery2
   on:
     repo: bpatrik/pigallery2
+    node: '7'
 cache:
   directories:
   - node_modules
