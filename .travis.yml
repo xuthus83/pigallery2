@@ -1,7 +1,7 @@
 language: node_js
 node_js:
-- '7'
-- '6'
+- '9'
+- '8'
 
 deploy:
   provider: heroku
@@ -10,7 +10,7 @@ deploy:
   app: pigallery2
   on:
     repo: bpatrik/pigallery2
-    node: '7'
+    node: '8'
 cache:
   directories:
   - node_modules
