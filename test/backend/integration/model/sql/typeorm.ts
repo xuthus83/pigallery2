@@ -190,9 +190,7 @@ describe('Typeorm integration', () => {
   });
 
   it('should open and close connection twice  with photo added ', async () => {
-    console.log("start-------------------------------------");
     let conn = await SQLConnection.getConnection();
-    console.log("opnenn-------------------------------------");
     const dir = await conn.getRepository(DirectoryEntity).save(getDir());
     let dir2 = getDir();
     dir2.parent = dir;

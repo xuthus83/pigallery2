@@ -123,9 +123,9 @@ export class GalleryCacheService {
     localStorage.setItem(key, JSON.stringify(directory));
 
     directory.directories.forEach((dir: DirectoryDTO) => {
-      let name = Utils.concatUrls(dir.path, dir.name);
-      if (localStorage.getItem(name) == null) { //don't override existing
-        localStorage.setItem(Utils.concatUrls(dir.path, dir.name), JSON.stringify(dir));
+      const sub_key = GalleryCacheService.CONTENT_PREFIX + Utils.concatUrls(dir.path, dir.name);
+      if (localStorage.getItem(sub_key) == null) { //don't override existing
+        localStorage.setItem(sub_key, JSON.stringify(dir));
       }
     });
 

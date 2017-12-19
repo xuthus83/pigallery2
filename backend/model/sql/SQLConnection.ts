@@ -33,7 +33,7 @@ export class SQLConnection {
         SharingEntity
       ];
       options.synchronize = true;
-      options.logging = "all";
+     // options.logging = "all";
       this.connection = await createConnection(options);
     }
     return this.connection;

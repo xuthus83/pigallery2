@@ -36,7 +36,7 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
       .getOne();
 
 
-    if (dir && dir.lastScanned == null) {
+    if (dir && dir.lastScanned != null) {
       //If it seems that the content did not changed, do not work on it
       if (knownLastModified && knownLastScanned
         && lastModified == knownLastModified &&
@@ -53,7 +53,6 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
       if (dir.photos) {
         for (let i = 0; i < dir.photos.length; i++) {
           dir.photos[i].directory = dir;
-          //PhotoMetadataEntity.open(dir.photos[i].metadata);
           dir.photos[i].readyThumbnails = [];
           dir.photos[i].readyIcon = false;
         }
@@ -84,6 +83,7 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
         return this.indexDirectory(relativeDirectoryName);
       }
 
+      //not indexed since a while, index it in a lazy manner
       if ((Date.now() - dir.lastScanned > Config.Server.indexing.cachedFolderTimeout &&
           Config.Server.indexing.reIndexingSensitivity >= ReIndexingSensitivity.medium) ||
         Config.Server.indexing.reIndexingSensitivity >= ReIndexingSensitivity.high) {
@@ -96,6 +96,8 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
 
 
     }
+
+    //never scanned (deep indexed), do it and return with it
     return this.indexDirectory(relativeDirectoryName);
 
 
