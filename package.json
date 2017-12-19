@@ -1,6 +1,6 @@
 {
   "name": "pigallery2",
-  "version": "1.0.0-rc.1",
+  "version": "1.0.0",
   "description": "This is a photo gallery optimised for running low resource servers (especially on raspberry pi)",
   "author": "Patrik J. Braun",
   "homepage": "https://github.com/bpatrik/PiGallery2",
@@ -11,7 +11,7 @@
     "install": "tsc && ng build -prod",
     "build-release": "gulp build-release",
     "pretest": "tsc",
-    "test": "ng test --single-run && mocha --recursive test/backend/unit",
+    "test": "ng test --single-run && mocha --recursive test/backend/unit && mocha --recursive test/backend/integration",
     "start": "node ./backend/index",
     "ng": "ng",
     "lint": "ng lint",
@@ -37,7 +37,7 @@
     "ts-exif-parser": "0.1.23",
     "ts-node-iptc": "1.0.9",
     "typeconfig": "1.0.5",
-    "typeorm": "0.1.1",
+    "typeorm": "0.1.9",
     "winston": "2.4.0"
   },
   "devDependencies": {

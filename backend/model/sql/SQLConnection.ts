@@ -33,7 +33,7 @@ export class SQLConnection {
         SharingEntity
       ];
       options.synchronize = true;
-      //  options.logging = "all" ;
+      options.logging = "all";
       this.connection = await createConnection(options);
     }
     return this.connection;
@@ -54,7 +54,7 @@ export class SQLConnection {
       SharingEntity
     ];
     options.synchronize = true;
-    options.logging = "all";
+    //options.logging = "all";
     const conn = await createConnection(options);
     await conn.close();
     return true;
@@ -98,6 +98,7 @@ export class SQLConnection {
     try {
       if (this.connection != null) {
         await this.connection.close();
+        this.connection = null;
       }
     } catch (err) {
       console.error(err);

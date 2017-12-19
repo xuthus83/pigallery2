@@ -14,9 +14,15 @@ export class DirectoryEntity implements DirectoryDTO {
   @Column()
   path: string;
 
+  /**
+   * last time the directory was modified (from outside, eg.: a new photo was added)
+   */
   @Column('bigint')
   public lastModified: number;
 
+  /**
+   * Last time the directory was fully scanned, not only for a few photos to create a preview
+   */
   @Column({type: "bigint", nullable: true})
   public lastScanned: number;
 
