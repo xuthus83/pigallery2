@@ -1,18 +1,19 @@
 <form #settingsForm="ngForm" class="form-horizontal">
   <div class="panel panel-default">
     <div class="panel-heading">
-      <h3 class="panel-title">Thumbnail settings</h3>
+      <h3 class="panel-title" i18n>Thumbnail settings</h3>
     </div>
     <div class="panel-body">
       <div [hidden]="!error" class="alert alert-danger" role="alert"><strong>Error: </strong>{{error}}</div>
       <div [hidden]="settings.server.processingLibrary!=ThumbnailProcessingLib.Jimp"
            class="alert alert-warning"
-           role="alert">It is highly recommended to use hardware accelerated (sharp or gm) lib for thumbnail generation
+           role="alert" i18n>It is highly recommended to use hardware accelerated (sharp or gm) lib for thumbnail
+        generation
       </div>
 
       <fieldset>
         <div class="form-group">
-          <label class="col-sm-2 control-label" for="lib">Thumbnail generation library</label>
+          <label class="col-sm-2 control-label" for="lib" i18n>Thumbnail generation library</label>
           <div class="col-sm-10">
             <select id="lib" class="form-control" [(ngModel)]="settings.server.processingLibrary"
                     name="type" required>
@@ -20,27 +21,27 @@
               </option>
             </select>
             <span *ngIf="settings.server.processingLibrary==ThumbnailProcessingLib.sharp"
-                  class="help-block">Make sure that sharp node module is installed (npm install sharp)</span>
+                  class="help-block" i18n>Make sure that sharp node module is installed (npm install sharp).</span>
             <span *ngIf="settings.server.processingLibrary==ThumbnailProcessingLib.gm"
-                  class="help-block">Make sure that gm node module and <a
-              href="http://www.graphicsmagick.org/">GraphicsMagick</a> are installed (npm install sharp)</span>
+                  class="help-block"><ng-container i18n>Make sure that gm node module and</ng-container> <a
+              href="http://www.graphicsmagick.org/" i18n>GraphicsMagick</a> <ng-container i18n>are installed (npm install sharp).</ng-container></span>
 
           </div>
         </div>
 
         <div class="form-group">
-          <label class="col-sm-2 control-label" for="th_folder">Thumbnail folder</label>
+          <label class="col-sm-2 control-label" for="th_folder" i18n>Thumbnail folder</label>
           <div class="col-sm-10">
             <input type="text" class="form-control" placeholder="path"
                    id="th_folder"
                    [(ngModel)]="settings.server.folder"
                    name="path" required>
-            <span class="help-block">Thumbnails will be saved in this folder. Write access is required</span>
+            <span class="help-block" i18n>Thumbnails will be saved in this folder. Write access is required</span>
 
           </div>
         </div>
         <div class="form-group" [hidden]="simplifiedMode">
-          <label class="col-sm-2 control-label" for="quality">Thumbnail Quality</label>
+          <label class="col-sm-2 control-label" for="quality" i18n>Thumbnail Quality</label>
           <div class="col-sm-10">
             <bSwitch
               id="quality"
@@ -54,7 +55,7 @@
               [switch-label-width]="'20'"
               [(ngModel)]="settings.server.qualityPriority">
             </bSwitch>
-            <span class="help-block">High quality may be slow. Especially with Jimp.</span>
+            <span class="help-block" i18n>High quality may be slow. Especially with Jimp.</span>
 
           </div>
         </div>
@@ -69,22 +70,23 @@
                    max="100"
                    step="1"
                    name="icon" required>
-            <span class="help-block">Icon size (used on maps)</span>
+            <span class="help-block" i18n>Icon size (used on maps)</span>
 
           </div>
         </div>
 
         <div class="form-group" [hidden]="simplifiedMode">
-          <label class="col-sm-2 control-label" for="thumbnailSizes">Thumbnail sizes</label>
+          <label class="col-sm-2 control-label" for="thumbnailSizes" i18n>Thumbnail sizes</label>
           <div class="col-sm-10">
             <input type="text" class="form-control" placeholder="200; 400"
                    id="thumbnailSizes"
                    [(ngModel)]="ThumbnailSizes"
                    name="thumbnailSizes" required>
             <span class="help-block">
-              Size of the thumbnails.<br/>
-              The best matching size will be generated. (More size gives better quality, but use storage to store and CPU to render.)<br/>
-              ';' separated integers. If size is 200, tha thumbnail will have 200^2 pixels.
+              <ng-container i18n>Size of the thumbnails.</ng-container><br/>
+              <ng-container i18n>The best matching size will be generated. (More size gives better quality, but use storage to store and CPU to render.)</ng-container><br/>
+              <ng-container
+                i18n>';' separated integers. If size is 200, tha thumbnail will have 200^2 pixels.</ng-container>
             </span>
 
           </div>
@@ -93,10 +95,10 @@
 
       <button class="btn btn-success pull-right"
               [disabled]="!settingsForm.form.valid || !changed || inProgress"
-              (click)="save()">Save
+              (click)="save()" i18n>Save
       </button>
       <button class="btn btn-default pull-right"
-              (click)="reset()">Reset
+              (click)="reset()" i18n>Reset
       </button>
     </div>
   </div>

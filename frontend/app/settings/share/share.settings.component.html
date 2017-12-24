@@ -2,7 +2,7 @@
   <div class="panel panel-default"
        [ngClass]="settings.enabled && !_settingsService.isSupported()?'panel-warning':''">
     <div class="panel-heading">
-      <h3 class="panel-title col-xs-6">Share settings</h3>
+      <h3 class="panel-title col-xs-6" i18n>Share settings</h3>
       <div class="switch-wrapper col-xs-6">
         <bSwitch
           class="switch"
@@ -23,7 +23,7 @@
 
       <ng-container *ngIf="settings.enabled  || _settingsService.isSupported()">
         <div class="form-group">
-          <label class="col-sm-2 control-label" for="passwordProtected">Password protected</label>
+          <label class="col-sm-2 control-label" for="passwordProtected" i18n>Password protected</label>
           <div class="col-sm-10">
             <bSwitch
               id="passwordProtected"
@@ -38,21 +38,21 @@
               [switch-label-width]="'20'"
               [(ngModel)]="settings.passwordProtected">
             </bSwitch>
-            <span class="help-block">Enables password protected sharing links</span>
+            <span class="help-block" i18n>Enables password protected sharing links</span>
 
           </div>
         </div>
 
       </ng-container>
-      <div class="panel-info" *ngIf="(!settings.enabled && !_settingsService.isSupported())">
+      <div class="panel-info" *ngIf="(!settings.enabled && !_settingsService.isSupported())" i18n>
         Sharing is not supported with these settings
       </div>
       <button class="btn btn-success pull-right"
               [disabled]="!settingsForm.form.valid || !changed || inProgress"
-              (click)="save()">Save
+              (click)="save()" i18n>Save
       </button>
       <button class="btn btn-default pull-right"
-              (click)="reset()">Reset
+              (click)="reset()" i18n>Reset
       </button>
     </div>
   </div>

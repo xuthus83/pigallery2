@@ -16,7 +16,7 @@
         {{title}}</a>
     </div>
     <div id="navbar" class="collapse navbar-collapse" [ngClass]="{ 'in': isIn }">
-      <ul class="nav navbar-nav">
+      <ul class="nav navbar-nav">$
       </ul>
 
       <ul class="nav navbar-nav navbar-right">
@@ -35,10 +35,15 @@
             <span *ngIf="notificationService.notifications.length>0" class="badge">{{notificationService.notifications.length}}</span>
           </a>
         </li>
+        <li>
+          <language class="navbar-btn"></language>
+        </li>
         <li *ngIf="authenticationRequired">
           <button class="btn btn-default navbar-btn"
                   style="cursor: pointer"
-                  (click)="logout()">Logout <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>
+                  (click)="logout()">
+            <ng-container i18n>Logout</ng-container>
+            <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>
           </button>
         </li>
       </ul>

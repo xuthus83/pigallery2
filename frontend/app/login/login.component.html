@@ -1,21 +1,24 @@
 <div class="container">
-
+  <div class="row">
+    <language class="pull-right"></language>
+  </div>
   <div class="row title">
     <h1><img src="assets/icon.png"/>{{title}}</h1>
   </div>
 
   <div class="row card">
     <div class="col-md-12">
-      <h1>Please log in</h1>
+      <h1 i18n>Please log in</h1>
       <form name="form" id="form" class="form-horizontal" #LoginForm="ngForm" (submit)="onLogin()">
-        <div class="error-message">
-          {{loginError}}&nbsp;
+        <div class="error-message" [hidden]="loginError==false" i18n>
+          Wrong username or password
         </div>
         <div class="input-group has-margin">
           <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
           <input id="username"
                  type="text"
                  class="form-control"
+                 i18n-placeholder
                  placeholder="Username"
                  autofocus
                  [(ngModel)]="loginCredential.username"
@@ -29,21 +32,26 @@
                  type="password"
                  [(ngModel)]="loginCredential.password"
                  name="password"
+                 i18n-placeholder
                  placeholder="Password"
                  required>
         </div>
 
         <div class="checkbox">
-          <label><input type="checkbox" name="rememberMe" [(ngModel)]="loginCredential.rememberMe" value="">Remember me</label>
+          <label><input type="checkbox" name="rememberMe" [(ngModel)]="loginCredential.rememberMe" value="">
+            <ng-container i18n>Remember
+              me
+            </ng-container>
+          </label>
         </div>
 
         <div class="form-group">
           <!-- Button -->
           <div class="col-sm-12 controls">
-            <button class="btn btn-primary pull-right"
+            <button class="btn btn-primary pull-right btn-login"
                     [disabled]="!LoginForm.form.valid || inProgress"
                     type="submit"
-                    name="action">Login
+                    name="action" i18n>Login
             </button>
           </div>
         </div>

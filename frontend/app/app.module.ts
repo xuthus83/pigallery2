@@ -47,6 +47,7 @@ import {NavigationService} from "./model/navigation.service";
 import {InfoPanelLightboxComponent} from "./gallery/lightbox/infopanel/info-panel.lightbox.gallery.component";
 import {MapSettingsComponent} from "./settings/map/map.settings.component";
 import {TooltipModule} from "ngx-bootstrap/tooltip";
+import {BsDropdownModule} from "ngx-bootstrap/dropdown";
 import {ThumbnailSettingsComponent} from "./settings/thumbnail/thumbanil.settings.component";
 import {SearchSettingsComponent} from "./settings/search/search.settings.component";
 import {SettingsService} from "./settings/settings.service";
@@ -55,6 +56,7 @@ import {BasicSettingsComponent} from "./settings/basic/basic.settings.component"
 import {OtherSettingsComponent} from "./settings/other/other.settings.component";
 import {DefaultUrlSerializer, UrlSerializer, UrlTree} from '@angular/router';
 import {IndexingSettingsComponent} from "./settings/indexing/indexing.settings.component";
+import {LanguageComponent} from "./language/language.component";
 
 @Injectable()
 export class GoogleMapsConfig {
@@ -98,6 +100,7 @@ export class CustomUrlSerializer implements UrlSerializer {
     TooltipModule.forRoot(),
     ToastModule.forRoot(),
     ModalModule.forRoot(),
+    BsDropdownModule.forRoot(),
     AgmCoreModule.forRoot(),
     SlimLoadingBarModule.forRoot()
   ],
@@ -105,7 +108,9 @@ export class CustomUrlSerializer implements UrlSerializer {
     LoginComponent,
     ShareLoginComponent,
     GalleryComponent,
+    //misc
     FrameComponent,
+    LanguageComponent,
     //Gallery
     GalleryLightboxPhotoComponent,
     GalleryPhotoLoadingComponent,

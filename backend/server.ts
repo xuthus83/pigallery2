@@ -1,6 +1,8 @@
 import * as _express from "express";
 import * as _bodyParser from "body-parser";
+import * as cookieParser from "cookie-parser";
 import * as _http from "http";
+import * as locale from "locale";
 import {PublicRouter} from "./routes/PublicRouter";
 import {UserRouter} from "./routes/UserRouter";
 import {GalleryRouter} from "./routes/GalleryRouter";
@@ -16,6 +18,8 @@ import {ThumbnailGeneratorMWs} from "./middlewares/thumbnail/ThumbnailGeneratorM
 import {DiskManager} from "./model/DiskManger";
 import {NotificationRouter} from "./routes/NotificationRouter";
 import {ConfigDiagnostics} from "./model/ConfigDiagnostics";
+import {Localizations} from "./model/Localizations";
+import {CookieNames} from "../common/CookieNames";
 
 const _session = require('cookie-session');
 
@@ -56,7 +60,7 @@ export class Server {
     }
 
     this.app.use(_session({
-      name: "pigallery2-session",
+      name: CookieNames.session,
       keys: ["key1" + s4() + s4() + s4() + s4(), "key2" + s4() + s4() + s4() + s4(), "key3" + s4() + s4() + s4() + s4()]
     }));
 
@@ -71,9 +75,13 @@ export class Server {
      */
     // for parsing application/json
     this.app.use(_bodyParser.json());
+    this.app.use(cookieParser());
 
     DiskManager.init();
     ThumbnailGeneratorMWs.init();
+    Localizations.init();
+
+    this.app.use(locale(Config.Client.languages, "en"));
     if (Config.Server.database.type != DatabaseType.memory) {
       await  ObjectManagerRepository.InitSQLManagers();
     } else {

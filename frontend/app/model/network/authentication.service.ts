@@ -7,6 +7,7 @@ import {Cookie} from "ng2-cookies";
 import {Config} from "../../../../common/config/public/Config";
 import {NetworkService} from "./network.service";
 import {ErrorCodes, ErrorDTO} from "../../../../common/entities/Error";
+import {CookieNames} from "../../../../common/CookieNames";
 
 declare module ServerInject {
   export let user: UserDTO;
@@ -22,7 +23,7 @@ export class AuthenticationService {
     this.user = new BehaviorSubject(null);
 
     //picking up session..
-    if (this.isAuthenticated() == false && Cookie.get('pigallery2-session') != null) {
+    if (this.isAuthenticated() == false && Cookie.get(CookieNames.session) != null) {
       if (typeof ServerInject !== "undefined" && typeof ServerInject.user !== "undefined") {
         this.user.next(ServerInject.user);
       }

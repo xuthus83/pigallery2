@@ -1,7 +1,7 @@
 <form #settingsForm="ngForm" class="form-horizontal">
   <div class="panel panel-default">
     <div class="panel-heading">
-      <h3 class="panel-title col-xs-4">Map settings</h3>
+      <h3 class="panel-title col-xs-4" i18n>Map settings</h3>
       <div class="switch-wrapper col-xs-8">
         <bSwitch
           class="switch"
@@ -22,14 +22,15 @@
 
 
       <div class="form-group">
-        <label class="col-sm-2 control-label" for="googleApiKey">Google maps api key</label>
+        <label class="col-sm-2 control-label" for="googleApiKey" i18n>Google maps api key</label>
         <div class="col-sm-10">
           <input type="text" class="form-control" placeholder="Google api key"
                  [(ngModel)]="settings.googleApiKey"
                  [disabled]="!settings.enabled"
                  name="googleApiKey" id="googleApiKey" required>
-          <span class="help-block">To show the images on a map, <a
-            href="https://developers.google.com/maps/documentation/javascript/get-api-key">google api key</a> is need</span>
+          <span class="help-block"><ng-container i18n>To show the images on a map,</ng-container> <a
+            href="https://developers.google.com/maps/documentation/javascript/get-api-key" i18n>google api key</a> <ng-container
+            i18n>is need</ng-container></span>
 
 
         </div>
@@ -37,10 +38,10 @@
 
       <button class="btn btn-success pull-right"
               [disabled]="!settingsForm.form.valid || !changed || inProgress"
-              (click)="save()">Save
+              (click)="save()" i18n>Save
       </button>
       <button class="btn btn-default pull-right"
-              (click)="reset()">Reset
+              (click)="reset()" i18n>Reset
       </button>
     </div>
   </div>

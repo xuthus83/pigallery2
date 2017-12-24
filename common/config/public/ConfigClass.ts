@@ -36,6 +36,7 @@ export module ClientConfig {
     enableOnScrollThumbnailPrioritising: boolean;
     authenticationRequired: boolean;
     publicUrl: string;
+    languages: string[];
   }
 
 }
@@ -73,7 +74,8 @@ export class PublicConfigClass {
     enableOnScrollRendering: true,
     enableOnScrollThumbnailPrioritising: true,
     authenticationRequired: true,
-    publicUrl: ""
+    publicUrl: "",
+    languages: []
   };
 
 }

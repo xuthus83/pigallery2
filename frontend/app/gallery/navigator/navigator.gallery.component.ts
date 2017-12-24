@@ -50,7 +50,6 @@ export class GalleryNavigatorComponent implements OnChanges {
       arr.push({name: "Images", route: null});
     } else {
       arr.push({name: "Images", route: UserDTO.isPathAvailable("/", user.permissions) ? "/" : null});
-
     }
 
     //create rest navigation

@@ -48,3 +48,8 @@ ng2-slim-loading-bar {
   padding: 0;
   background-color: transparent;
 }
+
+language {
+  display: block;
+  margin-right: 10px;
+}

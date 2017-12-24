@@ -1,31 +1,31 @@
 <div class="panel panel-default">
   <div class="panel-heading">
-    <h3 class="panel-title">Database settings</h3>
+    <h3 class="panel-title" i18n>Database settings</h3>
   </div>
   <div class="panel-body">
     <div [hidden]="!error" class="alert alert-danger" role="alert"><strong>Error: </strong>{{error}}</div>
     <form #settingsForm="ngForm">
-      <p class="title">Type:</p>
+      <p class="title" i18n>Type:</p>
       <select class="form-control" [(ngModel)]="settings.type" name="type" required>
         <option *ngFor="let type of types" [ngValue]="type.key">{{type.value}}
         </option>
       </select>
       <span *ngIf="settings.type == DatabaseType.mysql"
-            class="help-block">Install manually mysql node module to use mysql (npm install mysql)</span>
+            class="help-block" i18n>Install manually mysql node module to use mysql (npm install mysql)</span>
 
       <ng-container *ngIf="settings.type == DatabaseType.mysql">
-        <p class="title">MySQL settings:</p>
-        <input type="text" class="form-control" placeholder="Host" autofocus
+        <p class="title" i18n>MySQL settings:</p>
+        <input type="text" class="form-control" i18n-placeholder placeholder="Host" autofocus
                [(ngModel)]="settings.mysql.host" name="host" required>
-        <input type="text" class="form-control" placeholder="Database" autofocus
+        <input type="text" class="form-control" i18n-placeholder placeholder="Database" autofocus
                [(ngModel)]="settings.mysql.database" name="database" required>
-        <input type="text" class="form-control" placeholder="Username"
+        <input type="text" class="form-control" i18n-placeholder placeholder="Username"
                [(ngModel)]="settings.mysql.username" name="username">
-        <input type="password" class="form-control" placeholder="Password"
+        <input type="password" class="form-control" i18n-placeholder placeholder="Password"
                [(ngModel)]="settings.mysql.password" name="password">
       </ng-container>
       <ng-container *ngIf="settings.type == DatabaseType.sqlite">
-        <p class="title">SQLie settings:</p>
+        <p class="title" i18n>SQLie settings:</p>
         <input type="text" class="form-control" placeholder="storage" autofocus
                [(ngModel)]="settings.sqlite.storage" name="host" required>
       </ng-container>
@@ -33,10 +33,10 @@
     </form>
     <button class="btn btn-success pull-right"
             [disabled]="!settingsForm.form.valid || !changed || inProgress"
-            (click)="save()">Save
+            (click)="save()" i18n>Save
     </button>
     <button class="btn btn-default pull-right"
-            (click)="reset()">Reset
+            (click)="reset()" i18n>Reset
     </button>
   </div>
 </div>

@@ -1,6 +1,6 @@
 <div class="panel panel-default">
   <div class="panel-heading">
-    <h3 class="panel-title col-xs-6">Password protection </h3>
+    <h3 class="panel-title col-xs-6" i18n>Password protection </h3>
     <div class="switch-wrapper col-xs-6">
       <bSwitch
         class="switch"
@@ -24,8 +24,8 @@
       <table class="table table-hover">
         <thead>
         <tr>
-          <th>Name</th>
-          <th>Role</th>
+          <th i18n>Name</th>
+          <th i18n>Role</th>
           <th></th>
         </tr>
         </thead>
@@ -52,11 +52,10 @@
       </table>
 
       <button class="btn btn-primary pull-right"
-              (click)="initNewUser()">+ Add
-        user
+              (click)="initNewUser()" i18n>+ Add user
       </button>
     </ng-container>
-    <div class="panel-info" *ngIf="!enabled">
+    <div class="panel-info" *ngIf="!enabled" i18n>
       To protect the site with password / have login enable this.
     </div>
   </div>
@@ -70,14 +69,14 @@
       <div class="modal-header">
         <button type="button" class="close" (click)="userModal.hide()" aria-label="Close"><span
           aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="userModalLabel">Add new User</h4>
+        <h4 class="modal-title" id="userModalLabel" i18n>Add new User</h4>
       </div>
 
       <form #NewUserForm="ngForm">
         <div class="modal-body">
-          <input type="text" class="form-control" placeholder="Username" autofocus
+          <input type="text" class="form-control" i18n-placeholder placeholder="Username" autofocus
                  [(ngModel)]="newUser.name" name="name" required>
-          <input type="password" class="form-control" placeholder="Password"
+          <input type="password" class="form-control" i18n-placeholder placeholder="Password"
                  [(ngModel)]="newUser.password" name="password" required>
           <select class="form-control" [(ngModel)]="newUser.role" name="role" required>
             <option *ngFor="let repository of userRoles" [value]="repository.key">{{repository.value}}
@@ -85,10 +84,10 @@
           </select>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default" (click)="userModal.hide()">Close</button>
+          <button type="button" class="btn btn-default" (click)="userModal.hide()" i18n>Close</button>
           <button type="button" class="btn btn-primary" data-dismiss="modal"
                   (click)="addNewUser()"
-                  [disabled]="!NewUserForm.form.valid">Add User
+                  [disabled]="!NewUserForm.form.valid" i18n>Add User
           </button>
         </div>
       </form>

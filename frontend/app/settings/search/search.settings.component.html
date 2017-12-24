@@ -2,7 +2,7 @@
   <div class="panel panel-default"
        [ngClass]="settings.enabled && !_settingsService.isSupported()?'panel-warning':''">
     <div class="panel-heading">
-      <h3 class="panel-title col-xs-6">Search settings</h3>
+      <h3 class="panel-title col-xs-6" i18n>Search settings</h3>
       <div class="switch-wrapper col-xs-6">
         <bSwitch
           class="switch"
@@ -24,7 +24,7 @@
       <ng-container *ngIf="settings.enabled  || _settingsService.isSupported()">
 
         <div class="form-group">
-          <label class="col-sm-2 control-label" for="autocompleteEnabled">Autocomplete</label>
+          <label class="col-sm-2 control-label" for="autocompleteEnabled" i18n>Autocomplete</label>
           <div class="col-sm-10">
             <bSwitch
               id="autocompleteEnabled"
@@ -39,13 +39,13 @@
               [switch-label-width]="'20'"
               [(ngModel)]="settings.autocompleteEnabled">
             </bSwitch>
-            <span class="help-block">Show hints while typing search query</span>
+            <span class="help-block" i18n>Show hints while typing search query</span>
           </div>
         </div>
 
 
         <div class="form-group">
-          <label class="col-sm-2 control-label" for="instantSearchEnabled">Instant search</label>
+          <label class="col-sm-2 control-label" for="instantSearchEnabled" i18n>Instant search</label>
           <div class="col-sm-10">
             <bSwitch
               id="instantSearchEnabled"
@@ -60,20 +60,20 @@
               [switch-label-width]="'20'"
               [(ngModel)]="settings.instantSearchEnabled">
             </bSwitch>
-            <span class="help-block">Enables showing search results, while typing search query</span>
+            <span class="help-block" i18n>Enables showing search results, while typing search query</span>
           </div>
         </div>
 
       </ng-container>
-      <div class="panel-info" *ngIf="(!settings.enabled && !_settingsService.isSupported())">
+      <div class="panel-info" *ngIf="(!settings.enabled && !_settingsService.isSupported())" i18n>
         Search is not supported with these settings
       </div>
       <button class="btn btn-success pull-right"
               [disabled]="!settingsForm.form.valid || !changed || inProgress"
-              (click)="save()">Save
+              (click)="save()" i18n>Save
       </button>
       <button class="btn btn-default pull-right"
-              (click)="reset()">Reset
+              (click)="reset()" i18n>Reset
       </button>
     </div>
   </div>

@@ -11,7 +11,7 @@ import {NavigationService} from "../model/navigation.service";
 })
 export class ShareLoginComponent implements OnInit {
   password: string;
-  loginError: any = null;
+  loginError: boolean = false;
   title: string;
 
   constructor(private _authService: AuthenticationService, private _navigation: NavigationService) {
@@ -25,14 +25,14 @@ export class ShareLoginComponent implements OnInit {
   }
 
   async onLogin() {
-    this.loginError = null;
+    this.loginError = false;
 
     try {
       await this._authService.shareLogin(this.password);
 
     } catch (error) {
       if (error && error.code === ErrorCodes.CREDENTIAL_NOT_FOUND) {
-        this.loginError = "Wrong password";
+        this.loginError = true;
       }
     }
   }

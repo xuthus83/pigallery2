@@ -9,5 +9,13 @@
   "exclude": [
     "test.ts",
     "**/*.spec.ts"
+  ],
+  "include": [
+    "./**/*",
+    "./../node_modules/jw-bootstrap-switch-ng2/dist/index.ts",
+    "./../node_modules/jw-bootstrap-switch-ng2/dist/directive.ts",
+    "./../node_modules/ngx-clipboard/src/index.ts",
+    "./../node_modules/ngx-clipboard/src/clipboard.directive.ts",
+    "./../node_modules/ngx-clipboard/src/clipboard.service.ts"
   ]
 }

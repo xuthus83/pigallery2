@@ -1,7 +1,7 @@
 <button id="shareButton" class="btn btn-default navbar-btn btn-link"
         type="button" [disabled]="!enabled" (click)="showModal()">
   <span class="glyphicon glyphicon-share-alt"></span>
-  Share
+  <ng-container i18n>Share</ng-container>
 </button>
 
 <!-- sharing Modal-->
@@ -15,7 +15,7 @@
       <div class="modal-header">
         <button type="button" class="close" (click)="hideModal()" aria-label="Close"><span
           aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="shareModalLabel">Share</h4>
+        <h4 class="modal-title" id="shareModalLabel" i18n>Share</h4>
       </div>
       <div class="modal-body">
         <div class="row">
@@ -31,14 +31,14 @@
             <button id="copyButton" name="copyButton"
                     ngxClipboard [cbContent]="url"
                     (cbOnSuccess)="onCopy()"
-                    class="btn btn-primary">Copy
+                    class="btn btn-primary" i18n>Copy
             </button>
           </div>
         </div>
         <hr/>
         <div class="row">
           <div class="col-sm-2">
-            <label class="control-label">Sharing:</label>
+            <label class="control-label" i18n>Sharing:</label>
           </div>
           <div class="col-sm-10">
             <input disabled type="text"
@@ -49,7 +49,7 @@
 
         <div class="row">
           <div class="col-sm-2">
-            <label class="control-label">Include subfolders:</label>
+            <label class="control-label" i18n>Include subfolders:</label>
           </div>
           <div class="col-sm-4">
             <input id="recursiveShareBox"
@@ -63,7 +63,9 @@
 
         <div class="row">
           <div class="col-sm-2">
-            <label class="control-label">Password:</label>
+            <label class="control-label">
+              <ng-container i18n>Password</ng-container>
+              :</label>
           </div>
           <div class="col-sm-4">
             <input id="password"
@@ -77,7 +79,7 @@
 
         <div class="row">
           <div class="col-sm-2">
-            <label class="control-label">Valid:</label>
+            <label class="control-label" i18n>Valid:</label>
           </div>
           <div class="col-sm-3" style="padding-right: 1px">
             <input class="form-control" [(ngModel)]="input.valid.amount" (change)="update()"

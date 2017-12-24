@@ -1,14 +1,14 @@
 <form #settingsForm="ngForm" class="form-horizontal">
   <div class="panel panel-default">
     <div class="panel-heading">
-      <h3 class="panel-title col-xs-4">Folder indexing</h3>
+      <h3 class="panel-title col-xs-4" i18n>Folder indexing</h3>
     </div>
     <div class="panel-body">
       <div [hidden]="!error" class="alert alert-danger" role="alert"><strong>Error: </strong>{{error}}</div>
 
       <ng-container *ngIf="!simplifiedMode">
         <div class="form-group">
-          <label class="col-sm-2 control-label" for="cachedFolderTimeout">Index cache timeout [ms]</label>
+          <label class="col-sm-2 control-label" for="cachedFolderTimeout" i18n>Index cache timeout [ms]</label>
           <div class="col-sm-10">
             <input type="number" class="form-control" placeholder="36000"
                    id="cachedFolderTimeout"
@@ -16,11 +16,11 @@
                    step="1"
                    [(ngModel)]="settings.cachedFolderTimeout"
                    name="cachedFolderTimeout" required>
-            <span class="help-block">If there was no indexing in this time, it reindexes. (skipped if indexen in DB and sensitivity is low)</span>
+            <span class="help-block" i18n>If there was no indexing in this time, it reindexes. (skipped if indexen in DB and sensitivity is low)</span>
           </div>
         </div>
         <div class="form-group">
-          <label class="col-sm-2 control-label" for="folderPreviewSize">Sub folder preview size</label>
+          <label class="col-sm-2 control-label" for="folderPreviewSize" i18n>Sub folder preview size</label>
           <div class="col-sm-10">
             <input type="number" class="form-control" placeholder="1"
                    id="folderPreviewSize"
@@ -28,12 +28,12 @@
                    step="1"
                    [(ngModel)]="settings.folderPreviewSize"
                    name="folderPreviewSize" required>
-            <span class="help-block">Reads this many photos from sub folders</span>
+            <span class="help-block" i18n>Reads this many photos from sub folders</span>
           </div>
         </div>
 
         <div class="form-group">
-          <label class="col-sm-2 control-label" for="reIndexingSensitivity">Folder reindexing sensitivity</label>
+          <label class="col-sm-2 control-label" for="reIndexingSensitivity" i18n>Folder reindexing sensitivity</label>
           <div class="col-sm-10">
             <select id="reIndexingSensitivity" class="form-control" [(ngModel)]="settings.reIndexingSensitivity"
                     name="reIndexingSensitivity" required>
@@ -41,24 +41,30 @@
               </option>
             </select>
             <span
-              class="help-block">Set the reindexing sensitivity. High value check the folders for change more often</span>
+              class="help-block"
+              i18n>Set the reindexing sensitivity. High value check the folders for change more often</span>
           </div>
         </div>
 
 
         <button class="btn btn-success pull-right"
                 [disabled]="!settingsForm.form.valid || !changed || inProgress"
-                (click)="save()">Save
+                (click)="save()" i18n>Save
         </button>
         <button class="btn btn-default pull-right"
-                (click)="reset()">Reset
+                (click)="reset()" i18n>Reset
         </button>
         <br/>
         <hr/>
       </ng-container>
-      If you add a new folder to your gallery, the site indexes it automatically.
-      If you would like to trigger indexing manually, click index button.<br/>
-      (Note: search ony searched among the indexed directories)<br/>
+
+      <ng-container i18n>If you add a new folder to your gallery, the site indexes it automatically.</ng-container>
+      <ng-container i18n>If you would like to trigger indexing manually, click index button.</ng-container>
+      <br/>
+      (
+      <ng-container i18n>Note: search ony searched among the indexed directories</ng-container>
+      )<br/>
+
 
       <div *ngIf="_settingsService.progress.value != null">
         indexing: {{_settingsService.progress.value.current}}
@@ -79,16 +85,16 @@
         <button class="btn btn-success"
                 *ngIf="_settingsService.progress.value == null"
                 [disabled]="inProgress"
-                (click)="index()">Index
+                (click)="index()" i18n>Index
         </button>
         <button class="btn btn-default"
                 *ngIf="_settingsService.progress.value != null"
                 [disabled]="inProgress"
-                (click)="cancelIndexing()">Cancel
+                (click)="cancelIndexing()" i18n>Cancel
         </button>
         <button class="btn btn-danger"
                 [disabled]="inProgress"
-                (click)="resetDatabase()">Reset Indexes
+                (click)="resetDatabase()" i18n>Reset Indexes
         </button>
       </div>
     </div>

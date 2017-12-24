@@ -12,7 +12,7 @@ import {NavigationService} from "../model/navigation.service";
 })
 export class LoginComponent implements OnInit {
   loginCredential: LoginCredential;
-  loginError: any = null;
+  loginError: boolean = false;
   title: string;
   inProgress = false;
 
@@ -28,14 +28,14 @@ export class LoginComponent implements OnInit {
   }
 
   async onLogin() {
-    this.loginError = null;
+    this.loginError = false;
 
     this.inProgress = true;
     try {
       await this._authService.login(this.loginCredential);
     } catch (error) {
       if (error && error.code === ErrorCodes.CREDENTIAL_NOT_FOUND) {
-        this.loginError = "Wrong username or password";
+        this.loginError = true;
       }
     }
 

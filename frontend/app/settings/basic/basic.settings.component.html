@@ -1,14 +1,14 @@
 <form #settingsForm="ngForm" class="form-horizontal">
   <div class="panel panel-default">
     <div class="panel-heading">
-      <h3 class="panel-title">Basic settings</h3>
+      <h3 class="panel-title" i18n>Basic settings</h3>
     </div>
     <div class="panel-body">
       <div [hidden]="!error" class="alert alert-danger" role="alert"><strong>Error: </strong>{{error}}</div>
 
 
       <div class="form-group" [hidden]="simplifiedMode">
-        <label class="col-sm-2 control-label" for="applicationTitle">Page title</label>
+        <label class="col-sm-2 control-label" for="applicationTitle" i18n>Page title</label>
         <div class="col-sm-10">
           <input type="text" class="form-control" placeholder="Pigallery 2"
                  id="applicationTitle"
@@ -26,7 +26,7 @@
                  max="65535"
                  [(ngModel)]="settings.port"
                  name="port" required>
-          <span class="help-block">Port number. Port 80 is usually what you need.</span>
+          <span class="help-block" i18n>Port number. Port 80 is usually what you need.</span>
         </div>
       </div>
 
@@ -37,27 +37,27 @@
                  id="folder"
                  [(ngModel)]="settings.imagesFolder"
                  name="folder" required>
-          <span class="help-block">Images are loaded from this folder (read permission required)</span>
+          <span class="help-block" i18n>Images are loaded from this folder (read permission required)</span>
         </div>
       </div>
 
       <div class="form-group" [hidden]="simplifiedMode">
-        <label class="col-sm-2 control-label" for="publicUrl">Page public url</label>
+        <label class="col-sm-2 control-label" for="publicUrl" i18n>Page public url</label>
         <div class="col-sm-10">
           <input type="url" class="form-control" placeholder="{{urlPlaceholder}}"
                  id="publicUrl"
                  [(ngModel)]="settings.publicUrl"
                  name="publicUrl">
-          <span class="help-block">If you access the page form local network its good to know the public url for creating sharing link</span>
+          <span class="help-block" i18n>If you access the page form local network its good to know the public url for creating sharing link</span>
         </div>
       </div>
 
       <button class="btn btn-success pull-right"
               [disabled]="!settingsForm.form.valid || !changed || inProgress"
-              (click)="save()">Save
+              (click)="save()" i18n>Save
       </button>
       <button class="btn btn-default pull-right"
-              (click)="reset()">Reset
+              (click)="reset()" i18n>Reset
       </button>
     </div>
   </div>

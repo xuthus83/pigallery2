@@ -1,0 +1,21 @@
+<div class="dropdown" dropdown>
+  <button dropdownToggle
+          class="btn btn-default dropdown-toggle"
+          type="button"
+          id="language"
+          data-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="true">
+    <ng-container *ngIf="current != null">
+      {{current}}
+    </ng-container>
+    <span *ngIf="current == null" class="glyphicon glyphicon-globe">
+    </span>
+    <span class="caret"></span>
+  </button>
+  <ul *dropdownMenu class="dropdown-menu" aria-labelledby="language">
+    <li *ngFor="let lang of languages">
+      <a href="/{{lang}}">{{lang}}</a>
+    </li>
+  </ul>
+</div>

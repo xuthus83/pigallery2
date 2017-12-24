@@ -1,9 +1,7 @@
 import {Injectable} from "@angular/core";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import {
-  DatabaseType,
-  IPrivateConfig,
-  ReIndexingSensitivity,
+  DatabaseType, IPrivateConfig, ReIndexingSensitivity,
   ThumbnailProcessingLib
 } from "../../../common/config/private/IPrivateConfig";
 import {NetworkService} from "../model/network/network.service";
@@ -42,7 +40,8 @@ export class SettingsService {
         enableCache: true,
         enableOnScrollRendering: true,
         enableOnScrollThumbnailPrioritising: true,
-        authenticationRequired: true
+        authenticationRequired: true,
+        languages: []
       },
       Server: {
         database: {

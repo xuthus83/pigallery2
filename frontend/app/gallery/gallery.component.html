@@ -4,7 +4,11 @@
   <ng-container navbar>
 
     <li *ngIf="countDown">
-      <p class="navbar-text">Link availability: {{countDown.day}} days,
+      <p class="navbar-text">
+        <ng-container i18n>Link availability</ng-container>
+        : {{countDown.day}}
+        <ng-container i18n>days</ng-container>
+        ,
         {{("0"+countDown.hour).slice(-2)}}:{{("0"+countDown.minute).slice(-2)}}:{{("0"+countDown.second).slice(-2)}}
       </p>
     </li>
@@ -32,12 +36,12 @@
 
   <div body class="container" style="width: 100%; padding:0" *ngIf="_galleryService.content.value.searchResult">
     <div class="alert alert-info" role="alert"
-         *ngIf="_galleryService.content.value.searchResult.resultOverflow == true">
+         *ngIf="_galleryService.content.value.searchResult.resultOverflow == true" i18n>
       Too many results to show. Refine your search.
     </div>
     <ol class="breadcrumb">
       <li class="active">
-        Searching for:
+        <ng-container i18n>Searching for:</ng-container>
         <span [ngSwitch]="_galleryService.content.value.searchResult.searchType">
                         <span *ngSwitchCase="0" class="glyphicon glyphicon-picture"></span>
                         <span *ngSwitchCase="1" class="glyphicon glyphicon-folder-open"></span>
