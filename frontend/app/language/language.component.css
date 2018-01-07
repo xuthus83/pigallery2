@@ -1,3 +1,13 @@
 .dropdown-menu {
   min-width: auto;
 }
+
+.dark {
+  background-color: #222;
+  color: #FFF;
+  border-color: transparent;
+}
+
+.dark:hover {
+  border-color: #adadad;
+}

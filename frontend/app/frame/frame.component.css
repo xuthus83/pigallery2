@@ -27,7 +27,7 @@ ng2-slim-loading-bar {
 
 .navbar .divider-vertical {
   height: 30px;
-  margin: 10px 1px 10px 10px;
+  margin: 10px;
   border-right: 1px solid #ffffff;
   border-left: 1px solid #f2f2f2;
 }
@@ -41,7 +41,18 @@ ng2-slim-loading-bar {
   .navbar-collapse .nav > .divider-vertical {
     display: none;
   }
+
+  .navbar-text {
+    margin-left: 0;
+  }
 }
+
+@media (min-width: 767px) {
+  .navbar-text {
+    margin-left: 0;
+  }
+}
+
 
 .badge {
   margin-left: -5px;

@@ -1,4 +1,4 @@
-import {Component} from "@angular/core";
+import {Component, Input} from "@angular/core";
 import {Config} from "../../../common/config/public/Config";
 import {Cookie} from "ng2-cookies";
 import {CookieNames} from "../../../common/CookieNames";
@@ -10,6 +10,7 @@ import {CookieNames} from "../../../common/CookieNames";
 })
 export class LanguageComponent {
 
+  @Input() isDark: boolean;
   languages: string[] = [];
   current: string = null;
 

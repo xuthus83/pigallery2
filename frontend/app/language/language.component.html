@@ -5,7 +5,8 @@
           id="language"
           data-toggle="dropdown"
           aria-haspopup="true"
-          aria-expanded="true">
+          aria-expanded="true"
+          [ngClass]="isDark?'dark':''">
     <ng-container *ngIf="current != null">
       {{current}}
     </ng-container>
