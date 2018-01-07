@@ -8,7 +8,7 @@
   "main": "./backend/index.js",
   "bin": "./backend/index.js",
   "scripts": {
-    "install": "tsc && ng build -prod",
+    "install": "tsc && gulp build-prod",
     "build-release": "gulp build-release",
     "pretest": "tsc",
     "test": "ng test --single-run && mocha --recursive test/backend/unit && mocha --recursive test/backend/integration",

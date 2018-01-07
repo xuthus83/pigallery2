@@ -83,25 +83,33 @@ gulp.task('build-release', function (done) {
   });
 });
 
+var simpleBuild = function (isProd) {
+  return function (done) {
+    var dirCont = fs.readdirSync("./frontend/locale");
+    var files = dirCont.filter(function (elm) {
+      return elm.match(/.*\.[a-zA-Z]+\.(xlf)/ig);
+    });
+    var languages = files.map(function (f) {
+      return f.split(".")[1]
+    });
+    var tasks = [];
+    var cmd = "ng build  ";
+    if (isProd) {
+      cmd += " -prod "
+    }
+    createFornendTask('build-frontend-dev default', cmd + "--output-path=./dist --no-progress");
+    tasks.push('build-frontend-dev default');
+    for (var i = 0; i < files.length; i++) {
+      createFornendTask('build-frontend-dev ' + languages[i], cmd + "--output-path=./dist/" + languages[i] + " --no-progress --locale " + languages[i] + " --i18n-format xlf --i18n-file frontend/locale/" + files[i] + " --missing-translation warning");
+      tasks.push('build-frontend-dev ' + languages[i]);
+    }
+    tasks.push(function () {
+      done();
+    });
 
-gulp.task('build-dev', function (done) {
-  var dirCont = fs.readdirSync("./frontend/locale");
-  var files = dirCont.filter(function (elm) {
-    return elm.match(/.*\.[a-zA-Z]+\.(xlf)/ig);
-  });
-  var languages = files.map(function (f) {
-    return f.split(".")[1]
-  });
-  var tasks = [];
-  createFornendTask('build-frontend-dev default', "ng build --prod --output-path=./dist --no-progress");
-  tasks.push('build-frontend-dev default');
-  for (var i = 0; i < files.length; i++) {
-    createFornendTask('build-frontend-dev ' + languages[i], "ng build --prod --output-path=./dist/" + languages[i] + " --no-progress --locale " + languages[i] + " --i18n-format xlf --i18n-file frontend/locale/" + files[i] + " --missing-translation warning");
-    tasks.push('build-frontend-dev ' + languages[i]);
-  }
-  tasks.push(function () {
-    done();
-  });
+    runSequence.apply(this, tasks);
+  };
+};
 
-  runSequence.apply(this, tasks);
-});
+gulp.task('build-dev', simpleBuild(false));
+gulp.task('build-prod', simpleBuild(true));
