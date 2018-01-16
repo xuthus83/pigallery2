@@ -101,19 +101,16 @@ export class RendererFactory {
        */
       const ratio = metadata.height / metadata.width;
       const kernel = input.qualityPriority == true ? sharp.kernel.lanczos3 : sharp.kernel.nearest;
-      const interpolator = input.qualityPriority == true ? sharp.interpolator.bicubic : sharp.interpolator.nearest;
       if (input.makeSquare == false) {
         const newWidth = Math.round(Math.sqrt((input.size * input.size) / ratio));
         image.resize(newWidth, null, {
-          kernel: kernel,
-          interpolator: interpolator
+          kernel: kernel
         });
 
       } else {
         image
           .resize(input.size, input.size, {
-            kernel: kernel,
-            interpolator: interpolator
+            kernel: kernel
           })
           .crop(sharp.strategy.center);
       }
