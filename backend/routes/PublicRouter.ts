@@ -16,7 +16,6 @@ export class PublicRouter {
       let selectedLocale = req['locale'];
       if (req.cookies && req.cookies[CookieNames.lang]) {
         if (Config.Client.languages.indexOf(req.cookies[CookieNames.lang]) !== -1) {
-          console.log(selectedLocale);
           selectedLocale = req.cookies[CookieNames.lang];
         }
       }

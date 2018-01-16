@@ -19,8 +19,6 @@ export class LanguageComponent {
     if (Cookie.get(CookieNames.lang) != null) {
       this.current = Cookie.get(CookieNames.lang);
     }
-    console.log(this.current);
-
   }
 
 }
