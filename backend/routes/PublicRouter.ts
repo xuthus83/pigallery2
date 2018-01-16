@@ -34,11 +34,10 @@ export class PublicRouter {
 
     const redirectToBase = (locale: string) => {
       return (req: Request, res: Response) => {
-        console.log(locale);
         if (Config.Client.languages.indexOf(locale) !== -1) {
           res.cookie(CookieNames.lang, locale);
         }
-        res.redirect("/");
+        res.redirect("/?ln=" + locale);
       };
     };
 
