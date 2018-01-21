@@ -35,11 +35,11 @@ gulp.task('build-frontend', function (done) {
     return f.split(".")[1]
   });
   var tasks = [];
-  createFornendTask('build-frontend default', "ng build --aot -prod --output-path=./release/dist --no-progress");
-  tasks.push('build-frontend default');
+  createFornendTask('build-frontend-release default', "ng build --aot -prod --output-path=./release/dist --no-progress");
+  tasks.push('build-frontend-release default');
   for (var i = 0; i < files.length; i++) {
-    createFornendTask('build-frontend ' + languages[i], "ng build --aot -prod --output-path=./release/dist/" + languages[i] + " --no-progress --locale " + languages[i] + " --i18n-format xlf --i18n-file frontend/locale/" + files[i] + " --missing-translation warning");
-    tasks.push('build-frontend ' + languages[i]);
+    createFornendTask('build-frontend-release ' + languages[i], "ng build --aot -prod --output-path=./release/dist/" + languages[i] + " --no-progress --locale " + languages[i] + " --i18n-format xlf --i18n-file frontend/locale/" + files[i] + " --missing-translation warning");
+    tasks.push('build-frontend-release ' + languages[i]);
   }
   tasks.push(function () {
     done();
@@ -97,11 +97,11 @@ var simpleBuild = function (isProd) {
     if (isProd) {
       cmd += " -prod "
     }
-    createFornendTask('build-frontend-dev default', cmd + "--output-path=./dist --no-progress");
-    tasks.push('build-frontend-dev default');
+    createFornendTask('build-frontend default', cmd + "--output-path=./dist --no-progress");
+    tasks.push('build-frontend default');
     for (var i = 0; i < files.length; i++) {
-      createFornendTask('build-frontend-dev ' + languages[i], cmd + "--output-path=./dist/" + languages[i] + " --no-progress --locale " + languages[i] + " --i18n-format xlf --i18n-file frontend/locale/" + files[i] + " --missing-translation warning");
-      tasks.push('build-frontend-dev ' + languages[i]);
+      createFornendTask('build-frontend ' + languages[i], cmd + "--output-path=./dist/" + languages[i] + " --no-progress --locale " + languages[i] + " --i18n-format xlf --i18n-file frontend/locale/" + files[i] + " --missing-translation warning");
+      tasks.push('build-frontend ' + languages[i]);
     }
     tasks.push(function () {
       done();

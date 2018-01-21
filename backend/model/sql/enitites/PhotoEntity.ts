@@ -1,6 +1,10 @@
 import {Column, Entity, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
 import {
-  CameraMetadata, GPSMetadata, ImageSize, PhotoDTO, PhotoMetadata,
+  CameraMetadata,
+  GPSMetadata,
+  ImageSize,
+  PhotoDTO,
+  PhotoMetadata,
   PositionMetaData
 } from "../../../../common/entities/PhotoDTO";
 import {DirectoryEntity} from "./DirectoryEntity";

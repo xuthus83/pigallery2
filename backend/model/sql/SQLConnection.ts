@@ -9,13 +9,14 @@ import {SharingEntity} from "./enitites/SharingEntity";
 import {DataBaseConfig, DatabaseType} from "../../../common/config/private/IPrivateConfig";
 import {PasswordHelper} from "../PasswordHelper";
 import {ProjectPath} from "../../ProjectPath";
+import {VersionEntity} from "./enitites/VersionEntity";
 
 
 export class SQLConnection {
 
+  private static VERSION: number = 1;
+
   constructor() {
-
-
   }
 
   private static connection: Connection = null;
@@ -30,11 +31,13 @@ export class SQLConnection {
         UserEntity,
         PhotoEntity,
         DirectoryEntity,
-        SharingEntity
+        SharingEntity,
+        VersionEntity
       ];
-      options.synchronize = true;
-     // options.logging = "all";
+      options.synchronize = false;
+      //  options.logging = "all";
       this.connection = await createConnection(options);
+      await SQLConnection.sync(this.connection);
     }
     return this.connection;
 
@@ -51,13 +54,36 @@ export class SQLConnection {
       UserEntity,
       PhotoEntity,
       DirectoryEntity,
-      SharingEntity
+      SharingEntity,
+      VersionEntity
     ];
-    options.synchronize = true;
-    //options.logging = "all";
+    options.synchronize = false;
+    // options.logging = "all";
     const conn = await createConnection(options);
+    await SQLConnection.sync(conn);
     await conn.close();
     return true;
+  }
+
+  private static async sync(connection: Connection) {
+    let version = null;
+    try {
+      version = await connection.getRepository(VersionEntity).findOne();
+    } catch (ex) {
+    }
+    if (version && version.version == SQLConnection.VERSION) {
+      return;
+    }
+
+    if (!version) {
+      version = new VersionEntity();
+    }
+    version.version = SQLConnection.VERSION;
+
+
+    await connection.dropDatabase();
+    await connection.synchronize();
+    await connection.getRepository(VersionEntity).save(version);
   }
 
   public static async init(): Promise<void> {
