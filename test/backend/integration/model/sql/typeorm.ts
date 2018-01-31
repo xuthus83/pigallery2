@@ -9,7 +9,11 @@ import {UserRoles} from "../../../../../common/entities/UserDTO";
 import {PasswordHelper} from "../../../../../backend/model/PasswordHelper";
 import {DirectoryEntity} from "../../../../../backend/model/sql/enitites/DirectoryEntity";
 import {
-  CameraMetadataEntity, GPSMetadataEntity, ImageSizeEntity, PhotoEntity, PhotoMetadataEntity,
+  CameraMetadataEntity,
+  GPSMetadataEntity,
+  ImageSizeEntity,
+  PhotoEntity,
+  PhotoMetadataEntity,
   PositionMetaDataEntity
 } from "../../../../../backend/model/sql/enitites/PhotoEntity";
 
@@ -189,7 +193,7 @@ describe('Typeorm integration', () => {
     expect(photos.length).to.equal(0);
   });
 
-  it('should open and close connection twice  with photo added ', async () => {
+  it('should open and close connection twice with photo added ', async () => {
     let conn = await SQLConnection.getConnection();
     const dir = await conn.getRepository(DirectoryEntity).save(getDir());
     let dir2 = getDir();

@@ -10,6 +10,7 @@ import {DataBaseConfig, DatabaseType} from "../../../common/config/private/IPriv
 import {PasswordHelper} from "../PasswordHelper";
 import {ProjectPath} from "../../ProjectPath";
 import {VersionEntity} from "./enitites/VersionEntity";
+import {Logger} from "../../Logger";
 
 
 export class SQLConnection {
@@ -37,7 +38,7 @@ export class SQLConnection {
       options.synchronize = false;
       //  options.logging = "all";
       this.connection = await createConnection(options);
-      await SQLConnection.sync(this.connection);
+      await SQLConnection.schemeSync(this.connection);
     }
     return this.connection;
 
@@ -60,12 +61,12 @@ export class SQLConnection {
     options.synchronize = false;
     // options.logging = "all";
     const conn = await createConnection(options);
-    await SQLConnection.sync(conn);
+    await SQLConnection.schemeSync(conn);
     await conn.close();
     return true;
   }
 
-  private static async sync(connection: Connection) {
+  private static async schemeSync(connection: Connection) {
     let version = null;
     try {
       version = await connection.getRepository(VersionEntity).findOne();
@@ -74,7 +75,7 @@ export class SQLConnection {
     if (version && version.version == SQLConnection.VERSION) {
       return;
     }
-
+    Logger.info("Updating database scheme");
     if (!version) {
       version = new VersionEntity();
     }
