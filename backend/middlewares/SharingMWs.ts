@@ -90,12 +90,10 @@ export class SharingMWs {
     };
 
     try {
-
       req.resultPipe = await ObjectManagerRepository.getInstance().SharingManager.updateSharing(sharing);
       return next();
-
     } catch (err) {
-      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, "Error during creating sharing link", err));
+      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, "Error during updating sharing link", err));
     }
 
   }

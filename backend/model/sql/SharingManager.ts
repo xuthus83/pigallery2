@@ -7,29 +7,37 @@ import {PasswordHelper} from "../PasswordHelper";
 
 export class SharingManager implements ISharingManager {
 
+  private static async removeExpiredLink() {
+    const connection = await SQLConnection.getConnection();
+    return connection
+      .getRepository(SharingEntity)
+      .createQueryBuilder("share")
+      .where("expires < :now", {now: Date.now()})
+      .delete()
+      .execute();
+  }
+
   async findOne(filter: any): Promise<SharingDTO> {
-    await this.removeExpiredLink();
+    await SharingManager.removeExpiredLink();
     const connection = await SQLConnection.getConnection();
     return await connection.getRepository(SharingEntity).findOne(filter);
   }
 
   async createSharing(sharing: SharingDTO): Promise<SharingDTO> {
-    await this.removeExpiredLink();
+    await SharingManager.removeExpiredLink();
     const connection = await SQLConnection.getConnection();
     if (sharing.password) {
       sharing.password = PasswordHelper.cryptPassword(sharing.password);
     }
     return await connection.getRepository(SharingEntity).save(sharing);
-
-
   }
 
   async updateSharing(inSharing: SharingDTO): Promise<SharingDTO> {
     const connection = await SQLConnection.getConnection();
 
-    let sharing = await connection.getRepository(SharingEntity).findOne({
+    const sharing = await connection.getRepository(SharingEntity).findOne({
       id: inSharing.id,
-      creator: inSharing.creator,
+      creator: <any>inSharing.creator.id,
       path: inSharing.path
     });
 
@@ -42,16 +50,6 @@ export class SharingManager implements ISharingManager {
     sharing.expires = inSharing.expires;
 
     return await connection.getRepository(SharingEntity).save(sharing);
-  }
-
-  private async removeExpiredLink() {
-    const connection = await SQLConnection.getConnection();
-    return connection
-      .getRepository(SharingEntity)
-      .createQueryBuilder("share")
-      .where("expires < :now", {now: Date.now()})
-      .delete()
-      .execute();
   }
 
 
