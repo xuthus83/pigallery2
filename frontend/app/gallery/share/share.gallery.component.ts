@@ -29,18 +29,16 @@ export class GalleryShareComponent implements OnInit, OnDestroy {
     },
     password: ""
   };
-  validityTypes = [];
   currentDir: string = "";
   sharing: SharingDTO = null;
   contentSubscription = null;
   passwordProtection = false;
+  ValidityTypes: any;
 
   constructor(private _sharingService: ShareService,
               public _galleryService: GalleryService,
               private  _notification: NotificationService) {
-    this.validityTypes = Utils.enumToArray(ValidityTypes);
-
-
+    this.ValidityTypes = ValidityTypes;
   }
 
 
@@ -87,13 +85,14 @@ export class GalleryShareComponent implements OnInit, OnDestroy {
   async get() {
     this.url = "loading..";
     this.sharing = await this._sharingService.createSharing(this.currentDir, this.input.includeSubfolders, this.calcValidity());
-    console.log(this.sharing);
     this.url = Config.Client.publicUrl + "/share/" + this.sharing.sharingKey
   }
 
   async showModal() {
     await this.get();
+    this.input.password = "";
     this.childModal.show();
+    document.body.style.paddingRight = "0px";
   }
 
   onCopy() {

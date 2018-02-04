@@ -44,8 +44,7 @@ export class SharingManager implements ISharingManager {
     if (sharing.timeStamp < Date.now() - Config.Server.sharing.updateTimeout) {
       throw "Sharing is locked, can't update anymore"
     }
-
-    sharing.password = inSharing.password;
+    sharing.password = PasswordHelper.cryptPassword(inSharing.password);
     sharing.includeSubfolders = inSharing.includeSubfolders;
     sharing.expires = inSharing.expires;
 

@@ -90,15 +90,15 @@ export class AuthenticationMWs {
   public static authoriseDirectory(req: Request, res: Response, next: NextFunction) {
     if (req.session.user.permissions == null ||
       req.session.user.permissions.length == 0 ||
-      req.session.user.permissions[0] == "/") {
+      req.session.user.permissions[0] == "/*") {
       return next();
     }
 
     const directoryName = req.params.directory || "/";
     if (UserDTO.isPathAvailable(directoryName, req.session.user.permissions) == true) {
       return next();
-
     }
+
     return next(new ErrorDTO(ErrorCodes.PERMISSION_DENIED));
   }
 
@@ -130,18 +130,6 @@ export class AuthenticationMWs {
       return next();
 
     } catch (err) {
-      //if its a shared link, login as guest
-      /* try {
-       const user = Utils.clone(await AuthenticationMWs.getSharingUser(req));
-       if (user) {
-       delete (user.password);
-       req.session.user = user;
-       return next();
-       }
-       } catch (err) {
-       return next(new ErrorDTO(ErrorCodes.CREDENTIAL_NOT_FOUND, null, err));
-       }*/
-
       return next(new ErrorDTO(ErrorCodes.CREDENTIAL_NOT_FOUND));
     }
 
@@ -167,7 +155,7 @@ export class AuthenticationMWs {
       });
       if (!sharing || sharing.expires < Date.now() ||
         (Config.Client.Sharing.passwordProtected === true
-        && sharing.password && !PasswordHelper.comparePassword(password, sharing.password))) {
+          && sharing.password && !PasswordHelper.comparePassword(password, sharing.password))) {
         return next(new ErrorDTO(ErrorCodes.CREDENTIAL_NOT_FOUND));
       }
 

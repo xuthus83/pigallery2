@@ -18,10 +18,12 @@ export class GalleryMWs {
 
 
   public static async listDirectory(req: Request, res: Response, next: NextFunction) {
+    console.log("listDirectory");
     let directoryName = req.params.directory || "/";
     let absoluteDirectoryName = path.join(ProjectPath.ImageFolder, directoryName);
 
     if (!fs.statSync(absoluteDirectoryName).isDirectory()) {
+      console.log("not dir");
       return next();
     }
 
@@ -29,12 +31,15 @@ export class GalleryMWs {
 
       const directory = await ObjectManagerRepository.getInstance().GalleryManager.listDirectory(directoryName, req.query.knownLastModified, req.query.knownLastScanned);
       if (directory == null) {
+        console.log("null dir");
         req.resultPipe = new ContentWrapper(null, null, true);
         return next();
       }
+      console.log(req.session.user);
+      console.log(directory);
       if (req.session.user.permissions &&
         req.session.user.permissions.length > 0 &&
-        req.session.user.permissions[0] != "/") {
+        req.session.user.permissions[0] != "/*") {
         (<DirectoryDTO>directory).directories = (<DirectoryDTO>directory).directories.filter(d =>
           UserDTO.isDirectoryAvailable(d, req.session.user.permissions));
       }

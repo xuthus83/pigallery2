@@ -48,7 +48,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/gallery/share/share.gallery.component.ts</context>
-          <context context-type="linenumber">66</context>
+          <context context-type="linenumber">67</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/usermanager/usermanager.settings.component.ts</context>
@@ -60,12 +60,11 @@
         </context-group>
         <target>Jelszó</target>
       </trans-unit>
-      <trans-unit id="c67b8aed16c2f80bd4a8d5df636bb333feaa8c78" datatype="html">
-        <source>Remember
-            me</source>
+      <trans-unit id="3eb49d60bd859eb2d9d3a6d380cdf4e0b8252333" datatype="html">
+        <source>Remember me</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/login/login.component.ts</context>
-          <context context-type="linenumber">41</context>
+          <context context-type="linenumber">42</context>
         </context-group>
         <target>Jegyezzen meg</target>
       </trans-unit>
@@ -74,7 +73,7 @@
             </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/login/login.component.ts</context>
-          <context context-type="linenumber">51</context>
+          <context context-type="linenumber">52</context>
         </context-group>
         <target>Belépés</target>
       </trans-unit>
@@ -109,7 +108,7 @@
         <source>Link availability</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/gallery/gallery.component.ts</context>
-          <context context-type="linenumber">7</context>
+          <context context-type="linenumber">8</context>
         </context-group>
         <target>Link érvényes</target>
       </trans-unit>
@@ -117,7 +116,7 @@
         <source>days</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/gallery/gallery.component.ts</context>
-          <context context-type="linenumber">7</context>
+          <context context-type="linenumber">10</context>
         </context-group>
         <target>nap</target>
       </trans-unit>
@@ -127,7 +126,7 @@
     </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/gallery/gallery.component.ts</context>
-          <context context-type="linenumber">35</context>
+          <context context-type="linenumber">39</context>
         </context-group>
         <target>Túl sok találat. Pontosítsd a keresést.</target>
       </trans-unit>
@@ -135,7 +134,7 @@
         <source>Searching for:</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/gallery/gallery.component.ts</context>
-          <context context-type="linenumber">40</context>
+          <context context-type="linenumber">44</context>
         </context-group>
         <target>Keresés:</target>
       </trans-unit>
@@ -143,7 +142,7 @@
         <source>Logout</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/frame/frame.component.ts</context>
-          <context context-type="linenumber">44</context>
+          <context context-type="linenumber">45</context>
         </context-group>
         <target>Kijelentkezés</target>
       </trans-unit>
@@ -188,9 +187,41 @@
         <source>Valid:</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/gallery/share/share.gallery.component.ts</context>
-          <context context-type="linenumber">80</context>
+          <context context-type="linenumber">82</context>
         </context-group>
         <target>Érvényes:</target>
+      </trans-unit>
+      <trans-unit id="41e62daa962947c0d23ded0981975d1bddf0bf38" datatype="html">
+        <source>Minutes</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/gallery/share/share.gallery.component.ts</context>
+          <context context-type="linenumber">92</context>
+        </context-group>
+        <target>Perc</target>
+      </trans-unit>
+      <trans-unit id="3bbce5fef7e1151da052a4e529453edb340e3912" datatype="html">
+        <source>Hours</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/gallery/share/share.gallery.component.ts</context>
+          <context context-type="linenumber">93</context>
+        </context-group>
+        <target>Óra</target>
+      </trans-unit>
+      <trans-unit id="a5c3d9d2296f7886e8289b9f623323803deacfc6" datatype="html">
+        <source>Days</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/gallery/share/share.gallery.component.ts</context>
+          <context context-type="linenumber">94</context>
+        </context-group>
+        <target>Nap</target>
+      </trans-unit>
+      <trans-unit id="12cc9773650706e6b16eec367da84f99a1e6399c" datatype="html">
+        <source>Months</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/gallery/share/share.gallery.component.ts</context>
+          <context context-type="linenumber">95</context>
+        </context-group>
+        <target>Hónap</target>
       </trans-unit>
       <trans-unit id="f0acecaa22df19767da6d9990458470b17da3d7a" datatype="html">
         <source>Server notifications</source>
@@ -404,7 +435,7 @@
         <source>is need</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/map/map.settings.component.ts</context>
-          <context context-type="linenumber">32</context>
+          <context context-type="linenumber">33</context>
         </context-group>
         <target>van szükség</target>
       </trans-unit>
@@ -413,11 +444,11 @@
       </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/map/map.settings.component.ts</context>
-          <context context-type="linenumber">40</context>
+          <context context-type="linenumber">41</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/thumbnail/thumbanil.settings.component.ts</context>
-          <context context-type="linenumber">96</context>
+          <context context-type="linenumber">98</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/search/search.settings.component.ts</context>
@@ -442,11 +473,11 @@
       </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/map/map.settings.component.ts</context>
-          <context context-type="linenumber">43</context>
+          <context context-type="linenumber">44</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/thumbnail/thumbanil.settings.component.ts</context>
-          <context context-type="linenumber">99</context>
+          <context context-type="linenumber">101</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/search/search.settings.component.ts</context>
@@ -474,20 +505,22 @@
         </context-group>
         <target>Thumbnail beállítások</target>
       </trans-unit>
-      <trans-unit id="6daacb1e448ebb5f72f1d6b1d6f9882dd3ad21f2" datatype="html">
-        <source>It is highly recommended to use hardware accelerated (sharp or gm) lib for thumbnail generation
+      <trans-unit id="1b239b0422945f36c35b5559b4b0c135922fe299" datatype="html">
+        <source>It is highly recommended to use hardware accelerated (sharp or gm) lib for thumbnail
+        generation
       </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/thumbnail/thumbanil.settings.component.ts</context>
           <context context-type="linenumber">10</context>
         </context-group>
-        <target>Nagyon ajánlott hardveresen gyorsított (sharp vagy gm) könyvtár használata a thumbnail generálásához</target>
+        <target>Nagyon ajánlott hardveres gyorsított (éles vagy gm) lib használata a miniatűrökhöz
+        generáció</target>
       </trans-unit>
       <trans-unit id="6f49ee2673fb82fe8dd1a7da0bada14a4156bf30" datatype="html">
         <source>Thumbnail generation library</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/thumbnail/thumbanil.settings.component.ts</context>
-          <context context-type="linenumber">15</context>
+          <context context-type="linenumber">16</context>
         </context-group>
         <target>Thumbnail generáló könyvtár</target>
       </trans-unit>
@@ -495,7 +528,7 @@
         <source>Make sure that sharp node module is installed (npm install sharp).</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/thumbnail/thumbanil.settings.component.ts</context>
-          <context context-type="linenumber">23</context>
+          <context context-type="linenumber">24</context>
         </context-group>
         <target>Győződj meg arról, hogy a sharp node modul telepítve van (npm telepítés sharp).</target>
       </trans-unit>
@@ -503,7 +536,7 @@
         <source>Make sure that gm node module and</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/thumbnail/thumbanil.settings.component.ts</context>
-          <context context-type="linenumber">25</context>
+          <context context-type="linenumber">26</context>
         </context-group>
         <target>Győződjd meg arról, hogy a gm node modul és</target>
       </trans-unit>
@@ -511,7 +544,7 @@
         <source>GraphicsMagick</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/thumbnail/thumbanil.settings.component.ts</context>
-          <context context-type="linenumber">26</context>
+          <context context-type="linenumber">27</context>
         </context-group>
         <target>GraphicsMagick</target>
       </trans-unit>
@@ -519,7 +552,7 @@
         <source>are installed (npm install sharp).</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/thumbnail/thumbanil.settings.component.ts</context>
-          <context context-type="linenumber">26</context>
+          <context context-type="linenumber">27</context>
         </context-group>
         <target>telepítve van (npm install éles).</target>
       </trans-unit>
@@ -527,7 +560,7 @@
         <source>Thumbnail folder</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/thumbnail/thumbanil.settings.component.ts</context>
-          <context context-type="linenumber">32</context>
+          <context context-type="linenumber">33</context>
         </context-group>
         <target>Thumbnail mappa</target>
       </trans-unit>
@@ -535,7 +568,7 @@
         <source>Thumbnails will be saved in this folder. Write access is required</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/thumbnail/thumbanil.settings.component.ts</context>
-          <context context-type="linenumber">38</context>
+          <context context-type="linenumber">39</context>
         </context-group>
         <target>A thumbnail-ek ebben a mappában lesznek elmentve. Írási jog szükséges</target>
       </trans-unit>
@@ -543,7 +576,7 @@
         <source>Thumbnail Quality</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/thumbnail/thumbanil.settings.component.ts</context>
-          <context context-type="linenumber">43</context>
+          <context context-type="linenumber">44</context>
         </context-group>
         <target>Thumbnail minőség</target>
       </trans-unit>
@@ -551,7 +584,7 @@
         <source>High quality may be slow. Especially with Jimp.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/thumbnail/thumbanil.settings.component.ts</context>
-          <context context-type="linenumber">57</context>
+          <context context-type="linenumber">58</context>
         </context-group>
         <target>A jó minőségű lassú lehet. Különösen a Jimp esetén.</target>
       </trans-unit>
@@ -559,7 +592,7 @@
         <source>Icon size (used on maps)</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/thumbnail/thumbanil.settings.component.ts</context>
-          <context context-type="linenumber">72</context>
+          <context context-type="linenumber">73</context>
         </context-group>
         <target>Ikonméret (térképeken használva)</target>
       </trans-unit>
@@ -567,7 +600,7 @@
         <source>Thumbnail sizes</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/thumbnail/thumbanil.settings.component.ts</context>
-          <context context-type="linenumber">78</context>
+          <context context-type="linenumber">79</context>
         </context-group>
         <target>Thumbnail méretek</target>
       </trans-unit>
@@ -575,7 +608,7 @@
         <source>Size of the thumbnails.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/thumbnail/thumbanil.settings.component.ts</context>
-          <context context-type="linenumber">85</context>
+          <context context-type="linenumber">86</context>
         </context-group>
         <target>A thumbnail mérete.</target>
       </trans-unit>
@@ -583,7 +616,7 @@
         <source>The best matching size will be generated. (More size gives better quality, but use storage to store and CPU to render.)</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/thumbnail/thumbanil.settings.component.ts</context>
-          <context context-type="linenumber">86</context>
+          <context context-type="linenumber">87</context>
         </context-group>
         <target>A legjobban egyezett méret lesz generálva. (Több méret lehetőség jobb minőségéet eredményez, de processzort és tárhelyet fogyaszt)</target>
       </trans-unit>
@@ -591,7 +624,7 @@
         <source>';' separated integers. If size is 200, tha thumbnail will have 200^2 pixels.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/thumbnail/thumbanil.settings.component.ts</context>
-          <context context-type="linenumber">87</context>
+          <context context-type="linenumber">89</context>
         </context-group>
         <target>';'-val elválasztott egész számok. Ha a méret 200, akkor a thumnail-ok 200^2 pixelből fognak állni.</target>
       </trans-unit>
@@ -861,7 +894,7 @@
         <source>Set the reindexing sensitivity. High value check the folders for change more often</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/indexing/indexing.settings.component.ts</context>
-          <context context-type="linenumber">44</context>
+          <context context-type="linenumber">45</context>
         </context-group>
         <target>Állítsa be az újraindexelés érzékenységét. A magasabb érzékenység gyarkabban ellenőrzi a mappákat válztozás</target>
       </trans-unit>
@@ -870,7 +903,7 @@
         </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/indexing/indexing.settings.component.ts</context>
-          <context context-type="linenumber">51</context>
+          <context context-type="linenumber">52</context>
         </context-group>
         <target>Mentés</target>
       </trans-unit>
@@ -879,7 +912,7 @@
         </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/indexing/indexing.settings.component.ts</context>
-          <context context-type="linenumber">54</context>
+          <context context-type="linenumber">55</context>
         </context-group>
         <target>Visszaállítás</target>
       </trans-unit>
@@ -887,7 +920,7 @@
         <source>If you add a new folder to your gallery, the site indexes it automatically.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/indexing/indexing.settings.component.ts</context>
-          <context context-type="linenumber">60</context>
+          <context context-type="linenumber">61</context>
         </context-group>
         <target>Ha új mappát ad hozzá a galériához, a webhely automatikusan indexeli.</target>
       </trans-unit>
@@ -895,7 +928,7 @@
         <source>If you would like to trigger indexing manually, click index button.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/indexing/indexing.settings.component.ts</context>
-          <context context-type="linenumber">61</context>
+          <context context-type="linenumber">62</context>
         </context-group>
         <target>Ha kézzel szeretné indítani az indexelést, kattintson az index gombra.</target>
       </trans-unit>
@@ -903,7 +936,7 @@
         <source>Note: search ony searched among the indexed directories</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/indexing/indexing.settings.component.ts</context>
-          <context context-type="linenumber">62</context>
+          <context context-type="linenumber">65</context>
         </context-group>
         <target>Megjegyzés: a keresés csak az indexelet mappákban működik</target>
       </trans-unit>
@@ -912,7 +945,7 @@
         </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/indexing/indexing.settings.component.ts</context>
-          <context context-type="linenumber">84</context>
+          <context context-type="linenumber">88</context>
         </context-group>
         <target>Index</target>
       </trans-unit>
@@ -921,7 +954,7 @@
         </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/indexing/indexing.settings.component.ts</context>
-          <context context-type="linenumber">89</context>
+          <context context-type="linenumber">93</context>
         </context-group>
         <target>Mégse</target>
       </trans-unit>
@@ -930,7 +963,7 @@
         </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/indexing/indexing.settings.component.ts</context>
-          <context context-type="linenumber">93</context>
+          <context context-type="linenumber">97</context>
         </context-group>
         <target>Indexek törlése</target>
       </trans-unit>

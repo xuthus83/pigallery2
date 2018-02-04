@@ -3,7 +3,7 @@ import {ToastsManager} from "ng2-toastr/ng2-toastr";
 import {NetworkService} from "./network/network.service";
 import {AuthenticationService} from "./network/authentication.service";
 import {NotificationDTO, NotificationType} from "../../../common/entities/NotificationDTO";
-import {UserDTO} from "../../../common/entities/UserDTO";
+import {UserDTO, UserRoles} from "../../../common/entities/UserDTO";
 
 @Injectable()
 export class NotificationService {
@@ -22,7 +22,8 @@ export class NotificationService {
     this._authService.user.subscribe(() => {
       if (this._authService.isAuthenticated() &&
         (!this.lastUser ||
-        this.lastUser.id != this._authService.user.value.id)) {
+          this.lastUser.id != this._authService.user.value.id) &&
+        this._authService.user.value.role >= UserRoles.Guest) {
         this.getServerNotifications();
       }
       this.lastUser = this._authService.user.value;

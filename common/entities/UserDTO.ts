@@ -1,6 +1,7 @@
 import {DirectoryDTO} from "./DirectoryDTO";
 import {Utils} from "../Utils";
-export enum UserRoles{
+
+export enum UserRoles {
   LimitedGuest = 0,
   Guest = 1,
   User = 2,
@@ -20,7 +21,7 @@ export interface UserDTO {
 export module UserDTO {
 
   export const isPathAvailable = (path: string, permissions: string[]): boolean => {
-    if (permissions == null || permissions.length == 0 || permissions[0] == "/") {
+    if (permissions == null || permissions.length == 0 || permissions[0] == "/*") {
       return true;
     }
     for (let i = 0; i < permissions.length; i++) {
@@ -28,19 +29,20 @@ export module UserDTO {
       if (permission[permission.length - 1] == "*") {
         permission = permission.slice(0, -1);
         if (path.startsWith(permission)) {
-          return true
+          return true;
         }
-      } else {
-        if (path == permission) {
-          return true
-
-        }
+      } else if (path == permission) {
+        return true;
+      } else if (path == "." && permission == "/") {
+        return true;
       }
+
     }
     return false;
   };
 
-  export const isDirectoryAvailable = (direcotry: DirectoryDTO, permissions: string[]): boolean => {
-    return isPathAvailable(Utils.concatUrls(direcotry.path, direcotry.name), permissions);
+  export const isDirectoryAvailable = (directory: DirectoryDTO, permissions: string[]): boolean => {
+
+    return isPathAvailable(Utils.concatUrls(directory.path, directory.name), permissions);
   };
 }
