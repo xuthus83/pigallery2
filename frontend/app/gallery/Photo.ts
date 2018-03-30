@@ -1,7 +1,8 @@
-import {PhotoDTO} from "../../../common/entities/PhotoDTO";
-import {Utils} from "../../../common/Utils";
-import {IconPhoto} from "./IconPhoto";
-import {Config} from "../../../common/config/public/Config";
+import {PhotoDTO} from '../../../common/entities/PhotoDTO';
+import {Utils} from '../../../common/Utils';
+import {IconPhoto} from './IconPhoto';
+import {Config} from '../../../common/config/public/Config';
+
 export class Photo extends IconPhoto {
 
 
@@ -50,13 +51,13 @@ export class Photo extends IconPhoto {
 
   getReplacementThumbnailPath() {
     let size = this.getReplacementThumbnailSize();
-    return Utils.concatUrls("/api/gallery/content/", this.photo.directory.path, this.photo.directory.name, this.photo.name, "thumbnail", size.toString());
+    return Utils.concatUrls('/api/gallery/content/', this.photo.directory.path, this.photo.directory.name, this.photo.name, 'thumbnail', size.toString());
 
   }
 
   getThumbnailPath() {
     let size = this.getThumbnailSize();
-    return Utils.concatUrls("/api/gallery/content/", this.photo.directory.path, this.photo.directory.name, this.photo.name, "thumbnail", size.toString());
+    return Utils.concatUrls('/api/gallery/content/', this.photo.directory.path, this.photo.directory.name, this.photo.name, 'thumbnail', size.toString());
   }
 
 

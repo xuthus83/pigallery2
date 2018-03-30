@@ -1,15 +1,15 @@
-import {Component, OnDestroy, OnInit, ViewContainerRef} from "@angular/core";
-import {AuthenticationService} from "./model/network/authentication.service";
-import {UserDTO} from "../../common/entities/UserDTO";
-import {Router} from "@angular/router";
-import {Config} from "../../common/config/public/Config";
-import {Title} from "@angular/platform-browser";
-import {NotificationService} from "./model/notification.service";
-import {ShareService} from "./gallery/share.service";
-import "hammerjs";
+import {Component, OnDestroy, OnInit, ViewContainerRef} from '@angular/core';
+import {AuthenticationService} from './model/network/authentication.service';
+import {UserDTO} from '../../common/entities/UserDTO';
+import {Router} from '@angular/router';
+import {Config} from '../../common/config/public/Config';
+import {Title} from '@angular/platform-browser';
+import {NotificationService} from './model/notification.service';
+import {ShareService} from './gallery/share.service';
+import 'hammerjs';
 
 @Component({
-  selector: 'pi-gallery2-app',
+  selector: 'app-pi-gallery2',
   template: `<router-outlet></router-outlet>`,
 
 })
@@ -55,17 +55,17 @@ export class AppComponent implements OnInit, OnDestroy {
 
   private toLogin() {
     if (this._shareService.isSharing()) {
-      return this._router.navigate(["shareLogin"], {queryParams: {sk: this._shareService.getSharingKey()}});
+      return this._router.navigate(['shareLogin'], {queryParams: {sk: this._shareService.getSharingKey()}});
     } else {
-      return this._router.navigate(["login"]);
+      return this._router.navigate(['login']);
     }
   }
 
   private toGallery() {
     if (this._shareService.isSharing()) {
-      return this._router.navigate(["share", this._shareService.getSharingKey()]);
+      return this._router.navigate(['share', this._shareService.getSharingKey()]);
     } else {
-      return this._router.navigate(["gallery", ""]);
+      return this._router.navigate(['gallery', '']);
     }
   }
 }

@@ -1,5 +1,5 @@
-import {UserDTO, UserRoles} from "../../../../common/entities/UserDTO";
-import {Column, Entity, PrimaryGeneratedColumn} from "typeorm";
+import {UserDTO, UserRoles} from '../../../../common/entities/UserDTO';
+import {Column, Entity, PrimaryGeneratedColumn} from 'typeorm';
 
 @Entity()
 export class UserEntity implements UserDTO {
@@ -13,10 +13,10 @@ export class UserEntity implements UserDTO {
   @Column()
   password: string;
 
-  @Column("smallint")
+  @Column('smallint')
   role: UserRoles;
 
-  @Column("text", {nullable: true})
+  @Column('text', {nullable: true})
   permissions: string[];
 
 }

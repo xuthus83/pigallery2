@@ -1,8 +1,8 @@
-import {UserDTO, UserRoles} from "../../../common/entities/UserDTO";
-import {IUserManager} from "../interfaces/IUserManager";
-import {UserEntity} from "./enitites/UserEntity";
-import {SQLConnection} from "./SQLConnection";
-import {PasswordHelper} from "../PasswordHelper";
+import {UserDTO, UserRoles} from '../../../common/entities/UserDTO';
+import {IUserManager} from '../interfaces/IUserManager';
+import {UserEntity} from './enitites/UserEntity';
+import {SQLConnection} from './SQLConnection';
+import {PasswordHelper} from '../PasswordHelper';
 
 
 export class UserManager implements IUserManager {
@@ -22,7 +22,7 @@ export class UserManager implements IUserManager {
     }
 
     if (pass && !PasswordHelper.comparePassword(pass, user.password)) {
-      throw "No entry found";
+      throw 'No entry found';
     }
     return user;
 
@@ -64,7 +64,7 @@ export class UserManager implements IUserManager {
   }
 
   public async changePassword(request: any) {
-    throw new Error("not implemented"); //TODO: implement
+    throw new Error('not implemented'); //TODO: implement
   }
 
 }

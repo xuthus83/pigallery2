@@ -1,17 +1,17 @@
-import {expect} from "chai";
-import {DiskMangerWorker} from "../../../../../backend/model/threading/DiskMangerWorker";
-import * as path from "path";
-import {Config} from "../../../../../common/config/private/Config";
-import {ProjectPath} from "../../../../../backend/ProjectPath";
+import {expect} from 'chai';
+import {DiskMangerWorker} from '../../../../../backend/model/threading/DiskMangerWorker';
+import * as path from 'path';
+import {Config} from '../../../../../common/config/private/Config';
+import {ProjectPath} from '../../../../../backend/ProjectPath';
 
 describe('DiskMangerWorker', () => {
 
   it('should parse metadata', async () => {
-    Config.Server.imagesFolder = path.join(__dirname, "/../../assets");
-    ProjectPath.ImageFolder = path.join(__dirname, "/../../assets");
-    const dir = await DiskMangerWorker.scanDirectory("/");
+    Config.Server.imagesFolder = path.join(__dirname, '/../../assets');
+    ProjectPath.ImageFolder = path.join(__dirname, '/../../assets');
+    const dir = await DiskMangerWorker.scanDirectory('/');
     expect(dir.photos.length).to.be.equals(1);
-    expect(dir.photos[0].name).to.be.equals("test image öüóőúéáű-.,.jpg");
+    expect(dir.photos[0].name).to.be.equals('test image öüóőúéáű-.,.jpg');
     expect(dir.photos[0].metadata.keywords).to.deep.equals(['Berkley', 'USA', 'űáéúőóüö ŰÁÉÚŐÓÜÖ']);
     expect(dir.photos[0].metadata.fileSize).to.deep.equals(62392);
     expect(dir.photos[0].metadata.size).to.deep.equals({width: 140, height: 93});

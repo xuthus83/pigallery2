@@ -1,9 +1,9 @@
-import {Component} from "@angular/core";
-import {AutoCompleteService} from "./autocomplete.service";
-import {AutoCompleteItem, SearchTypes} from "../../../../common/entities/AutoCompleteItem";
-import {ActivatedRoute, Params, RouterLink} from "@angular/router";
-import {GalleryService} from "../gallery.service";
-import {Config} from "../../../../common/config/public/Config";
+import {Component} from '@angular/core';
+import {AutoCompleteService} from './autocomplete.service';
+import {AutoCompleteItem, SearchTypes} from '../../../../common/entities/AutoCompleteItem';
+import {ActivatedRoute, Params, RouterLink} from '@angular/router';
+import {GalleryService} from '../gallery.service';
+import {Config} from '../../../../common/config/public/Config';
 
 @Component({
   selector: 'gallery-search',
@@ -14,10 +14,10 @@ import {Config} from "../../../../common/config/public/Config";
 export class GallerySearchComponent {
 
   autoCompleteItems: Array<AutoCompleteRenderItem> = [];
-  public searchText: string = "";
+  public searchText: string = '';
   private cache = {
-    lastAutocomplete: "",
-    lastInstantSearch: ""
+    lastAutocomplete: '',
+    lastInstantSearch: ''
   };
 
   SearchTypes: any = [];
@@ -32,7 +32,7 @@ export class GallerySearchComponent {
 
     this.subscription = this._route.params.subscribe((params: Params) => {
       let searchText = params['searchText'];
-      if (searchText && searchText != "") {
+      if (searchText && searchText != '') {
         this.searchText = searchText;
       }
     });
@@ -41,7 +41,7 @@ export class GallerySearchComponent {
 
   ngOnDestroy() {
     if (this.subscription !== null) {
-      this.subscription.unsubscribe()
+      this.subscription.unsubscribe();
     }
   }
 
@@ -94,9 +94,9 @@ export class GallerySearchComponent {
 
   private async autocomplete(searchText: string) {
     if (!Config.Client.Search.autocompleteEnabled) {
-      return
+      return;
     }
-    if (searchText.trim() == ".") {
+    if (searchText.trim() == '.') {
       return;
     }
 
@@ -129,9 +129,9 @@ export class GallerySearchComponent {
 }
 
 class AutoCompleteRenderItem {
-  public preText: string = "";
-  public highLightText: string = "";
-  public postText: string = "";
+  public preText: string = '';
+  public highLightText: string = '';
+  public postText: string = '';
   public type: SearchTypes;
 
   constructor(public text: string, searchText: string, type: SearchTypes) {

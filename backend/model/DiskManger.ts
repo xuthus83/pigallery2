@@ -1,12 +1,13 @@
 ///<reference path="exif.d.ts"/>
-import {DirectoryDTO} from "../../common/entities/DirectoryDTO";
-import {Logger} from "../Logger";
-import {Config} from "../../common/config/private/Config";
-import {DiskManagerTH} from "./threading/ThreadPool";
-import {DiskMangerWorker} from "./threading/DiskMangerWorker";
+import {DirectoryDTO} from '../../common/entities/DirectoryDTO';
+import {Logger} from '../Logger';
+import {Config} from '../../common/config/private/Config';
+import {DiskManagerTH} from './threading/ThreadPool';
+import {DiskMangerWorker} from './threading/DiskMangerWorker';
 
 
-const LOG_TAG = "[DiskManager]";
+const LOG_TAG = '[DiskManager]';
+
 export class DiskManager {
   static threadPool: DiskManagerTH = null;
 
@@ -17,7 +18,7 @@ export class DiskManager {
   }
 
   public static async scanDirectory(relativeDirectoryName: string): Promise<DirectoryDTO> {
-    Logger.silly(LOG_TAG, "scanning directory:", relativeDirectoryName);
+    Logger.silly(LOG_TAG, 'scanning directory:', relativeDirectoryName);
 
 
     let directory: DirectoryDTO = null;

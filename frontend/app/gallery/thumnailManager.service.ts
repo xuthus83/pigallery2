@@ -1,12 +1,7 @@
-import {Injectable} from "@angular/core";
-import {
-  ThumbnailLoaderService,
-  ThumbnailLoadingListener,
-  ThumbnailLoadingPriority,
-  ThumbnailTaskEntity
-} from "./thumnailLoader.service";
-import {Photo} from "./Photo";
-import {IconPhoto} from "./IconPhoto";
+import {Injectable} from '@angular/core';
+import {ThumbnailLoaderService, ThumbnailLoadingListener, ThumbnailLoadingPriority, ThumbnailTaskEntity} from './thumnailLoader.service';
+import {Photo} from './Photo';
+import {IconPhoto} from './IconPhoto';
 
 
 @Injectable()
@@ -80,7 +75,7 @@ export class IconThumbnail extends ThumbnailBase {
 
   constructor(private photo: IconPhoto, thumbnailService: ThumbnailLoaderService) {
     super(thumbnailService);
-    this.src = "";
+    this.src = '';
     this.error = false;
     if (this.photo.isIconAvailable()) {
       this.src = this.photo.getIconPath();
@@ -166,28 +161,28 @@ export class Thumbnail extends ThumbnailBase {
   public load() {
     if (!this.photo.isThumbnailAvailable() && this.thumbnailTask == null) {
       //    setTimeout(() => {
-        let listener: ThumbnailLoadingListener = {
-          onStartedLoading: () => { //onLoadStarted
-            this.loading = true;
-          },
-          onLoad: () => {//onLoaded
-            this.src = this.photo.getThumbnailPath();
-            if (this.onLoad) this.onLoad();
-            this.available = true;
-            this.loading = false;
-            this.thumbnailTask = null;
-          },
-          onError: (error) => {//onError
-            this.thumbnailTask = null;
-            this.loading = false;
-            this.error = true;
-          }
-        };
-        if (this.photo.isReplacementThumbnailAvailable()) {
-          this.thumbnailTask = this.thumbnailService.loadImage(this.photo, ThumbnailLoadingPriority.medium, listener);
-        } else {
-          this.thumbnailTask = this.thumbnailService.loadImage(this.photo, ThumbnailLoadingPriority.high, listener);
+      let listener: ThumbnailLoadingListener = {
+        onStartedLoading: () => { //onLoadStarted
+          this.loading = true;
+        },
+        onLoad: () => {//onLoaded
+          this.src = this.photo.getThumbnailPath();
+          if (this.onLoad) this.onLoad();
+          this.available = true;
+          this.loading = false;
+          this.thumbnailTask = null;
+        },
+        onError: (error) => {//onError
+          this.thumbnailTask = null;
+          this.loading = false;
+          this.error = true;
         }
+      };
+      if (this.photo.isReplacementThumbnailAvailable()) {
+        this.thumbnailTask = this.thumbnailService.loadImage(this.photo, ThumbnailLoadingPriority.medium, listener);
+      } else {
+        this.thumbnailTask = this.thumbnailService.loadImage(this.photo, ThumbnailLoadingPriority.high, listener);
+      }
       // }, 0);
     }
   }

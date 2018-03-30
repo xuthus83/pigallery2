@@ -1,13 +1,13 @@
-import {expect} from "chai";
-import * as fs from "fs";
-import * as path from "path";
-import {Config} from "../../../../../common/config/private/Config";
-import {DatabaseType} from "../../../../../common/config/private/IPrivateConfig";
-import {SQLConnection} from "../../../../../backend/model/sql/SQLConnection";
-import {UserEntity} from "../../../../../backend/model/sql/enitites/UserEntity";
-import {UserRoles} from "../../../../../common/entities/UserDTO";
-import {PasswordHelper} from "../../../../../backend/model/PasswordHelper";
-import {DirectoryEntity} from "../../../../../backend/model/sql/enitites/DirectoryEntity";
+import {expect} from 'chai';
+import * as fs from 'fs';
+import * as path from 'path';
+import {Config} from '../../../../../common/config/private/Config';
+import {DatabaseType} from '../../../../../common/config/private/IPrivateConfig';
+import {SQLConnection} from '../../../../../backend/model/sql/SQLConnection';
+import {UserEntity} from '../../../../../backend/model/sql/enitites/UserEntity';
+import {UserRoles} from '../../../../../common/entities/UserDTO';
+import {PasswordHelper} from '../../../../../backend/model/PasswordHelper';
+import {DirectoryEntity} from '../../../../../backend/model/sql/enitites/DirectoryEntity';
 import {
   CameraMetadataEntity,
   GPSMetadataEntity,
@@ -15,13 +15,13 @@ import {
   PhotoEntity,
   PhotoMetadataEntity,
   PositionMetaDataEntity
-} from "../../../../../backend/model/sql/enitites/PhotoEntity";
+} from '../../../../../backend/model/sql/enitites/PhotoEntity';
 
 describe('Typeorm integration', () => {
 
 
-  const tempDir = path.join(__dirname, "../../tmp");
-  const dbPath = path.join(tempDir, "test.db");
+  const tempDir = path.join(__dirname, '../../tmp');
+  const dbPath = path.join(tempDir, 'test.db');
   const setUpSqlDB = () => {
     if (fs.existsSync(dbPath)) {
       fs.unlinkSync(dbPath);
@@ -56,8 +56,8 @@ describe('Typeorm integration', () => {
 
   const getDir = () => {
     const d = new DirectoryEntity();
-    d.name = "test dir";
-    d.path = ".";
+    d.name = 'test dir';
+    d.path = '.';
     d.lastModified = Date.now();
     d.lastScanned = null;
     d.parent = null;
@@ -76,20 +76,20 @@ describe('Typeorm integration', () => {
     gps.latitude = 1;
     gps.longitude = 1;
     const pd = new PositionMetaDataEntity();
-    pd.city = "New York";
-    pd.country = "Alderan";
-    pd.state = "Death star";
+    pd.city = 'New York';
+    pd.country = 'Alderan';
+    pd.state = 'Death star';
     pd.GPSData = gps;
     const cd = new CameraMetadataEntity();
     cd.ISO = 100;
-    cd.model = "60D";
-    cd.maker = "Canon";
+    cd.model = '60D';
+    cd.maker = 'Canon';
     cd.fStop = 1;
     cd.exposure = 1;
     cd.focalLength = 1;
-    cd.lens = "Lens";
+    cd.lens = 'Lens';
     const m = new PhotoMetadataEntity();
-    m.keywords = ["apple"];
+    m.keywords = ['apple'];
     m.cameraData = cd;
     m.positionData = pd;
     m.size = sd;
@@ -98,7 +98,7 @@ describe('Typeorm integration', () => {
 
 
     const d = new PhotoEntity();
-    d.name = "test photo.jpg";
+    d.name = 'test photo.jpg';
     d.directory = null;
     d.metadata = m;
     return d;
@@ -127,8 +127,8 @@ describe('Typeorm integration', () => {
     const conn = await SQLConnection.getConnection();
     const userRepository = conn.getRepository(UserEntity);
     const a = new UserEntity();
-    a.name = "test";
-    a.password = PasswordHelper.cryptPassword("test");
+    a.name = 'test';
+    a.password = PasswordHelper.cryptPassword('test');
     a.role = UserRoles.Admin;
     await userRepository.save(a);
     expect((await userRepository.find()).length).to.equal(1);
@@ -161,10 +161,10 @@ describe('Typeorm integration', () => {
     await pr.save(photo);
 
     let photos = await pr
-      .createQueryBuilder("photo")
-      .orderBy("photo.metadata.creationDate", "ASC")
-      .where('photo.metadata.positionData.city LIKE :text COLLATE utf8_general_ci', {text: "%" + photo.metadata.positionData.city + "%"})
-      .innerJoinAndSelect("photo.directory", "directory")
+      .createQueryBuilder('photo')
+      .orderBy('photo.metadata.creationDate', 'ASC')
+      .where('photo.metadata.positionData.city LIKE :text COLLATE utf8_general_ci', {text: '%' + photo.metadata.positionData.city + '%'})
+      .innerJoinAndSelect('photo.directory', 'directory')
       .limit(10)
       .getMany();
 
@@ -183,10 +183,10 @@ describe('Typeorm integration', () => {
     photo.metadata.positionData = null;
     await pr.save(photo);
     let photos = await pr
-      .createQueryBuilder("photo")
-      .orderBy("photo.metadata.creationDate", "ASC")
-      .where('photo.metadata.positionData.city LIKE :text COLLATE utf8_general_ci', {text: "%" + city + "%"})
-      .innerJoinAndSelect("photo.directory", "directory")
+      .createQueryBuilder('photo')
+      .orderBy('photo.metadata.creationDate', 'ASC')
+      .where('photo.metadata.positionData.city LIKE :text COLLATE utf8_general_ci', {text: '%' + city + '%'})
+      .innerJoinAndSelect('photo.directory', 'directory')
       .limit(10)
       .getMany();
 

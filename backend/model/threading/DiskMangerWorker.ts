@@ -1,14 +1,14 @@
-import * as fs from "fs";
-import * as path from "path";
-import {DirectoryDTO} from "../../../common/entities/DirectoryDTO";
-import {CameraMetadata, GPSMetadata, ImageSize, PhotoDTO, PhotoMetadata} from "../../../common/entities/PhotoDTO";
-import {Logger} from "../../Logger";
-import {IptcParser} from "ts-node-iptc";
-import {ExifParserFactory} from "ts-exif-parser";
-import {ProjectPath} from "../../ProjectPath";
-import {Config} from "../../../common/config/private/Config";
+import * as fs from 'fs';
+import * as path from 'path';
+import {DirectoryDTO} from '../../../common/entities/DirectoryDTO';
+import {CameraMetadata, GPSMetadata, ImageSize, PhotoDTO, PhotoMetadata} from '../../../common/entities/PhotoDTO';
+import {Logger} from '../../Logger';
+import {IptcParser} from 'ts-node-iptc';
+import {ExifParserFactory} from 'ts-exif-parser';
+import {ProjectPath} from '../../ProjectPath';
+import {Config} from '../../../common/config/private/Config';
 
-const LOG_TAG = "[DiskManagerTask]";
+const LOG_TAG = '[DiskManagerTask]';
 
 export class DiskMangerWorker {
   private static isImage(fullPath: string) {
@@ -139,7 +139,7 @@ export class DiskMangerWorker {
                 metadata.size = <ImageSize> {width: 1, height: 1};
               }
             } catch (err) {
-              Logger.debug(LOG_TAG, "Error parsing exif", fullPath, err);
+              Logger.debug(LOG_TAG, 'Error parsing exif', fullPath, err);
               metadata.size = <ImageSize> {width: 1, height: 1};
             }
 

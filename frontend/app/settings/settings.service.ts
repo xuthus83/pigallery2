@@ -1,10 +1,7 @@
-import {Injectable} from "@angular/core";
-import {BehaviorSubject} from "rxjs/BehaviorSubject";
-import {
-  DatabaseType, IPrivateConfig, ReIndexingSensitivity,
-  ThumbnailProcessingLib
-} from "../../../common/config/private/IPrivateConfig";
-import {NetworkService} from "../model/network/network.service";
+import {Injectable} from '@angular/core';
+import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import {DatabaseType, IPrivateConfig, ReIndexingSensitivity, ThumbnailProcessingLib} from '../../../common/config/private/IPrivateConfig';
+import {NetworkService} from '../model/network/network.service';
 
 @Injectable()
 export class SettingsService {
@@ -33,10 +30,10 @@ export class SettingsService {
         },
         Map: {
           enabled: true,
-          googleApiKey: ""
+          googleApiKey: ''
         },
-        publicUrl: "",
-        applicationTitle: "",
+        publicUrl: '',
+        applicationTitle: '',
         enableCache: true,
         enableOnScrollRendering: true,
         enableOnScrollThumbnailPrioritising: true,
@@ -50,11 +47,11 @@ export class SettingsService {
         sharing: {
           updateTimeout: 2000
         },
-        imagesFolder: "",
+        imagesFolder: '',
         enableThreading: true,
         port: 80,
         thumbnail: {
-          folder: "",
+          folder: '',
           qualityPriority: true,
           processingLibrary: ThumbnailProcessingLib.sharp
         },
@@ -69,7 +66,7 @@ export class SettingsService {
   }
 
   public async getSettings(): Promise<void> {
-    this.settings.next(await <Promise<IPrivateConfig>>this._networkService.getJson("/settings"));
+    this.settings.next(await <Promise<IPrivateConfig>>this._networkService.getJson('/settings'));
   }
 
 

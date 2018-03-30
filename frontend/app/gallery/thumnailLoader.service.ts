@@ -1,9 +1,9 @@
-import {Injectable} from "@angular/core";
-import {GalleryCacheService} from "./cache.gallery.service";
-import {Photo} from "./Photo";
-import {IconPhoto} from "./IconPhoto";
-import {PhotoDTO} from "../../../common/entities/PhotoDTO";
-import {Config} from "../../../common/config/public/Config";
+import {Injectable} from '@angular/core';
+import {GalleryCacheService} from './cache.gallery.service';
+import {Photo} from './Photo';
+import {IconPhoto} from './IconPhoto';
+import {PhotoDTO} from '../../../common/entities/PhotoDTO';
+import {Config} from '../../../common/config/public/Config';
 
 export enum ThumbnailLoadingPriority {
   extraHigh = 4, high = 3, medium = 2, low = 1
@@ -23,7 +23,7 @@ export class ThumbnailLoaderService {
 
     let index = taskEntry.parentTask.taskEntities.indexOf(taskEntry);
     if (index == -1) {
-      throw new Error("ThumbnailTaskEntity not exist on Task");
+      throw new Error('ThumbnailTaskEntity not exist on Task');
     }
     taskEntry.parentTask.taskEntities.splice(index, 1);
 
@@ -31,7 +31,7 @@ export class ThumbnailLoaderService {
       && taskEntry.parentTask.inProgress == false) {
       let i = this.que.indexOf(taskEntry.parentTask);
       if (i == -1) {
-        throw new Error("ThumbnailTask not exist");
+        throw new Error('ThumbnailTask not exist');
       }
       this.que.splice(i, 1);
     }
@@ -136,7 +136,7 @@ export class ThumbnailLoaderService {
     let i = this.que.indexOf(task);
     if (i == -1) {
       if (task.taskEntities.length !== 0) {
-        console.error("ThumbnailLoader: can't find poolTask to remove");
+        console.error('ThumbnailLoader: can\'t find poolTask to remove');
       }
       return;
     }

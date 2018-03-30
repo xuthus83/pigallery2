@@ -1,10 +1,10 @@
-import {Component, ViewEncapsulation} from "@angular/core";
-import {RouterLink} from "@angular/router";
-import {AuthenticationService} from "../model/network/authentication.service";
-import {UserDTO, UserRoles} from "../../../common/entities/UserDTO";
-import {Config} from "../../../common/config/public/Config";
-import {BehaviorSubject} from "rxjs/BehaviorSubject";
-import {NotificationService} from "../model/notification.service";
+import {Component, ViewEncapsulation} from '@angular/core';
+import {RouterLink} from '@angular/router';
+import {AuthenticationService} from '../model/network/authentication.service';
+import {UserDTO, UserRoles} from '../../../common/entities/UserDTO';
+import {Config} from '../../../common/config/public/Config';
+import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import {NotificationService} from '../model/notification.service';
 
 @Component({
   selector: 'app-frame',

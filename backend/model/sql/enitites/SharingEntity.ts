@@ -1,7 +1,7 @@
-import {Column, Entity, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
-import {SharingDTO} from "../../../../common/entities/SharingDTO";
-import {UserEntity} from "./UserEntity";
-import {UserDTO} from "../../../../common/entities/UserDTO";
+import {Column, Entity, ManyToOne, PrimaryGeneratedColumn} from 'typeorm';
+import {SharingDTO} from '../../../../common/entities/SharingDTO';
+import {UserEntity} from './UserEntity';
+import {UserDTO} from '../../../../common/entities/UserDTO';
 
 @Entity()
 export class SharingEntity implements SharingDTO {
@@ -14,7 +14,7 @@ export class SharingEntity implements SharingDTO {
   @Column()
   path: string;
 
-  @Column({type: "text", nullable: true})
+  @Column({type: 'text', nullable: true})
   password: string;
 
   @Column()

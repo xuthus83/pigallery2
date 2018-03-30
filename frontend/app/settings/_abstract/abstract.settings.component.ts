@@ -1,13 +1,13 @@
-import {Input, OnChanges, OnDestroy, OnInit, Output, ViewChild} from "@angular/core";
-import {AuthenticationService} from "../../model/network/authentication.service";
-import {UserRoles} from "../../../../common/entities/UserDTO";
-import {Utils} from "../../../../common/Utils";
-import {ErrorDTO} from "../../../../common/entities/Error";
-import {NotificationService} from "../../model/notification.service";
-import {NavigationService} from "../../model/navigation.service";
-import {AbstractSettingsService} from "./abstract.settings.service";
-import {IPrivateConfig} from "../../../../common/config/private/IPrivateConfig";
-import {I18n} from "@ngx-translate/i18n-polyfill";
+import {Input, OnChanges, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
+import {AuthenticationService} from '../../model/network/authentication.service';
+import {UserRoles} from '../../../../common/entities/UserDTO';
+import {Utils} from '../../../../common/Utils';
+import {ErrorDTO} from '../../../../common/entities/Error';
+import {NotificationService} from '../../model/notification.service';
+import {NavigationService} from '../../model/navigation.service';
+import {AbstractSettingsService} from './abstract.settings.service';
+import {IPrivateConfig} from '../../../../common/config/private/IPrivateConfig';
+import {I18n} from '@ngx-translate/i18n-polyfill';
 
 
 export abstract class SettingsComponent<T, S extends AbstractSettingsService<T>=AbstractSettingsService<T>>
@@ -32,10 +32,10 @@ export abstract class SettingsComponent<T, S extends AbstractSettingsService<T>=
   public original: T = <any>{};
 
   text = {
-    Enabled: "Enabled",
-    Disabled: "Disabled",
-    Low: "Low",
-    High: "High"
+    Enabled: 'Enabled',
+    Disabled: 'Disabled',
+    Low: 'Low',
+    High: 'High'
   };
 
   constructor(private name,
@@ -49,10 +49,10 @@ export abstract class SettingsComponent<T, S extends AbstractSettingsService<T>=
       this._settingsSubscription = this._settingsService.Settings.subscribe(this.onNewSettings);
       this.onNewSettings(this._settingsService._settingsService.settings.value);
     }
-    this.text.Enabled = i18n("Enabled");
-    this.text.Disabled = i18n("Disabled");
-    this.text.Low = i18n("Low");
-    this.text.High = i18n("High");
+    this.text.Enabled = i18n('Enabled');
+    this.text.Disabled = i18n('Disabled');
+    this.text.Low = i18n('Low');
+    this.text.High = i18n('High');
   }
 
   onNewSettings = (s) => {
@@ -101,11 +101,11 @@ export abstract class SettingsComponent<T, S extends AbstractSettingsService<T>=
 
   public async save() {
     this.inProgress = true;
-    this.error = "";
+    this.error = '';
     try {
       await this._settingsService.updateSettings(this.settings);
       await this.getSettings();
-      this.notification.success(this.name + this.i18n(' settings saved'), this.i18n("Success"));
+      this.notification.success(this.name + this.i18n(' settings saved'), this.i18n('Success'));
       this.inProgress = false;
       return true;
     } catch (err) {

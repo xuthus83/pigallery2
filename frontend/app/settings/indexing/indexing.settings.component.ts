@@ -1,14 +1,14 @@
-import {Component} from "@angular/core";
-import {IndexingSettingsService} from "./indexing.settings.service";
-import {AuthenticationService} from "../../model/network/authentication.service";
-import {NavigationService} from "../../model/navigation.service";
-import {NotificationService} from "../../model/notification.service";
-import {ErrorDTO} from "../../../../common/entities/Error";
-import {Observable} from "rxjs/Rx";
-import {IndexingConfig, ReIndexingSensitivity} from "../../../../common/config/private/IPrivateConfig";
-import {SettingsComponent} from "../_abstract/abstract.settings.component";
-import {Utils} from "../../../../common/Utils";
-import {I18n} from "@ngx-translate/i18n-polyfill";
+import {Component} from '@angular/core';
+import {IndexingSettingsService} from './indexing.settings.service';
+import {AuthenticationService} from '../../model/network/authentication.service';
+import {NavigationService} from '../../model/navigation.service';
+import {NotificationService} from '../../model/notification.service';
+import {ErrorDTO} from '../../../../common/entities/Error';
+import {Observable} from 'rxjs/Rx';
+import {IndexingConfig, ReIndexingSensitivity} from '../../../../common/config/private/IPrivateConfig';
+import {SettingsComponent} from '../_abstract/abstract.settings.component';
+import {Utils} from '../../../../common/Utils';
+import {I18n} from '@ngx-translate/i18n-polyfill';
 
 @Component({
   selector: 'settings-indexing',
@@ -54,7 +54,7 @@ export class IndexingSettingsComponent extends SettingsComponent<IndexingConfig,
               notification: NotificationService,
               i18n: I18n) {
 
-    super(i18n("Indexing"), _authService, _navigation, <any>_settingsService, notification, i18n, s => s.Server.indexing);
+    super(i18n('Indexing'), _authService, _navigation, <any>_settingsService, notification, i18n, s => s.Server.indexing);
 
   }
 
@@ -79,11 +79,11 @@ export class IndexingSettingsComponent extends SettingsComponent<IndexingConfig,
 
   async index() {
     this.inProgress = true;
-    this.error = "";
+    this.error = '';
     try {
       await this._settingsService.index();
       this.updateProgress();
-      this.notification.success(this.i18n("Folder indexed"), this.i18n("Success"));
+      this.notification.success(this.i18n('Folder indexed'), this.i18n('Success'));
       this.inProgress = false;
       return true;
     } catch (err) {
@@ -99,10 +99,10 @@ export class IndexingSettingsComponent extends SettingsComponent<IndexingConfig,
 
   async cancelIndexing() {
     this.inProgress = true;
-    this.error = "";
+    this.error = '';
     try {
       await (<IndexingSettingsService>this._settingsService).cancel();
-      this.notification.success(this.i18n("Folder indexed"), this.i18n("Success"));
+      this.notification.success(this.i18n('Folder indexed'), this.i18n('Success'));
       this.inProgress = false;
       return true;
     } catch (err) {
@@ -118,10 +118,10 @@ export class IndexingSettingsComponent extends SettingsComponent<IndexingConfig,
 
   async resetDatabase() {
     this.inProgress = true;
-    this.error = "";
+    this.error = '';
     try {
       await (<IndexingSettingsService>this._settingsService).reset();
-      this.notification.success(this.i18n('Database reset'), this.i18n("Success"));
+      this.notification.success(this.i18n('Database reset'), this.i18n('Success'));
       this.inProgress = false;
       return true;
     } catch (err) {

@@ -1,7 +1,7 @@
-import {Metadata, SharpInstance} from "sharp";
-import {Dimensions, State} from "gm";
-import {Logger} from "../../Logger";
-import {ThumbnailProcessingLib} from "../../../common/config/private/IPrivateConfig";
+import {Metadata, SharpInstance} from 'sharp';
+import {Dimensions, State} from 'gm';
+import {Logger} from '../../Logger';
+import {ThumbnailProcessingLib} from '../../../common/config/private/IPrivateConfig';
 
 export class ThumbnailWoker {
 
@@ -39,14 +39,14 @@ export class RendererFactory {
       case ThumbnailProcessingLib.sharp:
         return RendererFactory.Sharp();
     }
-    throw "unknown renderer"
+    throw 'unknown renderer';
   }
 
   public static Jimp() {
-    const Jimp = require("jimp");
+    const Jimp = require('jimp');
     return async (input: RendererInput): Promise<void> => {
       //generate thumbnail
-      Logger.silly("[JimpThRenderer] rendering thumbnail:", input.imagePath);
+      Logger.silly('[JimpThRenderer] rendering thumbnail:', input.imagePath);
       const image = await Jimp.read(input.imagePath);
       /**
        * newWidth * newHeight = size*size
@@ -83,10 +83,10 @@ export class RendererFactory {
 
 
   public static Sharp() {
-    const sharp = require("sharp");
+    const sharp = require('sharp');
     return async (input: RendererInput): Promise<void> => {
 
-      Logger.silly("[SharpThRenderer] rendering thumbnail:", input.imagePath);
+      Logger.silly('[SharpThRenderer] rendering thumbnail:', input.imagePath);
       const image: SharpInstance = sharp(input.imagePath);
       const metadata: Metadata = await image.metadata();
 
@@ -120,10 +120,10 @@ export class RendererFactory {
 
 
   public static Gm() {
-    const gm = require("gm");
+    const gm = require('gm');
     return (input: RendererInput): Promise<void> => {
       return new Promise((resolve, reject) => {
-        Logger.silly("[GMThRenderer] rendering thumbnail:", input.imagePath);
+        Logger.silly('[GMThRenderer] rendering thumbnail:', input.imagePath);
         let image: State = gm(input.imagePath);
         image.size((err, value: Dimensions) => {
           if (err) {

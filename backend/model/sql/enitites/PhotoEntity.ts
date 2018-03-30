@@ -1,37 +1,30 @@
-import {Column, Entity, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
-import {
-  CameraMetadata,
-  GPSMetadata,
-  ImageSize,
-  PhotoDTO,
-  PhotoMetadata,
-  PositionMetaData
-} from "../../../../common/entities/PhotoDTO";
-import {DirectoryEntity} from "./DirectoryEntity";
+import {Column, Entity, ManyToOne, PrimaryGeneratedColumn} from 'typeorm';
+import {CameraMetadata, GPSMetadata, ImageSize, PhotoDTO, PhotoMetadata, PositionMetaData} from '../../../../common/entities/PhotoDTO';
+import {DirectoryEntity} from './DirectoryEntity';
 
 
 @Entity()
 export class CameraMetadataEntity implements CameraMetadata {
 
-  @Column("text", {nullable: true})
+  @Column('text', {nullable: true})
   ISO: number;
 
-  @Column("text", {nullable: true})
+  @Column('text', {nullable: true})
   model: string;
 
-  @Column("text", {nullable: true})
+  @Column('text', {nullable: true})
   maker: string;
 
-  @Column("int", {nullable: true})
+  @Column('int', {nullable: true})
   fStop: number;
 
-  @Column("int", {nullable: true})
+  @Column('int', {nullable: true})
   exposure: number;
 
-  @Column("int", {nullable: true})
+  @Column('int', {nullable: true})
   focalLength: number;
 
-  @Column("text", {nullable: true})
+  @Column('text', {nullable: true})
   lens: string;
 }
 
@@ -39,21 +32,21 @@ export class CameraMetadataEntity implements CameraMetadata {
 @Entity()
 export class GPSMetadataEntity implements GPSMetadata {
 
-  @Column("int", {nullable: true})
+  @Column('int', {nullable: true})
   latitude: number;
-  @Column("int", {nullable: true})
+  @Column('int', {nullable: true})
   longitude: number;
-  @Column("int", {nullable: true})
+  @Column('int', {nullable: true})
   altitude: number;
 }
 
 @Entity()
 export class ImageSizeEntity implements ImageSize {
 
-  @Column("int")
+  @Column('int')
   width: number;
 
-  @Column("int")
+  @Column('int')
   height: number;
 }
 
@@ -64,13 +57,13 @@ export class PositionMetaDataEntity implements PositionMetaData {
   @Column(type => GPSMetadataEntity)
   GPSData: GPSMetadataEntity;
 
-  @Column("text", {nullable: true})
+  @Column('text', {nullable: true})
   country: string;
 
-  @Column("text", {nullable: true})
+  @Column('text', {nullable: true})
   state: string;
 
-  @Column("text", {nullable: true})
+  @Column('text', {nullable: true})
   city: string;
 }
 
@@ -78,7 +71,7 @@ export class PositionMetaDataEntity implements PositionMetaData {
 @Entity()
 export class PhotoMetadataEntity implements PhotoMetadata {
 
-  @Column("simple-array")
+  @Column('simple-array')
   keywords: Array<string>;
 
   @Column(type => CameraMetadataEntity)
@@ -90,10 +83,10 @@ export class PhotoMetadataEntity implements PhotoMetadata {
   @Column(type => ImageSizeEntity)
   size: ImageSizeEntity;
 
-  @Column("bigint")
+  @Column('bigint')
   creationDate: number;
 
-  @Column("int")
+  @Column('int')
   fileSize: number;
 }
 
@@ -104,10 +97,10 @@ export class PhotoEntity implements PhotoDTO {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column("text")
+  @Column('text')
   name: string;
 
-  @ManyToOne(type => DirectoryEntity, directory => directory.photos, {onDelete: "CASCADE"})
+  @ManyToOne(type => DirectoryEntity, directory => directory.photos, {onDelete: 'CASCADE'})
   directory: DirectoryEntity;
 
   @Column(type => PhotoMetadataEntity)

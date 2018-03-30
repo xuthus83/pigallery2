@@ -1,5 +1,5 @@
-import * as path from "path";
-import {Config} from "../common/config/private/Config";
+import * as path from 'path';
+import {Config} from '../common/config/private/Config';
 
 class ProjectPathClass {
   public Root: string;
@@ -24,10 +24,10 @@ class ProjectPathClass {
   }
 
   reset() {
-    this.Root = path.join(__dirname, "/../");
+    this.Root = path.join(__dirname, '/../');
     this.ImageFolder = this.getAbsolutePath(Config.Server.imagesFolder);
     this.ThumbnailFolder = this.getAbsolutePath(Config.Server.thumbnail.folder);
-    this.FrontendFolder = path.join(this.Root, 'dist')
+    this.FrontendFolder = path.join(this.Root, 'dist');
   }
 }
 

@@ -1,10 +1,10 @@
-declare module "jimp" {
-  function read(filaname);
+declare module 'jimp' {
+  function read(fileName);
 
-  var RESIZE_NEAREST_NEIGHBOR;
-  var RESIZE_BILINEAR;
-  var RESIZE_BICUBIC;
-  var RESIZE_HERMITE;
-  var RESIZE_BEZIER;
-  var AUTO: any;
+  const RESIZE_NEAREST_NEIGHBOR;
+  const RESIZE_BILINEAR;
+  const RESIZE_BICUBIC;
+  const RESIZE_HERMITE;
+  const RESIZE_BEZIER;
+  const AUTO: any;
 }

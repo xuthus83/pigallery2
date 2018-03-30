@@ -1,7 +1,7 @@
-import {NextFunction, Request, Response} from "express";
-import {ErrorCodes, ErrorDTO} from "../../../common/entities/Error";
-import {UserRoles} from "../../../common/entities/UserDTO";
-import {ObjectManagerRepository} from "../../model/ObjectManagerRepository";
+import {NextFunction, Request, Response} from 'express';
+import {ErrorCodes, ErrorDTO} from '../../../common/entities/Error';
+import {UserRoles} from '../../../common/entities/UserDTO';
+import {ObjectManagerRepository} from '../../model/ObjectManagerRepository';
 
 export class UserRequestConstrainsMWs {
 
@@ -38,7 +38,7 @@ export class UserRequestConstrainsMWs {
       return next();
     }
 
-    //TODO: fix it!
+    // TODO: fix it!
     try {
       const result = await ObjectManagerRepository.getInstance().UserManager.find({minRole: UserRoles.Admin});
       if (result.length <= 1) {

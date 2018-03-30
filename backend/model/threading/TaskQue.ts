@@ -1,5 +1,5 @@
-import {RendererInput, ThumbnailWoker} from "./ThumbnailWoker";
-import {Config} from "../../../common/config/private/Config";
+import {RendererInput, ThumbnailWoker} from './ThumbnailWoker';
+import {Config} from '../../../common/config/private/Config';
 
 
 interface QueTask {

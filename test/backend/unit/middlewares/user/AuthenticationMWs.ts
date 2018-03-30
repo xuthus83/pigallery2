@@ -1,11 +1,11 @@
-import {expect} from "chai";
-import {AuthenticationMWs} from "../../../../../backend/middlewares/user/AuthenticationMWs";
-import {ErrorCodes, ErrorDTO} from "../../../../../common/entities/Error";
-import {UserDTO, UserRoles} from "../../../../../common/entities/UserDTO";
-import {ObjectManagerRepository} from "../../../../../backend/model/ObjectManagerRepository";
-import {UserManager} from "../../../../../backend/model/memory/UserManager";
-import {Config} from "../../../../../common/config/private/Config";
-import {IUserManager} from "../../../../../backend/model/interfaces/IUserManager";
+import {expect} from 'chai';
+import {AuthenticationMWs} from '../../../../../backend/middlewares/user/AuthenticationMWs';
+import {ErrorCodes, ErrorDTO} from '../../../../../common/entities/Error';
+import {UserDTO, UserRoles} from '../../../../../common/entities/UserDTO';
+import {ObjectManagerRepository} from '../../../../../backend/model/ObjectManagerRepository';
+import {UserManager} from '../../../../../backend/model/memory/UserManager';
+import {Config} from '../../../../../common/config/private/Config';
+import {IUserManager} from '../../../../../backend/model/interfaces/IUserManager';
 
 
 describe('Authentication middleware', () => {
@@ -18,7 +18,7 @@ describe('Authentication middleware', () => {
     it('should call next on authenticated', (done) => {
       let req: any = {
         session: {
-          user: "A user"
+          user: 'A user'
         },
         sessionOptions: {},
         query: {},
@@ -71,7 +71,7 @@ describe('Authentication middleware', () => {
     it('should call next error on authenticated', (done) => {
       let req: any = {
         session: {
-          user: "A user"
+          user: 'A user'
         },
         sessionOptions: {},
       };
@@ -181,8 +181,8 @@ describe('Authentication middleware', () => {
       let req: any = {
         body: {
           loginCredential: {
-            username: "aa",
-            password: "bb"
+            username: 'aa',
+            password: 'bb'
           }
         },
         query: {},
@@ -208,8 +208,8 @@ describe('Authentication middleware', () => {
         session: {},
         body: {
           loginCredential: {
-            username: "aa",
-            password: "bb"
+            username: 'aa',
+            password: 'bb'
           }
         },
         query: {},
@@ -217,12 +217,12 @@ describe('Authentication middleware', () => {
       };
       let next: any = (err: ErrorDTO) => {
         expect(err).to.be.undefined;
-        expect(req.session.user).to.be.eql("test user");
+        expect(req.session.user).to.be.eql('test user');
         done();
       };
       ObjectManagerRepository.getInstance().UserManager = <IUserManager>{
         findOne: (filter) => {
-          return Promise.resolve(<any>"test user");
+          return Promise.resolve(<any>'test user');
         }
       };
       AuthenticationMWs.login(req, null, next);

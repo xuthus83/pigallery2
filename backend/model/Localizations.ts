@@ -1,7 +1,7 @@
-import {ProjectPath} from "../ProjectPath";
-import *  as fs from "fs";
-import *  as path from "path";
-import {Config} from "../../common/config/private/Config";
+import {ProjectPath} from '../ProjectPath';
+import *  as fs from 'fs';
+import *  as path from 'path';
+import {Config} from '../../common/config/private/Config';
 
 export class Localizations {
 
@@ -12,7 +12,7 @@ export class Localizations {
     const notLanguage = ['assets'];
     const dirCont = fs.readdirSync(ProjectPath.FrontendFolder).filter(f => fs.statSync(path.resolve(ProjectPath.FrontendFolder, f)).isDirectory());
     Config.Client.languages = dirCont.filter(d => notLanguage.indexOf(d) == -1);
-    Config.Client.languages.push("en");
+    Config.Client.languages.push('en');
   }
 
 }

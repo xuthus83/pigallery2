@@ -1,12 +1,12 @@
-import {Component} from "@angular/core";
-import {AuthenticationService} from "../../model/network/authentication.service";
-import {DataBaseConfig, DatabaseType} from "../../../../common/config/private/IPrivateConfig";
-import {Utils} from "../../../../common/Utils";
-import {NotificationService} from "../../model/notification.service";
-import {NavigationService} from "../../model/navigation.service";
-import {SettingsComponent} from "../_abstract/abstract.settings.component";
-import {DatabaseSettingsService} from "./database.settings.service";
-import {I18n} from "@ngx-translate/i18n-polyfill";
+import {Component} from '@angular/core';
+import {AuthenticationService} from '../../model/network/authentication.service';
+import {DataBaseConfig, DatabaseType} from '../../../../common/config/private/IPrivateConfig';
+import {Utils} from '../../../../common/Utils';
+import {NotificationService} from '../../model/notification.service';
+import {NavigationService} from '../../model/navigation.service';
+import {SettingsComponent} from '../_abstract/abstract.settings.component';
+import {DatabaseSettingsService} from './database.settings.service';
+import {I18n} from '@ngx-translate/i18n-polyfill';
 
 @Component({
   selector: 'settings-database',
@@ -25,7 +25,7 @@ export class DatabaseSettingsComponent extends SettingsComponent<DataBaseConfig>
               _settingsService: DatabaseSettingsService,
               notification: NotificationService,
               i18n: I18n) {
-    super(i18n("Database"), _authService, _navigation, _settingsService, notification, i18n, s => s.Server.database);
+    super(i18n('Database'), _authService, _navigation, _settingsService, notification, i18n, s => s.Server.database);
   }
 
   ngOnInit() {

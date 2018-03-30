@@ -1,23 +1,13 @@
-import {
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  EventEmitter,
-  HostListener,
-  OnDestroy,
-  Output,
-  QueryList,
-  ViewChild
-} from "@angular/core";
-import {PhotoDTO} from "../../../../common/entities/PhotoDTO";
-import {GalleryPhotoComponent} from "../grid/photo/photo.grid.gallery.component";
-import {Dimension} from "../../model/IRenderable";
-import {FullScreenService} from "../fullscreen.service";
-import {OverlayService} from "../overlay.service";
-import {Subscription} from "rxjs";
-import {animate, AnimationBuilder, AnimationPlayer, style} from "@angular/animations";
-import {GalleryLightboxPhotoComponent} from "./photo/photo.lightbox.gallery.component";
-import {Observable} from "rxjs/Observable";
+import {ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, OnDestroy, Output, QueryList, ViewChild} from '@angular/core';
+import {PhotoDTO} from '../../../../common/entities/PhotoDTO';
+import {GalleryPhotoComponent} from '../grid/photo/photo.grid.gallery.component';
+import {Dimension} from '../../model/IRenderable';
+import {FullScreenService} from '../fullscreen.service';
+import {OverlayService} from '../overlay.service';
+import {Subscription} from 'rxjs';
+import {animate, AnimationBuilder, AnimationPlayer, style} from '@angular/animations';
+import {GalleryLightboxPhotoComponent} from './photo/photo.lightbox.gallery.component';
+import {Observable} from 'rxjs/Observable';
 
 @Component({
   selector: 'gallery-lightbox',
@@ -28,8 +18,8 @@ export class GalleryLightboxComponent implements OnDestroy {
 
 
   @Output('onLastElement') onLastElement = new EventEmitter();
-  @ViewChild("photo") photoElement: GalleryLightboxPhotoComponent;
-  @ViewChild("lightbox") lightboxElement: ElementRef;
+  @ViewChild('photo') photoElement: GalleryLightboxPhotoComponent;
+  @ViewChild('lightbox') lightboxElement: ElementRef;
 
   public navigation = {hasPrev: true, hasNext: true};
   public blackCanvasOpacity: any = 0;
@@ -108,40 +98,13 @@ export class GalleryLightboxComponent implements OnDestroy {
     this.updateActivePhoto(photoIndex, resize);
   }
 
-  private updateActivePhoto(photoIndex: number, resize: boolean = true) {
-    let pcList = this.gridPhotoQL.toArray();
-
-
-    if (photoIndex < 0 || photoIndex > this.gridPhotoQL.length) {
-      throw new Error("Can't find the photo");
-    }
-    this.activePhotoId = photoIndex;
-    this.activePhoto = pcList[photoIndex];
-
-    if (resize) {
-      this.animatePhoto(this.calcLightBoxPhotoDimension(this.activePhoto.gridPhoto.photo));
-    }
-    this.navigation.hasPrev = photoIndex > 0;
-    this.navigation.hasNext = photoIndex + 1 < pcList.length;
-
-    let to = this.activePhoto.getDimension();
-
-    //if target image out of screen -> scroll to there
-    if (this.getBodyScrollTop() > to.top || this.getBodyScrollTop() + this.getPhotoFrameHeight() < to.top) {
-      this.setBodyScrollTop(to.top);
-    }
-
-  }
-
-  startPhotoDimension: Dimension = <Dimension>{top: 0, left: 0, width: 0, height: 0};
-
   public show(photo: PhotoDTO) {
     this.controllersVisible = true;
     this.showControls();
     this.visible = true;
     let selectedPhoto = this.findPhotoComponent(photo);
     if (selectedPhoto === null) {
-      throw new Error("Can't find Photo");
+      throw new Error('Can\'t find Photo');
     }
 
     const lightboxDimension = selectedPhoto.getDimension();
@@ -166,6 +129,33 @@ export class GalleryLightboxComponent implements OnDestroy {
     this.overlayService.showOverlay();
     this.blackCanvasOpacity = 1.0;
     this.showPhoto(this.gridPhotoQL.toArray().indexOf(selectedPhoto), false);
+  }
+
+  startPhotoDimension: Dimension = <Dimension>{top: 0, left: 0, width: 0, height: 0};
+
+  private updateActivePhoto(photoIndex: number, resize: boolean = true) {
+    let pcList = this.gridPhotoQL.toArray();
+
+
+    if (photoIndex < 0 || photoIndex > this.gridPhotoQL.length) {
+      throw new Error('Can\'t find the photo');
+    }
+    this.activePhotoId = photoIndex;
+    this.activePhoto = pcList[photoIndex];
+
+    if (resize) {
+      this.animatePhoto(this.calcLightBoxPhotoDimension(this.activePhoto.gridPhoto.photo));
+    }
+    this.navigation.hasPrev = photoIndex > 0;
+    this.navigation.hasNext = photoIndex + 1 < pcList.length;
+
+    let to = this.activePhoto.getDimension();
+
+    //if target image out of screen -> scroll to there
+    if (this.getBodyScrollTop() > to.top || this.getBodyScrollTop() + this.getPhotoFrameHeight() < to.top) {
+      this.setBodyScrollTop(to.top);
+    }
+
   }
 
   public hide() {

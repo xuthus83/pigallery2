@@ -1,4 +1,4 @@
-import {PhotoDTO} from "../../../../common/entities/PhotoDTO";
+import {PhotoDTO} from '../../../../common/entities/PhotoDTO';
 
 export class GridRowBuilder {
 

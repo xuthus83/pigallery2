@@ -1,13 +1,13 @@
-import {Injectable} from "@angular/core";
-import {UserDTO, UserRoles} from "../../../../common/entities/UserDTO";
-import {BehaviorSubject} from "rxjs/BehaviorSubject";
-import {UserService} from "./user.service";
-import {LoginCredential} from "../../../../common/entities/LoginCredential";
-import {Cookie} from "ng2-cookies";
-import {Config} from "../../../../common/config/public/Config";
-import {NetworkService} from "./network.service";
-import {ErrorCodes, ErrorDTO} from "../../../../common/entities/Error";
-import {CookieNames} from "../../../../common/CookieNames";
+import {Injectable} from '@angular/core';
+import {UserDTO, UserRoles} from '../../../../common/entities/UserDTO';
+import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import {UserService} from './user.service';
+import {LoginCredential} from '../../../../common/entities/LoginCredential';
+import {Cookie} from 'ng2-cookies';
+import {Config} from '../../../../common/config/public/Config';
+import {NetworkService} from './network.service';
+import {ErrorCodes, ErrorDTO} from '../../../../common/entities/Error';
+import {CookieNames} from '../../../../common/CookieNames';
 
 declare module ServerInject {
   export let user: UserDTO;
@@ -24,13 +24,13 @@ export class AuthenticationService {
 
     //picking up session..
     if (this.isAuthenticated() == false && Cookie.get(CookieNames.session) != null) {
-      if (typeof ServerInject !== "undefined" && typeof ServerInject.user !== "undefined") {
+      if (typeof ServerInject !== 'undefined' && typeof ServerInject.user !== 'undefined') {
         this.user.next(ServerInject.user);
       }
       this.getSessionUser();
     } else {
       if (Config.Client.authenticationRequired === false) {
-        this.user.next(<UserDTO>{name: "", role: UserRoles.Admin});
+        this.user.next(<UserDTO>{name: '', role: UserRoles.Admin});
       }
     }
 

@@ -1,5 +1,5 @@
-import {Component, ElementRef, Input, OnChanges} from "@angular/core";
-import {GridPhoto} from "../../grid/GridPhoto";
+import {Component, ElementRef, Input, OnChanges} from '@angular/core';
+import {GridPhoto} from '../../grid/GridPhoto';
 
 @Component({
   selector: 'gallery-lightbox-photo',
@@ -12,7 +12,7 @@ export class GalleryLightboxPhotoComponent implements OnChanges {
   @Input() loadImage: boolean = false;
   @Input() windowAspect: number = 1;
 
-  public imageSize = {width: "auto", height: "100"};
+  public imageSize = {width: 'auto', height: '100'};
 
   imageLoaded: boolean = false;
   public imageLoadFinished: boolean = false;
@@ -27,6 +27,32 @@ export class GalleryLightboxPhotoComponent implements OnChanges {
     this.setImageSize();
   }
 
+  onImageError() {
+    //TODO:handle error
+    this.imageLoadFinished = true;
+    console.error('cant load image');
+  }
+
+
+  onImageLoad() {
+    this.imageLoadFinished = true;
+    this.imageLoaded = true;
+  }
+
+  public thumbnailPath(): string {
+    if (this.gridPhoto.isThumbnailAvailable() === true)
+      return this.gridPhoto.getThumbnailPath();
+
+    if (this.gridPhoto.isReplacementThumbnailAvailable() === true)
+      return this.gridPhoto.getReplacementThumbnailPath();
+    return null;
+  }
+
+  public showThumbnail(): boolean {
+    return this.gridPhoto && !this.imageLoaded &&
+      (this.gridPhoto.isThumbnailAvailable() || this.gridPhoto.isReplacementThumbnailAvailable());
+  }
+
   private setImageSize() {
     if (!this.gridPhoto) {
       return;
@@ -36,38 +62,12 @@ export class GalleryLightboxPhotoComponent implements OnChanges {
     const photoAspect = this.gridPhoto.photo.metadata.size.width / this.gridPhoto.photo.metadata.size.height;
 
     if (photoAspect < this.windowAspect) {
-      this.imageSize.height = "100";
+      this.imageSize.height = '100';
       this.imageSize.width = null;
     } else {
       this.imageSize.height = null;
-      this.imageSize.width = "100";
+      this.imageSize.width = '100';
     }
-  }
-
-
-  onImageLoad() {
-    this.imageLoadFinished = true;
-    this.imageLoaded = true;
-  }
-
-  onImageError() {
-    //TODO:handle error
-    this.imageLoadFinished = true;
-    console.error("cant load image");
-  }
-
-  public showThumbnail(): boolean {
-    return this.gridPhoto && !this.imageLoaded &&
-      (this.gridPhoto.isThumbnailAvailable() || this.gridPhoto.isReplacementThumbnailAvailable());
-  }
-
-  public thumbnailPath(): string {
-    if (this.gridPhoto.isThumbnailAvailable() === true)
-      return this.gridPhoto.getThumbnailPath();
-
-    if (this.gridPhoto.isReplacementThumbnailAvailable() === true)
-      return this.gridPhoto.getReplacementThumbnailPath();
-    return null
   }
 
 }

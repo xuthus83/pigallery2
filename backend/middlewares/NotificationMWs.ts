@@ -1,8 +1,9 @@
-import {NextFunction, Request, Response} from "express";
-import {UserRoles} from "../../common/entities/UserDTO";
-import {NotificationManager} from "../model/NotifocationManager";
+import {NextFunction, Request, Response} from 'express';
+import {UserRoles} from '../../common/entities/UserDTO';
+import {NotificationManager} from '../model/NotifocationManager';
 
-const LOG_TAG = "[NotificationMWs]";
+const LOG_TAG = '[NotificationMWs]';
+
 export class NotificationMWs {
 
 

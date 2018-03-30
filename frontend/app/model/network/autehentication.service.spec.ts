@@ -1,15 +1,15 @@
-import {inject, TestBed} from "@angular/core/testing";
-import {UserService} from "./user.service";
-import {UserDTO} from "../../../../common/entities/UserDTO";
-import "rxjs/Rx";
-import {LoginCredential} from "../../../../common/entities/LoginCredential";
-import {AuthenticationService} from "./authentication.service";
-import {NetworkService} from "./network.service";
-import {ErrorDTO} from "../../../../common/entities/Error";
+import {inject, TestBed} from '@angular/core/testing';
+import {UserService} from './user.service';
+import {UserDTO} from '../../../../common/entities/UserDTO';
+import 'rxjs/Rx';
+import {LoginCredential} from '../../../../common/entities/LoginCredential';
+import {AuthenticationService} from './authentication.service';
+import {NetworkService} from './network.service';
+import {ErrorDTO} from '../../../../common/entities/Error';
 
 class MockUserService {
   public login(credential: LoginCredential): Promise<UserDTO> {
-    return Promise.resolve(<UserDTO>{name: "testUserName"})
+    return Promise.resolve(<UserDTO>{name: 'testUserName'});
   }
 
   public async getSessionUser() {
@@ -35,7 +35,7 @@ describe('AuthenticationService', () => {
 
 
   it('should call UserDTO service login', inject([AuthenticationService, UserService], (authService, userService) => {
-    spyOn(userService, "login").and.callThrough();
+    spyOn(userService, 'login').and.callThrough();
 
     expect(userService.login).not.toHaveBeenCalled();
     authService.login();
@@ -49,7 +49,7 @@ describe('AuthenticationService', () => {
 
 
   it('should have Authenticated use', inject([AuthenticationService], (authService: AuthenticationService) => {
-    spyOn(authService.user, "next").and.callThrough();
+    spyOn(authService.user, 'next').and.callThrough();
     authService.user.subscribe((user) => {
       if (user == null) {
         return;

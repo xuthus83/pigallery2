@@ -1,19 +1,19 @@
-import {expect} from "chai";
-import * as fs from "fs";
-import * as path from "path";
-import {Config} from "../../../../../common/config/private/Config";
-import {DatabaseType} from "../../../../../common/config/private/IPrivateConfig";
-import {SQLConnection} from "../../../../../backend/model/sql/SQLConnection";
-import {SharingManager} from "../../../../../backend/model/sql/SharingManager";
-import {SharingDTO} from "../../../../../common/entities/SharingDTO";
-import {UserEntity} from "../../../../../backend/model/sql/enitites/UserEntity";
-import {UserDTO, UserRoles} from "../../../../../common/entities/UserDTO";
+import {expect} from 'chai';
+import * as fs from 'fs';
+import * as path from 'path';
+import {Config} from '../../../../../common/config/private/Config';
+import {DatabaseType} from '../../../../../common/config/private/IPrivateConfig';
+import {SQLConnection} from '../../../../../backend/model/sql/SQLConnection';
+import {SharingManager} from '../../../../../backend/model/sql/SharingManager';
+import {SharingDTO} from '../../../../../common/entities/SharingDTO';
+import {UserEntity} from '../../../../../backend/model/sql/enitites/UserEntity';
+import {UserDTO, UserRoles} from '../../../../../common/entities/UserDTO';
 
 describe('SharingManager', () => {
 
 
-  const tempDir = path.join(__dirname, "../../tmp");
-  const dbPath = path.join(tempDir, "test.db");
+  const tempDir = path.join(__dirname, '../../tmp');
+  const dbPath = path.join(tempDir, 'test.db');
 
   let creator: UserDTO = null;
 
@@ -32,8 +32,8 @@ describe('SharingManager', () => {
 
     creator = await conn.getRepository(UserEntity).save({
       id: null,
-      name: "test use",
-      password: "",
+      name: 'test use',
+      password: '',
       role: UserRoles.User,
       permissions: null
     });
@@ -65,8 +65,8 @@ describe('SharingManager', () => {
 
     let sharing: SharingDTO = {
       id: null,
-      sharingKey: "testKey",
-      path: "/",
+      sharingKey: 'testKey',
+      path: '/',
       password: null,
       creator: creator,
       expires: Date.now() + 1000,
@@ -90,8 +90,8 @@ describe('SharingManager', () => {
 
     let sharing: SharingDTO = {
       id: null,
-      sharingKey: "testKey",
-      path: "/",
+      sharingKey: 'testKey',
+      path: '/',
       password: null,
       creator: creator,
       expires: Date.now() + 1000,
@@ -100,7 +100,7 @@ describe('SharingManager', () => {
     };
 
     const saved = await sm.createSharing(sharing);
-    const found = await sm.findOne({sharingKey: "testKey"});
+    const found = await sm.findOne({sharingKey: 'testKey'});
 
     expect(found.id).to.not.equals(null);
     expect(found.sharingKey).to.equals(sharing.sharingKey);
@@ -115,8 +115,8 @@ describe('SharingManager', () => {
 
     let sharing: SharingDTO = {
       id: null,
-      sharingKey: "testKey",
-      path: "/",
+      sharingKey: 'testKey',
+      path: '/',
       password: null,
       creator: creator,
       expires: Date.now() + 1000,

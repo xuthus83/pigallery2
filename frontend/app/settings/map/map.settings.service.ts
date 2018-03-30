@@ -1,8 +1,8 @@
-import {Injectable} from "@angular/core";
-import {NetworkService} from "../../model/network/network.service";
-import {ClientConfig} from "../../../../common/config/public/ConfigClass";
-import {SettingsService} from "../settings.service";
-import {AbstractSettingsService} from "../_abstract/abstract.settings.service";
+import {Injectable} from '@angular/core';
+import {NetworkService} from '../../model/network/network.service';
+import {ClientConfig} from '../../../../common/config/public/ConfigClass';
+import {SettingsService} from '../settings.service';
+import {AbstractSettingsService} from '../_abstract/abstract.settings.service';
 
 @Injectable()
 export class MapSettingsService extends AbstractSettingsService<ClientConfig.MapConfig> {
@@ -13,7 +13,7 @@ export class MapSettingsService extends AbstractSettingsService<ClientConfig.Map
   }
 
   public updateSettings(settings: ClientConfig.MapConfig): Promise<void> {
-    return this._networkService.putJson("/settings/map", {settings: settings});
+    return this._networkService.putJson('/settings/map', {settings: settings});
   }
 
 }

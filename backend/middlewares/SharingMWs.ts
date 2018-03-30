@@ -1,9 +1,10 @@
-import {NextFunction, Request, Response} from "express";
-import {CreateSharingDTO, SharingDTO} from "../../common/entities/SharingDTO";
-import {ObjectManagerRepository} from "../model/ObjectManagerRepository";
-import {ErrorCodes, ErrorDTO} from "../../common/entities/Error";
+import {NextFunction, Request, Response} from 'express';
+import {CreateSharingDTO, SharingDTO} from '../../common/entities/SharingDTO';
+import {ObjectManagerRepository} from '../model/ObjectManagerRepository';
+import {ErrorCodes, ErrorDTO} from '../../common/entities/Error';
 
-const LOG_TAG = "[SharingMWs]";
+const LOG_TAG = '[SharingMWs]';
+
 export class SharingMWs {
 
 
@@ -26,14 +27,14 @@ export class SharingMWs {
       return next();
 
     } catch (err) {
-      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, "Error during retrieving sharing link", err));
+      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, 'Error during retrieving sharing link', err));
     }
 
   }
 
   public static async createSharing(req: Request, res: Response, next: NextFunction) {
     if ((typeof req.body === 'undefined') || (typeof req.body.createSharing === 'undefined')) {
-      return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, "createSharing filed is missing"));
+      return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, 'createSharing filed is missing'));
     }
     const createSharing: CreateSharingDTO = req.body.createSharing;
     let sharingKey = SharingMWs.generateKey();
@@ -50,7 +51,7 @@ export class SharingMWs {
     }
 
 
-    const directoryName = req.params.directory || "/";
+    const directoryName = req.params.directory || '/';
     let sharing: SharingDTO = {
       id: null,
       sharingKey: sharingKey,
@@ -68,20 +69,20 @@ export class SharingMWs {
       return next();
 
     } catch (err) {
-      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, "Error during creating sharing link", err));
+      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, 'Error during creating sharing link', err));
     }
   }
 
   public static async updateSharing(req: Request, res: Response, next: NextFunction) {
     if ((typeof req.body === 'undefined') || (typeof req.body.updateSharing === 'undefined')) {
-      return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, "updateSharing filed is missing"));
+      return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, 'updateSharing filed is missing'));
     }
     const updateSharing: CreateSharingDTO = req.body.updateSharing;
-    const directoryName = req.params.directory || "/";
+    const directoryName = req.params.directory || '/';
     let sharing: SharingDTO = {
       id: updateSharing.id,
       path: directoryName,
-      sharingKey: "",
+      sharingKey: '',
       password: updateSharing.password,
       creator: req.session.user,
       expires: Date.now() + updateSharing.valid,
@@ -93,7 +94,7 @@ export class SharingMWs {
       req.resultPipe = await ObjectManagerRepository.getInstance().SharingManager.updateSharing(sharing);
       return next();
     } catch (err) {
-      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, "Error during updating sharing link", err));
+      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, 'Error during updating sharing link', err));
     }
 
   }

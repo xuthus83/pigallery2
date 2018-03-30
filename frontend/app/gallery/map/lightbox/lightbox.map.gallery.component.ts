@@ -1,11 +1,11 @@
-import {Component, ElementRef, HostListener, Input, OnChanges, ViewChild} from "@angular/core";
-import {PhotoDTO} from "../../../../../common/entities/PhotoDTO";
-import {Dimension} from "../../../model/IRenderable";
-import {FullScreenService} from "../../fullscreen.service";
-import {AgmMap} from "@agm/core";
-import {IconThumbnail, Thumbnail, ThumbnailManagerService} from "../../thumnailManager.service";
-import {IconPhoto} from "../../IconPhoto";
-import {Photo} from "../../Photo";
+import {Component, ElementRef, HostListener, Input, OnChanges, ViewChild} from '@angular/core';
+import {PhotoDTO} from '../../../../../common/entities/PhotoDTO';
+import {Dimension} from '../../../model/IRenderable';
+import {FullScreenService} from '../../fullscreen.service';
+import {AgmMap} from '@agm/core';
+import {IconThumbnail, Thumbnail, ThumbnailManagerService} from '../../thumnailManager.service';
+import {IconPhoto} from '../../IconPhoto';
+import {Photo} from '../../Photo';
 
 @Component({
   selector: 'gallery-map-lightbox',
@@ -23,7 +23,7 @@ export class GalleryMapLightboxComponent implements OnChanges {
   mapPhotos: MapPhoto[] = [];
   mapCenter = {latitude: 0, longitude: 0};
 
-  @ViewChild("root") elementRef: ElementRef;
+  @ViewChild('root') elementRef: ElementRef;
 
   @ViewChild(AgmMap) map: AgmMap;
 

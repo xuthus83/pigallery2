@@ -1,5 +1,5 @@
-import {Injectable} from "@angular/core";
-import {Event} from "../../../common/event/Event";
+import {Injectable} from '@angular/core';
+import {Event} from '../../../common/event/Event';
 
 @Injectable()
 export class OverlayService {
@@ -24,20 +24,20 @@ export class OverlayService {
     if (this.scrollWidth == null) {
 
 
-      let outer = document.createElement("div");
-      outer.style.visibility = "hidden";
-      outer.style.width = "100px";
-      outer.style.msOverflowStyle = "scrollbar"; // needed for WinJS apps
+      let outer = document.createElement('div');
+      outer.style.visibility = 'hidden';
+      outer.style.width = '100px';
+      outer.style.msOverflowStyle = 'scrollbar'; // needed for WinJS apps
 
       document.body.appendChild(outer);
 
       let widthNoScroll = outer.offsetWidth;
       // force scrollbars
-      outer.style.overflowY = "scroll";
+      outer.style.overflowY = 'scroll';
 
       // add innerdiv
-      let inner = document.createElement("div");
-      inner.style.width = "100%";
+      let inner = document.createElement('div');
+      inner.style.width = '100%';
       outer.appendChild(inner);
 
       let widthWithScroll = inner.offsetWidth;

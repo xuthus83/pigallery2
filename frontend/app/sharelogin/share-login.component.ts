@@ -1,8 +1,8 @@
-import {Component, OnInit} from "@angular/core";
-import {AuthenticationService} from "../model/network/authentication.service";
-import {ErrorCodes} from "../../../common/entities/Error";
-import {Config} from "../../../common/config/public/Config";
-import {NavigationService} from "../model/navigation.service";
+import {Component, OnInit} from '@angular/core';
+import {AuthenticationService} from '../model/network/authentication.service';
+import {ErrorCodes} from '../../../common/entities/Error';
+import {Config} from '../../../common/config/public/Config';
+import {NavigationService} from '../model/navigation.service';
 
 @Component({
   selector: 'share-login',
@@ -11,7 +11,7 @@ import {NavigationService} from "../model/navigation.service";
 })
 export class ShareLoginComponent implements OnInit {
   password: string;
-  loginError: boolean = false;
+  loginError = false;
   title: string;
 
   constructor(private _authService: AuthenticationService, private _navigation: NavigationService) {

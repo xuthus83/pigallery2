@@ -1,10 +1,10 @@
-import * as cluster from "cluster";
-import {Logger} from "../../Logger";
-import {DiskManagerTask, ThumbnailTask, WorkerMessage, WorkerTask, WorkerTaskTypes} from "./Worker";
-import {DirectoryDTO} from "../../../common/entities/DirectoryDTO";
-import {RendererInput} from "./ThumbnailWoker";
-import {Config} from "../../../common/config/private/Config";
-import {ITaskQue} from "./TaskQue";
+import * as cluster from 'cluster';
+import {Logger} from '../../Logger';
+import {DiskManagerTask, ThumbnailTask, WorkerMessage, WorkerTask, WorkerTaskTypes} from './Worker';
+import {DirectoryDTO} from '../../../common/entities/DirectoryDTO';
+import {RendererInput} from './ThumbnailWoker';
+import {Config} from '../../../common/config/private/Config';
+import {ITaskQue} from './TaskQue';
 
 
 interface PoolTask {
@@ -24,7 +24,7 @@ export class ThreadPool {
   private tasks: PoolTask[] = [];
 
   constructor(private size: number) {
-    Logger.silly("Creating thread pool with", size, "workers");
+    Logger.silly('Creating thread pool with', size, 'workers');
     for (let i = 0; i < size; i++) {
       this.startWorker();
     }
@@ -39,14 +39,14 @@ export class ThreadPool {
     });
     worker.worker.on('exit', (code, signal) => {
       ThreadPool.WorkerCount--;
-      Logger.warn('Worker ' + worker.worker.process.pid + ' died with code: ' + code + ', and signal: ' + signal + ", worker count:", ThreadPool.WorkerCount);
+      Logger.warn('Worker ' + worker.worker.process.pid + ' died with code: ' + code + ', and signal: ' + signal + ', worker count:', ThreadPool.WorkerCount);
       Logger.debug('Starting a new worker');
       this.startWorker();
     });
 
-    worker.worker.on("message", (msg: WorkerMessage) => {
+    worker.worker.on('message', (msg: WorkerMessage) => {
       if (worker.poolTask == null) {
-        throw "No worker task after worker task is completed"
+        throw 'No worker task after worker task is completed';
       }
       if (msg.error) {
         worker.poolTask.promise.reject(msg.error);

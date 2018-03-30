@@ -1,7 +1,8 @@
-import {Component, ElementRef, Input, OnChanges, ViewChild} from "@angular/core";
-import {PhotoDTO} from "../../../../common/entities/PhotoDTO";
-import {Dimension, IRenderable} from "../../model/IRenderable";
-import {GalleryMapLightboxComponent} from "./lightbox/lightbox.map.gallery.component";
+import {Component, ElementRef, Input, OnChanges, ViewChild} from '@angular/core';
+import {PhotoDTO} from '../../../../common/entities/PhotoDTO';
+import {Dimension, IRenderable} from '../../model/IRenderable';
+import {GalleryMapLightboxComponent} from './lightbox/lightbox.map.gallery.component';
+
 @Component({
   selector: 'gallery-map',
   templateUrl: './map.gallery.component.html',
@@ -14,7 +15,7 @@ export class GalleryMapComponent implements OnChanges, IRenderable {
 
   mapPhotos: Array<{ latitude: number, longitude: number }> = [];
   mapCenter = {latitude: 0, longitude: 0};
-  @ViewChild("map") map: ElementRef;
+  @ViewChild('map') map: ElementRef;
 
   //TODO: fix zooming
   ngOnChanges() {

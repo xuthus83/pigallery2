@@ -1,14 +1,14 @@
-import {Component, OnDestroy, OnInit, ViewChild} from "@angular/core";
-import {Utils} from "../../../../common/Utils";
-import {ShareService} from "../share.service";
-import {GalleryService} from "../gallery.service";
-import {ContentWrapper} from "../../../../common/entities/ConentWrapper";
-import {SharingDTO} from "../../../../common/entities/SharingDTO";
-import {ModalDirective} from "ngx-bootstrap/modal";
-import {Config} from "../../../../common/config/public/Config";
-import {NotificationService} from "../../model/notification.service";
-import {DirectoryDTO} from "../../../../common/entities/DirectoryDTO";
-import {I18n} from "@ngx-translate/i18n-polyfill";
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Utils} from '../../../../common/Utils';
+import {ShareService} from '../share.service';
+import {GalleryService} from '../gallery.service';
+import {ContentWrapper} from '../../../../common/entities/ConentWrapper';
+import {SharingDTO} from '../../../../common/entities/SharingDTO';
+import {ModalDirective} from 'ngx-bootstrap/modal';
+import {Config} from '../../../../common/config/public/Config';
+import {NotificationService} from '../../model/notification.service';
+import {DirectoryDTO} from '../../../../common/entities/DirectoryDTO';
+import {I18n} from '@ngx-translate/i18n-polyfill';
 
 
 @Component({
@@ -20,7 +20,7 @@ export class GalleryShareComponent implements OnInit, OnDestroy {
   @ViewChild('shareModal') public childModal: ModalDirective;
 
   enabled: boolean = true;
-  url: string = "";
+  url: string = '';
 
   input = {
     includeSubfolders: true,
@@ -28,9 +28,9 @@ export class GalleryShareComponent implements OnInit, OnDestroy {
       amount: 30,
       type: ValidityTypes.Days
     },
-    password: ""
+    password: ''
   };
-  currentDir: string = "";
+  currentDir: string = '';
   sharing: SharingDTO = null;
   contentSubscription = null;
   passwordProtection = false;
@@ -72,33 +72,33 @@ export class GalleryShareComponent implements OnInit, OnDestroy {
       case ValidityTypes.Months:
         return this.input.valid.amount * 1000 * 60 * 60 * 24 * 30;
     }
-    throw new Error("unknown type: " + this.input.valid.type);
+    throw new Error('unknown type: ' + this.input.valid.type);
   }
 
   async update() {
     if (this.sharing == null) {
       return;
     }
-    this.url = "loading..";
+    this.url = 'loading..';
     this.sharing = await this._sharingService.updateSharing(this.currentDir, this.sharing.id, this.input.includeSubfolders, this.input.password, this.calcValidity());
-    this.url = Config.Client.publicUrl + "/share/" + this.sharing.sharingKey
+    this.url = Config.Client.publicUrl + '/share/' + this.sharing.sharingKey;
   }
 
   async get() {
-    this.url = "loading..";
+    this.url = 'loading..';
     this.sharing = await this._sharingService.createSharing(this.currentDir, this.input.includeSubfolders, this.calcValidity());
-    this.url = Config.Client.publicUrl + "/share/" + this.sharing.sharingKey
+    this.url = Config.Client.publicUrl + '/share/' + this.sharing.sharingKey;
   }
 
   async showModal() {
     await this.get();
-    this.input.password = "";
+    this.input.password = '';
     this.childModal.show();
-    document.body.style.paddingRight = "0px";
+    document.body.style.paddingRight = '0px';
   }
 
   onCopy() {
-    this._notification.success(this.i18n("Url has been copied to clipboard"));
+    this._notification.success(this.i18n('Url has been copied to clipboard'));
   }
 
   public hideModal() {

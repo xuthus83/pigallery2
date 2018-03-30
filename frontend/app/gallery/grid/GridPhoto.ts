@@ -1,5 +1,6 @@
-import {PhotoDTO} from "../../../../common/entities/PhotoDTO";
-import {Photo} from "../Photo";
+import {PhotoDTO} from '../../../../common/entities/PhotoDTO';
+import {Photo} from '../Photo';
+
 export class GridPhoto extends Photo {
 
 

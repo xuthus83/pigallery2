@@ -49,11 +49,11 @@ img {
 }
 
 .info {
-    background-color: transparent;
-    color: white;
-    font-size: medium;
-    position: relative;
-    padding: 5px;
+  background-color: transparent;
+  color: white;
+  font-size: medium;
+  position: relative;
+  padding: 5px;
   margin-top: 0;
 
   transition: margin .3s ease-out, background-color .3s ease-out;

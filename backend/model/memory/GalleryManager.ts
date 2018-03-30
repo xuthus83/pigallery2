@@ -1,11 +1,11 @@
-import {DirectoryDTO} from "../../../common/entities/DirectoryDTO";
-import {IGalleryManager} from "../interfaces/IGalleryManager";
-import * as path from "path";
-import * as fs from "fs";
-import {DiskManager} from "../DiskManger";
-import {ProjectPath} from "../../ProjectPath";
-import {Config} from "../../../common/config/private/Config";
-import {ReIndexingSensitivity} from "../../../common/config/private/IPrivateConfig";
+import {DirectoryDTO} from '../../../common/entities/DirectoryDTO';
+import {IGalleryManager} from '../interfaces/IGalleryManager';
+import * as path from 'path';
+import * as fs from 'fs';
+import {DiskManager} from '../DiskManger';
+import {ProjectPath} from '../../ProjectPath';
+import {Config} from '../../../common/config/private/Config';
+import {ReIndexingSensitivity} from '../../../common/config/private/IPrivateConfig';
 
 export class GalleryManager implements IGalleryManager {
 

@@ -1,10 +1,10 @@
-import {Injectable} from "@angular/core";
-import {PhotoDTO} from "../../../common/entities/PhotoDTO";
-import {DirectoryDTO} from "../../../common/entities/DirectoryDTO";
-import {Utils} from "../../../common/Utils";
-import {Config} from "../../../common/config/public/Config";
-import {AutoCompleteItem, SearchTypes} from "../../../common/entities/AutoCompleteItem";
-import {SearchResultDTO} from "../../../common/entities/SearchResultDTO";
+import {Injectable} from '@angular/core';
+import {PhotoDTO} from '../../../common/entities/PhotoDTO';
+import {DirectoryDTO} from '../../../common/entities/DirectoryDTO';
+import {Utils} from '../../../common/Utils';
+import {Config} from '../../../common/config/public/Config';
+import {AutoCompleteItem, SearchTypes} from '../../../common/entities/AutoCompleteItem';
+import {SearchResultDTO} from '../../../common/entities/SearchResultDTO';
 
 interface CacheItem<T> {
   timestamp: number;
@@ -14,11 +14,11 @@ interface CacheItem<T> {
 @Injectable()
 export class GalleryCacheService {
 
-  private static CONTENT_PREFIX = "content:";
-  private static AUTO_COMPLETE_PREFIX = "autocomplete:";
-  private static INSTANT_SEARCH_PREFIX = "instant_search:";
-  private static SEARCH_PREFIX = "search:";
-  private static SEARCH_TYPE_PREFIX = ":type:";
+  private static CONTENT_PREFIX = 'content:';
+  private static AUTO_COMPLETE_PREFIX = 'autocomplete:';
+  private static INSTANT_SEARCH_PREFIX = 'instant_search:';
+  private static SEARCH_PREFIX = 'search:';
+  private static SEARCH_TYPE_PREFIX = ':type:';
 
 
   public getAutoComplete(text: string): Array<AutoCompleteItem> {
@@ -68,7 +68,7 @@ export class GalleryCacheService {
 
   public getSearch(text: string, type?: SearchTypes): SearchResultDTO {
     let key = GalleryCacheService.SEARCH_PREFIX + text;
-    if (typeof type != "undefined") {
+    if (typeof type != 'undefined') {
       key += GalleryCacheService.SEARCH_TYPE_PREFIX + type;
     }
     const tmp = localStorage.getItem(key);
@@ -89,7 +89,7 @@ export class GalleryCacheService {
       item: searchResult
     };
     let key = GalleryCacheService.SEARCH_PREFIX + text;
-    if (typeof type != "undefined") {
+    if (typeof type != 'undefined') {
       key += GalleryCacheService.SEARCH_TYPE_PREFIX + type;
     }
     localStorage.setItem(key, JSON.stringify(tmp));

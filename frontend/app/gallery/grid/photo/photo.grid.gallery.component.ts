@@ -1,11 +1,11 @@
-import {Component, ElementRef, Input, OnDestroy, OnInit, ViewChild} from "@angular/core";
-import {Dimension, IRenderable} from "../../../model/IRenderable";
-import {GridPhoto} from "../GridPhoto";
-import {SearchTypes} from "../../../../../common/entities/AutoCompleteItem";
-import {RouterLink} from "@angular/router";
-import {Thumbnail, ThumbnailManagerService} from "../../thumnailManager.service";
-import {Config} from "../../../../../common/config/public/Config";
-import {AnimationBuilder} from "@angular/animations";
+import {Component, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Dimension, IRenderable} from '../../../model/IRenderable';
+import {GridPhoto} from '../GridPhoto';
+import {SearchTypes} from '../../../../../common/entities/AutoCompleteItem';
+import {RouterLink} from '@angular/router';
+import {Thumbnail, ThumbnailManagerService} from '../../thumnailManager.service';
+import {Config} from '../../../../../common/config/public/Config';
+import {AnimationBuilder} from '@angular/animations';
 
 @Component({
   selector: 'gallery-grid-photo',
@@ -15,9 +15,9 @@ import {AnimationBuilder} from "@angular/animations";
 })
 export class GalleryPhotoComponent implements IRenderable, OnInit, OnDestroy {
   @Input() gridPhoto: GridPhoto;
-  @ViewChild("img") imageRef: ElementRef;
-  @ViewChild("info") infoDiv: ElementRef;
-  @ViewChild("photoContainer") container: ElementRef;
+  @ViewChild('img') imageRef: ElementRef;
+  @ViewChild('info') infoDiv: ElementRef;
+  @ViewChild('photoContainer') container: ElementRef;
 
   thumbnail: Thumbnail;
   /*
@@ -35,7 +35,7 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, OnDestroy {
   infoBar = {
     marginTop: 0,
     visible: false,
-    background: "rgba(0,0,0,0.0)"
+    background: 'rgba(0,0,0,0.0)'
   };
   animationTimer = null;
 
@@ -83,7 +83,7 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, OnDestroy {
 
   getPositionText(): string {
     if (!this.gridPhoto) {
-      return ""
+      return '';
     }
     return this.gridPhoto.photo.metadata.positionData.city ||
       this.gridPhoto.photo.metadata.positionData.state ||
@@ -97,7 +97,7 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, OnDestroy {
       clearTimeout(this.animationTimer);
     }
     this.animationTimer = setTimeout(() => {
-      this.infoBar.background = "rgba(0,0,0,0.8)";
+      this.infoBar.background = 'rgba(0,0,0,0.8)';
       if (!this.infoDiv) {
         this.animationTimer = setTimeout(() => {
           if (!this.infoDiv) {
@@ -115,7 +115,7 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, OnDestroy {
 
   mouseOut() {
     this.infoBar.marginTop = 0;
-    this.infoBar.background = "rgba(0,0,0,0.0)";
+    this.infoBar.background = 'rgba(0,0,0,0.0)';
     if (this.animationTimer != null) {
       clearTimeout(this.animationTimer);
     }

@@ -1,4 +1,4 @@
-import {TestProjectPage} from "./app.po";
+import {TestProjectPage} from './app.po';
 
 describe('test-project App', () => {
   let page: TestProjectPage;

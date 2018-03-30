@@ -1,11 +1,12 @@
-import {NotificationDTO, NotificationType} from "../../common/entities/NotificationDTO";
+import {NotificationDTO, NotificationType} from '../../common/entities/NotificationDTO';
+
 export class NotificationManager {
   public static notifications: NotificationDTO[] = [];
   public static HasNotification: NotificationDTO[] =
     [
       {
         type: NotificationType.info,
-        message: "There are unhandled server notification. Login as Administrator to handle them."
+        message: 'There are unhandled server notification. Login as Administrator to handle them.'
       }
     ];
 

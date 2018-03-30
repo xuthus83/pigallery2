@@ -1,5 +1,5 @@
-import {Injectable} from "@angular/core";
-import {Event} from "../../../common/event/Event";
+import {Injectable} from '@angular/core';
+import {Event} from '../../../common/event/Event';
 
 @Injectable()
 export class FullScreenService {

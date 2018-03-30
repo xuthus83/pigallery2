@@ -1,9 +1,9 @@
-import {ModuleWithProviders} from "@angular/core";
-import {RouterModule, Routes} from "@angular/router";
-import {LoginComponent} from "./login/login.component";
-import {GalleryComponent} from "./gallery/gallery.component";
-import {AdminComponent} from "./admin/admin.component";
-import {ShareLoginComponent} from "./sharelogin/share-login.component";
+import {ModuleWithProviders} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
+import {LoginComponent} from './login/login.component';
+import {GalleryComponent} from './gallery/gallery.component';
+import {AdminComponent} from './admin/admin.component';
+import {ShareLoginComponent} from './sharelogin/share-login.component';
 
 const ROUTES: Routes = [
   {

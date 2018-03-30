@@ -1,18 +1,18 @@
-import {NextFunction, Request, Response} from "express";
-import {ErrorCodes, ErrorDTO} from "../../common/entities/Error";
-import {Utils} from "../../common/Utils";
-import {Message} from "../../common/entities/Message";
-import {SharingDTO} from "../../common/entities/SharingDTO";
-import {Config} from "../../common/config/private/Config";
-import {PrivateConfigClass} from "../../common/config/private/PrivateConfigClass";
-import {UserRoles} from "../../common/entities/UserDTO";
-import {NotificationManager} from "../model/NotifocationManager";
-import {Logger} from "../Logger";
+import {NextFunction, Request, Response} from 'express';
+import {ErrorCodes, ErrorDTO} from '../../common/entities/Error';
+import {Utils} from '../../common/Utils';
+import {Message} from '../../common/entities/Message';
+import {SharingDTO} from '../../common/entities/SharingDTO';
+import {Config} from '../../common/config/private/Config';
+import {PrivateConfigClass} from '../../common/config/private/PrivateConfigClass';
+import {UserRoles} from '../../common/entities/UserDTO';
+import {NotificationManager} from '../model/NotifocationManager';
+import {Logger} from '../Logger';
 
 export class RenderingMWs {
 
   public static renderResult(req: Request, res: Response, next: NextFunction) {
-    if (typeof req.resultPipe == "undefined")
+    if (typeof req.resultPipe == 'undefined')
       return next();
 
     return RenderingMWs.renderMessage(res, req.resultPipe);
@@ -21,7 +21,7 @@ export class RenderingMWs {
 
   public static renderSessionUser(req: Request, res: Response, next: NextFunction) {
     if (!(req.session.user)) {
-      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, "User not exists"));
+      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, 'User not exists'));
     }
 
     const user = Utils.clone(req.session.user);
@@ -46,7 +46,7 @@ export class RenderingMWs {
   }
 
   public static renderOK(req: Request, res: Response, next: NextFunction) {
-    let message = new Message<string>(null, "ok");
+    let message = new Message<string>(null, 'ok');
     res.json(message);
   }
 
@@ -62,7 +62,7 @@ export class RenderingMWs {
     if (err instanceof ErrorDTO) {
       if (err.details) {
         if (!(req.session.user && req.session.user.role >= UserRoles.Developer)) {
-          Logger.warn("Handled error:", err);
+          Logger.warn('Handled error:', err);
           delete (err.details);
         } else {
           try {
@@ -75,7 +75,7 @@ export class RenderingMWs {
       let message = new Message<any>(err, null);
       return res.json(message);
     }
-    NotificationManager.error("unknown server error", err);
+    NotificationManager.error('unknown server error', err);
     return next(err);
   }
 

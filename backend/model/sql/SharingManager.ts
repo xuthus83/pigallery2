@@ -1,9 +1,9 @@
-import {ISharingManager} from "../interfaces/ISharingManager";
-import {SharingDTO} from "../../../common/entities/SharingDTO";
-import {SQLConnection} from "./SQLConnection";
-import {SharingEntity} from "./enitites/SharingEntity";
-import {Config} from "../../../common/config/private/Config";
-import {PasswordHelper} from "../PasswordHelper";
+import {ISharingManager} from '../interfaces/ISharingManager';
+import {SharingDTO} from '../../../common/entities/SharingDTO';
+import {SQLConnection} from './SQLConnection';
+import {SharingEntity} from './enitites/SharingEntity';
+import {Config} from '../../../common/config/private/Config';
+import {PasswordHelper} from '../PasswordHelper';
 
 export class SharingManager implements ISharingManager {
 
@@ -11,8 +11,8 @@ export class SharingManager implements ISharingManager {
     const connection = await SQLConnection.getConnection();
     return connection
       .getRepository(SharingEntity)
-      .createQueryBuilder("share")
-      .where("expires < :now", {now: Date.now()})
+      .createQueryBuilder('share')
+      .where('expires < :now', {now: Date.now()})
       .delete()
       .execute();
   }
@@ -42,7 +42,7 @@ export class SharingManager implements ISharingManager {
     });
 
     if (sharing.timeStamp < Date.now() - Config.Server.sharing.updateTimeout) {
-      throw "Sharing is locked, can't update anymore"
+      throw 'Sharing is locked, can\'t update anymore';
     }
     if (inSharing.password == null) {
       sharing.password = null;

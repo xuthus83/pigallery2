@@ -1,8 +1,8 @@
 let bcrypt;
 try {
-  bcrypt = require("bcrypt");
+  bcrypt = require('bcrypt');
 } catch (err) {
-  bcrypt = require("bcryptjs");
+  bcrypt = require('bcryptjs');
 }
 
 export class PasswordHelper {

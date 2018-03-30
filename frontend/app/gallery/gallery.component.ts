@@ -1,18 +1,18 @@
-import {Component, OnDestroy, OnInit, ViewChild} from "@angular/core";
-import {AuthenticationService} from "../model/network/authentication.service";
-import {ActivatedRoute, Params, Router} from "@angular/router";
-import {GalleryService} from "./gallery.service";
-import {GalleryGridComponent} from "./grid/grid.gallery.component";
-import {GallerySearchComponent} from "./search/search.gallery.component";
-import {SearchTypes} from "../../../common/entities/AutoCompleteItem";
-import {Config} from "../../../common/config/public/Config";
-import {DirectoryDTO} from "../../../common/entities/DirectoryDTO";
-import {SearchResultDTO} from "../../../common/entities/SearchResultDTO";
-import {ShareService} from "./share.service";
-import {NavigationService} from "../model/navigation.service";
-import {UserRoles} from "../../../common/entities/UserDTO";
-import {Observable} from "rxjs/Rx";
-import {ContentWrapper} from "../../../common/entities/ConentWrapper";
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {AuthenticationService} from '../model/network/authentication.service';
+import {ActivatedRoute, Params, Router} from '@angular/router';
+import {GalleryService} from './gallery.service';
+import {GalleryGridComponent} from './grid/grid.gallery.component';
+import {GallerySearchComponent} from './search/search.gallery.component';
+import {SearchTypes} from '../../../common/entities/AutoCompleteItem';
+import {Config} from '../../../common/config/public/Config';
+import {DirectoryDTO} from '../../../common/entities/DirectoryDTO';
+import {SearchResultDTO} from '../../../common/entities/SearchResultDTO';
+import {ShareService} from './share.service';
+import {NavigationService} from '../model/navigation.service';
+import {UserRoles} from '../../../common/entities/UserDTO';
+import {Observable} from 'rxjs/Rx';
+import {ContentWrapper} from '../../../common/entities/ConentWrapper';
 
 @Component({
   selector: 'gallery',
@@ -62,26 +62,33 @@ export class GalleryComponent implements OnInit, OnDestroy {
     this.countDown.second = t % 60;
   }
 
-  async ngOnInit() {
-    await this.shareService.wait();
-    if (!this._authService.isAuthenticated() &&
-      (!this.shareService.isSharing() ||
-      (this.shareService.isSharing() && Config.Client.Sharing.passwordProtected == true))) {
+  private onRoute = async (params: Params) => {
+    const searchText = params['searchText'];
+    if (searchText && searchText != '') {
+      let typeString = params['type'];
 
-      return this._navigation.toLogin();
-    }
-    this.showSearchBar = Config.Client.Search.enabled && this._authService.isAuthorized(UserRoles.Guest);
-    this.showShare = Config.Client.Sharing.enabled && this._authService.isAuthorized(UserRoles.User);
+      if (typeString && typeString != '') {
+        let type: SearchTypes = <any>SearchTypes[typeString];
+        this._galleryService.search(searchText, type);
+        return;
+      }
 
-    this.subscription.content = this._galleryService.content.subscribe(this.onContentChange);
-    this.subscription.route = this._route.params.subscribe(this.onRoute);
-
-    if (this.shareService.isSharing()) {
-      this.$counter = Observable.interval(1000);
-      this.subscription.timer = this.$counter.subscribe((x) => this.updateTimer(x));
+      this._galleryService.search(searchText);
+      return;
     }
 
-  }
+    if (params['sharingKey'] && params['sharingKey'] != '') {
+      const sharing = await this.shareService.getSharing();
+      this._router.navigate(['/gallery', sharing.path], {queryParams: {sk: this.shareService.getSharingKey()}});
+      return;
+    }
+
+    let directoryName = params['directory'];
+    directoryName = directoryName || '';
+
+    this._galleryService.getDirectory(directoryName);
+
+  };
 
   ngOnDestroy() {
     if (this.subscription.content !== null) {
@@ -118,33 +125,26 @@ export class GalleryComponent implements OnInit, OnDestroy {
     }
   };
 
-  private onRoute = async (params: Params) => {
-    const searchText = params['searchText'];
-    if (searchText && searchText != "") {
-      let typeString = params['type'];
+  async ngOnInit() {
+    await this.shareService.wait();
+    if (!this._authService.isAuthenticated() &&
+      (!this.shareService.isSharing() ||
+        (this.shareService.isSharing() && Config.Client.Sharing.passwordProtected == true))) {
 
-      if (typeString && typeString != "") {
-        let type: SearchTypes = <any>SearchTypes[typeString];
-        this._galleryService.search(searchText, type);
-        return;
-      }
+      return this._navigation.toLogin();
+    }
+    this.showSearchBar = Config.Client.Search.enabled && this._authService.isAuthorized(UserRoles.Guest);
+    this.showShare = Config.Client.Sharing.enabled && this._authService.isAuthorized(UserRoles.User);
 
-      this._galleryService.search(searchText);
-      return;
+    this.subscription.content = this._galleryService.content.subscribe(this.onContentChange);
+    this.subscription.route = this._route.params.subscribe(this.onRoute);
+
+    if (this.shareService.isSharing()) {
+      this.$counter = Observable.interval(1000);
+      this.subscription.timer = this.$counter.subscribe((x) => this.updateTimer(x));
     }
 
-    if (params['sharingKey'] && params['sharingKey'] != "") {
-      const sharing = await this.shareService.getSharing();
-      this._router.navigate(['/gallery', sharing.path], {queryParams: {sk: this.shareService.getSharingKey()}});
-      return;
-    }
-
-    let directoryName = params['directory'];
-    directoryName = directoryName || "";
-
-    this._galleryService.getDirectory(directoryName);
-
-  };
+  }
 
 
   onLightboxLastElement() {

@@ -1,16 +1,16 @@
-import {IGalleryManager} from "../interfaces/IGalleryManager";
-import {DirectoryDTO} from "../../../common/entities/DirectoryDTO";
-import * as path from "path";
-import * as fs from "fs";
-import {DirectoryEntity} from "./enitites/DirectoryEntity";
-import {SQLConnection} from "./SQLConnection";
-import {DiskManager} from "../DiskManger";
-import {PhotoEntity} from "./enitites/PhotoEntity";
-import {Utils} from "../../../common/Utils";
-import {ProjectPath} from "../../ProjectPath";
-import {Config} from "../../../common/config/private/Config";
-import {ISQLGalleryManager} from "./IGalleryManager";
-import {ReIndexingSensitivity} from "../../../common/config/private/IPrivateConfig";
+import {IGalleryManager} from '../interfaces/IGalleryManager';
+import {DirectoryDTO} from '../../../common/entities/DirectoryDTO';
+import * as path from 'path';
+import * as fs from 'fs';
+import {DirectoryEntity} from './enitites/DirectoryEntity';
+import {SQLConnection} from './SQLConnection';
+import {DiskManager} from '../DiskManger';
+import {PhotoEntity} from './enitites/PhotoEntity';
+import {Utils} from '../../../common/Utils';
+import {ProjectPath} from '../../ProjectPath';
+import {Config} from '../../../common/config/private/Config';
+import {ISQLGalleryManager} from './IGalleryManager';
+import {ReIndexingSensitivity} from '../../../common/config/private/IPrivateConfig';
 
 export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
 
@@ -18,7 +18,7 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
   public async listDirectory(relativeDirectoryName: string,
                              knownLastModified?: number,
                              knownLastScanned?: number): Promise<DirectoryDTO> {
-    relativeDirectoryName = path.normalize(path.join("." + path.sep, relativeDirectoryName));
+    relativeDirectoryName = path.normalize(path.join('.' + path.sep, relativeDirectoryName));
     const directoryName = path.basename(relativeDirectoryName);
     const directoryParent = path.join(path.dirname(relativeDirectoryName), path.sep);
     const connection = await SQLConnection.getConnection();
@@ -26,13 +26,13 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
     const lastModified = Math.max(stat.ctime.getTime(), stat.mtime.getTime());
     let dir = await connection
       .getRepository(DirectoryEntity)
-      .createQueryBuilder("directory")
-      .where("directory.name = :name AND directory.path = :path", {
+      .createQueryBuilder('directory')
+      .where('directory.name = :name AND directory.path = :path', {
         name: directoryName,
         path: directoryParent
       })
-      .leftJoinAndSelect("directory.directories", "directories")
-      .leftJoinAndSelect("directory.photos", "photos")
+      .leftJoinAndSelect('directory.directories', 'directories')
+      .leftJoinAndSelect('directory.photos', 'photos')
       .getOne();
 
 
@@ -61,11 +61,11 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
         for (let i = 0; i < dir.directories.length; i++) {
           dir.directories[i].photos = await connection
             .getRepository(PhotoEntity)
-            .createQueryBuilder("photo")
-            .where("photo.directory = :dir", {
+            .createQueryBuilder('photo')
+            .where('photo.directory = :dir', {
               dir: dir.directories[i].id
             })
-            .orderBy("photo.metadata.creationDate", "ASC")
+            .orderBy('photo.metadata.creationDate', 'ASC')
             .limit(Config.Server.indexing.folderPreviewSize)
             .getMany();
           dir.directories[i].isPartial = true;
@@ -85,7 +85,7 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
 
       //not indexed since a while, index it in a lazy manner
       if ((Date.now() - dir.lastScanned > Config.Server.indexing.cachedFolderTimeout &&
-          Config.Server.indexing.reIndexingSensitivity >= ReIndexingSensitivity.medium) ||
+        Config.Server.indexing.reIndexingSensitivity >= ReIndexingSensitivity.medium) ||
         Config.Server.indexing.reIndexingSensitivity >= ReIndexingSensitivity.high) {
         //on the fly reindexing
         this.indexDirectory(relativeDirectoryName).catch((err) => {
@@ -132,8 +132,8 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
     const photosRepository = connection.getRepository(PhotoEntity);
 
 
-    let currentDir = await directoryRepository.createQueryBuilder("directory")
-      .where("directory.name = :name AND directory.path = :path", {
+    let currentDir = await directoryRepository.createQueryBuilder('directory')
+      .where('directory.name = :name AND directory.path = :path', {
         name: scannedDirectory.name,
         path: scannedDirectory.path
       }).getOne();
@@ -147,8 +147,8 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
       currentDir = await directoryRepository.save(<DirectoryEntity>scannedDirectory);
     }
 
-    let childDirectories = await directoryRepository.createQueryBuilder("directory")
-      .where("directory.parent = :dir", {
+    let childDirectories = await directoryRepository.createQueryBuilder('directory')
+      .where('directory.parent = :dir', {
         dir: currentDir.id
       }).getMany();
 
@@ -185,8 +185,8 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
     await directoryRepository.remove(childDirectories);
 
 
-    let indexedPhotos = await photosRepository.createQueryBuilder("photo")
-      .where("photo.directory = :dir", {
+    let indexedPhotos = await photosRepository.createQueryBuilder('photo')
+      .where('photo.directory = :dir', {
         dir: currentDir.id
       }).getMany();
 

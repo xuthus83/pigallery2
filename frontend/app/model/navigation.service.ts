@@ -1,7 +1,7 @@
-import {Injectable} from "@angular/core";
+import {Injectable} from '@angular/core';
 
-import {Router} from "@angular/router";
-import {ShareService} from "../gallery/share.service";
+import {Router} from '@angular/router';
+import {ShareService} from '../gallery/share.service';
 
 @Injectable()
 export class NavigationService {
@@ -17,22 +17,22 @@ export class NavigationService {
   }
 
   public async toLogin() {
-    console.log("toLogin");
+    console.log('toLogin');
     await this._shareService.wait();
     if (this._shareService.isSharing()) {
-      return this._router.navigate(["shareLogin"], {queryParams: {sk: this._shareService.getSharingKey()}});
+      return this._router.navigate(['shareLogin'], {queryParams: {sk: this._shareService.getSharingKey()}});
     } else {
-      return this._router.navigate(["login"]);
+      return this._router.navigate(['login']);
     }
   }
 
   public async toGallery() {
-    console.log("toGallery");
+    console.log('toGallery');
     await this._shareService.wait();
     if (this._shareService.isSharing()) {
-      return this._router.navigate(["gallery", ""], {queryParams: {sk: this._shareService.getSharingKey()}});
+      return this._router.navigate(['gallery', ''], {queryParams: {sk: this._shareService.getSharingKey()}});
     } else {
-      return this._router.navigate(["gallery", ""]);
+      return this._router.navigate(['gallery', '']);
     }
   }
 }

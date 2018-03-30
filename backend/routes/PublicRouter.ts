@@ -1,18 +1,18 @@
-import {NextFunction, Request, Response} from "express";
-import * as path from "path";
-import * as fs from "fs";
-import {Utils} from "../../common/Utils";
-import {Config} from "../../common/config/private/Config";
-import {ProjectPath} from "../ProjectPath";
-import {AuthenticationMWs} from "../middlewares/user/AuthenticationMWs";
-import {CookieNames} from "../../common/CookieNames";
+import {NextFunction, Request, Response} from 'express';
+import * as path from 'path';
+import * as fs from 'fs';
+import {Utils} from '../../common/Utils';
+import {Config} from '../../common/config/private/Config';
+import {ProjectPath} from '../ProjectPath';
+import {AuthenticationMWs} from '../middlewares/user/AuthenticationMWs';
+import {CookieNames} from '../../common/CookieNames';
 
 
 export class PublicRouter {
 
   public static route(app) {
     const setLocale = (req: Request, res: Response, next: Function) => {
-      let localePath = "";
+      let localePath = '';
       let selectedLocale = req['locale'];
       if (req.cookies && req.cookies[CookieNames.lang]) {
         if (Config.Client.languages.indexOf(req.cookies[CookieNames.lang]) !== -1) {
@@ -37,7 +37,7 @@ export class PublicRouter {
         if (Config.Client.languages.indexOf(locale) !== -1) {
           res.cookie(CookieNames.lang, locale);
         }
-        res.redirect("/?ln=" + locale);
+        res.redirect('/?ln=' + locale);
       };
     };
 
@@ -47,7 +47,7 @@ export class PublicRouter {
 
         res.tpl.user = null;
         if (req.session.user) {
-          let user = Utils.clone(req.session.user);
+          const user = Utils.clone(req.session.user);
           delete user.password;
           res.tpl.user = user;
         }
@@ -60,13 +60,13 @@ export class PublicRouter {
       res.render(path.resolve(ProjectPath.FrontendFolder, 'config_inject.ejs'), res.tpl);
     });
 
-    app.get(['/', '/login', "/gallery*", "/share*", "/admin", "/search*"],
+    app.get(['/', '/login', '/gallery*', '/share*', '/admin', '/search*'],
       AuthenticationMWs.tryAuthenticate,
       setLocale,
       renderIndex
     );
     Config.Client.languages.forEach(l => {
-      app.get(['/' + l + '/', '/' + l + '/login', '/' + l + "/gallery*", '/' + l + "/share*", '/' + l + "/admin", '/' + l + "/search*"],
+      app.get(['/' + l + '/', '/' + l + '/login', '/' + l + '/gallery*', '/' + l + '/share*', '/' + l + '/admin', '/' + l + '/search*'],
         redirectToBase(l)
       );
     });

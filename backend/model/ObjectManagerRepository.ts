@@ -1,10 +1,10 @@
-import {IUserManager} from "./interfaces/IUserManager";
-import {IGalleryManager} from "./interfaces/IGalleryManager";
-import {ISearchManager} from "./interfaces/ISearchManager";
-import {SQLConnection} from "./sql/SQLConnection";
-import {ISharingManager} from "./interfaces/ISharingManager";
-import {Logger} from "../Logger";
-import {IIndexingManager} from "./interfaces/IIndexingManager";
+import {IUserManager} from './interfaces/IUserManager';
+import {IGalleryManager} from './interfaces/IGalleryManager';
+import {ISearchManager} from './interfaces/ISearchManager';
+import {SQLConnection} from './sql/SQLConnection';
+import {ISharingManager} from './interfaces/ISharingManager';
+import {Logger} from '../Logger';
+import {IIndexingManager} from './interfaces/IIndexingManager';
 
 export class ObjectManagerRepository {
 
@@ -70,11 +70,11 @@ export class ObjectManagerRepository {
 
   public static async InitMemoryManagers() {
     await ObjectManagerRepository.reset();
-    const GalleryManager = require("./memory/GalleryManager").GalleryManager;
-    const UserManager = require("./memory/UserManager").UserManager;
-    const SearchManager = require("./memory/SearchManager").SearchManager;
-    const SharingManager = require("./memory/SharingManager").SharingManager;
-    const IndexingManager = require("./memory/IndexingManager").IndexingManager;
+    const GalleryManager = require('./memory/GalleryManager').GalleryManager;
+    const UserManager = require('./memory/UserManager').UserManager;
+    const SearchManager = require('./memory/SearchManager').SearchManager;
+    const SharingManager = require('./memory/SharingManager').SharingManager;
+    const IndexingManager = require('./memory/IndexingManager').IndexingManager;
     ObjectManagerRepository.getInstance().GalleryManager = new GalleryManager();
     ObjectManagerRepository.getInstance().UserManager = new UserManager();
     ObjectManagerRepository.getInstance().SearchManager = new SearchManager();
@@ -85,17 +85,17 @@ export class ObjectManagerRepository {
   public static async InitSQLManagers() {
     await ObjectManagerRepository.reset();
     await SQLConnection.init();
-    const GalleryManager = require("./sql/GalleryManager").GalleryManager;
-    const UserManager = require("./sql/UserManager").UserManager;
-    const SearchManager = require("./sql/SearchManager").SearchManager;
-    const SharingManager = require("./sql/SharingManager").SharingManager;
-    const IndexingManager = require("./sql/IndexingManager").IndexingManager;
+    const GalleryManager = require('./sql/GalleryManager').GalleryManager;
+    const UserManager = require('./sql/UserManager').UserManager;
+    const SearchManager = require('./sql/SearchManager').SearchManager;
+    const SharingManager = require('./sql/SharingManager').SharingManager;
+    const IndexingManager = require('./sql/IndexingManager').IndexingManager;
     ObjectManagerRepository.getInstance().GalleryManager = new GalleryManager();
     ObjectManagerRepository.getInstance().UserManager = new UserManager();
     ObjectManagerRepository.getInstance().SearchManager = new SearchManager();
     ObjectManagerRepository.getInstance().SharingManager = new SharingManager();
     ObjectManagerRepository.getInstance().IndexingManager = new IndexingManager();
-    Logger.debug("SQL DB inited");
+    Logger.debug('SQL DB inited');
   }
 
 }

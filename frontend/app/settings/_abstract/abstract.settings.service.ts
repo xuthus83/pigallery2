@@ -1,4 +1,5 @@
-import {SettingsService} from "../settings.service";
+import {SettingsService} from '../settings.service';
+
 export abstract class AbstractSettingsService<T> {
 
   constructor(public _settingsService: SettingsService) {
@@ -18,5 +19,5 @@ export abstract class AbstractSettingsService<T> {
     return true;
   }
 
-  abstract  updateSettings(settings: T): Promise<void>;
+  abstract updateSettings(settings: T): Promise<void>;
 }

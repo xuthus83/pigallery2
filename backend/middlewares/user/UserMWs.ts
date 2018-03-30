@@ -1,8 +1,8 @@
-import {NextFunction, Request, Response} from "express";
-import {ErrorCodes, ErrorDTO} from "../../../common/entities/Error";
-import {ObjectManagerRepository} from "../../model/ObjectManagerRepository";
-import {Utils} from "../../../common/Utils";
-import {Config} from "../../../common/config/private/Config";
+import {NextFunction, Request, Response} from 'express';
+import {ErrorCodes, ErrorDTO} from '../../../common/entities/Error';
+import {ObjectManagerRepository} from '../../model/ObjectManagerRepository';
+import {Utils} from '../../../common/Utils';
+import {Config} from '../../../common/config/private/Config';
 
 export class UserMWs {
 
@@ -94,7 +94,7 @@ export class UserMWs {
       let result = await ObjectManagerRepository.getInstance().UserManager.find({});
       result = Utils.clone(result);
       for (let i = 0; i < result.length; i++) {
-        result[i].password = "";
+        result[i].password = '';
       }
       req.resultPipe = result;
       next();

@@ -1,7 +1,7 @@
-import {AuthenticationMWs} from "../middlewares/user/AuthenticationMWs";
-import {UserRoles} from "../../common/entities/UserDTO";
-import {RenderingMWs} from "../middlewares/RenderingMWs";
-import {SharingMWs} from "../middlewares/SharingMWs";
+import {AuthenticationMWs} from '../middlewares/user/AuthenticationMWs';
+import {UserRoles} from '../../common/entities/UserDTO';
+import {RenderingMWs} from '../middlewares/RenderingMWs';
+import {SharingMWs} from '../middlewares/SharingMWs';
 
 export class SharingRouter {
   public static route(app: any) {
@@ -13,7 +13,7 @@ export class SharingRouter {
   }
 
   private static addShareLogin(app) {
-    app.post("/api/share/login",
+    app.post('/api/share/login',
       AuthenticationMWs.inverseAuthenticate,
       AuthenticationMWs.shareLogin,
       RenderingMWs.renderSessionUser
@@ -21,7 +21,7 @@ export class SharingRouter {
   };
 
   private static addGetSharing(app) {
-    app.get("/api/share/:sharingKey",
+    app.get('/api/share/:sharingKey',
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.LimitedGuest),
       SharingMWs.getSharing,
@@ -30,7 +30,7 @@ export class SharingRouter {
   };
 
   private static addCreateSharing(app) {
-    app.post(["/api/share/:directory(*)", "/api/share/", "/api/share//"],
+    app.post(['/api/share/:directory(*)', '/api/share/', '/api/share//'],
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.User),
       SharingMWs.createSharing,
@@ -39,7 +39,7 @@ export class SharingRouter {
   };
 
   private static addUpdateSharing(app) {
-    app.put(["/api/share/:directory(*)", "/api/share/", "/api/share//"],
+    app.put(['/api/share/:directory(*)', '/api/share/', '/api/share//'],
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.User),
       SharingMWs.updateSharing,

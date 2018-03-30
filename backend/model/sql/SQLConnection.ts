@@ -1,16 +1,16 @@
-import "reflect-metadata";
-import {Connection, ConnectionOptions, createConnection, getConnection} from "typeorm";
-import {UserEntity} from "./enitites/UserEntity";
-import {UserRoles} from "../../../common/entities/UserDTO";
-import {PhotoEntity} from "./enitites/PhotoEntity";
-import {DirectoryEntity} from "./enitites/DirectoryEntity";
-import {Config} from "../../../common/config/private/Config";
-import {SharingEntity} from "./enitites/SharingEntity";
-import {DataBaseConfig, DatabaseType} from "../../../common/config/private/IPrivateConfig";
-import {PasswordHelper} from "../PasswordHelper";
-import {ProjectPath} from "../../ProjectPath";
-import {VersionEntity} from "./enitites/VersionEntity";
-import {Logger} from "../../Logger";
+import 'reflect-metadata';
+import {Connection, ConnectionOptions, createConnection, getConnection} from 'typeorm';
+import {UserEntity} from './enitites/UserEntity';
+import {UserRoles} from '../../../common/entities/UserDTO';
+import {PhotoEntity} from './enitites/PhotoEntity';
+import {DirectoryEntity} from './enitites/DirectoryEntity';
+import {Config} from '../../../common/config/private/Config';
+import {SharingEntity} from './enitites/SharingEntity';
+import {DataBaseConfig, DatabaseType} from '../../../common/config/private/IPrivateConfig';
+import {PasswordHelper} from '../PasswordHelper';
+import {ProjectPath} from '../../ProjectPath';
+import {VersionEntity} from './enitites/VersionEntity';
+import {Logger} from '../../Logger';
 
 
 export class SQLConnection {
@@ -27,7 +27,7 @@ export class SQLConnection {
     if (this.connection == null) {
 
       let options: any = this.getDriver(Config.Server.database);
-      options.name = "main";
+      options.name = 'main';
       options.entities = [
         UserEntity,
         PhotoEntity,
@@ -46,11 +46,11 @@ export class SQLConnection {
 
   public static async tryConnection(config: DataBaseConfig) {
     try {
-      await getConnection("test").close();
+      await getConnection('test').close();
     } catch (err) {
     }
     const options: any = this.getDriver(config);
-    options.name = "test";
+    options.name = 'test';
     options.entities = [
       UserEntity,
       PhotoEntity,
@@ -66,6 +66,20 @@ export class SQLConnection {
     return true;
   }
 
+  public static async init(): Promise<void> {
+    const connection = await this.getConnection();
+    let userRepository = connection.getRepository(UserEntity);
+    let admins = await userRepository.find({role: UserRoles.Admin});
+    if (admins.length == 0) {
+      let a = new UserEntity();
+      a.name = 'admin';
+      a.password = PasswordHelper.cryptPassword('admin');
+      a.role = UserRoles.Admin;
+      await userRepository.save(a);
+    }
+
+  }
+
   private static async schemeSync(connection: Connection) {
     let version = null;
     try {
@@ -75,7 +89,7 @@ export class SQLConnection {
     if (version && version.version == SQLConnection.VERSION) {
       return;
     }
-    Logger.info("Updating database scheme");
+    Logger.info('Updating database scheme');
     if (!version) {
       version = new VersionEntity();
     }
@@ -87,25 +101,11 @@ export class SQLConnection {
     await connection.getRepository(VersionEntity).save(version);
   }
 
-  public static async init(): Promise<void> {
-    const connection = await this.getConnection();
-    let userRepository = connection.getRepository(UserEntity);
-    let admins = await userRepository.find({role: UserRoles.Admin});
-    if (admins.length == 0) {
-      let a = new UserEntity();
-      a.name = "admin";
-      a.password = PasswordHelper.cryptPassword("admin");
-      a.role = UserRoles.Admin;
-      await userRepository.save(a);
-    }
-
-  }
-
   private static getDriver(config: DataBaseConfig): ConnectionOptions {
     let driver: ConnectionOptions = null;
     if (config.type == DatabaseType.mysql) {
       driver = {
-        type: "mysql",
+        type: 'mysql',
         host: config.mysql.host,
         port: 3306,
         username: config.mysql.username,
@@ -114,7 +114,7 @@ export class SQLConnection {
       };
     } else if (config.type == DatabaseType.sqlite) {
       driver = {
-        type: "sqlite",
+        type: 'sqlite',
         database: ProjectPath.getAbsolutePath(config.sqlite.storage)
       };
     }

@@ -1,179 +1,207 @@
-import {inject, TestBed} from "@angular/core/testing";
-import {BaseRequestOptions, Http, Response, ResponseOptions} from "@angular/http";
-import {MockBackend, MockConnection} from "@angular/http/testing";
-import "rxjs/Rx";
-import {NetworkService} from "./network.service";
-import {Message} from "../../../../common/entities/Message";
-import {SlimLoadingBarService} from "ng2-slim-loading-bar";
+import {getTestBed, inject, TestBed} from '@angular/core/testing';
+import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
+import 'rxjs/Rx';
+import {NetworkService} from './network.service';
+import {Message} from '../../../../common/entities/Message';
+import {SlimLoadingBarService} from 'ng2-slim-loading-bar';
 
 
 describe('NetworkService Success tests', () => {
-  let connection: MockConnection = null;
 
-  let testUrl = "/test/url";
-  let testData = {data: "testData"};
-  let testResponse = "testResponse";
-  let testResponseMessage = new Message(null, testResponse);
-
+  const testUrl = '/test/url';
+  const testData = {data: 'testData'};
+  const testResponse = 'testResponse';
+  const testResponseMessage = new Message(null, testResponse);
+  let injector;
+  let httpMock: HttpTestingController;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule],
       providers: [
-        MockBackend,
-        BaseRequestOptions,
         SlimLoadingBarService,
-        {
-          provide: Http, useFactory: (backend, options) => {
-          return new Http(backend, options);
-        }, deps: [MockBackend, BaseRequestOptions]
-        },
         NetworkService
       ]
     });
+    injector = getTestBed();
+    httpMock = injector.get(HttpTestingController);
   });
 
-
-  beforeEach(inject([MockBackend], (backend) => {
-
-    backend.connections.subscribe((c) => {
-      connection = c;
-      connection.mockRespond(new Response(
-        new ResponseOptions(
-          {
-            body: testResponseMessage
-          }
-        )));
-    });
-  }));
-
   afterEach(() => {
-
-    expect(connection.request.url).toBe("/api" + testUrl);
+    httpMock.verify();
   });
 
   it('should call GET', inject([NetworkService], (networkService) => {
 
-    networkService.getJson(testUrl).then((res: any) => {
+    networkService.getJson(testUrl).then((res: string) => {
       expect(res).toBe(testResponse);
+    }).catch((err) => {
+      console.error(err);
+      expect(err).toBeUndefined();
     });
+
+    const mockReq = httpMock.expectOne({method: 'GET'});
+    expect(mockReq.cancelled).toBeFalsy();
+    expect(mockReq.request.responseType).toEqual('json');
+    mockReq.flush(testResponseMessage);
+  }));
+
+  it('should call POST', inject([NetworkService], (networkService) => {
+
+    networkService.postJson(testUrl, testData).then((res: string) => {
+      expect(res).toBe(testResponse);
+    }).catch((err) => {
+      console.error(err);
+      expect(err).toBeUndefined();
+    });
+
+    let mockReq = httpMock.expectOne('/api' + testUrl);
+    expect(mockReq.cancelled).toBeFalsy();
+    expect(mockReq.request.responseType).toEqual('json');
+    mockReq.flush(testResponseMessage);
+    expect(mockReq.request.body).toBe(testData);
+
+    networkService.postJson(testUrl).then((res: string) => {
+      expect(res).toBe(testResponse);
+    }).catch((err) => {
+      console.error(err);
+      expect(err).toBeUndefined();
+    });
+
+    mockReq = httpMock.expectOne('/api' + testUrl);
+    expect(mockReq.cancelled).toBeFalsy();
+    expect(mockReq.request.responseType).toEqual('json');
+    expect(mockReq.request.body).toEqual({});
+    mockReq.flush(testResponseMessage);
+
 
   }));
 
-  it('should call POST', inject([NetworkService, MockBackend], (networkService) => {
 
-    networkService.postJson(testUrl, testData).then((res: any) => {
+  it('should call DELETE', inject([NetworkService], (networkService) => {
+
+    networkService.deleteJson(testUrl).then((res: any) => {
       expect(res).toBe(testResponse);
     });
-    expect(connection.request.text()).toBe(JSON.stringify(testData));
 
-
-    networkService.postJson(testUrl).then((res: any) => {
-      expect(res).toBe(testResponse);
-    });
-    expect(connection.request.text()).toBe(JSON.stringify({}));
+    const mockReq = httpMock.expectOne({method: 'DELETE'});
+    expect(mockReq.cancelled).toBeFalsy();
+    expect(mockReq.request.responseType).toEqual('json');
+    mockReq.flush(testResponseMessage);
   }));
 
-  it('should call PUT', inject([NetworkService, MockBackend], (networkService) => {
+  it('should call PUT', inject([NetworkService], (networkService) => {
 
     networkService.putJson(testUrl, testData).then((res: any) => {
       expect(res).toBe(testResponse);
     });
 
-    expect(connection.request.text()).toBe(JSON.stringify(testData));
+
+    let mockReq = httpMock.expectOne({});
+    expect(mockReq.cancelled).toBeFalsy();
+    expect(mockReq.request.responseType).toEqual('json');
+    expect(mockReq.request.body).toEqual(testData);
+    mockReq.flush(testResponseMessage);
 
 
     networkService.putJson(testUrl).then((res: any) => {
       expect(res).toBe(testResponse);
     });
-    expect(connection.request.text()).toBe(JSON.stringify({}));
+
+    mockReq = httpMock.expectOne({});
+    expect(mockReq.cancelled).toBeFalsy();
+    expect(mockReq.request.responseType).toEqual('json');
+    expect(mockReq.request.body).toEqual({});
+    mockReq.flush(testResponseMessage);
 
   }));
 
-  it('should call DELETE', inject([NetworkService, MockBackend], (networkService) => {
-
-    networkService.deleteJson(testUrl).then((res: any) => {
-      expect(res).toBe(testResponse);
-    });
-  }));
 });
 
 
 describe('NetworkService Fail tests', () => {
-  let connection: MockConnection = null;
 
-  let testUrl = "/test/url";
-  let testData = {data: "testData"};
-  let testError = "testError";
+  const testUrl = '/test/url';
+  const testData = {data: 'testData'};
+  const testError = 'testError';
+  let injector;
+  let httpMock: HttpTestingController;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule],
       providers: [
-        MockBackend,
-        BaseRequestOptions,
         SlimLoadingBarService,
-
-        {
-          provide: Http, useFactory: (backend, options) => {
-          return new Http(backend, options);
-        }, deps: [MockBackend, BaseRequestOptions]
-        },
         NetworkService
       ]
     });
+    injector = getTestBed();
+    httpMock = injector.get(HttpTestingController);
   });
-
-  beforeEach(inject([MockBackend], (backend) => {
-
-    backend.connections.subscribe((c) => {
-      connection = c;
-      connection.mockError({name: "errorName", message: testError});
-
-    });
-  }));
 
   afterEach(() => {
-
-    expect(connection.request.url).toBe("/api" + testUrl);
+    httpMock.verify();
   });
+
 
   it('should call GET with error', inject([NetworkService], (networkService) => {
 
     networkService.getJson(testUrl).then((res: any) => {
       expect(res).toBe(null);
     }).catch((err) => {
-      expect(err).toBe(testError);
+      expect(err).toBe('Http failure response for /api/test/url: 0 ' + testError);
     });
 
+
+    const mockReq = httpMock.expectOne({method: 'GET'});
+    expect(mockReq.cancelled).toBeFalsy();
+    expect(mockReq.request.responseType).toEqual('json');
+    mockReq.error(null, {statusText: testError});
   }));
 
-  it('should call POST with error', inject([NetworkService, MockBackend], (networkService) => {
+  it('should call POST with error', inject([NetworkService], (networkService) => {
 
     networkService.postJson(testUrl, testData).then((res: any) => {
       expect(res).toBe(null);
     }).catch((err) => {
-      expect(err).toBe(testError);
+      expect(err).toBe('Http failure response for /api/test/url: 0 ' + testError);
     });
-    expect(connection.request.text()).toBe(JSON.stringify(testData));
+
+    const mockReq = httpMock.expectOne({method: 'POST'});
+    expect(mockReq.cancelled).toBeFalsy();
+    expect(mockReq.request.responseType).toEqual('json');
+    expect(mockReq.request.body).toEqual(testData);
+    mockReq.error(null, {statusText: testError});
   }));
 
-  it('should call PUT with error', inject([NetworkService, MockBackend], (networkService) => {
+  it('should call PUT with error', inject([NetworkService], (networkService) => {
 
     networkService.putJson(testUrl, testData).then((res: any) => {
       expect(res).toBe(null);
     }).catch((err) => {
-      expect(err).toBe(testError);
+      expect(err).toBe('Http failure response for /api/test/url: 0 ' + testError);
     });
 
-    expect(connection.request.text()).toBe(JSON.stringify(testData));
+
+    const mockReq = httpMock.expectOne({method: 'PUT'});
+    expect(mockReq.cancelled).toBeFalsy();
+    expect(mockReq.request.responseType).toEqual('json');
+    expect(mockReq.request.body).toEqual(testData);
+    mockReq.error(null, {statusText: testError});
 
   }));
 
-  it('should call DELETE with error', inject([NetworkService, MockBackend], (networkService) => {
+  it('should call DELETE with error', inject([NetworkService], (networkService) => {
 
     networkService.deleteJson(testUrl).then((res: any) => {
       expect(res).toBe(null);
     }).catch((err) => {
-      expect(err).toBe(testError);
+      expect(err).toBe('Http failure response for /api/test/url: 0 ' + testError);
     });
+
+    const mockReq = httpMock.expectOne({method: 'DELETE'});
+    expect(mockReq.cancelled).toBeFalsy();
+    expect(mockReq.request.responseType).toEqual('json');
+    mockReq.error(null, {statusText: testError});
   }));
 });

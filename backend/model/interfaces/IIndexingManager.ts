@@ -1,4 +1,4 @@
-import {IndexingProgressDTO} from "../../../common/entities/settings/IndexingProgressDTO";
+import {IndexingProgressDTO} from '../../../common/entities/settings/IndexingProgressDTO';
 
 export interface IIndexingManager {
   startIndexing(): void;
@@ -7,5 +7,5 @@ export interface IIndexingManager {
 
   cancelIndexing(): void;
 
-  reset(): Promise<void> ;
+  reset(): Promise<void>;
 }

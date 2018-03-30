@@ -10,14 +10,14 @@ import {
   QueryList,
   ViewChild,
   ViewChildren
-} from "@angular/core";
-import {PhotoDTO} from "../../../../common/entities/PhotoDTO";
-import {GridRowBuilder} from "./GridRowBuilder";
-import {GalleryLightboxComponent} from "../lightbox/lightbox.gallery.component";
-import {GridPhoto} from "./GridPhoto";
-import {GalleryPhotoComponent} from "./photo/photo.grid.gallery.component";
-import {OverlayService} from "../overlay.service";
-import {Config} from "../../../../common/config/public/Config";
+} from '@angular/core';
+import {PhotoDTO} from '../../../../common/entities/PhotoDTO';
+import {GridRowBuilder} from './GridRowBuilder';
+import {GalleryLightboxComponent} from '../lightbox/lightbox.gallery.component';
+import {GridPhoto} from './GridPhoto';
+import {GalleryPhotoComponent} from './photo/photo.grid.gallery.component';
+import {OverlayService} from '../overlay.service';
+import {Config} from '../../../../common/config/public/Config';
 
 @Component({
   selector: 'gallery-grid',
@@ -154,7 +154,7 @@ export class GalleryGridComponent implements OnChanges, AfterViewInit, OnDestroy
       this.renderedPhotoIndex < numberOfPhotos)) {
       let ret = this.renderARow();
       if (ret === null) {
-        throw new Error("Grid photos rendering failed");
+        throw new Error('Grid photos rendering failed');
       }
       renderedContentHeight += ret;
     }

@@ -1,10 +1,10 @@
-import {UserDTO, UserRoles} from "../../../common/entities/UserDTO";
-import {IUserManager} from "../interfaces/IUserManager";
-import {ProjectPath} from "../../ProjectPath";
-import {Utils} from "../../../common/Utils";
-import * as path from "path";
-import * as fs from "fs";
-import {PasswordHelper} from "../PasswordHelper";
+import {UserDTO, UserRoles} from '../../../common/entities/UserDTO';
+import {IUserManager} from '../interfaces/IUserManager';
+import {ProjectPath} from '../../ProjectPath';
+import {Utils} from '../../../common/Utils';
+import * as path from 'path';
+import * as fs from 'fs';
+import {PasswordHelper} from '../PasswordHelper';
 
 
 export class UserManager implements IUserManager {
@@ -28,14 +28,14 @@ export class UserManager implements IUserManager {
     }
 
     if (!this.db.idCounter) {
-      console.log("creating counter");
+      console.log('creating counter');
       this.db.idCounter = 1;
     }
 
     if (!this.db.users) {
       this.db.users = [];
       //TODO: remove defaults
-      this.createUser(<UserDTO>{name: "admin", password: "admin", role: UserRoles.Admin});
+      this.createUser(<UserDTO>{name: 'admin', password: 'admin', role: UserRoles.Admin});
     }
     this.saveDB();
 
@@ -46,7 +46,7 @@ export class UserManager implements IUserManager {
     const result = await this.find(filter);
 
     if (result.length == 0) {
-      throw "UserDTO not found";
+      throw 'UserDTO not found';
     }
     return result[0];
   }
@@ -97,7 +97,7 @@ export class UserManager implements IUserManager {
   }
 
   public async changePassword(request: any) {
-    throw new Error("not implemented"); //TODO: implement
+    throw new Error('not implemented'); //TODO: implement
   }
 
   private loadDB() {

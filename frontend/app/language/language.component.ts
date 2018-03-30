@@ -1,7 +1,7 @@
-import {Component, Input} from "@angular/core";
-import {Config} from "../../../common/config/public/Config";
-import {Cookie} from "ng2-cookies";
-import {CookieNames} from "../../../common/CookieNames";
+import {Component, Input} from '@angular/core';
+import {Config} from '../../../common/config/public/Config';
+import {Cookie} from 'ng2-cookies';
+import {CookieNames} from '../../../common/CookieNames';
 
 @Component({
   selector: 'language',

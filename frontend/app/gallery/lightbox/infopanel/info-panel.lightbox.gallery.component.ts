@@ -1,6 +1,6 @@
-import {Component, ElementRef, EventEmitter, Input, Output} from "@angular/core";
-import {PhotoDTO} from "../../../../../common/entities/PhotoDTO";
-import {Config} from "../../../../../common/config/public/Config";
+import {Component, ElementRef, EventEmitter, Input, Output} from '@angular/core';
+import {PhotoDTO} from '../../../../../common/entities/PhotoDTO';
+import {Config} from '../../../../../common/config/public/Config';
 
 @Component({
   selector: 'info-panel',
@@ -21,7 +21,7 @@ export class InfoPanelLightboxComponent {
   }
 
   calcFileSize() {
-    let postFixes = ["B", "KB", "MB", "GB", "TB"];
+    let postFixes = ['B', 'KB', 'MB', 'GB', 'TB'];
     let index = 0;
     let size = this.photo.metadata.fileSize;
     while (size > 1000 && index < postFixes.length - 1) {
@@ -42,8 +42,8 @@ export class InfoPanelLightboxComponent {
 
   getDate() {
     const date = new Date(this.photo.metadata.creationDate);
-    let locale = "en-us";
-    return date.toLocaleString(locale, {month: "long"}) + " " + date.getDate();
+    let locale = 'en-us';
+    return date.toLocaleString(locale, {month: 'long'}) + ' ' + date.getDate();
   }
 
   getTime() {
@@ -53,31 +53,31 @@ export class InfoPanelLightboxComponent {
 
   getDay() {
     const date = new Date(this.photo.metadata.creationDate);
-    let locale = "en-us";
-    return date.toLocaleString(locale, {weekday: "long"});
+    let locale = 'en-us';
+    return date.toLocaleString(locale, {weekday: 'long'});
   }
 
   toFraction(f) {
     if (f > 1) {
       return f;
     }
-    return "1/" + (1 / f);
+    return '1/' + (1 / f);
   }
 
   hasGPS() {
     return this.photo.metadata.positionData && this.photo.metadata.positionData.GPSData &&
-      this.photo.metadata.positionData.GPSData.latitude && this.photo.metadata.positionData.GPSData.longitude
+      this.photo.metadata.positionData.GPSData.latitude && this.photo.metadata.positionData.GPSData.longitude;
   }
 
   getPositionText(): string {
     if (!this.photo.metadata.positionData) {
-      return "";
+      return '';
     }
     let str = this.photo.metadata.positionData.city ||
       this.photo.metadata.positionData.state;
 
     if (str.length != 0) {
-      str += ", ";
+      str += ', ';
     }
     str += this.photo.metadata.positionData.country;
 

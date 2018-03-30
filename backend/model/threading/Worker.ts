@@ -1,13 +1,13 @@
-import {DiskMangerWorker} from "./DiskMangerWorker";
-import {Logger} from "../../Logger";
-import {RendererInput, ThumbnailWoker} from "./ThumbnailWoker";
-import {ThumbnailProcessingLib} from "../../../common/config/private/IPrivateConfig";
+import {DiskMangerWorker} from './DiskMangerWorker';
+import {Logger} from '../../Logger';
+import {RendererInput, ThumbnailWoker} from './ThumbnailWoker';
+import {ThumbnailProcessingLib} from '../../../common/config/private/IPrivateConfig';
 
 export class Worker {
 
 
   public static process() {
-    Logger.debug("Worker is waiting for tasks");
+    Logger.debug('Worker is waiting for tasks');
     process.on('message', async (task: WorkerTask) => {
       try {
         let result = null;
@@ -22,8 +22,8 @@ export class Worker {
             result = await ThumbnailWoker.render((<ThumbnailTask>task).input, (<ThumbnailTask>task).renderer);
             break;
           default:
-            Logger.error("Unknown worker task type");
-            throw "Unknown worker task type";
+            Logger.error('Unknown worker task type');
+            throw 'Unknown worker task type';
         }
         process.send(<WorkerMessage>{
           error: null,

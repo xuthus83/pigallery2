@@ -1,29 +1,29 @@
-import * as path from "path";
-import * as fs from "fs";
-import {NextFunction, Request, Response} from "express";
-import {ErrorCodes, ErrorDTO} from "../../common/entities/Error";
-import {DirectoryDTO} from "../../common/entities/DirectoryDTO";
-import {ObjectManagerRepository} from "../model/ObjectManagerRepository";
-import {SearchTypes} from "../../common/entities/AutoCompleteItem";
-import {ContentWrapper} from "../../common/entities/ConentWrapper";
-import {PhotoDTO} from "../../common/entities/PhotoDTO";
-import {ProjectPath} from "../ProjectPath";
-import {Config} from "../../common/config/private/Config";
-import {UserDTO} from "../../common/entities/UserDTO";
+import * as path from 'path';
+import * as fs from 'fs';
+import {NextFunction, Request, Response} from 'express';
+import {ErrorCodes, ErrorDTO} from '../../common/entities/Error';
+import {DirectoryDTO} from '../../common/entities/DirectoryDTO';
+import {ObjectManagerRepository} from '../model/ObjectManagerRepository';
+import {SearchTypes} from '../../common/entities/AutoCompleteItem';
+import {ContentWrapper} from '../../common/entities/ConentWrapper';
+import {PhotoDTO} from '../../common/entities/PhotoDTO';
+import {ProjectPath} from '../ProjectPath';
+import {Config} from '../../common/config/private/Config';
+import {UserDTO} from '../../common/entities/UserDTO';
 
 
-const LOG_TAG = "[GalleryMWs]";
+const LOG_TAG = '[GalleryMWs]';
 
 export class GalleryMWs {
 
 
   public static async listDirectory(req: Request, res: Response, next: NextFunction) {
-    console.log("listDirectory");
-    let directoryName = req.params.directory || "/";
+    console.log('listDirectory');
+    let directoryName = req.params.directory || '/';
     let absoluteDirectoryName = path.join(ProjectPath.ImageFolder, directoryName);
 
     if (!fs.statSync(absoluteDirectoryName).isDirectory()) {
-      console.log("not dir");
+      console.log('not dir');
       return next();
     }
 
@@ -31,7 +31,7 @@ export class GalleryMWs {
 
       const directory = await ObjectManagerRepository.getInstance().GalleryManager.listDirectory(directoryName, req.query.knownLastModified, req.query.knownLastScanned);
       if (directory == null) {
-        console.log("null dir");
+        console.log('null dir');
         req.resultPipe = new ContentWrapper(null, null, true);
         return next();
       }
@@ -39,7 +39,7 @@ export class GalleryMWs {
       console.log(directory);
       if (req.session.user.permissions &&
         req.session.user.permissions.length > 0 &&
-        req.session.user.permissions[0] != "/*") {
+        req.session.user.permissions[0] != '/*') {
         (<DirectoryDTO>directory).directories = (<DirectoryDTO>directory).directories.filter(d =>
           UserDTO.isDirectoryAvailable(d, req.session.user.permissions));
       }
@@ -47,7 +47,7 @@ export class GalleryMWs {
       return next();
 
     } catch (err) {
-      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, "Error during listing the directory", err));
+      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, 'Error during listing the directory', err));
     }
   }
 
@@ -90,7 +90,7 @@ export class GalleryMWs {
 
     //check if thumbnail already exist
     if (fs.existsSync(fullImagePath) === false) {
-      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, "no such file:" + fullImagePath));
+      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, 'no such file:' + fullImagePath));
     }
     if (fs.statSync(fullImagePath).isDirectory()) {
       return next();
@@ -122,7 +122,7 @@ export class GalleryMWs {
       req.resultPipe = new ContentWrapper(null, result);
       return next();
     } catch (err) {
-      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, "Error during searching", err));
+      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, 'Error during searching', err));
     }
   }
 
@@ -142,7 +142,7 @@ export class GalleryMWs {
       req.resultPipe = new ContentWrapper(null, result);
       return next();
     } catch (err) {
-      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, "Error during searching", err));
+      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, 'Error during searching', err));
     }
   }
 
@@ -158,7 +158,7 @@ export class GalleryMWs {
       req.resultPipe = await ObjectManagerRepository.getInstance().SearchManager.autocomplete(req.params.text);
       return next();
     } catch (err) {
-      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, "Error during searching", err));
+      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, 'Error during searching', err));
     }
 
   }
