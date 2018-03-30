@@ -30,7 +30,8 @@ var createFrontendTask = function (type, script) {
 gulp.task('build-frontend', function (done) {
   var languages = getLanguages();
   var tasks = [];
-  createFrontendTask('build-frontend-release default', "ng build --aot -prod --output-path=./release/dist --no-progress");
+  createFrontendTask('build-frontend-release default', "ng build --aot -prod --output-path=./release/dist --no-progress --locale=en" +
+    " --i18n-format xlf --i18n-file frontend/" + translationFolder + "/messages.en.xlf" + " --missing-translation warning");
   tasks.push('build-frontend-release default');
   for (var i = 0; i < languages.length; i++) {
     createFrontendTask('build-frontend-release ' + languages[i], "ng build --aot -prod --output-path=./release/dist/" + languages[i] + " --no-progress --locale=" + languages[i] +
@@ -89,6 +90,8 @@ var getLanguages = function () {
   });
   return files.map(function (f) {
     return f.split(".")[1]
+  }).filter(function (l) {
+    return l !== "en";
   });
 };
 
@@ -96,11 +99,12 @@ var simpleBuild = function (isProd) {
   return function (done) {
     var languages = getLanguages();
     var tasks = [];
-    var cmd = "ng build  ";
+    var cmd = "ng build --aot ";
     if (isProd) {
       cmd += " -prod "
     }
-    createFrontendTask('build-frontend default', cmd + "--output-path=./dist --no-progress");
+    createFrontendTask('build-frontend default', cmd + "--output-path=./dist --no-progress --no-progress --locale en" +
+      " --i18n-format=xlf --i18n-file=frontend/" + translationFolder + "/messages.en.xlf" + " --missing-translation warning");
     tasks.push('build-frontend default');
     for (var i = 0; i < languages.length; i++) {
       createFrontendTask('build-frontend ' + languages[i], cmd + "--output-path=./dist/" + languages[i] + " --no-progress --locale " + languages[i] +
