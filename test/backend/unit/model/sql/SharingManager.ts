@@ -141,7 +141,6 @@ describe('SharingManager', () => {
     };
     const updated = await sm.updateSharing(update);
 
-    console.log(updated);
     expect(updated.id).to.equals(saved.id);
     expect(updated.sharingKey).to.equals(sharing.sharingKey);
     expect(updated.timeStamp).to.equals(sharing.timeStamp);

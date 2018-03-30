@@ -18,7 +18,7 @@
           <context context-type="sourcefile">app/login/login.component.ts</context>
           <context context-type="linenumber">13</context>
         </context-group>
-        <target>Hibás felhasználónév vagy jelszó</target>
+        <target>Rossz felhasználónév vagy jelszó</target>
       </trans-unit>
       <trans-unit id="08c74dc9762957593b91f6eb5d65efdfc975bf48" datatype="html">
         <source>Username</source>
@@ -51,6 +51,10 @@
           <context context-type="linenumber">67</context>
         </context-group>
         <context-group purpose="location">
+          <context context-type="sourcefile">app/gallery/share/share.gallery.component.ts</context>
+          <context context-type="linenumber">78</context>
+        </context-group>
+        <context-group purpose="location">
           <context context-type="sourcefile">app/settings/usermanager/usermanager.settings.component.ts</context>
           <context context-type="linenumber">79</context>
         </context-group>
@@ -66,7 +70,7 @@
           <context context-type="sourcefile">app/login/login.component.ts</context>
           <context context-type="linenumber">42</context>
         </context-group>
-        <target>Jegyezzen meg</target>
+        <target>Emlékezz rám</target>
       </trans-unit>
       <trans-unit id="c15f0f6076dd3f758adb69556fb1751f7a8139dc" datatype="html">
         <source>Login
@@ -85,7 +89,7 @@
           <context context-type="sourcefile">app/sharelogin/share-login.component.ts</context>
           <context context-type="linenumber">13</context>
         </context-group>
-        <target>Hibás jelszó</target>
+        <target>Rossz jelszó</target>
       </trans-unit>
       <trans-unit id="7bc15e0478a1384ea38903e2506f4ae3fe7dd6e1" datatype="html">
         <source>Enter
@@ -95,6 +99,58 @@
           <context context-type="linenumber">36</context>
         </context-group>
         <target>Belépés</target>
+      </trans-unit>
+      <trans-unit id="e576d10a00b926dc56802231438eea7831b602ee" datatype="html">
+        <source>download</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/gallery/lightbox/lightbox.gallery.component.ts</context>
+          <context context-type="linenumber">23</context>
+        </context-group>
+        <target>letöltés</target>
+      </trans-unit>
+      <trans-unit id="d3f952f7e85f196637e4536a1939c01f8a68d7da" datatype="html">
+        <source>info</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/gallery/lightbox/lightbox.gallery.component.ts</context>
+          <context context-type="linenumber">26</context>
+        </context-group>
+        <target>info</target>
+      </trans-unit>
+      <trans-unit id="a9c1983f028dd7c8079b2a379465c7a8d3e0b2cb" datatype="html">
+        <source>toggle fullscreen</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/gallery/lightbox/lightbox.gallery.component.ts</context>
+          <context context-type="linenumber">30</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/gallery/lightbox/lightbox.gallery.component.ts</context>
+          <context context-type="linenumber">34</context>
+        </context-group>
+        <target>teljes képernyőre váltás</target>
+      </trans-unit>
+      <trans-unit id="e329f67417e3574eda9988c92b15c0e29df1dd1b" datatype="html">
+        <source>close</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/gallery/lightbox/lightbox.gallery.component.ts</context>
+          <context context-type="linenumber">36</context>
+        </context-group>
+        <target>bezárás</target>
+      </trans-unit>
+      <trans-unit id="774684628600c4622be2ed1dab5e1525c03b7bd3" datatype="html">
+        <source>key: left arrow</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/gallery/lightbox/lightbox.gallery.component.ts</context>
+          <context context-type="linenumber">40</context>
+        </context-group>
+        <target>billentyű: balra nyíl</target>
+      </trans-unit>
+      <trans-unit id="063218892255510d21ef1cd3797ef59729730964" datatype="html">
+        <source>key: right arrow</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/gallery/lightbox/lightbox.gallery.component.ts</context>
+          <context context-type="linenumber">44</context>
+        </context-group>
+        <target>billentyű: jobbra nyíl</target>
       </trans-unit>
       <trans-unit id="7e892ba15f2c6c17e83510e273b3e10fc32ea016" datatype="html">
         <source>Search</source>
@@ -110,7 +166,7 @@
           <context context-type="sourcefile">app/gallery/gallery.component.ts</context>
           <context context-type="linenumber">8</context>
         </context-group>
-        <target>Link érvényes</target>
+        <target>Link elérhetősége</target>
       </trans-unit>
       <trans-unit id="fc34f2683c4cb526ed7095c5b1cdd66d672ba932" datatype="html">
         <source>days</source>
@@ -118,7 +174,7 @@
           <context context-type="sourcefile">app/gallery/gallery.component.ts</context>
           <context context-type="linenumber">10</context>
         </context-group>
-        <target>nap</target>
+        <target>napok</target>
       </trans-unit>
       <trans-unit id="c17b163553f84f2f704031a1b343e7b89c5c5ee1" datatype="html">
         <source>
@@ -128,7 +184,7 @@
           <context context-type="sourcefile">app/gallery/gallery.component.ts</context>
           <context context-type="linenumber">39</context>
         </context-group>
-        <target>Túl sok találat. Pontosítsd a keresést.</target>
+        <target>Túl sok eredmény jelenik meg. Pontosítsa a keresést.</target>
       </trans-unit>
       <trans-unit id="24f166827601febff9ec90329582bc637781def8" datatype="html">
         <source>Searching for:</source>
@@ -165,7 +221,7 @@
           <context context-type="sourcefile">app/gallery/share/share.gallery.component.ts</context>
           <context context-type="linenumber">34</context>
         </context-group>
-        <target>Másolás</target>
+        <target>Másolat</target>
       </trans-unit>
       <trans-unit id="07867d2c08ad81d9f1cb27f083c5d32d0d1f3bd6" datatype="html">
         <source>Sharing:</source>
@@ -173,7 +229,7 @@
           <context context-type="sourcefile">app/gallery/share/share.gallery.component.ts</context>
           <context context-type="linenumber">41</context>
         </context-group>
-        <target>Megosztás:</target>
+        <target>megosztás:</target>
       </trans-unit>
       <trans-unit id="030e713e20f553f6c55b76d217e8b604da1ea7c2" datatype="html">
         <source>Include subfolders:</source>
@@ -181,13 +237,13 @@
           <context context-type="sourcefile">app/gallery/share/share.gallery.component.ts</context>
           <context context-type="linenumber">52</context>
         </context-group>
-        <target>Alkönyvtárakat is:</target>
+        <target>Alkönyvtárak beillesztése:</target>
       </trans-unit>
       <trans-unit id="ac26f1ef0bc7eb42fdabd901d99cb23728abcd4f" datatype="html">
         <source>Valid:</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/gallery/share/share.gallery.component.ts</context>
-          <context context-type="linenumber">82</context>
+          <context context-type="linenumber">84</context>
         </context-group>
         <target>Érvényes:</target>
       </trans-unit>
@@ -195,33 +251,33 @@
         <source>Minutes</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/gallery/share/share.gallery.component.ts</context>
-          <context context-type="linenumber">92</context>
+          <context context-type="linenumber">94</context>
         </context-group>
-        <target>Perc</target>
+        <target>Percek</target>
       </trans-unit>
       <trans-unit id="3bbce5fef7e1151da052a4e529453edb340e3912" datatype="html">
         <source>Hours</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/gallery/share/share.gallery.component.ts</context>
-          <context context-type="linenumber">93</context>
+          <context context-type="linenumber">95</context>
         </context-group>
-        <target>Óra</target>
+        <target>Órák</target>
       </trans-unit>
       <trans-unit id="a5c3d9d2296f7886e8289b9f623323803deacfc6" datatype="html">
         <source>Days</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/gallery/share/share.gallery.component.ts</context>
-          <context context-type="linenumber">94</context>
+          <context context-type="linenumber">96</context>
         </context-group>
-        <target>Nap</target>
+        <target>Napok</target>
       </trans-unit>
       <trans-unit id="12cc9773650706e6b16eec367da84f99a1e6399c" datatype="html">
         <source>Months</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/gallery/share/share.gallery.component.ts</context>
-          <context context-type="linenumber">95</context>
+          <context context-type="linenumber">97</context>
         </context-group>
-        <target>Hónap</target>
+        <target>hónapok</target>
       </trans-unit>
       <trans-unit id="f0acecaa22df19767da6d9990458470b17da3d7a" datatype="html">
         <source>Server notifications</source>
@@ -239,7 +295,7 @@
           <context context-type="sourcefile">app/admin/admin.component.ts</context>
           <context context-type="linenumber">19</context>
         </context-group>
-        <target>Az ilyen értesítések elütetéséhez indítsd újra a az alkalmazást.</target>
+        <target>Az ilyen értesítések elutasításához indítsa újra a kiszolgálót.</target>
       </trans-unit>
       <trans-unit id="37e10df2d9c0c25ef04ac112c9c9a7723e8efae0" datatype="html">
         <source>Mode</source>
@@ -263,7 +319,7 @@
           <context context-type="sourcefile">app/settings/usermanager/usermanager.settings.component.ts</context>
           <context context-type="linenumber">3</context>
         </context-group>
-        <target>Jelszavas védelem</target>
+        <target>Jelszó védelem</target>
       </trans-unit>
       <trans-unit id="cff1428d10d59d14e45edec3c735a27b5482db59" datatype="html">
         <source>Name</source>
@@ -279,7 +335,7 @@
           <context context-type="sourcefile">app/settings/usermanager/usermanager.settings.component.ts</context>
           <context context-type="linenumber">28</context>
         </context-group>
-        <target>Jogkör</target>
+        <target>Szerep</target>
       </trans-unit>
       <trans-unit id="e3fcf58f9472d33a35df59fe5520e3b8b41d6951" datatype="html">
         <source>+ Add user
@@ -288,7 +344,7 @@
           <context context-type="sourcefile">app/settings/usermanager/usermanager.settings.component.ts</context>
           <context context-type="linenumber">55</context>
         </context-group>
-        <target>+ Felhasználó hozzáadása</target>
+        <target>+ Felhasználó felvétele</target>
       </trans-unit>
       <trans-unit id="eebaef174029db4c77c4f7d1c68070774730f4d3" datatype="html">
         <source>
@@ -298,7 +354,7 @@
           <context context-type="sourcefile">app/settings/usermanager/usermanager.settings.component.ts</context>
           <context context-type="linenumber">58</context>
         </context-group>
-        <target>A webhely jelszóval legyen védve / be kelljen jelentkezni</target>
+        <target>A webhely jelszóval való védelme / a bejelentkezés engedélyezi ezt.</target>
       </trans-unit>
       <trans-unit id="2df47a22f05b9ac3bdabb6693d4bc37c3ad7c000" datatype="html">
         <source>Add new User</source>
@@ -347,7 +403,7 @@
           <context context-type="sourcefile">app/settings/database/database.settings.component.ts</context>
           <context context-type="linenumber">14</context>
         </context-group>
-        <target>Telepítsd kézzel mysql node-modult a mysql (npm install mysql) használatához</target>
+        <target>Telepítsd kézzel mysql csomópont-modulot a mysql (npm install mysql) használatához</target>
       </trans-unit>
       <trans-unit id="1531e77d9dbcfb6a3efeb71fca40da5f5f7ddaaf" datatype="html">
         <source>MySQL settings:</source>
@@ -363,7 +419,7 @@
           <context context-type="sourcefile">app/settings/database/database.settings.component.ts</context>
           <context context-type="linenumber">18</context>
         </context-group>
-        <target>Cím</target>
+        <target>Házigazda</target>
       </trans-unit>
       <trans-unit id="fb324ec7da611c6283caa6fc6257c39a56d6aaf7" datatype="html">
         <source>Database</source>
@@ -413,7 +469,7 @@
           <context context-type="sourcefile">app/settings/map/map.settings.component.ts</context>
           <context context-type="linenumber">25</context>
         </context-group>
-        <target>Google maps api key</target>
+        <target>A Google térképek api kulcsot tartalmaznak</target>
       </trans-unit>
       <trans-unit id="83d20bb14a5d264b30b919fd3b52903f0b7a124c" datatype="html">
         <source>To show the images on a map,</source>
@@ -421,7 +477,7 @@
           <context context-type="sourcefile">app/settings/map/map.settings.component.ts</context>
           <context context-type="linenumber">31</context>
         </context-group>
-        <target>Ahhoz, hogy a térképen megjelenjenek a képek</target>
+        <target>A képek megjelenítéséhez térképen,</target>
       </trans-unit>
       <trans-unit id="9b480df2a8ef25163f0c093fe11c336908c7b55c" datatype="html">
         <source>google api key</source>
@@ -429,7 +485,7 @@
           <context context-type="sourcefile">app/settings/map/map.settings.component.ts</context>
           <context context-type="linenumber">32</context>
         </context-group>
-        <target>google api key-re</target>
+        <target>google api kulcs</target>
       </trans-unit>
       <trans-unit id="0d727eb391d8b787f3195d51625ea8579b05506a" datatype="html">
         <source>is need</source>
@@ -437,7 +493,7 @@
           <context context-type="sourcefile">app/settings/map/map.settings.component.ts</context>
           <context context-type="linenumber">33</context>
         </context-group>
-        <target>van szükség</target>
+        <target>szükség van</target>
       </trans-unit>
       <trans-unit id="d682be8fc94c1861394919e021e9dcf8def8f554" datatype="html">
         <source>Save
@@ -503,7 +559,7 @@
           <context context-type="sourcefile">app/settings/thumbnail/thumbanil.settings.component.ts</context>
           <context context-type="linenumber">4</context>
         </context-group>
-        <target>Thumbnail beállítások</target>
+        <target>Miniatűr beállítások</target>
       </trans-unit>
       <trans-unit id="1b239b0422945f36c35b5559b4b0c135922fe299" datatype="html">
         <source>It is highly recommended to use hardware accelerated (sharp or gm) lib for thumbnail
@@ -522,7 +578,7 @@
           <context context-type="sourcefile">app/settings/thumbnail/thumbanil.settings.component.ts</context>
           <context context-type="linenumber">16</context>
         </context-group>
-        <target>Thumbnail generáló könyvtár</target>
+        <target>Thumbnail generációs könyvtár</target>
       </trans-unit>
       <trans-unit id="405e524b190e5a9325aa74a21736f05afbf0fe6c" datatype="html">
         <source>Make sure that sharp node module is installed (npm install sharp).</source>
@@ -530,7 +586,7 @@
           <context context-type="sourcefile">app/settings/thumbnail/thumbanil.settings.component.ts</context>
           <context context-type="linenumber">24</context>
         </context-group>
-        <target>Győződj meg arról, hogy a sharp node modul telepítve van (npm telepítés sharp).</target>
+        <target>Győződjön meg arról, hogy az éles csomópont modul telepítve van (npm telepítés éles).</target>
       </trans-unit>
       <trans-unit id="becf05481d292e5e206fda4b7d67d8fac4e85c93" datatype="html">
         <source>Make sure that gm node module and</source>
@@ -538,7 +594,7 @@
           <context context-type="sourcefile">app/settings/thumbnail/thumbanil.settings.component.ts</context>
           <context context-type="linenumber">26</context>
         </context-group>
-        <target>Győződjd meg arról, hogy a gm node modul és</target>
+        <target>Győződjön meg róla, hogy a gm csomópont modul és</target>
       </trans-unit>
       <trans-unit id="50baaa30462f55de8e9b80d5762048f7ba4cecc4" datatype="html">
         <source>GraphicsMagick</source>
@@ -570,7 +626,7 @@
           <context context-type="sourcefile">app/settings/thumbnail/thumbanil.settings.component.ts</context>
           <context context-type="linenumber">39</context>
         </context-group>
-        <target>A thumbnail-ek ebben a mappában lesznek elmentve. Írási jog szükséges</target>
+        <target>A miniatűrök ebben a mappában lesznek elmentve. Íráshoz való hozzáférés szükséges</target>
       </trans-unit>
       <trans-unit id="76a16cf361d95615469c06e26644b6e52f3a4411" datatype="html">
         <source>Thumbnail Quality</source>
@@ -578,7 +634,7 @@
           <context context-type="sourcefile">app/settings/thumbnail/thumbanil.settings.component.ts</context>
           <context context-type="linenumber">44</context>
         </context-group>
-        <target>Thumbnail minőség</target>
+        <target>Thumbnail Quality</target>
       </trans-unit>
       <trans-unit id="b2d8e74a49c92e56ab68a248c5090187b16da0ae" datatype="html">
         <source>High quality may be slow. Especially with Jimp.</source>
@@ -586,7 +642,7 @@
           <context context-type="sourcefile">app/settings/thumbnail/thumbanil.settings.component.ts</context>
           <context context-type="linenumber">58</context>
         </context-group>
-        <target>A jó minőségű lassú lehet. Különösen a Jimp esetén.</target>
+        <target>A jó minőségű lehet lassú. Különösen a Jimp.</target>
       </trans-unit>
       <trans-unit id="b1a101e4cac6b5af1e4710d01ad2da24b494e982" datatype="html">
         <source>Icon size (used on maps)</source>
@@ -610,7 +666,7 @@
           <context context-type="sourcefile">app/settings/thumbnail/thumbanil.settings.component.ts</context>
           <context context-type="linenumber">86</context>
         </context-group>
-        <target>A thumbnail mérete.</target>
+        <target>A bélyegképek mérete.</target>
       </trans-unit>
       <trans-unit id="11b5800486a59a25fad47fa9850420f83ccbe52b" datatype="html">
         <source>The best matching size will be generated. (More size gives better quality, but use storage to store and CPU to render.)</source>
@@ -618,7 +674,7 @@
           <context context-type="sourcefile">app/settings/thumbnail/thumbanil.settings.component.ts</context>
           <context context-type="linenumber">87</context>
         </context-group>
-        <target>A legjobban egyezett méret lesz generálva. (Több méret lehetőség jobb minőségéet eredményez, de processzort és tárhelyet fogyaszt)</target>
+        <target>A legjobb egyezési méret keletkezik. (A nagyobb méret jobb minőségű, de tárolja a tárolást és a processzort a megjelenítéshez.)</target>
       </trans-unit>
       <trans-unit id="5c43f65d4b1e7f4c12937babb0794e7b84a9a103" datatype="html">
         <source>';' separated integers. If size is 200, tha thumbnail will have 200^2 pixels.</source>
@@ -626,7 +682,7 @@
           <context context-type="sourcefile">app/settings/thumbnail/thumbanil.settings.component.ts</context>
           <context context-type="linenumber">89</context>
         </context-group>
-        <target>';'-val elválasztott egész számok. Ha a méret 200, akkor a thumnail-ok 200^2 pixelből fognak állni.</target>
+        <target>';' elválasztott egész számok. Ha a méret 200, akkor a bélyegképnek 200 ^ 2 képpontja lesz.</target>
       </trans-unit>
       <trans-unit id="2e75ae3885931555902da6b288ed616843d5dc3c" datatype="html">
         <source>Search settings</source>
@@ -642,7 +698,7 @@
           <context context-type="sourcefile">app/settings/search/search.settings.component.ts</context>
           <context context-type="linenumber">27</context>
         </context-group>
-        <target>Automatikus kiegészítés</target>
+        <target>Autocomplete</target>
       </trans-unit>
       <trans-unit id="3370f9ec1e5b41b30e8c1e0de57d4dfacd0e1360" datatype="html">
         <source>Show hints while typing search query</source>
@@ -650,7 +706,7 @@
           <context context-type="sourcefile">app/settings/search/search.settings.component.ts</context>
           <context context-type="linenumber">42</context>
         </context-group>
-        <target>Kersési javaslatok megjelenítése a keresési szöveg beírása közben</target>
+        <target>Tippek felajánlása a keresés gépelése közben</target>
       </trans-unit>
       <trans-unit id="4f3e132bcb74ee7c0a19eff3915163699c249340" datatype="html">
         <source>Instant search</source>
@@ -658,7 +714,7 @@
           <context context-type="sourcefile">app/settings/search/search.settings.component.ts</context>
           <context context-type="linenumber">48</context>
         </context-group>
-        <target>Azonnali (instant) keresés</target>
+        <target>Instant keresés</target>
       </trans-unit>
       <trans-unit id="d532897643597c8670a76f65514b4cf92990729f" datatype="html">
         <source>Enables showing search results, while typing search query</source>
@@ -666,7 +722,7 @@
           <context context-type="sourcefile">app/settings/search/search.settings.component.ts</context>
           <context context-type="linenumber">63</context>
         </context-group>
-        <target>Lehetővé teszi a keresési eredmények megjelenítését a keresés beírása közben</target>
+        <target>Lehetővé teszi a keresési eredmények megjelenítését a keresési lekérdezés beírása közben</target>
       </trans-unit>
       <trans-unit id="fca20aaca9607b7bcfd32718fa299d107c73c32a" datatype="html">
         <source>
@@ -684,7 +740,7 @@
           <context context-type="sourcefile">app/settings/share/share.settings.component.ts</context>
           <context context-type="linenumber">5</context>
         </context-group>
-        <target>Megosztási bállítások</target>
+        <target>Megosztási beállítások</target>
       </trans-unit>
       <trans-unit id="6024b74e5baa9004f52b2d91fe37321412e328e4" datatype="html">
         <source>Password protected</source>
@@ -700,7 +756,7 @@
           <context context-type="sourcefile">app/settings/share/share.settings.component.ts</context>
           <context context-type="linenumber">41</context>
         </context-group>
-        <target>Jelszóval védi a megoszott linkeket.</target>
+        <target>Engedélyezi a jelszóval védett megosztást</target>
       </trans-unit>
       <trans-unit id="ec3e07d68edadc3aa5ad84f316e43f739a2bd962" datatype="html">
         <source>
@@ -718,7 +774,7 @@
           <context context-type="sourcefile">app/settings/basic/basic.settings.component.ts</context>
           <context context-type="linenumber">4</context>
         </context-group>
-        <target>Egyszerű beállítások</target>
+        <target>Alapvető beállítások</target>
       </trans-unit>
       <trans-unit id="870d05214ce19848ea4b7fe698e9a2e73db0c715" datatype="html">
         <source>Page title</source>
@@ -726,7 +782,7 @@
           <context context-type="sourcefile">app/settings/basic/basic.settings.component.ts</context>
           <context context-type="linenumber">11</context>
         </context-group>
-        <target>Oldal cím</target>
+        <target>Oldal címe</target>
       </trans-unit>
       <trans-unit id="0559356d4e98ee90a10ff16250a2bf139eac649b" datatype="html">
         <source>Port number. Port 80 is usually what you need.</source>
@@ -742,7 +798,7 @@
           <context context-type="sourcefile">app/settings/basic/basic.settings.component.ts</context>
           <context context-type="linenumber">40</context>
         </context-group>
-        <target>A képeket ebből a mappából tölti be (olvasási engedély szükséges)</target>
+        <target>A képek a mappából töltődnek be (olvasási engedély szükséges a mappára)</target>
       </trans-unit>
       <trans-unit id="682679bea54c7cdc8fad228e65f4e35d8cf62275" datatype="html">
         <source>Page public url</source>
@@ -750,7 +806,7 @@
           <context context-type="sourcefile">app/settings/basic/basic.settings.component.ts</context>
           <context context-type="linenumber">45</context>
         </context-group>
-        <target>Oldal nyilvános urlje (webcím)</target>
+        <target>Oldal nyilvános url-je</target>
       </trans-unit>
       <trans-unit id="46bb79be15f19c6081f5d139660695902930abbe" datatype="html">
         <source>If you access the page form local network its good to know the public url for creating sharing link</source>
@@ -758,7 +814,7 @@
           <context context-type="sourcefile">app/settings/basic/basic.settings.component.ts</context>
           <context context-type="linenumber">51</context>
         </context-group>
-        <target>Ha helyi hálózatról nézed az oldalt, jó ha tudja az oldal a publikus címét, hogy tudjon megosztási linket generálni</target>
+        <target>Ha belső hálózatról nézed oldalt, jó tudni a nyilvános URL-t, a megosztási link létrehozásához</target>
       </trans-unit>
       <trans-unit id="1e99f581a015c671d53abad7c7df6a5ad35bfe85" datatype="html">
         <source>Other settings</source>
@@ -782,7 +838,7 @@
           <context context-type="sourcefile">app/settings/other/other.settings.component.ts</context>
           <context context-type="linenumber">11</context>
         </context-group>
-        <target>Háttérszálon futtatás</target>
+        <target>Többszálas működés</target>
       </trans-unit>
       <trans-unit id="c3dec2a9fda84d35b3f44f58e47876f5828d84d8" datatype="html">
         <source>Runs directory scanning and thumbnail generation (only for Jimp) in a different thread</source>
@@ -790,7 +846,7 @@
           <context context-type="sourcefile">app/settings/other/other.settings.component.ts</context>
           <context context-type="linenumber">25</context>
         </context-group>
-        <target>Könyvtrá indexelést és thumnail generálást (csak Jimp esetén) háttérszálon futtatja.</target>
+        <target>A konytár szkennelések és az indexkép generálás (csak Jimp esetén) háttérszálon fut</target>
       </trans-unit>
       <trans-unit id="c29451eea39ce561ed481264df985f6e3b9c39ae" datatype="html">
         <source>Scroll based thumbnail
@@ -799,8 +855,8 @@
           <context context-type="sourcefile">app/settings/other/other.settings.component.ts</context>
           <context context-type="linenumber">30</context>
         </context-group>
-        <target>Scroll-ozás alapú thumbnail
-          generálás</target>
+        <target>Görgetés alapú kirajzolás
+        </target>
       </trans-unit>
       <trans-unit id="bc8bf5e0d03910950af843d84ada25e3c709b677" datatype="html">
         <source>Those thumbnails get higher priority that are visible on the screen</source>
@@ -808,7 +864,7 @@
           <context context-type="sourcefile">app/settings/other/other.settings.component.ts</context>
           <context context-type="linenumber">45</context>
         </context-group>
-        <target>A képernyőn látható thumnailek nagyobb prioritással generálódnak</target>
+        <target>Ezek a thumbnail-ek nagyobb prioritást kapnak, amelyek láthatóak a képernyőn</target>
       </trans-unit>
       <trans-unit id="1a693eac5c0c9ee65ea4e8db6e097806141e91f5" datatype="html">
         <source>Lazy image rendering</source>
@@ -816,7 +872,7 @@
           <context context-type="sourcefile">app/settings/other/other.settings.component.ts</context>
           <context context-type="linenumber">50</context>
         </context-group>
-        <target>Lazy kép megjelenítés</target>
+        <target>'Lazy' kép megjelenítés</target>
       </trans-unit>
       <trans-unit id="adbdec7eb762da25495914232537db1f7b102d8a" datatype="html">
         <source>Shows only the required amount of photos at once. Renders more if page bottom is reached</source>
@@ -824,7 +880,7 @@
           <context context-type="sourcefile">app/settings/other/other.settings.component.ts</context>
           <context context-type="linenumber">64</context>
         </context-group>
-        <target>Csak a szükséges mennyiségű fotót jeleníti meg egyszerre. újabbakat tölt be, ha elérte az oldal alját</target>
+        <target>Csak a szükséges mennyiségű fotót jeleníti meg egyszerre. Újebb képeket mutat, ha elérte az oldal alját</target>
       </trans-unit>
       <trans-unit id="1fa92c6ce274f878b2625587daa7e08b2a3a8b38" datatype="html">
         <source>Cache</source>
@@ -832,7 +888,7 @@
           <context context-type="sourcefile">app/settings/other/other.settings.component.ts</context>
           <context context-type="linenumber">70</context>
         </context-group>
-        <target>gyorsítótár</target>
+        <target>Gyorsítótár</target>
       </trans-unit>
       <trans-unit id="3d5c836021af994d7ecf28083b0595dbd78b9915" datatype="html">
         <source>Caches directory contents and search results for better performance</source>
@@ -840,7 +896,7 @@
           <context context-type="sourcefile">app/settings/other/other.settings.component.ts</context>
           <context context-type="linenumber">84</context>
         </context-group>
-        <target>Cach-eli a könyvtár tartalmát és a keresési eredményeket, hogy responzívabb legyen az oldal</target>
+        <target>Gyorsítótárazza a könyvtár tartalmát és a keresési eredményeket a jobb teljesítmény érdekében</target>
       </trans-unit>
       <trans-unit id="87b1696eb068572c3908643c425ee3090938c1a0" datatype="html">
         <source>Folder indexing</source>
@@ -856,7 +912,7 @@
           <context context-type="sourcefile">app/settings/indexing/indexing.settings.component.ts</context>
           <context context-type="linenumber">11</context>
         </context-group>
-        <target>Index cache timeout [ms]</target>
+        <target>Index cache időtúllépés [ms]</target>
       </trans-unit>
       <trans-unit id="1dd0f4aff02ce38e0a5935b379b9b28dc2c14a0a" datatype="html">
         <source>If there was no indexing in this time, it reindexes. (skipped if indexen in DB and sensitivity is low)</source>
@@ -864,7 +920,7 @@
           <context context-type="sourcefile">app/settings/indexing/indexing.settings.component.ts</context>
           <context context-type="linenumber">19</context>
         </context-group>
-        <target>Ha ennyi ideje nem volt indexelés, újraindexeli a könyvtárat. (kivéve, ha a DB index és az érzékenység alacsony)</target>
+        <target>Ha ebben az időben nem volt indexelés, újraindexet hajt végre. (kivéve, ha a DB index és az érzékenység alacsony)</target>
       </trans-unit>
       <trans-unit id="95cda683cfb2041ad808023f29e40d16981b3c5e" datatype="html">
         <source>Sub folder preview size</source>
@@ -872,7 +928,7 @@
           <context context-type="sourcefile">app/settings/indexing/indexing.settings.component.ts</context>
           <context context-type="linenumber">23</context>
         </context-group>
-        <target>Alkönyvtár előnézet mérete</target>
+        <target>Alkönyvtár előnézeti mérete</target>
       </trans-unit>
       <trans-unit id="fda1d8005a79f58b5713b5ada5d0eb20321ff640" datatype="html">
         <source>Reads this many photos from sub folders</source>
@@ -880,7 +936,7 @@
           <context context-type="sourcefile">app/settings/indexing/indexing.settings.component.ts</context>
           <context context-type="linenumber">31</context>
         </context-group>
-        <target>Ennyi fotót olvas be az alkönytárból</target>
+        <target>Ennyi fotót olvas be az almappákból (ezek közül választ az oldal amikor mappához képet rendel)</target>
       </trans-unit>
       <trans-unit id="d0a8aab4720af5526787eec8cfe8dd2e1bf20cac" datatype="html">
         <source>Folder reindexing sensitivity</source>
@@ -888,7 +944,7 @@
           <context context-type="sourcefile">app/settings/indexing/indexing.settings.component.ts</context>
           <context context-type="linenumber">36</context>
         </context-group>
-        <target>Folder újra indeyelés érzékenysége</target>
+        <target>Folder reindexing érzékenység</target>
       </trans-unit>
       <trans-unit id="dc94e5967c3fa68e0bc8fc48250a718cc826a40f" datatype="html">
         <source>Set the reindexing sensitivity. High value check the folders for change more often</source>
@@ -896,7 +952,7 @@
           <context context-type="sourcefile">app/settings/indexing/indexing.settings.component.ts</context>
           <context context-type="linenumber">45</context>
         </context-group>
-        <target>Állítsa be az újraindexelés érzékenységét. A magasabb érzékenység gyarkabban ellenőrzi a mappákat válztozás</target>
+        <target>Állítsa be az újraindexelés érzékenységét. Nagyob értékenység gyakrabban vizsgálja mappákat</target>
       </trans-unit>
       <trans-unit id="b8f78167ef95c21d032b15614e8239cc033a0fd2" datatype="html">
         <source>Save
@@ -933,12 +989,12 @@
         <target>Ha kézzel szeretné indítani az indexelést, kattintson az index gombra.</target>
       </trans-unit>
       <trans-unit id="9061efbc0c389083e0652206d2b92c8aa68bc722" datatype="html">
-        <source>Note: search ony searched among the indexed directories</source>
+        <source>Note: search only works among the indexed directories</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/indexing/indexing.settings.component.ts</context>
           <context context-type="linenumber">65</context>
         </context-group>
-        <target>Megjegyzés: a keresés csak az indexelet mappákban működik</target>
+        <target>Megjegyzés: csak az indexelt könyvtárak között működik a keresés</target>
       </trans-unit>
       <trans-unit id="32cc8ef8dc6f4f239b7f637ac8adaecc55b8e1d8" datatype="html">
         <source>Index
@@ -965,7 +1021,239 @@
           <context context-type="sourcefile">app/settings/indexing/indexing.settings.component.ts</context>
           <context context-type="linenumber">97</context>
         </context-group>
-        <target>Indexek törlése</target>
+        <target>Indexek visszaállítása</target>
+      </trans-unit>
+      <trans-unit id="bc2e854e111ecf2bd7db170da5e3c2ed08181d88" datatype="html">
+        <source>Advanced</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">frontend/app/admin/admin.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <target>Részletes</target>
+      </trans-unit>
+      <trans-unit id="7ef95cdc2fd0292d525e7de7dfafa5e182a26cbf" datatype="html">
+        <source>Simplified</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">frontend/app/admin/admin.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <target>Egyszerűsített</target>
+      </trans-unit>
+      <trans-unit id="b73f7f5060fb22a1e9ec462b1bb02493fa3ab866" datatype="html">
+        <source>Images</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">frontend/app/gallery/navigator/navigator.gallery.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">frontend/app/gallery/navigator/navigator.gallery.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <target>képek</target>
+      </trans-unit>
+      <trans-unit id="867c1b6839b592cec2156dd0b8a0009fe1557bfa" datatype="html">
+        <source>Url has been copied to clipboard</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">frontend/app/gallery/share/share.gallery.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <target>Az URL-t a vágólapon</target>
+      </trans-unit>
+      <trans-unit id="85b9773b9a3caeb9f0fd69b2b8fa7284bda6b492" datatype="html">
+        <source>Server error</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">frontend/app/model/notification.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">frontend/app/model/notification.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <target>Szerver hiba</target>
+      </trans-unit>
+      <trans-unit id="f8e38165d83447ee7596b6d2986e16abe7bb42a6" datatype="html">
+        <source>Server info</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">frontend/app/model/notification.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <target>Szerverinformáció</target>
+      </trans-unit>
+      <trans-unit id="f50a33d3c339f8f4a465141f8caa5d2d8c005251" datatype="html">
+        <source>Enabled</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">frontend/app/settings/_abstract/abstract.settings.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">frontend/app/settings/usermanager/usermanager.settings.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <target>Engedélyezve</target>
+      </trans-unit>
+      <trans-unit id="f39256070bfc0714020dfee08895421fc1527014" datatype="html">
+        <source>Disabled</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">frontend/app/settings/_abstract/abstract.settings.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">frontend/app/settings/usermanager/usermanager.settings.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <target>Tiltva</target>
+      </trans-unit>
+      <trans-unit id="9556266f0a2b1762a44b686f2bb21dbfefb01c12" datatype="html">
+        <source>Low</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">frontend/app/settings/_abstract/abstract.settings.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">frontend/app/settings/usermanager/usermanager.settings.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <target>Alacsony</target>
+      </trans-unit>
+      <trans-unit id="72279141a67cc042d9864102b703216cc8a428a3" datatype="html">
+        <source>High</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">frontend/app/settings/_abstract/abstract.settings.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">frontend/app/settings/usermanager/usermanager.settings.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <target>Magas</target>
+      </trans-unit>
+      <trans-unit id="03d4d456b5f14c7bdd428393e17c724cd5210852" datatype="html">
+        <source> settings saved</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">frontend/app/settings/_abstract/abstract.settings.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <target> beállítások elmentve</target>
+      </trans-unit>
+      <trans-unit id="1e035e6ccfab771cad4226b2ad230cb0d4a88cba" datatype="html">
+        <source>Success</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">frontend/app/settings/_abstract/abstract.settings.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">frontend/app/settings/indexing/indexing.settings.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">frontend/app/settings/indexing/indexing.settings.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">frontend/app/settings/indexing/indexing.settings.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">frontend/app/settings/usermanager/usermanager.settings.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">frontend/app/settings/usermanager/usermanager.settings.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <target>Siker</target>
+      </trans-unit>
+      <trans-unit id="380ab580741bec31346978e7cab8062d6970408d" datatype="html">
+        <source>Basic</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">frontend/app/settings/basic/basic.settings.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <target>Alapvető</target>
+      </trans-unit>
+      <trans-unit id="f53ab04e9d8449445abf482bf44b521e2e695c3c" datatype="html">
+        <source>Indexing</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">frontend/app/settings/indexing/indexing.settings.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <target>Indexelés</target>
+      </trans-unit>
+      <trans-unit id="f2504b9d9286a871bf4d56d08df05d6a16894592" datatype="html">
+        <source>Folder indexed</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">frontend/app/settings/indexing/indexing.settings.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">frontend/app/settings/indexing/indexing.settings.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <target>Mappa indexelve</target>
+      </trans-unit>
+      <trans-unit id="d779a223dd103570b842451d8d721ee1d3d700e4" datatype="html">
+        <source>Database reset</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">frontend/app/settings/indexing/indexing.settings.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <target>Adatbázis visszaállítása</target>
+      </trans-unit>
+      <trans-unit id="d2a2915d79ff31439a174fc3a147004542291e29" datatype="html">
+        <source>Map</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">frontend/app/settings/map/map.settings.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <target>Térkép</target>
+      </trans-unit>
+      <trans-unit id="c2a9de3714f5767b174d0424bc8abe2dc37acc41" datatype="html">
+        <source>Other</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">frontend/app/settings/other/other.settings.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <target>Más</target>
+      </trans-unit>
+      <trans-unit id="6244017173fe88802248f410e78f2e637f98f634" datatype="html">
+        <source>Restart the server to apply the new settings</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">frontend/app/settings/other/other.settings.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <target>Indítsa újra a  weboldalt az új beállítások alkalmazásához</target>
+      </trans-unit>
+      <trans-unit id="45dda89cf029b7d7b457a8dff01dc4b9a6485816" datatype="html">
+        <source>Thumbnail</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">frontend/app/settings/thumbnail/thumbanil.settings.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <target>Thumbnail</target>
+      </trans-unit>
+      <trans-unit id="ed3fc8103cfe2c6b999115b6d5dcbe7a2528a477" datatype="html">
+        <source>(recommended)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">frontend/app/settings/thumbnail/thumbanil.settings.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <target>(ajánlott)</target>
+      </trans-unit>
+      <trans-unit id="0028f40243cb1360bc3d7cb9d4512219bcbd428f" datatype="html">
+        <source>Password protection enabled</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">frontend/app/settings/usermanager/usermanager.settings.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <target>Jelszavas védelem engedélyezve</target>
+      </trans-unit>
+      <trans-unit id="00de5dcd17a5ebd17e67e0688bc638e01bc510a4" datatype="html">
+        <source>Password protection disabled</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">frontend/app/settings/usermanager/usermanager.settings.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <target>Jelszavas védelem tiltva</target>
       </trans-unit>
     </body>
   </file>

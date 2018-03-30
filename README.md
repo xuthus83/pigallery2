@@ -104,6 +104,7 @@ apt-get install build-essential  libkrb5-dev gcc g++
        * instant search, auto complete
      * sharing 
        * setting link expiration time
+ * internalization / translation support
  * Nice design 
     * responsive design (phone, tablet desktop support)
  * Setup page
@@ -111,3 +112,22 @@ apt-get install build-essential  libkrb5-dev gcc g++
  * **Markdown based blogging support** - `future plan`
    * you can write some note in the blog.md for every directory
  * bug free :) - `In progress`
+
+
+## Translate the page to you own language
+1) download / clone the repo (the source not the packed release!)
+2) add your language e.g: fr
+```bash
+npm run add-translation -- --fr
+```
+it creates a new `messages.fr.xls` file at `frontend/translate` folder, 
+it will already contain dummy translation with google translate.
+3) 'fix' the dummy translation
+4) test if it works:
+build and start the app
+```bash
+npm install
+npm start
+```
+5) create a pull request at github to add your translation to the project.
+

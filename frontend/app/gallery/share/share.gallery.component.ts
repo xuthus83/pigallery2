@@ -8,6 +8,7 @@ import {ModalDirective} from "ngx-bootstrap/modal";
 import {Config} from "../../../../common/config/public/Config";
 import {NotificationService} from "../../model/notification.service";
 import {DirectoryDTO} from "../../../../common/entities/DirectoryDTO";
+import {I18n} from "@ngx-translate/i18n-polyfill";
 
 
 @Component({
@@ -37,7 +38,8 @@ export class GalleryShareComponent implements OnInit, OnDestroy {
 
   constructor(private _sharingService: ShareService,
               public _galleryService: GalleryService,
-              private  _notification: NotificationService) {
+              private  _notification: NotificationService,
+              public i18n: I18n) {
     this.ValidityTypes = ValidityTypes;
   }
 
@@ -70,7 +72,7 @@ export class GalleryShareComponent implements OnInit, OnDestroy {
       case ValidityTypes.Months:
         return this.input.valid.amount * 1000 * 60 * 60 * 24 * 30;
     }
-    throw "unknown type: " + this.input.valid.type;
+    throw new Error("unknown type: " + this.input.valid.type);
   }
 
   async update() {
@@ -96,7 +98,7 @@ export class GalleryShareComponent implements OnInit, OnDestroy {
   }
 
   onCopy() {
-    this._notification.success("Url has been copied to clipboard");
+    this._notification.success(this.i18n("Url has been copied to clipboard"));
   }
 
   public hideModal() {

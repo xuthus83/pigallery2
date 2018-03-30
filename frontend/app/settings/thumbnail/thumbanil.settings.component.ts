@@ -7,6 +7,7 @@ import {ThumbnailConfig, ThumbnailProcessingLib} from "../../../../common/config
 import {ClientConfig} from "../../../../common/config/public/ConfigClass";
 import {ThumbnailSettingsService} from "./thumbanil.settings.service";
 import {Utils} from "../../../../common/Utils";
+import {I18n} from "@ngx-translate/i18n-polyfill";
 
 @Component({
   selector: 'settings-thumbnail',
@@ -22,8 +23,9 @@ export class ThumbnailSettingsComponent extends SettingsComponent<{ server: Thum
   constructor(_authService: AuthenticationService,
               _navigation: NavigationService,
               _settingsService: ThumbnailSettingsService,
-              notification: NotificationService) {
-    super("Thumbnail", _authService, _navigation, _settingsService, notification, s => ({
+              notification: NotificationService,
+              i18n: I18n) {
+    super(i18n("Thumbnail"), _authService, _navigation, _settingsService, notification, i18n, s => ({
       client: s.Client.Thumbnail,
       server: s.Server.thumbnail
     }));
@@ -44,7 +46,7 @@ export class ThumbnailSettingsComponent extends SettingsComponent<{ server: Thum
     this.types = Utils
       .enumToArray(ThumbnailProcessingLib).map((v) => {
         if (v.value.toLowerCase() == "sharp") {
-          v.value += " (recommended)";
+          v.value += " " + this.i18n("(recommended)");
         }
         return v;
       });

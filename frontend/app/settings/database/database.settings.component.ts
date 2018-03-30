@@ -6,6 +6,7 @@ import {NotificationService} from "../../model/notification.service";
 import {NavigationService} from "../../model/navigation.service";
 import {SettingsComponent} from "../_abstract/abstract.settings.component";
 import {DatabaseSettingsService} from "./database.settings.service";
+import {I18n} from "@ngx-translate/i18n-polyfill";
 
 @Component({
   selector: 'settings-database',
@@ -22,8 +23,9 @@ export class DatabaseSettingsComponent extends SettingsComponent<DataBaseConfig>
   constructor(_authService: AuthenticationService,
               _navigation: NavigationService,
               _settingsService: DatabaseSettingsService,
-              notification: NotificationService) {
-    super("Database", _authService, _navigation, _settingsService, notification, s => s.Server.database);
+              notification: NotificationService,
+              i18n: I18n) {
+    super(i18n("Database"), _authService, _navigation, _settingsService, notification, i18n, s => s.Server.database);
   }
 
   ngOnInit() {

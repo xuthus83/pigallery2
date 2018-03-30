@@ -101,7 +101,7 @@ describe('SearchManager', () => {
     await SQLConnection.close();
   };
 
-  const teardownUpSqlDB = async () => {
+  const tearDownSqlDB = async () => {
     await SQLConnection.close();
     if (fs.existsSync(dbPath)) {
       fs.unlinkSync(dbPath);
@@ -116,7 +116,7 @@ describe('SearchManager', () => {
   });
 
   afterEach(async () => {
-    await teardownUpSqlDB();
+    await tearDownSqlDB();
   });
 
 

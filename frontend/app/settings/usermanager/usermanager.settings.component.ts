@@ -7,6 +7,7 @@ import {ModalDirective} from "ngx-bootstrap/modal";
 import {NavigationService} from "../../model/navigation.service";
 import {NotificationService} from "../../model/notification.service";
 import {ErrorCodes, ErrorDTO} from "../../../../common/entities/Error";
+import {I18n} from "@ngx-translate/i18n-polyfill";
 
 @Component({
   selector: 'settings-usermanager',
@@ -24,10 +25,24 @@ export class UserMangerSettingsComponent implements OnInit {
   public error: string = null;
   public inProgress = false;
 
+
+  text = {
+    Enabled: "Enabled",
+    Disabled: "Disabled",
+    Low: "Low",
+    High: "High"
+  };
+
+
   constructor(private _authService: AuthenticationService,
               private _navigation: NavigationService,
               private _userSettings: UserManagerSettingsService,
-              private notification: NotificationService) {
+              private notification: NotificationService,
+              public i18n: I18n) {
+    this.text.Enabled = i18n("Enabled");
+    this.text.Disabled = i18n("Disabled");
+    this.text.Low = i18n("Low");
+    this.text.High = i18n("High");
   }
 
 
@@ -103,10 +118,10 @@ export class UserMangerSettingsComponent implements OnInit {
       await this._userSettings.updateSettings(this.enabled);
       await this.getSettings();
       if (this.enabled == true) {
-        this.notification.success('Password protection enabled', "Success");
+        this.notification.success(this.i18n('Password protection enabled'), this.i18n("Success"));
         this.getUsersList();
       } else {
-        this.notification.success('Password protection disabled', "Success");
+        this.notification.success(this.i18n('Password protection disabled'), this.i18n("Success"));
       }
     } catch (err) {
       console.log(err);

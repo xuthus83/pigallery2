@@ -7,6 +7,7 @@ import {NotificationService} from "../../model/notification.service";
 import {NavigationService} from "../../model/navigation.service";
 import {AbstractSettingsService} from "./abstract.settings.service";
 import {IPrivateConfig} from "../../../../common/config/private/IPrivateConfig";
+import {I18n} from "@ngx-translate/i18n-polyfill";
 
 
 export abstract class SettingsComponent<T, S extends AbstractSettingsService<T>=AbstractSettingsService<T>>
@@ -30,16 +31,28 @@ export abstract class SettingsComponent<T, S extends AbstractSettingsService<T>=
   public settings: T = <any>{};
   public original: T = <any>{};
 
+  text = {
+    Enabled: "Enabled",
+    Disabled: "Disabled",
+    Low: "Low",
+    High: "High"
+  };
+
   constructor(private name,
               private _authService: AuthenticationService,
               private _navigation: NavigationService,
               public _settingsService: S,
               protected notification: NotificationService,
+              public i18n: I18n,
               private sliceFN?: (s: IPrivateConfig) => T) {
     if (this.sliceFN) {
       this._settingsSubscription = this._settingsService.Settings.subscribe(this.onNewSettings);
       this.onNewSettings(this._settingsService._settingsService.settings.value);
     }
+    this.text.Enabled = i18n("Enabled");
+    this.text.Disabled = i18n("Disabled");
+    this.text.Low = i18n("Low");
+    this.text.High = i18n("High");
   }
 
   onNewSettings = (s) => {
@@ -92,7 +105,7 @@ export abstract class SettingsComponent<T, S extends AbstractSettingsService<T>=
     try {
       await this._settingsService.updateSettings(this.settings);
       await this.getSettings();
-      this.notification.success(this.name + ' settings saved', "Success");
+      this.notification.success(this.name + this.i18n(' settings saved'), this.i18n("Success"));
       this.inProgress = false;
       return true;
     } catch (err) {

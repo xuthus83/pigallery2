@@ -5,6 +5,7 @@ import {NavigationService} from "../../model/navigation.service";
 import {NotificationService} from "../../model/notification.service";
 import {ClientConfig} from "../../../../common/config/public/ConfigClass";
 import {ShareSettingsService} from "./share.settings.service";
+import {I18n} from "@ngx-translate/i18n-polyfill";
 
 @Component({
   selector: 'settings-share',
@@ -18,8 +19,9 @@ export class ShareSettingsComponent extends SettingsComponent<ClientConfig.Shari
   constructor(_authService: AuthenticationService,
               _navigation: NavigationService,
               _settingsService: ShareSettingsService,
-              notification: NotificationService) {
-    super("Share", _authService, _navigation, _settingsService, notification, s => s.Client.Sharing);
+              notification: NotificationService,
+              i18n: I18n) {
+    super(i18n("Share"), _authService, _navigation, _settingsService, notification, i18n, s => s.Client.Sharing);
   }
 
 

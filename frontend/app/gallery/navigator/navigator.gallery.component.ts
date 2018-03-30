@@ -4,6 +4,7 @@ import {RouterLink} from "@angular/router";
 import {UserDTO} from "../../../../common/entities/UserDTO";
 import {AuthenticationService} from "../../model/network/authentication.service";
 import {ShareService} from "../share.service";
+import {I18n} from "@ngx-translate/i18n-polyfill";
 
 @Component({
   selector: 'gallery-navbar',
@@ -16,7 +17,8 @@ export class GalleryNavigatorComponent implements OnChanges {
   routes: Array<NavigatorPath> = [];
 
   constructor(private _authService: AuthenticationService,
-              public _shareService: ShareService) {
+              public _shareService: ShareService,
+              private i18n: I18n) {
   }
 
 
@@ -47,9 +49,9 @@ export class GalleryNavigatorComponent implements OnChanges {
 
     //create root link
     if (dirs.length == 0) {
-      arr.push({name: "Images", route: null});
+      arr.push({name: this.i18n("Images"), route: null});
     } else {
-      arr.push({name: "Images", route: UserDTO.isPathAvailable("/", user.permissions) ? "/" : null});
+      arr.push({name: this.i18n("Images"), route: UserDTO.isPathAvailable("/", user.permissions) ? "/" : null});
     }
 
     //create rest navigation

@@ -4,6 +4,8 @@ import {UserRoles} from "../../../common/entities/UserDTO";
 import {NotificationService} from "../model/notification.service";
 import {NotificationType} from "../../../common/entities/NotificationDTO";
 import {NavigationService} from "../model/navigation.service";
+import {I18n} from "@ngx-translate/i18n-polyfill";
+
 @Component({
   selector: 'admin',
   templateUrl: './admin.component.html',
@@ -12,10 +14,17 @@ import {NavigationService} from "../model/navigation.service";
 export class AdminComponent implements OnInit {
 
   simplifiedMode = true;
+  text = {
+    Advanced: "Advanced",
+    Simplified: "Simplified"
+  };
 
   constructor(private _authService: AuthenticationService,
               private _navigation: NavigationService,
-              public notificationService: NotificationService) {
+              public notificationService: NotificationService,
+              public i18n: I18n) {
+    this.text.Advanced = i18n("Advanced");
+    this.text.Simplified = i18n("Simplified");
   }
 
   ngOnInit() {

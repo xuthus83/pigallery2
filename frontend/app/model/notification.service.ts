@@ -4,6 +4,7 @@ import {NetworkService} from "./network/network.service";
 import {AuthenticationService} from "./network/authentication.service";
 import {NotificationDTO, NotificationType} from "../../../common/entities/NotificationDTO";
 import {UserDTO, UserRoles} from "../../../common/entities/UserDTO";
+import {I18n} from "@ngx-translate/i18n-polyfill";
 
 @Injectable()
 export class NotificationService {
@@ -17,7 +18,8 @@ export class NotificationService {
 
   constructor(private _toastr: ToastsManager,
               private _networkService: NetworkService,
-              private _authService: AuthenticationService) {
+              private _authService: AuthenticationService,
+              public i18n: I18n) {
 
     this._authService.user.subscribe(() => {
       if (this._authService.isAuthenticated() &&
@@ -39,13 +41,13 @@ export class NotificationService {
       }
       switch (noti.type) {
         case  NotificationType.error:
-          this.error(msg, "Server error");
+          this.error(msg, this.i18n("Server error"));
           break;
         case  NotificationType.warning:
-          this.warning(msg, "Server error");
+          this.warning(msg, this.i18n("Server error"));
           break;
         case  NotificationType.info:
-          this.info(msg, "Server info");
+          this.info(msg, this.i18n("Server info"));
           break;
       }
     })

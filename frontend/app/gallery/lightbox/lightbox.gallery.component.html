@@ -20,28 +20,28 @@
       <a *ngIf="activePhoto" [href]="activePhoto.gridPhoto.getPhotoPath()"
          [download]="activePhoto.gridPhoto.photo.name">
         <span class="glyphicon glyphicon-download-alt highlight control-button"
-              title="download"></span>
+              title="download" i18n-title></span>
       </a>
       <span class="glyphicon glyphicon-info-sign highlight control-button" (click)="toggleInfoPanel()"
-            title="info"></span>
+            title="info" i18n-title></span>
 
       <span class=" glyphicon glyphicon-resize-small highlight control-button"
             *ngIf="fullScreenService.isFullScreenEnabled()"
-            (click)="fullScreenService.exitFullScreen()" title="toggle fullscreen"></span>
+            (click)="fullScreenService.exitFullScreen()" title="toggle fullscreen" i18n-title></span>
 
       <span class="glyphicon glyphicon-fullscreen highlight control-button"
             *ngIf="!fullScreenService.isFullScreenEnabled()"
-            (click)="fullScreenService.showFullScreen(root)" title="toggle fullscreen"></span>
+            (click)="fullScreenService.showFullScreen(root)" title="toggle fullscreen" i18n-title></span>
 
-      <span class="glyphicon glyphicon-remove highlight" (click)="hide()" title="close"></span>
+      <span class="glyphicon glyphicon-remove highlight" (click)="hide()" title="close" i18n-title></span>
     </div>
 
     <div class="navigation-arrow highlight"
-         *ngIf="navigation.hasPrev" title="key: left arrow" id="leftArrow"
+         *ngIf="navigation.hasPrev" title="key: left arrow" id="leftArrow" i18n-title
          (click)="prevImage()"><span
       class="glyphicon glyphicon-chevron-left"></span></div>
     <div class="navigation-arrow highlight"
-         *ngIf="navigation.hasNext" title="key: right arrow" id="rightArrow"
+         *ngIf="navigation.hasNext" title="key: right arrow" id="rightArrow" i18n-title
          (click)="nextImage()"><span
       class="glyphicon glyphicon-chevron-right"></span></div>
 

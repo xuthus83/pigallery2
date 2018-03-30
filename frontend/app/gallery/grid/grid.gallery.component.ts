@@ -154,7 +154,7 @@ export class GalleryGridComponent implements OnChanges, AfterViewInit, OnDestroy
       this.renderedPhotoIndex < numberOfPhotos)) {
       let ret = this.renderARow();
       if (ret === null) {
-        throw "Gridphotos rendering failed";
+        throw new Error("Grid photos rendering failed");
       }
       renderedContentHeight += ret;
     }

@@ -8,6 +8,7 @@ import {Observable} from "rxjs/Rx";
 import {IndexingConfig, ReIndexingSensitivity} from "../../../../common/config/private/IPrivateConfig";
 import {SettingsComponent} from "../_abstract/abstract.settings.component";
 import {Utils} from "../../../../common/Utils";
+import {I18n} from "@ngx-translate/i18n-polyfill";
 
 @Component({
   selector: 'settings-indexing',
@@ -50,9 +51,10 @@ export class IndexingSettingsComponent extends SettingsComponent<IndexingConfig,
   constructor(_authService: AuthenticationService,
               _navigation: NavigationService,
               _settingsService: IndexingSettingsService,
-              notification: NotificationService) {
+              notification: NotificationService,
+              i18n: I18n) {
 
-    super("Indexing", _authService, _navigation, <any>_settingsService, notification, s => s.Server.indexing);
+    super(i18n("Indexing"), _authService, _navigation, <any>_settingsService, notification, i18n, s => s.Server.indexing);
 
   }
 
@@ -81,7 +83,7 @@ export class IndexingSettingsComponent extends SettingsComponent<IndexingConfig,
     try {
       await this._settingsService.index();
       this.updateProgress();
-      this.notification.success("Folder indexed", "Success");
+      this.notification.success(this.i18n("Folder indexed"), this.i18n("Success"));
       this.inProgress = false;
       return true;
     } catch (err) {
@@ -100,7 +102,7 @@ export class IndexingSettingsComponent extends SettingsComponent<IndexingConfig,
     this.error = "";
     try {
       await (<IndexingSettingsService>this._settingsService).cancel();
-      this.notification.success("Folder indexed", "Success");
+      this.notification.success(this.i18n("Folder indexed"), this.i18n("Success"));
       this.inProgress = false;
       return true;
     } catch (err) {
@@ -119,7 +121,7 @@ export class IndexingSettingsComponent extends SettingsComponent<IndexingConfig,
     this.error = "";
     try {
       await (<IndexingSettingsService>this._settingsService).reset();
-      this.notification.success('Database reset', "Success");
+      this.notification.success(this.i18n('Database reset'), this.i18n("Success"));
       this.inProgress = false;
       return true;
     } catch (err) {

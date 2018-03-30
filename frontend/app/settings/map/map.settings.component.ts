@@ -5,6 +5,8 @@ import {AuthenticationService} from "../../model/network/authentication.service"
 import {NavigationService} from "../../model/navigation.service";
 import {NotificationService} from "../../model/notification.service";
 import {ClientConfig} from "../../../../common/config/public/ConfigClass";
+import {I18n} from "@ngx-translate/i18n-polyfill";
+
 
 @Component({
   selector: 'settings-map',
@@ -18,8 +20,9 @@ export class MapSettingsComponent extends SettingsComponent<ClientConfig.MapConf
   constructor(_authService: AuthenticationService,
               _navigation: NavigationService,
               _settingsService: MapSettingsService,
-              notification: NotificationService) {
-    super("Map", _authService, _navigation, <any>_settingsService, notification, s => s.Client.Map);
+              notification: NotificationService,
+              i18n: I18n) {
+    super(i18n("Map"), _authService, _navigation, <any>_settingsService, notification, i18n, s => s.Client.Map);
   }
 
 

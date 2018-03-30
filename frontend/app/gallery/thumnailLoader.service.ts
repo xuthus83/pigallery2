@@ -23,7 +23,7 @@ export class ThumbnailLoaderService {
 
     let index = taskEntry.parentTask.taskEntities.indexOf(taskEntry);
     if (index == -1) {
-      throw "ThumbnailTaskEntity not exist on Task";
+      throw new Error("ThumbnailTaskEntity not exist on Task");
     }
     taskEntry.parentTask.taskEntities.splice(index, 1);
 
@@ -31,7 +31,7 @@ export class ThumbnailLoaderService {
       && taskEntry.parentTask.inProgress == false) {
       let i = this.que.indexOf(taskEntry.parentTask);
       if (i == -1) {
-        throw "ThumbnailTask not exist";
+        throw new Error("ThumbnailTask not exist");
       }
       this.que.splice(i, 1);
     }

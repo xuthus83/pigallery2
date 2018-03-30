@@ -1,4 +1,4 @@
-import {Injectable, NgModule} from "@angular/core";
+import {Injectable, LOCALE_ID, NgModule, TRANSLATIONS} from "@angular/core";
 import {BrowserModule, HAMMER_GESTURE_CONFIG, HammerGestureConfig} from "@angular/platform-browser";
 import {FormsModule} from "@angular/forms";
 import {HttpModule} from "@angular/http";
@@ -57,6 +57,7 @@ import {OtherSettingsComponent} from "./settings/other/other.settings.component"
 import {DefaultUrlSerializer, UrlSerializer, UrlTree} from '@angular/router';
 import {IndexingSettingsComponent} from "./settings/indexing/indexing.settings.component";
 import {LanguageComponent} from "./language/language.component";
+import {I18n} from '@ngx-translate/i18n-polyfill';
 
 @Injectable()
 export class GoogleMapsConfig {
@@ -86,6 +87,14 @@ export class CustomUrlSerializer implements UrlSerializer {
   serialize(tree: UrlTree): string {
     return this._defaultUrlSerializer.serialize(tree).replace(/%28/g, '(').replace(/%29/g, ')');
   }
+}
+
+declare const require;
+
+export function translationsFactory(locale: string) {
+  locale = locale || 'en'; // default to english if no locale
+  console.log("locale", locale);
+  return require(`raw-loader!../translate/messages.${locale}.xlf`);
 }
 
 @NgModule({
@@ -153,8 +162,14 @@ export class CustomUrlSerializer implements UrlSerializer {
     FullScreenService,
     NavigationService,
     SettingsService,
-    OverlayService],
-
+    OverlayService,
+    {
+      provide: TRANSLATIONS,
+      useFactory: translationsFactory,
+      deps: [LOCALE_ID]
+    },
+    I18n
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {

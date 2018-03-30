@@ -5,6 +5,7 @@ import {NavigationService} from "../../model/navigation.service";
 import {NotificationService} from "../../model/notification.service";
 import {BasicSettingsService} from "./basic.settings.service";
 import {BasicConfigDTO} from "../../../../common/entities/settings/BasicConfigDTO";
+import {I18n} from "@ngx-translate/i18n-polyfill";
 
 @Component({
   selector: 'settings-basic',
@@ -20,8 +21,9 @@ export class BasicSettingsComponent extends SettingsComponent<BasicConfigDTO> {
   constructor(_authService: AuthenticationService,
               _navigation: NavigationService,
               _settingsService: BasicSettingsService,
-              notification: NotificationService) {
-    super("Basic", _authService, _navigation, _settingsService, notification, s => ({
+              notification: NotificationService,
+              i18n: I18n) {
+    super(i18n("Basic"), _authService, _navigation, _settingsService, notification, i18n, s => ({
       port: s.Server.port,
       imagesFolder: s.Server.imagesFolder,
       applicationTitle: s.Client.applicationTitle,

@@ -67,7 +67,6 @@ export class GallerySearchComponent {
   }
 
   public search(item: AutoCompleteItem) {
-    console.log("clicked");
     this.searchText = item.text;
     this.onSearch();
   }
