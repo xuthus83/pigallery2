@@ -7,7 +7,7 @@ import {ShareService} from '../share.service';
 import {I18n} from '@ngx-translate/i18n-polyfill';
 
 @Component({
-  selector: 'gallery-navbar',
+  selector: 'app-gallery-navbar',
   templateUrl: './navigator.gallery.component.html',
   providers: [RouterLink],
 })
@@ -31,12 +31,12 @@ export class GalleryNavigatorComponent implements OnChanges {
       return [];
     }
 
-    let path = this.directory.path.replace(new RegExp('\\\\', 'g'), '/');
+    const path = this.directory.path.replace(new RegExp('\\\\', 'g'), '/');
 
-    let dirs = path.split('/');
+    const dirs = path.split('/');
     dirs.push(this.directory.name);
 
-    //removing empty strings
+    // removing empty strings
     for (let i = 0; i < dirs.length; i++) {
       if (!dirs[i] || 0 === dirs[i].length || '.' === dirs[i]) {
         dirs.splice(i, 1);
@@ -45,19 +45,19 @@ export class GalleryNavigatorComponent implements OnChanges {
     }
 
     const user = this._authService.user.value;
-    let arr: NavigatorPath[] = [];
+    const arr: NavigatorPath[] = [];
 
-    //create root link
-    if (dirs.length == 0) {
+    // create root link
+    if (dirs.length === 0) {
       arr.push({name: this.i18n('Images'), route: null});
     } else {
       arr.push({name: this.i18n('Images'), route: UserDTO.isPathAvailable('/', user.permissions) ? '/' : null});
     }
 
-    //create rest navigation
+    // create rest navigation
     dirs.forEach((name, index) => {
       const route = dirs.slice(0, dirs.indexOf(name) + 1).join('/');
-      if (dirs.length - 1 == index) {
+      if (dirs.length - 1 === index) {
         arr.push({name: name, route: null});
       } else {
         arr.push({name: name, route: UserDTO.isPathAvailable(route, user.permissions) ? route : null});

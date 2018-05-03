@@ -4,7 +4,7 @@ export class GridRowBuilder {
 
   private photoRow: Array<PhotoDTO> = [];
 
-  private photoIndex: number = 0; //index of the last pushed photo to the photoRow
+  private photoIndex = 0; // index of the last pushed photo to the photoRow
 
 
   constructor(private photos: Array<PhotoDTO>,
@@ -43,13 +43,13 @@ export class GridRowBuilder {
   }
 
   public adjustRowHeightBetween(minHeight: number, maxHeight: number) {
-    while (this.calcRowHeight() > maxHeight && this.addPhoto() === true) { //row too high -> add more images
+    while (this.calcRowHeight() > maxHeight && this.addPhoto() === true) { // row too high -> add more images
     }
 
-    while (this.calcRowHeight() < minHeight && this.removePhoto() === true) { //roo too small -> remove images
+    while (this.calcRowHeight() < minHeight && this.removePhoto() === true) { // roo too small -> remove images
     }
 
-    //keep at least one photo int thr row
+    // keep at least one photo int thr row
     if (this.photoRow.length <= 0) {
       this.addPhoto();
     }
@@ -58,9 +58,9 @@ export class GridRowBuilder {
   public calcRowHeight(): number {
     let width = 0;
     for (let i = 0; i < this.photoRow.length; i++) {
-      width += ((this.photoRow[i].metadata.size.width) / (this.photoRow[i].metadata.size.height)); //summing up aspect ratios
+      width += ((this.photoRow[i].metadata.size.width) / (this.photoRow[i].metadata.size.height)); // summing up aspect ratios
     }
-    let height = (this.containerWidth - this.photoRow.length * (this.photoMargin * 2) - 1) / width; //cant be equal -> width-1
+    const height = (this.containerWidth - this.photoRow.length * (this.photoMargin * 2) - 1) / width; // cant be equal -> width-1
 
     return height + (this.photoMargin * 2);
   };

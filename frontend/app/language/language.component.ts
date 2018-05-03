@@ -4,7 +4,7 @@ import {Cookie} from 'ng2-cookies';
 import {CookieNames} from '../../../common/CookieNames';
 
 @Component({
-  selector: 'language',
+  selector: 'app-language',
   templateUrl: './language.component.html',
   styleUrls: ['./language.component.css'],
 })

@@ -26,7 +26,7 @@ describe('UserService', () => {
 
     it('should call postJson at login', inject([UserService, NetworkService], (userService, networkService) => {
       spyOn(networkService, 'postJson');
-      let credential = new LoginCredential('name', 'pass');
+      const credential = new LoginCredential('name', 'pass');
       userService.login(credential);
       expect(networkService.postJson).toHaveBeenCalled();
       expect(networkService.postJson.calls.argsFor(0)).toEqual(['/user/login', {'loginCredential': credential}]);

@@ -8,7 +8,7 @@ import {SearchSettingsService} from './search.settings.service';
 import {I18n} from '@ngx-translate/i18n-polyfill';
 
 @Component({
-  selector: 'settings-search',
+  selector: 'app-settings-search',
   templateUrl: './search.settings.component.html',
   styleUrls: ['./search.settings.component.css',
     './../_abstract/abstract.settings.component.css'],

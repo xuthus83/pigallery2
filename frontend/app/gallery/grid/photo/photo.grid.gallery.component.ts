@@ -8,7 +8,7 @@ import {Config} from '../../../../../common/config/public/Config';
 import {AnimationBuilder} from '@angular/animations';
 
 @Component({
-  selector: 'gallery-grid-photo',
+  selector: 'app-gallery-grid-photo',
   templateUrl: './photo.grid.gallery.component.html',
   styleUrls: ['./photo.grid.gallery.component.css'],
   providers: [RouterLink]
@@ -20,18 +20,6 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, OnDestroy {
   @ViewChild('photoContainer') container: ElementRef;
 
   thumbnail: Thumbnail;
-  /*
-   image = {
-   src: '',
-   show: false
-   };
-
-   loading = {
-   animate: false,
-   show: true
-   };
-   */
-
   infoBar = {
     marginTop: 0,
     visible: false,
@@ -40,7 +28,7 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, OnDestroy {
   animationTimer = null;
 
   SearchTypes: any = [];
-  searchEnabled: boolean = true;
+  searchEnabled = true;
 
   wasInView: boolean = null;
 
@@ -71,11 +59,11 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, OnDestroy {
 
 
   onScroll() {
-    if (this.thumbnail.Available == true) {
+    if (this.thumbnail.Available === true) {
       return;
     }
-    let isInView = this.isInView();
-    if (this.wasInView != isInView) {
+    const isInView = this.isInView();
+    if (this.wasInView !== isInView) {
       this.wasInView = isInView;
       this.thumbnail.Visible = isInView;
     }

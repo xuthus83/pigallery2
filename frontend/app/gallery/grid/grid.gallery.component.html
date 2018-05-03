@@ -1,5 +1,5 @@
 <div #gridContainer>
-  <gallery-grid-photo
+  <app-gallery-grid-photo
     *ngFor="let gridPhoto of photosToRender"
     (click)="lightbox.show(gridPhoto.photo)"
     [gridPhoto]="gridPhoto"
@@ -8,5 +8,5 @@
     [style.marginLeft.px]="IMAGE_MARGIN"
     [style.marginRight.px]="IMAGE_MARGIN">
 
-  </gallery-grid-photo>
+  </app-gallery-grid-photo>
 </div>

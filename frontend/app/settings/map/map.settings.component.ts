@@ -9,7 +9,7 @@ import {I18n} from '@ngx-translate/i18n-polyfill';
 
 
 @Component({
-  selector: 'settings-map',
+  selector: 'app-settings-map',
   templateUrl: './map.settings.component.html',
   styleUrls: ['./map.settings.component.css',
     './../_abstract/abstract.settings.component.css'],

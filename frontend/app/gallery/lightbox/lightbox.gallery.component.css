@@ -9,7 +9,7 @@
   cursor: pointer;
 }
 
-gallery-lightbox-photo {
+app-gallery-lightbox-photo {
   overflow: hidden;
 }
 
@@ -120,7 +120,7 @@ gallery-lightbox-photo {
   animation: blink 3s ease-in-out infinite;
 }
 
-info-panel {
+app-info-panel {
   z-index: 1100; /* Sit on top */
   position: fixed;
   height: 100vh;

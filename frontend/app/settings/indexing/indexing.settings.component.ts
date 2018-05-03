@@ -12,7 +12,7 @@ import {Utils} from '../../../../common/Utils';
 import {I18n} from '@ngx-translate/i18n-polyfill';
 
 @Component({
-  selector: 'settings-indexing',
+  selector: 'app-settings-indexing',
   templateUrl: './indexing.settings.component.html',
   styleUrls: ['./indexing.settings.component.css',
     './../_abstract/abstract.settings.component.css'],
@@ -47,7 +47,6 @@ export class IndexingSettingsComponent extends SettingsComponent<IndexingConfig,
       this.subscription.timer.unsubscribe();
       this.subscription.timer = null;
     }
-
   };
 
   constructor(_authService: AuthenticationService,

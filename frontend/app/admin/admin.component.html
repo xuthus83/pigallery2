@@ -35,23 +35,24 @@
             [switch-on-text]="text.Simplified"
             [switch-handle-width]="'100'"
             [switch-label-width]="'20'"
-            i18n-
             [(ngModel)]="simplifiedMode">
           </bSwitch>
         </div>
       </div>
     </div>
-    <settings-basic [simplifiedMode]="simplifiedMode"></settings-basic>
-    <settings-usermanager></settings-usermanager>
-    <settings-database [simplifiedMode]="simplifiedMode"></settings-database>
-    <settings-thumbnail #thumbnail [hidden]="!thumbnail.hasAvailableSettings"
-                        [simplifiedMode]="simplifiedMode"></settings-thumbnail>
-    <settings-search #search [hidden]="!search.hasAvailableSettings"
-                     [simplifiedMode]="simplifiedMode"></settings-search>
-    <settings-share #share [hidden]="!share.hasAvailableSettings" [simplifiedMode]="simplifiedMode"></settings-share>
-    <settings-map #map [hidden]="!map.hasAvailableSettings" [simplifiedMode]="simplifiedMode"></settings-map>
-    <settings-other #other [hidden]="!other.hasAvailableSettings" [simplifiedMode]="simplifiedMode"></settings-other>
-    <settings-indexing #other [hidden]="!other.hasAvailableSettings"
-                       [simplifiedMode]="simplifiedMode"></settings-indexing>
+    <app-settings-basic [simplifiedMode]="simplifiedMode"></app-settings-basic>
+    <app-settings-usermanager></app-settings-usermanager>
+    <app-settings-database [simplifiedMode]="simplifiedMode"></app-settings-database>
+    <app-settings-thumbnail #thumbnail [hidden]="!thumbnail.hasAvailableSettings"
+                            [simplifiedMode]="simplifiedMode"></app-settings-thumbnail>
+    <app-settings-search #search [hidden]="!search.hasAvailableSettings"
+                         [simplifiedMode]="simplifiedMode"></app-settings-search>
+    <app-settings-share #share [hidden]="!share.hasAvailableSettings"
+                        [simplifiedMode]="simplifiedMode"></app-settings-share>
+    <app-settings-map #map [hidden]="!map.hasAvailableSettings" [simplifiedMode]="simplifiedMode"></app-settings-map>
+    <app-settings-other #other [hidden]="!other.hasAvailableSettings"
+                        [simplifiedMode]="simplifiedMode"></app-settings-other>
+    <app-settings-indexing #other [hidden]="!other.hasAvailableSettings"
+                           [simplifiedMode]="simplifiedMode"></app-settings-indexing>
   </div>
 </app-frame>

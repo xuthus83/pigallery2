@@ -3,7 +3,7 @@ import {PhotoDTO} from '../../../../../common/entities/PhotoDTO';
 import {Config} from '../../../../../common/config/public/Config';
 
 @Component({
-  selector: 'info-panel',
+  selector: 'app-info-panel',
   styleUrls: ['./info-panel.lightbox.gallery.component.css'],
   templateUrl: './info-panel.lightbox.gallery.component.html',
 })
@@ -21,7 +21,7 @@ export class InfoPanelLightboxComponent {
   }
 
   calcFileSize() {
-    let postFixes = ['B', 'KB', 'MB', 'GB', 'TB'];
+    const postFixes = ['B', 'KB', 'MB', 'GB', 'TB'];
     let index = 0;
     let size = this.photo.metadata.fileSize;
     while (size > 1000 && index < postFixes.length - 1) {
@@ -42,7 +42,7 @@ export class InfoPanelLightboxComponent {
 
   getDate() {
     const date = new Date(this.photo.metadata.creationDate);
-    let locale = 'en-us';
+    const locale = 'en-us';
     return date.toLocaleString(locale, {month: 'long'}) + ' ' + date.getDate();
   }
 
@@ -53,7 +53,7 @@ export class InfoPanelLightboxComponent {
 
   getDay() {
     const date = new Date(this.photo.metadata.creationDate);
-    let locale = 'en-us';
+    const locale = 'en-us';
     return date.toLocaleString(locale, {weekday: 'long'});
   }
 
@@ -76,7 +76,7 @@ export class InfoPanelLightboxComponent {
     let str = this.photo.metadata.positionData.city ||
       this.photo.metadata.positionData.state;
 
-    if (str.length != 0) {
+    if (str.length !== 0) {
       str += ', ';
     }
     str += this.photo.metadata.positionData.country;

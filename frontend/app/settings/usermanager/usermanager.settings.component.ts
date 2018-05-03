@@ -10,7 +10,7 @@ import {ErrorCodes, ErrorDTO} from '../../../../common/entities/Error';
 import {I18n} from '@ngx-translate/i18n-polyfill';
 
 @Component({
-  selector: 'settings-usermanager',
+  selector: 'app-settings-usermanager',
   templateUrl: './usermanager.settings.component.html',
   styleUrls: ['./usermanager.settings.component.css',
     './../_abstract/abstract.settings.component.css'],

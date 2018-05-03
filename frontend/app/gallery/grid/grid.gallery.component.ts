@@ -20,7 +20,7 @@ import {OverlayService} from '../overlay.service';
 import {Config} from '../../../../common/config/public/Config';
 
 @Component({
-  selector: 'gallery-grid',
+  selector: 'app-gallery-grid',
   templateUrl: './grid.gallery.component.html',
   styleUrls: ['./grid.gallery.component.css'],
 })
@@ -33,7 +33,7 @@ export class GalleryGridComponent implements OnChanges, AfterViewInit, OnDestroy
   @Input() lightbox: GalleryLightboxComponent;
 
   photosToRender: Array<GridPhoto> = [];
-  containerWidth: number = 0;
+  containerWidth = 0;
 
   public IMAGE_MARGIN = 2;
   private TARGET_COL_COUNT = 5;
@@ -43,6 +43,8 @@ export class GalleryGridComponent implements OnChanges, AfterViewInit, OnDestroy
   private onScrollFired = false;
   private scrollbarWidth = 0;
   private helperTime = null;
+  isAfterViewInit = false;
+  private renderedPhotoIndex = 0;
 
   constructor(private overlayService: OverlayService,
               private changeDetector: ChangeDetectorRef) {
@@ -74,14 +76,11 @@ export class GalleryGridComponent implements OnChanges, AfterViewInit, OnDestroy
     }
     this.updateContainerWidth();
     this.sortPhotos();
-    //render the same amount of images on resize
-    let renderedIndex = this.renderedPhotoIndex;
+    // render the same amount of images on resize
+    const renderedIndex = this.renderedPhotoIndex;
     this.clearRenderedPhotos();
     this.renderPhotos(renderedIndex);
   }
-
-
-  isAfterViewInit: boolean = false;
 
 
   ngAfterViewInit() {
@@ -97,13 +96,38 @@ export class GalleryGridComponent implements OnChanges, AfterViewInit, OnDestroy
     this.isAfterViewInit = true;
   }
 
+  public renderARow(): number {
+    if (this.renderedPhotoIndex >= this.photos.length) {
+      return null;
+    }
 
-  private sortPhotos() {
-    //sort pohots by date
-    this.photos.sort((a: PhotoDTO, b: PhotoDTO) => {
-      return a.metadata.creationDate - b.metadata.creationDate;
+
+    let maxRowHeight = window.innerHeight / this.MIN_ROW_COUNT;
+    const minRowHeight = window.innerHeight / this.MAX_ROW_COUNT;
+
+    const photoRowBuilder = new GridRowBuilder(this.photos,
+      this.renderedPhotoIndex,
+      this.IMAGE_MARGIN,
+      this.containerWidth - this.overlayService.getPhantomScrollbarWidth()
+    );
+
+    photoRowBuilder.addPhotos(this.TARGET_COL_COUNT);
+    photoRowBuilder.adjustRowHeightBetween(minRowHeight, maxRowHeight);
+
+    // little trick: We don't want too big single images. But if a little extra height helps fit the row, its ok
+    if (photoRowBuilder.getPhotoRow().length > 1) {
+      maxRowHeight *= 1.2;
+    }
+    const rowHeight = Math.min(photoRowBuilder.calcRowHeight(), maxRowHeight);
+    const imageHeight = rowHeight - (this.IMAGE_MARGIN * 2);
+
+    photoRowBuilder.getPhotoRow().forEach((photo) => {
+      const imageWidth = imageHeight * (photo.metadata.size.width / photo.metadata.size.height);
+      this.photosToRender.push(new GridPhoto(photo, imageWidth, imageHeight, this.renderedPhotoIndex));
     });
 
+    this.renderedPhotoIndex += photoRowBuilder.getPhotoRow().length;
+    return rowHeight;
   }
 
   private clearRenderedPhotos() {
@@ -112,14 +136,22 @@ export class GalleryGridComponent implements OnChanges, AfterViewInit, OnDestroy
     this.changeDetector.detectChanges();
   }
 
+  private sortPhotos() {
+    // sort pohots by date
+    this.photos.sort((a: PhotoDTO, b: PhotoDTO) => {
+      return a.metadata.creationDate - b.metadata.creationDate;
+    });
+
+  }
+
   private mergeNewPhotos() {
-    //merge new data with old one
+    // merge new data with old one
     let lastSameIndex = 0;
     let lastRowId = null;
     for (let i = 0; i < this.photos.length && i < this.photosToRender.length; i++) {
 
-      //thIf a photo changed the whole row has to be removed
-      if (this.photosToRender[i].rowId != lastRowId) {
+      // thIf a photo changed the whole row has to be removed
+      if (this.photosToRender[i].rowId !== lastRowId) {
         lastSameIndex = i;
         lastRowId = this.photosToRender[i].rowId;
       }
@@ -133,30 +165,6 @@ export class GalleryGridComponent implements OnChanges, AfterViewInit, OnDestroy
       this.renderedPhotoIndex = lastSameIndex;
     } else {
       this.clearRenderedPhotos();
-    }
-  }
-
-
-  private renderedPhotoIndex: number = 0;
-
-  private renderPhotos(numberOfPhotos: number = 0) {
-    if (this.containerWidth == 0 ||
-      this.renderedPhotoIndex >= this.photos.length ||
-      !this.shouldRenderMore()) {
-      return;
-    }
-
-
-    let renderedContentHeight = 0;
-
-    while (this.renderedPhotoIndex < this.photos.length &&
-    (this.shouldRenderMore(renderedContentHeight) === true ||
-      this.renderedPhotoIndex < numberOfPhotos)) {
-      let ret = this.renderARow();
-      if (ret === null) {
-        throw new Error('Grid photos rendering failed');
-      }
-      renderedContentHeight += ret;
     }
   }
 
@@ -192,37 +200,25 @@ export class GalleryGridComponent implements OnChanges, AfterViewInit, OnDestroy
     }
   }
 
-  public renderARow(): number {
-    if (this.renderedPhotoIndex >= this.photos.length) {
-      return null;
+  private renderPhotos(numberOfPhotos: number = 0) {
+    if (this.containerWidth === 0 ||
+      this.renderedPhotoIndex >= this.photos.length ||
+      !this.shouldRenderMore()) {
+      return;
     }
 
 
-    let maxRowHeight = window.innerHeight / this.MIN_ROW_COUNT;
-    let minRowHeight = window.innerHeight / this.MAX_ROW_COUNT;
+    let renderedContentHeight = 0;
 
-    let photoRowBuilder = new GridRowBuilder(this.photos,
-      this.renderedPhotoIndex,
-      this.IMAGE_MARGIN,
-      this.containerWidth - this.overlayService.getPhantomScrollbarWidth()
-    );
-
-    photoRowBuilder.addPhotos(this.TARGET_COL_COUNT);
-    photoRowBuilder.adjustRowHeightBetween(minRowHeight, maxRowHeight);
-
-    if (photoRowBuilder.getPhotoRow().length > 1) { //little trick: We don't want too big single images. But if a little extra height helps fit the row, its ok
-      maxRowHeight *= 1.2;
+    while (this.renderedPhotoIndex < this.photos.length &&
+    (this.shouldRenderMore(renderedContentHeight) === true ||
+      this.renderedPhotoIndex < numberOfPhotos)) {
+      const ret = this.renderARow();
+      if (ret === null) {
+        throw new Error('Grid photos rendering failed');
+      }
+      renderedContentHeight += ret;
     }
-    let rowHeight = Math.min(photoRowBuilder.calcRowHeight(), maxRowHeight);
-    let imageHeight = rowHeight - (this.IMAGE_MARGIN * 2);
-
-    photoRowBuilder.getPhotoRow().forEach((photo) => {
-      let imageWidth = imageHeight * (photo.metadata.size.width / photo.metadata.size.height);
-      this.photosToRender.push(new GridPhoto(photo, imageWidth, imageHeight, this.renderedPhotoIndex));
-    });
-
-    this.renderedPhotoIndex += photoRowBuilder.getPhotoRow().length;
-    return rowHeight;
   }
 
   private updateContainerWidth(): number {

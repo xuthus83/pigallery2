@@ -2,7 +2,7 @@ import {Component, ElementRef, Input, OnChanges} from '@angular/core';
 import {GridPhoto} from '../../grid/GridPhoto';
 
 @Component({
-  selector: 'gallery-lightbox-photo',
+  selector: 'app-gallery-lightbox-photo',
   styleUrls: ['./photo.lightbox.gallery.component.css'],
   templateUrl: './photo.lightbox.gallery.component.html'
 })
@@ -51,7 +51,7 @@ export class GalleryLightboxPhotoComponent implements OnChanges {
   }
 
   public showThumbnail(): boolean {
-    return this.gridPhoto /*&& !this.imageLoaded*/ &&
+    return this.gridPhoto && !this.imageLoaded &&
       (this.gridPhoto.isThumbnailAvailable() || this.gridPhoto.isReplacementThumbnailAvailable());
   }
 

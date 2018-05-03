@@ -7,7 +7,7 @@ import {NavigationService} from '../model/navigation.service';
 import {I18n} from '@ngx-translate/i18n-polyfill';
 
 @Component({
-  selector: 'admin',
+  selector: 'app-admin',
   templateUrl: './admin.component.html',
   styleUrls: ['./admin.component.css']
 })

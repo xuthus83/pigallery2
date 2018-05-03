@@ -8,7 +8,7 @@ import {BasicConfigDTO} from '../../../../common/entities/settings/BasicConfigDT
 import {I18n} from '@ngx-translate/i18n-polyfill';
 
 @Component({
-  selector: 'settings-basic',
+  selector: 'app-settings-basic',
   templateUrl: './basic.settings.component.html',
   styleUrls: ['./basic.settings.component.css',
     './../_abstract/abstract.settings.component.css'],
@@ -33,7 +33,7 @@ export class BasicSettingsComponent extends SettingsComponent<BasicConfigDTO> {
 
   public async save(): Promise<boolean> {
     const val = await super.save();
-    if (val == true) {
+    if (val === true) {
 
       this.notification.info('Restart the server to apply the new settings');
     }

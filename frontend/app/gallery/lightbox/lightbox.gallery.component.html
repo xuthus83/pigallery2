@@ -5,11 +5,11 @@
   </div>
 
   <div class="lightbox" #lightbox>
-    <gallery-lightbox-photo [gridPhoto]="activePhoto ? activePhoto.gridPhoto : null"
-                            [loadImage]="!animating"
-                            [windowAspect]="getPhotoFrameWidth()/getPhotoFrameHeight()"
-                            #photo>
-    </gallery-lightbox-photo>
+    <app-gallery-lightbox-photo [gridPhoto]="activePhoto ? activePhoto.gridPhoto : null"
+                                [loadImage]="!animating"
+                                [windowAspect]="getPhotoFrameWidth()/getPhotoFrameHeight()"
+                                #photo>
+    </app-gallery-lightbox-photo>
   </div>
   <div
     (swipeleft)="nextImage()" (swiperight)="prevImage()" (swipeup)="hide()"
@@ -62,11 +62,11 @@
             title="fast auto play"></span>
     </div>
   </div>
-  <info-panel *ngIf="activePhoto && infoPanelVisible"
-              id="info-panel"
-              [style.width.px]="infoPanelWidth"
-              [photo]="activePhoto.gridPhoto.photo"
-              (onClose)="hideInfoPanel()">
+  <app-info-panel *ngIf="activePhoto && infoPanelVisible"
+                  id="info-panel"
+                  [style.width.px]="infoPanelWidth"
+                  [photo]="activePhoto.gridPhoto.photo"
+                  (onClose)="hideInfoPanel()">
 
-  </info-panel>
+  </app-info-panel>
 </div>

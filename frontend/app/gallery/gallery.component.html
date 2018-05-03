@@ -13,24 +13,25 @@
       </p>
     </li>
     <li *ngIf="showSearchBar">
-      <gallery-search #search></gallery-search>
+      <app-gallery-search #search></app-gallery-search>
     </li>
     <li *ngIf="showShare">
-      <gallery-share></gallery-share>
+      <app-gallery-share></app-gallery-share>
     </li>
   </ng-container>
 
 
   <div body class="container" style="width: 100%; padding:0" *ngIf="_galleryService.content.value.directory">
-    <gallery-navbar [directory]="_galleryService.content.value.directory"></gallery-navbar>
+    <app-gallery-navbar [directory]="_galleryService.content.value.directory"></app-gallery-navbar>
 
     <div class="directories">
-      <gallery-directory *ngFor="let directory of directories"
-                         [directory]="directory"></gallery-directory>
+      <app-gallery-directory *ngFor="let directory of directories"
+                             [directory]="directory"></app-gallery-directory>
     </div>
-    <gallery-map *ngIf="isPhotoWithLocation && mapEnabled"
-                 [photos]="_galleryService.content.value.directory.photos"></gallery-map>
-    <gallery-grid [photos]="_galleryService.content.value.directory.photos" [lightbox]="lightbox"></gallery-grid>
+    <app-gallery-map *ngIf="isPhotoWithLocation && mapEnabled"
+                     [photos]="_galleryService.content.value.directory.photos"></app-gallery-map>
+    <app-gallery-grid [photos]="_galleryService.content.value.directory.photos"
+                      [lightbox]="lightbox"></app-gallery-grid>
   </div>
 
   <div body class="container" style="width: 100%; padding:0" *ngIf="_galleryService.content.value.searchResult">
@@ -51,14 +52,15 @@
       </li>
     </ol>
 
-    <gallery-map *ngIf="isPhotoWithLocation && mapEnabled"
-                 [photos]="_galleryService.content.value.searchResult.photos"></gallery-map>
+    <app-gallery-map *ngIf="isPhotoWithLocation && mapEnabled"
+                     [photos]="_galleryService.content.value.searchResult.photos"></app-gallery-map>
 
     <div class="directories">
-      <gallery-directory *ngFor="let directory of directories"
-                         [directory]="directory"></gallery-directory>
+      <app-gallery-directory *ngFor="let directory of directories"
+                             [directory]="directory"></app-gallery-directory>
     </div>
-    <gallery-grid [photos]="_galleryService.content.value.searchResult.photos" [lightbox]="lightbox"></gallery-grid>
+    <app-gallery-grid [photos]="_galleryService.content.value.searchResult.photos"
+                      [lightbox]="lightbox"></app-gallery-grid>
   </div>
 
   <div body class="container"

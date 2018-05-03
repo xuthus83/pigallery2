@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {SettingsComponent} from '../_abstract/abstract.settings.component';
 import {AuthenticationService} from '../../model/network/authentication.service';
 import {NavigationService} from '../../model/navigation.service';
@@ -10,13 +10,15 @@ import {Utils} from '../../../../common/Utils';
 import {I18n} from '@ngx-translate/i18n-polyfill';
 
 @Component({
-  selector: 'settings-thumbnail',
+  selector: 'app-settings-thumbnail',
   templateUrl: './thumbanil.settings.component.html',
   styleUrls: ['./thumbanil.settings.component.css',
     './../_abstract/abstract.settings.component.css'],
   providers: [ThumbnailSettingsService],
 })
-export class ThumbnailSettingsComponent extends SettingsComponent<{ server: ThumbnailConfig, client: ClientConfig.ThumbnailConfig }> {
+export class ThumbnailSettingsComponent
+  extends SettingsComponent<{ server: ThumbnailConfig, client: ClientConfig.ThumbnailConfig }>
+  implements OnInit {
   types: Array<any> = [];
   ThumbnailProcessingLib: any;
 
@@ -38,14 +40,16 @@ export class ThumbnailSettingsComponent extends SettingsComponent<{ server: Thum
   set ThumbnailSizes(value: string) {
     value = value.replace(new RegExp(',', 'g'), ';');
     value = value.replace(new RegExp(' ', 'g'), ';');
-    this.settings.client.thumbnailSizes = value.split(';').map(s => parseInt(s)).filter(i => !isNaN(i) && i > 0);
+    this.settings.client.thumbnailSizes = value.split(';')
+      .map(s => parseInt(s, 10))
+      .filter(i => !isNaN(i) && i > 0);
   }
 
   ngOnInit() {
     super.ngOnInit();
     this.types = Utils
       .enumToArray(ThumbnailProcessingLib).map((v) => {
-        if (v.value.toLowerCase() == 'sharp') {
+        if (v.value.toLowerCase() === 'sharp') {
           v.value += ' ' + this.i18n('(recommended)');
         }
         return v;

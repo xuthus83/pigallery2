@@ -4,7 +4,7 @@ import {Dimension, IRenderable} from '../../model/IRenderable';
 import {GalleryMapLightboxComponent} from './lightbox/lightbox.map.gallery.component';
 
 @Component({
-  selector: 'gallery-map',
+  selector: 'app-gallery-map',
   templateUrl: './map.gallery.component.html',
   styleUrls: ['./map.gallery.component.css']
 })
@@ -17,7 +17,7 @@ export class GalleryMapComponent implements OnChanges, IRenderable {
   mapCenter = {latitude: 0, longitude: 0};
   @ViewChild('map') map: ElementRef;
 
-  //TODO: fix zooming
+  // TODO: fix zooming
   ngOnChanges() {
     this.mapPhotos = this.photos.filter(p => {
       return p.metadata && p.metadata.positionData && p.metadata.positionData.GPSData &&

@@ -13,7 +13,7 @@ export class SearchSettingsService extends AbstractSettingsService<ClientConfig.
   }
 
   public isSupported(): boolean {
-    return this._settingsService.settings.value.Server.database.type != DatabaseType.memory;
+    return this._settingsService.settings.value.Server.database.type !== DatabaseType.memory;
   }
 
   public updateSettings(settings: ClientConfig.SearchConfig): Promise<void> {

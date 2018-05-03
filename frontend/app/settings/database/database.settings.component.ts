@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AuthenticationService} from '../../model/network/authentication.service';
 import {DataBaseConfig, DatabaseType} from '../../../../common/config/private/IPrivateConfig';
 import {Utils} from '../../../../common/Utils';
@@ -9,13 +9,13 @@ import {DatabaseSettingsService} from './database.settings.service';
 import {I18n} from '@ngx-translate/i18n-polyfill';
 
 @Component({
-  selector: 'settings-database',
+  selector: 'app-settings-database',
   templateUrl: './database.settings.component.html',
   styleUrls: ['./database.settings.component.css',
     './../_abstract/abstract.settings.component.css'],
   providers: [DatabaseSettingsService],
 })
-export class DatabaseSettingsComponent extends SettingsComponent<DataBaseConfig> {
+export class DatabaseSettingsComponent extends SettingsComponent<DataBaseConfig> implements OnInit {
 
   public types: Array<any> = [];
   public DatabaseType: any;

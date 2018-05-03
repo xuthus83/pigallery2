@@ -8,7 +8,7 @@ import {OtherConfigDTO} from '../../../../common/entities/settings/OtherConfigDT
 import {I18n} from '@ngx-translate/i18n-polyfill';
 
 @Component({
-  selector: 'settings-other',
+  selector: 'app-settings-other',
   templateUrl: './other.settings.component.html',
   styleUrls: ['./other.settings.component.css',
     './../_abstract/abstract.settings.component.css'],
@@ -36,7 +36,7 @@ export class OtherSettingsComponent extends SettingsComponent<OtherConfigDTO> im
 
   public async save(): Promise<boolean> {
     const val = await super.save();
-    if (val == true) {
+    if (val === true) {
 
       this.notification.info(this.i18n('Restart the server to apply the new settings'), this.i18n('Info'));
     }

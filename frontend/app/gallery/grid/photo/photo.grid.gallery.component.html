@@ -1,11 +1,11 @@
 <div #photoContainer class="photo-container" (mouseover)="mouseOver()" (mouseout)="mouseOut()">
   <img #img [src]="thumbnail.Src" *ngIf="thumbnail.Available">
 
-  <gallery-grid-photo-loading
+  <app-gallery-grid-photo-loading
     [error]="thumbnail.Error"
     [animate]="thumbnail.loading"
     *ngIf="!thumbnail.Available">
-  </gallery-grid-photo-loading>
+  </app-gallery-grid-photo-loading>
 
   <!--Info box -->
   <div #info class="info"

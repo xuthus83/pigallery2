@@ -8,7 +8,7 @@ import {ShareSettingsService} from './share.settings.service';
 import {I18n} from '@ngx-translate/i18n-polyfill';
 
 @Component({
-  selector: 'settings-share',
+  selector: 'app-settings-share',
   templateUrl: './share.settings.component.html',
   styleUrls: ['./share.settings.component.css',
     './../_abstract/abstract.settings.component.css'],

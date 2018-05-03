@@ -12,15 +12,15 @@ import {I18n} from '@ngx-translate/i18n-polyfill';
 
 
 @Component({
-  selector: 'gallery-share',
+  selector: 'app-gallery-share',
   templateUrl: './share.gallery.component.html',
   styleUrls: ['./share.gallery.component.css'],
 })
 export class GalleryShareComponent implements OnInit, OnDestroy {
   @ViewChild('shareModal') public childModal: ModalDirective;
 
-  enabled: boolean = true;
-  url: string = '';
+  enabled = true;
+  url = '';
 
   input = {
     includeSubfolders: true,
@@ -30,7 +30,7 @@ export class GalleryShareComponent implements OnInit, OnDestroy {
     },
     password: ''
   };
-  currentDir: string = '';
+  currentDir = '';
   sharing: SharingDTO = null;
   contentSubscription = null;
   passwordProtection = false;
@@ -62,7 +62,7 @@ export class GalleryShareComponent implements OnInit, OnDestroy {
   }
 
   calcValidity() {
-    switch (parseInt(this.input.valid.type.toString())) {
+    switch (parseInt(this.input.valid.type.toString(), 10)) {
       case ValidityTypes.Minutes:
         return this.input.valid.amount * 1000 * 60;
       case ValidityTypes.Hours:
@@ -80,7 +80,8 @@ export class GalleryShareComponent implements OnInit, OnDestroy {
       return;
     }
     this.url = 'loading..';
-    this.sharing = await this._sharingService.updateSharing(this.currentDir, this.sharing.id, this.input.includeSubfolders, this.input.password, this.calcValidity());
+    this.sharing = await this._sharingService.updateSharing(this.currentDir,
+      this.sharing.id, this.input.includeSubfolders, this.input.password, this.calcValidity());
     this.url = Config.Client.publicUrl + '/share/' + this.sharing.sharingKey;
   }
 

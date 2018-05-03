@@ -8,7 +8,7 @@ import {IconPhoto} from '../../IconPhoto';
 import {Photo} from '../../Photo';
 
 @Component({
-  selector: 'gallery-map-lightbox',
+  selector: 'app-gallery-map-lightbox',
   styleUrls: ['./lightbox.map.gallery.component.css'],
   templateUrl: './lightbox.map.gallery.component.html',
 })
@@ -32,9 +32,9 @@ export class GalleryMapLightboxComponent implements OnChanges {
               private thumbnailService: ThumbnailManagerService) {
   }
 
-//TODO: fix zooming
+  // TODO: fix zooming
   ngOnChanges() {
-    if (this.visible == false) {
+    if (this.visible === false) {
       return;
     }
     this.showImages();
@@ -70,9 +70,9 @@ export class GalleryMapLightboxComponent implements OnChanges {
 
   public hide() {
     this.fullScreenService.exitFullScreen();
-    let to = this.startPosition;
+    const to = this.startPosition;
 
-    //iff target image out of screen -> scroll to there
+    // iff target image out of screen -> scroll to there
     if (this.getBodyScrollTop() > to.top || this.getBodyScrollTop() + this.getScreenHeight() < to.top) {
       this.setBodyScrollTop(to.top);
     }
@@ -113,7 +113,7 @@ export class GalleryMapLightboxComponent implements OnChanges {
         }
 
       };
-      if (iconTh.Available == true) {
+      if (iconTh.Available === true) {
         obj.iconUrl = iconTh.Src;
       } else {
         iconTh.OnLoad = () => {
@@ -163,12 +163,12 @@ export class GalleryMapLightboxComponent implements OnChanges {
   //noinspection JSUnusedGlobalSymbols
   @HostListener('window:keydown', ['$event'])
   onKeyPress(e: KeyboardEvent) {
-    if (this.visible != true) {
+    if (this.visible !== true) {
       return;
     }
-    let event: KeyboardEvent = window.event ? <any>window.event : e;
+    const event: KeyboardEvent = window.event ? <any>window.event : e;
     switch (event.keyCode) {
-      case 27: //escape
+      case 27: // escape
         this.hide();
         break;
     }
@@ -186,6 +186,6 @@ export interface MapPhoto {
     width: number;
     height: number;
     thumbnail: Thumbnail;
-  }
+  };
 }
 

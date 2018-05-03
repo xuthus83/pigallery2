@@ -4,7 +4,7 @@ div {
   font-size: 0;
 }
 
-gallery-grid-photo {
+app-gallery-grid-photo {
   display: inline-block;
 
   cursor: pointer;

@@ -1,5 +1,5 @@
 <ng-template [ngIf]="mapPhotos.length>0">
-  <gallery-map-lightbox [photos]="photos"></gallery-map-lightbox>
+  <app-gallery-map-lightbox [photos]="photos"></app-gallery-map-lightbox>
   <div id="map" #map>
     <agm-map
       (click)="click()"

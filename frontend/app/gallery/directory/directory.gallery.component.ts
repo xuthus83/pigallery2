@@ -8,7 +8,7 @@ import {Thumbnail, ThumbnailManagerService} from '../thumnailManager.service';
 import {ShareService} from '../share.service';
 
 @Component({
-  selector: 'gallery-directory',
+  selector: 'app-gallery-directory',
   templateUrl: './directory.gallery.component.html',
   styleUrls: ['./directory.gallery.component.css'],
   providers: [RouterLink],

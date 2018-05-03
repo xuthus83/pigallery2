@@ -5,7 +5,7 @@ import {Config} from '../../../common/config/public/Config';
 import {NavigationService} from '../model/navigation.service';
 
 @Component({
-  selector: 'share-login',
+  selector: 'app-share-login',
   templateUrl: './share-login.component.html',
   styleUrls: ['./share-login.component.css'],
 })

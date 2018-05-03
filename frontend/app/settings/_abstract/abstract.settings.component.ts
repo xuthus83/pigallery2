@@ -26,7 +26,7 @@ export abstract class SettingsComponent<T, S extends AbstractSettingsService<T>=
   public error: string = null;
   public changed = false;
   private _subscription = null;
-  private _settingsSubscription = null;
+  private readonly _settingsSubscription = null;
 
   public settings: T = <any>{};
   public original: T = <any>{};
