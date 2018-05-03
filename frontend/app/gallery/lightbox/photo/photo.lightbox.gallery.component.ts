@@ -9,13 +9,13 @@ import {GridPhoto} from '../../grid/GridPhoto';
 export class GalleryLightboxPhotoComponent implements OnChanges {
 
   @Input() gridPhoto: GridPhoto;
-  @Input() loadImage: boolean = false;
-  @Input() windowAspect: number = 1;
+  @Input() loadImage = false;
+  @Input() windowAspect = 1;
 
   public imageSize = {width: 'auto', height: '100'};
 
-  imageLoaded: boolean = false;
-  public imageLoadFinished: boolean = false;
+  imageLoaded = false;
+  public imageLoadFinished = false;
 
   constructor(public elementRef: ElementRef) {
   }
@@ -28,7 +28,7 @@ export class GalleryLightboxPhotoComponent implements OnChanges {
   }
 
   onImageError() {
-    //TODO:handle error
+    // TODO:handle error
     this.imageLoadFinished = true;
     console.error('cant load image');
   }
@@ -40,16 +40,18 @@ export class GalleryLightboxPhotoComponent implements OnChanges {
   }
 
   public thumbnailPath(): string {
-    if (this.gridPhoto.isThumbnailAvailable() === true)
+    if (this.gridPhoto.isThumbnailAvailable() === true) {
       return this.gridPhoto.getThumbnailPath();
+    }
 
-    if (this.gridPhoto.isReplacementThumbnailAvailable() === true)
+    if (this.gridPhoto.isReplacementThumbnailAvailable() === true) {
       return this.gridPhoto.getReplacementThumbnailPath();
+    }
     return null;
   }
 
   public showThumbnail(): boolean {
-    return this.gridPhoto && !this.imageLoaded &&
+    return this.gridPhoto /*&& !this.imageLoaded*/ &&
       (this.gridPhoto.isThumbnailAvailable() || this.gridPhoto.isReplacementThumbnailAvailable());
   }
 

@@ -1,9 +1,8 @@
 .imgContainer img {
   position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
-.imgContainer {
-  justify-content: center; /* add to align horizontal */
-  align-items: center; /* add to align vertical */
-}
 

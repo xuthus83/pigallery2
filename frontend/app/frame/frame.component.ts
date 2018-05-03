@@ -16,9 +16,9 @@ import {NotificationService} from '../model/notification.service';
 export class FrameComponent {
 
   user: BehaviorSubject<UserDTO>;
-  authenticationRequired: boolean = false;
+  authenticationRequired = false;
   public title: string;
-  isIn: boolean = false;
+  isIn = false;
 
   constructor(private _authService: AuthenticationService,
               public notificationService: NotificationService) {

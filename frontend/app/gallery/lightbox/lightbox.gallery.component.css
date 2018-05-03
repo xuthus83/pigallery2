@@ -6,9 +6,6 @@
   width: 100%; /* Full width */
   height: 100%; /* Full height */
   overflow: hidden;
-  display: flex; /* add */
-  justify-content: center; /* add to align horizontal */
-  align-items: center; /* add to align vertical */
   cursor: pointer;
 }
 

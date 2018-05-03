@@ -11,7 +11,7 @@ import {SearchResultDTO} from '../../../common/entities/SearchResultDTO';
 import {ShareService} from './share.service';
 import {NavigationService} from '../model/navigation.service';
 import {UserRoles} from '../../../common/entities/UserDTO';
-import {Observable} from 'rxjs/Rx';
+import {interval} from 'rxjs/observable/interval';
 import {ContentWrapper} from '../../../common/entities/ConentWrapper';
 
 @Component({
@@ -24,8 +24,8 @@ export class GalleryComponent implements OnInit, OnDestroy {
   @ViewChild(GallerySearchComponent) search: GallerySearchComponent;
   @ViewChild(GalleryGridComponent) grid: GalleryGridComponent;
 
-  public showSearchBar: boolean = false;
-  public showShare: boolean = false;
+  public showSearchBar = false;
+  public showShare = false;
   public directories: DirectoryDTO[] = [];
   public isPhotoWithLocation = false;
   private $counter;
@@ -64,11 +64,11 @@ export class GalleryComponent implements OnInit, OnDestroy {
 
   private onRoute = async (params: Params) => {
     const searchText = params['searchText'];
-    if (searchText && searchText != '') {
-      let typeString = params['type'];
+    if (searchText && searchText !== '') {
+      const typeString = params['type'];
 
-      if (typeString && typeString != '') {
-        let type: SearchTypes = <any>SearchTypes[typeString];
+      if (typeString && typeString !== '') {
+        const type: SearchTypes = <any>SearchTypes[typeString];
         this._galleryService.search(searchText, type);
         return;
       }
@@ -77,7 +77,7 @@ export class GalleryComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (params['sharingKey'] && params['sharingKey'] != '') {
+    if (params['sharingKey'] && params['sharingKey'] !== '') {
       const sharing = await this.shareService.getSharing();
       this._router.navigate(['/gallery', sharing.path], {queryParams: {sk: this.shareService.getSharingKey()}});
       return;
@@ -140,7 +140,7 @@ export class GalleryComponent implements OnInit, OnDestroy {
     this.subscription.route = this._route.params.subscribe(this.onRoute);
 
     if (this.shareService.isSharing()) {
-      this.$counter = Observable.interval(1000);
+      this.$counter = interval(1000);
       this.subscription.timer = this.$counter.subscribe((x) => this.updateTimer(x));
     }
 

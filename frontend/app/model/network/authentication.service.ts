@@ -22,8 +22,8 @@ export class AuthenticationService {
               private _networkService: NetworkService) {
     this.user = new BehaviorSubject(null);
 
-    //picking up session..
-    if (this.isAuthenticated() == false && Cookie.get(CookieNames.session) != null) {
+    // picking up session..
+    if (this.isAuthenticated() === false && Cookie.get(CookieNames.session) != null) {
       if (typeof ServerInject !== 'undefined' && typeof ServerInject.user !== 'undefined') {
         this.user.next(ServerInject.user);
       }
@@ -35,11 +35,11 @@ export class AuthenticationService {
     }
 
     _networkService.addGlobalErrorHandler((error: ErrorDTO) => {
-      if (error.code == ErrorCodes.NOT_AUTHENTICATED) {
+      if (error.code === ErrorCodes.NOT_AUTHENTICATED) {
         this.user.next(null);
         return true;
       }
-      if (error.code == ErrorCodes.NOT_AUTHORISED) {
+      if (error.code === ErrorCodes.NOT_AUTHORISED) {
         this.logout();
         return true;
       }

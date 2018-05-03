@@ -24,7 +24,7 @@ export class IndexingSettingsService extends AbstractSettingsService<IndexingCon
 
 
   public isSupported(): boolean {
-    return this._settingsService.settings.value.Server.database.type != DatabaseType.memory;
+    return this._settingsService.settings.value.Server.database.type !== DatabaseType.memory;
   }
 
   public index() {

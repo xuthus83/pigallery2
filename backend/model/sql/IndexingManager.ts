@@ -1,13 +1,13 @@
-import {IIndexingManager} from "../interfaces/IIndexingManager";
-import {IndexingProgressDTO} from "../../../common/entities/settings/IndexingProgressDTO";
-import {ObjectManagerRepository} from "../ObjectManagerRepository";
-import {ISQLGalleryManager} from "./IGalleryManager";
-import * as path from "path";
-import {SQLConnection} from "./SQLConnection";
-import {DirectoryEntity} from "./enitites/DirectoryEntity";
-import {Logger} from "../../Logger";
+import {IIndexingManager} from '../interfaces/IIndexingManager';
+import {IndexingProgressDTO} from '../../../common/entities/settings/IndexingProgressDTO';
+import {ObjectManagerRepository} from '../ObjectManagerRepository';
+import {ISQLGalleryManager} from './IGalleryManager';
+import * as path from 'path';
+import {SQLConnection} from './SQLConnection';
+import {DirectoryEntity} from './enitites/DirectoryEntity';
+import {Logger} from '../../Logger';
 
-const LOG_TAG = "[IndexingManager]";
+const LOG_TAG = '[IndexingManager]';
 
 export class IndexingManager implements IIndexingManager {
   directoriesToIndex: string[] = [];
@@ -30,24 +30,24 @@ export class IndexingManager implements IIndexingManager {
     }
     this.indexingProgress.indexed++;
     for (let i = 0; i < scanned.directories.length; i++) {
-      this.directoriesToIndex.push(path.join(scanned.directories[i].path, scanned.directories[i].name))
+      this.directoriesToIndex.push(path.join(scanned.directories[i].path, scanned.directories[i].name));
     }
     process.nextTick(this.indexNewDirectory);
   };
 
   startIndexing(): void {
     if (this.directoriesToIndex.length == 0 && this.enabled == false) {
-      Logger.info(LOG_TAG, "Starting indexing");
+      Logger.info(LOG_TAG, 'Starting indexing');
       this.indexingProgress = <IndexingProgressDTO>{
         indexed: 0,
         left: 0,
-        current: ""
+        current: ''
       };
-      this.directoriesToIndex.push("/");
+      this.directoriesToIndex.push('/');
       this.enabled = true;
       this.indexNewDirectory();
     } else {
-      Logger.info(LOG_TAG, "Already indexing..");
+      Logger.info(LOG_TAG, 'Already indexing..');
     }
   }
 
@@ -56,7 +56,7 @@ export class IndexingManager implements IIndexingManager {
   }
 
   cancelIndexing(): void {
-    Logger.info(LOG_TAG, "Canceling indexing");
+    Logger.info(LOG_TAG, 'Canceling indexing');
     this.directoriesToIndex = [];
     this.indexingProgress = null;
     this.enabled = false;
@@ -66,15 +66,16 @@ export class IndexingManager implements IIndexingManager {
   }
 
   async reset(): Promise<void> {
-    Logger.info(LOG_TAG, "Resetting DB");
+    Logger.info(LOG_TAG, 'Resetting DB');
     this.directoriesToIndex = [];
     this.indexingProgress = null;
     this.enabled = false;
     const connection = await SQLConnection.getConnection();
     return connection
       .getRepository(DirectoryEntity)
-      .createQueryBuilder("directory")
+      .createQueryBuilder('directory')
       .delete()
-      .execute();
+      .execute().then(() => {
+      });
   }
 }

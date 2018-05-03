@@ -1,10 +1,11 @@
-import {Component} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {IndexingSettingsService} from './indexing.settings.service';
 import {AuthenticationService} from '../../model/network/authentication.service';
 import {NavigationService} from '../../model/navigation.service';
 import {NotificationService} from '../../model/notification.service';
 import {ErrorDTO} from '../../../../common/entities/Error';
-import {Observable} from 'rxjs/Rx';
+import {Observable} from 'rxjs/Observable';
+import {interval} from 'rxjs/observable/interval';
 import {IndexingConfig, ReIndexingSensitivity} from '../../../../common/config/private/IPrivateConfig';
 import {SettingsComponent} from '../_abstract/abstract.settings.component';
 import {Utils} from '../../../../common/Utils';
@@ -17,7 +18,8 @@ import {I18n} from '@ngx-translate/i18n-polyfill';
     './../_abstract/abstract.settings.component.css'],
   providers: [IndexingSettingsService],
 })
-export class IndexingSettingsComponent extends SettingsComponent<IndexingConfig, IndexingSettingsService> {
+export class IndexingSettingsComponent extends SettingsComponent<IndexingConfig, IndexingSettingsService>
+  implements OnInit, OnDestroy {
 
 
   types: Array<any> = [];
@@ -37,7 +39,7 @@ export class IndexingSettingsComponent extends SettingsComponent<IndexingConfig,
     }
     if ((<IndexingSettingsService>this._settingsService).progress.value != null && this.subscription.timer == null) {
       if (!this.$counter) {
-        this.$counter = Observable.interval(5000);
+        this.$counter = interval(5000);
       }
       this.subscription.timer = this.$counter.subscribe((x) => this.updateProgress());
     }
@@ -54,7 +56,13 @@ export class IndexingSettingsComponent extends SettingsComponent<IndexingConfig,
               notification: NotificationService,
               i18n: I18n) {
 
-    super(i18n('Indexing'), _authService, _navigation, <any>_settingsService, notification, i18n, s => s.Server.indexing);
+    super(i18n('Indexing'),
+      _authService,
+      _navigation,
+      <any>_settingsService,
+      notification,
+      i18n,
+      s => s.Server.indexing);
 
   }
 

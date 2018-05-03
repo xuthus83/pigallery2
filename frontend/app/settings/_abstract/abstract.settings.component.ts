@@ -10,21 +10,21 @@ import {IPrivateConfig} from '../../../../common/config/private/IPrivateConfig';
 import {I18n} from '@ngx-translate/i18n-polyfill';
 
 
-export abstract class SettingsComponent<T, S extends AbstractSettingsService<T>=AbstractSettingsService<T>>
+export abstract class SettingsComponent<T, S extends AbstractSettingsService<T>= AbstractSettingsService<T>>
   implements OnInit, OnDestroy, OnChanges {
 
   @Input()
-  public simplifiedMode: boolean = true;
+  public simplifiedMode = true;
 
   @ViewChild('settingsForm')
   form: HTMLFormElement;
 
   @Output('hasAvailableSettings')
-  hasAvailableSettings: boolean = true;
+  hasAvailableSettings = true;
 
   public inProgress = false;
   public error: string = null;
-  public changed: boolean = false;
+  public changed = false;
   private _subscription = null;
   private _settingsSubscription = null;
 
