@@ -52,6 +52,7 @@ img {
   background-color: transparent;
   color: white;
   font-size: medium;
+  display: table-caption;
   position: relative;
   padding: 5px;
   margin-top: 0;

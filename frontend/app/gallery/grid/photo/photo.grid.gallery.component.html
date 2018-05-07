@@ -11,7 +11,8 @@
   <div #info class="info"
        *ngIf="infoBar.visible"
        [style.margin-top.px]="infoBar.marginTop"
-       [style.background]="infoBar.background">
+       [style.background]="infoBar.background"
+       [style.width.px]="container.nativeElement.offsetWidth">
     <div class="photo-name">{{gridPhoto.photo.name}}</div>
 
     <div class="photo-position" *ngIf="gridPhoto.photo.metadata.positionData">

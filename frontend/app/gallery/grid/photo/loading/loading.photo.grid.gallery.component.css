@@ -7,8 +7,9 @@
 }
 
 .static span {
-  top: calc(50% - 25px);
+  top: calc(50% - 61px);
   left: calc(50% - 25px);
+  margin-top: 36px;
 }
 
 .sk-cube-grid {

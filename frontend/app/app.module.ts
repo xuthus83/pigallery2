@@ -68,6 +68,7 @@ export class GoogleMapsConfig {
   }
 }
 
+@Injectable()
 export class MyHammerConfig extends HammerGestureConfig {
   overrides = <any>{
     'swipe': {direction: 31} // enable swipe up
