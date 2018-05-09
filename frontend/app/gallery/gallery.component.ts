@@ -45,6 +45,8 @@ export class GalleryComponent implements OnInit, OnDestroy {
               private _navigation: NavigationService) {
     this.mapEnabled = Config.Client.Map.enabled;
 
+    document.getElementsByTagName('body')[0].style.overflowY = 'scroll';
+
   }
 
   updateTimer(t: number) {
@@ -129,7 +131,7 @@ export class GalleryComponent implements OnInit, OnDestroy {
     await this.shareService.wait();
     if (!this._authService.isAuthenticated() &&
       (!this.shareService.isSharing() ||
-        (this.shareService.isSharing() && Config.Client.Sharing.passwordProtected == true))) {
+        (this.shareService.isSharing() && Config.Client.Sharing.passwordProtected === true))) {
 
       return this._navigation.toLogin();
     }

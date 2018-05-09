@@ -8,39 +8,35 @@ export class OverlayService {
   private scrollWidth: number = null;
 
   public showOverlay() {
-
-    //disable scrolling
+    // disable scrolling
     document.getElementsByTagName('body')[0].style.overflowY = 'hidden';
     this.OnOverlayChange.trigger(true);
   }
 
   public hideOverlay() {
-
     document.getElementsByTagName('body')[0].style.overflowY = 'scroll';
     this.OnOverlayChange.trigger(false);
   }
 
   getScrollbarWidth() {
     if (this.scrollWidth == null) {
-
-
-      let outer = document.createElement('div');
+      const outer = document.createElement('div');
       outer.style.visibility = 'hidden';
       outer.style.width = '100px';
       outer.style.msOverflowStyle = 'scrollbar'; // needed for WinJS apps
 
       document.body.appendChild(outer);
 
-      let widthNoScroll = outer.offsetWidth;
+      const widthNoScroll = outer.offsetWidth;
       // force scrollbars
       outer.style.overflowY = 'scroll';
 
       // add innerdiv
-      let inner = document.createElement('div');
+      const inner = document.createElement('div');
       inner.style.width = '100%';
       outer.appendChild(inner);
 
-      let widthWithScroll = inner.offsetWidth;
+      const widthWithScroll = inner.offsetWidth;
 
       // remove divs
       outer.parentNode.removeChild(outer);
@@ -51,7 +47,7 @@ export class OverlayService {
   }
 
   getPhantomScrollbarWidth() {
-    if (document.getElementsByTagName('body')[0].style.overflowY == 'hidden') {
+    if (document.getElementsByTagName('body')[0].style.overflowY === 'hidden') {
       return this.getScrollbarWidth();
     }
     return 0;
