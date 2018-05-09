@@ -38,7 +38,7 @@ Full node install description: https://raspberrypi.stackexchange.com/questions/4
 
 ```bash
 cd ~
-wget https://github.com/bpatrik/pigallery2/releases/download/1.0.0-rc.1/pigallery2.zip
+wget https://github.com/bpatrik/pigallery2/releases/download/1.1.0/pigallery2.zip
 unzip pigallery2
 cd pigallery2
 npm install
