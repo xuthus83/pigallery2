@@ -28,7 +28,6 @@ export class UserManager implements IUserManager {
     }
 
     if (!this.db.idCounter) {
-      console.log('creating counter');
       this.db.idCounter = 1;
     }
 

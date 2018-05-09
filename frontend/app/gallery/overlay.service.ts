@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Event} from '../../../common/event/Event';
+import {PageHelper} from '../model/page.helper';
 
 @Injectable()
 export class OverlayService {
@@ -9,12 +10,12 @@ export class OverlayService {
 
   public showOverlay() {
     // disable scrolling
-    document.getElementsByTagName('body')[0].style.overflowY = 'hidden';
+    PageHelper.hideScrollY();
     this.OnOverlayChange.trigger(true);
   }
 
   public hideOverlay() {
-    document.getElementsByTagName('body')[0].style.overflowY = 'scroll';
+    PageHelper.showScrollY();
     this.OnOverlayChange.trigger(false);
   }
 
@@ -47,7 +48,7 @@ export class OverlayService {
   }
 
   getPhantomScrollbarWidth() {
-    if (document.getElementsByTagName('body')[0].style.overflowY === 'hidden') {
+    if (!PageHelper.isScrollYVisible()) {
       return this.getScrollbarWidth();
     }
     return 0;

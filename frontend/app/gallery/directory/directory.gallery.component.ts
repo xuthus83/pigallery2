@@ -6,6 +6,7 @@ import {Utils} from '../../../../common/Utils';
 import {Photo} from '../Photo';
 import {Thumbnail, ThumbnailManagerService} from '../thumnailManager.service';
 import {ShareService} from '../share.service';
+import {PageHelper} from '../../model/page.helper';
 
 @Component({
   selector: 'app-gallery-directory',
@@ -53,9 +54,8 @@ export class GalleryDirectoryComponent implements OnInit, OnDestroy {
   }
 
   calcSize() {
-    if (this.size == null ||
-      document.getElementsByTagName('body')[0].style.overflowY == 'scroll') {
-      let size = 220 + 5;
+    if (this.size == null || PageHelper.isScrollYVisible()) {
+      const size = 220 + 5;
       const containerWidth = this.container.nativeElement.parentElement.parentElement.clientWidth;
       this.size = containerWidth / Math.round((containerWidth / size));
     }

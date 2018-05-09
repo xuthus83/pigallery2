@@ -17,7 +17,6 @@ export class NavigationService {
   }
 
   public async toLogin() {
-    console.log('toLogin');
     await this._shareService.wait();
     if (this._shareService.isSharing()) {
       return this._router.navigate(['shareLogin'], {queryParams: {sk: this._shareService.getSharingKey()}});
@@ -27,7 +26,6 @@ export class NavigationService {
   }
 
   public async toGallery() {
-    console.log('toGallery');
     await this._shareService.wait();
     if (this._shareService.isSharing()) {
       return this._router.navigate(['gallery', ''], {queryParams: {sk: this._shareService.getSharingKey()}});

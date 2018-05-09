@@ -94,7 +94,6 @@ declare const require;
 
 export function translationsFactory(locale: string) {
   locale = locale || 'en'; // default to english if no locale
-  console.log('locale', locale);
   return require(`raw-loader!../translate/messages.${locale}.xlf`);
 }
 

@@ -13,6 +13,7 @@ import {NavigationService} from '../model/navigation.service';
 import {UserRoles} from '../../../common/entities/UserDTO';
 import {interval} from 'rxjs/observable/interval';
 import {ContentWrapper} from '../../../common/entities/ConentWrapper';
+import {PageHelper} from '../model/page.helper';
 
 @Component({
   selector: 'gallery',
@@ -45,8 +46,7 @@ export class GalleryComponent implements OnInit, OnDestroy {
               private _navigation: NavigationService) {
     this.mapEnabled = Config.Client.Map.enabled;
 
-    document.getElementsByTagName('body')[0].style.overflowY = 'scroll';
-
+    PageHelper.showScrollY();
   }
 
   updateTimer(t: number) {

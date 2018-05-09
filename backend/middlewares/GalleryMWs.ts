@@ -19,19 +19,18 @@ export class GalleryMWs {
 
   public static async listDirectory(req: Request, res: Response, next: NextFunction) {
     console.log('listDirectory');
-    let directoryName = req.params.directory || '/';
-    let absoluteDirectoryName = path.join(ProjectPath.ImageFolder, directoryName);
+    const directoryName = req.params.directory || '/';
+    const absoluteDirectoryName = path.join(ProjectPath.ImageFolder, directoryName);
 
     if (!fs.statSync(absoluteDirectoryName).isDirectory()) {
-      console.log('not dir');
       return next();
     }
 
     try {
+      const directory = await ObjectManagerRepository.getInstance()
+        .GalleryManager.listDirectory(directoryName, req.query.knownLastModified, req.query.knownLastScanned);
 
-      const directory = await ObjectManagerRepository.getInstance().GalleryManager.listDirectory(directoryName, req.query.knownLastModified, req.query.knownLastScanned);
       if (directory == null) {
-        console.log('null dir');
         req.resultPipe = new ContentWrapper(null, null, true);
         return next();
       }
@@ -39,7 +38,7 @@ export class GalleryMWs {
       console.log(directory);
       if (req.session.user.permissions &&
         req.session.user.permissions.length > 0 &&
-        req.session.user.permissions[0] != '/*') {
+        req.session.user.permissions[0] !== '/*') {
         (<DirectoryDTO>directory).directories = (<DirectoryDTO>directory).directories.filter(d =>
           UserDTO.isDirectoryAvailable(d, req.session.user.permissions));
       }
@@ -53,14 +52,15 @@ export class GalleryMWs {
 
 
   public static removeCyclicDirectoryReferences(req: Request, res: Response, next: NextFunction) {
-    if (!req.resultPipe)
-      return next();
-
-    let cw: ContentWrapper = req.resultPipe;
-    if (cw.notModified == true) {
+    if (!req.resultPipe) {
       return next();
     }
-    let removeDirs = (dir) => {
+
+    const cw: ContentWrapper = req.resultPipe;
+    if (cw.notModified === true) {
+      return next();
+    }
+    const removeDirs = (dir) => {
       dir.photos.forEach((photo: PhotoDTO) => {
         photo.directory = null;
       });
@@ -86,9 +86,9 @@ export class GalleryMWs {
       return next();
     }
 
-    let fullImagePath = path.join(ProjectPath.ImageFolder, req.params.imagePath);
+    const fullImagePath = path.join(ProjectPath.ImageFolder, req.params.imagePath);
 
-    //check if thumbnail already exist
+    // check if thumbnail already exist
     if (fs.existsSync(fullImagePath) === false) {
       return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, 'no such file:' + fullImagePath));
     }
@@ -113,7 +113,7 @@ export class GalleryMWs {
 
     let type: SearchTypes;
     if (req.query.type) {
-      type = parseInt(req.query.type);
+      type = parseInt(req.query.type, 10);
     }
     try {
       const result = await ObjectManagerRepository.getInstance().SearchManager.search(req.params.text, type);

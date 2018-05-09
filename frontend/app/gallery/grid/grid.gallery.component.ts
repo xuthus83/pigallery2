@@ -18,6 +18,7 @@ import {GridPhoto} from './GridPhoto';
 import {GalleryPhotoComponent} from './photo/photo.grid.gallery.component';
 import {OverlayService} from '../overlay.service';
 import {Config} from '../../../../common/config/public/Config';
+import {PageHelper} from '../../model/page.helper';
 
 @Component({
   selector: 'app-gallery-grid',
@@ -177,7 +178,7 @@ export class GalleryGridComponent implements OnChanges, AfterViewInit, OnDestroy
    */
   private shouldRenderMore(offset: number = 0): boolean {
     return Config.Client.enableOnScrollRendering === false ||
-      window.scrollY >= (document.body.clientHeight + offset - window.innerHeight) * 0.7
+      PageHelper.ScrollY >= (document.body.clientHeight + offset - window.innerHeight) * 0.7
       || (document.body.clientHeight + offset) * 0.85 < window.innerHeight;
 
   }

@@ -6,6 +6,7 @@ import {AgmMap} from '@agm/core';
 import {IconThumbnail, Thumbnail, ThumbnailManagerService} from '../../thumnailManager.service';
 import {IconPhoto} from '../../IconPhoto';
 import {Photo} from '../../Photo';
+import {PageHelper} from '../../../model/page.helper';
 
 @Component({
   selector: 'app-gallery-map-lightbox',
@@ -55,7 +56,7 @@ export class GalleryMapLightboxComponent implements OnChanges {
     };
     this.map.triggerResize();
 
-    document.getElementsByTagName('body')[0].style.overflowY = 'hidden';
+    PageHelper.hideScrollY();
 
     setTimeout(() => {
       this.lightboxDimension = <Dimension>{
@@ -79,7 +80,7 @@ export class GalleryMapLightboxComponent implements OnChanges {
 
     this.lightboxDimension = this.startPosition;
     this.lightboxDimension.top -= this.getBodyScrollTop();
-    document.getElementsByTagName('body')[0].style.overflowY = 'scroll';
+    PageHelper.showScrollY();
     this.opacity = 0.0;
     setTimeout(() => {
       this.visible = false;
