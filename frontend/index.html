@@ -13,7 +13,7 @@
   <script>
     var ServerInject = {user: < % -JSON.stringify(user);
     %>,
-    ConfigInject:<
+    ConfigInject: <
     %
     -JSON.stringify(clientConfig);
     %>
@@ -23,7 +23,18 @@
 </head>
 
 <body style="overflow-y: scroll; padding-right: 0 !important;">
-<app-pi-gallery2>Loading...</app-pi-gallery2>
+<app-pi-gallery2>
+  <app-pi-gallery2>
+    <div style="position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    left: 50%;
+    text-align: center">
+      <img src="assets/icon.png" style="max-width: 256px"/>
+      <h2>Loading...</h2>
+    </div>
+  </app-pi-gallery2>
+</app-pi-gallery2>
 
 </body>
 </html>
