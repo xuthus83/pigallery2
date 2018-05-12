@@ -114,7 +114,7 @@ apt-get install build-essential  libkrb5-dev gcc g++
  * bug free :) - `In progress`
 
 
-## Translate the page to you own language
+## Translate the page to your own language
 1) download / clone the repo (the source not the packed release!)
 2) add your language e.g: fr
 ```bash

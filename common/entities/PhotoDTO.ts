@@ -1,4 +1,4 @@
-import {DirectoryDTO} from "./DirectoryDTO";
+import {DirectoryDTO} from './DirectoryDTO';
 
 export interface PhotoDTO {
   id: number;

@@ -1,5 +1,5 @@
-import {DirectoryDTO} from "./DirectoryDTO";
-import {Utils} from "../Utils";
+import {DirectoryDTO} from './DirectoryDTO';
+import {Utils} from '../Utils';
 
 export enum UserRoles {
   LimitedGuest = 0,
@@ -15,25 +15,25 @@ export interface UserDTO {
   name: string;
   password: string;
   role: UserRoles;
-  permissions: string[]; //user can only see these permissions. if ends with *, its recursive
+  permissions: string[]; // user can only see these permissions. if ends with *, its recursive
 }
 
 export module UserDTO {
 
   export const isPathAvailable = (path: string, permissions: string[]): boolean => {
-    if (permissions == null || permissions.length == 0 || permissions[0] == "/*") {
+    if (permissions == null || permissions.length === 0 || permissions[0] === '/*') {
       return true;
     }
     for (let i = 0; i < permissions.length; i++) {
       let permission = permissions[i];
-      if (permission[permission.length - 1] == "*") {
+      if (permission[permission.length - 1] === '*') {
         permission = permission.slice(0, -1);
         if (path.startsWith(permission)) {
           return true;
         }
-      } else if (path == permission) {
+      } else if (path === permission) {
         return true;
-      } else if (path == "." && permission == "/") {
+      } else if (path === '.' && permission === '/') {
         return true;
       }
 

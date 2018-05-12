@@ -1,14 +1,17 @@
 import {NextFunction, Request, Response} from 'express';
 import * as path from 'path';
 import * as fs from 'fs';
+import * as ejs from 'ejs';
 import {Utils} from '../../common/Utils';
 import {Config} from '../../common/config/private/Config';
 import {ProjectPath} from '../ProjectPath';
 import {AuthenticationMWs} from '../middlewares/user/AuthenticationMWs';
 import {CookieNames} from '../../common/CookieNames';
+import {ErrorDTO} from '../../common/entities/Error';
 
 
 export class PublicRouter {
+
 
   public static route(app) {
     const setLocale = (req: Request, res: Response, next: Function) => {
@@ -27,8 +30,14 @@ export class PublicRouter {
       next();
     };
 
-    const renderIndex = (req: Request, res: Response) => {
-      res.sendFile(path.resolve(ProjectPath.FrontendFolder, req['localePath'], 'index.html'), {maxAge: 31536000});
+    const renderIndex = (req: Request, res: Response, next: Function) => {
+      ejs.renderFile(path.resolve(ProjectPath.FrontendFolder, req['localePath'], 'index.html'),
+        res.tpl, (err, str) => {
+          if (err) {
+            return next(new ErrorDTO(err));
+          }
+          res.send(str);
+        });
     };
 
 
@@ -56,9 +65,6 @@ export class PublicRouter {
         return next();
       });
 
-    app.get('/config_inject.js', (req: Request, res: Response) => {
-      res.render(path.resolve(ProjectPath.FrontendFolder, 'config_inject.ejs'), res.tpl);
-    });
 
     app.get(['/', '/login', '/gallery*', '/share*', '/admin', '/search*'],
       AuthenticationMWs.tryAuthenticate,

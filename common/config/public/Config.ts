@@ -1,5 +1,5 @@
-import {PublicConfigClass} from "./ConfigClass";
-import {WebConfigLoader} from "typeconfig/src/WebConfigLoader";
+import {PublicConfigClass} from './ConfigClass';
+import {WebConfigLoader} from 'typeconfig/src/WebConfigLoader';
 
 
 declare module ServerInject {
@@ -9,12 +9,12 @@ declare module ServerInject {
 export let Config = new PublicConfigClass();
 
 
-if (typeof ServerInject !== "undefined" && typeof ServerInject.ConfigInject !== "undefined") {
+if (typeof ServerInject !== 'undefined' && typeof ServerInject.ConfigInject !== 'undefined') {
   WebConfigLoader.loadFrontendConfig(Config.Client, ServerInject.ConfigInject);
 }
 
 
-if (Config.Client.publicUrl == "") {
+if (Config.Client.publicUrl === '') {
   Config.Client.publicUrl = location.origin;
 }
 

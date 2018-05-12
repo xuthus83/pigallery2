@@ -1,8 +1,8 @@
 export module ClientConfig {
   export interface SearchConfig {
-    enabled: boolean
-    instantSearchEnabled: boolean
-    autocompleteEnabled: boolean
+    enabled: boolean;
+    instantSearchEnabled: boolean;
+    autocompleteEnabled: boolean;
     InstantSearchTimeout: number;
     autocompleteCacheTimeout: number;
     instantSearchCacheTimeout: number;
@@ -36,6 +36,7 @@ export module ClientConfig {
     enableOnScrollThumbnailPrioritising: boolean;
     authenticationRequired: boolean;
     publicUrl: string;
+    urlBase: string;
     languages: string[];
   }
 
@@ -47,7 +48,7 @@ export module ClientConfig {
 export class PublicConfigClass {
 
   public Client: ClientConfig.Config = {
-    applicationTitle: "PiGallery 2",
+    applicationTitle: 'PiGallery 2',
     Thumbnail: {
       thumbnailSizes: [200, 400, 600],
       iconSize: 30
@@ -67,14 +68,15 @@ export class PublicConfigClass {
     },
     Map: {
       enabled: true,
-      googleApiKey: ""
+      googleApiKey: ''
     },
     concurrentThumbnailGenerations: 1,
     enableCache: true,
     enableOnScrollRendering: true,
     enableOnScrollThumbnailPrioritising: true,
     authenticationRequired: true,
-    publicUrl: "",
+    publicUrl: '',
+    urlBase: '',
     languages: []
   };
 

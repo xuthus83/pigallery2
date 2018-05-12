@@ -30,8 +30,44 @@ export class Server {
   private app: any;
   private server: any;
 
+  /**
+   * Event listener for HTTP server "error" event.
+   */
+  private onError = (error: any) => {
+    if (error.syscall !== 'listen') {
+      Logger.error(LOG_TAG, 'Server error', error);
+      throw error;
+    }
+
+    const bind = 'Port ' + Config.Server.port;
+
+    // handle specific listen error with friendly messages
+    switch (error.code) {
+      case 'EACCES':
+        Logger.error(LOG_TAG, bind + ' requires elevated privileges');
+        process.exit(1);
+        break;
+      case 'EADDRINUSE':
+        Logger.error(LOG_TAG, bind + ' is already in use');
+        process.exit(1);
+        break;
+      default:
+        throw error;
+    }
+  };
+  /**
+   * Event listener for HTTP server "listening" event.
+   */
+  private onListening = () => {
+    const addr = this.server.address();
+    const bind = typeof addr === 'string'
+      ? 'pipe ' + addr
+      : 'port ' + addr.port;
+    Logger.info(LOG_TAG, 'Listening on ' + bind);
+  };
+
   constructor() {
-    if (!(process.env.NODE_ENV == 'production')) {
+    if (!(process.env.NODE_ENV === 'production')) {
       Logger.debug(LOG_TAG, 'Running in DEBUG mode');
     }
     this.init();
@@ -82,7 +118,7 @@ export class Server {
     Localizations.init();
 
     this.app.use(locale(Config.Client.languages, 'en'));
-    if (Config.Server.database.type != DatabaseType.memory) {
+    if (Config.Server.database.type !== DatabaseType.memory) {
       await  ObjectManagerRepository.InitSQLManagers();
     } else {
       await  ObjectManagerRepository.InitMemoryManagers();
@@ -105,54 +141,13 @@ export class Server {
     // Create HTTP server.
     this.server = _http.createServer(this.app);
 
-    //Listen on provided PORT, on all network interfaces.
+    // Listen on provided PORT, on all network interfaces.
     this.server.listen(Config.Server.port);
     this.server.on('error', this.onError);
     this.server.on('listening', this.onListening);
 
 
   }
-
-
-  /**
-   * Event listener for HTTP server "error" event.
-   */
-  private onError = (error: any) => {
-    if (error.syscall !== 'listen') {
-      Logger.error(LOG_TAG, 'Server error', error);
-      throw error;
-    }
-
-    const bind = typeof Config.Server.port === 'string'
-      ? 'Pipe ' + Config.Server.port
-      : 'Port ' + Config.Server.port;
-
-    // handle specific listen error with friendly messages
-    switch (error.code) {
-      case 'EACCES':
-        Logger.error(LOG_TAG, bind + ' requires elevated privileges');
-        process.exit(1);
-        break;
-      case 'EADDRINUSE':
-        Logger.error(LOG_TAG, bind + ' is already in use');
-        process.exit(1);
-        break;
-      default:
-        throw error;
-    }
-  };
-
-
-  /**
-   * Event listener for HTTP server "listening" event.
-   */
-  private onListening = () => {
-    let addr = this.server.address();
-    const bind = typeof addr === 'string'
-      ? 'pipe ' + addr
-      : 'port ' + addr.port;
-    Logger.info(LOG_TAG, 'Listening on ' + bind);
-  };
 
 }
 

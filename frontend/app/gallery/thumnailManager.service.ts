@@ -28,15 +28,15 @@ export class ThumbnailManagerService {
 
 export abstract class ThumbnailBase {
 
-  protected available: boolean = false;
+  protected available = false;
   protected src: string = null;
-  protected loading: boolean = false;
-  protected error: boolean = false;
+  protected loading = false;
+  protected error = false;
   protected onLoad: Function = null;
   protected thumbnailTask: ThumbnailTaskEntity = null;
 
 
-  constructor(protected thumbnailService: ThumbnailLoaderService) {
+  protected constructor(protected thumbnailService: ThumbnailLoaderService) {
   }
 
   abstract set Visible(visible: boolean);
@@ -80,24 +80,28 @@ export class IconThumbnail extends ThumbnailBase {
     if (this.photo.isIconAvailable()) {
       this.src = this.photo.getIconPath();
       this.available = true;
-      if (this.onLoad) this.onLoad();
+      if (this.onLoad) {
+        this.onLoad();
+      }
     }
 
     if (!this.photo.isIconAvailable()) {
       setTimeout(() => {
 
-        let listener: ThumbnailLoadingListener = {
-          onStartedLoading: () => { //onLoadStarted
+        const listener: ThumbnailLoadingListener = {
+          onStartedLoading: () => { // onLoadStarted
             this.loading = true;
           },
-          onLoad: () => {//onLoaded
+          onLoad: () => {// onLoaded
             this.src = this.photo.getIconPath();
-            if (this.onLoad) this.onLoad();
+            if (this.onLoad) {
+              this.onLoad();
+            }
             this.available = true;
             this.loading = false;
             this.thumbnailTask = null;
           },
-          onError: (error) => {//onError
+          onError: (error) => {// onError
             this.thumbnailTask = null;
             this.loading = false;
             this.error = true;
@@ -112,7 +116,9 @@ export class IconThumbnail extends ThumbnailBase {
   }
 
   set Visible(visible: boolean) {
-    if (!this.thumbnailTask) return;
+    if (!this.thumbnailTask) {
+      return;
+    }
     if (visible === true) {
       this.thumbnailTask.priority = ThumbnailLoadingPriority.high;
     } else {
@@ -131,7 +137,9 @@ export class Thumbnail extends ThumbnailBase {
     if (this.photo.isThumbnailAvailable()) {
       this.src = this.photo.getThumbnailPath();
       this.available = true;
-      if (this.onLoad) this.onLoad();
+      if (this.onLoad) {
+        this.onLoad();
+      }
     } else if (this.photo.isReplacementThumbnailAvailable()) {
       this.src = this.photo.getReplacementThumbnailPath();
       this.available = true;
@@ -142,7 +150,9 @@ export class Thumbnail extends ThumbnailBase {
   }
 
   set CurrentlyWaiting(value: boolean) {
-    if (!this.thumbnailTask) return;
+    if (!this.thumbnailTask) {
+      return;
+    }
     if (value === true) {
       if (this.photo.isReplacementThumbnailAvailable()) {
         this.thumbnailTask.priority = ThumbnailLoadingPriority.medium;
@@ -158,37 +168,10 @@ export class Thumbnail extends ThumbnailBase {
     }
   }
 
-  public load() {
-    if (!this.photo.isThumbnailAvailable() && this.thumbnailTask == null) {
-      //    setTimeout(() => {
-      let listener: ThumbnailLoadingListener = {
-        onStartedLoading: () => { //onLoadStarted
-          this.loading = true;
-        },
-        onLoad: () => {//onLoaded
-          this.src = this.photo.getThumbnailPath();
-          if (this.onLoad) this.onLoad();
-          this.available = true;
-          this.loading = false;
-          this.thumbnailTask = null;
-        },
-        onError: (error) => {//onError
-          this.thumbnailTask = null;
-          this.loading = false;
-          this.error = true;
-        }
-      };
-      if (this.photo.isReplacementThumbnailAvailable()) {
-        this.thumbnailTask = this.thumbnailService.loadImage(this.photo, ThumbnailLoadingPriority.medium, listener);
-      } else {
-        this.thumbnailTask = this.thumbnailService.loadImage(this.photo, ThumbnailLoadingPriority.high, listener);
-      }
-      // }, 0);
-    }
-  }
-
   set Visible(visible: boolean) {
-    if (!this.thumbnailTask) return;
+    if (!this.thumbnailTask) {
+      return;
+    }
     if (visible === true) {
       if (this.photo.isReplacementThumbnailAvailable()) {
         this.thumbnailTask.priority = ThumbnailLoadingPriority.medium;
@@ -203,6 +186,37 @@ export class Thumbnail extends ThumbnailBase {
       }
     }
 
+  }
+
+  public load() {
+    if (!this.photo.isThumbnailAvailable() && this.thumbnailTask == null) {
+      //    setTimeout(() => {
+      const listener: ThumbnailLoadingListener = {
+        onStartedLoading: () => { // onLoadStarted
+          this.loading = true;
+        },
+        onLoad: () => {// onLoaded
+          this.src = this.photo.getThumbnailPath();
+          if (this.onLoad) {
+            this.onLoad();
+          }
+          this.available = true;
+          this.loading = false;
+          this.thumbnailTask = null;
+        },
+        onError: (error) => {// onError
+          this.thumbnailTask = null;
+          this.loading = false;
+          this.error = true;
+        }
+      };
+      if (this.photo.isReplacementThumbnailAvailable()) {
+        this.thumbnailTask = this.thumbnailService.loadImage(this.photo, ThumbnailLoadingPriority.medium, listener);
+      } else {
+        this.thumbnailTask = this.thumbnailService.loadImage(this.photo, ThumbnailLoadingPriority.high, listener);
+      }
+      // }, 0);
+    }
   }
 
 }

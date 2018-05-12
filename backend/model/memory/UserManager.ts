@@ -9,7 +9,7 @@ import {PasswordHelper} from '../PasswordHelper';
 
 export class UserManager implements IUserManager {
   private db: { users?: UserDTO[], idCounter?: number } = {};
-  private dbPath;
+  private readonly dbPath;
 
   generateId(): string {
     function s4() {
@@ -33,7 +33,7 @@ export class UserManager implements IUserManager {
 
     if (!this.db.users) {
       this.db.users = [];
-      //TODO: remove defaults
+      // TODO: remove defaults
       this.createUser(<UserDTO>{name: 'admin', password: 'admin', role: UserRoles.Admin});
     }
     this.saveDB();
@@ -44,14 +44,14 @@ export class UserManager implements IUserManager {
   public async findOne(filter: any) {
     const result = await this.find(filter);
 
-    if (result.length == 0) {
-      throw 'UserDTO not found';
+    if (result.length === 0) {
+      throw new Error('UserDTO not found');
     }
     return result[0];
   }
 
   public async find(filter: any) {
-    let pass = filter.password;
+    const pass = filter.password;
     delete filter.password;
     const users = this.db.users.slice();
     let i = users.length;
@@ -60,7 +60,7 @@ export class UserManager implements IUserManager {
         users.splice(i, 1);
         continue;
       }
-      if (Utils.equalsFilter(users[i], filter) == false) {
+      if (Utils.equalsFilter(users[i], filter) === false) {
         users.splice(i, 1);
       }
     }
@@ -76,8 +76,8 @@ export class UserManager implements IUserManager {
   }
 
   public async deleteUser(id: number) {
-    let deleted = this.db.users.filter((u: UserDTO) => u.id == id);
-    this.db.users = this.db.users.filter((u: UserDTO) => u.id != id);
+    const deleted = this.db.users.filter((u: UserDTO) => u.id === id);
+    this.db.users = this.db.users.filter((u: UserDTO) => u.id !== id);
     this.saveDB();
     if (deleted.length > 0) {
       return deleted[0];
@@ -87,7 +87,7 @@ export class UserManager implements IUserManager {
 
   public async changeRole(id: number, newRole: UserRoles): Promise<UserDTO> {
     for (let i = 0; i < this.db.users.length; i++) {
-      if (this.db.users[i].id == id) {
+      if (this.db.users[i].id === id) {
         this.db.users[i].role = newRole;
         this.saveDB();
         return this.db.users[i];
@@ -96,7 +96,7 @@ export class UserManager implements IUserManager {
   }
 
   public async changePassword(request: any) {
-    throw new Error('not implemented'); //TODO: implement
+    throw new Error('not implemented'); // TODO: implement
   }
 
   private loadDB() {

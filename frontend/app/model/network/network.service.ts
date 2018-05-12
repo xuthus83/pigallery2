@@ -4,11 +4,13 @@ import {Message} from '../../../../common/entities/Message';
 import {SlimLoadingBarService} from 'ng2-slim-loading-bar';
 import 'rxjs/Rx';
 import {ErrorCodes, ErrorDTO} from '../../../../common/entities/Error';
+import {Config} from '../../../../common/config/public/Config';
+import {Utils} from '../../../../common/Utils';
 
 @Injectable()
 export class NetworkService {
 
-  _baseUrl = '/api';
+  _apiBaseUrl = Utils.concatUrls(Config.Client.urlBase, '/api');
   private globalErrorHandlers: Array<(error: ErrorDTO) => boolean> = [];
 
   constructor(private _http: HttpClient,
@@ -69,22 +71,22 @@ export class NetworkService {
 
     switch (method) {
       case 'get':
-        return this._http.get<Message<T>>(this._baseUrl + url)
+        return this._http.get<Message<T>>(this._apiBaseUrl + url)
           .toPromise()
           .then(process)
           .catch(err);
       case 'delete':
-        return this._http.delete<Message<T>>(this._baseUrl + url)
+        return this._http.delete<Message<T>>(this._apiBaseUrl + url)
           .toPromise()
           .then(process)
           .catch(err);
       case 'post':
-        return this._http.post<Message<T>>(this._baseUrl + url, body)
+        return this._http.post<Message<T>>(this._apiBaseUrl + url, body)
           .toPromise()
           .then(process)
           .catch(err);
       case 'put':
-        return this._http.put<Message<T>>(this._baseUrl + url, body)
+        return this._http.put<Message<T>>(this._apiBaseUrl + url, body)
           .toPromise()
           .then(process)
           .catch(err);

@@ -18,7 +18,7 @@ const LOG_TAG = '[ConfigDiagnostics]';
 export class ConfigDiagnostics {
 
   static async testDatabase(databaseConfig: DataBaseConfig) {
-    if (databaseConfig.type != DatabaseType.memory) {
+    if (databaseConfig.type !== DatabaseType.memory) {
       await SQLConnection.tryConnection(databaseConfig);
     }
   }
@@ -77,43 +77,45 @@ export class ConfigDiagnostics {
 
   static async testClientThumbnailConfig(thumbnailConfig: ClientConfig.ThumbnailConfig) {
     if (isNaN(thumbnailConfig.iconSize) || thumbnailConfig.iconSize <= 0) {
-      throw 'IconSize has to be >= 0 integer, got: ' + thumbnailConfig.iconSize;
+      throw new Error('IconSize has to be >= 0 integer, got: ' + thumbnailConfig.iconSize);
     }
 
     if (!thumbnailConfig.thumbnailSizes.length) {
-      throw 'At least one thumbnail size is needed';
+      throw new Error('At least one thumbnail size is needed');
     }
     for (let i = 0; i < thumbnailConfig.thumbnailSizes.length; i++) {
       if (isNaN(thumbnailConfig.thumbnailSizes[i]) || thumbnailConfig.thumbnailSizes[i] <= 0) {
-        throw 'Thumbnail size has to be >= 0 integer, got: ' + thumbnailConfig.thumbnailSizes[i];
+        throw new Error('Thumbnail size has to be >= 0 integer, got: ' + thumbnailConfig.thumbnailSizes[i]);
       }
     }
   }
 
 
   static async testSearchConfig(search: ClientConfig.SearchConfig, config: IPrivateConfig) {
-    if (search.enabled == true && config.Server.database.type == DatabaseType.memory) {
-      throw 'Memory Database do not support searching';
+    if (search.enabled === true &&
+      config.Server.database.type === DatabaseType.memory) {
+      throw new Error('Memory Database do not support searching');
     }
   }
 
 
   static async testSharingConfig(sharing: ClientConfig.SharingConfig, config: IPrivateConfig) {
-    if (sharing.enabled == true && config.Server.database.type == DatabaseType.memory) {
-      throw 'Memory Database do not support sharing';
+    if (sharing.enabled === true &&
+      config.Server.database.type === DatabaseType.memory) {
+      throw new Error('Memory Database do not support sharing');
     }
   }
 
   static async testMapConfig(map: ClientConfig.MapConfig) {
-    if (map.enabled == true && (!map.googleApiKey || map.googleApiKey.length == 0)) {
-      throw 'Maps need a valid google api key';
+    if (map.enabled === true && (!map.googleApiKey || map.googleApiKey.length === 0)) {
+      throw new Error('Maps need a valid google api key');
     }
   }
 
 
   static async runDiagnostics() {
 
-    if (Config.Server.database.type != DatabaseType.memory) {
+    if (Config.Server.database.type !== DatabaseType.memory) {
       try {
         await ConfigDiagnostics.testDatabase(Config.Server.database);
       } catch (err) {
@@ -124,7 +126,7 @@ export class ConfigDiagnostics {
       }
     }
 
-    if (Config.Server.thumbnail.processingLibrary != ThumbnailProcessingLib.Jimp) {
+    if (Config.Server.thumbnail.processingLibrary !== ThumbnailProcessingLib.Jimp) {
       try {
         await ConfigDiagnostics.testThumbnailLib(Config.Server.thumbnail.processingLibrary);
       } catch (err) {
@@ -164,7 +166,8 @@ export class ConfigDiagnostics {
     try {
       await ConfigDiagnostics.testSearchConfig(Config.Client.Search, Config);
     } catch (err) {
-      NotificationManager.warning('Search is not supported with these settings. Disabling temporally. Please adjust the config properly.', err);
+      NotificationManager.warning('Search is not supported with these settings. Disabling temporally. ' +
+        'Please adjust the config properly.', err);
       Logger.warn(LOG_TAG, 'Search is not supported with these settings, switching off..', err);
       Config.Client.Search.enabled = false;
     }
@@ -172,7 +175,8 @@ export class ConfigDiagnostics {
     try {
       await ConfigDiagnostics.testSharingConfig(Config.Client.Sharing, Config);
     } catch (err) {
-      NotificationManager.warning('Sharing is not supported with these settings. Disabling temporally. Please adjust the config properly.', err);
+      NotificationManager.warning('Sharing is not supported with these settings. Disabling temporally. ' +
+        'Please adjust the config properly.', err);
       Logger.warn(LOG_TAG, 'Sharing is not supported with these settings, switching off..', err);
       Config.Client.Sharing.enabled = false;
     }
@@ -180,8 +184,10 @@ export class ConfigDiagnostics {
     try {
       await ConfigDiagnostics.testMapConfig(Config.Client.Map);
     } catch (err) {
-      NotificationManager.warning('Maps is not supported with these settings. Disabling temporally. Please adjust the config properly.', err);
-      Logger.warn(LOG_TAG, 'Maps is not supported with these settings. Disabling temporally. Please adjust the config properly.', err);
+      NotificationManager.warning('Maps is not supported with these settings. Disabling temporally. ' +
+        'Please adjust the config properly.', err);
+      Logger.warn(LOG_TAG, 'Maps is not supported with these settings. Disabling temporally. ' +
+        'Please adjust the config properly.', err);
       Config.Client.Map.enabled = false;
     }
 

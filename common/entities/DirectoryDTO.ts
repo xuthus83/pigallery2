@@ -1,4 +1,4 @@
-import {PhotoDTO} from "./PhotoDTO";
+import {PhotoDTO} from './PhotoDTO';
 
 export interface DirectoryDTO {
   id: number;
@@ -22,5 +22,5 @@ export module DirectoryDTO {
       addReferences(directory);
       directory.parent = dir;
     });
-  }
+  };
 }

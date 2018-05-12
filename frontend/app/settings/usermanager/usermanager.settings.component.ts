@@ -54,7 +54,7 @@ export class UserMangerSettingsComponent implements OnInit {
     }
     this.userRoles = Utils
       .enumToArray(UserRoles)
-      .filter(r => r.key != UserRoles.LimitedGuest)
+      .filter(r => r.key !== UserRoles.LimitedGuest)
       .filter(r => r.key <= this._authService.user.value.role)
       .sort((a, b) => a.key - b.key);
 
@@ -62,29 +62,39 @@ export class UserMangerSettingsComponent implements OnInit {
     this.getUsersList();
   }
 
-  private async getUsersList() {
-    try {
-      this.users = await this._userSettings.getUsers();
-    } catch (err) {
-      this.users = [];
-      if ((<ErrorDTO>err).code != ErrorCodes.USER_MANAGEMENT_DISABLED) {
-        throw err;
-      }
+  canModifyUser(user: UserDTO): boolean {
+    const currentUser = this._authService.user.value;
+    if (!currentUser) {
+      return false;
     }
+
+    return currentUser.name !== user.name && currentUser.role >= user.role;
   }
 
   private async getSettings() {
     this.enabled = await this._userSettings.getSettings();
   }
 
-
-  canModifyUser(user: UserDTO): boolean {
-    let currentUser = this._authService.user.value;
-    if (!currentUser) {
-      return false;
+  async switched(event: { previousValue: false, currentValue: true }) {
+    this.inProgress = true;
+    this.error = '';
+    this.enabled = event.currentValue;
+    try {
+      await this._userSettings.updateSettings(this.enabled);
+      await this.getSettings();
+      if (this.enabled === true) {
+        this.notification.success(this.i18n('Password protection enabled'), this.i18n('Success'));
+        this.getUsersList();
+      } else {
+        this.notification.success(this.i18n('Password protection disabled'), this.i18n('Success'));
+      }
+    } catch (err) {
+      console.log(err);
+      if (err.message) {
+        this.error = (<ErrorDTO>err).message;
+      }
     }
-
-    return currentUser.name != user.name && currentUser.role >= user.role;
+    this.inProgress = false;
   }
 
   initNewUser() {
@@ -110,26 +120,15 @@ export class UserMangerSettingsComponent implements OnInit {
     this.childModal.hide();
   }
 
-  async switched(event: { previousValue: false, currentValue: true }) {
-    this.inProgress = true;
-    this.error = '';
-    this.enabled = event.currentValue;
+  private async getUsersList() {
     try {
-      await this._userSettings.updateSettings(this.enabled);
-      await this.getSettings();
-      if (this.enabled == true) {
-        this.notification.success(this.i18n('Password protection enabled'), this.i18n('Success'));
-        this.getUsersList();
-      } else {
-        this.notification.success(this.i18n('Password protection disabled'), this.i18n('Success'));
-      }
+      this.users = await this._userSettings.getUsers();
     } catch (err) {
-      console.log(err);
-      if (err.message) {
-        this.error = (<ErrorDTO>err).message;
+      this.users = [];
+      if ((<ErrorDTO>err).code !== ErrorCodes.USER_MANAGEMENT_DISABLED) {
+        throw err;
       }
     }
-    this.inProgress = false;
   }
 }
 

@@ -39,7 +39,7 @@ export class SharingMWs {
     const createSharing: CreateSharingDTO = req.body.createSharing;
     let sharingKey = SharingMWs.generateKey();
 
-    //create one not yet used
+    // create one not yet used
 
     while (true) {
       try {
@@ -52,7 +52,7 @@ export class SharingMWs {
 
 
     const directoryName = req.params.directory || '/';
-    let sharing: SharingDTO = {
+    const sharing: SharingDTO = {
       id: null,
       sharingKey: sharingKey,
       path: directoryName,
@@ -79,7 +79,7 @@ export class SharingMWs {
     }
     const updateSharing: CreateSharingDTO = req.body.updateSharing;
     const directoryName = req.params.directory || '/';
-    let sharing: SharingDTO = {
+    const sharing: SharingDTO = {
       id: updateSharing.id,
       path: directoryName,
       sharingKey: '',

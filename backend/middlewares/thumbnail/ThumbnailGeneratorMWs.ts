@@ -125,7 +125,8 @@ export class ThumbnailGeneratorMWs {
           photos[i].readyThumbnails.push(size);
         }
       }
-      const iconPath = path.join(thumbnailFolder, ThumbnailGeneratorMWs.generateThumbnailName(fullImagePath, Config.Client.Thumbnail.iconSize));
+      const iconPath = path.join(thumbnailFolder,
+        ThumbnailGeneratorMWs.generateThumbnailName(fullImagePath, Config.Client.Thumbnail.iconSize));
       if (fs.existsSync(iconPath) === true) {
         photos[i].readyIcon = true;
       }
@@ -133,7 +134,10 @@ export class ThumbnailGeneratorMWs {
     }
   }
 
-  private static async generateImage(imagePath: string, size: number, makeSquare: boolean, req: Request, res: Response, next: NextFunction) {
+  private static async generateImage(imagePath: string,
+                                     size: number,
+                                     makeSquare: boolean,
+                                     req: Request, res: Response, next: NextFunction) {
     // generate thumbnail path
     const thPath = path.join(ProjectPath.ThumbnailFolder, ThumbnailGeneratorMWs.generateThumbnailName(imagePath, size));
 
@@ -162,7 +166,7 @@ export class ThumbnailGeneratorMWs {
       await this.taskQue.execute(input);
       return next();
     } catch (error) {
-      return next(new ErrorDTO(ErrorCodes.THUMBNAIL_GENERATION_ERROR, 'Error during generating thumbnail', error));
+      return next(new ErrorDTO(ErrorCodes.THUMBNAIL_GENERATION_ERROR, 'Error during generating thumbnail: ' + input.imagePath, error));
     }
   }
 

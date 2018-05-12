@@ -1,6 +1,6 @@
-import {DirectoryDTO} from "./DirectoryDTO";
-import {PhotoDTO} from "./PhotoDTO";
-import {SearchTypes} from "./AutoCompleteItem";
+import {DirectoryDTO} from './DirectoryDTO';
+import {PhotoDTO} from './PhotoDTO';
+import {SearchTypes} from './AutoCompleteItem';
 
 export interface SearchResultDTO {
   searchText: string;

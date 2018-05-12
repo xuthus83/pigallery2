@@ -19,7 +19,7 @@ export class ShareService {
   constructor(private _networkService: NetworkService, private router: Router) {
     this.sharing = new BehaviorSubject(null);
     this.ReadyPR = new Promise((resolve) => {
-      if (this.inited == true) {
+      if (this.inited === true) {
         return resolve();
       }
       this.resolve = resolve;
@@ -29,7 +29,7 @@ export class ShareService {
       if (val instanceof RoutesRecognized) {
         this.param = val.state.root.firstChild.params['sharingKey'] || null;
         this.queryParam = val.state.root.firstChild.queryParams['sk'] || null;
-        const changed = this.sharingKey != this.param || this.queryParam;
+        const changed = this.sharingKey !== this.param || this.queryParam;
         if (changed) {
           this.sharingKey = this.param || this.queryParam;
           this.getSharing();

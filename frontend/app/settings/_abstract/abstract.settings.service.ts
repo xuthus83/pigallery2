@@ -2,7 +2,7 @@ import {SettingsService} from '../settings.service';
 
 export abstract class AbstractSettingsService<T> {
 
-  constructor(public _settingsService: SettingsService) {
+  protected constructor(public _settingsService: SettingsService) {
 
   }
 

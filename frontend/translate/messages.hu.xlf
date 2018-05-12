@@ -6,7 +6,7 @@
         <source>Please log in</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/login/login.component.ts</context>
-          <context context-type="linenumber">11</context>
+          <context context-type="linenumber">10</context>
         </context-group>
         <target>Jelentkezz be</target>
       </trans-unit>
@@ -16,7 +16,7 @@
         </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/login/login.component.ts</context>
-          <context context-type="linenumber">13</context>
+          <context context-type="linenumber">12</context>
         </context-group>
         <target>Rossz felhasználónév vagy jelszó</target>
       </trans-unit>
@@ -24,7 +24,7 @@
         <source>Username</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/login/login.component.ts</context>
-          <context context-type="linenumber">22</context>
+          <context context-type="linenumber">21</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/usermanager/usermanager.settings.component.ts</context>
@@ -40,7 +40,7 @@
         <source>Password</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/login/login.component.ts</context>
-          <context context-type="linenumber">36</context>
+          <context context-type="linenumber">37</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/sharelogin/share-login.component.ts</context>
@@ -68,7 +68,7 @@
         <source>Remember me</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/login/login.component.ts</context>
-          <context context-type="linenumber">42</context>
+          <context context-type="linenumber">43</context>
         </context-group>
         <target>Emlékezz rám</target>
       </trans-unit>
@@ -77,7 +77,7 @@
             </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/login/login.component.ts</context>
-          <context context-type="linenumber">52</context>
+          <context context-type="linenumber">53</context>
         </context-group>
         <target>Belépés</target>
       </trans-unit>
@@ -140,7 +140,7 @@
         <source>key: left arrow</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/gallery/lightbox/lightbox.gallery.component.ts</context>
-          <context context-type="linenumber">40</context>
+          <context context-type="linenumber">41</context>
         </context-group>
         <target>billentyű: balra nyíl</target>
       </trans-unit>
@@ -148,7 +148,7 @@
         <source>key: right arrow</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/gallery/lightbox/lightbox.gallery.component.ts</context>
-          <context context-type="linenumber">44</context>
+          <context context-type="linenumber">45</context>
         </context-group>
         <target>billentyű: jobbra nyíl</target>
       </trans-unit>
@@ -516,7 +516,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/basic/basic.settings.component.ts</context>
-          <context context-type="linenumber">57</context>
+          <context context-type="linenumber">68</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/other/other.settings.component.ts</context>
@@ -545,7 +545,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/basic/basic.settings.component.ts</context>
-          <context context-type="linenumber">60</context>
+          <context context-type="linenumber">71</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/other/other.settings.component.ts</context>
@@ -815,6 +815,22 @@
           <context context-type="linenumber">51</context>
         </context-group>
         <target>Ha belső hálózatról nézed oldalt, jó tudni a nyilvános URL-t, a megosztási link létrehozásához</target>
+      </trans-unit>
+      <trans-unit id="52e8e9fdcd08e89225892a7657140dbf41020b76" datatype="html">
+        <source>Url Base</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/settings/basic/basic.settings.component.ts</context>
+          <context context-type="linenumber">56</context>
+        </context-group>
+        <target>Al cím</target>
+      </trans-unit>
+      <trans-unit id="8a46f66aef490af08db029240d761dd0715dea54" datatype="html">
+        <source>If you access the gallery under a sub url (like: http://mydomain.com/myGallery), set it here. If not working you might miss the '/' from the beginning of the url.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/settings/basic/basic.settings.component.ts</context>
+          <context context-type="linenumber">62</context>
+        </context-group>
+        <target>Ha az oldalt egy al címen lehet elérni (pl: http://oldalam.hu/myGallery), akkor az alcímet itt állitsd be. Hiba esetén lehet, hogy a "/" hiányzik az url elejéről.</target>
       </trans-unit>
       <trans-unit id="1e99f581a015c671d53abad7c7df6a5ad35bfe85" datatype="html">
         <source>Other settings</source>

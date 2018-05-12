@@ -18,7 +18,7 @@ export class SharingRouter {
       AuthenticationMWs.shareLogin,
       RenderingMWs.renderSessionUser
     );
-  };
+  }
 
   private static addGetSharing(app) {
     app.get('/api/share/:sharingKey',
@@ -27,7 +27,7 @@ export class SharingRouter {
       SharingMWs.getSharing,
       RenderingMWs.renderSharing
     );
-  };
+  }
 
   private static addCreateSharing(app) {
     app.post(['/api/share/:directory(*)', '/api/share/', '/api/share//'],
@@ -36,7 +36,7 @@ export class SharingRouter {
       SharingMWs.createSharing,
       RenderingMWs.renderSharing
     );
-  };
+  }
 
   private static addUpdateSharing(app) {
     app.put(['/api/share/:directory(*)', '/api/share/', '/api/share//'],
@@ -45,7 +45,6 @@ export class SharingRouter {
       SharingMWs.updateSharing,
       RenderingMWs.renderSharing
     );
-  };
-
+  }
 
 }

@@ -30,33 +30,19 @@ export class ThreadPool {
     }
   }
 
-  private startWorker() {
-    const worker = <WorkerWrapper>{poolTask: null, worker: cluster.fork()};
-    this.workers.push(worker);
-    worker.worker.on('online', () => {
-      ThreadPool.WorkerCount++;
-      Logger.debug('Worker ' + worker.worker.process.pid + ' is online, worker count:', ThreadPool.WorkerCount);
-    });
-    worker.worker.on('exit', (code, signal) => {
-      ThreadPool.WorkerCount--;
-      Logger.warn('Worker ' + worker.worker.process.pid + ' died with code: ' + code + ', and signal: ' + signal + ', worker count:', ThreadPool.WorkerCount);
-      Logger.debug('Starting a new worker');
-      this.startWorker();
-    });
+  private run = () => {
+    if (this.tasks.length === 0) {
+      return;
+    }
+    const worker = this.getFreeWorker();
+    if (worker == null) {
+      return;
+    }
 
-    worker.worker.on('message', (msg: WorkerMessage) => {
-      if (worker.poolTask == null) {
-        throw 'No worker task after worker task is completed';
-      }
-      if (msg.error) {
-        worker.poolTask.promise.reject(msg.error);
-      } else {
-        worker.poolTask.promise.resolve(msg.result);
-      }
-      worker.poolTask = null;
-      this.run();
-    });
-  }
+    const poolTask = this.tasks.shift();
+    worker.poolTask = poolTask;
+    worker.worker.send(poolTask.task);
+  };
 
   protected executeTask<T>(task: WorkerTask): Promise<T> {
     return new Promise((resolve: Function, reject: Function) => {
@@ -74,19 +60,34 @@ export class ThreadPool {
     return null;
   }
 
-  private run = () => {
-    if (this.tasks.length == 0) {
-      return;
-    }
-    const worker = this.getFreeWorker();
-    if (worker == null) {
-      return;
-    }
+  private startWorker() {
+    const worker = <WorkerWrapper>{poolTask: null, worker: cluster.fork()};
+    this.workers.push(worker);
+    worker.worker.on('online', () => {
+      ThreadPool.WorkerCount++;
+      Logger.debug('Worker ' + worker.worker.process.pid + ' is online, worker count:', ThreadPool.WorkerCount);
+    });
+    worker.worker.on('exit', (code, signal) => {
+      ThreadPool.WorkerCount--;
+      Logger.warn('Worker ' + worker.worker.process.pid + ' died with code: ' + code +
+        ', and signal: ' + signal + ', worker count:', ThreadPool.WorkerCount);
+      Logger.debug('Starting a new worker');
+      this.startWorker();
+    });
 
-    const poolTask = this.tasks.shift();
-    worker.poolTask = poolTask;
-    worker.worker.send(poolTask.task);
-  };
+    worker.worker.on('message', (msg: WorkerMessage) => {
+      if (worker.poolTask == null) {
+        throw new Error('No worker task after worker task is completed');
+      }
+      if (msg.error) {
+        worker.poolTask.promise.reject(msg.error);
+      } else {
+        worker.poolTask.promise.resolve(msg.result);
+      }
+      worker.poolTask = null;
+      this.run();
+    });
+  }
 
 }
 

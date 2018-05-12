@@ -6,14 +6,14 @@ export class Utils {
   }
 
   static equalsFilter(object: any, filter: any): boolean {
-    if (typeof filter !== "object" || filter == null) {
-      return object == filter;
+    if (typeof filter !== 'object' || filter == null) {
+      return object === filter;
     }
     const keys = Object.keys(filter);
     for (let i = 0; i < keys.length; i++) {
       const key = keys[i];
-      if (typeof filter[key] === "object") {
-        if (Utils.equalsFilter(object[key], filter[key]) == false) {
+      if (typeof filter[key] === 'object') {
+        if (Utils.equalsFilter(object[key], filter[key]) === false) {
           return false;
         }
       } else if (object[key] !== filter[key]) {
@@ -27,19 +27,23 @@ export class Utils {
 
 
   static concatUrls(...args: Array<string>) {
-    let url = "";
+    let url = '';
     for (let i = 0; i < args.length; i++) {
-      if (args[i] === "" || typeof args[i] === "undefined") continue;
+      if (args[i] === '' || typeof args[i] === 'undefined') {
+        continue;
+      }
 
-      let part = args[i].replace("\\", "/");
-      if (part === "/" || part === "./") continue;
+      const part = args[i].replace('\\', '/');
+      if (part === '/' || part === './') {
+        continue;
+      }
 
-      url += part + "/";
+      url += part + '/';
     }
-    url = url.replace("//", "/");
+    url = url.replace('//', '/');
 
-    if (url.trim() == "") {
-      url = "./";
+    if (url.trim() === '') {
+      url = './';
     }
 
     return url.substring(0, url.length - 1);
@@ -47,10 +51,10 @@ export class Utils {
 
   public static updateKeys(targetObject: any, sourceObject: any) {
     Object.keys(sourceObject).forEach((key) => {
-      if (typeof targetObject[key] === "undefined") {
+      if (typeof targetObject[key] === 'undefined') {
         return;
       }
-      if (typeof targetObject[key] === "object") {
+      if (typeof targetObject[key] === 'object') {
         Utils.updateKeys(targetObject[key], sourceObject[key]);
       } else {
         targetObject[key] = sourceObject[key];
@@ -60,7 +64,7 @@ export class Utils {
 
   public static setKeys(targetObject: any, sourceObject: any) {
     Object.keys(sourceObject).forEach((key) => {
-      if (typeof targetObject[key] === "object") {
+      if (typeof targetObject[key] === 'object') {
         Utils.setKeys(targetObject[key], sourceObject[key]);
       } else {
         targetObject[key] = sourceObject[key];
@@ -70,8 +74,8 @@ export class Utils {
 
   public static setKeysForced(targetObject: any, sourceObject: any) {
     Object.keys(sourceObject).forEach((key) => {
-      if (typeof sourceObject[key] === "object") {
-        if (typeof targetObject[key] === "undefined") {
+      if (typeof sourceObject[key] === 'object') {
+        if (typeof targetObject[key] === 'undefined') {
           targetObject[key] = {};
         }
         Utils.setKeysForced(targetObject[key], sourceObject[key]);
@@ -85,12 +89,12 @@ export class Utils {
     key: number;
     value: string;
   }> {
-    let arr: Array<{ key: number; value: string; }> = [];
-    for (let enumMember in EnumType) {
+    const arr: Array<{ key: number; value: string; }> = [];
+    for (const enumMember in EnumType) {
       if (!EnumType.hasOwnProperty(enumMember)) {
         continue;
       }
-      let key = parseInt(enumMember, 10);
+      const key = parseInt(enumMember, 10);
       if (key >= 0) {
         arr.push({key: key, value: EnumType[enumMember]});
       }
@@ -106,7 +110,7 @@ export class Utils {
 
     arr.forEach((value) => {
 
-      let newDiff = Math.abs(number - value);
+      const newDiff = Math.abs(number - value);
 
       if (newDiff < diff) {
         diff = newDiff;

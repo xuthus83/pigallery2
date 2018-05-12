@@ -191,12 +191,14 @@ export class AdminMWs {
       Config.Server.port = settings.port;
       Config.Server.imagesFolder = settings.imagesFolder;
       Config.Client.publicUrl = settings.publicUrl;
+      Config.Client.urlBase = settings.urlBase;
       Config.Client.applicationTitle = settings.applicationTitle;
       // only updating explicitly set config (not saving config set by the diagnostics)
       const original = Config.original();
       original.Server.port = settings.port;
       original.Server.imagesFolder = settings.imagesFolder;
       original.Client.publicUrl = settings.publicUrl;
+      original.Client.urlBase = settings.urlBase;
       original.Client.applicationTitle = settings.applicationTitle;
       original.save();
       ProjectPath.reset();

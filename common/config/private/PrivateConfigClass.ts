@@ -1,13 +1,7 @@
-import {PublicConfigClass} from "../public/ConfigClass";
-import {
-  DatabaseType,
-  IPrivateConfig,
-  ReIndexingSensitivity,
-  ServerConfig,
-  ThumbnailProcessingLib
-} from "./IPrivateConfig";
-import * as path from "path";
-import {ConfigLoader} from "typeconfig";
+import {PublicConfigClass} from '../public/ConfigClass';
+import {DatabaseType, IPrivateConfig, ReIndexingSensitivity, ServerConfig, ThumbnailProcessingLib} from './IPrivateConfig';
+import * as path from 'path';
+import {ConfigLoader} from 'typeconfig';
 
 /**
  * This configuration will be only at backend
@@ -16,9 +10,9 @@ export class PrivateConfigClass extends PublicConfigClass implements IPrivateCon
 
   public Server: ServerConfig = {
     port: 80,
-    imagesFolder: "demo/images",
+    imagesFolder: 'demo/images',
     thumbnail: {
-      folder: "demo/TEMP",
+      folder: 'demo/TEMP',
       processingLibrary: ThumbnailProcessingLib.sharp,
       qualityPriority: true
     },
@@ -26,14 +20,14 @@ export class PrivateConfigClass extends PublicConfigClass implements IPrivateCon
     database: {
       type: DatabaseType.sqlite,
       mysql: {
-        host: "",
-        username: "",
-        password: "",
-        database: ""
+        host: '',
+        username: '',
+        password: '',
+        database: ''
 
       },
       sqlite: {
-        storage: "sqlite.db"
+        storage: 'sqlite.db'
       }
     },
     sharing: {
@@ -59,7 +53,7 @@ export class PrivateConfigClass extends PublicConfigClass implements IPrivateCon
   public load() {
     ConfigLoader.loadBackendConfig(this,
       path.join(__dirname, './../../../config.json'),
-      [["PORT", "Server-port"]]);
+      [['PORT', 'Server-port']]);
 
   }
 
@@ -68,7 +62,7 @@ export class PrivateConfigClass extends PublicConfigClass implements IPrivateCon
   }
 
   public original(): PrivateConfigClass {
-    let cfg = new PrivateConfigClass();
+    const cfg = new PrivateConfigClass();
     cfg.load();
     return cfg;
   }

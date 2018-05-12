@@ -14,7 +14,7 @@ export class IndexingManager implements IIndexingManager {
   indexingProgress = null;
   enabled = false;
   private indexNewDirectory = async () => {
-    if (this.directoriesToIndex.length == 0) {
+    if (this.directoriesToIndex.length === 0) {
       this.indexingProgress = null;
       if (global.gc) {
         global.gc();
@@ -25,7 +25,7 @@ export class IndexingManager implements IIndexingManager {
     this.indexingProgress.current = directory;
     this.indexingProgress.left = this.directoriesToIndex.length;
     const scanned = await (<ISQLGalleryManager>ObjectManagerRepository.getInstance().GalleryManager).indexDirectory(directory);
-    if (this.enabled == false) {
+    if (this.enabled === false) {
       return;
     }
     this.indexingProgress.indexed++;
@@ -36,7 +36,7 @@ export class IndexingManager implements IIndexingManager {
   };
 
   startIndexing(): void {
-    if (this.directoriesToIndex.length == 0 && this.enabled == false) {
+    if (this.directoriesToIndex.length === 0 && this.enabled === false) {
       Logger.info(LOG_TAG, 'Starting indexing');
       this.indexingProgress = <IndexingProgressDTO>{
         indexed: 0,

@@ -38,13 +38,13 @@ export abstract class SettingsComponent<T, S extends AbstractSettingsService<T>=
     High: 'High'
   };
 
-  constructor(private name,
-              private _authService: AuthenticationService,
-              private _navigation: NavigationService,
-              public _settingsService: S,
-              protected notification: NotificationService,
-              public i18n: I18n,
-              private sliceFN?: (s: IPrivateConfig) => T) {
+  protected constructor(private name,
+                        private _authService: AuthenticationService,
+                        private _navigation: NavigationService,
+                        public _settingsService: S,
+                        protected notification: NotificationService,
+                        public i18n: I18n,
+                        private sliceFN?: (s: IPrivateConfig) => T) {
     if (this.sliceFN) {
       this._settingsSubscription = this._settingsService.Settings.subscribe(this.onNewSettings);
       this.onNewSettings(this._settingsService._settingsService.settings.value);

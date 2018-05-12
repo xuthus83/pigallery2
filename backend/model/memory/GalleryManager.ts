@@ -10,12 +10,12 @@ import {ReIndexingSensitivity} from '../../../common/config/private/IPrivateConf
 export class GalleryManager implements IGalleryManager {
 
   public listDirectory(relativeDirectoryName: string, knownLastModified?: number, knownLastScanned?: number): Promise<DirectoryDTO> {
-    //If it seems that the content did not changed, do not work on it
+    // If it seems that the content did not changed, do not work on it
     if (knownLastModified && knownLastScanned) {
       const stat = fs.statSync(path.join(ProjectPath.ImageFolder, relativeDirectoryName));
       const lastModified = Math.max(stat.ctime.getTime(), stat.mtime.getTime());
       if (Date.now() - knownLastScanned <= Config.Server.indexing.cachedFolderTimeout &&
-        lastModified == knownLastModified &&
+        lastModified === knownLastModified &&
         Config.Server.indexing.reIndexingSensitivity < ReIndexingSensitivity.high) {
         return Promise.resolve(null);
       }

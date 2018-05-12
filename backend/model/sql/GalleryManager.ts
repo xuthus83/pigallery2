@@ -24,7 +24,7 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
     const connection = await SQLConnection.getConnection();
     const stat = fs.statSync(path.join(ProjectPath.ImageFolder, relativeDirectoryName));
     const lastModified = Math.max(stat.ctime.getTime(), stat.mtime.getTime());
-    let dir = await connection
+    const dir = await connection
       .getRepository(DirectoryEntity)
       .createQueryBuilder('directory')
       .where('directory.name = :name AND directory.path = :path', {
@@ -37,16 +37,16 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
 
 
     if (dir && dir.lastScanned != null) {
-      //If it seems that the content did not changed, do not work on it
+      // If it seems that the content did not changed, do not work on it
       if (knownLastModified && knownLastScanned
-        && lastModified == knownLastModified &&
-        dir.lastScanned == knownLastScanned) {
+        && lastModified === knownLastModified &&
+        dir.lastScanned === knownLastScanned) {
 
-        if (Config.Server.indexing.reIndexingSensitivity == ReIndexingSensitivity.low) {
+        if (Config.Server.indexing.reIndexingSensitivity === ReIndexingSensitivity.low) {
           return null;
         }
         if (Date.now() - knownLastScanned <= Config.Server.indexing.cachedFolderTimeout &&
-          Config.Server.indexing.reIndexingSensitivity == ReIndexingSensitivity.medium) {
+          Config.Server.indexing.reIndexingSensitivity === ReIndexingSensitivity.medium) {
           return null;
         }
       }
@@ -79,15 +79,15 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
       }
 
 
-      if (dir.lastModified != lastModified) {
+      if (dir.lastModified !== lastModified) {
         return this.indexDirectory(relativeDirectoryName);
       }
 
-      //not indexed since a while, index it in a lazy manner
+      // not indexed since a while, index it in a lazy manner
       if ((Date.now() - dir.lastScanned > Config.Server.indexing.cachedFolderTimeout &&
         Config.Server.indexing.reIndexingSensitivity >= ReIndexingSensitivity.medium) ||
         Config.Server.indexing.reIndexingSensitivity >= ReIndexingSensitivity.high) {
-        //on the fly reindexing
+        // on the fly reindexing
         this.indexDirectory(relativeDirectoryName).catch((err) => {
           console.error(err);
         });
@@ -97,7 +97,7 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
 
     }
 
-    //never scanned (deep indexed), do it and return with it
+    // never scanned (deep indexed), do it and return with it
     return this.indexDirectory(relativeDirectoryName);
 
 
@@ -109,7 +109,7 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
       try {
         const scannedDirectory = await DiskManager.scanDirectory(relativeDirectoryName);
 
-        //returning with the result
+        // returning with the result
         scannedDirectory.photos.forEach(p => p.readyThumbnails = []);
         resolve(scannedDirectory);
 
@@ -127,7 +127,7 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
   private async saveToDB(scannedDirectory: DirectoryDTO) {
     const connection = await SQLConnection.getConnection();
 
-    //saving to db
+    // saving to db
     const directoryRepository = connection.getRepository(DirectoryEntity);
     const photosRepository = connection.getRepository(PhotoEntity);
 
@@ -138,7 +138,7 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
         path: scannedDirectory.path
       }).getOne();
 
-    if (!!currentDir) {//Updated parent dir (if it was in the DB previously)
+    if (!!currentDir) {// Updated parent dir (if it was in the DB previously)
       currentDir.lastModified = scannedDirectory.lastModified;
       currentDir.lastScanned = scannedDirectory.lastScanned;
       currentDir = await directoryRepository.save(currentDir);
@@ -147,31 +147,31 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
       currentDir = await directoryRepository.save(<DirectoryEntity>scannedDirectory);
     }
 
-    let childDirectories = await directoryRepository.createQueryBuilder('directory')
+    const childDirectories = await directoryRepository.createQueryBuilder('directory')
       .where('directory.parent = :dir', {
         dir: currentDir.id
       }).getMany();
 
     for (let i = 0; i < scannedDirectory.directories.length; i++) {
-      //Was this child Dir already indexed before?
+      // Was this child Dir already indexed before?
       let directory: DirectoryEntity = null;
       for (let j = 0; j < childDirectories.length; j++) {
-        if (childDirectories[j].name == scannedDirectory.directories[i].name) {
+        if (childDirectories[j].name === scannedDirectory.directories[i].name) {
           directory = childDirectories[j];
           childDirectories.splice(j, 1);
           break;
         }
       }
 
-      if (directory != null) { //update existing directory
-        if (!directory.parent || !directory.parent.id) { //set parent if not set yet
+      if (directory != null) { // update existing directory
+        if (!directory.parent || !directory.parent.id) { // set parent if not set yet
           directory.parent = currentDir;
           delete directory.photos;
           await directoryRepository.save(directory);
         }
       } else {
         scannedDirectory.directories[i].parent = currentDir;
-        (<DirectoryEntity>scannedDirectory.directories[i]).lastScanned = null; //new child dir, not fully scanned yet
+        (<DirectoryEntity>scannedDirectory.directories[i]).lastScanned = null; // new child dir, not fully scanned yet
         const d = await directoryRepository.save(<DirectoryEntity>scannedDirectory.directories[i]);
         for (let j = 0; j < scannedDirectory.directories[i].photos.length; j++) {
           scannedDirectory.directories[i].photos[j].directory = d;
@@ -181,21 +181,21 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
       }
     }
 
-    //Remove child Dirs that are not anymore in the parent dir
+    // Remove child Dirs that are not anymore in the parent dir
     await directoryRepository.remove(childDirectories);
 
 
-    let indexedPhotos = await photosRepository.createQueryBuilder('photo')
+    const indexedPhotos = await photosRepository.createQueryBuilder('photo')
       .where('photo.directory = :dir', {
         dir: currentDir.id
       }).getMany();
 
 
-    let photosToSave = [];
+    const photosToSave = [];
     for (let i = 0; i < scannedDirectory.photos.length; i++) {
       let photo = null;
       for (let j = 0; j < indexedPhotos.length; j++) {
-        if (indexedPhotos[j].name == scannedDirectory.photos[i].name) {
+        if (indexedPhotos[j].name === scannedDirectory.photos[i].name) {
           photo = indexedPhotos[j];
           indexedPhotos.splice(j, 1);
           break;
@@ -208,10 +208,10 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
         photo.directory = currentDir;
       }
 
-      if (photo.metadata.keywords != scannedDirectory.photos[i].metadata.keywords ||
-        photo.metadata.cameraData != scannedDirectory.photos[i].metadata.cameraData ||
-        photo.metadata.positionData != scannedDirectory.photos[i].metadata.positionData ||
-        photo.metadata.size != scannedDirectory.photos[i].metadata.size) {
+      if (photo.metadata.keywords !== scannedDirectory.photos[i].metadata.keywords ||
+        photo.metadata.cameraData !== scannedDirectory.photos[i].metadata.cameraData ||
+        photo.metadata.positionData !== scannedDirectory.photos[i].metadata.positionData ||
+        photo.metadata.size !== scannedDirectory.photos[i].metadata.size) {
 
         photo.metadata.keywords = scannedDirectory.photos[i].metadata.keywords;
         photo.metadata.cameraData = scannedDirectory.photos[i].metadata.cameraData;

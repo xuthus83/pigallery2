@@ -1,4 +1,4 @@
-import {UserModificationRequest} from "./UserModificationRequest";
+import {UserModificationRequest} from './UserModificationRequest';
 
 export class PasswordChangeRequest extends UserModificationRequest {
 

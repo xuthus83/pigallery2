@@ -55,13 +55,13 @@ export class AuthenticationMWs {
 
   public static authoriseDirectory(req: Request, res: Response, next: NextFunction) {
     if (req.session.user.permissions == null ||
-      req.session.user.permissions.length == 0 ||
-      req.session.user.permissions[0] == '/*') {
+      req.session.user.permissions.length === 0 ||
+      req.session.user.permissions[0] === '/*') {
       return next();
     }
 
     const directoryName = req.params.directory || '/';
-    if (UserDTO.isPathAvailable(directoryName, req.session.user.permissions) == true) {
+    if (UserDTO.isPathAvailable(directoryName, req.session.user.permissions) === true) {
       return next();
     }
 
@@ -82,7 +82,7 @@ export class AuthenticationMWs {
     if (Config.Client.Sharing.enabled === false) {
       return next();
     }
-    //not enough parameter
+    // not enough parameter
     if ((!req.query.sk && !req.params.sharingKey)) {
       return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, 'no sharing key provided'));
     }
@@ -100,7 +100,7 @@ export class AuthenticationMWs {
       }
 
       let path = sharing.path;
-      if (sharing.includeSubfolders == true) {
+      if (sharing.includeSubfolders === true) {
         path += '*';
       }
 
@@ -122,13 +122,15 @@ export class AuthenticationMWs {
 
   public static async login(req: Request, res: Response, next: NextFunction) {
 
-    //not enough parameter
-    if ((typeof req.body === 'undefined') || (typeof req.body.loginCredential === 'undefined') || (typeof req.body.loginCredential.username === 'undefined') ||
+    // not enough parameter
+    if ((typeof req.body === 'undefined') ||
+      (typeof req.body.loginCredential === 'undefined') ||
+      (typeof req.body.loginCredential.username === 'undefined') ||
       (typeof req.body.loginCredential.password === 'undefined')) {
       return next(new ErrorDTO(ErrorCodes.INPUT_ERROR));
     }
     try {
-      //lets find the user
+      // lets find the user
       const user = Utils.clone(await ObjectManagerRepository.getInstance().UserManager.findOne({
         name: req.body.loginCredential.username,
         password: req.body.loginCredential.password
@@ -162,7 +164,7 @@ export class AuthenticationMWs {
       }
 
       let path = sharing.path;
-      if (sharing.includeSubfolders == true) {
+      if (sharing.includeSubfolders === true) {
         path += '*';
       }
       return <UserDTO>{name: 'Guest', role: UserRoles.LimitedGuest, permissions: [path]};

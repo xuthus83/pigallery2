@@ -16,7 +16,7 @@ import {ContentWrapper} from '../../../common/entities/ConentWrapper';
 import {PageHelper} from '../model/page.helper';
 
 @Component({
-  selector: 'gallery',
+  selector: 'app-gallery',
   templateUrl: './gallery.component.html',
   styleUrls: ['./gallery.component.css']
 })

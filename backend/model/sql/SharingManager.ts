@@ -42,7 +42,7 @@ export class SharingManager implements ISharingManager {
     });
 
     if (sharing.timeStamp < Date.now() - Config.Server.sharing.updateTimeout) {
-      throw 'Sharing is locked, can\'t update anymore';
+      throw new Error('Sharing is locked, can\'t update anymore');
     }
     if (inSharing.password == null) {
       sharing.password = null;

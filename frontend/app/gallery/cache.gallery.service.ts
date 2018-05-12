@@ -68,7 +68,7 @@ export class GalleryCacheService {
 
   public getSearch(text: string, type?: SearchTypes): SearchResultDTO {
     let key = GalleryCacheService.SEARCH_PREFIX + text;
-    if (typeof type != 'undefined') {
+    if (typeof type !== 'undefined') {
       key += GalleryCacheService.SEARCH_TYPE_PREFIX + type;
     }
     const tmp = localStorage.getItem(key);
@@ -89,7 +89,7 @@ export class GalleryCacheService {
       item: searchResult
     };
     let key = GalleryCacheService.SEARCH_PREFIX + text;
-    if (typeof type != 'undefined') {
+    if (typeof type !== 'undefined') {
       key += GalleryCacheService.SEARCH_TYPE_PREFIX + type;
     }
     localStorage.setItem(key, JSON.stringify(tmp));
@@ -97,12 +97,12 @@ export class GalleryCacheService {
 
 
   public getDirectory(directoryName: string): DirectoryDTO {
-    if (Config.Client.enableCache == false) {
+    if (Config.Client.enableCache === false) {
       return null;
     }
-    let value = localStorage.getItem(GalleryCacheService.CONTENT_PREFIX + Utils.concatUrls(directoryName));
+    const value = localStorage.getItem(GalleryCacheService.CONTENT_PREFIX + Utils.concatUrls(directoryName));
     if (value != null) {
-      let directory: DirectoryDTO = JSON.parse(value);
+      const directory: DirectoryDTO = JSON.parse(value);
 
       DirectoryDTO.addReferences(directory);
       return directory;
@@ -111,12 +111,12 @@ export class GalleryCacheService {
   }
 
   public setDirectory(directory: DirectoryDTO): void {
-    if (Config.Client.enableCache == false) {
+    if (Config.Client.enableCache === false) {
       return;
     }
 
     const key = GalleryCacheService.CONTENT_PREFIX + Utils.concatUrls(directory.path, directory.name);
-    if (directory.isPartial == true && localStorage.getItem(key)) {
+    if (directory.isPartial === true && localStorage.getItem(key)) {
       return;
     }
 
@@ -124,7 +124,7 @@ export class GalleryCacheService {
 
     directory.directories.forEach((dir: DirectoryDTO) => {
       const sub_key = GalleryCacheService.CONTENT_PREFIX + Utils.concatUrls(dir.path, dir.name);
-      if (localStorage.getItem(sub_key) == null) { //don't override existing
+      if (localStorage.getItem(sub_key) == null) { // don't override existing
         localStorage.setItem(sub_key, JSON.stringify(dir));
       }
     });
@@ -137,21 +137,21 @@ export class GalleryCacheService {
    */
   public photoUpdated(photo: PhotoDTO): void {
 
-    if (Config.Client.enableCache == false) {
+    if (Config.Client.enableCache === false) {
       return;
     }
 
-    let directoryName = Utils.concatUrls(photo.directory.path, photo.directory.name);
-    let value = localStorage.getItem(directoryName);
+    const directoryName = Utils.concatUrls(photo.directory.path, photo.directory.name);
+    const value = localStorage.getItem(directoryName);
     if (value != null) {
-      let directory: DirectoryDTO = JSON.parse(value);
+      const directory: DirectoryDTO = JSON.parse(value);
       directory.photos.forEach((p) => {
         if (p.name === photo.name) {
-          //update data
+          // update data
           p.metadata = photo.metadata;
           p.readyThumbnails = photo.readyThumbnails;
 
-          //save changes
+          // save changes
           localStorage.setItem(directoryName, JSON.stringify(directory));
           return;
         }

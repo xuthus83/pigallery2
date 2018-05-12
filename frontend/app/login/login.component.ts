@@ -6,13 +6,13 @@ import {Config} from '../../../common/config/public/Config';
 import {NavigationService} from '../model/navigation.service';
 
 @Component({
-  selector: 'login',
+  selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent implements OnInit {
   loginCredential: LoginCredential;
-  loginError: boolean = false;
+  loginError = false;
   title: string;
   inProgress = false;
 

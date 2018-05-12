@@ -1,11 +1,11 @@
 export class Event2Args<T, M> {
-  private handlers: { (data?: T, data2?: M): void; }[] = [];
+  private handlers: ((data?: T, data2?: M) => void)[] = [];
 
-  public on(handler: { (data?: T, data2?: M): void }) {
+  public on(handler: (data?: T, data2?: M) => void) {
     this.handlers.push(handler);
   }
 
-  public off(handler: { (data?: T, data2?: M): void }) {
+  public off(handler: (data?: T, data2?: M) => void) {
     this.handlers = this.handlers.filter(h => h !== handler);
   }
 

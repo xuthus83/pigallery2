@@ -1,4 +1,4 @@
-import {ClientConfig} from "../public/ConfigClass";
+import {ClientConfig} from '../public/ConfigClass';
 
 export enum DatabaseType {
   memory = 0, mysql = 1, sqlite = 2
@@ -47,7 +47,7 @@ export enum ReIndexingSensitivity {
 
 export interface IndexingConfig {
   folderPreviewSize: number;
-  cachedFolderTimeout: number;//Do not rescans the folder if seems ok
+  cachedFolderTimeout: number; // Do not rescans the folder if seems ok
   reIndexingSensitivity: ReIndexingSensitivity;
 }
 
@@ -58,7 +58,7 @@ export interface ServerConfig {
   database: DataBaseConfig;
   enableThreading: boolean;
   sharing: SharingConfig;
-  sessionTimeout: number
+  sessionTimeout: number;
   indexing: IndexingConfig;
 }
 

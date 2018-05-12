@@ -6,7 +6,7 @@
         <source>Please log in</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/login/login.component.ts</context>
-          <context context-type="linenumber">11</context>
+          <context context-type="linenumber">10</context>
         </context-group>
         <target>Please log in</target>
       </trans-unit>
@@ -16,7 +16,7 @@
         </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/login/login.component.ts</context>
-          <context context-type="linenumber">13</context>
+          <context context-type="linenumber">12</context>
         </context-group>
         <target>
           Wrong username or password
@@ -26,7 +26,7 @@
         <source>Username</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/login/login.component.ts</context>
-          <context context-type="linenumber">22</context>
+          <context context-type="linenumber">21</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/usermanager/usermanager.settings.component.ts</context>
@@ -42,7 +42,7 @@
         <source>Password</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/login/login.component.ts</context>
-          <context context-type="linenumber">36</context>
+          <context context-type="linenumber">37</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/sharelogin/share-login.component.ts</context>
@@ -70,7 +70,7 @@
         <source>Remember me</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/login/login.component.ts</context>
-          <context context-type="linenumber">42</context>
+          <context context-type="linenumber">43</context>
         </context-group>
         <target>Remember me</target>
       </trans-unit>
@@ -79,7 +79,7 @@
             </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/login/login.component.ts</context>
-          <context context-type="linenumber">52</context>
+          <context context-type="linenumber">53</context>
         </context-group>
         <target>Login
             </target>
@@ -146,7 +146,7 @@
         <source>key: left arrow</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/gallery/lightbox/lightbox.gallery.component.ts</context>
-          <context context-type="linenumber">40</context>
+          <context context-type="linenumber">41</context>
         </context-group>
         <target>key: left arrow</target>
       </trans-unit>
@@ -154,7 +154,7 @@
         <source>key: right arrow</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/gallery/lightbox/lightbox.gallery.component.ts</context>
-          <context context-type="linenumber">44</context>
+          <context context-type="linenumber">45</context>
         </context-group>
         <target>key: right arrow</target>
       </trans-unit>
@@ -533,7 +533,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/basic/basic.settings.component.ts</context>
-          <context context-type="linenumber">57</context>
+          <context context-type="linenumber">68</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/other/other.settings.component.ts</context>
@@ -563,7 +563,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/basic/basic.settings.component.ts</context>
-          <context context-type="linenumber">60</context>
+          <context context-type="linenumber">71</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/other/other.settings.component.ts</context>
@@ -839,6 +839,22 @@
           <context context-type="linenumber">51</context>
         </context-group>
         <target>If you access the page form local network its good to know the public url for creating sharing link</target>
+      </trans-unit>
+      <trans-unit id="52e8e9fdcd08e89225892a7657140dbf41020b76" datatype="html">
+        <source>Url Base</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/settings/basic/basic.settings.component.ts</context>
+          <context context-type="linenumber">56</context>
+        </context-group>
+        <target>Url Base</target>
+      </trans-unit>
+      <trans-unit id="8a46f66aef490af08db029240d761dd0715dea54" datatype="html">
+        <source>If you access the gallery under a sub url (like: http://mydomain.com/myGallery), set it here. If not working you might miss the '/' from the beginning of the url.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/settings/basic/basic.settings.component.ts</context>
+          <context context-type="linenumber">62</context>
+        </context-group>
+        <target>If you access the gallery under a sub url (like: http://mydomain.com/myGallery), set it here. If not working you might miss the '/' from the beginning of the url.</target>
       </trans-unit>
       <trans-unit id="1e99f581a015c671d53abad7c7df6a5ad35bfe85" datatype="html">
         <source>Other settings</source>

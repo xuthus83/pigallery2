@@ -36,7 +36,7 @@ export class GalleryService {
     this.lastRequest.directory = directoryName;
 
     const params = {};
-    if (Config.Client.Sharing.enabled == true) {
+    if (Config.Client.Sharing.enabled === true) {
       if (this._shareService.isSharing()) {
         params['sk'] = this._shareService.getSharingKey();
       }
@@ -52,13 +52,13 @@ export class GalleryService {
     const cw = await this.networkService.getJson<ContentWrapper>('/gallery/content/' + directoryName, params);
 
 
-    if (!cw || cw.notModified == true) {
+    if (!cw || cw.notModified === true) {
       return;
     }
 
-    this.galleryCacheService.setDirectory(cw.directory); //save it before adding references
+    this.galleryCacheService.setDirectory(cw.directory); // save it before adding references
 
-    if (this.lastRequest.directory != directoryName) {
+    if (this.lastRequest.directory !== directoryName) {
       return;
     }
 
@@ -78,7 +78,7 @@ export class GalleryService {
     if (this.searchId != null) {
       clearTimeout(this.searchId);
     }
-    if (text === null || text === '' || text.trim() == '.') {
+    if (text === null || text === '' || text.trim() === '.') {
       return null;
     }
 
@@ -87,7 +87,7 @@ export class GalleryService {
     cw.searchResult = this.galleryCacheService.getSearch(text, type);
     if (cw.searchResult == null) {
       const params = {};
-      if (typeof type != 'undefined') {
+      if (typeof type !== 'undefined') {
         params['type'] = type;
       }
       cw.searchResult = (await this.networkService.getJson<ContentWrapper>('/search/' + text, params)).searchResult;
@@ -98,7 +98,7 @@ export class GalleryService {
   }
 
   public async instantSearch(text: string): Promise<ContentWrapper> {
-    if (text === null || text === '' || text.trim() == '.') {
+    if (text === null || text === '' || text.trim() === '.') {
       const content = new ContentWrapper(this.lastDirectory);
       this.content.next(content);
       if (this.searchId != null) {
@@ -119,7 +119,7 @@ export class GalleryService {
     cw.directory = null;
     cw.searchResult = this.galleryCacheService.getSearch(text);
     if (cw.searchResult == null) {
-      //If result is not search cache, try to load load more
+      // If result is not search cache, try to load load more
       this.searchId = setTimeout(() => {
         this.search(text);
         this.searchId = null;
@@ -134,8 +134,8 @@ export class GalleryService {
     }
     this.content.next(cw);
 
-    //if instant search do not have a result, do not do a search
-    if (cw.searchResult.photos.length == 0 && cw.searchResult.directories.length == 0) {
+    // if instant search do not have a result, do not do a search
+    if (cw.searchResult.photos.length === 0 && cw.searchResult.directories.length === 0) {
       if (this.searchId != null) {
         clearTimeout(this.searchId);
       }

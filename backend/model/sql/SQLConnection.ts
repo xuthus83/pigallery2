@@ -15,7 +15,7 @@ import {Logger} from '../../Logger';
 
 export class SQLConnection {
 
-  private static VERSION: number = 1;
+  private static VERSION = 1;
 
   constructor() {
   }
@@ -26,7 +26,7 @@ export class SQLConnection {
 
     if (this.connection == null) {
 
-      let options: any = this.getDriver(Config.Server.database);
+      const options: any = this.getDriver(Config.Server.database);
       options.name = 'main';
       options.entities = [
         UserEntity,
@@ -68,10 +68,10 @@ export class SQLConnection {
 
   public static async init(): Promise<void> {
     const connection = await this.getConnection();
-    let userRepository = connection.getRepository(UserEntity);
-    let admins = await userRepository.find({role: UserRoles.Admin});
-    if (admins.length == 0) {
-      let a = new UserEntity();
+    const userRepository = connection.getRepository(UserEntity);
+    const admins = await userRepository.find({role: UserRoles.Admin});
+    if (admins.length === 0) {
+      const a = new UserEntity();
       a.name = 'admin';
       a.password = PasswordHelper.cryptPassword('admin');
       a.role = UserRoles.Admin;
@@ -86,7 +86,7 @@ export class SQLConnection {
       version = await connection.getRepository(VersionEntity).findOne();
     } catch (ex) {
     }
-    if (version && version.version == SQLConnection.VERSION) {
+    if (version && version.version === SQLConnection.VERSION) {
       return;
     }
     Logger.info('Updating database scheme');
@@ -103,7 +103,7 @@ export class SQLConnection {
 
   private static getDriver(config: DataBaseConfig): ConnectionOptions {
     let driver: ConnectionOptions = null;
-    if (config.type == DatabaseType.mysql) {
+    if (config.type === DatabaseType.mysql) {
       driver = {
         type: 'mysql',
         host: config.mysql.host,
@@ -112,7 +112,7 @@ export class SQLConnection {
         password: config.mysql.password,
         database: config.mysql.database
       };
-    } else if (config.type == DatabaseType.sqlite) {
+    } else if (config.type === DatabaseType.sqlite) {
       driver = {
         type: 'sqlite',
         database: ProjectPath.getAbsolutePath(config.sqlite.storage)

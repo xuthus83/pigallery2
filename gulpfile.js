@@ -28,7 +28,9 @@ var createFrontendTask = function (type, script) {
 };
 
 gulp.task('build-frontend', function (done) {
-  var languages = getLanguages();
+  var languages = getLanguages().filter(function (l) {
+    return l !== "en";
+  });
   var tasks = [];
   createFrontendTask('build-frontend-release default',
     "ng build --aot -prod --output-path=./release/dist --no-progress --locale=en" +
@@ -95,14 +97,14 @@ var getLanguages = function () {
   });
   return files.map(function (f) {
     return f.split(".")[1]
-  }).filter(function (l) {
-    return l !== "en";
   });
 };
 
 var simpleBuild = function (isProd) {
   return function (done) {
-    var languages = getLanguages();
+    var languages = getLanguages().filter(function (l) {
+      return l !== "en";
+    });
     var tasks = [];
     var cmd = "ng build --aot ";
     if (isProd) {

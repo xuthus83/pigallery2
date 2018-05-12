@@ -32,6 +32,7 @@ export class SettingsService {
           enabled: true,
           googleApiKey: ''
         },
+        urlBase: '',
         publicUrl: '',
         applicationTitle: '',
         enableCache: true,

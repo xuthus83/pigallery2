@@ -63,5 +63,5 @@ export class GridRowBuilder {
     const height = (this.containerWidth - this.photoRow.length * (this.photoMargin * 2) - 1) / width; // cant be equal -> width-1
 
     return height + (this.photoMargin * 2);
-  };
+  }
 }

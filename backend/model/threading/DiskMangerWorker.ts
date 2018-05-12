@@ -53,11 +53,11 @@ export class DiskMangerWorker {
           for (let i = 0; i < list.length; i++) {
             const file = list[i];
             const fullFilePath = path.normalize(path.resolve(absoluteDirectoryName, file));
-            if (photosOnly == false && fs.statSync(fullFilePath).isDirectory()) {
+            if (photosOnly === false && fs.statSync(fullFilePath).isDirectory()) {
               const d = await DiskMangerWorker.scanDirectory(path.join(relativeDirectoryName, file),
                 Config.Server.indexing.folderPreviewSize, true
               );
-              d.lastScanned = 0; //it was not a fully scan
+              d.lastScanned = 0; // it was not a fully scan
               d.isPartial = true;
               directory.directories.push(d);
             } else if (DiskMangerWorker.isImage(fullFilePath)) {

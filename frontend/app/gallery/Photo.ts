@@ -19,7 +19,7 @@ export class Photo extends IconPhoto {
   }
 
   getThumbnailSize() {
-    let renderSize = Math.sqrt(this.renderWidth * this.renderHeight);
+    const renderSize = Math.sqrt(this.renderWidth * this.renderHeight);
     return Utils.findClosest(renderSize, Config.Client.Thumbnail.thumbnailSizes);
   }
 
@@ -28,7 +28,7 @@ export class Photo extends IconPhoto {
     if (this.replacementSizeCache === false) {
       this.replacementSizeCache = null;
 
-      let size = this.getThumbnailSize();
+      const size = this.getThumbnailSize();
       if (!!this.photo.readyThumbnails) {
         for (let i = 0; i < this.photo.readyThumbnails.length; i++) {
           if (this.photo.readyThumbnails[i] < size) {
@@ -46,18 +46,22 @@ export class Photo extends IconPhoto {
   }
 
   isThumbnailAvailable() {
-    return this.photo.readyThumbnails && this.photo.readyThumbnails.indexOf(this.getThumbnailSize()) != -1;
+    return this.photo.readyThumbnails && this.photo.readyThumbnails.indexOf(this.getThumbnailSize()) !== -1;
   }
 
   getReplacementThumbnailPath() {
-    let size = this.getReplacementThumbnailSize();
-    return Utils.concatUrls('/api/gallery/content/', this.photo.directory.path, this.photo.directory.name, this.photo.name, 'thumbnail', size.toString());
+    const size = this.getReplacementThumbnailSize();
+    return Utils.concatUrls(Config.Client.urlBase,
+      '/api/gallery/content/',
+      this.photo.directory.path, this.photo.directory.name, this.photo.name, 'thumbnail', size.toString());
 
   }
 
   getThumbnailPath() {
-    let size = this.getThumbnailSize();
-    return Utils.concatUrls('/api/gallery/content/', this.photo.directory.path, this.photo.directory.name, this.photo.name, 'thumbnail', size.toString());
+    const size = this.getThumbnailSize();
+    return Utils.concatUrls(Config.Client.urlBase,
+      '/api/gallery/content/',
+      this.photo.directory.path, this.photo.directory.name, this.photo.name, 'thumbnail', size.toString());
   }
 
 

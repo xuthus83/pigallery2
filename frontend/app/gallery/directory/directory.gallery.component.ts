@@ -28,10 +28,11 @@ export class GalleryDirectoryComponent implements OnInit, OnDestroy {
   size: number = null;
 
   getSanitizedThUrl() {
-    return this._sanitizer.bypassSecurityTrustStyle('url(' + encodeURI(this.thumbnail.Src).replace(/\(/g, '%28').replace(/\)/g, '%29') + ')');
+    return this._sanitizer.bypassSecurityTrustStyle('url(' + encodeURI(this.thumbnail.Src).replace(/\(/g, '%28')
+      .replace(/\)/g, '%29') + ')');
   }
 
-  //TODO: implement scroll
+  // TODO: implement scroll
   isInView(): boolean {
     return document.body.scrollTop < this.container.nativeElement.offsetTop + this.container.nativeElement.clientHeight
       && document.body.scrollTop + window.innerHeight > this.container.nativeElement.offsetTop;

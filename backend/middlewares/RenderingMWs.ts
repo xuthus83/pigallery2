@@ -12,8 +12,9 @@ import {Logger} from '../Logger';
 export class RenderingMWs {
 
   public static renderResult(req: Request, res: Response, next: NextFunction) {
-    if (typeof req.resultPipe == 'undefined')
+    if (typeof req.resultPipe === 'undefined') {
       return next();
+    }
 
     return RenderingMWs.renderMessage(res, req.resultPipe);
   }
@@ -30,8 +31,9 @@ export class RenderingMWs {
   }
 
   public static renderSharing(req: Request, res: Response, next: NextFunction) {
-    if (!req.resultPipe)
+    if (!req.resultPipe) {
       return next();
+    }
 
     const sharing = Utils.clone<SharingDTO>(req.resultPipe);
     delete sharing.password;
@@ -39,20 +41,21 @@ export class RenderingMWs {
   }
 
   public static renderFile(req: Request, res: Response, next: NextFunction) {
-    if (!req.resultPipe)
+    if (!req.resultPipe) {
       return next();
+    }
 
     return res.sendFile(req.resultPipe, {maxAge: 31536000});
   }
 
   public static renderOK(req: Request, res: Response, next: NextFunction) {
-    let message = new Message<string>(null, 'ok');
+    const message = new Message<string>(null, 'ok');
     res.json(message);
   }
 
 
   public static renderConfig(req: Request, res: Response, next: NextFunction) {
-    let message = new Message<PrivateConfigClass>(null, Config.original());
+    const message = new Message<PrivateConfigClass>(null, Config.original());
     res.json(message);
   }
 
@@ -72,7 +75,7 @@ export class RenderingMWs {
           }
         }
       }
-      let message = new Message<any>(err, null);
+      const message = new Message<any>(err, null);
       return res.json(message);
     }
     NotificationManager.error('unknown server error', err);
@@ -81,7 +84,7 @@ export class RenderingMWs {
 
 
   protected static renderMessage<T>(res: Response, content: T) {
-    let message = new Message<T>(null, content);
+    const message = new Message<T>(null, content);
     res.json(message);
   }
 

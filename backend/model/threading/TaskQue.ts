@@ -15,9 +15,9 @@ export interface ITaskQue {
 export class TaskQue implements ITaskQue {
 
   private tasks: QueTask[] = [];
-  private taskInProgress: number = 0;
+  private taskInProgress = 0;
   private run = async () => {
-    if (this.tasks.length == 0 || this.taskInProgress >= this.size) {
+    if (this.tasks.length === 0 || this.taskInProgress >= this.size) {
       return;
     }
     this.taskInProgress++;

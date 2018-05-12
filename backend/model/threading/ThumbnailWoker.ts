@@ -9,7 +9,7 @@ export class ThumbnailWoker {
   private static rendererType = null;
 
   public static render(input: RendererInput, renderer: ThumbnailProcessingLib): Promise<void> {
-    if (ThumbnailWoker.rendererType != renderer) {
+    if (ThumbnailWoker.rendererType !== renderer) {
       ThumbnailWoker.renderer = RendererFactory.build(renderer);
       ThumbnailWoker.rendererType = renderer;
     }
@@ -25,7 +25,7 @@ export interface RendererInput {
   size: number;
   makeSquare: boolean;
   thPath: string;
-  qualityPriority: boolean
+  qualityPriority: boolean;
 }
 
 export class RendererFactory {
@@ -39,13 +39,13 @@ export class RendererFactory {
       case ThumbnailProcessingLib.sharp:
         return RendererFactory.Sharp();
     }
-    throw 'unknown renderer';
+    throw new Error('unknown renderer');
   }
 
   public static Jimp() {
     const Jimp = require('jimp');
     return async (input: RendererInput): Promise<void> => {
-      //generate thumbnail
+      // generate thumbnail
       Logger.silly('[JimpThRenderer] rendering thumbnail:', input.imagePath);
       const image = await Jimp.read(input.imagePath);
       /**
@@ -58,9 +58,9 @@ export class RendererFactory {
        * @type {number}
        */
       const ratio = image.bitmap.height / image.bitmap.width;
-      const algo = input.qualityPriority == true ? Jimp.RESIZE_BEZIER : Jimp.RESIZE_NEAREST_NEIGHBOR;
-      if (input.makeSquare == false) {
-        let newWidth = Math.sqrt((input.size * input.size) / ratio);
+      const algo = input.qualityPriority === true ? Jimp.RESIZE_BEZIER : Jimp.RESIZE_NEAREST_NEIGHBOR;
+      if (input.makeSquare === false) {
+        const newWidth = Math.sqrt((input.size * input.size) / ratio);
 
         image.resize(newWidth, Jimp.AUTO, algo);
       } else {
@@ -100,8 +100,8 @@ export class RendererFactory {
        * @type {number}
        */
       const ratio = metadata.height / metadata.width;
-      const kernel = input.qualityPriority == true ? sharp.kernel.lanczos3 : sharp.kernel.nearest;
-      if (input.makeSquare == false) {
+      const kernel = input.qualityPriority === true ? sharp.kernel.lanczos3 : sharp.kernel.nearest;
+      if (input.makeSquare === false) {
         const newWidth = Math.round(Math.sqrt((input.size * input.size) / ratio));
         image.resize(newWidth, null, {
           kernel: kernel
@@ -141,19 +141,19 @@ export class RendererFactory {
            */
           try {
             const ratio = value.height / value.width;
-            const filter = input.qualityPriority == true ? 'Lanczos' : 'Point';
+            const filter = input.qualityPriority === true ? 'Lanczos' : 'Point';
             image.filter(filter);
 
-            if (input.makeSquare == false) {
+            if (input.makeSquare === false) {
               const newWidth = Math.round(Math.sqrt((input.size * input.size) / ratio));
               image = image.resize(newWidth);
             } else {
               image = image.resize(input.size, input.size)
                 .crop(input.size, input.size);
             }
-            image.write(input.thPath, (err) => {
-              if (err) {
-                return reject(err);
+            image.write(input.thPath, (e) => {
+              if (e) {
+                return reject(e);
               }
               return resolve();
             });

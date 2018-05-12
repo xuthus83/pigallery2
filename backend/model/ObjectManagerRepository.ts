@@ -8,12 +8,13 @@ import {IIndexingManager} from './interfaces/IIndexingManager';
 
 export class ObjectManagerRepository {
 
+  private static _instance: ObjectManagerRepository = null;
+
   private _galleryManager: IGalleryManager;
   private _userManager: IUserManager;
   private _searchManager: ISearchManager;
   private _sharingManager: ISharingManager;
   private _indexingManager: IIndexingManager;
-  private static _instance: ObjectManagerRepository = null;
 
   get IndexingManager(): IIndexingManager {
     return this._indexingManager;

@@ -13,7 +13,7 @@ export class UserManager implements IUserManager {
 
   public async findOne(filter: any) {
     const connection = await SQLConnection.getConnection();
-    let pass = filter.password;
+    const pass = filter.password;
     delete filter.password;
     const user = (await connection.getRepository(UserEntity).findOne(filter));
 
@@ -22,11 +22,11 @@ export class UserManager implements IUserManager {
     }
 
     if (pass && !PasswordHelper.comparePassword(pass, user.password)) {
-      throw 'No entry found';
+      throw new Error('No entry found');
     }
     return user;
 
-  };
+  }
 
   public async find(filter: any) {
     const connection = await SQLConnection.getConnection();
@@ -56,7 +56,7 @@ export class UserManager implements IUserManager {
   public async changeRole(id: number, newRole: UserRoles) {
 
     const connection = await SQLConnection.getConnection();
-    let userRepository = connection.getRepository(UserEntity);
+    const userRepository = connection.getRepository(UserEntity);
     const user = await userRepository.findOne({id: id});
     user.role = newRole;
     return await userRepository.save(user);
@@ -64,7 +64,7 @@ export class UserManager implements IUserManager {
   }
 
   public async changePassword(request: any) {
-    throw new Error('not implemented'); //TODO: implement
+    throw new Error('not implemented'); // TODO: implement
   }
 
 }

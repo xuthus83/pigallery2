@@ -27,7 +27,8 @@ export class BasicSettingsComponent extends SettingsComponent<BasicConfigDTO> {
       port: s.Server.port,
       imagesFolder: s.Server.imagesFolder,
       applicationTitle: s.Client.applicationTitle,
-      publicUrl: s.Client.publicUrl
+      publicUrl: s.Client.publicUrl,
+      urlBase: s.Client.urlBase
     }));
   }
 

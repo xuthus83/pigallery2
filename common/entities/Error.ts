@@ -1,4 +1,4 @@
-export enum ErrorCodes{
+export enum ErrorCodes {
   NOT_AUTHENTICATED = 0,
   ALREADY_AUTHENTICATED = 1,
   NOT_AUTHORISED = 2,

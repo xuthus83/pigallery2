@@ -23,7 +23,7 @@ export class Worker {
             break;
           default:
             Logger.error('Unknown worker task type');
-            throw 'Unknown worker task type';
+            throw new Error('Unknown worker task type');
         }
         process.send(<WorkerMessage>{
           error: null,
@@ -32,7 +32,6 @@ export class Worker {
       } catch (err) {
         process.send({error: err, result: null});
       }
-
     });
   }
 }

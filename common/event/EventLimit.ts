@@ -4,21 +4,21 @@ export class EventLimit<T> {
 
   private handlers: Array<EventLimitHandler<T>> = [];
 
-  public on(limit: T, handler: { (data?: T): void }) {
+  public on(limit: T, handler: (data?: T) => void) {
     this.handlers.push(new EventLimitHandler(limit, handler));
     if (this.lastTriggerValue != null) {
       this.trigger(this.lastTriggerValue);
     }
   }
 
-  public onSingle(limit: T, handler: { (data?: T): void }) {
+  public onSingle(limit: T, handler: (data?: T) => void) {
     this.handlers.push(new SingleFireEventLimitHandler(limit, handler));
     if (this.lastTriggerValue != null) {
       this.trigger(this.lastTriggerValue);
     }
   }
 
-  public off(limit: T, handler: { (data?: T): void }) {
+  public off(limit: T, handler: (data?: T) => void) {
     this.handlers = this.handlers.filter(h => h.handler !== handler && h.limit !== limit);
   }
 
@@ -43,7 +43,7 @@ export class EventLimit<T> {
 class EventLimitHandler<T> {
   public lastTriggerValue: T = null;
 
-  constructor(public limit: T, public handler: { (data?: T): void }) {
+  constructor(public limit: T, public handler: (data?: T) => void) {
   }
 
   public fire(data?: T) {
@@ -54,18 +54,19 @@ class EventLimitHandler<T> {
     return true;
   }
 }
+
 class SingleFireEventLimitHandler<T> extends EventLimitHandler<T> {
   public fired = false;
 
-  constructor(public limit: T, public handler: { (data?: T): void }) {
+  constructor(public limit: T, public handler: (data?: T) => void) {
     super(limit, handler);
   }
 
   public fire(data?: T) {
-    if (this.fired == false) {
+    if (this.fired === false) {
       this.handler(data);
     }
-    this.fired = true
+    this.fired = true;
   }
 
   public isValid(): boolean {
