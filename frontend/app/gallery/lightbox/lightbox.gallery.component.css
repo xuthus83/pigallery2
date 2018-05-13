@@ -22,6 +22,9 @@ app-gallery-lightbox-photo {
   height: 100%; /* Full height */
   background-color: black;
   transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out;
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
 }
 
 .navigation-arrow {
@@ -48,6 +51,9 @@ app-gallery-lightbox-photo {
   position: fixed;
   color: white;
   transition: width 0.3s ease-in-out, opacity 1s;
+  -webkit-transition: width 0.3s ease-in-out, opacity 1s;
+  -o-transition: width 0.3s ease-in-out, opacity 1s;
+  -moz-transition: width 0.3s ease-in-out, opacity 1s;
 }
 
 #controllers-container.dim-controls {
@@ -127,4 +133,7 @@ app-info-panel {
   right: 0;
   top: 0;
   transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+  -webkit-transition: all 0.3s ease-in-out;
 }

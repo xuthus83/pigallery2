@@ -3,7 +3,6 @@
 [![Build Status](https://travis-ci.org/bpatrik/pigallery2.svg?branch=master)](https://travis-ci.org/bpatrik/pigallery2)
 [![Coverage Status](https://coveralls.io/repos/github/bpatrik/PiGallery2/badge.svg?branch=master)](https://coveralls.io/github/bpatrik/PiGallery2?branch=master)
 [![Heroku](https://heroku-badge.herokuapp.com/?app=pigallery2&style=flat)](https://pigallery2.herokuapp.com)
-[![Code Climate](https://codeclimate.com/github/bpatrik/pigallery2/badges/gpa.svg)](https://codeclimate.com/github/bpatrik/pigallery2)
 [![Dependency Status](https://david-dm.org/bpatrik/pigallery2.svg)](https://david-dm.org/bpatrik/pigallery2)
 [![devDependency Status](https://david-dm.org/bpatrik/pigallery2/dev-status.svg)](https://david-dm.org/bpatrik/pigallery2#info=devDependencies)
 

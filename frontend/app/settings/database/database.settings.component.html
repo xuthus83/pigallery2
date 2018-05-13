@@ -1,8 +1,8 @@
-<div class="panel panel-default">
-  <div class="panel-heading">
-    <h3 class="panel-title" i18n>Database settings</h3>
-  </div>
-  <div class="panel-body">
+<div class="card mb-4">
+  <h5 class="card-header" i18n>
+    Database settings
+  </h5>
+  <div class="card-body">
     <div [hidden]="!error" class="alert alert-danger" role="alert"><strong>Error: </strong>{{error}}</div>
     <form #settingsForm="ngForm">
       <p class="title" i18n>Type:</p>
@@ -10,8 +10,9 @@
         <option *ngFor="let type of types" [ngValue]="type.key">{{type.value}}
         </option>
       </select>
-      <span *ngIf="settings.type == DatabaseType.mysql"
-            class="help-block" i18n>Install manually mysql node module to use mysql (npm install mysql)</span>
+      <small *ngIf="settings.type == DatabaseType.mysql"
+             class="form-text text-muted" i18n>Install manually mysql node module to use mysql (npm install mysql)
+      </small>
 
       <ng-container *ngIf="settings.type == DatabaseType.mysql">
         <p class="title" i18n>MySQL settings:</p>
@@ -26,16 +27,16 @@
       </ng-container>
       <ng-container *ngIf="settings.type == DatabaseType.sqlite">
         <p class="title" i18n>SQLie settings:</p>
-        <input type="text" class="form-control" placeholder="storage" autofocus
+        <input type="text" class="form-control" placeholder="storage"
                [(ngModel)]="settings.sqlite.storage" name="host" required>
       </ng-container>
 
     </form>
-    <button class="btn btn-success pull-right"
+    <button class="btn btn-success float-right"
             [disabled]="!settingsForm.form.valid || !changed || inProgress"
             (click)="save()" i18n>Save
     </button>
-    <button class="btn btn-default pull-right"
+    <button class="btn btn-default float-right"
             (click)="reset()" i18n>Reset
     </button>
   </div>

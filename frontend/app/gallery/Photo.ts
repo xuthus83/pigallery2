@@ -57,6 +57,10 @@ export class Photo extends IconPhoto {
 
   }
 
+  hasPositionData(): boolean {
+    return PhotoDTO.hasPositionData(this.photo);
+  }
+
   getThumbnailPath() {
     const size = this.getThumbnailSize();
     return Utils.concatUrls(Config.Client.urlBase,

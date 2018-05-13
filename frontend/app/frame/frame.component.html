@@ -1,55 +1,47 @@
 <ng2-slim-loading-bar [color]="'#337ab7'" [height]="'3px'"></ng2-slim-loading-bar>
-<nav class="navbar navbar-inverse navbar-static-top">
-  <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed"
-              data-toggle="collapse" data-target="#navbar"
-              aria-expanded="false" aria-controls="navbar"
-              (click)="toggleState()">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" [routerLink]="['/gallery','/']"><img src="assets/icon_inv.png"
-                                                                   style="max-height: 26px; display: inline;"/>
-        {{title}}</a>
-    </div>
-    <div id="navbar" class="collapse navbar-collapse" [ngClass]="{ 'in': isIn }">
-      <ul class="nav navbar-nav">$
-      </ul>
+<nav class="navbar  navbar-dark bg-dark  navbar-expand-md">
+  <a class="navbar-brand" [routerLink]="['/gallery','/']"
+     [queryParams]="_shareService.isSharing() ? { sk: _shareService.getSharingKey() }:{}">
+    <img src="assets/icon_inv.png" width="30" height="30" class="d-inline-block align-top" alt="">
+    <strong>{{title}}</strong>
+  </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav"
+          aria-expanded="false" aria-label="Toggle navigation" (click)="toggleState()">
+    <span class="navbar-toggler-icon"></span>
+  </button>
 
-      <ul class="nav navbar-nav navbar-right">
-        <ng-content select="[navbar]"></ng-content>
-        <li class="divider-vertical">
-        </li>
-        <li *ngIf="authenticationRequired">
-          <p class="navbar-text" *ngIf="user.value">
-            <span class="glyphicon glyphicon-user" aria-hidden="true"></span> {{user.value.name}}</p>
-        </li>
-        <li *ngIf="isAdmin()">
-          <a style="cursor: pointer"
-             class="admin-link"
-             [routerLink]="['/admin']">
-            <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
-            <span *ngIf="notificationService.notifications.length>0" class="badge">{{notificationService.notifications.length}}</span>
-          </a>
-        </li>
-        <li>
-          <app-language class="navbar-btn" isDark="true"></app-language>
-        </li>
-        <li *ngIf="authenticationRequired">
-          <button class="btn btn-default navbar-btn"
-                  style="cursor: pointer"
-                  (click)="logout()">
-            <ng-container i18n>Logout</ng-container>
-            <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>
-          </button>
-        </li>
-      </ul>
+  <div class="collapse navbar-collapse" id="navbarNav" [collapse]="collapsed">
+    <ul class="navbar-nav navbar-right ml-auto">
+      <ng-content select="[navbar]"></ng-content>
+      <li class="nav-item divider-vertical">
+      </li>
+      <li class="nav-item mr-2 ml-2" *ngIf="authenticationRequired" style=" white-space: nowrap;">
+        <span class="navbar-text" *ngIf="user.value">
+          <span class="oi oi-person"></span> {{user.value.name}}</span>
+      </li>
+      <li class="nav-item" *ngIf="isAdmin()">
+        <a style="cursor: pointer;"
+           class="nav-link admin-link"
+           [routerLink]="['/admin']">
+          <span class="oi oi-wrench"></span>
+          <span *ngIf="notificationService.notifications.length>0" class="badge">{{notificationService.notifications.length}}</span>
+        </a>
+      </li>
+      <li class="nav-item ml-2">
+        <app-language class="navbar-btn" isDark="true"></app-language>
+      </li>
+      <li class="nav-item ml-2" *ngIf="authenticationRequired">
+        <button class="btn btn-default navbar-btn"
+                style="cursor: pointer"
+                (click)="logout()">
+          <span class="oi oi-account-logout"></span>
+          <ng-container i18n>Logout</ng-container>
+        </button>
+      </li>
+    </ul>
 
 
-    </div><!--/.nav-collapse -->
-  </div>
+  </div><!--/.nav-collapse -->
+
 </nav>
 <ng-content select="[body]"></ng-content>

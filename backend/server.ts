@@ -100,11 +100,6 @@ export class Server {
       keys: ['key1' + s4() + s4() + s4() + s4(), 'key2' + s4() + s4() + s4() + s4(), 'key3' + s4() + s4() + s4() + s4()]
     }));
 
-    /* this.app.use((req: Request, res: Response, next: NextFunction) => {
-       res.setHeader('Accept-Ranges', 'none');
-       res.setHeader('Connection', 'close');
-       next();
-     });*/
 
     /**
      * Parse parameters in POST

@@ -1,15 +1,15 @@
 <form #settingsForm="ngForm" class="form-horizontal">
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h3 class="panel-title" i18n>Other settings</h3>
-    </div>
-    <div class="panel-body">
+  <div class="card mb-4">
+    <h5 class="card-header" i18n>
+      Other settings
+    </h5>
+    <div class="card-body">
       <div [hidden]="!error" class="alert alert-danger" role="alert"><strong i18n>Error: </strong>{{error}}</div>
 
 
-      <div class="form-group">
-        <label class="col-sm-2 control-label" for="enableThreading" i18n>Threading</label>
-        <div class="col-sm-10">
+      <div class="form-group row">
+        <label class="col-md-2 control-label" for="enableThreading" i18n>Threading</label>
+        <div class="col-md-10">
           <bSwitch
             id="enableThreading"
             class="switch"
@@ -22,14 +22,16 @@
             [switch-label-width]="'20'"
             [(ngModel)]="settings.enableThreading">
           </bSwitch>
-          <span class="help-block" i18n>Runs directory scanning and thumbnail generation (only for Jimp) in a different thread</span>
+          <small class="form-text text-muted" i18n>Runs directory scanning and thumbnail generation (only for Jimp) in a
+            different thread
+          </small>
         </div>
       </div>
 
-      <div class="form-group">
-        <label class="col-sm-2 control-label" for="enableOnScrollThumbnailPrioritising" i18n>Scroll based thumbnail
+      <div class="form-group row">
+        <label class="col-md-2 control-label" for="enableOnScrollThumbnailPrioritising" i18n>Scroll based thumbnail
           generation</label>
-        <div class="col-sm-10">
+        <div class="col-md-10">
           <bSwitch
             id="enableOnScrollThumbnailPrioritising"
             class="switch"
@@ -42,13 +44,14 @@
             [switch-label-width]="'20'"
             [(ngModel)]="settings.enableOnScrollThumbnailPrioritising">
           </bSwitch>
-          <span class="help-block" i18n>Those thumbnails get higher priority that are visible on the screen</span>
+          <small class="form-text text-muted" i18n>Those thumbnails get higher priority that are visible on the screen
+          </small>
         </div>
       </div>
 
-      <div class="form-group">
-        <label class="col-sm-2 control-label" for="enableOnScrollRendering" i18n>Lazy image rendering</label>
-        <div class="col-sm-10">
+      <div class="form-group row">
+        <label class="col-md-2 control-label" for="enableOnScrollRendering" i18n>Lazy image rendering</label>
+        <div class="col-md-10">
           <bSwitch
             id="enableOnScrollRendering"
             class="switch"
@@ -61,14 +64,16 @@
             [switch-label-width]="'20'"
             [(ngModel)]="settings.enableOnScrollRendering">
           </bSwitch>
-          <span class="help-block" i18n>Shows only the required amount of photos at once. Renders more if page bottom is reached</span>
+          <small class="form-text text-muted" i18n>Shows only the required amount of photos at once. Renders more if
+            page bottom is reached
+          </small>
         </div>
       </div>
 
 
-      <div class="form-group">
-        <label class="col-sm-2 control-label" for="enableCache" i18n>Cache</label>
-        <div class="col-sm-10">
+      <div class="form-group row">
+        <label class="col-md-2 control-label" for="enableCache" i18n>Cache</label>
+        <div class="col-md-10">
           <bSwitch
             id="enableCache"
             class="switch"
@@ -81,16 +86,17 @@
             [switch-label-width]="'20'"
             [(ngModel)]="settings.enableCache">
           </bSwitch>
-          <span class="help-block" i18n>Caches directory contents and search results for better performance</span>
+          <small class="form-text text-muted" i18n>Caches directory contents and search results for better performance
+          </small>
         </div>
       </div>
 
 
-      <button class="btn btn-success pull-right"
+      <button class="btn btn-success float-right"
               [disabled]="!settingsForm.form.valid || !changed || inProgress"
               (click)="save()" i18n>Save
       </button>
-      <button class="btn btn-default pull-right"
+      <button class="btn btn-default float-right"
               (click)="reset()" i18n>Reset
       </button>
     </div>

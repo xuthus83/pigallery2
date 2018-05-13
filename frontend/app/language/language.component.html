@@ -10,13 +10,10 @@
     <ng-container *ngIf="current != null">
       {{current}}
     </ng-container>
-    <span *ngIf="current == null" class="glyphicon glyphicon-globe">
-    </span>
-    <span class="caret"></span>
+    <span *ngIf="current == null" class="oi oi-globe"></span>
+
   </button>
-  <ul *dropdownMenu class="dropdown-menu" aria-labelledby="language">
-    <li *ngFor="let lang of languages">
-      <a href="/{{lang}}">{{lang}}</a>
-    </li>
-  </ul>
+  <div *dropdownMenu class="dropdown-menu" aria-labelledby="language">
+    <a *ngFor="let lang of languages" class="dropdown-item" href="/{{lang}}">{{lang}}</a>
+  </div>
 </div>

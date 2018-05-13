@@ -35,8 +35,7 @@ export class BasicSettingsComponent extends SettingsComponent<BasicConfigDTO> {
   public async save(): Promise<boolean> {
     const val = await super.save();
     if (val === true) {
-
-      this.notification.info('Restart the server to apply the new settings');
+      this.notification.info(this.i18n('Restart the server to apply the new settings'));
     }
     return val;
   }

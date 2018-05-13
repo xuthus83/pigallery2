@@ -5,6 +5,7 @@ import {UserDTO, UserRoles} from '../../../common/entities/UserDTO';
 import {Config} from '../../../common/config/public/Config';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {NotificationService} from '../model/notification.service';
+import {ShareService} from '../gallery/share.service';
 
 @Component({
   selector: 'app-frame',
@@ -18,17 +19,18 @@ export class FrameComponent {
   user: BehaviorSubject<UserDTO>;
   authenticationRequired = false;
   public title: string;
-  isIn = false;
+  collapsed = true;
 
   constructor(private _authService: AuthenticationService,
-              public notificationService: NotificationService) {
+              public notificationService: NotificationService,
+              public _shareService: ShareService) {
     this.user = this._authService.user;
     this.authenticationRequired = Config.Client.authenticationRequired;
     this.title = Config.Client.applicationTitle;
   }
 
   toggleState() { // click handler
-    this.isIn = !this.isIn;
+    this.collapsed = !this.collapsed;
   }
 
   isAdmin() {

@@ -19,44 +19,50 @@
     <div class="controls controls-top">
       <a *ngIf="activePhoto" [href]="activePhoto.gridPhoto.getPhotoPath()"
          [download]="activePhoto.gridPhoto.photo.name">
-        <span class="glyphicon glyphicon-download-alt highlight control-button"
+        <span class="oi oi-data-transfer-download highlight control-button"
               title="download" i18n-title></span>
       </a>
-      <span class="glyphicon glyphicon-info-sign highlight control-button" (click)="toggleInfoPanel()"
+      <span class="oi oi-info highlight control-button"
+            (click)="toggleInfoPanel()"
             title="info" i18n-title></span>
 
-      <span class=" glyphicon glyphicon-resize-small highlight control-button"
+      <span class="oi oi-fullscreen-exit highlight control-button"
             *ngIf="fullScreenService.isFullScreenEnabled()"
-            (click)="fullScreenService.exitFullScreen()" title="toggle fullscreen" i18n-title></span>
+            (click)="fullScreenService.exitFullScreen()"
+            title="toggle fullscreen" i18n-title>
 
-      <span class="glyphicon glyphicon-fullscreen highlight control-button"
+      </span>
+
+      <span class="oi oi-fullscreen-enter highlight control-button"
             *ngIf="!fullScreenService.isFullScreenEnabled()"
-            (click)="fullScreenService.showFullScreen(root)" title="toggle fullscreen" i18n-title></span>
+            (click)="fullScreenService.showFullScreen(root)"
+            title="toggle fullscreen" i18n-title>
+      </span>
 
-      <span class="glyphicon glyphicon-remove highlight control-button" (click)="hide()" title="close"
+      <span class="oi oi-x highlight control-button" (click)="hide()" title="close"
             i18n-title></span>
     </div>
 
     <div class="navigation-arrow highlight"
          *ngIf="navigation.hasPrev" title="key: left arrow" id="leftArrow" i18n-title
          (click)="prevImage()"><span
-      class="glyphicon glyphicon-chevron-left"></span></div>
+      class="oi oi-chevron-left"></span></div>
     <div class="navigation-arrow highlight"
          *ngIf="navigation.hasNext" title="key: right arrow" id="rightArrow" i18n-title
          (click)="nextImage()"><span
-      class="glyphicon glyphicon-chevron-right"></span></div>
+      class="oi oi-chevron-right"></span></div>
 
     <div class="controls controls-playback">
-      <span class="glyphicon glyphicon-pause highlight control-button"
+      <span class="oi oi-media-pause highlight control-button"
             [ngClass]="playBackState == 0 ? 'button-disabled':''"
             (click)="pause()"
             title="pause"></span>
       <span
-        class="glyphicon glyphicon-play highlight control-button"
+        class="oi oi-media-play highlight control-button"
         [ngClass]="playBackState == 1 ? 'button-active':''"
         (click)="play()"
         title="auto play"></span>
-      <span class="glyphicon glyphicon-forward highlight control-button"
+      <span class="oi oi-media-skip-forward highlight control-button"
             [ngClass]="playBackState == 2 ? 'button-active':''"
             (click)="fastForward()"
             title="fast auto play"></span>

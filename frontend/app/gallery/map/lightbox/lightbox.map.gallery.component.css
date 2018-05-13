@@ -11,6 +11,9 @@
   align-items: center; /* add to align vertical */
   cursor: pointer;
   transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out;
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
 }
 
 .sebm-google-map-container {
@@ -27,6 +30,9 @@
   height: 100%; /* Full height */
   background-color: black;
   transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out;
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
 }
 
 #controllers-container {

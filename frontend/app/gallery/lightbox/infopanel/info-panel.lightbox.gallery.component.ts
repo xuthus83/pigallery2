@@ -64,6 +64,10 @@ export class InfoPanelLightboxComponent {
     return '1/' + (1 / f);
   }
 
+  hasPositionData(): boolean {
+    return PhotoDTO.hasPositionData(this.photo);
+  }
+
   hasGPS() {
     return this.photo.metadata.positionData && this.photo.metadata.positionData.GPSData &&
       this.photo.metadata.positionData.GPSData.latitude && this.photo.metadata.positionData.GPSData.longitude;
@@ -74,12 +78,12 @@ export class InfoPanelLightboxComponent {
       return '';
     }
     let str = this.photo.metadata.positionData.city ||
-      this.photo.metadata.positionData.state;
+      this.photo.metadata.positionData.state || '';
 
     if (str.length !== 0) {
       str += ', ';
     }
-    str += this.photo.metadata.positionData.country;
+    str += this.photo.metadata.positionData.country || '';
 
     return str;
   }

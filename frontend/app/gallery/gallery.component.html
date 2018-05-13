@@ -3,25 +3,25 @@
 
   <ng-container navbar>
 
-    <li *ngIf="countDown">
-      <p class="navbar-text">
+    <li class="nav-item" *ngIf="countDown">
+      <span class="navbar-text">
         <ng-container i18n>Link availability</ng-container>
         : {{countDown.day}}
         <ng-container i18n>days</ng-container>
         ,
         {{("0"+countDown.hour).slice(-2)}}:{{("0"+countDown.minute).slice(-2)}}:{{("0"+countDown.second).slice(-2)}}
-      </p>
+      </span>
     </li>
-    <li *ngIf="showSearchBar">
+    <li class="nav-item" *ngIf="showSearchBar">
       <app-gallery-search #search></app-gallery-search>
     </li>
-    <li *ngIf="showShare">
+    <li class="nav-item" *ngIf="showShare">
       <app-gallery-share></app-gallery-share>
     </li>
   </ng-container>
 
 
-  <div body class="container" style="width: 100%; padding:0" *ngIf="_galleryService.content.value.directory">
+  <div body class="container-fluid" style="width: 100%; padding:0" *ngIf="_galleryService.content.value.directory">
     <app-gallery-navbar [directory]="_galleryService.content.value.directory"></app-gallery-navbar>
 
     <div class="directories">
@@ -34,7 +34,7 @@
                       [lightbox]="lightbox"></app-gallery-grid>
   </div>
 
-  <div body class="container" style="width: 100%; padding:0" *ngIf="_galleryService.content.value.searchResult">
+  <div body class="container-fluid" style="width: 100%; padding:0" *ngIf="_galleryService.content.value.searchResult">
     <div class="alert alert-info" role="alert"
          *ngIf="_galleryService.content.value.searchResult.resultOverflow == true" i18n>
       Too many results to show. Refine your search.
@@ -43,10 +43,10 @@
       <li class="active">
         <ng-container i18n>Searching for:</ng-container>
         <span [ngSwitch]="_galleryService.content.value.searchResult.searchType">
-                        <span *ngSwitchCase="0" class="glyphicon glyphicon-picture"></span>
-                        <span *ngSwitchCase="1" class="glyphicon glyphicon-folder-open"></span>
-                        <span *ngSwitchCase="2" class="glyphicon glyphicon-tag"></span>
-                        <span *ngSwitchCase="3" class="glyphicon glyphicon-map-marker"></span>
+                      <span *ngSwitchCase="SearchTypes.image" class="oi oi-image"></span>
+                      <span *ngSwitchCase="SearchTypes.directory" class="oi oi-folder"></span>
+                      <span *ngSwitchCase="SearchTypes.keyword" class="oi oi-tag"></span>
+                      <span *ngSwitchCase="SearchTypes.position" class="oi oi-map-marker"></span>
                     </span>
         <strong>{{_galleryService.content.value.searchResult.searchText}}</strong>
       </li>

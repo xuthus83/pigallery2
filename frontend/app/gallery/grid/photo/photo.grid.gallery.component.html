@@ -15,8 +15,8 @@
        [style.width.px]="container.nativeElement.offsetWidth">
     <div class="photo-name">{{gridPhoto.photo.name}}</div>
 
-    <div class="photo-position" *ngIf="gridPhoto.photo.metadata.positionData">
-      <span class="glyphicon glyphicon-map-marker"></span>
+    <div class="photo-position" *ngIf="gridPhoto.hasPositionData()">
+      <span class="oi oi-map-marker"></span>
       <ng-template [ngIf]="getPositionText()">
         <a [routerLink]="['/search', getPositionText(), {type:SearchTypes[SearchTypes.position]}]"
            *ngIf="searchEnabled">

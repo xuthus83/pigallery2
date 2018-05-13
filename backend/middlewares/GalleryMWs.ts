@@ -18,7 +18,6 @@ export class GalleryMWs {
 
 
   public static async listDirectory(req: Request, res: Response, next: NextFunction) {
-    console.log('listDirectory');
     const directoryName = req.params.directory || '/';
     const absoluteDirectoryName = path.join(ProjectPath.ImageFolder, directoryName);
 
@@ -34,8 +33,6 @@ export class GalleryMWs {
         req.resultPipe = new ContentWrapper(null, null, true);
         return next();
       }
-      console.log(req.session.user);
-      console.log(directory);
       if (req.session.user.permissions &&
         req.session.user.permissions.length > 0 &&
         req.session.user.permissions[0] !== '/*') {

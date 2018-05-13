@@ -37,6 +37,7 @@ export class GalleryComponent implements OnInit, OnDestroy {
   };
   public countDown = null;
   public mapEnabled = true;
+  SearchTypes: any = [];
 
   constructor(public _galleryService: GalleryService,
               private _authService: AuthenticationService,
@@ -45,6 +46,7 @@ export class GalleryComponent implements OnInit, OnDestroy {
               private _route: ActivatedRoute,
               private _navigation: NavigationService) {
     this.mapEnabled = Config.Client.Map.enabled;
+    this.SearchTypes = SearchTypes;
 
     PageHelper.showScrollY();
   }

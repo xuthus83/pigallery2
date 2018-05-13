@@ -69,6 +69,7 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, OnDestroy {
     }
   }
 
+
   getPositionText(): string {
     if (!this.gridPhoto) {
       return '';

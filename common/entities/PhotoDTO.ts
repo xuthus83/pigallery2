@@ -44,5 +44,17 @@ export interface GPSMetadata {
   latitude?: number;
   longitude?: number;
   altitude?: number;
+}
 
+export module PhotoDTO {
+  export const hasPositionData = (photo: PhotoDTO): boolean => {
+    return !!photo.metadata.positionData &&
+      !!(photo.metadata.positionData.city ||
+        photo.metadata.positionData.state ||
+        photo.metadata.positionData.country ||
+        (photo.metadata.positionData.GPSData &&
+          photo.metadata.positionData.GPSData.altitude &&
+          photo.metadata.positionData.GPSData.latitude &&
+          photo.metadata.positionData.GPSData.longitude));
+  };
 }

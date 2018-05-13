@@ -27,8 +27,8 @@
                [style.width.px]="photo.preview.width"
                [style.height.px]="photo.preview.height"
                *ngIf="!photo.preview.thumbnail.Src">
-              <span class="glyphicon"
-                    [ngClass]="photo.preview.thumbnail.Error ? 'glyphicon-warning-sign' :  'glyphicon-picture'"
+              <span class="oi"
+                    [ngClass]="photo.preview.thumbnail.Error ? 'oi-warning' :  'oi-picture'"
                     aria-hidden="true">
               </span>
           </div>
@@ -41,17 +41,17 @@
   <div id="controllers-container" *ngIf="visible">
     <div id="controls">
             <span>
-                <span class=" glyphicon glyphicon-resize-small highlight"
+                <span class="oi  oi-fullscreen-exit highlight"
                       *ngIf="fullScreenService.isFullScreenEnabled()"
                       (click)="fullScreenService.exitFullScreen()" title="toggle fullscreen"></span>
                 </span>
       <span>
-             <span class="glyphicon glyphicon-fullscreen highlight"
+             <span class="oi oi-fullscreen-enter highlight"
                    *ngIf="!fullScreenService.isFullScreenEnabled()"
                    (click)="fullScreenService.showFullScreen(root)" title="toggle fullscreen"></span>
                 </span>
       <span>
-             <span class="glyphicon glyphicon-remove highlight" (click)="hide()" title="close"></span>
+             <span class="oi oi-x highlight" (click)="hide()" title="close"></span>
              </span>
     </div>
 

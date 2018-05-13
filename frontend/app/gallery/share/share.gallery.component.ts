@@ -36,11 +36,19 @@ export class GalleryShareComponent implements OnInit, OnDestroy {
   passwordProtection = false;
   ValidityTypes: any;
 
+  text = {
+    Yes: 'Yes',
+    No: 'No'
+  };
+
   constructor(private _sharingService: ShareService,
               public _galleryService: GalleryService,
               private  _notification: NotificationService,
               public i18n: I18n) {
     this.ValidityTypes = ValidityTypes;
+
+    this.text.Yes = i18n('Yes');
+    this.text.No = i18n('No');
   }
 
 

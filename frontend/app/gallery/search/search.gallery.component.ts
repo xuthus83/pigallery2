@@ -72,7 +72,6 @@ export class GallerySearchComponent implements OnDestroy {
   }
 
 
-
   public setMouseOverAutoComplete(value: boolean) {
     this.mouseOverAutoComplete = value;
   }

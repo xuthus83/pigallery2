@@ -26,7 +26,7 @@
         <source>Username</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/login/login.component.ts</context>
-          <context context-type="linenumber">21</context>
+          <context context-type="linenumber">29</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/usermanager/usermanager.settings.component.ts</context>
@@ -42,19 +42,19 @@
         <source>Password</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/login/login.component.ts</context>
-          <context context-type="linenumber">37</context>
+          <context context-type="linenumber">45</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/sharelogin/share-login.component.ts</context>
-          <context context-type="linenumber">25</context>
+          <context context-type="linenumber">27</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/gallery/share/share.gallery.component.ts</context>
-          <context context-type="linenumber">67</context>
+          <context context-type="linenumber">74</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/gallery/share/share.gallery.component.ts</context>
-          <context context-type="linenumber">78</context>
+          <context context-type="linenumber">84</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/usermanager/usermanager.settings.component.ts</context>
@@ -70,7 +70,7 @@
         <source>Remember me</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/login/login.component.ts</context>
-          <context context-type="linenumber">43</context>
+          <context context-type="linenumber">56</context>
         </context-group>
         <target>Remember me</target>
       </trans-unit>
@@ -79,7 +79,7 @@
             </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/login/login.component.ts</context>
-          <context context-type="linenumber">53</context>
+          <context context-type="linenumber">66</context>
         </context-group>
         <target>Login
             </target>
@@ -90,7 +90,7 @@
         </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/sharelogin/share-login.component.ts</context>
-          <context context-type="linenumber">13</context>
+          <context context-type="linenumber">11</context>
         </context-group>
         <target>
           Wrong password
@@ -101,7 +101,7 @@
             </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/sharelogin/share-login.component.ts</context>
-          <context context-type="linenumber">36</context>
+          <context context-type="linenumber">41</context>
         </context-group>
         <target>Enter
             </target>
@@ -118,7 +118,7 @@
         <source>info</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/gallery/lightbox/lightbox.gallery.component.ts</context>
-          <context context-type="linenumber">26</context>
+          <context context-type="linenumber">27</context>
         </context-group>
         <target>info</target>
       </trans-unit>
@@ -126,11 +126,11 @@
         <source>toggle fullscreen</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/gallery/lightbox/lightbox.gallery.component.ts</context>
-          <context context-type="linenumber">30</context>
+          <context context-type="linenumber">32</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/gallery/lightbox/lightbox.gallery.component.ts</context>
-          <context context-type="linenumber">34</context>
+          <context context-type="linenumber">39</context>
         </context-group>
         <target>toggle fullscreen</target>
       </trans-unit>
@@ -138,7 +138,7 @@
         <source>close</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/gallery/lightbox/lightbox.gallery.component.ts</context>
-          <context context-type="linenumber">36</context>
+          <context context-type="linenumber">42</context>
         </context-group>
         <target>close</target>
       </trans-unit>
@@ -146,7 +146,7 @@
         <source>key: left arrow</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/gallery/lightbox/lightbox.gallery.component.ts</context>
-          <context context-type="linenumber">41</context>
+          <context context-type="linenumber">47</context>
         </context-group>
         <target>key: left arrow</target>
       </trans-unit>
@@ -154,7 +154,7 @@
         <source>key: right arrow</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/gallery/lightbox/lightbox.gallery.component.ts</context>
-          <context context-type="linenumber">45</context>
+          <context context-type="linenumber">51</context>
         </context-group>
         <target>key: right arrow</target>
       </trans-unit>
@@ -206,7 +206,7 @@
         <source>Logout</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/frame/frame.component.ts</context>
-          <context context-type="linenumber">45</context>
+          <context context-type="linenumber">38</context>
         </context-group>
         <target>Logout</target>
       </trans-unit>
@@ -218,7 +218,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/gallery/share/share.gallery.component.ts</context>
-          <context context-type="linenumber">18</context>
+          <context context-type="linenumber">16</context>
         </context-group>
         <target>Share</target>
       </trans-unit>
@@ -227,7 +227,7 @@
             </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/gallery/share/share.gallery.component.ts</context>
-          <context context-type="linenumber">34</context>
+          <context context-type="linenumber">35</context>
         </context-group>
         <target>Copy
             </target>
@@ -236,7 +236,7 @@
         <source>Sharing:</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/gallery/share/share.gallery.component.ts</context>
-          <context context-type="linenumber">41</context>
+          <context context-type="linenumber">42</context>
         </context-group>
         <target>Sharing:</target>
       </trans-unit>
@@ -244,7 +244,7 @@
         <source>Include subfolders:</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/gallery/share/share.gallery.component.ts</context>
-          <context context-type="linenumber">52</context>
+          <context context-type="linenumber">53</context>
         </context-group>
         <target>Include subfolders:</target>
       </trans-unit>
@@ -252,7 +252,7 @@
         <source>Valid:</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/gallery/share/share.gallery.component.ts</context>
-          <context context-type="linenumber">84</context>
+          <context context-type="linenumber">90</context>
         </context-group>
         <target>Valid:</target>
       </trans-unit>
@@ -260,7 +260,7 @@
         <source>Minutes</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/gallery/share/share.gallery.component.ts</context>
-          <context context-type="linenumber">94</context>
+          <context context-type="linenumber">100</context>
         </context-group>
         <target>Minutes</target>
       </trans-unit>
@@ -268,7 +268,7 @@
         <source>Hours</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/gallery/share/share.gallery.component.ts</context>
-          <context context-type="linenumber">95</context>
+          <context context-type="linenumber">101</context>
         </context-group>
         <target>Hours</target>
       </trans-unit>
@@ -276,7 +276,7 @@
         <source>Days</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/gallery/share/share.gallery.component.ts</context>
-          <context context-type="linenumber">96</context>
+          <context context-type="linenumber">102</context>
         </context-group>
         <target>Days</target>
       </trans-unit>
@@ -284,15 +284,17 @@
         <source>Months</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/gallery/share/share.gallery.component.ts</context>
-          <context context-type="linenumber">97</context>
+          <context context-type="linenumber">103</context>
         </context-group>
         <target>Months</target>
       </trans-unit>
-      <trans-unit id="f0acecaa22df19767da6d9990458470b17da3d7a" datatype="html">
-        <source>Server notifications</source>
+      <trans-unit id="ac9751501a838bfb31f23e94ceb9616fe498a267" datatype="html">
+        <source>
+        Server notifications
+      </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/admin/admin.component.ts</context>
-          <context context-type="linenumber">6</context>
+          <context context-type="linenumber">5</context>
         </context-group>
         <target>Server notifications</target>
       </trans-unit>
@@ -320,17 +322,17 @@
         <source>Info</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/gallery/lightbox/infopanel/info-panel.lightbox.gallery.component.ts</context>
-          <context context-type="linenumber">5</context>
+          <context context-type="linenumber">3</context>
         </context-group>
         <target>Info</target>
       </trans-unit>
-      <trans-unit id="343879e5c41bab3cbc6160ae25fb0ed8e08859f0" datatype="html">
-        <source>Password protection </source>
+      <trans-unit id="427589505741d1da181b756815701e756184cb8d" datatype="html">
+        <source>Password protection</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/usermanager/usermanager.settings.component.ts</context>
           <context context-type="linenumber">3</context>
         </context-group>
-        <target>Password protection </target>
+        <target>Password protection</target>
       </trans-unit>
       <trans-unit id="cff1428d10d59d14e45edec3c735a27b5482db59" datatype="html">
         <source>Name</source>
@@ -374,7 +376,7 @@
         <source>Add new User</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/usermanager/usermanager.settings.component.ts</context>
-          <context context-type="linenumber">72</context>
+          <context context-type="linenumber">70</context>
         </context-group>
         <target>Add new User</target>
       </trans-unit>
@@ -396,11 +398,13 @@
         <target>Add User
           </target>
       </trans-unit>
-      <trans-unit id="25e15358423a68caf2960ac3eac6f7cfd19d5a30" datatype="html">
-        <source>Database settings</source>
+      <trans-unit id="26029ad47ff6a694b272298b212b5458128810be" datatype="html">
+        <source>
+    Database settings
+  </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/database/database.settings.component.ts</context>
-          <context context-type="linenumber">3</context>
+          <context context-type="linenumber">2</context>
         </context-group>
         <target>Database settings</target>
       </trans-unit>
@@ -517,7 +521,7 @@
       </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/map/map.settings.component.ts</context>
-          <context context-type="linenumber">41</context>
+          <context context-type="linenumber">39</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/thumbnail/thumbanil.settings.component.ts</context>
@@ -547,7 +551,7 @@
       </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/map/map.settings.component.ts</context>
-          <context context-type="linenumber">44</context>
+          <context context-type="linenumber">42</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/thumbnail/thumbanil.settings.component.ts</context>
@@ -572,11 +576,13 @@
         <target>Reset
       </target>
       </trans-unit>
-      <trans-unit id="d6644690d6218f5ecc21dd3b2c69aca33d6d58c3" datatype="html">
-        <source>Thumbnail settings</source>
+      <trans-unit id="7f69d84360f0db236db44098d55961bc2d267b5e" datatype="html">
+        <source>
+       Thumbnail settings
+    </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/thumbnail/thumbanil.settings.component.ts</context>
-          <context context-type="linenumber">4</context>
+          <context context-type="linenumber">3</context>
         </context-group>
         <target>Thumbnail settings</target>
       </trans-unit>
@@ -792,11 +798,13 @@
         Sharing is not supported with these settings
       </target>
       </trans-unit>
-      <trans-unit id="fe4fefb86d4b6629064ff0fa96fdc2b80fc151b0" datatype="html">
-        <source>Basic settings</source>
+      <trans-unit id="d62666b3159a0b5916b8f908c84e6b6f441ec1d1" datatype="html">
+        <source>
+      Basic settings
+    </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/basic/basic.settings.component.ts</context>
-          <context context-type="linenumber">4</context>
+          <context context-type="linenumber">3</context>
         </context-group>
         <target>Basic settings</target>
       </trans-unit>
@@ -856,11 +864,13 @@
         </context-group>
         <target>If you access the gallery under a sub url (like: http://mydomain.com/myGallery), set it here. If not working you might miss the '/' from the beginning of the url.</target>
       </trans-unit>
-      <trans-unit id="1e99f581a015c671d53abad7c7df6a5ad35bfe85" datatype="html">
-        <source>Other settings</source>
+      <trans-unit id="ee1319d3bfb2e70e14212ea2c3896e4ac4dc0092" datatype="html">
+        <source>
+      Other settings
+    </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/other/other.settings.component.ts</context>
-          <context context-type="linenumber">4</context>
+          <context context-type="linenumber">3</context>
         </context-group>
         <target>Other settings</target>
       </trans-unit>
@@ -938,11 +948,13 @@
         </context-group>
         <target>Caches directory contents and search results for better performance</target>
       </trans-unit>
-      <trans-unit id="87b1696eb068572c3908643c425ee3090938c1a0" datatype="html">
-        <source>Folder indexing</source>
+      <trans-unit id="5e00b6f637f57796ae6ce0bbafedf3849e28a171" datatype="html">
+        <source>
+      Folder indexing
+    </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/indexing/indexing.settings.component.ts</context>
-          <context context-type="linenumber">4</context>
+          <context context-type="linenumber">3</context>
         </context-group>
         <target>Folder indexing</target>
       </trans-unit>
@@ -1096,6 +1108,22 @@
         </context-group>
         <target>Images</target>
       </trans-unit>
+      <trans-unit id="4f20f2d5a6882190892e58b85f6ccbedfa737952" datatype="html">
+        <source>Yes</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">frontend/app/gallery/share/share.gallery.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <target>Yes</target>
+      </trans-unit>
+      <trans-unit id="3d3ae7deebc5949b0c1c78b9847886a94321d9fd" datatype="html">
+        <source>No</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">frontend/app/gallery/share/share.gallery.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <target>No</target>
+      </trans-unit>
       <trans-unit id="867c1b6839b592cec2156dd0b8a0009fe1557bfa" datatype="html">
         <source>Url has been copied to clipboard</source>
         <context-group purpose="location">
@@ -1216,6 +1244,18 @@
         </context-group>
         <target>Basic</target>
       </trans-unit>
+      <trans-unit id="6244017173fe88802248f410e78f2e637f98f634" datatype="html">
+        <source>Restart the server to apply the new settings</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">frontend/app/settings/basic/basic.settings.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">frontend/app/settings/other/other.settings.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <target>Restart the server to apply the new settings</target>
+      </trans-unit>
       <trans-unit id="f53ab04e9d8449445abf482bf44b521e2e695c3c" datatype="html">
         <source>Indexing</source>
         <context-group purpose="location">
@@ -1260,14 +1300,6 @@
         </context-group>
         <target>Other</target>
       </trans-unit>
-      <trans-unit id="6244017173fe88802248f410e78f2e637f98f634" datatype="html">
-        <source>Restart the server to apply the new settings</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">frontend/app/settings/other/other.settings.component.ts</context>
-          <context context-type="linenumber">1</context>
-        </context-group>
-        <target>Restart the server to apply the new settings</target>
-      </trans-unit>
       <trans-unit id="45dda89cf029b7d7b457a8dff01dc4b9a6485816" datatype="html">
         <source>Thumbnail</source>
         <context-group purpose="location">
@@ -1291,6 +1323,14 @@
           <context context-type="linenumber">1</context>
         </context-group>
         <target>Password protection enabled</target>
+      </trans-unit>
+      <trans-unit id="c76b3ba44c5b7ab363729f81f763b29ef5d7a641" datatype="html">
+        <source>Server restart is recommended.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">frontend/app/settings/usermanager/usermanager.settings.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <target>Server restart is recommended.</target>
       </trans-unit>
       <trans-unit id="00de5dcd17a5ebd17e67e0688bc638e01bc510a4" datatype="html">
         <source>Password protection disabled</source>

@@ -28,7 +28,7 @@
 }
 
 .autocomplete-item:hover {
-  background-color: #337ab7;
+  background-color: #007bff;
 }
 
 .autocomplete-item:hover a {
@@ -42,5 +42,5 @@
 }
 
 form {
-  padding-right: 50px;
+  padding-right: 1em;
 }

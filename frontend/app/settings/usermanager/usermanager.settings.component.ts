@@ -75,6 +75,7 @@ export class UserMangerSettingsComponent implements OnInit {
     this.enabled = await this._userSettings.getSettings();
   }
 
+
   async switched(event: { previousValue: false, currentValue: true }) {
     this.inProgress = true;
     this.error = '';
@@ -84,6 +85,7 @@ export class UserMangerSettingsComponent implements OnInit {
       await this.getSettings();
       if (this.enabled === true) {
         this.notification.success(this.i18n('Password protection enabled'), this.i18n('Success'));
+        this.notification.info(this.i18n('Server restart is recommended.'));
         this.getUsersList();
       } else {
         this.notification.success(this.i18n('Password protection disabled'), this.i18n('Success'));

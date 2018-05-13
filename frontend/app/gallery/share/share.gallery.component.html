@@ -1,6 +1,6 @@
-<button id="shareButton" class="btn btn-default navbar-btn btn-link"
+<button id="shareButton" class="nav-link btn btn-default btn-link"
         type="button" [disabled]="!enabled" (click)="showModal()">
-  <span class="glyphicon glyphicon-share-alt"></span>
+  <span class="oi oi-share"></span>
   <ng-container i18n>Share</ng-container>
 </button>
 
@@ -10,16 +10,17 @@
      tabindex="-1" role="dialog" aria-labelledby="shareModalLabel"
      [config]="{ backdrop: false }"
      aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" (click)="hideModal()" aria-label="Close"><span
-          aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="shareModalLabel" i18n>Share</h4>
+        <h5 class="modal-title" id="shareModalLabel" i18n>Share</h5>
+        <button type="button" class="close" (click)="hideModal()" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
       <div class="modal-body">
         <div class="row">
-          <div class="col-sm-10">
+          <div class="col-9">
             <input id="shareLink"
                    name="shareLink"
                    placeholder="link"
@@ -27,20 +28,20 @@
                    type="text"
                    [ngModel]="url">
           </div>
-          <div class="col-sm-2 pull-right">
+          <div class="col-3">
             <button id="copyButton" name="copyButton"
                     ngxClipboard [cbContent]="url"
                     (cbOnSuccess)="onCopy()"
-                    class="btn btn-primary" i18n>Copy
+                    class="btn btn-primary btn-block" i18n>Copy
             </button>
           </div>
         </div>
         <hr/>
         <div class="row">
-          <div class="col-sm-3">
+          <div class="col-4">
             <label class="control-label" i18n>Sharing:</label>
           </div>
-          <div class="col-sm-9">
+          <div class="col-8">
             <input disabled type="text"
                    class="full-width form-control"
                    [ngModel]="currentDir">
@@ -48,27 +49,33 @@
         </div>
 
         <div class="row">
-          <div class="col-sm-3">
+          <div class="col-4">
             <label class="control-label" i18n>Include subfolders:</label>
           </div>
-          <div class="col-sm-4">
-            <input id="recursiveShareBox"
-                   type="checkbox"
-                   (change)="update()"
-                   [(ngModel)]="input.includeSubfolders"
-                   checked="checked"
-                   value="remember-me">
+          <div class="col-8">
+            <bSwitch
+              class="switch"
+              name="includeSubfolders"
+              [switch-on-color]="'success'"
+              [switch-inverse]="'inverse'"
+              [switch-off-text]="text.No"
+              [switch-on-text]="text.Yes"
+              [switch-handle-width]="'100'"
+              [switch-label-width]="'20'"
+              (change)="update()"
+              [(ngModel)]="input.includeSubfolders">
+            </bSwitch>
           </div>
         </div>
 
         <div class="row">
-          <div class="col-sm-3">
+          <div class="col-4">
             <label class="control-label">
               <ng-container i18n>Password</ng-container>
               :
             </label>
           </div>
-          <div class="col-sm-6">
+          <div class="col-8">
             <input id="password"
                    class="form-control"
                    type="password"
@@ -80,21 +87,21 @@
         </div>
 
         <div class="row">
-          <div class="col-sm-3">
+          <div class="col-4">
             <label class="control-label" i18n>Valid:</label>
           </div>
-          <div class="col-sm-3" style="padding-right: 1px">
+          <div class="col-4" style="padding-right: 1px">
             <input class="form-control" [(ngModel)]="input.valid.amount" (change)="update()"
                    name="validAmount"
                    type="number" min="0" step="1"/>
           </div>
-          <div class="col-sm-3" style="padding-left: 1px">
-            <select class="form-control  col-md-3" [(ngModel)]="input.valid.type" (change)="update()" name="validType"
+          <div class="col-4" style="padding-left: 1px">
+            <select class="form-control" [(ngModel)]="input.valid.type" (change)="update()" name="validType"
                     required>
-              <option value="{{ValidityTypes.Minutes}}" i18n>Minutes</option>
-              <option value="{{ValidityTypes.Hours}}" i18n>Hours</option>
-              <option value="{{ValidityTypes.Days}}" i18n>Days</option>
-              <option value="{{ValidityTypes.Months}}" i18n>Months</option>
+              <option [ngValue]="ValidityTypes.Minutes" i18n>Minutes</option>
+              <option [ngValue]="ValidityTypes.Hours" i18n>Hours</option>
+              <option [ngValue]="ValidityTypes.Days" i18n>Days</option>
+              <option [ngValue]="ValidityTypes.Months" i18n>Months</option>
             </select>
           </div>
         </div>

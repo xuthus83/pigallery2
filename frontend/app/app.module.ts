@@ -47,6 +47,7 @@ import {InfoPanelLightboxComponent} from './gallery/lightbox/infopanel/info-pane
 import {MapSettingsComponent} from './settings/map/map.settings.component';
 import {TooltipModule} from 'ngx-bootstrap/tooltip';
 import {BsDropdownModule} from 'ngx-bootstrap/dropdown';
+import {CollapseModule} from 'ngx-bootstrap/collapse';
 import {ThumbnailSettingsComponent} from './settings/thumbnail/thumbanil.settings.component';
 import {SearchSettingsComponent} from './settings/search/search.settings.component';
 import {SettingsService} from './settings/settings.service';
@@ -90,6 +91,7 @@ export class CustomUrlSerializer implements UrlSerializer {
   }
 }
 
+// use the require method provided by webpack
 declare const require;
 
 export function translationsFactory(locale: string) {
@@ -109,6 +111,7 @@ export function translationsFactory(locale: string) {
     TooltipModule.forRoot(),
     ToastModule.forRoot(),
     ModalModule.forRoot(),
+    CollapseModule.forRoot(),
     BsDropdownModule.forRoot(),
     AgmCoreModule.forRoot(),
     SlimLoadingBarModule.forRoot()
@@ -168,7 +171,13 @@ export function translationsFactory(locale: string) {
       useFactory: translationsFactory,
       deps: [LOCALE_ID]
     },
-    I18n
+    I18n,
+    /*
+    {provide: TRANSLATIONS, useValue: translationsFactory('en')},
+    {provide: TRANSLATIONS_FORMAT, useValue: 'xlf'},
+    {provide: LOCALE_ID, useValue: 'en'},
+    {provide: MISSING_TRANSLATION_STRATEGY, useValue: MissingTranslationStrategy.Ignore},
+    */
   ],
   bootstrap: [AppComponent]
 })

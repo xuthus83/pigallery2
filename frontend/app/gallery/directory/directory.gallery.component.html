@@ -9,9 +9,8 @@
     <div class="photo" *ngIf="thumbnail && thumbnail.Available"
          [style.background-image]="getSanitizedThUrl()"></div>
 
-    <span *ngIf="!thumbnail || !thumbnail.Available" class="glyphicon glyphicon-folder-open no-image"
+    <span *ngIf="!thumbnail || !thumbnail.Available" class="oi oi-folder no-image"
           aria-hidden="true">
-
     </span>
   </div>
   <!--Info box -->

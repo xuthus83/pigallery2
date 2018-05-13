@@ -1,11 +1,11 @@
 <app-frame>
   <div body class="container">
 
-    <div class="panel panel-default" *ngIf="notificationService.notifications.length>0">
-      <div class="panel-heading">
-        <h3 class="panel-title" i18n>Server notifications</h3>
-      </div>
-      <div class="panel-body">
+    <div class="card mb-4" *ngIf="notificationService.notifications.length>0">
+      <h5 class="card-header" i18n>
+        Server notifications
+      </h5>
+      <div class="card-body">
         <ng-container *ngFor="let notification of notificationService.notifications">
 
           <div class="alert alert-{{getCss(notification.type)}}" role="alert">
@@ -16,28 +16,26 @@
         </ng-container>
       </div>
 
-      <div class="panel-footer" i18n>
+      <div class="card-footer" i18n>
         To dismiss these notifications, restart the server.
       </div>
     </div>
     <div class="form-horizontal">
-      <div class="form-group">
-        <label class="col-sm-10 col-xs-8 control-label" for="simplifiedMode" i18n>Mode</label>
-        <div class="col-sm-2  col-xs-4">
-          <bSwitch
-            id="simplifiedMode"
-            class="switch"
-            name="simplifiedMode"
-            [switch-off-color]="'warning'"
-            [switch-on-color]="'primary'"
-            [switch-inverse]="'inverse'"
-            [switch-off-text]="text.Advanced"
-            [switch-on-text]="text.Simplified"
-            [switch-handle-width]="'100'"
-            [switch-label-width]="'20'"
-            [(ngModel)]="simplifiedMode">
-          </bSwitch>
-        </div>
+      <div class="form-group d-flex justify-content-end">
+        <label class="control-label align-self-end mr-2" for="simplifiedMode" i18n>Mode</label>
+        <bSwitch
+          id="simplifiedMode"
+          class="switch"
+          name="simplifiedMode"
+          [switch-off-color]="'warning'"
+          [switch-on-color]="'primary'"
+          [switch-inverse]="'inverse'"
+          [switch-off-text]="text.Advanced"
+          [switch-on-text]="text.Simplified"
+          [switch-handle-width]="'100'"
+          [switch-label-width]="'20'"
+          [(ngModel)]="simplifiedMode">
+        </bSwitch>
       </div>
     </div>
     <app-settings-basic [simplifiedMode]="simplifiedMode"></app-settings-basic>
