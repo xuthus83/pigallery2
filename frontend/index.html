@@ -11,13 +11,7 @@
         href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-switch/3.3.4/css/bootstrap3/bootstrap-switch.css">
 
   <script>
-    var ServerInject = {user: < % -JSON.stringify(user);
-    %>,
-    ConfigInject: <
-    %
-    -JSON.stringify(clientConfig);
-    %>
-    }
+    var ServerInject = {user:  <%- JSON.stringify(user); %>, ConfigInject: <%- JSON.stringify(clientConfig); %>}
   </script>
 
 </head>
