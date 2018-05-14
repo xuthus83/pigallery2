@@ -74,8 +74,11 @@ app-gallery-lightbox-photo {
 }
 
 .controls .control-button {
-  margin-left: 6px;
-  margin-right: 6px;
+  margin-left: 0.2em;
+  margin-right: 0.2em;
+  display: inline-block;
+  padding: 0 0.5rem;
+  font-size: 1.5rem;
   color: white;
   cursor: pointer;
 }
@@ -130,6 +133,7 @@ app-info-panel {
   z-index: 1100; /* Sit on top */
   position: fixed;
   height: 100vh;
+  max-width: 100vw;
   right: 0;
   top: 0;
   transition: all 0.3s ease-in-out;

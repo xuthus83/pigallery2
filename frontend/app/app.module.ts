@@ -1,4 +1,11 @@
-import {Injectable, LOCALE_ID, NgModule, TRANSLATIONS} from '@angular/core';
+import {
+  Injectable,
+  LOCALE_ID,
+  NgModule,
+  TRANSLATIONS,
+  TRANSLATIONS_FORMAT,
+  MissingTranslationStrategy
+} from '@angular/core';
 import {BrowserModule, HAMMER_GESTURE_CONFIG, HammerGestureConfig} from '@angular/platform-browser';
 import {FormsModule} from '@angular/forms';
 import {AgmCoreModule} from '@agm/core';
@@ -58,7 +65,7 @@ import {HttpClientModule} from '@angular/common/http';
 import {DefaultUrlSerializer, UrlSerializer, UrlTree} from '@angular/router';
 import {IndexingSettingsComponent} from './settings/indexing/indexing.settings.component';
 import {LanguageComponent} from './language/language.component';
-import {I18n} from '@ngx-translate/i18n-polyfill';
+import {I18n, MISSING_TRANSLATION_STRATEGY} from '@ngx-translate/i18n-polyfill';
 
 @Injectable()
 export class GoogleMapsConfig {
@@ -172,12 +179,12 @@ export function translationsFactory(locale: string) {
       deps: [LOCALE_ID]
     },
     I18n,
-    /*
+/*
     {provide: TRANSLATIONS, useValue: translationsFactory('en')},
     {provide: TRANSLATIONS_FORMAT, useValue: 'xlf'},
     {provide: LOCALE_ID, useValue: 'en'},
     {provide: MISSING_TRANSLATION_STRATEGY, useValue: MissingTranslationStrategy.Ignore},
-    */
+*/
   ],
   bootstrap: [AppComponent]
 })

@@ -268,7 +268,7 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
       this.animateLightbox(<Dimension>{
           top: 0,
           left: 0,
-          width: this.getPhotoFrameWidth() - 400,
+          width: Math.max(this.getPhotoFrameWidth() - 400, 0),
           height: this.getPhotoFrameHeight()
         },
         <Dimension>{
@@ -343,12 +343,16 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
     window.scrollTo(window.scrollX, value);
   }
 
-  public getPhotoFrameWidth() {
+  public getPhotoFrameWidth(): number {
     return Math.max(window.innerWidth - this.infoPanelWidth, 0);
   }
 
-  public getPhotoFrameHeight() {
+  public getPhotoFrameHeight(): number {
     return window.innerHeight;
+  }
+
+  public getWindowAspectRatio(): number {
+    return Math.round(this.getPhotoFrameWidth() / this.getPhotoFrameHeight() * 100) / 100;
   }
 
   private updateActivePhoto(photoIndex: number, resize: boolean = true) {

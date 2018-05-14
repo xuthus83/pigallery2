@@ -7,7 +7,7 @@
   <div class="lightbox" #lightbox>
     <app-gallery-lightbox-photo [gridPhoto]="activePhoto ? activePhoto.gridPhoto : null"
                                 [loadImage]="!animating"
-                                [windowAspect]="getPhotoFrameWidth()/getPhotoFrameHeight()"
+                                [windowAspect]="getWindowAspectRatio()"
                                 #photo>
     </app-gallery-lightbox-photo>
   </div>
@@ -17,30 +17,43 @@
     id="controllers-container" #controls [style.width.px]="getPhotoFrameWidth()"
     [ngClass]="!controllersDimmed ? 'dim-controls':  ''">
     <div class="controls controls-top">
-      <a *ngIf="activePhoto" [href]="activePhoto.gridPhoto.getPhotoPath()"
+      <a *ngIf="activePhoto"
+         class="highlight control-button"
+         [href]="activePhoto.gridPhoto.getPhotoPath()"
          [download]="activePhoto.gridPhoto.photo.name">
-        <span class="oi oi-data-transfer-download highlight control-button"
+        <span class="oi oi-data-transfer-download"
               title="download" i18n-title></span>
       </a>
-      <span class="oi oi-info highlight control-button"
-            (click)="toggleInfoPanel()"
-            title="info" i18n-title></span>
 
-      <span class="oi oi-fullscreen-exit highlight control-button"
-            *ngIf="fullScreenService.isFullScreenEnabled()"
-            (click)="fullScreenService.exitFullScreen()"
-            title="toggle fullscreen" i18n-title>
+      <div class=" highlight control-button" (click)="toggleInfoPanel()"
+           title="info" i18n-title>
+        <span class="oi oi-info"></span>
+      </div>
 
-      </span>
+      <div *ngIf="fullScreenService.isFullScreenEnabled()"
+           class=" highlight control-button"
+           (click)="fullScreenService.exitFullScreen()"
+           title="toggle fullscreen" i18n-title>
+        <span class="oi oi-fullscreen-exit">
 
-      <span class="oi oi-fullscreen-enter highlight control-button"
-            *ngIf="!fullScreenService.isFullScreenEnabled()"
-            (click)="fullScreenService.showFullScreen(root)"
-            title="toggle fullscreen" i18n-title>
-      </span>
+        </span>
+      </div>
 
-      <span class="oi oi-x highlight control-button" (click)="hide()" title="close"
-            i18n-title></span>
+      <div *ngIf="!fullScreenService.isFullScreenEnabled()"
+           class="highlight control-button"
+           (click)="fullScreenService.showFullScreen(root)"
+           title="toggle fullscreen" i18n-title>
+        <span class="oi oi-fullscreen-enter">
+        </span>
+      </div>
+
+      <div class="highlight control-button"
+           (click)="hide()"
+           title="close" i18n-title>
+        <span class="oi oi-x">
+
+        </span>
+      </div>
     </div>
 
     <div class="navigation-arrow highlight"

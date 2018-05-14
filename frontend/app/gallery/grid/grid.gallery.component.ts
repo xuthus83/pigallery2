@@ -35,6 +35,7 @@ export class GalleryGridComponent implements OnChanges, AfterViewInit, OnDestroy
 
   photosToRender: Array<GridPhoto> = [];
   containerWidth = 0;
+  screenHeight = 0;
 
   public IMAGE_MARGIN = 2;
   private TARGET_COL_COUNT = 5;
@@ -42,7 +43,6 @@ export class GalleryGridComponent implements OnChanges, AfterViewInit, OnDestroy
   private MAX_ROW_COUNT = 5;
 
   private onScrollFired = false;
-  private scrollbarWidth = 0;
   private helperTime = null;
   isAfterViewInit = false;
   private renderedPhotoIndex = 0;
@@ -55,7 +55,7 @@ export class GalleryGridComponent implements OnChanges, AfterViewInit, OnDestroy
     if (this.isAfterViewInit === false) {
       return;
     }
-    this.updateContainerWidth();
+    this.updateContainerDimensions();
     this.sortPhotos();
     this.mergeNewPhotos();
     this.helperTime = setTimeout(() => {
@@ -75,11 +75,13 @@ export class GalleryGridComponent implements OnChanges, AfterViewInit, OnDestroy
     if (this.isAfterViewInit === false) {
       return;
     }
-    this.updateContainerWidth();
-    this.sortPhotos();
     // render the same amount of images on resize
     const renderedIndex = this.renderedPhotoIndex;
-    this.clearRenderedPhotos();
+    // do not rerender if container is not changes
+    if (this.updateContainerDimensions() === false) {
+      return;
+    }
+    this.sortPhotos();
     this.renderPhotos(renderedIndex);
   }
 
@@ -88,7 +90,7 @@ export class GalleryGridComponent implements OnChanges, AfterViewInit, OnDestroy
     this.lightbox.setGridPhotoQL(this.gridPhotoQL);
 
 
-    this.updateContainerWidth();
+    this.updateContainerDimensions();
     this.sortPhotos();
     this.clearRenderedPhotos();
     this.helperTime = setTimeout(() => {
@@ -103,8 +105,8 @@ export class GalleryGridComponent implements OnChanges, AfterViewInit, OnDestroy
     }
 
 
-    let maxRowHeight = window.innerHeight / this.MIN_ROW_COUNT;
-    const minRowHeight = window.innerHeight / this.MAX_ROW_COUNT;
+    let maxRowHeight = this.screenHeight / this.MIN_ROW_COUNT;
+    const minRowHeight = this.screenHeight / this.MAX_ROW_COUNT;
 
     const photoRowBuilder = new GridRowBuilder(this.photos,
       this.renderedPhotoIndex,
@@ -149,9 +151,9 @@ export class GalleryGridComponent implements OnChanges, AfterViewInit, OnDestroy
     // merge new data with old one
     let lastSameIndex = 0;
     let lastRowId = null;
-    for (let i = 0; i < this.photos.length && i < this.photosToRender.length; i++) {
+    for (let i = 0; i < this.photos.length && i < this.photosToRender.length; ++i) {
 
-      // thIf a photo changed the whole row has to be removed
+      // If a photo changed the whole row has to be removed
       if (this.photosToRender[i].rowId !== lastRowId) {
         lastSameIndex = i;
         lastRowId = this.photosToRender[i].rowId;
@@ -222,11 +224,22 @@ export class GalleryGridComponent implements OnChanges, AfterViewInit, OnDestroy
     }
   }
 
-  private updateContainerWidth(): number {
+  private updateContainerDimensions(): boolean {
     if (!this.gridContainer) {
-      return;
+      return false;
     }
-    this.containerWidth = this.gridContainer.nativeElement.clientWidth;
+
+    // if the width changed a bit or the height changed a lot
+    if (this.containerWidth !== this.gridContainer.nativeElement.clientWidth
+      || this.screenHeight < window.innerHeight * 0.75
+      || this.screenHeight > window.innerHeight * 1.25) {
+      this.screenHeight = window.innerHeight;
+      this.containerWidth = this.gridContainer.nativeElement.clientWidth;
+      this.clearRenderedPhotos();
+      return true;
+    }
+
+    return false;
   }
 
 
