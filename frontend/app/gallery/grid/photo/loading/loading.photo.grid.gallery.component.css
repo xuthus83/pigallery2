@@ -7,9 +7,11 @@
 }
 
 .static span {
-  top: calc(50% - 61px);
-  left: calc(50% - 25px);
-  margin-top: 36px;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  left: 50%;
+  display: table;
 }
 
 .sk-cube-grid {

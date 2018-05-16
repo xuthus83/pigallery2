@@ -7,6 +7,7 @@ img {
   -ms-animation: fadein 2s; /* Internet Explorer */
   -o-animation: fadein 2s; /* Opera < 12.1 */
   animation: fadein 2s;
+  vertical-align: unset;
 }
 
 @keyframes fadein {
@@ -61,6 +62,7 @@ img {
   -moz-transition: margin .3s ease-out, background-color .3s ease-out;
   -webkit-transition: margin .3s ease-out, background-color .3s ease-out;
   -o-transition: margin .3s ease-out, background-color .3s ease-out;
+  -ms-transition: margin .3s ease-out, background-color .3s ease-out;
 }
 
 .photo-container {

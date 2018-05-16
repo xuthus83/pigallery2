@@ -23,6 +23,7 @@ app-gallery-lightbox-photo {
   background-color: black;
   transition: all 0.3s ease-in-out;
   -o-transition: all 0.3s ease-in-out;
+  -ms-transition: all 0.3s ease-in-out;
   -webkit-transition: all 0.3s ease-in-out;
   -moz-transition: all 0.3s ease-in-out;
 }
@@ -53,6 +54,7 @@ app-gallery-lightbox-photo {
   transition: width 0.3s ease-in-out, opacity 1s;
   -webkit-transition: width 0.3s ease-in-out, opacity 1s;
   -o-transition: width 0.3s ease-in-out, opacity 1s;
+  -ms-transition: width 0.3s ease-in-out, opacity 1s;
   -moz-transition: width 0.3s ease-in-out, opacity 1s;
 }
 
@@ -104,6 +106,7 @@ app-gallery-lightbox-photo {
   -moz-transition: opacity .2s ease-out;
   -webkit-transition: opacity .2s ease-out;
   -o-transition: opacity .2s ease-out;
+  -ms-transition: opacity .2s ease-out;
 }
 
 .highlight:hover {
@@ -138,6 +141,7 @@ app-info-panel {
   top: 0;
   transition: all 0.3s ease-in-out;
   -o-transition: all 0.3s ease-in-out;
+  -ms-transition: all 0.3s ease-in-out;
   -moz-transition: all 0.3s ease-in-out;
   -webkit-transition: all 0.3s ease-in-out;
 }
