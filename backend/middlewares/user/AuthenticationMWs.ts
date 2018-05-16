@@ -93,9 +93,12 @@ export class AuthenticationMWs {
       const sharing = await ObjectManagerRepository.getInstance().SharingManager.findOne({
         sharingKey: req.query.sk || req.params.sharingKey,
       });
+
+      console.log(sharing);
       if (!sharing || sharing.expires < Date.now() ||
         (Config.Client.Sharing.passwordProtected === true
-          && sharing.password && !PasswordHelper.comparePassword(password, sharing.password))) {
+          && (sharing.password)
+          && !PasswordHelper.comparePassword(password, sharing.password))) {
         return next(new ErrorDTO(ErrorCodes.CREDENTIAL_NOT_FOUND));
       }
 
@@ -159,7 +162,9 @@ export class AuthenticationMWs {
         return null;
       }
 
-      if (Config.Client.Sharing.passwordProtected === true && sharing.password) {
+      console.log(sharing);
+
+      if (Config.Client.Sharing.passwordProtected === true && (sharing.password)) {
         return null;
       }
 

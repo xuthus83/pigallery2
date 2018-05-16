@@ -83,7 +83,7 @@ export class SharingMWs {
       id: updateSharing.id,
       path: directoryName,
       sharingKey: '',
-      password: updateSharing.password,
+      password: (updateSharing.password && updateSharing.password !== '') ? updateSharing.password : null,
       creator: req.session.user,
       expires: Date.now() + updateSharing.valid,
       includeSubfolders: updateSharing.includeSubfolders,

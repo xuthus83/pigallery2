@@ -87,14 +87,14 @@ export class GalleryShareComponent implements OnInit, OnDestroy {
     if (this.sharing == null) {
       return;
     }
-    this.url = 'loading..';
+    this.url = this.i18n('loading..');
     this.sharing = await this._sharingService.updateSharing(this.currentDir,
       this.sharing.id, this.input.includeSubfolders, this.input.password, this.calcValidity());
     this.url = Config.Client.publicUrl + '/share/' + this.sharing.sharingKey;
   }
 
   async get() {
-    this.url = 'loading..';
+    this.url = this.i18n('loading..');
     this.sharing = await this._sharingService.createSharing(this.currentDir, this.input.includeSubfolders, this.calcValidity());
     this.url = Config.Client.publicUrl + '/share/' + this.sharing.sharingKey;
   }
