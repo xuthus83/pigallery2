@@ -1,6 +1,7 @@
 export class PageHelper {
   private static readonly supportPageOffset = window.pageXOffset !== undefined;
   private static readonly isCSS1Compat = ((document.compatMode || '') === 'CSS1Compat');
+  private static readonly body = document.getElementsByTagName('body')[0];
 
   constructor() {
 
@@ -11,14 +12,14 @@ export class PageHelper {
   }
 
   public static showScrollY() {
-    document.getElementsByTagName('body')[0].style.overflowY = 'scroll';
+    PageHelper.body.style.overflowY = 'scroll';
   }
 
   public static isScrollYVisible(): boolean {
-    return document.getElementsByTagName('body')[0].style.overflowY === 'scroll';
+    return PageHelper.body.style.overflowY === 'scroll';
   }
 
   public static hideScrollY() {
-    document.getElementsByTagName('body')[0].style.overflowY = 'hidden';
+    PageHelper.body.style.overflowY = 'hidden';
   }
 }

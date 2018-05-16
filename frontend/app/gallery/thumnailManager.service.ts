@@ -185,7 +185,6 @@ export class Thumbnail extends ThumbnailBase {
         this.thumbnailTask.priority = ThumbnailLoadingPriority.medium;
       }
     }
-
   }
 
   public load() {

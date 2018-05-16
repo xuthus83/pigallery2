@@ -29,6 +29,7 @@ export class GalleryGridComponent implements OnChanges, AfterViewInit, OnDestroy
 
   @ViewChild('gridContainer') gridContainer: ElementRef;
   @ViewChildren(GalleryPhotoComponent) gridPhotoQL: QueryList<GalleryPhotoComponent>;
+  private scrollListenerPhotos: GalleryPhotoComponent[] = [];
 
   @Input() photos: Array<PhotoDTO>;
   @Input() lightbox: GalleryLightboxComponent;
@@ -89,6 +90,11 @@ export class GalleryGridComponent implements OnChanges, AfterViewInit, OnDestroy
   ngAfterViewInit() {
     this.lightbox.setGridPhotoQL(this.gridPhotoQL);
 
+    if (Config.Client.enableOnScrollThumbnailPrioritising === true) {
+      this.gridPhotoQL.changes.subscribe(() => {
+        this.scrollListenerPhotos = this.gridPhotoQL.filter(pc => pc.ScrollListener);
+      });
+    }
 
     this.updateContainerDimensions();
     this.sortPhotos();
@@ -188,15 +194,19 @@ export class GalleryGridComponent implements OnChanges, AfterViewInit, OnDestroy
 
   @HostListener('window:scroll')
   onScroll() {
-    if (!this.onScrollFired) {
+    if (!this.onScrollFired &&
+      // should we trigger this at all?
+      (this.renderedPhotoIndex < this.photos.length || this.scrollListenerPhotos.length > 0)) {
       window.requestAnimationFrame(() => {
         this.renderPhotos();
 
         if (Config.Client.enableOnScrollThumbnailPrioritising === true) {
-          this.gridPhotoQL.toArray().forEach((pc: GalleryPhotoComponent) => {
+          this.scrollListenerPhotos.forEach((pc: GalleryPhotoComponent) => {
             pc.onScroll();
           });
+          this.scrollListenerPhotos = this.scrollListenerPhotos.filter(pc => pc.ScrollListener);
         }
+
         this.onScrollFired = false;
       });
       this.onScrollFired = true;

@@ -6,6 +6,7 @@ import {RouterLink} from '@angular/router';
 import {Thumbnail, ThumbnailManagerService} from '../../thumnailManager.service';
 import {Config} from '../../../../../common/config/public/Config';
 import {AnimationBuilder} from '@angular/animations';
+import {PageHelper} from '../../../model/page.helper';
 
 @Component({
   selector: 'app-gallery-grid-photo',
@@ -53,13 +54,16 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, OnDestroy {
 
 
   isInView(): boolean {
-    return document.body.scrollTop < this.container.nativeElement.offsetTop + this.container.nativeElement.clientHeight
-      && document.body.scrollTop + window.innerHeight > this.container.nativeElement.offsetTop;
+    return PageHelper.ScrollY < this.container.nativeElement.offsetTop + this.container.nativeElement.clientHeight
+      && PageHelper.ScrollY + window.innerHeight > this.container.nativeElement.offsetTop;
   }
 
+  get ScrollListener(): boolean {
+    return !this.thumbnail.Available && !this.thumbnail.Error;
+  }
 
   onScroll() {
-    if (this.thumbnail.Available === true) {
+    if (this.thumbnail.Available === true || this.thumbnail.Error === true) {
       return;
     }
     const isInView = this.isInView();
