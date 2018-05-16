@@ -11,9 +11,15 @@ This is a directory-first photo gallery website, optimised for running on low re
 ## Live Demo
 Live Demo @ heroku: https://pigallery2.herokuapp.com/
 
+## Table of contents
+1. [Getting started](#getting-started-on-raspberry-pi-1)
+3. [Translate the page to your own language](#translate-the-page-to-your-own-language)
+2. [Feature list](#feature-list)
+4. [Credits](#credits) 
 
 
-## Install (on Raspberry Pi 1)
+
+## Getting started (on Raspberry Pi 1)
 ### Install NodeJs
 Download and extract
 ```bash
@@ -38,8 +44,8 @@ Full node install description: https://raspberrypi.stackexchange.com/questions/4
 ```bash
 cd ~
 wget https://github.com/bpatrik/pigallery2/releases/download/1.1.0/pigallery2.zip
-unzip master.zip
-cd pigallery2-master
+unzip pigallery2.zip
+cd pigallery2
 npm install
 ```
 #### Install from source
@@ -47,7 +53,7 @@ npm install
 cd ~
 wget https://github.com/bpatrik/pigallery2/archive/master.zip
 unzip master.zip
-cd pigallery2 # enter the unzipped directory
+cd pigallery2-master # enter the unzipped directory
 npm install
 ```
 
@@ -58,17 +64,38 @@ npm start
 To configure it. Run `PiGallery2` first to create `config.json` file, then edit it and restart. 
 Default user: `admin` pass: `admin`
 
-### Using nginx
+### Useful links/tips:
+
+#### using nginx
 https://stackoverflow.com/questions/5009324/node-js-nginx-what-now
 
-### making https
+#### making https
 https://certbot.eff.org/
 
-### node install error:
+#### node install error:
 If you get error during module installation, make sure you have everything to build node modules from source
 ```bash
 apt-get install build-essential  libkrb5-dev gcc g++
 ```
+
+
+## Translate the page to your own language
+1. download / clone the repo (the source not the packed release!)
+2. add your language e.g: fr
+   ```bash
+   npm run add-translation -- --fr
+   ```
+   it creates a new `messages.fr.xls` file at `frontend/translate` folder, 
+   it will already contain dummy translation with google translate.
+3. 'fix' the dummy translation
+4. test if it works:
+   build and start the app
+   ```bash
+   npm install
+   npm start
+   ```
+5. create a pull request at github to add your translation to the project.
+
 
 
 ## Feature list
@@ -113,20 +140,7 @@ apt-get install build-essential  libkrb5-dev gcc g++
  * bug free :) - `In progress`
 
 
-## Translate the page to your own language
-1) download / clone the repo (the source not the packed release!)
-2) add your language e.g: fr
-```bash
-npm run add-translation -- --fr
-```
-it creates a new `messages.fr.xls` file at `frontend/translate` folder, 
-it will already contain dummy translation with google translate.
-3) 'fix' the dummy translation
-4) test if it works:
-build and start the app
-```bash
-npm install
-npm start
-```
-5) create a pull request at github to add your translation to the project.
+## Credits
+Crossbrowser testing sponsored by [Browser Stack](https://www.browserstack.com)
+[<img src="https://camo.githubusercontent.com/a7b268f2785656ab3ca7b1cbb1633ee5affceb8f/68747470733a2f2f64677a6f7139623561736a67312e636c6f756466726f6e742e6e65742f70726f64756374696f6e2f696d616765732f6c61796f75742f6c6f676f2d6865616465722e706e67" alt="Browser Stack" height="31px" style="background: cornflowerblue;">](https://www.browserstack.com)
 
