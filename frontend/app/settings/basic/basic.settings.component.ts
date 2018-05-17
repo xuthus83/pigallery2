@@ -17,6 +17,8 @@ import {I18n} from '@ngx-translate/i18n-polyfill';
 export class BasicSettingsComponent extends SettingsComponent<BasicConfigDTO> {
 
   urlPlaceholder = location.origin;
+  urlBaseChanged = false;
+  urlError = false;
 
   constructor(_authService: AuthenticationService,
               _navigation: NavigationService,
@@ -30,6 +32,7 @@ export class BasicSettingsComponent extends SettingsComponent<BasicConfigDTO> {
       publicUrl: s.Client.publicUrl,
       urlBase: s.Client.urlBase
     }));
+    this.checkUrlError();
   }
 
   public async save(): Promise<boolean> {
@@ -38,6 +41,42 @@ export class BasicSettingsComponent extends SettingsComponent<BasicConfigDTO> {
       this.notification.info(this.i18n('Restart the server to apply the new settings'));
     }
     return val;
+  }
+
+  calcBaseUrl(): string {
+    console.log(this.settings.publicUrl.replace(new RegExp('\\\\', 'g'), '/'));
+    console.log(this.settings.publicUrl.replace(new RegExp('\\\\', 'g'), '/')
+      .replace(new RegExp('http://', 'g'), ''));
+    console.log(this.settings.publicUrl.replace(new RegExp('\\\\', 'g'), '/')
+      .replace(new RegExp('http://', 'g'), '')
+      .replace(new RegExp('https://', 'g'), ''));
+    const url = this.settings.publicUrl.replace(new RegExp('\\\\', 'g'), '/')
+      .replace(new RegExp('http://', 'g'), '')
+      .replace(new RegExp('https://', 'g'), '');
+    if (url.indexOf('/') !== -1) {
+      return url.substring(url.indexOf('/'));
+    }
+    return '';
+
+  }
+
+  checkUrlError() {
+    this.urlError = this.settings.urlBase !== this.calcBaseUrl();
+  }
+
+  onUrlChanged() {
+    if (this.urlBaseChanged === false) {
+      this.settings.urlBase = this.calcBaseUrl();
+    } else {
+      this.checkUrlError();
+    }
+
+  }
+
+  onUrlBaseChanged() {
+    this.urlBaseChanged = true;
+
+    this.checkUrlError();
   }
 
 }

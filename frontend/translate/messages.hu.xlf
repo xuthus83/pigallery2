@@ -98,7 +98,7 @@
           <context context-type="sourcefile">app/sharelogin/share-login.component.ts</context>
           <context context-type="linenumber">41</context>
         </context-group>
-        <target>Belépés</target>
+        <target>Belép</target>
       </trans-unit>
       <trans-unit id="e576d10a00b926dc56802231438eea7831b602ee" datatype="html">
         <source>download</source>
@@ -408,7 +408,7 @@
           <context context-type="sourcefile">app/settings/database/database.settings.component.ts</context>
           <context context-type="linenumber">14</context>
         </context-group>
-        <target>Manuálisan kell telepíteni a mysql node-modulot a mysql (npm install mysql) használatához</target>
+        <target>Telepítsd kézzel mysql csomópont-modulot a mysql (npm install mysql) használatához</target>
       </trans-unit>
       <trans-unit id="1531e77d9dbcfb6a3efeb71fca40da5f5f7ddaaf" datatype="html">
         <source>MySQL settings:</source>
@@ -499,7 +499,7 @@
           <context context-type="sourcefile">app/settings/map/map.settings.component.ts</context>
           <context context-type="linenumber">35</context>
         </context-group>
-        <target>van szükség</target>
+        <target>szükség van</target>
       </trans-unit>
       <trans-unit id="d682be8fc94c1861394919e021e9dcf8def8f554" datatype="html">
         <source>Save
@@ -522,7 +522,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/basic/basic.settings.component.ts</context>
-          <context context-type="linenumber">73</context>
+          <context context-type="linenumber">79</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/other/other.settings.component.ts</context>
@@ -551,7 +551,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/basic/basic.settings.component.ts</context>
-          <context context-type="linenumber">76</context>
+          <context context-type="linenumber">82</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/other/other.settings.component.ts</context>
@@ -567,7 +567,7 @@
           <context context-type="sourcefile">app/settings/thumbnail/thumbanil.settings.component.ts</context>
           <context context-type="linenumber">3</context>
         </context-group>
-        <target>Thumbnail beállítások</target>
+        <target>Miniatűr beállítások</target>
       </trans-unit>
       <trans-unit id="1b239b0422945f36c35b5559b4b0c135922fe299" datatype="html">
         <source>It is highly recommended to use hardware accelerated (sharp or gm) lib for thumbnail
@@ -595,7 +595,7 @@
           <context context-type="sourcefile">app/settings/thumbnail/thumbanil.settings.component.ts</context>
           <context context-type="linenumber">24</context>
         </context-group>
-        <target>Győződj meg arról, hogy a sharp node modul telepítve van (npm telepítés éles).</target>
+        <target>Győződjön meg arról, hogy az éles csomópont modul telepítve van (npm telepítés éles).</target>
       </trans-unit>
       <trans-unit id="becf05481d292e5e206fda4b7d67d8fac4e85c93" datatype="html">
         <source>Make sure that gm node module and</source>
@@ -636,7 +636,7 @@
           <context context-type="sourcefile">app/settings/thumbnail/thumbanil.settings.component.ts</context>
           <context context-type="linenumber">44</context>
         </context-group>
-        <target>A thumnail-ek ebben a mappában lesznek elmentve. Gyózödj meg arról, hogy a mappához van írási joga az oldalnak</target>
+        <target>A miniatűrök ebben a mappában lesznek elmentve. Íráshoz való hozzáférés szükséges</target>
       </trans-unit>
       <trans-unit id="76a16cf361d95615469c06e26644b6e52f3a4411" datatype="html">
         <source>Thumbnail Quality</source>
@@ -826,7 +826,7 @@
           </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/basic/basic.settings.component.ts</context>
-          <context context-type="linenumber">51</context>
+          <context context-type="linenumber">52</context>
         </context-group>
         <target>Ha belépsz az oldal formája helyi hálózat jó tudni a nyilvánosságot
             URL megosztási link létrehozásához</target>
@@ -835,7 +835,7 @@
         <source>Url Base</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/basic/basic.settings.component.ts</context>
-          <context context-type="linenumber">58</context>
+          <context context-type="linenumber">59</context>
         </context-group>
         <target>Al cím</target>
       </trans-unit>
@@ -846,11 +846,21 @@
           </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/basic/basic.settings.component.ts</context>
-          <context context-type="linenumber">64</context>
+          <context context-type="linenumber">66</context>
         </context-group>
         <target>Ha a galériát egy al-url alatt érheti el (például:
             http://mydomain.com/myGallery), állítsa be itt. Ha nem működik, akkor hiányolhat a "/" a kezdetétől
             url.</target>
+      </trans-unit>
+      <trans-unit id="f268a48c3f70d641ccb99786fe49f21a769eb2bb" datatype="html">
+        <source>
+        The public url and the url base are not matching. Some of the functionality might not work.
+      </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/settings/basic/basic.settings.component.ts</context>
+          <context context-type="linenumber">73</context>
+        </context-group>
+        <target>A nyilvános url és az al url nem egyeznek meg. Néhány funkció lehet hogy nem fog működni.</target>
       </trans-unit>
       <trans-unit id="ee1319d3bfb2e70e14212ea2c3896e4ac4dc0092" datatype="html">
         <source>
@@ -896,8 +906,8 @@
           <context context-type="sourcefile">app/settings/other/other.settings.component.ts</context>
           <context context-type="linenumber">32</context>
         </context-group>
-        <target>Görgetés alapú kirajzolás
-        </target>
+        <target>Görgetés alapú miniatűr
+          generáció</target>
       </trans-unit>
       <trans-unit id="b11dea996a20defa548ba5337c9745e43ac48440" datatype="html">
         <source>Those thumbnails get higher priority that are visible on the screen
@@ -970,8 +980,8 @@
           <context context-type="sourcefile">app/settings/indexing/indexing.settings.component.ts</context>
           <context context-type="linenumber">19</context>
         </context-group>
-        <target>Ha ebben az időben nem volt indexelés, akkor újraindex. (kihaggya, ha már létezik az index
-              és az érzékenység alacsony)</target>
+        <target>Ha ebben az időben nem volt indexelés, újraindexet hajt végre. (ha kihagyott
+              a DB index és az érzékenység alacsony)</target>
       </trans-unit>
       <trans-unit id="95cda683cfb2041ad808023f29e40d16981b3c5e" datatype="html">
         <source>Sub folder preview size</source>
@@ -1064,7 +1074,7 @@
           <context context-type="sourcefile">app/settings/indexing/indexing.settings.component.ts</context>
           <context context-type="linenumber">96</context>
         </context-group>
-        <target>Mégse</target>
+        <target>Megszünteti</target>
       </trans-unit>
       <trans-unit id="d68e02eaea0b78b12fceb483b2183a3f5b70d969" datatype="html">
         <source>Reset Indexes
@@ -1118,6 +1128,18 @@
           <context context-type="linenumber">1</context>
         </context-group>
         <target>Nem</target>
+      </trans-unit>
+      <trans-unit id="381b3a21fe4e53a0ca52dbc6e07073c172489230" datatype="html">
+        <source>loading..</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">frontend/app/gallery/share/share.gallery.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">frontend/app/gallery/share/share.gallery.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <target>betöltés..</target>
       </trans-unit>
       <trans-unit id="867c1b6839b592cec2156dd0b8a0009fe1557bfa" datatype="html">
         <source>Url has been copied to clipboard</source>

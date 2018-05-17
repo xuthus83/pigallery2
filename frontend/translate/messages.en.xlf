@@ -18,9 +18,7 @@
           <context context-type="sourcefile">app/login/login.component.ts</context>
           <context context-type="linenumber">12</context>
         </context-group>
-        <target>
-          Wrong username or password
-        </target>
+        <target>Wrong username or password</target>
       </trans-unit>
       <trans-unit id="08c74dc9762957593b91f6eb5d65efdfc975bf48" datatype="html">
         <source>Username</source>
@@ -81,8 +79,7 @@
           <context context-type="sourcefile">app/login/login.component.ts</context>
           <context context-type="linenumber">66</context>
         </context-group>
-        <target>Login
-            </target>
+        <target>Login</target>
       </trans-unit>
       <trans-unit id="64034510da88fc99130864f733500fcd62aedb01" datatype="html">
         <source>
@@ -92,9 +89,7 @@
           <context context-type="sourcefile">app/sharelogin/share-login.component.ts</context>
           <context context-type="linenumber">11</context>
         </context-group>
-        <target>
-          Wrong password
-        </target>
+        <target>Wrong password</target>
       </trans-unit>
       <trans-unit id="7bc15e0478a1384ea38903e2506f4ae3fe7dd6e1" datatype="html">
         <source>Enter
@@ -103,8 +98,7 @@
           <context context-type="sourcefile">app/sharelogin/share-login.component.ts</context>
           <context context-type="linenumber">41</context>
         </context-group>
-        <target>Enter
-            </target>
+        <target>Enter</target>
       </trans-unit>
       <trans-unit id="e576d10a00b926dc56802231438eea7831b602ee" datatype="html">
         <source>download</source>
@@ -190,9 +184,7 @@
           <context context-type="sourcefile">app/gallery/gallery.component.ts</context>
           <context context-type="linenumber">39</context>
         </context-group>
-        <target>
-      Too many results to show. Refine your search.
-    </target>
+        <target>Too many results to show. Refine your search.</target>
       </trans-unit>
       <trans-unit id="24f166827601febff9ec90329582bc637781def8" datatype="html">
         <source>Searching for:</source>
@@ -229,8 +221,7 @@
           <context context-type="sourcefile">app/gallery/share/share.gallery.component.ts</context>
           <context context-type="linenumber">35</context>
         </context-group>
-        <target>Copy
-            </target>
+        <target>Copy</target>
       </trans-unit>
       <trans-unit id="07867d2c08ad81d9f1cb27f083c5d32d0d1f3bd6" datatype="html">
         <source>Sharing:</source>
@@ -306,9 +297,7 @@
           <context context-type="sourcefile">app/admin/admin.component.ts</context>
           <context context-type="linenumber">19</context>
         </context-group>
-        <target>
-        To dismiss these notifications, restart the server.
-      </target>
+        <target>To dismiss these notifications, restart the server.</target>
       </trans-unit>
       <trans-unit id="37e10df2d9c0c25ef04ac112c9c9a7723e8efae0" datatype="html">
         <source>Mode</source>
@@ -357,8 +346,7 @@
           <context context-type="sourcefile">app/settings/usermanager/usermanager.settings.component.ts</context>
           <context context-type="linenumber">55</context>
         </context-group>
-        <target>+ Add user
-      </target>
+        <target>+ Add user</target>
       </trans-unit>
       <trans-unit id="eebaef174029db4c77c4f7d1c68070774730f4d3" datatype="html">
         <source>
@@ -368,9 +356,7 @@
           <context context-type="sourcefile">app/settings/usermanager/usermanager.settings.component.ts</context>
           <context context-type="linenumber">58</context>
         </context-group>
-        <target>
-      To protect the site with password / have login enable this.
-    </target>
+        <target>To protect the site with password / have login enable this.</target>
       </trans-unit>
       <trans-unit id="2df47a22f05b9ac3bdabb6693d4bc37c3ad7c000" datatype="html">
         <source>Add new User</source>
@@ -395,8 +381,7 @@
           <context context-type="sourcefile">app/settings/usermanager/usermanager.settings.component.ts</context>
           <context context-type="linenumber">90</context>
         </context-group>
-        <target>Add User
-          </target>
+        <target>Add User</target>
       </trans-unit>
       <trans-unit id="26029ad47ff6a694b272298b212b5458128810be" datatype="html">
         <source>
@@ -464,8 +449,7 @@
           <context context-type="sourcefile">app/settings/database/database.settings.component.ts</context>
           <context context-type="linenumber">37</context>
         </context-group>
-        <target>Save
-    </target>
+        <target>Save</target>
       </trans-unit>
       <trans-unit id="606e35514c0bf86c3b47babbc76eb1bb4e973cb0" datatype="html">
         <source>Reset
@@ -474,8 +458,7 @@
           <context context-type="sourcefile">app/settings/database/database.settings.component.ts</context>
           <context context-type="linenumber">40</context>
         </context-group>
-        <target>Reset
-    </target>
+        <target>Reset</target>
       </trans-unit>
       <trans-unit id="808812b8319c389ecbb84c658d5b3eac7087d079" datatype="html">
         <source>Map settings</source>
@@ -539,14 +522,13 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/basic/basic.settings.component.ts</context>
-          <context context-type="linenumber">73</context>
+          <context context-type="linenumber">79</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/other/other.settings.component.ts</context>
           <context context-type="linenumber">97</context>
         </context-group>
-        <target>Save
-      </target>
+        <target>Save</target>
       </trans-unit>
       <trans-unit id="bdff31ca405839a31596fdb5bfd8ac933289b5e7" datatype="html">
         <source>Reset
@@ -569,14 +551,13 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/basic/basic.settings.component.ts</context>
-          <context context-type="linenumber">76</context>
+          <context context-type="linenumber">82</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/other/other.settings.component.ts</context>
           <context context-type="linenumber">100</context>
         </context-group>
-        <target>Reset
-      </target>
+        <target>Reset</target>
       </trans-unit>
       <trans-unit id="bd5ac05be2794f26efba6549c3368373da95173d" datatype="html">
         <source>
@@ -597,8 +578,7 @@
           <context context-type="linenumber">10</context>
         </context-group>
         <target>It is highly recommended to use hardware accelerated (sharp or gm) lib for thumbnail
-        generation
-      </target>
+        generation</target>
       </trans-unit>
       <trans-unit id="6f49ee2673fb82fe8dd1a7da0bada14a4156bf30" datatype="html">
         <source>Thumbnail generation library</source>
@@ -762,9 +742,7 @@
           <context context-type="sourcefile">app/settings/search/search.settings.component.ts</context>
           <context context-type="linenumber">68</context>
         </context-group>
-        <target>
-        Search is not supported with these settings
-      </target>
+        <target>Search is not supported with these settings</target>
       </trans-unit>
       <trans-unit id="2ca3f59b3fe47e837455e9090470356d27d1f59e" datatype="html">
         <source>Share settings</source>
@@ -798,9 +776,7 @@
           <context context-type="sourcefile">app/settings/share/share.settings.component.ts</context>
           <context context-type="linenumber">47</context>
         </context-group>
-        <target>
-        Sharing is not supported with these settings
-      </target>
+        <target>Sharing is not supported with these settings</target>
       </trans-unit>
       <trans-unit id="d62666b3159a0b5916b8f908c84e6b6f441ec1d1" datatype="html">
         <source>
@@ -850,7 +826,7 @@
           </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/basic/basic.settings.component.ts</context>
-          <context context-type="linenumber">51</context>
+          <context context-type="linenumber">52</context>
         </context-group>
         <target>If you access the page form local network its good to know the public
             url for creating sharing link</target>
@@ -859,7 +835,7 @@
         <source>Url Base</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/basic/basic.settings.component.ts</context>
-          <context context-type="linenumber">58</context>
+          <context context-type="linenumber">59</context>
         </context-group>
         <target>Url Base</target>
       </trans-unit>
@@ -870,11 +846,21 @@
           </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/basic/basic.settings.component.ts</context>
-          <context context-type="linenumber">64</context>
+          <context context-type="linenumber">66</context>
         </context-group>
         <target>If you access the gallery under a sub url (like:
             http://mydomain.com/myGallery), set it here. If not working you might miss the '/' from the beginning of the
             url.</target>
+      </trans-unit>
+      <trans-unit id="f268a48c3f70d641ccb99786fe49f21a769eb2bb" datatype="html">
+        <source>
+        The public url and the url base are not matching. Some of the functionality might not work.
+      </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/settings/basic/basic.settings.component.ts</context>
+          <context context-type="linenumber">73</context>
+        </context-group>
+        <target>The public url and the url base are not matching. Some of the functionality might not work.</target>
       </trans-unit>
       <trans-unit id="ee1319d3bfb2e70e14212ea2c3896e4ac4dc0092" datatype="html">
         <source>
@@ -1037,8 +1023,7 @@
           <context context-type="sourcefile">app/settings/indexing/indexing.settings.component.ts</context>
           <context context-type="linenumber">55</context>
         </context-group>
-        <target>Save
-        </target>
+        <target>Save</target>
       </trans-unit>
       <trans-unit id="ae9e824f2eaba4400a5cb66ad946c433dc45b3d5" datatype="html">
         <source>Reset
@@ -1047,8 +1032,7 @@
           <context context-type="sourcefile">app/settings/indexing/indexing.settings.component.ts</context>
           <context context-type="linenumber">58</context>
         </context-group>
-        <target>Reset
-        </target>
+        <target>Reset</target>
       </trans-unit>
       <trans-unit id="b0eaa3abce5af3b71c03fe678062333b7b950430" datatype="html">
         <source>If you add a new folder to your gallery, the site indexes it automatically.</source>
@@ -1081,8 +1065,7 @@
           <context context-type="sourcefile">app/settings/indexing/indexing.settings.component.ts</context>
           <context context-type="linenumber">91</context>
         </context-group>
-        <target>Index
-        </target>
+        <target>Index</target>
       </trans-unit>
       <trans-unit id="e7e43ec575247424aa179da55b338fd740e8aa7f" datatype="html">
         <source>Cancel
@@ -1091,8 +1074,7 @@
           <context context-type="sourcefile">app/settings/indexing/indexing.settings.component.ts</context>
           <context context-type="linenumber">96</context>
         </context-group>
-        <target>Cancel
-        </target>
+        <target>Cancel</target>
       </trans-unit>
       <trans-unit id="d68e02eaea0b78b12fceb483b2183a3f5b70d969" datatype="html">
         <source>Reset Indexes
@@ -1101,8 +1083,7 @@
           <context context-type="sourcefile">app/settings/indexing/indexing.settings.component.ts</context>
           <context context-type="linenumber">100</context>
         </context-group>
-        <target>Reset Indexes
-        </target>
+        <target>Reset Indexes</target>
       </trans-unit>
       <trans-unit id="bc2e854e111ecf2bd7db170da5e3c2ed08181d88" datatype="html">
         <source>Advanced</source>
@@ -1147,6 +1128,18 @@
           <context context-type="linenumber">1</context>
         </context-group>
         <target>No</target>
+      </trans-unit>
+      <trans-unit id="381b3a21fe4e53a0ca52dbc6e07073c172489230" datatype="html">
+        <source>loading..</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">frontend/app/gallery/share/share.gallery.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">frontend/app/gallery/share/share.gallery.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <target>loading..</target>
       </trans-unit>
       <trans-unit id="867c1b6839b592cec2156dd0b8a0009fe1557bfa" datatype="html">
         <source>Url has been copied to clipboard</source>
