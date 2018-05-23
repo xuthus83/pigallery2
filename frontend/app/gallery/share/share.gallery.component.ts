@@ -1,14 +1,15 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit, TemplateRef} from '@angular/core';
 import {Utils} from '../../../../common/Utils';
 import {ShareService} from '../share.service';
 import {GalleryService} from '../gallery.service';
 import {ContentWrapper} from '../../../../common/entities/ConentWrapper';
 import {SharingDTO} from '../../../../common/entities/SharingDTO';
-import {ModalDirective} from 'ngx-bootstrap/modal';
 import {Config} from '../../../../common/config/public/Config';
 import {NotificationService} from '../../model/notification.service';
 import {DirectoryDTO} from '../../../../common/entities/DirectoryDTO';
 import {I18n} from '@ngx-translate/i18n-polyfill';
+import {BsModalService} from 'ngx-bootstrap/modal';
+import {BsModalRef} from 'ngx-bootstrap/modal/bs-modal-ref.service';
 
 
 @Component({
@@ -17,7 +18,6 @@ import {I18n} from '@ngx-translate/i18n-polyfill';
   styleUrls: ['./share.gallery.component.css'],
 })
 export class GalleryShareComponent implements OnInit, OnDestroy {
-  @ViewChild('shareModal') public childModal: ModalDirective;
 
   enabled = true;
   url = '';
@@ -36,6 +36,8 @@ export class GalleryShareComponent implements OnInit, OnDestroy {
   passwordProtection = false;
   ValidityTypes: any;
 
+  modalRef: BsModalRef;
+
   text = {
     Yes: 'Yes',
     No: 'No'
@@ -44,7 +46,8 @@ export class GalleryShareComponent implements OnInit, OnDestroy {
   constructor(private _sharingService: ShareService,
               public _galleryService: GalleryService,
               private  _notification: NotificationService,
-              public i18n: I18n) {
+              public i18n: I18n,
+              private modalService: BsModalService) {
     this.ValidityTypes = ValidityTypes;
 
     this.text.Yes = i18n('Yes');
@@ -99,10 +102,13 @@ export class GalleryShareComponent implements OnInit, OnDestroy {
     this.url = Config.Client.publicUrl + '/share/' + this.sharing.sharingKey;
   }
 
-  async showModal() {
+  async openModal(template: TemplateRef<any>) {
     await this.get();
     this.input.password = '';
-    this.childModal.show();
+    if (this.modalRef) {
+      this.modalRef.hide();
+    }
+    this.modalRef = this.modalService.show(template);
     document.body.style.paddingRight = '0px';
   }
 
@@ -111,7 +117,8 @@ export class GalleryShareComponent implements OnInit, OnDestroy {
   }
 
   public hideModal() {
-    this.childModal.hide();
+    this.modalRef.hide();
+    this.modalRef = null;
     this.sharing = null;
   }
 

@@ -1,111 +1,103 @@
 <button id="shareButton" class="nav-link btn btn-default btn-link"
-        type="button" [disabled]="!enabled" (click)="showModal()">
+        type="button" [disabled]="!enabled" (click)="openModal(shareModal)">
   <span class="oi oi-share"></span>
   <ng-container i18n>Share</ng-container>
 </button>
 
-<!-- sharing Modal-->
-<div bsModal #shareModal="bs-modal"
-     class="modal fade" id="shareModal"
-     tabindex="-1" role="dialog" aria-labelledby="shareModalLabel"
-     [config]="{ backdrop: false }"
-     aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="shareModalLabel" i18n>Share</h5>
-        <button type="button" class="close" (click)="hideModal()" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
+<ng-template #shareModal>
+  <!-- sharing Modal-->
+  <div class="modal-header">
+    <h5 class="modal-title" i18n>Share</h5>
+    <button type="button" class="close" (click)="hideModal()" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-7 col-sm-9">
+        <input id="shareLink"
+               name="shareLink"
+               placeholder="link"
+               class="form-control input-md"
+               type="text"
+               [ngModel]="url">
+      </div>
+      <div class="col-5 col-sm-3">
+        <button id="copyButton" name="copyButton"
+                ngxClipboard [cbContent]="url"
+                (cbOnSuccess)="onCopy()"
+                class="btn btn-primary btn-block" i18n>Copy
         </button>
       </div>
-      <div class="modal-body">
-        <div class="row">
-          <div class="col-7 col-sm-9">
-            <input id="shareLink"
-                   name="shareLink"
-                   placeholder="link"
-                   class="form-control input-md"
-                   type="text"
-                   [ngModel]="url">
-          </div>
-          <div class="col-5 col-sm-3">
-            <button id="copyButton" name="copyButton"
-                    ngxClipboard [cbContent]="url"
-                    (cbOnSuccess)="onCopy()"
-                    class="btn btn-primary btn-block" i18n>Copy
-            </button>
-          </div>
-        </div>
-        <hr/>
-        <div class="row">
-          <div class="col-4">
-            <label class="control-label" i18n>Sharing:</label>
-          </div>
-          <div class="col-8">
-            <input disabled type="text"
-                   class="full-width form-control"
-                   [ngModel]="currentDir">
-          </div>
-        </div>
+    </div>
+    <hr/>
+    <div class="row">
+      <div class="col-4">
+        <label class="control-label" i18n>Sharing:</label>
+      </div>
+      <div class="col-8">
+        <input disabled type="text"
+               class="full-width form-control"
+               [ngModel]="currentDir">
+      </div>
+    </div>
 
-        <div class="row">
-          <div class="col-4">
-            <label class="control-label" i18n>Include subfolders:</label>
-          </div>
-          <div class="col-8">
-            <bSwitch
-              class="switch"
-              name="includeSubfolders"
-              [switch-on-color]="'success'"
-              [switch-inverse]="'inverse'"
-              [switch-off-text]="text.No"
-              [switch-on-text]="text.Yes"
-              [switch-handle-width]="'100'"
-              [switch-label-width]="'20'"
-              (change)="update()"
-              [(ngModel)]="input.includeSubfolders">
-            </bSwitch>
-          </div>
-        </div>
+    <div class="row">
+      <div class="col-4">
+        <label class="control-label" i18n>Include subfolders:</label>
+      </div>
+      <div class="col-8">
+        <bSwitch
+          class="switch"
+          name="includeSubfolders"
+          [switch-on-color]="'success'"
+          [switch-inverse]="'inverse'"
+          [switch-off-text]="text.No"
+          [switch-on-text]="text.Yes"
+          [switch-handle-width]="'100'"
+          [switch-label-width]="'20'"
+          (change)="update()"
+          [(ngModel)]="input.includeSubfolders">
+        </bSwitch>
+      </div>
+    </div>
 
-        <div class="row">
-          <div class="col-4">
-            <label class="control-label">
-              <ng-container i18n>Password</ng-container>
-              :
-            </label>
-          </div>
-          <div class="col-8">
-            <input id="password"
-                   class="form-control"
-                   type="password"
-                   (change)="update()"
-                   [(ngModel)]="input.password"
-                   i18n-placeholder
-                   placeholder="Password">
-          </div>
-        </div>
+    <div class="row">
+      <div class="col-4">
+        <label class="control-label">
+          <ng-container i18n>Password</ng-container>
+          :
+        </label>
+      </div>
+      <div class="col-8">
+        <input id="password"
+               class="form-control"
+               type="password"
+               (change)="update()"
+               [(ngModel)]="input.password"
+               i18n-placeholder
+               placeholder="Password">
+      </div>
+    </div>
 
-        <div class="row">
-          <div class="col-4">
-            <label class="control-label" i18n>Valid:</label>
-          </div>
-          <div class="col-4" style="padding-right: 1px">
-            <input class="form-control" [(ngModel)]="input.valid.amount" (change)="update()"
-                   name="validAmount"
-                   type="number" min="0" step="1"/>
-          </div>
-          <div class="col-4" style="padding-left: 1px">
-            <select class="form-control" [(ngModel)]="input.valid.type" (change)="update()" name="validType"
-                    required>
-              <option [ngValue]="ValidityTypes.Minutes" i18n>Minutes</option>
-              <option [ngValue]="ValidityTypes.Hours" i18n>Hours</option>
-              <option [ngValue]="ValidityTypes.Days" i18n>Days</option>
-              <option [ngValue]="ValidityTypes.Months" i18n>Months</option>
-            </select>
-          </div>
-        </div>
+    <div class="row">
+      <div class="col-4">
+        <label class="control-label" i18n>Valid:</label>
+      </div>
+      <div class="col-4" style="padding-right: 1px">
+        <input class="form-control" [(ngModel)]="input.valid.amount" (change)="update()"
+               name="validAmount"
+               type="number" min="0" step="1"/>
+      </div>
+      <div class="col-4" style="padding-left: 1px">
+        <select class="form-control" [(ngModel)]="input.valid.type" (change)="update()" name="validType"
+                required>
+          <option [ngValue]="ValidityTypes.Minutes" i18n>Minutes</option>
+          <option [ngValue]="ValidityTypes.Hours" i18n>Hours</option>
+          <option [ngValue]="ValidityTypes.Days" i18n>Days</option>
+          <option [ngValue]="ValidityTypes.Months" i18n>Months</option>
+        </select>
       </div>
     </div>
   </div>
-</div>
+</ng-template>
