@@ -44,7 +44,7 @@ import {ShareLoginComponent} from './sharelogin/share-login.component';
 import {ShareService} from './gallery/share.service';
 import {ModalModule} from 'ngx-bootstrap/modal';
 import {DatabaseSettingsComponent} from './settings/database/database.settings.component';
-import {ToastModule} from 'ng2-toastr/ng2-toastr';
+import {ToastrModule} from 'ngx-toastr';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {NotificationService} from './model/notification.service';
 import {JWBootstrapSwitchModule} from 'jw-bootstrap-switch-ng2';
@@ -116,7 +116,7 @@ export function translationsFactory(locale: string) {
     ClipboardModule,
     JWBootstrapSwitchModule,
     TooltipModule.forRoot(),
-    ToastModule.forRoot(),
+    ToastrModule.forRoot(),
     ModalModule.forRoot(),
     CollapseModule.forRoot(),
     BsDropdownModule.forRoot(),

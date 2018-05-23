@@ -1,44 +1,53 @@
 import {inject, TestBed} from '@angular/core/testing';
-import {BaseRequestOptions, Http} from '@angular/http';
-import {MockBackend} from '@angular/http/testing';
-import 'rxjs/Rx';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {NetworkService} from './network.service';
 import {UserService} from './user.service';
 import {LoginCredential} from '../../../../common/entities/LoginCredential';
+import {SlimLoadingBarService} from 'ng2-slim-loading-bar';
+import {ShareService} from '../../gallery/share.service';
 
+class MockShareService {
+  wait() {
+    return Promise.resolve(true);
+  }
+
+  isSharing() {
+    return false;
+  }
+}
 
 describe('UserService', () => {
 
+
   beforeEach(() => {
     TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule],
       providers: [
-        MockBackend,
-        BaseRequestOptions,
-        {
-          provide: Http, useFactory: (backend, options) => {
-            return new Http(backend, options);
-          }, deps: [MockBackend, BaseRequestOptions]
-        },
+        UserService,
+        SlimLoadingBarService,
         NetworkService,
-        UserService]
+        {provide: ShareService, useClass: MockShareService}
+      ]
     });
+  });
 
-
-    it('should call postJson at login', inject([UserService, NetworkService], (userService, networkService) => {
+  it('should call postJson at login', inject([UserService, NetworkService],
+    async (userService, networkService) => {
       spyOn(networkService, 'postJson');
       const credential = new LoginCredential('name', 'pass');
-      userService.login(credential);
+      await userService.login(credential);
       expect(networkService.postJson).toHaveBeenCalled();
       expect(networkService.postJson.calls.argsFor(0)).toEqual(['/user/login', {'loginCredential': credential}]);
     }));
 
-    it('should call getJson at getSessionUser', inject([UserService, NetworkService], (userService, networkService) => {
+  it('should call getJson at getSessionUser', inject([UserService, NetworkService],
+    async (userService, networkService) => {
       spyOn(networkService, 'getJson');
-      userService.getSessionUser();
+      await userService.getSessionUser();
       expect(networkService.getJson).toHaveBeenCalled();
       expect(networkService.getJson.calls.argsFor(0)).toEqual(['/user/login']);
     }));
 
 
-  });
 });
+

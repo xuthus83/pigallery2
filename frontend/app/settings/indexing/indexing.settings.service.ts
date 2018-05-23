@@ -4,7 +4,7 @@ import {SettingsService} from '../settings.service';
 import {AbstractSettingsService} from '../_abstract/abstract.settings.service';
 import {DatabaseType, IndexingConfig} from '../../../../common/config/private/IPrivateConfig';
 import {IndexingProgressDTO} from '../../../../common/entities/settings/IndexingProgressDTO';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import {BehaviorSubject} from 'rxjs';
 
 @Injectable()
 export class IndexingSettingsService extends AbstractSettingsService<IndexingConfig> {

@@ -15,11 +15,9 @@ import {GalleryPhotoComponent} from '../grid/photo/photo.grid.gallery.component'
 import {Dimension} from '../../model/IRenderable';
 import {FullScreenService} from '../fullscreen.service';
 import {OverlayService} from '../overlay.service';
-import {Subscription} from 'rxjs/Subscription';
 import {animate, AnimationBuilder, AnimationPlayer, style} from '@angular/animations';
 import {GalleryLightboxPhotoComponent} from './photo/photo.lightbox.gallery.component';
-import {Observable} from 'rxjs/Observable';
-import {timer} from 'rxjs/observable/timer';
+import {Observable, Subscription, timer} from 'rxjs';
 import {filter} from 'rxjs/operators';
 
 @Component({

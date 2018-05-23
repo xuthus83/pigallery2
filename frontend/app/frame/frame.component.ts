@@ -3,7 +3,7 @@ import {RouterLink} from '@angular/router';
 import {AuthenticationService} from '../model/network/authentication.service';
 import {UserDTO, UserRoles} from '../../../common/entities/UserDTO';
 import {Config} from '../../../common/config/public/Config';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import {BehaviorSubject} from 'rxjs';
 import {NotificationService} from '../model/notification.service';
 import {ShareService} from '../gallery/share.service';
 

@@ -11,7 +11,7 @@ import {SearchResultDTO} from '../../../common/entities/SearchResultDTO';
 import {ShareService} from './share.service';
 import {NavigationService} from '../model/navigation.service';
 import {UserRoles} from '../../../common/entities/UserDTO';
-import {interval} from 'rxjs/observable/interval';
+import {interval} from 'rxjs';
 import {ContentWrapper} from '../../../common/entities/ConentWrapper';
 import {PageHelper} from '../model/page.helper';
 

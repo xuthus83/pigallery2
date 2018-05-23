@@ -1,6 +1,5 @@
 import {getTestBed, inject, TestBed} from '@angular/core/testing';
 import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
-import 'rxjs/Rx';
 import {NetworkService} from './network.service';
 import {Message} from '../../../../common/entities/Message';
 import {SlimLoadingBarService} from 'ng2-slim-loading-bar';
@@ -142,7 +141,6 @@ describe('NetworkService Fail tests', () => {
   afterEach(() => {
     httpMock.verify();
   });
-
 
   it('should call GET with error', inject([NetworkService], (networkService) => {
 

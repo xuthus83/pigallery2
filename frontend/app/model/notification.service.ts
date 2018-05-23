@@ -1,5 +1,5 @@
 import {Injectable, ViewContainerRef} from '@angular/core';
-import {ToastsManager} from 'ng2-toastr/ng2-toastr';
+import {ToastrService} from 'ngx-toastr';
 import {NetworkService} from './network/network.service';
 import {AuthenticationService} from './network/authentication.service';
 import {NotificationDTO, NotificationType} from '../../../common/entities/NotificationDTO';
@@ -16,7 +16,7 @@ export class NotificationService {
   notifications: NotificationDTO[] = [];
   lastUser: UserDTO = null;
 
-  constructor(private _toastr: ToastsManager,
+  constructor(private _toastr: ToastrService,
               private _networkService: NetworkService,
               private _authService: AuthenticationService,
               public i18n: I18n) {
@@ -53,10 +53,6 @@ export class NotificationService {
     });
   }
 
-  setRootViewContainerRef(vcr: ViewContainerRef) {
-    this._toastr.setRootViewContainerRef(vcr);
-  }
-
   success(text, title = null) {
     this._toastr.success(text, title, this.options);
   }
@@ -74,7 +70,7 @@ export class NotificationService {
   }
 
 
-  get Toastr(): ToastsManager {
+  get Toastr(): ToastrService {
     return this._toastr;
   }
 }

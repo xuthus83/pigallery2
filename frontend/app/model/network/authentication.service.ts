@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {UserDTO, UserRoles} from '../../../../common/entities/UserDTO';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import {BehaviorSubject} from 'rxjs';
 import {UserService} from './user.service';
 import {LoginCredential} from '../../../../common/entities/LoginCredential';
 import {Cookie} from 'ng2-cookies';

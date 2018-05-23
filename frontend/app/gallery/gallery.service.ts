@@ -4,7 +4,7 @@ import {ContentWrapper} from '../../../common/entities/ConentWrapper';
 import {DirectoryDTO} from '../../../common/entities/DirectoryDTO';
 import {SearchTypes} from '../../../common/entities/AutoCompleteItem';
 import {GalleryCacheService} from './cache.gallery.service';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import {BehaviorSubject} from 'rxjs';
 import {SharingDTO} from '../../../common/entities/SharingDTO';
 import {Config} from '../../../common/config/public/Config';
 import {ShareService} from './share.service';

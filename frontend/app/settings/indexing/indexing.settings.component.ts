@@ -4,8 +4,7 @@ import {AuthenticationService} from '../../model/network/authentication.service'
 import {NavigationService} from '../../model/navigation.service';
 import {NotificationService} from '../../model/notification.service';
 import {ErrorDTO} from '../../../../common/entities/Error';
-import {Observable} from 'rxjs/Observable';
-import {interval} from 'rxjs/observable/interval';
+import {Observable, interval} from 'rxjs';
 import {IndexingConfig, ReIndexingSensitivity} from '../../../../common/config/private/IPrivateConfig';
 import {SettingsComponent} from '../_abstract/abstract.settings.component';
 import {Utils} from '../../../../common/Utils';

@@ -20,9 +20,7 @@ export class AppComponent implements OnInit, OnDestroy {
   constructor(private _router: Router,
               private _authenticationService: AuthenticationService,
               private _shareService: ShareService,
-              private  _title: Title, vcr: ViewContainerRef,
-              notificationService: NotificationService) {
-    notificationService.setRootViewContainerRef(vcr);
+              private  _title: Title) {
   }
 
   async ngOnInit() {

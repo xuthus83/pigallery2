@@ -33,16 +33,16 @@ gulp.task('build-frontend', function (done) {
   });
   var tasks = [];
   createFrontendTask('build-frontend-release default',
-    "ng build --aot -prod --output-path=./release/dist --no-progress --locale=en" +
+    "ng build --aot --prod --output-path=./release/dist --no-progress --i18n-locale=en" +
     " --i18n-format xlf --i18n-file frontend/" + translationFolder + "/messages.en.xlf" +
-    " --missing-translation warning");
+    " --i18n-missing-translation warning");
   tasks.push('build-frontend-release default');
   for (var i = 0; i < languages.length; i++) {
     createFrontendTask('build-frontend-release ' + languages[i],
-      "ng build --aot -prod --output-path=./release/dist/" + languages[i] +
-      " --no-progress --locale=" + languages[i] +
+      "ng build --aot --prod --output-path=./release/dist/" + languages[i] +
+      " --no-progress --i18n-locale=" + languages[i] +
       " --i18n-format xlf --i18n-file frontend/" + translationFolder + "/messages." + languages[i] + ".xlf" +
-      " --missing-translation warning");
+      " --i18n-missing-translation warning");
     tasks.push('build-frontend-release ' + languages[i]);
   }
   tasks.push(function () {
@@ -108,14 +108,14 @@ var simpleBuild = function (isProd) {
     var tasks = [];
     var cmd = "ng build --aot ";
     if (isProd) {
-      cmd += " -prod "
+      cmd += " --prod "
     }
-    createFrontendTask('build-frontend default', cmd + "--output-path=./dist --no-progress --no-progress --locale en" +
-      " --i18n-format=xlf --i18n-file=frontend/" + translationFolder + "/messages.en.xlf" + " --missing-translation warning");
+    createFrontendTask('build-frontend default', cmd + "--output-path=./dist --no-progress --no-progress --i18n-locale en" +
+      " --i18n-format=xlf --i18n-file=frontend/" + translationFolder + "/messages.en.xlf" + " --i18n-missing-translation warning");
     tasks.push('build-frontend default');
     for (var i = 0; i < languages.length; i++) {
-      createFrontendTask('build-frontend ' + languages[i], cmd + "--output-path=./dist/" + languages[i] + " --no-progress --locale " + languages[i] +
-        " --i18n-format=xlf --i18n-file=frontend/" + translationFolder + "/messages." + languages[i] + ".xlf" + " --missing-translation warning");
+      createFrontendTask('build-frontend ' + languages[i], cmd + "--output-path=./dist/" + languages[i] + " --no-progress --i18n-locale " + languages[i] +
+        " --i18n-format=xlf --i18n-file=frontend/" + translationFolder + "/messages." + languages[i] + ".xlf" + " --i18n-missing-translation warning");
       tasks.push('build-frontend ' + languages[i]);
     }
     tasks.push(function () {
@@ -128,7 +128,7 @@ var simpleBuild = function (isProd) {
 
 gulp.task("extract-locale", function (cb) {
   console.log("creating source translation file:  locale.source.xlf");
-  exec('ng xi18n -of ./../locale.source.xlf -f xlf --locale en', function (err, stdout, stderr) {
+  exec('ng xi18n -of ./../locale.source.xlf -f xlf --i18n-locale en', function (err, stdout, stderr) {
     console.log(stdout);
     console.log(stderr);
     if (err) {

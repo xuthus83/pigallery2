@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {NetworkService} from '../model/network/network.service';
 import {CreateSharingDTO, SharingDTO} from '../../../common/entities/SharingDTO';
 import {Router, RoutesRecognized} from '@angular/router';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import {BehaviorSubject} from 'rxjs';
 
 @Injectable()
 export class ShareService {

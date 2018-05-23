@@ -44,12 +44,6 @@ export class BasicSettingsComponent extends SettingsComponent<BasicConfigDTO> {
   }
 
   calcBaseUrl(): string {
-    console.log(this.settings.publicUrl.replace(new RegExp('\\\\', 'g'), '/'));
-    console.log(this.settings.publicUrl.replace(new RegExp('\\\\', 'g'), '/')
-      .replace(new RegExp('http://', 'g'), ''));
-    console.log(this.settings.publicUrl.replace(new RegExp('\\\\', 'g'), '/')
-      .replace(new RegExp('http://', 'g'), '')
-      .replace(new RegExp('https://', 'g'), ''));
     const url = this.settings.publicUrl.replace(new RegExp('\\\\', 'g'), '/')
       .replace(new RegExp('http://', 'g'), '')
       .replace(new RegExp('https://', 'g'), '');
