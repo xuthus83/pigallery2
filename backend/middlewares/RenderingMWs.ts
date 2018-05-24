@@ -64,8 +64,8 @@ export class RenderingMWs {
 
     if (err instanceof ErrorDTO) {
       if (err.details) {
+        Logger.warn('Handled error:', err);
         if (!(req.session.user && req.session.user.role >= UserRoles.Developer)) {
-          Logger.warn('Handled error:', err);
           delete (err.details);
         } else {
           try {
