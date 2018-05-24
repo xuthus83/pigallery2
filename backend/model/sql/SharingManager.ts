@@ -4,12 +4,13 @@ import {SQLConnection} from './SQLConnection';
 import {SharingEntity} from './enitites/SharingEntity';
 import {Config} from '../../../common/config/private/Config';
 import {PasswordHelper} from '../PasswordHelper';
+import {DeleteResult} from 'typeorm';
 
 export class SharingManager implements ISharingManager {
 
-  private static async removeExpiredLink() {
+  private static async removeExpiredLink(): Promise<DeleteResult> {
     const connection = await SQLConnection.getConnection();
-    return connection
+    return await connection
       .getRepository(SharingEntity)
       .createQueryBuilder('share')
       .where('expires < :now', {now: Date.now()})
