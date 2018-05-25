@@ -136,6 +136,9 @@ export class AdminMWs {
       // only updating explicitly set config (not saving config set by the diagnostics)
       const original = Config.original();
       original.Client.authenticationRequired = <boolean>req.body.settings;
+      if (original.Client.authenticationRequired === false) {
+        original.Client.Sharing.enabled = false;
+      }
       original.save();
       await ConfigDiagnostics.runDiagnostics();
       Logger.info(LOG_TAG, 'new config:');

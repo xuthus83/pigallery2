@@ -104,6 +104,10 @@ export class ConfigDiagnostics {
       config.Server.database.type === DatabaseType.memory) {
       throw new Error('Memory Database do not support sharing');
     }
+    if (sharing.enabled === true &&
+      config.Client.authenticationRequired === false) {
+      throw new Error('In case of no authentication, sharing is not supported');
+    }
   }
 
   static async testMapConfig(map: ClientConfig.MapConfig) {
@@ -118,10 +122,11 @@ export class ConfigDiagnostics {
     if (Config.Server.database.type !== DatabaseType.memory) {
       try {
         await ConfigDiagnostics.testDatabase(Config.Server.database);
-      } catch (err) {
-        Logger.warn(LOG_TAG, '[SQL error]', err);
+      } catch (ex) {
+        const err: Error = ex;
+        Logger.warn(LOG_TAG, '[SQL error]', err.toString());
         Logger.warn(LOG_TAG, 'Error during initializing SQL falling back temporally to memory DB');
-        NotificationManager.warning('Error during initializing SQL falling back temporally to memory DB', err);
+        NotificationManager.warning('Error during initializing SQL falling back temporally to memory DB', err.toString());
         Config.setDatabaseType(DatabaseType.memory);
       }
     }
@@ -129,11 +134,12 @@ export class ConfigDiagnostics {
     if (Config.Server.thumbnail.processingLibrary !== ThumbnailProcessingLib.Jimp) {
       try {
         await ConfigDiagnostics.testThumbnailLib(Config.Server.thumbnail.processingLibrary);
-      } catch (err) {
+      } catch (ex) {
+        const err: Error = ex;
         NotificationManager.warning('Thumbnail hardware acceleration is not possible.' +
           ' \'' + ThumbnailProcessingLib[Config.Server.thumbnail.processingLibrary] + '\' node module is not found.' +
-          ' Falling back temporally to JS based thumbnail generation', err);
-        Logger.warn(LOG_TAG, '[Thumbnail hardware acceleration] module error: ', err);
+          ' Falling back temporally to JS based thumbnail generation', err.toString());
+        Logger.warn(LOG_TAG, '[Thumbnail hardware acceleration] module error: ', err.toString());
         Logger.warn(LOG_TAG, 'Thumbnail hardware acceleration is not possible.' +
           ' \'' + ThumbnailProcessingLib[Config.Server.thumbnail.processingLibrary] + '\' node module is not found.' +
           ' Falling back temporally to JS based thumbnail generation');
@@ -143,51 +149,57 @@ export class ConfigDiagnostics {
 
     try {
       await ConfigDiagnostics.testThumbnailFolder(Config.Server.thumbnail.folder);
-    } catch (err) {
-      NotificationManager.error('Thumbnail folder error', err);
-      Logger.error(LOG_TAG, 'Thumbnail folder error', err);
+    } catch (ex) {
+      const err: Error = ex;
+      NotificationManager.error('Thumbnail folder error', err.toString());
+      Logger.error(LOG_TAG, 'Thumbnail folder error', err.toString());
     }
 
 
     try {
       await ConfigDiagnostics.testImageFolder(Config.Server.imagesFolder);
-    } catch (err) {
-      NotificationManager.error('Images folder error', err);
-      Logger.error(LOG_TAG, 'Images folder error', err);
+    } catch (ex) {
+      const err: Error = ex;
+      NotificationManager.error('Images folder error', err.toString());
+      Logger.error(LOG_TAG, 'Images folder error', err.toString());
     }
     try {
       await ConfigDiagnostics.testClientThumbnailConfig(Config.Client.Thumbnail);
-    } catch (err) {
-      NotificationManager.error('Thumbnail settings error', err);
-      Logger.error(LOG_TAG, 'Thumbnail settings error', err);
+    } catch (ex) {
+      const err: Error = ex;
+      NotificationManager.error('Thumbnail settings error', err.toString());
+      Logger.error(LOG_TAG, 'Thumbnail settings error', err.toString());
     }
 
 
     try {
       await ConfigDiagnostics.testSearchConfig(Config.Client.Search, Config);
-    } catch (err) {
+    } catch (ex) {
+      const err: Error = ex;
       NotificationManager.warning('Search is not supported with these settings. Disabling temporally. ' +
-        'Please adjust the config properly.', err);
-      Logger.warn(LOG_TAG, 'Search is not supported with these settings, switching off..', err);
+        'Please adjust the config properly.', err.toString());
+      Logger.warn(LOG_TAG, 'Search is not supported with these settings, switching off..', err.toString());
       Config.Client.Search.enabled = false;
     }
 
     try {
       await ConfigDiagnostics.testSharingConfig(Config.Client.Sharing, Config);
-    } catch (err) {
+    } catch (ex) {
+      const err: Error = ex;
       NotificationManager.warning('Sharing is not supported with these settings. Disabling temporally. ' +
-        'Please adjust the config properly.', err);
-      Logger.warn(LOG_TAG, 'Sharing is not supported with these settings, switching off..', err);
+        'Please adjust the config properly.', err.toString());
+      Logger.warn(LOG_TAG, 'Sharing is not supported with these settings, switching off..', err.toString());
       Config.Client.Sharing.enabled = false;
     }
 
     try {
       await ConfigDiagnostics.testMapConfig(Config.Client.Map);
-    } catch (err) {
+    } catch (ex) {
+      const err: Error = ex;
       NotificationManager.warning('Maps is not supported with these settings. Disabling temporally. ' +
-        'Please adjust the config properly.', err);
+        'Please adjust the config properly.', err.toString());
       Logger.warn(LOG_TAG, 'Maps is not supported with these settings. Disabling temporally. ' +
-        'Please adjust the config properly.', err);
+        'Please adjust the config properly.', err.toString());
       Config.Client.Map.enabled = false;
     }
 

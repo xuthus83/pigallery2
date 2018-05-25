@@ -27,7 +27,7 @@ const LOG_TAG = '[server]';
 
 export class Server {
 
-  private app: any;
+  private app: _express.Express;
   private server: any;
 
   /**
