@@ -47,7 +47,7 @@ export class GalleryMapLightboxComponent implements OnChanges {
     this.opacity = 1.0;
     this.startPosition = position;
     this.lightboxDimension = position;
-    this.lightboxDimension.top -= this.getBodyScrollTop();
+    this.lightboxDimension.top -= PageHelper.ScrollY;
     this.mapDimension = <Dimension>{
       top: 0,
       left: 0,
@@ -74,12 +74,12 @@ export class GalleryMapLightboxComponent implements OnChanges {
     const to = this.startPosition;
 
     // iff target image out of screen -> scroll to there
-    if (this.getBodyScrollTop() > to.top || this.getBodyScrollTop() + this.getScreenHeight() < to.top) {
-      this.setBodyScrollTop(to.top);
+    if (PageHelper.ScrollY > to.top || PageHelper.ScrollY + this.getScreenHeight() < to.top) {
+      PageHelper.ScrollY = to.top;
     }
 
     this.lightboxDimension = this.startPosition;
-    this.lightboxDimension.top -= this.getBodyScrollTop();
+    this.lightboxDimension.top -= PageHelper.ScrollY;
     PageHelper.showScrollY();
     this.opacity = 0.0;
     setTimeout(() => {
@@ -144,14 +144,6 @@ export class GalleryMapLightboxComponent implements OnChanges {
     this.mapPhotos = [];
   }
 
-
-  private getBodyScrollTop(): number {
-    return window.scrollY;
-  }
-
-  private setBodyScrollTop(value: number) {
-    window.scrollTo(window.scrollX, value);
-  }
 
   private getScreenWidth() {
     return window.innerWidth;
