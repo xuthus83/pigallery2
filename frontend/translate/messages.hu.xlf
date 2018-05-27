@@ -810,7 +810,7 @@
           <context context-type="sourcefile">app/settings/basic/basic.settings.component.ts</context>
           <context context-type="linenumber">40</context>
         </context-group>
-        <target>A képek a mappából töltődnek be (olvasási engedély szükséges a mappára)</target>
+        <target>A képek ebből a mappából töltődnek be (olvasási engedély szükséges a mappára)</target>
       </trans-unit>
       <trans-unit id="682679bea54c7cdc8fad228e65f4e35d8cf62275" datatype="html">
         <source>Page public url</source>
@@ -828,8 +828,8 @@
           <context context-type="sourcefile">app/settings/basic/basic.settings.component.ts</context>
           <context context-type="linenumber">52</context>
         </context-group>
-        <target>Ha belépsz az oldal formája helyi hálózat jó tudni a nyilvánosságot
-            URL megosztási link létrehozásához</target>
+        <target>Ha az oldalt a helyi hálózaton keresztül éred el, jó tudni a nyilvánosságot
+            URL-t megosztási link létrehozásához</target>
       </trans-unit>
       <trans-unit id="52e8e9fdcd08e89225892a7657140dbf41020b76" datatype="html">
         <source>Url Base</source>
@@ -849,7 +849,7 @@
           <context context-type="linenumber">66</context>
         </context-group>
         <target>Ha a galériát egy al-url alatt érheti el (például:
-            http://mydomain.com/myGallery), állítsa be itt. Ha nem működik, akkor hiányolhat a "/" a kezdetétől
+            http://mydomain.com/myGallery), állítsa be itt. Ha nem működik, akkor hiányozhat a "/" a kezdetétől
             url.</target>
       </trans-unit>
       <trans-unit id="f268a48c3f70d641ccb99786fe49f21a769eb2bb" datatype="html">
@@ -860,7 +860,7 @@
           <context context-type="sourcefile">app/settings/basic/basic.settings.component.ts</context>
           <context context-type="linenumber">73</context>
         </context-group>
-        <target>A nyilvános url és az al url nem egyeznek meg. Néhány funkció lehet hogy nem fog működni.</target>
+        <target>A nyilvános url és az al url nem eggyeznek meg. Néhány funkció lehet hogy nem fog működni.</target>
       </trans-unit>
       <trans-unit id="ee1319d3bfb2e70e14212ea2c3896e4ac4dc0092" datatype="html">
         <source>
@@ -896,8 +896,7 @@
           <context context-type="sourcefile">app/settings/other/other.settings.component.ts</context>
           <context context-type="linenumber">25</context>
         </context-group>
-        <target>Lefuttatja a könyvtári beolvasást és indexkép generációt (csak Jimp számára) a
-            különböző szál</target>
+        <target>Külön szálon futtatja a könyvtár scnalést és a thumbnail generalást(csak Jimp számára)</target>
       </trans-unit>
       <trans-unit id="c29451eea39ce561ed481264df985f6e3b9c39ae" datatype="html">
         <source>Scroll based thumbnail
@@ -906,7 +905,7 @@
           <context context-type="sourcefile">app/settings/other/other.settings.component.ts</context>
           <context context-type="linenumber">32</context>
         </context-group>
-        <target>Görgetés alapú miniatűr
+        <target>Görgetés alapú thumbnail
           generáció</target>
       </trans-unit>
       <trans-unit id="b11dea996a20defa548ba5337c9745e43ac48440" datatype="html">
@@ -916,7 +915,7 @@
           <context context-type="sourcefile">app/settings/other/other.settings.component.ts</context>
           <context context-type="linenumber">47</context>
         </context-group>
-        <target>Ezek a miniatűrök nagyobb prioritást kapnak, ami látható a képernyőn</target>
+        <target>Azek a thumbnail-ek nagyobb prioritást kapnak, ami látható a képernyőn</target>
       </trans-unit>
       <trans-unit id="1a693eac5c0c9ee65ea4e8db6e097806141e91f5" datatype="html">
         <source>Lazy image rendering</source>
@@ -934,8 +933,8 @@
           <context context-type="sourcefile">app/settings/other/other.settings.component.ts</context>
           <context context-type="linenumber">67</context>
         </context-group>
-        <target>Csak a szükséges mennyiségű fotót jeleníti meg egyszerre. Többet nyújt, ha
-            elérte az alsó oldalt</target>
+        <target>Csak a szükséges mennyiségű fotót jeleníti meg egyszerre. Újabb fotókat jelenít meg, ha
+            elérte az oldal alját</target>
       </trans-unit>
       <trans-unit id="1fa92c6ce274f878b2625587daa7e08b2a3a8b38" datatype="html">
         <source>Cache</source>
@@ -952,7 +951,7 @@
           <context context-type="sourcefile">app/settings/other/other.settings.component.ts</context>
           <context context-type="linenumber">89</context>
         </context-group>
-        <target>Gyorsítja a könyvtár tartalmát és a keresési eredményeket a jobb teljesítmény érdekében</target>
+        <target>Cache-eli a könyvtár tartalmát és a keresési eredményeket a jobb teljesítmény érdekében</target>
       </trans-unit>
       <trans-unit id="5e00b6f637f57796ae6ce0bbafedf3849e28a171" datatype="html">
         <source>
@@ -970,7 +969,7 @@
           <context context-type="sourcefile">app/settings/indexing/indexing.settings.component.ts</context>
           <context context-type="linenumber">11</context>
         </context-group>
-        <target>Index cache időtúllépés [ms]</target>
+        <target>Index cache időtúllépése [ms]</target>
       </trans-unit>
       <trans-unit id="9b5dbb5bb33314765161dbb5601ad4e8f2f926ce" datatype="html">
         <source>If there was no indexing in this time, it reindexes. (skipped if
@@ -980,8 +979,8 @@
           <context context-type="sourcefile">app/settings/indexing/indexing.settings.component.ts</context>
           <context context-type="linenumber">19</context>
         </context-group>
-        <target>Ha ebben az időben nem volt indexelés, újraindexet hajt végre. (ha kihagyott
-              a DB index és az érzékenység alacsony)</target>
+        <target>Ha ebben az időben nem volt indexelés, újraindexet hajt végre. (figyelmen kívül hagyja, ha
+              az érzékenység alacsony)</target>
       </trans-unit>
       <trans-unit id="95cda683cfb2041ad808023f29e40d16981b3c5e" datatype="html">
         <source>Sub folder preview size</source>
@@ -997,7 +996,7 @@
           <context context-type="sourcefile">app/settings/indexing/indexing.settings.component.ts</context>
           <context context-type="linenumber">33</context>
         </context-group>
-        <target>Ennyi fotót olvas be az almappákból (ezek közül választ az oldal amikor mappához képet rendel)</target>
+        <target>Ennyi fotót olvas be az almappákból (ezek közül választ az oldal amikor mappához mutat egy képet)</target>
       </trans-unit>
       <trans-unit id="d0a8aab4720af5526787eec8cfe8dd2e1bf20cac" datatype="html">
         <source>Folder reindexing sensitivity</source>
@@ -1005,7 +1004,7 @@
           <context context-type="sourcefile">app/settings/indexing/indexing.settings.component.ts</context>
           <context context-type="linenumber">38</context>
         </context-group>
-        <target>Folder reindexing érzékenység</target>
+        <target>Mappa indexelése érzékenység</target>
       </trans-unit>
       <trans-unit id="6f509cb00bac00333d6edb9ba14fd14d145529e5" datatype="html">
         <source>Set the reindexing sensitivity. High value check the folders for change more often
@@ -1014,7 +1013,7 @@
           <context context-type="sourcefile">app/settings/indexing/indexing.settings.component.ts</context>
           <context context-type="linenumber">47</context>
         </context-group>
-        <target>Állítsa be az újraindexelés érzékenységét. Nagy értékű ellenőrzi a mappákat a változás gyakoribbá</target>
+        <target>Állítsa be az újraindexelés érzékenységét. Nagy érzékenység gyakrabban vizgyálja a mappát ellenőrzi a mappákat, változásokat keresve</target>
       </trans-unit>
       <trans-unit id="b8f78167ef95c21d032b15614e8239cc033a0fd2" datatype="html">
         <source>Save
@@ -1074,7 +1073,7 @@
           <context context-type="sourcefile">app/settings/indexing/indexing.settings.component.ts</context>
           <context context-type="linenumber">96</context>
         </context-group>
-        <target>Megszünteti</target>
+        <target>Mégse</target>
       </trans-unit>
       <trans-unit id="d68e02eaea0b78b12fceb483b2183a3f5b70d969" datatype="html">
         <source>Reset Indexes
@@ -1147,7 +1146,7 @@
           <context context-type="sourcefile">frontend/app/gallery/share/share.gallery.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>Az URL-t a vágólapon</target>
+        <target>Az URL-t a vágólapra lett másolva</target>
       </trans-unit>
       <trans-unit id="85b9773b9a3caeb9f0fd69b2b8fa7284bda6b492" datatype="html">
         <source>Server error</source>
@@ -1259,7 +1258,7 @@
           <context context-type="sourcefile">frontend/app/settings/basic/basic.settings.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>Alapvető</target>
+        <target>Alap</target>
       </trans-unit>
       <trans-unit id="6244017173fe88802248f410e78f2e637f98f634" datatype="html">
         <source>Restart the server to apply the new settings</source>
@@ -1271,7 +1270,7 @@
           <context context-type="sourcefile">frontend/app/settings/other/other.settings.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>Indítsa újra a  weboldalt az új beállítások alkalmazásához</target>
+        <target>Indítsd újra a weboldalt az új beállítások alkalmazásához</target>
       </trans-unit>
       <trans-unit id="f53ab04e9d8449445abf482bf44b521e2e695c3c" datatype="html">
         <source>Indexing</source>
@@ -1347,7 +1346,7 @@
           <context context-type="sourcefile">frontend/app/settings/usermanager/usermanager.settings.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>Szerver újraindítás javasolt.</target>
+        <target>Szerver újraindítása javasolt.</target>
       </trans-unit>
       <trans-unit id="00de5dcd17a5ebd17e67e0688bc638e01bc510a4" datatype="html">
         <source>Password protection disabled</source>

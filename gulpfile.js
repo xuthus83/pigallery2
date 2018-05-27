@@ -134,7 +134,7 @@ gulp.task("extract-locale", function (cb) {
     if (err) {
       return cb(err);
     }
-    exec('ngx-extractor -i frontend/**/*.ts -f xlf -o locale.source.xlf', function (err, stdout, stderr) {
+    exec('ngx-extractor -i frontend/**/*.ts -f xlf --out-file locale.source.xlf', function (err, stdout, stderr) {
       console.log(stdout);
       console.log(stderr);
       cb(err);
