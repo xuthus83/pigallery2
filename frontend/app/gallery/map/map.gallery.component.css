@@ -4,7 +4,14 @@
 }
 
 #map {
-
   width: 100%;
   height: 100%;
+}
+
+.overlay {
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+  opacity: 0.8;
+  cursor: pointer;
 }

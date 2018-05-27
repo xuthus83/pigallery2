@@ -2,20 +2,22 @@
   <app-gallery-map-lightbox [photos]="photos"></app-gallery-map-lightbox>
   <div id="map" #map>
     <agm-map
-      (click)="click()"
       [disableDefaultUI]="true"
       [zoomControl]="false"
       [streetViewControl]="false"
       [usePanning]="false"
       [draggable]="false"
       [zoom]="0"
-      [latitude]="mapCenter.latitude"
-      [longitude]="mapCenter.longitude">
+      [fitBounds]="latlngBounds">
       <agm-marker
         *ngFor="let photo of mapPhotos"
         [latitude]="photo.latitude"
         [longitude]="photo.longitude">
       </agm-marker>
     </agm-map>
+    <div class="overlay" (click)="click()"
+         [style.margin-top.px]="-height"
+         [style.height.px]="height">
+    </div>
   </div>
 </ng-template>

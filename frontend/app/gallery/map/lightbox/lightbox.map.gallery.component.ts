@@ -1,25 +1,27 @@
-import {Component, ElementRef, HostListener, Input, OnChanges, ViewChild} from '@angular/core';
+import {Component, ElementRef, HostListener, Input, OnChanges, ViewChild, AfterViewInit} from '@angular/core';
 import {PhotoDTO} from '../../../../../common/entities/PhotoDTO';
 import {Dimension} from '../../../model/IRenderable';
 import {FullScreenService} from '../../fullscreen.service';
-import {AgmMap} from '@agm/core';
+import {AgmMap, LatLngBounds, MapsAPILoader} from '@agm/core';
 import {IconThumbnail, Thumbnail, ThumbnailManagerService} from '../../thumnailManager.service';
 import {IconPhoto} from '../../IconPhoto';
 import {Photo} from '../../Photo';
 import {PageHelper} from '../../../model/page.helper';
+
 
 @Component({
   selector: 'app-gallery-map-lightbox',
   styleUrls: ['./lightbox.map.gallery.component.css'],
   templateUrl: './lightbox.map.gallery.component.html',
 })
-export class GalleryMapLightboxComponent implements OnChanges {
+export class GalleryMapLightboxComponent implements OnChanges, AfterViewInit {
 
   @Input() photos: Array<PhotoDTO>;
   private startPosition = null;
   public lightboxDimension: Dimension = <Dimension>{top: 0, left: 0, width: 0, height: 0};
   public mapDimension: Dimension = <Dimension>{top: 0, left: 0, width: 0, height: 0};
   public visible = false;
+  public controllersVisible = false;
   public opacity = 1.0;
   mapPhotos: MapPhoto[] = [];
   mapCenter = {latitude: 0, longitude: 0};
@@ -27,18 +29,23 @@ export class GalleryMapLightboxComponent implements OnChanges {
   @ViewChild('root') elementRef: ElementRef;
 
   @ViewChild(AgmMap) map: AgmMap;
+  public latlngBounds: LatLngBounds;
 
 
   constructor(public fullScreenService: FullScreenService,
-              private thumbnailService: ThumbnailManagerService) {
+              private thumbnailService: ThumbnailManagerService,
+              private mapsAPILoader: MapsAPILoader) {
   }
 
-  // TODO: fix zooming
   ngOnChanges() {
     if (this.visible === false) {
       return;
     }
     this.showImages();
+  }
+
+  ngAfterViewInit() {
+
   }
 
   public show(position: Dimension) {
@@ -54,7 +61,9 @@ export class GalleryMapLightboxComponent implements OnChanges {
       width: this.getScreenWidth(),
       height: this.getScreenHeight()
     };
-    this.map.triggerResize();
+    this.map.triggerResize().then(() => {
+      this.controllersVisible = true;
+    });
 
     PageHelper.hideScrollY();
 
@@ -71,6 +80,7 @@ export class GalleryMapLightboxComponent implements OnChanges {
 
   public hide() {
     this.fullScreenService.exitFullScreen();
+    this.controllersVisible = false;
     const to = this.startPosition;
 
     // iff target image out of screen -> scroll to there
@@ -92,7 +102,9 @@ export class GalleryMapLightboxComponent implements OnChanges {
     this.hideImages();
 
     this.mapPhotos = this.photos.filter(p => {
-      return p.metadata && p.metadata.positionData && p.metadata.positionData.GPSData;
+      return p.metadata && p.metadata.positionData && p.metadata.positionData.GPSData
+        && p.metadata.positionData.GPSData.latitude
+        && p.metadata.positionData.GPSData.longitude;
     }).map(p => {
       let width = 500;
       let height = 500;
@@ -124,9 +136,25 @@ export class GalleryMapLightboxComponent implements OnChanges {
       return obj;
     });
 
-    if (this.mapPhotos.length > 0) {
-      this.mapCenter = this.mapPhotos[0];
+    this.findPhotosBounds().catch(console.error);
+  }
+
+
+  private async findPhotosBounds() {
+    await this.mapsAPILoader.load();
+    if (!window['google']) {
+      return;
     }
+    this.latlngBounds = new window['google'].maps.LatLngBounds();
+
+    for (const photo of this.mapPhotos) {
+      this.latlngBounds.extend(new window['google'].maps.LatLng(photo.latitude, photo.longitude));
+    }
+    const clat = this.latlngBounds.getCenter().lat();
+    const clng = this.latlngBounds.getCenter().lng();
+    this.latlngBounds.extend(new window['google'].maps.LatLng(clat + 0.5, clng + 0.5));
+    this.latlngBounds.extend(new window['google'].maps.LatLng(clat - 0.5, clng - 0.5));
+
   }
 
 

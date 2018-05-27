@@ -9,9 +9,7 @@
     <agm-map
       [style.width.px]="mapDimension.width"
       [style.height.px]="mapDimension.height"
-      [zoom]="5"
-      [latitude]="mapCenter.latitude"
-      [longitude]="mapCenter.longitude">
+      [fitBounds]="latlngBounds">
       <agm-marker
         *ngFor="let photo of mapPhotos"
         [latitude]="photo.latitude"
@@ -38,7 +36,7 @@
   </div>
 
 
-  <div id="controllers-container" *ngIf="visible">
+  <div id="controllers-container" *ngIf="controllersVisible">
     <div id="controls">
             <span>
                 <span class="oi  oi-fullscreen-exit highlight"
