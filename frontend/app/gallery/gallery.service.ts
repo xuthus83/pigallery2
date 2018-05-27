@@ -8,6 +8,7 @@ import {BehaviorSubject} from 'rxjs';
 import {SharingDTO} from '../../../common/entities/SharingDTO';
 import {Config} from '../../../common/config/public/Config';
 import {ShareService} from './share.service';
+import {NavigationService} from '../model/navigation.service';
 
 @Injectable()
 export class GalleryService {
@@ -18,7 +19,8 @@ export class GalleryService {
 
   constructor(private networkService: NetworkService,
               private galleryCacheService: GalleryCacheService,
-              private _shareService: ShareService) {
+              private _shareService: ShareService,
+              private navigatoinService: NavigationService) {
     this.content = new BehaviorSubject<ContentWrapper>(new ContentWrapper());
   }
 
@@ -26,7 +28,7 @@ export class GalleryService {
     directory: null
   };
 
-  public async getDirectory(directoryName: string): Promise<ContentWrapper> {
+  public loadDirectory(directoryName: string): void {
     const content = new ContentWrapper();
 
     content.directory = this.galleryCacheService.getDirectory(directoryName);
@@ -49,29 +51,30 @@ export class GalleryService {
     }
 
 
-    const cw = await this.networkService.getJson<ContentWrapper>('/gallery/content/' + directoryName, params);
+    this.networkService.getJson<ContentWrapper>('/gallery/content/' + directoryName, params).then((cw) => {
 
 
-    if (!cw || cw.notModified === true) {
-      return;
-    }
+      if (!cw || cw.notModified === true) {
+        return;
+      }
 
-    this.galleryCacheService.setDirectory(cw.directory); // save it before adding references
+      this.galleryCacheService.setDirectory(cw.directory); // save it before adding references
 
-    if (this.lastRequest.directory !== directoryName) {
-      return;
-    }
-
-
-    DirectoryDTO.addReferences(<DirectoryDTO>cw.directory);
+      if (this.lastRequest.directory !== directoryName) {
+        return;
+      }
 
 
-    this.lastDirectory = <DirectoryDTO>cw.directory;
-    this.content.next(cw);
+      DirectoryDTO.addReferences(<DirectoryDTO>cw.directory);
 
 
-    return cw;
+      this.lastDirectory = <DirectoryDTO>cw.directory;
+      this.content.next(cw);
 
+
+    }).catch(() => {
+      this.navigatoinService.toGallery();
+    });
   }
 
   public async search(text: string, type?: SearchTypes): Promise<ContentWrapper> {
@@ -105,7 +108,7 @@ export class GalleryService {
         clearTimeout(this.searchId);
       }
       if (!this.lastDirectory) {
-        this.getDirectory('/');
+        this.loadDirectory('/');
       }
       return null;
     }

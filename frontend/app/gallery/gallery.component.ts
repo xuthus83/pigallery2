@@ -92,7 +92,7 @@ export class GalleryComponent implements OnInit, OnDestroy {
     let directoryName = params['directory'];
     directoryName = directoryName || '';
 
-    this._galleryService.getDirectory(directoryName);
+    this._galleryService.loadDirectory(directoryName);
 
 
   };

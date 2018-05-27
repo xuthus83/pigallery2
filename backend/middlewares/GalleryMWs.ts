@@ -21,7 +21,8 @@ export class GalleryMWs {
     const directoryName = req.params.directory || '/';
     const absoluteDirectoryName = path.join(ProjectPath.ImageFolder, directoryName);
 
-    if (!fs.statSync(absoluteDirectoryName).isDirectory()) {
+    if (!fs.existsSync(absoluteDirectoryName) ||
+      !fs.statSync(absoluteDirectoryName).isDirectory()) {
       return next();
     }
 
