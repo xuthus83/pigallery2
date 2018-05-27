@@ -1,5 +1,6 @@
-<a #dirContainer class="button btn btn-default" [routerLink]="['/gallery', getDirectoryPath()]"
-   [queryParams]="_shareService.isSharing() ? { sk: _shareService.getSharingKey() }:{}"
+<a #dirContainer class="button btn btn-default"
+   [routerLink]="['/gallery', getDirectoryPath()]"
+   [queryParams]="queryService.getParams()"
    style="display: inline-block;">
 
 

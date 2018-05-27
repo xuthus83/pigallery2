@@ -66,6 +66,7 @@ import {DefaultUrlSerializer, UrlSerializer, UrlTree} from '@angular/router';
 import {IndexingSettingsComponent} from './settings/indexing/indexing.settings.component';
 import {LanguageComponent} from './language/language.component';
 import {I18n, MISSING_TRANSLATION_STRATEGY} from '@ngx-translate/i18n-polyfill';
+import {QueryService} from './model/query.service';
 
 @Injectable()
 export class GoogleMapsConfig {
@@ -173,18 +174,19 @@ export function translationsFactory(locale: string) {
     NavigationService,
     SettingsService,
     OverlayService,
+    QueryService,
     {
       provide: TRANSLATIONS,
       useFactory: translationsFactory,
       deps: [LOCALE_ID]
     },
     I18n,
-/*
+
     {provide: TRANSLATIONS, useValue: translationsFactory('en')},
     {provide: TRANSLATIONS_FORMAT, useValue: 'xlf'},
     {provide: LOCALE_ID, useValue: 'en'},
     {provide: MISSING_TRANSLATION_STRATEGY, useValue: MissingTranslationStrategy.Ignore},
-*/
+
   ],
   bootstrap: [AppComponent]
 })

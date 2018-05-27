@@ -19,6 +19,15 @@ import {animate, AnimationBuilder, AnimationPlayer, style} from '@angular/animat
 import {GalleryLightboxPhotoComponent} from './photo/photo.lightbox.gallery.component';
 import {Observable, Subscription, timer} from 'rxjs';
 import {filter} from 'rxjs/operators';
+import {ActivatedRoute, Params, Router} from '@angular/router';
+import {PageHelper} from '../../model/page.helper';
+import {QueryService} from '../../model/query.service';
+
+export enum LightboxStates {
+  Open,
+  Closing,
+  Closed
+}
 
 @Component({
   selector: 'app-gallery-lightbox',
@@ -27,8 +36,6 @@ import {filter} from 'rxjs/operators';
 })
 export class GalleryLightboxComponent implements OnDestroy, OnInit {
 
-
-  @Output('onLastElement') onLastElement = new EventEmitter();
   @ViewChild('photo') photoElement: GalleryLightboxPhotoComponent;
   @ViewChild('lightbox') lightboxElement: ElementRef;
 
@@ -39,8 +46,14 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
   public activePhoto: GalleryPhotoComponent;
   private gridPhotoQL: QueryList<GalleryPhotoComponent>;
 
-  public visible = false;
-  private changeSubscription: Subscription = null;
+  public status: LightboxStates = LightboxStates.Closed;
+  private subscription: {
+    photosChange: Subscription,
+    route: Subscription
+  } = {
+    photosChange: null,
+    route: null
+  };
   private timer: Observable<number>;
   private timerSub: Subscription;
   public playBackState = 0;
@@ -53,21 +66,41 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
   startPhotoDimension: Dimension = <Dimension>{top: 0, left: 0, width: 0, height: 0};
   iPvisibilityTimer = null;
   visibilityTimer = null;
+  delayedPhotoShow: string = null;
 
 
   constructor(public fullScreenService: FullScreenService,
-              private changeDetector: ChangeDetectorRef, private overlayService: OverlayService,
-              private _builder: AnimationBuilder) {
+              private changeDetector: ChangeDetectorRef,
+              private overlayService: OverlayService,
+              private _builder: AnimationBuilder,
+              private router: Router,
+              private queryService: QueryService,
+              private route: ActivatedRoute) {
   }
 
   ngOnInit(): void {
     this.timer = timer(1000, 2000);
+    this.subscription.route = this.route.queryParams.subscribe((params: Params) => {
+      if (params[QueryService.PHOTO_PARAM] && params[QueryService.PHOTO_PARAM] !== '') {
+        if (!this.gridPhotoQL) {
+          return this.delayedPhotoShow = params[QueryService.PHOTO_PARAM];
+        }
+        this.onNavigateTo(params[QueryService.PHOTO_PARAM]);
+      } else if (this.status === LightboxStates.Open) {
+        this.delayedPhotoShow = null;
+        this.hideLigthbox();
+      }
+    });
   }
 
   ngOnDestroy(): void {
+    console.log('destroy');
     this.pause();
-    if (this.changeSubscription != null) {
-      this.changeSubscription.unsubscribe();
+    if (this.subscription.photosChange != null) {
+      this.subscription.photosChange.unsubscribe();
+    }
+    if (this.subscription.route != null) {
+      this.subscription.route.unsubscribe();
     }
 
     if (this.visibilityTimer != null) {
@@ -75,6 +108,41 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
     }
     if (this.iPvisibilityTimer != null) {
       clearTimeout(this.iPvisibilityTimer);
+    }
+  }
+
+  onNavigateTo(photoName: string) {
+    if (this.activePhoto && this.activePhoto.gridPhoto.photo.name === photoName) {
+      return;
+    }
+    const photo = this.gridPhotoQL.find(i => i.gridPhoto.photo.name === photoName);
+    if (!photo) {
+      return this.delayedPhotoShow = photoName;
+    }
+    if (this.status === LightboxStates.Closed) {
+      this.showLigthbox(photo.gridPhoto.photo);
+    } else {
+      this.showPhoto(this.gridPhotoQL.toArray().indexOf(photo));
+    }
+    this.delayedPhotoShow = null;
+  }
+
+  setGridPhotoQL(value: QueryList<GalleryPhotoComponent>) {
+    if (this.subscription.photosChange != null) {
+      this.subscription.photosChange.unsubscribe();
+    }
+    this.gridPhotoQL = value;
+    this.subscription.photosChange = this.gridPhotoQL.changes.subscribe(() => {
+      if (this.activePhotoId != null && this.gridPhotoQL.length > this.activePhotoId) {
+        this.updateActivePhoto(this.activePhotoId);
+      }
+      if (this.delayedPhotoShow) {
+        this.onNavigateTo(this.delayedPhotoShow);
+      }
+    });
+
+    if (this.delayedPhotoShow) {
+      this.onNavigateTo(this.delayedPhotoShow);
     }
   }
 
@@ -89,10 +157,10 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
 
   public nextImage() {
     if (this.activePhotoId + 1 < this.gridPhotoQL.length) {
-      this.showPhoto(this.activePhotoId + 1);
-      if (this.activePhotoId + 3 >= this.gridPhotoQL.length) {
+      this.navigateToPhoto(this.activePhotoId + 1);
+      /*if (this.activePhotoId + 3 >= this.gridPhotoQL.length) {
         this.onLastElement.emit({}); // trigger to render more photos if there are
-      }
+      }*/
       return;
     }
   }
@@ -100,11 +168,20 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
   public prevImage() {
     this.pause();
     if (this.activePhotoId > 0) {
-      this.showPhoto(this.activePhotoId - 1);
+      this.navigateToPhoto(this.activePhotoId - 1);
       return;
     }
   }
 
+
+  private navigateToPhoto(photoIndex: number) {
+    this.router.navigate([],
+      {queryParams: this.queryService.getParams(this.gridPhotoQL.toArray()[photoIndex].gridPhoto.photo)});
+    /*
+        this.activePhoto = null;
+        this.changeDetector.detectChanges();
+        this.updateActivePhoto(photoIndex, resize);*/
+  }
 
   private showPhoto(photoIndex: number, resize: boolean = true) {
     this.activePhoto = null;
@@ -112,17 +189,17 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
     this.updateActivePhoto(photoIndex, resize);
   }
 
-  public show(photo: PhotoDTO) {
+  public showLigthbox(photo: PhotoDTO) {
     this.controllersVisible = true;
     this.showControls();
-    this.visible = true;
+    this.status = LightboxStates.Open;
     const selectedPhoto = this.findPhotoComponent(photo);
     if (selectedPhoto === null) {
       throw new Error('Can\'t find Photo');
     }
 
     const lightboxDimension = selectedPhoto.getDimension();
-    lightboxDimension.top -= this.getBodyScrollTop();
+    lightboxDimension.top -= PageHelper.ScrollY;
     this.animating = true;
     this.animatePhoto(selectedPhoto.getDimension(), this.calcLightBoxPhotoDimension(selectedPhoto.gridPhoto.photo)).onDone(() => {
       this.animating = false;
@@ -148,7 +225,7 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
   //noinspection JSUnusedGlobalSymbols
   @HostListener('window:keydown', ['$event'])
   onKeyPress(e: KeyboardEvent) {
-    if (this.visible !== true) {
+    if (this.status !== LightboxStates.Open) {
       return;
     }
     const event: KeyboardEvent = window.event ? <any>window.event : e;
@@ -170,13 +247,19 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
   }
 
   public hide() {
+    this.router.navigate([],
+      {queryParams: this.queryService.getParams()});
+  }
+
+  private hideLigthbox() {
     this.controllersVisible = false;
+    this.status = LightboxStates.Closing;
     this.fullScreenService.exitFullScreen();
     this.pause();
 
     this.animating = true;
     const lightboxDimension = this.activePhoto.getDimension();
-    lightboxDimension.top -= this.getBodyScrollTop();
+    lightboxDimension.top -= PageHelper.ScrollY;
     this.blackCanvasOpacity = 0;
 
     this.animatePhoto(this.calcLightBoxPhotoDimension(this.activePhoto.gridPhoto.photo), this.activePhoto.getDimension());
@@ -186,8 +269,7 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
       width: this.getPhotoFrameWidth(),
       height: this.getPhotoFrameHeight()
     }, lightboxDimension).onDone(() => {
-
-      this.visible = false;
+      this.status = LightboxStates.Closed;
       this.activePhoto = null;
       this.activePhotoId = null;
       this.overlayService.hideOverlay();
@@ -226,18 +308,6 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
     return elem;
   }
 
-
-  setGridPhotoQL(value: QueryList<GalleryPhotoComponent>) {
-    if (this.changeSubscription != null) {
-      this.changeSubscription.unsubscribe();
-    }
-    this.gridPhotoQL = value;
-    this.changeSubscription = this.gridPhotoQL.changes.subscribe(() => {
-      if (this.activePhotoId != null && this.gridPhotoQL.length > this.activePhotoId) {
-        this.updateActivePhoto(this.activePhotoId);
-      }
-    });
-  }
 
   public toggleInfoPanel() {
 
@@ -287,7 +357,7 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
       if (this.navigation.hasNext) {
         this.nextImage();
       } else {
-        this.showPhoto(0);
+        this.navigateToPhoto(0);
       }
     });
     this.playBackState = 1;
@@ -326,20 +396,12 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
       if (this.navigation.hasNext) {
         this.nextImage();
       } else {
-        this.showPhoto(0);
+        this.navigateToPhoto(0);
       }
     });
     this.playBackState = 2;
   }
 
-
-  private getBodyScrollTop(): number {
-    return window.scrollY;
-  }
-
-  private setBodyScrollTop(value: number) {
-    window.scrollTo(window.scrollX, value);
-  }
 
   public getPhotoFrameWidth(): number {
     return Math.max(window.innerWidth - this.infoPanelWidth, 0);
@@ -372,15 +434,15 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
     const to = this.activePhoto.getDimension();
 
     // if target image out of screen -> scroll to there
-    if (this.getBodyScrollTop() > to.top || this.getBodyScrollTop() + this.getPhotoFrameHeight() < to.top) {
-      this.setBodyScrollTop(to.top);
+    if (PageHelper.ScrollY > to.top || PageHelper.ScrollY + this.getPhotoFrameHeight() < to.top) {
+      PageHelper.ScrollY = to.top;
     }
 
   }
 
 
   @HostListener('mousemove')
-  onMousemove() {
+  onMouseMove() {
     this.showControls();
   }
 
@@ -431,6 +493,10 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
     const left = (this.getPhotoFrameWidth() / 2 - width / 2);
 
     return <Dimension>{top: top, left: left, width: width, height: height};
+  }
+
+  public isVisible(): boolean {
+    return this.status !== LightboxStates.Closed;
   }
 }
 

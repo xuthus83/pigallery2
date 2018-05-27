@@ -14,6 +14,8 @@ import {UserRoles} from '../../../common/entities/UserDTO';
 import {interval} from 'rxjs';
 import {ContentWrapper} from '../../../common/entities/ConentWrapper';
 import {PageHelper} from '../model/page.helper';
+import {QueryService} from '../model/query.service';
+import {LightboxStates} from './lightbox/lightbox.gallery.component';
 
 @Component({
   selector: 'app-gallery',
@@ -92,6 +94,7 @@ export class GalleryComponent implements OnInit, OnDestroy {
 
     this._galleryService.getDirectory(directoryName);
 
+
   };
 
   ngOnDestroy() {
@@ -149,12 +152,6 @@ export class GalleryComponent implements OnInit, OnDestroy {
     }
 
   }
-
-
-  onLightboxLastElement() {
-    this.grid.renderARow();
-  }
-
 
 }
 

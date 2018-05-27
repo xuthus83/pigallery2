@@ -12,6 +12,9 @@ export class GridRowBuilder {
               private photoMargin: number,
               private containerWidth: number) {
     this.photoIndex = startIndex;
+    if (this.containerWidth <= 0) {
+      throw new Error('container width cant be <=0, got:' + this.containerWidth);
+    }
   }
 
   public addPhotos(number: number) {

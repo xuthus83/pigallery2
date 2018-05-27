@@ -5,6 +5,7 @@ import {UserDTO} from '../../../../common/entities/UserDTO';
 import {AuthenticationService} from '../../model/network/authentication.service';
 import {ShareService} from '../share.service';
 import {I18n} from '@ngx-translate/i18n-polyfill';
+import {QueryService} from '../../model/query.service';
 
 @Component({
   selector: 'app-gallery-navbar',
@@ -17,7 +18,7 @@ export class GalleryNavigatorComponent implements OnChanges {
   routes: Array<NavigatorPath> = [];
 
   constructor(private _authService: AuthenticationService,
-              public _shareService: ShareService,
+              public queryService: QueryService,
               private i18n: I18n) {
   }
 

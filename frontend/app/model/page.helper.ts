@@ -11,6 +11,14 @@ export class PageHelper {
     return this.supportPageOffset ? window.pageYOffset : this.isCSS1Compat ? document.documentElement.scrollTop : document.body.scrollTop;
   }
 
+  public static get ScrollX(): number {
+    return this.supportPageOffset ? window.pageXOffset : this.isCSS1Compat ? document.documentElement.scrollLeft : document.body.scrollLeft;
+  }
+
+  public static set ScrollY(value: number) {
+    window.scrollTo(this.ScrollX, value);
+  }
+
   public static showScrollY() {
     PageHelper.body.style.overflowY = 'scroll';
   }

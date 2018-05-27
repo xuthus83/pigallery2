@@ -6,6 +6,7 @@ import {Config} from '../../../common/config/public/Config';
 import {BehaviorSubject} from 'rxjs';
 import {NotificationService} from '../model/notification.service';
 import {ShareService} from '../gallery/share.service';
+import {QueryService} from '../model/query.service';
 
 @Component({
   selector: 'app-frame',
@@ -23,7 +24,7 @@ export class FrameComponent {
 
   constructor(private _authService: AuthenticationService,
               public notificationService: NotificationService,
-              public _shareService: ShareService) {
+              public queryService: QueryService) {
     this.user = this._authService.user;
     this.authenticationRequired = Config.Client.authenticationRequired;
     this.title = Config.Client.applicationTitle;

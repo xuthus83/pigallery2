@@ -7,6 +7,7 @@ import {Photo} from '../Photo';
 import {Thumbnail, ThumbnailManagerService} from '../thumnailManager.service';
 import {ShareService} from '../share.service';
 import {PageHelper} from '../../model/page.helper';
+import {QueryService} from '../../model/query.service';
 
 @Component({
   selector: 'app-gallery-directory',
@@ -21,7 +22,7 @@ export class GalleryDirectoryComponent implements OnInit, OnDestroy {
 
   constructor(private thumbnailService: ThumbnailManagerService,
               private _sanitizer: DomSanitizer,
-              public _shareService: ShareService) {
+              public queryService: QueryService) {
 
   }
 

@@ -7,6 +7,7 @@ import {Title} from '@angular/platform-browser';
 import {NotificationService} from './model/notification.service';
 import {ShareService} from './gallery/share.service';
 import 'hammerjs';
+import {QueryService} from './model/query.service';
 
 @Component({
   selector: 'app-pi-gallery2',

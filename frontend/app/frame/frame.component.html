@@ -1,7 +1,7 @@
 <ng2-slim-loading-bar [color]="'#337ab7'" [height]="'3px'"></ng2-slim-loading-bar>
 <nav class="navbar  navbar-dark bg-dark  navbar-expand-md">
   <a class="navbar-brand" [routerLink]="['/gallery','/']"
-     [queryParams]="_shareService.isSharing() ? { sk: _shareService.getSharingKey() }:{}">
+     [queryParams]="queryService.getParams()">
     <img src="assets/icon_inv.png" width="30" height="30" class="d-inline-block align-top" alt="">
     <strong>{{title}}</strong>
   </a>

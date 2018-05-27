@@ -9,23 +9,28 @@ import {
   OnDestroy,
   QueryList,
   ViewChild,
-  ViewChildren
+  ViewChildren,
+  OnInit
 } from '@angular/core';
 import {PhotoDTO} from '../../../../common/entities/PhotoDTO';
 import {GridRowBuilder} from './GridRowBuilder';
-import {GalleryLightboxComponent} from '../lightbox/lightbox.gallery.component';
+import {GalleryLightboxComponent, LightboxStates} from '../lightbox/lightbox.gallery.component';
 import {GridPhoto} from './GridPhoto';
 import {GalleryPhotoComponent} from './photo/photo.grid.gallery.component';
 import {OverlayService} from '../overlay.service';
 import {Config} from '../../../../common/config/public/Config';
 import {PageHelper} from '../../model/page.helper';
+import {Subscription} from 'rxjs';
+import {ActivatedRoute, Params, Router} from '@angular/router';
+import {QueryService} from '../../model/query.service';
+import {SimpleChanges} from '@angular/core';
 
 @Component({
   selector: 'app-gallery-grid',
   templateUrl: './grid.gallery.component.html',
   styleUrls: ['./grid.gallery.component.css'],
 })
-export class GalleryGridComponent implements OnChanges, AfterViewInit, OnDestroy {
+export class GalleryGridComponent implements OnChanges, OnInit, AfterViewInit, OnDestroy {
 
   @ViewChild('gridContainer') gridContainer: ElementRef;
   @ViewChildren(GalleryPhotoComponent) gridPhotoQL: QueryList<GalleryPhotoComponent>;
@@ -47,9 +52,27 @@ export class GalleryGridComponent implements OnChanges, AfterViewInit, OnDestroy
   private helperTime = null;
   isAfterViewInit = false;
   private renderedPhotoIndex = 0;
+  routeSubscription: Subscription = null;
+  delayedRenderUpToPhoto: string = null;
 
   constructor(private overlayService: OverlayService,
-              private changeDetector: ChangeDetectorRef) {
+              private changeDetector: ChangeDetectorRef,
+              public queryService: QueryService,
+              private router: Router,
+              private route: ActivatedRoute) {
+  }
+
+  ngOnInit() {
+    this.routeSubscription = this.route.queryParams.subscribe((params: Params) => {
+      if (params[QueryService.PHOTO_PARAM] && params[QueryService.PHOTO_PARAM] !== '') {
+        this.delayedRenderUpToPhoto = params[QueryService.PHOTO_PARAM];
+        if (!this.photos || this.photos.length === 0) {
+          return;
+        }
+
+        this.renderUpToPhoto(params[QueryService.PHOTO_PARAM]);
+      }
+    });
   }
 
   ngOnChanges() {
@@ -61,6 +84,9 @@ export class GalleryGridComponent implements OnChanges, AfterViewInit, OnDestroy
     this.mergeNewPhotos();
     this.helperTime = setTimeout(() => {
       this.renderPhotos();
+      if (this.delayedRenderUpToPhoto) {
+        this.renderUpToPhoto(this.delayedRenderUpToPhoto);
+      }
     }, 0);
   }
 
@@ -105,11 +131,22 @@ export class GalleryGridComponent implements OnChanges, AfterViewInit, OnDestroy
     this.isAfterViewInit = true;
   }
 
+
+  private renderUpToPhoto(photoName: string) {
+    const index = this.photos.findIndex(p => p.name === photoName);
+    if (index === -1) {
+      this.router.navigate([], {queryParams: this.queryService.getParams()});
+      return;
+    }
+    while (this.renderedPhotoIndex < index && this.renderARow()) {
+    }
+  }
+
   public renderARow(): number {
-    if (this.renderedPhotoIndex >= this.photos.length) {
+    if (this.renderedPhotoIndex >= this.photos.length
+      || this.containerWidth === 0) {
       return null;
     }
-
 
     let maxRowHeight = this.screenHeight / this.MIN_ROW_COUNT;
     const minRowHeight = this.screenHeight / this.MAX_ROW_COUNT;
@@ -146,7 +183,7 @@ export class GalleryGridComponent implements OnChanges, AfterViewInit, OnDestroy
   }
 
   private sortPhotos() {
-    // sort pohots by date
+    // sort photos by date
     this.photos.sort((a: PhotoDTO, b: PhotoDTO) => {
       return a.metadata.creationDate - b.metadata.creationDate;
     });
@@ -168,7 +205,6 @@ export class GalleryGridComponent implements OnChanges, AfterViewInit, OnDestroy
         break;
       }
     }
-
     if (lastSameIndex > 0) {
       this.photosToRender.splice(lastSameIndex, this.photosToRender.length - lastSameIndex);
       this.renderedPhotoIndex = lastSameIndex;
@@ -239,6 +275,8 @@ export class GalleryGridComponent implements OnChanges, AfterViewInit, OnDestroy
       return false;
     }
 
+    const pre = PageHelper.isScrollYVisible();
+    PageHelper.showScrollY();
     // if the width changed a bit or the height changed a lot
     if (this.containerWidth !== this.gridContainer.nativeElement.clientWidth
       || this.screenHeight < window.innerHeight * 0.75
@@ -246,9 +284,15 @@ export class GalleryGridComponent implements OnChanges, AfterViewInit, OnDestroy
       this.screenHeight = window.innerHeight;
       this.containerWidth = this.gridContainer.nativeElement.clientWidth;
       this.clearRenderedPhotos();
+      if (!pre) {
+        PageHelper.hideScrollY();
+      }
       return true;
     }
 
+    if (!pre) {
+      PageHelper.hideScrollY();
+    }
     return false;
   }
 
