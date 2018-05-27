@@ -181,12 +181,12 @@ export function translationsFactory(locale: string) {
       deps: [LOCALE_ID]
     },
     I18n,
-
+/*
     {provide: TRANSLATIONS, useValue: translationsFactory('en')},
     {provide: TRANSLATIONS_FORMAT, useValue: 'xlf'},
     {provide: LOCALE_ID, useValue: 'en'},
     {provide: MISSING_TRANSLATION_STRATEGY, useValue: MissingTranslationStrategy.Ignore},
-
+*/
   ],
   bootstrap: [AppComponent]
 })
