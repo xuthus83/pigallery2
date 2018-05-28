@@ -31,8 +31,9 @@ export class InfoPanelLightboxComponent {
     return size.toFixed(2) + postFixes[index];
   }
 
-  getCurrentYear() {
-    return (new Date()).getFullYear();
+  isThisYear() {
+    return (new Date()).getFullYear() ===
+      (new Date(this.photo.metadata.creationDate)).getFullYear();
   }
 
 
