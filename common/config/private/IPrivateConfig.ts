@@ -1,17 +1,17 @@
 import {ClientConfig} from '../public/ConfigClass';
 
 export enum DatabaseType {
-  memory = 0, mysql = 1, sqlite = 2
+  memory = 1, mysql = 2, sqlite = 3
 }
 
 export enum LogLevel {
-  error, warn, info, debug, verbose
+  error = 1, warn = 2, info = 3, debug = 4, verbose = 5
 }
 
 export enum ThumbnailProcessingLib {
-  Jimp = 0,
-  gm = 1,
-  sharp = 2
+  Jimp = 1,
+  gm = 2,
+  sharp = 3
 }
 
 export interface MySQLConfig {
@@ -42,7 +42,7 @@ export interface SharingConfig {
 }
 
 export enum ReIndexingSensitivity {
-  low, medium, high
+  low = 1, medium = 2, high = 3
 }
 
 export interface IndexingConfig {

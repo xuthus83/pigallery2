@@ -1,5 +1,5 @@
 export enum NotificationType {
-  error, warning, info
+  error = 1, warning = 2, info = 3
 }
 
 export interface NotificationDTO {

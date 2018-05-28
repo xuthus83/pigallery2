@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
 import {DatabaseType, IPrivateConfig, ReIndexingSensitivity, ThumbnailProcessingLib} from '../../../common/config/private/IPrivateConfig';
 import {NetworkService} from '../model/network/network.service';
+import {SortingMethods} from '../../../common/entities/SortingMethods';
 
 @Injectable()
 export class SettingsService {
@@ -39,7 +40,8 @@ export class SettingsService {
         enableOnScrollRendering: true,
         enableOnScrollThumbnailPrioritising: true,
         authenticationRequired: true,
-        languages: []
+        languages: [],
+        defaultPhotoSortingMethod: SortingMethods.ascDate
       },
       Server: {
         database: {

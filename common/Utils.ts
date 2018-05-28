@@ -9,6 +9,9 @@ export class Utils {
     if (typeof filter !== 'object' || filter == null) {
       return object === filter;
     }
+    if (!object) {
+      return false;
+    }
     const keys = Object.keys(filter);
     for (let i = 0; i < keys.length; i++) {
       const key = keys[i];

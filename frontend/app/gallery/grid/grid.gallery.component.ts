@@ -14,7 +14,7 @@ import {
 } from '@angular/core';
 import {PhotoDTO} from '../../../../common/entities/PhotoDTO';
 import {GridRowBuilder} from './GridRowBuilder';
-import {GalleryLightboxComponent, LightboxStates} from '../lightbox/lightbox.gallery.component';
+import {GalleryLightboxComponent} from '../lightbox/lightbox.gallery.component';
 import {GridPhoto} from './GridPhoto';
 import {GalleryPhotoComponent} from './photo/photo.grid.gallery.component';
 import {OverlayService} from '../overlay.service';
@@ -23,7 +23,8 @@ import {PageHelper} from '../../model/page.helper';
 import {Subscription} from 'rxjs';
 import {ActivatedRoute, Params, Router} from '@angular/router';
 import {QueryService} from '../../model/query.service';
-import {SimpleChanges} from '@angular/core';
+import {GalleryService} from '../gallery.service';
+import {SortingMethods} from '../../../../common/entities/SortingMethods';
 
 @Component({
   selector: 'app-gallery-grid',
@@ -52,18 +53,25 @@ export class GalleryGridComponent implements OnChanges, OnInit, AfterViewInit, O
   private helperTime = null;
   isAfterViewInit = false;
   private renderedPhotoIndex = 0;
-  routeSubscription: Subscription = null;
+  subscriptions: {
+    route: Subscription,
+    sorting: Subscription
+  } = {
+    route: null,
+    sorting: null
+  };
   delayedRenderUpToPhoto: string = null;
 
   constructor(private overlayService: OverlayService,
               private changeDetector: ChangeDetectorRef,
               public queryService: QueryService,
               private router: Router,
+              public galleryService: GalleryService,
               private route: ActivatedRoute) {
   }
 
   ngOnInit() {
-    this.routeSubscription = this.route.queryParams.subscribe((params: Params) => {
+    this.subscriptions.route = this.route.queryParams.subscribe((params: Params) => {
       if (params[QueryService.PHOTO_PARAM] && params[QueryService.PHOTO_PARAM] !== '') {
         this.delayedRenderUpToPhoto = params[QueryService.PHOTO_PARAM];
         if (!this.photos || this.photos.length === 0) {
@@ -72,6 +80,11 @@ export class GalleryGridComponent implements OnChanges, OnInit, AfterViewInit, O
 
         this.renderUpToPhoto(params[QueryService.PHOTO_PARAM]);
       }
+    });
+    this.subscriptions.sorting = this.galleryService.sorting.subscribe(() => {
+      this.clearRenderedPhotos();
+      this.sortPhotos();
+      this.renderPhotos();
     });
   }
 
@@ -94,6 +107,14 @@ export class GalleryGridComponent implements OnChanges, OnInit, AfterViewInit, O
 
     if (this.helperTime != null) {
       clearTimeout(this.helperTime);
+    }
+    if (this.subscriptions.route !== null) {
+      this.subscriptions.route.unsubscribe();
+      this.subscriptions.route = null;
+    }
+    if (this.subscriptions.sorting !== null) {
+      this.subscriptions.sorting.unsubscribe();
+      this.subscriptions.sorting = null;
     }
   }
 
@@ -183,10 +204,41 @@ export class GalleryGridComponent implements OnChanges, OnInit, AfterViewInit, O
   }
 
   private sortPhotos() {
-    // sort photos by date
-    this.photos.sort((a: PhotoDTO, b: PhotoDTO) => {
-      return a.metadata.creationDate - b.metadata.creationDate;
-    });
+    switch (this.galleryService.sorting.value) {
+      case SortingMethods.ascName:
+        this.photos.sort((a: PhotoDTO, b: PhotoDTO) => {
+          if (a.name.toLowerCase() < b.name.toLowerCase()) {
+            return -1;
+          }
+          if (a.name.toLowerCase() > b.name.toLowerCase()) {
+            return 1;
+          }
+          return 0;
+        });
+        break;
+      case SortingMethods.descName:
+        this.photos.sort((a: PhotoDTO, b: PhotoDTO) => {
+          if (a.name.toLowerCase() < b.name.toLowerCase()) {
+            return 1;
+          }
+          if (a.name.toLowerCase() > b.name.toLowerCase()) {
+            return -1;
+          }
+          return 0;
+        });
+        break;
+      case SortingMethods.ascDate:
+        this.photos.sort((a: PhotoDTO, b: PhotoDTO) => {
+          return a.metadata.creationDate - b.metadata.creationDate;
+        });
+        break;
+      case SortingMethods.descDate:
+        this.photos.sort((a: PhotoDTO, b: PhotoDTO) => {
+          return b.metadata.creationDate - a.metadata.creationDate;
+        });
+        break;
+    }
+
 
   }
 

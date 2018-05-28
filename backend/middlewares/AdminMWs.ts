@@ -225,12 +225,14 @@ export class AdminMWs {
       Config.Client.enableCache = settings.enableCache;
       Config.Client.enableOnScrollRendering = settings.enableOnScrollRendering;
       Config.Client.enableOnScrollThumbnailPrioritising = settings.enableOnScrollThumbnailPrioritising;
+      Config.Client.defaultPhotoSortingMethod = settings.defaultPhotoSortingMethod;
 
       // only updating explicitly set config (not saving config set by the diagnostics)
       const original = Config.original();
       original.Client.enableCache = settings.enableCache;
       original.Client.enableOnScrollRendering = settings.enableOnScrollRendering;
       original.Client.enableOnScrollThumbnailPrioritising = settings.enableOnScrollThumbnailPrioritising;
+      original.Client.defaultPhotoSortingMethod = settings.defaultPhotoSortingMethod;
       original.Server.enableThreading = settings.enableThreading;
       original.save();
       await ConfigDiagnostics.runDiagnostics();

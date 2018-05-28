@@ -38,7 +38,7 @@ export class Worker {
 
 
 export enum WorkerTaskTypes {
-  thumbnail, diskManager
+  thumbnail = 1, diskManager = 2
 }
 
 export interface WorkerTask {

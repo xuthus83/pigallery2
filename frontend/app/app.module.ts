@@ -67,6 +67,8 @@ import {IndexingSettingsComponent} from './settings/indexing/indexing.settings.c
 import {LanguageComponent} from './language/language.component';
 import {I18n, MISSING_TRANSLATION_STRATEGY} from '@ngx-translate/i18n-polyfill';
 import {QueryService} from './model/query.service';
+import {IconizeSortingMethod} from './pipes/IconizeSortingMethod';
+import {StringifySortingMethod} from './pipes/StringifySortingMethod';
 
 @Injectable()
 export class GoogleMapsConfig {
@@ -156,7 +158,9 @@ export function translationsFactory(locale: string) {
     BasicSettingsComponent,
     OtherSettingsComponent,
     IndexingSettingsComponent,
-    StringifyRole],
+    StringifyRole,
+    IconizeSortingMethod,
+    StringifySortingMethod],
   providers: [
     {provide: UrlSerializer, useClass: CustomUrlSerializer},
     {provide: LAZY_MAPS_API_CONFIG, useClass: GoogleMapsConfig},

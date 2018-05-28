@@ -24,9 +24,9 @@ import {PageHelper} from '../../model/page.helper';
 import {QueryService} from '../../model/query.service';
 
 export enum LightboxStates {
-  Open,
-  Closing,
-  Closed
+  Open = 1,
+  Closing = 2,
+  Closed = 3
 }
 
 @Component({

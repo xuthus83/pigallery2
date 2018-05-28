@@ -3,12 +3,15 @@ import {DirectoryDTO} from '../../../../common/entities/DirectoryDTO';
 import {RouterLink} from '@angular/router';
 import {UserDTO} from '../../../../common/entities/UserDTO';
 import {AuthenticationService} from '../../model/network/authentication.service';
-import {ShareService} from '../share.service';
 import {I18n} from '@ngx-translate/i18n-polyfill';
 import {QueryService} from '../../model/query.service';
+import {GalleryService} from '../gallery.service';
+import {Utils} from '../../../../common/Utils';
+import {SortingMethods} from '../../../../common/entities/SortingMethods';
 
 @Component({
   selector: 'app-gallery-navbar',
+  styleUrls: ['./navigator.gallery.component.css'],
   templateUrl: './navigator.gallery.component.html',
   providers: [RouterLink],
 })
@@ -16,10 +19,14 @@ export class GalleryNavigatorComponent implements OnChanges {
   @Input() directory: DirectoryDTO;
 
   routes: Array<NavigatorPath> = [];
+  SortingMethods = SortingMethods;
+  sortingMethodsType: { key: number; value: string }[] = [];
 
   constructor(private _authService: AuthenticationService,
               public queryService: QueryService,
+              public galleryService: GalleryService,
               private i18n: I18n) {
+    this.sortingMethodsType = Utils.enumToArray(SortingMethods);
   }
 
 
@@ -69,6 +76,10 @@ export class GalleryNavigatorComponent implements OnChanges {
     this.routes = arr;
 
 
+  }
+
+  setSorting(sorting: SortingMethods) {
+    this.galleryService.setSorting(sorting);
   }
 
 

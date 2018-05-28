@@ -1,4 +1,4 @@
-<nav aria-label="breadcrumb">
+<nav class="nav-container" aria-label="breadcrumb">
   <ol id="directory-path" class="breadcrumb">
     <li *ngFor="let path of routes" class="breadcrumb-item">
       <a *ngIf="path.route" [routerLink]="['/gallery',path.route]"
@@ -6,4 +6,21 @@
       <ng-container *ngIf="!path.route">{{path.name}}</ng-container>
     </li>
   </ol>
+
+  <div class="btn-group" dropdown placement="bottom right">
+    <button id="button-alignment" dropdownToggle type="button"
+            class="btn btn-default dropdown-toggle" aria-controls="dropdown-alignment"
+            [innerHTML]="galleryService.sorting.value| iconizeSorting">
+    </button>
+    <ul id="dropdown-alignment" *dropdownMenu class="dropdown-menu dropdown-menu-right"
+        role="menu" aria-labelledby="button-alignment">
+      <li class="row dropdown-item" role="menuitem"
+          *ngFor="let type of sortingMethodsType"
+          (click)="setSorting(type.key)">
+        <div class="col-3" [outerHTML]="type.key | iconizeSorting"></div>
+        <div class="col-9">{{type.key | stringifySorting}}</div>
+      </li>
+    </ul>
+  </div>
 </nav>
+

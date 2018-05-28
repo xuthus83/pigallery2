@@ -127,5 +127,5 @@ export class GalleryShareComponent implements OnInit, OnDestroy {
 
 
 export enum ValidityTypes {
-  Minutes = 0, Hours = 1, Days = 2, Months = 3
+  Minutes = 1, Hours = 2, Days = 3, Months = 4
 }

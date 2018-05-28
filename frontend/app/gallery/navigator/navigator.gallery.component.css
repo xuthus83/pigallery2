@@ -1,0 +1,31 @@
+.nav-container {
+  position: relative;
+}
+
+.btn-group {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+ol {
+  padding-right: 130px;
+}
+
+.dropdown-menu {
+  min-width: 16rem;
+}
+
+.row {
+  margin: 0;
+  display: flex;
+  cursor: pointer;
+}
+
+nav{
+  z-index: 1;
+}
+.dropdown-toggle::after {
+  display:none;
+}

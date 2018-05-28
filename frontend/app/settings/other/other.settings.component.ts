@@ -6,6 +6,9 @@ import {NotificationService} from '../../model/notification.service';
 import {OtherSettingsService} from './other.settings.service';
 import {OtherConfigDTO} from '../../../../common/entities/settings/OtherConfigDTO';
 import {I18n} from '@ngx-translate/i18n-polyfill';
+import {ReIndexingSensitivity} from '../../../../common/config/private/IPrivateConfig';
+import {Utils} from '../../../../common/Utils';
+import {SortingMethods} from '../../../../common/entities/SortingMethods';
 
 @Component({
   selector: 'app-settings-other',
@@ -16,6 +19,9 @@ import {I18n} from '@ngx-translate/i18n-polyfill';
 })
 export class OtherSettingsComponent extends SettingsComponent<OtherConfigDTO> implements OnChanges {
 
+
+  types: { key: number; value: string }[] = [];
+
   constructor(_authService: AuthenticationService,
               _navigation: NavigationService,
               _settingsService: OtherSettingsService,
@@ -25,8 +31,11 @@ export class OtherSettingsComponent extends SettingsComponent<OtherConfigDTO> im
       enableThreading: s.Server.enableThreading,
       enableOnScrollThumbnailPrioritising: s.Client.enableOnScrollThumbnailPrioritising,
       enableOnScrollRendering: s.Client.enableOnScrollRendering,
-      enableCache: s.Client.enableCache
+      enableCache: s.Client.enableCache,
+      defaultPhotoSortingMethod: s.Client.defaultPhotoSortingMethod
     }));
+    this.types = Utils.enumToArray(SortingMethods);
+    this.hasAvailableSettings = !this.simplifiedMode;
   }
 
   ngOnChanges(): void {

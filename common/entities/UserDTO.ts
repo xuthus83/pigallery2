@@ -2,11 +2,11 @@ import {DirectoryDTO} from './DirectoryDTO';
 import {Utils} from '../Utils';
 
 export enum UserRoles {
-  LimitedGuest = 0,
-  Guest = 1,
-  User = 2,
-  Admin = 3,
-  Developer = 4,
+  LimitedGuest = 1,
+  Guest = 2,
+  User = 3,
+  Admin = 4,
+  Developer = 5,
 
 }
 

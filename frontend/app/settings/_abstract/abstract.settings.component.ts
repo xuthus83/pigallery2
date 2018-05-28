@@ -70,7 +70,10 @@ export abstract class SettingsComponent<T, S extends AbstractSettingsService<T>=
     this.getSettings();
 
     this._subscription = this.form.valueChanges.subscribe((data) => {
-      this.changed = !Utils.equalsFilter(this.settings, this.original);
+      if (!data) {
+        return;
+      }
+      this.changed = !Utils.equalsFilter(data, this.original);
     });
 
   }

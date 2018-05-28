@@ -92,6 +92,18 @@
       </div>
 
 
+      <div class="form-group row"  [hidden]="simplifiedMode">
+        <label class="col-md-2 control-label" for="defaultPhotoSortingMethod" i18n>Default photo sorting method</label>
+        <div class="col-md-10">
+          <select id="defaultPhotoSortingMethod" class="form-control" [(ngModel)]="settings.defaultPhotoSortingMethod"
+                  name="defaultPhotoSortingMethod" required>
+            <option *ngFor="let type of types" [ngValue]="type.key">{{type.key | stringifySorting}}
+            </option>
+          </select>
+        </div>
+      </div>
+
+
       <button class="btn btn-success float-right"
               [disabled]="!settingsForm.form.valid || !changed || inProgress"
               (click)="save()" i18n>Save

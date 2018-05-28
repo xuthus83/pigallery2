@@ -9,11 +9,15 @@ import {SharingDTO} from '../../../common/entities/SharingDTO';
 import {Config} from '../../../common/config/public/Config';
 import {ShareService} from './share.service';
 import {NavigationService} from '../model/navigation.service';
+import {SortingMethods} from '../../../common/entities/SortingMethods';
+
 
 @Injectable()
 export class GalleryService {
 
+
   public content: BehaviorSubject<ContentWrapper>;
+  public sorting: BehaviorSubject<SortingMethods>;
   private lastDirectory: DirectoryDTO;
   private searchId: any;
 
@@ -22,11 +26,16 @@ export class GalleryService {
               private _shareService: ShareService,
               private navigatoinService: NavigationService) {
     this.content = new BehaviorSubject<ContentWrapper>(new ContentWrapper());
+    this.sorting = new BehaviorSubject<SortingMethods>(Config.Client.defaultPhotoSortingMethod);
   }
 
   lastRequest: { directory: string } = {
     directory: null
   };
+
+  setSorting(sorting: SortingMethods): void {
+    this.sorting.next(sorting);
+  }
 
   public loadDirectory(directoryName: string): void {
     const content = new ContentWrapper();

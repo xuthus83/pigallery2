@@ -1,3 +1,5 @@
+import {SortingMethods} from '../../entities/SortingMethods';
+
 export module ClientConfig {
   export interface SearchConfig {
     enabled: boolean;
@@ -38,6 +40,7 @@ export module ClientConfig {
     publicUrl: string;
     urlBase: string;
     languages: string[];
+    defaultPhotoSortingMethod: SortingMethods;
   }
 
 }
@@ -77,7 +80,8 @@ export class PublicConfigClass {
     authenticationRequired: true,
     publicUrl: '',
     urlBase: '',
-    languages: []
+    languages: [],
+    defaultPhotoSortingMethod: SortingMethods.ascDate
   };
 
 }
