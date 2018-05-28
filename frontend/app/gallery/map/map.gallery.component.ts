@@ -44,7 +44,6 @@ export class GalleryMapComponent implements OnChanges, IRenderable, AfterViewIni
   ngAfterViewInit() {
     setTimeout(() => {
       this.height = this.map.nativeElement.clientHeight;
-      console.log(this.height);
     }, 0);
   }
 

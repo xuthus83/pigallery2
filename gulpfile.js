@@ -144,7 +144,6 @@ gulp.task("extract-locale", function (cb) {
 
 var translate = function (list, cb) {
   var localsStr = '"[\\"' + list.join('\\",\\"') + '\\"]"';
-  console.log(localsStr);
   exec('xlf-google-translate --source-lang="en" --source-file="./locale.source.xlf" --destination-folder="./frontend/"' +
     translationFolder + ' --destination-languages=' + localsStr, function (err, stdout, stderr) {
     console.log(stdout);

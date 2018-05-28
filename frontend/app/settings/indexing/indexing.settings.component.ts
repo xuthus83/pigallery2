@@ -21,7 +21,7 @@ export class IndexingSettingsComponent extends SettingsComponent<IndexingConfig,
   implements OnInit, OnDestroy {
 
 
-  types: Array<any> = [];
+  types: { key: number; value: string }[] = [];
   private subscription: { timer: any, settings: any } = {
     timer: null,
     settings: null
@@ -68,6 +68,19 @@ export class IndexingSettingsComponent extends SettingsComponent<IndexingConfig,
     super.ngOnInit();
     this.types = Utils
       .enumToArray(ReIndexingSensitivity);
+    this.types.forEach(v => {
+      switch (v.value) {
+        case 'low':
+          v.value = this.i18n('low');
+          break;
+        case 'medium':
+          v.value = this.i18n('medium');
+          break;
+        case 'high':
+          v.value = this.i18n('high');
+          break;
+      }
+    });
     this.updateProgress();
   }
 

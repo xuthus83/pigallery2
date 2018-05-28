@@ -94,7 +94,6 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
   }
 
   ngOnDestroy(): void {
-    console.log('destroy');
     this.pause();
     if (this.subscription.photosChange != null) {
       this.subscription.photosChange.unsubscribe();

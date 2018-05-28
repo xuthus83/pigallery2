@@ -27,13 +27,15 @@
     </div>
     <div class="col-10">
       <div class="details-main">
-        {{getDate()}}
         <ng-container *ngIf="getYear() !== getCurrentYear()">
-          ,{{getYear()}}
+          {{ photo.metadata.creationDate | date :'longDate'}}
+        </ng-container>
+        <ng-container *ngIf="getYear() === getCurrentYear()">
+          {{ photo.metadata.creationDate | date :'MMMM d'}}
         </ng-container>
       </div>
       <div class="details-sub row">
-        <div class="col-12">{{getDay()}}, {{getTime()}}</div>
+        <div class="col-12">{{ photo.metadata.creationDate | date :'EEEE'}}, {{getTime()}}</div>
       </div>
     </div>
   </div>

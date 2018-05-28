@@ -492,21 +492,20 @@
         </context-group>
         <target>google api key</target>
       </trans-unit>
-      <trans-unit id="9f95b2d6482e4552e6d575ecffb94cbdb7e52cfe" datatype="html">
-        <source>is need
-          </source>
+      <trans-unit id="86a1216cdfe7002796280c5541f0b9f765efae78" datatype="html">
+        <source>is need.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/map/map.settings.component.ts</context>
           <context context-type="linenumber">35</context>
         </context-group>
-        <target>is need</target>
+        <target>is need.</target>
       </trans-unit>
       <trans-unit id="d682be8fc94c1861394919e021e9dcf8def8f554" datatype="html">
         <source>Save
       </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/map/map.settings.component.ts</context>
-          <context context-type="linenumber">43</context>
+          <context context-type="linenumber">42</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/thumbnail/thumbanil.settings.component.ts</context>
@@ -535,7 +534,7 @@
       </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/map/map.settings.component.ts</context>
-          <context context-type="linenumber">46</context>
+          <context context-type="linenumber">45</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/thumbnail/thumbanil.settings.component.ts</context>
@@ -795,6 +794,14 @@
         </context-group>
         <target>Page title</target>
       </trans-unit>
+      <trans-unit id="cb2741a46e3560f6bc6dfd99d385e86b08b26d72" datatype="html">
+        <source>Port</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/settings/basic/basic.settings.component.ts</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
+        <target>Port</target>
+      </trans-unit>
       <trans-unit id="0559356d4e98ee90a10ff16250a2bf139eac649b" datatype="html">
         <source>Port number. Port 80 is usually what you need.</source>
         <context-group purpose="location">
@@ -802,6 +809,14 @@
           <context context-type="linenumber">29</context>
         </context-group>
         <target>Port number. Port 80 is usually what you need.</target>
+      </trans-unit>
+      <trans-unit id="50c6dfe7491fc0710eafbc2781138fc213ee2168" datatype="html">
+        <source>Images folder</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/settings/basic/basic.settings.component.ts</context>
+          <context context-type="linenumber">34</context>
+        </context-group>
+        <target>Images folder</target>
       </trans-unit>
       <trans-unit id="b4b17c583a52ad8b6b15882c46d04ddbd7335816" datatype="html">
         <source>Images are loaded from this folder (read permission required)</source>
@@ -973,8 +988,7 @@
           <context context-type="sourcefile">app/settings/indexing/indexing.settings.component.ts</context>
           <context context-type="linenumber">19</context>
         </context-group>
-        <target>If there was no indexing in this time, it reindexes. (skipped if
-              indexes are in DB and sensitivity is low)</target>
+        <target>If there was no indexing in this time, it reindexes. (skipped if indexes are in DB and sensitivity is low)</target>
       </trans-unit>
       <trans-unit id="95cda683cfb2041ad808023f29e40d16981b3c5e" datatype="html">
         <source>Sub folder preview size</source>
@@ -1273,6 +1287,30 @@
           <context context-type="linenumber">1</context>
         </context-group>
         <target>Indexing</target>
+      </trans-unit>
+      <trans-unit id="03b2c27d0f1dd0ebdf6eb756bd43914d5127ca8a" datatype="html">
+        <source>low</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">frontend/app/settings/indexing/indexing.settings.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <target>low</target>
+      </trans-unit>
+      <trans-unit id="c611dbfd81ae6fd4d7e5332f85ee78f9740fe000" datatype="html">
+        <source>medium</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">frontend/app/settings/indexing/indexing.settings.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <target>medium</target>
+      </trans-unit>
+      <trans-unit id="fef2f6e70c3eaa2f29dbec8069e13bca1b75b222" datatype="html">
+        <source>high</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">frontend/app/settings/indexing/indexing.settings.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <target>high</target>
       </trans-unit>
       <trans-unit id="f2504b9d9286a871bf4d56d08df05d6a16894592" datatype="html">
         <source>Folder indexed</source>

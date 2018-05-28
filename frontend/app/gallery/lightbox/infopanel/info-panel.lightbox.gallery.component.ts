@@ -35,27 +35,12 @@ export class InfoPanelLightboxComponent {
     return (new Date()).getFullYear();
   }
 
-  getYear() {
-    const date = new Date(this.photo.metadata.creationDate);
-    return date.getFullYear();
-  }
-
-  getDate() {
-    const date = new Date(this.photo.metadata.creationDate);
-    const locale = 'en-us';
-    return date.toLocaleString(locale, {month: 'long'}) + ' ' + date.getDate();
-  }
 
   getTime() {
     const date = new Date(this.photo.metadata.creationDate);
     return date.toTimeString().split(' ')[0];
   }
 
-  getDay() {
-    const date = new Date(this.photo.metadata.creationDate);
-    const locale = 'en-us';
-    return date.toLocaleString(locale, {weekday: 'long'});
-  }
 
   toFraction(f) {
     if (f > 1) {
