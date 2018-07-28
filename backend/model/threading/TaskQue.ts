@@ -1,4 +1,4 @@
-import {RendererInput, ThumbnailWorker} from './ThumbnailWoker';
+import {RendererInput, ThumbnailWorker} from './ThumbnailWorker';
 import {Config} from '../../../common/config/private/Config';
 
 

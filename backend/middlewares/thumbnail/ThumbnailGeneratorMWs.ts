@@ -12,7 +12,7 @@ import {PhotoDTO} from '../../../common/entities/PhotoDTO';
 import {Config} from '../../../common/config/private/Config';
 import {ThumbnailProcessingLib} from '../../../common/config/private/IPrivateConfig';
 import {ThumbnailTH} from '../../model/threading/ThreadPool';
-import {RendererInput} from '../../model/threading/ThumbnailWoker';
+import {RendererInput} from '../../model/threading/ThumbnailWorker';
 import {ITaskQue, TaskQue} from '../../model/threading/TaskQue';
 
 
