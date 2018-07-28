@@ -3,17 +3,17 @@ import {Dimensions, State} from 'gm';
 import {Logger} from '../../Logger';
 import {ThumbnailProcessingLib} from '../../../common/config/private/IPrivateConfig';
 
-export class ThumbnailWoker {
+export class ThumbnailWorker {
 
   private static renderer: (input: RendererInput) => Promise<void> = null;
   private static rendererType = null;
 
   public static render(input: RendererInput, renderer: ThumbnailProcessingLib): Promise<void> {
-    if (ThumbnailWoker.rendererType !== renderer) {
-      ThumbnailWoker.renderer = RendererFactory.build(renderer);
-      ThumbnailWoker.rendererType = renderer;
+    if (ThumbnailWorker.rendererType !== renderer) {
+      ThumbnailWorker.renderer = RendererFactory.build(renderer);
+      ThumbnailWorker.rendererType = renderer;
     }
-    return ThumbnailWoker.renderer(input);
+    return ThumbnailWorker.renderer(input);
   }
 
 
@@ -46,7 +46,7 @@ export class RendererFactory {
     const Jimp = require('jimp');
     return async (input: RendererInput): Promise<void> => {
       // generate thumbnail
-      Logger.silly('[JimpThRenderer] rendering thumbnail:', input.imagePath);
+      Logger.silly('[JimpThRenderer] rendering thumbnail:' + input.imagePath);
       const image = await Jimp.read(input.imagePath);
       /**
        * newWidth * newHeight = size*size
@@ -86,7 +86,7 @@ export class RendererFactory {
     const sharp = require('sharp');
     return async (input: RendererInput): Promise<void> => {
 
-      Logger.silly('[SharpThRenderer] rendering thumbnail:', input.imagePath);
+      Logger.silly('[SharpThRenderer] rendering thumbnail:' + input.imagePath);
       const image: SharpInstance = sharp(input.imagePath);
       const metadata: Metadata = await image.metadata();
 
@@ -123,7 +123,7 @@ export class RendererFactory {
     const gm = require('gm');
     return (input: RendererInput): Promise<void> => {
       return new Promise((resolve, reject) => {
-        Logger.silly('[GMThRenderer] rendering thumbnail:', input.imagePath);
+        Logger.silly('[GMThRenderer] rendering thumbnail:' + input.imagePath);
         let image: State = gm(input.imagePath);
         image.size((err, value: Dimensions) => {
           if (err) {

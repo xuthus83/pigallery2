@@ -1,4 +1,4 @@
-import {RendererInput, ThumbnailWoker} from './ThumbnailWoker';
+import {RendererInput, ThumbnailWorker} from './ThumbnailWoker';
 import {Config} from '../../../common/config/private/Config';
 
 
@@ -23,7 +23,7 @@ export class TaskQue implements ITaskQue {
     this.taskInProgress++;
     const task = this.tasks.shift();
     try {
-      task.promise.resolve(await ThumbnailWoker.render(task.data, Config.Server.thumbnail.processingLibrary));
+      task.promise.resolve(await ThumbnailWorker.render(task.data, Config.Server.thumbnail.processingLibrary));
     } catch (err) {
       task.promise.reject(err);
     }

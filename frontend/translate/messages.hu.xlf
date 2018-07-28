@@ -434,8 +434,8 @@
         </context-group>
         <target>Adatbázis</target>
       </trans-unit>
-      <trans-unit id="5b1d1f76e9702b36014e734fd24aa8c5c486784a" datatype="html">
-        <source>SQLie settings:</source>
+      <trans-unit id="ba512e6fe9e8d0a8014c1959539e463cbea3c721" datatype="html">
+        <source>SQLite settings:</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/database/database.settings.component.ts</context>
           <context context-type="linenumber">29</context>
@@ -684,8 +684,8 @@
         </context-group>
         <target>A leginkább eggyező méret lesz generálva. (A nagyobb méret jobb minőségű képet jelent, de nagyobb számításigényű és több helyet is foglal.)</target>
       </trans-unit>
-      <trans-unit id="5c43f65d4b1e7f4c12937babb0794e7b84a9a103" datatype="html">
-        <source>';' separated integers. If size is 200, tha thumbnail will have 200^2 pixels.</source>
+      <trans-unit id="d2b55b02775d93e8e5feaea56c6975e7e617a38a" datatype="html">
+        <source>';' separated integers. If size is 200, that thumbnail will have 200^2 pixels.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/thumbnail/thumbanil.settings.component.ts</context>
           <context context-type="linenumber">95</context>
