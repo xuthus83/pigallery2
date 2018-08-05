@@ -36,7 +36,7 @@ describe('DiskMangerWorker', () => {
       city: 'óüöúőűáé ÓÜÖÚŐŰÁ'
     });
 
-    expect(dir.photos[0].metadata.creationDate).to.be.equals(1436610566000);
+    expect(dir.photos[0].metadata.creationDate).to.be.equals(1434018566000);
 
   });
 
