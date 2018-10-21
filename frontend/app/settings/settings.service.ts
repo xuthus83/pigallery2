@@ -33,6 +33,9 @@ export class SettingsService {
           enabled: true,
           googleApiKey: ''
         },
+        RandomPhoto: {
+          enabled: true
+        },
         urlBase: '',
         publicUrl: '',
         applicationTitle: '',

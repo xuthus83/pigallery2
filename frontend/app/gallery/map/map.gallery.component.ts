@@ -4,7 +4,7 @@ import {Dimension, IRenderable} from '../../model/IRenderable';
 import {GalleryMapLightboxComponent} from './lightbox/lightbox.map.gallery.component';
 import {ThumbnailManagerService} from '../thumnailManager.service';
 import {FullScreenService} from '../fullscreen.service';
-import {LatLngBounds, MapsAPILoader} from '@agm/core';
+import {LatLngBounds, MapsAPILoader, AgmMap} from '@agm/core';
 
 @Component({
   selector: 'app-gallery-map',
@@ -17,8 +17,7 @@ export class GalleryMapComponent implements OnChanges, IRenderable, AfterViewIni
   @ViewChild(GalleryMapLightboxComponent) mapLightbox: GalleryMapLightboxComponent;
 
   mapPhotos: Array<{ latitude: number, longitude: number }> = [];
-  public latlngBounds: LatLngBounds;
-  @ViewChild('map') map: ElementRef;
+  @ViewChild('map') mapElement: ElementRef;
   height = null;
 
 
@@ -37,32 +36,14 @@ export class GalleryMapComponent implements OnChanges, IRenderable, AfterViewIni
     });
 
 
-    this.findPhotosBounds().catch(console.error);
-
   }
 
   ngAfterViewInit() {
     setTimeout(() => {
-      this.height = this.map.nativeElement.clientHeight;
+      this.height = this.mapElement.nativeElement.clientHeight;
     }, 0);
   }
 
-  private async findPhotosBounds() {
-    await this.mapsAPILoader.load();
-    if (!window['google']) {
-      return;
-    }
-    this.latlngBounds = new window['google'].maps.LatLngBounds();
-
-    for (const photo of this.mapPhotos) {
-      this.latlngBounds.extend(new window['google'].maps.LatLng(photo.latitude, photo.longitude));
-    }
-    const clat = this.latlngBounds.getCenter().lat();
-    const clng = this.latlngBounds.getCenter().lng();
-    this.latlngBounds.extend(new window['google'].maps.LatLng(clat + 0.5, clng + 0.5));
-    this.latlngBounds.extend(new window['google'].maps.LatLng(clat - 0.5, clng - 0.5));
-
-  }
 
   click() {
     this.mapLightbox.show(this.getDimension());
@@ -70,10 +51,10 @@ export class GalleryMapComponent implements OnChanges, IRenderable, AfterViewIni
 
   public getDimension(): Dimension {
     return <Dimension>{
-      top: this.map.nativeElement.offsetTop,
-      left: this.map.nativeElement.offsetLeft,
-      width: this.map.nativeElement.offsetWidth,
-      height: this.map.nativeElement.offsetHeight
+      top: this.mapElement.nativeElement.offsetTop,
+      left: this.mapElement.nativeElement.offsetLeft,
+      width: this.mapElement.nativeElement.offsetWidth,
+      height: this.mapElement.nativeElement.offsetHeight
     };
   }
 }

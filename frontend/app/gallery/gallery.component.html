@@ -2,7 +2,6 @@
 <app-frame>
 
   <ng-container navbar>
-
     <li class="nav-item" *ngIf="countDown">
       <span class="navbar-text">
         <ng-container i18n>Link availability</ng-container>
@@ -17,6 +16,12 @@
     </li>
     <li class="nav-item" *ngIf="showShare">
       <app-gallery-share></app-gallery-share>
+    </li>
+  </ng-container>
+
+  <ng-container navbar-menu>
+    <li role="menuitem" *ngIf="showRandomPhotoBuilder">
+      <app-gallery-random-query-builder ></app-gallery-random-query-builder>
     </li>
   </ng-container>
 

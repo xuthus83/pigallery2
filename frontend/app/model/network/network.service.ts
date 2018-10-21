@@ -17,15 +17,7 @@ export class NetworkService {
               private slimLoadingBarService: SlimLoadingBarService) {
   }
 
-  public postJson<T>(url: string, data: any = {}): Promise<T> {
-    return this.callJson('post', url, data);
-  }
-
-  public putJson<T>(url: string, data: any = {}): Promise<T> {
-    return this.callJson('put', url, data);
-  }
-
-  public getJson<T>(url: string, data?: { [key: string]: any }): Promise<T> {
+  public static buildUrl(url: string, data?: { [key: string]: any }) {
     if (data) {
       const keys = Object.getOwnPropertyNames(data);
       if (keys.length > 0) {
@@ -38,7 +30,19 @@ export class NetworkService {
         }
       }
     }
-    return this.callJson('get', url);
+    return url;
+  }
+
+  public postJson<T>(url: string, data: any = {}): Promise<T> {
+    return this.callJson('post', url, data);
+  }
+
+  public putJson<T>(url: string, data: any = {}): Promise<T> {
+    return this.callJson('put', url, data);
+  }
+
+  public getJson<T>(url: string, data?: { [key: string]: any }): Promise<T> {
+    return this.callJson('get', NetworkService.buildUrl(url, data));
   }
 
   public deleteJson<T>(url: string): Promise<T> {

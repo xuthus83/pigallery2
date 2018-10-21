@@ -2,6 +2,7 @@ import {NextFunction, Request, Response} from 'express';
 import {CreateSharingDTO, SharingDTO} from '../../common/entities/SharingDTO';
 import {ObjectManagerRepository} from '../model/ObjectManagerRepository';
 import {ErrorCodes, ErrorDTO} from '../../common/entities/Error';
+import {Config} from '../../common/config/private/Config';
 
 const LOG_TAG = '[SharingMWs]';
 
@@ -20,6 +21,9 @@ export class SharingMWs {
 
 
   public static async getSharing(req: Request, res: Response, next: NextFunction) {
+    if (Config.Client.Sharing.enabled === false) {
+      return next();
+    }
     const sharingKey = req.params.sharingKey;
 
     try {
@@ -33,6 +37,9 @@ export class SharingMWs {
   }
 
   public static async createSharing(req: Request, res: Response, next: NextFunction) {
+    if (Config.Client.Sharing.enabled === false) {
+      return next();
+    }
     if ((typeof req.body === 'undefined') || (typeof req.body.createSharing === 'undefined')) {
       return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, 'createSharing filed is missing'));
     }
@@ -75,6 +82,9 @@ export class SharingMWs {
   }
 
   public static async updateSharing(req: Request, res: Response, next: NextFunction) {
+    if (Config.Client.Sharing.enabled === false) {
+      return next();
+    }
     if ((typeof req.body === 'undefined') || (typeof req.body.updateSharing === 'undefined')) {
       return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, 'updateSharing filed is missing'));
     }

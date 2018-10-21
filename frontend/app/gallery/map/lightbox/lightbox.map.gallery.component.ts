@@ -29,7 +29,6 @@ export class GalleryMapLightboxComponent implements OnChanges, AfterViewInit {
   @ViewChild('root') elementRef: ElementRef;
 
   @ViewChild(AgmMap) map: AgmMap;
-  public latlngBounds: LatLngBounds;
 
 
   constructor(public fullScreenService: FullScreenService,
@@ -136,25 +135,6 @@ export class GalleryMapLightboxComponent implements OnChanges, AfterViewInit {
       return obj;
     });
 
-    this.findPhotosBounds().catch(console.error);
-  }
-
-
-  private async findPhotosBounds() {
-    await this.mapsAPILoader.load();
-    if (!window['google']) {
-      return;
-    }
-    this.latlngBounds = new window['google'].maps.LatLngBounds();
-
-    for (const photo of this.mapPhotos) {
-      this.latlngBounds.extend(new window['google'].maps.LatLng(photo.latitude, photo.longitude));
-    }
-    const clat = this.latlngBounds.getCenter().lat();
-    const clng = this.latlngBounds.getCenter().lng();
-    this.latlngBounds.extend(new window['google'].maps.LatLng(clat + 0.5, clng + 0.5));
-    this.latlngBounds.extend(new window['google'].maps.LatLng(clat - 0.5, clng - 0.5));
-
   }
 
 
@@ -188,8 +168,8 @@ export class GalleryMapLightboxComponent implements OnChanges, AfterViewInit {
       return;
     }
     const event: KeyboardEvent = window.event ? <any>window.event : e;
-    switch (event.keyCode) {
-      case 27: // escape
+    switch (event.key) {
+      case 'Escape': // escape
         this.hide();
         break;
     }

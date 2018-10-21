@@ -110,6 +110,14 @@ export class ConfigDiagnostics {
     }
   }
 
+  static async testRandomPhotoConfig(sharing: ClientConfig.RandomPhotoConfig, config: IPrivateConfig) {
+    if (sharing.enabled === true &&
+      config.Server.database.type === DatabaseType.memory) {
+      throw new Error('Memory Database do not support sharing');
+    }
+  }
+
+
   static async testMapConfig(map: ClientConfig.MapConfig) {
     if (map.enabled === true && (!map.googleApiKey || map.googleApiKey.length === 0)) {
       throw new Error('Maps need a valid google api key');
@@ -191,6 +199,17 @@ export class ConfigDiagnostics {
       Logger.warn(LOG_TAG, 'Sharing is not supported with these settings, switching off..', err.toString());
       Config.Client.Sharing.enabled = false;
     }
+
+    try {
+      await ConfigDiagnostics.testRandomPhotoConfig(Config.Client.Sharing, Config);
+    } catch (ex) {
+      const err: Error = ex;
+      NotificationManager.warning('Random Photo is not supported with these settings. Disabling temporally. ' +
+        'Please adjust the config properly.', err.toString());
+      Logger.warn(LOG_TAG, 'Random Photo is not supported with these settings, switching off..', err.toString());
+      Config.Client.Sharing.enabled = false;
+    }
+
 
     try {
       await ConfigDiagnostics.testMapConfig(Config.Client.Map);

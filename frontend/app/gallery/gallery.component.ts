@@ -14,8 +14,6 @@ import {UserRoles} from '../../../common/entities/UserDTO';
 import {interval} from 'rxjs';
 import {ContentWrapper} from '../../../common/entities/ConentWrapper';
 import {PageHelper} from '../model/page.helper';
-import {QueryService} from '../model/query.service';
-import {LightboxStates} from './lightbox/lightbox.gallery.component';
 
 @Component({
   selector: 'app-gallery',
@@ -29,6 +27,8 @@ export class GalleryComponent implements OnInit, OnDestroy {
 
   public showSearchBar = false;
   public showShare = false;
+  public showRandomPhotoBuilder = false;
+
   public directories: DirectoryDTO[] = [];
   public isPhotoWithLocation = false;
   private $counter;
@@ -142,7 +142,7 @@ export class GalleryComponent implements OnInit, OnDestroy {
     }
     this.showSearchBar = Config.Client.Search.enabled && this._authService.isAuthorized(UserRoles.Guest);
     this.showShare = Config.Client.Sharing.enabled && this._authService.isAuthorized(UserRoles.User);
-
+    this.showRandomPhotoBuilder = Config.Client.RandomPhoto.enabled && this._authService.isAuthorized(UserRoles.Guest);
     this.subscription.content = this._galleryService.content.subscribe(this.onContentChange);
     this.subscription.route = this._route.params.subscribe(this.onRoute);
 

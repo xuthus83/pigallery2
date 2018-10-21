@@ -19,25 +19,38 @@
         <span class="navbar-text" *ngIf="user.value">
           <span class="oi oi-person"></span> {{user.value.name}}</span>
       </li>
-      <li class="nav-item" *ngIf="isAdmin()">
-        <a style="cursor: pointer;"
-           class="nav-link admin-link"
-           [routerLink]="['/admin']">
-          <span class="oi oi-wrench"></span>
-          <span *ngIf="notificationService.notifications.length>0" class="badge">{{notificationService.notifications.length}}</span>
-        </a>
-      </li>
       <li class="nav-item ml-2">
         <app-language class="navbar-btn" isDark="true"></app-language>
       </li>
-      <li class="nav-item ml-2" *ngIf="authenticationRequired">
-        <button class="btn btn-default navbar-btn"
-                style="cursor: pointer"
-                (click)="logout()">
-          <span class="oi oi-account-logout"></span>
-          <ng-container i18n>Logout</ng-container>
+      <div class="btn-group" dropdown placement="bottom right"  container="body" >
+        <button id="button-basic" dropdownToggle
+                type="button" class="btn btn-dark dropdown-toggle"
+                aria-controls="dropdown-basic">
+          <span class="oi oi-menu"></span>
+          <span *ngIf="isAdmin() && notificationService.notifications.length>0" class="badge">{{notificationService.notifications.length}}</span>
+
         </button>
-      </li>
+        <ul id="dropdown-basic" *dropdownMenu
+            class="dropdown-menu dropdown-menu-right"
+            role="menu" aria-labelledby="button-basic"  >
+          <ng-content  select="[navbar-menu]"></ng-content>
+          <li role="menuitem" *ngIf="isAdmin()">
+            <a class="dropdown-item" href="#" [routerLink]="['/admin']">
+              <span class="oi oi-wrench"></span>
+              <span *ngIf="notificationService.notifications.length>0" class="badge">{{notificationService.notifications.length}}</span>
+              <ng-container i18n>Settings</ng-container>
+            </a>
+          </li>
+          <li role="menuitem" *ngIf="authenticationRequired">
+            <a class="dropdown-item" href="#" (click)="logout()"  i18n>
+              <span class="oi oi-account-logout"></span>
+              <ng-container i18n>Logout</ng-container>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+
     </ul>
 
 

@@ -10,6 +10,7 @@ export class GalleryRouter {
     this.addGetImageIcon(app);
     this.addGetImageThumbnail(app);
     this.addGetImage(app);
+    this.addRandom(app);
     this.addDirectoryList(app);
 
     this.addSearch(app);
@@ -33,6 +34,17 @@ export class GalleryRouter {
     app.get(['/api/gallery/content/:imagePath(*\.(jpg|bmp|png|gif|jpeg))'],
       AuthenticationMWs.authenticate,
       // TODO: authorize path
+      GalleryMWs.loadImage,
+      RenderingMWs.renderFile
+    );
+  }
+
+  private static addRandom(app) {
+    app.get(['/api/gallery/random'],
+      AuthenticationMWs.authenticate,
+      AuthenticationMWs.authorise(UserRoles.Guest),
+      // TODO: authorize path
+      GalleryMWs.getRandomImage,
       GalleryMWs.loadImage,
       RenderingMWs.renderFile
     );

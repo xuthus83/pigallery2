@@ -1,4 +1,4 @@
-import {Metadata, SharpInstance} from 'sharp';
+import {Metadata, Sharp} from 'sharp';
 import {Dimensions, State} from 'gm';
 import {Logger} from '../../Logger';
 import {ThumbnailProcessingLib} from '../../../common/config/private/IPrivateConfig';
@@ -87,7 +87,7 @@ export class RendererFactory {
     return async (input: RendererInput): Promise<void> => {
 
       Logger.silly('[SharpThRenderer] rendering thumbnail:' + input.imagePath);
-      const image: SharpInstance = sharp(input.imagePath);
+      const image: Sharp = sharp(input.imagePath);
       const metadata: Metadata = await image.metadata();
 
       /**
@@ -110,9 +110,10 @@ export class RendererFactory {
       } else {
         image
           .resize(input.size, input.size, {
-            kernel: kernel
-          })
-          .crop(sharp.strategy.center);
+            kernel: kernel,
+            position: sharp.gravity.centre,
+            fit: 'cover'
+          });
       }
       await image.jpeg().toFile(input.thPath);
     };

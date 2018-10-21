@@ -43,11 +43,12 @@ import {GalleryShareComponent} from './gallery/share/share.gallery.component';
 import {ShareLoginComponent} from './sharelogin/share-login.component';
 import {ShareService} from './gallery/share.service';
 import {ModalModule} from 'ngx-bootstrap/modal';
+import {BsDatepickerModule} from 'ngx-bootstrap/datepicker';
 import {DatabaseSettingsComponent} from './settings/database/database.settings.component';
 import {ToastrModule} from 'ngx-toastr';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {NotificationService} from './model/notification.service';
-import {JWBootstrapSwitchModule} from 'jw-bootstrap-switch-ng2';
+import {JwBootstrapSwitchNg2Module} from 'jw-bootstrap-switch-ng2';
 import {ClipboardModule} from 'ngx-clipboard';
 import {NavigationService} from './model/navigation.service';
 import {InfoPanelLightboxComponent} from './gallery/lightbox/infopanel/info-panel.lightbox.gallery.component';
@@ -69,6 +70,8 @@ import {I18n, MISSING_TRANSLATION_STRATEGY} from '@ngx-translate/i18n-polyfill';
 import {QueryService} from './model/query.service';
 import {IconizeSortingMethod} from './pipes/IconizeSortingMethod';
 import {StringifySortingMethod} from './pipes/StringifySortingMethod';
+import {RandomQueryBuilderGalleryComponent} from './gallery/random-query-builder/random-query-builder.gallery.component';
+import {RandomPhotoSettingsComponent} from './settings/random-photo/random-photo.settings.component';
 
 @Injectable()
 export class GoogleMapsConfig {
@@ -117,14 +120,15 @@ export function translationsFactory(locale: string) {
     BrowserAnimationsModule,
     appRoutes,
     ClipboardModule,
-    JWBootstrapSwitchModule,
+    JwBootstrapSwitchNg2Module,
     TooltipModule.forRoot(),
     ToastrModule.forRoot(),
     ModalModule.forRoot(),
     CollapseModule.forRoot(),
     BsDropdownModule.forRoot(),
     AgmCoreModule.forRoot(),
-    SlimLoadingBarModule.forRoot()
+    SlimLoadingBarModule.forRoot(),
+    BsDatepickerModule.forRoot()
   ],
   declarations: [AppComponent,
     LoginComponent,
@@ -148,6 +152,7 @@ export function translationsFactory(locale: string) {
     GalleryPhotoComponent,
     AdminComponent,
     InfoPanelLightboxComponent,
+    RandomQueryBuilderGalleryComponent,
     // Settings
     UserMangerSettingsComponent,
     DatabaseSettingsComponent,
@@ -155,6 +160,7 @@ export function translationsFactory(locale: string) {
     ThumbnailSettingsComponent,
     SearchSettingsComponent,
     ShareSettingsComponent,
+    RandomPhotoSettingsComponent,
     BasicSettingsComponent,
     OtherSettingsComponent,
     IndexingSettingsComponent,
@@ -185,12 +191,12 @@ export function translationsFactory(locale: string) {
       deps: [LOCALE_ID]
     },
     I18n,
-/*
+
     {provide: TRANSLATIONS, useValue: translationsFactory('en')},
     {provide: TRANSLATIONS_FORMAT, useValue: 'xlf'},
     {provide: LOCALE_ID, useValue: 'en'},
     {provide: MISSING_TRANSLATION_STRATEGY, useValue: MissingTranslationStrategy.Ignore},
-*/
+
   ],
   bootstrap: [AppComponent]
 })

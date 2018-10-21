@@ -228,18 +228,18 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
       return;
     }
     const event: KeyboardEvent = window.event ? <any>window.event : e;
-    switch (event.keyCode) {
-      case 37:
+    switch (event.key) {
+      case 'ArrowLeft':
         if (this.activePhotoId > 0) {
           this.prevImage();
         }
         break;
-      case 39:
+      case 'ArrowRight':
         if (this.activePhotoId < this.gridPhotoQL.length - 1) {
           this.nextImage();
         }
         break;
-      case 27: // escape
+      case 'Escape': // escape
         this.hide();
         break;
     }

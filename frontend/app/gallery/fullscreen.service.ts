@@ -8,7 +8,9 @@ export class FullScreenService {
   OnFullScreenChange = new Event<boolean>();
 
   public isFullScreenEnabled(): boolean {
-    return !!(document.fullscreenElement || document['mozFullScreenElement'] || document.webkitFullscreenElement);
+    return !!(document['fullscreenElement'] ||
+      document['mozFullScreenElement'] ||
+      document['webkitFullscreenElement']);
   }
 
   public showFullScreen(element: any) {
@@ -37,8 +39,8 @@ export class FullScreenService {
       document.exitFullscreen();
     } else if (document['mozCancelFullScreen']) {
       document['mozCancelFullScreen']();
-    } else if (document.webkitExitFullscreen) {
-      document.webkitExitFullscreen();
+    } else if (document['webkitExitFullscreen']) {
+      document['webkitExitFullscreen']();
     }
     this.OnFullScreenChange.trigger(false);
   }

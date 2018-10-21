@@ -69,3 +69,14 @@ app-language {
   padding-right: 1.0rem;
   padding-left: 1.0rem;
 }
+
+
+
+a.dropdown-item {
+  padding:0.3rem 1.0rem 0.3rem 0.8rem;
+}
+
+a.dropdown-item span{
+  padding-right: 0.8rem;
+}
+

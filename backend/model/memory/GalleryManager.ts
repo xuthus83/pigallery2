@@ -6,6 +6,7 @@ import {DiskManager} from '../DiskManger';
 import {ProjectPath} from '../../ProjectPath';
 import {Config} from '../../../common/config/private/Config';
 import {ReIndexingSensitivity} from '../../../common/config/private/IPrivateConfig';
+import {PhotoDTO} from '../../../common/entities/PhotoDTO';
 
 export class GalleryManager implements IGalleryManager {
 
@@ -23,4 +24,7 @@ export class GalleryManager implements IGalleryManager {
     return DiskManager.scanDirectory(relativeDirectoryName);
   }
 
+  getRandomPhoto(RandomQuery): Promise<PhotoDTO> {
+    throw new Error('Random photo is not supported without database');
+  }
 }

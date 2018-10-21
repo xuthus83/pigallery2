@@ -8,11 +8,12 @@
       [usePanning]="false"
       [draggable]="false"
       [zoom]="0"
-      [fitBounds]="latlngBounds">
+      [fitBounds]="true">
       <agm-marker
         *ngFor="let photo of mapPhotos"
         [latitude]="photo.latitude"
-        [longitude]="photo.longitude">
+        [longitude]="photo.longitude"
+        [agmFitBounds]="true">
       </agm-marker>
     </agm-map>
     <div class="overlay" (click)="click()"

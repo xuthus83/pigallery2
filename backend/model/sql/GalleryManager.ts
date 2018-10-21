@@ -1,4 +1,4 @@
-import {IGalleryManager} from '../interfaces/IGalleryManager';
+import {IGalleryManager, RandomQuery} from '../interfaces/IGalleryManager';
 import {DirectoryDTO} from '../../../common/entities/DirectoryDTO';
 import * as path from 'path';
 import * as fs from 'fs';
@@ -11,6 +11,9 @@ import {ProjectPath} from '../../ProjectPath';
 import {Config} from '../../../common/config/private/Config';
 import {ISQLGalleryManager} from './IGalleryManager';
 import {ReIndexingSensitivity} from '../../../common/config/private/IPrivateConfig';
+import {PhotoDTO} from '../../../common/entities/PhotoDTO';
+import {OrientationType} from '../../../common/entities/RandomQueryDTO';
+import {Brackets} from 'typeorm';
 
 export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
 
@@ -225,5 +228,62 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
 
 
   }
+
+  async getRandomPhoto(queryFilter: RandomQuery): Promise<PhotoDTO> {
+    const connection = await SQLConnection.getConnection();
+    const photosRepository = connection.getRepository(PhotoEntity);
+
+    const query = photosRepository.createQueryBuilder('photo');
+    query.innerJoinAndSelect('photo.directory', 'directory');
+
+    if (queryFilter.directory) {
+      const directoryName = path.basename(queryFilter.directory);
+      const directoryParent = path.join(path.dirname(queryFilter.directory), path.sep);
+
+      query.where(new Brackets(qb => {
+        qb.where('directory.name = :name AND directory.path = :path', {
+          name: directoryName,
+          path: directoryParent
+        });
+
+        if (queryFilter.recursive) {
+          qb.orWhere('directory.name LIKE :text COLLATE utf8_general_ci', {text: '%' + queryFilter.directory + '%'});
+        }
+      }));
+    }
+
+    if (queryFilter.fromDate) {
+      query.andWhere('photo.metadata.creationDate >= :fromDate', {
+        fromDate: queryFilter.fromDate.getTime()
+      });
+    }
+    if (queryFilter.toDate) {
+      query.andWhere('photo.metadata.creationDate <= :toDate', {
+        toDate: queryFilter.toDate.getTime()
+      });
+    }
+    if (queryFilter.minResolution) {
+      query.andWhere('photo.metadata.size.width * photo.metadata.size.height >= :minRes', {
+        minRes: queryFilter.minResolution * 1000 * 1000
+      });
+    }
+
+    if (queryFilter.maxResolution) {
+      query.andWhere('photo.metadata.size.width * photo.metadata.size.height <= :maxRes', {
+        maxRes: queryFilter.maxResolution * 1000 * 1000
+      });
+    }
+    if (queryFilter.orientation === OrientationType.landscape) {
+      query.andWhere('photo.metadata.size.width >= photo.metadata.size.height');
+    }
+    if (queryFilter.orientation === OrientationType.portrait) {
+      query.andWhere('photo.metadata.size.width <= photo.metadata.size.height');
+    }
+
+
+    return await query.groupBy('RANDOM()').limit(1).getOne();
+
+  }
+
 
 }

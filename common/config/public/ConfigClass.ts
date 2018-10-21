@@ -16,6 +16,10 @@ export module ClientConfig {
     passwordProtected: boolean;
   }
 
+  export interface RandomPhotoConfig {
+    enabled: boolean;
+  }
+
   export interface MapConfig {
     enabled: boolean;
     googleApiKey: string;
@@ -32,6 +36,7 @@ export module ClientConfig {
     Search: SearchConfig;
     Sharing: SharingConfig;
     Map: MapConfig;
+    RandomPhoto: RandomPhotoConfig;
     concurrentThumbnailGenerations: number;
     enableCache: boolean;
     enableOnScrollRendering: boolean;
@@ -72,6 +77,9 @@ export class PublicConfigClass {
     Map: {
       enabled: true,
       googleApiKey: ''
+    },
+    RandomPhoto: {
+      enabled: true
     },
     concurrentThumbnailGenerations: 1,
     enableCache: true,

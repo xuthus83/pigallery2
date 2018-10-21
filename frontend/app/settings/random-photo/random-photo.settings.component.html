@@ -1,0 +1,45 @@
+<form #settingsForm="ngForm">
+  <div class="card mb-4"
+       [ngClass]="settings.enabled && !_settingsService.isSupported()?'panel-warning':''">
+    <h5 class="card-header">
+      <ng-container i18n>Random Photo settings</ng-container>
+      <div class="switch-wrapper">
+        <bSwitch
+          class="switch"
+          name="enabled"
+          [switch-on-color]="'success'"
+          [switch-inverse]="'inverse'"
+          [switch-off-text]="text.Disabled"
+          [switch-on-text]="text.Enabled"
+          [switch-disabled]="inProgress || (!settings.enabled && !_settingsService.isSupported())"
+          [switch-handle-width]="'100'"
+          [switch-label-width]="'20'"
+          [(ngModel)]="settings.enabled">
+        </bSwitch>
+      </div>
+    </h5>
+    <div class="card-body">
+      <div [hidden]="!error" class="alert alert-danger" role="alert"><strong>Error: </strong>{{error}}</div>
+
+      <ng-container *ngIf="settings.enabled  || _settingsService.isSupported()">
+        <div class="panel-info" i18n>
+          This feature enables you to generate 'random photo' urls.
+          That URL returns a photo random selected from your gallery.
+          You can use the url with 3rd party like random changing desktop background.
+        </div>
+
+      </ng-container>
+      <div class="panel-info" *ngIf="(!settings.enabled && !_settingsService.isSupported())" i18n>
+        Random Photo is not supported with these settings
+      </div>
+      <button class="btn btn-success float-right"
+              [disabled]="!settingsForm.form.valid || !changed || inProgress"
+              (click)="save()" i18n>Save
+      </button>
+      <button class="btn btn-default float-right"
+              (click)="reset()" i18n>Reset
+      </button>
+    </div>
+  </div>
+
+</form>

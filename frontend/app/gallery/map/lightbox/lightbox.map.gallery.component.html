@@ -9,13 +9,14 @@
     <agm-map
       [style.width.px]="mapDimension.width"
       [style.height.px]="mapDimension.height"
-      [fitBounds]="latlngBounds">
+      [fitBounds]="true">
       <agm-marker
         *ngFor="let photo of mapPhotos"
         [latitude]="photo.latitude"
         [longitude]="photo.longitude"
         [iconUrl]="photo.iconUrl"
-        (markerClick)="loadPreview(photo)">
+        (markerClick)="loadPreview(photo)"
+        [agmFitBounds]="true">
         <agm-info-window>
           <img *ngIf="photo.preview.thumbnail.Src"
                [style.width.px]="photo.preview.width"
