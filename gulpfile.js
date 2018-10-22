@@ -108,7 +108,7 @@ var simpleBuild = function (isProd) {
     var tasks = [];
     var cmd = "ng build --aot ";
     if (isProd) {
-      cmd += " --prod "
+      cmd += " --prod --no-extract-licenses "
     }
     createFrontendTask('build-frontend default', cmd + "--output-path=./dist --no-progress --no-progress --i18n-locale en" +
       " --i18n-format=xlf --i18n-file=frontend/" + translationFolder + "/messages.en.xlf" + " --i18n-missing-translation warning");

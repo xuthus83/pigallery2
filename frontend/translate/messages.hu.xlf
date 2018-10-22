@@ -878,7 +878,7 @@
           <context context-type="sourcefile">app/settings/random-photo/random-photo.settings.component.html</context>
           <context context-type="linenumber">5</context>
         </context-group>
-        <target>Random Photo beállítások</target>
+        <target>Véletlen fotó beállítások</target>
       </trans-unit>
       <trans-unit id="7626fa8df14a4bf00ff7898dd281b450b5c76718" datatype="html">
         <source>
@@ -892,7 +892,7 @@
         </context-group>
         <target>Ez a funkció lehetővé teszi a "véletlenszerű fotó" URL-ek létrehozását.
           Ez az URL egy galériából kiválasztott véletlenszerű fényképet jelenít meg.
-          Használhatja az url-ot harmadik félnek, például a véletlenszerűen megváltoztatott asztali hátteret.</target>
+          Használhatja az url-t külső alkalmazásokhoz, például a asztali háttérkép beállításához.</target>
       </trans-unit>
       <trans-unit id="6c02e8541a2e670f80de8b5a218ea14a16bb6c42" datatype="html">
         <source>
