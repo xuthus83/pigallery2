@@ -10,7 +10,7 @@ import {IPrivateConfig} from '../../../../common/config/private/IPrivateConfig';
 import {I18n} from '@ngx-translate/i18n-polyfill';
 
 
-export abstract class SettingsComponent<T, S extends AbstractSettingsService<T>= AbstractSettingsService<T>>
+export abstract class SettingsComponent<T, S extends AbstractSettingsService<T> = AbstractSettingsService<T>>
   implements OnInit, OnDestroy, OnChanges {
 
   @Input()
@@ -79,7 +79,9 @@ export abstract class SettingsComponent<T, S extends AbstractSettingsService<T>=
   }
 
   ngOnChanges(): void {
-    this.hasAvailableSettings = (this._settingsService.isSupported() || !this.simplifiedMode);
+    this.hasAvailableSettings = ((this._settingsService.isSupported() &&
+      this._settingsService.showInSimplifiedMode())
+      || !this.simplifiedMode);
   }
 
 

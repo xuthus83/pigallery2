@@ -15,6 +15,10 @@ export abstract class AbstractSettingsService<T> {
     return this._settingsService.getSettings();
   }
 
+  public showInSimplifiedMode(): boolean {
+    return true;
+  }
+
   isSupported() {
     return true;
   }

@@ -22,7 +22,8 @@
       <li class="nav-item ml-2">
         <app-language class="navbar-btn" isDark="true"></app-language>
       </li>
-      <div class="btn-group" dropdown placement="bottom right"  container="body" >
+      <div class="btn-group" dropdown placement="bottom right"  container="body"
+      *ngIf="isAdmin() || authenticationRequired">
         <button id="button-basic" dropdownToggle
                 type="button" class="btn btn-dark dropdown-toggle"
                 aria-controls="dropdown-basic">
@@ -32,8 +33,8 @@
         </button>
         <ul id="dropdown-basic" *dropdownMenu
             class="dropdown-menu dropdown-menu-right"
-            role="menu" aria-labelledby="button-basic"  >
-          <ng-content  select="[navbar-menu]"></ng-content>
+            role="menu" aria-labelledby="button-basic">
+          <ng-content select="[navbar-menu]"></ng-content>
           <li role="menuitem" *ngIf="isAdmin()">
             <a class="dropdown-item" href="#" [routerLink]="['/admin']">
               <span class="oi oi-wrench"></span>

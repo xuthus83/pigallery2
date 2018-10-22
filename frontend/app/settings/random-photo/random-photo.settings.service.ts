@@ -14,6 +14,10 @@ export class RandomPhotoSettingsService extends AbstractSettingsService<ClientCo
   }
 
 
+  public showInSimplifiedMode(): boolean {
+    return false;
+  }
+
   public isSupported(): boolean {
     return this._settingsService.settings.value.Server.database.type !== DatabaseType.memory;
   }

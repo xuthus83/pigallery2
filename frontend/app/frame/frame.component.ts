@@ -1,4 +1,4 @@
-import {Component, ViewEncapsulation} from '@angular/core';
+import {Component, ElementRef, ViewChild, ViewEncapsulation} from '@angular/core';
 import {RouterLink} from '@angular/router';
 import {AuthenticationService} from '../model/network/authentication.service';
 import {UserDTO, UserRoles} from '../../../common/entities/UserDTO';
