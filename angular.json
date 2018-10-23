@@ -74,7 +74,7 @@
             "tsConfig": "frontend/tsconfig.spec.json",
             "scripts": [],
             "styles": [
-              "node_modules/ng2-toastr/bundles/ng2-toastr.min.css",
+              "node_modules/ngx-toastr/toastr.css",
               "node_modules/bootstrap/dist/css/bootstrap.css",
               "node_modules/open-iconic/font/css/open-iconic-bootstrap.css",
               "frontend/styles.css"
