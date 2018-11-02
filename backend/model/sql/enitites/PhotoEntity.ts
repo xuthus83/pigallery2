@@ -80,7 +80,7 @@ export class PhotoMetadataEntity implements PhotoMetadata {
   @Column(type => PositionMetaDataEntity)
   positionData: PositionMetaDataEntity;
 
-  @Column('tinyint')
+  @Column('tinyint', {default: 1})
   orientation: OrientationTypes;
 
   @Column(type => ImageSizeEntity)

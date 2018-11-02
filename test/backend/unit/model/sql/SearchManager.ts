@@ -66,13 +66,13 @@ describe('SearchManager', () => {
     return d;
   };
 
-  let p = getPhoto();
+  const p = getPhoto();
   p.metadata.keywords = ['Boba Fett', 'star wars', 'Anakin', 'death star'];
   p.metadata.positionData.city = 'Mos Eisley';
   p.metadata.positionData.country = 'Tatooine';
   p.name = 'sw1';
 
-  let p2 = getPhoto();
+  const p2 = getPhoto();
   p2.metadata.keywords = ['Padmé Amidala', 'star wars', 'Natalie Portman', 'death star'];
   p2.metadata.positionData.city = 'Derem City';
   p2.metadata.positionData.state = 'Research City';
@@ -121,7 +121,7 @@ describe('SearchManager', () => {
 
 
   it('should get autocomplete', async () => {
-    let sm = new SearchManager();
+    const sm = new SearchManager();
 
     const cmp = (a: AutoCompleteItem, b: AutoCompleteItem) => {
       return a.text.localeCompare(b.text);
@@ -153,7 +153,7 @@ describe('SearchManager', () => {
 
 
   it('should search', async () => {
-    let sm = new SearchManager();
+    const sm = new SearchManager();
 
     expect((await sm.search('sw', null))).to.deep.equal(<SearchResultDTO>{
       searchText: 'sw',
@@ -198,7 +198,7 @@ describe('SearchManager', () => {
 
 
   it('should instant search', async () => {
-    let sm = new SearchManager();
+    const sm = new SearchManager();
 
     expect((await sm.instantSearch('sw'))).to.deep.equal({
       searchText: 'sw',
