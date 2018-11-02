@@ -14,6 +14,8 @@ import {UserRoles} from '../../../common/entities/UserDTO';
 import {interval} from 'rxjs';
 import {ContentWrapper} from '../../../common/entities/ConentWrapper';
 import {PageHelper} from '../model/page.helper';
+import {SortingMethods} from '../../../common/entities/SortingMethods';
+import {PhotoDTO} from '../../../common/entities/PhotoDTO';
 
 @Component({
   selector: 'app-gallery',
@@ -35,7 +37,8 @@ export class GalleryComponent implements OnInit, OnDestroy {
   private subscription = {
     content: null,
     route: null,
-    timer: null
+    timer: null,
+    sorting: null
   };
   public countDown = null;
   public mapEnabled = true;
@@ -107,10 +110,13 @@ export class GalleryComponent implements OnInit, OnDestroy {
     if (this.subscription.timer !== null) {
       this.subscription.timer.unsubscribe();
     }
+    if (this.subscription.sorting !== null) {
+      this.subscription.sorting.unsubscribe();
+    }
   }
 
   private onContentChange = (content: ContentWrapper) => {
-    const dirSorter = (a: DirectoryDTO, b: DirectoryDTO) => {
+    const ascdirSorter = (a: DirectoryDTO, b: DirectoryDTO) => {
       return a.name.localeCompare(b.name);
     };
 
@@ -118,7 +124,8 @@ export class GalleryComponent implements OnInit, OnDestroy {
       directories: [],
       photos: []
     });
-    this.directories = tmp.directories.sort(dirSorter);
+    this.directories = tmp.directories;
+    this.sortDirectories();
     this.isPhotoWithLocation = false;
     for (let i = 0; i < tmp.photos.length; i++) {
       if (tmp.photos[i].metadata &&
@@ -131,6 +138,36 @@ export class GalleryComponent implements OnInit, OnDestroy {
       }
     }
   };
+
+  private sortDirectories() {
+    switch (this._galleryService.sorting.value) {
+      case SortingMethods.ascName:
+      case SortingMethods.ascDate:
+        this.directories.sort((a: DirectoryDTO, b: DirectoryDTO) => {
+          if (a.name.toLowerCase() < b.name.toLowerCase()) {
+            return -1;
+          }
+          if (a.name.toLowerCase() > b.name.toLowerCase()) {
+            return 1;
+          }
+          return 0;
+        });
+        break;
+      case SortingMethods.descName:
+      case SortingMethods.descDate:
+        this.directories.sort((a: DirectoryDTO, b: DirectoryDTO) => {
+          if (a.name.toLowerCase() < b.name.toLowerCase()) {
+            return 1;
+          }
+          if (a.name.toLowerCase() > b.name.toLowerCase()) {
+            return -1;
+          }
+          return 0;
+        });
+        break;
+    }
+
+  }
 
   async ngOnInit() {
     await this.shareService.wait();
@@ -150,6 +187,10 @@ export class GalleryComponent implements OnInit, OnDestroy {
       this.$counter = interval(1000);
       this.subscription.timer = this.$counter.subscribe((x) => this.updateTimer(x));
     }
+
+    this.subscription.sorting = this._galleryService.sorting.subscribe(() => {
+      this.sortDirectories();
+    });
 
   }
 
