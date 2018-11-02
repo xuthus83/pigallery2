@@ -51,12 +51,17 @@ export interface IndexingConfig {
   reIndexingSensitivity: ReIndexingSensitivity;
 }
 
+export interface ThreadingConfig {
+  enable: boolean;
+  thumbnailThreads: number;
+}
+
 export interface ServerConfig {
   port: number;
   imagesFolder: string;
   thumbnail: ThumbnailConfig;
+  threading: ThreadingConfig;
   database: DataBaseConfig;
-  enableThreading: boolean;
   sharing: SharingConfig;
   sessionTimeout: number;
   indexing: IndexingConfig;

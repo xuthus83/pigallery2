@@ -1,4 +1,4 @@
-<form #settingsForm="ngForm" class="form-horizontal">
+<form #settingsForm="ngForm" class="form-horizontal" >
   <div class="card mb-4">
     <h5 class="card-header" i18n>
       Other settings
@@ -7,20 +7,21 @@
       <div [hidden]="!error" class="alert alert-danger" role="alert"><strong i18n>Error: </strong>{{error}}</div>
 
 
-      <div class="form-group row">
+      <p class="title" i18n>Threads:</p>
+      <div class="form-group row" >
         <label class="col-md-2 control-label" for="enableThreading" i18n>Threading</label>
         <div class="col-md-10">
           <bSwitch
             id="enableThreading"
             class="switch"
-            name="enableThreading"
+            name="enable"
             [switch-on-color]="'primary'"
             [switch-inverse]="'inverse'"
             [switch-off-text]="text.Disabled"
             [switch-on-text]="text.Enabled"
             [switch-handle-width]="'100'"
             [switch-label-width]="'20'"
-            [(ngModel)]="settings.enableThreading">
+            [(ngModel)]="settings.Server.enable">
           </bSwitch>
           <small class="form-text text-muted" i18n>Runs directory scanning and thumbnail generation (only for Jimp) in a
             different thread
@@ -28,6 +29,20 @@
         </div>
       </div>
 
+      <div class="form-group row"  [hidden]="simplifiedMode || settings.Server.enable == false">
+        <label class="col-md-2 control-label" for="thumbnailThreads" i18n>Thumbnail threads</label>
+        <div class="col-md-10">
+          <select id="thumbnailThreads" class="form-control" [(ngModel)]="settings.Server.thumbnailThreads"
+                  name="Server[thumbnailThreads]" required>
+            <option [ngValue]="0">auto</option>
+            <option *ngFor="let i of threads" [ngValue]="i">{{i}}</option>
+          </select>
+          <small class="form-text text-muted" i18n>Number of threads that are used to generate thumbnails. If auto, number of CPU cores -1 threads will be used.</small>
+        </div>
+      </div>
+
+
+      <p class="title" i18n>Misc:</p>
       <div class="form-group row">
         <label class="col-md-2 control-label" for="enableOnScrollThumbnailPrioritising" i18n>Scroll based thumbnail
           generation</label>
@@ -42,7 +57,7 @@
             [switch-on-text]="text.Enabled"
             [switch-handle-width]="'100'"
             [switch-label-width]="'20'"
-            [(ngModel)]="settings.enableOnScrollThumbnailPrioritising">
+            [(ngModel)]="settings.Client.enableOnScrollThumbnailPrioritising">
           </bSwitch>
           <small class="form-text text-muted" i18n>Those thumbnails get higher priority that are visible on the screen
           </small>
@@ -62,7 +77,7 @@
             [switch-on-text]="text.Enabled"
             [switch-handle-width]="'100'"
             [switch-label-width]="'20'"
-            [(ngModel)]="settings.enableOnScrollRendering">
+            [(ngModel)]="settings.Client.enableOnScrollRendering">
           </bSwitch>
           <small class="form-text text-muted" i18n>Shows only the required amount of photos at once. Renders more if
             page bottom is reached
@@ -84,7 +99,7 @@
             [switch-on-text]="text.Enabled"
             [switch-handle-width]="'100'"
             [switch-label-width]="'20'"
-            [(ngModel)]="settings.enableCache">
+            [(ngModel)]="settings.Client.enableCache">
           </bSwitch>
           <small class="form-text text-muted" i18n>Caches directory contents and search results for better performance
           </small>
@@ -92,10 +107,33 @@
       </div>
 
 
+      <p class="title" i18n>Navigation bar:</p>
+      <div class="form-group row">
+        <label class="col-md-2 control-label" for="showItemCount" [hidden]="simplifiedMode" i18n>Show item count</label>
+        <div class="col-md-10">
+          <bSwitch
+            id="showItemCount"
+            class="switch"
+            name="enableCache"
+            [switch-on-color]="'primary'"
+            [switch-inverse]="'inverse'"
+            [switch-off-text]="text.Disabled"
+            [switch-on-text]="text.Enabled"
+            [switch-handle-width]="'100'"
+            [switch-label-width]="'20'"
+            [(ngModel)]="settings.Client.NavBar.showItemCount">
+          </bSwitch>
+          <small class="form-text text-muted" i18n>Show hte number of items (photos) in the folder
+          </small>
+        </div>
+      </div>
+
+
+
       <div class="form-group row"  [hidden]="simplifiedMode">
         <label class="col-md-2 control-label" for="defaultPhotoSortingMethod" i18n>Default photo sorting method</label>
         <div class="col-md-10">
-          <select id="defaultPhotoSortingMethod" class="form-control" [(ngModel)]="settings.defaultPhotoSortingMethod"
+          <select id="defaultPhotoSortingMethod" class="form-control" [(ngModel)]="settings.Client.defaultPhotoSortingMethod"
                   name="defaultPhotoSortingMethod" required>
             <option *ngFor="let type of types" [ngValue]="type.key">{{type.key | stringifySorting}}
             </option>

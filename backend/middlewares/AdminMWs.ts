@@ -3,13 +3,14 @@ import {ErrorCodes, ErrorDTO} from '../../common/entities/Error';
 import {ObjectManagerRepository} from '../model/ObjectManagerRepository';
 import {Logger} from '../Logger';
 import {SQLConnection} from '../model/sql/SQLConnection';
-import {DataBaseConfig, DatabaseType, IndexingConfig, ThumbnailConfig} from '../../common/config/private/IPrivateConfig';
+import {DataBaseConfig, DatabaseType, IndexingConfig, IPrivateConfig, ThumbnailConfig} from '../../common/config/private/IPrivateConfig';
 import {Config} from '../../common/config/private/Config';
 import {ConfigDiagnostics} from '../model/ConfigDiagnostics';
 import {ClientConfig} from '../../common/config/public/ConfigClass';
 import {BasicConfigDTO} from '../../common/entities/settings/BasicConfigDTO';
 import {OtherConfigDTO} from '../../common/entities/settings/OtherConfigDTO';
 import {ProjectPath} from '../ProjectPath';
+import {PrivateConfigClass} from '../../common/config/private/PrivateConfigClass';
 
 
 const LOG_TAG = '[AdminMWs]';
@@ -244,18 +245,21 @@ export class AdminMWs {
 
     try {
       const settings: OtherConfigDTO = req.body.settings;
-      Config.Client.enableCache = settings.enableCache;
-      Config.Client.enableOnScrollRendering = settings.enableOnScrollRendering;
-      Config.Client.enableOnScrollThumbnailPrioritising = settings.enableOnScrollThumbnailPrioritising;
-      Config.Client.defaultPhotoSortingMethod = settings.defaultPhotoSortingMethod;
+      Config.Client.Other.enableCache = settings.Client.enableCache;
+      Config.Client.Other.enableOnScrollRendering = settings.Client.enableOnScrollRendering;
+      Config.Client.Other.enableOnScrollThumbnailPrioritising = settings.Client.enableOnScrollThumbnailPrioritising;
+      Config.Client.Other.defaultPhotoSortingMethod = settings.Client.defaultPhotoSortingMethod;
+      Config.Client.Other.NavBar.showItemCount = settings.Client.NavBar.showItemCount;
 
       // only updating explicitly set config (not saving config set by the diagnostics)
-      const original = Config.original();
-      original.Client.enableCache = settings.enableCache;
-      original.Client.enableOnScrollRendering = settings.enableOnScrollRendering;
-      original.Client.enableOnScrollThumbnailPrioritising = settings.enableOnScrollThumbnailPrioritising;
-      original.Client.defaultPhotoSortingMethod = settings.defaultPhotoSortingMethod;
-      original.Server.enableThreading = settings.enableThreading;
+      const original: PrivateConfigClass = Config.original();
+      original.Client.Other.enableCache = settings.Client.enableCache;
+      original.Client.Other.enableOnScrollRendering = settings.Client.enableOnScrollRendering;
+      original.Client.Other.enableOnScrollThumbnailPrioritising = settings.Client.enableOnScrollThumbnailPrioritising;
+      original.Client.Other.defaultPhotoSortingMethod = settings.Client.defaultPhotoSortingMethod;
+      original.Client.Other.NavBar.showItemCount = settings.Client.NavBar.showItemCount;
+      original.Server.threading.enable = settings.Server.enable;
+      original.Server.threading.thumbnailThreads = settings.Server.thumbnailThreads;
       original.save();
       await ConfigDiagnostics.runDiagnostics();
       Logger.info(LOG_TAG, 'new config:');

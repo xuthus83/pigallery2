@@ -26,18 +26,22 @@ export class ThumbnailGeneratorMWs {
     }
 
 
-    if (Config.Server.enableThreading === true ||
+    if (Config.Server.threading.enable === true ||
       Config.Server.thumbnail.processingLibrary !== ThumbnailProcessingLib.Jimp) {
-      Config.Client.concurrentThumbnailGenerations = Math.max(1, os.cpus().length - 1);
+      if (Config.Server.threading.thumbnailThreads > 0) {
+        Config.Client.Thumbnail.concurrentThumbnailGenerations = Config.Server.threading.thumbnailThreads;
+      } else {
+        Config.Client.Thumbnail.concurrentThumbnailGenerations = Math.max(1, os.cpus().length - 1);
+      }
     } else {
-      Config.Client.concurrentThumbnailGenerations = 1;
+      Config.Client.Thumbnail.concurrentThumbnailGenerations = 1;
     }
 
-    if (Config.Server.enableThreading === true &&
+    if (Config.Server.threading.enable === true &&
       Config.Server.thumbnail.processingLibrary === ThumbnailProcessingLib.Jimp) {
-      this.taskQue = new ThumbnailTH(Config.Client.concurrentThumbnailGenerations);
+      this.taskQue = new ThumbnailTH(Config.Client.Thumbnail.concurrentThumbnailGenerations);
     } else {
-      this.taskQue = new TaskQue(Config.Client.concurrentThumbnailGenerations);
+      this.taskQue = new TaskQue(Config.Client.Thumbnail.concurrentThumbnailGenerations);
     }
 
     this.initDone = true;

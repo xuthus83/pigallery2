@@ -137,7 +137,7 @@ export class GalleryGridComponent implements OnChanges, OnInit, AfterViewInit, O
   ngAfterViewInit() {
     this.lightbox.setGridPhotoQL(this.gridPhotoQL);
 
-    if (Config.Client.enableOnScrollThumbnailPrioritising === true) {
+    if (Config.Client.Other.enableOnScrollThumbnailPrioritising === true) {
       this.gridPhotoQL.changes.subscribe(() => {
         this.scrollListenerPhotos = this.gridPhotoQL.filter(pc => pc.ScrollListener);
       });
@@ -273,7 +273,7 @@ export class GalleryGridComponent implements OnChanges, OnInit, AfterViewInit, O
    * @returns {boolean}
    */
   private shouldRenderMore(offset: number = 0): boolean {
-    return Config.Client.enableOnScrollRendering === false ||
+    return Config.Client.Other.enableOnScrollRendering === false ||
       PageHelper.ScrollY >= (document.body.clientHeight + offset - window.innerHeight) * 0.7
       || (document.body.clientHeight + offset) * 0.85 < window.innerHeight;
 
@@ -288,7 +288,7 @@ export class GalleryGridComponent implements OnChanges, OnInit, AfterViewInit, O
       window.requestAnimationFrame(() => {
         this.renderPhotos();
 
-        if (Config.Client.enableOnScrollThumbnailPrioritising === true) {
+        if (Config.Client.Other.enableOnScrollThumbnailPrioritising === true) {
           this.scrollListenerPhotos.forEach((pc: GalleryPhotoComponent) => {
             pc.onScroll();
           });

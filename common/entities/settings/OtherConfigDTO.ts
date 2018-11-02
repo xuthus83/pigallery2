@@ -1,9 +1,7 @@
-import {SortingMethods} from '../SortingMethods';
+import {ClientConfig} from '../../config/public/ConfigClass';
+import {ThreadingConfig} from '../../config/private/IPrivateConfig';
 
 export interface OtherConfigDTO {
-  enableCache: boolean;
-  enableOnScrollRendering: boolean;
-  enableOnScrollThumbnailPrioritising: boolean;
-  enableThreading: boolean;
-  defaultPhotoSortingMethod: SortingMethods;
+  Server: ThreadingConfig;
+  Client: ClientConfig.OtherConfig;
 }

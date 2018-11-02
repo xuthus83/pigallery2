@@ -28,24 +28,33 @@ export module ClientConfig {
   export interface ThumbnailConfig {
     iconSize: number;
     thumbnailSizes: Array<number>;
+    concurrentThumbnailGenerations: number;
+  }
+
+  export interface NavBarConfig {
+    showItemCount: boolean;
+  }
+
+  export interface OtherConfig {
+    enableCache: boolean;
+    enableOnScrollRendering: boolean;
+    defaultPhotoSortingMethod: SortingMethods;
+    enableOnScrollThumbnailPrioritising: boolean;
+    NavBar: NavBarConfig;
   }
 
   export interface Config {
     applicationTitle: string;
+    publicUrl: string;
+    urlBase: string;
     Thumbnail: ThumbnailConfig;
     Search: SearchConfig;
     Sharing: SharingConfig;
     Map: MapConfig;
     RandomPhoto: RandomPhotoConfig;
-    concurrentThumbnailGenerations: number;
-    enableCache: boolean;
-    enableOnScrollRendering: boolean;
-    enableOnScrollThumbnailPrioritising: boolean;
+    Other: OtherConfig;
     authenticationRequired: boolean;
-    publicUrl: string;
-    urlBase: string;
     languages: string[];
-    defaultPhotoSortingMethod: SortingMethods;
   }
 
 }
@@ -58,6 +67,7 @@ export class PublicConfigClass {
   public Client: ClientConfig.Config = {
     applicationTitle: 'PiGallery 2',
     Thumbnail: {
+      concurrentThumbnailGenerations: 1,
       thumbnailSizes: [200, 400, 600],
       iconSize: 30
     },
@@ -81,15 +91,19 @@ export class PublicConfigClass {
     RandomPhoto: {
       enabled: true
     },
-    concurrentThumbnailGenerations: 1,
-    enableCache: true,
-    enableOnScrollRendering: true,
-    enableOnScrollThumbnailPrioritising: true,
+    Other: {
+      enableCache: true,
+      enableOnScrollRendering: true,
+      enableOnScrollThumbnailPrioritising: true,
+      defaultPhotoSortingMethod: SortingMethods.ascDate,
+      NavBar: {
+        showItemCount: true
+      }
+    },
     authenticationRequired: true,
     publicUrl: '',
     urlBase: '',
-    languages: [],
-    defaultPhotoSortingMethod: SortingMethods.ascDate
+    languages: []
   };
 
 }

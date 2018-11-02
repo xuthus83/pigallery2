@@ -29,6 +29,22 @@ export class Utils {
   }
 
 
+
+  /**
+   *
+   * @param from
+   * @param to inclusive
+   * @returns {Array}
+   */
+  static createRange(from: number, to: number): Array<number> {
+    const arr = new Array(to - from + 1);
+    let c = to - from + 1;
+    while (c--) {
+      arr[c] = to--;
+    }
+    return arr;
+  }
+
   static concatUrls(...args: Array<string>) {
     let url = '';
     for (let i = 0; i < args.length; i++) {

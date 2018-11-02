@@ -97,7 +97,7 @@ export class GalleryCacheService {
 
 
   public getDirectory(directoryName: string): DirectoryDTO {
-    if (Config.Client.enableCache === false) {
+    if (Config.Client.Other.enableCache === false) {
       return null;
     }
     const value = localStorage.getItem(GalleryCacheService.CONTENT_PREFIX + Utils.concatUrls(directoryName));
@@ -111,7 +111,7 @@ export class GalleryCacheService {
   }
 
   public setDirectory(directory: DirectoryDTO): void {
-    if (Config.Client.enableCache === false) {
+    if (Config.Client.Other.enableCache === false) {
       return;
     }
 
@@ -137,7 +137,7 @@ export class GalleryCacheService {
    */
   public photoUpdated(photo: PhotoDTO): void {
 
-    if (Config.Client.enableCache === false) {
+    if (Config.Client.Other.enableCache === false) {
       return;
     }
 

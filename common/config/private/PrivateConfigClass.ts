@@ -33,12 +33,15 @@ export class PrivateConfigClass extends PublicConfigClass implements IPrivateCon
     sharing: {
       updateTimeout: 1000 * 60 * 5
     },
+    threading: {
+      enable: true,
+      thumbnailThreads: 0
+    },
     indexing: {
       folderPreviewSize: 2,
       cachedFolderTimeout: 1000 * 60 * 60,
       reIndexingSensitivity: ReIndexingSensitivity.medium
-    },
-    enableThreading: true
+    }
   };
   private ConfigLoader: any;
 

@@ -6,7 +6,6 @@ import {NotificationService} from '../../model/notification.service';
 import {OtherSettingsService} from './other.settings.service';
 import {OtherConfigDTO} from '../../../../common/entities/settings/OtherConfigDTO';
 import {I18n} from '@ngx-translate/i18n-polyfill';
-import {ReIndexingSensitivity} from '../../../../common/config/private/IPrivateConfig';
 import {Utils} from '../../../../common/Utils';
 import {SortingMethods} from '../../../../common/entities/SortingMethods';
 
@@ -21,6 +20,7 @@ export class OtherSettingsComponent extends SettingsComponent<OtherConfigDTO> im
 
 
   types: { key: number; value: string }[] = [];
+  threads: number[] = Utils.createRange(1, 100);
 
   constructor(_authService: AuthenticationService,
               _navigation: NavigationService,
@@ -28,11 +28,8 @@ export class OtherSettingsComponent extends SettingsComponent<OtherConfigDTO> im
               notification: NotificationService,
               i18n: I18n) {
     super(i18n('Other'), _authService, _navigation, _settingsService, notification, i18n, s => ({
-      enableThreading: s.Server.enableThreading,
-      enableOnScrollThumbnailPrioritising: s.Client.enableOnScrollThumbnailPrioritising,
-      enableOnScrollRendering: s.Client.enableOnScrollRendering,
-      enableCache: s.Client.enableCache,
-      defaultPhotoSortingMethod: s.Client.defaultPhotoSortingMethod
+      Server: s.Server.threading,
+      Client: s.Client.Other
     }));
     this.types = Utils.enumToArray(SortingMethods);
     this.hasAvailableSettings = !this.simplifiedMode;

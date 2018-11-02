@@ -8,10 +8,10 @@
   </ol>
 
   <div class="right-side">
-    <div class="photos-count" *ngIf="directory.photos.length > 0">
+    <div class="photos-count" *ngIf="directory.photos.length > 0 && config.Client.Other.NavBar.showItemCount">
       {{directory.photos.length}} <span i18n>items</span>
     </div>
-    <div class="divider" *ngIf="directory.photos.length > 0">&nbsp;</div>
+    <div class="divider" *ngIf="directory.photos.length > 0 && config.Client.Other.NavBar.showItemCount">&nbsp;</div>
     <div class="btn-group" dropdown placement="bottom right">
       <button id="button-alignment" dropdownToggle type="button"
               class="btn btn-default dropdown-toggle" aria-controls="dropdown-alignment"

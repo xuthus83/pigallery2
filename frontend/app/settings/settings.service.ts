@@ -20,8 +20,8 @@ export class SettingsService {
           instantSearchCacheTimeout: 1000 * 60 * 60,
           autocompleteCacheTimeout: 1000 * 60 * 60
         },
-        concurrentThumbnailGenerations: null,
         Thumbnail: {
+          concurrentThumbnailGenerations: null,
           iconSize: 30,
           thumbnailSizes: []
         },
@@ -36,15 +36,20 @@ export class SettingsService {
         RandomPhoto: {
           enabled: true
         },
+        Other: {
+          enableCache: true,
+          enableOnScrollRendering: true,
+          enableOnScrollThumbnailPrioritising: true,
+          defaultPhotoSortingMethod: SortingMethods.ascDate,
+          NavBar: {
+            showItemCount: true
+          }
+        },
         urlBase: '',
         publicUrl: '',
         applicationTitle: '',
-        enableCache: true,
-        enableOnScrollRendering: true,
-        enableOnScrollThumbnailPrioritising: true,
         authenticationRequired: true,
-        languages: [],
-        defaultPhotoSortingMethod: SortingMethods.ascDate
+        languages: []
       },
       Server: {
         database: {
@@ -54,12 +59,15 @@ export class SettingsService {
           updateTimeout: 2000
         },
         imagesFolder: '',
-        enableThreading: true,
         port: 80,
         thumbnail: {
           folder: '',
           qualityPriority: true,
           processingLibrary: ThumbnailProcessingLib.sharp
+        },
+        threading: {
+          enable: true,
+          thumbnailThreads: 0
         },
         sessionTimeout: 0,
         indexing: {

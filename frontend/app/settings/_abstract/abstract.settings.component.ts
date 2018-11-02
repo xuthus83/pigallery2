@@ -19,7 +19,7 @@ export abstract class SettingsComponent<T, S extends AbstractSettingsService<T> 
   @ViewChild('settingsForm')
   form: HTMLFormElement;
 
-  @Output('hasAvailableSettings')
+  @Output()
   hasAvailableSettings = true;
 
   public inProgress = false;
@@ -61,6 +61,31 @@ export abstract class SettingsComponent<T, S extends AbstractSettingsService<T> 
     this.ngOnChanges();
   };
 
+  settingsSame(newSettings: T, original: T): boolean {
+    if (typeof original !== 'object' || original == null) {
+      return newSettings === original;
+    }
+    if (!newSettings) {
+      return false;
+    }
+    const keys = Object.keys(newSettings);
+    for (let i = 0; i < keys.length; i++) {
+      const key = keys[i];
+      if (typeof original[key] === 'undefined') {
+        throw new Error('unknown settings: ' + key);
+      }
+      if (typeof original[key] === 'object') {
+        if (this.settingsSame(newSettings[key], original[key]) === false) {
+          return false;
+        }
+      } else if (newSettings[key] !== original[key]) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
   ngOnInit() {
     if (!this._authService.isAuthenticated() ||
       this._authService.user.value.role < UserRoles.Admin) {
@@ -69,11 +94,11 @@ export abstract class SettingsComponent<T, S extends AbstractSettingsService<T> 
     }
     this.getSettings();
 
-    this._subscription = this.form.valueChanges.subscribe((data) => {
-      if (!data) {
-        return;
-      }
-      this.changed = !Utils.equalsFilter(data, this.original);
+    // TODO: fix after this issue is fixed: https://github.com/angular/angular/issues/24818
+    this._subscription = this.form.valueChanges.subscribe(() => {
+      setTimeout(() => {
+        this.changed = !this.settingsSame(this.settings, this.original);
+      }, 0);
     });
 
   }

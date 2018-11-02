@@ -8,6 +8,7 @@ import {QueryService} from '../../model/query.service';
 import {GalleryService} from '../gallery.service';
 import {Utils} from '../../../../common/Utils';
 import {SortingMethods} from '../../../../common/entities/SortingMethods';
+import {Config} from '../../../../common/config/public/Config';
 
 @Component({
   selector: 'app-gallery-navbar',
@@ -21,6 +22,7 @@ export class GalleryNavigatorComponent implements OnChanges {
   routes: Array<NavigatorPath> = [];
   SortingMethods = SortingMethods;
   sortingMethodsType: { key: number; value: string }[] = [];
+  config = Config;
 
   constructor(private _authService: AuthenticationService,
               public queryService: QueryService,

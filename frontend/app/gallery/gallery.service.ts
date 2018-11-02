@@ -26,7 +26,7 @@ export class GalleryService {
               private _shareService: ShareService,
               private navigatoinService: NavigationService) {
     this.content = new BehaviorSubject<ContentWrapper>(new ContentWrapper());
-    this.sorting = new BehaviorSubject<SortingMethods>(Config.Client.defaultPhotoSortingMethod);
+    this.sorting = new BehaviorSubject<SortingMethods>(Config.Client.Other.defaultPhotoSortingMethod);
   }
 
   lastRequest: { directory: string } = {
