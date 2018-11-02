@@ -108,10 +108,11 @@ export class GalleryMapLightboxComponent implements OnChanges, AfterViewInit {
     }).map(p => {
       let width = 500;
       let height = 500;
-      if (p.metadata.size.width > p.metadata.size.height) {
-        height = width * (p.metadata.size.height / p.metadata.size.width);
+      const rotatedSize = PhotoDTO.getRotatedSize(p);
+      if (rotatedSize.width > rotatedSize.height) {
+        height = width * (rotatedSize.height / rotatedSize.width);
       } else {
-        width = height * (p.metadata.size.width / p.metadata.size.height);
+        width = height * (rotatedSize.width / rotatedSize.height);
       }
       const iconTh = this.thumbnailService.getIcon(new IconPhoto(p));
       iconTh.Visible = true;

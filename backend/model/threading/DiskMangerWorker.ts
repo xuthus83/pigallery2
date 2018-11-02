@@ -93,7 +93,7 @@ export class DiskMangerWorker {
             cameraData: {},
             positionData: null,
             size: {},
-            orientation: OrientationTypes.TOP_RIGHT,
+            orientation: OrientationTypes.TOP_LEFT,
             creationDate: 0,
             fileSize: 0
           };
@@ -132,6 +132,7 @@ export class DiskMangerWorker {
               if (exif.tags.Orientation) {
                 metadata.orientation = exif.tags.Orientation;
               }
+
 
               if (exif.imageSize) {
                 metadata.size = <ImageSize> {width: exif.imageSize.width, height: exif.imageSize.height};
