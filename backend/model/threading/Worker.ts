@@ -8,7 +8,7 @@ export class Worker {
 
   public static process() {
     Logger.debug('Worker is waiting for tasks');
-    process.on('message', async (task: WorkerTask)=> {
+    process.on('message', async (task: WorkerTask) => {
       try {
         let result = null;
         switch (task.type) {

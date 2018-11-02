@@ -189,7 +189,7 @@ export class GalleryGridComponent implements OnChanges, OnInit, AfterViewInit, O
     const imageHeight = rowHeight - (this.IMAGE_MARGIN * 2);
 
     photoRowBuilder.getPhotoRow().forEach((photo) => {
-      const imageWidth = imageHeight * (photo.metadata.size.width / photo.metadata.size.height);
+      const imageWidth = imageHeight * PhotoDTO.calcRotatedAspectRatio(photo);
       this.photosToRender.push(new GridPhoto(photo, imageWidth, imageHeight, this.renderedPhotoIndex));
     });
 

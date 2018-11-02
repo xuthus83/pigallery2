@@ -30,7 +30,7 @@ export abstract class ThumbnailBase {
 
   protected available = false;
   protected src: string = null;
-  protected loading = false;
+  public loading = false;
   protected error = false;
   protected onLoad: Function = null;
   protected thumbnailTask: ThumbnailTaskEntity = null;

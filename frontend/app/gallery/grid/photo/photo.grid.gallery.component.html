@@ -1,5 +1,6 @@
 <div #photoContainer class="photo-container" (mouseover)="mouseOver()" (mouseout)="mouseOut()">
-  <img #img [src]="thumbnail.Src" *ngIf="thumbnail.Available">
+  <img #img [src]="thumbnail.Src | fixOrientation:gridPhoto.photo.metadata.orientation | async"
+       *ngIf="thumbnail.Available">
 
   <app-gallery-grid-photo-loading
     [error]="thumbnail.Error"
@@ -31,7 +32,7 @@
         <a *ngIf="searchEnabled"
            [routerLink]="['/search', keyword, {type: SearchTypes[SearchTypes.keyword]}]">#{{keyword}}</a>
         <span *ngIf="!searchEnabled">#{{keyword}}</span>
-        <ng-template [ngIf]="!last">, </ng-template>
+        <ng-template [ngIf]="!last">,</ng-template>
       </ng-template>
 
     </div>

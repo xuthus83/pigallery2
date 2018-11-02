@@ -4,7 +4,7 @@ import {DirectoryDTO} from '../../../common/entities/DirectoryDTO';
 import {CameraMetadata, GPSMetadata, ImageSize, PhotoDTO, PhotoMetadata} from '../../../common/entities/PhotoDTO';
 import {Logger} from '../../Logger';
 import {IptcParser} from 'ts-node-iptc';
-import {ExifParserFactory} from 'ts-exif-parser';
+import {ExifParserFactory, OrientationTypes} from 'ts-exif-parser';
 import {ProjectPath} from '../../ProjectPath';
 import {Config} from '../../../common/config/private/Config';
 
@@ -29,7 +29,6 @@ export class DiskMangerWorker {
 
   public static scanDirectory(relativeDirectoryName: string, maxPhotos: number = null, photosOnly: boolean = false): Promise<DirectoryDTO> {
     return new Promise<DirectoryDTO>((resolve, reject) => {
-
       const directoryName = path.basename(relativeDirectoryName);
       const directoryParent = path.join(path.dirname(relativeDirectoryName), path.sep);
       const absoluteDirectoryName = path.join(ProjectPath.ImageFolder, relativeDirectoryName);
@@ -94,10 +93,10 @@ export class DiskMangerWorker {
             cameraData: {},
             positionData: null,
             size: {},
+            orientation: OrientationTypes.TOP_RIGHT,
             creationDate: 0,
             fileSize: 0
           };
-
           try {
 
             try {
@@ -130,6 +129,9 @@ export class DiskMangerWorker {
                 metadata.creationDate = exif.tags.CreateDate || exif.tags.DateTimeOriginal || exif.tags.ModifyDate;
               }
 
+              if (exif.tags.Orientation) {
+                metadata.orientation = exif.tags.Orientation;
+              }
 
               if (exif.imageSize) {
                 metadata.size = <ImageSize> {width: exif.imageSize.width, height: exif.imageSize.height};

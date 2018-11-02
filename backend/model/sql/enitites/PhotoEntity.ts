@@ -1,7 +1,7 @@
 import {Column, Entity, ManyToOne, PrimaryGeneratedColumn} from 'typeorm';
 import {CameraMetadata, GPSMetadata, ImageSize, PhotoDTO, PhotoMetadata, PositionMetaData} from '../../../../common/entities/PhotoDTO';
 import {DirectoryEntity} from './DirectoryEntity';
-
+import {OrientationTypes} from 'ts-exif-parser';
 
 @Entity()
 export class CameraMetadataEntity implements CameraMetadata {
@@ -79,6 +79,9 @@ export class PhotoMetadataEntity implements PhotoMetadata {
 
   @Column(type => PositionMetaDataEntity)
   positionData: PositionMetaDataEntity;
+
+  @Column('tinyint')
+  orientation: OrientationTypes;
 
   @Column(type => ImageSizeEntity)
   size: ImageSizeEntity;

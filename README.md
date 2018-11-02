@@ -139,6 +139,10 @@ apt-get install build-essential  libkrb5-dev gcc g++
    * you can write some note in the blog.md for every directory
  * bug free :) - `In progress`
 
+## Known errors
+
+There is no nice way to handle EXIF orientation tag properly.
+The page handles these photos, but might cause same error in the user experience (e.g.: the pages loads those photos slower. See issue #11)
 
 ## Credits
 Crossbrowser testing sponsored by [Browser Stack](https://www.browserstack.com)

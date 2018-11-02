@@ -5,9 +5,9 @@ import {RouterLink} from '@angular/router';
 import {Utils} from '../../../../common/Utils';
 import {Photo} from '../Photo';
 import {Thumbnail, ThumbnailManagerService} from '../thumnailManager.service';
-import {ShareService} from '../share.service';
 import {PageHelper} from '../../model/page.helper';
 import {QueryService} from '../../model/query.service';
+import {PhotoDTO} from '../../../../common/entities/PhotoDTO';
 
 @Component({
   selector: 'app-gallery-directory',
@@ -27,6 +27,13 @@ export class GalleryDirectoryComponent implements OnInit, OnDestroy {
   }
 
   size: number = null;
+
+  public get SamplePhoto(): PhotoDTO {
+    if (this.directory.photos.length > 0) {
+      return this.directory.photos[0];
+    }
+    return null;
+  }
 
   getSanitizedThUrl() {
     return this._sanitizer.bypassSecurityTrustStyle('url(' + encodeURI(this.thumbnail.Src).replace(/\(/g, '%28')
@@ -51,7 +58,7 @@ export class GalleryDirectoryComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     if (this.directory.photos.length > 0) {
-      this.thumbnail = this.thumbnailService.getThumbnail(new Photo(this.directory.photos[0], this.calcSize(), this.calcSize()));
+      this.thumbnail = this.thumbnailService.getThumbnail(new Photo(this.SamplePhoto, this.calcSize(), this.calcSize()));
     }
   }
 

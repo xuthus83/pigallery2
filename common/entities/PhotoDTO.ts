@@ -1,4 +1,6 @@
 import {DirectoryDTO} from './DirectoryDTO';
+import {ImageSize} from './PhotoDTO';
+import {OrientationTypes} from 'ts-exif-parser';
 
 export interface PhotoDTO {
   id: number;
@@ -13,6 +15,7 @@ export interface PhotoMetadata {
   keywords: Array<string>;
   cameraData: CameraMetadata;
   positionData: PositionMetaData;
+  orientation: OrientationTypes;
   size: ImageSize;
   creationDate: number;
   fileSize: number;
@@ -56,5 +59,26 @@ export module PhotoDTO {
           photo.metadata.positionData.GPSData.altitude &&
           photo.metadata.positionData.GPSData.latitude &&
           photo.metadata.positionData.GPSData.longitude));
+  };
+
+  export const isSideWay = (photo: PhotoDTO): boolean => {
+    return photo.metadata.orientation === OrientationTypes.LEFT_TOP ||
+      photo.metadata.orientation === OrientationTypes.RIGHT_TOP ||
+      photo.metadata.orientation === OrientationTypes.LEFT_BOTTOM ||
+      photo.metadata.orientation === OrientationTypes.RIGHT_BOTTOM;
+
+  };
+
+  export const getRotatedSize = (photo: PhotoDTO): ImageSize => {
+    if (isSideWay(photo)) {
+      // noinspection JSSuspiciousNameCombination
+      return {width: photo.metadata.size.height, height: photo.metadata.size.width};
+    }
+    return photo.metadata.size;
+  };
+
+  export const calcRotatedAspectRatio = (photo: PhotoDTO): number => {
+    const size = getRotatedSize(photo);
+    return size.width / size.height;
   };
 }

@@ -72,6 +72,7 @@ import {IconizeSortingMethod} from './pipes/IconizeSortingMethod';
 import {StringifySortingMethod} from './pipes/StringifySortingMethod';
 import {RandomQueryBuilderGalleryComponent} from './gallery/random-query-builder/random-query-builder.gallery.component';
 import {RandomPhotoSettingsComponent} from './settings/random-photo/random-photo.settings.component';
+import {FixOrientationPipe} from './gallery/FixOrientationPipe';
 
 @Injectable()
 export class GoogleMapsConfig {
@@ -166,7 +167,9 @@ export function translationsFactory(locale: string) {
     IndexingSettingsComponent,
     StringifyRole,
     IconizeSortingMethod,
-    StringifySortingMethod],
+    StringifySortingMethod,
+    FixOrientationPipe
+  ],
   providers: [
     {provide: UrlSerializer, useClass: CustomUrlSerializer},
     {provide: LAZY_MAPS_API_CONFIG, useClass: GoogleMapsConfig},

@@ -1,4 +1,3 @@
-///<reference path="exif.d.ts"/>
 import {DirectoryDTO} from '../../common/entities/DirectoryDTO';
 import {Logger} from '../Logger';
 import {Config} from '../../common/config/private/Config';

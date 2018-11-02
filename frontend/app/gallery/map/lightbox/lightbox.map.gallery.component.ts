@@ -7,6 +7,7 @@ import {IconThumbnail, Thumbnail, ThumbnailManagerService} from '../../thumnailM
 import {IconPhoto} from '../../IconPhoto';
 import {Photo} from '../../Photo';
 import {PageHelper} from '../../../model/page.helper';
+import {OrientationTypes} from 'ts-exif-parser';
 
 
 @Component({
@@ -118,6 +119,7 @@ export class GalleryMapLightboxComponent implements OnChanges, AfterViewInit {
         latitude: p.metadata.positionData.GPSData.latitude,
         longitude: p.metadata.positionData.GPSData.longitude,
         iconThumbnail: iconTh,
+        orientation: p.metadata.orientation,
         preview: {
           width: width,
           height: height,
@@ -183,6 +185,7 @@ export interface MapPhoto {
   longitude: number;
   iconUrl?: string;
   iconThumbnail: IconThumbnail;
+  orientation: OrientationTypes;
   preview: {
     width: number;
     height: number;

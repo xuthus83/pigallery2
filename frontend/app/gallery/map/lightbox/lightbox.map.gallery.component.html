@@ -14,14 +14,14 @@
         *ngFor="let photo of mapPhotos"
         [latitude]="photo.latitude"
         [longitude]="photo.longitude"
-        [iconUrl]="photo.iconUrl"
+        [iconUrl]="photo.iconUrl | fixOrientation:photo.orientation | async"
         (markerClick)="loadPreview(photo)"
         [agmFitBounds]="true">
         <agm-info-window>
           <img *ngIf="photo.preview.thumbnail.Src"
                [style.width.px]="photo.preview.width"
                [style.height.px]="photo.preview.height"
-               [src]="photo.preview.thumbnail.Src">
+               [src]="photo.preview.thumbnail.Src | fixOrientation:photo.orientation | async">
           <div class="preview-loading"
                [style.width.px]="photo.preview.width"
                [style.height.px]="photo.preview.height"

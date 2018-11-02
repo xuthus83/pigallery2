@@ -2,12 +2,12 @@ import {PhotoDTO} from '../../../../common/entities/PhotoDTO';
 
 export class GridRowBuilder {
 
-  private photoRow: Array<PhotoDTO> = [];
+  private photoRow: PhotoDTO[] = [];
 
   private photoIndex = 0; // index of the last pushed photo to the photoRow
 
 
-  constructor(private photos: Array<PhotoDTO>,
+  constructor(private photos: PhotoDTO[],
               private startIndex: number,
               private photoMargin: number,
               private containerWidth: number) {
@@ -41,7 +41,7 @@ export class GridRowBuilder {
     return true;
   }
 
-  public getPhotoRow(): Array<PhotoDTO> {
+  public getPhotoRow(): PhotoDTO[] {
     return this.photoRow;
   }
 
@@ -61,7 +61,8 @@ export class GridRowBuilder {
   public calcRowHeight(): number {
     let width = 0;
     for (let i = 0; i < this.photoRow.length; i++) {
-      width += ((this.photoRow[i].metadata.size.width) / (this.photoRow[i].metadata.size.height)); // summing up aspect ratios
+      const size = PhotoDTO.getRotatedSize(this.photoRow[i]);
+      width += (size.width / size.height); // summing up aspect ratios
     }
     const height = (this.containerWidth - this.photoRow.length * (this.photoMargin * 2) - 1) / width; // cant be equal -> width-1
 

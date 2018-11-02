@@ -1,12 +1,5 @@
 import * as winston from 'winston';
 
-declare module 'winston' {
-  interface LoggerInstance {
-    logFileName: string;
-    logFilePath: string;
-  }
-}
-
 export const winstonSettings = {
   transports: [
     new winston.transports.Console({
