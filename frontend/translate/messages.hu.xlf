@@ -625,7 +625,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/other/other.settings.component.html</context>
-          <context context-type="linenumber">109</context>
+          <context context-type="linenumber">147</context>
         </context-group>
         <target>Mentés</target>
       </trans-unit>
@@ -658,7 +658,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/other/other.settings.component.html</context>
-          <context context-type="linenumber">112</context>
+          <context context-type="linenumber">150</context>
         </context-group>
         <target>Visszaállítás</target>
       </trans-unit>
@@ -1025,11 +1025,19 @@
         </context-group>
         <target>Hiba:</target>
       </trans-unit>
+      <trans-unit id="052fa597b5d3e4c2a81b35c8ed250487d43cabe5" datatype="html">
+        <source>Threads:</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/settings/other/other.settings.component.html</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+        <target>Szálak:</target>
+      </trans-unit>
       <trans-unit id="ddf9beb42acb007fe4498e7f7d91fac6737156a5" datatype="html">
         <source>Threading</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/other/other.settings.component.html</context>
-          <context context-type="linenumber">11</context>
+          <context context-type="linenumber">12</context>
         </context-group>
         <target>Többszálas működés</target>
       </trans-unit>
@@ -1039,16 +1047,40 @@
           </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/other/other.settings.component.html</context>
-          <context context-type="linenumber">25</context>
+          <context context-type="linenumber">26</context>
         </context-group>
         <target>Külön szálon futtatja a könyvtár scnalést és a thumbnail generalást(csak Jimp számára)</target>
+      </trans-unit>
+      <trans-unit id="46aa6890679de37f7171c72b36ee1a18182a3e37" datatype="html">
+        <source>Thumbnail threads</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/settings/other/other.settings.component.html</context>
+          <context context-type="linenumber">33</context>
+        </context-group>
+        <target>Thumbnail szálak</target>
+      </trans-unit>
+      <trans-unit id="09abcac6462987480032793a3b2aa059478db804" datatype="html">
+        <source>Number of threads that are used to generate thumbnails. If auto, number of CPU cores -1 threads will be used.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/settings/other/other.settings.component.html</context>
+          <context context-type="linenumber">40</context>
+        </context-group>
+        <target>A miniatűrök előállításához használt szálak száma. Ha auto-ra van állítva, a CPU magok száma -1 szálat fog használni.</target>
+      </trans-unit>
+      <trans-unit id="47a6788c09eddf8226148e24d245b7a527e179bf" datatype="html">
+        <source>Misc:</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/settings/other/other.settings.component.html</context>
+          <context context-type="linenumber">45</context>
+        </context-group>
+        <target>Egyéb:</target>
       </trans-unit>
       <trans-unit id="c29451eea39ce561ed481264df985f6e3b9c39ae" datatype="html">
         <source>Scroll based thumbnail
           generation</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/other/other.settings.component.html</context>
-          <context context-type="linenumber">32</context>
+          <context context-type="linenumber">47</context>
         </context-group>
         <target>Görgetés alapú thumbnail generálás</target>
       </trans-unit>
@@ -1057,7 +1089,7 @@
           </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/other/other.settings.component.html</context>
-          <context context-type="linenumber">47</context>
+          <context context-type="linenumber">62</context>
         </context-group>
         <target>Azok a thumbnail-ek nagyobb prioritást kapnak, ami látható a képernyőn</target>
       </trans-unit>
@@ -1065,7 +1097,7 @@
         <source>Lazy image rendering</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/other/other.settings.component.html</context>
-          <context context-type="linenumber">53</context>
+          <context context-type="linenumber">68</context>
         </context-group>
         <target>'Lazy' kép megjelenítés</target>
       </trans-unit>
@@ -1075,7 +1107,7 @@
           </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/other/other.settings.component.html</context>
-          <context context-type="linenumber">67</context>
+          <context context-type="linenumber">82</context>
         </context-group>
         <target>Csak a szükséges mennyiségű fotót jeleníti meg egyszerre. Újabb fotókat jelenít meg, ha elérte az oldal alját</target>
       </trans-unit>
@@ -1083,7 +1115,7 @@
         <source>Cache</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/other/other.settings.component.html</context>
-          <context context-type="linenumber">75</context>
+          <context context-type="linenumber">90</context>
         </context-group>
         <target>Gyorsítótár</target>
       </trans-unit>
@@ -1092,15 +1124,40 @@
           </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/other/other.settings.component.html</context>
-          <context context-type="linenumber">89</context>
+          <context context-type="linenumber">104</context>
         </context-group>
         <target>Cache-eli a könyvtár tartalmát és a keresési eredményeket a gyorsabb betöltés érdekében</target>
+      </trans-unit>
+      <trans-unit id="0efc9c8107ab5af400ea695f606b9a4b2637f947" datatype="html">
+        <source>Navigation bar:</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/settings/other/other.settings.component.html</context>
+          <context context-type="linenumber">110</context>
+        </context-group>
+        <target>Navigációs sáv:</target>
+      </trans-unit>
+      <trans-unit id="08fe06e1621e602fbf5b6fa1f8cd9df29888a1a2" datatype="html">
+        <source>Show item count</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/settings/other/other.settings.component.html</context>
+          <context context-type="linenumber">112</context>
+        </context-group>
+        <target>Az elemek számának megjelenítése</target>
+      </trans-unit>
+      <trans-unit id="fbc1a6306eb5dbad2b115452a2b8bd0bf077d00f" datatype="html">
+        <source>Show the number of items (photos) in the folder
+          </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/settings/other/other.settings.component.html</context>
+          <context context-type="linenumber">126</context>
+        </context-group>
+        <target>A mappában lévő elemek (fotók) számának mutatása</target>
       </trans-unit>
       <trans-unit id="15b229419fe525b3a517f3cb296326053a6e69f0" datatype="html">
         <source>Default photo sorting method</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/other/other.settings.component.html</context>
-          <context context-type="linenumber">96</context>
+          <context context-type="linenumber">134</context>
         </context-group>
         <target>Az alapértelmezett fotó rendezés</target>
       </trans-unit>
