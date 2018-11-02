@@ -134,15 +134,17 @@ apt-get install build-essential  libkrb5-dev gcc g++
  * Nice design 
     * responsive design (phone, tablet desktop support)
  * Setup page
+ * Random photo url
+   * You can generate an url that returns a random photo from your gallery. You can use this feature to develop 3rd party applications, like: changing desktop background
  * video support - `future plan`
  * **Markdown based blogging support** - `future plan`
    * you can write some note in the blog.md for every directory
  * bug free :) - `In progress`
 
 ## Known errors
-
-There is no nice way to handle EXIF orientation tag properly.
-The page handles these photos, but might cause same error in the user experience (e.g.: the pages loads those photos slower. See issue #11)
+* EXIF orientation tag:
+  *  There is no nice way to handle EXIF orientation tag properly.
+The page handles these photos, but might cause same error in the user experience (e.g.: the pages loads those photos slower. See issue [#11](https://github.com/bpatrik/pigallery2/issues/11))
 
 ## Credits
 Crossbrowser testing sponsored by [Browser Stack](https://www.browserstack.com)
