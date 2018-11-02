@@ -2,11 +2,21 @@
   position: relative;
 }
 
-.btn-group {
+.right-side {
   position: absolute;
   right: 1rem;
   top: 50%;
   transform: translateY(-50%);
+}
+
+.photos-count {
+  display: inline-block;
+}
+
+.divider{
+  margin: 5px 10px;
+  border-left: 1px solid #6c757d;
+  display: inline-block;
 }
 
 ol {
@@ -23,9 +33,10 @@ ol {
   cursor: pointer;
 }
 
-nav{
+nav {
   z-index: 1;
 }
+
 .dropdown-toggle::after {
-  display:none;
+  display: none;
 }

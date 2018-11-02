@@ -7,20 +7,27 @@
     </li>
   </ol>
 
-  <div class="btn-group" dropdown placement="bottom right">
-    <button id="button-alignment" dropdownToggle type="button"
-            class="btn btn-default dropdown-toggle" aria-controls="dropdown-alignment"
-            [innerHTML]="galleryService.sorting.value| iconizeSorting">
-    </button>
-    <ul id="dropdown-alignment" *dropdownMenu class="dropdown-menu dropdown-menu-right"
-        role="menu" aria-labelledby="button-alignment">
-      <li class="row dropdown-item" role="menuitem"
-          *ngFor="let type of sortingMethodsType"
-          (click)="setSorting(type.key)">
-        <div class="col-3" [outerHTML]="type.key | iconizeSorting"></div>
-        <div class="col-9">{{type.key | stringifySorting}}</div>
-      </li>
-    </ul>
+  <div class="right-side">
+    <div class="photos-count" *ngIf="directory.photos.length > 0">
+      {{directory.photos.length}} <span i18n>items</span>
+    </div>
+    <div class="divider" *ngIf="directory.photos.length > 0">&nbsp;</div>
+    <div class="btn-group" dropdown placement="bottom right">
+      <button id="button-alignment" dropdownToggle type="button"
+              class="btn btn-default dropdown-toggle" aria-controls="dropdown-alignment"
+              [innerHTML]="galleryService.sorting.value| iconizeSorting">
+      </button>
+      <ul id="dropdown-alignment" *dropdownMenu class="dropdown-menu dropdown-menu-right"
+          role="menu" aria-labelledby="button-alignment">
+        <li class="row dropdown-item" role="menuitem"
+            *ngFor="let type of sortingMethodsType"
+            (click)="setSorting(type.key)">
+          <div class="col-3" [outerHTML]="type.key | iconizeSorting"></div>
+          <div class="col-9">{{type.key | stringifySorting}}</div>
+        </li>
+      </ul>
+    </div>
   </div>
+
 </nav>
 

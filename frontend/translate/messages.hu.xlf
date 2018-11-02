@@ -198,7 +198,7 @@
         <source>Settings</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/frame/frame.component.html</context>
-          <context context-type="linenumber">41</context>
+          <context context-type="linenumber">42</context>
         </context-group>
         <target>Beállítások</target>
       </trans-unit>
@@ -206,7 +206,7 @@
         <source>Logout</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/frame/frame.component.html</context>
-          <context context-type="linenumber">47</context>
+          <context context-type="linenumber">48</context>
         </context-group>
         <target>Kijelentkezés</target>
       </trans-unit>
@@ -294,6 +294,14 @@
           <context context-type="linenumber">98</context>
         </context-group>
         <target>Hónapok</target>
+      </trans-unit>
+      <trans-unit id="064ce5140698af55532d5c8c6355e4605d2bcc1b" datatype="html">
+        <source>items</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/gallery/navigator/navigator.gallery.component.html</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+        <target>elem</target>
       </trans-unit>
       <trans-unit id="ac9751501a838bfb31f23e94ceb9616fe498a267" datatype="html">
         <source>
@@ -890,9 +898,7 @@
           <context context-type="sourcefile">app/settings/random-photo/random-photo.settings.component.html</context>
           <context context-type="linenumber">25</context>
         </context-group>
-        <target>Ez a funkció lehetővé teszi a "véletlenszerű fotó" URL-ek létrehozását.
-          Ez az URL egy galériából kiválasztott véletlenszerű fényképet jelenít meg.
-          Használhatja az url-t külső alkalmazásokhoz, például a asztali háttérkép beállításához.</target>
+        <target>Ez a funkció lehetővé teszi a "véletlenszerű fotó" URL-ek létrehozását. Ez az URL egy galériából kiválasztott véletlenszerű fényképet jelenít meg. Használhatja az url-t külső alkalmazásokhoz, például a asztali háttérkép beállításához.</target>
       </trans-unit>
       <trans-unit id="6c02e8541a2e670f80de8b5a218ea14a16bb6c42" datatype="html">
         <source>
