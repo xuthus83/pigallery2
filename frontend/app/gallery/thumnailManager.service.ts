@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {ThumbnailLoaderService, ThumbnailLoadingListener, ThumbnailLoadingPriority, ThumbnailTaskEntity} from './thumnailLoader.service';
-import {Photo} from './Photo';
-import {IconPhoto} from './IconPhoto';
+import {Media} from './Media';
+import {MediaIcon} from './MediaIcon';
 
 
 @Injectable()
@@ -11,16 +11,16 @@ export class ThumbnailManagerService {
   constructor(private thumbnailLoader: ThumbnailLoaderService) {
   }
 
-  public getThumbnail(photo: Photo): Thumbnail {
+  public getThumbnail(photo: Media): Thumbnail {
     return new Thumbnail(photo, this.thumbnailLoader);
   }
 
-  public getLazyThumbnail(photo: Photo): Thumbnail {
+  public getLazyThumbnail(photo: Media): Thumbnail {
     return new Thumbnail(photo, this.thumbnailLoader, false);
   }
 
 
-  public getIcon(photo: IconPhoto) {
+  public getIcon(photo: MediaIcon) {
     return new IconThumbnail(photo, this.thumbnailLoader);
   }
 }
@@ -73,19 +73,19 @@ export abstract class ThumbnailBase {
 
 export class IconThumbnail extends ThumbnailBase {
 
-  constructor(private photo: IconPhoto, thumbnailService: ThumbnailLoaderService) {
+  constructor(private media: MediaIcon, thumbnailService: ThumbnailLoaderService) {
     super(thumbnailService);
     this.src = '';
     this.error = false;
-    if (this.photo.isIconAvailable()) {
-      this.src = this.photo.getIconPath();
+    if (this.media.isIconAvailable()) {
+      this.src = this.media.getIconPath();
       this.available = true;
       if (this.onLoad) {
         this.onLoad();
       }
     }
 
-    if (!this.photo.isIconAvailable()) {
+    if (!this.media.isIconAvailable()) {
       setTimeout(() => {
 
         const listener: ThumbnailLoadingListener = {
@@ -93,7 +93,7 @@ export class IconThumbnail extends ThumbnailBase {
             this.loading = true;
           },
           onLoad: () => {// onLoaded
-            this.src = this.photo.getIconPath();
+            this.src = this.media.getIconPath();
             if (this.onLoad) {
               this.onLoad();
             }
@@ -107,7 +107,7 @@ export class IconThumbnail extends ThumbnailBase {
             this.error = true;
           }
         };
-        this.thumbnailTask = this.thumbnailService.loadIcon(this.photo, ThumbnailLoadingPriority.high, listener);
+        this.thumbnailTask = this.thumbnailService.loadIcon(this.media, ThumbnailLoadingPriority.high, listener);
 
 
       }, 0);
@@ -132,16 +132,16 @@ export class IconThumbnail extends ThumbnailBase {
 export class Thumbnail extends ThumbnailBase {
 
 
-  constructor(private photo: Photo, thumbnailService: ThumbnailLoaderService, autoLoad: boolean = true) {
+  constructor(private media: Media, thumbnailService: ThumbnailLoaderService, autoLoad: boolean = true) {
     super(thumbnailService);
-    if (this.photo.isThumbnailAvailable()) {
-      this.src = this.photo.getThumbnailPath();
+    if (this.media.isThumbnailAvailable()) {
+      this.src = this.media.getThumbnailPath();
       this.available = true;
       if (this.onLoad) {
         this.onLoad();
       }
-    } else if (this.photo.isReplacementThumbnailAvailable()) {
-      this.src = this.photo.getReplacementThumbnailPath();
+    } else if (this.media.isReplacementThumbnailAvailable()) {
+      this.src = this.media.getReplacementThumbnailPath();
       this.available = true;
     }
     if (autoLoad) {
@@ -154,13 +154,13 @@ export class Thumbnail extends ThumbnailBase {
       return;
     }
     if (value === true) {
-      if (this.photo.isReplacementThumbnailAvailable()) {
+      if (this.media.isReplacementThumbnailAvailable()) {
         this.thumbnailTask.priority = ThumbnailLoadingPriority.medium;
       } else {
         this.thumbnailTask.priority = ThumbnailLoadingPriority.extraHigh;
       }
     } else {
-      if (this.photo.isReplacementThumbnailAvailable()) {
+      if (this.media.isReplacementThumbnailAvailable()) {
         this.thumbnailTask.priority = ThumbnailLoadingPriority.low;
       } else {
         this.thumbnailTask.priority = ThumbnailLoadingPriority.medium;
@@ -173,13 +173,13 @@ export class Thumbnail extends ThumbnailBase {
       return;
     }
     if (visible === true) {
-      if (this.photo.isReplacementThumbnailAvailable()) {
+      if (this.media.isReplacementThumbnailAvailable()) {
         this.thumbnailTask.priority = ThumbnailLoadingPriority.medium;
       } else {
         this.thumbnailTask.priority = ThumbnailLoadingPriority.high;
       }
     } else {
-      if (this.photo.isReplacementThumbnailAvailable()) {
+      if (this.media.isReplacementThumbnailAvailable()) {
         this.thumbnailTask.priority = ThumbnailLoadingPriority.low;
       } else {
         this.thumbnailTask.priority = ThumbnailLoadingPriority.medium;
@@ -188,14 +188,14 @@ export class Thumbnail extends ThumbnailBase {
   }
 
   public load() {
-    if (!this.photo.isThumbnailAvailable() && this.thumbnailTask == null) {
+    if (!this.media.isThumbnailAvailable() && this.thumbnailTask == null) {
       //    setTimeout(() => {
       const listener: ThumbnailLoadingListener = {
         onStartedLoading: () => { // onLoadStarted
           this.loading = true;
         },
         onLoad: () => {// onLoaded
-          this.src = this.photo.getThumbnailPath();
+          this.src = this.media.getThumbnailPath();
           if (this.onLoad) {
             this.onLoad();
           }
@@ -209,10 +209,10 @@ export class Thumbnail extends ThumbnailBase {
           this.error = true;
         }
       };
-      if (this.photo.isReplacementThumbnailAvailable()) {
-        this.thumbnailTask = this.thumbnailService.loadImage(this.photo, ThumbnailLoadingPriority.medium, listener);
+      if (this.media.isReplacementThumbnailAvailable()) {
+        this.thumbnailTask = this.thumbnailService.loadImage(this.media, ThumbnailLoadingPriority.medium, listener);
       } else {
-        this.thumbnailTask = this.thumbnailService.loadImage(this.photo, ThumbnailLoadingPriority.high, listener);
+        this.thumbnailTask = this.thumbnailService.loadImage(this.media, ThumbnailLoadingPriority.high, listener);
       }
       // }, 0);
     }

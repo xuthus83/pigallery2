@@ -1,6 +1,6 @@
 import {Component, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Dimension, IRenderable} from '../../../model/IRenderable';
-import {GridPhoto} from '../GridPhoto';
+import {GridMedia} from '../GridMedia';
 import {SearchTypes} from '../../../../../common/entities/AutoCompleteItem';
 import {RouterLink} from '@angular/router';
 import {Thumbnail, ThumbnailManagerService} from '../../thumnailManager.service';
@@ -15,7 +15,7 @@ import {PageHelper} from '../../../model/page.helper';
   providers: [RouterLink]
 })
 export class GalleryPhotoComponent implements IRenderable, OnInit, OnDestroy {
-  @Input() gridPhoto: GridPhoto;
+  @Input() gridPhoto: GridMedia;
   @ViewChild('img') imageRef: ElementRef;
   @ViewChild('info') infoDiv: ElementRef;
   @ViewChild('photoContainer') container: ElementRef;
@@ -78,9 +78,9 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, OnDestroy {
     if (!this.gridPhoto) {
       return '';
     }
-    return this.gridPhoto.photo.metadata.positionData.city ||
-      this.gridPhoto.photo.metadata.positionData.state ||
-      this.gridPhoto.photo.metadata.positionData.country;
+    return this.gridPhoto.media.metadata.positionData.city ||
+      this.gridPhoto.media.metadata.positionData.state ||
+      this.gridPhoto.media.metadata.positionData.country;
   }
 
 

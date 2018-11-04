@@ -2,7 +2,7 @@ import {Pipe, PipeTransform} from '@angular/core';
 import {OrientationTypes} from 'ts-exif-parser';
 
 /**
- * This pipe is used to fix thumbnail and photo orientation based on their exif orientation tag
+ * This pipe is used to fix thumbnail and media orientation based on their exif orientation tag
  */
 
 @Pipe({name: 'fixOrientation'})

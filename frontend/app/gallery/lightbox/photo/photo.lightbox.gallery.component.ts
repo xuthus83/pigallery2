@@ -1,7 +1,8 @@
 import {Component, ElementRef, Input, OnChanges} from '@angular/core';
-import {GridPhoto} from '../../grid/GridPhoto';
+import {GridMedia} from '../../grid/GridMedia';
 import {PhotoDTO} from '../../../../../common/entities/PhotoDTO';
 import {FixOrientationPipe} from '../../FixOrientationPipe';
+import {MediaDTO} from '../../../../../common/entities/MediaDTO';
 
 @Component({
   selector: 'app-gallery-lightbox-photo',
@@ -10,8 +11,8 @@ import {FixOrientationPipe} from '../../FixOrientationPipe';
 })
 export class GalleryLightboxPhotoComponent implements OnChanges {
 
-  @Input() gridPhoto: GridPhoto;
-  @Input() loadImage = false;
+  @Input() gridMedia: GridMedia;
+  @Input() loadMedia = false;
   @Input() windowAspect = 1;
   prevGirdPhoto = null;
 
@@ -30,28 +31,33 @@ export class GalleryLightboxPhotoComponent implements OnChanges {
     this.imageLoaded = false;
     this.imageLoadFinished = false;
     this.setImageSize();
-    if (this.prevGirdPhoto !== this.gridPhoto) {
-      this.prevGirdPhoto = this.gridPhoto;
+    if (this.prevGirdPhoto !== this.gridMedia) {
+      this.prevGirdPhoto = this.gridMedia;
       this.thumbnailSrc = null;
       this.photoSrc = null;
     }
-    if (this.thumbnailSrc == null && this.gridPhoto && this.ThumbnailUrl !== null) {
-      FixOrientationPipe.transform(this.ThumbnailUrl, this.gridPhoto.photo.metadata.orientation)
+    if (this.thumbnailSrc == null && this.gridMedia && this.ThumbnailUrl !== null) {
+      FixOrientationPipe.transform(this.ThumbnailUrl, this.gridMedia.Orientation)
         .then((src) => this.thumbnailSrc = src);
     }
 
-    if (this.photoSrc == null && this.gridPhoto && this.loadImage) {
-      FixOrientationPipe.transform(this.gridPhoto.getPhotoPath(), this.gridPhoto.photo.metadata.orientation)
-        .then((src) => this.thumbnailSrc = src);
+    if (this.photoSrc == null && this.gridMedia && this.loadMedia) {
+      FixOrientationPipe.transform(this.gridMedia.getPhotoPath(), this.gridMedia.Orientation)
+        .then((src) => this.photoSrc = src);
     }
   }
 
   onImageError() {
     // TODO:handle error
     this.imageLoadFinished = true;
-    console.error('Error: cannot load image for lightbox url: ' + this.gridPhoto.getPhotoPath());
+    console.error('Error: cannot load image for lightbox url: ' + this.gridMedia.getPhotoPath());
   }
 
+  logevent(ev) {
+    console.log(ev);
+    this.imageLoadFinished = true;
+    this.imageLoaded = true;
+  }
 
   onImageLoad() {
     this.imageLoadFinished = true;
@@ -59,34 +65,34 @@ export class GalleryLightboxPhotoComponent implements OnChanges {
   }
 
   private get ThumbnailUrl(): string {
-    if (this.gridPhoto.isThumbnailAvailable() === true) {
-      return this.gridPhoto.getThumbnailPath();
+    if (this.gridMedia.isThumbnailAvailable() === true) {
+      return this.gridMedia.getThumbnailPath();
     }
 
-    if (this.gridPhoto.isReplacementThumbnailAvailable() === true) {
-      return this.gridPhoto.getReplacementThumbnailPath();
+    if (this.gridMedia.isReplacementThumbnailAvailable() === true) {
+      return this.gridMedia.getReplacementThumbnailPath();
     }
     return null;
   }
 
   public get PhotoSrc(): string {
-    return this.gridPhoto.getPhotoPath();
+    return this.gridMedia.getPhotoPath();
   }
 
   public showThumbnail(): boolean {
-    return this.gridPhoto &&
+    return this.gridMedia &&
       !this.imageLoaded &&
       this.thumbnailSrc !== null &&
-      (this.gridPhoto.isThumbnailAvailable() || this.gridPhoto.isReplacementThumbnailAvailable());
+      (this.gridMedia.isThumbnailAvailable() || this.gridMedia.isReplacementThumbnailAvailable());
   }
 
   private setImageSize() {
-    if (!this.gridPhoto) {
+    if (!this.gridMedia) {
       return;
     }
 
 
-    const photoAspect = PhotoDTO.calcRotatedAspectRatio(this.gridPhoto.photo);
+    const photoAspect = MediaDTO.calcRotatedAspectRatio(this.gridMedia.media);
 
     if (photoAspect < this.windowAspect) {
       this.imageSize.height = '100';

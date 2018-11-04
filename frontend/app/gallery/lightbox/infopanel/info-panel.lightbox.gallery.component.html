@@ -11,12 +11,12 @@
     </div>
     <div class="col-10">
       <div class="details-main">
-        {{photo.name}}
+        {{media.name}}
       </div>
       <div class="details-sub row">
-        <div class="col-4">{{photo.metadata.size.width}} x {{photo.metadata.size.height}}</div>
+        <div class="col-4">{{media.metadata.size.width}} x {{media.metadata.size.height}}</div>
         <div class="col-4">{{calcMpx()}}MP</div>
-        <div class="col-4" *ngIf="photo.metadata.fileSize">{{calcFileSize()}}</div>
+        <div class="col-4" *ngIf="media.metadata.fileSize">{{calcFileSize()}}</div>
       </div>
     </div>
   </div>
@@ -27,32 +27,32 @@
     </div>
     <div class="col-10">
       <div class="details-main">
-        {{ photo.metadata.creationDate | date: (isThisYear() ? 'MMMM d': 'longDate')}}
+        {{ media.metadata.creationDate | date: (isThisYear() ? 'MMMM d': 'longDate')}}
       </div>
       <div class="details-sub row">
-        <div class="col-12">{{ photo.metadata.creationDate | date :'EEEE'}}, {{getTime()}}</div>
+        <div class="col-12">{{ media.metadata.creationDate | date :'EEEE'}}, {{getTime()}}</div>
       </div>
     </div>
   </div>
 
-  <div class="row">
+  <div class="row" *ngIf="CameraData">
     <div class="col-2">
       <span class="details-icon oi oi-camera-slr"></span>
     </div>
     <div class="col-10">
       <div class="details-main">
-        {{photo.metadata.cameraData.model || photo.metadata.cameraData.make || "Camera"}}
+        {{CameraData.model || CameraData.make || "Camera"}}
       </div>
       <div class="details-sub row">
-        <div class="col-3" *ngIf="photo.metadata.cameraData.ISO">ISO{{photo.metadata.cameraData.ISO}}</div>
-        <div class="col-3" *ngIf="photo.metadata.cameraData.fStop">f/{{photo.metadata.cameraData.fStop}}</div>
-        <div class="col-3" *ngIf="photo.metadata.cameraData.exposure">
-          {{toFraction(photo.metadata.cameraData.exposure)}}s
+        <div class="col-3" *ngIf="CameraData.ISO">ISO{{CameraData.ISO}}</div>
+        <div class="col-3" *ngIf="CameraData.fStop">f/{{CameraData.fStop}}</div>
+        <div class="col-3" *ngIf="CameraData.exposure">
+          {{toFraction(CameraData.exposure)}}s
         </div>
-        <div class="col-3" *ngIf="photo.metadata.cameraData.focalLength">
-          {{photo.metadata.cameraData.focalLength}}mm
+        <div class="col-3" *ngIf="CameraData.focalLength">
+          {{CameraData.focalLength}}mm
         </div>
-        <div class="col-12" *ngIf="photo.metadata.cameraData.lens">{{photo.metadata.cameraData.lens}}</div>
+        <div class="col-12" *ngIf="CameraData.lens">{{CameraData.lens}}</div>
       </div>
     </div>
   </div>
@@ -67,8 +67,8 @@
       </div>
       <div class="details-sub row" *ngIf="hasGPS()">
         <div class="col-12">
-          {{photo.metadata.positionData.GPSData.latitude.toFixed(3)}},
-          {{photo.metadata.positionData.GPSData.longitude.toFixed(3)}}
+          {{media.metadata.positionData.GPSData.latitude.toFixed(3)}},
+          {{media.metadata.positionData.GPSData.longitude.toFixed(3)}}
         </div>
       </div>
     </div>
@@ -80,11 +80,11 @@
       [zoomControl]="false"
       [streetViewControl]="false"
       [zoom]="10"
-      [latitude]="photo.metadata.positionData.GPSData.latitude"
-      [longitude]="photo.metadata.positionData.GPSData.longitude">
+      [latitude]="media.metadata.positionData.GPSData.latitude"
+      [longitude]="media.metadata.positionData.GPSData.longitude">
       <agm-marker
-        [latitude]="photo.metadata.positionData.GPSData.latitude"
-        [longitude]="photo.metadata.positionData.GPSData.longitude">
+        [latitude]="media.metadata.positionData.GPSData.latitude"
+        [longitude]="media.metadata.positionData.GPSData.longitude">
       </agm-marker>
     </agm-map>
   </div>

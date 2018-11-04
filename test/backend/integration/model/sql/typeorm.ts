@@ -61,7 +61,7 @@ describe('Typeorm integration', () => {
     d.lastModified = Date.now();
     d.lastScanned = null;
     d.parent = null;
-    d.photos = [];
+    d.media = [];
     d.directories = [];
     return d;
   };
@@ -98,7 +98,7 @@ describe('Typeorm integration', () => {
 
 
     const d = new PhotoEntity();
-    d.name = 'test photo.jpg';
+    d.name = 'test media.jpg';
     d.directory = null;
     d.metadata = m;
     return d;
@@ -142,7 +142,7 @@ describe('Typeorm integration', () => {
     expect((await dr.find()).length).to.equal(1);
   });
 
-  it('should add a photo', async () => {
+  it('should add a media', async () => {
     const conn = await SQLConnection.getConnection();
     const pr = conn.getRepository(PhotoEntity);
     const dir = await conn.getRepository(DirectoryEntity).save(getDir());
@@ -152,7 +152,7 @@ describe('Typeorm integration', () => {
     expect((await pr.find()).length).to.equal(1);
   });
 
-  it('should find a photo', async () => {
+  it('should find a media', async () => {
     const conn = await SQLConnection.getConnection();
     const pr = conn.getRepository(PhotoEntity);
     const dir = await conn.getRepository(DirectoryEntity).save(getDir());
@@ -161,10 +161,10 @@ describe('Typeorm integration', () => {
     await pr.save(photo);
 
     let photos = await pr
-      .createQueryBuilder('photo')
-      .orderBy('photo.metadata.creationDate', 'ASC')
-      .where('photo.metadata.positionData.city LIKE :text COLLATE utf8_general_ci', {text: '%' + photo.metadata.positionData.city + '%'})
-      .innerJoinAndSelect('photo.directory', 'directory')
+      .createQueryBuilder('media')
+      .orderBy('media.metadata.creationDate', 'ASC')
+      .where('media.metadata.positionData.city LIKE :text COLLATE utf8_general_ci', {text: '%' + photo.metadata.positionData.city + '%'})
+      .innerJoinAndSelect('media.directory', 'directory')
       .limit(10)
       .getMany();
 
@@ -173,7 +173,7 @@ describe('Typeorm integration', () => {
   });
 
 
-  it('should not find a photo', async () => {
+  it('should not find a media', async () => {
     const conn = await SQLConnection.getConnection();
     const pr = conn.getRepository(PhotoEntity);
     const dir = await conn.getRepository(DirectoryEntity).save(getDir());
@@ -183,17 +183,17 @@ describe('Typeorm integration', () => {
     photo.metadata.positionData = null;
     await pr.save(photo);
     let photos = await pr
-      .createQueryBuilder('photo')
-      .orderBy('photo.metadata.creationDate', 'ASC')
-      .where('photo.metadata.positionData.city LIKE :text COLLATE utf8_general_ci', {text: '%' + city + '%'})
-      .innerJoinAndSelect('photo.directory', 'directory')
+      .createQueryBuilder('media')
+      .orderBy('media.metadata.creationDate', 'ASC')
+      .where('media.metadata.positionData.city LIKE :text COLLATE utf8_general_ci', {text: '%' + city + '%'})
+      .innerJoinAndSelect('media.directory', 'directory')
       .limit(10)
       .getMany();
 
     expect(photos.length).to.equal(0);
   });
 
-  it('should open and close connection twice with photo added ', async () => {
+  it('should open and close connection twice with media added ', async () => {
     let conn = await SQLConnection.getConnection();
     const dir = await conn.getRepository(DirectoryEntity).save(getDir());
     let dir2 = getDir();

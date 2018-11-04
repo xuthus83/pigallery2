@@ -3,11 +3,12 @@ import {DomSanitizer} from '@angular/platform-browser';
 import {DirectoryDTO} from '../../../../common/entities/DirectoryDTO';
 import {RouterLink} from '@angular/router';
 import {Utils} from '../../../../common/Utils';
-import {Photo} from '../Photo';
+import {Media} from '../Media';
 import {Thumbnail, ThumbnailManagerService} from '../thumnailManager.service';
 import {PageHelper} from '../../model/page.helper';
 import {QueryService} from '../../model/query.service';
 import {PhotoDTO} from '../../../../common/entities/PhotoDTO';
+import {MediaDTO} from '../../../../common/entities/MediaDTO';
 
 @Component({
   selector: 'app-gallery-directory',
@@ -28,9 +29,9 @@ export class GalleryDirectoryComponent implements OnInit, OnDestroy {
 
   size: number = null;
 
-  public get SamplePhoto(): PhotoDTO {
-    if (this.directory.photos.length > 0) {
-      return this.directory.photos[0];
+  public get SamplePhoto(): MediaDTO {
+    if (this.directory.media.length > 0) {
+      return this.directory.media[0];
     }
     return null;
   }
@@ -57,8 +58,8 @@ export class GalleryDirectoryComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    if (this.directory.photos.length > 0) {
-      this.thumbnail = this.thumbnailService.getThumbnail(new Photo(this.SamplePhoto, this.calcSize(), this.calcSize()));
+    if (this.directory.media.length > 0) {
+      this.thumbnail = this.thumbnailService.getThumbnail(new Media(this.SamplePhoto, this.calcSize(), this.calcSize()));
     }
   }
 

@@ -1,5 +1,5 @@
 <div #photoContainer class="photo-container" (mouseover)="mouseOver()" (mouseout)="mouseOut()">
-  <img #img [src]="thumbnail.Src | fixOrientation:gridPhoto.photo.metadata.orientation | async"
+  <img #img [src]="thumbnail.Src | fixOrientation:gridPhoto.media.metadata.orientation | async"
        *ngIf="thumbnail.Available">
 
   <app-gallery-grid-photo-loading
@@ -14,7 +14,7 @@
        [style.margin-top.px]="infoBar.marginTop"
        [style.background]="infoBar.background"
        [style.width.px]="container.nativeElement.offsetWidth">
-    <div class="photo-name">{{gridPhoto.photo.name}}</div>
+    <div class="photo-name">{{gridPhoto.media.name}}</div>
 
     <div class="photo-position" *ngIf="gridPhoto.hasPositionData()">
       <span class="oi oi-map-marker"></span>
@@ -27,8 +27,8 @@
       </ng-template>
     </div>
 
-    <div class="photo-keywords" *ngIf="gridPhoto.photo.metadata.keywords && gridPhoto.photo.metadata.keywords.length">
-      <ng-template ngFor let-keyword [ngForOf]="gridPhoto.photo.metadata.keywords" let-last="last">
+    <div class="photo-keywords" *ngIf="gridPhoto.media.metadata.keywords && gridPhoto.media.metadata.keywords.length">
+      <ng-template ngFor let-keyword [ngForOf]="gridPhoto.media.metadata.keywords" let-last="last">
         <a *ngIf="searchEnabled"
            [routerLink]="['/search', keyword, {type: SearchTypes[SearchTypes.keyword]}]">#{{keyword}}</a>
         <span *ngIf="!searchEnabled">#{{keyword}}</span>

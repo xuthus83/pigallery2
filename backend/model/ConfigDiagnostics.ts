@@ -204,9 +204,9 @@ export class ConfigDiagnostics {
       await ConfigDiagnostics.testRandomPhotoConfig(Config.Client.Sharing, Config);
     } catch (ex) {
       const err: Error = ex;
-      NotificationManager.warning('Random Photo is not supported with these settings. Disabling temporally. ' +
+      NotificationManager.warning('Random Media is not supported with these settings. Disabling temporally. ' +
         'Please adjust the config properly.', err.toString());
-      Logger.warn(LOG_TAG, 'Random Photo is not supported with these settings, switching off..', err.toString());
+      Logger.warn(LOG_TAG, 'Random Media is not supported with these settings, switching off..', err.toString());
       Config.Client.Sharing.enabled = false;
     }
 

@@ -25,6 +25,6 @@ export class GalleryManager implements IGalleryManager {
   }
 
   getRandomPhoto(RandomQuery): Promise<PhotoDTO> {
-    throw new Error('Random photo is not supported without database');
+    throw new Error('Random media is not supported without database');
   }
 }

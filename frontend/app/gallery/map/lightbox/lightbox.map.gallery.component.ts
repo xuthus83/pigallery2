@@ -4,10 +4,11 @@ import {Dimension} from '../../../model/IRenderable';
 import {FullScreenService} from '../../fullscreen.service';
 import {AgmMap, LatLngBounds, MapsAPILoader} from '@agm/core';
 import {IconThumbnail, Thumbnail, ThumbnailManagerService} from '../../thumnailManager.service';
-import {IconPhoto} from '../../IconPhoto';
-import {Photo} from '../../Photo';
+import {MediaIcon} from '../../MediaIcon';
+import {Media} from '../../Media';
 import {PageHelper} from '../../../model/page.helper';
 import {OrientationTypes} from 'ts-exif-parser';
+import {MediaDTO} from '../../../../../common/entities/MediaDTO';
 
 
 @Component({
@@ -108,13 +109,13 @@ export class GalleryMapLightboxComponent implements OnChanges, AfterViewInit {
     }).map(p => {
       let width = 500;
       let height = 500;
-      const rotatedSize = PhotoDTO.getRotatedSize(p);
+      const rotatedSize = MediaDTO.getRotatedSize(p);
       if (rotatedSize.width > rotatedSize.height) {
         height = width * (rotatedSize.height / rotatedSize.width);
       } else {
         width = height * (rotatedSize.width / rotatedSize.height);
       }
-      const iconTh = this.thumbnailService.getIcon(new IconPhoto(p));
+      const iconTh = this.thumbnailService.getIcon(new MediaIcon(p));
       iconTh.Visible = true;
       const obj: MapPhoto = {
         latitude: p.metadata.positionData.GPSData.latitude,
@@ -124,7 +125,7 @@ export class GalleryMapLightboxComponent implements OnChanges, AfterViewInit {
         preview: {
           width: width,
           height: height,
-          thumbnail: this.thumbnailService.getLazyThumbnail(new Photo(p, width, height))
+          thumbnail: this.thumbnailService.getLazyThumbnail(new Media(p, width, height))
         }
 
       };

@@ -34,8 +34,8 @@
                              [directory]="directory"></app-gallery-directory>
     </div>
     <app-gallery-map *ngIf="isPhotoWithLocation && mapEnabled"
-                     [photos]="_galleryService.content.value.directory.photos"></app-gallery-map>
-    <app-gallery-grid [photos]="_galleryService.content.value.directory.photos"
+                     [photos]="_galleryService.content.value.directory.media"></app-gallery-map>
+    <app-gallery-grid [photos]="_galleryService.content.value.directory.media"
                       [lightbox]="lightbox"></app-gallery-grid>
   </div>
 
@@ -58,13 +58,13 @@
     </ol>
 
     <app-gallery-map *ngIf="isPhotoWithLocation && mapEnabled"
-                     [photos]="_galleryService.content.value.searchResult.photos"></app-gallery-map>
+                     [photos]="_galleryService.content.value.searchResult.media"></app-gallery-map>
 
     <div class="directories">
       <app-gallery-directory *ngFor="let directory of directories"
                              [directory]="directory"></app-gallery-directory>
     </div>
-    <app-gallery-grid [photos]="_galleryService.content.value.searchResult.photos"
+    <app-gallery-grid [photos]="_galleryService.content.value.searchResult.media"
                       [lightbox]="lightbox"></app-gallery-grid>
   </div>
 

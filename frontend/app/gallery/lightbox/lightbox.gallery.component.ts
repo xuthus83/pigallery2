@@ -22,6 +22,7 @@ import {filter} from 'rxjs/operators';
 import {ActivatedRoute, Params, Router} from '@angular/router';
 import {PageHelper} from '../../model/page.helper';
 import {QueryService} from '../../model/query.service';
+import {MediaDTO} from '../../../../common/entities/MediaDTO';
 
 export enum LightboxStates {
   Open = 1,
@@ -111,15 +112,15 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
   }
 
   onNavigateTo(photoName: string) {
-    if (this.activePhoto && this.activePhoto.gridPhoto.photo.name === photoName) {
+    if (this.activePhoto && this.activePhoto.gridPhoto.media.name === photoName) {
       return;
     }
-    const photo = this.gridPhotoQL.find(i => i.gridPhoto.photo.name === photoName);
+    const photo = this.gridPhotoQL.find(i => i.gridPhoto.media.name === photoName);
     if (!photo) {
       return this.delayedPhotoShow = photoName;
     }
     if (this.status === LightboxStates.Closed) {
-      this.showLigthbox(photo.gridPhoto.photo);
+      this.showLigthbox(photo.gridPhoto.media);
     } else {
       this.showPhoto(this.gridPhotoQL.toArray().indexOf(photo));
     }
@@ -175,7 +176,7 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
 
   private navigateToPhoto(photoIndex: number) {
     this.router.navigate([],
-      {queryParams: this.queryService.getParams(this.gridPhotoQL.toArray()[photoIndex].gridPhoto.photo)});
+      {queryParams: this.queryService.getParams(this.gridPhotoQL.toArray()[photoIndex].gridPhoto.media)});
     /*
         this.activePhoto = null;
         this.changeDetector.detectChanges();
@@ -188,7 +189,7 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
     this.updateActivePhoto(photoIndex, resize);
   }
 
-  public showLigthbox(photo: PhotoDTO) {
+  public showLigthbox(photo: MediaDTO) {
     this.controllersVisible = true;
     this.showControls();
     this.status = LightboxStates.Open;
@@ -200,7 +201,7 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
     const lightboxDimension = selectedPhoto.getDimension();
     lightboxDimension.top -= PageHelper.ScrollY;
     this.animating = true;
-    this.animatePhoto(selectedPhoto.getDimension(), this.calcLightBoxPhotoDimension(selectedPhoto.gridPhoto.photo)).onDone(() => {
+    this.animatePhoto(selectedPhoto.getDimension(), this.calcLightBoxPhotoDimension(selectedPhoto.gridPhoto.media)).onDone(() => {
       this.animating = false;
     });
     this.animateLightbox(
@@ -261,7 +262,7 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
     lightboxDimension.top -= PageHelper.ScrollY;
     this.blackCanvasOpacity = 0;
 
-    this.animatePhoto(this.calcLightBoxPhotoDimension(this.activePhoto.gridPhoto.photo), this.activePhoto.getDimension());
+    this.animatePhoto(this.calcLightBoxPhotoDimension(this.activePhoto.gridPhoto.media), this.activePhoto.getDimension());
     this.animateLightbox(<Dimension>{
       top: 0,
       left: 0,
@@ -325,9 +326,9 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
       this.infoPanelVisible = false;
     }, 1000);
 
-    const starPhotoPos = this.calcLightBoxPhotoDimension(this.activePhoto.gridPhoto.photo);
+    const starPhotoPos = this.calcLightBoxPhotoDimension(this.activePhoto.gridPhoto.media);
     this.infoPanelWidth = 0;
-    const endPhotoPos = this.calcLightBoxPhotoDimension(this.activePhoto.gridPhoto.photo);
+    const endPhotoPos = this.calcLightBoxPhotoDimension(this.activePhoto.gridPhoto.media);
     if (_animate) {
       this.animatePhoto(starPhotoPos, endPhotoPos);
     }
@@ -365,9 +366,9 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
   showInfoPanel() {
     this.infoPanelVisible = true;
 
-    const starPhotoPos = this.calcLightBoxPhotoDimension(this.activePhoto.gridPhoto.photo);
+    const starPhotoPos = this.calcLightBoxPhotoDimension(this.activePhoto.gridPhoto.media);
     this.infoPanelWidth = 400;
-    const endPhotoPos = this.calcLightBoxPhotoDimension(this.activePhoto.gridPhoto.photo);
+    const endPhotoPos = this.calcLightBoxPhotoDimension(this.activePhoto.gridPhoto.media);
     this.animatePhoto(starPhotoPos, endPhotoPos);
     this.animateLightbox(<Dimension>{
         top: 0,
@@ -419,13 +420,13 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
 
 
     if (photoIndex < 0 || photoIndex > this.gridPhotoQL.length) {
-      throw new Error('Can\'t find the photo');
+      throw new Error('Can\'t find the media');
     }
     this.activePhotoId = photoIndex;
     this.activePhoto = pcList[photoIndex];
 
     if (resize) {
-      this.animatePhoto(this.calcLightBoxPhotoDimension(this.activePhoto.gridPhoto.photo));
+      this.animatePhoto(this.calcLightBoxPhotoDimension(this.activePhoto.gridPhoto.media));
     }
     this.navigation.hasPrev = photoIndex > 0;
     this.navigation.hasNext = photoIndex + 1 < pcList.length;
@@ -466,17 +467,17 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
     this.playBackState = 0;
   }
 
-  private findPhotoComponent(photo: any): GalleryPhotoComponent {
+  private findPhotoComponent(media: MediaDTO): GalleryPhotoComponent {
     const galleryPhotoComponents = this.gridPhotoQL.toArray();
     for (let i = 0; i < galleryPhotoComponents.length; i++) {
-      if (galleryPhotoComponents[i].gridPhoto.photo === photo) {
+      if (galleryPhotoComponents[i].gridPhoto.media === media) {
         return galleryPhotoComponents[i];
       }
     }
     return null;
   }
 
-  private calcLightBoxPhotoDimension(photo: PhotoDTO): Dimension {
+  private calcLightBoxPhotoDimension(photo: MediaDTO): Dimension {
     let width = 0;
     let height = 0;
     const photoAspect = photo.metadata.size.width / photo.metadata.size.height;

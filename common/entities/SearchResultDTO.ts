@@ -6,6 +6,6 @@ export interface SearchResultDTO {
   searchText: string;
   searchType: SearchTypes;
   directories: Array<DirectoryDTO>;
-  photos: Array<PhotoDTO>;
+  media: Array<PhotoDTO>;
   resultOverflow: boolean;
 }

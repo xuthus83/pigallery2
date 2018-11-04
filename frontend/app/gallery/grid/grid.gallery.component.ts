@@ -15,7 +15,7 @@ import {
 import {PhotoDTO} from '../../../../common/entities/PhotoDTO';
 import {GridRowBuilder} from './GridRowBuilder';
 import {GalleryLightboxComponent} from '../lightbox/lightbox.gallery.component';
-import {GridPhoto} from './GridPhoto';
+import {GridMedia} from './GridMedia';
 import {GalleryPhotoComponent} from './photo/photo.grid.gallery.component';
 import {OverlayService} from '../overlay.service';
 import {Config} from '../../../../common/config/public/Config';
@@ -25,6 +25,7 @@ import {ActivatedRoute, Params, Router} from '@angular/router';
 import {QueryService} from '../../model/query.service';
 import {GalleryService} from '../gallery.service';
 import {SortingMethods} from '../../../../common/entities/SortingMethods';
+import {MediaDTO} from '../../../../common/entities/MediaDTO';
 
 @Component({
   selector: 'app-gallery-grid',
@@ -40,7 +41,7 @@ export class GalleryGridComponent implements OnChanges, OnInit, AfterViewInit, O
   @Input() photos: Array<PhotoDTO>;
   @Input() lightbox: GalleryLightboxComponent;
 
-  photosToRender: Array<GridPhoto> = [];
+  photosToRender: Array<GridMedia> = [];
   containerWidth = 0;
   screenHeight = 0;
 
@@ -189,8 +190,8 @@ export class GalleryGridComponent implements OnChanges, OnInit, AfterViewInit, O
     const imageHeight = rowHeight - (this.IMAGE_MARGIN * 2);
 
     photoRowBuilder.getPhotoRow().forEach((photo) => {
-      const imageWidth = imageHeight * PhotoDTO.calcRotatedAspectRatio(photo);
-      this.photosToRender.push(new GridPhoto(photo, imageWidth, imageHeight, this.renderedPhotoIndex));
+      const imageWidth = imageHeight * MediaDTO.calcRotatedAspectRatio(photo);
+      this.photosToRender.push(new GridMedia(photo, imageWidth, imageHeight, this.renderedPhotoIndex));
     });
 
     this.renderedPhotoIndex += photoRowBuilder.getPhotoRow().length;
@@ -248,7 +249,7 @@ export class GalleryGridComponent implements OnChanges, OnInit, AfterViewInit, O
     let lastRowId = null;
     for (let i = 0; i < this.photos.length && i < this.photosToRender.length; ++i) {
 
-      // If a photo changed the whole row has to be removed
+      // If a media changed the whole row has to be removed
       if (this.photosToRender[i].rowId !== lastRowId) {
         lastSameIndex = i;
         lastRowId = this.photosToRender[i].rowId;
@@ -316,7 +317,7 @@ export class GalleryGridComponent implements OnChanges, OnInit, AfterViewInit, O
       this.renderedPhotoIndex < numberOfPhotos)) {
       const ret = this.renderARow();
       if (ret === null) {
-        throw new Error('Grid photos rendering failed');
+        throw new Error('Grid media rendering failed');
       }
       renderedContentHeight += ret;
     }

@@ -1,4 +1,5 @@
-.imgContainer img {
+.imgContainer img,
+.imgContainer video {
   position: absolute;
   top: 50%;
   left: 50%;

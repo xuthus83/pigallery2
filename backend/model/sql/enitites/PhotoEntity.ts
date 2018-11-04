@@ -1,7 +1,8 @@
 import {Column, Entity, ManyToOne, PrimaryGeneratedColumn} from 'typeorm';
-import {CameraMetadata, GPSMetadata, ImageSize, PhotoDTO, PhotoMetadata, PositionMetaData} from '../../../../common/entities/PhotoDTO';
+import {CameraMetadata, PhotoDTO, PhotoMetadata} from '../../../../common/entities/PhotoDTO';
 import {DirectoryEntity} from './DirectoryEntity';
 import {OrientationTypes} from 'ts-exif-parser';
+import {GPSMetadata, MediaDimension, PositionMetaData} from '../../../../common/entities/MediaDTO';
 
 @Entity()
 export class CameraMetadataEntity implements CameraMetadata {
@@ -41,7 +42,7 @@ export class GPSMetadataEntity implements GPSMetadata {
 }
 
 @Entity()
-export class ImageSizeEntity implements ImageSize {
+export class ImageSizeEntity implements MediaDimension {
 
   @Column('int')
   width: number;
@@ -103,7 +104,7 @@ export class PhotoEntity implements PhotoDTO {
   @Column('text')
   name: string;
 
-  @ManyToOne(type => DirectoryEntity, directory => directory.photos, {onDelete: 'CASCADE'})
+  @ManyToOne(type => DirectoryEntity, directory => directory.media, {onDelete: 'CASCADE'})
   directory: DirectoryEntity;
 
   @Column(type => PhotoMetadataEntity)

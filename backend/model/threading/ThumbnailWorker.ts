@@ -1,43 +1,103 @@
 import {Metadata, Sharp} from 'sharp';
 import {Dimensions, State} from 'gm';
 import {Logger} from '../../Logger';
+import {FfmpegCommand, FfprobeData} from 'fluent-ffmpeg';
 import {ThumbnailProcessingLib} from '../../../common/config/private/IPrivateConfig';
 
 export class ThumbnailWorker {
 
-  private static renderer: (input: RendererInput) => Promise<void> = null;
+  private static imageRenderer: (input: RendererInput) => Promise<void> = null;
+  private static videoRenderer: (input: RendererInput) => Promise<void> = null;
   private static rendererType = null;
 
   public static render(input: RendererInput, renderer: ThumbnailProcessingLib): Promise<void> {
+    if (input.type === ThumbnailSourceType.Image) {
+      return this.renderFromImage(input, renderer);
+    }
+    return this.renderFromVideo(input);
+  }
+
+  public static renderFromImage(input: RendererInput, renderer: ThumbnailProcessingLib): Promise<void> {
     if (ThumbnailWorker.rendererType !== renderer) {
-      ThumbnailWorker.renderer = RendererFactory.build(renderer);
+      ThumbnailWorker.imageRenderer = ImageRendererFactory.build(renderer);
       ThumbnailWorker.rendererType = renderer;
     }
-    return ThumbnailWorker.renderer(input);
+    return ThumbnailWorker.imageRenderer(input);
   }
 
 
+  public static renderFromVideo(input: RendererInput): Promise<void> {
+    if (ThumbnailWorker.videoRenderer === null) {
+      ThumbnailWorker.videoRenderer = VideoRendererFactory.build();
+    }
+    return ThumbnailWorker.videoRenderer(input);
+  }
+
 }
 
+export enum ThumbnailSourceType {
+  Image, Video
+}
 
 export interface RendererInput {
-  imagePath: string;
+  type: ThumbnailSourceType;
+  mediaPath: string;
   size: number;
   makeSquare: boolean;
   thPath: string;
   qualityPriority: boolean;
 }
 
-export class RendererFactory {
+export class VideoRendererFactory {
+  public static build(): (input: RendererInput) => Promise<void> {
+    const ffmpeg = require('fluent-ffmpeg');
+    return (input: RendererInput): Promise<void> => {
+      return new Promise((resolve, reject) => {
+
+        Logger.silly('[FFmpeg] rendering thumbnail: ' + input.mediaPath);
+
+        ffmpeg(input.mediaPath).ffprobe((err: any, data: FfprobeData) => {
+          if (!!err || data === null) {
+            return reject(err);
+          }
+          const ratio = data.streams[0].height / data.streams[0].width;
+          const command: FfmpegCommand = ffmpeg(input.mediaPath);
+          command
+            .on('end', () => {
+              resolve();
+            })
+            .on('error', (e) => {
+              reject(e);
+            })
+            .outputOptions(['-qscale:v 4']);
+          if (input.makeSquare === false) {
+            const newWidth = Math.round(Math.sqrt((input.size * input.size) / ratio));
+            command.takeScreenshots({
+              timemarks: ['10%'], size: newWidth + 'x?', filename: input.thPath
+            });
+
+
+          } else {
+            command.takeScreenshots({
+              timemarks: ['10%'], size: input.size + 'x' + input.size, filename: input.thPath
+            });
+          }
+        });
+      });
+    };
+  }
+}
+
+export class ImageRendererFactory {
 
   public static build(renderer: ThumbnailProcessingLib): (input: RendererInput) => Promise<void> {
     switch (renderer) {
       case ThumbnailProcessingLib.Jimp:
-        return RendererFactory.Jimp();
+        return ImageRendererFactory.Jimp();
       case ThumbnailProcessingLib.gm:
-        return RendererFactory.Gm();
+        return ImageRendererFactory.Gm();
       case ThumbnailProcessingLib.sharp:
-        return RendererFactory.Sharp();
+        return ImageRendererFactory.Sharp();
     }
     throw new Error('unknown renderer');
   }
@@ -46,8 +106,8 @@ export class RendererFactory {
     const Jimp = require('jimp');
     return async (input: RendererInput): Promise<void> => {
       // generate thumbnail
-      Logger.silly('[JimpThRenderer] rendering thumbnail:' + input.imagePath);
-      const image = await Jimp.read(input.imagePath);
+      Logger.silly('[JimpThRenderer] rendering thumbnail:' + input.mediaPath);
+      const image = await Jimp.read(input.mediaPath);
       /**
        * newWidth * newHeight = size*size
        * newHeight/newWidth = height/width
@@ -86,8 +146,8 @@ export class RendererFactory {
     const sharp = require('sharp');
     return async (input: RendererInput): Promise<void> => {
 
-      Logger.silly('[SharpThRenderer] rendering thumbnail:' + input.imagePath);
-      const image: Sharp = sharp(input.imagePath);
+      Logger.silly('[SharpThRenderer] rendering thumbnail:' + input.mediaPath);
+      const image: Sharp = sharp(input.mediaPath);
       const metadata: Metadata = await image.metadata();
 
       /**
@@ -124,8 +184,8 @@ export class RendererFactory {
     const gm = require('gm');
     return (input: RendererInput): Promise<void> => {
       return new Promise((resolve, reject) => {
-        Logger.silly('[GMThRenderer] rendering thumbnail:' + input.imagePath);
-        let image: State = gm(input.imagePath);
+        Logger.silly('[GMThRenderer] rendering thumbnail:' + input.mediaPath);
+        let image: State = gm(input.mediaPath);
         image.size((err, value: Dimensions) => {
           if (err) {
             return reject(err);

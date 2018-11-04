@@ -55,7 +55,7 @@ a:hover .photo-container {
   white-space: normal;
 }
 
-/* transforming photo, based on exif orientation*/
+/* transforming media, based on exif orientation*/
 .photo-orientation-1 {
 }
 .photo-orientation-2 {

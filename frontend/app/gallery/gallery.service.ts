@@ -147,7 +147,7 @@ export class GalleryService {
     this.content.next(cw);
 
     // if instant search do not have a result, do not do a search
-    if (cw.searchResult.photos.length === 0 && cw.searchResult.directories.length === 0) {
+    if (cw.searchResult.media.length === 0 && cw.searchResult.directories.length === 0) {
       if (this.searchId != null) {
         clearTimeout(this.searchId);
       }

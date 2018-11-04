@@ -4,12 +4,25 @@
        [style.height.%]="imageSize.height"
        [src]="thumbnailSrc"/>
 
-  <img *ngIf="gridPhoto !== null && loadImage && photoSrc"
+  <img *ngIf="gridMedia !== null && gridMedia.isPhoto() && loadMedia && photoSrc"
        [style.width.%]="imageSize.width"
        [style.height.%]="imageSize.height"
        [src]="photoSrc"
        (load)="onImageLoad()"
        (error)="onImageError()"/>
+
+  <video *ngIf="gridMedia !== null && gridMedia.isVideo() && loadMedia"
+         [style.width.%]="imageSize.width"
+         [style.height.%]="imageSize.height"
+         (loadeddata)="logevent($event)"
+         (loadedmetadata)="logevent($event)"
+         (durationchange)="logevent($event)"
+         (loadstart)="logevent($event)"
+         autoplay
+         controls
+         (error)="onImageError()">
+    <source [src]="gridMedia.getPhotoPath()" type="video/mp4">
+  </video>
 
 </div>
 

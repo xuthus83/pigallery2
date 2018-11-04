@@ -1,6 +1,7 @@
 import {Component, ElementRef, EventEmitter, Input, Output} from '@angular/core';
-import {PhotoDTO} from '../../../../../common/entities/PhotoDTO';
+import {CameraMetadata, PhotoDTO} from '../../../../../common/entities/PhotoDTO';
 import {Config} from '../../../../../common/config/public/Config';
+import {MediaDTO} from '../../../../../common/entities/MediaDTO';
 
 @Component({
   selector: 'app-info-panel',
@@ -8,7 +9,7 @@ import {Config} from '../../../../../common/config/public/Config';
   templateUrl: './info-panel.lightbox.gallery.component.html',
 })
 export class InfoPanelLightboxComponent {
-  @Input() photo: PhotoDTO;
+  @Input() media: MediaDTO;
   @Output('onClose') onClose = new EventEmitter();
   public mapEnabled = true;
 
@@ -17,13 +18,13 @@ export class InfoPanelLightboxComponent {
   }
 
   calcMpx() {
-    return (this.photo.metadata.size.width * this.photo.metadata.size.height / 1000000).toFixed(2);
+    return (this.media.metadata.size.width * this.media.metadata.size.height / 1000000).toFixed(2);
   }
 
   calcFileSize() {
     const postFixes = ['B', 'KB', 'MB', 'GB', 'TB'];
     let index = 0;
-    let size = this.photo.metadata.fileSize;
+    let size = this.media.metadata.fileSize;
     while (size > 1000 && index < postFixes.length - 1) {
       size /= 1000;
       index++;
@@ -33,12 +34,12 @@ export class InfoPanelLightboxComponent {
 
   isThisYear() {
     return (new Date()).getFullYear() ===
-      (new Date(this.photo.metadata.creationDate)).getFullYear();
+      (new Date(this.media.metadata.creationDate)).getFullYear();
   }
 
 
   getTime() {
-    const date = new Date(this.photo.metadata.creationDate);
+    const date = new Date(this.media.metadata.creationDate);
     return date.toTimeString().split(' ')[0];
   }
 
@@ -51,27 +52,31 @@ export class InfoPanelLightboxComponent {
   }
 
   hasPositionData(): boolean {
-    return PhotoDTO.hasPositionData(this.photo);
+    return MediaDTO.hasPositionData(this.media);
   }
 
   hasGPS() {
-    return this.photo.metadata.positionData && this.photo.metadata.positionData.GPSData &&
-      this.photo.metadata.positionData.GPSData.latitude && this.photo.metadata.positionData.GPSData.longitude;
+    return this.media.metadata.positionData && this.media.metadata.positionData.GPSData &&
+      this.media.metadata.positionData.GPSData.latitude && this.media.metadata.positionData.GPSData.longitude;
   }
 
   getPositionText(): string {
-    if (!this.photo.metadata.positionData) {
+    if (!this.media.metadata.positionData) {
       return '';
     }
-    let str = this.photo.metadata.positionData.city ||
-      this.photo.metadata.positionData.state || '';
+    let str = this.media.metadata.positionData.city ||
+      this.media.metadata.positionData.state || '';
 
     if (str.length !== 0) {
       str += ', ';
     }
-    str += this.photo.metadata.positionData.country || '';
+    str += this.media.metadata.positionData.country || '';
 
     return str;
+  }
+
+  get CameraData(): CameraMetadata {
+    return (<PhotoDTO>this.media).metadata.cameraData;
   }
 
   close() {

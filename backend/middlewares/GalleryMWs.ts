@@ -59,8 +59,8 @@ export class GalleryMWs {
     if (cw.notModified === true) {
       return next();
     }
-    const removeDirs = (dir) => {
-      dir.photos.forEach((photo: PhotoDTO) => {
+    const removeDirs = (dir: DirectoryDTO) => {
+      dir.media.forEach((photo: PhotoDTO) => {
         photo.directory = null;
       });
 
@@ -119,28 +119,28 @@ export class GalleryMWs {
       return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, 'No photo found'));
     }
 
-    req.params.imagePath = path.join(photo.directory.path, photo.directory.name, photo.name);
+    req.params.mediaPath = path.join(photo.directory.path, photo.directory.name, photo.name);
 
     return next();
   }
 
-  public static loadImage(req: Request, res: Response, next: NextFunction) {
-    if (!(req.params.imagePath)) {
+  public static loadMedia(req: Request, res: Response, next: NextFunction) {
+    if (!(req.params.mediaPath)) {
       return next();
     }
 
-    const fullImagePath = path.join(ProjectPath.ImageFolder, req.params.imagePath);
+    const fullMediaPath = path.join(ProjectPath.ImageFolder, req.params.mediaPath);
 
     // check if thumbnail already exist
-    if (fs.existsSync(fullImagePath) === false) {
-      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, 'no such file:' + fullImagePath));
+    if (fs.existsSync(fullMediaPath) === false) {
+      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, 'no such file:' + fullMediaPath));
     }
-    if (fs.statSync(fullImagePath).isDirectory()) {
+    if (fs.statSync(fullMediaPath).isDirectory()) {
       return next();
     }
 
 
-    req.resultPipe = fullImagePath;
+    req.resultPipe = fullMediaPath;
     return next();
   }
 
@@ -161,7 +161,7 @@ export class GalleryMWs {
     try {
       const result = await ObjectManagerRepository.getInstance().SearchManager.search(req.params.text, type);
 
-      result.directories.forEach(dir => dir.photos = dir.photos || []);
+      result.directories.forEach(dir => dir.media = dir.media || []);
       req.resultPipe = new ContentWrapper(null, result);
       return next();
     } catch (err) {
@@ -181,7 +181,7 @@ export class GalleryMWs {
     try {
       const result = await ObjectManagerRepository.getInstance().SearchManager.instantSearch(req.params.text);
 
-      result.directories.forEach(dir => dir.photos = dir.photos || []);
+      result.directories.forEach(dir => dir.media = dir.media || []);
       req.resultPipe = new ContentWrapper(null, result);
       return next();
     } catch (err) {

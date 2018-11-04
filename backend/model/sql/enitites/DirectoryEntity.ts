@@ -15,13 +15,13 @@ export class DirectoryEntity implements DirectoryDTO {
   path: string;
 
   /**
-   * last time the directory was modified (from outside, eg.: a new photo was added)
+   * last time the directory was modified (from outside, eg.: a new media was added)
    */
   @Column('bigint')
   public lastModified: number;
 
   /**
-   * Last time the directory was fully scanned, not only for a few photos to create a preview
+   * Last time the directory was fully scanned, not only for a few media to create a preview
    */
   @Column({type: 'bigint', nullable: true})
   public lastScanned: number;
@@ -35,6 +35,6 @@ export class DirectoryEntity implements DirectoryDTO {
   public directories: Array<DirectoryEntity>;
 
   @OneToMany(type => PhotoEntity, photo => photo.directory)
-  public photos: Array<PhotoEntity>;
+  public media: Array<PhotoEntity>;
 
 }

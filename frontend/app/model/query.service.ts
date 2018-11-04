@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {ShareService} from '../gallery/share.service';
 import {PhotoDTO} from '../../../common/entities/PhotoDTO';
+import {MediaDTO} from '../../../common/entities/MediaDTO';
 
 @Injectable()
 export class QueryService {
@@ -10,10 +11,10 @@ export class QueryService {
   constructor(private shareService: ShareService) {
   }
 
-  getParams(photo?: PhotoDTO): { [key: string]: string } {
+  getParams(media?: MediaDTO): { [key: string]: string } {
     const query = {};
-    if (photo) {
-      query[QueryService.PHOTO_PARAM] = photo.name;
+    if (media) {
+      query[QueryService.PHOTO_PARAM] = media.name;
     }
     if (this.shareService.isSharing()) {
       query['sk'] = this.shareService.getSharingKey();

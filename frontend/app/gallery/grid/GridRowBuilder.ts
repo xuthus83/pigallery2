@@ -1,10 +1,11 @@
 import {PhotoDTO} from '../../../../common/entities/PhotoDTO';
+import {MediaDTO} from '../../../../common/entities/MediaDTO';
 
 export class GridRowBuilder {
 
   private photoRow: PhotoDTO[] = [];
 
-  private photoIndex = 0; // index of the last pushed photo to the photoRow
+  private photoIndex = 0; // index of the last pushed media to the photoRow
 
 
   constructor(private photos: PhotoDTO[],
@@ -52,7 +53,7 @@ export class GridRowBuilder {
     while (this.calcRowHeight() < minHeight && this.removePhoto() === true) { // roo too small -> remove images
     }
 
-    // keep at least one photo int thr row
+    // keep at least one media int thr row
     if (this.photoRow.length <= 0) {
       this.addPhoto();
     }
@@ -61,7 +62,7 @@ export class GridRowBuilder {
   public calcRowHeight(): number {
     let width = 0;
     for (let i = 0; i < this.photoRow.length; i++) {
-      const size = PhotoDTO.getRotatedSize(this.photoRow[i]);
+      const size = MediaDTO.getRotatedSize(this.photoRow[i]);
       width += (size.width / size.height); // summing up aspect ratios
     }
     const height = (this.containerWidth - this.photoRow.length * (this.photoMargin * 2) - 1) / width; // cant be equal -> width-1

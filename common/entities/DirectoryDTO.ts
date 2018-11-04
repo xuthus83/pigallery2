@@ -1,4 +1,4 @@
-import {PhotoDTO} from './PhotoDTO';
+import {MediaDTO} from './MediaDTO';
 
 export interface DirectoryDTO {
   id: number;
@@ -9,12 +9,12 @@ export interface DirectoryDTO {
   isPartial?: boolean;
   parent: DirectoryDTO;
   directories: Array<DirectoryDTO>;
-  photos: Array<PhotoDTO>;
+  media: MediaDTO[];
 }
 
 export module DirectoryDTO {
   export const addReferences = (dir: DirectoryDTO): void => {
-    dir.photos.forEach((photo: PhotoDTO) => {
+    dir.media.forEach((photo: MediaDTO) => {
       photo.directory = dir;
     });
 

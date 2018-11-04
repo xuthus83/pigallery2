@@ -1,12 +1,16 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import {DirectoryDTO} from '../../../common/entities/DirectoryDTO';
-import {CameraMetadata, GPSMetadata, ImageSize, PhotoDTO, PhotoMetadata} from '../../../common/entities/PhotoDTO';
+import {CameraMetadata, PhotoDTO, PhotoMetadata} from '../../../common/entities/PhotoDTO';
 import {Logger} from '../../Logger';
 import {IptcParser} from 'ts-node-iptc';
 import {ExifParserFactory, OrientationTypes} from 'ts-exif-parser';
+import * as ffmpeg from 'fluent-ffmpeg';
+import {FfmpegCommand, FfprobeData} from 'fluent-ffmpeg';
 import {ProjectPath} from '../../ProjectPath';
 import {Config} from '../../../common/config/private/Config';
+import {VideoDTO} from '../../../common/entities/VideoDTO';
+import {GPSMetadata, MediaDimension, MediaMetadata} from '../../../common/entities/MediaDTO';
 
 const LOG_TAG = '[DiskManagerTask]';
 
@@ -27,6 +31,16 @@ export class DiskMangerWorker {
     return extensions.indexOf(extension) !== -1;
   }
 
+  private static isVideo(fullPath: string) {
+    const extensions = [
+      '.mp4',
+      '.webm'
+    ];
+
+    const extension = path.extname(fullPath).toLowerCase();
+    return extensions.indexOf(extension) !== -1;
+  }
+
   public static scanDirectory(relativeDirectoryName: string, maxPhotos: number = null, photosOnly: boolean = false): Promise<DirectoryDTO> {
     return new Promise<DirectoryDTO>((resolve, reject) => {
       const directoryName = path.basename(relativeDirectoryName);
@@ -41,9 +55,9 @@ export class DiskMangerWorker {
         lastScanned: Date.now(),
         directories: [],
         isPartial: false,
-        photos: []
+        media: []
       };
-      fs.readdir(absoluteDirectoryName, async (err, list) => {
+      fs.readdir(absoluteDirectoryName, async (err, list: string[]) => {
         if (err) {
           return reject(err);
         }
@@ -60,13 +74,23 @@ export class DiskMangerWorker {
               d.isPartial = true;
               directory.directories.push(d);
             } else if (DiskMangerWorker.isImage(fullFilePath)) {
-              directory.photos.push(<PhotoDTO>{
+              directory.media.push(<PhotoDTO>{
                 name: file,
                 directory: null,
                 metadata: await DiskMangerWorker.loadPhotoMetadata(fullFilePath)
               });
 
-              if (maxPhotos != null && directory.photos.length > maxPhotos) {
+              if (maxPhotos != null && directory.media.length > maxPhotos) {
+                break;
+              }
+            } else if (DiskMangerWorker.isVideo(fullFilePath)) {
+              directory.media.push(<VideoDTO>{
+                name: file,
+                directory: null,
+                metadata: await DiskMangerWorker.loadPVideoMetadata(fullFilePath)
+              });
+
+              if (maxPhotos != null && directory.media.length > maxPhotos) {
                 break;
               }
             }
@@ -80,6 +104,44 @@ export class DiskMangerWorker {
       });
     });
 
+  }
+
+  private static loadPVideoMetadata(fullPath: string): Promise<MediaMetadata> {
+    return new Promise<MediaMetadata>((resolve, reject) => {
+      const metadata: MediaMetadata = <MediaMetadata>{
+        keywords: [],
+        positionData: null,
+        size: {
+          width: 0,
+          height: 0
+        },
+        orientation: OrientationTypes.TOP_LEFT,
+        creationDate: 0,
+        fileSize: 0
+      };
+      try {
+        const stat = fs.statSync(fullPath);
+        metadata.fileSize = stat.size;
+      } catch (err) {
+      }
+      ffmpeg(fullPath).ffprobe((err: any, data: FfprobeData) => {
+        if (!!err || data === null) {
+          return reject(err);
+        }
+
+        metadata.size = {
+          width: data.streams[0].width,
+          height: data.streams[0].height
+        };
+
+        try {
+          metadata.creationDate = data.streams[0].tags.creation_time;
+        } catch (err) {
+        }
+
+        return resolve(metadata);
+      });
+    });
   }
 
   private static loadPhotoMetadata(fullPath: string): Promise<PhotoMetadata> {
@@ -135,15 +197,15 @@ export class DiskMangerWorker {
 
 
               if (exif.imageSize) {
-                metadata.size = <ImageSize> {width: exif.imageSize.width, height: exif.imageSize.height};
+                metadata.size = <MediaDimension> {width: exif.imageSize.width, height: exif.imageSize.height};
               } else if (exif.tags.RelatedImageWidth && exif.tags.RelatedImageHeight) {
-                metadata.size = <ImageSize> {width: exif.tags.RelatedImageWidth, height: exif.tags.RelatedImageHeight};
+                metadata.size = <MediaDimension> {width: exif.tags.RelatedImageWidth, height: exif.tags.RelatedImageHeight};
               } else {
-                metadata.size = <ImageSize> {width: 1, height: 1};
+                metadata.size = <MediaDimension> {width: 1, height: 1};
               }
             } catch (err) {
               Logger.debug(LOG_TAG, 'Error parsing exif', fullPath, err);
-              metadata.size = <ImageSize> {width: 1, height: 1};
+              metadata.size = <MediaDimension> {width: 1, height: 1};
             }
 
             try {

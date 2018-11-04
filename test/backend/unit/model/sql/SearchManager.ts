@@ -60,7 +60,7 @@ describe('SearchManager', () => {
 
 
     const d = new PhotoEntity();
-    d.name = 'test photo.jpg';
+    d.name = 'test media.jpg';
     d.directory = dir;
     d.metadata = m;
     return d;
@@ -159,7 +159,7 @@ describe('SearchManager', () => {
       searchText: 'sw',
       searchType: null,
       directories: [],
-      photos: [p, p2],
+      media: [p, p2],
       resultOverflow: false
     });
 
@@ -167,7 +167,7 @@ describe('SearchManager', () => {
       searchText: 'Tatooine',
       searchType: SearchTypes.position,
       directories: [],
-      photos: [p],
+      media: [p],
       resultOverflow: false
     });
 
@@ -175,7 +175,7 @@ describe('SearchManager', () => {
       searchText: 'ortm',
       searchType: SearchTypes.keyword,
       directories: [],
-      photos: [p2],
+      media: [p2],
       resultOverflow: false
     });
 
@@ -183,7 +183,7 @@ describe('SearchManager', () => {
       searchText: 'ortm',
       searchType: SearchTypes.keyword,
       directories: [],
-      photos: [p2],
+      media: [p2],
       resultOverflow: false
     });
 
@@ -191,7 +191,7 @@ describe('SearchManager', () => {
       searchText: 'wa',
       searchType: SearchTypes.keyword,
       directories: [dir],
-      photos: [p, p2],
+      media: [p, p2],
       resultOverflow: false
     });
   });

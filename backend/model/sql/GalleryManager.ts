@@ -53,30 +53,30 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
           return null;
         }
       }
-      if (dir.photos) {
-        for (let i = 0; i < dir.photos.length; i++) {
-          dir.photos[i].directory = dir;
-          dir.photos[i].readyThumbnails = [];
-          dir.photos[i].readyIcon = false;
+      if (dir.media) {
+        for (let i = 0; i < dir.media.length; i++) {
+          dir.media[i].directory = dir;
+          dir.media[i].readyThumbnails = [];
+          dir.media[i].readyIcon = false;
         }
       }
       if (dir.directories) {
         for (let i = 0; i < dir.directories.length; i++) {
-          dir.directories[i].photos = await connection
+          dir.directories[i].media = await connection
             .getRepository(PhotoEntity)
-            .createQueryBuilder('photo')
-            .where('photo.directory = :dir', {
+            .createQueryBuilder('media')
+            .where('media.directory = :dir', {
               dir: dir.directories[i].id
             })
-            .orderBy('photo.metadata.creationDate', 'ASC')
+            .orderBy('media.metadata.creationDate', 'ASC')
             .limit(Config.Server.indexing.folderPreviewSize)
             .getMany();
           dir.directories[i].isPartial = true;
 
-          for (let j = 0; j < dir.directories[i].photos.length; j++) {
-            dir.directories[i].photos[j].directory = dir.directories[i];
-            dir.directories[i].photos[j].readyThumbnails = [];
-            dir.directories[i].photos[j].readyIcon = false;
+          for (let j = 0; j < dir.directories[i].media.length; j++) {
+            dir.directories[i].media[j].directory = dir.directories[i];
+            dir.directories[i].media[j].readyThumbnails = [];
+            dir.directories[i].media[j].readyIcon = false;
           }
         }
       }
@@ -113,7 +113,7 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
         const scannedDirectory = await DiskManager.scanDirectory(relativeDirectoryName);
 
         // returning with the result
-        scannedDirectory.photos.forEach(p => p.readyThumbnails = []);
+        scannedDirectory.media.forEach(p => p.readyThumbnails = []);
         resolve(scannedDirectory);
 
         await this.saveToDB(scannedDirectory);
@@ -169,18 +169,18 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
       if (directory != null) { // update existing directory
         if (!directory.parent || !directory.parent.id) { // set parent if not set yet
           directory.parent = currentDir;
-          delete directory.photos;
+          delete directory.media;
           await directoryRepository.save(directory);
         }
       } else {
         scannedDirectory.directories[i].parent = currentDir;
         (<DirectoryEntity>scannedDirectory.directories[i]).lastScanned = null; // new child dir, not fully scanned yet
         const d = await directoryRepository.save(<DirectoryEntity>scannedDirectory.directories[i]);
-        for (let j = 0; j < scannedDirectory.directories[i].photos.length; j++) {
-          scannedDirectory.directories[i].photos[j].directory = d;
+        for (let j = 0; j < scannedDirectory.directories[i].media.length; j++) {
+          scannedDirectory.directories[i].media[j].directory = d;
         }
 
-        await photosRepository.save(scannedDirectory.directories[i].photos);
+        await photosRepository.save(scannedDirectory.directories[i].media);
       }
     }
 
@@ -188,38 +188,38 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
     await directoryRepository.remove(childDirectories);
 
 
-    const indexedPhotos = await photosRepository.createQueryBuilder('photo')
-      .where('photo.directory = :dir', {
+    const indexedPhotos = await photosRepository.createQueryBuilder('media')
+      .where('media.directory = :dir', {
         dir: currentDir.id
       }).getMany();
 
 
     const photosToSave = [];
-    for (let i = 0; i < scannedDirectory.photos.length; i++) {
+    for (let i = 0; i < scannedDirectory.media.length; i++) {
       let photo = null;
       for (let j = 0; j < indexedPhotos.length; j++) {
-        if (indexedPhotos[j].name === scannedDirectory.photos[i].name) {
+        if (indexedPhotos[j].name === scannedDirectory.media[i].name) {
           photo = indexedPhotos[j];
           indexedPhotos.splice(j, 1);
           break;
         }
       }
       if (photo == null) {
-        scannedDirectory.photos[i].directory = null;
-        photo = Utils.clone(scannedDirectory.photos[i]);
-        scannedDirectory.photos[i].directory = scannedDirectory;
+        scannedDirectory.media[i].directory = null;
+        photo = Utils.clone(scannedDirectory.media[i]);
+        scannedDirectory.media[i].directory = scannedDirectory;
         photo.directory = currentDir;
       }
 
-      if (photo.metadata.keywords !== scannedDirectory.photos[i].metadata.keywords ||
-        photo.metadata.cameraData !== scannedDirectory.photos[i].metadata.cameraData ||
-        photo.metadata.positionData !== scannedDirectory.photos[i].metadata.positionData ||
-        photo.metadata.size !== scannedDirectory.photos[i].metadata.size) {
+      if (photo.metadata.keywords !== scannedDirectory.media[i].metadata.keywords ||
+        photo.metadata.cameraData !== (<PhotoDTO>scannedDirectory.media[i]).metadata.cameraData ||
+        photo.metadata.positionData !== scannedDirectory.media[i].metadata.positionData ||
+        photo.metadata.size !== scannedDirectory.media[i].metadata.size) {
 
-        photo.metadata.keywords = scannedDirectory.photos[i].metadata.keywords;
-        photo.metadata.cameraData = scannedDirectory.photos[i].metadata.cameraData;
-        photo.metadata.positionData = scannedDirectory.photos[i].metadata.positionData;
-        photo.metadata.size = scannedDirectory.photos[i].metadata.size;
+        photo.metadata.keywords = scannedDirectory.media[i].metadata.keywords;
+        photo.metadata.cameraData = (<PhotoDTO>scannedDirectory.media[i]).metadata.cameraData;
+        photo.metadata.positionData = scannedDirectory.media[i].metadata.positionData;
+        photo.metadata.size = scannedDirectory.media[i].metadata.size;
         photosToSave.push(photo);
       }
     }
@@ -233,8 +233,8 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
     const connection = await SQLConnection.getConnection();
     const photosRepository = connection.getRepository(PhotoEntity);
 
-    const query = photosRepository.createQueryBuilder('photo');
-    query.innerJoinAndSelect('photo.directory', 'directory');
+    const query = photosRepository.createQueryBuilder('media');
+    query.innerJoinAndSelect('media.directory', 'directory');
 
     if (queryFilter.directory) {
       const directoryName = path.basename(queryFilter.directory);
@@ -253,31 +253,31 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
     }
 
     if (queryFilter.fromDate) {
-      query.andWhere('photo.metadata.creationDate >= :fromDate', {
+      query.andWhere('media.metadata.creationDate >= :fromDate', {
         fromDate: queryFilter.fromDate.getTime()
       });
     }
     if (queryFilter.toDate) {
-      query.andWhere('photo.metadata.creationDate <= :toDate', {
+      query.andWhere('media.metadata.creationDate <= :toDate', {
         toDate: queryFilter.toDate.getTime()
       });
     }
     if (queryFilter.minResolution) {
-      query.andWhere('photo.metadata.size.width * photo.metadata.size.height >= :minRes', {
+      query.andWhere('media.metadata.size.width * media.metadata.size.height >= :minRes', {
         minRes: queryFilter.minResolution * 1000 * 1000
       });
     }
 
     if (queryFilter.maxResolution) {
-      query.andWhere('photo.metadata.size.width * photo.metadata.size.height <= :maxRes', {
+      query.andWhere('media.metadata.size.width * media.metadata.size.height <= :maxRes', {
         maxRes: queryFilter.maxResolution * 1000 * 1000
       });
     }
     if (queryFilter.orientation === OrientationType.landscape) {
-      query.andWhere('photo.metadata.size.width >= photo.metadata.size.height');
+      query.andWhere('media.metadata.size.width >= media.metadata.size.height');
     }
     if (queryFilter.orientation === OrientationType.portrait) {
-      query.andWhere('photo.metadata.size.width <= photo.metadata.size.height');
+      query.andWhere('media.metadata.size.width <= media.metadata.size.height');
     }
 
 

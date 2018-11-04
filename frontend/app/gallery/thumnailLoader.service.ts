@@ -1,9 +1,10 @@
 import {Injectable} from '@angular/core';
 import {GalleryCacheService} from './cache.gallery.service';
-import {Photo} from './Photo';
-import {IconPhoto} from './IconPhoto';
+import {Media} from './Media';
+import {MediaIcon} from './MediaIcon';
 import {PhotoDTO} from '../../../common/entities/PhotoDTO';
 import {Config} from '../../../common/config/public/Config';
+import {MediaDTO} from '../../../common/entities/MediaDTO';
 
 export enum ThumbnailLoadingPriority {
   extraHigh = 4, high = 3, medium = 2, low = 1
@@ -35,7 +36,7 @@ export class ThumbnailLoaderService {
     const curImg = new Image();
     curImg.onload = () => {
       task.onLoaded();
-      this.galleryCacheService.photoUpdated(task.photo);
+      this.galleryCacheService.mediaUpdated(task.media);
       task.taskEntities.forEach((te: ThumbnailTaskEntity) => te.listener.onLoad());
 
       this.taskReady(task);
@@ -73,7 +74,7 @@ export class ThumbnailLoaderService {
 
   }
 
-  loadIcon(photo: IconPhoto, priority: ThumbnailLoadingPriority, listener: ThumbnailLoadingListener): ThumbnailTaskEntity {
+  loadIcon(photo: MediaIcon, priority: ThumbnailLoadingPriority, listener: ThumbnailLoadingListener): ThumbnailTaskEntity {
     let thTask: ThumbnailTask = null;
     // is image already qued?
     for (let i = 0; i < this.que.length; i++) {
@@ -84,7 +85,7 @@ export class ThumbnailLoaderService {
     }
     if (thTask == null) {
       thTask = {
-        photo: photo.photo,
+        media: photo.media,
         inProgress: false,
         taskEntities: [],
         onLoaded: () => {
@@ -106,25 +107,25 @@ export class ThumbnailLoaderService {
     return thumbnailTaskEntity;
   }
 
-  loadImage(photo: Photo, priority: ThumbnailLoadingPriority, listener: ThumbnailLoadingListener): ThumbnailTaskEntity {
+  loadImage(media: Media, priority: ThumbnailLoadingPriority, listener: ThumbnailLoadingListener): ThumbnailTaskEntity {
 
     let thTask: ThumbnailTask = null;
     // is image already qued?
     for (let i = 0; i < this.que.length; i++) {
-      if (this.que[i].path === photo.getThumbnailPath()) {
+      if (this.que[i].path === media.getThumbnailPath()) {
         thTask = this.que[i];
         break;
       }
     }
     if (thTask == null) {
       thTask = {
-        photo: photo.photo,
+        media: media.media,
         inProgress: false,
         taskEntities: [],
         onLoaded: () => {
-          photo.thumbnailLoaded();
+          media.thumbnailLoaded();
         },
-        path: photo.getThumbnailPath()
+        path: media.getThumbnailPath()
       };
       this.que.push(thTask);
     }
@@ -193,7 +194,7 @@ export interface ThumbnailTaskEntity {
 }
 
 interface ThumbnailTask {
-  photo: PhotoDTO;
+  media: MediaDTO;
   inProgress: boolean;
   taskEntities: Array<ThumbnailTaskEntity>;
   path: string;

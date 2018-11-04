@@ -28,7 +28,7 @@ export class DiskManager {
       directory = await DiskMangerWorker.scanDirectory(relativeDirectoryName);
     }
     const addDirs = (dir: DirectoryDTO) => {
-      dir.photos.forEach((ph) => {
+      dir.media.forEach((ph) => {
         ph.directory = dir;
       });
       dir.directories.forEach((d) => {

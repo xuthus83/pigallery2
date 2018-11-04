@@ -5,8 +5,8 @@
   </div>
 
   <div class="lightbox" #lightbox>
-    <app-gallery-lightbox-photo [gridPhoto]="activePhoto ? activePhoto.gridPhoto : null"
-                                [loadImage]="!animating"
+    <app-gallery-lightbox-photo [gridMedia]="activePhoto ? activePhoto.gridPhoto : null"
+                                [loadMedia]="!animating"
                                 [windowAspect]="getWindowAspectRatio()"
                                 #photo>
     </app-gallery-lightbox-photo>
@@ -20,7 +20,7 @@
       <a *ngIf="activePhoto"
          class="highlight control-button"
          [href]="activePhoto.gridPhoto.getPhotoPath()"
-         [download]="activePhoto.gridPhoto.photo.name">
+         [download]="activePhoto.gridPhoto.media.name">
         <span class="oi oi-data-transfer-download"
               title="download" i18n-title></span>
       </a>
@@ -84,7 +84,7 @@
   <app-info-panel *ngIf="activePhoto && infoPanelVisible"
                   id="info-panel"
                   [style.width.px]="infoPanelWidth"
-                  [photo]="activePhoto.gridPhoto.photo"
+                  [media]="activePhoto.gridPhoto.photo"
                   (onClose)="hideInfoPanel()">
 
   </app-info-panel>

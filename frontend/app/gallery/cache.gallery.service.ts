@@ -5,6 +5,7 @@ import {Utils} from '../../../common/Utils';
 import {Config} from '../../../common/config/public/Config';
 import {AutoCompleteItem, SearchTypes} from '../../../common/entities/AutoCompleteItem';
 import {SearchResultDTO} from '../../../common/entities/SearchResultDTO';
+import {MediaDTO} from '../../../common/entities/MediaDTO';
 
 interface CacheItem<T> {
   timestamp: number;
@@ -132,24 +133,24 @@ export class GalleryCacheService {
   }
 
   /**
-   * Update photo state at cache too (Eg.: thumbnail rendered)
-   * @param photo
+   * Update media state at cache too (Eg.: thumbnail rendered)
+   * @param media
    */
-  public photoUpdated(photo: PhotoDTO): void {
+  public mediaUpdated(media: MediaDTO): void {
 
     if (Config.Client.Other.enableCache === false) {
       return;
     }
 
-    const directoryName = Utils.concatUrls(photo.directory.path, photo.directory.name);
+    const directoryName = Utils.concatUrls(media.directory.path, media.directory.name);
     const value = localStorage.getItem(directoryName);
     if (value != null) {
       const directory: DirectoryDTO = JSON.parse(value);
-      directory.photos.forEach((p) => {
-        if (p.name === photo.name) {
+      directory.media.forEach((p) => {
+        if (p.name === media.name) {
           // update data
-          p.metadata = photo.metadata;
-          p.readyThumbnails = photo.readyThumbnails;
+          p.metadata = media.metadata;
+          p.readyThumbnails = media.readyThumbnails;
 
           // save changes
           localStorage.setItem(directoryName, JSON.stringify(directory));

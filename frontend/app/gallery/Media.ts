@@ -1,20 +1,21 @@
 import {PhotoDTO} from '../../../common/entities/PhotoDTO';
 import {Utils} from '../../../common/Utils';
-import {IconPhoto} from './IconPhoto';
+import {MediaIcon} from './MediaIcon';
 import {Config} from '../../../common/config/public/Config';
+import {MediaDTO} from '../../../common/entities/MediaDTO';
 
-export class Photo extends IconPhoto {
+export class Media extends MediaIcon {
 
 
-  constructor(photo: PhotoDTO, public renderWidth: number, public renderHeight: number) {
-    super(photo);
+  constructor(media: MediaDTO, public renderWidth: number, public renderHeight: number) {
+    super(media);
   }
 
 
   thumbnailLoaded() {
     if (!this.isThumbnailAvailable()) {
-      this.photo.readyThumbnails = this.photo.readyThumbnails || [];
-      this.photo.readyThumbnails.push(this.getThumbnailSize());
+      this.media.readyThumbnails = this.media.readyThumbnails || [];
+      this.media.readyThumbnails.push(this.getThumbnailSize());
     }
   }
 
@@ -29,10 +30,10 @@ export class Photo extends IconPhoto {
       this.replacementSizeCache = null;
 
       const size = this.getThumbnailSize();
-      if (!!this.photo.readyThumbnails) {
-        for (let i = 0; i < this.photo.readyThumbnails.length; i++) {
-          if (this.photo.readyThumbnails[i] < size) {
-            this.replacementSizeCache = this.photo.readyThumbnails[i];
+      if (!!this.media.readyThumbnails) {
+        for (let i = 0; i < this.media.readyThumbnails.length; i++) {
+          if (this.media.readyThumbnails[i] < size) {
+            this.replacementSizeCache = this.media.readyThumbnails[i];
             break;
           }
         }
@@ -46,26 +47,26 @@ export class Photo extends IconPhoto {
   }
 
   isThumbnailAvailable() {
-    return this.photo.readyThumbnails && this.photo.readyThumbnails.indexOf(this.getThumbnailSize()) !== -1;
+    return this.media.readyThumbnails && this.media.readyThumbnails.indexOf(this.getThumbnailSize()) !== -1;
   }
 
   getReplacementThumbnailPath() {
     const size = this.getReplacementThumbnailSize();
     return Utils.concatUrls(Config.Client.urlBase,
       '/api/gallery/content/',
-      this.photo.directory.path, this.photo.directory.name, this.photo.name, 'thumbnail', size.toString());
+      this.media.directory.path, this.media.directory.name, this.media.name, 'thumbnail', size.toString());
 
   }
 
   hasPositionData(): boolean {
-    return PhotoDTO.hasPositionData(this.photo);
+    return MediaDTO.hasPositionData(this.media);
   }
 
   getThumbnailPath() {
     const size = this.getThumbnailSize();
     return Utils.concatUrls(Config.Client.urlBase,
       '/api/gallery/content/',
-      this.photo.directory.path, this.photo.directory.name, this.photo.name, 'thumbnail', size.toString());
+      this.media.directory.path, this.media.directory.name, this.media.name, 'thumbnail', size.toString());
   }
 
 

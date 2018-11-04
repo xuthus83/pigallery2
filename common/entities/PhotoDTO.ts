@@ -1,8 +1,8 @@
 import {DirectoryDTO} from './DirectoryDTO';
-import {ImageSize} from './PhotoDTO';
 import {OrientationTypes} from 'ts-exif-parser';
+import {MediaDTO, MediaMetadata, MediaDimension, PositionMetaData} from './MediaDTO';
 
-export interface PhotoDTO {
+export interface PhotoDTO extends MediaDTO {
   id: number;
   name: string;
   directory: DirectoryDTO;
@@ -11,19 +11,14 @@ export interface PhotoDTO {
   readyIcon: boolean;
 }
 
-export interface PhotoMetadata {
+export interface PhotoMetadata extends MediaMetadata {
   keywords: Array<string>;
   cameraData: CameraMetadata;
   positionData: PositionMetaData;
   orientation: OrientationTypes;
-  size: ImageSize;
+  size: MediaDimension;
   creationDate: number;
   fileSize: number;
-}
-
-export interface ImageSize {
-  width: number;
-  height: number;
 }
 
 export interface CameraMetadata {
@@ -34,51 +29,4 @@ export interface CameraMetadata {
   exposure?: number;
   focalLength?: number;
   lens?: string;
-}
-
-export interface PositionMetaData {
-  GPSData?: GPSMetadata;
-  country?: string;
-  state?: string;
-  city?: string;
-}
-
-export interface GPSMetadata {
-  latitude?: number;
-  longitude?: number;
-  altitude?: number;
-}
-
-export module PhotoDTO {
-  export const hasPositionData = (photo: PhotoDTO): boolean => {
-    return !!photo.metadata.positionData &&
-      !!(photo.metadata.positionData.city ||
-        photo.metadata.positionData.state ||
-        photo.metadata.positionData.country ||
-        (photo.metadata.positionData.GPSData &&
-          photo.metadata.positionData.GPSData.altitude &&
-          photo.metadata.positionData.GPSData.latitude &&
-          photo.metadata.positionData.GPSData.longitude));
-  };
-
-  export const isSideWay = (photo: PhotoDTO): boolean => {
-    return photo.metadata.orientation === OrientationTypes.LEFT_TOP ||
-      photo.metadata.orientation === OrientationTypes.RIGHT_TOP ||
-      photo.metadata.orientation === OrientationTypes.LEFT_BOTTOM ||
-      photo.metadata.orientation === OrientationTypes.RIGHT_BOTTOM;
-
-  };
-
-  export const getRotatedSize = (photo: PhotoDTO): ImageSize => {
-    if (isSideWay(photo)) {
-      // noinspection JSSuspiciousNameCombination
-      return {width: photo.metadata.size.height, height: photo.metadata.size.width};
-    }
-    return photo.metadata.size;
-  };
-
-  export const calcRotatedAspectRatio = (photo: PhotoDTO): number => {
-    const size = getRotatedSize(photo);
-    return size.width / size.height;
-  };
 }
