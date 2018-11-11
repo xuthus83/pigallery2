@@ -32,7 +32,7 @@ export enum LightboxStates {
 
 @Component({
   selector: 'app-gallery-lightbox',
-  styleUrls: ['./lightbox.gallery.component.css'],
+  styleUrls: ['./lightbox.gallery.component.css', './inputrange.css'],
   templateUrl: './lightbox.gallery.component.html'
 })
 export class GalleryLightboxComponent implements OnDestroy, OnInit {
@@ -243,6 +243,11 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
       case 'Escape': // escape
         this.hide();
         break;
+      case ' ': // space
+        if (this.activePhoto && this.activePhoto.gridPhoto.isVideo()) {
+          this.photoElement.playPause();
+        }
+        break;
     }
   }
 
@@ -354,6 +359,11 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
       if (this.photoElement.imageLoadFinished === false) {
         return;
       }
+      // do not skip video if its playing
+      if (this.activePhoto && this.activePhoto.gridPhoto.isVideo() &&
+        !this.photoElement.Paused) {
+        return;
+      }
       if (this.navigation.hasNext) {
         this.nextImage();
       } else {
@@ -391,6 +401,10 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
     this.pause();
     this.timerSub = this.timer.subscribe(() => {
       if (this.photoElement.imageLoadFinished === false) {
+        return;
+      }
+      if (this.activePhoto && this.activePhoto.gridPhoto.isVideo() &&
+        !this.photoElement.Paused) {
         return;
       }
       if (this.navigation.hasNext) {

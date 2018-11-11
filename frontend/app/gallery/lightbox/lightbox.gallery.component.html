@@ -12,73 +12,98 @@
     </app-gallery-lightbox-photo>
   </div>
   <div
-    (swipeleft)="nextImage()" (swiperight)="prevImage()" (swipeup)="hide()"
     *ngIf="controllersVisible"
-    id="controllers-container" #controls [style.width.px]="getPhotoFrameWidth()"
+    id="controllers-container"
+    #controls
+    [style.width.px]="getPhotoFrameWidth()"
     [ngClass]="!controllersDimmed ? 'dim-controls':  ''">
-    <div class="controls controls-top">
-      <a *ngIf="activePhoto"
-         class="highlight control-button"
-         [href]="activePhoto.gridPhoto.getPhotoPath()"
-         [download]="activePhoto.gridPhoto.media.name">
+    <div id="swipeable-container"
+         (swipeleft)="nextImage()"
+         (swiperight)="prevImage()"
+         (swipeup)="hide()"
+         (click)="photo.playPause()">
+
+      <div class="controls controls-top">
+        <a *ngIf="activePhoto"
+           class="highlight control-button"
+           [href]="activePhoto.gridPhoto.getPhotoPath()"
+           [download]="activePhoto.gridPhoto.media.name">
         <span class="oi oi-data-transfer-download"
               title="download" i18n-title></span>
-      </a>
+        </a>
 
-      <div class=" highlight control-button" (click)="toggleInfoPanel()"
-           title="info" i18n-title>
-        <span class="oi oi-info"></span>
-      </div>
+        <div class=" highlight control-button" (click)="toggleInfoPanel()"
+             title="info" i18n-title>
+          <span class="oi oi-info"></span>
+        </div>
 
-      <div *ngIf="fullScreenService.isFullScreenEnabled()"
-           class=" highlight control-button"
-           (click)="fullScreenService.exitFullScreen()"
-           title="toggle fullscreen" i18n-title>
+        <div *ngIf="fullScreenService.isFullScreenEnabled()"
+             class=" highlight control-button"
+             (click)="fullScreenService.exitFullScreen()"
+             title="toggle fullscreen" i18n-title>
         <span class="oi oi-fullscreen-exit">
 
         </span>
-      </div>
+        </div>
 
-      <div *ngIf="!fullScreenService.isFullScreenEnabled()"
-           class="highlight control-button"
-           (click)="fullScreenService.showFullScreen(root)"
-           title="toggle fullscreen" i18n-title>
+        <div *ngIf="!fullScreenService.isFullScreenEnabled()"
+             class="highlight control-button"
+             (click)="fullScreenService.showFullScreen(root)"
+             title="toggle fullscreen" i18n-title>
         <span class="oi oi-fullscreen-enter">
         </span>
-      </div>
+        </div>
 
-      <div class="highlight control-button"
-           (click)="hide()"
-           title="close" i18n-title>
+        <div class="highlight control-button"
+             (click)="hide()"
+             title="close" i18n-title>
         <span class="oi oi-x">
 
         </span>
+        </div>
       </div>
-    </div>
 
-    <div class="navigation-arrow highlight"
-         *ngIf="navigation.hasPrev" title="key: left arrow" id="leftArrow" i18n-title
-         (click)="prevImage()"><span
-      class="oi oi-chevron-left"></span></div>
-    <div class="navigation-arrow highlight"
-         *ngIf="navigation.hasNext" title="key: right arrow" id="rightArrow" i18n-title
-         (click)="nextImage()"><span
-      class="oi oi-chevron-right"></span></div>
+      <div class="navigation-arrow highlight"
+           *ngIf="navigation.hasPrev" title="key: left arrow" id="leftArrow" i18n-title
+           (click)="prevImage()"><span
+        class="oi oi-chevron-left"></span></div>
+      <div class="navigation-arrow highlight"
+           *ngIf="navigation.hasNext" title="key: right arrow" id="rightArrow" i18n-title
+           (click)="nextImage()"><span
+        class="oi oi-chevron-right"></span></div>
 
-    <div class="controls controls-playback">
+      <div class="controls controls-playback"  *ngIf="activePhoto && activePhoto.gridPhoto.isPhoto()">
       <span class="oi oi-media-pause highlight control-button"
             [ngClass]="playBackState == 0 ? 'button-disabled':''"
             (click)="pause()"
             title="pause"></span>
-      <span
-        class="oi oi-media-play highlight control-button"
-        [ngClass]="playBackState == 1 ? 'button-active':''"
-        (click)="play()"
-        title="auto play"></span>
-      <span class="oi oi-media-skip-forward highlight control-button"
-            [ngClass]="playBackState == 2 ? 'button-active':''"
-            (click)="fastForward()"
-            title="fast auto play"></span>
+        <span
+          class="oi oi-media-play highlight control-button"
+          [ngClass]="playBackState == 1 ? 'button-active':''"
+          (click)="play()"
+          title="auto play"></span>
+        <span class="oi oi-media-skip-forward highlight control-button"
+              [ngClass]="playBackState == 2 ? 'button-active':''"
+              (click)="fastForward()"
+              title="fast auto play"></span>
+      </div>
+      <div class="controls controls-big-play" *ngIf=" activePhoto && activePhoto.gridPhoto.isVideo() && photo.Paused">
+        <span class="oi oi-media-play"></span>
+      </div>
+
+    </div>
+    <div class="controls controls-video row" *ngIf="activePhoto && activePhoto.gridPhoto.isVideo()">
+      <span class="oi  col-1"
+            [ngClass]="!photo.Paused ? 'oi-media-pause':'oi-media-play'"
+            (click)="photo.playPause()"></span>
+      <input type="range" [(ngModel)]="photo.VideoProgress"
+             min="0" max="100" step="0.1" class="col video-progress">
+      <span class="oi  col-1"
+            [ngClass]="photo.Muted ? 'oi-volume-off':'oi-volume-high'"
+            (click)="photo.mute()"></span>
+      <input type="range"
+             [(ngModel)]="photo.VideoVolume" min="0" max="1" step="0.1"
+             value="1" class="col-2 col-md-1 volume">
     </div>
   </div>
   <app-info-panel *ngIf="activePhoto && infoPanelVisible"

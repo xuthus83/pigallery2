@@ -11,16 +11,14 @@
        (load)="onImageLoad()"
        (error)="onImageError()"/>
 
-  <video *ngIf="gridMedia !== null && gridMedia.isVideo() && loadMedia"
+  <video #video
+          *ngIf="gridMedia !== null && gridMedia.isVideo() && loadMedia"
          [style.width.%]="imageSize.width"
          [style.height.%]="imageSize.height"
-         (loadeddata)="logevent($event)"
-         (loadedmetadata)="logevent($event)"
-         (durationchange)="logevent($event)"
-         (loadstart)="logevent($event)"
+         (loadstart)="onImageLoad()"
          autoplay
-         controls
-         (error)="onImageError()">
+         (error)="onImageError()"
+          (timeupdate)="onVideoProgress()" >
     <source [src]="gridMedia.getPhotoPath()" type="video/mp4">
   </video>
 
