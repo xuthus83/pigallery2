@@ -127,11 +127,12 @@ export class GalleryComponent implements OnInit, OnDestroy {
     this.directories = tmp.directories;
     this.sortDirectories();
     this.isPhotoWithLocation = false;
+
     for (let i = 0; i < tmp.media.length; i++) {
-      if (tmp.media[i].metadata &&
-        tmp.media[i].metadata.positionData &&
-        tmp.media[i].metadata.positionData.GPSData &&
-        tmp.media[i].metadata.positionData.GPSData.longitude
+      if ((<PhotoDTO>tmp.media[i]).metadata &&
+        (<PhotoDTO>tmp.media[i]).metadata.positionData &&
+        (<PhotoDTO>tmp.media[i]).metadata.positionData.GPSData &&
+        (<PhotoDTO>tmp.media[i]).metadata.positionData.GPSData.longitude
       ) {
         this.isPhotoWithLocation = true;
         break;

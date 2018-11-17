@@ -1,6 +1,6 @@
 import {DirectoryDTO} from './DirectoryDTO';
 import {OrientationTypes} from 'ts-exif-parser';
-import {MediaDTO, MediaMetadata, MediaDimension, PositionMetaData} from './MediaDTO';
+import {MediaDTO, MediaMetadata, MediaDimension} from './MediaDTO';
 
 export interface PhotoDTO extends MediaDTO {
   id: number;
@@ -20,6 +20,21 @@ export interface PhotoMetadata extends MediaMetadata {
   creationDate: number;
   fileSize: number;
 }
+
+
+export interface PositionMetaData {
+  GPSData?: GPSMetadata;
+  country?: string;
+  state?: string;
+  city?: string;
+}
+
+export interface GPSMetadata {
+  latitude?: number;
+  longitude?: number;
+  altitude?: number;
+}
+
 
 export interface CameraMetadata {
   ISO?: number;

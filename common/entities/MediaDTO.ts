@@ -1,6 +1,7 @@
 import {DirectoryDTO} from './DirectoryDTO';
 import {PhotoDTO} from './PhotoDTO';
 import {OrientationTypes} from 'ts-exif-parser';
+import {VideoDTO} from './VideoDTO';
 
 export interface MediaDTO {
   id: number;
@@ -13,26 +14,11 @@ export interface MediaDTO {
 
 
 export interface MediaMetadata {
-  keywords: string[];
-  positionData: PositionMetaData;
   size: MediaDimension;
   creationDate: number;
   fileSize: number;
 }
 
-
-export interface PositionMetaData {
-  GPSData?: GPSMetadata;
-  country?: string;
-  state?: string;
-  city?: string;
-}
-
-export interface GPSMetadata {
-  latitude?: number;
-  longitude?: number;
-  altitude?: number;
-}
 
 export interface MediaDimension {
   width: number;
@@ -41,14 +27,14 @@ export interface MediaDimension {
 
 export module MediaDTO {
   export const hasPositionData = (media: MediaDTO): boolean => {
-    return !!media.metadata.positionData &&
-      !!(media.metadata.positionData.city ||
-        media.metadata.positionData.state ||
-        media.metadata.positionData.country ||
-        (media.metadata.positionData.GPSData &&
-          media.metadata.positionData.GPSData.altitude &&
-          media.metadata.positionData.GPSData.latitude &&
-          media.metadata.positionData.GPSData.longitude));
+    return !!(<PhotoDTO>media).metadata.positionData &&
+      !!((<PhotoDTO>media).metadata.positionData.city ||
+        (<PhotoDTO>media).metadata.positionData.state ||
+        (<PhotoDTO>media).metadata.positionData.country ||
+        ((<PhotoDTO>media).metadata.positionData.GPSData &&
+          (<PhotoDTO>media).metadata.positionData.GPSData.altitude &&
+          (<PhotoDTO>media).metadata.positionData.GPSData.latitude &&
+          (<PhotoDTO>media).metadata.positionData.GPSData.longitude));
   };
 
   export const isSideWay = (media: MediaDTO): boolean => {
@@ -61,6 +47,14 @@ export module MediaDTO {
       photo.metadata.orientation === OrientationTypes.LEFT_BOTTOM ||
       photo.metadata.orientation === OrientationTypes.RIGHT_BOTTOM;
 
+  };
+
+  export const isPhoto = (media: MediaDTO): boolean => {
+    return typeof (<PhotoDTO>media).metadata.keywords !== 'undefined' && (<PhotoDTO>media).metadata.keywords !== null;
+  };
+
+  export const isVideo = (media: MediaDTO): boolean => {
+    return !MediaDTO.isPhoto(media);
   };
 
   export const getRotatedSize = (photo: MediaDTO): MediaDimension => {

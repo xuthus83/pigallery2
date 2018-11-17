@@ -11,6 +11,8 @@ import {PasswordHelper} from '../PasswordHelper';
 import {ProjectPath} from '../../ProjectPath';
 import {VersionEntity} from './enitites/VersionEntity';
 import {Logger} from '../../Logger';
+import {MediaEntity} from './enitites/MediaEntity';
+import {VideoEntity} from './enitites/VideoEntity';
 
 
 export class SQLConnection {
@@ -30,7 +32,9 @@ export class SQLConnection {
       options.name = 'main';
       options.entities = [
         UserEntity,
+        MediaEntity,
         PhotoEntity,
+        VideoEntity,
         DirectoryEntity,
         SharingEntity,
         VersionEntity
@@ -53,7 +57,9 @@ export class SQLConnection {
     options.name = 'test';
     options.entities = [
       UserEntity,
+      MediaEntity,
       PhotoEntity,
+      VideoEntity,
       DirectoryEntity,
       SharingEntity,
       VersionEntity

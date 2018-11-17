@@ -16,7 +16,7 @@ import {Dimension} from '../../model/IRenderable';
 import {FullScreenService} from '../fullscreen.service';
 import {OverlayService} from '../overlay.service';
 import {animate, AnimationBuilder, AnimationPlayer, style} from '@angular/animations';
-import {GalleryLightboxPhotoComponent} from './photo/photo.lightbox.gallery.component';
+import {GalleryLightboxMediaComponent} from './media/media.lightbox.gallery.component';
 import {Observable, Subscription, timer} from 'rxjs';
 import {filter} from 'rxjs/operators';
 import {ActivatedRoute, Params, Router} from '@angular/router';
@@ -37,7 +37,7 @@ export enum LightboxStates {
 })
 export class GalleryLightboxComponent implements OnDestroy, OnInit {
 
-  @ViewChild('photo') photoElement: GalleryLightboxPhotoComponent;
+  @ViewChild('photo') mediaElement: GalleryLightboxMediaComponent;
   @ViewChild('lightbox') lightboxElement: ElementRef;
 
   public navigation = {hasPrev: true, hasNext: true};
@@ -245,7 +245,7 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
         break;
       case ' ': // space
         if (this.activePhoto && this.activePhoto.gridPhoto.isVideo()) {
-          this.photoElement.playPause();
+          this.mediaElement.playPause();
         }
         break;
     }
@@ -292,7 +292,7 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
       animate(300,
         style(<any>Dimension.toString(to)))
     ])
-      .create(this.photoElement.elementRef.nativeElement);
+      .create(this.mediaElement.elementRef.nativeElement);
     elem.play();
     return elem;
   }
@@ -356,12 +356,12 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
   public play() {
     this.pause();
     this.timerSub = this.timer.pipe(filter(t => t % 2 === 0)).subscribe(() => {
-      if (this.photoElement.imageLoadFinished === false) {
+      if (this.mediaElement.imageLoadFinished === false) {
         return;
       }
       // do not skip video if its playing
       if (this.activePhoto && this.activePhoto.gridPhoto.isVideo() &&
-        !this.photoElement.Paused) {
+        !this.mediaElement.Paused) {
         return;
       }
       if (this.navigation.hasNext) {
@@ -400,11 +400,11 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
   public fastForward() {
     this.pause();
     this.timerSub = this.timer.subscribe(() => {
-      if (this.photoElement.imageLoadFinished === false) {
+      if (this.mediaElement.imageLoadFinished === false) {
         return;
       }
       if (this.activePhoto && this.activePhoto.gridPhoto.isVideo() &&
-        !this.photoElement.Paused) {
+        !this.mediaElement.Paused) {
         return;
       }
       if (this.navigation.hasNext) {

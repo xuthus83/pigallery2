@@ -1,13 +1,11 @@
-import {Column, Entity, ManyToOne, PrimaryGeneratedColumn} from 'typeorm';
-import {CameraMetadata, PhotoDTO, PhotoMetadata} from '../../../../common/entities/PhotoDTO';
-import {DirectoryEntity} from './DirectoryEntity';
+import {Column, Entity, ChildEntity} from 'typeorm';
+import {CameraMetadata, GPSMetadata, PhotoDTO, PhotoMetadata, PositionMetaData} from '../../../../common/entities/PhotoDTO';
 import {OrientationTypes} from 'ts-exif-parser';
-import {GPSMetadata, MediaDimension, PositionMetaData} from '../../../../common/entities/MediaDTO';
+import {MediaEntity, MediaMetadataEntity} from './MediaEntity';
 
-@Entity()
 export class CameraMetadataEntity implements CameraMetadata {
 
-  @Column('text', {nullable: true})
+  @Column('int', {nullable: true})
   ISO: number;
 
   @Column('text', {nullable: true})
@@ -30,7 +28,6 @@ export class CameraMetadataEntity implements CameraMetadata {
 }
 
 
-@Entity()
 export class GPSMetadataEntity implements GPSMetadata {
 
   @Column('int', {nullable: true})
@@ -41,18 +38,6 @@ export class GPSMetadataEntity implements GPSMetadata {
   altitude: number;
 }
 
-@Entity()
-export class ImageSizeEntity implements MediaDimension {
-
-  @Column('int')
-  width: number;
-
-  @Column('int')
-  height: number;
-}
-
-
-@Entity()
 export class PositionMetaDataEntity implements PositionMetaData {
 
   @Column(type => GPSMetadataEntity)
@@ -69,11 +54,10 @@ export class PositionMetaDataEntity implements PositionMetaData {
 }
 
 
-@Entity()
-export class PhotoMetadataEntity implements PhotoMetadata {
+export class PhotoMetadataEntity extends MediaMetadataEntity implements PhotoMetadata {
 
   @Column('simple-array')
-  keywords: Array<string>;
+  keywords: string[];
 
   @Column(type => CameraMetadataEntity)
   cameraData: CameraMetadataEntity;
@@ -84,34 +68,11 @@ export class PhotoMetadataEntity implements PhotoMetadata {
   @Column('tinyint', {default: OrientationTypes.TOP_LEFT})
   orientation: OrientationTypes;
 
-  @Column(type => ImageSizeEntity)
-  size: ImageSizeEntity;
-
-  @Column('bigint')
-  creationDate: number;
-
-  @Column('int')
-  fileSize: number;
 }
 
 
-@Entity()
-export class PhotoEntity implements PhotoDTO {
-
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @Column('text')
-  name: string;
-
-  @ManyToOne(type => DirectoryEntity, directory => directory.media, {onDelete: 'CASCADE'})
-  directory: DirectoryEntity;
-
+@ChildEntity()
+export class PhotoEntity extends MediaEntity implements PhotoDTO {
   @Column(type => PhotoMetadataEntity)
   metadata: PhotoMetadataEntity;
-
-  readyThumbnails: Array<number> = [];
-
-  readyIcon = false;
-
 }

@@ -20,7 +20,7 @@ import {FullScreenService} from './gallery/fullscreen.service';
 import {AuthenticationService} from './model/network/authentication.service';
 import {UserMangerSettingsComponent} from './settings/usermanager/usermanager.settings.component';
 import {FrameComponent} from './frame/frame.component';
-import {GalleryLightboxPhotoComponent} from './gallery/lightbox/photo/photo.lightbox.gallery.component';
+import {GalleryLightboxMediaComponent} from './gallery/lightbox/media/media.lightbox.gallery.component';
 import {GalleryPhotoLoadingComponent} from './gallery/grid/photo/loading/loading.photo.grid.gallery.component';
 import {GalleryNavigatorComponent} from './gallery/navigator/navigator.gallery.component';
 import {GallerySearchComponent} from './gallery/search/search.gallery.component';
@@ -139,7 +139,7 @@ export function translationsFactory(locale: string) {
     FrameComponent,
     LanguageComponent,
     // Gallery
-    GalleryLightboxPhotoComponent,
+    GalleryLightboxMediaComponent,
     GalleryPhotoLoadingComponent,
     GalleryGridComponent,
     GalleryDirectoryComponent,

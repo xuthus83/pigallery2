@@ -1,16 +1,16 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import {DirectoryDTO} from '../../../common/entities/DirectoryDTO';
-import {CameraMetadata, PhotoDTO, PhotoMetadata} from '../../../common/entities/PhotoDTO';
+import {CameraMetadata, GPSMetadata, PhotoDTO, PhotoMetadata} from '../../../common/entities/PhotoDTO';
 import {Logger} from '../../Logger';
 import {IptcParser} from 'ts-node-iptc';
 import {ExifParserFactory, OrientationTypes} from 'ts-exif-parser';
 import * as ffmpeg from 'fluent-ffmpeg';
-import {FfmpegCommand, FfprobeData} from 'fluent-ffmpeg';
+import {FfprobeData} from 'fluent-ffmpeg';
 import {ProjectPath} from '../../ProjectPath';
 import {Config} from '../../../common/config/private/Config';
-import {VideoDTO} from '../../../common/entities/VideoDTO';
-import {GPSMetadata, MediaDimension, MediaMetadata} from '../../../common/entities/MediaDTO';
+import {VideoDTO, VideoMetadata} from '../../../common/entities/VideoDTO';
+import {MediaDimension, MediaMetadata} from '../../../common/entities/MediaDTO';
 
 const LOG_TAG = '[DiskManagerTask]';
 
@@ -87,7 +87,7 @@ export class DiskMangerWorker {
               directory.media.push(<VideoDTO>{
                 name: file,
                 directory: null,
-                metadata: await DiskMangerWorker.loadPVideoMetadata(fullFilePath)
+                metadata: await DiskMangerWorker.loadVideoMetadata(fullFilePath)
               });
 
               if (maxPhotos != null && directory.media.length > maxPhotos) {
@@ -106,16 +106,15 @@ export class DiskMangerWorker {
 
   }
 
-  private static loadPVideoMetadata(fullPath: string): Promise<MediaMetadata> {
-    return new Promise<MediaMetadata>((resolve, reject) => {
-      const metadata: MediaMetadata = <MediaMetadata>{
-        keywords: [],
-        positionData: null,
+  public static loadVideoMetadata(fullPath: string): Promise<VideoMetadata> {
+    return new Promise<VideoMetadata>((resolve, reject) => {
+      const metadata: VideoMetadata = <VideoMetadata>{
         size: {
           width: 0,
           height: 0
         },
-        orientation: OrientationTypes.TOP_LEFT,
+        bitRate: 0,
+        duration: 0,
         creationDate: 0,
         fileSize: 0
       };
@@ -129,13 +128,20 @@ export class DiskMangerWorker {
           return reject(err);
         }
 
-        metadata.size = {
-          width: data.streams[0].width,
-          height: data.streams[0].height
-        };
+        if (!data.streams[0]) {
+          return resolve(metadata);
+        }
 
         try {
-          metadata.creationDate = data.streams[0].tags.creation_time;
+
+          metadata.size = {
+            width: data.streams[0].width,
+            height: data.streams[0].height
+          };
+
+          metadata.duration = Math.floor(data.streams[0].duration * 1000);
+          metadata.bitRate = data.streams[0].bit_rate;
+          metadata.creationDate = Date.parse(data.streams[0].tags.creation_time);
         } catch (err) {
         }
 
@@ -144,7 +150,7 @@ export class DiskMangerWorker {
     });
   }
 
-  private static loadPhotoMetadata(fullPath: string): Promise<PhotoMetadata> {
+  public static loadPhotoMetadata(fullPath: string): Promise<PhotoMetadata> {
     return new Promise<PhotoMetadata>((resolve, reject) => {
         fs.readFile(fullPath, (err, data) => {
           if (err) {
@@ -220,7 +226,7 @@ export class DiskMangerWorker {
               metadata.creationDate = <number> (iptcData.date_time ? iptcData.date_time.getTime() : metadata.creationDate);
 
             } catch (err) {
-              // Logger.debug(LOG_TAG, "Error parsing iptc data", fullPath, err);
+              Logger.debug(LOG_TAG, 'Error parsing iptc data', fullPath, err);
             }
 
             metadata.creationDate = metadata.creationDate || 0;

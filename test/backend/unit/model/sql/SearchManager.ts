@@ -7,7 +7,6 @@ import {SQLConnection} from '../../../../../backend/model/sql/SQLConnection';
 import {
   CameraMetadataEntity,
   GPSMetadataEntity,
-  ImageSizeEntity,
   PhotoEntity,
   PhotoMetadataEntity,
   PositionMetaDataEntity
@@ -16,6 +15,7 @@ import {SearchManager} from '../../../../../backend/model/sql/SearchManager';
 import {AutoCompleteItem, SearchTypes} from '../../../../../common/entities/AutoCompleteItem';
 import {SearchResultDTO} from '../../../../../common/entities/SearchResultDTO';
 import {DirectoryEntity} from '../../../../../backend/model/sql/enitites/DirectoryEntity';
+import {MediaDimensionEntity} from '../../../../../backend/model/sql/enitites/MediaEntity';
 
 describe('SearchManager', () => {
 
@@ -30,7 +30,7 @@ describe('SearchManager', () => {
   dir.lastScanned = null;
 
   const getPhoto = () => {
-    const sd = new ImageSizeEntity();
+    const sd = new MediaDimensionEntity();
     sd.height = 200;
     sd.width = 200;
     const gps = new GPSMetadataEntity();

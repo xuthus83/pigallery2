@@ -5,11 +5,11 @@
   </div>
 
   <div class="lightbox" #lightbox>
-    <app-gallery-lightbox-photo [gridMedia]="activePhoto ? activePhoto.gridPhoto : null"
+    <app-gallery-lightbox-media [gridMedia]="activePhoto ? activePhoto.gridPhoto : null"
                                 [loadMedia]="!animating"
                                 [windowAspect]="getWindowAspectRatio()"
                                 #photo>
-    </app-gallery-lightbox-photo>
+    </app-gallery-lightbox-media>
   </div>
   <div
     *ngIf="controllersVisible"
@@ -110,7 +110,7 @@
                   id="info-panel"
                   [style.width.px]="infoPanelWidth"
                   [media]="activePhoto.gridPhoto.photo"
-                  (onClose)="hideInfoPanel()">
+                  (closed)="hideInfoPanel()">
 
   </app-info-panel>
 </div>

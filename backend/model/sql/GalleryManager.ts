@@ -13,7 +13,10 @@ import {ISQLGalleryManager} from './IGalleryManager';
 import {ReIndexingSensitivity} from '../../../common/config/private/IPrivateConfig';
 import {PhotoDTO} from '../../../common/entities/PhotoDTO';
 import {OrientationType} from '../../../common/entities/RandomQueryDTO';
-import {Brackets} from 'typeorm';
+import {Connection, Brackets} from 'typeorm';
+import {MediaEntity} from './enitites/MediaEntity';
+import {MediaDTO} from '../../../common/entities/MediaDTO';
+import {VideoEntity} from './enitites/VideoEntity';
 
 export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
 
@@ -35,7 +38,7 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
         path: directoryParent
       })
       .leftJoinAndSelect('directory.directories', 'directories')
-      .leftJoinAndSelect('directory.photos', 'photos')
+      .leftJoinAndSelect('directory.media', 'media')
       .getOne();
 
 
@@ -63,7 +66,7 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
       if (dir.directories) {
         for (let i = 0; i < dir.directories.length; i++) {
           dir.directories[i].media = await connection
-            .getRepository(PhotoEntity)
+            .getRepository(MediaEntity)
             .createQueryBuilder('media')
             .where('media.directory = :dir', {
               dir: dir.directories[i].id
@@ -132,10 +135,10 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
 
     // saving to db
     const directoryRepository = connection.getRepository(DirectoryEntity);
-    const photosRepository = connection.getRepository(PhotoEntity);
+    const mediaRepository = connection.getRepository(MediaEntity);
 
 
-    let currentDir = await directoryRepository.createQueryBuilder('directory')
+    let currentDir: DirectoryEntity = await directoryRepository.createQueryBuilder('directory')
       .where('directory.name = :name AND directory.path = :path', {
         name: scannedDirectory.name,
         path: scannedDirectory.path
@@ -144,10 +147,18 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
     if (!!currentDir) {// Updated parent dir (if it was in the DB previously)
       currentDir.lastModified = scannedDirectory.lastModified;
       currentDir.lastScanned = scannedDirectory.lastScanned;
+      const media: MediaEntity[] = currentDir.media;
+      delete currentDir.media;
       currentDir = await directoryRepository.save(currentDir);
+      media.forEach(m => m.directory = currentDir);
+      currentDir.media = await this.saveMedia(connection, media);
     } else {
+      const media = scannedDirectory.media;
+      delete scannedDirectory.media;
       (<DirectoryEntity>scannedDirectory).lastScanned = scannedDirectory.lastScanned;
       currentDir = await directoryRepository.save(<DirectoryEntity>scannedDirectory);
+      media.forEach(m => m.directory = currentDir);
+      currentDir.media = await this.saveMedia(connection, media);
     }
 
     const childDirectories = await directoryRepository.createQueryBuilder('directory')
@@ -180,7 +191,7 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
           scannedDirectory.directories[i].media[j].directory = d;
         }
 
-        await photosRepository.save(scannedDirectory.directories[i].media);
+        await this.saveMedia(connection, scannedDirectory.directories[i].media);
       }
     }
 
@@ -188,53 +199,49 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
     await directoryRepository.remove(childDirectories);
 
 
-    const indexedPhotos = await photosRepository.createQueryBuilder('media')
+    const indexedMedia = await mediaRepository.createQueryBuilder('media')
       .where('media.directory = :dir', {
         dir: currentDir.id
       }).getMany();
 
 
-    const photosToSave = [];
+    const mediaToSave = [];
     for (let i = 0; i < scannedDirectory.media.length; i++) {
-      let photo = null;
-      for (let j = 0; j < indexedPhotos.length; j++) {
-        if (indexedPhotos[j].name === scannedDirectory.media[i].name) {
-          photo = indexedPhotos[j];
-          indexedPhotos.splice(j, 1);
+      let media = null;
+      for (let j = 0; j < indexedMedia.length; j++) {
+        if (indexedMedia[j].name === scannedDirectory.media[i].name) {
+          media = indexedMedia[j];
+          indexedMedia.splice(j, 1);
           break;
         }
       }
-      if (photo == null) {
+      if (media == null) {
         scannedDirectory.media[i].directory = null;
-        photo = Utils.clone(scannedDirectory.media[i]);
+        media = Utils.clone(scannedDirectory.media[i]);
         scannedDirectory.media[i].directory = scannedDirectory;
-        photo.directory = currentDir;
+        media.directory = currentDir;
       }
 
-      if (photo.metadata.keywords !== scannedDirectory.media[i].metadata.keywords ||
-        photo.metadata.cameraData !== (<PhotoDTO>scannedDirectory.media[i]).metadata.cameraData ||
-        photo.metadata.positionData !== scannedDirectory.media[i].metadata.positionData ||
-        photo.metadata.size !== scannedDirectory.media[i].metadata.size) {
 
-        photo.metadata.keywords = scannedDirectory.media[i].metadata.keywords;
-        photo.metadata.cameraData = (<PhotoDTO>scannedDirectory.media[i]).metadata.cameraData;
-        photo.metadata.positionData = scannedDirectory.media[i].metadata.positionData;
-        photo.metadata.size = scannedDirectory.media[i].metadata.size;
-        photosToSave.push(photo);
+      if (!Utils.equalsFilter(media.metadata, scannedDirectory.media[i].metadata)) {
+        media.metadata = (<PhotoDTO>scannedDirectory.media[i]).metadata;
+        mediaToSave.push(media);
       }
     }
-    await photosRepository.save(photosToSave);
-    await photosRepository.remove(indexedPhotos);
+    await this.saveMedia(connection, mediaToSave);
+    await mediaRepository.remove(indexedMedia);
+  }
 
-
+  private async saveMedia(connection: Connection, mediaList: MediaDTO[]): Promise<MediaEntity[]> {
+    const list = await connection.getRepository(VideoEntity).save(<VideoEntity[]>mediaList.filter(m => MediaDTO.isVideo(m)));
+    return list.concat(await connection.getRepository(PhotoEntity).save(<PhotoEntity[]>mediaList.filter(m => MediaDTO.isPhoto(m))));
   }
 
   async getRandomPhoto(queryFilter: RandomQuery): Promise<PhotoDTO> {
     const connection = await SQLConnection.getConnection();
     const photosRepository = connection.getRepository(PhotoEntity);
-
-    const query = photosRepository.createQueryBuilder('media');
-    query.innerJoinAndSelect('media.directory', 'directory');
+    const query = photosRepository.createQueryBuilder('photo');
+    query.innerJoinAndSelect('photo.directory', 'directory');
 
     if (queryFilter.directory) {
       const directoryName = path.basename(queryFilter.directory);

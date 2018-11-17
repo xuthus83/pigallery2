@@ -1,6 +1,6 @@
 import {Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn} from 'typeorm';
 import {DirectoryDTO} from '../../../../common/entities/DirectoryDTO';
-import {PhotoEntity} from './PhotoEntity';
+import {MediaEntity} from './MediaEntity';
 
 @Entity()
 export class DirectoryEntity implements DirectoryDTO {
@@ -32,9 +32,9 @@ export class DirectoryEntity implements DirectoryDTO {
   public parent: DirectoryEntity;
 
   @OneToMany(type => DirectoryEntity, dir => dir.parent)
-  public directories: Array<DirectoryEntity>;
+  public directories: DirectoryEntity[];
 
-  @OneToMany(type => PhotoEntity, photo => photo.directory)
-  public media: Array<PhotoEntity>;
+  @OneToMany(type => MediaEntity, media => media.directory)
+  public media: MediaEntity[];
 
 }

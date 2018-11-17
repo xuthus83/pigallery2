@@ -11,11 +11,11 @@ import {DirectoryEntity} from '../../../../../backend/model/sql/enitites/Directo
 import {
   CameraMetadataEntity,
   GPSMetadataEntity,
-  ImageSizeEntity,
   PhotoEntity,
   PhotoMetadataEntity,
   PositionMetaDataEntity
 } from '../../../../../backend/model/sql/enitites/PhotoEntity';
+import {MediaDimensionEntity} from '../../../../../backend/model/sql/enitites/MediaEntity';
 
 describe('Typeorm integration', () => {
 
@@ -68,7 +68,7 @@ describe('Typeorm integration', () => {
 
 
   const getPhoto = () => {
-    const sd = new ImageSizeEntity();
+    const sd = new MediaDimensionEntity();
     sd.height = 200;
     sd.width = 200;
     const gps = new GPSMetadataEntity();
@@ -146,7 +146,7 @@ describe('Typeorm integration', () => {
     const conn = await SQLConnection.getConnection();
     const pr = conn.getRepository(PhotoEntity);
     const dir = await conn.getRepository(DirectoryEntity).save(getDir());
-    let photo = getPhoto();
+    const photo = getPhoto();
     photo.directory = dir;
     await pr.save(photo);
     expect((await pr.find()).length).to.equal(1);
@@ -156,11 +156,11 @@ describe('Typeorm integration', () => {
     const conn = await SQLConnection.getConnection();
     const pr = conn.getRepository(PhotoEntity);
     const dir = await conn.getRepository(DirectoryEntity).save(getDir());
-    let photo = getPhoto();
+    const photo = getPhoto();
     photo.directory = dir;
     await pr.save(photo);
 
-    let photos = await pr
+    const photos = await pr
       .createQueryBuilder('media')
       .orderBy('media.metadata.creationDate', 'ASC')
       .where('media.metadata.positionData.city LIKE :text COLLATE utf8_general_ci', {text: '%' + photo.metadata.positionData.city + '%'})
@@ -177,12 +177,12 @@ describe('Typeorm integration', () => {
     const conn = await SQLConnection.getConnection();
     const pr = conn.getRepository(PhotoEntity);
     const dir = await conn.getRepository(DirectoryEntity).save(getDir());
-    let photo = getPhoto();
+    const photo = getPhoto();
     photo.directory = dir;
     const city = photo.metadata.positionData.city;
     photo.metadata.positionData = null;
     await pr.save(photo);
-    let photos = await pr
+    const photos = await pr
       .createQueryBuilder('media')
       .orderBy('media.metadata.creationDate', 'ASC')
       .where('media.metadata.positionData.city LIKE :text COLLATE utf8_general_ci', {text: '%' + city + '%'})
@@ -196,10 +196,10 @@ describe('Typeorm integration', () => {
   it('should open and close connection twice with media added ', async () => {
     let conn = await SQLConnection.getConnection();
     const dir = await conn.getRepository(DirectoryEntity).save(getDir());
-    let dir2 = getDir();
+    const dir2 = getDir();
     dir2.parent = dir;
     await conn.getRepository(DirectoryEntity).save(dir2);
-    let photo = getPhoto();
+    const photo = getPhoto();
     photo.directory = dir2;
     await await conn.getRepository(PhotoEntity).save(photo);
     await SQLConnection.close();

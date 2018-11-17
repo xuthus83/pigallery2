@@ -1,15 +1,14 @@
 import {Component, ElementRef, Input, Output, OnChanges, ViewChild} from '@angular/core';
 import {GridMedia} from '../../grid/GridMedia';
-import {PhotoDTO} from '../../../../../common/entities/PhotoDTO';
 import {FixOrientationPipe} from '../../FixOrientationPipe';
 import {MediaDTO} from '../../../../../common/entities/MediaDTO';
 
 @Component({
-  selector: 'app-gallery-lightbox-photo',
-  styleUrls: ['./photo.lightbox.gallery.component.css'],
-  templateUrl: './photo.lightbox.gallery.component.html'
+  selector: 'app-gallery-lightbox-media',
+  styleUrls: ['./media.lightbox.gallery.component.css'],
+  templateUrl: './media.lightbox.gallery.component.html'
 })
-export class GalleryLightboxPhotoComponent implements OnChanges {
+export class GalleryLightboxMediaComponent implements OnChanges {
 
   @Input() gridMedia: GridMedia;
   @Input() loadMedia = false;
@@ -26,7 +25,7 @@ export class GalleryLightboxPhotoComponent implements OnChanges {
 
   thumbnailSrc: string = null;
   photoSrc: string = null;
-  private videoProgress: number = 0;
+  private videoProgress = 0;
 
   constructor(public elementRef: ElementRef) {
   }
@@ -49,10 +48,9 @@ export class GalleryLightboxPhotoComponent implements OnChanges {
       FixOrientationPipe.transform(this.gridMedia.getPhotoPath(), this.gridMedia.Orientation)
         .then((src) => this.photoSrc = src);
     }
-
-
   }
 
+  /** Video **/
   private onVideoProgress() {
     this.videoProgress = (100 / this.video.nativeElement.duration) * this.video.nativeElement.currentTime;
   }
@@ -124,7 +122,7 @@ export class GalleryLightboxPhotoComponent implements OnChanges {
   onImageError() {
     // TODO:handle error
     this.imageLoadFinished = true;
-    console.error('Error: cannot load image for lightbox url: ' + this.gridMedia.getPhotoPath());
+    console.error('Error: cannot load media for lightbox url: ' + this.gridMedia.getPhotoPath());
   }
 
 

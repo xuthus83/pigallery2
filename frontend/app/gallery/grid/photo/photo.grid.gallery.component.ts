@@ -7,6 +7,7 @@ import {Thumbnail, ThumbnailManagerService} from '../../thumnailManager.service'
 import {Config} from '../../../../../common/config/public/Config';
 import {AnimationBuilder} from '@angular/animations';
 import {PageHelper} from '../../../model/page.helper';
+import {PhotoDTO} from '../../../../../common/entities/PhotoDTO';
 
 @Component({
   selector: 'app-gallery-grid-photo',
@@ -75,12 +76,12 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, OnDestroy {
 
 
   getPositionText(): string {
-    if (!this.gridPhoto) {
+    if (!this.gridPhoto || !this.gridPhoto.isPhoto()) {
       return '';
     }
-    return this.gridPhoto.media.metadata.positionData.city ||
-      this.gridPhoto.media.metadata.positionData.state ||
-      this.gridPhoto.media.metadata.positionData.country;
+    return (<PhotoDTO>this.gridPhoto.media).metadata.positionData.city ||
+      (<PhotoDTO>this.gridPhoto.media).metadata.positionData.state ||
+      (<PhotoDTO>this.gridPhoto.media).metadata.positionData.country;
   }
 
 

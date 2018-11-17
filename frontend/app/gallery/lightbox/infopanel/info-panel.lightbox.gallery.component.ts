@@ -10,7 +10,8 @@ import {MediaDTO} from '../../../../../common/entities/MediaDTO';
 })
 export class InfoPanelLightboxComponent {
   @Input() media: MediaDTO;
-  @Output('onClose') onClose = new EventEmitter();
+  @Output() closed = new EventEmitter();
+
   public mapEnabled = true;
 
   constructor(public elementRef: ElementRef) {
@@ -56,21 +57,21 @@ export class InfoPanelLightboxComponent {
   }
 
   hasGPS() {
-    return this.media.metadata.positionData && this.media.metadata.positionData.GPSData &&
-      this.media.metadata.positionData.GPSData.latitude && this.media.metadata.positionData.GPSData.longitude;
+    return (<PhotoDTO>this.media).metadata.positionData && (<PhotoDTO>this.media).metadata.positionData.GPSData &&
+      (<PhotoDTO>this.media).metadata.positionData.GPSData.latitude && (<PhotoDTO>this.media).metadata.positionData.GPSData.longitude;
   }
 
   getPositionText(): string {
-    if (!this.media.metadata.positionData) {
+    if (!(<PhotoDTO>this.media).metadata.positionData) {
       return '';
     }
-    let str = this.media.metadata.positionData.city ||
-      this.media.metadata.positionData.state || '';
+    let str = (<PhotoDTO>this.media).metadata.positionData.city ||
+      (<PhotoDTO>this.media).metadata.positionData.state || '';
 
     if (str.length !== 0) {
       str += ', ';
     }
-    str += this.media.metadata.positionData.country || '';
+    str += (<PhotoDTO>this.media).metadata.positionData.country || '';
 
     return str;
   }
@@ -80,7 +81,7 @@ export class InfoPanelLightboxComponent {
   }
 
   close() {
-    this.onClose.emit();
+    this.closed.emit();
   }
 }
 

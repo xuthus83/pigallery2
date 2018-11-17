@@ -13,7 +13,7 @@ describe('DiskMangerWorker', () => {
     const dir = await DiskMangerWorker.scanDirectory('/');
     expect(dir.media.length).to.be.equals(1);
     expect(dir.media[0].name).to.be.equals('test image öüóőúéáű-.,.jpg');
-    expect(dir.media[0].metadata.keywords).to.deep.equals(['Berkley', 'USA', 'űáéúőóüö ŰÁÉÚŐÓÜÖ']);
+    expect((<PhotoDTO>dir.media[0]).metadata.keywords).to.deep.equals(['Berkley', 'USA', 'űáéúőóüö ŰÁÉÚŐÓÜÖ']);
     expect(dir.media[0].metadata.fileSize).to.deep.equals(62392);
     expect(dir.media[0].metadata.size).to.deep.equals({width: 140, height: 93});
     expect((<PhotoDTO>dir.media[0]).metadata.cameraData).to.deep.equals({
@@ -26,7 +26,7 @@ describe('DiskMangerWorker', () => {
       lens: 'EF-S15-85mm f/3.5-5.6 IS USM'
     });
 
-    expect(dir.media[0].metadata.positionData).to.deep.equals({
+    expect((<PhotoDTO>dir.media[0]).metadata.positionData).to.deep.equals({
       GPSData: {
         latitude: 37.871093333333334,
         longitude: -122.25678,

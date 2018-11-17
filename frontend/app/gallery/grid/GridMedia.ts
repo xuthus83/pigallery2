@@ -15,11 +15,11 @@ export class GridMedia extends Media {
   }
 
   isPhoto(): boolean {
-    return typeof (<PhotoDTO>this.media).metadata.cameraData !== 'undefined';
+    return MediaDTO.isPhoto(this.media);
   }
 
   isVideo(): boolean {
-    return typeof (<PhotoDTO>this.media).metadata.cameraData === 'undefined';
+    return MediaDTO.isVideo(this.media);
   }
 
 
