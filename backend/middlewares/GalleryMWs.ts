@@ -11,6 +11,8 @@ import {ProjectPath} from '../ProjectPath';
 import {Config} from '../../common/config/private/Config';
 import {UserDTO} from '../../common/entities/UserDTO';
 import {RandomQuery} from '../model/interfaces/IGalleryManager';
+import {MediaDTO} from '../../common/entities/MediaDTO';
+import {VideoDTO} from '../../common/entities/VideoDTO';
 
 
 const LOG_TAG = '[GalleryMWs]';
@@ -71,8 +73,28 @@ export class GalleryMWs {
 
     };
 
+    const cleanUpMedia = (media: MediaDTO[]) => {
+      media.forEach(m => {
+        if (MediaDTO.isPhoto(m)) {
+          delete (<VideoDTO>m).metadata.bitRate;
+          delete (<VideoDTO>m).metadata.duration;
+        } else if (MediaDTO.isVideo(m)) {
+          delete (<PhotoDTO>m).metadata.cameraData;
+          delete (<PhotoDTO>m).metadata.orientation;
+          delete (<PhotoDTO>m).metadata.orientation;
+          delete (<PhotoDTO>m).metadata.keywords;
+          delete (<PhotoDTO>m).metadata.positionData;
+        }
+      });
+    };
+
     if (cw.directory) {
       removeDirs(cw.directory);
+      // TODO: remove when typeorm inheritance is fixed
+      cleanUpMedia(cw.directory.media);
+    }
+    if (cw.searchResult) {
+      cleanUpMedia(cw.searchResult.media);
     }
 
 

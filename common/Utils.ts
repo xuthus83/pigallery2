@@ -5,6 +5,11 @@ export class Utils {
     return JSON.parse(JSON.stringify(object));
   }
 
+  static zeroPrefix(value, length: number) {
+    const ret = '00000' + value;
+    return ret.substr(ret.length - length);
+  }
+
   static equalsFilter(object: any, filter: any): boolean {
     if (typeof filter !== 'object' || filter == null) {
       return object === filter;

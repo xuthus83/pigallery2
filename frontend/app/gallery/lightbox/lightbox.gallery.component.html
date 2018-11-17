@@ -16,52 +16,53 @@
     id="controllers-container"
     #controls
     [style.width.px]="getPhotoFrameWidth()"
-    [ngClass]="!controllersDimmed ? 'dim-controls':  ''">
+    [ngClass]="!controllersDimmed ? (activePhoto && activePhoto.gridPhoto.isVideo() ? 'dim-controls-video' :'dim-controls'):  ''">
+
+    <div class="controls controls-top">
+      <a *ngIf="activePhoto"
+         class="highlight control-button"
+         [href]="activePhoto.gridPhoto.getPhotoPath()"
+         [download]="activePhoto.gridPhoto.media.name">
+        <span class="oi oi-data-transfer-download"
+              title="download" i18n-title></span>
+      </a>
+
+      <div class=" highlight control-button" (click)="toggleInfoPanel()"
+           title="info" i18n-title>
+        <span class="oi oi-info"></span>
+      </div>
+
+      <div *ngIf="fullScreenService.isFullScreenEnabled()"
+           class=" highlight control-button"
+           (click)="fullScreenService.exitFullScreen()"
+           title="toggle fullscreen" i18n-title>
+        <span class="oi oi-fullscreen-exit">
+
+        </span>
+      </div>
+
+      <div *ngIf="!fullScreenService.isFullScreenEnabled()"
+           class="highlight control-button"
+           (click)="fullScreenService.showFullScreen(root)"
+           title="toggle fullscreen" i18n-title>
+        <span class="oi oi-fullscreen-enter">
+        </span>
+      </div>
+
+      <div class="highlight control-button"
+           (click)="hide()"
+           title="close" i18n-title>
+        <span class="oi oi-x">
+
+        </span>
+      </div>
+    </div>
     <div id="swipeable-container"
          (swipeleft)="nextImage()"
          (swiperight)="prevImage()"
          (swipeup)="hide()"
          (click)="photo.playPause()">
 
-      <div class="controls controls-top">
-        <a *ngIf="activePhoto"
-           class="highlight control-button"
-           [href]="activePhoto.gridPhoto.getPhotoPath()"
-           [download]="activePhoto.gridPhoto.media.name">
-        <span class="oi oi-data-transfer-download"
-              title="download" i18n-title></span>
-        </a>
-
-        <div class=" highlight control-button" (click)="toggleInfoPanel()"
-             title="info" i18n-title>
-          <span class="oi oi-info"></span>
-        </div>
-
-        <div *ngIf="fullScreenService.isFullScreenEnabled()"
-             class=" highlight control-button"
-             (click)="fullScreenService.exitFullScreen()"
-             title="toggle fullscreen" i18n-title>
-        <span class="oi oi-fullscreen-exit">
-
-        </span>
-        </div>
-
-        <div *ngIf="!fullScreenService.isFullScreenEnabled()"
-             class="highlight control-button"
-             (click)="fullScreenService.showFullScreen(root)"
-             title="toggle fullscreen" i18n-title>
-        <span class="oi oi-fullscreen-enter">
-        </span>
-        </div>
-
-        <div class="highlight control-button"
-             (click)="hide()"
-             title="close" i18n-title>
-        <span class="oi oi-x">
-
-        </span>
-        </div>
-      </div>
 
       <div class="navigation-arrow highlight"
            *ngIf="navigation.hasPrev" title="key: left arrow" id="leftArrow" i18n-title
@@ -72,7 +73,7 @@
            (click)="nextImage()"><span
         class="oi oi-chevron-right"></span></div>
 
-      <div class="controls controls-playback"  *ngIf="activePhoto && activePhoto.gridPhoto.isPhoto()">
+      <div class="controls controls-playback" *ngIf="activePhoto && activePhoto.gridPhoto.isPhoto()">
       <span class="oi oi-media-pause highlight control-button"
             [ngClass]="playBackState == 0 ? 'button-disabled':''"
             (click)="pause()"
@@ -109,7 +110,7 @@
   <app-info-panel *ngIf="activePhoto && infoPanelVisible"
                   id="info-panel"
                   [style.width.px]="infoPanelWidth"
-                  [media]="activePhoto.gridPhoto.photo"
+                  [media]="activePhoto.gridPhoto.media"
                   (closed)="hideInfoPanel()">
 
   </app-info-panel>

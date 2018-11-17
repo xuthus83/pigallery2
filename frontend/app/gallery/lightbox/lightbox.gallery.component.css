@@ -64,6 +64,10 @@ app-gallery-lightbox-photo {
   opacity: 0.1;
 }
 
+#controllers-container.dim-controls-video {
+  opacity: 0;
+}
+
 #swipeable-container{
   height: 100%;
 }

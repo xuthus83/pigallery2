@@ -62,7 +62,7 @@ export class GalleryLightboxMediaComponent implements OnChanges {
 
   public get VideoVolume(): number {
     if (!this.video) {
-      return 100;
+      return 1;
     }
     return this.video.nativeElement.volume;
   }
@@ -88,7 +88,7 @@ export class GalleryLightboxMediaComponent implements OnChanges {
 
   public get Muted(): boolean {
     if (!this.video) {
-      return true;
+      return false;
     }
     return this.video.nativeElement.muted;
   }

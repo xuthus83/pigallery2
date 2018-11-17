@@ -1,7 +1,9 @@
 import {Component, ElementRef, EventEmitter, Input, Output} from '@angular/core';
-import {CameraMetadata, PhotoDTO} from '../../../../../common/entities/PhotoDTO';
+import {CameraMetadata, PhotoDTO, PositionMetaData} from '../../../../../common/entities/PhotoDTO';
 import {Config} from '../../../../../common/config/public/Config';
 import {MediaDTO} from '../../../../../common/entities/MediaDTO';
+import {VideoDTO, VideoMetadata} from '../../../../../common/entities/VideoDTO';
+import {Utils} from '../../../../../common/Utils';
 
 @Component({
   selector: 'app-info-panel',
@@ -18,14 +20,26 @@ export class InfoPanelLightboxComponent {
     this.mapEnabled = Config.Client.Map.enabled;
   }
 
+  isPhoto() {
+    return this.media && MediaDTO.isPhoto(this.media);
+  }
+
   calcMpx() {
     return (this.media.metadata.size.width * this.media.metadata.size.height / 1000000).toFixed(2);
   }
 
-  calcFileSize() {
+  renderDuration(time: number) {
+    const h = Math.floor(time / 1000 / 60 / 60);
+    time %= 1000 * 60 * 60;
+    const m = Math.floor(time / 1000 / 60);
+    time %= 1000 * 60;
+    const s = Math.floor(time / 1000);
+    return Utils.zeroPrefix(h, 2) + ':' + Utils.zeroPrefix(m, 2) + ':' + Utils.zeroPrefix(s, 2);
+  }
+
+  calcSize(size: number) {
     const postFixes = ['B', 'KB', 'MB', 'GB', 'TB'];
     let index = 0;
-    let size = this.media.metadata.fileSize;
     while (size > 1000 && index < postFixes.length - 1) {
       size /= 1000;
       index++;
@@ -52,13 +66,27 @@ export class InfoPanelLightboxComponent {
     return '1/' + (1 / f);
   }
 
+  get VideoData(): VideoMetadata {
+    if (typeof (<VideoDTO>this.media).metadata.bitRate === 'undefined') {
+      return null;
+    }
+    return (<VideoDTO>this.media).metadata;
+  }
+
   hasPositionData(): boolean {
-    return MediaDTO.hasPositionData(this.media);
+    return !!(<PhotoDTO>this.media).metadata.positionData &&
+      !!((<PhotoDTO>this.media).metadata.positionData.city ||
+        (<PhotoDTO>this.media).metadata.positionData.state ||
+        (<PhotoDTO>this.media).metadata.positionData.country);
   }
 
   hasGPS() {
     return (<PhotoDTO>this.media).metadata.positionData && (<PhotoDTO>this.media).metadata.positionData.GPSData &&
       (<PhotoDTO>this.media).metadata.positionData.GPSData.latitude && (<PhotoDTO>this.media).metadata.positionData.GPSData.longitude;
+  }
+
+  get PositionData(): PositionMetaData {
+    return (<PhotoDTO>this.media).metadata.positionData;
   }
 
   getPositionText(): string {

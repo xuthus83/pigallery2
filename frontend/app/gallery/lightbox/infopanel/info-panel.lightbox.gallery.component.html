@@ -15,8 +15,8 @@
       </div>
       <div class="details-sub row">
         <div class="col-4">{{media.metadata.size.width}} x {{media.metadata.size.height}}</div>
-        <div class="col-4">{{calcMpx()}}MP</div>
-        <div class="col-4" *ngIf="media.metadata.fileSize">{{calcFileSize()}}</div>
+        <div class="col-4" *ngIf="isPhoto()">{{calcMpx()}}MP</div>
+        <div class="col-4" *ngIf="media.metadata.fileSize">{{calcSize(media.metadata.fileSize)}}</div>
       </div>
     </div>
   </div>
@@ -31,6 +31,22 @@
       </div>
       <div class="details-sub row">
         <div class="col-12">{{ media.metadata.creationDate | date :'EEEE'}}, {{getTime()}}</div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row" *ngIf="VideoData">
+    <div class="col-2">
+      <span class="details-icon oi oi-video"></span>
+    </div>
+    <div class="col-10">
+      <div class="details-main">
+        {{"Video"}}
+      </div>
+      <div class="details-sub row">
+        <div class="col-6" *ngIf="VideoData.duration">length: {{renderDuration(VideoData.duration)}}</div>
+        <div class="col-6" *ngIf="VideoData.bitRate">bit rate: {{calcSize(VideoData.bitRate)}}/s</div>
       </div>
     </div>
   </div>
@@ -67,8 +83,8 @@
       </div>
       <div class="details-sub row" *ngIf="hasGPS()">
         <div class="col-12">
-          {{media.metadata.positionData.GPSData.latitude.toFixed(3)}},
-          {{media.metadata.positionData.GPSData.longitude.toFixed(3)}}
+          {{PositionData.GPSData.latitude.toFixed(3)}},
+          {{PositionData.GPSData.longitude.toFixed(3)}}
         </div>
       </div>
     </div>
@@ -80,11 +96,11 @@
       [zoomControl]="false"
       [streetViewControl]="false"
       [zoom]="10"
-      [latitude]="media.metadata.positionData.GPSData.latitude"
-      [longitude]="media.metadata.positionData.GPSData.longitude">
+      [latitude]="PositionData.GPSData.latitude"
+      [longitude]="PositionData.GPSData.longitude">
       <agm-marker
-        [latitude]="media.metadata.positionData.GPSData.latitude"
-        [longitude]="media.metadata.positionData.GPSData.longitude">
+        [latitude]="PositionData.GPSData.latitude"
+        [longitude]="PositionData.GPSData.longitude">
       </agm-marker>
     </agm-map>
   </div>
