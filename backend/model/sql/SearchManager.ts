@@ -4,6 +4,7 @@ import {SearchResultDTO} from '../../../common/entities/SearchResultDTO';
 import {SQLConnection} from './SQLConnection';
 import {PhotoEntity} from './enitites/PhotoEntity';
 import {DirectoryEntity} from './enitites/DirectoryEntity';
+import {MediaEntity} from './enitites/MediaEntity';
 
 export class SearchManager implements ISearchManager {
 
@@ -24,32 +25,32 @@ export class SearchManager implements ISearchManager {
 
     const connection = await SQLConnection.getConnection();
 
-    let result: Array<AutoCompleteItem> = [];
+    let result: AutoCompleteItem[] = [];
     const photoRepository = connection.getRepository(PhotoEntity);
+    const mediaRepository = connection.getRepository(MediaEntity);
     const directoryRepository = connection.getRepository(DirectoryEntity);
 
 
     (await photoRepository
-      .createQueryBuilder('media')
-      .select('DISTINCT(media.metadata.keywords)')
-      .where('media.metadata.keywords LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
+      .createQueryBuilder('photo')
+      .select('DISTINCT(photo.metadata.keywords)')
+      .where('photo.metadata.keywords LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
       .limit(5)
       .getRawMany())
-      .map(r => <Array<string>>r.metadataKeywords.split(','))
+      .map(r => <Array<string>>(<string>r.metadataKeywords).split(','))
       .forEach(keywords => {
         result = result.concat(this.encapsulateAutoComplete(keywords
           .filter(k => k.toLowerCase().indexOf(text.toLowerCase()) !== -1), SearchTypes.keyword));
       });
 
-
     (await photoRepository
-      .createQueryBuilder('media')
-      .select('media.metadata.positionData.country as country,' +
-        'mediao.metadata.positionData.state as state, media.metadata.positionData.city as city')
-      .where('media.metadata.positionData.country LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
-      .orWhere('media.metadata.positionData.state LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
-      .orWhere('media.metadata.positionData.city LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
-      .groupBy('media.metadata.positionData.country, media.metadata.positionData.state, media.metadata.positionData.city')
+      .createQueryBuilder('photo')
+      .select('photo.metadata.positionData.country as country, ' +
+        'photo.metadata.positionData.state as state, photo.metadata.positionData.city as city')
+      .where('photo.metadata.positionData.country LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
+      .orWhere('photo.metadata.positionData.state LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
+      .orWhere('photo.metadata.positionData.city LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
+      .groupBy('photo.metadata.positionData.country, photo.metadata.positionData.state, photo.metadata.positionData.city')
       .limit(5)
       .getRawMany())
       .filter(pm => !!pm)
@@ -59,7 +60,7 @@ export class SearchManager implements ISearchManager {
           .filter(p => p.toLowerCase().indexOf(text.toLowerCase()) !== -1), SearchTypes.position));
       });
 
-    result = result.concat(this.encapsulateAutoComplete((await photoRepository
+    result = result.concat(this.encapsulateAutoComplete((await mediaRepository
       .createQueryBuilder('media')
       .select('DISTINCT(media.name)')
       .where('media.name LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})

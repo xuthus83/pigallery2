@@ -16,6 +16,8 @@ import {AutoCompleteItem, SearchTypes} from '../../../../../common/entities/Auto
 import {SearchResultDTO} from '../../../../../common/entities/SearchResultDTO';
 import {DirectoryEntity} from '../../../../../backend/model/sql/enitites/DirectoryEntity';
 import {MediaDimensionEntity} from '../../../../../backend/model/sql/enitites/MediaEntity';
+import {OrientationTypes} from 'ts-exif-parser';
+import {Utils} from '../../../../../common/Utils';
 
 describe('SearchManager', () => {
 
@@ -57,6 +59,11 @@ describe('SearchManager', () => {
     m.size = sd;
     m.creationDate = Date.now();
     m.fileSize = 123456789;
+    m.orientation = OrientationTypes.TOP_LEFT;
+
+    // TODO: remove when typeorm is fixed
+    m.duration = null;
+    m.bitRate = null;
 
 
     const d = new PhotoEntity();
@@ -155,85 +162,86 @@ describe('SearchManager', () => {
   it('should search', async () => {
     const sm = new SearchManager();
 
-    expect((await sm.search('sw', null))).to.deep.equal(<SearchResultDTO>{
+
+    expect(Utils.clone(await sm.search('sw', null))).to.deep.equal(Utils.clone(<SearchResultDTO>{
       searchText: 'sw',
       searchType: null,
       directories: [],
       media: [p, p2],
       resultOverflow: false
-    });
+    }));
 
-    expect((await sm.search('Tatooine', SearchTypes.position))).to.deep.equal(<SearchResultDTO>{
+    expect(Utils.clone(await sm.search('Tatooine', SearchTypes.position))).to.deep.equal(Utils.clone(<SearchResultDTO>{
       searchText: 'Tatooine',
       searchType: SearchTypes.position,
       directories: [],
       media: [p],
       resultOverflow: false
-    });
+    }));
 
-    expect((await sm.search('ortm', SearchTypes.keyword))).to.deep.equal(<SearchResultDTO>{
+    expect(Utils.clone(await sm.search('ortm', SearchTypes.keyword))).to.deep.equal(Utils.clone(<SearchResultDTO>{
       searchText: 'ortm',
       searchType: SearchTypes.keyword,
       directories: [],
       media: [p2],
       resultOverflow: false
-    });
+    }));
 
-    expect((await sm.search('ortm', SearchTypes.keyword))).to.deep.equal(<SearchResultDTO>{
+    expect(Utils.clone(await sm.search('ortm', SearchTypes.keyword))).to.deep.equal(Utils.clone(<SearchResultDTO>{
       searchText: 'ortm',
       searchType: SearchTypes.keyword,
       directories: [],
       media: [p2],
       resultOverflow: false
-    });
+    }));
 
-    expect((await sm.search('wa', SearchTypes.keyword))).to.deep.equal(<SearchResultDTO>{
+    expect(Utils.clone(await sm.search('wa', SearchTypes.keyword))).to.deep.equal(Utils.clone(<SearchResultDTO>{
       searchText: 'wa',
       searchType: SearchTypes.keyword,
       directories: [dir],
       media: [p, p2],
       resultOverflow: false
-    });
+    }));
   });
 
 
   it('should instant search', async () => {
     const sm = new SearchManager();
 
-    expect((await sm.instantSearch('sw'))).to.deep.equal({
+    expect(Utils.clone(await sm.instantSearch('sw'))).to.deep.equal(Utils.clone({
       searchText: 'sw',
       directories: [],
-      photos: [p, p2],
+      media: [p, p2],
       resultOverflow: false
-    });
+    }));
 
-    expect((await sm.instantSearch('Tatooine'))).to.deep.equal({
+    expect(Utils.clone(await sm.instantSearch('Tatooine'))).to.deep.equal(Utils.clone({
       searchText: 'Tatooine',
       directories: [],
-      photos: [p],
+      media: [p],
       resultOverflow: false
-    });
+    }));
 
-    expect((await sm.instantSearch('ortm'))).to.deep.equal({
+    expect(Utils.clone(await sm.instantSearch('ortm'))).to.deep.equal(Utils.clone({
       searchText: 'ortm',
       directories: [],
-      photos: [p2],
+      media: [p2],
       resultOverflow: false
-    });
+    }));
 
-    expect((await sm.instantSearch('ortm'))).to.deep.equal({
+    expect(Utils.clone(await sm.instantSearch('ortm'))).to.deep.equal(Utils.clone({
       searchText: 'ortm',
       directories: [],
-      photos: [p2],
+      media: [p2],
       resultOverflow: false
-    });
+    }));
 
-    expect((await sm.instantSearch('wa'))).to.deep.equal({
+    expect(Utils.clone(await sm.instantSearch('wa'))).to.deep.equal(Utils.clone({
       searchText: 'wa',
       directories: [dir],
-      photos: [p, p2],
+      media: [p, p2],
       resultOverflow: false
-    });
+    }));
   });
 
 

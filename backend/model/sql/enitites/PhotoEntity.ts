@@ -55,7 +55,7 @@ export class PositionMetaDataEntity implements PositionMetaData {
 
 
 export class PhotoMetadataEntity extends MediaMetadataEntity implements PhotoMetadata {
-
+/*
   @Column('simple-array')
   keywords: string[];
 
@@ -67,7 +67,7 @@ export class PhotoMetadataEntity extends MediaMetadataEntity implements PhotoMet
 
   @Column('tinyint', {default: OrientationTypes.TOP_LEFT})
   orientation: OrientationTypes;
-
+*/
 }
 
 

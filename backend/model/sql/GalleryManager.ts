@@ -150,15 +150,19 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
       const media: MediaEntity[] = currentDir.media;
       delete currentDir.media;
       currentDir = await directoryRepository.save(currentDir);
-      media.forEach(m => m.directory = currentDir);
-      currentDir.media = await this.saveMedia(connection, media);
+      if (media) {
+        media.forEach(m => m.directory = currentDir);
+        currentDir.media = await this.saveMedia(connection, media);
+      }
     } else {
       const media = scannedDirectory.media;
       delete scannedDirectory.media;
       (<DirectoryEntity>scannedDirectory).lastScanned = scannedDirectory.lastScanned;
       currentDir = await directoryRepository.save(<DirectoryEntity>scannedDirectory);
-      media.forEach(m => m.directory = currentDir);
-      currentDir.media = await this.saveMedia(connection, media);
+      if (media) {
+        media.forEach(m => m.directory = currentDir);
+        currentDir.media = await this.saveMedia(connection, media);
+      }
     }
 
     const childDirectories = await directoryRepository.createQueryBuilder('directory')

@@ -226,7 +226,7 @@ export class DiskMangerWorker {
               metadata.creationDate = <number> (iptcData.date_time ? iptcData.date_time.getTime() : metadata.creationDate);
 
             } catch (err) {
-              Logger.debug(LOG_TAG, 'Error parsing iptc data', fullPath, err);
+              // Logger.debug(LOG_TAG, "Error parsing iptc data", fullPath, err);
             }
 
             metadata.creationDate = metadata.creationDate || 0;
