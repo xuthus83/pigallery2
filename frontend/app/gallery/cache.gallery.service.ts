@@ -6,6 +6,7 @@ import {Config} from '../../../common/config/public/Config';
 import {AutoCompleteItem, SearchTypes} from '../../../common/entities/AutoCompleteItem';
 import {SearchResultDTO} from '../../../common/entities/SearchResultDTO';
 import {MediaDTO} from '../../../common/entities/MediaDTO';
+import {DataStructureVersion} from '../../../common/DataStructureVersion';
 
 interface CacheItem<T> {
   timestamp: number;
@@ -20,6 +21,16 @@ export class GalleryCacheService {
   private static INSTANT_SEARCH_PREFIX = 'instant_search:';
   private static SEARCH_PREFIX = 'search:';
   private static SEARCH_TYPE_PREFIX = ':type:';
+  private static VERSION = 'version';
+
+  constructor() {
+    const version = parseInt(localStorage.getItem(GalleryCacheService.VERSION), 10) || 0;
+    if (version !== DataStructureVersion) {
+      localStorage.clear();
+      localStorage.setItem(GalleryCacheService.VERSION, DataStructureVersion.toString());
+    }
+
+  }
 
 
   public getAutoComplete(text: string): Array<AutoCompleteItem> {

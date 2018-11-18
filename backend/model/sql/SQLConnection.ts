@@ -13,11 +13,11 @@ import {VersionEntity} from './enitites/VersionEntity';
 import {Logger} from '../../Logger';
 import {MediaEntity} from './enitites/MediaEntity';
 import {VideoEntity} from './enitites/VideoEntity';
+import {DataStructureVersion} from '../../../common/DataStructureVersion';
 
 
 export class SQLConnection {
 
-  private static VERSION = 2;
 
   constructor() {
   }
@@ -92,14 +92,14 @@ export class SQLConnection {
       version = await connection.getRepository(VersionEntity).findOne();
     } catch (ex) {
     }
-    if (version && version.version === SQLConnection.VERSION) {
+    if (version && version.version === DataStructureVersion) {
       return;
     }
     Logger.info('Updating database scheme');
     if (!version) {
       version = new VersionEntity();
     }
-    version.version = SQLConnection.VERSION;
+    version.version = DataStructureVersion;
 
 
     await connection.dropDatabase();
