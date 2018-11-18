@@ -174,7 +174,7 @@ export class ThumbnailGeneratorMWs {
       await this.taskQue.execute(input);
       return next();
     } catch (error) {
-      return next(new ErrorDTO(ErrorCodes.THUMBNAIL_GENERATION_ERROR, 'Error during generating thumbnail: ' + input.mediaPath, error));
+      return next(new ErrorDTO(ErrorCodes.THUMBNAIL_GENERATION_ERROR, 'Error during generating thumbnail: ' + input.mediaPath, error.toString()));
     }
   }
 

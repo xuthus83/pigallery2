@@ -59,7 +59,7 @@ export class VideoRendererFactory {
 
         ffmpeg(input.mediaPath).ffprobe((err: any, data: FfprobeData) => {
           if (!!err || data === null) {
-            return reject(err);
+            return reject(err.toString());
           }
           const ratio = data.streams[0].height / data.streams[0].width;
           const command: FfmpegCommand = ffmpeg(input.mediaPath);
@@ -68,7 +68,7 @@ export class VideoRendererFactory {
               resolve();
             })
             .on('error', (e) => {
-              reject(e);
+              reject(e.toString());
             })
             .outputOptions(['-qscale:v 4']);
           if (input.makeSquare === false) {
