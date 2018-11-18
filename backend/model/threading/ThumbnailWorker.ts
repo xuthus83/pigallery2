@@ -3,6 +3,7 @@ import {Dimensions, State} from 'gm';
 import {Logger} from '../../Logger';
 import {FfmpegCommand, FfprobeData} from 'fluent-ffmpeg';
 import {ThumbnailProcessingLib} from '../../../common/config/private/IPrivateConfig';
+import {FFmpegFactory} from '../FFmpegFactory';
 
 export class ThumbnailWorker {
 
@@ -50,7 +51,7 @@ export interface RendererInput {
 
 export class VideoRendererFactory {
   public static build(): (input: RendererInput) => Promise<void> {
-    const ffmpeg = require('fluent-ffmpeg');
+    const ffmpeg = FFmpegFactory.get();
     return (input: RendererInput): Promise<void> => {
       return new Promise((resolve, reject) => {
 

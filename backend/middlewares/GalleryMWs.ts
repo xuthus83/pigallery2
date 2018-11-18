@@ -52,7 +52,7 @@ export class GalleryMWs {
   }
 
 
-  public static removeCyclicDirectoryReferences(req: Request, res: Response, next: NextFunction) {
+  public static cleanUpGalleryResults(req: Request, res: Response, next: NextFunction) {
     if (!req.resultPipe) {
       return next();
     }
@@ -61,17 +61,6 @@ export class GalleryMWs {
     if (cw.notModified === true) {
       return next();
     }
-    const removeDirs = (dir: DirectoryDTO) => {
-      dir.media.forEach((photo: PhotoDTO) => {
-        photo.directory = null;
-      });
-
-      dir.directories.forEach((directory: DirectoryDTO) => {
-        removeDirs(directory);
-        directory.parent = null;
-      });
-
-    };
 
     const cleanUpMedia = (media: MediaDTO[]) => {
       media.forEach(m => {
@@ -89,7 +78,7 @@ export class GalleryMWs {
     };
 
     if (cw.directory) {
-      removeDirs(cw.directory);
+      DirectoryDTO.removeReferences(cw.directory);
       // TODO: remove when typeorm inheritance is fixed
       cleanUpMedia(cw.directory.media);
     }
@@ -97,6 +86,19 @@ export class GalleryMWs {
       cleanUpMedia(cw.searchResult.media);
     }
 
+
+    if (Config.Client.Video.enabled === false) {
+      if (cw.directory) {
+        const removeVideos = (dir: DirectoryDTO) => {
+          dir.media = dir.media.filter(m => !MediaDTO.isVideo(m));
+          dir.directories.forEach(d => removeVideos(d));
+        };
+        removeVideos(cw.directory);
+      }
+      if (cw.searchResult) {
+        cw.searchResult.media = cw.searchResult.media.filter(m => !MediaDTO.isVideo(m));
+      }
+    }
 
     return next();
   }

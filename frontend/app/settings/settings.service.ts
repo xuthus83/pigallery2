@@ -36,6 +36,9 @@ export class SettingsService {
         RandomPhoto: {
           enabled: true
         },
+        Video: {
+          enabled: true
+        },
         Other: {
           enableCache: true,
           enableOnScrollRendering: true,

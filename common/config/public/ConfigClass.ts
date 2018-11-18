@@ -43,6 +43,11 @@ export module ClientConfig {
     NavBar: NavBarConfig;
   }
 
+  export interface VideoConfig {
+    enabled: boolean;
+  }
+
+
   export interface Config {
     applicationTitle: string;
     publicUrl: string;
@@ -55,6 +60,7 @@ export module ClientConfig {
     Other: OtherConfig;
     authenticationRequired: boolean;
     languages: string[];
+    Video: VideoConfig;
   }
 
 }
@@ -89,6 +95,9 @@ export class PublicConfigClass {
       googleApiKey: ''
     },
     RandomPhoto: {
+      enabled: true
+    },
+    Video: {
       enabled: true
     },
     Other: {

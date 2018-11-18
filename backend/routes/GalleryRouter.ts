@@ -27,7 +27,7 @@ export class GalleryRouter {
       AuthenticationMWs.authoriseDirectory,
       GalleryMWs.listDirectory,
       ThumbnailGeneratorMWs.addThumbnailInformation,
-      GalleryMWs.removeCyclicDirectoryReferences,
+      GalleryMWs.cleanUpGalleryResults,
       RenderingMWs.renderResult
     );
   }
@@ -98,7 +98,7 @@ export class GalleryRouter {
       AuthenticationMWs.authorise(UserRoles.Guest),
       GalleryMWs.search,
       ThumbnailGeneratorMWs.addThumbnailInformation,
-      GalleryMWs.removeCyclicDirectoryReferences,
+      GalleryMWs.cleanUpGalleryResults,
       RenderingMWs.renderResult
     );
   }
@@ -109,7 +109,7 @@ export class GalleryRouter {
       AuthenticationMWs.authorise(UserRoles.Guest),
       GalleryMWs.instantSearch,
       ThumbnailGeneratorMWs.addThumbnailInformation,
-      GalleryMWs.removeCyclicDirectoryReferences,
+      GalleryMWs.cleanUpGalleryResults,
       RenderingMWs.renderResult
     );
   }

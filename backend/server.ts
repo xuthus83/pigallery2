@@ -17,7 +17,7 @@ import {LoggerRouter} from './routes/LoggerRouter';
 import {ThumbnailGeneratorMWs} from './middlewares/thumbnail/ThumbnailGeneratorMWs';
 import {DiskManager} from './model/DiskManger';
 import {NotificationRouter} from './routes/NotificationRouter';
-import {ConfigDiagnostics} from './model/ConfigDiagnostics';
+import {ConfigDiagnostics} from './model/diagnostics/ConfigDiagnostics';
 import {Localizations} from './model/Localizations';
 import {CookieNames} from '../common/CookieNames';
 

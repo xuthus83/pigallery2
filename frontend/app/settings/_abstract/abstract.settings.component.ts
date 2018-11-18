@@ -135,7 +135,7 @@ export abstract class SettingsComponent<T, S extends AbstractSettingsService<T> 
     try {
       await this._settingsService.updateSettings(this.settings);
       await this.getSettings();
-      this.notification.success(this.name + this.i18n(' settings saved'), this.i18n('Success'));
+      this.notification.success(this.name + ' ' + this.i18n('settings saved'), this.i18n('Success'));
       this.inProgress = false;
       return true;
     } catch (err) {

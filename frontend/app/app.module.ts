@@ -73,6 +73,7 @@ import {StringifySortingMethod} from './pipes/StringifySortingMethod';
 import {RandomQueryBuilderGalleryComponent} from './gallery/random-query-builder/random-query-builder.gallery.component';
 import {RandomPhotoSettingsComponent} from './settings/random-photo/random-photo.settings.component';
 import {FixOrientationPipe} from './gallery/FixOrientationPipe';
+import {VideoSettingsComponent} from './settings/video/video.settings.component';
 
 @Injectable()
 export class GoogleMapsConfig {
@@ -159,6 +160,7 @@ export function translationsFactory(locale: string) {
     DatabaseSettingsComponent,
     MapSettingsComponent,
     ThumbnailSettingsComponent,
+    VideoSettingsComponent,
     SearchSettingsComponent,
     ShareSettingsComponent,
     RandomPhotoSettingsComponent,

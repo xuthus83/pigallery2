@@ -5,14 +5,16 @@ import {CameraMetadata, GPSMetadata, PhotoDTO, PhotoMetadata} from '../../../com
 import {Logger} from '../../Logger';
 import {IptcParser} from 'ts-node-iptc';
 import {ExifParserFactory, OrientationTypes} from 'ts-exif-parser';
-import * as ffmpeg from 'fluent-ffmpeg';
 import {FfprobeData} from 'fluent-ffmpeg';
 import {ProjectPath} from '../../ProjectPath';
 import {Config} from '../../../common/config/private/Config';
 import {VideoDTO, VideoMetadata} from '../../../common/entities/VideoDTO';
-import {MediaDimension, MediaMetadata} from '../../../common/entities/MediaDTO';
+import {MediaDimension} from '../../../common/entities/MediaDTO';
+import {FFmpegFactory} from '../FFmpegFactory';
 
 const LOG_TAG = '[DiskManagerTask]';
+
+const ffmpeg = FFmpegFactory.get();
 
 export class DiskMangerWorker {
   private static isImage(fullPath: string) {
@@ -33,8 +35,7 @@ export class DiskMangerWorker {
 
   private static isVideo(fullPath: string) {
     const extensions = [
-      '.mp4',
-      '.webm'
+      '.mp4'
     ];
 
     const extension = path.extname(fullPath).toLowerCase();
@@ -83,7 +84,8 @@ export class DiskMangerWorker {
               if (maxPhotos != null && directory.media.length > maxPhotos) {
                 break;
               }
-            } else if (DiskMangerWorker.isVideo(fullFilePath)) {
+            } else if (Config.Client.Video.enabled === true &&
+              DiskMangerWorker.isVideo(fullFilePath)) {
               directory.media.push(<VideoDTO>{
                 name: file,
                 directory: null,
@@ -98,7 +100,7 @@ export class DiskMangerWorker {
 
           return resolve(directory);
         } catch (err) {
-          return reject({error: err});
+          return reject({error: err.toString()});
         }
 
       });

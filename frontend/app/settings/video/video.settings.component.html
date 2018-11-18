@@ -1,0 +1,36 @@
+<form #settingsForm="ngForm" class="form-horizontal">
+  <div class="card mb-4">
+    <h5 class="card-header">
+      <ng-container i18n>Video settings</ng-container>
+      <div class="switch-wrapper">
+        <bSwitch
+          class="switch"
+          name="enabled"
+          [switch-on-color]="'success'"
+          [switch-inverse]="'inverse'"
+          [switch-off-text]="text.Disabled"
+          [switch-on-text]="text.Enabled"
+          [switch-disabled]="inProgress"
+          [switch-handle-width]="'100'"
+          [switch-label-width]="'20'"
+          [(ngModel)]="settings.enabled">
+        </bSwitch>
+      </div>
+    </h5>
+    <div class="card-body">
+      <div [hidden]="!error" class="alert alert-danger" role="alert"><strong>Error: </strong>{{error}}</div>
+
+      <ng-container i18n>Video support uses ffmpeg. ffmpeg and ffprobe binaries need to be available in the PATH or the @ffmpeg-installer/ffmpeg and @ffprobe-installer/ffprobe optional node packages need to be installed.</ng-container>&nbsp;
+
+
+      <button class="btn btn-success float-right"
+              [disabled]="!settingsForm.form.valid || !changed || inProgress"
+              (click)="save()" i18n>Save
+      </button>
+      <button class="btn btn-default float-right"
+              (click)="reset()" i18n>Reset
+      </button>
+    </div>
+  </div>
+
+</form>

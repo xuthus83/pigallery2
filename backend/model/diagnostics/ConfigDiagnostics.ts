@@ -1,17 +1,19 @@
-import {Config} from '../../common/config/private/Config';
+import {Config} from '../../../common/config/private/Config';
 import {
   DataBaseConfig,
   DatabaseType,
   IPrivateConfig,
   ThumbnailConfig,
   ThumbnailProcessingLib
-} from '../../common/config/private/IPrivateConfig';
-import {Logger} from '../Logger';
-import {NotificationManager} from './NotifocationManager';
-import {ProjectPath} from '../ProjectPath';
-import {SQLConnection} from './sql/SQLConnection';
+} from '../../../common/config/private/IPrivateConfig';
+import {Logger} from '../../Logger';
+import {NotificationManager} from '../NotifocationManager';
+import {ProjectPath} from '../../ProjectPath';
+import {SQLConnection} from '../sql/SQLConnection';
 import * as fs from 'fs';
-import {ClientConfig} from '../../common/config/public/ConfigClass';
+import {ClientConfig} from '../../../common/config/public/ConfigClass';
+import VideoConfig = ClientConfig.VideoConfig;
+import {FFmpegFactory} from '../FFmpegFactory';
 
 const LOG_TAG = '[ConfigDiagnostics]';
 
@@ -23,6 +25,31 @@ export class ConfigDiagnostics {
     }
   }
 
+
+  static testVideoConfig(videoConfig: VideoConfig) {
+    return new Promise((resolve, reject) => {
+      try {
+        if (videoConfig.enabled === true) {
+          const ffmpeg = FFmpegFactory.get();
+          ffmpeg().getAvailableCodecs((err) => {
+            if (err) {
+              return reject(new Error('Error accessing ffmpeg, cant find executable: ' + err.toString()));
+            }
+            ffmpeg(__dirname + '/blank.jpg').ffprobe((err2) => {
+              if (err2) {
+                return reject(new Error('Error accessing ffmpeg-probe, cant find executable: ' + err2.toString()));
+              }
+              return resolve();
+            });
+          });
+        } else {
+          return resolve();
+        }
+      } catch (e) {
+        return reject(new Error('unkown video error: ' + e.toString()));
+      }
+    });
+  }
 
   static async testThumbnailLib(processingLibrary: ThumbnailProcessingLib) {
     switch (processingLibrary) {
@@ -44,8 +71,8 @@ export class ConfigDiagnostics {
     }
   }
 
-  static async testThumbnailFolder(folder: string) {
-    await new Promise((resolve, reject) => {
+  static testThumbnailFolder(folder: string) {
+    return new Promise((resolve, reject) => {
       fs.access(folder, fs.constants.W_OK, (err) => {
         if (err) {
           reject({message: 'Error during getting write access to temp folder', error: err.toString()});
@@ -55,8 +82,8 @@ export class ConfigDiagnostics {
     });
   }
 
-  static async testImageFolder(folder: string) {
-    await new Promise((resolve, reject) => {
+  static testImageFolder(folder: string) {
+    return new Promise((resolve, reject) => {
       if (!fs.existsSync(folder)) {
         reject('Images folder not exists: \'' + folder + '\'');
       }
@@ -161,6 +188,16 @@ export class ConfigDiagnostics {
       const err: Error = ex;
       NotificationManager.error('Thumbnail folder error', err.toString());
       Logger.error(LOG_TAG, 'Thumbnail folder error', err.toString());
+    }
+
+
+    try {
+      await ConfigDiagnostics.testVideoConfig(Config.Client.Video);
+    } catch (ex) {
+      const err: Error = ex;
+      NotificationManager.warning('Video support error, switching off..', err.toString());
+      Logger.warn(LOG_TAG, 'Video support error, switching off..', err.toString());
+      Config.Client.Video.enabled = false;
     }
 
 

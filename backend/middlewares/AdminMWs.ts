@@ -5,7 +5,7 @@ import {Logger} from '../Logger';
 import {SQLConnection} from '../model/sql/SQLConnection';
 import {DataBaseConfig, DatabaseType, IndexingConfig, IPrivateConfig, ThumbnailConfig} from '../../common/config/private/IPrivateConfig';
 import {Config} from '../../common/config/private/Config';
-import {ConfigDiagnostics} from '../model/ConfigDiagnostics';
+import {ConfigDiagnostics} from '../model/diagnostics/ConfigDiagnostics';
 import {ClientConfig} from '../../common/config/public/ConfigClass';
 import {BasicConfigDTO} from '../../common/entities/settings/BasicConfigDTO';
 import {OtherConfigDTO} from '../../common/entities/settings/OtherConfigDTO';
@@ -78,6 +78,27 @@ export class AdminMWs {
       return next();
     } catch (err) {
       return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, 'Settings error: ' + JSON.stringify(err, null, '  '), err));
+    }
+  }
+  public static async updateVideoSettings(req: Request, res: Response, next: NextFunction) {
+    if ((typeof req.body === 'undefined') || (typeof req.body.settings === 'undefined')) {
+      return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, 'settings is needed'));
+    }
+
+    try {
+      await ConfigDiagnostics.testVideoConfig(<ClientConfig.VideoConfig>req.body.settings);
+
+      Config.Client.Video = <ClientConfig.VideoConfig>req.body.settings;
+      // only updating explicitly set config (not saving config set by the diagnostics)
+      const original = Config.original();
+      original.Client.Video = <ClientConfig.VideoConfig>req.body.settings;
+      original.save();
+      await ConfigDiagnostics.runDiagnostics();
+      Logger.info(LOG_TAG, 'new config:');
+      Logger.info(LOG_TAG, JSON.stringify(Config, null, '\t'));
+      return next();
+    } catch (err) {
+      return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, 'Settings error: ' + err.toString(), err));
     }
   }
 

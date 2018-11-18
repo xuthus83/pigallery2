@@ -17,7 +17,7 @@ import {VideoEntity} from './enitites/VideoEntity';
 
 export class SQLConnection {
 
-  private static VERSION = 1;
+  private static VERSION = 2;
 
   constructor() {
   }

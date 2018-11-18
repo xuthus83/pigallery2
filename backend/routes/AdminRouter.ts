@@ -59,6 +59,12 @@ export class AdminRouter {
       AdminMWs.updateMapSettings,
       RenderingMWs.renderOK
     );
+    app.put('/api/settings/video',
+      AuthenticationMWs.authenticate,
+      AuthenticationMWs.authorise(UserRoles.Admin),
+      AdminMWs.updateVideoSettings,
+      RenderingMWs.renderOK
+    );
 
     app.put('/api/settings/authentication',
       AuthenticationMWs.authenticate,

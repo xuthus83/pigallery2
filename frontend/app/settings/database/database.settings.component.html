@@ -16,9 +16,9 @@
 
       <ng-container *ngIf="settings.type == DatabaseType.mysql">
         <p class="title" i18n>MySQL settings:</p>
-        <input type="text" class="form-control" i18n-placeholder placeholder="Host" autofocus
+        <input type="text" class="form-control" i18n-placeholder placeholder="Host"
                [(ngModel)]="settings.mysql.host" name="host" required>
-        <input type="text" class="form-control" i18n-placeholder placeholder="Database" autofocus
+        <input type="text" class="form-control" i18n-placeholder placeholder="Database"
                [(ngModel)]="settings.mysql.database" name="database" required>
         <input type="text" class="form-control" i18n-placeholder placeholder="Username"
                [(ngModel)]="settings.mysql.username" name="username">

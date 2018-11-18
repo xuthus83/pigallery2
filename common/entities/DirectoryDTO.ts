@@ -1,4 +1,5 @@
 import {MediaDTO} from './MediaDTO';
+import {PhotoDTO} from './PhotoDTO';
 
 export interface DirectoryDTO {
   id: number;
@@ -22,5 +23,17 @@ export module DirectoryDTO {
       addReferences(directory);
       directory.parent = dir;
     });
+  };
+
+  export const removeReferences = (dir: DirectoryDTO) => {
+    dir.media.forEach((photo: PhotoDTO) => {
+      photo.directory = null;
+    });
+
+    dir.directories.forEach((directory: DirectoryDTO) => {
+      removeReferences(directory);
+      directory.parent = null;
+    });
+
   };
 }

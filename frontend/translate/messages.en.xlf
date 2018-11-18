@@ -104,7 +104,7 @@
         <source>download</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/gallery/lightbox/lightbox.gallery.component.html</context>
-          <context context-type="linenumber">25</context>
+          <context context-type="linenumber">27</context>
         </context-group>
         <target>download</target>
       </trans-unit>
@@ -112,7 +112,7 @@
         <source>info</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/gallery/lightbox/lightbox.gallery.component.html</context>
-          <context context-type="linenumber">29</context>
+          <context context-type="linenumber">31</context>
         </context-group>
         <target>info</target>
       </trans-unit>
@@ -120,11 +120,11 @@
         <source>toggle fullscreen</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/gallery/lightbox/lightbox.gallery.component.html</context>
-          <context context-type="linenumber">36</context>
+          <context context-type="linenumber">38</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/gallery/lightbox/lightbox.gallery.component.html</context>
-          <context context-type="linenumber">45</context>
+          <context context-type="linenumber">47</context>
         </context-group>
         <target>toggle fullscreen</target>
       </trans-unit>
@@ -132,7 +132,7 @@
         <source>close</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/gallery/lightbox/lightbox.gallery.component.html</context>
-          <context context-type="linenumber">52</context>
+          <context context-type="linenumber">54</context>
         </context-group>
         <target>close</target>
       </trans-unit>
@@ -140,7 +140,7 @@
         <source>key: left arrow</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/gallery/lightbox/lightbox.gallery.component.html</context>
-          <context context-type="linenumber">60</context>
+          <context context-type="linenumber">68</context>
         </context-group>
         <target>key: left arrow</target>
       </trans-unit>
@@ -148,7 +148,7 @@
         <source>key: right arrow</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/gallery/lightbox/lightbox.gallery.component.html</context>
-          <context context-type="linenumber">64</context>
+          <context context-type="linenumber">72</context>
         </context-group>
         <target>key: right arrow</target>
       </trans-unit>
@@ -608,6 +608,10 @@
           <context context-type="linenumber">104</context>
         </context-group>
         <context-group purpose="location">
+          <context context-type="sourcefile">app/settings/video/video.settings.component.html</context>
+          <context context-type="linenumber">28</context>
+        </context-group>
+        <context-group purpose="location">
           <context context-type="sourcefile">app/settings/search/search.settings.component.html</context>
           <context context-type="linenumber">73</context>
         </context-group>
@@ -639,6 +643,10 @@
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/thumbnail/thumbanil.settings.component.html</context>
           <context context-type="linenumber">107</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/settings/video/video.settings.component.html</context>
+          <context context-type="linenumber">31</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/search/search.settings.component.html</context>
@@ -795,6 +803,22 @@
           <context context-type="linenumber">95</context>
         </context-group>
         <target>';' separated integers. If size is 200, that thumbnail will have 200^2 pixels.</target>
+      </trans-unit>
+      <trans-unit id="b5398623f87ee72ed23f5023918db1707771e925" datatype="html">
+        <source>Video settings</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/settings/video/video.settings.component.html</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+        <target>Video settings</target>
+      </trans-unit>
+      <trans-unit id="6b8862cecf0fd1c8fc1b503e131bfa230d851343" datatype="html">
+        <source>Video support uses ffmpeg. ffmpeg and ffprobe binaries need to be available in the PATH or the @ffmpeg-installer/ffmpeg and @ffprobe-installer/ffprobe optional node packages need to be installed.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/settings/video/video.settings.component.html</context>
+          <context context-type="linenumber">23</context>
+        </context-group>
+        <target>Video support uses ffmpeg. ffmpeg and ffprobe binaries need to be available in the PATH or the @ffmpeg-installer/ffmpeg and @ffprobe-installer/ffprobe optional node packages need to be installed.</target>
       </trans-unit>
       <trans-unit id="2e75ae3885931555902da6b288ed616843d5dc3c" datatype="html">
         <source>Search settings</source>
@@ -1467,8 +1491,8 @@
         </context-group>
         <target>High</target>
       </trans-unit>
-      <trans-unit id="03d4d456b5f14c7bdd428393e17c724cd5210852" datatype="html">
-        <source> settings saved</source>
+      <trans-unit id="04e4b67fdc5f633a81e0ab32c1751ab20e6e3034" datatype="html">
+        <source>settings saved</source>
         <context-group purpose="location">
           <context context-type="sourcefile">frontend/app/settings/_abstract/abstract.settings.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -1591,13 +1615,13 @@
         </context-group>
         <target>Other</target>
       </trans-unit>
-      <trans-unit id="59b428a89fc1e287f2fb60806ed5f0588cb9c270" datatype="html">
-        <source>Random Photo</source>
+      <trans-unit id="e636143d733fa6a21fa62ffdff2fd76c221e6cac" datatype="html">
+        <source>Random Media</source>
         <context-group purpose="location">
           <context context-type="sourcefile">frontend/app/settings/random-photo/random-photo.settings.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>Random Photo</target>
+        <target>Random Media</target>
       </trans-unit>
       <trans-unit id="45dda89cf029b7d7b457a8dff01dc4b9a6485816" datatype="html">
         <source>Thumbnail</source>
@@ -1638,6 +1662,14 @@
           <context context-type="linenumber">1</context>
         </context-group>
         <target>Password protection disabled</target>
+      </trans-unit>
+      <trans-unit id="2d1ea268a6a9f483dbc2cbfe19bf4256a57a6af4" datatype="html">
+        <source>Video</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">frontend/app/settings/video/video.settings.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <target>Video</target>
       </trans-unit>
     </body>
   </file>
