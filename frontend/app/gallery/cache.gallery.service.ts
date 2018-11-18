@@ -101,12 +101,15 @@ export class GalleryCacheService {
     if (Config.Client.Other.enableCache === false) {
       return null;
     }
-    const value = localStorage.getItem(GalleryCacheService.CONTENT_PREFIX + Utils.concatUrls(directoryName));
-    if (value != null) {
-      const directory: DirectoryDTO = JSON.parse(value);
+    try {
+      const value = localStorage.getItem(GalleryCacheService.CONTENT_PREFIX + Utils.concatUrls(directoryName));
+      if (value != null) {
+        const directory: DirectoryDTO = JSON.parse(value);
 
-      DirectoryDTO.addReferences(directory);
-      return directory;
+        DirectoryDTO.addReferences(directory);
+        return directory;
+      }
+    } catch (e) {
     }
     return null;
   }
