@@ -108,43 +108,46 @@ export class GalleryMWs {
     if (Config.Client.RandomPhoto.enabled === false) {
       return next();
     }
-    const query: RandomQuery = {};
-    if (req.query.directory) {
-      query.directory = req.query.directory;
-    }
-    if (req.query.recursive === 'true') {
-      query.recursive = true;
-    }
-    if (req.query.orientation) {
-      query.orientation = parseInt(req.query.orientation.toString(), 10);
-    }
-    if (req.query.maxResolution) {
-      query.maxResolution = parseFloat(req.query.maxResolution.toString());
-    }
-    if (req.query.minResolution) {
-      query.minResolution = parseFloat(req.query.minResolution.toString());
-    }
-    if (req.query.fromDate) {
-      query.fromDate = new Date(req.query.fromDate);
-    }
-    if (req.query.toDate) {
-      query.toDate = new Date(req.query.toDate);
-    }
-    if (query.minResolution && query.maxResolution && query.maxResolution < query.minResolution) {
-      return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, 'Input error: min resolution is greater than the max resolution'));
-    }
-    if (query.toDate && query.fromDate && query.toDate.getTime() < query.fromDate.getTime()) {
-      return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, 'Input error: to date is earlier than from date'));
-    }
+    try {
+      const query: RandomQuery = {};
+      if (req.query.directory) {
+        query.directory = req.query.directory;
+      }
+      if (req.query.recursive === 'true') {
+        query.recursive = true;
+      }
+      if (req.query.orientation) {
+        query.orientation = parseInt(req.query.orientation.toString(), 10);
+      }
+      if (req.query.maxResolution) {
+        query.maxResolution = parseFloat(req.query.maxResolution.toString());
+      }
+      if (req.query.minResolution) {
+        query.minResolution = parseFloat(req.query.minResolution.toString());
+      }
+      if (req.query.fromDate) {
+        query.fromDate = new Date(req.query.fromDate);
+      }
+      if (req.query.toDate) {
+        query.toDate = new Date(req.query.toDate);
+      }
+      if (query.minResolution && query.maxResolution && query.maxResolution < query.minResolution) {
+        return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, 'Input error: min resolution is greater than the max resolution'));
+      }
+      if (query.toDate && query.fromDate && query.toDate.getTime() < query.fromDate.getTime()) {
+        return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, 'Input error: to date is earlier than from date'));
+      }
 
-    const photo = await ObjectManagerRepository.getInstance()
-      .GalleryManager.getRandomPhoto(query);
-    if (!photo) {
-      return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, 'No photo found'));
+      const photo = await ObjectManagerRepository.getInstance()
+        .GalleryManager.getRandomPhoto(query);
+      if (!photo) {
+        return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, 'No photo found'));
+      }
+
+      req.params.mediaPath = path.join(photo.directory.path, photo.directory.name, photo.name);
+    } catch (e) {
+      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, 'Can\'t get random photo: ' + e.toString()));
     }
-
-    req.params.mediaPath = path.join(photo.directory.path, photo.directory.name, photo.name);
-
     return next();
   }
 

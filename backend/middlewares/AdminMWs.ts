@@ -43,7 +43,7 @@ export class AdminMWs {
       Logger.info(LOG_TAG, 'new config:');
       Logger.info(LOG_TAG, JSON.stringify(Config, null, '\t'));
 
-      ObjectManagerRepository.reset();
+      await ObjectManagerRepository.reset();
       if (Config.Server.database.type !== DatabaseType.memory) {
         await ObjectManagerRepository.InitSQLManagers();
       } else {
@@ -80,6 +80,7 @@ export class AdminMWs {
       return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, 'Settings error: ' + JSON.stringify(err, null, '  '), err));
     }
   }
+
   public static async updateVideoSettings(req: Request, res: Response, next: NextFunction) {
     if ((typeof req.body === 'undefined') || (typeof req.body.settings === 'undefined')) {
       return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, 'settings is needed'));

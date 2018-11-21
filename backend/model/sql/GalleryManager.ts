@@ -10,10 +10,10 @@ import {Utils} from '../../../common/Utils';
 import {ProjectPath} from '../../ProjectPath';
 import {Config} from '../../../common/config/private/Config';
 import {ISQLGalleryManager} from './IGalleryManager';
-import {ReIndexingSensitivity} from '../../../common/config/private/IPrivateConfig';
+import {DatabaseType, ReIndexingSensitivity} from '../../../common/config/private/IPrivateConfig';
 import {PhotoDTO} from '../../../common/entities/PhotoDTO';
 import {OrientationType} from '../../../common/entities/RandomQueryDTO';
-import {Connection, Brackets} from 'typeorm';
+import {Brackets, Connection} from 'typeorm';
 import {MediaEntity} from './enitites/MediaEntity';
 import {MediaDTO} from '../../../common/entities/MediaDTO';
 import {VideoEntity} from './enitites/VideoEntity';
@@ -264,34 +264,36 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
     }
 
     if (queryFilter.fromDate) {
-      query.andWhere('media.metadata.creationDate >= :fromDate', {
+      query.andWhere('photo.metadata.creationDate >= :fromDate', {
         fromDate: queryFilter.fromDate.getTime()
       });
     }
     if (queryFilter.toDate) {
-      query.andWhere('media.metadata.creationDate <= :toDate', {
+      query.andWhere('photo.metadata.creationDate <= :toDate', {
         toDate: queryFilter.toDate.getTime()
       });
     }
     if (queryFilter.minResolution) {
-      query.andWhere('media.metadata.size.width * media.metadata.size.height >= :minRes', {
+      query.andWhere('photo.metadata.size.width * photo.metadata.size.height >= :minRes', {
         minRes: queryFilter.minResolution * 1000 * 1000
       });
     }
 
     if (queryFilter.maxResolution) {
-      query.andWhere('media.metadata.size.width * media.metadata.size.height <= :maxRes', {
+      query.andWhere('photo.metadata.size.width * photo.metadata.size.height <= :maxRes', {
         maxRes: queryFilter.maxResolution * 1000 * 1000
       });
     }
     if (queryFilter.orientation === OrientationType.landscape) {
-      query.andWhere('media.metadata.size.width >= media.metadata.size.height');
+      query.andWhere('photo.metadata.size.width >= photo.metadata.size.height');
     }
     if (queryFilter.orientation === OrientationType.portrait) {
-      query.andWhere('media.metadata.size.width <= media.metadata.size.height');
+      query.andWhere('photo.metadata.size.width <= photo.metadata.size.height');
     }
 
-
+    if (Config.Server.database.type === DatabaseType.mysql) {
+      return await query.groupBy('RAND(), photo.id').limit(1).getOne();
+    }
     return await query.groupBy('RANDOM()').limit(1).getOne();
 
   }
