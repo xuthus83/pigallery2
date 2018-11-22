@@ -54,7 +54,8 @@ gulp.task('build-frontend', function (done) {
 });
 
 gulp.task('copy-static', function () {
-  return gulp.src([
+   return gulp.src([
+    "backend/model/diagnostics/blank.jpg",
     "README.md",
     "LICENSE"], {base: "."})
     .pipe(gulp.dest('./release'));

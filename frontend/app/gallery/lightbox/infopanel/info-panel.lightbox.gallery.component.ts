@@ -28,14 +28,6 @@ export class InfoPanelLightboxComponent {
     return (this.media.metadata.size.width * this.media.metadata.size.height / 1000000).toFixed(2);
   }
 
-  renderDuration(time: number) {
-    const h = Math.floor(time / 1000 / 60 / 60);
-    time %= 1000 * 60 * 60;
-    const m = Math.floor(time / 1000 / 60);
-    time %= 1000 * 60;
-    const s = Math.floor(time / 1000);
-    return Utils.zeroPrefix(h, 2) + ':' + Utils.zeroPrefix(m, 2) + ':' + Utils.zeroPrefix(s, 2);
-  }
 
   calcSize(size: number) {
     const postFixes = ['B', 'KB', 'MB', 'GB', 'TB'];

@@ -2,6 +2,7 @@ import {Media} from '../Media';
 import {MediaDTO} from '../../../../common/entities/MediaDTO';
 import {OrientationTypes} from 'ts-exif-parser';
 import {PhotoDTO} from '../../../../common/entities/PhotoDTO';
+import {VideoDTO} from '../../../../common/entities/VideoDTO';
 
 export class GridMedia extends Media {
 
@@ -20,6 +21,10 @@ export class GridMedia extends Media {
 
   isVideo(): boolean {
     return MediaDTO.isVideo(this.media);
+  }
+
+  get Video(): VideoDTO {
+    return <VideoDTO>this.media;
   }
 
 

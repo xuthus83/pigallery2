@@ -137,7 +137,7 @@ apt-get install build-essential  libkrb5-dev gcc g++
  * Setup page
  * Random photo url
    * You can generate an url that returns a random photo from your gallery. You can use this feature to develop 3rd party applications, like: changing desktop background
- * video support - `future plan`
+ * video support
  * **Markdown based blogging support** - `future plan`
    * you can write some note in the blog.md for every directory
  * bug free :) - `In progress`

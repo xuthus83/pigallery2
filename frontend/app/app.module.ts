@@ -74,6 +74,7 @@ import {RandomQueryBuilderGalleryComponent} from './gallery/random-query-builder
 import {RandomPhotoSettingsComponent} from './settings/random-photo/random-photo.settings.component';
 import {FixOrientationPipe} from './gallery/FixOrientationPipe';
 import {VideoSettingsComponent} from './settings/video/video.settings.component';
+import {DurationPipe} from './pipes/DurationPipe';
 
 @Injectable()
 export class GoogleMapsConfig {
@@ -170,7 +171,8 @@ export function translationsFactory(locale: string) {
     StringifyRole,
     IconizeSortingMethod,
     StringifySortingMethod,
-    FixOrientationPipe
+    FixOrientationPipe,
+    DurationPipe
   ],
   providers: [
     {provide: UrlSerializer, useClass: CustomUrlSerializer},

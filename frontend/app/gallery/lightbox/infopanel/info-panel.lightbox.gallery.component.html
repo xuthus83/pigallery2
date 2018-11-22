@@ -45,8 +45,8 @@
         {{"Video"}}
       </div>
       <div class="details-sub row">
-        <div class="col-6" *ngIf="VideoData.duration">length: {{renderDuration(VideoData.duration)}}</div>
-        <div class="col-6" *ngIf="VideoData.bitRate">bit rate: {{calcSize(VideoData.bitRate)}}/s</div>
+        <div class="col-6" *ngIf="VideoData.duration"><ng-container i18n>duration</ng-container>: {{VideoData.duration | duration}}</div>
+        <div class="col-6" *ngIf="VideoData.bitRate"><ng-container i18n>bit rate</ng-container>: {{calcSize(VideoData.bitRate)}}/s</div>
       </div>
     </div>
   </div>

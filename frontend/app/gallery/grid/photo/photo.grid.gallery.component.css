@@ -82,7 +82,6 @@ img {
 
 a {
   color: white;
-
 }
 
 .photo-keywords {
@@ -91,4 +90,12 @@ a {
   text-align: right;
   display: inline-block;
   width: 100%;
+}
+
+.video-indicator{
+  font-size: large;
+  padding: 10px;
+  position: absolute;
+  transform: translate(-100%);
+  white-space: nowrap;
 }
