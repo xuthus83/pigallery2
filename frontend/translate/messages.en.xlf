@@ -339,6 +339,22 @@
         </context-group>
         <target>Info</target>
       </trans-unit>
+      <trans-unit id="653fa26f58c963f7493010061952b3fe63cd8084" datatype="html">
+        <source>duration</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/gallery/lightbox/infopanel/info-panel.lightbox.gallery.component.html</context>
+          <context context-type="linenumber">48</context>
+        </context-group>
+        <target>duration</target>
+      </trans-unit>
+      <trans-unit id="b00f6ce63441c0057013e41ad97b15383f0b17ae" datatype="html">
+        <source>bit rate</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/gallery/lightbox/infopanel/info-panel.lightbox.gallery.component.html</context>
+          <context context-type="linenumber">49</context>
+        </context-group>
+        <target>bit rate</target>
+      </trans-unit>
       <trans-unit id="8d3ad64abc60cf14853c51267267963732cc2c5c" datatype="html">
         <source>Random link</source>
         <context-group purpose="location">
@@ -1410,6 +1426,33 @@
           <context context-type="linenumber">1</context>
         </context-group>
         <target>Server info</target>
+      </trans-unit>
+      <trans-unit id="69f5c8276a390f22d64236a3d4849b1f2c308ef1" datatype="html">
+        <source>h</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">frontend/app/pipes/DurationPipe.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <note priority="1" from="meaning">hour</note>
+        <target>h</target>
+      </trans-unit>
+      <trans-unit id="7001154a37e238b0800a22a3629b60128690515c" datatype="html">
+        <source>m</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">frontend/app/pipes/DurationPipe.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <note priority="1" from="meaning">minute</note>
+        <target>m</target>
+      </trans-unit>
+      <trans-unit id="75ecedd96576b01de81bf0c5f515b658d3c94091" datatype="html">
+        <source>s</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">frontend/app/pipes/DurationPipe.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <note priority="1" from="meaning">second</note>
+        <target>s</target>
       </trans-unit>
       <trans-unit id="2ce162878bbc73bd49c7a3b51d6db6a10da4f21f" datatype="html">
         <source>ascending name</source>
