@@ -1,19 +1,21 @@
 <div #photoContainer class="photo-container" (mouseover)="mouseOver()" (mouseout)="mouseOut()">
 
 
-  <img #img [src]="thumbnail.Src | fixOrientation:gridPhoto.Orientation | async"
+  <img alt="{{gridPhoto.media.name}}" #img [src]="thumbnail.Src | fixOrientation:gridPhoto.Orientation | async"
        *ngIf="thumbnail.Available">
-
-  <div *ngIf="gridPhoto.isVideo()" class="video-indicator"
-       [style.marginTop.px]="-container.nativeElement.offsetHeight"
-       [style.marginLeft.px]="container.nativeElement.offsetWidth">
-    {{gridPhoto.Video.metadata.duration  | duration}} <span class="oi oi-video"></span></div>
 
   <app-gallery-grid-photo-loading
     [error]="thumbnail.Error"
     [animate]="thumbnail.loading"
     *ngIf="!thumbnail.Available">
   </app-gallery-grid-photo-loading>
+
+
+  <div *ngIf="gridPhoto.isVideo()" class="video-indicator"
+       [style.marginTop.px]="-container.nativeElement.offsetHeight"
+       [style.marginLeft.px]="container.nativeElement.offsetWidth">
+    {{gridPhoto.Video.metadata.duration  | duration}} <span class="oi oi-video"></span></div>
+
 
   <!--Info box -->
   <div #info class="info"
