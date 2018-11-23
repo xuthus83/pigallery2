@@ -52,6 +52,7 @@ export interface RendererInput {
 export class VideoRendererFactory {
   public static build(): (input: RendererInput) => Promise<void> {
     const ffmpeg = FFmpegFactory.get();
+    const path = require('path');
     return (input: RendererInput): Promise<void> => {
       return new Promise((resolve, reject) => {
 
@@ -63,24 +64,30 @@ export class VideoRendererFactory {
           }
           const ratio = data.streams[0].height / data.streams[0].width;
           const command: FfmpegCommand = ffmpeg(input.mediaPath);
+          const fileName = path.basename(input.thPath);
+          const folder = path.dirname(input.thPath);
+          let executedCmd = '';
           command
+            .on('start', (cmd) => {
+              executedCmd = cmd;
+            })
             .on('end', () => {
               resolve();
             })
             .on('error', (e) => {
-              reject(e.toString());
+              reject(e.toString() + ' executed: ' + executedCmd);
             })
             .outputOptions(['-qscale:v 4']);
           if (input.makeSquare === false) {
             const newWidth = Math.round(Math.sqrt((input.size * input.size) / ratio));
             command.takeScreenshots({
-              timemarks: ['10%'], size: newWidth + 'x?', filename: input.thPath
+              timemarks: ['10%'], size: newWidth + 'x?', filename: fileName, folder: folder
             });
 
 
           } else {
             command.takeScreenshots({
-              timemarks: ['10%'], size: input.size + 'x' + input.size, filename: input.thPath
+              timemarks: ['10%'], size: input.size + 'x' + input.size, filename: fileName, folder: folder
             });
           }
         });
