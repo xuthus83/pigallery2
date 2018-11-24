@@ -54,3 +54,7 @@ app-gallery-directory {
     -webkit-transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
   }
 }
+
+.search-type{
+  margin-left: 5px;
+}

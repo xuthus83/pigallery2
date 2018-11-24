@@ -28,7 +28,7 @@
                 type="button" class="btn btn-dark dropdown-toggle"
                 aria-controls="dropdown-basic">
           <span class="oi oi-menu"></span>
-          <span *ngIf="isAdmin() && notificationService.notifications.length>0" class="badge">{{notificationService.notifications.length}}</span>
+          <span *ngIf="isAdmin() && notificationService.notifications.length>0" class="navbar-badge badge badge-warning">{{notificationService.notifications.length}}</span>
 
         </button>
         <ul id="dropdown-basic" *dropdownMenu

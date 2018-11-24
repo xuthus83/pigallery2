@@ -5,6 +5,7 @@ import {SQLConnection} from './SQLConnection';
 import {PhotoEntity} from './enitites/PhotoEntity';
 import {DirectoryEntity} from './enitites/DirectoryEntity';
 import {MediaEntity} from './enitites/MediaEntity';
+import {VideoEntity} from './enitites/VideoEntity';
 
 export class SearchManager implements ISearchManager {
 
@@ -27,6 +28,7 @@ export class SearchManager implements ISearchManager {
 
     let result: AutoCompleteItem[] = [];
     const photoRepository = connection.getRepository(PhotoEntity);
+    const videoRepository = connection.getRepository(VideoEntity);
     const mediaRepository = connection.getRepository(MediaEntity);
     const directoryRepository = connection.getRepository(DirectoryEntity);
 
@@ -60,13 +62,21 @@ export class SearchManager implements ISearchManager {
           .filter(p => p.toLowerCase().indexOf(text.toLowerCase()) !== -1), SearchTypes.position));
       });
 
-    result = result.concat(this.encapsulateAutoComplete((await mediaRepository
+    result = result.concat(this.encapsulateAutoComplete((await photoRepository
       .createQueryBuilder('media')
       .select('DISTINCT(media.name)')
       .where('media.name LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
       .limit(5)
       .getRawMany())
-      .map(r => r.name), SearchTypes.image));
+      .map(r => r.name), SearchTypes.photo));
+
+    result = result.concat(this.encapsulateAutoComplete((await videoRepository
+      .createQueryBuilder('media')
+      .select('DISTINCT(media.name)')
+      .where('media.name LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
+      .limit(5)
+      .getRawMany())
+      .map(r => r.name), SearchTypes.video));
 
     result = result.concat(this.encapsulateAutoComplete((await directoryRepository
       .createQueryBuilder('dir')
@@ -91,9 +101,15 @@ export class SearchManager implements ISearchManager {
       resultOverflow: false
     };
 
-    const query = connection
-      .getRepository(MediaEntity)
-      .createQueryBuilder('media')
+    let repostiroy = connection.getRepository(MediaEntity);
+
+    if (searchType === SearchTypes.photo) {
+      repostiroy = connection.getRepository(PhotoEntity);
+    } else if (searchType === SearchTypes.video) {
+      repostiroy = connection.getRepository(VideoEntity);
+    }
+
+    const query = repostiroy.createQueryBuilder('media')
       .innerJoinAndSelect('media.directory', 'directory')
       .orderBy('media.metadata.creationDate', 'ASC');
 
@@ -102,7 +118,7 @@ export class SearchManager implements ISearchManager {
       query.orWhere('directory.name LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'});
     }
 
-    if (!searchType || searchType === SearchTypes.image) {
+    if (!searchType || searchType === SearchTypes.photo || searchType === SearchTypes.video) {
       query.orWhere('media.name LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'});
     }
 
@@ -173,7 +189,7 @@ export class SearchManager implements ISearchManager {
     return result;
   }
 
-  private encapsulateAutoComplete(values: Array<string>, type: SearchTypes): Array<AutoCompleteItem> {
+  private encapsulateAutoComplete(values: string[], type: SearchTypes): Array<AutoCompleteItem> {
     const res = [];
     values.forEach((value) => {
       res.push(new AutoCompleteItem(value, type));

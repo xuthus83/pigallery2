@@ -8,7 +8,8 @@
         : {{countDown.day}}
         <ng-container i18n>days</ng-container>
         ,
-        {{("0"+countDown.hour).slice(-2)}}:{{("0"+countDown.minute).slice(-2)}}:{{("0"+countDown.second).slice(-2)}}
+        {{("0" + countDown.hour).slice(-2)}}:{{("0" + countDown.minute).slice(-2)}}
+        :{{("0" + countDown.second).slice(-2)}}
       </span>
     </li>
     <li class="nav-item" *ngIf="showSearchBar">
@@ -21,7 +22,7 @@
 
   <ng-container navbar-menu>
     <li role="menuitem" *ngIf="showRandomPhotoBuilder">
-      <app-gallery-random-query-builder ></app-gallery-random-query-builder>
+      <app-gallery-random-query-builder></app-gallery-random-query-builder>
     </li>
   </ng-container>
 
@@ -47,13 +48,14 @@
     <ol class="breadcrumb">
       <li class="active">
         <ng-container i18n>Searching for:</ng-container>
-        <span [ngSwitch]="_galleryService.content.value.searchResult.searchType">
-                      <span *ngSwitchCase="SearchTypes.image" class="oi oi-image"></span>
+        <span class="search-type" [ngSwitch]="_galleryService.content.value.searchResult.searchType">
+                      <span *ngSwitchCase="SearchTypes.photo" class="oi oi-image"></span>
+                      <span *ngSwitchCase="SearchTypes.video" class="oi oi-video"></span>
                       <span *ngSwitchCase="SearchTypes.directory" class="oi oi-folder"></span>
                       <span *ngSwitchCase="SearchTypes.keyword" class="oi oi-tag"></span>
                       <span *ngSwitchCase="SearchTypes.position" class="oi oi-map-marker"></span>
                     </span>
-        <strong>{{_galleryService.content.value.searchResult.searchText}}</strong>
+        <strong> {{_galleryService.content.value.searchResult.searchText}}</strong>
       </li>
     </ol>
 
