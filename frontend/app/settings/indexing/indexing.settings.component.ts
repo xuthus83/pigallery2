@@ -96,11 +96,11 @@ export class IndexingSettingsComponent extends SettingsComponent<IndexingConfig,
     }
   }
 
-  async index() {
+  async index(createThumbnails: boolean) {
     this.inProgress = true;
     this.error = '';
     try {
-      await this._settingsService.index();
+      await this._settingsService.index(createThumbnails);
       this.updateProgress();
       this.notification.success(this.i18n('Folder indexed'), this.i18n('Success'));
       this.inProgress = false;

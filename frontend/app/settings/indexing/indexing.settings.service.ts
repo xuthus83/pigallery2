@@ -5,6 +5,7 @@ import {AbstractSettingsService} from '../_abstract/abstract.settings.service';
 import {DatabaseType, IndexingConfig} from '../../../../common/config/private/IPrivateConfig';
 import {IndexingProgressDTO} from '../../../../common/entities/settings/IndexingProgressDTO';
 import {BehaviorSubject} from 'rxjs';
+import {IndexingDTO} from '../../../../common/entities/settings/IndexingDTO';
 
 @Injectable()
 export class IndexingSettingsService extends AbstractSettingsService<IndexingConfig> {
@@ -27,8 +28,8 @@ export class IndexingSettingsService extends AbstractSettingsService<IndexingCon
     return this._settingsService.settings.value.Server.database.type !== DatabaseType.memory;
   }
 
-  public index() {
-    return this._networkService.putJson('/admin/indexes/job');
+  public index(createThumbnails) {
+    return this._networkService.postJson('/admin/indexes/job', <IndexingDTO>{createThumbnails: createThumbnails});
   }
 
   public cancel() {

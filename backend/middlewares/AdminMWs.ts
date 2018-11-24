@@ -11,6 +11,7 @@ import {BasicConfigDTO} from '../../common/entities/settings/BasicConfigDTO';
 import {OtherConfigDTO} from '../../common/entities/settings/OtherConfigDTO';
 import {ProjectPath} from '../ProjectPath';
 import {PrivateConfigClass} from '../../common/config/private/PrivateConfigClass';
+import {IndexingDTO} from '../../common/entities/settings/IndexingDTO';
 
 
 const LOG_TAG = '[AdminMWs]';
@@ -317,13 +318,15 @@ export class AdminMWs {
 
   public static startIndexing(req: Request, res: Response, next: NextFunction) {
     try {
-      ObjectManagerRepository.getInstance().IndexingManager.startIndexing();
+      const createThumbnails: boolean = (<IndexingDTO>req.body).createThumbnails || false;
+      ObjectManagerRepository.getInstance().IndexingManager.startIndexing(createThumbnails);
       req.resultPipe = 'ok';
       return next();
     } catch (err) {
       return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, 'Indexing error: ' + JSON.stringify(err, null, '  '), err));
     }
   }
+
 
   public static getIndexingProgress(req: Request, res: Response, next: NextFunction) {
     try {

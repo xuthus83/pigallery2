@@ -179,7 +179,7 @@ export class ThumbnailGeneratorMWs {
     }
   }
 
-  private static generateThumbnailName(mediaPath: string, size: number): string {
+  public static generateThumbnailName(mediaPath: string, size: number): string {
     return crypto.createHash('md5').update(mediaPath).digest('hex') + '_' + size + '.jpg';
   }
 }

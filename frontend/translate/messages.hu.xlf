@@ -1304,30 +1304,51 @@
         </context-group>
         <target>Megjegyzés: csak az indexelt könyvtárak között működik a keresés</target>
       </trans-unit>
-      <trans-unit id="32cc8ef8dc6f4f239b7f637ac8adaecc55b8e1d8" datatype="html">
-        <source>Index
-        </source>
+      <trans-unit id="170f7de02b14690fb9c1999a16926c0044bfd5c1" datatype="html">
+        <source>Index</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/settings/indexing/indexing.settings.component.html</context>
+          <context context-type="linenumber">93</context>
+        </context-group>
+        <target>Index</target>
+      </trans-unit>
+      <trans-unit id="b0a0813328867a956835e6fd09e614c2ad1cbc9d" datatype="html">
+        <source>Indexes the folders</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/indexing/indexing.settings.component.html</context>
           <context context-type="linenumber">91</context>
         </context-group>
-        <target>Index</target>
+        <target>Indexeli a mappákat</target>
       </trans-unit>
-      <trans-unit id="e7e43ec575247424aa179da55b338fd740e8aa7f" datatype="html">
-        <source>Cancel
-        </source>
+      <trans-unit id="7e546cd01e4ee4cb0571fe34ce9c96ad760f31f7" datatype="html">
+        <source>Index with Thumbnails</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/indexing/indexing.settings.component.html</context>
-          <context context-type="linenumber">96</context>
+          <context context-type="linenumber">99</context>
+        </context-group>
+        <target>Index thumbnail-el</target>
+      </trans-unit>
+      <trans-unit id="b7e4e839063c258440e50826493ef7ee3c8c2be3" datatype="html">
+        <source>Indexes the folders and also creates the thumbnails</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/settings/indexing/indexing.settings.component.html</context>
+          <context context-type="linenumber">95</context>
+        </context-group>
+        <target>Indexeli a mappákat és legenerálja a thumbnaileket is</target>
+      </trans-unit>
+      <trans-unit id="d7b35c384aecd25a516200d6921836374613dfe7" datatype="html">
+        <source>Cancel</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/settings/indexing/indexing.settings.component.html</context>
+          <context context-type="linenumber">103</context>
         </context-group>
         <target>Mégse</target>
       </trans-unit>
-      <trans-unit id="d68e02eaea0b78b12fceb483b2183a3f5b70d969" datatype="html">
-        <source>Reset Indexes
-        </source>
+      <trans-unit id="6ea6ba32bbd2333f0df2a888252f82e42c8bbe7a" datatype="html">
+        <source>Reset Indexes</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/indexing/indexing.settings.component.html</context>
-          <context context-type="linenumber">100</context>
+          <context context-type="linenumber">106</context>
         </context-group>
         <target>Indexek visszaállítása</target>
       </trans-unit>

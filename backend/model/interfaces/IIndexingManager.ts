@@ -1,7 +1,7 @@
 import {IndexingProgressDTO} from '../../../common/entities/settings/IndexingProgressDTO';
 
 export interface IIndexingManager {
-  startIndexing(): void;
+  startIndexing(createThumbnails?: boolean): void;
 
   getProgress(): IndexingProgressDTO;
 

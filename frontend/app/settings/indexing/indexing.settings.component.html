@@ -88,17 +88,22 @@
         <button class="btn btn-success"
                 *ngIf="_settingsService.progress.value == null"
                 [disabled]="inProgress"
-                (click)="index()" i18n>Index
-        </button>
+                title="Indexes the folders"
+                i18n-title
+                (click)="index(false)" i18n>Index</button>
+        <button class="btn btn-primary"
+                title="Indexes the folders and also creates the thumbnails"
+                i18n-title
+                *ngIf="_settingsService.progress.value == null"
+                [disabled]="inProgress"
+                (click)="index(true)" i18n>Index with Thumbnails</button>
         <button class="btn btn-default"
                 *ngIf="_settingsService.progress.value != null"
                 [disabled]="inProgress"
-                (click)="cancelIndexing()" i18n>Cancel
-        </button>
+                (click)="cancelIndexing()" i18n>Cancel</button>
         <button class="btn btn-danger"
                 [disabled]="inProgress"
-                (click)="resetDatabase()" i18n>Reset Indexes
-        </button>
+                (click)="resetDatabase()" i18n>Reset Indexes</button>
       </div>
     </div>
   </div>

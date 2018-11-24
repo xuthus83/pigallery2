@@ -18,7 +18,7 @@ export class AdminRouter {
       AdminMWs.getIndexingProgress,
       RenderingMWs.renderResult
     );
-    app.put('/api/admin/indexes/job',
+    app.post('/api/admin/indexes/job',
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Admin),
       AdminMWs.startIndexing,
