@@ -103,7 +103,7 @@ describe('GalleryManager', () => {
     removeIds(selected);
     subDir.isPartial = true;
     delete subDir.directories;
-    expect(selected).to.deep.equal(parent);
+    expect(Utils.clone(selected)).to.deep.equal(Utils.clone(parent));
 
   });
 
@@ -137,7 +137,7 @@ describe('GalleryManager', () => {
     delete subDir.parent;
     removeIds(selected);
     // selected.directories[0].parent = selected;
-    expect(selected).to.deep.equal(subDir);
+    expect(Utils.clone(selected)).to.deep.equal(Utils.clone(subDir));
 
   });
 

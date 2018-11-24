@@ -19,7 +19,7 @@ import {MediaDimensionEntity} from '../../../../../backend/model/sql/enitites/Me
 import {OrientationTypes} from 'ts-exif-parser';
 import {Utils} from '../../../../../common/Utils';
 import {TestHelper} from './TestHelper';
-import {afterEach, beforeEach, describe, it} from '@angular/core/testing/src/testing_internal';
+import {VideoEntity} from '../../../../../backend/model/sql/enitites/VideoEntity';
 
 describe('SearchManager', () => {
 
@@ -30,6 +30,7 @@ describe('SearchManager', () => {
   const dir = TestHelper.getDirectoryEntry();
   const p = TestHelper.getPhotoEntry1(dir);
   const p2 = TestHelper.getPhotoEntry2(dir);
+  const v = TestHelper.getVideoEntry1(dir);
 
   const setUpSqlDB = async () => {
     if (fs.existsSync(dbPath)) {
@@ -49,6 +50,7 @@ describe('SearchManager', () => {
     await conn.getRepository(DirectoryEntity).save(p.directory);
     await pr.save(p);
     await pr.save(p2);
+    await conn.getRepository(VideoEntity).save(v);
 
     await SQLConnection.close();
   };
@@ -99,8 +101,10 @@ describe('SearchManager', () => {
       new AutoCompleteItem('wars dir', SearchTypes.directory),
       new AutoCompleteItem('Research City', SearchTypes.position)].sort(cmp));
 
-    expect((await sm.autocomplete('sw')).sort(cmp)).to.deep.equal([new AutoCompleteItem('sw1', SearchTypes.image),
-      new AutoCompleteItem('sw2', SearchTypes.image)].sort(cmp));
+    expect((await sm.autocomplete('sw')).sort(cmp)).to.deep.equal([new AutoCompleteItem('sw1', SearchTypes.photo),
+      new AutoCompleteItem('sw2', SearchTypes.photo), new AutoCompleteItem(v.name, SearchTypes.video)].sort(cmp));
+
+    expect((await sm.autocomplete(v.name)).sort(cmp)).to.deep.equal([new AutoCompleteItem(v.name, SearchTypes.video)]);
   });
 
 
@@ -112,7 +116,7 @@ describe('SearchManager', () => {
       searchText: 'sw',
       searchType: null,
       directories: [],
-      media: [p, p2],
+      media: [p, p2,v],
       resultOverflow: false
     }));
 
@@ -156,7 +160,7 @@ describe('SearchManager', () => {
     expect(Utils.clone(await sm.instantSearch('sw'))).to.deep.equal(Utils.clone({
       searchText: 'sw',
       directories: [],
-      media: [p, p2],
+      media: [p, p2,v],
       resultOverflow: false
     }));
 

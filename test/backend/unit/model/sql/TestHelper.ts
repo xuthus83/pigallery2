@@ -9,6 +9,7 @@ import * as path from 'path';
 import {OrientationTypes} from 'ts-exif-parser';
 import {DirectoryEntity} from '../../../../../backend/model/sql/enitites/DirectoryEntity';
 import {Utils} from '../../../../../common/Utils';
+import {VideoEntity, VideoMetadataEntity} from '../../../../../backend/model/sql/enitites/VideoEntity';
 
 export class TestHelper {
 
@@ -65,6 +66,28 @@ export class TestHelper {
     return d;
   }
 
+  public static getVideoEntry(dir: DirectoryEntity) {
+    const sd = new MediaDimensionEntity();
+    sd.height = 200;
+    sd.width = 200;
+
+    const m = new VideoMetadataEntity();
+    m.keywords = null;
+    m.size = sd;
+    m.creationDate = Date.now();
+    m.fileSize = 123456789;
+
+    m.duration = 10000;
+    m.bitRate = 4000;
+
+
+    const d = new VideoEntity();
+    d.name = 'test video.jpg';
+    d.directory = dir;
+    d.metadata = m;
+    return d;
+  }
+
   public static getPhotoEntry1(dir: DirectoryEntity) {
     const p = TestHelper.getPhotoEntry(dir);
 
@@ -72,6 +95,12 @@ export class TestHelper {
     p.metadata.positionData.city = 'Mos Eisley';
     p.metadata.positionData.country = 'Tatooine';
     p.name = 'sw1';
+    return p;
+  }
+
+  public static getVideoEntry1(dir: DirectoryEntity) {
+    const p = TestHelper.getVideoEntry(dir);
+    p.name = 'swVideo';
     return p;
   }
 
