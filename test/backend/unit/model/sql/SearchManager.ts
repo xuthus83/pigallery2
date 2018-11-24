@@ -18,6 +18,8 @@ import {DirectoryEntity} from '../../../../../backend/model/sql/enitites/Directo
 import {MediaDimensionEntity} from '../../../../../backend/model/sql/enitites/MediaEntity';
 import {OrientationTypes} from 'ts-exif-parser';
 import {Utils} from '../../../../../common/Utils';
+import {TestHelper} from './TestHelper';
+import {afterEach, beforeEach, describe, it} from '@angular/core/testing/src/testing_internal';
 
 describe('SearchManager', () => {
 
@@ -25,66 +27,9 @@ describe('SearchManager', () => {
   const tempDir = path.join(__dirname, '../../tmp');
   const dbPath = path.join(tempDir, 'test.db');
 
-  const dir = new DirectoryEntity();
-  dir.name = 'wars dir';
-  dir.path = '.';
-  dir.lastModified = Date.now();
-  dir.lastScanned = null;
-
-  const getPhoto = () => {
-    const sd = new MediaDimensionEntity();
-    sd.height = 200;
-    sd.width = 200;
-    const gps = new GPSMetadataEntity();
-    /* gps.altitude = 1;
-     gps.latitude = 1;
-     gps.longitude = 1;*/
-    const pd = new PositionMetaDataEntity();
-    /* pd.city = "New York";
-     pd.country = "Alderan";
-     pd.state = "Death star";*/
-    pd.GPSData = gps;
-    const cd = new CameraMetadataEntity();
-    /* cd.ISO = 100;
-     cd.model = "60D";
-     cd.maker = "Canon";
-     cd.fStop = 1;
-     cd.exposure = 1;
-     cd.focalLength = 1;*/
-    cd.lens = 'Lens';
-    const m = new PhotoMetadataEntity();
-    m.keywords = ['apple'];
-    m.cameraData = cd;
-    m.positionData = pd;
-    m.size = sd;
-    m.creationDate = Date.now();
-    m.fileSize = 123456789;
-    m.orientation = OrientationTypes.TOP_LEFT;
-
-    // TODO: remove when typeorm is fixed
-    m.duration = null;
-    m.bitRate = null;
-
-
-    const d = new PhotoEntity();
-    d.name = 'test media.jpg';
-    d.directory = dir;
-    d.metadata = m;
-    return d;
-  };
-
-  const p = getPhoto();
-  p.metadata.keywords = ['Boba Fett', 'star wars', 'Anakin', 'death star'];
-  p.metadata.positionData.city = 'Mos Eisley';
-  p.metadata.positionData.country = 'Tatooine';
-  p.name = 'sw1';
-
-  const p2 = getPhoto();
-  p2.metadata.keywords = ['Padmé Amidala', 'star wars', 'Natalie Portman', 'death star'];
-  p2.metadata.positionData.city = 'Derem City';
-  p2.metadata.positionData.state = 'Research City';
-  p2.metadata.positionData.country = 'Kamino';
-  p2.name = 'sw2';
+  const dir = TestHelper.getDirectoryEntry();
+  const p = TestHelper.getPhotoEntry1(dir);
+  const p2 = TestHelper.getPhotoEntry2(dir);
 
   const setUpSqlDB = async () => {
     if (fs.existsSync(dbPath)) {

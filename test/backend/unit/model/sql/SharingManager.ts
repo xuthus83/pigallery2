@@ -61,9 +61,9 @@ describe('SharingManager', () => {
 
 
   it('should create sharing', async () => {
-    let sm = new SharingManager();
+    const sm = new SharingManager();
 
-    let sharing: SharingDTO = {
+    const sharing: SharingDTO = {
       id: null,
       sharingKey: 'testKey',
       path: '/',
@@ -86,9 +86,9 @@ describe('SharingManager', () => {
 
 
   it('should find sharing', async () => {
-    let sm = new SharingManager();
+    const sm = new SharingManager();
 
-    let sharing: SharingDTO = {
+    const sharing: SharingDTO = {
       id: null,
       sharingKey: 'testKey',
       path: '/',
@@ -111,9 +111,9 @@ describe('SharingManager', () => {
 
 
   it('should update sharing', async () => {
-    let sm = new SharingManager();
+    const sm = new SharingManager();
 
-    let sharing: SharingDTO = {
+    const sharing: SharingDTO = {
       id: null,
       sharingKey: 'testKey',
       path: '/',
@@ -129,7 +129,7 @@ describe('SharingManager', () => {
     expect(saved.expires).to.equals(sharing.expires);
     expect(saved.includeSubfolders).to.equals(sharing.includeSubfolders);
 
-    let update: SharingDTO = {
+    const update: SharingDTO = {
       id: saved.id,
       sharingKey: saved.sharingKey,
       path: saved.path,
