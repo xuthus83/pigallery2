@@ -92,7 +92,7 @@ export class SearchManager implements ISearchManager {
     };
 
     const query = connection
-      .getRepository(PhotoEntity)
+      .getRepository(MediaEntity)
       .createQueryBuilder('media')
       .innerJoinAndSelect('media.directory', 'directory')
       .orderBy('media.metadata.creationDate', 'ASC');
@@ -150,7 +150,7 @@ export class SearchManager implements ISearchManager {
     };
 
     result.media = await connection
-      .getRepository(PhotoEntity)
+      .getRepository(MediaEntity)
       .createQueryBuilder('media')
       .orderBy('media.metadata.creationDate', 'ASC')
       .where('media.metadata.keywords LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
