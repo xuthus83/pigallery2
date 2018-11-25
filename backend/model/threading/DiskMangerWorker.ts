@@ -35,7 +35,10 @@ export class DiskMangerWorker {
 
   private static isVideo(fullPath: string) {
     const extensions = [
-      '.mp4'
+      '.mp4',
+      '.webm',
+      '.ogv',
+      '.ogg'
     ];
 
     const extension = path.extname(fullPath).toLowerCase();
@@ -112,8 +115,8 @@ export class DiskMangerWorker {
     return new Promise<VideoMetadata>((resolve, reject) => {
       const metadata: VideoMetadata = <VideoMetadata>{
         size: {
-          width: 0,
-          height: 0
+          width: 1,
+          height: 1
         },
         bitRate: 0,
         duration: 0,
@@ -135,15 +138,18 @@ export class DiskMangerWorker {
         }
 
         try {
+          for (let i = 0; i < data.streams.length; i++) {
+            if (data.streams[i].width) {
+              metadata.size.width = data.streams[i].width;
+              metadata.size.height = data.streams[i].height;
 
-          metadata.size = {
-            width: data.streams[0].width,
-            height: data.streams[0].height
-          };
+              metadata.duration = Math.floor(data.streams[i].duration * 1000);
+              metadata.bitRate = parseInt(data.streams[i].bit_rate, 10) || null;
+              metadata.creationDate = Date.parse(data.streams[i].tags.creation_time);
+              break;
+            }
+          }
 
-          metadata.duration = Math.floor(data.streams[0].duration * 1000);
-          metadata.bitRate = data.streams[0].bit_rate;
-          metadata.creationDate = Date.parse(data.streams[0].tags.creation_time);
         } catch (err) {
         }
 
@@ -177,7 +183,7 @@ export class DiskMangerWorker {
 
             try {
               const exif = ExifParserFactory.create(data).parse();
-              metadata.cameraData = <CameraMetadata> {
+              metadata.cameraData = <CameraMetadata>{
                 ISO: exif.tags.ISO,
                 model: exif.tags.Model,
                 make: exif.tags.Make,
@@ -188,7 +194,7 @@ export class DiskMangerWorker {
               };
               if (!isNaN(exif.tags.GPSLatitude) || exif.tags.GPSLongitude || exif.tags.GPSAltitude) {
                 metadata.positionData = metadata.positionData || {};
-                metadata.positionData.GPSData = <GPSMetadata> {
+                metadata.positionData.GPSData = <GPSMetadata>{
                   latitude: exif.tags.GPSLatitude,
                   longitude: exif.tags.GPSLongitude,
                   altitude: exif.tags.GPSAltitude
@@ -205,15 +211,15 @@ export class DiskMangerWorker {
 
 
               if (exif.imageSize) {
-                metadata.size = <MediaDimension> {width: exif.imageSize.width, height: exif.imageSize.height};
+                metadata.size = <MediaDimension>{width: exif.imageSize.width, height: exif.imageSize.height};
               } else if (exif.tags.RelatedImageWidth && exif.tags.RelatedImageHeight) {
-                metadata.size = <MediaDimension> {width: exif.tags.RelatedImageWidth, height: exif.tags.RelatedImageHeight};
+                metadata.size = <MediaDimension>{width: exif.tags.RelatedImageWidth, height: exif.tags.RelatedImageHeight};
               } else {
-                metadata.size = <MediaDimension> {width: 1, height: 1};
+                metadata.size = <MediaDimension>{width: 1, height: 1};
               }
             } catch (err) {
               Logger.debug(LOG_TAG, 'Error parsing exif', fullPath, err);
-              metadata.size = <MediaDimension> {width: 1, height: 1};
+              metadata.size = <MediaDimension>{width: 1, height: 1};
             }
 
             try {
@@ -224,8 +230,8 @@ export class DiskMangerWorker {
                 metadata.positionData.state = iptcData.province_or_state;
                 metadata.positionData.city = iptcData.city;
               }
-              metadata.keywords = <string[]> (iptcData.keywords || []);
-              metadata.creationDate = <number> (iptcData.date_time ? iptcData.date_time.getTime() : metadata.creationDate);
+              metadata.keywords = <string[]>(iptcData.keywords || []);
+              metadata.creationDate = <number>(iptcData.date_time ? iptcData.date_time.getTime() : metadata.creationDate);
 
             } catch (err) {
               // Logger.debug(LOG_TAG, "Error parsing iptc data", fullPath, err);

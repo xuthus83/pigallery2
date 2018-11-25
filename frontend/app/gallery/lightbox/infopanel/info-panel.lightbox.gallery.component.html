@@ -21,7 +21,7 @@
     </div>
   </div>
 
-  <div class="row">
+  <div class="row" *ngIf="media.metadata.creationDate">
     <div class="col-2">
       <span class="details-icon oi oi-calendar"></span>
     </div>
@@ -36,7 +36,7 @@
   </div>
 
 
-  <div class="row" *ngIf="VideoData">
+  <div class="row" *ngIf="VideoData && (VideoData.duration || VideoData.bitRate)">
     <div class="col-2">
       <span class="details-icon oi oi-video"></span>
     </div>

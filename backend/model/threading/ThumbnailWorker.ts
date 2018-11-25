@@ -62,7 +62,20 @@ export class VideoRendererFactory {
           if (!!err || data === null) {
             return reject(err.toString());
           }
-          const ratio = data.streams[0].height / data.streams[0].width;
+         /// console.log(data);
+          let width = null;
+          let height = null;
+          for (let i = 0; i < data.streams.length; i++) {
+            if (data.streams[i].width) {
+              width = data.streams[i].width;
+              height = data.streams[i].height;
+              break;
+            }
+          }
+          if (!width || !height) {
+            return reject('Can not read video dimension');
+          }
+          const ratio = height / width;
           const command: FfmpegCommand = ffmpeg(input.mediaPath);
           const fileName = path.basename(input.thPath);
           const folder = path.dirname(input.thPath);

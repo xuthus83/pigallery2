@@ -43,7 +43,7 @@ export class GalleryRouter {
   }
 
   private static addGetVideo(app) {
-    app.get(['/api/gallery/content/:mediaPath(*\.(mp4))'],
+    app.get(['/api/gallery/content/:mediaPath(*\.(mp4|ogg|ogv|webm))'],
       AuthenticationMWs.authenticate,
       // TODO: authorize path
       GalleryMWs.loadMedia,
@@ -73,7 +73,7 @@ export class GalleryRouter {
   }
 
   private static addGetVideoThumbnail(app) {
-    app.get('/api/gallery/content/:mediaPath(*\.(mp4))/thumbnail/:size?',
+    app.get('/api/gallery/content/:mediaPath(*\.(mp4|ogg|ogv|webm))/thumbnail/:size?',
       AuthenticationMWs.authenticate,
       // TODO: authorize path
       GalleryMWs.loadMedia,

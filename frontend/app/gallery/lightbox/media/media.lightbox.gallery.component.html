@@ -19,7 +19,7 @@
          autoplay
          (error)="onImageError()"
           (timeupdate)="onVideoProgress()" >
-    <source [src]="gridMedia.getPhotoPath()" type="video/mp4">
+    <source [src]="gridMedia.getPhotoPath()" type="{{getVideoType()}}">
   </video>
 
 </div>

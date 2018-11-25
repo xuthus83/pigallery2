@@ -12,6 +12,10 @@ export class MediaIcon {
 
   }
 
+  getExtension(): string {
+    return this.media.name.substr(this.media.name.lastIndexOf('.') + 1);
+  }
+
   iconLoaded() {
     this.media.readyIcon = true;
   }
