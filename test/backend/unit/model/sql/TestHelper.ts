@@ -10,6 +10,7 @@ import {OrientationTypes} from 'ts-exif-parser';
 import {DirectoryEntity} from '../../../../../backend/model/sql/enitites/DirectoryEntity';
 import {Utils} from '../../../../../common/Utils';
 import {VideoEntity, VideoMetadataEntity} from '../../../../../backend/model/sql/enitites/VideoEntity';
+import {FileEntity} from '../../../../../backend/model/sql/enitites/FileEntity';
 
 export class TestHelper {
 
@@ -126,11 +127,22 @@ export class TestHelper {
       parent.directories.push(dir);
     }
     dir.directories = [];
+    dir.metaFile = [];
     dir.media = [];
     dir.lastModified = Date.now();
     dir.lastScanned = null;
 
     return dir;
+  }
+
+
+  public static getRandomizedGPXEntry(dir: DirectoryEntity, forceStr = null): FileEntity {
+    const d = new FileEntity();
+    d.name = forceStr + '_' + Math.random().toString(36).substring(7) + '.gpx';
+    d.directory = dir;
+
+    dir.metaFile.push(d);
+    return d;
   }
 
   public static getRandomizedPhotoEntry(dir: DirectoryEntity, forceStr = null) {

@@ -13,6 +13,7 @@ export class GalleryRouter {
     this.addGetVideoThumbnail(app);
     this.addGetImage(app);
     this.addGetVideo(app);
+    this.addGetMetaFile(app);
     this.addRandom(app);
     this.addDirectoryList(app);
 
@@ -34,19 +35,28 @@ export class GalleryRouter {
 
 
   private static addGetImage(app) {
-    app.get(['/api/gallery/content/:mediaPath(*\.(jpg|bmp|png|gif|jpeg))'],
+    app.get(['/api/gallery/content/:filePath(*\.(jpg|bmp|png|gif|jpeg))'],
       AuthenticationMWs.authenticate,
       // TODO: authorize path
-      GalleryMWs.loadMedia,
+      GalleryMWs.loadFile,
       RenderingMWs.renderFile
     );
   }
 
   private static addGetVideo(app) {
-    app.get(['/api/gallery/content/:mediaPath(*\.(mp4|ogg|ogv|webm))'],
+    app.get(['/api/gallery/content/:filePath(*\.(mp4|ogg|ogv|webm))'],
       AuthenticationMWs.authenticate,
       // TODO: authorize path
-      GalleryMWs.loadMedia,
+      GalleryMWs.loadFile,
+      RenderingMWs.renderFile
+    );
+  }
+
+  private static addGetMetaFile(app) {
+    app.get(['/api/gallery/content/:filePath(*\.(gpx))'],
+      AuthenticationMWs.authenticate,
+      // TODO: authorize path
+      GalleryMWs.loadFile,
       RenderingMWs.renderFile
     );
   }
@@ -57,36 +67,36 @@ export class GalleryRouter {
       AuthenticationMWs.authorise(UserRoles.Guest),
       // TODO: authorize path
       GalleryMWs.getRandomImage,
-      GalleryMWs.loadMedia,
+      GalleryMWs.loadFile,
       RenderingMWs.renderFile
     );
   }
 
   private static addGetImageThumbnail(app) {
-    app.get('/api/gallery/content/:mediaPath(*\.(jpg|bmp|png|gif|jpeg))/thumbnail/:size?',
+    app.get('/api/gallery/content/:filePath(*\.(jpg|bmp|png|gif|jpeg))/thumbnail/:size?',
       AuthenticationMWs.authenticate,
       // TODO: authorize path
-      GalleryMWs.loadMedia,
+      GalleryMWs.loadFile,
       ThumbnailGeneratorMWs.generateThumbnailFactory(ThumbnailSourceType.Image),
       RenderingMWs.renderFile
     );
   }
 
   private static addGetVideoThumbnail(app) {
-    app.get('/api/gallery/content/:mediaPath(*\.(mp4|ogg|ogv|webm))/thumbnail/:size?',
+    app.get('/api/gallery/content/:filePath(*\.(mp4|ogg|ogv|webm))/thumbnail/:size?',
       AuthenticationMWs.authenticate,
       // TODO: authorize path
-      GalleryMWs.loadMedia,
+      GalleryMWs.loadFile,
       ThumbnailGeneratorMWs.generateThumbnailFactory(ThumbnailSourceType.Video),
       RenderingMWs.renderFile
     );
   }
 
   private static addGetImageIcon(app) {
-    app.get('/api/gallery/content/:mediaPath(*\.(jpg|bmp|png|gif|jpeg))/icon',
+    app.get('/api/gallery/content/:filePath(*\.(jpg|bmp|png|gif|jpeg))/icon',
       AuthenticationMWs.authenticate,
       // TODO: authorize path
-      GalleryMWs.loadMedia,
+      GalleryMWs.loadFile,
       ThumbnailGeneratorMWs.generateIconFactory(ThumbnailSourceType.Image),
       RenderingMWs.renderFile
     );

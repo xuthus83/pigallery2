@@ -17,6 +17,8 @@ import {Brackets, Connection} from 'typeorm';
 import {MediaEntity} from './enitites/MediaEntity';
 import {MediaDTO} from '../../../common/entities/MediaDTO';
 import {VideoEntity} from './enitites/VideoEntity';
+import {FileEntity} from './enitites/FileEntity';
+import {FileDTO} from '../../../common/entities/FileDTO';
 
 export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
 
@@ -30,6 +32,7 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
       })
       .leftJoinAndSelect('directory.directories', 'directories')
       .leftJoinAndSelect('directory.media', 'media')
+      .leftJoinAndSelect('directory.metaFile', 'metaFile')
       .getOne();
   }
 
@@ -202,6 +205,7 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
     // saving to db
     const directoryRepository = connection.getRepository(DirectoryEntity);
     const mediaRepository = connection.getRepository(MediaEntity);
+    const fileRepository = connection.getRepository(FileEntity);
 
 
     let currentDir: DirectoryEntity = await directoryRepository.createQueryBuilder('directory')
@@ -299,6 +303,34 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
     }
     await this.saveMedia(connection, mediaToSave);
     await mediaRepository.remove(indexedMedia);
+
+    // save files
+    const indexedMetaFiles = await fileRepository.createQueryBuilder('file')
+      .where('file.directory = :dir', {
+        dir: currentDir.id
+      }).getMany();
+
+
+    const metaFilesToSave = [];
+    for (let i = 0; i < scannedDirectory.metaFile.length; i++) {
+      let metaFile: FileDTO = null;
+      for (let j = 0; j < indexedMetaFiles.length; j++) {
+        if (indexedMetaFiles[j].name === scannedDirectory.metaFile[i].name) {
+          metaFile = indexedMetaFiles[j];
+          indexedMetaFiles.splice(j, 1);
+          break;
+        }
+      }
+      if (metaFile == null) { //not in DB yet
+        scannedDirectory.metaFile[i].directory = null;
+        metaFile = Utils.clone(scannedDirectory.metaFile[i]);
+        scannedDirectory.metaFile[i].directory = scannedDirectory;
+        metaFile.directory = currentDir;
+        metaFilesToSave.push(metaFile);
+      }
+    }
+    await fileRepository.save(metaFilesToSave);
+   // await fileRepository.remove(indexedMetaFiles);
   }
 
   protected async saveMedia(connection: Connection, mediaList: MediaDTO[]): Promise<MediaEntity[]> {

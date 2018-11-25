@@ -11,6 +11,7 @@ import {Connection} from 'typeorm';
 import {DirectoryEntity} from '../../../../../backend/model/sql/enitites/DirectoryEntity';
 import {Utils} from '../../../../../common/Utils';
 import {MediaDTO} from '../../../../../common/entities/MediaDTO';
+import {FileDTO} from '../../../../../common/entities/FileDTO';
 
 
 class GalleryManagerTest extends GalleryManager {
@@ -71,9 +72,12 @@ describe('GalleryManager', () => {
     delete dir.id;
     dir.media.forEach((media: MediaDTO) => {
       delete media.id;
-
     });
-
+    if (dir.metaFile) {
+      dir.metaFile.forEach((file: FileDTO) => {
+        delete file.id;
+      });
+    }
     if (dir.directories) {
       dir.directories.forEach((directory: DirectoryDTO) => {
         removeIds(directory);
@@ -87,6 +91,7 @@ describe('GalleryManager', () => {
     const parent = TestHelper.getRandomizedDirectoryEntry();
     const p1 = TestHelper.getRandomizedPhotoEntry(parent, 'Photo1');
     const p2 = TestHelper.getRandomizedPhotoEntry(parent, 'Photo2');
+    const gpx = TestHelper.getRandomizedGPXEntry(parent, 'GPX1');
     const subDir = TestHelper.getRandomizedDirectoryEntry(parent, 'subDir');
     const sp1 = TestHelper.getRandomizedPhotoEntry(subDir, 'subPhoto1');
     const sp2 = TestHelper.getRandomizedPhotoEntry(subDir, 'subPhoto2');
@@ -103,6 +108,7 @@ describe('GalleryManager', () => {
     removeIds(selected);
     subDir.isPartial = true;
     delete subDir.directories;
+    delete subDir.metaFile;
     expect(Utils.clone(selected)).to.deep.equal(Utils.clone(parent));
 
   });

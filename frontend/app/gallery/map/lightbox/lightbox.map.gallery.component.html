@@ -10,6 +10,21 @@
       [style.width.px]="mapDimension.width"
       [style.height.px]="mapDimension.height"
       [fitBounds]="true">
+      <agm-polyline *ngFor="let path of paths"
+                    strokeColor="#007bff"
+                    strokeOpacity="0.8"
+                    strokeWeight="6">
+        <agm-polyline-point
+          *ngFor="let point of path"
+          [latitude]="point.latitude" [longitude]="point.longitude">
+        </agm-polyline-point>
+      </agm-polyline>
+      <agm-marker
+        *ngFor="let path of paths"
+        [latitude]="path[0].latitude"
+        [longitude]="path[0].longitude"
+        [agmFitBounds]="true">
+      </agm-marker>
       <agm-marker
         *ngFor="let photo of mapPhotos"
         [latitude]="photo.latitude"

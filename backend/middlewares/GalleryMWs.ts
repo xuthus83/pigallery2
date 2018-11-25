@@ -151,12 +151,11 @@ export class GalleryMWs {
     return next();
   }
 
-  public static loadMedia(req: Request, res: Response, next: NextFunction) {
-    if (!(req.params.mediaPath)) {
+  public static loadFile(req: Request, res: Response, next: NextFunction) {
+    if (!(req.params.filePath)) {
       return next();
     }
-
-    const fullMediaPath = path.join(ProjectPath.ImageFolder, req.params.mediaPath);
+    const fullMediaPath = path.join(ProjectPath.ImageFolder, req.params.filePath);
 
     // check if thumbnail already exist
     if (fs.existsSync(fullMediaPath) === false) {

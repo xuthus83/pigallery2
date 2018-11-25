@@ -75,6 +75,7 @@ import {RandomPhotoSettingsComponent} from './settings/random-photo/random-photo
 import {FixOrientationPipe} from './gallery/FixOrientationPipe';
 import {VideoSettingsComponent} from './settings/video/video.settings.component';
 import {DurationPipe} from './pipes/DurationPipe';
+import {MapService} from './gallery/map/map.service';
 
 @Injectable()
 export class GoogleMapsConfig {
@@ -183,6 +184,7 @@ export function translationsFactory(locale: string) {
     UserService,
     GalleryCacheService,
     GalleryService,
+    MapService,
     AuthenticationService,
     ThumbnailLoaderService,
     ThumbnailManagerService,

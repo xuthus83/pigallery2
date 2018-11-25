@@ -15,8 +15,6 @@ import {SearchManager} from '../../../../../backend/model/sql/SearchManager';
 import {AutoCompleteItem, SearchTypes} from '../../../../../common/entities/AutoCompleteItem';
 import {SearchResultDTO} from '../../../../../common/entities/SearchResultDTO';
 import {DirectoryEntity} from '../../../../../backend/model/sql/enitites/DirectoryEntity';
-import {MediaDimensionEntity} from '../../../../../backend/model/sql/enitites/MediaEntity';
-import {OrientationTypes} from 'ts-exif-parser';
 import {Utils} from '../../../../../common/Utils';
 import {TestHelper} from './TestHelper';
 import {VideoEntity} from '../../../../../backend/model/sql/enitites/VideoEntity';
@@ -116,7 +114,8 @@ describe('SearchManager', () => {
       searchText: 'sw',
       searchType: null,
       directories: [],
-      media: [p, p2,v],
+      media: [p, p2, v],
+      metaFile: [],
       resultOverflow: false
     }));
 
@@ -125,6 +124,7 @@ describe('SearchManager', () => {
       searchType: SearchTypes.position,
       directories: [],
       media: [p],
+      metaFile: [],
       resultOverflow: false
     }));
 
@@ -133,6 +133,7 @@ describe('SearchManager', () => {
       searchType: SearchTypes.keyword,
       directories: [],
       media: [p2],
+      metaFile: [],
       resultOverflow: false
     }));
 
@@ -141,6 +142,7 @@ describe('SearchManager', () => {
       searchType: SearchTypes.keyword,
       directories: [],
       media: [p2],
+      metaFile: [],
       resultOverflow: false
     }));
 
@@ -149,6 +151,7 @@ describe('SearchManager', () => {
       searchType: SearchTypes.keyword,
       directories: [dir],
       media: [p, p2],
+      metaFile: [],
       resultOverflow: false
     }));
   });
@@ -160,7 +163,8 @@ describe('SearchManager', () => {
     expect(Utils.clone(await sm.instantSearch('sw'))).to.deep.equal(Utils.clone({
       searchText: 'sw',
       directories: [],
-      media: [p, p2,v],
+      media: [p, p2, v],
+      metaFile: [],
       resultOverflow: false
     }));
 
@@ -168,6 +172,7 @@ describe('SearchManager', () => {
       searchText: 'Tatooine',
       directories: [],
       media: [p],
+      metaFile: [],
       resultOverflow: false
     }));
 
@@ -175,6 +180,7 @@ describe('SearchManager', () => {
       searchText: 'ortm',
       directories: [],
       media: [p2],
+      metaFile: [],
       resultOverflow: false
     }));
 
@@ -182,6 +188,7 @@ describe('SearchManager', () => {
       searchText: 'ortm',
       directories: [],
       media: [p2],
+      metaFile: [],
       resultOverflow: false
     }));
 
@@ -189,6 +196,7 @@ describe('SearchManager', () => {
       searchText: 'wa',
       directories: [dir],
       media: [p, p2],
+      metaFile: [],
       resultOverflow: false
     }));
   });

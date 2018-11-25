@@ -93,11 +93,12 @@ export class SearchManager implements ISearchManager {
   async search(text: string, searchType: SearchTypes): Promise<SearchResultDTO> {
     const connection = await SQLConnection.getConnection();
 
-    const result: SearchResultDTO = <SearchResultDTO>{
+    const result: SearchResultDTO = {
       searchText: text,
       searchType: searchType,
       directories: [],
       media: [],
+      metaFile: [],
       resultOverflow: false
     };
 
@@ -157,11 +158,12 @@ export class SearchManager implements ISearchManager {
   async instantSearch(text: string): Promise<SearchResultDTO> {
     const connection = await SQLConnection.getConnection();
 
-    const result: SearchResultDTO = <SearchResultDTO>{
+    const result: SearchResultDTO = {
       searchText: text,
       // searchType:undefined, not adding this
       directories: [],
       media: [],
+      metaFile: [],
       resultOverflow: false
     };
 

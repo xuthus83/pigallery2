@@ -11,6 +11,7 @@ import {Config} from '../../../common/config/private/Config';
 import {VideoDTO, VideoMetadata} from '../../../common/entities/VideoDTO';
 import {MediaDimension} from '../../../common/entities/MediaDTO';
 import {FFmpegFactory} from '../FFmpegFactory';
+import {FileDTO} from '../../../common/entities/FileDTO';
 
 const LOG_TAG = '[DiskManagerTask]';
 
@@ -45,6 +46,15 @@ export class DiskMangerWorker {
     return extensions.indexOf(extension) !== -1;
   }
 
+  private static isMetaFile(fullPath: string) {
+    const extensions = [
+      '.gpx'
+    ];
+
+    const extension = path.extname(fullPath).toLowerCase();
+    return extensions.indexOf(extension) !== -1;
+  }
+
   public static scanDirectory(relativeDirectoryName: string, maxPhotos: number = null, photosOnly: boolean = false): Promise<DirectoryDTO> {
     return new Promise<DirectoryDTO>((resolve, reject) => {
       const directoryName = path.basename(relativeDirectoryName);
@@ -52,14 +62,17 @@ export class DiskMangerWorker {
       const absoluteDirectoryName = path.join(ProjectPath.ImageFolder, relativeDirectoryName);
 
       const stat = fs.statSync(path.join(ProjectPath.ImageFolder, relativeDirectoryName));
-      const directory = <DirectoryDTO>{
+      const directory: DirectoryDTO = {
+        id: null,
+        parent: null,
         name: directoryName,
         path: directoryParent,
         lastModified: Math.max(stat.ctime.getTime(), stat.mtime.getTime()),
         lastScanned: Date.now(),
         directories: [],
         isPartial: false,
-        media: []
+        media: [],
+        metaFile: []
       };
       fs.readdir(absoluteDirectoryName, async (err, list: string[]) => {
         if (err) {
@@ -95,9 +108,12 @@ export class DiskMangerWorker {
                 metadata: await DiskMangerWorker.loadVideoMetadata(fullFilePath)
               });
 
-              if (maxPhotos != null && directory.media.length > maxPhotos) {
-                break;
-              }
+            } else if (DiskMangerWorker.isMetaFile(fullFilePath)) {
+              directory.metaFile.push(<FileDTO>{
+                name: file,
+                directory: null,
+              });
+
             }
           }
 

@@ -120,7 +120,7 @@ apt-get install build-essential  libkrb5-dev gcc g++
    * gesture support (swipe left, right, up)
  * Client side caching (directories and search results)
  * Rendering **photos** with GPS coordinates **on google map**
-   * .gpx file support - `future plan`
+   * .gpx file support 
  * **Two modes: SQL database and no-database mode**
    * both modes supports
      * user management

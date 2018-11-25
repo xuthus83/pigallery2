@@ -9,6 +9,11 @@ import {Media} from '../../Media';
 import {PageHelper} from '../../../model/page.helper';
 import {OrientationTypes} from 'ts-exif-parser';
 import {MediaDTO} from '../../../../../common/entities/MediaDTO';
+import {FileDTO} from '../../../../../common/entities/FileDTO';
+import {NetworkService} from '../../../model/network/network.service';
+import {Utils} from '../../../../../common/Utils';
+import {Config} from '../../../../../common/config/public/Config';
+import {MapPath, MapService} from '../map.service';
 
 
 @Component({
@@ -18,7 +23,8 @@ import {MediaDTO} from '../../../../../common/entities/MediaDTO';
 })
 export class GalleryMapLightboxComponent implements OnChanges, AfterViewInit {
 
-  @Input() photos: Array<PhotoDTO>;
+  @Input() photos: PhotoDTO[];
+  @Input() gpxFiles: FileDTO[];
   private startPosition = null;
   public lightboxDimension: Dimension = <Dimension>{top: 0, left: 0, width: 0, height: 0};
   public mapDimension: Dimension = <Dimension>{top: 0, left: 0, width: 0, height: 0};
@@ -26,6 +32,7 @@ export class GalleryMapLightboxComponent implements OnChanges, AfterViewInit {
   public controllersVisible = false;
   public opacity = 1.0;
   mapPhotos: MapPhoto[] = [];
+  paths: MapPath[][] = [];
   mapCenter = {latitude: 0, longitude: 0};
 
   @ViewChild('root') elementRef: ElementRef;
@@ -35,6 +42,7 @@ export class GalleryMapLightboxComponent implements OnChanges, AfterViewInit {
 
   constructor(public fullScreenService: FullScreenService,
               private thumbnailService: ThumbnailManagerService,
+              private mapService: MapService,
               private mapsAPILoader: MapsAPILoader) {
   }
 
@@ -139,6 +147,22 @@ export class GalleryMapLightboxComponent implements OnChanges, AfterViewInit {
       return obj;
     });
 
+    if (this.gpxFiles) {
+      this.loadGPXFiles().catch(console.error);
+    }
+
+  }
+
+  private async loadGPXFiles(): Promise<void> {
+    this.paths = [];
+    for (let i = 0; i < this.gpxFiles.length; i++) {
+      const file = this.gpxFiles[i];
+      const path = await this.mapService.getMapPath(file);
+      if (file !== this.gpxFiles[i]) { // check race condition
+        return;
+      }
+      this.paths.push(path);
+    }
   }
 
 

@@ -5,6 +5,7 @@ import {GalleryMapLightboxComponent} from './lightbox/lightbox.map.gallery.compo
 import {ThumbnailManagerService} from '../thumnailManager.service';
 import {FullScreenService} from '../fullscreen.service';
 import {LatLngBounds, MapsAPILoader, AgmMap} from '@agm/core';
+import {FileDTO} from '../../../../common/entities/FileDTO';
 
 @Component({
   selector: 'app-gallery-map',
@@ -13,7 +14,8 @@ import {LatLngBounds, MapsAPILoader, AgmMap} from '@agm/core';
 })
 export class GalleryMapComponent implements OnChanges, IRenderable, AfterViewInit {
 
-  @Input() photos: Array<PhotoDTO>;
+  @Input() photos: PhotoDTO[];
+  @Input() metaFiles: FileDTO[];
   @ViewChild(GalleryMapLightboxComponent) mapLightbox: GalleryMapLightboxComponent;
 
   mapPhotos: Array<{ latitude: number, longitude: number }> = [];

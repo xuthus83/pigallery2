@@ -14,6 +14,7 @@ import {Logger} from '../../Logger';
 import {MediaEntity} from './enitites/MediaEntity';
 import {VideoEntity} from './enitites/VideoEntity';
 import {DataStructureVersion} from '../../../common/DataStructureVersion';
+import {FileEntity} from './enitites/FileEntity';
 
 
 export class SQLConnection {
@@ -32,6 +33,7 @@ export class SQLConnection {
       options.name = 'main';
       options.entities = [
         UserEntity,
+        FileEntity,
         MediaEntity,
         PhotoEntity,
         VideoEntity,
@@ -57,6 +59,7 @@ export class SQLConnection {
     options.name = 'test';
     options.entities = [
       UserEntity,
+      FileEntity,
       MediaEntity,
       PhotoEntity,
       VideoEntity,

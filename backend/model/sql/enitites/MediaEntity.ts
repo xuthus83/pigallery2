@@ -3,6 +3,7 @@ import {DirectoryEntity} from './DirectoryEntity';
 import {MediaDimension, MediaDTO, MediaMetadata} from '../../../../common/entities/MediaDTO';
 import {OrientationTypes} from 'ts-exif-parser';
 import {CameraMetadataEntity, PositionMetaDataEntity} from './PhotoEntity';
+import {FileEntity} from './FileEntity';
 
 
 export class MediaDimensionEntity implements MediaDimension {
@@ -49,7 +50,7 @@ export class MediaMetadataEntity implements MediaMetadata {
 // TODO: fix inheritance once its working in typeorm
 @Entity()
 @TableInheritance({column: {type: 'varchar', name: 'type'}})
-export abstract class MediaEntity implements MediaDTO {
+export abstract class MediaEntity  implements MediaDTO {
 
   @PrimaryGeneratedColumn()
   id: number;

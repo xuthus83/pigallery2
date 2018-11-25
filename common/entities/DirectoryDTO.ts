@@ -1,5 +1,6 @@
 import {MediaDTO} from './MediaDTO';
 import {PhotoDTO} from './PhotoDTO';
+import {FileDTO} from './FileDTO';
 
 export interface DirectoryDTO {
   id: number;
@@ -11,6 +12,7 @@ export interface DirectoryDTO {
   parent: DirectoryDTO;
   directories: Array<DirectoryDTO>;
   media: MediaDTO[];
+  metaFile: FileDTO[];
 }
 
 export module DirectoryDTO {
@@ -18,7 +20,9 @@ export module DirectoryDTO {
     dir.media.forEach((media: MediaDTO) => {
       media.directory = dir;
     });
-
+    dir.metaFile.forEach((file: FileDTO) => {
+      file.directory = dir;
+    });
     dir.directories.forEach((directory: DirectoryDTO) => {
       addReferences(directory);
       directory.parent = dir;
@@ -29,7 +33,11 @@ export module DirectoryDTO {
     dir.media.forEach((media: MediaDTO) => {
       media.directory = null;
     });
-
+    if (dir.metaFile) {
+      dir.metaFile.forEach((file: FileDTO) => {
+        file.directory = null;
+      });
+    }
     if (dir.directories) {
       dir.directories.forEach((directory: DirectoryDTO) => {
         removeReferences(directory);

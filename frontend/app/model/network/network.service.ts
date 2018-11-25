@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Message} from '../../../../common/entities/Message';
 import {SlimLoadingBarService} from 'ng2-slim-loading-bar';
 import 'rxjs/Rx';
@@ -31,6 +31,30 @@ export class NetworkService {
       }
     }
     return url;
+  }
+
+  public getXML<T>(url: string): Promise<Document> {
+
+    this.slimLoadingBarService.visible = true;
+    this.slimLoadingBarService.start(() => {
+      this.slimLoadingBarService.visible = false;
+    });
+
+    const process = (res: string): Document => {
+      this.slimLoadingBarService.complete();
+      const parser = new DOMParser();
+      return parser.parseFromString(res, 'text/xml');
+    };
+
+    const err = (error) => {
+      this.slimLoadingBarService.complete();
+      return this.handleError(error);
+    };
+
+    return this._http.get(this._apiBaseUrl + url, {responseType: 'text'})
+      .toPromise()
+      .then(process)
+      .catch(err);
   }
 
   public postJson<T>(url: string, data: any = {}): Promise<T> {
