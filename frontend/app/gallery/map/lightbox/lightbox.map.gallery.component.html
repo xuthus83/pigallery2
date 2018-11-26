@@ -7,22 +7,37 @@
        [style.left.px]="lightboxDimension.left"
        [style.opacity]="opacity">
     <agm-map
+      #map
       [style.width.px]="mapDimension.width"
       [style.height.px]="mapDimension.height"
       [fitBounds]="true">
-      <agm-polyline *ngFor="let path of paths"
-                    strokeColor="#007bff"
-                    strokeOpacity="0.8"
-                    strokeWeight="6">
-        <agm-polyline-point
-          *ngFor="let point of path"
-          [latitude]="point.latitude" [longitude]="point.longitude">
-        </agm-polyline-point>
-      </agm-polyline>
+      <ng-container *ngIf="map.zoom > 11">
+        <agm-polyline *ngFor="let path of paths"
+                      strokeColor="#007bff"
+                      strokeOpacity="0.8"
+                      strokeWeight="6">
+            <agm-polyline-point
+              *ngFor="let point of path"
+              [latitude]="point.latitude" [longitude]="point.longitude">
+            </agm-polyline-point>
+        </agm-polyline>
+      </ng-container>
+      <ng-container *ngIf="map.zoom <= 11">
+        <agm-polyline *ngFor="let path of pathOutlines"
+                      strokeColor="#007bff"
+                      strokeOpacity="0.8"
+                      strokeWeight="6">
+            <agm-polyline-point
+              *ngFor="let point of path"
+              [latitude]="point.latitude" [longitude]="point.longitude">
+            </agm-polyline-point>
+        </agm-polyline>
+      </ng-container>
       <agm-marker
         *ngFor="let path of paths"
         [latitude]="path[0].latitude"
         [longitude]="path[0].longitude"
+        iconUrl="https://cdn.mapmarker.io/api/v1/fa?size=32&icon=fa-map-marker-alt&color=%23006fe6"
         [agmFitBounds]="true">
       </agm-marker>
       <agm-marker

@@ -33,6 +33,7 @@ export class GalleryMapLightboxComponent implements OnChanges, AfterViewInit {
   public opacity = 1.0;
   mapPhotos: MapPhoto[] = [];
   paths: MapPath[][] = [];
+  pathOutlines: MapPath[][] = [];
   mapCenter = {latitude: 0, longitude: 0};
 
   @ViewChild('root') elementRef: ElementRef;
@@ -153,6 +154,37 @@ export class GalleryMapLightboxComponent implements OnChanges, AfterViewInit {
 
   }
 
+  private calcDistance(loc: MapPath, loc2: MapPath): number {
+    const radlat1 = Math.PI * loc.latitude / 180;
+    const radlat2 = Math.PI * loc2.latitude / 180;
+    const theta = loc.longitude - loc2.longitude;
+    const radtheta = Math.PI * theta / 180;
+    let dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+    if (dist > 1) {
+      dist = 1;
+    }
+    dist = Math.acos(dist);
+    dist = dist * 180 / Math.PI;
+    dist = dist * 60 * 1.1515;
+    return dist * 1.609344;
+  }
+
+
+  private gpxFilter(list: MapPath[]) {
+    let last = list[0];
+    const out = [];
+    for (let i = 1; i < list.length; i++) {
+      if (this.calcDistance(list[i], last) > 0.5) {
+        out.push(list[i]);
+        last = list[i];
+      }
+    }
+    if (out.length < 2) {
+      out.push(list[list.length - 1]);
+    }
+    return out;
+  }
+
   private async loadGPXFiles(): Promise<void> {
     this.paths = [];
     for (let i = 0; i < this.gpxFiles.length; i++) {
@@ -161,7 +193,11 @@ export class GalleryMapLightboxComponent implements OnChanges, AfterViewInit {
       if (file !== this.gpxFiles[i]) { // check race condition
         return;
       }
+      if (path.length === 0) {
+        continue;
+      }
       this.paths.push(path);
+      this.pathOutlines.push(this.gpxFilter(path));
     }
   }
 
