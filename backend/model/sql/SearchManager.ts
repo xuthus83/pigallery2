@@ -192,7 +192,7 @@ export class SearchManager implements ISearchManager {
   }
 
   private encapsulateAutoComplete(values: string[], type: SearchTypes): Array<AutoCompleteItem> {
-    const res = [];
+    const res: AutoCompleteItem[] = [];
     values.forEach((value) => {
       res.push(new AutoCompleteItem(value, type));
     });

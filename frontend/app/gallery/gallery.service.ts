@@ -10,6 +10,7 @@ import {Config} from '../../../common/config/public/Config';
 import {ShareService} from './share.service';
 import {NavigationService} from '../model/navigation.service';
 import {SortingMethods} from '../../../common/entities/SortingMethods';
+import {QueryService} from '../model/query.service';
 
 
 @Injectable()
@@ -46,10 +47,10 @@ export class GalleryService {
     this.content.next(content);
     this.lastRequest.directory = directoryName;
 
-    const params = {};
+    const params: { [key: string]: any } = {};
     if (Config.Client.Sharing.enabled === true) {
       if (this._shareService.isSharing()) {
-        params['sk'] = this._shareService.getSharingKey();
+        params[QueryService.SHARING_KEY] = this._shareService.getSharingKey();
       }
     }
 
@@ -98,7 +99,7 @@ export class GalleryService {
     const cw = new ContentWrapper();
     cw.searchResult = this.galleryCacheService.getSearch(text, type);
     if (cw.searchResult == null) {
-      const params = {};
+      const params: { type?: SearchTypes } = {};
       if (typeof type !== 'undefined') {
         params['type'] = type;
       }

@@ -1,18 +1,28 @@
-declare module Express {
-  export interface Request {
-    resultPipe?: any;
-    body?: {
-      loginCredential
-    };
-  }
+import {LoginCredential} from '../../../common/entities/LoginCredential';
+import {UserEntity} from '../../model/sql/enitites/UserEntity';
 
-  export interface Response {
-    tpl?: any;
-  }
 
-  export interface Session {
-    user?;
-    rememberMe?: boolean;
+
+
+declare global {
+  namespace Express {
+    interface Request {
+
+      resultPipe?: any;
+      body?: {
+        loginCredential: LoginCredential
+      };
+      locale?: string;
+    }
+
+    interface Response {
+      tpl?: any;
+    }
+    interface Session {
+      user?: UserEntity;
+      rememberMe?: boolean;
+    }
   }
 }
+
 

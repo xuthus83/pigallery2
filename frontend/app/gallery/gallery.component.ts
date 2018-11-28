@@ -11,11 +11,12 @@ import {SearchResultDTO} from '../../../common/entities/SearchResultDTO';
 import {ShareService} from './share.service';
 import {NavigationService} from '../model/navigation.service';
 import {UserRoles} from '../../../common/entities/UserDTO';
-import {interval} from 'rxjs';
+import {interval, Subscription, Observable} from 'rxjs';
 import {ContentWrapper} from '../../../common/entities/ConentWrapper';
 import {PageHelper} from '../model/page.helper';
 import {SortingMethods} from '../../../common/entities/SortingMethods';
 import {PhotoDTO} from '../../../common/entities/PhotoDTO';
+import {QueryService} from '../model/query.service';
 
 @Component({
   selector: 'app-gallery',
@@ -33,16 +34,16 @@ export class GalleryComponent implements OnInit, OnDestroy {
 
   public directories: DirectoryDTO[] = [];
   public isPhotoWithLocation = false;
-  private $counter;
-  private subscription = {
+  private $counter: Observable<number>;
+  private subscription: { [key: string]: Subscription } = {
     content: null,
     route: null,
     timer: null,
     sorting: null
   };
-  public countDown = null;
+  public countDown: { day: number, hour: number, minute: number, second: number } = null;
   public mapEnabled = true;
-  SearchTypes: any = [];
+  readonly SearchTypes: typeof SearchTypes;
 
   constructor(public _galleryService: GalleryService,
               private _authService: AuthenticationService,
@@ -61,7 +62,7 @@ export class GalleryComponent implements OnInit, OnDestroy {
       return;
     }
     t = Math.floor((this.shareService.sharing.value.expires - Date.now()) / 1000);
-    this.countDown = {};
+    this.countDown = <any>{};
     this.countDown.day = Math.floor(t / 86400);
     t -= this.countDown.day * 86400;
     this.countDown.hour = Math.floor(t / 3600) % 24;
@@ -74,21 +75,23 @@ export class GalleryComponent implements OnInit, OnDestroy {
   private onRoute = async (params: Params) => {
     const searchText = params['searchText'];
     if (searchText && searchText !== '') {
-      const typeString = params['type'];
+      const typeString: string = params['type'];
 
       if (typeString && typeString !== '') {
-        const type: SearchTypes = <any>SearchTypes[typeString];
-        this._galleryService.search(searchText, type);
+        const type: SearchTypes = <any>SearchTypes[<any>typeString];
+        this._galleryService.search(searchText, type).catch(console.error);
         return;
       }
 
-      this._galleryService.search(searchText);
+      this._galleryService.search(searchText).catch(console.error);
       return;
     }
 
     if (params['sharingKey'] && params['sharingKey'] !== '') {
       const sharing = await this.shareService.getSharing();
-      this._router.navigate(['/gallery', sharing.path], {queryParams: {sk: this.shareService.getSharingKey()}});
+      const qParams: { [key: string]: any } = {};
+      qParams[QueryService.SHARING_KEY] = this.shareService.getSharingKey();
+      this._router.navigate(['/gallery', sharing.path], {queryParams: qParams}).catch(console.error);
       return;
     }
 

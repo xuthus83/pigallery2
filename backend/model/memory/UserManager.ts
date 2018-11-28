@@ -9,7 +9,7 @@ import {PasswordHelper} from '../PasswordHelper';
 
 export class UserManager implements IUserManager {
   private db: { users?: UserDTO[], idCounter?: number } = {};
-  private readonly dbPath;
+  private readonly dbPath: string;
 
   generateId(): string {
     function s4() {

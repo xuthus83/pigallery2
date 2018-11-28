@@ -16,7 +16,7 @@ const LOG_TAG = '[IndexingManager]';
 
 export class IndexingManager implements IIndexingManager {
   directoriesToIndex: string[] = [];
-  indexingProgress = null;
+  indexingProgress: { current: string, left: number, indexed: number } = null;
   enabled = false;
   private indexNewDirectory = async (createThumbnails: boolean = false) => {
     if (this.directoriesToIndex.length === 0) {

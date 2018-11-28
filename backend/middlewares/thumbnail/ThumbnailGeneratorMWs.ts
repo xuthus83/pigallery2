@@ -1,4 +1,3 @@
-///<reference path="../customtypings/jimp.d.ts"/>
 import * as path from 'path';
 import * as crypto from 'crypto';
 import * as fs from 'fs';

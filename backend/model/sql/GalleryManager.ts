@@ -121,7 +121,7 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
   }
 
 
-  public indexDirectory(relativeDirectoryName): Promise<DirectoryDTO> {
+  public indexDirectory(relativeDirectoryName: string): Promise<DirectoryDTO> {
     return new Promise(async (resolve, reject) => {
       try {
         const scannedDirectory = await DiskManager.scanDirectory(relativeDirectoryName);
@@ -217,22 +217,22 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
     if (!!currentDir) {// Updated parent dir (if it was in the DB previously)
       currentDir.lastModified = scannedDirectory.lastModified;
       currentDir.lastScanned = scannedDirectory.lastScanned;
-    //  const media: MediaEntity[] = currentDir.media;
-    //  delete currentDir.media;
+      //  const media: MediaEntity[] = currentDir.media;
+      //  delete currentDir.media;
       currentDir = await directoryRepository.save(currentDir);
       /*if (media) {
         media.forEach(m => m.directory = currentDir);
         currentDir.media = await this.saveMedia(connection, media);
       }*/
     } else {
-    //  const media = scannedDirectory.media;
-     // delete scannedDirectory.media;
+      //  const media = scannedDirectory.media;
+      // delete scannedDirectory.media;
       (<DirectoryEntity>scannedDirectory).lastScanned = scannedDirectory.lastScanned;
       currentDir = await directoryRepository.save(<DirectoryEntity>scannedDirectory);
-     /* if (media) {
-        media.forEach(m => m.directory = currentDir);
-        currentDir.media = await this.saveMedia(connection, media);
-      }*/
+      /* if (media) {
+         media.forEach(m => m.directory = currentDir);
+         currentDir.media = await this.saveMedia(connection, media);
+       }*/
     }
 
     // save subdirectories
@@ -296,7 +296,7 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
         scannedDirectory.media[i].directory = scannedDirectory;
         media.directory = currentDir;
         mediaToSave.push(media);
-      }else if (!Utils.equalsFilter(media.metadata, scannedDirectory.media[i].metadata)) {
+      } else if (!Utils.equalsFilter(media.metadata, scannedDirectory.media[i].metadata)) {
         media.metadata = scannedDirectory.media[i].metadata;
         mediaToSave.push(media);
       }
@@ -330,7 +330,7 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
       }
     }
     await fileRepository.save(metaFilesToSave);
-   // await fileRepository.remove(indexedMetaFiles);
+    // await fileRepository.remove(indexedMetaFiles);
   }
 
   protected async saveMedia(connection: Connection, mediaList: MediaDTO[]): Promise<MediaEntity[]> {

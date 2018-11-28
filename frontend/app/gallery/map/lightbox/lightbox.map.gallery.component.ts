@@ -25,7 +25,7 @@ export class GalleryMapLightboxComponent implements OnChanges, AfterViewInit {
 
   @Input() photos: PhotoDTO[];
   @Input() gpxFiles: FileDTO[];
-  private startPosition = null;
+  private startPosition: Dimension = null;
   public lightboxDimension: Dimension = <Dimension>{top: 0, left: 0, width: 0, height: 0};
   public mapDimension: Dimension = <Dimension>{top: 0, left: 0, width: 0, height: 0};
   public visible = false;

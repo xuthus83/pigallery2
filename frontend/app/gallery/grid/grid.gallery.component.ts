@@ -51,7 +51,7 @@ export class GalleryGridComponent implements OnChanges, OnInit, AfterViewInit, O
   private MAX_ROW_COUNT = 5;
 
   private onScrollFired = false;
-  private helperTime = null;
+  private helperTime: number = null;
   isAfterViewInit = false;
   private renderedPhotoIndex = 0;
   subscriptions: {
@@ -96,7 +96,7 @@ export class GalleryGridComponent implements OnChanges, OnInit, AfterViewInit, O
     this.updateContainerDimensions();
     this.sortPhotos();
     this.mergeNewPhotos();
-    this.helperTime = setTimeout(() => {
+    this.helperTime = window.setTimeout(() => {
       this.renderPhotos();
       if (this.delayedRenderUpToPhoto) {
         this.renderUpToPhoto(this.delayedRenderUpToPhoto);
@@ -147,7 +147,7 @@ export class GalleryGridComponent implements OnChanges, OnInit, AfterViewInit, O
     this.updateContainerDimensions();
     this.sortPhotos();
     this.clearRenderedPhotos();
-    this.helperTime = setTimeout(() => {
+    this.helperTime = window.setTimeout(() => {
       this.renderPhotos();
     }, 0);
     this.isAfterViewInit = true;

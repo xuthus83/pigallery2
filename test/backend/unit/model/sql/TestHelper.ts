@@ -8,7 +8,6 @@ import {
 import * as path from 'path';
 import {OrientationTypes} from 'ts-exif-parser';
 import {DirectoryEntity} from '../../../../../backend/model/sql/enitites/DirectoryEntity';
-import {Utils} from '../../../../../common/Utils';
 import {VideoEntity, VideoMetadataEntity} from '../../../../../backend/model/sql/enitites/VideoEntity';
 import {FileEntity} from '../../../../../backend/model/sql/enitites/FileEntity';
 
@@ -117,7 +116,7 @@ export class TestHelper {
   }
 
 
-  public static getRandomizedDirectoryEntry(parent: DirectoryEntity = null, forceStr = null) {
+  public static getRandomizedDirectoryEntry(parent: DirectoryEntity = null, forceStr: string = null) {
 
     const dir = new DirectoryEntity();
     dir.name = forceStr || Math.random().toString(36).substring(7);
@@ -136,7 +135,7 @@ export class TestHelper {
   }
 
 
-  public static getRandomizedGPXEntry(dir: DirectoryEntity, forceStr = null): FileEntity {
+  public static getRandomizedGPXEntry(dir: DirectoryEntity, forceStr: string = null): FileEntity {
     const d = new FileEntity();
     d.name = forceStr + '_' + Math.random().toString(36).substring(7) + '.gpx';
     d.directory = dir;
@@ -145,7 +144,7 @@ export class TestHelper {
     return d;
   }
 
-  public static getRandomizedPhotoEntry(dir: DirectoryEntity, forceStr = null) {
+  public static getRandomizedPhotoEntry(dir: DirectoryEntity, forceStr: string = null) {
 
 
     const rndStr = () => {

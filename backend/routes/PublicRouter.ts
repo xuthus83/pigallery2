@@ -1,4 +1,4 @@
-import {NextFunction, Request, Response} from 'express';
+import {Express, NextFunction, Request, Response} from 'express';
 import * as path from 'path';
 import * as fs from 'fs';
 import * as ejs from 'ejs';
@@ -7,13 +7,26 @@ import {Config} from '../../common/config/private/Config';
 import {ProjectPath} from '../ProjectPath';
 import {AuthenticationMWs} from '../middlewares/user/AuthenticationMWs';
 import {CookieNames} from '../../common/CookieNames';
-import {ErrorDTO} from '../../common/entities/Error';
+import {ErrorCodes, ErrorDTO} from '../../common/entities/Error';
 
+declare global {
+  namespace Express {
+    interface Request {
+      locale?: string;
+      localePath?: string;
+      tpl?: any;
+    }
+
+    interface Response {
+      tpl?: any;
+    }
+  }
+}
 
 export class PublicRouter {
 
 
-  public static route(app) {
+  public static route(app: Express) {
     const setLocale = (req: Request, res: Response, next: Function) => {
       let localePath = '';
       let selectedLocale = req['locale'];
@@ -34,7 +47,7 @@ export class PublicRouter {
       ejs.renderFile(path.resolve(ProjectPath.FrontendFolder, req['localePath'], 'index.html'),
         res.tpl, (err, str) => {
           if (err) {
-            return next(new ErrorDTO(err));
+            return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, err.message));
           }
           res.send(str);
         });

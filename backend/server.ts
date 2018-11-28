@@ -114,9 +114,9 @@ export class Server {
 
     this.app.use(locale(Config.Client.languages, 'en'));
     if (Config.Server.database.type !== DatabaseType.memory) {
-      await  ObjectManagerRepository.InitSQLManagers();
+      await ObjectManagerRepository.InitSQLManagers();
     } else {
-      await  ObjectManagerRepository.InitMemoryManagers();
+      await ObjectManagerRepository.InitMemoryManagers();
     }
 
     PublicRouter.route(this.app);

@@ -3,7 +3,7 @@ import {WebConfigLoader} from 'typeconfig/src/WebConfigLoader';
 
 
 declare module ServerInject {
-  export const ConfigInject;
+  export const ConfigInject: PublicConfigClass;
 }
 
 export let Config = new PublicConfigClass();

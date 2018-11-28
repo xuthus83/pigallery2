@@ -10,6 +10,7 @@ import {BsModalService} from 'ngx-bootstrap/modal';
 import {BsModalRef} from 'ngx-bootstrap/modal/bs-modal-ref.service';
 import {OrientationType, RandomQueryDTO} from '../../../../common/entities/RandomQueryDTO';
 import {NetworkService} from '../../model/network/network.service';
+import {Subscription} from 'rxjs';
 
 
 @Component({
@@ -31,9 +32,9 @@ export class RandomQueryBuilderGalleryComponent implements OnInit, OnDestroy {
     toDate: null,
     fromDate: null
   };
-  contentSubscription = null;
+  contentSubscription: Subscription = null;
 
-  OrientationType;
+  readonly OrientationType: typeof OrientationType;
   modalRef: BsModalRef;
 
   text = {
@@ -71,8 +72,8 @@ export class RandomQueryBuilderGalleryComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       const data = Utils.clone(this.data);
       for (const key of Object.keys(data)) {
-        if (!data[key]) {
-          delete data[key];
+        if (!(<any>data)[key]) {
+          delete (<any>data)[key];
         }
       }
       this.url = NetworkService.buildUrl(Config.Client.publicUrl + '/api/gallery/random/', data);

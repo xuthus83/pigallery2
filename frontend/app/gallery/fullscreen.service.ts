@@ -1,6 +1,15 @@
 import {Injectable} from '@angular/core';
 import {Event} from '../../../common/event/Event';
 
+declare const document: {
+  fullscreenElement: any;
+  mozFullScreenElement: any;
+  webkitFullscreenElement: any;
+  exitFullscreen: () => void;
+  mozCancelFullScreen: () => void;
+  webkitExitFullscreen: () => void;
+};
+
 @Injectable()
 export class FullScreenService {
 

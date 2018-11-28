@@ -109,7 +109,7 @@ export class CustomUrlSerializer implements UrlSerializer {
 }
 
 // use the require method provided by webpack
-declare const require;
+declare const require: (path: string) => string;
 
 export function translationsFactory(locale: string) {
   locale = locale || 'en'; // default to english if no locale

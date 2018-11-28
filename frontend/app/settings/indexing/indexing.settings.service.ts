@@ -28,7 +28,7 @@ export class IndexingSettingsService extends AbstractSettingsService<IndexingCon
     return this._settingsService.settings.value.Server.database.type !== DatabaseType.memory;
   }
 
-  public index(createThumbnails) {
+  public index(createThumbnails: boolean) {
     return this._networkService.postJson('/admin/indexes/job', <IndexingDTO>{createThumbnails: createThumbnails});
   }
 

@@ -30,7 +30,7 @@ describe('NetworkService Success tests', () => {
     httpMock.verify();
   });
 
-  it('should call GET', inject([NetworkService], (networkService) => {
+  it('should call GET', inject([NetworkService], (networkService: NetworkService) => {
 
     networkService.getJson(testUrl).then((res: string) => {
       expect(res).toBe(testResponse);
@@ -45,7 +45,7 @@ describe('NetworkService Success tests', () => {
     mockReq.flush(testResponseMessage);
   }));
 
-  it('should call POST', inject([NetworkService], (networkService) => {
+  it('should call POST', inject([NetworkService], (networkService: NetworkService) => {
 
     networkService.postJson(testUrl, testData).then((res: string) => {
       expect(res).toBe(testResponse);
@@ -77,7 +77,7 @@ describe('NetworkService Success tests', () => {
   }));
 
 
-  it('should call DELETE', inject([NetworkService], (networkService) => {
+  it('should call DELETE', inject([NetworkService], (networkService: NetworkService) => {
 
     networkService.deleteJson(testUrl).then((res: any) => {
       expect(res).toBe(testResponse);
@@ -89,7 +89,7 @@ describe('NetworkService Success tests', () => {
     mockReq.flush(testResponseMessage);
   }));
 
-  it('should call PUT', inject([NetworkService], (networkService) => {
+  it('should call PUT', inject([NetworkService], (networkService: NetworkService) => {
 
     networkService.putJson(testUrl, testData).then((res: any) => {
       expect(res).toBe(testResponse);
@@ -142,7 +142,7 @@ describe('NetworkService Fail tests', () => {
     httpMock.verify();
   });
 
-  it('should call GET with error', inject([NetworkService], (networkService) => {
+  it('should call GET with error', inject([NetworkService], (networkService: NetworkService) => {
 
     networkService.getJson(testUrl).then((res: any) => {
       expect(res).toBe(null);
@@ -157,7 +157,7 @@ describe('NetworkService Fail tests', () => {
     mockReq.error(null, {statusText: testError});
   }));
 
-  it('should call POST with error', inject([NetworkService], (networkService) => {
+  it('should call POST with error', inject([NetworkService], (networkService: NetworkService) => {
 
     networkService.postJson(testUrl, testData).then((res: any) => {
       expect(res).toBe(null);
@@ -172,7 +172,7 @@ describe('NetworkService Fail tests', () => {
     mockReq.error(null, {statusText: testError});
   }));
 
-  it('should call PUT with error', inject([NetworkService], (networkService) => {
+  it('should call PUT with error', inject([NetworkService], (networkService: NetworkService) => {
 
     networkService.putJson(testUrl, testData).then((res: any) => {
       expect(res).toBe(null);
@@ -189,7 +189,7 @@ describe('NetworkService Fail tests', () => {
 
   }));
 
-  it('should call DELETE with error', inject([NetworkService], (networkService) => {
+  it('should call DELETE with error', inject([NetworkService], (networkService: NetworkService) => {
 
     networkService.deleteJson(testUrl).then((res: any) => {
       expect(res).toBe(null);

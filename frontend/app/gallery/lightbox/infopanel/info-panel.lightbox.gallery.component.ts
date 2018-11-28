@@ -51,7 +51,7 @@ export class InfoPanelLightboxComponent {
   }
 
 
-  toFraction(f) {
+  toFraction(f: number) {
     if (f > 1) {
       return f;
     }

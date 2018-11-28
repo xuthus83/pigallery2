@@ -2,16 +2,17 @@ import {AuthenticationMWs} from '../middlewares/user/AuthenticationMWs';
 import {UserRoles} from '../../common/entities/UserDTO';
 import {RenderingMWs} from '../middlewares/RenderingMWs';
 import {AdminMWs} from '../middlewares/AdminMWs';
+import {Express} from 'express';
 
 export class AdminRouter {
-  public static route(app: any) {
+  public static route(app: Express) {
 
     this.addIndexGallery(app);
     this.addSettings(app);
   }
 
 
-  private static addIndexGallery(app) {
+  private static addIndexGallery(app: Express) {
     app.get('/api/admin/indexes/job/progress',
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Admin),
@@ -38,7 +39,7 @@ export class AdminRouter {
     );
   }
 
-  private static addSettings(app) {
+  private static addSettings(app: Express) {
     app.get('/api/settings',
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Admin),

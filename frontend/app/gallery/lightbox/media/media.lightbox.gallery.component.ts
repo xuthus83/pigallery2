@@ -16,7 +16,7 @@ export class GalleryLightboxMediaComponent implements OnChanges {
 
   @ViewChild('video') video: ElementRef<HTMLVideoElement>;
 
-  prevGirdPhoto = null;
+  prevGirdPhoto: GridMedia = null;
 
   public imageSize = {width: 'auto', height: '100'};
 

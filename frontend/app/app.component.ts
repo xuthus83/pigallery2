@@ -7,16 +7,18 @@ import {Title} from '@angular/platform-browser';
 import {NotificationService} from './model/notification.service';
 import {ShareService} from './gallery/share.service';
 import 'hammerjs';
+import {Subscription} from 'rxjs';
 import {QueryService} from './model/query.service';
 
 @Component({
   selector: 'app-pi-gallery2',
-  template: `<router-outlet></router-outlet>`,
+  template: `
+    <router-outlet></router-outlet>`,
 
 })
 export class AppComponent implements OnInit, OnDestroy {
 
-  private subscription = null;
+  private subscription: Subscription = null;
 
   constructor(private _router: Router,
               private _authenticationService: AuthenticationService,

@@ -11,7 +11,7 @@ class MockUserService {
     return Promise.resolve(<UserDTO>{name: 'testUserName'});
   }
 
-  public async getSessionUser() {
+  public async getSessionUser(): Promise<UserDTO> {
     return null;
   }
 }
@@ -34,11 +34,11 @@ describe('AuthenticationService', () => {
 
 
   it('should call UserDTO service login', inject([AuthenticationService, UserService],
-    async (authService, userService) => {
+    async (authService: AuthenticationService, userService: UserService) => {
       spyOn(userService, 'login').and.callThrough();
 
       expect(userService.login).not.toHaveBeenCalled();
-      await  authService.login();
+      await authService.login(null);
       expect(userService.login).toHaveBeenCalled();
     }));
 

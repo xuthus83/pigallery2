@@ -20,7 +20,7 @@ export class GalleryMapComponent implements OnChanges, IRenderable, AfterViewIni
 
   mapPhotos: Array<{ latitude: number, longitude: number }> = [];
   @ViewChild('map') mapElement: ElementRef;
-  height = null;
+  height: number = null;
 
 
   constructor(private mapsAPILoader: MapsAPILoader) {

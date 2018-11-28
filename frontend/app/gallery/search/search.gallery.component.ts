@@ -3,6 +3,7 @@ import {AutoCompleteService} from './autocomplete.service';
 import {AutoCompleteItem, SearchTypes} from '../../../../common/entities/AutoCompleteItem';
 import {ActivatedRoute, Params, RouterLink} from '@angular/router';
 import {GalleryService} from '../gallery.service';
+import {Subscription} from 'rxjs';
 import {Config} from '../../../../common/config/public/Config';
 
 @Component({
@@ -13,16 +14,16 @@ import {Config} from '../../../../common/config/public/Config';
 })
 export class GallerySearchComponent implements OnDestroy {
 
-  autoCompleteItems: Array<AutoCompleteRenderItem> = [];
+  autoCompleteItems: AutoCompleteRenderItem[] = [];
   public searchText = '';
   private cache = {
     lastAutocomplete: '',
     lastInstantSearch: ''
   };
-
-  SearchTypes: any = [];
   mouseOverAutoComplete = false;
-  private readonly subscription = null;
+
+  readonly SearchTypes: typeof SearchTypes;
+  private readonly subscription: Subscription = null;
 
   constructor(private _autoCompleteService: AutoCompleteService,
               private _galleryService: GalleryService,

@@ -1,4 +1,5 @@
 import {AuthenticationMWs} from '../middlewares/user/AuthenticationMWs';
+import {Express} from 'express';
 import {GalleryMWs} from '../middlewares/GalleryMWs';
 import {RenderingMWs} from '../middlewares/RenderingMWs';
 import {ThumbnailGeneratorMWs} from '../middlewares/thumbnail/ThumbnailGeneratorMWs';
@@ -6,7 +7,7 @@ import {UserRoles} from '../../common/entities/UserDTO';
 import {ThumbnailSourceType} from '../model/threading/ThumbnailWorker';
 
 export class GalleryRouter {
-  public static route(app: any) {
+  public static route(app: Express) {
 
     this.addGetImageIcon(app);
     this.addGetImageThumbnail(app);
@@ -22,7 +23,7 @@ export class GalleryRouter {
     this.addAutoComplete(app);
   }
 
-  private static addDirectoryList(app) {
+  private static addDirectoryList(app: Express) {
     app.get(['/api/gallery/content/:directory(*)', '/api/gallery/', '/api/gallery//'],
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authoriseDirectory,
@@ -34,7 +35,7 @@ export class GalleryRouter {
   }
 
 
-  private static addGetImage(app) {
+  private static addGetImage(app: Express) {
     app.get(['/api/gallery/content/:filePath(*\.(jpg|bmp|png|gif|jpeg))'],
       AuthenticationMWs.authenticate,
       // TODO: authorize path
@@ -43,7 +44,7 @@ export class GalleryRouter {
     );
   }
 
-  private static addGetVideo(app) {
+  private static addGetVideo(app: Express) {
     app.get(['/api/gallery/content/:filePath(*\.(mp4|ogg|ogv|webm))'],
       AuthenticationMWs.authenticate,
       // TODO: authorize path
@@ -52,7 +53,7 @@ export class GalleryRouter {
     );
   }
 
-  private static addGetMetaFile(app) {
+  private static addGetMetaFile(app: Express) {
     app.get(['/api/gallery/content/:filePath(*\.(gpx))'],
       AuthenticationMWs.authenticate,
       // TODO: authorize path
@@ -61,7 +62,7 @@ export class GalleryRouter {
     );
   }
 
-  private static addRandom(app) {
+  private static addRandom(app: Express) {
     app.get(['/api/gallery/random'],
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Guest),
@@ -72,7 +73,7 @@ export class GalleryRouter {
     );
   }
 
-  private static addGetImageThumbnail(app) {
+  private static addGetImageThumbnail(app: Express) {
     app.get('/api/gallery/content/:filePath(*\.(jpg|bmp|png|gif|jpeg))/thumbnail/:size?',
       AuthenticationMWs.authenticate,
       // TODO: authorize path
@@ -82,7 +83,7 @@ export class GalleryRouter {
     );
   }
 
-  private static addGetVideoThumbnail(app) {
+  private static addGetVideoThumbnail(app: Express) {
     app.get('/api/gallery/content/:filePath(*\.(mp4|ogg|ogv|webm))/thumbnail/:size?',
       AuthenticationMWs.authenticate,
       // TODO: authorize path
@@ -92,7 +93,7 @@ export class GalleryRouter {
     );
   }
 
-  private static addGetImageIcon(app) {
+  private static addGetImageIcon(app: Express) {
     app.get('/api/gallery/content/:filePath(*\.(jpg|bmp|png|gif|jpeg))/icon',
       AuthenticationMWs.authenticate,
       // TODO: authorize path
@@ -102,7 +103,7 @@ export class GalleryRouter {
     );
   }
 
-  private static addSearch(app) {
+  private static addSearch(app: Express) {
     app.get('/api/search/:text',
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Guest),
@@ -113,7 +114,7 @@ export class GalleryRouter {
     );
   }
 
-  private static addInstantSearch(app) {
+  private static addInstantSearch(app: Express) {
     app.get('/api/instant-search/:text',
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Guest),
@@ -124,7 +125,7 @@ export class GalleryRouter {
     );
   }
 
-  private static addAutoComplete(app) {
+  private static addAutoComplete(app: Express) {
     app.get('/api/autocomplete/:text',
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Guest),

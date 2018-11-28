@@ -53,19 +53,19 @@ export class NotificationService {
     });
   }
 
-  success(text, title = null) {
+  success(text: string, title: string = null): void {
     this._toastr.success(text, title, this.options);
   }
 
-  error(text, title?) {
+  error(text: string, title?: string): void {
     this._toastr.error(text, title, this.options);
   }
 
-  warning(text, title?) {
+  warning(text: string, title?: string): void {
     this._toastr.warning(text, title, this.options);
   }
 
-  info(text, title = null) {
+  info(text: string, title: string = null): void {
     this._toastr.info(text, title, this.options);
   }
 

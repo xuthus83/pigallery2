@@ -41,7 +41,7 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
   @ViewChild('lightbox') lightboxElement: ElementRef;
 
   public navigation = {hasPrev: true, hasNext: true};
-  public blackCanvasOpacity: any = 0;
+  public blackCanvasOpacity = 0;
 
   private activePhotoId: number = null;
   public activePhoto: GalleryPhotoComponent;
@@ -65,8 +65,8 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
   public infoPanelWidth = 0;
   public animating = false;
   startPhotoDimension: Dimension = <Dimension>{top: 0, left: 0, width: 0, height: 0};
-  iPvisibilityTimer = null;
-  visibilityTimer = null;
+  iPvisibilityTimer: number = null;
+  visibilityTimer: number = null;
   delayedPhotoShow: string = null;
 
 
@@ -326,7 +326,7 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
   }
 
   hideInfoPanel(_animate: boolean = true) {
-    this.iPvisibilityTimer = setTimeout(() => {
+    this.iPvisibilityTimer = window.setTimeout(() => {
       this.iPvisibilityTimer = null;
       this.infoPanelVisible = false;
     }, 1000);
@@ -465,7 +465,7 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
     if (this.visibilityTimer != null) {
       clearTimeout(this.visibilityTimer);
     }
-    this.visibilityTimer = setTimeout(this.hideControls, 2000);
+    this.visibilityTimer = window.setTimeout(this.hideControls, 2000);
   }
 
   private hideControls = () => {

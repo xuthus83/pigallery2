@@ -9,7 +9,7 @@ export class ThumbnailWorker {
 
   private static imageRenderer: (input: RendererInput) => Promise<void> = null;
   private static videoRenderer: (input: RendererInput) => Promise<void> = null;
-  private static rendererType = null;
+  private static rendererType: ThumbnailProcessingLib = null;
 
   public static render(input: RendererInput, renderer: ThumbnailProcessingLib): Promise<void> {
     if (input.type === ThumbnailSourceType.Image) {
@@ -62,7 +62,7 @@ export class VideoRendererFactory {
           if (!!err || data === null) {
             return reject(err.toString());
           }
-         /// console.log(data);
+          /// console.log(data);
           let width = null;
           let height = null;
           for (let i = 0; i < data.streams.length; i++) {
@@ -151,7 +151,7 @@ export class ImageRendererFactory {
       image.quality(60);        // set JPEG quality
 
       await new Promise((resolve, reject) => {
-        image.write(input.thPath, (err) => { // save
+        image.write(input.thPath, (err: Error | null) => { // save
           if (err) {
             return reject(err);
           }

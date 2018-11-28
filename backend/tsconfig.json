@@ -1,6 +1,7 @@
 {
   "compileOnSave": true,
   "compilerOptions": {
+    "noImplicitAny": true,
     "module": "commonjs",
     "skipLibCheck": true,
     "sourceMap": false,

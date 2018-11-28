@@ -31,11 +31,11 @@ export class ConfigDiagnostics {
       try {
         if (videoConfig.enabled === true) {
           const ffmpeg = FFmpegFactory.get();
-          ffmpeg().getAvailableCodecs((err) => {
+          ffmpeg().getAvailableCodecs((err: Error) => {
             if (err) {
               return reject(new Error('Error accessing ffmpeg, cant find executable: ' + err.toString()));
             }
-            ffmpeg(__dirname + '/blank.jpg').ffprobe((err2) => {
+            ffmpeg(__dirname + '/blank.jpg').ffprobe((err2: Error) => {
               if (err2) {
                 return reject(new Error('Error accessing ffmpeg-probe, cant find executable: ' + err2.toString()));
               }
@@ -60,7 +60,7 @@ export class ConfigDiagnostics {
       case  ThumbnailProcessingLib.gm:
         const gm = require('gm');
         await new Promise((resolve, reject) => {
-          gm(ProjectPath.FrontendFolder + '/assets/icon.png').size((err, value) => {
+          gm(ProjectPath.FrontendFolder + '/assets/icon.png').size((err: Error) => {
             if (err) {
               return reject(err.toString());
             }

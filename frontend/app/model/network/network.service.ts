@@ -46,7 +46,7 @@ export class NetworkService {
       return parser.parseFromString(res, 'text/xml');
     };
 
-    const err = (error) => {
+    const err = (error: any) => {
       this.slimLoadingBarService.complete();
       return this.handleError(error);
     };
@@ -85,14 +85,14 @@ export class NetworkService {
       this.slimLoadingBarService.complete();
       if (!!res.error) {
         if (res.error.code) {
-          res.error['title'] = ErrorCodes[res.error.code];
+          (<any>res.error)['title'] = ErrorCodes[res.error.code];
         }
         throw res.error;
       }
       return res.result;
     };
 
-    const err = (error) => {
+    const err = (error:any) => {
       this.slimLoadingBarService.complete();
       return this.handleError(error);
     };

@@ -10,6 +10,7 @@ import {DirectoryDTO} from '../../../../common/entities/DirectoryDTO';
 import {I18n} from '@ngx-translate/i18n-polyfill';
 import {BsModalService} from 'ngx-bootstrap/modal';
 import {BsModalRef} from 'ngx-bootstrap/modal/bs-modal-ref.service';
+import {Subscription} from 'rxjs';
 
 
 @Component({
@@ -32,7 +33,7 @@ export class GalleryShareComponent implements OnInit, OnDestroy {
   };
   currentDir = '';
   sharing: SharingDTO = null;
-  contentSubscription = null;
+  contentSubscription: Subscription = null;
   passwordProtection = false;
   ValidityTypes: any;
 

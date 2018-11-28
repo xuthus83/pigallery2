@@ -1,5 +1,5 @@
 import {DirectoryDTO} from '../../../common/entities/DirectoryDTO';
-import {IGalleryManager} from '../interfaces/IGalleryManager';
+import {IGalleryManager, RandomQuery} from '../interfaces/IGalleryManager';
 import * as path from 'path';
 import * as fs from 'fs';
 import {DiskManager} from '../DiskManger';
@@ -24,7 +24,7 @@ export class GalleryManager implements IGalleryManager {
     return DiskManager.scanDirectory(relativeDirectoryName);
   }
 
-  getRandomPhoto(RandomQuery): Promise<PhotoDTO> {
+  getRandomPhoto(queryFilter: RandomQuery): Promise<PhotoDTO> {
     throw new Error('Random media is not supported without database');
   }
 }

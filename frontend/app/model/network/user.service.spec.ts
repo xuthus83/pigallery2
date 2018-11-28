@@ -32,20 +32,20 @@ describe('UserService', () => {
   });
 
   it('should call postJson at login', inject([UserService, NetworkService],
-    async (userService, networkService) => {
+    async (userService: UserService, networkService: NetworkService) => {
       spyOn(networkService, 'postJson');
       const credential = new LoginCredential('name', 'pass');
       await userService.login(credential);
       expect(networkService.postJson).toHaveBeenCalled();
-      expect(networkService.postJson.calls.argsFor(0)).toEqual(['/user/login', {'loginCredential': credential}]);
+      expect((<any>networkService.postJson).calls.argsFor(0)).toEqual(['/user/login', {'loginCredential': credential}]);
     }));
 
   it('should call getJson at getSessionUser', inject([UserService, NetworkService],
-    async (userService, networkService) => {
+    async (userService: UserService, networkService: NetworkService) => {
       spyOn(networkService, 'getJson');
       await userService.getSessionUser();
       expect(networkService.getJson).toHaveBeenCalled();
-      expect(networkService.getJson.calls.argsFor(0)).toEqual(['/user/login']);
+      expect((<any>networkService.getJson).calls.argsFor(0)).toEqual(['/user/login']);
     }));
 
 

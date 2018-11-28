@@ -5,7 +5,7 @@ export class Utils {
     return JSON.parse(JSON.stringify(object));
   }
 
-  static zeroPrefix(value, length: number) {
+  static zeroPrefix(value: string | number, length: number) {
     const ret = '00000' + value;
     return ret.substr(ret.length - length);
   }
@@ -32,7 +32,6 @@ export class Utils {
 
     return true;
   }
-
 
 
   /**

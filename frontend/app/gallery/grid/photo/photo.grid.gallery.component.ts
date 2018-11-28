@@ -27,9 +27,9 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, OnDestroy {
     visible: false,
     background: 'rgba(0,0,0,0.0)'
   };
-  animationTimer = null;
+  animationTimer: number = null;
 
-  SearchTypes: any = [];
+  readonly SearchTypes: typeof SearchTypes;
   searchEnabled = true;
 
   wasInView: boolean = null;
@@ -90,10 +90,10 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, OnDestroy {
     if (this.animationTimer != null) {
       clearTimeout(this.animationTimer);
     }
-    this.animationTimer = setTimeout(() => {
+    this.animationTimer = window.setTimeout(() => {
       this.infoBar.background = 'rgba(0,0,0,0.8)';
       if (!this.infoDiv) {
-        this.animationTimer = setTimeout(() => {
+        this.animationTimer = window.setTimeout(() => {
           if (!this.infoDiv) {
             this.infoBar.marginTop = -50;
             return;
@@ -111,13 +111,13 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, OnDestroy {
     if (this.animationTimer != null) {
       clearTimeout(this.animationTimer);
     }
-    this.animationTimer = setTimeout(() => {
+    this.animationTimer = window.setTimeout(() => {
       this.infoBar.marginTop = 0;
       this.infoBar.background = 'rgba(0,0,0,0.0)';
       if (this.animationTimer != null) {
         clearTimeout(this.animationTimer);
       }
-      this.animationTimer = setTimeout(() => {
+      this.animationTimer = window.setTimeout(() => {
         this.infoBar.visible = false;
       }, 500);
     }, 100);

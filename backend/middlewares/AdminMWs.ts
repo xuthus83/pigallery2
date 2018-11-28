@@ -13,7 +13,6 @@ import {ProjectPath} from '../ProjectPath';
 import {PrivateConfigClass} from '../../common/config/private/PrivateConfigClass';
 import {IndexingDTO} from '../../common/entities/settings/IndexingDTO';
 
-
 const LOG_TAG = '[AdminMWs]';
 
 export class AdminMWs {
@@ -347,7 +346,7 @@ export class AdminMWs {
     }
   }
 
-  public static async resetIndexes(req: Request, res: Response, next: NextFunction) {
+  public static async resetIndexes(req: Express.Request, res: Response, next: NextFunction) {
     try {
       await ObjectManagerRepository.getInstance().IndexingManager.reset();
       req.resultPipe = 'ok';

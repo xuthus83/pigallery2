@@ -8,9 +8,10 @@ import {NavigationService} from '../../model/navigation.service';
 import {AbstractSettingsService} from './abstract.settings.service';
 import {IPrivateConfig} from '../../../../common/config/private/IPrivateConfig';
 import {I18n} from '@ngx-translate/i18n-polyfill';
+import {Subscription} from 'rxjs';
 
 
-export abstract class SettingsComponent<T, S extends AbstractSettingsService<T> = AbstractSettingsService<T>>
+export abstract class SettingsComponent<T extends { [key: string]: any }, S extends AbstractSettingsService<T> = AbstractSettingsService<T>>
   implements OnInit, OnDestroy, OnChanges {
 
   @Input()
@@ -25,8 +26,8 @@ export abstract class SettingsComponent<T, S extends AbstractSettingsService<T> 
   public inProgress = false;
   public error: string = null;
   public changed = false;
-  private _subscription = null;
-  private readonly _settingsSubscription = null;
+  private _subscription: Subscription = null;
+  private readonly _settingsSubscription: Subscription = null;
 
   public settings: T = <any>{};
   public original: T = <any>{};
@@ -38,7 +39,7 @@ export abstract class SettingsComponent<T, S extends AbstractSettingsService<T> 
     High: 'High'
   };
 
-  protected constructor(private name,
+  protected constructor(private name: string,
                         private _authService: AuthenticationService,
                         private _navigation: NavigationService,
                         public _settingsService: S,
@@ -55,7 +56,7 @@ export abstract class SettingsComponent<T, S extends AbstractSettingsService<T> 
     this.text.High = i18n('High');
   }
 
-  onNewSettings = (s) => {
+  onNewSettings = (s: IPrivateConfig) => {
     this.settings = Utils.clone(this.sliceFN(s));
     this.original = Utils.clone(this.settings);
     this.ngOnChanges();
