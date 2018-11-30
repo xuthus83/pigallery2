@@ -3,7 +3,7 @@ import * as path from 'path';
 import {DirectoryDTO} from '../../../common/entities/DirectoryDTO';
 import {CameraMetadata, GPSMetadata, PhotoDTO, PhotoMetadata} from '../../../common/entities/PhotoDTO';
 import {Logger} from '../../Logger';
-import {IptcParser} from 'ts-node-iptc';
+import {IptcParser, MarkerError, FileFormatError} from 'ts-node-iptc';
 import {ExifParserFactory, OrientationTypes} from 'ts-exif-parser';
 import {FfprobeData} from 'fluent-ffmpeg';
 import {ProjectPath} from '../../ProjectPath';
@@ -83,7 +83,10 @@ export class DiskMangerWorker {
           for (let i = 0; i < list.length; i++) {
             const file = list[i];
             const fullFilePath = path.normalize(path.resolve(absoluteDirectoryName, file));
-            if (photosOnly === false && fs.statSync(fullFilePath).isDirectory()) {
+            if (fs.statSync(fullFilePath).isDirectory()) {
+              if (photosOnly === true) {
+                continue;
+              }
               const d = await DiskMangerWorker.scanDirectory(path.join(relativeDirectoryName, file),
                 Config.Server.indexing.folderPreviewSize, true
               );
@@ -100,7 +103,7 @@ export class DiskMangerWorker {
               if (maxPhotos != null && directory.media.length > maxPhotos) {
                 break;
               }
-            } else if (Config.Client.Video.enabled === true &&
+            } else if (photosOnly === false && Config.Client.Video.enabled === true &&
               DiskMangerWorker.isVideo(fullFilePath)) {
               directory.media.push(<VideoDTO>{
                 name: file,
@@ -108,7 +111,8 @@ export class DiskMangerWorker {
                 metadata: await DiskMangerWorker.loadVideoMetadata(fullFilePath)
               });
 
-            } else if (DiskMangerWorker.isMetaFile(fullFilePath)) {
+            } else if (photosOnly === false && Config.Client.MetaFile.enabled === true &&
+              DiskMangerWorker.isMetaFile(fullFilePath)) {
               directory.metaFile.push(<FileDTO>{
                 name: file,
                 directory: null,
@@ -176,8 +180,13 @@ export class DiskMangerWorker {
 
   public static loadPhotoMetadata(fullPath: string): Promise<PhotoMetadata> {
     return new Promise<PhotoMetadata>((resolve, reject) => {
-        fs.readFile(fullPath, (err, data) => {
+        const fd = fs.openSync(fullPath, 'r');
+
+        const data = new Buffer(65535);
+        fs.read(fd, data, 0, 65535, 0, (err) => {
+          //     fs.readFile(fullPath, (err, data) => {
           if (err) {
+            fs.closeSync(fd);
             return reject({file: fullPath, error: err});
           }
           const metadata: PhotoMetadata = <PhotoMetadata>{
@@ -250,13 +259,15 @@ export class DiskMangerWorker {
               metadata.creationDate = <number>(iptcData.date_time ? iptcData.date_time.getTime() : metadata.creationDate);
 
             } catch (err) {
-              // Logger.debug(LOG_TAG, "Error parsing iptc data", fullPath, err);
+              //  Logger.debug(LOG_TAG, 'Error parsing iptc data', fullPath, err);
             }
 
             metadata.creationDate = metadata.creationDate || 0;
 
+            fs.closeSync(fd);
             return resolve(metadata);
           } catch (err) {
+            fs.closeSync(fd);
             return reject({file: fullPath, error: err});
           }
         });
