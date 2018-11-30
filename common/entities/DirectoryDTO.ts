@@ -20,13 +20,19 @@ export module DirectoryDTO {
     dir.media.forEach((media: MediaDTO) => {
       media.directory = dir;
     });
-    dir.metaFile.forEach((file: FileDTO) => {
-      file.directory = dir;
-    });
-    dir.directories.forEach((directory: DirectoryDTO) => {
-      addReferences(directory);
-      directory.parent = dir;
-    });
+
+    if (dir.metaFile) {
+      dir.metaFile.forEach((file: FileDTO) => {
+        file.directory = dir;
+      });
+    }
+
+    if (dir.directories) {
+      dir.directories.forEach((directory: DirectoryDTO) => {
+        addReferences(directory);
+        directory.parent = dir;
+      });
+    }
   };
 
   export const removeReferences = (dir: DirectoryDTO): void => {
