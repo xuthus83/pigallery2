@@ -26,6 +26,7 @@ import {QueryService} from '../../model/query.service';
 import {GalleryService} from '../gallery.service';
 import {SortingMethods} from '../../../../common/entities/SortingMethods';
 import {MediaDTO} from '../../../../common/entities/MediaDTO';
+import {QueryParams} from '../../../../common/QueryParams';
 
 @Component({
   selector: 'app-gallery-grid',
@@ -73,13 +74,13 @@ export class GalleryGridComponent implements OnChanges, OnInit, AfterViewInit, O
 
   ngOnInit() {
     this.subscriptions.route = this.route.queryParams.subscribe((params: Params) => {
-      if (params[QueryService.PHOTO_PARAM] && params[QueryService.PHOTO_PARAM] !== '') {
-        this.delayedRenderUpToPhoto = params[QueryService.PHOTO_PARAM];
+      if (params[QueryParams.gallery.photo] && params[QueryParams.gallery.photo] !== '') {
+        this.delayedRenderUpToPhoto = params[QueryParams.gallery.photo];
         if (!this.photos || this.photos.length === 0) {
           return;
         }
 
-        this.renderUpToPhoto(params[QueryService.PHOTO_PARAM]);
+        this.renderUpToPhoto(params[QueryParams.gallery.photo]);
       }
     });
     this.subscriptions.sorting = this.galleryService.sorting.subscribe(() => {

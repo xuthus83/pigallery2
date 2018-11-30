@@ -8,6 +8,9 @@ export const QueryParams = {
       toDate: 'toDate',
       minResolution: 'fromRes',
       maxResolution: 'toRes'
-    }
+    },
+    photo: 'p',
+    sharingKey_short: 'sk',
+    sharingKey_long: 'sharingKey'
   }
 };

@@ -3,6 +3,7 @@ import {UserRoles} from '../../common/entities/UserDTO';
 import {RenderingMWs} from '../middlewares/RenderingMWs';
 import {SharingMWs} from '../middlewares/SharingMWs';
 import * as express from 'express';
+import {QueryParams} from '../../common/QueryParams';
 
 export class SharingRouter {
   public static route(app: express.Express) {
@@ -22,7 +23,7 @@ export class SharingRouter {
   }
 
   private static addGetSharing(app: express.Express) {
-    app.get('/api/share/:sharingKey',
+    app.get('/api/share/:' + QueryParams.gallery.sharingKey_long,
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.LimitedGuest),
       SharingMWs.getSharing,

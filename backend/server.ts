@@ -2,6 +2,7 @@ import * as _express from 'express';
 import * as _bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
 import * as _http from 'http';
+// @ts-ignore
 import * as locale from 'locale';
 import {PublicRouter} from './routes/PublicRouter';
 import {UserRouter} from './routes/UserRouter';
@@ -68,7 +69,7 @@ export class Server {
 
   constructor() {
     if (!(process.env.NODE_ENV === 'production')) {
-      Logger.debug(LOG_TAG, 'Running in DEBUG mode');
+      Logger.debug(LOG_TAG, 'Running in DEBUG mode, set env variable NODE_ENV=production to disable ');
     }
     this.init();
   }

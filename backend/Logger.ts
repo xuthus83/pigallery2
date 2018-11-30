@@ -2,7 +2,7 @@ import * as winston from 'winston';
 
 export const winstonSettings = {
   transports: [
-    new winston.transports.Console({
+    new winston.transports.Console(<any>{
       level: process.env.NODE_ENV === 'production' ? 'info' : 'silly',
       handleExceptions: true,
       json: false,
@@ -11,9 +11,9 @@ export const winstonSettings = {
         return (new Date()).toLocaleString();
       },
       label: 'innerLabel',
-      formatter: (options) => {
+      formatter: (options: any) => {
         // Return string will be passed to logger.
-        return options.timestamp() + '[' + winston['config']['colorize'](options.level, options.level.toUpperCase()) + '] ' +
+        return options.timestamp() + '[' + (<any>winston)['config']['colorize'](options.level, options.level.toUpperCase()) + '] ' +
           (undefined !== options.message ? options.message : '') +
           (options.meta && Object.keys(options.meta).length ? '\n\t' + JSON.stringify(options.meta) : '');
       },
@@ -23,4 +23,4 @@ export const winstonSettings = {
   exitOnError: false
 };
 
-export const Logger = new winston.Logger(winstonSettings);
+export const Logger = new (<any>winston).Logger(winstonSettings);

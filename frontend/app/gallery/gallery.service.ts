@@ -10,7 +10,7 @@ import {Config} from '../../../common/config/public/Config';
 import {ShareService} from './share.service';
 import {NavigationService} from '../model/navigation.service';
 import {SortingMethods} from '../../../common/entities/SortingMethods';
-import {QueryService} from '../model/query.service';
+import {QueryParams} from '../../../common/QueryParams';
 
 
 @Injectable()
@@ -25,7 +25,7 @@ export class GalleryService {
   constructor(private networkService: NetworkService,
               private galleryCacheService: GalleryCacheService,
               private _shareService: ShareService,
-              private navigatoinService: NavigationService) {
+              private navigationService: NavigationService) {
     this.content = new BehaviorSubject<ContentWrapper>(new ContentWrapper());
     this.sorting = new BehaviorSubject<SortingMethods>(Config.Client.Other.defaultPhotoSortingMethod);
   }
@@ -44,13 +44,15 @@ export class GalleryService {
     content.directory = this.galleryCacheService.getDirectory(directoryName);
     content.searchResult = null;
 
+    console.log(content.directory);
+
     this.content.next(content);
     this.lastRequest.directory = directoryName;
 
     const params: { [key: string]: any } = {};
     if (Config.Client.Sharing.enabled === true) {
       if (this._shareService.isSharing()) {
-        params[QueryService.SHARING_KEY] = this._shareService.getSharingKey();
+        params[QueryParams.gallery.sharingKey_short] = this._shareService.getSharingKey();
       }
     }
 
@@ -82,8 +84,9 @@ export class GalleryService {
       this.content.next(cw);
 
 
-    }).catch(() => {
-      this.navigatoinService.toGallery();
+    }).catch((e) => {
+      console.error(e);
+      this.navigationService.toGallery();
     });
   }
 

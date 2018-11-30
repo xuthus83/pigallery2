@@ -6,6 +6,7 @@ import {ObjectManagerRepository} from '../../model/ObjectManagerRepository';
 import {Config} from '../../../common/config/private/Config';
 import {PasswordHelper} from '../../model/PasswordHelper';
 import {Utils} from '../../../common/Utils';
+import {QueryParams} from '../../../common/QueryParams';
 
 export class AuthenticationMWs {
 
@@ -48,7 +49,7 @@ export class AuthenticationMWs {
     if (req.session.rememberMe === true) {
       req.sessionOptions.expires = new Date(Date.now() + Config.Server.sessionTimeout);
     } else {
-      delete(req.sessionOptions.expires);
+      delete (req.sessionOptions.expires);
     }
     return next();
   }
@@ -83,7 +84,7 @@ export class AuthenticationMWs {
       return next();
     }
     // not enough parameter
-    if ((!req.query.sk && !req.params.sharingKey)) {
+    if ((!req.query[QueryParams.gallery.sharingKey_short] && !req.params[QueryParams.gallery.sharingKey_long])) {
       return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, 'no sharing key provided'));
     }
 
@@ -91,7 +92,7 @@ export class AuthenticationMWs {
       const password = (req.body ? req.body.password : null) || null;
 
       const sharing = await ObjectManagerRepository.getInstance().SharingManager.findOne({
-        sharingKey: req.query.sk || req.params.sharingKey,
+        sharingKey: req.query[QueryParams.gallery.sharingKey_short] || req.params[QueryParams.gallery.sharingKey_long]
       });
 
       console.log(sharing);
@@ -154,9 +155,9 @@ export class AuthenticationMWs {
 
   private static async getSharingUser(req: Request) {
     if (Config.Client.Sharing.enabled === true &&
-      (!!req.query.sk || !!req.params.sharingKey)) {
+      (!!req.params[QueryParams.gallery.sharingKey_short] || !!req.params[QueryParams.gallery.sharingKey_long])) {
       const sharing = await ObjectManagerRepository.getInstance().SharingManager.findOne({
-        sharingKey: req.query.sk || req.params.sharingKey,
+        sharingKey: req.query[QueryParams.gallery.sharingKey_short] || req.params[QueryParams.gallery.sharingKey_long],
       });
       if (!sharing || sharing.expires < Date.now()) {
         return null;

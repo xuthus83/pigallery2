@@ -4,6 +4,7 @@ import {LoginComponent} from './login/login.component';
 import {GalleryComponent} from './gallery/gallery.component';
 import {AdminComponent} from './admin/admin.component';
 import {ShareLoginComponent} from './sharelogin/share-login.component';
+import {QueryParams} from '../../common/QueryParams';
 
 const ROUTES: Routes = [
   {
@@ -31,7 +32,7 @@ const ROUTES: Routes = [
     component: GalleryComponent
   },
   {
-    path: 'share/:sharingKey',
+    path: 'share/:' + QueryParams.gallery.sharingKey_long,
     component: GalleryComponent
   },
   {path: '', redirectTo: '/login', pathMatch: 'full'},

@@ -3,6 +3,7 @@ import {CreateSharingDTO, SharingDTO} from '../../common/entities/SharingDTO';
 import {ObjectManagerRepository} from '../model/ObjectManagerRepository';
 import {ErrorCodes, ErrorDTO} from '../../common/entities/Error';
 import {Config} from '../../common/config/private/Config';
+import {QueryParams} from '../../common/QueryParams';
 
 const LOG_TAG = '[SharingMWs]';
 
@@ -24,7 +25,7 @@ export class SharingMWs {
     if (Config.Client.Sharing.enabled === false) {
       return next();
     }
-    const sharingKey = req.params.sharingKey;
+    const sharingKey = req.params[QueryParams.gallery.sharingKey_long];
 
     try {
       req.resultPipe = await ObjectManagerRepository.getInstance().SharingManager.findOne({sharingKey: sharingKey});

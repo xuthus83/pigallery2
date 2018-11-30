@@ -3,7 +3,7 @@ import {NetworkService} from '../model/network/network.service';
 import {CreateSharingDTO, SharingDTO} from '../../../common/entities/SharingDTO';
 import {Router, RoutesRecognized} from '@angular/router';
 import {BehaviorSubject} from 'rxjs';
-import {QueryService} from '../model/query.service';
+import {QueryParams} from '../../../common/QueryParams';
 
 @Injectable()
 export class ShareService {
@@ -28,8 +28,8 @@ export class ShareService {
 
     this.router.events.subscribe(val => {
       if (val instanceof RoutesRecognized) {
-        this.param = val.state.root.firstChild.params['sharingKey'] || null;
-        this.queryParam = val.state.root.firstChild.queryParams[QueryService.SHARING_KEY] || null;
+        this.param = val.state.root.firstChild.params[QueryParams.gallery.sharingKey_long] || null;
+        this.queryParam = val.state.root.firstChild.queryParams[QueryParams.gallery.sharingKey_short] || null;
         const changed = this.sharingKey !== this.param || this.queryParam;
         if (changed) {
           this.sharingKey = this.param || this.queryParam;

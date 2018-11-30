@@ -16,7 +16,7 @@ import {ContentWrapper} from '../../../common/entities/ConentWrapper';
 import {PageHelper} from '../model/page.helper';
 import {SortingMethods} from '../../../common/entities/SortingMethods';
 import {PhotoDTO} from '../../../common/entities/PhotoDTO';
-import {QueryService} from '../model/query.service';
+import {QueryParams} from '../../../common/QueryParams';
 
 @Component({
   selector: 'app-gallery',
@@ -90,7 +90,7 @@ export class GalleryComponent implements OnInit, OnDestroy {
     if (params['sharingKey'] && params['sharingKey'] !== '') {
       const sharing = await this.shareService.getSharing();
       const qParams: { [key: string]: any } = {};
-      qParams[QueryService.SHARING_KEY] = this.shareService.getSharingKey();
+      qParams[QueryParams.gallery.sharingKey_short] = this.shareService.getSharingKey();
       this._router.navigate(['/gallery', sharing.path], {queryParams: qParams}).catch(console.error);
       return;
     }

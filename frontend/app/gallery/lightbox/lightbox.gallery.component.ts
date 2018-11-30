@@ -10,7 +10,6 @@ import {
   QueryList,
   ViewChild
 } from '@angular/core';
-import {PhotoDTO} from '../../../../common/entities/PhotoDTO';
 import {GalleryPhotoComponent} from '../grid/photo/photo.grid.gallery.component';
 import {Dimension} from '../../model/IRenderable';
 import {FullScreenService} from '../fullscreen.service';
@@ -23,6 +22,7 @@ import {ActivatedRoute, Params, Router} from '@angular/router';
 import {PageHelper} from '../../model/page.helper';
 import {QueryService} from '../../model/query.service';
 import {MediaDTO} from '../../../../common/entities/MediaDTO';
+import {QueryParams} from '../../../../common/QueryParams';
 
 export enum LightboxStates {
   Open = 1,
@@ -82,11 +82,11 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
   ngOnInit(): void {
     this.timer = timer(1000, 2000);
     this.subscription.route = this.route.queryParams.subscribe((params: Params) => {
-      if (params[QueryService.PHOTO_PARAM] && params[QueryService.PHOTO_PARAM] !== '') {
+      if (params[QueryParams.gallery.photo] && params[QueryParams.gallery.photo] !== '') {
         if (!this.gridPhotoQL) {
-          return this.delayedPhotoShow = params[QueryService.PHOTO_PARAM];
+          return this.delayedPhotoShow = params[QueryParams.gallery.photo];
         }
-        this.onNavigateTo(params[QueryService.PHOTO_PARAM]);
+        this.onNavigateTo(params[QueryParams.gallery.photo]);
       } else if (this.status === LightboxStates.Open) {
         this.delayedPhotoShow = null;
         this.hideLigthbox();
