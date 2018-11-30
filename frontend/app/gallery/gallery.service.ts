@@ -44,7 +44,6 @@ export class GalleryService {
     content.directory = this.galleryCacheService.getDirectory(directoryName);
     content.searchResult = null;
 
-    console.log(content.directory);
 
     this.content.next(content);
     this.lastRequest.directory = directoryName;

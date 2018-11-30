@@ -39,6 +39,9 @@ export class SettingsService {
         Video: {
           enabled: true
         },
+        MetaFile: {
+          enabled: true
+        },
         Other: {
           enableCache: true,
           enableOnScrollRendering: true,

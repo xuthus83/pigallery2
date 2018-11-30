@@ -47,6 +47,10 @@ export module ClientConfig {
     enabled: boolean;
   }
 
+  export interface MetaFileConfig {
+    enabled: boolean;
+  }
+
 
   export interface Config {
     applicationTitle: string;
@@ -61,6 +65,7 @@ export module ClientConfig {
     authenticationRequired: boolean;
     languages: string[];
     Video: VideoConfig;
+    MetaFile: MetaFileConfig;
   }
 
 }
@@ -98,6 +103,9 @@ export class PublicConfigClass {
       enabled: true
     },
     Video: {
+      enabled: true
+    },
+    MetaFile: {
       enabled: true
     },
     Other: {

@@ -3,7 +3,7 @@ import * as path from 'path';
 import {DirectoryDTO} from '../../../common/entities/DirectoryDTO';
 import {CameraMetadata, GPSMetadata, PhotoDTO, PhotoMetadata} from '../../../common/entities/PhotoDTO';
 import {Logger} from '../../Logger';
-import {IptcParser, MarkerError, FileFormatError} from 'ts-node-iptc';
+import {IptcParser} from 'ts-node-iptc';
 import {ExifParserFactory, OrientationTypes} from 'ts-exif-parser';
 import {FfprobeData} from 'fluent-ffmpeg';
 import {ProjectPath} from '../../ProjectPath';
