@@ -66,6 +66,12 @@ export class AdminRouter {
       AdminMWs.updateVideoSettings,
       RenderingMWs.renderOK
     );
+    app.put('/api/settings/metafile',
+      AuthenticationMWs.authenticate,
+      AuthenticationMWs.authorise(UserRoles.Admin),
+      AdminMWs.updateMetaFileSettings,
+      RenderingMWs.renderOK
+    );
 
     app.put('/api/settings/authentication',
       AuthenticationMWs.authenticate,

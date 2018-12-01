@@ -14,6 +14,7 @@ import * as fs from 'fs';
 import {ClientConfig} from '../../../common/config/public/ConfigClass';
 import VideoConfig = ClientConfig.VideoConfig;
 import {FFmpegFactory} from '../FFmpegFactory';
+import MetaFileConfig = ClientConfig.MetaFileConfig;
 
 const LOG_TAG = '[ConfigDiagnostics]';
 
@@ -22,6 +23,14 @@ export class ConfigDiagnostics {
   static async testDatabase(databaseConfig: DataBaseConfig) {
     if (databaseConfig.type !== DatabaseType.memory) {
       await SQLConnection.tryConnection(databaseConfig);
+    }
+  }
+
+
+  static async testMetaFileConfig(metaFileConfig: MetaFileConfig, config: IPrivateConfig) {
+    if (metaFileConfig.enabled === true &&
+      config.Client.Map.enabled === false) {
+      throw new Error('*.gpx meta files are not supported without MAP');
     }
   }
 
@@ -198,6 +207,15 @@ export class ConfigDiagnostics {
       NotificationManager.warning('Video support error, switching off..', err.toString());
       Logger.warn(LOG_TAG, 'Video support error, switching off..', err.toString());
       Config.Client.Video.enabled = false;
+    }
+
+    try {
+      await ConfigDiagnostics.testMetaFileConfig(Config.Client.MetaFile, Config);
+    } catch (ex) {
+      const err: Error = ex;
+      NotificationManager.warning('Meta file support error, switching off..', err.toString());
+      Logger.warn(LOG_TAG, 'Meta file support error, switching off..', err.toString());
+      Config.Client.MetaFile.enabled = false;
     }
 
 

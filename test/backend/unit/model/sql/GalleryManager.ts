@@ -113,6 +113,26 @@ describe('GalleryManager', () => {
 
   });
 
+  it('should skip meta files', async () => {
+    const gm = new GalleryManagerTest();
+    const parent = TestHelper.getRandomizedDirectoryEntry();
+    const p1 = TestHelper.getRandomizedPhotoEntry(parent, 'Photo1');
+    const p2 = TestHelper.getRandomizedPhotoEntry(parent, 'Photo2');
+    const gpx = TestHelper.getRandomizedGPXEntry(parent, 'GPX1');
+    DirectoryDTO.removeReferences(parent);
+    Config.Client.MetaFile.enabled = true;
+    await gm.saveToDB(Utils.clone(parent));
+
+    Config.Client.MetaFile.enabled = false;
+    const conn = await SQLConnection.getConnection();
+    const selected = await gm.selectParentDir(conn, parent.name, parent.path);
+    await gm.fillParentDir(conn, selected);
+
+    delete parent.metaFile;
+    DirectoryDTO.removeReferences(selected);
+    removeIds(selected);
+    expect(Utils.clone(selected)).to.deep.equal(Utils.clone(parent));
+  });
 
   it('should update sub directory', async () => {
     const gm = new GalleryManagerTest();

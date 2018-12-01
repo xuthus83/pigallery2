@@ -103,6 +103,29 @@ export class AdminMWs {
     }
   }
 
+  public static async updateMetaFileSettings(req: Request, res: Response, next: NextFunction) {
+    if ((typeof req.body === 'undefined') || (typeof req.body.settings === 'undefined')) {
+      return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, 'settings is needed'));
+    }
+
+    try {
+      const original = Config.original();
+      await ConfigDiagnostics.testMetaFileConfig(<ClientConfig.MetaFileConfig>req.body.settings, original);
+
+      Config.Client.MetaFile = <ClientConfig.MetaFileConfig>req.body.settings;
+      // only updating explicitly set config (not saving config set by the diagnostics)
+
+      original.Client.MetaFile = <ClientConfig.MetaFileConfig>req.body.settings;
+      original.save();
+      await ConfigDiagnostics.runDiagnostics();
+      Logger.info(LOG_TAG, 'new config:');
+      Logger.info(LOG_TAG, JSON.stringify(Config, null, '\t'));
+      return next();
+    } catch (err) {
+      return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, 'Settings error: ' + err.toString(), err));
+    }
+  }
+
   public static async updateShareSettings(req: Request, res: Response, next: NextFunction) {
     if ((typeof req.body === 'undefined') || (typeof req.body.settings === 'undefined')) {
       return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, 'settings is needed'));

@@ -76,6 +76,7 @@ import {FixOrientationPipe} from './gallery/FixOrientationPipe';
 import {VideoSettingsComponent} from './settings/video/video.settings.component';
 import {DurationPipe} from './pipes/DurationPipe';
 import {MapService} from './gallery/map/map.service';
+import {MetaFileSettingsComponent} from './settings/metafiles/metafile.settings.component';
 
 @Injectable()
 export class GoogleMapsConfig {
@@ -163,6 +164,7 @@ export function translationsFactory(locale: string) {
     MapSettingsComponent,
     ThumbnailSettingsComponent,
     VideoSettingsComponent,
+    MetaFileSettingsComponent,
     SearchSettingsComponent,
     ShareSettingsComponent,
     RandomPhotoSettingsComponent,

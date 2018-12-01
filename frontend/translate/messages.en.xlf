@@ -182,7 +182,7 @@
     </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/gallery/gallery.component.html</context>
-          <context context-type="linenumber">44</context>
+          <context context-type="linenumber">46</context>
         </context-group>
         <target>Too many results to show. Refine your search.</target>
       </trans-unit>
@@ -190,7 +190,7 @@
         <source>Searching for:</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/gallery/gallery.component.html</context>
-          <context context-type="linenumber">49</context>
+          <context context-type="linenumber">51</context>
         </context-group>
         <target>Searching for:</target>
       </trans-unit>
@@ -628,6 +628,10 @@
           <context context-type="linenumber">28</context>
         </context-group>
         <context-group purpose="location">
+          <context context-type="sourcefile">app/settings/metafiles/metafile.settings.component.html</context>
+          <context context-type="linenumber">28</context>
+        </context-group>
+        <context-group purpose="location">
           <context context-type="sourcefile">app/settings/search/search.settings.component.html</context>
           <context context-type="linenumber">73</context>
         </context-group>
@@ -662,6 +666,10 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/video/video.settings.component.html</context>
+          <context context-type="linenumber">31</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/settings/metafiles/metafile.settings.component.html</context>
           <context context-type="linenumber">31</context>
         </context-group>
         <context-group purpose="location">
@@ -835,6 +843,22 @@
           <context context-type="linenumber">23</context>
         </context-group>
         <target>Video support uses ffmpeg. ffmpeg and ffprobe binaries need to be available in the PATH or the @ffmpeg-installer/ffmpeg and @ffprobe-installer/ffprobe optional node packages need to be installed.</target>
+      </trans-unit>
+      <trans-unit id="c45b54bd977f2e5b0d635231051f1143e0abf1c1" datatype="html">
+        <source>Meta file settings</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/settings/metafiles/metafile.settings.component.html</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+        <target>Meta file settings</target>
+      </trans-unit>
+      <trans-unit id="219e36c6747ef991081a68fc8ab2678677583e11" datatype="html">
+        <source>Reads and show *.gpx files on the map</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/settings/metafiles/metafile.settings.component.html</context>
+          <context context-type="linenumber">23</context>
+        </context-group>
+        <target>Reads and show *.gpx files on the map</target>
       </trans-unit>
       <trans-unit id="2e75ae3885931555902da6b288ed616843d5dc3c" datatype="html">
         <source>Search settings</source>
@@ -1670,6 +1694,14 @@
           <context context-type="linenumber">1</context>
         </context-group>
         <target>Map</target>
+      </trans-unit>
+      <trans-unit id="6bf63e55f9a54c6d0e7a5ee7ed3e3f3ab412fa61" datatype="html">
+        <source>Meta files</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">frontend/app/settings/metafiles/metafile.settings.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <target>Meta files</target>
       </trans-unit>
       <trans-unit id="c2a9de3714f5767b174d0424bc8abe2dc37acc41" datatype="html">
         <source>Other</source>

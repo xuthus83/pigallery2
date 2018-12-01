@@ -182,7 +182,7 @@ export class DiskMangerWorker {
     return new Promise<PhotoMetadata>((resolve, reject) => {
         const fd = fs.openSync(fullPath, 'r');
 
-        const data = new Buffer(65535);
+        const data = Buffer.allocUnsafe(65535);
         fs.read(fd, data, 0, 65535, 0, (err) => {
           //     fs.readFile(fullPath, (err, data) => {
           if (err) {
