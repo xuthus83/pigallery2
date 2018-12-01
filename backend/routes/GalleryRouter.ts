@@ -36,7 +36,7 @@ export class GalleryRouter {
 
 
   private static addGetImage(app: Express) {
-    app.get(['/api/gallery/content/:filePath(*\.(jpg|bmp|png|gif|jpeg))'],
+    app.get(['/api/gallery/content/:mediaPath(*\.(jpg|bmp|png|gif|jpeg))'],
       AuthenticationMWs.authenticate,
       // TODO: authorize path
       GalleryMWs.loadFile,
@@ -45,7 +45,7 @@ export class GalleryRouter {
   }
 
   private static addGetVideo(app: Express) {
-    app.get(['/api/gallery/content/:filePath(*\.(mp4|ogg|ogv|webm))'],
+    app.get(['/api/gallery/content/:mediaPath(*\.(mp4|ogg|ogv|webm))'],
       AuthenticationMWs.authenticate,
       // TODO: authorize path
       GalleryMWs.loadFile,
@@ -54,7 +54,7 @@ export class GalleryRouter {
   }
 
   private static addGetMetaFile(app: Express) {
-    app.get(['/api/gallery/content/:filePath(*\.(gpx))'],
+    app.get(['/api/gallery/content/:mediaPath(*\.(gpx))'],
       AuthenticationMWs.authenticate,
       // TODO: authorize path
       GalleryMWs.loadFile,
@@ -65,7 +65,6 @@ export class GalleryRouter {
   private static addRandom(app: Express) {
     app.get(['/api/gallery/random'],
       AuthenticationMWs.authenticate,
-      AuthenticationMWs.authorise(UserRoles.Guest),
       // TODO: authorize path
       GalleryMWs.getRandomImage,
       GalleryMWs.loadFile,
@@ -74,7 +73,7 @@ export class GalleryRouter {
   }
 
   private static addGetImageThumbnail(app: Express) {
-    app.get('/api/gallery/content/:filePath(*\.(jpg|bmp|png|gif|jpeg))/thumbnail/:size?',
+    app.get('/api/gallery/content/:mediaPath(*\.(jpg|bmp|png|gif|jpeg))/thumbnail/:size?',
       AuthenticationMWs.authenticate,
       // TODO: authorize path
       GalleryMWs.loadFile,
@@ -84,7 +83,7 @@ export class GalleryRouter {
   }
 
   private static addGetVideoThumbnail(app: Express) {
-    app.get('/api/gallery/content/:filePath(*\.(mp4|ogg|ogv|webm))/thumbnail/:size?',
+    app.get('/api/gallery/content/:mediaPath(*\.(mp4|ogg|ogv|webm))/thumbnail/:size?',
       AuthenticationMWs.authenticate,
       // TODO: authorize path
       GalleryMWs.loadFile,
@@ -94,7 +93,7 @@ export class GalleryRouter {
   }
 
   private static addGetImageIcon(app: Express) {
-    app.get('/api/gallery/content/:filePath(*\.(jpg|bmp|png|gif|jpeg))/icon',
+    app.get('/api/gallery/content/:mediaPath(*\.(jpg|bmp|png|gif|jpeg))/icon',
       AuthenticationMWs.authenticate,
       // TODO: authorize path
       GalleryMWs.loadFile,

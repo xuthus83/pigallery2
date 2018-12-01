@@ -19,11 +19,12 @@ import {MediaDTO} from '../../../common/entities/MediaDTO';
 import {VideoEntity} from './enitites/VideoEntity';
 import {FileEntity} from './enitites/FileEntity';
 import {FileDTO} from '../../../common/entities/FileDTO';
+import {NotificationManager} from '../NotifocationManager';
 
 export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
 
   protected async selectParentDir(connection: Connection, directoryName: string, directoryParent: string): Promise<DirectoryEntity> {
-    return await connection
+    const query = connection
       .getRepository(DirectoryEntity)
       .createQueryBuilder('directory')
       .where('directory.name = :name AND directory.path = :path', {
@@ -31,9 +32,13 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
         path: directoryParent
       })
       .leftJoinAndSelect('directory.directories', 'directories')
-      .leftJoinAndSelect('directory.media', 'media')
-      .leftJoinAndSelect('directory.metaFile', 'metaFile')
-      .getOne();
+      .leftJoinAndSelect('directory.media', 'media');
+
+    if (Config.Client.MetaFile.enabled == true) {
+      query.leftJoinAndSelect('directory.metaFile', 'metaFile');
+    }
+
+    return await query.getOne();
   }
 
   protected async fillParentDir(connection: Connection, dir: DirectoryEntity): Promise<void> {
@@ -133,6 +138,7 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
         await this.saveToDB(scannedDirectory);
 
       } catch (error) {
+        NotificationManager.warning('Unknown indexing error', error.toString());
         console.error(error);
         return reject(error);
       }

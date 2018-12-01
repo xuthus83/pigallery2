@@ -145,17 +145,17 @@ export class GalleryMWs {
       }
 
       req.params.mediaPath = path.join(photo.directory.path, photo.directory.name, photo.name);
+      return next();
     } catch (e) {
       return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, 'Can\'t get random photo: ' + e.toString()));
     }
-    return next();
   }
 
   public static loadFile(req: Request, res: Response, next: NextFunction) {
-    if (!(req.params.filePath)) {
+    if (!(req.params.mediaPath)) {
       return next();
     }
-    const fullMediaPath = path.join(ProjectPath.ImageFolder, req.params.filePath);
+    const fullMediaPath = path.join(ProjectPath.ImageFolder, req.params.mediaPath);
 
     // check if thumbnail already exist
     if (fs.existsSync(fullMediaPath) === false) {
