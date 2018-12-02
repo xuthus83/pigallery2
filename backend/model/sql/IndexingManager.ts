@@ -3,6 +3,7 @@ import {IndexingProgressDTO} from '../../../common/entities/settings/IndexingPro
 import {ObjectManagerRepository} from '../ObjectManagerRepository';
 import {ISQLGalleryManager} from './IGalleryManager';
 import * as path from 'path';
+import * as fs from 'fs';
 import {SQLConnection} from './SQLConnection';
 import {DirectoryEntity} from './enitites/DirectoryEntity';
 import {Logger} from '../../Logger';
@@ -43,6 +44,9 @@ export class IndexingManager implements IIndexingManager {
         const mPath = path.join(ProjectPath.ImageFolder, media.directory.path, media.directory.name, media.name);
         const thPath = path.join(ProjectPath.ThumbnailFolder,
           ThumbnailGeneratorMWs.generateThumbnailName(mPath, Config.Client.Thumbnail.thumbnailSizes[0]));
+        if (fs.existsSync(thPath)) { // skip existing thumbnails
+          continue;
+        }
         await ThumbnailWorker.render(<RendererInput>{
           type: MediaDTO.isVideo(media) ? ThumbnailSourceType.Video : ThumbnailSourceType.Image,
           mediaPath: mPath,

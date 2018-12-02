@@ -61,7 +61,11 @@ export class PrivateConfigClass extends PublicConfigClass implements IPrivateCon
   }
 
   public save() {
-    ConfigLoader.saveConfigFile(path.join(__dirname, './../../../config.json'), this);
+    try {
+      ConfigLoader.saveConfigFile(path.join(__dirname, './../../../config.json'), this);
+    } catch (e) {
+      throw new Error('Error during saving config: ' + e.toString());
+    }
   }
 
   public original(): PrivateConfigClass {

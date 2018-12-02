@@ -77,6 +77,9 @@ export class AdminMWs {
       Logger.info(LOG_TAG, JSON.stringify(Config, null, '\t'));
       return next();
     } catch (err) {
+      if (err instanceof Error) {
+        return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, 'Settings error: ' + err.toString(), err));
+      }
       return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, 'Settings error: ' + JSON.stringify(err, null, '  '), err));
     }
   }
@@ -99,7 +102,10 @@ export class AdminMWs {
       Logger.info(LOG_TAG, JSON.stringify(Config, null, '\t'));
       return next();
     } catch (err) {
-      return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, 'Settings error: ' + err.toString(), err));
+      if (err instanceof Error) {
+        return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, 'Settings error: ' + err.toString(), err));
+      }
+      return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, 'Settings error: ' + JSON.stringify(err, null, '  '), err));
     }
   }
 
@@ -122,7 +128,10 @@ export class AdminMWs {
       Logger.info(LOG_TAG, JSON.stringify(Config, null, '\t'));
       return next();
     } catch (err) {
-      return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, 'Settings error: ' + err.toString(), err));
+      if (err instanceof Error) {
+        return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, 'Settings error: ' + err.toString(), err));
+      }
+      return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, 'Settings error: ' + JSON.stringify(err, null, '  '), err));
     }
   }
 
@@ -144,6 +153,9 @@ export class AdminMWs {
       Logger.info(LOG_TAG, JSON.stringify(Config, null, '\t'));
       return next();
     } catch (err) {
+      if (err instanceof Error) {
+        return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, 'Settings error: ' + err.toString(), err));
+      }
       return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, 'Settings error: ' + JSON.stringify(err, null, '  '), err));
     }
   }
@@ -167,6 +179,9 @@ export class AdminMWs {
       Logger.info(LOG_TAG, JSON.stringify(Config, null, '\t'));
       return next();
     } catch (err) {
+      if (err instanceof Error) {
+        return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, 'Settings error: ' + err.toString(), err));
+      }
       return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, 'Settings error: ' + JSON.stringify(err, null, '  '), err));
     }
   }
@@ -189,6 +204,9 @@ export class AdminMWs {
       Logger.info(LOG_TAG, JSON.stringify(Config, null, '\t'));
       return next();
     } catch (err) {
+      if (err instanceof Error) {
+        return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, 'Settings error: ' + err.toString(), err));
+      }
       return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, 'Settings error: ' + JSON.stringify(err, null, '  '), err));
     }
   }
@@ -213,6 +231,9 @@ export class AdminMWs {
       Logger.info(LOG_TAG, JSON.stringify(Config, null, '\t'));
       return next();
     } catch (err) {
+      if (err instanceof Error) {
+        return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, 'Settings error: ' + err.toString(), err));
+      }
       return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, 'Settings error: ' + JSON.stringify(err, null, '  '), err));
     }
   }
@@ -278,6 +299,9 @@ export class AdminMWs {
       Logger.info(LOG_TAG, JSON.stringify(Config, null, '\t'));
       return next();
     } catch (err) {
+      if (err instanceof Error) {
+        return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, 'Settings error: ' + err.toString(), err));
+      }
       return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, 'Settings error: ' + JSON.stringify(err, null, '  '), err));
     }
   }
@@ -311,6 +335,9 @@ export class AdminMWs {
       Logger.info(LOG_TAG, JSON.stringify(Config, null, '\t'));
       return next();
     } catch (err) {
+      if (err instanceof Error) {
+        return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, 'Settings error: ' + err.toString(), err));
+      }
       return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, 'Settings error: ' + JSON.stringify(err, null, '  '), err));
     }
   }
@@ -333,6 +360,9 @@ export class AdminMWs {
       Logger.info(LOG_TAG, JSON.stringify(Config, null, '\t'));
       return next();
     } catch (err) {
+      if (err instanceof Error) {
+        return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, 'Settings error: ' + err.toString(), err));
+      }
       return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, 'Settings error: ' + JSON.stringify(err, null, '  '), err));
     }
   }
@@ -345,7 +375,10 @@ export class AdminMWs {
       req.resultPipe = 'ok';
       return next();
     } catch (err) {
-      return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, 'Indexing error: ' + JSON.stringify(err, null, '  '), err));
+      if (err instanceof Error) {
+        return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, 'Settings error: ' + err.toString(), err));
+      }
+      return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, 'Settings error: ' + JSON.stringify(err, null, '  '), err));
     }
   }
 
@@ -355,7 +388,10 @@ export class AdminMWs {
       req.resultPipe = ObjectManagerRepository.getInstance().IndexingManager.getProgress();
       return next();
     } catch (err) {
-      return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, 'Indexing error: ' + JSON.stringify(err, null, '  '), err));
+      if (err instanceof Error) {
+        return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, 'Settings error: ' + err.toString(), err));
+      }
+      return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, 'Settings error: ' + JSON.stringify(err, null, '  '), err));
     }
   }
 
@@ -365,7 +401,10 @@ export class AdminMWs {
       req.resultPipe = 'ok';
       return next();
     } catch (err) {
-      return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, 'Indexing error: ' + JSON.stringify(err, null, '  '), err));
+      if (err instanceof Error) {
+        return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, 'Settings error: ' + err.toString(), err));
+      }
+      return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, 'Settings error: ' + JSON.stringify(err, null, '  '), err));
     }
   }
 
@@ -375,7 +414,10 @@ export class AdminMWs {
       req.resultPipe = 'ok';
       return next();
     } catch (err) {
-      return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, 'Indexing error: ' + JSON.stringify(err, null, '  '), err));
+      if (err instanceof Error) {
+        return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, 'Settings error: ' + err.toString(), err));
+      }
+      return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, 'Settings error: ' + JSON.stringify(err, null, '  '), err));
     }
   }
 }

@@ -138,7 +138,7 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
         await this.saveToDB(scannedDirectory);
 
       } catch (error) {
-        NotificationManager.warning('Unknown indexing error', error.toString());
+        NotificationManager.warning('Unknown indexing error for: ' + relativeDirectoryName, error.toString());
         console.error(error);
         return reject(error);
       }
@@ -336,12 +336,17 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
       }
     }
     await fileRepository.save(metaFilesToSave);
-    // await fileRepository.remove(indexedMetaFiles);
+    await fileRepository.remove(indexedMetaFiles);
   }
 
   protected async saveMedia(connection: Connection, mediaList: MediaDTO[]): Promise<MediaEntity[]> {
-    const list = await connection.getRepository(VideoEntity).save(<VideoEntity[]>mediaList.filter(m => MediaDTO.isVideo(m)));
-    return list.concat(await connection.getRepository(PhotoEntity).save(<PhotoEntity[]>mediaList.filter(m => MediaDTO.isPhoto(m))));
+    const chunked = Utils.chunkArrays(mediaList, 100);
+    let list: MediaEntity[] = [];
+    for (let i = 0; i < chunked.length; i++) {
+      list = list.concat(await connection.getRepository(PhotoEntity).save(<PhotoEntity[]>chunked[i].filter(m => MediaDTO.isPhoto(m))));
+      list = list.concat(await connection.getRepository(VideoEntity).save(<VideoEntity[]>chunked[i].filter(m => MediaDTO.isVideo(m))));
+    }
+    return list;
   }
 
 }
