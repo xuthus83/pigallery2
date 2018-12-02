@@ -2,7 +2,7 @@ import {expect} from 'chai';
 import * as fs from 'fs';
 import * as path from 'path';
 import {Config} from '../../../../../common/config/private/Config';
-import {DatabaseType, ReIndexingSensitivity} from '../../../../../common/config/private/IPrivateConfig';
+import {DatabaseType} from '../../../../../common/config/private/IPrivateConfig';
 import {SQLConnection} from '../../../../../backend/model/sql/SQLConnection';
 import {GalleryManager} from '../../../../../backend/model/sql/GalleryManager';
 import {DirectoryDTO} from '../../../../../common/entities/DirectoryDTO';
@@ -74,9 +74,13 @@ describe('GalleryManager', () => {
       delete media.id;
     });
     if (dir.metaFile) {
-      dir.metaFile.forEach((file: FileDTO) => {
-        delete file.id;
-      });
+      if (dir.metaFile.length === 0) {
+        delete dir.metaFile;
+      } else {
+        dir.metaFile.forEach((file: FileDTO) => {
+          delete file.id;
+        });
+      }
     }
     if (dir.directories) {
       dir.directories.forEach((directory: DirectoryDTO) => {
@@ -161,6 +165,7 @@ describe('GalleryManager', () => {
     //  delete subDir.directories;
     DirectoryDTO.removeReferences(selected);
     delete subDir.parent;
+    delete subDir.metaFile;
     removeIds(selected);
     // selected.directories[0].parent = selected;
     expect(Utils.clone(selected)).to.deep.equal(Utils.clone(subDir));
