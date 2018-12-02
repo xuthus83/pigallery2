@@ -10,7 +10,9 @@
       <span class="details-icon oi oi-image"></span>
     </div>
     <div class="col-10">
-      <div class="details-main">
+      <div class="details-main dir-link" title="{{FullPath}}"
+           [routerLink]="['/gallery', DirectoryPath]"
+           [queryParams]="queryService.getParams()">
         {{media.name}}
       </div>
       <div class="details-sub row">

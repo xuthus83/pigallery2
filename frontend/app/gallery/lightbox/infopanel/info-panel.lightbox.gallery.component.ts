@@ -4,6 +4,7 @@ import {Config} from '../../../../../common/config/public/Config';
 import {MediaDTO} from '../../../../../common/entities/MediaDTO';
 import {VideoDTO, VideoMetadata} from '../../../../../common/entities/VideoDTO';
 import {Utils} from '../../../../../common/Utils';
+import {QueryService} from '../../../model/query.service';
 
 @Component({
   selector: 'app-info-panel',
@@ -16,7 +17,7 @@ export class InfoPanelLightboxComponent {
 
   public mapEnabled = true;
 
-  constructor(public elementRef: ElementRef) {
+  constructor(public queryService: QueryService) {
     this.mapEnabled = Config.Client.Map.enabled;
   }
 
@@ -27,6 +28,15 @@ export class InfoPanelLightboxComponent {
   calcMpx() {
     return (this.media.metadata.size.width * this.media.metadata.size.height / 1000000).toFixed(2);
   }
+
+  get FullPath(): string {
+    return Utils.concatUrls(this.media.directory.path, this.media.directory.name, this.media.name);
+  }
+
+  get DirectoryPath() {
+    return Utils.concatUrls(this.media.directory.path, this.media.directory.name);
+  }
+
 
 
   calcSize(size: number) {

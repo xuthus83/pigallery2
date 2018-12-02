@@ -186,14 +186,6 @@
         </context-group>
         <target>Túl sok eredmény jelenik meg. Pontosítsa a keresést.</target>
       </trans-unit>
-      <trans-unit id="24f166827601febff9ec90329582bc637781def8" datatype="html">
-        <source>Searching for:</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/gallery/gallery.component.html</context>
-          <context context-type="linenumber">51</context>
-        </context-group>
-        <target>Keresés:</target>
-      </trans-unit>
       <trans-unit id="121cc5391cd2a5115bc2b3160379ee5b36cd7716" datatype="html">
         <source>Settings</source>
         <context-group purpose="location">
@@ -295,11 +287,19 @@
         </context-group>
         <target>Hónapok</target>
       </trans-unit>
+      <trans-unit id="24f166827601febff9ec90329582bc637781def8" datatype="html">
+        <source>Searching for:</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/gallery/navigator/navigator.gallery.component.html</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+        <target>Keresés:</target>
+      </trans-unit>
       <trans-unit id="064ce5140698af55532d5c8c6355e4605d2bcc1b" datatype="html">
         <source>items</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/gallery/navigator/navigator.gallery.component.html</context>
-          <context context-type="linenumber">12</context>
+          <context context-type="linenumber">26</context>
         </context-group>
         <target>elem</target>
       </trans-unit>
@@ -343,7 +343,7 @@
         <source>duration</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/gallery/lightbox/infopanel/info-panel.lightbox.gallery.component.html</context>
-          <context context-type="linenumber">48</context>
+          <context context-type="linenumber">50</context>
         </context-group>
         <target>hossz</target>
       </trans-unit>
@@ -351,7 +351,7 @@
         <source>bit rate</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/gallery/lightbox/infopanel/info-panel.lightbox.gallery.component.html</context>
-          <context context-type="linenumber">49</context>
+          <context context-type="linenumber">51</context>
         </context-group>
         <target>bit ráta</target>
       </trans-unit>
@@ -1695,13 +1695,13 @@
         </context-group>
         <target>Térkép</target>
       </trans-unit>
-      <trans-unit id="6bf63e55f9a54c6d0e7a5ee7ed3e3f3ab412fa61" datatype="html">
-        <source>Meta files</source>
+      <trans-unit id="3610ff97c9b9af9a23aa02a1a05d561c8fa03f42" datatype="html">
+        <source>Meta file</source>
         <context-group purpose="location">
           <context context-type="sourcefile">frontend/app/settings/metafiles/metafile.settings.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>Metafájlok</target>
+        <target>Meta fájl</target>
       </trans-unit>
       <trans-unit id="c2a9de3714f5767b174d0424bc8abe2dc37acc41" datatype="html">
         <source>Other</source>

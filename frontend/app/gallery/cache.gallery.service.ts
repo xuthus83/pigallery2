@@ -28,7 +28,15 @@ export class GalleryCacheService {
       localStorage.clear();
       localStorage.setItem(GalleryCacheService.VERSION, DataStructureVersion.toString());
     }
+  }
 
+  private reset() {
+    try {
+      localStorage.clear();
+      localStorage.setItem(GalleryCacheService.VERSION, DataStructureVersion.toString());
+    } catch (e) {
+
+    }
   }
 
 
@@ -51,7 +59,12 @@ export class GalleryCacheService {
       timestamp: Date.now(),
       item: items
     };
-    localStorage.setItem(GalleryCacheService.AUTO_COMPLETE_PREFIX + text, JSON.stringify(tmp));
+    try {
+      localStorage.setItem(GalleryCacheService.AUTO_COMPLETE_PREFIX + text, JSON.stringify(tmp));
+    } catch (e) {
+      this.reset();
+      console.error(e);
+    }
   }
 
   public getInstantSearch(text: string): SearchResultDTO {
@@ -73,7 +86,12 @@ export class GalleryCacheService {
       timestamp: Date.now(),
       item: searchResult
     };
-    localStorage.setItem(GalleryCacheService.INSTANT_SEARCH_PREFIX + text, JSON.stringify(tmp));
+    try {
+      localStorage.setItem(GalleryCacheService.INSTANT_SEARCH_PREFIX + text, JSON.stringify(tmp));
+    } catch (e) {
+      this.reset();
+      console.error(e);
+    }
   }
 
 
@@ -103,7 +121,12 @@ export class GalleryCacheService {
     if (typeof type !== 'undefined') {
       key += GalleryCacheService.SEARCH_TYPE_PREFIX + type;
     }
-    localStorage.setItem(key, JSON.stringify(tmp));
+    try {
+      localStorage.setItem(key, JSON.stringify(tmp));
+    } catch (e) {
+      this.reset();
+      console.error(e);
+    }
   }
 
 
@@ -134,8 +157,12 @@ export class GalleryCacheService {
       return;
     }
 
-    localStorage.setItem(key, JSON.stringify(directory));
-
+    try {
+      localStorage.setItem(key, JSON.stringify(directory));
+    } catch (e) {
+      this.reset();
+      console.error(e);
+    }
     directory.directories.forEach((dir: DirectoryDTO) => {
       const sub_key = GalleryCacheService.CONTENT_PREFIX + Utils.concatUrls(dir.path, dir.name);
       if (localStorage.getItem(sub_key) == null) { // don't override existing

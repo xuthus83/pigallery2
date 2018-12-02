@@ -44,3 +44,10 @@
   margin: 0;
   font-size: 1.2rem;
 }
+
+.dir-link{
+  cursor: pointer;
+}
+.dir-link:hover{
+  text-decoration: underline;
+}
