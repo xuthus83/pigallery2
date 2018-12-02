@@ -9,6 +9,8 @@ import {GalleryService} from '../gallery.service';
 import {Utils} from '../../../../common/Utils';
 import {SortingMethods} from '../../../../common/entities/SortingMethods';
 import {Config} from '../../../../common/config/public/Config';
+import {SearchResultDTO} from '../../../../common/entities/SearchResultDTO';
+import {SearchTypes} from '../../../../common/entities/AutoCompleteItem';
 
 @Component({
   selector: 'app-gallery-navbar',
@@ -18,11 +20,14 @@ import {Config} from '../../../../common/config/public/Config';
 })
 export class GalleryNavigatorComponent implements OnChanges {
   @Input() directory: DirectoryDTO;
+  @Input() searchResult: SearchResultDTO;
 
   routes: Array<NavigatorPath> = [];
   SortingMethods = SortingMethods;
   sortingMethodsType: { key: number; value: string }[] = [];
   config = Config;
+
+  readonly SearchTypes = SearchTypes;
 
   constructor(private _authService: AuthenticationService,
               public queryService: QueryService,
@@ -84,6 +89,9 @@ export class GalleryNavigatorComponent implements OnChanges {
     this.galleryService.setSorting(sorting);
   }
 
+  get ItemCount(): number {
+    return (this.directory || this.searchResult).media.length;
+  }
 
 }
 

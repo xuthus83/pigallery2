@@ -40,3 +40,8 @@ nav {
 .dropdown-toggle::after {
   display: none;
 }
+
+
+.search-type{
+  margin-left: 5px;
+}

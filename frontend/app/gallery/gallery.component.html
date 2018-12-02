@@ -40,25 +40,13 @@
     <app-gallery-grid [photos]="_galleryService.content.value.directory.media"
                       [lightbox]="lightbox"></app-gallery-grid>
   </div>
-
+  <!-- Search-->
   <div body class="container-fluid" style="width: 100%; padding:0" *ngIf="_galleryService.content.value.searchResult">
     <div class="alert alert-info" role="alert"
          *ngIf="_galleryService.content.value.searchResult.resultOverflow == true" i18n>
       Too many results to show. Refine your search.
     </div>
-    <ol class="breadcrumb">
-      <li class="active">
-        <ng-container i18n>Searching for:</ng-container>
-        <span class="search-type" [ngSwitch]="_galleryService.content.value.searchResult.searchType">
-                      <span *ngSwitchCase="SearchTypes.photo" class="oi oi-image"></span>
-                      <span *ngSwitchCase="SearchTypes.video" class="oi oi-video"></span>
-                      <span *ngSwitchCase="SearchTypes.directory" class="oi oi-folder"></span>
-                      <span *ngSwitchCase="SearchTypes.keyword" class="oi oi-tag"></span>
-                      <span *ngSwitchCase="SearchTypes.position" class="oi oi-map-marker"></span>
-                    </span>
-        <strong> {{_galleryService.content.value.searchResult.searchText}}</strong>
-      </li>
-    </ol>
+    <app-gallery-navbar [searchResult]="_galleryService.content.value.searchResult"></app-gallery-navbar>
 
     <app-gallery-map *ngIf="isPhotoWithLocation && mapEnabled"
                      [photos]="_galleryService.content.value.searchResult.media"

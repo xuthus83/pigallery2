@@ -1,5 +1,4 @@
 import {Injectable} from '@angular/core';
-import {PhotoDTO} from '../../../common/entities/PhotoDTO';
 import {DirectoryDTO} from '../../../common/entities/DirectoryDTO';
 import {Utils} from '../../../common/Utils';
 import {Config} from '../../../common/config/public/Config';
@@ -33,11 +32,11 @@ export class GalleryCacheService {
   }
 
 
-  public getAutoComplete(text: string): Array<AutoCompleteItem> {
+  public getAutoComplete(text: string): AutoCompleteItem[] {
     const key = GalleryCacheService.AUTO_COMPLETE_PREFIX + text;
     const tmp = localStorage.getItem(key);
     if (tmp != null) {
-      const value: CacheItem<Array<AutoCompleteItem>> = JSON.parse(tmp);
+      const value: CacheItem<AutoCompleteItem[]> = JSON.parse(tmp);
       if (value.timestamp < Date.now() - Config.Client.Search.autocompleteCacheTimeout) {
         localStorage.removeItem(key);
         return null;
