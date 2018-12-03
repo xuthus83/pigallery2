@@ -8,7 +8,8 @@
 This is a directory-first photo gallery website, optimised for running on low resource servers (especially on raspberry pi)
 
 ## Live Demo
-Live Demo @ heroku: https://pigallery2.herokuapp.com/
+Live Demo @ heroku: https://pigallery2.herokuapp.com/ 
+ - the demo page **first load** might take up **30s**: the time while the free webservice boots up
 
 ## Table of contents
 1. [Getting started](#getting-started-on-raspberry-pi-1)
@@ -20,30 +21,21 @@ Live Demo @ heroku: https://pigallery2.herokuapp.com/
 
 
 ## Getting started (on Raspberry Pi 1)
-### Install NodeJs
+### [Install NodeJs](https://nodejs.org/en/download/)
 Download and extract
 ```bash
-cd ~
-wget https://nodejs.org/dist/v6.10.3/node-v6.10.3-linux-armv6l.tar.gz
-tar -xzf node-v6.10.3-linux-armv6l.tar.gz
+curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
+sudo apt-get install -y nodejs
 ```
-Copy it to /usr/local: 
-```bash
-cd node-v6.10.3-linux-armv6l/
-sudo cp -R * /usr/local/
-```
-Add to path. Add the following line to  `~/.bashrc`
-```bash
-PATH=$PATH:/usr/local/bin
-```
-Full node install description: https://raspberrypi.stackexchange.com/questions/48303/install-nodejs-for-all-raspberry-pi
+
+Full node install on rapberry pi description: https://www.w3schools.com/nodejs/nodejs_raspberrypi.asp
  
 ### Install PiGallery2
 #### Install from release
 
 ```bash
 cd ~
-wget https://github.com/bpatrik/pigallery2/releases/download/1.2.0/pigallery2.zip
+wget https://github.com/bpatrik/pigallery2/releases/download/1.5.0/pigallery2.zip
 unzip pigallery2.zip
 cd pigallery2
 npm install
