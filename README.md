@@ -1,9 +1,11 @@
-# PiGallery2
+# PiGallery2 
 [![npm version](https://badge.fury.io/js/pigallery2.svg)](https://badge.fury.io/js/pigallery2)
 [![Build Status](https://travis-ci.org/bpatrik/pigallery2.svg?branch=master)](https://travis-ci.org/bpatrik/pigallery2)
 [![Heroku](https://heroku-badge.herokuapp.com/?app=pigallery2&style=flat)](https://pigallery2.herokuapp.com)
 [![dependencies Status](https://david-dm.org/bpatrik/pigallery2/status.svg)](https://david-dm.org/bpatrik/pigallery2)
 [![devDependencies Status](https://david-dm.org/bpatrik/pigallery2/dev-status.svg)](https://david-dm.org/bpatrik/pigallery2?type=dev)
+
+Homepage: http://bpatrik.github.io/pigallery2/
 
 This is a directory-first photo gallery website, optimised for running on low resource servers (especially on raspberry pi)
 
