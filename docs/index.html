@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link rel="icon" href="assets/icon.png">
+
+  <title>PiGallery 2</title>
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="text-center">
+<a href="https://github.com/bpatrik/pigallery2"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_left_white_ffffff.png" alt="Fork me on GitHub"></a>
+<div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column ">
+  <header class="masthead">
+    <div class="inner">
+      <h3 class="masthead-brand"><img src="assets/icon_inv.png" width="30" height="30" class="d-inline-block align-top"
+                                      alt=""> PiGallery 2</h3>
+      <nav class="nav nav-masthead justify-content-center">
+        <a class="nav-link active" href="index.html">Features</a>
+        <a class="nav-link" href="https://github.com/bpatrik/pigallery2">Install</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="content">
+    <div class="row">
+      <div class="col">
+        <h3>
+          PiGallery 2 is a self-hosted directory-first photo gallery website.
+        </h3>
+        <a href="https://pigallery2.herokuapp.com/">Try our live demo! <span class="small">(First load may tak up 30s, while the server boots up)</span></a>
+      </div>
+    </div>
+    <img class="banner-photo" src="assets/main_page.jpg" style="width: 100%">
+    <div class="row">
+      <div class="col">
+        The gallery is a directory first gallery. It renders your directory structure as it is.
+        Creates thumbnails on the fly. Can be run without any database but support sqlite and MySQL databases too.
+      </div>
+    </div>
+    <h3 class="section-header">Main features:</h3>
+    <hr/>
+
+
+    <div class="row feature">
+      <div class="col">
+        <h3>Photo viewer</h3>
+        Nice photo viewer with optional information panel that shows all important information about the photo.
+      </div>
+      <div class="col-12 col-md-8">
+        <img class="card-img-right" src="assets/lightbox_info.jpg" style="width: 100%">
+      </div>
+    </div>
+
+    <div class="row feature">
+      <div class="col-12 col-md-8  order-last order-md-first">
+        <img class="card-img-right" src="assets/map.jpg" style="width: 100%">
+      </div>
+      <div class="col">
+        <h3>Map</h3>
+        PiGallery2 reads the location data of the photos and puts them on google maps.
+        The gallery also supports *.gps file to show your tracked path on the map too.
+      </div>
+    </div>
+
+    <div class="row feature">
+      <div class="col">
+        <h3>Searching</h3>
+        Searching based on keywords, location, file or directory name.
+        The gallery supports autocomplete and instant search too.
+      </div>
+      <div class="col-12 col-md-8">
+        <img class="card-img-right" src="assets/search.jpg">
+      </div>
+    </div>
+
+
+    <div class="row feature">
+      <div class="col-12 col-md-8  order-last order-md-first">
+        <img class="card-img-right" src="assets/sharing.jpg" style="width: 100%">
+      </div>
+      <div class="col">
+        <h3>Sharing</h3>
+        You can share your photo folders with your friends.
+        The sharing link can be also password protected.
+      </div>
+    </div>
+
+
+    <div class="row feature">
+      <div class="col">
+        <h3>Easy settings</h3>
+        PiGallery2 has a rich settings page where you can easily set up the gallery.
+        <a href="https://pigallery2.herokuapp.com/admin">Click here to see all the setting in the live demo.</a>
+      </div>
+      <div class="col-12 col-md-8">
+        <img class="card-img-right" src="assets/settings.jpg" style="width: 100%">
+      </div>
+    </div>
+
+    <div class="row feature">
+      <div class="col-12 col-md-8  order-last order-md-first">
+        <img class="card-img-right" src="assets/video.jpg" style="width: 100%">
+      </div>
+      <div class="col">
+        <h3>Video playback</h3>
+        It also supports *.mp4, *.webm, *.ogv and *.ogg files.
+      </div>
+    </div>
+
+
+    <div class="row feature">
+      <div class="col">
+        <h3>Random link</h3>
+        You can create a link that will serve a random photo from your gallery.
+        You can use this link with 3rd party applications, like with an automatic wallpaper changer gadget.
+      </div>
+      <div class="col-12 col-md-8">
+        <img class="card-img-right" src="assets/random_link.jpg" style="width: 100%">
+      </div>
+    </div>
+
+    <h3 class="section-header">All features:</h3>
+    <hr/>
+    <ul class="text-left">
+      <li><strong>Rendering directories as it is</strong>
+        <ul>
+          <li>Listing subdirectories recursively</li>
+          <li>Listing photos in a nice grid layout
+            <ul>
+              <li>supporting most common image formats</li>
+              <li>showing <strong>tag/keywords, locations, GPS coordinates</strong> for photos</li>
+              <li>rendering photos on demand (on scroll)</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li><strong>On the fly thumbnail generation</strong> in several sizes
+        <ul>
+          <li>prioritizes thumbnail generation (generating thumbnail first for the visible photos)</li>
+          <li>saving generated thumbnails to TEMP folder for reuse</li>
+          <li>supporting several core CPU</li>
+          <li>supporting hardware acceleration (<a href="https://github.com/lovell/sharp">sharp</a> and <a
+            href="https://github.com/aheckmann/gm">gm</a> as optional and JS-based <a
+            href="https://github.com/oliver-moran/jimp">Jimp</a> as fallback)
+          </li>
+        </ul>
+      </li>
+      <li>Custom lightbox for full screen photo viewing
+        <ul>
+          <li>keyboard support for navigation</li>
+          <li>showing low-res thumbnail while full image loads</li>
+          <li>Information panel for showing <strong>Exif info</strong></li>
+          <li>Automatic playing</li>
+          <li>gesture support (swipe left, right, up)</li>
+        </ul>
+      </li>
+      <li>Client side caching (directories and search results)</li>
+      <li>Rendering <strong>photos</strong> with GPS coordinates <strong>on google map</strong>
+        <ul>
+          <li>.gpx file support</li>
+        </ul>
+      </li>
+      <li><strong>Two modes: SQL database and no-database mode</strong>
+        <ul>
+          <li>both modes supports
+            <ul>
+              <li>user management</li>
+              <li>password protection can be disabled/enabled</li>
+            </ul>
+          </li>
+          <li>database mode supports:
+            <ul>
+              <li>faster directory listing</li>
+              <li>searching</li>
+              <li>instant search, auto complete</li>
+              <li>sharing</li>
+              <li>setting link expiration time</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>internalization / translation support</li>
+      <li>Nice design
+        <ul>
+          <li>responsive design (phone, tablet desktop support)</li>
+        </ul>
+      </li>
+      <li>Setup page</li>
+      <li>Random photo url
+        <ul>
+          <li>You can generate an url that returns a random photo from your gallery. You can use this feature to develop
+            3rd party applications, like: changing desktop background
+          </li>
+        </ul>
+      </li>
+      <li>video support
+        <ul>
+          <li>fully supports <em>.mp4 files and partially (might have errors with safari and IE) supports </em>.ogg,
+            <em>.ogv, </em>.webm files
+          </li>
+          <li>uses ffmpeg and ffprobe to generate video thumbnails</li>
+        </ul>
+      </li>
+    </ul>
+
+  </main>
+
+</div>
+
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
+
+</body>
+</html>
