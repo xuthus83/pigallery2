@@ -80,7 +80,8 @@ export class SettingsService {
           cachedFolderTimeout: 0,
           folderPreviewSize: 0,
           reIndexingSensitivity: ReIndexingSensitivity.medium
-        }
+        },
+        photoMetadataSize: 512 * 1024
       }
     });
   }
