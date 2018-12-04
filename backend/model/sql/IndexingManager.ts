@@ -40,21 +40,26 @@ export class IndexingManager implements IIndexingManager {
     }
     if (createThumbnails) {
       for (let i = 0; i < scanned.media.length; i++) {
-        const media = scanned.media[i];
-        const mPath = path.join(ProjectPath.ImageFolder, media.directory.path, media.directory.name, media.name);
-        const thPath = path.join(ProjectPath.ThumbnailFolder,
-          ThumbnailGeneratorMWs.generateThumbnailName(mPath, Config.Client.Thumbnail.thumbnailSizes[0]));
-        if (fs.existsSync(thPath)) { // skip existing thumbnails
-          continue;
+        try {
+          const media = scanned.media[i];
+          const mPath = path.join(ProjectPath.ImageFolder, media.directory.path, media.directory.name, media.name);
+          const thPath = path.join(ProjectPath.ThumbnailFolder,
+            ThumbnailGeneratorMWs.generateThumbnailName(mPath, Config.Client.Thumbnail.thumbnailSizes[0]));
+          if (fs.existsSync(thPath)) { // skip existing thumbnails
+            continue;
+          }
+          await ThumbnailWorker.render(<RendererInput>{
+            type: MediaDTO.isVideo(media) ? ThumbnailSourceType.Video : ThumbnailSourceType.Image,
+            mediaPath: mPath,
+            size: Config.Client.Thumbnail.thumbnailSizes[0],
+            thPath: thPath,
+            makeSquare: false,
+            qualityPriority: Config.Server.thumbnail.qualityPriority
+          }, Config.Server.thumbnail.processingLibrary);
+        } catch (e) {
+          console.error(e);
+          Logger.error(LOG_TAG, 'Error during indexing job: ' + e.toString());
         }
-        await ThumbnailWorker.render(<RendererInput>{
-          type: MediaDTO.isVideo(media) ? ThumbnailSourceType.Video : ThumbnailSourceType.Image,
-          mediaPath: mPath,
-          size: Config.Client.Thumbnail.thumbnailSizes[0],
-          thPath: thPath,
-          makeSquare: false,
-          qualityPriority: Config.Server.thumbnail.qualityPriority
-        }, Config.Server.thumbnail.processingLibrary);
       }
 
     }
