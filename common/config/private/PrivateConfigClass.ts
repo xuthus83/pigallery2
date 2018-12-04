@@ -17,6 +17,7 @@ export class PrivateConfigClass extends PublicConfigClass implements IPrivateCon
       qualityPriority: true
     },
     sessionTimeout: 1000 * 60 * 60 * 24 * 7,
+    photoMetadataSize: 512 * 1024,
     database: {
       type: DatabaseType.sqlite,
       mysql: {

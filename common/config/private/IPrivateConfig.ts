@@ -65,6 +65,7 @@ export interface ServerConfig {
   sharing: SharingConfig;
   sessionTimeout: number;
   indexing: IndexingConfig;
+  photoMetadataSize:number;
 }
 
 export interface IPrivateConfig {
