@@ -1,4 +1,5 @@
 import {SortingMethods} from '../../entities/SortingMethods';
+import {UserRoles} from '../../entities/UserDTO';
 
 export module ClientConfig {
   export interface SearchConfig {
@@ -63,6 +64,7 @@ export module ClientConfig {
     RandomPhoto: RandomPhotoConfig;
     Other: OtherConfig;
     authenticationRequired: boolean;
+    unAuthenticatedUserRole: UserRoles;
     languages: string[];
     Video: VideoConfig;
     MetaFile: MetaFileConfig;
@@ -118,6 +120,7 @@ export class PublicConfigClass {
       }
     },
     authenticationRequired: true,
+    unAuthenticatedUserRole: UserRoles.Admin,
     publicUrl: '',
     urlBase: '',
     languages: []

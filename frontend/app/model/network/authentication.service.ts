@@ -30,7 +30,7 @@ export class AuthenticationService {
       this.getSessionUser();
     } else {
       if (Config.Client.authenticationRequired === false) {
-        this.user.next(<UserDTO>{name: '', role: UserRoles.Admin});
+        this.user.next(<UserDTO>{name: UserRoles[Config.Client.unAuthenticatedUserRole], role: Config.Client.unAuthenticatedUserRole});
       }
     }
 

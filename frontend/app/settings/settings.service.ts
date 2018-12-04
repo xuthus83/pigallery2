@@ -3,6 +3,7 @@ import {BehaviorSubject} from 'rxjs';
 import {DatabaseType, IPrivateConfig, ReIndexingSensitivity, ThumbnailProcessingLib} from '../../../common/config/private/IPrivateConfig';
 import {NetworkService} from '../model/network/network.service';
 import {SortingMethods} from '../../../common/entities/SortingMethods';
+import {UserRoles} from '../../../common/entities/UserDTO';
 
 @Injectable()
 export class SettingsService {
@@ -55,6 +56,7 @@ export class SettingsService {
         publicUrl: '',
         applicationTitle: '',
         authenticationRequired: true,
+        unAuthenticatedUserRole: UserRoles.Admin,
         languages: []
       },
       Server: {

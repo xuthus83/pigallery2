@@ -2,6 +2,9 @@ import {PublicConfigClass} from '../public/ConfigClass';
 import {DatabaseType, IPrivateConfig, ReIndexingSensitivity, ServerConfig, ThumbnailProcessingLib} from './IPrivateConfig';
 import * as path from 'path';
 import {ConfigLoader} from 'typeconfig';
+import {UserService} from '../../../frontend/app/model/network/user.service';
+import {Utils} from '../../Utils';
+import {UserRoles} from '../../entities/UserDTO';
 
 /**
  * This configuration will be only at backend
@@ -58,6 +61,10 @@ export class PrivateConfigClass extends PublicConfigClass implements IPrivateCon
     ConfigLoader.loadBackendConfig(this,
       path.join(__dirname, './../../../config.json'),
       [['PORT', 'Server-port']]);
+
+    if (Utils.enumToArray(UserRoles).map(r => r.key).indexOf(this.Client.unAuthenticatedUserRole) === -1) {
+      throw new Error('Unknown user role for Client.unAuthenticatedUserRole, found: ' + this.Client.unAuthenticatedUserRole);
+    }
 
   }
 

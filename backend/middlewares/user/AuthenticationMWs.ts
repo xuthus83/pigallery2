@@ -12,7 +12,7 @@ export class AuthenticationMWs {
 
   public static async tryAuthenticate(req: Request, res: Response, next: NextFunction) {
     if (Config.Client.authenticationRequired === false) {
-      req.session.user = <UserDTO>{name: 'Admin', role: UserRoles.Admin};
+      req.session.user = <UserDTO>{name: UserRoles[Config.Client.unAuthenticatedUserRole], role: Config.Client.unAuthenticatedUserRole};
       return next();
     }
     try {
@@ -31,7 +31,7 @@ export class AuthenticationMWs {
   public static async authenticate(req: Request, res: Response, next: NextFunction) {
 
     if (Config.Client.authenticationRequired === false) {
-      req.session.user = <UserDTO>{name: 'Admin', role: UserRoles.Admin};
+      req.session.user = <UserDTO>{name: UserRoles[Config.Client.unAuthenticatedUserRole], role: Config.Client.unAuthenticatedUserRole};
       return next();
     }
     try {
