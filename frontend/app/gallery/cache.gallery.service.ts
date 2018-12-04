@@ -97,7 +97,7 @@ export class GalleryCacheService {
 
   public getSearch(text: string, type?: SearchTypes): SearchResultDTO {
     let key = GalleryCacheService.SEARCH_PREFIX + text;
-    if (typeof type !== 'undefined') {
+    if (typeof type !== 'undefined' && type !== null) {
       key += GalleryCacheService.SEARCH_TYPE_PREFIX + type;
     }
     const tmp = localStorage.getItem(key);
@@ -118,7 +118,7 @@ export class GalleryCacheService {
       item: searchResult
     };
     let key = GalleryCacheService.SEARCH_PREFIX + text;
-    if (typeof type !== 'undefined') {
+    if (typeof type !== 'undefined' && type !== null) {
       key += GalleryCacheService.SEARCH_TYPE_PREFIX + type;
     }
     try {

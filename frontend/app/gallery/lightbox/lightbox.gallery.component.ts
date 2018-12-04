@@ -23,6 +23,7 @@ import {PageHelper} from '../../model/page.helper';
 import {QueryService} from '../../model/query.service';
 import {MediaDTO} from '../../../../common/entities/MediaDTO';
 import {QueryParams} from '../../../../common/QueryParams';
+import {GalleryService} from '../gallery.service';
 
 export enum LightboxStates {
   Open = 1,
@@ -67,7 +68,7 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
   startPhotoDimension: Dimension = <Dimension>{top: 0, left: 0, width: 0, height: 0};
   iPvisibilityTimer: number = null;
   visibilityTimer: number = null;
-  delayedPhotoShow: string = null;
+  delayedMediaShow: string = null;
 
 
   constructor(public fullScreenService: FullScreenService,
@@ -76,6 +77,7 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
               private _builder: AnimationBuilder,
               private router: Router,
               private queryService: QueryService,
+              private galleryService: GalleryService,
               private route: ActivatedRoute) {
   }
 
@@ -84,11 +86,11 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
     this.subscription.route = this.route.queryParams.subscribe((params: Params) => {
       if (params[QueryParams.gallery.photo] && params[QueryParams.gallery.photo] !== '') {
         if (!this.gridPhotoQL) {
-          return this.delayedPhotoShow = params[QueryParams.gallery.photo];
+          return this.delayedMediaShow = params[QueryParams.gallery.photo];
         }
         this.onNavigateTo(params[QueryParams.gallery.photo]);
       } else if (this.status === LightboxStates.Open) {
-        this.delayedPhotoShow = null;
+        this.delayedMediaShow = null;
         this.hideLigthbox();
       }
     });
@@ -111,20 +113,20 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
     }
   }
 
-  onNavigateTo(photoName: string) {
-    if (this.activePhoto && this.activePhoto.gridPhoto.media.name === photoName) {
+  onNavigateTo(photoStringId: string) {
+    if (this.activePhoto && this.queryService.getMediaStringId(this.activePhoto.gridPhoto.media) === photoStringId) {
       return;
     }
-    const photo = this.gridPhotoQL.find(i => i.gridPhoto.media.name === photoName);
+    const photo = this.gridPhotoQL.find(i => this.queryService.getMediaStringId(i.gridPhoto.media) === photoStringId);
     if (!photo) {
-      return this.delayedPhotoShow = photoName;
+      return this.delayedMediaShow = photoStringId;
     }
     if (this.status === LightboxStates.Closed) {
       this.showLigthbox(photo.gridPhoto.media);
     } else {
       this.showPhoto(this.gridPhotoQL.toArray().indexOf(photo));
     }
-    this.delayedPhotoShow = null;
+    this.delayedMediaShow = null;
   }
 
   setGridPhotoQL(value: QueryList<GalleryPhotoComponent>) {
@@ -136,13 +138,13 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
       if (this.activePhotoId != null && this.gridPhotoQL.length > this.activePhotoId) {
         this.updateActivePhoto(this.activePhotoId);
       }
-      if (this.delayedPhotoShow) {
-        this.onNavigateTo(this.delayedPhotoShow);
+      if (this.delayedMediaShow) {
+        this.onNavigateTo(this.delayedMediaShow);
       }
     });
 
-    if (this.delayedPhotoShow) {
-      this.onNavigateTo(this.delayedPhotoShow);
+    if (this.delayedMediaShow) {
+      this.onNavigateTo(this.delayedMediaShow);
     }
   }
 
@@ -177,10 +179,6 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
   private navigateToPhoto(photoIndex: number) {
     this.router.navigate([],
       {queryParams: this.queryService.getParams(this.gridPhotoQL.toArray()[photoIndex].gridPhoto.media)});
-    /*
-        this.activePhoto = null;
-        this.changeDetector.detectChanges();
-        this.updateActivePhoto(photoIndex, resize);*/
   }
 
   private showPhoto(photoIndex: number, resize: boolean = true) {

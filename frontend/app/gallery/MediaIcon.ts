@@ -24,6 +24,10 @@ export class MediaIcon {
     return this.media.readyIcon;
   }
 
+  getRelativePath(): string {
+    return Utils.concatUrls(this.media.directory.path, this.media.directory.name, this.media.name);
+  }
+
   getIconPath() {
     return Utils.concatUrls(Config.Client.urlBase,
       '/api/gallery/content/',
@@ -37,7 +41,7 @@ export class MediaIcon {
   }
 
 
-  equals(other: PhotoDTO | MediaIcon): boolean {
+  equals(other: MediaDTO | MediaIcon): boolean {
     // is gridphoto
     if (other instanceof MediaIcon) {
       return this.media.directory.path === other.media.directory.path &&

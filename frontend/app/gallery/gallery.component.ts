@@ -76,14 +76,13 @@ export class GalleryComponent implements OnInit, OnDestroy {
     const searchText = params['searchText'];
     if (searchText && searchText !== '') {
       const typeString: string = params['type'];
-
+      let type: SearchTypes = null;
       if (typeString && typeString !== '') {
-        const type: SearchTypes = <any>SearchTypes[<any>typeString];
-        this._galleryService.search(searchText, type).catch(console.error);
-        return;
+        type = <any>SearchTypes[<any>typeString];
       }
 
-      this._galleryService.search(searchText).catch(console.error);
+      this._galleryService.search(searchText, type).catch(console.error);
+
       return;
     }
 

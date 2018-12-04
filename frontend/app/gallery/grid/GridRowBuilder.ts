@@ -3,12 +3,12 @@ import {MediaDTO} from '../../../../common/entities/MediaDTO';
 
 export class GridRowBuilder {
 
-  private photoRow: PhotoDTO[] = [];
+  private photoRow: MediaDTO[] = [];
 
   private photoIndex = 0; // index of the last pushed media to the photoRow
 
 
-  constructor(private photos: PhotoDTO[],
+  constructor(private photos: MediaDTO[],
               private startIndex: number,
               private photoMargin: number,
               private containerWidth: number) {
@@ -42,7 +42,7 @@ export class GridRowBuilder {
     return true;
   }
 
-  public getPhotoRow(): PhotoDTO[] {
+  public getPhotoRow(): MediaDTO[] {
     return this.photoRow;
   }
 

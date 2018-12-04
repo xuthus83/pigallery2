@@ -33,7 +33,8 @@
     </div>
 
     <div class="input-group-btn" style="display: block">
-      <button class="btn btn-default" type="button" (click)="onSearch()">
+      <button class="btn btn-default" type="button"
+              [routerLink]="['/search', searchText]">
         <span class="oi oi-magnifying-glass"></span>
       </button>
     </div>

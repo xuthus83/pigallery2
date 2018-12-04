@@ -184,7 +184,6 @@ export class DiskMangerWorker {
 
         const data = Buffer.allocUnsafe(Config.Server.photoMetadataSize);
         fs.read(fd, data, 0, Config.Server.photoMetadataSize, 0, (err) => {
-          //     fs.readFile(fullPath, (err, data) => {
           if (err) {
             fs.closeSync(fd);
             return reject({file: fullPath, error: err});
@@ -234,7 +233,6 @@ export class DiskMangerWorker {
                 metadata.orientation = exif.tags.Orientation;
               }
 
-              console.log(exif);
               if (exif.imageSize) {
                 metadata.size = <MediaDimension>{width: exif.imageSize.width, height: exif.imageSize.height};
               } else if (exif.tags.RelatedImageWidth && exif.tags.RelatedImageHeight) {

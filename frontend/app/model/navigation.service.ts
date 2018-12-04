@@ -33,4 +33,8 @@ export class NavigationService {
       return this._router.navigate(['gallery', '']);
     }
   }
+
+  public async search(searchText: string) {
+    return this._router.navigate(['search', searchText]);
+  }
 }

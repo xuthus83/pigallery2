@@ -5,6 +5,7 @@ import {ActivatedRoute, Params, RouterLink} from '@angular/router';
 import {GalleryService} from '../gallery.service';
 import {Subscription} from 'rxjs';
 import {Config} from '../../../../common/config/public/Config';
+import {NavigationService} from '../../model/navigation.service';
 
 @Component({
   selector: 'app-gallery-search',
@@ -27,6 +28,7 @@ export class GallerySearchComponent implements OnDestroy {
 
   constructor(private _autoCompleteService: AutoCompleteService,
               private _galleryService: GalleryService,
+              private navigationService: NavigationService,
               private _route: ActivatedRoute) {
 
     this.SearchTypes = SearchTypes;
@@ -52,24 +54,15 @@ export class GallerySearchComponent implements OnDestroy {
 
     if (Config.Client.Search.autocompleteEnabled && this.cache.lastAutocomplete !== searchText) {
       this.cache.lastAutocomplete = searchText;
-      this.autocomplete(searchText);
+      this.autocomplete(searchText).catch(console.error);
     }
 
     if (Config.Client.Search.instantSearchEnabled && this.cache.lastInstantSearch !== searchText) {
       this.cache.lastInstantSearch = searchText;
-      this._galleryService.instantSearch(searchText);
+      this._galleryService.runInstantSearch(searchText);
+      this.navigationService.search(searchText).catch(console.error);
+      // this._galleryService.instantSearch(searchText).catch(console.error);
     }
-  }
-
-  public onSearch() {
-    if (Config.Client.Search.enabled) {
-      this._galleryService.search(this.searchText);
-    }
-  }
-
-  public search(item: AutoCompleteItem) {
-    this.searchText = item.text;
-    this.onSearch();
   }
 
 
@@ -84,7 +77,7 @@ export class GallerySearchComponent implements OnDestroy {
   }
 
   public onFocus() {
-    this.autocomplete(this.searchText);
+    this.autocomplete(this.searchText).catch(console.error);
   }
 
   private emptyAutoComplete() {
@@ -113,7 +106,7 @@ export class GallerySearchComponent implements OnDestroy {
     }
   }
 
-  private showSuggestions(suggestions: Array<AutoCompleteItem>, searchText: string) {
+  private showSuggestions(suggestions: AutoCompleteItem[], searchText: string) {
     this.emptyAutoComplete();
     suggestions.forEach((item: AutoCompleteItem) => {
       const renderItem = new AutoCompleteRenderItem(item.text, searchText, item.type);

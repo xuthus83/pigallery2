@@ -1,4 +1,5 @@
 import {Injectable} from '@angular/core';
+import {Location} from '@angular/common';
 import {NetworkService} from '../model/network/network.service';
 import {ContentWrapper} from '../../../common/entities/ConentWrapper';
 import {DirectoryDTO} from '../../../common/entities/DirectoryDTO';
@@ -16,16 +17,25 @@ import {QueryParams} from '../../../common/QueryParams';
 @Injectable()
 export class GalleryService {
 
-
   public content: BehaviorSubject<ContentWrapper>;
   public sorting: BehaviorSubject<SortingMethods>;
   private lastDirectory: DirectoryDTO;
   private searchId: any;
+  private ongoingSearch: {
+    text: string,
+    type: SearchTypes
+  } = null;
+  private ongoingInstantSearch: {
+    text: string,
+    type: SearchTypes
+  } = null;
+  private runInstantSearchFor: string;
 
   constructor(private networkService: NetworkService,
               private galleryCacheService: GalleryCacheService,
               private _shareService: ShareService,
-              private navigationService: NavigationService) {
+              private navigationService: NavigationService,
+              private location: Location) {
     this.content = new BehaviorSubject<ContentWrapper>(new ContentWrapper());
     this.sorting = new BehaviorSubject<SortingMethods>(Config.Client.Other.defaultPhotoSortingMethod);
   }
@@ -85,11 +95,11 @@ export class GalleryService {
 
     }).catch((e) => {
       console.error(e);
-      this.navigationService.toGallery();
+      this.navigationService.toGallery().catch(console.error);
     });
   }
 
-  public async search(text: string, type?: SearchTypes): Promise<ContentWrapper> {
+  public async search(text: string, type?: SearchTypes): Promise<void> {
     if (this.searchId != null) {
       clearTimeout(this.searchId);
     }
@@ -97,22 +107,32 @@ export class GalleryService {
       return null;
     }
 
+    this.ongoingSearch = {text: text, type: type};
+
+
     this.content.next(new ContentWrapper());
     const cw = new ContentWrapper();
     cw.searchResult = this.galleryCacheService.getSearch(text, type);
     if (cw.searchResult == null) {
+      if (this.runInstantSearchFor === text && !type) {
+        await this.instantSearch(text, type);
+        return;
+      }
       const params: { type?: SearchTypes } = {};
-      if (typeof type !== 'undefined') {
+      if (typeof type !== 'undefined' && type !== null) {
         params['type'] = type;
       }
       cw.searchResult = (await this.networkService.getJson<ContentWrapper>('/search/' + text, params)).searchResult;
+      if (this.ongoingSearch &&
+        (this.ongoingSearch.text !== text || this.ongoingSearch.type !== type)) {
+        return;
+      }
       this.galleryCacheService.setSearch(text, type, cw.searchResult);
     }
     this.content.next(cw);
-    return cw;
   }
 
-  public async instantSearch(text: string): Promise<ContentWrapper> {
+  public async instantSearch(text: string, type?: SearchTypes): Promise<ContentWrapper> {
     if (text === null || text === '' || text.trim() === '.') {
       const content = new ContentWrapper(this.lastDirectory);
       this.content.next(content);
@@ -128,15 +148,17 @@ export class GalleryService {
     if (this.searchId != null) {
       clearTimeout(this.searchId);
     }
+    this.runInstantSearchFor = null;
+    this.ongoingInstantSearch = {text: text, type: type};
 
 
     const cw = new ContentWrapper();
     cw.directory = null;
     cw.searchResult = this.galleryCacheService.getSearch(text);
     if (cw.searchResult == null) {
-      // If result is not search cache, try to load load more
+      // If result is not search cache, try to load more
       this.searchId = setTimeout(() => {
-        this.search(text);
+        this.search(text, type);
         this.searchId = null;
       }, Config.Client.Search.InstantSearchTimeout);
 
@@ -144,6 +166,10 @@ export class GalleryService {
 
       if (cw.searchResult == null) {
         cw.searchResult = (await this.networkService.getJson<ContentWrapper>('/instant-search/' + text)).searchResult;
+        if (this.ongoingInstantSearch &&
+          (this.ongoingInstantSearch.text !== text || this.ongoingInstantSearch.type !== type)) {
+          return;
+        }
         this.galleryCacheService.setInstantSearch(text, cw.searchResult);
       }
     }
@@ -163,4 +189,13 @@ export class GalleryService {
     return this.networkService.getJson<SharingDTO>('/share/' + sharingKey);
   }
 
+
+  isSearchResult(): boolean {
+    return !!this.content.value.searchResult;
+  }
+
+
+  runInstantSearch(searchText: string) {
+    this.runInstantSearchFor = searchText;
+  }
 }
