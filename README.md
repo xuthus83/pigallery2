@@ -60,6 +60,22 @@ To configure it, run `PiGallery2` first to create `config.json` file, then edit 
 The app has a nice UI for settings, you may use that too. 
 Default user: `admin` pass: `admin`
 
+### Run with Docker 
+```bash
+docker run \
+   -p 80:80 \
+   -e NODE_ENV=production \
+   -v <path to your config file folder>/config.json:/pigallery2-release/config.json \
+   -v <path to your images folder>:/pigallery2-release/demo/images \
+   -v <path to your temp folder>:/pigallery2-release/TEMP \
+   bpatrik/pigallery2:nightly-stretch
+```
+Make sure that a file at `<path to your config file folder>/config.json` exists before running it. 
+
+After the container is up and running, you go to `http://localhost` and log in with user: `admin` pass: `admin` and set up the page in the settings. 
+
+**Note**: of course, you dont need to do installation steps if you are using docker. 
+
 ### Useful links/tips:
 
 #### using nginx
