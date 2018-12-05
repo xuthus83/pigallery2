@@ -17,6 +17,8 @@ export class MediaDimensionEntity implements MediaDimension {
 
 
 export class MediaMetadataEntity implements MediaMetadata {
+  @Column('text')
+  caption: string;
 
   @Column(type => MediaDimensionEntity)
   size: MediaDimensionEntity;
@@ -50,7 +52,7 @@ export class MediaMetadataEntity implements MediaMetadata {
 // TODO: fix inheritance once its working in typeorm
 @Entity()
 @TableInheritance({column: {type: 'varchar', name: 'type'}})
-export abstract class MediaEntity  implements MediaDTO {
+export abstract class MediaEntity implements MediaDTO {
 
   @PrimaryGeneratedColumn()
   id: number;

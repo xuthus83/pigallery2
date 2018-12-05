@@ -8,6 +8,27 @@ export class Utils {
   }
 
 
+  static removeNullOrEmptyObj(obj: any) {
+    if (typeof obj !== 'object' || obj == null) {
+      return obj;
+    }
+
+    const keys = Object.keys(obj);
+    for (let i = 0; i < keys.length; i++) {
+      const key = keys[i];
+      if (obj[key] !== null && typeof obj[key] === 'object') {
+        if (Utils.removeNullOrEmptyObj(obj[key])) {
+          if (Object.keys(obj[key]).length === 0) {
+            delete obj[key];
+          }
+        }
+      } else if (obj[key] === null) {
+        delete obj[key];
+      }
+    }
+    return obj;
+  }
+
   static clone<T>(object: T): T {
     return JSON.parse(JSON.stringify(object));
   }

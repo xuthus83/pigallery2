@@ -18,8 +18,9 @@ const LOG_TAG = '[DiskManagerTask]';
 const ffmpeg = FFmpegFactory.get();
 
 export class DiskMangerWorker {
-  private static isImage(fullPath: string) {
-    const extensions = [
+
+  private static readonly SupportedEXT = {
+    photo: [
       '.bmp',
       '.gif',
       '.jpeg', '.jpg', '.jpe',
@@ -28,31 +29,31 @@ export class DiskMangerWorker {
       '.webp',
       '.ico',
       '.tga'
-    ];
-
-    const extension = path.extname(fullPath).toLowerCase();
-    return extensions.indexOf(extension) !== -1;
-  }
-
-  private static isVideo(fullPath: string) {
-    const extensions = [
+    ],
+    video: [
       '.mp4',
       '.webm',
       '.ogv',
       '.ogg'
-    ];
+    ],
+    metaFile: [
+      '.gpx'
+    ]
+  };
 
+  private static isImage(fullPath: string) {
     const extension = path.extname(fullPath).toLowerCase();
-    return extensions.indexOf(extension) !== -1;
+    return this.SupportedEXT.photo.indexOf(extension) !== -1;
+  }
+
+  private static isVideo(fullPath: string) {
+    const extension = path.extname(fullPath).toLowerCase();
+    return this.SupportedEXT.video.indexOf(extension) !== -1;
   }
 
   private static isMetaFile(fullPath: string) {
-    const extensions = [
-      '.gpx'
-    ];
-
     const extension = path.extname(fullPath).toLowerCase();
-    return extensions.indexOf(extension) !== -1;
+    return this.SupportedEXT.metaFile.indexOf(extension) !== -1;
   }
 
   public static scanDirectory(relativeDirectoryName: string, maxPhotos: number = null, photosOnly: boolean = false): Promise<DirectoryDTO> {
@@ -133,7 +134,7 @@ export class DiskMangerWorker {
 
   public static loadVideoMetadata(fullPath: string): Promise<VideoMetadata> {
     return new Promise<VideoMetadata>((resolve, reject) => {
-      const metadata: VideoMetadata = <VideoMetadata>{
+      const metadata: VideoMetadata = {
         size: {
           width: 1,
           height: 1
@@ -188,11 +189,12 @@ export class DiskMangerWorker {
             fs.closeSync(fd);
             return reject({file: fullPath, error: err});
           }
-          const metadata: PhotoMetadata = <PhotoMetadata>{
+          const metadata: PhotoMetadata = {
             keywords: [],
             cameraData: {},
             positionData: null,
-            size: {},
+            size: {width: 1, height: 1},
+            caption: null,
             orientation: OrientationTypes.TOP_LEFT,
             creationDate: 0,
             fileSize: 0
@@ -253,7 +255,8 @@ export class DiskMangerWorker {
                 metadata.positionData.state = iptcData.province_or_state;
                 metadata.positionData.city = iptcData.city;
               }
-              metadata.keywords = <string[]>(iptcData.keywords || []);
+              metadata.caption = iptcData.caption;
+              metadata.keywords = iptcData.keywords || [];
               metadata.creationDate = <number>(iptcData.date_time ? iptcData.date_time.getTime() : metadata.creationDate);
 
             } catch (err) {

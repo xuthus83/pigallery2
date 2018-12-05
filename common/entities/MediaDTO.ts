@@ -4,7 +4,7 @@ import {OrientationTypes} from 'ts-exif-parser';
 import {VideoDTO} from './VideoDTO';
 import {FileDTO} from './FileDTO';
 
-export interface MediaDTO  extends FileDTO{
+export interface MediaDTO extends FileDTO {
   id: number;
   name: string;
   directory: DirectoryDTO;
@@ -51,11 +51,12 @@ export module MediaDTO {
   };
 
   export const isPhoto = (media: MediaDTO): boolean => {
-    return typeof (<PhotoDTO>media).metadata.keywords !== 'undefined' && (<PhotoDTO>media).metadata.keywords !== null;
+    return !MediaDTO.isVideo(media);
   };
 
   export const isVideo = (media: MediaDTO): boolean => {
-    return !MediaDTO.isPhoto(media);
+    const lower = media.name.toLowerCase();
+    return lower.endsWith('.mp4') || lower.endsWith('.webm') || lower.endsWith('.ogg') || lower.endsWith('.ogv');
   };
 
   export const getRotatedSize = (photo: MediaDTO): MediaDimension => {

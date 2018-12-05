@@ -46,6 +46,7 @@ export class TestHelper {
     cd.focalLength = 1;
     cd.lens = 'Lens';
     const m = new PhotoMetadataEntity();
+    m.caption = null;
     m.keywords = ['apple'];
     m.cameraData = cd;
     m.positionData = pd;
@@ -72,6 +73,7 @@ export class TestHelper {
     sd.width = 200;
 
     const m = new VideoMetadataEntity();
+    m.caption = null;
     m.keywords = null;
     m.size = sd;
     m.creationDate = Date.now();

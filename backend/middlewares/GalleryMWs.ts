@@ -13,6 +13,7 @@ import {UserDTO} from '../../common/entities/UserDTO';
 import {RandomQuery} from '../model/interfaces/IGalleryManager';
 import {MediaDTO} from '../../common/entities/MediaDTO';
 import {VideoDTO} from '../../common/entities/VideoDTO';
+import {Utils} from '../../common/Utils';
 
 
 const LOG_TAG = '[GalleryMWs]';
@@ -68,12 +69,16 @@ export class GalleryMWs {
           delete (<VideoDTO>m).metadata.bitRate;
           delete (<VideoDTO>m).metadata.duration;
         } else if (MediaDTO.isVideo(m)) {
+          delete (<PhotoDTO>m).metadata.caption;
           delete (<PhotoDTO>m).metadata.cameraData;
           delete (<PhotoDTO>m).metadata.orientation;
           delete (<PhotoDTO>m).metadata.orientation;
           delete (<PhotoDTO>m).metadata.keywords;
           delete (<PhotoDTO>m).metadata.positionData;
         }
+        Utils.removeNullOrEmptyObj(m);
+        console.log(m);
+        console.log(Utils.removeNullOrEmptyObj(m));
       });
     };
 

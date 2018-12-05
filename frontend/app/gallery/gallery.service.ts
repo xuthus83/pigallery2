@@ -1,5 +1,4 @@
 import {Injectable} from '@angular/core';
-import {Location} from '@angular/common';
 import {NetworkService} from '../model/network/network.service';
 import {ContentWrapper} from '../../../common/entities/ConentWrapper';
 import {DirectoryDTO} from '../../../common/entities/DirectoryDTO';
@@ -11,6 +10,7 @@ import {Config} from '../../../common/config/public/Config';
 import {ShareService} from './share.service';
 import {NavigationService} from '../model/navigation.service';
 import {SortingMethods} from '../../../common/entities/SortingMethods';
+import {QueryService} from '../model/query.service';
 import {QueryParams} from '../../../common/QueryParams';
 
 
@@ -34,8 +34,7 @@ export class GalleryService {
   constructor(private networkService: NetworkService,
               private galleryCacheService: GalleryCacheService,
               private _shareService: ShareService,
-              private navigationService: NavigationService,
-              private location: Location) {
+              private navigationService: NavigationService) {
     this.content = new BehaviorSubject<ContentWrapper>(new ContentWrapper());
     this.sorting = new BehaviorSubject<SortingMethods>(Config.Client.Other.defaultPhotoSortingMethod);
   }
@@ -48,7 +47,7 @@ export class GalleryService {
     this.sorting.next(sorting);
   }
 
-  public loadDirectory(directoryName: string): void {
+  public async loadDirectory(directoryName: string): Promise<void> {
     const content = new ContentWrapper();
 
     content.directory = this.galleryCacheService.getDirectory(directoryName);
@@ -71,8 +70,8 @@ export class GalleryService {
       params['knownLastScanned'] = content.directory.lastScanned;
     }
 
-
-    this.networkService.getJson<ContentWrapper>('/gallery/content/' + directoryName, params).then((cw) => {
+    try {
+      const cw = await this.networkService.getJson<ContentWrapper>('/gallery/content/' + directoryName, params);
 
 
       if (!cw || cw.notModified === true) {
@@ -85,18 +84,14 @@ export class GalleryService {
         return;
       }
 
-
       DirectoryDTO.addReferences(<DirectoryDTO>cw.directory);
-
 
       this.lastDirectory = <DirectoryDTO>cw.directory;
       this.content.next(cw);
-
-
-    }).catch((e) => {
+    } catch (e) {
       console.error(e);
       this.navigationService.toGallery().catch(console.error);
-    });
+    }
   }
 
   public async search(text: string, type?: SearchTypes): Promise<void> {
@@ -140,7 +135,7 @@ export class GalleryService {
         clearTimeout(this.searchId);
       }
       if (!this.lastDirectory) {
-        this.loadDirectory('/');
+        this.loadDirectory('/').catch(console.error);
       }
       return null;
     }
@@ -158,7 +153,7 @@ export class GalleryService {
     if (cw.searchResult == null) {
       // If result is not search cache, try to load more
       this.searchId = setTimeout(() => {
-        this.search(text, type);
+        this.search(text, type).catch(console.error);
         this.searchId = null;
       }, Config.Client.Search.InstantSearchTimeout);
 

@@ -5,6 +5,8 @@ import {MediaDTO} from '../../../common/entities/MediaDTO';
 import {QueryParams} from '../../../common/QueryParams';
 import {Utils} from '../../../common/Utils';
 import {GalleryService} from '../gallery/gallery.service';
+import {Config} from '../../../common/config/public/Config';
+import {DirectoryDTO} from '../../../common/entities/DirectoryDTO';
 
 @Injectable()
 export class QueryService {
@@ -27,10 +29,29 @@ export class QueryService {
     if (media) {
       query[QueryParams.gallery.photo] = this.getMediaStringId(media);
     }
-    if (this.shareService.isSharing()) {
-      query[QueryParams.gallery.sharingKey_short] = this.shareService.getSharingKey();
+    if (Config.Client.Sharing.enabled === true) {
+      if (this.shareService.isSharing()) {
+        query[QueryParams.gallery.sharingKey_short] = this.shareService.getSharingKey();
+      }
     }
     return query;
+  }
+
+  getParamsForDirs(directory: DirectoryDTO) {
+    const params: { [key: string]: any } = {};
+    if (Config.Client.Sharing.enabled === true) {
+      if (this.shareService.isSharing()) {
+        params[QueryParams.gallery.sharingKey_short] = this.shareService.getSharingKey();
+      }
+    }
+    if (directory && directory.lastModified && directory.lastScanned &&
+      !directory.isPartial) {
+      params['knownLastModified'] = directory.lastModified;
+      params['knownLastScanned'] = directory.lastScanned;
+    }
+
+    return params;
+
   }
 
 }

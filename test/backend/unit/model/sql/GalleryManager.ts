@@ -113,8 +113,8 @@ describe('GalleryManager', () => {
     subDir.isPartial = true;
     delete subDir.directories;
     delete subDir.metaFile;
-    expect(Utils.clone(selected)).to.deep.equal(Utils.clone(parent));
-
+    expect(Utils.clone(Utils.removeNullOrEmptyObj(selected)))
+      .to.deep.equal(Utils.clone(Utils.removeNullOrEmptyObj(parent)));
   });
 
   it('should skip meta files', async () => {
@@ -135,7 +135,8 @@ describe('GalleryManager', () => {
     delete parent.metaFile;
     DirectoryDTO.removeReferences(selected);
     removeIds(selected);
-    expect(Utils.clone(selected)).to.deep.equal(Utils.clone(parent));
+    expect(Utils.clone(Utils.removeNullOrEmptyObj(selected)))
+      .to.deep.equal(Utils.clone(Utils.removeNullOrEmptyObj(parent)));
   });
 
   it('should update sub directory', async () => {
@@ -168,7 +169,8 @@ describe('GalleryManager', () => {
     delete subDir.metaFile;
     removeIds(selected);
     // selected.directories[0].parent = selected;
-    expect(Utils.clone(selected)).to.deep.equal(Utils.clone(subDir));
+    expect(Utils.clone(Utils.removeNullOrEmptyObj(selected)))
+      .to.deep.equal(Utils.clone(Utils.removeNullOrEmptyObj(subDir)));
 
   });
 
