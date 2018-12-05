@@ -24,6 +24,7 @@ import {QueryService} from '../../model/query.service';
 import {MediaDTO} from '../../../../common/entities/MediaDTO';
 import {QueryParams} from '../../../../common/QueryParams';
 import {GalleryService} from '../gallery.service';
+import {PhotoDTO} from '../../../../common/entities/PhotoDTO';
 
 export enum LightboxStates {
   Open = 1,
@@ -95,6 +96,7 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
       }
     });
   }
+
 
   ngOnDestroy(): void {
     this.pause();
@@ -509,6 +511,14 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
 
   public isVisible(): boolean {
     return this.status !== LightboxStates.Closed;
+  }
+
+
+  get Title(): string {
+    if (!this.activePhoto) {
+      return null;
+    }
+    return (<PhotoDTO>this.activePhoto.gridPhoto.media).metadata.caption;
   }
 }
 

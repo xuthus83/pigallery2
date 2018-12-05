@@ -93,6 +93,7 @@ export class TestHelper {
   public static getPhotoEntry1(dir: DirectoryEntity) {
     const p = TestHelper.getPhotoEntry(dir);
 
+    p.metadata.caption = 'Han Solo\'s dice';
     p.metadata.keywords = ['Boba Fett', 'star wars', 'Anakin', 'death star'];
     p.metadata.positionData.city = 'Mos Eisley';
     p.metadata.positionData.country = 'Tatooine';

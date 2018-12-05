@@ -94,6 +94,7 @@ describe('SearchManager', () => {
       new AutoCompleteItem('death star', SearchTypes.keyword),
       new AutoCompleteItem('Padmé Amidala', SearchTypes.keyword),
       new AutoCompleteItem('Natalie Portman', SearchTypes.keyword),
+      new AutoCompleteItem('Han Solo\'s dice', SearchTypes.photo),
       new AutoCompleteItem('Kamino', SearchTypes.position),
       new AutoCompleteItem('Tatooine', SearchTypes.position),
       new AutoCompleteItem('wars dir', SearchTypes.directory),
@@ -154,6 +155,24 @@ describe('SearchManager', () => {
       metaFile: [],
       resultOverflow: false
     }));
+
+    expect(Utils.clone(await sm.search('han', SearchTypes.photo))).to.deep.equal(Utils.clone(<SearchResultDTO>{
+      searchText: 'han',
+      searchType: SearchTypes.photo,
+      directories: [],
+      media: [p],
+      metaFile: [],
+      resultOverflow: false
+    }));
+
+    expect(Utils.clone(await sm.search('han', SearchTypes.keyword))).to.deep.equal(Utils.clone(<SearchResultDTO>{
+      searchText: 'han',
+      searchType: SearchTypes.keyword,
+      directories: [],
+      media: [],
+      metaFile: [],
+      resultOverflow: false
+    }));
   });
 
 
@@ -196,6 +215,14 @@ describe('SearchManager', () => {
       searchText: 'wa',
       directories: [dir],
       media: [p, p2],
+      metaFile: [],
+      resultOverflow: false
+    }));
+
+    expect(Utils.clone(await sm.instantSearch('han'))).to.deep.equal(Utils.clone({
+      searchText: 'han',
+      directories: [],
+      media: [p],
       metaFile: [],
       resultOverflow: false
     }));

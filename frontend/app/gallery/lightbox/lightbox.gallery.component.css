@@ -68,7 +68,7 @@ app-gallery-lightbox-photo {
   opacity: 0;
 }
 
-#swipeable-container{
+#swipeable-container {
   height: 100%;
 }
 
@@ -101,15 +101,25 @@ app-gallery-lightbox-photo {
 
 .controls-top {
   top: 0;
-
 }
 
+.controls-caption {
+  opacity: 0.5;
+  top: 0;
+  position: absolute;
+  height: initial;
+  text-align: left;
+  width: 75%;
+  padding: 5px 13px;
+  font-size: 1.5rem;
+}
 
 .controls-playback {
   padding-right: 15px;
   bottom: 0;
   position: absolute;
 }
+
 .controls-video {
   padding-right: 15px;
   bottom: 0;
@@ -117,13 +127,13 @@ app-gallery-lightbox-photo {
 }
 
 .controls-video .oi,
-.controls-video input{
+.controls-video input {
   color: white;
   cursor: pointer;
 
 }
 
-.controls-big-play span{
+.controls-big-play span {
   font-size: 20vh;
   position: absolute;
   top: 50%;
@@ -131,12 +141,12 @@ app-gallery-lightbox-photo {
   transform: translate(-50%, -50%);
 }
 
-.controls-video input[type=range]{
+.controls-video input[type=range] {
   padding: 0;
   margin-top: 6px;
 }
 
-.controls-video .oi{
+.controls-video .oi {
   text-align: center;
   max-width: 45px;
   margin-left: 10px;

@@ -70,6 +70,16 @@ export class SearchManager implements ISearchManager {
       .getRawMany())
       .map(r => r.name), SearchTypes.photo));
 
+
+    result = result.concat(this.encapsulateAutoComplete((await photoRepository
+      .createQueryBuilder('media')
+      .select('DISTINCT(media.metadata.caption) as caption')
+      .where('media.metadata.caption LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
+      .limit(5)
+      .getRawMany())
+      .map(r => r.caption), SearchTypes.photo));
+
+
     result = result.concat(this.encapsulateAutoComplete((await videoRepository
       .createQueryBuilder('media')
       .select('DISTINCT(media.name)')
@@ -121,6 +131,10 @@ export class SearchManager implements ISearchManager {
 
     if (!searchType || searchType === SearchTypes.photo || searchType === SearchTypes.video) {
       query.orWhere('media.name LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'});
+    }
+
+    if (!searchType || searchType === SearchTypes.photo) {
+      query.orWhere('media.metadata.caption LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'});
     }
 
     if (!searchType || searchType === SearchTypes.position) {
@@ -176,6 +190,7 @@ export class SearchManager implements ISearchManager {
       .orWhere('media.metadata.positionData.state LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
       .orWhere('media.metadata.positionData.city LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
       .orWhere('media.name LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
+      .orWhere('media.metadata.caption LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
       .innerJoinAndSelect('media.directory', 'directory')
       .limit(10)
       .getMany();

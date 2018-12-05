@@ -17,7 +17,7 @@
     #controls
     [style.width.px]="getPhotoFrameWidth()"
     [ngClass]="!controllersDimmed ? (activePhoto && activePhoto.gridPhoto.isVideo() ? 'dim-controls-video' :'dim-controls'):  ''">
-
+    <div class="controls-caption"  *ngIf="Title">{{Title}}</div>
     <div class="controls controls-top">
       <a *ngIf="activePhoto"
          class="highlight control-button"

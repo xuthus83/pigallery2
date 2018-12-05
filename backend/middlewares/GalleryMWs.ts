@@ -77,8 +77,6 @@ export class GalleryMWs {
           delete (<PhotoDTO>m).metadata.positionData;
         }
         Utils.removeNullOrEmptyObj(m);
-        console.log(m);
-        console.log(Utils.removeNullOrEmptyObj(m));
       });
     };
 

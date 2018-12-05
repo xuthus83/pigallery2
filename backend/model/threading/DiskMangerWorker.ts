@@ -255,7 +255,9 @@ export class DiskMangerWorker {
                 metadata.positionData.state = iptcData.province_or_state;
                 metadata.positionData.city = iptcData.city;
               }
-              metadata.caption = iptcData.caption;
+              if (iptcData.caption) {
+                metadata.caption = iptcData.caption.replace(/\0/g, '').trim();
+              }
               metadata.keywords = iptcData.keywords || [];
               metadata.creationDate = <number>(iptcData.date_time ? iptcData.date_time.getTime() : metadata.creationDate);
 
