@@ -50,12 +50,14 @@ unzip master.zip
 cd pigallery2-master # enter the unzipped directory
 npm install
 ```
+**Note**: if you run `npm run build-release`, it creates a clean, minified, production ready version from the app in the `release` folder, that is ready to deploy.
 
 ### Run PiGallery2
 ```bash
 npm start
 ```
-To configure it. Run `PiGallery2` first to create `config.json` file, then edit it and restart. 
+To configure it, run `PiGallery2` first to create `config.json` file, then edit it and restart.
+The app has a nice UI for settings, you may use that too. 
 Default user: `admin` pass: `admin`
 
 ### Useful links/tips:
@@ -103,7 +105,7 @@ apt-get install build-essential  libkrb5-dev gcc g++
  * **On the fly thumbnail generation** in several sizes
    * prioritizes thumbnail generation (generating thumbnail first for the visible photos)
    * saving generated thumbnails to TEMP folder for reuse
-   * supporting several core CPU
+   * supporting multi-core CPUs
    * supporting hardware acceleration ([sharp](https://github.com/lovell/sharp) and [gm](https://github.com/aheckmann/gm) as optional and JS-based [Jimp](https://github.com/oliver-moran/jimp)  as fallback)   
  * Custom lightbox for full screen photo viewing
    * keyboard support for navigation  
