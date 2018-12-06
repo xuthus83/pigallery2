@@ -41,6 +41,7 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
 
   @ViewChild('photo') mediaElement: GalleryLightboxMediaComponent;
   @ViewChild('lightbox') lightboxElement: ElementRef;
+  @ViewChild('root') root: HTMLElement;
 
   public navigation = {hasPrev: true, hasNext: true};
   public blackCanvasOpacity = 0;
@@ -60,7 +61,8 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
   private timer: Observable<number>;
   private timerSub: Subscription;
   public playBackState = 0;
-  public controllersDimmed = true;
+  public controllersDimmed = false;
+  public controllersAlwaysOn = false;
   public controllersVisible = true;
 
   public infoPanelVisible = false;
@@ -235,6 +237,29 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
           this.prevImage();
         }
         break;
+      case 'i':
+      case 'I':
+        if (this.isInfoPanelAnimating()) {
+          return;
+        }
+        if (this.infoPanelVisible) {
+          this.hideInfoPanel(true);
+        } else {
+          this.showInfoPanel();
+        }
+        break;
+      case 'f':
+      case 'F':
+        if (this.fullScreenService.isFullScreenEnabled()) {
+          this.fullScreenService.exitFullScreen();
+        } else {
+          this.fullScreenService.showFullScreen(this.root);
+        }
+        break;
+      case 'c':
+      case 'C':
+        this.controllersAlwaysOn = !this.controllersAlwaysOn;
+        break;
       case 'ArrowRight':
         if (this.activePhotoId < this.gridPhotoQL.length - 1) {
           this.nextImage();
@@ -373,6 +398,10 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
     this.playBackState = 1;
   }
 
+  isInfoPanelAnimating(): boolean {
+    return this.iPvisibilityTimer != null;
+  }
+
   showInfoPanel() {
     this.infoPanelVisible = true;
 
@@ -461,7 +490,7 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
   }
 
   private showControls() {
-    this.controllersDimmed = true;
+    this.controllersDimmed = false;
     if (this.visibilityTimer != null) {
       clearTimeout(this.visibilityTimer);
     }
@@ -469,8 +498,7 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
   }
 
   private hideControls = () => {
-
-    this.controllersDimmed = false;
+    this.controllersDimmed = true;
   };
 
 

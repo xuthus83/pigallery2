@@ -44,6 +44,7 @@ export class SettingsService {
           enabled: true
         },
         Other: {
+          captionFirstNaming: false,
           enableCache: true,
           enableOnScrollRendering: true,
           enableOnScrollThumbnailPrioritising: true,

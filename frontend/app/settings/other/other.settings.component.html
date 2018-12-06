@@ -107,6 +107,27 @@
       </div>
 
 
+      <div class="form-group row">
+        <label class="col-md-2 control-label" for="enableCache" i18n>Caption first naming</label>
+        <div class="col-md-10">
+          <bSwitch
+            id="captionFirstNaming"
+            class="switch"
+            name="captionFirstNaming"
+            [switch-on-color]="'primary'"
+            [switch-inverse]="'inverse'"
+            [switch-off-text]="text.Disabled"
+            [switch-on-text]="text.Enabled"
+            [switch-handle-width]="'100'"
+            [switch-label-width]="'20'"
+            [(ngModel)]="settings.Client.captionFirstNaming">
+          </bSwitch>
+          <small class="form-text text-muted" i18n>Show the caption (IPTC 120) tags from the EXIF data instead of the filenames.
+          </small>
+        </div>
+      </div>
+
+
       <p class="title" i18n>Navigation bar:</p>
       <div class="form-group row">
         <label class="col-md-2 control-label" for="showItemCount" [hidden]="simplifiedMode" i18n>Show item count</label>

@@ -2,8 +2,10 @@
 [![npm version](https://badge.fury.io/js/pigallery2.svg)](https://badge.fury.io/js/pigallery2)
 [![Build Status](https://travis-ci.org/bpatrik/pigallery2.svg?branch=master)](https://travis-ci.org/bpatrik/pigallery2)
 [![Heroku](https://heroku-badge.herokuapp.com/?app=pigallery2&style=flat)](https://pigallery2.herokuapp.com)
+[![Docker Build Status](https://img.shields.io/docker/build/bpatrik/pigallery2.svg)](https://hub.docker.com/r/bpatrik/pigallery2/)
 [![dependencies Status](https://david-dm.org/bpatrik/pigallery2/status.svg)](https://david-dm.org/bpatrik/pigallery2)
 [![devDependencies Status](https://david-dm.org/bpatrik/pigallery2/dev-status.svg)](https://david-dm.org/bpatrik/pigallery2?type=dev)
+
 
 Homepage: http://bpatrik.github.io/pigallery2/
 
@@ -33,8 +35,8 @@ sudo apt-get install -y nodejs
 
 Full node install on raspberry pi description: https://www.w3schools.com/nodejs/nodejs_raspberrypi.asp
  
-### 1.1.2 Install PiGallery2
-#### 1.1.2-a Install from release
+### 1.1.1 Install PiGallery2
+#### 1.1.1-a Install from release
 
 ```bash
 cd ~
@@ -43,7 +45,7 @@ unzip pigallery2.zip
 cd pigallery2
 npm install
 ```
-#### 1.1.2-b Install from source
+#### 1.1.1-b Install from source
 ```bash
 cd ~
 wget https://github.com/bpatrik/pigallery2/archive/master.zip
@@ -53,7 +55,7 @@ npm install
 ```
 **Note**: if you run `npm run build-release`, it creates a clean, minified, production ready version from the app in the `release` folder, that is ready to deploy.
 
-#### 1.1.3 Run PiGallery2
+#### 1.1.2 Run PiGallery2
 ```bash
 npm start
 ```
@@ -78,12 +80,25 @@ After the container is up and running, you go to `http://localhost` and log in w
 
 **Note**: You dont need to do the installation steps if you are using docker. 
 
-### 1.3 Useful links/tips:
+
+### 1.3 Advanced configuration
+You can set up the app the following ways:
+ * Using the UI
+ * Manually editing the `config.json`
+ * Through switches
+   * Like: `node backend/index.js --Server-port=3000 --Client-authenticationRequired=false`
+   * You can check the generated `config.json` for the config hierarchy
+ * Through environmental variable
+   * like set env. variable `Server-port` to `3000`   
+
+### 1.4 Useful links/tips:
 
 #### using nginx
+It is recommended to use a reverse proxy like nginx before node
 https://stackoverflow.com/questions/5009324/node-js-nginx-what-now
 
 #### making https
+With cerbot & nginx it is simple to set up secure connection. You have no excuse not doing so.
 https://certbot.eff.org/
 
 #### node install error:

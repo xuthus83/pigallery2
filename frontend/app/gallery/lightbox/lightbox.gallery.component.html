@@ -16,8 +16,8 @@
     id="controllers-container"
     #controls
     [style.width.px]="getPhotoFrameWidth()"
-    [ngClass]="!controllersDimmed ? (activePhoto && activePhoto.gridPhoto.isVideo() ? 'dim-controls-video' :'dim-controls'):  ''">
-    <div class="controls-caption"  *ngIf="Title">{{Title}}</div>
+    [ngClass]="(controllersDimmed && !controllersAlwaysOn) ? (activePhoto && activePhoto.gridPhoto.isVideo() ? 'dim-controls-video' :'dim-controls'):  ''">
+    <div class="controls-caption" *ngIf="Title">{{Title}}</div>
     <div class="controls controls-top">
       <a *ngIf="activePhoto"
          class="highlight control-button"
@@ -28,14 +28,14 @@
       </a>
 
       <div class=" highlight control-button" (click)="toggleInfoPanel()"
-           title="info" i18n-title>
+           title="info key: i" i18n-title>
         <span class="oi oi-info"></span>
       </div>
 
       <div *ngIf="fullScreenService.isFullScreenEnabled()"
            class=" highlight control-button"
            (click)="fullScreenService.exitFullScreen()"
-           title="toggle fullscreen" i18n-title>
+           title="toggle fullscreen, key: f" i18n-title>
         <span class="oi oi-fullscreen-exit">
 
         </span>
@@ -44,14 +44,14 @@
       <div *ngIf="!fullScreenService.isFullScreenEnabled()"
            class="highlight control-button"
            (click)="fullScreenService.showFullScreen(root)"
-           title="toggle fullscreen" i18n-title>
+           title="toggle fullscreen, key: f" i18n-title>
         <span class="oi oi-fullscreen-enter">
         </span>
       </div>
 
       <div class="highlight control-button"
            (click)="hide()"
-           title="close" i18n-title>
+           title="close, key: Escape" i18n-title>
         <span class="oi oi-x">
 
         </span>

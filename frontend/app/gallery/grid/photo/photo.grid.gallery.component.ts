@@ -124,6 +124,19 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, OnDestroy {
 
   }
 
+  get Title(): string {
+    if (Config.Client.Other.captionFirstNaming === false) {
+      return this.gridPhoto.media.name;
+    }
+    if ((<PhotoDTO>this.gridPhoto.media).metadata.caption) {
+      if ((<PhotoDTO>this.gridPhoto.media).metadata.caption.length > 20) {
+        return (<PhotoDTO>this.gridPhoto.media).metadata.caption.substring(0, 17) + '...';
+      }
+      return (<PhotoDTO>this.gridPhoto.media).metadata.caption;
+    }
+    return this.gridPhoto.media.name;
+  }
+
   /*
    onImageLoad() {
    this.loading.show = false;
