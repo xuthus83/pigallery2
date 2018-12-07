@@ -2,7 +2,6 @@ import {Component, ElementRef, HostListener, Input, OnChanges, ViewChild, AfterV
 import {PhotoDTO} from '../../../../../common/entities/PhotoDTO';
 import {Dimension} from '../../../model/IRenderable';
 import {FullScreenService} from '../../fullscreen.service';
-import {AgmMap, LatLngBounds, MapsAPILoader} from '@agm/core';
 import {IconThumbnail, Thumbnail, ThumbnailManagerService} from '../../thumnailManager.service';
 import {MediaIcon} from '../../MediaIcon';
 import {Media} from '../../Media';
@@ -10,11 +9,12 @@ import {PageHelper} from '../../../model/page.helper';
 import {OrientationTypes} from 'ts-exif-parser';
 import {MediaDTO} from '../../../../../common/entities/MediaDTO';
 import {FileDTO} from '../../../../../common/entities/FileDTO';
-import {NetworkService} from '../../../model/network/network.service';
 import {Utils} from '../../../../../common/Utils';
 import {Config} from '../../../../../common/config/public/Config';
-import {MapPath, MapService} from '../map.service';
-
+import {MapService} from '../map.service';
+import {LatLng, Point} from 'leaflet';
+import {MapComponent} from '@yaga/leaflet-ng2';
+import {FixOrientationPipe} from '../../FixOrientationPipe';
 
 @Component({
   selector: 'app-gallery-map-lightbox',
@@ -32,19 +32,16 @@ export class GalleryMapLightboxComponent implements OnChanges, AfterViewInit {
   public controllersVisible = false;
   public opacity = 1.0;
   mapPhotos: MapPhoto[] = [];
-  paths: MapPath[][] = [];
-  pathOutlines: MapPath[][] = [];
-  mapCenter = {latitude: 0, longitude: 0};
+  paths: LatLng[][] = [];
 
   @ViewChild('root') elementRef: ElementRef;
+  @ViewChild('yagaMap') yagaMap: MapComponent;
 
-  @ViewChild(AgmMap) map: AgmMap;
-
+  public iconSize = new Point(Config.Client.Thumbnail.iconSize, Config.Client.Thumbnail.iconSize);
 
   constructor(public fullScreenService: FullScreenService,
               private thumbnailService: ThumbnailManagerService,
-              private mapService: MapService,
-              private mapsAPILoader: MapsAPILoader) {
+              public mapService: MapService) {
   }
 
   ngOnChanges() {
@@ -58,7 +55,8 @@ export class GalleryMapLightboxComponent implements OnChanges, AfterViewInit {
 
   }
 
-  public show(position: Dimension) {
+
+  public async show(position: Dimension) {
     this.hideImages();
     this.visible = true;
     this.opacity = 1.0;
@@ -71,21 +69,20 @@ export class GalleryMapLightboxComponent implements OnChanges, AfterViewInit {
       width: this.getScreenWidth(),
       height: this.getScreenHeight()
     };
-    this.map.triggerResize().then(() => {
-      this.controllersVisible = true;
-    });
-
+    this.showImages();
+    this.centerMap();
     PageHelper.hideScrollY();
-
-    setTimeout(() => {
-      this.lightboxDimension = <Dimension>{
-        top: 0,
-        left: 0,
-        width: this.getScreenWidth(),
-        height: this.getScreenHeight()
-      };
-      this.showImages();
-    }, 0);
+    await Utils.wait(0);
+    this.lightboxDimension = <Dimension>{
+      top: 0,
+      left: 0,
+      width: this.getScreenWidth(),
+      height: this.getScreenHeight()
+    };
+    await Utils.wait(350);
+    this.yagaMap.invalidateSize();
+    this.centerMap();
+    this.controllersVisible = true;
   }
 
   public hide() {
@@ -105,6 +102,7 @@ export class GalleryMapLightboxComponent implements OnChanges, AfterViewInit {
     setTimeout(() => {
       this.visible = false;
       this.hideImages();
+      this.yagaMap.zoom = 2;
     }, 500);
   }
 
@@ -127,8 +125,8 @@ export class GalleryMapLightboxComponent implements OnChanges, AfterViewInit {
       const iconTh = this.thumbnailService.getIcon(new MediaIcon(p));
       iconTh.Visible = true;
       const obj: MapPhoto = {
-        latitude: p.metadata.positionData.GPSData.latitude,
-        longitude: p.metadata.positionData.GPSData.longitude,
+        lat: p.metadata.positionData.GPSData.latitude,
+        lng: p.metadata.positionData.GPSData.longitude,
         iconThumbnail: iconTh,
         orientation: p.metadata.orientation,
         preview: {
@@ -139,36 +137,30 @@ export class GalleryMapLightboxComponent implements OnChanges, AfterViewInit {
 
       };
       if (iconTh.Available === true) {
-        obj.iconUrl = iconTh.Src;
+        FixOrientationPipe.transform(iconTh.Src, p.metadata.orientation).then((icon) => {
+          obj.iconUrl = icon;
+        });
       } else {
         iconTh.OnLoad = () => {
-          obj.iconUrl = iconTh.Src;
+          FixOrientationPipe.transform(iconTh.Src, p.metadata.orientation).then((icon) => {
+            obj.iconUrl = icon;
+          });
         };
       }
       return obj;
     });
-
     if (this.gpxFiles) {
       this.loadGPXFiles().catch(console.error);
     }
 
   }
 
-
-  private gpxFilter(list: MapPath[]) {
-    let last = list[0];
-    const out = [];
-    for (let i = 1; i < list.length; i++) {
-      if (this.mapService.calcDistance(list[i], last) > 0.5) {
-        out.push(list[i]);
-        last = list[i];
-      }
+  private centerMap() {
+    if (this.mapPhotos.length > 0) {
+      this.yagaMap.fitBounds(<any>this.mapPhotos);
     }
-    if (out.length < 2) {
-      out.push(list[list.length - 1]);
-    }
-    return out;
   }
+
 
   private async loadGPXFiles(): Promise<void> {
     this.paths = [];
@@ -181,8 +173,7 @@ export class GalleryMapLightboxComponent implements OnChanges, AfterViewInit {
       if (path.length === 0) {
         continue;
       }
-      this.paths.push(path);
-      this.pathOutlines.push(this.gpxFilter(path));
+      this.paths.push(<LatLng[]>path);
     }
   }
 
@@ -193,7 +184,6 @@ export class GalleryMapLightboxComponent implements OnChanges, AfterViewInit {
   }
 
   hideImages() {
-    this.mapCenter = {longitude: 0, latitude: 0};
     this.mapPhotos.forEach((mp) => {
       mp.iconThumbnail.destroy();
       mp.preview.thumbnail.destroy();
@@ -228,8 +218,8 @@ export class GalleryMapLightboxComponent implements OnChanges, AfterViewInit {
 }
 
 export interface MapPhoto {
-  latitude: number;
-  longitude: number;
+  lat: number;
+  lng: number;
   iconUrl?: string;
   iconThumbnail: IconThumbnail;
   orientation: OrientationTypes;

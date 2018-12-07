@@ -17,9 +17,15 @@
             "tsConfig": "frontend/tsconfig.app.json",
             "polyfills": "frontend/polyfills.ts",
             "assets": [
+              {
+                "glob": "**/*",
+                "input": "./node_modules/leaflet/dist/images",
+                "output": "/"
+              },
               "frontend/assets"
             ],
             "styles": [
+              "node_modules/leaflet/dist/leaflet.css",
               "node_modules/ngx-toastr/toastr.css",
               "node_modules/bootstrap/dist/css/bootstrap.css",
               "node_modules/open-iconic/font/css/open-iconic-bootstrap.css",

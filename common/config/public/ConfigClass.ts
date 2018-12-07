@@ -2,6 +2,11 @@ import {SortingMethods} from '../../entities/SortingMethods';
 import {UserRoles} from '../../entities/UserDTO';
 
 export module ClientConfig {
+
+  export enum MapProviders {
+    OpenStreetMap, Custom
+  }
+
   export interface SearchConfig {
     enabled: boolean;
     instantSearchEnabled: boolean;
@@ -23,7 +28,8 @@ export module ClientConfig {
 
   export interface MapConfig {
     enabled: boolean;
-    googleApiKey: string;
+    mapProvider: MapProviders;
+    tileUrl: string;
   }
 
   export interface ThumbnailConfig {
@@ -100,7 +106,8 @@ export class PublicConfigClass {
     },
     Map: {
       enabled: true,
-      googleApiKey: ''
+      mapProvider: ClientConfig.MapProviders.OpenStreetMap,
+      tileUrl: ''
     },
     RandomPhoto: {
       enabled: true

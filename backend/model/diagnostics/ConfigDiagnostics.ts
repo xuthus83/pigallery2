@@ -12,8 +12,8 @@ import {ProjectPath} from '../../ProjectPath';
 import {SQLConnection} from '../sql/SQLConnection';
 import * as fs from 'fs';
 import {ClientConfig} from '../../../common/config/public/ConfigClass';
-import VideoConfig = ClientConfig.VideoConfig;
 import {FFmpegFactory} from '../FFmpegFactory';
+import VideoConfig = ClientConfig.VideoConfig;
 import MetaFileConfig = ClientConfig.MetaFileConfig;
 
 const LOG_TAG = '[ConfigDiagnostics]';
@@ -155,8 +155,9 @@ export class ConfigDiagnostics {
 
 
   static async testMapConfig(map: ClientConfig.MapConfig) {
-    if (map.enabled === true && (!map.googleApiKey || map.googleApiKey.length === 0)) {
-      throw new Error('Maps need a valid google api key');
+    if (map.enabled === true && map.mapProvider === ClientConfig.MapProviders.Custom &&
+      (!map.tileUrl || map.tileUrl.length === 0)) {
+      throw new Error('Custom maps need a valid tile url');
     }
   }
 
@@ -270,11 +271,11 @@ export class ConfigDiagnostics {
       await ConfigDiagnostics.testMapConfig(Config.Client.Map);
     } catch (ex) {
       const err: Error = ex;
-      NotificationManager.warning('Maps is not supported with these settings. Disabling temporally. ' +
+      NotificationManager.warning('Maps is not supported with these settings. Using open street maps temporally. ' +
         'Please adjust the config properly.', err.toString());
-      Logger.warn(LOG_TAG, 'Maps is not supported with these settings. Disabling temporally. ' +
+      Logger.warn(LOG_TAG, 'Maps is not supported with these settings. Using open street maps temporally ' +
         'Please adjust the config properly.', err.toString());
-      Config.Client.Map.enabled = false;
+      Config.Client.Map.mapProvider = ClientConfig.MapProviders.OpenStreetMap;
     }
 
   }

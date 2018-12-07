@@ -1,7 +1,7 @@
 .content {
   background-color: #F7F7F7;
   height: 100%;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .row {
@@ -30,7 +30,7 @@
   padding-right: 5px;
 }
 
-.sebm-google-map-container {
+.yaga-map {
   width: 100%;
   height: 100%;
 }
@@ -45,9 +45,14 @@
   font-size: 1.2rem;
 }
 
-.dir-link{
+.dir-link {
   cursor: pointer;
 }
-.dir-link:hover{
+
+.dir-link:hover {
   text-decoration: underline;
+}
+
+.modal-header {
+  padding: 0.4rem 1rem;
 }

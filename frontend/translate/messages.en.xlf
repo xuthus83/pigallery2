@@ -343,7 +343,7 @@
         <source>duration</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/gallery/lightbox/infopanel/info-panel.lightbox.gallery.component.html</context>
-          <context context-type="linenumber">50</context>
+          <context context-type="linenumber">51</context>
         </context-group>
         <target>duration</target>
       </trans-unit>
@@ -351,7 +351,7 @@
         <source>bit rate</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/gallery/lightbox/infopanel/info-panel.lightbox.gallery.component.html</context>
-          <context context-type="linenumber">51</context>
+          <context context-type="linenumber">54</context>
         </context-group>
         <target>bit rate</target>
       </trans-unit>
@@ -580,44 +580,36 @@
         </context-group>
         <target>Map settings</target>
       </trans-unit>
-      <trans-unit id="2ac5d327999abb61d7353f475edffa8b1f0a8ad7" datatype="html">
-        <source>Google maps api key</source>
+      <trans-unit id="1bd9d57dffd8f2e6ed1c65e3ed7bf329f317e752" datatype="html">
+        <source>Map provider</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/map/map.settings.component.html</context>
           <context context-type="linenumber">25</context>
         </context-group>
-        <target>Google maps api key</target>
+        <target>Map provider</target>
       </trans-unit>
-      <trans-unit id="83d20bb14a5d264b30b919fd3b52903f0b7a124c" datatype="html">
-        <source>To show the images on a map,</source>
+      <trans-unit id="559b1ca26c5fffeb5c5d4fbc71d64b85824d9188" datatype="html">
+        <source>Map tile url</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/map/map.settings.component.html</context>
-          <context context-type="linenumber">32</context>
+          <context context-type="linenumber">37</context>
         </context-group>
-        <target>To show the images on a map,</target>
+        <target>Map tile url</target>
       </trans-unit>
-      <trans-unit id="9b480df2a8ef25163f0c093fe11c336908c7b55c" datatype="html">
-        <source>google api key</source>
+      <trans-unit id="853c11ccf6fba4454bdfb48dc708159fb7d11075" datatype="html">
+        <source>The map module will use this url to fetch the map tiles.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/map/map.settings.component.html</context>
-          <context context-type="linenumber">34</context>
+          <context context-type="linenumber">43</context>
         </context-group>
-        <target>google api key</target>
-      </trans-unit>
-      <trans-unit id="86a1216cdfe7002796280c5541f0b9f765efae78" datatype="html">
-        <source>is need.</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/settings/map/map.settings.component.html</context>
-          <context context-type="linenumber">35</context>
-        </context-group>
-        <target>is need.</target>
+        <target>The map module will use this url to fetch the map tiles.</target>
       </trans-unit>
       <trans-unit id="d682be8fc94c1861394919e021e9dcf8def8f554" datatype="html">
         <source>Save
       </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/map/map.settings.component.html</context>
-          <context context-type="linenumber">42</context>
+          <context context-type="linenumber">50</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/thumbnail/thumbanil.settings.component.html</context>
@@ -658,7 +650,7 @@
       </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/map/map.settings.component.html</context>
-          <context context-type="linenumber">45</context>
+          <context context-type="linenumber">53</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/thumbnail/thumbanil.settings.component.html</context>

@@ -17,7 +17,7 @@ import {I18n} from '@ngx-translate/i18n-polyfill';
 })
 export class DatabaseSettingsComponent extends SettingsComponent<DataBaseConfig> implements OnInit {
 
-  public types: Array<any> = [];
+  public types: { key: number, value: string }[] = [];
   public DatabaseType: any;
 
   constructor(_authService: AuthenticationService,
@@ -30,8 +30,7 @@ export class DatabaseSettingsComponent extends SettingsComponent<DataBaseConfig>
 
   ngOnInit() {
     super.ngOnInit();
-    this.types = Utils
-      .enumToArray(DatabaseType);
+    this.types = Utils.enumToArray(DatabaseType);
     this.DatabaseType = DatabaseType;
   }
 

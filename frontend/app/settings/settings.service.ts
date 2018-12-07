@@ -4,6 +4,7 @@ import {DatabaseType, IPrivateConfig, ReIndexingSensitivity, ThumbnailProcessing
 import {NetworkService} from '../model/network/network.service';
 import {SortingMethods} from '../../../common/entities/SortingMethods';
 import {UserRoles} from '../../../common/entities/UserDTO';
+import {ClientConfig} from '../../../common/config/public/ConfigClass';
 
 @Injectable()
 export class SettingsService {
@@ -32,7 +33,8 @@ export class SettingsService {
         },
         Map: {
           enabled: true,
-          googleApiKey: ''
+          mapProvider: ClientConfig.MapProviders.OpenStreetMap,
+          tileUrl: ''
         },
         RandomPhoto: {
           enabled: true

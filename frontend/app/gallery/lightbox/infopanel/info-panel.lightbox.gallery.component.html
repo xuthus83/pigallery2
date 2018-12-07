@@ -29,7 +29,7 @@
     </div>
     <div class="col-10">
       <div class="details-main">
-        {{ media.metadata.creationDate | date: (isThisYear() ? 'MMMM d': 'longDate')}}
+        {{ media.metadata.creationDate | date: (isThisYear() ? 'MMMM d' : 'longDate')}}
       </div>
       <div class="details-sub row">
         <div class="col-12">{{ media.metadata.creationDate | date :'EEEE'}}, {{getTime()}}</div>
@@ -47,8 +47,13 @@
         {{"Video"}}
       </div>
       <div class="details-sub row">
-        <div class="col-6" *ngIf="VideoData.duration"><ng-container i18n>duration</ng-container>: {{VideoData.duration | duration}}</div>
-        <div class="col-6" *ngIf="VideoData.bitRate"><ng-container i18n>bit rate</ng-container>: {{calcSize(VideoData.bitRate)}}/s</div>
+        <div class="col-6" *ngIf="VideoData.duration">
+          <ng-container i18n>duration</ng-container>
+          : {{VideoData.duration | duration}}</div>
+        <div class="col-6" *ngIf="VideoData.bitRate">
+          <ng-container i18n>bit rate</ng-container>
+          : {{calcSize(VideoData.bitRate)}}/s
+        </div>
       </div>
     </div>
   </div>
@@ -93,17 +98,14 @@
   </div>
 
   <div id="map" *ngIf="hasGPS() && mapEnabled">
-    <agm-map
-      [disableDefaultUI]="true"
-      [zoomControl]="false"
-      [streetViewControl]="false"
-      [zoom]="10"
-      [latitude]="PositionData.GPSData.latitude"
-      [longitude]="PositionData.GPSData.longitude">
-      <agm-marker
-        [latitude]="PositionData.GPSData.latitude"
-        [longitude]="PositionData.GPSData.longitude">
-      </agm-marker>
-    </agm-map>
+    <yaga-map [zoom]="10"
+              [lat]="PositionData.GPSData.latitude"
+              [lng]="PositionData.GPSData.longitude">
+      <yaga-marker
+        [lat]="PositionData.GPSData.latitude"
+        [lng]="PositionData.GPSData.longitude">
+      </yaga-marker>
+      <yaga-tile-layer [url]="mapService.MapLayer"></yaga-tile-layer>
+    </yaga-map>
   </div>
 </div>

@@ -7,6 +7,12 @@ export class Utils {
     return R;
   }
 
+  static wait(time: number) {
+    return new Promise((resolve) => {
+      setTimeout(resolve, time);
+    });
+  }
+
 
   static removeNullOrEmptyObj(obj: any) {
     if (typeof obj !== 'object' || obj == null) {

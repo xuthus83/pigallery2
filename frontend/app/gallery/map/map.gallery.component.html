@@ -1,21 +1,23 @@
 <ng-template [ngIf]="mapPhotos.length>0">
   <app-gallery-map-lightbox [photos]="photos" [gpxFiles]="metaFiles"></app-gallery-map-lightbox>
   <div id="map" #map>
-    <agm-map
-      [disableDefaultUI]="true"
-      [zoomControl]="false"
-      [streetViewControl]="false"
-      [usePanning]="false"
-      [draggable]="false"
-      [zoom]="0"
-      [fitBounds]="true">
-      <agm-marker
+
+    <yaga-map #yagaMap
+              [draggingEnabled]="false"
+              [keyboardEnabled]="false"
+              [tapEnabled]="false"
+              [boxZoomEnabled]="false"
+              [doubleClickZoomEnabled]="false">
+      <yaga-marker
         *ngFor="let photo of mapPhotos"
-        [latitude]="photo.latitude"
-        [longitude]="photo.longitude"
-        [agmFitBounds]="true">
-      </agm-marker>
-    </agm-map>
+        [lat]="photo.lat"
+        [lng]="photo.lng">
+      </yaga-marker>
+      <yaga-attribution-control
+        [attributions]="mapService.Attributions"
+      ></yaga-attribution-control>
+      <yaga-tile-layer [url]="mapService.MapLayer"></yaga-tile-layer>
+    </yaga-map>
     <div class="overlay" (click)="click()"
          [style.margin-top.px]="-height"
          [style.height.px]="height">

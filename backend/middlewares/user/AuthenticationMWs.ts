@@ -95,7 +95,6 @@ export class AuthenticationMWs {
         sharingKey: req.query[QueryParams.gallery.sharingKey_short] || req.params[QueryParams.gallery.sharingKey_long]
       });
 
-      console.log(sharing);
       if (!sharing || sharing.expires < Date.now() ||
         (Config.Client.Sharing.passwordProtected === true
           && (sharing.password)

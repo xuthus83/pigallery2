@@ -8,7 +8,6 @@ import {
 } from '@angular/core';
 import {BrowserModule, HAMMER_GESTURE_CONFIG, HammerGestureConfig} from '@angular/platform-browser';
 import {FormsModule} from '@angular/forms';
-import {AgmCoreModule} from '@agm/core';
 import {AppComponent} from './app.component';
 import {appRoutes} from './app.routing';
 import {UserService} from './model/network/user.service';
@@ -20,6 +19,7 @@ import {FullScreenService} from './gallery/fullscreen.service';
 import {AuthenticationService} from './model/network/authentication.service';
 import {UserMangerSettingsComponent} from './settings/usermanager/usermanager.settings.component';
 import {FrameComponent} from './frame/frame.component';
+import {YagaModule} from '@yaga/leaflet-ng2';
 import {GalleryLightboxMediaComponent} from './gallery/lightbox/media/media.lightbox.gallery.component';
 import {GalleryPhotoLoadingComponent} from './gallery/grid/photo/loading/loading.photo.grid.gallery.component';
 import {GalleryNavigatorComponent} from './gallery/navigator/navigator.gallery.component';
@@ -36,8 +36,6 @@ import {GalleryMapComponent} from './gallery/map/map.gallery.component';
 import {GalleryMapLightboxComponent} from './gallery/map/lightbox/lightbox.map.gallery.component';
 import {ThumbnailManagerService} from './gallery/thumnailManager.service';
 import {OverlayService} from './gallery/overlay.service';
-import {Config} from '../../common/config/public/Config';
-import {LAZY_MAPS_API_CONFIG} from '@agm/core/services';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 import {GalleryShareComponent} from './gallery/share/share.gallery.component';
 import {ShareLoginComponent} from './sharelogin/share-login.component';
@@ -78,14 +76,6 @@ import {DurationPipe} from './pipes/DurationPipe';
 import {MapService} from './gallery/map/map.service';
 import {MetaFileSettingsComponent} from './settings/metafiles/metafile.settings.component';
 
-@Injectable()
-export class GoogleMapsConfig {
-  apiKey: string;
-
-  constructor() {
-    this.apiKey = Config.Client.Map.googleApiKey;
-  }
-}
 
 @Injectable()
 export class MyHammerConfig extends HammerGestureConfig {
@@ -131,9 +121,9 @@ export function translationsFactory(locale: string) {
     ModalModule.forRoot(),
     CollapseModule.forRoot(),
     BsDropdownModule.forRoot(),
-    AgmCoreModule.forRoot(),
     SlimLoadingBarModule.forRoot(),
-    BsDatepickerModule.forRoot()
+    BsDatepickerModule.forRoot(),
+    YagaModule
   ],
   declarations: [AppComponent,
     LoginComponent,
@@ -179,7 +169,6 @@ export function translationsFactory(locale: string) {
   ],
   providers: [
     {provide: UrlSerializer, useClass: CustomUrlSerializer},
-    {provide: LAZY_MAPS_API_CONFIG, useClass: GoogleMapsConfig},
     {provide: HAMMER_GESTURE_CONFIG, useClass: MyHammerConfig},
     NetworkService,
     ShareService,

@@ -1,10 +1,11 @@
-import {Component, ElementRef, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {CameraMetadata, PhotoDTO, PositionMetaData} from '../../../../../common/entities/PhotoDTO';
 import {Config} from '../../../../../common/config/public/Config';
 import {MediaDTO} from '../../../../../common/entities/MediaDTO';
 import {VideoDTO, VideoMetadata} from '../../../../../common/entities/VideoDTO';
 import {Utils} from '../../../../../common/Utils';
 import {QueryService} from '../../../model/query.service';
+import {MapService} from '../../map/map.service';
 
 @Component({
   selector: 'app-info-panel',
@@ -17,7 +18,8 @@ export class InfoPanelLightboxComponent {
 
   public mapEnabled = true;
 
-  constructor(public queryService: QueryService) {
+  constructor(public queryService: QueryService,
+              public mapService: MapService) {
     this.mapEnabled = Config.Client.Map.enabled;
   }
 
@@ -36,7 +38,6 @@ export class InfoPanelLightboxComponent {
   get DirectoryPath() {
     return Utils.concatUrls(this.media.directory.path, this.media.directory.name);
   }
-
 
 
   calcSize(size: number) {

@@ -6,64 +6,50 @@
        [style.top.px]="lightboxDimension.top"
        [style.left.px]="lightboxDimension.left"
        [style.opacity]="opacity">
-    <agm-map
-      #map
-      [style.width.px]="mapDimension.width"
-      [style.height.px]="mapDimension.height"
-      [fitBounds]="true">
-      <ng-container *ngIf="map.zoom > 11">
-        <agm-polyline *ngFor="let path of paths"
-                      strokeColor="#007bff"
-                      strokeOpacity="0.8"
-                      strokeWeight="6">
-            <agm-polyline-point
-              *ngFor="let point of path"
-              [latitude]="point.latitude" [longitude]="point.longitude">
-            </agm-polyline-point>
-        </agm-polyline>
-      </ng-container>
-      <ng-container *ngIf="map.zoom <= 11">
-        <agm-polyline *ngFor="let path of pathOutlines"
-                      strokeColor="#007bff"
-                      strokeOpacity="0.8"
-                      strokeWeight="6">
-            <agm-polyline-point
-              *ngFor="let point of path"
-              [latitude]="point.latitude" [longitude]="point.longitude">
-            </agm-polyline-point>
-        </agm-polyline>
-      </ng-container>
-      <agm-marker
+
+    <yaga-map #yagaMap
+              [style.width.px]="mapDimension.width"
+              [style.height.px]="mapDimension.height">
+      <yaga-polyline *ngFor="let path of paths"
+                     [latLngs]="path">
+      </yaga-polyline>
+      <yaga-marker
         *ngFor="let path of paths"
-        [latitude]="path[0].latitude"
-        [longitude]="path[0].longitude"
-        iconUrl="https://cdn.mapmarker.io/api/v1/fa?size=32&icon=fa-map-marker-alt&color=%23006fe6"
-        [agmFitBounds]="true">
-      </agm-marker>
-      <agm-marker
+        [lat]="path[0].lat"
+        [lng]="path[1].lng">
+      </yaga-marker>
+      <yaga-marker
         *ngFor="let photo of mapPhotos"
-        [latitude]="photo.latitude"
-        [longitude]="photo.longitude"
-        [iconUrl]="photo.iconUrl | fixOrientation:photo.orientation | async"
-        (markerClick)="loadPreview(photo)"
-        [agmFitBounds]="true">
-        <agm-info-window>
+        [lat]="photo.lat"
+        [lng]="photo.lng">
+        <yaga-icon
+          *ngIf="photo.iconUrl"
+          [iconUrl]="photo.iconUrl"
+          [iconSize]="iconSize"
+        ></yaga-icon>
+        <yaga-popup
+          (open)="loadPreview(photo)"
+          [minWidth]="photo.preview.width">
           <img *ngIf="photo.preview.thumbnail.Src"
                [style.width.px]="photo.preview.width"
                [style.height.px]="photo.preview.height"
                [src]="photo.preview.thumbnail.Src | fixOrientation:photo.orientation | async">
           <div class="preview-loading"
+               *ngIf="!photo.preview.thumbnail.Src"
                [style.width.px]="photo.preview.width"
-               [style.height.px]="photo.preview.height"
-               *ngIf="!photo.preview.thumbnail.Src">
+               [style.height.px]="photo.preview.height">
               <span class="oi"
                     [ngClass]="photo.preview.thumbnail.Error ? 'oi-warning' :  'oi-picture'"
                     aria-hidden="true">
               </span>
           </div>
-        </agm-info-window>
-      </agm-marker>
-    </agm-map>
+        </yaga-popup>
+      </yaga-marker>
+      <yaga-attribution-control
+        [attributions]="mapService.Attributions"
+      ></yaga-attribution-control>
+      <yaga-tile-layer [url]="mapService.MapLayer"></yaga-tile-layer>
+    </yaga-map>
   </div>
 
 

@@ -2,10 +2,9 @@ import {Component, ElementRef, Input, OnChanges, ViewChild, AfterViewInit} from 
 import {PhotoDTO} from '../../../../common/entities/PhotoDTO';
 import {Dimension, IRenderable} from '../../model/IRenderable';
 import {GalleryMapLightboxComponent} from './lightbox/lightbox.map.gallery.component';
-import {ThumbnailManagerService} from '../thumnailManager.service';
-import {FullScreenService} from '../fullscreen.service';
-import {LatLngBounds, MapsAPILoader, AgmMap} from '@agm/core';
 import {FileDTO} from '../../../../common/entities/FileDTO';
+import {MapService} from './map.service';
+import {MapComponent} from '@yaga/leaflet-ng2';
 
 @Component({
   selector: 'app-gallery-map',
@@ -18,12 +17,13 @@ export class GalleryMapComponent implements OnChanges, IRenderable, AfterViewIni
   @Input() metaFiles: FileDTO[];
   @ViewChild(GalleryMapLightboxComponent) mapLightbox: GalleryMapLightboxComponent;
 
-  mapPhotos: Array<{ latitude: number, longitude: number }> = [];
+  mapPhotos: Array<{ lat: number, lng: number }> = [];
   @ViewChild('map') mapElement: ElementRef;
+  @ViewChild('yagaMap') yagaMap: MapComponent;
   height: number = null;
 
 
-  constructor(private mapsAPILoader: MapsAPILoader) {
+  constructor(public mapService: MapService) {
   }
 
   ngOnChanges() {
@@ -32,17 +32,25 @@ export class GalleryMapComponent implements OnChanges, IRenderable, AfterViewIni
         p.metadata.positionData.GPSData.latitude && p.metadata.positionData.GPSData.longitude;
     }).map(p => {
       return {
-        latitude: p.metadata.positionData.GPSData.latitude,
-        longitude: p.metadata.positionData.GPSData.longitude
+        lat: p.metadata.positionData.GPSData.latitude,
+        lng: p.metadata.positionData.GPSData.longitude
       };
     });
 
+    if (this.yagaMap) {
+      this.yagaMap.setView(this.mapPhotos[0], 0);
+      this.yagaMap.fitBounds(<any>this.mapPhotos);
+      this.yagaMap.zoom = 0;
+    }
 
   }
 
   ngAfterViewInit() {
     setTimeout(() => {
       this.height = this.mapElement.nativeElement.clientHeight;
+      this.yagaMap.setView(this.mapPhotos[0], 0);
+      this.yagaMap.fitBounds(<any>this.mapPhotos);
+      this.yagaMap.zoom = 0;
     }, 0);
   }
 
