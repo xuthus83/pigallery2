@@ -3,7 +3,7 @@ import {Dimension, IRenderable} from '../../../model/IRenderable';
 import {GridMedia} from '../GridMedia';
 import {SearchTypes} from '../../../../../common/entities/AutoCompleteItem';
 import {RouterLink} from '@angular/router';
-import {Thumbnail, ThumbnailManagerService} from '../../thumnailManager.service';
+import {Thumbnail, ThumbnailManagerService} from '../../thumbnailManager.service';
 import {Config} from '../../../../../common/config/public/Config';
 import {AnimationBuilder} from '@angular/animations';
 import {PageHelper} from '../../../model/page.helper';

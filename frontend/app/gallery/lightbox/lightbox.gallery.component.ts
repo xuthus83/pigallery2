@@ -2,11 +2,9 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
-  EventEmitter,
   HostListener,
   OnDestroy,
   OnInit,
-  Output,
   QueryList,
   ViewChild
 } from '@angular/core';

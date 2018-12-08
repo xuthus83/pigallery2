@@ -2,6 +2,8 @@ import {DiskMangerWorker} from './DiskMangerWorker';
 import {Logger} from '../../Logger';
 import {RendererInput, ThumbnailWorker} from './ThumbnailWorker';
 import {ThumbnailProcessingLib} from '../../../common/config/private/IPrivateConfig';
+import {DirectoryDTO} from '../../../common/entities/DirectoryDTO';
+import {Utils} from '../../../common/Utils';
 
 export class Worker {
 
@@ -22,7 +24,6 @@ export class Worker {
             result = await ThumbnailWorker.render((<ThumbnailTask>task).input, (<ThumbnailTask>task).renderer);
             break;
           default:
-            Logger.error('Unknown worker task type');
             throw new Error('Unknown worker task type');
         }
         process.send(<WorkerMessage>{
@@ -54,7 +55,13 @@ export interface ThumbnailTask extends WorkerTask {
   renderer: ThumbnailProcessingLib;
 }
 
+export module WorkerTask {
+  export const equals = (t1: WorkerTask, t2: WorkerTask): boolean => {
+    return Utils.equalsFilter(t1, t2);
+  };
+}
+
 export interface WorkerMessage {
-  error: any;
-  result: any;
+  error: Error;
+  result: DirectoryDTO | void;
 }

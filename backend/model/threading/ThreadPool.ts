@@ -4,24 +4,20 @@ import {DiskManagerTask, ThumbnailTask, WorkerMessage, WorkerTask, WorkerTaskTyp
 import {DirectoryDTO} from '../../../common/entities/DirectoryDTO';
 import {RendererInput} from './ThumbnailWorker';
 import {Config} from '../../../common/config/private/Config';
-import {ITaskQue} from './TaskQue';
+import {TaskQue, TaskQueEntry} from './TaskQue';
+import {ITaskExecuter} from './TaskExecuter';
 
 
-interface PoolTask {
-  task: WorkerTask;
-  promise: { resolve: Function, reject: Function };
-}
-
-interface WorkerWrapper {
+interface WorkerWrapper<O> {
   worker: cluster.Worker;
-  poolTask: PoolTask;
+  poolTask: TaskQueEntry<WorkerTask, O>;
 }
 
-export class ThreadPool {
+export class ThreadPool<O> {
 
   public static WorkerCount = 0;
-  private workers: WorkerWrapper[] = [];
-  private tasks: PoolTask[] = [];
+  private workers: WorkerWrapper<O>[] = [];
+  private taskQue = new TaskQue<WorkerTask, O>();
 
   constructor(private size: number) {
     Logger.silly('Creating thread pool with', size, 'workers');
@@ -31,7 +27,7 @@ export class ThreadPool {
   }
 
   private run = () => {
-    if (this.tasks.length === 0) {
+    if (this.taskQue.isEmpty()) {
       return;
     }
     const worker = this.getFreeWorker();
@@ -39,16 +35,15 @@ export class ThreadPool {
       return;
     }
 
-    const poolTask = this.tasks.shift();
+    const poolTask = this.taskQue.get();
     worker.poolTask = poolTask;
-    worker.worker.send(poolTask.task);
+    worker.worker.send(poolTask.data);
   };
 
-  protected executeTask<T>(task: WorkerTask): Promise<T> {
-    return new Promise((resolve: Function, reject: Function) => {
-      this.tasks.push({task: task, promise: {resolve: resolve, reject: reject}});
-      this.run();
-    });
+  protected executeTask(task: WorkerTask): Promise<O> {
+    const promise = this.taskQue.add(task).promise.obj;
+    this.run();
+    return promise;
   }
 
   private getFreeWorker() {
@@ -61,7 +56,7 @@ export class ThreadPool {
   }
 
   private startWorker() {
-    const worker = <WorkerWrapper>{poolTask: null, worker: cluster.fork()};
+    const worker = <WorkerWrapper<O>>{poolTask: null, worker: cluster.fork()};
     this.workers.push(worker);
     worker.worker.on('online', () => {
       ThreadPool.WorkerCount++;
@@ -84,6 +79,7 @@ export class ThreadPool {
       } else {
         worker.poolTask.promise.resolve(msg.result);
       }
+      this.taskQue.ready(worker.poolTask);
       worker.poolTask = null;
       this.run();
     });
@@ -91,7 +87,7 @@ export class ThreadPool {
 
 }
 
-export class DiskManagerTH extends ThreadPool implements ITaskQue {
+export class DiskManagerTH extends ThreadPool<DirectoryDTO> implements ITaskExecuter<string, DirectoryDTO> {
   execute(relativeDirectoryName: string): Promise<DirectoryDTO> {
     return super.executeTask(<DiskManagerTask>{
       type: WorkerTaskTypes.diskManager,
@@ -100,7 +96,7 @@ export class DiskManagerTH extends ThreadPool implements ITaskQue {
   }
 }
 
-export class ThumbnailTH extends ThreadPool implements ITaskQue {
+export class ThumbnailTH extends ThreadPool<void> implements ITaskExecuter<RendererInput, void> {
   execute(input: RendererInput): Promise<void> {
     return super.executeTask(<ThumbnailTask>{
       type: WorkerTaskTypes.thumbnail,

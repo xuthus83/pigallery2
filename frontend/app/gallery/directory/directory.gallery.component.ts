@@ -4,7 +4,7 @@ import {DirectoryDTO} from '../../../../common/entities/DirectoryDTO';
 import {RouterLink} from '@angular/router';
 import {Utils} from '../../../../common/Utils';
 import {Media} from '../Media';
-import {Thumbnail, ThumbnailManagerService} from '../thumnailManager.service';
+import {Thumbnail, ThumbnailManagerService} from '../thumbnailManager.service';
 import {PageHelper} from '../../model/page.helper';
 import {QueryService} from '../../model/query.service';
 import {PhotoDTO} from '../../../../common/entities/PhotoDTO';

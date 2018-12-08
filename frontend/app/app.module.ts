@@ -13,7 +13,6 @@ import {appRoutes} from './app.routing';
 import {UserService} from './model/network/user.service';
 import {GalleryService} from './gallery/gallery.service';
 import {NetworkService} from './model/network/network.service';
-import {ThumbnailLoaderService} from './gallery/thumnailLoader.service';
 import {GalleryCacheService} from './gallery/cache.gallery.service';
 import {FullScreenService} from './gallery/fullscreen.service';
 import {AuthenticationService} from './model/network/authentication.service';
@@ -34,7 +33,7 @@ import {GalleryComponent} from './gallery/gallery.component';
 import {StringifyRole} from './pipes/StringifyRolePipe';
 import {GalleryMapComponent} from './gallery/map/map.gallery.component';
 import {GalleryMapLightboxComponent} from './gallery/map/lightbox/lightbox.map.gallery.component';
-import {ThumbnailManagerService} from './gallery/thumnailManager.service';
+import {ThumbnailManagerService} from './gallery/thumbnailManager.service';
 import {OverlayService} from './gallery/overlay.service';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 import {GalleryShareComponent} from './gallery/share/share.gallery.component';
@@ -76,6 +75,7 @@ import {DurationPipe} from './pipes/DurationPipe';
 import {MapService} from './gallery/map/map.service';
 import {Icon} from 'leaflet';
 import {MetaFileSettingsComponent} from './settings/metafiles/metafile.settings.component';
+import {ThumbnailLoaderService} from './gallery/thumbnailLoader.service';
 
 
 @Injectable()
@@ -84,16 +84,7 @@ export class MyHammerConfig extends HammerGestureConfig {
     'swipe': {direction: 31} // enable swipe up
   };
 }
-/*
-console.log(Icon);
-console.log(Icon.Default);
-console.log(Icon.Default.prototype);
-console.log(Icon.Default.prototype.options);
-Icon.Default.prototype.options.iconRetinaUrl = 'assets/leaflet/marker-icon-2x.png';
-Icon.Default.imagePath = 'assets/leaflet/marker-icon.png';
-Icon.Default.prototype.options.iconUrl = 'assets/leaflet/marker-icon.png';
-Icon.Default.prototype.options.shadowUrl = 'assets/leaflet/marker-shadow.png';
-*/
+
 export class CustomUrlSerializer implements UrlSerializer {
   private _defaultUrlSerializer: DefaultUrlSerializer = new DefaultUrlSerializer();
 

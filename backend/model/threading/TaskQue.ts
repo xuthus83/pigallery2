@@ -1,46 +1,58 @@
-import {RendererInput, ThumbnailWorker} from './ThumbnailWorker';
-import {Config} from '../../../common/config/private/Config';
+import {Utils} from '../../../common/Utils';
 
 
-interface QueTask {
-  data: RendererInput;
-  promise: { resolve: Function, reject: Function };
+export interface TaskQueEntry<I, O> {
+  data: I;
+  promise: { obj: Promise<O>, resolve: Function, reject: Function };
 }
 
 
-export interface ITaskQue {
-  execute(input: any): Promise<any>;
-}
+export class TaskQue<I, O> {
 
-export class TaskQue implements ITaskQue {
+  private tasks: TaskQueEntry<I, O>[] = [];
+  private processing: TaskQueEntry<I, O>[] = [];
 
-  private tasks: QueTask[] = [];
-  private taskInProgress = 0;
-  private run = async () => {
-    if (this.tasks.length === 0 || this.taskInProgress >= this.size) {
-      return;
-    }
-    this.taskInProgress++;
-    const task = this.tasks.shift();
-    try {
-      task.promise.resolve(await ThumbnailWorker.render(task.data, Config.Server.thumbnail.processingLibrary));
-    } catch (err) {
-      task.promise.reject(err);
-    }
-    this.taskInProgress--;
-    process.nextTick(this.run);
-  };
-
-  constructor(private size: number) {
+  constructor() {
   }
 
-  execute(input: RendererInput): Promise<void> {
-    return new Promise((resolve: Function, reject: Function) => {
-      this.tasks.push({
-        data: input,
-        promise: {resolve: resolve, reject: reject}
-      });
-      this.run();
+
+  private getSameTask(input: I): TaskQueEntry<I, O> {
+    return this.tasks.find(t => Utils.equalsFilter(t.data, input)) ||
+      this.processing.find(t => Utils.equalsFilter(t.data, input));
+  }
+
+  private putNewTask(input: I): TaskQueEntry<I, O> {
+    const taskEntry: TaskQueEntry<I, O> = {
+      data: input,
+      promise: {
+        obj: null,
+        resolve: null,
+        reject: null
+      }
+    };
+    this.tasks.push(taskEntry);
+    taskEntry.promise.obj = new Promise<O>((resolve: Function, reject: Function) => {
+      taskEntry.promise.reject = reject;
+      taskEntry.promise.resolve = resolve;
     });
+    return taskEntry;
+  }
+
+  public isEmpty(): boolean {
+    return this.tasks.length === 0;
+  }
+
+  public add(input: I): TaskQueEntry<I, O> {
+    return (this.getSameTask(input) || this.putNewTask(input));
+  }
+
+  public get(): TaskQueEntry<I, O> {
+    const task = this.tasks.shift();
+    this.processing.push(task);
+    return task;
+  }
+
+  public ready(task: TaskQueEntry<I, O>): void {
+    this.processing.slice(this.processing.indexOf(task), 1);
   }
 }

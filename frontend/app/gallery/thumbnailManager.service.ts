@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {ThumbnailLoaderService, ThumbnailLoadingListener, ThumbnailLoadingPriority, ThumbnailTaskEntity} from './thumnailLoader.service';
+import {ThumbnailLoaderService, ThumbnailLoadingListener, ThumbnailLoadingPriority, ThumbnailTaskEntity} from './thumbnailLoader.service';
 import {Media} from './Media';
 import {MediaIcon} from './MediaIcon';
 
@@ -101,7 +101,7 @@ export class IconThumbnail extends ThumbnailBase {
             this.loading = false;
             this.thumbnailTask = null;
           },
-          onError: (error) => {// onError
+          onError: () => {// onError
             this.thumbnailTask = null;
             this.loading = false;
             this.error = true;
@@ -203,7 +203,7 @@ export class Thumbnail extends ThumbnailBase {
           this.loading = false;
           this.thumbnailTask = null;
         },
-        onError: (error) => {// onError
+        onError: () => {// onError
           this.thumbnailTask = null;
           this.loading = false;
           this.error = true;

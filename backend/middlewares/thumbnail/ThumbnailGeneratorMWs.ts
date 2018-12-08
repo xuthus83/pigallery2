@@ -7,18 +7,18 @@ import {ErrorCodes, ErrorDTO} from '../../../common/entities/Error';
 import {ContentWrapper} from '../../../common/entities/ConentWrapper';
 import {DirectoryDTO} from '../../../common/entities/DirectoryDTO';
 import {ProjectPath} from '../../ProjectPath';
-import {PhotoDTO} from '../../../common/entities/PhotoDTO';
 import {Config} from '../../../common/config/private/Config';
 import {ThumbnailProcessingLib} from '../../../common/config/private/IPrivateConfig';
 import {ThumbnailTH} from '../../model/threading/ThreadPool';
-import {RendererInput, ThumbnailSourceType} from '../../model/threading/ThumbnailWorker';
-import {ITaskQue, TaskQue} from '../../model/threading/TaskQue';
+import {RendererInput, ThumbnailSourceType, ThumbnailWorker} from '../../model/threading/ThumbnailWorker';
+
 import {MediaDTO} from '../../../common/entities/MediaDTO';
+import {ITaskExecuter, TaskExecuter} from '../../model/threading/TaskExecuter';
 
 
 export class ThumbnailGeneratorMWs {
   private static initDone = false;
-  private static taskQue: ITaskQue = null;
+  private static taskQue: ITaskExecuter<RendererInput, void> = null;
 
   public static init() {
     if (this.initDone === true) {
@@ -26,8 +26,7 @@ export class ThumbnailGeneratorMWs {
     }
 
 
-    if (Config.Server.threading.enable === true ||
-      Config.Server.thumbnail.processingLibrary !== ThumbnailProcessingLib.Jimp) {
+    if (Config.Server.threading.enable === true) {
       if (Config.Server.threading.thumbnailThreads > 0) {
         Config.Client.Thumbnail.concurrentThumbnailGenerations = Config.Server.threading.thumbnailThreads;
       } else {
@@ -41,7 +40,8 @@ export class ThumbnailGeneratorMWs {
       Config.Server.thumbnail.processingLibrary === ThumbnailProcessingLib.Jimp) {
       this.taskQue = new ThumbnailTH(Config.Client.Thumbnail.concurrentThumbnailGenerations);
     } else {
-      this.taskQue = new TaskQue(Config.Client.Thumbnail.concurrentThumbnailGenerations);
+      this.taskQue = new TaskExecuter(Config.Client.Thumbnail.concurrentThumbnailGenerations,
+        (input => ThumbnailWorker.render(input, Config.Server.thumbnail.processingLibrary)));
     }
 
     this.initDone = true;
@@ -102,10 +102,10 @@ export class ThumbnailGeneratorMWs {
   }
 
   private static addThInfoTODir(directory: DirectoryDTO) {
-    if (typeof  directory.media === 'undefined') {
+    if (typeof directory.media === 'undefined') {
       directory.media = [];
     }
-    if (typeof  directory.directories === 'undefined') {
+    if (typeof directory.directories === 'undefined') {
       directory.directories = [];
     }
     ThumbnailGeneratorMWs.addThInfoToPhotos(directory.media);
@@ -124,7 +124,7 @@ export class ThumbnailGeneratorMWs {
         const size = Config.Client.Thumbnail.thumbnailSizes[j];
         const thPath = path.join(thumbnailFolder, ThumbnailGeneratorMWs.generateThumbnailName(fullMediaPath, size));
         if (fs.existsSync(thPath) === true) {
-          if (typeof  photos[i].readyThumbnails === 'undefined') {
+          if (typeof photos[i].readyThumbnails === 'undefined') {
             photos[i].readyThumbnails = [];
           }
           photos[i].readyThumbnails.push(size);

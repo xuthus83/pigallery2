@@ -2,7 +2,7 @@ import {Component, ElementRef, HostListener, Input, OnChanges, ViewChild, AfterV
 import {PhotoDTO} from '../../../../../common/entities/PhotoDTO';
 import {Dimension} from '../../../model/IRenderable';
 import {FullScreenService} from '../../fullscreen.service';
-import {IconThumbnail, Thumbnail, ThumbnailManagerService} from '../../thumnailManager.service';
+import {IconThumbnail, Thumbnail, ThumbnailManagerService} from '../../thumbnailManager.service';
 import {MediaIcon} from '../../MediaIcon';
 import {Media} from '../../Media';
 import {PageHelper} from '../../../model/page.helper';
