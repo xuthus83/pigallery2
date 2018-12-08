@@ -2,7 +2,6 @@ import {Injectable} from '@angular/core';
 import {NetworkService} from '../../model/network/network.service';
 import {FileDTO} from '../../../../common/entities/FileDTO';
 import {Utils} from '../../../../common/Utils';
-import {OSM_TILE_LAYER_URL} from '@yaga/leaflet-ng2';
 import {Config} from '../../../../common/config/public/Config';
 import {ClientConfig} from '../../../../common/config/public/ConfigClass';
 
@@ -29,15 +28,48 @@ export class MapService {
   }
 
 
+  public get ShortAttributions(): string[] {
+    const yaga = '<a href="https://yagajs.org" title="YAGA">YAGA</a>';
+    const lf = '<a href="https://leaflet-ng2.yagajs.org" title="Leaflet in Angular2">leaflet-ng2</a>';
+    const OSM = '<a href="https://www.openstreetmap.org/copyright">OSM</a>';
+    const MB = '<a href="https://www.mapbox.com/">Mapbox</a>';
+
+
+    if (Config.Client.Map.mapProvider === ClientConfig.MapProviders.OpenStreetMap) {
+      return [yaga + ' | &copy; ' + OSM];
+    }
+
+    if (Config.Client.Map.mapProvider === ClientConfig.MapProviders.Mapbox) {
+      return [yaga + ' | ' + OSM + ' | ' + MB];
+    }
+    return [yaga + ' | ' + lf];
+  }
+
   public get Attributions(): string[] {
-    return ['&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'];
+    const yagalf = '<a href="https://yagajs.org" title="YAGA">YAGA</a> | ' +
+      '<a href="https://leaflet-ng2.yagajs.org" title="Leaflet in Angular2">leaflet-ng2</a>';
+    const OSM = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>';
+    const MB = '&copy; <a href="https://www.mapbox.com/">Mapbox</a>';
+
+    if (Config.Client.Map.mapProvider === ClientConfig.MapProviders.OpenStreetMap) {
+      return [yagalf + ' | ' + OSM];
+    }
+
+    if (Config.Client.Map.mapProvider === ClientConfig.MapProviders.Mapbox) {
+      return [yagalf + ' | ' + OSM + ' | ' + MB];
+    }
+    return [yagalf];
   }
 
   public get MapLayer(): string {
     if (Config.Client.Map.mapProvider === ClientConfig.MapProviders.Custom) {
       return Config.Client.Map.tileUrl;
     }
-    return OSM_TILE_LAYER_URL;
+    if (Config.Client.Map.mapProvider === ClientConfig.MapProviders.Mapbox) {
+      return 'https://api.tiles.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token='
+        + Config.Client.Map.mapboxAccessToken;
+    }
+    return 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
   }
 
 }

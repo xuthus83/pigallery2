@@ -46,8 +46,9 @@
         </yaga-popup>
       </yaga-marker>
       <yaga-attribution-control
-        [attributions]="mapService.Attributions"
-      ></yaga-attribution-control>
+        prefix=""
+        [attributions]="mapService.Attributions">
+      </yaga-attribution-control>
       <yaga-tile-layer [url]="mapService.MapLayer"></yaga-tile-layer>
     </yaga-map>
   </div>

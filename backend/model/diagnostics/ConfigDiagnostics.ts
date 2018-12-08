@@ -154,8 +154,15 @@ export class ConfigDiagnostics {
   }
 
 
-  static async testMapConfig(map: ClientConfig.MapConfig) {
-    if (map.enabled === true && map.mapProvider === ClientConfig.MapProviders.Custom &&
+  static async testMapConfig(map: ClientConfig.MapConfig): Promise<void> {
+    if (map.enabled === false) {
+      return;
+    }
+    if (map.mapProvider === ClientConfig.MapProviders.Mapbox &&
+      (!map.mapboxAccessToken || map.mapboxAccessToken.length === 0)) {
+      throw new Error('Mapbox needs a valid api key.');
+    }
+    if (map.mapProvider === ClientConfig.MapProviders.Custom &&
       (!map.tileUrl || map.tileUrl.length === 0)) {
       throw new Error('Custom maps need a valid tile url');
     }

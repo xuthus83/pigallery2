@@ -38,8 +38,8 @@ export class GalleryMapComponent implements OnChanges, IRenderable, AfterViewIni
     });
 
     if (this.yagaMap) {
-      this.yagaMap.setView(this.mapPhotos[0], 0);
-      this.yagaMap.fitBounds(<any>this.mapPhotos);
+      this.yagaMap.setView(this.mapPhotos[0], 99);
+      this.yagaMap.fitBounds(this.mapPhotos.map(mp => <[number, number]>[mp.lat, mp.lng]));
       this.yagaMap.zoom = 0;
     }
 
@@ -48,8 +48,8 @@ export class GalleryMapComponent implements OnChanges, IRenderable, AfterViewIni
   ngAfterViewInit() {
     setTimeout(() => {
       this.height = this.mapElement.nativeElement.clientHeight;
-      this.yagaMap.setView(this.mapPhotos[0], 0);
-      this.yagaMap.fitBounds(<any>this.mapPhotos);
+      this.yagaMap.setView(this.mapPhotos[0], 99);
+      this.yagaMap.fitBounds(this.mapPhotos.map(mp => <[number, number]>[mp.lat, mp.lng]));
       this.yagaMap.zoom = 0;
     }, 0);
   }

@@ -4,7 +4,7 @@ import {UserRoles} from '../../entities/UserDTO';
 export module ClientConfig {
 
   export enum MapProviders {
-    OpenStreetMap, Custom
+    OpenStreetMap, Mapbox, Custom
   }
 
   export interface SearchConfig {
@@ -29,6 +29,7 @@ export module ClientConfig {
   export interface MapConfig {
     enabled: boolean;
     mapProvider: MapProviders;
+    mapboxAccessToken: string;
     tileUrl: string;
   }
 
@@ -107,6 +108,7 @@ export class PublicConfigClass {
     Map: {
       enabled: true,
       mapProvider: ClientConfig.MapProviders.OpenStreetMap,
+      mapboxAccessToken: '',
       tileUrl: ''
     },
     RandomPhoto: {

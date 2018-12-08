@@ -74,6 +74,7 @@ import {FixOrientationPipe} from './gallery/FixOrientationPipe';
 import {VideoSettingsComponent} from './settings/video/video.settings.component';
 import {DurationPipe} from './pipes/DurationPipe';
 import {MapService} from './gallery/map/map.service';
+import {Icon} from 'leaflet';
 import {MetaFileSettingsComponent} from './settings/metafiles/metafile.settings.component';
 
 
@@ -83,7 +84,16 @@ export class MyHammerConfig extends HammerGestureConfig {
     'swipe': {direction: 31} // enable swipe up
   };
 }
-
+/*
+console.log(Icon);
+console.log(Icon.Default);
+console.log(Icon.Default.prototype);
+console.log(Icon.Default.prototype.options);
+Icon.Default.prototype.options.iconRetinaUrl = 'assets/leaflet/marker-icon-2x.png';
+Icon.Default.imagePath = 'assets/leaflet/marker-icon.png';
+Icon.Default.prototype.options.iconUrl = 'assets/leaflet/marker-icon.png';
+Icon.Default.prototype.options.shadowUrl = 'assets/leaflet/marker-shadow.png';
+*/
 export class CustomUrlSerializer implements UrlSerializer {
   private _defaultUrlSerializer: DefaultUrlSerializer = new DefaultUrlSerializer();
 

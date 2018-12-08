@@ -45,6 +45,19 @@
         </div>
       </div>
 
+      <div class="form-group row" *ngIf="settings.mapProvider === MapProviders.Mapbox">
+        <label class="col-md-2 control-label" for="mapboxAccessToken" i18n>Mapbox access token</label>
+        <div class="col-md-10">
+          <input type="text" class="form-control" placeholder="Mapbox access token"
+                 [(ngModel)]="settings.mapboxAccessToken"
+                 name="mapboxAccessToken" id="mapboxAccessToken" required>
+          <small class="form-text text-muted">
+            <ng-container i18n>MapBox needs an access token to work, create one at </ng-container><a href="https://www.mapbox.com">https://www.mapbox.com</a>.
+          </small>
+        </div>
+      </div>
+
+
       <button class="btn btn-success float-right"
               [disabled]="!settingsForm.form.valid || !changed || inProgress"
               (click)="save()" i18n>Save

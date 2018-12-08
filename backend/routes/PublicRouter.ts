@@ -90,7 +90,7 @@ export class PublicRouter {
       );
     });
 
-    app.get('/assets/:file',
+    app.get('/assets/:file(*)',
       setLocale,
       (req: Request, res: Response) => {
         const file = path.resolve(ProjectPath.FrontendFolder, req['localePath'], 'assets', req.params.file);
