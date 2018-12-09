@@ -143,6 +143,9 @@ export class GalleryComponent implements OnInit, OnDestroy {
   };
 
   private sortDirectories() {
+    if (!this.directories) {
+      return;
+    }
     switch (this._galleryService.sorting.value) {
       case SortingMethods.ascName:
       case SortingMethods.ascDate:

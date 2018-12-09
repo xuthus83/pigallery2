@@ -47,6 +47,7 @@ export class GalleryService {
     this.sorting.next(sorting);
   }
 
+
   public async loadDirectory(directoryName: string): Promise<void> {
     const content = new ContentWrapper();
 

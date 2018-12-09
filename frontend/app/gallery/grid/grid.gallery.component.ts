@@ -253,7 +253,8 @@ export class GalleryGridComponent implements OnChanges, OnInit, AfterViewInit, O
     // merge new data with old one
     let lastSameIndex = 0;
     let lastRowId = null;
-    for (let i = 0; i < this.media.length && i < this.photosToRender.length; ++i) {
+    let i = 0;
+    for (; i < this.media.length && i < this.photosToRender.length; ++i) {
 
       // If a media changed the whole row has to be removed
       if (this.photosToRender[i].rowId !== lastRowId) {
@@ -264,12 +265,20 @@ export class GalleryGridComponent implements OnChanges, OnInit, AfterViewInit, O
         break;
       }
     }
+    // if all the same
+    if (this.photosToRender.length > 0 &&
+      i === this.photosToRender.length &&
+      i === this.media.length &&
+      this.photosToRender[i - 1].equals(this.media[i - 1])) {
+      lastSameIndex = i;
+    }
     if (lastSameIndex > 0) {
       this.photosToRender.splice(lastSameIndex, this.photosToRender.length - lastSameIndex);
       this.renderedPhotoIndex = lastSameIndex;
     } else {
       this.clearRenderedPhotos();
     }
+
   }
 
 

@@ -25,7 +25,7 @@
         <yaga-icon
           *ngIf="photo.iconUrl"
           [iconUrl]="photo.iconUrl"
-          [iconSize]="iconSize"
+          [iconSize]="yagaMap.zoom < 15 ? smallIconSize : iconSize"
         ></yaga-icon>
         <yaga-popup
           (open)="loadPreview(photo)"

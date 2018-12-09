@@ -90,7 +90,7 @@ export class PublicConfigClass {
     Thumbnail: {
       concurrentThumbnailGenerations: 1,
       thumbnailSizes: [200, 400, 600],
-      iconSize: 30
+      iconSize: 45
     },
     Search: {
       enabled: true,
