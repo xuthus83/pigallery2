@@ -73,9 +73,9 @@ import {FixOrientationPipe} from './gallery/FixOrientationPipe';
 import {VideoSettingsComponent} from './settings/video/video.settings.component';
 import {DurationPipe} from './pipes/DurationPipe';
 import {MapService} from './gallery/map/map.service';
-import {Icon} from 'leaflet';
 import {MetaFileSettingsComponent} from './settings/metafiles/metafile.settings.component';
 import {ThumbnailLoaderService} from './gallery/thumbnailLoader.service';
+import {FileSizePipe} from './pipes/FileSizePipe';
 
 
 @Injectable()
@@ -166,7 +166,8 @@ export function translationsFactory(locale: string) {
     IconizeSortingMethod,
     StringifySortingMethod,
     FixOrientationPipe,
-    DurationPipe
+    DurationPipe,
+    FileSizePipe
   ],
   providers: [
     {provide: UrlSerializer, useClass: CustomUrlSerializer},

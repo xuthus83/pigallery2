@@ -9,6 +9,7 @@ import {IndexingConfig, ReIndexingSensitivity} from '../../../../common/config/p
 import {SettingsComponent} from '../_abstract/abstract.settings.component';
 import {Utils} from '../../../../common/Utils';
 import {I18n} from '@ngx-translate/i18n-polyfill';
+import {StatisticDTO} from '../../../../common/entities/settings/StatisticDTO';
 
 @Component({
   selector: 'app-settings-indexing',
@@ -26,6 +27,7 @@ export class IndexingSettingsComponent extends SettingsComponent<IndexingConfig,
     timer: null,
     settings: null
   };
+  statistic: StatisticDTO;
   private $counter: Observable<number> = null;
   updateProgress = async () => {
     try {
@@ -82,6 +84,7 @@ export class IndexingSettingsComponent extends SettingsComponent<IndexingConfig,
       }
     });
     this.updateProgress();
+    this.statistic = await this._settingsService.getStatistic();
   }
 
   ngOnDestroy() {

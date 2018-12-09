@@ -7,10 +7,19 @@ import {Express} from 'express';
 export class AdminRouter {
   public static route(app: Express) {
 
+    this.addGetStatistic(app);
     this.addIndexGallery(app);
     this.addSettings(app);
   }
 
+  private static addGetStatistic(app: Express) {
+    app.get('/api/admin/statistic',
+      AuthenticationMWs.authenticate,
+      AuthenticationMWs.authorise(UserRoles.Admin),
+      AdminMWs.loadStatistic,
+      RenderingMWs.renderResult
+    );
+  }
 
   private static addIndexGallery(app: Express) {
     app.get('/api/admin/indexes/job/progress',

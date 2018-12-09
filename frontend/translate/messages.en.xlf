@@ -1353,11 +1353,12 @@
         </context-group>
         <target>Note: search only works among the indexed directories</target>
       </trans-unit>
-      <trans-unit id="170f7de02b14690fb9c1999a16926c0044bfd5c1" datatype="html">
-        <source>Index</source>
+      <trans-unit id="32cc8ef8dc6f4f239b7f637ac8adaecc55b8e1d8" datatype="html">
+        <source>Index
+        </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/indexing/indexing.settings.component.html</context>
-          <context context-type="linenumber">93</context>
+          <context context-type="linenumber">94</context>
         </context-group>
         <target>Index</target>
       </trans-unit>
@@ -1365,15 +1366,16 @@
         <source>Indexes the folders</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/indexing/indexing.settings.component.html</context>
-          <context context-type="linenumber">91</context>
+          <context context-type="linenumber">92</context>
         </context-group>
         <target>Indexes the folders</target>
       </trans-unit>
-      <trans-unit id="7e546cd01e4ee4cb0571fe34ce9c96ad760f31f7" datatype="html">
-        <source>Index with Thumbnails</source>
+      <trans-unit id="2cf5bad5f694098d6eb9ce70f687cc469e60c697" datatype="html">
+        <source>Index with Thumbnails
+        </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/indexing/indexing.settings.component.html</context>
-          <context context-type="linenumber">99</context>
+          <context context-type="linenumber">101</context>
         </context-group>
         <target>Index with Thumbnails</target>
       </trans-unit>
@@ -1381,25 +1383,69 @@
         <source>Indexes the folders and also creates the thumbnails</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/indexing/indexing.settings.component.html</context>
-          <context context-type="linenumber">95</context>
+          <context context-type="linenumber">97</context>
         </context-group>
         <target>Indexes the folders and also creates the thumbnails</target>
       </trans-unit>
-      <trans-unit id="d7b35c384aecd25a516200d6921836374613dfe7" datatype="html">
-        <source>Cancel</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/settings/indexing/indexing.settings.component.html</context>
-          <context context-type="linenumber">103</context>
-        </context-group>
-        <target>Cancel</target>
-      </trans-unit>
-      <trans-unit id="6ea6ba32bbd2333f0df2a888252f82e42c8bbe7a" datatype="html">
-        <source>Reset Indexes</source>
+      <trans-unit id="e7e43ec575247424aa179da55b338fd740e8aa7f" datatype="html">
+        <source>Cancel
+        </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/indexing/indexing.settings.component.html</context>
           <context context-type="linenumber">106</context>
         </context-group>
+        <target>Cancel</target>
+      </trans-unit>
+      <trans-unit id="d68e02eaea0b78b12fceb483b2183a3f5b70d969" datatype="html">
+        <source>Reset Indexes
+        </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/settings/indexing/indexing.settings.component.html</context>
+          <context context-type="linenumber">110</context>
+        </context-group>
         <target>Reset Indexes</target>
+      </trans-unit>
+      <trans-unit id="fed617f53bda7660e3f3cf4e7c62fa6d39e2ca16" datatype="html">
+        <source>
+          Statistic:
+        </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/settings/indexing/indexing.settings.component.html</context>
+          <context context-type="linenumber">115</context>
+        </context-group>
+        <target>Statistic:</target>
+      </trans-unit>
+      <trans-unit id="3fde556358b58d910adc30abaaff2433f0bb5f6c" datatype="html">
+        <source>Folders</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/settings/indexing/indexing.settings.component.html</context>
+          <context context-type="linenumber">119</context>
+        </context-group>
+        <target>Folders</target>
+      </trans-unit>
+      <trans-unit id="f84ece8c3bbbf088cb70cf95792ae14dfe51bf96" datatype="html">
+        <source>Photos</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/settings/indexing/indexing.settings.component.html</context>
+          <context context-type="linenumber">123</context>
+        </context-group>
+        <target>Photos</target>
+      </trans-unit>
+      <trans-unit id="a52dae09be10ca3a65da918533ced3d3f4992238" datatype="html">
+        <source>Videos</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/settings/indexing/indexing.settings.component.html</context>
+          <context context-type="linenumber">127</context>
+        </context-group>
+        <target>Videos</target>
+      </trans-unit>
+      <trans-unit id="7faaaa08f56427999f3be41df1093ce4089bbd75" datatype="html">
+        <source>Size</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/settings/indexing/indexing.settings.component.html</context>
+          <context context-type="linenumber">132</context>
+        </context-group>
+        <target>Size</target>
       </trans-unit>
       <trans-unit id="bc2e854e111ecf2bd7db170da5e3c2ed08181d88" datatype="html">
         <source>Advanced</source>

@@ -6,6 +6,7 @@ import {DatabaseType, IndexingConfig} from '../../../../common/config/private/IP
 import {IndexingProgressDTO} from '../../../../common/entities/settings/IndexingProgressDTO';
 import {BehaviorSubject} from 'rxjs';
 import {IndexingDTO} from '../../../../common/entities/settings/IndexingDTO';
+import {StatisticDTO} from '../../../../common/entities/settings/StatisticDTO';
 
 @Injectable()
 export class IndexingSettingsService extends AbstractSettingsService<IndexingConfig> {
@@ -45,4 +46,7 @@ export class IndexingSettingsService extends AbstractSettingsService<IndexingCon
   }
 
 
+  getStatistic() {
+    return this._networkService.getJson<StatisticDTO>('/admin/statistic');
+  }
 }

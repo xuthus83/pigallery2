@@ -365,4 +365,35 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
     return list;
   }
 
+  async countDirectories(): Promise<number> {
+    const connection = await SQLConnection.getConnection();
+    return await connection.getRepository(DirectoryEntity)
+      .createQueryBuilder('directory')
+      .getCount();
+  }
+
+  async countMediaSize(): Promise<number> {
+    const connection = await SQLConnection.getConnection();
+    let {sum} = await connection.getRepository(MediaEntity)
+      .createQueryBuilder('media')
+      .select('SUM(media.metadata.fileSize)', 'sum')
+      .getRawOne();
+    return sum;
+  }
+
+  async countPhotos(): Promise<number> {
+    const connection = await SQLConnection.getConnection();
+    return await connection.getRepository(PhotoEntity)
+      .createQueryBuilder('directory')
+      .getCount();
+  }
+
+  async countVideos(): Promise<number> {
+    const connection = await SQLConnection.getConnection();
+    return await connection.getRepository(VideoEntity)
+      .createQueryBuilder('directory')
+      .getCount();
+  }
+
+
 }

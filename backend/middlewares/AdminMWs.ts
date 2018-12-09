@@ -3,7 +3,7 @@ import {ErrorCodes, ErrorDTO} from '../../common/entities/Error';
 import {ObjectManagerRepository} from '../model/ObjectManagerRepository';
 import {Logger} from '../Logger';
 import {SQLConnection} from '../model/sql/SQLConnection';
-import {DataBaseConfig, DatabaseType, IndexingConfig, IPrivateConfig, ThumbnailConfig} from '../../common/config/private/IPrivateConfig';
+import {DataBaseConfig, DatabaseType, IndexingConfig, ThumbnailConfig} from '../../common/config/private/IPrivateConfig';
 import {Config} from '../../common/config/private/Config';
 import {ConfigDiagnostics} from '../model/diagnostics/ConfigDiagnostics';
 import {ClientConfig} from '../../common/config/public/ConfigClass';
@@ -12,11 +12,35 @@ import {OtherConfigDTO} from '../../common/entities/settings/OtherConfigDTO';
 import {ProjectPath} from '../ProjectPath';
 import {PrivateConfigClass} from '../../common/config/private/PrivateConfigClass';
 import {IndexingDTO} from '../../common/entities/settings/IndexingDTO';
+import {ISQLGalleryManager} from '../model/sql/IGalleryManager';
 
 const LOG_TAG = '[AdminMWs]';
 
 export class AdminMWs {
 
+
+  public static async loadStatistic(req: Request, res: Response, next: NextFunction) {
+    if (Config.Server.database.type === DatabaseType.memory) {
+      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, 'Statistic is only available for indexed content'));
+    }
+
+
+    const galleryManager = <ISQLGalleryManager>ObjectManagerRepository.getInstance().GalleryManager;
+    try {
+      req.resultPipe = {
+        directories: await galleryManager.countDirectories(),
+        photos: await galleryManager.countPhotos(),
+        videos: await galleryManager.countVideos(),
+        diskUsage: await galleryManager.countMediaSize(),
+      };
+      return next();
+    } catch (err) {
+      if (err instanceof Error) {
+        return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, 'Error while getting statistic: ' + err.toString(), err));
+      }
+      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, 'Error while getting statistic', err));
+    }
+  }
 
   public static async updateDatabaseSettings(req: Request, res: Response, next: NextFunction) {
 

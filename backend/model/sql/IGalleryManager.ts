@@ -8,4 +8,11 @@ export interface ISQLGalleryManager extends IGalleryManager {
 
   indexDirectory(relativeDirectoryName: string): Promise<DirectoryDTO>;
 
+  countDirectories(): Promise<number>;
+
+  countPhotos(): Promise<number>;
+
+  countVideos(): Promise<number>;
+
+  countMediaSize(): Promise<number>;
 }

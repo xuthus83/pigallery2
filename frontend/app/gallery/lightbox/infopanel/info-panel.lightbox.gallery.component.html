@@ -18,7 +18,7 @@
       <div class="details-sub row">
         <div class="col-4">{{media.metadata.size.width}} x {{media.metadata.size.height}}</div>
         <div class="col-4" *ngIf="isPhoto()">{{calcMpx()}}MP</div>
-        <div class="col-4" *ngIf="media.metadata.fileSize">{{calcSize(media.metadata.fileSize)}}</div>
+        <div class="col-4" *ngIf="media.metadata.fileSize">{{media.metadata.fileSize | fileSize}}</div>
       </div>
     </div>
   </div>
