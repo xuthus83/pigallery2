@@ -54,9 +54,9 @@ describe('Typeorm integration', () => {
   });
 
 
-  const getDir = () => {
+  const getDir = (namePrefix: string = '') => {
     const d = new DirectoryEntity();
-    d.name = 'test dir';
+    d.name = namePrefix + 'test dir';
     d.path = '.';
     d.lastModified = Date.now();
     d.lastScanned = null;
@@ -196,7 +196,7 @@ describe('Typeorm integration', () => {
   it('should open and close connection twice with media added ', async () => {
     let conn = await SQLConnection.getConnection();
     const dir = await conn.getRepository(DirectoryEntity).save(getDir());
-    const dir2 = getDir();
+    const dir2 = getDir('dir2');
     dir2.parent = dir;
     await conn.getRepository(DirectoryEntity).save(dir2);
     const photo = getPhoto();
