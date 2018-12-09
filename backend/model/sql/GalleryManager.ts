@@ -94,11 +94,10 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
       if (knownLastModified && knownLastScanned
         && lastModified === knownLastModified &&
         dir.lastScanned === knownLastScanned) {
-
         if (Config.Server.indexing.reIndexingSensitivity === ReIndexingSensitivity.low) {
           return null;
         }
-        if (Date.now() - knownLastScanned <= Config.Server.indexing.cachedFolderTimeout &&
+        if (Date.now() - dir.lastScanned <= Config.Server.indexing.cachedFolderTimeout &&
           Config.Server.indexing.reIndexingSensitivity === ReIndexingSensitivity.medium) {
           return null;
         }
@@ -349,9 +348,9 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
       }
       await fileRepository.save(metaFilesToSave);
       await fileRepository.remove(indexedMetaFiles);
-    }catch (e){
+    } catch (e) {
       throw e;
-    }finally {
+    } finally {
       this.isSaving = false;
     }
   }

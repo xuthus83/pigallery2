@@ -66,8 +66,8 @@ export class GalleryService {
 
     if (content.directory && content.directory.lastModified && content.directory.lastScanned &&
       !content.directory.isPartial) {
-      params['knownLastModified'] = content.directory.lastModified;
-      params['knownLastScanned'] = content.directory.lastScanned;
+      params[QueryParams.gallery.knownLastModified] = content.directory.lastModified;
+      params[QueryParams.gallery.knownLastScanned] = content.directory.lastScanned;
     }
 
     try {

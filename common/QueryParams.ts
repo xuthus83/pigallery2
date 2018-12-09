@@ -11,6 +11,8 @@ export const QueryParams = {
     },
     photo: 'p',
     sharingKey_short: 'sk',
-    sharingKey_long: 'sharingKey'
+    sharingKey_long: 'sharingKey',
+    knownLastModified: 'knownLastModified',
+    knownLastScanned: 'knownLastScanned'
   }
 };

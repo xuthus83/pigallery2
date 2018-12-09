@@ -46,8 +46,8 @@ export class QueryService {
     }
     if (directory && directory.lastModified && directory.lastScanned &&
       !directory.isPartial) {
-      params['knownLastModified'] = directory.lastModified;
-      params['knownLastScanned'] = directory.lastScanned;
+      params[QueryParams.gallery.knownLastModified] = directory.lastModified;
+      params[QueryParams.gallery.knownLastScanned] = directory.lastScanned;
     }
 
     return params;

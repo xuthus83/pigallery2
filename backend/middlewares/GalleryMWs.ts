@@ -14,6 +14,7 @@ import {RandomQuery} from '../model/interfaces/IGalleryManager';
 import {MediaDTO} from '../../common/entities/MediaDTO';
 import {VideoDTO} from '../../common/entities/VideoDTO';
 import {Utils} from '../../common/Utils';
+import {QueryParams} from '../../common/QueryParams';
 
 
 const LOG_TAG = '[GalleryMWs]';
@@ -32,7 +33,9 @@ export class GalleryMWs {
 
     try {
       const directory = await ObjectManagerRepository.getInstance()
-        .GalleryManager.listDirectory(directoryName, req.query.knownLastModified, req.query.knownLastScanned);
+        .GalleryManager.listDirectory(directoryName,
+          parseInt(req.query[QueryParams.gallery.knownLastModified], 10),
+          parseInt(req.query[QueryParams.gallery.knownLastScanned], 10));
 
       if (directory == null) {
         req.resultPipe = new ContentWrapper(null, null, true);
