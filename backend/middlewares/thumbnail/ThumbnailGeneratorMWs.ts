@@ -52,17 +52,22 @@ export class ThumbnailGeneratorMWs {
       return next();
     }
 
-    const cw: ContentWrapper = req.resultPipe;
-    if (cw.notModified === true) {
-      return next();
-    }
-    if (cw.directory) {
-      ThumbnailGeneratorMWs.addThInfoTODir(<DirectoryDTO>cw.directory);
-    }
-    if (cw.searchResult) {
-      ThumbnailGeneratorMWs.addThInfoToPhotos(cw.searchResult.media);
-    }
+    try {
+      const cw: ContentWrapper = req.resultPipe;
+      if (cw.notModified === true) {
+        return next();
+      }
+      if (cw.directory) {
+        ThumbnailGeneratorMWs.addThInfoTODir(cw.directory);
+      }
+      if (cw.searchResult && cw.searchResult.media) {
+        ThumbnailGeneratorMWs.addThInfoToPhotos(cw.searchResult.media);
+      }
 
+    } catch (error) {
+      return next(new ErrorDTO(ErrorCodes.SERVER_ERROR, 'error during postprocessing result', error.toString()));
+
+    }
 
     return next();
 
@@ -102,18 +107,14 @@ export class ThumbnailGeneratorMWs {
   }
 
   private static addThInfoTODir(directory: DirectoryDTO) {
-    if (typeof directory.media === 'undefined') {
-      directory.media = [];
+    if (typeof directory.media !== 'undefined') {
+      ThumbnailGeneratorMWs.addThInfoToPhotos(directory.media);
     }
-    if (typeof directory.directories === 'undefined') {
-      directory.directories = [];
+    if (typeof directory.directories !== 'undefined') {
+      for (let i = 0; i < directory.directories.length; i++) {
+        ThumbnailGeneratorMWs.addThInfoTODir(directory.directories[i]);
+      }
     }
-    ThumbnailGeneratorMWs.addThInfoToPhotos(directory.media);
-
-    for (let i = 0; i < directory.directories.length; i++) {
-      ThumbnailGeneratorMWs.addThInfoTODir(directory.directories[i]);
-    }
-
   }
 
   private static addThInfoToPhotos(photos: MediaDTO[]) {
@@ -135,7 +136,6 @@ export class ThumbnailGeneratorMWs {
       if (fs.existsSync(iconPath) === true) {
         photos[i].readyIcon = true;
       }
-
     }
   }
 

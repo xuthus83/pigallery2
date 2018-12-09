@@ -26,11 +26,9 @@ export class SQLConnection {
   private static connection: Connection = null;
 
   public static async getConnection(): Promise<Connection> {
-
     if (this.connection == null) {
-
       const options: any = this.getDriver(Config.Server.database);
-      options.name = 'main';
+   //   options.name = 'main';
       options.entities = [
         UserEntity,
         FileEntity,
@@ -47,7 +45,6 @@ export class SQLConnection {
       await SQLConnection.schemeSync(this.connection);
     }
     return this.connection;
-
   }
 
   public static async tryConnection(config: DataBaseConfig) {

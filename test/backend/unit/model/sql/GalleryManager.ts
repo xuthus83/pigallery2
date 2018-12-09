@@ -12,6 +12,8 @@ import {DirectoryEntity} from '../../../../../backend/model/sql/enitites/Directo
 import {Utils} from '../../../../../common/Utils';
 import {MediaDTO} from '../../../../../common/entities/MediaDTO';
 import {FileDTO} from '../../../../../common/entities/FileDTO';
+import {PhotoEntity} from '../../../../../backend/model/sql/enitites/PhotoEntity';
+import {FileEntity} from '../../../../../backend/model/sql/enitites/FileEntity';
 
 
 class GalleryManagerTest extends GalleryManager {
@@ -27,6 +29,10 @@ class GalleryManagerTest extends GalleryManager {
 
   public async saveToDB(scannedDirectory: DirectoryDTO) {
     return super.saveToDB(scannedDirectory);
+  }
+
+  public async queueForSave(scannedDirectory: DirectoryDTO): Promise<void> {
+    return super.queueForSave(scannedDirectory);
   }
 }
 
@@ -171,7 +177,41 @@ describe('GalleryManager', () => {
     // selected.directories[0].parent = selected;
     expect(Utils.clone(Utils.removeNullOrEmptyObj(selected)))
       .to.deep.equal(Utils.clone(Utils.removeNullOrEmptyObj(subDir)));
+  });
 
+  it('should avoid race condition', async () => {
+    const conn = await SQLConnection.getConnection();
+    const gm = new GalleryManagerTest();
+    Config.Client.MetaFile.enabled = true;
+    const parent = TestHelper.getRandomizedDirectoryEntry();
+    const p1 = TestHelper.getRandomizedPhotoEntry(parent, 'Photo1');
+    const p2 = TestHelper.getRandomizedPhotoEntry(parent, 'Photo2');
+    const gpx = TestHelper.getRandomizedGPXEntry(parent, 'GPX1');
+    const subDir = TestHelper.getRandomizedDirectoryEntry(parent, 'subDir');
+    const sp1 = TestHelper.getRandomizedPhotoEntry(subDir, 'subPhoto1');
+    const sp2 = TestHelper.getRandomizedPhotoEntry(subDir, 'subPhoto2');
+
+
+    DirectoryDTO.removeReferences(parent);
+    const s1 = gm.queueForSave(Utils.clone(parent));
+    const s2 = gm.queueForSave(Utils.clone(parent));
+    const s3 = gm.queueForSave(Utils.clone(parent));
+
+    await Promise.all([s1, s2, s3]);
+
+    const selected = await gm.selectParentDir(conn, parent.name, parent.path);
+    await gm.fillParentDir(conn, selected);
+
+    const query = conn.getRepository(FileEntity).createQueryBuilder('photo');
+    query.innerJoinAndSelect('photo.directory', 'directory');
+    console.log((await query.getMany()));
+    DirectoryDTO.removeReferences(selected);
+    removeIds(selected);
+    subDir.isPartial = true;
+    delete subDir.directories;
+    delete subDir.metaFile;
+    expect(Utils.clone(Utils.removeNullOrEmptyObj(selected)))
+      .to.deep.equal(Utils.clone(Utils.removeNullOrEmptyObj(parent)));
   });
 
 });

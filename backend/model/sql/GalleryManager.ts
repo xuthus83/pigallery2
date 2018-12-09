@@ -13,7 +13,7 @@ import {ISQLGalleryManager} from './IGalleryManager';
 import {DatabaseType, ReIndexingSensitivity} from '../../../common/config/private/IPrivateConfig';
 import {PhotoDTO} from '../../../common/entities/PhotoDTO';
 import {OrientationType} from '../../../common/entities/RandomQueryDTO';
-import {Brackets, Connection} from 'typeorm';
+import {Brackets, Connection, Transaction, TransactionRepository, Repository} from 'typeorm';
 import {MediaEntity} from './enitites/MediaEntity';
 import {MediaDTO} from '../../../common/entities/MediaDTO';
 import {VideoEntity} from './enitites/VideoEntity';
@@ -22,6 +22,9 @@ import {FileDTO} from '../../../common/entities/FileDTO';
 import {NotificationManager} from '../NotifocationManager';
 
 export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
+
+  private savingQueue: DirectoryDTO[] = [];
+  private isSaving = false;
 
   protected async selectParentDir(connection: Connection, directoryName: string, directoryParent: string): Promise<DirectoryEntity> {
     const query = connection
@@ -34,7 +37,7 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
       .leftJoinAndSelect('directory.directories', 'directories')
       .leftJoinAndSelect('directory.media', 'media');
 
-    if (Config.Client.MetaFile.enabled == true) {
+    if (Config.Client.MetaFile.enabled === true) {
       query.leftJoinAndSelect('directory.metaFile', 'metaFile');
     }
 
@@ -75,14 +78,16 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
   public async listDirectory(relativeDirectoryName: string,
                              knownLastModified?: number,
                              knownLastScanned?: number): Promise<DirectoryDTO> {
+
     relativeDirectoryName = path.normalize(path.join('.' + path.sep, relativeDirectoryName));
     const directoryName = path.basename(relativeDirectoryName);
     const directoryParent = path.join(path.dirname(relativeDirectoryName), path.sep);
     const connection = await SQLConnection.getConnection();
     const stat = fs.statSync(path.join(ProjectPath.ImageFolder, relativeDirectoryName));
     const lastModified = Math.max(stat.ctime.getTime(), stat.mtime.getTime());
-    const dir = await this.selectParentDir(connection, directoryName, directoryParent);
 
+
+    const dir = await this.selectParentDir(connection, directoryName, directoryParent);
 
     if (dir && dir.lastScanned != null) {
       // If it seems that the content did not changed, do not work on it
@@ -135,7 +140,7 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
         scannedDirectory.media.forEach(p => p.readyThumbnails = []);
         resolve(scannedDirectory);
 
-        await this.saveToDB(scannedDirectory);
+        this.queueForSave(scannedDirectory).catch(console.error);
 
       } catch (error) {
         NotificationManager.warning('Unknown indexing error for: ' + relativeDirectoryName, error.toString());
@@ -204,139 +209,151 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
 
   }
 
+  // Todo fix it, once typeorm support connection pools ofr sqlite
+  protected async queueForSave(scannedDirectory: DirectoryDTO) {
+    if (this.savingQueue.findIndex(dir => dir.name === scannedDirectory.name &&
+      dir.path === scannedDirectory.path &&
+      dir.lastModified === scannedDirectory.lastModified &&
+      dir.lastScanned === scannedDirectory.lastScanned &&
+      (dir.media || dir.media.length) === (scannedDirectory.media || scannedDirectory.media.length) &&
+      (dir.metaFile || dir.metaFile.length) === (scannedDirectory.metaFile || scannedDirectory.metaFile.length)) !== -1) {
+      return;
+    }
+    this.savingQueue.push(scannedDirectory);
+    while (this.isSaving === false && this.savingQueue.length > 0) {
+      await this.saveToDB(this.savingQueue[0]);
+      this.savingQueue.shift();
+    }
+
+  }
 
   protected async saveToDB(scannedDirectory: DirectoryDTO) {
-    const connection = await SQLConnection.getConnection();
+    this.isSaving = true;
+    try {
+      const connection = await SQLConnection.getConnection();
 
-    // saving to db
-    const directoryRepository = connection.getRepository(DirectoryEntity);
-    const mediaRepository = connection.getRepository(MediaEntity);
-    const fileRepository = connection.getRepository(FileEntity);
+      // saving to db
+      const directoryRepository = connection.getRepository(DirectoryEntity);
+      const mediaRepository = connection.getRepository(MediaEntity);
+      const fileRepository = connection.getRepository(FileEntity);
 
 
-    let currentDir: DirectoryEntity = await directoryRepository.createQueryBuilder('directory')
-      .where('directory.name = :name AND directory.path = :path', {
-        name: scannedDirectory.name,
-        path: scannedDirectory.path
-      }).getOne();
-
-    if (!!currentDir) {// Updated parent dir (if it was in the DB previously)
-      currentDir.lastModified = scannedDirectory.lastModified;
-      currentDir.lastScanned = scannedDirectory.lastScanned;
-      //  const media: MediaEntity[] = currentDir.media;
-      //  delete currentDir.media;
-      currentDir = await directoryRepository.save(currentDir);
-      /*if (media) {
-        media.forEach(m => m.directory = currentDir);
-        currentDir.media = await this.saveMedia(connection, media);
-      }*/
-    } else {
-      //  const media = scannedDirectory.media;
-      // delete scannedDirectory.media;
-      (<DirectoryEntity>scannedDirectory).lastScanned = scannedDirectory.lastScanned;
-      currentDir = await directoryRepository.save(<DirectoryEntity>scannedDirectory);
-      /* if (media) {
-         media.forEach(m => m.directory = currentDir);
-         currentDir.media = await this.saveMedia(connection, media);
-       }*/
-    }
-
-    // save subdirectories
-    const childDirectories = await directoryRepository.createQueryBuilder('directory')
-      .where('directory.parent = :dir', {
-        dir: currentDir.id
-      }).getMany();
-
-    for (let i = 0; i < scannedDirectory.directories.length; i++) {
-      // Was this child Dir already indexed before?
-      let directory: DirectoryEntity = null;
-      for (let j = 0; j < childDirectories.length; j++) {
-        if (childDirectories[j].name === scannedDirectory.directories[i].name) {
-          directory = childDirectories[j];
-          childDirectories.splice(j, 1);
-          break;
-        }
-      }
-
-      if (directory != null) { // update existing directory
-        if (!directory.parent || !directory.parent.id) { // set parent if not set yet
-          directory.parent = currentDir;
-          delete directory.media;
-          await directoryRepository.save(directory);
-        }
+      let currentDir: DirectoryEntity = await directoryRepository.createQueryBuilder('directory')
+        .where('directory.name = :name AND directory.path = :path', {
+          name: scannedDirectory.name,
+          path: scannedDirectory.path
+        }).getOne();
+      if (!!currentDir) {// Updated parent dir (if it was in the DB previously)
+        currentDir.lastModified = scannedDirectory.lastModified;
+        currentDir.lastScanned = scannedDirectory.lastScanned;
+        currentDir = await directoryRepository.save(currentDir);
       } else {
-        scannedDirectory.directories[i].parent = currentDir;
-        (<DirectoryEntity>scannedDirectory.directories[i]).lastScanned = null; // new child dir, not fully scanned yet
-        const d = await directoryRepository.save(<DirectoryEntity>scannedDirectory.directories[i]);
-        for (let j = 0; j < scannedDirectory.directories[i].media.length; j++) {
-          scannedDirectory.directories[i].media[j].directory = d;
+        (<DirectoryEntity>scannedDirectory).lastScanned = scannedDirectory.lastScanned;
+        currentDir = await directoryRepository.save(<DirectoryEntity>scannedDirectory);
+      }
+
+
+      // save subdirectories
+      const childDirectories = await directoryRepository.createQueryBuilder('directory')
+        .where('directory.parent = :dir', {
+          dir: currentDir.id
+        }).getMany();
+
+      for (let i = 0; i < scannedDirectory.directories.length; i++) {
+        // Was this child Dir already indexed before?
+        let directory: DirectoryEntity = null;
+        for (let j = 0; j < childDirectories.length; j++) {
+          if (childDirectories[j].name === scannedDirectory.directories[i].name) {
+            directory = childDirectories[j];
+            childDirectories.splice(j, 1);
+            break;
+          }
         }
 
-        await this.saveMedia(connection, scannedDirectory.directories[i].media);
-      }
-    }
+        if (directory != null) { // update existing directory
+          if (!directory.parent || !directory.parent.id) { // set parent if not set yet
+            directory.parent = currentDir;
+            delete directory.media;
+            await directoryRepository.save(directory);
+          }
+        } else {
+          scannedDirectory.directories[i].parent = currentDir;
+          (<DirectoryEntity>scannedDirectory.directories[i]).lastScanned = null; // new child dir, not fully scanned yet
+          const d = await directoryRepository.save(<DirectoryEntity>scannedDirectory.directories[i]);
+          for (let j = 0; j < scannedDirectory.directories[i].media.length; j++) {
+            scannedDirectory.directories[i].media[j].directory = d;
+          }
 
-    // Remove child Dirs that are not anymore in the parent dir
-    await directoryRepository.remove(childDirectories);
-
-    // save media
-    const indexedMedia = await mediaRepository.createQueryBuilder('media')
-      .where('media.directory = :dir', {
-        dir: currentDir.id
-      }).getMany();
-
-
-    const mediaToSave = [];
-    for (let i = 0; i < scannedDirectory.media.length; i++) {
-      let media: MediaDTO = null;
-      for (let j = 0; j < indexedMedia.length; j++) {
-        if (indexedMedia[j].name === scannedDirectory.media[i].name) {
-          media = indexedMedia[j];
-          indexedMedia.splice(j, 1);
-          break;
+          await this.saveMedia(connection, scannedDirectory.directories[i].media);
         }
       }
-      if (media == null) { //not in DB yet
-        scannedDirectory.media[i].directory = null;
-        media = Utils.clone(scannedDirectory.media[i]);
-        scannedDirectory.media[i].directory = scannedDirectory;
-        media.directory = currentDir;
-        mediaToSave.push(media);
-      } else if (!Utils.equalsFilter(media.metadata, scannedDirectory.media[i].metadata)) {
-        media.metadata = scannedDirectory.media[i].metadata;
-        mediaToSave.push(media);
-      }
-    }
-    await this.saveMedia(connection, mediaToSave);
-    await mediaRepository.remove(indexedMedia);
 
-    // save files
-    const indexedMetaFiles = await fileRepository.createQueryBuilder('file')
-      .where('file.directory = :dir', {
-        dir: currentDir.id
-      }).getMany();
+      // Remove child Dirs that are not anymore in the parent dir
+      await directoryRepository.remove(childDirectories);
+
+      // save media
+      const indexedMedia = await mediaRepository.createQueryBuilder('media')
+        .where('media.directory = :dir', {
+          dir: currentDir.id
+        }).getMany();
 
 
-    const metaFilesToSave = [];
-    for (let i = 0; i < scannedDirectory.metaFile.length; i++) {
-      let metaFile: FileDTO = null;
-      for (let j = 0; j < indexedMetaFiles.length; j++) {
-        if (indexedMetaFiles[j].name === scannedDirectory.metaFile[i].name) {
-          metaFile = indexedMetaFiles[j];
-          indexedMetaFiles.splice(j, 1);
-          break;
+      const mediaToSave = [];
+      for (let i = 0; i < scannedDirectory.media.length; i++) {
+        let media: MediaDTO = null;
+        for (let j = 0; j < indexedMedia.length; j++) {
+          if (indexedMedia[j].name === scannedDirectory.media[i].name) {
+            media = indexedMedia[j];
+            indexedMedia.splice(j, 1);
+            break;
+          }
+        }
+        if (media == null) { // not in DB yet
+          scannedDirectory.media[i].directory = null;
+          media = Utils.clone(scannedDirectory.media[i]);
+          scannedDirectory.media[i].directory = scannedDirectory;
+          media.directory = currentDir;
+          mediaToSave.push(media);
+        } else if (!Utils.equalsFilter(media.metadata, scannedDirectory.media[i].metadata)) {
+          media.metadata = scannedDirectory.media[i].metadata;
+          mediaToSave.push(media);
         }
       }
-      if (metaFile == null) { //not in DB yet
-        scannedDirectory.metaFile[i].directory = null;
-        metaFile = Utils.clone(scannedDirectory.metaFile[i]);
-        scannedDirectory.metaFile[i].directory = scannedDirectory;
-        metaFile.directory = currentDir;
-        metaFilesToSave.push(metaFile);
+      await this.saveMedia(connection, mediaToSave);
+      await mediaRepository.remove(indexedMedia);
+
+      // save files
+      const indexedMetaFiles = await fileRepository.createQueryBuilder('file')
+        .where('file.directory = :dir', {
+          dir: currentDir.id
+        }).getMany();
+
+
+      const metaFilesToSave = [];
+      for (let i = 0; i < scannedDirectory.metaFile.length; i++) {
+        let metaFile: FileDTO = null;
+        for (let j = 0; j < indexedMetaFiles.length; j++) {
+          if (indexedMetaFiles[j].name === scannedDirectory.metaFile[i].name) {
+            metaFile = indexedMetaFiles[j];
+            indexedMetaFiles.splice(j, 1);
+            break;
+          }
+        }
+        if (metaFile == null) { // not in DB yet
+          scannedDirectory.metaFile[i].directory = null;
+          metaFile = Utils.clone(scannedDirectory.metaFile[i]);
+          scannedDirectory.metaFile[i].directory = scannedDirectory;
+          metaFile.directory = currentDir;
+          metaFilesToSave.push(metaFile);
+        }
       }
+      await fileRepository.save(metaFilesToSave);
+      await fileRepository.remove(indexedMetaFiles);
+    }catch (e){
+      throw e;
+    }finally {
+      this.isSaving = false;
     }
-    await fileRepository.save(metaFilesToSave);
-    await fileRepository.remove(indexedMetaFiles);
   }
 
   protected async saveMedia(connection: Connection, mediaList: MediaDTO[]): Promise<MediaEntity[]> {

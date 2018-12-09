@@ -162,10 +162,6 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
   public nextImage() {
     if (this.activePhotoId + 1 < this.gridPhotoQL.length) {
       this.navigateToPhoto(this.activePhotoId + 1);
-      /*if (this.activePhotoId + 3 >= this.gridPhotoQL.length) {
-        this.onLastElement.emit({}); // trigger to render more photos if there are
-      }*/
-      return;
     }
   }
 
@@ -173,14 +169,13 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
     this.pause();
     if (this.activePhotoId > 0) {
       this.navigateToPhoto(this.activePhotoId - 1);
-      return;
     }
   }
 
 
   private navigateToPhoto(photoIndex: number) {
     this.router.navigate([],
-      {queryParams: this.queryService.getParams(this.gridPhotoQL.toArray()[photoIndex].gridPhoto.media)});
+      {queryParams: this.queryService.getParams(this.gridPhotoQL.toArray()[photoIndex].gridPhoto.media)}).catch(console.error);
   }
 
   private showPhoto(photoIndex: number, resize: boolean = true) {
@@ -235,6 +230,11 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
           this.prevImage();
         }
         break;
+      case 'ArrowRight':
+        if (this.activePhotoId < this.gridPhotoQL.length - 1) {
+          this.nextImage();
+        }
+        break;
       case 'i':
       case 'I':
         if (this.isInfoPanelAnimating()) {
@@ -258,11 +258,6 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
       case 'C':
         this.controllersAlwaysOn = !this.controllersAlwaysOn;
         break;
-      case 'ArrowRight':
-        if (this.activePhotoId < this.gridPhotoQL.length - 1) {
-          this.nextImage();
-        }
-        break;
       case 'Escape': // escape
         this.hide();
         break;
@@ -276,7 +271,7 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
 
   public hide() {
     this.router.navigate([],
-      {queryParams: this.queryService.getParams()});
+      {queryParams: this.queryService.getParams()}).catch(console.error);
   }
 
   private hideLigthbox() {

@@ -1,4 +1,4 @@
-import {Column, Entity, ChildEntity} from 'typeorm';
+import {Column, Entity, ChildEntity, Unique} from 'typeorm';
 import {CameraMetadata, GPSMetadata, PhotoDTO, PhotoMetadata, PositionMetaData} from '../../../../common/entities/PhotoDTO';
 import {OrientationTypes} from 'ts-exif-parser';
 import {MediaEntity, MediaMetadataEntity} from './MediaEntity';

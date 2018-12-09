@@ -1,4 +1,4 @@
-import {Column, Entity, ManyToOne, PrimaryGeneratedColumn, TableInheritance} from 'typeorm';
+import {Column, Entity, ManyToOne, PrimaryGeneratedColumn, TableInheritance, Unique} from 'typeorm';
 import {DirectoryEntity} from './DirectoryEntity';
 import {MediaDimension, MediaDTO, MediaMetadata} from '../../../../common/entities/MediaDTO';
 import {OrientationTypes} from 'ts-exif-parser';
@@ -51,6 +51,7 @@ export class MediaMetadataEntity implements MediaMetadata {
 
 // TODO: fix inheritance once its working in typeorm
 @Entity()
+@Unique(['name', 'directory'])
 @TableInheritance({column: {type: 'varchar', name: 'type'}})
 export abstract class MediaEntity implements MediaDTO {
 
