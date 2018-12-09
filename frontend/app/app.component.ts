@@ -4,11 +4,9 @@ import {UserDTO} from '../../common/entities/UserDTO';
 import {Router} from '@angular/router';
 import {Config} from '../../common/config/public/Config';
 import {Title} from '@angular/platform-browser';
-import {NotificationService} from './model/notification.service';
 import {ShareService} from './gallery/share.service';
 import 'hammerjs';
 import {Subscription} from 'rxjs';
-import {QueryService} from './model/query.service';
 
 @Component({
   selector: 'app-pi-gallery2',

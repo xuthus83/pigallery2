@@ -41,7 +41,7 @@
         <a *ngIf="searchEnabled"
            [routerLink]="['/search', keyword, {type: SearchTypes[SearchTypes.keyword]}]">#{{keyword}}</a>
         <span *ngIf="!searchEnabled">#{{keyword}}</span>
-        <ng-template [ngIf]="!last">,</ng-template>
+        <ng-template [ngIf]="!last">, </ng-template>
       </ng-template>
 
     </div>

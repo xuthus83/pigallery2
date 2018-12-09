@@ -25,7 +25,6 @@ import {QueryParams} from '../../../common/QueryParams';
 })
 export class GalleryComponent implements OnInit, OnDestroy {
 
-  @ViewChild(GallerySearchComponent) search: GallerySearchComponent;
   @ViewChild(GalleryGridComponent) grid: GalleryGridComponent;
 
   public showSearchBar = false;
@@ -73,7 +72,7 @@ export class GalleryComponent implements OnInit, OnDestroy {
   }
 
   private onRoute = async (params: Params) => {
-    const searchText = params['searchText'];
+    const searchText = params[QueryParams.gallery.searchText];
     if (searchText && searchText !== '') {
       const typeString: string = params['type'];
       let type: SearchTypes = null;
@@ -86,7 +85,7 @@ export class GalleryComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (params['sharingKey'] && params['sharingKey'] !== '') {
+    if (params[QueryParams.gallery.sharingKey_long] && params[QueryParams.gallery.sharingKey_long] !== '') {
       const sharing = await this.shareService.getSharing();
       const qParams: { [key: string]: any } = {};
       qParams[QueryParams.gallery.sharingKey_short] = this.shareService.getSharingKey();
@@ -94,7 +93,7 @@ export class GalleryComponent implements OnInit, OnDestroy {
       return;
     }
 
-    let directoryName = params['directory'];
+    let directoryName = params[QueryParams.gallery.directory];
     directoryName = directoryName || '';
 
     this._galleryService.loadDirectory(directoryName);

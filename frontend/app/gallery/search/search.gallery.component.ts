@@ -6,6 +6,7 @@ import {GalleryService} from '../gallery.service';
 import {Subscription} from 'rxjs';
 import {Config} from '../../../../common/config/public/Config';
 import {NavigationService} from '../../model/navigation.service';
+import {QueryParams} from '../../../../common/QueryParams';
 
 @Component({
   selector: 'app-gallery-search',
@@ -34,7 +35,7 @@ export class GallerySearchComponent implements OnDestroy {
     this.SearchTypes = SearchTypes;
 
     this.subscription = this._route.params.subscribe((params: Params) => {
-      const searchText = params['searchText'];
+      const searchText = params[QueryParams.gallery.searchText];
       if (searchText && searchText !== '') {
         this.searchText = searchText;
       }
@@ -50,18 +51,24 @@ export class GallerySearchComponent implements OnDestroy {
 
   onSearchChange(event: KeyboardEvent) {
 
+
     const searchText = (<HTMLInputElement>event.target).value.trim();
 
-    if (Config.Client.Search.autocompleteEnabled && this.cache.lastAutocomplete !== searchText) {
+    if (Config.Client.Search.autocompleteEnabled &&
+      this.cache.lastAutocomplete !== searchText) {
       this.cache.lastAutocomplete = searchText;
       this.autocomplete(searchText).catch(console.error);
     }
 
-    if (Config.Client.Search.instantSearchEnabled && this.cache.lastInstantSearch !== searchText) {
+    if (Config.Client.Search.instantSearchEnabled &&
+      this.cache.lastInstantSearch !== searchText) {
       this.cache.lastInstantSearch = searchText;
+      if (searchText === '') {
+        return this.navigationService.toGallery().catch(console.error);
+      }
       this._galleryService.runInstantSearch(searchText);
       this.navigationService.search(searchText).catch(console.error);
-      // this._galleryService.instantSearch(searchText).catch(console.error);
+
     }
   }
 
@@ -113,11 +120,6 @@ export class GallerySearchComponent implements OnDestroy {
       this.autoCompleteItems.push(renderItem);
     });
   }
-
-  public setSearchText(searchText: string) {
-    this.searchText = searchText;
-  }
-
 }
 
 class AutoCompleteRenderItem {
