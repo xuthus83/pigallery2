@@ -37,8 +37,11 @@ export class GalleryDirectoryComponent implements OnInit, OnDestroy {
   }
 
   getSanitizedThUrl() {
-    return this._sanitizer.bypassSecurityTrustStyle('url(' + encodeURI(this.thumbnail.Src).replace(/\(/g, '%28')
-      .replace(/\)/g, '%29') + ')');
+    return this._sanitizer.bypassSecurityTrustStyle('url(' +
+      encodeURI(this.thumbnail.Src)
+        .replace(/\(/g, '%28')
+        .replace(/'/g, '%27')
+        .replace(/\)/g, '%29') + ')');
   }
 
   // TODO: implement scroll

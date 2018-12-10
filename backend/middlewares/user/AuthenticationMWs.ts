@@ -162,8 +162,6 @@ export class AuthenticationMWs {
         return null;
       }
 
-      console.log(sharing);
-
       if (Config.Client.Sharing.passwordProtected === true && (sharing.password)) {
         return null;
       }
