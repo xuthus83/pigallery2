@@ -40,7 +40,7 @@ Full node install on raspberry pi description: https://www.w3schools.com/nodejs/
 
 ```bash
 cd ~
-wget https://github.com/bpatrik/pigallery2/releases/download/1.5.0/pigallery2.zip
+wget https://github.com/bpatrik/pigallery2/releases/download/1.5.5/pigallery2.zip
 unzip pigallery2.zip
 cd pigallery2
 npm install
@@ -72,11 +72,13 @@ docker run \
    -v <path to your config file folder>/config.json:/pigallery2-release/config.json \
    -v <path to your images folder>:/pigallery2-release/demo/images \
    -v <path to your temp folder>:/pigallery2-release/demo/TEMP \
-   bpatrik/pigallery2:nightly-stretch
+   bpatrik/pigallery2:1.5.5-stretch
 ```
 Make sure that a file at `<path to your config file folder>/config.json` exists before running it. 
 
 After the container is up and running, you go to `http://localhost` and log in with user: `admin` pass: `admin` and set up the page in the settings. 
+
+**All docker builds**: https://hub.docker.com/r/bpatrik/pigallery2/tags/
 
 **Note**: You dont need to do the installation steps if you are using docker. 
 
