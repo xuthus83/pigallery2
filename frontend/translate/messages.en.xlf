@@ -126,6 +126,14 @@
           <context context-type="sourcefile">app/gallery/lightbox/lightbox.gallery.component.html</context>
           <context context-type="linenumber">47</context>
         </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/gallery/map/lightbox/lightbox.map.gallery.component.html</context>
+          <context context-type="linenumber">62</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/gallery/map/lightbox/lightbox.map.gallery.component.html</context>
+          <context context-type="linenumber">67</context>
+        </context-group>
         <target>toggle fullscreen, key: f</target>
       </trans-unit>
       <trans-unit id="d78be78234111c1ca3a1d28d981a05ed6ce5d38d" datatype="html">
@@ -133,6 +141,10 @@
         <context-group purpose="location">
           <context context-type="sourcefile">app/gallery/lightbox/lightbox.gallery.component.html</context>
           <context context-type="linenumber">54</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/gallery/map/lightbox/lightbox.map.gallery.component.html</context>
+          <context context-type="linenumber">70</context>
         </context-group>
         <target>close, key: Escape</target>
       </trans-unit>

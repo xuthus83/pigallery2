@@ -56,6 +56,25 @@ export class GalleryMapLightboxComponent implements OnChanges, AfterViewInit {
 
   }
 
+  @HostListener('window:resize', ['$event'])
+  async onResize() {
+    this.lightboxDimension = <Dimension>{
+      top: 0,
+      left: 0,
+      width: this.getScreenWidth(),
+      height: this.getScreenHeight()
+    };
+    this.mapDimension = <Dimension>{
+      top: 0,
+      left: 0,
+      width: this.getScreenWidth(),
+      height: this.getScreenHeight()
+    };
+    await Utils.wait(0);
+    this.yagaMap.invalidateSize();
+  }
+
+
 
   public async show(position: Dimension) {
     this.hideImages();
@@ -209,6 +228,14 @@ export class GalleryMapLightboxComponent implements OnChanges, AfterViewInit {
     }
     const event: KeyboardEvent = window.event ? <any>window.event : e;
     switch (event.key) {
+      case 'f':
+      case 'F':
+        if (this.fullScreenService.isFullScreenEnabled()) {
+          this.fullScreenService.exitFullScreen();
+        } else {
+          this.fullScreenService.showFullScreen(this.elementRef.nativeElement);
+        }
+        break;
       case 'Escape': // escape
         this.hide();
         break;

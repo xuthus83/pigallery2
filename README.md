@@ -142,15 +142,17 @@ apt-get install build-essential  libkrb5-dev gcc g++
    * saving generated thumbnails to TEMP folder for reuse
    * supporting multi-core CPUs
    * supporting hardware acceleration ([sharp](https://github.com/lovell/sharp) and [gm](https://github.com/aheckmann/gm) as optional and JS-based [Jimp](https://github.com/oliver-moran/jimp)  as fallback)   
- * Custom lightbox for full screen photo viewing
+ * Custom lightbox for full screen photo and video viewing
    * keyboard support for navigation  
    * showing low-res thumbnail while full image loads
    * Information panel for showing **Exif info**  
    * Automatic playing
    * gesture support (swipe left, right, up)
+   * shortcut support
  * Client side caching (directories and search results)
- * Rendering **photos** with GPS coordinates **on google map**
-   * .gpx file support 
+ * Rendering **photos** with GPS coordinates **on open street maps**
+   * .gpx file support: rendering paths to map
+   * supports [OSM](https://www.openstreetmap.org) and [Mapbox](https://www.mapbox.com) by default, but you can add any provider that has a tile url
  * **Two modes: SQL database and no-database mode**
    * both modes supports
      * user management
@@ -162,6 +164,7 @@ apt-get install build-essential  libkrb5-dev gcc g++
      * sharing 
        * setting link expiration time
  * internalization / translation support
+   * currently supported languages: eng, hun
  * Nice design 
     * responsive design (phone, tablet desktop support)
  * Setup page

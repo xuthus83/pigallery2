@@ -39,7 +39,7 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
 
   @ViewChild('photo') mediaElement: GalleryLightboxMediaComponent;
   @ViewChild('lightbox') lightboxElement: ElementRef;
-  @ViewChild('root') root: HTMLElement;
+  @ViewChild('root') root: ElementRef;
 
   public navigation = {hasPrev: true, hasNext: true};
   public blackCanvasOpacity = 0;
@@ -251,7 +251,7 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
         if (this.fullScreenService.isFullScreenEnabled()) {
           this.fullScreenService.exitFullScreen();
         } else {
-          this.fullScreenService.showFullScreen(this.root);
+          this.fullScreenService.showFullScreen(this.root.nativeElement);
         }
         break;
       case 'c':

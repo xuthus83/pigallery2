@@ -22,19 +22,19 @@ export class FullScreenService {
       document['webkitFullscreenElement']);
   }
 
-  public showFullScreen(element: any) {
+  public showFullScreen(element: Element) {
     if (this.isFullScreenEnabled()) {
       return;
     }
 
     if (element.requestFullscreen) {
-      element.requestFullscreen();
-    } else if (element.mozRequestFullScreen) {
-      element.mozRequestFullScreen();
-    } else if (element.webkitRequestFullscreen) {
-      element.webkitRequestFullscreen();
-    } else if (element.msRequestFullscreen) {
-      element.msRequestFullscreen();
+      element.requestFullscreen().catch(console.error);
+    } else if ((<any>element).mozRequestFullScreen) {
+      (<any>element).mozRequestFullScreen();
+    } else if ((<any>element).webkitRequestFullscreen) {
+      (<any>element).webkitRequestFullscreen();
+    } else if ((<any>element).msRequestFullscreen) {
+      (<any>element).msRequestFullscreen();
     }
     this.OnFullScreenChange.trigger(true);
   }
