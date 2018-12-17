@@ -80,10 +80,15 @@ import {FileSizePipe} from './pipes/FileSizePipe';
 
 @Injectable()
 export class MyHammerConfig extends HammerGestureConfig {
-  overrides = <any>{
-    'swipe': {direction: 31} // enable swipe up
+  events: string[] = ['pinch'];
+  overrides = {
+    pan: {threshold: 1},
+    swipe: {direction: 31}, // enable swipe up
+    pinch: {enable: true}
   };
 }
+
+
 
 export class CustomUrlSerializer implements UrlSerializer {
   private _defaultUrlSerializer: DefaultUrlSerializer = new DefaultUrlSerializer();

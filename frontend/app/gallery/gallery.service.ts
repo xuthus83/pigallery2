@@ -10,7 +10,6 @@ import {Config} from '../../../common/config/public/Config';
 import {ShareService} from './share.service';
 import {NavigationService} from '../model/navigation.service';
 import {SortingMethods} from '../../../common/entities/SortingMethods';
-import {QueryService} from '../model/query.service';
 import {QueryParams} from '../../../common/QueryParams';
 
 

@@ -52,7 +52,7 @@
           : {{VideoData.duration | duration}}</div>
         <div class="col-6" *ngIf="VideoData.bitRate">
           <ng-container i18n>bit rate</ng-container>
-          : {{calcSize(VideoData.bitRate)}}/s
+          : {{VideoData.bitRate | fileSize}}/s
         </div>
       </div>
     </div>

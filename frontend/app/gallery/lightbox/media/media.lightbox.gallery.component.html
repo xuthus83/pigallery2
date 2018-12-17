@@ -2,23 +2,26 @@
   <img *ngIf="showThumbnail()"
        [style.width.%]="imageSize.width"
        [style.height.%]="imageSize.height"
+       [style.transform]="ImageTransform"
        [src]="thumbnailSrc"/>
 
   <img *ngIf="gridMedia !== null && gridMedia.isPhoto() && loadMedia && photoSrc"
        [style.width.%]="imageSize.width"
        [style.height.%]="imageSize.height"
+       [style.transform]="ImageTransform"
        [src]="photoSrc"
+       [alt]="gridMedia.media.name"
        (load)="onImageLoad()"
        (error)="onImageError()"/>
 
   <video #video
-          *ngIf="gridMedia !== null && gridMedia.isVideo() && loadMedia"
+         *ngIf="gridMedia !== null && gridMedia.isVideo() && loadMedia"
          [style.width.%]="imageSize.width"
          [style.height.%]="imageSize.height"
          (loadstart)="onImageLoad()"
          autoplay
          (error)="onImageError()"
-          (timeupdate)="onVideoProgress()" >
+         (timeupdate)="onVideoProgress()">
     <source [src]="gridMedia.getPhotoPath()" type="{{getVideoType()}}">
   </video>
 

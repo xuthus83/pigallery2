@@ -2,6 +2,7 @@ import {Component, ElementRef, Input, Output, OnChanges, ViewChild} from '@angul
 import {GridMedia} from '../../grid/GridMedia';
 import {FixOrientationPipe} from '../../FixOrientationPipe';
 import {MediaDTO} from '../../../../../common/entities/MediaDTO';
+import {DomSanitizer, SafeStyle} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-gallery-lightbox-media',
@@ -13,6 +14,8 @@ export class GalleryLightboxMediaComponent implements OnChanges {
   @Input() gridMedia: GridMedia;
   @Input() loadMedia = false;
   @Input() windowAspect = 1;
+  @Input() zoom = 1;
+  @Input() drag = {x: 0, y: 0};
 
   @ViewChild('video') video: ElementRef<HTMLVideoElement>;
 
@@ -27,7 +30,14 @@ export class GalleryLightboxMediaComponent implements OnChanges {
   photoSrc: string = null;
   private videoProgress = 0;
 
-  constructor(public elementRef: ElementRef) {
+  constructor(public elementRef: ElementRef,
+              private _sanitizer: DomSanitizer) {
+  }
+
+  get ImageTransform(): SafeStyle {
+    return this._sanitizer.bypassSecurityTrustStyle('scale(' + this.zoom +
+      ') translate(calc(' + -50 / this.zoom + '% + ' + this.drag.x / this.zoom + 'px), calc(' +
+      -50 / this.zoom + '% + ' + this.drag.y / this.zoom + 'px))');
   }
 
   ngOnChanges() {

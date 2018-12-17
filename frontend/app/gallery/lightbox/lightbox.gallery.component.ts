@@ -23,6 +23,8 @@ import {MediaDTO} from '../../../../common/entities/MediaDTO';
 import {QueryParams} from '../../../../common/QueryParams';
 import {GalleryService} from '../gallery.service';
 import {PhotoDTO} from '../../../../common/entities/PhotoDTO';
+import {$e} from '@angular/compiler/src/chars';
+import {Utils} from '../../../../common/Utils';
 
 export enum LightboxStates {
   Open = 1,
@@ -70,7 +72,10 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
   iPvisibilityTimer: number = null;
   visibilityTimer: number = null;
   delayedMediaShow: string = null;
-
+  public zoom = 1;
+  public drag = {x: 0, y: 0};
+  private prevDrag = {x: 0, y: 0};
+  private prevZoom = 1;
 
   constructor(public fullScreenService: FullScreenService,
               private changeDetector: ChangeDetectorRef,
@@ -119,6 +124,8 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
     if (this.activePhoto && this.queryService.getMediaStringId(this.activePhoto.gridPhoto.media) === photoStringId) {
       return;
     }
+
+    this.setZoom(1);
     const photo = this.gridPhotoQL.find(i => this.queryService.getMediaStringId(i.gridPhoto.media) === photoStringId);
     if (!photo) {
       return this.delayedMediaShow = photoStringId;
@@ -148,6 +155,128 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
     if (this.delayedMediaShow) {
       this.onNavigateTo(this.delayedMediaShow);
     }
+  }
+
+  @HostListener('pan', ['$event'])
+  dragging($event: any) {
+    if (this.zoom === 1) {
+      return;
+    }
+    this.drag.x = this.prevDrag.x + $event.deltaX;
+    this.drag.y = this.prevDrag.y + $event.deltaY;
+    this.checkZoomAndDrag();
+    if ($event.isFinal) {
+      this.prevDrag = {
+        x: this.drag.x,
+        y: this.drag.y,
+      };
+    }
+  }
+
+  @HostListener('window:wheel', ['$event'])
+  onWheel($event: any) {
+    this.setZoom(this.zoom + ($event.deltaY < 0 ? this.zoom / 10 : -this.zoom / 10));
+  }
+
+  @HostListener('pinch', ['$event'])
+  pinch($event: any) {
+    this.setZoom(this.prevZoom * $event.scale);
+  }
+
+  @HostListener('pinchend', ['$event'])
+  pinchend($event: any) {
+    this.setZoom(this.prevZoom * $event.scale);
+    this.prevZoom = this.zoom;
+  }
+
+  @HostListener('tap', ['$event'])
+  tao($event: any) {
+    if ($event.tapCount < 2) {
+      return;
+    }
+
+    if (this.zoom > 1) {
+      this.setZoom(1);
+      this.prevZoom = this.zoom;
+      return;
+    } else {
+      this.setZoom(5);
+      this.prevZoom = this.zoom;
+      return;
+    }
+  }
+
+
+  private setZoom(zoom: number) {
+    if (!this.activePhoto || this.activePhoto.gridPhoto.isVideo()) {
+      return;
+    }
+    if (zoom < 1) {
+      zoom = 1;
+    }
+    if (zoom > 10) {
+      zoom = 10;
+    }
+    this.drag.x = this.drag.x / this.zoom * zoom;
+    this.drag.y = this.drag.y / this.zoom * zoom;
+    this.prevDrag.x = this.drag.x;
+    this.prevDrag.y = this.drag.y;
+    this.zoom = zoom;
+    this.checkZoomAndDrag();
+  }
+
+  private checkZoomAndDrag() {
+    const fixDrag = (drag: { x: number, y: number }) => {
+      if (this.zoom === 1) {
+        drag.y = 0;
+        drag.x = 0;
+        return;
+      }
+      if (!this.activePhoto) {
+        return;
+      }
+
+      const photoAspect = MediaDTO.calcRotatedAspectRatio(this.activePhoto.gridPhoto.media);
+      const widthFilled = photoAspect > this.getWindowAspectRatio();
+      const divWidth = this.getPhotoFrameWidth();
+      const divHeight = this.getPhotoFrameHeight();
+      const size = {
+        width: (widthFilled ? divWidth : divHeight * photoAspect) * this.zoom,
+        height: (widthFilled ? divWidth / photoAspect : divHeight) * this.zoom
+      };
+
+
+      const widthDrag = Math.abs(divWidth - size.width) / 2;
+      const heightDrag = Math.abs(divHeight - size.height) / 2;
+
+      if (divWidth > size.width) {
+        drag.x = 0;
+      }
+      if (divHeight > size.height) {
+        drag.y = 0;
+      }
+
+      if (drag.x < -widthDrag) {
+        drag.x = -widthDrag;
+      }
+      if (drag.x > widthDrag) {
+        drag.x = widthDrag;
+      }
+      if (drag.y < -heightDrag) {
+        drag.y = -heightDrag;
+      }
+      if (drag.y > heightDrag) {
+        drag.y = heightDrag;
+      }
+    };
+    if (this.zoom < 1) {
+      this.zoom = 1;
+    }
+    if (this.zoom > 10) {
+      this.zoom = 10;
+    }
+    fixDrag(this.drag);
+    fixDrag(this.prevDrag);
   }
 
 //noinspection JSUnusedGlobalSymbols
@@ -185,6 +314,7 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
   }
 
   public showLigthbox(photo: MediaDTO) {
+    this.setZoom(1);
     this.controllersVisible = true;
     this.showControls();
     this.status = LightboxStates.Open;
@@ -275,6 +405,7 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
   }
 
   private hideLigthbox() {
+    this.setZoom(1);
     this.controllersVisible = false;
     this.status = LightboxStates.Closing;
     this.fullScreenService.exitFullScreen();
@@ -347,6 +478,7 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
     this.iPvisibilityTimer = window.setTimeout(() => {
       this.iPvisibilityTimer = null;
       this.infoPanelVisible = false;
+      this.checkZoomAndDrag();
     }, 1000);
 
     const starPhotoPos = this.calcLightBoxPhotoDimension(this.activePhoto.gridPhoto.media);
@@ -417,6 +549,8 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
     if (this.iPvisibilityTimer != null) {
       clearTimeout(this.iPvisibilityTimer);
     }
+
+    this.checkZoomAndDrag();
   }
 
   public fastForward() {

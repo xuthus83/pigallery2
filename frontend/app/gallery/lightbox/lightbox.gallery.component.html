@@ -7,6 +7,8 @@
   <div class="lightbox" #lightbox>
     <app-gallery-lightbox-media [gridMedia]="activePhoto ? activePhoto.gridPhoto : null"
                                 [loadMedia]="!animating"
+                                [zoom]="zoom"
+                                [drag]="drag"
                                 [windowAspect]="getWindowAspectRatio()"
                                 #photo>
     </app-gallery-lightbox-media>
@@ -58,18 +60,18 @@
       </div>
     </div>
     <div id="swipeable-container"
-         (swipeleft)="nextImage()"
-         (swiperight)="prevImage()"
-         (swipeup)="hide()"
+         (swipeleft)="zoom == 1 && nextImage()"
+         (swiperight)="zoom == 1 && prevImage()"
+         (swipeup)="zoom == 1 && hide()"
          (click)="photo.playPause()">
 
 
       <div class="navigation-arrow highlight"
-           *ngIf="navigation.hasPrev" title="key: left arrow" id="leftArrow" i18n-title
+           *ngIf="navigation.hasPrev && zoom == 1" title="key: left arrow" id="leftArrow" i18n-title
            (click)="prevImage()"><span
         class="oi oi-chevron-left"></span></div>
       <div class="navigation-arrow highlight"
-           *ngIf="navigation.hasNext" title="key: right arrow" id="rightArrow" i18n-title
+           *ngIf="navigation.hasNext && zoom == 1" title="key: right arrow" id="rightArrow" i18n-title
            (click)="nextImage()"><span
         class="oi oi-chevron-right"></span></div>
 
