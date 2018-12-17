@@ -209,7 +209,7 @@ export class DiskMangerWorker {
 
             try {
               const exif = ExifParserFactory.create(data).parse();
-              metadata.cameraData = <CameraMetadata>{
+              metadata.cameraData = {
                 ISO: exif.tags.ISO,
                 model: exif.tags.Model,
                 make: exif.tags.Make,
@@ -220,7 +220,7 @@ export class DiskMangerWorker {
               };
               if (!isNaN(exif.tags.GPSLatitude) || exif.tags.GPSLongitude || exif.tags.GPSAltitude) {
                 metadata.positionData = metadata.positionData || {};
-                metadata.positionData.GPSData = <GPSMetadata>{
+                metadata.positionData.GPSData = {
                   latitude: exif.tags.GPSLatitude,
                   longitude: exif.tags.GPSLongitude,
                   altitude: exif.tags.GPSAltitude
@@ -236,15 +236,15 @@ export class DiskMangerWorker {
               }
 
               if (exif.imageSize) {
-                metadata.size = <MediaDimension>{width: exif.imageSize.width, height: exif.imageSize.height};
+                metadata.size = {width: exif.imageSize.width, height: exif.imageSize.height};
               } else if (exif.tags.RelatedImageWidth && exif.tags.RelatedImageHeight) {
-                metadata.size = <MediaDimension>{width: exif.tags.RelatedImageWidth, height: exif.tags.RelatedImageHeight};
+                metadata.size = {width: exif.tags.RelatedImageWidth, height: exif.tags.RelatedImageHeight};
               } else {
-                metadata.size = <MediaDimension>{width: 1, height: 1};
+                metadata.size = {width: 1, height: 1};
               }
             } catch (err) {
               Logger.debug(LOG_TAG, 'Error parsing exif', fullPath, err);
-              metadata.size = <MediaDimension>{width: 1, height: 1};
+              metadata.size = {width: 1, height: 1};
             }
 
             try {

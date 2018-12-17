@@ -36,9 +36,11 @@ export module DirectoryDTO {
   };
 
   export const removeReferences = (dir: DirectoryDTO): void => {
-    dir.media.forEach((media: MediaDTO) => {
-      media.directory = null;
-    });
+    if (dir.media) {
+      dir.media.forEach((media: MediaDTO) => {
+        media.directory = null;
+      });
+    }
     if (dir.metaFile) {
       dir.metaFile.forEach((file: FileDTO) => {
         file.directory = null;

@@ -12,9 +12,6 @@ import {DirectoryEntity} from '../../../../../backend/model/sql/enitites/Directo
 import {Utils} from '../../../../../common/Utils';
 import {MediaDTO} from '../../../../../common/entities/MediaDTO';
 import {FileDTO} from '../../../../../common/entities/FileDTO';
-import {PhotoEntity} from '../../../../../backend/model/sql/enitites/PhotoEntity';
-import {FileEntity} from '../../../../../backend/model/sql/enitites/FileEntity';
-
 
 class GalleryManagerTest extends GalleryManager {
 
@@ -202,9 +199,6 @@ describe('GalleryManager', () => {
     const selected = await gm.selectParentDir(conn, parent.name, parent.path);
     await gm.fillParentDir(conn, selected);
 
-    const query = conn.getRepository(FileEntity).createQueryBuilder('photo');
-    query.innerJoinAndSelect('photo.directory', 'directory');
-    console.log((await query.getMany()));
     DirectoryDTO.removeReferences(selected);
     removeIds(selected);
     subDir.isPartial = true;
@@ -213,5 +207,26 @@ describe('GalleryManager', () => {
     expect(Utils.clone(Utils.removeNullOrEmptyObj(selected)))
       .to.deep.equal(Utils.clone(Utils.removeNullOrEmptyObj(parent)));
   });
+
+
+  (<any>it('should save 1500 photos', async () => {
+    const conn = await SQLConnection.getConnection();
+    const gm = new GalleryManagerTest();
+    Config.Client.MetaFile.enabled = true;
+    const parent = TestHelper.getRandomizedDirectoryEntry();
+    DirectoryDTO.removeReferences(parent);
+    await gm.saveToDB(Utils.clone(parent));
+    const subDir = TestHelper.getRandomizedDirectoryEntry(parent, 'subDir');
+    for (let i = 0; i < 1500; i++) {
+      TestHelper.getRandomizedPhotoEntry(subDir, 'p' + i);
+    }
+
+    DirectoryDTO.removeReferences(parent);
+    await gm.saveToDB(subDir);
+
+
+    const selected = await gm.selectParentDir(conn, subDir.name, subDir.path);
+    expect(selected.media.length).to.deep.equal(subDir.media.length);
+  })).timeout(20000);
 
 });

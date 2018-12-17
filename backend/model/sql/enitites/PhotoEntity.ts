@@ -12,7 +12,7 @@ export class CameraMetadataEntity implements CameraMetadata {
   model: string;
 
   @Column('text', {nullable: true})
-  maker: string;
+  make: string;
 
   @Column('int', {nullable: true})
   fStop: number;
@@ -55,19 +55,19 @@ export class PositionMetaDataEntity implements PositionMetaData {
 
 
 export class PhotoMetadataEntity extends MediaMetadataEntity implements PhotoMetadata {
-/*
-  @Column('simple-array')
-  keywords: string[];
+  /*
+    @Column('simple-array')
+    keywords: string[];
 
-  @Column(type => CameraMetadataEntity)
-  cameraData: CameraMetadataEntity;
+    @Column(type => CameraMetadataEntity)
+    cameraData: CameraMetadataEntity;
 
-  @Column(type => PositionMetaDataEntity)
-  positionData: PositionMetaDataEntity;
+    @Column(type => PositionMetaDataEntity)
+    positionData: PositionMetaDataEntity;
 
-  @Column('tinyint', {default: OrientationTypes.TOP_LEFT})
-  orientation: OrientationTypes;
-*/
+    @Column('tinyint', {default: OrientationTypes.TOP_LEFT})
+    orientation: OrientationTypes;
+  */
 }
 
 
@@ -75,4 +75,5 @@ export class PhotoMetadataEntity extends MediaMetadataEntity implements PhotoMet
 export class PhotoEntity extends MediaEntity implements PhotoDTO {
   @Column(type => PhotoMetadataEntity)
   metadata: PhotoMetadataEntity;
+
 }

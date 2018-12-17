@@ -275,7 +275,7 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
             delete directory.media;
             await directoryRepository.save(directory);
           }
-        } else {
+        } else { //dir does not exists yet
           scannedDirectory.directories[i].parent = currentDir;
           (<DirectoryEntity>scannedDirectory.directories[i]).lastScanned = null; // new child dir, not fully scanned yet
           const d = await directoryRepository.save(<DirectoryEntity>scannedDirectory.directories[i]);
@@ -288,7 +288,7 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
       }
 
       // Remove child Dirs that are not anymore in the parent dir
-      await directoryRepository.remove(childDirectories);
+      await directoryRepository.remove(childDirectories, {chunk: Math.max(Math.ceil(childDirectories.length / 500), 1)});
 
       // save media
       const indexedMedia = await mediaRepository.createQueryBuilder('media')
@@ -321,6 +321,7 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
       await this.saveMedia(connection, mediaToSave);
       await mediaRepository.remove(indexedMedia);
 
+
       // save files
       const indexedMetaFiles = await fileRepository.createQueryBuilder('file')
         .where('file.directory = :dir', {
@@ -346,8 +347,8 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
           metaFilesToSave.push(metaFile);
         }
       }
-      await fileRepository.save(metaFilesToSave);
-      await fileRepository.remove(indexedMetaFiles);
+      await fileRepository.save(metaFilesToSave, {chunk: Math.max(Math.ceil(metaFilesToSave.length / 500), 1)});
+      await fileRepository.remove(indexedMetaFiles, {chunk: Math.max(Math.ceil(indexedMetaFiles.length / 500), 1)});
     } catch (e) {
       throw e;
     } finally {

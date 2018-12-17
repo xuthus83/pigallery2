@@ -10,6 +10,10 @@ import {OrientationTypes} from 'ts-exif-parser';
 import {DirectoryEntity} from '../../../../../backend/model/sql/enitites/DirectoryEntity';
 import {VideoEntity, VideoMetadataEntity} from '../../../../../backend/model/sql/enitites/VideoEntity';
 import {FileEntity} from '../../../../../backend/model/sql/enitites/FileEntity';
+import {MediaDimension} from '../../../../../common/entities/MediaDTO';
+import {CameraMetadata, GPSMetadata, PhotoDTO, PhotoMetadata, PositionMetaData} from '../../../../../common/entities/PhotoDTO';
+import {DirectoryDTO} from '../../../../../common/entities/DirectoryDTO';
+import {FileDTO} from '../../../../../common/entities/FileDTO';
 
 export class TestHelper {
 
@@ -40,7 +44,7 @@ export class TestHelper {
     const cd = new CameraMetadataEntity();
     cd.ISO = 100;
     cd.model = '60D';
-    cd.maker = 'Canon';
+    cd.make = 'Canon';
     cd.fStop = 1;
     cd.exposure = 1;
     cd.focalLength = 1;
@@ -119,35 +123,38 @@ export class TestHelper {
   }
 
 
-  public static getRandomizedDirectoryEntry(parent: DirectoryEntity = null, forceStr: string = null) {
+  public static getRandomizedDirectoryEntry(parent: DirectoryDTO = null, forceStr: string = null) {
 
-    const dir = new DirectoryEntity();
-    dir.name = forceStr || Math.random().toString(36).substring(7);
-    dir.path = '.';
+    const dir: DirectoryDTO = {
+      id: null,
+      name: forceStr || Math.random().toString(36).substring(7),
+      path: '.',
+      directories: [],
+      metaFile: [],
+      media: [],
+      lastModified: Date.now(),
+      lastScanned: null,
+      parent: null
+    };
     if (parent !== null) {
       dir.path = path.join(parent.path, parent.name);
       parent.directories.push(dir);
     }
-    dir.directories = [];
-    dir.metaFile = [];
-    dir.media = [];
-    dir.lastModified = Date.now();
-    dir.lastScanned = null;
-
     return dir;
   }
 
 
-  public static getRandomizedGPXEntry(dir: DirectoryEntity, forceStr: string = null): FileEntity {
-    const d = new FileEntity();
-    d.name = forceStr + '_' + Math.random().toString(36).substring(7) + '.gpx';
-    d.directory = dir;
-
+  public static getRandomizedGPXEntry(dir: DirectoryDTO, forceStr: string = null): FileDTO {
+    const d: FileDTO = {
+      id: null,
+      name: forceStr + '_' + Math.random().toString(36).substring(7) + '.gpx',
+      directory: dir
+    };
     dir.metaFile.push(d);
     return d;
   }
 
-  public static getRandomizedPhotoEntry(dir: DirectoryEntity, forceStr: string = null) {
+  public static getRandomizedPhotoEntry(dir: DirectoryDTO, forceStr: string = null) {
 
 
     const rndStr = () => {
@@ -159,44 +166,51 @@ export class TestHelper {
       return Math.floor(Math.random() * max);
     };
 
-    const sd = new MediaDimensionEntity();
-    sd.height = rndInt();
-    sd.width = rndInt();
-    const gps = new GPSMetadataEntity();
-    gps.altitude = rndInt(1000);
-    gps.latitude = rndInt(1000);
-    gps.longitude = rndInt(1000);
-    const pd = new PositionMetaDataEntity();
-    pd.city = rndStr();
-    pd.country = rndStr();
-    pd.state = rndStr();
-    pd.GPSData = gps;
-    const cd = new CameraMetadataEntity();
-    cd.ISO = rndInt(500);
-    cd.model = rndStr();
-    cd.maker = rndStr();
-    cd.fStop = rndInt(10);
-    cd.exposure = rndInt(10);
-    cd.focalLength = rndInt(10);
-    cd.lens = rndStr();
-    const m = new PhotoMetadataEntity();
-    m.keywords = [rndStr(), rndStr()];
-    m.cameraData = cd;
-    m.positionData = pd;
-    m.size = sd;
-    m.creationDate = Date.now();
-    m.fileSize = rndInt(10000);
-    m.orientation = OrientationTypes.TOP_LEFT;
+    const sd: MediaDimension = {
+      height: rndInt(),
+      width: rndInt(),
+    };
 
-    // TODO: remove when typeorm is fixed
-    m.duration = null;
-    m.bitRate = null;
+    const gps: GPSMetadata = {
+      altitude: rndInt(1000),
+      latitude: rndInt(1000),
+      longitude: rndInt(1000)
+    };
+    const pd: PositionMetaData = {
+      city: rndStr(),
+      country: rndStr(),
+      state: rndStr(),
+      GPSData: gps
+    };
+    const cd: CameraMetadata = {
+      ISO: rndInt(500),
+      model: rndStr(),
+      make: rndStr(),
+      fStop: rndInt(10),
+      exposure: rndInt(10),
+      focalLength: rndInt(10),
+      lens: rndStr()
+    };
+    const m: PhotoMetadata = {
+      keywords: [rndStr(), rndStr()],
+      cameraData: cd,
+      positionData: pd,
+      size: sd,
+      creationDate: Date.now(),
+      fileSize: rndInt(10000),
+      orientation: OrientationTypes.TOP_LEFT,
+      caption: rndStr()
+    };
 
 
-    const d = new PhotoEntity();
-    d.name = rndStr() + '.jpg';
-    d.directory = dir;
-    d.metadata = m;
+    const d: PhotoDTO = {
+      id: null,
+      name: rndStr() + '.jpg',
+      directory: dir,
+      metadata: m,
+      readyThumbnails: null,
+      readyIcon: false
+    };
 
     dir.media.push(d);
     return d;
