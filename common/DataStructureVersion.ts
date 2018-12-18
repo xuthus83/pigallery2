@@ -1,1 +1,1 @@
-export const DataStructureVersion = 4;
+export const DataStructureVersion = 5;
