@@ -29,19 +29,20 @@ app-gallery-lightbox-photo {
 }
 
 .navigation-arrow {
-  width: 20%;
+  width: 30px;
   min-width: 60px;
-  height: 50%;
-  margin-top: 22vh;
-  position: static;
+  height: 100px;
+  position: absolute;
+  top: calc(50% - 50px);
   display: inline-block;
   padding: 15px;
   cursor: pointer;
   font-size: xx-large;
+  left: 0;
 }
 
 .navigation-arrow span {
-  top: 43%;
+  top: 20px;
 }
 
 #controllers-container {
@@ -73,7 +74,8 @@ app-gallery-lightbox-photo {
 }
 
 #rightArrow {
-  float: right;
+  right: 0;
+  left: auto;
   text-align: right;
 }
 
@@ -196,4 +198,21 @@ app-info-panel {
   -ms-transition: all 0.3s ease-in-out;
   -moz-transition: all 0.3s ease-in-out;
   -webkit-transition: all 0.3s ease-in-out;
+}
+
+.controls-zoom {
+  bottom: 0;
+  position: absolute;
+  margin-bottom: 10px;
+}
+
+.zoom-progress-wrapper {
+  height: 11px;
+  border: 1px solid white;
+  padding: 0;
+}
+
+.zoom-progress {
+  height: 10px;
+  background: white;
 }

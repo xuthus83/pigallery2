@@ -23,13 +23,17 @@ import {MediaDTO} from '../../../../common/entities/MediaDTO';
 import {QueryParams} from '../../../../common/QueryParams';
 import {GalleryService} from '../gallery.service';
 import {PhotoDTO} from '../../../../common/entities/PhotoDTO';
-import {$e} from '@angular/compiler/src/chars';
-import {Utils} from '../../../../common/Utils';
 
 export enum LightboxStates {
   Open = 1,
   Closing = 2,
   Closed = 3
+}
+
+export enum PlayBackStates {
+  Paused = 1,
+  Play = 2,
+  FastForward = 3
 }
 
 @Component({
@@ -38,6 +42,8 @@ export enum LightboxStates {
   templateUrl: './lightbox.gallery.component.html'
 })
 export class GalleryLightboxComponent implements OnDestroy, OnInit {
+
+  readonly MAX_ZOOM=10;
 
   @ViewChild('photo') mediaElement: GalleryLightboxMediaComponent;
   @ViewChild('lightbox') lightboxElement: ElementRef;
@@ -60,7 +66,8 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
   };
   private timer: Observable<number>;
   private timerSub: Subscription;
-  public playBackState = 0;
+  public playBackState: PlayBackStates = PlayBackStates.Paused;
+  public PlayBackStates = PlayBackStates;
   public controllersDimmed = false;
   public controllersAlwaysOn = false;
   public controllersVisible = true;
@@ -157,8 +164,10 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
     }
   }
 
-  @HostListener('pan', ['$event'])
-  dragging($event: any) {
+  pan($event: any) {
+    if (!this.activePhoto || this.activePhoto.gridPhoto.isVideo()) {
+      return;
+    }
     if (this.zoom === 1) {
       return;
     }
@@ -173,28 +182,42 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
     }
   }
 
-  @HostListener('window:wheel', ['$event'])
-  onWheel($event: any) {
+  wheel($event: any) {
+    if (!this.activePhoto || this.activePhoto.gridPhoto.isVideo()) {
+      return;
+    }
+    this.showControls();
     this.setZoom(this.zoom + ($event.deltaY < 0 ? this.zoom / 10 : -this.zoom / 10));
   }
 
   @HostListener('pinch', ['$event'])
   pinch($event: any) {
+    if (!this.activePhoto || this.activePhoto.gridPhoto.isVideo()) {
+      return;
+    }
+    this.showControls();
     this.setZoom(this.prevZoom * $event.scale);
   }
 
   @HostListener('pinchend', ['$event'])
   pinchend($event: any) {
+    if (!this.activePhoto || this.activePhoto.gridPhoto.isVideo()) {
+      return;
+    }
+    this.showControls();
     this.setZoom(this.prevZoom * $event.scale);
     this.prevZoom = this.zoom;
   }
 
-  @HostListener('tap', ['$event'])
-  tao($event: any) {
+  tap($event: any) {
+    if (!this.activePhoto || this.activePhoto.gridPhoto.isVideo()) {
+      return;
+    }
     if ($event.tapCount < 2) {
       return;
     }
 
+    this.showControls();
     if (this.zoom > 1) {
       this.setZoom(1);
       this.prevZoom = this.zoom;
@@ -214,9 +237,13 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
     if (zoom < 1) {
       zoom = 1;
     }
-    if (zoom > 10) {
-      zoom = 10;
+    if (zoom > this.MAX_ZOOM) {
+      zoom = this.MAX_ZOOM;
     }
+    if (this.zoom === zoom) {
+      return;
+    }
+    this.pause();
     this.drag.x = this.drag.x / this.zoom * zoom;
     this.drag.y = this.drag.y / this.zoom * zoom;
     this.prevDrag.x = this.drag.x;
@@ -272,8 +299,8 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
     if (this.zoom < 1) {
       this.zoom = 1;
     }
-    if (this.zoom > 10) {
-      this.zoom = 10;
+    if (this.zoom > this.MAX_ZOOM) {
+      this.zoom =  this.MAX_ZOOM;
     }
     fixDrag(this.drag);
     fixDrag(this.prevDrag);
@@ -520,7 +547,7 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
         this.navigateToPhoto(0);
       }
     });
-    this.playBackState = 1;
+    this.playBackState = PlayBackStates.Play;
   }
 
   isInfoPanelAnimating(): boolean {
@@ -569,7 +596,7 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
         this.navigateToPhoto(0);
       }
     });
-    this.playBackState = 2;
+    this.playBackState = PlayBackStates.FastForward;
   }
 
 
@@ -633,7 +660,7 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
     if (this.timerSub != null) {
       this.timerSub.unsubscribe();
     }
-    this.playBackState = 0;
+    this.playBackState = PlayBackStates.Paused;
   }
 
   private findPhotoComponent(media: MediaDTO): GalleryPhotoComponent {

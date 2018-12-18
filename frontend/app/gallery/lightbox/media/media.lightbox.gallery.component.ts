@@ -41,13 +41,13 @@ export class GalleryLightboxMediaComponent implements OnChanges {
   }
 
   ngOnChanges() {
-    this.imageLoaded = false;
-    this.imageLoadFinished = false;
-    this.setImageSize();
     if (this.prevGirdPhoto !== this.gridMedia) {
       this.prevGirdPhoto = this.gridMedia;
       this.thumbnailSrc = null;
       this.photoSrc = null;
+      this.imageLoaded = false;
+      this.imageLoadFinished = false;
+      this.setImageSize();
     }
     if (this.thumbnailSrc == null && this.gridMedia && this.ThumbnailUrl !== null) {
       FixOrientationPipe.transform(this.ThumbnailUrl, this.gridMedia.Orientation)
