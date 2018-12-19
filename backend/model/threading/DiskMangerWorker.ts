@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import {DirectoryDTO} from '../../../common/entities/DirectoryDTO';
-import {CameraMetadata, GPSMetadata, PhotoDTO, PhotoMetadata} from '../../../common/entities/PhotoDTO';
+import {PhotoDTO, PhotoMetadata} from '../../../common/entities/PhotoDTO';
 import {Logger} from '../../Logger';
 import {IptcParser} from 'ts-node-iptc';
 import {ExifParserFactory, OrientationTypes} from 'ts-exif-parser';
@@ -9,9 +9,9 @@ import {FfprobeData} from 'fluent-ffmpeg';
 import {ProjectPath} from '../../ProjectPath';
 import {Config} from '../../../common/config/private/Config';
 import {VideoDTO, VideoMetadata} from '../../../common/entities/VideoDTO';
-import {MediaDimension} from '../../../common/entities/MediaDTO';
 import {FFmpegFactory} from '../FFmpegFactory';
 import {FileDTO} from '../../../common/entities/FileDTO';
+import * as sizeOf from 'image-size';
 
 const LOG_TAG = '[DiskManagerTask]';
 
@@ -240,11 +240,17 @@ export class DiskMangerWorker {
               } else if (exif.tags.RelatedImageWidth && exif.tags.RelatedImageHeight) {
                 metadata.size = {width: exif.tags.RelatedImageWidth, height: exif.tags.RelatedImageHeight};
               } else {
-                metadata.size = {width: 1, height: 1};
+                const info = sizeOf(fullPath);
+                metadata.size = {width: info.width, height: info.height};
               }
             } catch (err) {
               Logger.debug(LOG_TAG, 'Error parsing exif', fullPath, err);
-              metadata.size = {width: 1, height: 1};
+              try {
+                const info = sizeOf(fullPath);
+                metadata.size = {width: info.width, height: info.height};
+              } catch (e) {
+                metadata.size = {width: 1, height: 1};
+              }
             }
 
             try {

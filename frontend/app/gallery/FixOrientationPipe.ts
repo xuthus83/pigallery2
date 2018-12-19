@@ -24,7 +24,7 @@ export class FixOrientationPipe implements PipeTransform {
 
         // set proper canvas dimensions before transform & export
         if (OrientationTypes.BOTTOM_LEFT < orientation &&
-          orientation < OrientationTypes.LEFT_BOTTOM) {
+          orientation <= OrientationTypes.LEFT_BOTTOM) {
           // noinspection JSSuspiciousNameCombination
           canvas.width = height;
           // noinspection JSSuspiciousNameCombination
