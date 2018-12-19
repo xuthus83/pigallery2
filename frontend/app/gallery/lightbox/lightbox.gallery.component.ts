@@ -132,7 +132,7 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
       return;
     }
 
-    this.setZoom(1);
+    this.Zoom = 1;
     const photo = this.gridPhotoQL.find(i => this.queryService.getMediaStringId(i.gridPhoto.media) === photoStringId);
     if (!photo) {
       return this.delayedMediaShow = photoStringId;
@@ -186,7 +186,6 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
     if (!this.activePhoto || this.activePhoto.gridPhoto.isVideo()) {
       return;
     }
-    this.showControls();
     if ($event.deltaY < 0) {
       this.zoomIn();
     } else {
@@ -200,7 +199,7 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
       return;
     }
     this.showControls();
-    this.setZoom(this.prevZoom * $event.scale);
+    this.Zoom = this.prevZoom * $event.scale;
   }
 
   @HostListener('pinchend', ['$event'])
@@ -209,7 +208,7 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
       return;
     }
     this.showControls();
-    this.setZoom(this.prevZoom * $event.scale);
+    this.Zoom = this.prevZoom * $event.scale;
     this.prevZoom = this.zoom;
   }
 
@@ -223,11 +222,11 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
 
     this.showControls();
     if (this.zoom > 1) {
-      this.setZoom(1);
+      this.Zoom = 1;
       this.prevZoom = this.zoom;
       return;
     } else {
-      this.setZoom(5);
+      this.Zoom = 5;
       this.prevZoom = this.zoom;
       return;
     }
@@ -235,17 +234,20 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
 
   zoomIn() {
     this.showControls();
-    this.setZoom(this.zoom + this.zoom / 10);
-
+    this.Zoom = this.zoom + this.zoom / 10;
   }
 
   zoomOut() {
     this.showControls();
-    this.setZoom(this.zoom - this.zoom / 10);
+    this.Zoom = this.zoom - this.zoom / 10;
   }
 
 
-  private setZoom(zoom: number) {
+  public get Zoom(): number {
+    return this.zoom;
+  }
+
+  public set Zoom(zoom: number) {
     if (!this.activePhoto || this.activePhoto.gridPhoto.isVideo()) {
       return;
     }
@@ -356,7 +358,7 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
   }
 
   public showLigthbox(photo: MediaDTO) {
-    this.setZoom(1);
+    this.Zoom = 1;
     this.controllersVisible = true;
     this.showControls();
     this.status = LightboxStates.Open;
@@ -447,7 +449,7 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
   }
 
   private hideLigthbox() {
-    this.setZoom(1);
+    this.Zoom = 1;
     this.controllersVisible = false;
     this.status = LightboxStates.Closing;
     this.fullScreenService.exitFullScreen();
