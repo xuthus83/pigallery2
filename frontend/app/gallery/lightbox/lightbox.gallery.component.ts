@@ -428,6 +428,12 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
           this.fullScreenService.showFullScreen(this.root.nativeElement);
         }
         break;
+      case '-':
+        this.zoomOut();
+        break;
+      case '+':
+        this.zoomIn();
+        break;
       case 'c':
       case 'C':
         this.controllersAlwaysOn = !this.controllersAlwaysOn;

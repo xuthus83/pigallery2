@@ -104,7 +104,7 @@
         <source>download</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/gallery/lightbox/lightbox.gallery.component.html</context>
-          <context context-type="linenumber">27</context>
+          <context context-type="linenumber">29</context>
         </context-group>
         <target>letöltés</target>
       </trans-unit>
@@ -112,7 +112,7 @@
         <source>info key: i</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/gallery/lightbox/lightbox.gallery.component.html</context>
-          <context context-type="linenumber">31</context>
+          <context context-type="linenumber">33</context>
         </context-group>
         <target>info gyorsgomb: i</target>
       </trans-unit>
@@ -120,11 +120,11 @@
         <source>toggle fullscreen, key: f</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/gallery/lightbox/lightbox.gallery.component.html</context>
-          <context context-type="linenumber">38</context>
+          <context context-type="linenumber">40</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/gallery/lightbox/lightbox.gallery.component.html</context>
-          <context context-type="linenumber">47</context>
+          <context context-type="linenumber">49</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/gallery/map/lightbox/lightbox.map.gallery.component.html</context>
@@ -140,7 +140,7 @@
         <source>close, key: Escape</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/gallery/lightbox/lightbox.gallery.component.html</context>
-          <context context-type="linenumber">54</context>
+          <context context-type="linenumber">56</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/gallery/map/lightbox/lightbox.map.gallery.component.html</context>
@@ -152,7 +152,7 @@
         <source>key: left arrow</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/gallery/lightbox/lightbox.gallery.component.html</context>
-          <context context-type="linenumber">68</context>
+          <context context-type="linenumber">74</context>
         </context-group>
         <target>gyorsgomb: balra nyíl</target>
       </trans-unit>
@@ -160,9 +160,25 @@
         <source>key: right arrow</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/gallery/lightbox/lightbox.gallery.component.html</context>
-          <context context-type="linenumber">72</context>
+          <context context-type="linenumber">78</context>
         </context-group>
         <target>gyorsgomb: jobbra nyíl</target>
+      </trans-unit>
+      <trans-unit id="49ff0cc3911a77da18c69b07229b401f12102904" datatype="html">
+        <source>Zoom out, key: '-'</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/gallery/lightbox/lightbox.gallery.component.html</context>
+          <context context-type="linenumber">84</context>
+        </context-group>
+        <target>Kicsinyítés, gyorsgomb: '-'</target>
+      </trans-unit>
+      <trans-unit id="b0bf8edbb5f9dc62365ecf63a317ae0e21faac73" datatype="html">
+        <source>Zoom in, key: '+'</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/gallery/lightbox/lightbox.gallery.component.html</context>
+          <context context-type="linenumber">91</context>
+        </context-group>
+        <target>Nagyítás, gyorsgomb: '+'</target>
       </trans-unit>
       <trans-unit id="7e892ba15f2c6c17e83510e273b3e10fc32ea016" datatype="html">
         <source>Search</source>

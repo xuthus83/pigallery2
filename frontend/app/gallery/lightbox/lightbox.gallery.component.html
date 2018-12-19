@@ -81,14 +81,15 @@
 
     <div class="controls controls-zoom row" *ngIf="zoom > 1">
       <div class="col-1 col-md-4">
-        <span (click)="zoomOut()" class="oi oi-zoom-out float-right"></span>
+        <span (click)="zoomOut()" i18n-title title="Zoom out, key: '-'"
+              class="oi oi-zoom-out float-right"></span>
       </div>
-
       <input type="range"
-             [(ngModel)]="Zoom"  min="1" [max]="MAX_ZOOM" step="0.1"
+             [(ngModel)]="Zoom" min="1" [max]="MAX_ZOOM" step="0.1"
              value="1" class="col-10 col-md-4 zoom-progress">
       <div class="col-1 col-md-4">
-        <span (click)="zoomIn()" class="oi oi-zoom-in float-left"></span>
+        <span (click)="zoomIn()" i18n-title title="Zoom in, key: '+'"
+              class="oi oi-zoom-in float-left"></span>
       </div>
     </div>
 
