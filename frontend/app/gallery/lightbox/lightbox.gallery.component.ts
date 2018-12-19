@@ -43,7 +43,7 @@ export enum PlayBackStates {
 })
 export class GalleryLightboxComponent implements OnDestroy, OnInit {
 
-  readonly MAX_ZOOM=10;
+  readonly MAX_ZOOM = 10;
 
   @ViewChild('photo') mediaElement: GalleryLightboxMediaComponent;
   @ViewChild('lightbox') lightboxElement: ElementRef;
@@ -187,7 +187,11 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
       return;
     }
     this.showControls();
-    this.setZoom(this.zoom + ($event.deltaY < 0 ? this.zoom / 10 : -this.zoom / 10));
+    if ($event.deltaY < 0) {
+      this.zoomIn();
+    } else {
+      this.zoomOut();
+    }
   }
 
   @HostListener('pinch', ['$event'])
@@ -227,6 +231,17 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
       this.prevZoom = this.zoom;
       return;
     }
+  }
+
+  zoomIn() {
+    this.showControls();
+    this.setZoom(this.zoom + this.zoom / 10);
+
+  }
+
+  zoomOut() {
+    this.showControls();
+    this.setZoom(this.zoom - this.zoom / 10);
   }
 
 
@@ -300,7 +315,7 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
       this.zoom = 1;
     }
     if (this.zoom > this.MAX_ZOOM) {
-      this.zoom =  this.MAX_ZOOM;
+      this.zoom = this.MAX_ZOOM;
     }
     fixDrag(this.drag);
     fixDrag(this.prevDrag);

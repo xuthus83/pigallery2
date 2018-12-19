@@ -204,15 +204,39 @@ app-info-panel {
   bottom: 0;
   position: absolute;
   margin-bottom: 10px;
+  margin-right: 0;
+  margin-left: 0;
 }
 
 .zoom-progress-wrapper {
+  margin-top: 3px;
   height: 11px;
   border: 1px solid white;
   padding: 0;
 }
 
-.zoom-progress {
-  height: 10px;
-  background: white;
+
+
+
+input[type="range"].zoom-progress {
+  height: 11px;
+  margin-top: 3px;
+  border: 1px solid white;
+  background: transparent;
+  padding: 0;
+}
+
+input[type="range"].zoom-progress::-webkit-slider-runnable-track {
+  background: transparent;
+}
+
+input[type="range"].zoom-progress::-moz-range-track {
+  background: transparent;
+}
+
+
+
+
+.controls-zoom .oi {
+  cursor: pointer;
 }
