@@ -6,6 +6,7 @@ import {AutoCompleteItem, SearchTypes} from '../../../common/entities/AutoComple
 import {SearchResultDTO} from '../../../common/entities/SearchResultDTO';
 import {MediaDTO} from '../../../common/entities/MediaDTO';
 import {DataStructureVersion} from '../../../common/DataStructureVersion';
+import {SortingMethods} from '../../../common/entities/SortingMethods';
 
 interface CacheItem<T> {
   timestamp: number;
@@ -15,12 +16,13 @@ interface CacheItem<T> {
 @Injectable()
 export class GalleryCacheService {
 
-  private static CONTENT_PREFIX = 'content:';
-  private static AUTO_COMPLETE_PREFIX = 'autocomplete:';
-  private static INSTANT_SEARCH_PREFIX = 'instant_search:';
-  private static SEARCH_PREFIX = 'search:';
-  private static SEARCH_TYPE_PREFIX = ':type:';
-  private static VERSION = 'version';
+  private static readonly CONTENT_PREFIX = 'content:';
+  private static readonly AUTO_COMPLETE_PREFIX = 'autocomplete:';
+  private static readonly INSTANT_SEARCH_PREFIX = 'instant_search:';
+  private static readonly SEARCH_PREFIX = 'search:';
+  private static readonly SORTING_PREFIX = 'sorting:';
+  private static readonly SEARCH_TYPE_PREFIX = ':type:';
+  private static readonly VERSION = 'version';
 
   constructor() {
     const version = parseInt(localStorage.getItem(GalleryCacheService.VERSION), 10) || 0;
@@ -39,6 +41,36 @@ export class GalleryCacheService {
     }
   }
 
+
+  public getSorting(dir: DirectoryDTO): SortingMethods {
+    const key = GalleryCacheService.SORTING_PREFIX + dir.path + '/' + dir.name;
+    const tmp = localStorage.getItem(key);
+    if (tmp != null) {
+      return parseInt(tmp, 10);
+    }
+    return null;
+  }
+
+  public removeSorting(dir: DirectoryDTO) {
+    try {
+      const key = GalleryCacheService.SORTING_PREFIX + dir.path + '/' + dir.name;
+      localStorage.removeItem(key);
+    } catch (e) {
+      this.reset();
+      console.error(e);
+    }
+  }
+
+  public setSorting(dir: DirectoryDTO, sorting: SortingMethods): SortingMethods {
+    try {
+      const key = GalleryCacheService.SORTING_PREFIX + dir.path + '/' + dir.name;
+      localStorage.setItem(key, sorting.toString());
+    } catch (e) {
+      this.reset();
+      console.error(e);
+    }
+    return null;
+  }
 
   public getAutoComplete(text: string): AutoCompleteItem[] {
     const key = GalleryCacheService.AUTO_COMPLETE_PREFIX + text;

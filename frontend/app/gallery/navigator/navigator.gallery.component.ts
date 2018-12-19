@@ -22,10 +22,11 @@ export class GalleryNavigatorComponent implements OnChanges {
   @Input() directory: DirectoryDTO;
   @Input() searchResult: SearchResultDTO;
 
-  routes: Array<NavigatorPath> = [];
+  routes: NavigatorPath[] = [];
   SortingMethods = SortingMethods;
   sortingMethodsType: { key: number; value: string }[] = [];
   config = Config;
+  DefaultSorting = Config.Client.Other.defaultPhotoSortingMethod;
 
   readonly SearchTypes = SearchTypes;
 

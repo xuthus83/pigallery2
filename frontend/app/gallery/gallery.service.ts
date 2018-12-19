@@ -44,6 +44,26 @@ export class GalleryService {
 
   setSorting(sorting: SortingMethods): void {
     this.sorting.next(sorting);
+    if (this.content.value.directory) {
+      if (sorting !== Config.Client.Other.defaultPhotoSortingMethod) {
+        this.galleryCacheService.setSorting(this.content.value.directory, sorting);
+      } else {
+        this.galleryCacheService.removeSorting(this.content.value.directory);
+      }
+    }
+  }
+
+
+  setContent(content: ContentWrapper): void {
+    this.content.next(content);
+    if (content.directory) {
+      const sort = this.galleryCacheService.getSorting(content.directory);
+      if (sort !== null) {
+        this.sorting.next(sort);
+      } else {
+        this.sorting.next(Config.Client.Other.defaultPhotoSortingMethod);
+      }
+    }
   }
 
 
@@ -54,7 +74,7 @@ export class GalleryService {
     content.searchResult = null;
 
 
-    this.content.next(content);
+    this.setContent(content);
     this.lastRequest.directory = directoryName;
 
     const params: { [key: string]: any } = {};
@@ -87,7 +107,7 @@ export class GalleryService {
       DirectoryDTO.addReferences(<DirectoryDTO>cw.directory);
 
       this.lastDirectory = <DirectoryDTO>cw.directory;
-      this.content.next(cw);
+      this.setContent(cw);
     } catch (e) {
       console.error(e);
       this.navigationService.toGallery().catch(console.error);
@@ -105,7 +125,7 @@ export class GalleryService {
     this.ongoingSearch = {text: text, type: type};
 
 
-    this.content.next(new ContentWrapper());
+    this.setContent(new ContentWrapper());
     const cw = new ContentWrapper();
     cw.searchResult = this.galleryCacheService.getSearch(text, type);
     if (cw.searchResult == null) {
@@ -124,13 +144,13 @@ export class GalleryService {
       }
       this.galleryCacheService.setSearch(text, type, cw.searchResult);
     }
-    this.content.next(cw);
+    this.setContent(cw);
   }
 
   public async instantSearch(text: string, type?: SearchTypes): Promise<ContentWrapper> {
     if (text === null || text === '' || text.trim() === '.') {
       const content = new ContentWrapper(this.lastDirectory);
-      this.content.next(content);
+      this.setContent(content);
       if (this.searchId != null) {
         clearTimeout(this.searchId);
       }
@@ -168,7 +188,7 @@ export class GalleryService {
         this.galleryCacheService.setInstantSearch(text, cw.searchResult);
       }
     }
-    this.content.next(cw);
+    this.setContent(cw);
 
     // if instant search do not have a result, do not do a search
     if (cw.searchResult.media.length === 0 && cw.searchResult.directories.length === 0) {
