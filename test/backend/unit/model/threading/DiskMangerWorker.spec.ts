@@ -11,10 +11,10 @@ describe('DiskMangerWorker', () => {
     Config.Server.imagesFolder = path.join(__dirname, '/../../assets');
     ProjectPath.ImageFolder = path.join(__dirname, '/../../assets');
     const dir = await DiskMangerWorker.scanDirectory('/');
-    expect(dir.media.length).to.be.equals(1);
+    expect(dir.media.length).to.be.equals(2);
     expect(dir.media[0].name).to.be.equals('test image öüóőúéáű-.,.jpg');
     expect((<PhotoDTO>dir.media[0]).metadata.keywords).to.deep.equals(['Berkley', 'USA', 'űáéúőóüö ŰÁÉÚŐÓÜÖ']);
-    expect(dir.media[0].metadata.fileSize).to.deep.equals(62392);
+    expect(dir.media[0].metadata.fileSize).to.deep.equals(62786);
     expect(dir.media[0].metadata.size).to.deep.equals({width: 140, height: 93});
     expect((<PhotoDTO>dir.media[0]).metadata.cameraData).to.deep.equals({
       ISO: 3200,
@@ -32,7 +32,7 @@ describe('DiskMangerWorker', () => {
         longitude: -122.25678,
         altitude: 102.4498997995992
       },
-      country: 'mmóüöúőűáé ÓÜÖÚŐŰÁÉmm-.,|\\mm\u0000',
+      country: 'mmóüöúőűáé ÓÜÖÚŐŰÁÉmm-.,|\\mm',
       state: 'óüöúőűáé ÓÜÖÚŐŰÁ',
       city: 'óüöúőűáé ÓÜÖÚŐŰÁ'
     });

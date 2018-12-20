@@ -12,10 +12,10 @@ export interface PhotoDTO extends MediaDTO {
 }
 
 export interface PhotoMetadata extends MediaMetadata {
-  caption: string;
-  keywords: Array<string>;
-  cameraData: CameraMetadata;
-  positionData: PositionMetaData;
+  caption?: string;
+  keywords?: string[];
+  cameraData?: CameraMetadata;
+  positionData?: PositionMetaData;
   orientation: OrientationTypes;
   size: MediaDimension;
   creationDate: number;
