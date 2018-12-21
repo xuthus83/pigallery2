@@ -16,11 +16,11 @@ Live Demo @ heroku: https://pigallery2.herokuapp.com/
  - the demo page **first load** might take up **30s**: the time while the free webservice boots up
 
 ## Table of contents
-1. [Getting started](#1.-getting-started-on-raspberry-pi)
-2. [Translate the page to your own language](#1.-translate-the-page-to-your-own-language)
-3. [Feature list](#3.-feature-list)
-4. [Known errors](#4.-known-errors)
-5. [Credits](#5.-credits) 
+1. [Getting started](#1-getting-started-on-raspberry-pi)
+2. [Translate the page to your own language](#2-translate-the-page-to-your-own-language)
+3. [Feature list](#3-feature-list)
+4. [Known errors](#4-known-errors)
+5. [Credits](#5-credits) 
 
 
 
@@ -111,7 +111,7 @@ apt-get install build-essential  libkrb5-dev gcc g++
 
 
 ## 2. Translate the page to your own language
-1. [Install Pigallery2](1.1.1-b-install-from-source) from source (with the release it won't work) 
+1. [Install Pigallery2](#111-b-install-from-source) from source (with the release it won't work) 
 2. add your language e.g: fr
    ```bash
    npm run add-translation -- --fr
@@ -127,7 +127,7 @@ apt-get install build-essential  libkrb5-dev gcc g++
    ```
 5. (optional) create a pull request at github to add your translation to the project.
 
-**Note**: you can also build your own release with `npm run build-release` as described in `1.1.1-b Install from source`;
+**Note**: you can also build your own release with as described in [1.1.1-b Install from source](#111-b-install-from-source);
 
 
 
