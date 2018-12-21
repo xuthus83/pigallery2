@@ -67,8 +67,8 @@ export class MetadataLoader {
 
         const data = Buffer.allocUnsafe(Config.Server.photoMetadataSize);
         fs.read(fd, data, 0, Config.Server.photoMetadataSize, 0, (err) => {
+          fs.closeSync(fd);
           if (err) {
-            fs.closeSync(fd);
             return reject({file: fullPath, error: err});
           }
           const metadata: PhotoMetadata = {
@@ -157,10 +157,8 @@ export class MetadataLoader {
 
             metadata.creationDate = metadata.creationDate || 0;
 
-            fs.closeSync(fd);
             return resolve(metadata);
           } catch (err) {
-            fs.closeSync(fd);
             return reject({file: fullPath, error: err});
           }
         });

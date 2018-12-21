@@ -165,6 +165,7 @@ export class ImageRendererFactory {
 
   public static Sharp() {
     const sharp = require('sharp');
+    sharp.cache(false);
     return async (input: RendererInput): Promise<void> => {
 
       Logger.silly('[SharpThRenderer] rendering thumbnail:' + input.mediaPath);

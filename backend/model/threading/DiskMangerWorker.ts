@@ -72,7 +72,6 @@ export class DiskMangerWorker {
         if (err) {
           return reject(err);
         }
-
         try {
           for (let i = 0; i < list.length; i++) {
             const file = list[i];

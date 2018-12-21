@@ -2,7 +2,7 @@ import {expect} from 'chai';
 import * as fs from 'fs';
 import * as path from 'path';
 import {Config} from '../../../../../common/config/private/Config';
-import {DatabaseType} from '../../../../../common/config/private/IPrivateConfig';
+import {DatabaseType, ReIndexingSensitivity} from '../../../../../common/config/private/IPrivateConfig';
 import {SQLConnection} from '../../../../../backend/model/sql/SQLConnection';
 import {GalleryManager} from '../../../../../backend/model/sql/GalleryManager';
 import {DirectoryDTO} from '../../../../../common/entities/DirectoryDTO';
@@ -228,5 +228,57 @@ describe('GalleryManager', () => {
     const selected = await gm.selectParentDir(conn, subDir.name, subDir.path);
     expect(selected.media.length).to.deep.equal(subDir.media.length);
   })).timeout(20000);
+
+  describe('Test listDirectory', () => {
+    const statSync = fs.statSync;
+    let dirTime = 0;
+    const indexedTime = {
+      lastScanned: 0,
+      lastModified: 0
+    };
+
+    beforeEach(() => {
+      dirTime = 0;
+      indexedTime.lastModified = 0;
+      indexedTime.lastScanned = 0;
+    });
+
+    afterEach(() => {
+      // @ts-ignore
+      fs.statSync = statSync;
+    });
+
+    it('with re indexing severity low', async () => {
+      Config.Server.indexing.reIndexingSensitivity = ReIndexingSensitivity.low;
+
+      // @ts-ignore
+      fs.statSync = () => ({ctime: new Date(dirTime), mtime: new Date(dirTime)});
+      const gm = new GalleryManagerTest();
+      gm.selectParentDir = (connection: Connection, directoryName: string, directoryParent: string) => {
+        return Promise.resolve(<any>indexedTime);
+      };
+      gm.fillParentDir = (connection: Connection, dir: DirectoryEntity) => {
+        return Promise.resolve();
+      };
+
+      gm.indexDirectory = (...args) => {
+        return <any>Promise.resolve('indexing');
+      };
+
+      indexedTime.lastScanned = null;
+      expect(await gm.listDirectory('./')).to.be.equal('indexing');
+      indexedTime.lastModified = 0;
+      dirTime = 1;
+      expect(await gm.listDirectory('./')).to.be.equal('indexing');
+      indexedTime.lastScanned = 10;
+      indexedTime.lastModified = 1;
+      dirTime = 1;
+      expect(await gm.listDirectory('./')).to.be.equal(indexedTime);
+      expect(await gm.listDirectory('./', 1, 10))
+        .to.be.equal(null);
+
+
+    });
+  });
 
 });

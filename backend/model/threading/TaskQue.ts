@@ -53,6 +53,10 @@ export class TaskQue<I, O> {
   }
 
   public ready(task: TaskQueEntry<I, O>): void {
-    this.processing.slice(this.processing.indexOf(task), 1);
+    const index = this.processing.indexOf(task);
+    if (index === -1) {
+      throw new Error('Task does not exist');
+    }
+    this.processing.splice(index, 1);
   }
 }

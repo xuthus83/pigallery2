@@ -23,11 +23,7 @@ describe('TaskQue', () => {
     tq.add(2);
     const task = tq.get();
     tq.ready(task);
-    try {
-      tq.ready(task);
-      expect(false).to.be.equal(true); // should not reach
-    } catch (e) {
-      expect(e).not.to.be.equal(null);
-    }
+    expect(tq.isEmpty()).to.be.equal(true);
+    expect(tq.ready.bind(tq, task)).to.be.throw('Task does not exist');
   });
 });

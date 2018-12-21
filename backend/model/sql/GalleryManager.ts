@@ -88,7 +88,6 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
 
 
     const dir = await this.selectParentDir(connection, directoryName, directoryParent);
-
     if (dir && dir.lastScanned != null) {
       // If it seems that the content did not changed, do not work on it
       if (knownLastModified && knownLastScanned
@@ -102,25 +101,25 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
           return null;
         }
       }
-      await this.fillParentDir(connection, dir);
 
 
       if (dir.lastModified !== lastModified) {
         return this.indexDirectory(relativeDirectoryName);
       }
 
+
       // not indexed since a while, index it in a lazy manner
       if ((Date.now() - dir.lastScanned > Config.Server.indexing.cachedFolderTimeout &&
         Config.Server.indexing.reIndexingSensitivity >= ReIndexingSensitivity.medium) ||
         Config.Server.indexing.reIndexingSensitivity >= ReIndexingSensitivity.high) {
         // on the fly reindexing
+
         this.indexDirectory(relativeDirectoryName).catch((err) => {
           console.error(err);
         });
       }
+      await this.fillParentDir(connection, dir);
       return dir;
-
-
     }
 
     // never scanned (deep indexed), do it and return with it
@@ -275,7 +274,7 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
             delete directory.media;
             await directoryRepository.save(directory);
           }
-        } else { //dir does not exists yet
+        } else { // dir does not exists yet
           scannedDirectory.directories[i].parent = currentDir;
           (<DirectoryEntity>scannedDirectory.directories[i]).lastScanned = null; // new child dir, not fully scanned yet
           const d = await directoryRepository.save(<DirectoryEntity>scannedDirectory.directories[i]);
@@ -375,7 +374,7 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
 
   async countMediaSize(): Promise<number> {
     const connection = await SQLConnection.getConnection();
-    let {sum} = await connection.getRepository(MediaEntity)
+    const {sum} = await connection.getRepository(MediaEntity)
       .createQueryBuilder('media')
       .select('SUM(media.metadata.fileSize)', 'sum')
       .getRawOne();
