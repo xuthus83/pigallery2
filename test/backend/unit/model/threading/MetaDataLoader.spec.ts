@@ -8,8 +8,8 @@ describe('MetadataLoader', () => {
   it('should load png', async () => {
     const data = await MetadataLoader.loadPhotoMetadata(path.join(__dirname, '/../../assets/test_png.png'));
     expect(Utils.clone(data)).to.be.deep.equal(Utils.clone({
-      creationDate: 1545342192328,
-      fileSize: 2110,
+      creationDate: 1545435746672,
+      fileSize: 2155,
       orientation: 1,
       size: {
         height: 26,
