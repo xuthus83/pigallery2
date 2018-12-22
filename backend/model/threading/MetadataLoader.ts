@@ -81,6 +81,7 @@ export class MetadataLoader {
 
             try {
               const stat = fs.statSync(fullPath);
+              console.log(stat);
               metadata.fileSize = stat.size;
               metadata.creationDate = stat.ctime.getTime();
             } catch (err) {

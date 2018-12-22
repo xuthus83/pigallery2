@@ -7,8 +7,8 @@ describe('MetadataLoader', () => {
 
   it('should load png', async () => {
     const data = await MetadataLoader.loadPhotoMetadata(path.join(__dirname, '/../../assets/test_png.png'));
+    delete data.creationDate; // creation time for png not supported
     expect(Utils.clone(data)).to.be.deep.equal(Utils.clone({
-      creationDate: 1545435746672,
       fileSize: 2155,
       orientation: 1,
       size: {
