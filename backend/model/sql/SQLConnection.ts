@@ -28,7 +28,7 @@ export class SQLConnection {
   public static async getConnection(): Promise<Connection> {
     if (this.connection == null) {
       const options: any = this.getDriver(Config.Server.database);
-   //   options.name = 'main';
+      //   options.name = 'main';
       options.entities = [
         UserEntity,
         FileEntity,
@@ -101,10 +101,18 @@ export class SQLConnection {
     }
     version.version = DataStructureVersion;
 
-
+    const users = await connection.getRepository(UserEntity).find();
     await connection.dropDatabase();
     await connection.synchronize();
     await connection.getRepository(VersionEntity).save(version);
+    try {
+      await connection.getRepository(UserEntity).save(users);
+    } catch (e) {
+      await connection.dropDatabase();
+      await connection.synchronize();
+      await connection.getRepository(VersionEntity).save(version);
+      Logger.warn('Could not move users to the new db scheme, deleting them. Details:' + e.toString());
+    }
   }
 
   private static getDriver(config: DataBaseConfig): ConnectionOptions {
