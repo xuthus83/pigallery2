@@ -220,7 +220,6 @@ export class GalleryMapLightboxComponent implements OnChanges, AfterViewInit {
     return window.innerHeight;
   }
 
-  //noinspection JSUnusedGlobalSymbols
   @HostListener('window:keydown', ['$event'])
   onKeyPress(e: KeyboardEvent) {
     if (this.visible !== true) {

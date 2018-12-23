@@ -5,7 +5,7 @@
        [style.transform]="ImageTransform"
        [src]="thumbnailSrc"/>
 
-  <img *ngIf="gridMedia !== null && gridMedia.isPhoto() && loadMedia && photoSrc"
+  <img *ngIf="gridMedia !== null && gridMedia.isPhoto() && photoSrc"
        [style.width.%]="imageSize.width"
        [style.height.%]="imageSize.height"
        [style.transform]="ImageTransform"
@@ -14,14 +14,14 @@
        (load)="onImageLoad()"
        (error)="onImageError()"/>
 
-  <video #video
-         *ngIf="gridMedia !== null && gridMedia.isVideo() && loadMedia"
+  <video *ngIf="gridMedia !== null && gridMedia.isVideo() && loadMedia"
          [style.width.%]="imageSize.width"
          [style.height.%]="imageSize.height"
          (loadstart)="onImageLoad()"
          autoplay
          (error)="onImageError()"
-         (timeupdate)="onVideoProgress()">
+         (timeupdate)="onVideoProgress()"
+         #video>
     <source [src]="gridMedia.getPhotoPath()" type="{{getVideoType()}}">
   </video>
 

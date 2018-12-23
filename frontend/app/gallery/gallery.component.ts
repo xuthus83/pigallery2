@@ -3,7 +3,6 @@ import {AuthenticationService} from '../model/network/authentication.service';
 import {ActivatedRoute, Params, Router} from '@angular/router';
 import {GalleryService} from './gallery.service';
 import {GalleryGridComponent} from './grid/grid.gallery.component';
-import {GallerySearchComponent} from './search/search.gallery.component';
 import {SearchTypes} from '../../../common/entities/AutoCompleteItem';
 import {Config} from '../../../common/config/public/Config';
 import {DirectoryDTO} from '../../../common/entities/DirectoryDTO';

@@ -104,7 +104,7 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
         this.onNavigateTo(params[QueryParams.gallery.photo]);
       } else if (this.status === LightboxStates.Open) {
         this.delayedMediaShow = null;
-        this.hideLigthbox();
+        this.hideLightbox();
       }
     });
   }
@@ -391,7 +391,6 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
     this.showPhoto(this.gridPhotoQL.toArray().indexOf(selectedPhoto), false);
   }
 
-  //noinspection JSUnusedGlobalSymbols
   @HostListener('window:keydown', ['$event'])
   onKeyPress(e: KeyboardEvent) {
     if (this.status !== LightboxStates.Open) {
@@ -454,7 +453,7 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
       {queryParams: this.queryService.getParams()}).catch(console.error);
   }
 
-  private hideLigthbox() {
+  private hideLightbox() {
     this.Zoom = 1;
     this.controllersVisible = false;
     this.status = LightboxStates.Closing;
@@ -487,9 +486,9 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
 
   animatePhoto(from: Dimension, to: Dimension = from): AnimationPlayer {
     const elem = this._builder.build([
-      style(<any>Dimension.toString(from)),
+      style(Dimension.toString(from)),
       animate(300,
-        style(<any>Dimension.toString(to)))
+        style(Dimension.toString(to)))
     ])
       .create(this.mediaElement.elementRef.nativeElement);
     elem.play();
@@ -503,9 +502,9 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
     height: this.getPhotoFrameHeight()
   }, to: Dimension = from): AnimationPlayer {
     const elem = this._builder.build([
-      style(<any>Dimension.toString(from)),
+      style(Dimension.toString(from)),
       animate(300,
-        style(<any>Dimension.toString(to)))
+        style(Dimension.toString(to)))
     ])
       .create(this.lightboxElement.nativeElement);
     elem.play();
