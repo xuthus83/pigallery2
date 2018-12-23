@@ -1,6 +1,6 @@
-import {Component, Input, OnChanges} from '@angular/core';
+import {Component, HostListener, Input, OnChanges} from '@angular/core';
 import {DirectoryDTO} from '../../../../common/entities/DirectoryDTO';
-import {RouterLink} from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 import {UserDTO} from '../../../../common/entities/UserDTO';
 import {AuthenticationService} from '../../model/network/authentication.service';
 import {I18n} from '@ngx-translate/i18n-polyfill';
@@ -11,6 +11,7 @@ import {SortingMethods} from '../../../../common/entities/SortingMethods';
 import {Config} from '../../../../common/config/public/Config';
 import {SearchResultDTO} from '../../../../common/entities/SearchResultDTO';
 import {SearchTypes} from '../../../../common/entities/AutoCompleteItem';
+import {LightboxStates} from '../lightbox/lightbox.gallery.component';
 
 @Component({
   selector: 'app-gallery-navbar',
@@ -33,6 +34,7 @@ export class GalleryNavigatorComponent implements OnChanges {
   constructor(private _authService: AuthenticationService,
               public queryService: QueryService,
               public galleryService: GalleryService,
+              private router: Router,
               private i18n: I18n) {
     this.sortingMethodsType = Utils.enumToArray(SortingMethods);
   }
@@ -93,7 +95,20 @@ export class GalleryNavigatorComponent implements OnChanges {
   get ItemCount(): number {
     return (this.directory || this.searchResult).media.length;
   }
+/*
 
+  @HostListener('window:keydown', ['$event'])
+  onKeyPress(e: KeyboardEvent) {
+    if (this.routes.length < 2) {
+      return;
+    }
+    const event: KeyboardEvent = window.event ? <any>window.event : e;
+    if (event.altKey === true && event.key === 'ArrowUp') {
+      const path = this.routes[this.routes.length - 2];
+      this.router.navigate(['/gallery', path.route],
+        {queryParams: this.queryService.getParams()}).catch(console.error);
+    }
+  }*/
 }
 
 interface NavigatorPath {
