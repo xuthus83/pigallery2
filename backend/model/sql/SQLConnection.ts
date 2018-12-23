@@ -101,7 +101,11 @@ export class SQLConnection {
     }
     version.version = DataStructureVersion;
 
-    const users = await connection.getRepository(UserEntity).find();
+    let users: UserEntity[] = [];
+    try {
+      users = await connection.getRepository(UserEntity).createQueryBuilder('user').getMany();
+    } catch (ex) {
+    }
     await connection.dropDatabase();
     await connection.synchronize();
     await connection.getRepository(VersionEntity).save(version);

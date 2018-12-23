@@ -16,6 +16,8 @@ import {
   PositionMetaDataEntity
 } from '../../../../../backend/model/sql/enitites/PhotoEntity';
 import {MediaDimensionEntity} from '../../../../../backend/model/sql/enitites/MediaEntity';
+import {DataStructureVersion} from '../../../../../common/DataStructureVersion';
+import {VersionEntity} from '../../../../../backend/model/sql/enitites/VersionEntity';
 
 describe('Typeorm integration', () => {
 
@@ -103,6 +105,25 @@ describe('Typeorm integration', () => {
     d.metadata = m;
     return d;
   };
+
+  it('should migrate users', async () => {
+    const conn = await SQLConnection.getConnection();
+    const a = new UserEntity();
+    a.name = 'migrated admin';
+    a.password = PasswordHelper.cryptPassword('Test admin');
+    a.role = UserRoles.Admin;
+    await conn.getRepository(UserEntity).save(a);
+
+    const version = await conn.getRepository(VersionEntity).findOne();
+    version.version--;
+    await conn.getRepository(VersionEntity).save(version);
+
+    await SQLConnection.close();
+
+    const conn2 = await SQLConnection.getConnection();
+    const admins = await conn2.getRepository(UserEntity).find({name: 'migrated admin'});
+    expect(admins.length).to.be.equal(1);
+  });
 
   it('should open and close connection', async () => {
     const conn = await SQLConnection.getConnection();
