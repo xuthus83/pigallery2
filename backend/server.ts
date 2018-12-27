@@ -40,7 +40,7 @@ export class Server {
       throw error;
     }
 
-    const bind = 'Port ' + Config.Server.port;
+    const bind = Config.Server.host + ':' + Config.Server.port;
 
     // handle specific listen error with friendly messages
     switch (error.code) {
@@ -138,7 +138,7 @@ export class Server {
     this.server = _http.createServer(this.app);
 
     // Listen on provided PORT, on all network interfaces.
-    this.server.listen(Config.Server.port);
+    this.server.listen(Config.Server.port, Config.Server.host);
     this.server.on('error', this.onError);
     this.server.on('listening', this.onListening);
 

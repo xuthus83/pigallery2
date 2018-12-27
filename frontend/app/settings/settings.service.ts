@@ -71,7 +71,8 @@ export class SettingsService {
           updateTimeout: 2000
         },
         imagesFolder: '',
-        port: 80,
+	port: 80,
+	host: '0.0.0.0',
         thumbnail: {
           folder: '',
           qualityPriority: true,

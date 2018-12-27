@@ -58,6 +58,7 @@ export interface ThreadingConfig {
 
 export interface ServerConfig {
   port: number;
+  host: string;
   imagesFolder: string;
   thumbnail: ThumbnailConfig;
   threading: ThreadingConfig;
