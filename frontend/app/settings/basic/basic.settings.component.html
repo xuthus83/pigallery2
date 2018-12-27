@@ -16,6 +16,18 @@
                  name="applicationTitle" required>
         </div>
       </div>
+
+      <div class="form-group row" [hidden]="simplifiedMode">
+        <label class="col-md-2 control-label" for="host" i18n>Host</label>
+        <div class="col-md-10">
+          <input type="text" class="form-control" placeholder="0.0.0.0"
+                 id="host"
+                 [(ngModel)]="settings.host"
+                 name="host" required>
+          <small class="form-text text-muted" i18n>Server will accept connections from this IPv6 or IPv4 address.</small>
+        </div>
+      </div>
+
       <div class="form-group row" [hidden]="simplifiedMode">
         <label class="col-md-2 control-label" for="port" i18n>Port</label>
         <div class="col-md-10">

@@ -180,14 +180,6 @@
         </context-group>
         <target>Nagyítás, gyorsgomb: '+'</target>
       </trans-unit>
-      <trans-unit id="7e892ba15f2c6c17e83510e273b3e10fc32ea016" datatype="html">
-        <source>Search</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/gallery/search/search.gallery.component.html</context>
-          <context context-type="linenumber">6</context>
-        </context-group>
-        <target>Keresés</target>
-      </trans-unit>
       <trans-unit id="f3cda2936c4e70d5b920b2c243ec634222743ba1" datatype="html">
         <source>Link availability</source>
         <context-group purpose="location">
@@ -229,6 +221,14 @@
           <context context-type="linenumber">48</context>
         </context-group>
         <target>Kijelentkezés</target>
+      </trans-unit>
+      <trans-unit id="7e892ba15f2c6c17e83510e273b3e10fc32ea016" datatype="html">
+        <source>Search</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/gallery/search/search.gallery.component.html</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+        <target>Keresés</target>
       </trans-unit>
       <trans-unit id="0bd8b27f60a1f098a53e06328426d818e3508ff9" datatype="html">
         <source>Share</source>
@@ -564,6 +564,10 @@
           <context context-type="sourcefile">app/settings/database/database.settings.component.html</context>
           <context context-type="linenumber">19</context>
         </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/settings/basic/basic.settings.component.html</context>
+          <context context-type="linenumber">21</context>
+        </context-group>
         <target>Host</target>
       </trans-unit>
       <trans-unit id="fb324ec7da611c6283caa6fc6257c39a56d6aaf7" datatype="html">
@@ -681,7 +685,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/basic/basic.settings.component.html</context>
-          <context context-type="linenumber">79</context>
+          <context context-type="linenumber">94</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/other/other.settings.component.html</context>
@@ -722,7 +726,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/basic/basic.settings.component.html</context>
-          <context context-type="linenumber">82</context>
+          <context context-type="linenumber">97</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/other/other.settings.component.html</context>
@@ -1028,11 +1032,19 @@
         </context-group>
         <target>Oldal címe</target>
       </trans-unit>
+      <trans-unit id="497b92e92e1682d5c9bf9fee8801d601b17d0833" datatype="html">
+        <source>Server will accept connections from this IPv6 or IPv4 address.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/settings/basic/basic.settings.component.html</context>
+          <context context-type="linenumber">30</context>
+        </context-group>
+        <target>A szerver csak erről az (IPv6 vagy az IPv4) címből származó kapcsolatokat fog fogadni.</target>
+      </trans-unit>
       <trans-unit id="cb2741a46e3560f6bc6dfd99d385e86b08b26d72" datatype="html">
         <source>Port</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/basic/basic.settings.component.html</context>
-          <context context-type="linenumber">20</context>
+          <context context-type="linenumber">35</context>
         </context-group>
         <target>Port</target>
       </trans-unit>
@@ -1040,7 +1052,7 @@
         <source>Port number. Port 80 is usually what you need.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/basic/basic.settings.component.html</context>
-          <context context-type="linenumber">29</context>
+          <context context-type="linenumber">44</context>
         </context-group>
         <target>Portszám. A 80-as port általában az, amire szükséged van.</target>
       </trans-unit>
@@ -1048,7 +1060,7 @@
         <source>Images folder</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/basic/basic.settings.component.html</context>
-          <context context-type="linenumber">34</context>
+          <context context-type="linenumber">49</context>
         </context-group>
         <target>Képek mappa</target>
       </trans-unit>
@@ -1056,7 +1068,7 @@
         <source>Images are loaded from this folder (read permission required)</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/basic/basic.settings.component.html</context>
-          <context context-type="linenumber">40</context>
+          <context context-type="linenumber">55</context>
         </context-group>
         <target>A képek ebből a mappából töltődnek be (olvasási engedély szükséges a mappára)</target>
       </trans-unit>
@@ -1064,7 +1076,7 @@
         <source>Page public url</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/basic/basic.settings.component.html</context>
-          <context context-type="linenumber">45</context>
+          <context context-type="linenumber">60</context>
         </context-group>
         <target>Oldal nyilvános url-je</target>
       </trans-unit>
@@ -1074,7 +1086,7 @@
           </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/basic/basic.settings.component.html</context>
-          <context context-type="linenumber">52</context>
+          <context context-type="linenumber">67</context>
         </context-group>
         <target>Ha az oldalt a helyi hálózaton keresztül éred el, jó tudni a nyilvánosságot URL-t megosztási link létrehozásához</target>
       </trans-unit>
@@ -1082,7 +1094,7 @@
         <source>Url Base</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/basic/basic.settings.component.html</context>
-          <context context-type="linenumber">59</context>
+          <context context-type="linenumber">74</context>
         </context-group>
         <target>Al cím</target>
       </trans-unit>
@@ -1093,7 +1105,7 @@
           </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/basic/basic.settings.component.html</context>
-          <context context-type="linenumber">66</context>
+          <context context-type="linenumber">81</context>
         </context-group>
         <target>Ha a galériát egy al-url alatt érheti el (például: http://mydomain.com/myGallery), állítsa be itt. Ha nem működik, akkor hiányozhat a "/" a kezdetétől url.</target>
       </trans-unit>
@@ -1103,7 +1115,7 @@
       </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings/basic/basic.settings.component.html</context>
-          <context context-type="linenumber">73</context>
+          <context context-type="linenumber">88</context>
         </context-group>
         <target>A nyilvános url és az al url nem eggyeznek meg. Néhány funkció lehet hogy nem fog működni.</target>
       </trans-unit>

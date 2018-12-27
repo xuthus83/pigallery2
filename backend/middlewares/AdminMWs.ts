@@ -305,6 +305,7 @@ export class AdminMWs {
       const settings: BasicConfigDTO = req.body.settings;
       await ConfigDiagnostics.testImageFolder(settings.imagesFolder);
       Config.Server.port = settings.port;
+      Config.Server.host = settings.host;
       Config.Server.imagesFolder = settings.imagesFolder;
       Config.Client.publicUrl = settings.publicUrl;
       Config.Client.urlBase = settings.urlBase;
@@ -312,6 +313,7 @@ export class AdminMWs {
       // only updating explicitly set config (not saving config set by the diagnostics)
       const original = Config.original();
       original.Server.port = settings.port;
+      original.Server.host = settings.host;
       original.Server.imagesFolder = settings.imagesFolder;
       original.Client.publicUrl = settings.publicUrl;
       original.Client.urlBase = settings.urlBase;

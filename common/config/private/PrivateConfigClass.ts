@@ -2,7 +2,6 @@ import {PublicConfigClass} from '../public/ConfigClass';
 import {DatabaseType, IPrivateConfig, ReIndexingSensitivity, ServerConfig, ThumbnailProcessingLib} from './IPrivateConfig';
 import * as path from 'path';
 import {ConfigLoader} from 'typeconfig';
-import {UserService} from '../../../frontend/app/model/network/user.service';
 import {Utils} from '../../Utils';
 import {UserRoles} from '../../entities/UserDTO';
 

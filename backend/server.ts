@@ -2,6 +2,7 @@ import * as _express from 'express';
 import * as _bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
 import * as _http from 'http';
+import {Server as HttpServer} from 'http';
 // @ts-ignore
 import * as locale from 'locale';
 import {PublicRouter} from './routes/PublicRouter';
@@ -29,7 +30,7 @@ const LOG_TAG = '[server]';
 export class Server {
 
   private app: _express.Express;
-  private server: any;
+  private server: HttpServer;
 
   /**
    * Event listener for HTTP server "error" event.

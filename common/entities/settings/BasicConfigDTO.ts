@@ -4,4 +4,5 @@ export interface BasicConfigDTO {
   urlBase: string;
   applicationTitle: string;
   port: number;
+  host: string;
 }
