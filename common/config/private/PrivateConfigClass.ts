@@ -13,6 +13,7 @@ export class PrivateConfigClass extends PublicConfigClass implements IPrivateCon
 
   public Server: ServerConfig = {
     port: 80,
+    host: '0.0.0.0',
     imagesFolder: 'demo/images',
     thumbnail: {
       folder: 'demo/TEMP',
