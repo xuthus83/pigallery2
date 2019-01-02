@@ -36,7 +36,7 @@ export class PublicRouter {
         }
       }
       if (selectedLocale !== 'en') {
-        localePath = req['locale'];
+        localePath = selectedLocale;
       }
       res.cookie(CookieNames.lang, selectedLocale);
       req['localePath'] = localePath;
