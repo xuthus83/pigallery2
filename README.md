@@ -12,7 +12,7 @@ Homepage: http://bpatrik.github.io/pigallery2/
 This is a directory-first photo gallery website, optimised for running on low resource servers (especially on raspberry pi)
 
 ## Live Demo
-Live Demo @ heroku: https://pigallery2.herokuapp.com/ (not available until 01/01/2019)
+Live Demo @ heroku: https://pigallery2.herokuapp.com/ 
  - the demo page **first load** might take up **30s**: the time while the free webservice boots up
 
 ## Table of contents
