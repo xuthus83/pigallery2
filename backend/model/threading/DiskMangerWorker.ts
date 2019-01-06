@@ -1,4 +1,5 @@
 import * as fs from 'fs';
+import {Stats} from 'fs';
 import * as path from 'path';
 import {DirectoryDTO} from '../../../common/entities/DirectoryDTO';
 import {PhotoDTO} from '../../../common/entities/PhotoDTO';
@@ -49,8 +50,17 @@ export class DiskMangerWorker {
     return this.SupportedEXT.metaFile.indexOf(extension) !== -1;
   }
 
+  public static calcLastModified(stat: Stats) {
+    return Math.max(stat.ctime.getTime(), stat.mtime.getTime());
+  }
+
+  public static normalizeDirPath(dirPath: string) {
+    return path.normalize(path.join('.' + path.sep, dirPath));
+  }
+
   public static scanDirectory(relativeDirectoryName: string, maxPhotos: number = null, photosOnly: boolean = false): Promise<DirectoryDTO> {
     return new Promise<DirectoryDTO>((resolve, reject) => {
+      relativeDirectoryName = this.normalizeDirPath(relativeDirectoryName);
       const directoryName = path.basename(relativeDirectoryName);
       const directoryParent = path.join(path.dirname(relativeDirectoryName), path.sep);
       const absoluteDirectoryName = path.join(ProjectPath.ImageFolder, relativeDirectoryName);
@@ -61,10 +71,11 @@ export class DiskMangerWorker {
         parent: null,
         name: directoryName,
         path: directoryParent,
-        lastModified: Math.max(stat.ctime.getTime(), stat.mtime.getTime()),
+        lastModified: this.calcLastModified(stat),
         lastScanned: Date.now(),
         directories: [],
         isPartial: false,
+        mediaCount: 0,
         media: [],
         metaFile: []
       };
@@ -113,6 +124,8 @@ export class DiskMangerWorker {
 
             }
           }
+
+          directory.mediaCount = directory.media.length;
 
           return resolve(directory);
         } catch (err) {

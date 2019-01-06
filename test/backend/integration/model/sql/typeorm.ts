@@ -63,6 +63,7 @@ describe('Typeorm integration', () => {
     d.lastModified = Date.now();
     d.lastScanned = null;
     d.parent = null;
+    d.mediaCount = 0;
     d.media = [];
     d.directories = [];
     return d;

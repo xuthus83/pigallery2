@@ -22,6 +22,7 @@ export class TestHelper {
     const dir = new DirectoryEntity();
     dir.name = 'wars dir';
     dir.path = '.';
+    dir.mediaCount = 0;
     dir.lastModified = Date.now();
     dir.lastScanned = null;
 
@@ -68,6 +69,7 @@ export class TestHelper {
     d.name = 'test media.jpg';
     d.directory = dir;
     d.metadata = m;
+    dir.mediaCount++;
     return d;
   }
 
@@ -129,6 +131,7 @@ export class TestHelper {
       id: null,
       name: forceStr || Math.random().toString(36).substring(7),
       path: '.',
+      mediaCount: 0,
       directories: [],
       metaFile: [],
       media: [],

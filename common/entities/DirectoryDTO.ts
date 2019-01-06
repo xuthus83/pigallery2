@@ -10,7 +10,8 @@ export interface DirectoryDTO {
   lastScanned: number;
   isPartial?: boolean;
   parent: DirectoryDTO;
-  directories: Array<DirectoryDTO>;
+  mediaCount: number;
+  directories: DirectoryDTO[];
   media: MediaDTO[];
   metaFile: FileDTO[];
 }

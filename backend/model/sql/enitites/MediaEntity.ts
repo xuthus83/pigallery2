@@ -1,10 +1,8 @@
-import {Column, Entity, ManyToOne, PrimaryGeneratedColumn, TableInheritance, Unique} from 'typeorm';
+import {Column, Entity, ManyToOne, PrimaryGeneratedColumn, TableInheritance, Unique, Index} from 'typeorm';
 import {DirectoryEntity} from './DirectoryEntity';
 import {MediaDimension, MediaDTO, MediaMetadata} from '../../../../common/entities/MediaDTO';
 import {OrientationTypes} from 'ts-exif-parser';
 import {CameraMetadataEntity, PositionMetaDataEntity} from './PhotoEntity';
-import {FileEntity} from './FileEntity';
-
 
 export class MediaDimensionEntity implements MediaDimension {
 
@@ -55,12 +53,14 @@ export class MediaMetadataEntity implements MediaMetadata {
 @TableInheritance({column: {type: 'varchar', name: 'type'}})
 export abstract class MediaEntity implements MediaDTO {
 
+  @Index()
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column('text')
   name: string;
 
+  @Index()
   @ManyToOne(type => DirectoryEntity, directory => directory.media, {onDelete: 'CASCADE'})
   directory: DirectoryEntity;
 

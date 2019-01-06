@@ -1,4 +1,4 @@
-import {Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, Unique} from 'typeorm';
+import {Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, Unique, Index} from 'typeorm';
 import {DirectoryDTO} from '../../../../common/entities/DirectoryDTO';
 import {MediaEntity} from './MediaEntity';
 import {FileEntity} from './FileEntity';
@@ -7,12 +7,15 @@ import {FileEntity} from './FileEntity';
 @Unique(['name', 'path'])
 export class DirectoryEntity implements DirectoryDTO {
 
+  @Index()
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Index()
   @Column()
   name: string;
 
+  @Index()
   @Column()
   path: string;
 
@@ -30,6 +33,10 @@ export class DirectoryEntity implements DirectoryDTO {
 
   isPartial?: boolean;
 
+  @Column('smallint')
+  mediaCount: number;
+
+  @Index()
   @ManyToOne(type => DirectoryEntity, directory => directory.directories, {onDelete: 'CASCADE'})
   public parent: DirectoryEntity;
 
@@ -38,7 +45,6 @@ export class DirectoryEntity implements DirectoryDTO {
 
   @OneToMany(type => MediaEntity, media => media.directory)
   public media: MediaEntity[];
-
 
   @OneToMany(type => FileEntity, file => file.directory)
   public metaFile: FileEntity[];

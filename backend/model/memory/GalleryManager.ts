@@ -7,6 +7,7 @@ import {ProjectPath} from '../../ProjectPath';
 import {Config} from '../../../common/config/private/Config';
 import {ReIndexingSensitivity} from '../../../common/config/private/IPrivateConfig';
 import {PhotoDTO} from '../../../common/entities/PhotoDTO';
+import {DiskMangerWorker} from '../threading/DiskMangerWorker';
 
 export class GalleryManager implements IGalleryManager {
 
@@ -14,7 +15,7 @@ export class GalleryManager implements IGalleryManager {
     // If it seems that the content did not changed, do not work on it
     if (knownLastModified && knownLastScanned) {
       const stat = fs.statSync(path.join(ProjectPath.ImageFolder, relativeDirectoryName));
-      const lastModified = Math.max(stat.ctime.getTime(), stat.mtime.getTime());
+      const lastModified = DiskMangerWorker.calcLastModified(stat);
       if (Date.now() - knownLastScanned <= Config.Server.indexing.cachedFolderTimeout &&
         lastModified === knownLastModified &&
         Config.Server.indexing.reIndexingSensitivity < ReIndexingSensitivity.high) {

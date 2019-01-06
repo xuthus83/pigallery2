@@ -119,6 +119,15 @@ export class IndexingSettingsComponent extends SettingsComponent<IndexingConfig,
     return false;
   }
 
+  get TimeLeft() {
+    const prg = this._settingsService.progress.value;
+    return (prg.time.current - prg.time.start) / prg.indexed * prg.left;
+  }
+  get TimeElapsed() {
+    const prg = this._settingsService.progress.value;
+    return (prg.time.current - prg.time.start);
+  }
+
   async cancelIndexing() {
     this.inProgress = true;
     this.error = '';

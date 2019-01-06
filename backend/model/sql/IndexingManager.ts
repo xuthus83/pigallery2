@@ -17,7 +17,7 @@ const LOG_TAG = '[IndexingManager]';
 
 export class IndexingManager implements IIndexingManager {
   directoriesToIndex: string[] = [];
-  indexingProgress: { current: string, left: number, indexed: number } = null;
+  indexingProgress: IndexingProgressDTO = null;
   enabled = false;
   private indexNewDirectory = async (createThumbnails: boolean = false) => {
     if (this.directoriesToIndex.length === 0) {
@@ -35,6 +35,7 @@ export class IndexingManager implements IIndexingManager {
       return;
     }
     this.indexingProgress.indexed++;
+    this.indexingProgress.time.current = Date.now();
     for (let i = 0; i < scanned.directories.length; i++) {
       this.directoriesToIndex.push(path.join(scanned.directories[i].path, scanned.directories[i].name));
     }
@@ -71,10 +72,14 @@ export class IndexingManager implements IIndexingManager {
   startIndexing(createThumbnails: boolean = false): void {
     if (this.directoriesToIndex.length === 0 && this.enabled === false) {
       Logger.info(LOG_TAG, 'Starting indexing');
-      this.indexingProgress = <IndexingProgressDTO>{
+      this.indexingProgress = {
         indexed: 0,
         left: 0,
-        current: ''
+        current: '',
+        time: {
+          start: Date.now(),
+          current: Date.now()
+        }
       };
       this.directoriesToIndex.push('/');
       this.enabled = true;

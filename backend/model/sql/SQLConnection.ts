@@ -40,7 +40,7 @@ export class SQLConnection {
         VersionEntity
       ];
       options.synchronize = false;
-      // options.logging = 'all';
+    //  options.logging = 'all';
       this.connection = await createConnection(options);
       await SQLConnection.schemeSync(this.connection);
     }

@@ -1,5 +1,5 @@
 import {AuthenticationMWs} from '../middlewares/user/AuthenticationMWs';
-import {Express} from 'express';
+import {Express, NextFunction, Request, Response} from 'express';
 import {GalleryMWs} from '../middlewares/GalleryMWs';
 import {RenderingMWs} from '../middlewares/RenderingMWs';
 import {ThumbnailGeneratorMWs} from '../middlewares/thumbnail/ThumbnailGeneratorMWs';

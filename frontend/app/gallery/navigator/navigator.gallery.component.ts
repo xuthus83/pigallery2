@@ -28,6 +28,7 @@ export class GalleryNavigatorComponent implements OnChanges {
   sortingMethodsType: { key: number; value: string }[] = [];
   config = Config;
   DefaultSorting = Config.Client.Other.defaultPhotoSortingMethod;
+  private readonly RootFolderName: string;
 
   readonly SearchTypes = SearchTypes;
 
@@ -37,6 +38,7 @@ export class GalleryNavigatorComponent implements OnChanges {
               private router: Router,
               private i18n: I18n) {
     this.sortingMethodsType = Utils.enumToArray(SortingMethods);
+    this.RootFolderName = this.i18n('Images');
   }
 
 
@@ -67,9 +69,9 @@ export class GalleryNavigatorComponent implements OnChanges {
 
     // create root link
     if (dirs.length === 0) {
-      arr.push({name: this.i18n('Images'), route: null});
+      arr.push({name: this.RootFolderName, route: null});
     } else {
-      arr.push({name: this.i18n('Images'), route: UserDTO.isPathAvailable('/', user.permissions) ? '/' : null});
+      arr.push({name: this.RootFolderName, route: UserDTO.isPathAvailable('/', user.permissions) ? '/' : null});
     }
 
     // create rest navigation
@@ -93,22 +95,23 @@ export class GalleryNavigatorComponent implements OnChanges {
   }
 
   get ItemCount(): number {
-    return (this.directory || this.searchResult).media.length;
+    return this.directory ? this.directory.mediaCount : this.searchResult.media.length;
   }
-/*
 
-  @HostListener('window:keydown', ['$event'])
-  onKeyPress(e: KeyboardEvent) {
-    if (this.routes.length < 2) {
-      return;
-    }
-    const event: KeyboardEvent = window.event ? <any>window.event : e;
-    if (event.altKey === true && event.key === 'ArrowUp') {
-      const path = this.routes[this.routes.length - 2];
-      this.router.navigate(['/gallery', path.route],
-        {queryParams: this.queryService.getParams()}).catch(console.error);
-    }
-  }*/
+  /*
+
+    @HostListener('window:keydown', ['$event'])
+    onKeyPress(e: KeyboardEvent) {
+      if (this.routes.length < 2) {
+        return;
+      }
+      const event: KeyboardEvent = window.event ? <any>window.event : e;
+      if (event.altKey === true && event.key === 'ArrowUp') {
+        const path = this.routes[this.routes.length - 2];
+        this.router.navigate(['/gallery', path.route],
+          {queryParams: this.queryService.getParams()}).catch(console.error);
+      }
+    }*/
 }
 
 interface NavigatorPath {

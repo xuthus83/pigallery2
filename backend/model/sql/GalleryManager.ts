@@ -20,6 +20,10 @@ import {VideoEntity} from './enitites/VideoEntity';
 import {FileEntity} from './enitites/FileEntity';
 import {FileDTO} from '../../../common/entities/FileDTO';
 import {NotificationManager} from '../NotifocationManager';
+import {DiskMangerWorker} from '../threading/DiskMangerWorker';
+import {Logger} from '../../Logger';
+
+const LOG_TAG = '[GalleryManager]';
 
 export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
 
@@ -79,12 +83,12 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
                              knownLastModified?: number,
                              knownLastScanned?: number): Promise<DirectoryDTO> {
 
-    relativeDirectoryName = path.normalize(path.join('.' + path.sep, relativeDirectoryName));
+    relativeDirectoryName = DiskMangerWorker.normalizeDirPath(relativeDirectoryName);
     const directoryName = path.basename(relativeDirectoryName);
     const directoryParent = path.join(path.dirname(relativeDirectoryName), path.sep);
     const connection = await SQLConnection.getConnection();
     const stat = fs.statSync(path.join(ProjectPath.ImageFolder, relativeDirectoryName));
-    const lastModified = Math.max(stat.ctime.getTime(), stat.mtime.getTime());
+    const lastModified = DiskMangerWorker.calcLastModified(stat);
 
 
     const dir = await this.selectParentDir(connection, directoryName, directoryParent);
@@ -104,6 +108,8 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
 
 
       if (dir.lastModified !== lastModified) {
+        Logger.silly(LOG_TAG, 'Reindexing reason: lastModified mismatch: known: '
+          + dir.lastModified + ', current:' + lastModified);
         return this.indexDirectory(relativeDirectoryName);
       }
 
@@ -114,6 +120,8 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
         Config.Server.indexing.reIndexingSensitivity >= ReIndexingSensitivity.high) {
         // on the fly reindexing
 
+        Logger.silly(LOG_TAG, 'lazy reindexing reason: cache timeout: lastScanned: '
+          + (Date.now() - dir.lastScanned) + ', cachedFolderTimeout:' + Config.Server.indexing.cachedFolderTimeout);
         this.indexDirectory(relativeDirectoryName).catch((err) => {
           console.error(err);
         });
@@ -123,6 +131,7 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
     }
 
     // never scanned (deep indexed), do it and return with it
+    Logger.silly(LOG_TAG, 'Reindexing reason: never scanned');
     return this.indexDirectory(relativeDirectoryName);
 
 
@@ -244,9 +253,9 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
       if (!!currentDir) {// Updated parent dir (if it was in the DB previously)
         currentDir.lastModified = scannedDirectory.lastModified;
         currentDir.lastScanned = scannedDirectory.lastScanned;
+        currentDir.mediaCount = scannedDirectory.mediaCount;
         currentDir = await directoryRepository.save(currentDir);
       } else {
-        (<DirectoryEntity>scannedDirectory).lastScanned = scannedDirectory.lastScanned;
         currentDir = await directoryRepository.save(<DirectoryEntity>scannedDirectory);
       }
 
