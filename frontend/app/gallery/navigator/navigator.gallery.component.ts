@@ -11,7 +11,6 @@ import {SortingMethods} from '../../../../common/entities/SortingMethods';
 import {Config} from '../../../../common/config/public/Config';
 import {SearchResultDTO} from '../../../../common/entities/SearchResultDTO';
 import {SearchTypes} from '../../../../common/entities/AutoCompleteItem';
-import {LightboxStates} from '../lightbox/lightbox.gallery.component';
 
 @Component({
   selector: 'app-gallery-navbar',

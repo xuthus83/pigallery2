@@ -3,8 +3,7 @@ import {
   LOCALE_ID,
   NgModule,
   TRANSLATIONS,
-  TRANSLATIONS_FORMAT,
-  MissingTranslationStrategy
+  TRANSLATIONS_FORMAT
 } from '@angular/core';
 import {BrowserModule, HAMMER_GESTURE_CONFIG, HammerGestureConfig} from '@angular/platform-browser';
 import {FormsModule} from '@angular/forms';
@@ -63,7 +62,7 @@ import {HttpClientModule} from '@angular/common/http';
 import {DefaultUrlSerializer, UrlSerializer, UrlTree} from '@angular/router';
 import {IndexingSettingsComponent} from './settings/indexing/indexing.settings.component';
 import {LanguageComponent} from './language/language.component';
-import {I18n, MISSING_TRANSLATION_STRATEGY} from '@ngx-translate/i18n-polyfill';
+import {I18n} from '@ngx-translate/i18n-polyfill';
 import {QueryService} from './model/query.service';
 import {IconizeSortingMethod} from './pipes/IconizeSortingMethod';
 import {StringifySortingMethod} from './pipes/StringifySortingMethod';
@@ -87,7 +86,6 @@ export class MyHammerConfig extends HammerGestureConfig {
     pinch: {enable: true}
   };
 }
-
 
 
 export class CustomUrlSerializer implements UrlSerializer {
@@ -197,13 +195,8 @@ export function translationsFactory(locale: string) {
       useFactory: translationsFactory,
       deps: [LOCALE_ID]
     },
-    I18n,
-
-    {provide: TRANSLATIONS, useValue: translationsFactory('en')},
     {provide: TRANSLATIONS_FORMAT, useValue: 'xlf'},
-    {provide: LOCALE_ID, useValue: 'en'},
-    {provide: MISSING_TRANSLATION_STRATEGY, useValue: MissingTranslationStrategy.Ignore},
-
+    I18n
   ],
   bootstrap: [AppComponent]
 })

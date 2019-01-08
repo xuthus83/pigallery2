@@ -13,7 +13,7 @@
     "pretest": "tsc",
     "test": "ng test && mocha --recursive test/backend/unit && mocha --recursive test/backend/integration  && mocha --recursive test/common/unit ",
     "start": "node ./backend/index",
-    "run-dev": "ng build --aot --watch --output-path=./dist --i18n-locale en --i18n-format xlf --i18n-file frontend/translate/messages.en.xlf --i18n-missing-translation warning",
+    "run-dev": "ng build --aot --watch --output-path=./dist --i18n-locale en --i18n-file frontend/translate/messages.en.xlf --i18n-missing-translation warning",
     "update-translation": "gulp update-translation",
     "add-translation": "gulp add-translation"
   },
