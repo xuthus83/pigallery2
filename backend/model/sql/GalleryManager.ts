@@ -5,13 +5,13 @@ import * as fs from 'fs';
 import {DirectoryEntity} from './enitites/DirectoryEntity';
 import {SQLConnection} from './SQLConnection';
 import {DiskManager} from '../DiskManger';
-import {PhotoEntity} from './enitites/PhotoEntity';
+import {PhotoEntity, PhotoMetadataEntity} from './enitites/PhotoEntity';
 import {Utils} from '../../../common/Utils';
 import {ProjectPath} from '../../ProjectPath';
 import {Config} from '../../../common/config/private/Config';
 import {ISQLGalleryManager} from './IGalleryManager';
 import {DatabaseType, ReIndexingSensitivity} from '../../../common/config/private/IPrivateConfig';
-import {PhotoDTO} from '../../../common/entities/PhotoDTO';
+import {FaceRegion, PhotoDTO, PhotoMetadata} from '../../../common/entities/PhotoDTO';
 import {OrientationType} from '../../../common/entities/RandomQueryDTO';
 import {Brackets, Connection, Transaction, TransactionRepository, Repository} from 'typeorm';
 import {MediaEntity} from './enitites/MediaEntity';
@@ -22,6 +22,8 @@ import {FileDTO} from '../../../common/entities/FileDTO';
 import {NotificationManager} from '../NotifocationManager';
 import {DiskMangerWorker} from '../threading/DiskMangerWorker';
 import {Logger} from '../../Logger';
+import {FaceRegionEntry} from './enitites/FaceRegionEntry';
+import {PersonEntry} from './enitites/PersonEntry';
 
 const LOG_TAG = '[GalleryManager]';
 
@@ -50,11 +52,23 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
 
   protected async fillParentDir(connection: Connection, dir: DirectoryEntity): Promise<void> {
     if (dir.media) {
+      const indexedFaces = await connection.getRepository(FaceRegionEntry)
+        .createQueryBuilder('face')
+        .leftJoinAndSelect('face.media', 'media')
+        .where('media.directory = :directory', {
+          directory: dir.id
+        })
+        .leftJoinAndSelect('face.person', 'person')
+        .getMany();
       for (let i = 0; i < dir.media.length; i++) {
         dir.media[i].directory = dir;
         dir.media[i].readyThumbnails = [];
         dir.media[i].readyIcon = false;
+        (<PhotoDTO>dir.media[i]).metadata.faces = indexedFaces
+          .filter(fe => fe.media.id === dir.media[i].id)
+          .map(f => ({box: f.box, name: f.person.name}));
       }
+
     }
     if (dir.directories) {
       for (let i = 0; i < dir.directories.length; i++) {
@@ -235,6 +249,7 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
   }
 
   protected async saveToDB(scannedDirectory: DirectoryDTO) {
+    console.log('saving');
     this.isSaving = true;
     try {
       const connection = await SQLConnection.getConnection();
@@ -259,7 +274,7 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
         currentDir = await directoryRepository.save(<DirectoryEntity>scannedDirectory);
       }
 
-
+      // TODO: fix when first opened directory is not root
       // save subdirectories
       const childDirectories = await directoryRepository.createQueryBuilder('directory')
         .where('directory.parent = :dir', {
@@ -299,10 +314,11 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
       await directoryRepository.remove(childDirectories, {chunk: Math.max(Math.ceil(childDirectories.length / 500), 1)});
 
       // save media
-      const indexedMedia = await mediaRepository.createQueryBuilder('media')
+      const indexedMedia = (await mediaRepository.createQueryBuilder('media')
         .where('media.directory = :dir', {
           dir: currentDir.id
-        }).getMany();
+        })
+        .getMany());
 
 
       const mediaToSave = [];
@@ -315,18 +331,30 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
             break;
           }
         }
+
+
         if (media == null) { // not in DB yet
           scannedDirectory.media[i].directory = null;
           media = Utils.clone(scannedDirectory.media[i]);
           scannedDirectory.media[i].directory = scannedDirectory;
           media.directory = currentDir;
           mediaToSave.push(media);
-        } else if (!Utils.equalsFilter(media.metadata, scannedDirectory.media[i].metadata)) {
-          media.metadata = scannedDirectory.media[i].metadata;
-          mediaToSave.push(media);
+        } else {
+          delete (<PhotoMetadata>media.metadata).faces;
+
+          if (!Utils.equalsFilter(media.metadata, scannedDirectory.media[i].metadata)) {
+            media.metadata = scannedDirectory.media[i].metadata;
+            mediaToSave.push(media);
+          }
         }
+        const scannedFaces = (<PhotoMetadata>scannedDirectory.media[i].metadata).faces;
+        delete (<PhotoMetadata>scannedDirectory.media[i].metadata).faces;
+
+        const mediaEntry = await this.saveAMedia(connection, media);
+
+        await this.saveFaces(connection, mediaEntry, scannedFaces);
       }
-      await this.saveMedia(connection, mediaToSave);
+      // await this.saveMedia(connection, mediaToSave);
       await mediaRepository.remove(indexedMedia);
 
 
@@ -362,6 +390,64 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
     } finally {
       this.isSaving = false;
     }
+  }
+
+  protected async saveFaces(connection: Connection, media: MediaEntity, scannedFaces: FaceRegion[]) {
+
+    const faceRepository = connection.getRepository(FaceRegionEntry);
+    const personRepository = connection.getRepository(PersonEntry);
+    const indexedPersons = await personRepository.createQueryBuilder('person').getMany();
+
+    const indexedFaces = await faceRepository.createQueryBuilder('face')
+      .where('face.media = :media', {
+        media: media.id
+      })
+      .leftJoinAndSelect('face.person', 'person')
+      .getMany();
+
+
+    const getPerson = async (name: string) => {
+      let person = indexedPersons.find(p => p.name === name);
+      if (!person) {
+        person = <any>await personRepository.save({name: name});
+        indexedPersons.push(person);
+      }
+      return person;
+    };
+
+    const faceToSave = [];
+    for (let i = 0; i < scannedFaces.length; i++) {
+      let face: FaceRegionEntry = null;
+      for (let j = 0; j < indexedFaces.length; j++) {
+        if (indexedFaces[j].box.height === scannedFaces[i].box.height &&
+          indexedFaces[j].box.width === scannedFaces[i].box.width &&
+          indexedFaces[j].box.x === scannedFaces[i].box.x &&
+          indexedFaces[j].box.y === scannedFaces[i].box.y &&
+          indexedFaces[j].person.name === scannedFaces[i].name) {
+          face = indexedFaces[j];
+          indexedFaces.splice(j, 1);
+          break;
+        }
+      }
+
+      if (face == null) {
+        (<FaceRegionEntry>scannedFaces[i]).person = await getPerson(scannedFaces[i].name);
+        (<FaceRegionEntry>scannedFaces[i]).media = media;
+        //   console.log('inserting', (<FaceRegionEntry>scannedFaces[i]).person, (<FaceRegionEntry>scannedFaces[i]).media);
+        //  console.log('inserting', (<FaceRegionEntry>scannedFaces[i]).person.id, (<FaceRegionEntry>scannedFaces[i]).media.id);
+        faceToSave.push(scannedFaces[i]);
+      }
+    }
+    await faceRepository.save(faceToSave, {chunk: Math.max(Math.ceil(faceToSave.length / 500), 1)});
+    await faceRepository.remove(indexedFaces, {chunk: Math.max(Math.ceil(indexedFaces.length / 500), 1)});
+
+  }
+
+  protected async saveAMedia(connection: Connection, media: MediaDTO): Promise<MediaEntity> {
+    if (MediaDTO.isPhoto(media)) {
+      return await <any>connection.getRepository(PhotoEntity).save(media);
+    }
+    return await <any>connection.getRepository(VideoEntity).save(media);
   }
 
   protected async saveMedia(connection: Connection, mediaList: MediaDTO[]): Promise<MediaEntity[]> {

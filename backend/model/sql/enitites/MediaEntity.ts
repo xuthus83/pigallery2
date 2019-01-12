@@ -1,8 +1,9 @@
-import {Column, Entity, ManyToOne, PrimaryGeneratedColumn, TableInheritance, Unique, Index} from 'typeorm';
+import {Column, Entity, OneToMany, ManyToOne, PrimaryGeneratedColumn, TableInheritance, Unique, Index} from 'typeorm';
 import {DirectoryEntity} from './DirectoryEntity';
 import {MediaDimension, MediaDTO, MediaMetadata} from '../../../../common/entities/MediaDTO';
 import {OrientationTypes} from 'ts-exif-parser';
 import {CameraMetadataEntity, PositionMetaDataEntity} from './PhotoEntity';
+import {FaceRegionEntry} from './FaceRegionEntry';
 
 export class MediaDimensionEntity implements MediaDimension {
 
@@ -27,7 +28,6 @@ export class MediaMetadataEntity implements MediaMetadata {
   @Column('int')
   fileSize: number;
 
-
   @Column('simple-array')
   keywords: string[];
 
@@ -39,6 +39,9 @@ export class MediaMetadataEntity implements MediaMetadata {
 
   @Column('tinyint', {default: OrientationTypes.TOP_LEFT})
   orientation: OrientationTypes;
+
+  @OneToMany(type => FaceRegionEntry, faceRegion => faceRegion.media)
+  faces: FaceRegionEntry[];
 
   @Column('int')
   bitRate: number;

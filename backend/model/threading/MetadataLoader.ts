@@ -1,5 +1,5 @@
 import {VideoMetadata} from '../../../common/entities/VideoDTO';
-import {PhotoMetadata} from '../../../common/entities/PhotoDTO';
+import {FaceRegion, PhotoMetadata} from '../../../common/entities/PhotoDTO';
 import {Config} from '../../../common/config/private/Config';
 import {Logger} from '../../Logger';
 import * as fs from 'fs';
@@ -8,6 +8,14 @@ import {OrientationTypes, ExifParserFactory} from 'ts-exif-parser';
 import {IptcParser} from 'ts-node-iptc';
 import {FFmpegFactory} from '../FFmpegFactory';
 import {FfprobeData} from 'fluent-ffmpeg';
+
+// TODO: fix up different metadata loaders
+// @ts-ignore
+global.DataView = require('jdataview');
+// @ts-ignore
+global.DOMParser = require('xmldom').DOMParser;
+// @ts-ignore
+const ExifReader = require('exifreader');
 
 const LOG_TAG = '[MetadataLoader]';
 const ffmpeg = FFmpegFactory.get();
@@ -156,6 +164,47 @@ export class MetadataLoader {
             }
 
             metadata.creationDate = metadata.creationDate || 0;
+
+
+            try {
+              const ret = ExifReader.load(data);
+              const faces: FaceRegion[] = [];
+              if (ret.Regions && ret.Regions.value.RegionList && ret.Regions.value.RegionList.value) {
+                for (let i = 0; i < ret.Regions.value.RegionList.value.length; i++) {
+                  if (!ret.Regions.value.RegionList.value[i].value ||
+                    !ret.Regions.value.RegionList.value[i].value['rdf:Description'] ||
+                    !ret.Regions.value.RegionList.value[i].value['rdf:Description'].value ||
+                    !ret.Regions.value.RegionList.value[i].value['rdf:Description'].value['mwg-rs:Area']) {
+                    continue;
+                  }
+                  const region = ret.Regions.value.RegionList.value[i].value['rdf:Description'];
+                  const regionBox = ret.Regions.value.RegionList.value[i].value['rdf:Description'].value['mwg-rs:Area'].attributes;
+                  if (region.attributes['mwg-rs:Type'] !== 'Face' ||
+                    !region.attributes['mwg-rs:Name']) {
+                    continue;
+                  }
+                  const name = region.attributes['mwg-rs:Name'];
+                  const box = {
+                    width: Math.round(regionBox['stArea:w'] * metadata.size.width),
+                    height: Math.round(regionBox['stArea:h'] * metadata.size.height),
+                    x: Math.round(regionBox['stArea:x'] * metadata.size.width),
+                    y: Math.round(regionBox['stArea:y'] * metadata.size.height)
+                  };
+                  faces.push({name: name, box: box});
+                }
+              }
+              if (faces.length > 0) {
+                metadata.faces = faces; // save faces
+                // remove faces from keywords
+                metadata.faces.forEach(f => {
+                  const index = metadata.keywords.indexOf(f.name);
+                  if (index !== -1) {
+                    metadata.keywords.splice(index, 1);
+                  }
+                });
+              }
+            } catch (err) {
+            }
 
             return resolve(metadata);
           } catch (err) {

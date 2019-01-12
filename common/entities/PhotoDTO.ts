@@ -11,6 +11,18 @@ export interface PhotoDTO extends MediaDTO {
   readyIcon: boolean;
 }
 
+export interface FaceRegionBox {
+  width: number;
+  height: number;
+  x: number;
+  y: number;
+}
+
+export interface FaceRegion {
+  name: string;
+  box: FaceRegionBox;
+}
+
 export interface PhotoMetadata extends MediaMetadata {
   caption?: string;
   keywords?: string[];
@@ -20,6 +32,7 @@ export interface PhotoMetadata extends MediaMetadata {
   size: MediaDimension;
   creationDate: number;
   fileSize: number;
+  faces?: FaceRegion[];
 }
 
 

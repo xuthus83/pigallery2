@@ -15,6 +15,8 @@ import {MediaEntity} from './enitites/MediaEntity';
 import {VideoEntity} from './enitites/VideoEntity';
 import {DataStructureVersion} from '../../../common/DataStructureVersion';
 import {FileEntity} from './enitites/FileEntity';
+import {FaceRegionEntry} from './enitites/FaceRegionEntry';
+import {PersonEntry} from './enitites/PersonEntry';
 
 
 export class SQLConnection {
@@ -32,6 +34,8 @@ export class SQLConnection {
       options.entities = [
         UserEntity,
         FileEntity,
+        FaceRegionEntry,
+        PersonEntry,
         MediaEntity,
         PhotoEntity,
         VideoEntity,
@@ -40,7 +44,7 @@ export class SQLConnection {
         VersionEntity
       ];
       options.synchronize = false;
-    //  options.logging = 'all';
+      options.logging = 'all';
       this.connection = await createConnection(options);
       await SQLConnection.schemeSync(this.connection);
     }
@@ -57,6 +61,8 @@ export class SQLConnection {
     options.entities = [
       UserEntity,
       FileEntity,
+      FaceRegionEntry,
+      PersonEntry,
       MediaEntity,
       PhotoEntity,
       VideoEntity,
