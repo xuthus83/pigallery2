@@ -36,7 +36,7 @@ export class GalleryRouter {
 
 
   private static addGetImage(app: Express) {
-    app.get(['/api/gallery/content/:mediaPath(*\.(jpg|bmp|png|gif|jpeg))'],
+    app.get(['/api/gallery/content/:mediaPath(*\.(jpg|jpeg|jpe|webp|png|gif|svg))'],
       AuthenticationMWs.authenticate,
       // TODO: authorize path
       GalleryMWs.loadFile,
@@ -73,7 +73,7 @@ export class GalleryRouter {
   }
 
   private static addGetImageThumbnail(app: Express) {
-    app.get('/api/gallery/content/:mediaPath(*\.(jpg|bmp|png|gif|jpeg))/thumbnail/:size?',
+    app.get('/api/gallery/content/:mediaPath(*\.(jpg|jpeg|jpe|webp|png|gif|svg))/thumbnail/:size?',
       AuthenticationMWs.authenticate,
       // TODO: authorize path
       GalleryMWs.loadFile,
@@ -93,7 +93,7 @@ export class GalleryRouter {
   }
 
   private static addGetImageIcon(app: Express) {
-    app.get('/api/gallery/content/:mediaPath(*\.(jpg|bmp|png|gif|jpeg))/icon',
+    app.get('/api/gallery/content/:mediaPath(*\.(jpg|jpeg|jpe|webp|png|gif|svg))/icon',
       AuthenticationMWs.authenticate,
       // TODO: authorize path
       GalleryMWs.loadFile,

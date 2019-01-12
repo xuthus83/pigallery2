@@ -15,14 +15,11 @@ export class DiskMangerWorker {
 
   private static readonly SupportedEXT = {
     photo: [
-      '.bmp',
       '.gif',
       '.jpeg', '.jpg', '.jpe',
       '.png',
-      '.tiff', '.tif',
       '.webp',
-      '.ico',
-      '.tga'
+      '.svg'
     ],
     video: [
       '.mp4',

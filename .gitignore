@@ -23,3 +23,7 @@ sqlite.db
 dist/
 release/
 out-tsc/
+ffmpeg/
+locale.source.xlf
+package-lock.json
+test.*

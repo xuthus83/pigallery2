@@ -133,6 +133,9 @@ apt-get install build-essential  libkrb5-dev gcc g++
 
 ## 3. Feature list
 
+ * supported formats:
+   * images: **jpg, jpeg, jpe, webp, png, gif, svg**
+   * videos: **mp4, ogg, ogv, webm**
  * **Rendering directories as it is**
    * Listing subdirectories recursively
    * Listing photos in a nice grid layout

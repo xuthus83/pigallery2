@@ -16,11 +16,17 @@
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-131201011-1"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
     gtag('js', new Date());
 
     gtag('config', 'UA-131201011-1');
   </script>
+  <!-- Place this tag in your head or just before your close body tag. -->
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
 </head>
 
 <body class="text-center">
@@ -30,8 +36,10 @@
 <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column ">
   <header class="masthead">
     <div class="inner">
-      <h3 class="masthead-brand"><img src="assets/icon_inv.png" width="30" height="30" class="d-inline-block align-top"
-                                      alt=""> PiGallery 2</h3>
+      <h3 class="masthead-brand">
+        <img src="assets/icon_inv.png" width="30" height="30" class="d-inline-block align-top"
+             alt=""> PiGallery 2
+      </h3>
       <nav class="nav nav-masthead justify-content-center">
         <a class="nav-link active" href="index.html">Features</a>
         <a class="nav-link" href="https://github.com/bpatrik/pigallery2">Install</a>
@@ -46,7 +54,17 @@
           PiGallery 2 is a self-hosted directory-first photo gallery website.
         </h3>
         <a href="https://pigallery2.herokuapp.com/">Try our live demo! <span class="small">(First load may take up 30s, while the server boots up)</span></a>
+
       </div>
+
+    </div>
+    <div class="github-button-wrapper">
+    <!-- Place this tag where you want the button to render. -->
+    <a class="github-button" href="https://github.com/bpatrik/pigallery2" data-size="large" data-icon="octicon-star"
+       data-show-count="true" aria-label="Star bpatrik/pigallery2 on GitHub">Star</a>
+    <!-- Place this tag where you want the button to render. -->
+    <a class="github-button" href="https://github.com/bpatrik/pigallery2/fork" data-size="large" data-icon="octicon-repo-forked"
+       data-show-count="true" aria-label="Fork bpatrik/pigallery2 on GitHub">Fork</a>
     </div>
     <img class="banner-photo" src="assets/main_page.jpg" style="width: 100%">
     <div class="row">
@@ -142,6 +160,12 @@
     <h3 class="section-header">All features:</h3>
     <hr/>
     <ul class="text-left">
+      <li>supported formats:
+        <ul>
+          <li>images: <strong>jpg, jpeg, jpe, webp, png, gif, svg</strong></li>
+          <li>videos: <strong>mp4, ogg, ogv, webm</strong></li>
+        </ul>
+      </li>
       <li><strong>Rendering directories as it is</strong>
         <ul>
           <li>Listing subdirectories recursively</li>
