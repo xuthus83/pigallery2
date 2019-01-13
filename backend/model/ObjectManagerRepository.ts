@@ -113,7 +113,7 @@ export class ObjectManagerRepository {
     const UserManager = require('./sql/UserManager').UserManager;
     const SearchManager = require('./sql/SearchManager').SearchManager;
     const SharingManager = require('./sql/SharingManager').SharingManager;
-    const IndexingTaskManager = require('./sql/IndexingManager').IndexingTaskManager;
+    const IndexingTaskManager = require('./sql/IndexingTaskManager').IndexingTaskManager;
     const IndexingManager = require('./sql/IndexingManager').IndexingManager;
     const PersonManager = require('./sql/PersonManager').PersonManager;
     ObjectManagerRepository.getInstance().GalleryManager = new GalleryManager();

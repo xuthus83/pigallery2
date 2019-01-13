@@ -6,6 +6,8 @@ import {PhotoEntity} from './enitites/PhotoEntity';
 import {DirectoryEntity} from './enitites/DirectoryEntity';
 import {MediaEntity} from './enitites/MediaEntity';
 import {VideoEntity} from './enitites/VideoEntity';
+import {PersonEntry} from './enitites/PersonEntry';
+import {FaceRegionEntry} from './enitites/FaceRegionEntry';
 
 export class SearchManager implements ISearchManager {
 
@@ -29,7 +31,7 @@ export class SearchManager implements ISearchManager {
     let result: AutoCompleteItem[] = [];
     const photoRepository = connection.getRepository(PhotoEntity);
     const videoRepository = connection.getRepository(VideoEntity);
-    const mediaRepository = connection.getRepository(MediaEntity);
+    const personRepository = connection.getRepository(PersonEntry);
     const directoryRepository = connection.getRepository(DirectoryEntity);
 
 
@@ -44,6 +46,14 @@ export class SearchManager implements ISearchManager {
         result = result.concat(this.encapsulateAutoComplete(keywords
           .filter(k => k.toLowerCase().indexOf(text.toLowerCase()) !== -1), SearchTypes.keyword));
       });
+
+    result = result.concat(this.encapsulateAutoComplete((await personRepository
+      .createQueryBuilder('person')
+      .select('DISTINCT(person.name)')
+      .where('person.name LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
+      .limit(5)
+      .getRawMany())
+      .map(r => r.name), SearchTypes.person));
 
     (await photoRepository
       .createQueryBuilder('photo')
@@ -112,16 +122,19 @@ export class SearchManager implements ISearchManager {
       resultOverflow: false
     };
 
-    let repostiroy = connection.getRepository(MediaEntity);
+    let repository = connection.getRepository(MediaEntity);
+    const faceRepository = connection.getRepository(FaceRegionEntry);
 
     if (searchType === SearchTypes.photo) {
-      repostiroy = connection.getRepository(PhotoEntity);
+      repository = connection.getRepository(PhotoEntity);
     } else if (searchType === SearchTypes.video) {
-      repostiroy = connection.getRepository(VideoEntity);
+      repository = connection.getRepository(VideoEntity);
     }
 
-    const query = repostiroy.createQueryBuilder('media')
-      .innerJoinAndSelect('media.directory', 'directory')
+    const query = repository.createQueryBuilder('media')
+      .leftJoinAndSelect('media.directory', 'directory')
+      .leftJoin('media.metadata.faces', 'faces')
+      .leftJoin('faces.person', 'person')
       .orderBy('media.metadata.creationDate', 'ASC');
 
 
@@ -136,6 +149,9 @@ export class SearchManager implements ISearchManager {
     if (!searchType || searchType === SearchTypes.photo) {
       query.orWhere('media.metadata.caption LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'});
     }
+    if (!searchType || searchType === SearchTypes.person) {
+      query.orWhere('person.name LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'});
+    }
 
     if (!searchType || searchType === SearchTypes.position) {
       query.orWhere('media.metadata.positionData.country LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
@@ -147,9 +163,20 @@ export class SearchManager implements ISearchManager {
       query.orWhere('media.metadata.keywords LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'});
     }
 
-    result.media = await query
-      .limit(2001)
-      .getMany();
+
+    result.media = (await query
+      .limit(5000).getMany()).slice(0, 2001);
+
+    for (let i = 0; i < result.media.length; i++) {
+      const faces = (await faceRepository
+        .createQueryBuilder('faces')
+        .leftJoinAndSelect('faces.person', 'person')
+        .where('faces.media = :media', {media: result.media[i].id})
+        .getMany()).map(fE => ({name: fE.person.name, box: fE.box}));
+      if (faces.length > 0) {
+        result.media[i].metadata.faces = faces;
+      }
+    }
 
     if (result.media.length > 2000) {
       result.resultOverflow = true;
@@ -181,6 +208,8 @@ export class SearchManager implements ISearchManager {
       resultOverflow: false
     };
 
+    const faceRepository = connection.getRepository(FaceRegionEntry);
+
     result.media = await connection
       .getRepository(MediaEntity)
       .createQueryBuilder('media')
@@ -191,10 +220,23 @@ export class SearchManager implements ISearchManager {
       .orWhere('media.metadata.positionData.city LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
       .orWhere('media.name LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
       .orWhere('media.metadata.caption LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
+      .orWhere('person.name LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
       .innerJoinAndSelect('media.directory', 'directory')
+      .leftJoin('media.metadata.faces', 'faces')
+      .leftJoin('faces.person', 'person')
       .limit(10)
       .getMany();
 
+    for (let i = 0; i < result.media.length; i++) {
+      const faces = (await faceRepository
+        .createQueryBuilder('faces')
+        .leftJoinAndSelect('faces.person', 'person')
+        .where('faces.media = :media', {media: result.media[i].id})
+        .getMany()).map(fE => ({name: fE.person.name, box: fE.box}));
+      if (faces.length > 0) {
+        result.media[i].metadata.faces = faces;
+      }
+    }
 
     result.directories = await connection
       .getRepository(DirectoryEntity)

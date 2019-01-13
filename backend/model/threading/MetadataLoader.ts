@@ -4,7 +4,7 @@ import {Config} from '../../../common/config/private/Config';
 import {Logger} from '../../Logger';
 import * as fs from 'fs';
 import * as sizeOf from 'image-size';
-import {OrientationTypes, ExifParserFactory} from 'ts-exif-parser';
+import {ExifParserFactory, OrientationTypes} from 'ts-exif-parser';
 import {IptcParser} from 'ts-node-iptc';
 import {FFmpegFactory} from '../FFmpegFactory';
 import {FfprobeData} from 'fluent-ffmpeg';
@@ -147,10 +147,16 @@ export class MetadataLoader {
 
             try {
               const iptcData = IptcParser.parse(data);
-              if (iptcData.country_or_primary_location_name || iptcData.province_or_state || iptcData.city) {
+              if (iptcData.country_or_primary_location_name) {
                 metadata.positionData = metadata.positionData || {};
                 metadata.positionData.country = iptcData.country_or_primary_location_name.replace(/\0/g, '').trim();
+              }
+              if (iptcData.province_or_state) {
+                metadata.positionData = metadata.positionData || {};
                 metadata.positionData.state = iptcData.province_or_state.replace(/\0/g, '').trim();
+              }
+              if (iptcData.city) {
+                metadata.positionData = metadata.positionData || {};
                 metadata.positionData.city = iptcData.city.replace(/\0/g, '').trim();
               }
               if (iptcData.caption) {
@@ -160,7 +166,7 @@ export class MetadataLoader {
               metadata.creationDate = <number>(iptcData.date_time ? iptcData.date_time.getTime() : metadata.creationDate);
 
             } catch (err) {
-              //  Logger.debug(LOG_TAG, 'Error parsing iptc data', fullPath, err);
+              Logger.debug(LOG_TAG, 'Error parsing iptc data', fullPath, err);
             }
 
             metadata.creationDate = metadata.creationDate || 0;
