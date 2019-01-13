@@ -1,6 +1,6 @@
 import {DirectoryDTO} from './DirectoryDTO';
 import {OrientationTypes} from 'ts-exif-parser';
-import {MediaDTO, MediaMetadata, MediaDimension} from './MediaDTO';
+import {MediaDimension, MediaDTO, MediaMetadata} from './MediaDTO';
 
 export interface PhotoDTO extends MediaDTO {
   id: number;

@@ -6,8 +6,6 @@ export interface ISQLGalleryManager extends IGalleryManager {
                 knownLastModified?: number,
                 knownLastScanned?: number): Promise<DirectoryDTO>;
 
-  indexDirectory(relativeDirectoryName: string): Promise<DirectoryDTO>;
-
   countDirectories(): Promise<number>;
 
   countPhotos(): Promise<number>;

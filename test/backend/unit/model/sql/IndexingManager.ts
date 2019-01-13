@@ -12,6 +12,9 @@ import {DirectoryEntity} from '../../../../../backend/model/sql/enitites/Directo
 import {Utils} from '../../../../../common/Utils';
 import {MediaDTO} from '../../../../../common/entities/MediaDTO';
 import {FileDTO} from '../../../../../common/entities/FileDTO';
+import {IndexingManager} from '../../../../../backend/model/sql/IndexingManager';
+import {ObjectManagerRepository} from '../../../../../backend/model/ObjectManagerRepository';
+import {PersonManager} from '../../../../../backend/model/sql/PersonManager';
 
 class GalleryManagerTest extends GalleryManager {
 
@@ -24,16 +27,21 @@ class GalleryManagerTest extends GalleryManager {
     return super.fillParentDir(connection, dir);
   }
 
-  public async saveToDB(scannedDirectory: DirectoryDTO) {
-    return super.saveToDB(scannedDirectory);
-  }
+}
+
+class IndexingManagerTest extends IndexingManager {
+
 
   public async queueForSave(scannedDirectory: DirectoryDTO): Promise<void> {
     return super.queueForSave(scannedDirectory);
   }
+
+  public async saveToDB(scannedDirectory: DirectoryDTO): Promise<void> {
+    return super.saveToDB(scannedDirectory);
+  }
 }
 
-describe('GalleryManager', () => {
+describe('IndexingManager', () => {
 
 
   const tempDir = path.join(__dirname, '../../tmp');
@@ -50,6 +58,7 @@ describe('GalleryManager', () => {
 
     Config.Server.database.type = DatabaseType.sqlite;
     Config.Server.database.sqlite.storage = dbPath;
+    ObjectManagerRepository.getInstance().PersonManager = new PersonManager();
 
   };
 
@@ -94,18 +103,19 @@ describe('GalleryManager', () => {
 
   it('should save parent directory', async () => {
     const gm = new GalleryManagerTest();
+    const im = new IndexingManagerTest();
 
     const parent = TestHelper.getRandomizedDirectoryEntry();
     const p1 = TestHelper.getRandomizedPhotoEntry(parent, 'Photo1');
     const p2 = TestHelper.getRandomizedPhotoEntry(parent, 'Photo2');
     const gpx = TestHelper.getRandomizedGPXEntry(parent, 'GPX1');
     const subDir = TestHelper.getRandomizedDirectoryEntry(parent, 'subDir');
-    const sp1 = TestHelper.getRandomizedPhotoEntry(subDir, 'subPhoto1');
-    const sp2 = TestHelper.getRandomizedPhotoEntry(subDir, 'subPhoto2');
+    const sp1 = TestHelper.getRandomizedPhotoEntry(subDir, 'subPhoto1', 0);
+    const sp2 = TestHelper.getRandomizedPhotoEntry(subDir, 'subPhoto2', 0);
 
 
     DirectoryDTO.removeReferences(parent);
-    await gm.saveToDB(Utils.clone(parent));
+    await im.saveToDB(Utils.clone(parent));
 
     const conn = await SQLConnection.getConnection();
     const selected = await gm.selectParentDir(conn, parent.name, parent.path);
@@ -122,13 +132,14 @@ describe('GalleryManager', () => {
 
   it('should skip meta files', async () => {
     const gm = new GalleryManagerTest();
+    const im = new IndexingManagerTest();
     const parent = TestHelper.getRandomizedDirectoryEntry();
     const p1 = TestHelper.getRandomizedPhotoEntry(parent, 'Photo1');
     const p2 = TestHelper.getRandomizedPhotoEntry(parent, 'Photo2');
     const gpx = TestHelper.getRandomizedGPXEntry(parent, 'GPX1');
     DirectoryDTO.removeReferences(parent);
     Config.Client.MetaFile.enabled = true;
-    await gm.saveToDB(Utils.clone(parent));
+    await im.saveToDB(Utils.clone(parent));
 
     Config.Client.MetaFile.enabled = false;
     const conn = await SQLConnection.getConnection();
@@ -144,6 +155,7 @@ describe('GalleryManager', () => {
 
   it('should update sub directory', async () => {
     const gm = new GalleryManagerTest();
+    const im = new IndexingManagerTest();
 
     const parent = TestHelper.getRandomizedDirectoryEntry();
     parent.name = 'parent';
@@ -153,13 +165,13 @@ describe('GalleryManager', () => {
     const sp1 = TestHelper.getRandomizedPhotoEntry(subDir, 'subPhoto1');
 
     DirectoryDTO.removeReferences(parent);
-    await gm.saveToDB(Utils.clone(parent));
+    await im.saveToDB(Utils.clone(parent));
 
     const sp2 = TestHelper.getRandomizedPhotoEntry(subDir, 'subPhoto2');
     const sp3 = TestHelper.getRandomizedPhotoEntry(subDir, 'subPhoto3');
 
     DirectoryDTO.removeReferences(subDir);
-    await gm.saveToDB(Utils.clone(subDir));
+    await im.saveToDB(Utils.clone(subDir));
 
     const conn = await SQLConnection.getConnection();
     const selected = await gm.selectParentDir(conn, subDir.name, subDir.path);
@@ -179,20 +191,21 @@ describe('GalleryManager', () => {
   it('should avoid race condition', async () => {
     const conn = await SQLConnection.getConnection();
     const gm = new GalleryManagerTest();
+    const im = new IndexingManagerTest();
     Config.Client.MetaFile.enabled = true;
     const parent = TestHelper.getRandomizedDirectoryEntry();
     const p1 = TestHelper.getRandomizedPhotoEntry(parent, 'Photo1');
     const p2 = TestHelper.getRandomizedPhotoEntry(parent, 'Photo2');
     const gpx = TestHelper.getRandomizedGPXEntry(parent, 'GPX1');
     const subDir = TestHelper.getRandomizedDirectoryEntry(parent, 'subDir');
-    const sp1 = TestHelper.getRandomizedPhotoEntry(subDir, 'subPhoto1');
-    const sp2 = TestHelper.getRandomizedPhotoEntry(subDir, 'subPhoto2');
+    const sp1 = TestHelper.getRandomizedPhotoEntry(subDir, 'subPhoto1', 1);
+    const sp2 = TestHelper.getRandomizedPhotoEntry(subDir, 'subPhoto2', 1);
 
 
     DirectoryDTO.removeReferences(parent);
-    const s1 = gm.queueForSave(Utils.clone(parent));
-    const s2 = gm.queueForSave(Utils.clone(parent));
-    const s3 = gm.queueForSave(Utils.clone(parent));
+    const s1 = im.queueForSave(Utils.clone(parent));
+    const s2 = im.queueForSave(Utils.clone(parent));
+    const s3 = im.queueForSave(Utils.clone(parent));
 
     await Promise.all([s1, s2, s3]);
 
@@ -204,30 +217,33 @@ describe('GalleryManager', () => {
     subDir.isPartial = true;
     delete subDir.directories;
     delete subDir.metaFile;
+    delete sp1.metadata.faces;
+    delete sp2.metadata.faces;
     expect(Utils.clone(Utils.removeNullOrEmptyObj(selected)))
       .to.deep.equal(Utils.clone(Utils.removeNullOrEmptyObj(parent)));
   });
 
 
-  (<any>it('should save 1500 photos', async () => {
+  (it('should save 1500 photos', async () => {
     const conn = await SQLConnection.getConnection();
     const gm = new GalleryManagerTest();
+    const im = new IndexingManagerTest();
     Config.Client.MetaFile.enabled = true;
     const parent = TestHelper.getRandomizedDirectoryEntry();
     DirectoryDTO.removeReferences(parent);
-    await gm.saveToDB(Utils.clone(parent));
+    await im.saveToDB(Utils.clone(parent));
     const subDir = TestHelper.getRandomizedDirectoryEntry(parent, 'subDir');
     for (let i = 0; i < 1500; i++) {
       TestHelper.getRandomizedPhotoEntry(subDir, 'p' + i);
     }
 
     DirectoryDTO.removeReferences(parent);
-    await gm.saveToDB(subDir);
+    await im.saveToDB(subDir);
 
 
     const selected = await gm.selectParentDir(conn, subDir.name, subDir.path);
     expect(selected.media.length).to.deep.equal(subDir.media.length);
-  })).timeout(20000);
+  }) as any).timeout(40000);
 
   describe('Test listDirectory', () => {
     const statSync = fs.statSync;
@@ -239,6 +255,8 @@ describe('GalleryManager', () => {
 
     beforeEach(() => {
       dirTime = 0;
+
+      ObjectManagerRepository.getInstance().IndexingManager = new IndexingManagerTest();
       indexedTime.lastModified = 0;
       indexedTime.lastScanned = 0;
     });
@@ -261,7 +279,7 @@ describe('GalleryManager', () => {
         return Promise.resolve();
       };
 
-      gm.indexDirectory = (...args) => {
+      ObjectManagerRepository.getInstance().IndexingManager.indexDirectory = (...args) => {
         return <any>Promise.resolve('indexing');
       };
 

@@ -42,7 +42,7 @@
     "ts-exif-parser": "0.1.4",
     "ts-node-iptc": "1.0.11",
     "typeconfig": "1.0.7",
-    "typeorm": "0.2.9",
+    "typeorm": "0.2.11",
     "winston": "2.4.2",
     "xmldom": "0.1.27"
   },
