@@ -36,6 +36,12 @@
             role="menu" aria-labelledby="button-basic">
           <ng-content select="[navbar-menu]"></ng-content>
           <li role="menuitem" *ngIf="isAdmin()">
+            <a class="dropdown-item" href="#" [routerLink]="['/duplicates']">
+              <span class="oi oi-layers"></span>
+              <ng-container i18n>duplicates</ng-container>
+            </a>
+          </li>
+          <li role="menuitem" *ngIf="isAdmin()">
             <a class="dropdown-item" href="#" [routerLink]="['/admin']">
               <span class="oi oi-wrench"></span>
               <span *ngIf="notificationService.notifications.length>0" class="badge">{{notificationService.notifications.length}}</span>

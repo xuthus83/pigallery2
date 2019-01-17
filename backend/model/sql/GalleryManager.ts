@@ -18,6 +18,7 @@ import {DiskMangerWorker} from '../threading/DiskMangerWorker';
 import {Logger} from '../../Logger';
 import {FaceRegionEntry} from './enitites/FaceRegionEntry';
 import {ObjectManagerRepository} from '../ObjectManagerRepository';
+import {DuplicatesDTO} from '../../../common/entities/DuplicatesDTO';
 
 const LOG_TAG = '[GalleryManager]';
 
@@ -173,7 +174,7 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
     const connection = await SQLConnection.getConnection();
     const mediaRepository = connection.getRepository(MediaEntity);
 
-    const duplicates = await mediaRepository.createQueryBuilder('media')
+    let duplicates = await mediaRepository.createQueryBuilder('media')
       .innerJoin(query => query.from(MediaEntity, 'innerMedia')
           .select(['innerMedia.name as name', 'innerMedia.metadata.fileSize as fileSize', 'count(*)'])
           .groupBy('innerMedia.name, innerMedia.metadata.fileSize')
@@ -181,7 +182,51 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
         'innerMedia',
         'media.name=innerMedia.name AND media.metadata.fileSize = innerMedia.fileSize')
       .innerJoinAndSelect('media.directory', 'directory').getMany();
-    return duplicates;
+
+    const duplicateParis: DuplicatesDTO[] = [];
+    let i = duplicates.length - 1;
+    while (i >= 0) {
+      const list = [duplicates[i]];
+      let j = i - 1;
+      while (j >= 0 && duplicates[i].name === duplicates[j].name && duplicates[i].metadata.fileSize === duplicates[j].metadata.fileSize) {
+        list.push(duplicates[j]);
+        j--;
+      }
+      i = j;
+      duplicateParis.push({media: list});
+    }
+
+
+    duplicates = await mediaRepository.createQueryBuilder('media')
+      .innerJoin(query => query.from(MediaEntity, 'innerMedia')
+          .select(['innerMedia.metadata.creationDate as creationDate', 'innerMedia.metadata.fileSize as fileSize', 'count(*)'])
+          .groupBy('innerMedia.name, innerMedia.metadata.fileSize')
+          .having('count(*)>1'),
+        'innerMedia',
+        'media.metadata.creationDate=innerMedia.creationDate AND media.metadata.fileSize = innerMedia.fileSize')
+      .innerJoinAndSelect('media.directory', 'directory').getMany();
+
+    i = duplicates.length - 1;
+    while (i >= 0) {
+      const list = [duplicates[i]];
+      let j = i - 1;
+      while (j >= 0 && duplicates[i].metadata.creationDate === duplicates[j].metadata.creationDate && duplicates[i].metadata.fileSize === duplicates[j].metadata.fileSize) {
+        list.push(duplicates[j]);
+        j--;
+      }
+      i = j;
+      if (list.filter(paired =>
+        !!duplicateParis.find(dp =>
+          !!dp.media.find(m =>
+            m.id === paired.id))).length === list.length) {
+        continue;
+      }
+
+      duplicateParis.push({media: list});
+    }
+
+
+    return duplicateParis;
 
   }
 
