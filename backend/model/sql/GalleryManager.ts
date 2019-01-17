@@ -169,6 +169,22 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
       .getCount();
   }
 
+  public async getPossibleDuplicates() {
+    const connection = await SQLConnection.getConnection();
+    const mediaRepository = connection.getRepository(MediaEntity);
+
+    const duplicates = await mediaRepository.createQueryBuilder('media')
+      .innerJoin(query => query.from(MediaEntity, 'innerMedia')
+          .select(['innerMedia.name as name', 'innerMedia.metadata.fileSize as fileSize', 'count(*)'])
+          .groupBy('innerMedia.name, innerMedia.metadata.fileSize')
+          .having('count(*)>1'),
+        'innerMedia',
+        'media.name=innerMedia.name AND media.metadata.fileSize = innerMedia.fileSize')
+      .innerJoinAndSelect('media.directory', 'directory').getMany();
+    return duplicates;
+
+  }
+
   protected async selectParentDir(connection: Connection, directoryName: string, directoryParent: string): Promise<DirectoryEntity> {
     const query = connection
       .getRepository(DirectoryEntity)
@@ -196,9 +212,9 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
           directory: dir.id
         })
         .leftJoinAndSelect('face.person', 'person')
-        .select(['face.id',  'face.box.x',
+        .select(['face.id', 'face.box.x',
           'face.box.y', 'face.box.width', 'face.box.height',
-          'media.id',  'person.name', 'person.id'])
+          'media.id', 'person.name', 'person.id'])
         .getMany();
       for (let i = 0; i < dir.media.length; i++) {
         dir.media[i].directory = dir;
@@ -231,6 +247,5 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
       }
     }
   }
-
 
 }

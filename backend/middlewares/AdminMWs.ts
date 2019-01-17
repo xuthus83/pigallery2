@@ -42,6 +42,25 @@ export class AdminMWs {
     }
   }
 
+
+  public static async getDuplicates(req: Request, res: Response, next: NextFunction) {
+    if (Config.Server.database.type === DatabaseType.memory) {
+      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, 'Statistic is only available for indexed content'));
+    }
+
+
+    const galleryManager = <ISQLGalleryManager>ObjectManagerRepository.getInstance().GalleryManager;
+    try {
+      req.resultPipe =  await galleryManager.getPossibleDuplicates();
+      return next();
+    } catch (err) {
+      if (err instanceof Error) {
+        return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, 'Error while getting duplicates: ' + err.toString(), err));
+      }
+      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, 'Error while getting duplicates', err));
+    }
+  }
+
   public static async updateDatabaseSettings(req: Request, res: Response, next: NextFunction) {
 
     if ((typeof req.body === 'undefined') || (typeof req.body.settings === 'undefined')) {

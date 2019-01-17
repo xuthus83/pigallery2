@@ -1,5 +1,6 @@
 import {DirectoryDTO} from '../../../common/entities/DirectoryDTO';
 import {IGalleryManager} from '../interfaces/IGalleryManager';
+import {MediaEntity} from './enitites/MediaEntity';
 
 export interface ISQLGalleryManager extends IGalleryManager {
   listDirectory(relativeDirectoryName: string,
@@ -13,4 +14,6 @@ export interface ISQLGalleryManager extends IGalleryManager {
   countVideos(): Promise<number>;
 
   countMediaSize(): Promise<number>;
+
+  getPossibleDuplicates(): Promise<MediaEntity[]>;
 }
