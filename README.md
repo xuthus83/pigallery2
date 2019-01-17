@@ -75,8 +75,9 @@ docker run \
    -v <path to your temp folder>:/pigallery2-release/demo/TEMP \
    bpatrik/pigallery2:1.5.5-stretch
 ```
-Make sure that a file at `<path to your config file folder>/config.json` exists before running it. 
-you do not need the `<path to your db file folder>/sqlite.db` line if you dont use sqlite database.
+Make sure that a file at `<path to your config file folder>/config.json` and `sqlite.db` files exists before running it. 
+
+You do not need the `<path to your db file folder>/sqlite.db` line if you don't use the sqlite database.
 
 After the container is up and running, you go to `http://localhost` and log in with user: `admin` pass: `admin` and set up the page in the settings. 
 
