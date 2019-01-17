@@ -129,8 +129,10 @@ hr{
   background: white;
   margin-top: 0;
 }
-
+.github-button-wrapper{
+  margin-top: 10px;
+  float: right;
+}
 .banner-photo{
-  margin-top: 30px;
   margin-bottom: 30px;
 }

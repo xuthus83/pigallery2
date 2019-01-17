@@ -70,11 +70,14 @@ docker run \
    -p 80:80 \
    -e NODE_ENV=production \
    -v <path to your config file folder>/config.json:/pigallery2-release/config.json \
+   -v <path to your db file folder>/sqlite.db:/pigallery2-release/sqlite.db \
    -v <path to your images folder>:/pigallery2-release/demo/images \
    -v <path to your temp folder>:/pigallery2-release/demo/TEMP \
    bpatrik/pigallery2:1.5.5-stretch
 ```
-Make sure that a file at `<path to your config file folder>/config.json` exists before running it. 
+Make sure that a file at `<path to your config file folder>/config.json` and `sqlite.db` files exists before running it. 
+
+You do not need the `<path to your db file folder>/sqlite.db` line if you don't use the sqlite database.
 
 After the container is up and running, you go to `http://localhost` and log in with user: `admin` pass: `admin` and set up the page in the settings. 
 
@@ -133,6 +136,9 @@ apt-get install build-essential  libkrb5-dev gcc g++
 
 ## 3. Feature list
 
+ * supported formats:
+   * images: **jpg, jpeg, jpe, webp, png, gif, svg**
+   * videos: **mp4, ogg, ogv, webm**
  * **Rendering directories as it is**
    * Listing subdirectories recursively
    * Listing photos in a nice grid layout
