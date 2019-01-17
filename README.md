@@ -73,7 +73,7 @@ docker run \
    -v <path to your db file folder>/sqlite.db:/pigallery2-release/sqlite.db \
    -v <path to your images folder>:/pigallery2-release/demo/images \
    -v <path to your temp folder>:/pigallery2-release/demo/TEMP \
-   bpatrik/pigallery2:1.5.5-stretch
+   bpatrik/pigallery2:1.5.6-stretch
 ```
 Make sure that a file at `<path to your config file folder>/config.json` and `sqlite.db` files exists before running it. 
 
