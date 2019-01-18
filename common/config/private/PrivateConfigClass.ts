@@ -45,6 +45,9 @@ export class PrivateConfigClass extends PublicConfigClass implements IPrivateCon
       folderPreviewSize: 2,
       cachedFolderTimeout: 1000 * 60 * 60,
       reIndexingSensitivity: ReIndexingSensitivity.low
+    },
+    duplicates: {
+      listingLimit: 1000
     }
   };
   private ConfigLoader: any;

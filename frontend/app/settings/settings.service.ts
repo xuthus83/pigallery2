@@ -71,8 +71,8 @@ export class SettingsService {
           updateTimeout: 2000
         },
         imagesFolder: '',
-	port: 80,
-	host: '0.0.0.0',
+        port: 80,
+        host: '0.0.0.0',
         thumbnail: {
           folder: '',
           qualityPriority: true,
@@ -88,7 +88,10 @@ export class SettingsService {
           folderPreviewSize: 0,
           reIndexingSensitivity: ReIndexingSensitivity.medium
         },
-        photoMetadataSize: 512 * 1024
+        photoMetadataSize: 512 * 1024,
+        duplicates: {
+          listingLimit: 1000
+        }
       }
     });
   }

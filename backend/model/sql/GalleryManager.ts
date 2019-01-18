@@ -181,50 +181,67 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
           .having('count(*)>1'),
         'innerMedia',
         'media.name=innerMedia.name AND media.metadata.fileSize = innerMedia.fileSize')
-      .innerJoinAndSelect('media.directory', 'directory').getMany();
+      .innerJoinAndSelect('media.directory', 'directory')
+      .orderBy('media.name, media.metadata.fileSize')
+      .limit(Config.Server.duplicates.listingLimit).getMany();
+
 
     const duplicateParis: DuplicatesDTO[] = [];
-    let i = duplicates.length - 1;
-    while (i >= 0) {
-      const list = [duplicates[i]];
-      let j = i - 1;
-      while (j >= 0 && duplicates[i].name === duplicates[j].name && duplicates[i].metadata.fileSize === duplicates[j].metadata.fileSize) {
-        list.push(duplicates[j]);
-        j--;
+    const processDuplicates = (duplicateList: MediaEntity[],
+                               equalFn: (a: MediaEntity, b: MediaEntity) => boolean,
+                               checkDuplicates: boolean = false) => {
+      let i = duplicateList.length - 1;
+      while (i >= 0) {
+        const list = [duplicateList[i]];
+        let j = i - 1;
+        while (j >= 0 && equalFn(duplicateList[i], duplicateList[j])) {
+          list.push(duplicateList[j]);
+          j--;
+        }
+        i = j;
+        // if we cut the select list with the SQL LIMIT, filter unpaired media
+        if (list.length < 2) {
+          continue;
+        }
+        if (checkDuplicates) {
+          // ad to group if one already existed
+          const foundDuplicates = duplicateParis.find(dp =>
+            !!dp.media.find(m =>
+              !!list.find(lm => lm.id === m.id)));
+          if (foundDuplicates) {
+            list.forEach(lm => {
+              if (!!foundDuplicates.media.find(m => m.id === lm.id)) {
+                return;
+              }
+              foundDuplicates.media.push(lm);
+            });
+            continue;
+          }
+        }
+
+        duplicateParis.push({media: list});
       }
-      i = j;
-      duplicateParis.push({media: list});
-    }
+    };
+
+    processDuplicates(duplicates,
+      (a, b) => a.name === b.name &&
+        a.metadata.fileSize === b.metadata.fileSize);
 
 
     duplicates = await mediaRepository.createQueryBuilder('media')
       .innerJoin(query => query.from(MediaEntity, 'innerMedia')
           .select(['innerMedia.metadata.creationDate as creationDate', 'innerMedia.metadata.fileSize as fileSize', 'count(*)'])
-          .groupBy('innerMedia.name, innerMedia.metadata.fileSize')
+          .groupBy('innerMedia.metadata.creationDate, innerMedia.metadata.fileSize')
           .having('count(*)>1'),
         'innerMedia',
         'media.metadata.creationDate=innerMedia.creationDate AND media.metadata.fileSize = innerMedia.fileSize')
-      .innerJoinAndSelect('media.directory', 'directory').getMany();
+      .innerJoinAndSelect('media.directory', 'directory')
+      .orderBy('media.metadata.creationDate, media.metadata.fileSize')
+      .limit(Config.Server.duplicates.listingLimit).getMany();
 
-    i = duplicates.length - 1;
-    while (i >= 0) {
-      const list = [duplicates[i]];
-      let j = i - 1;
-      while (j >= 0 && duplicates[i].metadata.creationDate === duplicates[j].metadata.creationDate && duplicates[i].metadata.fileSize === duplicates[j].metadata.fileSize) {
-        list.push(duplicates[j]);
-        j--;
-      }
-      i = j;
-      if (list.filter(paired =>
-        !!duplicateParis.find(dp =>
-          !!dp.media.find(m =>
-            m.id === paired.id))).length === list.length) {
-        continue;
-      }
-
-      duplicateParis.push({media: list});
-    }
-
+    processDuplicates(duplicates,
+      (a, b) => a.metadata.creationDate === b.metadata.creationDate &&
+        a.metadata.fileSize === b.metadata.fileSize, true);
 
     return duplicateParis;
 

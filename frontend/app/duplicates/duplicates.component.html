@@ -1,31 +1,34 @@
 <app-frame>
 
   <div body class="container">
-    <ng-template [ngIf]="_duplicateService.duplicates.value">
-      <div *ngFor="let pairs of _duplicateService.duplicates.value" class="card">
-        <div class="card-body">
-          <div *ngFor="let media of pairs.media"
-               class="row"
-               [routerLink]="['/gallery', getDirectoryPath(media)]"
-               [queryParams]="queryService.getParams()">
-            <app-duplicates-photo class="col-1" [media]="media"></app-duplicates-photo>
-            <div class="col-5">
-              /{{getDirectoryPath(media)}}/<span class="same-data">{{media.name}}</span>
-            </div>
-            <div class="col-2">
-              <span class="same-data">{{media.metadata.fileSize | fileSize}}</span>
-            </div>
-            <div class="col-2" [title]="media.metadata.creationDate">
-              {{media.metadata.creationDate | date}}
-            </div>
-            <div class="col-2">
-              {{media.metadata.size.width}}x{{media.metadata.size.height}}
+    <ng-template [ngIf]="renderedDirGroups">
+      <div *ngFor="let group of renderedDirGroups">
+        <strong>{{group.name}}</strong>
+        <div *ngFor="let pairs of group.duplicates" class="card">
+          <div class="card-body">
+            <div *ngFor="let media of pairs.media"
+                 class="row"
+                 [routerLink]="['/gallery', getDirectoryPath(media.directory)]"
+                 [queryParams]="queryService.getParams()">
+              <app-duplicates-photo class="col-1" [media]="media"></app-duplicates-photo>
+              <div class="col-5">
+                /{{getDirectoryPath(media.directory)}}/<span class="same-data">{{media.name}}</span>
+              </div>
+              <div class="col-2">
+                <span class="same-data">{{media.metadata.fileSize | fileSize}}</span>
+              </div>
+              <div class="col-2" [title]="media.metadata.creationDate">
+                {{media.metadata.creationDate | date}}
+              </div>
+              <div class="col-2">
+                {{media.metadata.size.width}}x{{media.metadata.size.height}}
+              </div>
             </div>
           </div>
         </div>
       </div>
     </ng-template>
-    <ng-template [ngIf]="!_duplicateService.duplicates.value">
+    <ng-template [ngIf]="!renderedDirGroups">
       loading
     </ng-template>
   </div>
