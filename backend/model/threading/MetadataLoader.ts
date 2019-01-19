@@ -120,7 +120,7 @@ export class MetadataLoader {
               }
 
               if (exif.tags.CreateDate || exif.tags.DateTimeOriginal || exif.tags.ModifyDate) {
-                metadata.creationDate = exif.tags.CreateDate || exif.tags.DateTimeOriginal || exif.tags.ModifyDate;
+                metadata.creationDate = (exif.tags.CreateDate || exif.tags.DateTimeOriginal || exif.tags.ModifyDate) * 1000;
               }
 
               if (exif.tags.Orientation) {
@@ -163,10 +163,11 @@ export class MetadataLoader {
                 metadata.caption = iptcData.caption.replace(/\0/g, '').trim();
               }
               metadata.keywords = iptcData.keywords || [];
+
               metadata.creationDate = <number>(iptcData.date_time ? iptcData.date_time.getTime() : metadata.creationDate);
 
             } catch (err) {
-             // Logger.debug(LOG_TAG, 'Error parsing iptc data', fullPath, err);
+              // Logger.debug(LOG_TAG, 'Error parsing iptc data', fullPath, err);
             }
 
             metadata.creationDate = metadata.creationDate || 0;

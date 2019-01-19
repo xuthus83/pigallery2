@@ -24,4 +24,11 @@ describe('MetadataLoader', () => {
     expect(Utils.clone(data)).to.be.deep.equal(expected);
   });
 
+
+  it('should load jpg 2', async () => {
+    const data = await MetadataLoader.loadPhotoMetadata(path.join(__dirname, '/../../assets/old_photo.jpg'));
+    const expected = require(path.join(__dirname, '/../../assets/old_photo.json'));
+    expect(Utils.clone(data)).to.be.deep.equal(expected);
+  });
+
 });
