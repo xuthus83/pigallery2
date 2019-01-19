@@ -28,6 +28,10 @@ export class DuplicateComponent implements OnDestroy {
   };
   subscription: Subscription;
   renderTimer: number = null;
+  duplicateCount = {
+    pairs: 0,
+    photos: 0
+  };
 
   constructor(public _duplicateService: DuplicateService,
               public queryService: QueryService) {
@@ -36,9 +40,16 @@ export class DuplicateComponent implements OnDestroy {
       this.directoryGroups = [];
       this.renderedIndex = {group: -1, pairs: 0};
       this.renderedDirGroups = [];
+      this.duplicateCount = {
+        pairs: 0,
+        photos: 0
+      };
       if (duplicates === null) {
         return;
       }
+      this.duplicateCount.photos = duplicates.reduce((prev: number, curr) => prev + curr.media.length, 0);
+      this.duplicateCount.pairs = duplicates.length;
+
       const getMostFrequentDir = (dupls: DuplicatesDTO[]) => {
         if (dupls.length === 0) {
           return null;
