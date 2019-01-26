@@ -8,6 +8,7 @@ import {MediaEntity} from './enitites/MediaEntity';
 import {VideoEntity} from './enitites/VideoEntity';
 import {PersonEntry} from './enitites/PersonEntry';
 import {FaceRegionEntry} from './enitites/FaceRegionEntry';
+import {SelectQueryBuilder} from 'typeorm';
 
 export class SearchManager implements ISearchManager {
 
@@ -24,7 +25,7 @@ export class SearchManager implements ISearchManager {
     return a;
   }
 
-  async autocomplete(text: string): Promise<Array<AutoCompleteItem>> {
+  async autocomplete(text: string): Promise<AutoCompleteItem[]> {
 
     const connection = await SQLConnection.getConnection();
 
@@ -122,61 +123,60 @@ export class SearchManager implements ISearchManager {
       resultOverflow: false
     };
 
-    let repository = connection.getRepository(MediaEntity);
-    const faceRepository = connection.getRepository(FaceRegionEntry);
+    let usedEntity = MediaEntity;
 
     if (searchType === SearchTypes.photo) {
-      repository = connection.getRepository(PhotoEntity);
+      usedEntity = PhotoEntity;
     } else if (searchType === SearchTypes.video) {
-      repository = connection.getRepository(VideoEntity);
+      usedEntity = VideoEntity;
     }
 
-    const query = repository.createQueryBuilder('media')
+    const query = await connection.getRepository(usedEntity).createQueryBuilder('media')
+      .innerJoin(q => {
+          const subQuery = q.from(usedEntity, 'media')
+            .select('distinct media.id')
+            .limit(2000);
+
+
+          if (!searchType || searchType === SearchTypes.directory) {
+            subQuery.leftJoin('media.directory', 'directory')
+              .orWhere('directory.name LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'});
+          }
+
+          if (!searchType || searchType === SearchTypes.photo || searchType === SearchTypes.video) {
+            subQuery.orWhere('media.name LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'});
+          }
+
+          if (!searchType || searchType === SearchTypes.photo) {
+            subQuery.orWhere('media.metadata.caption LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'});
+          }
+          if (!searchType || searchType === SearchTypes.person) {
+            subQuery
+              .leftJoin('media.metadata.faces', 'faces')
+              .leftJoin('faces.person', 'person')
+              .orWhere('person.name LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'});
+          }
+
+          if (!searchType || searchType === SearchTypes.position) {
+            subQuery.orWhere('media.metadata.positionData.country LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
+              .orWhere('media.metadata.positionData.state LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
+              .orWhere('media.metadata.positionData.city LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'});
+
+          }
+          if (!searchType || searchType === SearchTypes.keyword) {
+            subQuery.orWhere('media.metadata.keywords LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'});
+          }
+
+          return subQuery;
+        },
+        'innerMedia',
+        'media.id=innerMedia.id')
       .leftJoinAndSelect('media.directory', 'directory')
-      .leftJoin('media.metadata.faces', 'faces')
-      .leftJoin('faces.person', 'person')
-      .orderBy('media.metadata.creationDate', 'ASC');
+      .leftJoinAndSelect('media.metadata.faces', 'faces')
+      .leftJoinAndSelect('faces.person', 'person');
 
 
-    if (!searchType || searchType === SearchTypes.directory) {
-      query.orWhere('directory.name LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'});
-    }
-
-    if (!searchType || searchType === SearchTypes.photo || searchType === SearchTypes.video) {
-      query.orWhere('media.name LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'});
-    }
-
-    if (!searchType || searchType === SearchTypes.photo) {
-      query.orWhere('media.metadata.caption LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'});
-    }
-    if (!searchType || searchType === SearchTypes.person) {
-      query.orWhere('person.name LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'});
-    }
-
-    if (!searchType || searchType === SearchTypes.position) {
-      query.orWhere('media.metadata.positionData.country LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
-        .orWhere('media.metadata.positionData.state LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
-        .orWhere('media.metadata.positionData.city LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'});
-
-    }
-    if (!searchType || searchType === SearchTypes.keyword) {
-      query.orWhere('media.metadata.keywords LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'});
-    }
-
-
-    result.media = (await query
-      .limit(5000).getMany()).slice(0, 2001);
-
-    for (let i = 0; i < result.media.length; i++) {
-      const faces = (await faceRepository
-        .createQueryBuilder('faces')
-        .leftJoinAndSelect('faces.person', 'person')
-        .where('faces.media = :media', {media: result.media[i].id})
-        .getMany()).map(fE => ({name: fE.person.name, box: fE.box}));
-      if (faces.length > 0) {
-        result.media[i].metadata.faces = faces;
-      }
-    }
+    result.media = await this.loadMediaWithFaces(query);
 
     if (result.media.length > 2000) {
       result.resultOverflow = true;
@@ -208,35 +208,30 @@ export class SearchManager implements ISearchManager {
       resultOverflow: false
     };
 
-    const faceRepository = connection.getRepository(FaceRegionEntry);
+    const query = await connection.getRepository(MediaEntity).createQueryBuilder('media')
+      .innerJoin(q => q.from(MediaEntity, 'media')
+          .select('distinct media.id')
+          .limit(10)
+          .leftJoin('media.directory', 'directory')
+          .leftJoin('media.metadata.faces', 'faces')
+          .leftJoin('faces.person', 'person')
+          .where('media.metadata.keywords LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
+          .orWhere('media.metadata.positionData.country LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
+          .orWhere('media.metadata.positionData.state LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
+          .orWhere('media.metadata.positionData.city LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
+          .orWhere('media.name LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
+          .orWhere('media.metadata.caption LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
+          .orWhere('person.name LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
+        ,
+        'innerMedia',
+        'media.id=innerMedia.id')
+      .leftJoinAndSelect('media.directory', 'directory')
+      .leftJoinAndSelect('media.metadata.faces', 'faces')
+      .leftJoinAndSelect('faces.person', 'person');
 
-    result.media = await connection
-      .getRepository(MediaEntity)
-      .createQueryBuilder('media')
-      .orderBy('media.metadata.creationDate', 'ASC')
-      .where('media.metadata.keywords LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
-      .orWhere('media.metadata.positionData.country LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
-      .orWhere('media.metadata.positionData.state LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
-      .orWhere('media.metadata.positionData.city LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
-      .orWhere('media.name LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
-      .orWhere('media.metadata.caption LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
-      .orWhere('person.name LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
-      .innerJoinAndSelect('media.directory', 'directory')
-      .leftJoin('media.metadata.faces', 'faces')
-      .leftJoin('faces.person', 'person')
-      .limit(10)
-      .getMany();
 
-    for (let i = 0; i < result.media.length; i++) {
-      const faces = (await faceRepository
-        .createQueryBuilder('faces')
-        .leftJoinAndSelect('faces.person', 'person')
-        .where('faces.media = :media', {media: result.media[i].id})
-        .getMany()).map(fE => ({name: fE.person.name, box: fE.box}));
-      if (faces.length > 0) {
-        result.media[i].metadata.faces = faces;
-      }
-    }
+    result.media = await this.loadMediaWithFaces(query);
+
 
     result.directories = await connection
       .getRepository(DirectoryEntity)
@@ -254,5 +249,30 @@ export class SearchManager implements ISearchManager {
       res.push(new AutoCompleteItem(value, type));
     });
     return res;
+  }
+
+  private async loadMediaWithFaces(query: SelectQueryBuilder<MediaEntity>) {
+    const rawAndEntities = await query.orderBy('media.id').getRawAndEntities();
+    const media: MediaEntity[] = rawAndEntities.entities;
+
+    //  console.log(rawAndEntities.raw);
+    let rawIndex = 0;
+    for (let i = 0; i < media.length; i++) {
+      if (rawAndEntities.raw[rawIndex].faces_id === null ||
+        rawAndEntities.raw[rawIndex].media_id !== media[i].id) {
+        delete media[i].metadata.faces;
+        continue;
+      }
+      media[i].metadata.faces = [];
+
+      while (rawAndEntities.raw[rawIndex].media_id === media[i].id) {
+        media[i].metadata.faces.push(<any>FaceRegionEntry.fromRawToDTO(rawAndEntities.raw[rawIndex]));
+        rawIndex++;
+        if (rawIndex >= rawAndEntities.raw.length) {
+          return media;
+        }
+      }
+    }
+    return media;
   }
 }

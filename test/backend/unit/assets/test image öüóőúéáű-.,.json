@@ -13,15 +13,24 @@
   "faces": [
     {
       "box": {
-        "height": 19,
-        "width": 20,
-        "x": 82,
-        "y": 38
+        "height": 2,
+        "width": 2,
+        "x": 8,
+        "y": 4
       },
       "name": "squirrel"
+    },
+    {
+      "box": {
+        "height": 3,
+        "width": 2,
+        "x": 5,
+        "y": 5
+      },
+      "name": "special_chars űáéúőóüío?._:"
     }
   ],
-  "fileSize": 59187,
+  "fileSize": 39424,
   "keywords": [
     "Berkley",
     "USA",
@@ -39,7 +48,7 @@
     "state": "test state őúéáűóöí-.,)("
   },
   "size": {
-    "height": 93,
-    "width": 140
+    "height": 10,
+    "width": 14
   }
 }

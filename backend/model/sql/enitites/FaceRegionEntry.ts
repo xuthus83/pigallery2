@@ -1,7 +1,7 @@
-import {FaceRegionBox} from '../../../../common/entities/PhotoDTO';
-import {Column, ManyToOne, Entity, PrimaryGeneratedColumn} from 'typeorm';
+import {FaceRegion, FaceRegionBox} from '../../../../common/entities/PhotoDTO';
+import {Column, Entity, ManyToOne, PrimaryGeneratedColumn} from 'typeorm';
 import {PersonEntry} from './PersonEntry';
-import {MediaEntity, MediaMetadataEntity} from './MediaEntity';
+import {MediaEntity} from './MediaEntity';
 
 export class FaceRegionBoxEntry implements FaceRegionBox {
   @Column('int')
@@ -35,4 +35,21 @@ export class FaceRegionEntry {
   person: PersonEntry;
 
   name: string;
+
+  public static fromRawToDTO(raw: {
+    faces_id: number,
+    faces_mediaId: number,
+    faces_personId: number,
+    faces_boxHeight: number,
+    faces_boxWidth: number,
+    faces_boxX: number,
+    faces_boxY: number,
+    person_id: number,
+    person_name: string
+  }): FaceRegion {
+    return {
+      box: {width: raw.faces_boxWidth, height: raw.faces_boxHeight, x: raw.faces_boxX, y: raw.faces_boxY},
+      name: raw.person_name
+    };
+  }
 }

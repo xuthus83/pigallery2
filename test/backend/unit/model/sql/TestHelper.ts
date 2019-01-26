@@ -104,6 +104,20 @@ export class TestHelper {
     p.metadata.positionData.city = 'Mos Eisley';
     p.metadata.positionData.country = 'Tatooine';
     p.name = 'sw1';
+
+    p.metadata.faces = [<any>{
+      box: {height: 10, width: 10, x: 10, y: 10},
+      name: 'Boba Fett'
+    }, <any>{
+      box: {height: 10, width: 10, x: 101, y: 101},
+      name: 'Luke Skywalker'
+    }, <any>{
+      box: {height: 10, width: 10, x: 101, y: 101},
+      name: 'Han Solo'
+    }, <any>{
+      box: {height: 10, width: 10, x: 101, y: 101},
+      name: 'Unkle Ben'
+    }];
     return p;
   }
 
@@ -121,6 +135,16 @@ export class TestHelper {
     p.metadata.positionData.state = 'Research City';
     p.metadata.positionData.country = 'Kamino';
     p.name = 'sw2';
+    p.metadata.faces = [<any>{
+      box: {height: 10, width: 10, x: 10, y: 10},
+      name: 'Padmé Amidala'
+    }, <any>{
+      box: {height: 10, width: 10, x: 101, y: 101},
+      name: 'Anakin Skywalker'
+    }, <any>{
+      box: {height: 10, width: 10, x: 101, y: 101},
+      name: 'Obivan Kenobi'
+    }];
     return p;
   }
 
