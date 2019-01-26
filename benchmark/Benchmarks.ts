@@ -84,18 +84,18 @@ export class Benchmarks {
         const startSkip = process.hrtime();
         await beforeEach();
         const endSkip = process.hrtime(startSkip);
-        skip += (endSkip[0] * 1000 + endSkip[1] / 1000);
+        skip += (endSkip[0] * 1000 + endSkip[1] / 1000000);
       }
       await fn();
       if (afterEach) {
         const startSkip = process.hrtime();
         await afterEach();
         const endSkip = process.hrtime(startSkip);
-        skip += (endSkip[0] * 1000 + endSkip[1] / 1000);
+        skip += (endSkip[0] * 1000 + endSkip[1] / 1000000);
       }
     }
     const end = process.hrtime(start);
-    const duration = (end[0] * 1000 + end[1] / 1000) / this.RUNS;
+    const duration = (end[0] * 1000 + end[1] / 1000000) / this.RUNS;
 
     if (!scanned) {
       return {

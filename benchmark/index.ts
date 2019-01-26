@@ -10,7 +10,7 @@ const config: { path: string, system: string } = require(path.join(__dirname, 'c
 Config.Server.imagesFolder = config.path;
 const dbPath = path.join(__dirname, 'test.db');
 ProjectPath.reset();
-const RUNS = 1;
+const RUNS = 50;
 
 let resultsText = '';
 const printLine = (text: string) => {
@@ -25,7 +25,11 @@ const printHeader = async () => {
     '.' + dt.getFullYear());
   printLine('**System**: ' + config.system);
   const dir = await DiskMangerWorker.scanDirectory('./');
-  printLine('**Gallery**: directories:' + dir.directories.length + ' media:' + dir.media.length);
+  printLine('**Gallery**: directories: ' +
+    dir.directories.length +
+    ' media: ' + dir.media.length +
+    // @ts-ignore
+    ', faces: ' + dir.media.reduce((p, c) => p + (c.metadata.faces || []).length, 0));
 };
 
 
@@ -34,6 +38,7 @@ const printTableHeader = () => {
   printLine('|:------:|:--------------:|:------------:|:-------:|');
 };
 const printResult = (result: BenchmarkResult, action: string, actionDetails: string = '') => {
+  console.log('benchmarked: ' + action);
   let details = '-';
   if (result.items) {
     details = 'items: ' + result.items;
@@ -42,10 +47,11 @@ const printResult = (result: BenchmarkResult, action: string, actionDetails: str
     details = 'media: ' + result.media + ', directories:' + result.directories;
   }
   printLine('| ' + action + ' | ' + actionDetails +
-    ' | ' + (result.duration / 1000).toFixed(2) + 's | ' + details + ' |');
+    ' | ' + (result.duration).toFixed(1) + 'ms | ' + details + ' |');
 };
 
 const run = async () => {
+  const start = Date.now();
   const bm = new Benchmarks(RUNS, dbPath);
 
   // header
@@ -64,6 +70,7 @@ const run = async () => {
   printResult(await bm.bmInstantSearch('a'), 'instant search', '`a`');
   printResult(await bm.bmAutocomplete('a'), 'auto complete', '`a`');
   console.log(resultsText);
+  console.log('run for : ' + ((Date.now() - start)).toFixed(1) + 'ms');
 };
 
 run();
