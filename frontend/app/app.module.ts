@@ -73,6 +73,7 @@ import {FileSizePipe} from './pipes/FileSizePipe';
 import {DuplicateService} from './duplicates/duplicates.service';
 import {DuplicateComponent} from './duplicates/duplicates.component';
 import {DuplicatesPhotoComponent} from './duplicates/photo/photo.duplicates.component';
+import {SeededRandomService} from './model/seededRandom.service';
 
 
 @Injectable()
@@ -189,6 +190,7 @@ export function translationsFactory(locale: string) {
     FullScreenService,
     NavigationService,
     SettingsService,
+    SeededRandomService,
     OverlayService,
     QueryService,
     DuplicateService,
