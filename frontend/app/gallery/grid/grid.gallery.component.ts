@@ -292,7 +292,6 @@ export class GalleryGridComponent implements OnChanges, OnInit, AfterViewInit, O
     return Config.Client.Other.enableOnScrollRendering === false ||
       PageHelper.ScrollY >= (document.body.clientHeight + offset - window.innerHeight) * 0.7
       || (document.body.clientHeight + offset) * 0.85 < window.innerHeight;
-
   }
 
 
