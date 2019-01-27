@@ -113,13 +113,15 @@ const simpleBuild = (isProd: boolean) => {
   createFrontendTask('build-frontend default', cmd + '--output-path=./dist --no-progress --no-progress --i18n-locale en' +
     ' --i18n-format=xlf --i18n-file=frontend/' + translationFolder + '/messages.en.xlf' + ' --i18n-missing-translation warning');
   tasks.push('build-frontend default');
-  for (let i = 0; i < languages.length; i++) {
-    createFrontendTask('build-frontend ' + languages[i], cmd +
-      '--output-path=./dist/' + languages[i] +
-      ' --no-progress --i18n-locale ' + languages[i] +
-      ' --i18n-format=xlf --i18n-file=frontend/' + translationFolder +
-      '/messages.' + languages[i] + '.xlf' + ' --i18n-missing-translation warning');
-    tasks.push('build-frontend ' + languages[i]);
+  if (!process.env.CI) { // don't build languages if running in CI
+    for (let i = 0; i < languages.length; i++) {
+      createFrontendTask('build-frontend ' + languages[i], cmd +
+        '--output-path=./dist/' + languages[i] +
+        ' --no-progress --i18n-locale ' + languages[i] +
+        ' --i18n-format=xlf --i18n-file=frontend/' + translationFolder +
+        '/messages.' + languages[i] + '.xlf' + ' --i18n-missing-translation warning');
+      tasks.push('build-frontend ' + languages[i]);
+    }
   }
   return gulp.series(...tasks);
 };
