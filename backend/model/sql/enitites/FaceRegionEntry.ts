@@ -20,7 +20,7 @@ export class FaceRegionBoxEntry implements FaceRegionBox {
 @Entity()
 export class FaceRegionEntry {
 
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({unsigned: true})
   id: number;
 
   @Column(type => FaceRegionBoxEntry)

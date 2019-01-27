@@ -15,12 +15,15 @@ export class SettingsService {
       Client: {
         Search: {
           enabled: true,
-          autocompleteEnabled: true,
+          AutoComplete: {
+            enabled: true,
+            cacheTimeout: 1000 * 60 * 60,
+            maxItemsPerCategory: 5
+          },
           instantSearchEnabled: true,
           InstantSearchTimeout: 0,
           searchCacheTimeout: 1000 * 60 * 60,
           instantSearchCacheTimeout: 1000 * 60 * 60,
-          autocompleteCacheTimeout: 1000 * 60 * 60
         },
         Thumbnail: {
           concurrentThumbnailGenerations: null,

@@ -258,7 +258,7 @@ export class TestHelper {
       name: rndStr() + '.jpg',
       directory: dir,
       metadata: m,
-      readyThumbnails: null,
+      readyThumbnails: [],
       readyIcon: false
     };
 

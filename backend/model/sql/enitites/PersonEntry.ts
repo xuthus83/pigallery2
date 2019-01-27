@@ -6,7 +6,7 @@ import {FaceRegionEntry} from './FaceRegionEntry';
 @Unique(['name'])
 export class PersonEntry {
   @Index()
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({unsigned: true})
   id: number;
 
   @Column()

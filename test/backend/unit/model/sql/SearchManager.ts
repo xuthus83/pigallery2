@@ -1,8 +1,4 @@
 import {expect} from 'chai';
-import * as fs from 'fs';
-import * as path from 'path';
-import {Config} from '../../../../../common/config/private/Config';
-import {DatabaseType} from '../../../../../common/config/private/IPrivateConfig';
 import {SQLConnection} from '../../../../../backend/model/sql/SQLConnection';
 import {PhotoEntity} from '../../../../../backend/model/sql/enitites/PhotoEntity';
 import {SearchManager} from '../../../../../backend/model/sql/SearchManager';
@@ -15,12 +11,15 @@ import {VideoEntity} from '../../../../../backend/model/sql/enitites/VideoEntity
 import {PersonEntry} from '../../../../../backend/model/sql/enitites/PersonEntry';
 import {FaceRegionEntry} from '../../../../../backend/model/sql/enitites/FaceRegionEntry';
 import {PhotoDTO} from '../../../../../common/entities/PhotoDTO';
+import {SQLTestHelper} from '../../../SQLTestHelper';
+import {Config} from '../../../../../common/config/private/Config';
 
-describe('SearchManager', () => {
+// to help WebStorm to handle the test cases
+declare let describe: any;
+declare const after: any;
+describe = SQLTestHelper.describe;
 
-
-  const tempDir = path.join(__dirname, '../../tmp');
-  const dbPath = path.join(tempDir, 'test.db');
+describe('SearchManager', (sqlHelper: SQLTestHelper) => {
 
   const dir = TestHelper.getDirectoryEntry();
   const p = TestHelper.getPhotoEntry1(dir);
@@ -31,15 +30,7 @@ describe('SearchManager', () => {
   const v = TestHelper.getVideoEntry1(dir);
 
   const setUpSqlDB = async () => {
-    if (fs.existsSync(dbPath)) {
-      fs.unlinkSync(dbPath);
-    }
-    if (!fs.existsSync(tempDir)) {
-      fs.mkdirSync(tempDir);
-    }
-
-    Config.Server.database.type = DatabaseType.sqlite;
-    Config.Server.database.sqlite.storage = dbPath;
+    await sqlHelper.initDB();
 
     const savePhoto = async (photo: PhotoDTO) => {
       const savedPhoto = await pr.save(photo);
@@ -66,24 +57,15 @@ describe('SearchManager', () => {
     await SQLConnection.close();
   };
 
-  const tearDownSqlDB = async () => {
-    await SQLConnection.close();
-    if (fs.existsSync(dbPath)) {
-      fs.unlinkSync(dbPath);
-    }
-    if (fs.existsSync(tempDir)) {
-      fs.rmdirSync(tempDir);
-    }
-  };
 
   beforeEach(async () => {
     await setUpSqlDB();
   });
 
-  afterEach(async () => {
-    await tearDownSqlDB();
-  });
 
+  after(async () => {
+    await sqlHelper.clearDB();
+  });
 
   it('should get autocomplete', async () => {
     const sm = new SearchManager();
@@ -103,6 +85,8 @@ describe('SearchManager', () => {
       new AutoCompleteItem('wars dir', SearchTypes.directory)]);
 
     expect((await sm.autocomplete('arch'))).eql([new AutoCompleteItem('Research City', SearchTypes.position)]);
+
+    Config.Client.Search.AutoComplete.maxItemsPerCategory = 99999;
     expect((await sm.autocomplete('a')).sort(cmp)).eql([
       new AutoCompleteItem('Boba Fett', SearchTypes.keyword),
       new AutoCompleteItem('Boba Fett', SearchTypes.person),
@@ -113,6 +97,7 @@ describe('SearchManager', () => {
       new AutoCompleteItem('Han Solo', SearchTypes.person),
       new AutoCompleteItem('death star', SearchTypes.keyword),
       new AutoCompleteItem('Padmé Amidala', SearchTypes.person),
+      new AutoCompleteItem('Obivan Kenobi', SearchTypes.person),
       new AutoCompleteItem('Padmé Amidala', SearchTypes.keyword),
       new AutoCompleteItem('Natalie Portman', SearchTypes.keyword),
       new AutoCompleteItem('Han Solo\'s dice', SearchTypes.photo),
@@ -121,10 +106,24 @@ describe('SearchManager', () => {
       new AutoCompleteItem('wars dir', SearchTypes.directory),
       new AutoCompleteItem('Research City', SearchTypes.position)].sort(cmp));
 
+    Config.Client.Search.AutoComplete.maxItemsPerCategory = 1;
+    expect((await sm.autocomplete('a')).sort(cmp)).eql([
+      new AutoCompleteItem('Anakin', SearchTypes.keyword),
+      new AutoCompleteItem('star wars', SearchTypes.keyword),
+      new AutoCompleteItem('death star', SearchTypes.keyword),
+      new AutoCompleteItem('Anakin Skywalker', SearchTypes.person),
+      new AutoCompleteItem('Han Solo\'s dice', SearchTypes.photo),
+      new AutoCompleteItem('Kamino', SearchTypes.position),
+      new AutoCompleteItem('Research City', SearchTypes.position),
+      new AutoCompleteItem('wars dir', SearchTypes.directory),
+      new AutoCompleteItem('Boba Fett', SearchTypes.keyword)].sort(cmp));
+    Config.Client.Search.AutoComplete.maxItemsPerCategory = 5;
+
     expect((await sm.autocomplete('sw')).sort(cmp)).to.deep.equal([new AutoCompleteItem('sw1', SearchTypes.photo),
       new AutoCompleteItem('sw2', SearchTypes.photo), new AutoCompleteItem(v.name, SearchTypes.video)].sort(cmp));
 
     expect((await sm.autocomplete(v.name)).sort(cmp)).to.deep.equal([new AutoCompleteItem(v.name, SearchTypes.video)]);
+
   });
 
 

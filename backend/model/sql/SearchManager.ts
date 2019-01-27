@@ -9,6 +9,7 @@ import {VideoEntity} from './enitites/VideoEntity';
 import {PersonEntry} from './enitites/PersonEntry';
 import {FaceRegionEntry} from './enitites/FaceRegionEntry';
 import {SelectQueryBuilder} from 'typeorm';
+import {Config} from '../../../common/config/private/Config';
 
 export class SearchManager implements ISearchManager {
 
@@ -40,7 +41,7 @@ export class SearchManager implements ISearchManager {
       .createQueryBuilder('photo')
       .select('DISTINCT(photo.metadata.keywords)')
       .where('photo.metadata.keywords LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
-      .limit(5)
+      .limit(Config.Client.Search.AutoComplete.maxItemsPerCategory)
       .getRawMany())
       .map(r => <Array<string>>(<string>r.metadataKeywords).split(','))
       .forEach(keywords => {
@@ -52,7 +53,8 @@ export class SearchManager implements ISearchManager {
       .createQueryBuilder('person')
       .select('DISTINCT(person.name)')
       .where('person.name LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
-      .limit(5)
+      .limit(Config.Client.Search.AutoComplete.maxItemsPerCategory)
+      .orderBy('person.name')
       .getRawMany())
       .map(r => r.name), SearchTypes.person));
 
@@ -64,7 +66,7 @@ export class SearchManager implements ISearchManager {
       .orWhere('photo.metadata.positionData.state LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
       .orWhere('photo.metadata.positionData.city LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
       .groupBy('photo.metadata.positionData.country, photo.metadata.positionData.state, photo.metadata.positionData.city')
-      .limit(5)
+      .limit(Config.Client.Search.AutoComplete.maxItemsPerCategory)
       .getRawMany())
       .filter(pm => !!pm)
       .map(pm => <Array<string>>[pm.city || '', pm.country || '', pm.state || ''])
@@ -77,7 +79,7 @@ export class SearchManager implements ISearchManager {
       .createQueryBuilder('media')
       .select('DISTINCT(media.name)')
       .where('media.name LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
-      .limit(5)
+      .limit(Config.Client.Search.AutoComplete.maxItemsPerCategory)
       .getRawMany())
       .map(r => r.name), SearchTypes.photo));
 
@@ -86,7 +88,7 @@ export class SearchManager implements ISearchManager {
       .createQueryBuilder('media')
       .select('DISTINCT(media.metadata.caption) as caption')
       .where('media.metadata.caption LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
-      .limit(5)
+      .limit(Config.Client.Search.AutoComplete.maxItemsPerCategory)
       .getRawMany())
       .map(r => r.caption), SearchTypes.photo));
 
@@ -95,7 +97,7 @@ export class SearchManager implements ISearchManager {
       .createQueryBuilder('media')
       .select('DISTINCT(media.name)')
       .where('media.name LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
-      .limit(5)
+      .limit(Config.Client.Search.AutoComplete.maxItemsPerCategory)
       .getRawMany())
       .map(r => r.name), SearchTypes.video));
 
@@ -103,7 +105,7 @@ export class SearchManager implements ISearchManager {
       .createQueryBuilder('dir')
       .select('DISTINCT(dir.name)')
       .where('dir.name LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
-      .limit(5)
+      .limit(Config.Client.Search.AutoComplete.maxItemsPerCategory)
       .getRawMany())
       .map(r => r.name), SearchTypes.directory));
 

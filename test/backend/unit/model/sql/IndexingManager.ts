@@ -1,8 +1,7 @@
 import {expect} from 'chai';
 import * as fs from 'fs';
-import * as path from 'path';
 import {Config} from '../../../../../common/config/private/Config';
-import {DatabaseType, ReIndexingSensitivity} from '../../../../../common/config/private/IPrivateConfig';
+import {ReIndexingSensitivity} from '../../../../../common/config/private/IPrivateConfig';
 import {SQLConnection} from '../../../../../backend/model/sql/SQLConnection';
 import {GalleryManager} from '../../../../../backend/model/sql/GalleryManager';
 import {DirectoryDTO} from '../../../../../common/entities/DirectoryDTO';
@@ -15,6 +14,7 @@ import {FileDTO} from '../../../../../common/entities/FileDTO';
 import {IndexingManager} from '../../../../../backend/model/sql/IndexingManager';
 import {ObjectManagerRepository} from '../../../../../backend/model/ObjectManagerRepository';
 import {PersonManager} from '../../../../../backend/model/sql/PersonManager';
+import {SQLTestHelper} from '../../../SQLTestHelper';
 
 class GalleryManagerTest extends GalleryManager {
 
@@ -41,43 +41,22 @@ class IndexingManagerTest extends IndexingManager {
   }
 }
 
-describe('IndexingManager', () => {
+// to help WebStorm to handle the test cases
+declare let describe: any;
+declare const after: any;
+describe = SQLTestHelper.describe;
 
+describe('IndexingManager', (sqlHelper: SQLTestHelper) => {
 
-  const tempDir = path.join(__dirname, '../../tmp');
-  const dbPath = path.join(tempDir, 'test.db');
-
-
-  const setUpSqlDB = async () => {
-    if (fs.existsSync(dbPath)) {
-      fs.unlinkSync(dbPath);
-    }
-    if (!fs.existsSync(tempDir)) {
-      fs.mkdirSync(tempDir);
-    }
-
-    Config.Server.database.type = DatabaseType.sqlite;
-    Config.Server.database.sqlite.storage = dbPath;
-    ObjectManagerRepository.getInstance().PersonManager = new PersonManager();
-
-  };
-
-  const tearDownSqlDB = async () => {
-    await SQLConnection.close();
-    if (fs.existsSync(dbPath)) {
-      fs.unlinkSync(dbPath);
-    }
-    if (fs.existsSync(tempDir)) {
-      fs.rmdirSync(tempDir);
-    }
-  };
 
   beforeEach(async () => {
-    await setUpSqlDB();
+    await sqlHelper.initDB();
+    ObjectManagerRepository.getInstance().PersonManager = new PersonManager();
   });
 
-  afterEach(async () => {
-    await tearDownSqlDB();
+
+  after(async () => {
+    await sqlHelper.clearDB();
   });
 
   const removeIds = (dir: DirectoryDTO) => {
@@ -245,7 +224,7 @@ describe('IndexingManager', () => {
     expect(selected.media.length).to.deep.equal(subDir.media.length);
   }) as any).timeout(40000);
 
-  describe('Test listDirectory', () => {
+  SQLTestHelper.savedDescribe('Test listDirectory', () => {
     const statSync = fs.statSync;
     let dirTime = 0;
     const indexedTime = {
