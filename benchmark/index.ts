@@ -20,7 +20,7 @@ const printLine = (text: string) => {
 const printHeader = async () => {
   const dt = new Date();
   printLine('## PiGallery2 v' + require('./../package.json').version +
-    ', ' + Utils.zeroPrefix(dt.getDay(), 2) +
+    ', ' + Utils.zeroPrefix(dt.getDate(), 2) +
     '.' + Utils.zeroPrefix(dt.getMonth() + 1, 2) +
     '.' + dt.getFullYear());
   printLine('**System**: ' + config.system);

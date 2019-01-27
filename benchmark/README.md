@@ -2,7 +2,7 @@
 
 These results are created mostly for development, but I'm making them public for curious users.
 
-## PiGallery2 v1.5.8, 06.01.2019
+## PiGallery2 v1.5.8, 26.01.2019
 
 **System**: Intel(R) Core(TM) i7-6700HQ CPU @ 2.60GHz, 16GB Ram, SHDD: 1TB, 5400 rpm
 **Gallery**: directories: 0 media: 341, faces: 39
