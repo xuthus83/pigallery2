@@ -3,8 +3,6 @@ language: node_js
 node_js:
   - '10'
   - '11'
-env:
-  - "Server-database-mysql-host"='localhost' "Server-database-mysql-username"='root' "Server-database-mysql-password"='' "Server-database-mysql-database"="pigallery2_travis"
 services:
   - mysql
 addons:
