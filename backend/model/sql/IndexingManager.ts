@@ -16,6 +16,7 @@ import {FaceRegionEntry} from './enitites/FaceRegionEntry';
 import {ObjectManagers} from '../ObjectManagers';
 import {IIndexingManager} from '../interfaces/IIndexingManager';
 import {DiskMangerWorker} from '../threading/DiskMangerWorker';
+import {Logger} from '../../Logger';
 
 const LOG_TAG = '[IndexingManager]';
 
@@ -42,6 +43,17 @@ export class IndexingManager implements IIndexingManager {
       }
 
     });
+  }
+
+  async resetDB(): Promise<void> {
+    Logger.info(LOG_TAG, 'Resetting DB');
+    const connection = await SQLConnection.getConnection();
+    return connection
+      .getRepository(DirectoryEntity)
+      .createQueryBuilder('directory')
+      .delete()
+      .execute().then(() => {
+      });
   }
 
   // Todo fix it, once typeorm support connection pools for sqlite

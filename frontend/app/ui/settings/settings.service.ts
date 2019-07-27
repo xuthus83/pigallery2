@@ -114,6 +114,9 @@ export class SettingsService {
         photoMetadataSize: 512 * 1024,
         duplicates: {
           listingLimit: 1000
+        },
+        tasks: {
+          scheduled: []
         }
       }
     });

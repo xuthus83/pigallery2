@@ -1,5 +1,5 @@
 import {IIndexingTaskManager} from '../interfaces/IIndexingTaskManager';
-import {IndexingProgressDTO} from '../../../common/entities/settings/IndexingProgressDTO';
+import {TaskProgressDTO} from '../../../common/entities/settings/TaskProgressDTO';
 
 export class IndexingTaskManager implements IIndexingTaskManager {
 
@@ -7,7 +7,7 @@ export class IndexingTaskManager implements IIndexingTaskManager {
     throw new Error('not supported by memory DB');
   }
 
-  getProgress(): IndexingProgressDTO {
+  getProgress(): TaskProgressDTO {
     throw new Error('not supported by memory DB');
   }
 

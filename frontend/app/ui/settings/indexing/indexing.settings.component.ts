@@ -4,12 +4,13 @@ import {AuthenticationService} from '../../../model/network/authentication.servi
 import {NavigationService} from '../../../model/navigation.service';
 import {NotificationService} from '../../../model/notification.service';
 import {ErrorDTO} from '../../../../../common/entities/Error';
-import {interval, Observable} from 'rxjs';
 import {IndexingConfig, ReIndexingSensitivity} from '../../../../../common/config/private/IPrivateConfig';
 import {SettingsComponent} from '../_abstract/abstract.settings.component';
 import {Utils} from '../../../../../common/Utils';
 import {I18n} from '@ngx-translate/i18n-polyfill';
 import {StatisticDTO} from '../../../../../common/entities/settings/StatisticDTO';
+import {ScheduledTasksService} from '../scheduled-tasks.service';
+import {DefaultsTasks} from '../../../../../common/entities/task/TaskDTO';
 
 @Component({
   selector: 'app-settings-indexing',
@@ -24,15 +25,11 @@ export class IndexingSettingsComponent extends SettingsComponent<IndexingConfig,
 
   types: { key: number; value: string }[] = [];
   statistic: StatisticDTO;
-  private subscription: { timer: any, settings: any } = {
-    timer: null,
-    settings: null
-  };
-  private $counter: Observable<number> = null;
 
   constructor(_authService: AuthenticationService,
               _navigation: NavigationService,
               _settingsService: IndexingSettingsService,
+              public tasksService: ScheduledTasksService,
               notification: NotificationService,
               i18n: I18n) {
 
@@ -46,43 +43,30 @@ export class IndexingSettingsComponent extends SettingsComponent<IndexingConfig,
 
   }
 
-  get TimeLeft() {
-    const prg = this._settingsService.progress.value;
-    return (prg.time.current - prg.time.start) / prg.indexed * prg.left;
+  get Progress() {
+    return this.tasksService.progress.value[DefaultsTasks[DefaultsTasks.Indexing]];
+  }
+
+  get TimeLeft(): number {
+    if (this.Progress) {
+      return (this.Progress.time.current - this.Progress.time.start) / this.Progress.progress * this.Progress.left;
+    }
   }
 
   get TimeElapsed() {
-    const prg = this._settingsService.progress.value;
-    return (prg.time.current - prg.time.start);
+    if (this.Progress) {
+      return (this.Progress.time.current - this.Progress.time.start);
+    }
   }
 
-  updateProgress = async () => {
-    try {
-      const wasRunning = this._settingsService.progress.value !== null;
-      await (<IndexingSettingsService>this._settingsService).getProgress();
-      if (wasRunning && this._settingsService.progress.value === null) {
-        this.notification.success(this.i18n('Folder indexed'), this.i18n('Success'));
-      }
-    } catch (err) {
-      if (this.subscription.timer != null) {
-        this.subscription.timer.unsubscribe();
-        this.subscription.timer = null;
-      }
-    }
-    if ((<IndexingSettingsService>this._settingsService).progress.value != null && this.subscription.timer == null) {
-      if (!this.$counter) {
-        this.$counter = interval(5000);
-      }
-      this.subscription.timer = this.$counter.subscribe((x) => this.updateProgress());
-    }
-    if ((<IndexingSettingsService>this._settingsService).progress.value == null && this.subscription.timer != null) {
-      this.subscription.timer.unsubscribe();
-      this.subscription.timer = null;
-    }
-  };
+  ngOnDestroy() {
+    super.ngOnDestroy();
+    this.tasksService.unsubscribeFromProgress();
+  }
 
   async ngOnInit() {
     super.ngOnInit();
+    this.tasksService.subscribeToProgress();
     this.types = Utils
       .enumToArray(ReIndexingSensitivity);
     this.types.forEach(v => {
@@ -98,30 +82,18 @@ export class IndexingSettingsComponent extends SettingsComponent<IndexingConfig,
           break;
       }
     });
-    this.updateProgress();
     if (this._settingsService.isSupported()) {
       this.statistic = await this._settingsService.getStatistic();
     }
   }
 
-  ngOnDestroy() {
-    super.ngOnDestroy();
-    if (this.subscription.timer != null) {
-      this.subscription.timer.unsubscribe();
-      this.subscription.timer = null;
-    }
-    if (this.subscription.settings != null) {
-      this.subscription.settings.unsubscribe();
-      this.subscription.settings = null;
-    }
-  }
 
   async index(createThumbnails: boolean) {
     this.inProgress = true;
     this.error = '';
     try {
-      await this._settingsService.index(createThumbnails);
-      this.updateProgress();
+      await this.tasksService.start(DefaultsTasks[DefaultsTasks.Indexing], {createThumbnails: !!createThumbnails});
+      await this.tasksService.forceUpdate();
       this.notification.info(this.i18n('Folder indexing started'));
       this.inProgress = false;
       return true;
@@ -140,8 +112,8 @@ export class IndexingSettingsComponent extends SettingsComponent<IndexingConfig,
     this.inProgress = true;
     this.error = '';
     try {
-      await (<IndexingSettingsService>this._settingsService).cancel();
-      this._settingsService.progress.next(null);
+      await this.tasksService.stop(DefaultsTasks[DefaultsTasks.Indexing]);
+      await this.tasksService.forceUpdate();
       this.notification.info(this.i18n('Folder indexing interrupted'));
       this.inProgress = false;
       return true;
@@ -160,7 +132,8 @@ export class IndexingSettingsComponent extends SettingsComponent<IndexingConfig,
     this.inProgress = true;
     this.error = '';
     try {
-      await (<IndexingSettingsService>this._settingsService).reset();
+      await this.tasksService.start(DefaultsTasks[DefaultsTasks['Database Reset']]);
+      await this.tasksService.forceUpdate();
       this.notification.success(this.i18n('Database reset'), this.i18n('Success'));
       this.inProgress = false;
       return true;

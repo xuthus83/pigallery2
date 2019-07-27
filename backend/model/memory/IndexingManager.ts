@@ -7,5 +7,9 @@ export class IndexingManager implements IIndexingManager {
     throw new Error('not supported by memory DB');
   }
 
+  resetDB(): Promise<void> {
+    throw new Error('not supported by memory DB');
+  }
+
 
 }

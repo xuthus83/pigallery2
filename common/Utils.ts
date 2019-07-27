@@ -1,4 +1,14 @@
 export class Utils {
+  static GUID() {
+    const s4 = function () {
+      return Math.floor((1 + Math.random()) * 0x10000)
+        .toString(16)
+        .substring(1);
+    };
+
+    return s4() + s4() + '-' + s4() + s4();
+  }
+
   static chunkArrays<T>(arr: T[], chunkSize: number): T[][] {
     const R = [];
     for (let i = 0; i < arr.length; i += chunkSize) {

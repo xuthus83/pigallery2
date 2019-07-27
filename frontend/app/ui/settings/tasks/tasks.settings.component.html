@@ -1,0 +1,117 @@
+<form #settingsForm="ngForm" class="form-horizontal">
+  <div class="card mb-4">
+    <h5 class="card-header" i18n>
+      Tasks
+    </h5>
+    <div class="card-body">
+      <div [hidden]="!error" class="alert alert-danger" role="alert"><strong>Error: </strong>{{error}}</div>
+
+      <div *ngFor="let schedule of settings.scheduled;let i= index">
+        <div class="card bg-light">
+          <div class="card-header ">
+            <div class="d-flex justify-content-between">
+              {{schedule.name}}
+              <button class="btn btn-danger button-delete"
+                      (click)="remove(schedule.taskName)" i18n><span class="oi oi-trash"></span>
+              </button>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="d-flex justify-content-between">
+              <div>
+                <select class="form-control" [(ngModel)]="schedule.taskName" [name]="'taskName'+i" required>
+                  <option *ngFor="let availableTask of _settingsService.availableTasks | async"
+                          [ngValue]="availableTask.Name">{{availableTask.Name}}
+                  </option>
+                </select>
+              </div>
+              <div>
+                <button class="btn btn-success"
+                        *ngIf="!tasksService.progress.value[schedule.taskName]"
+                        [disabled]="disableButtons"
+                        title="Trigger task run manually"
+                        i18n-title
+                        (click)="start(schedule)" i18n>Start
+                </button>
+                <button class="btn btn-secondary"
+                        *ngIf="tasksService.progress.value[schedule.taskName]"
+                        [disabled]="disableButtons"
+                        (click)="stop(schedule)" i18n>Stop
+                </button>
+              </div>
+            </div>
+
+            <ng-container *ngIf="getConfigTemplate(schedule.taskName) ">
+              <hr/>
+              <div *ngFor="let configEntry of  getConfigTemplate(schedule.taskName)">
+                <ng-container [ngSwitch]="configEntry.type">
+                  <ng-container *ngSwitchCase="'boolean'">
+                    <div class="form-group row">
+                      <label class="col-md-2 control-label" [for]="configEntry.id"
+                             i18n>{{configEntry.name}}</label>
+                      <div class="col-md-10">
+                        <bSwitch
+                          id="enableThreading"
+                          class="switch"
+                          [name]="configEntry.id"
+                          [id]="configEntry.id"
+                          [switch-on-color]="'primary'"
+                          [switch-inverse]="true"
+                          [switch-off-text]="text.Disabled"
+                          [switch-on-text]="text.Enabled"
+                          [switch-handle-width]="100"
+                          [switch-label-width]="20"
+                          [(ngModel)]="schedule.config[configEntry.id]">
+                        </bSwitch>
+                      </div>
+                    </div>
+                  </ng-container>
+                  <ng-container *ngSwitchCase="'string'">
+                    <div class="form-group row" [hidden]="simplifiedMode">
+                      <label class="col-md-2 control-label" [for]="configEntry.id"
+                             i18n>{{configEntry.name}}</label>
+                      <div class="col-md-10">
+                        <input type="text" class="form-control" [name]="configEntry.id" [id]="configEntry.id"
+                               [(ngModel)]="schedule.config[configEntry.id]" required>
+                      </div>
+                    </div>
+                  </ng-container>
+                  <ng-container *ngSwitchCase="'number'">
+                    <div class="form-group row" [hidden]="simplifiedMode">
+                      <label class="col-md-2 control-label" [for]="configEntry.id"
+                             i18n>{{configEntry.name}}</label>
+                      <div class="col-md-10">
+                        <input type="number" class="form-control" [name]="configEntry.id" [id]="configEntry.id"
+                               [(ngModel)]="schedule.config[configEntry.id]" required>
+                      </div>
+                    </div>
+                  </ng-container>
+                </ng-container>
+              </div>
+            </ng-container>
+          </div>
+          <div class="card-footer bg-transparent" *ngIf="tasksService.progress.value[schedule.taskName]">
+            <span class="progress-details"
+                  i18n>status</span>: {{tasksService.progress.value[schedule.taskName].comment}} <br/>
+            <span class="progress-details" i18n>elapsed</span>: {{getTimeElapsed(schedule.taskName) | duration}}<br/>
+            <span class="progress-details" i18n>left</span>: {{getTimeLeft(schedule.taskName) | duration}}
+            <div class="progress">
+              <div class="progress-bar progress-bar-success"
+                   role="progressbar"
+                   aria-valuenow="2"
+                   aria-valuemin="0"
+                   aria-valuemax="100"
+                   style="min-width: 2em;"
+                   [style.width.%]="(tasksService.progress.value[schedule.taskName].progress/(tasksService.progress.value[schedule.taskName].left+tasksService.progress.value[schedule.taskName].progress))*100">
+                {{tasksService.progress.value[schedule.taskName].progress}}
+                /{{tasksService.progress.value[schedule.taskName].progress + tasksService.progress.value[schedule.taskName].left}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</form>

@@ -1,4 +1,5 @@
 import {ClientConfig} from '../public/ConfigClass';
+import {TaskScheduleDTO} from '../../entities/task/TaskScheduleDTO';
 
 export enum DatabaseType {
   memory = 1, mysql = 2, sqlite = 3
@@ -70,6 +71,10 @@ export interface LogConfig {
   sqlLevel: SQLLogLevel;
 }
 
+export interface TaskConfig {
+  scheduled: TaskScheduleDTO[];
+}
+
 export interface ServerConfig {
   port: number;
   host: string;
@@ -83,6 +88,7 @@ export interface ServerConfig {
   photoMetadataSize: number;
   duplicates: DuplicatesConfig;
   log: LogConfig;
+  tasks: TaskConfig;
 }
 
 export interface IPrivateConfig {

@@ -18,7 +18,8 @@ export enum ErrorCodes {
 
   INPUT_ERROR = 12,
 
-  SETTINGS_ERROR = 13
+  SETTINGS_ERROR = 13,
+  TASK_ERROR = 14
 }
 
 export class ErrorDTO {

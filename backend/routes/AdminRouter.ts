@@ -9,6 +9,7 @@ export class AdminRouter {
 
     this.addGetStatistic(app);
     this.addGetDuplicates(app);
+    this.addTasks(app);
     this.addIndexGallery(app);
     this.addSettings(app);
   }
@@ -21,6 +22,7 @@ export class AdminRouter {
       RenderingMWs.renderResult
     );
   }
+
   private static addGetDuplicates(app: Express) {
     app.get('/api/admin/duplicates',
       AuthenticationMWs.authenticate,
@@ -53,6 +55,33 @@ export class AdminRouter {
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Admin),
       AdminMWs.resetIndexes,
+      RenderingMWs.renderResult
+    );
+  }
+
+  private static addTasks(app: Express) {
+    app.get('/api/admin/tasks/available',
+      AuthenticationMWs.authenticate,
+      AuthenticationMWs.authorise(UserRoles.Admin),
+      AdminMWs.getAvailableTasks,
+      RenderingMWs.renderResult
+    );
+    app.get('/api/admin/tasks/scheduled/progress',
+      AuthenticationMWs.authenticate,
+      AuthenticationMWs.authorise(UserRoles.Admin),
+      AdminMWs.getTaskProgresses,
+      RenderingMWs.renderResult
+    );
+    app.post('/api/admin/tasks/scheduled/:id/start',
+      AuthenticationMWs.authenticate,
+      AuthenticationMWs.authorise(UserRoles.Admin),
+      AdminMWs.startTask,
+      RenderingMWs.renderResult
+    );
+    app.post('/api/admin/tasks/scheduled/:id/stop',
+      AuthenticationMWs.authenticate,
+      AuthenticationMWs.authorise(UserRoles.Admin),
+      AdminMWs.stopTask,
       RenderingMWs.renderResult
     );
   }

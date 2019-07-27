@@ -1,0 +1,13 @@
+
+.progress-details {
+  font-weight: bold;
+}
+
+.card {
+  margin-bottom: 1rem;
+}
+
+.button-delete {
+  margin-top: -5px;
+  margin-bottom: -5px;
+}

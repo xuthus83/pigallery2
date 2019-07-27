@@ -1,44 +1,58 @@
-import {IIndexingTaskManager} from '../interfaces/IIndexingTaskManager';
 import {TaskProgressDTO} from '../../../common/entities/settings/TaskProgressDTO';
 import {ObjectManagers} from '../ObjectManagers';
 import * as path from 'path';
 import * as fs from 'fs';
-import {SQLConnection} from './SQLConnection';
-import {DirectoryEntity} from './enitites/DirectoryEntity';
 import {Logger} from '../../Logger';
 import {RendererInput, ThumbnailSourceType, ThumbnailWorker} from '../threading/ThumbnailWorker';
 import {Config} from '../../../common/config/private/Config';
 import {MediaDTO} from '../../../common/entities/MediaDTO';
 import {ProjectPath} from '../../ProjectPath';
 import {ThumbnailGeneratorMWs} from '../../middlewares/thumbnail/ThumbnailGeneratorMWs';
+import {Task} from './Task';
+import {DatabaseType} from '../../../common/config/private/IPrivateConfig';
+import {ConfigTemplateEntry, DefaultsTasks} from '../../../common/entities/task/TaskDTO';
 
-const LOG_TAG = '[IndexingTaskManager]';
+declare const global: any;
+const LOG_TAG = '[IndexingTask]';
 
-export class IndexingTaskManager implements IIndexingTaskManager {
+export class IndexingTask extends Task<{ createThumbnails: boolean }> {
+  public readonly Name = DefaultsTasks[DefaultsTasks.Indexing];
   directoriesToIndex: string[] = [];
-  indexingProgress: TaskProgressDTO = null;
-  enabled = false;
-  private indexNewDirectory = async (createThumbnails: boolean = false) => {
+  public readonly ConfigTemplate: ConfigTemplateEntry[] = [{
+    id: 'createThumbnails',
+    type: 'boolean',
+    name: 'With thumbnails',
+    defaultValue: false
+  }];
+
+  public get Supported(): boolean {
+    return Config.Server.database.type !== DatabaseType.memory;
+  }
+
+  protected async init() {
+    this.directoriesToIndex.push('/');
+  }
+
+  protected async step(): Promise<TaskProgressDTO> {
     if (this.directoriesToIndex.length === 0) {
-      this.indexingProgress = null;
       if (global.gc) {
         global.gc();
       }
-      return;
+      return null;
     }
     const directory = this.directoriesToIndex.shift();
-    this.indexingProgress.comment = directory;
-    this.indexingProgress.left = this.directoriesToIndex.length;
+    this.progress.comment = directory;
+    this.progress.left = this.directoriesToIndex.length;
     const scanned = await ObjectManagers.getInstance().IndexingManager.indexDirectory(directory);
-    if (this.enabled === false) {
-      return;
+    if (this.running === false) {
+      return null;
     }
-    this.indexingProgress.progress++;
-    this.indexingProgress.time.current = Date.now();
+    this.progress.progress++;
+    this.progress.time.current = Date.now();
     for (let i = 0; i < scanned.directories.length; i++) {
       this.directoriesToIndex.push(path.join(scanned.directories[i].path, scanned.directories[i].name));
     }
-    if (createThumbnails) {
+    if (this.config.createThumbnails) {
       for (let i = 0; i < scanned.media.length; i++) {
         try {
           const media = scanned.media[i];
@@ -63,56 +77,8 @@ export class IndexingTaskManager implements IIndexingTaskManager {
       }
 
     }
-    process.nextTick(() => {
-      this.indexNewDirectory(createThumbnails).catch(console.error);
-    });
-  };
-
-  startIndexing(createThumbnails: boolean = false): void {
-    if (this.directoriesToIndex.length === 0 && this.enabled === false) {
-      Logger.info(LOG_TAG, 'Starting indexing');
-      this.indexingProgress = {
-        progress: 0,
-        left: 0,
-        comment: '',
-        time: {
-          start: Date.now(),
-          current: Date.now()
-        }
-      };
-      this.directoriesToIndex.push('/');
-      this.enabled = true;
-      this.indexNewDirectory(createThumbnails).catch(console.error);
-    } else {
-      Logger.info(LOG_TAG, 'Already indexing..');
-    }
+    return this.progress;
   }
 
-  getProgress(): TaskProgressDTO {
-    return this.indexingProgress;
-  }
 
-  cancelIndexing(): void {
-    Logger.info(LOG_TAG, 'Canceling indexing');
-    this.directoriesToIndex = [];
-    this.indexingProgress = null;
-    this.enabled = false;
-    if (global.gc) {
-      global.gc();
-    }
-  }
-
-  async reset(): Promise<void> {
-    Logger.info(LOG_TAG, 'Resetting DB');
-    this.directoriesToIndex = [];
-    this.indexingProgress = null;
-    this.enabled = false;
-    const connection = await SQLConnection.getConnection();
-    return connection
-      .getRepository(DirectoryEntity)
-      .createQueryBuilder('directory')
-      .delete()
-      .execute().then(() => {
-      });
-  }
 }

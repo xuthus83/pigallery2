@@ -1,9 +1,9 @@
-import {IndexingProgressDTO} from '../../../common/entities/settings/IndexingProgressDTO';
+import {TaskProgressDTO} from '../../../common/entities/settings/TaskProgressDTO';
 
 export interface IIndexingTaskManager {
   startIndexing(createThumbnails?: boolean): void;
 
-  getProgress(): IndexingProgressDTO;
+  getProgress(): TaskProgressDTO;
 
   cancelIndexing(): void;
 

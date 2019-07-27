@@ -51,7 +51,7 @@ export class AdminMWs {
 
     const galleryManager = <ISQLGalleryManager>ObjectManagers.getInstance().GalleryManager;
     try {
-      req.resultPipe =  await galleryManager.getPossibleDuplicates();
+      req.resultPipe = await galleryManager.getPossibleDuplicates();
       return next();
     } catch (err) {
       if (err instanceof Error) {
@@ -253,6 +253,7 @@ export class AdminMWs {
       return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, 'Settings error: ' + JSON.stringify(err, null, '  '), err));
     }
   }
+
   public static async updateFacesSettings(req: Request, res: Response, next: NextFunction) {
     if ((typeof req.body === 'undefined') || (typeof req.body.settings === 'undefined')) {
       return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, 'settings is needed'));
@@ -438,6 +439,60 @@ export class AdminMWs {
     }
   }
 
+
+  public static startTask(req: Request, res: Response, next: NextFunction) {
+    try {
+      const id = req.params.id;
+      const taskConfig: any = req.body.config;
+      ObjectManagers.getInstance().TaskManager.start(id, taskConfig);
+      req.resultPipe = 'ok';
+      return next();
+    } catch (err) {
+      if (err instanceof Error) {
+        return next(new ErrorDTO(ErrorCodes.TASK_ERROR, 'Task error: ' + err.toString(), err));
+      }
+      return next(new ErrorDTO(ErrorCodes.TASK_ERROR, 'Task error: ' + JSON.stringify(err, null, '  '), err));
+    }
+  }
+
+  public static stopTask(req: Request, res: Response, next: NextFunction) {
+    try {
+      const id = req.params.id;
+      ObjectManagers.getInstance().TaskManager.stop(id);
+      req.resultPipe = 'ok';
+      return next();
+    } catch (err) {
+      if (err instanceof Error) {
+        return next(new ErrorDTO(ErrorCodes.TASK_ERROR, 'Task error: ' + err.toString(), err));
+      }
+      return next(new ErrorDTO(ErrorCodes.TASK_ERROR, 'Task error: ' + JSON.stringify(err, null, '  '), err));
+    }
+  }
+
+
+  public static getAvailableTasks(req: Request, res: Response, next: NextFunction) {
+    try {
+      req.resultPipe = ObjectManagers.getInstance().TaskManager.getAvailableTasks();
+      return next();
+    } catch (err) {
+      if (err instanceof Error) {
+        return next(new ErrorDTO(ErrorCodes.TASK_ERROR, 'Task error: ' + err.toString(), err));
+      }
+      return next(new ErrorDTO(ErrorCodes.TASK_ERROR, 'Task error: ' + JSON.stringify(err, null, '  '), err));
+    }
+  }
+
+  public static getTaskProgresses(req: Request, res: Response, next: NextFunction) {
+    try {
+      req.resultPipe = ObjectManagers.getInstance().TaskManager.getProgresses();
+      return next();
+    } catch (err) {
+      if (err instanceof Error) {
+        return next(new ErrorDTO(ErrorCodes.TASK_ERROR, 'Task error: ' + err.toString(), err));
+      }
+      return next(new ErrorDTO(ErrorCodes.TASK_ERROR, 'Task error: ' + JSON.stringify(err, null, '  '), err));
+    }
+  }
 
   public static startIndexing(req: Request, res: Response, next: NextFunction) {
     try {

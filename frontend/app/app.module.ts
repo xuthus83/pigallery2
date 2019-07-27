@@ -78,9 +78,11 @@ import {FacesComponent} from './ui/faces/faces.component';
 import {FacesService} from './ui/faces/faces.service';
 import {FaceComponent} from './ui/faces/face/face.component';
 import {VersionService} from './model/version.service';
-import { DirectoriesComponent } from './ui/gallery/directories/directories.component';
+import {DirectoriesComponent} from './ui/gallery/directories/directories.component';
 import {ControlsLightboxComponent} from './ui/gallery/lightbox/controls/controls.lightbox.gallery.component';
 import {FacesSettingsComponent} from './ui/settings/faces/faces.settings.component';
+import {TasksSettingsComponent} from './ui/settings/tasks/tasks.settings.component';
+import {ScheduledTasksService} from './ui/settings/scheduled-tasks.service';
 
 
 @Injectable()
@@ -166,8 +168,12 @@ export function translationsFactory(locale: string) {
     InfoPanelLightboxComponent,
     ControlsLightboxComponent,
     RandomQueryBuilderGalleryComponent,
+    DirectoriesComponent,
     // Face
     FaceComponent,
+    // Duplicates
+    DuplicateComponent,
+    DuplicatesPhotoComponent,
     // Settings
     UserMangerSettingsComponent,
     DatabaseSettingsComponent,
@@ -182,15 +188,14 @@ export function translationsFactory(locale: string) {
     FacesSettingsComponent,
     OtherSettingsComponent,
     IndexingSettingsComponent,
-    DuplicateComponent,
-    DuplicatesPhotoComponent,
+    TasksSettingsComponent,
+    // Pipes
     StringifyRole,
     IconizeSortingMethod,
     StringifySortingMethod,
     FixOrientationPipe,
     DurationPipe,
-    FileSizePipe,
-    DirectoriesComponent
+    FileSizePipe
   ],
   providers: [
     {provide: UrlSerializer, useClass: CustomUrlSerializer},
@@ -214,6 +219,7 @@ export function translationsFactory(locale: string) {
     DuplicateService,
     FacesService,
     VersionService,
+    ScheduledTasksService,
     {
       provide: TRANSLATIONS,
       useFactory: translationsFactory,
