@@ -44,11 +44,15 @@ export class ScheduledTasksService {
     if (this.timer != null || this.subscribers === 0) {
       return;
     }
+    let repeatTime = 5000;
+    if (Object.values(this.progress.value).length === 0) {
+      repeatTime = 10000;
+    }
     this.timer = window.setTimeout(async () => {
       await this.getProgress();
       this.timer = null;
       this.getProgressPeriodically();
-    }, 5000);
+    }, repeatTime);
   }
 
   private incSubscribers() {

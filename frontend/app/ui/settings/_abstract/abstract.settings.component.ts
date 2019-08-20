@@ -74,7 +74,8 @@ export abstract class SettingsComponent<T extends { [key: string]: any }, S exte
     for (let i = 0; i < keys.length; i++) {
       const key = keys[i];
       if (typeof original[key] === 'undefined') {
-        throw new Error('unknown settings: ' + key);
+        console.warn('unknown settings: ' + key);
+        return false;
       }
       if (typeof original[key] === 'object') {
         if (this.settingsSame(newSettings[key], original[key]) === false) {
@@ -88,6 +89,13 @@ export abstract class SettingsComponent<T extends { [key: string]: any }, S exte
     return true;
   }
 
+  public testSettingChanges() {
+    // TODO: fix after this issue is fixed: https://github.com/angular/angular/issues/24818
+    setTimeout(() => {
+      this.changed = !this.settingsSame(this.settings, this.original);
+    }, 0);
+  }
+
   ngOnInit() {
     if (!this._authService.isAuthenticated() ||
       this._authService.user.value.role < UserRoles.Admin) {
@@ -98,9 +106,7 @@ export abstract class SettingsComponent<T extends { [key: string]: any }, S exte
 
     // TODO: fix after this issue is fixed: https://github.com/angular/angular/issues/24818
     this._subscription = this.form.valueChanges.subscribe(() => {
-      setTimeout(() => {
-        this.changed = !this.settingsSame(this.settings, this.original);
-      }, 0);
+      this.testSettingChanges();
     });
 
   }

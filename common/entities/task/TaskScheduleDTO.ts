@@ -12,15 +12,13 @@ export interface NeverTaskTrigger {
 
 export interface ScheduledTaskTrigger extends TaskTrigger {
   type: TaskTriggerType.scheduled;
-  time: number;
+  time: number;  // data time
 }
 
 export interface PeriodicTaskTrigger extends TaskTrigger {
   type: TaskTriggerType.periodic;
-  time: {
-    offset: number,
-    repeat: number
-  };
+  periodicity: number;  // 1-7: week days 8+ every x days
+  atTime: number; // day time
 }
 
 export interface TaskScheduleDTO {

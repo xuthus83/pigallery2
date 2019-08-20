@@ -1,0 +1,10 @@
+<timepicker
+  class="form-control"
+  [name]="name"
+  [ngModel]="date"
+  [showSpinners]="false"
+  [showMeridian]="false"
+  [mousewheel]="true"
+  [arrowkeys]="true"
+  (ngModelChange)="onChange($event)"
+  required></timepicker>

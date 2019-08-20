@@ -1,7 +1,7 @@
 <form #settingsForm="ngForm" class="form-horizontal">
   <div class="card mb-4">
     <h5 class="card-header">
-      <ng-container i18n>Video settings</ng-container>
+      <ng-container i18n>Video settings</ng-container><ng-container *ngIf="changed">*</ng-container>
       <div class="switch-wrapper">
         <bSwitch
           class="switch"

@@ -14,7 +14,7 @@ import {Config} from '../../../../common/config/public/Config';
 })
 export class AdminComponent implements OnInit {
 
-  simplifiedMode = true;
+  simplifiedMode = false;
   text = {
     Advanced: 'Advanced',
     Simplified: 'Simplified'

@@ -12,7 +12,7 @@ import * as path from 'path';
 import {ConfigLoader} from 'typeconfig';
 import {Utils} from '../../Utils';
 import {UserRoles} from '../../entities/UserDTO';
-import {TaskScheduleDTO, TaskTriggerType} from '../../entities/task/TaskScheduleDTO';
+import {TaskScheduleDTO} from '../../entities/task/TaskScheduleDTO';
 import {Config} from './Config';
 
 /**
@@ -65,28 +65,7 @@ export class PrivateConfigClass extends PublicConfigClass implements IPrivateCon
       listingLimit: 1000
     },
     tasks: {
-      scheduled: [
-        {
-          priority: 1,
-          taskName: 'indexing',
-          config: null,
-          trigger: {
-            type: TaskTriggerType.periodic,
-            time: {
-              offset: 0,
-              repeat: 10
-            }
-          }
-        },
-        {
-          priority: 2,
-          taskName: 'Database reset',
-          config: null,
-          trigger: {
-            type: TaskTriggerType.never
-          }
-        }
-      ]
+      scheduled: []
     }
   };
   private ConfigLoader: any;

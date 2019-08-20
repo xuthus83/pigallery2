@@ -83,6 +83,10 @@ import {ControlsLightboxComponent} from './ui/gallery/lightbox/controls/controls
 import {FacesSettingsComponent} from './ui/settings/faces/faces.settings.component';
 import {TasksSettingsComponent} from './ui/settings/tasks/tasks.settings.component';
 import {ScheduledTasksService} from './ui/settings/scheduled-tasks.service';
+import {TimepickerModule} from 'ngx-bootstrap/timepicker';
+import {TimeStampDatePickerComponent} from './ui/utils/timestamp-datepicker/datepicker.component';
+import {TimeStampTimePickerComponent} from './ui/utils/timestamp-timepicker/timepicker.component';
+
 
 
 @Injectable()
@@ -141,7 +145,8 @@ export function translationsFactory(locale: string) {
     BsDropdownModule.forRoot(),
     SlimLoadingBarModule.forRoot(),
     BsDatepickerModule.forRoot(),
-    YagaModule
+    YagaModule,
+    TimepickerModule.forRoot()
   ],
   declarations: [AppComponent,
     LoginComponent,
@@ -151,6 +156,8 @@ export function translationsFactory(locale: string) {
     // misc
     FrameComponent,
     LanguageComponent,
+    TimeStampDatePickerComponent,
+    TimeStampTimePickerComponent,
     // Gallery
     GalleryLightboxMediaComponent,
     GalleryPhotoLoadingComponent,

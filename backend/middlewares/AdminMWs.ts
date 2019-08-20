@@ -3,7 +3,7 @@ import {ErrorCodes, ErrorDTO} from '../../common/entities/Error';
 import {ObjectManagers} from '../model/ObjectManagers';
 import {Logger} from '../Logger';
 import {SQLConnection} from '../model/sql/SQLConnection';
-import {DataBaseConfig, DatabaseType, IndexingConfig, ThumbnailConfig} from '../../common/config/private/IPrivateConfig';
+import {DataBaseConfig, DatabaseType, IndexingConfig, TaskConfig, ThumbnailConfig} from '../../common/config/private/IPrivateConfig';
 import {Config} from '../../common/config/private/Config';
 import {ConfigDiagnostics} from '../model/diagnostics/ConfigDiagnostics';
 import {ClientConfig} from '../../common/config/public/ConfigClass';
@@ -427,6 +427,35 @@ export class AdminMWs {
       const original = Config.original();
       original.Server.indexing = settings;
       original.save();
+      await ConfigDiagnostics.runDiagnostics();
+      Logger.info(LOG_TAG, 'new config:');
+      Logger.info(LOG_TAG, JSON.stringify(Config, null, '\t'));
+      return next();
+    } catch (err) {
+      if (err instanceof Error) {
+        return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, 'Settings error: ' + err.toString(), err));
+      }
+      return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, 'Settings error: ' + JSON.stringify(err, null, '  '), err));
+    }
+  }
+
+
+  public static async updateTasksSettings(req: Request, res: Response, next: NextFunction) {
+    if ((typeof req.body === 'undefined') || (typeof req.body.settings === 'undefined')) {
+      return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, 'settings is needed'));
+    }
+
+    try {
+
+      // only updating explicitly set config (not saving config set by the diagnostics)
+      const settings: TaskConfig = req.body.settings;
+      const original = Config.original();
+      await ConfigDiagnostics.testTasksConfig(settings, original);
+
+      Config.Server.tasks = settings;
+      original.Server.tasks = settings;
+      original.save();
+
       await ConfigDiagnostics.runDiagnostics();
       Logger.info(LOG_TAG, 'new config:');
       Logger.info(LOG_TAG, JSON.stringify(Config, null, '\t'));

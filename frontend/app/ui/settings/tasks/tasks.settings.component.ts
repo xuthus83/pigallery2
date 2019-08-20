@@ -8,19 +8,29 @@ import {SettingsComponent} from '../_abstract/abstract.settings.component';
 import {I18n} from '@ngx-translate/i18n-polyfill';
 import {ErrorDTO} from '../../../../../common/entities/Error';
 import {ScheduledTasksService} from '../scheduled-tasks.service';
-import {TaskScheduleDTO} from '../../../../../common/entities/task/TaskScheduleDTO';
+import {
+  NeverTaskTrigger,
+  PeriodicTaskTrigger,
+  ScheduledTaskTrigger,
+  TaskScheduleDTO,
+  TaskTriggerType
+} from '../../../../../common/entities/task/TaskScheduleDTO';
+import {Utils} from '../../../../../common/Utils';
 
 @Component({
   selector: 'app-settings-tasks',
   templateUrl: './tasks.settings.component.html',
   styleUrls: ['./tasks.settings.component.css',
     './../_abstract/abstract.settings.component.css'],
-  providers: [TasksSettingsService],
+  providers: [TasksSettingsService]
 })
 export class TasksSettingsComponent extends SettingsComponent<TaskConfig, TasksSettingsService>
   implements OnInit, OnDestroy, OnChanges {
 
   disableButtons = false;
+  taskTriggerType: { key: number, value: string }[];
+  TaskTriggerType = TaskTriggerType;
+  periods: string[] = [];
 
   constructor(_authService: AuthenticationService,
               _navigation: NavigationService,
@@ -37,7 +47,15 @@ export class TasksSettingsComponent extends SettingsComponent<TaskConfig, TasksS
       i18n,
       s => s.Server.tasks);
     this.hasAvailableSettings = !this.simplifiedMode;
-
+    this.taskTriggerType = Utils.enumToArray(TaskTriggerType);
+    this.periods = [this.i18n('Monday'),
+      this.i18n('Tuesday'),
+      this.i18n('Wednesday'),
+      this.i18n('Thursday'),
+      this.i18n('Friday'),
+      this.i18n('Saturday'),
+      this.i18n('Sunday'),
+      this.i18n('day')];
   }
 
 
@@ -130,6 +148,34 @@ export class TasksSettingsComponent extends SettingsComponent<TaskConfig, TasksS
 
   }
 
+  update($event: string, trigger: ScheduledTaskTrigger) {
+    if (!$event) {
+      return;
+    }
+    console.log(typeof $event);
+    console.log($event);
+    console.log(new Date($event));
+    console.log(new Date($event).getTime());
+    trigger.time = new Date($event).getTime();
+  }
+
+  toDate(time: number) {
+    return new Date(time);
+  }
+
+  taskTriggerTypeChanged(triggerType: TaskTriggerType, schedule: TaskScheduleDTO) {
+    schedule.trigger = <NeverTaskTrigger>{type: triggerType};
+    switch (triggerType) {
+      case TaskTriggerType.scheduled:
+        (<ScheduledTaskTrigger><unknown>schedule.trigger).time = (Date.now());
+        break;
+
+      case TaskTriggerType.periodic:
+        (<PeriodicTaskTrigger><unknown>schedule.trigger).periodicity = null;
+        (<PeriodicTaskTrigger><unknown>schedule.trigger).atTime = null;
+        break;
+    }
+  }
 }
 
 

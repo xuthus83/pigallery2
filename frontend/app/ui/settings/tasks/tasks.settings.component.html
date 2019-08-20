@@ -1,7 +1,8 @@
 <form #settingsForm="ngForm" class="form-horizontal">
   <div class="card mb-4">
     <h5 class="card-header" i18n>
-      Tasks
+      <ng-container i18n>Tasks</ng-container>
+      <ng-container *ngIf="changed">*</ng-container>
     </h5>
     <div class="card-body">
       <div [hidden]="!error" class="alert alert-danger" role="alert"><strong>Error: </strong>{{error}}</div>
@@ -24,6 +25,36 @@
                           [ngValue]="availableTask.Name">{{availableTask.Name}}
                   </option>
                 </select>
+                <div class="row">
+                  <select class="form-control" [(ngModel)]="schedule.trigger.type"
+                          (ngModelChange)="taskTriggerTypeChanged($event,schedule)"
+                          [name]="'repeatType'+i" required>
+                    <option *ngFor="let taskTrigger of taskTriggerType"
+                            [ngValue]="taskTrigger.key">{{taskTrigger.value}}
+                    </option>
+                  </select>
+
+                  <app-timestamp-datepicker
+                    [name]="'triggerTime'+i"
+                    *ngIf="schedule.trigger.type== TaskTriggerType.scheduled"
+                    [(timestamp)]="schedule.trigger.time"></app-timestamp-datepicker>
+
+                  <select *ngIf="schedule.trigger.type== TaskTriggerType.periodic"
+                          class="form-control" [(ngModel)]="schedule.trigger.periodicity" [name]="'periodicity'+i"
+                          required>
+                    <option *ngFor="let period of periods; let i= index"
+                            [ngValue]="i">
+                      <ng-container i18n>every</ng-container>
+                      {{period}}
+                    </option>
+                  </select>
+                  <app-timestamp-timepicker
+                    [name]="'atTime'+i"
+                    (timestampChange)="testSettingChanges()"
+                    *ngIf="schedule.trigger.type== TaskTriggerType.periodic"
+                    [(timestamp)]="schedule.trigger.atTime"></app-timestamp-timepicker>
+
+                </div>
               </div>
               <div>
                 <button class="btn btn-success"
@@ -31,7 +62,7 @@
                         [disabled]="disableButtons"
                         title="Trigger task run manually"
                         i18n-title
-                        (click)="start(schedule)" i18n>Start
+                        (click)="start(schedule)" i18n>Start now
                 </button>
                 <button class="btn btn-secondary"
                         *ngIf="tasksService.progress.value[schedule.taskName]"
@@ -110,6 +141,13 @@
           </div>
         </div>
       </div>
+      <button class="btn btn-success float-right"
+              [disabled]="!settingsForm.form.valid || !changed || inProgress"
+              (click)="save()" i18n>Save
+      </button>
+      <button class="btn btn-secondary float-right"
+              (click)="reset()" i18n>Reset
+      </button>
     </div>
 
   </div>

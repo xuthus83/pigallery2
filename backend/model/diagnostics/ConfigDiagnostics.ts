@@ -3,6 +3,7 @@ import {
   DataBaseConfig,
   DatabaseType,
   IPrivateConfig,
+  TaskConfig,
   ThumbnailConfig,
   ThumbnailProcessingLib
 } from '../../../common/config/private/IPrivateConfig';
@@ -126,6 +127,10 @@ export class ConfigDiagnostics {
     }
   }
 
+
+  static async testTasksConfig(faces: TaskConfig, config: IPrivateConfig) {
+
+  }
 
   static async testFacesConfig(faces: ClientConfig.FacesConfig, config: IPrivateConfig) {
     if (faces.enabled === true) {
@@ -278,6 +283,17 @@ export class ConfigDiagnostics {
       NotificationManager.warning('Faces are not supported with these settings. Disabling temporally. ' +
         'Please adjust the config properly.', err.toString());
       Logger.warn(LOG_TAG, 'Faces are not supported with these settings, switching off..', err.toString());
+      Config.Client.Faces.enabled = false;
+    }
+
+
+    try {
+      await ConfigDiagnostics.testTasksConfig(Config.Server.tasks, Config);
+    } catch (ex) {
+      const err: Error = ex;
+      NotificationManager.warning('Some Tasks are not supported with these settings. Disabling temporally. ' +
+        'Please adjust the config properly.', err.toString());
+      Logger.warn(LOG_TAG, 'Some Tasks not supported with these settings, switching off..', err.toString());
       Config.Client.Faces.enabled = false;
     }
 

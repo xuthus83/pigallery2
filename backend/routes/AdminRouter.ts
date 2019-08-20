@@ -174,6 +174,12 @@ export class AdminRouter {
       AdminMWs.updateIndexingSettings,
       RenderingMWs.renderOK
     );
+    app.put('/api/settings/tasks',
+      AuthenticationMWs.authenticate,
+      AuthenticationMWs.authorise(UserRoles.Admin),
+      AdminMWs.updateTasksSettings,
+      RenderingMWs.renderOK
+    );
   }
 
 
