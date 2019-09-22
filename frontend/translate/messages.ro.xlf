@@ -8,7 +8,7 @@
           <context context-type="sourcefile">app/ui/login/login.component.html</context>
           <context context-type="linenumber">10</context>
         </context-group>
-        <target>Va rugam sa va logati</target>
+        <target>Vă rugăm să vă autentificați</target>
       </trans-unit>
       <trans-unit id="f5006bd06a75b0b5719b47cd81a516d1a923ef88" datatype="html">
         <source>
@@ -18,7 +18,7 @@
           <context context-type="sourcefile">app/ui/login/login.component.html</context>
           <context context-type="linenumber">12</context>
         </context-group>
-        <target>Nume utilizator sau parolă greșită</target>
+        <target>Nume utilizator sau parolă incorectă</target>
       </trans-unit>
       <trans-unit id="08c74dc9762957593b91f6eb5d65efdfc975bf48" datatype="html">
         <source>Username</source>
@@ -34,7 +34,7 @@
           <context context-type="sourcefile">app/ui/settings/database/database.settings.component.html</context>
           <context context-type="linenumber">23</context>
         </context-group>
-        <target>Nume de utilizator</target>
+        <target>Nume utilizator</target>
       </trans-unit>
       <trans-unit id="c32ef07f8803a223a83ed17024b38e8d82292407" datatype="html">
         <source>Password</source>
@@ -62,7 +62,7 @@
           <context context-type="sourcefile">app/ui/settings/database/database.settings.component.html</context>
           <context context-type="linenumber">25</context>
         </context-group>
-        <target>Parola</target>
+        <target>Parolă</target>
       </trans-unit>
       <trans-unit id="3eb49d60bd859eb2d9d3a6d380cdf4e0b8252333" datatype="html">
         <source>Remember me</source>
@@ -70,7 +70,7 @@
           <context context-type="sourcefile">app/ui/login/login.component.html</context>
           <context context-type="linenumber">56</context>
         </context-group>
-        <target>Amintește-ți de mine</target>
+        <target>Reține-mă</target>
       </trans-unit>
       <trans-unit id="c15f0f6076dd3f758adb69556fb1751f7a8139dc" datatype="html">
         <source>Login
@@ -89,7 +89,7 @@
           <context context-type="sourcefile">app/ui/sharelogin/share-login.component.html</context>
           <context context-type="linenumber">11</context>
         </context-group>
-        <target>Parola gresita</target>
+        <target>Parolă incorectă</target>
       </trans-unit>
       <trans-unit id="7bc15e0478a1384ea38903e2506f4ae3fe7dd6e1" datatype="html">
         <source>Enter
@@ -98,7 +98,7 @@
           <context context-type="sourcefile">app/ui/sharelogin/share-login.component.html</context>
           <context context-type="linenumber">41</context>
         </context-group>
-        <target>introduce</target>
+        <target>Intră</target>
       </trans-unit>
       <trans-unit id="e576d10a00b926dc56802231438eea7831b602ee" datatype="html">
         <source>download</source>
@@ -106,7 +106,7 @@
           <context context-type="sourcefile">app/ui/gallery/lightbox/controls/controls.lightbox.gallery.component.html</context>
           <context context-type="linenumber">11</context>
         </context-group>
-        <target>Descarca</target>
+        <target>descarcă</target>
       </trans-unit>
       <trans-unit id="1b39202792f1e79300ba55f5615910525c482e80" datatype="html">
         <source>info key: i</source>
@@ -114,7 +114,7 @@
           <context context-type="sourcefile">app/ui/gallery/lightbox/controls/controls.lightbox.gallery.component.html</context>
           <context context-type="linenumber">15</context>
         </context-group>
-        <target>cheie info: i</target>
+        <target>informații, tasta: i</target>
       </trans-unit>
       <trans-unit id="75d395063772653b542109d690691e092511a851" datatype="html">
         <source>toggle fullscreen, key: f</source>
@@ -146,7 +146,7 @@
           <context context-type="sourcefile">app/ui/gallery/map/lightbox/lightbox.map.gallery.component.html</context>
           <context context-type="linenumber">94</context>
         </context-group>
-        <target>aproape, cheie: Evadare</target>
+        <target>închide, tasta: Esc</target>
       </trans-unit>
       <trans-unit id="774684628600c4622be2ed1dab5e1525c03b7bd3" datatype="html">
         <source>key: left arrow</source>
@@ -154,7 +154,7 @@
           <context context-type="sourcefile">app/ui/gallery/lightbox/controls/controls.lightbox.gallery.component.html</context>
           <context context-type="linenumber">76</context>
         </context-group>
-        <target>tasta: săgeata stângă</target>
+        <target>tasta: săgeată stânga</target>
       </trans-unit>
       <trans-unit id="063218892255510d21ef1cd3797ef59729730964" datatype="html">
         <source>key: right arrow</source>
@@ -162,7 +162,7 @@
           <context context-type="sourcefile">app/ui/gallery/lightbox/controls/controls.lightbox.gallery.component.html</context>
           <context context-type="linenumber">80</context>
         </context-group>
-        <target>tasta: săgeata dreapta</target>
+        <target>tasta: săgeată dreapta</target>
       </trans-unit>
       <trans-unit id="49ff0cc3911a77da18c69b07229b401f12102904" datatype="html">
         <source>Zoom out, key: '-'</source>
@@ -170,7 +170,7 @@
           <context context-type="sourcefile">app/ui/gallery/lightbox/controls/controls.lightbox.gallery.component.html</context>
           <context context-type="linenumber">86</context>
         </context-group>
-        <target>Zoom out, tasta: '-'</target>
+        <target>Micșorează, tasta: '-'</target>
       </trans-unit>
       <trans-unit id="b0bf8edbb5f9dc62365ecf63a317ae0e21faac73" datatype="html">
         <source>Zoom in, key: '+'</source>
@@ -178,7 +178,7 @@
           <context context-type="sourcefile">app/ui/gallery/lightbox/controls/controls.lightbox.gallery.component.html</context>
           <context context-type="linenumber">93</context>
         </context-group>
-        <target>Măriți, tastați: '+'</target>
+        <target>Mărește, tasta: '+'</target>
       </trans-unit>
       <trans-unit id="f3cda2936c4e70d5b920b2c243ec634222743ba1" datatype="html">
         <source>Link availability</source>
@@ -186,7 +186,7 @@
           <context context-type="sourcefile">app/ui/gallery/gallery.component.html</context>
           <context context-type="linenumber">7</context>
         </context-group>
-        <target>Disponibilitatea link-ului</target>
+        <target>Disponibilitatea legăturii</target>
       </trans-unit>
       <trans-unit id="fc34f2683c4cb526ed7095c5b1cdd66d672ba932" datatype="html">
         <source>days</source>
@@ -194,7 +194,7 @@
           <context context-type="sourcefile">app/ui/gallery/gallery.component.html</context>
           <context context-type="linenumber">9</context>
         </context-group>
-        <target>zi</target>
+        <target>zile</target>
       </trans-unit>
       <trans-unit id="c17b163553f84f2f704031a1b343e7b89c5c5ee1" datatype="html">
         <source>
@@ -204,7 +204,7 @@
           <context context-type="sourcefile">app/ui/gallery/gallery.component.html</context>
           <context context-type="linenumber">44</context>
         </context-group>
-        <target>Prea multe rezultate de arătat. Rafinați-vă căutarea.</target>
+        <target>Prea multe rezultate de afișat. Adjustați-vă interogarea.</target>
       </trans-unit>
       <trans-unit id="6503d1c263c249bd71dfbfd0c12f3ff2233b2386" datatype="html">
         <source>No faces to show.</source>
@@ -212,7 +212,7 @@
           <context context-type="sourcefile">app/ui/faces/faces.component.html</context>
           <context context-type="linenumber">15</context>
         </context-group>
-        <target>Fără fețe de arătat.</target>
+        <target>Nicio față de afișat.</target>
       </trans-unit>
       <trans-unit id="a34baa1282c78d04170353e19aaca50af32adf00" datatype="html">
         <source>Gallery</source>
@@ -228,7 +228,7 @@
           <context context-type="sourcefile">app/ui/frame/frame.component.html</context>
           <context context-type="linenumber">21</context>
         </context-group>
-        <target>feţele</target>
+        <target>Fețe</target>
       </trans-unit>
       <trans-unit id="4411a8af7bfef3125efb0326d5e6cf500b5d31f3" datatype="html">
         <source>duplicates</source>
@@ -236,7 +236,7 @@
           <context context-type="sourcefile">app/ui/frame/frame.component.html</context>
           <context context-type="linenumber">51</context>
         </context-group>
-        <target>duplicate</target>
+        <target>dubluri</target>
       </trans-unit>
       <trans-unit id="121cc5391cd2a5115bc2b3160379ee5b36cd7716" datatype="html">
         <source>Settings</source>
@@ -272,7 +272,7 @@
           <context context-type="sourcefile">app/ui/gallery/share/share.gallery.component.html</context>
           <context context-type="linenumber">10</context>
         </context-group>
-        <target>Acțiune</target>
+        <target>Partajare</target>
       </trans-unit>
       <trans-unit id="d6e92b2b2b7668da4091ca34948c28521bdacbe9" datatype="html">
         <source>Copy
@@ -285,7 +285,7 @@
           <context context-type="sourcefile">app/ui/gallery/random-query-builder/random-query-builder.gallery.component.html</context>
           <context context-type="linenumber">28</context>
         </context-group>
-        <target>Copie</target>
+        <target>Copiere</target>
       </trans-unit>
       <trans-unit id="07867d2c08ad81d9f1cb27f083c5d32d0d1f3bd6" datatype="html">
         <source>Sharing:</source>
@@ -293,7 +293,7 @@
           <context context-type="sourcefile">app/ui/gallery/share/share.gallery.component.html</context>
           <context context-type="linenumber">36</context>
         </context-group>
-        <target>Partajarea:</target>
+        <target>Partajare:</target>
       </trans-unit>
       <trans-unit id="030e713e20f553f6c55b76d217e8b604da1ea7c2" datatype="html">
         <source>Include subfolders:</source>
@@ -305,7 +305,7 @@
           <context context-type="sourcefile">app/ui/gallery/random-query-builder/random-query-builder.gallery.component.html</context>
           <context context-type="linenumber">46</context>
         </context-group>
-        <target>Includeți subfoldere:</target>
+        <target>Include subdosare:</target>
       </trans-unit>
       <trans-unit id="ac26f1ef0bc7eb42fdabd901d99cb23728abcd4f" datatype="html">
         <source>Valid:</source>
@@ -313,7 +313,7 @@
           <context context-type="sourcefile">app/ui/gallery/share/share.gallery.component.html</context>
           <context context-type="linenumber">85</context>
         </context-group>
-        <target>Valabil:</target>
+        <target>Disponibil:</target>
       </trans-unit>
       <trans-unit id="41e62daa962947c0d23ded0981975d1bddf0bf38" datatype="html">
         <source>Minutes</source>
@@ -329,7 +329,7 @@
           <context context-type="sourcefile">app/ui/gallery/share/share.gallery.component.html</context>
           <context context-type="linenumber">96</context>
         </context-group>
-        <target>ore</target>
+        <target>Ore</target>
       </trans-unit>
       <trans-unit id="a5c3d9d2296f7886e8289b9f623323803deacfc6" datatype="html">
         <source>Days</source>
@@ -337,7 +337,7 @@
           <context context-type="sourcefile">app/ui/gallery/share/share.gallery.component.html</context>
           <context context-type="linenumber">97</context>
         </context-group>
-        <target>zi</target>
+        <target>Zile</target>
       </trans-unit>
       <trans-unit id="12cc9773650706e6b16eec367da84f99a1e6399c" datatype="html">
         <source>Months</source>
@@ -371,7 +371,7 @@
           <context context-type="sourcefile">app/ui/admin/admin.component.html</context>
           <context context-type="linenumber">5</context>
         </context-group>
-        <target>Notificări pe server</target>
+        <target>Notificări de server</target>
       </trans-unit>
       <trans-unit id="483d20ced82942e869d34d4592675741a0dfe910" datatype="html">
         <source>
@@ -397,7 +397,7 @@
           <context context-type="sourcefile">app/ui/admin/admin.component.html</context>
           <context context-type="linenumber">30</context>
         </context-group>
-        <target>mod</target>
+        <target>Mod</target>
       </trans-unit>
       <trans-unit id="321e4419a943044e674beb55b8039f42a9761ca5" datatype="html">
         <source>Info</source>
@@ -405,7 +405,7 @@
           <context context-type="sourcefile">app/ui/gallery/lightbox/infopanel/info-panel.lightbox.gallery.component.html</context>
           <context context-type="linenumber">3</context>
         </context-group>
-        <target>Info</target>
+        <target>Informații</target>
       </trans-unit>
       <trans-unit id="653fa26f58c963f7493010061952b3fe63cd8084" datatype="html">
         <source>duration</source>
@@ -429,7 +429,7 @@
           <context context-type="sourcefile">app/ui/gallery/random-query-builder/random-query-builder.gallery.component.html</context>
           <context context-type="linenumber">3</context>
         </context-group>
-        <target>Link aleatoriu</target>
+        <target>Legătură aleatorie</target>
       </trans-unit>
       <trans-unit id="c6e09603cadec32184dfabf3cffca64761aa48cc" datatype="html">
         <source>Random Link generator</source>
@@ -540,7 +540,7 @@
           <context context-type="sourcefile">app/ui/settings/usermanager/usermanager.settings.component.html</context>
           <context context-type="linenumber">58</context>
         </context-group>
-        <target>Pentru a proteja site-ul cu parolă / aveți conectare activați acest lucru.</target>
+        <target>Pentru a proteja site-ul cu parolă / cereți utilizatorului să activeze funcția.</target>
       </trans-unit>
       <trans-unit id="2df47a22f05b9ac3bdabb6693d4bc37c3ad7c000" datatype="html">
         <source>Add new User</source>
@@ -592,7 +592,7 @@
           <context context-type="sourcefile">app/ui/settings/database/database.settings.component.html</context>
           <context context-type="linenumber">14</context>
         </context-group>
-        <target>Instalați manual modulul mysql pentru a utiliza mysql (npm instala mysql)</target>
+        <target>Instalați manual modulul node MuSQL pentru a utiliza MySQL (npm install mysql)</target>
       </trans-unit>
       <trans-unit id="1531e77d9dbcfb6a3efeb71fca40da5f5f7ddaaf" datatype="html">
         <source>MySQL settings:</source>
@@ -637,7 +637,7 @@
           <context context-type="sourcefile">app/ui/settings/database/database.settings.component.html</context>
           <context context-type="linenumber">37</context>
         </context-group>
-        <target>Salvați</target>
+        <target>Salvare</target>
       </trans-unit>
       <trans-unit id="606e35514c0bf86c3b47babbc76eb1bb4e973cb0" datatype="html">
         <source>Reset
@@ -646,7 +646,7 @@
           <context context-type="sourcefile">app/ui/settings/database/database.settings.component.html</context>
           <context context-type="linenumber">40</context>
         </context-group>
-        <target>restabili</target>
+        <target>Restabilire</target>
       </trans-unit>
       <trans-unit id="808812b8319c389ecbb84c658d5b3eac7087d079" datatype="html">
         <source>Map settings</source>
@@ -662,7 +662,7 @@
           <context context-type="sourcefile">app/ui/settings/map/map.settings.component.html</context>
           <context context-type="linenumber">25</context>
         </context-group>
-        <target>Folosiți markere de imagine</target>
+        <target>Utilizare marcatori de imagine</target>
       </trans-unit>
       <trans-unit id="05a7c135815c576c6f2a6c5a7e5adf0ff228a224" datatype="html">
         <source>
@@ -672,7 +672,7 @@
           <context context-type="sourcefile">app/ui/settings/map/map.settings.component.html</context>
           <context context-type="linenumber">39</context>
         </context-group>
-        <target>Harta va folosi imagini în miniatură ca markeri în loc de pinul implicit.</target>
+        <target>Harta va folosi miniaturi ca marcatori în loc de pinul implicit.</target>
       </trans-unit>
       <trans-unit id="1bd9d57dffd8f2e6ed1c65e3ed7bf329f317e752" datatype="html">
         <source>Map provider</source>
@@ -688,7 +688,7 @@
           <context context-type="sourcefile">app/ui/settings/map/map.settings.component.html</context>
           <context context-type="linenumber">63</context>
         </context-group>
-        <target>Urlă de gresie *</target>
+        <target>URL plăci*</target>
       </trans-unit>
       <trans-unit id="fd2b3090099597195c82fe0f1963ae97243956b0" datatype="html">
         <source>*The map module will use these urls to fetch the map tiles.</source>
@@ -696,7 +696,7 @@
           <context context-type="sourcefile">app/ui/settings/map/map.settings.component.html</context>
           <context context-type="linenumber">88</context>
         </context-group>
-        <target>* Modulul de hartă va utiliza aceste URL-uri pentru a prelua plăcile de hartă.</target>
+        <target>*Modulul de hartă va utiliza aceste URL-uri pentru a prelua plăcile hărții.</target>
       </trans-unit>
       <trans-unit id="56b620f4539160c20d0591fa76fea3a4091017f2" datatype="html">
         <source>+ Add Layer
@@ -713,7 +713,7 @@
           <context context-type="sourcefile">app/ui/settings/map/map.settings.component.html</context>
           <context context-type="linenumber">99</context>
         </context-group>
-        <target>Token de acces al căsuței de hartă</target>
+        <target>Token de acces Mapbox</target>
       </trans-unit>
       <trans-unit id="82a6a6dc17d7855ddaec1e78c1ddeedb1b3212ad" datatype="html">
         <source>MapBox needs an access token to work, create one at</source>
@@ -721,7 +721,7 @@
           <context context-type="sourcefile">app/ui/settings/map/map.settings.component.html</context>
           <context context-type="linenumber">105</context>
         </context-group>
-        <target>MapBox are nevoie de un token de acces pentru a funcționa, crea unul la</target>
+        <target>Mapbox are nevoie de un token de acces pentru a funcționa, creați unul la</target>
       </trans-unit>
       <trans-unit id="d682be8fc94c1861394919e021e9dcf8def8f554" datatype="html">
         <source>Save
@@ -766,7 +766,7 @@
           <context context-type="sourcefile">app/ui/settings/other/other.settings.component.html</context>
           <context context-type="linenumber">168</context>
         </context-group>
-        <target>Salvați</target>
+        <target>Salvare</target>
       </trans-unit>
       <trans-unit id="bdff31ca405839a31596fdb5bfd8ac933289b5e7" datatype="html">
         <source>Reset
@@ -811,7 +811,7 @@
           <context context-type="sourcefile">app/ui/settings/other/other.settings.component.html</context>
           <context context-type="linenumber">171</context>
         </context-group>
-        <target>restabili</target>
+        <target>Restabilire</target>
       </trans-unit>
       <trans-unit id="bd5ac05be2794f26efba6549c3368373da95173d" datatype="html">
         <source>
@@ -831,8 +831,7 @@
           <context context-type="sourcefile">app/ui/settings/thumbnail/thumbanil.settings.component.html</context>
           <context context-type="linenumber">10</context>
         </context-group>
-        <target>Este recomandat să utilizați lib hardware accelerat (ascuțit sau gm) pentru miniatură
-        generaţie</target>
+        <target>Este recomandat să utilizați o bibliotecă accelerată hardware (Sharp sau GraphicsMagick) pentru generarea de miniaturi</target>
       </trans-unit>
       <trans-unit id="6f49ee2673fb82fe8dd1a7da0bada14a4156bf30" datatype="html">
         <source>Thumbnail generation library</source>
@@ -849,7 +848,7 @@
           <context context-type="sourcefile">app/ui/settings/thumbnail/thumbanil.settings.component.html</context>
           <context context-type="linenumber">24</context>
         </context-group>
-        <target>Asigurați-vă că modulul de nod ascuțit este instalat (npm instalați ascuțit).</target>
+        <target>Asigurați-vă că modulul node sharp este instalat (npm install sharp).</target>
       </trans-unit>
       <trans-unit id="becf05481d292e5e206fda4b7d67d8fac4e85c93" datatype="html">
         <source>Make sure that gm node module and</source>
@@ -857,7 +856,7 @@
           <context context-type="sourcefile">app/ui/settings/thumbnail/thumbanil.settings.component.html</context>
           <context context-type="linenumber">28</context>
         </context-group>
-        <target>Asigurați-vă că modulul gm și</target>
+        <target>Asigurați-vă că modulul node gm și</target>
       </trans-unit>
       <trans-unit id="50baaa30462f55de8e9b80d5762048f7ba4cecc4" datatype="html">
         <source>GraphicsMagick</source>
@@ -873,7 +872,7 @@
           <context context-type="sourcefile">app/ui/settings/thumbnail/thumbanil.settings.component.html</context>
           <context context-type="linenumber">31</context>
         </context-group>
-        <target>sunt instalate (npm instalați ascuțit).</target>
+        <target>sunt instalate (npm install sharp).</target>
       </trans-unit>
       <trans-unit id="77dbc5bc9bc2a7dfc5394da0dcf5f08e4a120502" datatype="html">
         <source>Thumbnail folder</source>
@@ -881,7 +880,7 @@
           <context context-type="sourcefile">app/ui/settings/thumbnail/thumbanil.settings.component.html</context>
           <context context-type="linenumber">38</context>
         </context-group>
-        <target>Dosarul de miniaturi</target>
+        <target>Dosar de miniaturi</target>
       </trans-unit>
       <trans-unit id="159e136707f870fa65e5a59184b6e00036dcdf67" datatype="html">
         <source>Thumbnails will be saved in this folder. Write access is required
@@ -890,7 +889,7 @@
           <context context-type="sourcefile">app/ui/settings/thumbnail/thumbanil.settings.component.html</context>
           <context context-type="linenumber">44</context>
         </context-group>
-        <target>Miniaturile vor fi salvate în acest folder. Accesul la scriere este necesar</target>
+        <target>Miniaturile vor fi salvate în acest dosar. Accesul la scriere este necesar</target>
       </trans-unit>
       <trans-unit id="76a16cf361d95615469c06e26644b6e52f3a4411" datatype="html">
         <source>Thumbnail Quality</source>
@@ -906,7 +905,7 @@
           <context context-type="sourcefile">app/ui/settings/thumbnail/thumbanil.settings.component.html</context>
           <context context-type="linenumber">64</context>
         </context-group>
-        <target>Calitatea înaltă poate fi lentă. Mai ales cu Jimp.</target>
+        <target>Calitatea înaltă poate fi lentă. În special cu Jimp.</target>
       </trans-unit>
       <trans-unit id="b1a101e4cac6b5af1e4710d01ad2da24b494e982" datatype="html">
         <source>Icon size (used on maps)</source>
@@ -922,7 +921,7 @@
           <context context-type="sourcefile">app/ui/settings/thumbnail/thumbanil.settings.component.html</context>
           <context context-type="linenumber">85</context>
         </context-group>
-        <target>Dimensiuni de miniatură</target>
+        <target>Dimensiunile miniaturii</target>
       </trans-unit>
       <trans-unit id="ccfcda4d4700752fafcce0d40a3a6765056c200a" datatype="html">
         <source>Size of the thumbnails.</source>
@@ -938,7 +937,7 @@
           <context context-type="sourcefile">app/ui/settings/thumbnail/thumbanil.settings.component.html</context>
           <context context-type="linenumber">93</context>
         </context-group>
-        <target>Se va genera cea mai bună dimensiune potrivită. (Mai multe dimensiuni oferă o calitate mai bună, dar folosiți spațiu de stocare și procesor pentru a reda.)</target>
+        <target>Se va genera cea mai bună dimensiune potrivită. (Dimensiunea mai mare oferă o calitate mai bună, dar utilizează spațiu pentru stocare și procesor pentru redare.)</target>
       </trans-unit>
       <trans-unit id="d2b55b02775d93e8e5feaea56c6975e7e617a38a" datatype="html">
         <source>';' separated integers. If size is 200, that thumbnail will have 200^2 pixels.</source>
@@ -946,7 +945,7 @@
           <context context-type="sourcefile">app/ui/settings/thumbnail/thumbanil.settings.component.html</context>
           <context context-type="linenumber">95</context>
         </context-group>
-        <target>';' numere întregi separate. Dacă dimensiunea este 200, acea miniatură va avea 200 ^ 2 pixeli.</target>
+        <target>numere întregi separate prin „;”. Dacă dimensiunea este 200, acea miniatură va avea 200 ^ 2 pixeli.</target>
       </trans-unit>
       <trans-unit id="b5398623f87ee72ed23f5023918db1707771e925" datatype="html">
         <source>Video settings</source>
@@ -954,7 +953,7 @@
           <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
           <context context-type="linenumber">4</context>
         </context-group>
-        <target>Setari video</target>
+        <target>Setări video</target>
       </trans-unit>
       <trans-unit id="6b8862cecf0fd1c8fc1b503e131bfa230d851343" datatype="html">
         <source>Video support uses ffmpeg. ffmpeg and ffprobe binaries need to be available in the PATH or the @ffmpeg-installer/ffmpeg and @ffprobe-installer/ffprobe optional node packages need to be installed.</source>
@@ -962,7 +961,7 @@
           <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
           <context context-type="linenumber">23</context>
         </context-group>
-        <target>Suportul video folosește ffmpeg. Binarele ffmpeg și ffprobe trebuie să fie disponibile în PATH sau în pachetele opționale de noduri @ ffmpeg-installer / ffmpeg și @ ffprobe-installer / ffprobe.</target>
+        <target>Suportul video folosește ffmpeg. Executabilele ffmpeg și ffprobe trebuie să fie disponibile în PATH sau pachetele opționale node @ffmpeg-installer/ffmpeg și @ffprobe-installer/ffprobe trebuie să fie instalate.</target>
       </trans-unit>
       <trans-unit id="c45b54bd977f2e5b0d635231051f1143e0abf1c1" datatype="html">
         <source>Meta file settings</source>
@@ -970,7 +969,7 @@
           <context context-type="sourcefile">app/ui/settings/metafiles/metafile.settings.component.html</context>
           <context context-type="linenumber">4</context>
         </context-group>
-        <target>Setările fișierului Meta</target>
+        <target>Setările fișierului meta</target>
       </trans-unit>
       <trans-unit id="219e36c6747ef991081a68fc8ab2678677583e11" datatype="html">
         <source>Reads and show *.gpx files on the map</source>
@@ -978,7 +977,7 @@
           <context context-type="sourcefile">app/ui/settings/metafiles/metafile.settings.component.html</context>
           <context context-type="linenumber">23</context>
         </context-group>
-        <target>Citește și arată fișiere * .gpx pe hartă</target>
+        <target>Citește și arată fișiere *.gpx pe hartă</target>
       </trans-unit>
       <trans-unit id="2e75ae3885931555902da6b288ed616843d5dc3c" datatype="html">
         <source>Search settings</source>
@@ -994,7 +993,7 @@
           <context context-type="sourcefile">app/ui/settings/search/search.settings.component.html</context>
           <context context-type="linenumber">27</context>
         </context-group>
-        <target>Completare automată</target>
+        <target>Autocompletare</target>
       </trans-unit>
       <trans-unit id="3370f9ec1e5b41b30e8c1e0de57d4dfacd0e1360" datatype="html">
         <source>Show hints while typing search query</source>
@@ -1002,7 +1001,7 @@
           <context context-type="sourcefile">app/ui/settings/search/search.settings.component.html</context>
           <context context-type="linenumber">42</context>
         </context-group>
-        <target>Afișați indicii în timp ce tastați interogarea de căutare</target>
+        <target>Afișați indicii tastând interogarea</target>
       </trans-unit>
       <trans-unit id="4f3e132bcb74ee7c0a19eff3915163699c249340" datatype="html">
         <source>Instant search</source>
@@ -1018,7 +1017,7 @@
           <context context-type="sourcefile">app/ui/settings/search/search.settings.component.html</context>
           <context context-type="linenumber">63</context>
         </context-group>
-        <target>Permite afișarea rezultatelor căutării, în timp ce introduceți interogarea de căutare</target>
+        <target>Permite afișarea rezultatelor căutării cât tastați interogarea</target>
       </trans-unit>
       <trans-unit id="fca20aaca9607b7bcfd32718fa299d107c73c32a" datatype="html">
         <source>
@@ -1028,7 +1027,7 @@
           <context context-type="sourcefile">app/ui/settings/search/search.settings.component.html</context>
           <context context-type="linenumber">68</context>
         </context-group>
-        <target>Căutarea nu este acceptată cu aceste setări</target>
+        <target>Căutarea nu este suportată cu aceste setări</target>
       </trans-unit>
       <trans-unit id="2ca3f59b3fe47e837455e9090470356d27d1f59e" datatype="html">
         <source>Share settings</source>
@@ -1036,7 +1035,7 @@
           <context context-type="sourcefile">app/ui/settings/share/share.settings.component.html</context>
           <context context-type="linenumber">5</context>
         </context-group>
-        <target>Opțiuni de distribuire</target>
+        <target>Opțiuni de partajare</target>
       </trans-unit>
       <trans-unit id="6024b74e5baa9004f52b2d91fe37321412e328e4" datatype="html">
         <source>Password protected</source>
@@ -1044,7 +1043,7 @@
           <context context-type="sourcefile">app/ui/settings/share/share.settings.component.html</context>
           <context context-type="linenumber">26</context>
         </context-group>
-        <target>Protectie cu parola</target>
+        <target>Protecție cu parolă</target>
       </trans-unit>
       <trans-unit id="0ea62fbed498f782a8d0cb876e2f8a8fff8ed6ed" datatype="html">
         <source>Enables password protected sharing links</source>
@@ -1062,7 +1061,7 @@
           <context context-type="sourcefile">app/ui/settings/share/share.settings.component.html</context>
           <context context-type="linenumber">47</context>
         </context-group>
-        <target>Partajarea nu este acceptată cu aceste setări</target>
+        <target>Partajarea nu este suportată cu aceste setări</target>
       </trans-unit>
       <trans-unit id="7dfb72da1dc4553b2352694d8cf6b103bc280b91" datatype="html">
         <source>Random Photo settings</source>
@@ -1082,9 +1081,9 @@
           <context context-type="sourcefile">app/ui/settings/random-photo/random-photo.settings.component.html</context>
           <context context-type="linenumber">25</context>
         </context-group>
-        <target>Această caracteristică vă permite să generați URL-uri „aleatoare pentru fotografii”.
-          Respectiva adresă URL returnează o fotografie selectată la întâmplare din galeria dvs.
-          Puteți utiliza adresa URL cu o terță parte ca fundalul desktop schimbător aleatoriu.</target>
+        <target>Această caracteristică vă permite să generați URL-uri pentru „fotografii aleatorii”.
+          Respectiva adresă URL returnează o fotografie selectată aleatoriu din galeria dvs.
+          Puteți utiliza adresa URL cu o terță parte precum un fundal de desktop ce se schimbă aleatoriu.</target>
       </trans-unit>
       <trans-unit id="6c02e8541a2e670f80de8b5a218ea14a16bb6c42" datatype="html">
         <source>
@@ -1094,7 +1093,7 @@
           <context context-type="sourcefile">app/ui/settings/random-photo/random-photo.settings.component.html</context>
           <context context-type="linenumber">32</context>
         </context-group>
-        <target>Fotografia aleatorie nu este acceptată cu aceste setări</target>
+        <target>Fotografia aleatorie nu este suportată cu aceste setări</target>
       </trans-unit>
       <trans-unit id="d62666b3159a0b5916b8f908c84e6b6f441ec1d1" datatype="html">
         <source>
@@ -1136,7 +1135,7 @@
           <context context-type="sourcefile">app/ui/settings/basic/basic.settings.component.html</context>
           <context context-type="linenumber">41</context>
         </context-group>
-        <target>Numarul portului. Portul 80 este de obicei ceea ce ai nevoie.</target>
+        <target>Numărul portului. Portul 80 este utilizat uzual.</target>
       </trans-unit>
       <trans-unit id="50c6dfe7491fc0710eafbc2781138fc213ee2168" datatype="html">
         <source>Images folder</source>
@@ -1144,7 +1143,7 @@
           <context context-type="sourcefile">app/ui/settings/basic/basic.settings.component.html</context>
           <context context-type="linenumber">46</context>
         </context-group>
-        <target>Folderul Imagini</target>
+        <target>Dosar cu imagini</target>
       </trans-unit>
       <trans-unit id="b4b17c583a52ad8b6b15882c46d04ddbd7335816" datatype="html">
         <source>Images are loaded from this folder (read permission required)</source>
@@ -1160,7 +1159,7 @@
           <context context-type="sourcefile">app/ui/settings/basic/basic.settings.component.html</context>
           <context context-type="linenumber">57</context>
         </context-group>
-        <target>Pagina adresă publică</target>
+        <target>URL-ul public al paginii</target>
       </trans-unit>
       <trans-unit id="bfd0ad1924e3d9ba68d5485553f7b9e8709d60e4" datatype="html">
         <source>If you access the page form local network its good to know the public
@@ -1170,8 +1169,8 @@
           <context context-type="sourcefile">app/ui/settings/basic/basic.settings.component.html</context>
           <context context-type="linenumber">64</context>
         </context-group>
-        <target>Dacă accesați pagina din rețeaua locală este bine să cunoașteți publicul
-            url pentru crearea linkului de partajare</target>
+        <target>Dacă accesați pagina din rețeaua locală este bine să cunoașteți URL-ul
+            public pentru crearea legăturii de partajare</target>
       </trans-unit>
       <trans-unit id="52e8e9fdcd08e89225892a7657140dbf41020b76" datatype="html">
         <source>Url Base</source>
@@ -1179,7 +1178,7 @@
           <context context-type="sourcefile">app/ui/settings/basic/basic.settings.component.html</context>
           <context context-type="linenumber">71</context>
         </context-group>
-        <target>Url Base</target>
+        <target>Baza URL</target>
       </trans-unit>
       <trans-unit id="6422de400b451bf0e2874acac8d8e90502b371fe" datatype="html">
         <source>If you access the gallery under a sub url (like:
@@ -1190,8 +1189,8 @@
           <context context-type="sourcefile">app/ui/settings/basic/basic.settings.component.html</context>
           <context context-type="linenumber">78</context>
         </context-group>
-        <target>Dacă accesați galeria sub un suburl (cum ar fi:
-            http://mydomain.com/myGallery), setați-l aici. Dacă nu funcționează, este posibil să pierdeți „/” de la începutul
+        <target>Dacă accesați galeria dintr-un sub-URL (cum ar fi:
+            http://mydomain.com/myGallery), setați-l aici. Dacă nu funcționează, este posibil să fi omis „/” de la începutul
             URL-ul.</target>
       </trans-unit>
       <trans-unit id="f268a48c3f70d641ccb99786fe49f21a769eb2bb" datatype="html">
@@ -1202,7 +1201,7 @@
           <context context-type="sourcefile">app/ui/settings/basic/basic.settings.component.html</context>
           <context context-type="linenumber">85</context>
         </context-group>
-        <target>URL-ul public și baza URL nu se potrivesc. Este posibil ca unele funcționalități să nu funcționeze.</target>
+        <target>URL-ul public și baza URL nu se potrivesc. Este posibil ca unele funcționalități să nu meargă.</target>
       </trans-unit>
       <trans-unit id="5c45755390365c5b322131096f87c0013faa26fc" datatype="html">
         <source>Faces settings</source>
@@ -1218,7 +1217,7 @@
           <context context-type="sourcefile">app/ui/settings/faces/faces.settings.component.html</context>
           <context context-type="linenumber">27</context>
         </context-group>
-        <target>Anulați cuvintele cheie</target>
+        <target>Suprascrieți cuvintele cheie</target>
       </trans-unit>
       <trans-unit id="6dd2bf03cc78892ef8476c01524abc3e69263b41" datatype="html">
         <source>If a photo has the same face (person) name and keyword, the app removes the duplicate, keeping the face only.</source>
@@ -1226,7 +1225,7 @@
           <context context-type="sourcefile">app/ui/settings/faces/faces.settings.component.html</context>
           <context context-type="linenumber">42</context>
         </context-group>
-        <target>Dacă o fotografie are același nume (persoană) și cuvânt cheie, aplicația elimină duplicatul, păstrând doar fața.</target>
+        <target>Dacă o fotografie are aceeași față (persoană) și cuvânt cheie, aplicația elimină dublura, păstrând doar fața.</target>
       </trans-unit>
       <trans-unit id="32422a2f6e71d138d840d3fa927e492cfa57ef8e" datatype="html">
         <source>Face starring right</source>
@@ -1234,7 +1233,7 @@
           <context context-type="sourcefile">app/ui/settings/faces/faces.settings.component.html</context>
           <context context-type="linenumber">48</context>
         </context-group>
-        <target>Fața înfipt în dreapta</target>
+        <target>Dreptul de a stela fețe</target>
       </trans-unit>
       <trans-unit id="82774b234f55dc57cdc78c709586971b7520119b" datatype="html">
         <source>Required minimum right to start (favourite) a face.</source>
@@ -1242,7 +1241,7 @@
           <context context-type="sourcefile">app/ui/settings/faces/faces.settings.component.html</context>
           <context context-type="linenumber">54</context>
         </context-group>
-        <target>Drept minim necesar pentru a începe (preferat) o față.</target>
+        <target>Drept minim necesar pentru a stela (adăuga la favorite) o față.</target>
       </trans-unit>
       <trans-unit id="efddd8cd82869370d3846b05c546a4335f44625f" datatype="html">
         <source>
@@ -1252,7 +1251,7 @@
           <context context-type="sourcefile">app/ui/settings/faces/faces.settings.component.html</context>
           <context context-type="linenumber">59</context>
         </context-group>
-        <target>Fețele nu sunt acceptate cu aceste setări.</target>
+        <target>Fețele nu sunt suportate cu aceste setări.</target>
       </trans-unit>
       <trans-unit id="ee1319d3bfb2e70e14212ea2c3896e4ac4dc0092" datatype="html">
         <source>
@@ -1262,7 +1261,7 @@
           <context context-type="sourcefile">app/ui/settings/other/other.settings.component.html</context>
           <context context-type="linenumber">3</context>
         </context-group>
-        <target>Alte setari</target>
+        <target>Alte setări</target>
       </trans-unit>
       <trans-unit id="07807dce2e0dc33743530dd6a8b0d1f24094884d" datatype="html">
         <source>Error: </source>
@@ -1278,7 +1277,7 @@
           <context context-type="sourcefile">app/ui/settings/other/other.settings.component.html</context>
           <context context-type="linenumber">10</context>
         </context-group>
-        <target>Subiecte:</target>
+        <target>Fire (de execuție):</target>
       </trans-unit>
       <trans-unit id="ddf9beb42acb007fe4498e7f7d91fac6737156a5" datatype="html">
         <source>Threading</source>
@@ -1286,7 +1285,7 @@
           <context context-type="sourcefile">app/ui/settings/other/other.settings.component.html</context>
           <context context-type="linenumber">12</context>
         </context-group>
-        <target>Filetat</target>
+        <target>Multithreading</target>
       </trans-unit>
       <trans-unit id="597f26e7edba1a23ff5c8d9b2429dd1785af6ac3" datatype="html">
         <source>Runs directory scanning and thumbnail generation (only for Jimp) in a
@@ -1296,8 +1295,8 @@
           <context context-type="sourcefile">app/ui/settings/other/other.settings.component.html</context>
           <context context-type="linenumber">26</context>
         </context-group>
-        <target>Se execută scanarea și generarea de miniaturi (numai pentru Jimp) în directorul
-            fir diferit</target>
+        <target>Se execută scanarea directorului și generarea de miniaturi (numai pentru Jimp) într-un
+            alt fir</target>
       </trans-unit>
       <trans-unit id="46aa6890679de37f7171c72b36ee1a18182a3e37" datatype="html">
         <source>Thumbnail threads</source>
@@ -1305,7 +1304,7 @@
           <context context-type="sourcefile">app/ui/settings/other/other.settings.component.html</context>
           <context context-type="linenumber">33</context>
         </context-group>
-        <target>Fire de miniatură</target>
+        <target>Firele pentru miniatură</target>
       </trans-unit>
       <trans-unit id="09abcac6462987480032793a3b2aa059478db804" datatype="html">
         <source>Number of threads that are used to generate thumbnails. If auto, number of CPU cores -1 threads will be used.</source>
@@ -1313,7 +1312,7 @@
           <context context-type="sourcefile">app/ui/settings/other/other.settings.component.html</context>
           <context context-type="linenumber">40</context>
         </context-group>
-        <target>Numărul de fire care sunt utilizate pentru a genera miniaturi. Dacă este automat, se vor utiliza un număr de nuclee CPU -1 fire.</target>
+        <target>Numărul de fire pentru generarea miniaturilor. Dacă este automat, se vor utiliza unumărul de nuclee CPU -1 fire.</target>
       </trans-unit>
       <trans-unit id="47a6788c09eddf8226148e24d245b7a527e179bf" datatype="html">
         <source>Misc:</source>
@@ -1330,8 +1329,8 @@
           <context context-type="sourcefile">app/ui/settings/other/other.settings.component.html</context>
           <context context-type="linenumber">47</context>
         </context-group>
-        <target>Derulați miniatura bazată pe
-          generaţie</target>
+        <target>Generarea miniaturii după
+          derulare</target>
       </trans-unit>
       <trans-unit id="b11dea996a20defa548ba5337c9745e43ac48440" datatype="html">
         <source>Those thumbnails get higher priority that are visible on the screen
@@ -1348,7 +1347,7 @@
           <context context-type="sourcefile">app/ui/settings/other/other.settings.component.html</context>
           <context context-type="linenumber">68</context>
         </context-group>
-        <target>Redarea imaginilor leneșe</target>
+        <target>Redarea leneșă imaginilor</target>
       </trans-unit>
       <trans-unit id="0d2d7f528f8b7ba2dc1015522ba3c01a18df34fd" datatype="html">
         <source>Shows only the required amount of photos at once. Renders more if
@@ -1358,8 +1357,8 @@
           <context context-type="sourcefile">app/ui/settings/other/other.settings.component.html</context>
           <context context-type="linenumber">82</context>
         </context-group>
-        <target>Afișează doar cantitatea necesară de fotografii simultan. Renderi mai mult dacă
-            pagina de jos este atinsă</target>
+        <target>Afișează doar cantitatea necesară de fotografii simultan. Afișează mai multe
+            dacă s-a ajuns la capătul paginii</target>
       </trans-unit>
       <trans-unit id="1fa92c6ce274f878b2625587daa7e08b2a3a8b38" datatype="html">
         <source>Cache</source>
@@ -1367,7 +1366,7 @@
           <context context-type="sourcefile">app/ui/settings/other/other.settings.component.html</context>
           <context context-type="linenumber">90</context>
         </context-group>
-        <target>ascunzătoare</target>
+        <target>Cache</target>
       </trans-unit>
       <trans-unit id="b73dcf2e65ef893aadc258c4ba2d19718c6cc5c4" datatype="html">
         <source>Caches directory contents and search results for better performance
@@ -1376,7 +1375,7 @@
           <context context-type="sourcefile">app/ui/settings/other/other.settings.component.html</context>
           <context context-type="linenumber">104</context>
         </context-group>
-        <target>Cache conținutul directorului și rezultatele căutării pentru o performanță mai bună</target>
+        <target>Cache-ează conținutul directorului și rezultatele căutării pentru o performanță mai bună</target>
       </trans-unit>
       <trans-unit id="444a85e1dff192c11fecdb4ae588a422ea385077" datatype="html">
         <source>Caption first naming</source>
@@ -1384,7 +1383,7 @@
           <context context-type="sourcefile">app/ui/settings/other/other.settings.component.html</context>
           <context context-type="linenumber">111</context>
         </context-group>
-        <target>Subtitrare pentru prima dată</target>
+        <target>Primul nume al legendei</target>
       </trans-unit>
       <trans-unit id="90071eef3ad802369d399deba98443736668765d" datatype="html">
         <source>Show the caption (IPTC 120) tags from the EXIF data instead of the filenames.
@@ -1418,7 +1417,7 @@
           <context context-type="sourcefile">app/ui/settings/other/other.settings.component.html</context>
           <context context-type="linenumber">147</context>
         </context-group>
-        <target>Afișează numărul de articole (fotografii) din folder</target>
+        <target>Afișează numărul de articole (fotografii) din dosar</target>
       </trans-unit>
       <trans-unit id="15b229419fe525b3a517f3cb296326053a6e69f0" datatype="html">
         <source>Default photo sorting method</source>
@@ -1444,7 +1443,7 @@
           <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
           <context context-type="linenumber">11</context>
         </context-group>
-        <target>Indexarea expirării cache [ms]</target>
+        <target>Expirarea indexării cache [ms]</target>
       </trans-unit>
       <trans-unit id="edaceecfcf40e795e85f168d9253c42fe4623e30" datatype="html">
         <source>If there was no indexing in this time, it reindexes. (skipped if
@@ -1454,7 +1453,7 @@
           <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
           <context context-type="linenumber">19</context>
         </context-group>
-        <target>Dacă nu a existat nicio indexare în acest timp, aceasta reindexează. (a sărit dacă
+        <target>Dacă nu a existat nicio indexare în acest timp, se reindexează. (se sare dacă
               indicii sunt în DB și sensibilitatea este scăzută)</target>
       </trans-unit>
       <trans-unit id="95cda683cfb2041ad808023f29e40d16981b3c5e" datatype="html">
@@ -1463,7 +1462,7 @@
           <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
           <context context-type="linenumber">25</context>
         </context-group>
-        <target>Mărimea previzualizării folderului</target>
+        <target>Mărimea previzualizării subdosarului</target>
       </trans-unit>
       <trans-unit id="fda1d8005a79f58b5713b5ada5d0eb20321ff640" datatype="html">
         <source>Reads this many photos from sub folders</source>
@@ -1471,7 +1470,7 @@
           <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
           <context context-type="linenumber">33</context>
         </context-group>
-        <target>Citește multe fotografii din sub foldere</target>
+        <target>Citește atâtea fotografii din subdosare</target>
       </trans-unit>
       <trans-unit id="d0a8aab4720af5526787eec8cfe8dd2e1bf20cac" datatype="html">
         <source>Folder reindexing sensitivity</source>
@@ -1479,7 +1478,7 @@
           <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
           <context context-type="linenumber">38</context>
         </context-group>
-        <target>Folder reindexing sensibilitate</target>
+        <target>Sensibilitatea reindexării dosarelor</target>
       </trans-unit>
       <trans-unit id="6f509cb00bac00333d6edb9ba14fd14d145529e5" datatype="html">
         <source>Set the reindexing sensitivity. High value check the folders for change more often
@@ -1488,7 +1487,7 @@
           <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
           <context context-type="linenumber">47</context>
         </context-group>
-        <target>Setați sensibilitatea reindexing. Valoare ridicată verifică modificarea folderelor mai des</target>
+        <target>Setați sensibilitatea reindexării. O valoare ridicată verifică modificarea dosarelor mai des</target>
       </trans-unit>
       <trans-unit id="b8f78167ef95c21d032b15614e8239cc033a0fd2" datatype="html">
         <source>Save
@@ -1497,7 +1496,7 @@
           <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
           <context context-type="linenumber">55</context>
         </context-group>
-        <target>Salvați</target>
+        <target>Salvare</target>
       </trans-unit>
       <trans-unit id="ae9e824f2eaba4400a5cb66ad946c433dc45b3d5" datatype="html">
         <source>Reset
@@ -1506,7 +1505,7 @@
           <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
           <context context-type="linenumber">58</context>
         </context-group>
-        <target>restabili</target>
+        <target>Restabilire</target>
       </trans-unit>
       <trans-unit id="b0eaa3abce5af3b71c03fe678062333b7b950430" datatype="html">
         <source>If you add a new folder to your gallery, the site indexes it automatically.</source>
@@ -1514,7 +1513,7 @@
           <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
           <context context-type="linenumber">64</context>
         </context-group>
-        <target>Dacă adăugați un nou folder la galeria dvs., site-ul îl indexează automat.</target>
+        <target>Dacă adăugați un nou dosar la galeria dvs., site-ul îl indexează automat.</target>
       </trans-unit>
       <trans-unit id="2622cf599561bd3154f42feef9ac9960a316a6eb" datatype="html">
         <source>If you would like to trigger indexing manually, click index button.</source>
@@ -1522,7 +1521,7 @@
           <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
           <context context-type="linenumber">65</context>
         </context-group>
-        <target>Dacă doriți să declanșați indexarea manual, faceți clic pe butonul index.</target>
+        <target>Dacă doriți să declanșați indexarea manual, apăsați butonul index.</target>
       </trans-unit>
       <trans-unit id="56949ecea1cfe94dcd1a269282c047549cda1de8" datatype="html">
         <source>Note: search only works among the indexed directories</source>
@@ -1554,7 +1553,7 @@
           <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
           <context context-type="linenumber">75</context>
         </context-group>
-        <target>stânga</target>
+        <target>rămas</target>
       </trans-unit>
       <trans-unit id="32cc8ef8dc6f4f239b7f637ac8adaecc55b8e1d8" datatype="html">
         <source>Index
@@ -1571,7 +1570,7 @@
           <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
           <context context-type="linenumber">94</context>
         </context-group>
-        <target>Indexează folderele</target>
+        <target>Indexează dosarele</target>
       </trans-unit>
       <trans-unit id="2cf5bad5f694098d6eb9ce70f687cc469e60c697" datatype="html">
         <source>Index with Thumbnails
@@ -1606,7 +1605,7 @@
           <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
           <context context-type="linenumber">112</context>
         </context-group>
-        <target>Resetați indexurile</target>
+        <target>Resetare indecși</target>
       </trans-unit>
       <trans-unit id="fed617f53bda7660e3f3cf4e7c62fa6d39e2ca16" datatype="html">
         <source>
@@ -1616,7 +1615,7 @@
           <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
           <context context-type="linenumber">117</context>
         </context-group>
-        <target>Statistic:</target>
+        <target>Statistici:</target>
       </trans-unit>
       <trans-unit id="3fde556358b58d910adc30abaaff2433f0bb5f6c" datatype="html">
         <source>Folders</source>
@@ -1648,7 +1647,7 @@
           <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
           <context context-type="linenumber">134</context>
         </context-group>
-        <target>mărimea</target>
+        <target>Dimensiuni</target>
       </trans-unit>
       <trans-unit id="291dbda8eb9bfe6de93991c3472307c9af46f48d" datatype="html">
         <source>
@@ -1658,7 +1657,7 @@
           <context context-type="sourcefile">app/ui/duplicates/duplicates.component.html</context>
           <context context-type="linenumber">8</context>
         </context-group>
-        <target>Nu s-au găsit duplicate</target>
+        <target>Nicio dublură găsită</target>
       </trans-unit>
       <trans-unit id="85b9773b9a3caeb9f0fd69b2b8fa7284bda6b492" datatype="html">
         <source>Server error</source>
@@ -1713,7 +1712,7 @@
           <context context-type="sourcefile">frontend/app/pipes/StringifySortingMethod.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>nume ascendent</target>
+        <target>nume crescător</target>
       </trans-unit>
       <trans-unit id="5f6c10fa70a64acf16325e813e3cd6485df01b7c" datatype="html">
         <source>descending name</source>
@@ -1721,7 +1720,7 @@
           <context context-type="sourcefile">frontend/app/pipes/StringifySortingMethod.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>nume descendent</target>
+        <target>nume descrescător</target>
       </trans-unit>
       <trans-unit id="33cbb9be635d087d7ec1a4827bdc938ee785bb96" datatype="html">
         <source>ascending date</source>
@@ -1729,7 +1728,7 @@
           <context context-type="sourcefile">frontend/app/pipes/StringifySortingMethod.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>data ascendenta</target>
+        <target>data crescătoare</target>
       </trans-unit>
       <trans-unit id="de879950dc2e77b3d8e9b4efe9d6c0051fba37d4" datatype="html">
         <source>descending date</source>
@@ -1737,7 +1736,7 @@
           <context context-type="sourcefile">frontend/app/pipes/StringifySortingMethod.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>data descendentă</target>
+        <target>data descrescătoare</target>
       </trans-unit>
       <trans-unit id="63b8a172f11bb90da8fbca54f34f2c71a205225b" datatype="html">
         <source>random</source>
@@ -1745,7 +1744,7 @@
           <context context-type="sourcefile">frontend/app/pipes/StringifySortingMethod.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>Aleatoriu</target>
+        <target>aleatoriu</target>
       </trans-unit>
       <trans-unit id="bc2e854e111ecf2bd7db170da5e3c2ed08181d88" datatype="html">
         <source>Advanced</source>
@@ -1761,7 +1760,7 @@
           <context context-type="sourcefile">frontend/app/ui/admin/admin.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>simplificată</target>
+        <target>Simplificat</target>
       </trans-unit>
       <trans-unit id="b73f7f5060fb22a1e9ec462b1bb02493fa3ab866" datatype="html">
         <source>Images</source>
@@ -1781,7 +1780,7 @@
           <context context-type="sourcefile">frontend/app/ui/gallery/share/share.gallery.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>da</target>
+        <target>Da</target>
       </trans-unit>
       <trans-unit id="3d3ae7deebc5949b0c1c78b9847886a94321d9fd" datatype="html">
         <source>No</source>
@@ -1805,7 +1804,7 @@
           <context context-type="sourcefile">frontend/app/ui/gallery/share/share.gallery.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>Url a fost copiat în clipboard</target>
+        <target>URL-ul a fost copiat în planșetă</target>
       </trans-unit>
       <trans-unit id="381b3a21fe4e53a0ca52dbc6e07073c172489230" datatype="html">
         <source>loading..</source>
@@ -1817,7 +1816,7 @@
           <context context-type="sourcefile">frontend/app/ui/gallery/share/share.gallery.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>se incarca..</target>
+        <target>încărcare...</target>
       </trans-unit>
       <trans-unit id="f50a33d3c339f8f4a465141f8caa5d2d8c005251" datatype="html">
         <source>Enabled</source>
@@ -1841,7 +1840,7 @@
           <context context-type="sourcefile">frontend/app/ui/settings/usermanager/usermanager.settings.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>invalid</target>
+        <target>Dezactivat</target>
       </trans-unit>
       <trans-unit id="9556266f0a2b1762a44b686f2bb21dbfefb01c12" datatype="html">
         <source>Low</source>
@@ -1873,7 +1872,7 @@
           <context context-type="sourcefile">frontend/app/ui/settings/_abstract/abstract.settings.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>Setari Salvate</target>
+        <target>setări salvate</target>
       </trans-unit>
       <trans-unit id="1e035e6ccfab771cad4226b2ad230cb0d4a88cba" datatype="html">
         <source>Success</source>
@@ -1925,7 +1924,7 @@
           <context context-type="sourcefile">frontend/app/ui/settings/indexing/indexing.settings.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>Indexarea</target>
+        <target>Indexare</target>
       </trans-unit>
       <trans-unit id="f2504b9d9286a871bf4d56d08df05d6a16894592" datatype="html">
         <source>Folder indexed</source>
@@ -1933,7 +1932,7 @@
           <context context-type="sourcefile">frontend/app/ui/settings/indexing/indexing.settings.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>Folder indexat</target>
+        <target>Dosar indexat</target>
       </trans-unit>
       <trans-unit id="03b2c27d0f1dd0ebdf6eb756bd43914d5127ca8a" datatype="html">
         <source>low</source>
@@ -1965,7 +1964,7 @@
           <context context-type="sourcefile">frontend/app/ui/settings/indexing/indexing.settings.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>A început indexarea folderului</target>
+        <target>Indexarea dosarelor a început</target>
       </trans-unit>
       <trans-unit id="c5a3929b71a7b8090a763cc3434f8756184effdc" datatype="html">
         <source>Folder indexing interrupted</source>
@@ -1973,7 +1972,7 @@
           <context context-type="sourcefile">frontend/app/ui/settings/indexing/indexing.settings.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>Indexarea dosarului a fost întreruptă</target>
+        <target>Indexarea dosarelor s-a întrerupt</target>
       </trans-unit>
       <trans-unit id="d779a223dd103570b842451d8d721ee1d3d700e4" datatype="html">
         <source>Database reset</source>
@@ -1981,7 +1980,7 @@
           <context context-type="sourcefile">frontend/app/ui/settings/indexing/indexing.settings.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>Resetarea bazei de date</target>
+        <target>Restabilirea bazei de date</target>
       </trans-unit>
       <trans-unit id="d2a2915d79ff31439a174fc3a147004542291e29" datatype="html">
         <source>Map</source>
@@ -2005,7 +2004,7 @@
           <context context-type="sourcefile">frontend/app/ui/settings/other/other.settings.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>Alte</target>
+        <target>Altele</target>
       </trans-unit>
       <trans-unit id="e636143d733fa6a21fa62ffdff2fd76c221e6cac" datatype="html">
         <source>Random Media</source>
@@ -2021,7 +2020,7 @@
           <context context-type="sourcefile">frontend/app/ui/settings/thumbnail/thumbanil.settings.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>miniatură</target>
+        <target>Miniatură</target>
       </trans-unit>
       <trans-unit id="ed3fc8103cfe2c6b999115b6d5dcbe7a2528a477" datatype="html">
         <source>(recommended)</source>
@@ -2037,7 +2036,7 @@
           <context context-type="sourcefile">frontend/app/ui/settings/thumbnail/thumbanil.settings.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>(Învechită)</target>
+        <target>(depreciat)</target>
       </trans-unit>
       <trans-unit id="0028f40243cb1360bc3d7cb9d4512219bcbd428f" datatype="html">
         <source>Password protection enabled</source>
@@ -2061,7 +2060,7 @@
           <context context-type="sourcefile">frontend/app/ui/settings/usermanager/usermanager.settings.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>Protecția prin parolă este dezactivată</target>
+        <target>Protecție prin parolă dezactivată</target>
       </trans-unit>
       <trans-unit id="2d1ea268a6a9f483dbc2cbfe19bf4256a57a6af4" datatype="html">
         <source>Video</source>
