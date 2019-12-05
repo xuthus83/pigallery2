@@ -57,6 +57,39 @@ export class DiskMangerWorker {
     return path.basename(name);
   }
 
+  public static excludeDir(name: string,relativeDirectoryName: string, absoluteDirectoryName: string) {
+    const absoluteName=path.normalize(path.join(absoluteDirectoryName,name));
+    const relativeName=path.normalize(path.join(relativeDirectoryName,name));
+
+    for (let j = 0; j < Config.Server.indexing.excludeFolderList.length; j++) {
+      const exclude=Config.Server.indexing.excludeFolderList[j];
+
+      if (exclude.startsWith('/')) {
+        if (exclude==absoluteName) {
+          return true;
+        }
+      } else if (exclude.includes('/')) {
+        if (path.normalize(exclude)==relativeName) {
+          return true;
+        }
+      } else {
+        if (exclude==name) {
+          return true;
+        }
+      }
+    }
+
+    for (let j = 0; j < Config.Server.indexing.excludeFileList.length; j++) {
+      const exclude=Config.Server.indexing.excludeFileList[j];
+
+      if (fs.existsSync(path.join(absoluteName,exclude))) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   public static scanDirectory(relativeDirectoryName: string, maxPhotos: number = null, photosOnly: boolean = false): Promise<DirectoryDTO> {
     return new Promise<DirectoryDTO>((resolve, reject) => {
       relativeDirectoryName = this.normalizeDirPath(relativeDirectoryName);
@@ -88,6 +121,9 @@ export class DiskMangerWorker {
             const fullFilePath = path.normalize(path.join(absoluteDirectoryName, file));
             if (fs.statSync(fullFilePath).isDirectory()) {
               if (photosOnly === true) {
+                continue;
+              }
+              if (DiskMangerWorker.excludeDir(file,relativeDirectoryName,absoluteDirectoryName)) {
                 continue;
               }
               const d = await DiskMangerWorker.scanDirectory(path.join(relativeDirectoryName, file),

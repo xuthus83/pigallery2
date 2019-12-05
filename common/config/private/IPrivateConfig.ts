@@ -54,6 +54,8 @@ export interface IndexingConfig {
   folderPreviewSize: number;
   cachedFolderTimeout: number; // Do not rescans the folder if seems ok
   reIndexingSensitivity: ReIndexingSensitivity;
+  excludeFolderList: string[]
+  excludeFileList: string[]
 }
 
 export interface ThreadingConfig {

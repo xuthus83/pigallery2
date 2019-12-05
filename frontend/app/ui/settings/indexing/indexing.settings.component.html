@@ -49,6 +49,36 @@
           </div>
         </div>
 
+        <div class="form-group row">
+          <label class="col-md-2 control-label" for="excludeFolderList" i18n>Exclude Folder List</label>
+          <div class="col-md-10">
+            <input type="text" class="form-control" placeholder=""
+                   id="excludeFolderList"
+                   [(ngModel)]="excludeFolderList"
+                   name="excludeFolderList" required>
+            <small class="form-text text-muted">
+              <ng-container i18n>Folders to exclude from indexing</ng-container><br/>
+              <ng-container
+                i18n>';' separated strings. If an entry starts with '/' it is treated as an absolute path. If it doesn't start with '/' but contains a '/', the path is relative to the image directory. If it doesn't contain a '/', any folder with this name will be excluded.</ng-container>
+            </small>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <label class="col-md-2 control-label" for="excludeFileList" i18n>Exclude File List</label>
+          <div class="col-md-10">
+            <input type="text" class="form-control" placeholder=""
+                   id="excludeFileList"
+                   [(ngModel)]="excludeFileList"
+                   name="excludeFileList" required>
+            <small class="form-text text-muted">
+              <ng-container i18n>FFiles that mark a folder to be excluded from indexing</ng-container><br/>
+              <ng-container
+                i18n>';' separated strings. Any folder that contains a file with this name will be excluded from indexing.</ng-container>
+            </small>
+          </div>
+        </div>
+
 
         <button class="btn btn-success float-right"
                 [disabled]="!settingsForm.form.valid || !changed || inProgress"
