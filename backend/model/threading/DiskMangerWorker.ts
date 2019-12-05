@@ -61,18 +61,8 @@ export class DiskMangerWorker {
     const absoluteName=path.normalize(path.join(absoluteDirectoryName,name));
     const relativeName=path.normalize(path.join(relativeDirectoryName,name));
 
-
-    console.log("----- Starting exlude dir -----");
-    console.log("name %s",name);
-    console.log("absoluteDirectoryName %s",absoluteDirectoryName);
-    console.log("absoluteName %s",absoluteName);
-    console.log("relativeDirectoryName %s",relativeDirectoryName);
-    console.log("relativeName %s",relativeName);
-    console.log("Config.Server.indexing.excludeFolderList %s",Config.Server.indexing.excludeFolderList);
-
     for (let j = 0; j < Config.Server.indexing.excludeFolderList.length; j++) {
       const exclude=Config.Server.indexing.excludeFolderList[j];
-      console.log("trying dir %s",exclude);
 
       if (exclude.startsWith('/')) {
         if (exclude==absoluteName) {
@@ -91,7 +81,6 @@ export class DiskMangerWorker {
 
     for (let j = 0; j < Config.Server.indexing.excludeFileList.length; j++) {
       const exclude=Config.Server.indexing.excludeFileList[j];
-      console.log("trying file %s",exclude);
 
       if (fs.existsSync(path.join(absoluteName,exclude))) {
         return true;
