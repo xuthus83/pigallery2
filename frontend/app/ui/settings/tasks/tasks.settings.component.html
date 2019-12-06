@@ -7,7 +7,7 @@
     <div class="card-body">
       <div [hidden]="!error" class="alert alert-danger" role="alert"><strong>Error: </strong>{{error}}</div>
 
-      <div *ngFor="let schedule of settings.scheduled;let i= index">
+      <div *ngFor="let schedule of settings.scheduled; let i= index">
         <div class="card bg-light">
           <div class="card-header ">
             <div class="d-flex justify-content-between">
@@ -36,22 +36,25 @@
 
                   <app-timestamp-datepicker
                     [name]="'triggerTime'+i"
-                    *ngIf="schedule.trigger.type== TaskTriggerType.scheduled"
+                    *ngIf="schedule.trigger.type == TaskTriggerType.scheduled"
+                    (timestampChange)="testSettingChanges()"
                     [(timestamp)]="schedule.trigger.time"></app-timestamp-datepicker>
 
-                  <select *ngIf="schedule.trigger.type== TaskTriggerType.periodic"
-                          class="form-control" [(ngModel)]="schedule.trigger.periodicity" [name]="'periodicity'+i"
+                  <select *ngIf="schedule.trigger.type == TaskTriggerType.periodic"
+                          class="form-control" [(ngModel)]="schedule.trigger.periodicity" [name]="'periodicity' + i"
                           required>
-                    <option *ngFor="let period of periods; let i= index"
+                    <option *ngFor="let period of periods; let i = index"
                             [ngValue]="i">
+                      <ng-container i18n>every</ng-container>
                       <ng-container i18n>every</ng-container>
                       {{period}}
                     </option>
                   </select>
+
                   <app-timestamp-timepicker
                     [name]="'atTime'+i"
                     (timestampChange)="testSettingChanges()"
-                    *ngIf="schedule.trigger.type== TaskTriggerType.periodic"
+                    *ngIf="schedule.trigger.type == TaskTriggerType.periodic"
                     [(timestamp)]="schedule.trigger.atTime"></app-timestamp-timepicker>
 
                 </div>

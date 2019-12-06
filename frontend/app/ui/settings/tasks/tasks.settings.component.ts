@@ -46,16 +46,17 @@ export class TasksSettingsComponent extends SettingsComponent<TaskConfig, TasksS
       notification,
       i18n,
       s => s.Server.tasks);
+
     this.hasAvailableSettings = !this.simplifiedMode;
     this.taskTriggerType = Utils.enumToArray(TaskTriggerType);
-    this.periods = [this.i18n('Monday'),
-      this.i18n('Tuesday'),
-      this.i18n('Wednesday'),
+    this.periods = [this.i18n('Monday'), // 0
+      this.i18n('Tuesday'), // 1
+      this.i18n('Wednesday'), // 2
       this.i18n('Thursday'),
       this.i18n('Friday'),
       this.i18n('Saturday'),
       this.i18n('Sunday'),
-      this.i18n('day')];
+      this.i18n('day')]; // 7
   }
 
 
@@ -147,7 +148,7 @@ export class TasksSettingsComponent extends SettingsComponent<TaskConfig, TasksS
   remove(id: string) {
 
   }
-
+/*
   update($event: string, trigger: ScheduledTaskTrigger) {
     if (!$event) {
       return;
@@ -161,7 +162,7 @@ export class TasksSettingsComponent extends SettingsComponent<TaskConfig, TasksS
 
   toDate(time: number) {
     return new Date(time);
-  }
+  }*/
 
   taskTriggerTypeChanged(triggerType: TaskTriggerType, schedule: TaskScheduleDTO) {
     schedule.trigger = <NeverTaskTrigger>{type: triggerType};

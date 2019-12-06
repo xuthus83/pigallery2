@@ -7,6 +7,7 @@ import {Component, EventEmitter, Input, Output} from '@angular/core';
 export class TimeStampTimePickerComponent {
 
   timestampValue = 0;
+  timezoneOffset = (new Date()).getTimezoneOffset() * 60 * 1000;
   @Output() timestampChange = new EventEmitter<number>();
 
   date: Date = new Date();
@@ -19,7 +20,7 @@ export class TimeStampTimePickerComponent {
   }
 
   public set timestamp(val: number) {
-    this.date.setTime(val);
+    this.date.setTime(val + this.timezoneOffset);
     if (this.timestampValue === val) {
       return;
     }
@@ -27,8 +28,8 @@ export class TimeStampTimePickerComponent {
     this.timestampChange.emit(this.timestampValue);
   }
 
-  onChange(date: Date | string) {
-    this.timestamp = (new Date(date)).getTime();
+  onChange(date: Date | string): void {
+    this.timestamp = (new Date(date)).getTime() - this.timezoneOffset;
   }
 
 
