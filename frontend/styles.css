@@ -20,3 +20,11 @@
 bs-dropdown-container {
   z-index: 1;
 }
+
+
+
+.slim-loading-bar-progress {
+  transition: opacity 1s ease-in;
+  transition-delay: 1s;
+  transition-property: opacity;
+}
