@@ -35,7 +35,7 @@ export class Server {
 
   constructor() {
     if (!(process.env.NODE_ENV === 'production')) {
-      Logger.debug(LOG_TAG, 'Running in DEBUG mode, set env variable NODE_ENV=production to disable ');
+      Logger.info(LOG_TAG, 'Running in DEBUG mode, set env variable NODE_ENV=production to disable ');
     }
     this.init();
   }
@@ -43,10 +43,10 @@ export class Server {
   async init() {
     Logger.info(LOG_TAG, 'running diagnostics...');
     await ConfigDiagnostics.runDiagnostics();
-    Logger.info(LOG_TAG, 'using config:');
+    Logger.verbose(LOG_TAG, 'using config:');
     const appVer = require('../package.json').version;
     Config.Client.appVersion = appVer;
-    Logger.info(LOG_TAG, JSON.stringify(Config, null, '\t'));
+    Logger.verbose(LOG_TAG, JSON.stringify(Config, null, '\t'));
 
     this.app = _express();
 

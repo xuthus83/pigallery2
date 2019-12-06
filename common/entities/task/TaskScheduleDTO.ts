@@ -17,7 +17,7 @@ export interface ScheduledTaskTrigger extends TaskTrigger {
 
 export interface PeriodicTaskTrigger extends TaskTrigger {
   type: TaskTriggerType.periodic;
-  periodicity: number;  // 1-7: week days 8+ every x days
+  periodicity: number;  // 0-6: week days 7 every day
   atTime: number; // day time
 }
 

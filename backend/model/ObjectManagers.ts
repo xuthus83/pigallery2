@@ -105,8 +105,17 @@ export class ObjectManagers {
   }
 
   public static async reset() {
+    if (ObjectManagers.getInstance().TaskManager) {
+      ObjectManagers.getInstance().TaskManager.stopSchedules();
+    }
     await SQLConnection.close();
     this._instance = null;
+  }
+
+
+  public static async InitCommonManagers() {
+    const TaskManager = require('./tasks/TaskManager').TaskManager;
+    ObjectManagers.getInstance().TaskManager = new TaskManager();
   }
 
   public static async InitMemoryManagers() {
@@ -119,7 +128,6 @@ export class ObjectManagers {
     const IndexingManager = require('./memory/IndexingManager').IndexingManager;
     const PersonManager = require('./memory/PersonManager').PersonManager;
     const VersionManager = require('./memory/VersionManager').VersionManager;
-    const TaskManager = require('./tasks/TaskManager').TaskManager;
     ObjectManagers.getInstance().GalleryManager = new GalleryManager();
     ObjectManagers.getInstance().UserManager = new UserManager();
     ObjectManagers.getInstance().SearchManager = new SearchManager();
@@ -128,7 +136,7 @@ export class ObjectManagers {
     ObjectManagers.getInstance().IndexingManager = new IndexingManager();
     ObjectManagers.getInstance().PersonManager = new PersonManager();
     ObjectManagers.getInstance().VersionManager = new VersionManager();
-    ObjectManagers.getInstance().TaskManager = new TaskManager();
+    this.InitCommonManagers();
   }
 
   public static async InitSQLManagers() {
@@ -142,7 +150,6 @@ export class ObjectManagers {
     const IndexingManager = require('./sql/IndexingManager').IndexingManager;
     const PersonManager = require('./sql/PersonManager').PersonManager;
     const VersionManager = require('./sql/VersionManager').VersionManager;
-    const TaskManager = require('./tasks/TaskManager').TaskManager;
     ObjectManagers.getInstance().GalleryManager = new GalleryManager();
     ObjectManagers.getInstance().UserManager = new UserManager();
     ObjectManagers.getInstance().SearchManager = new SearchManager();
@@ -151,7 +158,7 @@ export class ObjectManagers {
     ObjectManagers.getInstance().IndexingManager = new IndexingManager();
     ObjectManagers.getInstance().PersonManager = new PersonManager();
     ObjectManagers.getInstance().VersionManager = new VersionManager();
-    ObjectManagers.getInstance().TaskManager = new TaskManager();
+    this.InitCommonManagers();
     Logger.debug('SQL DB inited');
   }
 

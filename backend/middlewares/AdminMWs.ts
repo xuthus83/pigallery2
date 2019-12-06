@@ -457,6 +457,7 @@ export class AdminMWs {
       original.save();
 
       await ConfigDiagnostics.runDiagnostics();
+      ObjectManagers.getInstance().TaskManager.runSchedules();
       Logger.info(LOG_TAG, 'new config:');
       Logger.info(LOG_TAG, JSON.stringify(Config, null, '\t'));
       return next();

@@ -6,7 +6,7 @@ export enum DatabaseType {
 }
 
 export enum LogLevel {
-  error = 1, warn = 2, info = 3, debug = 4, verbose = 5, silly = 6
+  error = 1, warn = 2, info = 3, verbose = 4, debug = 5,  silly = 6
 }
 
 export enum SQLLogLevel {

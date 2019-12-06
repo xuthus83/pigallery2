@@ -3,10 +3,18 @@ import {TaskProgressDTO} from '../../../common/entities/settings/TaskProgressDTO
 import {ITask} from './ITask';
 import {TaskRepository} from './TaskRepository';
 import {Config} from '../../../common/config/private/Config';
-import {TaskTriggerType} from '../../../common/entities/task/TaskScheduleDTO';
+import {TaskScheduleDTO, TaskTriggerType} from '../../../common/entities/task/TaskScheduleDTO';
+import {Logger} from '../../Logger';
+
+const LOG_TAG = '[TaskManager]';
 
 export class TaskManager implements ITaskManager {
 
+  protected timers: NodeJS.Timeout[] = [];
+
+  constructor() {
+    this.runSchedules();
+  }
 
   getProgresses(): { [id: string]: TaskProgressDTO } {
     const m: { [id: string]: TaskProgressDTO } = {};
@@ -14,10 +22,12 @@ export class TaskManager implements ITaskManager {
     return m;
   }
 
-  start(taskName: string, config: any): void {
+  start<T>(taskName: string, config: T): void {
     const t = this.findTask(taskName);
     if (t) {
       t.start(config);
+    } else {
+      Logger.warn(LOG_TAG, 'cannot find task to start:' + taskName);
     }
   }
 
@@ -25,6 +35,8 @@ export class TaskManager implements ITaskManager {
     const t = this.findTask(taskName);
     if (t) {
       t.stop();
+    } else {
+      Logger.warn(LOG_TAG, 'cannot find task to stop:' + taskName);
     }
   }
 
@@ -32,38 +44,79 @@ export class TaskManager implements ITaskManager {
     return TaskRepository.Instance.getAvailableTasks();
   }
 
+  public stopSchedules(): void {
+    this.timers.forEach(timer => clearTimeout(timer));
+    this.timers = [];
+  }
+
   public runSchedules(): void {
+    this.stopSchedules();
+    Logger.info(LOG_TAG, 'Running task schedules');
     Config.Server.tasks.scheduled.forEach(schedule => {
-      let nextRun = null;
-      switch (schedule.trigger.type) {
-        case TaskTriggerType.scheduled:
-          nextRun = Date.now() - schedule.trigger.time;
-          break;
-        /*case TaskTriggerType.periodic:
+      const nextDate = this.getDateFromSchedule(new Date(), schedule);
+      if (nextDate && nextDate.getTime() > Date.now()) {
+        Logger.debug(LOG_TAG, 'running schedule: [' + schedule.id + '] ' + schedule.name +
+          ' at ' + nextDate.toLocaleString(undefined, {hour12: false}));
 
-          //TODo finish it
-          const getNextDayOfTheWeek = (dayOfWeek: number) => {
-            const refDate = new Date();
-            refDate.setHours(0, 0, 0, 0);
-            refDate.setDate(refDate.getDate()  + (dayOfWeek + 7 - refDate.getDay()) % 7);
-            return refDate;
-          };
-
-          nextRun = Date.now() - schedule.trigger.periodicity;
-          break;*/
-      }
-
-      if (nextRun != null) {
-        setTimeout(() => {
+        const timer: NodeJS.Timeout = setTimeout(() => {
           this.start(schedule.taskName, schedule.config);
-        }, nextRun);
+          this.timers = this.timers.filter(t => t !== timer);
+        }, nextDate.getTime() - Date.now());
+        this.timers.push(timer);
+
+      } else {
+        Logger.debug(LOG_TAG, 'skipping schedule: [' + schedule.id + '] ' + schedule.name);
       }
+
     });
   }
 
-  protected findTask(taskName: string): ITask<any> {
-    return this.getAvailableTasks().find(t => t.Name === taskName);
+  protected getDateFromSchedule(refDate: Date, schedule: TaskScheduleDTO): Date {
+    switch (schedule.trigger.type) {
+      case TaskTriggerType.scheduled:
+        return new Date(schedule.trigger.time);
 
+      case TaskTriggerType.periodic:
+        const nextValidHM = (date: Date, h: number, m: number, dayDiff: number): Date => {
+
+          if (date.getHours() < h || (date.getHours() === h && date.getMinutes() <= m)) {
+            date.setHours(h);
+            date.setMinutes(m);
+          } else {
+            date.setTime(date.getTime() + dayDiff);
+            date.setHours(h);
+            date.setMinutes(m);
+          }
+          return date;
+        };
+
+        const getNextDayOfTheWeek = (dayOfWeek: number, h: number, m: number): Date => {
+          const date = new Date(refDate);
+          date.setDate(refDate.getDate() + (dayOfWeek + 1 + 7 - refDate.getDay()) % 7);
+          if (date.getDay() === refDate.getDay()) {
+            return new Date(refDate);
+          }
+          date.setHours(0, 0, 0, 0);
+          return date;
+        };
+
+
+        const hour = Math.floor(schedule.trigger.atTime / 1000 / (60 * 60));
+        const minute = (schedule.trigger.atTime / 1000 / 60) % 60;
+
+        if (schedule.trigger.periodicity <= 6) { // Between Monday and Sunday
+          const nextRunDate = getNextDayOfTheWeek(schedule.trigger.periodicity, hour, minute);
+          return nextValidHM(nextRunDate, hour, minute, 7 * 24 * 60 * 60 * 1000);
+        }
+
+        // every day
+        return nextValidHM(new Date(refDate), hour, minute, 24 * 60 * 60 * 1000);
+    }
+    return null;
+  }
+
+  protected findTask<T = any>(taskName: string): ITask<T> {
+    return this.getAvailableTasks().find(t => t.Name === taskName);
   }
 
 }

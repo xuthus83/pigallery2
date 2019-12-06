@@ -1,5 +1,4 @@
 import {TaskProgressDTO} from '../../../common/entities/settings/TaskProgressDTO';
-import {TaskScheduleDTO} from '../../../common/entities/task/TaskScheduleDTO';
 import {TaskDTO} from '../../../common/entities/task/TaskDTO';
 
 export interface ITaskManager {
@@ -12,4 +11,8 @@ export interface ITaskManager {
 
 
   getAvailableTasks(): TaskDTO[];
+
+  stopSchedules(): void;
+
+  runSchedules(): void;
 }

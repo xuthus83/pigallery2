@@ -25,4 +25,13 @@ export const winstonSettings = {
   exitOnError: false
 };
 
-export const Logger = new (<any>winston).Logger(winstonSettings);
+type logFN = (...args: (string | number)[]) => {};
+
+export const Logger: {
+  error: logFN,
+  warn: logFN,
+  info: logFN,
+  verbose: logFN,
+  debug: logFN,
+  silly: logFN
+} = new (<any>winston).Logger(winstonSettings);
