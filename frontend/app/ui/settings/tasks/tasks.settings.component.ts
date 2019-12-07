@@ -31,6 +31,7 @@ export class TasksSettingsComponent extends SettingsComponent<TaskConfig, TasksS
   taskTriggerType: { key: number, value: string }[];
   TaskTriggerType = TaskTriggerType;
   periods: string[] = [];
+  showDetails: boolean[] = [];
 
   constructor(_authService: AuthenticationService,
               _navigation: NavigationService,
@@ -145,24 +146,20 @@ export class TasksSettingsComponent extends SettingsComponent<TaskConfig, TasksS
     return false;
   }
 
-  remove(id: string) {
-
-  }
-/*
-  update($event: string, trigger: ScheduledTaskTrigger) {
-    if (!$event) {
-      return;
-    }
-    console.log(typeof $event);
-    console.log($event);
-    console.log(new Date($event));
-    console.log(new Date($event).getTime());
-    trigger.time = new Date($event).getTime();
+  remove(index: number) {
+    this.settings.scheduled.splice(index, 1);
   }
 
-  toDate(time: number) {
-    return new Date(time);
-  }*/
+  addNewTask() {
+    this.settings.scheduled.push({
+      taskName: this._settingsService.availableTasks.value[0].Name,
+      config: {},
+      priority: 0,
+      trigger: {
+        type: TaskTriggerType.never
+      }
+    });
+  }
 
   taskTriggerTypeChanged(triggerType: TaskTriggerType, schedule: TaskScheduleDTO) {
     schedule.trigger = <NeverTaskTrigger>{type: triggerType};

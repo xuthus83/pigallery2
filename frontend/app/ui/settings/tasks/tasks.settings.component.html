@@ -9,65 +9,99 @@
 
       <div *ngFor="let schedule of settings.scheduled; let i= index">
         <div class="card bg-light">
-          <div class="card-header ">
+          <div class="card-header clickable" (click)="showDetails[i]=!showDetails[i]">
             <div class="d-flex justify-content-between">
-              {{schedule.name}}
+              {{schedule.taskName}} @<!--
+              -->
+              <ng-container [ngSwitch]="schedule.trigger.type">
+                <ng-container *ngSwitchCase="TaskTriggerType.periodic">
+                  <ng-container i18n>every</ng-container>
+                  {{periods[schedule.trigger.periodicity]}} {{schedule.trigger.atTime | date:"HH:mm":"+0"}}
+                </ng-container>
+                <ng-container
+                  *ngSwitchCase="TaskTriggerType.scheduled">{{schedule.trigger.time | date:"medium"}}</ng-container>
+                <ng-container *ngSwitchCase="TaskTriggerType.never" i18n>never</ng-container>
+              </ng-container>
               <button class="btn btn-danger button-delete"
-                      (click)="remove(schedule.taskName)" i18n><span class="oi oi-trash"></span>
+                      (click)="remove(i)" i18n><span class="oi oi-trash"></span>
               </button>
             </div>
           </div>
-          <div class="card-body">
-            <div class="d-flex justify-content-between">
-              <div>
-                <select class="form-control" [(ngModel)]="schedule.taskName" [name]="'taskName'+i" required>
-                  <option *ngFor="let availableTask of _settingsService.availableTasks | async"
-                          [ngValue]="availableTask.Name">{{availableTask.Name}}
-                  </option>
-                </select>
-                <div class="row">
-                  <select class="form-control" [(ngModel)]="schedule.trigger.type"
-                          (ngModelChange)="taskTriggerTypeChanged($event,schedule)"
-                          [name]="'repeatType'+i" required>
-                    <option *ngFor="let taskTrigger of taskTriggerType"
-                            [ngValue]="taskTrigger.key">{{taskTrigger.value}}
-                    </option>
-                  </select>
 
-                  <app-timestamp-datepicker
-                    [name]="'triggerTime'+i"
-                    *ngIf="schedule.trigger.type == TaskTriggerType.scheduled"
-                    (timestampChange)="testSettingChanges()"
-                    [(timestamp)]="schedule.trigger.time"></app-timestamp-datepicker>
+          <div class="card-body" [hidden]="!showDetails[i]">
+            <div class="row">
 
-                  <select *ngIf="schedule.trigger.type == TaskTriggerType.periodic"
-                          class="form-control" [(ngModel)]="schedule.trigger.periodicity" [name]="'periodicity' + i"
-                          required>
-                    <option *ngFor="let period of periods; let i = index"
-                            [ngValue]="i">
-                      <ng-container i18n>every</ng-container>
-                      <ng-container i18n>every</ng-container>
-                      {{period}}
-                    </option>
-                  </select>
+              <div class="col-md-9">
+                <div class="form-group row">
+                  <label class="col-md-2 control-label" [for]="'taskName'+i" i18n>Task:</label>
+                  <div class="col-md-10">
+                    <select class="form-control" [(ngModel)]="schedule.taskName" [name]="'taskName'+i" required>
+                      <option *ngFor="let availableTask of _settingsService.availableTasks | async"
+                              [ngValue]="availableTask.Name">{{availableTask.Name}}
+                      </option>
+                    </select>
+                    <small class="form-text text-muted"
+                           i18n>Select a task to schedule.
+                    </small>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-md-2 control-label" [for]="'repeatType'+i" i18n>Periodicity:</label>
+                  <div class="col-md-10">
+                    <select class="form-control" [(ngModel)]="schedule.trigger.type"
+                            (ngModelChange)="taskTriggerTypeChanged($event,schedule)"
+                            [name]="'repeatType'+i" required>
+                      <option *ngFor="let taskTrigger of taskTriggerType"
+                              [ngValue]="taskTrigger.key">{{taskTrigger.value}}
+                      </option>
+                    </select>
+                    <small class="form-text text-muted"
+                           i18n>Set the time to run the task.
+                    </small>
+                  </div>
+                </div>
 
-                  <app-timestamp-timepicker
-                    [name]="'atTime'+i"
-                    (timestampChange)="testSettingChanges()"
-                    *ngIf="schedule.trigger.type == TaskTriggerType.periodic"
-                    [(timestamp)]="schedule.trigger.atTime"></app-timestamp-timepicker>
 
+                <div class="form-group row" *ngIf="schedule.trigger.type == TaskTriggerType.scheduled">
+                  <label class="col-md-2 control-label" [for]="'triggerTime'+i" i18n>At:</label>
+                  <div class="col-md-10">
+                    <app-timestamp-datepicker
+                      [name]="'triggerTime'+i"
+                      (timestampChange)="testSettingChanges()"
+                      [(timestamp)]="schedule.trigger.time"></app-timestamp-datepicker>
+                  </div>
+                </div>
+
+                <div class="form-group row" *ngIf="schedule.trigger.type == TaskTriggerType.periodic">
+                  <label class="col-md-2 control-label" [for]="'periodicity'+i" i18n>At:</label>
+                  <div class="col-md-10">
+                    <select
+                      class="form-control" [(ngModel)]="schedule.trigger.periodicity"
+                      [name]="'periodicity' + i"
+                      required>
+                      <option *ngFor="let period of periods; let i = index"
+                              [ngValue]="i">
+                        <ng-container i18n>every</ng-container>
+                        {{period}}
+                      </option>
+                    </select>
+                    <app-timestamp-timepicker
+                      [name]="'atTime'+i"
+                      (timestampChange)="testSettingChanges()"
+                      [(timestamp)]="schedule.trigger.atTime"></app-timestamp-timepicker>
+                  </div>
                 </div>
               </div>
-              <div>
-                <button class="btn btn-success"
+
+              <div class="col-md-3">
+                <button class="btn btn-success float-right"
                         *ngIf="!tasksService.progress.value[schedule.taskName]"
                         [disabled]="disableButtons"
                         title="Trigger task run manually"
                         i18n-title
                         (click)="start(schedule)" i18n>Start now
                 </button>
-                <button class="btn btn-secondary"
+                <button class="btn btn-secondary float-right"
                         *ngIf="tasksService.progress.value[schedule.taskName]"
                         [disabled]="disableButtons"
                         (click)="stop(schedule)" i18n>Stop
@@ -149,7 +183,11 @@
               (click)="save()" i18n>Save
       </button>
       <button class="btn btn-secondary float-right"
+              [disabled]=" !changed || inProgress"
               (click)="reset()" i18n>Reset
+      </button>
+      <button class="btn btn-primary float-right"
+              (click)="addNewTask()" i18n>+ Add task
       </button>
     </div>
 

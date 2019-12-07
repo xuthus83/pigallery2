@@ -44,7 +44,7 @@
             </select>
             <small
               class="form-text text-muted"
-              i18n>Set the reindexing sensitivity. High value check the folders for change more often
+              i18n>Set the reindexing sensitivity. High value check the folders for change more often.
             </small>
           </div>
         </div>
@@ -55,6 +55,7 @@
                 (click)="save()" i18n>Save
         </button>
         <button class="btn btn-secondary float-right"
+                [disabled]=" !changed || inProgress"
                 (click)="reset()" i18n>Reset
         </button>
         <br/>

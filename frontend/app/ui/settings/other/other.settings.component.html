@@ -168,6 +168,7 @@
               (click)="save()" i18n>Save
       </button>
       <button class="btn btn-secondary float-right"
+              [disabled]=" !changed || inProgress"
               (click)="reset()" i18n>Reset
       </button>
     </div>

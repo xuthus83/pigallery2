@@ -55,7 +55,7 @@ export class TaskManager implements ITaskManager {
     Config.Server.tasks.scheduled.forEach(schedule => {
       const nextDate = this.getDateFromSchedule(new Date(), schedule);
       if (nextDate && nextDate.getTime() > Date.now()) {
-        Logger.debug(LOG_TAG, 'running schedule: [' + schedule.id + '] ' + schedule.name +
+        Logger.debug(LOG_TAG, 'running schedule: ' + schedule.taskName +
           ' at ' + nextDate.toLocaleString(undefined, {hour12: false}));
 
         const timer: NodeJS.Timeout = setTimeout(() => {
@@ -65,7 +65,7 @@ export class TaskManager implements ITaskManager {
         this.timers.push(timer);
 
       } else {
-        Logger.debug(LOG_TAG, 'skipping schedule: [' + schedule.id + '] ' + schedule.name);
+        Logger.debug(LOG_TAG, 'skipping schedule:' + schedule.taskName);
       }
 
     });

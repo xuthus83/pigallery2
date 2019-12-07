@@ -99,20 +99,6 @@ export class PrivateConfigClass extends PublicConfigClass implements IPrivateCon
       throw new Error('Unknown Server.log.level, found: ' + this.Server.log.sqlLevel);
     }
 
-    let updated = false;
-    Config.Server.tasks.scheduled.forEach((task: TaskScheduleDTO, i: number) => {
-      if (!task.id) {
-        task.id = Utils.GUID();
-        updated = true;
-      }
-      if (!task.name) {
-        task.name = task.taskName;
-        updated = true;
-      }
-    });
-    if (updated) {
-      this.save();
-    }
   }
 
   public save() {

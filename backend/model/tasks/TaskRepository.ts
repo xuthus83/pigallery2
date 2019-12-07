@@ -27,4 +27,4 @@ export class TaskRepository {
 
 TaskRepository.Instance.register(new IndexingTask());
 TaskRepository.Instance.register(new DBRestTask());
-TaskRepository.Instance.register(new DummyTask());
+// TaskRepository.Instance.register(new DummyTask());

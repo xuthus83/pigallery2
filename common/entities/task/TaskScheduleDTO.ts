@@ -23,8 +23,6 @@ export interface PeriodicTaskTrigger extends TaskTrigger {
 
 export interface TaskScheduleDTO {
   priority: number;
-  name?: string;
-  id?: string;
   taskName: string;
   config: any;
   trigger: NeverTaskTrigger | ScheduledTaskTrigger | PeriodicTaskTrigger;
