@@ -64,6 +64,22 @@ export class IndexingSettingsComponent extends SettingsComponent<IndexingConfig,
     this.tasksService.unsubscribeFromProgress();
   }
 
+  get excludeFolderList(): string {
+    return this.settings.excludeFolderList.join(';');
+  }
+
+  set excludeFolderList(value: string) {
+    this.settings.excludeFolderList = value.split(';');
+  }
+
+  get excludeFileList(): string {
+    return this.settings.excludeFileList.join(';');
+  }
+
+  set excludeFileList(value: string) {
+    this.settings.excludeFileList = value.split(';');
+  }
+
   async ngOnInit() {
     super.ngOnInit();
     this.tasksService.subscribeToProgress();

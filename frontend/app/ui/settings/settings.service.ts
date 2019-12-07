@@ -109,7 +109,9 @@ export class SettingsService {
         indexing: {
           cachedFolderTimeout: 0,
           folderPreviewSize: 0,
-          reIndexingSensitivity: ReIndexingSensitivity.medium
+          reIndexingSensitivity: ReIndexingSensitivity.medium,
+          excludeFolderList: [],
+          excludeFileList: []
         },
         photoMetadataSize: 512 * 1024,
         duplicates: {
