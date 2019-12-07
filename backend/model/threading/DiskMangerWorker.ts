@@ -57,32 +57,32 @@ export class DiskMangerWorker {
     return path.basename(name);
   }
 
-  public static excludeDir(name: string,relativeDirectoryName: string, absoluteDirectoryName: string) {
-    const absoluteName=path.normalize(path.join(absoluteDirectoryName,name));
-    const relativeName=path.normalize(path.join(relativeDirectoryName,name));
+  public static excludeDir(name: string, relativeDirectoryName: string, absoluteDirectoryName: string) {
+    const absoluteName = path.normalize(path.join(absoluteDirectoryName, name));
+    const relativeName = path.normalize(path.join(relativeDirectoryName, name));
 
     for (let j = 0; j < Config.Server.indexing.excludeFolderList.length; j++) {
-      const exclude=Config.Server.indexing.excludeFolderList[j];
+      const exclude = Config.Server.indexing.excludeFolderList[j];
 
       if (exclude.startsWith('/')) {
-        if (exclude==absoluteName) {
+        if (exclude === absoluteName) {
           return true;
         }
       } else if (exclude.includes('/')) {
-        if (path.normalize(exclude)==relativeName) {
+        if (path.normalize(exclude) === relativeName) {
           return true;
         }
       } else {
-        if (exclude==name) {
+        if (exclude === name) {
           return true;
         }
       }
     }
-
+    // exclude dirs that have the given files (like .ignore)
     for (let j = 0; j < Config.Server.indexing.excludeFileList.length; j++) {
-      const exclude=Config.Server.indexing.excludeFileList[j];
+      const exclude = Config.Server.indexing.excludeFileList[j];
 
-      if (fs.existsSync(path.join(absoluteName,exclude))) {
+      if (fs.existsSync(path.join(absoluteName, exclude))) {
         return true;
       }
     }
@@ -123,7 +123,7 @@ export class DiskMangerWorker {
               if (photosOnly === true) {
                 continue;
               }
-              if (DiskMangerWorker.excludeDir(file,relativeDirectoryName,absoluteDirectoryName)) {
+              if (DiskMangerWorker.excludeDir(file, relativeDirectoryName, absoluteDirectoryName)) {
                 continue;
               }
               const d = await DiskMangerWorker.scanDirectory(path.join(relativeDirectoryName, file),

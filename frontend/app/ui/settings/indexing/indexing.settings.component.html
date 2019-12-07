@@ -67,12 +67,12 @@
         <div class="form-group row">
           <label class="col-md-2 control-label" for="excludeFileList" i18n>Exclude File List</label>
           <div class="col-md-10">
-            <input type="text" class="form-control" placeholder=""
+            <input type="text" class="form-control" placeholder=".ignore; .pg2ignore"
                    id="excludeFileList"
                    [(ngModel)]="excludeFileList"
                    name="excludeFileList" required>
             <small class="form-text text-muted">
-              <ng-container i18n>FFiles that mark a folder to be excluded from indexing</ng-container><br/>
+              <ng-container i18n>Files that mark a folder to be excluded from indexing</ng-container><br/>
               <ng-container
                 i18n>';' separated strings. Any folder that contains a file with this name will be excluded from indexing.</ng-container>
             </small>
