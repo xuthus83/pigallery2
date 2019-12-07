@@ -7,7 +7,7 @@ declare const process: any;
 
 export abstract class Task<T = void> implements ITask<T> {
 
-  protected progress: TaskProgressDTO;
+  protected progress: TaskProgressDTO = null;
   protected running = false;
   protected config: T;
 
@@ -25,7 +25,7 @@ export abstract class Task<T = void> implements ITask<T> {
 
   public start(config: T): void {
     if (this.running === false && this.Supported) {
-      Logger.info('[Task]', 'running task:' + this.Name);
+      Logger.info('[Task]', 'Running task: ' + this.Name);
       this.config = config;
       this.progress = {
         progress: 0,
@@ -45,14 +45,19 @@ export abstract class Task<T = void> implements ITask<T> {
   }
 
   public stop(): void {
-    Logger.info('[Task]', 'stopping task' + this.Name);
-    this.progress = null;
+    Logger.info('[Task]', 'Stopping task: ' + this.Name);
     this.running = false;
+    this.onFinish();
   }
 
   protected abstract async step(): Promise<TaskProgressDTO>;
 
   protected abstract async init(): Promise<void>;
+
+  private onFinish(): void {
+    this.progress = null;
+    Logger.info('[Task]', 'Task finished: ' + this.Name);
+  }
 
   private run() {
     process.nextTick(async () => {
@@ -64,6 +69,7 @@ export abstract class Task<T = void> implements ITask<T> {
         this.progress = await this.step();
         if (this.progress == null) { // finished
           this.running = false;
+          this.onFinish();
           return;
         }
         this.run();

@@ -2,7 +2,7 @@ export  type fieldType = 'string' | 'number' | 'boolean';
 
 
 export enum DefaultsTasks {
-  Indexing, 'Database Reset', Dummy
+  Indexing = 1, 'Database Reset' = 2
 }
 
 export interface ConfigTemplateEntry {
@@ -11,11 +11,6 @@ export interface ConfigTemplateEntry {
   type: fieldType;
   defaultValue: any;
 }
-
-/*
-export interface NestedFieldType {
-  [key: string]: fieldType | NestedFieldType;
-}*/
 
 export interface TaskDTO {
   Name: string;

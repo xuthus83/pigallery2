@@ -10,7 +10,6 @@ export class AdminRouter {
     this.addGetStatistic(app);
     this.addGetDuplicates(app);
     this.addTasks(app);
-    this.addIndexGallery(app);
     this.addSettings(app);
   }
 
@@ -28,33 +27,6 @@ export class AdminRouter {
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Admin),
       AdminMWs.getDuplicates,
-      RenderingMWs.renderResult
-    );
-  }
-
-  private static addIndexGallery(app: Express) {
-    app.get('/api/admin/indexes/job/progress',
-      AuthenticationMWs.authenticate,
-      AuthenticationMWs.authorise(UserRoles.Admin),
-      AdminMWs.getIndexingProgress,
-      RenderingMWs.renderResult
-    );
-    app.post('/api/admin/indexes/job',
-      AuthenticationMWs.authenticate,
-      AuthenticationMWs.authorise(UserRoles.Admin),
-      AdminMWs.startIndexing,
-      RenderingMWs.renderResult
-    );
-    app.delete('/api/admin/indexes/job',
-      AuthenticationMWs.authenticate,
-      AuthenticationMWs.authorise(UserRoles.Admin),
-      AdminMWs.cancelIndexing,
-      RenderingMWs.renderResult
-    );
-    app.delete('/api/admin/indexes',
-      AuthenticationMWs.authenticate,
-      AuthenticationMWs.authorise(UserRoles.Admin),
-      AdminMWs.resetIndexes,
       RenderingMWs.renderResult
     );
   }

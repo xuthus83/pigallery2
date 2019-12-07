@@ -18,7 +18,9 @@ export class TaskManager implements ITaskManager {
 
   getProgresses(): { [id: string]: TaskProgressDTO } {
     const m: { [id: string]: TaskProgressDTO } = {};
-    TaskRepository.Instance.getAvailableTasks().forEach(t => m[t.Name] = t.Progress);
+    TaskRepository.Instance.getAvailableTasks()
+      .filter(t => t.Progress)
+      .forEach(t => m[t.Name] = t.Progress);
     return m;
   }
 
@@ -35,6 +37,9 @@ export class TaskManager implements ITaskManager {
     const t = this.findTask(taskName);
     if (t) {
       t.stop();
+      if (global.gc) {
+        global.gc();
+      }
     } else {
       Logger.warn(LOG_TAG, 'cannot find task to stop:' + taskName);
     }

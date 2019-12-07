@@ -11,7 +11,6 @@ import {BasicConfigDTO} from '../../common/entities/settings/BasicConfigDTO';
 import {OtherConfigDTO} from '../../common/entities/settings/OtherConfigDTO';
 import {ProjectPath} from '../ProjectPath';
 import {PrivateConfigClass} from '../../common/config/private/PrivateConfigClass';
-import {IndexingDTO} from '../../common/entities/settings/IndexingDTO';
 import {ISQLGalleryManager} from '../model/sql/IGalleryManager';
 
 const LOG_TAG = '[AdminMWs]';
@@ -521,59 +520,6 @@ export class AdminMWs {
         return next(new ErrorDTO(ErrorCodes.TASK_ERROR, 'Task error: ' + err.toString(), err));
       }
       return next(new ErrorDTO(ErrorCodes.TASK_ERROR, 'Task error: ' + JSON.stringify(err, null, '  '), err));
-    }
-  }
-
-  public static startIndexing(req: Request, res: Response, next: NextFunction) {
-    try {
-      const createThumbnails: boolean = (<IndexingDTO>req.body).createThumbnails || false;
-      ObjectManagers.getInstance().IndexingTaskManager.startIndexing(createThumbnails);
-      req.resultPipe = 'ok';
-      return next();
-    } catch (err) {
-      if (err instanceof Error) {
-        return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, 'Settings error: ' + err.toString(), err));
-      }
-      return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, 'Settings error: ' + JSON.stringify(err, null, '  '), err));
-    }
-  }
-
-
-  public static getIndexingProgress(req: Request, res: Response, next: NextFunction) {
-    try {
-      req.resultPipe = ObjectManagers.getInstance().IndexingTaskManager.getProgress();
-      return next();
-    } catch (err) {
-      if (err instanceof Error) {
-        return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, 'Settings error: ' + err.toString(), err));
-      }
-      return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, 'Settings error: ' + JSON.stringify(err, null, '  '), err));
-    }
-  }
-
-  public static cancelIndexing(req: Request, res: Response, next: NextFunction) {
-    try {
-      ObjectManagers.getInstance().IndexingTaskManager.cancelIndexing();
-      req.resultPipe = 'ok';
-      return next();
-    } catch (err) {
-      if (err instanceof Error) {
-        return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, 'Settings error: ' + err.toString(), err));
-      }
-      return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, 'Settings error: ' + JSON.stringify(err, null, '  '), err));
-    }
-  }
-
-  public static async resetIndexes(req: Express.Request, res: Response, next: NextFunction) {
-    try {
-      await ObjectManagers.getInstance().IndexingTaskManager.reset();
-      req.resultPipe = 'ok';
-      return next();
-    } catch (err) {
-      if (err instanceof Error) {
-        return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, 'Settings error: ' + err.toString(), err));
-      }
-      return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, 'Settings error: ' + JSON.stringify(err, null, '  '), err));
     }
   }
 }

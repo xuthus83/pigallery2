@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {EventEmitter, Injectable} from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
 import {TaskProgressDTO} from '../../../../common/entities/settings/TaskProgressDTO';
 import {NetworkService} from '../../model/network/network.service';
@@ -8,6 +8,7 @@ export class ScheduledTasksService {
 
 
   public progress: BehaviorSubject<{ [key: string]: TaskProgressDTO }>;
+  public onTaskFinish: EventEmitter<string> = new EventEmitter<string>();
   timer: number = null;
   private subscribers = 0;
 
@@ -28,16 +29,24 @@ export class ScheduledTasksService {
     return this.getProgress();
   }
 
-  public async start(id: string, config?: any) {
-    return await this._networkService.postJson('/admin/tasks/scheduled/' + id + '/start', {config: config});
+  public async start(id: string, config?: any): Promise<void> {
+    await this._networkService.postJson('/admin/tasks/scheduled/' + id + '/start', {config: config});
+    this.forceUpdate();
   }
 
-  public async stop(id: string) {
-    return await this._networkService.postJson('/admin/tasks/scheduled/' + id + '/stop');
+  public async stop(id: string): Promise<void> {
+    await this._networkService.postJson('/admin/tasks/scheduled/' + id + '/stop');
+    this.forceUpdate();
   }
 
   protected async getProgress() {
-    return this.progress.next(await this._networkService.getJson<{ [key: string]: TaskProgressDTO }>('/admin/tasks/scheduled/progress'));
+    const prevPrg = this.progress.value;
+    this.progress.next(await this._networkService.getJson<{ [key: string]: TaskProgressDTO }>('/admin/tasks/scheduled/progress'));
+    for (const prg in prevPrg) {
+      if (!this.progress.value.hasOwnProperty(prg)) {
+        this.onTaskFinish.emit(prg);
+      }
+    }
   }
 
   protected getProgressPeriodically() {

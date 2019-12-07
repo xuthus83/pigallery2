@@ -4,7 +4,6 @@ import {ISearchManager} from './interfaces/ISearchManager';
 import {SQLConnection} from './sql/SQLConnection';
 import {ISharingManager} from './interfaces/ISharingManager';
 import {Logger} from '../Logger';
-import {IIndexingTaskManager} from './interfaces/IIndexingTaskManager';
 import {IIndexingManager} from './interfaces/IIndexingManager';
 import {IPersonManager} from './interfaces/IPersonManager';
 import {IVersionManager} from './interfaces/IVersionManager';
@@ -19,7 +18,6 @@ export class ObjectManagers {
   private _searchManager: ISearchManager;
   private _sharingManager: ISharingManager;
   private _indexingManager: IIndexingManager;
-  private _indexingTaskManager: IIndexingTaskManager;
   private _personManager: IPersonManager;
   private _versionManager: IVersionManager;
   private _taskManager: ITaskManager;
@@ -49,13 +47,6 @@ export class ObjectManagers {
     this._indexingManager = value;
   }
 
-  get IndexingTaskManager(): IIndexingTaskManager {
-    return this._indexingTaskManager;
-  }
-
-  set IndexingTaskManager(value: IIndexingTaskManager) {
-    this._indexingTaskManager = value;
-  }
 
   get GalleryManager(): IGalleryManager {
     return this._galleryManager;
@@ -124,7 +115,6 @@ export class ObjectManagers {
     const UserManager = require('./memory/UserManager').UserManager;
     const SearchManager = require('./memory/SearchManager').SearchManager;
     const SharingManager = require('./memory/SharingManager').SharingManager;
-    const IndexingTaskManager = require('./memory/IndexingTaskManager').IndexingTaskManager;
     const IndexingManager = require('./memory/IndexingManager').IndexingManager;
     const PersonManager = require('./memory/PersonManager').PersonManager;
     const VersionManager = require('./memory/VersionManager').VersionManager;
@@ -132,7 +122,6 @@ export class ObjectManagers {
     ObjectManagers.getInstance().UserManager = new UserManager();
     ObjectManagers.getInstance().SearchManager = new SearchManager();
     ObjectManagers.getInstance().SharingManager = new SharingManager();
-    ObjectManagers.getInstance().IndexingTaskManager = new IndexingTaskManager();
     ObjectManagers.getInstance().IndexingManager = new IndexingManager();
     ObjectManagers.getInstance().PersonManager = new PersonManager();
     ObjectManagers.getInstance().VersionManager = new VersionManager();
@@ -146,7 +135,6 @@ export class ObjectManagers {
     const UserManager = require('./sql/UserManager').UserManager;
     const SearchManager = require('./sql/SearchManager').SearchManager;
     const SharingManager = require('./sql/SharingManager').SharingManager;
-    const IndexingTaskManager = require('./sql/IndexingTaskManager').IndexingTaskManager;
     const IndexingManager = require('./sql/IndexingManager').IndexingManager;
     const PersonManager = require('./sql/PersonManager').PersonManager;
     const VersionManager = require('./sql/VersionManager').VersionManager;
@@ -154,7 +142,6 @@ export class ObjectManagers {
     ObjectManagers.getInstance().UserManager = new UserManager();
     ObjectManagers.getInstance().SearchManager = new SearchManager();
     ObjectManagers.getInstance().SharingManager = new SharingManager();
-    ObjectManagers.getInstance().IndexingTaskManager = new IndexingTaskManager();
     ObjectManagers.getInstance().IndexingManager = new IndexingManager();
     ObjectManagers.getInstance().PersonManager = new PersonManager();
     ObjectManagers.getInstance().VersionManager = new VersionManager();

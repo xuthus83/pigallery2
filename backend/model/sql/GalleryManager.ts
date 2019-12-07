@@ -153,7 +153,7 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
       .createQueryBuilder('media')
       .select('SUM(media.metadata.fileSize)', 'sum')
       .getRawOne();
-    return sum;
+    return sum || 0;
   }
 
   async countPhotos(): Promise<number> {

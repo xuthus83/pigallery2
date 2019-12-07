@@ -111,7 +111,6 @@ export class TasksSettingsComponent extends SettingsComponent<TaskConfig, TasksS
     try {
       this.disableButtons = true;
       await this.tasksService.start(schedule.taskName, schedule.config);
-      await this.tasksService.forceUpdate();
       this.notification.info(this.i18n('Task') + ' ' + schedule.taskName + ' ' + this.i18n('started'));
       return true;
     } catch (err) {
@@ -131,7 +130,6 @@ export class TasksSettingsComponent extends SettingsComponent<TaskConfig, TasksS
     try {
       this.disableButtons = true;
       await this.tasksService.stop(schedule.taskName);
-      await this.tasksService.forceUpdate();
       this.notification.info(this.i18n('Task') + ' ' + schedule.taskName + ' ' + this.i18n('stopped'));
       return true;
     } catch (err) {

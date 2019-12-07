@@ -8,7 +8,6 @@ import {IndexingConfig, ReIndexingSensitivity} from '../../../../../common/confi
 import {SettingsComponent} from '../_abstract/abstract.settings.component';
 import {Utils} from '../../../../../common/Utils';
 import {I18n} from '@ngx-translate/i18n-polyfill';
-import {StatisticDTO} from '../../../../../common/entities/settings/StatisticDTO';
 import {ScheduledTasksService} from '../scheduled-tasks.service';
 import {DefaultsTasks} from '../../../../../common/entities/task/TaskDTO';
 
@@ -24,7 +23,6 @@ export class IndexingSettingsComponent extends SettingsComponent<IndexingConfig,
 
 
   types: { key: number; value: string }[] = [];
-  statistic: StatisticDTO;
 
   constructor(_authService: AuthenticationService,
               _navigation: NavigationService,
@@ -59,11 +57,6 @@ export class IndexingSettingsComponent extends SettingsComponent<IndexingConfig,
     }
   }
 
-  ngOnDestroy() {
-    super.ngOnDestroy();
-    this.tasksService.unsubscribeFromProgress();
-  }
-
   get excludeFolderList(): string {
     return this.settings.excludeFolderList.join(';');
   }
@@ -78,6 +71,11 @@ export class IndexingSettingsComponent extends SettingsComponent<IndexingConfig,
 
   set excludeFileList(value: string) {
     this.settings.excludeFileList = value.split(';');
+  }
+
+  ngOnDestroy() {
+    super.ngOnDestroy();
+    this.tasksService.unsubscribeFromProgress();
   }
 
   async ngOnInit() {
@@ -98,9 +96,6 @@ export class IndexingSettingsComponent extends SettingsComponent<IndexingConfig,
           break;
       }
     });
-    if (this._settingsService.isSupported()) {
-      this.statistic = await this._settingsService.getStatistic();
-    }
   }
 
 
@@ -109,7 +104,6 @@ export class IndexingSettingsComponent extends SettingsComponent<IndexingConfig,
     this.error = '';
     try {
       await this.tasksService.start(DefaultsTasks[DefaultsTasks.Indexing], {createThumbnails: !!createThumbnails});
-      await this.tasksService.forceUpdate();
       this.notification.info(this.i18n('Folder indexing started'));
       this.inProgress = false;
       return true;
@@ -129,7 +123,6 @@ export class IndexingSettingsComponent extends SettingsComponent<IndexingConfig,
     this.error = '';
     try {
       await this.tasksService.stop(DefaultsTasks[DefaultsTasks.Indexing]);
-      await this.tasksService.forceUpdate();
       this.notification.info(this.i18n('Folder indexing interrupted'));
       this.inProgress = false;
       return true;
@@ -149,8 +142,7 @@ export class IndexingSettingsComponent extends SettingsComponent<IndexingConfig,
     this.error = '';
     try {
       await this.tasksService.start(DefaultsTasks[DefaultsTasks['Database Reset']]);
-      await this.tasksService.forceUpdate();
-      this.notification.success(this.i18n('Database reset'), this.i18n('Success'));
+      this.notification.info(this.i18n('Resetting  database'));
       this.inProgress = false;
       return true;
     } catch (err) {
