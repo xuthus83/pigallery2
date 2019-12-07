@@ -125,7 +125,7 @@ export function translationsFactory(locale: string) {
   if (locale === 'en') {
     return '';
   }
-  return require(`raw-loader!../translate/messages.${locale}.xlf`);
+  return (<any>require(`raw-loader!../translate/messages.${locale}.xlf`)).default;
 }
 
 @NgModule({

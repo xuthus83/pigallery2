@@ -43,9 +43,25 @@ const getLanguages = () => {
   const files: string[] = dirCont.filter((elm) => {
     return elm.match(/.*\.[a-zA-Z]+\.(xlf)/ig);
   });
-  return files.map((f: string) => {
+
+  // get languages to filter
+  let languageFilter: string[] = null;
+  for (let i = 0; i < process.argv.length; i++) {
+    if (process.argv[i].startsWith('--languages=')) {
+      languageFilter = process.argv[i].replace('--languages=', '').split(',');
+    }
+  }
+
+  let languages = files.map((f: string) => {
     return f.split('.')[1];
   });
+
+  if (languageFilter !== null) {
+    languages = languages.filter((l) => {
+      return languageFilter.indexOf(l) !== -1;
+    });
+  }
+  return languages;
 };
 
 gulp.task('build-frontend', (() => {
@@ -98,11 +114,11 @@ gulp.task('zip-release', function () {
     .pipe(gulp.dest('.'));
 });
 
-gulp.task('build-release', gulp.series('build-frontend', 'build-backend', 'copy-static', 'copy-package', 'zip-release'));
+gulp.task('create-release', gulp.series('build-frontend', 'build-backend', 'copy-static', 'copy-package', 'zip-release'));
 
 
 const simpleBuild = (isProd: boolean) => {
-  const languages = getLanguages().filter(function (l) {
+  const languages = getLanguages().filter((l) => {
     return l !== 'en';
   });
   const tasks = [];
