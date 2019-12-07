@@ -1,6 +1,6 @@
 <form #settingsForm="ngForm" class="form-horizontal">
   <div class="card mb-4">
-    <h5 class="card-header" i18n>
+    <h5 class="card-header">
       <ng-container i18n>Tasks</ng-container>
       <ng-container *ngIf="changed">*</ng-container>
     </h5>
@@ -115,8 +115,7 @@
                 <ng-container [ngSwitch]="configEntry.type">
                   <ng-container *ngSwitchCase="'boolean'">
                     <div class="form-group row">
-                      <label class="col-md-2 control-label" [for]="configEntry.id"
-                             i18n>{{configEntry.name}}</label>
+                      <label class="col-md-2 control-label" [for]="configEntry.id" >{{configEntry.name}}</label>
                       <div class="col-md-10">
                         <bSwitch
                           id="enableThreading"
@@ -136,8 +135,7 @@
                   </ng-container>
                   <ng-container *ngSwitchCase="'string'">
                     <div class="form-group row" [hidden]="simplifiedMode">
-                      <label class="col-md-2 control-label" [for]="configEntry.id"
-                             i18n>{{configEntry.name}}</label>
+                      <label class="col-md-2 control-label" [for]="configEntry.id">{{configEntry.name}}</label>
                       <div class="col-md-10">
                         <input type="text" class="form-control" [name]="configEntry.id" [id]="configEntry.id"
                                [(ngModel)]="schedule.config[configEntry.id]" required>
@@ -146,8 +144,7 @@
                   </ng-container>
                   <ng-container *ngSwitchCase="'number'">
                     <div class="form-group row" [hidden]="simplifiedMode">
-                      <label class="col-md-2 control-label" [for]="configEntry.id"
-                             i18n>{{configEntry.name}}</label>
+                      <label class="col-md-2 control-label" [for]="configEntry.id">{{configEntry.name}}</label>
                       <div class="col-md-10">
                         <input type="number" class="form-control" [name]="configEntry.id" [id]="configEntry.id"
                                [(ngModel)]="schedule.config[configEntry.id]" required>
