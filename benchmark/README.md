@@ -1,6 +1,6 @@
 # PiGallery2 performance benchmark results
 
-These results are created mostly for development, but I'm making them public for curious users.
+These results are created mostly for development, but the results are public for curious users.
 
 ## PiGallery2 v1.5.8, 26.01.2019
 
