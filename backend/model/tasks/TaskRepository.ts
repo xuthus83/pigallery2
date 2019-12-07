@@ -1,7 +1,6 @@
 import {ITask} from './ITask';
 import {IndexingTask} from './IndexingTask';
 import {DBRestTask} from './DBResetTask';
-import {DummyTask} from './DummyTask';
 
 export class TaskRepository {
 
@@ -27,4 +26,3 @@ export class TaskRepository {
 
 TaskRepository.Instance.register(new IndexingTask());
 TaskRepository.Instance.register(new DBRestTask());
-// TaskRepository.Instance.register(new DummyTask());

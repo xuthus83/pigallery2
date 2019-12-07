@@ -3,7 +3,7 @@ import {FaceRegion, PhotoMetadata} from '../../../common/entities/PhotoDTO';
 import {Config} from '../../../common/config/private/Config';
 import {Logger} from '../../Logger';
 import * as fs from 'fs';
-import * as sizeOf from 'image-size';
+import {imageSize} from 'image-size';
 // @ts-ignore
 import * as ExifReader from 'exifreader';
 import {ExifParserFactory, OrientationTypes} from 'ts-exif-parser';
@@ -49,8 +49,8 @@ export class MetadataLoader {
                 metadata.size.width = data.streams[i].width;
                 metadata.size.height = data.streams[i].height;
 
-                if (Utils.isInt32(Math.floor(data.streams[i].duration * 1000))) {
-                  metadata.duration = Math.floor(data.streams[i].duration * 1000);
+                if (Utils.isInt32(Math.floor(parseFloat(data.streams[i].duration) * 1000))) {
+                  metadata.duration = Math.floor(parseFloat(data.streams[i].duration) * 1000);
                 }
 
                 if (Utils.isInt32(parseInt(data.streams[i].bit_rate, 10))) {
@@ -150,13 +150,13 @@ export class MetadataLoader {
               } else if (exif.tags.RelatedImageWidth && exif.tags.RelatedImageHeight) {
                 metadata.size = {width: exif.tags.RelatedImageWidth, height: exif.tags.RelatedImageHeight};
               } else {
-                const info = sizeOf(fullPath);
+                const info = imageSize(fullPath);
                 metadata.size = {width: info.width, height: info.height};
               }
             } catch (err) {
               Logger.debug(LOG_TAG, 'Error parsing exif', fullPath, err);
               try {
-                const info = sizeOf(fullPath);
+                const info = imageSize(fullPath);
                 metadata.size = {width: info.width, height: info.height};
               } catch (e) {
                 metadata.size = {width: 1, height: 1};

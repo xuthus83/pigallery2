@@ -56,14 +56,12 @@ export class UserMWs {
 
 
     try {
-      await ObjectManagers.getInstance().UserManager.deleteUser(req.params.id);
+      await ObjectManagers.getInstance().UserManager.deleteUser(parseInt(req.params.id, 10));
       return next();
 
     } catch (err) {
       return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, null, err));
     }
-
-
   }
 
   public static async changeRole(req: Request, res: Response, next: NextFunction) {
@@ -76,7 +74,7 @@ export class UserMWs {
     }
 
     try {
-      await  ObjectManagers.getInstance().UserManager.changeRole(req.params.id, req.body.newRole);
+      await ObjectManagers.getInstance().UserManager.changeRole(parseInt(req.params.id, 10), req.body.newRole);
       return next();
 
     } catch (err) {

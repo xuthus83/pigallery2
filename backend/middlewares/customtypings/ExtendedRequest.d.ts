@@ -10,7 +10,7 @@ declare global {
 
       resultPipe?: any;
       body?: {
-        loginCredential: LoginCredential
+        loginCredential?: LoginCredential
       };
       locale?: string;
     }
