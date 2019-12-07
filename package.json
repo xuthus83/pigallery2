@@ -8,7 +8,7 @@
   "main": "./backend/index.js",
   "bin": "./backend/index.js",
   "scripts": {
-    "installx": "tsc && gulp build-prod",
+    "install": "tsc && gulp build-prod",
     "build-release": "gulp build-release",
     "build-backend": "tsc",
     "pretest": "tsc",
@@ -46,6 +46,7 @@
     "ts-node-iptc": "1.0.11",
     "typeconfig": "1.0.7",
     "typeorm": "0.2.21",
+    "webpack-bundle-analyzer": "^3.6.0",
     "winston": "2.4.4",
     "xmldom": "0.1.27"
   },
