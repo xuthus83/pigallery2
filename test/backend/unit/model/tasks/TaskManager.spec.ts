@@ -14,7 +14,7 @@ describe('TaskManager', () => {
   it('should get date from schedule', async () => {
     const tm = new TaskManagerSpec();
 
-    const refDate = new Date(2019, 7, 18, 5, 10); // its a sunday
+    const refDate = new Date(2019, 7, 18, 5, 10, 10, 0); // its a sunday
 
 
     expect(tm.getDateFromSchedule(refDate, <any>{
@@ -22,7 +22,7 @@ describe('TaskManager', () => {
         type: TaskTriggerType.scheduled,
         time: (new Date(2019, 7, 18, 5, 10)).getTime()
       }
-    })).to.be.deep.equal((new Date(2019, 7, 18, 5, 10)));
+    })).to.be.deep.equal((new Date(2019, 7, 18, 5, 10, 0)));
 
 
     for (let dayOfWeek = 0; dayOfWeek < 7; ++dayOfWeek) {
@@ -36,7 +36,7 @@ describe('TaskManager', () => {
           atTime: (h * 60 + m) * 60 * 1000,
           periodicity: dayOfWeek
         }
-      })).to.be.deep.equal((new Date(2019, 7, nextDay, h, m)), 'for day: ' + dayOfWeek);
+      })).to.be.deep.equal((new Date(2019, 7, nextDay, h, m, 0)), 'for day: ' + dayOfWeek);
 
       h = 2;
       m = 5;
@@ -47,7 +47,18 @@ describe('TaskManager', () => {
           atTime: (h * 60 + m) * 60 * 1000,
           periodicity: dayOfWeek
         }
-      })).to.be.deep.equal((new Date(2019, 7, nextDay, h, m)), 'for day: ' + dayOfWeek);
+      })).to.be.deep.equal((new Date(2019, 7, nextDay, h, m, 0)), 'for day: ' + dayOfWeek);
+
+      h = 5;
+      m = 10;
+      nextDay = 18 + dayOfWeek + 1;
+      expect(tm.getDateFromSchedule(refDate, <any>{
+        trigger: {
+          type: TaskTriggerType.periodic,
+          atTime: (h * 60 + m) * 60 * 1000,
+          periodicity: dayOfWeek
+        }
+      })).to.be.deep.equal((new Date(2019, 7, nextDay, h, m, 0)), 'for day: ' + dayOfWeek);
     }
 
     {
@@ -59,7 +70,7 @@ describe('TaskManager', () => {
           atTime: (h * 60 + m) * 60 * 1000,
           periodicity: 7
         }
-      })).to.be.deep.equal((new Date(2019, 7, 18, h, m)));
+      })).to.be.deep.equal((new Date(2019, 7, 18, h, m, 0)));
     }
     {
       const h = 2;
@@ -70,7 +81,7 @@ describe('TaskManager', () => {
           atTime: (h * 60 + m) * 60 * 1000,
           periodicity: 7
         }
-      })).to.be.deep.equal((new Date(2019, 7, 19, h, m)));
+      })).to.be.deep.equal((new Date(2019, 7, 19, h, m, 0)));
     }
   });
 

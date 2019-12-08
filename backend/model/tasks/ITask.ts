@@ -6,7 +6,7 @@ export interface ITask<T> extends TaskDTO {
   Supported: boolean;
   Progress: TaskProgressDTO;
 
-  start(config: T): void;
+  start(config: T): Promise<void>;
 
   stop(): void;
 }

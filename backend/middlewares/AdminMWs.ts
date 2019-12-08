@@ -473,7 +473,7 @@ export class AdminMWs {
     try {
       const id = req.params.id;
       const taskConfig: any = req.body.config;
-      ObjectManagers.getInstance().TaskManager.start(id, taskConfig);
+      ObjectManagers.getInstance().TaskManager.run(id, taskConfig);
       req.resultPipe = 'ok';
       return next();
     } catch (err) {

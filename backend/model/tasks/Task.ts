@@ -10,6 +10,7 @@ export abstract class Task<T = void> implements ITask<T> {
   protected progress: TaskProgressDTO = null;
   protected running = false;
   protected config: T;
+  protected prResolve: () => void;
 
 
   public abstract get Supported(): boolean;
@@ -23,7 +24,7 @@ export abstract class Task<T = void> implements ITask<T> {
     return this.progress;
   }
 
-  public start(config: T): void {
+  public start(config: T): Promise<void> {
     if (this.running === false && this.Supported) {
       Logger.info('[Task]', 'Running task: ' + this.Name);
       this.config = config;
@@ -39,8 +40,12 @@ export abstract class Task<T = void> implements ITask<T> {
       this.running = true;
       this.init().catch(console.error);
       this.run();
+      return new Promise<void>((resolve) => {
+        this.prResolve = resolve;
+      });
     } else {
       Logger.info('[Task]', 'Task already running: ' + this.Name);
+      return Promise.reject();
     }
   }
 
@@ -57,6 +62,7 @@ export abstract class Task<T = void> implements ITask<T> {
   private onFinish(): void {
     this.progress = null;
     Logger.info('[Task]', 'Task finished: ' + this.Name);
+    this.prResolve();
   }
 
   private run() {
