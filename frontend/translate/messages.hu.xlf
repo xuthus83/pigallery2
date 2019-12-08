@@ -862,7 +862,7 @@
           <context context-type="sourcefile">app/ui/settings/thumbnail/thumbanil.settings.component.html</context>
           <context context-type="linenumber">24</context>
         </context-group>
-        <target>Győződjön meg arról, hogy az éles csomópont modul telepítve van (npm telepítés éles).</target>
+        <target>Győződjön meg arról, hogy a sharp node modul telepítve van (npm telepítés éles).</target>
       </trans-unit>
       <trans-unit id="becf05481d292e5e206fda4b7d67d8fac4e85c93" datatype="html">
         <source>Make sure that gm node module and</source>
@@ -1198,7 +1198,7 @@
           <context context-type="sourcefile">app/ui/settings/basic/basic.settings.component.html</context>
           <context context-type="linenumber">78</context>
         </context-group>
-        <target>Ha a galériát egy al-url alatt érheti el (például: http://mydomain.com/myGallery), állítsa be itt. Ha nem működik, akkor hiányozhat a "/" a kezdetétől url.</target>
+        <target>Ha a galériát egy al-url alatt érheti el (például: http://mydomain.com/myGallery), állítsa be itt. Ha nem működik, akkor hiányozhat a "/" az url elejéről.</target>
       </trans-unit>
       <trans-unit id="f268a48c3f70d641ccb99786fe49f21a769eb2bb" datatype="html">
         <source>

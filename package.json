@@ -10,7 +10,7 @@
   "scripts": {
     "install": "npm run build-prod",
     "build-prod": "tsc && gulp build-prod",
-    "create-release": "gulp build-release",
+    "create-release": "gulp create-release",
     "build-backend": "tsc",
     "pretest": "tsc",
     "test": "ng test && mocha --recursive test/backend/unit && mocha --recursive test/backend/integration  && mocha --recursive test/common/unit ",

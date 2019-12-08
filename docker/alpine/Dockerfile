@@ -2,7 +2,7 @@ FROM node:alpine
 RUN apk add python build-base
 COPY . /build
 WORKDIR /build
-RUN set -x && npm install --unsafe-perm && npm run build-release && \
+RUN set -x && npm install --unsafe-perm && npm run create-release && \
     cd /build/release && npm install --unsafe-perm
 RUN mkdir -p /build/release/data/config && \
     mkdir -p /build/release/data/db && \
