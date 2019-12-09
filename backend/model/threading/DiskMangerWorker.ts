@@ -9,30 +9,13 @@ import {VideoDTO} from '../../../common/entities/VideoDTO';
 import {FileDTO} from '../../../common/entities/FileDTO';
 import {MetadataLoader} from './MetadataLoader';
 import {Logger} from '../../Logger';
+import {SupportedFormats} from '../../../common/SupportedFormats';
 
 const LOG_TAG = '[DiskManagerTask]';
 
 
 export class DiskMangerWorker {
 
-  private static readonly SupportedEXT = {
-    photo: [
-      '.gif',
-      '.jpeg', '.jpg', '.jpe',
-      '.png',
-      '.webp',
-      '.svg'
-    ],
-    video: [
-      '.mp4',
-      '.webm',
-      '.ogv',
-      '.ogg'
-    ],
-    metaFile: [
-      '.gpx'
-    ]
-  };
 
   public static calcLastModified(stat: Stats) {
     return Math.max(stat.ctime.getTime(), stat.mtime.getTime());
@@ -186,17 +169,17 @@ export class DiskMangerWorker {
 
   private static isImage(fullPath: string) {
     const extension = path.extname(fullPath).toLowerCase();
-    return this.SupportedEXT.photo.indexOf(extension) !== -1;
+    return SupportedFormats.WithDots.Photos.indexOf(extension) !== -1;
   }
 
   private static isVideo(fullPath: string) {
     const extension = path.extname(fullPath).toLowerCase();
-    return this.SupportedEXT.video.indexOf(extension) !== -1;
+    return SupportedFormats.WithDots.Videos.indexOf(extension) !== -1;
   }
 
   private static isMetaFile(fullPath: string) {
     const extension = path.extname(fullPath).toLowerCase();
-    return this.SupportedEXT.metaFile.indexOf(extension) !== -1;
+    return SupportedFormats.WithDots.MetaFiles.indexOf(extension) !== -1;
   }
 
 }

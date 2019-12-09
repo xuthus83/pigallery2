@@ -1,8 +1,8 @@
 import {DirectoryDTO} from './DirectoryDTO';
 import {PhotoDTO} from './PhotoDTO';
 import {OrientationTypes} from 'ts-exif-parser';
-import {VideoDTO} from './VideoDTO';
 import {FileDTO} from './FileDTO';
+import {SupportedFormats} from '../SupportedFormats';
 
 export interface MediaDTO extends FileDTO {
   id: number;
@@ -56,7 +56,12 @@ export module MediaDTO {
 
   export const isVideo = (media: MediaDTO): boolean => {
     const lower = media.name.toLowerCase();
-    return lower.endsWith('.mp4') || lower.endsWith('.webm') || lower.endsWith('.ogg') || lower.endsWith('.ogv');
+    for (const ext of SupportedFormats.WithDots.Videos) {
+      if (lower.endsWith(ext)) {
+        return true;
+      }
+    }
+    return false;
   };
 
   export const getRotatedSize = (photo: MediaDTO): MediaDimension => {

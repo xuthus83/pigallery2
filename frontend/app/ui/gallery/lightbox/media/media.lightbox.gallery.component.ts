@@ -129,17 +129,6 @@ export class GalleryLightboxMediaComponent implements OnChanges {
     return this.video.nativeElement.paused;
   }
 
-  public getVideoType(): string {
-    switch (this.gridMedia.getExtension().toLowerCase()) {
-      case 'webm':
-        return 'video/webm';
-      case 'ogv':
-      case 'ogg':
-        return 'video/ogg';
-      default:
-        return 'video/mp4';
-    }
-  }
 
   onImageError() {
     // TODO:handle error
