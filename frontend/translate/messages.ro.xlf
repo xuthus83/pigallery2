@@ -419,7 +419,7 @@
         <source>bit rate</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/gallery/lightbox/infopanel/info-panel.lightbox.gallery.component.html</context>
-          <context context-type="linenumber">54</context>
+          <context context-type="linenumber">57</context>
         </context-group>
         <target>rata de biți</target>
       </trans-unit>
@@ -744,7 +744,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
-          <context context-type="linenumber">28</context>
+          <context context-type="linenumber">101</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/metafiles/metafile.settings.component.html</context>
@@ -772,7 +772,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/other/other.settings.component.html</context>
-          <context context-type="linenumber">168</context>
+          <context context-type="linenumber">170</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/tasks/tasks.settings.component.html</context>
@@ -793,7 +793,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
-          <context context-type="linenumber">32</context>
+          <context context-type="linenumber">105</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/metafiles/metafile.settings.component.html</context>
@@ -821,7 +821,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/other/other.settings.component.html</context>
-          <context context-type="linenumber">172</context>
+          <context context-type="linenumber">174</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/tasks/tasks.settings.component.html</context>
@@ -969,13 +969,191 @@
         </context-group>
         <target>Setări video</target>
       </trans-unit>
-      <trans-unit id="6b8862cecf0fd1c8fc1b503e131bfa230d851343" datatype="html">
-        <source>Video support uses ffmpeg. ffmpeg and ffprobe binaries need to be available in the PATH or the @ffmpeg-installer/ffmpeg and @ffprobe-installer/ffprobe optional node packages need to be installed.</source>
+      <trans-unit id="c720bddc2e7fc9d0eb8186ebaf2f98ebbdd4b11a" datatype="html">
+        <source>Video support uses ffmpeg. ffmpeg and ffprobe binaries need to be available in the PATH or the
+        @ffmpeg-installer/ffmpeg and @ffprobe-installer/ffprobe optional node packages need to be installed.
+      </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
-          <context context-type="linenumber">23</context>
+          <context context-type="linenumber">24</context>
         </context-group>
         <target>Suportul video folosește ffmpeg. Executabilele ffmpeg și ffprobe trebuie să fie disponibile în PATH sau pachetele opționale node @ffmpeg-installer/ffmpeg și @ffprobe-installer/ffprobe trebuie să fie instalate.</target>
+      </trans-unit>
+      <trans-unit id="8fbfaec401808fd2433e6b694c11122de317ab19" datatype="html">
+        <source>Video transcoding:</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
+          <context context-type="linenumber">30</context>
+        </context-group>
+        <target>Video transcoding:</target>
+      </trans-unit>
+      <trans-unit id="7722a92a1fc887570b4f4d8a7bb916f067f32028" datatype="html">
+        <source>Format</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
+          <context context-type="linenumber">32</context>
+        </context-group>
+        <target>Format</target>
+      </trans-unit>
+      <trans-unit id="205c33d626f4654f36d9d7dcea6f9d9e9b2a7ec7" datatype="html">
+        <source>Codec</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
+          <context context-type="linenumber">44</context>
+        </context-group>
+        <target>Codec</target>
+      </trans-unit>
+      <trans-unit id="b284ee2481274869dfb81764f597da8a13a6813d" datatype="html">
+        <source>Resolution</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
+          <context context-type="linenumber">55</context>
+        </context-group>
+        <target>Resolution</target>
+      </trans-unit>
+      <trans-unit id="0d6637ce3816903489419385dc58eb463dc0836b" datatype="html">
+        <source>The height of the output video will be scaled down to this, while keeping the aspect ratio.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
+          <context context-type="linenumber">63</context>
+        </context-group>
+        <target>The height of the output video will be scaled down to this, while keeping the aspect ratio.</target>
+      </trans-unit>
+      <trans-unit id="b78bb5b721abd47e61ef2338c7070c83c1e3bd32" datatype="html">
+        <source>FPS</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
+          <context context-type="linenumber">68</context>
+        </context-group>
+        <target>FPS</target>
+      </trans-unit>
+      <trans-unit id="391b4787040773f2848745c1fe3f5d5d29f0a35f" datatype="html">
+        <source>Target frame per second (fps) of the output video will be scaled down this this.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
+          <context context-type="linenumber">76</context>
+        </context-group>
+        <target>Target frame per second (fps) of the output video will be scaled down this this.</target>
+      </trans-unit>
+      <trans-unit id="bff9e9bcea920ffed20cedd60107bf09472fbb8e" datatype="html">
+        <source>Bit rate</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
+          <context context-type="linenumber">81</context>
+        </context-group>
+        <target>Bit rate</target>
+      </trans-unit>
+      <trans-unit id="1b086611528e2cf88d0d08c176056a8c32c9760a" datatype="html">
+        <source>Target bit rate of the output video will be scaled down this this. This should be less than the
+            upload rate of your home server.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
+          <context context-type="linenumber">93</context>
+        </context-group>
+        <target>Target bit rate of the output video will be scaled down this this. This should be less than the
+            upload rate of your home server.</target>
+      </trans-unit>
+      <trans-unit id="3873472ddebbf35f0155cf0b8f98596852b2de0f" datatype="html">
+        <source>To ensure smooth video playback, video transcoding is recommended to a lower bit rate than the
+        server's upload rate.
+      </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
+          <context context-type="linenumber">111</context>
+        </context-group>
+        <target>To ensure smooth video playback, video transcoding is recommended to a lower bit rate than the server's upload rate.</target>
+      </trans-unit>
+      <trans-unit id="2563716b6cdad527d4d01f0aa49368d1a876263f" datatype="html">
+        <source>The transcoded videos will be save to the thumbnail folder.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
+          <context context-type="linenumber">114</context>
+        </context-group>
+        <target>The transcoded videos will be save to the thumbnail folder.</target>
+      </trans-unit>
+      <trans-unit id="4ae3667dc5f56cb27b15b1be01ab7ae13f50ef71" datatype="html">
+        <source>You can trigger the transcoding manually, but you can also create an automatic encoding task in
+        advanced settings mode.
+      </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
+          <context context-type="linenumber">115</context>
+        </context-group>
+        <target>You can trigger the transcoding manually, but you can also create an automatic encoding task in advanced settings mode.</target>
+      </trans-unit>
+      <trans-unit id="cd6833e4192fb71216599b027996baef7e625573" datatype="html">
+        <source>Transcode videos now
+      </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
+          <context context-type="linenumber">127</context>
+        </context-group>
+        <target>Transcode videos now</target>
+      </trans-unit>
+      <trans-unit id="b0a0813328867a956835e6fd09e614c2ad1cbc9d" datatype="html">
+        <source>Indexes the folders</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
+          <context context-type="linenumber">125</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
+          <context context-type="linenumber">125</context>
+        </context-group>
+        <target>Indexează dosarele</target>
+      </trans-unit>
+      <trans-unit id="697670781e73f64409b9ee44e657a2351fc5b1bc" datatype="html">
+        <source>Cancel transcoding
+      </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
+          <context context-type="linenumber">132</context>
+        </context-group>
+        <target>Cancel transcoding</target>
+      </trans-unit>
+      <trans-unit id="1ac5dc3858808c90bb5e7cbd0c3e5e4b342160f3" datatype="html">
+        <source>indexing</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
+          <context context-type="linenumber">139</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
+          <context context-type="linenumber">104</context>
+        </context-group>
+        <target>indexare</target>
+      </trans-unit>
+      <trans-unit id="adab6f78490c699b2fdf22f611d3dc8662a178a5" datatype="html">
+        <source>elapsed</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
+          <context context-type="linenumber">140</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
+          <context context-type="linenumber">105</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/tasks/tasks.settings.component.html</context>
+          <context context-type="linenumber">161</context>
+        </context-group>
+        <target>scurs</target>
+      </trans-unit>
+      <trans-unit id="478c0bf6552f7226e27bb5b57b8209a040ded2c6" datatype="html">
+        <source>left</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
+          <context context-type="linenumber">141</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
+          <context context-type="linenumber">106</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/tasks/tasks.settings.component.html</context>
+          <context context-type="linenumber">162</context>
+        </context-group>
+        <target>rămas</target>
       </trans-unit>
       <trans-unit id="c45b54bd977f2e5b0d635231051f1143e0abf1c1" datatype="html">
         <source>Meta file settings</source>
@@ -1322,7 +1500,7 @@
         <source>Misc:</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/other/other.settings.component.html</context>
-          <context context-type="linenumber">45</context>
+          <context context-type="linenumber">46</context>
         </context-group>
         <target>Diverse:</target>
       </trans-unit>
@@ -1331,7 +1509,7 @@
           generation</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/other/other.settings.component.html</context>
-          <context context-type="linenumber">47</context>
+          <context context-type="linenumber">48</context>
         </context-group>
         <target>Generarea miniaturii după derulare</target>
       </trans-unit>
@@ -1340,7 +1518,7 @@
           </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/other/other.settings.component.html</context>
-          <context context-type="linenumber">62</context>
+          <context context-type="linenumber">63</context>
         </context-group>
         <target>Aceste miniaturi au prioritate mai mare care sunt vizibile pe ecran</target>
       </trans-unit>
@@ -1348,7 +1526,7 @@
         <source>Lazy image rendering</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/other/other.settings.component.html</context>
-          <context context-type="linenumber">68</context>
+          <context context-type="linenumber">69</context>
         </context-group>
         <target>Redarea leneșă imaginilor</target>
       </trans-unit>
@@ -1358,7 +1536,7 @@
           </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/other/other.settings.component.html</context>
-          <context context-type="linenumber">82</context>
+          <context context-type="linenumber">83</context>
         </context-group>
         <target>Afișează doar cantitatea necesară de fotografii simultan. Afișează mai multe dacă s-a ajuns la capătul paginii</target>
       </trans-unit>
@@ -1366,7 +1544,7 @@
         <source>Cache</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/other/other.settings.component.html</context>
-          <context context-type="linenumber">90</context>
+          <context context-type="linenumber">91</context>
         </context-group>
         <target>Cache</target>
       </trans-unit>
@@ -1375,7 +1553,7 @@
           </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/other/other.settings.component.html</context>
-          <context context-type="linenumber">104</context>
+          <context context-type="linenumber">105</context>
         </context-group>
         <target>Cache-ează conținutul directorului și rezultatele căutării pentru o performanță mai bună</target>
       </trans-unit>
@@ -1383,7 +1561,7 @@
         <source>Caption first naming</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/other/other.settings.component.html</context>
-          <context context-type="linenumber">111</context>
+          <context context-type="linenumber">112</context>
         </context-group>
         <target>Primul nume al legendei</target>
       </trans-unit>
@@ -1392,7 +1570,7 @@
           </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/other/other.settings.component.html</context>
-          <context context-type="linenumber">125</context>
+          <context context-type="linenumber">126</context>
         </context-group>
         <target>Afișați etichetele din legendă (IPTC 120) din datele EXIF ​​în loc de numele fișierelor.</target>
       </trans-unit>
@@ -1400,7 +1578,7 @@
         <source>Navigation bar:</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/other/other.settings.component.html</context>
-          <context context-type="linenumber">131</context>
+          <context context-type="linenumber">133</context>
         </context-group>
         <target>Bară de navigare:</target>
       </trans-unit>
@@ -1408,7 +1586,7 @@
         <source>Show item count</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/other/other.settings.component.html</context>
-          <context context-type="linenumber">133</context>
+          <context context-type="linenumber">135</context>
         </context-group>
         <target>Afișează numărul articolului</target>
       </trans-unit>
@@ -1417,7 +1595,7 @@
           </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/other/other.settings.component.html</context>
-          <context context-type="linenumber">147</context>
+          <context context-type="linenumber">149</context>
         </context-group>
         <target>Afișează numărul de articole (fotografii) din dosar</target>
       </trans-unit>
@@ -1425,7 +1603,7 @@
         <source>Default photo sorting method</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/other/other.settings.component.html</context>
-          <context context-type="linenumber">155</context>
+          <context context-type="linenumber">157</context>
         </context-group>
         <target>Metoda implicită de sortare a fotografiilor</target>
       </trans-unit>
@@ -1578,38 +1756,6 @@
         </context-group>
         <target>Notă: căutarea funcționează numai printre directoarele indexate</target>
       </trans-unit>
-      <trans-unit id="1ac5dc3858808c90bb5e7cbd0c3e5e4b342160f3" datatype="html">
-        <source>indexing</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
-          <context context-type="linenumber">104</context>
-        </context-group>
-        <target>indexare</target>
-      </trans-unit>
-      <trans-unit id="adab6f78490c699b2fdf22f611d3dc8662a178a5" datatype="html">
-        <source>elapsed</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
-          <context context-type="linenumber">105</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/tasks/tasks.settings.component.html</context>
-          <context context-type="linenumber">161</context>
-        </context-group>
-        <target>scurs</target>
-      </trans-unit>
-      <trans-unit id="478c0bf6552f7226e27bb5b57b8209a040ded2c6" datatype="html">
-        <source>left</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
-          <context context-type="linenumber">106</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/tasks/tasks.settings.component.html</context>
-          <context context-type="linenumber">162</context>
-        </context-group>
-        <target>rămas</target>
-      </trans-unit>
       <trans-unit id="32cc8ef8dc6f4f239b7f637ac8adaecc55b8e1d8" datatype="html">
         <source>Index
         </source>
@@ -1618,14 +1764,6 @@
           <context context-type="linenumber">127</context>
         </context-group>
         <target>Index</target>
-      </trans-unit>
-      <trans-unit id="b0a0813328867a956835e6fd09e614c2ad1cbc9d" datatype="html">
-        <source>Indexes the folders</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
-          <context context-type="linenumber">125</context>
-        </context-group>
-        <target>Indexează dosarele</target>
       </trans-unit>
       <trans-unit id="2cf5bad5f694098d6eb9ce70f687cc469e60c697" datatype="html">
         <source>Index with Thumbnails
@@ -2321,6 +2459,22 @@
           <context context-type="linenumber">1</context>
         </context-group>
         <target>Video</target>
+      </trans-unit>
+      <trans-unit id="f901d94d8b05ae4778935178a3b96f754f46dda3" datatype="html">
+        <source>Video transcoding started</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">frontend/app/ui/settings/video/video.settings.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <target>Video transcoding started</target>
+      </trans-unit>
+      <trans-unit id="c4f62fe259fc76cf4d5cd04004c36bfc25a4d386" datatype="html">
+        <source>Video transcoding interrupted</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">frontend/app/ui/settings/video/video.settings.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <target>Video transcoding interrupted</target>
       </trans-unit>
     </body>
   </file>

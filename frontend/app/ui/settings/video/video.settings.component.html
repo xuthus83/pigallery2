@@ -37,7 +37,6 @@
             <option *ngFor="let format of formats" [ngValue]="format">{{format}}
             </option>
           </select>
-          <small class="form-text text-muted" i18n>Select the format to encode your videos to.</small>
         </div>
       </div>
 
@@ -49,7 +48,6 @@
             <option *ngFor="let codec of codecs[settings.server.transcoding.format]" [ngValue]="codec">{{codec}}
             </option>
           </select>
-          <small class="form-text text-muted" i18n>This codec will be used for the transcoding. </small>
         </div>
       </div>
 
@@ -62,7 +60,7 @@
             <option *ngFor="let resolution of resolutions" [ngValue]="resolution">{{resolution}}p
             </option>
           </select>
-          <small class="form-text text-muted" i18n>Resolution of the output video.</small>
+          <small class="form-text text-muted" i18n>The height of the output video will be scaled down to this, while keeping the aspect ratio.</small>
         </div>
       </div>
 
@@ -75,7 +73,7 @@
             <option *ngFor="let fps of fps" [ngValue]="fps">{{fps}}
             </option>
           </select>
-          <small class="form-text text-muted" i18n>Target frame per second (fps) of the output video.</small>
+          <small class="form-text text-muted" i18n>Target frame per second (fps) of the output video will be scaled down this this.</small>
         </div>
       </div>
 
@@ -92,7 +90,7 @@
           <div class="input-group-append">
             <span class="input-group-text">mbps</span>
           </div>
-          <small class="form-text text-muted" i18n>Target bit rate for the output video. This should be less than the
+          <small class="form-text text-muted" i18n>Target bit rate of the output video will be scaled down this this. This should be less than the
             upload rate of your home server.</small>
         </div>
       </div>
