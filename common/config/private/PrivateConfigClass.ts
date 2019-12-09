@@ -12,8 +12,6 @@ import * as path from 'path';
 import {ConfigLoader} from 'typeconfig';
 import {Utils} from '../../Utils';
 import {UserRoles} from '../../entities/UserDTO';
-import {TaskScheduleDTO} from '../../entities/task/TaskScheduleDTO';
-import {Config} from './Config';
 
 /**
  * This configuration will be only at backend
@@ -24,19 +22,19 @@ export class PrivateConfigClass extends PublicConfigClass implements IPrivateCon
     port: 80,
     host: '0.0.0.0',
     imagesFolder: 'demo/images',
-    thumbnail: {
+    Thumbnail: {
       folder: 'demo/TEMP',
       processingLibrary: ThumbnailProcessingLib.sharp,
       qualityPriority: true,
       personFaceMargin: 0.6
     },
-    log: {
+    Log: {
       level: LogLevel.info,
       sqlLevel: SQLLogLevel.error
     },
     sessionTimeout: 1000 * 60 * 60 * 24 * 7,
     photoMetadataSize: 512 * 1024,
-    database: {
+    Database: {
       type: DatabaseType.sqlite,
       mysql: {
         host: '',
@@ -49,31 +47,40 @@ export class PrivateConfigClass extends PublicConfigClass implements IPrivateCon
         storage: 'sqlite.db'
       }
     },
-    sharing: {
+    Sharing: {
       updateTimeout: 1000 * 60 * 5
     },
-    threading: {
+    Threading: {
       enable: true,
       thumbnailThreads: 0
     },
-    indexing: {
+    Indexing: {
       folderPreviewSize: 2,
       cachedFolderTimeout: 1000 * 60 * 60,
       reIndexingSensitivity: ReIndexingSensitivity.low,
       excludeFolderList: [],
       excludeFileList: []
     },
-    duplicates: {
+    Duplicates: {
       listingLimit: 1000
     },
-    tasks: {
+    Tasks: {
       scheduled: []
+    },
+    Video: {
+      transcoding: {
+        bitRate: 5 * 1024 * 1024,
+        codec: 'libx264',
+        format: 'mp4',
+        fps: 25,
+        resolution: 720
+      }
     }
   };
   private ConfigLoader: any;
 
   public setDatabaseType(type: DatabaseType) {
-    this.Server.database.type = type;
+    this.Server.Database.type = type;
     if (type === DatabaseType.memory) {
       this.Client.Search.enabled = false;
       this.Client.Sharing.enabled = false;
@@ -94,11 +101,11 @@ export class PrivateConfigClass extends PublicConfigClass implements IPrivateCon
     if (Utils.enumToArray(UserRoles).map(r => r.key).indexOf(this.Client.unAuthenticatedUserRole) === -1) {
       throw new Error('Unknown user role for Client.unAuthenticatedUserRole, found: ' + this.Client.unAuthenticatedUserRole);
     }
-    if (Utils.enumToArray(LogLevel).map(r => r.key).indexOf(this.Server.log.level) === -1) {
-      throw new Error('Unknown Server.log.level, found: ' + this.Server.log.level);
+    if (Utils.enumToArray(LogLevel).map(r => r.key).indexOf(this.Server.Log.level) === -1) {
+      throw new Error('Unknown Server.log.level, found: ' + this.Server.Log.level);
     }
-    if (Utils.enumToArray(SQLLogLevel).map(r => r.key).indexOf(this.Server.log.sqlLevel) === -1) {
-      throw new Error('Unknown Server.log.level, found: ' + this.Server.log.sqlLevel);
+    if (Utils.enumToArray(SQLLogLevel).map(r => r.key).indexOf(this.Server.Log.sqlLevel) === -1) {
+      throw new Error('Unknown Server.log.level, found: ' + this.Server.Log.sqlLevel);
     }
 
   }

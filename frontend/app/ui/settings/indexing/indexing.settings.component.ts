@@ -37,7 +37,7 @@ export class IndexingSettingsComponent extends SettingsComponent<IndexingConfig,
       <any>_settingsService,
       notification,
       i18n,
-      s => s.Server.indexing);
+      s => s.Server.Indexing);
 
   }
 

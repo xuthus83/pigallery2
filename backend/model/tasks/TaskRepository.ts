@@ -1,6 +1,7 @@
-import {ITask} from './ITask';
-import {IndexingTask} from './IndexingTask';
-import {DBRestTask} from './DBResetTask';
+import {ITask} from './tasks/ITask';
+import {IndexingTask} from './tasks/IndexingTask';
+import {DBRestTask} from './tasks/DBResetTask';
+import {VideoConvertingTask} from './tasks/VideoConvertingTask';
 
 export class TaskRepository {
 
@@ -26,3 +27,4 @@ export class TaskRepository {
 
 TaskRepository.Instance.register(new IndexingTask());
 TaskRepository.Instance.register(new DBRestTask());
+TaskRepository.Instance.register(new VideoConvertingTask());

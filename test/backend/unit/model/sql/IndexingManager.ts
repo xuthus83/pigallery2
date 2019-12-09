@@ -457,7 +457,7 @@ describe('IndexingManager', (sqlHelper: SQLTestHelper) => {
     });
 
     it('with re indexing severity low', async () => {
-      Config.Server.indexing.reIndexingSensitivity = ReIndexingSensitivity.low;
+      Config.Server.Indexing.reIndexingSensitivity = ReIndexingSensitivity.low;
 
       // @ts-ignore
       fs.statSync = () => ({ctime: new Date(dirTime), mtime: new Date(dirTime)});

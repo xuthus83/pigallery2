@@ -1,6 +1,6 @@
 import {ITaskManager} from '../interfaces/ITaskManager';
 import {TaskProgressDTO} from '../../../common/entities/settings/TaskProgressDTO';
-import {ITask} from './ITask';
+import {ITask} from './tasks/ITask';
 import {TaskRepository} from './TaskRepository';
 import {Config} from '../../../common/config/private/Config';
 import {TaskScheduleDTO, TaskTriggerType} from '../../../common/entities/task/TaskScheduleDTO';
@@ -20,7 +20,10 @@ export class TaskManager implements ITaskManager {
     const m: { [id: string]: TaskProgressDTO } = {};
     TaskRepository.Instance.getAvailableTasks()
       .filter(t => t.Progress)
-      .forEach(t => m[t.Name] = t.Progress);
+      .forEach(t => {
+        t.Progress.time.current = Date.now();
+        m[t.Name] = t.Progress;
+      });
     return m;
   }
 
@@ -57,7 +60,7 @@ export class TaskManager implements ITaskManager {
   public runSchedules(): void {
     this.stopSchedules();
     Logger.info(LOG_TAG, 'Running task schedules');
-    Config.Server.tasks.scheduled.forEach(s => this.runSchedule(s));
+    Config.Server.Tasks.scheduled.forEach(s => this.runSchedule(s));
   }
 
   protected getNextDayOfTheWeek(refDate: Date, dayOfWeek: number) {

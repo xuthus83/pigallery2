@@ -27,9 +27,9 @@ export class ThumbnailGeneratorMWs {
     }
 
 
-    if (Config.Server.threading.enable === true) {
-      if (Config.Server.threading.thumbnailThreads > 0) {
-        Config.Client.Thumbnail.concurrentThumbnailGenerations = Config.Server.threading.thumbnailThreads;
+    if (Config.Server.Threading.enable === true) {
+      if (Config.Server.Threading.thumbnailThreads > 0) {
+        Config.Client.Thumbnail.concurrentThumbnailGenerations = Config.Server.Threading.thumbnailThreads;
       } else {
         Config.Client.Thumbnail.concurrentThumbnailGenerations = Math.max(1, os.cpus().length - 1);
       }
@@ -37,12 +37,12 @@ export class ThumbnailGeneratorMWs {
       Config.Client.Thumbnail.concurrentThumbnailGenerations = 1;
     }
 
-    if (Config.Server.threading.enable === true &&
-      Config.Server.thumbnail.processingLibrary === ThumbnailProcessingLib.Jimp) {
+    if (Config.Server.Threading.enable === true &&
+      Config.Server.Thumbnail.processingLibrary === ThumbnailProcessingLib.Jimp) {
       this.taskQue = new ThumbnailTH(Config.Client.Thumbnail.concurrentThumbnailGenerations);
     } else {
       this.taskQue = new TaskExecuter(Config.Client.Thumbnail.concurrentThumbnailGenerations,
-        (input => ThumbnailWorker.render(input, Config.Server.thumbnail.processingLibrary)));
+        (input => ThumbnailWorker.render(input, Config.Server.Thumbnail.processingLibrary)));
     }
 
     this.initDone = true;
@@ -131,14 +131,10 @@ export class ThumbnailGeneratorMWs {
       return next();
     }
 
-    // create thumbnail folder if not exist
-    if (!fs.existsSync(ProjectPath.ThumbnailFolder)) {
-      fs.mkdirSync(ProjectPath.ThumbnailFolder);
-    }
 
     const margin = {
-      x: Math.round(photo.metadata.faces[0].box.width * (Config.Server.thumbnail.personFaceMargin)),
-      y: Math.round(photo.metadata.faces[0].box.height * (Config.Server.thumbnail.personFaceMargin))
+      x: Math.round(photo.metadata.faces[0].box.width * (Config.Server.Thumbnail.personFaceMargin)),
+      y: Math.round(photo.metadata.faces[0].box.height * (Config.Server.Thumbnail.personFaceMargin))
     };
 
 
@@ -155,7 +151,7 @@ export class ThumbnailGeneratorMWs {
         width: photo.metadata.faces[0].box.width + margin.x,
         height: photo.metadata.faces[0].box.height + margin.y
       },
-      qualityPriority: Config.Server.thumbnail.qualityPriority
+      qualityPriority: Config.Server.Thumbnail.qualityPriority
     };
     input.cut.width = Math.min(input.cut.width, photo.metadata.size.width - input.cut.left);
     input.cut.height = Math.min(input.cut.height, photo.metadata.size.height - input.cut.top);
@@ -260,10 +256,6 @@ export class ThumbnailGeneratorMWs {
       return next();
     }
 
-    // create thumbnail folder if not exist
-    if (!fs.existsSync(ProjectPath.ThumbnailFolder)) {
-      fs.mkdirSync(ProjectPath.ThumbnailFolder);
-    }
 
     // run on other thread
     const input = <RendererInput>{
@@ -272,7 +264,7 @@ export class ThumbnailGeneratorMWs {
       size: size,
       thPath: thPath,
       makeSquare: makeSquare,
-      qualityPriority: Config.Server.thumbnail.qualityPriority
+      qualityPriority: Config.Server.Thumbnail.qualityPriority
     };
     try {
       await this.taskQue.execute(input);

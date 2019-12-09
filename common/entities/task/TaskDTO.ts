@@ -2,7 +2,7 @@ export  type fieldType = 'string' | 'number' | 'boolean';
 
 
 export enum DefaultsTasks {
-  Indexing = 1, 'Database Reset' = 2
+  Indexing = 1, 'Database Reset' = 2, 'Video Converting' = 3
 }
 
 export interface ConfigTemplateEntry {

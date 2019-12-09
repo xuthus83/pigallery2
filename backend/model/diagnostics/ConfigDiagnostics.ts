@@ -134,7 +134,7 @@ export class ConfigDiagnostics {
 
   static async testFacesConfig(faces: ClientConfig.FacesConfig, config: IPrivateConfig) {
     if (faces.enabled === true) {
-      if (config.Server.database.type === DatabaseType.memory) {
+      if (config.Server.Database.type === DatabaseType.memory) {
         throw new Error('Memory Database do not support faces');
       }
       if (config.Client.Search.enabled === false) {
@@ -145,7 +145,7 @@ export class ConfigDiagnostics {
 
   static async testSearchConfig(search: ClientConfig.SearchConfig, config: IPrivateConfig) {
     if (search.enabled === true &&
-      config.Server.database.type === DatabaseType.memory) {
+      config.Server.Database.type === DatabaseType.memory) {
       throw new Error('Memory Database do not support searching');
     }
   }
@@ -153,7 +153,7 @@ export class ConfigDiagnostics {
 
   static async testSharingConfig(sharing: ClientConfig.SharingConfig, config: IPrivateConfig) {
     if (sharing.enabled === true &&
-      config.Server.database.type === DatabaseType.memory) {
+      config.Server.Database.type === DatabaseType.memory) {
       throw new Error('Memory Database do not support sharing');
     }
     if (sharing.enabled === true &&
@@ -164,7 +164,7 @@ export class ConfigDiagnostics {
 
   static async testRandomPhotoConfig(sharing: ClientConfig.RandomPhotoConfig, config: IPrivateConfig) {
     if (sharing.enabled === true &&
-      config.Server.database.type === DatabaseType.memory) {
+      config.Server.Database.type === DatabaseType.memory) {
       throw new Error('Memory Database do not support sharing');
     }
   }
@@ -194,9 +194,9 @@ export class ConfigDiagnostics {
 
   static async runDiagnostics() {
 
-    if (Config.Server.database.type !== DatabaseType.memory) {
+    if (Config.Server.Database.type !== DatabaseType.memory) {
       try {
-        await ConfigDiagnostics.testDatabase(Config.Server.database);
+        await ConfigDiagnostics.testDatabase(Config.Server.Database);
       } catch (ex) {
         const err: Error = ex;
         Logger.warn(LOG_TAG, '[SQL error]', err.toString());
@@ -206,24 +206,24 @@ export class ConfigDiagnostics {
       }
     }
 
-    if (Config.Server.thumbnail.processingLibrary !== ThumbnailProcessingLib.Jimp) {
+    if (Config.Server.Thumbnail.processingLibrary !== ThumbnailProcessingLib.Jimp) {
       try {
-        await ConfigDiagnostics.testThumbnailLib(Config.Server.thumbnail.processingLibrary);
+        await ConfigDiagnostics.testThumbnailLib(Config.Server.Thumbnail.processingLibrary);
       } catch (ex) {
         const err: Error = ex;
         NotificationManager.warning('Thumbnail hardware acceleration is not possible.' +
-          ' \'' + ThumbnailProcessingLib[Config.Server.thumbnail.processingLibrary] + '\' node module is not found.' +
+          ' \'' + ThumbnailProcessingLib[Config.Server.Thumbnail.processingLibrary] + '\' node module is not found.' +
           ' Falling back temporally to JS based thumbnail generation', err.toString());
         Logger.warn(LOG_TAG, '[Thumbnail hardware acceleration] module error: ', err.toString());
         Logger.warn(LOG_TAG, 'Thumbnail hardware acceleration is not possible.' +
-          ' \'' + ThumbnailProcessingLib[Config.Server.thumbnail.processingLibrary] + '\' node module is not found.' +
+          ' \'' + ThumbnailProcessingLib[Config.Server.Thumbnail.processingLibrary] + '\' node module is not found.' +
           ' Falling back temporally to JS based thumbnail generation');
-        Config.Server.thumbnail.processingLibrary = ThumbnailProcessingLib.Jimp;
+        Config.Server.Thumbnail.processingLibrary = ThumbnailProcessingLib.Jimp;
       }
     }
 
     try {
-      await ConfigDiagnostics.testThumbnailFolder(Config.Server.thumbnail.folder);
+      await ConfigDiagnostics.testThumbnailFolder(Config.Server.Thumbnail.folder);
     } catch (ex) {
       const err: Error = ex;
       NotificationManager.error('Thumbnail folder error', err.toString());
@@ -288,7 +288,7 @@ export class ConfigDiagnostics {
 
 
     try {
-      await ConfigDiagnostics.testTasksConfig(Config.Server.tasks, Config);
+      await ConfigDiagnostics.testTasksConfig(Config.Server.Tasks, Config);
     } catch (ex) {
       const err: Error = ex;
       NotificationManager.warning('Some Tasks are not supported with these settings. Disabling temporally. ' +

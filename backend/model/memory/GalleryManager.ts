@@ -16,9 +16,9 @@ export class GalleryManager implements IGalleryManager {
     if (knownLastModified && knownLastScanned) {
       const stat = fs.statSync(path.join(ProjectPath.ImageFolder, relativeDirectoryName));
       const lastModified = DiskMangerWorker.calcLastModified(stat);
-      if (Date.now() - knownLastScanned <= Config.Server.indexing.cachedFolderTimeout &&
+      if (Date.now() - knownLastScanned <= Config.Server.Indexing.cachedFolderTimeout &&
         lastModified === knownLastModified &&
-        Config.Server.indexing.reIndexingSensitivity < ReIndexingSensitivity.high) {
+        Config.Server.Indexing.reIndexingSensitivity < ReIndexingSensitivity.high) {
         return Promise.resolve(null);
       }
     }

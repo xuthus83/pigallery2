@@ -31,8 +31,8 @@ describe('Typeorm integration', () => {
       fs.mkdirSync(tempDir);
     }
 
-    Config.Server.database.type = DatabaseType.sqlite;
-    Config.Server.database.sqlite.storage = dbPath;
+    Config.Server.Database.type = DatabaseType.sqlite;
+    Config.Server.Database.sqlite.storage = dbPath;
 
   };
 

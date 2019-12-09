@@ -15,6 +15,7 @@ import {MediaDTO} from '../../common/entities/MediaDTO';
 import {VideoDTO} from '../../common/entities/VideoDTO';
 import {Utils} from '../../common/Utils';
 import {QueryParams} from '../../common/QueryParams';
+import {VideoConverterMWs} from './VideoConverterMWs';
 
 
 const LOG_TAG = '[GalleryMWs]';
@@ -165,7 +166,7 @@ export class GalleryMWs {
     }
     const fullMediaPath = path.join(ProjectPath.ImageFolder, req.params.mediaPath);
 
-    // check if thumbnail already exist
+    // check if file exist
     if (fs.existsSync(fullMediaPath) === false) {
       return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, 'no such file:' + req.params.mediaPath, 'can\'t find file: ' + fullMediaPath));
     }
@@ -175,6 +176,32 @@ export class GalleryMWs {
 
 
     req.resultPipe = fullMediaPath;
+    return next();
+  }
+
+  public static loadBestFitVideo(req: Request, res: Response, next: NextFunction) {
+    if (!(req.params.mediaPath)) {
+      return next();
+    }
+    const fullMediaPath = path.join(ProjectPath.ImageFolder, req.params.mediaPath);
+
+    if (fs.statSync(fullMediaPath).isDirectory()) {
+      return next();
+    }
+
+    // check if  video exist
+    if (fs.existsSync(fullMediaPath) === false) {
+      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, 'no such file:' + req.params.mediaPath, 'can\'t find file: ' + fullMediaPath));
+    }
+    req.resultPipe = fullMediaPath;
+
+    const convertedVideo = VideoConverterMWs.generateConvertedFileName(fullMediaPath);
+
+    // check if transcoded video exist
+    if (fs.existsSync(convertedVideo) === true) {
+      req.resultPipe = convertedVideo;
+    }
+
     return next();
   }
 

@@ -28,7 +28,7 @@ export class OtherSettingsComponent extends SettingsComponent<OtherConfigDTO> im
               notification: NotificationService,
               i18n: I18n) {
     super(i18n('Other'), _authService, _navigation, _settingsService, notification, i18n, s => ({
-      Server: s.Server.threading,
+      Server: s.Server.Threading,
       Client: s.Client.Other
     }));
     this.types = Utils.enumToArray(SortingMethods);

@@ -19,7 +19,7 @@ export class RandomPhotoSettingsService extends AbstractSettingsService<ClientCo
   }
 
   public isSupported(): boolean {
-    return this._settingsService.settings.value.Server.database.type !== DatabaseType.memory;
+    return this._settingsService.settings.value.Server.Database.type !== DatabaseType.memory;
   }
 
   public updateSettings(settings: ClientConfig.SharingConfig): Promise<void> {

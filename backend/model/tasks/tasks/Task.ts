@@ -1,7 +1,7 @@
-import {TaskProgressDTO} from '../../../common/entities/settings/TaskProgressDTO';
-import {Logger} from '../../Logger';
+import {TaskProgressDTO} from '../../../../common/entities/settings/TaskProgressDTO';
+import {Logger} from '../../../Logger';
 import {ITask} from './ITask';
-import {ConfigTemplateEntry} from '../../../common/entities/task/TaskDTO';
+import {ConfigTemplateEntry} from '../../../../common/entities/task/TaskDTO';
 
 declare const process: any;
 

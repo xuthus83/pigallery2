@@ -15,7 +15,7 @@ export class ShareSettingsService extends AbstractSettingsService<ClientConfig.S
 
 
   public isSupported(): boolean {
-    return this._settingsService.settings.value.Server.database.type !== DatabaseType.memory &&
+    return this._settingsService.settings.value.Server.Database.type !== DatabaseType.memory &&
       this._settingsService.settings.value.Client.authenticationRequired === true;
   }
 

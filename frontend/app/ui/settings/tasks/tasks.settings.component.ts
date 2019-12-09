@@ -46,7 +46,7 @@ export class TasksSettingsComponent extends SettingsComponent<TaskConfig, TasksS
       <any>_settingsService,
       notification,
       i18n,
-      s => s.Server.tasks);
+      s => s.Server.Tasks);
 
     this.hasAvailableSettings = !this.simplifiedMode;
     this.taskTriggerType = Utils.enumToArray(TaskTriggerType);

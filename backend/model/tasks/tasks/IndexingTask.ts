@@ -1,16 +1,16 @@
-import {TaskProgressDTO} from '../../../common/entities/settings/TaskProgressDTO';
-import {ObjectManagers} from '../ObjectManagers';
+import {TaskProgressDTO} from '../../../../common/entities/settings/TaskProgressDTO';
+import {ObjectManagers} from '../../ObjectManagers';
 import * as path from 'path';
 import * as fs from 'fs';
-import {Logger} from '../../Logger';
-import {RendererInput, ThumbnailSourceType, ThumbnailWorker} from '../threading/ThumbnailWorker';
-import {Config} from '../../../common/config/private/Config';
-import {MediaDTO} from '../../../common/entities/MediaDTO';
-import {ProjectPath} from '../../ProjectPath';
-import {ThumbnailGeneratorMWs} from '../../middlewares/thumbnail/ThumbnailGeneratorMWs';
+import {Logger} from '../../../Logger';
+import {RendererInput, ThumbnailSourceType, ThumbnailWorker} from '../../threading/ThumbnailWorker';
+import {Config} from '../../../../common/config/private/Config';
+import {MediaDTO} from '../../../../common/entities/MediaDTO';
+import {ProjectPath} from '../../../ProjectPath';
+import {ThumbnailGeneratorMWs} from '../../../middlewares/thumbnail/ThumbnailGeneratorMWs';
 import {Task} from './Task';
-import {DatabaseType} from '../../../common/config/private/IPrivateConfig';
-import {ConfigTemplateEntry, DefaultsTasks} from '../../../common/entities/task/TaskDTO';
+import {DatabaseType} from '../../../../common/config/private/IPrivateConfig';
+import {ConfigTemplateEntry, DefaultsTasks} from '../../../../common/entities/task/TaskDTO';
 
 declare const global: any;
 const LOG_TAG = '[IndexingTask]';
@@ -26,7 +26,7 @@ export class IndexingTask extends Task<{ createThumbnails: boolean }> {
   }];
 
   public get Supported(): boolean {
-    return Config.Server.database.type !== DatabaseType.memory;
+    return Config.Server.Database.type !== DatabaseType.memory;
   }
 
   protected async init() {
@@ -68,8 +68,8 @@ export class IndexingTask extends Task<{ createThumbnails: boolean }> {
             size: Config.Client.Thumbnail.thumbnailSizes[0],
             thPath: thPath,
             makeSquare: false,
-            qualityPriority: Config.Server.thumbnail.qualityPriority
-          }, Config.Server.thumbnail.processingLibrary);
+            qualityPriority: Config.Server.Thumbnail.qualityPriority
+          }, Config.Server.Thumbnail.processingLibrary);
         } catch (e) {
           console.error(e);
           Logger.error(LOG_TAG, 'Error during indexing job: ' + e.toString());

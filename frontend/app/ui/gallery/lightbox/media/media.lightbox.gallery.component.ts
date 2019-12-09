@@ -55,7 +55,7 @@ export class GalleryLightboxMediaComponent implements OnChanges {
     }
 
     if (this.photoSrc == null && this.gridMedia && this.loadMedia) {
-      FixOrientationPipe.transform(this.gridMedia.getPhotoPath(), this.gridMedia.Orientation)
+      FixOrientationPipe.transform(this.gridMedia.getMediaPath(), this.gridMedia.Orientation)
         .then((src) => this.photoSrc = src);
     }
   }
@@ -144,7 +144,7 @@ export class GalleryLightboxMediaComponent implements OnChanges {
   onImageError() {
     // TODO:handle error
     this.imageLoadFinished = true;
-    console.error('Error: cannot load media for lightbox url: ' + this.gridMedia.getPhotoPath());
+    console.error('Error: cannot load media for lightbox url: ' + this.gridMedia.getMediaPath());
   }
 
 
@@ -165,7 +165,7 @@ export class GalleryLightboxMediaComponent implements OnChanges {
   }
 
   public get PhotoSrc(): string {
-    return this.gridMedia.getPhotoPath();
+    return this.gridMedia.getMediaPath();
   }
 
   public showThumbnail(): boolean {

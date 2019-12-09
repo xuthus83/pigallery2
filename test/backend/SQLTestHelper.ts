@@ -62,13 +62,13 @@ export class SQLTestHelper {
   private async initSQLite() {
     await this.resetSQLite();
 
-    Config.Server.database.type = DatabaseType.sqlite;
-    Config.Server.database.sqlite.storage = this.dbPath;
+    Config.Server.Database.type = DatabaseType.sqlite;
+    Config.Server.Database.sqlite.storage = this.dbPath;
   }
 
   private async initMySQL() {
-    Config.Server.database.type = DatabaseType.mysql;
-    Config.Server.database.mysql.database = 'pigallery2_test';
+    Config.Server.Database.type = DatabaseType.mysql;
+    Config.Server.Database.mysql.database = 'pigallery2_test';
 
     await this.resetMySQL();
   }
@@ -85,8 +85,8 @@ export class SQLTestHelper {
   }
 
   private async resetMySQL() {
-    Config.Server.database.type = DatabaseType.mysql;
-    Config.Server.database.mysql.database = 'pigallery2_test';
+    Config.Server.Database.type = DatabaseType.mysql;
+    Config.Server.Database.mysql.database = 'pigallery2_test';
     const conn = await SQLConnection.getConnection();
     await conn.query('DROP DATABASE IF EXISTS ' + conn.options.database);
     await conn.query('CREATE DATABASE IF NOT EXISTS ' + conn.options.database);
@@ -94,8 +94,8 @@ export class SQLTestHelper {
   }
 
   private async clearUpMysql() {
-    Config.Server.database.type = DatabaseType.mysql;
-    Config.Server.database.mysql.database = 'pigallery2_test';
+    Config.Server.Database.type = DatabaseType.mysql;
+    Config.Server.Database.mysql.database = 'pigallery2_test';
     const conn = await SQLConnection.getConnection();
     await conn.query('DROP DATABASE IF EXISTS ' + conn.options.database);
     await SQLConnection.close();

@@ -28,7 +28,8 @@ export class MetadataLoader {
         bitRate: 0,
         duration: 0,
         creationDate: 0,
-        fileSize: 0
+        fileSize: 0,
+        fps: 0
       };
       try {
         const stat = fs.statSync(fullPath);
@@ -55,6 +56,9 @@ export class MetadataLoader {
 
                 if (Utils.isInt32(parseInt(data.streams[i].bit_rate, 10))) {
                   metadata.bitRate = parseInt(data.streams[i].bit_rate, 10) || null;
+                }
+                if (Utils.isInt32(parseInt(data.streams[i].avg_frame_rate, 10))) {
+                  metadata.fps = parseInt(data.streams[i].avg_frame_rate, 10) || null;
                 }
                 metadata.creationDate = Date.parse(data.streams[i].tags.creation_time) || metadata.creationDate;
                 break;

@@ -30,7 +30,7 @@ export class SQLConnection {
 
   public static async getConnection(): Promise<Connection> {
     if (this.connection == null) {
-      const options: any = this.getDriver(Config.Server.database);
+      const options: any = this.getDriver(Config.Server.Database);
       //   options.name = 'main';
       options.entities = [
         UserEntity,
@@ -45,8 +45,8 @@ export class SQLConnection {
         VersionEntity
       ];
       options.synchronize = false;
-      if (Config.Server.log.sqlLevel !== SQLLogLevel.none) {
-        options.logging = SQLLogLevel[Config.Server.log.sqlLevel];
+      if (Config.Server.Log.sqlLevel !== SQLLogLevel.none) {
+        options.logging = SQLLogLevel[Config.Server.Log.sqlLevel];
       }
 
       this.connection = await this.createConnection(options);
@@ -75,8 +75,8 @@ export class SQLConnection {
       VersionEntity
     ];
     options.synchronize = false;
-    if (Config.Server.log.sqlLevel !== SQLLogLevel.none) {
-      options.logging = SQLLogLevel[Config.Server.log.sqlLevel];
+    if (Config.Server.Log.sqlLevel !== SQLLogLevel.none) {
+      options.logging = SQLLogLevel[Config.Server.Log.sqlLevel];
     }
     const conn = await this.createConnection(options);
     await SQLConnection.schemeSync(conn);

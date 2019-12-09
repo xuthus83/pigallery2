@@ -11,21 +11,22 @@ export class DiskManager {
   static threadPool: DiskManagerTH = null;
 
   public static init() {
-    if (Config.Server.threading.enable === true) {
+    if (Config.Server.Threading.enable === true) {
       DiskManager.threadPool = new DiskManagerTH(1);
     }
   }
 
-  public static async scanDirectory(relativeDirectoryName: string): Promise<DirectoryDTO> {
+  public static async scanDirectory(relativeDirectoryName: string,
+                                    settings: DiskMangerWorker.DirectoryScanSettings = {}): Promise<DirectoryDTO> {
+
     Logger.silly(LOG_TAG, 'scanning directory:', relativeDirectoryName);
 
+    let directory: DirectoryDTO;
 
-    let directory: DirectoryDTO = null;
-
-    if (Config.Server.threading.enable === true) {
-      directory = await DiskManager.threadPool.execute(relativeDirectoryName);
+    if (Config.Server.Threading.enable === true) {
+      directory = await DiskManager.threadPool.execute(relativeDirectoryName, settings);
     } else {
-      directory = await DiskMangerWorker.scanDirectory(relativeDirectoryName);
+      directory = await DiskMangerWorker.scanDirectory(relativeDirectoryName, settings);
     }
     const addDirs = (dir: DirectoryDTO) => {
       dir.media.forEach((ph) => {

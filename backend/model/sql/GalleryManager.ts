@@ -43,11 +43,11 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
       if (knownLastModified && knownLastScanned
         && lastModified === knownLastModified &&
         dir.lastScanned === knownLastScanned) {
-        if (Config.Server.indexing.reIndexingSensitivity === ReIndexingSensitivity.low) {
+        if (Config.Server.Indexing.reIndexingSensitivity === ReIndexingSensitivity.low) {
           return null;
         }
-        if (Date.now() - dir.lastScanned <= Config.Server.indexing.cachedFolderTimeout &&
-          Config.Server.indexing.reIndexingSensitivity === ReIndexingSensitivity.medium) {
+        if (Date.now() - dir.lastScanned <= Config.Server.Indexing.cachedFolderTimeout &&
+          Config.Server.Indexing.reIndexingSensitivity === ReIndexingSensitivity.medium) {
           return null;
         }
       }
@@ -61,13 +61,13 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
 
 
       // not indexed since a while, index it in a lazy manner
-      if ((Date.now() - dir.lastScanned > Config.Server.indexing.cachedFolderTimeout &&
-        Config.Server.indexing.reIndexingSensitivity >= ReIndexingSensitivity.medium) ||
-        Config.Server.indexing.reIndexingSensitivity >= ReIndexingSensitivity.high) {
+      if ((Date.now() - dir.lastScanned > Config.Server.Indexing.cachedFolderTimeout &&
+        Config.Server.Indexing.reIndexingSensitivity >= ReIndexingSensitivity.medium) ||
+        Config.Server.Indexing.reIndexingSensitivity >= ReIndexingSensitivity.high) {
         // on the fly reindexing
 
         Logger.silly(LOG_TAG, 'lazy reindexing reason: cache timeout: lastScanned: '
-          + (Date.now() - dir.lastScanned) + ' ms ago, cachedFolderTimeout:' + Config.Server.indexing.cachedFolderTimeout);
+          + (Date.now() - dir.lastScanned) + ' ms ago, cachedFolderTimeout:' + Config.Server.Indexing.cachedFolderTimeout);
         ObjectManagers.getInstance().IndexingManager.indexDirectory(relativeDirectoryName).catch((err) => {
           console.error(err);
         });
@@ -133,7 +133,7 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
       query.andWhere('photo.metadata.size.width <= photo.metadata.size.height');
     }
 
-    if (Config.Server.database.type === DatabaseType.mysql) {
+    if (Config.Server.Database.type === DatabaseType.mysql) {
       return await query.groupBy('RAND(), photo.id').limit(1).getOne();
     }
     return await query.groupBy('RANDOM()').limit(1).getOne();
@@ -183,7 +183,7 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
         'media.name=innerMedia.name AND media.metadata.fileSize = innerMedia.fileSize')
       .innerJoinAndSelect('media.directory', 'directory')
       .orderBy('media.name, media.metadata.fileSize')
-      .limit(Config.Server.duplicates.listingLimit).getMany();
+      .limit(Config.Server.Duplicates.listingLimit).getMany();
 
 
     const duplicateParis: DuplicatesDTO[] = [];
@@ -237,7 +237,7 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
         'media.metadata.creationDate=innerMedia.creationDate AND media.metadata.fileSize = innerMedia.fileSize')
       .innerJoinAndSelect('media.directory', 'directory')
       .orderBy('media.metadata.creationDate, media.metadata.fileSize')
-      .limit(Config.Server.duplicates.listingLimit).getMany();
+      .limit(Config.Server.Duplicates.listingLimit).getMany();
 
     processDuplicates(duplicates,
       (a, b) => a.metadata.creationDate === b.metadata.creationDate &&
@@ -297,7 +297,7 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
             dir: dir.directories[i].id
           })
           .orderBy('media.metadata.creationDate', 'ASC')
-          .limit(Config.Server.indexing.folderPreviewSize)
+          .limit(Config.Server.Indexing.folderPreviewSize)
           .getMany();
         dir.directories[i].isPartial = true;
 

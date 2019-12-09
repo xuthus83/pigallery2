@@ -45,7 +45,7 @@ export class Benchmarks {
   async bmListDirectory(): Promise<BenchmarkResult> {
     const gm = new GalleryManager();
     await this.setupDB();
-    Config.Server.indexing.reIndexingSensitivity = ReIndexingSensitivity.low;
+    Config.Server.Indexing.reIndexingSensitivity = ReIndexingSensitivity.low;
     return await this.benchmark(() => gm.listDirectory('./'));
   }
 
@@ -122,8 +122,8 @@ export class Benchmarks {
     if (fs.existsSync(this.dbPath)) {
       fs.unlinkSync(this.dbPath);
     }
-    Config.Server.database.type = DatabaseType.sqlite;
-    Config.Server.database.sqlite.storage = this.dbPath;
+    Config.Server.Database.type = DatabaseType.sqlite;
+    Config.Server.Database.sqlite.storage = this.dbPath;
     await ObjectManagers.InitSQLManagers();
   };
 

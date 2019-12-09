@@ -19,7 +19,7 @@ export class AdminMWs {
 
 
   public static async loadStatistic(req: Request, res: Response, next: NextFunction) {
-    if (Config.Server.database.type === DatabaseType.memory) {
+    if (Config.Server.Database.type === DatabaseType.memory) {
       return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, 'Statistic is only available for indexed content'));
     }
 
@@ -43,7 +43,7 @@ export class AdminMWs {
 
 
   public static async getDuplicates(req: Request, res: Response, next: NextFunction) {
-    if (Config.Server.database.type === DatabaseType.memory) {
+    if (Config.Server.Database.type === DatabaseType.memory) {
       return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, 'Statistic is only available for indexed content'));
     }
 
@@ -72,10 +72,10 @@ export class AdminMWs {
       if (databaseSettings.type !== DatabaseType.memory) {
         await SQLConnection.tryConnection(databaseSettings);
       }
-      Config.Server.database = databaseSettings;
+      Config.Server.Database = databaseSettings;
       // only updating explicitly set config (not saving config set by the diagnostics)
       const original = Config.original();
-      original.Server.database = databaseSettings;
+      original.Server.Database = databaseSettings;
       if (databaseSettings.type === DatabaseType.memory) {
         original.Client.Sharing.enabled = false;
         original.Client.Search.enabled = false;
@@ -86,7 +86,7 @@ export class AdminMWs {
       Logger.info(LOG_TAG, JSON.stringify(Config, null, '\t'));
 
       await ObjectManagers.reset();
-      if (Config.Server.database.type !== DatabaseType.memory) {
+      if (Config.Server.Database.type !== DatabaseType.memory) {
         await ObjectManagers.InitSQLManagers();
       } else {
         await ObjectManagers.InitMemoryManagers();
@@ -318,11 +318,11 @@ export class AdminMWs {
 
       await ConfigDiagnostics.testServerThumbnailConfig(settings.server);
       await ConfigDiagnostics.testClientThumbnailConfig(settings.client);
-      Config.Server.thumbnail = settings.server;
+      Config.Server.Thumbnail = settings.server;
       Config.Client.Thumbnail = settings.client;
       // only updating explicitly set config (not saving config set by the diagnostics)
       const original = Config.original();
-      original.Server.thumbnail = settings.server;
+      original.Server.Thumbnail = settings.server;
       original.Client.Thumbnail = settings.client;
       original.save();
       ProjectPath.reset();
@@ -398,8 +398,8 @@ export class AdminMWs {
       original.Client.Other.enableOnScrollThumbnailPrioritising = settings.Client.enableOnScrollThumbnailPrioritising;
       original.Client.Other.defaultPhotoSortingMethod = settings.Client.defaultPhotoSortingMethod;
       original.Client.Other.NavBar.showItemCount = settings.Client.NavBar.showItemCount;
-      original.Server.threading.enable = settings.Server.enable;
-      original.Server.threading.thumbnailThreads = settings.Server.thumbnailThreads;
+      original.Server.Threading.enable = settings.Server.enable;
+      original.Server.Threading.thumbnailThreads = settings.Server.thumbnailThreads;
       original.save();
       await ConfigDiagnostics.runDiagnostics();
       Logger.info(LOG_TAG, 'new config:');
@@ -420,11 +420,11 @@ export class AdminMWs {
 
     try {
       const settings: IndexingConfig = req.body.settings;
-      Config.Server.indexing = settings;
+      Config.Server.Indexing = settings;
 
       // only updating explicitly set config (not saving config set by the diagnostics)
       const original = Config.original();
-      original.Server.indexing = settings;
+      original.Server.Indexing = settings;
       original.save();
       await ConfigDiagnostics.runDiagnostics();
       Logger.info(LOG_TAG, 'new config:');
@@ -451,8 +451,8 @@ export class AdminMWs {
       const original = Config.original();
       await ConfigDiagnostics.testTasksConfig(settings, original);
 
-      Config.Server.tasks = settings;
-      original.Server.tasks = settings;
+      Config.Server.Tasks = settings;
+      original.Server.Tasks = settings;
       original.save();
 
       await ConfigDiagnostics.runDiagnostics();

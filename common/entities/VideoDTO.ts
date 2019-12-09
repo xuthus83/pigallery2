@@ -15,4 +15,5 @@ export interface VideoMetadata extends MediaMetadata {
   bitRate: number;
   duration: number; // in milliseconds
   fileSize: number;
+  fps: number;
 }

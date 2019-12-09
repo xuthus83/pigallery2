@@ -82,7 +82,7 @@ export class Server {
     Localizations.init();
 
     this.app.use(locale(Config.Client.languages, 'en'));
-    if (Config.Server.database.type !== DatabaseType.memory) {
+    if (Config.Server.Database.type !== DatabaseType.memory) {
       await ObjectManagers.InitSQLManagers();
     } else {
       await ObjectManagers.InitMemoryManagers();

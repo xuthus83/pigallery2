@@ -6,6 +6,7 @@ import {RendererInput} from './ThumbnailWorker';
 import {Config} from '../../../common/config/private/Config';
 import {TaskQue, TaskQueEntry} from './TaskQue';
 import {ITaskExecuter} from './TaskExecuter';
+import {DiskMangerWorker} from './DiskMangerWorker';
 
 
 interface WorkerWrapper<O> {
@@ -26,6 +27,12 @@ export class ThreadPool<O> {
     }
   }
 
+  protected executeTask(task: WorkerTask): Promise<O> {
+    const promise = this.taskQue.add(task).promise.obj;
+    this.run();
+    return promise;
+  }
+
   private run = () => {
     if (this.taskQue.isEmpty()) {
       return;
@@ -39,12 +46,6 @@ export class ThreadPool<O> {
     worker.poolTask = poolTask;
     worker.worker.send(poolTask.data);
   };
-
-  protected executeTask(task: WorkerTask): Promise<O> {
-    const promise = this.taskQue.add(task).promise.obj;
-    this.run();
-    return promise;
-  }
 
   private getFreeWorker() {
     for (let i = 0; i < this.workers.length; i++) {
@@ -88,10 +89,11 @@ export class ThreadPool<O> {
 }
 
 export class DiskManagerTH extends ThreadPool<DirectoryDTO> implements ITaskExecuter<string, DirectoryDTO> {
-  execute(relativeDirectoryName: string): Promise<DirectoryDTO> {
+  execute(relativeDirectoryName: string, settings: DiskMangerWorker.DirectoryScanSettings = {}): Promise<DirectoryDTO> {
     return super.executeTask(<DiskManagerTask>{
       type: WorkerTaskTypes.diskManager,
-      relativeDirectoryName: relativeDirectoryName
+      relativeDirectoryName: relativeDirectoryName,
+      settings: settings
     });
   }
 }
@@ -101,7 +103,7 @@ export class ThumbnailTH extends ThreadPool<void> implements ITaskExecuter<Rende
     return super.executeTask(<ThumbnailTask>{
       type: WorkerTaskTypes.thumbnail,
       input: input,
-      renderer: Config.Server.thumbnail.processingLibrary
+      renderer: Config.Server.Thumbnail.processingLibrary
     });
   }
 }

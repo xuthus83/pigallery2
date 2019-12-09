@@ -12,6 +12,7 @@ import {Logger} from '../../Logger';
 
 const LOG_TAG = '[DiskManagerTask]';
 
+
 export class DiskMangerWorker {
 
   private static readonly SupportedEXT = {
@@ -61,8 +62,8 @@ export class DiskMangerWorker {
     const absoluteName = path.normalize(path.join(absoluteDirectoryName, name));
     const relativeName = path.normalize(path.join(relativeDirectoryName, name));
 
-    for (let j = 0; j < Config.Server.indexing.excludeFolderList.length; j++) {
-      const exclude = Config.Server.indexing.excludeFolderList[j];
+    for (let j = 0; j < Config.Server.Indexing.excludeFolderList.length; j++) {
+      const exclude = Config.Server.Indexing.excludeFolderList[j];
 
       if (exclude.startsWith('/')) {
         if (exclude === absoluteName) {
@@ -79,8 +80,8 @@ export class DiskMangerWorker {
       }
     }
     // exclude dirs that have the given files (like .ignore)
-    for (let j = 0; j < Config.Server.indexing.excludeFileList.length; j++) {
-      const exclude = Config.Server.indexing.excludeFileList[j];
+    for (let j = 0; j < Config.Server.Indexing.excludeFileList.length; j++) {
+      const exclude = Config.Server.Indexing.excludeFileList[j];
 
       if (fs.existsSync(path.join(absoluteName, exclude))) {
         return true;
@@ -90,7 +91,7 @@ export class DiskMangerWorker {
     return false;
   }
 
-  public static scanDirectory(relativeDirectoryName: string, maxPhotos: number = null, photosOnly: boolean = false): Promise<DirectoryDTO> {
+  public static scanDirectory(relativeDirectoryName: string, settings: DiskMangerWorker.DirectoryScanSettings = {}): Promise<DirectoryDTO> {
     return new Promise<DirectoryDTO>((resolve, reject) => {
       relativeDirectoryName = this.normalizeDirPath(relativeDirectoryName);
       const directoryName = DiskMangerWorker.dirName(relativeDirectoryName);
@@ -120,29 +121,36 @@ export class DiskMangerWorker {
             const file = list[i];
             const fullFilePath = path.normalize(path.join(absoluteDirectoryName, file));
             if (fs.statSync(fullFilePath).isDirectory()) {
-              if (photosOnly === true) {
+              if (settings.noDirectory === true) {
                 continue;
               }
               if (DiskMangerWorker.excludeDir(file, relativeDirectoryName, absoluteDirectoryName)) {
                 continue;
               }
+
+              // create preview directory
               const d = await DiskMangerWorker.scanDirectory(path.join(relativeDirectoryName, file),
-                Config.Server.indexing.folderPreviewSize, true
+                {
+                  maxPhotos: Config.Server.Indexing.folderPreviewSize,
+                  noMetaFile: true,
+                  noVideo: true,
+                  noDirectory: false
+                }
               );
               d.lastScanned = 0; // it was not a fully scan
               d.isPartial = true;
               directory.directories.push(d);
-            } else if (DiskMangerWorker.isImage(fullFilePath)) {
+            } else if (!settings.noPhoto && DiskMangerWorker.isImage(fullFilePath)) {
               directory.media.push(<PhotoDTO>{
                 name: file,
                 directory: null,
                 metadata: await MetadataLoader.loadPhotoMetadata(fullFilePath)
               });
 
-              if (maxPhotos != null && directory.media.length > maxPhotos) {
+              if (settings.maxPhotos && directory.media.length > settings.maxPhotos) {
                 break;
               }
-            } else if (photosOnly === false && Config.Client.Video.enabled === true &&
+            } else if (!settings.noVideo && Config.Client.Video.enabled === true &&
               DiskMangerWorker.isVideo(fullFilePath)) {
               try {
                 directory.media.push(<VideoDTO>{
@@ -154,7 +162,7 @@ export class DiskMangerWorker {
                 Logger.warn('Media loading error, skipping: ' + file + ', reason: ' + e.toString());
               }
 
-            } else if (photosOnly === false && Config.Client.MetaFile.enabled === true &&
+            } else if (!settings.noMetaFile && Config.Client.MetaFile.enabled === true &&
               DiskMangerWorker.isMetaFile(fullFilePath)) {
               directory.metaFile.push(<FileDTO>{
                 name: file,
@@ -191,4 +199,14 @@ export class DiskMangerWorker {
     return this.SupportedEXT.metaFile.indexOf(extension) !== -1;
   }
 
+}
+
+export namespace DiskMangerWorker {
+  export interface DirectoryScanSettings {
+    maxPhotos?: number;
+    noMetaFile?: boolean;
+    noVideo?: boolean;
+    noPhoto?: boolean;
+    noDirectory?: boolean;
+  }
 }

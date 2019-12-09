@@ -15,7 +15,7 @@ export class Worker {
         let result = null;
         switch (task.type) {
           case WorkerTaskTypes.diskManager:
-            result = await DiskMangerWorker.scanDirectory((<DiskManagerTask>task).relativeDirectoryName);
+            result = await DiskMangerWorker.scanDirectory((<DiskManagerTask>task).relativeDirectoryName, (<DiskManagerTask>task).settings);
             if (global.gc) {
               global.gc();
             }
@@ -48,6 +48,7 @@ export interface WorkerTask {
 
 export interface DiskManagerTask extends WorkerTask {
   relativeDirectoryName: string;
+  settings: DiskMangerWorker.DirectoryScanSettings;
 }
 
 export interface ThumbnailTask extends WorkerTask {

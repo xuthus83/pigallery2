@@ -16,6 +16,7 @@ export class GalleryRouter {
     this.addGetVideoThumbnail(app);
     this.addGetImage(app);
     this.addGetVideo(app);
+    this.addGetBestFitVideo(app);
     this.addGetMetaFile(app);
     this.addRandom(app);
     this.addDirectoryList(app);
@@ -55,6 +56,15 @@ export class GalleryRouter {
       AuthenticationMWs.normalizePathParam('mediaPath'),
       AuthenticationMWs.authorisePath('mediaPath', false),
       GalleryMWs.loadFile,
+      RenderingMWs.renderFile
+    );
+  }
+  private static addGetBestFitVideo(app: Express) {
+    app.get(['/api/gallery/content/:mediaPath(*\.(mp4|ogg|ogv|webm))/bestFit'],
+      AuthenticationMWs.authenticate,
+      AuthenticationMWs.normalizePathParam('mediaPath'),
+      AuthenticationMWs.authorisePath('mediaPath', false),
+      GalleryMWs.loadBestFitVideo,
       RenderingMWs.renderFile
     );
   }

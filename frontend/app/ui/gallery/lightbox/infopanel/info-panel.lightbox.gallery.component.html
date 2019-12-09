@@ -50,6 +50,9 @@
         <div class="col-6" *ngIf="VideoData.duration">
           <ng-container i18n>duration</ng-container>
           : {{VideoData.duration | duration}}</div>
+        <div class="col-6" *ngIf="VideoData.fps">
+          fps: {{VideoData.fps}}/s
+        </div>
         <div class="col-6" *ngIf="VideoData.bitRate">
           <ng-container i18n>bit rate</ng-container>
           : {{VideoData.bitRate | fileSize}}/s

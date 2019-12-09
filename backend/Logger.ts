@@ -5,7 +5,7 @@ import {LogLevel} from '../common/config/private/IPrivateConfig';
 export const winstonSettings = {
   transports: [
     new winston.transports.Console(<any>{
-      level: LogLevel[Config.Server.log.level],
+      level: LogLevel[Config.Server.Log.level],
       handleExceptions: true,
       json: false,
       colorize: true,

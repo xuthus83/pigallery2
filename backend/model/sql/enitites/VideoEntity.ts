@@ -16,6 +16,9 @@ export class VideoMetadataEntity extends MediaMetadataEntity implements VideoMet
   })
   duration: number;
 
+  @Column('int')
+  fps: number;
+
 }
 
 

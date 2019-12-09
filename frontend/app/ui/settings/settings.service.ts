@@ -82,31 +82,31 @@ export class SettingsService {
         languages: []
       },
       Server: {
-        database: {
+        Database: {
           type: DatabaseType.memory
         },
-        log: {
+        Log: {
           level: LogLevel.info,
           sqlLevel: SQLLogLevel.error
         },
-        sharing: {
+        Sharing: {
           updateTimeout: 2000
         },
         imagesFolder: '',
         port: 80,
         host: '0.0.0.0',
-        thumbnail: {
+        Thumbnail: {
           personFaceMargin: 0.1,
           folder: '',
           qualityPriority: true,
           processingLibrary: ThumbnailProcessingLib.sharp
         },
-        threading: {
+        Threading: {
           enable: true,
           thumbnailThreads: 0
         },
         sessionTimeout: 0,
-        indexing: {
+        Indexing: {
           cachedFolderTimeout: 0,
           folderPreviewSize: 0,
           reIndexingSensitivity: ReIndexingSensitivity.medium,
@@ -114,11 +114,20 @@ export class SettingsService {
           excludeFileList: []
         },
         photoMetadataSize: 512 * 1024,
-        duplicates: {
+        Duplicates: {
           listingLimit: 1000
         },
-        tasks: {
+        Tasks: {
           scheduled: []
+        },
+        Video: {
+          transcoding: {
+            bitRate: 5 * 1024 * 1024,
+            codec: 'libx264',
+            format: 'mp4',
+            fps: 25,
+            resolution: 720
+          }
         }
       }
     });
