@@ -1,7 +1,8 @@
 <form #settingsForm="ngForm" class="form-horizontal">
   <div class="card mb-4">
     <h5 class="card-header">
-      <ng-container i18n>Video settings</ng-container><ng-container *ngIf="changed">*</ng-container>
+      <ng-container i18n>Video settings</ng-container>
+      <ng-container *ngIf="changed">*</ng-container>
       <div class="switch-wrapper">
         <bSwitch
           class="switch"
@@ -13,14 +14,88 @@
           [switch-disabled]="inProgress"
           [switch-handle-width]="100"
           [switch-label-width]="20"
-          [(ngModel)]="settings.enabled">
+          [(ngModel)]="settings.client.enabled">
         </bSwitch>
       </div>
     </h5>
     <div class="card-body">
       <div [hidden]="!error" class="alert alert-danger" role="alert"><strong>Error: </strong>{{error}}</div>
 
-      <ng-container i18n>Video support uses ffmpeg. ffmpeg and ffprobe binaries need to be available in the PATH or the @ffmpeg-installer/ffmpeg and @ffprobe-installer/ffprobe optional node packages need to be installed.</ng-container>&nbsp;
+      <ng-container i18n>Video support uses ffmpeg. ffmpeg and ffprobe binaries need to be available in the PATH or the
+        @ffmpeg-installer/ffmpeg and @ffprobe-installer/ffprobe optional node packages need to be installed.
+      </ng-container>
+
+      <hr/>
+
+      <p class="title" i18n>Video transcoding:</p>
+      <div class="form-group row">
+        <label class="col-md-2 control-label" for="format" i18n>Format</label>
+        <div class="col-md-10">
+          <select id="format" class="form-control" [(ngModel)]="settings.server.transcoding.format"
+                  (ngModelChange)="formatChanged($event)"
+                  name="format" required>
+            <option *ngFor="let format of formats" [ngValue]="format">{{format}}
+            </option>
+          </select>
+          <small class="form-text text-muted" i18n>Select the format to encode your videos to.</small>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label class="col-md-2 control-label" for="codec" i18n>Codec</label>
+        <div class="col-md-10">
+          <select id="codec" class="form-control" [(ngModel)]="settings.server.transcoding.codec"
+                  name="codec" required>
+            <option *ngFor="let codec of codecs[settings.server.transcoding.format]" [ngValue]="codec">{{codec}}
+            </option>
+          </select>
+          <small class="form-text text-muted" i18n>This codec will be used for the transcoding. </small>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label class="col-md-2 control-label" for="resolution" i18n>Resolution</label>
+        <div class="col-md-10">
+          <select id="resolution" class="form-control" [(ngModel)]="settings.server.transcoding.resolution"
+                  (ngModelChange)="updateBitRate()"
+                  name="resolution" required>
+            <option *ngFor="let resolution of resolutions" [ngValue]="resolution">{{resolution}}p
+            </option>
+          </select>
+          <small class="form-text text-muted" i18n>Resolution of the output video.</small>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label class="col-md-2 control-label" for="fps" i18n>FPS</label>
+        <div class="col-md-10">
+          <select id="fps" class="form-control" [(ngModel)]="settings.server.transcoding.fps"
+                  (ngModelChange)="updateBitRate()"
+                  name="fps" required>
+            <option *ngFor="let fps of fps" [ngValue]="fps">{{fps}}
+            </option>
+          </select>
+          <small class="form-text text-muted" i18n>Target frame per second (fps) of the output video.</small>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label class="col-md-2 control-label" for="bitRate" i18n>Bit rate</label>
+        <div class="input-group col-md-10">
+          <input type="number" class="form-control" placeholder="2"
+                 id="bitRate"
+                 min="0"
+                 step="0.1"
+                 max="1000"
+                 [(ngModel)]="bitRate"
+                 name="bitRate" required>
+          <div class="input-group-append">
+            <span class="input-group-text">mbps</span>
+          </div>
+          <small class="form-text text-muted" i18n>Target bit rate for the output video. This should be less than the
+            upload rate of your home server.</small>
+        </div>
+      </div>
 
 
       <button class="btn btn-success float-right"
@@ -31,6 +106,56 @@
               [disabled]=" !changed || inProgress"
               (click)="reset()" i18n>Reset
       </button>
+
+      <br/>
+      <hr/>
+
+      <ng-container i18n>To ensure smooth video playback, video transcoding is recommended to a lower bit rate than the
+        server's upload rate.
+      </ng-container>&nbsp;
+      <ng-container i18n>The transcoded videos will be save to the thumbnail folder.</ng-container>&nbsp;
+      <ng-container i18n>You can trigger the transcoding manually, but you can also create an automatic encoding task in
+        advanced settings mode.
+      </ng-container>&nbsp;
+
+      <br/>
+
+
+      <button class="btn btn-success  float-right"
+              *ngIf="Progress == null"
+              [disabled]="inProgress"
+              title="Indexes the folders"
+              i18n-title
+              (click)="transcode()" i18n>Transcode videos now
+      </button>
+      <button class="btn btn-secondary  float-right"
+              *ngIf="Progress != null"
+              [disabled]="inProgress"
+              (click)="cancelTranscoding()" i18n>Cancel transcoding
+      </button>
+
+
+      <ng-container *ngIf="Progress != null">
+        <br/>
+        <hr/>
+        <span class="progress-details" i18n>indexing</span>: {{Progress.comment}} <br/>
+        <span class="progress-details" i18n>elapsed</span>: {{tasksService.calcTimeElapsed(Progress) | duration}}<br/>
+        <span class="progress-details" i18n>left</span>: {{tasksService.calcTimeLeft(Progress)  | duration}}
+        <div class="progress">
+          <div class="progress-bar progress-bar-success"
+               role="progressbar"
+               aria-valuenow="2"
+               aria-valuemin="0"
+               aria-valuemax="100"
+               style="min-width: 2em;"
+               [style.width.%]="(Progress.progress/(Progress.left+Progress.progress))*100">
+            {{Progress.progress}}
+            /{{Progress.progress + Progress.left}}
+          </div>
+        </div>
+      </ng-container>
+
+
     </div>
   </div>
 

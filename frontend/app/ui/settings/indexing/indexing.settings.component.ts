@@ -45,18 +45,6 @@ export class IndexingSettingsComponent extends SettingsComponent<IndexingConfig,
     return this.tasksService.progress.value[DefaultsTasks[DefaultsTasks.Indexing]];
   }
 
-  get TimeLeft(): number {
-    if (this.Progress) {
-      return (this.Progress.time.current - this.Progress.time.start) / this.Progress.progress * this.Progress.left;
-    }
-  }
-
-  get TimeElapsed() {
-    if (this.Progress) {
-      return (this.Progress.time.current - this.Progress.time.start);
-    }
-  }
-
   get excludeFolderList(): string {
     return this.settings.excludeFolderList.join(';');
   }

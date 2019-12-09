@@ -77,13 +77,17 @@ export interface TaskConfig {
   scheduled: TaskScheduleDTO[];
 }
 
+export type codecType = 'libvpx-vp9' | 'libx264' | 'libvpx' | 'libx265';
+export type resolutionType = 240 | 360 | 480 | 720 | 1080 | 1440 | 2160 | 4320;
+export type formatType = 'mp4' | 'webm';
+
 export interface VideoConfig {
   transcoding: {
     bitRate: number,
-    resolution: 240 | 360 | 480 | 720 | 1080 | 1440 | 2160 | 4320,
+    resolution: resolutionType,
     fps: number,
-    codec: 'libvpx-vp9' | 'libx264' | 'libvpx',
-    format: 'mp4' | 'webm'
+    codec: codecType,
+    format: formatType
   };
 }
 
