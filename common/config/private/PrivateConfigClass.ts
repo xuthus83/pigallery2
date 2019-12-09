@@ -92,10 +92,10 @@ export class PrivateConfigClass extends PublicConfigClass implements IPrivateCon
     ConfigLoader.loadBackendConfig(this,
       path.join(__dirname, './../../../config.json'),
       [['PORT', 'Server-port'],
-        ['MYSQL_HOST', 'Server-database-mysql-host'],
-        ['MYSQL_PASSWORD', 'Server-database-mysql-password'],
-        ['MYSQL_USERNAME', 'Server-database-mysql-username'],
-        ['MYSQL_DATABASE', 'Server-database-mysql-database']]);
+        ['MYSQL_HOST', 'Server-Database-mysql-host'],
+        ['MYSQL_PASSWORD', 'Server-Database-mysql-password'],
+        ['MYSQL_USERNAME', 'Server-Database-mysql-username'],
+        ['MYSQL_DATABASE', 'Server-Database-mysql-database']]);
     this.removeComment();
 
     if (Utils.enumToArray(UserRoles).map(r => r.key).indexOf(this.Client.unAuthenticatedUserRole) === -1) {
