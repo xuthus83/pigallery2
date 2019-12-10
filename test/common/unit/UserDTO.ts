@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import {UserDTO} from '../../../common/entities/UserDTO';
+import {UserDTO} from '../../../src/common/entities/UserDTO';
 
 describe('UserDTO', () => {
 

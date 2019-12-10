@@ -1,6 +1,6 @@
 import {expect} from 'chai';
-import {TaskManager} from '../../../../../backend/model/tasks/TaskManager';
-import {TaskScheduleDTO, TaskTriggerType} from '../../../../../common/entities/task/TaskScheduleDTO';
+import {TaskManager} from '../../../../../src/backend/model/tasks/TaskManager';
+import {TaskScheduleDTO, TaskTriggerType} from '../../../../../src/common/entities/task/TaskScheduleDTO';
 
 class TaskManagerSpec extends TaskManager {
 

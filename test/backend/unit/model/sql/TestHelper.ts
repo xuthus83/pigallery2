@@ -1,19 +1,19 @@
-import {MediaDimensionEntity} from '../../../../../backend/model/sql/enitites/MediaEntity';
+import {MediaDimensionEntity} from '../../../../../src/backend/model/sql/enitites/MediaEntity';
 import {
   CameraMetadataEntity,
   GPSMetadataEntity,
   PhotoEntity,
   PhotoMetadataEntity,
   PositionMetaDataEntity
-} from '../../../../../backend/model/sql/enitites/PhotoEntity';
+} from '../../../../../src/backend/model/sql/enitites/PhotoEntity';
 import {OrientationTypes} from 'ts-exif-parser';
-import {DirectoryEntity} from '../../../../../backend/model/sql/enitites/DirectoryEntity';
-import {VideoEntity, VideoMetadataEntity} from '../../../../../backend/model/sql/enitites/VideoEntity';
-import {MediaDimension} from '../../../../../common/entities/MediaDTO';
-import {CameraMetadata, FaceRegion, GPSMetadata, PhotoDTO, PhotoMetadata, PositionMetaData} from '../../../../../common/entities/PhotoDTO';
-import {DirectoryDTO} from '../../../../../common/entities/DirectoryDTO';
-import {FileDTO} from '../../../../../common/entities/FileDTO';
-import {DiskMangerWorker} from '../../../../../backend/model/threading/DiskMangerWorker';
+import {DirectoryEntity} from '../../../../../src/backend/model/sql/enitites/DirectoryEntity';
+import {VideoEntity, VideoMetadataEntity} from '../../../../../src/backend/model/sql/enitites/VideoEntity';
+import {MediaDimension} from '../../../../../src/common/entities/MediaDTO';
+import {CameraMetadata, FaceRegion, GPSMetadata, PhotoDTO, PhotoMetadata, PositionMetaData} from '../../../../../src/common/entities/PhotoDTO';
+import {DirectoryDTO} from '../../../../../src/common/entities/DirectoryDTO';
+import {FileDTO} from '../../../../../src/common/entities/FileDTO';
+import {DiskMangerWorker} from '../../../../../src/backend/model/threading/DiskMangerWorker';
 
 export class TestHelper {
 

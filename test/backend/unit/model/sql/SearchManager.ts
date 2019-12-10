@@ -1,18 +1,18 @@
 import {expect} from 'chai';
-import {SQLConnection} from '../../../../../backend/model/sql/SQLConnection';
-import {PhotoEntity} from '../../../../../backend/model/sql/enitites/PhotoEntity';
-import {SearchManager} from '../../../../../backend/model/sql/SearchManager';
-import {AutoCompleteItem, SearchTypes} from '../../../../../common/entities/AutoCompleteItem';
-import {SearchResultDTO} from '../../../../../common/entities/SearchResultDTO';
-import {DirectoryEntity} from '../../../../../backend/model/sql/enitites/DirectoryEntity';
-import {Utils} from '../../../../../common/Utils';
+import {SQLConnection} from '../../../../../src/backend/model/sql/SQLConnection';
+import {PhotoEntity} from '../../../../../src/backend/model/sql/enitites/PhotoEntity';
+import {SearchManager} from '../../../../../src/backend/model/sql/SearchManager';
+import {AutoCompleteItem, SearchTypes} from '../../../../../src/common/entities/AutoCompleteItem';
+import {SearchResultDTO} from '../../../../../src/common/entities/SearchResultDTO';
+import {DirectoryEntity} from '../../../../../src/backend/model/sql/enitites/DirectoryEntity';
+import {Utils} from '../../../../../src/common/Utils';
 import {TestHelper} from './TestHelper';
-import {VideoEntity} from '../../../../../backend/model/sql/enitites/VideoEntity';
-import {PersonEntry} from '../../../../../backend/model/sql/enitites/PersonEntry';
-import {FaceRegionEntry} from '../../../../../backend/model/sql/enitites/FaceRegionEntry';
-import {PhotoDTO} from '../../../../../common/entities/PhotoDTO';
+import {VideoEntity} from '../../../../../src/backend/model/sql/enitites/VideoEntity';
+import {PersonEntry} from '../../../../../src/backend/model/sql/enitites/PersonEntry';
+import {FaceRegionEntry} from '../../../../../src/backend/model/sql/enitites/FaceRegionEntry';
+import {PhotoDTO} from '../../../../../src/common/entities/PhotoDTO';
 import {SQLTestHelper} from '../../../SQLTestHelper';
-import {Config} from '../../../../../common/config/private/Config';
+import {Config} from '../../../../../src/common/config/private/Config';
 
 // to help WebStorm to handle the test cases
 declare let describe: any;

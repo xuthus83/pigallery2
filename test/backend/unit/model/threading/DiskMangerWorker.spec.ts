@@ -1,9 +1,9 @@
 import {expect} from 'chai';
-import {DiskMangerWorker} from '../../../../../backend/model/threading/DiskMangerWorker';
+import {DiskMangerWorker} from '../../../../../src/backend/model/threading/DiskMangerWorker';
 import * as path from 'path';
-import {Config} from '../../../../../common/config/private/Config';
-import {ProjectPath} from '../../../../../backend/ProjectPath';
-import {Utils} from '../../../../../common/Utils';
+import {Config} from '../../../../../src/common/config/private/Config';
+import {ProjectPath} from '../../../../../src/backend/ProjectPath';
+import {Utils} from '../../../../../src/common/Utils';
 
 describe('DiskMangerWorker', () => {
 

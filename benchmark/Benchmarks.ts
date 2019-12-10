@@ -1,15 +1,15 @@
-import {SQLConnection} from '../backend/model/sql/SQLConnection';
-import {Config} from '../common/config/private/Config';
-import {ObjectManagers} from '../backend/model/ObjectManagers';
-import {DiskMangerWorker} from '../backend/model/threading/DiskMangerWorker';
-import {IndexingManager} from '../backend/model/sql/IndexingManager';
-import {SearchManager} from '../backend/model/sql/SearchManager';
+import {SQLConnection} from '../src/backend/model/sql/SQLConnection';
+import {Config} from '../src/common/config/private/Config';
+import {ObjectManagers} from '../src/backend/model/ObjectManagers';
+import {DiskMangerWorker} from '../src/backend/model/threading/DiskMangerWorker';
+import {IndexingManager} from '../src/backend/model/sql/IndexingManager';
+import {SearchManager} from '../src/backend/model/sql/SearchManager';
 import * as fs from 'fs';
-import {SearchTypes} from '../common/entities/AutoCompleteItem';
-import {Utils} from '../common/Utils';
-import {GalleryManager} from '../backend/model/sql/GalleryManager';
-import {DirectoryDTO} from '../common/entities/DirectoryDTO';
-import {ServerConfig} from '../common/config/private/IPrivateConfig';
+import {SearchTypes} from '../src/common/entities/AutoCompleteItem';
+import {Utils} from '../src/common/Utils';
+import {GalleryManager} from '../src/backend/model/sql/GalleryManager';
+import {DirectoryDTO} from '../src/common/entities/DirectoryDTO';
+import {ServerConfig} from '../src/common/config/private/IPrivateConfig';
 
 export interface BenchmarkResult {
   duration: number;

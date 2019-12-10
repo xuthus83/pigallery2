@@ -1,9 +1,9 @@
 import {expect} from 'chai';
-import {SQLConnection} from '../../../../../backend/model/sql/SQLConnection';
-import {SharingManager} from '../../../../../backend/model/sql/SharingManager';
-import {SharingDTO} from '../../../../../common/entities/SharingDTO';
-import {UserEntity} from '../../../../../backend/model/sql/enitites/UserEntity';
-import {UserDTO, UserRoles} from '../../../../../common/entities/UserDTO';
+import {SQLConnection} from '../../../../../src/backend/model/sql/SQLConnection';
+import {SharingManager} from '../../../../../src/backend/model/sql/SharingManager';
+import {SharingDTO} from '../../../../../src/common/entities/SharingDTO';
+import {UserEntity} from '../../../../../src/backend/model/sql/enitites/UserEntity';
+import {UserDTO, UserRoles} from '../../../../../src/common/entities/UserDTO';
 import {SQLTestHelper} from '../../../SQLTestHelper';
 
 // to help WebStorm to handle the test cases

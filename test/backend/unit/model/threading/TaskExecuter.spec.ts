@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import {TaskExecuter} from '../../../../../backend/model/threading/TaskExecuter';
+import {TaskExecuter} from '../../../../../src/backend/model/threading/TaskExecuter';
 
 describe('TaskExecuter', () => {
 

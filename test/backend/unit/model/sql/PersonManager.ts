@@ -1,6 +1,6 @@
 import {expect} from 'chai';
-import {PersonManager} from '../../../../../backend/model/sql/PersonManager';
-import {FaceRegion, PhotoDTO} from '../../../../../common/entities/PhotoDTO';
+import {PersonManager} from '../../../../../src/backend/model/sql/PersonManager';
+import {FaceRegion, PhotoDTO} from '../../../../../src/common/entities/PhotoDTO';
 
 
 // to help WebStorm to handle the test cases

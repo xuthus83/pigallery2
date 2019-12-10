@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import {Utils} from '../../../common/Utils';
+import {Utils} from '../../../src/common/Utils';
 
 describe('Utils', () => {
   it('should concat urls', () => {

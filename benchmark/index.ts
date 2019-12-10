@@ -1,10 +1,10 @@
-import {Config} from '../common/config/private/Config';
+import {Config} from '../src/common/config/private/Config';
 import * as path from 'path';
-import {ProjectPath} from '../backend/ProjectPath';
+import {ProjectPath} from '../src/backend/ProjectPath';
 import {BenchmarkResult, Benchmarks} from './Benchmarks';
-import {SearchTypes} from '../common/entities/AutoCompleteItem';
-import {Utils} from '../common/Utils';
-import {DiskMangerWorker} from '../backend/model/threading/DiskMangerWorker';
+import {SearchTypes} from '../src/common/entities/AutoCompleteItem';
+import {Utils} from '../src/common/Utils';
+import {DiskMangerWorker} from '../src/backend/model/threading/DiskMangerWorker';
 
 const config: { path: string, system: string } = require(path.join(__dirname, 'config.json'));
 Config.Server.imagesFolder = config.path;

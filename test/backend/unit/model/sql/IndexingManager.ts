@@ -1,22 +1,22 @@
 import {expect} from 'chai';
 import * as fs from 'fs';
-import {Config} from '../../../../../common/config/private/Config';
-import {SQLConnection} from '../../../../../backend/model/sql/SQLConnection';
-import {GalleryManager} from '../../../../../backend/model/sql/GalleryManager';
-import {DirectoryDTO} from '../../../../../common/entities/DirectoryDTO';
+import {Config} from '../../../../../src/common/config/private/Config';
+import {SQLConnection} from '../../../../../src/backend/model/sql/SQLConnection';
+import {GalleryManager} from '../../../../../src/backend/model/sql/GalleryManager';
+import {DirectoryDTO} from '../../../../../src/common/entities/DirectoryDTO';
 import {TestHelper} from './TestHelper';
 import {Connection} from 'typeorm';
-import {DirectoryEntity} from '../../../../../backend/model/sql/enitites/DirectoryEntity';
-import {Utils} from '../../../../../common/Utils';
-import {MediaDTO} from '../../../../../common/entities/MediaDTO';
-import {FileDTO} from '../../../../../common/entities/FileDTO';
-import {IndexingManager} from '../../../../../backend/model/sql/IndexingManager';
-import {ObjectManagers} from '../../../../../backend/model/ObjectManagers';
-import {PersonManager} from '../../../../../backend/model/sql/PersonManager';
+import {DirectoryEntity} from '../../../../../src/backend/model/sql/enitites/DirectoryEntity';
+import {Utils} from '../../../../../src/common/Utils';
+import {MediaDTO} from '../../../../../src/common/entities/MediaDTO';
+import {FileDTO} from '../../../../../src/common/entities/FileDTO';
+import {IndexingManager} from '../../../../../src/backend/model/sql/IndexingManager';
+import {ObjectManagers} from '../../../../../src/backend/model/ObjectManagers';
+import {PersonManager} from '../../../../../src/backend/model/sql/PersonManager';
 import {SQLTestHelper} from '../../../SQLTestHelper';
-import {VersionManager} from '../../../../../backend/model/sql/VersionManager';
-import {DiskMangerWorker} from '../../../../../backend/model/threading/DiskMangerWorker';
-import {ServerConfig} from '../../../../../common/config/private/IPrivateConfig';
+import {VersionManager} from '../../../../../src/backend/model/sql/VersionManager';
+import {DiskMangerWorker} from '../../../../../src/backend/model/threading/DiskMangerWorker';
+import {ServerConfig} from '../../../../../src/common/config/private/IPrivateConfig';
 
 class GalleryManagerTest extends GalleryManager {
 

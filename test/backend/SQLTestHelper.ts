@@ -1,8 +1,8 @@
-import {Config} from '../../common/config/private/Config';
+import {Config} from '../../src/common/config/private/Config';
 import * as fs from 'fs';
 import * as path from 'path';
-import {SQLConnection} from '../../backend/model/sql/SQLConnection';
-import {ServerConfig} from '../../common/config/private/IPrivateConfig';
+import {SQLConnection} from '../../src/backend/model/sql/SQLConnection';
+import {ServerConfig} from '../../src/common/config/private/IPrivateConfig';
 
 declare let describe: any;
 const savedDescribe = describe;

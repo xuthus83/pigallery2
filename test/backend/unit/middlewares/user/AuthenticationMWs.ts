@@ -1,11 +1,11 @@
 import {expect} from 'chai';
-import {AuthenticationMWs} from '../../../../../backend/middlewares/user/AuthenticationMWs';
-import {ErrorCodes, ErrorDTO} from '../../../../../common/entities/Error';
-import {UserDTO, UserRoles} from '../../../../../common/entities/UserDTO';
-import {ObjectManagers} from '../../../../../backend/model/ObjectManagers';
-import {UserManager} from '../../../../../backend/model/memory/UserManager';
-import {Config} from '../../../../../common/config/private/Config';
-import {IUserManager} from '../../../../../backend/model/interfaces/IUserManager';
+import {AuthenticationMWs} from '../../../../../src/backend/middlewares/user/AuthenticationMWs';
+import {ErrorCodes, ErrorDTO} from '../../../../../src/common/entities/Error';
+import {UserDTO, UserRoles} from '../../../../../src/common/entities/UserDTO';
+import {ObjectManagers} from '../../../../../src/backend/model/ObjectManagers';
+import {UserManager} from '../../../../../src/backend/model/memory/UserManager';
+import {Config} from '../../../../../src/common/config/private/Config';
+import {IUserManager} from '../../../../../src/backend/model/interfaces/IUserManager';
 import * as path from 'path';
 
 

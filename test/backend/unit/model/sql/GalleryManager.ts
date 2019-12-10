@@ -1,14 +1,14 @@
 import {expect} from 'chai';
 import {TestHelper} from './TestHelper';
 import {SQLTestHelper} from '../../../SQLTestHelper';
-import {GalleryManager} from '../../../../../backend/model/sql/GalleryManager';
-import {IndexingManager} from '../../../../../backend/model/sql/IndexingManager';
-import {DirectoryDTO} from '../../../../../common/entities/DirectoryDTO';
-import {Utils} from '../../../../../common/Utils';
-import {ObjectManagers} from '../../../../../backend/model/ObjectManagers';
-import {PersonManager} from '../../../../../backend/model/sql/PersonManager';
-import {MediaEntity} from '../../../../../backend/model/sql/enitites/MediaEntity';
-import {VersionManager} from '../../../../../backend/model/sql/VersionManager';
+import {GalleryManager} from '../../../../../src/backend/model/sql/GalleryManager';
+import {IndexingManager} from '../../../../../src/backend/model/sql/IndexingManager';
+import {DirectoryDTO} from '../../../../../src/common/entities/DirectoryDTO';
+import {Utils} from '../../../../../src/common/Utils';
+import {ObjectManagers} from '../../../../../src/backend/model/ObjectManagers';
+import {PersonManager} from '../../../../../src/backend/model/sql/PersonManager';
+import {MediaEntity} from '../../../../../src/backend/model/sql/enitites/MediaEntity';
+import {VersionManager} from '../../../../../src/backend/model/sql/VersionManager';
 
 class IndexingManagerTest extends IndexingManager {
 

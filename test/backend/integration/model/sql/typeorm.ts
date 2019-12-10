@@ -1,22 +1,22 @@
 import {expect} from 'chai';
 import * as fs from 'fs';
 import * as path from 'path';
-import {Config} from '../../../../../common/config/private/Config';
-import {SQLConnection} from '../../../../../backend/model/sql/SQLConnection';
-import {UserEntity} from '../../../../../backend/model/sql/enitites/UserEntity';
-import {UserRoles} from '../../../../../common/entities/UserDTO';
-import {PasswordHelper} from '../../../../../backend/model/PasswordHelper';
-import {DirectoryEntity} from '../../../../../backend/model/sql/enitites/DirectoryEntity';
+import {Config} from '../../../../../src/common/config/private/Config';
+import {SQLConnection} from '../../../../../src/backend/model/sql/SQLConnection';
+import {UserEntity} from '../../../../../src/backend/model/sql/enitites/UserEntity';
+import {UserRoles} from '../../../../../src/common/entities/UserDTO';
+import {PasswordHelper} from '../../../../../src/backend/model/PasswordHelper';
+import {DirectoryEntity} from '../../../../../src/backend/model/sql/enitites/DirectoryEntity';
 import {
   CameraMetadataEntity,
   GPSMetadataEntity,
   PhotoEntity,
   PhotoMetadataEntity,
   PositionMetaDataEntity
-} from '../../../../../backend/model/sql/enitites/PhotoEntity';
-import {MediaDimensionEntity} from '../../../../../backend/model/sql/enitites/MediaEntity';
-import {VersionEntity} from '../../../../../backend/model/sql/enitites/VersionEntity';
-import {ServerConfig} from '../../../../../common/config/private/IPrivateConfig';
+} from '../../../../../src/backend/model/sql/enitites/PhotoEntity';
+import {MediaDimensionEntity} from '../../../../../src/backend/model/sql/enitites/MediaEntity';
+import {VersionEntity} from '../../../../../src/backend/model/sql/enitites/VersionEntity';
+import {ServerConfig} from '../../../../../src/common/config/private/IPrivateConfig';
 
 describe('Typeorm integration', () => {
 

@@ -1,6 +1,6 @@
 import {expect} from 'chai';
-import {MetadataLoader} from '../../../../../backend/model/threading/MetadataLoader';
-import {Utils} from '../../../../../common/Utils';
+import {MetadataLoader} from '../../../../../src/backend/model/threading/MetadataLoader';
+import {Utils} from '../../../../../src/common/Utils';
 import * as path from 'path';
 
 describe('MetadataLoader', () => {

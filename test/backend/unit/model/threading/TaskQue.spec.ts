@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import {TaskQue} from '../../../../../backend/model/threading/TaskQue';
+import {TaskQue} from '../../../../../src/backend/model/threading/TaskQue';
 
 describe('TaskQue', () => {
 

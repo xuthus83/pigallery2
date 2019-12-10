@@ -5,8 +5,8 @@
   "author": "Patrik J. Braun",
   "homepage": "https://github.com/bpatrik/PiGallery2",
   "license": "MIT",
-  "main": "./backend/index.js",
-  "bin": "./backend/index.js",
+  "main": "./src/backend/index.js",
+  "bin": "./src/backend/index.js",
   "scripts": {
     "install": "npm run build-prod",
     "build-prod": "tsc && gulp build-prod",
@@ -15,8 +15,8 @@
     "pretest": "tsc",
     "test": "ng test && mocha --recursive test/backend/unit && mocha --recursive test/backend/integration  && mocha --recursive test/common/unit ",
     "start": "node ./backend/index",
-    "run-dev": "ng build --aot --watch --output-path=./dist --i18n-locale en --i18n-file frontend/translate/messages.en.xlf --i18n-missing-translation warning",
-    "build-stats": "ng build --aot --prod --stats-json --output-path=./dist --i18n-locale en --i18n-file frontend/translate/messages.en.xlf --i18n-missing-translation warning",
+    "run-dev": "ng build --aot --watch --output-path=./dist --i18n-locale en --i18n-file src/frontend/translate/messages.en.xlf --i18n-missing-translation warning",
+    "build-stats": "ng build --aot --prod --stats-json --output-path=./dist --i18n-locale en --i18n-file src/frontend/translate/messages.en.xlf --i18n-missing-translation warning",
     "merge-new-translation": "gulp merge-new-translation",
     "add-translation": "gulp add-translation"
   },

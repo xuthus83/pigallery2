@@ -13,8 +13,8 @@ const tsBackendProject = ts.createProject('tsconfig.json');
 
 gulp.task('build-backend', function () {
   return gulp.src([
-    'common/**/*.ts',
-    'backend/**/*.ts'], {base: '.'})
+    'src/common/**/*.ts',
+    'src/backend/**/*.ts'], {base: '.'})
     .pipe(tsBackendProject())
     .js
     .pipe(gulp.dest('./release'));
@@ -36,10 +36,10 @@ const createFrontendTask = (type: string, script: string) => {
 };
 
 const getLanguages = () => {
-  if (!fs.existsSync('./frontend/' + translationFolder)) {
+  if (!fs.existsSync('./src/frontend/' + translationFolder)) {
     return [];
   }
-  const dirCont = fs.readdirSync('./frontend/' + translationFolder);
+  const dirCont = fs.readdirSync('./src/frontend/' + translationFolder);
   const files: string[] = dirCont.filter((elm) => {
     return elm.match(/.*\.[a-zA-Z]+\.(xlf)/ig);
   });
@@ -71,14 +71,14 @@ gulp.task('build-frontend', (() => {
   const tasks = [];
   createFrontendTask('build-frontend-release default',
     'ng build --aot --prod --output-path=./release/dist --no-progress --i18n-locale=en' +
-    ' --i18n-format xlf --i18n-file frontend/' + translationFolder + '/messages.en.xlf' +
+    ' --i18n-format xlf --i18n-file src/frontend/' + translationFolder + '/messages.en.xlf' +
     ' --i18n-missing-translation warning');
   tasks.push('build-frontend-release default');
   for (let i = 0; i < languages.length; i++) {
     createFrontendTask('build-frontend-release ' + languages[i],
       'ng build --aot --prod --output-path=./release/dist/' + languages[i] +
       ' --no-progress --i18n-locale=' + languages[i] +
-      ' --i18n-format xlf --i18n-file frontend/' + translationFolder + '/messages.' + languages[i] + '.xlf' +
+      ' --i18n-format xlf --i18n-file src/frontend/' + translationFolder + '/messages.' + languages[i] + '.xlf' +
       ' --i18n-missing-translation warning');
     tasks.push('build-frontend-release ' + languages[i]);
   }
@@ -87,7 +87,7 @@ gulp.task('build-frontend', (() => {
 
 gulp.task('copy-static', function () {
   return gulp.src([
-    'backend/model/diagnostics/blank.jpg',
+    'src/backend/model/diagnostics/blank.jpg',
     'README.md',
     'LICENSE'], {base: '.'})
     .pipe(gulp.dest('./release'));
@@ -102,7 +102,7 @@ gulp.task('copy-package', function () {
     }))
     .pipe(jsonModify({
       key: 'scripts',
-      value: {'start': 'node ./backend/index.js'}
+      value: {'start': 'node ./src/backend/index.js'}
     }))
     .pipe(gulp.dest('./release'));
 });
@@ -127,14 +127,14 @@ const simpleBuild = (isProd: boolean) => {
     cmd += ' --prod --no-extract-licenses ';
   }
   createFrontendTask('build-frontend default', cmd + '--output-path=./dist --no-progress --no-progress --i18n-locale en' +
-    ' --i18n-format=xlf --i18n-file=frontend/' + translationFolder + '/messages.en.xlf' + ' --i18n-missing-translation warning');
+    ' --i18n-format=xlf --i18n-file=src/frontend/' + translationFolder + '/messages.en.xlf' + ' --i18n-missing-translation warning');
   tasks.push('build-frontend default');
   if (!process.env.CI) { // don't build languages if running in CI
     for (let i = 0; i < languages.length; i++) {
       createFrontendTask('build-frontend ' + languages[i], cmd +
         '--output-path=./dist/' + languages[i] +
         ' --no-progress --i18n-locale ' + languages[i] +
-        ' --i18n-format=xlf --i18n-file=frontend/' + translationFolder +
+        ' --i18n-format=xlf --i18n-file=src/frontend/' + translationFolder +
         '/messages.' + languages[i] + '.xlf' + ' --i18n-missing-translation warning');
       tasks.push('build-frontend ' + languages[i]);
     }
@@ -151,20 +151,20 @@ gulp.task('extract-locale', (cb) => {
       if (error) {
         return cb(error);
       }
-      exec('ngx-extractor -i frontend/**/*.ts -f xlf --out-file locale.source.xlf',
+      exec('ngx-extractor -i src/frontend/**/*.ts -f xlf --out-file locale.source.xlf',
         handleError(cb));
     });
 });
 
 const translate = (list: any[], cb: (err: any) => void) => {
   const localsStr = '"[\\"' + list.join('\\",\\"') + '\\"]"';
-  exec('xlf-google-translate --source-lang="en" --source-file="./locale.source.xlf" --destination-folder="./frontend/"' +
+  exec('xlf-google-translate --source-lang="en" --source-file="./locale.source.xlf" --destination-folder="./src/frontend/"' +
     translationFolder + ' --destination-languages=' + localsStr,
     handleError(cb));
 };
 const merge = (list: any[], cb: (err: any) => void) => {
   const localsStr = '"[\\"' + list.join('\\",\\"') + '\\"]"';
-  exec('xlf-google-translate --method="extend-only" --source-lang="en" --source-file="./locale.source.xlf" --destination-folder="./frontend/"' +
+  exec('xlf-google-translate --method="extend-only" --source-lang="en" --source-file="./locale.source.xlf" --destination-folder="./src/frontend/"' +
     translationFolder + ' --destination-languages=' + localsStr,
     handleError(cb));
 };
