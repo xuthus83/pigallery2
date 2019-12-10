@@ -42,6 +42,10 @@ export class DiskMangerWorker {
   }
 
   public static excludeDir(name: string, relativeDirectoryName: string, absoluteDirectoryName: string) {
+    if (Config.Server.Indexing.excludeFolderList.length === 0 ||
+      Config.Server.Indexing.excludeFileList.length === 0) {
+      return false;
+    }
     const absoluteName = path.normalize(path.join(absoluteDirectoryName, name));
     const relativeName = path.normalize(path.join(relativeDirectoryName, name));
 
@@ -104,10 +108,8 @@ export class DiskMangerWorker {
             const file = list[i];
             const fullFilePath = path.normalize(path.join(absoluteDirectoryName, file));
             if (fs.statSync(fullFilePath).isDirectory()) {
-              if (settings.noDirectory === true) {
-                continue;
-              }
-              if (DiskMangerWorker.excludeDir(file, relativeDirectoryName, absoluteDirectoryName)) {
+              if (settings.noDirectory === true ||
+                DiskMangerWorker.excludeDir(file, relativeDirectoryName, absoluteDirectoryName)) {
                 continue;
               }
 
@@ -117,13 +119,16 @@ export class DiskMangerWorker {
                   maxPhotos: Config.Server.Indexing.folderPreviewSize,
                   noMetaFile: true,
                   noVideo: true,
-                  noDirectory: false
+                  noDirectory: true
                 }
               );
               d.lastScanned = 0; // it was not a fully scan
               d.isPartial = true;
               directory.directories.push(d);
-            } else if (!settings.noPhoto && DiskMangerWorker.isImage(fullFilePath)) {
+            } else if (DiskMangerWorker.isImage(fullFilePath)) {
+              if (settings.noPhoto) {
+                continue;
+              }
               directory.media.push(<PhotoDTO>{
                 name: file,
                 directory: null,
@@ -133,8 +138,10 @@ export class DiskMangerWorker {
               if (settings.maxPhotos && directory.media.length > settings.maxPhotos) {
                 break;
               }
-            } else if (!settings.noVideo && Config.Client.Video.enabled === true &&
-              DiskMangerWorker.isVideo(fullFilePath)) {
+            } else if (DiskMangerWorker.isVideo(fullFilePath)) {
+              if (Config.Client.Video.enabled === false || settings.noVideo) {
+                continue;
+              }
               try {
                 directory.media.push(<VideoDTO>{
                   name: file,
@@ -145,8 +152,11 @@ export class DiskMangerWorker {
                 Logger.warn('Media loading error, skipping: ' + file + ', reason: ' + e.toString());
               }
 
-            } else if (!settings.noMetaFile && Config.Client.MetaFile.enabled === true &&
-              DiskMangerWorker.isMetaFile(fullFilePath)) {
+            } else if (DiskMangerWorker.isMetaFile(fullFilePath)) {
+              if (Config.Client.MetaFile.enabled === false || settings.noMetaFile) {
+                continue;
+              }
+
               directory.metaFile.push(<FileDTO>{
                 name: file,
                 directory: null,
