@@ -9,6 +9,7 @@ import {IPrivateConfig, ServerConfig} from '../../../../common/config/private/IP
 @Injectable()
 export class SettingsService {
   public settings: BehaviorSubject<IPrivateConfig>;
+  private fetchingSettings = false;
 
   constructor(private _networkService: NetworkService) {
     this.settings = new BehaviorSubject<IPrivateConfig>({
@@ -127,7 +128,16 @@ export class SettingsService {
   }
 
   public async getSettings(): Promise<void> {
-    this.settings.next(await this._networkService.getJson<Promise<IPrivateConfig>>('/settings'));
+    if (this.fetchingSettings === true) {
+      return;
+    }
+    this.fetchingSettings = true;
+    try {
+      this.settings.next(await this._networkService.getJson<Promise<IPrivateConfig>>('/settings'));
+    } catch (e) {
+      console.error(e);
+    }
+    this.fetchingSettings = false;
   }
 
 
