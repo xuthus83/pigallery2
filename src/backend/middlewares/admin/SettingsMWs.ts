@@ -10,7 +10,7 @@ import {ClientConfig} from '../../../common/config/public/ConfigClass';
 import {BasicConfigDTO} from '../../../common/entities/settings/BasicConfigDTO';
 import {OtherConfigDTO} from '../../../common/entities/settings/OtherConfigDTO';
 import {ProjectPath} from '../../ProjectPath';
-import {PrivateConfigClass} from '../../../common/config/private/PrivateConfigClass';
+import {ConfigClass} from '../../../common/config/private/PrivateConfigClass';
 import {ServerConfig} from '../../../common/config/private/IPrivateConfig';
 
 const LOG_TAG = '[SettingsMWs]';
@@ -352,7 +352,7 @@ export class SettingsMWs {
       Config.Client.Other.NavBar.showItemCount = settings.Client.NavBar.showItemCount;
 
       // only updating explicitly set config (not saving config set by the diagnostics)
-      const original: PrivateConfigClass = Config.original();
+      const original: ConfigClass = Config.original();
       original.Client.Other.enableCache = settings.Client.enableCache;
       original.Client.Other.captionFirstNaming = settings.Client.captionFirstNaming;
       original.Client.Other.enableOnScrollRendering = settings.Client.enableOnScrollRendering;

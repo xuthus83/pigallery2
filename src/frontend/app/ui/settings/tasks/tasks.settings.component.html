@@ -115,13 +115,13 @@
                 <ng-container [ngSwitch]="configEntry.type">
                   <ng-container *ngSwitchCase="'boolean'">
                     <div class="form-group row">
-                      <label class="col-md-2 control-label" [for]="configEntry.id" >{{configEntry.name}}</label>
+                      <label class="col-md-2 control-label" [for]="configEntry.id+'_boolean_'+i">{{configEntry.name}}</label>
                       <div class="col-md-10">
                         <bSwitch
                           id="enableThreading"
                           class="switch"
-                          [name]="configEntry.id"
-                          [id]="configEntry.id"
+                          [name]="configEntry.id+'_boolean_'+i"
+                          [id]="configEntry.id+'_boolean_'+i"
                           [switch-on-color]="'primary'"
                           [switch-inverse]="true"
                           [switch-off-text]="text.Disabled"
@@ -135,18 +135,20 @@
                   </ng-container>
                   <ng-container *ngSwitchCase="'string'">
                     <div class="form-group row" [hidden]="simplifiedMode">
-                      <label class="col-md-2 control-label" [for]="configEntry.id">{{configEntry.name}}</label>
+                      <label class="col-md-2 control-label" [for]="configEntry.id+'_string_'+i">{{configEntry.name}}</label>
                       <div class="col-md-10">
-                        <input type="text" class="form-control" [name]="configEntry.id" [id]="configEntry.id"
+                        <input type="text" class="form-control" [name]="configEntry.id+'_string_'+i"
+                               [id]="configEntry.id+'_string_'+i"
                                [(ngModel)]="schedule.config[configEntry.id]" required>
                       </div>
                     </div>
                   </ng-container>
                   <ng-container *ngSwitchCase="'number'">
                     <div class="form-group row" [hidden]="simplifiedMode">
-                      <label class="col-md-2 control-label" [for]="configEntry.id">{{configEntry.name}}</label>
+                      <label class="col-md-2 control-label" [for]="configEntry.id+'_number_'+i">{{configEntry.name}}</label>
                       <div class="col-md-10">
-                        <input type="number" class="form-control" [name]="configEntry.id" [id]="configEntry.id"
+                        <input type="number" class="form-control" [name]="configEntry.id+'_number_'+i"
+                               [id]="configEntry.id+'_number_'+i"
                                [(ngModel)]="schedule.config[configEntry.id]" required>
                       </div>
                     </div>

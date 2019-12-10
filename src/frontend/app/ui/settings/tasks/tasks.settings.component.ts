@@ -16,6 +16,7 @@ import {
 } from '../../../../../common/entities/task/TaskScheduleDTO';
 import {Utils} from '../../../../../common/Utils';
 import {ServerConfig} from '../../../../../common/config/private/IPrivateConfig';
+import {ConfigTemplateEntry} from '../../../../../common/entities/task/TaskDTO';
 
 @Component({
   selector: 'app-settings-tasks',
@@ -65,14 +66,9 @@ export class TasksSettingsComponent extends SettingsComponent<ServerConfig.TaskC
     this.hasAvailableSettings = !this.simplifiedMode;
   }
 
-  getConfigTemplate(taskName: string) {
+  getConfigTemplate(taskName: string): ConfigTemplateEntry[] {
     const task = this._settingsService.availableTasks.value.find(t => t.Name === taskName);
     if (task && task.ConfigTemplate && task.ConfigTemplate.length > 0) {
-      const schedule = this.settings.scheduled.find(s => s.taskName === taskName);
-      if (schedule) {
-        schedule.config = schedule.config || {};
-        task.ConfigTemplate.forEach(ct => schedule.config[ct.id] = ct.defaultValue);
-      }
       return task.ConfigTemplate;
     }
     return null;
@@ -149,13 +145,19 @@ export class TasksSettingsComponent extends SettingsComponent<ServerConfig.TaskC
   }
 
   addNewTask() {
-    this.settings.scheduled.push({
-      taskName: this._settingsService.availableTasks.value[0].Name,
-      config: {},
+    const taskName = this._settingsService.availableTasks.value[0].Name;
+    const newSchedule: TaskScheduleDTO = {
+      taskName: taskName,
+      config: <any>{},
       trigger: {
         type: TaskTriggerType.never
       }
-    });
+    };
+
+    const task = this._settingsService.availableTasks.value.find(t => t.Name === taskName);
+    newSchedule.config = newSchedule.config || {};
+    task.ConfigTemplate.forEach(ct => newSchedule.config[ct.id] = ct.defaultValue);
+    this.settings.scheduled.push(newSchedule);
   }
 
   taskTriggerTypeChanged(triggerType: TaskTriggerType, schedule: TaskScheduleDTO) {

@@ -1,5 +1,5 @@
-import {PrivateConfigClass} from './PrivateConfigClass';
+import {ConfigClass} from './ConfigClass';
 
 
-export let Config = new PrivateConfigClass();
+export let Config = new ConfigClass();
 Config.load();
