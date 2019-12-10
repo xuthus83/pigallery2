@@ -55,7 +55,8 @@ cd pigallery2-master # enter the unzipped directory
 npm install
 ```
 **Note**: if you run `npm run create-release`, it creates a clean, minified, production ready version from the app in the `release` folder, that is ready to deploy.
-**Note**: you can use `npm run create-release -- --languages=fr,ro` to restrict building to the listed languages (english is added by default)
+
+**Note2**: you can use `npm run create-release -- --languages=fr,ro` to restrict building to the listed languages (english is added by default)
 
 #### 1.1.2 Run PiGallery2
 ```bash
