@@ -13,16 +13,12 @@ class ProjectPathClass {
     this.reset();
   }
 
-  isAbsolutePath(pathStr: string) {
-    return path.resolve(pathStr) === path.normalize(pathStr);
-  }
-
   normalizeRelative(pathStr: string) {
     return path.join(pathStr, path.sep);
   }
 
   getAbsolutePath(pathStr: string): string {
-    return this.isAbsolutePath(pathStr) ? pathStr : path.join(this.Root, pathStr);
+    return path.isAbsolute(pathStr) ? pathStr : path.join(this.Root, pathStr);
   }
 
   getRelativePathToImages(pathStr: string): string {
