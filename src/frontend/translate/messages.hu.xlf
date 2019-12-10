@@ -180,6 +180,29 @@
         </context-group>
         <target>Nagyítás, gyorsgomb: '+'</target>
       </trans-unit>
+      <trans-unit id="19654bbc78ebdc3916d5912faafcf20b4ff74069" datatype="html">
+        <source>Error during loading the video.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/gallery/lightbox/lightbox.gallery.component.html</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
+        <target>Hiba a videó betöltése közben.</target>
+      </trans-unit>
+      <trans-unit id="2e8bc19dbafcdd19549c005b6a5fbd506d16317b" datatype="html">
+        <source>
+            Most likely the video is not transcoded.
+            It can be done in the settings.
+            You need to transcode these videos to watch them online:
+          </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/gallery/lightbox/lightbox.gallery.component.html</context>
+          <context context-type="linenumber">22</context>
+        </context-group>
+        <target>
+          Valószínűleg a videó nincs átkonvertálva. Ezt a beállításokban megteheted.
+          Ezek a videó formátumok csak átkonvertálás után játszhatók le:
+          </target>
+      </trans-unit>
       <trans-unit id="f3cda2936c4e70d5b920b2c243ec634222743ba1" datatype="html">
         <source>Link availability</source>
         <context-group purpose="location">

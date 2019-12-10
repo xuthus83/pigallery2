@@ -29,11 +29,18 @@ export const SupportedFormats = {
     Photos: <string[]>[],
     Videos: <string[]>[],
     MetaFiles: <string[]>[],
+    TranscodeNeed: {
+      Photos: <string[]>[],
+      Videos: <string[]>[],
+    }
   }
 };
+
 SupportedFormats.Photos = SupportedFormats.Photos.concat(SupportedFormats.TranscodeNeed.Photos);
 SupportedFormats.Videos = SupportedFormats.Videos.concat(SupportedFormats.TranscodeNeed.Videos);
 SupportedFormats.WithDots.Photos = SupportedFormats.Photos.map(f => '.' + f);
 SupportedFormats.WithDots.Videos = SupportedFormats.Videos.map(f => '.' + f);
 SupportedFormats.WithDots.MetaFiles = SupportedFormats.MetaFiles.map(f => '.' + f);
+SupportedFormats.WithDots.TranscodeNeed.Photos = SupportedFormats.TranscodeNeed.Photos.map(f => '.' + f);
+SupportedFormats.WithDots.TranscodeNeed.Videos = SupportedFormats.TranscodeNeed.Videos.map(f => '.' + f);
 

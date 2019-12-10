@@ -11,6 +11,7 @@ export interface MediaDTO extends FileDTO {
   metadata: MediaMetadata;
   readyThumbnails: Array<number>;
   readyIcon: boolean;
+
 }
 
 
@@ -63,6 +64,17 @@ export module MediaDTO {
     }
     return false;
   };
+
+  export const isVideoTranscodingNeeded = (media: MediaDTO): boolean => {
+    const lower = media.name.toLowerCase();
+    for (const ext of SupportedFormats.WithDots.TranscodeNeed.Videos) {
+      if (lower.endsWith(ext)) {
+        return true;
+      }
+    }
+    return false;
+  };
+
 
   export const getRotatedSize = (photo: MediaDTO): MediaDimension => {
     if (isSideWay(photo)) {

@@ -22,8 +22,10 @@
          (error)="onImageError()"
          (timeupdate)="onVideoProgress()"
          #video>
-    <source [src]="gridMedia.getBestFitMediaPath()">
+    <source [src]="gridMedia.getBestFitMediaPath()" (error)="onSourceError($event)">
+    Something went wrong.
   </video>
+
 
 </div>
 

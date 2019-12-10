@@ -14,6 +14,7 @@ import {QueryParams} from '../../../../../common/QueryParams';
 import {GalleryService} from '../gallery.service';
 import {PhotoDTO} from '../../../../../common/entities/PhotoDTO';
 import {ControlsLightboxComponent} from './controls/controls.lightbox.gallery.component';
+import {SupportedFormats} from '../../../../../common/SupportedFormats';
 
 export enum LightboxStates {
   Open = 1,
@@ -41,6 +42,8 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
   public infoPanelWidth = 0;
   public animating = false;
   public photoFrameDim = {width: 1, height: 1, aspect: 1};
+  public videoSourceError = false;
+  public transcodeNeedVideos = SupportedFormats.TranscodeNeed.Videos;
   private startPhotoDimension: Dimension = <Dimension>{top: 0, left: 0, width: 0, height: 0};
   private iPvisibilityTimer: number = null;
   private visibilityTimer: number = null;
@@ -54,7 +57,6 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
     photosChange: null,
     route: null
   };
-
 
   constructor(public fullScreenService: FullScreenService,
               private changeDetector: ChangeDetectorRef,
@@ -325,10 +327,14 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
   public isVisible(): boolean {
     return this.status !== LightboxStates.Closed;
   }
+
   public isOpen(): boolean {
     return this.status === LightboxStates.Open;
   }
 
+  onVideoSourceError() {
+    this.videoSourceError = true;
+  }
 
   private updatePhotoFrameDim = () => {
     this.photoFrameDim.width = Math.max(window.innerWidth - this.infoPanelWidth, 0);
@@ -389,6 +395,7 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
     if (photoIndex < 0 || photoIndex > this.gridPhotoQL.length) {
       throw new Error('Can\'t find the media');
     }
+    this.videoSourceError = false;
     this.activePhotoId = photoIndex;
     this.activePhoto = pcList[photoIndex];
 
@@ -406,7 +413,6 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
     }
 
   }
-
 
   private findPhotoComponent(media: MediaDTO): GalleryPhotoComponent {
     const galleryPhotoComponents = this.gridPhotoQL.toArray();

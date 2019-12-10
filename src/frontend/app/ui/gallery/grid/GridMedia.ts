@@ -15,6 +15,14 @@ export class GridMedia extends Media {
     return (<PhotoDTO>this.media).metadata.orientation || OrientationTypes.TOP_LEFT;
   }
 
+  get Video(): VideoDTO {
+    return <VideoDTO>this.media;
+  }
+
+  get Photo(): PhotoDTO {
+    return <PhotoDTO>this.media;
+  }
+
   isPhoto(): boolean {
     return MediaDTO.isPhoto(this.media);
   }
@@ -23,12 +31,7 @@ export class GridMedia extends Media {
     return MediaDTO.isVideo(this.media);
   }
 
-  get Video(): VideoDTO {
-    return <VideoDTO>this.media;
+  public isVideoTranscodingNeeded() {
+    return MediaDTO.isVideoTranscodingNeeded(this.media);
   }
-  get Photo(): PhotoDTO {
-    return <PhotoDTO>this.media;
-  }
-
-
 }
