@@ -32,25 +32,33 @@ export class NotificationService {
     });
   }
 
+  get Toastr(): ToastrService {
+    return this._toastr;
+  }
+
   async getServerNotifications() {
-    this.notifications = await this._networkService.getJson<NotificationDTO[]>('/notifications');
-    this.notifications.forEach((noti) => {
-      let msg = noti.message;
-      if (noti.details) {
-        msg += ' Details: ' + JSON.stringify(noti.details);
-      }
-      switch (noti.type) {
-        case  NotificationType.error:
-          this.error(msg, this.i18n('Server error'));
-          break;
-        case  NotificationType.warning:
-          this.warning(msg, this.i18n('Server error'));
-          break;
-        case  NotificationType.info:
-          this.info(msg, this.i18n('Server info'));
-          break;
-      }
-    });
+    try {
+      this.notifications = (await this._networkService.getJson<NotificationDTO[]>('/notifications')) || [];
+      this.notifications.forEach((noti) => {
+        let msg = noti.message;
+        if (noti.details) {
+          msg += ' Details: ' + JSON.stringify(noti.details);
+        }
+        switch (noti.type) {
+          case  NotificationType.error:
+            this.error(msg, this.i18n('Server error'));
+            break;
+          case  NotificationType.warning:
+            this.warning(msg, this.i18n('Server error'));
+            break;
+          case  NotificationType.info:
+            this.info(msg, this.i18n('Server info'));
+            break;
+        }
+      });
+    } catch (e) {
+      console.error(e);
+    }
   }
 
   success(text: string, title: string = null): void {
@@ -67,10 +75,5 @@ export class NotificationService {
 
   info(text: string, title: string = null): void {
     this._toastr.info(text, title, this.options);
-  }
-
-
-  get Toastr(): ToastrService {
-    return this._toastr;
   }
 }

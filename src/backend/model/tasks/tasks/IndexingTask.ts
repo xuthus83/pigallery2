@@ -9,7 +9,7 @@ import {MediaDTO} from '../../../../common/entities/MediaDTO';
 import {ProjectPath} from '../../../ProjectPath';
 import {ThumbnailGeneratorMWs} from '../../../middlewares/thumbnail/ThumbnailGeneratorMWs';
 import {Task} from './Task';
-import {ConfigTemplateEntry, DefaultsTasks, TaskDTO} from '../../../../common/entities/task/TaskDTO';
+import {ConfigTemplateEntry, DefaultsTasks} from '../../../../common/entities/task/TaskDTO';
 import {ServerConfig} from '../../../../common/config/private/IPrivateConfig';
 
 declare const global: any;

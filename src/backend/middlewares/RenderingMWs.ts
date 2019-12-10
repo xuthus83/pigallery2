@@ -66,14 +66,11 @@ export class RenderingMWs {
       if (err.details) {
         Logger.warn('Handled error:');
         console.log(err);
+        delete (err.details); // do not send back error object to the client side
+
+        // hide error details for non developers
         if (!(req.session.user && req.session.user.role >= UserRoles.Developer)) {
-          delete (err.details);
-        } else {
-          try {
-            err.details = err.details.toString() || err.details;
-          } catch (err) {
-            console.error(err);
-          }
+          delete (err.detailsStr);
         }
       }
       const message = new Message<any>(err, null);
