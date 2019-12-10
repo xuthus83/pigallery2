@@ -6,50 +6,66 @@ import {ProjectPath} from '../../../ProjectPath';
 import {MediaDTO} from '../../../../common/entities/MediaDTO';
 import {Logger} from '../../../Logger';
 import * as path from 'path';
+import * as fs from 'fs';
+import * as util from 'util';
 import {DiskManager} from '../../DiskManger';
 import {VideoConverterMWs} from '../../../middlewares/VideoConverterMWs';
-import {VideoDTO} from '../../../../common/entities/VideoDTO';
 
 const LOG_TAG = '[VideoConvertingTask]';
+const existsPr = util.promisify(fs.exists);
+
 
 export class VideoConvertingTask extends Task {
   public readonly Name = DefaultsTasks[DefaultsTasks['Video Converting']];
   public readonly ConfigTemplate: ConfigTemplateEntry[] = null;
-  queue: (string | VideoDTO)[] = [];
+  directoryQueue: string[] = [];
+  videoQueue: string[] = [];
 
   public get Supported(): boolean {
     return Config.Client.Video.enabled === true;
   }
 
   protected async init() {
-    this.queue.push('/');
+    this.directoryQueue = [];
+    this.videoQueue = [];
+    this.directoryQueue.push('/');
   }
 
   protected async step(): Promise<TaskProgressDTO> {
-    if (this.queue.length === 0) {
+    if ((this.directoryQueue.length === 0 && this.videoQueue.length === 0)
+      || this.running === false) {
       if (global.gc) {
         global.gc();
       }
       return null;
     }
-    if (this.running === false) {
-      return null;
-    }
-    const entry = this.queue.shift();
-    this.progress.left = this.queue.length;
-    this.progress.progress++;
+
+    this.progress.left = this.videoQueue.length;
     this.progress.time.current = Date.now();
-    if (typeof entry === 'string') {
-      const directory = entry;
-      this.progress.comment = 'scanning directory: ' + entry;
+    if (this.directoryQueue.length > 0) {
+      const directory = this.directoryQueue.shift();
+      this.progress.comment = 'scanning directory: ' + directory;
       const scanned = await DiskManager.scanDirectory(directory, {noPhoto: true, noMetaFile: true});
       for (let i = 0; i < scanned.directories.length; i++) {
-        this.queue.push(path.join(scanned.directories[i].path, scanned.directories[i].name));
+        this.directoryQueue.push(path.join(scanned.directories[i].path, scanned.directories[i].name));
       }
-      this.queue = this.queue.concat(<VideoDTO[]>scanned.media.filter(m => MediaDTO.isVideo(m)));
-    } else {
-      const video: VideoDTO = entry;
-      const videoPath = path.join(ProjectPath.ImageFolder, video.directory.path, video.directory.name, video.name);
+
+      for (let i = 0; i < scanned.media.length; ++i) {
+        if (!MediaDTO.isVideo(scanned.media[i])) {
+          continue;
+        }
+        const videoPath = path.join(ProjectPath.ImageFolder,
+          scanned.media[i].directory.path,
+          scanned.media[i].directory.name,
+          scanned.media[i].name);
+
+        if (await existsPr(VideoConverterMWs.generateConvertedFileName(videoPath)) === false) {
+          this.videoQueue.push(videoPath);
+        }
+      }
+    } else if (this.videoQueue.length > 0) {
+      const videoPath = this.videoQueue.shift();
+      this.progress.progress++;
       this.progress.comment = 'transcoding: ' + videoPath;
       try {
         await VideoConverterMWs.convertVideo(videoPath);

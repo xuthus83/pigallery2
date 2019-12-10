@@ -1,8 +1,11 @@
 import {Logger} from '../../Logger';
+import * as fs from 'fs';
+import * as util from 'util';
 import {FfmpegCommand} from 'fluent-ffmpeg';
 import {FFmpegFactory} from '../FFmpegFactory';
 import {ServerConfig} from '../../../common/config/private/IPrivateConfig';
 
+const renamePr = util.promisify(fs.rename);
 
 export interface VideoConverterInput {
   videoPath: string;
@@ -20,7 +23,15 @@ export class VideoConverterWorker {
 
   private static ffmpeg = FFmpegFactory.get();
 
-  public static convert(input: VideoConverterInput): Promise<void> {
+  public static async convert(input: VideoConverterInput): Promise<void> {
+    const origPath = input.output.path;
+    input.output.path = origPath + '.part';
+    await this._convert(input);
+    await renamePr(input.output.path, origPath);
+
+  }
+
+  private static _convert(input: VideoConverterInput): Promise<void> {
 
     if (this.ffmpeg == null) {
       this.ffmpeg = FFmpegFactory.get();
