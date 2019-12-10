@@ -1,12 +1,4 @@
 import {Config} from '../../../common/config/private/Config';
-import {
-  DataBaseConfig,
-  DatabaseType,
-  IPrivateConfig,
-  TaskConfig,
-  ThumbnailConfig,
-  ThumbnailProcessingLib
-} from '../../../common/config/private/IPrivateConfig';
 import {Logger} from '../../Logger';
 import {NotificationManager} from '../NotifocationManager';
 import {ProjectPath} from '../../ProjectPath';
@@ -14,21 +6,20 @@ import {SQLConnection} from '../sql/SQLConnection';
 import * as fs from 'fs';
 import {ClientConfig} from '../../../common/config/public/ConfigClass';
 import {FFmpegFactory} from '../FFmpegFactory';
-import VideoConfig = ClientConfig.VideoConfig;
-import MetaFileConfig = ClientConfig.MetaFileConfig;
+import {IPrivateConfig, ServerConfig} from '../../../common/config/private/IPrivateConfig';
 
 const LOG_TAG = '[ConfigDiagnostics]';
 
 export class ConfigDiagnostics {
 
-  static async testDatabase(databaseConfig: DataBaseConfig) {
-    if (databaseConfig.type !== DatabaseType.memory) {
+  static async testDatabase(databaseConfig: ServerConfig.DataBaseConfig) {
+    if (databaseConfig.type !== ServerConfig.DatabaseType.memory) {
       await SQLConnection.tryConnection(databaseConfig);
     }
   }
 
 
-  static async testMetaFileConfig(metaFileConfig: MetaFileConfig, config: IPrivateConfig) {
+  static async testMetaFileConfig(metaFileConfig: ClientConfig.MetaFileConfig, config: IPrivateConfig) {
     if (metaFileConfig.enabled === true &&
       config.Client.Map.enabled === false) {
       throw new Error('*.gpx meta files are not supported without MAP');
@@ -36,7 +27,7 @@ export class ConfigDiagnostics {
   }
 
 
-  static testVideoConfig(videoConfig: VideoConfig) {
+  static testClientVideoConfig(videoConfig: ClientConfig.VideoConfig) {
     return new Promise((resolve, reject) => {
       try {
         if (videoConfig.enabled === true) {
@@ -61,13 +52,21 @@ export class ConfigDiagnostics {
     });
   }
 
-  static async testThumbnailLib(processingLibrary: ThumbnailProcessingLib) {
+  static async testServerVideoConfig(videoConfig: ServerConfig.VideoConfig, config: IPrivateConfig) {
+    if (config.Client.Video.enabled === true) {
+      if (videoConfig.transcoding.fps <= 0) {
+        throw new Error('fps should be grater than 0');
+      }
+    }
+  }
+
+  static async testThumbnailLib(processingLibrary: ServerConfig.ThumbnailProcessingLib) {
     switch (processingLibrary) {
-      case ThumbnailProcessingLib.sharp:
+      case ServerConfig.ThumbnailProcessingLib.sharp:
         const sharp = require('sharp');
         sharp();
         break;
-      case  ThumbnailProcessingLib.gm:
+      case  ServerConfig.ThumbnailProcessingLib.gm:
         const gm = require('gm');
         await new Promise((resolve, reject) => {
           gm(ProjectPath.FrontendFolder + '/assets/icon.png').size((err: Error) => {
@@ -107,7 +106,7 @@ export class ConfigDiagnostics {
   }
 
 
-  static async testServerThumbnailConfig(thumbnailConfig: ThumbnailConfig) {
+  static async testServerThumbnailConfig(thumbnailConfig: ServerConfig.ThumbnailConfig) {
     await ConfigDiagnostics.testThumbnailLib(thumbnailConfig.processingLibrary);
     await ConfigDiagnostics.testThumbnailFolder(thumbnailConfig.folder);
   }
@@ -128,13 +127,13 @@ export class ConfigDiagnostics {
   }
 
 
-  static async testTasksConfig(faces: TaskConfig, config: IPrivateConfig) {
+  static async testTasksConfig(faces: ServerConfig.TaskConfig, config: IPrivateConfig) {
 
   }
 
   static async testFacesConfig(faces: ClientConfig.FacesConfig, config: IPrivateConfig) {
     if (faces.enabled === true) {
-      if (config.Server.Database.type === DatabaseType.memory) {
+      if (config.Server.Database.type === ServerConfig.DatabaseType.memory) {
         throw new Error('Memory Database do not support faces');
       }
       if (config.Client.Search.enabled === false) {
@@ -145,7 +144,7 @@ export class ConfigDiagnostics {
 
   static async testSearchConfig(search: ClientConfig.SearchConfig, config: IPrivateConfig) {
     if (search.enabled === true &&
-      config.Server.Database.type === DatabaseType.memory) {
+      config.Server.Database.type === ServerConfig.DatabaseType.memory) {
       throw new Error('Memory Database do not support searching');
     }
   }
@@ -153,7 +152,7 @@ export class ConfigDiagnostics {
 
   static async testSharingConfig(sharing: ClientConfig.SharingConfig, config: IPrivateConfig) {
     if (sharing.enabled === true &&
-      config.Server.Database.type === DatabaseType.memory) {
+      config.Server.Database.type === ServerConfig.DatabaseType.memory) {
       throw new Error('Memory Database do not support sharing');
     }
     if (sharing.enabled === true &&
@@ -164,8 +163,8 @@ export class ConfigDiagnostics {
 
   static async testRandomPhotoConfig(sharing: ClientConfig.RandomPhotoConfig, config: IPrivateConfig) {
     if (sharing.enabled === true &&
-      config.Server.Database.type === DatabaseType.memory) {
-      throw new Error('Memory Database do not support sharing');
+      config.Server.Database.type === ServerConfig.DatabaseType.memory) {
+      throw new Error('Memory Database do not support random photo');
     }
   }
 
@@ -194,7 +193,7 @@ export class ConfigDiagnostics {
 
   static async runDiagnostics() {
 
-    if (Config.Server.Database.type !== DatabaseType.memory) {
+    if (Config.Server.Database.type !== ServerConfig.DatabaseType.memory) {
       try {
         await ConfigDiagnostics.testDatabase(Config.Server.Database);
       } catch (ex) {
@@ -202,23 +201,23 @@ export class ConfigDiagnostics {
         Logger.warn(LOG_TAG, '[SQL error]', err.toString());
         Logger.warn(LOG_TAG, 'Error during initializing SQL falling back temporally to memory DB');
         NotificationManager.warning('Error during initializing SQL falling back temporally to memory DB', err.toString());
-        Config.setDatabaseType(DatabaseType.memory);
+        Config.setDatabaseType(ServerConfig.DatabaseType.memory);
       }
     }
 
-    if (Config.Server.Thumbnail.processingLibrary !== ThumbnailProcessingLib.Jimp) {
+    if (Config.Server.Thumbnail.processingLibrary !== ServerConfig.ThumbnailProcessingLib.Jimp) {
       try {
         await ConfigDiagnostics.testThumbnailLib(Config.Server.Thumbnail.processingLibrary);
       } catch (ex) {
         const err: Error = ex;
         NotificationManager.warning('Thumbnail hardware acceleration is not possible.' +
-          ' \'' + ThumbnailProcessingLib[Config.Server.Thumbnail.processingLibrary] + '\' node module is not found.' +
+          ' \'' + ServerConfig.ThumbnailProcessingLib[Config.Server.Thumbnail.processingLibrary] + '\' node module is not found.' +
           ' Falling back temporally to JS based thumbnail generation', err.toString());
         Logger.warn(LOG_TAG, '[Thumbnail hardware acceleration] module error: ', err.toString());
         Logger.warn(LOG_TAG, 'Thumbnail hardware acceleration is not possible.' +
-          ' \'' + ThumbnailProcessingLib[Config.Server.Thumbnail.processingLibrary] + '\' node module is not found.' +
+          ' \'' + ServerConfig.ThumbnailProcessingLib[Config.Server.Thumbnail.processingLibrary] + '\' node module is not found.' +
           ' Falling back temporally to JS based thumbnail generation');
-        Config.Server.Thumbnail.processingLibrary = ThumbnailProcessingLib.Jimp;
+        Config.Server.Thumbnail.processingLibrary = ServerConfig.ThumbnailProcessingLib.Jimp;
       }
     }
 
@@ -232,7 +231,8 @@ export class ConfigDiagnostics {
 
 
     try {
-      await ConfigDiagnostics.testVideoConfig(Config.Client.Video);
+      await ConfigDiagnostics.testClientVideoConfig(Config.Server.Video);
+      await ConfigDiagnostics.testServerVideoConfig(Config.Server.Video, Config);
     } catch (ex) {
       const err: Error = ex;
       NotificationManager.warning('Video support error, switching off..', err.toString());

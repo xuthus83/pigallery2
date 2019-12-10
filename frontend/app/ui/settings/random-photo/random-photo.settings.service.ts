@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
 import {NetworkService} from '../../../model/network/network.service';
-import {DatabaseType} from '../../../../../common/config/private/IPrivateConfig';
 import {ClientConfig} from '../../../../../common/config/public/ConfigClass';
 import {SettingsService} from '../settings.service';
 import {AbstractSettingsService} from '../_abstract/abstract.settings.service';
+import {ServerConfig} from '../../../../../common/config/private/IPrivateConfig';
 
 @Injectable()
 export class RandomPhotoSettingsService extends AbstractSettingsService<ClientConfig.SharingConfig> {
@@ -19,7 +19,7 @@ export class RandomPhotoSettingsService extends AbstractSettingsService<ClientCo
   }
 
   public isSupported(): boolean {
-    return this._settingsService.settings.value.Server.Database.type !== DatabaseType.memory;
+    return this._settingsService.settings.value.Server.Database.type !== ServerConfig.DatabaseType.memory;
   }
 
   public updateSettings(settings: ClientConfig.SharingConfig): Promise<void> {

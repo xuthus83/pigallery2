@@ -1,6 +1,7 @@
 import {Logger} from '../../Logger';
 import {FfmpegCommand} from 'fluent-ffmpeg';
 import {FFmpegFactory} from '../FFmpegFactory';
+import {ServerConfig} from '../../../common/config/private/IPrivateConfig';
 
 
 export interface VideoConverterInput {
@@ -8,10 +9,10 @@ export interface VideoConverterInput {
   output: {
     path: string,
     bitRate?: number,
-    resolution?: 240 | 360 | 480 | 720 | 1080 | 1440 | 2160 | 4320,
+    resolution?: ServerConfig.resolutionType,
     fps?: number,
-    codec: string,
-    format: string
+    codec: ServerConfig.codecType,
+    format: ServerConfig.formatType
   };
 }
 

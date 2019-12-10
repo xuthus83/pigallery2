@@ -2,14 +2,14 @@ import {Injectable} from '@angular/core';
 import {NetworkService} from '../../../model/network/network.service';
 import {SettingsService} from '../settings.service';
 import {AbstractSettingsService} from '../_abstract/abstract.settings.service';
-import {DatabaseType, IndexingConfig} from '../../../../../common/config/private/IPrivateConfig';
 import {BehaviorSubject} from 'rxjs';
 import {StatisticDTO} from '../../../../../common/entities/settings/StatisticDTO';
 import {ScheduledTasksService} from '../scheduled-tasks.service';
 import {DefaultsTasks} from '../../../../../common/entities/task/TaskDTO';
+import {ServerConfig} from '../../../../../common/config/private/IPrivateConfig';
 
 @Injectable()
-export class IndexingSettingsService extends AbstractSettingsService<IndexingConfig> {
+export class IndexingSettingsService extends AbstractSettingsService<ServerConfig.IndexingConfig> {
 
 
   public statistic: BehaviorSubject<StatisticDTO>;
@@ -35,13 +35,13 @@ export class IndexingSettingsService extends AbstractSettingsService<IndexingCon
     });
   }
 
-  public updateSettings(settings: IndexingConfig): Promise<void> {
+  public updateSettings(settings: ServerConfig.IndexingConfig): Promise<void> {
     return this._networkService.putJson('/settings/indexing', {settings: settings});
   }
 
 
   public isSupported(): boolean {
-    return this._settingsService.settings.value.Server.Database.type !== DatabaseType.memory;
+    return this._settingsService.settings.value.Server.Database.type !== ServerConfig.DatabaseType.memory;
   }
 
 

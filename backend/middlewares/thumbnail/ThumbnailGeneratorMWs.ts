@@ -8,13 +8,13 @@ import {ContentWrapper} from '../../../common/entities/ConentWrapper';
 import {DirectoryDTO} from '../../../common/entities/DirectoryDTO';
 import {ProjectPath} from '../../ProjectPath';
 import {Config} from '../../../common/config/private/Config';
-import {ThumbnailProcessingLib} from '../../../common/config/private/IPrivateConfig';
 import {ThumbnailTH} from '../../model/threading/ThreadPool';
 import {RendererInput, ThumbnailSourceType, ThumbnailWorker} from '../../model/threading/ThumbnailWorker';
 import {MediaDTO} from '../../../common/entities/MediaDTO';
 import {ITaskExecuter, TaskExecuter} from '../../model/threading/TaskExecuter';
 import {FaceRegion, PhotoDTO} from '../../../common/entities/PhotoDTO';
 import {PersonWithPhoto} from '../PersonMWs';
+import {ServerConfig} from '../../../common/config/private/IPrivateConfig';
 
 
 export class ThumbnailGeneratorMWs {
@@ -38,7 +38,7 @@ export class ThumbnailGeneratorMWs {
     }
 
     if (Config.Server.Threading.enable === true &&
-      Config.Server.Thumbnail.processingLibrary === ThumbnailProcessingLib.Jimp) {
+      Config.Server.Thumbnail.processingLibrary === ServerConfig.ThumbnailProcessingLib.Jimp) {
       this.taskQue = new ThumbnailTH(Config.Client.Thumbnail.concurrentThumbnailGenerations);
     } else {
       this.taskQue = new TaskExecuter(Config.Client.Thumbnail.concurrentThumbnailGenerations,

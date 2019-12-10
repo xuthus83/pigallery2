@@ -9,8 +9,8 @@ import {MediaDTO} from '../../../../common/entities/MediaDTO';
 import {ProjectPath} from '../../../ProjectPath';
 import {ThumbnailGeneratorMWs} from '../../../middlewares/thumbnail/ThumbnailGeneratorMWs';
 import {Task} from './Task';
-import {DatabaseType} from '../../../../common/config/private/IPrivateConfig';
 import {ConfigTemplateEntry, DefaultsTasks} from '../../../../common/entities/task/TaskDTO';
+import {ServerConfig} from '../../../../common/config/private/IPrivateConfig';
 
 declare const global: any;
 const LOG_TAG = '[IndexingTask]';
@@ -26,7 +26,7 @@ export class IndexingTask extends Task<{ createThumbnails: boolean }> {
   }];
 
   public get Supported(): boolean {
-    return Config.Server.Database.type !== DatabaseType.memory;
+    return Config.Server.Database.type !== ServerConfig.DatabaseType.memory;
   }
 
   protected async init() {

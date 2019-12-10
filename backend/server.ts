@@ -5,24 +5,17 @@ import * as _http from 'http';
 import {Server as HttpServer} from 'http';
 // @ts-ignore
 import * as locale from 'locale';
-import {PublicRouter} from './routes/PublicRouter';
-import {UserRouter} from './routes/UserRouter';
-import {GalleryRouter} from './routes/GalleryRouter';
-import {AdminRouter} from './routes/AdminRouter';
-import {ErrorRouter} from './routes/ErrorRouter';
-import {SharingRouter} from './routes/SharingRouter';
 import {ObjectManagers} from './model/ObjectManagers';
 import {Logger} from './Logger';
 import {Config} from '../common/config/private/Config';
-import {DatabaseType} from '../common/config/private/IPrivateConfig';
 import {LoggerRouter} from './routes/LoggerRouter';
 import {ThumbnailGeneratorMWs} from './middlewares/thumbnail/ThumbnailGeneratorMWs';
 import {DiskManager} from './model/DiskManger';
-import {NotificationRouter} from './routes/NotificationRouter';
 import {ConfigDiagnostics} from './model/diagnostics/ConfigDiagnostics';
 import {Localizations} from './model/Localizations';
 import {CookieNames} from '../common/CookieNames';
-import {PersonRouter} from './routes/PersonRouter';
+import {Router} from './routes/Router';
+import {ServerConfig} from '../common/config/private/IPrivateConfig';
 
 const _session = require('cookie-session');
 
@@ -82,22 +75,13 @@ export class Server {
     Localizations.init();
 
     this.app.use(locale(Config.Client.languages, 'en'));
-    if (Config.Server.Database.type !== DatabaseType.memory) {
+    if (Config.Server.Database.type !== ServerConfig.DatabaseType.memory) {
       await ObjectManagers.InitSQLManagers();
     } else {
       await ObjectManagers.InitMemoryManagers();
     }
 
-    PublicRouter.route(this.app);
-
-    UserRouter.route(this.app);
-    GalleryRouter.route(this.app);
-    PersonRouter.route(this.app);
-    SharingRouter.route(this.app);
-    AdminRouter.route(this.app);
-    NotificationRouter.route(this.app);
-
-    ErrorRouter.route(this.app);
+    Router.route(this.app);
 
 
     // Get PORT from environment and store in Express.

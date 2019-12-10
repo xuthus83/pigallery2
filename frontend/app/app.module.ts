@@ -47,7 +47,7 @@ import {TooltipModule} from 'ngx-bootstrap/tooltip';
 import {BsDropdownModule} from 'ngx-bootstrap/dropdown';
 import {CollapseModule} from 'ngx-bootstrap/collapse';
 import {PopoverModule} from 'ngx-bootstrap/popover';
-import {ThumbnailSettingsComponent} from './ui/settings/thumbnail/thumbanil.settings.component';
+import {ThumbnailSettingsComponent} from './ui/settings/thumbnail/thumbnail.settings.component';
 import {SearchSettingsComponent} from './ui/settings/search/search.settings.component';
 import {SettingsService} from './ui/settings/settings.service';
 import {ShareSettingsComponent} from './ui/settings/share/share.settings.component';

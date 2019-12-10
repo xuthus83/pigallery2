@@ -15,7 +15,7 @@ export class UserManagerSettingsService {
   }
 
   public async getSettings(): Promise<boolean> {
-    return (await <Promise<IPrivateConfig>>this._networkService.getJson('/settings')).Client.authenticationRequired;
+    return (await this._networkService.getJson<Promise<IPrivateConfig>>('/settings')).Client.authenticationRequired;
   }
 
   public updateSettings(settings: boolean): Promise<void> {

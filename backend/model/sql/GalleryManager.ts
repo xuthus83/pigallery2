@@ -8,10 +8,9 @@ import {PhotoEntity} from './enitites/PhotoEntity';
 import {ProjectPath} from '../../ProjectPath';
 import {Config} from '../../../common/config/private/Config';
 import {ISQLGalleryManager} from './IGalleryManager';
-import {DatabaseType, ReIndexingSensitivity} from '../../../common/config/private/IPrivateConfig';
 import {PhotoDTO} from '../../../common/entities/PhotoDTO';
 import {OrientationType} from '../../../common/entities/RandomQueryDTO';
-import {Brackets, Connection} from 'typeorm';
+import {Brackets, Connection, SelectQueryBuilder} from 'typeorm';
 import {MediaEntity} from './enitites/MediaEntity';
 import {VideoEntity} from './enitites/VideoEntity';
 import {DiskMangerWorker} from '../threading/DiskMangerWorker';
@@ -19,6 +18,7 @@ import {Logger} from '../../Logger';
 import {FaceRegionEntry} from './enitites/FaceRegionEntry';
 import {ObjectManagers} from '../ObjectManagers';
 import {DuplicatesDTO} from '../../../common/entities/DuplicatesDTO';
+import {ServerConfig} from '../../../common/config/private/IPrivateConfig';
 
 const LOG_TAG = '[GalleryManager]';
 
@@ -43,11 +43,11 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
       if (knownLastModified && knownLastScanned
         && lastModified === knownLastModified &&
         dir.lastScanned === knownLastScanned) {
-        if (Config.Server.Indexing.reIndexingSensitivity === ReIndexingSensitivity.low) {
+        if (Config.Server.Indexing.reIndexingSensitivity === ServerConfig.ReIndexingSensitivity.low) {
           return null;
         }
         if (Date.now() - dir.lastScanned <= Config.Server.Indexing.cachedFolderTimeout &&
-          Config.Server.Indexing.reIndexingSensitivity === ReIndexingSensitivity.medium) {
+          Config.Server.Indexing.reIndexingSensitivity === ServerConfig.ReIndexingSensitivity.medium) {
           return null;
         }
       }
@@ -62,8 +62,8 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
 
       // not indexed since a while, index it in a lazy manner
       if ((Date.now() - dir.lastScanned > Config.Server.Indexing.cachedFolderTimeout &&
-        Config.Server.Indexing.reIndexingSensitivity >= ReIndexingSensitivity.medium) ||
-        Config.Server.Indexing.reIndexingSensitivity >= ReIndexingSensitivity.high) {
+        Config.Server.Indexing.reIndexingSensitivity >= ServerConfig.ReIndexingSensitivity.medium) ||
+        Config.Server.Indexing.reIndexingSensitivity >= ServerConfig.ReIndexingSensitivity.high) {
         // on the fly reindexing
 
         Logger.silly(LOG_TAG, 'lazy reindexing reason: cache timeout: lastScanned: '
@@ -86,7 +86,7 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
   public async getRandomPhoto(queryFilter: RandomQuery): Promise<PhotoDTO> {
     const connection = await SQLConnection.getConnection();
     const photosRepository = connection.getRepository(PhotoEntity);
-    const query = photosRepository.createQueryBuilder('photo');
+    const query: SelectQueryBuilder<PhotoEntity> = photosRepository.createQueryBuilder('photo');
     query.innerJoinAndSelect('photo.directory', 'directory');
 
     if (queryFilter.directory) {
@@ -133,7 +133,7 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
       query.andWhere('photo.metadata.size.width <= photo.metadata.size.height');
     }
 
-    if (Config.Server.Database.type === DatabaseType.mysql) {
+    if (Config.Server.Database.type === ServerConfig.DatabaseType.mysql) {
       return await query.groupBy('RAND(), photo.id').limit(1).getOne();
     }
     return await query.groupBy('RANDOM()').limit(1).getOne();

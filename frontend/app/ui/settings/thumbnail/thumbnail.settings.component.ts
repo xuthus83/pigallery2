@@ -3,21 +3,21 @@ import {SettingsComponent} from '../_abstract/abstract.settings.component';
 import {AuthenticationService} from '../../../model/network/authentication.service';
 import {NavigationService} from '../../../model/navigation.service';
 import {NotificationService} from '../../../model/notification.service';
-import {ThumbnailConfig, ThumbnailProcessingLib} from '../../../../../common/config/private/IPrivateConfig';
 import {ClientConfig} from '../../../../../common/config/public/ConfigClass';
-import {ThumbnailSettingsService} from './thumbanil.settings.service';
+import {ThumbnailSettingsService} from './thumbnail.settings.service';
 import {Utils} from '../../../../../common/Utils';
 import {I18n} from '@ngx-translate/i18n-polyfill';
+import {ServerConfig} from '../../../../../common/config/private/IPrivateConfig';
 
 @Component({
   selector: 'app-settings-thumbnail',
-  templateUrl: './thumbanil.settings.component.html',
-  styleUrls: ['./thumbanil.settings.component.css',
+  templateUrl: './thumbnail.settings.component.html',
+  styleUrls: ['./thumbnail.settings.component.css',
     './../_abstract/abstract.settings.component.css'],
   providers: [ThumbnailSettingsService],
 })
 export class ThumbnailSettingsComponent
-  extends SettingsComponent<{ server: ThumbnailConfig, client: ClientConfig.ThumbnailConfig }>
+  extends SettingsComponent<{ server: ServerConfig.ThumbnailConfig, client: ClientConfig.ThumbnailConfig }>
   implements OnInit {
   types: Array<any> = [];
   ThumbnailProcessingLib: any;
@@ -48,7 +48,7 @@ export class ThumbnailSettingsComponent
   ngOnInit() {
     super.ngOnInit();
     this.types = Utils
-      .enumToArray(ThumbnailProcessingLib).map((v) => {
+      .enumToArray(ServerConfig.ThumbnailProcessingLib).map((v) => {
         if (v.value.toLowerCase() === 'sharp') {
           v.value += ' ' + this.i18n('(recommended)');
         }
@@ -57,7 +57,7 @@ export class ThumbnailSettingsComponent
         }
         return v;
       });
-    this.ThumbnailProcessingLib = ThumbnailProcessingLib;
+    this.ThumbnailProcessingLib = ServerConfig.ThumbnailProcessingLib;
   }
 
 }

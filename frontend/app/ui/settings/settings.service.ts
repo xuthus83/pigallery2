@@ -1,17 +1,10 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
-import {
-  DatabaseType,
-  IPrivateConfig,
-  LogLevel,
-  ReIndexingSensitivity,
-  SQLLogLevel,
-  ThumbnailProcessingLib
-} from '../../../../common/config/private/IPrivateConfig';
 import {NetworkService} from '../../model/network/network.service';
 import {SortingMethods} from '../../../../common/entities/SortingMethods';
 import {UserRoles} from '../../../../common/entities/UserDTO';
 import {ClientConfig} from '../../../../common/config/public/ConfigClass';
+import {IPrivateConfig, ServerConfig} from '../../../../common/config/private/IPrivateConfig';
 
 @Injectable()
 export class SettingsService {
@@ -83,11 +76,11 @@ export class SettingsService {
       },
       Server: {
         Database: {
-          type: DatabaseType.memory
+          type: ServerConfig.DatabaseType.memory
         },
         Log: {
-          level: LogLevel.info,
-          sqlLevel: SQLLogLevel.error
+          level: ServerConfig.LogLevel.info,
+          sqlLevel: ServerConfig.SQLLogLevel.error
         },
         Sharing: {
           updateTimeout: 2000
@@ -99,7 +92,7 @@ export class SettingsService {
           personFaceMargin: 0.1,
           folder: '',
           qualityPriority: true,
-          processingLibrary: ThumbnailProcessingLib.sharp
+          processingLibrary: ServerConfig.ThumbnailProcessingLib.sharp
         },
         Threading: {
           enable: true,
@@ -109,7 +102,7 @@ export class SettingsService {
         Indexing: {
           cachedFolderTimeout: 0,
           folderPreviewSize: 0,
-          reIndexingSensitivity: ReIndexingSensitivity.medium,
+          reIndexingSensitivity: ServerConfig.ReIndexingSensitivity.medium,
           excludeFolderList: [],
           excludeFileList: []
         },
@@ -134,7 +127,7 @@ export class SettingsService {
   }
 
   public async getSettings(): Promise<void> {
-    this.settings.next(await <Promise<IPrivateConfig>>this._networkService.getJson('/settings'));
+    this.settings.next(await this._networkService.getJson<Promise<IPrivateConfig>>('/settings'));
   }
 
 

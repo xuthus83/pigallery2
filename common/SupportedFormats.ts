@@ -10,19 +10,29 @@ export const SupportedFormats = {
     'mp4',
     'webm',
     'ogv',
-    'ogg',
-    'avi'
+    'ogg'
   ],
   MetaFiles: [
     'gpx'
   ],
+  TranscodeNeed: {
+    Photos: <string[]>[],
+    Videos: [
+      'avi',
+      'mkv',
+      'mov',
+      'wmv',
+      'flv'
+    ],
+  },
   WithDots: {
     Photos: <string[]>[],
     Videos: <string[]>[],
     MetaFiles: <string[]>[],
   }
 };
-
+SupportedFormats.Photos = SupportedFormats.Photos.concat(SupportedFormats.TranscodeNeed.Photos);
+SupportedFormats.Videos = SupportedFormats.Videos.concat(SupportedFormats.TranscodeNeed.Videos);
 SupportedFormats.WithDots.Photos = SupportedFormats.Photos.map(f => '.' + f);
 SupportedFormats.WithDots.Videos = SupportedFormats.Videos.map(f => '.' + f);
 SupportedFormats.WithDots.MetaFiles = SupportedFormats.MetaFiles.map(f => '.' + f);

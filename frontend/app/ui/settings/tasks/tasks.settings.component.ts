@@ -3,7 +3,6 @@ import {TasksSettingsService} from './tasks.settings.service';
 import {AuthenticationService} from '../../../model/network/authentication.service';
 import {NavigationService} from '../../../model/navigation.service';
 import {NotificationService} from '../../../model/notification.service';
-import {TaskConfig} from '../../../../../common/config/private/IPrivateConfig';
 import {SettingsComponent} from '../_abstract/abstract.settings.component';
 import {I18n} from '@ngx-translate/i18n-polyfill';
 import {ErrorDTO} from '../../../../../common/entities/Error';
@@ -16,6 +15,7 @@ import {
   TaskTriggerType
 } from '../../../../../common/entities/task/TaskScheduleDTO';
 import {Utils} from '../../../../../common/Utils';
+import {ServerConfig} from '../../../../../common/config/private/IPrivateConfig';
 
 @Component({
   selector: 'app-settings-tasks',
@@ -24,7 +24,7 @@ import {Utils} from '../../../../../common/Utils';
     './../_abstract/abstract.settings.component.css'],
   providers: [TasksSettingsService]
 })
-export class TasksSettingsComponent extends SettingsComponent<TaskConfig, TasksSettingsService>
+export class TasksSettingsComponent extends SettingsComponent<ServerConfig.TaskConfig, TasksSettingsService>
   implements OnInit, OnDestroy, OnChanges {
 
   disableButtons = false;
@@ -152,7 +152,6 @@ export class TasksSettingsComponent extends SettingsComponent<TaskConfig, TasksS
     this.settings.scheduled.push({
       taskName: this._settingsService.availableTasks.value[0].Name,
       config: {},
-      priority: 0,
       trigger: {
         type: TaskTriggerType.never
       }

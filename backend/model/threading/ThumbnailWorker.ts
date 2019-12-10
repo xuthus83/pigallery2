@@ -2,23 +2,23 @@ import {Metadata, Sharp} from 'sharp';
 import {Dimensions, State} from 'gm';
 import {Logger} from '../../Logger';
 import {FfmpegCommand, FfprobeData} from 'fluent-ffmpeg';
-import {ThumbnailProcessingLib} from '../../../common/config/private/IPrivateConfig';
 import {FFmpegFactory} from '../FFmpegFactory';
+import {ServerConfig} from '../../../common/config/private/IPrivateConfig';
 
 export class ThumbnailWorker {
 
   private static imageRenderer: (input: RendererInput) => Promise<void> = null;
   private static videoRenderer: (input: RendererInput) => Promise<void> = null;
-  private static rendererType: ThumbnailProcessingLib = null;
+  private static rendererType: ServerConfig.ThumbnailProcessingLib = null;
 
-  public static render(input: RendererInput, renderer: ThumbnailProcessingLib): Promise<void> {
+  public static render(input: RendererInput, renderer: ServerConfig.ThumbnailProcessingLib): Promise<void> {
     if (input.type === ThumbnailSourceType.Image) {
       return this.renderFromImage(input, renderer);
     }
     return this.renderFromVideo(input);
   }
 
-  public static renderFromImage(input: RendererInput, renderer: ThumbnailProcessingLib): Promise<void> {
+  public static renderFromImage(input: RendererInput, renderer: ServerConfig.ThumbnailProcessingLib): Promise<void> {
     if (ThumbnailWorker.rendererType !== renderer) {
       ThumbnailWorker.imageRenderer = ImageRendererFactory.build(renderer);
       ThumbnailWorker.rendererType = renderer;
@@ -117,13 +117,13 @@ export class VideoRendererFactory {
 
 export class ImageRendererFactory {
 
-  public static build(renderer: ThumbnailProcessingLib): (input: RendererInput) => Promise<void> {
+  public static build(renderer: ServerConfig.ThumbnailProcessingLib): (input: RendererInput) => Promise<void> {
     switch (renderer) {
-      case ThumbnailProcessingLib.Jimp:
+      case ServerConfig.ThumbnailProcessingLib.Jimp:
         return ImageRendererFactory.Jimp();
-      case ThumbnailProcessingLib.gm:
+      case ServerConfig.ThumbnailProcessingLib.gm:
         return ImageRendererFactory.Gm();
-      case ThumbnailProcessingLib.sharp:
+      case ServerConfig.ThumbnailProcessingLib.sharp:
         return ImageRendererFactory.Sharp();
     }
     throw new Error('unknown renderer');

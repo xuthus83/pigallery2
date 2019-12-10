@@ -4,7 +4,7 @@ import {UserRoles} from '../../entities/UserDTO';
 export module ClientConfig {
 
   export enum MapProviders {
-    OpenStreetMap, Mapbox, Custom
+    OpenStreetMap = 0, Mapbox = 1, Custom = 2
   }
 
   export interface AutoCompleteConfig {

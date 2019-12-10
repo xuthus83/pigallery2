@@ -2,12 +2,12 @@ import {Injectable} from '@angular/core';
 import {NetworkService} from '../../../model/network/network.service';
 import {SettingsService} from '../settings.service';
 import {AbstractSettingsService} from '../_abstract/abstract.settings.service';
-import {TaskConfig} from '../../../../../common/config/private/IPrivateConfig';
 import {BehaviorSubject} from 'rxjs';
 import {TaskDTO} from '../../../../../common/entities/task/TaskDTO';
+import {ServerConfig} from '../../../../../common/config/private/IPrivateConfig';
 
 @Injectable()
-export class TasksSettingsService extends AbstractSettingsService<TaskConfig> {
+export class TasksSettingsService extends AbstractSettingsService<ServerConfig.TaskConfig> {
 
 
   public availableTasks: BehaviorSubject<TaskDTO[]>;
@@ -18,7 +18,7 @@ export class TasksSettingsService extends AbstractSettingsService<TaskConfig> {
     this.availableTasks = new BehaviorSubject([]);
   }
 
-  public updateSettings(settings: TaskConfig): Promise<void> {
+  public updateSettings(settings: ServerConfig.TaskConfig): Promise<void> {
     return this._networkService.putJson('/settings/tasks', {settings: settings});
   }
 

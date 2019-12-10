@@ -6,7 +6,6 @@ import {PhotoEntity} from './enitites/PhotoEntity';
 import {DirectoryEntity} from './enitites/DirectoryEntity';
 import {Config} from '../../../common/config/private/Config';
 import {SharingEntity} from './enitites/SharingEntity';
-import {DataBaseConfig, DatabaseType, SQLLogLevel} from '../../../common/config/private/IPrivateConfig';
 import {PasswordHelper} from '../PasswordHelper';
 import {ProjectPath} from '../../ProjectPath';
 import {VersionEntity} from './enitites/VersionEntity';
@@ -18,6 +17,7 @@ import {FileEntity} from './enitites/FileEntity';
 import {FaceRegionEntry} from './enitites/FaceRegionEntry';
 import {PersonEntry} from './enitites/PersonEntry';
 import {Utils} from '../../../common/Utils';
+import {ServerConfig} from '../../../common/config/private/IPrivateConfig';
 
 
 export class SQLConnection {
@@ -45,8 +45,8 @@ export class SQLConnection {
         VersionEntity
       ];
       options.synchronize = false;
-      if (Config.Server.Log.sqlLevel !== SQLLogLevel.none) {
-        options.logging = SQLLogLevel[Config.Server.Log.sqlLevel];
+      if (Config.Server.Log.sqlLevel !== ServerConfig.SQLLogLevel.none) {
+        options.logging = ServerConfig.SQLLogLevel[Config.Server.Log.sqlLevel];
       }
 
       this.connection = await this.createConnection(options);
@@ -55,7 +55,7 @@ export class SQLConnection {
     return this.connection;
   }
 
-  public static async tryConnection(config: DataBaseConfig) {
+  public static async tryConnection(config: ServerConfig.DataBaseConfig) {
     try {
       await getConnection('test').close();
     } catch (err) {
@@ -75,8 +75,8 @@ export class SQLConnection {
       VersionEntity
     ];
     options.synchronize = false;
-    if (Config.Server.Log.sqlLevel !== SQLLogLevel.none) {
-      options.logging = SQLLogLevel[Config.Server.Log.sqlLevel];
+    if (Config.Server.Log.sqlLevel !== ServerConfig.SQLLogLevel.none) {
+      options.logging = ServerConfig.SQLLogLevel[Config.Server.Log.sqlLevel];
     }
     const conn = await this.createConnection(options);
     await SQLConnection.schemeSync(conn);
@@ -163,9 +163,9 @@ export class SQLConnection {
     }
   }
 
-  private static getDriver(config: DataBaseConfig): ConnectionOptions {
+  private static getDriver(config: ServerConfig.DataBaseConfig): ConnectionOptions {
     let driver: ConnectionOptions = null;
-    if (config.type === DatabaseType.mysql) {
+    if (config.type === ServerConfig.DatabaseType.mysql) {
       driver = {
         type: 'mysql',
         host: config.mysql.host,
@@ -175,7 +175,7 @@ export class SQLConnection {
         database: config.mysql.database,
         charset: 'utf8'
       };
-    } else if (config.type === DatabaseType.sqlite) {
+    } else if (config.type === ServerConfig.DatabaseType.sqlite) {
       driver = {
         type: 'sqlite',
         database: ProjectPath.getAbsolutePath(config.sqlite.storage)

@@ -1,9 +1,9 @@
 import {DiskMangerWorker} from './DiskMangerWorker';
 import {Logger} from '../../Logger';
 import {RendererInput, ThumbnailWorker} from './ThumbnailWorker';
-import {ThumbnailProcessingLib} from '../../../common/config/private/IPrivateConfig';
 import {DirectoryDTO} from '../../../common/entities/DirectoryDTO';
 import {Utils} from '../../../common/Utils';
+import {ServerConfig} from '../../../common/config/private/IPrivateConfig';
 
 export class Worker {
 
@@ -53,7 +53,7 @@ export interface DiskManagerTask extends WorkerTask {
 
 export interface ThumbnailTask extends WorkerTask {
   input: RendererInput;
-  renderer: ThumbnailProcessingLib;
+  renderer: ServerConfig.ThumbnailProcessingLib;
 }
 
 export module WorkerTask {

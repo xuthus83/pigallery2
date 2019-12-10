@@ -2,7 +2,6 @@ import {expect} from 'chai';
 import * as fs from 'fs';
 import * as path from 'path';
 import {Config} from '../../../../../common/config/private/Config';
-import {DatabaseType} from '../../../../../common/config/private/IPrivateConfig';
 import {SQLConnection} from '../../../../../backend/model/sql/SQLConnection';
 import {UserEntity} from '../../../../../backend/model/sql/enitites/UserEntity';
 import {UserRoles} from '../../../../../common/entities/UserDTO';
@@ -17,6 +16,7 @@ import {
 } from '../../../../../backend/model/sql/enitites/PhotoEntity';
 import {MediaDimensionEntity} from '../../../../../backend/model/sql/enitites/MediaEntity';
 import {VersionEntity} from '../../../../../backend/model/sql/enitites/VersionEntity';
+import {ServerConfig} from '../../../../../common/config/private/IPrivateConfig';
 
 describe('Typeorm integration', () => {
 
@@ -31,7 +31,7 @@ describe('Typeorm integration', () => {
       fs.mkdirSync(tempDir);
     }
 
-    Config.Server.Database.type = DatabaseType.sqlite;
+    Config.Server.Database.type = ServerConfig.DatabaseType.sqlite;
     Config.Server.Database.sqlite.storage = dbPath;
 
   };

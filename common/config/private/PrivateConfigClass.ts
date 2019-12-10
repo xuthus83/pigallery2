@@ -1,41 +1,35 @@
 import {PublicConfigClass} from '../public/ConfigClass';
-import {
-  DatabaseType,
-  IPrivateConfig,
-  LogLevel,
-  ReIndexingSensitivity,
-  ServerConfig,
-  SQLLogLevel,
-  ThumbnailProcessingLib
-} from './IPrivateConfig';
+import {IPrivateConfig, ServerConfig,} from './IPrivateConfig';
 import * as path from 'path';
 import {ConfigLoader} from 'typeconfig';
 import {Utils} from '../../Utils';
 import {UserRoles} from '../../entities/UserDTO';
+import {TaskTriggerType} from '../../entities/task/TaskScheduleDTO';
+import {DefaultsTasks} from '../../entities/task/TaskDTO';
 
 /**
  * This configuration will be only at backend
  */
 export class PrivateConfigClass extends PublicConfigClass implements IPrivateConfig {
 
-  public Server: ServerConfig = {
+  public Server: ServerConfig.Config = {
     port: 80,
     host: '0.0.0.0',
     imagesFolder: 'demo/images',
     Thumbnail: {
       folder: 'demo/TEMP',
-      processingLibrary: ThumbnailProcessingLib.sharp,
+      processingLibrary: ServerConfig.ThumbnailProcessingLib.sharp,
       qualityPriority: true,
       personFaceMargin: 0.6
     },
     Log: {
-      level: LogLevel.info,
-      sqlLevel: SQLLogLevel.error
+      level: ServerConfig.LogLevel.info,
+      sqlLevel: ServerConfig.SQLLogLevel.error
     },
     sessionTimeout: 1000 * 60 * 60 * 24 * 7,
     photoMetadataSize: 512 * 1024,
     Database: {
-      type: DatabaseType.sqlite,
+      type: ServerConfig.DatabaseType.sqlite,
       mysql: {
         host: '',
         username: '',
@@ -57,7 +51,7 @@ export class PrivateConfigClass extends PublicConfigClass implements IPrivateCon
     Indexing: {
       folderPreviewSize: 2,
       cachedFolderTimeout: 1000 * 60 * 60,
-      reIndexingSensitivity: ReIndexingSensitivity.low,
+      reIndexingSensitivity: ServerConfig.ReIndexingSensitivity.low,
       excludeFolderList: [],
       excludeFileList: []
     },
@@ -65,7 +59,19 @@ export class PrivateConfigClass extends PublicConfigClass implements IPrivateCon
       listingLimit: 1000
     },
     Tasks: {
-      scheduled: []
+      scheduled: [{
+        taskName: DefaultsTasks[DefaultsTasks['Database Reset']],
+        config: {},
+        trigger: {type: TaskTriggerType.never}
+      }, {
+        taskName: DefaultsTasks[DefaultsTasks.Indexing],
+        config: {},
+        trigger: {type: TaskTriggerType.never}
+      }, {
+        taskName: DefaultsTasks[DefaultsTasks['Video Converting']],
+        config: {},
+        trigger: {type: TaskTriggerType.never}
+      }]
     },
     Video: {
       transcoding: {
@@ -79,9 +85,9 @@ export class PrivateConfigClass extends PublicConfigClass implements IPrivateCon
   };
   private ConfigLoader: any;
 
-  public setDatabaseType(type: DatabaseType) {
+  public setDatabaseType(type: ServerConfig.DatabaseType) {
     this.Server.Database.type = type;
-    if (type === DatabaseType.memory) {
+    if (type === ServerConfig.DatabaseType.memory) {
       this.Client.Search.enabled = false;
       this.Client.Sharing.enabled = false;
     }
@@ -101,10 +107,10 @@ export class PrivateConfigClass extends PublicConfigClass implements IPrivateCon
     if (Utils.enumToArray(UserRoles).map(r => r.key).indexOf(this.Client.unAuthenticatedUserRole) === -1) {
       throw new Error('Unknown user role for Client.unAuthenticatedUserRole, found: ' + this.Client.unAuthenticatedUserRole);
     }
-    if (Utils.enumToArray(LogLevel).map(r => r.key).indexOf(this.Server.Log.level) === -1) {
+    if (Utils.enumToArray(ServerConfig.LogLevel).map(r => r.key).indexOf(this.Server.Log.level) === -1) {
       throw new Error('Unknown Server.log.level, found: ' + this.Server.Log.level);
     }
-    if (Utils.enumToArray(SQLLogLevel).map(r => r.key).indexOf(this.Server.Log.sqlLevel) === -1) {
+    if (Utils.enumToArray(ServerConfig.SQLLogLevel).map(r => r.key).indexOf(this.Server.Log.sqlLevel) === -1) {
       throw new Error('Unknown Server.log.level, found: ' + this.Server.Log.sqlLevel);
     }
 

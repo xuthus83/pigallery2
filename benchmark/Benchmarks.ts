@@ -1,6 +1,5 @@
 import {SQLConnection} from '../backend/model/sql/SQLConnection';
 import {Config} from '../common/config/private/Config';
-import {DatabaseType, ReIndexingSensitivity} from '../common/config/private/IPrivateConfig';
 import {ObjectManagers} from '../backend/model/ObjectManagers';
 import {DiskMangerWorker} from '../backend/model/threading/DiskMangerWorker';
 import {IndexingManager} from '../backend/model/sql/IndexingManager';
@@ -10,6 +9,7 @@ import {SearchTypes} from '../common/entities/AutoCompleteItem';
 import {Utils} from '../common/Utils';
 import {GalleryManager} from '../backend/model/sql/GalleryManager';
 import {DirectoryDTO} from '../common/entities/DirectoryDTO';
+import {ServerConfig} from '../common/config/private/IPrivateConfig';
 
 export interface BenchmarkResult {
   duration: number;
@@ -45,7 +45,7 @@ export class Benchmarks {
   async bmListDirectory(): Promise<BenchmarkResult> {
     const gm = new GalleryManager();
     await this.setupDB();
-    Config.Server.Indexing.reIndexingSensitivity = ReIndexingSensitivity.low;
+    Config.Server.Indexing.reIndexingSensitivity = ServerConfig.ReIndexingSensitivity.low;
     return await this.benchmark(() => gm.listDirectory('./'));
   }
 
@@ -122,7 +122,7 @@ export class Benchmarks {
     if (fs.existsSync(this.dbPath)) {
       fs.unlinkSync(this.dbPath);
     }
-    Config.Server.Database.type = DatabaseType.sqlite;
+    Config.Server.Database.type = ServerConfig.DatabaseType.sqlite;
     Config.Server.Database.sqlite.storage = this.dbPath;
     await ObjectManagers.InitSQLManagers();
   };

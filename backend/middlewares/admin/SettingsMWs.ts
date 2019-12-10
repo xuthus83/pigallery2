@@ -1,64 +1,21 @@
+/**/
 import {NextFunction, Request, Response} from 'express';
-import {ErrorCodes, ErrorDTO} from '../../common/entities/Error';
-import {ObjectManagers} from '../model/ObjectManagers';
-import {Logger} from '../Logger';
-import {SQLConnection} from '../model/sql/SQLConnection';
-import {DataBaseConfig, DatabaseType, IndexingConfig, TaskConfig, ThumbnailConfig} from '../../common/config/private/IPrivateConfig';
-import {Config} from '../../common/config/private/Config';
-import {ConfigDiagnostics} from '../model/diagnostics/ConfigDiagnostics';
-import {ClientConfig} from '../../common/config/public/ConfigClass';
-import {BasicConfigDTO} from '../../common/entities/settings/BasicConfigDTO';
-import {OtherConfigDTO} from '../../common/entities/settings/OtherConfigDTO';
-import {ProjectPath} from '../ProjectPath';
-import {PrivateConfigClass} from '../../common/config/private/PrivateConfigClass';
-import {ISQLGalleryManager} from '../model/sql/IGalleryManager';
+import {ErrorCodes, ErrorDTO} from '../../../common/entities/Error';
+import {ObjectManagers} from '../../model/ObjectManagers';
+import {Logger} from '../../Logger';
+import {SQLConnection} from '../../model/sql/SQLConnection';
+import {Config} from '../../../common/config/private/Config';
+import {ConfigDiagnostics} from '../../model/diagnostics/ConfigDiagnostics';
+import {ClientConfig} from '../../../common/config/public/ConfigClass';
+import {BasicConfigDTO} from '../../../common/entities/settings/BasicConfigDTO';
+import {OtherConfigDTO} from '../../../common/entities/settings/OtherConfigDTO';
+import {ProjectPath} from '../../ProjectPath';
+import {PrivateConfigClass} from '../../../common/config/private/PrivateConfigClass';
+import {ServerConfig} from '../../../common/config/private/IPrivateConfig';
 
-const LOG_TAG = '[AdminMWs]';
+const LOG_TAG = '[SettingsMWs]';
 
-export class AdminMWs {
-
-
-  public static async loadStatistic(req: Request, res: Response, next: NextFunction) {
-    if (Config.Server.Database.type === DatabaseType.memory) {
-      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, 'Statistic is only available for indexed content'));
-    }
-
-
-    const galleryManager = <ISQLGalleryManager>ObjectManagers.getInstance().GalleryManager;
-    try {
-      req.resultPipe = {
-        directories: await galleryManager.countDirectories(),
-        photos: await galleryManager.countPhotos(),
-        videos: await galleryManager.countVideos(),
-        diskUsage: await galleryManager.countMediaSize(),
-      };
-      return next();
-    } catch (err) {
-      if (err instanceof Error) {
-        return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, 'Error while getting statistic: ' + err.toString(), err));
-      }
-      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, 'Error while getting statistic', err));
-    }
-  }
-
-
-  public static async getDuplicates(req: Request, res: Response, next: NextFunction) {
-    if (Config.Server.Database.type === DatabaseType.memory) {
-      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, 'Statistic is only available for indexed content'));
-    }
-
-
-    const galleryManager = <ISQLGalleryManager>ObjectManagers.getInstance().GalleryManager;
-    try {
-      req.resultPipe = await galleryManager.getPossibleDuplicates();
-      return next();
-    } catch (err) {
-      if (err instanceof Error) {
-        return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, 'Error while getting duplicates: ' + err.toString(), err));
-      }
-      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, 'Error while getting duplicates', err));
-    }
-  }
+export class SettingsMWs {
 
   public static async updateDatabaseSettings(req: Request, res: Response, next: NextFunction) {
 
@@ -66,17 +23,17 @@ export class AdminMWs {
       return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, 'settings is needed'));
     }
 
-    const databaseSettings = <DataBaseConfig>req.body.settings;
+    const databaseSettings = <ServerConfig.DataBaseConfig>req.body.settings;
 
     try {
-      if (databaseSettings.type !== DatabaseType.memory) {
+      if (databaseSettings.type !== ServerConfig.DatabaseType.memory) {
         await SQLConnection.tryConnection(databaseSettings);
       }
       Config.Server.Database = databaseSettings;
       // only updating explicitly set config (not saving config set by the diagnostics)
       const original = Config.original();
       original.Server.Database = databaseSettings;
-      if (databaseSettings.type === DatabaseType.memory) {
+      if (databaseSettings.type === ServerConfig.DatabaseType.memory) {
         original.Client.Sharing.enabled = false;
         original.Client.Search.enabled = false;
       }
@@ -86,7 +43,7 @@ export class AdminMWs {
       Logger.info(LOG_TAG, JSON.stringify(Config, null, '\t'));
 
       await ObjectManagers.reset();
-      if (Config.Server.Database.type !== DatabaseType.memory) {
+      if (Config.Server.Database.type !== ServerConfig.DatabaseType.memory) {
         await ObjectManagers.InitSQLManagers();
       } else {
         await ObjectManagers.InitMemoryManagers();
@@ -132,12 +89,20 @@ export class AdminMWs {
     }
 
     try {
-      await ConfigDiagnostics.testVideoConfig(<ClientConfig.VideoConfig>req.body.settings);
+      const settings: {
+        server: ServerConfig.VideoConfig,
+        client: ClientConfig.VideoConfig
+      } = req.body.settings;
 
-      Config.Client.Video = <ClientConfig.VideoConfig>req.body.settings;
-      // only updating explicitly set config (not saving config set by the diagnostics)
+
       const original = Config.original();
-      original.Client.Video = <ClientConfig.VideoConfig>req.body.settings;
+      await ConfigDiagnostics.testClientVideoConfig(settings.client);
+      await ConfigDiagnostics.testServerVideoConfig(settings.server, original);
+      Config.Server.Video = settings.server;
+      Config.Client.Video = settings.client;
+      // only updating explicitly set config (not saving config set by the diagnostics)
+      original.Server.Video = settings.server;
+      original.Client.Video = settings.client;
       original.save();
       await ConfigDiagnostics.runDiagnostics();
       Logger.info(LOG_TAG, 'new config:');
@@ -201,7 +166,6 @@ export class AdminMWs {
       return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, 'Settings error: ' + JSON.stringify(err, null, '  '), err));
     }
   }
-
 
   public static async updateRandomPhotoSettings(req: Request, res: Response, next: NextFunction) {
     if ((typeof req.body === 'undefined') || (typeof req.body.settings === 'undefined')) {
@@ -278,7 +242,6 @@ export class AdminMWs {
     }
   }
 
-
   public static async updateAuthenticationSettings(req: Request, res: Response, next: NextFunction) {
     if ((typeof req.body === 'undefined') || (typeof req.body.settings === 'undefined')) {
       return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, 'settings is needed'));
@@ -312,7 +275,7 @@ export class AdminMWs {
 
     try {
       const settings: {
-        server: ThumbnailConfig,
+        server: ServerConfig.ThumbnailConfig,
         client: ClientConfig.ThumbnailConfig
       } = req.body.settings;
 
@@ -337,7 +300,6 @@ export class AdminMWs {
       return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, 'Settings error: ' + JSON.stringify(err, null, '  '), err));
     }
   }
-
 
   public static async updateBasicSettings(req: Request, res: Response, next: NextFunction) {
     if ((typeof req.body === 'undefined') || (typeof req.body.settings === 'undefined')) {
@@ -374,7 +336,6 @@ export class AdminMWs {
       return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, 'Settings error: ' + JSON.stringify(err, null, '  '), err));
     }
   }
-
 
   public static async updateOtherSettings(req: Request, res: Response, next: NextFunction) {
     if ((typeof req.body === 'undefined') || (typeof req.body.settings === 'undefined')) {
@@ -419,7 +380,7 @@ export class AdminMWs {
     }
 
     try {
-      const settings: IndexingConfig = req.body.settings;
+      const settings: ServerConfig.IndexingConfig = req.body.settings;
       Config.Server.Indexing = settings;
 
       // only updating explicitly set config (not saving config set by the diagnostics)
@@ -438,7 +399,6 @@ export class AdminMWs {
     }
   }
 
-
   public static async updateTasksSettings(req: Request, res: Response, next: NextFunction) {
     if ((typeof req.body === 'undefined') || (typeof req.body.settings === 'undefined')) {
       return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, 'settings is needed'));
@@ -447,7 +407,7 @@ export class AdminMWs {
     try {
 
       // only updating explicitly set config (not saving config set by the diagnostics)
-      const settings: TaskConfig = req.body.settings;
+      const settings: ServerConfig.TaskConfig = req.body.settings;
       const original = Config.original();
       await ConfigDiagnostics.testTasksConfig(settings, original);
 
@@ -468,58 +428,4 @@ export class AdminMWs {
     }
   }
 
-
-  public static startTask(req: Request, res: Response, next: NextFunction) {
-    try {
-      const id = req.params.id;
-      const taskConfig: any = req.body.config;
-      ObjectManagers.getInstance().TaskManager.run(id, taskConfig);
-      req.resultPipe = 'ok';
-      return next();
-    } catch (err) {
-      if (err instanceof Error) {
-        return next(new ErrorDTO(ErrorCodes.TASK_ERROR, 'Task error: ' + err.toString(), err));
-      }
-      return next(new ErrorDTO(ErrorCodes.TASK_ERROR, 'Task error: ' + JSON.stringify(err, null, '  '), err));
-    }
-  }
-
-  public static stopTask(req: Request, res: Response, next: NextFunction) {
-    try {
-      const id = req.params.id;
-      ObjectManagers.getInstance().TaskManager.stop(id);
-      req.resultPipe = 'ok';
-      return next();
-    } catch (err) {
-      if (err instanceof Error) {
-        return next(new ErrorDTO(ErrorCodes.TASK_ERROR, 'Task error: ' + err.toString(), err));
-      }
-      return next(new ErrorDTO(ErrorCodes.TASK_ERROR, 'Task error: ' + JSON.stringify(err, null, '  '), err));
-    }
-  }
-
-
-  public static getAvailableTasks(req: Request, res: Response, next: NextFunction) {
-    try {
-      req.resultPipe = ObjectManagers.getInstance().TaskManager.getAvailableTasks();
-      return next();
-    } catch (err) {
-      if (err instanceof Error) {
-        return next(new ErrorDTO(ErrorCodes.TASK_ERROR, 'Task error: ' + err.toString(), err));
-      }
-      return next(new ErrorDTO(ErrorCodes.TASK_ERROR, 'Task error: ' + JSON.stringify(err, null, '  '), err));
-    }
-  }
-
-  public static getTaskProgresses(req: Request, res: Response, next: NextFunction) {
-    try {
-      req.resultPipe = ObjectManagers.getInstance().TaskManager.getProgresses();
-      return next();
-    } catch (err) {
-      if (err instanceof Error) {
-        return next(new ErrorDTO(ErrorCodes.TASK_ERROR, 'Task error: ' + err.toString(), err));
-      }
-      return next(new ErrorDTO(ErrorCodes.TASK_ERROR, 'Task error: ' + JSON.stringify(err, null, '  '), err));
-    }
-  }
 }

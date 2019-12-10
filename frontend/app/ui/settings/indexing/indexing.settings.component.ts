@@ -4,12 +4,12 @@ import {AuthenticationService} from '../../../model/network/authentication.servi
 import {NavigationService} from '../../../model/navigation.service';
 import {NotificationService} from '../../../model/notification.service';
 import {ErrorDTO} from '../../../../../common/entities/Error';
-import {IndexingConfig, ReIndexingSensitivity} from '../../../../../common/config/private/IPrivateConfig';
 import {SettingsComponent} from '../_abstract/abstract.settings.component';
 import {Utils} from '../../../../../common/Utils';
 import {I18n} from '@ngx-translate/i18n-polyfill';
 import {ScheduledTasksService} from '../scheduled-tasks.service';
 import {DefaultsTasks} from '../../../../../common/entities/task/TaskDTO';
+import {ServerConfig} from '../../../../../common/config/private/IPrivateConfig';
 
 @Component({
   selector: 'app-settings-indexing',
@@ -18,7 +18,7 @@ import {DefaultsTasks} from '../../../../../common/entities/task/TaskDTO';
     './../_abstract/abstract.settings.component.css'],
   providers: [IndexingSettingsService],
 })
-export class IndexingSettingsComponent extends SettingsComponent<IndexingConfig, IndexingSettingsService>
+export class IndexingSettingsComponent extends SettingsComponent<ServerConfig.IndexingConfig, IndexingSettingsService>
   implements OnInit, OnDestroy {
 
 
@@ -70,7 +70,7 @@ export class IndexingSettingsComponent extends SettingsComponent<IndexingConfig,
     super.ngOnInit();
     this.tasksService.subscribeToProgress();
     this.types = Utils
-      .enumToArray(ReIndexingSensitivity);
+      .enumToArray(ServerConfig.ReIndexingSensitivity);
     this.types.forEach(v => {
       switch (v.value) {
         case 'low':

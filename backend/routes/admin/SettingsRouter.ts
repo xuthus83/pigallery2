@@ -1,61 +1,13 @@
-import {AuthenticationMWs} from '../middlewares/user/AuthenticationMWs';
-import {UserRoles} from '../../common/entities/UserDTO';
-import {RenderingMWs} from '../middlewares/RenderingMWs';
-import {AdminMWs} from '../middlewares/AdminMWs';
+import {AuthenticationMWs} from '../../middlewares/user/AuthenticationMWs';
+import {UserRoles} from '../../../common/entities/UserDTO';
+import {RenderingMWs} from '../../middlewares/RenderingMWs';
 import {Express} from 'express';
+import {SettingsMWs} from '../../middlewares/admin/SettingsMWs';
 
-export class AdminRouter {
+export class SettingsRouter {
   public static route(app: Express) {
 
-    this.addGetStatistic(app);
-    this.addGetDuplicates(app);
-    this.addTasks(app);
     this.addSettings(app);
-  }
-
-  private static addGetStatistic(app: Express) {
-    app.get('/api/admin/statistic',
-      AuthenticationMWs.authenticate,
-      AuthenticationMWs.authorise(UserRoles.Admin),
-      AdminMWs.loadStatistic,
-      RenderingMWs.renderResult
-    );
-  }
-
-  private static addGetDuplicates(app: Express) {
-    app.get('/api/admin/duplicates',
-      AuthenticationMWs.authenticate,
-      AuthenticationMWs.authorise(UserRoles.Admin),
-      AdminMWs.getDuplicates,
-      RenderingMWs.renderResult
-    );
-  }
-
-  private static addTasks(app: Express) {
-    app.get('/api/admin/tasks/available',
-      AuthenticationMWs.authenticate,
-      AuthenticationMWs.authorise(UserRoles.Admin),
-      AdminMWs.getAvailableTasks,
-      RenderingMWs.renderResult
-    );
-    app.get('/api/admin/tasks/scheduled/progress',
-      AuthenticationMWs.authenticate,
-      AuthenticationMWs.authorise(UserRoles.Admin),
-      AdminMWs.getTaskProgresses,
-      RenderingMWs.renderResult
-    );
-    app.post('/api/admin/tasks/scheduled/:id/start',
-      AuthenticationMWs.authenticate,
-      AuthenticationMWs.authorise(UserRoles.Admin),
-      AdminMWs.startTask,
-      RenderingMWs.renderResult
-    );
-    app.post('/api/admin/tasks/scheduled/:id/stop',
-      AuthenticationMWs.authenticate,
-      AuthenticationMWs.authorise(UserRoles.Admin),
-      AdminMWs.stopTask,
-      RenderingMWs.renderResult
-    );
   }
 
   private static addSettings(app: Express) {
@@ -69,87 +21,87 @@ export class AdminRouter {
     app.put('/api/settings/database',
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Admin),
-      AdminMWs.updateDatabaseSettings,
+      SettingsMWs.updateDatabaseSettings,
       RenderingMWs.renderOK
     );
 
     app.put('/api/settings/map',
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Admin),
-      AdminMWs.updateMapSettings,
+      SettingsMWs.updateMapSettings,
       RenderingMWs.renderOK
     );
     app.put('/api/settings/video',
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Admin),
-      AdminMWs.updateVideoSettings,
+      SettingsMWs.updateVideoSettings,
       RenderingMWs.renderOK
     );
     app.put('/api/settings/metafile',
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Admin),
-      AdminMWs.updateMetaFileSettings,
+      SettingsMWs.updateMetaFileSettings,
       RenderingMWs.renderOK
     );
 
     app.put('/api/settings/authentication',
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Admin),
-      AdminMWs.updateAuthenticationSettings,
+      SettingsMWs.updateAuthenticationSettings,
       RenderingMWs.renderOK
     );
     app.put('/api/settings/thumbnail',
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Admin),
-      AdminMWs.updateThumbnailSettings,
+      SettingsMWs.updateThumbnailSettings,
       RenderingMWs.renderOK
     );
     app.put('/api/settings/search',
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Admin),
-      AdminMWs.updateSearchSettings,
+      SettingsMWs.updateSearchSettings,
       RenderingMWs.renderOK
     );
     app.put('/api/settings/faces',
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Admin),
-      AdminMWs.updateFacesSettings,
+      SettingsMWs.updateFacesSettings,
       RenderingMWs.renderOK
     );
     app.put('/api/settings/share',
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Admin),
-      AdminMWs.updateShareSettings,
+      SettingsMWs.updateShareSettings,
       RenderingMWs.renderOK
     );
     app.put('/api/settings/randomPhoto',
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Admin),
-      AdminMWs.updateRandomPhotoSettings,
+      SettingsMWs.updateRandomPhotoSettings,
       RenderingMWs.renderOK
     );
     app.put('/api/settings/basic',
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Admin),
-      AdminMWs.updateBasicSettings,
+      SettingsMWs.updateBasicSettings,
       RenderingMWs.renderOK
     );
     app.put('/api/settings/other',
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Admin),
-      AdminMWs.updateOtherSettings,
+      SettingsMWs.updateOtherSettings,
       RenderingMWs.renderOK
     );
     app.put('/api/settings/indexing',
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Admin),
-      AdminMWs.updateIndexingSettings,
+      SettingsMWs.updateIndexingSettings,
       RenderingMWs.renderOK
     );
     app.put('/api/settings/tasks',
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Admin),
-      AdminMWs.updateTasksSettings,
+      SettingsMWs.updateTasksSettings,
       RenderingMWs.renderOK
     );
   }

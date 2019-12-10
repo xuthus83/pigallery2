@@ -1,5 +1,4 @@
 import * as path from 'path';
-import * as os from 'os';
 import * as fs from 'fs';
 import * as util from 'util';
 import {ITaskExecuter, TaskExecuter} from '../model/threading/TaskExecuter';
@@ -12,7 +11,7 @@ const existPr = util.promisify(fs.exists);
 
 export class VideoConverterMWs {
   private static taskQue: ITaskExecuter<VideoConverterInput, void> =
-    new TaskExecuter(Math.max(1, os.cpus().length - 1), (input => VideoConverterWorker.convert(input)));
+    new TaskExecuter(1, (input => VideoConverterWorker.convert(input)));
 
 
   public static generateConvertedFileName(videoPath: string): string {

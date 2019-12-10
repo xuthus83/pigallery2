@@ -6,10 +6,10 @@ import {NavigationService} from '../../../model/navigation.service';
 import {NotificationService} from '../../../model/notification.service';
 import {ClientConfig} from '../../../../../common/config/public/ConfigClass';
 import {I18n} from '@ngx-translate/i18n-polyfill';
-import {codecType, formatType, resolutionType, VideoConfig} from '../../../../../common/config/private/IPrivateConfig';
 import {ScheduledTasksService} from '../scheduled-tasks.service';
 import {DefaultsTasks} from '../../../../../common/entities/task/TaskDTO';
 import {ErrorDTO} from '../../../../../common/entities/Error';
+import {ServerConfig} from '../../../../../common/config/private/IPrivateConfig';
 
 
 @Component({
@@ -19,11 +19,11 @@ import {ErrorDTO} from '../../../../../common/entities/Error';
     './../_abstract/abstract.settings.component.css'],
   providers: [VideoSettingsService],
 })
-export class VideoSettingsComponent extends SettingsComponent<{ server: VideoConfig, client: ClientConfig.VideoConfig }> {
+export class VideoSettingsComponent extends SettingsComponent<{ server: ServerConfig.VideoConfig, client: ClientConfig.VideoConfig }> {
 
-  resolutions: resolutionType[] = [360, 480, 720, 1080, 1440, 2160, 4320];
-  codecs: { [key: string]: codecType[] } = {webm: ['libvpx', 'libvpx-vp9'], mp4: ['libx264', 'libx265']};
-  formats: formatType[] = ['mp4', 'webm'];
+  resolutions: ServerConfig.resolutionType[] = [360, 480, 720, 1080, 1440, 2160, 4320];
+  codecs: { [key: string]: ServerConfig.codecType[] } = {webm: ['libvpx', 'libvpx-vp9'], mp4: ['libx264', 'libx265']};
+  formats: ServerConfig.formatType[] = ['mp4', 'webm'];
   fps = [24, 25, 30, 48, 50, 60];
 
   constructor(_authService: AuthenticationService,
@@ -79,7 +79,7 @@ export class VideoSettingsComponent extends SettingsComponent<{ server: VideoCon
       this.settings.server.transcoding.fps);
   }
 
-  formatChanged(format: formatType) {
+  formatChanged(format: ServerConfig.formatType) {
     this.settings.server.transcoding.codec = this.codecs[format][0];
   }
 

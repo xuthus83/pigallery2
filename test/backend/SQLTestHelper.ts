@@ -1,8 +1,8 @@
 import {Config} from '../../common/config/private/Config';
-import {DatabaseType} from '../../common/config/private/IPrivateConfig';
 import * as fs from 'fs';
 import * as path from 'path';
 import {SQLConnection} from '../../backend/model/sql/SQLConnection';
+import {ServerConfig} from '../../common/config/private/IPrivateConfig';
 
 declare let describe: any;
 const savedDescribe = describe;
@@ -17,7 +17,7 @@ export class SQLTestHelper {
   tempDir: string;
   dbPath: string;
 
-  constructor(public dbType: DatabaseType) {
+  constructor(public dbType: ServerConfig.DatabaseType) {
     this.tempDir = path.join(__dirname, './tmp');
     this.dbPath = path.join(__dirname, './tmp', 'test.db');
 
@@ -26,13 +26,13 @@ export class SQLTestHelper {
   static describe(name: string, tests: (helper?: SQLTestHelper) => void) {
     savedDescribe(name, async () => {
       if (SQLTestHelper.enable.sqlite) {
-        const helper = new SQLTestHelper(DatabaseType.sqlite);
+        const helper = new SQLTestHelper(ServerConfig.DatabaseType.sqlite);
         savedDescribe('sqlite', () => {
           return tests(helper);
         });
       }
       if (SQLTestHelper.enable.mysql) {
-        const helper = new SQLTestHelper(DatabaseType.mysql);
+        const helper = new SQLTestHelper(ServerConfig.DatabaseType.mysql);
         savedDescribe('mysql', function () {
           this.timeout(99999999);
           // @ts-ignore
@@ -43,7 +43,7 @@ export class SQLTestHelper {
   }
 
   public async initDB() {
-    if (this.dbType === DatabaseType.sqlite) {
+    if (this.dbType === ServerConfig.DatabaseType.sqlite) {
       await this.initSQLite();
     } else {
       await this.initMySQL();
@@ -52,7 +52,7 @@ export class SQLTestHelper {
 
 
   public async clearDB() {
-    if (this.dbType === DatabaseType.sqlite) {
+    if (this.dbType === ServerConfig.DatabaseType.sqlite) {
       await this.clearUpSQLite();
     } else {
       await this.clearUpMysql();
@@ -62,12 +62,12 @@ export class SQLTestHelper {
   private async initSQLite() {
     await this.resetSQLite();
 
-    Config.Server.Database.type = DatabaseType.sqlite;
+    Config.Server.Database.type = ServerConfig.DatabaseType.sqlite;
     Config.Server.Database.sqlite.storage = this.dbPath;
   }
 
   private async initMySQL() {
-    Config.Server.Database.type = DatabaseType.mysql;
+    Config.Server.Database.type = ServerConfig.DatabaseType.mysql;
     Config.Server.Database.mysql.database = 'pigallery2_test';
 
     await this.resetMySQL();
@@ -85,7 +85,7 @@ export class SQLTestHelper {
   }
 
   private async resetMySQL() {
-    Config.Server.Database.type = DatabaseType.mysql;
+    Config.Server.Database.type = ServerConfig.DatabaseType.mysql;
     Config.Server.Database.mysql.database = 'pigallery2_test';
     const conn = await SQLConnection.getConnection();
     await conn.query('DROP DATABASE IF EXISTS ' + conn.options.database);
@@ -94,7 +94,7 @@ export class SQLTestHelper {
   }
 
   private async clearUpMysql() {
-    Config.Server.Database.type = DatabaseType.mysql;
+    Config.Server.Database.type = ServerConfig.DatabaseType.mysql;
     Config.Server.Database.mysql.database = 'pigallery2_test';
     const conn = await SQLConnection.getConnection();
     await conn.query('DROP DATABASE IF EXISTS ' + conn.options.database);

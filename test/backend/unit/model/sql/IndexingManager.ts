@@ -1,7 +1,6 @@
 import {expect} from 'chai';
 import * as fs from 'fs';
 import {Config} from '../../../../../common/config/private/Config';
-import {ReIndexingSensitivity} from '../../../../../common/config/private/IPrivateConfig';
 import {SQLConnection} from '../../../../../backend/model/sql/SQLConnection';
 import {GalleryManager} from '../../../../../backend/model/sql/GalleryManager';
 import {DirectoryDTO} from '../../../../../common/entities/DirectoryDTO';
@@ -17,6 +16,7 @@ import {PersonManager} from '../../../../../backend/model/sql/PersonManager';
 import {SQLTestHelper} from '../../../SQLTestHelper';
 import {VersionManager} from '../../../../../backend/model/sql/VersionManager';
 import {DiskMangerWorker} from '../../../../../backend/model/threading/DiskMangerWorker';
+import {ServerConfig} from '../../../../../common/config/private/IPrivateConfig';
 
 class GalleryManagerTest extends GalleryManager {
 
@@ -457,7 +457,7 @@ describe('IndexingManager', (sqlHelper: SQLTestHelper) => {
     });
 
     it('with re indexing severity low', async () => {
-      Config.Server.Indexing.reIndexingSensitivity = ReIndexingSensitivity.low;
+      Config.Server.Indexing.reIndexingSensitivity = ServerConfig.ReIndexingSensitivity.low;
 
       // @ts-ignore
       fs.statSync = () => ({ctime: new Date(dirTime), mtime: new Date(dirTime)});
