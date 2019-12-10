@@ -4,7 +4,7 @@ import {Utils} from '../../common/Utils';
 import {Message} from '../../common/entities/Message';
 import {SharingDTO} from '../../common/entities/SharingDTO';
 import {Config} from '../../common/config/private/Config';
-import {ConfigClass} from '../../common/config/private/PrivateConfigClass';
+import {ConfigClass} from '../../common/config/private/ConfigClass';
 import {UserRoles} from '../../common/entities/UserDTO';
 import {NotificationManager} from '../model/NotifocationManager';
 import {Logger} from '../Logger';

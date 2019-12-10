@@ -10,7 +10,7 @@ import {ClientConfig} from '../../../common/config/public/ConfigClass';
 import {BasicConfigDTO} from '../../../common/entities/settings/BasicConfigDTO';
 import {OtherConfigDTO} from '../../../common/entities/settings/OtherConfigDTO';
 import {ProjectPath} from '../../ProjectPath';
-import {ConfigClass} from '../../../common/config/private/PrivateConfigClass';
+import {ConfigClass} from '../../../common/config/private/ConfigClass';
 import {ServerConfig} from '../../../common/config/private/IPrivateConfig';
 
 const LOG_TAG = '[SettingsMWs]';
