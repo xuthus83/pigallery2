@@ -1050,8 +1050,7 @@
           <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
           <context context-type="linenumber">93</context>
         </context-group>
-        <target>Target bit rate of the output video will be scaled down this this. This should be less than the
-            upload rate of your home server.</target>
+        <target>Target bit rate of the output video will be scaled down this this. This should be less than the upload rate of your home server.</target>
       </trans-unit>
       <trans-unit id="3873472ddebbf35f0155cf0b8f98596852b2de0f" datatype="html">
         <source>To ensure smooth video playback, video transcoding is recommended to a lower bit rate than the
