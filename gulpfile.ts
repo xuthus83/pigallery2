@@ -144,7 +144,7 @@ const simpleBuild = (isProd: boolean) => {
 
 gulp.task('extract-locale', (cb) => {
   console.log('creating source translation file:  locale.source.xlf');
-  exec('ng xi18n --out-file=./../locale.source.xlf  --i18n-format=xlf --i18n-locale=en',
+  exec('ng xi18n --out-file=./../../locale.source.xlf  --i18n-format=xlf --i18n-locale=en',
     {maxBuffer: 1024 * 1024}, (error: any, stdOut: string, stdErr: string) => {
       console.log(stdOut);
       console.log(stdErr);
