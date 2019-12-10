@@ -10,11 +10,32 @@ import {IPrivateConfig, ServerConfig} from '../../../common/config/private/IPriv
 
 const LOG_TAG = '[ConfigDiagnostics]';
 
+
 export class ConfigDiagnostics {
+
+  static checkReadWritePermission(path: string) {
+    return new Promise((resolve, reject) => {
+      // tslint:disable-next-line:no-bitwise
+      fs.access(path, fs.constants.R_OK | fs.constants.W_OK, (err) => {
+        if (err) {
+          return reject(err);
+        }
+        return resolve();
+      });
+    });
+  }
 
   static async testDatabase(databaseConfig: ServerConfig.DataBaseConfig) {
     if (databaseConfig.type !== ServerConfig.DatabaseType.memory) {
       await SQLConnection.tryConnection(databaseConfig);
+    }
+    if (databaseConfig.type !== ServerConfig.DatabaseType.sqlite) {
+      try {
+        await this.checkReadWritePermission(ProjectPath.getAbsolutePath(databaseConfig.sqlite.storage));
+      } catch (e) {
+        throw new Error('Cannot read or write sqlite storage file: ' +
+          ProjectPath.getAbsolutePath(databaseConfig.sqlite.storage));
+      }
     }
   }
 
