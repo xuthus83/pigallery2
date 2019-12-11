@@ -6,6 +6,8 @@ export const SupportedFormats = {
     'webp',
     'svg'
   ],
+  // Browser supported video formats
+  // Read more:  https://www.w3schools.com/html/html5_video.asp
   Videos: [
     'mp4',
     'webm',
@@ -15,6 +17,7 @@ export const SupportedFormats = {
   MetaFiles: [
     'gpx'
   ],
+  // These formats need to be transcoded (with the build-in ffmpeg support)
   TranscodeNeed: {
     Photos: <string[]>[],
     Videos: [
@@ -22,7 +25,17 @@ export const SupportedFormats = {
       'mkv',
       'mov',
       'wmv',
-      'flv'
+      'flv',
+      '.mts',
+      '.m2ts',
+      'mpg',
+      '3gp',
+      'm4v',
+      'mpeg',
+      'vob',
+      'divx',
+      'xvid',
+      'ts'
     ],
   },
   WithDots: {
