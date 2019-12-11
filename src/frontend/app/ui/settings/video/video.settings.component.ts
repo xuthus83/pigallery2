@@ -10,6 +10,7 @@ import {ScheduledTasksService} from '../scheduled-tasks.service';
 import {DefaultsTasks} from '../../../../../common/entities/task/TaskDTO';
 import {ErrorDTO} from '../../../../../common/entities/Error';
 import {ServerConfig} from '../../../../../common/config/private/IPrivateConfig';
+import { TaskState } from '../../../../../common/entities/settings/TaskProgressDTO';
 
 
 @Component({
@@ -25,6 +26,8 @@ export class VideoSettingsComponent extends SettingsComponent<{ server: ServerCo
   codecs: { [key: string]: ServerConfig.codecType[] } = {webm: ['libvpx', 'libvpx-vp9'], mp4: ['libx264', 'libx265']};
   formats: ServerConfig.formatType[] = ['mp4', 'webm'];
   fps = [24, 25, 30, 48, 50, 60];
+
+  TaskState = TaskState;
 
   constructor(_authService: AuthenticationService,
               _navigation: NavigationService,

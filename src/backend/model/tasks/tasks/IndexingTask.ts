@@ -1,4 +1,4 @@
-import {TaskProgressDTO} from '../../../../common/entities/settings/TaskProgressDTO';
+import {TaskProgressDTO, TaskState} from '../../../../common/entities/settings/TaskProgressDTO';
 import {ObjectManagers} from '../../ObjectManagers';
 import * as path from 'path';
 import * as fs from 'fs';
@@ -45,7 +45,7 @@ export class IndexingTask extends Task<{ createThumbnails: boolean }> {
     this.progress.comment = directory;
     this.progress.left = this.directoriesToIndex.length;
     const scanned = await ObjectManagers.getInstance().IndexingManager.indexDirectory(directory);
-    if (this.running === false) {
+    if (this.state !== TaskState.running) {
       return null;
     }
     this.progress.progress++;

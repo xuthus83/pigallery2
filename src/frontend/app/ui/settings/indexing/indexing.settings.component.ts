@@ -10,6 +10,7 @@ import {I18n} from '@ngx-translate/i18n-polyfill';
 import {ScheduledTasksService} from '../scheduled-tasks.service';
 import {DefaultsTasks} from '../../../../../common/entities/task/TaskDTO';
 import {ServerConfig} from '../../../../../common/config/private/IPrivateConfig';
+import {TaskState} from '../../../../../common/entities/settings/TaskProgressDTO';
 
 @Component({
   selector: 'app-settings-indexing',
@@ -23,6 +24,7 @@ export class IndexingSettingsComponent extends SettingsComponent<ServerConfig.In
 
 
   types: { key: number; value: string }[] = [];
+  TaskState = TaskState;
 
   constructor(_authService: AuthenticationService,
               _navigation: NavigationService,

@@ -1,4 +1,4 @@
-import {TaskProgressDTO} from '../../../../common/entities/settings/TaskProgressDTO';
+import {TaskProgressDTO, TaskState} from '../../../../common/entities/settings/TaskProgressDTO';
 import {Logger} from '../../../Logger';
 import {ITask} from './ITask';
 import {ConfigTemplateEntry, TaskDTO} from '../../../../common/entities/task/TaskDTO';
@@ -8,7 +8,7 @@ declare const process: any;
 export abstract class Task<T = void> implements ITask<T> {
 
   protected progress: TaskProgressDTO = null;
-  protected running = false;
+  protected state = TaskState.idle;
   protected config: T;
   protected prResolve: () => void;
 
@@ -25,24 +25,26 @@ export abstract class Task<T = void> implements ITask<T> {
   }
 
   public start(config: T): Promise<void> {
-    if (this.running === false && this.Supported) {
+    if (this.state === TaskState.idle && this.Supported) {
       Logger.info('[Task]', 'Running task: ' + this.Name);
       this.config = config;
       this.progress = {
         progress: 0,
         left: 0,
         comment: '',
+        state: TaskState.running,
         time: {
           start: Date.now(),
           current: Date.now()
         }
       };
-      this.running = true;
-      this.init().catch(console.error);
-      this.run();
-      return new Promise<void>((resolve) => {
+      const pr = new Promise<void>((resolve) => {
         this.prResolve = resolve;
       });
+      this.init().catch(console.error);
+      this.state = TaskState.running;
+      this.run();
+      return pr;
     } else {
       Logger.info('[Task]', 'Task already running: ' + this.Name);
       return Promise.reject();
@@ -51,8 +53,8 @@ export abstract class Task<T = void> implements ITask<T> {
 
   public stop(): void {
     Logger.info('[Task]', 'Stopping task: ' + this.Name);
-    this.running = false;
-    this.onFinish();
+    this.state = TaskState.stopping;
+    this.progress.state = TaskState.stopping;
   }
 
   public toJSON(): TaskDTO {
@@ -75,13 +77,13 @@ export abstract class Task<T = void> implements ITask<T> {
   private run() {
     process.nextTick(async () => {
       try {
-        if (!this.running) {
+        if (this.state === TaskState.idle) {
           this.progress = null;
           return;
         }
         this.progress = await this.step();
         if (this.progress == null) { // finished
-          this.running = false;
+          this.state = TaskState.idle;
           this.onFinish();
           return;
         }

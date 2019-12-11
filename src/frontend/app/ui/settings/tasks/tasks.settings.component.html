@@ -103,7 +103,7 @@
                 </button>
                 <button class="btn btn-secondary float-right"
                         *ngIf="tasksService.progress.value[schedule.taskName]"
-                        [disabled]="disableButtons"
+                        [disabled]="disableButtons || tasksService.progress.value[schedule.taskName].state !== TaskState.running"
                         (click)="stop(schedule)" i18n>Stop
                 </button>
               </div>
@@ -115,7 +115,8 @@
                 <ng-container [ngSwitch]="configEntry.type">
                   <ng-container *ngSwitchCase="'boolean'">
                     <div class="form-group row">
-                      <label class="col-md-2 control-label" [for]="configEntry.id+'_boolean_'+i">{{configEntry.name}}</label>
+                      <label class="col-md-2 control-label"
+                             [for]="configEntry.id+'_boolean_'+i">{{configEntry.name}}</label>
                       <div class="col-md-10">
                         <bSwitch
                           id="enableThreading"
@@ -135,7 +136,8 @@
                   </ng-container>
                   <ng-container *ngSwitchCase="'string'">
                     <div class="form-group row" [hidden]="simplifiedMode">
-                      <label class="col-md-2 control-label" [for]="configEntry.id+'_string_'+i">{{configEntry.name}}</label>
+                      <label class="col-md-2 control-label"
+                             [for]="configEntry.id+'_string_'+i">{{configEntry.name}}</label>
                       <div class="col-md-10">
                         <input type="text" class="form-control" [name]="configEntry.id+'_string_'+i"
                                [id]="configEntry.id+'_string_'+i"
@@ -145,7 +147,8 @@
                   </ng-container>
                   <ng-container *ngSwitchCase="'number'">
                     <div class="form-group row" [hidden]="simplifiedMode">
-                      <label class="col-md-2 control-label" [for]="configEntry.id+'_number_'+i">{{configEntry.name}}</label>
+                      <label class="col-md-2 control-label"
+                             [for]="configEntry.id+'_number_'+i">{{configEntry.name}}</label>
                       <div class="col-md-10">
                         <input type="number" class="form-control" [name]="configEntry.id+'_number_'+i"
                                [id]="configEntry.id+'_number_'+i"
@@ -157,24 +160,11 @@
               </div>
             </ng-container>
           </div>
-          <div class="card-footer bg-transparent" *ngIf="tasksService.progress.value[schedule.taskName]">
-            <span class="progress-details"
-                  i18n>status</span>: {{tasksService.progress.value[schedule.taskName].comment}} <br/>
-            <span class="progress-details" i18n>elapsed</span>: {{getTimeElapsed(schedule.taskName) | duration}}<br/>
-            <span class="progress-details" i18n>left</span>: {{getTimeLeft(schedule.taskName) | duration}}
-            <div class="progress">
-              <div class="progress-bar progress-bar-success"
-                   role="progressbar"
-                   aria-valuenow="2"
-                   aria-valuemin="0"
-                   aria-valuemax="100"
-                   style="min-width: 2em;"
-                   [style.width.%]="(tasksService.progress.value[schedule.taskName].progress/(tasksService.progress.value[schedule.taskName].left+tasksService.progress.value[schedule.taskName].progress))*100">
-                {{tasksService.progress.value[schedule.taskName].progress}}
-                /{{tasksService.progress.value[schedule.taskName].progress + tasksService.progress.value[schedule.taskName].left}}
-              </div>
-            </div>
-          </div>
+          <app-settings-tasks-progress
+            class="card-footer bg-transparent"
+            [progress]="tasksService.progress.value[schedule.taskName]">
+          </app-settings-tasks-progress>
+
         </div>
       </div>
       <button class="btn btn-success float-right"

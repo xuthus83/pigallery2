@@ -86,6 +86,7 @@ import {ScheduledTasksService} from './ui/settings/scheduled-tasks.service';
 import {TimepickerModule} from 'ngx-bootstrap/timepicker';
 import {TimeStampDatePickerComponent} from './ui/utils/timestamp-datepicker/datepicker.component';
 import {TimeStampTimePickerComponent} from './ui/utils/timestamp-timepicker/timepicker.component';
+import {TasksProgressComponent} from './ui/settings/tasks/progress/progress.tasks.settings.component';
 
 
 
@@ -195,6 +196,7 @@ export function translationsFactory(locale: string) {
     FacesSettingsComponent,
     OtherSettingsComponent,
     IndexingSettingsComponent,
+    TasksProgressComponent,
     TasksSettingsComponent,
     // Pipes
     StringifyRole,

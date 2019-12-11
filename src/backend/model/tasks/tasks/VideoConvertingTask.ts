@@ -1,4 +1,4 @@
-import {TaskProgressDTO} from '../../../../common/entities/settings/TaskProgressDTO';
+import {TaskProgressDTO, TaskState} from '../../../../common/entities/settings/TaskProgressDTO';
 import {Config} from '../../../../common/config/private/Config';
 import {ConfigTemplateEntry, DefaultsTasks} from '../../../../common/entities/task/TaskDTO';
 import {Task} from './Task';
@@ -33,7 +33,7 @@ export class VideoConvertingTask extends Task {
 
   protected async step(): Promise<TaskProgressDTO> {
     if ((this.directoryQueue.length === 0 && this.videoQueue.length === 0)
-      || this.running === false) {
+      || this.state !== TaskState.running) {
       if (global.gc) {
         global.gc();
       }

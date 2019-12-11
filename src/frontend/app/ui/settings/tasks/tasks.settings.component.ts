@@ -17,6 +17,7 @@ import {
 import {Utils} from '../../../../../common/Utils';
 import {ServerConfig} from '../../../../../common/config/private/IPrivateConfig';
 import {ConfigTemplateEntry} from '../../../../../common/entities/task/TaskDTO';
+import {TaskState} from '../../../../../common/entities/settings/TaskProgressDTO';
 
 @Component({
   selector: 'app-settings-tasks',
@@ -33,6 +34,7 @@ export class TasksSettingsComponent extends SettingsComponent<ServerConfig.TaskC
   TaskTriggerType = TaskTriggerType;
   periods: string[] = [];
   showDetails: boolean[] = [];
+  TaskState = TaskState;
 
   constructor(_authService: AuthenticationService,
               _navigation: NavigationService,
@@ -83,22 +85,6 @@ export class TasksSettingsComponent extends SettingsComponent<ServerConfig.TaskC
   ngOnDestroy() {
     super.ngOnDestroy();
     this.tasksService.unsubscribeFromProgress();
-  }
-
-  getTimeLeft(id: string): number {
-    const prg = this.tasksService.progress.value[id];
-    if (!prg) {
-      return null;
-    }
-    return (prg.time.current - prg.time.start) / prg.progress * prg.left;
-  }
-
-  getTimeElapsed(id: string) {
-    const prg = this.tasksService.progress.value[id];
-    if (!prg) {
-      return null;
-    }
-    return (prg.time.current - prg.time.start);
   }
 
 
