@@ -94,8 +94,9 @@ You can set up the app the following ways:
  * Using the UI
  * Manually editing the `config.json`
  * Through switches
-   * Like: `node backend/index.js --Server-port=3000 --Client-authenticationRequired=false`
+   * Like: `node start -- --Server-port=3000 --Client-authenticationRequired=false`
    * You can check the generated `config.json` for the config hierarchy
+   * Note: you can run the app to generate the config file only, by running `npm start -- --config-only`
  * Through environmental variable
    * like set env. variable `Server-port` to `3000`   
 
@@ -122,7 +123,7 @@ apt-get install build-essential  libkrb5-dev gcc g++
    ```bash
    npm run add-translation -- --fr
    ```
-   it creates a new `messages.fr.xls` file at `frontend/translate` folder, 
+   it creates a new `messages.fr.xls` file at `src/frontend/translate` folder, 
    it will already contain dummy translation with google translate.
 3. 'fix' the dummy translation
 4. test if it works:

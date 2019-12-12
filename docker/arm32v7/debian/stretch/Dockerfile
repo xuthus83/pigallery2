@@ -1,6 +1,6 @@
 FROM arm32v7/node:10-stretch
 LABEL maintainer="Patrik J. Braun"
-
+# build tutorial: https://collabnix.com/building-arm-based-docker-images-on-docker-desktop-made-possible-using-buildx/
 
 RUN git clone https://github.com/bpatrik/pigallery2.git && \
     cd /pigallery2 && \

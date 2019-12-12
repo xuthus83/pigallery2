@@ -32,6 +32,11 @@ export class ConfigClass extends PrivateConfigDefaultsClass implements IPrivateC
         ['MYSQL_DATABASE', 'Server-Database-mysql-database']]);
     this.removeComment();
 
+    if (process.argv.indexOf('--config-only')) {
+      console.log('started with \'--config-only\' flag. Saving config and exiting.');
+      process.exit();
+    }
+
     if (Utils.enumToArray(UserRoles).map(r => r.key).indexOf(this.Client.unAuthenticatedUserRole) === -1) {
       throw new Error('Unknown user role for Client.unAuthenticatedUserRole, found: ' + this.Client.unAuthenticatedUserRole);
     }
