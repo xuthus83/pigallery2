@@ -8,7 +8,7 @@ RUN mkdir -p /build/release/data/config && \
     mkdir -p /build/release/data/db && \
     mkdir -p /build/release/data/image && \
     mkdir -p /build/release/data/TEMP && \
-    cd /build/release && node backend/server.js && \
+    cd /build/release && node src/backend/server.js || true && \
     sed -i 's/demo/data/g' config.json && sed -i 's@sqlite\.db@data/db/sqlite\.db@' config.json && \
     mv /build/release/config.json /build/release/data/config/config.json
 
