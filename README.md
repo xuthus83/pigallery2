@@ -15,6 +15,8 @@ This is a directory-first photo gallery website, optimised for running on low re
 Live Demo @ heroku: https://pigallery2.herokuapp.com/ 
  - the demo page **first load** might take up **30s**: the time while the free webservice boots up
 
+![PiGallery2 - Animated gif demo](docs/demo.gif)
+
 ## Table of contents
 1. [Getting started](#1-getting-started-on-raspberry-pi)
 2. [Translate the page to your own language](#2-translate-the-page-to-your-own-language)
