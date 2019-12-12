@@ -32,7 +32,7 @@ export class ConfigClass extends PrivateConfigDefaultsClass implements IPrivateC
         ['MYSQL_DATABASE', 'Server-Database-mysql-database']]);
     this.removeComment();
 
-    if (process.argv.indexOf('--config-only')) {
+    if (process.argv.indexOf('--config-only') !== -1) {
       console.log('started with \'--config-only\' flag. Saving config and exiting.');
       process.exit();
     }
