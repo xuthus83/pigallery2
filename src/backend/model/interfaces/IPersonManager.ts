@@ -1,5 +1,4 @@
 import {PersonEntry} from '../sql/enitites/PersonEntry';
-import {MediaDTO} from '../../../common/entities/MediaDTO';
 import {PhotoDTO} from '../../../common/entities/PhotoDTO';
 import {PersonDTO} from '../../../common/entities/PersonDTO';
 

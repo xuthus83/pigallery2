@@ -68,7 +68,7 @@ export class ConfigDiagnostics {
           return resolve();
         }
       } catch (e) {
-        return reject(new Error('unkown video error: ' + e.toString()));
+        return reject(new Error('unknown video error: ' + e.toString()));
       }
     });
   }

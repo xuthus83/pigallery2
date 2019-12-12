@@ -10,6 +10,7 @@ const exec = require('child_process').exec;
 
 const translationFolder = 'translate';
 const tsBackendProject = ts.createProject('tsconfig.json');
+declare var process: NodeJS.Process;
 
 gulp.task('build-backend', function () {
   return gulp.src([

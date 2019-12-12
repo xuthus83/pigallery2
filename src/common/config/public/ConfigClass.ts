@@ -61,7 +61,7 @@ export module ClientConfig {
     defaultPhotoSortingMethod: SortingMethods;
     enableOnScrollThumbnailPrioritising: boolean;
     NavBar: NavBarConfig;
-    captionFirstNaming: boolean; // shows the caption instead of the filename in the phot grid
+    captionFirstNaming: boolean; // shows the caption instead of the filename in the photo grid
   }
 
   export interface VideoConfig {

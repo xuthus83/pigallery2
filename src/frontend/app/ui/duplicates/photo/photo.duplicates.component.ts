@@ -1,7 +1,6 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {MediaDTO} from '../../../../../common/entities/MediaDTO';
-import {Media} from '../../gallery/Media';
-import {IconThumbnail, Thumbnail, ThumbnailManagerService} from '../../gallery/thumbnailManager.service';
+import {IconThumbnail, ThumbnailManagerService} from '../../gallery/thumbnailManager.service';
 import {PhotoDTO} from '../../../../../common/entities/PhotoDTO';
 import {OrientationTypes} from 'ts-exif-parser';
 import {MediaIcon} from '../../gallery/MediaIcon';

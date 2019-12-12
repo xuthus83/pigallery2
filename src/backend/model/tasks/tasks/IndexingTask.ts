@@ -12,7 +12,7 @@ import {Task} from './Task';
 import {ConfigTemplateEntry, DefaultsTasks} from '../../../../common/entities/task/TaskDTO';
 import {ServerConfig} from '../../../../common/config/private/IPrivateConfig';
 
-declare const global: any;
+declare var global: NodeJS.Global;
 const LOG_TAG = '[IndexingTask]';
 
 export class IndexingTask extends Task<{ createThumbnails: boolean }> {

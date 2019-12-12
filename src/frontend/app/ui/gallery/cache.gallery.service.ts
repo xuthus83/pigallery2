@@ -28,12 +28,47 @@ export class GalleryCacheService {
     const onNewVersion = (ver: string) => {
       if (ver !== null &&
         localStorage.getItem(GalleryCacheService.VERSION) !== ver) {
-        this.deleteCache();
+        GalleryCacheService.deleteCache();
         localStorage.setItem(GalleryCacheService.VERSION, ver);
       }
     };
     this.versionService.version.subscribe(onNewVersion);
     onNewVersion(this.versionService.version.value);
+  }
+
+  private static loadCacheItem(key: string): SearchResultDTO {
+    const tmp = localStorage.getItem(key);
+    if (tmp != null) {
+      const value: CacheItem<SearchResultDTO> = JSON.parse(tmp);
+      if (value.timestamp < Date.now() - Config.Client.Search.instantSearchCacheTimeout) {
+        localStorage.removeItem(key);
+        return null;
+      }
+      return value.item;
+    }
+
+    return null;
+  }
+
+  private static deleteCache() {
+    try {
+      const toRemove = [];
+      for (let i = 0; i < localStorage.length; i++) {
+        if (localStorage.key(i).startsWith(GalleryCacheService.CONTENT_PREFIX) ||
+          localStorage.key(i).startsWith(GalleryCacheService.SEARCH_PREFIX) ||
+          localStorage.key(i).startsWith(GalleryCacheService.INSTANT_SEARCH_PREFIX) ||
+          localStorage.key(i).startsWith(GalleryCacheService.AUTO_COMPLETE_PREFIX)
+        ) {
+          toRemove.push(localStorage.key(i));
+        }
+      }
+
+      for (let i = 0; i < toRemove.length; i++) {
+        localStorage.removeItem(toRemove[i]);
+      }
+    } catch (e) {
+
+    }
   }
 
   public getSorting(dir: DirectoryDTO): SortingMethods {
@@ -104,16 +139,7 @@ export class GalleryCacheService {
       return null;
     }
     const key = GalleryCacheService.INSTANT_SEARCH_PREFIX + text;
-    const tmp = localStorage.getItem(key);
-    if (tmp != null) {
-      const value: CacheItem<SearchResultDTO> = JSON.parse(tmp);
-      if (value.timestamp < Date.now() - Config.Client.Search.instantSearchCacheTimeout) {
-        localStorage.removeItem(key);
-        return null;
-      }
-      return value.item;
-    }
-    return null;
+    return GalleryCacheService.loadCacheItem(key);
   }
 
   public setInstantSearch(text: string, searchResult: SearchResultDTO): void {
@@ -140,16 +166,8 @@ export class GalleryCacheService {
     if (typeof type !== 'undefined' && type !== null) {
       key += GalleryCacheService.SEARCH_TYPE_PREFIX + type;
     }
-    const tmp = localStorage.getItem(key);
-    if (tmp != null) {
-      const value: CacheItem<SearchResultDTO> = JSON.parse(tmp);
-      if (value.timestamp < Date.now() - Config.Client.Search.searchCacheTimeout) {
-        localStorage.removeItem(key);
-        return null;
-      }
-      return value.item;
-    }
-    return null;
+
+    return GalleryCacheService.loadCacheItem(key);
   }
 
   public setSearch(text: string, type: SearchTypes, searchResult: SearchResultDTO): void {
@@ -241,27 +259,6 @@ export class GalleryCacheService {
       });
     }
 
-  }
-
-  private deleteCache() {
-    try {
-      const toRemove = [];
-      for (let i = 0; i < localStorage.length; i++) {
-        if (localStorage.key(i).startsWith(GalleryCacheService.CONTENT_PREFIX) ||
-          localStorage.key(i).startsWith(GalleryCacheService.SEARCH_PREFIX) ||
-          localStorage.key(i).startsWith(GalleryCacheService.INSTANT_SEARCH_PREFIX) ||
-          localStorage.key(i).startsWith(GalleryCacheService.AUTO_COMPLETE_PREFIX)
-        ) {
-          toRemove.push(localStorage.key(i));
-        }
-      }
-
-      for (let i = 0; i < toRemove.length; i++) {
-        localStorage.removeItem(toRemove[i]);
-      }
-    } catch (e) {
-
-    }
   }
 
   private reset() {

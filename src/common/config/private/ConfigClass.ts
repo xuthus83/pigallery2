@@ -5,6 +5,8 @@ import {Utils} from '../../Utils';
 import {UserRoles} from '../../entities/UserDTO';
 import {PrivateConfigDefaultsClass} from './PrivateConfigDefaultsClass';
 
+declare var process: NodeJS.Process;
+
 /**
  * This configuration will be only at backend
  */
@@ -12,7 +14,6 @@ export class ConfigClass extends PrivateConfigDefaultsClass implements IPrivateC
 
   private static readonly CONFIG_PATH = path.join(__dirname, './../../../../config.json');
 
-  private ConfigLoader: any;
 
   public setDatabaseType(type: ServerConfig.DatabaseType) {
     this.Server.Database.type = type;

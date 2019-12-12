@@ -1,5 +1,4 @@
 import {MediaDTO} from './MediaDTO';
-import {PhotoDTO} from './PhotoDTO';
 import {FileDTO} from './FileDTO';
 
 export interface DirectoryDTO {

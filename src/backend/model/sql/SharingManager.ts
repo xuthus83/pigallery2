@@ -30,7 +30,7 @@ export class SharingManager implements ISharingManager {
     if (sharing.password) {
       sharing.password = PasswordHelper.cryptPassword(sharing.password);
     }
-    return await connection.getRepository(SharingEntity).save(sharing);
+    return connection.getRepository(SharingEntity).save(sharing);
   }
 
   async updateSharing(inSharing: SharingDTO): Promise<SharingDTO> {
@@ -53,7 +53,7 @@ export class SharingManager implements ISharingManager {
     sharing.includeSubfolders = inSharing.includeSubfolders;
     sharing.expires = inSharing.expires;
 
-    return await connection.getRepository(SharingEntity).save(sharing);
+    return connection.getRepository(SharingEntity).save(sharing);
   }
 
 

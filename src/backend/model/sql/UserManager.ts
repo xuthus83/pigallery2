@@ -17,7 +17,7 @@ export class UserManager implements IUserManager {
     delete filter.password;
     const user = (await connection.getRepository(UserEntity).findOne(filter));
 
-    if (user.permissions && user.permissions != null) {
+    if (user.permissions) {
       user.permissions = <any>JSON.parse(<any>user.permissions);
     }
 
@@ -31,7 +31,7 @@ export class UserManager implements IUserManager {
   public async find(filter: any) {
     const connection = await SQLConnection.getConnection();
     return (await connection.getRepository(UserEntity).find(filter)).map(user => {
-      if (user.permissions && user.permissions != null) {
+      if (user.permissions) {
         user.permissions = <any>JSON.parse(<any>user.permissions);
       }
       return user;
@@ -40,11 +40,11 @@ export class UserManager implements IUserManager {
 
   public async createUser(user: UserDTO) {
     const connection = await SQLConnection.getConnection();
-    if (user.permissions && user.permissions != null) {
+    if (user.permissions) {
       user.permissions = <any>JSON.stringify(<any>user.permissions);
     }
     user.password = PasswordHelper.cryptPassword(user.password);
-    return await connection.getRepository(UserEntity).save(user);
+    return connection.getRepository(UserEntity).save(user);
   }
 
   public async deleteUser(id: number) {
@@ -59,7 +59,7 @@ export class UserManager implements IUserManager {
     const userRepository = connection.getRepository(UserEntity);
     const user = await userRepository.findOne({id: id});
     user.role = newRole;
-    return await userRepository.save(user);
+    return userRepository.save(user);
 
   }
 

@@ -1,4 +1,4 @@
-import {Component, ElementRef, Input, OnChanges, OnInit} from '@angular/core';
+import {Component, ElementRef, Input, OnChanges} from '@angular/core';
 import {DirectoryDTO} from '../../../../../common/entities/DirectoryDTO';
 
 @Component({

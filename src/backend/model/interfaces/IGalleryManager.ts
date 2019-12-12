@@ -1,6 +1,6 @@
 import {DirectoryDTO} from '../../../common/entities/DirectoryDTO';
 import {PhotoDTO} from '../../../common/entities/PhotoDTO';
-import {OrientationType, RandomQueryDTO} from '../../../common/entities/RandomQueryDTO';
+import {OrientationType} from '../../../common/entities/RandomQueryDTO';
 
 export interface RandomQuery {
   directory?: string;

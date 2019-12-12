@@ -1,4 +1,3 @@
-import {PhotoDTO} from '../../../../../common/entities/PhotoDTO';
 import {MediaDTO} from '../../../../../common/entities/MediaDTO';
 
 export class GridRowBuilder {
@@ -22,15 +21,6 @@ export class GridRowBuilder {
     for (let i = 0; i < number; i++) {
       this.addPhoto();
     }
-  }
-
-  private addPhoto(): boolean {
-    if (this.photoIndex + 1 > this.photos.length) {
-      return false;
-    }
-    this.photoRow.push(this.photos[this.photoIndex]);
-    this.photoIndex++;
-    return true;
   }
 
   public removePhoto(): boolean {
@@ -68,5 +58,14 @@ export class GridRowBuilder {
     const height = (this.containerWidth - this.photoRow.length * (this.photoMargin * 2) - 1) / width; // cant be equal -> width-1
 
     return height + (this.photoMargin * 2);
+  }
+
+  private addPhoto(): boolean {
+    if (this.photoIndex + 1 > this.photos.length) {
+      return false;
+    }
+    this.photoRow.push(this.photos[this.photoIndex]);
+    this.photoIndex++;
+    return true;
   }
 }

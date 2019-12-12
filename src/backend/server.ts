@@ -19,6 +19,8 @@ import {ServerConfig} from '../common/config/private/IPrivateConfig';
 
 const _session = require('cookie-session');
 
+declare var process: NodeJS.Process;
+
 const LOG_TAG = '[server]';
 
 export class Server {

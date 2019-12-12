@@ -1,4 +1,4 @@
-import {Component, HostListener, Input, OnChanges} from '@angular/core';
+import {Component, Input, OnChanges} from '@angular/core';
 import {DirectoryDTO} from '../../../../../common/entities/DirectoryDTO';
 import {Router, RouterLink} from '@angular/router';
 import {UserDTO} from '../../../../../common/entities/UserDTO';
@@ -27,9 +27,8 @@ export class GalleryNavigatorComponent implements OnChanges {
   sortingMethodsType: { key: number; value: string }[] = [];
   config = Config;
   DefaultSorting = Config.Client.Other.defaultPhotoSortingMethod;
-  private readonly RootFolderName: string;
-
   readonly SearchTypes = SearchTypes;
+  private readonly RootFolderName: string;
 
   constructor(private _authService: AuthenticationService,
               public queryService: QueryService,
@@ -40,6 +39,9 @@ export class GalleryNavigatorComponent implements OnChanges {
     this.RootFolderName = this.i18n('Images');
   }
 
+  get ItemCount(): number {
+    return this.directory ? this.directory.mediaCount : this.searchResult.media.length;
+  }
 
   ngOnChanges() {
     this.getPath();
@@ -91,10 +93,6 @@ export class GalleryNavigatorComponent implements OnChanges {
 
   setSorting(sorting: SortingMethods) {
     this.galleryService.setSorting(sorting);
-  }
-
-  get ItemCount(): number {
-    return this.directory ? this.directory.mediaCount : this.searchResult.media.length;
   }
 
   /*

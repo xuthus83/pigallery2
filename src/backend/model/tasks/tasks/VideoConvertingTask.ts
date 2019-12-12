@@ -11,6 +11,9 @@ import * as util from 'util';
 import {DiskManager} from '../../DiskManger';
 import {VideoConverterMWs} from '../../../middlewares/VideoConverterMWs';
 
+declare var global: NodeJS.Global;
+
+
 const LOG_TAG = '[VideoConvertingTask]';
 const existsPr = util.promisify(fs.exists);
 

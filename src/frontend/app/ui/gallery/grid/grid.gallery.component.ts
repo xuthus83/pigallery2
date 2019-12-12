@@ -315,7 +315,7 @@ export class GalleryGridComponent implements OnChanges, OnInit, AfterViewInit, O
   /**
    * Returns true, if scroll is >= 70% to render more images.
    * Or of onscroll rendering is off: return always to render all the images at once
-   * @param offset Add height to the client height (conent is not yet added to the dom, but calculate with it)
+   * @param offset Add height to the client height (content is not yet added to the dom, but calculate with it)
    * @returns {boolean}
    */
   private shouldRenderMore(offset: number = 0): boolean {

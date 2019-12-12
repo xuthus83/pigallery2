@@ -425,8 +425,8 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
   }
 
   private calcLightBoxPhotoDimension(photo: MediaDTO): Dimension {
-    let width = 0;
-    let height = 0;
+    let width: number;
+    let height: number;
     const photoAspect = photo.metadata.size.width / photo.metadata.size.height;
     const windowAspect = this.photoFrameDim.aspect;
     if (photoAspect < windowAspect) {

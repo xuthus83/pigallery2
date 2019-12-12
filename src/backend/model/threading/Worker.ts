@@ -5,10 +5,11 @@ import {DirectoryDTO} from '../../../common/entities/DirectoryDTO';
 import {Utils} from '../../../common/Utils';
 import {ServerConfig} from '../../../common/config/private/IPrivateConfig';
 
+declare var process: NodeJS.Process;
+declare var global: NodeJS.Global;
+
 export class Worker {
-
-
-  public static process() {
+  public static process(): void {
     Logger.debug('Worker is waiting for tasks');
     process.on('message', async (task: WorkerTask) => {
       try {

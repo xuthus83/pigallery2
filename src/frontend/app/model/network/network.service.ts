@@ -5,7 +5,7 @@ import {SlimLoadingBarService} from 'ng2-slim-loading-bar';
 import {ErrorCodes, ErrorDTO} from '../../../../common/entities/Error';
 import {Config} from '../../../../common/config/public/Config';
 import {Utils} from '../../../../common/Utils';
-import {CostumHeaders} from '../../../../common/CostumHeaders';
+import {CustomHeaders} from '../../../../common/CustomHeaders';
 import {VersionService} from '../version.service';
 
 @Injectable()
@@ -90,8 +90,8 @@ export class NetworkService {
     const process = (res: HttpResponse<Message<T>>): T => {
       this.slimLoadingBarService.complete();
       const msg = res.body;
-      if (res.headers.has(CostumHeaders.dataVersion)) {
-        this.versionService.onNewVersion(res.headers.get(CostumHeaders.dataVersion));
+      if (res.headers.has(CustomHeaders.dataVersion)) {
+        this.versionService.onNewVersion(res.headers.get(CustomHeaders.dataVersion));
       }
       if (!!msg.error) {
         if (msg.error.code) {

@@ -6,6 +6,8 @@ import {Config} from '../../../common/config/private/Config';
 import {TaskScheduleDTO, TaskTriggerType} from '../../../common/entities/task/TaskScheduleDTO';
 import {Logger} from '../../Logger';
 
+declare var global: NodeJS.Global;
+
 const LOG_TAG = '[TaskManager]';
 
 export class TaskManager implements ITaskManager {

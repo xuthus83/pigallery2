@@ -21,9 +21,9 @@ export class AuthenticationService {
 
   constructor(private _userService: UserService,
               private _networkService: NetworkService,
-              private shareSerice: ShareService) {
+              private shareService: ShareService) {
     this.user = new BehaviorSubject(null);
-    this.shareSerice.setUserObs(this.user);
+    this.shareService.setUserObs(this.user);
     // picking up session..
     if (this.isAuthenticated() === false && Cookie.get(CookieNames.session) != null) {
       if (typeof ServerInject !== 'undefined' && typeof ServerInject.user !== 'undefined') {
