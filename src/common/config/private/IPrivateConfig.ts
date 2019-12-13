@@ -31,10 +31,15 @@ export module ServerConfig {
     storage: string;
   }
 
+  export interface MemoryConfig {
+    usersFile: string;
+  }
+
   export interface DataBaseConfig {
     type: DatabaseType;
     mysql?: MySQLConfig;
     sqlite?: SQLiteConfig;
+    memory?: MemoryConfig;
   }
 
   export interface ThumbnailConfig {

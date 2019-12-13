@@ -12,8 +12,22 @@ declare var process: NodeJS.Process;
  */
 export class ConfigClass extends PrivateConfigDefaultsClass implements IPrivateConfig {
 
-  private static readonly CONFIG_PATH = path.join(__dirname, './../../../../config.json');
+  private static CONFIG_PATH = path.join(__dirname, './../../../../config.json');
 
+  constructor() {
+    super();
+
+    // TODO: refactor this
+    let configPath = process.argv.find(s => s.startsWith('--config-path='));
+    if (configPath) {
+      configPath = configPath.replace('--config-path=', '');
+      if (path.isAbsolute(configPath)) {
+        ConfigClass.CONFIG_PATH = configPath;
+      } else {
+        ConfigClass.CONFIG_PATH = path.join(__dirname, './../../../../', configPath);
+      }
+    }
+  }
 
   public setDatabaseType(type: ServerConfig.DatabaseType) {
     this.Server.Database.type = type;
@@ -30,7 +44,8 @@ export class ConfigClass extends PrivateConfigDefaultsClass implements IPrivateC
         ['MYSQL_HOST', 'Server-Database-mysql-host'],
         ['MYSQL_PASSWORD', 'Server-Database-mysql-password'],
         ['MYSQL_USERNAME', 'Server-Database-mysql-username'],
-        ['MYSQL_DATABASE', 'Server-Database-mysql-database']]);
+        ['MYSQL_DATABASE', 'Server-Database-mysql-database']],
+      process.argv.indexOf('--force-rewrite-config') !== -1);
     this.removeComment();
 
     if (process.argv.indexOf('--config-only') !== -1) {

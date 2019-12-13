@@ -35,6 +35,9 @@ export class PrivateConfigDefaultsClass extends PublicConfigClass implements IPr
       },
       sqlite: {
         storage: 'sqlite.db'
+      },
+      memory: {
+        usersFile: 'user.db'
       }
     },
     Sharing: {

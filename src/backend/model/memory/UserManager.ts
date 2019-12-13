@@ -2,27 +2,18 @@ import {UserDTO, UserRoles} from '../../../common/entities/UserDTO';
 import {IUserManager} from '../interfaces/IUserManager';
 import {ProjectPath} from '../../ProjectPath';
 import {Utils} from '../../../common/Utils';
-import * as path from 'path';
 import * as fs from 'fs';
 import {PasswordHelper} from '../PasswordHelper';
+import {Config} from '../../../common/config/private/Config';
 
 
 export class UserManager implements IUserManager {
   private db: { users?: UserDTO[], idCounter?: number } = {};
   private readonly dbPath: string;
 
-  generateId(): string {
-    function s4() {
-      return Math.floor((1 + Math.random()) * 0x10000)
-        .toString(16)
-        .substring(1);
-    }
-
-    return s4() + s4() + s4() + s4();
-  }
 
   constructor() {
-    this.dbPath = path.join(ProjectPath.Root, 'users.db');
+    this.dbPath = ProjectPath.getAbsolutePath(Config.Server.Database.memory.usersFile);
     if (fs.existsSync(this.dbPath)) {
       this.loadDB();
     }
