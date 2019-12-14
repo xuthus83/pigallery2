@@ -55,6 +55,7 @@ wget https://github.com/bpatrik/pigallery2/archive/master.zip
 unzip master.zip
 cd pigallery2-master # enter the unzipped directory
 npm install
+npm build
 ```
 **Note**: if you run `npm run create-release`, it creates a clean, minified, production ready version from the app in the `release` folder, that is ready to deploy.
 
@@ -69,24 +70,8 @@ The app has a nice UI for settings, you may use that too.
 Default user: `admin` pass: `admin`
 
 ### 1.2 Run with Docker 
-If you have `docker` and don't want to install all the dependencies, use this:
-```bash
-docker run \
-   -p 80:80 \
-   -e NODE_ENV=production \
-   -v <path to your config file folder>/config.json:/pigallery2-release/config.json \
-   -v <path to your db file folder>/sqlite.db:/pigallery2-release/sqlite.db \
-   -v <path to your images folder>:/pigallery2-release/demo/images \
-   -v <path to your temp folder>:/pigallery2-release/demo/TEMP \
-   bpatrik/pigallery2:1.7.0-stretch
-```
-Make sure that a file at `<path to your config file folder>/config.json` and `sqlite.db` files exists before running it. 
-
-You do not need the `<path to your db file folder>/sqlite.db` line if you don't use the sqlite database.
-
-After the container is up and running, you go to `http://localhost` and log in with user: `admin` pass: `admin` and set up the page in the settings. 
-
-**All docker builds**: https://hub.docker.com/r/bpatrik/pigallery2/tags/
+If you have `docker` and don't want to install all the dependencies, you can use one of our docker build.
+For configuration read more [here](docker/README.md) or check all builds: https://hub.docker.com/r/bpatrik/pigallery2/tags/
 
 **Note**: You dont need to do the installation steps if you are using docker. 
 

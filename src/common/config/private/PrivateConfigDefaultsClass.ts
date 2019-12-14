@@ -13,7 +13,7 @@ export class PrivateConfigDefaultsClass extends PublicConfigClass implements IPr
     host: '0.0.0.0',
     imagesFolder: 'demo/images',
     Thumbnail: {
-      folder: 'demo/TEMP',
+      folder: 'demo/tmp',
       processingLibrary: ServerConfig.ThumbnailProcessingLib.sharp,
       qualityPriority: true,
       personFaceMargin: 0.6

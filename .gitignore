@@ -20,7 +20,7 @@ benchmark/**/*.js
 benchmark/**/*.js.map
 gulpfile.js
 gulpfile.js.map
-demo/TEMP/
+demo/tmp/
 config.json
 users.db
 sqlite.db
