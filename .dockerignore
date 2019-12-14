@@ -8,3 +8,9 @@ docs/
 out-tsc/
 test/
 docker/
+.travis.yml
+config.json
+karma.conf.js
+protractor.conf.js
+Procfile
+.*ignore

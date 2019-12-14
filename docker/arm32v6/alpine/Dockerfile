@@ -3,7 +3,7 @@ RUN apk add --no-cache wget && \
     wget https://github.com/multiarch/qemu-user-static/releases/download/v4.1.1-1/x86_64_qemu-arm-static.tar.gz && \
     tar -xvf x86_64_qemu-arm-static.tar.gz
 
-FROM arm32v6/node:12-stretch AS builder
+FROM arm32v6/node:12-alpine AS builder
 COPY --from=qemu-builder /qemu-arm-static /usr/bin
 # LABEL maintainer="Patrik J. Braun"
 # copying only package{-lock}.json to make node_modules cachable
@@ -26,7 +26,7 @@ RUN mkdir -p /build/release/data/config && \
     --Server-Thumbnail-folder='data/tmp'  || true
 
 
-FROM arm32v6/node:12-stretch-slim
+FROM arm32v6/node:12-alpine
 COPY --from=qemu-builder /qemu-arm-static /usr/bin
 WORKDIR /app
 ENTRYPOINT ["npm", "start"]
