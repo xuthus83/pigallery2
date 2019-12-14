@@ -1,5 +1,6 @@
 FROM alpine AS qemu-builder
-RUN wget https://github.com/multiarch/qemu-user-static/releases/download/v4.1.1-1/x86_64_qemu-arm-static.tar.gz && \
+RUN apk add --no-cache wget && \
+    wget https://github.com/multiarch/qemu-user-static/releases/download/v4.1.1-1/x86_64_qemu-arm-static.tar.gz && \
     tar -xvf x86_64_qemu-arm-static.tar.gz
 
 FROM arm32v6/node:12-stretch AS builder

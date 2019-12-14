@@ -1,0 +1,10 @@
+.github/
+.idea/
+node_modules/
+benchmark/
+demo/
+dist/
+docs/
+out-tsc/
+test/
+docker/
