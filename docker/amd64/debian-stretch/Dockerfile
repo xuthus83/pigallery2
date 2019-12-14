@@ -5,7 +5,7 @@ COPY package*.json /build/
 WORKDIR /build
 RUN set -x && npm install --unsafe-perm
 # build app
-COPY stretch /build
+COPY . /build
 RUN mkdir -p /build/release/data/config && \
     mkdir -p /build/release/data/db && \
     mkdir -p /build/release/data/images && \

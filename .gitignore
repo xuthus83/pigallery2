@@ -2,13 +2,9 @@
 PiGallery2.iml
 node_modules/
 pigallery2.zip
-src/frontend/**/*.js
-src/frontend/**/*.js.map
+src/**/*.js
+src/**/*.js.map
 src/frontend/dist
-src/backend/**/*.js
-src/backend/**/*.js.map
-src/common/**/*.js
-src/common/**/*.js.map
 test/coverage
 test/backend/**/*.js
 test/backend/**/*.js.map
