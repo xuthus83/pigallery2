@@ -5,7 +5,7 @@ RUN apk add --no-cache wget && \
 
 FROM arm32v6/node:12-alpine AS builder
 COPY --from=qemu-builder /qemu-arm-static /usr/bin
-# LABEL maintainer="Patrik J. Braun"
+RUN apk add python build-base
 # copying only package{-lock}.json to make node_modules cachable
 COPY package*.json /build/
 WORKDIR /build

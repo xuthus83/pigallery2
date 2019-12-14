@@ -1,5 +1,4 @@
 FROM node:12-stretch AS builder
-# LABEL maintainer="Patrik J. Braun"
 # copying only package{-lock}.json to make node_modules cachable
 COPY package*.json /build/
 WORKDIR /build
