@@ -170,7 +170,7 @@ export class Utils {
   }
 
 
-  public static findClosest(number: number, arr: Array<number>) {
+  public static findClosest(number: number, arr: number[]): number {
 
     let curr = arr[0];
     let diff = Math.abs(number - curr);
@@ -185,6 +185,25 @@ export class Utils {
       }
 
     });
+
+    return curr;
+  }
+
+
+  public static findClosestinSorted(number: number, arr: number[]): number {
+
+    let curr = arr[0];
+    let diff = Math.abs(number - curr);
+    for (let i = 0; i < arr.length; ++i) {
+
+      const newDiff = Math.abs(number - arr[i]);
+      if (newDiff > diff) {
+        break;
+      }
+      diff = newDiff;
+      curr = arr[i];
+    }
+
 
     return curr;
   }

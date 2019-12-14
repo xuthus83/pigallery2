@@ -3,7 +3,7 @@ import {NextFunction, Request, Response} from 'express';
 import {ErrorCodes, ErrorDTO} from '../../../common/entities/Error';
 import {ObjectManagers} from '../../model/ObjectManagers';
 import {Logger} from '../../Logger';
-import {SQLConnection} from '../../model/sql/SQLConnection';
+import {SQLConnection} from '../../model/database/sql/SQLConnection';
 import {Config} from '../../../common/config/private/Config';
 import {ConfigDiagnostics} from '../../model/diagnostics/ConfigDiagnostics';
 import {ClientConfig} from '../../../common/config/public/ConfigClass';
@@ -98,11 +98,11 @@ export class SettingsMWs {
       const original = Config.original();
       await ConfigDiagnostics.testClientVideoConfig(settings.client);
       await ConfigDiagnostics.testServerVideoConfig(settings.server, original);
-      Config.Server.Video = settings.server;
-      Config.Client.Video = settings.client;
+      Config.Server.Media.Video = settings.server;
+      Config.Client.Media.Video = settings.client;
       // only updating explicitly set config (not saving config set by the diagnostics)
-      original.Server.Video = settings.server;
-      original.Client.Video = settings.client;
+      original.Server.Media.Video = settings.server;
+      original.Client.Media.Video = settings.client;
       original.save();
       await ConfigDiagnostics.runDiagnostics();
       Logger.info(LOG_TAG, 'new config:');
@@ -281,12 +281,12 @@ export class SettingsMWs {
 
       await ConfigDiagnostics.testServerThumbnailConfig(settings.server);
       await ConfigDiagnostics.testClientThumbnailConfig(settings.client);
-      Config.Server.Thumbnail = settings.server;
-      Config.Client.Thumbnail = settings.client;
+      Config.Server.Media.Thumbnail = settings.server;
+      Config.Client.Media.Thumbnail = settings.client;
       // only updating explicitly set config (not saving config set by the diagnostics)
       const original = Config.original();
-      original.Server.Thumbnail = settings.server;
-      original.Client.Thumbnail = settings.client;
+      original.Server.Media.Thumbnail = settings.server;
+      original.Client.Media.Thumbnail = settings.client;
       original.save();
       ProjectPath.reset();
       await ConfigDiagnostics.runDiagnostics();
@@ -311,7 +311,7 @@ export class SettingsMWs {
       await ConfigDiagnostics.testImageFolder(settings.imagesFolder);
       Config.Server.port = settings.port;
       Config.Server.host = settings.host;
-      Config.Server.imagesFolder = settings.imagesFolder;
+      Config.Server.Media.folder = settings.imagesFolder;
       Config.Client.publicUrl = settings.publicUrl;
       Config.Client.urlBase = settings.urlBase;
       Config.Client.applicationTitle = settings.applicationTitle;
@@ -319,7 +319,7 @@ export class SettingsMWs {
       const original = Config.original();
       original.Server.port = settings.port;
       original.Server.host = settings.host;
-      original.Server.imagesFolder = settings.imagesFolder;
+      original.Server.Media.folder = settings.imagesFolder;
       original.Client.publicUrl = settings.publicUrl;
       original.Client.urlBase = settings.urlBase;
       original.Client.applicationTitle = settings.applicationTitle;

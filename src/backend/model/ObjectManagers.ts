@@ -1,13 +1,13 @@
-import {IUserManager} from './interfaces/IUserManager';
-import {IGalleryManager} from './interfaces/IGalleryManager';
-import {ISearchManager} from './interfaces/ISearchManager';
-import {SQLConnection} from './sql/SQLConnection';
-import {ISharingManager} from './interfaces/ISharingManager';
+import {IUserManager} from './database/interfaces/IUserManager';
+import {IGalleryManager} from './database/interfaces/IGalleryManager';
+import {ISearchManager} from './database/interfaces/ISearchManager';
+import {SQLConnection} from './database/sql/SQLConnection';
+import {ISharingManager} from './database/interfaces/ISharingManager';
 import {Logger} from '../Logger';
-import {IIndexingManager} from './interfaces/IIndexingManager';
-import {IPersonManager} from './interfaces/IPersonManager';
-import {IVersionManager} from './interfaces/IVersionManager';
-import {ITaskManager} from './interfaces/ITaskManager';
+import {IIndexingManager} from './database/interfaces/IIndexingManager';
+import {IPersonManager} from './database/interfaces/IPersonManager';
+import {IVersionManager} from './database/interfaces/IVersionManager';
+import {ITaskManager} from './database/interfaces/ITaskManager';
 
 export class ObjectManagers {
 
@@ -111,13 +111,13 @@ export class ObjectManagers {
 
   public static async InitMemoryManagers() {
     await ObjectManagers.reset();
-    const GalleryManager = require('./memory/GalleryManager').GalleryManager;
-    const UserManager = require('./memory/UserManager').UserManager;
-    const SearchManager = require('./memory/SearchManager').SearchManager;
-    const SharingManager = require('./memory/SharingManager').SharingManager;
-    const IndexingManager = require('./memory/IndexingManager').IndexingManager;
-    const PersonManager = require('./memory/PersonManager').PersonManager;
-    const VersionManager = require('./memory/VersionManager').VersionManager;
+    const GalleryManager = require('./database/memory/GalleryManager').GalleryManager;
+    const UserManager = require('./database/memory/UserManager').UserManager;
+    const SearchManager = require('./database/memory/SearchManager').SearchManager;
+    const SharingManager = require('./database/memory/SharingManager').SharingManager;
+    const IndexingManager = require('./database/memory/IndexingManager').IndexingManager;
+    const PersonManager = require('./database/memory/PersonManager').PersonManager;
+    const VersionManager = require('./database/memory/VersionManager').VersionManager;
     ObjectManagers.getInstance().GalleryManager = new GalleryManager();
     ObjectManagers.getInstance().UserManager = new UserManager();
     ObjectManagers.getInstance().SearchManager = new SearchManager();
@@ -131,13 +131,13 @@ export class ObjectManagers {
   public static async InitSQLManagers() {
     await ObjectManagers.reset();
     await SQLConnection.init();
-    const GalleryManager = require('./sql/GalleryManager').GalleryManager;
-    const UserManager = require('./sql/UserManager').UserManager;
-    const SearchManager = require('./sql/SearchManager').SearchManager;
-    const SharingManager = require('./sql/SharingManager').SharingManager;
-    const IndexingManager = require('./sql/IndexingManager').IndexingManager;
-    const PersonManager = require('./sql/PersonManager').PersonManager;
-    const VersionManager = require('./sql/VersionManager').VersionManager;
+    const GalleryManager = require('./database/sql/GalleryManager').GalleryManager;
+    const UserManager = require('./database/sql/UserManager').UserManager;
+    const SearchManager = require('./database/sql/SearchManager').SearchManager;
+    const SharingManager = require('./database/sql/SharingManager').SharingManager;
+    const IndexingManager = require('./database/sql/IndexingManager').IndexingManager;
+    const PersonManager = require('./database/sql/PersonManager').PersonManager;
+    const VersionManager = require('./database/sql/VersionManager').VersionManager;
     ObjectManagers.getInstance().GalleryManager = new GalleryManager();
     ObjectManagers.getInstance().UserManager = new UserManager();
     ObjectManagers.getInstance().SearchManager = new SearchManager();

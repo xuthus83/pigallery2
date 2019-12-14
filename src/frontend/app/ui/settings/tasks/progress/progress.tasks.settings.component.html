@@ -11,8 +11,8 @@
 
 
   <div class="form-group row progress-row ">
-    <div class="col-md-1 text-right" title="time elapsed" i18n-title>{{TimeElapsed| duration}}</div>
-    <div class="progress col-md-10 ">
+    <div class="col-1 text-right" title="time elapsed" i18n-title>{{TimeElapsed| duration}}</div>
+    <div class="progress col-10 ">
       <div
         class="progress-bar d-inline-block progress-bar-success {{progress.state === TaskState.stopping ? 'bg-secondary' : ''}}"
         role="progressbar"
@@ -25,6 +25,6 @@
         /{{progress.progress + progress.left}}
       </div>
     </div>
-    <div class="col-md-1" title="time left" i18n-title>{{TimeAll| duration}}</div>
+    <div class="col-1" title="time left" i18n-title>{{TimeAll| duration}}</div>
   </div>
 </div>

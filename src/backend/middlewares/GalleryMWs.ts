@@ -10,12 +10,12 @@ import {PhotoDTO} from '../../common/entities/PhotoDTO';
 import {ProjectPath} from '../ProjectPath';
 import {Config} from '../../common/config/private/Config';
 import {UserDTO} from '../../common/entities/UserDTO';
-import {RandomQuery} from '../model/interfaces/IGalleryManager';
+import {RandomQuery} from '../model/database/interfaces/IGalleryManager';
 import {MediaDTO} from '../../common/entities/MediaDTO';
 import {VideoDTO} from '../../common/entities/VideoDTO';
 import {Utils} from '../../common/Utils';
 import {QueryParams} from '../../common/QueryParams';
-import {VideoConverterMWs} from './VideoConverterMWs';
+import {VideoProcessing} from '../model/fileprocessing/VideoProcessing';
 
 
 const LOG_TAG = '[GalleryMWs]';
@@ -94,7 +94,7 @@ export class GalleryMWs {
     }
 
 
-    if (Config.Client.Video.enabled === false) {
+    if (Config.Client.Media.Video.enabled === false) {
       if (cw.directory) {
         const removeVideos = (dir: DirectoryDTO) => {
           dir.media = dir.media.filter(m => !MediaDTO.isVideo(m));
@@ -180,22 +180,22 @@ export class GalleryMWs {
   }
 
   public static loadBestFitVideo(req: Request, res: Response, next: NextFunction) {
-    if (!(req.params.mediaPath)) {
+    if (!(req.resultPipe)) {
       return next();
     }
-    const fullMediaPath = path.join(ProjectPath.ImageFolder, req.params.mediaPath);
+    const fullMediaPath = path.join(ProjectPath.ImageFolder, req.resultPipe);
 
     if (fs.statSync(fullMediaPath).isDirectory()) {
       return next();
     }
 
-    // check if  video exist
+    // check if  video does not exist
     if (fs.existsSync(fullMediaPath) === false) {
-      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, 'no such file:' + req.params.mediaPath, 'can\'t find file: ' + fullMediaPath));
+      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, 'no such file:' + req.resultPipe, 'can\'t find file: ' + fullMediaPath));
     }
     req.resultPipe = fullMediaPath;
 
-    const convertedVideo = VideoConverterMWs.generateConvertedFileName(fullMediaPath);
+    const convertedVideo = VideoProcessing.generateConvertedFileName(fullMediaPath);
 
     // check if transcoded video exist
     if (fs.existsSync(convertedVideo) === true) {

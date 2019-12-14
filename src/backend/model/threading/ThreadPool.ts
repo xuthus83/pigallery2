@@ -103,7 +103,7 @@ export class ThumbnailTH extends ThreadPool<void> implements ITaskExecuter<Rende
     return super.executeTask(<ThumbnailTask>{
       type: WorkerTaskTypes.thumbnail,
       input: input,
-      renderer: Config.Server.Thumbnail.processingLibrary
+      renderer: Config.Server.Media.Thumbnail.processingLibrary
     });
   }
 }

@@ -3,9 +3,9 @@ import {AuthenticationMWs} from '../../../../../src/backend/middlewares/user/Aut
 import {ErrorCodes, ErrorDTO} from '../../../../../src/common/entities/Error';
 import {UserDTO, UserRoles} from '../../../../../src/common/entities/UserDTO';
 import {ObjectManagers} from '../../../../../src/backend/model/ObjectManagers';
-import {UserManager} from '../../../../../src/backend/model/memory/UserManager';
+import {UserManager} from '../../../../../src/backend/model/database/memory/UserManager';
 import {Config} from '../../../../../src/common/config/private/Config';
-import {IUserManager} from '../../../../../src/backend/model/interfaces/IUserManager';
+import {IUserManager} from '../../../../../src/backend/model/database/interfaces/IUserManager';
 import * as path from 'path';
 
 

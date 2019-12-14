@@ -12,7 +12,7 @@ export class ThumbnailWorker {
   private static rendererType: ServerConfig.ThumbnailProcessingLib = null;
 
   public static render(input: RendererInput, renderer: ServerConfig.ThumbnailProcessingLib): Promise<void> {
-    if (input.type === ThumbnailSourceType.Image) {
+    if (input.type === ThumbnailSourceType.Photo) {
       return this.renderFromImage(input, renderer);
     }
     return this.renderFromVideo(input);
@@ -37,7 +37,7 @@ export class ThumbnailWorker {
 }
 
 export enum ThumbnailSourceType {
-  Image, Video
+  Photo = 1, Video = 2
 }
 
 export interface RendererInput {
@@ -45,7 +45,7 @@ export interface RendererInput {
   mediaPath: string;
   size: number;
   makeSquare: boolean;
-  thPath: string;
+  outPath: string;
   qualityPriority: boolean;
   cut?: {
     left: number,
@@ -83,8 +83,8 @@ export class VideoRendererFactory {
           }
           const ratio = height / width;
           const command: FfmpegCommand = ffmpeg(input.mediaPath);
-          const fileName = path.basename(input.thPath);
-          const folder = path.dirname(input.thPath);
+          const fileName = path.basename(input.outPath);
+          const folder = path.dirname(input.outPath);
           let executedCmd = '';
           command
             .on('start', (cmd) => {
@@ -98,9 +98,9 @@ export class VideoRendererFactory {
             })
             .outputOptions(['-qscale:v 4']);
           if (input.makeSquare === false) {
-            const newWidth = Math.round(Math.sqrt((input.size * input.size) / ratio));
+            const newSize = width < height ? Math.min(input.size, width) + 'x?' : '?x' + Math.min(input.size, height);
             command.takeScreenshots({
-              timemarks: ['10%'], size: newWidth + 'x?', filename: fileName, folder: folder
+              timemarks: ['10%'], size: newSize, filename: fileName, folder: folder
             });
 
 
@@ -156,9 +156,12 @@ export class ImageRendererFactory {
         );
       }
       if (input.makeSquare === false) {
-        const newWidth = Math.sqrt((input.size * input.size) / ratio);
+        if (image.bitmap.width < image.bitmap.height) {
+          image.resize(Math.min(input.size, image.bitmap.width), Jimp.AUTO, algo);
+        } else {
+          image.resize(Jimp.AUTO, Math.min(image.size, image.bitmap.height), algo);
+        }
 
-        image.resize(newWidth, Jimp.AUTO, algo);
       } else {
         image.resize(input.size / Math.min(ratio, 1), Jimp.AUTO, algo);
         image.crop(0, 0, input.size, input.size);
@@ -166,7 +169,7 @@ export class ImageRendererFactory {
       image.quality(60);        // set JPEG quality
 
       await new Promise((resolve, reject) => {
-        image.write(input.thPath, (err: Error | null) => { // save
+        image.write(input.outPath, (err: Error | null) => { // save
           if (err) {
             return reject('[JimpThRenderer] ' + err.toString());
           }
@@ -202,10 +205,16 @@ export class ImageRendererFactory {
         image.extract(input.cut);
       }
       if (input.makeSquare === false) {
-        const newWidth = Math.round(Math.sqrt((input.size * input.size) / ratio));
-        image.resize(newWidth, null, {
-          kernel: kernel
-        });
+        if (metadata.height > metadata.width) {
+          image.resize(Math.min(input.size, metadata.width), null, {
+            kernel: kernel
+          });
+        } else {
+          image.resize(null, Math.min(input.size, metadata.height), {
+            kernel: kernel
+          });
+        }
+
 
       } else {
         image
@@ -215,7 +224,7 @@ export class ImageRendererFactory {
             fit: 'cover'
           });
       }
-      await image.jpeg().toFile(input.thPath);
+      await image.jpeg().toFile(input.outPath);
     };
   }
 
@@ -252,7 +261,7 @@ export class ImageRendererFactory {
               image = image.resize(input.size, input.size)
                 .crop(input.size, input.size);
             }
-            image.write(input.thPath, (e) => {
+            image.write(input.outPath, (e) => {
               if (e) {
                 return reject('[GMThRenderer] ' + e.toString());
               }

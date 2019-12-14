@@ -1,5 +1,5 @@
 import {LoginCredential} from '../../../common/entities/LoginCredential';
-import {UserEntity} from '../../model/sql/enitites/UserEntity';
+import {UserEntity} from '../../model/database/sql/enitites/UserEntity';
 
 
 

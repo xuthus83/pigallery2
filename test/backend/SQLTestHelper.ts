@@ -1,7 +1,7 @@
 import {Config} from '../../src/common/config/private/Config';
 import * as fs from 'fs';
 import * as path from 'path';
-import {SQLConnection} from '../../src/backend/model/sql/SQLConnection';
+import {SQLConnection} from '../../src/backend/model/database/sql/SQLConnection';
 import {ServerConfig} from '../../src/common/config/private/IPrivateConfig';
 
 declare let describe: any;

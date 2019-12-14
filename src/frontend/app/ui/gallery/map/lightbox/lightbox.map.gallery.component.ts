@@ -35,8 +35,8 @@ export class GalleryMapLightboxComponent implements OnChanges, AfterViewInit {
   paths: LatLng[][] = [];
   @ViewChild('root', {static: true}) elementRef: ElementRef;
   @ViewChild('yagaMap', {static: true}) yagaMap: MapComponent;
-  public smallIconSize = new Point(Config.Client.Thumbnail.iconSize * 0.75, Config.Client.Thumbnail.iconSize * 0.75);
-  public iconSize = new Point(Config.Client.Thumbnail.iconSize, Config.Client.Thumbnail.iconSize);
+  public smallIconSize = new Point(Config.Client.Media.Thumbnail.iconSize * 0.75, Config.Client.Media.Thumbnail.iconSize * 0.75);
+  public iconSize = new Point(Config.Client.Media.Thumbnail.iconSize, Config.Client.Media.Thumbnail.iconSize);
   private startPosition: Dimension = null;
 
   constructor(public fullScreenService: FullScreenService,

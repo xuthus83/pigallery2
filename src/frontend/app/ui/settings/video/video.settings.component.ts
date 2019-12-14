@@ -36,8 +36,8 @@ export class VideoSettingsComponent extends SettingsComponent<{ server: ServerCo
               notification: NotificationService,
               i18n: I18n) {
     super(i18n('Video'), _authService, _navigation, <any>_settingsService, notification, i18n, s => ({
-      client: s.Client.Video,
-      server: s.Server.Video
+      client: s.Client.Media.Video,
+      server: s.Server.Media.Video
     }));
   }
 

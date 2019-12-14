@@ -1,20 +1,20 @@
 import {expect} from 'chai';
 import * as fs from 'fs';
 import {Config} from '../../../../../src/common/config/private/Config';
-import {SQLConnection} from '../../../../../src/backend/model/sql/SQLConnection';
-import {GalleryManager} from '../../../../../src/backend/model/sql/GalleryManager';
+import {SQLConnection} from '../../../../../src/backend/model/database/sql/SQLConnection';
+import {GalleryManager} from '../../../../../src/backend/model/database/sql/GalleryManager';
 import {DirectoryDTO} from '../../../../../src/common/entities/DirectoryDTO';
 import {TestHelper} from './TestHelper';
 import {Connection} from 'typeorm';
-import {DirectoryEntity} from '../../../../../src/backend/model/sql/enitites/DirectoryEntity';
+import {DirectoryEntity} from '../../../../../src/backend/model/database/sql/enitites/DirectoryEntity';
 import {Utils} from '../../../../../src/common/Utils';
 import {MediaDTO} from '../../../../../src/common/entities/MediaDTO';
 import {FileDTO} from '../../../../../src/common/entities/FileDTO';
-import {IndexingManager} from '../../../../../src/backend/model/sql/IndexingManager';
+import {IndexingManager} from '../../../../../src/backend/model/database/sql/IndexingManager';
 import {ObjectManagers} from '../../../../../src/backend/model/ObjectManagers';
-import {PersonManager} from '../../../../../src/backend/model/sql/PersonManager';
+import {PersonManager} from '../../../../../src/backend/model/database/sql/PersonManager';
 import {SQLTestHelper} from '../../../SQLTestHelper';
-import {VersionManager} from '../../../../../src/backend/model/sql/VersionManager';
+import {VersionManager} from '../../../../../src/backend/model/database/sql/VersionManager';
 import {DiskMangerWorker} from '../../../../../src/backend/model/threading/DiskMangerWorker';
 import {ServerConfig} from '../../../../../src/common/config/private/IPrivateConfig';
 

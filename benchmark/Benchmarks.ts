@@ -1,13 +1,13 @@
-import {SQLConnection} from '../src/backend/model/sql/SQLConnection';
+import {SQLConnection} from '../src/backend/model/database/sql/SQLConnection';
 import {Config} from '../src/common/config/private/Config';
 import {ObjectManagers} from '../src/backend/model/ObjectManagers';
 import {DiskMangerWorker} from '../src/backend/model/threading/DiskMangerWorker';
-import {IndexingManager} from '../src/backend/model/sql/IndexingManager';
-import {SearchManager} from '../src/backend/model/sql/SearchManager';
+import {IndexingManager} from '../src/backend/model/database/sql/IndexingManager';
+import {SearchManager} from '../src/backend/model/database/sql/SearchManager';
 import * as fs from 'fs';
 import {SearchTypes} from '../src/common/entities/AutoCompleteItem';
 import {Utils} from '../src/common/Utils';
-import {GalleryManager} from '../src/backend/model/sql/GalleryManager';
+import {GalleryManager} from '../src/backend/model/database/sql/GalleryManager';
 import {DirectoryDTO} from '../src/common/entities/DirectoryDTO';
 import {ServerConfig} from '../src/common/config/private/IPrivateConfig';
 

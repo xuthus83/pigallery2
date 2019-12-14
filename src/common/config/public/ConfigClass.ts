@@ -68,6 +68,11 @@ export module ClientConfig {
     enabled: boolean;
   }
 
+  export interface MediaConfig {
+    Thumbnail: ThumbnailConfig;
+    Video: VideoConfig;
+  }
+
   export interface MetaFileConfig {
     enabled: boolean;
   }
@@ -83,7 +88,6 @@ export module ClientConfig {
     applicationTitle: string;
     publicUrl: string;
     urlBase: string;
-    Thumbnail: ThumbnailConfig;
     Search: SearchConfig;
     Sharing: SharingConfig;
     Map: MapConfig;
@@ -92,7 +96,7 @@ export module ClientConfig {
     authenticationRequired: boolean;
     unAuthenticatedUserRole: UserRoles;
     languages: string[];
-    Video: VideoConfig;
+    Media: MediaConfig;
     MetaFile: MetaFileConfig;
     Faces: FacesConfig;
   }
@@ -107,11 +111,16 @@ export class PublicConfigClass {
   public Client: ClientConfig.Config = {
     applicationTitle: 'PiGallery 2',
     appVersion: '',
-    Thumbnail: {
-      concurrentThumbnailGenerations: 1,
-      thumbnailSizes: [200, 400, 600],
-      iconSize: 45,
-      personThumbnailSize: 200
+    Media: {
+      Video: {
+        enabled: true
+      },
+      Thumbnail: {
+        concurrentThumbnailGenerations: 1,
+        thumbnailSizes: [160, 240, 480],
+        iconSize: 45,
+        personThumbnailSize: 200
+      }
     },
     Search: {
       enabled: true,
@@ -137,9 +146,6 @@ export class PublicConfigClass {
       customLayers: [{name: 'street', url: ''}]
     },
     RandomPhoto: {
-      enabled: true
-    },
-    Video: {
       enabled: true
     },
     MetaFile: {

@@ -28,7 +28,7 @@ export class BasicSettingsComponent extends SettingsComponent<BasicConfigDTO> {
     super(i18n('Basic'), _authService, _navigation, _settingsService, notification, i18n, s => ({
       port: s.Server.port,
       host: s.Server.host,
-      imagesFolder: s.Server.imagesFolder,
+      imagesFolder: s.Server.Media.folder,
       applicationTitle: s.Client.applicationTitle,
       publicUrl: s.Client.publicUrl,
       urlBase: s.Client.urlBase

@@ -7,17 +7,19 @@ import {UserRoles} from '../../common/entities/UserDTO';
 import {ThumbnailSourceType} from '../model/threading/ThumbnailWorker';
 import {VersionMWs} from '../middlewares/VersionMWs';
 import {SupportedFormats} from '../../common/SupportedFormats';
+import {PhotoConverterMWs} from '../middlewares/thumbnail/PhotoConverterMWs';
 
 export class GalleryRouter {
   public static route(app: Express) {
 
     this.addGetImageIcon(app);
     this.addGetVideoIcon(app);
-    this.addGetImageThumbnail(app);
+    this.addGetPhotoThumbnail(app);
     this.addGetVideoThumbnail(app);
+    this.addGetBestFitImage(app);
     this.addGetImage(app);
-    this.addGetVideo(app);
     this.addGetBestFitVideo(app);
+    this.addGetVideo(app);
     this.addGetMetaFile(app);
     this.addRandom(app);
     this.addDirectoryList(app);
@@ -51,6 +53,17 @@ export class GalleryRouter {
     );
   }
 
+  private static addGetBestFitImage(app: Express) {
+    app.get(['/api/gallery/content/:mediaPath(*\.(' + SupportedFormats.Photos.join('|') + '))/bestFit'],
+      AuthenticationMWs.authenticate,
+      AuthenticationMWs.normalizePathParam('mediaPath'),
+      AuthenticationMWs.authorisePath('mediaPath', false),
+      GalleryMWs.loadFile,
+      PhotoConverterMWs.convertPhoto,
+      RenderingMWs.renderFile
+    );
+  }
+
   private static addGetVideo(app: Express) {
     app.get(['/api/gallery/content/:mediaPath(*\.(' + SupportedFormats.Videos.join('|') + '))'],
       AuthenticationMWs.authenticate,
@@ -66,6 +79,7 @@ export class GalleryRouter {
       AuthenticationMWs.authenticate,
       AuthenticationMWs.normalizePathParam('mediaPath'),
       AuthenticationMWs.authorisePath('mediaPath', false),
+      GalleryMWs.loadFile,
       GalleryMWs.loadBestFitVideo,
       RenderingMWs.renderFile
     );
@@ -92,13 +106,13 @@ export class GalleryRouter {
     );
   }
 
-  private static addGetImageThumbnail(app: Express) {
+  private static addGetPhotoThumbnail(app: Express) {
     app.get('/api/gallery/content/:mediaPath(*\.(' + SupportedFormats.Photos.join('|') + '))/thumbnail/:size?',
       AuthenticationMWs.authenticate,
       AuthenticationMWs.normalizePathParam('mediaPath'),
       AuthenticationMWs.authorisePath('mediaPath', false),
       GalleryMWs.loadFile,
-      ThumbnailGeneratorMWs.generateThumbnailFactory(ThumbnailSourceType.Image),
+      ThumbnailGeneratorMWs.generateThumbnailFactory(ThumbnailSourceType.Photo),
       RenderingMWs.renderFile
     );
   }
@@ -132,7 +146,7 @@ export class GalleryRouter {
       AuthenticationMWs.normalizePathParam('mediaPath'),
       AuthenticationMWs.authorisePath('mediaPath', false),
       GalleryMWs.loadFile,
-      ThumbnailGeneratorMWs.generateIconFactory(ThumbnailSourceType.Image),
+      ThumbnailGeneratorMWs.generateIconFactory(ThumbnailSourceType.Photo),
       RenderingMWs.renderFile
     );
   }

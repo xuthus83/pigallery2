@@ -5,6 +5,8 @@ import {MediaDTO} from '../../../../common/entities/MediaDTO';
 
 export class Media extends MediaIcon {
 
+  static readonly sortedThumbnailSizes = Config.Client.Media.Thumbnail.thumbnailSizes
+    .sort((a, b) => a - b);
 
   constructor(media: MediaDTO, public renderWidth: number, public renderHeight: number) {
     super(media);
@@ -19,8 +21,8 @@ export class Media extends MediaIcon {
   }
 
   getThumbnailSize() {
-    const renderSize = Math.sqrt(this.renderWidth * this.renderHeight);
-    return Utils.findClosest(renderSize, Config.Client.Thumbnail.thumbnailSizes);
+    const longerEdge = Math.max(this.renderWidth * this.renderHeight);
+    return Utils.findClosestinSorted(longerEdge, Media.sortedThumbnailSizes);
   }
 
   getReplacementThumbnailSize(): number {

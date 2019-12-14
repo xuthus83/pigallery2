@@ -16,6 +16,7 @@ import {Localizations} from './model/Localizations';
 import {CookieNames} from '../common/CookieNames';
 import {Router} from './routes/Router';
 import {ServerConfig} from '../common/config/private/IPrivateConfig';
+import {PhotoProcessing} from './model/fileprocessing/PhotoProcessing';
 
 const _session = require('cookie-session');
 
@@ -72,7 +73,7 @@ export class Server {
     this.app.use(cookieParser());
 
     DiskManager.init();
-    ThumbnailGeneratorMWs.init();
+    PhotoProcessing.init();
     Localizations.init();
 
     this.app.use(locale(Config.Client.languages, 'en'));

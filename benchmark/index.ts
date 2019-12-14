@@ -7,7 +7,7 @@ import {Utils} from '../src/common/Utils';
 import {DiskMangerWorker} from '../src/backend/model/threading/DiskMangerWorker';
 
 const config: { path: string, system: string } = require(path.join(__dirname, 'config.json'));
-Config.Server.imagesFolder = config.path;
+Config.Server.Media.folder = config.path;
 const dbPath = path.join(__dirname, 'test.db');
 ProjectPath.reset();
 const RUNS = 50;

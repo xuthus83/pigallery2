@@ -2,7 +2,7 @@ import {Config} from '../../../common/config/private/Config';
 import {Logger} from '../../Logger';
 import {NotificationManager} from '../NotifocationManager';
 import {ProjectPath} from '../../ProjectPath';
-import {SQLConnection} from '../sql/SQLConnection';
+import {SQLConnection} from '../database/sql/SQLConnection';
 import * as fs from 'fs';
 import {ClientConfig} from '../../../common/config/public/ConfigClass';
 import {FFmpegFactory} from '../FFmpegFactory';
@@ -74,7 +74,7 @@ export class ConfigDiagnostics {
   }
 
   static async testServerVideoConfig(videoConfig: ServerConfig.VideoConfig, config: IPrivateConfig) {
-    if (config.Client.Video.enabled === true) {
+    if (config.Client.Media.Video.enabled === true) {
       if (videoConfig.transcoding.fps <= 0) {
         throw new Error('fps should be grater than 0');
       }
@@ -101,15 +101,8 @@ export class ConfigDiagnostics {
     }
   }
 
-  static testThumbnailFolder(folder: string) {
-    return new Promise((resolve, reject) => {
-      fs.access(folder, fs.constants.W_OK, (err) => {
-        if (err) {
-          reject({message: 'Error during getting write access to temp folder', error: err.toString()});
-        }
-      });
-      resolve();
-    });
+  static async testTempFolder(folder: string) {
+    await this.checkReadWritePermission(folder);
   }
 
   static testImageFolder(folder: string) {
@@ -129,7 +122,6 @@ export class ConfigDiagnostics {
 
   static async testServerThumbnailConfig(thumbnailConfig: ServerConfig.ThumbnailConfig) {
     await ConfigDiagnostics.testThumbnailLib(thumbnailConfig.processingLibrary);
-    await ConfigDiagnostics.testThumbnailFolder(thumbnailConfig.folder);
   }
 
   static async testClientThumbnailConfig(thumbnailConfig: ClientConfig.ThumbnailConfig) {
@@ -226,24 +218,24 @@ export class ConfigDiagnostics {
       }
     }
 
-    if (Config.Server.Thumbnail.processingLibrary !== ServerConfig.ThumbnailProcessingLib.Jimp) {
+    if (Config.Server.Media.Thumbnail.processingLibrary !== ServerConfig.ThumbnailProcessingLib.Jimp) {
       try {
-        await ConfigDiagnostics.testThumbnailLib(Config.Server.Thumbnail.processingLibrary);
+        await ConfigDiagnostics.testThumbnailLib(Config.Server.Media.Thumbnail.processingLibrary);
       } catch (ex) {
         const err: Error = ex;
         NotificationManager.warning('Thumbnail hardware acceleration is not possible.' +
-          ' \'' + ServerConfig.ThumbnailProcessingLib[Config.Server.Thumbnail.processingLibrary] + '\' node module is not found.' +
+          ' \'' + ServerConfig.ThumbnailProcessingLib[Config.Server.Media.Thumbnail.processingLibrary] + '\' node module is not found.' +
           ' Falling back temporally to JS based thumbnail generation', err.toString());
         Logger.warn(LOG_TAG, '[Thumbnail hardware acceleration] module error: ', err.toString());
         Logger.warn(LOG_TAG, 'Thumbnail hardware acceleration is not possible.' +
-          ' \'' + ServerConfig.ThumbnailProcessingLib[Config.Server.Thumbnail.processingLibrary] + '\' node module is not found.' +
+          ' \'' + ServerConfig.ThumbnailProcessingLib[Config.Server.Media.Thumbnail.processingLibrary] + '\' node module is not found.' +
           ' Falling back temporally to JS based thumbnail generation');
-        Config.Server.Thumbnail.processingLibrary = ServerConfig.ThumbnailProcessingLib.Jimp;
+        Config.Server.Media.Thumbnail.processingLibrary = ServerConfig.ThumbnailProcessingLib.Jimp;
       }
     }
 
     try {
-      await ConfigDiagnostics.testThumbnailFolder(Config.Server.Thumbnail.folder);
+      await ConfigDiagnostics.testTempFolder(Config.Server.Media.tempFolder);
     } catch (ex) {
       const err: Error = ex;
       NotificationManager.error('Thumbnail folder error', err.toString());
@@ -252,13 +244,13 @@ export class ConfigDiagnostics {
 
 
     try {
-      await ConfigDiagnostics.testClientVideoConfig(Config.Client.Video);
-      await ConfigDiagnostics.testServerVideoConfig(Config.Server.Video, Config);
+      await ConfigDiagnostics.testClientVideoConfig(Config.Client.Media.Video);
+      await ConfigDiagnostics.testServerVideoConfig(Config.Server.Media.Video, Config);
     } catch (ex) {
       const err: Error = ex;
       NotificationManager.warning('Video support error, switching off..', err.toString());
       Logger.warn(LOG_TAG, 'Video support error, switching off..', err.toString());
-      Config.Client.Video.enabled = false;
+      Config.Client.Media.Video.enabled = false;
     }
 
     try {
@@ -272,14 +264,14 @@ export class ConfigDiagnostics {
 
 
     try {
-      await ConfigDiagnostics.testImageFolder(Config.Server.imagesFolder);
+      await ConfigDiagnostics.testImageFolder(Config.Server.Media.folder);
     } catch (ex) {
       const err: Error = ex;
       NotificationManager.error('Images folder error', err.toString());
       Logger.error(LOG_TAG, 'Images folder error', err.toString());
     }
     try {
-      await ConfigDiagnostics.testClientThumbnailConfig(Config.Client.Thumbnail);
+      await ConfigDiagnostics.testClientThumbnailConfig(Config.Client.Media.Thumbnail);
     } catch (ex) {
       const err: Error = ex;
       NotificationManager.error('Thumbnail settings error', err.toString());

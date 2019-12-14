@@ -1,4 +1,4 @@
-import {ITaskManager} from '../interfaces/ITaskManager';
+import {ITaskManager} from '../database/interfaces/ITaskManager';
 import {TaskProgressDTO} from '../../../common/entities/settings/TaskProgressDTO';
 import {ITask} from './tasks/ITask';
 import {TaskRepository} from './TaskRepository';

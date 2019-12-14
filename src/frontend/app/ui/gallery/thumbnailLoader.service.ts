@@ -19,7 +19,7 @@ export class ThumbnailLoaderService {
   }
 
   run = () => {
-    if (this.que.length === 0 || this.runningRequests >= Config.Client.Thumbnail.concurrentThumbnailGenerations) {
+    if (this.que.length === 0 || this.runningRequests >= Config.Client.Media.Thumbnail.concurrentThumbnailGenerations) {
       return;
     }
     const task = this.getNextTask();

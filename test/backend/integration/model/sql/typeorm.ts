@@ -2,20 +2,20 @@ import {expect} from 'chai';
 import * as fs from 'fs';
 import * as path from 'path';
 import {Config} from '../../../../../src/common/config/private/Config';
-import {SQLConnection} from '../../../../../src/backend/model/sql/SQLConnection';
-import {UserEntity} from '../../../../../src/backend/model/sql/enitites/UserEntity';
+import {SQLConnection} from '../../../../../src/backend/model/database/sql/SQLConnection';
+import {UserEntity} from '../../../../../src/backend/model/database/sql/enitites/UserEntity';
 import {UserRoles} from '../../../../../src/common/entities/UserDTO';
 import {PasswordHelper} from '../../../../../src/backend/model/PasswordHelper';
-import {DirectoryEntity} from '../../../../../src/backend/model/sql/enitites/DirectoryEntity';
+import {DirectoryEntity} from '../../../../../src/backend/model/database/sql/enitites/DirectoryEntity';
 import {
   CameraMetadataEntity,
   GPSMetadataEntity,
   PhotoEntity,
   PhotoMetadataEntity,
   PositionMetaDataEntity
-} from '../../../../../src/backend/model/sql/enitites/PhotoEntity';
-import {MediaDimensionEntity} from '../../../../../src/backend/model/sql/enitites/MediaEntity';
-import {VersionEntity} from '../../../../../src/backend/model/sql/enitites/VersionEntity';
+} from '../../../../../src/backend/model/database/sql/enitites/PhotoEntity';
+import {MediaDimensionEntity} from '../../../../../src/backend/model/database/sql/enitites/MediaEntity';
+import {VersionEntity} from '../../../../../src/backend/model/database/sql/enitites/VersionEntity';
 import {ServerConfig} from '../../../../../src/common/config/private/IPrivateConfig';
 
 describe('Typeorm integration', () => {

@@ -11,12 +11,30 @@ export class PrivateConfigDefaultsClass extends PublicConfigClass implements IPr
   public Server: ServerConfig.Config = {
     port: 80,
     host: '0.0.0.0',
-    imagesFolder: 'demo/images',
-    Thumbnail: {
-      folder: 'demo/tmp',
-      processingLibrary: ServerConfig.ThumbnailProcessingLib.sharp,
-      qualityPriority: true,
-      personFaceMargin: 0.6
+    Media: {
+      folder: 'demo/images',
+      tempFolder: 'demo/tmp',
+      Thumbnail: {
+        processingLibrary: ServerConfig.ThumbnailProcessingLib.sharp,
+        qualityPriority: true,
+        personFaceMargin: 0.6
+      },
+      Photo: {
+        converting: {
+          enabled: true,
+          onTheFly: true,
+          resolution: 1080
+        }
+      },
+      Video: {
+        transcoding: {
+          bitRate: 5 * 1024 * 1024,
+          codec: 'libx264',
+          format: 'mp4',
+          fps: 25,
+          resolution: 720
+        }
+      }
     },
     Log: {
       level: ServerConfig.LogLevel.info,
@@ -71,15 +89,6 @@ export class PrivateConfigDefaultsClass extends PublicConfigClass implements IPr
         config: {},
         trigger: {type: TaskTriggerType.never}
       }]
-    },
-    Video: {
-      transcoding: {
-        bitRate: 5 * 1024 * 1024,
-        codec: 'libx264',
-        format: 'mp4',
-        fps: 25,
-        resolution: 720
-      }
     }
   };
 }

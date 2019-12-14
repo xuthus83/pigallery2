@@ -27,6 +27,7 @@ export class GalleryLightboxMediaComponent implements OnChanges {
   public imageLoadFinished = false;
   thumbnailSrc: string = null;
   photoSrc: string = null;
+  isPhotoSrcBestFit = true;
   public transcodeNeedVideos = SupportedFormats.TranscodeNeed.Videos;
   private mediaLoaded = false;
   private videoProgress = 0;
@@ -84,9 +85,6 @@ export class GalleryLightboxMediaComponent implements OnChanges {
     return this.video.nativeElement.paused;
   }
 
-  public get PhotoSrc(): string {
-    return this.gridMedia.getMediaPath();
-  }
 
   private get ThumbnailUrl(): string {
     if (this.gridMedia.isThumbnailAvailable() === true) {
@@ -113,10 +111,25 @@ export class GalleryLightboxMediaComponent implements OnChanges {
         .then((src) => this.thumbnailSrc = src);
     }
 
-    if (this.photoSrc == null && this.gridMedia && this.loadMedia) {
+    if (this.zoom === 1) {
+      if (this.photoSrc == null && this.gridMedia && this.loadMedia) {
+        FixOrientationPipe.transform(this.gridMedia.getBestFitMediaPath(), this.gridMedia.Orientation)
+          .then((src) => {
+            this.photoSrc = src;
+            this.isPhotoSrcBestFit = true;
+          });
+      }
+      // on zoom load high res photo
+    } else if ((this.isPhotoSrcBestFit === true ||
+      this.photoSrc == null) && this.gridMedia && this.loadMedia) {
       FixOrientationPipe.transform(this.gridMedia.getMediaPath(), this.gridMedia.Orientation)
-        .then((src) => this.photoSrc = src);
+        .then((src) => {
+          this.photoSrc = src;
+          this.isPhotoSrcBestFit = false;
+        });
     }
+
+
   }
 
   public mute() {
@@ -141,7 +154,7 @@ export class GalleryLightboxMediaComponent implements OnChanges {
   onImageError() {
     // TODO:handle error
     this.imageLoadFinished = true;
-    console.error('Error: cannot load media for lightbox url: ' + this.gridMedia.getMediaPath());
+    console.error('Error: cannot load media for lightbox url: ' + this.gridMedia.getBestFitMediaPath());
   }
 
   onImageLoad() {

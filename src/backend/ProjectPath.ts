@@ -6,7 +6,7 @@ class ProjectPathClass {
   public Root: string;
   public ImageFolder: string;
   public ThumbnailFolder: string;
-  public TranscendedFolder: string;
+  public TranscodedFolder: string;
   public FrontendFolder: string;
 
   constructor() {
@@ -27,10 +27,10 @@ class ProjectPathClass {
 
   reset() {
     this.Root = path.join(__dirname, '/../../');
-    this.ImageFolder = this.getAbsolutePath(Config.Server.imagesFolder);
-    this.ThumbnailFolder = this.getAbsolutePath(Config.Server.Thumbnail.folder);
-    this.TranscendedFolder = path.join(this.ThumbnailFolder, 'tc');
     this.FrontendFolder = path.join(this.Root, 'dist');
+    this.ImageFolder = this.getAbsolutePath(Config.Server.Media.folder);
+    this.ThumbnailFolder = this.getAbsolutePath(Config.Server.Media.tempFolder);
+    this.TranscodedFolder = path.join(this.ThumbnailFolder, 'tc');
 
     // create thumbnail folder if not exist
     if (!fs.existsSync(this.ThumbnailFolder)) {

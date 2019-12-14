@@ -1,14 +1,14 @@
 import {expect} from 'chai';
 import {TestHelper} from './TestHelper';
 import {SQLTestHelper} from '../../../SQLTestHelper';
-import {GalleryManager} from '../../../../../src/backend/model/sql/GalleryManager';
-import {IndexingManager} from '../../../../../src/backend/model/sql/IndexingManager';
+import {GalleryManager} from '../../../../../src/backend/model/database/sql/GalleryManager';
+import {IndexingManager} from '../../../../../src/backend/model/database/sql/IndexingManager';
 import {DirectoryDTO} from '../../../../../src/common/entities/DirectoryDTO';
 import {Utils} from '../../../../../src/common/Utils';
 import {ObjectManagers} from '../../../../../src/backend/model/ObjectManagers';
-import {PersonManager} from '../../../../../src/backend/model/sql/PersonManager';
-import {MediaEntity} from '../../../../../src/backend/model/sql/enitites/MediaEntity';
-import {VersionManager} from '../../../../../src/backend/model/sql/VersionManager';
+import {PersonManager} from '../../../../../src/backend/model/database/sql/PersonManager';
+import {MediaEntity} from '../../../../../src/backend/model/database/sql/enitites/MediaEntity';
+import {VersionManager} from '../../../../../src/backend/model/database/sql/VersionManager';
 
 class IndexingManagerTest extends IndexingManager {
 

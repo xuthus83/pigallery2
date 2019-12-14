@@ -139,7 +139,7 @@ export class DiskMangerWorker {
                 break;
               }
             } else if (DiskMangerWorker.isVideo(fullFilePath)) {
-              if (Config.Client.Video.enabled === false || settings.noVideo) {
+              if (Config.Client.Media.Video.enabled === false || settings.noVideo) {
                 continue;
               }
               try {

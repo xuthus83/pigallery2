@@ -43,7 +43,6 @@ export module ServerConfig {
   }
 
   export interface ThumbnailConfig {
-    folder: string;
     processingLibrary: ThumbnailProcessingLib;
     qualityPriority: boolean;
     personFaceMargin: number; // in ration [0-1]
@@ -98,21 +97,36 @@ export module ServerConfig {
   }
 
 
+  export interface PhotoConfig {
+    converting: {
+      enabled: boolean;
+      onTheFly: boolean;
+      resolution: resolutionType
+    };
+  }
+
+  export interface MediaConfig {
+    folder: string;
+    tempFolder: string;
+    Video: VideoConfig;
+    Photo: PhotoConfig;
+    Thumbnail: ThumbnailConfig;
+  }
+
+
   export interface Config {
     port: number;
     host: string;
-    imagesFolder: string;
-    Thumbnail: ThumbnailConfig;
+    Media: MediaConfig;
     Threading: ThreadingConfig;
     Database: DataBaseConfig;
     Sharing: SharingConfig;
     sessionTimeout: number;
     Indexing: IndexingConfig;
-    photoMetadataSize: number;
+    photoMetadataSize: number; // only this many bites will be loaded when scanning photo for metadata
     Duplicates: DuplicatesConfig;
     Log: LogConfig;
     Tasks: TaskConfig;
-    Video: VideoConfig;
   }
 }
 

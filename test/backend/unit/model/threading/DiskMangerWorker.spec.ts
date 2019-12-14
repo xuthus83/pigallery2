@@ -8,7 +8,7 @@ import {Utils} from '../../../../../src/common/Utils';
 describe('DiskMangerWorker', () => {
 
   it('should parse metadata', async () => {
-    Config.Server.imagesFolder = path.join(__dirname, '/../../assets');
+    Config.Server.Media.folder = path.join(__dirname, '/../../assets');
     ProjectPath.ImageFolder = path.join(__dirname, '/../../assets');
     const dir = await DiskMangerWorker.scanDirectory('/');
     expect(dir.media.length).to.be.equals(4);

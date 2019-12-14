@@ -28,8 +28,8 @@ export class ThumbnailSettingsComponent
               notification: NotificationService,
               i18n: I18n) {
     super(i18n('Thumbnail'), _authService, _navigation, _settingsService, notification, i18n, s => ({
-      client: s.Client.Thumbnail,
-      server: s.Server.Thumbnail
+      client: s.Client.Media.Thumbnail,
+      server: s.Server.Media.Thumbnail
     }));
   }
 

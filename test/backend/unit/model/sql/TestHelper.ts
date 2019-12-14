@@ -1,14 +1,14 @@
-import {MediaDimensionEntity} from '../../../../../src/backend/model/sql/enitites/MediaEntity';
+import {MediaDimensionEntity} from '../../../../../src/backend/model/database/sql/enitites/MediaEntity';
 import {
   CameraMetadataEntity,
   GPSMetadataEntity,
   PhotoEntity,
   PhotoMetadataEntity,
   PositionMetaDataEntity
-} from '../../../../../src/backend/model/sql/enitites/PhotoEntity';
+} from '../../../../../src/backend/model/database/sql/enitites/PhotoEntity';
 import {OrientationTypes} from 'ts-exif-parser';
-import {DirectoryEntity} from '../../../../../src/backend/model/sql/enitites/DirectoryEntity';
-import {VideoEntity, VideoMetadataEntity} from '../../../../../src/backend/model/sql/enitites/VideoEntity';
+import {DirectoryEntity} from '../../../../../src/backend/model/database/sql/enitites/DirectoryEntity';
+import {VideoEntity, VideoMetadataEntity} from '../../../../../src/backend/model/database/sql/enitites/VideoEntity';
 import {MediaDimension} from '../../../../../src/common/entities/MediaDTO';
 import {CameraMetadata, FaceRegion, GPSMetadata, PhotoDTO, PhotoMetadata, PositionMetaData} from '../../../../../src/common/entities/PhotoDTO';
 import {DirectoryDTO} from '../../../../../src/common/entities/DirectoryDTO';
