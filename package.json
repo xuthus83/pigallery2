@@ -8,8 +8,7 @@
   "main": "./src/backend/index.js",
   "bin": "./src/backend/index.js",
   "scripts": {
-    "install": "npm run build-prod",
-    "build-prod": "tsc && gulp build-prod",
+    "build": "tsc && gulp build-prod",
     "create-release": "gulp create-release",
     "build-backend": "tsc",
     "pretest": "tsc",
@@ -43,7 +42,7 @@
     "sqlite3": "4.1.1",
     "ts-exif-parser": "0.1.4",
     "ts-node-iptc": "1.0.11",
-    "typeconfig": "1.0.8c",
+    "typeconfig": "1.0.8d",
     "typeorm": "0.2.21",
     "winston": "2.4.4"
   },
