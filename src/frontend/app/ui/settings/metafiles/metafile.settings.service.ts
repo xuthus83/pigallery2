@@ -17,6 +17,10 @@ export class MetaFileSettingsService extends AbstractSettingsService<ClientConfi
   }
 
 
+  showInSimplifiedMode(): boolean {
+    return false;
+  }
+
   public updateSettings(settings: ClientConfig.MetaFileConfig): Promise<void> {
     return this._networkService.putJson('/settings/metafile', {settings: settings});
   }

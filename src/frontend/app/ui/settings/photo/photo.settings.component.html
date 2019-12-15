@@ -24,8 +24,7 @@
             <small *ngIf="settings.photoProcessingLibrary==PhotoProcessingLib.gm"
                    class="form-text text-muted">
               <ng-container i18n>Make sure that gm node module and</ng-container>
-              <a
-                href="http://www.graphicsmagick.org/" i18n>GraphicsMagick</a>
+              <a href="http://www.graphicsmagick.org/">GraphicsMagick</a>
               <ng-container i18n>are installed (npm install sharp).</ng-container>
             </small>
 
@@ -56,7 +55,7 @@
         </div>
       </div>
 
-      <div class="form-group row" [hidden]="!settings.client.Converting.enabled">
+      <div class="form-group row" [hidden]="!settings.client.Converting.enabled || simplifiedMode">
         <label class="col-md-2 control-label" for="onTheFlyConverting" i18n>On the fly converting </label>
         <div class="col-md-10">
           <bSwitch

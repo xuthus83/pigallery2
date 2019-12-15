@@ -37,6 +37,12 @@ export class SettingsRouter {
       SettingsMWs.updateVideoSettings,
       RenderingMWs.renderOK
     );
+    app.put('/api/settings/photo',
+      AuthenticationMWs.authenticate,
+      AuthenticationMWs.authorise(UserRoles.Admin),
+      SettingsMWs.updatePhotoSettings,
+      RenderingMWs.renderOK
+    );
     app.put('/api/settings/metafile',
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Admin),

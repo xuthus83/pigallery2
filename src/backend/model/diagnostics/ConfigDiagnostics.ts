@@ -120,6 +120,15 @@ export class ConfigDiagnostics {
   }
 
 
+
+  static async testServerPhotoConfig(server: ServerConfig.PhotoConfig) {
+
+  }
+
+  static async testClientPhotoConfig(client: ClientConfig.PhotoConfig) {
+
+  }
+
   public static async testServerThumbnailConfig(server: ServerConfig.ThumbnailConfig) {
     if (server.personFaceMargin < 0 || server.personFaceMargin > 1) {
       throw new Error('personFaceMargin should be between 0 and 1');
@@ -142,7 +151,7 @@ export class ConfigDiagnostics {
   }
 
 
-  static async testTasksConfig(faces: ServerConfig.TaskConfig, config: IPrivateConfig) {
+  static async testTasksConfig(task: ServerConfig.TaskConfig, config: IPrivateConfig) {
 
   }
 

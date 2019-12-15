@@ -22,6 +22,11 @@ export class TasksSettingsService extends AbstractSettingsService<ServerConfig.T
     return this._networkService.putJson('/settings/tasks', {settings: settings});
   }
 
+
+  showInSimplifiedMode(): boolean {
+    return false;
+  }
+
   public isSupported(): boolean {
     return true;
   }

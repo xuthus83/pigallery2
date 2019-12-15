@@ -301,6 +301,43 @@ export class SettingsMWs {
     }
   }
 
+  public static async updatePhotoSettings(req: Request, res: Response, next: NextFunction) {
+    if ((typeof req.body === 'undefined') || (typeof req.body.settings === 'undefined')) {
+      return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, 'settings is needed'));
+    }
+
+    try {
+      const settings: {
+        photoProcessingLibrary: ServerConfig.PhotoProcessingLib,
+        server: ServerConfig.PhotoConfig,
+        client: ClientConfig.PhotoConfig
+      } = req.body.settings;
+
+      await ConfigDiagnostics.testThumbnailLib(settings.photoProcessingLibrary);
+      await ConfigDiagnostics.testServerPhotoConfig(settings.server);
+      await ConfigDiagnostics.testClientPhotoConfig(settings.client);
+      Config.Server.Media.photoProcessingLibrary = settings.photoProcessingLibrary;
+      Config.Server.Media.Photo = settings.server;
+      Config.Client.Media.Photo = settings.client;
+      // only updating explicitly set config (not saving config set by the diagnostics)
+      const original = Config.original();
+      original.Server.Media.photoProcessingLibrary = settings.photoProcessingLibrary;
+      original.Server.Media.Photo = settings.server;
+      original.Client.Media.Photo = settings.client;
+      original.save();
+      ProjectPath.reset();
+      await ConfigDiagnostics.runDiagnostics();
+      Logger.info(LOG_TAG, 'new config:');
+      Logger.info(LOG_TAG, JSON.stringify(Config, null, '\t'));
+      return next();
+    } catch (err) {
+      if (err instanceof Error) {
+        return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, 'Settings error: ' + err.toString(), err));
+      }
+      return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, 'Settings error: ' + JSON.stringify(err, null, '  '), err));
+    }
+  }
+
   public static async updateBasicSettings(req: Request, res: Response, next: NextFunction) {
     if ((typeof req.body === 'undefined') || (typeof req.body.settings === 'undefined')) {
       return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, 'settings is needed'));

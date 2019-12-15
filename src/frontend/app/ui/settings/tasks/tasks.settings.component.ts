@@ -64,9 +64,6 @@ export class TasksSettingsComponent extends SettingsComponent<ServerConfig.TaskC
   }
 
 
-  ngOnChanges(): void {
-    this.hasAvailableSettings = !this.simplifiedMode;
-  }
 
   getConfigTemplate(taskName: string): ConfigTemplateEntry[] {
     const task = this._settingsService.availableTasks.value.find(t => t.Name === taskName);

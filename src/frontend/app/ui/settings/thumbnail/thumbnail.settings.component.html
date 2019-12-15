@@ -1,62 +1,69 @@
 <form #settingsForm="ngForm" class="form-horizontal">
   <div class="card mb-4">
     <h5 class="card-header">
-      {{Name}}<ng-container *ngIf="changed">*</ng-container>
+      {{Name}}
+      <ng-container *ngIf="changed">*</ng-container>
     </h5>
     <div class="card-body">
       <div [hidden]="!error" class="alert alert-danger" role="alert"><strong>Error: </strong>{{error}}</div>
 
 
-        <div class="form-group row" [hidden]="simplifiedMode">
-          <label class="col-md-2 control-label" for="quality" i18n>Thumbnail Quality</label>
-          <div class="col-md-10">
-            <bSwitch
-              id="quality"
-              class="switch"
-              name="enabled"
-              [switch-on-color]="'primary'"
-              [switch-inverse]="true"
-              [switch-off-text]="text.Low"
-              [switch-on-text]="text.High"
-              [switch-handle-width]="100"
-              [switch-label-width]="20"
-              [(ngModel)]="settings.server.qualityPriority">
-            </bSwitch>
-            <small class="form-text text-muted" i18n>High quality may be slow. Especially with Jimp.</small>
+      <div class="form-group row" [hidden]="simplifiedMode">
+        <label class="col-md-2 control-label" for="quality" i18n>Thumbnail Quality</label>
+        <div class="col-md-10">
+          <bSwitch
+            id="quality"
+            class="switch"
+            name="enabled"
+            [switch-on-color]="'primary'"
+            [switch-inverse]="true"
+            [switch-off-text]="text.Low"
+            [switch-on-text]="text.High"
+            [switch-handle-width]="100"
+            [switch-label-width]="20"
+            [(ngModel)]="settings.server.qualityPriority">
+          </bSwitch>
+          <small class="form-text text-muted" i18n>High quality may be slow. Especially with Jimp.</small>
 
-          </div>
         </div>
+      </div>
 
-        <div class="form-group row" [hidden]="simplifiedMode">
-          <label class="col-md-2 control-label" for="icon">Icon size</label>
-          <div class="col-md-10">
-            <input type="number" class="form-control" placeholder="30"
-                   id="icon"
-                   [(ngModel)]="settings.client.iconSize"
-                   min="1"
-                   max="100"
-                   step="1"
-                   name="icon" required>
-            <small class="form-text text-muted" i18n>Icon size (used on maps)</small>
+      <div class="form-group row" [hidden]="simplifiedMode">
+        <label class="col-md-2 control-label" for="icon">Icon size</label>
+        <div class="col-md-10">
+          <input type="number" class="form-control" placeholder="30"
+                 id="icon"
+                 [(ngModel)]="settings.client.iconSize"
+                 min="1"
+                 max="100"
+                 step="1"
+                 name="icon" required>
+          <small class="form-text text-muted" i18n>Icon size (used on maps)</small>
 
-          </div>
         </div>
+      </div>
 
-        <div class="form-group row" [hidden]="simplifiedMode">
-          <label class="col-md-2 control-label" for="thumbnailSizes" i18n>Thumbnail sizes</label>
-          <div class="col-md-10">
-            <input type="text" class="form-control" placeholder="160; 240"
-                   id="thumbnailSizes"
-                   [(ngModel)]="ThumbnailSizes"
-                   name="thumbnailSizes" required>
-            <small class="form-text text-muted">
-              <ng-container i18n>Size of the thumbnails.</ng-container><br/>
-              <ng-container i18n>The best matching size will be generated. (More sizes give better quality, but use more storage and CPU to render.)</ng-container><br/>
-              <ng-container i18n>';' separated integers. If size is 160, that shorter side of the thumbnail will have 160 pixels.</ng-container>
-            </small>
+      <div class="form-group row" [hidden]="simplifiedMode">
+        <label class="col-md-2 control-label" for="thumbnailSizes" i18n>Thumbnail sizes</label>
+        <div class="col-md-10">
+          <input type="text" class="form-control" placeholder="160; 240"
+                 id="thumbnailSizes"
+                 [(ngModel)]="ThumbnailSizes"
+                 name="thumbnailSizes" required>
+          <small class="form-text text-muted">
+            <ng-container i18n>Size of the thumbnails.</ng-container>
+            <br/>
+            <ng-container i18n>The best matching size will be generated. (More sizes give better quality, but use more
+              storage and CPU to render.)
+            </ng-container>
+            <br/>
+            <ng-container i18n>';' separated integers. If size is 160, that shorter side of the thumbnail will have 160
+              pixels.
+            </ng-container>
+          </small>
 
-          </div>
         </div>
+      </div>
 
       <button class="btn btn-success float-right"
               [disabled]="!settingsForm.form.valid || !changed || inProgress"
@@ -66,8 +73,31 @@
               [disabled]=" !changed || inProgress"
               (click)="reset()" i18n>Reset
       </button>
+
+
+      <button class="btn btn-success  float-left ml-0"
+              *ngIf="Progress == null"
+              [disabled]="inProgress"
+              title="Indexes the folders"
+              i18n-title
+              (click)="startTask()">
+        <ng-container i18n>Convert photos now</ng-container>
+        <span class="oi oi-media-play ml-2"></span>
+      </button>
+      <button class="btn btn-secondary  float-left ml-0"
+              *ngIf="Progress != null"
+              [disabled]="inProgress || Progress.state !== TaskState.running"
+              (click)="cancelTask()" i18n>Cancel converting
+      </button>
+
+
+      <ng-container *ngIf="Progress != null">
+        <br/>
+        <hr/>
+        <app-settings-tasks-progress [progress]="Progress"></app-settings-tasks-progress>
+      </ng-container>
+
     </div>
+
   </div>
-
-
 </form>

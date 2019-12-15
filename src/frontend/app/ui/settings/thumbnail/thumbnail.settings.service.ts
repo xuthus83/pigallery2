@@ -14,6 +14,10 @@ export class ThumbnailSettingsService
   }
 
 
+  showInSimplifiedMode(): boolean {
+    return false;
+  }
+
   public updateSettings(settings: { server: ServerConfig.ThumbnailConfig, client: ClientConfig.ThumbnailConfig }): Promise<void> {
     return this._networkService.putJson('/settings/thumbnail', {settings: settings});
   }
