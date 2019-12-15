@@ -32,7 +32,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/database/database.settings.component.html</context>
-          <context context-type="linenumber">23</context>
+          <context context-type="linenumber">42</context>
         </context-group>
         <target>Имя пользователя</target>
       </trans-unit>
@@ -60,7 +60,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/database/database.settings.component.html</context>
-          <context context-type="linenumber">25</context>
+          <context context-type="linenumber">49</context>
         </context-group>
         <target>Пароль</target>
       </trans-unit>
@@ -198,11 +198,7 @@
           <context context-type="sourcefile">app/ui/gallery/lightbox/lightbox.gallery.component.html</context>
           <context context-type="linenumber">22</context>
         </context-group>
-        <target>
-            Most likely the video is not transcoded.
-            It can be done in the settings.
-            You need to transcode these videos to watch them online:
-          </target>
+        <target>Most likely the video is not transcoded. It can be done in the settings. You need to transcode these videos to watch them online:</target>
       </trans-unit>
       <trans-unit id="f3cda2936c4e70d5b920b2c243ec634222743ba1" datatype="html">
         <source>Link availability</source>
@@ -419,7 +415,7 @@
         <source>Mode</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/admin/admin.component.html</context>
-          <context context-type="linenumber">30</context>
+          <context context-type="linenumber">29</context>
         </context-group>
         <target>Режим</target>
       </trans-unit>
@@ -529,14 +525,6 @@
         </context-group>
         <target>Дубликаты не найдены</target>
       </trans-unit>
-      <trans-unit id="427589505741d1da181b756815701e756184cb8d" datatype="html">
-        <source>Password protection</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/usermanager/usermanager.settings.component.html</context>
-          <context context-type="linenumber">3</context>
-        </context-group>
-        <target>Защита паролем</target>
-      </trans-unit>
       <trans-unit id="cff1428d10d59d14e45edec3c735a27b5482db59" datatype="html">
         <source>Name</source>
         <context-group purpose="location">
@@ -545,7 +533,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/map/map.settings.component.html</context>
-          <context context-type="linenumber">62</context>
+          <context context-type="linenumber">61</context>
         </context-group>
         <target>Имя</target>
       </trans-unit>
@@ -601,44 +589,28 @@
         </context-group>
         <target>Добавить пользователя</target>
       </trans-unit>
-      <trans-unit id="25e15358423a68caf2960ac3eac6f7cfd19d5a30" datatype="html">
-        <source>Database settings</source>
+      <trans-unit id="f61c6867295f3b53d23557021f2f4e0aa1d0b8fc" datatype="html">
+        <source>Type</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/database/database.settings.component.html</context>
-          <context context-type="linenumber">3</context>
+          <context context-type="linenumber">12</context>
         </context-group>
-        <target>Настройки БД</target>
+        <target>Type</target>
       </trans-unit>
-      <trans-unit id="e78c0d60ac39787f62c9159646fe0b3c1ed55a1d" datatype="html">
-        <source>Type:</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/database/database.settings.component.html</context>
-          <context context-type="linenumber">8</context>
-        </context-group>
-        <target>Тип:</target>
-      </trans-unit>
-      <trans-unit id="fd6ac0dccc0cae1fd6c41a1a97c2dcccae2e8b47" datatype="html">
+      <trans-unit id="293f5a42ffa5cafe565700e00f29c9d3faff235b" datatype="html">
         <source>Install manually mysql node module to use mysql (npm install mysql)
-      </source>
+          </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/database/database.settings.component.html</context>
-          <context context-type="linenumber">14</context>
+          <context context-type="linenumber">20</context>
         </context-group>
         <target>Установите вручную модуль node.js для использования mysql (npm install mysql)</target>
-      </trans-unit>
-      <trans-unit id="1531e77d9dbcfb6a3efeb71fca40da5f5f7ddaaf" datatype="html">
-        <source>MySQL settings:</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/database/database.settings.component.html</context>
-          <context context-type="linenumber">18</context>
-        </context-group>
-        <target>Настройки MySQL:</target>
       </trans-unit>
       <trans-unit id="fe22ca53e651df951dac25b67c17894b0980f767" datatype="html">
         <source>Host</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/database/database.settings.component.html</context>
-          <context context-type="linenumber">19</context>
+          <context context-type="linenumber">28</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/basic/basic.settings.component.html</context>
@@ -650,125 +622,48 @@
         <source>Database</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/database/database.settings.component.html</context>
-          <context context-type="linenumber">21</context>
+          <context context-type="linenumber">35</context>
         </context-group>
         <target>База данных</target>
       </trans-unit>
-      <trans-unit id="ba512e6fe9e8d0a8014c1959539e463cbea3c721" datatype="html">
-        <source>SQLite settings:</source>
+      <trans-unit id="4434ba7f3b08e34c6d0848d7f1b272859028396c" datatype="html">
+        <source>Storage file</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/database/database.settings.component.html</context>
-          <context context-type="linenumber">29</context>
+          <context context-type="linenumber">58</context>
         </context-group>
-        <target>Настройки SQLite:</target>
+        <target>Storage file</target>
       </trans-unit>
-      <trans-unit id="c84df9553019022cc521320e3afaed42f23feca1" datatype="html">
-        <source>Save
-    </source>
+      <trans-unit id="479185717f08d4a6ab80645e5fc4c8719a31dc88" datatype="html">
+        <source>User's file</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/database/database.settings.component.html</context>
-          <context context-type="linenumber">37</context>
+          <context context-type="linenumber">67</context>
         </context-group>
-        <target>Сохранить</target>
-      </trans-unit>
-      <trans-unit id="606e35514c0bf86c3b47babbc76eb1bb4e973cb0" datatype="html">
-        <source>Reset
-    </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/database/database.settings.component.html</context>
-          <context context-type="linenumber">41</context>
-        </context-group>
-        <target>Сбросить</target>
-      </trans-unit>
-      <trans-unit id="808812b8319c389ecbb84c658d5b3eac7087d079" datatype="html">
-        <source>Map settings</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/map/map.settings.component.html</context>
-          <context context-type="linenumber">4</context>
-        </context-group>
-        <target>Настройки карты</target>
-      </trans-unit>
-      <trans-unit id="2780e50203a2f635b9fba81e3dd37e3ee06e000c" datatype="html">
-        <source>Use image markers</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/map/map.settings.component.html</context>
-          <context context-type="linenumber">25</context>
-        </context-group>
-        <target>Use image markers</target>
-      </trans-unit>
-      <trans-unit id="05a7c135815c576c6f2a6c5a7e5adf0ff228a224" datatype="html">
-        <source>
-              Map will use thumbnail images as markers instead of the default pin.
-            </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/map/map.settings.component.html</context>
-          <context context-type="linenumber">39</context>
-        </context-group>
-        <target>Map will use thumbnail images as markers instead of the default pin.</target>
-      </trans-unit>
-      <trans-unit id="1bd9d57dffd8f2e6ed1c65e3ed7bf329f317e752" datatype="html">
-        <source>Map provider</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/map/map.settings.component.html</context>
-          <context context-type="linenumber">47</context>
-        </context-group>
-        <target>Провайдер онлайн карт</target>
-      </trans-unit>
-      <trans-unit id="404941a3f2ac25d1f1ab75020507adcb8cff42df" datatype="html">
-        <source>Tile Url*</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/map/map.settings.component.html</context>
-          <context context-type="linenumber">63</context>
-        </context-group>
-        <target>Tile Url*</target>
-      </trans-unit>
-      <trans-unit id="fd2b3090099597195c82fe0f1963ae97243956b0" datatype="html">
-        <source>*The map module will use these urls to fetch the map tiles.</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/map/map.settings.component.html</context>
-          <context context-type="linenumber">88</context>
-        </context-group>
-        <target>*The map module will use these urls to fetch the map tiles.</target>
-      </trans-unit>
-      <trans-unit id="56b620f4539160c20d0591fa76fea3a4091017f2" datatype="html">
-        <source>+ Add Layer
-            </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/map/map.settings.component.html</context>
-          <context context-type="linenumber">93</context>
-        </context-group>
-        <target>+ Add Layer</target>
-      </trans-unit>
-      <trans-unit id="d43c7ef9da77ac203afc6f0b748adfc03a10e569" datatype="html">
-        <source>Mapbox access token</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/map/map.settings.component.html</context>
-          <context context-type="linenumber">99</context>
-        </context-group>
-        <target>Токен доступа Mapbox</target>
-      </trans-unit>
-      <trans-unit id="82a6a6dc17d7855ddaec1e78c1ddeedb1b3212ad" datatype="html">
-        <source>MapBox needs an access token to work, create one at</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/map/map.settings.component.html</context>
-          <context context-type="linenumber">105</context>
-        </context-group>
-        <target>Для работы MapBox нужен токен, создайте его на</target>
+        <target>User's file</target>
       </trans-unit>
       <trans-unit id="d682be8fc94c1861394919e021e9dcf8def8f554" datatype="html">
         <source>Save
       </source>
         <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/database/database.settings.component.html</context>
+          <context context-type="linenumber">77</context>
+        </context-group>
+        <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/map/map.settings.component.html</context>
-          <context context-type="linenumber">114</context>
+          <context context-type="linenumber">113</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/thumbnail/thumbnail.settings.component.html</context>
-          <context context-type="linenumber">104</context>
+          <context context-type="linenumber">70</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
-          <context context-type="linenumber">106</context>
+          <context context-type="linenumber">120</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/photo/photo.settings.component.html</context>
+          <context context-type="linenumber">94</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/metafiles/metafile.settings.component.html</context>
@@ -784,11 +679,11 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/random-photo/random-photo.settings.component.html</context>
-          <context context-type="linenumber">37</context>
+          <context context-type="linenumber">39</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/basic/basic.settings.component.html</context>
-          <context context-type="linenumber">91</context>
+          <context context-type="linenumber">102</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/faces/faces.settings.component.html</context>
@@ -800,7 +695,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/tasks/tasks.settings.component.html</context>
-          <context context-type="linenumber">180</context>
+          <context context-type="linenumber">189</context>
         </context-group>
         <target>Сохранить</target>
       </trans-unit>
@@ -808,16 +703,24 @@
         <source>Reset
       </source>
         <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/database/database.settings.component.html</context>
+          <context context-type="linenumber">81</context>
+        </context-group>
+        <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/map/map.settings.component.html</context>
-          <context context-type="linenumber">118</context>
+          <context context-type="linenumber">117</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/thumbnail/thumbnail.settings.component.html</context>
-          <context context-type="linenumber">108</context>
+          <context context-type="linenumber">74</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
-          <context context-type="linenumber">110</context>
+          <context context-type="linenumber">124</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/photo/photo.settings.component.html</context>
+          <context context-type="linenumber">98</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/metafiles/metafile.settings.component.html</context>
@@ -833,11 +736,11 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/random-photo/random-photo.settings.component.html</context>
-          <context context-type="linenumber">41</context>
+          <context context-type="linenumber">43</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/basic/basic.settings.component.html</context>
-          <context context-type="linenumber">95</context>
+          <context context-type="linenumber">106</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/faces/faces.settings.component.html</context>
@@ -849,91 +752,82 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/tasks/tasks.settings.component.html</context>
-          <context context-type="linenumber">184</context>
+          <context context-type="linenumber">193</context>
         </context-group>
         <target>Сбросить</target>
       </trans-unit>
-      <trans-unit id="d6644690d6218f5ecc21dd3b2c69aca33d6d58c3" datatype="html">
-        <source>Thumbnail settings</source>
+      <trans-unit id="2780e50203a2f635b9fba81e3dd37e3ee06e000c" datatype="html">
+        <source>Use image markers</source>
         <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/thumbnail/thumbnail.settings.component.html</context>
-          <context context-type="linenumber">4</context>
-        </context-group>
-        <target>Настройки миниатюр</target>
-      </trans-unit>
-      <trans-unit id="1b239b0422945f36c35b5559b4b0c135922fe299" datatype="html">
-        <source>It is highly recommended to use hardware accelerated (sharp or gm) lib for thumbnail
-        generation
-      </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/thumbnail/thumbnail.settings.component.html</context>
-          <context context-type="linenumber">10</context>
-        </context-group>
-        <target>Для создания миниатюр рекомендуется использовать библиотеку с аппаратным ускорением (sharp или gm)</target>
-      </trans-unit>
-      <trans-unit id="6f49ee2673fb82fe8dd1a7da0bada14a4156bf30" datatype="html">
-        <source>Thumbnail generation library</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/thumbnail/thumbnail.settings.component.html</context>
-          <context context-type="linenumber">16</context>
-        </context-group>
-        <target>Библиотека для создания миниатюр</target>
-      </trans-unit>
-      <trans-unit id="de94dec9eca4785ffa7de91cceca4f7ef0ee6a54" datatype="html">
-        <source>Make sure that sharp node module is installed (npm install sharp).
-            </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/thumbnail/thumbnail.settings.component.html</context>
+          <context context-type="sourcefile">app/ui/settings/map/map.settings.component.html</context>
           <context context-type="linenumber">24</context>
         </context-group>
-        <target>Убедитесь, что модуль node.js sharp установлен.</target>
+        <target>Use image markers</target>
       </trans-unit>
-      <trans-unit id="becf05481d292e5e206fda4b7d67d8fac4e85c93" datatype="html">
-        <source>Make sure that gm node module and</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/thumbnail/thumbnail.settings.component.html</context>
-          <context context-type="linenumber">28</context>
-        </context-group>
-        <target>Убедитесь, что модуль node.js gm и</target>
-      </trans-unit>
-      <trans-unit id="50baaa30462f55de8e9b80d5762048f7ba4cecc4" datatype="html">
-        <source>GraphicsMagick</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/thumbnail/thumbnail.settings.component.html</context>
-          <context context-type="linenumber">30</context>
-        </context-group>
-        <target>GraphicsMagick</target>
-      </trans-unit>
-      <trans-unit id="b3dc2b50f4949565d88efab1f3ebd4236e16a082" datatype="html">
-        <source>are installed (npm install sharp).</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/thumbnail/thumbnail.settings.component.html</context>
-          <context context-type="linenumber">31</context>
-        </context-group>
-        <target>установлен (npm install sharp).</target>
-      </trans-unit>
-      <trans-unit id="77dbc5bc9bc2a7dfc5394da0dcf5f08e4a120502" datatype="html">
-        <source>Thumbnail folder</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/thumbnail/thumbnail.settings.component.html</context>
-          <context context-type="linenumber">38</context>
-        </context-group>
-        <target>Папка для миниатюр</target>
-      </trans-unit>
-      <trans-unit id="159e136707f870fa65e5a59184b6e00036dcdf67" datatype="html">
-        <source>Thumbnails will be saved in this folder. Write access is required
+      <trans-unit id="05a7c135815c576c6f2a6c5a7e5adf0ff228a224" datatype="html">
+        <source>
+              Map will use thumbnail images as markers instead of the default pin.
             </source>
         <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/thumbnail/thumbnail.settings.component.html</context>
-          <context context-type="linenumber">44</context>
+          <context context-type="sourcefile">app/ui/settings/map/map.settings.component.html</context>
+          <context context-type="linenumber">38</context>
         </context-group>
-        <target>Миниатюры будут сохранены в этой папке. Требуеться право доступа для записи</target>
+        <target>Map will use thumbnail images as markers instead of the default pin.</target>
+      </trans-unit>
+      <trans-unit id="1bd9d57dffd8f2e6ed1c65e3ed7bf329f317e752" datatype="html">
+        <source>Map provider</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/map/map.settings.component.html</context>
+          <context context-type="linenumber">46</context>
+        </context-group>
+        <target>Провайдер онлайн карт</target>
+      </trans-unit>
+      <trans-unit id="404941a3f2ac25d1f1ab75020507adcb8cff42df" datatype="html">
+        <source>Tile Url*</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/map/map.settings.component.html</context>
+          <context context-type="linenumber">62</context>
+        </context-group>
+        <target>Tile Url*</target>
+      </trans-unit>
+      <trans-unit id="fd2b3090099597195c82fe0f1963ae97243956b0" datatype="html">
+        <source>*The map module will use these urls to fetch the map tiles.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/map/map.settings.component.html</context>
+          <context context-type="linenumber">87</context>
+        </context-group>
+        <target>*The map module will use these urls to fetch the map tiles.</target>
+      </trans-unit>
+      <trans-unit id="56b620f4539160c20d0591fa76fea3a4091017f2" datatype="html">
+        <source>+ Add Layer
+            </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/map/map.settings.component.html</context>
+          <context context-type="linenumber">92</context>
+        </context-group>
+        <target>+ Add Layer</target>
+      </trans-unit>
+      <trans-unit id="d43c7ef9da77ac203afc6f0b748adfc03a10e569" datatype="html">
+        <source>Mapbox access token</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/map/map.settings.component.html</context>
+          <context context-type="linenumber">98</context>
+        </context-group>
+        <target>Токен доступа Mapbox</target>
+      </trans-unit>
+      <trans-unit id="82a6a6dc17d7855ddaec1e78c1ddeedb1b3212ad" datatype="html">
+        <source>MapBox needs an access token to work, create one at</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/map/map.settings.component.html</context>
+          <context context-type="linenumber">104</context>
+        </context-group>
+        <target>Для работы MapBox нужен токен, создайте его на</target>
       </trans-unit>
       <trans-unit id="76a16cf361d95615469c06e26644b6e52f3a4411" datatype="html">
         <source>Thumbnail Quality</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/thumbnail/thumbnail.settings.component.html</context>
-          <context context-type="linenumber">50</context>
+          <context context-type="linenumber">12</context>
         </context-group>
         <target>Качество миниатюр</target>
       </trans-unit>
@@ -941,7 +835,7 @@
         <source>High quality may be slow. Especially with Jimp.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/thumbnail/thumbnail.settings.component.html</context>
-          <context context-type="linenumber">64</context>
+          <context context-type="linenumber">26</context>
         </context-group>
         <target>Высокое качество может потребовать больше времени на создание. Особенно с Jimp.</target>
       </trans-unit>
@@ -949,7 +843,7 @@
         <source>Icon size (used on maps)</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/thumbnail/thumbnail.settings.component.html</context>
-          <context context-type="linenumber">79</context>
+          <context context-type="linenumber">41</context>
         </context-group>
         <target>Размер иконки (используется на картах)</target>
       </trans-unit>
@@ -957,7 +851,7 @@
         <source>Thumbnail sizes</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/thumbnail/thumbnail.settings.component.html</context>
-          <context context-type="linenumber">85</context>
+          <context context-type="linenumber">47</context>
         </context-group>
         <target>Размеры миниатюр</target>
       </trans-unit>
@@ -965,41 +859,68 @@
         <source>Size of the thumbnails.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/thumbnail/thumbnail.settings.component.html</context>
-          <context context-type="linenumber">92</context>
+          <context context-type="linenumber">54</context>
         </context-group>
         <target>Размер миниатюр.</target>
       </trans-unit>
-      <trans-unit id="11b5800486a59a25fad47fa9850420f83ccbe52b" datatype="html">
-        <source>The best matching size will be generated. (More size gives better quality, but use storage to store and CPU to render.)</source>
+      <trans-unit id="0fea72962a78303f539b0d63e2694648ae33d12f" datatype="html">
+        <source>The best matching size will be generated. (More sizes give better quality, but use more
+              storage and CPU to render.)
+            </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/thumbnail/thumbnail.settings.component.html</context>
-          <context context-type="linenumber">93</context>
+          <context context-type="linenumber">56</context>
         </context-group>
-        <target>Будет создан самый подходящий размер. (Больше разрешение лучше по качеству, но требует больше места для хранения и времени на создание.)</target>
+        <target>The best matching size will be generated. (More sizes give better quality, but use more
+              storage and CPU to render.)
+            </target>
       </trans-unit>
-      <trans-unit id="d2b55b02775d93e8e5feaea56c6975e7e617a38a" datatype="html">
-        <source>';' separated integers. If size is 200, that thumbnail will have 200^2 pixels.</source>
+      <trans-unit id="acee7864683576e1e4f159e725db24ddeee32e1c" datatype="html">
+        <source>';' separated integers. If size is 160, that shorter side of the thumbnail will have 160
+              pixels.
+            </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/thumbnail/thumbnail.settings.component.html</context>
-          <context context-type="linenumber">95</context>
+          <context context-type="linenumber">60</context>
         </context-group>
-        <target>введите целые числа, разделенные ';'. Если указан размер 200, миниатюра будет иметь 200 ^ 2 пикселей.</target>
+        <target>';' separated integers. If size is 160, that shorter side of the thumbnail will have 160
+              pixels.
+            </target>
       </trans-unit>
-      <trans-unit id="b5398623f87ee72ed23f5023918db1707771e925" datatype="html">
-        <source>Video settings</source>
+      <trans-unit id="5e561ce99009d20e901f7aef3c4f867a519ca9f0" datatype="html">
+        <source>Generate thumbnails now</source>
         <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
-          <context context-type="linenumber">4</context>
+          <context context-type="sourcefile">app/ui/settings/thumbnail/thumbnail.settings.component.html</context>
+          <context context-type="linenumber">84</context>
         </context-group>
-        <target>Настройки видео</target>
+        <target>Generate thumbnails now</target>
       </trans-unit>
-      <trans-unit id="c720bddc2e7fc9d0eb8186ebaf2f98ebbdd4b11a" datatype="html">
-        <source>Video support uses ffmpeg. ffmpeg and ffprobe binaries need to be available in the PATH or the
-        @ffmpeg-installer/ffmpeg and @ffprobe-installer/ffprobe optional node packages need to be installed.
+      <trans-unit id="02815610fa0657bac1103cc2ab729f6c1d6614f7" datatype="html">
+        <source>Generates all thumbnails now</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/thumbnail/thumbnail.settings.component.html</context>
+          <context context-type="linenumber">81</context>
+        </context-group>
+        <target>Generates all thumbnails now</target>
+      </trans-unit>
+      <trans-unit id="dceae7c3795607d38a6a497282ce0e19939f088f" datatype="html">
+        <source>Cancel thumbnail generation
       </source>
         <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/thumbnail/thumbnail.settings.component.html</context>
+          <context context-type="linenumber">90</context>
+        </context-group>
+        <target>Cancel thumbnail generation
+      </target>
+      </trans-unit>
+      <trans-unit id="69149fe434cf1b0d9bafe5ead5d126101bb5162e" datatype="html">
+        <source>Video support uses ffmpeg. ffmpeg and ffprobe binaries need to be available in the PATH or
+          the
+          @ffmpeg-installer/ffmpeg and @ffprobe-installer/ffprobe optional node packages need to be installed.
+        </source>
+        <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
-          <context context-type="linenumber">24</context>
+          <context context-type="linenumber">25</context>
         </context-group>
         <target>Для работы с видео необходим ffmpeg. Приложения ffmpeg и ffprobe должны быть установлены и доступны через PATH, альтернативное решение - установка node.js модулей @ffmpeg-installer/ffmpeg и @ffprobe-installer/ffprobe.</target>
       </trans-unit>
@@ -1007,15 +928,45 @@
         <source>Video transcoding:</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
-          <context context-type="linenumber">30</context>
+          <context context-type="linenumber">32</context>
         </context-group>
         <target>Video transcoding:</target>
+      </trans-unit>
+      <trans-unit id="e4535a01533b3a6f9f803428e90a31618c8d173e" datatype="html">
+        <source>To ensure smooth video playback, video transcoding is recommended to a lower bit rate than
+          the
+          server's upload rate.
+        </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
+          <context context-type="linenumber">34</context>
+        </context-group>
+        <target>To ensure smooth video playback, video transcoding is recommended to a lower bit rate than the server's upload rate.</target>
+      </trans-unit>
+      <trans-unit id="2563716b6cdad527d4d01f0aa49368d1a876263f" datatype="html">
+        <source>The transcoded videos will be save to the thumbnail folder.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
+          <context context-type="linenumber">38</context>
+        </context-group>
+        <target>The transcoded videos will be save to the thumbnail folder.</target>
+      </trans-unit>
+      <trans-unit id="9ca8b858f4f19476c64b5f4b6416e8e8210c7f1e" datatype="html">
+        <source>You can trigger the transcoding manually, but you can also create an automatic encoding task
+          in
+          advanced settings mode.
+        </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
+          <context context-type="linenumber">39</context>
+        </context-group>
+        <target>You can trigger the transcoding manually, but you can also create an automatic encoding task in advanced settings mode.</target>
       </trans-unit>
       <trans-unit id="7722a92a1fc887570b4f4d8a7bb916f067f32028" datatype="html">
         <source>Format</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
-          <context context-type="linenumber">32</context>
+          <context context-type="linenumber">46</context>
         </context-group>
         <target>Format</target>
       </trans-unit>
@@ -1023,7 +974,7 @@
         <source>Codec</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
-          <context context-type="linenumber">44</context>
+          <context context-type="linenumber">58</context>
         </context-group>
         <target>Codec</target>
       </trans-unit>
@@ -1031,7 +982,11 @@
         <source>Resolution</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
-          <context context-type="linenumber">55</context>
+          <context context-type="linenumber">69</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/photo/photo.settings.component.html</context>
+          <context context-type="linenumber">78</context>
         </context-group>
         <target>Resolution</target>
       </trans-unit>
@@ -1040,7 +995,7 @@
             keeping the aspect ratio.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
-          <context context-type="linenumber">63</context>
+          <context context-type="linenumber">77</context>
         </context-group>
         <target>The height of the output video will be scaled down to this, while keeping the aspect ratio.</target>
       </trans-unit>
@@ -1048,7 +1003,7 @@
         <source>FPS</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
-          <context context-type="linenumber">69</context>
+          <context context-type="linenumber">83</context>
         </context-group>
         <target>FPS</target>
       </trans-unit>
@@ -1057,7 +1012,7 @@
             this this.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
-          <context context-type="linenumber">77</context>
+          <context context-type="linenumber">91</context>
         </context-group>
         <target>Target frame per second (fps) of the output video will be scaled down this this.</target>
       </trans-unit>
@@ -1065,7 +1020,7 @@
         <source>Bit rate</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
-          <context context-type="linenumber">83</context>
+          <context context-type="linenumber">97</context>
         </context-group>
         <target>Bit rate</target>
       </trans-unit>
@@ -1075,44 +1030,15 @@
             upload rate of your home server.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
-          <context context-type="linenumber">97</context>
+          <context context-type="linenumber">111</context>
         </context-group>
         <target>Target bit rate of the output video will be scaled down this this. This should be less than the upload rate of your home server.</target>
       </trans-unit>
-      <trans-unit id="3873472ddebbf35f0155cf0b8f98596852b2de0f" datatype="html">
-        <source>To ensure smooth video playback, video transcoding is recommended to a lower bit rate than the
-        server's upload rate.
-      </source>
+      <trans-unit id="972490ece7c4295088769fca5c9c14d3860a6f6d" datatype="html">
+        <source>Transcode videos now</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
-          <context context-type="linenumber">116</context>
-        </context-group>
-        <target>To ensure smooth video playback, video transcoding is recommended to a lower bit rate than the server's upload rate.</target>
-      </trans-unit>
-      <trans-unit id="2563716b6cdad527d4d01f0aa49368d1a876263f" datatype="html">
-        <source>The transcoded videos will be save to the thumbnail folder.</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
-          <context context-type="linenumber">119</context>
-        </context-group>
-        <target>The transcoded videos will be save to the thumbnail folder.</target>
-      </trans-unit>
-      <trans-unit id="4ae3667dc5f56cb27b15b1be01ab7ae13f50ef71" datatype="html">
-        <source>You can trigger the transcoding manually, but you can also create an automatic encoding task in
-        advanced settings mode.
-      </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
-          <context context-type="linenumber">120</context>
-        </context-group>
-        <target>You can trigger the transcoding manually, but you can also create an automatic encoding task in advanced settings mode.</target>
-      </trans-unit>
-      <trans-unit id="cd6833e4192fb71216599b027996baef7e625573" datatype="html">
-        <source>Transcode videos now
-      </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
-          <context context-type="linenumber">132</context>
+          <context context-type="linenumber">134</context>
         </context-group>
         <target>Transcode videos now</target>
       </trans-unit>
@@ -1120,11 +1046,15 @@
         <source>Indexes the folders</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
-          <context context-type="linenumber">130</context>
+          <context context-type="linenumber">131</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/photo/photo.settings.component.html</context>
+          <context context-type="linenumber">105</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
-          <context context-type="linenumber">125</context>
+          <context context-type="linenumber">118</context>
         </context-group>
         <target>Индексирует папки</target>
       </trans-unit>
@@ -1133,61 +1063,124 @@
       </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
-          <context context-type="linenumber">137</context>
+          <context context-type="linenumber">140</context>
         </context-group>
         <target>Cancel transcoding</target>
       </trans-unit>
-      <trans-unit id="74ac724decc8ee58e90042e703408a8642cf5405" datatype="html">
-        <source>status</source>
+      <trans-unit id="1b239b0422945f36c35b5559b4b0c135922fe299" datatype="html">
+        <source>It is highly recommended to use hardware accelerated (sharp or gm) lib for thumbnail
+        generation
+      </source>
         <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
-          <context context-type="linenumber">144</context>
+          <context context-type="sourcefile">app/ui/settings/photo/photo.settings.component.html</context>
+          <context context-type="linenumber">8</context>
         </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/tasks/tasks.settings.component.html</context>
-          <context context-type="linenumber">160</context>
-        </context-group>
-        <target>status</target>
+        <target>Для создания миниатюр рекомендуется использовать библиотеку с аппаратным ускорением (sharp или gm)</target>
       </trans-unit>
-      <trans-unit id="adab6f78490c699b2fdf22f611d3dc8662a178a5" datatype="html">
-        <source>elapsed</source>
+      <trans-unit id="6f49ee2673fb82fe8dd1a7da0bada14a4156bf30" datatype="html">
+        <source>Thumbnail generation library</source>
         <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
-          <context context-type="linenumber">145</context>
+          <context context-type="sourcefile">app/ui/settings/photo/photo.settings.component.html</context>
+          <context context-type="linenumber">14</context>
         </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
-          <context context-type="linenumber">105</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/tasks/tasks.settings.component.html</context>
-          <context context-type="linenumber">161</context>
-        </context-group>
-        <target>прошло</target>
+        <target>Библиотека для создания миниатюр</target>
       </trans-unit>
-      <trans-unit id="478c0bf6552f7226e27bb5b57b8209a040ded2c6" datatype="html">
-        <source>left</source>
+      <trans-unit id="de94dec9eca4785ffa7de91cceca4f7ef0ee6a54" datatype="html">
+        <source>Make sure that sharp node module is installed (npm install sharp).
+            </source>
         <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
-          <context context-type="linenumber">146</context>
+          <context context-type="sourcefile">app/ui/settings/photo/photo.settings.component.html</context>
+          <context context-type="linenumber">22</context>
         </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
-          <context context-type="linenumber">106</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/tasks/tasks.settings.component.html</context>
-          <context context-type="linenumber">162</context>
-        </context-group>
-        <target>осталось</target>
+        <target>Убедитесь, что модуль node.js sharp установлен.</target>
       </trans-unit>
-      <trans-unit id="c45b54bd977f2e5b0d635231051f1143e0abf1c1" datatype="html">
-        <source>Meta file settings</source>
+      <trans-unit id="becf05481d292e5e206fda4b7d67d8fac4e85c93" datatype="html">
+        <source>Make sure that gm node module and</source>
         <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/metafiles/metafile.settings.component.html</context>
-          <context context-type="linenumber">4</context>
+          <context context-type="sourcefile">app/ui/settings/photo/photo.settings.component.html</context>
+          <context context-type="linenumber">26</context>
         </context-group>
-        <target>Мета информация</target>
+        <target>Убедитесь, что модуль node.js gm и</target>
+      </trans-unit>
+      <trans-unit id="b3dc2b50f4949565d88efab1f3ebd4236e16a082" datatype="html">
+        <source>are installed (npm install sharp).</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/photo/photo.settings.component.html</context>
+          <context context-type="linenumber">28</context>
+        </context-group>
+        <target>установлен (npm install sharp).</target>
+      </trans-unit>
+      <trans-unit id="ab123cb43ad6623f84c33f28274418c88667e866" datatype="html">
+        <source>Photo converting:</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/photo/photo.settings.component.html</context>
+          <context context-type="linenumber">36</context>
+        </context-group>
+        <target>Photo converting:</target>
+      </trans-unit>
+      <trans-unit id="cf3e07d622499cbe9d8c177163f65eceaa11a1de" datatype="html">
+        <source>Converting</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/photo/photo.settings.component.html</context>
+          <context context-type="linenumber">39</context>
+        </context-group>
+        <target>Converting</target>
+      </trans-unit>
+      <trans-unit id="73abe1f06432b092036b04da3e2c6b67eaf1fd5f" datatype="html">
+        <source>Downsizes photos for faster preview loading. (Zooming in to the photo
+            loads the original)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/photo/photo.settings.component.html</context>
+          <context context-type="linenumber">53</context>
+        </context-group>
+        <target>Downsizes photos for faster preview loading. (Zooming in to the photo
+            loads the original)</target>
+      </trans-unit>
+      <trans-unit id="45becd33ed4f2f1a19f2040b4624968677f7b02b" datatype="html">
+        <source>On the fly converting </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/photo/photo.settings.component.html</context>
+          <context context-type="linenumber">59</context>
+        </context-group>
+        <target>On the fly converting </target>
+      </trans-unit>
+      <trans-unit id="a9a7b9d2773aa49ff4f41b01b55e0a51d664eecf" datatype="html">
+        <source>Converts photos on the fly, when they are requested.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/photo/photo.settings.component.html</context>
+          <context context-type="linenumber">73</context>
+        </context-group>
+        <target>Converts photos on the fly, when they are requested.</target>
+      </trans-unit>
+      <trans-unit id="9c8c328f075bf04fa34b3ee3f011577929d85fcd" datatype="html">
+        <source>The shorter edge of the converted photo will be scaled down to this,
+            while
+            keeping the aspect ratio.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/photo/photo.settings.component.html</context>
+          <context context-type="linenumber">85</context>
+        </context-group>
+        <target>The shorter edge of the converted photo will be scaled down to this,
+            while
+            keeping the aspect ratio.</target>
+      </trans-unit>
+      <trans-unit id="4b9cafd261787994f5e6ab5c2fbab785156037ef" datatype="html">
+        <source>Convert photos now</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/photo/photo.settings.component.html</context>
+          <context context-type="linenumber">108</context>
+        </context-group>
+        <target>Convert photos now</target>
+      </trans-unit>
+      <trans-unit id="c6aa3f484d553b8746e0cef6cef79a48ff6183ea" datatype="html">
+        <source>Cancel converting
+        </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/photo/photo.settings.component.html</context>
+          <context context-type="linenumber">114</context>
+        </context-group>
+        <target>Cancel converting
+        </target>
       </trans-unit>
       <trans-unit id="219e36c6747ef991081a68fc8ab2678677583e11" datatype="html">
         <source>Reads and show *.gpx files on the map</source>
@@ -1196,14 +1189,6 @@
           <context context-type="linenumber">23</context>
         </context-group>
         <target>Считывать и отображать *.gpx файлы на карте</target>
-      </trans-unit>
-      <trans-unit id="2e75ae3885931555902da6b288ed616843d5dc3c" datatype="html">
-        <source>Search settings</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/search/search.settings.component.html</context>
-          <context context-type="linenumber">5</context>
-        </context-group>
-        <target>Настройки поиска</target>
       </trans-unit>
       <trans-unit id="fba3e700d434667e68ec31f38b2fed451955b6a3" datatype="html">
         <source>Autocomplete</source>
@@ -1247,14 +1232,6 @@
         </context-group>
         <target>Указанные настройками не поддерживаются поиском</target>
       </trans-unit>
-      <trans-unit id="2ca3f59b3fe47e837455e9090470356d27d1f59e" datatype="html">
-        <source>Share settings</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/share/share.settings.component.html</context>
-          <context context-type="linenumber">5</context>
-        </context-group>
-        <target>Настройки публичного доступа</target>
-      </trans-unit>
       <trans-unit id="6024b74e5baa9004f52b2d91fe37321412e328e4" datatype="html">
         <source>Password protected</source>
         <context-group purpose="location">
@@ -1281,25 +1258,21 @@
         </context-group>
         <target>Совместное использование не поддерживается с указанными настройками</target>
       </trans-unit>
-      <trans-unit id="7dfb72da1dc4553b2352694d8cf6b103bc280b91" datatype="html">
-        <source>Random Photo settings</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/random-photo/random-photo.settings.component.html</context>
-          <context context-type="linenumber">5</context>
-        </context-group>
-        <target>Настройки случайных фото</target>
-      </trans-unit>
-      <trans-unit id="7626fa8df14a4bf00ff7898dd281b450b5c76718" datatype="html">
+      <trans-unit id="445a71ab2f91f21a6d54acf86fb9796b1ac20bbb" datatype="html">
         <source>
           This feature enables you to generate 'random photo' urls.
           That URL returns a photo random selected from your gallery.
-          You can use the url with 3rd party like random changing desktop background.
+          You can use the url with 3rd party application like random changing desktop background.
         </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/random-photo/random-photo.settings.component.html</context>
-          <context context-type="linenumber">25</context>
+          <context context-type="linenumber">27</context>
         </context-group>
-        <target>Эта функция позволяет генерировать URL для случайных фотографий. По этому адресу буду доступны случайные фто из вашей галереи. Вы также можете использовать этот адрес сторонними приложениями, например как фон на рабочем столе</target>
+        <target>
+          This feature enables you to generate 'random photo' urls.
+          That URL returns a photo random selected from your gallery.
+          You can use the url with 3rd party application like random changing desktop background.
+        </target>
       </trans-unit>
       <trans-unit id="6c02e8541a2e670f80de8b5a218ea14a16bb6c42" datatype="html">
         <source>
@@ -1307,17 +1280,9 @@
       </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/random-photo/random-photo.settings.component.html</context>
-          <context context-type="linenumber">32</context>
+          <context context-type="linenumber">34</context>
         </context-group>
         <target>"Случайные Фото" не поддерживают указанные настройки</target>
-      </trans-unit>
-      <trans-unit id="fe4fefb86d4b6629064ff0fa96fdc2b80fc151b0" datatype="html">
-        <source>Basic settings</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/basic/basic.settings.component.html</context>
-          <context context-type="linenumber">4</context>
-        </context-group>
-        <target>Основные настройки</target>
       </trans-unit>
       <trans-unit id="870d05214ce19848ea4b7fe698e9a2e73db0c715" datatype="html">
         <source>Page title</source>
@@ -1367,11 +1332,27 @@
         </context-group>
         <target>Изображения загружаются из этой папки (требуется право на чтение)</target>
       </trans-unit>
+      <trans-unit id="cec8ee6e412792ec14d7c0219c8df1c32d897b17" datatype="html">
+        <source>Temp folder</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/basic/basic.settings.component.html</context>
+          <context context-type="linenumber">57</context>
+        </context-group>
+        <target>Temp folder</target>
+      </trans-unit>
+      <trans-unit id="5b20c7a90f947511c0ba64f952ab52ddf33ff094" datatype="html">
+        <source>Thumbnails, coverted photos, videos will be stored here (write permission required)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/basic/basic.settings.component.html</context>
+          <context context-type="linenumber">63</context>
+        </context-group>
+        <target>Thumbnails, coverted photos, videos will be stored here (write permission required)</target>
+      </trans-unit>
       <trans-unit id="682679bea54c7cdc8fad228e65f4e35d8cf62275" datatype="html">
         <source>Page public url</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/basic/basic.settings.component.html</context>
-          <context context-type="linenumber">57</context>
+          <context context-type="linenumber">68</context>
         </context-group>
         <target>Публичный URL</target>
       </trans-unit>
@@ -1381,7 +1362,7 @@
           </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/basic/basic.settings.component.html</context>
-          <context context-type="linenumber">64</context>
+          <context context-type="linenumber">75</context>
         </context-group>
         <target>Для входа в галлерею из внешней или докальной сети используйте этот URL</target>
       </trans-unit>
@@ -1389,7 +1370,7 @@
         <source>Url Base</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/basic/basic.settings.component.html</context>
-          <context context-type="linenumber">71</context>
+          <context context-type="linenumber">82</context>
         </context-group>
         <target>Path</target>
       </trans-unit>
@@ -1400,7 +1381,7 @@
           </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/basic/basic.settings.component.html</context>
-          <context context-type="linenumber">78</context>
+          <context context-type="linenumber">89</context>
         </context-group>
         <target>Вы можете задать path(вложенный URL) для полного пути вашей галлереи (например: http://mydomain.com/myGallery). Если не указан, входите в галлерею по публичному URL без / в конце</target>
       </trans-unit>
@@ -1410,17 +1391,9 @@
       </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/basic/basic.settings.component.html</context>
-          <context context-type="linenumber">85</context>
+          <context context-type="linenumber">96</context>
         </context-group>
         <target>Публичный URL и базовый URL не совпадают. Некоторые функции могут не работать.</target>
-      </trans-unit>
-      <trans-unit id="5c45755390365c5b322131096f87c0013faa26fc" datatype="html">
-        <source>Faces settings</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/faces/faces.settings.component.html</context>
-          <context context-type="linenumber">5</context>
-        </context-group>
-        <target>Faces settings</target>
       </trans-unit>
       <trans-unit id="a20e57ed1eb4d083455f5dd3f0d5b51328e7217a" datatype="html">
         <source>Override keywords</source>
@@ -1463,14 +1436,6 @@
           <context context-type="linenumber">59</context>
         </context-group>
         <target>Faces are not supported with these settings.</target>
-      </trans-unit>
-      <trans-unit id="1e99f581a015c671d53abad7c7df6a5ad35bfe85" datatype="html">
-        <source>Other settings</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/other/other.settings.component.html</context>
-          <context context-type="linenumber">4</context>
-        </context-group>
-        <target>Другие настройки</target>
       </trans-unit>
       <trans-unit id="07807dce2e0dc33743530dd6a8b0d1f24094884d" datatype="html">
         <source>Error: </source>
@@ -1633,14 +1598,6 @@
         </context-group>
         <target>Метод сортировки фотографий по умолчанию</target>
       </trans-unit>
-      <trans-unit id="87b1696eb068572c3908643c425ee3090938c1a0" datatype="html">
-        <source>Folder indexing</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
-          <context context-type="linenumber">4</context>
-        </context-group>
-        <target>Сканирование папок</target>
-      </trans-unit>
       <trans-unit id="1be10583851301763cfa3b55d74670808986a583" datatype="html">
         <source>Index cache timeout [ms]</source>
         <context-group purpose="location">
@@ -1708,11 +1665,14 @@
         </context-group>
         <target>Folders to exclude from indexing</target>
       </trans-unit>
-      <trans-unit id="cd7fc792f9cd85a7445d39592b8bdf85adadd7d6" datatype="html">
-        <source>';' separated strings. If an entry starts with '/' it is treated as an absolute path. If it doesn't start with '/' but contains a '/', the path is relative to the image directory. If it doesn't contain a '/', any folder with this name will be excluded.</source>
+      <trans-unit id="2b1fbf3c2b183c9c5e70c33a1c2b8664a58f2095" datatype="html">
+        <source>';' separated strings. If an entry starts with '/' it is treated as an absolute path. If it doesn't
+                start with '/' but contains a '/', the path is relative to the image directory. If it doesn't contain a
+                '/', any folder with this name will be excluded.
+              </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
-          <context context-type="linenumber">62</context>
+          <context context-type="linenumber">63</context>
         </context-group>
         <target>';' separated strings. If an entry starts with '/' it is treated as an absolute path. If it doesn't start with '/' but contains a '/', the path is relative to the image directory. If it doesn't contain a '/', any folder with this name will be excluded.</target>
       </trans-unit>
@@ -1720,7 +1680,7 @@
         <source>Exclude File List</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
-          <context context-type="linenumber">68</context>
+          <context context-type="linenumber">72</context>
         </context-group>
         <target>Exclude File List</target>
       </trans-unit>
@@ -1728,15 +1688,17 @@
         <source>Files that mark a folder to be excluded from indexing</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
-          <context context-type="linenumber">75</context>
+          <context context-type="linenumber">79</context>
         </context-group>
         <target>Files that mark a folder to be excluded from indexing</target>
       </trans-unit>
-      <trans-unit id="960f496e8818499033ad3ce9860b342bfb193fd2" datatype="html">
-        <source>';' separated strings. Any folder that contains a file with this name will be excluded from indexing.</source>
+      <trans-unit id="77f3038c926583f3e3be3a5a8db3c4207e125237" datatype="html">
+        <source>';' separated strings. Any folder that contains a file with this name will be excluded from
+                indexing.
+              </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
-          <context context-type="linenumber">77</context>
+          <context context-type="linenumber">82</context>
         </context-group>
         <target>';' separated strings. Any folder that contains a file with this name will be excluded from indexing.</target>
       </trans-unit>
@@ -1745,7 +1707,7 @@
         </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
-          <context context-type="linenumber">85</context>
+          <context context-type="linenumber">92</context>
         </context-group>
         <target>Сохранить</target>
       </trans-unit>
@@ -1754,7 +1716,7 @@
         </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
-          <context context-type="linenumber">89</context>
+          <context context-type="linenumber">96</context>
         </context-group>
         <target>Сбросить</target>
       </trans-unit>
@@ -1762,7 +1724,7 @@
         <source>If you add a new folder to your gallery, the site indexes it automatically.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
-          <context context-type="linenumber">95</context>
+          <context context-type="linenumber">103</context>
         </context-group>
         <target>Сайт автоматически индексирует добавленые в галерею папки.</target>
       </trans-unit>
@@ -1770,7 +1732,7 @@
         <source>If you would like to trigger indexing manually, click index button.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
-          <context context-type="linenumber">96</context>
+          <context context-type="linenumber">104</context>
         </context-group>
         <target>Если вы хотите запустить индексацию вручную, нажмите кнопку "Индексировать".</target>
       </trans-unit>
@@ -1778,59 +1740,34 @@
         <source>Note: search only works among the indexed directories</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
-          <context context-type="linenumber">99</context>
+          <context context-type="linenumber">106</context>
         </context-group>
         <target>Примечание: поиск работает только с проиндексированными каталогами</target>
       </trans-unit>
-      <trans-unit id="1ac5dc3858808c90bb5e7cbd0c3e5e4b342160f3" datatype="html">
-        <source>indexing</source>
+      <trans-unit id="d0b9da73a3a242b1c3e91e25afd292dab70cc5e5" datatype="html">
+        <source>Index folders now</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
-          <context context-type="linenumber">104</context>
+          <context context-type="linenumber">121</context>
         </context-group>
-        <target>индексирование</target>
+        <target>Index folders now</target>
       </trans-unit>
-      <trans-unit id="32cc8ef8dc6f4f239b7f637ac8adaecc55b8e1d8" datatype="html">
-        <source>Index
-        </source>
+      <trans-unit id="fbd0525b939894a3a196bc879e6e7f928593604c" datatype="html">
+        <source>Cancel converting
+      </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
           <context context-type="linenumber">127</context>
         </context-group>
-        <target>Индексировать</target>
+        <target>Cancel converting
+      </target>
       </trans-unit>
-      <trans-unit id="2cf5bad5f694098d6eb9ce70f687cc469e60c697" datatype="html">
-        <source>Index with Thumbnails
-        </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
-          <context context-type="linenumber">134</context>
-        </context-group>
-        <target>Индексировать и создавать миниатюры</target>
-      </trans-unit>
-      <trans-unit id="b7e4e839063c258440e50826493ef7ee3c8c2be3" datatype="html">
-        <source>Indexes the folders and also creates the thumbnails</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
-          <context context-type="linenumber">130</context>
-        </context-group>
-        <target>Индексирует папки и создает миниатюры</target>
-      </trans-unit>
-      <trans-unit id="e7e43ec575247424aa179da55b338fd740e8aa7f" datatype="html">
-        <source>Cancel
-        </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
-          <context context-type="linenumber">139</context>
-        </context-group>
-        <target>Отмена</target>
-      </trans-unit>
-      <trans-unit id="d68e02eaea0b78b12fceb483b2183a3f5b70d969" datatype="html">
+      <trans-unit id="ab4d309abbd8f981e3157ae6924b1962b69c3e36" datatype="html">
         <source>Reset Indexes
-        </source>
+      </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
-          <context context-type="linenumber">143</context>
+          <context context-type="linenumber">131</context>
         </context-group>
         <target>Удалить индекс</target>
       </trans-unit>
@@ -1840,7 +1777,7 @@
         </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
-          <context context-type="linenumber">148</context>
+          <context context-type="linenumber">137</context>
         </context-group>
         <target>Статистика:</target>
       </trans-unit>
@@ -1848,7 +1785,7 @@
         <source>Folders</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
-          <context context-type="linenumber">152</context>
+          <context context-type="linenumber">141</context>
         </context-group>
         <target>Папки</target>
       </trans-unit>
@@ -1856,7 +1793,7 @@
         <source>Photos</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
-          <context context-type="linenumber">156</context>
+          <context context-type="linenumber">145</context>
         </context-group>
         <target>Фото</target>
       </trans-unit>
@@ -1864,7 +1801,7 @@
         <source>Videos</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
-          <context context-type="linenumber">160</context>
+          <context context-type="linenumber">149</context>
         </context-group>
         <target>Видео</target>
       </trans-unit>
@@ -1872,17 +1809,33 @@
         <source>Size</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
-          <context context-type="linenumber">165</context>
+          <context context-type="linenumber">154</context>
         </context-group>
         <target>Размер</target>
       </trans-unit>
-      <trans-unit id="586a5fd72602b5b14ec0c55f84814de47bb21e3a" datatype="html">
-        <source>Tasks</source>
+      <trans-unit id="6f905843264b6935f11115fb91b72ce4f2aafd75" datatype="html">
+        <source>Stopping</source>
         <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/tasks/tasks.settings.component.html</context>
-          <context context-type="linenumber">4</context>
+          <context context-type="sourcefile">app/ui/settings/tasks/progress/progress.tasks.settings.component.html</context>
+          <context context-type="linenumber">7</context>
         </context-group>
-        <target>Tasks</target>
+        <target>Stopping</target>
+      </trans-unit>
+      <trans-unit id="9f2195bf10299534034510f387621199db784343" datatype="html">
+        <source>time elapsed</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/tasks/progress/progress.tasks.settings.component.html</context>
+          <context context-type="linenumber">14</context>
+        </context-group>
+        <target>time elapsed</target>
+      </trans-unit>
+      <trans-unit id="35511807089eb9a1864bec06e28d57e04b4c8f87" datatype="html">
+        <source>time left</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/tasks/progress/progress.tasks.settings.component.html</context>
+          <context context-type="linenumber">28</context>
+        </context-group>
+        <target>time left</target>
       </trans-unit>
       <trans-unit id="18443428b116a10f17fbd067bde0553c00db45f1" datatype="html">
         <source>every</source>
@@ -1892,7 +1845,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/tasks/tasks.settings.component.html</context>
-          <context context-type="linenumber">84</context>
+          <context context-type="linenumber">85</context>
         </context-group>
         <target>every</target>
       </trans-unit>
@@ -1931,7 +1884,7 @@
                     </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/tasks/tasks.settings.component.html</context>
-          <context context-type="linenumber">44</context>
+          <context context-type="linenumber">45</context>
         </context-group>
         <target>Select a task to schedule.</target>
       </trans-unit>
@@ -1939,7 +1892,7 @@
         <source>Periodicity:</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/tasks/tasks.settings.component.html</context>
-          <context context-type="linenumber">49</context>
+          <context context-type="linenumber">50</context>
         </context-group>
         <target>Periodicity:</target>
       </trans-unit>
@@ -1948,7 +1901,7 @@
                     </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/tasks/tasks.settings.component.html</context>
-          <context context-type="linenumber">59</context>
+          <context context-type="linenumber">60</context>
         </context-group>
         <target>Set the time to run the task.</target>
       </trans-unit>
@@ -1956,11 +1909,11 @@
         <source>At:</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/tasks/tasks.settings.component.html</context>
-          <context context-type="linenumber">66</context>
+          <context context-type="linenumber">67</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/tasks/tasks.settings.component.html</context>
-          <context context-type="linenumber">76</context>
+          <context context-type="linenumber">77</context>
         </context-group>
         <target>At:</target>
       </trans-unit>
@@ -1969,7 +1922,7 @@
                 </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/tasks/tasks.settings.component.html</context>
-          <context context-type="linenumber">102</context>
+          <context context-type="linenumber">103</context>
         </context-group>
         <target>Start now</target>
       </trans-unit>
@@ -1977,7 +1930,7 @@
         <source>Trigger task run manually</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/tasks/tasks.settings.component.html</context>
-          <context context-type="linenumber">100</context>
+          <context context-type="linenumber">101</context>
         </context-group>
         <target>Trigger task run manually</target>
       </trans-unit>
@@ -1986,16 +1939,24 @@
                 </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/tasks/tasks.settings.component.html</context>
-          <context context-type="linenumber">107</context>
+          <context context-type="linenumber">108</context>
         </context-group>
         <target>Stop</target>
+      </trans-unit>
+      <trans-unit id="eecad7f2f355d4ae0baed11537a10ceaebbc7382" datatype="html">
+        <source>';' separated integers.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/tasks/tasks.settings.component.html</context>
+          <context context-type="linenumber">171</context>
+        </context-group>
+        <target>';' separated integers.</target>
       </trans-unit>
       <trans-unit id="87dc7285ddadbe21ac1770275d35e8c747e0eb26" datatype="html">
         <source>+ Add task
       </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/tasks/tasks.settings.component.html</context>
-          <context context-type="linenumber">187</context>
+          <context context-type="linenumber">196</context>
         </context-group>
         <target>+ Add task</target>
       </trans-unit>
@@ -2250,13 +2211,13 @@
         </context-group>
         <target>Для того чтобы применить настройки перезапустите сервер</target>
       </trans-unit>
-      <trans-unit id="f53ab04e9d8449445abf482bf44b521e2e695c3c" datatype="html">
-        <source>Indexing</source>
+      <trans-unit id="87b1696eb068572c3908643c425ee3090938c1a0" datatype="html">
+        <source>Folder indexing</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/indexing/indexing.settings.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>Индексирование</target>
+        <target>Сканирование папок</target>
       </trans-unit>
       <trans-unit id="03b2c27d0f1dd0ebdf6eb756bd43914d5127ca8a" datatype="html">
         <source>low</source>
@@ -2330,13 +2291,61 @@
         </context-group>
         <target>Другие</target>
       </trans-unit>
-      <trans-unit id="e636143d733fa6a21fa62ffdff2fd76c221e6cac" datatype="html">
-        <source>Random Media</source>
+      <trans-unit id="ed3fc8103cfe2c6b999115b6d5dcbe7a2528a477" datatype="html">
+        <source>(recommended)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/frontend/app/ui/settings/photo/photo.settings.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <target>(рекомендуемые)</target>
+      </trans-unit>
+      <trans-unit id="37e17739aa72ee0616a2f908ae66092778f3d626" datatype="html">
+        <source>(deprecated, will be removed)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/frontend/app/ui/settings/photo/photo.settings.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <target>(deprecated, will be removed)</target>
+      </trans-unit>
+      <trans-unit id="a4179dfcd78cace8b98cdeb5a74ef60ea2360163" datatype="html">
+        <source>Photo</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/frontend/app/ui/settings/photo/photo.settings.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <target>Photo</target>
+      </trans-unit>
+      <trans-unit id="656b49c7447dc2f934fffb3ae96e499aa7336fce" datatype="html">
+        <source>Photo converting started</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/frontend/app/ui/settings/photo/photo.settings.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <target>Photo converting started</target>
+      </trans-unit>
+      <trans-unit id="9ccf3940c1dfdaa576468188a224c5ada24f48a1" datatype="html">
+        <source>Photo converting interrupted</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/frontend/app/ui/settings/photo/photo.settings.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <target>Photo converting interrupted</target>
+      </trans-unit>
+      <trans-unit id="59b428a89fc1e287f2fb60806ed5f0588cb9c270" datatype="html">
+        <source>Random Photo</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/random-photo/random-photo.settings.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>Случайные ресурсы</target>
+        <target>Random Photo</target>
+      </trans-unit>
+      <trans-unit id="586a5fd72602b5b14ec0c55f84814de47bb21e3a" datatype="html">
+        <source>Tasks</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/frontend/app/ui/settings/tasks/tasks.settings.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <target>Tasks</target>
       </trans-unit>
       <trans-unit id="a43c57a7cbebf57eb33a2eae5e994c91d9887596" datatype="html">
         <source>Monday</source>
@@ -2438,21 +2447,29 @@
         </context-group>
         <target>Миниатюра</target>
       </trans-unit>
-      <trans-unit id="ed3fc8103cfe2c6b999115b6d5dcbe7a2528a477" datatype="html">
-        <source>(recommended)</source>
+      <trans-unit id="e3ae3152b6ddbc0522dfb5b46ee52799f0ca4e5b" datatype="html">
+        <source>Thumbnail generation started</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/thumbnail/thumbnail.settings.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>(рекомендуемые)</target>
+        <target>Thumbnail generation started</target>
       </trans-unit>
-      <trans-unit id="f0e5f3dc033fbfa7335bd37c129c6a0b5caab921" datatype="html">
-        <source>(deprecated)</source>
+      <trans-unit id="e0ef1e32541709f3e363851385ff3eca05606eaa" datatype="html">
+        <source>Thumbnail generation interrupted</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/thumbnail/thumbnail.settings.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>(Устаревшее)</target>
+        <target>Thumbnail generation interrupted</target>
+      </trans-unit>
+      <trans-unit id="427589505741d1da181b756815701e756184cb8d" datatype="html">
+        <source>Password protection</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/frontend/app/ui/settings/usermanager/usermanager.settings.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <target>Защита паролем</target>
       </trans-unit>
       <trans-unit id="0028f40243cb1360bc3d7cb9d4512219bcbd428f" datatype="html">
         <source>Password protection enabled</source>

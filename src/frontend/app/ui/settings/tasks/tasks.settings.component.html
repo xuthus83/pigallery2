@@ -1,8 +1,7 @@
 <form #settingsForm="ngForm" class="form-horizontal">
   <div class="card mb-4">
     <h5 class="card-header">
-      {{Name}}
-      <ng-container *ngIf="changed">*</ng-container>
+      {{Name}}<ng-container *ngIf="changed">*</ng-container>
     </h5>
     <div class="card-body">
       <div [hidden]="!error" class="alert alert-danger" role="alert"><strong>Error: </strong>{{error}}</div>
@@ -22,8 +21,7 @@
                   *ngSwitchCase="TaskTriggerType.scheduled">{{schedule.trigger.time | date:"medium"}}</ng-container>
                 <ng-container *ngSwitchCase="TaskTriggerType.never" i18n>never</ng-container>
               </ng-container>
-              <button class="btn btn-danger button-delete"
-                      (click)="remove(i)" i18n><span class="oi oi-trash"></span>
+              <button class="btn btn-danger button-delete" (click)="remove(i)"><span class="oi oi-trash"></span>
               </button>
             </div>
           </div>
