@@ -22,7 +22,6 @@ RUN mkdir -p /build/release/data/config && \
     mkdir -p /build/release/data/db && \
     mkdir -p /build/release/data/images && \
     mkdir -p /build/release/data/tmp && \
-    npm run create-release && \
     cd /build/release && npm install --unsafe-perm && \
     npm start -- --config-only --force-rewrite-config \
     --config-path=data/config/config.json \
