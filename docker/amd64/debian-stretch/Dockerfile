@@ -15,8 +15,8 @@ RUN mkdir -p /build/release/data/config && \
     --config-path=data/config/config.json \
     --Server-Database-sqlite-storage='data/db/sqlite.db' \
     --Server-Database-memory-usersFile='data/db/users.db' \
-    --Server-imagesFolder='data/images' \
-    --Server-Thumbnail-folder='data/tmp'  || true
+    --Server-Media-folder='data/images' \
+    --Server-Media-tempFolder='data/tmp'  || true
 
 
 FROM node:12-stretch-slim
