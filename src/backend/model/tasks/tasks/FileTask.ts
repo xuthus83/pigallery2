@@ -6,6 +6,7 @@ import {DiskManager} from '../../DiskManger';
 import {DiskMangerWorker} from '../../threading/DiskMangerWorker';
 import {DirectoryDTO} from '../../../../common/entities/DirectoryDTO';
 import {Logger} from '../../../Logger';
+import {MediaDTO} from '../../../../common/entities/MediaDTO';
 
 declare var global: NodeJS.Global;
 
@@ -13,7 +14,7 @@ declare var global: NodeJS.Global;
 const LOG_TAG = '[FileTask]';
 
 
-export abstract class FileTask<T> extends Task {
+export abstract class FileTask<T, S = void> extends Task<S> {
   public readonly ConfigTemplate: ConfigTemplateEntry[] = null;
   directoryQueue: string[] = [];
   fileQueue: T[] = [];

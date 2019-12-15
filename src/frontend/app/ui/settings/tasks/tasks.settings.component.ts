@@ -130,6 +130,13 @@ export class TasksSettingsComponent extends SettingsComponent<ServerConfig.TaskC
     this.settings.scheduled.splice(index, 1);
   }
 
+
+  taskTypeChanged(schedule: TaskScheduleDTO) {
+    const task = this._settingsService.availableTasks.value.find(t => t.Name === schedule.taskName);
+    schedule.config = schedule.config || {};
+    task.ConfigTemplate.forEach(ct => schedule.config[ct.id] = ct.defaultValue);
+  }
+
   addNewTask() {
     const taskName = this._settingsService.availableTasks.value[0].Name;
     const newSchedule: TaskScheduleDTO = {
@@ -159,6 +166,23 @@ export class TasksSettingsComponent extends SettingsComponent<ServerConfig.TaskC
         break;
     }
   }
+
+  setNumberArray(configElement: any, id: string, value: string) {
+    console.log(value);
+    console.log(configElement[id]);
+    value = value.replace(new RegExp(',', 'g'), ';');
+    value = value.replace(new RegExp(' ', 'g'), ';');
+    configElement[id] = value.split(';')
+      .map((s: string) => parseInt(s, 10))
+      .filter((i: number) => !isNaN(i) && i > 0);
+    console.log(configElement[id]);
+  }
+
+  getNumberArray(configElement: any, id: string) {
+
+    return configElement[id].join('; ');
+  }
+
 }
 
 

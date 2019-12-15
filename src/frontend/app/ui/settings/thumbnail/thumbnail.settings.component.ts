@@ -48,6 +48,8 @@ export class ThumbnailSettingsComponent
     super.ngOnInit();
   }
 
+
+
 }
 
 

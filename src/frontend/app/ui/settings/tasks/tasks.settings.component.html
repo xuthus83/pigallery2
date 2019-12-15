@@ -1,7 +1,8 @@
 <form #settingsForm="ngForm" class="form-horizontal">
   <div class="card mb-4">
     <h5 class="card-header">
-      {{Name}}<ng-container *ngIf="changed">*</ng-container>
+      {{Name}}
+      <ng-container *ngIf="changed">*</ng-container>
     </h5>
     <div class="card-body">
       <div [hidden]="!error" class="alert alert-danger" role="alert"><strong>Error: </strong>{{error}}</div>
@@ -34,7 +35,8 @@
                 <div class="form-group row">
                   <label class="col-md-2 control-label" [for]="'taskName'+i" i18n>Task:</label>
                   <div class="col-md-10">
-                    <select class="form-control" [(ngModel)]="schedule.taskName" [name]="'taskName'+i" required>
+                    <select class="form-control" (change)="taskTypeChanged(schedule)" [(ngModel)]="schedule.taskName"
+                            [name]="'taskName'+i" required>
                       <option *ngFor="let availableTask of _settingsService.availableTasks | async"
                               [ngValue]="availableTask.Name">{{availableTask.Name}}
                       </option>
@@ -152,6 +154,22 @@
                         <input type="number" class="form-control" [name]="configEntry.id+'_number_'+i"
                                [id]="configEntry.id+'_number_'+i"
                                [(ngModel)]="schedule.config[configEntry.id]" required>
+                      </div>
+                    </div>
+                  </ng-container>
+                  <ng-container *ngSwitchCase="'number-array'">
+                    <div class="form-group row" [hidden]="simplifiedMode">
+                      <label class="col-md-2 control-label"
+                             [for]="configEntry.id+'_number-array_'+i">{{configEntry.name}}</label>
+                      <div class="col-md-10">
+                        <input type="text" class="form-control"
+                               [name]="configEntry.id+'_number-array_'+i"
+                               [id]="configEntry.id+'_number-array_'+i"
+                               (ngModelChange)="setNumberArray(schedule.config,configEntry.id,$event)"
+                               [ngModel]="getNumberArray(schedule.config,configEntry.id)" required>
+                        <small class="form-text text-muted">
+                          <ng-container i18n>';' separated integers.</ng-container>
+                        </small>
                       </div>
                     </div>
                   </ng-container>

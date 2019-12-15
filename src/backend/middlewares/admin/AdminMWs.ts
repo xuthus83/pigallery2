@@ -50,11 +50,11 @@ export class AdminMWs {
     }
   }
 
-  public static startTask(req: Request, res: Response, next: NextFunction) {
+  public static async startTask(req: Request, res: Response, next: NextFunction) {
     try {
       const id = req.params.id;
       const taskConfig: any = req.body.config;
-      ObjectManagers.getInstance().TaskManager.run(id, taskConfig);
+      await ObjectManagers.getInstance().TaskManager.run(id, taskConfig);
       req.resultPipe = 'ok';
       return next();
     } catch (err) {

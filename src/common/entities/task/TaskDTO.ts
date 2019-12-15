@@ -1,4 +1,4 @@
-export  type fieldType = 'string' | 'number' | 'boolean';
+export type fieldType = 'string' | 'number' | 'boolean' | 'number-array';
 
 
 export enum DefaultsTasks {
