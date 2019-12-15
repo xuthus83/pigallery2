@@ -2,17 +2,15 @@ import {TaskProgressDTO, TaskState} from '../../../../common/entities/settings/T
 import {ConfigTemplateEntry} from '../../../../common/entities/task/TaskDTO';
 import {Task} from './Task';
 import * as path from 'path';
-import * as fs from 'fs';
-import * as util from 'util';
 import {DiskManager} from '../../DiskManger';
 import {DiskMangerWorker} from '../../threading/DiskMangerWorker';
 import {DirectoryDTO} from '../../../../common/entities/DirectoryDTO';
+import {Logger} from '../../../Logger';
 
 declare var global: NodeJS.Global;
 
 
 const LOG_TAG = '[FileTask]';
-const existsPr = util.promisify(fs.exists);
 
 
 export abstract class FileTask<T> extends Task {
@@ -58,7 +56,12 @@ export abstract class FileTask<T> extends Task {
       this.progress.left = this.fileQueue.length;
       this.progress.progress++;
       this.progress.comment = 'processing: ' + file;
-      await this.processFile(file);
+      try {
+        await this.processFile(file);
+      } catch (e) {
+        console.error(e);
+        Logger.error(LOG_TAG, 'Error during processing file: ' + e.toString());
+      }
     }
     return this.progress;
   }

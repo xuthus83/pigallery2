@@ -359,7 +359,7 @@ export class SettingsMWs {
       original.Client.Other.enableOnScrollThumbnailPrioritising = settings.Client.enableOnScrollThumbnailPrioritising;
       original.Client.Other.defaultPhotoSortingMethod = settings.Client.defaultPhotoSortingMethod;
       original.Client.Other.NavBar.showItemCount = settings.Client.NavBar.showItemCount;
-      original.Server.Threading.enable = settings.Server.enable;
+      original.Server.Threading.enabled = settings.Server.enabled;
       original.Server.Threading.thumbnailThreads = settings.Server.thumbnailThreads;
       original.save();
       await ConfigDiagnostics.runDiagnostics();

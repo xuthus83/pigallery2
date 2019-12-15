@@ -14,7 +14,7 @@ export module ServerConfig {
     none = 1, error = 2, all = 3
   }
 
-  export enum ThumbnailProcessingLib {
+  export enum PhotoProcessingLib {
     sharp = 3,
     Jimp = 1,
     gm = 2,
@@ -43,7 +43,6 @@ export module ServerConfig {
   }
 
   export interface ThumbnailConfig {
-    processingLibrary: ThumbnailProcessingLib;
     qualityPriority: boolean;
     personFaceMargin: number; // in ration [0-1]
   }
@@ -65,7 +64,7 @@ export module ServerConfig {
   }
 
   export interface ThreadingConfig {
-    enable: boolean;
+    enabled: boolean;
     thumbnailThreads: number;
   }
 
@@ -107,6 +106,7 @@ export module ServerConfig {
   export interface MediaConfig {
     folder: string;
     tempFolder: string;
+    photoProcessingLibrary: PhotoProcessingLib;
     Video: VideoConfig;
     Photo: PhotoConfig;
     Thumbnail: ThumbnailConfig;

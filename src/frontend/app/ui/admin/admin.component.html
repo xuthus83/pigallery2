@@ -53,8 +53,10 @@
               <button class="btn btn-link nav-link  text-md-left py-md-1 px-md-0"
                       *ngFor="let s of contents; let i=index;"
                       (click)="scrollTo(i)"
-                      [hidden]="!s.hasAvailableSettings"
-              >{{s.Name}}</button>
+                      [hidden]="!s.HasAvailableSettings">
+                {{s.Name}}<!--
+                --><ng-container *ngIf="s.Changed">*</ng-container>
+              </button>
             </div>
           </div>
 
@@ -63,44 +65,47 @@
       <div class="col-md-10">
         <app-settings-basic #setting #basic
                             [simplifiedMode]="simplifiedMode"
-                            [hidden]="!basic.hasAvailableSettings"></app-settings-basic>
+                            [hidden]="!basic.HasAvailableSettings"></app-settings-basic>
         <app-settings-usermanager #setting #userManager
-                                  [hidden]="!userManager.hasAvailableSettings"></app-settings-usermanager>
+                                  [hidden]="!userManager.HasAvailableSettings"></app-settings-usermanager>
         <app-settings-database #setting #database
                                [simplifiedMode]="simplifiedMode"
-                               [hidden]="!database.hasAvailableSettings"></app-settings-database>
-        <app-settings-thumbnail #setting #thumbnail
-                                [hidden]="!thumbnail.hasAvailableSettings"
-                                [simplifiedMode]="simplifiedMode"></app-settings-thumbnail>
+                               [hidden]="!database.HasAvailableSettings"></app-settings-database>
+        <app-settings-photo #setting #photo
+                            [hidden]="!photo.HasAvailableSettings"
+                            [simplifiedMode]="simplifiedMode"></app-settings-photo>
         <app-settings-video #setting #video
-                            [hidden]="!video.hasAvailableSettings"
+                            [hidden]="!video.HasAvailableSettings"
                             [simplifiedMode]="simplifiedMode"></app-settings-video>
+        <app-settings-thumbnail #setting #thumbnail
+                                [hidden]="!thumbnail.HasAvailableSettings"
+                                [simplifiedMode]="simplifiedMode"></app-settings-thumbnail>
         <app-settings-search #setting #search
-                             [hidden]="!search.hasAvailableSettings"
+                             [hidden]="!search.HasAvailableSettings"
                              [simplifiedMode]="simplifiedMode"></app-settings-search>
         <app-settings-share #setting #share
-                            [hidden]="!share.hasAvailableSettings"
+                            [hidden]="!share.HasAvailableSettings"
                             [simplifiedMode]="simplifiedMode"></app-settings-share>
         <app-settings-map #setting #map
-                          [hidden]="!map.hasAvailableSettings"
+                          [hidden]="!map.HasAvailableSettings"
                           [simplifiedMode]="simplifiedMode"></app-settings-map>
         <app-settings-meta-file #setting #metaFile
-                                [hidden]="!metaFile.hasAvailableSettings"
+                                [hidden]="!metaFile.HasAvailableSettings"
                                 [simplifiedMode]="simplifiedMode"></app-settings-meta-file>
         <app-settings-other #setting #other
-                            [hidden]="!other.hasAvailableSettings"
+                            [hidden]="!other.HasAvailableSettings"
                             [simplifiedMode]="simplifiedMode"></app-settings-other>
         <app-settings-random-photo #setting #random
-                                   [hidden]="!random.hasAvailableSettings"
+                                   [hidden]="!random.HasAvailableSettings"
                                    [simplifiedMode]="simplifiedMode"></app-settings-random-photo>
         <app-settings-faces #setting #faces
-                            [hidden]="!faces.hasAvailableSettings"
+                            [hidden]="!faces.HasAvailableSettings"
                             [simplifiedMode]="simplifiedMode"></app-settings-faces>
         <app-settings-indexing #setting #indexing
-                               [hidden]="!indexing.hasAvailableSettings"
+                               [hidden]="!indexing.HasAvailableSettings"
                                [simplifiedMode]="simplifiedMode"></app-settings-indexing>
         <app-settings-tasks #setting #tasks
-                            [hidden]="!tasks.hasAvailableSettings"
+                            [hidden]="!tasks.HasAvailableSettings"
                             [simplifiedMode]="simplifiedMode"></app-settings-tasks>
       </div>
     </div>

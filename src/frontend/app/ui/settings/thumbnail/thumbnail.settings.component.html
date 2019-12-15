@@ -5,34 +5,7 @@
     </h5>
     <div class="card-body">
       <div [hidden]="!error" class="alert alert-danger" role="alert"><strong>Error: </strong>{{error}}</div>
-      <div [hidden]="settings.server.processingLibrary!=ThumbnailProcessingLib.Jimp"
-           class="alert alert-warning"
-           role="alert" i18n>It is highly recommended to use hardware accelerated (sharp or gm) lib for thumbnail
-        generation
-      </div>
 
-      <fieldset>
-        <div class="form-group row">
-          <label class="col-md-2 control-label" for="lib" i18n>Thumbnail generation library</label>
-          <div class="col-md-10">
-            <select id="lib" class="form-control" [(ngModel)]="settings.server.processingLibrary"
-                    name="type" required>
-              <option *ngFor="let type of types" [ngValue]="type.key">{{type.value}}
-              </option>
-            </select>
-            <small *ngIf="settings.server.processingLibrary==ThumbnailProcessingLib.sharp"
-                   class="form-text text-muted" i18n>Make sure that sharp node module is installed (npm install sharp).
-            </small>
-            <small *ngIf="settings.server.processingLibrary==ThumbnailProcessingLib.gm"
-                   class="form-text text-muted">
-              <ng-container i18n>Make sure that gm node module and</ng-container>
-              <a
-                href="http://www.graphicsmagick.org/" i18n>GraphicsMagick</a>
-              <ng-container i18n>are installed (npm install sharp).</ng-container>
-            </small>
-
-          </div>
-        </div>
 
         <div class="form-group row" [hidden]="simplifiedMode">
           <label class="col-md-2 control-label" for="quality" i18n>Thumbnail Quality</label>
@@ -84,7 +57,6 @@
 
           </div>
         </div>
-      </fieldset>
 
       <button class="btn btn-success float-right"
               [disabled]="!settingsForm.form.valid || !changed || inProgress"

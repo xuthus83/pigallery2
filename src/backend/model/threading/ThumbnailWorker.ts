@@ -9,16 +9,16 @@ export class ThumbnailWorker {
 
   private static imageRenderer: (input: RendererInput) => Promise<void> = null;
   private static videoRenderer: (input: RendererInput) => Promise<void> = null;
-  private static rendererType: ServerConfig.ThumbnailProcessingLib = null;
+  private static rendererType: ServerConfig.PhotoProcessingLib = null;
 
-  public static render(input: RendererInput, renderer: ServerConfig.ThumbnailProcessingLib): Promise<void> {
+  public static render(input: RendererInput, renderer: ServerConfig.PhotoProcessingLib): Promise<void> {
     if (input.type === ThumbnailSourceType.Photo) {
       return this.renderFromImage(input, renderer);
     }
     return this.renderFromVideo(input);
   }
 
-  public static renderFromImage(input: RendererInput, renderer: ServerConfig.ThumbnailProcessingLib): Promise<void> {
+  public static renderFromImage(input: RendererInput, renderer: ServerConfig.PhotoProcessingLib): Promise<void> {
     if (ThumbnailWorker.rendererType !== renderer) {
       ThumbnailWorker.imageRenderer = ImageRendererFactory.build(renderer);
       ThumbnailWorker.rendererType = renderer;
@@ -117,13 +117,13 @@ export class VideoRendererFactory {
 
 export class ImageRendererFactory {
 
-  public static build(renderer: ServerConfig.ThumbnailProcessingLib): (input: RendererInput) => Promise<void> {
+  public static build(renderer: ServerConfig.PhotoProcessingLib): (input: RendererInput) => Promise<void> {
     switch (renderer) {
-      case ServerConfig.ThumbnailProcessingLib.Jimp:
+      case ServerConfig.PhotoProcessingLib.Jimp:
         return ImageRendererFactory.Jimp();
-      case ServerConfig.ThumbnailProcessingLib.gm:
+      case ServerConfig.PhotoProcessingLib.gm:
         return ImageRendererFactory.Gm();
-      case ServerConfig.ThumbnailProcessingLib.sharp:
+      case ServerConfig.PhotoProcessingLib.sharp:
         return ImageRendererFactory.Sharp();
     }
     throw new Error('unknown renderer');

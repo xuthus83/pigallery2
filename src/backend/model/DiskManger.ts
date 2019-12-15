@@ -11,7 +11,7 @@ export class DiskManager {
   static threadPool: DiskManagerTH = null;
 
   public static init() {
-    if (Config.Server.Threading.enable === true) {
+    if (Config.Server.Threading.enabled === true) {
       DiskManager.threadPool = new DiskManagerTH(1);
     }
   }
@@ -23,7 +23,7 @@ export class DiskManager {
 
     let directory: DirectoryDTO;
 
-    if (Config.Server.Threading.enable === true) {
+    if (Config.Server.Threading.enabled === true) {
       directory = await DiskManager.threadPool.execute(relativeDirectoryName, settings);
     } else {
       directory = await DiskMangerWorker.scanDirectory(relativeDirectoryName, settings);

@@ -17,9 +17,8 @@ import {ServerConfig} from '../../../../../common/config/private/IPrivateConfig'
   providers: [ThumbnailSettingsService],
 })
 export class ThumbnailSettingsComponent
-  extends SettingsComponent<{ server: ServerConfig.ThumbnailConfig, client: ClientConfig.ThumbnailConfig }>
-  implements OnInit {
-  types: Array<any> = [];
+    extends SettingsComponent<{ server: ServerConfig.ThumbnailConfig, client: ClientConfig.ThumbnailConfig }>
+    implements OnInit {
   ThumbnailProcessingLib: any;
 
   constructor(_authService: AuthenticationService,
@@ -41,22 +40,12 @@ export class ThumbnailSettingsComponent
     value = value.replace(new RegExp(',', 'g'), ';');
     value = value.replace(new RegExp(' ', 'g'), ';');
     this.settings.client.thumbnailSizes = value.split(';')
-      .map(s => parseInt(s, 10))
-      .filter(i => !isNaN(i) && i > 0);
+        .map(s => parseInt(s, 10))
+        .filter(i => !isNaN(i) && i > 0);
   }
 
   ngOnInit() {
     super.ngOnInit();
-    this.types = Utils
-      .enumToArray(ServerConfig.ThumbnailProcessingLib).map((v) => {
-        if (v.value.toLowerCase() === 'sharp') {
-          v.value += ' ' + this.i18n('(recommended)');
-        } else {
-          v.value += ' ' + this.i18n('(deprecated, will be removed)');
-        }
-        return v;
-      });
-    this.ThumbnailProcessingLib = ServerConfig.ThumbnailProcessingLib;
   }
 
 }

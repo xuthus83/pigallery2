@@ -99,43 +99,39 @@
         <hr/>
       </ng-container>
 
-      <ng-container i18n>If you add a new folder to your gallery, the site indexes it automatically.</ng-container>&nbsp;
-      <ng-container i18n>If you would like to trigger indexing manually, click index button.</ng-container>
-      <br/>
-      (
-      <ng-container i18n>Note: search only works among the indexed directories</ng-container>
-      )<br/>
+      <div class="alert alert-secondary" role="alert">
+        <ng-container i18n>If you add a new folder to your gallery, the site indexes it automatically.</ng-container>&nbsp;
+        <ng-container i18n>If you would like to trigger indexing manually, click index button.</ng-container>
+        <br/>
+        (<ng-container i18n>Note: search only works among the indexed directories</ng-container>)
+      </div>
 
 
       <div *ngIf="Progress != null">
         <app-settings-tasks-progress [progress]="Progress"></app-settings-tasks-progress>
       </div>
 
-      <div class="row justify-content-center buttons-row">
-        <button class="btn btn-success"
-                *ngIf="Progress == null"
-                [disabled]="inProgress"
-                title="Indexes the folders"
-                i18n-title
-                (click)="index(false)" i18n>Index
-        </button>
-        <button class="btn btn-primary"
-                title="Indexes the folders and also creates the thumbnails"
-                i18n-title
-                *ngIf="Progress == null"
-                [disabled]="inProgress"
-                (click)="index(true)" i18n>Index with Thumbnails
-        </button>
-        <button class="btn btn-secondary"
-                *ngIf="Progress != null"
-                [disabled]="inProgress || Progress.state !== TaskState.running"
-                (click)="cancelIndexing()" i18n>Cancel
-        </button>
-        <button class="btn btn-danger"
-                [disabled]="inProgress"
-                (click)="resetDatabase()" i18n>Reset Indexes
-        </button>
-      </div>
+
+      <button class="btn btn-success   ml-0"
+              *ngIf="Progress == null"
+              [disabled]="inProgress"
+              title="Indexes the folders"
+              i18n-title
+              (click)="index()">
+        <ng-container i18n>Index folders now</ng-container>
+        <span class="oi oi-media-play ml-2"></span>
+      </button>
+      <button class="btn btn-secondary  ml-0"
+              *ngIf="Progress != null"
+              [disabled]="inProgress || Progress.state !== TaskState.running"
+              (click)="cancelIndexing()" i18n>Cancel converting
+      </button>
+      <button class="btn btn-danger   ml-2"
+              [disabled]="inProgress"
+              (click)="resetDatabase()" i18n>Reset Indexes
+      </button>
+
+
       <hr/>
       <div class="row statics">
         <div class="col-md-4 col-12" i18n>

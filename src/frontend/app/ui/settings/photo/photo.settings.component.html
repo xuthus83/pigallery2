@@ -1,0 +1,129 @@
+<form #settingsForm="ngForm" class="form-horizontal">
+  <div class="card mb-4">
+    <h5 class="card-header">{{Name}}<span *ngIf="changed">*</span></h5>
+    <div class="card-body">
+      <div [hidden]="!error" class="alert alert-danger" role="alert"><strong>Error: </strong>{{error}}</div>
+      <div [hidden]="settings.photoProcessingLibrary!=PhotoProcessingLib.Jimp"
+           class="alert alert-warning"
+           role="alert" i18n>It is highly recommended to use hardware accelerated (sharp or gm) lib for thumbnail
+        generation
+      </div>
+
+      <div [hidden]="simplifiedMode">
+        <div class="form-group row">
+          <label class="col-md-2 control-label" for="lib" i18n>Thumbnail generation library</label>
+          <div class="col-md-10">
+            <select id="lib" class="form-control" [(ngModel)]="settings.photoProcessingLibrary"
+                    name="type" required>
+              <option *ngFor="let type of libTypes" [ngValue]="type.key">{{type.value}}
+              </option>
+            </select>
+            <small *ngIf="settings.photoProcessingLibrary==PhotoProcessingLib.sharp"
+                   class="form-text text-muted" i18n>Make sure that sharp node module is installed (npm install sharp).
+            </small>
+            <small *ngIf="settings.photoProcessingLibrary==PhotoProcessingLib.gm"
+                   class="form-text text-muted">
+              <ng-container i18n>Make sure that gm node module and</ng-container>
+              <a
+                href="http://www.graphicsmagick.org/" i18n>GraphicsMagick</a>
+              <ng-container i18n>are installed (npm install sharp).</ng-container>
+            </small>
+
+          </div>
+        </div>
+
+        <hr/>
+      </div>
+      <p class="title" i18n>Photo converting:</p>
+
+      <div class="form-group row">
+        <label class="col-md-2 control-label" for="enablePhotoConverting" i18n>Converting</label>
+        <div class="col-md-10">
+          <bSwitch
+            id="enablePhotoConverting"
+            class="switch"
+            name="enablePhotoConverting"
+            [switch-on-color]="'primary'"
+            [switch-inverse]="true"
+            [switch-off-text]="text.Disabled"
+            [switch-on-text]="text.Enabled"
+            [switch-handle-width]="100"
+            [switch-label-width]="20"
+            [(ngModel)]="settings.client.Converting.enabled">
+          </bSwitch>
+          <small class="form-text text-muted" i18n>Downsizes photos for faster preview loading. (Zooming in to the photo
+            loads the original)</small>
+        </div>
+      </div>
+
+      <div class="form-group row" [hidden]="!settings.client.Converting.enabled">
+        <label class="col-md-2 control-label" for="onTheFlyConverting" i18n>On the fly converting </label>
+        <div class="col-md-10">
+          <bSwitch
+            id="onTheFlyConverting"
+            class="switch"
+            name="onTheFlyConverting"
+            [switch-on-color]="'primary'"
+            [switch-inverse]="true"
+            [switch-off-text]="text.Disabled"
+            [switch-on-text]="text.Enabled"
+            [switch-handle-width]="100"
+            [switch-label-width]="20"
+            [(ngModel)]="settings.server.Converting.onTheFly">
+          </bSwitch>
+          <small class="form-text text-muted" i18n>Converts photos on the fly, when they are requested.</small>
+        </div>
+      </div>
+
+      <div class="form-group row" [hidden]="!settings.client.Converting.enabled">
+        <label class="col-md-2 control-label" for="resolution" i18n>Resolution</label>
+        <div class="col-md-10">
+          <select id="resolution" class="form-control" [(ngModel)]="settings.server.Converting.resolution"
+                  name="resolution" required>
+            <option *ngFor="let resolution of resolutions" [ngValue]="resolution">{{resolution}}px
+            </option>
+          </select>
+          <small class="form-text text-muted" i18n>The shorter edge of the converted photo will be scaled down to this,
+            while
+            keeping the aspect ratio.</small>
+        </div>
+      </div>
+
+
+      <button class="btn btn-success float-right"
+              [disabled]="!settingsForm.form.valid || !changed || inProgress"
+              (click)="save()" i18n>Save
+      </button>
+      <button class="btn btn-secondary float-right"
+              [disabled]=" !changed || inProgress"
+              (click)="reset()" i18n>Reset
+      </button>
+
+      <div [hidden]="!settings.client.Converting.enabled">
+        <button class="btn btn-success  float-left ml-0"
+                *ngIf="Progress == null"
+                [disabled]="inProgress"
+                title="Indexes the folders"
+                i18n-title
+                (click)="convertPhoto()">
+          <ng-container i18n>Convert photos now</ng-container>
+          <span class="oi oi-media-play ml-2"></span>
+        </button>
+        <button class="btn btn-secondary  float-left ml-0"
+                *ngIf="Progress != null"
+                [disabled]="inProgress || Progress.state !== TaskState.running"
+                (click)="cancelPhotoConverting()" i18n>Cancel converting
+        </button>
+
+
+        <ng-container *ngIf="Progress != null">
+          <br/>
+          <hr/>
+          <app-settings-tasks-progress [progress]="Progress"></app-settings-tasks-progress>
+        </ng-container>
+
+      </div>
+    </div>
+  </div>
+
+</form>

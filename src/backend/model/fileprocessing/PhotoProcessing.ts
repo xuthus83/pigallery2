@@ -22,7 +22,7 @@ export class PhotoProcessing {
     }
 
 
-    if (Config.Server.Threading.enable === true) {
+    if (Config.Server.Threading.enabled === true) {
       if (Config.Server.Threading.thumbnailThreads > 0) {
         Config.Client.Media.Thumbnail.concurrentThumbnailGenerations = Config.Server.Threading.thumbnailThreads;
       } else {
@@ -32,12 +32,12 @@ export class PhotoProcessing {
       Config.Client.Media.Thumbnail.concurrentThumbnailGenerations = 1;
     }
 
-    if (Config.Server.Threading.enable === true &&
-      Config.Server.Media.Thumbnail.processingLibrary === ServerConfig.ThumbnailProcessingLib.Jimp) {
+    if (Config.Server.Threading.enabled === true &&
+      Config.Server.Media.photoProcessingLibrary === ServerConfig.PhotoProcessingLib.Jimp) {
       this.taskQue = new ThumbnailTH(Config.Client.Media.Thumbnail.concurrentThumbnailGenerations);
     } else {
       this.taskQue = new TaskExecuter(Config.Client.Media.Thumbnail.concurrentThumbnailGenerations,
-        (input => ThumbnailWorker.render(input, Config.Server.Media.Thumbnail.processingLibrary)));
+        (input => ThumbnailWorker.render(input, Config.Server.Media.photoProcessingLibrary)));
     }
 
     this.initDone = true;

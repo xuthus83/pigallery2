@@ -26,7 +26,8 @@ export class UserMangerSettingsComponent implements OnInit, ISettingsComponent {
   public error: string = null;
   public inProgress = false;
   Name: string;
-  hasAvailableSettings = true;
+  HasAvailableSettings = true;
+  Changed = false;
 
 
   text = {

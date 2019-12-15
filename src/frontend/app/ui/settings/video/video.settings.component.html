@@ -1,7 +1,8 @@
 <form #settingsForm="ngForm" class="form-horizontal">
   <div class="card mb-4">
     <h5 class="card-header">
-      {{Name}}<ng-container *ngIf="changed">*</ng-container>
+      {{Name}}
+      <ng-container *ngIf="changed">*</ng-container>
       <div class="switch-wrapper">
         <bSwitch
           class="switch"
@@ -20,13 +21,27 @@
     <div class="card-body">
       <div [hidden]="!error" class="alert alert-danger" role="alert"><strong>Error: </strong>{{error}}</div>
 
-      <ng-container i18n>Video support uses ffmpeg. ffmpeg and ffprobe binaries need to be available in the PATH or the
-        @ffmpeg-installer/ffmpeg and @ffprobe-installer/ffprobe optional node packages need to be installed.
-      </ng-container>
-
+      <div class="alert alert-secondary" role="alert">
+        <ng-container i18n>Video support uses ffmpeg. ffmpeg and ffprobe binaries need to be available in the PATH or
+          the
+          @ffmpeg-installer/ffmpeg and @ffprobe-installer/ffprobe optional node packages need to be installed.
+        </ng-container>
+      </div>
       <hr/>
 
       <p class="title" i18n>Video transcoding:</p>
+      <div class="alert alert-secondary" role="alert">
+        <ng-container i18n>To ensure smooth video playback, video transcoding is recommended to a lower bit rate than
+          the
+          server's upload rate.
+        </ng-container>&nbsp;
+        <ng-container i18n>The transcoded videos will be save to the thumbnail folder.</ng-container>&nbsp;
+        <ng-container i18n>You can trigger the transcoding manually, but you can also create an automatic encoding task
+          in
+          advanced settings mode.
+        </ng-container>&nbsp;
+      </div>
+
       <div class="form-group row" [hidden]="simplifiedMode">
         <label class="col-md-2 control-label" for="format" i18n>Format</label>
         <div class="col-md-10">
@@ -109,28 +124,17 @@
               (click)="reset()" i18n>Reset
       </button>
 
-      <br/>
-      <hr/>
 
-      <ng-container i18n>To ensure smooth video playback, video transcoding is recommended to a lower bit rate than the
-        server's upload rate.
-      </ng-container>&nbsp;
-      <ng-container i18n>The transcoded videos will be save to the thumbnail folder.</ng-container>&nbsp;
-      <ng-container i18n>You can trigger the transcoding manually, but you can also create an automatic encoding task in
-        advanced settings mode.
-      </ng-container>&nbsp;
-
-      <br/>
-
-
-      <button class="btn btn-success  float-right"
+      <button class="btn btn-success  float-left ml-0"
               *ngIf="Progress == null"
               [disabled]="inProgress"
               title="Indexes the folders"
               i18n-title
-              (click)="transcode()" i18n>Transcode videos now
+              (click)="transcode()">
+        <ng-container i18n>Transcode videos now</ng-container>
+        <span class="oi oi-media-play ml-2"></span>
       </button>
-      <button class="btn btn-secondary  float-right"
+      <button class="btn btn-secondary  float-left ml-0"
               *ngIf="Progress != null"
               [disabled]="inProgress || Progress.state !== TaskState.running"
               (click)="cancelTranscoding()" i18n>Cancel transcoding

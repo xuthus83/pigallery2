@@ -81,13 +81,13 @@ export class ConfigDiagnostics {
     }
   }
 
-  static async testThumbnailLib(processingLibrary: ServerConfig.ThumbnailProcessingLib) {
+  static async testThumbnailLib(processingLibrary: ServerConfig.PhotoProcessingLib) {
     switch (processingLibrary) {
-      case ServerConfig.ThumbnailProcessingLib.sharp:
+      case ServerConfig.PhotoProcessingLib.sharp:
         const sharp = require('sharp');
         sharp();
         break;
-      case  ServerConfig.ThumbnailProcessingLib.gm:
+      case  ServerConfig.PhotoProcessingLib.gm:
         const gm = require('gm');
         await new Promise((resolve, reject) => {
           gm(ProjectPath.FrontendFolder + '/assets/icon.png').size((err: Error) => {
@@ -120,8 +120,10 @@ export class ConfigDiagnostics {
   }
 
 
-  static async testServerThumbnailConfig(thumbnailConfig: ServerConfig.ThumbnailConfig) {
-    await ConfigDiagnostics.testThumbnailLib(thumbnailConfig.processingLibrary);
+  public static async testServerThumbnailConfig(server: ServerConfig.ThumbnailConfig) {
+    if (server.personFaceMargin < 0 || server.personFaceMargin > 1) {
+      throw new Error('personFaceMargin should be between 0 and 1');
+    }
   }
 
   static async testClientThumbnailConfig(thumbnailConfig: ClientConfig.ThumbnailConfig) {
@@ -218,19 +220,19 @@ export class ConfigDiagnostics {
       }
     }
 
-    if (Config.Server.Media.Thumbnail.processingLibrary !== ServerConfig.ThumbnailProcessingLib.Jimp) {
+    if (Config.Server.Media.photoProcessingLibrary !== ServerConfig.PhotoProcessingLib.Jimp) {
       try {
-        await ConfigDiagnostics.testThumbnailLib(Config.Server.Media.Thumbnail.processingLibrary);
+        await ConfigDiagnostics.testThumbnailLib(Config.Server.Media.photoProcessingLibrary);
       } catch (ex) {
         const err: Error = ex;
         NotificationManager.warning('Thumbnail hardware acceleration is not possible.' +
-          ' \'' + ServerConfig.ThumbnailProcessingLib[Config.Server.Media.Thumbnail.processingLibrary] + '\' node module is not found.' +
+          ' \'' + ServerConfig.PhotoProcessingLib[Config.Server.Media.photoProcessingLibrary] + '\' node module is not found.' +
           ' Falling back temporally to JS based thumbnail generation', err.toString());
         Logger.warn(LOG_TAG, '[Thumbnail hardware acceleration] module error: ', err.toString());
         Logger.warn(LOG_TAG, 'Thumbnail hardware acceleration is not possible.' +
-          ' \'' + ServerConfig.ThumbnailProcessingLib[Config.Server.Media.Thumbnail.processingLibrary] + '\' node module is not found.' +
+          ' \'' + ServerConfig.PhotoProcessingLib[Config.Server.Media.photoProcessingLibrary] + '\' node module is not found.' +
           ' Falling back temporally to JS based thumbnail generation');
-        Config.Server.Media.Thumbnail.processingLibrary = ServerConfig.ThumbnailProcessingLib.Jimp;
+        Config.Server.Media.photoProcessingLibrary = ServerConfig.PhotoProcessingLib.Jimp;
       }
     }
 
@@ -343,4 +345,5 @@ export class ConfigDiagnostics {
     }
 
   }
+
 }

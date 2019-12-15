@@ -22,7 +22,7 @@ export class MetaFileSettingsComponent extends SettingsComponent<ClientConfig.Me
               _settingsService: MetaFileSettingsService,
               notification: NotificationService,
               i18n: I18n) {
-    super(i18n('Meta file'), _authService, _navigation, <any>_settingsService, notification, i18n, s => s.Client.MetaFile);
+    super(i18n('Meta file'), _authService, _navigation, _settingsService, notification, i18n, s => s.Client.MetaFile);
   }
 
 

@@ -26,7 +26,7 @@ export class MapSettingsComponent extends SettingsComponent<ClientConfig.MapConf
               _settingsService: MapSettingsService,
               notification: NotificationService,
               i18n: I18n) {
-    super(i18n('Map'), _authService, _navigation, <any>_settingsService, notification, i18n, s => s.Client.Map);
+    super(i18n('Map'), _authService, _navigation, _settingsService, notification, i18n, s => s.Client.Map);
 
     this.mapProviders = Utils.enumToArray(ClientConfig.MapProviders);
   }

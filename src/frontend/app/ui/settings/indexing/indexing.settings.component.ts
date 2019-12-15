@@ -36,7 +36,7 @@ export class IndexingSettingsComponent extends SettingsComponent<ServerConfig.In
     super(i18n('Folder indexing'),
       _authService,
       _navigation,
-      <any>_settingsService,
+      _settingsService,
       notification,
       i18n,
       s => s.Server.Indexing);
@@ -89,11 +89,11 @@ export class IndexingSettingsComponent extends SettingsComponent<ServerConfig.In
   }
 
 
-  async index(createThumbnails: boolean) {
+  async index() {
     this.inProgress = true;
     this.error = '';
     try {
-      await this.tasksService.start(DefaultsTasks[DefaultsTasks.Indexing], {createThumbnails: !!createThumbnails});
+      await this.tasksService.start(DefaultsTasks[DefaultsTasks.Indexing]);
       this.notification.info(this.i18n('Folder indexing started'));
       this.inProgress = false;
       return true;

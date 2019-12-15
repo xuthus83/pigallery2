@@ -21,7 +21,7 @@
             [switch-on-text]="text.Enabled"
             [switch-handle-width]="100"
             [switch-label-width]="20"
-            [(ngModel)]="settings.Server.enable">
+            [(ngModel)]="settings.Server.enabled">
           </bSwitch>
           <small class="form-text text-muted" i18n>Runs directory scanning and thumbnail generation (only for Jimp) in a
             different thread
@@ -29,7 +29,7 @@
         </div>
       </div>
 
-      <div class="form-group row"  [hidden]="simplifiedMode || settings.Server.enable == false">
+      <div class="form-group row"  [hidden]="simplifiedMode || settings.Server.enabled == false">
         <label class="col-md-2 control-label" for="thumbnailThreads" i18n>Thumbnail threads</label>
         <div class="col-md-10">
           <select id="thumbnailThreads" class="form-control" [(ngModel)]="settings.Server.thumbnailThreads"

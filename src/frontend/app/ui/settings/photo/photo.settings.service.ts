@@ -6,15 +6,16 @@ import {AbstractSettingsService} from '../_abstract/abstract.settings.service';
 import {ServerConfig} from '../../../../../common/config/private/IPrivateConfig';
 
 @Injectable()
-export class VideoSettingsService extends AbstractSettingsService<{ server: ServerConfig.VideoConfig, client: ClientConfig.VideoConfig }> {
+export class PhotoSettingsService extends AbstractSettingsService<{ server: ServerConfig.PhotoConfig, client: ClientConfig.PhotoConfig }> {
   constructor(private _networkService: NetworkService,
               _settingsService: SettingsService) {
     super(_settingsService);
-
   }
 
-  public updateSettings(settings: { server: ServerConfig.VideoConfig, client: ClientConfig.VideoConfig }): Promise<void> {
-    return this._networkService.putJson('/settings/video', {settings: settings});
+
+  public updateSettings(settings: { server: ServerConfig.PhotoConfig, client: ClientConfig.PhotoConfig }): Promise<void> {
+    return this._networkService.putJson('/settings/photo', {settings: settings});
   }
+
 
 }

@@ -1,5 +1,6 @@
 export interface ISettingsComponent {
 
-  hasAvailableSettings: boolean;
+  HasAvailableSettings: boolean;
   Name: string;
+  Changed: boolean;
 }

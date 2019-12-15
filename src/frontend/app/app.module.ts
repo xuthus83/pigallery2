@@ -87,6 +87,7 @@ import {TimepickerModule} from 'ngx-bootstrap/timepicker';
 import {TimeStampDatePickerComponent} from './ui/utils/timestamp-datepicker/datepicker.component';
 import {TimeStampTimePickerComponent} from './ui/utils/timestamp-timepicker/timepicker.component';
 import {TasksProgressComponent} from './ui/settings/tasks/progress/progress.tasks.settings.component';
+import {PhotoSettingsComponent} from './ui/settings/photo/photo.settings.component';
 
 
 
@@ -188,6 +189,7 @@ export function translationsFactory(locale: string) {
     MapSettingsComponent,
     ThumbnailSettingsComponent,
     VideoSettingsComponent,
+    PhotoSettingsComponent,
     MetaFileSettingsComponent,
     SearchSettingsComponent,
     ShareSettingsComponent,

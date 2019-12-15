@@ -14,8 +14,8 @@ export class PrivateConfigDefaultsClass extends PublicConfigClass implements IPr
     Media: {
       folder: 'demo/images',
       tempFolder: 'demo/tmp',
+      photoProcessingLibrary: ServerConfig.PhotoProcessingLib.sharp,
       Thumbnail: {
-        processingLibrary: ServerConfig.ThumbnailProcessingLib.sharp,
         qualityPriority: true,
         personFaceMargin: 0.6
       },
@@ -61,7 +61,7 @@ export class PrivateConfigDefaultsClass extends PublicConfigClass implements IPr
       updateTimeout: 1000 * 60 * 5
     },
     Threading: {
-      enable: true,
+      enabled: true,
       thumbnailThreads: 0
     },
     Indexing: {

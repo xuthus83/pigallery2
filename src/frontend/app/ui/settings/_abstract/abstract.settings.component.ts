@@ -60,6 +60,14 @@ export abstract class SettingsComponent<T extends { [key: string]: any }, S exte
     return this.name;
   }
 
+  get Changed(): boolean {
+    return this.changed;
+  }
+
+  get HasAvailableSettings(): boolean {
+    return this.hasAvailableSettings;
+  }
+
   onNewSettings = (s: IPrivateConfig) => {
     this.settings = Utils.clone(this.sliceFN(s));
     this.original = Utils.clone(this.settings);

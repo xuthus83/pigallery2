@@ -54,7 +54,7 @@ export interface DiskManagerTask extends WorkerTask {
 
 export interface ThumbnailTask extends WorkerTask {
   input: RendererInput;
-  renderer: ServerConfig.ThumbnailProcessingLib;
+  renderer: ServerConfig.PhotoProcessingLib;
 }
 
 export module WorkerTask {

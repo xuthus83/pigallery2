@@ -14,14 +14,14 @@ const existsPr = util.promisify(fs.exists);
 
 
 export class PhotoConvertingTask extends FileTask<string> {
-  public readonly Name = DefaultsTasks[DefaultsTasks['Video Converting']];
+  public readonly Name = DefaultsTasks[DefaultsTasks['Photo Converting']];
 
   constructor() {
     super({noVideo: true, noMetaFile: true});
   }
 
   public get Supported(): boolean {
-    return Config.Server.Media.Photo.Converting.enabled === true;
+    return Config.Client.Media.Photo.Converting.enabled === true;
   }
 
   protected async processDirectory(directory: DirectoryDTO): Promise<string[]> {
@@ -40,7 +40,7 @@ export class PhotoConvertingTask extends FileTask<string> {
   }
 
   protected async processFile(file: string): Promise<void> {
-    await PhotoProcessing.generateThumbnail(file, Config.Server.Media.Photo.Converting.resolution, ThumbnailSourceType.Photo, false);
+    await PhotoProcessing.convertPhoto(file, Config.Server.Media.Photo.Converting.resolution);
   }
 
 

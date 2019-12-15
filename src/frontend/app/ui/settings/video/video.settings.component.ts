@@ -35,10 +35,15 @@ export class VideoSettingsComponent extends SettingsComponent<{ server: ServerCo
               public tasksService: ScheduledTasksService,
               notification: NotificationService,
               i18n: I18n) {
-    super(i18n('Video'), _authService, _navigation, <any>_settingsService, notification, i18n, s => ({
+    super(i18n('Video'), _authService, _navigation, _settingsService, notification, i18n, s => ({
       client: s.Client.Media.Video,
       server: s.Server.Media.Video
     }));
+
+    const currentRes = _settingsService.Settings.value.Server.Media.Video.transcoding.resolution;
+    if (this.resolutions.indexOf(currentRes) === -1) {
+      this.resolutions.push(currentRes);
+    }
   }
 
 

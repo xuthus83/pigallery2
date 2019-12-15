@@ -18,7 +18,12 @@ import {UserRoles} from '../../../../../common/entities/UserDTO';
 })
 export class FacesSettingsComponent extends SettingsComponent<ClientConfig.FacesConfig> {
 
-  public userRoles: Array<any> = [];
+  public readonly userRoles = Utils
+    .enumToArray(UserRoles)
+    .filter(r => r.key !== UserRoles.LimitedGuest)
+    .filter(r => r.key <= this._authService.user.value.role)
+    .sort((a, b) => a.key - b.key);
+
   constructor(_authService: AuthenticationService,
               _navigation: NavigationService,
               _settingsService: FacesSettingsService,
@@ -26,11 +31,6 @@ export class FacesSettingsComponent extends SettingsComponent<ClientConfig.Faces
               i18n: I18n) {
     super(i18n('Faces'), _authService, _navigation, _settingsService, notification, i18n, s => s.Client.Faces);
 
-    this.userRoles = Utils
-      .enumToArray(UserRoles)
-      .filter(r => r.key !== UserRoles.LimitedGuest)
-      .filter(r => r.key <= this._authService.user.value.role)
-      .sort((a, b) => a.key - b.key);
   }
 
 

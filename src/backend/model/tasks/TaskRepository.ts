@@ -2,6 +2,7 @@ import {ITask} from './tasks/ITask';
 import {IndexingTask} from './tasks/IndexingTask';
 import {DBRestTask} from './tasks/DBResetTask';
 import {VideoConvertingTask} from './tasks/VideoConvertingTask';
+import {PhotoConvertingTask} from './tasks/PhotoConvertingTask';
 
 export class TaskRepository {
 
@@ -28,3 +29,4 @@ export class TaskRepository {
 TaskRepository.Instance.register(new IndexingTask());
 TaskRepository.Instance.register(new DBRestTask());
 TaskRepository.Instance.register(new VideoConvertingTask());
+TaskRepository.Instance.register(new PhotoConvertingTask());

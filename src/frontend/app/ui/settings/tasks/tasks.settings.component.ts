@@ -46,7 +46,7 @@ export class TasksSettingsComponent extends SettingsComponent<ServerConfig.TaskC
     super(i18n('Tasks'),
       _authService,
       _navigation,
-      <any>_settingsService,
+      _settingsService,
       notification,
       i18n,
       s => s.Server.Tasks);
