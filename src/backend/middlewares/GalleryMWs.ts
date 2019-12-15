@@ -183,7 +183,7 @@ export class GalleryMWs {
     if (!(req.resultPipe)) {
       return next();
     }
-    const fullMediaPath = path.join(ProjectPath.ImageFolder, req.resultPipe);
+    const fullMediaPath: string = req.resultPipe;
 
     if (fs.statSync(fullMediaPath).isDirectory()) {
       return next();

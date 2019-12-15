@@ -4,6 +4,7 @@ import {FixOrientationPipe} from '../../../../pipes/FixOrientationPipe';
 import {MediaDTO} from '../../../../../../common/entities/MediaDTO';
 import {DomSanitizer, SafeStyle} from '@angular/platform-browser';
 import {SupportedFormats} from '../../../../../../common/SupportedFormats';
+import {Config} from '../../../../../../common/config/public/Config';
 
 @Component({
   selector: 'app-gallery-lightbox-media',
@@ -26,8 +27,10 @@ export class GalleryLightboxMediaComponent implements OnChanges {
   public imageSize = {width: 'auto', height: '100'};
   public imageLoadFinished = false;
   thumbnailSrc: string = null;
-  photoSrc: string = null;
-  isPhotoSrcBestFit = true;
+  photo = {
+    src: <string>null,
+    isBestFit: false
+  };
   public transcodeNeedVideos = SupportedFormats.TranscodeNeed.Videos;
   private mediaLoaded = false;
   private videoProgress = 0;
@@ -98,10 +101,11 @@ export class GalleryLightboxMediaComponent implements OnChanges {
   }
 
   ngOnChanges() {
+    // media changed
     if (this.prevGirdPhoto !== this.gridMedia) {
       this.prevGirdPhoto = this.gridMedia;
       this.thumbnailSrc = null;
-      this.photoSrc = null;
+      this.photo.src = null;
       this.mediaLoaded = false;
       this.imageLoadFinished = false;
       this.setImageSize();
@@ -111,24 +115,7 @@ export class GalleryLightboxMediaComponent implements OnChanges {
         .then((src) => this.thumbnailSrc = src);
     }
 
-    if (this.zoom === 1) {
-      if (this.photoSrc == null && this.gridMedia && this.loadMedia) {
-        FixOrientationPipe.transform(this.gridMedia.getBestFitMediaPath(), this.gridMedia.Orientation)
-          .then((src) => {
-            this.photoSrc = src;
-            this.isPhotoSrcBestFit = true;
-          });
-      }
-      // on zoom load high res photo
-    } else if ((this.isPhotoSrcBestFit === true ||
-      this.photoSrc == null) && this.gridMedia && this.loadMedia) {
-      FixOrientationPipe.transform(this.gridMedia.getMediaPath(), this.gridMedia.Orientation)
-        .then((src) => {
-          this.photoSrc = src;
-          this.isPhotoSrcBestFit = false;
-        });
-    }
-
+    this.loadPhoto().catch(console.error);
 
   }
 
@@ -172,6 +159,28 @@ export class GalleryLightboxMediaComponent implements OnChanges {
   onSourceError($event: any) {
     this.mediaLoaded = false;
     this.videoSourceError.emit();
+  }
+
+  private async loadPhoto() {
+    if (!this.gridMedia || !this.loadMedia || !this.gridMedia.isPhoto()) {
+      return;
+    }
+
+    if (this.zoom === 1) {
+      if (this.photo.src == null) {
+        if (Config.Client.Media.Photo.Converting.enabled === true) {
+          this.photo.src = await FixOrientationPipe.transform(this.gridMedia.getBestFitMediaPath(), this.gridMedia.Orientation);
+          this.photo.isBestFit = true;
+        } else {
+          this.photo.src = await FixOrientationPipe.transform(this.gridMedia.getMediaPath(), this.gridMedia.Orientation);
+          this.photo.isBestFit = false;
+        }
+      }
+      // on zoom load high res photo
+    } else if ((this.photo.isBestFit === true || this.photo.src == null)) {
+      this.photo.src = await FixOrientationPipe.transform(this.gridMedia.getMediaPath(), this.gridMedia.Orientation);
+      this.photo.isBestFit = false;
+    }
   }
 
   /** Video **/

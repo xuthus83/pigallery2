@@ -1,5 +1,5 @@
 <app-frame>
-  <div body class="container">
+  <div body class="container-fluid">
 
     <div class="card mb-4" *ngIf="notificationService.notifications.length>0">
       <h5 class="card-header" i18n>
@@ -23,8 +23,7 @@
     <div class="form-horizontal">
       <div class="d-flex justify-content-between">
         <a class="version" href="https://github.com/bpatrik/pigallery2/releases">
-          <span i18n>App version:</span>&nbsp;
-          v<span>{{appVersion}}</span>
+          <span i18n>App version:</span>&nbsp;v<span>{{appVersion}}</span>
         </a>
         <div class="form-group">
           <label class="control-label align-self-end mr-2" for="simplifiedMode" i18n>Mode</label>
@@ -44,29 +43,66 @@
         </div>
       </div>
     </div>
-    <app-settings-basic [simplifiedMode]="simplifiedMode"></app-settings-basic>
-    <app-settings-usermanager></app-settings-usermanager>
-    <app-settings-database [simplifiedMode]="simplifiedMode"></app-settings-database>
-    <app-settings-thumbnail #thumbnail [hidden]="!thumbnail.hasAvailableSettings"
-                            [simplifiedMode]="simplifiedMode"></app-settings-thumbnail>
-    <app-settings-video #video [hidden]="!video.hasAvailableSettings"
-                        [simplifiedMode]="simplifiedMode"></app-settings-video>
-    <app-settings-search #search [hidden]="!search.hasAvailableSettings"
-                         [simplifiedMode]="simplifiedMode"></app-settings-search>
-    <app-settings-share #share [hidden]="!share.hasAvailableSettings"
-                        [simplifiedMode]="simplifiedMode"></app-settings-share>
-    <app-settings-map #map [hidden]="!map.hasAvailableSettings" [simplifiedMode]="simplifiedMode"></app-settings-map>
-    <app-settings-meta-file #metaFile [hidden]="!metaFile.hasAvailableSettings"
-                            [simplifiedMode]="simplifiedMode"></app-settings-meta-file>
-    <app-settings-other #other [hidden]="!other.hasAvailableSettings"
-                        [simplifiedMode]="simplifiedMode"></app-settings-other>
-    <app-settings-random-photo #random [hidden]="!random.hasAvailableSettings"
-                               [simplifiedMode]="simplifiedMode"></app-settings-random-photo>
-    <app-settings-faces #random [hidden]="!random.hasAvailableSettings"
-                               [simplifiedMode]="simplifiedMode"></app-settings-faces>
-    <app-settings-indexing #indexing [hidden]="!indexing.hasAvailableSettings"
-                           [simplifiedMode]="simplifiedMode"></app-settings-indexing>
-    <app-settings-tasks #tasks [hidden]="!tasks.hasAvailableSettings"
-                           [simplifiedMode]="simplifiedMode"></app-settings-tasks>
+
+    <div class="row">
+      <div class="col-md-2 ">
+        <nav class="nav flex-column sticky-top">
+          <div class="card">
+            <div class="card-body text-md-left text-center align-content-md-start align-content-center">
+              <h5 class="card-title">Menu</h5>
+              <button class="btn btn-link nav-link  text-md-left py-md-1 px-md-0"
+                      *ngFor="let s of contents; let i=index;"
+                      (click)="scrollTo(i)"
+                      [hidden]="!s.hasAvailableSettings"
+              >{{s.Name}}</button>
+            </div>
+          </div>
+
+        </nav>
+      </div>
+      <div class="col-md-10">
+        <app-settings-basic #setting #basic
+                            [simplifiedMode]="simplifiedMode"
+                            [hidden]="!basic.hasAvailableSettings"></app-settings-basic>
+        <app-settings-usermanager #setting #userManager
+                                  [hidden]="!userManager.hasAvailableSettings"></app-settings-usermanager>
+        <app-settings-database #setting #database
+                               [simplifiedMode]="simplifiedMode"
+                               [hidden]="!database.hasAvailableSettings"></app-settings-database>
+        <app-settings-thumbnail #setting #thumbnail
+                                [hidden]="!thumbnail.hasAvailableSettings"
+                                [simplifiedMode]="simplifiedMode"></app-settings-thumbnail>
+        <app-settings-video #setting #video
+                            [hidden]="!video.hasAvailableSettings"
+                            [simplifiedMode]="simplifiedMode"></app-settings-video>
+        <app-settings-search #setting #search
+                             [hidden]="!search.hasAvailableSettings"
+                             [simplifiedMode]="simplifiedMode"></app-settings-search>
+        <app-settings-share #setting #share
+                            [hidden]="!share.hasAvailableSettings"
+                            [simplifiedMode]="simplifiedMode"></app-settings-share>
+        <app-settings-map #setting #map
+                          [hidden]="!map.hasAvailableSettings"
+                          [simplifiedMode]="simplifiedMode"></app-settings-map>
+        <app-settings-meta-file #setting #metaFile
+                                [hidden]="!metaFile.hasAvailableSettings"
+                                [simplifiedMode]="simplifiedMode"></app-settings-meta-file>
+        <app-settings-other #setting #other
+                            [hidden]="!other.hasAvailableSettings"
+                            [simplifiedMode]="simplifiedMode"></app-settings-other>
+        <app-settings-random-photo #setting #random
+                                   [hidden]="!random.hasAvailableSettings"
+                                   [simplifiedMode]="simplifiedMode"></app-settings-random-photo>
+        <app-settings-faces #setting #faces
+                            [hidden]="!faces.hasAvailableSettings"
+                            [simplifiedMode]="simplifiedMode"></app-settings-faces>
+        <app-settings-indexing #setting #indexing
+                               [hidden]="!indexing.hasAvailableSettings"
+                               [simplifiedMode]="simplifiedMode"></app-settings-indexing>
+        <app-settings-tasks #setting #tasks
+                            [hidden]="!tasks.hasAvailableSettings"
+                            [simplifiedMode]="simplifiedMode"></app-settings-tasks>
+      </div>
+    </div>
   </div>
 </app-frame>

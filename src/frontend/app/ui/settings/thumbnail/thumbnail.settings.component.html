@@ -1,7 +1,7 @@
 <form #settingsForm="ngForm" class="form-horizontal">
   <div class="card mb-4">
     <h5 class="card-header">
-      <ng-container i18n>Thumbnail settings</ng-container><ng-container *ngIf="changed">*</ng-container>
+      {{Name}}<ng-container *ngIf="changed">*</ng-container>
     </h5>
     <div class="card-body">
       <div [hidden]="!error" class="alert alert-danger" role="alert"><strong>Error: </strong>{{error}}</div>
@@ -34,18 +34,6 @@
           </div>
         </div>
 
-<!--        <div class="form-group row">-->
-<!--          <label class="col-md-2 control-label" for="th_folder" i18n>Thumbnail folder</label>-->
-<!--          <div class="col-md-10">-->
-<!--            <input type="text" class="form-control" placeholder="path"-->
-<!--                   id="th_folder"-->
-<!--                   [(ngModel)]="settings.server.folder"-->
-<!--                   name="path" required>-->
-<!--            <small class="form-text text-muted" i18n>Thumbnails will be saved in this folder. Write access is required-->
-<!--            </small>-->
-
-<!--          </div>-->
-<!--        </div>-->
         <div class="form-group row" [hidden]="simplifiedMode">
           <label class="col-md-2 control-label" for="quality" i18n>Thumbnail Quality</label>
           <div class="col-md-10">
@@ -84,15 +72,14 @@
         <div class="form-group row" [hidden]="simplifiedMode">
           <label class="col-md-2 control-label" for="thumbnailSizes" i18n>Thumbnail sizes</label>
           <div class="col-md-10">
-            <input type="text" class="form-control" placeholder="200; 400"
+            <input type="text" class="form-control" placeholder="160; 240"
                    id="thumbnailSizes"
                    [(ngModel)]="ThumbnailSizes"
                    name="thumbnailSizes" required>
             <small class="form-text text-muted">
               <ng-container i18n>Size of the thumbnails.</ng-container><br/>
-              <ng-container i18n>The best matching size will be generated. (More size gives better quality, but use storage to store and CPU to render.)</ng-container><br/>
-              <ng-container
-                i18n>';' separated integers. If size is 200, that thumbnail will have 200^2 pixels.</ng-container>
+              <ng-container i18n>The best matching size will be generated. (More sizes give better quality, but use more storage and CPU to render.)</ng-container><br/>
+              <ng-container i18n>';' separated integers. If size is 160, that shorter side of the thumbnail will have 160 pixels.</ng-container>
             </small>
 
           </div>

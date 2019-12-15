@@ -51,9 +51,8 @@ export class ThumbnailSettingsComponent
       .enumToArray(ServerConfig.ThumbnailProcessingLib).map((v) => {
         if (v.value.toLowerCase() === 'sharp') {
           v.value += ' ' + this.i18n('(recommended)');
-        }
-        if (v.value.toLowerCase() === 'gm') {
-          v.value += ' ' + this.i18n('(deprecated)');
+        } else {
+          v.value += ' ' + this.i18n('(deprecated, will be removed)');
         }
         return v;
       });

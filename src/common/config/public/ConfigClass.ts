@@ -68,9 +68,16 @@ export module ClientConfig {
     enabled: boolean;
   }
 
+  export interface PhotoConfig {
+    Converting: {
+      enabled: boolean;
+    };
+  }
+
   export interface MediaConfig {
     Thumbnail: ThumbnailConfig;
     Video: VideoConfig;
+    Photo: PhotoConfig;
   }
 
   export interface MetaFileConfig {
@@ -114,6 +121,11 @@ export class PublicConfigClass {
     Media: {
       Video: {
         enabled: true
+      },
+      Photo: {
+        Converting: {
+          enabled: true
+        }
       },
       Thumbnail: {
         concurrentThumbnailGenerations: 1,

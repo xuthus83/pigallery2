@@ -8,6 +8,7 @@ import {NavigationService} from '../../../model/navigation.service';
 import {NotificationService} from '../../../model/notification.service';
 import {ErrorCodes, ErrorDTO} from '../../../../../common/entities/Error';
 import {I18n} from '@ngx-translate/i18n-polyfill';
+import {ISettingsComponent} from '../_abstract/ISettingsComponent';
 
 @Component({
   selector: 'app-settings-usermanager',
@@ -16,7 +17,7 @@ import {I18n} from '@ngx-translate/i18n-polyfill';
     '../_abstract/abstract.settings.component.css'],
   providers: [UserManagerSettingsService],
 })
-export class UserMangerSettingsComponent implements OnInit {
+export class UserMangerSettingsComponent implements OnInit, ISettingsComponent {
   @ViewChild('userModal', {static: false}) public childModal: ModalDirective;
   public newUser = <UserDTO>{};
   public userRoles: Array<any> = [];
@@ -24,6 +25,8 @@ export class UserMangerSettingsComponent implements OnInit {
   public enabled = true;
   public error: string = null;
   public inProgress = false;
+  Name: string;
+  hasAvailableSettings = true;
 
 
   text = {
@@ -39,6 +42,7 @@ export class UserMangerSettingsComponent implements OnInit {
               private _userSettings: UserManagerSettingsService,
               private notification: NotificationService,
               public i18n: I18n) {
+    this.Name = i18n('Password protection');
     this.text.Enabled = i18n('Enabled');
     this.text.Disabled = i18n('Disabled');
     this.text.Low = i18n('Low');
@@ -48,15 +52,15 @@ export class UserMangerSettingsComponent implements OnInit {
 
   ngOnInit() {
     if (!this._authService.isAuthenticated() ||
-      this._authService.user.value.role < UserRoles.Admin) {
+        this._authService.user.value.role < UserRoles.Admin) {
       this._navigation.toLogin();
       return;
     }
     this.userRoles = Utils
-      .enumToArray(UserRoles)
-      .filter(r => r.key !== UserRoles.LimitedGuest)
-      .filter(r => r.key <= this._authService.user.value.role)
-      .sort((a, b) => a.key - b.key);
+        .enumToArray(UserRoles)
+        .filter(r => r.key !== UserRoles.LimitedGuest)
+        .filter(r => r.key <= this._authService.user.value.role)
+        .sort((a, b) => a.key - b.key);
 
     this.getSettings();
     this.getUsersList();

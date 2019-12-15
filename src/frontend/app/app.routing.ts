@@ -68,5 +68,7 @@ const ROUTES: Routes = [
   {path: '**', redirectTo: '/login', pathMatch: 'full'}
 ];
 
-export const appRoutes: ModuleWithProviders = RouterModule.forRoot(ROUTES);
+export const appRoutes: ModuleWithProviders = RouterModule.forRoot(ROUTES, {
+  anchorScrolling: 'enabled'
+});
 

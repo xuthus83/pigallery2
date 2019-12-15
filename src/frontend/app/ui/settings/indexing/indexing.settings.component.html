@@ -1,8 +1,7 @@
 <form #settingsForm="ngForm" class="form-horizontal">
   <div class="card mb-4">
     <h5 class="card-header">
-      <ng-container i18n>Folder indexing</ng-container>
-      <ng-container *ngIf="changed">*</ng-container>
+      {{Name}}<ng-container *ngIf="changed">*</ng-container>
     </h5>
     <div class="card-body">
       <div [hidden]="!error" class="alert alert-danger" role="alert"><strong>Error: </strong>{{error}}</div>

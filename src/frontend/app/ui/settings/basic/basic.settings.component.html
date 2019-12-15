@@ -1,7 +1,7 @@
 <form #settingsForm="ngForm" class="form-horizontal">
   <div class="card mb-4">
     <h5 class="card-header">
-      <ng-container i18n>Basic settings</ng-container><ng-container *ngIf="changed">*</ng-container>
+     {{Name}}<ng-container *ngIf="changed">*</ng-container>
     </h5>
     <div class="card-body">
       <div [hidden]="!error" class="alert alert-danger" role="alert"><strong>Error: </strong>{{error}}</div>
@@ -50,6 +50,17 @@
                  [(ngModel)]="settings.imagesFolder"
                  name="imagesFolder" required>
           <small class="form-text text-muted" i18n>Images are loaded from this folder (read permission required)</small>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label class="col-md-2 control-label" for="tempFolder" i18n>Temp folder</label>
+        <div class="col-md-10">
+          <input type="text" class="form-control" placeholder="path"
+                 id="tempFolder"
+                 [(ngModel)]="settings.tempFolder"
+                 name="tempFolder" required>
+          <small class="form-text text-muted" i18n>Thumbnails, coverted photos, videos will be stored here (write permission required)</small>
         </div>
       </div>
 

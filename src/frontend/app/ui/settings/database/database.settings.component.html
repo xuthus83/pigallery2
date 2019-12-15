@@ -1,44 +1,85 @@
-<div class="card mb-4">
-  <h5 class="card-header">
-    <ng-container i18n>Database settings</ng-container><ng-container *ngIf="changed">*</ng-container>
-  </h5>
-  <div class="card-body">
-    <div [hidden]="!error" class="alert alert-danger" role="alert"><strong>Error: </strong>{{error}}</div>
-    <form #settingsForm="ngForm">
-      <p class="title" i18n>Type:</p>
-      <select class="form-control" [(ngModel)]="settings.type" name="type" required>
-        <option *ngFor="let type of types" [ngValue]="type.key">{{type.value}}
-        </option>
-      </select>
-      <small *ngIf="settings.type == DatabaseType.mysql"
-             class="form-text text-muted" i18n>Install manually mysql node module to use mysql (npm install mysql)
-      </small>
+<form #settingsForm="ngForm" class="form-horizontal">
+  <div class="card mb-4">
+    <h5 class="card-header">
+      {{Name}}
+      <ng-container *ngIf="changed">*</ng-container>
+    </h5>
+    <div class="card-body">
+      <div [hidden]="!error" class="alert alert-danger" role="alert"><strong>Error: </strong>{{error}}</div>
+
+
+      <div class="form-group row">
+        <label class="col-md-2 control-label" for="Type" i18n>Type</label>
+        <div class="col-md-10">
+          <select name="Type" id="Type"
+                  class="form-control" [(ngModel)]="settings.type" required>
+            <option *ngFor="let type of types" [ngValue]="type.key">{{type.value}}
+            </option>
+          </select>
+          <small *ngIf="settings.type == DatabaseType.mysql"
+                 class="form-text text-muted" i18n>Install manually mysql node module to use mysql (npm install mysql)
+          </small>
+        </div>
+      </div>
 
       <ng-container *ngIf="settings.type == DatabaseType.mysql">
-        <p class="title" i18n>MySQL settings:</p>
-        <input type="text" class="form-control" i18n-placeholder placeholder="Host"
-               [(ngModel)]="settings.mysql.host" name="host" required>
-        <input type="text" class="form-control" i18n-placeholder placeholder="Database"
-               [(ngModel)]="settings.mysql.database" name="database" required>
-        <input type="text" class="form-control" i18n-placeholder placeholder="Username"
-               [(ngModel)]="settings.mysql.username" name="username">
-        <input type="password" class="form-control" i18n-placeholder placeholder="Password"
-               [(ngModel)]="settings.mysql.password" name="password">
+
+        <div class="form-group row">
+          <label class="col-md-2 control-label" for="host" i18n>Host</label>
+          <div class="col-md-10">
+            <input type="text" class="form-control" placeholder="localhost"
+                   [(ngModel)]="settings.mysql.host" id="host" name="host" required>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-md-2 control-label" for="database" i18n>Database</label>
+          <div class="col-md-10">
+            <input type="text" class="form-control" placeholder="pigallery2"
+                   [(ngModel)]="settings.mysql.database" id="database" name="database" required>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-md-2 control-label" for="username" i18n>Username</label>
+          <div class="col-md-10">
+            <input type="text" class="form-control" placeholder="username"
+                   [(ngModel)]="settings.mysql.username" id="username" name="username" required>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-md-2 control-label" for="password" i18n>Password</label>
+          <div class="col-md-10">
+            <input type="password" class="form-control" placeholder="password"
+                   [(ngModel)]="settings.mysql.password" id="password" name="password" required>
+          </div>
+        </div>
       </ng-container>
       <ng-container *ngIf="settings.type == DatabaseType.sqlite">
-        <p class="title" i18n>SQLite settings:</p>
-        <input type="text" class="form-control" placeholder="storage"
-               [(ngModel)]="settings.sqlite.storage" name="host" required>
+        <div class="form-group row">
+          <label class="col-md-2 control-label" for="storage" i18n>Storage file</label>
+          <div class="col-md-10">
+            <input type="text" class="form-control" placeholder="sqlite.db"
+                   [(ngModel)]="settings.sqlite.storage" id="storage" name="storage" required>
+          </div>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="settings.type == DatabaseType.memory">
+        <div class="form-group row">
+          <label class="col-md-2 control-label" for="usersFile" i18n>User's file</label>
+          <div class="col-md-10">
+            <input type="text" class="form-control" placeholder="users.db"
+                   [(ngModel)]="settings.memory.usersFile" id="usersFile" name="usersFile" required>
+          </div>
+        </div>
       </ng-container>
 
-    </form>
-    <button class="btn btn-success float-right"
-            [disabled]="!settingsForm.form.valid || !changed || inProgress"
-            (click)="save()" i18n>Save
-    </button>
-    <button class="btn btn-secondary float-right"
-            [disabled]=" !changed || inProgress"
-            (click)="reset()" i18n>Reset
-    </button>
+      <button class="btn btn-success float-right"
+              [disabled]="!settingsForm.form.valid || !changed || inProgress"
+              (click)="save()" i18n>Save
+      </button>
+      <button class="btn btn-secondary float-right"
+              [disabled]=" !changed || inProgress"
+              (click)="reset()" i18n>Reset
+      </button>
+    </div>
   </div>
-</div>
+</form>

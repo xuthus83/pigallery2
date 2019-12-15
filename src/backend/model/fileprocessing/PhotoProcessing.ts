@@ -108,7 +108,7 @@ export class PhotoProcessing {
   public static generateConvertedFileName(photoPath: string): string {
     const extension = path.extname(photoPath);
     const file = path.basename(photoPath, extension);
-    const postfix = Config.Server.Media.Photo.converting.resolution;
+    const postfix = Config.Server.Media.Photo.Converting.resolution;
     return path.join(ProjectPath.TranscodedFolder,
       ProjectPath.getRelativePathToImages(path.dirname(photoPath)), file +
       '_' + postfix + '.jpg');

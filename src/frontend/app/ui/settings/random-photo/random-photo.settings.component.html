@@ -2,7 +2,7 @@
   <div class="card mb-4"
        [ngClass]="settings.enabled && !_settingsService.isSupported()?'panel-warning':''">
     <h5 class="card-header">
-      <ng-container i18n>Random Photo settings</ng-container><ng-container *ngIf="changed">*</ng-container>
+      {{Name}}<ng-container *ngIf="changed">*</ng-container>
       <div class="switch-wrapper">
         <bSwitch
           class="switch"
@@ -25,7 +25,7 @@
         <div class="panel-info" i18n>
           This feature enables you to generate 'random photo' urls.
           That URL returns a photo random selected from your gallery.
-          You can use the url with 3rd party like random changing desktop background.
+          You can use the url with 3rd party application like random changing desktop background.
         </div>
 
       </ng-container>

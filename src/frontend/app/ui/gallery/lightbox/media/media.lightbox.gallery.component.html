@@ -5,11 +5,11 @@
        [style.transform]="ImageTransform"
        [src]="thumbnailSrc"/>
 
-  <img *ngIf="gridMedia !== null && gridMedia.isPhoto() && photoSrc"
+  <img *ngIf="gridMedia !== null && gridMedia.isPhoto() && photo.src"
        [style.width.%]="imageSize.width"
        [style.height.%]="imageSize.height"
        [style.transform]="ImageTransform"
-       [src]="photoSrc"
+       [src]="photo.src"
        [alt]="gridMedia.media.name"
        (load)="onImageLoad()"
        (error)="onImageError()"/>

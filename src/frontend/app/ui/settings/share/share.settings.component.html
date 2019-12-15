@@ -2,7 +2,7 @@
   <div class="card mb-4"
        [ngClass]="settings.enabled && !_settingsService.isSupported()?'panel-warning':''">
     <h5 class="card-header">
-      <ng-container i18n>Share settings</ng-container><ng-container *ngIf="changed">*</ng-container>
+      {{Name}}<ng-container *ngIf="changed">*</ng-container>
       <div class="switch-wrapper">
         <bSwitch
           class="switch"

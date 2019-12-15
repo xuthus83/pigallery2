@@ -21,7 +21,7 @@ export class PhotoConvertingTask extends FileTask<string> {
   }
 
   public get Supported(): boolean {
-    return Config.Server.Media.Photo.converting.enabled === true;
+    return Config.Server.Media.Photo.Converting.enabled === true;
   }
 
   protected async processDirectory(directory: DirectoryDTO): Promise<string[]> {
@@ -40,7 +40,7 @@ export class PhotoConvertingTask extends FileTask<string> {
   }
 
   protected async processFile(file: string): Promise<void> {
-    await PhotoProcessing.generateThumbnail(file, Config.Server.Media.Photo.converting.resolution, ThumbnailSourceType.Photo, false);
+    await PhotoProcessing.generateThumbnail(file, Config.Server.Media.Photo.Converting.resolution, ThumbnailSourceType.Photo, false);
   }
 
 

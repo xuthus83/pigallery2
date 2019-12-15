@@ -9,10 +9,11 @@ import {AbstractSettingsService} from './abstract.settings.service';
 import {IPrivateConfig} from '../../../../../common/config/private/IPrivateConfig';
 import {I18n} from '@ngx-translate/i18n-polyfill';
 import {Subscription} from 'rxjs';
+import {ISettingsComponent} from './ISettingsComponent';
 
 
 export abstract class SettingsComponent<T extends { [key: string]: any }, S extends AbstractSettingsService<T> = AbstractSettingsService<T>>
-  implements OnInit, OnDestroy, OnChanges {
+  implements OnInit, OnDestroy, OnChanges, ISettingsComponent {
 
   @Input()
   public simplifiedMode = true;
@@ -52,6 +53,11 @@ export abstract class SettingsComponent<T extends { [key: string]: any }, S exte
     this.text.Disabled = i18n('Disabled');
     this.text.Low = i18n('Low');
     this.text.High = i18n('High');
+  }
+
+
+  get Name(): string {
+    return this.name;
   }
 
   onNewSettings = (s: IPrivateConfig) => {
@@ -137,7 +143,7 @@ export abstract class SettingsComponent<T extends { [key: string]: any }, S exte
     try {
       await this._settingsService.updateSettings(this.settings);
       await this.getSettings();
-      this.notification.success(this.name + ' ' + this.i18n('settings saved'), this.i18n('Success'));
+      this.notification.success(this.Name + ' ' + this.i18n('settings saved'), this.i18n('Success'));
       this.inProgress = false;
       return true;
     } catch (err) {

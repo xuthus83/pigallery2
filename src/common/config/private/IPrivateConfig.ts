@@ -15,9 +15,9 @@ export module ServerConfig {
   }
 
   export enum ThumbnailProcessingLib {
+    sharp = 3,
     Jimp = 1,
     gm = 2,
-    sharp = 3
   }
 
   export interface MySQLConfig {
@@ -98,8 +98,7 @@ export module ServerConfig {
 
 
   export interface PhotoConfig {
-    converting: {
-      enabled: boolean;
+    Converting: {
       onTheFly: boolean;
       resolution: resolutionType
     };

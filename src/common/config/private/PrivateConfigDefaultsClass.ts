@@ -20,8 +20,7 @@ export class PrivateConfigDefaultsClass extends PublicConfigClass implements IPr
         personFaceMargin: 0.6
       },
       Photo: {
-        converting: {
-          enabled: true,
+        Converting: {
           onTheFly: true,
           resolution: 1080
         }

@@ -21,7 +21,7 @@ export class RandomPhotoSettingsComponent extends SettingsComponent<ClientConfig
               _settingsService: RandomPhotoSettingsService,
               notification: NotificationService,
               i18n: I18n) {
-    super(i18n('Random Media'), _authService, _navigation, _settingsService, notification, i18n, s => s.Client.RandomPhoto);
+    super(i18n('Random Photo'), _authService, _navigation, _settingsService, notification, i18n, s => s.Client.RandomPhoto);
   }
 
 

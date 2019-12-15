@@ -33,7 +33,7 @@ export class IndexingSettingsComponent extends SettingsComponent<ServerConfig.In
               notification: NotificationService,
               i18n: I18n) {
 
-    super(i18n('Indexing'),
+    super(i18n('Folder indexing'),
       _authService,
       _navigation,
       <any>_settingsService,

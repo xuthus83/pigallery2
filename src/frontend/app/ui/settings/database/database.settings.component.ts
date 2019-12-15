@@ -17,8 +17,8 @@ import {ServerConfig} from '../../../../../common/config/private/IPrivateConfig'
 })
 export class DatabaseSettingsComponent extends SettingsComponent<ServerConfig.DataBaseConfig> implements OnInit {
 
-  public types: { key: number, value: string }[] = [];
-  public DatabaseType: any;
+  public types = Utils.enumToArray(ServerConfig.DatabaseType);
+  public DatabaseType = ServerConfig.DatabaseType;
 
   constructor(_authService: AuthenticationService,
               _navigation: NavigationService,
@@ -30,8 +30,6 @@ export class DatabaseSettingsComponent extends SettingsComponent<ServerConfig.Da
 
   ngOnInit() {
     super.ngOnInit();
-    this.types = Utils.enumToArray(ServerConfig.DatabaseType);
-    this.DatabaseType = ServerConfig.DatabaseType;
   }
 
 
