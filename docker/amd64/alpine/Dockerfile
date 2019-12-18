@@ -27,7 +27,7 @@ EXPOSE 80
 ENV NODE_ENV=production
 COPY --from=builder /build/release /app
 RUN ln -s /app/data/config/config.json config.json
-VOLUME ["/app/data/config", "/app/data/db", "/app/data/images", "/app/data/TEMP"]
+VOLUME ["/app/data/config", "/app/data/db", "/app/data/images", "/app/data/tmp"]
 HEALTHCHECK --interval=30s --timeout=10s --retries=4 --start-period=60s \
   CMD wget --quiet --tries=1 --no-check-certificate --spider \
   http://localhost:80 || exit 1
