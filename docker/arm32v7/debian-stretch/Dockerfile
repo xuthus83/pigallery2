@@ -5,7 +5,6 @@ RUN apk add --no-cache wget && \
 
 # separate release builder for faster build on docker hub
 FROM node:12-stretch AS node-builder
-RUN apk add python build-base
 # copying only package{-lock}.json to make node_modules cachable
 COPY package*.json /build/
 WORKDIR /build
@@ -14,9 +13,8 @@ RUN set -x && npm install --unsafe-perm
 COPY . /build
 RUN npm run create-release
 
-FROM arm32v7/node:12-stretch-slim AS builder
+FROM arm32v7/node:12-stretch AS builder
 COPY --from=qemu-builder /qemu-arm-static /usr/bin
-RUN apk add python build-base
 COPY --from=node-builder /build/release /build/release
 RUN mkdir -p /build/release/data/config && \
     mkdir -p /build/release/data/db && \
@@ -31,7 +29,7 @@ RUN mkdir -p /build/release/data/config && \
     --Server-Media-tempFolder='data/tmp'  || true
 
 
-FROM arm32v7/node:12-alpine
+FROM arm32v7/node:12-stretch-slim
 COPY --from=qemu-builder /qemu-arm-static /usr/bin
 WORKDIR /app
 ENTRYPOINT ["npm", "start"]
