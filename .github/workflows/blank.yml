@@ -12,12 +12,12 @@ jobs:
       -
         name: Checkout
         uses: actions/checkout@v1
-      - 
+      -
         name: Setup Node.js for use with actions
         uses: actions/setup-node@v1.1.0
         with:
           version: 12
-      - 
+      -
         name: Install Deps
         run: npm install --unsafe-perm
       -
@@ -34,7 +34,7 @@ jobs:
       -
         name: Checkout
         uses: actions/checkout@v1
-      - 
+      -
         uses: actions/download-artifact@v1
         with:
           name: pigallery2-release
@@ -47,7 +47,7 @@ jobs:
       -
         name: Available platforms
         run: echo ${{ steps.buildx.outputs.platforms }}
-      - 
+      -
         name: Docker login
         run: |
           docker login -u "${DOCKER_REGISTRY_USERNAME}" -p "${DOCKER_REGISTRY_PASSWORD}"
@@ -58,7 +58,7 @@ jobs:
         name: Run Buildx stretch
         run: |
           docker buildx build \
-            --platform linux/amd64,linux/arm64,linux/386,linux/arm/v6,linux/arm/v7 \
+            --platform linux/amd64, linux/arm64, linux/arm/v7 \
             --output "type=image,push=true" \
             --tag bpatrik/pigallery2:nightly-stretch \
             --file docker/debian-stretch/Dockerfile.build  .
@@ -70,7 +70,7 @@ jobs:
             --output "type=image,push=true" \
             --tag bpatrik/pigallery2:nightly-alpine \
             --file docker/alpine/Dockerfile.build  .
-      - 
+      -
         name: Docker logout
         run: |
           docker logout
