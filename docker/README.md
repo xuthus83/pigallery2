@@ -42,4 +42,4 @@ You do not need the `<path to your db file folder>/sqlite.db` line if you don't 
  
  ### Build the Docker image on your own
  
- You can clone the repository and build the image, or you can just use the 'self-contained' Dockerfile: [debian/stretch/selfcontained/Dockerfile](amd64/debian-stretch/selfcontained/Dockerfile)
+ You can clone the repository and build the image, or you can just use the 'self-contained' Dockerfile: [debian-stretch/selfcontained/Dockerfile](debian-stretch/selfcontained/Dockerfile)

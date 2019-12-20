@@ -1,22 +1,17 @@
 FROM node:12-stretch AS builder
-# copying only package{-lock}.json to make node_modules cachable
-COPY package*.json /build/
+COPY pigallery2-release /build
 WORKDIR /build
-RUN set -x && npm install --unsafe-perm
-# build app
-COPY . /build
-RUN mkdir -p /build/release/data/config && \
-    mkdir -p /build/release/data/db && \
-    mkdir -p /build/release/data/images && \
-    mkdir -p /build/release/data/tmp && \
-    npm run create-release && \
-    cd /build/release && npm install --unsafe-perm && \
+RUN npm install --unsafe-perm
+RUN mkdir -p /build/data/config && \
+    mkdir -p /build/data/db && \
+    mkdir -p /build/data/images && \
+    mkdir -p /build/data/tmp && \
     npm start -- --config-only --force-rewrite-config \
     --config-path=data/config/config.json \
     --Server-Database-sqlite-storage='data/db/sqlite.db' \
     --Server-Database-memory-usersFile='data/db/users.db' \
     --Server-Media-folder='data/images' \
-    --Server-Media-tempFolder='data/tmp'  || true
+    --Server-Media-tempFolder='data/tmp'
 
 
 FROM node:12-stretch-slim
@@ -24,10 +19,9 @@ WORKDIR /app
 ENTRYPOINT ["npm", "start"]
 EXPOSE 80
 ENV NODE_ENV=production
-COPY --from=builder /build/release /app
+COPY --from=builder /build /app
 RUN ln -s /app/data/config/config.json config.json
 VOLUME ["/app/data/config", "/app/data/db", "/app/data/images", "/app/data/tmp"]
 HEALTHCHECK --interval=30s --timeout=10s --retries=4 --start-period=60s \
   CMD wget --quiet --tries=1 --no-check-certificate --spider \
   http://localhost:80 || exit 1
-
