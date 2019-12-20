@@ -58,7 +58,7 @@ jobs:
         name: Run Buildx stretch
         run: |
           docker buildx build \
-            --platform linux/amd64, linux/arm64, linux/arm/v7 \
+            --platform linux/amd64,linux/arm64,linux/arm/v7 \
             --output "type=image,push=true" \
             --tag bpatrik/pigallery2:nightly-stretch \
             --file docker/debian-stretch/Dockerfile.build  .
