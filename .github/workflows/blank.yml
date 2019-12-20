@@ -55,13 +55,21 @@ jobs:
           DOCKER_REGISTRY_USERNAME: ${{ secrets.REGISTRY_USERNAME }}
           DOCKER_REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
       -
-        name: Run Buildx
+        name: Run Buildx stretch
         run: |
           docker buildx build \
             --platform linux/amd64,linux/arm64,linux/386,linux/arm/v6,linux/arm/v7 \
             --output "type=image,push=true" \
             --tag bpatrik/pigallery2:nightly-stretch \
-            --file docker/stretch/Dockerfile.build  .
+            --file docker/debian-stretch/Dockerfile.build  .
+      -
+        name: Run Buildx alpine
+        run: |
+          docker buildx build \
+            --platform linux/amd64,linux/arm64,linux/386,linux/arm/v6,linux/arm/v7 \
+            --output "type=image,push=true" \
+            --tag bpatrik/pigallery2:nightly-alpine \
+            --file docker/alpine/Dockerfile.build  .
       - 
         name: Docker logout
         run: |
