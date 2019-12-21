@@ -81,22 +81,30 @@ export class ConfigDiagnostics {
     }
   }
 
+  static async testSharp() {
+    const sharp = require('sharp');
+    sharp();
+  }
+
+  static async testGM() {
+    const gm = require('gm');
+    await new Promise((resolve, reject) => {
+      gm(ProjectPath.FrontendFolder + '/assets/icon.png').size((err: Error) => {
+        if (err) {
+          return reject(err.toString());
+        }
+        return resolve();
+      });
+    });
+  }
+
   static async testThumbnailLib(processingLibrary: ServerConfig.PhotoProcessingLib) {
     switch (processingLibrary) {
       case ServerConfig.PhotoProcessingLib.sharp:
-        const sharp = require('sharp');
-        sharp();
+        await this.testSharp();
         break;
       case  ServerConfig.PhotoProcessingLib.gm:
-        const gm = require('gm');
-        await new Promise((resolve, reject) => {
-          gm(ProjectPath.FrontendFolder + '/assets/icon.png').size((err: Error) => {
-            if (err) {
-              return reject(err.toString());
-            }
-            return resolve();
-          });
-        });
+        await this.testGM();
         break;
     }
   }
@@ -118,7 +126,6 @@ export class ConfigDiagnostics {
       resolve();
     });
   }
-
 
 
   static async testServerPhotoConfig(server: ServerConfig.PhotoConfig) {

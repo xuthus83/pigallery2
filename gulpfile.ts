@@ -12,14 +12,17 @@ const translationFolder = 'translate';
 const tsBackendProject = ts.createProject('tsconfig.json');
 declare var process: NodeJS.Process;
 
-const getSwitch = (name: string, def: string = null) => {
+const getSwitch = (name: string, def: string = null): string => {
   name = '--' + name;
   for (let i = 0; i < process.argv.length; i++) {
     if (process.argv[i].startsWith(name + '=')) {
       return process.argv[i].replace(name + '=', '').trim();
     }
-    if (process.argv[i].startsWith(name) && i + 1 < process.argv.length) {
-      return process.argv[i + 1].trim();
+    if (process.argv[i].startsWith(name)) {
+      if (i + 1 < process.argv.length) {
+        return process.argv[i + 1].trim();
+      }
+      return 'true';
     }
   }
   return def;
@@ -128,6 +131,13 @@ gulp.task('copy-package', function () {
             }
           }
         }
+      }
+
+      if (!!getSwitch('force-opt-packages')) {
+        for (const key of Object.keys(json.optionalDependencies)) {
+          json.dependencies[key] = json.optionalDependencies[key];
+        }
+        delete json.optionalDependencies;
       }
       return json;
     }))
