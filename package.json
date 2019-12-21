@@ -84,7 +84,7 @@
     "core-js": "3.4.7",
     "ejs-loader": "0.3.5",
     "gulp": "4.0.2",
-    "gulp-json-modify": "1.0.2",
+    "gulp-json-editor": "2.5.4",
     "gulp-typescript": "5.0.1",
     "gulp-zip": "5.0.1",
     "hammerjs": "2.0.8",

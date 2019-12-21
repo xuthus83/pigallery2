@@ -8,7 +8,7 @@ import {ShareService} from '../../ui/gallery/share.service';
 @Injectable()
 export class UserService {
 
-
+  // Todo use JWT instead of costume cookie
   constructor(private _networkService: NetworkService,
               private _shareService: ShareService) {
   }

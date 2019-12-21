@@ -19,6 +19,7 @@ WORKDIR /app
 ENTRYPOINT ["npm", "start"]
 EXPOSE 80
 ENV NODE_ENV=production
+RUN apt-get update && apt-get install -y ffmpeg
 COPY --from=builder /build /app
 RUN ln -s /app/data/config/config.json config.json
 VOLUME ["/app/data/config", "/app/data/db", "/app/data/images", "/app/data/tmp"]

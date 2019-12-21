@@ -38,7 +38,7 @@ export function galleryMatcherFunction(
   }
   return null;
 }
-
+// Todo: authguard - canActivate https://angular.io/api/router/CanActivate
 const ROUTES: Routes = [
   {
     path: 'login',

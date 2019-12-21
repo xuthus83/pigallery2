@@ -3,7 +3,7 @@ import * as fs from 'fs';
 import * as zip from 'gulp-zip';
 import * as ts from 'gulp-typescript';
 // @ts-ignore
-import * as jsonModify from 'gulp-json-modify';
+import * as jeditor from 'gulp-json-editor';
 
 
 const exec = require('child_process').exec;
@@ -11,6 +11,19 @@ const exec = require('child_process').exec;
 const translationFolder = 'translate';
 const tsBackendProject = ts.createProject('tsconfig.json');
 declare var process: NodeJS.Process;
+
+const getSwitch = (name: string, def: string = null) => {
+  name = '--' + name;
+  for (let i = 0; i < process.argv.length; i++) {
+    if (process.argv[i].startsWith(name + '=')) {
+      return process.argv[i].replace(name + '=', '').trim();
+    }
+    if (process.argv[i].startsWith(name) && i + 1 < process.argv.length) {
+      return process.argv[i + 1].trim();
+    }
+  }
+  return def;
+};
 
 gulp.task('build-backend', function () {
   return gulp.src([
@@ -36,6 +49,7 @@ const createFrontendTask = (type: string, script: string) => {
   });
 };
 
+
 const getLanguages = () => {
   if (!fs.existsSync('./src/frontend/' + translationFolder)) {
     return [];
@@ -47,10 +61,8 @@ const getLanguages = () => {
 
   // get languages to filter
   let languageFilter: string[] = null;
-  for (let i = 0; i < process.argv.length; i++) {
-    if (process.argv[i].startsWith('--languages=')) {
-      languageFilter = process.argv[i].replace('--languages=', '').split(',');
-    }
+  if (getSwitch('languages')) {
+    languageFilter = getSwitch('languages').split(',');
   }
 
   let languages = files.map((f: string) => {
@@ -90,6 +102,7 @@ gulp.task('copy-static', function () {
   return gulp.src([
     'src/backend/model/diagnostics/blank.jpg',
     'README.md',
+    'package-lock.json',
     'LICENSE'], {base: '.'})
     .pipe(gulp.dest('./release'));
 });
@@ -97,13 +110,26 @@ gulp.task('copy-static', function () {
 gulp.task('copy-package', function () {
   return gulp.src([
     'package.json'], {base: '.'})
-    .pipe(jsonModify({
-      key: 'devDependencies',
-      value: {}
-    }))
-    .pipe(jsonModify({
-      key: 'scripts',
-      value: {'start': 'node ./src/backend/index.js'}
+    .pipe(jeditor((json: {
+      devDependencies: { [key: string]: string },
+      scripts: { [key: string]: string },
+      dependencies: { [key: string]: string },
+      optionalDependencies: { [key: string]: string }
+    }) => {
+      delete json.devDependencies;
+      json.scripts = {start: 'node ./src/backend/index.js'};
+
+      if (getSwitch('skip-opt-packages')) {
+        const skipPackages = getSwitch('skip-opt-packages').split(',');
+        for (const pkg of skipPackages) {
+          for (const key of Object.keys(json.optionalDependencies)) {
+            if (key.indexOf(pkg) !== -1) {
+              delete json.optionalDependencies[key];
+            }
+          }
+        }
+      }
+      return json;
     }))
     .pipe(gulp.dest('./release'));
 });

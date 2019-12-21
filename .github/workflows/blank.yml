@@ -22,7 +22,7 @@ jobs:
         run: npm install --unsafe-perm
       -
         name: Create Release
-        run: npm run create-release
+        run: npm run create-release -- --skip-opt-packages=ffmpeg,ffprobe
       - uses: actions/upload-artifact@v1
         with:
           name: pigallery2-release
