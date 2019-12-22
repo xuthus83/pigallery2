@@ -1,7 +1,7 @@
 FROM node:12-alpine AS builder
 RUN apk add python build-base sqlite-dev sqlite-libs vips-dev
-COPY pigallery2-release /build
-WORKDIR /build
+COPY pigallery2-release /app
+WORKDIR /app
 RUN npm install --unsafe-perm
 RUN mkdir -p /app/data/config && \
     mkdir -p /app/data/db && \
