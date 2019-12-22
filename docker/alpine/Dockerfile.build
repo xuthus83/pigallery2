@@ -3,16 +3,16 @@ RUN apk add python build-base sqlite-dev sqlite-libs vips-dev
 COPY pigallery2-release /build
 WORKDIR /build
 RUN npm install --unsafe-perm
-RUN mkdir -p /build/data/config && \
-    mkdir -p /build/data/db && \
-    mkdir -p /build/data/images && \
-    mkdir -p /build/data/tmp && \
+RUN mkdir -p /app/data/config && \
+    mkdir -p /app/data/db && \
+    mkdir -p /app/data/images && \
+    mkdir -p /app/data/tmp && \
     npm start -- --config-only --force-rewrite-config \
-    --config-path=data/config/config.json \
-    --Server-Database-sqlite-storage='data/db/sqlite.db' \
-    --Server-Database-memory-usersFile='data/db/users.db' \
-    --Server-Media-folder='data/images' \
-    --Server-Media-tempFolder='data/tmp'
+    --config-path=/app/data/config/config.json \
+    --Server-Database-sqlite-storage='/app/data/db/sqlite.db' \
+    --Server-Database-memory-usersFile='/app/data/db/users.db' \
+    --Server-Media-folder='/app/data/images' \
+    --Server-Media-tempFolder='/app/data/tmp'
 
 
 FROM node:12-alpine
