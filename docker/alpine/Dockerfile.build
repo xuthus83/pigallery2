@@ -6,23 +6,22 @@ RUN npm install --unsafe-perm
 RUN mkdir -p /app/data/config && \
     mkdir -p /app/data/db && \
     mkdir -p /app/data/images && \
-    mkdir -p /app/data/tmp && \
-    npm start -- --config-only --force-rewrite-config \
-    --config-path=/app/data/config/config.json \
-    --Server-Database-sqlite-storage='/app/data/db/sqlite.db' \
-    --Server-Database-memory-usersFile='/app/data/db/users.db' \
-    --Server-Media-folder='/app/data/images' \
-    --Server-Media-tempFolder='/app/data/tmp'
+    mkdir -p /app/data/tmp
 
 
 FROM node:12-alpine
 WORKDIR /app
-ENTRYPOINT ["npm", "start"]
+# command line arg orverride the config.json with these settings
+ENTRYPOINT ["npm", "start",  "--",
+  "--config-path=/app/data/config/config.json",
+  "--Server-Database-sqlite-storage='/app/data/db/sqlite.db'",
+  "--Server-Database-memory-usersFile='/app/data/db/users.db'",
+  "--Server-Media-folder='/app/data/images'",
+  "--Server-Media-tempFolder='/app/data/tmp'"]
 EXPOSE 80
 ENV NODE_ENV=production
 RUN apk add ffmpeg
 COPY --from=builder /app /app
-RUN ln -s /app/data/config/config.json config.json
 VOLUME ["/app/data/config", "/app/data/db", "/app/data/images", "/app/data/tmp"]
 HEALTHCHECK --interval=30s --timeout=10s --retries=4 --start-period=60s \
   CMD wget --quiet --tries=1 --no-check-certificate --spider \

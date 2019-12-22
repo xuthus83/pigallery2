@@ -26,6 +26,7 @@ export class ConfigClass extends PrivateConfigDefaultsClass implements IPrivateC
       } else {
         ConfigClass.CONFIG_PATH = path.join(__dirname, './../../../../', configPath);
       }
+      console.log('using config path:' + ConfigClass.CONFIG_PATH);
     }
   }
 
