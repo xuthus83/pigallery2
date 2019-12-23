@@ -92,6 +92,8 @@ export module ClientConfig {
 
   export interface Config {
     appVersion: string;
+    buildTime: string;
+    buildCommitHash: string;
     applicationTitle: string;
     publicUrl: string;
     urlBase: string;
@@ -118,6 +120,8 @@ export class PublicConfigClass {
   public Client: ClientConfig.Config = {
     applicationTitle: 'PiGallery 2',
     appVersion: '',
+    buildCommitHash: '',
+    buildTime: '',
     Media: {
       Video: {
         enabled: true

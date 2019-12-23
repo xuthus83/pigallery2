@@ -41,6 +41,8 @@ export class Server {
     await ConfigDiagnostics.runDiagnostics();
     Logger.verbose(LOG_TAG, 'using config:');
     Config.Client.appVersion = require('../../package.json').version;
+    Config.Client.buildTime = require('../../package.json').buildTime;
+    Config.Client.buildCommitHash = require('../../package.json').buildCommitHash;
     Logger.verbose(LOG_TAG, JSON.stringify(Config, null, '\t'));
 
     this.app = _express();

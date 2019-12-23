@@ -22,7 +22,7 @@
     </div>
     <div class="form-horizontal">
       <div class="d-flex justify-content-between">
-        <a class="version" href="https://github.com/bpatrik/pigallery2/releases">
+        <a title="{{versionExtra}}" class="version" href="https://github.com/bpatrik/pigallery2/releases">
           <span i18n>App version:</span>&nbsp;v<span>{{appVersion}}</span>
         </a>
         <div class="form-group">
@@ -55,7 +55,8 @@
                       (click)="scrollTo(i)"
                       [hidden]="!s.HasAvailableSettings">
                 {{s.Name}}<!--
-                --><ng-container *ngIf="s.Changed">*</ng-container>
+                -->
+                <ng-container *ngIf="s.Changed">*</ng-container>
               </button>
             </div>
           </div>

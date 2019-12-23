@@ -117,7 +117,9 @@ gulp.task('copy-package', function () {
       devDependencies: { [key: string]: string },
       scripts: { [key: string]: string },
       dependencies: { [key: string]: string },
-      optionalDependencies: { [key: string]: string }
+      optionalDependencies: { [key: string]: string },
+      buildTime: string,
+      buildCommitHash: string
     }) => {
       delete json.devDependencies;
       json.scripts = {start: 'node ./src/backend/index.js'};
@@ -139,6 +141,13 @@ gulp.task('copy-package', function () {
         }
         delete json.optionalDependencies;
       }
+      json.buildTime = (new Date()).toISOString();
+
+      try {
+        json.buildCommitHash = require('child_process').execSync('git rev-parse HEAD');
+      } catch (e) {
+      }
+
       return json;
     }))
     .pipe(gulp.dest('./release'));

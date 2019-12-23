@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, OnInit, QueryList, ViewChildren} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, Inject, LOCALE_ID, OnInit, QueryList, ViewChildren} from '@angular/core';
 import {AuthenticationService} from '../../model/network/authentication.service';
 import {UserRoles} from '../../../../common/entities/UserDTO';
 import {NotificationService} from '../../model/notification.service';
@@ -8,6 +8,7 @@ import {I18n} from '@ngx-translate/i18n-polyfill';
 import {Config} from '../../../../common/config/public/Config';
 import {ISettingsComponent} from '../settings/_abstract/ISettingsComponent';
 import {PageHelper} from '../../model/page.helper';
+import {formatDate} from '@angular/common';
 
 @Component({
   selector: 'app-admin',
@@ -21,6 +22,9 @@ export class AdminComponent implements OnInit, AfterViewInit {
     Simplified: 'Simplified'
   };
   appVersion = Config.Client.appVersion;
+  versionExtra = '';
+  buildTime = Config.Client.buildTime;
+  buildCommitHash = Config.Client.buildCommitHash;
   @ViewChildren('setting') settingsComponents: QueryList<ISettingsComponent>;
   @ViewChildren('setting', {read: ElementRef}) settingsComponents2: QueryList<ElementRef>;
   contents: ISettingsComponent[] = [];
@@ -28,9 +32,17 @@ export class AdminComponent implements OnInit, AfterViewInit {
   constructor(private _authService: AuthenticationService,
               private _navigation: NavigationService,
               public notificationService: NotificationService,
+              @Inject(LOCALE_ID) private locale: string,
               public i18n: I18n) {
     this.text.Advanced = i18n('Advanced');
     this.text.Simplified = i18n('Simplified');
+    if (Config.Client.buildTime) {
+      this.versionExtra = i18n('Built at') + ': ' + formatDate(Config.Client.buildTime, 'medium', locale);
+    }
+    if (Config.Client.buildCommitHash) {
+      this.versionExtra += ', ' + i18n('git hash') + ': ' + Config.Client.buildCommitHash;
+    }
+
   }
 
   ngAfterViewInit(): void {
