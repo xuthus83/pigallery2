@@ -22,8 +22,7 @@
         aria-valuemax="100"
         style="min-width: 2em;"
         [style.width.%]="(progress.progress/(progress.left+progress.progress))*100">
-        {{progress.progress}}
-        /{{progress.progress + progress.left}}
+        {{progress.progress}}/{{progress.progress + progress.left}}
       </div>
       <div
         *ngIf="progress.progress + progress.left === 0"
