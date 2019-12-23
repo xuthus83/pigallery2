@@ -11,11 +11,13 @@ export abstract class Task<T = void> implements ITask<T> {
   protected state = TaskState.idle;
   protected config: T;
   protected prResolve: () => void;
+  protected IsInstant = false;
 
 
   public abstract get Supported(): boolean;
 
   public abstract get Name(): string;
+
 
   public abstract get ConfigTemplate(): ConfigTemplateEntry[];
 
@@ -44,6 +46,9 @@ export abstract class Task<T = void> implements ITask<T> {
       this.init().catch(console.error);
       this.state = TaskState.running;
       this.run();
+      if (!this.IsInstant) { // if instant, wait for execution, otherwise, return right away
+        return Promise.resolve();
+      }
       return pr;
     } else {
       Logger.info('[Task]', 'Task already running: ' + this.Name);
@@ -71,7 +76,9 @@ export abstract class Task<T = void> implements ITask<T> {
   private onFinish(): void {
     this.progress = null;
     Logger.info('[Task]', 'Task finished: ' + this.Name);
-    this.prResolve();
+    if (this.IsInstant) {
+      this.prResolve();
+    }
   }
 
   private run() {

@@ -68,16 +68,16 @@ export class PhotoSettingsComponent extends SettingsComponent<{
     try {
       await this.tasksService.start(DefaultsTasks[DefaultsTasks['Photo Converting']]);
       this.notification.info(this.i18n('Photo converting started'));
-      this.inProgress = false;
       return true;
     } catch (err) {
       console.log(err);
       if (err.message) {
         this.error = (<ErrorDTO>err).message;
       }
+    } finally {
+      this.inProgress = false;
     }
 
-    this.inProgress = false;
     return false;
   }
 
@@ -87,16 +87,16 @@ export class PhotoSettingsComponent extends SettingsComponent<{
     try {
       await this.tasksService.stop(DefaultsTasks[DefaultsTasks['Photo Converting']]);
       this.notification.info(this.i18n('Photo converting interrupted'));
-      this.inProgress = false;
       return true;
     } catch (err) {
       console.log(err);
       if (err.message) {
         this.error = (<ErrorDTO>err).message;
       }
+    } finally {
+      this.inProgress = false;
     }
 
-    this.inProgress = false;
     return false;
   }
 }

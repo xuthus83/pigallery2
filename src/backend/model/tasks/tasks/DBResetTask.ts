@@ -10,6 +10,7 @@ const LOG_TAG = '[DBRestTask]';
 export class DBRestTask extends Task {
   public readonly Name = DefaultsTasks[DefaultsTasks['Database Reset']];
   public readonly ConfigTemplate: ConfigTemplateEntry[] = null;
+  protected readonly IsInstant = true;
 
   public get Supported(): boolean {
     return Config.Server.Database.type !== ServerConfig.DatabaseType.memory;

@@ -36,8 +36,8 @@ export class ScheduledTasksService {
     this.decSubscribers();
   }
 
-  public forceUpdate() {
-    return this.getProgress();
+  public async forceUpdate(): Promise<void> {
+    return await this.getProgress();
   }
 
   public async start(id: string, config?: any): Promise<void> {
@@ -50,7 +50,7 @@ export class ScheduledTasksService {
     this.forceUpdate();
   }
 
-  protected async getProgress() {
+  protected async getProgress(): Promise<void> {
     const prevPrg = this.progress.value;
     this.progress.next(await this._networkService.getJson<{ [key: string]: TaskProgressDTO }>('/admin/tasks/scheduled/progress'));
     for (const prg in prevPrg) {
