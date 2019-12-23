@@ -595,7 +595,7 @@
           <context context-type="sourcefile">app/ui/settings/database/database.settings.component.html</context>
           <context context-type="linenumber">12</context>
         </context-group>
-        <target>Type</target>
+        <target>Típus</target>
       </trans-unit>
       <trans-unit id="293f5a42ffa5cafe565700e00f29c9d3faff235b" datatype="html">
         <source>Install manually mysql node module to use mysql (npm install mysql)
@@ -632,7 +632,7 @@
           <context context-type="sourcefile">app/ui/settings/database/database.settings.component.html</context>
           <context context-type="linenumber">58</context>
         </context-group>
-        <target>Storage file</target>
+        <target>Adatbázis fájl</target>
       </trans-unit>
       <trans-unit id="479185717f08d4a6ab80645e5fc4c8719a31dc88" datatype="html">
         <source>User's file</source>
