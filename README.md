@@ -2,7 +2,7 @@
 [![npm version](https://badge.fury.io/js/pigallery2.svg)](https://badge.fury.io/js/pigallery2)
 [![Build Status](https://travis-ci.org/bpatrik/pigallery2.svg?branch=master)](https://travis-ci.org/bpatrik/pigallery2)
 [![Heroku](https://heroku-badge.herokuapp.com/?app=pigallery2&style=flat)](https://pigallery2.herokuapp.com)
-[![Docker Build Status](https://img.shields.io/docker/build/bpatrik/pigallery2.svg)](https://hub.docker.com/r/bpatrik/pigallery2/)
+![](https://github.com/bpatrik/pigallery2/workflows/docker-buildx/badge.svg)
 [![dependencies Status](https://david-dm.org/bpatrik/pigallery2/status.svg)](https://david-dm.org/bpatrik/pigallery2)
 [![devDependencies Status](https://david-dm.org/bpatrik/pigallery2/dev-status.svg)](https://david-dm.org/bpatrik/pigallery2?type=dev)
 
@@ -27,19 +27,27 @@ Live Demo @ heroku: https://pigallery2.herokuapp.com/
 
 
 
-## 1. Getting started (on Raspberry Pi)
-### 1.1 Direct Install
-### 1.1.0 [Install NodeJs](https://nodejs.org/en/download/)
+## 1. Getting started (also works on Raspberry Pi)
+
+### 1.1 Run with Docker 
+If you have `docker` and don't want to install all the dependencies, you can use one of our docker build.
+For configuration and docker-compose files read more [here](docker/README.md) or check all builds: https://hub.docker.com/r/bpatrik/pigallery2/tags/
+
+**Note**: You dont need to do the installation steps if you are using docker. 
+
+
+### 1.2 Direct Install
+### 1.2.0 [Install NodeJs](https://nodejs.org/en/download/)
 Download and extract
 ```bash
-curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
+curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
 sudo apt-get install -y nodejs
 ```
 
 Full node install on raspberry pi description: https://www.w3schools.com/nodejs/nodejs_raspberrypi.asp
  
-### 1.1.1 Install PiGallery2
-#### 1.1.1-a Install from release
+### 1.2.1 Install PiGallery2
+#### 1.2.1-a Install from release
 
 ```bash
 cd ~
@@ -48,7 +56,7 @@ unzip pigallery2.zip -d pigallery2
 cd pigallery2
 npm install
 ```
-#### 1.1.1-b Install from source
+#### 1.2.1-b Install from source
 ```bash
 cd ~
 wget https://github.com/bpatrik/pigallery2/archive/master.zip
@@ -61,7 +69,7 @@ npm build
 
 **Note2**: you can use `npm run create-release -- --languages=fr,ro` to restrict building to the listed languages (english is added by default)
 
-#### 1.1.2 Run PiGallery2
+#### 1.2.2 Run PiGallery2
 ```bash
 npm start
 ```
@@ -69,11 +77,6 @@ To configure it, run `PiGallery2` first to create `config.json` file, then edit 
 The app has a nice UI for settings, you may use that too. 
 Default user: `admin` pass: `admin`
 
-### 1.2 Run with Docker 
-If you have `docker` and don't want to install all the dependencies, you can use one of our docker build.
-For configuration read more [here](docker/README.md) or check all builds: https://hub.docker.com/r/bpatrik/pigallery2/tags/
-
-**Note**: You dont need to do the installation steps if you are using docker. 
 
 
 ### 1.3 Advanced configuration

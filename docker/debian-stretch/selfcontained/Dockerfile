@@ -9,22 +9,22 @@ RUN set -x && npm install --unsafe-perm && \
     mkdir -p /build/release/data/images && \
     mkdir -p /build/release/data/tmp && \
     npm run create-release && \
-    cd /build/release && npm install --unsafe-perm && \
-    npm start -- --config-only --force-rewrite-config \
-    --config-path=/app/data/config/config.json \
-    --Server-Database-sqlite-storage='/app/data/db/sqlite.db' \
-    --Server-Database-memory-usersFile='/app/data/db/users.db' \
-    --Server-Media-folder='/app/data/images' \
-    --Server-Media-tempFolder='/app/data/tmp'
+    cd /build/release && npm install --unsafe-perm
 
 
 FROM node:12-stretch-slim
 WORKDIR /app
-ENTRYPOINT ["npm", "start"]
+ENTRYPOINT ["npm", "start",  "--", \
+  # after a extensive job (like video converting), pigallery calls gc, to clean up everthing as fast as possible
+  "--expose-gc", \
+  "--config-path=/app/data/config/config.json", \
+  "--Server-Database-sqlite-storage=/app/data/db/sqlite.db", \
+  "--Server-Database-memory-usersFile=/app/data/db/users.db", \
+  "--Server-Media-folder=/app/data/images", \
+  "--Server-Media-tempFolder=/app/data/tmp"]
 EXPOSE 80
 ENV NODE_ENV=production
 COPY --from=BUILDER /build/release /app
-RUN ln -s /app/data/config/config.json config.json
 VOLUME ["/app/data/config", "/app/data/db", "/app/data/images", "/app/data/tmp"]
 HEALTHCHECK --interval=30s --timeout=10s --retries=4 --start-period=60s \
   CMD wget --quiet --tries=1 --no-check-certificate --spider \
