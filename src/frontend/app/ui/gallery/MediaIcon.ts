@@ -40,10 +40,7 @@ export class MediaIcon {
   }
 
   getBestFitMediaPath() {
-    return Utils.concatUrls(Config.Client.urlBase,
-      '/api/gallery/content/',
-      this.media.directory.path, this.media.directory.name, this.media.name,
-      '/bestFit');
+    return Utils.concatUrls(this.getMediaPath(), '/bestFit');
   }
 
 

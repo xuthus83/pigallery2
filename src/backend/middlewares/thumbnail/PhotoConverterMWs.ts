@@ -23,10 +23,12 @@ export class PhotoConverterMWs {
       return next();
     }
 
-    if (Config.Server.Media.Photo.Converting.onTheFly) {
+    if (Config.Server.Media.Photo.Converting.onTheFly === true) {
       req.resultPipe = await PhotoProcessing.convertPhoto(fullMediaPath,
         Config.Server.Media.Photo.Converting.resolution);
+      return next();
     }
+
     // not converted and won't be now
     return res.redirect(req.originalUrl.slice(0, -1 * '\\bestFit'.length));
   }

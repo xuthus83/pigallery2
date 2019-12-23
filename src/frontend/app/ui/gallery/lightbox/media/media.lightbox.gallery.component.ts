@@ -29,7 +29,7 @@ export class GalleryLightboxMediaComponent implements OnChanges {
   thumbnailSrc: string = null;
   photo = {
     src: <string>null,
-    isBestFit: false
+    isBestFit: <boolean>null
   };
   public transcodeNeedVideos = SupportedFormats.TranscodeNeed.Videos;
   private mediaLoaded = false;

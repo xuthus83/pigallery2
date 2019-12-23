@@ -185,7 +185,7 @@ export class ImageRendererFactory {
     const sharp = require('sharp');
     sharp.cache(false);
     return async (input: RendererInput): Promise<void> => {
-      Logger.silly('[SharpThRenderer] rendering thumbnail:' + input.mediaPath);
+      Logger.silly('[SharpRenderer] rendering photo:' + input.mediaPath + ', size:' + input.size);
       const image: Sharp = sharp(input.mediaPath, {failOnError: false});
       const metadata: Metadata = await image.metadata();
 
