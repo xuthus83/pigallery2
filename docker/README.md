@@ -1,10 +1,10 @@
-# PiGallery2 docker installation ![](https://github.com/bpatrik/pigallery2/workflows/docker-buildx/badge.svg)
+# PiGallery2 docker installation [![Docker build](https://github.com/bpatrik/pigallery2/workflows/docker-buildx/badge.svg)](https://github.com/bpatrik/pigallery2/actions)
 
 You can use [docker](https://docs.docker.com/install/) to run PiGallery2. See all available docker tags here: https://hub.docker.com/r/bpatrik/pigallery2/tags/
+We support multiple architectures, including `amd64`, `arm32v7`, `arm64v8`.
 
 
-
-###0. Install docker
+## 0. Install docker
 Official installation guide [here](https://docs.docker.com/install/),
 but this will most likely do the trick ([source](https://dev.to/rohansawant/installing-docker-and-docker-compose-on-the-raspberry-pi-in-5-simple-steps-3mgl)): 
 ```bash
