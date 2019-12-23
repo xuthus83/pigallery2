@@ -14,10 +14,10 @@ WORKDIR /app
 # command line arg orverride the config.json with these settings
 ENTRYPOINT ["npm", "start",  "--", \
   "--config-path=/app/data/config/config.json", \
-  "--Server-Database-sqlite-storage='/app/data/db/sqlite.db'", \
-  "--Server-Database-memory-usersFile='/app/data/db/users.db'", \
-  "--Server-Media-folder='/app/data/images'", \
-  "--Server-Media-tempFolder='/app/data/tmp'"]
+  "--Server-Database-sqlite-storage=/app/data/db/sqlite.db", \
+  "--Server-Database-memory-usersFile=/app/data/db/users.db", \
+  "--Server-Media-folder=/app/data/images", \
+  "--Server-Media-tempFolder=/app/data/tmp"]
 EXPOSE 80
 ENV NODE_ENV=production
 RUN apk add ffmpeg
