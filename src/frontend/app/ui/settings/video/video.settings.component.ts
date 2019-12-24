@@ -6,11 +6,11 @@ import {NavigationService} from '../../../model/navigation.service';
 import {NotificationService} from '../../../model/notification.service';
 import {ClientConfig} from '../../../../../common/config/public/ConfigClass';
 import {I18n} from '@ngx-translate/i18n-polyfill';
-import {ScheduledTasksService} from '../scheduled-tasks.service';
-import {DefaultsTasks} from '../../../../../common/entities/task/TaskDTO';
+import {ScheduledJobsService} from '../scheduled-jobs.service';
+import {DefaultsJobs} from '../../../../../common/entities/job/JobDTO';
 import {ErrorDTO} from '../../../../../common/entities/Error';
 import {ServerConfig} from '../../../../../common/config/private/IPrivateConfig';
-import { TaskState } from '../../../../../common/entities/settings/TaskProgressDTO';
+import { JobState } from '../../../../../common/entities/settings/JobProgressDTO';
 
 
 @Component({
@@ -27,12 +27,12 @@ export class VideoSettingsComponent extends SettingsComponent<{ server: ServerCo
   formats: ServerConfig.formatType[] = ['mp4', 'webm'];
   fps = [24, 25, 30, 48, 50, 60];
 
-  TaskState = TaskState;
+  JobState = JobState;
 
   constructor(_authService: AuthenticationService,
               _navigation: NavigationService,
               _settingsService: VideoSettingsService,
-              public tasksService: ScheduledTasksService,
+              public jobsService: ScheduledJobsService,
               notification: NotificationService,
               i18n: I18n) {
     super(i18n('Video'), _authService, _navigation, _settingsService, notification, i18n, s => ({
@@ -48,7 +48,7 @@ export class VideoSettingsComponent extends SettingsComponent<{ server: ServerCo
 
 
   get Progress() {
-    return this.tasksService.progress.value[DefaultsTasks[DefaultsTasks['Video Converting']]];
+    return this.jobsService.progress.value[DefaultsJobs[DefaultsJobs['Video Converting']]];
   }
 
   get bitRate(): number {
@@ -96,7 +96,7 @@ export class VideoSettingsComponent extends SettingsComponent<{ server: ServerCo
     this.inProgress = true;
     this.error = '';
     try {
-      await this.tasksService.start(DefaultsTasks[DefaultsTasks['Video Converting']]);
+      await this.jobsService.start(DefaultsJobs[DefaultsJobs['Video Converting']]);
       this.notification.info(this.i18n('Video transcoding started'));
       this.inProgress = false;
       return true;
@@ -115,7 +115,7 @@ export class VideoSettingsComponent extends SettingsComponent<{ server: ServerCo
     this.inProgress = true;
     this.error = '';
     try {
-      await this.tasksService.stop(DefaultsTasks[DefaultsTasks['Video Converting']]);
+      await this.jobsService.stop(DefaultsJobs[DefaultsJobs['Video Converting']]);
       this.notification.info(this.i18n('Video transcoding interrupted'));
       this.inProgress = false;
       return true;

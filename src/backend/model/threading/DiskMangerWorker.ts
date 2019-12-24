@@ -11,7 +11,7 @@ import {MetadataLoader} from './MetadataLoader';
 import {Logger} from '../../Logger';
 import {SupportedFormats} from '../../../common/SupportedFormats';
 
-const LOG_TAG = '[DiskManagerTask]';
+const LOG_TAG = '[DiskMangerWorker]';
 
 
 export class DiskMangerWorker {

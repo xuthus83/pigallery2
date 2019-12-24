@@ -158,7 +158,7 @@ export class ConfigDiagnostics {
   }
 
 
-  static async testTasksConfig(task: ServerConfig.TaskConfig, config: IPrivateConfig) {
+  static async testTasksConfig(task: ServerConfig.JobConfig, config: IPrivateConfig) {
 
   }
 
@@ -319,7 +319,7 @@ export class ConfigDiagnostics {
 
 
     try {
-      await ConfigDiagnostics.testTasksConfig(Config.Server.Tasks, Config);
+      await ConfigDiagnostics.testTasksConfig(Config.Server.Jobs, Config);
     } catch (ex) {
       const err: Error = ex;
       NotificationManager.warning('Some Tasks are not supported with these settings. Disabling temporally. ' +

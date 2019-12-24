@@ -2,9 +2,9 @@
 
   <div class="form-group row">
     <div class="col-md-12">
-      <input *ngIf="progress.state === TaskState.running" type="text" class="form-control" disabled
+      <input *ngIf="progress.state === JobState.running" type="text" class="form-control" disabled
              [ngModel]="progress.comment" name="details">
-      <input *ngIf="progress.state === TaskState.stopping" type="text" class="form-control" disabled value="Stopping"
+      <input *ngIf="progress.state === JobState.stopping" type="text" class="form-control" disabled value="Stopping"
              i18n-value name="details">
     </div>
   </div>
@@ -15,7 +15,7 @@
     <div class="progress col-10 ">
       <div
         *ngIf="progress.progress + progress.left >0"
-        class="progress-bar d-inline-block progress-bar-success {{progress.state === TaskState.stopping ? 'bg-secondary' : ''}}"
+        class="progress-bar d-inline-block progress-bar-success {{progress.state === JobState.stopping ? 'bg-secondary' : ''}}"
         role="progressbar"
         aria-valuenow="2"
         aria-valuemin="0"
@@ -26,7 +26,7 @@
       </div>
       <div
         *ngIf="progress.progress + progress.left === 0"
-        class="progress-bar d-inline-block progress-bar-success  progress-bar-striped progress-bar-animated  {{progress.state === TaskState.stopping ? 'bg-secondary' : ''}}"
+        class="progress-bar d-inline-block progress-bar-success  progress-bar-striped progress-bar-animated  {{progress.state === JobState.stopping ? 'bg-secondary' : ''}}"
         role="progressbar" aria-valuenow="100"
         aria-valuemin="0" aria-valuemax="100" style="width: 100%">
       </div>

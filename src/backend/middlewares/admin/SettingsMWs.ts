@@ -444,16 +444,16 @@ export class SettingsMWs {
     try {
 
       // only updating explicitly set config (not saving config set by the diagnostics)
-      const settings: ServerConfig.TaskConfig = req.body.settings;
+      const settings: ServerConfig.JobConfig = req.body.settings;
       const original = Config.original();
       await ConfigDiagnostics.testTasksConfig(settings, original);
 
-      Config.Server.Tasks = settings;
-      original.Server.Tasks = settings;
+      Config.Server.Jobs = settings;
+      original.Server.Jobs = settings;
       original.save();
 
       await ConfigDiagnostics.runDiagnostics();
-      ObjectManagers.getInstance().TaskManager.runSchedules();
+      ObjectManagers.getInstance().JobManager.runSchedules();
       Logger.info(LOG_TAG, 'new config:');
       Logger.info(LOG_TAG, JSON.stringify(Config, null, '\t'));
       return next();

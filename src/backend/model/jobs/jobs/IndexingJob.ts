@@ -1,16 +1,16 @@
-import {TaskProgressDTO, TaskState} from '../../../../common/entities/settings/TaskProgressDTO';
+import {JobProgressDTO, JobState} from '../../../../common/entities/settings/JobProgressDTO';
 import {ObjectManagers} from '../../ObjectManagers';
 import * as path from 'path';
 import {Config} from '../../../../common/config/private/Config';
-import {Task} from './Task';
-import {ConfigTemplateEntry, DefaultsTasks} from '../../../../common/entities/task/TaskDTO';
+import {Job} from './Job';
+import {ConfigTemplateEntry, DefaultsJobs} from '../../../../common/entities/job/JobDTO';
 import {ServerConfig} from '../../../../common/config/private/IPrivateConfig';
 
 declare var global: NodeJS.Global;
-const LOG_TAG = '[IndexingTask]';
+const LOG_TAG = '[IndexingJob]';
 
-export class IndexingTask extends Task {
-  public readonly Name = DefaultsTasks[DefaultsTasks.Indexing];
+export class IndexingJob extends Job {
+  public readonly Name = DefaultsJobs[DefaultsJobs.Indexing];
   directoriesToIndex: string[] = [];
   public readonly ConfigTemplate: ConfigTemplateEntry[] = null;
 
@@ -23,7 +23,7 @@ export class IndexingTask extends Task {
     this.directoriesToIndex.push('/');
   }
 
-  protected async step(): Promise<TaskProgressDTO> {
+  protected async step(): Promise<JobProgressDTO> {
     if (this.directoriesToIndex.length === 0) {
       if (global.gc) {
         global.gc();
@@ -34,7 +34,7 @@ export class IndexingTask extends Task {
     this.progress.comment = directory;
     this.progress.left = this.directoriesToIndex.length;
     const scanned = await ObjectManagers.getInstance().IndexingManager.indexDirectory(directory);
-    if (this.state !== TaskState.running) {
+    if (this.state !== JobState.running) {
       return null;
     }
     this.progress.progress++;

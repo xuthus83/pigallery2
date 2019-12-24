@@ -1,5 +1,5 @@
 import {ClientConfig} from '../public/ConfigClass';
-import {TaskScheduleDTO} from '../../entities/task/TaskScheduleDTO';
+import {JobScheduleDTO} from '../../entities/job/JobScheduleDTO';
 
 export module ServerConfig {
   export enum DatabaseType {
@@ -77,8 +77,8 @@ export module ServerConfig {
     sqlLevel: SQLLogLevel;
   }
 
-  export interface TaskConfig {
-    scheduled: TaskScheduleDTO[];
+  export interface JobConfig {
+    scheduled: JobScheduleDTO[];
   }
 
   export type codecType = 'libvpx-vp9' | 'libx264' | 'libvpx' | 'libx265';
@@ -125,7 +125,7 @@ export module ServerConfig {
     photoMetadataSize: number; // only this many bites will be loaded when scanning photo for metadata
     Duplicates: DuplicatesConfig;
     Log: LogConfig;
-    Tasks: TaskConfig;
+    Jobs: JobConfig;
   }
 }
 

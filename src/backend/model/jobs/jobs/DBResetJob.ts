@@ -1,14 +1,14 @@
-import {TaskProgressDTO} from '../../../../common/entities/settings/TaskProgressDTO';
+import {JobProgressDTO} from '../../../../common/entities/settings/JobProgressDTO';
 import {ObjectManagers} from '../../ObjectManagers';
 import {Config} from '../../../../common/config/private/Config';
-import {ConfigTemplateEntry, DefaultsTasks} from '../../../../common/entities/task/TaskDTO';
-import {Task} from './Task';
+import {ConfigTemplateEntry, DefaultsJobs} from '../../../../common/entities/job/JobDTO';
+import {Job} from './Job';
 import {ServerConfig} from '../../../../common/config/private/IPrivateConfig';
 
-const LOG_TAG = '[DBRestTask]';
+const LOG_TAG = '[DBRestJob]';
 
-export class DBRestTask extends Task {
-  public readonly Name = DefaultsTasks[DefaultsTasks['Database Reset']];
+export class DBRestJob extends Job {
+  public readonly Name = DefaultsJobs[DefaultsJobs['Database Reset']];
   public readonly ConfigTemplate: ConfigTemplateEntry[] = null;
   protected readonly IsInstant = true;
 
@@ -19,7 +19,7 @@ export class DBRestTask extends Task {
   protected async init() {
   }
 
-  protected async step(): Promise<TaskProgressDTO> {
+  protected async step(): Promise<JobProgressDTO> {
     await ObjectManagers.getInstance().IndexingManager.resetDB();
     return null;
   }

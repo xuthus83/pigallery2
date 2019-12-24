@@ -9,7 +9,7 @@ export class AdminRouter {
 
     this.addGetStatistic(app);
     this.addGetDuplicates(app);
-    this.addTasks(app);
+    this.addJobs(app);
   }
 
   private static addGetStatistic(app: Express) {
@@ -30,29 +30,29 @@ export class AdminRouter {
     );
   }
 
-  private static addTasks(app: Express) {
-    app.get('/api/admin/tasks/available',
+  private static addJobs(app: Express) {
+    app.get('/api/admin/jobs/available',
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Admin),
-      AdminMWs.getAvailableTasks,
+      AdminMWs.getAvailableJobs,
       RenderingMWs.renderResult
     );
-    app.get('/api/admin/tasks/scheduled/progress',
+    app.get('/api/admin/jobs/scheduled/progress',
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Admin),
-      AdminMWs.getTaskProgresses,
+      AdminMWs.getJobProgresses,
       RenderingMWs.renderResult
     );
-    app.post('/api/admin/tasks/scheduled/:id/start',
+    app.post('/api/admin/jobs/scheduled/:id/start',
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Admin),
-      AdminMWs.startTask,
+      AdminMWs.startJob,
       RenderingMWs.renderResult
     );
-    app.post('/api/admin/tasks/scheduled/:id/stop',
+    app.post('/api/admin/jobs/scheduled/:id/stop',
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Admin),
-      AdminMWs.stopTask,
+      AdminMWs.stopJob,
       RenderingMWs.renderResult
     );
   }

@@ -7,10 +7,10 @@ import {ClientConfig} from '../../../../../common/config/public/ConfigClass';
 import {ThumbnailSettingsService} from './thumbnail.settings.service';
 import {I18n} from '@ngx-translate/i18n-polyfill';
 import {ServerConfig} from '../../../../../common/config/private/IPrivateConfig';
-import {DefaultsTasks} from '../../../../../common/entities/task/TaskDTO';
+import {DefaultsJobs} from '../../../../../common/entities/job/JobDTO';
 import {ErrorDTO} from '../../../../../common/entities/Error';
-import {ScheduledTasksService} from '../scheduled-tasks.service';
-import {TaskState} from '../../../../../common/entities/settings/TaskProgressDTO';
+import {ScheduledJobsService} from '../scheduled-jobs.service';
+import {JobState} from '../../../../../common/entities/settings/JobProgressDTO';
 
 @Component({
   selector: 'app-settings-thumbnail',
@@ -22,13 +22,13 @@ import {TaskState} from '../../../../../common/entities/settings/TaskProgressDTO
 export class ThumbnailSettingsComponent
     extends SettingsComponent<{ server: ServerConfig.ThumbnailConfig, client: ClientConfig.ThumbnailConfig }>
     implements OnInit {
-  TaskState = TaskState;
+  JobState = JobState;
 
   constructor(_authService: AuthenticationService,
               _navigation: NavigationService,
               _settingsService: ThumbnailSettingsService,
               notification: NotificationService,
-              public tasksService: ScheduledTasksService,
+              public jobsService: ScheduledJobsService,
               i18n: I18n) {
     super(i18n('Thumbnail'), _authService, _navigation, _settingsService, notification, i18n, s => ({
       client: s.Client.Media.Thumbnail,
@@ -49,18 +49,18 @@ export class ThumbnailSettingsComponent
   }
 
   get Progress() {
-    return this.tasksService.progress.value[DefaultsTasks[DefaultsTasks['Thumbnail Generation']]];
+    return this.jobsService.progress.value[DefaultsJobs[DefaultsJobs['Thumbnail Generation']]];
   }
 
   ngOnInit() {
     super.ngOnInit();
   }
 
-  async startTask() {
+  async startJob() {
     this.inProgress = true;
     this.error = '';
     try {
-      await this.tasksService.start(DefaultsTasks[DefaultsTasks['Thumbnail Generation']], {sizes: this.original.client.thumbnailSizes[0]});
+      await this.jobsService.start(DefaultsJobs[DefaultsJobs['Thumbnail Generation']], {sizes: this.original.client.thumbnailSizes[0]});
       this.notification.info(this.i18n('Thumbnail generation started'));
       this.inProgress = false;
       return true;
@@ -75,11 +75,11 @@ export class ThumbnailSettingsComponent
     return false;
   }
 
-  async cancelTask() {
+  async cancelJob() {
     this.inProgress = true;
     this.error = '';
     try {
-      await this.tasksService.stop(DefaultsTasks[DefaultsTasks['Thumbnail Generation']]);
+      await this.jobsService.stop(DefaultsJobs[DefaultsJobs['Thumbnail Generation']]);
       this.notification.info(this.i18n('Thumbnail generation interrupted'));
       this.inProgress = false;
       return true;

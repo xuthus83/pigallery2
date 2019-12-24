@@ -110,7 +110,7 @@
         </button>
         <button class="btn btn-secondary  float-left ml-0"
                 *ngIf="Progress != null"
-                [disabled]="inProgress || Progress.state !== TaskState.running"
+                [disabled]="inProgress || Progress.state !== JobState.running"
                 (click)="cancelPhotoConverting()" i18n>Cancel converting
         </button>
 
@@ -118,7 +118,7 @@
         <ng-container *ngIf="Progress != null">
           <br/>
           <hr/>
-          <app-settings-tasks-progress [progress]="Progress"></app-settings-tasks-progress>
+          <app-settings-job-progress [progress]="Progress"></app-settings-job-progress>
         </ng-container>
 
       </div>

@@ -108,7 +108,7 @@
 
 
       <div *ngIf="Progress != null">
-        <app-settings-tasks-progress [progress]="Progress"></app-settings-tasks-progress>
+        <app-settings-job-progress [progress]="Progress"></app-settings-job-progress>
       </div>
 
 
@@ -123,7 +123,7 @@
       </button>
       <button class="btn btn-secondary  ml-0"
               *ngIf="Progress != null"
-              [disabled]="inProgress || Progress.state !== TaskState.running"
+              [disabled]="inProgress || Progress.state !== JobState.running"
               (click)="cancelIndexing()" i18n>Cancel converting
       </button>
       <button class="btn btn-danger   ml-2"

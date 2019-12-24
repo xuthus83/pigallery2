@@ -1,12 +1,12 @@
-export enum TaskState {
+export enum JobState {
   idle = 1, running = 2, stopping = 3
 }
 
 
-export interface TaskProgressDTO {
+export interface JobProgressDTO {
   progress: number;
   left: number;
-  state: TaskState;
+  state: JobState;
   comment: string;
   time: {
     start: number,

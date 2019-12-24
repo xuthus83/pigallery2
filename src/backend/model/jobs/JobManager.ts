@@ -1,26 +1,26 @@
-import {ITaskManager} from '../database/interfaces/ITaskManager';
-import {TaskProgressDTO} from '../../../common/entities/settings/TaskProgressDTO';
-import {ITask} from './tasks/ITask';
-import {TaskRepository} from './TaskRepository';
+import {IJobManager} from '../database/interfaces/IJobManager';
+import {JobProgressDTO} from '../../../common/entities/settings/JobProgressDTO';
+import {IJob} from './jobs/IJob';
+import {JobRepository} from './JobRepository';
 import {Config} from '../../../common/config/private/Config';
-import {TaskScheduleDTO, TaskTriggerType} from '../../../common/entities/task/TaskScheduleDTO';
+import {JobScheduleDTO, JobTriggerType} from '../../../common/entities/job/JobScheduleDTO';
 import {Logger} from '../../Logger';
 
 declare var global: NodeJS.Global;
 
-const LOG_TAG = '[TaskManager]';
+const LOG_TAG = '[JobManager]';
 
-export class TaskManager implements ITaskManager {
+export class JobManager implements IJobManager {
 
-  protected timers: { schedule: TaskScheduleDTO, timer: NodeJS.Timeout }[] = [];
+  protected timers: { schedule: JobScheduleDTO, timer: NodeJS.Timeout }[] = [];
 
   constructor() {
     this.runSchedules();
   }
 
-  getProgresses(): { [id: string]: TaskProgressDTO } {
-    const m: { [id: string]: TaskProgressDTO } = {};
-    TaskRepository.Instance.getAvailableTasks()
+  getProgresses(): { [id: string]: JobProgressDTO } {
+    const m: { [id: string]: JobProgressDTO } = {};
+    JobRepository.Instance.getAvailableJobs()
       .filter(t => t.Progress)
       .forEach(t => {
         t.Progress.time.current = Date.now();
@@ -29,29 +29,29 @@ export class TaskManager implements ITaskManager {
     return m;
   }
 
-  async run<T>(taskName: string, config: T): Promise<void> {
-    const t = this.findTask(taskName);
+  async run<T>(jobName: string, config: T): Promise<void> {
+    const t = this.findJob(jobName);
     if (t) {
       await t.start(config);
     } else {
-      Logger.warn(LOG_TAG, 'cannot find task to start:' + taskName);
+      Logger.warn(LOG_TAG, 'cannot find job to start:' + jobName);
     }
   }
 
-  stop(taskName: string): void {
-    const t = this.findTask(taskName);
+  stop(jobName: string): void {
+    const t = this.findJob(jobName);
     if (t) {
       t.stop();
       if (global.gc) {
         global.gc();
       }
     } else {
-      Logger.warn(LOG_TAG, 'cannot find task to stop:' + taskName);
+      Logger.warn(LOG_TAG, 'cannot find job to stop:' + jobName);
     }
   }
 
-  getAvailableTasks(): ITask<any>[] {
-    return TaskRepository.Instance.getAvailableTasks();
+  getAvailableJobs(): IJob<any>[] {
+    return JobRepository.Instance.getAvailableJobs();
   }
 
   public stopSchedules(): void {
@@ -61,8 +61,8 @@ export class TaskManager implements ITaskManager {
 
   public runSchedules(): void {
     this.stopSchedules();
-    Logger.info(LOG_TAG, 'Running task schedules');
-    Config.Server.Tasks.scheduled.forEach(s => this.runSchedule(s));
+    Logger.info(LOG_TAG, 'Running job schedules');
+    Config.Server.Jobs.scheduled.forEach(s => this.runSchedule(s));
   }
 
   protected getNextDayOfTheWeek(refDate: Date, dayOfWeek: number) {
@@ -89,12 +89,12 @@ export class TaskManager implements ITaskManager {
     return date;
   }
 
-  protected getDateFromSchedule(refDate: Date, schedule: TaskScheduleDTO): Date {
+  protected getDateFromSchedule(refDate: Date, schedule: JobScheduleDTO): Date {
     switch (schedule.trigger.type) {
-      case TaskTriggerType.scheduled:
+      case JobTriggerType.scheduled:
         return new Date(schedule.trigger.time);
 
-      case TaskTriggerType.periodic:
+      case JobTriggerType.periodic:
 
 
         const hour = Math.floor(schedule.trigger.atTime / 1000 / (60 * 60));
@@ -111,25 +111,25 @@ export class TaskManager implements ITaskManager {
     return null;
   }
 
-  protected findTask<T = any>(taskName: string): ITask<T> {
-    return this.getAvailableTasks().find(t => t.Name === taskName);
+  protected findJob<T = any>(jobName: string): IJob<T> {
+    return this.getAvailableJobs().find(t => t.Name === jobName);
   }
 
-  private runSchedule(schedule: TaskScheduleDTO) {
+  private runSchedule(schedule: JobScheduleDTO) {
     const nextDate = this.getDateFromSchedule(new Date(), schedule);
     if (nextDate && nextDate.getTime() > Date.now()) {
-      Logger.debug(LOG_TAG, 'running schedule: ' + schedule.taskName +
+      Logger.debug(LOG_TAG, 'running schedule: ' + schedule.jobName +
         ' at ' + nextDate.toLocaleString(undefined, {hour12: false}));
 
       const timer: NodeJS.Timeout = setTimeout(async () => {
         this.timers = this.timers.filter(t => t.timer !== timer);
-        await this.run(schedule.taskName, schedule.config);
+        await this.run(schedule.jobName, schedule.config);
         this.runSchedule(schedule);
       }, nextDate.getTime() - Date.now());
       this.timers.push({schedule: schedule, timer: timer});
 
     } else {
-      Logger.debug(LOG_TAG, 'skipping schedule:' + schedule.taskName);
+      Logger.debug(LOG_TAG, 'skipping schedule:' + schedule.jobName);
     }
   }
 

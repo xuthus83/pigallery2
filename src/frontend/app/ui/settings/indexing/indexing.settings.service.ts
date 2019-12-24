@@ -4,8 +4,8 @@ import {SettingsService} from '../settings.service';
 import {AbstractSettingsService} from '../_abstract/abstract.settings.service';
 import {BehaviorSubject} from 'rxjs';
 import {StatisticDTO} from '../../../../../common/entities/settings/StatisticDTO';
-import {ScheduledTasksService} from '../scheduled-tasks.service';
-import {DefaultsTasks} from '../../../../../common/entities/task/TaskDTO';
+import {ScheduledJobsService} from '../scheduled-jobs.service';
+import {DefaultsJobs} from '../../../../../common/entities/job/JobDTO';
 import {ServerConfig} from '../../../../../common/config/private/IPrivateConfig';
 import {first} from 'rxjs/operators';
 
@@ -16,7 +16,7 @@ export class IndexingSettingsService extends AbstractSettingsService<ServerConfi
   public statistic: BehaviorSubject<StatisticDTO>;
 
   constructor(private _networkService: NetworkService,
-              private _tasksService: ScheduledTasksService,
+              private _jobsService: ScheduledJobsService,
               _settingsService: SettingsService) {
     super(_settingsService);
     this.statistic = new BehaviorSubject(null);
@@ -25,9 +25,9 @@ export class IndexingSettingsService extends AbstractSettingsService<ServerConfi
         this.loadStatistic();
       }
     });
-    this._tasksService.onTaskFinish.subscribe((taskName: string) => {
-      if (taskName === DefaultsTasks[DefaultsTasks.Indexing] ||
-        taskName === DefaultsTasks[DefaultsTasks['Database Reset']]) {
+    this._jobsService.onJobFinish.subscribe((jobName: string) => {
+      if (jobName === DefaultsJobs[DefaultsJobs.Indexing] ||
+        jobName === DefaultsJobs[DefaultsJobs['Database Reset']]) {
         if (this.isSupported()) {
           this.loadStatistic();
         }

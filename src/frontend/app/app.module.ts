@@ -81,14 +81,13 @@ import {VersionService} from './model/version.service';
 import {DirectoriesComponent} from './ui/gallery/directories/directories.component';
 import {ControlsLightboxComponent} from './ui/gallery/lightbox/controls/controls.lightbox.gallery.component';
 import {FacesSettingsComponent} from './ui/settings/faces/faces.settings.component';
-import {TasksSettingsComponent} from './ui/settings/tasks/tasks.settings.component';
-import {ScheduledTasksService} from './ui/settings/scheduled-tasks.service';
 import {TimepickerModule} from 'ngx-bootstrap/timepicker';
 import {TimeStampDatePickerComponent} from './ui/utils/timestamp-datepicker/datepicker.component';
 import {TimeStampTimePickerComponent} from './ui/utils/timestamp-timepicker/timepicker.component';
-import {TasksProgressComponent} from './ui/settings/tasks/progress/progress.tasks.settings.component';
 import {PhotoSettingsComponent} from './ui/settings/photo/photo.settings.component';
-
+import {JobProgressComponent} from './ui/settings/jobs/progress/job-progress.settings.component';
+import {JobsSettingsComponent} from './ui/settings/jobs/jobs.settings.component';
+import {ScheduledJobsService} from './ui/settings/scheduled-jobs.service';
 
 
 @Injectable()
@@ -198,8 +197,8 @@ export function translationsFactory(locale: string) {
     FacesSettingsComponent,
     OtherSettingsComponent,
     IndexingSettingsComponent,
-    TasksProgressComponent,
-    TasksSettingsComponent,
+    JobProgressComponent,
+    JobsSettingsComponent,
     // Pipes
     StringifyRole,
     IconizeSortingMethod,
@@ -230,7 +229,7 @@ export function translationsFactory(locale: string) {
     DuplicateService,
     FacesService,
     VersionService,
-    ScheduledTasksService,
+    ScheduledJobsService,
     {
       provide: TRANSLATIONS,
       useFactory: translationsFactory,

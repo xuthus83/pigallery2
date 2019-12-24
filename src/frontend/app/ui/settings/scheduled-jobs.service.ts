@@ -1,14 +1,14 @@
 import {EventEmitter, Injectable} from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
-import {TaskProgressDTO} from '../../../../common/entities/settings/TaskProgressDTO';
+import {JobProgressDTO} from '../../../../common/entities/settings/JobProgressDTO';
 import {NetworkService} from '../../model/network/network.service';
 
 @Injectable()
-export class ScheduledTasksService {
+export class ScheduledJobsService {
 
 
-  public progress: BehaviorSubject<{ [key: string]: TaskProgressDTO }>;
-  public onTaskFinish: EventEmitter<string> = new EventEmitter<string>();
+  public progress: BehaviorSubject<{ [key: string]: JobProgressDTO }>;
+  public onJobFinish: EventEmitter<string> = new EventEmitter<string>();
   timer: number = null;
   private subscribers = 0;
 
@@ -16,13 +16,13 @@ export class ScheduledTasksService {
     this.progress = new BehaviorSubject({});
   }
 
-  public calcTimeElapsed(progress: TaskProgressDTO) {
+  public calcTimeElapsed(progress: JobProgressDTO) {
     if (progress) {
       return (progress.time.current - progress.time.start);
     }
   }
 
-  public calcTimeLeft(progress: TaskProgressDTO) {
+  public calcTimeLeft(progress: JobProgressDTO) {
     if (progress) {
       return (progress.time.current - progress.time.start) / progress.progress * progress.left;
     }
@@ -41,21 +41,21 @@ export class ScheduledTasksService {
   }
 
   public async start(id: string, config?: any): Promise<void> {
-    await this._networkService.postJson('/admin/tasks/scheduled/' + id + '/start', {config: config});
+    await this._networkService.postJson('/admin/jobs/scheduled/' + id + '/start', {config: config});
     this.forceUpdate();
   }
 
   public async stop(id: string): Promise<void> {
-    await this._networkService.postJson('/admin/tasks/scheduled/' + id + '/stop');
+    await this._networkService.postJson('/admin/jobs/scheduled/' + id + '/stop');
     this.forceUpdate();
   }
 
   protected async getProgress(): Promise<void> {
     const prevPrg = this.progress.value;
-    this.progress.next(await this._networkService.getJson<{ [key: string]: TaskProgressDTO }>('/admin/tasks/scheduled/progress'));
+    this.progress.next(await this._networkService.getJson<{ [key: string]: JobProgressDTO }>('/admin/jobs/scheduled/progress'));
     for (const prg in prevPrg) {
       if (!this.progress.value.hasOwnProperty(prg)) {
-        this.onTaskFinish.emit(prg);
+        this.onJobFinish.emit(prg);
       }
     }
   }

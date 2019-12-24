@@ -50,56 +50,56 @@ export class AdminMWs {
     }
   }
 
-  public static async startTask(req: Request, res: Response, next: NextFunction) {
+  public static async startJob(req: Request, res: Response, next: NextFunction) {
     try {
       const id = req.params.id;
-      const taskConfig: any = req.body.config;
-      await ObjectManagers.getInstance().TaskManager.run(id, taskConfig);
+      const JobConfig: any = req.body.config;
+      await ObjectManagers.getInstance().JobManager.run(id, JobConfig);
       req.resultPipe = 'ok';
       return next();
     } catch (err) {
       if (err instanceof Error) {
-        return next(new ErrorDTO(ErrorCodes.TASK_ERROR, 'Task error: ' + err.toString(), err));
+        return next(new ErrorDTO(ErrorCodes.JOB_ERROR, 'Job error: ' + err.toString(), err));
       }
-      return next(new ErrorDTO(ErrorCodes.TASK_ERROR, 'Task error: ' + JSON.stringify(err, null, '  '), err));
+      return next(new ErrorDTO(ErrorCodes.JOB_ERROR, 'Job error: ' + JSON.stringify(err, null, '  '), err));
     }
   }
 
-  public static stopTask(req: Request, res: Response, next: NextFunction) {
+  public static stopJob(req: Request, res: Response, next: NextFunction) {
     try {
       const id = req.params.id;
-      ObjectManagers.getInstance().TaskManager.stop(id);
+      ObjectManagers.getInstance().JobManager.stop(id);
       req.resultPipe = 'ok';
       return next();
     } catch (err) {
       if (err instanceof Error) {
-        return next(new ErrorDTO(ErrorCodes.TASK_ERROR, 'Task error: ' + err.toString(), err));
+        return next(new ErrorDTO(ErrorCodes.JOB_ERROR, 'Job error: ' + err.toString(), err));
       }
-      return next(new ErrorDTO(ErrorCodes.TASK_ERROR, 'Task error: ' + JSON.stringify(err, null, '  '), err));
+      return next(new ErrorDTO(ErrorCodes.JOB_ERROR, 'Job error: ' + JSON.stringify(err, null, '  '), err));
     }
   }
 
-  public static getAvailableTasks(req: Request, res: Response, next: NextFunction) {
+  public static getAvailableJobs(req: Request, res: Response, next: NextFunction) {
     try {
-      req.resultPipe = ObjectManagers.getInstance().TaskManager.getAvailableTasks();
+      req.resultPipe = ObjectManagers.getInstance().JobManager.getAvailableJobs();
       return next();
     } catch (err) {
       if (err instanceof Error) {
-        return next(new ErrorDTO(ErrorCodes.TASK_ERROR, 'Task error: ' + err.toString(), err));
+        return next(new ErrorDTO(ErrorCodes.JOB_ERROR, 'Job error: ' + err.toString(), err));
       }
-      return next(new ErrorDTO(ErrorCodes.TASK_ERROR, 'Task error: ' + JSON.stringify(err, null, '  '), err));
+      return next(new ErrorDTO(ErrorCodes.JOB_ERROR, 'Job error: ' + JSON.stringify(err, null, '  '), err));
     }
   }
 
-  public static getTaskProgresses(req: Request, res: Response, next: NextFunction) {
+  public static getJobProgresses(req: Request, res: Response, next: NextFunction) {
     try {
-      req.resultPipe = ObjectManagers.getInstance().TaskManager.getProgresses();
+      req.resultPipe = ObjectManagers.getInstance().JobManager.getProgresses();
       return next();
     } catch (err) {
       if (err instanceof Error) {
-        return next(new ErrorDTO(ErrorCodes.TASK_ERROR, 'Task error: ' + err.toString(), err));
+        return next(new ErrorDTO(ErrorCodes.JOB_ERROR, 'Job error: ' + err.toString(), err));
       }
-      return next(new ErrorDTO(ErrorCodes.TASK_ERROR, 'Task error: ' + JSON.stringify(err, null, '  '), err));
+      return next(new ErrorDTO(ErrorCodes.JOB_ERROR, 'Job error: ' + JSON.stringify(err, null, '  '), err));
     }
   }
 }

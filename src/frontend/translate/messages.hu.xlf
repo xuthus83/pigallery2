@@ -694,8 +694,8 @@
           <context context-type="linenumber">170</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/tasks/tasks.settings.component.html</context>
-          <context context-type="linenumber">189</context>
+          <context context-type="sourcefile">app/ui/settings/jobs/jobs.settings.component.html</context>
+          <context context-type="linenumber">187</context>
         </context-group>
         <target>Mentés</target>
       </trans-unit>
@@ -751,8 +751,8 @@
           <context context-type="linenumber">174</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/tasks/tasks.settings.component.html</context>
-          <context context-type="linenumber">193</context>
+          <context context-type="sourcefile">app/ui/settings/jobs/jobs.settings.component.html</context>
+          <context context-type="linenumber">191</context>
         </context-group>
         <target>Visszaállítás</target>
       </trans-unit>
@@ -871,9 +871,7 @@
           <context context-type="sourcefile">app/ui/settings/thumbnail/thumbnail.settings.component.html</context>
           <context context-type="linenumber">56</context>
         </context-group>
-        <target>The best matching size will be generated. (More sizes give better quality, but use more
-              storage and CPU to render.)
-            </target>
+        <target>The best matching size will be generated. (More sizes give better quality, but use more storage and CPU to render.)</target>
       </trans-unit>
       <trans-unit id="acee7864683576e1e4f159e725db24ddeee32e1c" datatype="html">
         <source>';' separated integers. If size is 160, that shorter side of the thumbnail will have 160
@@ -883,9 +881,7 @@
           <context context-type="sourcefile">app/ui/settings/thumbnail/thumbnail.settings.component.html</context>
           <context context-type="linenumber">60</context>
         </context-group>
-        <target>';' separated integers. If size is 160, that shorter side of the thumbnail will have 160
-              pixels.
-            </target>
+        <target>';' separated integers. If size is 160, that shorter side of the thumbnail will have 160 pixels.</target>
       </trans-unit>
       <trans-unit id="5e561ce99009d20e901f7aef3c4f867a519ca9f0" datatype="html">
         <source>Generate thumbnails now</source>
@@ -910,8 +906,7 @@
           <context context-type="sourcefile">app/ui/settings/thumbnail/thumbnail.settings.component.html</context>
           <context context-type="linenumber">90</context>
         </context-group>
-        <target>Thumbnail generálás megszakítása
-      </target>
+        <target>Thumbnail generálás megszakítása</target>
       </trans-unit>
       <trans-unit id="69149fe434cf1b0d9bafe5ead5d126101bb5162e" datatype="html">
         <source>Video support uses ffmpeg. ffmpeg and ffprobe binaries need to be available in the PATH or
@@ -951,8 +946,8 @@
         </context-group>
         <target>Az átkonvertált videók a thumbnail mappába lesznek mentve.</target>
       </trans-unit>
-      <trans-unit id="9ca8b858f4f19476c64b5f4b6416e8e8210c7f1e" datatype="html">
-        <source>You can trigger the transcoding manually, but you can also create an automatic encoding task
+      <trans-unit id="5c159049e5e44f672041b3ff2c85328cda14a740" datatype="html">
+        <source>You can trigger the transcoding manually, but you can also create an automatic encoding job
           in
           advanced settings mode.
         </source>
@@ -1152,8 +1147,7 @@
         <target>Photókat menet közvben konvertálja, amikor kérésre megy rájuk.</target>
       </trans-unit>
       <trans-unit id="9c8c328f075bf04fa34b3ee3f011577929d85fcd" datatype="html">
-        <source>
-        The shorter edge of the converted photo will be scaled down to this,
+        <source>The shorter edge of the converted photo will be scaled down to this,
             while
             keeping the aspect ratio.</source>
         <context-group purpose="location">
@@ -1177,8 +1171,7 @@
           <context context-type="sourcefile">app/ui/settings/photo/photo.settings.component.html</context>
           <context context-type="linenumber">114</context>
         </context-group>
-        <target>Konvertálás megszakítása
-        </target>
+        <target>Cancel converting</target>
       </trans-unit>
       <trans-unit id="219e36c6747ef991081a68fc8ab2678677583e11" datatype="html">
         <source>Reads and show *.gpx files on the map</source>
@@ -1266,11 +1259,7 @@
           <context context-type="sourcefile">app/ui/settings/random-photo/random-photo.settings.component.html</context>
           <context context-type="linenumber">27</context>
         </context-group>
-        <target>
-          Ez a modul a 'véletlenszerű fotó' utl generálását engedelyezi.
-          Az url egy véletlen fotót ad vissza a galériából.
-          Harmadik fél által készített alkalmazásokhoz használhatód. Pl véletlenszerűen változó háttérkép.
-        </target>
+        <target>Ez a modul a 'véletlenszerű fotó' utl generálását engedelyezi. Az url egy véletlen fotót ad vissza a galériából. Harmadik fél által készített alkalmazásokhoz használhatód. Pl véletlenszerűen változó háttérkép.</target>
       </trans-unit>
       <trans-unit id="6c02e8541a2e670f80de8b5a218ea14a16bb6c42" datatype="html">
         <source>
@@ -1757,8 +1746,7 @@
           <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
           <context context-type="linenumber">127</context>
         </context-group>
-        <target>Cancel converting
-      </target>
+        <target>Cancel converting</target>
       </trans-unit>
       <trans-unit id="ab4d309abbd8f981e3157ae6924b1962b69c3e36" datatype="html">
         <source>Reset Indexes
@@ -1814,7 +1802,7 @@
       <trans-unit id="6f905843264b6935f11115fb91b72ce4f2aafd75" datatype="html">
         <source>Stopping</source>
         <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/tasks/progress/progress.tasks.settings.component.html</context>
+          <context context-type="sourcefile">app/ui/settings/jobs/progress/job-progress.settings.component.html</context>
           <context context-type="linenumber">7</context>
         </context-group>
         <target>Leállás alatt</target>
@@ -1822,7 +1810,7 @@
       <trans-unit id="9f2195bf10299534034510f387621199db784343" datatype="html">
         <source>time elapsed</source>
         <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/tasks/progress/progress.tasks.settings.component.html</context>
+          <context context-type="sourcefile">app/ui/settings/jobs/progress/job-progress.settings.component.html</context>
           <context context-type="linenumber">14</context>
         </context-group>
         <target>eltelt idő</target>
@@ -1830,88 +1818,74 @@
       <trans-unit id="35511807089eb9a1864bec06e28d57e04b4c8f87" datatype="html">
         <source>time left</source>
         <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/tasks/progress/progress.tasks.settings.component.html</context>
-          <context context-type="linenumber">28</context>
+          <context context-type="sourcefile">app/ui/settings/jobs/progress/job-progress.settings.component.html</context>
+          <context context-type="linenumber">34</context>
         </context-group>
         <target>hátramaradt idő</target>
       </trans-unit>
       <trans-unit id="18443428b116a10f17fbd067bde0553c00db45f1" datatype="html">
         <source>every</source>
         <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/tasks/tasks.settings.component.html</context>
-          <context context-type="linenumber">18</context>
+          <context context-type="sourcefile">app/ui/settings/jobs/jobs.settings.component.html</context>
+          <context context-type="linenumber">17</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/tasks/tasks.settings.component.html</context>
-          <context context-type="linenumber">85</context>
+          <context context-type="sourcefile">app/ui/settings/jobs/jobs.settings.component.html</context>
+          <context context-type="linenumber">83</context>
         </context-group>
         <target>minden</target>
       </trans-unit>
       <trans-unit id="e113e3450a367a1dff703fc5e0403a497ca73a7c" datatype="html">
         <source>never</source>
         <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/tasks/tasks.settings.component.html</context>
-          <context context-type="linenumber">23</context>
+          <context context-type="sourcefile">app/ui/settings/jobs/jobs.settings.component.html</context>
+          <context context-type="linenumber">22</context>
         </context-group>
         <target>soha</target>
       </trans-unit>
-      <trans-unit id="b51d9edc98562fb34f39d48bbd177db63f74fe8d" datatype="html">
-        <source>
-          <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span>"/>
-          <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span>"/>
-        </source>
+      <trans-unit id="89dc7dff0be8b6a3443789ff1e7469f47d92935e" datatype="html">
+        <source>Job:</source>
         <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/tasks/tasks.settings.component.html</context>
-          <context context-type="linenumber">26</context>
+          <context context-type="sourcefile">app/ui/settings/jobs/jobs.settings.component.html</context>
+          <context context-type="linenumber">34</context>
         </context-group>
-        <target>
-          <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span>"/>
-          <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span>"/>
-        </target>
+        <target>Job:</target>
       </trans-unit>
-      <trans-unit id="41f883b96980ad03407749f5c0b2523528924dda" datatype="html">
-        <source>Task:</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/tasks/tasks.settings.component.html</context>
-          <context context-type="linenumber">36</context>
-        </context-group>
-        <target>Feladat:</target>
-      </trans-unit>
-      <trans-unit id="9bcffeb5af739217ecbeec01abeb14126b20bdda" datatype="html">
-        <source>Select a task to schedule.
+      <trans-unit id="0b87ca794b645dc89e2efe8478c401c605e03861" datatype="html">
+        <source>Select a job to schedule.
                     </source>
         <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/tasks/tasks.settings.component.html</context>
-          <context context-type="linenumber">45</context>
+          <context context-type="sourcefile">app/ui/settings/jobs/jobs.settings.component.html</context>
+          <context context-type="linenumber">43</context>
         </context-group>
         <target>Válaszd ki az ütemezendő feladatot.</target>
       </trans-unit>
       <trans-unit id="f336006fe51502c7da913994e14a3137dd5c5009" datatype="html">
         <source>Periodicity:</source>
         <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/tasks/tasks.settings.component.html</context>
-          <context context-type="linenumber">50</context>
+          <context context-type="sourcefile">app/ui/settings/jobs/jobs.settings.component.html</context>
+          <context context-type="linenumber">48</context>
         </context-group>
         <target>Gyakoriság:</target>
       </trans-unit>
-      <trans-unit id="63082f0e453734275af4e538827c1ae06d04ef52" datatype="html">
-        <source>Set the time to run the task.
+      <trans-unit id="40aec3d7895a3d8dafac6fe442e45150769950ae" datatype="html">
+        <source>Set the time to run the job.
                     </source>
         <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/tasks/tasks.settings.component.html</context>
-          <context context-type="linenumber">60</context>
+          <context context-type="sourcefile">app/ui/settings/jobs/jobs.settings.component.html</context>
+          <context context-type="linenumber">58</context>
         </context-group>
         <target>Állítsd be, hogy mikos fusson a feladat.</target>
       </trans-unit>
       <trans-unit id="ef36f0dc0067decf548cc11905ef3100f5bbd004" datatype="html">
         <source>At:</source>
         <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/tasks/tasks.settings.component.html</context>
-          <context context-type="linenumber">67</context>
+          <context context-type="sourcefile">app/ui/settings/jobs/jobs.settings.component.html</context>
+          <context context-type="linenumber">65</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/tasks/tasks.settings.component.html</context>
-          <context context-type="linenumber">77</context>
+          <context context-type="sourcefile">app/ui/settings/jobs/jobs.settings.component.html</context>
+          <context context-type="linenumber">75</context>
         </context-group>
         <target>Ekkor:</target>
       </trans-unit>
@@ -1919,16 +1893,16 @@
         <source>Start now
                 </source>
         <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/tasks/tasks.settings.component.html</context>
-          <context context-type="linenumber">103</context>
+          <context context-type="sourcefile">app/ui/settings/jobs/jobs.settings.component.html</context>
+          <context context-type="linenumber">101</context>
         </context-group>
         <target>Futtatás most</target>
       </trans-unit>
-      <trans-unit id="cfbd068646ce959a640ab824e85e1ed3ab20c5f2" datatype="html">
-        <source>Trigger task run manually</source>
+      <trans-unit id="75bfaf8c39c31b82e233afbbc1175d1a49ef172f" datatype="html">
+        <source>Trigger job run manually</source>
         <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/tasks/tasks.settings.component.html</context>
-          <context context-type="linenumber">101</context>
+          <context context-type="sourcefile">app/ui/settings/jobs/jobs.settings.component.html</context>
+          <context context-type="linenumber">99</context>
         </context-group>
         <target>Manuálisan elnidítja a feladatot</target>
       </trans-unit>
@@ -1936,27 +1910,28 @@
         <source>Stop
                 </source>
         <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/tasks/tasks.settings.component.html</context>
-          <context context-type="linenumber">108</context>
+          <context context-type="sourcefile">app/ui/settings/jobs/jobs.settings.component.html</context>
+          <context context-type="linenumber">106</context>
         </context-group>
         <target>Leállítás</target>
       </trans-unit>
       <trans-unit id="eecad7f2f355d4ae0baed11537a10ceaebbc7382" datatype="html">
         <source>';' separated integers.</source>
         <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/tasks/tasks.settings.component.html</context>
-          <context context-type="linenumber">171</context>
+          <context context-type="sourcefile">app/ui/settings/jobs/jobs.settings.component.html</context>
+          <context context-type="linenumber">169</context>
         </context-group>
         <target>';'-vel elválaszott egész számok.</target>
       </trans-unit>
-      <trans-unit id="87dc7285ddadbe21ac1770275d35e8c747e0eb26" datatype="html">
-        <source>+ Add task
+      <trans-unit id="6ff865ebc673e7fe5ed9367575e44833ef811693" datatype="html">
+        <source>+ Add Job
       </source>
         <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/tasks/tasks.settings.component.html</context>
-          <context context-type="linenumber">196</context>
+          <context context-type="sourcefile">app/ui/settings/jobs/jobs.settings.component.html</context>
+          <context context-type="linenumber">194</context>
         </context-group>
-        <target>+ új feladat</target>
+        <target>+ Add Job
+      </target>
       </trans-unit>
       <trans-unit id="85b9773b9a3caeb9f0fd69b2b8fa7284bda6b492" datatype="html">
         <source>Server error</source>
@@ -2060,6 +2035,22 @@
           <context context-type="linenumber">1</context>
         </context-group>
         <target>Egyszerűsített</target>
+      </trans-unit>
+      <trans-unit id="f56c1efc2bd6e9eb87cd271ea47ab620445012a2" datatype="html">
+        <source>Built at</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/frontend/app/ui/admin/admin.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <target>Build-elve</target>
+      </trans-unit>
+      <trans-unit id="f620bdd6f6bdd3330d7f3786caa97cbba9cbde5a" datatype="html">
+        <source>git hash</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/frontend/app/ui/admin/admin.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <target>git hash</target>
       </trans-unit>
       <trans-unit id="b73f7f5060fb22a1e9ec462b1bb02493fa3ab866" datatype="html">
         <source>Images</source>
@@ -2265,6 +2256,106 @@
         </context-group>
         <target>Adatbázis visszaállítása</target>
       </trans-unit>
+      <trans-unit id="43f1cc191ebc0b8ce89f6916aa634f5a57158798" datatype="html">
+        <source>Jobs</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/frontend/app/ui/settings/jobs/jobs.settings.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <target>Jobs</target>
+      </trans-unit>
+      <trans-unit id="a43c57a7cbebf57eb33a2eae5e994c91d9887596" datatype="html">
+        <source>Monday</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/frontend/app/ui/settings/jobs/jobs.settings.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <target>Hétfő</target>
+      </trans-unit>
+      <trans-unit id="48a2a35957ce394eb2c59ae35c99642360af70ee" datatype="html">
+        <source>Tuesday</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/frontend/app/ui/settings/jobs/jobs.settings.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <target>Kedd</target>
+      </trans-unit>
+      <trans-unit id="b0af441f9ba8b82952b9ec10fb8c62e8fec67df9" datatype="html">
+        <source>Wednesday</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/frontend/app/ui/settings/jobs/jobs.settings.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <target>Szerda</target>
+      </trans-unit>
+      <trans-unit id="55c583b99c809818ec27df065ccf05357a6ac10b" datatype="html">
+        <source>Thursday</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/frontend/app/ui/settings/jobs/jobs.settings.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <target>Csütörtök</target>
+      </trans-unit>
+      <trans-unit id="e91b54925dc5f490753f60f53ef6f8b4609e6215" datatype="html">
+        <source>Friday</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/frontend/app/ui/settings/jobs/jobs.settings.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <target>Péntek</target>
+      </trans-unit>
+      <trans-unit id="c0d2dd391a3eca8e841a5d0e035cd268280eb68e" datatype="html">
+        <source>Saturday</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/frontend/app/ui/settings/jobs/jobs.settings.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <target>Szombat</target>
+      </trans-unit>
+      <trans-unit id="8339364b054610983b7f2334bb807fff7613bddf" datatype="html">
+        <source>Sunday</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/frontend/app/ui/settings/jobs/jobs.settings.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <target>Vasárnap</target>
+      </trans-unit>
+      <trans-unit id="f64c76c7c7c71baddef3dc6a93e4394b8fdb69f4" datatype="html">
+        <source>day</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/frontend/app/ui/settings/jobs/jobs.settings.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <target>nap</target>
+      </trans-unit>
+      <trans-unit id="78917e8031aaf913ac3fa63295325ce8879703ce" datatype="html">
+        <source>Job</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/frontend/app/ui/settings/jobs/jobs.settings.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/frontend/app/ui/settings/jobs/jobs.settings.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <target>Job</target>
+      </trans-unit>
+      <trans-unit id="802a1b81a26fd41f8625b1b7a02f606fc31f97e7" datatype="html">
+        <source>started</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/frontend/app/ui/settings/jobs/jobs.settings.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <target>elindult</target>
+      </trans-unit>
+      <trans-unit id="0f3ebb12666577c4183f3c9687180f7963cfabf4" datatype="html">
+        <source>stopped</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/frontend/app/ui/settings/jobs/jobs.settings.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <target>leállt</target>
+      </trans-unit>
       <trans-unit id="d2a2915d79ff31439a174fc3a147004542291e29" datatype="html">
         <source>Map</source>
         <context-group purpose="location">
@@ -2336,106 +2427,6 @@
           <context context-type="linenumber">1</context>
         </context-group>
         <target>Véletleg Fotó</target>
-      </trans-unit>
-      <trans-unit id="586a5fd72602b5b14ec0c55f84814de47bb21e3a" datatype="html">
-        <source>Tasks</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/frontend/app/ui/settings/tasks/tasks.settings.component.ts</context>
-          <context context-type="linenumber">1</context>
-        </context-group>
-        <target>Feladatok</target>
-      </trans-unit>
-      <trans-unit id="a43c57a7cbebf57eb33a2eae5e994c91d9887596" datatype="html">
-        <source>Monday</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/frontend/app/ui/settings/tasks/tasks.settings.component.ts</context>
-          <context context-type="linenumber">1</context>
-        </context-group>
-        <target>Hétfő</target>
-      </trans-unit>
-      <trans-unit id="48a2a35957ce394eb2c59ae35c99642360af70ee" datatype="html">
-        <source>Tuesday</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/frontend/app/ui/settings/tasks/tasks.settings.component.ts</context>
-          <context context-type="linenumber">1</context>
-        </context-group>
-        <target>Kedd</target>
-      </trans-unit>
-      <trans-unit id="b0af441f9ba8b82952b9ec10fb8c62e8fec67df9" datatype="html">
-        <source>Wednesday</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/frontend/app/ui/settings/tasks/tasks.settings.component.ts</context>
-          <context context-type="linenumber">1</context>
-        </context-group>
-        <target>Szerda</target>
-      </trans-unit>
-      <trans-unit id="55c583b99c809818ec27df065ccf05357a6ac10b" datatype="html">
-        <source>Thursday</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/frontend/app/ui/settings/tasks/tasks.settings.component.ts</context>
-          <context context-type="linenumber">1</context>
-        </context-group>
-        <target>Csütörtök</target>
-      </trans-unit>
-      <trans-unit id="e91b54925dc5f490753f60f53ef6f8b4609e6215" datatype="html">
-        <source>Friday</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/frontend/app/ui/settings/tasks/tasks.settings.component.ts</context>
-          <context context-type="linenumber">1</context>
-        </context-group>
-        <target>Péntek</target>
-      </trans-unit>
-      <trans-unit id="c0d2dd391a3eca8e841a5d0e035cd268280eb68e" datatype="html">
-        <source>Saturday</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/frontend/app/ui/settings/tasks/tasks.settings.component.ts</context>
-          <context context-type="linenumber">1</context>
-        </context-group>
-        <target>Szombat</target>
-      </trans-unit>
-      <trans-unit id="8339364b054610983b7f2334bb807fff7613bddf" datatype="html">
-        <source>Sunday</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/frontend/app/ui/settings/tasks/tasks.settings.component.ts</context>
-          <context context-type="linenumber">1</context>
-        </context-group>
-        <target>Vasárnap</target>
-      </trans-unit>
-      <trans-unit id="f64c76c7c7c71baddef3dc6a93e4394b8fdb69f4" datatype="html">
-        <source>day</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/frontend/app/ui/settings/tasks/tasks.settings.component.ts</context>
-          <context context-type="linenumber">1</context>
-        </context-group>
-        <target>nap</target>
-      </trans-unit>
-      <trans-unit id="61435c6c3b3cca0c204ef9f5369027565d327acb" datatype="html">
-        <source>Task</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/frontend/app/ui/settings/tasks/tasks.settings.component.ts</context>
-          <context context-type="linenumber">1</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/frontend/app/ui/settings/tasks/tasks.settings.component.ts</context>
-          <context context-type="linenumber">1</context>
-        </context-group>
-        <target>Feladat</target>
-      </trans-unit>
-      <trans-unit id="802a1b81a26fd41f8625b1b7a02f606fc31f97e7" datatype="html">
-        <source>started</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/frontend/app/ui/settings/tasks/tasks.settings.component.ts</context>
-          <context context-type="linenumber">1</context>
-        </context-group>
-        <target>elindult</target>
-      </trans-unit>
-      <trans-unit id="0f3ebb12666577c4183f3c9687180f7963cfabf4" datatype="html">
-        <source>stopped</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/frontend/app/ui/settings/tasks/tasks.settings.component.ts</context>
-          <context context-type="linenumber">1</context>
-        </context-group>
-        <target>leállt</target>
       </trans-unit>
       <trans-unit id="45dda89cf029b7d7b457a8dff01dc4b9a6485816" datatype="html">
         <source>Thumbnail</source>

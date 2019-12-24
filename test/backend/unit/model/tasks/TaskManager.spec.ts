@@ -1,25 +1,25 @@
 import {expect} from 'chai';
-import {TaskManager} from '../../../../../src/backend/model/tasks/TaskManager';
-import {TaskScheduleDTO, TaskTriggerType} from '../../../../../src/common/entities/task/TaskScheduleDTO';
+import {JobManager} from '../../../../../src/backend/model/jobs/JobManager';
+import {JobScheduleDTO, JobTriggerType} from '../../../../../src/common/entities/job/JobScheduleDTO';
 
-class TaskManagerSpec extends TaskManager {
+class JobManagerSpec extends JobManager {
 
-  public getDateFromSchedule(refDate: Date, schedule: TaskScheduleDTO): Date {
+  public getDateFromSchedule(refDate: Date, schedule: JobScheduleDTO): Date {
     return super.getDateFromSchedule(refDate, schedule);
   }
 }
 
-describe('TaskManager', () => {
+describe('JobManager', () => {
 
   it('should get date from schedule', async () => {
-    const tm = new TaskManagerSpec();
+    const tm = new JobManagerSpec();
 
     const refDate = new Date(2019, 7, 18, 5, 10, 10, 0); // its a sunday
 
 
     expect(tm.getDateFromSchedule(refDate, <any>{
       trigger: {
-        type: TaskTriggerType.scheduled,
+        type: JobTriggerType.scheduled,
         time: (new Date(2019, 7, 18, 5, 10)).getTime()
       }
     })).to.be.deep.equal((new Date(2019, 7, 18, 5, 10, 0)));
@@ -32,7 +32,7 @@ describe('TaskManager', () => {
       let m = 5;
       expect(tm.getDateFromSchedule(refDate, <any>{
         trigger: {
-          type: TaskTriggerType.periodic,
+          type: JobTriggerType.periodic,
           atTime: (h * 60 + m) * 60 * 1000,
           periodicity: dayOfWeek
         }
@@ -43,7 +43,7 @@ describe('TaskManager', () => {
       nextDay = 18 + dayOfWeek + 1;
       expect(tm.getDateFromSchedule(refDate, <any>{
         trigger: {
-          type: TaskTriggerType.periodic,
+          type: JobTriggerType.periodic,
           atTime: (h * 60 + m) * 60 * 1000,
           periodicity: dayOfWeek
         }
@@ -54,7 +54,7 @@ describe('TaskManager', () => {
       nextDay = 18 + dayOfWeek + 1;
       expect(tm.getDateFromSchedule(refDate, <any>{
         trigger: {
-          type: TaskTriggerType.periodic,
+          type: JobTriggerType.periodic,
           atTime: (h * 60 + m) * 60 * 1000,
           periodicity: dayOfWeek
         }
@@ -66,7 +66,7 @@ describe('TaskManager', () => {
       const m = 5;
       expect(tm.getDateFromSchedule(refDate, <any>{
         trigger: {
-          type: TaskTriggerType.periodic,
+          type: JobTriggerType.periodic,
           atTime: (h * 60 + m) * 60 * 1000,
           periodicity: 7
         }
@@ -77,7 +77,7 @@ describe('TaskManager', () => {
       const m = 5;
       expect(tm.getDateFromSchedule(refDate, <any>{
         trigger: {
-          type: TaskTriggerType.periodic,
+          type: JobTriggerType.periodic,
           atTime: (h * 60 + m) * 60 * 1000,
           periodicity: 7
         }

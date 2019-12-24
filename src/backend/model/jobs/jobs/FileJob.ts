@@ -1,6 +1,6 @@
-import {TaskProgressDTO, TaskState} from '../../../../common/entities/settings/TaskProgressDTO';
-import {ConfigTemplateEntry} from '../../../../common/entities/task/TaskDTO';
-import {Task} from './Task';
+import {JobProgressDTO, JobState} from '../../../../common/entities/settings/JobProgressDTO';
+import {ConfigTemplateEntry} from '../../../../common/entities/job/JobDTO';
+import {Job} from './Job';
 import * as path from 'path';
 import {DiskManager} from '../../DiskManger';
 import {DiskMangerWorker} from '../../threading/DiskMangerWorker';
@@ -14,7 +14,7 @@ declare var global: NodeJS.Global;
 const LOG_TAG = '[FileTask]';
 
 
-export abstract class FileTask<T, S = void> extends Task<S> {
+export abstract class FileJob<T, S = void> extends Job<S> {
   public readonly ConfigTemplate: ConfigTemplateEntry[] = null;
   directoryQueue: string[] = [];
   fileQueue: T[] = [];
@@ -34,9 +34,9 @@ export abstract class FileTask<T, S = void> extends Task<S> {
 
   protected abstract async processFile(file: T): Promise<void>;
 
-  protected async step(): Promise<TaskProgressDTO> {
+  protected async step(): Promise<JobProgressDTO> {
     if ((this.directoryQueue.length === 0 && this.fileQueue.length === 0)
-      || this.state !== TaskState.running) {
+      || this.state !== JobState.running) {
       if (global.gc) {
         global.gc();
       }

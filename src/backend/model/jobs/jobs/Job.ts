@@ -1,14 +1,16 @@
-import {TaskProgressDTO, TaskState} from '../../../../common/entities/settings/TaskProgressDTO';
+import {JobProgressDTO, JobState} from '../../../../common/entities/settings/JobProgressDTO';
 import {Logger} from '../../../Logger';
-import {ITask} from './ITask';
-import {ConfigTemplateEntry, TaskDTO} from '../../../../common/entities/task/TaskDTO';
+import {IJob} from './IJob';
+import {ConfigTemplateEntry, JobDTO} from '../../../../common/entities/job/JobDTO';
 
 declare const process: any;
 
-export abstract class Task<T = void> implements ITask<T> {
+const LOG_TAG = '[JOB]';
 
-  protected progress: TaskProgressDTO = null;
-  protected state = TaskState.idle;
+export abstract class Job<T = void> implements IJob<T> {
+
+  protected progress: JobProgressDTO = null;
+  protected state = JobState.idle;
   protected config: T;
   protected prResolve: () => void;
   protected IsInstant = false;
@@ -22,19 +24,19 @@ export abstract class Task<T = void> implements ITask<T> {
   public abstract get ConfigTemplate(): ConfigTemplateEntry[];
 
 
-  public get Progress(): TaskProgressDTO {
+  public get Progress(): JobProgressDTO {
     return this.progress;
   }
 
   public start(config: T): Promise<void> {
-    if (this.state === TaskState.idle && this.Supported) {
-      Logger.info('[Task]', 'Running task: ' + this.Name);
+    if (this.state === JobState.idle && this.Supported) {
+      Logger.info(LOG_TAG, 'Running job: ' + this.Name);
       this.config = config;
       this.progress = {
         progress: 0,
         left: 0,
         comment: '',
-        state: TaskState.running,
+        state: JobState.running,
         time: {
           start: Date.now(),
           current: Date.now()
@@ -44,38 +46,38 @@ export abstract class Task<T = void> implements ITask<T> {
         this.prResolve = resolve;
       });
       this.init().catch(console.error);
-      this.state = TaskState.running;
+      this.state = JobState.running;
       this.run();
       if (!this.IsInstant) { // if instant, wait for execution, otherwise, return right away
         return Promise.resolve();
       }
       return pr;
     } else {
-      Logger.info('[Task]', 'Task already running: ' + this.Name);
+      Logger.info(LOG_TAG, 'Job already running: ' + this.Name);
       return Promise.reject();
     }
   }
 
   public stop(): void {
-    Logger.info('[Task]', 'Stopping task: ' + this.Name);
-    this.state = TaskState.stopping;
-    this.progress.state = TaskState.stopping;
+    Logger.info(LOG_TAG, 'Stopping job: ' + this.Name);
+    this.state = JobState.stopping;
+    this.progress.state = JobState.stopping;
   }
 
-  public toJSON(): TaskDTO {
+  public toJSON(): JobDTO {
     return {
       Name: this.Name,
       ConfigTemplate: this.ConfigTemplate
     };
   }
 
-  protected abstract async step(): Promise<TaskProgressDTO>;
+  protected abstract async step(): Promise<JobProgressDTO>;
 
   protected abstract async init(): Promise<void>;
 
   private onFinish(): void {
     this.progress = null;
-    Logger.info('[Task]', 'Task finished: ' + this.Name);
+    Logger.info(LOG_TAG, 'Job finished: ' + this.Name);
     if (this.IsInstant) {
       this.prResolve();
     }
@@ -84,19 +86,19 @@ export abstract class Task<T = void> implements ITask<T> {
   private run() {
     process.nextTick(async () => {
       try {
-        if (this.state === TaskState.idle) {
+        if (this.state === JobState.idle) {
           this.progress = null;
           return;
         }
         this.progress = await this.step();
         if (this.progress == null) { // finished
-          this.state = TaskState.idle;
+          this.state = JobState.idle;
           this.onFinish();
           return;
         }
         this.run();
       } catch (e) {
-        Logger.error('[Task]', e);
+        Logger.error(LOG_TAG, e);
       }
     });
   }

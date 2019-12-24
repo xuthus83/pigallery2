@@ -7,10 +7,10 @@ import {ErrorDTO} from '../../../../../common/entities/Error';
 import {SettingsComponent} from '../_abstract/abstract.settings.component';
 import {Utils} from '../../../../../common/Utils';
 import {I18n} from '@ngx-translate/i18n-polyfill';
-import {ScheduledTasksService} from '../scheduled-tasks.service';
-import {DefaultsTasks} from '../../../../../common/entities/task/TaskDTO';
+import {ScheduledJobsService} from '../scheduled-jobs.service';
+import {DefaultsJobs} from '../../../../../common/entities/job/JobDTO';
 import {ServerConfig} from '../../../../../common/config/private/IPrivateConfig';
-import {TaskState} from '../../../../../common/entities/settings/TaskProgressDTO';
+import {JobState} from '../../../../../common/entities/settings/JobProgressDTO';
 
 @Component({
   selector: 'app-settings-indexing',
@@ -24,12 +24,12 @@ export class IndexingSettingsComponent extends SettingsComponent<ServerConfig.In
 
 
   types: { key: number; value: string }[] = [];
-  TaskState = TaskState;
+  JobState = JobState;
 
   constructor(_authService: AuthenticationService,
               _navigation: NavigationService,
               _settingsService: IndexingSettingsService,
-              public tasksService: ScheduledTasksService,
+              public jobsService: ScheduledJobsService,
               notification: NotificationService,
               i18n: I18n) {
 
@@ -44,7 +44,7 @@ export class IndexingSettingsComponent extends SettingsComponent<ServerConfig.In
   }
 
   get Progress() {
-    return this.tasksService.progress.value[DefaultsTasks[DefaultsTasks.Indexing]];
+    return this.jobsService.progress.value[DefaultsJobs[DefaultsJobs.Indexing]];
   }
 
   get excludeFolderList(): string {
@@ -65,12 +65,12 @@ export class IndexingSettingsComponent extends SettingsComponent<ServerConfig.In
 
   ngOnDestroy() {
     super.ngOnDestroy();
-    this.tasksService.unsubscribeFromProgress();
+    this.jobsService.unsubscribeFromProgress();
   }
 
   async ngOnInit() {
     super.ngOnInit();
-    this.tasksService.subscribeToProgress();
+    this.jobsService.subscribeToProgress();
     this.types = Utils
       .enumToArray(ServerConfig.ReIndexingSensitivity);
     this.types.forEach(v => {
@@ -93,7 +93,7 @@ export class IndexingSettingsComponent extends SettingsComponent<ServerConfig.In
     this.inProgress = true;
     this.error = '';
     try {
-      await this.tasksService.start(DefaultsTasks[DefaultsTasks.Indexing]);
+      await this.jobsService.start(DefaultsJobs[DefaultsJobs.Indexing]);
       this.notification.info(this.i18n('Folder indexing started'));
       this.inProgress = false;
       return true;
@@ -112,7 +112,7 @@ export class IndexingSettingsComponent extends SettingsComponent<ServerConfig.In
     this.inProgress = true;
     this.error = '';
     try {
-      await this.tasksService.stop(DefaultsTasks[DefaultsTasks.Indexing]);
+      await this.jobsService.stop(DefaultsJobs[DefaultsJobs.Indexing]);
       this.notification.info(this.i18n('Folder indexing interrupted'));
       this.inProgress = false;
       return true;
@@ -131,7 +131,7 @@ export class IndexingSettingsComponent extends SettingsComponent<ServerConfig.In
     this.inProgress = true;
     this.error = '';
     try {
-      await this.tasksService.start(DefaultsTasks[DefaultsTasks['Database Reset']]);
+      await this.jobsService.start(DefaultsJobs[DefaultsJobs['Database Reset']]);
       this.notification.info(this.i18n('Resetting  database'));
       this.inProgress = false;
       return true;

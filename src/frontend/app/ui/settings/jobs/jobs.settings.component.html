@@ -10,16 +10,16 @@
         <div class="card bg-light">
           <div class="card-header clickable" (click)="showDetails[i]=!showDetails[i]">
             <div class="d-flex justify-content-between">
-              {{schedule.taskName}} @<!--
+              {{schedule.jobName}} @<!--
               -->
               <ng-container [ngSwitch]="schedule.trigger.type">
-                <ng-container *ngSwitchCase="TaskTriggerType.periodic">
+                <ng-container *ngSwitchCase="JobTriggerType.periodic">
                   <ng-container i18n>every</ng-container>
                   {{periods[schedule.trigger.periodicity]}} {{schedule.trigger.atTime | date:"HH:mm":"+0"}}
                 </ng-container>
                 <ng-container
-                  *ngSwitchCase="TaskTriggerType.scheduled">{{schedule.trigger.time | date:"medium"}}</ng-container>
-                <ng-container *ngSwitchCase="TaskTriggerType.never" i18n>never</ng-container>
+                  *ngSwitchCase="JobTriggerType.scheduled">{{schedule.trigger.time | date:"medium"}}</ng-container>
+                <ng-container *ngSwitchCase="JobTriggerType.never" i18n>never</ng-container>
               </ng-container>
               <button class="btn btn-danger button-delete" (click)="remove(i)"><span class="oi oi-trash"></span>
               </button>
@@ -31,16 +31,16 @@
 
               <div class="col-md-9">
                 <div class="form-group row">
-                  <label class="col-md-2 control-label" [for]="'taskName'+i" i18n>Task:</label>
+                  <label class="col-md-2 control-label" [for]="'jobName'+i" i18n>Job:</label>
                   <div class="col-md-10">
-                    <select class="form-control" (change)="taskTypeChanged(schedule)" [(ngModel)]="schedule.taskName"
-                            [name]="'taskName'+i" required>
-                      <option *ngFor="let availableTask of _settingsService.availableTasks | async"
-                              [ngValue]="availableTask.Name">{{availableTask.Name}}
+                    <select class="form-control" (change)="jobTypeChanged(schedule)" [(ngModel)]="schedule.jobName"
+                            [name]="'jobName'+i" required>
+                      <option *ngFor="let availableJob of _settingsService.availableJobs | async"
+                              [ngValue]="availableJob.Name">{{availableJob.Name}}
                       </option>
                     </select>
                     <small class="form-text text-muted"
-                           i18n>Select a task to schedule.
+                           i18n>Select a job to schedule.
                     </small>
                   </div>
                 </div>
@@ -48,20 +48,20 @@
                   <label class="col-md-2 control-label" [for]="'repeatType'+i" i18n>Periodicity:</label>
                   <div class="col-md-10">
                     <select class="form-control" [(ngModel)]="schedule.trigger.type"
-                            (ngModelChange)="taskTriggerTypeChanged($event,schedule)"
+                            (ngModelChange)="jobTriggerTypeChanged($event,schedule)"
                             [name]="'repeatType'+i" required>
-                      <option *ngFor="let taskTrigger of taskTriggerType"
-                              [ngValue]="taskTrigger.key">{{taskTrigger.value}}
+                      <option *ngFor="let jobTrigger of JobTriggerTypeMap"
+                              [ngValue]="jobTrigger.key">{{jobTrigger.value}}
                       </option>
                     </select>
                     <small class="form-text text-muted"
-                           i18n>Set the time to run the task.
+                           i18n>Set the time to run the job.
                     </small>
                   </div>
                 </div>
 
 
-                <div class="form-group row" *ngIf="schedule.trigger.type == TaskTriggerType.scheduled">
+                <div class="form-group row" *ngIf="schedule.trigger.type == JobTriggerType.scheduled">
                   <label class="col-md-2 control-label" [for]="'triggerTime'+i" i18n>At:</label>
                   <div class="col-md-10">
                     <app-timestamp-datepicker
@@ -71,7 +71,7 @@
                   </div>
                 </div>
 
-                <div class="form-group row" *ngIf="schedule.trigger.type == TaskTriggerType.periodic">
+                <div class="form-group row" *ngIf="schedule.trigger.type == JobTriggerType.periodic">
                   <label class="col-md-2 control-label" [for]="'periodicity'+i" i18n>At:</label>
                   <div class="col-md-10">
                     <select
@@ -94,23 +94,23 @@
 
               <div class="col-md-3">
                 <button class="btn btn-success float-right"
-                        *ngIf="!tasksService.progress.value[schedule.taskName]"
+                        *ngIf="!jobsService.progress.value[schedule.jobName]"
                         [disabled]="disableButtons"
-                        title="Trigger task run manually"
+                        title="Trigger job run manually"
                         i18n-title
                         (click)="start(schedule)" i18n>Start now
                 </button>
                 <button class="btn btn-secondary float-right"
-                        *ngIf="tasksService.progress.value[schedule.taskName]"
-                        [disabled]="disableButtons || tasksService.progress.value[schedule.taskName].state !== TaskState.running"
+                        *ngIf="jobsService.progress.value[schedule.jobName]"
+                        [disabled]="disableButtons || jobsService.progress.value[schedule.jobName].state !== JobState.running"
                         (click)="stop(schedule)" i18n>Stop
                 </button>
               </div>
             </div>
 
-            <ng-container *ngIf="getConfigTemplate(schedule.taskName) ">
+            <ng-container *ngIf="getConfigTemplate(schedule.jobName) ">
               <hr/>
-              <div *ngFor="let configEntry of  getConfigTemplate(schedule.taskName)">
+              <div *ngFor="let configEntry of  getConfigTemplate(schedule.jobName)">
                 <ng-container [ngSwitch]="configEntry.type">
                   <ng-container *ngSwitchCase="'boolean'">
                     <div class="form-group row">
@@ -175,10 +175,10 @@
               </div>
             </ng-container>
           </div>
-          <app-settings-tasks-progress
+          <app-settings-job-progress
             class="card-footer bg-transparent"
-            [progress]="tasksService.progress.value[schedule.taskName]">
-          </app-settings-tasks-progress>
+            [progress]="jobsService.progress.value[schedule.jobName]">
+          </app-settings-job-progress>
 
         </div>
       </div>
@@ -191,7 +191,7 @@
               (click)="reset()" i18n>Reset
       </button>
       <button class="btn btn-primary float-right"
-              (click)="addNewTask()" i18n>+ Add task
+              (click)="addNewJob()" i18n>+ Add Job
       </button>
     </div>
 

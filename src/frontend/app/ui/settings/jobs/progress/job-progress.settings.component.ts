@@ -1,16 +1,16 @@
 import {Component, Input, OnChanges, OnDestroy} from '@angular/core';
-import {TaskProgressDTO, TaskState} from '../../../../../../common/entities/settings/TaskProgressDTO';
+import {JobProgressDTO, JobState} from '../../../../../../common/entities/settings/JobProgressDTO';
 import {Subscription, timer} from 'rxjs';
 
 @Component({
-  selector: 'app-settings-tasks-progress',
-  templateUrl: './progress.tasks.settings.component.html',
-  styleUrls: ['./progress.tasks.settings.component.css']
+  selector: 'app-settings-job-progress',
+  templateUrl: './job-progress.settings.component.html',
+  styleUrls: ['./job-progress.settings.component.css']
 })
-export class TasksProgressComponent implements OnDestroy, OnChanges {
+export class JobProgressComponent implements OnDestroy, OnChanges {
 
-  @Input() progress: TaskProgressDTO;
-  TaskState = TaskState;
+  @Input() progress: JobProgressDTO;
+  JobState = JobState;
   timeCurrentCopy: number;
   private timerSub: Subscription;
 

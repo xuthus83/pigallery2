@@ -1,21 +1,21 @@
 import {Config} from '../../../../common/config/private/Config';
-import {ConfigTemplateEntry, DefaultsTasks} from '../../../../common/entities/task/TaskDTO';
+import {ConfigTemplateEntry, DefaultsJobs} from '../../../../common/entities/job/JobDTO';
 import {ProjectPath} from '../../../ProjectPath';
 import * as path from 'path';
 import * as fs from 'fs';
 import * as util from 'util';
-import {FileTask} from './FileTask';
+import {FileJob} from './FileJob';
 import {DirectoryDTO} from '../../../../common/entities/DirectoryDTO';
 import {PhotoProcessing} from '../../fileprocessing/PhotoProcessing';
 import {ThumbnailSourceType} from '../../threading/ThumbnailWorker';
 import {MediaDTO} from '../../../../common/entities/MediaDTO';
 
-const LOG_TAG = '[ThumbnailGenerationTask]';
+const LOG_TAG = '[ThumbnailGenerationJob]';
 const existsPr = util.promisify(fs.exists);
 
 
-export class ThumbnailGenerationTask extends FileTask<MediaDTO, { sizes: number[] }> {
-  public readonly Name = DefaultsTasks[DefaultsTasks['Thumbnail Generation']];
+export class ThumbnailGenerationJob extends FileJob<MediaDTO, { sizes: number[] }> {
+  public readonly Name = DefaultsJobs[DefaultsJobs['Thumbnail Generation']];
   public readonly ConfigTemplate: ConfigTemplateEntry[] = [{
     id: 'sizes',
     type: 'number-array',

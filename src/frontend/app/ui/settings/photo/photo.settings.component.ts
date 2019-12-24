@@ -6,12 +6,12 @@ import {NavigationService} from '../../../model/navigation.service';
 import {NotificationService} from '../../../model/notification.service';
 import {ClientConfig} from '../../../../../common/config/public/ConfigClass';
 import {I18n} from '@ngx-translate/i18n-polyfill';
-import {ScheduledTasksService} from '../scheduled-tasks.service';
+import {ScheduledJobsService} from '../scheduled-jobs.service';
 import {ServerConfig} from '../../../../../common/config/private/IPrivateConfig';
 import {Utils} from '../../../../../common/Utils';
-import {DefaultsTasks} from '../../../../../common/entities/task/TaskDTO';
+import {DefaultsJobs} from '../../../../../common/entities/job/JobDTO';
 import {ErrorDTO} from '../../../../../common/entities/Error';
-import {TaskState} from '../../../../../common/entities/settings/TaskProgressDTO';
+import {JobState} from '../../../../../common/entities/settings/JobProgressDTO';
 
 
 @Component({
@@ -28,7 +28,7 @@ export class PhotoSettingsComponent extends SettingsComponent<{
 }> {
   resolutions = [720, 1080, 1440, 2160, 4320];
   PhotoProcessingLib = ServerConfig.PhotoProcessingLib;
-  TaskState = TaskState;
+  JobState = JobState;
 
   libTypes = Utils
     .enumToArray(ServerConfig.PhotoProcessingLib).map((v) => {
@@ -43,7 +43,7 @@ export class PhotoSettingsComponent extends SettingsComponent<{
   constructor(_authService: AuthenticationService,
               _navigation: NavigationService,
               _settingsService: PhotoSettingsService,
-              public tasksService: ScheduledTasksService,
+              public jobsService: ScheduledJobsService,
               notification: NotificationService,
               i18n: I18n) {
     super(i18n('Photo'), _authService, _navigation, _settingsService, notification, i18n, s => ({
@@ -59,14 +59,14 @@ export class PhotoSettingsComponent extends SettingsComponent<{
 
 
   get Progress() {
-    return this.tasksService.progress.value[DefaultsTasks[DefaultsTasks['Photo Converting']]];
+    return this.jobsService.progress.value[DefaultsJobs[DefaultsJobs['Photo Converting']]];
   }
 
   async convertPhoto() {
     this.inProgress = true;
     this.error = '';
     try {
-      await this.tasksService.start(DefaultsTasks[DefaultsTasks['Photo Converting']]);
+      await this.jobsService.start(DefaultsJobs[DefaultsJobs['Photo Converting']]);
       this.notification.info(this.i18n('Photo converting started'));
       return true;
     } catch (err) {
@@ -85,7 +85,7 @@ export class PhotoSettingsComponent extends SettingsComponent<{
     this.inProgress = true;
     this.error = '';
     try {
-      await this.tasksService.stop(DefaultsTasks[DefaultsTasks['Photo Converting']]);
+      await this.jobsService.stop(DefaultsJobs[DefaultsJobs['Photo Converting']]);
       this.notification.info(this.i18n('Photo converting interrupted'));
       return true;
     } catch (err) {

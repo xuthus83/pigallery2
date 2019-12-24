@@ -80,21 +80,21 @@
               [disabled]="inProgress"
               title="Generates all thumbnails now"
               i18n-title
-              (click)="startTask()">
+              (click)="startJob()">
         <ng-container i18n>Generate thumbnails now</ng-container>
         <span class="oi oi-media-play ml-2"></span>
       </button>
       <button class="btn btn-secondary  float-left ml-0"
               *ngIf="Progress != null"
-              [disabled]="inProgress || Progress.state !== TaskState.running"
-              (click)="cancelTask()" i18n>Cancel thumbnail generation
+              [disabled]="inProgress || Progress.state !== JobState.running"
+              (click)="cancelJob()" i18n>Cancel thumbnail generation
       </button>
 
 
       <ng-container *ngIf="Progress != null">
         <br/>
         <hr/>
-        <app-settings-tasks-progress [progress]="Progress"></app-settings-tasks-progress>
+        <app-settings-job-progress [progress]="Progress"></app-settings-job-progress>
       </ng-container>
 
     </div>

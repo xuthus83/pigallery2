@@ -1,7 +1,7 @@
 import {PublicConfigClass} from '../public/ConfigClass';
 import {IPrivateConfig, ServerConfig} from './IPrivateConfig';
-import {TaskTriggerType} from '../../entities/task/TaskScheduleDTO';
-import {DefaultsTasks} from '../../entities/task/TaskDTO';
+import {JobTriggerType} from '../../entities/job/JobScheduleDTO';
+import {DefaultsJobs} from '../../entities/job/JobDTO';
 
 /**
  * This configuration will be only at backend
@@ -74,19 +74,19 @@ export class PrivateConfigDefaultsClass extends PublicConfigClass implements IPr
     Duplicates: {
       listingLimit: 1000
     },
-    Tasks: {
+    Jobs: {
       scheduled: [{
-        taskName: DefaultsTasks[DefaultsTasks['Database Reset']],
+        jobName: DefaultsJobs[DefaultsJobs['Database Reset']],
         config: {},
-        trigger: {type: TaskTriggerType.never}
+        trigger: {type: JobTriggerType.never}
       }, {
-        taskName: DefaultsTasks[DefaultsTasks.Indexing],
+        jobName: DefaultsJobs[DefaultsJobs.Indexing],
         config: {},
-        trigger: {type: TaskTriggerType.never}
+        trigger: {type: JobTriggerType.never}
       }, {
-        taskName: DefaultsTasks[DefaultsTasks['Video Converting']],
+        jobName: DefaultsJobs[DefaultsJobs['Video Converting']],
         config: {},
-        trigger: {type: TaskTriggerType.never}
+        trigger: {type: JobTriggerType.never}
       }]
     }
   };

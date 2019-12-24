@@ -7,7 +7,7 @@ import {Logger} from '../Logger';
 import {IIndexingManager} from './database/interfaces/IIndexingManager';
 import {IPersonManager} from './database/interfaces/IPersonManager';
 import {IVersionManager} from './database/interfaces/IVersionManager';
-import {ITaskManager} from './database/interfaces/ITaskManager';
+import {IJobManager} from './database/interfaces/IJobManager';
 
 export class ObjectManagers {
 
@@ -20,7 +20,7 @@ export class ObjectManagers {
   private _indexingManager: IIndexingManager;
   private _personManager: IPersonManager;
   private _versionManager: IVersionManager;
-  private _taskManager: ITaskManager;
+  private _jobManager: IJobManager;
 
 
   get VersionManager(): IVersionManager {
@@ -80,12 +80,12 @@ export class ObjectManagers {
     this._sharingManager = value;
   }
 
-  get TaskManager(): ITaskManager {
-    return this._taskManager;
+  get JobManager(): IJobManager {
+    return this._jobManager;
   }
 
-  set TaskManager(value: ITaskManager) {
-    this._taskManager = value;
+  set JobManager(value: IJobManager) {
+    this._jobManager = value;
   }
 
   public static getInstance() {
@@ -96,8 +96,8 @@ export class ObjectManagers {
   }
 
   public static async reset() {
-    if (ObjectManagers.getInstance().TaskManager) {
-      ObjectManagers.getInstance().TaskManager.stopSchedules();
+    if (ObjectManagers.getInstance().JobManager) {
+      ObjectManagers.getInstance().JobManager.stopSchedules();
     }
     await SQLConnection.close();
     this._instance = null;
@@ -105,8 +105,8 @@ export class ObjectManagers {
 
 
   public static async InitCommonManagers() {
-    const TaskManager = require('./tasks/TaskManager').TaskManager;
-    ObjectManagers.getInstance().TaskManager = new TaskManager();
+    const JobManager = require('./jobs/JobManager').JobManager;
+    ObjectManagers.getInstance().JobManager = new JobManager();
   }
 
   public static async InitMemoryManagers() {

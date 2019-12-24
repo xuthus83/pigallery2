@@ -1,19 +1,19 @@
 import {Config} from '../../../../common/config/private/Config';
-import {DefaultsTasks} from '../../../../common/entities/task/TaskDTO';
+import {DefaultsJobs} from '../../../../common/entities/job/JobDTO';
 import {ProjectPath} from '../../../ProjectPath';
 import * as path from 'path';
 import * as fs from 'fs';
 import * as util from 'util';
-import {FileTask} from './FileTask';
+import {FileJob} from './FileJob';
 import {DirectoryDTO} from '../../../../common/entities/DirectoryDTO';
 import {VideoProcessing} from '../../fileprocessing/VideoProcessing';
 
-const LOG_TAG = '[VideoConvertingTask]';
+const LOG_TAG = '[VideoConvertingJob]';
 const existsPr = util.promisify(fs.exists);
 
 
-export class VideoConvertingTask extends FileTask<string> {
-  public readonly Name = DefaultsTasks[DefaultsTasks['Video Converting']];
+export class VideoConvertingJob extends FileJob<string> {
+  public readonly Name = DefaultsJobs[DefaultsJobs['Video Converting']];
 
   constructor() {
     super({noPhoto: true, noMetaFile: true});

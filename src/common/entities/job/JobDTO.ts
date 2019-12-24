@@ -1,7 +1,7 @@
 export type fieldType = 'string' | 'number' | 'boolean' | 'number-array';
 
 
-export enum DefaultsTasks {
+export enum DefaultsJobs {
   Indexing = 1, 'Database Reset' = 2, 'Video Converting' = 3, 'Photo Converting' = 4, 'Thumbnail Generation' = 5
 }
 
@@ -12,7 +12,7 @@ export interface ConfigTemplateEntry {
   defaultValue: any;
 }
 
-export interface TaskDTO {
+export interface JobDTO {
   Name: string;
   ConfigTemplate: ConfigTemplateEntry[];
 }

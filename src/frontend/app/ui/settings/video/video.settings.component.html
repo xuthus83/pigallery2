@@ -36,7 +36,7 @@
           server's upload rate.
         </ng-container>&nbsp;
         <ng-container i18n>The transcoded videos will be save to the thumbnail folder.</ng-container>&nbsp;
-        <ng-container i18n>You can trigger the transcoding manually, but you can also create an automatic encoding task
+        <ng-container i18n>You can trigger the transcoding manually, but you can also create an automatic encoding job
           in
           advanced settings mode.
         </ng-container>&nbsp;
@@ -136,7 +136,7 @@
       </button>
       <button class="btn btn-secondary  float-left ml-0"
               *ngIf="Progress != null"
-              [disabled]="inProgress || Progress.state !== TaskState.running"
+              [disabled]="inProgress || Progress.state !== JobState.running"
               (click)="cancelTranscoding()" i18n>Cancel transcoding
       </button>
 
@@ -144,7 +144,7 @@
       <ng-container *ngIf="Progress != null">
         <br/>
         <hr/>
-        <app-settings-tasks-progress [progress]="Progress"></app-settings-tasks-progress>
+        <app-settings-job-progress [progress]="Progress"></app-settings-job-progress>
       </ng-container>
 
 
