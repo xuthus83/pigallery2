@@ -15,7 +15,7 @@ export class PhotoConverterMWs {
     }
     const fullMediaPath = req.resultPipe;
 
-    const convertedVideo = PhotoProcessing.generateConvertedFileName(fullMediaPath);
+    const convertedVideo = PhotoProcessing.generateConvertedFilePath(fullMediaPath);
 
     // check if transcoded video exist
     if (fs.existsSync(convertedVideo) === true) {

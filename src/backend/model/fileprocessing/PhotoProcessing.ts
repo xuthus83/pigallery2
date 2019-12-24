@@ -5,7 +5,7 @@ import * as crypto from 'crypto';
 import {ProjectPath} from '../../ProjectPath';
 import {Config} from '../../../common/config/private/Config';
 import {ThumbnailTH} from '../threading/ThreadPool';
-import {RendererInput, ThumbnailSourceType, ThumbnailWorker} from '../threading/ThumbnailWorker';
+import {PhotoWorker, RendererInput, ThumbnailSourceType} from '../threading/PhotoWorker';
 import {ITaskExecuter, TaskExecuter} from '../threading/TaskExecuter';
 import {ServerConfig} from '../../../common/config/private/IPrivateConfig';
 import {FaceRegion, PhotoDTO} from '../../../common/entities/PhotoDTO';
@@ -37,7 +37,7 @@ export class PhotoProcessing {
       this.taskQue = new ThumbnailTH(Config.Client.Media.Thumbnail.concurrentThumbnailGenerations);
     } else {
       this.taskQue = new TaskExecuter(Config.Client.Media.Thumbnail.concurrentThumbnailGenerations,
-        (input => ThumbnailWorker.render(input, Config.Server.Media.photoProcessingLibrary)));
+        (input => PhotoWorker.render(input, Config.Server.Media.photoProcessingLibrary)));
     }
 
     this.initDone = true;
@@ -56,8 +56,7 @@ export class PhotoProcessing {
     const mediaPath = path.join(ProjectPath.ImageFolder, photo.directory.path, photo.directory.name, photo.name);
     const size: number = Config.Client.Media.Thumbnail.personThumbnailSize;
     // generate thumbnail path
-    const thPath = path.join(ProjectPath.ThumbnailFolder,
-      PhotoProcessing.generatePersonThumbnailName(mediaPath, photo.metadata.faces[0], size));
+    const thPath = PhotoProcessing.generatePersonThumbnailPath(mediaPath, photo.metadata.faces[0], size);
 
 
     // check if thumbnail already exist
@@ -95,17 +94,22 @@ export class PhotoProcessing {
   }
 
 
-  public static generateThumbnailName(mediaPath: string, size: number): string {
-    return crypto.createHash('md5').update(mediaPath).digest('hex') + '_' + size + '.jpg';
+  public static generateThumbnailPath(mediaPath: string, size: number): string {
+    const extension = path.extname(mediaPath);
+    const file = path.basename(mediaPath, extension);
+    return path.join(ProjectPath.TranscodedFolder,
+      ProjectPath.getRelativePathToImages(path.dirname(mediaPath)), file +
+      '_' + size + '.jpg');
   }
 
-  public static generatePersonThumbnailName(mediaPath: string, faceRegion: FaceRegion, size: number): string {
-    return crypto.createHash('md5').update(mediaPath + '_' + faceRegion.name + '_' + faceRegion.box.left + '_' + faceRegion.box.top)
-      .digest('hex') + '_' + size + '.jpg';
+  public static generatePersonThumbnailPath(mediaPath: string, faceRegion: FaceRegion, size: number): string {
+    return path.join(ProjectPath.FacesFolder,
+      crypto.createHash('md5').update(mediaPath + '_' + faceRegion.name + '_' + faceRegion.box.left + '_' + faceRegion.box.top)
+        .digest('hex') + '_' + size + '.jpg');
   }
 
 
-  public static generateConvertedFileName(photoPath: string): string {
+  public static generateConvertedFilePath(photoPath: string): string {
     const extension = path.extname(photoPath);
     const file = path.basename(photoPath, extension);
     const postfix = Config.Server.Media.Photo.Converting.resolution;
@@ -117,7 +121,7 @@ export class PhotoProcessing {
 
   public static async convertPhoto(mediaPath: string, size: number) {
     // generate thumbnail path
-    const outPath = PhotoProcessing.generateConvertedFileName(mediaPath);
+    const outPath = PhotoProcessing.generateConvertedFilePath(mediaPath);
 
 
     // check if file already exist
@@ -149,7 +153,7 @@ export class PhotoProcessing {
                                         sourceType: ThumbnailSourceType,
                                         makeSquare: boolean) {
     // generate thumbnail path
-    const outPath = path.join(ProjectPath.ThumbnailFolder, PhotoProcessing.generateThumbnailName(mediaPath, size));
+    const outPath = PhotoProcessing.generateThumbnailPath(mediaPath, size);
 
 
     // check if thumbnail already exist

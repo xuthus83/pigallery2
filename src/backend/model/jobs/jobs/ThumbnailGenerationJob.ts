@@ -7,7 +7,7 @@ import * as util from 'util';
 import {FileJob} from './FileJob';
 import {DirectoryDTO} from '../../../../common/entities/DirectoryDTO';
 import {PhotoProcessing} from '../../fileprocessing/PhotoProcessing';
-import {ThumbnailSourceType} from '../../threading/ThumbnailWorker';
+import {ThumbnailSourceType} from '../../threading/PhotoWorker';
 import {MediaDTO} from '../../../../common/entities/MediaDTO';
 
 const LOG_TAG = '[ThumbnailGenerationJob]';

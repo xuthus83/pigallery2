@@ -2,7 +2,7 @@ import * as cluster from 'cluster';
 import {Logger} from '../../Logger';
 import {DiskManagerTask, ThumbnailTask, WorkerMessage, WorkerTask, WorkerTaskTypes} from './Worker';
 import {DirectoryDTO} from '../../../common/entities/DirectoryDTO';
-import {RendererInput} from './ThumbnailWorker';
+import {RendererInput} from './PhotoWorker';
 import {Config} from '../../../common/config/private/Config';
 import {TaskQue, TaskQueEntry} from './TaskQue';
 import {ITaskExecuter} from './TaskExecuter';

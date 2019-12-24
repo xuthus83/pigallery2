@@ -5,7 +5,7 @@ import {FfmpegCommand, FfprobeData} from 'fluent-ffmpeg';
 import {FFmpegFactory} from '../FFmpegFactory';
 import {ServerConfig} from '../../../common/config/private/IPrivateConfig';
 
-export class ThumbnailWorker {
+export class PhotoWorker {
 
   private static imageRenderer: (input: RendererInput) => Promise<void> = null;
   private static videoRenderer: (input: RendererInput) => Promise<void> = null;
@@ -19,19 +19,19 @@ export class ThumbnailWorker {
   }
 
   public static renderFromImage(input: RendererInput, renderer: ServerConfig.PhotoProcessingLib): Promise<void> {
-    if (ThumbnailWorker.rendererType !== renderer) {
-      ThumbnailWorker.imageRenderer = ImageRendererFactory.build(renderer);
-      ThumbnailWorker.rendererType = renderer;
+    if (PhotoWorker.rendererType !== renderer) {
+      PhotoWorker.imageRenderer = ImageRendererFactory.build(renderer);
+      PhotoWorker.rendererType = renderer;
     }
-    return ThumbnailWorker.imageRenderer(input);
+    return PhotoWorker.imageRenderer(input);
   }
 
 
   public static renderFromVideo(input: RendererInput): Promise<void> {
-    if (ThumbnailWorker.videoRenderer === null) {
-      ThumbnailWorker.videoRenderer = VideoRendererFactory.build();
+    if (PhotoWorker.videoRenderer === null) {
+      PhotoWorker.videoRenderer = VideoRendererFactory.build();
     }
-    return ThumbnailWorker.videoRenderer(input);
+    return PhotoWorker.videoRenderer(input);
   }
 
 }

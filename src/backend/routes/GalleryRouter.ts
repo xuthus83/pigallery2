@@ -4,7 +4,7 @@ import {GalleryMWs} from '../middlewares/GalleryMWs';
 import {RenderingMWs} from '../middlewares/RenderingMWs';
 import {ThumbnailGeneratorMWs} from '../middlewares/thumbnail/ThumbnailGeneratorMWs';
 import {UserRoles} from '../../common/entities/UserDTO';
-import {ThumbnailSourceType} from '../model/threading/ThumbnailWorker';
+import {ThumbnailSourceType} from '../model/threading/PhotoWorker';
 import {VersionMWs} from '../middlewares/VersionMWs';
 import {SupportedFormats} from '../../common/SupportedFormats';
 import {PhotoConverterMWs} from '../middlewares/thumbnail/PhotoConverterMWs';

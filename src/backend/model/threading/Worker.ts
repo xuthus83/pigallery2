@@ -1,6 +1,6 @@
 import {DiskMangerWorker} from './DiskMangerWorker';
 import {Logger} from '../../Logger';
-import {RendererInput, ThumbnailWorker} from './ThumbnailWorker';
+import {RendererInput, PhotoWorker} from './PhotoWorker';
 import {DirectoryDTO} from '../../../common/entities/DirectoryDTO';
 import {Utils} from '../../../common/Utils';
 import {ServerConfig} from '../../../common/config/private/IPrivateConfig';
@@ -22,7 +22,7 @@ export class Worker {
             }
             break;
           case WorkerTaskTypes.thumbnail:
-            result = await ThumbnailWorker.render((<ThumbnailTask>task).input, (<ThumbnailTask>task).renderer);
+            result = await PhotoWorker.render((<ThumbnailTask>task).input, (<ThumbnailTask>task).renderer);
             break;
           default:
             throw new Error('Unknown worker task type');

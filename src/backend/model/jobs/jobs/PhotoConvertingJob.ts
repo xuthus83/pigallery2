@@ -31,7 +31,7 @@ export class PhotoConvertingJob extends FileJob<string> {
         directory.media[i].directory.name,
         directory.media[i].name);
 
-      if (await existsPr(PhotoProcessing.generateConvertedFileName(photoPath)) === false) {
+      if (await existsPr(PhotoProcessing.generateConvertedFilePath(photoPath)) === false) {
         ret.push(photoPath);
       }
     }

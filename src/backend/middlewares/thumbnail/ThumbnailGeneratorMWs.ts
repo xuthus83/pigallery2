@@ -6,7 +6,7 @@ import {ContentWrapper} from '../../../common/entities/ConentWrapper';
 import {DirectoryDTO} from '../../../common/entities/DirectoryDTO';
 import {ProjectPath} from '../../ProjectPath';
 import {Config} from '../../../common/config/private/Config';
-import {ThumbnailSourceType} from '../../model/threading/ThumbnailWorker';
+import {ThumbnailSourceType} from '../../model/threading/PhotoWorker';
 import {MediaDTO} from '../../../common/entities/MediaDTO';
 import {PersonWithPhoto} from '../PersonMWs';
 import {PhotoProcessing} from '../../model/fileprocessing/PhotoProcessing';
@@ -56,8 +56,7 @@ export class ThumbnailGeneratorMWs {
           persons[i].samplePhoto.directory.name, persons[i].samplePhoto.name);
 
         // generate thumbnail path
-        const thPath = path.join(ProjectPath.ThumbnailFolder,
-          PhotoProcessing.generatePersonThumbnailName(mediaPath, persons[i].samplePhoto.metadata.faces[0], size));
+        const thPath = PhotoProcessing.generatePersonThumbnailPath(mediaPath, persons[i].samplePhoto.metadata.faces[0], size);
 
         persons[i].readyThumbnail = fs.existsSync(thPath);
       }
@@ -151,7 +150,7 @@ export class ThumbnailGeneratorMWs {
       const fullMediaPath = path.join(ProjectPath.ImageFolder, photos[i].directory.path, photos[i].directory.name, photos[i].name);
       for (let j = 0; j < Config.Client.Media.Thumbnail.thumbnailSizes.length; j++) {
         const size = Config.Client.Media.Thumbnail.thumbnailSizes[j];
-        const thPath = path.join(thumbnailFolder, PhotoProcessing.generateThumbnailName(fullMediaPath, size));
+        const thPath = PhotoProcessing.generateThumbnailPath(fullMediaPath, size);
         if (fs.existsSync(thPath) === true) {
           if (typeof photos[i].readyThumbnails === 'undefined') {
             photos[i].readyThumbnails = [];
@@ -159,8 +158,7 @@ export class ThumbnailGeneratorMWs {
           photos[i].readyThumbnails.push(size);
         }
       }
-      const iconPath = path.join(thumbnailFolder,
-        PhotoProcessing.generateThumbnailName(fullMediaPath, Config.Client.Media.Thumbnail.iconSize));
+      const iconPath = PhotoProcessing.generateThumbnailPath(fullMediaPath, Config.Client.Media.Thumbnail.iconSize);
       if (fs.existsSync(iconPath) === true) {
         photos[i].readyIcon = true;
       }
