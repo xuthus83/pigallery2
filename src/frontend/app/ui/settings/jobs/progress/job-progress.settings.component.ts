@@ -1,6 +1,7 @@
 import {Component, Input, OnChanges, OnDestroy} from '@angular/core';
-import {JobProgressDTO, JobState} from '../../../../../../common/entities/settings/JobProgressDTO';
+import {JobProgressDTO, JobState} from '../../../../../../common/entities/job/JobProgressDTO';
 import {Subscription, timer} from 'rxjs';
+import {JobLastRunDTO, JobLastRunState} from '../../../../../../common/entities/job/JobLastRunDTO';
 
 @Component({
   selector: 'app-settings-job-progress',
@@ -10,8 +11,10 @@ import {Subscription, timer} from 'rxjs';
 export class JobProgressComponent implements OnDestroy, OnChanges {
 
   @Input() progress: JobProgressDTO;
+  @Input() lastRun: JobLastRunDTO;
   JobState = JobState;
   timeCurrentCopy: number;
+  JobLastRunState = JobLastRunState;
   private timerSub: Subscription;
 
   constructor() {

@@ -3,7 +3,7 @@ import * as path from 'path';
 import * as util from 'util';
 import {promises as fsp} from 'fs';
 import {Job} from './Job';
-import {JobProgressDTO} from '../../../../common/entities/settings/JobProgressDTO';
+import {JobProgressDTO} from '../../../../common/entities/job/JobProgressDTO';
 import {ProjectPath} from '../../../ProjectPath';
 import {PhotoProcessing} from '../../fileprocessing/PhotoProcessing';
 import {VideoProcessing} from '../../fileprocessing/VideoProcessing';

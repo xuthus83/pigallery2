@@ -10,7 +10,7 @@ import {ScheduledJobsService} from '../scheduled-jobs.service';
 import {DefaultsJobs} from '../../../../../common/entities/job/JobDTO';
 import {ErrorDTO} from '../../../../../common/entities/Error';
 import {ServerConfig} from '../../../../../common/config/private/IPrivateConfig';
-import { JobState } from '../../../../../common/entities/settings/JobProgressDTO';
+import { JobState } from '../../../../../common/entities/job/JobProgressDTO';
 
 
 @Component({

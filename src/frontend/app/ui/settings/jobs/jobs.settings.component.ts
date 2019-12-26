@@ -18,7 +18,7 @@ import {
 import {Utils} from '../../../../../common/Utils';
 import {ServerConfig} from '../../../../../common/config/private/IPrivateConfig';
 import {ConfigTemplateEntry} from '../../../../../common/entities/job/JobDTO';
-import {JobState} from '../../../../../common/entities/settings/JobProgressDTO';
+import {JobState} from '../../../../../common/entities/job/JobProgressDTO';
 import {Job} from '../../../../../backend/model/jobs/jobs/Job';
 import {ModalDirective} from 'ngx-bootstrap/modal';
 
@@ -209,6 +209,10 @@ export class JobsSettingsComponent extends SettingsComponent<ServerConfig.JobCon
     const count = this.settings.scheduled.filter(s => s.jobName === jobName).length;
     this.newSchedule.name = count === 0 ? jobName : jobName + ' ' + (count + 1);
     this.settings.scheduled.push(this.newSchedule);
+  }
+
+  getConfigHash(schedule: JobScheduleDTO): string {
+    return JSON.stringify(schedule.config);
   }
 
   private getNextRunningDate(sch: JobScheduleDTO, list: JobScheduleDTO[], depth: number = 0): number {

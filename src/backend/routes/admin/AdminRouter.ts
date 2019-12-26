@@ -43,6 +43,12 @@ export class AdminRouter {
       AdminMWs.getJobProgresses,
       RenderingMWs.renderResult
     );
+    app.get('/api/admin/jobs/scheduled/lastRun',
+      AuthenticationMWs.authenticate,
+      AuthenticationMWs.authorise(UserRoles.Admin),
+      AdminMWs.getJobLastRuns,
+      RenderingMWs.renderResult
+    );
     app.post('/api/admin/jobs/scheduled/:id/start',
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Admin),

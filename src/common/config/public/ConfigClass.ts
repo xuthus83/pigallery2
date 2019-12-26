@@ -115,7 +115,7 @@ export module ClientConfig {
 /**
  * These configuration will be available at frontend and backend too
  */
-export class PublicConfigClass {
+export class  PublicConfigClass {
 
   public Client: ClientConfig.Config = {
     applicationTitle: 'PiGallery 2',

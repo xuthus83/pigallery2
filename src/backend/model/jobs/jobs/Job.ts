@@ -1,9 +1,11 @@
-import {JobProgressDTO, JobState} from '../../../../common/entities/settings/JobProgressDTO';
+import {JobProgressDTO, JobState} from '../../../../common/entities/job/JobProgressDTO';
 import {Logger} from '../../../Logger';
 import {IJob} from './IJob';
 import {ConfigTemplateEntry, JobDTO} from '../../../../common/entities/job/JobDTO';
+import {JobLastRunDTO, JobLastRunState} from '../../../../common/entities/job/JobLastRunDTO';
 
 declare const process: any;
+declare const global: any;
 
 const LOG_TAG = '[JOB]';
 
@@ -14,6 +16,7 @@ export abstract class Job<T = void> implements IJob<T> {
   protected config: T;
   protected prResolve: () => void;
   protected IsInstant = false;
+  protected lastRuns: { [key: string]: JobLastRunDTO } = {};
 
   public abstract get Supported(): boolean;
 
@@ -21,12 +24,15 @@ export abstract class Job<T = void> implements IJob<T> {
 
   public abstract get ConfigTemplate(): ConfigTemplateEntry[];
 
+  public get LastRuns(): { [key: string]: JobLastRunDTO } {
+    return this.lastRuns;
+  }
+
   public get Progress(): JobProgressDTO {
     return this.progress;
   }
 
-  public start(config: T, onFinishCB = () => {
-  }): Promise<void> {
+  public start(config: T, onFinishCB: () => void): Promise<void> {
     this.OnFinishCB = onFinishCB;
     if (this.state === JobState.idle && this.Supported) {
       Logger.info(LOG_TAG, 'Running job: ' + this.Name);
@@ -78,6 +84,17 @@ export abstract class Job<T = void> implements IJob<T> {
   protected abstract async init(): Promise<void>;
 
   private onFinish(): void {
+    this.lastRuns[JSON.stringify(this.config)] = {
+      all: this.progress.left + this.progress.progress,
+      done: this.progress.progress,
+      comment: '',
+      config: this.config,
+      state: this.progress.state === JobState.stopping ? JobLastRunState.canceled : JobLastRunState.finished,
+      time: {
+        start: this.progress.time.start,
+        end: Date.now()
+      }
+    };
     this.progress = null;
     if (global.gc) {
       global.gc();
@@ -95,16 +112,16 @@ export abstract class Job<T = void> implements IJob<T> {
         if (this.state === JobState.idle) {
           return;
         }
+        let prg = null;
         if (this.state === JobState.running) {
-          this.progress = await this.step();
-        } else {
-          this.progress = null;
+          prg = await this.step();
         }
-        if (this.progress == null) { // finished
+        if (prg == null) { // finished
           this.state = JobState.idle;
           this.onFinish();
           return;
         }
+        this.progress = prg;
         this.run();
       } catch (e) {
         Logger.error(LOG_TAG, e);

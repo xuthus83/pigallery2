@@ -11,7 +11,7 @@ import {ServerConfig} from '../../../../../common/config/private/IPrivateConfig'
 import {Utils} from '../../../../../common/Utils';
 import {DefaultsJobs} from '../../../../../common/entities/job/JobDTO';
 import {ErrorDTO} from '../../../../../common/entities/Error';
-import {JobState} from '../../../../../common/entities/settings/JobProgressDTO';
+import {JobState} from '../../../../../common/entities/job/JobProgressDTO';
 
 
 @Component({

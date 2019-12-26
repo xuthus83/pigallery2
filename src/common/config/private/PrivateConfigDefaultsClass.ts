@@ -75,17 +75,50 @@ export class PrivateConfigDefaultsClass extends PublicConfigClass implements IPr
       listingLimit: 1000
     },
     Jobs: {
-      scheduled: [{
-        name: DefaultsJobs[DefaultsJobs['Database Reset']],
-        jobName: DefaultsJobs[DefaultsJobs['Database Reset']],
-        config: {},
-        trigger: {type: JobTriggerType.never}
-      }, {
-        name: DefaultsJobs[DefaultsJobs.Indexing],
-        jobName: DefaultsJobs[DefaultsJobs.Indexing],
-        config: {},
-        trigger: {type: JobTriggerType.never}
-      }]
+      scheduled: [
+        {
+          name: DefaultsJobs[DefaultsJobs.Indexing],
+          jobName: DefaultsJobs[DefaultsJobs.Indexing],
+          config: {},
+          trigger: {type: JobTriggerType.never}
+        },
+        {
+          name: DefaultsJobs[DefaultsJobs['Thumbnail Generation']],
+          jobName: DefaultsJobs[DefaultsJobs['Thumbnail Generation']],
+          config: {sizes: [160]},
+          trigger: {
+            type: JobTriggerType.after,
+            afterScheduleName: DefaultsJobs[DefaultsJobs.Indexing]
+          }
+        },
+        {
+          name: DefaultsJobs[DefaultsJobs['Photo Converting']],
+          jobName: DefaultsJobs[DefaultsJobs['Photo Converting']],
+          config: {},
+          trigger: {
+            type: JobTriggerType.after,
+            afterScheduleName: DefaultsJobs[DefaultsJobs['Thumbnail Generation']]
+          }
+        },
+        {
+          name: DefaultsJobs[DefaultsJobs['Video Converting']],
+          jobName: DefaultsJobs[DefaultsJobs['Video Converting']],
+          config: {},
+          trigger: {
+            type: JobTriggerType.after,
+            afterScheduleName: DefaultsJobs[DefaultsJobs['Photo Converting']]
+          }
+        },
+        {
+          name: DefaultsJobs[DefaultsJobs['Temp Folder Cleaning']],
+          jobName: DefaultsJobs[DefaultsJobs['Temp Folder Cleaning']],
+          config: {},
+          trigger: {
+            type: JobTriggerType.after,
+            afterScheduleName: DefaultsJobs[DefaultsJobs['Video Converting']]
+          }
+        }
+      ]
     }
   };
 }

@@ -1,19 +1,22 @@
 import {EventEmitter, Injectable} from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
-import {JobProgressDTO} from '../../../../common/entities/settings/JobProgressDTO';
+import {JobProgressDTO} from '../../../../common/entities/job/JobProgressDTO';
 import {NetworkService} from '../../model/network/network.service';
+import {JobLastRunDTO} from '../../../../common/entities/job/JobLastRunDTO';
 
 @Injectable()
 export class ScheduledJobsService {
 
 
   public progress: BehaviorSubject<{ [key: string]: JobProgressDTO }>;
+  public lastRuns: BehaviorSubject<{ [key: string]: { [key: string]: JobLastRunDTO } }>;
   public onJobFinish: EventEmitter<string> = new EventEmitter<string>();
   timer: number = null;
   private subscribers = 0;
 
   constructor(private _networkService: NetworkService) {
     this.progress = new BehaviorSubject({});
+    this.lastRuns = new BehaviorSubject({});
   }
 
   public calcTimeElapsed(progress: JobProgressDTO) {
@@ -53,6 +56,7 @@ export class ScheduledJobsService {
   protected async getProgress(): Promise<void> {
     const prevPrg = this.progress.value;
     this.progress.next(await this._networkService.getJson<{ [key: string]: JobProgressDTO }>('/admin/jobs/scheduled/progress'));
+    this.lastRuns.next(await this._networkService.getJson<{ [key: string]: { [key: string]: JobLastRunDTO } }>('/admin/jobs/scheduled/lastRun'));
     for (const prg in prevPrg) {
       if (!this.progress.value.hasOwnProperty(prg)) {
         this.onJobFinish.emit(prg);

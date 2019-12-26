@@ -1,4 +1,4 @@
-import {JobProgressDTO, JobState} from '../../../../common/entities/settings/JobProgressDTO';
+import {JobProgressDTO, JobState} from '../../../../common/entities/job/JobProgressDTO';
 import {ObjectManagers} from '../../ObjectManagers';
 import * as path from 'path';
 import {Config} from '../../../../common/config/private/Config';

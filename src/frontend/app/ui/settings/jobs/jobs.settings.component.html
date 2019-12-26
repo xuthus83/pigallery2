@@ -189,9 +189,11 @@
               </div>
             </ng-container>
           </div>
+
           <app-settings-job-progress
             class="card-footer bg-transparent"
-            [progress]="jobsService.progress.value[schedule.jobName]">
+            [progress]="jobsService.progress.value[schedule.jobName]"
+            [lastRun]="(jobsService.lastRuns.value[schedule.jobName] || {})[getConfigHash(schedule)]">
           </app-settings-job-progress>
 
         </div>

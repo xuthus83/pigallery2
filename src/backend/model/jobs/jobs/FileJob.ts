@@ -1,4 +1,4 @@
-import {JobProgressDTO} from '../../../../common/entities/settings/JobProgressDTO';
+import {JobProgressDTO} from '../../../../common/entities/job/JobProgressDTO';
 import {ConfigTemplateEntry} from '../../../../common/entities/job/JobDTO';
 import {Job} from './Job';
 import * as path from 'path';

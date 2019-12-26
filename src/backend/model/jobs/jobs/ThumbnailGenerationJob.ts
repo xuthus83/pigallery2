@@ -28,14 +28,14 @@ export class ThumbnailGenerationJob extends FileJob<MediaDTO, { sizes: number[] 
     return true;
   }
 
-  start(config: { sizes: number[] }): Promise<void> {
+  start(config: { sizes: number[] }, OnFinishCB: () => void): Promise<void> {
     for (let i = 0; i < config.sizes.length; ++i) {
       if (Config.Client.Media.Thumbnail.thumbnailSizes.indexOf(config.sizes[i]) === -1) {
         throw new Error('unknown thumbnails size: ' + config.sizes[i] + '. Add it to the possible thumbnail sizes.');
       }
     }
 
-    return super.start(config);
+    return super.start(config, OnFinishCB);
   }
 
   protected async processDirectory(directory: DirectoryDTO): Promise<MediaDTO[]> {

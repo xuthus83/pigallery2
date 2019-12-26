@@ -102,4 +102,15 @@ export class AdminMWs {
       return next(new ErrorDTO(ErrorCodes.JOB_ERROR, 'Job error: ' + JSON.stringify(err, null, '  '), err));
     }
   }
+  public static getJobLastRuns(req: Request, res: Response, next: NextFunction) {
+    try {
+      req.resultPipe = ObjectManagers.getInstance().JobManager.getJobLastRuns();
+      return next();
+    } catch (err) {
+      if (err instanceof Error) {
+        return next(new ErrorDTO(ErrorCodes.JOB_ERROR, 'Job error: ' + err.toString(), err));
+      }
+      return next(new ErrorDTO(ErrorCodes.JOB_ERROR, 'Job error: ' + JSON.stringify(err, null, '  '), err));
+    }
+  }
 }

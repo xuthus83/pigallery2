@@ -1,11 +1,12 @@
 import {IJobManager} from '../database/interfaces/IJobManager';
-import {JobProgressDTO} from '../../../common/entities/settings/JobProgressDTO';
+import {JobProgressDTO} from '../../../common/entities/job/JobProgressDTO';
 import {IJob} from './jobs/IJob';
 import {JobRepository} from './JobRepository';
 import {Config} from '../../../common/config/private/Config';
 import {AfterJobTrigger, JobScheduleDTO, JobTriggerType} from '../../../common/entities/job/JobScheduleDTO';
 import {Logger} from '../../Logger';
 import {NotificationManager} from '../NotifocationManager';
+import {JobLastRunDTO} from '../../../common/entities/job/JobLastRunDTO';
 
 declare var global: NodeJS.Global;
 
@@ -27,6 +28,14 @@ export class JobManager implements IJobManager {
         t.Progress.time.current = Date.now();
         m[t.Name] = t.Progress;
       });
+    return m;
+  }
+
+  getJobLastRuns(): { [key: string]: { [key: string]: JobLastRunDTO } } {
+    const m: { [id: string]: { [id: string]: JobLastRunDTO } } = {};
+    JobRepository.Instance.getAvailableJobs().forEach(t => {
+      m[t.Name] = t.LastRuns;
+    });
     return m;
   }
 
@@ -54,9 +63,10 @@ export class JobManager implements IJobManager {
   }
 
   async onJobFinished(job: IJob<any>): Promise<void> {
+    console.log('onFinished' + job.Name);
     const sch = Config.Server.Jobs.scheduled.find(s => s.jobName === job.Name);
     if (sch) {
-      console.log('found parent');
+      console.log('parent found' + sch.jobName);
       const children = Config.Server.Jobs.scheduled.filter(s => s.trigger.type === JobTriggerType.after &&
         (<AfterJobTrigger>s.trigger).afterScheduleName === sch.name);
       for (let i = 0; i < children.length; ++i) {

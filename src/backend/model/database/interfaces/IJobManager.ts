@@ -1,5 +1,6 @@
-import {JobProgressDTO} from '../../../../common/entities/settings/JobProgressDTO';
+import {JobProgressDTO} from '../../../../common/entities/job/JobProgressDTO';
 import {JobDTO} from '../../../../common/entities/job/JobDTO';
+import {JobLastRunDTO} from '../../../../common/entities/job/JobLastRunDTO';
 
 export interface IJobManager {
 
@@ -15,4 +16,6 @@ export interface IJobManager {
   stopSchedules(): void;
 
   runSchedules(): void;
+
+  getJobLastRuns(): { [key: string]: { [key: string]: JobLastRunDTO } };
 }
