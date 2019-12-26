@@ -8,11 +8,11 @@ import {I18n} from '@ngx-translate/i18n-polyfill';
 import {ErrorDTO} from '../../../../../common/entities/Error';
 import {ScheduledJobsService} from '../scheduled-jobs.service';
 import {
+  JobScheduleDTO,
+  JobTriggerType,
   NeverJobTrigger,
   PeriodicJobTrigger,
-  ScheduledJobTrigger,
-  JobScheduleDTO,
-  JobTriggerType
+  ScheduledJobTrigger
 } from '../../../../../common/entities/job/JobScheduleDTO';
 import {Utils} from '../../../../../common/Utils';
 import {ServerConfig} from '../../../../../common/config/private/IPrivateConfig';
@@ -62,7 +62,6 @@ export class JobsSettingsComponent extends SettingsComponent<ServerConfig.JobCon
       this.i18n('Sunday'),
       this.i18n('day')]; // 7
   }
-
 
 
   getConfigTemplate(JobName: string): ConfigTemplateEntry[] {
@@ -131,7 +130,9 @@ export class JobsSettingsComponent extends SettingsComponent<ServerConfig.JobCon
   jobTypeChanged(schedule: JobScheduleDTO) {
     const job = this._settingsService.availableJobs.value.find(t => t.Name === schedule.jobName);
     schedule.config = schedule.config || {};
-    job.ConfigTemplate.forEach(ct => schedule.config[ct.id] = ct.defaultValue);
+    if (job.ConfigTemplate) {
+      job.ConfigTemplate.forEach(ct => schedule.config[ct.id] = ct.defaultValue);
+    }
   }
 
   addNewJob() {
@@ -146,7 +147,9 @@ export class JobsSettingsComponent extends SettingsComponent<ServerConfig.JobCon
 
     const job = this._settingsService.availableJobs.value.find(t => t.Name === jobName);
     newSchedule.config = newSchedule.config || {};
-    job.ConfigTemplate.forEach(ct => newSchedule.config[ct.id] = ct.defaultValue);
+    if (job.ConfigTemplate) {
+      job.ConfigTemplate.forEach(ct => newSchedule.config[ct.id] = ct.defaultValue);
+    }
     this.settings.scheduled.push(newSchedule);
   }
 

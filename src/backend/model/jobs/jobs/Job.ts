@@ -2,6 +2,7 @@ import {JobProgressDTO, JobState} from '../../../../common/entities/settings/Job
 import {Logger} from '../../../Logger';
 import {IJob} from './IJob';
 import {ConfigTemplateEntry, JobDTO} from '../../../../common/entities/job/JobDTO';
+import * as rimraf from 'rimraf';
 
 declare const process: any;
 
@@ -77,6 +78,9 @@ export abstract class Job<T = void> implements IJob<T> {
 
   private onFinish(): void {
     this.progress = null;
+    if (global.gc) {
+      global.gc();
+    }
     Logger.info(LOG_TAG, 'Job finished: ' + this.Name);
     if (this.IsInstant) {
       this.prResolve();
@@ -87,10 +91,13 @@ export abstract class Job<T = void> implements IJob<T> {
     process.nextTick(async () => {
       try {
         if (this.state === JobState.idle) {
-          this.progress = null;
           return;
         }
-        this.progress = await this.step();
+        if (this.state === JobState.running) {
+          this.progress = await this.step();
+        } else {
+          this.progress = null;
+        }
         if (this.progress == null) { // finished
           this.state = JobState.idle;
           this.onFinish();

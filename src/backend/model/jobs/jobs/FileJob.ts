@@ -1,4 +1,4 @@
-import {JobProgressDTO, JobState} from '../../../../common/entities/settings/JobProgressDTO';
+import {JobProgressDTO} from '../../../../common/entities/settings/JobProgressDTO';
 import {ConfigTemplateEntry} from '../../../../common/entities/job/JobDTO';
 import {Job} from './Job';
 import * as path from 'path';
@@ -6,7 +6,6 @@ import {DiskManager} from '../../DiskManger';
 import {DiskMangerWorker} from '../../threading/DiskMangerWorker';
 import {DirectoryDTO} from '../../../../common/entities/DirectoryDTO';
 import {Logger} from '../../../Logger';
-import {MediaDTO} from '../../../../common/entities/MediaDTO';
 
 declare var global: NodeJS.Global;
 
@@ -35,11 +34,7 @@ export abstract class FileJob<T, S = void> extends Job<S> {
   protected abstract async processFile(file: T): Promise<void>;
 
   protected async step(): Promise<JobProgressDTO> {
-    if ((this.directoryQueue.length === 0 && this.fileQueue.length === 0)
-      || this.state !== JobState.running) {
-      if (global.gc) {
-        global.gc();
-      }
+    if (this.directoryQueue.length === 0 && this.fileQueue.length === 0) {
       return null;
     }
 

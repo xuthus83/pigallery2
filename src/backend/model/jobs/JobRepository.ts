@@ -4,6 +4,7 @@ import {DBRestJob} from './jobs/DBResetJob';
 import {VideoConvertingJob} from './jobs/VideoConvertingJob';
 import {PhotoConvertingJob} from './jobs/PhotoConvertingJob';
 import {ThumbnailGenerationJob} from './jobs/ThumbnailGenerationJob';
+import {TempFolderCleaningJob} from './jobs/TempFolderCleaningJob';
 
 export class JobRepository {
 
@@ -21,7 +22,10 @@ export class JobRepository {
     return Object.values(this.availableJobs).filter(t => t.Supported);
   }
 
-  register(job: IJob<any>) {
+  register(job: IJob<any>): void {
+    if (typeof this.availableJobs[job.Name] !== 'undefined') {
+      throw new Error('Job already exist:' + job.Name);
+    }
     this.availableJobs[job.Name] = job;
   }
 }
@@ -32,3 +36,4 @@ JobRepository.Instance.register(new DBRestJob());
 JobRepository.Instance.register(new VideoConvertingJob());
 JobRepository.Instance.register(new PhotoConvertingJob());
 JobRepository.Instance.register(new ThumbnailGenerationJob());
+JobRepository.Instance.register(new TempFolderCleaningJob());

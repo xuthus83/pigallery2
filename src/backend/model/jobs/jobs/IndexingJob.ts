@@ -25,9 +25,6 @@ export class IndexingJob extends Job {
 
   protected async step(): Promise<JobProgressDTO> {
     if (this.directoriesToIndex.length === 0) {
-      if (global.gc) {
-        global.gc();
-      }
       return null;
     }
     const directory = this.directoriesToIndex.shift();

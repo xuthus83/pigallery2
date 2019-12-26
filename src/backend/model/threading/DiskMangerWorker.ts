@@ -1,5 +1,4 @@
-import * as fs from 'fs';
-import {Stats} from 'fs';
+import {promises as fsp, Stats} from 'fs';
 import * as path from 'path';
 import {DirectoryDTO} from '../../../common/entities/DirectoryDTO';
 import {PhotoDTO} from '../../../common/entities/PhotoDTO';
@@ -10,6 +9,8 @@ import {FileDTO} from '../../../common/entities/FileDTO';
 import {MetadataLoader} from './MetadataLoader';
 import {Logger} from '../../Logger';
 import {SupportedFormats} from '../../../common/SupportedFormats';
+import {VideoProcessing} from '../fileprocessing/VideoProcessing';
+import {PhotoProcessing} from '../fileprocessing/PhotoProcessing';
 
 const LOG_TAG = '[DiskMangerWorker]';
 
@@ -41,7 +42,7 @@ export class DiskMangerWorker {
     return path.basename(name);
   }
 
-  public static excludeDir(name: string, relativeDirectoryName: string, absoluteDirectoryName: string) {
+  public static async excludeDir(name: string, relativeDirectoryName: string, absoluteDirectoryName: string) {
     if (Config.Server.Indexing.excludeFolderList.length === 0 ||
       Config.Server.Indexing.excludeFileList.length === 0) {
       return false;
@@ -70,122 +71,105 @@ export class DiskMangerWorker {
     for (let j = 0; j < Config.Server.Indexing.excludeFileList.length; j++) {
       const exclude = Config.Server.Indexing.excludeFileList[j];
 
-      if (fs.existsSync(path.join(absoluteName, exclude))) {
+      try {
+        await fsp.access(path.join(absoluteName, exclude));
         return true;
+      } catch (e) {
       }
     }
 
     return false;
   }
 
-  public static scanDirectory(relativeDirectoryName: string, settings: DiskMangerWorker.DirectoryScanSettings = {}): Promise<DirectoryDTO> {
-    return new Promise<DirectoryDTO>((resolve, reject) => {
-      relativeDirectoryName = this.normalizeDirPath(relativeDirectoryName);
-      const directoryName = DiskMangerWorker.dirName(relativeDirectoryName);
-      const directoryParent = this.pathFromRelativeDirName(relativeDirectoryName);
-      const absoluteDirectoryName = path.join(ProjectPath.ImageFolder, relativeDirectoryName);
+  public static async scanDirectory(relativeDirectoryName: string,
+                                    settings: DiskMangerWorker.DirectoryScanSettings = {}): Promise<DirectoryDTO> {
 
-      const stat = fs.statSync(path.join(ProjectPath.ImageFolder, relativeDirectoryName));
-      const directory: DirectoryDTO = {
-        id: null,
-        parent: null,
-        name: directoryName,
-        path: directoryParent,
-        lastModified: this.calcLastModified(stat),
-        lastScanned: Date.now(),
-        directories: [],
-        isPartial: false,
-        mediaCount: 0,
-        media: [],
-        metaFile: []
-      };
-      fs.readdir(absoluteDirectoryName, async (err, list: string[]) => {
-        if (err) {
-          return reject(err);
+    relativeDirectoryName = this.normalizeDirPath(relativeDirectoryName);
+    const directoryName = DiskMangerWorker.dirName(relativeDirectoryName);
+    const directoryParent = this.pathFromRelativeDirName(relativeDirectoryName);
+    const absoluteDirectoryName = path.join(ProjectPath.ImageFolder, relativeDirectoryName);
+
+    const stat = await fsp.stat(path.join(ProjectPath.ImageFolder, relativeDirectoryName));
+    const directory: DirectoryDTO = {
+      id: null,
+      parent: null,
+      name: directoryName,
+      path: directoryParent,
+      lastModified: this.calcLastModified(stat),
+      lastScanned: Date.now(),
+      directories: [],
+      isPartial: false,
+      mediaCount: 0,
+      media: [],
+      metaFile: []
+    };
+    const list = await fsp.readdir(absoluteDirectoryName);
+    for (let i = 0; i < list.length; i++) {
+      const file = list[i];
+      const fullFilePath = path.normalize(path.join(absoluteDirectoryName, file));
+      if ((await fsp.stat(fullFilePath)).isDirectory()) {
+        if (settings.noDirectory === true ||
+          await DiskMangerWorker.excludeDir(file, relativeDirectoryName, absoluteDirectoryName)) {
+          continue;
+        }
+
+        // create preview directory
+        const d = await DiskMangerWorker.scanDirectory(path.join(relativeDirectoryName, file),
+          {
+            maxPhotos: Config.Server.Indexing.folderPreviewSize,
+            noMetaFile: true,
+            noVideo: true,
+            noDirectory: true
+          }
+        );
+        d.lastScanned = 0; // it was not a fully scan
+        d.isPartial = true;
+        directory.directories.push(d);
+      } else if (PhotoProcessing.isPhoto(fullFilePath)) {
+        if (settings.noPhoto) {
+          continue;
+        }
+        directory.media.push(<PhotoDTO>{
+          name: file,
+          directory: null,
+          metadata: await MetadataLoader.loadPhotoMetadata(fullFilePath)
+        });
+
+        if (settings.maxPhotos && directory.media.length > settings.maxPhotos) {
+          break;
+        }
+      } else if (VideoProcessing.isVideo(fullFilePath)) {
+        if (Config.Client.Media.Video.enabled === false || settings.noVideo) {
+          continue;
         }
         try {
-          for (let i = 0; i < list.length; i++) {
-            const file = list[i];
-            const fullFilePath = path.normalize(path.join(absoluteDirectoryName, file));
-            if (fs.statSync(fullFilePath).isDirectory()) {
-              if (settings.noDirectory === true ||
-                DiskMangerWorker.excludeDir(file, relativeDirectoryName, absoluteDirectoryName)) {
-                continue;
-              }
-
-              // create preview directory
-              const d = await DiskMangerWorker.scanDirectory(path.join(relativeDirectoryName, file),
-                {
-                  maxPhotos: Config.Server.Indexing.folderPreviewSize,
-                  noMetaFile: true,
-                  noVideo: true,
-                  noDirectory: true
-                }
-              );
-              d.lastScanned = 0; // it was not a fully scan
-              d.isPartial = true;
-              directory.directories.push(d);
-            } else if (DiskMangerWorker.isImage(fullFilePath)) {
-              if (settings.noPhoto) {
-                continue;
-              }
-              directory.media.push(<PhotoDTO>{
-                name: file,
-                directory: null,
-                metadata: await MetadataLoader.loadPhotoMetadata(fullFilePath)
-              });
-
-              if (settings.maxPhotos && directory.media.length > settings.maxPhotos) {
-                break;
-              }
-            } else if (DiskMangerWorker.isVideo(fullFilePath)) {
-              if (Config.Client.Media.Video.enabled === false || settings.noVideo) {
-                continue;
-              }
-              try {
-                directory.media.push(<VideoDTO>{
-                  name: file,
-                  directory: null,
-                  metadata: await MetadataLoader.loadVideoMetadata(fullFilePath)
-                });
-              } catch (e) {
-                Logger.warn('Media loading error, skipping: ' + file + ', reason: ' + e.toString());
-              }
-
-            } else if (DiskMangerWorker.isMetaFile(fullFilePath)) {
-              if (Config.Client.MetaFile.enabled === false || settings.noMetaFile) {
-                continue;
-              }
-
-              directory.metaFile.push(<FileDTO>{
-                name: file,
-                directory: null,
-              });
-
-            }
-          }
-
-          directory.mediaCount = directory.media.length;
-
-          return resolve(directory);
-        } catch (err) {
-          return reject({error: err});
+          directory.media.push(<VideoDTO>{
+            name: file,
+            directory: null,
+            metadata: await MetadataLoader.loadVideoMetadata(fullFilePath)
+          });
+        } catch (e) {
+          Logger.warn('Media loading error, skipping: ' + file + ', reason: ' + e.toString());
         }
 
-      });
-    });
+      } else if (DiskMangerWorker.isMetaFile(fullFilePath)) {
+        if (Config.Client.MetaFile.enabled === false || settings.noMetaFile) {
+          continue;
+        }
 
+        directory.metaFile.push(<FileDTO>{
+          name: file,
+          directory: null,
+        });
+
+      }
+    }
+
+    directory.mediaCount = directory.media.length;
+
+    return directory;
   }
 
-  private static isImage(fullPath: string) {
-    const extension = path.extname(fullPath).toLowerCase();
-    return SupportedFormats.WithDots.Photos.indexOf(extension) !== -1;
-  }
-
-  private static isVideo(fullPath: string) {
-    const extension = path.extname(fullPath).toLowerCase();
-    return SupportedFormats.WithDots.Videos.indexOf(extension) !== -1;
-  }
 
   private static isMetaFile(fullPath: string) {
     const extension = path.extname(fullPath).toLowerCase();

@@ -5,7 +5,7 @@ import {Config} from '../common/config/private/Config';
 class ProjectPathClass {
   public Root: string;
   public ImageFolder: string;
-  public ThumbnailFolder: string;
+  public TempFolder: string;
   public TranscodedFolder: string;
   public FacesFolder: string;
   public FrontendFolder: string;
@@ -30,13 +30,13 @@ class ProjectPathClass {
     this.Root = path.join(__dirname, '/../../');
     this.FrontendFolder = path.join(this.Root, 'dist');
     this.ImageFolder = this.getAbsolutePath(Config.Server.Media.folder);
-    this.ThumbnailFolder = this.getAbsolutePath(Config.Server.Media.tempFolder);
-    this.TranscodedFolder = path.join(this.ThumbnailFolder, 'tc');
-    this.FacesFolder = path.join(this.ThumbnailFolder, 'f');
+    this.TempFolder = this.getAbsolutePath(Config.Server.Media.tempFolder);
+    this.TranscodedFolder = path.join(this.TempFolder, 'tc');
+    this.FacesFolder = path.join(this.TempFolder, 'f');
 
     // create thumbnail folder if not exist
-    if (!fs.existsSync(this.ThumbnailFolder)) {
-      fs.mkdirSync(this.ThumbnailFolder);
+    if (!fs.existsSync(this.TempFolder)) {
+      fs.mkdirSync(this.TempFolder);
     }
 
   }

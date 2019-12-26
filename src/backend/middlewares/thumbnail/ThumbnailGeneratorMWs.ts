@@ -145,7 +145,6 @@ export class ThumbnailGeneratorMWs {
   }
 
   private static addThInfoToPhotos(photos: MediaDTO[]) {
-    const thumbnailFolder = ProjectPath.ThumbnailFolder;
     for (let i = 0; i < photos.length; i++) {
       const fullMediaPath = path.join(ProjectPath.ImageFolder, photos[i].directory.path, photos[i].directory.name, photos[i].name);
       for (let j = 0; j < Config.Client.Media.Thumbnail.thumbnailSizes.length; j++) {

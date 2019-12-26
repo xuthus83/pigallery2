@@ -31,7 +31,7 @@ export class VideoConvertingJob extends FileJob<string> {
         directory.media[i].directory.name,
         directory.media[i].name);
 
-      if (await existsPr(VideoProcessing.generateConvertedFileName(videoPath)) === false) {
+      if (await existsPr(VideoProcessing.generateConvertedFilePath(videoPath)) === false) {
         ret.push(videoPath);
       }
     }

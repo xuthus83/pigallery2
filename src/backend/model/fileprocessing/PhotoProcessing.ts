@@ -1,5 +1,5 @@
 import * as path from 'path';
-import * as fs from 'fs';
+import {constants as fsConstants, promises as fsp} from 'fs';
 import * as os from 'os';
 import * as crypto from 'crypto';
 import {ProjectPath} from '../../ProjectPath';
@@ -9,6 +9,7 @@ import {PhotoWorker, RendererInput, ThumbnailSourceType} from '../threading/Phot
 import {ITaskExecuter, TaskExecuter} from '../threading/TaskExecuter';
 import {ServerConfig} from '../../../common/config/private/IPrivateConfig';
 import {FaceRegion, PhotoDTO} from '../../../common/entities/PhotoDTO';
+import {SupportedFormats} from '../../../common/SupportedFormats';
 
 
 export class PhotoProcessing {
@@ -60,8 +61,11 @@ export class PhotoProcessing {
 
 
     // check if thumbnail already exist
-    if (fs.existsSync(thPath) === true) {
+    try {
+      await fsp.access(thPath, fsConstants.R_OK);
       return null;
+    } catch (e) {
+
     }
 
 
@@ -95,11 +99,10 @@ export class PhotoProcessing {
 
 
   public static generateThumbnailPath(mediaPath: string, size: number): string {
-    const extension = path.extname(mediaPath);
-    const file = path.basename(mediaPath, extension);
+    const file = path.basename(mediaPath);
     return path.join(ProjectPath.TranscodedFolder,
-      ProjectPath.getRelativePathToImages(path.dirname(mediaPath)), file +
-      '_' + size + '.jpg');
+      ProjectPath.getRelativePathToImages(path.dirname(mediaPath)),
+      file + '_' + size + '.jpg');
   }
 
   public static generatePersonThumbnailPath(mediaPath: string, faceRegion: FaceRegion, size: number): string {
@@ -108,14 +111,34 @@ export class PhotoProcessing {
         .digest('hex') + '_' + size + '.jpg');
   }
 
-
   public static generateConvertedFilePath(photoPath: string): string {
-    const extension = path.extname(photoPath);
-    const file = path.basename(photoPath, extension);
-    const postfix = Config.Server.Media.Photo.Converting.resolution;
-    return path.join(ProjectPath.TranscodedFolder,
-      ProjectPath.getRelativePathToImages(path.dirname(photoPath)), file +
-      '_' + postfix + '.jpg');
+    return this.generateThumbnailPath(photoPath, Config.Server.Media.Photo.Converting.resolution);
+  }
+
+  public static async isValidConvertedPath(convertedPath: string): Promise<boolean> {
+    const origFilePath = path.join(ProjectPath.ImageFolder,
+      path.relative(ProjectPath.TranscodedFolder,
+        convertedPath.substring(0, convertedPath.lastIndexOf('_'))));
+
+    const sizeStr = convertedPath.substring(convertedPath.lastIndexOf('_') + 1,
+      convertedPath.length - path.extname(convertedPath).length);
+
+    const size = parseInt(sizeStr, 10);
+
+    if ((size + '').length !== sizeStr.length ||
+      (Config.Client.Media.Thumbnail.thumbnailSizes.indexOf(size) === -1 &&
+        Config.Server.Media.Photo.Converting.resolution !== size)) {
+      return false;
+    }
+
+    try {
+      await fsp.access(origFilePath, fsConstants.R_OK);
+    } catch (e) {
+      return false;
+    }
+
+
+    return true;
   }
 
 
@@ -125,8 +148,10 @@ export class PhotoProcessing {
 
 
     // check if file already exist
-    if (fs.existsSync(outPath) === true) {
+    try {
+      await fsp.access(outPath, fsConstants.R_OK);
       return outPath;
+    } catch (e) {
     }
 
 
@@ -141,9 +166,8 @@ export class PhotoProcessing {
     };
 
     const outDir = path.dirname(input.outPath);
-    if (!fs.existsSync(outDir)) {
-      fs.mkdirSync(outDir, {recursive: true});
-    }
+
+    await fsp.mkdir(outDir, {recursive: true});
     await this.taskQue.execute(input);
     return outPath;
   }
@@ -156,9 +180,11 @@ export class PhotoProcessing {
     const outPath = PhotoProcessing.generateThumbnailPath(mediaPath, size);
 
 
-    // check if thumbnail already exist
-    if (fs.existsSync(outPath) === true) {
+    // check if file already exist
+    try {
+      await fsp.access(outPath, fsConstants.R_OK);
       return outPath;
+    } catch (e) {
     }
 
 
@@ -173,11 +199,15 @@ export class PhotoProcessing {
     };
 
     const outDir = path.dirname(input.outPath);
-    if (!fs.existsSync(outDir)) {
-      fs.mkdirSync(outDir, {recursive: true});
-    }
+
+    await fsp.mkdir(outDir, {recursive: true});
     await this.taskQue.execute(input);
     return outPath;
+  }
+
+  public static isPhoto(fullPath: string) {
+    const extension = path.extname(fullPath).toLowerCase();
+    return SupportedFormats.WithDots.Photos.indexOf(extension) !== -1;
   }
 }
 

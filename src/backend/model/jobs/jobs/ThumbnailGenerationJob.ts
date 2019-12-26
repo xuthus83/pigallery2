@@ -2,8 +2,6 @@ import {Config} from '../../../../common/config/private/Config';
 import {ConfigTemplateEntry, DefaultsJobs} from '../../../../common/entities/job/JobDTO';
 import {ProjectPath} from '../../../ProjectPath';
 import * as path from 'path';
-import * as fs from 'fs';
-import * as util from 'util';
 import {FileJob} from './FileJob';
 import {DirectoryDTO} from '../../../../common/entities/DirectoryDTO';
 import {PhotoProcessing} from '../../fileprocessing/PhotoProcessing';
@@ -11,7 +9,6 @@ import {ThumbnailSourceType} from '../../threading/PhotoWorker';
 import {MediaDTO} from '../../../../common/entities/MediaDTO';
 
 const LOG_TAG = '[ThumbnailGenerationJob]';
-const existsPr = util.promisify(fs.exists);
 
 
 export class ThumbnailGenerationJob extends FileJob<MediaDTO, { sizes: number[] }> {

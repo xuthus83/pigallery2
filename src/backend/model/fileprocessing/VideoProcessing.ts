@@ -1,38 +1,56 @@
 import * as path from 'path';
-import * as fs from 'fs';
-import * as util from 'util';
-import {ITaskExecuter, TaskExecuter} from '../../model/threading/TaskExecuter';
-import {VideoConverterInput, VideoConverterWorker} from '../../model/threading/VideoConverterWorker';
-import {MetadataLoader} from '../../model/threading/MetadataLoader';
+import {constants as fsConstants, promises as fsp} from 'fs';
+import {ITaskExecuter, TaskExecuter} from '../threading/TaskExecuter';
+import {VideoConverterInput, VideoConverterWorker} from '../threading/VideoConverterWorker';
+import {MetadataLoader} from '../threading/MetadataLoader';
 import {Config} from '../../../common/config/private/Config';
 import {ProjectPath} from '../../ProjectPath';
+import {SupportedFormats} from '../../../common/SupportedFormats';
 
-const existPr = util.promisify(fs.exists);
 
 export class VideoProcessing {
   private static taskQue: ITaskExecuter<VideoConverterInput, void> =
     new TaskExecuter(1, (input => VideoConverterWorker.convert(input)));
 
-
-  public static generateConvertedFileName(videoPath: string): string {
-    const extension = path.extname(videoPath);
-    const file = path.basename(videoPath, extension);
-    const postfix = Math.round(Config.Server.Media.Video.transcoding.bitRate / 1024) + 'k' +
-      Config.Server.Media.Video.transcoding.codec.toString().toLowerCase() +
-      Config.Server.Media.Video.transcoding.resolution;
+  public static generateConvertedFilePath(videoPath: string): string {
     return path.join(ProjectPath.TranscodedFolder,
-      ProjectPath.getRelativePathToImages(path.dirname(videoPath)), file +
-      '_' + postfix + '.' + Config.Server.Media.Video.transcoding.format);
+      ProjectPath.getRelativePathToImages(path.dirname(videoPath)),
+      path.basename(videoPath) + '_' + this.getConvertedFilePostFix());
+  }
+
+  public static async isValidConvertedPath(convertedPath: string): Promise<boolean> {
+
+    const origFilePath = path.join(ProjectPath.ImageFolder,
+      path.relative(ProjectPath.TranscodedFolder,
+        convertedPath.substring(0, convertedPath.lastIndexOf('_'))));
+
+    const postfix = convertedPath.substring(convertedPath.lastIndexOf('_') + 1, convertedPath.length);
+
+    if (postfix !== this.getConvertedFilePostFix()) {
+      return false;
+    }
+
+    try {
+      await fsp.access(origFilePath, fsConstants.R_OK);
+    } catch (e) {
+      return false;
+    }
+
+
+    return true;
   }
 
   public static async convertVideo(videoPath: string): Promise<void> {
 
 
-    const outPath = this.generateConvertedFileName(videoPath);
+    const outPath = this.generateConvertedFilePath(videoPath);
 
-    if (await existPr(outPath)) {
+    try {
+      await fsp.access(outPath, fsConstants.R_OK);
       return;
+    } catch (e) {
     }
+
     const metaData = await MetadataLoader.loadVideoMetadata(videoPath);
 
     const renderInput: VideoConverterInput = {
@@ -56,12 +74,23 @@ export class VideoProcessing {
     }
 
     const outDir = path.dirname(renderInput.output.path);
-    if (!fs.existsSync(outDir)) {
-      fs.mkdirSync(outDir, {recursive: true});
-    }
 
+    await fsp.mkdir(outDir, {recursive: true});
     await VideoProcessing.taskQue.execute(renderInput);
 
   }
+
+  public static isVideo(fullPath: string) {
+    const extension = path.extname(fullPath).toLowerCase();
+    return SupportedFormats.WithDots.Videos.indexOf(extension) !== -1;
+  }
+
+  protected static getConvertedFilePostFix(): string {
+    return Math.round(Config.Server.Media.Video.transcoding.bitRate / 1024) + 'k' +
+      Config.Server.Media.Video.transcoding.codec.toString().toLowerCase() +
+      Config.Server.Media.Video.transcoding.resolution +
+      '.' + Config.Server.Media.Video.transcoding.format.toLowerCase();
+  }
+
 }
 

@@ -195,7 +195,7 @@ export class GalleryMWs {
     }
     req.resultPipe = fullMediaPath;
 
-    const convertedVideo = VideoProcessing.generateConvertedFileName(fullMediaPath);
+    const convertedVideo = VideoProcessing.generateConvertedFilePath(fullMediaPath);
 
     // check if transcoded video exist
     if (fs.existsSync(convertedVideo) === true) {
