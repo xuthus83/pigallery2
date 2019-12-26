@@ -1,23 +1,14 @@
 import {expect} from 'chai';
-import {JobManager} from '../../../../../src/backend/model/jobs/JobManager';
-import {JobScheduleDTO, JobTriggerType} from '../../../../../src/common/entities/job/JobScheduleDTO';
+import {JobScheduleDTO, JobTriggerType} from '../../../src/common/entities/job/JobScheduleDTO';
 
-class JobManagerSpec extends JobManager {
-
-  public getDateFromSchedule(refDate: Date, schedule: JobScheduleDTO): Date {
-    return super.getDateFromSchedule(refDate, schedule);
-  }
-}
-
-describe('JobManager', () => {
+describe('JobScheduleDTO', () => {
 
   it('should get date from schedule', async () => {
-    const tm = new JobManagerSpec();
 
     const refDate = new Date(2019, 7, 18, 5, 10, 10, 0); // its a sunday
 
 
-    expect(tm.getDateFromSchedule(refDate, <any>{
+    expect(JobScheduleDTO.getNextRunningDate(refDate, <any>{
       trigger: {
         type: JobTriggerType.scheduled,
         time: (new Date(2019, 7, 18, 5, 10)).getTime()
@@ -30,7 +21,7 @@ describe('JobManager', () => {
 
       let h = 10;
       let m = 5;
-      expect(tm.getDateFromSchedule(refDate, <any>{
+      expect(JobScheduleDTO.getNextRunningDate(refDate, <any>{
         trigger: {
           type: JobTriggerType.periodic,
           atTime: (h * 60 + m) * 60 * 1000,
@@ -41,7 +32,7 @@ describe('JobManager', () => {
       h = 2;
       m = 5;
       nextDay = 18 + dayOfWeek + 1;
-      expect(tm.getDateFromSchedule(refDate, <any>{
+      expect(JobScheduleDTO.getNextRunningDate(refDate, <any>{
         trigger: {
           type: JobTriggerType.periodic,
           atTime: (h * 60 + m) * 60 * 1000,
@@ -52,7 +43,7 @@ describe('JobManager', () => {
       h = 5;
       m = 10;
       nextDay = 18 + dayOfWeek + 1;
-      expect(tm.getDateFromSchedule(refDate, <any>{
+      expect(JobScheduleDTO.getNextRunningDate(refDate, <any>{
         trigger: {
           type: JobTriggerType.periodic,
           atTime: (h * 60 + m) * 60 * 1000,
@@ -64,7 +55,7 @@ describe('JobManager', () => {
     {
       const h = 10;
       const m = 5;
-      expect(tm.getDateFromSchedule(refDate, <any>{
+      expect(JobScheduleDTO.getNextRunningDate(refDate, <any>{
         trigger: {
           type: JobTriggerType.periodic,
           atTime: (h * 60 + m) * 60 * 1000,
@@ -75,7 +66,7 @@ describe('JobManager', () => {
     {
       const h = 2;
       const m = 5;
-      expect(tm.getDateFromSchedule(refDate, <any>{
+      expect(JobScheduleDTO.getNextRunningDate(refDate, <any>{
         trigger: {
           type: JobTriggerType.periodic,
           atTime: (h * 60 + m) * 60 * 1000,
@@ -84,5 +75,4 @@ describe('JobManager', () => {
       })).to.be.deep.equal((new Date(2019, 7, 19, h, m, 0)));
     }
   });
-
 });
