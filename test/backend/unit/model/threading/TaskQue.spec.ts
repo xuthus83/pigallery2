@@ -24,6 +24,6 @@ describe('TaskQue', () => {
     const task = tq.get();
     tq.ready(task);
     expect(tq.isEmpty()).to.be.equal(true);
-    expect(tq.ready.bind(tq, task)).to.be.throw('Job does not exist');
+    expect(tq.ready.bind(tq, task)).to.be.throw('Task does not exist');
   });
 });
