@@ -27,8 +27,8 @@ export abstract class SettingsComponent<T extends { [key: string]: any }, S exte
   public inProgress = false;
   public error: string = null;
   public changed = false;
-  public settings: T = <any>{};
-  public original: T = <any>{};
+  public settings: T = <T>{};
+  public original: T = <T>{};
   text = {
     Enabled: 'Enabled',
     Disabled: 'Disabled',

@@ -6,7 +6,7 @@ export interface IJob<T> extends JobDTO {
   Supported: boolean;
   Progress: JobProgressDTO;
 
-  start(config: T): Promise<void>;
+  start(config: T, onFinishCB?: () => void): Promise<void>;
 
   stop(): void;
 

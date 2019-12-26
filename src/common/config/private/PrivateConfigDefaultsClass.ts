@@ -76,15 +76,13 @@ export class PrivateConfigDefaultsClass extends PublicConfigClass implements IPr
     },
     Jobs: {
       scheduled: [{
+        name: DefaultsJobs[DefaultsJobs['Database Reset']],
         jobName: DefaultsJobs[DefaultsJobs['Database Reset']],
         config: {},
         trigger: {type: JobTriggerType.never}
       }, {
+        name: DefaultsJobs[DefaultsJobs.Indexing],
         jobName: DefaultsJobs[DefaultsJobs.Indexing],
-        config: {},
-        trigger: {type: JobTriggerType.never}
-      }, {
-        jobName: DefaultsJobs[DefaultsJobs['Video Converting']],
         config: {},
         trigger: {type: JobTriggerType.never}
       }]

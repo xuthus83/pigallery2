@@ -436,7 +436,7 @@ export class SettingsMWs {
     }
   }
 
-  public static async updateTasksSettings(req: Request, res: Response, next: NextFunction) {
+  public static async updateJobSettings(req: Request, res: Response, next: NextFunction) {
     if ((typeof req.body === 'undefined') || (typeof req.body.settings === 'undefined')) {
       return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, 'settings is needed'));
     }

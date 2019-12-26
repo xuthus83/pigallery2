@@ -104,10 +104,10 @@ export class SettingsRouter {
       SettingsMWs.updateIndexingSettings,
       RenderingMWs.renderOK
     );
-    app.put('/api/settings/tasks',
+    app.put('/api/settings/jobs',
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Admin),
-      SettingsMWs.updateTasksSettings,
+      SettingsMWs.updateJobSettings,
       RenderingMWs.renderOK
     );
   }

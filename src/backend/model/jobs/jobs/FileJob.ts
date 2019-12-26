@@ -10,7 +10,7 @@ import {Logger} from '../../../Logger';
 declare var global: NodeJS.Global;
 
 
-const LOG_TAG = '[FileTask]';
+const LOG_TAG = '[FileJob]';
 
 
 export abstract class FileJob<T, S = void> extends Job<S> {
@@ -56,7 +56,7 @@ export abstract class FileJob<T, S = void> extends Job<S> {
         await this.processFile(file);
       } catch (e) {
         console.error(e);
-        Logger.error(LOG_TAG, 'Error during processing file: ' + e.toString());
+        Logger.error(LOG_TAG, 'Error during processing file.' + ', ' + e.toString());
       }
     }
     return this.progress;

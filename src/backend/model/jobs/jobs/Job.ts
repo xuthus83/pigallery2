@@ -2,7 +2,6 @@ import {JobProgressDTO, JobState} from '../../../../common/entities/settings/Job
 import {Logger} from '../../../Logger';
 import {IJob} from './IJob';
 import {ConfigTemplateEntry, JobDTO} from '../../../../common/entities/job/JobDTO';
-import * as rimraf from 'rimraf';
 
 declare const process: any;
 
@@ -16,20 +15,19 @@ export abstract class Job<T = void> implements IJob<T> {
   protected prResolve: () => void;
   protected IsInstant = false;
 
-
   public abstract get Supported(): boolean;
 
   public abstract get Name(): string;
 
-
   public abstract get ConfigTemplate(): ConfigTemplateEntry[];
-
 
   public get Progress(): JobProgressDTO {
     return this.progress;
   }
 
-  public start(config: T): Promise<void> {
+  public start(config: T, onFinishCB = () => {
+  }): Promise<void> {
+    this.OnFinishCB = onFinishCB;
     if (this.state === JobState.idle && this.Supported) {
       Logger.info(LOG_TAG, 'Running job: ' + this.Name);
       this.config = config;
@@ -72,6 +70,9 @@ export abstract class Job<T = void> implements IJob<T> {
     };
   }
 
+  protected OnFinishCB = () => {
+  };
+
   protected abstract async step(): Promise<JobProgressDTO>;
 
   protected abstract async init(): Promise<void>;
@@ -85,6 +86,7 @@ export abstract class Job<T = void> implements IJob<T> {
     if (this.IsInstant) {
       this.prResolve();
     }
+    this.OnFinishCB();
   }
 
   private run() {

@@ -1,16 +1,17 @@
 <form #settingsForm="ngForm" class="form-horizontal">
   <div class="card mb-4">
     <h5 class="card-header">
-      {{Name}}<ng-container *ngIf="changed">*</ng-container>
+      {{Name}}
+      <ng-container *ngIf="changed">*</ng-container>
     </h5>
     <div class="card-body">
       <div [hidden]="!error" class="alert alert-danger" role="alert"><strong>Error: </strong>{{error}}</div>
 
-      <div *ngFor="let schedule of settings.scheduled; let i= index">
-        <div class="card bg-light">
-          <div class="card-header clickable" (click)="showDetails[i]=!showDetails[i]">
+      <div *ngFor="let schedule of sortedSchedules() as schedules; let i= index">
+        <div class="card bg-light {{shouldIdent(schedule,schedules[i-1])? 'ml-4' : ''}}">
+          <div class="card-header clickable" (click)="showDetails[schedule.name]=!showDetails[schedule.name]">
             <div class="d-flex justify-content-between">
-              {{schedule.jobName}} @<!--
+              {{schedule.name}} @<!--
               -->
               <ng-container [ngSwitch]="schedule.trigger.type">
                 <ng-container *ngSwitchCase="JobTriggerType.periodic">
@@ -20,28 +21,24 @@
                 <ng-container
                   *ngSwitchCase="JobTriggerType.scheduled">{{schedule.trigger.time | date:"medium"}}</ng-container>
                 <ng-container *ngSwitchCase="JobTriggerType.never" i18n>never</ng-container>
+                <ng-container *ngSwitchCase="JobTriggerType.after">
+                  <ng-container i18n>after</ng-container>
+                  {{schedule.trigger.afterScheduleName}}
+                </ng-container>
               </ng-container>
               <button class="btn btn-danger button-delete" (click)="remove(i)"><span class="oi oi-trash"></span>
               </button>
             </div>
           </div>
 
-          <div class="card-body" [hidden]="!showDetails[i]">
+          <div class="card-body" [hidden]="!showDetails[schedule.name]">
             <div class="row">
 
               <div class="col-md-9">
                 <div class="form-group row">
                   <label class="col-md-2 control-label" [for]="'jobName'+i" i18n>Job:</label>
                   <div class="col-md-10">
-                    <select class="form-control" (change)="jobTypeChanged(schedule)" [(ngModel)]="schedule.jobName"
-                            [name]="'jobName'+i" required>
-                      <option *ngFor="let availableJob of _settingsService.availableJobs | async"
-                              [ngValue]="availableJob.Name">{{availableJob.Name}}
-                      </option>
-                    </select>
-                    <small class="form-text text-muted"
-                           i18n>Select a job to schedule.
-                    </small>
+                    {{schedule.jobName}}
                   </div>
                 </div>
                 <div class="form-group row">
@@ -56,6 +53,23 @@
                     </select>
                     <small class="form-text text-muted"
                            i18n>Set the time to run the job.
+                    </small>
+                  </div>
+                </div>
+
+                <div class="form-group row" *ngIf="schedule.trigger.type == JobTriggerType.after">
+                  <label class="col-md-2 control-label" [for]="'triggerAfter'+i" i18n>After:</label>
+                  <div class="col-md-10">
+                    <select class="form-control" [(ngModel)]="schedule.trigger.afterScheduleName"
+                            [name]="'triggerAfter'+i" required>
+                      <ng-container *ngFor="let sch of settings.scheduled">
+                        <option *ngIf="sch.name !== schedule.name"
+                                [ngValue]="sch.name">{{sch.name}}
+                        </option>
+                      </ng-container>
+                    </select>
+                    <small class="form-text text-muted"
+                           i18n>The job will run after that job finishes.
                     </small>
                   </div>
                 </div>
@@ -191,10 +205,47 @@
               (click)="reset()" i18n>Reset
       </button>
       <button class="btn btn-primary float-right"
-              (click)="addNewJob()" i18n>+ Add Job
+              (click)="prepareNewJob()" i18n>+ Add Job
       </button>
     </div>
 
   </div>
 
 </form>
+
+
+<!-- Modal -->
+<div bsModal #jobModal="bs-modal" class="modal fade" id="jobModal" tabindex="-1" role="dialog"
+     aria-labelledby="jobModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="jobModalLabel" i18n>Add new job</h5>
+        <button type="button" class="close" (click)="jobModal.hide()" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form #jobModalForm="ngForm">
+        <div class="modal-body">
+          <select class="form-control" (change)="jobTypeChanged(newSchedule)" [(ngModel)]="newSchedule.jobName"
+                  name="newJobName" required>
+            <option *ngFor="let availableJob of _settingsService.availableJobs | async"
+                    [ngValue]="availableJob.Name">{{availableJob.Name}}
+            </option>
+          </select>
+          <small class="form-text text-muted"
+                 i18n>Select a job to schedule.
+          </small>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="jobModal.hide()" i18n>Close</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal"
+                  (click)="addNewJob()"
+                  [disabled]="!jobModalForm.form.valid" i18n>Add Job
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

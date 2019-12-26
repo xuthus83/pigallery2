@@ -1,4 +1,4 @@
-import {Component, OnChanges, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {JobsSettingsService} from './jobs.settings.service';
 import {AuthenticationService} from '../../../model/network/authentication.service';
 import {NavigationService} from '../../../model/navigation.service';
@@ -8,6 +8,7 @@ import {I18n} from '@ngx-translate/i18n-polyfill';
 import {ErrorDTO} from '../../../../../common/entities/Error';
 import {ScheduledJobsService} from '../scheduled-jobs.service';
 import {
+  AfterJobTrigger,
   JobScheduleDTO,
   JobTriggerType,
   NeverJobTrigger,
@@ -18,6 +19,8 @@ import {Utils} from '../../../../../common/Utils';
 import {ServerConfig} from '../../../../../common/config/private/IPrivateConfig';
 import {ConfigTemplateEntry} from '../../../../../common/entities/job/JobDTO';
 import {JobState} from '../../../../../common/entities/settings/JobProgressDTO';
+import {Job} from '../../../../../backend/model/jobs/jobs/Job';
+import {ModalDirective} from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-settings-jobs',
@@ -29,12 +32,21 @@ import {JobState} from '../../../../../common/entities/settings/JobProgressDTO';
 export class JobsSettingsComponent extends SettingsComponent<ServerConfig.JobConfig, JobsSettingsService>
   implements OnInit, OnDestroy, OnChanges {
 
+  @ViewChild('jobModal', {static: false}) public jobModal: ModalDirective;
   disableButtons = false;
   JobTriggerTypeMap: { key: number, value: string }[];
   JobTriggerType = JobTriggerType;
   periods: string[] = [];
   showDetails: boolean[] = [];
   JobState = JobState;
+  newSchedule: JobScheduleDTO = {
+    name: '',
+    config: null,
+    jobName: '',
+    trigger: {
+      type: JobTriggerType.never
+    }
+  };
 
   constructor(_authService: AuthenticationService,
               _navigation: NavigationService,
@@ -63,7 +75,6 @@ export class JobsSettingsComponent extends SettingsComponent<ServerConfig.JobCon
       this.i18n('day')]; // 7
   }
 
-
   getConfigTemplate(JobName: string): ConfigTemplateEntry[] {
     const job = this._settingsService.availableJobs.value.find(t => t.Name === JobName);
     if (job && job.ConfigTemplate && job.ConfigTemplate.length > 0) {
@@ -82,7 +93,6 @@ export class JobsSettingsComponent extends SettingsComponent<ServerConfig.JobCon
     super.ngOnDestroy();
     this.jobsService.unsubscribeFromProgress();
   }
-
 
   public async start(schedule: JobScheduleDTO) {
     this.error = '';
@@ -126,7 +136,6 @@ export class JobsSettingsComponent extends SettingsComponent<ServerConfig.JobCon
     this.settings.scheduled.splice(index, 1);
   }
 
-
   jobTypeChanged(schedule: JobScheduleDTO) {
     const job = this._settingsService.availableJobs.value.find(t => t.Name === schedule.jobName);
     schedule.config = schedule.config || {};
@@ -135,9 +144,10 @@ export class JobsSettingsComponent extends SettingsComponent<ServerConfig.JobCon
     }
   }
 
-  addNewJob() {
+  prepareNewJob() {
     const jobName = this._settingsService.availableJobs.value[0].Name;
-    const newSchedule: JobScheduleDTO = {
+    this.newSchedule = {
+      name: 'new job',
       jobName: jobName,
       config: <any>{},
       trigger: {
@@ -146,11 +156,12 @@ export class JobsSettingsComponent extends SettingsComponent<ServerConfig.JobCon
     };
 
     const job = this._settingsService.availableJobs.value.find(t => t.Name === jobName);
-    newSchedule.config = newSchedule.config || {};
+    this.newSchedule.config = this.newSchedule.config || {};
     if (job.ConfigTemplate) {
-      job.ConfigTemplate.forEach(ct => newSchedule.config[ct.id] = ct.defaultValue);
+      job.ConfigTemplate.forEach(ct => this.newSchedule.config[ct.id] = ct.defaultValue);
     }
-    this.settings.scheduled.push(newSchedule);
+
+    this.jobModal.show();
   }
 
   jobTriggerTypeChanged(triggerType: JobTriggerType, schedule: JobScheduleDTO) {
@@ -183,6 +194,39 @@ export class JobsSettingsComponent extends SettingsComponent<ServerConfig.JobCon
     return configElement[id].join('; ');
   }
 
+  public shouldIdent(curr: JobScheduleDTO, prev: JobScheduleDTO) {
+    return curr && curr.trigger.type === JobTriggerType.after && prev && prev.name === curr.trigger.afterScheduleName;
+  }
+
+  public sortedSchedules() {
+    return this.settings.scheduled.slice().sort((a, b) => {
+      return this.getNextRunningDate(a, this.settings.scheduled) - this.getNextRunningDate(b, this.settings.scheduled);
+    });
+  }
+
+  addNewJob() {
+    const jobName = this.newSchedule.jobName;
+    const count = this.settings.scheduled.filter(s => s.jobName === jobName).length;
+    this.newSchedule.name = count === 0 ? jobName : jobName + ' ' + (count + 1);
+    this.settings.scheduled.push(this.newSchedule);
+  }
+
+  private getNextRunningDate(sch: JobScheduleDTO, list: JobScheduleDTO[], depth: number = 0): number {
+    if (depth > list.length) {
+      return 0;
+    }
+    if (sch.trigger.type === JobTriggerType.never) {
+      return list.map(s => s.name).sort().indexOf(sch.name) * -1;
+    }
+    if (sch.trigger.type === JobTriggerType.after) {
+      const parent = list.find(s => s.name === (<AfterJobTrigger>sch.trigger).afterScheduleName);
+      if (parent) {
+        return this.getNextRunningDate(parent, list, depth + 1) + 0.001;
+      }
+    }
+    const d = JobScheduleDTO.getNextRunningDate(new Date(), sch);
+    return d !== null ? d.getTime() : 0;
+  }
 }
 
 
