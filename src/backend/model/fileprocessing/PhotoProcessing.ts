@@ -63,9 +63,8 @@ export class PhotoProcessing {
     // check if thumbnail already exist
     try {
       await fsp.access(thPath, fsConstants.R_OK);
-      return null;
+      return thPath;
     } catch (e) {
-
     }
 
 
