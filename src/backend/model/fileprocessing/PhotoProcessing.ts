@@ -92,6 +92,7 @@ export class PhotoProcessing {
     input.cut.width = Math.min(input.cut.width, photo.metadata.size.width - input.cut.left);
     input.cut.height = Math.min(input.cut.height, photo.metadata.size.height - input.cut.top);
 
+    await fsp.mkdir(ProjectPath.FacesFolder, {recursive: true});
     await PhotoProcessing.taskQue.execute(input);
     return thPath;
   }
