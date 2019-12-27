@@ -126,7 +126,7 @@ export class DiskMangerWorker {
         d.isPartial = true;
         directory.directories.push(d);
       } else if (PhotoProcessing.isPhoto(fullFilePath)) {
-        if (settings.noPhoto) {
+        if (settings.noPhoto === true) {
           continue;
         }
         directory.media.push(<PhotoDTO>{
@@ -139,7 +139,7 @@ export class DiskMangerWorker {
           break;
         }
       } else if (VideoProcessing.isVideo(fullFilePath)) {
-        if (Config.Client.Media.Video.enabled === false || settings.noVideo) {
+        if (Config.Client.Media.Video.enabled === false || settings.noVideo === true) {
           continue;
         }
         try {
@@ -153,7 +153,7 @@ export class DiskMangerWorker {
         }
 
       } else if (DiskMangerWorker.isMetaFile(fullFilePath)) {
-        if (Config.Client.MetaFile.enabled === false || settings.noMetaFile) {
+        if (Config.Client.MetaFile.enabled === false || settings.noMetaFile === true) {
           continue;
         }
 

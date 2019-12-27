@@ -15,7 +15,10 @@ export class PhotoWorker {
     if (input.type === ThumbnailSourceType.Photo) {
       return this.renderFromImage(input, renderer);
     }
-    return this.renderFromVideo(input);
+    if (input.type === ThumbnailSourceType.Video) {
+      return this.renderFromVideo(input);
+    }
+    throw new Error('Unsupported media type to render thumbnail:' + input.type);
   }
 
   public static renderFromImage(input: RendererInput, renderer: ServerConfig.PhotoProcessingLib): Promise<void> {

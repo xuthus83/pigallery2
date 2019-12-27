@@ -63,10 +63,8 @@ export class JobManager implements IJobManager {
   }
 
   async onJobFinished(job: IJob<any>): Promise<void> {
-    console.log('onFinished' + job.Name);
     const sch = Config.Server.Jobs.scheduled.find(s => s.jobName === job.Name);
     if (sch) {
-      console.log('parent found' + sch.jobName);
       const children = Config.Server.Jobs.scheduled.filter(s => s.trigger.type === JobTriggerType.after &&
         (<AfterJobTrigger>s.trigger).afterScheduleName === sch.name);
       for (let i = 0; i < children.length; ++i) {

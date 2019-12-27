@@ -51,11 +51,11 @@ export module MediaDTO {
 
   };
 
-  export const isPhoto = (media: MediaDTO): boolean => {
+  export const isPhoto = (media: FileDTO): boolean => {
     return !MediaDTO.isVideo(media);
   };
 
-  export const isVideo = (media: MediaDTO): boolean => {
+  export const isVideo = (media: FileDTO): boolean => {
     const lower = media.name.toLowerCase();
     for (const ext of SupportedFormats.WithDots.Videos) {
       if (lower.endsWith(ext)) {
@@ -65,7 +65,7 @@ export module MediaDTO {
     return false;
   };
 
-  export const isVideoTranscodingNeeded = (media: MediaDTO): boolean => {
+  export const isVideoTranscodingNeeded = (media: FileDTO): boolean => {
     const lower = media.name.toLowerCase();
     for (const ext of SupportedFormats.WithDots.TranscodeNeed.Videos) {
       if (lower.endsWith(ext)) {
