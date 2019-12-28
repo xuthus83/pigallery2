@@ -57,7 +57,7 @@ export abstract class SettingsComponent<T extends { [key: string]: any }, S exte
 
 
   get Name(): string {
-    return this.name;
+    return this.changed ? this.name + '*' : this.name;
   }
 
   get Changed(): boolean {

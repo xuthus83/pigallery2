@@ -1,6 +1,7 @@
 <form #settingsForm="ngForm" class="form-horizontal">
   <div class="card mb-4">
-    <h5 class="card-header">{{Name}}<span *ngIf="changed">*</span></h5>
+    <h5 class="card-header">
+      {{Name}}</h5>
     <div class="card-body">
       <div [hidden]="!error" class="alert alert-danger" role="alert"><strong>Error: </strong>{{error}}</div>
       <div [hidden]="settings.photoProcessingLibrary!=PhotoProcessingLib.Jimp"

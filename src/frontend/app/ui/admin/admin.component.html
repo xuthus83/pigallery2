@@ -54,9 +54,7 @@
                       *ngFor="let s of contents; let i=index;"
                       (click)="scrollTo(i)"
                       [hidden]="!s.HasAvailableSettings">
-                {{s.Name}}<!--
-                -->
-                <ng-container *ngIf="s.Changed">*</ng-container>
+                {{s.Name}}
               </button>
             </div>
           </div>
