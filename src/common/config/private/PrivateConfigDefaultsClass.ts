@@ -43,18 +43,13 @@ export class PrivateConfigDefaultsClass extends PublicConfigClass implements IPr
     photoMetadataSize: 512 * 1024,
     Database: {
       type: ServerConfig.DatabaseType.sqlite,
+      dbFolder: 'db',
       mysql: {
         host: '',
         username: '',
         password: '',
         database: ''
 
-      },
-      sqlite: {
-        storage: 'sqlite.db'
-      },
-      memory: {
-        usersFile: 'user.db'
       }
     },
     Sharing: {
@@ -75,6 +70,7 @@ export class PrivateConfigDefaultsClass extends PublicConfigClass implements IPr
       listingLimit: 1000
     },
     Jobs: {
+      maxSavedProgress: 10,
       scheduled: [
         {
           name: DefaultsJobs[DefaultsJobs.Indexing],

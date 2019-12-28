@@ -5,6 +5,7 @@ import {DiskMangerWorker} from '../src/backend/model/threading/DiskMangerWorker'
 import {IndexingManager} from '../src/backend/model/database/sql/IndexingManager';
 import {SearchManager} from '../src/backend/model/database/sql/SearchManager';
 import * as fs from 'fs';
+import * as path from 'path';
 import {SearchTypes} from '../src/common/entities/AutoCompleteItem';
 import {Utils} from '../src/common/Utils';
 import {GalleryManager} from '../src/backend/model/database/sql/GalleryManager';
@@ -123,7 +124,7 @@ export class Benchmarks {
       fs.unlinkSync(this.dbPath);
     }
     Config.Server.Database.type = ServerConfig.DatabaseType.sqlite;
-    Config.Server.Database.sqlite.storage = this.dbPath;
+    Config.Server.Database.dbFolder = path.dirname(this.dbPath);
     await ObjectManagers.InitSQLManagers();
   };
 

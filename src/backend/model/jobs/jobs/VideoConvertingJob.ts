@@ -20,12 +20,14 @@ export class VideoConvertingJob extends FileJob {
     return Config.Client.Media.Video.enabled === true;
   }
 
+  protected async shouldProcess(file: FileDTO): Promise<boolean> {
+    const mPath = path.join(ProjectPath.ImageFolder, file.directory.path, file.directory.name, file.name);
+    return !(await VideoProcessing.convertedVideoExist(mPath));
+  }
 
   protected async processFile(file: FileDTO): Promise<void> {
-    await VideoProcessing.convertVideo(path.join(ProjectPath.ImageFolder,
-      file.directory.path,
-      file.directory.name,
-      file.name));
+    const mPath = path.join(ProjectPath.ImageFolder, file.directory.path, file.directory.name, file.name);
+    await VideoProcessing.convertVideo(mPath);
   }
 
 

@@ -32,7 +32,7 @@ describe('Typeorm integration', () => {
     }
 
     Config.Server.Database.type = ServerConfig.DatabaseType.sqlite;
-    Config.Server.Database.sqlite.storage = dbPath;
+    Config.Server.Database.dbFolder = path.dirname(dbPath);
 
   };
 

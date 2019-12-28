@@ -7,10 +7,10 @@ import {NotificationService} from '../../../model/notification.service';
 import {ClientConfig} from '../../../../../common/config/public/ConfigClass';
 import {I18n} from '@ngx-translate/i18n-polyfill';
 import {ScheduledJobsService} from '../scheduled-jobs.service';
-import {DefaultsJobs} from '../../../../../common/entities/job/JobDTO';
+import {DefaultsJobs, JobDTO} from '../../../../../common/entities/job/JobDTO';
 import {ErrorDTO} from '../../../../../common/entities/Error';
 import {ServerConfig} from '../../../../../common/config/private/IPrivateConfig';
-import { JobState } from '../../../../../common/entities/job/JobProgressDTO';
+import {JobProgressStates} from '../../../../../common/entities/job/JobProgressDTO';
 
 
 @Component({
@@ -27,7 +27,7 @@ export class VideoSettingsComponent extends SettingsComponent<{ server: ServerCo
   formats: ServerConfig.formatType[] = ['mp4', 'webm'];
   fps = [24, 25, 30, 48, 50, 60];
 
-  JobState = JobState;
+  JobProgressStates = JobProgressStates;
 
   constructor(_authService: AuthenticationService,
               _navigation: NavigationService,
@@ -48,7 +48,7 @@ export class VideoSettingsComponent extends SettingsComponent<{ server: ServerCo
 
 
   get Progress() {
-    return this.jobsService.progress.value[DefaultsJobs[DefaultsJobs['Video Converting']]];
+    return this.jobsService.progress.value[JobDTO.getHashName(DefaultsJobs[DefaultsJobs['Video Converting']])];
   }
 
   get bitRate(): number {

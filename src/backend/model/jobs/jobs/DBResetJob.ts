@@ -1,4 +1,3 @@
-import {JobProgressDTO} from '../../../../common/entities/job/JobProgressDTO';
 import {ObjectManagers} from '../../ObjectManagers';
 import {Config} from '../../../../common/config/private/Config';
 import {ConfigTemplateEntry, DefaultsJobs} from '../../../../common/entities/job/JobDTO';
@@ -19,9 +18,11 @@ export class DBRestJob extends Job {
   protected async init() {
   }
 
-  protected async step(): Promise<JobProgressDTO> {
+  protected async step(): Promise<boolean> {
+    this.Progress.Left = 1;
+    this.Progress.Processed++;
     await ObjectManagers.getInstance().IndexingManager.resetDB();
-    return null;
+    return false;
   }
 
 

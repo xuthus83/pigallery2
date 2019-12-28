@@ -1,4 +1,3 @@
-import {JobProgressDTO} from '../../../../common/entities/job/JobProgressDTO';
 import {ConfigTemplateEntry} from '../../../../common/entities/job/JobDTO';
 import {Job} from './Job';
 import * as path from 'path';
@@ -53,14 +52,14 @@ export abstract class FileJob<S extends { indexedOnly: boolean } = { indexedOnly
     return files;
   }
 
+  protected abstract async shouldProcess(file: FileDTO): Promise<boolean>;
   protected abstract async processFile(file: FileDTO): Promise<void>;
 
-  protected async step(): Promise<JobProgressDTO> {
+  protected async step(): Promise<boolean> {
     if (this.directoryQueue.length === 0 && this.fileQueue.length === 0) {
-      return null;
+      return false;
     }
 
-    this.progress.time.current = Date.now();
     if (this.directoryQueue.length > 0) {
 
       if (this.config.indexedOnly === true &&
@@ -71,24 +70,30 @@ export abstract class FileJob<S extends { indexedOnly: boolean } = { indexedOnly
         await this.loadADirectoryFromDisk();
       }
     } else if (this.fileQueue.length > 0) {
+      this.Progress.Left = this.fileQueue.length;
       const file = this.fileQueue.shift();
-      this.progress.left = this.fileQueue.length;
-      this.progress.progress++;
       const filePath = path.join(file.directory.path, file.directory.name, file.name);
-      this.progress.comment = 'processing: ' + filePath;
       try {
-        await this.processFile(file);
+        if ((await this.shouldProcess(file)) === true) {
+          this.Progress.Processed++;
+          this.Progress.log('processing: ' + filePath);
+          await this.processFile(file);
+        } else {
+        this.Progress.log('skipping: ' + filePath);
+          this.Progress.Skipped++;
+        }
       } catch (e) {
         console.error(e);
         Logger.error(LOG_TAG, 'Error during processing file:' + filePath + ', ' + e.toString());
+        this.Progress.log('Error during processing file:' + filePath + ', ' + e.toString());
       }
     }
-    return this.progress;
+    return true;
   }
 
   private async loadADirectoryFromDisk() {
     const directory = this.directoryQueue.shift();
-    this.progress.comment = 'scanning directory: ' + directory;
+    this.Progress.log('scanning directory: ' + directory);
     const scanned = await DiskManager.scanDirectory(directory, this.scanFilter);
     for (let i = 0; i < scanned.directories.length; i++) {
       this.directoryQueue.push(path.join(scanned.directories[i].path, scanned.directories[i].name));
@@ -106,7 +111,7 @@ export abstract class FileJob<S extends { indexedOnly: boolean } = { indexedOnly
     if (this.scanFilter.noVideo === true && this.scanFilter.noPhoto === true) {
       return;
     }
-    this.progress.comment = 'Loading files from db';
+    this.Progress.log('Loading files from db');
     Logger.silly(LOG_TAG, 'Loading files from db');
 
     const connection = await SQLConnection.getConnection();

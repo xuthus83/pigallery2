@@ -7,10 +7,10 @@ import {ClientConfig} from '../../../../../common/config/public/ConfigClass';
 import {ThumbnailSettingsService} from './thumbnail.settings.service';
 import {I18n} from '@ngx-translate/i18n-polyfill';
 import {ServerConfig} from '../../../../../common/config/private/IPrivateConfig';
-import {DefaultsJobs} from '../../../../../common/entities/job/JobDTO';
+import {DefaultsJobs, JobDTO} from '../../../../../common/entities/job/JobDTO';
 import {ErrorDTO} from '../../../../../common/entities/Error';
 import {ScheduledJobsService} from '../scheduled-jobs.service';
-import {JobState} from '../../../../../common/entities/job/JobProgressDTO';
+import {JobProgressStates} from '../../../../../common/entities/job/JobProgressDTO';
 
 @Component({
   selector: 'app-settings-thumbnail',
@@ -22,7 +22,7 @@ import {JobState} from '../../../../../common/entities/job/JobProgressDTO';
 export class ThumbnailSettingsComponent
     extends SettingsComponent<{ server: ServerConfig.ThumbnailConfig, client: ClientConfig.ThumbnailConfig }>
     implements OnInit {
-  JobState = JobState;
+  JobProgressStates = JobProgressStates;
 
   constructor(_authService: AuthenticationService,
               _navigation: NavigationService,
@@ -49,7 +49,7 @@ export class ThumbnailSettingsComponent
   }
 
   get Progress() {
-    return this.jobsService.progress.value[DefaultsJobs[DefaultsJobs['Thumbnail Generation']]];
+    return this.jobsService.progress.value[JobDTO.getHashName(DefaultsJobs[DefaultsJobs['Thumbnail Generation']])];
   }
 
   ngOnInit() {

@@ -17,10 +17,10 @@ import {
 } from '../../../../../common/entities/job/JobScheduleDTO';
 import {Utils} from '../../../../../common/Utils';
 import {ServerConfig} from '../../../../../common/config/private/IPrivateConfig';
-import {ConfigTemplateEntry} from '../../../../../common/entities/job/JobDTO';
-import {JobState} from '../../../../../common/entities/job/JobProgressDTO';
+import {ConfigTemplateEntry, JobDTO} from '../../../../../common/entities/job/JobDTO';
 import {Job} from '../../../../../backend/model/jobs/jobs/Job';
 import {ModalDirective} from 'ngx-bootstrap/modal';
+import {JobProgressStates} from '../../../../../common/entities/job/JobProgressDTO';
 
 @Component({
   selector: 'app-settings-jobs',
@@ -38,7 +38,7 @@ export class JobsSettingsComponent extends SettingsComponent<ServerConfig.JobCon
   JobTriggerType = JobTriggerType;
   periods: string[] = [];
   showDetails: boolean[] = [];
-  JobState = JobState;
+  JobProgressStates = JobProgressStates;
   newSchedule: JobScheduleDTO = {
     name: '',
     config: null,
@@ -216,11 +216,11 @@ export class JobsSettingsComponent extends SettingsComponent<ServerConfig.JobCon
   }
 
   getProgress(schedule: JobScheduleDTO) {
-    return this.jobsService.progress.value[schedule.jobName];
+    return this.jobsService.progress.value[JobDTO.getHashName(schedule.jobName, schedule.config)];
   }
 
   getLastRun(schedule: JobScheduleDTO) {
-    return (this.jobsService.lastRuns.value[schedule.jobName] || {})[this.getConfigHash(schedule)];
+    return this.jobsService.lastRuns.value[JobDTO.getHashName(schedule.jobName, schedule.config)];
   }
 
   private getNextRunningDate(sch: JobScheduleDTO, list: JobScheduleDTO[], depth: number = 0): number {

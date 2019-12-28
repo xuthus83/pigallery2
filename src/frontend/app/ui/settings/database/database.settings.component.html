@@ -21,6 +21,17 @@
         </div>
       </div>
 
+      <div class="form-group row">
+        <label class="col-md-2 control-label" for="dbFolder" i18n>Database folder</label>
+        <div class="col-md-10">
+          <input type="text" class="form-control" placeholder="db"
+                 [(ngModel)]="settings.dbFolder" id="dbFolder" name="dbFolder" required>
+        </div>
+        <small  class="form-text text-muted" i18n>
+          All file-based data will be stored here (sqlite database, user database in case of memory db, job history data)
+        </small>
+      </div>
+
       <ng-container *ngIf="settings.type == DatabaseType.mysql">
 
         <div class="form-group row">
@@ -52,24 +63,7 @@
           </div>
         </div>
       </ng-container>
-      <ng-container *ngIf="settings.type == DatabaseType.sqlite">
-        <div class="form-group row">
-          <label class="col-md-2 control-label" for="storage" i18n>Storage file</label>
-          <div class="col-md-10">
-            <input type="text" class="form-control" placeholder="sqlite.db"
-                   [(ngModel)]="settings.sqlite.storage" id="storage" name="storage" required>
-          </div>
-        </div>
-      </ng-container>
-      <ng-container *ngIf="settings.type == DatabaseType.memory">
-        <div class="form-group row">
-          <label class="col-md-2 control-label" for="usersFile" i18n>User's file</label>
-          <div class="col-md-10">
-            <input type="text" class="form-control" placeholder="users.db"
-                   [(ngModel)]="settings.memory.usersFile" id="usersFile" name="usersFile" required>
-          </div>
-        </div>
-      </ng-container>
+
 
       <button class="btn btn-success float-right"
               [disabled]="!settingsForm.form.valid || !changed || inProgress"

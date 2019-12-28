@@ -136,7 +136,7 @@
       </button>
       <button class="btn btn-secondary  float-left ml-0"
               *ngIf="Progress != null"
-              [disabled]="inProgress || Progress.state !== JobState.running"
+              [disabled]="inProgress || Progress.state !== JobProgressStates.running"
               (click)="cancelTranscoding()" i18n>Cancel transcoding
       </button>
 

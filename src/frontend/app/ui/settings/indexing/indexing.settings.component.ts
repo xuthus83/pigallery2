@@ -8,9 +8,9 @@ import {SettingsComponent} from '../_abstract/abstract.settings.component';
 import {Utils} from '../../../../../common/Utils';
 import {I18n} from '@ngx-translate/i18n-polyfill';
 import {ScheduledJobsService} from '../scheduled-jobs.service';
-import {DefaultsJobs} from '../../../../../common/entities/job/JobDTO';
+import {DefaultsJobs, JobDTO} from '../../../../../common/entities/job/JobDTO';
 import {ServerConfig} from '../../../../../common/config/private/IPrivateConfig';
-import {JobState} from '../../../../../common/entities/job/JobProgressDTO';
+import {JobProgressStates} from '../../../../../common/entities/job/JobProgressDTO';
 
 @Component({
   selector: 'app-settings-indexing',
@@ -24,7 +24,7 @@ export class IndexingSettingsComponent extends SettingsComponent<ServerConfig.In
 
 
   types: { key: number; value: string }[] = [];
-  JobState = JobState;
+  JobProgressStates = JobProgressStates;
 
   constructor(_authService: AuthenticationService,
               _navigation: NavigationService,
@@ -44,7 +44,7 @@ export class IndexingSettingsComponent extends SettingsComponent<ServerConfig.In
   }
 
   get Progress() {
-    return this.jobsService.progress.value[DefaultsJobs[DefaultsJobs.Indexing]];
+    return this.jobsService.progress.value[JobDTO.getHashName(DefaultsJobs[DefaultsJobs.Indexing])];
   }
 
   get excludeFolderList(): string {

@@ -1,15 +1,14 @@
 import {EventEmitter, Injectable} from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
-import {JobProgressDTO} from '../../../../common/entities/job/JobProgressDTO';
+import {JobProgressDTO, JobProgressStates} from '../../../../common/entities/job/JobProgressDTO';
 import {NetworkService} from '../../model/network/network.service';
-import {JobLastRunDTO} from '../../../../common/entities/job/JobLastRunDTO';
 
 @Injectable()
 export class ScheduledJobsService {
 
 
   public progress: BehaviorSubject<{ [key: string]: JobProgressDTO }>;
-  public lastRuns: BehaviorSubject<{ [key: string]: { [key: string]: JobLastRunDTO } }>;
+  public lastRuns: BehaviorSubject<{ [key: string]: { [key: string]: JobProgressStates } }>;
   public onJobFinish: EventEmitter<string> = new EventEmitter<string>();
   timer: number = null;
   private subscribers = 0;
@@ -19,17 +18,6 @@ export class ScheduledJobsService {
     this.lastRuns = new BehaviorSubject({});
   }
 
-  public calcTimeElapsed(progress: JobProgressDTO) {
-    if (progress) {
-      return (progress.time.current - progress.time.start);
-    }
-  }
-
-  public calcTimeLeft(progress: JobProgressDTO) {
-    if (progress) {
-      return (progress.time.current - progress.time.start) / progress.progress * progress.left;
-    }
-  }
 
   subscribeToProgress(): void {
     this.incSubscribers();
@@ -56,13 +44,14 @@ export class ScheduledJobsService {
   protected async getProgress(): Promise<void> {
     const prevPrg = this.progress.value;
     this.progress.next(await this._networkService.getJson<{ [key: string]: JobProgressDTO }>('/admin/jobs/scheduled/progress'));
-    this.lastRuns.next(await this._networkService.getJson<{ [key: string]: { [key: string]: JobLastRunDTO } }>('/admin/jobs/scheduled/lastRun'));
+    this.lastRuns.next(await this._networkService.getJson<{ [key: string]: { [key: string]: JobProgressStates } }>('/admin/jobs/scheduled/lastRun'));
     for (const prg in prevPrg) {
       if (!this.progress.value.hasOwnProperty(prg)) {
         this.onJobFinish.emit(prg);
       }
     }
   }
+
 
   protected getProgressPeriodically() {
     if (this.timer != null || this.subscribers === 0) {

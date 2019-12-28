@@ -98,7 +98,7 @@ export class PhotoProcessing {
   }
 
 
-  public static generateThumbnailPath(mediaPath: string, size: number): string {
+  public static generateConvertedPath(mediaPath: string, size: number): string {
     const file = path.basename(mediaPath);
     return path.join(ProjectPath.TranscodedFolder,
       ProjectPath.getRelativePathToImages(path.dirname(mediaPath)),
@@ -111,9 +111,6 @@ export class PhotoProcessing {
         .digest('hex') + '_' + size + '.jpg');
   }
 
-  public static generateConvertedFilePath(photoPath: string): string {
-    return this.generateThumbnailPath(photoPath, Config.Server.Media.Photo.Converting.resolution);
-  }
 
   public static async isValidConvertedPath(convertedPath: string): Promise<boolean> {
     const origFilePath = path.join(ProjectPath.ImageFolder,
@@ -142,42 +139,35 @@ export class PhotoProcessing {
   }
 
 
-  public static async convertPhoto(mediaPath: string, size: number) {
+  public static async convertPhoto(mediaPath: string) {
+    return this.generateThumbnail(mediaPath,
+      Config.Server.Media.Photo.Converting.resolution,
+      ThumbnailSourceType.Photo,
+      false);
+  }
+
+
+  static async convertedPhotoExist(mediaPath: string, size: number) {
+
     // generate thumbnail path
-    const outPath = PhotoProcessing.generateConvertedFilePath(mediaPath);
+    const outPath = PhotoProcessing.generateConvertedPath(mediaPath, size);
 
 
     // check if file already exist
     try {
       await fsp.access(outPath, fsConstants.R_OK);
-      return outPath;
+      return true;
     } catch (e) {
     }
-
-
-    // run on other thread
-    const input = <RendererInput>{
-      type: ThumbnailSourceType.Photo,
-      mediaPath: mediaPath,
-      size: size,
-      outPath: outPath,
-      makeSquare: false,
-      qualityPriority: Config.Server.Media.Thumbnail.qualityPriority
-    };
-
-    const outDir = path.dirname(input.outPath);
-
-    await fsp.mkdir(outDir, {recursive: true});
-    await this.taskQue.execute(input);
-    return outPath;
+    return false;
   }
 
   public static async generateThumbnail(mediaPath: string,
                                         size: number,
                                         sourceType: ThumbnailSourceType,
-                                        makeSquare: boolean) {
+                                        makeSquare: boolean): Promise<string> {
     // generate thumbnail path
-    const outPath = PhotoProcessing.generateThumbnailPath(mediaPath, size);
+    const outPath = PhotoProcessing.generateConvertedPath(mediaPath, size);
 
 
     // check if file already exist
@@ -209,5 +199,6 @@ export class PhotoProcessing {
     const extension = path.extname(fullPath).toLowerCase();
     return SupportedFormats.WithDots.Photos.indexOf(extension) !== -1;
   }
+
 }
 

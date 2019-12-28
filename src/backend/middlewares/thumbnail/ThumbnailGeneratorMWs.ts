@@ -149,7 +149,7 @@ export class ThumbnailGeneratorMWs {
       const fullMediaPath = path.join(ProjectPath.ImageFolder, photos[i].directory.path, photos[i].directory.name, photos[i].name);
       for (let j = 0; j < Config.Client.Media.Thumbnail.thumbnailSizes.length; j++) {
         const size = Config.Client.Media.Thumbnail.thumbnailSizes[j];
-        const thPath = PhotoProcessing.generateThumbnailPath(fullMediaPath, size);
+        const thPath = PhotoProcessing.generateConvertedPath(fullMediaPath, size);
         if (fs.existsSync(thPath) === true) {
           if (typeof photos[i].readyThumbnails === 'undefined') {
             photos[i].readyThumbnails = [];
@@ -157,7 +157,7 @@ export class ThumbnailGeneratorMWs {
           photos[i].readyThumbnails.push(size);
         }
       }
-      const iconPath = PhotoProcessing.generateThumbnailPath(fullMediaPath, Config.Client.Media.Thumbnail.iconSize);
+      const iconPath = PhotoProcessing.generateConvertedPath(fullMediaPath, Config.Client.Media.Thumbnail.iconSize);
       if (fs.existsSync(iconPath) === true) {
         photos[i].readyIcon = true;
       }

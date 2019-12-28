@@ -1,10 +1,10 @@
-import {JobProgressDTO, JobState} from '../../../../common/entities/job/JobProgressDTO';
 import {ObjectManagers} from '../../ObjectManagers';
 import * as path from 'path';
 import {Config} from '../../../../common/config/private/Config';
 import {Job} from './Job';
 import {ConfigTemplateEntry, DefaultsJobs} from '../../../../common/entities/job/JobDTO';
 import {ServerConfig} from '../../../../common/config/private/IPrivateConfig';
+import {JobProgressStates} from '../../../../common/entities/job/JobProgressDTO';
 
 declare var global: NodeJS.Global;
 const LOG_TAG = '[IndexingJob]';
@@ -23,23 +23,22 @@ export class IndexingJob extends Job {
     this.directoriesToIndex.push('/');
   }
 
-  protected async step(): Promise<JobProgressDTO> {
+  protected async step(): Promise<boolean> {
     if (this.directoriesToIndex.length === 0) {
-      return null;
+      return false;
     }
     const directory = this.directoriesToIndex.shift();
-    this.progress.comment = directory;
-    this.progress.left = this.directoriesToIndex.length;
+    this.Progress.log(directory);
+    this.Progress.Left = this.directoriesToIndex.length;
     const scanned = await ObjectManagers.getInstance().IndexingManager.indexDirectory(directory);
-    if (this.state !== JobState.running) {
-      return null;
+    if (this.Progress.State !== JobProgressStates.running) {
+      return false;
     }
-    this.progress.progress++;
-    this.progress.time.current = Date.now();
+    this.Progress.Processed++;
     for (let i = 0; i < scanned.directories.length; i++) {
       this.directoriesToIndex.push(path.join(scanned.directories[i].path, scanned.directories[i].name));
     }
-    return this.progress;
+    return true;
   }
 
 

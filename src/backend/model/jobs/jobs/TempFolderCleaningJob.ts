@@ -3,7 +3,6 @@ import * as path from 'path';
 import * as util from 'util';
 import {promises as fsp} from 'fs';
 import {Job} from './Job';
-import {JobProgressDTO} from '../../../../common/entities/job/JobProgressDTO';
 import {ProjectPath} from '../../../ProjectPath';
 import {PhotoProcessing} from '../../fileprocessing/PhotoProcessing';
 import {VideoProcessing} from '../../fileprocessing/VideoProcessing';
@@ -61,39 +60,38 @@ export class TempFolderCleaningJob extends Job {
     const validFiles = [ProjectPath.TranscodedFolder, ProjectPath.FacesFolder];
     for (let i = 0; i < files.length; ++i) {
       if (validFiles.indexOf(files[i]) === -1) {
+        this.Progress.Processed++;
         if ((await fsp.stat(files[i])).isDirectory()) {
           await rimrafPR(files[i]);
         } else {
           await fsp.unlink(files[i]);
         }
+      } else {
+        this.Progress.Skipped++;
       }
     }
 
-    this.progress.time.current = Date.now();
 
-    this.progress.comment = 'processing: ' + ProjectPath.TempFolder;
+    this.Progress.log('processing: ' + ProjectPath.TempFolder);
 
-    return this.progress;
+    return true;
 
 
   }
 
   protected async stepConvertedDirectory() {
 
-
-    this.progress.time.current = Date.now();
-
-
     const filePath = this.directoryQueue.shift();
     const stat = await fsp.stat(filePath);
 
-    this.progress.left = this.directoryQueue.length;
-    this.progress.progress++;
-    this.progress.comment = 'processing: ' + filePath;
+    this.Progress.Left = this.directoryQueue.length;
+    this.Progress.log('processing: ' + filePath);
     if (stat.isDirectory()) {
       if (await this.isValidDirectory(filePath) === false) {
+        this.Progress.Processed++;
         await rimrafPR(filePath);
       } else {
+        this.Progress.Skipped++;
         this.directoryQueue = this.directoryQueue.concat(await this.readDir(filePath));
       }
     } else {
@@ -101,12 +99,12 @@ export class TempFolderCleaningJob extends Job {
         await fsp.unlink(filePath);
       }
     }
-    return this.progress;
+    return true;
   }
 
-  protected async step(): Promise<JobProgressDTO> {
+  protected async step(): Promise<boolean> {
     if (this.directoryQueue.length === 0) {
-      return null;
+      return false;
     }
     if (this.tempRootCleaned === false) {
       this.tempRootCleaned = true;

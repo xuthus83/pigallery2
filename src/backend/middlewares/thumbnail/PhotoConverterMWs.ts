@@ -15,7 +15,7 @@ export class PhotoConverterMWs {
     }
     const fullMediaPath = req.resultPipe;
 
-    const convertedVideo = PhotoProcessing.generateConvertedFilePath(fullMediaPath);
+    const convertedVideo = PhotoProcessing.generateConvertedPath(fullMediaPath, Config.Server.Media.Photo.Converting.resolution);
 
     // check if transcoded video exist
     if (fs.existsSync(convertedVideo) === true) {
@@ -24,8 +24,7 @@ export class PhotoConverterMWs {
     }
 
     if (Config.Server.Media.Photo.Converting.onTheFly === true) {
-      req.resultPipe = await PhotoProcessing.convertPhoto(fullMediaPath,
-        Config.Server.Media.Photo.Converting.resolution);
+      req.resultPipe = await PhotoProcessing.convertPhoto(fullMediaPath);
       return next();
     }
 

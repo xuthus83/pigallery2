@@ -15,8 +15,7 @@ ENTRYPOINT ["npm", "start",  "--", \
   # after a extensive job (like video converting), pigallery calls gc, to clean up everthing as fast as possible
   "--expose-gc", \
   "--config-path=/app/data/config/config.json", \
-  "--Server-Database-sqlite-storage=/app/data/db/sqlite.db", \
-  "--Server-Database-memory-usersFile=/app/data/db/users.db", \
+  "--Server-Database-dbFolder=/app/data/db", \
   "--Server-Media-folder=/app/data/images", \
   "--Server-Media-tempFolder=/app/data/tmp"]
 EXPOSE 80

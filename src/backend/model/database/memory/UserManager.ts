@@ -3,6 +3,7 @@ import {IUserManager} from '../interfaces/IUserManager';
 import {ProjectPath} from '../../../ProjectPath';
 import {Utils} from '../../../../common/Utils';
 import * as fs from 'fs';
+import * as path from 'path';
 import {PasswordHelper} from '../../PasswordHelper';
 import {Config} from '../../../../common/config/private/Config';
 
@@ -13,7 +14,7 @@ export class UserManager implements IUserManager {
 
 
   constructor() {
-    this.dbPath = ProjectPath.getAbsolutePath(Config.Server.Database.memory.usersFile);
+    this.dbPath = path.join(ProjectPath.getAbsolutePath(Config.Server.Database.dbFolder), 'users.db');
     if (fs.existsSync(this.dbPath)) {
       this.loadDB();
     }

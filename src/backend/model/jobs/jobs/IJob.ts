@@ -1,16 +1,16 @@
-import {JobProgressDTO} from '../../../../common/entities/job/JobProgressDTO';
 import {JobDTO} from '../../../../common/entities/job/JobDTO';
-import {JobLastRunDTO, JobLastRunState} from '../../../../common/entities/job/JobLastRunDTO';
+import {JobProgress} from './JobProgress';
+import {IJobListener} from './IJobListener';
 
 export interface IJob<T> extends JobDTO {
   Name: string;
   Supported: boolean;
-  Progress: JobProgressDTO;
-  LastRuns: { [key: string]: JobLastRunDTO };
+  Progress: JobProgress;
+  JobListener: IJobListener;
 
-  start(config: T, OnFinishCB: (status: JobLastRunState) => void): Promise<void>;
+  start(config: T): Promise<void>;
 
-  stop(): void;
+  cancel(): void;
 
   toJSON(): JobDTO;
 }

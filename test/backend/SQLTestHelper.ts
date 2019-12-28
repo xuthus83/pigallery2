@@ -63,7 +63,7 @@ export class SQLTestHelper {
     await this.resetSQLite();
 
     Config.Server.Database.type = ServerConfig.DatabaseType.sqlite;
-    Config.Server.Database.sqlite.storage = this.dbPath;
+    Config.Server.Database.dbFolder = path.dirname(this.dbPath);
   }
 
   private async initMySQL() {

@@ -1,50 +1,40 @@
 import {IJobManager} from '../database/interfaces/IJobManager';
-import {JobProgressDTO} from '../../../common/entities/job/JobProgressDTO';
+import {JobProgressDTO, JobProgressStates} from '../../../common/entities/job/JobProgressDTO';
 import {IJob} from './jobs/IJob';
 import {JobRepository} from './JobRepository';
 import {Config} from '../../../common/config/private/Config';
 import {AfterJobTrigger, JobScheduleDTO, JobTriggerType} from '../../../common/entities/job/JobScheduleDTO';
 import {Logger} from '../../Logger';
 import {NotificationManager} from '../NotifocationManager';
-import {JobLastRunDTO, JobLastRunState} from '../../../common/entities/job/JobLastRunDTO';
+import {IJobListener} from './jobs/IJobListener';
+import {JobProgress} from './jobs/JobProgress';
+import {JobProgressManager} from './JobProgressManager';
 
-declare var global: NodeJS.Global;
 
 const LOG_TAG = '[JobManager]';
 
-export class JobManager implements IJobManager {
-
+export class JobManager implements IJobManager, IJobListener {
   protected timers: { schedule: JobScheduleDTO, timer: NodeJS.Timeout }[] = [];
+  protected progressManager: JobProgressManager = null;
 
   constructor() {
+    this.progressManager = new JobProgressManager();
     this.runSchedules();
   }
 
   getProgresses(): { [id: string]: JobProgressDTO } {
-    const m: { [id: string]: JobProgressDTO } = {};
-    JobRepository.Instance.getAvailableJobs()
-      .filter(t => t.Progress)
-      .forEach(t => {
-        t.Progress.time.current = Date.now();
-        m[t.Name] = t.Progress;
-      });
-    return m;
+    return this.progressManager.Running;
   }
 
-  getJobLastRuns(): { [key: string]: { [key: string]: JobLastRunDTO } } {
-    const m: { [id: string]: { [id: string]: JobLastRunDTO } } = {};
-    JobRepository.Instance.getAvailableJobs().forEach(t => {
-      m[t.Name] = t.LastRuns;
-    });
-    return m;
+  getJobLastRuns(): { [key: string]: JobProgressDTO } {
+    return this.progressManager.Finished;
   }
 
   async run<T>(jobName: string, config: T): Promise<void> {
     const t = this.findJob(jobName);
     if (t) {
-      await t.start(config, (status: JobLastRunState) => {
-        this.onJobFinished(t, status);
-      });
+      t.JobListener = this;
+      await t.start(config);
     } else {
       Logger.warn(LOG_TAG, 'cannot find job to start:' + jobName);
     }
@@ -53,14 +43,19 @@ export class JobManager implements IJobManager {
   stop(jobName: string): void {
     const t = this.findJob(jobName);
     if (t) {
-      t.stop();
+      t.cancel();
     } else {
       Logger.warn(LOG_TAG, 'cannot find job to stop:' + jobName);
     }
   }
 
-  async onJobFinished(job: IJob<any>, status: JobLastRunState): Promise<void> {
-    if (status === JobLastRunState.canceled) { // if it was cancelled do not start the next one
+  onProgressUpdate = (progress: JobProgress): void => {
+    this.progressManager.onJobProgressUpdate(progress.toDTO());
+  };
+
+
+  onJobFinished = async (job: IJob<any>, state: JobProgressStates): Promise<void> => {
+    if (state !== JobProgressStates.finished) { // if it was not finished peacefully, do not start the next one
       return;
     }
     const sch = Config.Server.Jobs.scheduled.find(s => s.jobName === job.Name);
@@ -75,7 +70,7 @@ export class JobManager implements IJobManager {
         }
       }
     }
-  }
+  };
 
   getAvailableJobs(): IJob<any>[] {
     return JobRepository.Instance.getAvailableJobs();

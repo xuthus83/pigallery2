@@ -27,19 +27,19 @@ export module ServerConfig {
     password: string;
   }
 
-  export interface SQLiteConfig {
-    storage: string;
-  }
+  /*
+    export interface SQLiteConfig {
+    }
 
-  export interface MemoryConfig {
-    usersFile: string;
-  }
+    export interface MemoryConfig {
+    }*/
 
   export interface DataBaseConfig {
     type: DatabaseType;
+    dbFolder: string;
     mysql?: MySQLConfig;
-    sqlite?: SQLiteConfig;
-    memory?: MemoryConfig;
+    // sqlite?: SQLiteConfig;
+    // memory?: MemoryConfig;
   }
 
   export interface ThumbnailConfig {
@@ -78,6 +78,7 @@ export module ServerConfig {
   }
 
   export interface JobConfig {
+    maxSavedProgress: number;
     scheduled: JobScheduleDTO[];
   }
 

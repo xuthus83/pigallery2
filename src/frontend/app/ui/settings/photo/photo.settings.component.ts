@@ -9,9 +9,9 @@ import {I18n} from '@ngx-translate/i18n-polyfill';
 import {ScheduledJobsService} from '../scheduled-jobs.service';
 import {ServerConfig} from '../../../../../common/config/private/IPrivateConfig';
 import {Utils} from '../../../../../common/Utils';
-import {DefaultsJobs} from '../../../../../common/entities/job/JobDTO';
+import {DefaultsJobs, JobDTO} from '../../../../../common/entities/job/JobDTO';
 import {ErrorDTO} from '../../../../../common/entities/Error';
-import {JobState} from '../../../../../common/entities/job/JobProgressDTO';
+import {JobProgressStates} from '../../../../../common/entities/job/JobProgressDTO';
 
 
 @Component({
@@ -28,7 +28,7 @@ export class PhotoSettingsComponent extends SettingsComponent<{
 }> {
   resolutions = [720, 1080, 1440, 2160, 4320];
   PhotoProcessingLib = ServerConfig.PhotoProcessingLib;
-  JobState = JobState;
+  JobProgressStates = JobProgressStates;
 
   libTypes = Utils
     .enumToArray(ServerConfig.PhotoProcessingLib).map((v) => {
@@ -59,7 +59,7 @@ export class PhotoSettingsComponent extends SettingsComponent<{
 
 
   get Progress() {
-    return this.jobsService.progress.value[DefaultsJobs[DefaultsJobs['Photo Converting']]];
+    return this.jobsService.progress.value[JobDTO.getHashName(DefaultsJobs[DefaultsJobs['Photo Converting']])];
   }
 
   async convertPhoto() {

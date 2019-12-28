@@ -21,3 +21,9 @@ export interface JobDTO {
   Name: string;
   ConfigTemplate: ConfigTemplateEntry[];
 }
+
+export module JobDTO {
+  export const getHashName = (jobName: string, config: any = {}) => {
+    return jobName + '-' + JSON.stringify(config);
+  };
+}

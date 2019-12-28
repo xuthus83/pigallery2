@@ -31,10 +31,9 @@ export class ConfigDiagnostics {
     }
     if (databaseConfig.type !== ServerConfig.DatabaseType.sqlite) {
       try {
-        await this.checkReadWritePermission(ProjectPath.getAbsolutePath(databaseConfig.sqlite.storage));
+        await this.checkReadWritePermission(SQLConnection.getSQLiteDB(databaseConfig));
       } catch (e) {
-        throw new Error('Cannot read or write sqlite storage file: ' +
-          ProjectPath.getAbsolutePath(databaseConfig.sqlite.storage));
+        throw new Error('Cannot read or write sqlite storage file: ' + SQLConnection.getSQLiteDB(databaseConfig));
       }
     }
   }

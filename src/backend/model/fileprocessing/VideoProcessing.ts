@@ -40,6 +40,19 @@ export class VideoProcessing {
     return true;
   }
 
+
+  static async convertedVideoExist(videoPath: string): Promise<boolean> {
+    const outPath = this.generateConvertedFilePath(videoPath);
+
+    try {
+      await fsp.access(outPath, fsConstants.R_OK);
+      return true;
+    } catch (e) {
+    }
+
+    return false;
+  }
+
   public static async convertVideo(videoPath: string): Promise<void> {
 
 
