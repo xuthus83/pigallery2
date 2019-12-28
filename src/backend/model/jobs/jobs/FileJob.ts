@@ -74,12 +74,13 @@ export abstract class FileJob<S extends { indexedOnly: boolean } = { indexedOnly
       const file = this.fileQueue.shift();
       this.progress.left = this.fileQueue.length;
       this.progress.progress++;
-      this.progress.comment = 'processing: ' + path.join(file.directory.path, file.directory.name, file.name);
+      const filePath = path.join(file.directory.path, file.directory.name, file.name);
+      this.progress.comment = 'processing: ' + filePath;
       try {
         await this.processFile(file);
       } catch (e) {
         console.error(e);
-        Logger.error(LOG_TAG, 'Error during processing file.' + ', ' + e.toString());
+        Logger.error(LOG_TAG, 'Error during processing file:' + filePath + ', ' + e.toString());
       }
     }
     return this.progress;
@@ -105,6 +106,7 @@ export abstract class FileJob<S extends { indexedOnly: boolean } = { indexedOnly
     if (this.scanFilter.noVideo === true && this.scanFilter.noPhoto === true) {
       return;
     }
+    this.progress.comment = 'Loading files from db';
     Logger.silly(LOG_TAG, 'Loading files from db');
 
     const connection = await SQLConnection.getConnection();
@@ -117,7 +119,9 @@ export abstract class FileJob<S extends { indexedOnly: boolean } = { indexedOnly
       usedEntity = VideoEntity;
     }
 
-    const result = await connection.getRepository(usedEntity).createQueryBuilder('media')
+    const result = await connection
+      .getRepository(usedEntity)
+      .createQueryBuilder('media')
       .select(['media.name', 'media.id'])
       .leftJoinAndSelect('media.directory', 'directory')
       .getMany();

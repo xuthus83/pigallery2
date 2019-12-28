@@ -106,9 +106,19 @@
                                [hidden]="!indexing.HasAvailableSettings"
                                [simplifiedMode]="simplifiedMode"></app-settings-indexing>
         <app-settings-jobs #setting #jobs
-                            [hidden]="!jobs.HasAvailableSettings"
-                            [simplifiedMode]="simplifiedMode"></app-settings-jobs>
+                           [hidden]="!jobs.HasAvailableSettings"
+                           [simplifiedMode]="simplifiedMode"></app-settings-jobs>
       </div>
     </div>
+
+    <div class="row mb-2">
+      <div class="col-12">
+        <div class="text-right">
+          <ng-container i18n>Up time</ng-container><!--
+          -->: {{upTime | date:'medium'}}
+        </div>
+      </div>
+    </div>
+
   </div>
 </app-frame>

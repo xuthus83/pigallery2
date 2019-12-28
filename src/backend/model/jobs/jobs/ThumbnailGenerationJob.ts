@@ -7,6 +7,7 @@ import {PhotoProcessing} from '../../fileprocessing/PhotoProcessing';
 import {ThumbnailSourceType} from '../../threading/PhotoWorker';
 import {MediaDTO} from '../../../../common/entities/MediaDTO';
 import {FileDTO} from '../../../../common/entities/FileDTO';
+import {JobLastRunState} from '../../../../common/entities/job/JobLastRunDTO';
 
 const LOG_TAG = '[ThumbnailGenerationJob]';
 
@@ -28,7 +29,7 @@ export class ThumbnailGenerationJob extends FileJob<{ sizes: number[], indexedOn
     return true;
   }
 
-  start(config: { sizes: number[], indexedOnly: boolean }, OnFinishCB: () => void): Promise<void> {
+  start(config: { sizes: number[], indexedOnly: boolean }, OnFinishCB: (status: JobLastRunState) => void): Promise<void> {
     for (let i = 0; i < config.sizes.length; ++i) {
       if (Config.Client.Media.Thumbnail.thumbnailSizes.indexOf(config.sizes[i]) === -1) {
         throw new Error('unknown thumbnails size: ' + config.sizes[i] + '. Add it to the possible thumbnail sizes.');

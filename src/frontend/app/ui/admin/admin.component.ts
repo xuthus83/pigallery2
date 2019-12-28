@@ -23,8 +23,7 @@ export class AdminComponent implements OnInit, AfterViewInit {
   };
   appVersion = Config.Client.appVersion;
   versionExtra = '';
-  buildTime = Config.Client.buildTime;
-  buildCommitHash = Config.Client.buildCommitHash;
+  upTime = Config.Client.upTime;
   @ViewChildren('setting') settingsComponents: QueryList<ISettingsComponent>;
   @ViewChildren('setting', {read: ElementRef}) settingsComponents2: QueryList<ElementRef>;
   contents: ISettingsComponent[] = [];
@@ -36,6 +35,7 @@ export class AdminComponent implements OnInit, AfterViewInit {
               public i18n: I18n) {
     this.text.Advanced = i18n('Advanced');
     this.text.Simplified = i18n('Simplified');
+
     if (Config.Client.buildTime) {
       this.versionExtra = i18n('Built at') + ': ' + formatDate(Config.Client.buildTime, 'medium', locale);
     }
@@ -51,12 +51,12 @@ export class AdminComponent implements OnInit, AfterViewInit {
 
   scrollTo(i: number) {
     PageHelper.ScrollY = this.settingsComponents2.toArray()[i].nativeElement.getBoundingClientRect().top +
-      PageHelper.ScrollY;
+        PageHelper.ScrollY;
   }
 
   ngOnInit() {
     if (!this._authService.isAuthenticated()
-      || this._authService.user.value.role < UserRoles.Admin) {
+        || this._authService.user.value.role < UserRoles.Admin) {
       this._navigation.toLogin();
       return;
     }

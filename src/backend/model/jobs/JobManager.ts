@@ -6,7 +6,7 @@ import {Config} from '../../../common/config/private/Config';
 import {AfterJobTrigger, JobScheduleDTO, JobTriggerType} from '../../../common/entities/job/JobScheduleDTO';
 import {Logger} from '../../Logger';
 import {NotificationManager} from '../NotifocationManager';
-import {JobLastRunDTO} from '../../../common/entities/job/JobLastRunDTO';
+import {JobLastRunDTO, JobLastRunState} from '../../../common/entities/job/JobLastRunDTO';
 
 declare var global: NodeJS.Global;
 
@@ -42,8 +42,8 @@ export class JobManager implements IJobManager {
   async run<T>(jobName: string, config: T): Promise<void> {
     const t = this.findJob(jobName);
     if (t) {
-      await t.start(config, () => {
-        this.onJobFinished(t);
+      await t.start(config, (status: JobLastRunState) => {
+        this.onJobFinished(t, status);
       });
     } else {
       Logger.warn(LOG_TAG, 'cannot find job to start:' + jobName);
@@ -54,15 +54,15 @@ export class JobManager implements IJobManager {
     const t = this.findJob(jobName);
     if (t) {
       t.stop();
-      if (global.gc) {
-        global.gc();
-      }
     } else {
       Logger.warn(LOG_TAG, 'cannot find job to stop:' + jobName);
     }
   }
 
-  async onJobFinished(job: IJob<any>): Promise<void> {
+  async onJobFinished(job: IJob<any>, status: JobLastRunState): Promise<void> {
+    if (status === JobLastRunState.canceled) { // if it was cancelled do not start the next one
+      return;
+    }
     const sch = Config.Server.Jobs.scheduled.find(s => s.jobName === job.Name);
     if (sch) {
       const children = Config.Server.Jobs.scheduled.filter(s => s.trigger.type === JobTriggerType.after &&

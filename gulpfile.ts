@@ -144,7 +144,7 @@ gulp.task('copy-package', function () {
       json.buildTime = (new Date()).toISOString();
 
       try {
-        json.buildCommitHash = require('child_process').execSync('git rev-parse HEAD');
+        json.buildCommitHash = require('child_process').execSync('git rev-parse HEAD').toString().trim();
       } catch (e) {
       }
 

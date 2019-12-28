@@ -186,7 +186,6 @@ export class JobsSettingsComponent extends SettingsComponent<ServerConfig.JobCon
     configElement[id] = value.split(';')
       .map((s: string) => parseInt(s, 10))
       .filter((i: number) => !isNaN(i) && i > 0);
-    console.log(configElement[id]);
   }
 
   getNumberArray(configElement: any, id: string) {
@@ -209,10 +208,19 @@ export class JobsSettingsComponent extends SettingsComponent<ServerConfig.JobCon
     const count = this.settings.scheduled.filter(s => s.jobName === jobName).length;
     this.newSchedule.name = count === 0 ? jobName : jobName + ' ' + (count + 1);
     this.settings.scheduled.push(this.newSchedule);
+    this.jobModal.hide();
   }
 
   getConfigHash(schedule: JobScheduleDTO): string {
     return JSON.stringify(schedule.config);
+  }
+
+  getProgress(schedule: JobScheduleDTO) {
+    return this.jobsService.progress.value[schedule.jobName];
+  }
+
+  getLastRun(schedule: JobScheduleDTO) {
+    return (this.jobsService.lastRuns.value[schedule.jobName] || {})[this.getConfigHash(schedule)];
   }
 
   private getNextRunningDate(sch: JobScheduleDTO, list: JobScheduleDTO[], depth: number = 0): number {

@@ -32,7 +32,7 @@ export abstract class Job<T = void> implements IJob<T> {
     return this.progress;
   }
 
-  public start(config: T, onFinishCB: () => void): Promise<void> {
+  public start(config: T, onFinishCB: (status: JobLastRunState) => void): Promise<void> {
     this.OnFinishCB = onFinishCB;
     if (this.state === JobState.idle && this.Supported) {
       Logger.info(LOG_TAG, 'Running job: ' + this.Name);
@@ -45,6 +45,17 @@ export abstract class Job<T = void> implements IJob<T> {
         time: {
           start: Date.now(),
           current: Date.now()
+        }
+      };
+      this.lastRuns[JSON.stringify(this.config)] = {
+        all: 0,
+        done: 0,
+        comment: '',
+        config: this.config,
+        state: JobLastRunState.finished,
+        time: {
+          start: Date.now(),
+          end: Date.now()
         }
       };
       const pr = new Promise<void>((resolve) => {
@@ -67,6 +78,7 @@ export abstract class Job<T = void> implements IJob<T> {
     Logger.info(LOG_TAG, 'Stopping job: ' + this.Name);
     this.state = JobState.stopping;
     this.progress.state = JobState.stopping;
+    this.lastRuns[JSON.stringify(this.config)].state = JobLastRunState.canceled;
   }
 
   public toJSON(): JobDTO {
@@ -76,7 +88,7 @@ export abstract class Job<T = void> implements IJob<T> {
     };
   }
 
-  protected OnFinishCB = () => {
+  protected OnFinishCB = (status: JobLastRunState) => {
   };
 
   protected abstract async step(): Promise<JobProgressDTO>;
@@ -84,17 +96,10 @@ export abstract class Job<T = void> implements IJob<T> {
   protected abstract async init(): Promise<void>;
 
   private onFinish(): void {
-    this.lastRuns[JSON.stringify(this.config)] = {
-      all: this.progress.left + this.progress.progress,
-      done: this.progress.progress,
-      comment: '',
-      config: this.config,
-      state: this.progress.state === JobState.stopping ? JobLastRunState.canceled : JobLastRunState.finished,
-      time: {
-        start: this.progress.time.start,
-        end: Date.now()
-      }
-    };
+    this.lastRuns[JSON.stringify(this.config)].all = this.progress.left + this.progress.progress;
+    this.lastRuns[JSON.stringify(this.config)].done = this.progress.progress;
+    this.lastRuns[JSON.stringify(this.config)].time.end = Date.now();
+
     this.progress = null;
     if (global.gc) {
       global.gc();
@@ -103,7 +108,7 @@ export abstract class Job<T = void> implements IJob<T> {
     if (this.IsInstant) {
       this.prResolve();
     }
-    this.OnFinishCB();
+    this.OnFinishCB(this.lastRuns[JSON.stringify(this.config)].state);
   }
 
   private run() {

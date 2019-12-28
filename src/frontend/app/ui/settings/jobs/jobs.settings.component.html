@@ -9,7 +9,8 @@
 
       <div *ngFor="let schedule of sortedSchedules() as schedules; let i= index">
         <div class="card bg-light {{shouldIdent(schedule,schedules[i-1])? 'ml-4' : ''}}">
-          <div class="card-header clickable" (click)="showDetails[schedule.name]=!showDetails[schedule.name]">
+          <div class="card-header clickable"
+               (click)="showDetails[schedule.name]=!showDetails[schedule.name]">
             <div class="d-flex justify-content-between">
               {{schedule.name}} @<!--
               -->
@@ -26,10 +27,23 @@
                   {{schedule.trigger.afterScheduleName}}
                 </ng-container>
               </ng-container>
-              <button class="btn btn-danger button-delete" (click)="remove(i)"><span class="oi oi-trash"></span>
-              </button>
+              <div>
+                <button class="btn btn-danger job-control-button" (click)="remove(i)"><span class="oi oi-trash"></span>
+                </button>
+                <button class="btn btn-success job-control-button"
+                        *ngIf="!jobsService.progress.value[schedule.jobName]"
+                        [disabled]="disableButtons"
+                        (click)="start(schedule); $event.stopPropagation();"><span class="oi oi-media-play"></span>
+                </button>
+                <button class="btn btn-secondary job-control-button"
+                        *ngIf="jobsService.progress.value[schedule.jobName]"
+                        [disabled]="disableButtons || jobsService.progress.value[schedule.jobName].state !== JobState.running"
+                        (click)="stop(schedule); $event.stopPropagation();"><span class="oi oi-media-stop"></span>
+                </button>
+              </div>
             </div>
           </div>
+
 
           <div class="card-body" [hidden]="!showDetails[schedule.name]">
             <div class="row">
@@ -192,8 +206,9 @@
 
           <app-settings-job-progress
             class="card-footer bg-transparent"
-            [progress]="jobsService.progress.value[schedule.jobName]"
-            [lastRun]="(jobsService.lastRuns.value[schedule.jobName] || {})[getConfigHash(schedule)]">
+            *ngIf="getProgress(schedule) || getLastRun(schedule)"
+            [progress]="getProgress(schedule)"
+            [lastRun]="getLastRun(schedule)">
           </app-settings-job-progress>
 
         </div>
