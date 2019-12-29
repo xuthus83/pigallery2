@@ -1,11 +1,9 @@
 import {Logger} from '../../Logger';
-import * as fs from 'fs';
-import * as util from 'util';
+import {promises as fsp} from 'fs';
 import {FfmpegCommand} from 'fluent-ffmpeg';
 import {FFmpegFactory} from '../FFmpegFactory';
 import {ServerConfig} from '../../../common/config/private/IPrivateConfig';
 
-const renamePr = util.promisify(fs.rename);
 
 export interface VideoConverterInput {
   videoPath: string;
@@ -27,7 +25,7 @@ export class VideoConverterWorker {
     const origPath = input.output.path;
     input.output.path = origPath + '.part';
     await this._convert(input);
-    await renamePr(input.output.path, origPath);
+    await fsp.rename(input.output.path, origPath);
 
   }
 

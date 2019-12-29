@@ -44,8 +44,7 @@ export class RenderingMWs {
     if (!req.resultPipe) {
       return next();
     }
-
-    return res.sendFile(req.resultPipe, {maxAge: 31536000});
+    return res.sendFile(req.resultPipe, {maxAge: 31536000, dotfiles: 'allow'});
   }
 
   public static renderOK(req: Request, res: Response, next: NextFunction) {
