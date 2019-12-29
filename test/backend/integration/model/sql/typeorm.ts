@@ -1,6 +1,7 @@
 import {expect} from 'chai';
-import * as fs from 'fs';
 import * as path from 'path';
+import * as util from 'util';
+import * as rimraf from 'rimraf';
 import {Config} from '../../../../../src/common/config/private/Config';
 import {SQLConnection} from '../../../../../src/backend/model/database/sql/SQLConnection';
 import {UserEntity} from '../../../../../src/backend/model/database/sql/enitites/UserEntity';
@@ -18,36 +19,28 @@ import {MediaDimensionEntity} from '../../../../../src/backend/model/database/sq
 import {VersionEntity} from '../../../../../src/backend/model/database/sql/enitites/VersionEntity';
 import {ServerConfig} from '../../../../../src/common/config/private/IPrivateConfig';
 
+
+const rimrafPR = util.promisify(rimraf);
+
 describe('Typeorm integration', () => {
 
 
   const tempDir = path.join(__dirname, '../../tmp');
-  const dbPath = path.join(tempDir, 'test.db');
-  const setUpSqlDB = () => {
-    if (fs.existsSync(dbPath)) {
-      fs.unlinkSync(dbPath);
-    }
-    if (!fs.existsSync(tempDir)) {
-      fs.mkdirSync(tempDir);
-    }
+  const setUpSqlDB = async () => {
+    await rimrafPR(tempDir);
 
     Config.Server.Database.type = ServerConfig.DatabaseType.sqlite;
-    Config.Server.Database.dbFolder = path.dirname(dbPath);
+    Config.Server.Database.dbFolder = tempDir;
 
   };
 
   const teardownUpSqlDB = async () => {
     await SQLConnection.close();
-    if (fs.existsSync(dbPath)) {
-      fs.unlinkSync(dbPath);
-    }
-    if (fs.existsSync(tempDir)) {
-      fs.rmdirSync(tempDir);
-    }
+    await rimrafPR(tempDir);
   };
 
-  beforeEach(() => {
-    setUpSqlDB();
+  beforeEach(async () => {
+    await setUpSqlDB();
   });
 
   afterEach(async () => {

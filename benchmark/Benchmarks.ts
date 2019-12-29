@@ -4,13 +4,15 @@ import {ObjectManagers} from '../src/backend/model/ObjectManagers';
 import {DiskMangerWorker} from '../src/backend/model/threading/DiskMangerWorker';
 import {IndexingManager} from '../src/backend/model/database/sql/IndexingManager';
 import {SearchManager} from '../src/backend/model/database/sql/SearchManager';
-import * as fs from 'fs';
-import * as path from 'path';
+import * as util from 'util';
+import * as rimraf from 'rimraf';
 import {SearchTypes} from '../src/common/entities/AutoCompleteItem';
 import {Utils} from '../src/common/Utils';
 import {GalleryManager} from '../src/backend/model/database/sql/GalleryManager';
 import {DirectoryDTO} from '../src/common/entities/DirectoryDTO';
 import {ServerConfig} from '../src/common/config/private/IPrivateConfig';
+
+const rimrafPR = util.promisify(rimraf);
 
 export interface BenchmarkResult {
   duration: number;
@@ -28,7 +30,7 @@ export class BMIndexingManager extends IndexingManager {
 
 export class Benchmarks {
 
-  constructor(public RUNS: number, public dbPath: string) {
+  constructor(public RUNS: number, public dbFolder: string) {
 
   }
 
@@ -120,11 +122,9 @@ export class Benchmarks {
 
   private resetDB = async () => {
     await SQLConnection.close();
-    if (fs.existsSync(this.dbPath)) {
-      fs.unlinkSync(this.dbPath);
-    }
+    await rimrafPR(this.dbFolder);
     Config.Server.Database.type = ServerConfig.DatabaseType.sqlite;
-    Config.Server.Database.dbFolder = path.dirname(this.dbPath);
+    Config.Server.Database.dbFolder = this.dbFolder;
     await ObjectManagers.InitSQLManagers();
   };
 

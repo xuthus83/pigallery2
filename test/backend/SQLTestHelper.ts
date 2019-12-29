@@ -1,11 +1,13 @@
 import {Config} from '../../src/common/config/private/Config';
-import * as fs from 'fs';
 import * as path from 'path';
+import * as util from 'util';
+import * as rimraf from 'rimraf';
 import {SQLConnection} from '../../src/backend/model/database/sql/SQLConnection';
 import {ServerConfig} from '../../src/common/config/private/IPrivateConfig';
 
 declare let describe: any;
 const savedDescribe = describe;
+const rimrafPR = util.promisify(rimraf);
 
 export class SQLTestHelper {
 
@@ -15,12 +17,9 @@ export class SQLTestHelper {
   };
   public static readonly savedDescribe = savedDescribe;
   tempDir: string;
-  dbPath: string;
 
   constructor(public dbType: ServerConfig.DatabaseType) {
     this.tempDir = path.join(__dirname, './tmp');
-    this.dbPath = path.join(__dirname, './tmp', 'test.db');
-
   }
 
   static describe(name: string, tests: (helper?: SQLTestHelper) => void) {
@@ -63,7 +62,7 @@ export class SQLTestHelper {
     await this.resetSQLite();
 
     Config.Server.Database.type = ServerConfig.DatabaseType.sqlite;
-    Config.Server.Database.dbFolder = path.dirname(this.dbPath);
+    Config.Server.Database.dbFolder = this.tempDir;
   }
 
   private async initMySQL() {
@@ -75,13 +74,7 @@ export class SQLTestHelper {
 
   private async resetSQLite() {
     await SQLConnection.close();
-
-    if (fs.existsSync(this.dbPath)) {
-      fs.unlinkSync(this.dbPath);
-    }
-    if (fs.existsSync(this.tempDir)) {
-      fs.rmdirSync(this.tempDir);
-    }
+    await rimrafPR(this.tempDir);
   }
 
   private async resetMySQL() {

@@ -26,3 +26,4 @@ out-tsc/
 ffmpeg/
 locale.source.xlf
 test.*
+/db/

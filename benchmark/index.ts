@@ -8,7 +8,7 @@ import {DiskMangerWorker} from '../src/backend/model/threading/DiskMangerWorker'
 
 const config: { path: string, system: string } = require(path.join(__dirname, 'config.json'));
 Config.Server.Media.folder = config.path;
-const dbPath = path.join(__dirname, 'test.db');
+const dbFolder = __dirname;
 ProjectPath.reset();
 const RUNS = 50;
 
@@ -52,7 +52,7 @@ const printResult = (result: BenchmarkResult, action: string, actionDetails: str
 
 const run = async () => {
   const start = Date.now();
-  const bm = new Benchmarks(RUNS, dbPath);
+  const bm = new Benchmarks(RUNS, dbFolder);
 
   // header
   await printHeader();

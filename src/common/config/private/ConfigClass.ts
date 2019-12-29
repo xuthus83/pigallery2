@@ -7,28 +7,24 @@ import {PrivateConfigDefaultsClass} from './PrivateConfigDefaultsClass';
 
 declare var process: NodeJS.Process;
 
+let CONFIG_PATH = path.join(__dirname, './../../../../config.json');
+// TODO: refactor this
+let configPath = process.argv.find(s => s.startsWith('--config-path='));
+if (configPath) {
+  configPath = configPath.replace('--config-path=', '');
+  if (path.isAbsolute(configPath)) {
+    CONFIG_PATH = configPath;
+  } else {
+    CONFIG_PATH = path.join(__dirname, './../../../../', configPath);
+  }
+  console.log('using config path:' + CONFIG_PATH);
+}
+
 /**
  * This configuration will be only at backend
  */
 export class ConfigClass extends PrivateConfigDefaultsClass implements IPrivateConfig {
 
-  private static CONFIG_PATH = path.join(__dirname, './../../../../config.json');
-
-  constructor() {
-    super();
-
-    // TODO: refactor this
-    let configPath = process.argv.find(s => s.startsWith('--config-path='));
-    if (configPath) {
-      configPath = configPath.replace('--config-path=', '');
-      if (path.isAbsolute(configPath)) {
-        ConfigClass.CONFIG_PATH = configPath;
-      } else {
-        ConfigClass.CONFIG_PATH = path.join(__dirname, './../../../../', configPath);
-      }
-      console.log('using config path:' + ConfigClass.CONFIG_PATH);
-    }
-  }
 
   public setDatabaseType(type: ServerConfig.DatabaseType) {
     this.Server.Database.type = type;
@@ -40,7 +36,7 @@ export class ConfigClass extends PrivateConfigDefaultsClass implements IPrivateC
 
   public load() {
     this.addComment();
-    ConfigLoader.loadBackendConfig(this, ConfigClass.CONFIG_PATH,
+    ConfigLoader.loadBackendConfig(this, CONFIG_PATH,
       [['PORT', 'Server-port'],
         ['MYSQL_HOST', 'Server-Database-mysql-host'],
         ['MYSQL_PASSWORD', 'Server-Database-mysql-password'],
@@ -69,7 +65,7 @@ export class ConfigClass extends PrivateConfigDefaultsClass implements IPrivateC
   public save() {
     try {
       this.addComment();
-      ConfigLoader.saveConfigFile(ConfigClass.CONFIG_PATH, this);
+      ConfigLoader.saveConfigFile(CONFIG_PATH, this);
       this.removeComment();
     } catch (e) {
       throw new Error('Error during saving config: ' + e.toString());

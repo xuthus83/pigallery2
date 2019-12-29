@@ -87,7 +87,7 @@ export class PrivateConfigDefaultsClass extends PublicConfigClass implements IPr
             afterScheduleName: DefaultsJobs[DefaultsJobs.Indexing]
           }
         },
-        {
+      /*  {
           name: DefaultsJobs[DefaultsJobs['Photo Converting']],
           jobName: DefaultsJobs[DefaultsJobs['Photo Converting']],
           config: {},
@@ -95,14 +95,14 @@ export class PrivateConfigDefaultsClass extends PublicConfigClass implements IPr
             type: JobTriggerType.after,
             afterScheduleName: DefaultsJobs[DefaultsJobs['Thumbnail Generation']]
           }
-        },
+        },*/
         {
           name: DefaultsJobs[DefaultsJobs['Video Converting']],
           jobName: DefaultsJobs[DefaultsJobs['Video Converting']],
           config: {},
           trigger: {
             type: JobTriggerType.after,
-            afterScheduleName: DefaultsJobs[DefaultsJobs['Photo Converting']]
+            afterScheduleName: DefaultsJobs[DefaultsJobs['Thumbnail Generation']]
           }
         },
         {
