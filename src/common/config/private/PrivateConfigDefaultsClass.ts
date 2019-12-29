@@ -81,7 +81,7 @@ export class PrivateConfigDefaultsClass extends PublicConfigClass implements IPr
         {
           name: DefaultsJobs[DefaultsJobs['Thumbnail Generation']],
           jobName: DefaultsJobs[DefaultsJobs['Thumbnail Generation']],
-          config: {sizes: [160]},
+          config: {sizes: [240]},
           trigger: {
             type: JobTriggerType.after,
             afterScheduleName: DefaultsJobs[DefaultsJobs.Indexing]

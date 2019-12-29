@@ -21,7 +21,7 @@ export class Media extends MediaIcon {
   }
 
   getThumbnailSize() {
-    const longerEdge = Math.max(this.renderWidth * this.renderHeight);
+    const longerEdge = Math.max(this.renderWidth, this.renderHeight);
     return Utils.findClosestinSorted(longerEdge, Media.sortedThumbnailSizes);
   }
 

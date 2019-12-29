@@ -77,7 +77,7 @@ To configure it, run `PiGallery2` first to create `config.json` file, then edit 
 The app has a nice UI for settings, you may use that too. 
 Default user: `admin` pass: `admin`
 
-**Note**: First run, you might have file access issues and port 80 issue.
+**Note**: First run, you might have file access issues and port 80 issue, see [#115](https://github.com/bpatrik/pigallery2/issues/115).
 Running `npm start -- --Server-port=8080` will start the app on port 8080 that does not require `root`
 Adding read/write permissions to all files can solve the file access issue `chmod -R o-w .`, see [#98](https://github.com/bpatrik/pigallery2/issues/98).
 

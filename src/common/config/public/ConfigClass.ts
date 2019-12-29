@@ -135,7 +135,7 @@ export class PublicConfigClass {
       },
       Thumbnail: {
         concurrentThumbnailGenerations: 1,
-        thumbnailSizes: [160, 240, 480],
+        thumbnailSizes: [240, 480],
         iconSize: 45,
         personThumbnailSize: 200
       }
