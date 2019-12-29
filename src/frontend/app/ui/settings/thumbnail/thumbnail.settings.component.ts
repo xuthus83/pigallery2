@@ -20,8 +20,8 @@ import {JobProgressStates} from '../../../../../common/entities/job/JobProgressD
   providers: [ThumbnailSettingsService],
 })
 export class ThumbnailSettingsComponent
-    extends SettingsComponent<{ server: ServerConfig.ThumbnailConfig, client: ClientConfig.ThumbnailConfig }>
-    implements OnInit {
+  extends SettingsComponent<{ server: ServerConfig.ThumbnailConfig, client: ClientConfig.ThumbnailConfig }>
+  implements OnInit {
   JobProgressStates = JobProgressStates;
 
   constructor(_authService: AuthenticationService,
@@ -44,12 +44,13 @@ export class ThumbnailSettingsComponent
     value = value.replace(new RegExp(',', 'g'), ';');
     value = value.replace(new RegExp(' ', 'g'), ';');
     this.settings.client.thumbnailSizes = value.split(';')
-        .map(s => parseInt(s, 10))
-        .filter(i => !isNaN(i) && i > 0);
+      .map(s => parseInt(s, 10))
+      .filter(i => !isNaN(i) && i > 0);
   }
 
   get Progress() {
-    return this.jobsService.progress.value[JobDTO.getHashName(DefaultsJobs[DefaultsJobs['Thumbnail Generation']])];
+    return this.jobsService.progress.value[JobDTO.getHashName(DefaultsJobs[DefaultsJobs['Thumbnail Generation']],
+      {sizes: this.original.client.thumbnailSizes[0]})];
   }
 
   ngOnInit() {

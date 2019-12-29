@@ -30,12 +30,12 @@
                 <button class="btn btn-danger job-control-button" (click)="remove(i)"><span class="oi oi-trash"></span>
                 </button>
                 <button class="btn btn-success job-control-button"
-                        *ngIf="!jobsService.progress.value[schedule.jobName]"
+                        *ngIf="!getProgress(schedule)"
                         [disabled]="disableButtons"
                         (click)="start(schedule); $event.stopPropagation();"><span class="oi oi-media-play"></span>
                 </button>
                 <button class="btn btn-secondary job-control-button"
-                        *ngIf="jobsService.progress.value[schedule.jobName]"
+                        *ngIf="getProgress(schedule)"
                         [disabled]="disableButtons || jobsService.progress.value[schedule.jobName].state !== JobProgressStates.running"
                         (click)="stop(schedule); $event.stopPropagation();"><span class="oi oi-media-stop"></span>
                 </button>
@@ -121,14 +121,14 @@
 
               <div class="col-md-3">
                 <button class="btn btn-success float-right"
-                        *ngIf="!jobsService.progress.value[schedule.jobName]"
+                        *ngIf="!getProgress(schedule)"
                         [disabled]="disableButtons"
                         title="Trigger job run manually"
                         i18n-title
                         (click)="start(schedule)" i18n>Start now
                 </button>
                 <button class="btn btn-secondary float-right"
-                        *ngIf="jobsService.progress.value[schedule.jobName]"
+                        *ngIf="getProgress(schedule)"
                         [disabled]="disableButtons || jobsService.progress.value[schedule.jobName].state !== JobProgressStates.running"
                         (click)="stop(schedule)" i18n>Stop
                 </button>

@@ -84,7 +84,7 @@ export class VideoSettingsComponent extends SettingsComponent<{ server: ServerCo
 
   updateBitRate() {
     this.settings.server.transcoding.bitRate = this.getRecommendedBitRate(this.settings.server.transcoding.resolution,
-      this.settings.server.transcoding.fps);
+        this.settings.server.transcoding.fps);
   }
 
   formatChanged(format: ServerConfig.formatType) {
