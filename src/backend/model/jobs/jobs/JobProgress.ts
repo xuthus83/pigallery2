@@ -1,4 +1,4 @@
-import {JobProgressDTO, JobProgressStates} from '../../../../common/entities/job/JobProgressDTO';
+import {JobProgressDTO, JobProgressLogDTO, JobProgressStates} from '../../../../common/entities/job/JobProgressDTO';
 
 
 export class JobProgress {
@@ -12,7 +12,8 @@ export class JobProgress {
     start: <number>Date.now(),
     end: <number>null,
   };
-  private logs: string[] = [];
+  private logCounter = 0;
+  private logs: { id: number, timestamp: string, comment: string }[] = [];
 
 
   constructor(public readonly HashName: string) {
@@ -72,7 +73,7 @@ export class JobProgress {
     this.onChange(this);
   }
 
-  get Logs(): string[] {
+  get Logs(): JobProgressLogDTO[] {
     return this.logs;
   }
 
@@ -83,7 +84,7 @@ export class JobProgress {
     while (this.logs.length > 10) {
       this.logs.shift();
     }
-    this.logs.push(log);
+    this.logs.push({id: this.logCounter++, timestamp: (new Date()).toISOString(), comment: log});
     this.onChange(this);
   }
 

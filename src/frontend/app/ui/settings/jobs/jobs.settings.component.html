@@ -36,7 +36,7 @@
                 </button>
                 <button class="btn btn-secondary job-control-button"
                         *ngIf="getProgress(schedule)"
-                        [disabled]="disableButtons || jobsService.progress.value[schedule.jobName].state !== JobProgressStates.running"
+                        [disabled]="disableButtons || getProgress(schedule).state !== JobProgressStates.running"
                         (click)="stop(schedule); $event.stopPropagation();"><span class="oi oi-media-stop"></span>
                 </button>
               </div>
@@ -129,7 +129,7 @@
                 </button>
                 <button class="btn btn-secondary float-right"
                         *ngIf="getProgress(schedule)"
-                        [disabled]="disableButtons || jobsService.progress.value[schedule.jobName].state !== JobProgressStates.running"
+                        [disabled]="disableButtons || getProgress(schedule).state !== JobProgressStates.running"
                         (click)="stop(schedule)" i18n>Stop
                 </button>
               </div>
@@ -181,7 +181,8 @@
                       </ng-container>
                     </ng-container>
                     <small class="form-text text-muted">
-                      <ng-container *ngIf="configEntry.type == 'number-array'" i18n>';' separated integers.</ng-container>
+                      <ng-container *ngIf="configEntry.type == 'number-array'" i18n>';' separated integers.
+                      </ng-container>
                       {{backendtextService.get(configEntry.description)}}
                     </small>
                   </div>
@@ -194,8 +195,7 @@
           <app-settings-job-progress
             class="card-footer bg-transparent"
             *ngIf="getProgress(schedule) || getLastRun(schedule)"
-            [progress]="getProgress(schedule)"
-            [lastRun]="getLastRun(schedule)">
+            [progress]="getProgress(schedule) || getLastRun(schedule)">
           </app-settings-job-progress>
 
         </div>

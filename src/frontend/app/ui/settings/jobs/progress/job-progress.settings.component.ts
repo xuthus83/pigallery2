@@ -1,6 +1,7 @@
-import {Component, Input, OnChanges, OnDestroy} from '@angular/core';
+import {Component, Input, OnChanges, OnDestroy, TemplateRef} from '@angular/core';
 import {JobProgressDTO, JobProgressStates} from '../../../../../../common/entities/job/JobProgressDTO';
 import {Subscription, timer} from 'rxjs';
+import {BsModalRef, BsModalService} from 'ngx-bootstrap';
 
 @Component({
   selector: 'app-settings-job-progress',
@@ -10,12 +11,16 @@ import {Subscription, timer} from 'rxjs';
 export class JobProgressComponent implements OnDestroy, OnChanges {
 
   @Input() progress: JobProgressDTO;
-  @Input() lastRun: JobProgressDTO;
   JobProgressStates = JobProgressStates;
   timeCurrentCopy: number;
+  modalRef: BsModalRef;
   private timerSub: Subscription;
 
-  constructor() {
+  constructor(private modalService: BsModalService) {
+  }
+
+  get Name(): string {
+    return this.progress.HashName;
   }
 
   get TimeAll(): number {
@@ -24,6 +29,10 @@ export class JobProgressComponent implements OnDestroy, OnChanges {
     }
     return (this.progress.time.end - this.progress.time.start) /
       (this.progress.steps.processed + this.progress.steps.skipped) * this.progress.steps.all;
+  }
+
+  get IsRunning() {
+    return this.progress.state === JobProgressStates.running || this.progress.state === JobProgressStates.canceled;
   }
 
   get TimeLeft(): number {
@@ -38,6 +47,11 @@ export class JobProgressComponent implements OnDestroy, OnChanges {
       return 0;
     }
     return (this.timeCurrentCopy - this.progress.time.start);
+  }
+
+
+  openModal(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(template, {class: 'modal-lg'});
   }
 
   ngOnChanges(): void {

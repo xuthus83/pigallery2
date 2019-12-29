@@ -6,3 +6,8 @@
 .progress-row {
   font-size: .75rem;
 }
+
+
+.clickable {
+  cursor: pointer;
+}

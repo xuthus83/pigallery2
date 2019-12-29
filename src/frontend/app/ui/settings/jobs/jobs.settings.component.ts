@@ -17,10 +17,10 @@ import {
 } from '../../../../../common/entities/job/JobScheduleDTO';
 import {Utils} from '../../../../../common/Utils';
 import {ServerConfig} from '../../../../../common/config/private/IPrivateConfig';
-import {ConfigTemplateEntry, JobDTO} from '../../../../../common/entities/job/JobDTO';
+import {ConfigTemplateEntry} from '../../../../../common/entities/job/JobDTO';
 import {Job} from '../../../../../backend/model/jobs/jobs/Job';
 import {ModalDirective} from 'ngx-bootstrap/modal';
-import {JobProgressStates} from '../../../../../common/entities/job/JobProgressDTO';
+import {JobProgressDTO, JobProgressStates} from '../../../../../common/entities/job/JobProgressDTO';
 import {BackendtextService} from '../../../model/backendtext.service';
 
 @Component({
@@ -181,8 +181,6 @@ export class JobsSettingsComponent extends SettingsComponent<ServerConfig.JobCon
   }
 
   setNumberArray(configElement: any, id: string, value: string) {
-    console.log(value);
-    console.log(configElement[id]);
     value = value.replace(new RegExp(',', 'g'), ';');
     value = value.replace(new RegExp(' ', 'g'), ';');
     configElement[id] = value.split(';')
@@ -217,12 +215,12 @@ export class JobsSettingsComponent extends SettingsComponent<ServerConfig.JobCon
     return JSON.stringify(schedule.config);
   }
 
-  getProgress(schedule: JobScheduleDTO) {
-    return this.jobsService.progress.value[JobDTO.getHashName(schedule.jobName, schedule.config)];
+  getProgress(schedule: JobScheduleDTO): JobProgressDTO {
+    return this.jobsService.getProgress(schedule);
   }
 
-  getLastRun(schedule: JobScheduleDTO) {
-    return this.jobsService.lastRuns.value[JobDTO.getHashName(schedule.jobName, schedule.config)];
+  getLastRun(schedule: JobScheduleDTO): JobProgressDTO {
+    return this.jobsService.getLastRun(schedule);
   }
 
   private getNextRunningDate(sch: JobScheduleDTO, list: JobScheduleDTO[], depth: number = 0): number {

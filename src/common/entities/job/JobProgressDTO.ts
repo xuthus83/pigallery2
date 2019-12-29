@@ -3,6 +3,12 @@ export enum JobProgressStates {
 }
 
 
+export interface JobProgressLogDTO {
+  id: number;
+  timestamp: string;
+  comment: string;
+}
+
 export interface JobProgressDTO {
   HashName: string;
   steps: {
@@ -11,7 +17,7 @@ export interface JobProgressDTO {
     skipped: number,
   };
   state: JobProgressStates;
-  logs: string[];
+  logs: JobProgressLogDTO[];
   time: {
     start: number,
     end: number

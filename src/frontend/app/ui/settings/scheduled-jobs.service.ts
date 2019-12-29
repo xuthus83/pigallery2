@@ -1,14 +1,16 @@
 import {EventEmitter, Injectable} from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
-import {JobProgressDTO, JobProgressStates} from '../../../../common/entities/job/JobProgressDTO';
+import {JobProgressDTO} from '../../../../common/entities/job/JobProgressDTO';
 import {NetworkService} from '../../model/network/network.service';
+import {JobScheduleDTO} from '../../../../common/entities/job/JobScheduleDTO';
+import {JobDTO} from '../../../../common/entities/job/JobDTO';
 
 @Injectable()
 export class ScheduledJobsService {
 
 
   public progress: BehaviorSubject<{ [key: string]: JobProgressDTO }>;
-  public lastRuns: BehaviorSubject<{ [key: string]: { [key: string]: JobProgressStates } }>;
+  public lastRuns: BehaviorSubject<{ [key: string]: JobProgressDTO }>;
   public onJobFinish: EventEmitter<string> = new EventEmitter<string>();
   timer: number = null;
   private subscribers = 0;
@@ -18,6 +20,13 @@ export class ScheduledJobsService {
     this.lastRuns = new BehaviorSubject({});
   }
 
+  getProgress(schedule: JobScheduleDTO): JobProgressDTO {
+    return this.progress.value[JobDTO.getHashName(schedule.jobName, schedule.config)];
+  }
+
+  getLastRun(schedule: JobScheduleDTO): JobProgressDTO {
+    return this.lastRuns.value[JobDTO.getHashName(schedule.jobName, schedule.config)];
+  }
 
   subscribeToProgress(): void {
     this.incSubscribers();
@@ -28,7 +37,7 @@ export class ScheduledJobsService {
   }
 
   public async forceUpdate(): Promise<void> {
-    return await this.getProgress();
+    return await this.loadProgress();
   }
 
   public async start(id: string, config?: any): Promise<void> {
@@ -41,10 +50,10 @@ export class ScheduledJobsService {
     this.forceUpdate();
   }
 
-  protected async getProgress(): Promise<void> {
+  protected async loadProgress(): Promise<void> {
     const prevPrg = this.progress.value;
     this.progress.next(await this._networkService.getJson<{ [key: string]: JobProgressDTO }>('/admin/jobs/scheduled/progress'));
-    this.lastRuns.next(await this._networkService.getJson<{ [key: string]: { [key: string]: JobProgressStates } }>('/admin/jobs/scheduled/lastRun'));
+    this.lastRuns.next(await this._networkService.getJson<{ [key: string]: JobProgressDTO }>('/admin/jobs/scheduled/lastRun'));
     for (const prg in prevPrg) {
       if (!this.progress.value.hasOwnProperty(prg)) {
         this.onJobFinish.emit(prg);
@@ -65,7 +74,7 @@ export class ScheduledJobsService {
       this.timer = null;
       this.getProgressPeriodically();
     }, repeatTime);
-    this.getProgress().catch(console.error);
+    this.loadProgress().catch(console.error);
   }
 
   private incSubscribers() {
