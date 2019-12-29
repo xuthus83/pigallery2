@@ -1,3 +1,5 @@
+import {backendText} from '../../BackendTexts';
+
 export type fieldType = 'string' | 'number' | 'boolean' | 'number-array';
 
 
@@ -12,7 +14,8 @@ export enum DefaultsJobs {
 
 export interface ConfigTemplateEntry {
   id: string;
-  name: string;
+  name: backendText;
+  description: backendText;
   type: fieldType;
   defaultValue: any;
 }

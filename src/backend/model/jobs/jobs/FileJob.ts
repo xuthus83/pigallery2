@@ -11,6 +11,7 @@ import {SQLConnection} from '../../database/sql/SQLConnection';
 import {MediaEntity} from '../../database/sql/enitites/MediaEntity';
 import {PhotoEntity} from '../../database/sql/enitites/PhotoEntity';
 import {VideoEntity} from '../../database/sql/enitites/VideoEntity';
+import {backendTexts} from '../../../../common/BackendTexts';
 import DatabaseType = ServerConfig.DatabaseType;
 
 declare var global: NodeJS.Global;
@@ -31,7 +32,8 @@ export abstract class FileJob<S extends { indexedOnly: boolean } = { indexedOnly
       this.ConfigTemplate.push({
         id: 'indexedOnly',
         type: 'boolean',
-        name: 'Only indexed files',
+        name: backendTexts.indexedFilesOnly.name,
+        description: backendTexts.indexedFilesOnly.description,
         defaultValue: true
       });
     }
@@ -53,6 +55,7 @@ export abstract class FileJob<S extends { indexedOnly: boolean } = { indexedOnly
   }
 
   protected abstract async shouldProcess(file: FileDTO): Promise<boolean>;
+
   protected abstract async processFile(file: FileDTO): Promise<void>;
 
   protected async step(): Promise<boolean> {
@@ -79,7 +82,7 @@ export abstract class FileJob<S extends { indexedOnly: boolean } = { indexedOnly
           this.Progress.log('processing: ' + filePath);
           await this.processFile(file);
         } else {
-        this.Progress.log('skipping: ' + filePath);
+          this.Progress.log('skipping: ' + filePath);
           this.Progress.Skipped++;
         }
       } catch (e) {

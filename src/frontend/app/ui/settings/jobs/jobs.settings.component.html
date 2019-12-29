@@ -138,17 +138,18 @@
             <ng-container *ngIf="getConfigTemplate(schedule.jobName) ">
               <hr/>
               <div *ngFor="let configEntry of  getConfigTemplate(schedule.jobName)">
-                <ng-container [ngSwitch]="configEntry.type">
-                  <ng-container *ngSwitchCase="'boolean'">
-                    <div class="form-group row">
-                      <label class="col-md-2 control-label"
-                             [for]="configEntry.id+'_boolean_'+i">{{configEntry.name}}</label>
-                      <div class="col-md-10">
+
+                <div class="form-group row">
+                  <label class="col-md-2 control-label"
+                         [for]="configEntry.id+'_'+i">{{backendtextService.get(configEntry.name)}}:</label>
+                  <div class="col-md-10">
+                    <ng-container [ngSwitch]="configEntry.type">
+                      <ng-container *ngSwitchCase="'boolean'">
                         <bSwitch
                           id="enableThreading"
                           class="switch"
-                          [name]="configEntry.id+'_boolean_'+i"
-                          [id]="configEntry.id+'_boolean_'+i"
+                          [name]="configEntry.id+'_'+i"
+                          [id]="configEntry.id+'_'+i"
                           [switch-on-color]="'primary'"
                           [switch-inverse]="true"
                           [switch-off-text]="text.Disabled"
@@ -157,48 +158,35 @@
                           [switch-label-width]="20"
                           [(ngModel)]="schedule.config[configEntry.id]">
                         </bSwitch>
-                      </div>
-                    </div>
-                  </ng-container>
-                  <ng-container *ngSwitchCase="'string'">
-                    <div class="form-group row" [hidden]="simplifiedMode">
-                      <label class="col-md-2 control-label"
-                             [for]="configEntry.id+'_string_'+i">{{configEntry.name}}</label>
-                      <div class="col-md-10">
-                        <input type="text" class="form-control" [name]="configEntry.id+'_string_'+i"
-                               [id]="configEntry.id+'_string_'+i"
+                      </ng-container>
+
+                      <ng-container *ngSwitchCase="'string'">
+                        <input type="text" class="form-control" [name]="configEntry.id+'_'+i"
+                               [id]="configEntry.id+'_'+i"
                                [(ngModel)]="schedule.config[configEntry.id]" required>
-                      </div>
-                    </div>
-                  </ng-container>
-                  <ng-container *ngSwitchCase="'number'">
-                    <div class="form-group row" [hidden]="simplifiedMode">
-                      <label class="col-md-2 control-label"
-                             [for]="configEntry.id+'_number_'+i">{{configEntry.name}}</label>
-                      <div class="col-md-10">
-                        <input type="number" class="form-control" [name]="configEntry.id+'_number_'+i"
-                               [id]="configEntry.id+'_number_'+i"
+                      </ng-container>
+
+                      <ng-container *ngSwitchCase="'number'">
+                        <input type="number" class="form-control" [name]="configEntry.id+'_'+i"
+                               [id]="configEntry.id+'_'+i"
                                [(ngModel)]="schedule.config[configEntry.id]" required>
-                      </div>
-                    </div>
-                  </ng-container>
-                  <ng-container *ngSwitchCase="'number-array'">
-                    <div class="form-group row" [hidden]="simplifiedMode">
-                      <label class="col-md-2 control-label"
-                             [for]="configEntry.id+'_number-array_'+i">{{configEntry.name}}</label>
-                      <div class="col-md-10">
+                      </ng-container>
+
+                      <ng-container *ngSwitchCase="'number-array'">
                         <input type="text" class="form-control"
-                               [name]="configEntry.id+'_number-array_'+i"
-                               [id]="configEntry.id+'_number-array_'+i"
+                               [name]="configEntry.id+'_'+i"
+                               [id]="configEntry.id+'_'+i"
                                (ngModelChange)="setNumberArray(schedule.config,configEntry.id,$event)"
                                [ngModel]="getNumberArray(schedule.config,configEntry.id)" required>
-                        <small class="form-text text-muted">
-                          <ng-container i18n>';' separated integers.</ng-container>
-                        </small>
-                      </div>
-                    </div>
-                  </ng-container>
-                </ng-container>
+                      </ng-container>
+                    </ng-container>
+                    <small class="form-text text-muted">
+                      <ng-container *ngIf="configEntry.type == 'number-array'" i18n>';' separated integers.</ng-container>
+                      {{backendtextService.get(configEntry.description)}}
+                    </small>
+                  </div>
+                </div>
+
               </div>
             </ng-container>
           </div>

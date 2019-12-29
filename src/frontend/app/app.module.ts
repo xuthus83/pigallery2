@@ -88,6 +88,7 @@ import {PhotoSettingsComponent} from './ui/settings/photo/photo.settings.compone
 import {JobProgressComponent} from './ui/settings/jobs/progress/job-progress.settings.component';
 import {JobsSettingsComponent} from './ui/settings/jobs/jobs.settings.component';
 import {ScheduledJobsService} from './ui/settings/scheduled-jobs.service';
+import {BackendtextService} from './model/backendtext.service';
 
 
 @Injectable()
@@ -230,6 +231,7 @@ export function translationsFactory(locale: string) {
     FacesService,
     VersionService,
     ScheduledJobsService,
+    BackendtextService,
     {
       provide: TRANSLATIONS,
       useFactory: translationsFactory,

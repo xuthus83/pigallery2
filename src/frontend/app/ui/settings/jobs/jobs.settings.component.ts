@@ -21,6 +21,7 @@ import {ConfigTemplateEntry, JobDTO} from '../../../../../common/entities/job/Jo
 import {Job} from '../../../../../backend/model/jobs/jobs/Job';
 import {ModalDirective} from 'ngx-bootstrap/modal';
 import {JobProgressStates} from '../../../../../common/entities/job/JobProgressDTO';
+import {BackendtextService} from '../../../model/backendtext.service';
 
 @Component({
   selector: 'app-settings-jobs',
@@ -52,6 +53,7 @@ export class JobsSettingsComponent extends SettingsComponent<ServerConfig.JobCon
               _navigation: NavigationService,
               _settingsService: JobsSettingsService,
               public jobsService: ScheduledJobsService,
+              public backendtextService: BackendtextService,
               notification: NotificationService,
               i18n: I18n) {
 

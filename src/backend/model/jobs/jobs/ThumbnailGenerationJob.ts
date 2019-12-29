@@ -7,6 +7,7 @@ import {PhotoProcessing} from '../../fileprocessing/PhotoProcessing';
 import {ThumbnailSourceType} from '../../threading/PhotoWorker';
 import {MediaDTO} from '../../../../common/entities/MediaDTO';
 import {FileDTO} from '../../../../common/entities/FileDTO';
+import {backendTexts} from '../../../../common/BackendTexts';
 
 const LOG_TAG = '[ThumbnailGenerationJob]';
 
@@ -20,7 +21,8 @@ export class ThumbnailGenerationJob extends FileJob<{ sizes: number[], indexedOn
     this.ConfigTemplate.push({
       id: 'sizes',
       type: 'number-array',
-      name: 'Sizes to generate',
+      name: backendTexts.sizeToGenerate.name,
+      description: backendTexts.sizeToGenerate.description,
       defaultValue: [Config.Client.Media.Thumbnail.thumbnailSizes[0]]
     });
   }
