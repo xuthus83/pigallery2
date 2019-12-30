@@ -10,6 +10,7 @@ export interface JobProgressLogDTO {
 }
 
 export interface JobProgressDTO {
+  jobName: string;
   HashName: string;
   steps: {
     all: number,

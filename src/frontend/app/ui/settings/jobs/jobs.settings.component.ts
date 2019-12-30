@@ -14,7 +14,6 @@ import {
   PeriodicJobTrigger,
   ScheduledJobTrigger
 } from '../../../../../common/entities/job/JobScheduleDTO';
-import {Utils} from '../../../../../common/Utils';
 import {ServerConfig} from '../../../../../common/config/private/IPrivateConfig';
 import {ConfigTemplateEntry} from '../../../../../common/entities/job/JobDTO';
 import {ModalDirective} from 'ngx-bootstrap/modal';
@@ -51,7 +50,7 @@ export class JobsSettingsComponent extends SettingsComponent<ServerConfig.JobCon
               _navigation: NavigationService,
               _settingsService: JobsSettingsService,
               public jobsService: ScheduledJobsService,
-              public backendtextService: BackendtextService,
+              public backendTextService: BackendtextService,
               notification: NotificationService,
               i18n: I18n) {
 
@@ -64,7 +63,12 @@ export class JobsSettingsComponent extends SettingsComponent<ServerConfig.JobCon
       s => s.Server.Jobs);
 
     this.hasAvailableSettings = !this.simplifiedMode;
-    this.JobTriggerTypeMap = Utils.enumToArray(JobTriggerType);
+    this.JobTriggerTypeMap = [
+      {key: JobTriggerType.after, value: this.i18n('after')},
+      {key: JobTriggerType.never, value: this.i18n('never')},
+      {key: JobTriggerType.periodic, value: this.i18n('periodic')},
+      {key: JobTriggerType.scheduled, value: this.i18n('scheduled')},
+    ];
     this.periods = [this.i18n('Monday'), // 0
       this.i18n('Tuesday'), // 1
       this.i18n('Wednesday'), // 2
@@ -166,7 +170,7 @@ export class JobsSettingsComponent extends SettingsComponent<ServerConfig.JobCon
   addNewJob() {
     const jobName = this.newSchedule.jobName;
     const count = this.settings.scheduled.filter(s => s.jobName === jobName).length;
-    this.newSchedule.name = count === 0 ? jobName : jobName + ' ' + (count + 1);
+    this.newSchedule.name = count === 0 ? jobName : this.backendTextService.getJobName(jobName) + ' ' + (count + 1);
     this.settings.scheduled.push(this.newSchedule);
     this.jobModal.hide();
   }

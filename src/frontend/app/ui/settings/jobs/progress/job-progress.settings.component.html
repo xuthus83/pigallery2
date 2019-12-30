@@ -7,13 +7,13 @@
     {{progress.time.start | date:'medium'}} -  {{progress.time.end | date:'mediumTime'}}
   </div>
   <div class="col-md-2 col-4"
-       title="processed:{{progress.steps.processed}}+ skipped:{{progress.steps.skipped}} / all:{{progress.steps.all}}">
+       [title]="ProgressTitle">
     <span class="oi oi-check" aria-hidden="true"></span>
     {{progress.steps.processed + progress.steps.skipped}}/{{progress.steps.all}}
   </div>
   <div class="col-md-2 col-4" title="Status" i18n-title>
     <span class="oi oi-pulse" aria-hidden="true"></span>
-    {{JobProgressStates[progress.state]}}
+    {{State}}
   </div>
   <div class="col-md-2 col-4">
     <button class="btn btn-secondary float-right" (click)="openModal(template)">
@@ -29,7 +29,7 @@
       [ngModel]="progress.logs[progress.logs.length-1].comment" name="details">
     <input
       *ngIf="progress.state === JobProgressStates.cancelling" type="text" class="form-control" disabled
-      value="Cancelling: {{progress.logs[progress.logs.length-1].comment}}"
+      value="Cancelling..."
       i18n-value name="details">
     <div class="input-group-append">
       <button class="btn btn-secondary" (click)="openModal(template)">
@@ -45,7 +45,7 @@
     <div class="col-6 col-md-2 col-lg-1 order-md-2 text-right text-md-left" title="time left"
          i18n-title>{{TimeAll| duration:':'}}</div>
     <div class="progress col-md-8 col-lg-10 order-md-1"
-         title="processed:{{progress.steps.processed}}+ skipped:{{progress.steps.skipped}} / all:{{progress.steps.all}}">
+         [title]="ProgressTitle">
       <div
         *ngIf="progress.steps.all >0"
         class="progress-bar clickable d-inline-block progress-bar-success {{progress.state === JobProgressStates.cancelling ? 'bg-secondary' : ''}}"
@@ -78,11 +78,11 @@
   </div>
   <div class="modal-body">
     <div class="container">
-      <div class="row justify-content-between">
-        <div>Processed: {{progress.steps.processed}}</div>
-        <div>Skipped: {{progress.steps.skipped}}</div>
-        <div>Left: {{progress.steps.all - progress.steps.skipped - progress.steps.processed}}</div>
-        <div>All: {{progress.steps.all}}</div>
+      <div class="row">
+        <div class="col-md-3 col-6"><ng-container i18n>Processed</ng-container>: {{progress.steps.processed}}</div>
+        <div class="col-md-3 col-6"><ng-container i18n>Skipped</ng-container>: {{progress.steps.skipped}}</div>
+        <div class="col-md-3 col-6"><ng-container i18n>Left</ng-container>: {{progress.steps.all - progress.steps.skipped - progress.steps.processed}}</div>
+        <div class="col-md-3 col-6"><ng-container i18n>All</ng-container>: {{progress.steps.all}}</div>
       </div>
       <div class="row  mt-3 mb-3">
         <div class="progress col-12">

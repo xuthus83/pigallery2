@@ -5,6 +5,7 @@ import {ScheduledJobsService} from '../../scheduled-jobs.service';
 import {NotificationService} from '../../../../model/notification.service';
 import {I18n} from '@ngx-translate/i18n-polyfill';
 import {JobDTO} from '../../../../../../common/entities/job/JobDTO';
+import {BackendtextService} from '../../../../model/backendtext.service';
 
 @Component({
   selector: 'app-settings-job-button',
@@ -23,6 +24,7 @@ export class JobButtonComponent {
 
   constructor(private notification: NotificationService,
               public jobsService: ScheduledJobsService,
+              public backendTextService: BackendtextService,
               private i18n: I18n) {
   }
 
@@ -39,7 +41,7 @@ export class JobButtonComponent {
     this.error.emit('');
     try {
       await this.jobsService.start(this.jobName, this.config, this.soloRun);
-      this.notification.info(this.i18n('Job') + ' ' + this.jobName + ' ' + this.i18n('started'));
+      this.notification.info(this.i18n('Job started') + ': ' + this.jobName);
       return true;
     } catch (err) {
       console.log(err);
@@ -55,7 +57,7 @@ export class JobButtonComponent {
     this.error.emit('');
     try {
       await this.jobsService.stop(this.jobName);
-      this.notification.info(this.i18n('Job') + ' ' + this.jobName + ' ' + this.i18n('stopped'));
+      this.notification.info(this.i18n('Job stopped') + ': ' + this.jobName);
       return true;
     } catch (err) {
       console.log(err);

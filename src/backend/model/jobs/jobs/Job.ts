@@ -43,7 +43,7 @@ export abstract class Job<T = void> implements IJob<T> {
       Logger.info(LOG_TAG, 'Running job ' + (soloRun === true ? 'solo' : '') + ': ' + this.Name);
       this.soloRun = soloRun;
       this.config = config;
-      this.progress = new JobProgress(JobDTO.getHashName(this.Name, this.config));
+      this.progress = new JobProgress(this.Name, JobDTO.getHashName(this.Name, this.config));
       this.progress.OnChange = this.jobListener.onProgressUpdate;
       const pr = new Promise<void>((resolve) => {
         this.prResolve = resolve;

@@ -5,7 +5,7 @@ import {Config} from '../../../common/config/private/Config';
 import {JobProgressDTO, JobProgressStates} from '../../../common/entities/job/JobProgressDTO';
 
 export class JobProgressManager {
-  private static readonly VERSION = 2;
+  private static readonly VERSION = 3;
   private db: {
     version: number,
     progresses: { [key: string]: { progress: JobProgressDTO, timestamp: number } }

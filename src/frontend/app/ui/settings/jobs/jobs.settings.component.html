@@ -24,15 +24,15 @@
                     *ngSwitchCase="JobTriggerType.scheduled">{{schedule.trigger.time | date:"medium"}}</ng-container>
                   <ng-container *ngSwitchCase="JobTriggerType.never" i18n>never</ng-container>
                   <ng-container *ngSwitchCase="JobTriggerType.after">
-                    <ng-container i18n>after</ng-container>
+                    <ng-container i18n>after</ng-container>:
                     {{schedule.trigger.afterScheduleName}}
                   </ng-container>
                 </ng-container>
               </div>
               <div>
-                <button class="btn btn-danger job-control-button" (click)="remove(schedule)"><span class="oi oi-trash"></span>
+                <button class="btn btn-danger job-control-button ml-0" (click)="remove(schedule)"><span class="oi oi-trash"></span>
                 </button>
-                <app-settings-job-button class="job-control-button ml-2"
+                <app-settings-job-button class="job-control-button ml-md-2 mt-2 mt-md-0"
                                          (error)="error=$event"
                                          [jobName]="schedule.jobName" [config]="schedule.config"
                                          [shortName]="true"></app-settings-job-button>
@@ -44,11 +44,18 @@
           <div class="card-body" [hidden]="!showDetails[schedule.name]">
             <div class="row">
 
-              <div class="col-md-9">
+              <div class="col-md-12">
                 <div class="form-group row">
                   <label class="col-md-2 control-label" [for]="'jobName'+i" i18n>Job:</label>
-                  <div class="col-md-10">
-                    {{schedule.jobName}}
+                  <div class="col-md-4">
+                    {{backendTextService.getJobName(schedule.jobName)}}
+                  </div>
+                  <div class="col-md-6">
+                  <app-settings-job-button class="float-right"
+                                           [jobName]="schedule.jobName"
+                                           (error)="error=$event"
+                                           [config]="schedule.config"></app-settings-job-button>
+
                   </div>
                 </div>
                 <div class="form-group row">
@@ -116,12 +123,7 @@
                 </div>
               </div>
 
-              <div class="col-md-3">
-                <app-settings-job-button class="float-right"
-                                         [jobName]="schedule.jobName"
-                                         (error)="error=$event"
-                                         [config]="schedule.config"></app-settings-job-button>
-              </div>
+
             </div>
 
             <ng-container *ngIf="getConfigTemplate(schedule.jobName) ">
@@ -130,7 +132,7 @@
 
                 <div class="form-group row">
                   <label class="col-md-2 control-label"
-                         [for]="configEntry.id+'_'+i">{{backendtextService.get(configEntry.name)}}:</label>
+                         [for]="configEntry.id+'_'+i">{{backendTextService.get(configEntry.name)}}:</label>
                   <div class="col-md-10">
                     <ng-container [ngSwitch]="configEntry.type">
                       <ng-container *ngSwitchCase="'boolean'">
@@ -172,7 +174,7 @@
                     <small class="form-text text-muted">
                       <ng-container *ngIf="configEntry.type == 'number-array'" i18n>';' separated integers.
                       </ng-container>
-                      {{backendtextService.get(configEntry.description)}}
+                      {{backendTextService.get(configEntry.description)}}
                     </small>
                   </div>
                 </div>
@@ -223,7 +225,7 @@
           <select class="form-control" (change)="jobTypeChanged(newSchedule)" [(ngModel)]="newSchedule.jobName"
                   name="newJobName" required>
             <option *ngFor="let availableJob of _settingsService.availableJobs | async"
-                    [ngValue]="availableJob.Name">{{availableJob.Name}}
+                    [ngValue]="availableJob.Name">{{backendTextService.getJobName(availableJob.Name)}}
             </option>
           </select>
           <small class="form-text text-muted"

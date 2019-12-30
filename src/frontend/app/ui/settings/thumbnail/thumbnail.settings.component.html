@@ -28,7 +28,7 @@
       </div>
 
       <div class="form-group row" [hidden]="simplifiedMode">
-        <label class="col-md-2 control-label" for="icon">Icon size</label>
+        <label class="col-md-2 control-label" for="icon" i18n>Icon size</label>
         <div class="col-md-10">
           <input type="number" class="form-control" placeholder="30"
                  id="icon"
@@ -45,7 +45,7 @@
       <div class="form-group row" [hidden]="simplifiedMode">
         <label class="col-md-2 control-label" for="thumbnailSizes" i18n>Thumbnail sizes</label>
         <div class="col-md-10">
-          <input type="text" class="form-control" placeholder="160; 240"
+          <input type="text" class="form-control" placeholder="240; 480"
                  id="thumbnailSizes"
                  [(ngModel)]="ThumbnailSizes"
                  name="thumbnailSizes" required>
@@ -56,7 +56,7 @@
               storage and CPU to render.)
             </ng-container>
             <br/>
-            <ng-container i18n>';' separated integers. If size is 160, that shorter side of the thumbnail will have 160
+            <ng-container i18n>';' separated integers. If size is 240, that shorter side of the thumbnail will have 160
               pixels.
             </ng-container>
           </small>
@@ -74,7 +74,7 @@
       </button>
 
 
-      <app-settings-job-button class="float-left"
+      <app-settings-job-button class="mt-2 mt-md-2 float-left"
                                [soloRun]="true"
                                (error)="error=$event"
                                [jobName]="jobName"

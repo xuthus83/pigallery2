@@ -26,10 +26,11 @@
         <div class="col-md-10">
           <input type="text" class="form-control" placeholder="db"
                  [(ngModel)]="settings.dbFolder" id="dbFolder" name="dbFolder" required>
+          <small class="form-text text-muted" i18n>
+            All file-based data will be stored here (sqlite database, user database in case of memory db, job history
+            data)
+          </small>
         </div>
-        <small  class="form-text text-muted" i18n>
-          All file-based data will be stored here (sqlite database, user database in case of memory db, job history data)
-        </small>
       </div>
 
       <ng-container *ngIf="settings.type == DatabaseType.mysql">

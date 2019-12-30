@@ -16,7 +16,7 @@ export class JobProgress {
   private logs: { id: number, timestamp: string, comment: string }[] = [];
 
 
-  constructor(public readonly HashName: string) {
+  constructor(public readonly jobName: string, public readonly HashName: string) {
   }
 
   set OnChange(val: (progress: JobProgress) => void) {
@@ -90,6 +90,7 @@ export class JobProgress {
 
   toDTO(): JobProgressDTO {
     return {
+      jobName: this.jobName,
       HashName: this.HashName,
       state: this.state,
       time: {
