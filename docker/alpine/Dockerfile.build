@@ -1,5 +1,6 @@
-FROM node:12-alpine AS builder
-RUN apk add python build-base sqlite-dev sqlite-libs vips-dev
+FROM node:12-alpine3.10 AS builder
+RUN apk add --update-cache --repository https://alpine.global.ssl.fastly.net/alpine/v3.10/community/ \
+  python build-base sqlite-dev sqlite-libs vips-dev fftw-dev gcc g++ make libc6-compat
 COPY pigallery2-release /app
 WORKDIR /app
 RUN npm install --unsafe-perm
@@ -9,7 +10,7 @@ RUN mkdir -p /app/data/config && \
     mkdir -p /app/data/tmp
 
 
-FROM node:12-alpine
+FROM node:12-alpine3.10
 WORKDIR /app
 # command line arg orverride the config.json with these settings
 ENTRYPOINT ["npm", "start",  "--", \
@@ -21,7 +22,8 @@ ENTRYPOINT ["npm", "start",  "--", \
   "--Server-Media-tempFolder=/app/data/tmp"]
 EXPOSE 80
 ENV NODE_ENV=production
-RUN apk add ffmpeg
+RUN apk add --update-cache --repository https://alpine.global.ssl.fastly.net/alpine/v3.10/community/ \
+    vips ffmpeg
 COPY --from=builder /app /app
 VOLUME ["/app/data/config", "/app/data/db", "/app/data/images", "/app/data/tmp"]
 HEALTHCHECK --interval=30s --timeout=20s --retries=4 --start-period=60s \
