@@ -65,6 +65,16 @@ export module MediaDTO {
     return false;
   };
 
+  export const isVideoPath = (path: string): boolean => {
+    const lower = path.toLowerCase();
+    for (const ext of SupportedFormats.WithDots.Videos) {
+      if (lower.endsWith(ext)) {
+        return true;
+      }
+    }
+    return false;
+  };
+
   export const isVideoTranscodingNeeded = (media: FileDTO): boolean => {
     const lower = media.name.toLowerCase();
     for (const ext of SupportedFormats.WithDots.TranscodeNeed.Videos) {

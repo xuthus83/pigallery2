@@ -41,7 +41,7 @@ export class JobButtonComponent {
     this.error.emit('');
     try {
       await this.jobsService.start(this.jobName, this.config, this.soloRun);
-      this.notification.info(this.i18n('Job started') + ': ' + this.jobName);
+      this.notification.success(this.i18n('Job started') + ': ' + this.backendTextService.getJobName(this.jobName));
       return true;
     } catch (err) {
       console.log(err);
@@ -57,7 +57,7 @@ export class JobButtonComponent {
     this.error.emit('');
     try {
       await this.jobsService.stop(this.jobName);
-      this.notification.info(this.i18n('Job stopped') + ': ' + this.jobName);
+      this.notification.info(this.i18n('Job stopped') + ': ' + this.backendTextService.getJobName(this.jobName));
       return true;
     } catch (err) {
       console.log(err);

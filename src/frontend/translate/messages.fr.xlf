@@ -904,9 +904,7 @@
           <context context-type="sourcefile">app/ui/settings/thumbnail/thumbnail.settings.component.html</context>
           <context context-type="linenumber">59</context>
         </context-group>
-        <target>';' separated integers. If size is 240, that shorter side of the thumbnail will have 160
-              pixels.
-            </target>
+        <target>';' separated integers. If size is 240, that shorter side of the thumbnail will have 160 pixels.</target>
       </trans-unit>
       <trans-unit id="69149fe434cf1b0d9bafe5ead5d126101bb5162e" datatype="html">
         <source>Video support uses ffmpeg. ffmpeg and ffprobe binaries need to be available in the PATH or
@@ -2591,6 +2589,14 @@
           <context context-type="linenumber">1</context>
         </context-group>
         <target>Random Photo</target>
+      </trans-unit>
+      <trans-unit id="bf5ce15a43de0abbce2193b3061a208eb35f7195" datatype="html">
+        <source>Job finished</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/frontend/app/ui/settings/scheduled-jobs.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <target>Job finished</target>
       </trans-unit>
       <trans-unit id="45dda89cf029b7d7b457a8dff01dc4b9a6485816" datatype="html">
         <source>Thumbnail</source>

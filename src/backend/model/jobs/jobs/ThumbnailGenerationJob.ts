@@ -1,7 +1,5 @@
 import {Config} from '../../../../common/config/private/Config';
 import {DefaultsJobs} from '../../../../common/entities/job/JobDTO';
-import {ProjectPath} from '../../../ProjectPath';
-import * as path from 'path';
 import {FileJob} from './FileJob';
 import {PhotoProcessing} from '../../fileprocessing/PhotoProcessing';
 import {ThumbnailSourceType} from '../../threading/PhotoWorker';
@@ -49,8 +47,7 @@ export class ThumbnailGenerationJob extends FileJob<{ sizes: number[], indexedOn
     return undefined;
   }
 
-  protected async shouldProcess(file: FileDTO): Promise<boolean> {
-    const mPath = path.join(ProjectPath.ImageFolder, file.directory.path, file.directory.name, file.name);
+  protected async shouldProcess(mPath: string): Promise<boolean> {
     for (let i = 0; i < this.config.sizes.length; ++i) {
       if (!(await PhotoProcessing.convertedPhotoExist(mPath, this.config.sizes[i]))) {
         return true;
@@ -58,13 +55,11 @@ export class ThumbnailGenerationJob extends FileJob<{ sizes: number[], indexedOn
     }
   }
 
-  protected async processFile(file: FileDTO): Promise<void> {
-
-    const mPath = path.join(ProjectPath.ImageFolder, file.directory.path, file.directory.name, file.name);
+  protected async processFile(mPath: string): Promise<void> {
     for (let i = 0; i < this.config.sizes.length; ++i) {
       await PhotoProcessing.generateThumbnail(mPath,
         this.config.sizes[i],
-        MediaDTO.isVideo(file) ? ThumbnailSourceType.Video : ThumbnailSourceType.Photo,
+        MediaDTO.isVideoPath(mPath) ? ThumbnailSourceType.Video : ThumbnailSourceType.Photo,
         false);
 
     }

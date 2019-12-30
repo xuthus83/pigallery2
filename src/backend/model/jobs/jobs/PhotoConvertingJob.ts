@@ -21,14 +21,12 @@ export class PhotoConvertingJob extends FileJob {
   }
 
 
-  protected async shouldProcess(file: FileDTO): Promise<boolean> {
-    const mPath = path.join(ProjectPath.ImageFolder, file.directory.path, file.directory.name, file.name);
+  protected async shouldProcess(mPath: string): Promise<boolean> {
     return !(await PhotoProcessing.convertedPhotoExist(mPath, Config.Server.Media.Photo.Converting.resolution));
   }
 
 
-  protected async processFile(file: FileDTO): Promise<void> {
-    const mPath = path.join(ProjectPath.ImageFolder, file.directory.path, file.directory.name, file.name);
+  protected async processFile(mPath: string): Promise<void> {
     await PhotoProcessing.convertPhoto(mPath);
   }
 

@@ -12,7 +12,7 @@ import {MediaEntity} from '../../database/sql/enitites/MediaEntity';
 import {PhotoEntity} from '../../database/sql/enitites/PhotoEntity';
 import {VideoEntity} from '../../database/sql/enitites/VideoEntity';
 import {backendTexts} from '../../../../common/BackendTexts';
-import DatabaseType = ServerConfig.DatabaseType;
+import {ProjectPath} from '../../../ProjectPath';
 
 declare var global: NodeJS.Global;
 
@@ -23,12 +23,12 @@ const LOG_TAG = '[FileJob]';
 export abstract class FileJob<S extends { indexedOnly: boolean } = { indexedOnly: boolean }> extends Job<S> {
   public readonly ConfigTemplate: ConfigTemplateEntry[] = [];
   directoryQueue: string[] = [];
-  fileQueue: FileDTO[] = [];
+  fileQueue: string[] = [];
 
 
   protected constructor(private scanFilter: DiskMangerWorker.DirectoryScanSettings) {
     super();
-    if (Config.Server.Database.type !== DatabaseType.memory) {
+    if (Config.Server.Database.type !== ServerConfig.DatabaseType.memory) {
       this.ConfigTemplate.push({
         id: 'indexedOnly',
         type: 'boolean',
@@ -54,9 +54,9 @@ export abstract class FileJob<S extends { indexedOnly: boolean } = { indexedOnly
     return files;
   }
 
-  protected abstract async shouldProcess(file: FileDTO): Promise<boolean>;
+  protected abstract async shouldProcess(filePath: string): Promise<boolean>;
 
-  protected abstract async processFile(file: FileDTO): Promise<void>;
+  protected abstract async processFile(filePath: string): Promise<void>;
 
   protected async step(): Promise<boolean> {
     if (this.directoryQueue.length === 0 && this.fileQueue.length === 0) {
@@ -66,7 +66,7 @@ export abstract class FileJob<S extends { indexedOnly: boolean } = { indexedOnly
     if (this.directoryQueue.length > 0) {
 
       if (this.config.indexedOnly === true &&
-        Config.Server.Database.type !== DatabaseType.memory) {
+        Config.Server.Database.type !== ServerConfig.DatabaseType.memory) {
         await this.loadAllMediaFilesFromDB();
         this.directoryQueue = [];
       } else {
@@ -74,13 +74,12 @@ export abstract class FileJob<S extends { indexedOnly: boolean } = { indexedOnly
       }
     } else if (this.fileQueue.length > 0) {
       this.Progress.Left = this.fileQueue.length;
-      const file = this.fileQueue.shift();
-      const filePath = path.join(file.directory.path, file.directory.name, file.name);
+      const filePath = this.fileQueue.shift();
       try {
-        if ((await this.shouldProcess(file)) === true) {
+        if ((await this.shouldProcess(filePath)) === true) {
           this.Progress.Processed++;
           this.Progress.log('processing: ' + filePath);
-          await this.processFile(file);
+          await this.processFile(filePath);
         } else {
           this.Progress.log('skipping: ' + filePath);
           this.Progress.Skipped++;
@@ -102,10 +101,12 @@ export abstract class FileJob<S extends { indexedOnly: boolean } = { indexedOnly
       this.directoryQueue.push(path.join(scanned.directories[i].path, scanned.directories[i].name));
     }
     if (this.scanFilter.noVideo !== true || this.scanFilter.noVideo !== true) {
-      this.fileQueue.push(...await this.filterMediaFiles(scanned.media));
+      this.fileQueue.push(...(await this.filterMediaFiles(scanned.media))
+        .map(f => path.join(ProjectPath.ImageFolder, f.directory.path, f.directory.name, f.name)));
     }
     if (this.scanFilter.noMetaFile !== true) {
-      this.fileQueue.push(...await this.filterMetaFiles(scanned.metaFile));
+      this.fileQueue.push(...(await this.filterMetaFiles(scanned.metaFile))
+        .map(f => path.join(ProjectPath.ImageFolder, f.directory.path, f.directory.name, f.name)));
     }
   }
 
@@ -134,6 +135,7 @@ export abstract class FileJob<S extends { indexedOnly: boolean } = { indexedOnly
       .leftJoinAndSelect('media.directory', 'directory')
       .getMany();
 
-    this.fileQueue.push(...await this.filterMediaFiles(result));
+    this.fileQueue.push(...(result
+      .map(f => path.join(ProjectPath.ImageFolder, f.directory.path, f.directory.name, f.name))));
   }
 }

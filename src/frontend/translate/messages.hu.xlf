@@ -2590,6 +2590,14 @@
         </context-group>
         <target>Véletleg Fotó</target>
       </trans-unit>
+      <trans-unit id="bf5ce15a43de0abbce2193b3061a208eb35f7195" datatype="html">
+        <source>Job finished</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/frontend/app/ui/settings/scheduled-jobs.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <target>Feladat végzett</target>
+      </trans-unit>
       <trans-unit id="45dda89cf029b7d7b457a8dff01dc4b9a6485816" datatype="html">
         <source>Thumbnail</source>
         <context-group purpose="location">

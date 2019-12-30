@@ -25,7 +25,7 @@
 
   <div class="input-group form-group">
     <input
-      *ngIf="progress.state === JobProgressStates.running" type="text" class="form-control" disabled
+      *ngIf="progress.state === JobProgressStates.running && progress.logs.length > 0" type="text" class="form-control" disabled
       [ngModel]="progress.logs[progress.logs.length-1].comment" name="details">
     <input
       *ngIf="progress.state === JobProgressStates.cancelling" type="text" class="form-control" disabled
@@ -112,7 +112,7 @@
       </div>
       <div class="card-body text-secondary">
         <ng-container *ngFor="let log of progress.logs; let i = index;">
-          <p class="card-text" *ngIf="(i==0 && log.id > 0) || ( i> 0 && progress.logs[i-1].id+1!=log.id)">
+          <p class="card-text" *ngIf="(i==0 && log.id > 0) || ( i> 0  && progress.logs[i-1].id+1!=log.id)">
             ...
           </p>
           <p class="card-text">
