@@ -78,6 +78,11 @@ export class PublicRouter {
         return next();
       });
 
+    app.get('/heartbeat',
+      (req: Request, res: Response, next: NextFunction) => {
+        res.sendStatus(200);
+      }
+    );
 
     app.get(['/', '/login', '/gallery*', '/share*', '/admin', '/duplicates', '/faces', '/search*'],
       AuthenticationMWs.tryAuthenticate,
@@ -110,6 +115,7 @@ export class PublicRouter {
       setLocale,
       AuthenticationMWs.normalizePathParam('file'),
       renderFile());
+
   }
 
 }

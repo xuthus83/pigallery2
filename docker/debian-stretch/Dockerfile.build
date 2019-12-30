@@ -11,7 +11,7 @@ RUN mkdir -p /app/data/config && \
 FROM node:12-stretch-slim
 WORKDIR /app
 # command line arg orverride the config.json with these settings
-ENTRYPOINT ["npm", "start",  "--", \
+ENTRYPOINT ["node", "./src/backend/index",  \
   # after a extensive job (like video converting), pigallery calls gc, to clean up everthing as fast as possible
   "--expose-gc", \
   "--config-path=/app/data/config/config.json", \
@@ -23,6 +23,6 @@ ENV NODE_ENV=production
 RUN apt-get update && apt-get install -y ffmpeg
 COPY --from=builder /app /app
 VOLUME ["/app/data/config", "/app/data/db", "/app/data/images", "/app/data/tmp"]
-HEALTHCHECK --interval=30s --timeout=20s --retries=4 --start-period=60s \
+HEALTHCHECK --interval=40s --timeout=30s --retries=3 --start-period=60s \
   CMD wget --quiet --tries=1 --no-check-certificate --spider \
-  http://localhost:80 || exit 1
+  http://localhost:80/heartbeat || exit 1
