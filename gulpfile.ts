@@ -105,7 +105,7 @@ gulp.task('copy-static', function () {
   return gulp.src([
     'src/backend/model/diagnostics/blank.jpg',
     'README.md',
-    'package-lock.json',
+  //  'package-lock.json', should not add, it keeps optional packages optional even with --force-opt-packages.
     'LICENSE'], {base: '.'})
     .pipe(gulp.dest('./release'));
 });
