@@ -70,7 +70,7 @@ docker run \
    -v <path to your db file folder>:/app/data/db \
    -v <path to your images folder>:/app/data/images \
    -v <path to your temp folder>:/app/data/tmp \
-   bpatrik/pigallery2:nightly-stretch
+   bpatrik/pigallery2:latest
 ```
 
 After the container is up and running, you go to `http://localhost` and log in with user: `admin` pass: `admin` and set up the page in the settings. 

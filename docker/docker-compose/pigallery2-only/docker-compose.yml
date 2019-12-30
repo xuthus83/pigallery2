@@ -1,7 +1,7 @@
 version: '3'
 services:
   pigallery2:
-    image: bpatrik/pigallery2:nightly-stretch
+    image: bpatrik/pigallery2:latest
     container_name: pigallery2
     environment:
       - NODE_ENV=production
