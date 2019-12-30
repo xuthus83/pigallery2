@@ -89,6 +89,7 @@ import {JobProgressComponent} from './ui/settings/jobs/progress/job-progress.set
 import {JobsSettingsComponent} from './ui/settings/jobs/jobs.settings.component';
 import {ScheduledJobsService} from './ui/settings/scheduled-jobs.service';
 import {BackendtextService} from './model/backendtext.service';
+import {JobButtonComponent} from './ui/settings/jobs/button/job-button.settings.component';
 
 
 @Injectable()
@@ -200,6 +201,8 @@ export function translationsFactory(locale: string) {
     IndexingSettingsComponent,
     JobProgressComponent,
     JobsSettingsComponent,
+    JobButtonComponent,
+
     // Pipes
     StringifyRole,
     IconizeSortingMethod,

@@ -115,6 +115,9 @@
       </div>
 
 
+
+
+
       <button class="btn btn-success float-right"
               [disabled]="!settingsForm.form.valid || !changed || inProgress"
               (click)="save()" i18n>Save
@@ -124,22 +127,10 @@
               (click)="reset()" i18n>Reset
       </button>
 
-
-      <button class="btn btn-success  float-left ml-0"
-              *ngIf="Progress == null"
-              [disabled]="inProgress"
-              title="Indexes the folders"
-              i18n-title
-              (click)="transcode()">
-        <ng-container i18n>Transcode videos now</ng-container>
-        <span class="oi oi-media-play ml-2"></span>
-      </button>
-      <button class="btn btn-secondary  float-left ml-0"
-              *ngIf="Progress != null"
-              [disabled]="inProgress || Progress.state !== JobProgressStates.running"
-              (click)="cancelTranscoding()" i18n>Cancel transcoding
-      </button>
-
+      <app-settings-job-button class="float-left"
+                               [soloRun]="true"
+                               (error)="error=$event"
+                               [jobName]="jobName"></app-settings-job-button>
 
       <ng-container *ngIf="Progress != null">
         <br/>

@@ -23,18 +23,14 @@ export class JobManager implements IJobManager, IJobListener {
   }
 
   getProgresses(): { [id: string]: JobProgressDTO } {
-    return this.progressManager.Running;
+    return this.progressManager.Progresses;
   }
 
-  getJobLastRuns(): { [key: string]: JobProgressDTO } {
-    return this.progressManager.Finished;
-  }
-
-  async run<T>(jobName: string, config: T): Promise<void> {
+  async run<T>(jobName: string, config: T, soloRun: boolean): Promise<void> {
     const t = this.findJob(jobName);
     if (t) {
       t.JobListener = this;
-      await t.start(config);
+      await t.start(config, soloRun);
     } else {
       Logger.warn(LOG_TAG, 'cannot find job to start:' + jobName);
     }
@@ -54,8 +50,9 @@ export class JobManager implements IJobManager, IJobListener {
   };
 
 
-  onJobFinished = async (job: IJob<any>, state: JobProgressStates): Promise<void> => {
-    if (state !== JobProgressStates.finished) { // if it was not finished peacefully, do not start the next one
+  onJobFinished = async (job: IJob<any>, state: JobProgressStates, soloRun: boolean): Promise<void> => {
+    // if it was not finished peacefully or was a soloRun, do not start the next one
+    if (state !== JobProgressStates.finished || soloRun === true) {
       return;
     }
     const sch = Config.Server.Jobs.scheduled.find(s => s.jobName === job.Name);
@@ -64,7 +61,7 @@ export class JobManager implements IJobManager, IJobListener {
         (<AfterJobTrigger>s.trigger).afterScheduleName === sch.name);
       for (let i = 0; i < children.length; ++i) {
         try {
-          await this.run(children[i].jobName, children[i].config);
+          await this.run(children[i].jobName, children[i].config, false);
         } catch (e) {
           NotificationManager.warning('Job running error:' + children[i].name, e.toString());
         }
@@ -99,7 +96,7 @@ export class JobManager implements IJobManager, IJobListener {
 
       const timer: NodeJS.Timeout = setTimeout(async () => {
         this.timers = this.timers.filter(t => t.timer !== timer);
-        await this.run(schedule.jobName, schedule.config);
+        await this.run(schedule.jobName, schedule.config, false);
         this.runSchedule(schedule);
       }, nextDate.getTime() - Date.now());
       this.timers.push({schedule: schedule, timer: timer});

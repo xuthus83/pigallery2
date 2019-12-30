@@ -10,22 +10,17 @@ export class ScheduledJobsService {
 
 
   public progress: BehaviorSubject<{ [key: string]: JobProgressDTO }>;
-  public lastRuns: BehaviorSubject<{ [key: string]: JobProgressDTO }>;
   public onJobFinish: EventEmitter<string> = new EventEmitter<string>();
   timer: number = null;
+  public jobStartingStopping: { [key: string]: boolean } = {};
   private subscribers = 0;
 
   constructor(private _networkService: NetworkService) {
     this.progress = new BehaviorSubject({});
-    this.lastRuns = new BehaviorSubject({});
   }
 
   getProgress(schedule: JobScheduleDTO): JobProgressDTO {
     return this.progress.value[JobDTO.getHashName(schedule.jobName, schedule.config)];
-  }
-
-  getLastRun(schedule: JobScheduleDTO): JobProgressDTO {
-    return this.lastRuns.value[JobDTO.getHashName(schedule.jobName, schedule.config)];
   }
 
   subscribeToProgress(): void {
@@ -40,20 +35,24 @@ export class ScheduledJobsService {
     return await this.loadProgress();
   }
 
-  public async start(id: string, config?: any): Promise<void> {
-    await this._networkService.postJson('/admin/jobs/scheduled/' + id + '/start', {config: config});
+  public async start(jobName: string, config?: any, soloStart: boolean = false): Promise<void> {
+    this.jobStartingStopping[jobName] = true;
+    await this._networkService.postJson('/admin/jobs/scheduled/' + jobName + '/' + (soloStart === true ? 'soloStart' : 'start'),
+      {config: config});
+    delete this.jobStartingStopping[jobName];
     this.forceUpdate();
   }
 
-  public async stop(id: string): Promise<void> {
-    await this._networkService.postJson('/admin/jobs/scheduled/' + id + '/stop');
+  public async stop(jobName: string): Promise<void> {
+    this.jobStartingStopping[jobName] = true;
+    await this._networkService.postJson('/admin/jobs/scheduled/' + jobName + '/stop');
+    delete this.jobStartingStopping[jobName];
     this.forceUpdate();
   }
 
   protected async loadProgress(): Promise<void> {
     const prevPrg = this.progress.value;
     this.progress.next(await this._networkService.getJson<{ [key: string]: JobProgressDTO }>('/admin/jobs/scheduled/progress'));
-    this.lastRuns.next(await this._networkService.getJson<{ [key: string]: JobProgressDTO }>('/admin/jobs/scheduled/lastRun'));
     for (const prg in prevPrg) {
       if (!this.progress.value.hasOwnProperty(prg)) {
         this.onJobFinish.emit(prg);

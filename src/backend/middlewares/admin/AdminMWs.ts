@@ -50,19 +50,22 @@ export class AdminMWs {
     }
   }
 
-  public static async startJob(req: Request, res: Response, next: NextFunction) {
-    try {
-      const id = req.params.id;
-      const JobConfig: any = req.body.config;
-      await ObjectManagers.getInstance().JobManager.run(id, JobConfig);
-      req.resultPipe = 'ok';
-      return next();
-    } catch (err) {
-      if (err instanceof Error) {
-        return next(new ErrorDTO(ErrorCodes.JOB_ERROR, 'Job error: ' + err.toString(), err));
+
+  public static startJob(soloRun: boolean) {
+    return async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const id = req.params.id;
+        const JobConfig: any = req.body.config;
+        await ObjectManagers.getInstance().JobManager.run(id, JobConfig, soloRun);
+        req.resultPipe = 'ok';
+        return next();
+      } catch (err) {
+        if (err instanceof Error) {
+          return next(new ErrorDTO(ErrorCodes.JOB_ERROR, 'Job error: ' + err.toString(), err));
+        }
+        return next(new ErrorDTO(ErrorCodes.JOB_ERROR, 'Job error: ' + JSON.stringify(err, null, '  '), err));
       }
-      return next(new ErrorDTO(ErrorCodes.JOB_ERROR, 'Job error: ' + JSON.stringify(err, null, '  '), err));
-    }
+    };
   }
 
   public static stopJob(req: Request, res: Response, next: NextFunction) {
@@ -94,17 +97,6 @@ export class AdminMWs {
   public static getJobProgresses(req: Request, res: Response, next: NextFunction) {
     try {
       req.resultPipe = ObjectManagers.getInstance().JobManager.getProgresses();
-      return next();
-    } catch (err) {
-      if (err instanceof Error) {
-        return next(new ErrorDTO(ErrorCodes.JOB_ERROR, 'Job error: ' + err.toString(), err));
-      }
-      return next(new ErrorDTO(ErrorCodes.JOB_ERROR, 'Job error: ' + JSON.stringify(err, null, '  '), err));
-    }
-  }
-  public static getJobLastRuns(req: Request, res: Response, next: NextFunction) {
-    try {
-      req.resultPipe = ObjectManagers.getInstance().JobManager.getJobLastRuns();
       return next();
     } catch (err) {
       if (err instanceof Error) {

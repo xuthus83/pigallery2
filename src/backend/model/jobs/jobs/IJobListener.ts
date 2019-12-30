@@ -3,7 +3,7 @@ import {IJob} from './IJob';
 import {JobProgressStates} from '../../../../common/entities/job/JobProgressDTO';
 
 export interface IJobListener {
-  onJobFinished(job: IJob<any>, state: JobProgressStates): void;
+  onJobFinished(job: IJob<any>, state: JobProgressStates, soloRun: boolean): void;
 
   onProgressUpdate(progress: JobProgress): void;
 }

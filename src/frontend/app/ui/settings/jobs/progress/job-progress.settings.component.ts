@@ -20,6 +20,9 @@ export class JobProgressComponent implements OnDestroy, OnChanges {
   }
 
   get Name(): string {
+    if (!this.progress) {
+      return '';
+    }
     return this.progress.HashName;
   }
 
@@ -28,11 +31,15 @@ export class JobProgressComponent implements OnDestroy, OnChanges {
       return 0;
     }
     return (this.progress.time.end - this.progress.time.start) /
-      (this.progress.steps.processed + this.progress.steps.skipped) * this.progress.steps.all;
+      (this.progress.steps.processed) * (this.progress.steps.all - this.progress.steps.skipped);
   }
 
-  get IsRunning() {
-    return this.progress.state === JobProgressStates.running || this.progress.state === JobProgressStates.canceled;
+  get Running() {
+    return this.progress && (this.progress.state === JobProgressStates.running || this.progress.state === JobProgressStates.cancelling);
+  }
+
+  get Stopped() {
+    return this.progress && (this.progress.state !== JobProgressStates.running && this.progress.state !== JobProgressStates.cancelling);
   }
 
   get TimeLeft(): number {

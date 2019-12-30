@@ -8,7 +8,6 @@ import {ClientConfig} from '../../../../../common/config/public/ConfigClass';
 import {I18n} from '@ngx-translate/i18n-polyfill';
 import {ScheduledJobsService} from '../scheduled-jobs.service';
 import {DefaultsJobs, JobDTO} from '../../../../../common/entities/job/JobDTO';
-import {ErrorDTO} from '../../../../../common/entities/Error';
 import {ServerConfig} from '../../../../../common/config/private/IPrivateConfig';
 import {JobProgressStates} from '../../../../../common/entities/job/JobProgressDTO';
 
@@ -28,6 +27,7 @@ export class VideoSettingsComponent extends SettingsComponent<{ server: ServerCo
   fps = [24, 25, 30, 48, 50, 60];
 
   JobProgressStates = JobProgressStates;
+  readonly jobName = DefaultsJobs[DefaultsJobs['Video Converting']];
 
   constructor(_authService: AuthenticationService,
               _navigation: NavigationService,
@@ -84,7 +84,7 @@ export class VideoSettingsComponent extends SettingsComponent<{ server: ServerCo
 
   updateBitRate() {
     this.settings.server.transcoding.bitRate = this.getRecommendedBitRate(this.settings.server.transcoding.resolution,
-        this.settings.server.transcoding.fps);
+      this.settings.server.transcoding.fps);
   }
 
   formatChanged(format: ServerConfig.formatType) {
@@ -92,43 +92,6 @@ export class VideoSettingsComponent extends SettingsComponent<{ server: ServerCo
   }
 
 
-  async transcode() {
-    this.inProgress = true;
-    this.error = '';
-    try {
-      await this.jobsService.start(DefaultsJobs[DefaultsJobs['Video Converting']]);
-      this.notification.info(this.i18n('Video transcoding started'));
-      this.inProgress = false;
-      return true;
-    } catch (err) {
-      console.log(err);
-      if (err.message) {
-        this.error = (<ErrorDTO>err).message;
-      }
-    }
-
-    this.inProgress = false;
-    return false;
-  }
-
-  async cancelTranscoding() {
-    this.inProgress = true;
-    this.error = '';
-    try {
-      await this.jobsService.stop(DefaultsJobs[DefaultsJobs['Video Converting']]);
-      this.notification.info(this.i18n('Video transcoding interrupted'));
-      this.inProgress = false;
-      return true;
-    } catch (err) {
-      console.log(err);
-      if (err.message) {
-        this.error = (<ErrorDTO>err).message;
-      }
-    }
-
-    this.inProgress = false;
-    return false;
-  }
 }
 
 

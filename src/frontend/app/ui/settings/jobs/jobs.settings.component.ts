@@ -5,7 +5,6 @@ import {NavigationService} from '../../../model/navigation.service';
 import {NotificationService} from '../../../model/notification.service';
 import {SettingsComponent} from '../_abstract/abstract.settings.component';
 import {I18n} from '@ngx-translate/i18n-polyfill';
-import {ErrorDTO} from '../../../../../common/entities/Error';
 import {ScheduledJobsService} from '../scheduled-jobs.service';
 import {
   AfterJobTrigger,
@@ -18,7 +17,6 @@ import {
 import {Utils} from '../../../../../common/Utils';
 import {ServerConfig} from '../../../../../common/config/private/IPrivateConfig';
 import {ConfigTemplateEntry} from '../../../../../common/entities/job/JobDTO';
-import {Job} from '../../../../../backend/model/jobs/jobs/Job';
 import {ModalDirective} from 'ngx-bootstrap/modal';
 import {JobProgressDTO, JobProgressStates} from '../../../../../common/entities/job/JobProgressDTO';
 import {BackendtextService} from '../../../model/backendtext.service';
@@ -96,46 +94,8 @@ export class JobsSettingsComponent extends SettingsComponent<ServerConfig.JobCon
     this.jobsService.unsubscribeFromProgress();
   }
 
-  public async start(schedule: JobScheduleDTO) {
-    this.error = '';
-    try {
-      this.disableButtons = true;
-      await this.jobsService.start(schedule.jobName, schedule.config);
-      this.notification.info(this.i18n('Job') + ' ' + schedule.jobName + ' ' + this.i18n('started'));
-      return true;
-    } catch (err) {
-      console.log(err);
-      if (err.message) {
-        this.error = (<ErrorDTO>err).message;
-      }
-    } finally {
-      this.disableButtons = false;
-    }
-
-    return false;
-  }
-
-  public async stop(schedule: JobScheduleDTO) {
-    this.error = '';
-    try {
-      this.disableButtons = true;
-      await this.jobsService.stop(schedule.jobName);
-      this.notification.info(this.i18n('Job') + ' ' + schedule.jobName + ' ' + this.i18n('stopped'));
-      return true;
-    } catch (err) {
-      console.log(err);
-      if (err.message) {
-        this.error = (<ErrorDTO>err).message;
-      }
-    } finally {
-      this.disableButtons = false;
-    }
-
-    return false;
-  }
-
-  remove(index: number) {
-    this.settings.scheduled.splice(index, 1);
+  remove(schedule: JobScheduleDTO) {
+    this.settings.scheduled.splice(this.settings.scheduled.indexOf(schedule), 1);
   }
 
   jobTypeChanged(schedule: JobScheduleDTO) {
@@ -211,16 +171,9 @@ export class JobsSettingsComponent extends SettingsComponent<ServerConfig.JobCon
     this.jobModal.hide();
   }
 
-  getConfigHash(schedule: JobScheduleDTO): string {
-    return JSON.stringify(schedule.config);
-  }
 
   getProgress(schedule: JobScheduleDTO): JobProgressDTO {
     return this.jobsService.getProgress(schedule);
-  }
-
-  getLastRun(schedule: JobScheduleDTO): JobProgressDTO {
-    return this.jobsService.getLastRun(schedule);
   }
 
   private getNextRunningDate(sch: JobScheduleDTO, list: JobScheduleDTO[], depth: number = 0): number {

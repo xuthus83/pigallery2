@@ -1,0 +1,16 @@
+<button class="btn {{danger ? 'btn-danger': 'btn-success'}}"
+        title="Trigger job run manually"
+        i18n-title
+        *ngIf="!Running"
+        [disabled]="disabled || jobsService.jobStartingStopping[jobName]"
+        (click)="start();">
+  <span class="mr-2" *ngIf="!shortName">Run {{jobName}} now</span>
+  <span class="oi oi-media-play"></span>
+</button>
+<button class="btn btn-secondary"
+        *ngIf="Running"
+        [disabled]="disabled || jobsService.jobStartingStopping[jobName] || Progress.state !== JobProgressStates.running"
+        (click)="stop();">
+  <span class="oi oi-media-stop"></span>
+  <span class="ml-2" *ngIf="!shortName">Cancel {{jobName}}</span>
+</button>

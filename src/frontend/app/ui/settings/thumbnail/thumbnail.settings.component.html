@@ -74,20 +74,11 @@
       </button>
 
 
-      <button class="btn btn-success  float-left ml-0"
-              *ngIf="Progress == null"
-              [disabled]="inProgress"
-              title="Generates all thumbnails now"
-              i18n-title
-              (click)="startJob()">
-        <ng-container i18n>Generate thumbnails now</ng-container>
-        <span class="oi oi-media-play ml-2"></span>
-      </button>
-      <button class="btn btn-secondary  float-left ml-0"
-              *ngIf="Progress != null"
-              [disabled]="inProgress || Progress.state !== JobProgressStates.running"
-              (click)="cancelJob()" i18n>Cancel thumbnail generation
-      </button>
+      <app-settings-job-button class="float-left"
+                               [soloRun]="true"
+                               (error)="error=$event"
+                               [jobName]="jobName"
+                               [config]="Config"></app-settings-job-button>
 
 
       <ng-container *ngIf="Progress != null">

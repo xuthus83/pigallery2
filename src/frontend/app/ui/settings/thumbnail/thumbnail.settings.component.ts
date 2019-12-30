@@ -8,7 +8,6 @@ import {ThumbnailSettingsService} from './thumbnail.settings.service';
 import {I18n} from '@ngx-translate/i18n-polyfill';
 import {ServerConfig} from '../../../../../common/config/private/IPrivateConfig';
 import {DefaultsJobs, JobDTO} from '../../../../../common/entities/job/JobDTO';
-import {ErrorDTO} from '../../../../../common/entities/Error';
 import {ScheduledJobsService} from '../scheduled-jobs.service';
 import {JobProgressStates} from '../../../../../common/entities/job/JobProgressDTO';
 
@@ -23,6 +22,7 @@ export class ThumbnailSettingsComponent
   extends SettingsComponent<{ server: ServerConfig.ThumbnailConfig, client: ClientConfig.ThumbnailConfig }>
   implements OnInit {
   JobProgressStates = JobProgressStates;
+  readonly jobName = DefaultsJobs[DefaultsJobs['Thumbnail Generation']];
 
   constructor(_authService: AuthenticationService,
               _navigation: NavigationService,
@@ -34,6 +34,10 @@ export class ThumbnailSettingsComponent
       client: s.Client.Media.Thumbnail,
       server: s.Server.Media.Thumbnail
     }));
+  }
+
+  get Config(): any {
+    return {sizes: this.original.client.thumbnailSizes[0]};
   }
 
   get ThumbnailSizes(): string {
@@ -49,52 +53,12 @@ export class ThumbnailSettingsComponent
   }
 
   get Progress() {
-    return this.jobsService.progress.value[JobDTO.getHashName(DefaultsJobs[DefaultsJobs['Thumbnail Generation']],
-      {sizes: this.original.client.thumbnailSizes[0]})];
+    return this.jobsService.progress.value[JobDTO.getHashName(this.jobName, this.Config)];
   }
 
   ngOnInit() {
     super.ngOnInit();
   }
-
-  async startJob() {
-    this.inProgress = true;
-    this.error = '';
-    try {
-      await this.jobsService.start(DefaultsJobs[DefaultsJobs['Thumbnail Generation']], {sizes: this.original.client.thumbnailSizes[0]});
-      this.notification.info(this.i18n('Thumbnail generation started'));
-      this.inProgress = false;
-      return true;
-    } catch (err) {
-      console.log(err);
-      if (err.message) {
-        this.error = (<ErrorDTO>err).message;
-      }
-    }
-
-    this.inProgress = false;
-    return false;
-  }
-
-  async cancelJob() {
-    this.inProgress = true;
-    this.error = '';
-    try {
-      await this.jobsService.stop(DefaultsJobs[DefaultsJobs['Thumbnail Generation']]);
-      this.notification.info(this.i18n('Thumbnail generation interrupted'));
-      this.inProgress = false;
-      return true;
-    } catch (err) {
-      console.log(err);
-      if (err.message) {
-        this.error = (<ErrorDTO>err).message;
-      }
-    }
-
-    this.inProgress = false;
-    return false;
-  }
-
 }
 
 

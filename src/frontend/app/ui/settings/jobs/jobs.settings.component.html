@@ -8,37 +8,34 @@
 
       <div *ngFor="let schedule of sortedSchedules() as schedules; let i= index">
         <div class="card bg-light {{shouldIdent(schedule,schedules[i-1])? 'ml-4' : ''}}">
-          <div class="card-header clickable"
-               (click)="showDetails[schedule.name]=!showDetails[schedule.name]">
+          <div class="card-header">
             <div class="d-flex justify-content-between">
-              {{schedule.name}} @<!--
+              <div class="clickable"
+                   (click)="showDetails[schedule.name]=!showDetails[schedule.name]">
+                <span class="oi oi-chevron-{{showDetails[schedule.name] ? 'bottom' : 'right'}}"></span>
+                {{schedule.name}} @<!--
               -->
-              <ng-container [ngSwitch]="schedule.trigger.type">
-                <ng-container *ngSwitchCase="JobTriggerType.periodic">
-                  <ng-container i18n>every</ng-container>
-                  {{periods[schedule.trigger.periodicity]}} {{schedule.trigger.atTime | date:"HH:mm":"+0"}}
+                <ng-container [ngSwitch]="schedule.trigger.type">
+                  <ng-container *ngSwitchCase="JobTriggerType.periodic">
+                    <ng-container i18n>every</ng-container>
+                    {{periods[schedule.trigger.periodicity]}} {{schedule.trigger.atTime | date:"HH:mm":"+0"}}
+                  </ng-container>
+                  <ng-container
+                    *ngSwitchCase="JobTriggerType.scheduled">{{schedule.trigger.time | date:"medium"}}</ng-container>
+                  <ng-container *ngSwitchCase="JobTriggerType.never" i18n>never</ng-container>
+                  <ng-container *ngSwitchCase="JobTriggerType.after">
+                    <ng-container i18n>after</ng-container>
+                    {{schedule.trigger.afterScheduleName}}
+                  </ng-container>
                 </ng-container>
-                <ng-container
-                  *ngSwitchCase="JobTriggerType.scheduled">{{schedule.trigger.time | date:"medium"}}</ng-container>
-                <ng-container *ngSwitchCase="JobTriggerType.never" i18n>never</ng-container>
-                <ng-container *ngSwitchCase="JobTriggerType.after">
-                  <ng-container i18n>after</ng-container>
-                  {{schedule.trigger.afterScheduleName}}
-                </ng-container>
-              </ng-container>
+              </div>
               <div>
-                <button class="btn btn-danger job-control-button" (click)="remove(i)"><span class="oi oi-trash"></span>
+                <button class="btn btn-danger job-control-button" (click)="remove(schedule)"><span class="oi oi-trash"></span>
                 </button>
-                <button class="btn btn-success job-control-button"
-                        *ngIf="!getProgress(schedule)"
-                        [disabled]="disableButtons"
-                        (click)="start(schedule); $event.stopPropagation();"><span class="oi oi-media-play"></span>
-                </button>
-                <button class="btn btn-secondary job-control-button"
-                        *ngIf="getProgress(schedule)"
-                        [disabled]="disableButtons || getProgress(schedule).state !== JobProgressStates.running"
-                        (click)="stop(schedule); $event.stopPropagation();"><span class="oi oi-media-stop"></span>
-                </button>
+                <app-settings-job-button class="job-control-button ml-2"
+                                         (error)="error=$event"
+                                         [jobName]="schedule.jobName" [config]="schedule.config"
+                                         [shortName]="true"></app-settings-job-button>
               </div>
             </div>
           </div>
@@ -120,18 +117,10 @@
               </div>
 
               <div class="col-md-3">
-                <button class="btn btn-success float-right"
-                        *ngIf="!getProgress(schedule)"
-                        [disabled]="disableButtons"
-                        title="Trigger job run manually"
-                        i18n-title
-                        (click)="start(schedule)" i18n>Start now
-                </button>
-                <button class="btn btn-secondary float-right"
-                        *ngIf="getProgress(schedule)"
-                        [disabled]="disableButtons || getProgress(schedule).state !== JobProgressStates.running"
-                        (click)="stop(schedule)" i18n>Stop
-                </button>
+                <app-settings-job-button class="float-right"
+                                         [jobName]="schedule.jobName"
+                                         (error)="error=$event"
+                                         [config]="schedule.config"></app-settings-job-button>
               </div>
             </div>
 
@@ -194,8 +183,8 @@
 
           <app-settings-job-progress
             class="card-footer bg-transparent"
-            *ngIf="getProgress(schedule) || getLastRun(schedule)"
-            [progress]="getProgress(schedule) || getLastRun(schedule)">
+            *ngIf="getProgress(schedule)"
+            [progress]="getProgress(schedule)">
           </app-settings-job-progress>
 
         </div>

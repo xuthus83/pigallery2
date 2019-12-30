@@ -25,6 +25,8 @@ export class IndexingSettingsComponent extends SettingsComponent<ServerConfig.In
 
   types: { key: number; value: string }[] = [];
   JobProgressStates = JobProgressStates;
+  readonly indexingJobName = DefaultsJobs[DefaultsJobs.Indexing];
+  readonly resetJobName = DefaultsJobs[DefaultsJobs['Database Reset']];
 
   constructor(_authService: AuthenticationService,
               _navigation: NavigationService,

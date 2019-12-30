@@ -100,21 +100,10 @@
       </button>
 
       <div [hidden]="!settings.client.Converting.enabled">
-        <button class="btn btn-success  float-left ml-0"
-                *ngIf="Progress == null"
-                [disabled]="inProgress"
-                title="Indexes the folders"
-                i18n-title
-                (click)="convertPhoto()">
-          <ng-container i18n>Convert photos now</ng-container>
-          <span class="oi oi-media-play ml-2"></span>
-        </button>
-        <button class="btn btn-secondary  float-left ml-0"
-                *ngIf="Progress != null"
-                [disabled]="inProgress || Progress.state !== JobProgressStates.running"
-                (click)="cancelPhotoConverting()" i18n>Cancel converting
-        </button>
-
+        <app-settings-job-button class="float-left"
+                                 [soloRun]="true"
+                                 (error)="error=$event"
+                                 [jobName]="jobName"></app-settings-job-button>
 
         <ng-container *ngIf="Progress != null">
           <br/>

@@ -39,6 +39,7 @@ export class PhotoSettingsComponent extends SettingsComponent<{
       }
       return v;
     });
+  readonly jobName = DefaultsJobs[DefaultsJobs['Photo Converting']];
 
   constructor(_authService: AuthenticationService,
               _navigation: NavigationService,
@@ -60,44 +61,6 @@ export class PhotoSettingsComponent extends SettingsComponent<{
 
   get Progress() {
     return this.jobsService.progress.value[JobDTO.getHashName(DefaultsJobs[DefaultsJobs['Photo Converting']])];
-  }
-
-  async convertPhoto() {
-    this.inProgress = true;
-    this.error = '';
-    try {
-      await this.jobsService.start(DefaultsJobs[DefaultsJobs['Photo Converting']]);
-      this.notification.info(this.i18n('Photo converting started'));
-      return true;
-    } catch (err) {
-      console.log(err);
-      if (err.message) {
-        this.error = (<ErrorDTO>err).message;
-      }
-    } finally {
-      this.inProgress = false;
-    }
-
-    return false;
-  }
-
-  async cancelPhotoConverting() {
-    this.inProgress = true;
-    this.error = '';
-    try {
-      await this.jobsService.stop(DefaultsJobs[DefaultsJobs['Photo Converting']]);
-      this.notification.info(this.i18n('Photo converting interrupted'));
-      return true;
-    } catch (err) {
-      console.log(err);
-      if (err.message) {
-        this.error = (<ErrorDTO>err).message;
-      }
-    } finally {
-      this.inProgress = false;
-    }
-
-    return false;
   }
 }
 

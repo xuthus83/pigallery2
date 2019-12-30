@@ -8,7 +8,7 @@ export interface IJob<T> extends JobDTO {
   Progress: JobProgress;
   JobListener: IJobListener;
 
-  start(config: T): Promise<void>;
+  start(config: T, soloRun?: boolean): Promise<void>;
 
   cancel(): void;
 

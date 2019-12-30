@@ -3,12 +3,12 @@ import {JobDTO} from '../../../../common/entities/job/JobDTO';
 
 export interface IJobManager {
 
-  run(jobId: string, config: any): Promise<void>;
+
+  run(jobId: string, config: any, soloRun: boolean): Promise<void>;
 
   stop(jobId: string): void;
 
   getProgresses(): { [key: string]: JobProgressDTO };
-
 
   getAvailableJobs(): JobDTO[];
 
@@ -16,5 +16,4 @@ export interface IJobManager {
 
   runSchedules(): void;
 
-  getJobLastRuns(): { [key: string]: JobProgressDTO };
 }
