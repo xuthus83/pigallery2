@@ -28,6 +28,7 @@ export abstract class FileJob<S extends { indexedOnly: boolean } = { indexedOnly
 
   protected constructor(private scanFilter: DiskMangerWorker.DirectoryScanSettings) {
     super();
+    this.scanFilter.noChildDirPhotos = true;
     if (Config.Server.Database.type !== ServerConfig.DatabaseType.memory) {
       this.ConfigTemplate.push({
         id: 'indexedOnly',
@@ -96,7 +97,7 @@ export abstract class FileJob<S extends { indexedOnly: boolean } = { indexedOnly
   private async loadADirectoryFromDisk() {
     const directory = this.directoryQueue.shift();
     this.Progress.log('scanning directory: ' + directory);
-    const scanned = await DiskManager.scanDirectory(directory, this.scanFilter);
+    const scanned = await DiskManager.scanDirectoryNoMetadata(directory, this.scanFilter);
     for (let i = 0; i < scanned.directories.length; i++) {
       this.directoryQueue.push(path.join(scanned.directories[i].path, scanned.directories[i].name));
     }

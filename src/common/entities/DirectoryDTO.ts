@@ -1,17 +1,17 @@
 import {MediaDTO} from './MediaDTO';
 import {FileDTO} from './FileDTO';
 
-export interface DirectoryDTO {
+export interface DirectoryDTO<S extends FileDTO = MediaDTO> {
   id: number;
   name: string;
   path: string;
   lastModified: number;
   lastScanned: number;
   isPartial?: boolean;
-  parent: DirectoryDTO;
+  parent: DirectoryDTO<S>;
   mediaCount: number;
-  directories: DirectoryDTO[];
-  media: MediaDTO[];
+  directories: DirectoryDTO<S>[];
+  media: S[];
   metaFile: FileDTO[];
 }
 

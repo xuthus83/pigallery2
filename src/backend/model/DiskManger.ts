@@ -3,6 +3,7 @@ import {Logger} from '../Logger';
 import {Config} from '../../common/config/private/Config';
 import {DiskManagerTH} from './threading/ThreadPool';
 import {DiskMangerWorker} from './threading/DiskMangerWorker';
+import {FileDTO} from '../../common/entities/FileDTO';
 
 
 const LOG_TAG = '[DiskManager]';
@@ -14,6 +15,13 @@ export class DiskManager {
     if (Config.Server.Threading.enabled === true) {
       DiskManager.threadPool = new DiskManagerTH(1);
     }
+  }
+
+
+  public static async scanDirectoryNoMetadata(relativeDirectoryName: string,
+                                              settings: DiskMangerWorker.DirectoryScanSettings = {}): Promise<DirectoryDTO<FileDTO>> {
+    settings.noMetadata = true;
+    return this.scanDirectory(relativeDirectoryName, settings);
   }
 
   public static async scanDirectory(relativeDirectoryName: string,

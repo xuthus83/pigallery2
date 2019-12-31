@@ -81,6 +81,12 @@ export class DiskMangerWorker {
     return false;
   }
 
+  public static async scanDirectoryNoMetadata(relativeDirectoryName: string,
+                                              settings: DiskMangerWorker.DirectoryScanSettings = {}): Promise<DirectoryDTO<FileDTO>> {
+    settings.noMetadata = true;
+    return this.scanDirectory(relativeDirectoryName, settings);
+  }
+
   public static async scanDirectory(relativeDirectoryName: string,
                                     settings: DiskMangerWorker.DirectoryScanSettings = {}): Promise<DirectoryDTO> {
 
@@ -103,6 +109,11 @@ export class DiskMangerWorker {
       media: [],
       metaFile: []
     };
+
+    // nothing to scan, we are here for the empty dir
+    if (settings.noPhoto === true && settings.noMetadata === true && settings.noVideo === true) {
+      return directory;
+    }
     const list = await fsp.readdir(absoluteDirectoryName);
     for (let i = 0; i < list.length; i++) {
       const file = list[i];
@@ -119,12 +130,15 @@ export class DiskMangerWorker {
             maxPhotos: Config.Server.Indexing.folderPreviewSize,
             noMetaFile: true,
             noVideo: true,
-            noDirectory: true
+            noDirectory: true,
+            noPhoto: settings.noChildDirPhotos || settings.noPhoto
           }
         );
+
         d.lastScanned = 0; // it was not a fully scan
         d.isPartial = true;
         directory.directories.push(d);
+
       } else if (PhotoProcessing.isPhoto(fullFilePath)) {
         if (settings.noPhoto === true) {
           continue;
@@ -132,8 +146,9 @@ export class DiskMangerWorker {
         directory.media.push(<PhotoDTO>{
           name: file,
           directory: null,
-          metadata: await MetadataLoader.loadPhotoMetadata(fullFilePath)
+          metadata: settings.noMetadata === true ? null : await MetadataLoader.loadPhotoMetadata(fullFilePath)
         });
+
 
         if (settings.maxPhotos && directory.media.length > settings.maxPhotos) {
           break;
@@ -146,7 +161,7 @@ export class DiskMangerWorker {
           directory.media.push(<VideoDTO>{
             name: file,
             directory: null,
-            metadata: await MetadataLoader.loadVideoMetadata(fullFilePath)
+            metadata: settings.noMetadata === true ? null : await MetadataLoader.loadVideoMetadata(fullFilePath)
           });
         } catch (e) {
           Logger.warn('Media loading error, skipping: ' + file + ', reason: ' + e.toString());
@@ -185,5 +200,7 @@ export namespace DiskMangerWorker {
     noVideo?: boolean;
     noPhoto?: boolean;
     noDirectory?: boolean;
+    noMetadata?: boolean;
+    noChildDirPhotos?: boolean;
   }
 }
