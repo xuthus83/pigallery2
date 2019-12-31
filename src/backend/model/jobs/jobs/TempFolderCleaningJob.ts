@@ -60,6 +60,7 @@ export class TempFolderCleaningJob extends Job {
     const validFiles = [ProjectPath.TranscodedFolder, ProjectPath.FacesFolder];
     for (let i = 0; i < files.length; ++i) {
       if (validFiles.indexOf(files[i]) === -1) {
+        this.Progress.log('processing: ' + files[i]);
         this.Progress.Processed++;
         if ((await fsp.stat(files[i])).isDirectory()) {
           await rimrafPR(files[i]);
@@ -67,12 +68,12 @@ export class TempFolderCleaningJob extends Job {
           await fsp.unlink(files[i]);
         }
       } else {
+        this.Progress.log('skipping: ' + files[i]);
         this.Progress.Skipped++;
       }
     }
 
 
-    this.Progress.log('processing: ' + ProjectPath.TempFolder);
 
     return true;
 
@@ -85,19 +86,26 @@ export class TempFolderCleaningJob extends Job {
     const stat = await fsp.stat(filePath);
 
     this.Progress.Left = this.directoryQueue.length;
-    this.Progress.log('processing: ' + filePath);
     if (stat.isDirectory()) {
       if (await this.isValidDirectory(filePath) === false) {
+        this.Progress.log('processing: ' + filePath);
         this.Progress.Processed++;
         await rimrafPR(filePath);
       } else {
+        this.Progress.log('skipping: ' + filePath);
         this.Progress.Skipped++;
         this.directoryQueue = this.directoryQueue.concat(await this.readDir(filePath));
       }
     } else {
       if (await this.isValidFile(filePath) === false) {
+        this.Progress.log('processing: ' + filePath);
+        this.Progress.Processed++;
         await fsp.unlink(filePath);
+      } else {
+        this.Progress.log('skipping: ' + filePath);
+        this.Progress.Skipped++;
       }
+
     }
     return true;
   }
