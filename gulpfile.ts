@@ -1,12 +1,17 @@
 import * as gulp from 'gulp';
 import * as fs from 'fs';
+import {promises as fsp} from 'fs';
+import * as path from 'path';
+import * as util from 'util';
 import * as zip from 'gulp-zip';
 import * as ts from 'gulp-typescript';
+import * as xml2js from 'xml2js';
+import * as child_process from 'child_process';
 // @ts-ignore
 import * as jeditor from 'gulp-json-editor';
+import {XLIFF} from 'xlf-google-translate';
 
-
-const exec = require('child_process').exec;
+const execPr = util.promisify(child_process.exec);
 
 const translationFolder = 'translate';
 const tsBackendProject = ts.createProject('tsconfig.json');
@@ -45,10 +50,79 @@ const handleError = (cb: (err: any) => void) => {
     cb(err);
   };
 };
+const createDynamicTranslationFile = async (language: string) => {
+  // load
+  const folder = './src/frontend/' + translationFolder;
+  const data: string = await fsp.readFile(path.join(folder, `messages.${language}.xlf`), 'utf-8');
+  const translationXml: XLIFF.Root = await xml2js.parseStringPromise(data);
 
-const createFrontendTask = (type: string, script: string) => {
-  gulp.task(type, (cb) => {
-    exec(script, handleError(cb));
+  // clean translations, keep only .ts transaltions
+  const hasTsTranslation = (cg: XLIFF.ContextGroup) =>
+    cg.context.findIndex((c: any) => c.$['context-type'] === 'sourcefile' && c._.endsWith('.ts')) !== -1;
+  const translations = translationXml.xliff.file[0].body[0]['trans-unit'];
+  const filtered = translations.filter(tr => tr['context-group'].findIndex(hasTsTranslation) !== -1);
+  filtered.forEach(tr => delete tr['context-group']);
+  translationXml.xliff.file[0].body[0]['trans-unit'] = filtered;
+
+  // save
+  const builder = new xml2js.Builder({trim: true, normalize: true});
+  const xml = builder.buildObject(translationXml);
+  await fsp.writeFile(path.join(folder, `ts-only-msg.${language}.xlf`), xml);
+
+};
+
+const removeDynamicTranslationFile = async (language: string) => {
+  const translationFile = path.join('./src/frontend/', translationFolder, `ts-only-msg.${language}.xlf`);
+  fsp.unlink(translationFile);
+};
+
+
+const setDynTransFileAtAppModule = async (language: string) => {
+  const file = './src/frontend/app/app.module.ts';
+  let data: string = await fsp.readFile(file, 'utf-8');
+  const from = 'messages.${locale}.xlf';
+  const to = `ts-only-msg.${language}.xlf`;
+  data = data.replace(from, to);
+  await fsp.writeFile(file, data);
+};
+
+const resetAppModule = async (language: string) => {
+  const file = './src/frontend/app/app.module.ts';
+  let data: string = await fsp.readFile(file, 'utf-8');
+  const from = 'messages.${locale}.xlf';
+  const to = `ts-only-msg.${language}.xlf`;
+  data = data.replace(to, from);
+  await fsp.writeFile(file, data);
+};
+
+
+const createFrontendTask = (type: string, language: string, script: string) => {
+  gulp.task(type, async (cb) => {
+    let error;
+    try {
+      // TODO: remove this once i18n-pollify is removed from the project
+      // Adding filtered translation as webpack would pack all translations into the created release
+      await createDynamicTranslationFile(language);
+      await setDynTransFileAtAppModule(language);
+      const {stdout, stderr} = await execPr(script);
+      console.log(stdout);
+      console.error(stderr);
+    } catch (e) {
+      console.error(e);
+      error = e;
+    } finally {
+      try {
+        await resetAppModule(language);
+      } catch (e) {
+
+      }
+      try {
+        await removeDynamicTranslationFile(language);
+      } catch (e) {
+
+      }
+      cb(error);
+    }
   });
 };
 
@@ -85,13 +159,13 @@ gulp.task('build-frontend', (() => {
     return l !== 'en';
   });
   const tasks = [];
-  createFrontendTask('build-frontend-release default',
+  createFrontendTask('build-frontend-release default', 'en',
     'ng build --aot --prod --output-path=./release/dist --no-progress --i18n-locale=en' +
     ' --i18n-format xlf --i18n-file src/frontend/' + translationFolder + '/messages.en.xlf' +
     ' --i18n-missing-translation warning');
   tasks.push('build-frontend-release default');
   for (let i = 0; i < languages.length; i++) {
-    createFrontendTask('build-frontend-release ' + languages[i],
+    createFrontendTask('build-frontend-release ' + languages[i], languages[i],
       'ng build --aot --prod --output-path=./release/dist/' + languages[i] +
       ' --no-progress --i18n-locale=' + languages[i] +
       ' --i18n-format xlf --i18n-file src/frontend/' + translationFolder + '/messages.' + languages[i] + '.xlf' +
@@ -105,7 +179,7 @@ gulp.task('copy-static', function () {
   return gulp.src([
     'src/backend/model/diagnostics/blank.jpg',
     'README.md',
-  //  'package-lock.json', should not add, it keeps optional packages optional even with --force-opt-packages.
+    //  'package-lock.json', should not add, it keeps optional packages optional even with --force-opt-packages.
     'LICENSE'], {base: '.'})
     .pipe(gulp.dest('./release'));
 });
@@ -172,12 +246,12 @@ const simpleBuild = (isProd: boolean) => {
   if (isProd) {
     cmd += ' --prod --no-extract-licenses ';
   }
-  createFrontendTask('build-frontend default', cmd + '--output-path=./dist --no-progress --no-progress --i18n-locale en' +
+  createFrontendTask('build-frontend default', 'en', cmd + '--output-path=./dist --no-progress --no-progress --i18n-locale en' +
     ' --i18n-format=xlf --i18n-file=src/frontend/' + translationFolder + '/messages.en.xlf' + ' --i18n-missing-translation warning');
   tasks.push('build-frontend default');
   if (!process.env.CI) { // don't build languages if running in CI
     for (let i = 0; i < languages.length; i++) {
-      createFrontendTask('build-frontend ' + languages[i], cmd +
+      createFrontendTask('build-frontend ' + languages[i], languages[i], cmd +
         '--output-path=./dist/' + languages[i] +
         ' --no-progress --i18n-locale ' + languages[i] +
         ' --i18n-format=xlf --i18n-file=src/frontend/' + translationFolder +
@@ -188,31 +262,59 @@ const simpleBuild = (isProd: boolean) => {
   return gulp.series(...tasks);
 };
 
-gulp.task('extract-locale', (cb) => {
+gulp.task('extract-locale', async (cb) => {
   console.log('creating source translation file:  locale.source.xlf');
-  exec('ng xi18n --out-file=./../../locale.source.xlf  --i18n-format=xlf --i18n-locale=en',
-    {maxBuffer: 1024 * 1024}, (error: any, stdOut: string, stdErr: string) => {
-      console.log(stdOut);
-      console.log(stdErr);
-      if (error) {
-        return cb(error);
-      }
-      exec('ngx-extractor -i src/frontend/**/*.ts -f xlf --out-file locale.source.xlf',
-        handleError(cb));
-    });
+  try {
+    {
+      const {stdout, stderr} = await execPr('ng xi18n --out-file=./../../locale.source.xlf  --i18n-format=xlf --i18n-locale=en',
+        {maxBuffer: 1024 * 1024});
+      console.log(stdout);
+      console.error(stderr);
+    }
+    {
+      const {stdout, stderr} = await execPr('ngx-extractor -i src/frontend/**/*.ts -f xlf --out-file locale.source.xlf');
+      console.log(stdout);
+      console.error(stderr);
+    }
+    cb();
+  } catch (e) {
+    console.error(e);
+    return cb(e);
+  }
 });
 
-const translate = (list: any[], cb: (err: any) => void) => {
-  const localsStr = '"[\\"' + list.join('\\",\\"') + '\\"]"';
-  exec('xlf-google-translate --source-lang="en" --source-file="./locale.source.xlf" --destination-folder="./src/frontend/"' +
-    translationFolder + ' --destination-languages=' + localsStr,
-    handleError(cb));
+const translate = async (list: any[], cb: (err?: any) => void) => {
+  try {
+    const localsStr = '"[\\"' + list.join('\\",\\"') + '\\"]"';
+    const {stdout, stderr} = await execPr('xlf-google-translate ' +
+      '--source-lang="en" ' +
+      '--source-file="./locale.source.xlf" ' +
+      '--destination-filename="messages" ' +
+      '--destination-folder="./src/frontend/"' +   translationFolder + ' --destination-languages=' + localsStr);
+    console.log(stdout);
+    console.error(stderr);
+    cb();
+  } catch (e) {
+    console.error(e);
+    return cb(e);
+  }
 };
-const merge = (list: any[], cb: (err: any) => void) => {
-  const localsStr = '"[\\"' + list.join('\\",\\"') + '\\"]"';
-  exec('xlf-google-translate --method="extend-only" --source-lang="en" --source-file="./locale.source.xlf" --destination-folder="./src/frontend/"' +
-    translationFolder + ' --destination-languages=' + localsStr,
-    handleError(cb));
+const merge = async (list: any[], cb: (err?: any) => void) => {
+  try {
+    const localsStr = '"[\\"' + list.join('\\",\\"') + '\\"]"';
+    const {stdout, stderr} = await execPr('xlf-google-translate ' +
+      '--method="extend-only" ' +
+      '--source-lang="en" ' +
+      '--source-file="./locale.source.xlf" ' +
+      '--destination-filename="messages" ' +
+      '--destination-folder="./src/frontend/"' + translationFolder + ' --destination-languages=' + localsStr);
+    console.log(stdout);
+    console.error(stderr);
+    cb();
+  } catch (e) {
+    console.error(e);
+    return cb(e);
+  }
 };
 
 gulp.task('update-translation-only', function (cb) {

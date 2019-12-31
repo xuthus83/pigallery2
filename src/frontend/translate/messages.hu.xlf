@@ -588,7 +588,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/jobs/jobs.settings.component.html</context>
-          <context context-type="linenumber">237</context>
+          <context context-type="linenumber">260</context>
         </context-group>
         <target>Bezárás</target>
       </trans-unit>
@@ -710,7 +710,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/jobs/jobs.settings.component.html</context>
-          <context context-type="linenumber">196</context>
+          <context context-type="linenumber">219</context>
         </context-group>
         <target>Mentés</target>
       </trans-unit>
@@ -767,7 +767,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/jobs/jobs.settings.component.html</context>
-          <context context-type="linenumber">200</context>
+          <context context-type="linenumber">223</context>
         </context-group>
         <target>Visszaállítás</target>
       </trans-unit>
@@ -1685,7 +1685,7 @@
         </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
-          <context context-type="linenumber">130</context>
+          <context context-type="linenumber">132</context>
         </context-group>
         <target>Statisztika:</target>
       </trans-unit>
@@ -1693,7 +1693,7 @@
         <source>Folders</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
-          <context context-type="linenumber">134</context>
+          <context context-type="linenumber">136</context>
         </context-group>
         <target>Mappák</target>
       </trans-unit>
@@ -1701,7 +1701,7 @@
         <source>Photos</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
-          <context context-type="linenumber">138</context>
+          <context context-type="linenumber">140</context>
         </context-group>
         <target>Fotók</target>
       </trans-unit>
@@ -1709,7 +1709,7 @@
         <source>Videos</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
-          <context context-type="linenumber">142</context>
+          <context context-type="linenumber">144</context>
         </context-group>
         <target>Videók</target>
       </trans-unit>
@@ -1717,7 +1717,7 @@
         <source>Size</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
-          <context context-type="linenumber">147</context>
+          <context context-type="linenumber">149</context>
         </context-group>
         <target>Méret</target>
       </trans-unit>
@@ -1821,7 +1821,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/jobs/jobs.settings.component.html</context>
-          <context context-type="linenumber">114</context>
+          <context context-type="linenumber">118</context>
         </context-group>
         <target>minden</target>
       </trans-unit>
@@ -1845,7 +1845,7 @@
         <source>Job:</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/jobs/jobs.settings.component.html</context>
-          <context context-type="linenumber">49</context>
+          <context context-type="linenumber">52</context>
         </context-group>
         <target>Feladat:</target>
       </trans-unit>
@@ -1853,7 +1853,7 @@
         <source>Periodicity:</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/jobs/jobs.settings.component.html</context>
-          <context context-type="linenumber">62</context>
+          <context context-type="linenumber">66</context>
         </context-group>
         <target>Gyakoriság:</target>
       </trans-unit>
@@ -1862,7 +1862,7 @@
                     </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/jobs/jobs.settings.component.html</context>
-          <context context-type="linenumber">72</context>
+          <context context-type="linenumber">76</context>
         </context-group>
         <target>Állítsd be, hogy mikos fusson a feladat.</target>
       </trans-unit>
@@ -1870,7 +1870,7 @@
         <source>After:</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/jobs/jobs.settings.component.html</context>
-          <context context-type="linenumber">78</context>
+          <context context-type="linenumber">82</context>
         </context-group>
         <target>Ez után:</target>
       </trans-unit>
@@ -1879,7 +1879,7 @@
                     </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/jobs/jobs.settings.component.html</context>
-          <context context-type="linenumber">89</context>
+          <context context-type="linenumber">93</context>
         </context-group>
         <target>Ez a feladat a beállított feladat után fog futni.</target>
       </trans-unit>
@@ -1887,20 +1887,37 @@
         <source>At:</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/jobs/jobs.settings.component.html</context>
-          <context context-type="linenumber">96</context>
+          <context context-type="linenumber">100</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/jobs/jobs.settings.component.html</context>
-          <context context-type="linenumber">106</context>
+          <context context-type="linenumber">110</context>
         </context-group>
         <target>Ekkor:</target>
+      </trans-unit>
+      <trans-unit id="a86e51ae77acea0fd2a18ba02699494038f7fcae" datatype="html">
+        <source>Allow parallel run</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/jobs/jobs.settings.component.html</context>
+          <context context-type="linenumber">129</context>
+        </context-group>
+        <target>Párhuzamos futtatás</target>
+      </trans-unit>
+      <trans-unit id="5230ebf1e8c837caa3871f3807c5390b4fc156c8" datatype="html">
+        <source>Enables the job to start even if an other job is already running.
+                    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/jobs/jobs.settings.component.html</context>
+          <context context-type="linenumber">144</context>
+        </context-group>
+        <target>Akkor is elundul a feladat, ha egy másik már fut.</target>
       </trans-unit>
       <trans-unit id="06a2d1d53517fb6ae65f61bc4acfdc1bfe7f0fc8" datatype="html">
         <source>';' separated integers.
                       </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/jobs/jobs.settings.component.html</context>
-          <context context-type="linenumber">175</context>
+          <context context-type="linenumber">198</context>
         </context-group>
         <target>';'-vel elválaszott egész számok.</target>
       </trans-unit>
@@ -1909,7 +1926,7 @@
       </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/jobs/jobs.settings.component.html</context>
-          <context context-type="linenumber">203</context>
+          <context context-type="linenumber">226</context>
         </context-group>
         <target>+ Új feladat</target>
       </trans-unit>
@@ -1917,7 +1934,7 @@
         <source>Add new job</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/jobs/jobs.settings.component.html</context>
-          <context context-type="linenumber">218</context>
+          <context context-type="linenumber">241</context>
         </context-group>
         <target>Új feladat</target>
       </trans-unit>
@@ -1926,7 +1943,7 @@
           </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/jobs/jobs.settings.component.html</context>
-          <context context-type="linenumber">232</context>
+          <context context-type="linenumber">255</context>
         </context-group>
         <target>Válaszd ki az ütemezendő feladatot.</target>
       </trans-unit>
@@ -1935,7 +1952,7 @@
           </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/jobs/jobs.settings.component.html</context>
-          <context context-type="linenumber">240</context>
+          <context context-type="linenumber">263</context>
         </context-group>
         <target>Feladat hozzáadása</target>
       </trans-unit>
@@ -2374,13 +2391,13 @@
         </context-group>
         <target>Feladat elindult</target>
       </trans-unit>
-      <trans-unit id="37a8a7f4290d2e007dc452c7b5d5682d9d2ef164" datatype="html">
-        <source>Job stopped</source>
+      <trans-unit id="b8d05f3701688493a899c9c05d588e8c6b2909ef" datatype="html">
+        <source>Stopping job</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/jobs/button/job-button.settings.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>Feladat leállt</target>
+        <target>Stopping job</target>
       </trans-unit>
       <trans-unit id="43f1cc191ebc0b8ce89f6916aa634f5a57158798" datatype="html">
         <source>Jobs</source>

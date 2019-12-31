@@ -79,6 +79,7 @@
     "@types/rimraf": "2.0.3",
     "@types/sharp": "0.23.1",
     "@types/winston": "2.4.4",
+    "@types/xml2js": "0.4.5",
     "@yaga/leaflet-ng2": "1.0.0",
     "bootstrap": "4.4.1",
     "chai": "4.2.0",
@@ -118,7 +119,8 @@
     "ts-node": "8.5.4",
     "tslint": "5.20.1",
     "typescript": "3.5.3",
-    "xlf-google-translate": "1.0.0-beta.15",
+    "xlf-google-translate": "1.0.0-beta.19",
+    "xml2js": "0.4.23",
     "zone.js": "0.10.2"
   },
   "//": [
@@ -138,5 +140,10 @@
   },
   "engines": {
     "node": ">=10.17 <13.0"
-  }
+  },
+  "browserslist": [
+    "> 5%",
+    "Firefox ESR",
+    "not dead"
+  ]
 }
