@@ -47,7 +47,7 @@ Than get your certificate:
 certbot certonly --standalone -d yourdomain.com
 ```
 
-#### I.1.a start docker-compose
+#### I.1.b start docker-compose
 In the folder that has `docker-compose.yml`:
 ```bash
 docker-compose up -d
@@ -58,6 +58,14 @@ After the containers are up and running, you go to `yourdomain.com` and log in w
 
 **Note:** `docker-compose.yml` contains `restart:always`, so the containers will be automatically started after reboot ([read more here](https://stackoverflow.com/questions/43671482/how-to-run-docker-compose-up-d-at-system-start-up)).
 
+#### I.2 upgrade to newer version
+
+```bash
+docker-compose pull # get new version
+docker-compose down # stop running container
+docker system prune # from time to time its nice to clean up docker
+docker-compose up -d # start containers
+```
 
 ## II. Without docker-compose
 If you want to run the container by yourself, here you go:
