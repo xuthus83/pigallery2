@@ -75,6 +75,7 @@ export class PrivateConfigDefaultsClass extends PublicConfigClass implements IPr
         {
           name: DefaultsJobs[DefaultsJobs.Indexing],
           jobName: DefaultsJobs[DefaultsJobs.Indexing],
+          allowParallelRun: false,
           config: {},
           trigger: {type: JobTriggerType.never}
         },
@@ -82,24 +83,27 @@ export class PrivateConfigDefaultsClass extends PublicConfigClass implements IPr
           name: DefaultsJobs[DefaultsJobs['Thumbnail Generation']],
           jobName: DefaultsJobs[DefaultsJobs['Thumbnail Generation']],
           config: {sizes: [240]},
+          allowParallelRun: false,
           trigger: {
             type: JobTriggerType.after,
             afterScheduleName: DefaultsJobs[DefaultsJobs.Indexing]
           }
         },
-      /*  {
-          name: DefaultsJobs[DefaultsJobs['Photo Converting']],
-          jobName: DefaultsJobs[DefaultsJobs['Photo Converting']],
-          config: {},
-          trigger: {
-            type: JobTriggerType.after,
-            afterScheduleName: DefaultsJobs[DefaultsJobs['Thumbnail Generation']]
-          }
-        },*/
+        /*  {
+            name: DefaultsJobs[DefaultsJobs['Photo Converting']],
+            jobName: DefaultsJobs[DefaultsJobs['Photo Converting']],
+            config: {},
+            parallelRunEnabled:false,
+            trigger: {
+              type: JobTriggerType.after,
+              afterScheduleName: DefaultsJobs[DefaultsJobs['Thumbnail Generation']]
+            }
+          },*/
         {
           name: DefaultsJobs[DefaultsJobs['Video Converting']],
           jobName: DefaultsJobs[DefaultsJobs['Video Converting']],
           config: {},
+          allowParallelRun: false,
           trigger: {
             type: JobTriggerType.after,
             afterScheduleName: DefaultsJobs[DefaultsJobs['Thumbnail Generation']]
@@ -109,6 +113,7 @@ export class PrivateConfigDefaultsClass extends PublicConfigClass implements IPr
           name: DefaultsJobs[DefaultsJobs['Temp Folder Cleaning']],
           jobName: DefaultsJobs[DefaultsJobs['Temp Folder Cleaning']],
           config: {},
+          allowParallelRun: false,
           trigger: {
             type: JobTriggerType.after,
             afterScheduleName: DefaultsJobs[DefaultsJobs['Video Converting']]

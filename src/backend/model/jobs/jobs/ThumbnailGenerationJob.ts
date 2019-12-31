@@ -29,14 +29,14 @@ export class ThumbnailGenerationJob extends FileJob<{ sizes: number[], indexedOn
     return true;
   }
 
-  start(config: { sizes: number[], indexedOnly: boolean }, soloRun = false): Promise<void> {
+  start(config: { sizes: number[], indexedOnly: boolean }, soloRun = false, allowParallelRun = false): Promise<void> {
     for (let i = 0; i < config.sizes.length; ++i) {
       if (Config.Client.Media.Thumbnail.thumbnailSizes.indexOf(config.sizes[i]) === -1) {
         throw new Error('unknown thumbnails size: ' + config.sizes[i] + '. Add it to the possible thumbnail sizes.');
       }
     }
 
-    return super.start(config, soloRun);
+    return super.start(config, soloRun, allowParallelRun);
   }
 
   protected async filterMediaFiles(files: FileDTO[]): Promise<FileDTO[]> {

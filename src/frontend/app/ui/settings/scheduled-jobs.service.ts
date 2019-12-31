@@ -41,14 +41,23 @@ export class ScheduledJobsService {
     return await this.loadProgress();
   }
 
-  public async start(jobName: string, config?: any, soloStart: boolean = false): Promise<void> {
-    this.jobStartingStopping[jobName] = true;
-    await this._networkService.postJson('/admin/jobs/scheduled/' + jobName + '/' + (soloStart === true ? 'soloStart' : 'start'),
-      {config: config});
-    // placeholder to force showing running job
-    this.addDummyProgress(jobName, config);
-    delete this.jobStartingStopping[jobName];
-    this.forceUpdate();
+  public async start(jobName: string, config?: any, soloStart: boolean = false, allowParallelRun = false): Promise<void> {
+    try {
+      this.jobStartingStopping[jobName] = true;
+      await this._networkService.postJson('/admin/jobs/scheduled/' + jobName + '/start',
+        {
+          config: config,
+          allowParallelRun: allowParallelRun,
+          soloStart: soloStart
+        });
+      // placeholder to force showing running job
+      this.addDummyProgress(jobName, config);
+    } catch (e) {
+      throw e;
+    } finally {
+      delete this.jobStartingStopping[jobName];
+      this.forceUpdate();
+    }
   }
 
   public async stop(jobName: string): Promise<void> {
@@ -70,7 +79,7 @@ export class ScheduledJobsService {
             this.progress.value[prg].state === JobProgressStates.cancelling)
         )) {
         this.onJobFinish.emit(prg);
-        this.notification.info(this.i18n('Job finished') + ': ' + this.backendTextService.getJobName(prevPrg[prg].jobName));
+        this.notification.success(this.i18n('Job finished') + ': ' + this.backendTextService.getJobName(prevPrg[prg].jobName));
       }
     }
   }

@@ -4,7 +4,7 @@ import {JobDTO} from '../../../../common/entities/job/JobDTO';
 export interface IJobManager {
 
 
-  run(jobId: string, config: any, soloRun: boolean): Promise<void>;
+  run(jobId: string, config: any, soloRun: boolean, allowParallelRun: boolean): Promise<void>;
 
   stop(jobId: string): void;
 

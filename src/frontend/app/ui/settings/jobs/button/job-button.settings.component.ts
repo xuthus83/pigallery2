@@ -18,6 +18,7 @@ export class JobButtonComponent {
   @Input() shortName = false;
   @Input() disabled = false;
   @Input() soloRun = false;
+  @Input() allowParallelRun = false;
   @Input() danger = false;
   JobProgressStates = JobProgressStates;
   @Output() error = new EventEmitter<string>();
@@ -40,7 +41,7 @@ export class JobButtonComponent {
   public async start() {
     this.error.emit('');
     try {
-      await this.jobsService.start(this.jobName, this.config, this.soloRun);
+      await this.jobsService.start(this.jobName, this.config, this.soloRun, this.allowParallelRun);
       this.notification.success(this.i18n('Job started') + ': ' + this.backendTextService.getJobName(this.jobName));
       return true;
     } catch (err) {
@@ -57,7 +58,7 @@ export class JobButtonComponent {
     this.error.emit('');
     try {
       await this.jobsService.stop(this.jobName);
-      this.notification.info(this.i18n('Job stopped') + ': ' + this.backendTextService.getJobName(this.jobName));
+      this.notification.info(this.i18n('Stopping job') + ': ' + this.backendTextService.getJobName(this.jobName));
       return true;
     } catch (err) {
       console.log(err);

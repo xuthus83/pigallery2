@@ -11,6 +11,7 @@ declare const global: any;
 const LOG_TAG = '[JOB]';
 
 export abstract class Job<T = void> implements IJob<T> {
+  public allowParallelRun: boolean = null;
   protected progress: JobProgress = null;
   protected config: T;
   protected prResolve: () => void;
@@ -33,15 +34,16 @@ export abstract class Job<T = void> implements IJob<T> {
     return this.progress;
   }
 
-  protected get InProgress(): boolean {
+  public get InProgress(): boolean {
     return this.Progress !== null && (this.Progress.State === JobProgressStates.running ||
       this.Progress.State === JobProgressStates.cancelling);
   }
 
-  public start(config: T, soloRun = false): Promise<void> {
+  public start(config: T, soloRun = false, allowParallelRun = false): Promise<void> {
     if (this.InProgress === false && this.Supported === true) {
       Logger.info(LOG_TAG, 'Running job ' + (soloRun === true ? 'solo' : '') + ': ' + this.Name);
       this.soloRun = soloRun;
+      this.allowParallelRun = allowParallelRun;
       this.config = config;
       this.progress = new JobProgress(this.Name, JobDTO.getHashName(this.Name, this.config));
       this.progress.OnChange = this.jobListener.onProgressUpdate;

@@ -51,21 +51,21 @@ export class AdminMWs {
   }
 
 
-  public static startJob(soloRun: boolean) {
-    return async (req: Request, res: Response, next: NextFunction) => {
-      try {
-        const id = req.params.id;
-        const JobConfig: any = req.body.config;
-        await ObjectManagers.getInstance().JobManager.run(id, JobConfig, soloRun);
-        req.resultPipe = 'ok';
-        return next();
-      } catch (err) {
-        if (err instanceof Error) {
-          return next(new ErrorDTO(ErrorCodes.JOB_ERROR, 'Job error: ' + err.toString(), err));
-        }
-        return next(new ErrorDTO(ErrorCodes.JOB_ERROR, 'Job error: ' + JSON.stringify(err, null, '  '), err));
+  public static async startJob(req: Request, res: Response, next: NextFunction) {
+    try {
+      const id = req.params.id;
+      const JobConfig: any = req.body.config;
+      const soloRun: boolean = req.body.soloRun;
+      const allowParallelRun: boolean = req.body.allowParallelRun;
+      await ObjectManagers.getInstance().JobManager.run(id, JobConfig, soloRun, allowParallelRun);
+      req.resultPipe = 'ok';
+      return next();
+    } catch (err) {
+      if (err instanceof Error) {
+        return next(new ErrorDTO(ErrorCodes.JOB_ERROR, 'Job error: ' + err.toString(), err));
       }
-    };
+      return next(new ErrorDTO(ErrorCodes.JOB_ERROR, 'Job error: ' + JSON.stringify(err, null, '  '), err));
+    }
   }
 
   public static stopJob(req: Request, res: Response, next: NextFunction) {

@@ -22,15 +22,28 @@ export class JobManager implements IJobManager, IJobListener {
     this.runSchedules();
   }
 
+  protected get JobRunning(): boolean {
+    return JobRepository.Instance.getAvailableJobs().findIndex(j => j.InProgress === true) !== -1;
+  }
+
+  protected get JobNoParallelRunning(): boolean {
+    return JobRepository.Instance.getAvailableJobs()
+      .findIndex(j => j.InProgress === true && j.allowParallelRun) !== -1;
+  }
+
   getProgresses(): { [id: string]: JobProgressDTO } {
     return this.progressManager.Progresses;
   }
 
-  async run<T>(jobName: string, config: T, soloRun: boolean): Promise<void> {
+  async run<T>(jobName: string, config: T, soloRun: boolean, allowParallelRun: boolean): Promise<void> {
+    if ((allowParallelRun === false && this.JobRunning === true) || this.JobNoParallelRunning === true) {
+      throw new Error('Can\'t start this job while an other is running');
+    }
+
     const t = this.findJob(jobName);
     if (t) {
       t.JobListener = this;
-      await t.start(config, soloRun);
+      await t.start(config, soloRun, allowParallelRun);
     } else {
       Logger.warn(LOG_TAG, 'cannot find job to start:' + jobName);
     }
@@ -49,7 +62,6 @@ export class JobManager implements IJobManager, IJobListener {
     this.progressManager.onJobProgressUpdate(progress.toDTO());
   };
 
-
   onJobFinished = async (job: IJob<any>, state: JobProgressStates, soloRun: boolean): Promise<void> => {
     // if it was not finished peacefully or was a soloRun, do not start the next one
     if (state !== JobProgressStates.finished || soloRun === true) {
@@ -61,7 +73,7 @@ export class JobManager implements IJobManager, IJobListener {
         (<AfterJobTrigger>s.trigger).afterScheduleName === sch.name);
       for (let i = 0; i < children.length; ++i) {
         try {
-          await this.run(children[i].jobName, children[i].config, false);
+          await this.run(children[i].jobName, children[i].config, false, children[i].allowParallelRun);
         } catch (e) {
           NotificationManager.warning('Job running error:' + children[i].name, e.toString());
         }
@@ -96,7 +108,7 @@ export class JobManager implements IJobManager, IJobListener {
 
       const timer: NodeJS.Timeout = setTimeout(async () => {
         this.timers = this.timers.filter(t => t.timer !== timer);
-        await this.run(schedule.jobName, schedule.config, false);
+        await this.run(schedule.jobName, schedule.config, false, schedule.allowParallelRun);
         this.runSchedule(schedule);
       }, nextDate.getTime() - Date.now());
       this.timers.push({schedule: schedule, timer: timer});

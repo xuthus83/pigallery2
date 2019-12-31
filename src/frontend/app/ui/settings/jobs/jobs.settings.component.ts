@@ -43,7 +43,8 @@ export class JobsSettingsComponent extends SettingsComponent<ServerConfig.JobCon
     jobName: '',
     trigger: {
       type: JobTriggerType.never
-    }
+    },
+    allowParallelRun: false
   };
 
   constructor(_authService: AuthenticationService,
@@ -118,7 +119,8 @@ export class JobsSettingsComponent extends SettingsComponent<ServerConfig.JobCon
       config: <any>{},
       trigger: {
         type: JobTriggerType.never
-      }
+      },
+      allowParallelRun: false
     };
 
     const job = this._settingsService.availableJobs.value.find(t => t.Name === jobName);

@@ -24,16 +24,19 @@
                     *ngSwitchCase="JobTriggerType.scheduled">{{schedule.trigger.time | date:"medium"}}</ng-container>
                   <ng-container *ngSwitchCase="JobTriggerType.never" i18n>never</ng-container>
                   <ng-container *ngSwitchCase="JobTriggerType.after">
-                    <ng-container i18n>after</ng-container>:
+                    <ng-container i18n>after</ng-container>
+                    :
                     {{schedule.trigger.afterScheduleName}}
                   </ng-container>
                 </ng-container>
               </div>
               <div>
-                <button class="btn btn-danger job-control-button ml-0" (click)="remove(schedule)"><span class="oi oi-trash"></span>
+                <button class="btn btn-danger job-control-button ml-0" (click)="remove(schedule)"><span
+                  class="oi oi-trash"></span>
                 </button>
                 <app-settings-job-button class="job-control-button ml-md-2 mt-2 mt-md-0"
                                          (error)="error=$event"
+                                         [allowParallelRun]="schedule.allowParallelRun"
                                          [jobName]="schedule.jobName" [config]="schedule.config"
                                          [shortName]="true"></app-settings-job-button>
               </div>
@@ -51,10 +54,11 @@
                     {{backendTextService.getJobName(schedule.jobName)}}
                   </div>
                   <div class="col-md-6">
-                  <app-settings-job-button class="float-right"
-                                           [jobName]="schedule.jobName"
-                                           (error)="error=$event"
-                                           [config]="schedule.config"></app-settings-job-button>
+                    <app-settings-job-button class="float-right"
+                                             [jobName]="schedule.jobName"
+                                             [allowParallelRun]="schedule.allowParallelRun"
+                                             (error)="error=$event"
+                                             [config]="schedule.config"></app-settings-job-button>
 
                   </div>
                 </div>
@@ -121,6 +125,26 @@
                       [(timestamp)]="schedule.trigger.atTime"></app-timestamp-timepicker>
                   </div>
                 </div>
+                <div class="form-group row">
+                  <label class="col-md-2 control-label" [for]="'allowParallelRun'+i" i18n>Allow parallel run</label>
+                  <div class="col-md-10">
+                    <bSwitch
+                      class="switch"
+                      [name]="'allowParallelRun'+'_'+i"
+                      [id]="'allowParallelRun'+'_'+i"
+                      [switch-on-color]="'primary'"
+                      [switch-inverse]="true"
+                      [switch-off-text]="text.Disabled"
+                      [switch-on-text]="text.Enabled"
+                      [switch-handle-width]="100"
+                      [switch-label-width]="20"
+                      [(ngModel)]="schedule.allowParallelRun">
+                    </bSwitch>
+                    <small class="form-text text-muted"
+                           i18n>Enables the job to start even if an other job is already running.
+                    </small>
+                  </div>
+                </div>
               </div>
 
 
@@ -137,7 +161,6 @@
                     <ng-container [ngSwitch]="configEntry.type">
                       <ng-container *ngSwitchCase="'boolean'">
                         <bSwitch
-                          id="enableThreading"
                           class="switch"
                           [name]="configEntry.id+'_'+i"
                           [id]="configEntry.id+'_'+i"

@@ -114,6 +114,7 @@
       <app-settings-job-button #indexingButton
                                [soloRun]="true"
                                (error)="error=$event"
+                               [allowParallelRun]="false"
                                [jobName]="indexingJobName"></app-settings-job-button>
 
 
@@ -121,6 +122,7 @@
                                danger="true"
                                [soloRun]="true"
                                (error)="error=$event"
+                               [allowParallelRun]="false"
                                [disabled]="indexingButton.Running"
                                [jobName]="resetJobName"></app-settings-job-button>
 

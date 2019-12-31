@@ -46,13 +46,7 @@ export class AdminRouter {
     app.post('/api/admin/jobs/scheduled/:id/start',
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Admin),
-      AdminMWs.startJob(false),
-      RenderingMWs.renderResult
-    );
-    app.post('/api/admin/jobs/scheduled/:id/soloStart',
-      AuthenticationMWs.authenticate,
-      AuthenticationMWs.authorise(UserRoles.Admin),
-      AdminMWs.startJob(true),
+      AdminMWs.startJob,
       RenderingMWs.renderResult
     );
     app.post('/api/admin/jobs/scheduled/:id/stop',

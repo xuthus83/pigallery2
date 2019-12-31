@@ -7,8 +7,10 @@ export interface IJob<T> extends JobDTO {
   Supported: boolean;
   Progress: JobProgress;
   JobListener: IJobListener;
+  InProgress: boolean;
+  allowParallelRun: boolean;
 
-  start(config: T, soloRun?: boolean): Promise<void>;
+  start(config: T, soloRun: boolean, allowParallelRun: boolean): Promise<void>;
 
   cancel(): void;
 

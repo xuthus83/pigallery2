@@ -30,6 +30,7 @@ export interface JobScheduleDTO {
   name: string;
   jobName: string;
   config: any;
+  allowParallelRun: boolean;
   trigger: NeverJobTrigger | ScheduledJobTrigger | PeriodicJobTrigger | AfterJobTrigger;
 }
 
