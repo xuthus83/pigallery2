@@ -7,6 +7,8 @@ export interface IPersonManager {
 
   getSamplePhoto(name: string): Promise<PhotoDTO>;
 
+  getSamplePhotos(names: string[]): Promise<{ [key: string]: PhotoDTO }>;
+
   get(name: string): Promise<PersonEntry>;
 
   saveAll(names: string[]): Promise<void>;

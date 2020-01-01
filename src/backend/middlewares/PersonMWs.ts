@@ -45,10 +45,10 @@ export class PersonMWs {
     }
     try {
       const persons = (req.resultPipe as PersonWithPhoto[]);
-      for (let i = 0; i < persons.length; i++) {
-        persons[i].samplePhoto = await ObjectManagers.getInstance()
-          .PersonManager.getSamplePhoto(persons[i].name);
-      }
+      const photoMap = await ObjectManagers.getInstance()
+        .PersonManager.getSamplePhotos(persons.map(p => p.name));
+      persons.forEach(p => p.samplePhoto = photoMap[p.name]);
+
       req.resultPipe = persons;
       return next();
 

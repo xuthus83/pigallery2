@@ -10,6 +10,7 @@ import {ThumbnailSourceType} from '../../model/threading/PhotoWorker';
 import {MediaDTO} from '../../../common/entities/MediaDTO';
 import {PersonWithPhoto} from '../PersonMWs';
 import {PhotoProcessing} from '../../model/fileprocessing/PhotoProcessing';
+import {PhotoDTO} from '../../../common/entities/PhotoDTO';
 
 
 export class ThumbnailGeneratorMWs {
@@ -75,12 +76,14 @@ export class ThumbnailGeneratorMWs {
     if (!req.resultPipe) {
       return next();
     }
+    const photo: PhotoDTO = req.resultPipe;
     try {
-      req.resultPipe = await PhotoProcessing.generatePersonThumbnail(req.resultPipe);
+      req.resultPipe = await PhotoProcessing.generatePersonThumbnail(photo);
       return next();
     } catch (error) {
+      console.error(error);
       return next(new ErrorDTO(ErrorCodes.THUMBNAIL_GENERATION_ERROR,
-        'Error during generating face thumbnail: ' + req.resultPipe, error.toString()));
+        'Error during generating face thumbnail: ' + photo.name, error.toString()));
     }
 
   }

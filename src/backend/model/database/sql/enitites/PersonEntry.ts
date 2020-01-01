@@ -6,6 +6,7 @@ import {PersonDTO} from '../../../../../common/entities/PersonDTO';
 @Entity()
 @Unique(['name'])
 export class PersonEntry implements PersonDTO {
+
   @Index()
   @PrimaryGeneratedColumn({unsigned: true})
   id: number;

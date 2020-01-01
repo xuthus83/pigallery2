@@ -6,6 +6,7 @@ import {MediaEntity} from './enitites/MediaEntity';
 import {FaceRegionEntry} from './enitites/FaceRegionEntry';
 import {PersonDTO} from '../../../../common/entities/PersonDTO';
 import {Utils} from '../../../../common/Utils';
+import {SelectQueryBuilder} from 'typeorm';
 
 const LOG_TAG = '[PersonManager]';
 
@@ -35,27 +36,38 @@ export class PersonManager implements IPersonManager {
   }
 
   async getSamplePhoto(name: string): Promise<PhotoDTO> {
-    if (!this.samplePhotos[name]) {
+    return (await this.getSamplePhotos([name]))[name];
+  }
+
+
+  async getSamplePhotos(names: string[]): Promise<{ [key: string]: PhotoDTO }> {
+    const hasAll = names.reduce((prev, name) => prev && !!this.samplePhotos[name], true);
+    if (!hasAll) {
       const connection = await SQLConnection.getConnection();
-      const rawAndEntities = await connection.getRepository(MediaEntity).createQueryBuilder('media')
-        .limit(1)
-        .leftJoinAndSelect('media.directory', 'directory')
+      const rawAndEntities = await (connection
+        .getRepository(MediaEntity)
+        .createQueryBuilder('media') as SelectQueryBuilder<MediaEntity>)
+        .select(['media.name', 'media.id', 'person.name', 'directory.name',
+          'directory.path', 'media.metadata.size.width', 'media.metadata.size.height'])
+        .leftJoin('media.directory', 'directory')
         .leftJoinAndSelect('media.metadata.faces', 'faces')
         .leftJoin('faces.person', 'person')
-        .where('person.name LIKE :name COLLATE utf8_general_ci', {name: name}).getRawAndEntities();
+        .groupBy('person.name')
+        .orWhere(`person.name IN (:...names) COLLATE utf8_general_ci`, {names: names}).getRawAndEntities();
 
-      if (rawAndEntities.entities.length === 0) {
-        return null;
+
+      for (let i = 0; i < rawAndEntities.raw.length; ++i) {
+        this.samplePhotos[rawAndEntities.raw[i].person_name] =
+          Utils.clone(rawAndEntities.entities.find(m => m.name === rawAndEntities.raw[i].media_name));
+        this.samplePhotos[rawAndEntities.raw[i].person_name].metadata.faces = [FaceRegionEntry.fromRawToDTO(rawAndEntities.raw[i])];
       }
-      const media: PhotoDTO = Utils.clone(rawAndEntities.entities[0]);
-
-      media.metadata.faces = [FaceRegionEntry.fromRawToDTO(rawAndEntities.raw[0])];
-
-      this.samplePhotos[name] = media;
     }
 
-    return this.samplePhotos[name];
+    const photoMap: { [key: string]: PhotoDTO } = {};
+    names.forEach(n => photoMap[n] = this.samplePhotos[n]);
+    return photoMap;
   }
+
 
   async loadAll(): Promise<void> {
     const connection = await SQLConnection.getConnection();
