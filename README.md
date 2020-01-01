@@ -18,7 +18,7 @@ Live Demo @ heroku: https://pigallery2.herokuapp.com/
 ![PiGallery2 - Animated gif demo](docs/demo.gif)
 
 ## Table of contents
-1. [Getting started](#1-getting-started-on-raspberry-pi)
+1. [Getting started](#1-getting-started-also-works-on-raspberry-pi)
 2. [Translate the page to your own language](#2-translate-the-page-to-your-own-language)
 3. [Feature list](#3-feature-list)
 4. [Suggest/endorse new features](#4-suggestendorse-new-features)
@@ -29,14 +29,15 @@ Live Demo @ heroku: https://pigallery2.herokuapp.com/
 
 ## 1. Getting started (also works on Raspberry Pi)
 
-### 1.1 Run with Docker (recommended)
-If you have `docker` and don't want to install all the dependencies, you can use one of our docker build.
+### 1.1 Install and Run with Docker (recommended)
+
+[Docker](https://www.docker.com/) with [docker-compose](https://docs.docker.com/compose/) is the offitial and recommend way of installing and running *Pigallery2*.
+It contains all necessary dependencies, auto restarts on reboot, supports https, easy to upgrade to newer versions.
 For configuration and docker-compose files read more [here](docker/README.md) or check all builds: https://hub.docker.com/r/bpatrik/pigallery2/tags/
 
-**Note**: You dont need to do the rest of the installation steps if you are using docker. 
 
 
-### 1.2 Direct Install
+### 1.2 Direct Install (if you are familiar with nodejs and building npm packages from source)
 As an alternative, you can also directly install nodejs and the app and run it natively. 
 ### 1.2.0 [Install NodeJs](https://nodejs.org/en/download/)
 Download and extract
@@ -58,6 +59,10 @@ cd pigallery2
 npm install
 ```
 #### 1.2.1-b Install from source
+
+**Note:** A build requires a machine with around 2GB or memory.
+
+
 ```bash
 cd ~
 wget https://github.com/bpatrik/pigallery2/archive/master.zip
@@ -66,8 +71,10 @@ cd pigallery2-master # enter the unzipped directory
 npm install
 npm run build
 ```
-**Note**: if you run `npm run create-release`, it creates a clean, minified, production ready version from the app in the `release` folder, that is ready to deploy.
-**Note2**: you can use `npm run create-release -- --languages=fr,ro` to restrict building to the listed languages (english is added by default)
+
+**Note**: It is recommended to create a release version with `npm run create-release` on a more powerful mashine and deploy that to you server.
+
+**Note**: you can use `npm run create-release -- --languages=fr,ro` to restrict building to the listed languages (english is added by default)
 
 #### 1.2.2 Run PiGallery2
 ```bash
@@ -122,30 +129,31 @@ apt-get install build-essential  libkrb5-dev gcc g++
    build and start the app
    ```bash
    npm install
+   npm run build
    npm start
    ```
 5. (optional) create a pull request at github to add your translation to the project.
 
-**Note**: you can also build your own release with as described in [1.1.1-b Install from source](#111-b-install-from-source);
+**Note**: you can also build your own release with as described in [1.1.1-b Install from source](#121-b-install-from-source);
 
 
 
 ## 3. Feature list
 
- * supported formats:
+ * supported formats [full list here](https://github.com/bpatrik/pigallery2/blob/master/src/common/SupportedFormats.ts):
    * images: **jpg, jpeg, jpe, webp, png, gif, svg**
    * videos: **mp4, ogg, ogv, webm**
+     * with (built-in) transcoding: avi, mkv, mov, wmv, flv, mts, m2ts, mpg, 3gp, m4v, mpeg, vob, divx, xvid, ts
  * **Rendering directories as it is**
    * Listing subdirectories recursively
    * Listing photos in a nice grid layout
-     * supporting most common image formats
      * showing **tag/keywords, locations, GPS coordinates** for photos
      * rendering photos on demand (on scroll)
  * **On the fly thumbnail generation** in several sizes
    * prioritizes thumbnail generation (generating thumbnail first for the visible photos)
    * saving generated thumbnails to TEMP folder for reuse
    * supporting multi-core CPUs
-   * supporting hardware acceleration ([sharp](https://github.com/lovell/sharp) and [gm](https://github.com/aheckmann/gm) as optional and JS-based [Jimp](https://github.com/oliver-moran/jimp)  as fallback)   
+   * supporting hardware acceleration ([sharp](https://github.com/lovell/sharp))
  * Custom lightbox for full screen photo and video viewing
    * keyboard support for navigation  
    * showing low-res thumbnail while full image loads
@@ -153,6 +161,8 @@ apt-get install build-essential  libkrb5-dev gcc g++
    * Automatic playing
    * gesture support (swipe left, right, up)
    * shortcut support
+ * On the fly photo downscaling for faster load [#50](https://github.com/bpatrik/pigallery2/issues/50)
+   * on zoom, the original photo loads
  * Client side caching (directories and search results)
  * Rendering **photos** with GPS coordinates **on open street maps**
    * .gpx file support: rendering paths to map
@@ -171,15 +181,24 @@ apt-get install build-essential  libkrb5-dev gcc g++
     * reads Adobe's XMP Face region metadata. (It is defined by the Metadata Working Group (MWG).)
     * shows face bounding box over images
  * internalization / translation support
-   * currently supported languages: eng, hun
+   * currently supported languages: eng, hun, ro, ru, fr
  * Nice design 
     * responsive design (phone, tablet desktop support)
  * Setup page
  * Random photo url
    * You can generate an url that returns a random photo from your gallery. You can use this feature to develop 3rd party applications, like: changing desktop background
+ * duplicate photo detection  
  * video support
-   * fully supports *.mp4 files and partially (might have errors with safari and IE) supports *.ogg, *.ogv, *.webm files
+   * fully supports `*.mp4` files and partially (might have errors with safari and IE) supports `*.ogg`, `*.ogv`, `*.webm` files
    * uses ffmpeg and ffprobe to generate video thumbnails
+   * can transcode videos to mp4 for better support
+ * job sceduling support, with the following supported task: [#92](https://github.com/bpatrik/pigallery2/issues/92)
+   * converting/transcoding videos [#66](https://github.com/bpatrik/pigallery2/issues/66) [#71](https://github.com/bpatrik/pigallery2/issues/71)
+   * generating thumbnails
+   * generating converted photos
+   * cleaning up temp folder
+   * indexing db
+ * folder ignoring [#87](https://github.com/bpatrik/pigallery2/issues/87)
  * Dockerized 
  * **Markdown based blogging support** - `future plan`
    * you can write some note in the blog.md for every directory
@@ -196,7 +215,8 @@ apt-get install build-essential  libkrb5-dev gcc g++
   *  There is no nice way to handle EXIF orientation tag properly.
 The page handles these photos, but might cause same error in the user experience (e.g.: the pages loads those photos slower. See issue [#11](https://github.com/bpatrik/pigallery2/issues/11))
 * Video support on weak servers (like raspberry pi) with low upload rate
-  * video playback may use up too much resources and the server might not response for a while. A solution might be to down scale / convert the video files to lower bitrate. 
+  * video playback may use up too much resources and the server might not response for a while. Enable video transcoding in the app, to transcode the videos to lover bitrate. 
+  
 ## 6. Credits
 Crossbrowser testing sponsored by [Browser Stack](https://www.browserstack.com)
 [<img src="https://camo.githubusercontent.com/a7b268f2785656ab3ca7b1cbb1633ee5affceb8f/68747470733a2f2f64677a6f7139623561736a67312e636c6f756466726f6e742e6e65742f70726f64756374696f6e2f696d616765732f6c61796f75742f6c6f676f2d6865616465722e706e67" alt="Browser Stack" height="31px" style="background: cornflowerblue;">](https://www.browserstack.com)
