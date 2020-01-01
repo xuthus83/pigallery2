@@ -98,6 +98,7 @@ describe('SearchManager', (sqlHelper: SQLTestHelper) => {
       new AutoCompleteItem('death star', SearchTypes.keyword),
       new AutoCompleteItem('Padmé Amidala', SearchTypes.person),
       new AutoCompleteItem('Obivan Kenobi', SearchTypes.person),
+      new AutoCompleteItem('Arvíztűrő Tükörfúrógép', SearchTypes.person),
       new AutoCompleteItem('Padmé Amidala', SearchTypes.keyword),
       new AutoCompleteItem('Natalie Portman', SearchTypes.keyword),
       new AutoCompleteItem('Han Solo\'s dice', SearchTypes.photo),
