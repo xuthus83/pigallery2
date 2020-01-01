@@ -1,3 +1,5 @@
+#-----------------BUILDER-----------------
+#-----------------------------------------
 FROM node:12-stretch AS builder
 COPY pigallery2-release /app
 WORKDIR /app
@@ -8,7 +10,9 @@ RUN mkdir -p /app/data/config && \
     mkdir -p /app/data/tmp
 
 
-FROM node:12-stretch-slim
+#-----------------MAIN--------------------
+#-----------------------------------------
+FROM node:12-stretch-slim as main
 WORKDIR /app
 # command line arg orverride the config.json with these settings
 ENTRYPOINT ["node", "./src/backend/index",  \

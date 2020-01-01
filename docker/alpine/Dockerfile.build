@@ -1,5 +1,7 @@
-FROM node:12-alpine3.10 AS builder
-RUN apk add --update-cache --repository https://alpine.global.ssl.fastly.net/alpine/v3.10/community/ \
+#-----------------BUILDER-----------------
+#-----------------------------------------
+FROM node:12-alpine3.11 AS builder
+RUN apk add --update-cache --repository https://alpine.global.ssl.fastly.net/alpine/v3.11/community/ \
   python build-base sqlite-dev sqlite-libs vips-dev fftw-dev gcc g++ make libc6-compat
 COPY pigallery2-release /app
 WORKDIR /app
@@ -10,7 +12,9 @@ RUN mkdir -p /app/data/config && \
     mkdir -p /app/data/tmp
 
 
-FROM node:12-alpine3.10
+#-----------------MAIN--------------------
+#-----------------------------------------
+FROM node:12-alpine3.11 as main
 WORKDIR /app
 # command line arg orverride the config.json with these settings
 ENTRYPOINT ["node", "./src/backend/index",  \
@@ -22,7 +26,7 @@ ENTRYPOINT ["node", "./src/backend/index",  \
   "--Server-Media-tempFolder=/app/data/tmp"]
 EXPOSE 80
 ENV NODE_ENV=production
-RUN apk add --update-cache --repository https://alpine.global.ssl.fastly.net/alpine/v3.10/community/ \
+RUN apk add --update-cache --repository https://alpine.global.ssl.fastly.net/alpine/v3.11/community/ \
     vips ffmpeg
 COPY --from=builder /app /app
 VOLUME ["/app/data/config", "/app/data/db", "/app/data/images", "/app/data/tmp"]
