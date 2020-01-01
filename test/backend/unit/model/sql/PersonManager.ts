@@ -68,27 +68,45 @@ describe('PersonManager', (sqlHelper: SQLTestHelper) => {
   });
 
 
-  it('should get sample photos', async () => {
-    const pm = new PersonManager();
+  const mapPhoto = (photo: PhotoDTO) => {
     const map: { [key: string]: PhotoDTO } = {};
-    p.metadata.faces.forEach(face => {
+    photo.metadata.faces.forEach(face => {
       map[face.name] = <any>{
-        id: p.id,
-        name: p.name,
+        id: photo.id,
+        name: photo.name,
         directory: {
-          path: p.directory.path,
-          name: p.directory.name,
+          path: photo.directory.path,
+          name: photo.directory.name,
         },
         metadata: {
-          size: p.metadata.size,
-          faces: [p.metadata.faces.find(f => f.name === face.name)]
+          size: photo.metadata.size,
+          faces: [photo.metadata.faces.find(f => f.name === face.name)]
         },
         readyIcon: false,
         readyThumbnails: []
       };
 
     });
+    return map;
+  };
+
+  it('should get sample photos', async () => {
+    const pm = new PersonManager();
+    const map = mapPhoto(p);
     expect(await pm.getSamplePhotos(p.metadata.faces.map(f => f.name))).to.deep.equal(map);
+  });
+
+
+  it('should get sample photos case insensitive', async () => {
+    const pm = new PersonManager();
+    const map = mapPhoto(p);
+    for (const k of Object.keys(map)) {
+      if (k.toLowerCase() !== k) {
+        map[k.toLowerCase()] = map[k];
+        delete map[k];
+      }
+    }
+    expect(await pm.getSamplePhotos(p.metadata.faces.map(f => f.name.toLowerCase()))).to.deep.equal(map);
   });
 
 });

@@ -44,6 +44,15 @@ export class PersonManager implements IPersonManager {
     const hasAll = names.reduce((prev, name) => prev && !!this.samplePhotos[name], true);
     if (!hasAll) {
       const connection = await SQLConnection.getConnection();
+      const namesObj: any = {};
+      let queryStr = '';
+      names.forEach((n, i) => {
+        if (i > 0) {
+          queryStr += ', ';
+        }
+        queryStr += ':n' + i + ' COLLATE utf8_general_ci';
+        namesObj['n' + i] = n;
+      });
       const rawAndEntities = await (connection
         .getRepository(MediaEntity)
         .createQueryBuilder('media') as SelectQueryBuilder<MediaEntity>)
@@ -52,19 +61,19 @@ export class PersonManager implements IPersonManager {
         .leftJoin('media.directory', 'directory')
         .leftJoinAndSelect('media.metadata.faces', 'faces')
         .leftJoin('faces.person', 'person')
-        .groupBy('person.name')
-        .orWhere(`person.name IN (:...names) COLLATE utf8_general_ci`, {names: names}).getRawAndEntities();
+        .groupBy('person.name, media.name, media.id, directory.name, faces.id')
+        .orWhere(`lower(person.name) IN (:...names)`, {names: names.map(n => n.toLowerCase())}).getRawAndEntities();
 
 
       for (let i = 0; i < rawAndEntities.raw.length; ++i) {
-        this.samplePhotos[rawAndEntities.raw[i].person_name] =
+        this.samplePhotos[rawAndEntities.raw[i].person_name.toLowerCase()] =
           Utils.clone(rawAndEntities.entities.find(m => m.name === rawAndEntities.raw[i].media_name));
-        this.samplePhotos[rawAndEntities.raw[i].person_name].metadata.faces = [FaceRegionEntry.fromRawToDTO(rawAndEntities.raw[i])];
+        this.samplePhotos[rawAndEntities.raw[i].person_name.toLowerCase()].metadata.faces = [FaceRegionEntry.fromRawToDTO(rawAndEntities.raw[i])];
       }
     }
 
     const photoMap: { [key: string]: PhotoDTO } = {};
-    names.forEach(n => photoMap[n] = this.samplePhotos[n]);
+    names.forEach(n => photoMap[n] = this.samplePhotos[n.toLowerCase()]);
     return photoMap;
   }
 
