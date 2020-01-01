@@ -58,6 +58,9 @@ cd pigallery2
 npm install
 ```
 #### 1.2.1-b Install from source
+
+**Note:** A build requires a machine with around 2GB or memory.
+
 ```bash
 cd ~
 wget https://github.com/bpatrik/pigallery2/archive/master.zip
