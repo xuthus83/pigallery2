@@ -64,7 +64,7 @@ wget https://github.com/bpatrik/pigallery2/archive/master.zip
 unzip master.zip
 cd pigallery2-master # enter the unzipped directory
 npm install
-npm build
+npm run build
 ```
 **Note**: if you run `npm run create-release`, it creates a clean, minified, production ready version from the app in the `release` folder, that is ready to deploy.
 **Note2**: you can use `npm run create-release -- --languages=fr,ro` to restrict building to the listed languages (english is added by default)
