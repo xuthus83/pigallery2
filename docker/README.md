@@ -4,7 +4,7 @@ You can use [docker](https://docs.docker.com/install/) to run PiGallery2. See al
 We support multiple architectures, including `amd64`, `arm32v7`, `arm64v8`.
 
 
-## 0. Install docker
+## 0. Install docker (recommended)
 Official installation guide [here](https://docs.docker.com/install/),
 but this will most likely do the trick ([source](https://dev.to/rohansawant/installing-docker-and-docker-compose-on-the-raspberry-pi-in-5-simple-steps-3mgl)): 
 ```bash
@@ -35,6 +35,8 @@ Download [docker-compose/default/docker-compose.yml](docker-compose/default/dock
 
 Edit `docker-compose.yml` to point the volumes to the right `image` and `tmp` directories.
 Edit `nginx.conf` by replacing `yourdomain.com` to you domain address.
+
+**Note**: Do not change the `image` and the `tmp` path in the `config.json` or in the UI, only through the `volume` settings of the docker. see [here](https://github.com/bpatrik/pigallery2/issues/114#issuecomment-570006336)
 
 **Note:** We are using nginx as reverse proxy to handle https and do proper HTTP queuing, gzipping, etc. Full nginx-based docker-compose tutorial [here](https://www.domysee.com/blogposts/reverse-proxy-nginx-docker-compose).
 
