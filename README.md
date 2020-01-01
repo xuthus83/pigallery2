@@ -129,11 +129,12 @@ apt-get install build-essential  libkrb5-dev gcc g++
    build and start the app
    ```bash
    npm install
+   npm run build
    npm start
    ```
 5. (optional) create a pull request at github to add your translation to the project.
 
-**Note**: you can also build your own release with as described in [1.1.1-b Install from source](#111-b-install-from-source);
+**Note**: you can also build your own release with as described in [1.1.1-b Install from source](#121-b-install-from-source);
 
 
 
@@ -152,7 +153,7 @@ apt-get install build-essential  libkrb5-dev gcc g++
    * prioritizes thumbnail generation (generating thumbnail first for the visible photos)
    * saving generated thumbnails to TEMP folder for reuse
    * supporting multi-core CPUs
-   * supporting hardware acceleration ([sharp](https://github.com/lovell/sharp)
+   * supporting hardware acceleration ([sharp](https://github.com/lovell/sharp))
  * Custom lightbox for full screen photo and video viewing
    * keyboard support for navigation  
    * showing low-res thumbnail while full image loads
