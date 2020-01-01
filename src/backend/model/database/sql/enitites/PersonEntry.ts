@@ -1,6 +1,7 @@
 import {Column, Entity, Index, OneToMany, PrimaryGeneratedColumn, Unique} from 'typeorm';
 import {FaceRegionEntry} from './FaceRegionEntry';
 import {PersonDTO} from '../../../../../common/entities/PersonDTO';
+import {columnCharsetCS} from './EntityUtils';
 
 
 @Entity()
@@ -11,7 +12,7 @@ export class PersonEntry implements PersonDTO {
   @PrimaryGeneratedColumn({unsigned: true})
   id: number;
 
-  @Column()
+  @Column(columnCharsetCS)
   name: string;
 
   @Column('int', {unsigned: true, default: 0})

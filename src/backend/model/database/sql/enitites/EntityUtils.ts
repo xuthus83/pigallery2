@@ -5,7 +5,7 @@ import {ColumnOptions} from 'typeorm/decorator/options/ColumnOptions';
 export class ColumnCharsetCS implements ColumnOptions {
 
   public get charset(): string {
-    return Config.Server.Database.type === ServerConfig.DatabaseType.mysql ? 'utf8' : null;
+    return Config.Server.Database.type === ServerConfig.DatabaseType.mysql ? 'utf8' : 'utf8';
   }
 
   public get collation(): string {

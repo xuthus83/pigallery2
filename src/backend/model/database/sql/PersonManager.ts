@@ -53,7 +53,7 @@ export class PersonManager implements IPersonManager {
         queryStr += ':n' + i + ' COLLATE utf8_general_ci';
         namesObj['n' + i] = n;
       });
-      const rawAndEntities = await (connection
+      const query: SelectQueryBuilder<MediaEntity> = await (connection
         .getRepository(MediaEntity)
         .createQueryBuilder('media') as SelectQueryBuilder<MediaEntity>)
         .select(['media.name', 'media.id', 'person.name', 'directory.name',
@@ -61,10 +61,15 @@ export class PersonManager implements IPersonManager {
         .leftJoin('media.directory', 'directory')
         .leftJoinAndSelect('media.metadata.faces', 'faces')
         .leftJoin('faces.person', 'person')
-        .groupBy('person.name, media.name, media.id, directory.name, faces.id')
-        .orWhere(`lower(person.name) IN (:...names)`, {names: names.map(n => n.toLowerCase())}).getRawAndEntities();
+        .groupBy('person.name, media.name, media.id, directory.name, faces.id');
+      // TODO: improve it. SQLITE does not support case-insensitive special characters like ÁÉÚŐ
+      for (let i = 0; i < names.length; ++i) {
+        const opt: any = {};
+        opt['n' + i] = names[i];
+        query.orWhere(`person.name LIKE :n${i} COLLATE utf8_general_ci`, opt);
+      }
 
-
+      const rawAndEntities = await query.getRawAndEntities();
       for (let i = 0; i < rawAndEntities.raw.length; ++i) {
         this.samplePhotos[rawAndEntities.raw[i].person_name.toLowerCase()] =
           Utils.clone(rawAndEntities.entities.find(m => m.name === rawAndEntities.raw[i].media_name));

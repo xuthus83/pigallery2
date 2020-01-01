@@ -106,6 +106,7 @@ describe('PersonManager', (sqlHelper: SQLTestHelper) => {
         delete map[k];
       }
     }
+
     expect(await pm.getSamplePhotos(p.metadata.faces.map(f => f.name.toLowerCase()))).to.deep.equal(map);
   });
 

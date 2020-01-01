@@ -109,14 +109,17 @@ export class TestHelper {
       box: {height: 10, width: 10, left: 10, top: 10},
       name: 'Boba Fett'
     }, <FaceRegion>{
-      box: {height: 10, width: 10, left: 101, top: 101},
+      box: {height: 10, width: 10, left: 102, top: 102},
       name: 'Luke Skywalker'
     }, <FaceRegion>{
-      box: {height: 10, width: 10, left: 101, top: 101},
+      box: {height: 10, width: 10, left: 103, top: 103},
       name: 'Han Solo'
     }, <FaceRegion>{
-      box: {height: 10, width: 10, left: 101, top: 101},
+      box: {height: 10, width: 10, left: 104, top: 104},
       name: 'Unkle Ben'
+    }, <FaceRegion>{
+      box: {height: 10, width: 10, left: 105, top: 105},
+      name: 'Arvíztűrő Tükörfúrógép'
     }] as any[];
     return p;
   }
