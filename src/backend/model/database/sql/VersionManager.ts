@@ -5,8 +5,6 @@ import {SQLConnection} from './SQLConnection';
 import {DirectoryEntity} from './enitites/DirectoryEntity';
 import {MediaEntity} from './enitites/MediaEntity';
 
-const LOG_TAG = '[VersionManager]';
-
 export class VersionManager implements IVersionManager {
 
   private allMediaCount = 0;

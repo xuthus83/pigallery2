@@ -1,5 +1,6 @@
 # PiGallery2 
 [![npm version](https://badge.fury.io/js/pigallery2.svg)](https://badge.fury.io/js/pigallery2)
+[![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/bpatrik/pigallery2.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/bpatrik/pigallery2/context:javascript)
 [![Build Status](https://travis-ci.org/bpatrik/pigallery2.svg?branch=master)](https://travis-ci.org/bpatrik/pigallery2)
 [![Heroku](https://heroku-badge.herokuapp.com/?app=pigallery2&style=flat)](https://pigallery2.herokuapp.com)
 [![Docker build](https://github.com/bpatrik/pigallery2/workflows/docker-buildx/badge.svg)](https://github.com/bpatrik/pigallery2/actions)

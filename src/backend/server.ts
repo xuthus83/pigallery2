@@ -9,7 +9,6 @@ import {ObjectManagers} from './model/ObjectManagers';
 import {Logger} from './Logger';
 import {Config} from '../common/config/private/Config';
 import {LoggerRouter} from './routes/LoggerRouter';
-import {ThumbnailGeneratorMWs} from './middlewares/thumbnail/ThumbnailGeneratorMWs';
 import {DiskManager} from './model/DiskManger';
 import {ConfigDiagnostics} from './model/diagnostics/ConfigDiagnostics';
 import {Localizations} from './model/Localizations';
@@ -17,6 +16,7 @@ import {CookieNames} from '../common/CookieNames';
 import {Router} from './routes/Router';
 import {ServerConfig} from '../common/config/private/IPrivateConfig';
 import {PhotoProcessing} from './model/fileprocessing/PhotoProcessing';
+import * as _csrf from 'csurf';
 
 const _session = require('cookie-session');
 
@@ -56,15 +56,10 @@ export class Server {
     /**
      * Session above all
      */
-    function s4() {
-      return Math.floor((1 + Math.random()) * 0x10000)
-        .toString(16)
-        .substring(1);
-    }
 
     this.app.use(_session({
       name: CookieNames.session,
-      keys: ['key1' + s4() + s4() + s4() + s4(), 'key2' + s4() + s4() + s4() + s4(), 'key3' + s4() + s4() + s4() + s4()]
+      keys: Config.Server.sessionSecret
     }));
 
 
@@ -74,6 +69,7 @@ export class Server {
     // for parsing application/json
     this.app.use(_bodyParser.json());
     this.app.use(cookieParser());
+    this.app.use(_csrf({cookie: true}));
 
     DiskManager.init();
     PhotoProcessing.init();

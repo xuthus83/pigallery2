@@ -1,5 +1,5 @@
 import * as path from 'path';
-import * as fs from 'fs';
+import {promises as fsp} from 'fs';
 import {NextFunction, Request, Response} from 'express';
 import {ErrorCodes, ErrorDTO} from '../../common/entities/Error';
 import {DirectoryDTO} from '../../common/entities/DirectoryDTO';
@@ -18,8 +18,6 @@ import {QueryParams} from '../../common/QueryParams';
 import {VideoProcessing} from '../model/fileprocessing/VideoProcessing';
 
 
-const LOG_TAG = '[GalleryMWs]';
-
 export class GalleryMWs {
 
 
@@ -27,8 +25,11 @@ export class GalleryMWs {
     const directoryName = req.params.directory || '/';
     const absoluteDirectoryName = path.join(ProjectPath.ImageFolder, directoryName);
 
-    if (!fs.existsSync(absoluteDirectoryName) ||
-      !fs.statSync(absoluteDirectoryName).isDirectory()) {
+    try {
+      if ((await fsp.stat(absoluteDirectoryName)).isDirectory() === false) {
+        return next();
+      }
+    } catch (e) {
       return next();
     }
 
@@ -160,18 +161,19 @@ export class GalleryMWs {
     }
   }
 
-  public static loadFile(req: Request, res: Response, next: NextFunction) {
+  public static async loadFile(req: Request, res: Response, next: NextFunction) {
     if (!(req.params.mediaPath)) {
       return next();
     }
     const fullMediaPath = path.join(ProjectPath.ImageFolder, req.params.mediaPath);
 
     // check if file exist
-    if (fs.existsSync(fullMediaPath) === false) {
+    try {
+      if ((await fsp.stat(fullMediaPath)).isDirectory()) {
+        return next();
+      }
+    } catch (e) {
       return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, 'no such file:' + req.params.mediaPath, 'can\'t find file: ' + fullMediaPath));
-    }
-    if (fs.statSync(fullMediaPath).isDirectory()) {
-      return next();
     }
 
 
@@ -179,28 +181,33 @@ export class GalleryMWs {
     return next();
   }
 
-  public static loadBestFitVideo(req: Request, res: Response, next: NextFunction) {
+  public static async loadBestFitVideo(req: Request, res: Response, next: NextFunction) {
     if (!(req.resultPipe)) {
       return next();
     }
     const fullMediaPath: string = req.resultPipe;
 
-    if (fs.statSync(fullMediaPath).isDirectory()) {
-      return next();
+
+    try {
+      if ((await fsp.stat(fullMediaPath)).isDirectory()) {
+        return next();
+      }
+    } catch (e) {
+      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, 'no such file:' + req.params.mediaPath, 'can\'t find file: ' + fullMediaPath));
     }
 
-    // check if  video does not exist
-    if (fs.existsSync(fullMediaPath) === false) {
-      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, 'no such file:' + req.resultPipe, 'can\'t find file: ' + fullMediaPath));
-    }
+
     req.resultPipe = fullMediaPath;
 
     const convertedVideo = VideoProcessing.generateConvertedFilePath(fullMediaPath);
 
     // check if transcoded video exist
-    if (fs.existsSync(convertedVideo) === true) {
+    try {
+      await fsp.access(fullMediaPath);
       req.resultPipe = convertedVideo;
+    } catch (e) {
     }
+
 
     return next();
   }

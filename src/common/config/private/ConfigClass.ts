@@ -60,6 +60,17 @@ export class ConfigClass extends PrivateConfigDefaultsClass implements IPrivateC
       throw new Error('Unknown Server.log.level, found: ' + this.Server.Log.sqlLevel);
     }
 
+    if (Array.isArray(this.Server.sessionSecret) === false) {
+      const s4 = (): string => {
+        return Math.floor((1 + Math.random()) * 0x10000)
+          .toString(16)
+          .substring(1);
+      };
+      this.Server.sessionSecret = ['key1' + s4() + s4() + s4() + s4(),
+        'key2' + s4() + s4() + s4() + s4(),
+        'key3' + s4() + s4() + s4() + s4()];
+    }
+
   }
 
   public save() {

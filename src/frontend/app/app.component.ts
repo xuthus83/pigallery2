@@ -25,7 +25,7 @@ export class AppComponent implements OnInit, OnDestroy {
   async ngOnInit() {
     this._title.setTitle(Config.Client.applicationTitle);
     await this._shareService.wait();
-    this.subscription = this._authenticationService.user.subscribe((user: UserDTO) => {
+    this.subscription = this._authenticationService.user.subscribe(() => {
       if (this._authenticationService.isAuthenticated()) {
         if (this.isLoginPage()) {
           return this.toGallery();

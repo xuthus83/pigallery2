@@ -185,7 +185,7 @@ export class SQLConnection {
     return driver;
   }
 
-  public static getSQLiteDB(config: ServerConfig.DataBaseConfig){
+  public static getSQLiteDB(config: ServerConfig.DataBaseConfig) {
     return path.join(ProjectPath.getAbsolutePath(config.dbFolder), 'sqlite.db');
   }
 

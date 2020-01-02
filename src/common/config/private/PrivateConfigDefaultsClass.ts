@@ -10,6 +10,7 @@ export class PrivateConfigDefaultsClass extends PublicConfigClass implements IPr
 
   public Server: ServerConfig.Config = {
     port: 80,
+    sessionSecret: null,
     host: '0.0.0.0',
     Media: {
       folder: 'demo/images',

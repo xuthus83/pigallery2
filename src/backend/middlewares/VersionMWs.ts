@@ -4,8 +4,6 @@ import {ErrorCodes, ErrorDTO} from '../../common/entities/Error';
 import {CustomHeaders} from '../../common/CustomHeaders';
 
 
-const LOG_TAG = '[VersionMWs]';
-
 export class VersionMWs {
 
 

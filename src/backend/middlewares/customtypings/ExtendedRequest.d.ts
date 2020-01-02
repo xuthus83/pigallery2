@@ -2,8 +2,6 @@ import {LoginCredential} from '../../../common/entities/LoginCredential';
 import {UserEntity} from '../../model/database/sql/enitites/UserEntity';
 
 
-
-
 declare global {
   namespace Express {
     interface Request {
@@ -18,6 +16,7 @@ declare global {
     interface Response {
       tpl?: any;
     }
+
     interface Session {
       user?: UserEntity;
       rememberMe?: boolean;

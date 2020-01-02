@@ -12,8 +12,6 @@ import {SupportedFormats} from '../../../common/SupportedFormats';
 import {VideoProcessing} from '../fileprocessing/VideoProcessing';
 import {PhotoProcessing} from '../fileprocessing/PhotoProcessing';
 
-const LOG_TAG = '[DiskMangerWorker]';
-
 
 export class DiskMangerWorker {
 

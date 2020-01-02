@@ -1,6 +1,6 @@
 import {DiskMangerWorker} from './DiskMangerWorker';
 import {Logger} from '../../Logger';
-import {RendererInput, PhotoWorker} from './PhotoWorker';
+import {PhotoWorker, RendererInput} from './PhotoWorker';
 import {DirectoryDTO} from '../../../common/entities/DirectoryDTO';
 import {Utils} from '../../../common/Utils';
 import {ServerConfig} from '../../../common/config/private/IPrivateConfig';

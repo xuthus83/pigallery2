@@ -84,7 +84,6 @@ export class VideoRendererFactory {
           if (!width || !height) {
             return reject('[FFmpeg] Can not read video dimension');
           }
-          const ratio = height / width;
           const command: FfmpegCommand = ffmpeg(input.mediaPath);
           const fileName = path.basename(input.outPath);
           const folder = path.dirname(input.outPath);
@@ -192,16 +191,7 @@ export class ImageRendererFactory {
       const image: Sharp = sharp(input.mediaPath, {failOnError: false});
       const metadata: Metadata = await image.metadata();
 
-      /**
-       * newWidth * newHeight = size*size
-       * newHeight/newWidth = height/width
-       *
-       * newHeight = (height/width)*newWidth
-       * newWidth * newWidth = (size*size) / (height/width)
-       *
-       * @type {number}
-       */
-      const ratio = metadata.height / metadata.width;
+
       const kernel = input.qualityPriority === true ? sharp.kernel.lanczos3 : sharp.kernel.nearest;
 
       if (input.cut) {

@@ -4,7 +4,6 @@ import {ConfigTemplateEntry, DefaultsJobs} from '../../../../common/entities/job
 import {Job} from './Job';
 import {ServerConfig} from '../../../../common/config/private/IPrivateConfig';
 
-const LOG_TAG = '[DBRestJob]';
 
 export class DBRestJob extends Job {
   public readonly Name = DefaultsJobs[DefaultsJobs['Database Reset']];

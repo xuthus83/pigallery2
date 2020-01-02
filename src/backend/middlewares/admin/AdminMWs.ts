@@ -5,7 +5,6 @@ import {Config} from '../../../common/config/private/Config';
 import {ISQLGalleryManager} from '../../model/database/sql/IGalleryManager';
 import {ServerConfig} from '../../../common/config/private/IPrivateConfig';
 
-const LOG_TAG = '[AdminMWs]';
 
 export class AdminMWs {
 

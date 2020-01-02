@@ -34,7 +34,7 @@ export class GalleryComponent implements OnInit, OnDestroy {
   public directories: DirectoryDTO[] = [];
   public isPhotoWithLocation = false;
   public countDown: { day: number, hour: number, minute: number, second: number } = null;
-  public mapEnabled = true;
+  public readonly mapEnabled: boolean;
   readonly SearchTypes: typeof SearchTypes;
   private $counter: Observable<number>;
   private subscription: { [key: string]: Subscription } = {

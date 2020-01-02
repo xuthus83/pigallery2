@@ -8,7 +8,6 @@ import {PersonDTO} from '../../../../common/entities/PersonDTO';
 import {Utils} from '../../../../common/Utils';
 import {SelectQueryBuilder} from 'typeorm';
 
-const LOG_TAG = '[PersonManager]';
 
 export class PersonManager implements IPersonManager {
   samplePhotos: { [key: string]: PhotoDTO } = {};
@@ -73,7 +72,8 @@ export class PersonManager implements IPersonManager {
       for (let i = 0; i < rawAndEntities.raw.length; ++i) {
         this.samplePhotos[rawAndEntities.raw[i].person_name.toLowerCase()] =
           Utils.clone(rawAndEntities.entities.find(m => m.name === rawAndEntities.raw[i].media_name));
-        this.samplePhotos[rawAndEntities.raw[i].person_name.toLowerCase()].metadata.faces = [FaceRegionEntry.fromRawToDTO(rawAndEntities.raw[i])];
+        this.samplePhotos[rawAndEntities.raw[i].person_name.toLowerCase()].metadata.faces =
+          [FaceRegionEntry.fromRawToDTO(rawAndEntities.raw[i])];
       }
     }
 

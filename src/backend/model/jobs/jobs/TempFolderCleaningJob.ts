@@ -8,8 +8,6 @@ import {PhotoProcessing} from '../../fileprocessing/PhotoProcessing';
 import {VideoProcessing} from '../../fileprocessing/VideoProcessing';
 import * as rimraf from 'rimraf';
 
-const LOG_TAG = '[TempFolderCleaningJob]';
-
 const rimrafPR = util.promisify(rimraf);
 
 
@@ -72,7 +70,6 @@ export class TempFolderCleaningJob extends Job {
         this.Progress.Skipped++;
       }
     }
-
 
 
     return true;

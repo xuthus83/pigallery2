@@ -6,7 +6,6 @@ import {Config} from '../../common/config/private/Config';
 import {QueryParams} from '../../common/QueryParams';
 import * as path from 'path';
 
-const LOG_TAG = '[SharingMWs]';
 
 export class SharingMWs {
 

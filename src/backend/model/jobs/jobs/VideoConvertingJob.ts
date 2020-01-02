@@ -3,7 +3,6 @@ import {DefaultsJobs} from '../../../../common/entities/job/JobDTO';
 import {FileJob} from './FileJob';
 import {VideoProcessing} from '../../fileprocessing/VideoProcessing';
 
-const LOG_TAG = '[VideoConvertingJob]';
 declare const global: any;
 
 

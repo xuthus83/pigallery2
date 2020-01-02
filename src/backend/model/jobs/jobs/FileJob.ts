@@ -101,7 +101,7 @@ export abstract class FileJob<S extends { indexedOnly: boolean } = { indexedOnly
     for (let i = 0; i < scanned.directories.length; i++) {
       this.directoryQueue.push(path.join(scanned.directories[i].path, scanned.directories[i].name));
     }
-    if (this.scanFilter.noVideo !== true || this.scanFilter.noVideo !== true) {
+    if (this.scanFilter.noPhoto !== true || this.scanFilter.noVideo !== true) {
       this.fileQueue.push(...(await this.filterMediaFiles(scanned.media))
         .map(f => path.join(ProjectPath.ImageFolder, f.directory.path, f.directory.name, f.name)));
     }

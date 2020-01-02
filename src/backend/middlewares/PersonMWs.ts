@@ -5,8 +5,6 @@ import {PersonDTO} from '../../common/entities/PersonDTO';
 import {PhotoDTO} from '../../common/entities/PhotoDTO';
 
 
-const LOG_TAG = '[PersonMWs]';
-
 export class PersonMWs {
 
 

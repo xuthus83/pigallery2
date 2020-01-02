@@ -115,6 +115,7 @@ export module ServerConfig {
 
 
   export interface Config {
+    sessionSecret: string[];
     port: number;
     host: string;
     Media: MediaConfig;

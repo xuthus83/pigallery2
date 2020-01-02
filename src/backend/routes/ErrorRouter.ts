@@ -1,9 +1,7 @@
 import {RenderingMWs} from '../middlewares/RenderingMWs';
 import {ErrorCodes, ErrorDTO} from '../../common/entities/Error';
 import {Logger} from '../Logger';
-import Request = Express.Request;
-import Response = Express.Response;
-import {Express} from 'express';
+import {Express, Request, Response} from 'express';
 
 export class ErrorRouter {
   public static route(app: Express) {

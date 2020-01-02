@@ -33,7 +33,6 @@ export class JobProgressManager {
   }
 
 
-
   onJobProgressUpdate(progress: JobProgressDTO) {
     this.db.progresses[progress.HashName] = {progress: progress, timestamp: Date.now()};
     this.delayedSave();

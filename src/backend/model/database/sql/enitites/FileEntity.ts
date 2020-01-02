@@ -1,4 +1,4 @@
-import {Column, Entity, ManyToOne, PrimaryGeneratedColumn, Index} from 'typeorm';
+import {Column, Entity, Index, ManyToOne, PrimaryGeneratedColumn} from 'typeorm';
 import {DirectoryEntity} from './DirectoryEntity';
 import {FileDTO} from '../../../../../common/entities/FileDTO';
 import {columnCharsetCS} from './EntityUtils';

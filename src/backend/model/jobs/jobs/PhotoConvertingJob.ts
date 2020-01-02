@@ -1,12 +1,7 @@
 import {Config} from '../../../../common/config/private/Config';
 import {DefaultsJobs} from '../../../../common/entities/job/JobDTO';
-import {ProjectPath} from '../../../ProjectPath';
-import * as path from 'path';
 import {FileJob} from './FileJob';
 import {PhotoProcessing} from '../../fileprocessing/PhotoProcessing';
-import {FileDTO} from '../../../../common/entities/FileDTO';
-
-const LOG_TAG = '[PhotoConvertingJob]';
 
 
 export class PhotoConvertingJob extends FileJob {
