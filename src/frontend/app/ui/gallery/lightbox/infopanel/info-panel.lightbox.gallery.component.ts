@@ -16,19 +16,11 @@ export class InfoPanelLightboxComponent {
   @Input() media: MediaDTO;
   @Output() closed = new EventEmitter();
 
-  public mapEnabled = true;
+  public readonly mapEnabled: boolean;
 
   constructor(public queryService: QueryService,
               public mapService: MapService) {
     this.mapEnabled = Config.Client.Map.enabled;
-  }
-
-  isPhoto() {
-    return this.media && MediaDTO.isPhoto(this.media);
-  }
-
-  calcMpx() {
-    return (this.media.metadata.size.width * this.media.metadata.size.height / 1000000).toFixed(2);
   }
 
   get FullPath(): string {
@@ -39,33 +31,44 @@ export class InfoPanelLightboxComponent {
     return Utils.concatUrls(this.media.directory.path, this.media.directory.name);
   }
 
+  get VideoData(): VideoMetadata {
+    if (typeof (<VideoDTO>this.media).metadata.bitRate === 'undefined') {
+      return null;
+    }
+    return (<VideoDTO>this.media).metadata;
+  }
 
+  get PositionData(): PositionMetaData {
+    return (<PhotoDTO>this.media).metadata.positionData;
+  }
 
+  get CameraData(): CameraMetadata {
+    return (<PhotoDTO>this.media).metadata.cameraData;
+  }
+
+  isPhoto() {
+    return this.media && MediaDTO.isPhoto(this.media);
+  }
+
+  calcMpx() {
+    return (this.media.metadata.size.width * this.media.metadata.size.height / 1000000).toFixed(2);
+  }
 
   isThisYear() {
     return (new Date()).getFullYear() ===
       (new Date(this.media.metadata.creationDate)).getFullYear();
   }
 
-
   getTime() {
     const date = new Date(this.media.metadata.creationDate);
     return date.toTimeString().split(' ')[0];
   }
-
 
   toFraction(f: number) {
     if (f > 1) {
       return f;
     }
     return '1/' + (1 / f);
-  }
-
-  get VideoData(): VideoMetadata {
-    if (typeof (<VideoDTO>this.media).metadata.bitRate === 'undefined') {
-      return null;
-    }
-    return (<VideoDTO>this.media).metadata;
   }
 
   hasPositionData(): boolean {
@@ -78,10 +81,6 @@ export class InfoPanelLightboxComponent {
   hasGPS() {
     return (<PhotoDTO>this.media).metadata.positionData && (<PhotoDTO>this.media).metadata.positionData.GPSData &&
       (<PhotoDTO>this.media).metadata.positionData.GPSData.latitude && (<PhotoDTO>this.media).metadata.positionData.GPSData.longitude;
-  }
-
-  get PositionData(): PositionMetaData {
-    return (<PhotoDTO>this.media).metadata.positionData;
   }
 
   getPositionText(): string {
@@ -97,10 +96,6 @@ export class InfoPanelLightboxComponent {
     str += (<PhotoDTO>this.media).metadata.positionData.country || '';
 
     return str;
-  }
-
-  get CameraData(): CameraMetadata {
-    return (<PhotoDTO>this.media).metadata.cameraData;
   }
 
   close() {

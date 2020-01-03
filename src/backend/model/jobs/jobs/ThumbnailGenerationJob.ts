@@ -7,8 +7,6 @@ import {MediaDTO} from '../../../../common/entities/MediaDTO';
 import {FileDTO} from '../../../../common/entities/FileDTO';
 import {backendTexts} from '../../../../common/BackendTexts';
 
-const LOG_TAG = '[ThumbnailGenerationJob]';
-
 
 export class ThumbnailGenerationJob extends FileJob<{ sizes: number[], indexedOnly: boolean }> {
 

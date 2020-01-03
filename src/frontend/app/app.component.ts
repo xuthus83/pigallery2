@@ -1,6 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {AuthenticationService} from './model/network/authentication.service';
-import {UserDTO} from '../../common/entities/UserDTO';
 import {Router} from '@angular/router';
 import {Config} from '../../common/config/public/Config';
 import {Title} from '@angular/platform-browser';

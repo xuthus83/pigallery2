@@ -6,8 +6,6 @@ import {ConfigTemplateEntry, DefaultsJobs} from '../../../../common/entities/job
 import {ServerConfig} from '../../../../common/config/private/IPrivateConfig';
 import {JobProgressStates} from '../../../../common/entities/job/JobProgressDTO';
 
-declare var global: NodeJS.Global;
-const LOG_TAG = '[IndexingJob]';
 
 export class IndexingJob extends Job {
   public readonly Name = DefaultsJobs[DefaultsJobs.Indexing];

@@ -43,13 +43,7 @@ gulp.task('build-backend', function () {
 
 });
 
-const handleError = (cb: (err: any) => void) => {
-  return (err: any, stdout: string, stderr: string) => {
-    console.log(stdout);
-    console.log(stderr);
-    cb(err);
-  };
-};
+
 const createDynamicTranslationFile = async (language: string) => {
   // load
   const folder = './src/frontend/' + translationFolder;
@@ -290,7 +284,7 @@ const translate = async (list: any[], cb: (err?: any) => void) => {
       '--source-lang="en" ' +
       '--source-file="./locale.source.xlf" ' +
       '--destination-filename="messages" ' +
-      '--destination-folder="./src/frontend/"' +   translationFolder + ' --destination-languages=' + localsStr);
+      '--destination-folder="./src/frontend/"' + translationFolder + ' --destination-languages=' + localsStr);
     console.log(stdout);
     console.error(stderr);
     cb();
@@ -318,10 +312,10 @@ const merge = async (list: any[], cb: (err?: any) => void) => {
 };
 
 gulp.task('update-translation-only', function (cb) {
-  translate(getLanguages(), cb);
+  translate(getLanguages(), cb).catch(console.error);
 });
 gulp.task('merge-translation-only', function (cb) {
-  merge(getLanguages(), cb);
+  merge(getLanguages(), cb).catch(console.error);
 });
 
 gulp.task('update-translation', gulp.series('extract-locale', 'update-translation-only'));

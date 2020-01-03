@@ -1,5 +1,6 @@
 import {IPrivateConfig, ServerConfig} from './IPrivateConfig';
 import * as path from 'path';
+import * as crypto from 'crypto';
 import {ConfigLoader} from 'typeconfig';
 import {Utils} from '../../Utils';
 import {UserRoles} from '../../entities/UserDTO';
@@ -61,14 +62,10 @@ export class ConfigClass extends PrivateConfigDefaultsClass implements IPrivateC
     }
 
     if (Array.isArray(this.Server.sessionSecret) === false) {
-      const s4 = (): string => {
-        return Math.floor((1 + Math.random()) * 0x10000)
-          .toString(16)
-          .substring(1);
-      };
-      this.Server.sessionSecret = ['key1' + s4() + s4() + s4() + s4(),
-        'key2' + s4() + s4() + s4() + s4(),
-        'key3' + s4() + s4() + s4() + s4()];
+      // if not secret is set, generate one randomly
+      this.Server.sessionSecret = [crypto.randomBytes(256).toString('hex'),
+        crypto.randomBytes(256).toString('hex'),
+        crypto.randomBytes(256).toString('hex')];
     }
 
   }

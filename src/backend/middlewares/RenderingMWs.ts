@@ -54,7 +54,9 @@ export class RenderingMWs {
 
 
   public static renderConfig(req: Request, res: Response, next: NextFunction) {
-    const message = new Message<ConfigClass>(null, Config.original());
+    const originalConf = Config.original();
+    originalConf.Server.sessionSecret = null;
+    const message = new Message<ConfigClass>(null, originalConf);
     res.json(message);
   }
 
