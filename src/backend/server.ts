@@ -17,6 +17,7 @@ import {Router} from './routes/Router';
 import {ServerConfig} from '../common/config/private/IPrivateConfig';
 import {PhotoProcessing} from './model/fileprocessing/PhotoProcessing';
 import * as _csrf from 'csurf';
+import {Event} from '../common/event/Event';
 
 const _session = require('cookie-session');
 
@@ -26,6 +27,7 @@ const LOG_TAG = '[server]';
 
 export class Server {
 
+  public onStarted = new Event<void>();
   private app: _express.Express;
   private server: HttpServer;
 
@@ -34,6 +36,10 @@ export class Server {
       Logger.info(LOG_TAG, 'Running in DEBUG mode, set env variable NODE_ENV=production to disable ');
     }
     this.init().catch(console.error);
+  }
+
+  get App(): any {
+    return this.server;
   }
 
   async init(): Promise<void> {
@@ -69,7 +75,7 @@ export class Server {
     // for parsing application/json
     this.app.use(_bodyParser.json());
     this.app.use(cookieParser());
-    this.app.use(_csrf({cookie: true}));
+  //  this.app.use(_csrf({cookie: true}));
 
     DiskManager.init();
     PhotoProcessing.init();
@@ -96,7 +102,7 @@ export class Server {
     this.server.on('error', this.onError);
     this.server.on('listening', this.onListening);
 
-
+    this.onStarted.trigger();
   }
 
   /**

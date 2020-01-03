@@ -17,7 +17,7 @@ export class UserEntity implements UserDTO {
   @Column('smallint')
   role: UserRoles;
 
-  @Column('text', {nullable: true})
+  @Column('simple-array', {nullable: true})
   permissions: string[];
 
 }

@@ -17,9 +17,6 @@ export class UserManager implements IUserManager {
     delete filter.password;
     const user = (await connection.getRepository(UserEntity).findOne(filter));
 
-    if (user.permissions) {
-      user.permissions = <any>JSON.parse(<any>user.permissions);
-    }
 
     if (pass && !PasswordHelper.comparePassword(pass, user.password)) {
       throw new Error('No entry found');
@@ -30,19 +27,11 @@ export class UserManager implements IUserManager {
 
   public async find(filter: any) {
     const connection = await SQLConnection.getConnection();
-    return (await connection.getRepository(UserEntity).find(filter)).map(user => {
-      if (user.permissions) {
-        user.permissions = <any>JSON.parse(<any>user.permissions);
-      }
-      return user;
-    });
+    return await connection.getRepository(UserEntity).find(filter);
   }
 
   public async createUser(user: UserDTO) {
     const connection = await SQLConnection.getConnection();
-    if (user.permissions) {
-      user.permissions = <any>JSON.stringify(<any>user.permissions);
-    }
     user.password = PasswordHelper.cryptPassword(user.password);
     return connection.getRepository(UserEntity).save(user);
   }

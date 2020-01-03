@@ -140,7 +140,7 @@ export class AuthenticationMWs {
       (typeof req.body.loginCredential === 'undefined') ||
       (typeof req.body.loginCredential.username === 'undefined') ||
       (typeof req.body.loginCredential.password === 'undefined')) {
-      return next(new ErrorDTO(ErrorCodes.INPUT_ERROR));
+      return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, 'not all parameters are included, got' + JSON.stringify(req.body)));
     }
     try {
       // lets find the user
