@@ -41,7 +41,7 @@ Download [docker-compose/default/docker-compose.yml](docker-compose/default/dock
 Edit `docker-compose.yml` to point the volumes to the right `image` and `tmp` directories.
 Edit `nginx.conf` by replacing `yourdomain.com` to you domain address.
 
-**Note**: Do not change the `image` and the `tmp` path in the `config.json` or in the UI, only through the `volume` settings of the docker. see [here](https://github.com/bpatrik/pigallery2/issues/114#issuecomment-570006336)
+**Note**: Do not change the `image` and the `tmp` path in the `config.json` or in the UI, only through the `volume` settings of the docker. See [here](https://github.com/bpatrik/pigallery2/issues/114#issuecomment-570006336) and [here](https://github.com/bpatrik/pigallery2/issues/119).
 
 **Note:** We are using nginx as reverse proxy to handle https and do proper HTTP queuing, gzipping, etc. Full nginx-based docker-compose tutorial [here](https://www.domysee.com/blogposts/reverse-proxy-nginx-docker-compose).
 
@@ -64,7 +64,7 @@ docker-compose up -d
 After the containers are up and running, you go to `yourdomain.com` and log in with user: `admin` pass: `admin` and set up the page in the settings. 
 
 **Note:** `docker-compose.yml` contains `restart:always`, so the containers will be automatically started after reboot ([read more here](https://stackoverflow.com/questions/43671482/how-to-run-docker-compose-up-d-at-system-start-up)).
-
+ 
 #### I.2 upgrade to newer version
 
 ```bash
@@ -91,6 +91,8 @@ docker run \
 After the container is up and running, you go to `http://localhost` and log in with user: `admin` pass: `admin` and set up the page in the settings. 
 
 **Note**: even with `memory` db, pigallery2 creates a db file for storing user credentials (if enabled), so mounting (with `-v`) the `/app/data/db` folder is recommended.
+
+**Note2**: Do not change the `image` and the `tmp` path in the `config.json` or in the UI, only through the `volume` settings of the docker. See [here](https://github.com/bpatrik/pigallery2/issues/114#issuecomment-570006336) and [here](https://github.com/bpatrik/pigallery2/issues/119).
 
 ### II.a before v1.7.0
 There was a breaking change in Docker files after v1.7.0. Use this to run earlier versions:
