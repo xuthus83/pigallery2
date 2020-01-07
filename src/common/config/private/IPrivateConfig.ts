@@ -122,7 +122,7 @@ export module ServerConfig {
     Threading: ThreadingConfig;
     Database: DataBaseConfig;
     Sharing: SharingConfig;
-    sessionTimeout: number;
+    sessionTimeout: number; // in ms
     Indexing: IndexingConfig;
     photoMetadataSize: number; // only this many bites will be loaded when scanning photo for metadata
     Duplicates: DuplicatesConfig;

@@ -18,10 +18,17 @@ export class ErrorRouter {
 
   private static addGenericHandler(app: Express) {
     app.use((err: any, req: Request, res: Response, next: Function) => {
+
+        if (err.name === 'UnauthorizedError') {
+          // jwt authentication error
+          res.status(401);
+          return next(new ErrorDTO(ErrorCodes.NOT_AUTHENTICATED, 'Invalid token'));
+        }
+
         // Flush out the stack to the console
         Logger.error('Unexpected error:');
         console.error(err);
-        next(new ErrorDTO(ErrorCodes.SERVER_ERROR, 'Unknown server side error', err));
+        return next(new ErrorDTO(ErrorCodes.SERVER_ERROR, 'Unknown server side error', err));
       },
       RenderingMWs.renderError
     );

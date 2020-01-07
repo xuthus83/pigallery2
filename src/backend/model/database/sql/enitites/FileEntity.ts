@@ -15,6 +15,6 @@ export class FileEntity implements FileDTO {
   name: string;
 
   @Index()
-  @ManyToOne(type => DirectoryEntity, directory => directory.metaFile, {onDelete: 'CASCADE'})
+  @ManyToOne(type => DirectoryEntity, directory => directory.metaFile, {onDelete: 'CASCADE', nullable: false})
   directory: DirectoryEntity;
 }

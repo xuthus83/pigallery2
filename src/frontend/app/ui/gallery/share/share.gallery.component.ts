@@ -29,13 +29,13 @@ export class GalleryShareComponent implements OnInit, OnDestroy {
       amount: 30,
       type: ValidityTypes.Days
     },
-    password: ''
+    password: <string>null
   };
   currentDir = '';
   sharing: SharingDTO = null;
   contentSubscription: Subscription = null;
-  passwordProtection = false;
-  ValidityTypes: any;
+  readonly passwordProtection = Config.Client.Sharing.passwordProtected;
+  readonly ValidityTypes = ValidityTypes;
 
   modalRef: BsModalRef;
 
@@ -49,7 +49,6 @@ export class GalleryShareComponent implements OnInit, OnDestroy {
               private  _notification: NotificationService,
               public i18n: I18n,
               private modalService: BsModalService) {
-    this.ValidityTypes = ValidityTypes;
 
     this.text.Yes = i18n('Yes');
     this.text.No = i18n('No');
@@ -64,7 +63,6 @@ export class GalleryShareComponent implements OnInit, OnDestroy {
       }
       this.currentDir = Utils.concatUrls((<DirectoryDTO>content.directory).path, (<DirectoryDTO>content.directory).name);
     });
-    this.passwordProtection = Config.Client.Sharing.passwordProtected;
   }
 
   ngOnDestroy() {

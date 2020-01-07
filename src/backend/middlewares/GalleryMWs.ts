@@ -24,7 +24,6 @@ export class GalleryMWs {
   public static async listDirectory(req: Request, res: Response, next: NextFunction) {
     const directoryName = req.params.directory || '/';
     const absoluteDirectoryName = path.join(ProjectPath.ImageFolder, directoryName);
-
     try {
       if ((await fsp.stat(absoluteDirectoryName)).isDirectory() === false) {
         return next();

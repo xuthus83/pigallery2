@@ -3,6 +3,8 @@ import {Utils} from '../../../src/common/Utils';
 
 describe('Utils', () => {
   it('should concat urls', () => {
+    expect(Utils.concatUrls('\\')).to.be.equal('.');
+    expect(Utils.concatUrls('\\*')).to.be.equal('/*');
     expect(Utils.concatUrls('abc', 'cde')).to.be.equal('abc/cde');
     expect(Utils.concatUrls('abc/', 'cde')).to.be.equal('abc/cde');
     expect(Utils.concatUrls('abc\\', 'cde')).to.be.equal('abc/cde');

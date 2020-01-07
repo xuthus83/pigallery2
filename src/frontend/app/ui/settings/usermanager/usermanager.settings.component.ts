@@ -91,7 +91,7 @@ export class UserMangerSettingsComponent implements OnInit, ISettingsComponent {
         this.notification.success(this.i18n('Password protection disabled'), this.i18n('Success'));
       }
     } catch (err) {
-      console.log(err);
+      console.error(err);
       if (err.message) {
         this.error = (<ErrorDTO>err).message;
       }

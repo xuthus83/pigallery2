@@ -93,6 +93,12 @@ export class Utils {
     return arr;
   }
 
+  public static canonizePath(path: string) {
+    return path
+      .replace(new RegExp('\\\\', 'g'), '/')
+      .replace(new RegExp('/+', 'g'), '/');
+  }
+
   static concatUrls(...args: Array<string>) {
     let url = '';
     for (let i = 0; i < args.length; i++) {

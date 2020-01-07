@@ -9,7 +9,7 @@ export class UserRequestConstrainsMWs {
     if ((typeof req.params === 'undefined') || (typeof req.params.id === 'undefined')) {
       return next();
     }
-    if (req.session.user.id !== req.params.id) {
+    if (req.session.user.id !== parseInt(req.params.id, 10)) {
       return next(new ErrorDTO(ErrorCodes.NOT_AUTHORISED));
     }
 
@@ -22,7 +22,7 @@ export class UserRequestConstrainsMWs {
       return next();
     }
 
-    if (req.session.user.id === req.params.id) {
+    if (req.session.user.id === parseInt(req.params.id, 10)) {
       return next(new ErrorDTO(ErrorCodes.NOT_AUTHORISED));
     }
 
@@ -34,7 +34,7 @@ export class UserRequestConstrainsMWs {
       return next();
     }
 
-    if (req.session.user.id !== req.params.id) {
+    if (req.session.user.id !== parseInt(req.params.id, 10)) {
       return next();
     }
 

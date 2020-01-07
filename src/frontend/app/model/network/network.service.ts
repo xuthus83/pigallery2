@@ -11,7 +11,7 @@ import {VersionService} from '../version.service';
 @Injectable()
 export class NetworkService {
 
-  _apiBaseUrl = Utils.concatUrls(Config.Client.urlBase, '/api');
+  readonly _apiBaseUrl = Utils.concatUrls(Config.Client.urlBase, '/api');
   private globalErrorHandlers: Array<(error: ErrorDTO) => boolean> = [];
 
   constructor(private _http: HttpClient,
@@ -67,8 +67,8 @@ export class NetworkService {
     return this.callJson('put', url, data);
   }
 
-  public getJson<T>(url: string, data?: { [key: string]: any }): Promise<T> {
-    return this.callJson('get', NetworkService.buildUrl(url, data));
+  public getJson<T>(url: string, query?: { [key: string]: any }): Promise<T> {
+    return this.callJson('get', NetworkService.buildUrl(url, query));
   }
 
   public deleteJson<T>(url: string): Promise<T> {

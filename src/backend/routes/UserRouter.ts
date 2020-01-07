@@ -36,7 +36,7 @@ export class UserRouter {
 
 
   private static addGetSessionUser(app: Express) {
-    app.get('/api/user/login',
+    app.get('/api/user/me',
       AuthenticationMWs.authenticate,
       RenderingMWs.renderSessionUser
     );

@@ -1,4 +1,5 @@
 import * as _express from 'express';
+import {Request} from 'express';
 import * as _bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
 import * as _http from 'http';
@@ -17,7 +18,9 @@ import {Router} from './routes/Router';
 import {ServerConfig} from '../common/config/private/IPrivateConfig';
 import {PhotoProcessing} from './model/fileprocessing/PhotoProcessing';
 import * as _csrf from 'csurf';
+import * as unless from 'express-unless';
 import {Event} from '../common/event/Event';
+import {QueryParams} from '../common/QueryParams';
 
 const _session = require('cookie-session');
 
@@ -75,7 +78,18 @@ export class Server {
     // for parsing application/json
     this.app.use(_bodyParser.json());
     this.app.use(cookieParser());
-  //  this.app.use(_csrf({cookie: true}));
+    const csuf: any = _csrf();
+    csuf.unless = unless;
+    this.app.use(csuf.unless((req: Request) => {
+      return Config.Client.authenticationRequired === false ||
+        ['/api/user/login', '/api/user/logout', '/api/share/login'].indexOf(req.originalUrl) !== -1 ||
+        (Config.Client.Sharing.enabled === true && !!req.query[QueryParams.gallery.sharingKey_query]);
+    }));
+
+    // enable token generation but do not check it
+    this.app.post(['/api/user/login', '/api/share/login'], _csrf({ignoreMethods: ['POST']}));
+    this.app.get(['/api/user/me', '/api/share/:' + QueryParams.gallery.sharingKey_params], _csrf({ignoreMethods: ['GET']}));
+
 
     DiskManager.init();
     PhotoProcessing.init();

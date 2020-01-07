@@ -71,7 +71,7 @@ export abstract class MediaEntity implements MediaDTO {
   name: string;
 
   @Index()
-  @ManyToOne(type => DirectoryEntity, directory => directory.media, {onDelete: 'CASCADE'})
+  @ManyToOne(type => DirectoryEntity, directory => directory.media, {onDelete: 'CASCADE', nullable: false})
   directory: DirectoryEntity;
 
   @Column(type => MediaMetadataEntity)

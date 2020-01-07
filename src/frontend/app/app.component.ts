@@ -6,10 +6,12 @@ import {Title} from '@angular/platform-browser';
 import {ShareService} from './ui/gallery/share.service';
 import 'hammerjs';
 import {Subscription} from 'rxjs';
+import {QueryParams} from '../../common/QueryParams';
 
 @Component({
   selector: 'app-pi-gallery2',
-  template: `<router-outlet></router-outlet>`
+  template: `
+    <router-outlet></router-outlet>`
 })
 export class AppComponent implements OnInit, OnDestroy {
 
@@ -51,7 +53,9 @@ export class AppComponent implements OnInit, OnDestroy {
 
   private toLogin() {
     if (this._shareService.isSharing()) {
-      return this._router.navigate(['shareLogin'], {queryParams: {sk: this._shareService.getSharingKey()}});
+      const q: any = {};
+      q[QueryParams.gallery.sharingKey_query] = this._shareService.getSharingKey();
+      return this._router.navigate(['shareLogin'], {queryParams: q});
     } else {
       return this._router.navigate(['login']);
     }

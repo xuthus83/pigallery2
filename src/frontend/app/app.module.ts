@@ -53,7 +53,7 @@ import {SettingsService} from './ui/settings/settings.service';
 import {ShareSettingsComponent} from './ui/settings/share/share.settings.component';
 import {BasicSettingsComponent} from './ui/settings/basic/basic.settings.component';
 import {OtherSettingsComponent} from './ui/settings/other/other.settings.component';
-import {HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {DefaultUrlSerializer, UrlSerializer, UrlTree} from '@angular/router';
 import {IndexingSettingsComponent} from './ui/settings/indexing/indexing.settings.component';
 import {LanguageComponent} from './ui/language/language.component';
@@ -90,6 +90,8 @@ import {JobsSettingsComponent} from './ui/settings/jobs/jobs.settings.component'
 import {ScheduledJobsService} from './ui/settings/scheduled-jobs.service';
 import {BackendtextService} from './model/backendtext.service';
 import {JobButtonComponent} from './ui/settings/jobs/button/job-button.settings.component';
+import {ErrorInterceptor} from './model/network/helper/error.interceptor';
+import {CSRFInterceptor} from './model/network/helper/csrf.interceptor';
 
 
 @Injectable()
@@ -212,6 +214,8 @@ export function translationsFactory(locale: string) {
     FileSizePipe
   ],
   providers: [
+    {provide: HTTP_INTERCEPTORS, useClass: CSRFInterceptor, multi: true},
+    {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
     {provide: UrlSerializer, useClass: CustomUrlSerializer},
     {provide: HAMMER_GESTURE_CONFIG, useClass: MyHammerConfig},
     NetworkService,

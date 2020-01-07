@@ -14,7 +14,7 @@ export class SharingMWs {
     if (Config.Client.Sharing.enabled === false) {
       return next();
     }
-    const sharingKey = req.params[QueryParams.gallery.sharingKey_long];
+    const sharingKey = req.params[QueryParams.gallery.sharingKey_params];
 
     try {
       req.resultPipe = await ObjectManagers.getInstance().SharingManager.findOne({sharingKey: sharingKey});
@@ -37,7 +37,6 @@ export class SharingMWs {
     let sharingKey = SharingMWs.generateKey();
 
     // create one not yet used
-
     while (true) {
       try {
         await ObjectManagers.getInstance().SharingManager.findOne({sharingKey: sharingKey});

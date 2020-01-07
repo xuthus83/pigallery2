@@ -36,6 +36,6 @@ export class SharingEntity implements SharingDTO {
   @Column()
   includeSubfolders: boolean;
 
-  @ManyToOne(type => UserEntity)
+  @ManyToOne(type => UserEntity, {onDelete: 'CASCADE', nullable: false})
   creator: UserDTO;
 }

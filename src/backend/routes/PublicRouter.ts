@@ -2,12 +2,12 @@ import {Express, NextFunction, Request, Response} from 'express';
 import * as path from 'path';
 import * as fs from 'fs';
 import * as ejs from 'ejs';
-import {Utils} from '../../common/Utils';
 import {Config} from '../../common/config/private/Config';
 import {ProjectPath} from '../ProjectPath';
 import {AuthenticationMWs} from '../middlewares/user/AuthenticationMWs';
 import {CookieNames} from '../../common/CookieNames';
 import {ErrorCodes, ErrorDTO} from '../../common/entities/Error';
+import {UserDTO} from '../../common/entities/UserDTO';
 
 declare global {
   namespace Express {
@@ -69,9 +69,18 @@ export class PublicRouter {
 
         res.tpl.user = null;
         if (req.session.user) {
-          const user = Utils.clone(req.session.user);
-          delete user.password;
-          res.tpl.user = user;
+          res.tpl.user = <UserDTO>{
+            id: req.session.user.id,
+            name: req.session.user.name,
+            csrfToken: req.session.user.csrfToken,
+            role: req.session.user.role,
+            usedSharingKey: req.session.user.usedSharingKey,
+            permissions: req.session.user.permissions
+          };
+
+          if (!res.tpl.user.csrfToken && req.csrfToken) {
+            res.tpl.user.csrfToken = req.csrfToken();
+          }
         }
         res.tpl.clientConfig = Config.Client;
 

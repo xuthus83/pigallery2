@@ -17,7 +17,6 @@ export class UserManager implements IUserManager {
     delete filter.password;
     const user = (await connection.getRepository(UserEntity).findOne(filter));
 
-
     if (pass && !PasswordHelper.comparePassword(pass, user.password)) {
       throw new Error('No entry found');
     }

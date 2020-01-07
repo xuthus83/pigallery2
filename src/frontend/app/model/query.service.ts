@@ -30,7 +30,7 @@ export class QueryService {
     }
     if (Config.Client.Sharing.enabled === true) {
       if (this.shareService.isSharing()) {
-        query[QueryParams.gallery.sharingKey_short] = this.shareService.getSharingKey();
+        query[QueryParams.gallery.sharingKey_query] = this.shareService.getSharingKey();
       }
     }
     return query;
@@ -40,7 +40,7 @@ export class QueryService {
     const params: { [key: string]: any } = {};
     if (Config.Client.Sharing.enabled === true) {
       if (this.shareService.isSharing()) {
-        params[QueryParams.gallery.sharingKey_short] = this.shareService.getSharingKey();
+        params[QueryParams.gallery.sharingKey_query] = this.shareService.getSharingKey();
       }
     }
     if (directory && directory.lastModified && directory.lastScanned &&

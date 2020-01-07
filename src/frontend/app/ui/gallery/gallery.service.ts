@@ -5,7 +5,6 @@ import {DirectoryDTO} from '../../../../common/entities/DirectoryDTO';
 import {SearchTypes} from '../../../../common/entities/AutoCompleteItem';
 import {GalleryCacheService} from './cache.gallery.service';
 import {BehaviorSubject} from 'rxjs';
-import {SharingDTO} from '../../../../common/entities/SharingDTO';
 import {Config} from '../../../../common/config/public/Config';
 import {ShareService} from './share.service';
 import {NavigationService} from '../../model/navigation.service';
@@ -79,7 +78,7 @@ export class GalleryService {
     const params: { [key: string]: any } = {};
     if (Config.Client.Sharing.enabled === true) {
       if (this._shareService.isSharing()) {
-        params[QueryParams.gallery.sharingKey_short] = this._shareService.getSharingKey();
+        params[QueryParams.gallery.sharingKey_query] = this._shareService.getSharingKey();
       }
     }
 
@@ -199,9 +198,6 @@ export class GalleryService {
 
   }
 
-  public async getSharing(sharingKey: string): Promise<SharingDTO> {
-    return this.networkService.getJson<SharingDTO>('/share/' + sharingKey);
-  }
 
 
   isSearchResult(): boolean {

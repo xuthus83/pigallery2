@@ -61,7 +61,7 @@ export class JobButtonComponent {
       this.notification.info(this.i18n('Stopping job') + ': ' + this.backendTextService.getJobName(this.jobName));
       return true;
     } catch (err) {
-      console.log(err);
+      console.error(err);
       if (err.message) {
         this.error.emit((<ErrorDTO>err).message);
       }

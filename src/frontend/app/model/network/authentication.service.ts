@@ -14,16 +14,16 @@ declare module ServerInject {
   export let user: UserDTO;
 }
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class AuthenticationService {
 
-  public user: BehaviorSubject<UserDTO>;
+  public readonly user: BehaviorSubject<UserDTO>;
 
   constructor(private _userService: UserService,
               private _networkService: NetworkService,
               private shareService: ShareService) {
-    this.user = new BehaviorSubject(null);
-    this.shareService.setUserObs(this.user);
+    this.user = new BehaviorSubject(JSON.parse(localStorage.getItem('currentUser')));
+
     // picking up session..
     if (this.isAuthenticated() === false && Cookie.get(CookieNames.session) != null) {
       if (typeof ServerInject !== 'undefined' && typeof ServerInject.user !== 'undefined') {
@@ -48,6 +48,17 @@ export class AuthenticationService {
       return false;
     });
 
+    // TODO: refactor architecture remove shareService dependency
+    window.setTimeout(() => {
+      this.user.subscribe((u) => {
+        this.shareService.onNewUser(u);
+        if (u !== null) {
+          localStorage.setItem('currentUser', JSON.stringify(u));
+        } else {
+          localStorage.removeItem('currentUser');
+        }
+      });
+    }, 0);
   }
 
   public async login(credential: LoginCredential): Promise<UserDTO> {
@@ -82,9 +93,8 @@ export class AuthenticationService {
     try {
       this.user.next(await this._userService.getSessionUser());
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
-
   }
 
 

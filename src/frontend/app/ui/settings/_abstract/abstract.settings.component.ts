@@ -155,7 +155,7 @@ export abstract class SettingsComponent<T extends { [key: string]: any }, S exte
       this.inProgress = false;
       return true;
     } catch (err) {
-      console.log(err);
+      console.error(err);
       if (err.message) {
         this.error = (<ErrorDTO>err).message;
       }

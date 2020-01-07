@@ -23,7 +23,7 @@ export class SharingRouter {
   }
 
   private static addGetSharing(app: express.Express) {
-    app.get('/api/share/:' + QueryParams.gallery.sharingKey_long,
+    app.get('/api/share/:' + QueryParams.gallery.sharingKey_params,
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.LimitedGuest),
       SharingMWs.getSharing,

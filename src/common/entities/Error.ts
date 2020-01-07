@@ -27,7 +27,7 @@ export class ErrorDTO {
   public detailsStr: string;
 
   constructor(public code: ErrorCodes, public message?: string, public details?: any) {
-    this.detailsStr = (this.details ? this.details.toString() : '');
+    this.detailsStr = (this.details ? this.details.toString() : '') || ErrorCodes[code];
   }
 
   toString(): string {

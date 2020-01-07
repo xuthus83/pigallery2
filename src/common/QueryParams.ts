@@ -13,11 +13,11 @@ export const QueryParams = {
       type: 'type'
     },
     photo: 'p',
-    sharingKey_short: 'sk',
-    sharingKey_long: 'sharingKey',
+    sharingKey_query: 'sk',
+    sharingKey_params: 'sharingKey',
     searchText: 'searchText',
     directory: 'directory',
-    knownLastModified: 'knownLastModified',
-    knownLastScanned: 'knownLastScanned'
+    knownLastModified: 'klm',
+    knownLastScanned: 'kls'
   }
 };

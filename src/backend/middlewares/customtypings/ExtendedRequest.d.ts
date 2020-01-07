@@ -1,5 +1,5 @@
 import {LoginCredential} from '../../../common/entities/LoginCredential';
-import {UserEntity} from '../../model/database/sql/enitites/UserEntity';
+import {UserDTO} from '../../../common/entities/UserDTO';
 
 
 declare global {
@@ -18,7 +18,7 @@ declare global {
     }
 
     interface Session {
-      user?: UserEntity;
+      user?: UserDTO;
       rememberMe?: boolean;
     }
   }

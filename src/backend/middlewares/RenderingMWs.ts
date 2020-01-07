@@ -1,11 +1,9 @@
 import {NextFunction, Request, Response} from 'express';
 import {ErrorCodes, ErrorDTO} from '../../common/entities/Error';
-import {Utils} from '../../common/Utils';
 import {Message} from '../../common/entities/Message';
-import {SharingDTO} from '../../common/entities/SharingDTO';
 import {Config} from '../../common/config/private/Config';
 import {ConfigClass} from '../../common/config/private/ConfigClass';
-import {UserRoles} from '../../common/entities/UserDTO';
+import {UserDTO, UserRoles} from '../../common/entities/UserDTO';
 import {NotificationManager} from '../model/NotifocationManager';
 import {Logger} from '../Logger';
 
@@ -25,8 +23,19 @@ export class RenderingMWs {
       return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, 'User not exists'));
     }
 
-    const user = Utils.clone(req.session.user);
-    delete user.password;
+    const user = <UserDTO>{
+      id: req.session.user.id,
+      name: req.session.user.name,
+      csrfToken: req.session.user.csrfToken || req.csrfToken(),
+      role: req.session.user.role,
+      usedSharingKey: req.session.user.usedSharingKey,
+      permissions: req.session.user.permissions
+    };
+
+    if (!user.csrfToken && req.csrfToken) {
+      user.csrfToken = req.csrfToken();
+    }
+
     RenderingMWs.renderMessage(res, user);
   }
 
@@ -35,8 +44,7 @@ export class RenderingMWs {
       return next();
     }
 
-    const sharing = Utils.clone<SharingDTO>(req.resultPipe);
-    delete sharing.password;
+    const {password, creator, ...sharing} = req.resultPipe;
     RenderingMWs.renderMessage(res, sharing);
   }
 

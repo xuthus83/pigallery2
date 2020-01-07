@@ -263,7 +263,9 @@ export class GalleryCacheService {
 
   private reset() {
     try {
+      const currentUserStr = localStorage.getItem('currentUser');
       localStorage.clear();
+      localStorage.setItem('currentUser', currentUserStr);
       localStorage.setItem(GalleryCacheService.VERSION, this.versionService.version.value);
     } catch (e) {
 

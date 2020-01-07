@@ -15,29 +15,35 @@ export interface UserDTO {
   name: string;
   password: string;
   role: UserRoles;
+  csrfToken?: string;
   usedSharingKey?: string;
   permissions: string[]; // user can only see these permissions. if ends with *, its recursive
 }
 
 export module UserDTO {
 
-  export const isDirectoryPathAvailable = (path: string, permissions: string[], separator = '/'): boolean => {
-    if (permissions == null || permissions.length === 0 || permissions[0] === separator + '*') {
+  export const isDirectoryPathAvailable = (path: string, permissions: string[]): boolean => {
+    if (permissions == null) {
+      return true;
+    }
+    permissions = permissions.map(p => Utils.canonizePath(p));
+    path = Utils.canonizePath(path);
+    if (permissions.length === 0 || permissions[0] === '/*') {
       return true;
     }
     for (let i = 0; i < permissions.length; i++) {
       let permission = permissions[i];
-      if (permissions[i] === separator + '*') {
+      if (permissions[i] === '/*') {
         return true;
       }
       if (permission[permission.length - 1] === '*') {
         permission = permission.slice(0, -1);
-        if (path.startsWith(permission) && (!path[permission.length] || path[permission.length] === separator)) {
+        if (path.startsWith(permission) && (!path[permission.length] || path[permission.length] === '/')) {
           return true;
         }
       } else if (path === permission) {
         return true;
-      } else if (path === '.' && permission === separator) {
+      } else if (path === '.' && permission === '/') {
         return true;
       }
 
@@ -46,6 +52,7 @@ export module UserDTO {
   };
 
   export const isDirectoryAvailable = (directory: DirectoryDTO, permissions: string[]): boolean => {
-    return isDirectoryPathAvailable(Utils.concatUrls(directory.path, directory.name), permissions);
+    return isDirectoryPathAvailable(
+      Utils.concatUrls(directory.path, directory.name), permissions);
   };
 }

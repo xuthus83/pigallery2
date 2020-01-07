@@ -2,25 +2,27 @@ import {Injectable} from '@angular/core';
 import {NetworkService} from '../../model/network/network.service';
 import {CreateSharingDTO, SharingDTO} from '../../../../common/entities/SharingDTO';
 import {Router, RoutesRecognized} from '@angular/router';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {BehaviorSubject} from 'rxjs';
+import {distinctUntilChanged, filter} from 'rxjs/operators';
 import {QueryParams} from '../../../../common/QueryParams';
 import {UserDTO} from '../../../../common/entities/UserDTO';
 
 @Injectable()
 export class ShareService {
 
-  public sharing: BehaviorSubject<SharingDTO>;
   param: string = null;
   queryParam: string = null;
   sharingKey: string = null;
   inited = false;
   public ReadyPR: Promise<void>;
-  private resolve: () => void;
+  public sharingSubject: BehaviorSubject<SharingDTO> = new BehaviorSubject(null);
+  public currentSharing = this.sharingSubject
+    .asObservable().pipe(filter(s => s !== null)).pipe(distinctUntilChanged());
 
+  private resolve: () => void;
 
   constructor(private networkService: NetworkService,
               private router: Router) {
-    this.sharing = new BehaviorSubject(null);
     this.ReadyPR = new Promise((resolve: () => void) => {
       if (this.inited === true) {
         return resolve();
@@ -28,15 +30,15 @@ export class ShareService {
       this.resolve = resolve;
     });
 
-    this.router.events.subscribe(val => {
+    this.router.events.subscribe(async val => {
       if (val instanceof RoutesRecognized) {
-        this.param = val.state.root.firstChild.params[QueryParams.gallery.sharingKey_long] || null;
-        this.queryParam = val.state.root.firstChild.queryParams[QueryParams.gallery.sharingKey_short] || null;
+        this.param = val.state.root.firstChild.params[QueryParams.gallery.sharingKey_params] || null;
+        this.queryParam = val.state.root.firstChild.queryParams[QueryParams.gallery.sharingKey_query] || null;
 
         const changed = this.sharingKey !== (this.param || this.queryParam);
         if (changed) {
           this.sharingKey = this.param || this.queryParam || this.sharingKey;
-          this.getSharing();
+          await this.getSharing();
         }
         if (this.resolve) {
           this.resolve();
@@ -50,22 +52,21 @@ export class ShareService {
 
   }
 
-  public setUserObs(userOB: Observable<UserDTO>) {
 
-    userOB.subscribe((user) => {
-      if (user && !!user.usedSharingKey) {
-        if (user.usedSharingKey !== this.sharingKey) {
-          this.sharingKey = user.usedSharingKey;
-          this.getSharing();
-        }
-        if (this.resolve) {
-          this.resolve();
-          this.resolve = null;
-          this.inited = true;
-        }
+  onNewUser = async (user: UserDTO) => {
+    if (user && !!user.usedSharingKey) {
+      if (user.usedSharingKey !== this.sharingKey ||
+        this.sharingSubject.value == null) {
+        this.sharingKey = user.usedSharingKey;
+        await this.getSharing();
       }
-    });
-  }
+      if (this.resolve) {
+        this.resolve();
+        this.resolve = null;
+        this.inited = true;
+      }
+    }
+  };
 
 
   public wait(): Promise<void> {
@@ -104,9 +105,13 @@ export class ShareService {
 
   }
 
-  public async getSharing(): Promise<SharingDTO> {
-    const sharing = await this.networkService.getJson<SharingDTO>('/share/' + this.getSharingKey());
-    this.sharing.next(sharing);
-    return sharing;
+  private async getSharing(): Promise<void> {
+    try {
+      this.sharingSubject.next(null);
+      const sharing = await this.networkService.getJson<SharingDTO>('/share/' + this.getSharingKey());
+      this.sharingSubject.next(sharing);
+    } catch (e) {
+      console.error(e);
+    }
   }
 }

@@ -17,6 +17,7 @@ import {SortingMethods} from '../../../../common/entities/SortingMethods';
 import {PhotoDTO} from '../../../../common/entities/PhotoDTO';
 import {QueryParams} from '../../../../common/QueryParams';
 import {SeededRandomService} from '../../model/seededRandom.service';
+import {take} from 'rxjs/operators';
 
 @Component({
   selector: 'app-gallery',
@@ -57,10 +58,10 @@ export class GalleryComponent implements OnInit, OnDestroy {
   }
 
   updateTimer(t: number) {
-    if (this.shareService.sharing.value == null) {
+    if (this.shareService.sharingSubject.value == null) {
       return;
     }
-    t = Math.floor((this.shareService.sharing.value.expires - Date.now()) / 1000);
+    t = Math.floor((this.shareService.sharingSubject.value.expires - Date.now()) / 1000);
     this.countDown = <any>{};
     this.countDown.day = Math.floor(t / 86400);
     t -= this.countDown.day * 86400;
@@ -125,10 +126,10 @@ export class GalleryComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (params[QueryParams.gallery.sharingKey_long] && params[QueryParams.gallery.sharingKey_long] !== '') {
-      const sharing = await this.shareService.getSharing();
+    if (params[QueryParams.gallery.sharingKey_params] && params[QueryParams.gallery.sharingKey_params] !== '') {
+      const sharing = await this.shareService.currentSharing.pipe(take(1)).toPromise();
       const qParams: { [key: string]: any } = {};
-      qParams[QueryParams.gallery.sharingKey_short] = this.shareService.getSharingKey();
+      qParams[QueryParams.gallery.sharingKey_query] = this.shareService.getSharingKey();
       this._router.navigate(['/gallery', sharing.path], {queryParams: qParams}).catch(console.error);
       return;
     }
