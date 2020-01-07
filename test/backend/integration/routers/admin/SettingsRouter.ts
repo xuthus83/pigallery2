@@ -31,6 +31,7 @@ describe('SettingsRouter', () => {
 
   describe('/GET settings', () => {
     it('it should GET all the books', async () => {
+      Config.Client.authenticationRequired = false;
       const originalSettings = Config.original();
       originalSettings.Server.sessionSecret = null;
       const srv = new Server();

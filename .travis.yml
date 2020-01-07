@@ -6,6 +6,7 @@ node_js:
   - '13'
 env:
   - MYSQL_HOST='localhost' MYSQL_PASSWORD='' MYSQL_USERNAME='root' MYSQL_DATABASE='pigallery2_test'
+  - Server-port=35000
 services:
   - mysql
 addons:
