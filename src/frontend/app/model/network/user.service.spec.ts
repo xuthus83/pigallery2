@@ -47,7 +47,7 @@ describe('UserService', () => {
       spyOn(networkService, 'getJson');
       await userService.getSessionUser();
       expect(networkService.getJson).toHaveBeenCalled();
-      expect((<any>networkService.getJson).calls.argsFor(0)).toEqual(['/user/login']);
+      expect((<any>networkService.getJson).calls.argsFor(0)).toEqual(['/user/me']);
     }));
 
 

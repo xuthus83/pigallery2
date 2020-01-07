@@ -24,12 +24,13 @@ class MockNetworkService {
 }
 
 class MockShareService {
-  setUserObs(user: any) {
+  onNewUser(user: any) {
   }
 }
 
 describe('AuthenticationService', () => {
   beforeEach(() => {
+    localStorage.clear();
     TestBed.configureTestingModule({
       providers: [
         VersionService,
