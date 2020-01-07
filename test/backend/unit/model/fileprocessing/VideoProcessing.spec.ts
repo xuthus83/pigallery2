@@ -10,7 +10,7 @@ describe('VideoProcessing', () => {
   // tslint:disable:no-unused-expression
   it('should generate converted file path', async () => {
 
-    ProjectPath.ImageFolder = path.join(__dirname, './../../assets');
+    ProjectPath.ImageFolder = path.join(__dirname, './../../../assets');
     const videoPath = path.join(ProjectPath.ImageFolder, 'video.mp4');
     expect(await VideoProcessing
       .isValidConvertedPath(VideoProcessing.generateConvertedFilePath(videoPath)))

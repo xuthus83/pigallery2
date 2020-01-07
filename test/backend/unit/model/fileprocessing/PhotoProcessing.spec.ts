@@ -12,7 +12,7 @@ describe('PhotoProcessing', () => {
 
     Config.load();
     Config.Client.Media.Thumbnail.thumbnailSizes = [];
-    ProjectPath.ImageFolder = path.join(__dirname, './../../assets');
+    ProjectPath.ImageFolder = path.join(__dirname, './../../../assets');
     const photoPath = path.join(ProjectPath.ImageFolder, 'test_png.png');
 
     expect(await PhotoProcessing
@@ -39,7 +39,7 @@ describe('PhotoProcessing', () => {
     Config.load();
     Config.Server.Media.Photo.Converting.resolution = <any>null;
     Config.Client.Media.Thumbnail.thumbnailSizes = [10, 20];
-    ProjectPath.ImageFolder = path.join(__dirname, './../../assets');
+    ProjectPath.ImageFolder = path.join(__dirname, './../../../assets');
     const photoPath = path.join(ProjectPath.ImageFolder, 'test_png.png');
 
     for (let i = 0; i < Config.Client.Media.Thumbnail.thumbnailSizes.length; ++i) {

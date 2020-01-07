@@ -6,7 +6,7 @@ import * as path from 'path';
 describe('MetadataLoader', () => {
 
   it('should load png', async () => {
-    const data = await MetadataLoader.loadPhotoMetadata(path.join(__dirname, '/../../assets/test_png.png'));
+    const data = await MetadataLoader.loadPhotoMetadata(path.join(__dirname, '/../../../assets/test_png.png'));
     delete data.creationDate; // creation time for png not supported
     expect(Utils.clone(data)).to.be.deep.equal(Utils.clone({
       fileSize: 2155,
@@ -19,22 +19,22 @@ describe('MetadataLoader', () => {
   });
 
   it('should load jpg', async () => {
-    const data = await MetadataLoader.loadPhotoMetadata(path.join(__dirname, '/../../assets/test image öüóőúéáű-.,.jpg'));
-    const expected = require(path.join(__dirname, '/../../assets/test image öüóőúéáű-.,.json'));
+    const data = await MetadataLoader.loadPhotoMetadata(path.join(__dirname, '/../../../assets/test image öüóőúéáű-.,.jpg'));
+    const expected = require(path.join(__dirname, '/../../../assets/test image öüóőúéáű-.,.json'));
     expect(Utils.clone(data)).to.be.deep.equal(expected);
   });
 
 
   it('should load jpg 2', async () => {
-    const data = await MetadataLoader.loadPhotoMetadata(path.join(__dirname, '/../../assets/old_photo.jpg'));
-    const expected = require(path.join(__dirname, '/../../assets/old_photo.json'));
+    const data = await MetadataLoader.loadPhotoMetadata(path.join(__dirname, '/../../../assets/old_photo.jpg'));
+    const expected = require(path.join(__dirname, '/../../../assets/old_photo.json'));
     expect(Utils.clone(data)).to.be.deep.equal(expected);
   });
 
 
   it('should load mp4', async () => {
-    const data = await MetadataLoader.loadVideoMetadata(path.join(__dirname, '/../../assets/video.mp4'));
-    const expected = require(path.join(__dirname, '/../../assets/video.json'));
+    const data = await MetadataLoader.loadVideoMetadata(path.join(__dirname, '/../../../assets/video.mp4'));
+    const expected = require(path.join(__dirname, '/../../../assets/video.json'));
     expect(Utils.clone(data)).to.be.deep.equal(expected);
   });
 

@@ -8,11 +8,11 @@ import {Utils} from '../../../../../src/common/Utils';
 describe('DiskMangerWorker', () => {
 
   it('should parse metadata', async () => {
-    Config.Server.Media.folder = path.join(__dirname, '/../../assets');
-    ProjectPath.ImageFolder = path.join(__dirname, '/../../assets');
+    Config.Server.Media.folder = path.join(__dirname, '/../../../assets');
+    ProjectPath.ImageFolder = path.join(__dirname, '/../../../assets');
     const dir = await DiskMangerWorker.scanDirectory('/');
     expect(dir.media.length).to.be.equals(4);
-    const expected = require(path.join(__dirname, '/../../assets/test image öüóőúéáű-.,.json'));
+    const expected = require(path.join(__dirname, '/../../../assets/test image öüóőúéáű-.,.json'));
     expect(Utils.clone(dir.media[1].name)).to.be.deep.equal('test image öüóőúéáű-.,.jpg');
     expect(Utils.clone(dir.media[1].metadata)).to.be.deep.equal(expected);
   });
