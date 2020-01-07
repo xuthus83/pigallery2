@@ -186,23 +186,11 @@ export class GalleryMWs {
     }
     const fullMediaPath: string = req.resultPipe;
 
-
-    try {
-      if ((await fsp.stat(fullMediaPath)).isDirectory()) {
-        return next();
-      }
-    } catch (e) {
-      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, 'no such file:' + req.params.mediaPath, 'can\'t find file: ' + fullMediaPath));
-    }
-
-
-    req.resultPipe = fullMediaPath;
-
     const convertedVideo = VideoProcessing.generateConvertedFilePath(fullMediaPath);
 
     // check if transcoded video exist
     try {
-      await fsp.access(fullMediaPath);
+      await fsp.access(convertedVideo);
       req.resultPipe = convertedVideo;
     } catch (e) {
     }

@@ -22,7 +22,7 @@ const should = chai.should();
 chai.use(chaiHttp);
 
 const rimrafPR = util.promisify(rimraf);
-describe('Sharing', () => {
+describe('SharingRouter', () => {
 
   const testUser: UserDTO = {
     id: 1,
