@@ -22,7 +22,7 @@ export class AuthenticationService {
   constructor(private _userService: UserService,
               private _networkService: NetworkService,
               private shareService: ShareService) {
-    this.user = new BehaviorSubject(JSON.parse(localStorage.getItem('currentUser')));
+    this.user = new BehaviorSubject(null);
 
     // picking up session..
     if (this.isAuthenticated() === false && Cookie.get(CookieNames.session) != null) {
@@ -52,11 +52,6 @@ export class AuthenticationService {
     window.setTimeout(() => {
       this.user.subscribe((u) => {
         this.shareService.onNewUser(u);
-        if (u !== null) {
-          localStorage.setItem('currentUser', JSON.stringify(u));
-        } else {
-          localStorage.removeItem('currentUser');
-        }
       });
     }, 0);
   }
