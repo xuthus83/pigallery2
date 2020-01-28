@@ -16,16 +16,13 @@ FROM node:12-stretch-slim
 WORKDIR /app
 ENV NODE_ENV=production \
     CONFIG_FILE=/app/data/config/config.json \
-    DB_PATH=/app/data/db \
-    MEDIA_PATH=/app/data/images \
-    TEMP_PATH=/app/data/tmp
+    Server-Database-dbFolder=/app/data/db \
+    Server-Media-folder=/app/data/images \
+    Server-Media-tempFolder=/app/data/tmp
 ENTRYPOINT ["npm", "start",  "--", \
   # after a extensive job (like video converting), pigallery calls gc, to clean up everthing as fast as possible
   "--expose-gc", \
-  "--config-path=$CONFIG_FILE", \
-  "--Server-Database-dbFolder=$DB_PATH", \
-  "--Server-Media-folder=$MEDIA_PATH", \
-  "--Server-Media-tempFolder=$TEMP_PATH"]
+  "--config-path=$CONFIG_FILE"]
 EXPOSE 80
 COPY --from=BUILDER /build/release /app
 VOLUME ["/app/data/config", "/app/data/db", "/app/data/images", "/app/data/tmp"]
