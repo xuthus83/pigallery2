@@ -3,7 +3,7 @@ import {NetworkService} from '../../../model/network/network.service';
 import {FileDTO} from '../../../../../common/entities/FileDTO';
 import {Utils} from '../../../../../common/Utils';
 import {Config} from '../../../../../common/config/public/Config';
-import {ClientConfig} from '../../../../../common/config/public/ConfigClass';
+import {ClientConfig} from '../../../../../common/config/public/ClientConfig';
 import MapLayers = ClientConfig.MapLayers;
 
 @Injectable()

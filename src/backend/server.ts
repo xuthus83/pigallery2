@@ -1,3 +1,4 @@
+import {Config} from '../common/config/private/Config';
 import * as _express from 'express';
 import {Request} from 'express';
 import * as _bodyParser from 'body-parser';
@@ -8,19 +9,18 @@ import {Server as HttpServer} from 'http';
 import * as locale from 'locale';
 import {ObjectManagers} from './model/ObjectManagers';
 import {Logger} from './Logger';
-import {Config} from '../common/config/private/Config';
 import {LoggerRouter} from './routes/LoggerRouter';
 import {DiskManager} from './model/DiskManger';
 import {ConfigDiagnostics} from './model/diagnostics/ConfigDiagnostics';
 import {Localizations} from './model/Localizations';
 import {CookieNames} from '../common/CookieNames';
 import {Router} from './routes/Router';
-import {ServerConfig} from '../common/config/private/IPrivateConfig';
 import {PhotoProcessing} from './model/fileprocessing/PhotoProcessing';
 import * as _csrf from 'csurf';
 import * as unless from 'express-unless';
 import {Event} from '../common/event/Event';
 import {QueryParams} from '../common/QueryParams';
+import {ServerConfig} from '../common/config/private/PrivateConfig';
 
 const _session = require('cookie-session');
 

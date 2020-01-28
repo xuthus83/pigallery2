@@ -6,10 +6,11 @@ import {ErrorDTO} from '../../../../../common/entities/Error';
 import {NotificationService} from '../../../model/notification.service';
 import {NavigationService} from '../../../model/navigation.service';
 import {AbstractSettingsService} from './abstract.settings.service';
-import {IPrivateConfig} from '../../../../../common/config/private/IPrivateConfig';
 import {I18n} from '@ngx-translate/i18n-polyfill';
 import {Subscription} from 'rxjs';
 import {ISettingsComponent} from './ISettingsComponent';
+import {WebConfig} from '../../../../../common/config/private/WebConfig';
+
 
 
 export abstract class SettingsComponent<T extends { [key: string]: any }, S extends AbstractSettingsService<T> = AbstractSettingsService<T>>
@@ -44,7 +45,7 @@ export abstract class SettingsComponent<T extends { [key: string]: any }, S exte
                         public _settingsService: S,
                         protected notification: NotificationService,
                         public i18n: I18n,
-                        private sliceFN?: (s: IPrivateConfig) => T) {
+                        private sliceFN?: (s: WebConfig) => T) {
     if (this.sliceFN) {
       this._settingsSubscription = this._settingsService.Settings.subscribe(this.onNewSettings);
       this.onNewSettings(this._settingsService._settingsService.settings.value);
@@ -68,7 +69,7 @@ export abstract class SettingsComponent<T extends { [key: string]: any }, S exte
     return this.hasAvailableSettings;
   }
 
-  onNewSettings = (s: IPrivateConfig) => {
+  onNewSettings = (s: WebConfig) => {
     this.settings = Utils.clone(this.sliceFN(s));
     this.original = Utils.clone(this.settings);
     this.ngOnChanges();

@@ -4,7 +4,7 @@ import {SettingsService} from '../settings.service';
 import {AbstractSettingsService} from '../_abstract/abstract.settings.service';
 import {BehaviorSubject} from 'rxjs';
 import {JobDTO} from '../../../../../common/entities/job/JobDTO';
-import {ServerConfig} from '../../../../../common/config/private/IPrivateConfig';
+import {ServerConfig} from '../../../../../common/config/private/PrivateConfig';
 
 @Injectable()
 export class JobsSettingsService extends AbstractSettingsService<ServerConfig.JobConfig> {

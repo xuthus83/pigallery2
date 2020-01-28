@@ -14,11 +14,11 @@ import {
   PeriodicJobTrigger,
   ScheduledJobTrigger
 } from '../../../../../common/entities/job/JobScheduleDTO';
-import {ServerConfig} from '../../../../../common/config/private/IPrivateConfig';
 import {ConfigTemplateEntry} from '../../../../../common/entities/job/JobDTO';
 import {ModalDirective} from 'ngx-bootstrap/modal';
 import {JobProgressDTO, JobProgressStates} from '../../../../../common/entities/job/JobProgressDTO';
 import {BackendtextService} from '../../../model/backendtext.service';
+import {ServerConfig} from '../../../../../common/config/private/PrivateConfig';
 
 @Component({
   selector: 'app-settings-jobs',

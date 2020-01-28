@@ -6,7 +6,7 @@ import {NavigationService} from '../../../model/navigation.service';
 import {SettingsComponent} from '../_abstract/abstract.settings.component';
 import {DatabaseSettingsService} from './database.settings.service';
 import {I18n} from '@ngx-translate/i18n-polyfill';
-import {ServerConfig} from '../../../../../common/config/private/IPrivateConfig';
+import {ServerConfig} from '../../../../../common/config/private/PrivateConfig';
 
 @Component({
   selector: 'app-settings-database',

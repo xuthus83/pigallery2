@@ -82,7 +82,7 @@ export class PublicRouter {
             res.tpl.user.csrfToken = req.csrfToken();
           }
         }
-        res.tpl.clientConfig = Config.Client;
+        res.tpl.clientConfig = {Client: Config.Client};
 
         return next();
       });

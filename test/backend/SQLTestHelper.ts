@@ -3,7 +3,7 @@ import * as path from 'path';
 import * as util from 'util';
 import * as rimraf from 'rimraf';
 import {SQLConnection} from '../../src/backend/model/database/sql/SQLConnection';
-import {ServerConfig} from '../../src/common/config/private/IPrivateConfig';
+import {ServerConfig} from '../../src/common/config/private/PrivateConfig';
 
 declare let describe: any;
 const savedDescribe = describe;

@@ -9,8 +9,8 @@ import {Utils} from '../../../../../common/Utils';
 import {I18n} from '@ngx-translate/i18n-polyfill';
 import {ScheduledJobsService} from '../scheduled-jobs.service';
 import {DefaultsJobs, JobDTO} from '../../../../../common/entities/job/JobDTO';
-import {ServerConfig} from '../../../../../common/config/private/IPrivateConfig';
 import {JobProgressStates} from '../../../../../common/entities/job/JobProgressDTO';
+import {ServerConfig} from '../../../../../common/config/private/PrivateConfig';
 
 @Component({
   selector: 'app-settings-indexing',

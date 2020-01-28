@@ -3,7 +3,7 @@ import {ErrorCodes, ErrorDTO} from '../../../common/entities/Error';
 import {ObjectManagers} from '../../model/ObjectManagers';
 import {Config} from '../../../common/config/private/Config';
 import {ISQLGalleryManager} from '../../model/database/sql/IGalleryManager';
-import {ServerConfig} from '../../../common/config/private/IPrivateConfig';
+import {ServerConfig} from '../../../common/config/private/PrivateConfig';
 
 
 export class AdminMWs {

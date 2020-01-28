@@ -1,16 +1,28 @@
-import {PublicConfigClass} from './ConfigClass';
-import {WebConfigLoader} from 'typeconfig/src/WebConfigLoader';
+import {ClientConfig} from './ClientConfig';
+import {WebConfigClass} from 'typeconfig/src/decorators/class/WebConfigClass';
+import {WebConfigClassBuilder} from 'typeconfig/src/decorators/builders/WebConfigClassBuilder';
+import {ConfigProperty} from 'typeconfig/src/decorators/property/ConfigPropoerty';
 
 
-declare module ServerInject {
-  export const ConfigInject: PublicConfigClass;
+/**
+ * These configuration will be available at frontend and backend too
+ */
+@WebConfigClass()
+export class ClientClass {
+
+  @ConfigProperty()
+  public Client: ClientConfig.Config = new ClientConfig.Config();
 }
 
-export let Config = new PublicConfigClass();
+declare module ServerInject {
+  export const ConfigInject: ClientClass;
+}
+
+export let Config = WebConfigClassBuilder.attachInterface(new ClientClass());
 
 
 if (typeof ServerInject !== 'undefined' && typeof ServerInject.ConfigInject !== 'undefined') {
-  WebConfigLoader.loadFrontendConfig(Config.Client, ServerInject.ConfigInject);
+  Config.load(ServerInject.ConfigInject);
 }
 
 

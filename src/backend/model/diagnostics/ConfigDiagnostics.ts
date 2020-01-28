@@ -1,12 +1,13 @@
-import {Config} from '../../../common/config/private/Config';
+import {Config, PrivateConfigClass} from '../../../common/config/private/Config';
 import {Logger} from '../../Logger';
 import {NotificationManager} from '../NotifocationManager';
 import {ProjectPath} from '../../ProjectPath';
 import {SQLConnection} from '../database/sql/SQLConnection';
 import * as fs from 'fs';
-import {ClientConfig} from '../../../common/config/public/ConfigClass';
 import {FFmpegFactory} from '../FFmpegFactory';
-import {IPrivateConfig, ServerConfig} from '../../../common/config/private/IPrivateConfig';
+import {ClientConfig} from '../../../common/config/public/ClientConfig';
+import {ServerConfig} from '../../../common/config/private/PrivateConfig';
+import MapLayers = ClientConfig.MapLayers;
 
 const LOG_TAG = '[ConfigDiagnostics]';
 
@@ -39,7 +40,7 @@ export class ConfigDiagnostics {
   }
 
 
-  static async testMetaFileConfig(metaFileConfig: ClientConfig.MetaFileConfig, config: IPrivateConfig) {
+  static async testMetaFileConfig(metaFileConfig: ClientConfig.MetaFileConfig, config: PrivateConfig) {
     if (metaFileConfig.enabled === true &&
       config.Client.Map.enabled === false) {
       throw new Error('*.gpx meta files are not supported without MAP');
@@ -72,7 +73,7 @@ export class ConfigDiagnostics {
     });
   }
 
-  static async testServerVideoConfig(videoConfig: ServerConfig.VideoConfig, config: IPrivateConfig) {
+  static async testServerVideoConfig(videoConfig: ServerConfig.VideoConfig, config: PrivateConfig) {
     if (config.Client.Media.Video.enabled === true) {
       if (videoConfig.transcoding.fps <= 0) {
         throw new Error('fps should be grater than 0');
@@ -157,11 +158,11 @@ export class ConfigDiagnostics {
   }
 
 
-  static async testTasksConfig(task: ServerConfig.JobConfig, config: IPrivateConfig) {
+  static async testTasksConfig(task: ServerConfig.JobConfig, config: PrivateConfig) {
 
   }
 
-  static async testFacesConfig(faces: ClientConfig.FacesConfig, config: IPrivateConfig) {
+  static async testFacesConfig(faces: ClientConfig.FacesConfig, config: PrivateConfig) {
     if (faces.enabled === true) {
       if (config.Server.Database.type === ServerConfig.DatabaseType.memory) {
         throw new Error('Memory Database do not support faces');
@@ -172,7 +173,7 @@ export class ConfigDiagnostics {
     }
   }
 
-  static async testSearchConfig(search: ClientConfig.SearchConfig, config: IPrivateConfig) {
+  static async testSearchConfig(search: ClientConfig.SearchConfig, config: PrivateConfig) {
     if (search.enabled === true &&
       config.Server.Database.type === ServerConfig.DatabaseType.memory) {
       throw new Error('Memory Database do not support searching');
@@ -180,7 +181,7 @@ export class ConfigDiagnostics {
   }
 
 
-  static async testSharingConfig(sharing: ClientConfig.SharingConfig, config: IPrivateConfig) {
+  static async testSharingConfig(sharing: ClientConfig.SharingConfig, config: PrivateConfig) {
     if (sharing.enabled === true &&
       config.Server.Database.type === ServerConfig.DatabaseType.memory) {
       throw new Error('Memory Database do not support sharing');
@@ -191,7 +192,7 @@ export class ConfigDiagnostics {
     }
   }
 
-  static async testRandomPhotoConfig(sharing: ClientConfig.RandomPhotoConfig, config: IPrivateConfig) {
+  static async testRandomPhotoConfig(sharing: ClientConfig.RandomPhotoConfig, config: PrivateConfig) {
     if (sharing.enabled === true &&
       config.Server.Database.type === ServerConfig.DatabaseType.memory) {
       throw new Error('Memory Database do not support random photo');
@@ -212,7 +213,7 @@ export class ConfigDiagnostics {
       throw new Error('Custom maps need at least one valid layer');
     }
     if (map.mapProvider === ClientConfig.MapProviders.Custom) {
-      map.customLayers.forEach(l => {
+      map.customLayers.forEach((l: MapLayers) => {
         if (!l.url || l.url.length === 0) {
           throw new Error('Custom maps url need to be a valid layer');
         }
@@ -231,7 +232,7 @@ export class ConfigDiagnostics {
         Logger.warn(LOG_TAG, '[SQL error]', err.toString());
         Logger.warn(LOG_TAG, 'Error during initializing SQL falling back temporally to memory DB');
         NotificationManager.warning('Error during initializing SQL falling back temporally to memory DB', err.toString());
-        Config.setDatabaseType(ServerConfig.DatabaseType.memory);
+        Config.Server.Database.type = ServerConfig.DatabaseType.memory;
       }
     }
 

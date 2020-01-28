@@ -18,7 +18,7 @@ import {FaceRegionEntry} from './enitites/FaceRegionEntry';
 import {PersonEntry} from './enitites/PersonEntry';
 import {Utils} from '../../../../common/Utils';
 import * as path from 'path';
-import {ServerConfig} from '../../../../common/config/private/IPrivateConfig';
+import {ServerConfig} from '../../../../common/config/private/PrivateConfig';
 
 
 export class SQLConnection {
@@ -110,6 +110,10 @@ export class SQLConnection {
     }
   }
 
+  public static getSQLiteDB(config: ServerConfig.DataBaseConfig) {
+    return path.join(ProjectPath.getAbsolutePath(config.dbFolder), 'sqlite.db');
+  }
+
   private static async createConnection(options: ConnectionOptions) {
     if (options.type === 'sqlite') {
       return await createConnection(options);
@@ -183,10 +187,6 @@ export class SQLConnection {
       };
     }
     return driver;
-  }
-
-  public static getSQLiteDB(config: ServerConfig.DataBaseConfig) {
-    return path.join(ProjectPath.getAbsolutePath(config.dbFolder), 'sqlite.db');
   }
 
 }

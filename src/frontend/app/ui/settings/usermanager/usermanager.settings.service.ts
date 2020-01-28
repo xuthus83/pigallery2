@@ -1,7 +1,9 @@
 import {Injectable} from '@angular/core';
 import {UserDTO} from '../../../../../common/entities/UserDTO';
 import {NetworkService} from '../../../model/network/network.service';
-import {IPrivateConfig} from '../../../../../common/config/private/IPrivateConfig';
+
+import {WebConfig} from '../../../../../common/config/private/WebConfig';
+
 
 @Injectable()
 export class UserManagerSettingsService {
@@ -15,7 +17,7 @@ export class UserManagerSettingsService {
   }
 
   public async getSettings(): Promise<boolean> {
-    return (await this._networkService.getJson<Promise<IPrivateConfig>>('/settings')).Client.authenticationRequired;
+    return (await this._networkService.getJson<Promise<WebConfig>>('/settings')).Client.authenticationRequired;
   }
 
   public updateSettings(settings: boolean): Promise<void> {

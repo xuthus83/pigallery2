@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {NetworkService} from '../../../model/network/network.service';
 import {AbstractSettingsService} from '../_abstract/abstract.settings.service';
 import {SettingsService} from '../settings.service';
-import {ServerConfig} from '../../../../../common/config/private/IPrivateConfig';
+import {ServerConfig} from '../../../../../common/config/private/PrivateConfig';
 
 @Injectable()
 export class DatabaseSettingsService extends AbstractSettingsService<ServerConfig.DataBaseConfig> {

@@ -10,7 +10,7 @@ import {SearchTypes} from '../src/common/entities/AutoCompleteItem';
 import {Utils} from '../src/common/Utils';
 import {GalleryManager} from '../src/backend/model/database/sql/GalleryManager';
 import {DirectoryDTO} from '../src/common/entities/DirectoryDTO';
-import {ServerConfig} from '../src/common/config/private/IPrivateConfig';
+import {ServerConfig} from '../src/common/config/private/PrivateConfig';
 
 const rimrafPR = util.promisify(rimraf);
 

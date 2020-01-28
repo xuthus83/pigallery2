@@ -1,5 +1,4 @@
 import {Config} from '../../../../src/common/config/private/Config';
-import {ServerConfig} from '../../../../src/common/config/private/IPrivateConfig';
 import {Server} from '../../../../src/backend/server';
 import * as path from 'path';
 import * as util from 'util';
@@ -8,6 +7,7 @@ import * as rimraf from 'rimraf';
 import {SQLConnection} from '../../../../src/backend/model/database/sql/SQLConnection';
 import {SuperAgentStatic} from 'superagent';
 import {ProjectPath} from '../../../../src/backend/ProjectPath';
+import {ServerConfig} from '../../../../src/common/config/private/PrivateConfig';
 
 
 process.env.NODE_ENV = 'test';

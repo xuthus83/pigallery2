@@ -5,7 +5,6 @@ import {DiskManager} from '../../DiskManger';
 import {DiskMangerWorker} from '../../threading/DiskMangerWorker';
 import {Logger} from '../../../Logger';
 import {Config} from '../../../../common/config/private/Config';
-import {ServerConfig} from '../../../../common/config/private/IPrivateConfig';
 import {FileDTO} from '../../../../common/entities/FileDTO';
 import {SQLConnection} from '../../database/sql/SQLConnection';
 import {MediaEntity} from '../../database/sql/enitites/MediaEntity';
@@ -13,6 +12,7 @@ import {PhotoEntity} from '../../database/sql/enitites/PhotoEntity';
 import {VideoEntity} from '../../database/sql/enitites/VideoEntity';
 import {backendTexts} from '../../../../common/BackendTexts';
 import {ProjectPath} from '../../../ProjectPath';
+import {ServerConfig} from '../../../../common/config/private/PrivateConfig';
 
 declare var global: NodeJS.Global;
 

@@ -17,7 +17,7 @@ import {
 } from '../../../../../src/backend/model/database/sql/enitites/PhotoEntity';
 import {MediaDimensionEntity} from '../../../../../src/backend/model/database/sql/enitites/MediaEntity';
 import {VersionEntity} from '../../../../../src/backend/model/database/sql/enitites/VersionEntity';
-import {ServerConfig} from '../../../../../src/common/config/private/IPrivateConfig';
+import {ServerConfig} from '../../../../../src/common/config/private/PrivateConfig';
 
 
 const rimrafPR = util.promisify(rimraf);

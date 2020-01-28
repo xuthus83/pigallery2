@@ -7,9 +7,9 @@ import {Config} from '../../../common/config/private/Config';
 import {ThumbnailTH} from '../threading/ThreadPool';
 import {PhotoWorker, RendererInput, ThumbnailSourceType} from '../threading/PhotoWorker';
 import {ITaskExecuter, TaskExecuter} from '../threading/TaskExecuter';
-import {ServerConfig} from '../../../common/config/private/IPrivateConfig';
 import {FaceRegion, PhotoDTO} from '../../../common/entities/PhotoDTO';
 import {SupportedFormats} from '../../../common/SupportedFormats';
+import {ServerConfig} from '../../../common/config/private/PrivateConfig';
 
 
 export class PhotoProcessing {

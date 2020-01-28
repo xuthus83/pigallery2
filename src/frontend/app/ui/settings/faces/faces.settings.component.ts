@@ -3,11 +3,11 @@ import {SettingsComponent} from '../_abstract/abstract.settings.component';
 import {AuthenticationService} from '../../../model/network/authentication.service';
 import {NavigationService} from '../../../model/navigation.service';
 import {NotificationService} from '../../../model/notification.service';
-import {ClientConfig} from '../../../../../common/config/public/ConfigClass';
 import {FacesSettingsService} from './faces.settings.service';
 import {I18n} from '@ngx-translate/i18n-polyfill';
 import {Utils} from '../../../../../common/Utils';
 import {UserRoles} from '../../../../../common/entities/UserDTO';
+import {ClientConfig} from '../../../../../common/config/public/ClientConfig';
 
 @Component({
   selector: 'app-settings-faces',

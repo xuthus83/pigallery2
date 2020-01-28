@@ -1,8 +1,7 @@
 import {NextFunction, Request, Response} from 'express';
 import {ErrorCodes, ErrorDTO} from '../../common/entities/Error';
 import {Message} from '../../common/entities/Message';
-import {Config} from '../../common/config/private/Config';
-import {ConfigClass} from '../../common/config/private/ConfigClass';
+import {Config, PrivateConfigClass} from '../../common/config/private/Config';
 import {UserDTO, UserRoles} from '../../common/entities/UserDTO';
 import {NotificationManager} from '../model/NotifocationManager';
 import {Logger} from '../Logger';
@@ -61,10 +60,10 @@ export class RenderingMWs {
   }
 
 
-  public static renderConfig(req: Request, res: Response, next: NextFunction) {
-    const originalConf = Config.original();
+  public static async renderConfig(req: Request, res: Response, next: NextFunction) {
+    const originalConf = await Config.original();
     originalConf.Server.sessionSecret = null;
-    const message = new Message<ConfigClass>(null, originalConf);
+    const message = new Message<PrivateConfigClass>(null, <any>originalConf.toJSON({attachDefaults: true}));
     res.json(message);
   }
 
