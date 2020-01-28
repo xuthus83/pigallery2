@@ -348,7 +348,7 @@ gulp.task('generate-man', async (cb) => {
   let txt = '# Pigallery 2 man page\n';
   txt += 'pigallery2 uses [typeconfig](https://github.com/bpatrik/typeconfig) for configuration\n\n';
   txt += '`npm start -- --help` prints the following:\n\n';
-  txt += '```bash\n' + ConfigClassBuilder.attachPrivateInterface(Config).__printMan() + '```';
+  txt += '```\n' + ConfigClassBuilder.attachPrivateInterface(Config).__printMan() + '```';
   await fsp.writeFile('MANPAGE.md', txt);
   cb();
 });
