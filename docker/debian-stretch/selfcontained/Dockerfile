@@ -14,15 +14,16 @@ RUN set -x && npm install --unsafe-perm && \
 
 FROM node:12-stretch-slim
 WORKDIR /app
+ENV NODE_ENV=production \
+    CONFIG_FILE=/app/data/config/config.json \
+    Server-Database-dbFolder=/app/data/db \
+    Server-Media-folder=/app/data/images \
+    Server-Media-tempFolder=/app/data/tmp
 ENTRYPOINT ["npm", "start",  "--", \
   # after a extensive job (like video converting), pigallery calls gc, to clean up everthing as fast as possible
   "--expose-gc", \
-  "--config-path=/app/data/config/config.json", \
-  "--Server-Database-dbFolder=/app/data/db", \
-  "--Server-Media-folder=/app/data/images", \
-  "--Server-Media-tempFolder=/app/data/tmp"]
+  "--config-path=$CONFIG_FILE"]
 EXPOSE 80
-ENV NODE_ENV=production
 COPY --from=BUILDER /build/release /app
 VOLUME ["/app/data/config", "/app/data/db", "/app/data/images", "/app/data/tmp"]
 HEALTHCHECK --interval=30s --timeout=10s --retries=4 --start-period=60s \
