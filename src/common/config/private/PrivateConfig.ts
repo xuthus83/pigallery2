@@ -38,11 +38,11 @@ export module ServerConfig {
   export class MySQLConfig {
     @ConfigProperty({envAlias: 'MYSQL_HOST'})
     host: string = '';
-    @ConfigProperty({envAlias: 'MYSQL_PASSWORD'})
+    @ConfigProperty({envAlias: 'MYSQL_DATABASE'})
     database: string = '';
     @ConfigProperty({envAlias: 'MYSQL_USERNAME'})
     username: string = '';
-    @ConfigProperty({envAlias: 'MYSQL_DATABASE'})
+    @ConfigProperty({envAlias: 'MYSQL_PASSWORD'})
     password: string = '';
   }
 

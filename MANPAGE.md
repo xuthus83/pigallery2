@@ -3,7 +3,7 @@ pigallery2 uses [typeconfig](https://github.com/bpatrik/typeconfig) for configur
 
 `npm start -- --help` prints the following:
 
-```bash
+```
 Usage: <appname> [options] 
 
 Meta cli options: 
@@ -123,11 +123,11 @@ Environmental variables:
   Server-Database-mysql-host                         (default: '')
   MYSQL_HOST                                         same as Server-Database-mysql-host
   Server-Database-mysql-database                     (default: '')
-  MYSQL_PASSWORD                                     same as Server-Database-mysql-database
+  MYSQL_DATABASE                                     same as Server-Database-mysql-database
   Server-Database-mysql-username                     (default: '')
   MYSQL_USERNAME                                     same as Server-Database-mysql-username
   Server-Database-mysql-password                     (default: '')
-  MYSQL_DATABASE                                     same as Server-Database-mysql-password
+  MYSQL_PASSWORD                                     same as Server-Database-mysql-password
   Server-Sharing-updateTimeout                       (default: 300000)
   Server-sessionTimeout                             unit: ms (default: 604800000)
   Server-Indexing-folderPreviewSize                  (default: 2)
