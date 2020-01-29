@@ -23,7 +23,7 @@ jobs:
           env:
             MYSQL_USER: user
             MYSQL_PASSWORD: password
-            MYSQL_DATABASE: test
+            MYSQL_DATABASE: pigallery_test
             MYSQL_ROOT_PASSWORD: password
           options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
 
@@ -53,7 +53,7 @@ jobs:
         MYSQL_USERNAME: user
         MYSQL_PASSWORD: password
         MYSQL_PORT: ${{ job.services.mariadb.ports[3306] }}
-        MYSQL_DATABASE: pigalelry_test
+        MYSQL_DATABASE: pigallery_test
         PORT: 35000
         CI: true
       
