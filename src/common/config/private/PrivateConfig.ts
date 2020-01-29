@@ -38,6 +38,8 @@ export module ServerConfig {
   export class MySQLConfig {
     @ConfigProperty({envAlias: 'MYSQL_HOST'})
     host: string = '';
+    @ConfigProperty({envAlias: 'MYSQL_PORT'})
+    port: number = 3306;
     @ConfigProperty({envAlias: 'MYSQL_DATABASE'})
     database: string = '';
     @ConfigProperty({envAlias: 'MYSQL_USERNAME'})

@@ -174,7 +174,7 @@ export class SQLConnection {
       driver = {
         type: 'mysql',
         host: config.mysql.host,
-        port: 3306,
+        port: config.mysql.port,
         username: config.mysql.username,
         password: config.mysql.password,
         database: config.mysql.database,
