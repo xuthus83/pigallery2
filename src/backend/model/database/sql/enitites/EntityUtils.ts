@@ -1,6 +1,6 @@
 import {Config} from '../../../../../common/config/private/Config';
-import {ServerConfig} from '../../../../../common/config/private/IPrivateConfig';
 import {ColumnOptions} from 'typeorm/decorator/options/ColumnOptions';
+import {ServerConfig} from '../../../../../common/config/private/PrivateConfig';
 
 export class ColumnCharsetCS implements ColumnOptions {
 

@@ -1,4 +1,4 @@
-<ng2-slim-loading-bar [color]="'#337ab7'" [height]="'3px'"></ng2-slim-loading-bar>
+<ng2-slim-loading-bar color="#337ab7" height="3px"></ng2-slim-loading-bar>
 <nav class="navbar  navbar-dark bg-dark  navbar-expand-md">
   <a class="navbar-brand" [routerLink]="['/gallery','/']"
      [queryParams]="queryService.getParams()">
@@ -6,7 +6,7 @@
     <strong>{{title}}</strong>
   </a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav"
-          aria-expanded="false" aria-label="Toggle navigation" (click)="toggleState()">
+          aria-expanded="false" aria-label="Toggle navigation" (click)="collapsed = !collapsed">
     <span class="navbar-toggler-icon"></span>
   </button>
 
@@ -32,7 +32,7 @@
       <li class="nav-item ml-2">
         <app-language class="navbar-btn" isDark="true"></app-language>
       </li>
-      <div class="btn-group" dropdown  placement="bottom"
+      <div class="btn-group" dropdown placement="bottom"
            *ngIf="isAdmin() || authenticationRequired">
         <button id="button-alignment" dropdownToggle
                 type="button" class="btn btn-dark dropdown-toggle"
@@ -46,13 +46,13 @@
             role="menu" aria-labelledby="button-alignment">
           <ng-content select="[navbar-menu]"></ng-content>
           <li role="menuitem" *ngIf="isAdmin()">
-            <a class="dropdown-item" href="#" [routerLink]="['/duplicates']">
+            <a class="dropdown-item"  [routerLink]="['/duplicates']">
               <span class="oi oi-layers"></span>
               <ng-container i18n>duplicates</ng-container>
             </a>
           </li>
           <li role="menuitem" *ngIf="isAdmin()">
-            <a class="dropdown-item" href="#" [routerLink]="['/admin']">
+            <a class="dropdown-item" [routerLink]="['/admin']">
               <span class="oi oi-wrench"></span>
               <span *ngIf="notificationService.notifications.length>0"
                     class="badge">{{notificationService.notifications.length}}</span>
@@ -60,10 +60,10 @@
             </a>
           </li>
           <li role="menuitem" *ngIf="authenticationRequired">
-            <a class="dropdown-item"  (click)="logout()">
+            <button class="dropdown-item btn btn-link" (click)="logout()">
               <span class="oi oi-account-logout"></span>
               <ng-container i18n>Logout</ng-container>
-            </a>
+            </button>
           </li>
         </ul>
       </div>

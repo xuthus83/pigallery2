@@ -16,7 +16,7 @@ import {PersonManager} from '../../../../../src/backend/model/database/sql/Perso
 import {SQLTestHelper} from '../../../SQLTestHelper';
 import {VersionManager} from '../../../../../src/backend/model/database/sql/VersionManager';
 import {DiskMangerWorker} from '../../../../../src/backend/model/threading/DiskMangerWorker';
-import {ServerConfig} from '../../../../../src/common/config/private/IPrivateConfig';
+import {ServerConfig} from '../../../../../src/common/config/private/PrivateConfig';
 
 class GalleryManagerTest extends GalleryManager {
 

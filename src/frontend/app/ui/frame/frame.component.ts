@@ -17,8 +17,8 @@ import {QueryService} from '../../model/query.service';
 export class FrameComponent {
 
   user: BehaviorSubject<UserDTO>;
-  authenticationRequired = false;
-  public title: string;
+  public readonly authenticationRequired = Config.Client.authenticationRequired;
+  public readonly title = Config.Client.applicationTitle;
   collapsed = true;
   facesEnabled = Config.Client.Faces.enabled;
 
@@ -26,13 +26,8 @@ export class FrameComponent {
               public notificationService: NotificationService,
               public queryService: QueryService) {
     this.user = this._authService.user;
-    this.authenticationRequired = Config.Client.authenticationRequired;
-    this.title = Config.Client.applicationTitle;
   }
 
-  toggleState() { // click handler
-    this.collapsed = !this.collapsed;
-  }
 
   isAdmin() {
     return this.user.value && this.user.value.role >= UserRoles.Admin;

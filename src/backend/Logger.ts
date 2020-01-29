@@ -1,6 +1,6 @@
 import * as winston from 'winston';
 import {Config} from '../common/config/private/Config';
-import {ServerConfig} from '../common/config/private/IPrivateConfig';
+import {ServerConfig} from '../common/config/private/PrivateConfig';
 
 export const winstonSettings = {
   transports: [

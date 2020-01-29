@@ -3,7 +3,7 @@ import {Logger} from '../../Logger';
 import {PhotoWorker, RendererInput} from './PhotoWorker';
 import {DirectoryDTO} from '../../../common/entities/DirectoryDTO';
 import {Utils} from '../../../common/Utils';
-import {ServerConfig} from '../../../common/config/private/IPrivateConfig';
+import {ServerConfig} from '../../../common/config/private/PrivateConfig';
 
 declare var process: NodeJS.Process;
 declare var global: NodeJS.Global;

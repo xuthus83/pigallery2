@@ -1,5 +1,6 @@
-import {ClientConfig} from '../../config/public/ConfigClass';
-import {ServerConfig} from '../../config/private/IPrivateConfig';
+import {ServerConfig} from '../../config/private/PrivateConfig';
+import {ClientConfig} from '../../config/public/ClientConfig';
+
 
 export interface OtherConfigDTO {
   Server: ServerConfig.ThreadingConfig;

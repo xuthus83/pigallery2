@@ -2,7 +2,7 @@ import {ObjectManagers} from '../../ObjectManagers';
 import {Config} from '../../../../common/config/private/Config';
 import {ConfigTemplateEntry, DefaultsJobs} from '../../../../common/entities/job/JobDTO';
 import {Job} from './Job';
-import {ServerConfig} from '../../../../common/config/private/IPrivateConfig';
+import {ServerConfig} from '../../../../common/config/private/PrivateConfig';
 
 
 export class DBRestJob extends Job {

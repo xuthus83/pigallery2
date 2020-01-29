@@ -7,7 +7,7 @@ import {ProjectPath} from '../../../ProjectPath';
 import {Config} from '../../../../common/config/private/Config';
 import {PhotoDTO} from '../../../../common/entities/PhotoDTO';
 import {DiskMangerWorker} from '../../threading/DiskMangerWorker';
-import {ServerConfig} from '../../../../common/config/private/IPrivateConfig';
+import {ServerConfig} from '../../../../common/config/private/PrivateConfig';
 
 export class GalleryManager implements IGalleryManager {
 

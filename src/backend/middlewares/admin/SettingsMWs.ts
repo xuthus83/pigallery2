@@ -6,14 +6,14 @@ import {Logger} from '../../Logger';
 import {SQLConnection} from '../../model/database/sql/SQLConnection';
 import {Config} from '../../../common/config/private/Config';
 import {ConfigDiagnostics} from '../../model/diagnostics/ConfigDiagnostics';
-import {ClientConfig} from '../../../common/config/public/ConfigClass';
 import {BasicConfigDTO} from '../../../common/entities/settings/BasicConfigDTO';
 import {OtherConfigDTO} from '../../../common/entities/settings/OtherConfigDTO';
 import {ProjectPath} from '../../ProjectPath';
-import {ConfigClass} from '../../../common/config/private/ConfigClass';
-import {ServerConfig} from '../../../common/config/private/IPrivateConfig';
+import {ServerConfig} from '../../../common/config/private/PrivateConfig';
+import {ClientConfig} from '../../../common/config/public/ClientConfig';
 
 const LOG_TAG = '[SettingsMWs]';
+
 
 export class SettingsMWs {
 
@@ -31,7 +31,7 @@ export class SettingsMWs {
       }
       Config.Server.Database = databaseSettings;
       // only updating explicitly set config (not saving config set by the diagnostics)
-      const original = Config.original();
+      const original = await Config.original();
       original.Server.Database = databaseSettings;
       if (databaseSettings.type === ServerConfig.DatabaseType.memory) {
         original.Client.Sharing.enabled = false;
@@ -68,7 +68,7 @@ export class SettingsMWs {
 
       Config.Client.Map = <ClientConfig.MapConfig>req.body.settings;
       // only updating explicitly set config (not saving config set by the diagnostics)
-      const original = Config.original();
+      const original = await Config.original();
       original.Client.Map = <ClientConfig.MapConfig>req.body.settings;
       original.save();
       await ConfigDiagnostics.runDiagnostics();
@@ -95,7 +95,7 @@ export class SettingsMWs {
       } = req.body.settings;
 
 
-      const original = Config.original();
+      const original = await Config.original();
       await ConfigDiagnostics.testClientVideoConfig(settings.client);
       await ConfigDiagnostics.testServerVideoConfig(settings.server, original);
       Config.Server.Media.Video = settings.server;
@@ -122,7 +122,7 @@ export class SettingsMWs {
     }
 
     try {
-      const original = Config.original();
+      const original = await Config.original();
       await ConfigDiagnostics.testMetaFileConfig(<ClientConfig.MetaFileConfig>req.body.settings, original);
 
       Config.Client.MetaFile = <ClientConfig.MetaFileConfig>req.body.settings;
@@ -149,7 +149,7 @@ export class SettingsMWs {
 
     try {
       // only updating explicitly set config (not saving config set by the diagnostics)
-      const original = Config.original();
+      const original = await Config.original();
       await ConfigDiagnostics.testSharingConfig(<ClientConfig.SharingConfig>req.body.settings, original);
 
       Config.Client.Sharing = <ClientConfig.SharingConfig>req.body.settings;
@@ -174,7 +174,7 @@ export class SettingsMWs {
 
     try {
       // only updating explicitly set config (not saving config set by the diagnostics)
-      const original = Config.original();
+      const original = await Config.original();
       await ConfigDiagnostics.testRandomPhotoConfig(<ClientConfig.RandomPhotoConfig>req.body.settings, original);
 
       Config.Client.RandomPhoto = <ClientConfig.RandomPhotoConfig>req.body.settings;
@@ -199,7 +199,7 @@ export class SettingsMWs {
 
     try {
       // only updating explicitly set config (not saving config set by the diagnostics)
-      const original = Config.original();
+      const original = await Config.original();
       await ConfigDiagnostics.testSearchConfig(<ClientConfig.SearchConfig>req.body.settings, original);
 
       Config.Client.Search = <ClientConfig.SearchConfig>req.body.settings;
@@ -224,7 +224,7 @@ export class SettingsMWs {
 
     try {
       // only updating explicitly set config (not saving config set by the diagnostics)
-      const original = Config.original();
+      const original = await Config.original();
       await ConfigDiagnostics.testFacesConfig(<ClientConfig.FacesConfig>req.body.settings, original);
 
       Config.Client.Faces = <ClientConfig.FacesConfig>req.body.settings;
@@ -250,7 +250,7 @@ export class SettingsMWs {
     try {
       Config.Client.authenticationRequired = <boolean>req.body.settings;
       // only updating explicitly set config (not saving config set by the diagnostics)
-      const original = Config.original();
+      const original = await Config.original();
       original.Client.authenticationRequired = <boolean>req.body.settings;
       if (original.Client.authenticationRequired === false) {
         original.Client.Sharing.enabled = false;
@@ -284,7 +284,7 @@ export class SettingsMWs {
       Config.Server.Media.Thumbnail = settings.server;
       Config.Client.Media.Thumbnail = settings.client;
       // only updating explicitly set config (not saving config set by the diagnostics)
-      const original = Config.original();
+      const original = await Config.original();
       original.Server.Media.Thumbnail = settings.server;
       original.Client.Media.Thumbnail = settings.client;
       original.save();
@@ -320,7 +320,7 @@ export class SettingsMWs {
       Config.Server.Media.Photo = settings.server;
       Config.Client.Media.Photo = settings.client;
       // only updating explicitly set config (not saving config set by the diagnostics)
-      const original = Config.original();
+      const original = await Config.original();
       original.Server.Media.photoProcessingLibrary = settings.photoProcessingLibrary;
       original.Server.Media.Photo = settings.server;
       original.Client.Media.Photo = settings.client;
@@ -353,7 +353,7 @@ export class SettingsMWs {
       Config.Client.urlBase = settings.urlBase;
       Config.Client.applicationTitle = settings.applicationTitle;
       // only updating explicitly set config (not saving config set by the diagnostics)
-      const original = Config.original();
+      const original = await Config.original();
       original.Server.port = settings.port;
       original.Server.host = settings.host;
       original.Server.Media.folder = settings.imagesFolder;
@@ -389,7 +389,7 @@ export class SettingsMWs {
       Config.Client.Other.NavBar.showItemCount = settings.Client.NavBar.showItemCount;
 
       // only updating explicitly set config (not saving config set by the diagnostics)
-      const original: ConfigClass = Config.original();
+      const original = await Config.original();
       original.Client.Other.enableCache = settings.Client.enableCache;
       original.Client.Other.captionFirstNaming = settings.Client.captionFirstNaming;
       original.Client.Other.enableOnScrollRendering = settings.Client.enableOnScrollRendering;
@@ -398,7 +398,7 @@ export class SettingsMWs {
       original.Client.Other.NavBar.showItemCount = settings.Client.NavBar.showItemCount;
       original.Server.Threading.enabled = settings.Server.enabled;
       original.Server.Threading.thumbnailThreads = settings.Server.thumbnailThreads;
-      original.save();
+      await original.save();
       await ConfigDiagnostics.runDiagnostics();
       Logger.info(LOG_TAG, 'new config:');
       Logger.info(LOG_TAG, JSON.stringify(Config, null, '\t'));
@@ -421,7 +421,7 @@ export class SettingsMWs {
       Config.Server.Indexing = settings;
 
       // only updating explicitly set config (not saving config set by the diagnostics)
-      const original = Config.original();
+      const original = await Config.original();
       original.Server.Indexing = settings;
       original.save();
       await ConfigDiagnostics.runDiagnostics();
@@ -445,7 +445,7 @@ export class SettingsMWs {
 
       // only updating explicitly set config (not saving config set by the diagnostics)
       const settings: ServerConfig.JobConfig = req.body.settings;
-      const original = Config.original();
+      const original = await Config.original();
       await ConfigDiagnostics.testTasksConfig(settings, original);
 
       Config.Server.Jobs = settings;

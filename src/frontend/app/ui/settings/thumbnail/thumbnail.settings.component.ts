@@ -3,13 +3,13 @@ import {SettingsComponent} from '../_abstract/abstract.settings.component';
 import {AuthenticationService} from '../../../model/network/authentication.service';
 import {NavigationService} from '../../../model/navigation.service';
 import {NotificationService} from '../../../model/notification.service';
-import {ClientConfig} from '../../../../../common/config/public/ConfigClass';
 import {ThumbnailSettingsService} from './thumbnail.settings.service';
 import {I18n} from '@ngx-translate/i18n-polyfill';
-import {ServerConfig} from '../../../../../common/config/private/IPrivateConfig';
 import {DefaultsJobs, JobDTO} from '../../../../../common/entities/job/JobDTO';
 import {ScheduledJobsService} from '../scheduled-jobs.service';
 import {JobProgressStates} from '../../../../../common/entities/job/JobProgressDTO';
+import {ServerConfig} from '../../../../../common/config/private/PrivateConfig';
+import {ClientConfig} from '../../../../../common/config/public/ClientConfig';
 
 @Component({
   selector: 'app-settings-thumbnail',

@@ -38,8 +38,8 @@ You can check if it was successful with `docker-compose --version`.
 Download [docker-compose/default/docker-compose.yml](docker-compose/default/docker-compose.yml) and 
 [docker-compose/default/nginx.conf](docker-compose/default/nginx.conf).
 
-Edit `docker-compose.yml` to point the volumes to the right `image` and `tmp` directories.
-Edit `nginx.conf` by replacing `yourdomain.com` to you domain address.
+Edit `docker-compose.yml` at the `# CHANGE ME` lines to point the volumes to the right `image` and `tmp` directories.
+Edit `nginx.conf` at the `# CHANGE ME` lines by replacing `yourdomain.com` to you domain address.
 
 **Note**: Do not change the `image` and the `tmp` path in the `config.json` or in the UI, only through the `volume` settings of the docker. See [here](https://github.com/bpatrik/pigallery2/issues/114#issuecomment-570006336) and [here](https://github.com/bpatrik/pigallery2/issues/119).
 

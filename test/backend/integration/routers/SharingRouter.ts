@@ -1,5 +1,4 @@
 import {Config} from '../../../../src/common/config/private/Config';
-import {ServerConfig} from '../../../../src/common/config/private/IPrivateConfig';
 import {Server} from '../../../../src/backend/server';
 import {LoginCredential} from '../../../../src/common/entities/LoginCredential';
 import {UserDTO, UserRoles} from '../../../../src/common/entities/UserDTO';
@@ -13,6 +12,7 @@ import {SuperAgentStatic} from 'superagent';
 import {RouteTestingHelper} from './RouteTestingHelper';
 import {QueryParams} from '../../../../src/common/QueryParams';
 import {ErrorCodes} from '../../../../src/common/entities/Error';
+import {ServerConfig} from '../../../../src/common/config/private/PrivateConfig';
 
 
 process.env.NODE_ENV = 'test';
@@ -109,7 +109,7 @@ describe('SharingRouter', () => {
     });
 
     it('should login with no-password share', async () => {
-      const sharing = await RouteTestingHelper.createSharing(testUser,);
+      const sharing = await RouteTestingHelper.createSharing(testUser);
       const res = await shareLogin(server, sharing.sharingKey, sharing.password);
       shouldBeValidUser(res, RouteTestingHelper.getExpectedSharingUser(sharing));
     });

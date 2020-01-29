@@ -3,7 +3,7 @@ import {Dimensions, State} from 'gm';
 import {Logger} from '../../Logger';
 import {FfmpegCommand, FfprobeData} from 'fluent-ffmpeg';
 import {FFmpegFactory} from '../FFmpegFactory';
-import {ServerConfig} from '../../../common/config/private/IPrivateConfig';
+import {ServerConfig} from '../../../common/config/private/PrivateConfig';
 
 export class PhotoWorker {
 

@@ -2,9 +2,9 @@ import * as path from 'path';
 import * as util from 'util';
 import * as rimraf from 'rimraf';
 import {Config} from '../../../../../src/common/config/private/Config';
-import {ServerConfig} from '../../../../../src/common/config/private/IPrivateConfig';
 import {SQLConnection} from '../../../../../src/backend/model/database/sql/SQLConnection';
 import {Server} from '../../../../../src/backend/server';
+import {ServerConfig} from '../../../../../src/common/config/private/PrivateConfig';
 
 process.env.NODE_ENV = 'test';
 const chai: any = require('chai');
@@ -32,7 +32,7 @@ describe('SettingsRouter', () => {
   describe('/GET settings', () => {
     it('it should GET all the books', async () => {
       Config.Client.authenticationRequired = false;
-      const originalSettings = Config.original();
+      const originalSettings = await Config.original();
       originalSettings.Server.sessionSecret = null;
       const srv = new Server();
       await srv.onStarted.wait();
@@ -42,7 +42,7 @@ describe('SettingsRouter', () => {
       result.res.should.have.status(200);
       result.body.should.be.a('object');
       should.equal(result.body.error, null);
-      result.body.result.should.deep.equal(originalSettings);
+      result.body.result.should.deep.equal(JSON.parse(JSON.stringify(originalSettings.toJSON({attachDefaults: true}))));
 
     });
   });

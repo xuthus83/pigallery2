@@ -1,16 +1,17 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
 import {NetworkService} from '../../model/network/network.service';
-import {IPrivateConfig} from '../../../../common/config/private/IPrivateConfig';
-import {PrivateConfigDefaultsClass} from '../../../../common/config/private/PrivateConfigDefaultsClass';
+
+import {WebConfig} from '../../../../common/config/private/WebConfig';
+import {WebConfigClassBuilder} from 'typeconfig/src/decorators/builders/WebConfigClassBuilder';
 
 @Injectable()
 export class SettingsService {
-  public settings: BehaviorSubject<IPrivateConfig>;
+  public settings: BehaviorSubject<WebConfig>;
   private fetchingSettings = false;
 
   constructor(private _networkService: NetworkService) {
-    this.settings = new BehaviorSubject<IPrivateConfig>(new PrivateConfigDefaultsClass());
+    this.settings = new BehaviorSubject<WebConfig>(new WebConfig());
   }
 
   public async getSettings(): Promise<void> {
@@ -19,7 +20,9 @@ export class SettingsService {
     }
     this.fetchingSettings = true;
     try {
-      this.settings.next(await this._networkService.getJson<Promise<IPrivateConfig>>('/settings'));
+      const wcg = WebConfigClassBuilder.attachInterface(new WebConfig());
+      wcg.load(await this._networkService.getJson<Promise<WebConfig>>('/settings'));
+      this.settings.next(wcg);
     } catch (e) {
       console.error(e);
     }

@@ -2,7 +2,7 @@ import {Logger} from '../../Logger';
 import {promises as fsp} from 'fs';
 import {FfmpegCommand} from 'fluent-ffmpeg';
 import {FFmpegFactory} from '../FFmpegFactory';
-import {ServerConfig} from '../../../common/config/private/IPrivateConfig';
+import {ServerConfig} from '../../../common/config/private/PrivateConfig';
 
 
 export interface VideoConverterInput {

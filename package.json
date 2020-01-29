@@ -12,12 +12,14 @@
     "create-release": "gulp create-release",
     "build-backend": "tsc",
     "pretest": "tsc",
-    "test": "ng test && mocha --recursive test/backend/unit && mocha --recursive test/backend/integration  && mocha --recursive test/common/unit ",
+    "test": "ng test  && nyc mocha --recursive test",
+    "coverage": "nyc report --reporter=text-lcov | coveralls",
     "start": "node ./src/backend/index",
     "run-dev": "ng build --aot --watch --output-path=./dist --i18n-locale en --i18n-file src/frontend/translate/messages.en.xlf --i18n-missing-translation warning",
     "build-stats": "ng build --aot --prod --stats-json --output-path=./dist --i18n-locale en --i18n-file src/frontend/translate/messages.en.xlf --i18n-missing-translation warning",
     "merge-new-translation": "gulp merge-new-translation",
-    "add-translation": "gulp add-translation"
+    "add-translation": "gulp add-translation",
+    "generate-man": "gulp generate-man"
   },
   "repository": {
     "type": "git",
@@ -45,7 +47,7 @@
     "sqlite3": "4.1.1",
     "ts-exif-parser": "0.1.4",
     "ts-node-iptc": "1.0.11",
-    "typeconfig": "1.0.8d",
+    "typeconfig": "2.0.0",
     "typeorm": "0.2.21",
     "winston": "2.4.4"
   },
@@ -92,6 +94,7 @@
     "chai-http": "4.3.0",
     "codelyzer": "5.2.0",
     "core-js": "3.4.7",
+    "coveralls": "3.0.9",
     "ejs-loader": "0.3.5",
     "gulp": "4.0.2",
     "gulp-json-editor": "2.5.4",
@@ -116,6 +119,7 @@
     "ngx-bootstrap": "5.2.0",
     "ngx-clipboard": "12.3.0",
     "ngx-toastr": "11.2.1",
+    "nyc": "15.0.0",
     "open-iconic": "1.1.1",
     "protractor": "5.4.2",
     "remap-istanbul": "0.13.0",

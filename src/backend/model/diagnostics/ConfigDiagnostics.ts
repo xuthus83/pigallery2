@@ -4,9 +4,10 @@ import {NotificationManager} from '../NotifocationManager';
 import {ProjectPath} from '../../ProjectPath';
 import {SQLConnection} from '../database/sql/SQLConnection';
 import * as fs from 'fs';
-import {ClientConfig} from '../../../common/config/public/ConfigClass';
 import {FFmpegFactory} from '../FFmpegFactory';
-import {IPrivateConfig, ServerConfig} from '../../../common/config/private/IPrivateConfig';
+import {ClientConfig} from '../../../common/config/public/ClientConfig';
+import {IPrivateConfig, ServerConfig} from '../../../common/config/private/PrivateConfig';
+import MapLayers = ClientConfig.MapLayers;
 
 const LOG_TAG = '[ConfigDiagnostics]';
 
@@ -212,7 +213,7 @@ export class ConfigDiagnostics {
       throw new Error('Custom maps need at least one valid layer');
     }
     if (map.mapProvider === ClientConfig.MapProviders.Custom) {
-      map.customLayers.forEach(l => {
+      map.customLayers.forEach((l: MapLayers) => {
         if (!l.url || l.url.length === 0) {
           throw new Error('Custom maps url need to be a valid layer');
         }
@@ -231,7 +232,7 @@ export class ConfigDiagnostics {
         Logger.warn(LOG_TAG, '[SQL error]', err.toString());
         Logger.warn(LOG_TAG, 'Error during initializing SQL falling back temporally to memory DB');
         NotificationManager.warning('Error during initializing SQL falling back temporally to memory DB', err.toString());
-        Config.setDatabaseType(ServerConfig.DatabaseType.memory);
+        Config.Server.Database.type = ServerConfig.DatabaseType.memory;
       }
     }
 

@@ -1,0 +1,180 @@
+# Pigallery 2 man page
+pigallery2 uses [typeconfig](https://github.com/bpatrik/typeconfig) for configuration
+
+`npm start -- --help` prints the following:
+
+```
+Usage: <appname> [options] 
+
+Meta cli options: 
+--help                           prints this manual 
+--config-path                    sets the config file location 
+--config-attachDefs              prints the defaults to the config file 
+--config-attachDesc              prints description to the config file 
+--config-rewrite-cli             updates the config file with the options from cli switches 
+--config-rewrite-env             updates the config file with the options from environmental variables 
+--config-string-enum             enums are stored as string in the config file (instead of numbers) 
+--config-save-if-not-exist       creates config file if not exist 
+--config-save-and-exist          creates config file and terminates 
+
+<appname> can be configured through the configuration file, cli switches and environmental variables. 
+All settings are case sensitive. 
+Example for setting config MyConf through cli: '<appname> --MyConf=5' 
+and through env variable: 'SET MyConf=5' . 
+
+Default values can be also overwritten by prefixing the options with 'default-', 
+ like '<appname> --default-MyConf=5' and  'SET default-MyConf=5'
+
+App CLI options: 
+  --Server-sessionSecret                                 (default: [])
+  --Server-port                                          (default: 80)
+  --Server-host                                          (default: '0.0.0.0')
+  --Server-Media-folder                                 Images are loaded from this folder (read permission required) (default: 'demo/images')
+  --Server-Media-tempFolder                             Thumbnails, coverted photos, videos will be stored here (write permission required) (default: 'demo/tmp')
+  --Server-Media-photoProcessingLibrary                  (default: 'sharp')
+  --Server-Media-Video-transcoding-bitRate               (default: 5242880)
+  --Server-Media-Video-transcoding-resolution            (default: 720)
+  --Server-Media-Video-transcoding-fps                   (default: 25)
+  --Server-Media-Video-transcoding-codec                 (default: 'libx264')
+  --Server-Media-Video-transcoding-format                (default: 'mp4')
+  --Server-Media-Photo-Converting-onTheFly              Converts photos on the fly, when they are requested. (default: true)
+  --Server-Media-Photo-Converting-resolution             (default: 1080)
+  --Server-Media-Thumbnail-qualityPriority              if true, photos will have better quality. (default: true)
+  --Server-Media-Thumbnail-personFaceMargin              (default: 0.6)
+  --Server-Threading-enabled                            App can run on multiple thread (default: true)
+  --Server-Threading-thumbnailThreads                   Number of threads that are used to generate thumbnails. If 0, number of 'CPU cores -1' threads will be used. (default: 0)
+  --Server-Database-type                                 (default: 'sqlite')
+  --Server-Database-dbFolder                             (default: 'db')
+  --Server-Database-mysql-host                           (default: '')
+  --Server-Database-mysql-database                       (default: '')
+  --Server-Database-mysql-username                       (default: '')
+  --Server-Database-mysql-password                       (default: '')
+  --Server-Sharing-updateTimeout                         (default: 300000)
+  --Server-sessionTimeout                               unit: ms (default: 604800000)
+  --Server-Indexing-folderPreviewSize                    (default: 2)
+  --Server-Indexing-cachedFolderTimeout                  (default: 3600000)
+  --Server-Indexing-reIndexingSensitivity                (default: 'low')
+  --Server-Indexing-excludeFolderList                   If an entry starts with '/' it is treated as an absolute path. If it doesn't start with '/' but contains a '/', the path is relative to the image directory. If it doesn't contain a '/', any folder with this name will be excluded. (default: [])
+  --Server-Indexing-excludeFileList                     Any folder that contains a file with this name will be excluded from indexing. (default: [])
+  --Server-photoMetadataSize                            only this many bites will be loaded when scanning photo for metadata (default: 524288)
+  --Server-Duplicates-listingLimit                       (default: 1000)
+  --Server-Log-level                                     (default: 'info')
+  --Server-Log-sqlLevel                                  (default: 'error')
+  --Server-Jobs-maxSavedProgress                        Job history size (default: 10)
+  --Server-Jobs-scheduled                                (default: [{"name":"Indexing","jobName":"Indexing","config":{},"allowParallelRun":false,"trigger":{"type":1}},{"name":"Thumbnail Generation","jobName":"Thumbnail Generation","config":{"sizes":[240]},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"Indexing"}},{"name":"Photo Converting","jobName":"Photo Converting","config":{},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"Thumbnail Generation"}},{"name":"Video Converting","jobName":"Video Converting","config":{},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"Photo Converting"}},{"name":"Temp Folder Cleaning","jobName":"Temp Folder Cleaning","config":{},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"Photo Converting"}}])
+  --Client-applicationTitle                              (default: 'PiGallery 2')
+  --Client-publicUrl                                     (default: '')
+  --Client-urlBase                                       (default: '')
+  --Client-Search-enabled                                (default: true)
+  --Client-Search-instantSearchEnabled                   (default: true)
+  --Client-Search-InstantSearchTimeout                   (default: 3000)
+  --Client-Search-instantSearchCacheTimeout              (default: 3600000)
+  --Client-Search-searchCacheTimeout                     (default: 3600000)
+  --Client-Search-AutoComplete-enabled                   (default: true)
+  --Client-Search-AutoComplete-maxItemsPerCategory       (default: 5)
+  --Client-Search-AutoComplete-cacheTimeout              (default: 3600000)
+  --Client-Sharing-enabled                               (default: true)
+  --Client-Sharing-passwordProtected                     (default: true)
+  --Client-Map-enabled                                   (default: true)
+  --Client-Map-useImageMarkers                           (default: true)
+  --Client-Map-mapProvider                               (default: 0)
+  --Client-Map-mapboxAccessToken                         (default: '')
+  --Client-Map-customLayers                              (default: [{"name":"street","url":""}])
+  --Client-RandomPhoto-enabled                           (default: true)
+  --Client-Other-enableCache                             (default: true)
+  --Client-Other-enableOnScrollRendering                 (default: true)
+  --Client-Other-defaultPhotoSortingMethod               (default: 'ascDate')
+  --Client-Other-enableOnScrollThumbnailPrioritising     (default: true)
+  --Client-Other-NavBar-showItemCount                    (default: true)
+  --Client-Other-captionFirstNaming                      (default: false)
+  --Client-authenticationRequired                        (default: true)
+  --Client-unAuthenticatedUserRole                       (default: 'Admin')
+  --Client-Media-Thumbnail-iconSize                      (default: 45)
+  --Client-Media-Thumbnail-personThumbnailSize           (default: 200)
+  --Client-Media-Thumbnail-thumbnailSizes                (default: [240,480])
+  --Client-Media-Video-enabled                           (default: true)
+  --Client-Media-Photo-Converting-enabled                (default: true)
+  --Client-MetaFile-enabled                              (default: true)
+  --Client-Faces-enabled                                 (default: true)
+  --Client-Faces-keywordsToPersons                       (default: true)
+  --Client-Faces-writeAccessMinRole                      (default: 'Admin')
+
+Environmental variables: 
+  Server-sessionSecret                               (default: [])
+  Server-port                                        (default: 80)
+  PORT                                               same as Server-port
+  Server-host                                        (default: '0.0.0.0')
+  Server-Media-folder                               Images are loaded from this folder (read permission required) (default: 'demo/images')
+  Server-Media-tempFolder                           Thumbnails, coverted photos, videos will be stored here (write permission required) (default: 'demo/tmp')
+  Server-Media-photoProcessingLibrary                (default: 'sharp')
+  Server-Media-Video-transcoding-bitRate             (default: 5242880)
+  Server-Media-Video-transcoding-resolution          (default: 720)
+  Server-Media-Video-transcoding-fps                 (default: 25)
+  Server-Media-Video-transcoding-codec               (default: 'libx264')
+  Server-Media-Video-transcoding-format              (default: 'mp4')
+  Server-Media-Photo-Converting-onTheFly            Converts photos on the fly, when they are requested. (default: true)
+  Server-Media-Photo-Converting-resolution           (default: 1080)
+  Server-Media-Thumbnail-qualityPriority            if true, photos will have better quality. (default: true)
+  Server-Media-Thumbnail-personFaceMargin            (default: 0.6)
+  Server-Threading-enabled                          App can run on multiple thread (default: true)
+  Server-Threading-thumbnailThreads                 Number of threads that are used to generate thumbnails. If 0, number of 'CPU cores -1' threads will be used. (default: 0)
+  Server-Database-type                               (default: 'sqlite')
+  Server-Database-dbFolder                           (default: 'db')
+  Server-Database-mysql-host                         (default: '')
+  MYSQL_HOST                                         same as Server-Database-mysql-host
+  Server-Database-mysql-database                     (default: '')
+  MYSQL_DATABASE                                     same as Server-Database-mysql-database
+  Server-Database-mysql-username                     (default: '')
+  MYSQL_USERNAME                                     same as Server-Database-mysql-username
+  Server-Database-mysql-password                     (default: '')
+  MYSQL_PASSWORD                                     same as Server-Database-mysql-password
+  Server-Sharing-updateTimeout                       (default: 300000)
+  Server-sessionTimeout                             unit: ms (default: 604800000)
+  Server-Indexing-folderPreviewSize                  (default: 2)
+  Server-Indexing-cachedFolderTimeout                (default: 3600000)
+  Server-Indexing-reIndexingSensitivity              (default: 'low')
+  Server-Indexing-excludeFolderList                 If an entry starts with '/' it is treated as an absolute path. If it doesn't start with '/' but contains a '/', the path is relative to the image directory. If it doesn't contain a '/', any folder with this name will be excluded. (default: [])
+  Server-Indexing-excludeFileList                   Any folder that contains a file with this name will be excluded from indexing. (default: [])
+  Server-photoMetadataSize                          only this many bites will be loaded when scanning photo for metadata (default: 524288)
+  Server-Duplicates-listingLimit                     (default: 1000)
+  Server-Log-level                                   (default: 'info')
+  Server-Log-sqlLevel                                (default: 'error')
+  Server-Jobs-maxSavedProgress                      Job history size (default: 10)
+  Server-Jobs-scheduled                              (default: [{"name":"Indexing","jobName":"Indexing","config":{},"allowParallelRun":false,"trigger":{"type":1}},{"name":"Thumbnail Generation","jobName":"Thumbnail Generation","config":{"sizes":[240]},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"Indexing"}},{"name":"Photo Converting","jobName":"Photo Converting","config":{},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"Thumbnail Generation"}},{"name":"Video Converting","jobName":"Video Converting","config":{},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"Photo Converting"}},{"name":"Temp Folder Cleaning","jobName":"Temp Folder Cleaning","config":{},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"Photo Converting"}}])
+  Client-applicationTitle                            (default: 'PiGallery 2')
+  Client-publicUrl                                   (default: '')
+  Client-urlBase                                     (default: '')
+  Client-Search-enabled                              (default: true)
+  Client-Search-instantSearchEnabled                 (default: true)
+  Client-Search-InstantSearchTimeout                 (default: 3000)
+  Client-Search-instantSearchCacheTimeout            (default: 3600000)
+  Client-Search-searchCacheTimeout                   (default: 3600000)
+  Client-Search-AutoComplete-enabled                 (default: true)
+  Client-Search-AutoComplete-maxItemsPerCategory     (default: 5)
+  Client-Search-AutoComplete-cacheTimeout            (default: 3600000)
+  Client-Sharing-enabled                             (default: true)
+  Client-Sharing-passwordProtected                   (default: true)
+  Client-Map-enabled                                 (default: true)
+  Client-Map-useImageMarkers                         (default: true)
+  Client-Map-mapProvider                             (default: 0)
+  Client-Map-mapboxAccessToken                       (default: '')
+  Client-Map-customLayers                            (default: [{"name":"street","url":""}])
+  Client-RandomPhoto-enabled                         (default: true)
+  Client-Other-enableCache                           (default: true)
+  Client-Other-enableOnScrollRendering               (default: true)
+  Client-Other-defaultPhotoSortingMethod             (default: 'ascDate')
+  Client-Other-enableOnScrollThumbnailPrioritising   (default: true)
+  Client-Other-NavBar-showItemCount                  (default: true)
+  Client-Other-captionFirstNaming                    (default: false)
+  Client-authenticationRequired                      (default: true)
+  Client-unAuthenticatedUserRole                     (default: 'Admin')
+  Client-Media-Thumbnail-iconSize                    (default: 45)
+  Client-Media-Thumbnail-personThumbnailSize         (default: 200)
+  Client-Media-Thumbnail-thumbnailSizes              (default: [240,480])
+  Client-Media-Video-enabled                         (default: true)
+  Client-Media-Photo-Converting-enabled              (default: true)
+  Client-MetaFile-enabled                            (default: true)
+  Client-Faces-enabled                               (default: true)
+  Client-Faces-keywordsToPersons                     (default: true)
+  Client-Faces-writeAccessMinRole                    (default: 'Admin')
+```

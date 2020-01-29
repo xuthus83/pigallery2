@@ -6,8 +6,8 @@ import {BehaviorSubject} from 'rxjs';
 import {StatisticDTO} from '../../../../../common/entities/settings/StatisticDTO';
 import {ScheduledJobsService} from '../scheduled-jobs.service';
 import {DefaultsJobs} from '../../../../../common/entities/job/JobDTO';
-import {ServerConfig} from '../../../../../common/config/private/IPrivateConfig';
 import {first} from 'rxjs/operators';
+import {ServerConfig} from '../../../../../common/config/private/PrivateConfig';
 
 @Injectable()
 export class IndexingSettingsService extends AbstractSettingsService<ServerConfig.IndexingConfig> {

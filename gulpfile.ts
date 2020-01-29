@@ -10,6 +10,8 @@ import * as child_process from 'child_process';
 // @ts-ignore
 import * as jeditor from 'gulp-json-editor';
 import {XLIFF} from 'xlf-google-translate';
+import {Config} from './src/common/config/private/Config';
+import {ConfigClassBuilder} from 'typeconfig/src/decorators/builders/ConfigClassBuilder';
 
 const execPr = util.promisify(child_process.exec);
 
@@ -342,6 +344,14 @@ gulp.task('add-translation-only', (cb) => {
   translate([lng], cb);
 });
 
+gulp.task('generate-man', async (cb) => {
+  let txt = '# Pigallery 2 man page\n';
+  txt += 'pigallery2 uses [typeconfig](https://github.com/bpatrik/typeconfig) for configuration\n\n';
+  txt += '`npm start -- --help` prints the following:\n\n';
+  txt += '```\n' + ConfigClassBuilder.attachPrivateInterface(Config).__printMan() + '```';
+  await fsp.writeFile('MANPAGE.md', txt);
+  cb();
+});
 
 gulp.task('add-translation', gulp.series('extract-locale', 'add-translation-only'));
 

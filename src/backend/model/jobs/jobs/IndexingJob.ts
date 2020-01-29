@@ -3,8 +3,8 @@ import * as path from 'path';
 import {Config} from '../../../../common/config/private/Config';
 import {Job} from './Job';
 import {ConfigTemplateEntry, DefaultsJobs} from '../../../../common/entities/job/JobDTO';
-import {ServerConfig} from '../../../../common/config/private/IPrivateConfig';
 import {JobProgressStates} from '../../../../common/entities/job/JobProgressDTO';
+import {ServerConfig} from '../../../../common/config/private/PrivateConfig';
 
 
 export class IndexingJob extends Job {

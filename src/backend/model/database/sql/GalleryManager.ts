@@ -18,7 +18,7 @@ import {Logger} from '../../../Logger';
 import {FaceRegionEntry} from './enitites/FaceRegionEntry';
 import {ObjectManagers} from '../../ObjectManagers';
 import {DuplicatesDTO} from '../../../../common/entities/DuplicatesDTO';
-import {ServerConfig} from '../../../../common/config/private/IPrivateConfig';
+import {ServerConfig} from '../../../../common/config/private/PrivateConfig';
 
 const LOG_TAG = '[GalleryManager]';
 
