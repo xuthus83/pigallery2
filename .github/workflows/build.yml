@@ -50,7 +50,7 @@ jobs:
         npm test
       env:
         MYSQL_HOST: localhost
-        MYSQL_USER: user
+        MYSQL_USERNAME: user
         MYSQL_PASSWORD: password
         MYSQL_PORT: ${{ job.services.mariadb.ports[3306] }}
         MYSQL_DATABASE: pigalelry_test
