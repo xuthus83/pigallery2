@@ -7,14 +7,16 @@
         <bSwitch
           class="switch"
           name="enabled"
-          [switch-on-color]="'success'"
-          [switch-inverse]="true"
-          [switch-off-text]="text.Disabled"
-          [switch-on-text]="text.Enabled"
+          switch-on-color="success"
+          switch-inverse="true"
+          switch-off-text="Disabled"
+          switch-on-text="Enabled"
+          i18n-switch-off-text
+          i18n-switch-on-text
           [switch-disabled]="inProgress"
-          [switch-handle-width]="100"
-          [switch-label-width]="20"
-          [(ngModel)]="settings.client.enabled">
+          switch-handle-width="100"
+          switch-label-width="20"
+          [(ngModel)]="states.client.enabled.value">
         </bSwitch>
       </div>
     </h5>
@@ -42,58 +44,50 @@
         </ng-container>&nbsp;
       </div>
 
-      <div class="form-group row" [hidden]="simplifiedMode">
-        <label class="col-md-2 control-label" for="format" i18n>Format</label>
-        <div class="col-md-10">
-          <select id="format" class="form-control" [(ngModel)]="settings.server.transcoding.format"
-                  (ngModelChange)="formatChanged($event)"
-                  name="format" required>
-            <option *ngFor="let format of formats" [ngValue]="format">{{format}}
-            </option>
-          </select>
-        </div>
-      </div>
+      <app-settings-entry
+        name="Format"
+        i18n-name
+        [ngModel]="states.server.transcoding.format"
+        [simplifiedMode]="simplifiedMode"
+        (ngModelChange)="formatChanged($event)"
+        [options]="formats"
+        required="true">
+      </app-settings-entry>
 
-      <div class="form-group row" [hidden]="simplifiedMode">
-        <label class="col-md-2 control-label" for="codec" i18n>Codec</label>
-        <div class="col-md-10">
-          <select id="codec" class="form-control" [(ngModel)]="settings.server.transcoding.codec"
-                  name="codec" required>
-            <option *ngFor="let codec of codecs[settings.server.transcoding.format]" [ngValue]="codec">{{codec}}
-            </option>
-          </select>
-        </div>
-      </div>
+      <app-settings-entry
+        name="Codec"
+        i18n-name
+        [ngModel]="states.server.transcoding.codec"
+        [simplifiedMode]="simplifiedMode"
+        [options]="codecs[states.server.transcoding.format.value]"
+        required="true">
+      </app-settings-entry>
 
-      <div class="form-group row">
-        <label class="col-md-2 control-label" for="resolution" i18n>Resolution</label>
-        <div class="col-md-10">
-          <select id="resolution" class="form-control" [(ngModel)]="settings.server.transcoding.resolution"
-                  (ngModelChange)="updateBitRate()"
-                  name="resolution" required>
-            <option *ngFor="let resolution of resolutions" [ngValue]="resolution">{{resolution}}p
-            </option>
-          </select>
-          <small class="form-text text-muted" i18n>The height of the output video will be scaled down to this, while
-            keeping the aspect ratio.</small>
-        </div>
-      </div>
+      <app-settings-entry
+        name="Resolution"
+        description="The height of the output video will be scaled down to this, while keeping the aspect ratio."
+        i18n-name i18n-description
+        [ngModel]="states.server.transcoding.resolution"
+        (ngModelChange)="updateBitRate()"
+        [options]="resolutions"
+        required="true">
+      </app-settings-entry>
 
-      <div class="form-group row" [hidden]="simplifiedMode">
-        <label class="col-md-2 control-label" for="fps" i18n>FPS</label>
-        <div class="col-md-10">
-          <select id="fps" class="form-control" [(ngModel)]="settings.server.transcoding.fps"
-                  (ngModelChange)="updateBitRate()"
-                  name="fps" required>
-            <option *ngFor="let fps of fps" [ngValue]="fps">{{fps}}
-            </option>
-          </select>
-          <small class="form-text text-muted" i18n>Target frame per second (fps) of the output video will be scaled down
-            this this.</small>
-        </div>
-      </div>
 
-      <div class="form-group row">
+      <app-settings-entry
+        name="FPS"
+        description="Target frame per second (fps) of the output video will be scaled down this this."
+        i18n-name i18n-description
+        [ngModel]="states.server.transcoding.fps"
+        (ngModelChange)="updateBitRate()"
+        [options]="fps"
+        [simplifiedMode]="simplifiedMode"
+        required="true">
+      </app-settings-entry>
+
+
+      <div class="form-group row"
+      [class.changed-settings]="states.server.transcoding.bitRate.value !== states.server.transcoding.bitRate.default">
         <label class="col-md-2 control-label" for="bitRate" i18n>Bit rate</label>
         <div class="col-md-10">
           <div class="input-group">
@@ -113,9 +107,6 @@
             upload rate of your home server.</small>
         </div>
       </div>
-
-
-
 
 
       <button class="btn btn-success float-right"

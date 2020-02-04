@@ -42,7 +42,7 @@ describe('SettingsRouter', () => {
       result.res.should.have.status(200);
       result.body.should.be.a('object');
       should.equal(result.body.error, null);
-      result.body.result.should.deep.equal(JSON.parse(JSON.stringify(originalSettings.toJSON({attachDefaults: true}))));
+      result.body.result.should.deep.equal(JSON.parse(JSON.stringify(originalSettings.toJSON({attachState: true, attachVolatile: true}))));
 
     });
   });

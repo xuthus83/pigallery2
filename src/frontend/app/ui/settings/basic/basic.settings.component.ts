@@ -46,7 +46,7 @@ export class BasicSettingsComponent extends SettingsComponent<BasicConfigDTO> {
   }
 
   calcBaseUrl(): string {
-    const url = this.settings.publicUrl.replace(new RegExp('\\\\', 'g'), '/')
+    const url = this.states.publicUrl.value.replace(new RegExp('\\\\', 'g'), '/')
       .replace(new RegExp('http://', 'g'), '')
       .replace(new RegExp('https://', 'g'), '');
     if (url.indexOf('/') !== -1) {
@@ -57,23 +57,24 @@ export class BasicSettingsComponent extends SettingsComponent<BasicConfigDTO> {
   }
 
   checkUrlError() {
-    this.urlError = this.settings.urlBase !== this.calcBaseUrl();
+    this.urlError = this.states.urlBase.value !== this.calcBaseUrl();
   }
 
   onUrlChanged() {
+    console.log('called');
     if (this.urlBaseChanged === false) {
-      this.settings.urlBase = this.calcBaseUrl();
+      this.states.urlBase.value = this.calcBaseUrl();
     } else {
       this.checkUrlError();
     }
 
   }
 
-  onUrlBaseChanged() {
+  onUrlBaseChanged = () => {
     this.urlBaseChanged = true;
 
     this.checkUrlError();
-  }
+  };
 
 }
 

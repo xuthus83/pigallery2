@@ -2,15 +2,14 @@
 import 'reflect-metadata';
 import {ClientConfig} from '../public/ClientConfig';
 import {ServerConfig} from './PrivateConfig';
-import {WebConfigClass} from 'typeconfig/src/decorators/class/WebConfigClass';
-import {ConfigProperty} from 'typeconfig/src/decorators/property/ConfigPropoerty';
-import {ConfigDefaults} from 'typeconfig/src/decorators/property/ConfigDefaults';
+import {WebConfigClass} from 'typeconfig/web';
+import {ConfigProperty, ConfigState} from 'typeconfig/common';
 
 
 @WebConfigClass()
 export class WebConfig {
-  @ConfigDefaults()
-  Defaults: WebConfig;
+  @ConfigState()
+  State: any;
 
   @ConfigProperty()
   Server: ServerConfig.Config = new ServerConfig.Config();

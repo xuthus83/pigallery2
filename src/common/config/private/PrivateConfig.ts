@@ -3,8 +3,8 @@ import 'reflect-metadata';
 import {DefaultsJobs} from '../../entities/job/JobDTO';
 import {JobScheduleDTO, JobTrigger, JobTriggerType} from '../../entities/job/JobScheduleDTO';
 import {ClientConfig} from '../public/ClientConfig';
-import { SubConfigClass } from 'typeconfig/src/decorators/class/SubConfigClass';
-import { ConfigProperty } from 'typeconfig/src/decorators/property/ConfigPropoerty';
+import {SubConfigClass} from 'typeconfig/src/decorators/class/SubConfigClass';
+import {ConfigProperty} from 'typeconfig/src/decorators/property/ConfigPropoerty';
 
 export module ServerConfig {
   export enum DatabaseType {
@@ -37,14 +37,14 @@ export module ServerConfig {
   @SubConfigClass()
   export class MySQLConfig {
     @ConfigProperty({envAlias: 'MYSQL_HOST'})
-    host: string = '';
-    @ConfigProperty({envAlias: 'MYSQL_PORT'})
+    host: string = 'localhost';
+    @ConfigProperty({envAlias: 'MYSQL_PORT', min: 0, max: 65535})
     port: number = 3306;
     @ConfigProperty({envAlias: 'MYSQL_DATABASE'})
-    database: string = '';
+    database: string = 'pigallery2';
     @ConfigProperty({envAlias: 'MYSQL_USERNAME'})
     username: string = '';
-    @ConfigProperty({envAlias: 'MYSQL_PASSWORD'})
+    @ConfigProperty({envAlias: 'MYSQL_PASSWORD', type: 'password'})
     password: string = '';
   }
 
@@ -93,13 +93,13 @@ export module ServerConfig {
     @ConfigProperty({type: ReIndexingSensitivity})
     reIndexingSensitivity: ReIndexingSensitivity = ReIndexingSensitivity.low;
     @ConfigProperty({
-      arrayType: String,
+      arrayType: 'string',
       description: 'If an entry starts with \'/\' it is treated as an absolute path.' +
         ' If it doesn\'t start with \'/\' but contains a \'/\', the path is relative to the image directory.' +
         ' If it doesn\'t contain a \'/\', any folder with this name will be excluded.'
     })
     excludeFolderList: string[] = [];
-    @ConfigProperty({arrayType: String, description: 'Any folder that contains a file with this name will be excluded from indexing.'})
+    @ConfigProperty({arrayType: 'string', description: 'Any folder that contains a file with this name will be excluded from indexing.'})
     excludeFileList: string[] = [];
   }
 
@@ -291,9 +291,9 @@ export module ServerConfig {
 
   @SubConfigClass()
   export class Config {
-    @ConfigProperty({arrayType: String})
+    @ConfigProperty({arrayType: 'string'})
     sessionSecret: string[] = [];
-    @ConfigProperty({type: 'unsignedInt', envAlias: 'PORT'})
+    @ConfigProperty({type: 'unsignedInt', envAlias: 'PORT', min: 0, max: 65535})
     port: number = 80;
     @ConfigProperty()
     host: string = '0.0.0.0';
@@ -305,7 +305,7 @@ export module ServerConfig {
     Database: DataBaseConfig = new DataBaseConfig();
     @ConfigProperty()
     Sharing: SharingConfig = new SharingConfig();
-    @ConfigProperty({description: 'unit: ms'})
+    @ConfigProperty({type: 'unsignedInt', description: 'unit: ms'})
     sessionTimeout: number = 1000 * 60 * 60 * 24 * 7; // in ms
     @ConfigProperty()
     Indexing: IndexingConfig = new IndexingConfig();

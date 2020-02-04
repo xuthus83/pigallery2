@@ -100,7 +100,7 @@ export class JobsSettingsComponent extends SettingsComponent<ServerConfig.JobCon
   }
 
   remove(schedule: JobScheduleDTO) {
-    this.settings.scheduled.splice(this.settings.scheduled.indexOf(schedule), 1);
+    this.states.scheduled.value.splice(this.states.scheduled.value.indexOf(schedule), 1);
   }
 
   jobTypeChanged(schedule: JobScheduleDTO) {
@@ -163,17 +163,17 @@ export class JobsSettingsComponent extends SettingsComponent<ServerConfig.JobCon
     return curr && curr.trigger.type === JobTriggerType.after && prev && prev.name === curr.trigger.afterScheduleName;
   }
 
-  public sortedSchedules() {
-    return this.settings.scheduled.slice().sort((a, b) => {
-      return this.getNextRunningDate(a, this.settings.scheduled) - this.getNextRunningDate(b, this.settings.scheduled);
+  public sortedSchedules(): JobScheduleDTO[] {
+    return this.states.scheduled.value.slice().sort((a: JobScheduleDTO, b: JobScheduleDTO) => {
+      return this.getNextRunningDate(a, this.states.scheduled.value) - this.getNextRunningDate(b, this.states.scheduled.value);
     });
   }
 
   addNewJob() {
     const jobName = this.newSchedule.jobName;
-    const count = this.settings.scheduled.filter(s => s.jobName === jobName).length;
+    const count = this.states.scheduled.value.filter((s: JobScheduleDTO) => s.jobName === jobName).length;
     this.newSchedule.name = count === 0 ? jobName : this.backendTextService.getJobName(jobName) + ' ' + (count + 1);
-    this.settings.scheduled.push(this.newSchedule);
+    this.states.scheduled.value.push(this.newSchedule);
     this.jobModal.hide();
   }
 

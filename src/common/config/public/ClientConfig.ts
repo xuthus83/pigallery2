@@ -2,23 +2,23 @@
 import 'reflect-metadata';
 import {SortingMethods} from '../../entities/SortingMethods';
 import {UserRoles} from '../../entities/UserDTO';
-import { SubConfigClass } from 'typeconfig/src/decorators/class/SubConfigClass';
-import { ConfigProperty } from 'typeconfig/src/decorators/property/ConfigPropoerty';
+import {SubConfigClass} from 'typeconfig/src/decorators/class/SubConfigClass';
+import {ConfigProperty} from 'typeconfig/src/decorators/property/ConfigPropoerty';
 
 
 export module ClientConfig {
 
   export enum MapProviders {
-    OpenStreetMap = 0, Mapbox = 1, Custom = 2
+    OpenStreetMap = 1, Mapbox = 2, Custom = 3
   }
 
   @SubConfigClass()
   export class AutoCompleteConfig {
     @ConfigProperty()
-    enabled = true;
-    @ConfigProperty()
-    maxItemsPerCategory = 5;
-    @ConfigProperty()
+    enabled: boolean = true;
+    @ConfigProperty({type: 'unsignedInt'})
+    maxItemsPerCategory: number = 5;
+    @ConfigProperty({type: 'unsignedInt'})
     cacheTimeout: number = 1000 * 60 * 60;
   }
 
@@ -28,11 +28,11 @@ export module ClientConfig {
     enabled: boolean = true;
     @ConfigProperty()
     instantSearchEnabled: boolean = true;
-    @ConfigProperty()
+    @ConfigProperty({type: 'unsignedInt'})
     InstantSearchTimeout: number = 3000;
-    @ConfigProperty()
+    @ConfigProperty({type: 'unsignedInt'})
     instantSearchCacheTimeout: number = 1000 * 60 * 60;
-    @ConfigProperty()
+    @ConfigProperty({type: 'unsignedInt'})
     searchCacheTimeout: number = 1000 * 60 * 60;
     @ConfigProperty()
     AutoComplete: AutoCompleteConfig = new AutoCompleteConfig();
@@ -66,7 +66,7 @@ export module ClientConfig {
     enabled: boolean = true;
     @ConfigProperty()
     useImageMarkers: boolean = true;
-    @ConfigProperty()
+    @ConfigProperty({type: MapProviders})
     mapProvider: MapProviders = MapProviders.OpenStreetMap;
     @ConfigProperty()
     mapboxAccessToken: string = '';
@@ -76,11 +76,11 @@ export module ClientConfig {
 
   @SubConfigClass()
   export class ThumbnailConfig {
-    @ConfigProperty()
+    @ConfigProperty({type: 'unsignedInt', max: 100})
     iconSize: number = 45;
-    @ConfigProperty()
+    @ConfigProperty({type: 'unsignedInt'})
     personThumbnailSize: number = 200;
-    @ConfigProperty({arrayType: Number})
+    @ConfigProperty({arrayType: 'unsignedInt'})
     thumbnailSizes: number[] = [240, 480];
     @ConfigProperty({volatile: true})
     concurrentThumbnailGenerations: number = 1;
@@ -184,7 +184,7 @@ export module ClientConfig {
     authenticationRequired: boolean = true;
     @ConfigProperty({type: UserRoles})
     unAuthenticatedUserRole: UserRoles = UserRoles.Admin;
-    @ConfigProperty({arrayType: String, volatile: true})
+    @ConfigProperty({arrayType: 'string', volatile: true})
     languages: string[];
     @ConfigProperty()
     Media: MediaConfig = new MediaConfig();

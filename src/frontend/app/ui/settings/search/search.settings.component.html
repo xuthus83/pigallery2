@@ -1,71 +1,53 @@
 <form #settingsForm="ngForm">
   <div class="card mb-4"
-       [ngClass]="settings.enabled && !_settingsService.isSupported()?'panel-warning':''">
+       [ngClass]="states.enabled.value && !_settingsService.isSupported()?'panel-warning':''">
     <h5 class="card-header">
       {{Name}}
       <div class="switch-wrapper">
         <bSwitch
           class="switch"
           name="enabled"
-          [switch-on-color]="'success'"
-          [switch-inverse]="true"
-          [switch-off-text]="text.Disabled"
-          [switch-on-text]="text.Enabled"
-          [switch-disabled]="inProgress || (!settings.enabled && !_settingsService.isSupported())"
-          [switch-handle-width]="100"
-          [switch-label-width]="20"
-          [(ngModel)]="settings.enabled">
+          switch-on-color="success"
+          switch-inverse="true"
+          switch-off-text="Disabled"
+          switch-on-text="Enabled"
+          i18n-switch-off-text
+          i18n-switch-on-text
+          [switch-disabled]="inProgress || !_settingsService.isSupported()"
+          switch-handle-width="100"
+          switch-label-width="20"
+          [(ngModel)]="states.enabled.value">
         </bSwitch>
       </div>
     </h5>
     <div class="card-body">
       <div [hidden]="!error" class="alert alert-danger" role="alert"><strong>Error: </strong>{{error}}</div>
 
-      <ng-container *ngIf="settings.enabled  || _settingsService.isSupported()">
-
-        <div class="form-group row">
-          <label class="col-md-2 control-label" for="autocompleteEnabled" i18n>Autocomplete</label>
-          <div class="col-md-10">
-            <bSwitch
-              id="autocompleteEnabled"
-              class="switch"
-              name="autocompleteEnabled"
-              [switch-on-color]="'primary'"
-              [switch-disabled]="!settings.enabled"
-              [switch-inverse]="true"
-              [switch-off-text]="text.Disabled"
-              [switch-on-text]="text.Enabled"
-              [switch-handle-width]="100"
-              [switch-label-width]="20"
-              [(ngModel)]="settings.AutoComplete.enabled">
-            </bSwitch>
-            <small class="form-text text-muted" i18n>Show hints while typing search query</small>
-          </div>
-        </div>
+      <ng-container *ngIf="states.enabled.value  || _settingsService.isSupported()">
 
 
-        <div class="form-group row">
-          <label class="col-md-2 control-label" for="instantSearchEnabled" i18n>Instant search</label>
-          <div class="col-md-10">
-            <bSwitch
-              id="instantSearchEnabled"
-              class="switch"
-              name="instantSearchEnabled"
-              [switch-on-color]="'primary'"
-              [switch-disabled]="!settings.enabled"
-              [switch-inverse]="true"
-              [switch-off-text]="text.Disabled"
-              [switch-on-text]="text.Enabled"
-              [switch-handle-width]="100"
-              [switch-label-width]="20"
-              [(ngModel)]="settings.instantSearchEnabled">
-            </bSwitch>
-            <small class="form-text text-muted" i18n>Enables showing search results, while typing search query</small>
-          </div>
-        </div>
+
+
+        <app-settings-entry
+          name="Autocomplete"
+          description="Show hints while typing search query."
+          i18n-description i18n-name
+          [ngModel]="states.AutoComplete.enabled"
+          required="true">
+        </app-settings-entry>
+
+        <app-settings-entry
+          name="Instant search"
+          description="Enables showing search results, while typing search query."
+          i18n-description i18n-name
+          [ngModel]="states.instantSearchEnabled"
+          required="true">
+        </app-settings-entry>
+
+
 
       </ng-container>
-      <div class="panel-info" *ngIf="(!settings.enabled && !_settingsService.isSupported())" i18n>
+      <div class="panel-info" *ngIf="(!states.enabled.value && !_settingsService.isSupported())" i18n>
         Search is not supported with these settings
       </div>
       <button class="btn btn-success float-right"

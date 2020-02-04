@@ -1,50 +1,41 @@
 <form #settingsForm="ngForm">
   <div class="card mb-4"
-       [ngClass]="settings.enabled && !_settingsService.isSupported()?'panel-warning':''">
+       [ngClass]="states.enabled.value && !_settingsService.isSupported()?'panel-warning':''">
     <h5 class="card-header">
       {{Name}}
       <div class="switch-wrapper">
         <bSwitch
           class="switch"
           name="enabled"
-          [switch-on-color]="'success'"
-          [switch-inverse]="true"
-          [switch-off-text]="text.Disabled"
-          [switch-on-text]="text.Enabled"
-          [switch-disabled]="inProgress || (!settings.enabled && !_settingsService.isSupported())"
-          [switch-handle-width]="100"
-          [switch-label-width]="20"
-          [(ngModel)]="settings.enabled">
+          switch-on-color="success"
+          switch-inverse="true"
+          switch-off-text="Disabled"
+          switch-on-text="Enabled"
+          i18n-switch-off-text
+          i18n-switch-on-text
+          [switch-disabled]="inProgress || !_settingsService.isSupported()"
+          switch-handle-width="100"
+          switch-label-width="20"
+          [(ngModel)]="states.enabled.value">
         </bSwitch>
       </div>
     </h5>
     <div class="card-body">
       <div [hidden]="!error" class="alert alert-danger" role="alert"><strong>Error: </strong>{{error}}</div>
 
-      <ng-container *ngIf="settings.enabled  || _settingsService.isSupported()">
-        <div class="form-group row">
-          <label class="col-md-2 control-label" for="passwordProtected" i18n>Password protected</label>
-          <div class="col-md-10">
-            <bSwitch
-              id="passwordProtected"
-              class="switch"
-              name="passwordProtected"
-              [switch-on-color]="'primary'"
-              [switch-disabled]="!settings.enabled"
-              [switch-inverse]="true"
-              [switch-off-text]="text.Disabled"
-              [switch-on-text]="text.Enabled"
-              [switch-handle-width]="100"
-              [switch-label-width]="20"
-              [(ngModel)]="settings.passwordProtected">
-            </bSwitch>
-            <small class="form-text text-muted" i18n>Enables password protected sharing links</small>
+      <ng-container *ngIf="states.enabled.value  || _settingsService.isSupported()">
 
-          </div>
-        </div>
+        <app-settings-entry
+          name="Password protected"
+          description="Enables password protected sharing links."
+          i18n-description i18n-name
+          [ngModel]="states.passwordProtected"
+          required="true">
+        </app-settings-entry>
+
 
       </ng-container>
-      <div class="panel-info" *ngIf="(!settings.enabled && !_settingsService.isSupported())" i18n>
+      <div class="panel-info" *ngIf="(!states.enabled.value && !_settingsService.isSupported())" i18n>
         Sharing is not supported with these settings
       </div>
       <button class="btn btn-success float-right"

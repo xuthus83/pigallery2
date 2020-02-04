@@ -83,7 +83,7 @@
                   <div class="col-md-10">
                     <select class="form-control" [(ngModel)]="schedule.trigger.afterScheduleName"
                             [name]="'triggerAfter'+i" required>
-                      <ng-container *ngFor="let sch of settings.scheduled">
+                      <ng-container *ngFor="let sch of states.scheduled.value">
                         <option *ngIf="sch.name !== schedule.name"
                                 [ngValue]="sch.name">{{sch.name}}
                         </option>
@@ -101,7 +101,7 @@
                   <div class="col-md-10">
                     <app-timestamp-datepicker
                       [name]="'triggerTime'+i"
-                      (timestampChange)="testSettingChanges()"
+                      (timestampChange)="onOptionChange()"
                       [(timestamp)]="schedule.trigger.time"></app-timestamp-datepicker>
                   </div>
                 </div>
@@ -121,7 +121,7 @@
                     </select>
                     <app-timestamp-timepicker
                       [name]="'atTime'+i"
-                      (timestampChange)="testSettingChanges()"
+                      (timestampChange)="onOptionChange()"
                       [(timestamp)]="schedule.trigger.atTime"></app-timestamp-timepicker>
                   </div>
                 </div>
@@ -132,12 +132,13 @@
                       class="switch"
                       [name]="'allowParallelRun'+'_'+i"
                       [id]="'allowParallelRun'+'_'+i"
-                      [switch-on-color]="'primary'"
-                      [switch-inverse]="true"
-                      [switch-off-text]="text.Disabled"
-                      [switch-on-text]="text.Enabled"
-                      [switch-handle-width]="100"
-                      [switch-label-width]="20"
+                      switch-on-color="primary"
+                      switch-inverse="true"
+                      switch-off-text="Disabled"
+                      switch-on-text="Enabled"
+                      i18n-switch-off-text i18n-switch-on-text
+                      switch-handle-width="100"
+                      switch-label-width="20"
                       [(ngModel)]="schedule.allowParallelRun">
                     </bSwitch>
                     <small class="form-text text-muted"
@@ -164,12 +165,13 @@
                           class="switch"
                           [name]="configEntry.id+'_'+i"
                           [id]="configEntry.id+'_'+i"
-                          [switch-on-color]="'primary'"
-                          [switch-inverse]="true"
-                          [switch-off-text]="text.Disabled"
-                          [switch-on-text]="text.Enabled"
-                          [switch-handle-width]="100"
-                          [switch-label-width]="20"
+                          switch-on-color="primary"
+                          switch-inverse="true"
+                          switch-off-text="Disabled"
+                          switch-on-text="Enabled"
+                          i18n-switch-off-text i18n-switch-on-text
+                          switch-handle-width="100"
+                          switch-label-width="20"
                           [(ngModel)]="schedule.config[configEntry.id]">
                         </bSwitch>
                       </ng-container>

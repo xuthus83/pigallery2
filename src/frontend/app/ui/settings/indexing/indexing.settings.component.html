@@ -7,84 +7,66 @@
       <div [hidden]="!error" class="alert alert-danger" role="alert"><strong>Error: </strong>{{error}}</div>
 
       <ng-container *ngIf="!simplifiedMode">
-        <div class="form-group row">
-          <label class="col-md-2 control-label" for="cachedFolderTimeout" i18n>Index cache timeout [ms]</label>
-          <div class="col-md-10">
-            <input type="number" class="form-control" placeholder="36000"
-                   id="cachedFolderTimeout"
-                   min="0"
-                   step="1"
-                   [(ngModel)]="settings.cachedFolderTimeout"
-                   name="cachedFolderTimeout" required>
-            <small class="form-text text-muted" i18n>If there was no indexing in this time, it reindexes. (skipped if
-              indexes are in DB and sensitivity is low)
-            </small>
-          </div>
-        </div>
-        <div class="form-group row">
-          <label class="col-md-2 control-label" for="folderPreviewSize" i18n>Sub folder preview size</label>
-          <div class="col-md-10">
-            <input type="number" class="form-control" placeholder="1"
-                   id="folderPreviewSize"
-                   min="0"
-                   step="1"
-                   [(ngModel)]="settings.folderPreviewSize"
-                   name="folderPreviewSize" required>
-            <small class="form-text text-muted" i18n>Reads this many photos from sub folders</small>
-          </div>
-        </div>
 
-        <div class="form-group row">
-          <label class="col-md-2 control-label" for="reIndexingSensitivity" i18n>Folder reindexing sensitivity</label>
-          <div class="col-md-10">
-            <select id="reIndexingSensitivity" class="form-control" [(ngModel)]="settings.reIndexingSensitivity"
-                    name="reIndexingSensitivity" required>
-              <option *ngFor="let type of types" [ngValue]="type.key">{{type.value}}
-              </option>
-            </select>
-            <small
-              class="form-text text-muted"
-              i18n>Set the reindexing sensitivity. High value check the folders for change more often.
-            </small>
-          </div>
-        </div>
+        <app-settings-entry
+          name="Index cache timeout [ms]"
+          description="If there was no indexing in this time, it reindexes. (skipped if indexes are in DB and sensitivity is low)"
+          i18n-description i18n-name
+          [ngModel]="states.cachedFolderTimeout"
+          required="true">
+        </app-settings-entry>
 
-        <div class="form-group row">
-          <label class="col-md-2 control-label" for="excludeFolderList" i18n>Exclude Folder List</label>
-          <div class="col-md-10">
-            <input type="text" class="form-control" placeholder="/media/images/family/private;private;family/private"
-                   id="excludeFolderList"
-                   [(ngModel)]="excludeFolderList"
-                   name="excludeFolderList" required>
-            <small class="form-text text-muted">
-              <ng-container i18n>Folders to exclude from indexing</ng-container>
-              <br/>
-              <ng-container
-                i18n>';' separated strings. If an entry starts with '/' it is treated as an absolute path. If it doesn't
-                start with '/' but contains a '/', the path is relative to the image directory. If it doesn't contain a
-                '/', any folder with this name will be excluded.
-              </ng-container>
-            </small>
-          </div>
-        </div>
+        <app-settings-entry
+          name="Sub folder preview size"
+          description="Reads this many photos from sub folders."
+          i18n-description i18n-name
+          [ngModel]="states.folderPreviewSize"
+          required="true">
+        </app-settings-entry>
 
-        <div class="form-group row">
-          <label class="col-md-2 control-label" for="excludeFileList" i18n>Exclude File List</label>
-          <div class="col-md-10">
-            <input type="text" class="form-control" placeholder=".ignore;.pg2ignore"
-                   id="excludeFileList"
-                   [(ngModel)]="excludeFileList"
-                   name="excludeFileList" required>
-            <small class="form-text text-muted">
-              <ng-container i18n>Files that mark a folder to be excluded from indexing</ng-container>
-              <br/>
-              <ng-container
-                i18n>';' separated strings. Any folder that contains a file with this name will be excluded from
-                indexing.
-              </ng-container>
-            </small>
-          </div>
-        </div>
+
+        <app-settings-entry
+          name="Folder reindexing sensitivity"
+          [ngModel]="states.reIndexingSensitivity"
+          description="Set the reindexing sensitivity. High value check the folders for change more often."
+          i18n-description i18n-name
+          required="true">
+        </app-settings-entry>
+
+        <app-settings-entry
+          name="Exclude Folder List"
+          i18n-name
+          placeholder="/media/images/family/private;private;family/private"
+          [ngModel]="states.excludeFolderList"
+          required="true">
+          <small class="form-text text-muted">
+            <ng-container i18n>Folders to exclude from indexing</ng-container>
+            <br/>
+            <ng-container
+              i18n>';' separated strings. If an entry starts with '/' it is treated as an absolute path. If it doesn't
+              start with '/' but contains a '/', the path is relative to the image directory. If it doesn't contain a
+              '/', any folder with this name will be excluded.
+            </ng-container>
+          </small>
+        </app-settings-entry>
+
+        <app-settings-entry
+          name="Exclude File List"
+          i18n-name
+          placeholder=".ignore;.pg2ignore"
+          [ngModel]="states.excludeFileList"
+          required="true">
+          <small class="form-text text-muted">
+            <ng-container i18n>Files that mark a folder to be excluded from indexing</ng-container>
+            <br/>
+            <ng-container
+              i18n>';' separated strings. Any folder that contains a file with this name will be excluded from
+              indexing.
+            </ng-container>
+          </small>
+        </app-settings-entry>
+
+
 
 
         <button class="btn btn-success float-right"

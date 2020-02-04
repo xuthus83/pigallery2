@@ -31,13 +31,15 @@
             id="simplifiedMode"
             class="switch"
             name="simplifiedMode"
-            [switch-off-color]="'warning'"
-            [switch-on-color]="'primary'"
-            [switch-inverse]="true"
-            [switch-off-text]="text.Advanced"
-            [switch-on-text]="text.Simplified"
-            [switch-handle-width]="100"
-            [switch-label-width]="20"
+            switch-off-color="warning"
+            switch-on-color="primary"
+            switch-inverse="true"
+            switch-off-text="Advanced"
+            switch-on-text="Simplified"
+            i18n-switch-off-text
+            i18n-switch-on-text
+            switch-handle-width="100"
+            switch-label-width="20"
             [(ngModel)]="simplifiedMode">
           </bSwitch>
         </div>

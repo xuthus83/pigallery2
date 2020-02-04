@@ -6,71 +6,68 @@
     <div class="card-body">
       <div [hidden]="!error" class="alert alert-danger" role="alert"><strong>Error: </strong>{{error}}</div>
 
+      <app-settings-entry
+        name="Type"
+        [ngModel]="states.type"
+        i18n-name
+        required="true">
+        <small *ngIf="states.type.value == DatabaseType.mysql"
+               class="form-text text-muted" i18n>Install manually mysql node module to use mysql (npm install mysql)
+        </small>
+      </app-settings-entry>
 
-      <div class="form-group row">
-        <label class="col-md-2 control-label" for="Type" i18n>Type</label>
-        <div class="col-md-10">
-          <select name="Type" id="Type"
-                  class="form-control" [(ngModel)]="settings.type" required>
-            <option *ngFor="let type of types" [ngValue]="type.key">{{type.value}}
-            </option>
-          </select>
-          <small *ngIf="settings.type == DatabaseType.mysql"
-                 class="form-text text-muted" i18n>Install manually mysql node module to use mysql (npm install mysql)
-          </small>
-        </div>
-      </div>
 
-      <div class="form-group row">
-        <label class="col-md-2 control-label" for="dbFolder" i18n>Database folder</label>
-        <div class="col-md-10">
-          <input type="text" class="form-control" placeholder="db"
-                 [(ngModel)]="settings.dbFolder" id="dbFolder" name="dbFolder" required>
-          <small class="form-text text-muted" i18n>
-            All file-based data will be stored here (sqlite database, user database in case of memory db, job history
-            data)
-          </small>
-        </div>
-      </div>
+      <app-settings-entry
+        name="Database folder"
+        description="All file-based data will be stored here (sqlite database, user database in case of memory db, job history data)"
+        [ngModel]="states.dbFolder"
+        i18n-name i18n-description
+        required="true">
+      </app-settings-entry>
 
-      <ng-container *ngIf="settings.type == DatabaseType.mysql">
 
-        <div class="form-group row">
-          <label class="col-md-2 control-label" for="mysql_host" i18n>Host</label>
-          <div class="col-md-10">
-            <input type="text" class="form-control" placeholder="localhost"
-                   [(ngModel)]="settings.mysql.host" id="mysql_host" name="mysql_host" required>
-          </div>
-        </div>
-        <div class="form-group row">
-          <label class="col-md-2 control-label" for="mysql_port" i18n>Port</label>
-          <div class="col-md-10">
-            <input type="number" class="form-control" placeholder="3306" min="0" max="65535"
-                   [(ngModel)]="settings.mysql.port" id="mysql_port" name="mysql_port" required>
-          </div>
-        </div>
+      <ng-container *ngIf="states.type.value == DatabaseType.mysql">
 
-        <div class="form-group row">
-          <label class="col-md-2 control-label" for="mysql_database" i18n>Database</label>
-          <div class="col-md-10">
-            <input type="text" class="form-control" placeholder="pigallery2"
-                   [(ngModel)]="settings.mysql.database" id="mysql_database" name="mysql_database" required>
-          </div>
-        </div>
-        <div class="form-group row">
-          <label class="col-md-2 control-label" for="mysql_username" i18n>Username</label>
-          <div class="col-md-10">
-            <input type="text" class="form-control" placeholder="username"
-                   [(ngModel)]="settings.mysql.username" id="mysql_username" name="mysql_username" required>
-          </div>
-        </div>
-        <div class="form-group row">
-          <label class="col-md-2 control-label" for="mysql_password" i18n>Password</label>
-          <div class="col-md-10">
-            <input type="password" class="form-control" placeholder="password"
-                   [(ngModel)]="settings.mysql.password" id="mysql_password" name="mysql_password" required>
-          </div>
-        </div>
+
+        <app-settings-entry
+          name="Host"
+          [ngModel]="states.mysql.host"
+          i18n-name
+          required="true">
+        </app-settings-entry>
+
+        <app-settings-entry
+          name="Port"
+          [ngModel]="states.mysql.port"
+          i18n-name
+          required="true">
+        </app-settings-entry>
+
+
+        <app-settings-entry
+          name="Database"
+          [ngModel]="states.mysql.database"
+          i18n-name
+          required="true">
+        </app-settings-entry>
+
+        <app-settings-entry
+          name="Username"
+          [ngModel]="states.mysql.username"
+          placeholder="username"
+          i18n-name
+          required="true">
+        </app-settings-entry>
+
+
+        <app-settings-entry
+          name="Password"
+          [ngModel]="states.mysql.password"
+          placeholder="password"
+          i18n-name
+          required="true">
+        </app-settings-entry>
+
       </ng-container>
 
 
