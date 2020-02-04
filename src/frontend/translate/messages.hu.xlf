@@ -2348,7 +2348,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/settings/_abstract/settings-entry/settings-entry.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>alapértelmezett érték/target>
+        <target>alapértelmezett érték</target>
       </trans-unit>
       <trans-unit id="380ab580741bec31346978e7cab8062d6970408d" datatype="html">
         <source>Basic</source>
