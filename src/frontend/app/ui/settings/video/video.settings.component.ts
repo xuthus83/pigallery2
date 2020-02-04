@@ -21,10 +21,16 @@ import {ClientConfig} from '../../../../../common/config/public/ClientConfig';
 })
 export class VideoSettingsComponent extends SettingsComponent<{ server: ServerConfig.VideoConfig, client: ClientConfig.VideoConfig }> {
 
-  resolutions: ServerConfig.resolutionType[] = [360, 480, 720, 1080, 1440, 2160, 4320];
-  codecs: { [key: string]: ServerConfig.codecType[] } = {webm: ['libvpx', 'libvpx-vp9'], mp4: ['libx264', 'libx265']};
-  formats: ServerConfig.formatType[] = ['mp4', 'webm'];
-  fps = [24, 25, 30, 48, 50, 60];
+  readonly resolutionTypes: ServerConfig.resolutionType[] = [360, 480, 720, 1080, 1440, 2160, 4320];
+
+  resolutions: { key: number, value: string }[] = [];
+  codecs: { [key: string]: { key: ServerConfig.codecType, value: ServerConfig.codecType }[] } = {
+    webm: ['libvpx', 'libvpx-vp9'].map((e: ServerConfig.codecType) => ({key: e, value: e})),
+    mp4: ['libx264', 'libx265'].map((e: ServerConfig.codecType) => ({key: e, value: e}))
+  };
+  formats: { key: ServerConfig.formatType, value: ServerConfig.formatType }[] = ['mp4', 'webm']
+      .map((e: ServerConfig.formatType) => ({key: e, value: e}));
+  fps = [24, 25, 30, 48, 50, 60].map(e => ({key: e, value: e}));
 
   JobProgressStates = JobProgressStates;
   readonly jobName = DefaultsJobs[DefaultsJobs['Video Converting']];
@@ -41,9 +47,10 @@ export class VideoSettingsComponent extends SettingsComponent<{ server: ServerCo
     }));
 
     const currentRes = _settingsService.Settings.value.Server.Media.Video.transcoding.resolution;
-    if (this.resolutions.indexOf(currentRes) === -1) {
-      this.resolutions.push(currentRes);
+    if (this.resolutionTypes.indexOf(currentRes) === -1) {
+      this.resolutionTypes.push(currentRes);
     }
+    this.resolutions = this.resolutionTypes.map(e => ({key: e, value: e + 'px'}));
   }
 
 
@@ -52,11 +59,11 @@ export class VideoSettingsComponent extends SettingsComponent<{ server: ServerCo
   }
 
   get bitRate(): number {
-    return this.settings.server.transcoding.bitRate / 1024 / 1024;
+    return this.states.server.transcoding.bitRate.value / 1024 / 1024;
   }
 
   set bitRate(value: number) {
-    this.settings.server.transcoding.bitRate = Math.round(value * 1024 * 1024);
+    this.states.server.transcoding.bitRate.value = Math.round(value * 1024 * 1024);
   }
 
   getRecommendedBitRate(resolution: number, fps: number) {
@@ -83,12 +90,12 @@ export class VideoSettingsComponent extends SettingsComponent<{ server: ServerCo
   }
 
   updateBitRate() {
-    this.settings.server.transcoding.bitRate = this.getRecommendedBitRate(this.settings.server.transcoding.resolution,
-      this.settings.server.transcoding.fps);
+    this.states.server.transcoding.bitRate.value = this.getRecommendedBitRate(this.states.server.transcoding.resolution.value,
+        this.states.server.transcoding.fps.value);
   }
 
   formatChanged(format: ServerConfig.formatType) {
-    this.settings.server.transcoding.codec = this.codecs[format][0];
+    this.states.server.transcoding.codec.value = this.codecs[format][0].key;
   }
 
 

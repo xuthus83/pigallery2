@@ -1,0 +1,11 @@
+
+.changed-settings input, .changed-settings select {
+  border-color: #007bff;
+  border-width: 1.5px;
+}
+
+.changed-settings label {
+  color: #007bff;
+  font-weight: bold;
+}
+

@@ -6,7 +6,6 @@ import {NavigationService} from '../../../model/navigation.service';
 import {NotificationService} from '../../../model/notification.service';
 import {I18n} from '@ngx-translate/i18n-polyfill';
 import {ScheduledJobsService} from '../scheduled-jobs.service';
-import {Utils} from '../../../../../common/Utils';
 import {DefaultsJobs, JobDTO} from '../../../../../common/entities/job/JobDTO';
 import {JobProgressStates} from '../../../../../common/entities/job/JobProgressDTO';
 import {ServerConfig} from '../../../../../common/config/private/PrivateConfig';
@@ -25,19 +24,11 @@ export class PhotoSettingsComponent extends SettingsComponent<{
   server: ServerConfig.PhotoConfig,
   client: ClientConfig.PhotoConfig
 }> {
-  resolutions = [720, 1080, 1440, 2160, 4320];
+  readonly resolutionTypes = [720, 1080, 1440, 2160, 4320];
+  resolutions: { key: number, value: string }[] = [];
   PhotoProcessingLib = ServerConfig.PhotoProcessingLib;
   JobProgressStates = JobProgressStates;
 
-  libTypes = Utils
-    .enumToArray(ServerConfig.PhotoProcessingLib).map((v) => {
-      if (v.value.toLowerCase() === 'sharp') {
-        v.value += ' ' + this.i18n('(recommended)');
-      } else {
-        v.value += ' ' + this.i18n('(deprecated, will be removed)');
-      }
-      return v;
-    });
   readonly jobName = DefaultsJobs[DefaultsJobs['Photo Converting']];
 
   constructor(_authService: AuthenticationService,
@@ -52,15 +43,24 @@ export class PhotoSettingsComponent extends SettingsComponent<{
       server: s.Server.Media.Photo
     }));
     const currentRes = _settingsService.Settings.value.Server.Media.Photo.Converting.resolution;
-    if (this.resolutions.indexOf(currentRes) === -1) {
-      this.resolutions.push(currentRes);
+    if (this.resolutionTypes.indexOf(currentRes) === -1) {
+      this.resolutionTypes.push(currentRes);
     }
+    this.resolutions = this.resolutionTypes.map(e => ({key: e, value: e + 'px'}));
   }
-
 
   get Progress() {
     return this.jobsService.progress.value[JobDTO.getHashName(DefaultsJobs[DefaultsJobs['Photo Converting']])];
   }
+
+  libTypesMap = (v: { key: number, value: string }) => {
+    if (v.value.toLowerCase() === 'sharp') {
+      v.value += ' ' + this.i18n('(recommended)');
+    } else {
+      v.value += ' ' + this.i18n('(deprecated, will be removed)');
+    }
+    return v;
+  };
 }
 
 

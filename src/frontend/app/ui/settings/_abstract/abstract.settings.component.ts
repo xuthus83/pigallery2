@@ -10,8 +10,29 @@ import {I18n} from '@ngx-translate/i18n-polyfill';
 import {Subscription} from 'rxjs';
 import {ISettingsComponent} from './ISettingsComponent';
 import {WebConfig} from '../../../../../common/config/private/WebConfig';
+import {FormControl} from '@angular/forms';
 
+interface ConfigState {
+  value: any;
+  original: any;
+  default: any;
+  readonly: any;
+  onChange: any;
+  isEnumType: boolean;
+  isConfigType: boolean;
+}
 
+interface RecursiveState extends ConfigState {
+  value: any;
+  original: any;
+  default: any;
+  readonly: any;
+  onChange: any;
+  isEnumType: any;
+  isConfigType: any;
+
+  [key: string]: RecursiveState;
+}
 
 export abstract class SettingsComponent<T extends { [key: string]: any }, S extends AbstractSettingsService<T> = AbstractSettingsService<T>>
   implements OnInit, OnDestroy, OnChanges, ISettingsComponent {
@@ -20,7 +41,8 @@ export abstract class SettingsComponent<T extends { [key: string]: any }, S exte
   public simplifiedMode = true;
 
   @ViewChild('settingsForm', {static: true})
-  form: HTMLFormElement;
+  form: FormControl;
+
 
   @Output()
   hasAvailableSettings = true;
@@ -28,14 +50,9 @@ export abstract class SettingsComponent<T extends { [key: string]: any }, S exte
   public inProgress = false;
   public error: string = null;
   public changed = false;
-  public settings: T = <T>{};
-  public original: T = <T>{};
-  text = {
-    Enabled: 'Enabled',
-    Disabled: 'Disabled',
-    Low: 'Low',
-    High: 'High'
-  };
+  public states: RecursiveState = <any>{};
+
+
   private _subscription: Subscription = null;
   private readonly _settingsSubscription: Subscription = null;
 
@@ -50,10 +67,6 @@ export abstract class SettingsComponent<T extends { [key: string]: any }, S exte
       this._settingsSubscription = this._settingsService.Settings.subscribe(this.onNewSettings);
       this.onNewSettings(this._settingsService._settingsService.settings.value);
     }
-    this.text.Enabled = i18n('Enabled');
-    this.text.Disabled = i18n('Disabled');
-    this.text.Low = i18n('Low');
-    this.text.High = i18n('High');
   }
 
 
@@ -70,8 +83,22 @@ export abstract class SettingsComponent<T extends { [key: string]: any }, S exte
   }
 
   onNewSettings = (s: WebConfig) => {
-    this.settings = Utils.clone(this.sliceFN(s));
-    this.original = Utils.clone(this.settings);
+
+    this.states = Utils.clone(<any>this.sliceFN(s.State));
+    const addOriginal = (obj: any) => {
+      for (const k of Object.keys(obj)) {
+        if (typeof obj[k].value === 'undefined') {
+          if (typeof obj[k] === 'object') {
+            addOriginal(obj[k]);
+          }
+          continue;
+        }
+
+        obj[k].original = Utils.clone(obj[k].value);
+        obj[k].onChange = this.onOptionChange;
+      }
+    };
+    addOriginal(this.states);
     this.ngOnChanges();
   };
 
@@ -104,12 +131,32 @@ export abstract class SettingsComponent<T extends { [key: string]: any }, S exte
     return true;
   }
 
-  public testSettingChanges() {
-    // TODO: fix after this issue is fixed: https://github.com/angular/angular/issues/24818
+  onOptionChange = () => {
     setTimeout(() => {
-      this.changed = !this.settingsSame(this.settings, this.original);
+      const settingsSame = (state: RecursiveState): boolean => {
+        if (typeof state === 'undefined') {
+          return true;
+        }
+        if (typeof state.original === 'object') {
+          return Utils.equalsFilter(state.original, state.value);
+        }
+        if (typeof state.original !== 'undefined') {
+          return state.value === state.original;
+        }
+        const keys = Object.keys(state);
+        for (let i = 0; i < keys.length; i++) {
+          const key = keys[i];
+          if (settingsSame(state[key]) === false) {
+            return false;
+          }
+        }
+
+        return true;
+      };
+
+      this.changed = !settingsSame(this.states);
     }, 0);
-  }
+  };
 
   ngOnInit() {
     if (!this._authService.isAuthenticated() ||
@@ -121,9 +168,8 @@ export abstract class SettingsComponent<T extends { [key: string]: any }, S exte
 
     // TODO: fix after this issue is fixed: https://github.com/angular/angular/issues/24818
     this._subscription = this.form.valueChanges.subscribe(() => {
-      this.testSettingChanges();
+      this.onOptionChange();
     });
-
   }
 
   ngOnChanges(): void {
@@ -146,11 +192,28 @@ export abstract class SettingsComponent<T extends { [key: string]: any }, S exte
     this.getSettings();
   }
 
+  stateToSettings(): T {
+    const ret: T = <any>{};
+
+    const add = (obj: any, to: any): void => {
+      for (const key of Object.keys(obj)) {
+        to[key] = {};
+        if (obj[key].isConfigType) {
+          return add(obj[key], to[key]);
+        }
+        to[key] = obj[key].value;
+      }
+    };
+    add(this.states, ret);
+    return ret;
+
+  }
+
   public async save() {
     this.inProgress = true;
     this.error = '';
     try {
-      await this._settingsService.updateSettings(this.settings);
+      await this._settingsService.updateSettings(this.stateToSettings());
       await this.getSettings();
       this.notification.success(this.Name + ' ' + this.i18n('settings saved'), this.i18n('Success'));
       this.inProgress = false;
@@ -166,11 +229,11 @@ export abstract class SettingsComponent<T extends { [key: string]: any }, S exte
     return false;
   }
 
+
   private async getSettings() {
     await this._settingsService.getSettings();
     this.changed = false;
   }
-
 }
 
 

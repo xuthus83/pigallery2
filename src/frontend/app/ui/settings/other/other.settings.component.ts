@@ -8,6 +8,7 @@ import {OtherConfigDTO} from '../../../../../common/entities/settings/OtherConfi
 import {I18n} from '@ngx-translate/i18n-polyfill';
 import {Utils} from '../../../../../common/Utils';
 import {SortingMethods} from '../../../../../common/entities/SortingMethods';
+import {StringifySortingMethod} from '../../../pipes/StringifySortingMethod';
 
 @Component({
   selector: 'app-settings-other',
@@ -20,17 +21,24 @@ export class OtherSettingsComponent extends SettingsComponent<OtherConfigDTO> im
 
 
   types: { key: number; value: string }[] = [];
-  threads: number[] = Utils.createRange(1, 100);
+  threads: { key: number, value: string }[] = [{key: 0, value: 'auto'}].concat(Utils.createRange(1, 100)
+      .map(v => ({key: v, value: '' + v})));
+  sortingMap: any;
 
   constructor(_authService: AuthenticationService,
               _navigation: NavigationService,
               _settingsService: OtherSettingsService,
               notification: NotificationService,
-              i18n: I18n) {
+              i18n: I18n,
+              private formatter: StringifySortingMethod) {
     super(i18n('Other'), _authService, _navigation, _settingsService, notification, i18n, s => ({
       Server: s.Server.Threading,
       Client: s.Client.Other
     }));
+    this.sortingMap = (v: { key: number; value: string }) => {
+      v.value = this.formatter.transform(v.key);
+      return v;
+    };
     this.types = Utils.enumToArray(SortingMethods);
     this.hasAvailableSettings = !this.simplifiedMode;
   }

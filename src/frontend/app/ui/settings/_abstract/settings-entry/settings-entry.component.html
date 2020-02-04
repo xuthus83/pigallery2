@@ -1,0 +1,67 @@
+<ng-container *ngIf="state">
+  <div class="form-group row" *ngIf="!state.isEnumType && state.type !== 'boolean'"
+       [class.changed-settings]="changed"
+       [hidden]="shouldHide">
+    <label class="col-md-2 control-label" [for]="idName">{{name}}</label>
+    <div class="col-md-10">
+      <input [type]="type" [min]="state.min" [max]="state.max" class="form-control" [placeholder]="PlaceHolder"
+             [title]="title"
+             [(ngModel)]="value"
+             (ngModelChange)="onChange($event)"
+             [name]="idName"
+             [disabled]="state.readonly || _disabled"
+             [id]="idName"
+             required="required">
+      <small class="form-text text-muted" *ngIf="description">{{description}}
+      </small>
+    </div>
+  </div>
+  <div class="form-group row" *ngIf="state.isEnumType === true"
+       [class.changed-settings]="changed"
+       [hidden]="shouldHide">
+    <label class="col-md-2 control-label" [for]="idName">{{name}}</label>
+    <div class="col-md-10">
+      <select [id]="idName"
+              [name]="idName"
+              [title]="title"
+              (ngModelChange)="onChange($event)"
+              [disabled]="state.readonly || _disabled"
+              class="form-control" [(ngModel)]="state.value">
+        <option *ngFor="let opt of _options" [ngValue]="opt.key">{{opt.value}}
+        </option>
+      </select>
+      <small class="form-text text-muted" *ngIf="description">{{description}}
+      </small>
+      <ng-content></ng-content>
+    </div>
+  </div>
+
+  <div class="form-group row" *ngIf="state.type === 'boolean'"
+       [class.changed-settings]="changed"
+       [hidden]="shouldHide">
+    <label class="col-md-2 control-label" [for]="idName">{{name}}</label>
+    <div class="col-md-10">
+      <bSwitch
+        class="switch"
+        [id]="idName"
+        [name]="idName"
+        [title]="title"
+        [disabled]="state.readonly || _disabled"
+        switch-on-color="primary"
+        switch-inverse="true"
+        switch-off-text="Disabled"
+        switch-on-text="Enabled"
+        i18n-switch-off-text
+        i18n-switch-on-text
+        switch-handle-width="100"
+        switch-label-width="20"
+        (ngModelChange)="onChange($event)"
+        [(ngModel)]="state.value">
+      </bSwitch>
+
+      <small class="form-text text-muted" *ngIf="description">{{description}}
+      </small>
+      <ng-content></ng-content>
+    </div>
+  </div>
+</ng-container>

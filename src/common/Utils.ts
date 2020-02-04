@@ -61,6 +61,10 @@ export class Utils {
     if (!object) {
       return false;
     }
+
+    if (Array.isArray(object) && object.length !== filter.length) {
+      return false;
+    }
     const keys = Object.keys(filter);
     for (let i = 0; i < keys.length; i++) {
       const key = keys[i];
@@ -158,10 +162,7 @@ export class Utils {
     });
   }
 
-  public static enumToArray(EnumType: any): Array<{
-    key: number;
-    value: string;
-  }> {
+  public static enumToArray(EnumType: any): { key: number; value: string }[] {
     const arr: Array<{ key: number; value: string; }> = [];
     for (const enumMember in EnumType) {
       if (!EnumType.hasOwnProperty(enumMember)) {

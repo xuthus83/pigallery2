@@ -6,14 +6,16 @@
         <bSwitch
           class="switch"
           name="enabled"
-          [switch-on-color]="'success'"
-          [switch-inverse]="true"
-          [switch-off-text]="text.Disabled"
-          [switch-on-text]="text.Enabled"
+          switch-on-color="success"
+          switch-inverse="true"
+          switch-off-text="Disabled"
+          switch-on-text="Enabled"
+          i18n-switch-off-text
+          i18n-switch-on-text
           [switch-disabled]="inProgress"
-          [switch-handle-width]="100"
-          [switch-label-width]="20"
-          [(ngModel)]="settings.enabled">
+          switch-handle-width="100"
+          switch-label-width="20"
+          [(ngModel)]="states.enabled.value">
         </bSwitch>
       </div>
     </h5>

@@ -7,62 +7,48 @@
       <div [hidden]="!error" class="alert alert-danger" role="alert"><strong>Error: </strong>{{error}}</div>
 
 
-      <div class="form-group row" [hidden]="simplifiedMode">
-        <label class="col-md-2 control-label" for="quality" i18n>Thumbnail Quality</label>
-        <div class="col-md-10">
-          <bSwitch
-            id="quality"
-            class="switch"
-            name="enabled"
-            [switch-on-color]="'primary'"
-            [switch-inverse]="true"
-            [switch-off-text]="text.Low"
-            [switch-on-text]="text.High"
-            [switch-handle-width]="100"
-            [switch-label-width]="20"
-            [(ngModel)]="settings.server.qualityPriority">
-          </bSwitch>
-          <small class="form-text text-muted" i18n>High quality may be slow. Especially with Jimp.</small>
+      <app-settings-entry
+        name="Thumbnail Quality"
+        description="High quality may be slow. Especially with Jimp."
+        i18n-description i18n-name
+        [ngModel]="states.server.qualityPriority"
+        [simplifiedMode]="simplifiedMode"
+        required="true">
+      </app-settings-entry>
 
-        </div>
-      </div>
 
-      <div class="form-group row" [hidden]="simplifiedMode">
-        <label class="col-md-2 control-label" for="icon" i18n>Icon size</label>
-        <div class="col-md-10">
-          <input type="number" class="form-control" placeholder="30"
-                 id="icon"
-                 [(ngModel)]="settings.client.iconSize"
-                 min="1"
-                 max="100"
-                 step="1"
-                 name="icon" required>
-          <small class="form-text text-muted" i18n>Icon size (used on maps)</small>
+      <app-settings-entry
+        name="Icon size"
+        description="Icon size (used on maps)."
+        i18n-description i18n-name
+        [ngModel]="states.client.iconSize"
+        [simplifiedMode]="simplifiedMode"
+        required="true">
+      </app-settings-entry>
 
-        </div>
-      </div>
 
-      <div class="form-group row" [hidden]="simplifiedMode">
-        <label class="col-md-2 control-label" for="thumbnailSizes" i18n>Thumbnail sizes</label>
-        <div class="col-md-10">
-          <input type="text" class="form-control" placeholder="240; 480"
-                 id="thumbnailSizes"
-                 [(ngModel)]="ThumbnailSizes"
-                 name="thumbnailSizes" required>
-          <small class="form-text text-muted">
-            <ng-container i18n>Size of the thumbnails.</ng-container>
-            <br/>
-            <ng-container i18n>The best matching size will be generated. (More sizes give better quality, but use more
-              storage and CPU to render.)
-            </ng-container>
-            <br/>
-            <ng-container i18n>';' separated integers. If size is 240, that shorter side of the thumbnail will have 160
-              pixels.
-            </ng-container>
-          </small>
+      <app-settings-entry
+        name="Thumbnail sizes"
+        i18n-name
+        placeholder="240; 480"
+        [ngModel]="states.client.thumbnailSizes"
+        [simplifiedMode]="simplifiedMode"
+        required="true">
+        <small class="form-text text-muted">
+          <ng-container i18n>Size of the thumbnails.</ng-container>
+          <br/>
+          <ng-container i18n>The best matching size will be generated. (More sizes give better quality, but use more
+            storage and CPU to render.)
+          </ng-container>
+          <br/>
+          <ng-container i18n>';' separated integers. If size is 240, that shorter side of the thumbnail will have 160
+            pixels.
+          </ng-container>
+        </small>
+      </app-settings-entry>
 
-        </div>
-      </div>
+
+
 
       <button class="btn btn-success float-right"
               [disabled]="!settingsForm.form.valid || !changed || inProgress"

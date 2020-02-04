@@ -63,7 +63,10 @@ export class RenderingMWs {
   public static async renderConfig(req: Request, res: Response, next: NextFunction) {
     const originalConf = await Config.original();
     originalConf.Server.sessionSecret = null;
-    const message = new Message<PrivateConfigClass>(null, <any>originalConf.toJSON({attachDefaults: true}));
+    const message = new Message<PrivateConfigClass>(null, <any>originalConf.toJSON({
+      attachState: true,
+      attachVolatile: true
+    }));
     res.json(message);
   }
 

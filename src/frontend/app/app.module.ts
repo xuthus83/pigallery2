@@ -92,6 +92,7 @@ import {BackendtextService} from './model/backendtext.service';
 import {JobButtonComponent} from './ui/settings/jobs/button/job-button.settings.component';
 import {ErrorInterceptor} from './model/network/helper/error.interceptor';
 import {CSRFInterceptor} from './model/network/helper/csrf.interceptor';
+import {SettingsEntryComponent} from './ui/settings/_abstract/settings-entry/settings-entry.component';
 
 
 @Injectable()
@@ -187,6 +188,7 @@ export function translationsFactory(locale: string) {
     DuplicateComponent,
     DuplicatesPhotoComponent,
     // Settings
+    SettingsEntryComponent,
     UserMangerSettingsComponent,
     DatabaseSettingsComponent,
     MapSettingsComponent,
@@ -218,6 +220,7 @@ export function translationsFactory(locale: string) {
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
     {provide: UrlSerializer, useClass: CustomUrlSerializer},
     {provide: HAMMER_GESTURE_CONFIG, useClass: MyHammerConfig},
+    StringifySortingMethod,
     NetworkService,
     ShareService,
     UserService,

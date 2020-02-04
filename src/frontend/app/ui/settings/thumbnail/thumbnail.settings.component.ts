@@ -37,20 +37,9 @@ export class ThumbnailSettingsComponent
   }
 
   get Config(): any {
-    return {sizes: this.original.client.thumbnailSizes[0]};
+    return {sizes: this.states.client.thumbnailSizes.original[0]};
   }
 
-  get ThumbnailSizes(): string {
-    return this.settings.client.thumbnailSizes.join('; ');
-  }
-
-  set ThumbnailSizes(value: string) {
-    value = value.replace(new RegExp(',', 'g'), ';');
-    value = value.replace(new RegExp(' ', 'g'), ';');
-    this.settings.client.thumbnailSizes = value.split(';')
-      .map(s => parseInt(s, 10))
-      .filter(i => !isNaN(i) && i > 0);
-  }
 
   get Progress() {
     return this.jobsService.progress.value[JobDTO.getHashName(this.jobName, this.Config)];

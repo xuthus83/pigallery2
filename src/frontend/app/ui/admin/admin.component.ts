@@ -17,15 +17,11 @@ import {formatDate} from '@angular/common';
 })
 export class AdminComponent implements OnInit, AfterViewInit {
   simplifiedMode = true;
-  text = {
-    Advanced: 'Advanced',
-    Simplified: 'Simplified'
-  };
   appVersion = Config.Client.appVersion;
   versionExtra = '';
   upTime = Config.Client.upTime;
   @ViewChildren('setting') settingsComponents: QueryList<ISettingsComponent>;
-  @ViewChildren('setting', {read: ElementRef}) settingsComponents2: QueryList<ElementRef>;
+  @ViewChildren('setting', {read: ElementRef}) settingsComponentsElemRef: QueryList<ElementRef>;
   contents: ISettingsComponent[] = [];
 
   constructor(private _authService: AuthenticationService,
@@ -33,8 +29,6 @@ export class AdminComponent implements OnInit, AfterViewInit {
               public notificationService: NotificationService,
               @Inject(LOCALE_ID) private locale: string,
               public i18n: I18n) {
-    this.text.Advanced = i18n('Advanced');
-    this.text.Simplified = i18n('Simplified');
 
     if (Config.Client.buildTime) {
       this.versionExtra = i18n('Built at') + ': ' + formatDate(Config.Client.buildTime, 'medium', locale);
@@ -50,13 +44,13 @@ export class AdminComponent implements OnInit, AfterViewInit {
   }
 
   scrollTo(i: number) {
-    PageHelper.ScrollY = this.settingsComponents2.toArray()[i].nativeElement.getBoundingClientRect().top +
-        PageHelper.ScrollY;
+    PageHelper.ScrollY = this.settingsComponentsElemRef.toArray()[i].nativeElement.getBoundingClientRect().top +
+      PageHelper.ScrollY;
   }
 
   ngOnInit() {
     if (!this._authService.isAuthenticated()
-        || this._authService.user.value.role < UserRoles.Admin) {
+      || this._authService.user.value.role < UserRoles.Admin) {
       this._navigation.toLogin();
       return;
     }
