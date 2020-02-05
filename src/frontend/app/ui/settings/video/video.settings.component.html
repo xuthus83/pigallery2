@@ -68,7 +68,7 @@
         description="The height of the output video will be scaled down to this, while keeping the aspect ratio."
         i18n-name i18n-description
         [ngModel]="states.server.transcoding.resolution"
-        (ngModelChange)="updateBitRate()"
+        (change)="updateBitRate()"
         [options]="resolutions"
         required="true">
       </app-settings-entry>
@@ -79,7 +79,7 @@
         description="Target frame per second (fps) of the output video will be scaled down this this."
         i18n-name i18n-description
         [ngModel]="states.server.transcoding.fps"
-        (ngModelChange)="updateBitRate()"
+        (change)="updateBitRate()"
         [options]="fps"
         [simplifiedMode]="simplifiedMode"
         required="true">

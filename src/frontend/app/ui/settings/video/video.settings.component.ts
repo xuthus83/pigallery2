@@ -78,7 +78,7 @@ export class VideoSettingsComponent extends SettingsComponent<{ server: ServerCo
       bitRate = 8 * 1024 * 1024;
     } else if (resolution <= 1440) {
       bitRate = 16 * 1024 * 1024;
-    } else if (resolution <= 2016) {
+    } else  {
       bitRate = 40 * 1024 * 1024;
     }
 
