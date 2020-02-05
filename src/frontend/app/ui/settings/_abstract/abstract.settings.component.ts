@@ -198,13 +198,15 @@ export abstract class SettingsComponent<T extends { [key: string]: any }, S exte
     const add = (obj: any, to: any): void => {
       for (const key of Object.keys(obj)) {
         to[key] = {};
-        if (obj[key].isConfigType) {
-          return add(obj[key], to[key]);
+        if (obj[key].isConfigType || (typeof obj[key] === 'object' && typeof obj[key].value === 'undefined')) {
+           add(obj[key], to[key]);
+           continue;
         }
         to[key] = obj[key].value;
       }
     };
     add(this.states, ret);
+
     return ret;
 
   }
