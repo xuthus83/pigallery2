@@ -6,8 +6,7 @@ export enum UserRoles {
   Guest = 2,
   User = 3,
   Admin = 4,
-  Developer = 5,
-
+  Developer = 5
 }
 
 export interface UserDTO {

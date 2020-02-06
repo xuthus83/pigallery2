@@ -156,7 +156,10 @@ export class SettingsEntryComponent implements ControlValueAccessor, Validator, 
   }
 
   validate(control: FormControl): ValidationErrors {
-    if (!this.required || (this.state && this.state.value && this.state.value !== '')) {
+    if (!this.required || (this.state &&
+      typeof this.state.value !== 'undefined' &&
+      this.state.value !== null &&
+      this.state.value !== '')) {
       return null;
     }
     return {required: true};

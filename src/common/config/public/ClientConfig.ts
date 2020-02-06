@@ -2,8 +2,7 @@
 import 'reflect-metadata';
 import {SortingMethods} from '../../entities/SortingMethods';
 import {UserRoles} from '../../entities/UserDTO';
-import {SubConfigClass} from 'typeconfig/src/decorators/class/SubConfigClass';
-import {ConfigProperty} from 'typeconfig/src/decorators/property/ConfigPropoerty';
+import {ConfigProperty, SubConfigClass} from 'typeconfig/common';
 
 
 export module ClientConfig {
@@ -154,7 +153,6 @@ export module ClientConfig {
 
   @SubConfigClass()
   export class Config {
-
 
     @ConfigProperty({volatile: true})
     upTime: string;

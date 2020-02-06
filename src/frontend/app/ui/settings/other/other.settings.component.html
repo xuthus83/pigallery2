@@ -14,8 +14,7 @@
         name="Threading"
         description="Runs directory scanning and thumbnail generation (only for Jimp) in a different thread."
         i18n-description i18n-name
-        [ngModel]="states.Server.enabled"
-        required="true">
+        [ngModel]="states.Server.enabled">
       </app-settings-entry>
 
 
@@ -37,32 +36,28 @@
         name="Scroll based thumbnail generation"
         description="Those thumbnails get higher priority that are visible on the screen."
         i18n-description i18n-name
-        [ngModel]="states.Client.enableOnScrollThumbnailPrioritising"
-        required="true">
+        [ngModel]="states.Client.enableOnScrollThumbnailPrioritising">
       </app-settings-entry>
 
       <app-settings-entry
         name="Lazy image rendering"
         description="Shows only the required amount of photos at once. Renders more if page bottom is reached."
         i18n-description i18n-name
-        [ngModel]="states.Client.enableOnScrollRendering"
-        required="true">
+        [ngModel]="states.Client.enableOnScrollRendering">
       </app-settings-entry>
 
       <app-settings-entry
         name="Cache"
         description="Caches directory contents and search results for better performance."
         i18n-description i18n-name
-        [ngModel]="states.Client.enableCache"
-        required="true">
+        [ngModel]="states.Client.enableCache">
       </app-settings-entry>
 
       <app-settings-entry
         name="Caption first naming"
         description="Show the caption (IPTC 120) tags from the EXIF data instead of the filenames."
         i18n-description i18n-name
-        [ngModel]="states.Client.captionFirstNaming"
-        required="true">
+        [ngModel]="states.Client.captionFirstNaming">
       </app-settings-entry>
 
 

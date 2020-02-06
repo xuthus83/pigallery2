@@ -39,8 +39,7 @@
         name="Converting"
         description="Downsizes photos for faster preview loading. (Zooming in to the photo loads the original)."
         i18n-description i18n-name
-        [ngModel]="states.client.Converting.enabled"
-        required="true">
+        [ngModel]="states.client.Converting.enabled">
       </app-settings-entry>
 
       <app-settings-entry
@@ -49,8 +48,7 @@
         i18n-description i18n-name
         [ngModel]="states.server.Converting.onTheFly"
         [simplifiedMode]="simplifiedMode"
-        [disabled]="!states.client.Converting.enabled.value"
-        required="true">
+        [disabled]="!states.client.Converting.enabled.value">
       </app-settings-entry>
 
       <app-settings-entry
