@@ -1,10 +1,10 @@
 /* tslint:disable:no-inferrable-types */
 import 'reflect-metadata';
-import {DefaultsJobs} from '../../entities/job/JobDTO';
 import {JobScheduleDTO, JobTrigger, JobTriggerType} from '../../entities/job/JobScheduleDTO';
 import {ClientConfig} from '../public/ClientConfig';
 import {SubConfigClass} from 'typeconfig/src/decorators/class/SubConfigClass';
 import {ConfigProperty} from 'typeconfig/src/decorators/property/ConfigPropoerty';
+import {DefaultsJobs} from '../../entities/job/JobDTO';
 
 export module ServerConfig {
   export enum DatabaseType {
@@ -159,7 +159,7 @@ export module ServerConfig {
     @ConfigProperty()
     afterScheduleName: string; // runs after schedule
 
-    constructor(afterScheduleName: string) {
+    constructor(afterScheduleName?: string) {
       this.afterScheduleName = afterScheduleName;
     }
   }
@@ -177,8 +177,10 @@ export module ServerConfig {
     @ConfigProperty()
     allowParallelRun: boolean;
     @ConfigProperty({
+      type: NeverJobTrigger,
       typeBuilder: (v: JobTrigger) => {
-        switch (v.type) {
+        const type = typeof v.type === 'number' ? v.type : JobTriggerType[v.type];
+        switch (type) {
           case JobTriggerType.after:
             return AfterJobTrigger;
           case JobTriggerType.never:
@@ -232,7 +234,7 @@ export module ServerConfig {
       new JobScheduleConfig(DefaultsJobs[DefaultsJobs['Temp Folder Cleaning']],
         DefaultsJobs[DefaultsJobs['Temp Folder Cleaning']],
         false,
-        new AfterJobTrigger(DefaultsJobs[DefaultsJobs['Photo Converting']]), {}
+        new AfterJobTrigger(DefaultsJobs[DefaultsJobs['Video Converting']]), {}
       ),
     ];
   }
