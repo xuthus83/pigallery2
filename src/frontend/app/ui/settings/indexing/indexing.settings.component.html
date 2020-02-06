@@ -37,8 +37,7 @@
           name="Exclude Folder List"
           i18n-name
           placeholder="/media/images/family/private;private;family/private"
-          [ngModel]="states.excludeFolderList"
-          required="true">
+          [ngModel]="states.excludeFolderList">
           <small class="form-text text-muted">
             <ng-container i18n>Folders to exclude from indexing</ng-container>
             <br/>
@@ -54,8 +53,7 @@
           name="Exclude File List"
           i18n-name
           placeholder=".ignore;.pg2ignore"
-          [ngModel]="states.excludeFileList"
-          required="true">
+          [ngModel]="states.excludeFileList">
           <small class="form-text text-muted">
             <ng-container i18n>Files that mark a folder to be excluded from indexing</ng-container>
             <br/>

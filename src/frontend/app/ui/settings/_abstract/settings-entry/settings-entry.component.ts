@@ -99,7 +99,7 @@ export class SettingsEntryComponent implements ControlValueAccessor, Validator, 
       (this.state.arrayType === 'string' || this.isNumberArray)) {
       value = value.replace(new RegExp(',', 'g'), ';');
       value = value.replace(new RegExp(' ', 'g'), ';');
-      this.state.value = value.split(';');
+      this.state.value = value.split(';').filter((v: string) => v !== '');
       if (this.isNumberArray) {
         this.state.value = this.state.value.map((v: string) => parseFloat(v)).filter((v: number) => !isNaN(v));
       }

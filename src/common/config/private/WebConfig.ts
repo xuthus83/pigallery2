@@ -6,7 +6,7 @@ import {WebConfigClass} from 'typeconfig/web';
 import {ConfigProperty, ConfigState} from 'typeconfig/common';
 
 
-@WebConfigClass()
+@WebConfigClass({softReadonly: true})
 export class WebConfig {
   @ConfigState()
   State: any;

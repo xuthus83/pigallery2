@@ -11,6 +11,7 @@ import {ConfigProperty, IConfigClass} from 'typeconfig/common';
   saveIfNotExist: true,
   attachDescription: true,
   enumsAsString: true,
+  softReadonly: true,
   cli: {
     enable: {
       configPath: true,
