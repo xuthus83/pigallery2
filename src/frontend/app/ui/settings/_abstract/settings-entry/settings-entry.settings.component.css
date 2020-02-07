@@ -1,7 +1,7 @@
 
 .changed-settings input, .changed-settings select {
   border-color: #007bff;
-  border-width: 1.5px;
+  border-width: 1px;
 }
 
 .changed-settings label {
@@ -9,3 +9,15 @@
   font-weight: bold;
 }
 
+.changed-settings.docker-warning label {
+  color: #ffc107;
+}
+
+.changed-settings.docker-warning select, .changed-settings.docker-warning input {
+  border-color: #ffc107;
+}
+
+.warning-icon {
+  font-size: x-large;
+  margin-top: 5px;
+}

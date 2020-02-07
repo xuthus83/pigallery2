@@ -292,7 +292,23 @@ export module ServerConfig {
 
 
   @SubConfigClass()
+  export class EnvironmentConfig {
+    @ConfigProperty({volatile: true})
+    upTime: string;
+    @ConfigProperty({volatile: true})
+    appVersion: string;
+    @ConfigProperty({volatile: true})
+    buildTime: string;
+    @ConfigProperty({volatile: true})
+    buildCommitHash: string;
+    @ConfigProperty({volatile: true})
+    isDocker: boolean;
+  }
+
+  @SubConfigClass()
   export class Config {
+    @ConfigProperty({volatile: true})
+    Environment: EnvironmentConfig = new EnvironmentConfig();
     @ConfigProperty({arrayType: 'string'})
     sessionSecret: string[] = [];
     @ConfigProperty({type: 'unsignedInt', envAlias: 'PORT', min: 0, max: 65535})

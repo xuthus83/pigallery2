@@ -1,64 +1,67 @@
+<ng-template #popTemplate i18n>
+  It seems that you are running the application in a Docker container.
+  This setting should not be changed in docker.
+  Make sure, that you know what you are doing.
+</ng-template>
+
 <ng-container *ngIf="state">
-  <div class="form-group row" *ngIf="!state.isEnumType && state.type !== 'boolean'"
+  <div class="form-group row"
        [class.changed-settings]="changed"
+       [class.docker-warning]="dockerWarning"
        [hidden]="shouldHide">
     <label class="col-md-2 control-label" [for]="idName">{{name}}</label>
     <div class="col-md-10">
-      <input [type]="type" [min]="state.min" [max]="state.max" class="form-control" [placeholder]="PlaceHolder"
-             [title]="title"
-             [(ngModel)]="value"
-             (ngModelChange)="onChange($event)"
-             [name]="idName"
-             [disabled]="state.readonly || _disabled"
-             [id]="idName"
-             required="required">
-      <small class="form-text text-muted" *ngIf="description">{{description}}
-      </small>
-    </div>
-  </div>
-  <div class="form-group row" *ngIf="state.isEnumType === true"
-       [class.changed-settings]="changed"
-       [hidden]="shouldHide">
-    <label class="col-md-2 control-label" [for]="idName">{{name}}</label>
-    <div class="col-md-10">
-      <select [id]="idName"
-              [name]="idName"
-              [title]="title"
-              (ngModelChange)="onChange($event)"
-              [disabled]="state.readonly || _disabled"
-              class="form-control" [(ngModel)]="state.value">
-        <option *ngFor="let opt of _options" [ngValue]="opt.key">{{opt.value}}
-        </option>
-      </select>
-      <small class="form-text text-muted" *ngIf="description">{{description}}
-      </small>
-      <ng-content></ng-content>
-    </div>
-  </div>
 
-  <div class="form-group row" *ngIf="state.type === 'boolean'"
-       [class.changed-settings]="changed"
-       [hidden]="shouldHide">
-    <label class="col-md-2 control-label" [for]="idName">{{name}}</label>
-    <div class="col-md-10">
-      <bSwitch
-        class="switch"
-        [id]="idName"
-        [name]="idName"
-        [title]="title"
-        [disabled]="state.readonly || _disabled"
-        switch-on-color="primary"
-        switch-inverse="true"
-        switch-off-text="Disabled"
-        switch-on-text="Enabled"
-        i18n-switch-off-text
-        i18n-switch-on-text
-        switch-handle-width="100"
-        switch-label-width="20"
-        (ngModelChange)="onChange($event)"
-        [(ngModel)]="state.value">
-      </bSwitch>
+      <div class="input-group">
+        <input
+          *ngIf="!state.isEnumType && state.type !== 'boolean'"
+          [type]="type" [min]="state.min" [max]="state.max" class="form-control" [placeholder]="PlaceHolder"
+          [title]="title"
+          [(ngModel)]="value"
+          (ngModelChange)="onChange($event)"
+          [name]="idName"
+          [disabled]="state.readonly || _disabled"
+          [id]="idName"
+          required="required">
 
+        <select
+          *ngIf="state.isEnumType === true"
+          [id]="idName"
+          [name]="idName"
+          [title]="title"
+          (ngModelChange)="onChange($event)"
+          [disabled]="state.readonly || _disabled"
+          class="form-control" [(ngModel)]="state.value">
+          <option *ngFor="let opt of _options" [ngValue]="opt.key">{{opt.value}}
+          </option>
+        </select>
+
+        <bSwitch
+          *ngIf="state.type === 'boolean'"
+          class="switch"
+          [id]="idName"
+          [name]="idName"
+          [title]="title"
+          [disabled]="state.readonly || _disabled"
+          switch-on-color="primary"
+          switch-inverse="true"
+          switch-off-text="Disabled"
+          switch-on-text="Enabled"
+          i18n-switch-off-text
+          i18n-switch-on-text
+          switch-handle-width="100"
+          switch-label-width="20"
+          (ngModelChange)="onChange($event)"
+          [(ngModel)]="state.value">
+        </bSwitch>
+        <div class="input-group-append">
+          <span
+            triggers="mouseenter:mouseleave"
+            placement="bottom"
+            [popover]="popTemplate"
+            class="oi oi-warning text-warning warning-icon ml-2" *ngIf="dockerWarning && changed"></span>
+        </div>
+      </div>
       <small class="form-text text-muted" *ngIf="description">{{description}}
       </small>
       <ng-content></ng-content>

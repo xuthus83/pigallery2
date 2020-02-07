@@ -26,6 +26,7 @@ export class SettingsEntryComponent implements ControlValueAccessor, Validator, 
 
   @Input() name: string;
   @Input() required: boolean;
+  @Input() dockerWarning: boolean;
   @Input() optionMap: (v: { key: number, value: string }) => { key: number, value: string };
   @Input() placeholder: string;
   @Input() options: { key: number | string, value: number | string }[];

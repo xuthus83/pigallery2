@@ -49,10 +49,6 @@ export class Server {
     Logger.info(LOG_TAG, 'running diagnostics...');
     await ConfigDiagnostics.runDiagnostics();
     Logger.verbose(LOG_TAG, 'using config:');
-    Config.Client.appVersion = require('../../package.json').version;
-    Config.Client.buildTime = require('../../package.json').buildTime;
-    Config.Client.buildCommitHash = require('../../package.json').buildCommitHash;
-    Config.Client.upTime = (new Date()).toISOString();
     Logger.verbose(LOG_TAG, JSON.stringify(Config, null, '\t'));
 
     this.app = _express();

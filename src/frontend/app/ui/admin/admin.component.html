@@ -1,3 +1,14 @@
+<ng-template #popTemplate>
+  <span i18n>Application version</span>: v{{(settingsService.settings | async).Server.Environment.appVersion}}
+  <ng-container *ngIf="(settingsService.settings | async).Server.Environment.buildTime">
+    <br/>
+    <span i18n>Built at</span>: {{(settingsService.settings | async).Server.Environment.buildTime | date:'medium' }}
+  </ng-container>
+  <ng-container *ngIf="(settingsService.settings | async).Server.Environment.buildCommitHash">
+    <br/>
+    <span i18n>Git commit</span>: {{(settingsService.settings | async).Server.Environment.buildCommitHash}}
+  </ng-container>
+</ng-template>
 <app-frame>
   <div body class="container-fluid">
 
@@ -22,9 +33,16 @@
     </div>
     <div class="form-horizontal">
       <div class="d-flex justify-content-between">
-        <a title="{{versionExtra}}" class="version" href="https://github.com/bpatrik/pigallery2/releases">
-          <span i18n>App version:</span>&nbsp;v<span>{{appVersion}}</span>
-        </a>
+        <div>
+          <a triggers="mouseenter:mouseleave"
+             placement="bottom"
+             [popover]="popTemplate"
+             class="version"
+             href="https://github.com/bpatrik/pigallery2/releases">
+            <span
+              i18n>App version:</span>&nbsp;<span>{{'v'+((settingsService.settings | async).Server.Environment.appVersion || '----')}}</span>
+          </a>
+        </div>
         <div class="form-group">
           <label class="control-label align-self-end mr-2" for="simplifiedMode" i18n>Mode</label>
           <bSwitch
@@ -115,7 +133,7 @@
       <div class="col-12">
         <div class="text-right">
           <ng-container i18n>Up time</ng-container><!--
-          -->: {{upTime | date:'medium'}}
+          -->: {{(settingsService.settings | async).Server.Environment.upTime | date:'medium'}}
         </div>
       </div>
     </div>

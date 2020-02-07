@@ -153,15 +153,6 @@ export module ClientConfig {
 
   @SubConfigClass()
   export class Config {
-
-    @ConfigProperty({volatile: true})
-    upTime: string;
-    @ConfigProperty({volatile: true})
-    appVersion: string;
-    @ConfigProperty({volatile: true})
-    buildTime: string;
-    @ConfigProperty({volatile: true})
-    buildCommitHash: string;
     @ConfigProperty()
     applicationTitle: string = 'PiGallery 2';
     @ConfigProperty()

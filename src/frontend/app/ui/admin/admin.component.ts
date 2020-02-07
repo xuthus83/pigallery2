@@ -5,10 +5,9 @@ import {NotificationService} from '../../model/notification.service';
 import {NotificationType} from '../../../../common/entities/NotificationDTO';
 import {NavigationService} from '../../model/navigation.service';
 import {I18n} from '@ngx-translate/i18n-polyfill';
-import {Config} from '../../../../common/config/public/Config';
 import {ISettingsComponent} from '../settings/_abstract/ISettingsComponent';
 import {PageHelper} from '../../model/page.helper';
-import {formatDate} from '@angular/common';
+import {SettingsService} from '../settings/settings.service';
 
 @Component({
   selector: 'app-admin',
@@ -17,9 +16,6 @@ import {formatDate} from '@angular/common';
 })
 export class AdminComponent implements OnInit, AfterViewInit {
   simplifiedMode = true;
-  appVersion = Config.Client.appVersion;
-  versionExtra = '';
-  upTime = Config.Client.upTime;
   @ViewChildren('setting') settingsComponents: QueryList<ISettingsComponent>;
   @ViewChildren('setting', {read: ElementRef}) settingsComponentsElemRef: QueryList<ElementRef>;
   contents: ISettingsComponent[] = [];
@@ -27,16 +23,9 @@ export class AdminComponent implements OnInit, AfterViewInit {
   constructor(private _authService: AuthenticationService,
               private _navigation: NavigationService,
               public notificationService: NotificationService,
+              public settingsService: SettingsService,
               @Inject(LOCALE_ID) private locale: string,
               public i18n: I18n) {
-
-    if (Config.Client.buildTime) {
-      this.versionExtra = i18n('Built at') + ': ' + formatDate(Config.Client.buildTime, 'medium', locale);
-    }
-    if (Config.Client.buildCommitHash) {
-      this.versionExtra += ', ' + i18n('git hash') + ': ' + Config.Client.buildCommitHash;
-    }
-
   }
 
   ngAfterViewInit(): void {

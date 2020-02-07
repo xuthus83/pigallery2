@@ -20,6 +20,8 @@ ENV NODE_ENV=production \
     default-Server-Database-dbFolder=/app/data/db \
     default-Server-Media-folder=/app/data/images \
     default-Server-Media-tempFolder=/app/data/tmp
+    # flagging dockerized environemnt
+    PI_DOCKER=true
 # command line arg orverride the config.json with these settings
 ENTRYPOINT ["node", "./src/backend/index",  \
   # after a extensive job (like video converting), pigallery calls gc, to clean up everthing as fast as possible

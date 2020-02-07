@@ -12,6 +12,7 @@ export class SettingsService {
 
   constructor(private _networkService: NetworkService) {
     this.settings = new BehaviorSubject<WebConfig>(new WebConfig());
+    this.getSettings().catch(console.error);
   }
 
   public async getSettings(): Promise<void> {
@@ -28,6 +29,4 @@ export class SettingsService {
     }
     this.fetchingSettings = false;
   }
-
-
 }
