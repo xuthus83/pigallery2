@@ -42,6 +42,8 @@ describe('SettingsRouter', () => {
       result.res.should.have.status(200);
       result.body.should.be.a('object');
       should.equal(result.body.error, null);
+      result.body.result.Server.Environment.upTime = null;
+      originalSettings.Server.Environment.upTime = null;
       result.body.result.should.deep.equal(JSON.parse(JSON.stringify(originalSettings.toJSON({attachState: true, attachVolatile: true}))));
 
     });
