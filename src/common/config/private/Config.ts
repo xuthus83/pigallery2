@@ -29,9 +29,9 @@ import {ConfigProperty, IConfigClass} from 'typeconfig/common';
   }
 })
 export class PrivateConfigClass implements IPrivateConfig {
-  @ConfigProperty()
+  @ConfigProperty({type: ServerConfig.Config})
   Server: ServerConfig.Config = new ServerConfig.Config();
-  @ConfigProperty()
+  @ConfigProperty({type: ClientConfig.Config})
   Client: IConfigClass & ClientConfig.Config = <IConfigClass & ClientConfig.Config>(new ClientConfig.Config());
 
   constructor() {

@@ -62,6 +62,7 @@ docker-compose up -d
 `-d` runs it as a daemon. Remove it, so you will see the logs. 
 
 After the containers are up and running, you go to `yourdomain.com` and log in with user: `admin` pass: `admin` and set up the page in the settings. 
+Full list of configuration options are available at the [MANPAGE.md](../MANPAGE.md).
 
 **Note:** `docker-compose.yml` contains `restart:always`, so the containers will be automatically started after reboot ([read more here](https://stackoverflow.com/questions/43671482/how-to-run-docker-compose-up-d-at-system-start-up)).
  

@@ -96,9 +96,10 @@ You can set up the app the following ways:
  * Through switches
    * Like: `node start -- --Server-port=3000 --Client-authenticationRequired=false`
    * You can check the generated `config.json` for the config hierarchy
-   * Note: you can run the app to generate the config file only, by running `npm start -- --config-only`
  * Through environmental variable
    * like set env. variable `Server-port` to `3000`   
+
+Full list of configuration options are available at the  [MANPAGE.md](MANPAGE.md).
 
 ### 1.4 Useful links/tips:
 

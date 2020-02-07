@@ -10,7 +10,7 @@ import * as child_process from 'child_process';
 // @ts-ignore
 import * as jeditor from 'gulp-json-editor';
 import {XLIFF} from 'xlf-google-translate';
-import {Config} from './src/common/config/private/Config';
+import {Config, PrivateConfigClass} from './src/common/config/private/Config';
 import {ConfigClassBuilder} from 'typeconfig/src/decorators/builders/ConfigClassBuilder';
 
 const execPr = util.promisify(child_process.exec);
@@ -345,10 +345,14 @@ gulp.task('add-translation-only', (cb) => {
 });
 
 gulp.task('generate-man', async (cb) => {
+  const defCFG =  ConfigClassBuilder.attachInterface(new PrivateConfigClass());
+  defCFG.Server.sessionSecret = [];
   let txt = '# Pigallery 2 man page\n';
   txt += 'pigallery2 uses [typeconfig](https://github.com/bpatrik/typeconfig) for configuration\n\n';
   txt += '`npm start -- --help` prints the following:\n\n';
-  txt += '```\n' + ConfigClassBuilder.attachPrivateInterface(Config).__printMan() + '```';
+  txt += '```\n' + ConfigClassBuilder.attachPrivateInterface(defCFG).__printMan() + '```';
+  txt += '\n\n ### `config.json` sample:\n';
+  txt += '```json\n' + JSON.stringify(defCFG, null, 4) + '```';
   await fsp.writeFile('MANPAGE.md', txt);
   cb();
 });

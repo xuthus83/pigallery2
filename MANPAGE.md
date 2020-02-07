@@ -9,7 +9,7 @@ Usage: <appname> [options]
 Meta cli options: 
 --help                           prints this manual 
 --config-path                    sets the config file location 
---config-attachDefs              prints the defaults to the config file 
+--config-attachState             prints the value state (default, readonly, volatile, etc..) to the config file 
 --config-attachDesc              prints description to the config file 
 --config-rewrite-cli             updates the config file with the options from cli switches 
 --config-rewrite-env             updates the config file with the options from environmental variables 
@@ -45,8 +45,9 @@ App CLI options:
   --Server-Threading-thumbnailThreads                   Number of threads that are used to generate thumbnails. If 0, number of 'CPU cores -1' threads will be used. (default: 0)
   --Server-Database-type                                 (default: 'sqlite')
   --Server-Database-dbFolder                             (default: 'db')
-  --Server-Database-mysql-host                           (default: '')
-  --Server-Database-mysql-database                       (default: '')
+  --Server-Database-mysql-host                           (default: 'localhost')
+  --Server-Database-mysql-port                           (default: 3306)
+  --Server-Database-mysql-database                       (default: 'pigallery2')
   --Server-Database-mysql-username                       (default: '')
   --Server-Database-mysql-password                       (default: '')
   --Server-Sharing-updateTimeout                         (default: 300000)
@@ -61,7 +62,7 @@ App CLI options:
   --Server-Log-level                                     (default: 'info')
   --Server-Log-sqlLevel                                  (default: 'error')
   --Server-Jobs-maxSavedProgress                        Job history size (default: 10)
-  --Server-Jobs-scheduled                                (default: [{"name":"Indexing","jobName":"Indexing","config":{},"allowParallelRun":false,"trigger":{"type":1}},{"name":"Thumbnail Generation","jobName":"Thumbnail Generation","config":{"sizes":[240]},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"Indexing"}},{"name":"Photo Converting","jobName":"Photo Converting","config":{},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"Thumbnail Generation"}},{"name":"Video Converting","jobName":"Video Converting","config":{},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"Photo Converting"}},{"name":"Temp Folder Cleaning","jobName":"Temp Folder Cleaning","config":{},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"Photo Converting"}}])
+  --Server-Jobs-scheduled                                (default: [{"name":"Indexing","jobName":"Indexing","config":{},"allowParallelRun":false,"trigger":{"type":1}},{"name":"Thumbnail Generation","jobName":"Thumbnail Generation","config":{"sizes":[240]},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"Indexing"}},{"name":"Photo Converting","jobName":"Photo Converting","config":{},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"Thumbnail Generation"}},{"name":"Video Converting","jobName":"Video Converting","config":{},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"Photo Converting"}},{"name":"Temp Folder Cleaning","jobName":"Temp Folder Cleaning","config":{},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"Video Converting"}}])
   --Client-applicationTitle                              (default: 'PiGallery 2')
   --Client-publicUrl                                     (default: '')
   --Client-urlBase                                       (default: '')
@@ -77,7 +78,7 @@ App CLI options:
   --Client-Sharing-passwordProtected                     (default: true)
   --Client-Map-enabled                                   (default: true)
   --Client-Map-useImageMarkers                           (default: true)
-  --Client-Map-mapProvider                               (default: 0)
+  --Client-Map-mapProvider                               (default: 'OpenStreetMap')
   --Client-Map-mapboxAccessToken                         (default: '')
   --Client-Map-customLayers                              (default: [{"name":"street","url":""}])
   --Client-RandomPhoto-enabled                           (default: true)
@@ -120,9 +121,11 @@ Environmental variables:
   Server-Threading-thumbnailThreads                 Number of threads that are used to generate thumbnails. If 0, number of 'CPU cores -1' threads will be used. (default: 0)
   Server-Database-type                               (default: 'sqlite')
   Server-Database-dbFolder                           (default: 'db')
-  Server-Database-mysql-host                         (default: '')
+  Server-Database-mysql-host                         (default: 'localhost')
   MYSQL_HOST                                         same as Server-Database-mysql-host
-  Server-Database-mysql-database                     (default: '')
+  Server-Database-mysql-port                         (default: 3306)
+  MYSQL_PORT                                         same as Server-Database-mysql-port
+  Server-Database-mysql-database                     (default: 'pigallery2')
   MYSQL_DATABASE                                     same as Server-Database-mysql-database
   Server-Database-mysql-username                     (default: '')
   MYSQL_USERNAME                                     same as Server-Database-mysql-username
@@ -140,7 +143,7 @@ Environmental variables:
   Server-Log-level                                   (default: 'info')
   Server-Log-sqlLevel                                (default: 'error')
   Server-Jobs-maxSavedProgress                      Job history size (default: 10)
-  Server-Jobs-scheduled                              (default: [{"name":"Indexing","jobName":"Indexing","config":{},"allowParallelRun":false,"trigger":{"type":1}},{"name":"Thumbnail Generation","jobName":"Thumbnail Generation","config":{"sizes":[240]},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"Indexing"}},{"name":"Photo Converting","jobName":"Photo Converting","config":{},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"Thumbnail Generation"}},{"name":"Video Converting","jobName":"Video Converting","config":{},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"Photo Converting"}},{"name":"Temp Folder Cleaning","jobName":"Temp Folder Cleaning","config":{},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"Photo Converting"}}])
+  Server-Jobs-scheduled                              (default: [{"name":"Indexing","jobName":"Indexing","config":{},"allowParallelRun":false,"trigger":{"type":1}},{"name":"Thumbnail Generation","jobName":"Thumbnail Generation","config":{"sizes":[240]},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"Indexing"}},{"name":"Photo Converting","jobName":"Photo Converting","config":{},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"Thumbnail Generation"}},{"name":"Video Converting","jobName":"Video Converting","config":{},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"Photo Converting"}},{"name":"Temp Folder Cleaning","jobName":"Temp Folder Cleaning","config":{},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"Video Converting"}}])
   Client-applicationTitle                            (default: 'PiGallery 2')
   Client-publicUrl                                   (default: '')
   Client-urlBase                                     (default: '')
@@ -156,7 +159,7 @@ Environmental variables:
   Client-Sharing-passwordProtected                   (default: true)
   Client-Map-enabled                                 (default: true)
   Client-Map-useImageMarkers                         (default: true)
-  Client-Map-mapProvider                             (default: 0)
+  Client-Map-mapProvider                             (default: 'OpenStreetMap')
   Client-Map-mapboxAccessToken                       (default: '')
   Client-Map-customLayers                            (default: [{"name":"street","url":""}])
   Client-RandomPhoto-enabled                         (default: true)
@@ -178,3 +181,214 @@ Environmental variables:
   Client-Faces-keywordsToPersons                     (default: true)
   Client-Faces-writeAccessMinRole                    (default: 'Admin')
 ```
+
+ ### `config.json` sample:
+```json
+{
+    "Server": {
+        "sessionSecret": [],
+        "port": 80,
+        "host": "0.0.0.0",
+        "Media": {
+            "//[folder]": "Images are loaded from this folder (read permission required)",
+            "folder": "demo/images",
+            "//[tempFolder]": "Thumbnails, coverted photos, videos will be stored here (write permission required)",
+            "tempFolder": "demo/tmp",
+            "photoProcessingLibrary": "sharp",
+            "Video": {
+                "transcoding": {
+                    "bitRate": 5242880,
+                    "resolution": 720,
+                    "fps": 25,
+                    "codec": "libx264",
+                    "format": "mp4"
+                }
+            },
+            "Photo": {
+                "Converting": {
+                    "//[onTheFly]": "Converts photos on the fly, when they are requested.",
+                    "onTheFly": true,
+                    "resolution": 1080
+                }
+            },
+            "Thumbnail": {
+                "//[qualityPriority]": "if true, photos will have better quality.",
+                "qualityPriority": true,
+                "personFaceMargin": 0.6
+            }
+        },
+        "Threading": {
+            "//[enabled]": "App can run on multiple thread",
+            "enabled": true,
+            "//[thumbnailThreads]": "Number of threads that are used to generate thumbnails. If 0, number of 'CPU cores -1' threads will be used.",
+            "thumbnailThreads": 0
+        },
+        "Database": {
+            "type": "sqlite",
+            "dbFolder": "db",
+            "mysql": {
+                "host": "localhost",
+                "port": 3306,
+                "database": "pigallery2",
+                "username": "",
+                "password": ""
+            }
+        },
+        "Sharing": {
+            "updateTimeout": 300000
+        },
+        "//[sessionTimeout]": "unit: ms",
+        "sessionTimeout": 604800000,
+        "Indexing": {
+            "folderPreviewSize": 2,
+            "cachedFolderTimeout": 3600000,
+            "reIndexingSensitivity": "low",
+            "//[excludeFolderList]": "If an entry starts with '/' it is treated as an absolute path. If it doesn't start with '/' but contains a '/', the path is relative to the image directory. If it doesn't contain a '/', any folder with this name will be excluded.",
+            "excludeFolderList": [],
+            "//[excludeFileList]": "Any folder that contains a file with this name will be excluded from indexing.",
+            "excludeFileList": []
+        },
+        "//[photoMetadataSize]": "only this many bites will be loaded when scanning photo for metadata",
+        "photoMetadataSize": 524288,
+        "Duplicates": {
+            "listingLimit": 1000
+        },
+        "Log": {
+            "level": "info",
+            "sqlLevel": "error"
+        },
+        "Jobs": {
+            "//[maxSavedProgress]": "Job history size",
+            "maxSavedProgress": 10,
+            "scheduled": [
+                {
+                    "name": "Indexing",
+                    "jobName": "Indexing",
+                    "config": {},
+                    "allowParallelRun": false,
+                    "trigger": {
+                        "type": "never"
+                    }
+                },
+                {
+                    "name": "Thumbnail Generation",
+                    "jobName": "Thumbnail Generation",
+                    "config": {
+                        "sizes": [
+                            240
+                        ]
+                    },
+                    "allowParallelRun": false,
+                    "trigger": {
+                        "type": "after",
+                        "afterScheduleName": "Indexing"
+                    }
+                },
+                {
+                    "name": "Photo Converting",
+                    "jobName": "Photo Converting",
+                    "config": {},
+                    "allowParallelRun": false,
+                    "trigger": {
+                        "type": "after",
+                        "afterScheduleName": "Thumbnail Generation"
+                    }
+                },
+                {
+                    "name": "Video Converting",
+                    "jobName": "Video Converting",
+                    "config": {},
+                    "allowParallelRun": false,
+                    "trigger": {
+                        "type": "after",
+                        "afterScheduleName": "Photo Converting"
+                    }
+                },
+                {
+                    "name": "Temp Folder Cleaning",
+                    "jobName": "Temp Folder Cleaning",
+                    "config": {},
+                    "allowParallelRun": false,
+                    "trigger": {
+                        "type": "after",
+                        "afterScheduleName": "Video Converting"
+                    }
+                }
+            ]
+        }
+    },
+    "Client": {
+        "applicationTitle": "PiGallery 2",
+        "publicUrl": "",
+        "urlBase": "",
+        "Search": {
+            "enabled": true,
+            "instantSearchEnabled": true,
+            "InstantSearchTimeout": 3000,
+            "instantSearchCacheTimeout": 3600000,
+            "searchCacheTimeout": 3600000,
+            "AutoComplete": {
+                "enabled": true,
+                "maxItemsPerCategory": 5,
+                "cacheTimeout": 3600000
+            }
+        },
+        "Sharing": {
+            "enabled": true,
+            "passwordProtected": true
+        },
+        "Map": {
+            "enabled": true,
+            "useImageMarkers": true,
+            "mapProvider": "OpenStreetMap",
+            "mapboxAccessToken": "",
+            "customLayers": [
+                {
+                    "name": "street",
+                    "url": ""
+                }
+            ]
+        },
+        "RandomPhoto": {
+            "enabled": true
+        },
+        "Other": {
+            "enableCache": true,
+            "enableOnScrollRendering": true,
+            "defaultPhotoSortingMethod": "ascDate",
+            "enableOnScrollThumbnailPrioritising": true,
+            "NavBar": {
+                "showItemCount": true
+            },
+            "captionFirstNaming": false
+        },
+        "authenticationRequired": true,
+        "unAuthenticatedUserRole": "Admin",
+        "Media": {
+            "Thumbnail": {
+                "iconSize": 45,
+                "personThumbnailSize": 200,
+                "thumbnailSizes": [
+                    240,
+                    480
+                ]
+            },
+            "Video": {
+                "enabled": true
+            },
+            "Photo": {
+                "Converting": {
+                    "enabled": true
+                }
+            }
+        },
+        "MetaFile": {
+            "enabled": true
+        },
+        "Faces": {
+            "enabled": true,
+            "keywordsToPersons": true,
+            "writeAccessMinRole": "Admin"
+        }
+    }
+}```
