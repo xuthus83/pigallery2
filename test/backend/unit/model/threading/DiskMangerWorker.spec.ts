@@ -11,10 +11,10 @@ describe('DiskMangerWorker', () => {
     Config.Server.Media.folder = path.join(__dirname, '/../../../assets');
     ProjectPath.ImageFolder = path.join(__dirname, '/../../../assets');
     const dir = await DiskMangerWorker.scanDirectory('/');
-    expect(dir.media.length).to.be.equals(4);
+    expect(dir.media.length).to.be.equals(5);
     const expected = require(path.join(__dirname, '/../../../assets/test image öüóőúéáű-.,.json'));
-    expect(Utils.clone(dir.media[1].name)).to.be.deep.equal('test image öüóőúéáű-.,.jpg');
-    expect(Utils.clone(dir.media[1].metadata)).to.be.deep.equal(expected);
+    expect(Utils.clone(dir.media[2].name)).to.be.deep.equal('test image öüóőúéáű-.,.jpg');
+    expect(Utils.clone(dir.media[2].metadata)).to.be.deep.equal(expected);
   });
 
 });

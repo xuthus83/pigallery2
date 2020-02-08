@@ -142,7 +142,8 @@ export class MetadataLoader {
               }
 
               if (exif.tags.CreateDate || exif.tags.DateTimeOriginal || exif.tags.ModifyDate) {
-                metadata.creationDate = (exif.tags.CreateDate || exif.tags.DateTimeOriginal || exif.tags.ModifyDate) * 1000;
+                metadata.creationDate = (exif.tags.DateTimeOriginal || exif.tags.CreateDate || exif.tags.ModifyDate) * 1000;
+
               }
 
               if (exif.tags.Orientation) {
