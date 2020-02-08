@@ -37,6 +37,9 @@ App CLI options:
   --Server-Media-Video-transcoding-fps                   (default: 25)
   --Server-Media-Video-transcoding-codec                 (default: 'libx264')
   --Server-Media-Video-transcoding-format                (default: 'mp4')
+  --Server-Media-Video-transcoding-crf                  Constant Rate Factor. The range of the CRF scale is 0–51, where 0 is lossless, 23 is the default, and 51 is worst quality possible. (default: 23)
+  --Server-Media-Video-transcoding-preset               A preset is a collection of options that will provide a certain encoding speed to compression ratio (default: 'medium')
+  --Server-Media-Video-transcoding-customOptions        It will be sent to ffmpeg as it is, as custom options. (default: [])
   --Server-Media-Photo-Converting-onTheFly              Converts photos on the fly, when they are requested. (default: true)
   --Server-Media-Photo-Converting-resolution             (default: 1080)
   --Server-Media-Thumbnail-qualityPriority              if true, photos will have better quality. (default: true)
@@ -113,6 +116,9 @@ Environmental variables:
   Server-Media-Video-transcoding-fps                 (default: 25)
   Server-Media-Video-transcoding-codec               (default: 'libx264')
   Server-Media-Video-transcoding-format              (default: 'mp4')
+  Server-Media-Video-transcoding-crf                Constant Rate Factor. The range of the CRF scale is 0–51, where 0 is lossless, 23 is the default, and 51 is worst quality possible. (default: 23)
+  Server-Media-Video-transcoding-preset             A preset is a collection of options that will provide a certain encoding speed to compression ratio (default: 'medium')
+  Server-Media-Video-transcoding-customOptions      It will be sent to ffmpeg as it is, as custom options. (default: [])
   Server-Media-Photo-Converting-onTheFly            Converts photos on the fly, when they are requested. (default: true)
   Server-Media-Photo-Converting-resolution           (default: 1080)
   Server-Media-Thumbnail-qualityPriority            if true, photos will have better quality. (default: true)
@@ -201,7 +207,13 @@ Environmental variables:
                     "resolution": 720,
                     "fps": 25,
                     "codec": "libx264",
-                    "format": "mp4"
+                    "format": "mp4",
+                    "//[crf]": "Constant Rate Factor. The range of the CRF scale is 0–51, where 0 is lossless, 23 is the default, and 51 is worst quality possible.",
+                    "crf": 23,
+                    "//[preset]": "A preset is a collection of options that will provide a certain encoding speed to compression ratio",
+                    "preset": "medium",
+                    "//[customOptions]": "It will be sent to ffmpeg as it is, as custom options.",
+                    "customOptions": []
                 }
             },
             "Photo": {
