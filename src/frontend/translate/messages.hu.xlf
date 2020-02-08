@@ -588,11 +588,7 @@
           <context context-type="sourcefile">app/ui/settings/_abstract/settings-entry/settings-entry.component.html</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>
-  Úgy tűnik, hogy dockerben futtatod az alkalmaást.
-  Ezt a beállítást nem célszerű dockeren belül módosítani,
-   ezért biztosan tudd hogy mit csinálsz.
-</target>
+        <target>Úgy tűnik, hogy dockerben futtatod az alkalmaást. Ezt a beállítást nem célszerű dockeren belül módosítani, ezért biztosan tudd hogy mit csinálsz.</target>
       </trans-unit>
       <trans-unit id="f39256070bfc0714020dfee08895421fc1527014" datatype="html">
         <source>Disabled</source>
@@ -832,7 +828,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
-          <context context-type="linenumber">113</context>
+          <context context-type="linenumber">143</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/photo/photo.settings.component.html</context>
@@ -889,7 +885,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
-          <context context-type="linenumber">117</context>
+          <context context-type="linenumber">147</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/photo/photo.settings.component.html</context>
@@ -1180,6 +1176,54 @@
           <context context-type="linenumber">104</context>
         </context-group>
         <target>A konvertált videó bit rátája ennyi lesz. (Felfelé nem lesz skálázva)</target>
+      </trans-unit>
+      <trans-unit id="148d5d78e94f20a20c3ad3b01d704a3497a8c761" datatype="html">
+        <source>CRF</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
+          <context context-type="linenumber">112</context>
+        </context-group>
+        <target>CRF</target>
+      </trans-unit>
+      <trans-unit id="9849326199a31248798c5acffde967fd35a7fb68" datatype="html">
+        <source>The range of the Constant Rate Factor (CRF) scale is 0–51, where 0 is lossless, 23 is the default, and 51 is worst quality possible.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
+          <context context-type="linenumber">113</context>
+        </context-group>
+        <target>Constant Rate Factor (CRF) 0-51 között mozog, ahol 0 veszteségmentes, 23 az alapértelemzett és 51 a legrosszabb minőség.</target>
+      </trans-unit>
+      <trans-unit id="962533863b61fce4a1ac5a852936185f58039695" datatype="html">
+        <source>Preset</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
+          <context context-type="linenumber">121</context>
+        </context-group>
+        <target>Preset</target>
+      </trans-unit>
+      <trans-unit id="b990e080e67c16cef76ca1f879e659de50ce1c36" datatype="html">
+        <source>A preset is a collection of options that will provide a certain encoding speed to compression ratio. A slower preset will provide better compression (compression is quality per filesize).</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
+          <context context-type="linenumber">122</context>
+        </context-group>
+        <target>Preset egy előre elkészített beállítási csoport, ami egy adott tömörítési minőséget biztosít. Lasabb preset-ek jobb tömörítési minőséget biztosítanak.</target>
+      </trans-unit>
+      <trans-unit id="25ce84764ffa614804d96c740bec339fe91f4a25" datatype="html">
+        <source>Custom Options</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
+          <context context-type="linenumber">130</context>
+        </context-group>
+        <target>Egyéb beállítások</target>
+      </trans-unit>
+      <trans-unit id="fde4937739b841cf4a7566913ea3787c745a0c83" datatype="html">
+        <source>; separated values. It will be sent to ffmpeg as it is, as custom options.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
+          <context context-type="linenumber">131</context>
+        </context-group>
+        <target>;-al elválaszott értékek. Egy az egyben kerülnek átadásra az ffmpeg-nek.</target>
       </trans-unit>
       <trans-unit id="1b239b0422945f36c35b5559b4b0c135922fe299" datatype="html">
         <source>It is highly recommended to use hardware accelerated (sharp or gm) lib for thumbnail

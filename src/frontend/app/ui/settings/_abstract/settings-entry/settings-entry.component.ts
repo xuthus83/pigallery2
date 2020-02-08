@@ -31,6 +31,7 @@ export class SettingsEntryComponent implements ControlValueAccessor, Validator, 
   @Input() placeholder: string;
   @Input() options: { key: number | string, value: number | string }[];
   @Input() simplifiedMode = false;
+  @Input() allowSpaces = false;
   @Input() description: boolean;
   state: {
     isEnumType: boolean,
@@ -99,7 +100,9 @@ export class SettingsEntryComponent implements ControlValueAccessor, Validator, 
     if (this.state.type === 'array' &&
       (this.state.arrayType === 'string' || this.isNumberArray)) {
       value = value.replace(new RegExp(',', 'g'), ';');
-      value = value.replace(new RegExp(' ', 'g'), ';');
+      if(this.allowSpaces === false) {
+        value = value.replace(new RegExp(' ', 'g'), ';');
+      }
       this.state.value = value.split(';').filter((v: string) => v !== '');
       if (this.isNumberArray) {
         this.state.value = this.state.value.map((v: string) => parseFloat(v)).filter((v: number) => !isNaN(v));

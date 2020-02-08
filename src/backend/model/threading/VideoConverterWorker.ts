@@ -3,6 +3,7 @@ import {promises as fsp} from 'fs';
 import {FfmpegCommand} from 'fluent-ffmpeg';
 import {FFmpegFactory} from '../FFmpegFactory';
 import {ServerConfig} from '../../../common/config/private/PrivateConfig';
+import FFmpegPresets = ServerConfig.FFmpegPresets;
 
 
 export interface VideoConverterInput {
@@ -12,6 +13,9 @@ export interface VideoConverterInput {
     bitRate?: number,
     resolution?: ServerConfig.resolutionType,
     fps?: number,
+    crf?: number,
+    preset?: ServerConfig.FFmpegPresets,
+    customOptions?: string[],
     codec: ServerConfig.codecType,
     format: ServerConfig.formatType
   };
@@ -67,6 +71,21 @@ export class VideoConverterWorker {
       if (input.output.fps) {
         command.fps(input.output.fps);
       }
+
+      // set Constant Rate Factor (CRF)
+      if (input.output.crf) {
+        command.addOption(['-crf ' + input.output.crf]);
+      }
+
+      // set preset
+      if (input.output.preset) {
+        command.addOption(['-preset ' + FFmpegPresets[input.output.preset]]);
+      }
+      // set any additional commands
+      if (input.output.customOptions) {
+        command.addOption(input.output.customOptions);
+      }
+
       // set output format to force
       command.format(input.output.format)
         // save to file

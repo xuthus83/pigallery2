@@ -29,6 +29,11 @@ export module ServerConfig {
     low = 1, medium = 2, high = 3
   }
 
+  export enum FFmpegPresets {
+    ultrafast = 1, superfast = 2, veryfast = 3, faster = 4, fast = 5, medium = 6,
+    slow = 7, slower = 8, veryslow = 9, placebo = 10
+  }
+
 
   export type codecType = 'libvpx-vp9' | 'libx264' | 'libvpx' | 'libx265';
   export type resolutionType = 240 | 360 | 480 | 720 | 1080 | 1440 | 2160 | 4320;
@@ -252,6 +257,20 @@ export module ServerConfig {
     codec: codecType = 'libx264';
     @ConfigProperty()
     format: formatType = 'mp4';
+    @ConfigProperty({
+      type: 'unsignedInt',
+      description: 'Constant Rate Factor. The range of the CRF scale is 0–51, where 0 is lossless, 23 is the default, and 51 is worst quality possible.',
+      max: 51
+    })
+    crf: number = 23;
+    @ConfigProperty({
+      type: FFmpegPresets,
+      description: 'A preset is a collection of options that will provide a certain encoding speed to compression ratio'
+    })
+    preset: FFmpegPresets = FFmpegPresets.medium;
+
+    @ConfigProperty({arrayType: 'string', description: 'It will be sent to ffmpeg as it is, as custom options.'})
+    customOptions: string[] = [];
   }
 
   @SubConfigClass()

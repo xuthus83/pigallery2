@@ -71,7 +71,10 @@ export class VideoProcessing {
       output: {
         path: outPath,
         codec: Config.Server.Media.Video.transcoding.codec,
-        format: Config.Server.Media.Video.transcoding.format
+        format: Config.Server.Media.Video.transcoding.format,
+        crf: Config.Server.Media.Video.transcoding.crf,
+        preset: Config.Server.Media.Video.transcoding.preset,
+        customOptions: Config.Server.Media.Video.transcoding.customOptions,
       }
     };
 

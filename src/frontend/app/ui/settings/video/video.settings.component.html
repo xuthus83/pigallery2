@@ -108,6 +108,36 @@
       </div>
 
 
+      <app-settings-entry
+        name="CRF"
+        description="The range of the Constant Rate Factor (CRF) scale is 0–51, where 0 is lossless, 23 is the default, and 51 is worst quality possible."
+        i18n-name i18n-description
+        [ngModel]="states.server.transcoding.crf"
+        [simplifiedMode]="simplifiedMode"
+        required="true">
+      </app-settings-entry>
+
+      <app-settings-entry
+        name="Preset"
+        description="A preset is a collection of options that will provide a certain encoding speed to compression ratio. A slower preset will provide better compression (compression is quality per filesize)."
+        i18n-name i18n-description
+        [ngModel]="states.server.transcoding.preset"
+        [simplifiedMode]="simplifiedMode"
+        required="true">
+      </app-settings-entry>
+
+      <app-settings-entry
+        name="Custom Options"
+        description="; separated values. It will be sent to ffmpeg as it is, as custom options."
+        placeholder="-pass 2; -minrate 1M; -maxrate 1M; -bufsize 2M"
+        i18n-name i18n-description
+        [ngModel]="states.server.transcoding.customOptions"
+        [allowSpaces]="true"
+        [simplifiedMode]="simplifiedMode"
+        required="true">
+      </app-settings-entry>
+
+
       <button class="btn btn-success float-right"
               [disabled]="!settingsForm.form.valid || !changed || inProgress"
               (click)="save()" i18n>Save
