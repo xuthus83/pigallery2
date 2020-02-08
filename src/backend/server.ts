@@ -21,6 +21,8 @@ import * as unless from 'express-unless';
 import {Event} from '../common/event/Event';
 import {QueryParams} from '../common/QueryParams';
 import {ServerConfig} from '../common/config/private/PrivateConfig';
+import {ConfigClassBuilder} from 'typeconfig/node';
+import {ConfigClassOptions} from 'typeconfig/src/decorators/class/IConfigClass';
 
 const _session = require('cookie-session');
 
@@ -48,7 +50,8 @@ export class Server {
   async init(): Promise<void> {
     Logger.info(LOG_TAG, 'running diagnostics...');
     await ConfigDiagnostics.runDiagnostics();
-    Logger.verbose(LOG_TAG, 'using config:');
+    Logger.verbose(LOG_TAG, 'using config from ' +
+      (<ConfigClassOptions>ConfigClassBuilder.attachPrivateInterface(Config).__options).configPath + ':');
     Logger.verbose(LOG_TAG, JSON.stringify(Config, null, '\t'));
 
     this.app = _express();
