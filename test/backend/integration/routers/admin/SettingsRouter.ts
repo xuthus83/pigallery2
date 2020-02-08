@@ -45,7 +45,6 @@ describe('SettingsRouter', () => {
       result.body.result.Server.Environment.upTime = null;
       originalSettings.Server.Environment.upTime = null;
       result.body.result.should.deep.equal(JSON.parse(JSON.stringify(originalSettings.toJSON({attachState: true, attachVolatile: true}))));
-
     });
   });
 });

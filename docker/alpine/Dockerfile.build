@@ -21,7 +21,7 @@ ENV NODE_ENV=production \
     # overrides only the default value of the settings (the actualy value can be overwritten through config.json)
     default-Server-Database-dbFolder=/app/data/db \
     default-Server-Media-folder=/app/data/images \
-    default-Server-Media-tempFolder=/app/data/tmp
+    default-Server-Media-tempFolder=/app/data/tmp \
     # flagging dockerized environemnt
     PI_DOCKER=true
 # command line arg orverride the config.json with these settings
