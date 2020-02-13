@@ -41,7 +41,7 @@ export class DiskMangerWorker {
   }
 
   public static async excludeDir(name: string, relativeDirectoryName: string, absoluteDirectoryName: string) {
-    if (Config.Server.Indexing.excludeFolderList.length === 0 ||
+    if (Config.Server.Indexing.excludeFolderList.length === 0 &&
       Config.Server.Indexing.excludeFileList.length === 0) {
       return false;
     }
