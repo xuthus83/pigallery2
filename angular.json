@@ -11,6 +11,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "crossOrigin": "anonymous",
             "outputPath": "dist",
             "index": "src/frontend/index.html",
             "main": "src/frontend/main.ts",
