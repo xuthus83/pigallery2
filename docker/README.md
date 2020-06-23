@@ -20,7 +20,7 @@ curl -sSL https://get.docker.com | sh
 It is recommended to use [docker-compose](https://docs.docker.com/compose/) to run pigallery2.
 
 ### I.0 Install docker-compose
-Official dokcer-compose installation guide [here](https://docs.docker.com/compose/install/),
+Official docker-compose installation guide [here](https://docs.docker.com/compose/install/),
 but this will  most likely  do the trick ([source](https://dev.to/rohansawant/installing-docker-and-docker-compose-on-the-raspberry-pi-in-5-simple-steps-3mgl)): 
 Install dependencies:
 ```bash
