@@ -30,7 +30,7 @@ export class ConfigDiagnostics {
     if (databaseConfig.type !== ServerConfig.DatabaseType.memory) {
       await SQLConnection.tryConnection(databaseConfig);
     }
-    if (databaseConfig.type !== ServerConfig.DatabaseType.sqlite) {
+    if (databaseConfig.type === ServerConfig.DatabaseType.sqlite) {
       try {
         await this.checkReadWritePermission(SQLConnection.getSQLiteDB(databaseConfig));
       } catch (e) {
