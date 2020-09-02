@@ -50,6 +50,12 @@ export class MetadataLoader {
                 metadata.size.width = data.streams[i].width;
                 metadata.size.height = data.streams[i].height;
 
+                if (Utils.isInt32(parseInt(data.streams[i].rotation, 10)) && 
+                  (Math.abs(parseInt(data.streams[i].rotation, 10)) / 90) % 2 === 1) {
+                    metadata.size.width = data.streams[i].height;
+                    metadata.size.height = data.streams[i].width;
+                }
+
                 if (Utils.isInt32(Math.floor(parseFloat(data.streams[i].duration) * 1000))) {
                   metadata.duration = Math.floor(parseFloat(data.streams[i].duration) * 1000);
                 }
