@@ -53,6 +53,7 @@ Than get your certificate:
 ```bash
 certbot certonly --standalone -d yourdomain.com
 ```
+**Note:** if you get an error like `Problem binding to port 80: Could not bind to IPv4 or IPv6.` THen a service is running on port 80. If it's a fresh raspberry install, it's potentially nginx, you can disable it with `sudo systemctl disable nginx` [details here](https://askubuntu.com/questions/177041/nginx-disable-autostart)
 
 #### I.1.b start docker-compose
 In the folder that has `docker-compose.yml`:
