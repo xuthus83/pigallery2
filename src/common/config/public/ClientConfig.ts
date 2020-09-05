@@ -149,6 +149,8 @@ export module ClientConfig {
     keywordsToPersons: boolean = true;
     @ConfigProperty({type: UserRoles})
     writeAccessMinRole: UserRoles = UserRoles.Admin;
+    @ConfigProperty({type: UserRoles})
+    readAccessMinRole: UserRoles = UserRoles.User;
   }
 
   @SubConfigClass()
