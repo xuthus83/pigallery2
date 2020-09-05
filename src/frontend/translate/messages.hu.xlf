@@ -832,7 +832,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/photo/photo.settings.component.html</context>
-          <context context-type="linenumber">67</context>
+          <context context-type="linenumber">61</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/metafiles/metafile.settings.component.html</context>
@@ -889,7 +889,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/photo/photo.settings.component.html</context>
-          <context context-type="linenumber">71</context>
+          <context context-type="linenumber">65</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/metafiles/metafile.settings.component.html</context>
@@ -1131,7 +1131,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/photo/photo.settings.component.html</context>
-          <context context-type="linenumber">55</context>
+          <context context-type="linenumber">49</context>
         </context-group>
         <target>Felbontás</target>
       </trans-unit>
@@ -1244,22 +1244,6 @@
         </context-group>
         <target>Győződjön meg arról, hogy a sharp node modul telepítve van (npm telepítés éles).</target>
       </trans-unit>
-      <trans-unit id="becf05481d292e5e206fda4b7d67d8fac4e85c93" datatype="html">
-        <source>Make sure that gm node module and</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/photo/photo.settings.component.html</context>
-          <context context-type="linenumber">27</context>
-        </context-group>
-        <target>Győződj meg róla, hogy a gm node modul és</target>
-      </trans-unit>
-      <trans-unit id="b3dc2b50f4949565d88efab1f3ebd4236e16a082" datatype="html">
-        <source>are installed (npm install sharp).</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/photo/photo.settings.component.html</context>
-          <context context-type="linenumber">29</context>
-        </context-group>
-        <target>telepítve van (npm install sharp).</target>
-      </trans-unit>
       <trans-unit id="6f49ee2673fb82fe8dd1a7da0bada14a4156bf30" datatype="html">
         <source>Thumbnail generation library</source>
         <context-group purpose="location">
@@ -1272,7 +1256,7 @@
         <source>Photo converting:</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/photo/photo.settings.component.html</context>
-          <context context-type="linenumber">36</context>
+          <context context-type="linenumber">30</context>
         </context-group>
         <target>Photo konvertálás:</target>
       </trans-unit>
@@ -1280,7 +1264,7 @@
         <source>Converting</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/photo/photo.settings.component.html</context>
-          <context context-type="linenumber">39</context>
+          <context context-type="linenumber">33</context>
         </context-group>
         <target>Konvertálás</target>
       </trans-unit>
@@ -1288,7 +1272,7 @@
         <source>Downsizes photos for faster preview loading. (Zooming in to the photo loads the original).</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/photo/photo.settings.component.html</context>
-          <context context-type="linenumber">40</context>
+          <context context-type="linenumber">34</context>
         </context-group>
         <target>Downsizes photos for faster preview loading. (Zooming in to the photo loads the original).</target>
       </trans-unit>
@@ -1296,7 +1280,7 @@
         <source>On the fly converting</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/photo/photo.settings.component.html</context>
-          <context context-type="linenumber">46</context>
+          <context context-type="linenumber">40</context>
         </context-group>
         <target>Menet közbeni konvetálás</target>
       </trans-unit>
@@ -1304,7 +1288,7 @@
         <source>Converts photos on the fly, when they are requested.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/photo/photo.settings.component.html</context>
-          <context context-type="linenumber">47</context>
+          <context context-type="linenumber">41</context>
         </context-group>
         <target>Photókat menet közvben konvertálja, amikor kérésre megy rájuk.</target>
       </trans-unit>
@@ -1312,7 +1296,7 @@
         <source>The shorter edge of the converted photo will be scaled down to this, while keeping the aspect ratio.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/photo/photo.settings.component.html</context>
-          <context context-type="linenumber">56</context>
+          <context context-type="linenumber">50</context>
         </context-group>
         <target>A konvertált fotó rövidebb oldala lesz ekkora.</target>
       </trans-unit>

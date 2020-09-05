@@ -1,7 +1,6 @@
 import {Config} from '../../../common/config/private/Config';
 import {Logger} from '../../Logger';
 import {NotificationManager} from '../NotifocationManager';
-import {ProjectPath} from '../../ProjectPath';
 import {SQLConnection} from '../database/sql/SQLConnection';
 import * as fs from 'fs';
 import {FFmpegFactory} from '../FFmpegFactory';
@@ -86,25 +85,10 @@ export class ConfigDiagnostics {
     sharp();
   }
 
-  static async testGM() {
-    const gm = require('gm');
-    await new Promise((resolve, reject) => {
-      gm(ProjectPath.FrontendFolder + '/assets/icon.png').size((err: Error) => {
-        if (err) {
-          return reject(err.toString());
-        }
-        return resolve();
-      });
-    });
-  }
-
   static async testThumbnailLib(processingLibrary: ServerConfig.PhotoProcessingLib) {
     switch (processingLibrary) {
       case ServerConfig.PhotoProcessingLib.sharp:
         await this.testSharp();
-        break;
-      case  ServerConfig.PhotoProcessingLib.gm:
-        await this.testGM();
         break;
     }
   }
@@ -235,8 +219,8 @@ export class ConfigDiagnostics {
           NotificationManager.warning('Error during initializing SQL falling back temporally to memory DB', err.toString());
           Config.Server.Database.type = ServerConfig.DatabaseType.memory;
         } else {
-            Logger.error(LOG_TAG, 'Error during initializing SQL DB, check DB connection and settings');
-            process.exit(1);
+          Logger.error(LOG_TAG, 'Error during initializing SQL DB, check DB connection and settings');
+          process.exit(1);
         }
       }
     }

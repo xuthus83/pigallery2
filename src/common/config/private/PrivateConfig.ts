@@ -21,8 +21,7 @@ export module ServerConfig {
 
   export enum PhotoProcessingLib {
     sharp = 3,
-    Jimp = 1,
-    gm = 2,
+    Jimp = 1
   }
 
   export enum ReIndexingSensitivity {
