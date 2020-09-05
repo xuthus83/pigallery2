@@ -230,9 +230,14 @@ export class ConfigDiagnostics {
       } catch (ex) {
         const err: Error = ex;
         Logger.warn(LOG_TAG, '[SQL error]', err.toString());
-        Logger.warn(LOG_TAG, 'Error during initializing SQL falling back temporally to memory DB');
-        NotificationManager.warning('Error during initializing SQL falling back temporally to memory DB', err.toString());
-        Config.Server.Database.type = ServerConfig.DatabaseType.memory;
+        if (Config.Server.Database.enableFallback === true) {
+          Logger.warn(LOG_TAG, 'Error during initializing SQL falling back temporally to memory DB');
+          NotificationManager.warning('Error during initializing SQL falling back temporally to memory DB', err.toString());
+          Config.Server.Database.type = ServerConfig.DatabaseType.memory;
+        } else {
+            Logger.error(LOG_TAG, 'Error during initializing SQL DB, check DB connection and settings');
+            process.exit(1);
+        }
       }
     }
 

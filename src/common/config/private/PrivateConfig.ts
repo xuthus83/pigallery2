@@ -67,6 +67,9 @@ export module ServerConfig {
     })
     type: DatabaseType = DatabaseType.sqlite;
 
+    @ConfigProperty({description: 'In the case of bad database settings (or unreachable database), the app falls back using inmemory database, otherwise terminates the app.'})
+    enableFallback: boolean = true;
+
     @ConfigProperty()
     dbFolder: string = 'db';
 
