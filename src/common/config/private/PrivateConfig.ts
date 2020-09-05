@@ -103,7 +103,7 @@ export module ServerConfig {
         ' If it doesn\'t start with \'/\' but contains a \'/\', the path is relative to the image directory.' +
         ' If it doesn\'t contain a \'/\', any folder with this name will be excluded.'
     })
-    excludeFolderList: string[] = [];
+    excludeFolderList: string[] = ['.Trash-1000', '.dtrash', '$RECYCLE.BIN'];
     @ConfigProperty({arrayType: 'string', description: 'Any folder that contains a file with this name will be excluded from indexing.'})
     excludeFileList: string[] = [];
   }
