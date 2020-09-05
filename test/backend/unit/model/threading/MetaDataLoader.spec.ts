@@ -44,5 +44,10 @@ describe('MetadataLoader', () => {
     expect(Utils.clone(data)).to.be.deep.equal(expected);
   });
 
+  it('should respect mp4 rotate transformation', async () => {
+    const data = await MetadataLoader.loadVideoMetadata(path.join(__dirname, '/../../../assets/video_rotate.mp4'));
+    const expected = require(path.join(__dirname, '/../../../assets/video_rotate.json'));
+    expect(Utils.clone(data)).to.be.deep.equal(expected);
+  });
 
 });
