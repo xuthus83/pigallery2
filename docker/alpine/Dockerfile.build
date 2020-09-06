@@ -17,7 +17,6 @@ RUN mkdir -p /app/data/config && \
 FROM node:12-alpine3.11 as main
 WORKDIR /app
 ENV NODE_ENV=production \
-    CONFIG_FILE=/app/data/config/config.json \
     # overrides only the default value of the settings (the actualy value can be overwritten through config.json)
     default-Server-Database-dbFolder=/app/data/db \
     default-Server-Media-folder=/app/data/images \
@@ -25,11 +24,6 @@ ENV NODE_ENV=production \
     # flagging dockerized environemnt
     PI_DOCKER=true
 
-# after a extensive job (like video converting), pigallery calls gc, to clean up everthing as fast as possible
-# This trick is needed as entrypoint in exec form does not support ENV variables
-# and in shell form ENV variables were not properly passed to pigallry2
-RUN echo "#!/usr/bin/env node ./src/backend/index --expose-gc --config-path=${CONFIG_FILE}" > ./entrypoint.sh && \
- chmod +x ./entrypoint.sh
 
 EXPOSE 80
 RUN apk add --update-cache --repository https://alpine.global.ssl.fastly.net/alpine/v3.11/community/ \
@@ -40,4 +34,8 @@ HEALTHCHECK --interval=40s --timeout=30s --retries=3 --start-period=60s \
   CMD wget --quiet --tries=1 --no-check-certificate --spider \
   http://localhost:80/heartbeat || exit 1
 
-ENTRYPOINT ["./entrypoint.sh"]
+
+# after a extensive job (like video converting), pigallery calls gc, to clean up everthing as fast as possible
+# Exec form entrypoint is need otherwise (using shell form) ENV variables are not properly passed down to the app
+ENTRYPOINT ["node", "./src/backend/index", "--expose-gc",  "--config-path=/app/data/config/config.json"]
+
