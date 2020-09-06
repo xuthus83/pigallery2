@@ -4,6 +4,9 @@ import {ServerConfig} from '../common/config/private/PrivateConfig';
 
 const forcedDebug = process.env.NODE_ENV === 'debug';
 
+if (forcedDebug === true) {
+  console.log('NODE_ENV environmental variable is set to debug, forcing all logs to print');
+}
 export const winstonSettings = {
   transports: [
     new winston.transports.Console(<any>{
