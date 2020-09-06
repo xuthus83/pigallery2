@@ -2,10 +2,12 @@ import * as winston from 'winston';
 import {Config} from '../common/config/private/Config';
 import {ServerConfig} from '../common/config/private/PrivateConfig';
 
+const forcedDebug = process.env.NODE_ENV === 'debug';
+
 export const winstonSettings = {
   transports: [
     new winston.transports.Console(<any>{
-      level: ServerConfig.LogLevel[Config.Server.Log.level],
+      level: forcedDebug === true ? ServerConfig.LogLevel.silly : ServerConfig.LogLevel[Config.Server.Log.level],
       handleExceptions: true,
       json: false,
       colorize: true,

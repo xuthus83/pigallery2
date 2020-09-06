@@ -48,7 +48,7 @@
     "sqlite3": "4.1.1",
     "ts-exif-parser": "0.2.1",
     "ts-node-iptc": "1.0.11",
-    "typeconfig": "2.0.9",
+    "typeconfig": "2.0.10",
     "typeorm": "0.2.21",
     "winston": "2.4.4"
   },
