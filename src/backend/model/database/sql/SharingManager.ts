@@ -5,7 +5,6 @@ import {SharingEntity} from './enitites/SharingEntity';
 import {Config} from '../../../../common/config/private/Config';
 import {PasswordHelper} from '../../PasswordHelper';
 import {DeleteResult} from 'typeorm';
-import {UserEntity} from './enitites/UserEntity';
 
 export class SharingManager implements ISharingManager {
 
@@ -25,10 +24,12 @@ export class SharingManager implements ISharingManager {
     await connection.getRepository(SharingEntity).remove(sharing);
   }
 
-  async find(filter: any): Promise<SharingDTO[]> {
+  async listAll(): Promise<SharingDTO[]> {
     await SharingManager.removeExpiredLink();
     const connection = await SQLConnection.getConnection();
-    return await connection.getRepository(SharingEntity).find(filter);
+    return await connection.getRepository(SharingEntity)
+      .createQueryBuilder('share')
+      .leftJoinAndSelect('share.creator', 'creator').getMany();
   }
 
   async findOne(filter: any): Promise<SharingDTO> {

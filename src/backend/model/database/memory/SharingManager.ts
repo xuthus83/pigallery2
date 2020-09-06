@@ -7,7 +7,7 @@ export class SharingManager implements ISharingManager {
     throw new Error('not implemented');
   }
 
-  find(filter: any): Promise<SharingDTO[]> {
+  listAll(): Promise<SharingDTO[]> {
     throw new Error('not implemented');
   }
 

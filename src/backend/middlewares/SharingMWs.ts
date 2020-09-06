@@ -125,7 +125,7 @@ export class SharingMWs {
       return next();
     }
     try {
-      req.resultPipe = await ObjectManagers.getInstance().SharingManager.find({});
+      req.resultPipe = await ObjectManagers.getInstance().SharingManager.listAll();
       return next();
     } catch (err) {
       return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, 'Error during listing shares', err));

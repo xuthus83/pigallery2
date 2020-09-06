@@ -6,6 +6,7 @@ import {UserDTO, UserRoles} from '../../common/entities/UserDTO';
 import {NotificationManager} from '../model/NotifocationManager';
 import {Logger} from '../Logger';
 import {SharingDTO} from '../../common/entities/SharingDTO';
+import {Utils} from '../../common/Utils';
 
 export class RenderingMWs {
 
@@ -54,8 +55,12 @@ export class RenderingMWs {
       return next();
     }
 
-    req.resultPipe.forEach((s: SharingDTO) => delete s.password);
-    return RenderingMWs.renderMessage(res, req.resultPipe);
+    const shares: SharingDTO[] = Utils.clone(req.resultPipe);
+    shares.forEach(s => {
+      delete s.password;
+      delete s.creator.password;
+    });
+    return RenderingMWs.renderMessage(res, shares);
   }
 
   public static renderFile(req: Request, res: Response, next: NextFunction) {
