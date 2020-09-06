@@ -26,7 +26,7 @@ ENV NODE_ENV=production \
 # after a extensive job (like video converting), pigallery calls gc, to clean up everthing as fast as possible
 # This trick is needed as entrypoint in exec form does not support ENV variables
 # and in shell form ENV variables were not properly passed to pigallry2
-RUN echo "node ./src/backend/index --expose-gc --config-path=${CONFIG_FILE}" > ./entrypoint.sh && \
+RUN echo "#!/usr/bin/env node ./src/backend/index --expose-gc --config-path=${CONFIG_FILE}" > ./entrypoint.sh && \
  chmod +x ./entrypoint.sh
 
 EXPOSE 80
