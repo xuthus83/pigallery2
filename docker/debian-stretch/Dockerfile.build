@@ -26,8 +26,8 @@ ENV NODE_ENV=production \
 # after a extensive job (like video converting), pigallery calls gc, to clean up everthing as fast as possible
 # This trick is needed as entrypoint in exec form does not support ENV variables
 # and in shell form ENV variables were not properly passed to pigallry2
-RUN echo "#!/usr/bin/env node ./src/backend/index --expose-gc --config-path=${CONFIG_FILE}" > ./entrypoint.sh && \
- chmod +x ./entrypoint.sh
+#RUN echo -e '#!/bin/bash \n node ./src/backend/index --expose-gc --config-path=${CONFIG_FILE}' > ./entrypoint.sh && \
+# chmod +x ./entrypoint.sh
 
 EXPOSE 80
 RUN apt-get update && apt-get install -y ffmpeg
@@ -37,5 +37,5 @@ HEALTHCHECK --interval=40s --timeout=30s --retries=3 --start-period=60s \
   CMD wget --quiet --tries=1 --no-check-certificate --spider \
   http://localhost:80/heartbeat || exit 1
 
-ENTRYPOINT ["./entrypoint.sh"]
+ENTRYPOINT node ./src/backend/index --expose-gc --config-path=${CONFIG_FILE}
 
