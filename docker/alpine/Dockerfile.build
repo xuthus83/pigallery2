@@ -25,8 +25,6 @@ ENV NODE_ENV=production \
     # flagging dockerized environemnt
     PI_DOCKER=true
 
- # after a extensive job (like video converting), pigallery calls gc, to clean up everthing as fast as possible
-ENTRYPOINT node ./src/backend/index --expose-gc  --config-path=$CONFIG_FILE
 
 EXPOSE 80
 RUN apk add --update-cache --repository https://alpine.global.ssl.fastly.net/alpine/v3.11/community/ \
@@ -36,3 +34,6 @@ VOLUME ["/app/data/config", "/app/data/db", "/app/data/images", "/app/data/tmp"]
 HEALTHCHECK --interval=40s --timeout=30s --retries=3 --start-period=60s \
   CMD wget --quiet --tries=1 --no-check-certificate --spider \
   http://localhost:80/heartbeat || exit 1
+
+# after a extensive job (like video converting), pigallery calls gc, to clean up everthing as fast as possible
+ENTRYPOINT ["node", "./src/backend/index", "--expose-gc",  "--config-path=${CONFIG_FILE}"]

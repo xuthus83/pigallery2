@@ -33,5 +33,5 @@ HEALTHCHECK --interval=40s --timeout=30s --retries=3 --start-period=60s \
   http://localhost:80/heartbeat || exit 1
 
 # after a extensive job (like video converting), pigallery calls gc, to clean up everthing as fast as possible
-ENTRYPOINT ["node", "./src/backend/index", "--expose-gc",  "--config-path=$CONFIG_FILE"]
+ENTRYPOINT ["node", "./src/backend/index", "--expose-gc",  "--config-path=${CONFIG_FILE}"]
 
