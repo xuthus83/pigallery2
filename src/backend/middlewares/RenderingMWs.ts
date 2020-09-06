@@ -5,6 +5,7 @@ import {Config, PrivateConfigClass} from '../../common/config/private/Config';
 import {UserDTO, UserRoles} from '../../common/entities/UserDTO';
 import {NotificationManager} from '../model/NotifocationManager';
 import {Logger} from '../Logger';
+import {SharingDTO} from '../../common/entities/SharingDTO';
 
 export class RenderingMWs {
 
@@ -45,6 +46,16 @@ export class RenderingMWs {
 
     const {password, creator, ...sharing} = req.resultPipe;
     RenderingMWs.renderMessage(res, sharing);
+  }
+
+
+  public static renderSharingList(req: Request, res: Response, next: NextFunction) {
+    if (!req.resultPipe) {
+      return next();
+    }
+
+    req.resultPipe.forEach((s: SharingDTO) => delete s.password);
+    return RenderingMWs.renderMessage(res, req.resultPipe);
   }
 
   public static renderFile(req: Request, res: Response, next: NextFunction) {
