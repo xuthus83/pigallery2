@@ -7,7 +7,7 @@ const forcedDebug = process.env.NODE_ENV === 'debug';
 export const winstonSettings = {
   transports: [
     new winston.transports.Console(<any>{
-      level: forcedDebug === true ? ServerConfig.LogLevel.silly : ServerConfig.LogLevel[Config.Server.Log.level],
+      level: forcedDebug === true ? ServerConfig.LogLevel[ServerConfig.LogLevel.silly] : ServerConfig.LogLevel[Config.Server.Log.level],
       handleExceptions: true,
       json: false,
       colorize: true,
