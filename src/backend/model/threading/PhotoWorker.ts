@@ -1,5 +1,4 @@
 import {Metadata, Sharp} from 'sharp';
-import {Dimensions, State} from 'gm';
 import {Logger} from '../../Logger';
 import {FfmpegCommand, FfprobeData} from 'fluent-ffmpeg';
 import {FFmpegFactory} from '../FFmpegFactory';
@@ -215,7 +214,7 @@ export class ImageRendererFactory {
             fit: 'cover'
           });
       }
-      await image.jpeg().toFile(input.outPath);
+      await image.withMetadata().jpeg().toFile(input.outPath);
     };
   }
 

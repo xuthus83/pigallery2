@@ -63,7 +63,6 @@ import {IconizeSortingMethod} from './pipes/IconizeSortingMethod';
 import {StringifySortingMethod} from './pipes/StringifySortingMethod';
 import {RandomQueryBuilderGalleryComponent} from './ui/gallery/random-query-builder/random-query-builder.gallery.component';
 import {RandomPhotoSettingsComponent} from './ui/settings/random-photo/random-photo.settings.component';
-import {FixOrientationPipe} from './pipes/FixOrientationPipe';
 import {VideoSettingsComponent} from './ui/settings/video/video.settings.component';
 import {DurationPipe} from './pipes/DurationPipe';
 import {MapService} from './ui/gallery/map/map.service';
@@ -211,7 +210,6 @@ export function translationsFactory(locale: string) {
     StringifyRole,
     IconizeSortingMethod,
     StringifySortingMethod,
-    FixOrientationPipe,
     DurationPipe,
     FileSizePipe
   ],

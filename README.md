@@ -119,7 +119,7 @@ apt-get install build-essential  libkrb5-dev gcc g++
 
 
 ## 2. Translate the page to your own language
-1. [Install Pigallery2](#111-b-install-from-source) from source (with the release it won't work) 
+1. [Install Pigallery2](#121-b-install-from-source) from source (with the release it won't work) 
 2. add your language e.g: fr
    ```bash
    npm run add-translation -- --fr
@@ -214,8 +214,8 @@ apt-get install build-essential  libkrb5-dev gcc g++
 
 ## 5. Known errors
 * EXIF orientation tag:
-  *  There is no nice way to handle EXIF orientation tag properly.
-The page handles these photos, but might cause same error in the user experience (e.g.: the pages loads those photos slower. See issue [#11](https://github.com/bpatrik/pigallery2/issues/11))
+  *  Some photos code the orientation tag and with/height in a less conventional format, like the "duck photo" in [#19](https://github.com/bpatrik/pigallery2/issues/19). 
+After Browsers support orientation tag natively [#172](https://github.com/bpatrik/pigallery2/issues/172), I could not find a solution for that. 
 * Video support on weak servers (like raspberry pi) with low upload rate
   * video playback may use up too much resources and the server might not response for a while. Enable video transcoding in the app, to transcode the videos to lover bitrate. 
   
