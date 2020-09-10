@@ -8,7 +8,7 @@ import {ConfigProperty, IConfigClass} from 'typeconfig/common';
 
 declare const process: any;
 
-consts upTime = (new Date()).toISOString();
+const upTime = (new Date()).toISOString();
 
 @ConfigClass({
   configPath: path.join(__dirname, './../../../../config.json'),
