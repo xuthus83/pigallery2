@@ -82,7 +82,7 @@ export class PublicRouter {
             res.tpl.user.csrfToken = req.csrfToken();
           }
         }
-        res.tpl.clientConfig = {Client: Config.Client.toJSON({attachVolatile: true})};
+        res.tpl.Config = {Client: Config.Client.toJSON({attachVolatile: true})};
 
         return next();
       });

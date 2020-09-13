@@ -40,6 +40,7 @@ export class ConfigDiagnostics {
 
 
   static async testMetaFileConfig(metaFileConfig: ClientConfig.MetaFileConfig, config: IPrivateConfig) {
+    // TODO: now we have metadata for pg2conf files too not only gpx that also runs without map
     if (metaFileConfig.enabled === true &&
       config.Client.Map.enabled === false) {
       throw new Error('*.gpx meta files are not supported without MAP');
