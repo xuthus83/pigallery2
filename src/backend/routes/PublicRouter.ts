@@ -93,6 +93,25 @@ export class PublicRouter {
       }
     );
 
+    app.get('/manifest.json',
+      (req: Request, res: Response, next: NextFunction) => {
+        res.send({
+          name: Config.Client.applicationTitle,
+          icons: [
+            {
+              src: 'assets/icon_inv.png',
+              sizes: '48x48 72x72 96x96 128x128 256x256'
+            }
+          ],
+          display: 'standalone',
+          orientation: 'any',
+          start_url: Config.Client.publicUrl,
+          background_color: '#000000',
+          theme_color: '#000000'
+        });
+      }
+    );
+
     app.get(['/', '/login', '/gallery*', '/share*', '/admin', '/duplicates', '/faces', '/search*'],
       AuthenticationMWs.tryAuthenticate,
       setLocale,
