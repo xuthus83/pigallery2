@@ -32,15 +32,15 @@ Live Demo @ heroku: https://pigallery2.herokuapp.com/
 
 ### 1.1 Install and Run with Docker (recommended)
 
-[Docker](https://www.docker.com/) with [docker-compose](https://docs.docker.com/compose/) is the offitial and recommend way of installing and running *Pigallery2*.
+[Docker](https://www.docker.com/) with [docker-compose](https://docs.docker.com/compose/) is the official and recommend way of installing and running *Pigallery2*.
 It contains all necessary dependencies, auto restarts on reboot, supports https, easy to upgrade to newer versions.
 For configuration and docker-compose files read more [here](docker/README.md) or check all builds: https://hub.docker.com/r/bpatrik/pigallery2/tags/
 
 
 
-### 1.2 Direct Install (if you are familiar with nodejs and building npm packages from source)
-As an alternative, you can also directly install nodejs and the app and run it natively. 
-### 1.2.0 [Install NodeJs](https://nodejs.org/en/download/)
+### 1.2 Direct Install (if you are familiar with Node.js and building npm packages from source)
+As an alternative, you can also directly install Node.js and the app and run it natively. 
+### 1.2.0 [Install Node.js](https://nodejs.org/en/download/)
 Download and extract
 ```bash
 curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
@@ -73,9 +73,9 @@ npm install
 npm run build
 ```
 
-**Note**: It is recommended to create a release version with `npm run create-release` on a more powerful mashine and deploy that to you server.
+**Note**: It is recommended to create a release version with `npm run create-release` on a more powerful machine and deploy that to you server.
 
-**Note**: you can use `npm run create-release -- --languages=fr,ro` to restrict building to the listed languages (english is added by default)
+**Note**: you can use `npm run create-release -- --languages=fr,ro` to restrict building to the listed languages (English is added by default)
 
 #### 1.2.2 Run PiGallery2
 ```bash
@@ -99,7 +99,7 @@ You can set up the app the following ways:
  * Through environmental variable
    * like set env. variable `Server-port` to `3000`   
 
-Full list of configuration options are available at the  [MANPAGE.md](MANPAGE.md).
+Full list of configuration options are available at the [MANPAGE.md](MANPAGE.md).
 
 ### 1.4 Useful links/tips:
 
@@ -194,7 +194,7 @@ apt-get install build-essential  libkrb5-dev gcc g++
    * fully supports `*.mp4` files and partially (might have errors with safari and IE) supports `*.ogg`, `*.ogv`, `*.webm` files
    * uses ffmpeg and ffprobe to generate video thumbnails
    * can transcode videos to mp4 for better support
- * job sceduling support, with the following supported task: [#92](https://github.com/bpatrik/pigallery2/issues/92)
+ * job scheduling support, with the following supported task: [#92](https://github.com/bpatrik/pigallery2/issues/92)
    * converting/transcoding videos [#66](https://github.com/bpatrik/pigallery2/issues/66) [#71](https://github.com/bpatrik/pigallery2/issues/71)
    * generating thumbnails
    * generating converted photos
@@ -212,7 +212,7 @@ apt-get install build-essential  libkrb5-dev gcc g++
  
 ## 4. Suggest/endorse new features
   You are welcome to suggest new features to the application via [github issues](https://github.com/bpatrik/pigallery2/issues).
-  I cannot garantie any dealine with the development of a new feature. (I usually fix bugs within week/weeks.)
+  I cannot guarantee any deadline with the development of a new feature. (I usually fix bugs within a week/weeks.)
   I will give a higher priority to a feature that has more 'likes' (i.e.: `+1`-s or thumbs ups) on it.
 
 ## 5. Known errors
