@@ -477,6 +477,10 @@
           <context context-type="sourcefile">app/ui/gallery/lightbox/infopanel/info-panel.lightbox.gallery.component.html</context>
           <context context-type="linenumber">51</context>
         </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/jobs/progress/job-progress.settings.component.html</context>
+          <context context-type="linenumber">45</context>
+        </context-group>
         <target>duration</target>
       </trans-unit>
       <trans-unit id="b00f6ce63441c0057013e41ad97b15383f0b17ae" datatype="html">
@@ -1442,9 +1446,7 @@
           <context context-type="sourcefile">app/ui/settings/share/share.settings.component.html</context>
           <context context-type="linenumber">84</context>
         </context-group>
-        <target>
-          No sharing was created.
-        </target>
+        <target>No sharing was created.</target>
       </trans-unit>
       <trans-unit id="445a71ab2f91f21a6d54acf86fb9796b1ac20bbb" datatype="html">
         <source>
@@ -1973,14 +1975,6 @@
           <context context-type="linenumber">43</context>
         </context-group>
         <target>time elapsed</target>
-      </trans-unit>
-      <trans-unit id="35511807089eb9a1864bec06e28d57e04b4c8f87" datatype="html">
-        <source>time left</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">app/ui/settings/jobs/progress/job-progress.settings.component.html</context>
-          <context context-type="linenumber">45</context>
-        </context-group>
-        <target>time left</target>
       </trans-unit>
       <trans-unit id="84b516c4d38a09d8bbe8312569aeddfac65cdf6a" datatype="html">
         <source>Processed</source>
