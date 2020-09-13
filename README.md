@@ -30,7 +30,7 @@ Live Demo @ heroku: https://pigallery2.herokuapp.com/
 
 ## 1. Getting started (also works on Raspberry Pi)
 
-### 1.1 Install and Run with Docker (recommended)
+### 1.1 [Install and Run with Docker (recommended)](docker/README.md)
 
 [Docker](https://www.docker.com/) with [docker-compose](https://docs.docker.com/compose/) is the official and recommend way of installing and running *Pigallery2*.
 It contains all necessary dependencies, auto restarts on reboot, supports https, easy to upgrade to newer versions.
@@ -88,6 +88,9 @@ Default user: `admin` pass: `admin`
 **Note**: First run, you might have file access issues and port 80 issue, see [#115](https://github.com/bpatrik/pigallery2/issues/115).
 Running `npm start -- --Server-port=8080` will start the app on port 8080 that does not require `root`
 Adding read/write permissions to all files can solve the file access issue `chmod -R o-w .`, see [#98](https://github.com/bpatrik/pigallery2/issues/98).
+
+##### 1.2.2.1 Run on startup
+You can run the app up as a service to run it on startup. Read more at [#42](https://github.com/bpatrik/pigallery2/issues/42#issuecomment-458340945)
 
 ### 1.3 Advanced configuration
 You can set up the app the following ways:
