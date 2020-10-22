@@ -83,7 +83,7 @@ If you want to run the container by yourself, here you go:
 docker run \
    -p 80:80 \
    -e NODE_ENV=production \
-   -v <path to your config file folder>/config.json:/app/data/config/config.json \
+   -v <path to your config file folder>:/app/data/config \
    -v <path to your db file folder>:/app/data/db \
    -v <path to your images folder>:/app/data/images \
    -v <path to your temp folder>:/app/data/tmp \
