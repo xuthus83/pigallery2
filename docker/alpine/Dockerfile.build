@@ -14,7 +14,7 @@ RUN mkdir -p /app/data/config && \
 
 #-----------------MAIN--------------------
 #-----------------------------------------
-FROM node:12-alpine3.11 as main
+FROM node:12-alpine3.11 AS main
 WORKDIR /app
 ENV NODE_ENV=production \
     # overrides only the default value of the settings (the actualy value can be overwritten through config.json)
@@ -24,7 +24,6 @@ ENV NODE_ENV=production \
     # flagging dockerized environemnt
     PI_DOCKER=true
 
-
 EXPOSE 80
 RUN apk add --update-cache --repository https://alpine.global.ssl.fastly.net/alpine/v3.11/community/ \
     vips ffmpeg
@@ -33,7 +32,6 @@ VOLUME ["/app/data/config", "/app/data/db", "/app/data/images", "/app/data/tmp"]
 HEALTHCHECK --interval=40s --timeout=30s --retries=3 --start-period=60s \
   CMD wget --quiet --tries=1 --no-check-certificate --spider \
   http://localhost:80/heartbeat || exit 1
-
 
 # after a extensive job (like video converting), pigallery calls gc, to clean up everthing as fast as possible
 # Exec form entrypoint is need otherwise (using shell form) ENV variables are not properly passed down to the app
