@@ -12,7 +12,7 @@ RUN mkdir -p /app/data/config && \
 
 #-----------------MAIN--------------------
 #-----------------------------------------
-FROM node:12-stretch-slim as main
+FROM node:12-stretch-slim AS main
 WORKDIR /app
 ENV NODE_ENV=production \
     # overrides only the default value of the settings (the actualy value can be overwritten through config.json)
@@ -22,14 +22,11 @@ ENV NODE_ENV=production \
     # flagging dockerized environemnt
     PI_DOCKER=true
 
-# after a extensive job (like video converting), pigallery calls gc, to clean up everthing as fast as possible
-# This trick is needed as entrypoint in exec form does not support ENV variables
-# and in shell form ENV variables were not properly passed to pigallry2
-#RUN echo -e '#!/bin/bash \n node ./src/backend/index --expose-gc --config-path=${CONFIG_FILE}' > ./entrypoint.sh && \
-# chmod +x ./entrypoint.sh
-
 EXPOSE 80
-RUN apt-get update && apt-get install -y ffmpeg
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends ca-certificates wget ffmpeg \
+    && apt-get clean -q -y \
+    && rm -rf /var/lib/apt/lists/*
 COPY --from=builder /app /app
 VOLUME ["/app/data/config", "/app/data/db", "/app/data/images", "/app/data/tmp"]
 HEALTHCHECK --interval=40s --timeout=30s --retries=3 --start-period=60s \
