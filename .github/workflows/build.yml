@@ -115,10 +115,9 @@ jobs:
           file: docker/alpine/Dockerfile.build
           platforms: linux/amd64,linux/arm64,linux/arm/v7
           push: true
-          type: image
           tags: bpatrik/pigallery2:nightly-alpine       
       -
-        name: Build and push alpine nightly
+        name: Build and push alpine release
         if: startsWith(steps.vars.outputs.type , 'tag')
         env:
           RELEASE_VERSION: ${{ steps.vars.outputs.tag }}
@@ -146,46 +145,42 @@ jobs:
       -
         uses: actions/download-artifact@v2
         with:
-          name: pigallery2-release
+          name: pigallery2-release  
+          path: pigallery2-release      
+      -
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
       -
         name: Set up Docker Buildx
-        id: buildx
         uses: docker/setup-buildx-action@v1
+      -
+        name: Login to DockerHub
+        uses: docker/login-action@v1 
         with:
-          buildx-version: latest
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}          
       -
-        name: Available platforms
-        run: echo ${{ steps.buildx.outputs.platforms }}
-      -
-        name: Docker login
-        run: |
-          docker login -u "${DOCKER_REGISTRY_USERNAME}" -p "${DOCKER_REGISTRY_PASSWORD}"
-        env:
-          DOCKER_REGISTRY_USERNAME: ${{ secrets.REGISTRY_USERNAME }}
-          DOCKER_REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
-      -
-        name: Run Buildx stretch
+        name: Build and push debian stretch  nightly
         if: startsWith(steps.vars.outputs.type , 'head')
-        run: |
-          docker buildx build \
-            --platform linux/amd64,linux/arm64,linux/arm/v7 \
-            --output "type=image,push=true" \
-            --tag bpatrik/pigallery2:nightly-stretch \
-            --file docker/debian-stretch/Dockerfile.build  .
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: docker/debian-stretch/Dockerfile.build
+          platforms: linux/amd64,linux/arm64,linux/arm/v7
+          push: true
+          tags: bpatrik/pigallery2:nightly-stretch       
       -
-        name: Run Buildx stretch for tag
+        name: Build and push debian stretch release
         if: startsWith(steps.vars.outputs.type , 'tag')
         env:
           RELEASE_VERSION: ${{ steps.vars.outputs.tag }}
-        run: |
-          docker buildx build \
-            --platform linux/amd64,linux/arm64,linux/arm/v7 \
-            --output "type=image,push=true" \
-            --tag bpatrik/pigallery2:nightly-stretch \
-            --tag bpatrik/pigallery2:$RELEASE_VERSION \
-            --tag bpatrik/pigallery2:latest \
-            --file docker/debian-stretch/Dockerfile.build  .
-      -
-        name: Docker logout
-        run: |
-          docker logout
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: docker/debian-stretch/Dockerfile.build
+          platforms: linux/amd64,linux/arm64,linux/arm/v7
+          push: true
+          tags: |
+            bpatrik/pigallery2:nightly-stretch
+            bpatrik/pigallery2:$RELEASE_VERSION
+            bpatrik/pigallery2:latest
