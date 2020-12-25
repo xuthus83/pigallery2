@@ -67,7 +67,7 @@ jobs:
         name: Setup Node.js for use with actions
         uses: actions/setup-node@v2
         with:
-          version: 12
+          node-version: 12
       -
         name: Install Deps
         run: npm install --unsafe-perm
