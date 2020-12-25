@@ -92,7 +92,8 @@ jobs:
       -
         uses: actions/download-artifact@v2
         with:
-          name: pigallery2-release        
+          name: pigallery2-release  
+          path: pigallery2-release      
       -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v1
@@ -127,7 +128,6 @@ jobs:
           file: docker/alpine/Dockerfile.build
           platforms: linux/amd64,linux/arm64,linux/arm/v7
           push: true
-          type: image
           tags: |
             bpatrik/pigallery2:nightly-alpine
             bpatrik/pigallery2:$RELEASE_VERSION-alpine
