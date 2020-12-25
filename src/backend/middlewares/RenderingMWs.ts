@@ -7,6 +7,7 @@ import {NotificationManager} from '../model/NotifocationManager';
 import {Logger} from '../Logger';
 import {SharingDTO} from '../../common/entities/SharingDTO';
 import {Utils} from '../../common/Utils';
+import {LoggerRouter} from '../routes/LoggerRouter';
 
 export class RenderingMWs {
 
@@ -92,6 +93,7 @@ export class RenderingMWs {
     if (err instanceof ErrorDTO) {
       if (err.details) {
         Logger.warn('Handled error:');
+        LoggerRouter.log(Logger.warn, req, res);
         console.log(err);
         delete (err.details); // do not send back error object to the client side
 
@@ -103,7 +105,7 @@ export class RenderingMWs {
       const message = new Message<any>(err, null);
       return res.json(message);
     }
-    NotificationManager.error('unknown server error', err);
+    NotificationManager.error('Unknown server error', err);
     return next(err);
   }
 

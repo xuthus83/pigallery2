@@ -30,7 +30,7 @@ export const winstonSettings = {
   exitOnError: false
 };
 
-type logFN = (...args: (string | number)[]) => {};
+export type logFN = (...args: (string | number)[]) => {};
 
 export const Logger: {
   error: logFN,

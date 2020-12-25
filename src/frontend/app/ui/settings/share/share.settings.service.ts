@@ -26,6 +26,9 @@ export class ShareSettingsService extends AbstractSettingsService<ClientConfig.S
 
 
   public getSharingList(): Promise<SharingDTO[]> {
+    if (!this._settingsService.settings.value.Client.Sharing.enabled) {
+      return Promise.resolve([]);
+    }
     return this._networkService.getJson('/share/list');
   }
 
