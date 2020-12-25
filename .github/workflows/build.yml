@@ -29,9 +29,9 @@ jobs:
 
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v2
       with:
         node-version: ${{ matrix.node-version }}
 
@@ -62,10 +62,10 @@ jobs:
     steps:
       -
         name: Checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
       -
         name: Setup Node.js for use with actions
-        uses: actions/setup-node@v1.1.0
+        uses: actions/setup-node@v2
         with:
           version: 12
       -
@@ -74,7 +74,7 @@ jobs:
       -
         name: Create Release
         run: npm run create-release -- --skip-opt-packages=ffmpeg,ffprobe --force-opt-packages
-      - uses: actions/upload-artifact@v1
+      - uses: actions/upload-artifact@v2
         with:
           name: pigallery2-release
           path: release
@@ -88,15 +88,15 @@ jobs:
         run: echo ::set-output name=tag::$(echo ${GITHUB_REF:10}) && echo ::set-output name=type::$(echo ${GITHUB_REF:5})
       -
         name: Checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
       -
-        uses: actions/download-artifact@v1
+        uses: actions/download-artifact@v2
         with:
           name: pigallery2-release
       -
         name: Set up Docker Buildx
         id: buildx
-        uses: crazy-max/ghaction-docker-buildx@v1
+        uses: docker/setup-buildx-action@v1
         with:
           buildx-version: latest
       -
@@ -144,15 +144,15 @@ jobs:
         run: echo ::set-output name=tag::$(echo ${GITHUB_REF:10}) && echo ::set-output name=type::$(echo ${GITHUB_REF:5})
       -
         name: Checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
       -
-        uses: actions/download-artifact@v1
+        uses: actions/download-artifact@v2
         with:
           name: pigallery2-release
       -
         name: Set up Docker Buildx
         id: buildx
-        uses: crazy-max/ghaction-docker-buildx@v1
+        uses: docker/setup-buildx-action@v1
         with:
           buildx-version: latest
       -
