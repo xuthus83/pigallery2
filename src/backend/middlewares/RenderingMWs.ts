@@ -105,7 +105,7 @@ export class RenderingMWs {
       const message = new Message<any>(err, null);
       return res.json(message);
     }
-    NotificationManager.error('Unknown server error', err);
+    NotificationManager.error('Unknown server error', err, req);
     return next(err);
   }
 

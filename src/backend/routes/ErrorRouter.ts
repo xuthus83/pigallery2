@@ -24,11 +24,18 @@ export class ErrorRouter {
           res.status(401);
           return next(new ErrorDTO(ErrorCodes.NOT_AUTHENTICATED, 'Invalid token'));
         }
+        if (err.name === 'ForbiddenError' && err.code === 'EBADCSRFTOKEN') {
+          // jwt authentication error
+          res.status(401);
+          return next(new ErrorDTO(ErrorCodes.NOT_AUTHENTICATED, 'Invalid CSRF token', err, req));
+        }
+
+        console.log(err);
 
         // Flush out the stack to the console
         Logger.error('Unexpected error:');
         console.error(err);
-        return next(new ErrorDTO(ErrorCodes.SERVER_ERROR, 'Unknown server side error', err));
+        return next(new ErrorDTO(ErrorCodes.SERVER_ERROR, 'Unknown server side error', err, req));
       },
       RenderingMWs.renderError
     );

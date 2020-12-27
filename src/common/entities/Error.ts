@@ -1,3 +1,5 @@
+import {Request} from 'express';
+
 export enum ErrorCodes {
   NOT_AUTHENTICATED = 1,
   ALREADY_AUTHENTICATED = 2,
@@ -25,9 +27,16 @@ export enum ErrorCodes {
 
 export class ErrorDTO {
   public detailsStr: string;
+  public request: {
+    method: string, url: string
+  } = {method: '', url: ''};
 
-  constructor(public code: ErrorCodes, public message?: string, public details?: any) {
+  constructor(public code: ErrorCodes, public message?: string, public details?: any, req?: Request) {
     this.detailsStr = (this.details ? this.details.toString() : '') || ErrorCodes[code];
+    this.request = {
+      method: req.method,
+      url: req.url
+    };
   }
 
   toString(): string {

@@ -6,6 +6,10 @@ import {NotificationDTO, NotificationType} from '../../../common/entities/Notifi
 import {UserDTO, UserRoles} from '../../../common/entities/UserDTO';
 import {I18n} from '@ngx-translate/i18n-polyfill';
 
+export interface CountedNotificationDTO extends NotificationDTO {
+  count: number;
+}
+
 @Injectable()
 export class NotificationService {
 
@@ -13,7 +17,8 @@ export class NotificationService {
     positionClass: 'toast-top-center',
     animate: 'flyLeft'
   };
-  notifications: NotificationDTO[] = [];
+  countedNotifications: CountedNotificationDTO[] = [];
+  numberOfNotifications = 0;
   lastUser: UserDTO = null;
 
   constructor(private _toastr: ToastrService,
@@ -36,11 +41,30 @@ export class NotificationService {
     return this._toastr;
   }
 
+  groupNotifications(notifications: NotificationDTO[]) {
+    const groups: { [key: string]: { notification: NotificationDTO, count: number } } = {};
+    notifications.forEach(n => {
+      let key = n.message;
+      if (n.details) {
+        key += JSON.stringify(n.details);
+      }
+      groups[key] = groups[key] || {notification: n, count: 0};
+      groups[key].count++;
+    });
+    this.numberOfNotifications = notifications.length;
+    this.countedNotifications = [];
+    for (const key of Object.keys(groups)) {
+      (groups[key].notification as CountedNotificationDTO).count = groups[key].count;
+      this.countedNotifications.push(groups[key].notification as CountedNotificationDTO);
+    }
+
+  }
+
   async getServerNotifications() {
     try {
-      this.notifications = (await this._networkService.getJson<NotificationDTO[]>('/notifications')) || [];
-      this.notifications.forEach((noti) => {
-        let msg = noti.message;
+      this.groupNotifications((await this._networkService.getJson<NotificationDTO[]>('/notifications')) || []);
+      this.countedNotifications.forEach((noti) => {
+        let msg = '(' + noti.count + ') ' + noti.message;
         if (noti.details) {
           msg += ' Details: ' + JSON.stringify(noti.details);
         }

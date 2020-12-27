@@ -38,8 +38,8 @@
                 type="button" class="btn btn-dark dropdown-toggle"
                 aria-controls="dropdown-alignment">
           <span class="oi oi-menu"></span>
-          <span *ngIf="isAdmin() && notificationService.notifications.length>0"
-                class="navbar-badge badge badge-warning">{{notificationService.notifications.length}}</span>
+          <span *ngIf="isAdmin() && notificationService.numberOfNotifications>0"
+                class="navbar-badge badge badge-warning">{{notificationService.numberOfNotifications}}</span>
         </button>
         <ul id="dropdown-alignment" *dropdownMenu
             class="dropdown-menu dropdown-menu-right"
@@ -54,8 +54,8 @@
           <li role="menuitem" *ngIf="isAdmin()">
             <a class="dropdown-item" [routerLink]="['/admin']">
               <span class="oi oi-wrench"></span>
-              <span *ngIf="notificationService.notifications.length>0"
-                    class="badge">{{notificationService.notifications.length}}</span>
+              <span *ngIf="notificationService.numberOfNotifications>0"
+                    class="badge">{{notificationService.numberOfNotifications}}</span>
               <ng-container i18n>Settings</ng-container>
             </a>
           </li>
