@@ -19,7 +19,6 @@ export class LoggerRouter {
       return;
     }
     req.logged = true;
-    req._startTime = Date.now();
     const end = res.end;
     res.end = (a?: any, b?: any, c?: any) => {
       res.end = end;
@@ -29,6 +28,11 @@ export class LoggerRouter {
   }
 
   public static route(app: Express) {
+    /* Save start time for all requests */
+    app.use((req: Request, res: Response, next: NextFunction) => {
+      req._startTime = Date.now();
+      return next();
+    });
 
     app.get('/api*', (req: Request, res: Response, next: NextFunction) => {
       LoggerRouter.log(Logger.verbose, req, res);
