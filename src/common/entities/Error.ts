@@ -33,10 +33,12 @@ export class ErrorDTO {
 
   constructor(public code: ErrorCodes, public message?: string, public details?: any, req?: Request) {
     this.detailsStr = (this.details ? this.details.toString() : '') || ErrorCodes[code];
-    this.request = {
-      method: req.method,
-      url: req.url
-    };
+    if (req) {
+      this.request = {
+        method: req.method,
+        url: req.url
+      };
+    }
   }
 
   toString(): string {
