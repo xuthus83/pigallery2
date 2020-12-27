@@ -14,8 +14,8 @@ describe('DiskMangerWorker', () => {
     // should match the number of media (photo/video) files in the assets folder
     expect(dir.media.length).to.be.equals(7);
     const expected = require(path.join(__dirname, '/../../../assets/test image öüóőúéáű-.,.json'));
-    expect(Utils.clone(dir.media[2].name)).to.be.deep.equal('test image öüóőúéáű-.,.jpg');
-    expect(Utils.clone(dir.media[2].metadata)).to.be.deep.equal(expected);
+    expect(Utils.clone(dir.media[3].name)).to.be.deep.equal('test image öüóőúéáű-.,.jpg');
+    expect(Utils.clone(dir.media[3].metadata)).to.be.deep.equal(expected);
   });
 
 });
