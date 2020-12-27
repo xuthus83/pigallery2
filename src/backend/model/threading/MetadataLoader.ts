@@ -210,29 +210,45 @@ export class MetadataLoader {
                 const faces: FaceRegion[] = [];
                 if (ret.Regions && ret.Regions.value.RegionList && ret.Regions.value.RegionList.value) {
                   for (let i = 0; i < ret.Regions.value.RegionList.value.length; i++) {
-                    if (!ret.Regions.value.RegionList.value[i].value ||
-                      !ret.Regions.value.RegionList.value[i].value['rdf:Description'] ||
-                      !ret.Regions.value.RegionList.value[i].value['rdf:Description'].value ||
-                      !ret.Regions.value.RegionList.value[i].value['rdf:Description'].value['mwg-rs:Area']) {
-                      continue;
+                    if (ret.Regions.value.RegionList.value[i].value &&
+                        ret.Regions.value.RegionList.value[i].value['rdf:Description'] &&
+                        ret.Regions.value.RegionList.value[i].value['rdf:Description'].value &&
+                        ret.Regions.value.RegionList.value[i].value['rdf:Description'].value['mwg-rs:Area']) {
+                      const region = ret.Regions.value.RegionList.value[i].value['rdf:Description'];
+                      const regionBox = ret.Regions.value.RegionList.value[i].value['rdf:Description'].value['mwg-rs:Area'].attributes;
+                      if (region.attributes['mwg-rs:Type'] !== 'Face' ||
+                        !region.attributes['mwg-rs:Name']) {
+                        continue;
+                      }
+                      const name = region.attributes['mwg-rs:Name'];
+                      const box = {
+                        width: Math.round(parseFloat('' + regionBox['stArea:w']) * metadata.size.width),
+                        height: Math.round(parseFloat('' + regionBox['stArea:h']) * metadata.size.height),
+                        left: Math.round(parseFloat('' + regionBox['stArea:x']) * metadata.size.width),
+                        top: Math.round(parseFloat('' + regionBox['stArea:y']) * metadata.size.height)
+                      };
+                      // convert center base box to corner based box
+                      box.left = Math.max(0, box.left - box.width / 2);
+                      box.top = Math.max(0, box.top - box.height / 2);
+                      faces.push({name: name, box: box});
+                    } else if((ret.Regions.value.RegionList.value[i] as any).Area &&
+                              (ret.Regions.value.RegionList.value[i] as any).Name &&
+                              (ret.Regions.value.RegionList.value[i] as any).Type) {
+                      const regionBox = (ret.Regions.value.RegionList.value[i] as any).Area.value;
+                      const name = (ret.Regions.value.RegionList.value[i] as any).Name.value;
+                      const type = (ret.Regions.value.RegionList.value[i] as any).Type.value;
+                      if (type !== 'Face') continue;
+                      const box = {
+                        width: Math.round(parseFloat(regionBox.w.value) * metadata.size.width),
+                        height: Math.round(parseFloat(regionBox.h.value) * metadata.size.height),
+                        left: Math.round(parseFloat(regionBox.x.value) * metadata.size.width),
+                        top: Math.round(parseFloat(regionBox.y.value) * metadata.size.height)
+                      };
+                      // convert center base box to corner based box
+                      box.left = Math.max(0, box.left - box.width / 2);
+                      box.top = Math.max(0, box.top - box.height / 2);
+                      faces.push({name: name, box: box});
                     }
-                    const region = ret.Regions.value.RegionList.value[i].value['rdf:Description'];
-                    const regionBox = ret.Regions.value.RegionList.value[i].value['rdf:Description'].value['mwg-rs:Area'].attributes;
-                    if (region.attributes['mwg-rs:Type'] !== 'Face' ||
-                      !region.attributes['mwg-rs:Name']) {
-                      continue;
-                    }
-                    const name = region.attributes['mwg-rs:Name'];
-                    const box = {
-                      width: Math.round(parseFloat('' + regionBox['stArea:w']) * metadata.size.width),
-                      height: Math.round(parseFloat('' + regionBox['stArea:h']) * metadata.size.height),
-                      left: Math.round(parseFloat('' + regionBox['stArea:x']) * metadata.size.width),
-                      top: Math.round(parseFloat('' + regionBox['stArea:y']) * metadata.size.height)
-                    };
-                    // convert center base box to corner based box
-                    box.left = Math.max(0, box.left - box.width / 2);
-                    box.top = Math.max(0, box.top - box.height / 2);
-                    faces.push({name: name, box: box});
                   }
                 }
                 if (Config.Client.Faces.keywordsToPersons && faces.length > 0) {

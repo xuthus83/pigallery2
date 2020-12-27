@@ -218,7 +218,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: docker/debian-stretch/Dockerfile.build
+          file: docker/debian-buster/Dockerfile.build
           platforms: linux/amd64,linux/arm64,linux/arm/v7
           push: true
           tags: bpatrik/pigallery2:nightly-buster
