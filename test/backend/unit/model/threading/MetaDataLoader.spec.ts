@@ -32,6 +32,13 @@ describe('MetadataLoader', () => {
   });
 
 
+  it('should load jpg edited with exiftool', async () => {
+    const data = await MetadataLoader.loadPhotoMetadata(path.join(__dirname, '/../../../assets/exiftool.jpg'));
+    const expected = require(path.join(__dirname, '/../../../assets/exiftool.json'));
+    expect(Utils.clone(data)).to.be.deep.equal(expected);
+  });
+
+
   it('should load mp4', async () => {
     const data = await MetadataLoader.loadVideoMetadata(path.join(__dirname, '/../../../assets/video.mp4'));
     const expected = require(path.join(__dirname, '/../../../assets/video.json'));

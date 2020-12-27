@@ -210,45 +210,52 @@ export class MetadataLoader {
                 const faces: FaceRegion[] = [];
                 if (ret.Regions && ret.Regions.value.RegionList && ret.Regions.value.RegionList.value) {
                   for (let i = 0; i < ret.Regions.value.RegionList.value.length; i++) {
-                    if (ret.Regions.value.RegionList.value[i].value &&
-                        ret.Regions.value.RegionList.value[i].value['rdf:Description'] &&
-                        ret.Regions.value.RegionList.value[i].value['rdf:Description'].value &&
-                        ret.Regions.value.RegionList.value[i].value['rdf:Description'].value['mwg-rs:Area']) {
-                      const region = ret.Regions.value.RegionList.value[i].value['rdf:Description'];
-                      const regionBox = ret.Regions.value.RegionList.value[i].value['rdf:Description'].value['mwg-rs:Area'].attributes;
-                      if (region.attributes['mwg-rs:Type'] !== 'Face' ||
-                        !region.attributes['mwg-rs:Name']) {
-                        continue;
-                      }
-                      const name = region.attributes['mwg-rs:Name'];
-                      const box = {
-                        width: Math.round(parseFloat('' + regionBox['stArea:w']) * metadata.size.width),
-                        height: Math.round(parseFloat('' + regionBox['stArea:h']) * metadata.size.height),
-                        left: Math.round(parseFloat('' + regionBox['stArea:x']) * metadata.size.width),
-                        top: Math.round(parseFloat('' + regionBox['stArea:y']) * metadata.size.height)
+
+                    let type, name, box;
+                    const regionRoot = ret.Regions.value.RegionList.value[i] as any;
+                    const createFaceBox = (w: string, h: string, x: string, y: string) => {
+                      return {
+                        width: Math.round(parseFloat(w) * metadata.size.width),
+                        height: Math.round(parseFloat(h) * metadata.size.height),
+                        left: Math.round(parseFloat(x) * metadata.size.width),
+                        top: Math.round(parseFloat(y) * metadata.size.height)
                       };
-                      // convert center base box to corner based box
-                      box.left = Math.max(0, box.left - box.width / 2);
-                      box.top = Math.max(0, box.top - box.height / 2);
-                      faces.push({name: name, box: box});
-                    } else if((ret.Regions.value.RegionList.value[i] as any).Area &&
-                              (ret.Regions.value.RegionList.value[i] as any).Name &&
-                              (ret.Regions.value.RegionList.value[i] as any).Type) {
-                      const regionBox = (ret.Regions.value.RegionList.value[i] as any).Area.value;
-                      const name = (ret.Regions.value.RegionList.value[i] as any).Name.value;
-                      const type = (ret.Regions.value.RegionList.value[i] as any).Type.value;
-                      if (type !== 'Face') continue;
-                      const box = {
-                        width: Math.round(parseFloat(regionBox.w.value) * metadata.size.width),
-                        height: Math.round(parseFloat(regionBox.h.value) * metadata.size.height),
-                        left: Math.round(parseFloat(regionBox.x.value) * metadata.size.width),
-                        top: Math.round(parseFloat(regionBox.y.value) * metadata.size.height)
-                      };
-                      // convert center base box to corner based box
-                      box.left = Math.max(0, box.left - box.width / 2);
-                      box.top = Math.max(0, box.top - box.height / 2);
-                      faces.push({name: name, box: box});
+                    };
+
+                    /* Adobe Lightroom based face region structure*/
+                    if (regionRoot.value &&
+                      regionRoot.value['rdf:Description'] &&
+                      regionRoot.value['rdf:Description'].value &&
+                      regionRoot.value['rdf:Description'].value['mwg-rs:Area']) {
+
+                      const region = regionRoot.value['rdf:Description'];
+                      const regionBox = region.value['mwg-rs:Area'].attributes;
+
+                      name = region.attributes['mwg-rs:Name'];
+                      type = region.attributes['mwg-rs:Type'];
+                      box = createFaceBox(regionBox['stArea:w'],
+                        regionBox['stArea:h'],
+                        regionBox['stArea:x'],
+                        regionBox['stArea:y']);
+                      /* Load exiftool edited face region structure, see github issue #191 */
+                    } else if (regionRoot.Area && regionRoot.Name && regionRoot.Type) {
+
+                      const regionBox = regionRoot.Area.value;
+                      name = regionRoot.Name.value;
+                      type = regionRoot.Type.value;
+                      box = createFaceBox(regionBox.w.value,
+                        regionBox.h.value,
+                        regionBox.x.value,
+                        regionBox.y.value);
                     }
+
+                    if (type !== 'Face' || !name) {
+                      continue;
+                    }
+                    // convert center base box to corner based box
+                    box.left = Math.max(0, box.left - box.width / 2);
+                    box.top = Math.max(0, box.top - box.height / 2);
+                    faces.push({name: name, box: box});
                   }
                 }
                 if (Config.Client.Faces.keywordsToPersons && faces.length > 0) {
