@@ -11,6 +11,9 @@ import {Utils} from '../src/common/Utils';
 import {GalleryManager} from '../src/backend/model/database/sql/GalleryManager';
 import {DirectoryDTO} from '../src/common/entities/DirectoryDTO';
 import {ServerConfig} from '../src/common/config/private/PrivateConfig';
+import {ProjectPath} from '../src/backend/ProjectPath';
+import {PersonMWs} from '../src/backend/middlewares/PersonMWs';
+import {ThumbnailGeneratorMWs} from '../src/backend/middlewares/thumbnail/ThumbnailGeneratorMWs';
 
 const rimrafPR = util.promisify(rimraf);
 
@@ -30,7 +33,7 @@ export class BMIndexingManager extends IndexingManager {
 
 export class Benchmarks {
 
-  constructor(public RUNS: number, public dbFolder: string) {
+  constructor(public RUNS: number) {
 
   }
 
@@ -50,6 +53,20 @@ export class Benchmarks {
     await this.setupDB();
     Config.Server.Indexing.reIndexingSensitivity = ServerConfig.ReIndexingSensitivity.low;
     return await this.benchmark(() => gm.listDirectory('./'));
+  }
+
+  async bmListPersons(): Promise<BenchmarkResult> {
+    await this.setupDB();
+    Config.Server.Indexing.reIndexingSensitivity = ServerConfig.ReIndexingSensitivity.low;
+    return await this.benchmark(async () => {
+      await ObjectManagers.reset();
+      const req = {resultPipe: <any>null};
+      await this.nextToPromise(PersonMWs.listPersons, req, null);
+      await this.nextToPromise(PersonMWs.addSamplePhotoForAll, req, null);
+      await this.nextToPromise(ThumbnailGeneratorMWs.addThumbnailInfoForPersons, req, null);
+      await this.nextToPromise(PersonMWs.removeSamplePhotoForAll, req, null);
+      return req.resultPipe;
+    });
   }
 
   async bmAllSearch(text: string): Promise<{ result: BenchmarkResult, searchType: SearchTypes }[]> {
@@ -75,6 +92,16 @@ export class Benchmarks {
     return await this.benchmark(() => sm.autocomplete(text));
   }
 
+  private nextToPromise(fn: (req: any, res: any, next: Function) => void, request: any, response: any) {
+    return new Promise<void>((resolve, reject) => {
+      fn(request, resolve, (err?: any) => {
+        if (err) {
+          return reject(err);
+        }
+        resolve();
+      });
+    });
+  }
 
   private async benchmark(fn: () => Promise<{ media: any[], directories: any[] } | any[] | void>,
                           beforeEach: () => Promise<any> = null,
@@ -122,9 +149,8 @@ export class Benchmarks {
 
   private resetDB = async () => {
     await SQLConnection.close();
-    await rimrafPR(this.dbFolder);
+    await rimrafPR(ProjectPath.DBFolder);
     Config.Server.Database.type = ServerConfig.DatabaseType.sqlite;
-    Config.Server.Database.dbFolder = this.dbFolder;
     await ObjectManagers.InitSQLManagers();
   };
 

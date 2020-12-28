@@ -9,6 +9,7 @@ class ProjectPathClass {
   public TranscodedFolder: string;
   public FacesFolder: string;
   public FrontendFolder: string;
+  public DBFolder: string;
 
   constructor() {
     this.reset();
@@ -33,6 +34,7 @@ class ProjectPathClass {
     this.TempFolder = this.getAbsolutePath(Config.Server.Media.tempFolder);
     this.TranscodedFolder = path.join(this.TempFolder, 'tc');
     this.FacesFolder = path.join(this.TempFolder, 'f');
+    this.DBFolder = this.getAbsolutePath(Config.Server.Database.dbFolder);
 
     // create thumbnail folder if not exist
     if (!fs.existsSync(this.TempFolder)) {

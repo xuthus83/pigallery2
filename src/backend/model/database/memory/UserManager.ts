@@ -14,7 +14,7 @@ export class UserManager implements IUserManager {
 
 
   constructor() {
-    this.dbPath = path.join(ProjectPath.getAbsolutePath(Config.Server.Database.dbFolder), 'users.db');
+    this.dbPath = path.join(ProjectPath.DBFolder, 'users.db');
     if (fs.existsSync(this.dbPath)) {
       this.loadDB();
     }

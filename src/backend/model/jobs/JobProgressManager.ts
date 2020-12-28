@@ -17,7 +17,7 @@ export class JobProgressManager {
   private timer: NodeJS.Timeout = null;
 
   constructor() {
-    this.dbPath = path.join(ProjectPath.getAbsolutePath(Config.Server.Database.dbFolder), 'jobs.db');
+    this.dbPath = path.join(ProjectPath.DBFolder, 'jobs.db');
     this.loadDB().catch(console.error);
   }
 

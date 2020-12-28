@@ -18,6 +18,7 @@ import {
 import {MediaDimensionEntity} from '../../../../../src/backend/model/database/sql/enitites/MediaEntity';
 import {VersionEntity} from '../../../../../src/backend/model/database/sql/enitites/VersionEntity';
 import {ServerConfig} from '../../../../../src/common/config/private/PrivateConfig';
+import {ProjectPath} from '../../../../../src/backend/ProjectPath';
 
 
 const rimrafPR = util.promisify(rimraf);
@@ -31,6 +32,7 @@ describe('Typeorm integration', () => {
 
     Config.Server.Database.type = ServerConfig.DatabaseType.sqlite;
     Config.Server.Database.dbFolder = tempDir;
+    ProjectPath.reset();
 
   };
 

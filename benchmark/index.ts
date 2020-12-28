@@ -5,10 +5,12 @@ import {BenchmarkResult, Benchmarks} from './Benchmarks';
 import {SearchTypes} from '../src/common/entities/AutoCompleteItem';
 import {Utils} from '../src/common/Utils';
 import {DiskMangerWorker} from '../src/backend/model/threading/DiskMangerWorker';
+import {BMConfig} from './BMConfig';
+import {GalleryManager} from '../src/backend/model/database/sql/GalleryManager';
 
-const config: { path: string, system: string } = require(path.join(__dirname, 'config.json'));
-Config.Server.Media.folder = config.path;
-const dbFolder = __dirname;
+
+Config.Server.Media.folder = BMConfig.path;
+const dbFolder = path.join(__dirname, './../');
 ProjectPath.reset();
 const RUNS = 50;
 
@@ -23,8 +25,9 @@ const printHeader = async () => {
     ', ' + Utils.zeroPrefix(dt.getDate(), 2) +
     '.' + Utils.zeroPrefix(dt.getMonth() + 1, 2) +
     '.' + dt.getFullYear());
-  printLine('**System**: ' + config.system);
+  printLine('**System**: ' + BMConfig.system);
   const dir = await DiskMangerWorker.scanDirectory('./');
+  const gm = new GalleryManager();
   printLine('**Gallery**: directories: ' +
     dir.directories.length +
     ' media: ' + dir.media.length +
@@ -52,7 +55,7 @@ const printResult = (result: BenchmarkResult, action: string, actionDetails: str
 
 const run = async () => {
   const start = Date.now();
-  const bm = new Benchmarks(RUNS, dbFolder);
+  const bm = new Benchmarks(RUNS);
 
   // header
   await printHeader();
@@ -60,6 +63,7 @@ const run = async () => {
   printResult(await bm.bmScanDirectory(), 'Scanning directory');
   printResult(await bm.bmSaveDirectory(), 'Saving directory');
   printResult(await bm.bmListDirectory(), 'Listing Directory');
+  printResult(await bm.bmListPersons(), 'Listing Faces');
   (await bm.bmAllSearch('a')).forEach(res => {
     if (res.searchType !== null) {
       printResult(res.result, 'searching', '`a` as `' + SearchTypes[res.searchType] + '`');

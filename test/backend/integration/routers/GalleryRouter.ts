@@ -30,6 +30,7 @@ describe('GalleryRouter', () => {
     Config.Server.Database.dbFolder = tempDir;
     ProjectPath.ImageFolder = path.join(__dirname, '../../assets');
     ProjectPath.TempFolder = tempDir;
+    ProjectPath.reset();
 
     server = new Server();
     await server.onStarted.wait();

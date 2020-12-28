@@ -97,6 +97,6 @@ export class PersonMWs {
 }
 
 
-export interface PersonWithPhoto extends PersonDTO {
+export interface  PersonWithPhoto extends PersonDTO {
   samplePhoto: PhotoDTO;
 }

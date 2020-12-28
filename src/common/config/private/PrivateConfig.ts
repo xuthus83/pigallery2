@@ -54,6 +54,13 @@ export module ServerConfig {
 
 
   @SubConfigClass()
+  export class SQLiteConfig {
+    @ConfigProperty()
+    DBFileName: string = 'sqlite.db';
+  }
+
+
+  @SubConfigClass()
   export class DataBaseConfig {
     @ConfigProperty<DatabaseType, IPrivateConfig>({
       type: DatabaseType,
@@ -68,6 +75,9 @@ export module ServerConfig {
 
     @ConfigProperty()
     dbFolder: string = 'db';
+
+    @ConfigProperty()
+    sqlite?: SQLiteConfig = new SQLiteConfig();
 
     @ConfigProperty()
     mysql?: MySQLConfig = new MySQLConfig();

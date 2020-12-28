@@ -4,6 +4,7 @@ import * as util from 'util';
 import * as rimraf from 'rimraf';
 import {SQLConnection} from '../../src/backend/model/database/sql/SQLConnection';
 import {ServerConfig} from '../../src/common/config/private/PrivateConfig';
+import {ProjectPath} from '../../src/backend/ProjectPath';
 
 declare let describe: any;
 const savedDescribe = describe;
@@ -63,6 +64,7 @@ export class SQLTestHelper {
 
     Config.Server.Database.type = ServerConfig.DatabaseType.sqlite;
     Config.Server.Database.dbFolder = this.tempDir;
+    ProjectPath.reset();
   }
 
   private async initMySQL() {

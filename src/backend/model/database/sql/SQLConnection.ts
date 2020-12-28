@@ -183,7 +183,7 @@ export class SQLConnection {
     } else if (config.type === ServerConfig.DatabaseType.sqlite) {
       driver = {
         type: 'sqlite',
-        database: path.join(ProjectPath.getAbsolutePath(config.dbFolder), 'sqlite.db')
+        database: path.join(ProjectPath.getAbsolutePath(config.dbFolder), config.sqlite.DBFileName)
       };
     }
     return driver;

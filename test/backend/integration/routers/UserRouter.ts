@@ -13,6 +13,7 @@ import {SuperAgentStatic} from 'superagent';
 import {RouteTestingHelper} from './RouteTestingHelper';
 import {ErrorCodes} from '../../../../src/common/entities/Error';
 import {ServerConfig} from '../../../../src/common/config/private/PrivateConfig';
+import {ProjectPath} from '../../../../src/backend/ProjectPath';
 
 
 process.env.NODE_ENV = 'test';
@@ -39,6 +40,7 @@ describe('UserRouter', () => {
     Config.Server.Threading.enabled = false;
     Config.Server.Database.type = ServerConfig.DatabaseType.sqlite;
     Config.Server.Database.dbFolder = tempDir;
+    ProjectPath.reset();
 
 
     server = new Server();

@@ -5,6 +5,7 @@ import {Config} from '../../../../../src/common/config/private/Config';
 import {SQLConnection} from '../../../../../src/backend/model/database/sql/SQLConnection';
 import {Server} from '../../../../../src/backend/server';
 import {ServerConfig} from '../../../../../src/common/config/private/PrivateConfig';
+import {ProjectPath} from '../../../../../src/backend/ProjectPath';
 
 process.env.NODE_ENV = 'test';
 const chai: any = require('chai');
@@ -21,6 +22,7 @@ describe('SettingsRouter', () => {
     Config.Server.Threading.enabled = false;
     Config.Server.Database.type = ServerConfig.DatabaseType.sqlite;
     Config.Server.Database.dbFolder = tempDir;
+    ProjectPath.reset();
   });
 
 
