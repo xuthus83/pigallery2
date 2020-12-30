@@ -22,8 +22,14 @@ const LOG_TAG = '[IndexingManager]';
 
 export class IndexingManager implements IIndexingManager {
 
+  SavingReady: Promise<void> = null;
+  SavingReadyPR: () => void = null;
   private savingQueue: DirectoryDTO[] = [];
   private isSaving = false;
+
+  get IsSavingInProgress() {
+    return this.SavingReady !== null;
+  }
 
   public indexDirectory(relativeDirectoryName: string): Promise<DirectoryDTO> {
     return new Promise(async (resolve, reject) => {
@@ -67,9 +73,18 @@ export class IndexingManager implements IIndexingManager {
       return;
     }
     this.savingQueue.push(scannedDirectory);
+    if (!this.SavingReady) {
+      this.SavingReady = new Promise<void>((resolve) => {
+        this.SavingReadyPR = resolve;
+      });
+    }
     while (this.isSaving === false && this.savingQueue.length > 0) {
       await this.saveToDB(this.savingQueue[0]);
       this.savingQueue.shift();
+    }
+    if (this.savingQueue.length === 0) {
+      this.SavingReady = null;
+      this.SavingReadyPR();
     }
 
   }

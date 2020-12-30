@@ -38,7 +38,8 @@ const getSwitch = (name: string, def: string = null): string => {
 gulp.task('build-backend', function () {
   return gulp.src([
     'src/common/**/*.ts',
-    'src/backend/**/*.ts'], {base: '.'})
+    'src/backend/**/*.ts',
+    'benchmark/**/*.ts'], {base: '.'})
     .pipe(tsBackendProject())
     .js
     .pipe(gulp.dest('./release'));

@@ -1,18 +1,17 @@
 import {Config} from '../src/common/config/private/Config';
-import * as path from 'path';
 import {ProjectPath} from '../src/backend/ProjectPath';
-import {BenchmarkResult, Benchmarks} from './Benchmarks';
+import {BenchmarkResult, BenchmarkRunner} from './BenchmarkRunner';
 import {SearchTypes} from '../src/common/entities/AutoCompleteItem';
 import {Utils} from '../src/common/Utils';
 import {DiskMangerWorker} from '../src/backend/model/threading/DiskMangerWorker';
 import {BMConfig} from './BMConfig';
 import {GalleryManager} from '../src/backend/model/database/sql/GalleryManager';
+import {PersonManager} from '../src/backend/model/database/sql/PersonManager';
 
 
 Config.Server.Media.folder = BMConfig.path;
-const dbFolder = path.join(__dirname, './../');
 ProjectPath.reset();
-const RUNS = 50;
+const RUNS = BMConfig.RUNS;
 
 let resultsText = '';
 const printLine = (text: string) => {
@@ -28,54 +27,75 @@ const printHeader = async () => {
   printLine('**System**: ' + BMConfig.system);
   const dir = await DiskMangerWorker.scanDirectory('./');
   const gm = new GalleryManager();
-  printLine('**Gallery**: directories: ' +
+  const pm = new PersonManager();
+  printLine('\n**Gallery**: directories: ' +
     dir.directories.length +
     ' media: ' + dir.media.length +
     // @ts-ignore
-    ', faces: ' + dir.media.reduce((p, c) => p + (c.metadata.faces || []).length, 0));
+    ', all persons: ' + dir.media.reduce((p, c) => p + (c.metadata.faces || []).length, 0) +
+    ',unique persons (faces): ' + (await pm.getAll()).length + '\n');
 };
 
 
 const printTableHeader = () => {
-  printLine('| action | action details | average time | details |');
-  printLine('|:------:|:--------------:|:------------:|:-------:|');
+  printLine('| Action | Sub action | Action details | Average Duration | Details |');
+  printLine('|:------:|:----------:|:--------------:|:----------------:|:-------:|');
 };
-const printResult = (result: BenchmarkResult, action: string, actionDetails: string = '') => {
-  console.log('benchmarked: ' + action);
+const printResult = (result: BenchmarkResult, actionDetails: string = '', isSubResult = false) => {
+  console.log('benchmarked: ' + result.name);
   let details = '-';
   if (result.items) {
     details = 'items: ' + result.items;
   }
-  if (result.media) {
-    details = 'media: ' + result.media + ', directories:' + result.directories;
+  if (result.contentWrapper) {
+    if (result.contentWrapper.directory) {
+      details = 'media: ' + result.contentWrapper.directory.media.length +
+        ', directories:' + result.contentWrapper.directory.directories.length;
+    } else {
+      details = 'media: ' + result.contentWrapper.searchResult.media.length +
+        ', directories:' + result.contentWrapper.searchResult.directories.length;
+    }
   }
-  printLine('| ' + action + ' | ' + actionDetails +
-    ' | ' + (result.duration).toFixed(1) + 'ms | ' + details + ' |');
+  if (isSubResult) {
+    printLine('| | ' + result.name + ' | ' + actionDetails +
+      ' | ' + (result.duration).toFixed(1) + ' ms | ' + details + ' |');
+  } else {
+    printLine('| **' + result.name + '** | | ' + actionDetails +
+      ' | ' + (result.duration).toFixed(1) + ' ms | ' + details + ' |');
+  }
+  if (result.subBenchmarks && result.subBenchmarks.length > 1) {
+    for (let i = 0; i < result.subBenchmarks.length; i++) {
+      printResult(result.subBenchmarks[i], '', true);
+    }
+  }
 };
 
 const run = async () => {
+  console.log('Running, RUNS:' + RUNS);
   const start = Date.now();
-  const bm = new Benchmarks(RUNS);
+  const bm = new BenchmarkRunner(RUNS);
 
   // header
   await printHeader();
   printTableHeader();
-  printResult(await bm.bmScanDirectory(), 'Scanning directory');
-  printResult(await bm.bmSaveDirectory(), 'Saving directory');
-  printResult(await bm.bmListDirectory(), 'Listing Directory');
-  printResult(await bm.bmListPersons(), 'Listing Faces');
+
+  printResult(await bm.bmScanDirectory());
+  printResult(await bm.bmSaveDirectory());
+  printResult(await bm.bmListDirectory());
+  printResult(await bm.bmListPersons());
   (await bm.bmAllSearch('a')).forEach(res => {
     if (res.searchType !== null) {
-      printResult(res.result, 'searching', '`a` as `' + SearchTypes[res.searchType] + '`');
+      printResult(res.result, '`a` as `' + SearchTypes[res.searchType] + '`');
     } else {
-      printResult(res.result, 'searching', '`a` as `any`');
+      printResult(res.result, '`a` as `any`');
     }
   });
-  printResult(await bm.bmInstantSearch('a'), 'instant search', '`a`');
-  printResult(await bm.bmAutocomplete('a'), 'auto complete', '`a`');
+  printResult(await bm.bmInstantSearch('a'), '`a`');
+  printResult(await bm.bmAutocomplete('a'), '`a`');
+  printLine('*Measurements run ' + RUNS + ' times and an average was calculated.');
   console.log(resultsText);
   console.log('run for : ' + ((Date.now() - start)).toFixed(1) + 'ms');
 };
 
-run();
+run().then(console.log).catch(console.error);
 

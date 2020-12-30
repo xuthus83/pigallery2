@@ -23,6 +23,9 @@ export class IndexingJob extends Job {
 
   protected async step(): Promise<boolean> {
     if (this.directoriesToIndex.length === 0) {
+      if (ObjectManagers.getInstance().IndexingManager.IsSavingInProgress) {
+        await ObjectManagers.getInstance().IndexingManager.SavingReady;
+      }
       return false;
     }
     const directory = this.directoriesToIndex.shift();

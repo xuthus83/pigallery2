@@ -11,6 +11,7 @@ import {ConfigProperty} from 'typeconfig/common';
   enumsAsString: true,
   softReadonly: true,
   cli: {
+    prefix: 'bm-config',
     enable: {
       configPath: true,
       attachState: true,
@@ -31,6 +32,8 @@ export class PrivateConfigClass {
   path: string = 'demo/images';
   @ConfigProperty({description: 'Describe your system setup'})
   system: string = '';
+  @ConfigProperty({description: 'Number of times to run the benchmark'})
+  RUNS: number = 50;
 
 
 }
