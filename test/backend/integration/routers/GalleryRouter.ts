@@ -28,9 +28,9 @@ describe('GalleryRouter', () => {
     Config.Client.Media.Video.enabled = true;
     Config.Server.Database.type = ServerConfig.DatabaseType.sqlite;
     Config.Server.Database.dbFolder = tempDir;
+    ProjectPath.reset();
     ProjectPath.ImageFolder = path.join(__dirname, '../../assets');
     ProjectPath.TempFolder = tempDir;
-    ProjectPath.reset();
 
     server = new Server();
     await server.onStarted.wait();
