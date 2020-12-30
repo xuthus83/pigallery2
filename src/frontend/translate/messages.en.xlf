@@ -68,7 +68,7 @@
         <source>Remember me</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/login/login.component.html</context>
-          <context context-type="linenumber">56</context>
+          <context context-type="linenumber">58</context>
         </context-group>
         <target>Remember me</target>
       </trans-unit>
@@ -77,7 +77,7 @@
             </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/login/login.component.html</context>
-          <context context-type="linenumber">66</context>
+          <context context-type="linenumber">68</context>
         </context-group>
         <target>Login</target>
       </trans-unit>
@@ -419,7 +419,7 @@
       </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/admin/admin.component.html</context>
-          <context context-type="linenumber">30</context>
+          <context context-type="linenumber">34</context>
         </context-group>
         <target>To dismiss these notifications, restart the server.</target>
       </trans-unit>
@@ -427,7 +427,7 @@
         <source>App version:</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/admin/admin.component.html</context>
-          <context context-type="linenumber">43</context>
+          <context context-type="linenumber">47</context>
         </context-group>
         <target>App version:</target>
       </trans-unit>
@@ -435,7 +435,7 @@
         <source>Mode</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/admin/admin.component.html</context>
-          <context context-type="linenumber">47</context>
+          <context context-type="linenumber">51</context>
         </context-group>
         <target>Mode</target>
       </trans-unit>
@@ -443,7 +443,7 @@
         <source>Advanced</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/admin/admin.component.html</context>
-          <context context-type="linenumber">55</context>
+          <context context-type="linenumber">59</context>
         </context-group>
         <target>Advanced</target>
       </trans-unit>
@@ -451,7 +451,7 @@
         <source>Simplified</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/admin/admin.component.html</context>
-          <context context-type="linenumber">56</context>
+          <context context-type="linenumber">60</context>
         </context-group>
         <target>Simplified</target>
       </trans-unit>
@@ -459,7 +459,7 @@
         <source>Up time</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/admin/admin.component.html</context>
-          <context context-type="linenumber">135</context>
+          <context context-type="linenumber">139</context>
         </context-group>
         <target>Up time</target>
       </trans-unit>
@@ -1926,11 +1926,19 @@
         </context-group>
         <target>Videos</target>
       </trans-unit>
+      <trans-unit id="09c3d8dca68f757aec322440b75f686a1e2c2322" datatype="html">
+        <source>Persons</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
+          <context context-type="linenumber">129</context>
+        </context-group>
+        <target>Persons</target>
+      </trans-unit>
       <trans-unit id="7faaaa08f56427999f3be41df1093ce4089bbd75" datatype="html">
         <source>Size</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
-          <context context-type="linenumber">129</context>
+          <context context-type="linenumber">133</context>
         </context-group>
         <target>Size</target>
       </trans-unit>

@@ -5,6 +5,7 @@ import {Config} from '../../../common/config/private/Config';
 import {ISQLGalleryManager} from '../../model/database/sql/IGalleryManager';
 import {ServerConfig} from '../../../common/config/private/PrivateConfig';
 import {ISQLPersonManager} from '../../model/database/sql/IPersonManager';
+import {StatisticDTO} from '../../../common/entities/settings/StatisticDTO';
 
 
 export class AdminMWs {
@@ -18,12 +19,12 @@ export class AdminMWs {
     const galleryManager = <ISQLGalleryManager>ObjectManagers.getInstance().GalleryManager;
     const personManager = <ISQLPersonManager>ObjectManagers.getInstance().PersonManager;
     try {
-      req.resultPipe = {
+      req.resultPipe = <StatisticDTO>{
         directories: await galleryManager.countDirectories(),
         photos: await galleryManager.countPhotos(),
         videos: await galleryManager.countVideos(),
         diskUsage: await galleryManager.countMediaSize(),
-        faces: await personManager.countFaces(),
+        persons: await personManager.countFaces(),
       };
       return next();
     } catch (err) {
