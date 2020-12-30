@@ -4,6 +4,7 @@ import {ObjectManagers} from '../../model/ObjectManagers';
 import {Config} from '../../../common/config/private/Config';
 import {ISQLGalleryManager} from '../../model/database/sql/IGalleryManager';
 import {ServerConfig} from '../../../common/config/private/PrivateConfig';
+import {ISQLPersonManager} from '../../model/database/sql/IPersonManager';
 
 
 export class AdminMWs {
@@ -15,12 +16,14 @@ export class AdminMWs {
 
 
     const galleryManager = <ISQLGalleryManager>ObjectManagers.getInstance().GalleryManager;
+    const personManager = <ISQLPersonManager>ObjectManagers.getInstance().PersonManager;
     try {
       req.resultPipe = {
         directories: await galleryManager.countDirectories(),
         photos: await galleryManager.countPhotos(),
         videos: await galleryManager.countVideos(),
         diskUsage: await galleryManager.countMediaSize(),
+        faces: await personManager.countFaces(),
       };
       return next();
     } catch (err) {

@@ -1,4 +1,3 @@
-import {IPersonManager} from '../interfaces/IPersonManager';
 import {SQLConnection} from './SQLConnection';
 import {PersonEntry} from './enitites/PersonEntry';
 import {PhotoDTO} from '../../../../common/entities/PhotoDTO';
@@ -7,9 +6,10 @@ import {FaceRegionEntry} from './enitites/FaceRegionEntry';
 import {PersonDTO} from '../../../../common/entities/PersonDTO';
 import {Utils} from '../../../../common/Utils';
 import {SelectQueryBuilder} from 'typeorm';
+import {ISQLPersonManager} from './IPersonManager';
 
 
-export class PersonManager implements IPersonManager {
+export class PersonManager implements ISQLPersonManager {
   samplePhotos: { [key: string]: PhotoDTO } = {};
   persons: PersonEntry[] = [];
 
@@ -95,6 +95,13 @@ export class PersonManager implements IPersonManager {
     return this.persons;
   }
 
+
+  async countFaces(): Promise<number> {
+    const connection = await SQLConnection.getConnection();
+    return await connection.getRepository(FaceRegionEntry)
+      .createQueryBuilder('faceRegion')
+      .getCount();
+  }
 
   async get(name: string): Promise<PersonEntry> {
 

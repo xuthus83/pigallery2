@@ -156,6 +156,7 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
     return sum || 0;
   }
 
+
   async countPhotos(): Promise<number> {
     const connection = await SQLConnection.getConnection();
     return await connection.getRepository(PhotoEntity)

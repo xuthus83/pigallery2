@@ -4,6 +4,7 @@ import {DiskMangerWorker} from '../src/backend/model/threading/DiskMangerWorker'
 import {IndexingManager} from '../src/backend/model/database/sql/IndexingManager';
 import {SearchManager} from '../src/backend/model/database/sql/SearchManager';
 import * as util from 'util';
+import * as path from 'path';
 import * as rimraf from 'rimraf';
 import {SearchTypes} from '../src/common/entities/AutoCompleteItem';
 import {Utils} from '../src/common/Utils';
@@ -20,6 +21,8 @@ import {JobProgress} from '../src/backend/model/jobs/jobs/JobProgress';
 import {GalleryMWs} from '../src/backend/middlewares/GalleryMWs';
 import {UserDTO, UserRoles} from '../src/common/entities/UserDTO';
 import {ContentWrapper} from '../src/common/entities/ConentWrapper';
+import {GalleryManager} from '../src/backend/model/database/sql/GalleryManager';
+import {PersonManager} from '../src/backend/model/database/sql/PersonManager';
 
 const rimrafPR = util.promisify(rimraf);
 
@@ -39,15 +42,17 @@ export class BMIndexingManager extends IndexingManager {
 }
 
 export class BenchmarkRunner {
-
+  inited = false;
+  private biggestPath: string = null;
 
   constructor(public RUNS: number) {
 
   }
 
   async bmSaveDirectory(): Promise<BenchmarkResult> {
+    await this.init();
     await this.resetDB();
-    const dir = await DiskMangerWorker.scanDirectory('./');
+    const dir = await DiskMangerWorker.scanDirectory(this.biggestPath);
     const bm = new Benchmark('Saving directory to DB', null, () => this.resetDB());
     bm.addAStep({
       name: 'Saving directory to DB',
@@ -60,15 +65,17 @@ export class BenchmarkRunner {
   }
 
   async bmScanDirectory(): Promise<BenchmarkResult> {
+    await this.init();
     const bm = new Benchmark('Scanning directory');
     bm.addAStep({
       name: 'Scanning directory',
-      fn: async () => new ContentWrapper(await DiskMangerWorker.scanDirectory('./'))
+      fn: async () => new ContentWrapper(await DiskMangerWorker.scanDirectory(this.biggestPath))
     });
     return await bm.run(this.RUNS);
   }
 
   async bmListDirectory(): Promise<BenchmarkResult> {
+    await this.init();
     await this.setupDB();
     Config.Server.Indexing.reIndexingSensitivity = ServerConfig.ReIndexingSensitivity.low;
     const bm = new Benchmark('List directory',
@@ -79,7 +86,7 @@ export class BenchmarkRunner {
       });
     bm.addAStep({
       name: 'List directory',
-      fn: (input) => this.nextToPromise(GalleryMWs.listDirectory, input, {directory: '/'})
+      fn: (input) => this.nextToPromise(GalleryMWs.listDirectory, input, {directory: this.biggestPath})
     });
     bm.addAStep({
       name: 'Add Thumbnail information',
@@ -163,6 +170,54 @@ export class BenchmarkRunner {
     return await bm.run(this.RUNS);
   }
 
+  async getStatistic() {
+    await this.setupDB();
+    const gm = new GalleryManager();
+    const pm = new PersonManager();
+
+    const renderDataSize = (size: number) => {
+      const postFixes = ['B', 'KB', 'MB', 'GB', 'TB'];
+      let index = 0;
+      while (size > 1000 && index < postFixes.length - 1) {
+        size /= 1000;
+        index++;
+      }
+      return size.toFixed(2) + postFixes[index];
+    };
+    return 'directories: ' + await gm.countDirectories() +
+      ', photos: ' + await gm.countPhotos() +
+      ', videos: ' + await gm.countVideos() +
+      ', diskUsage : ' + renderDataSize(await gm.countMediaSize()) +
+      ', persons : ' + await pm.countFaces() +
+      ', unique persons (faces): ' + (await pm.getAll()).length;
+
+  }
+
+  private async init() {
+    if (this.inited === false) {
+      await this.setupDB();
+
+      const gm = new GalleryManager();
+      let biggest = 0;
+      let biggestPath = '/';
+      const queue = ['/'];
+      while (queue.length > 0) {
+        const dirPath = queue.shift();
+        const dir = await gm.listDirectory(dirPath);
+        dir.directories.forEach(d => queue.push(path.join(d.path + d.name)));
+        if (biggest < dir.media.length) {
+          biggestPath = path.join(dir.path + dir.name);
+          biggest = dir.media.length;
+        }
+      }
+      this.biggestPath = biggestPath;
+      console.log('updating path of biggest dir to: ' + this.biggestPath);
+      this.inited = true;
+    }
+    return this.biggestPath;
+
+  }
+
   private nextToPromise(fn: (req: any, res: any, next: Function) => void, input?: any, params = {}) {
     return new Promise<void>((resolve, reject) => {
       const request = {
@@ -211,5 +266,4 @@ export class BenchmarkRunner {
       }
     });
   }
-
 }

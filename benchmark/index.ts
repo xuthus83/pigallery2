@@ -3,10 +3,7 @@ import {ProjectPath} from '../src/backend/ProjectPath';
 import {BenchmarkResult, BenchmarkRunner} from './BenchmarkRunner';
 import {SearchTypes} from '../src/common/entities/AutoCompleteItem';
 import {Utils} from '../src/common/Utils';
-import {DiskMangerWorker} from '../src/backend/model/threading/DiskMangerWorker';
 import {BMConfig} from './BMConfig';
-import {GalleryManager} from '../src/backend/model/database/sql/GalleryManager';
-import {PersonManager} from '../src/backend/model/database/sql/PersonManager';
 
 
 Config.Server.Media.folder = BMConfig.path;
@@ -18,22 +15,15 @@ const printLine = (text: string) => {
   resultsText += text + '\n';
 };
 
-const printHeader = async () => {
+
+const printHeader = async (statistic: string) => {
   const dt = new Date();
   printLine('## PiGallery2 v' + require('./../package.json').version +
     ', ' + Utils.zeroPrefix(dt.getDate(), 2) +
     '.' + Utils.zeroPrefix(dt.getMonth() + 1, 2) +
     '.' + dt.getFullYear());
   printLine('**System**: ' + BMConfig.system);
-  const dir = await DiskMangerWorker.scanDirectory('./');
-  const gm = new GalleryManager();
-  const pm = new PersonManager();
-  printLine('\n**Gallery**: directories: ' +
-    dir.directories.length +
-    ' media: ' + dir.media.length +
-    // @ts-ignore
-    ', all persons: ' + dir.media.reduce((p, c) => p + (c.metadata.faces || []).length, 0) +
-    ',unique persons (faces): ' + (await pm.getAll()).length + '\n');
+  printLine('\n**Gallery**: ' + statistic + '\n');
 };
 
 
@@ -60,8 +50,8 @@ const printResult = (result: BenchmarkResult, actionDetails: string = '', isSubR
     printLine('| | ' + result.name + ' | ' + actionDetails +
       ' | ' + (result.duration).toFixed(1) + ' ms | ' + details + ' |');
   } else {
-    printLine('| **' + result.name + '** | | ' + actionDetails +
-      ' | ' + (result.duration).toFixed(1) + ' ms | ' + details + ' |');
+    printLine('| **' + result.name + '** | | **' + actionDetails +
+      '** | **' + (result.duration).toFixed(1) + ' ms** | **' + details + '** |');
   }
   if (result.subBenchmarks && result.subBenchmarks.length > 1) {
     for (let i = 0; i < result.subBenchmarks.length; i++) {
@@ -76,7 +66,7 @@ const run = async () => {
   const bm = new BenchmarkRunner(RUNS);
 
   // header
-  await printHeader();
+  await printHeader(await bm.getStatistic());
   printTableHeader();
 
   printResult(await bm.bmScanDirectory());
