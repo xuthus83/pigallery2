@@ -39,10 +39,10 @@ const printResult = (result: BenchmarkResult, isSubResult = false) => {
   if (result.contentWrapper) {
     if (result.contentWrapper.directory) {
       details = 'media: ' + result.contentWrapper.directory.media.length +
-        ', directories:' + result.contentWrapper.directory.directories.length;
+        ', directories: ' + result.contentWrapper.directory.directories.length;
     } else {
       details = 'media: ' + result.contentWrapper.searchResult.media.length +
-        ', directories:' + result.contentWrapper.searchResult.directories.length;
+        ', directories: ' + result.contentWrapper.searchResult.directories.length;
     }
   }
   if (isSubResult) {

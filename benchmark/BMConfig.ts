@@ -29,7 +29,7 @@ import {ConfigProperty} from 'typeconfig/common';
 })
 export class PrivateConfigClass {
   @ConfigProperty({description: 'Images are loaded from this folder (read permission required)'})
-  path: string = 'demo/images';
+  path: string = '/app/data/images';
   @ConfigProperty({description: 'Describe your system setup'})
   system: string = '';
   @ConfigProperty({description: 'Number of times to run the benchmark'})
