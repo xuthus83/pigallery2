@@ -29,12 +29,15 @@ export class GalleryRouter {
     this.addAutoComplete(app);
   }
 
-  private static addDirectoryList(app: Express) {
+  protected static addDirectoryList(app: Express) {
     app.get(['/api/gallery/content/:directory(*)', '/api/gallery/', '/api/gallery//'],
+      // common part
       AuthenticationMWs.authenticate,
       AuthenticationMWs.normalizePathParam('directory'),
       AuthenticationMWs.authorisePath('directory', true),
       VersionMWs.injectGalleryVersion,
+
+      // specific part
       GalleryMWs.listDirectory,
       ThumbnailGeneratorMWs.addThumbnailInformation,
       GalleryMWs.cleanUpGalleryResults,
@@ -43,85 +46,109 @@ export class GalleryRouter {
   }
 
 
-  private static addGetImage(app: Express) {
+  protected static addGetImage(app: Express) {
     app.get(['/api/gallery/content/:mediaPath(*\.(' + SupportedFormats.Photos.join('|') + '))'],
+      // common part
       AuthenticationMWs.authenticate,
       AuthenticationMWs.normalizePathParam('mediaPath'),
       AuthenticationMWs.authorisePath('mediaPath', false),
+
+      // specific part
       GalleryMWs.loadFile,
       RenderingMWs.renderFile
     );
   }
 
-  private static addGetBestFitImage(app: Express) {
+  protected static addGetBestFitImage(app: Express) {
     app.get(['/api/gallery/content/:mediaPath(*\.(' + SupportedFormats.Photos.join('|') + '))/bestFit'],
+      // common part
       AuthenticationMWs.authenticate,
       AuthenticationMWs.normalizePathParam('mediaPath'),
       AuthenticationMWs.authorisePath('mediaPath', false),
+
+      // specific part
       GalleryMWs.loadFile,
       PhotoConverterMWs.convertPhoto,
       RenderingMWs.renderFile
     );
   }
 
-  private static addGetVideo(app: Express) {
+  protected static addGetVideo(app: Express) {
     app.get(['/api/gallery/content/:mediaPath(*\.(' + SupportedFormats.Videos.join('|') + '))'],
+      // common part
       AuthenticationMWs.authenticate,
       AuthenticationMWs.normalizePathParam('mediaPath'),
       AuthenticationMWs.authorisePath('mediaPath', false),
+
+      // specific part
       GalleryMWs.loadFile,
       RenderingMWs.renderFile
     );
   }
 
-  private static addGetBestFitVideo(app: Express) {
+  protected static addGetBestFitVideo(app: Express) {
     app.get(['/api/gallery/content/:mediaPath(*\.(' + SupportedFormats.Videos.join('|') + '))/bestFit'],
+      // common part
       AuthenticationMWs.authenticate,
       AuthenticationMWs.normalizePathParam('mediaPath'),
       AuthenticationMWs.authorisePath('mediaPath', false),
+
+      // specific part
       GalleryMWs.loadFile,
       GalleryMWs.loadBestFitVideo,
       RenderingMWs.renderFile
     );
   }
 
-  private static addGetMetaFile(app: Express) {
+  protected static addGetMetaFile(app: Express) {
     app.get(['/api/gallery/content/:mediaPath(*\.(' + SupportedFormats.MetaFiles.join('|') + '))'],
+      // common part
       AuthenticationMWs.authenticate,
       AuthenticationMWs.normalizePathParam('mediaPath'),
       AuthenticationMWs.authorisePath('mediaPath', false),
+
+      // specific part
       GalleryMWs.loadFile,
       RenderingMWs.renderFile
     );
   }
 
-  private static addRandom(app: Express) {
+  protected static addRandom(app: Express) {
     app.get(['/api/gallery/random'],
+      // common part
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Guest),
       VersionMWs.injectGalleryVersion,
+
+      // specific part
       GalleryMWs.getRandomImage,
       GalleryMWs.loadFile,
       RenderingMWs.renderFile
     );
   }
 
-  private static addGetPhotoThumbnail(app: Express) {
+  protected static addGetPhotoThumbnail(app: Express) {
     app.get('/api/gallery/content/:mediaPath(*\.(' + SupportedFormats.Photos.join('|') + '))/thumbnail/:size?',
+      // common part
       AuthenticationMWs.authenticate,
       AuthenticationMWs.normalizePathParam('mediaPath'),
       AuthenticationMWs.authorisePath('mediaPath', false),
+
+      // specific part
       GalleryMWs.loadFile,
       ThumbnailGeneratorMWs.generateThumbnailFactory(ThumbnailSourceType.Photo),
       RenderingMWs.renderFile
     );
   }
 
-  private static addGetVideoThumbnail(app: Express) {
+  protected static addGetVideoThumbnail(app: Express) {
     app.get('/api/gallery/content/:mediaPath(*\.(' + SupportedFormats.Videos.join('|') + '))/thumbnail/:size?',
+      // common part
       AuthenticationMWs.authenticate,
       AuthenticationMWs.normalizePathParam('mediaPath'),
       AuthenticationMWs.authorisePath('mediaPath', false),
+
+      // specific part
       GalleryMWs.loadFile,
       ThumbnailGeneratorMWs.generateThumbnailFactory(ThumbnailSourceType.Video),
       RenderingMWs.renderFile
@@ -129,33 +156,42 @@ export class GalleryRouter {
   }
 
 
-  private static addGetVideoIcon(app: Express) {
+  protected static addGetVideoIcon(app: Express) {
     app.get('/api/gallery/content/:mediaPath(*\.(' + SupportedFormats.Videos.join('|') + '))/icon',
+      // common part
       AuthenticationMWs.authenticate,
       AuthenticationMWs.normalizePathParam('mediaPath'),
       AuthenticationMWs.authorisePath('mediaPath', false),
+
+      // specific part
       GalleryMWs.loadFile,
       ThumbnailGeneratorMWs.generateIconFactory(ThumbnailSourceType.Video),
       RenderingMWs.renderFile
     );
   }
 
-  private static addGetImageIcon(app: Express) {
+  protected static addGetImageIcon(app: Express) {
     app.get('/api/gallery/content/:mediaPath(*\.(' + SupportedFormats.Photos.join('|') + '))/icon',
+      // common part
       AuthenticationMWs.authenticate,
       AuthenticationMWs.normalizePathParam('mediaPath'),
       AuthenticationMWs.authorisePath('mediaPath', false),
+
+      // specific part
       GalleryMWs.loadFile,
       ThumbnailGeneratorMWs.generateIconFactory(ThumbnailSourceType.Photo),
       RenderingMWs.renderFile
     );
   }
 
-  private static addSearch(app: Express) {
+  protected static addSearch(app: Express) {
     app.get('/api/search/:text',
+      // common part
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Guest),
       VersionMWs.injectGalleryVersion,
+
+      // specific part
       GalleryMWs.search,
       ThumbnailGeneratorMWs.addThumbnailInformation,
       GalleryMWs.cleanUpGalleryResults,
@@ -163,11 +199,14 @@ export class GalleryRouter {
     );
   }
 
-  private static addInstantSearch(app: Express) {
+  protected static addInstantSearch(app: Express) {
     app.get('/api/instant-search/:text',
+      // common part
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Guest),
       VersionMWs.injectGalleryVersion,
+
+      // specific part
       GalleryMWs.instantSearch,
       ThumbnailGeneratorMWs.addThumbnailInformation,
       GalleryMWs.cleanUpGalleryResults,
@@ -175,11 +214,14 @@ export class GalleryRouter {
     );
   }
 
-  private static addAutoComplete(app: Express) {
+  protected static addAutoComplete(app: Express) {
     app.get('/api/autocomplete/:text',
+      // common part
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Guest),
       VersionMWs.injectGalleryVersion,
+
+      // specific part
       GalleryMWs.autocomplete,
       RenderingMWs.renderResult
     );

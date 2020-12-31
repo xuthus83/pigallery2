@@ -1,7 +1,6 @@
 import {Config} from '../src/common/config/private/Config';
 import {ProjectPath} from '../src/backend/ProjectPath';
 import {BenchmarkResult, BenchmarkRunner} from './BenchmarkRunner';
-import {SearchTypes} from '../src/common/entities/AutoCompleteItem';
 import {Utils} from '../src/common/Utils';
 import {BMConfig} from './BMConfig';
 
@@ -28,10 +27,10 @@ const printHeader = async (statistic: string) => {
 
 
 const printTableHeader = () => {
-  printLine('| Action | Sub action | Action details | Average Duration | Details |');
-  printLine('|:------:|:----------:|:--------------:|:----------------:|:-------:|');
+  printLine('| Action | Sub action | Average Duration | Result  |');
+  printLine('|:------:|:----------:|:----------------:|:-------:|');
 };
-const printResult = (result: BenchmarkResult, actionDetails: string = '', isSubResult = false) => {
+const printResult = (result: BenchmarkResult, isSubResult = false) => {
   console.log('benchmarked: ' + result.name);
   let details = '-';
   if (result.items) {
@@ -47,15 +46,13 @@ const printResult = (result: BenchmarkResult, actionDetails: string = '', isSubR
     }
   }
   if (isSubResult) {
-    printLine('| | ' + result.name + ' | ' + actionDetails +
-      ' | ' + (result.duration).toFixed(1) + ' ms | ' + details + ' |');
+    printLine('| | ' + result.name + ' | ' + (result.duration).toFixed(1) + ' ms | ' + details + ' |');
   } else {
-    printLine('| **' + result.name + '** | | **' + actionDetails +
-      '** | **' + (result.duration).toFixed(1) + ' ms** | **' + details + '** |');
+    printLine('| **' + result.name + '** | | **' + (result.duration).toFixed(1) + ' ms** | **' + details + '** |');
   }
   if (result.subBenchmarks && result.subBenchmarks.length > 1) {
     for (let i = 0; i < result.subBenchmarks.length; i++) {
-      printResult(result.subBenchmarks[i], '', true);
+      printResult(result.subBenchmarks[i], true);
     }
   }
 };
@@ -73,15 +70,9 @@ const run = async () => {
   printResult(await bm.bmSaveDirectory());
   printResult(await bm.bmListDirectory());
   printResult(await bm.bmListPersons());
-  (await bm.bmAllSearch('a')).forEach(res => {
-    if (res.searchType !== null) {
-      printResult(res.result, '`a` as `' + SearchTypes[res.searchType] + '`');
-    } else {
-      printResult(res.result, '`a` as `any`');
-    }
-  });
-  printResult(await bm.bmInstantSearch('a'), '`a`');
-  printResult(await bm.bmAutocomplete('a'), '`a`');
+  (await bm.bmAllSearch('a')).forEach(res => printResult(res.result));
+  printResult(await bm.bmInstantSearch('a'));
+  printResult(await bm.bmAutocomplete('a'));
   printLine('*Measurements run ' + RUNS + ' times and an average was calculated.');
   console.log(resultsText);
   console.log('run for : ' + ((Date.now() - start)).toFixed(1) + 'ms');

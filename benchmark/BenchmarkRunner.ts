@@ -2,7 +2,6 @@ import {Config} from '../src/common/config/private/Config';
 import {ObjectManagers} from '../src/backend/model/ObjectManagers';
 import {DiskMangerWorker} from '../src/backend/model/threading/DiskMangerWorker';
 import {IndexingManager} from '../src/backend/model/database/sql/IndexingManager';
-import {SearchManager} from '../src/backend/model/database/sql/SearchManager';
 import * as util from 'util';
 import * as path from 'path';
 import * as rimraf from 'rimraf';
@@ -11,18 +10,18 @@ import {Utils} from '../src/common/Utils';
 import {DirectoryDTO} from '../src/common/entities/DirectoryDTO';
 import {ServerConfig} from '../src/common/config/private/PrivateConfig';
 import {ProjectPath} from '../src/backend/ProjectPath';
-import {PersonMWs} from '../src/backend/middlewares/PersonMWs';
-import {ThumbnailGeneratorMWs} from '../src/backend/middlewares/thumbnail/ThumbnailGeneratorMWs';
 import {Benchmark} from './Benchmark';
 import {IndexingJob} from '../src/backend/model/jobs/jobs/IndexingJob';
 import {IJob} from '../src/backend/model/jobs/jobs/IJob';
 import {JobProgressStates} from '../src/common/entities/job/JobProgressDTO';
 import {JobProgress} from '../src/backend/model/jobs/jobs/JobProgress';
-import {GalleryMWs} from '../src/backend/middlewares/GalleryMWs';
-import {UserDTO, UserRoles} from '../src/common/entities/UserDTO';
 import {ContentWrapper} from '../src/common/entities/ConentWrapper';
 import {GalleryManager} from '../src/backend/model/database/sql/GalleryManager';
 import {PersonManager} from '../src/backend/model/database/sql/PersonManager';
+import {GalleryRouter} from '../src/backend/routes/GalleryRouter';
+import {Express} from 'express';
+import {PersonRouter} from '../src/backend/routes/PersonRouter';
+import {QueryParams} from '../src/common/QueryParams';
 
 const rimrafPR = util.promisify(rimraf);
 
@@ -41,18 +40,49 @@ export class BMIndexingManager extends IndexingManager {
   }
 }
 
+
+class BMGalleryRouter extends GalleryRouter {
+  public static addDirectoryList(app: Express) {
+    GalleryRouter.addDirectoryList(app);
+  }
+
+  public static addSearch(app: Express) {
+    GalleryRouter.addSearch(app);
+  }
+
+  public static addInstantSearch(app: Express) {
+    GalleryRouter.addInstantSearch(app);
+  }
+
+  public static addAutoComplete(app: Express) {
+    GalleryRouter.addAutoComplete(app);
+  }
+}
+
+class BMPersonRouter extends PersonRouter {
+  public static addGetPersons(app: Express) {
+    PersonRouter.addGetPersons(app);
+  }
+}
+
 export class BenchmarkRunner {
   inited = false;
-  private biggestPath: string = null;
+  private biggestDirPath: string = null;
+  private readonly requestTemplate: any = {
+    requestPipe: null,
+    params: {},
+    query: {},
+    session: {}
+  };
 
   constructor(public RUNS: number) {
-
+    Config.Client.authenticationRequired = false;
   }
 
   async bmSaveDirectory(): Promise<BenchmarkResult> {
     await this.init();
     await this.resetDB();
-    const dir = await DiskMangerWorker.scanDirectory(this.biggestPath);
+    const dir = await DiskMangerWorker.scanDirectory(this.biggestDirPath);
     const bm = new Benchmark('Saving directory to DB', null, () => this.resetDB());
     bm.addAStep({
       name: 'Saving directory to DB',
@@ -69,7 +99,7 @@ export class BenchmarkRunner {
     const bm = new Benchmark('Scanning directory');
     bm.addAStep({
       name: 'Scanning directory',
-      fn: async () => new ContentWrapper(await DiskMangerWorker.scanDirectory(this.biggestPath))
+      fn: async () => new ContentWrapper(await DiskMangerWorker.scanDirectory(this.biggestDirPath))
     });
     return await bm.run(this.RUNS);
   }
@@ -78,50 +108,25 @@ export class BenchmarkRunner {
     await this.init();
     await this.setupDB();
     Config.Server.Indexing.reIndexingSensitivity = ServerConfig.ReIndexingSensitivity.low;
-    const bm = new Benchmark('List directory',
-      null,
+    const req = Utils.clone(this.requestTemplate);
+    req.params.directory = this.biggestDirPath;
+    const bm = new Benchmark('List directory', req,
       async () => {
         await ObjectManagers.reset();
         await ObjectManagers.InitSQLManagers();
       });
-    bm.addAStep({
-      name: 'List directory',
-      fn: (input) => this.nextToPromise(GalleryMWs.listDirectory, input, {directory: this.biggestPath})
-    });
-    bm.addAStep({
-      name: 'Add Thumbnail information',
-      fn: (input) => this.nextToPromise(ThumbnailGeneratorMWs.addThumbnailInformation, input)
-    });
-    bm.addAStep({
-      name: 'Clean Up Gallery Result',
-      fn: (input) => this.nextToPromise(GalleryMWs.cleanUpGalleryResults, input)
-    });
+    BMGalleryRouter.addDirectoryList(bm.BmExpressApp);
     return await bm.run(this.RUNS);
   }
 
   async bmListPersons(): Promise<BenchmarkResult> {
     await this.setupDB();
     Config.Server.Indexing.reIndexingSensitivity = ServerConfig.ReIndexingSensitivity.low;
-    const bm = new Benchmark('Listing Faces', null, async () => {
+    const bm = new Benchmark('Listing Faces', Utils.clone(this.requestTemplate), async () => {
       await ObjectManagers.reset();
       await ObjectManagers.InitSQLManagers();
     });
-    bm.addAStep({
-      name: 'List Persons',
-      fn: (input) => this.nextToPromise(PersonMWs.listPersons, input)
-    });
-    bm.addAStep({
-      name: 'Add sample photo',
-      fn: (input) => this.nextToPromise(PersonMWs.addSamplePhotoForAll, input)
-    });
-    bm.addAStep({
-      name: 'Add thumbnail info',
-      fn: (input) => this.nextToPromise(ThumbnailGeneratorMWs.addThumbnailInfoForPersons, input)
-    });
-    bm.addAStep({
-      name: 'Remove sample photo',
-      fn: (input) => this.nextToPromise(PersonMWs.removeSamplePhotoForAll, input)
-    });
+    BMPersonRouter.addGetPersons(bm.BmExpressApp);
     return await bm.run(this.RUNS);
   }
 
@@ -131,14 +136,12 @@ export class BenchmarkRunner {
     const results: { result: BenchmarkResult, searchType: SearchTypes }[] = [];
 
     for (let i = 0; i < types.length; i++) {
-      const bm = new Benchmark('Searching');
-      bm.addAStep({
-        name: 'Searching',
-        fn: async () => {
-          const sm = new SearchManager();
-          return new ContentWrapper(null, await sm.search(text, types[i]));
-        }
-      });
+      const req = Utils.clone(this.requestTemplate);
+      req.params.text = text;
+      req.query[QueryParams.gallery.search.type] = types[i];
+      const bm = new Benchmark('Searching for `' + text + '` as `' + (types[i] ? SearchTypes[types[i]] : 'any') + '`', req);
+      BMGalleryRouter.addSearch(bm.BmExpressApp);
+
       results.push({result: await bm.run(this.RUNS), searchType: types[i]});
     }
     return results;
@@ -146,27 +149,19 @@ export class BenchmarkRunner {
 
   async bmInstantSearch(text: string): Promise<BenchmarkResult> {
     await this.setupDB();
-    const bm = new Benchmark('Instant search');
-    bm.addAStep({
-      name: 'Instant search',
-      fn: async () => {
-        const sm = new SearchManager();
-        return new ContentWrapper(null, await sm.instantSearch(text));
-      }
-    });
+    const req = Utils.clone(this.requestTemplate);
+    req.params.text = text;
+    const bm = new Benchmark('Instant search for `' + text + '`', req);
+    BMGalleryRouter.addInstantSearch(bm.BmExpressApp);
     return await bm.run(this.RUNS);
   }
 
   async bmAutocomplete(text: string): Promise<BenchmarkResult> {
     await this.setupDB();
-    const bm = new Benchmark('Auto complete');
-    bm.addAStep({
-      name: 'Auto complete',
-      fn: () => {
-        const sm = new SearchManager();
-        return sm.autocomplete(text);
-      }
-    });
+    const req = Utils.clone(this.requestTemplate);
+    req.params.text = text;
+    const bm = new Benchmark('Auto complete for `' + text + '`', req);
+    BMGalleryRouter.addAutoComplete(bm.BmExpressApp);
     return await bm.run(this.RUNS);
   }
 
@@ -175,19 +170,11 @@ export class BenchmarkRunner {
     const gm = new GalleryManager();
     const pm = new PersonManager();
 
-    const renderDataSize = (size: number) => {
-      const postFixes = ['B', 'KB', 'MB', 'GB', 'TB'];
-      let index = 0;
-      while (size > 1000 && index < postFixes.length - 1) {
-        size /= 1000;
-        index++;
-      }
-      return size.toFixed(2) + postFixes[index];
-    };
+
     return 'directories: ' + await gm.countDirectories() +
       ', photos: ' + await gm.countPhotos() +
       ', videos: ' + await gm.countVideos() +
-      ', diskUsage : ' + renderDataSize(await gm.countMediaSize()) +
+      ', diskUsage : ' + Utils.renderDataSize(await gm.countMediaSize()) +
       ', persons : ' + await pm.countFaces() +
       ', unique persons (faces): ' + (await pm.getAll()).length;
 
@@ -210,30 +197,14 @@ export class BenchmarkRunner {
           biggest = dir.media.length;
         }
       }
-      this.biggestPath = biggestPath;
-      console.log('updating path of biggest dir to: ' + this.biggestPath);
+      this.biggestDirPath = biggestPath;
+      console.log('updating path of biggest dir to: ' + this.biggestDirPath);
       this.inited = true;
     }
-    return this.biggestPath;
+    return this.biggestDirPath;
 
   }
 
-  private nextToPromise(fn: (req: any, res: any, next: Function) => void, input?: any, params = {}) {
-    return new Promise<void>((resolve, reject) => {
-      const request = {
-        resultPipe: input,
-        params: params,
-        query: {},
-        session: {user: <UserDTO>{name: UserRoles[UserRoles.Admin], role: UserRoles.Admin}}
-      };
-      fn(request, resolve, (err?: any) => {
-        if (err) {
-          return reject(err);
-        }
-        resolve(request.resultPipe);
-      });
-    });
-  }
 
   private resetDB = async () => {
     Config.Server.Threading.enabled = false;

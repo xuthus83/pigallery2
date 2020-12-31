@@ -16,7 +16,7 @@ export class PersonRouter {
   }
 
 
-  private static updatePerson(app: Express) {
+  protected static updatePerson(app: Express) {
     app.post(['/api/person/:name'],
       // common part
       AuthenticationMWs.authenticate,
@@ -29,7 +29,7 @@ export class PersonRouter {
     );
   }
 
-  private static addGetPersons(app: Express) {
+  protected static addGetPersons(app: Express) {
     app.get(['/api/person'],
       // common part
       AuthenticationMWs.authenticate,
@@ -45,7 +45,7 @@ export class PersonRouter {
     );
   }
 
-  private static getPersonThumbnail(app: Express) {
+  protected static getPersonThumbnail(app: Express) {
     app.get(['/api/person/:name/thumbnail'],
       // common part
       AuthenticationMWs.authenticate,

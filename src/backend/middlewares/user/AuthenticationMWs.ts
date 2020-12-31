@@ -57,14 +57,14 @@ export class AuthenticationMWs {
 
 
   public static normalizePathParam(paramName: string) {
-    return (req: Request, res: Response, next: NextFunction) => {
+    return function normalizePathParam(req: Request, res: Response, next: NextFunction) {
       req.params[paramName] = path.normalize(req.params[paramName] || path.sep).replace(/^(\.\.[\/\\])+/, '');
       return next();
     };
   }
 
   public static authorisePath(paramName: string, isDirectory: boolean) {
-    return (req: Request, res: Response, next: NextFunction) => {
+    return function authorisePath(req: Request, res: Response, next: NextFunction) {
       let p: string = req.params[paramName];
       if (!isDirectory) {
         p = path.dirname(p);
@@ -80,7 +80,7 @@ export class AuthenticationMWs {
 
 
   public static authorise(role: UserRoles) {
-    return (req: Request, res: Response, next: NextFunction) => {
+    return function authorise(req: Request, res: Response, next: NextFunction) {
       if (req.session.user.role < role) {
         return next(new ErrorDTO(ErrorCodes.NOT_AUTHORISED));
       }

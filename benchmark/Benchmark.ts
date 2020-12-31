@@ -1,9 +1,56 @@
 import {BenchmarkResult} from './BenchmarkRunner';
 import {ContentWrapper} from '../src/common/entities/ConentWrapper';
+import {Express} from 'express';
+import {Utils} from '../src/common/Utils';
+import {Message} from '../src/common/entities/Message';
 
 export interface BenchmarkStep {
   name: string;
   fn: ((input?: any) => Promise<ContentWrapper | any[] | void>);
+}
+
+/**
+ * This class converts PiGallery2 Routers to benchamrkable steps to the Benchmark class
+ */
+class BMExpressApp {
+  readonly benchmark: Benchmark;
+
+
+  constructor(benchmark: Benchmark) {
+    this.benchmark = benchmark;
+  }
+
+  get(match: string | string[], ...functions: ((req: any, res: any, next: Function) => void)[]) {
+    functions.forEach(f => {
+      this.benchmark.addAStep({
+        name: this.camelToSpaceSeparated(f.name),
+        fn: (request: any) => this.nextToPromise(f, request)
+      });
+    });
+  }
+
+  private camelToSpaceSeparated(text: string) {
+    const result = (text.replace(/([A-Z])/g, ' $1')).toLocaleLowerCase();
+    return result.charAt(0).toUpperCase() + result.slice(1);
+  }
+
+  private nextToPromise(fn: (req: any, res: any, next: Function) => void, request: any) {
+    return new Promise<void>((resolve, reject) => {
+      const response = {
+        header: () => {
+        },
+        json: (data: any) => {
+          resolve(data);
+        }
+      };
+      fn(request, response, (err?: any) => {
+        if (err) {
+          return reject(err);
+        }
+        resolve(request.resultPipe);
+      });
+    });
+  }
 }
 
 export class Benchmark {
@@ -11,19 +58,25 @@ export class Benchmark {
 
   steps: BenchmarkStep[] = [];
   name: string;
-  inputCB: () => any;
+  request: any;
   beforeEach: () => Promise<any>;
   afterEach: () => Promise<any>;
+  private readonly bmExpressApp: BMExpressApp;
 
 
   constructor(name: string,
-              inputCB?: () => any,
+              request: any = {},
               beforeEach?: () => Promise<any>,
               afterEach?: () => Promise<any>) {
     this.name = name;
-    this.inputCB = inputCB;
+    this.request = request;
     this.beforeEach = beforeEach;
     this.afterEach = afterEach;
+    this.bmExpressApp = new BMExpressApp(this);
+  }
+
+  get BmExpressApp(): Express {
+    return (<unknown>this.bmExpressApp) as Express;
   }
 
   async run(RUNS: number): Promise<BenchmarkResult> {
@@ -63,7 +116,7 @@ export class Benchmark {
     return ret;
   }
 
-  outputToBMResult(name: string, output: any[] | ContentWrapper): BenchmarkResult {
+  outputToBMResult(name: string, output: any[] | ContentWrapper | Message<ContentWrapper>): BenchmarkResult {
     if (output) {
       if (Array.isArray(output)) {
         return {
@@ -73,12 +126,30 @@ export class Benchmark {
         };
       }
 
-      if (output.directory || output.searchResult) {
+      if (output instanceof ContentWrapper) {
         return {
           name: name,
           duration: null,
           contentWrapper: output
         };
+      }
+      if (output instanceof Message) {
+        const msg = output.result;
+        if (Array.isArray(msg)) {
+          return {
+            name: name,
+            duration: null,
+            items: msg.length,
+          };
+        }
+
+        if (msg instanceof ContentWrapper) {
+          return {
+            name: name,
+            duration: null,
+            contentWrapper: msg
+          };
+        }
       }
 
     }
@@ -89,7 +160,7 @@ export class Benchmark {
   }
 
   async scanSteps(): Promise<any[]> {
-    let pipe = this.inputCB ? this.inputCB() : null;
+    const request = Utils.clone(this.request);
     const stepOutput = new Array(this.steps.length);
 
     for (let j = 0; j < this.steps.length; ++j) {
@@ -97,9 +168,8 @@ export class Benchmark {
         await this.beforeEach();
       }
       for (let i = 0; i <= j; ++i) {
-        pipe = await this.steps[i].fn(pipe);
+        stepOutput[j] = await this.steps[i].fn(request);
       }
-      stepOutput[j] = pipe;
       if (this.afterEach) {
         await this.afterEach();
       }
@@ -108,10 +178,10 @@ export class Benchmark {
   }
 
   async runOneRound(stepTimer: number[]): Promise<number[]> {
-    let pipe = this.inputCB ? this.inputCB() : null;
+    const request = Utils.clone(this.request);
     for (let i = 0; i < this.steps.length; ++i) {
       const start = process.hrtime();
-      pipe = await this.steps[i].fn(pipe);
+      await this.steps[i].fn(request);
       const end = process.hrtime(start);
       stepTimer[i] += (end[0] * 1000 + end[1] / 1000000);
     }
