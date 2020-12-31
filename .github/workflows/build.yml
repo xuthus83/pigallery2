@@ -119,8 +119,6 @@ jobs:
       -
         name: Build and push alpine release
         if: startsWith(steps.vars.outputs.type , 'tag')
-        env:
-          RELEASE_VERSION: ${{ steps.vars.outputs.tag }}
         uses: docker/build-push-action@v2
         with:
           context: .
@@ -129,7 +127,7 @@ jobs:
           push: true
           tags: |
             bpatrik/pigallery2:nightly-alpine
-            bpatrik/pigallery2:$RELEASE_VERSION-alpine
+            bpatrik/pigallery2:${{ steps.vars.outputs.tag }}-alpine
             bpatrik/pigallery2:latest-alpine
   build-stretch:
     runs-on: [ubuntu-latest]
@@ -172,8 +170,6 @@ jobs:
       -
         name: Build and push debian stretch release
         if: startsWith(steps.vars.outputs.type , 'tag')
-        env:
-          RELEASE_VERSION: ${{ steps.vars.outputs.tag }}
         uses: docker/build-push-action@v2
         with:
           context: .
@@ -182,7 +178,7 @@ jobs:
           push: true
           tags: |
             bpatrik/pigallery2:nightly-stretch
-            bpatrik/pigallery2:$RELEASE_VERSION-stretch
+            bpatrik/pigallery2:${{ steps.vars.outputs.tag }}-stretch
             bpatrik/pigallery2:latest-stretch
   build-buster:
     runs-on: [ubuntu-latest]
@@ -225,8 +221,6 @@ jobs:
       -
         name: Build and push debian buster release
         if: startsWith(steps.vars.outputs.type , 'tag')
-        env:
-          RELEASE_VERSION: ${{ steps.vars.outputs.tag }}
         uses: docker/build-push-action@v2
         with:
           context: .
@@ -235,5 +229,5 @@ jobs:
           push: true
           tags: |
             bpatrik/pigallery2:nightly-buster
-            bpatrik/pigallery2:$RELEASE_VERSION
+            bpatrik/pigallery2:${{ steps.vars.outputs.tag }}
             bpatrik/pigallery2:latest
