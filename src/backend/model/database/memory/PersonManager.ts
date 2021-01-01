@@ -1,18 +1,9 @@
 import {IPersonManager} from '../interfaces/IPersonManager';
-import {PhotoDTO} from '../../../../common/entities/PhotoDTO';
 import {PersonDTO} from '../../../../common/entities/PersonDTO';
 
 export class PersonManager implements IPersonManager {
 
   getAll(): Promise<any[]> {
-    throw new Error('not supported by memory DB');
-  }
-
-  getSamplePhoto(name: string): Promise<PhotoDTO> {
-    throw new Error('not supported by memory DB');
-  }
-
-  getSamplePhotos(names: string[]): Promise<{ [key: string]: PhotoDTO }> {
     throw new Error('not supported by memory DB');
   }
 

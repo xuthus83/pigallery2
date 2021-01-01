@@ -8,9 +8,8 @@ import {ProjectPath} from '../../ProjectPath';
 import {Config} from '../../../common/config/private/Config';
 import {ThumbnailSourceType} from '../../model/threading/PhotoWorker';
 import {MediaDTO} from '../../../common/entities/MediaDTO';
-import {PersonWithPhoto} from '../PersonMWs';
 import {PhotoProcessing} from '../../model/fileprocessing/PhotoProcessing';
-import {PhotoDTO} from '../../../common/entities/PhotoDTO';
+import {PersonWithSampleRegion} from '../../../common/entities/PersonDTO';
 
 
 export class ThumbnailGeneratorMWs {
@@ -49,15 +48,15 @@ export class ThumbnailGeneratorMWs {
     try {
       const size: number = Config.Client.Media.Thumbnail.personThumbnailSize;
 
-      const persons: PersonWithPhoto[] = req.resultPipe;
+      const persons: PersonWithSampleRegion[] = req.resultPipe;
       for (let i = 0; i < persons.length; i++) {
         // load parameters
         const mediaPath = path.join(ProjectPath.ImageFolder,
-          persons[i].samplePhoto.directory.path,
-          persons[i].samplePhoto.directory.name, persons[i].samplePhoto.name);
+          persons[i].sampleRegion.media.directory.path,
+          persons[i].sampleRegion.media.directory.name, persons[i].sampleRegion.media.name);
 
         // generate thumbnail path
-        const thPath = PhotoProcessing.generatePersonThumbnailPath(mediaPath, persons[i].samplePhoto.metadata.faces[0], size);
+        const thPath = PhotoProcessing.generatePersonThumbnailPath(mediaPath, persons[i].sampleRegion, size);
 
         persons[i].readyThumbnail = fs.existsSync(thPath);
       }
@@ -76,14 +75,14 @@ export class ThumbnailGeneratorMWs {
     if (!req.resultPipe) {
       return next();
     }
-    const photo: PhotoDTO = req.resultPipe;
+    const person: PersonWithSampleRegion = req.resultPipe;
     try {
-      req.resultPipe = await PhotoProcessing.generatePersonThumbnail(photo);
+      req.resultPipe = await PhotoProcessing.generatePersonThumbnail(person);
       return next();
     } catch (error) {
       console.error(error);
       return next(new ErrorDTO(ErrorCodes.THUMBNAIL_GENERATION_ERROR,
-        'Error during generating face thumbnail: ' + photo.name, error.toString()));
+        'Error during generating face thumbnail: ' + person.name, error.toString()));
     }
 
   }

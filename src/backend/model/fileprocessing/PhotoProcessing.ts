@@ -10,6 +10,7 @@ import {ITaskExecuter, TaskExecuter} from '../threading/TaskExecuter';
 import {FaceRegion, PhotoDTO} from '../../../common/entities/PhotoDTO';
 import {SupportedFormats} from '../../../common/SupportedFormats';
 import {ServerConfig} from '../../../common/config/private/PrivateConfig';
+import {PersonWithSampleRegion} from '../../../common/entities/PersonDTO';
 
 
 export class PhotoProcessing {
@@ -45,19 +46,14 @@ export class PhotoProcessing {
   }
 
 
-  public static async generatePersonThumbnail(photo: PhotoDTO) {
+  public static async generatePersonThumbnail(person: PersonWithSampleRegion) {
 
     // load parameters
-
-    if (!photo.metadata.faces || photo.metadata.faces.length !== 1) {
-      throw new Error('Photo does not contain  a face');
-    }
-
-    // load parameters
+    const photo: PhotoDTO = person.sampleRegion.media;
     const mediaPath = path.join(ProjectPath.ImageFolder, photo.directory.path, photo.directory.name, photo.name);
     const size: number = Config.Client.Media.Thumbnail.personThumbnailSize;
     // generate thumbnail path
-    const thPath = PhotoProcessing.generatePersonThumbnailPath(mediaPath, photo.metadata.faces[0], size);
+    const thPath = PhotoProcessing.generatePersonThumbnailPath(mediaPath, person.sampleRegion, size);
 
 
     // check if thumbnail already exist
@@ -69,8 +65,8 @@ export class PhotoProcessing {
 
 
     const margin = {
-      x: Math.round(photo.metadata.faces[0].box.width * (Config.Server.Media.Thumbnail.personFaceMargin)),
-      y: Math.round(photo.metadata.faces[0].box.height * (Config.Server.Media.Thumbnail.personFaceMargin))
+      x: Math.round(person.sampleRegion.box.width * (Config.Server.Media.Thumbnail.personFaceMargin)),
+      y: Math.round(person.sampleRegion.box.height * (Config.Server.Media.Thumbnail.personFaceMargin))
     };
 
 
@@ -82,10 +78,10 @@ export class PhotoProcessing {
       outPath: thPath,
       makeSquare: false,
       cut: {
-        left: Math.round(Math.max(0, photo.metadata.faces[0].box.left - margin.x / 2)),
-        top: Math.round(Math.max(0, photo.metadata.faces[0].box.top - margin.y / 2)),
-        width: photo.metadata.faces[0].box.width + margin.x,
-        height: photo.metadata.faces[0].box.height + margin.y
+        left: Math.round(Math.max(0, person.sampleRegion.box.left - margin.x / 2)),
+        top: Math.round(Math.max(0, person.sampleRegion.box.top - margin.y / 2)),
+        width: person.sampleRegion.box.width + margin.x,
+        height: person.sampleRegion.box.height + margin.y
       },
       qualityPriority: Config.Server.Media.Thumbnail.qualityPriority
     };

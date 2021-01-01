@@ -26,11 +26,9 @@ export class FaceRegionEntry {
   @Column(type => FaceRegionBoxEntry)
   box: FaceRegionBoxEntry;
 
-  // @PrimaryColumn('int')
   @ManyToOne(type => MediaEntity, media => media.metadata.faces, {onDelete: 'CASCADE', nullable: false})
   media: MediaEntity;
 
-  // @PrimaryColumn('int')
   @ManyToOne(type => PersonEntry, person => person.faces, {onDelete: 'CASCADE', nullable: false})
   person: PersonEntry;
 

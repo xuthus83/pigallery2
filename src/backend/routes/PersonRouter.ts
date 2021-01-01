@@ -38,9 +38,9 @@ export class PersonRouter {
 
       // specific part
       PersonMWs.listPersons,
-      PersonMWs.addSamplePhotoForAll,
+     // PersonMWs.addSamplePhotoForAll,
       ThumbnailGeneratorMWs.addThumbnailInfoForPersons,
-      PersonMWs.removeSamplePhotoForAll,
+      PersonMWs.cleanUpPersonResults,
       RenderingMWs.renderResult
     );
   }
@@ -53,7 +53,7 @@ export class PersonRouter {
       VersionMWs.injectGalleryVersion,
 
       // specific part
-      PersonMWs.getSamplePhoto,
+      PersonMWs.getPerson,
       ThumbnailGeneratorMWs.generatePersonThumbnail,
       RenderingMWs.renderFile
     );
