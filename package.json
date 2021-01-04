@@ -30,12 +30,13 @@
     "url": "https://github.com/bpatrik/PiGallery2/issues"
   },
   "dependencies": {
-    "bcryptjs": "2.4.3",
     "body-parser": "1.19.0",
     "cookie-parser": "1.4.5",
     "cookie-session": "2.0.0-beta.3",
     "csurf": "1.11.0",
     "ejs": "3.1.5",
+    "bcrypt": "5.0.0",
+    "sharp": "0.23.4",
     "exifreader": "3.12.2",
     "express": "4.17.1",
     "express-unless": "0.5.0",
@@ -44,7 +45,6 @@
     "jimp": "0.16.1",
     "locale": "0.1.0",
     "reflect-metadata": "0.1.13",
-    "rimraf": "3.0.2",
     "sqlite3": "5.0.0",
     "ts-exif-parser": "0.2.1",
     "ts-node-iptc": "1.0.11",
@@ -144,11 +144,9 @@
   "optionalDependencies": {
     "@ffmpeg-installer/ffmpeg": "1.0.20",
     "@ffprobe-installer/ffprobe": "1.1.0",
-    "bcrypt": "5.0.0",
-    "mysql": "2.18.1",
-    "sharp": "0.23.4"
+    "mysql": "2.18.1"
   },
   "engines": {
-    "node": ">=10.17 <15.0"
+    "node": ">=12.0 <15.0"
   }
 }

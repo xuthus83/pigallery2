@@ -1,14 +1,12 @@
 import {Config} from '../../src/common/config/private/Config';
 import * as path from 'path';
-import * as util from 'util';
-import * as rimraf from 'rimraf';
+import * as fs from 'fs';
 import {SQLConnection} from '../../src/backend/model/database/sql/SQLConnection';
 import {ServerConfig} from '../../src/common/config/private/PrivateConfig';
 import {ProjectPath} from '../../src/backend/ProjectPath';
 
 declare let describe: any;
 const savedDescribe = describe;
-const rimrafPR = util.promisify(rimraf);
 
 export class SQLTestHelper {
 
@@ -76,7 +74,7 @@ export class SQLTestHelper {
 
   private async resetSQLite() {
     await SQLConnection.close();
-    await rimrafPR(this.tempDir);
+    await fs.promises.rmdir(this.tempDir, {recursive: true});
   }
 
   private async resetMySQL() {

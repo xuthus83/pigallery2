@@ -96,6 +96,10 @@ export class ObjectManagers {
   }
 
   public static async reset() {
+    if (ObjectManagers.getInstance().IndexingManager &&
+      ObjectManagers.getInstance().IndexingManager.IsSavingInProgress) {
+      await ObjectManagers.getInstance().IndexingManager.SavingReady;
+    }
     if (ObjectManagers.getInstance().JobManager) {
       ObjectManagers.getInstance().JobManager.stopSchedules();
     }

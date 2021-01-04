@@ -87,6 +87,8 @@ export class SQLConnection {
 
   public static async init(): Promise<void> {
     const connection = await this.getConnection();
+
+    // Add dummy Admin to the db
     const userRepository = connection.getRepository(UserEntity);
     const admins = await userRepository.find({role: UserRoles.Admin});
     if (admins.length === 0) {

@@ -1,6 +1,5 @@
 import * as path from 'path';
-import * as util from 'util';
-import * as rimraf from 'rimraf';
+import * as fs from 'fs';
 import {Config} from '../../../../../src/common/config/private/Config';
 import {SQLConnection} from '../../../../../src/backend/model/database/sql/SQLConnection';
 import {Server} from '../../../../../src/backend/server';
@@ -13,12 +12,11 @@ const chaiHttp = require('chai-http');
 const should = chai.should();
 chai.use(chaiHttp);
 
-const rimrafPR = util.promisify(rimraf);
 describe('SettingsRouter', () => {
 
   const tempDir = path.join(__dirname, '../../tmp');
   beforeEach(async () => {
-    await rimrafPR(tempDir);
+    await fs.promises.rmdir(tempDir, {recursive: true});
     Config.Server.Threading.enabled = false;
     Config.Server.Database.type = ServerConfig.DatabaseType.sqlite;
     Config.Server.Database.dbFolder = tempDir;
@@ -28,7 +26,7 @@ describe('SettingsRouter', () => {
 
   afterEach(async () => {
     await SQLConnection.close();
-    await rimrafPR(tempDir);
+    await fs.promises.rmdir(tempDir, {recursive: true});
   });
 
   describe('/GET settings', () => {

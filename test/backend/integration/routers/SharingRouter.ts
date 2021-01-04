@@ -3,8 +3,7 @@ import {Server} from '../../../../src/backend/server';
 import {LoginCredential} from '../../../../src/common/entities/LoginCredential';
 import {UserDTO, UserRoles} from '../../../../src/common/entities/UserDTO';
 import * as path from 'path';
-import * as util from 'util';
-import * as rimraf from 'rimraf';
+import * as fs from 'fs';
 import {SQLConnection} from '../../../../src/backend/model/database/sql/SQLConnection';
 import {ObjectManagers} from '../../../../src/backend/model/ObjectManagers';
 import {Utils} from '../../../../src/common/Utils';
@@ -21,7 +20,6 @@ const chaiHttp = require('chai-http');
 const should = chai.should();
 chai.use(chaiHttp);
 
-const rimrafPR = util.promisify(rimraf);
 describe('SharingRouter', () => {
 
   const testUser: UserDTO = {
@@ -35,7 +33,7 @@ describe('SharingRouter', () => {
   const tempDir = path.join(__dirname, '../../tmp');
   let server: Server;
   const setUp = async () => {
-    await rimrafPR(tempDir);
+    await fs.promises.rmdir(tempDir, {recursive: true});
     Config.Client.authenticationRequired = true;
     Config.Server.Threading.enabled = false;
     Config.Client.Sharing.enabled = true;
@@ -51,7 +49,7 @@ describe('SharingRouter', () => {
   };
   const tearDown = async () => {
     await SQLConnection.close();
-    await rimrafPR(tempDir);
+    await fs.promises.rmdir(tempDir, {recursive: true});
   };
 
   const shouldBeValidUser = (result: any, user: any) => {

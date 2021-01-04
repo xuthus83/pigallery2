@@ -23,7 +23,7 @@ const LOG_TAG = '[IndexingManager]';
 export class IndexingManager implements IIndexingManager {
 
   SavingReady: Promise<void> = null;
-  SavingReadyPR: () => void = null;
+  private SavingReadyPR: () => void = null;
   private savingQueue: DirectoryDTO[] = [];
   private isSaving = false;
 
@@ -78,13 +78,20 @@ export class IndexingManager implements IIndexingManager {
         this.SavingReadyPR = resolve;
       });
     }
-    while (this.isSaving === false && this.savingQueue.length > 0) {
-      await this.saveToDB(this.savingQueue[0]);
-      this.savingQueue.shift();
-    }
-    if (this.savingQueue.length === 0) {
-      this.SavingReady = null;
-      this.SavingReadyPR();
+    try {
+      while (this.isSaving === false && this.savingQueue.length > 0) {
+        await this.saveToDB(this.savingQueue[0]);
+        this.savingQueue.shift();
+      }
+    } catch (e) {
+      this.savingQueue = [];
+      throw e;
+    } finally {
+      if (this.savingQueue.length === 0) {
+        this.SavingReady = null;
+        this.SavingReadyPR();
+      }
+
     }
 
   }

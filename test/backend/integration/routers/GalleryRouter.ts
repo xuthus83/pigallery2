@@ -1,9 +1,8 @@
 import {Config} from '../../../../src/common/config/private/Config';
 import {Server} from '../../../../src/backend/server';
 import * as path from 'path';
-import * as util from 'util';
+import * as fs from 'fs';
 import {expect} from 'chai';
-import * as rimraf from 'rimraf';
 import {SQLConnection} from '../../../../src/backend/model/database/sql/SQLConnection';
 import {SuperAgentStatic} from 'superagent';
 import {ProjectPath} from '../../../../src/backend/ProjectPath';
@@ -16,13 +15,12 @@ const chaiHttp = require('chai-http');
 const should = chai.should();
 chai.use(chaiHttp);
 
-const rimrafPR = util.promisify(rimraf);
 describe('GalleryRouter', () => {
 
   const tempDir = path.join(__dirname, '../../tmp');
   let server: Server;
   const setUp = async () => {
-    await rimrafPR(tempDir);
+    await fs.promises.rmdir(tempDir, {recursive: true});
     Config.Client.authenticationRequired = false;
     Config.Server.Threading.enabled = false;
     Config.Client.Media.Video.enabled = true;
@@ -38,7 +36,7 @@ describe('GalleryRouter', () => {
   };
   const tearDown = async () => {
     await SQLConnection.close();
-    await rimrafPR(tempDir);
+    await fs.promises.rmdir(tempDir, {recursive: true});
   };
 
 

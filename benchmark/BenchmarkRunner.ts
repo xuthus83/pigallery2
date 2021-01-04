@@ -2,9 +2,8 @@ import {Config} from '../src/common/config/private/Config';
 import {ObjectManagers} from '../src/backend/model/ObjectManagers';
 import {DiskMangerWorker} from '../src/backend/model/threading/DiskMangerWorker';
 import {IndexingManager} from '../src/backend/model/database/sql/IndexingManager';
-import * as util from 'util';
 import * as path from 'path';
-import * as rimraf from 'rimraf';
+import * as fs from 'fs';
 import {SearchTypes} from '../src/common/entities/AutoCompleteItem';
 import {Utils} from '../src/common/Utils';
 import {DirectoryDTO} from '../src/common/entities/DirectoryDTO';
@@ -23,7 +22,6 @@ import {Express} from 'express';
 import {PersonRouter} from '../src/backend/routes/PersonRouter';
 import {QueryParams} from '../src/common/QueryParams';
 
-const rimrafPR = util.promisify(rimraf);
 
 export interface BenchmarkResult {
   name: string;
@@ -105,9 +103,9 @@ export class BenchmarkRunner {
   }
 
   async bmListDirectory(): Promise<BenchmarkResult> {
+    Config.Server.Indexing.reIndexingSensitivity = ServerConfig.ReIndexingSensitivity.low;
     await this.init();
     await this.setupDB();
-    Config.Server.Indexing.reIndexingSensitivity = ServerConfig.ReIndexingSensitivity.low;
     const req = Utils.clone(this.requestTemplate);
     req.params.directory = this.biggestDirPath;
     const bm = new Benchmark('List directory', req,
@@ -209,17 +207,17 @@ export class BenchmarkRunner {
   private resetDB = async () => {
     Config.Server.Threading.enabled = false;
     await ObjectManagers.reset();
-    await rimrafPR(ProjectPath.DBFolder);
+    await fs.promises.rmdir(ProjectPath.DBFolder, {recursive: true});
     Config.Server.Database.type = ServerConfig.DatabaseType.sqlite;
     Config.Server.Jobs.scheduled = [];
     await ObjectManagers.InitSQLManagers();
   };
 
-  private setupDB(): Promise<void> {
+  private async setupDB(): Promise<void> {
     Config.Server.Threading.enabled = false;
-    return new Promise<void>(async (resolve, reject) => {
+    await this.resetDB();
+    await new Promise<void>((resolve, reject) => {
       try {
-        await this.resetDB();
         const indexingJob = new IndexingJob();
 
         indexingJob.JobListener = {

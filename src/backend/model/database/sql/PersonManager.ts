@@ -99,14 +99,15 @@ export class PersonManager implements ISQLPersonManager {
 
   private async updateCounts() {
     const connection = await SQLConnection.getConnection();
-    await connection.query('update person_entry set count = ' +
-      ' (select COUNT(1) from face_region_entry where face_region_entry.personId = person_entry.id)');
+    await connection.query('UPDATE person_entry SET count = ' +
+      ' (SELECT COUNT(1) FROM face_region_entry WHERE face_region_entry.personId = person_entry.id)');
 
     // remove persons without photo
-    await connection.getRepository(PersonEntry)
+    await connection
       .createQueryBuilder()
-      .where('count = 0')
       .delete()
+      .from(PersonEntry)
+      .where('count = 0')
       .execute();
   }
 

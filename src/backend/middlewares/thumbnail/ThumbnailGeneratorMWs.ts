@@ -13,7 +13,7 @@ import {PersonWithSampleRegion} from '../../../common/entities/PersonDTO';
 
 
 export class ThumbnailGeneratorMWs {
-  public static addThumbnailInformation(req: Request, res: Response, next: NextFunction) {
+  public static async addThumbnailInformation(req: Request, res: Response, next: NextFunction) {
     if (!req.resultPipe) {
       return next();
     }

@@ -1,7 +1,6 @@
 import {expect} from 'chai';
 import * as path from 'path';
-import * as util from 'util';
-import * as rimraf from 'rimraf';
+import * as fs from 'fs';
 import {Config} from '../../../../../src/common/config/private/Config';
 import {SQLConnection} from '../../../../../src/backend/model/database/sql/SQLConnection';
 import {UserEntity} from '../../../../../src/backend/model/database/sql/enitites/UserEntity';
@@ -21,14 +20,12 @@ import {ServerConfig} from '../../../../../src/common/config/private/PrivateConf
 import {ProjectPath} from '../../../../../src/backend/ProjectPath';
 
 
-const rimrafPR = util.promisify(rimraf);
-
 describe('Typeorm integration', () => {
 
 
   const tempDir = path.join(__dirname, '../../tmp');
   const setUpSqlDB = async () => {
-    await rimrafPR(tempDir);
+    await fs.promises.rmdir(tempDir, {recursive: true});
 
     Config.Server.Database.type = ServerConfig.DatabaseType.sqlite;
     Config.Server.Database.dbFolder = tempDir;
@@ -38,7 +35,7 @@ describe('Typeorm integration', () => {
 
   const teardownUpSqlDB = async () => {
     await SQLConnection.close();
-    await rimrafPR(tempDir);
+    await fs.promises.rmdir(tempDir, {recursive: true});
   };
 
   beforeEach(async () => {
