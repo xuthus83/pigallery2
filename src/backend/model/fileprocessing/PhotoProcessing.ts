@@ -34,13 +34,9 @@ export class PhotoProcessing {
       Config.Client.Media.Thumbnail.concurrentThumbnailGenerations = 1;
     }
 
-    if (Config.Server.Threading.enabled === true &&
-      Config.Server.Media.photoProcessingLibrary === ServerConfig.PhotoProcessingLib.Jimp) {
-      this.taskQue = new ThumbnailTH(Config.Client.Media.Thumbnail.concurrentThumbnailGenerations);
-    } else {
-      this.taskQue = new TaskExecuter(Config.Client.Media.Thumbnail.concurrentThumbnailGenerations,
-        (input => PhotoWorker.render(input, Config.Server.Media.photoProcessingLibrary)));
-    }
+
+    this.taskQue = new TaskExecuter(Config.Client.Media.Thumbnail.concurrentThumbnailGenerations,
+      (input => PhotoWorker.render(input)));
 
     this.initDone = true;
   }

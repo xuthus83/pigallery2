@@ -4,29 +4,7 @@
       {{Name}}</h5>
     <div class="card-body">
       <div [hidden]="!error" class="alert alert-danger" role="alert"><strong>Error: </strong>{{error}}</div>
-      <div [hidden]="states.photoProcessingLibrary.value!=PhotoProcessingLib.Jimp"
-           class="alert alert-warning"
-           role="alert" i18n>It is highly recommended to use hardware accelerated (sharp or gm) lib for thumbnail
-        generation
-      </div>
 
-      <div [hidden]="simplifiedMode">
-
-        <app-settings-entry
-          name="Thumbnail generation library"
-          i18n-name
-          [ngModel]="states.photoProcessingLibrary"
-          [optionMap]="libTypesMap"
-          [simplifiedMode]="simplifiedMode"
-          required="true">
-          <small *ngIf="states.photoProcessingLibrary.value==PhotoProcessingLib.sharp"
-                 class="form-text text-muted" i18n>Make sure that sharp node module is installed (npm install sharp).
-          </small>
-        </app-settings-entry>
-
-
-        <hr/>
-      </div>
       <p class="title" i18n>Photo converting:</p>
 
       <app-settings-entry

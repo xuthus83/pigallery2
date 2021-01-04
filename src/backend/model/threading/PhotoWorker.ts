@@ -2,17 +2,15 @@ import {Metadata, Sharp} from 'sharp';
 import {Logger} from '../../Logger';
 import {FfmpegCommand, FfprobeData} from 'fluent-ffmpeg';
 import {FFmpegFactory} from '../FFmpegFactory';
-import {ServerConfig} from '../../../common/config/private/PrivateConfig';
 
 export class PhotoWorker {
 
   private static imageRenderer: (input: RendererInput) => Promise<void> = null;
   private static videoRenderer: (input: RendererInput) => Promise<void> = null;
-  private static rendererType: ServerConfig.PhotoProcessingLib = null;
 
-  public static render(input: RendererInput, renderer: ServerConfig.PhotoProcessingLib): Promise<void> {
+  public static render(input: RendererInput): Promise<void> {
     if (input.type === ThumbnailSourceType.Photo) {
-      return this.renderFromImage(input, renderer);
+      return this.renderFromImage(input);
     }
     if (input.type === ThumbnailSourceType.Video) {
       return this.renderFromVideo(input);
@@ -20,10 +18,9 @@ export class PhotoWorker {
     throw new Error('Unsupported media type to render thumbnail:' + input.type);
   }
 
-  public static renderFromImage(input: RendererInput, renderer: ServerConfig.PhotoProcessingLib): Promise<void> {
-    if (PhotoWorker.rendererType !== renderer) {
-      PhotoWorker.imageRenderer = ImageRendererFactory.build(renderer);
-      PhotoWorker.rendererType = renderer;
+  public static renderFromImage(input: RendererInput): Promise<void> {
+    if (PhotoWorker.imageRenderer === null) {
+      PhotoWorker.imageRenderer = ImageRendererFactory.build();
     }
     return PhotoWorker.imageRenderer(input);
   }
@@ -118,67 +115,9 @@ export class VideoRendererFactory {
 
 export class ImageRendererFactory {
 
-  public static build(renderer: ServerConfig.PhotoProcessingLib): (input: RendererInput) => Promise<void> {
-    switch (renderer) {
-      case ServerConfig.PhotoProcessingLib.Jimp:
-        return ImageRendererFactory.Jimp();
-      case ServerConfig.PhotoProcessingLib.sharp:
-        return ImageRendererFactory.Sharp();
-    }
-    throw new Error('unknown renderer');
+  public static build(): (input: RendererInput) => Promise<void> {
+    return ImageRendererFactory.Sharp();
   }
-
-  public static Jimp() {
-    const Jimp = require('jimp');
-    return async (input: RendererInput): Promise<void> => {
-      // generate thumbnail
-      Logger.silly('[JimpThRenderer] rendering thumbnail:' + input.mediaPath);
-      const image = await Jimp.read(input.mediaPath);
-      /**
-       * newWidth * newHeight = size*size
-       * newHeight/newWidth = height/width
-       *
-       * newHeight = (height/width)*newWidth
-       * newWidth * newWidth = (size*size) / (height/width)
-       *
-       * @type {number}
-       */
-      const ratio = image.bitmap.height / image.bitmap.width;
-      const algo = input.qualityPriority === true ? Jimp.RESIZE_BEZIER : Jimp.RESIZE_NEAREST_NEIGHBOR;
-
-      if (input.cut) {
-        image.crop(
-          input.cut.left,
-          input.cut.top,
-          input.cut.width,
-          input.cut.height
-        );
-      }
-      if (input.makeSquare === false) {
-        if (image.bitmap.width < image.bitmap.height) {
-          image.resize(Math.min(input.size, image.bitmap.width), Jimp.AUTO, algo);
-        } else {
-          image.resize(Jimp.AUTO, Math.min(image.size, image.bitmap.height), algo);
-        }
-
-      } else {
-        image.resize(input.size / Math.min(ratio, 1), Jimp.AUTO, algo);
-        image.crop(0, 0, input.size, input.size);
-      }
-      image.quality(60);        // set JPEG quality
-
-      await new Promise((resolve, reject) => {
-        image.write(input.outPath, (err: Error | null) => { // save
-          if (err) {
-            return reject('[JimpThRenderer] ' + err.toString());
-          }
-          resolve();
-        });
-      });
-
-    };
-  }
-
 
   public static Sharp() {
     const sharp = require('sharp');

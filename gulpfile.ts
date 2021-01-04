@@ -62,7 +62,7 @@ const createDynamicTranslationFile = async (language: string) => {
   translationXml.xliff.file[0].body[0]['trans-unit'] = filtered;
 
   // save
-  const builder = new xml2js.Builder({trim: true, normalize: true});
+  const builder = new xml2js.Builder();
   const xml = builder.buildObject(translationXml);
   await fsp.writeFile(path.join(folder, `ts-only-msg.${language}.xlf`), xml);
 

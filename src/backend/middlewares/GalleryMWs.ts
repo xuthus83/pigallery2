@@ -36,8 +36,8 @@ export class GalleryMWs {
     try {
       const directory = await ObjectManagers.getInstance()
         .GalleryManager.listDirectory(directoryName,
-          parseInt(req.query[QueryParams.gallery.knownLastModified], 10),
-          parseInt(req.query[QueryParams.gallery.knownLastScanned], 10));
+          parseInt(<string>req.query[QueryParams.gallery.knownLastModified], 10),
+          parseInt(<string>req.query[QueryParams.gallery.knownLastScanned], 10));
 
       if (directory == null) {
         req.resultPipe = new ContentWrapper(null, null, true);
@@ -121,7 +121,7 @@ export class GalleryMWs {
     try {
       const query: RandomQuery = {};
       if (req.query.directory) {
-        query.directory = DiskMangerWorker.normalizeDirPath(req.query.directory);
+        query.directory = DiskMangerWorker.normalizeDirPath(<string>req.query.directory);
       }
       if (req.query.recursive === 'true') {
         query.recursive = true;
@@ -136,10 +136,10 @@ export class GalleryMWs {
         query.minResolution = parseFloat(req.query.minResolution.toString());
       }
       if (req.query.fromDate) {
-        query.fromDate = new Date(req.query.fromDate);
+        query.fromDate = new Date(<string>req.query.fromDate);
       }
       if (req.query.toDate) {
-        query.toDate = new Date(req.query.toDate);
+        query.toDate = new Date(<string>req.query.toDate);
       }
       if (query.minResolution && query.maxResolution && query.maxResolution < query.minResolution) {
         return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, 'Input error: min resolution is greater than the max resolution'));
@@ -212,7 +212,7 @@ export class GalleryMWs {
 
     let type: SearchTypes;
     if (req.query[QueryParams.gallery.search.type]) {
-      type = parseInt(req.query[QueryParams.gallery.search.type], 10);
+      type = parseInt(<string>req.query[QueryParams.gallery.search.type], 10);
     }
     try {
       const result = await ObjectManagers.getInstance().SearchManager.search(req.params.text, type);

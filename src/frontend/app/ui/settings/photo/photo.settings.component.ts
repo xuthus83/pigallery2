@@ -20,13 +20,11 @@ import {ClientConfig} from '../../../../../common/config/public/ClientConfig';
   providers: [PhotoSettingsService],
 })
 export class PhotoSettingsComponent extends SettingsComponent<{
-  photoProcessingLibrary: ServerConfig.PhotoProcessingLib,
   server: ServerConfig.PhotoConfig,
   client: ClientConfig.PhotoConfig
 }> {
   readonly resolutionTypes = [720, 1080, 1440, 2160, 4320];
   resolutions: { key: number, value: string }[] = [];
-  PhotoProcessingLib = ServerConfig.PhotoProcessingLib;
   JobProgressStates = JobProgressStates;
 
   readonly jobName = DefaultsJobs[DefaultsJobs['Photo Converting']];
@@ -38,7 +36,6 @@ export class PhotoSettingsComponent extends SettingsComponent<{
               notification: NotificationService,
               i18n: I18n) {
     super(i18n('Photo'), _authService, _navigation, _settingsService, notification, i18n, s => ({
-      photoProcessingLibrary: s.Server.Media.photoProcessingLibrary,
       client: s.Client.Media.Photo,
       server: s.Server.Media.Photo
     }));

@@ -13,7 +13,7 @@ const LOG_TAG = '[ConfigDiagnostics]';
 
 export class ConfigDiagnostics {
 
-  static checkReadWritePermission(path: string) {
+  static checkReadWritePermission(path: string): Promise<void> {
     return new Promise((resolve, reject) => {
       // tslint:disable-next-line:no-bitwise
       fs.access(path, fs.constants.R_OK | fs.constants.W_OK, (err) => {
@@ -48,7 +48,7 @@ export class ConfigDiagnostics {
   }
 
 
-  static testClientVideoConfig(videoConfig: ClientConfig.VideoConfig) {
+  static testClientVideoConfig(videoConfig: ClientConfig.VideoConfig): Promise<void> {
     return new Promise((resolve, reject) => {
       try {
         if (videoConfig.enabled === true) {
@@ -86,19 +86,12 @@ export class ConfigDiagnostics {
     sharp();
   }
 
-  static async testThumbnailLib(processingLibrary: ServerConfig.PhotoProcessingLib) {
-    switch (processingLibrary) {
-      case ServerConfig.PhotoProcessingLib.sharp:
-        await this.testSharp();
-        break;
-    }
-  }
 
   static async testTempFolder(folder: string) {
     await this.checkReadWritePermission(folder);
   }
 
-  static testImageFolder(folder: string) {
+  static testImageFolder(folder: string): Promise<void> {
     return new Promise((resolve, reject) => {
       if (!fs.existsSync(folder)) {
         reject('Images folder not exists: \'' + folder + '\'');
@@ -220,21 +213,18 @@ export class ConfigDiagnostics {
       }
     }
 
-    if (Config.Server.Media.photoProcessingLibrary !== ServerConfig.PhotoProcessingLib.Jimp) {
-      try {
-        await ConfigDiagnostics.testThumbnailLib(Config.Server.Media.photoProcessingLibrary);
-      } catch (ex) {
-        const err: Error = ex;
-        NotificationManager.warning('Thumbnail hardware acceleration is not possible.' +
-          ' \'' + ServerConfig.PhotoProcessingLib[Config.Server.Media.photoProcessingLibrary] + '\' node module is not found.' +
-          ' Falling back temporally to JS based thumbnail generation', err.toString());
-        Logger.warn(LOG_TAG, '[Thumbnail hardware acceleration] module error: ', err.toString());
-        Logger.warn(LOG_TAG, 'Thumbnail hardware acceleration is not possible.' +
-          ' \'' + ServerConfig.PhotoProcessingLib[Config.Server.Media.photoProcessingLibrary] + '\' node module is not found.' +
-          ' Falling back temporally to JS based thumbnail generation');
-        Config.Server.Media.photoProcessingLibrary = ServerConfig.PhotoProcessingLib.Jimp;
-      }
+    try {
+      await ConfigDiagnostics.testSharp();
+    } catch (ex) {
+      const err: Error = ex;
+
+      Logger.warn(LOG_TAG, '[Thumbnail hardware acceleration] module error: ', err.toString());
+      Logger.warn(LOG_TAG, 'Thumbnail hardware acceleration is not possible.' +
+        ' \'sharp\' node module is not found.' +
+        ' Falling back temporally to JS based thumbnail generation');
+      process.exit(1);
     }
+
 
     try {
       await ConfigDiagnostics.testTempFolder(Config.Server.Media.tempFolder);

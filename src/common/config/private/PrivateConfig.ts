@@ -19,10 +19,6 @@ export module ServerConfig {
     none = 1, error = 2, all = 3
   }
 
-  export enum PhotoProcessingLib {
-    sharp = 3,
-    Jimp = 1
-  }
 
   export enum ReIndexingSensitivity {
     low = 1, medium = 2, high = 3
@@ -308,8 +304,6 @@ export module ServerConfig {
     folder: string = 'demo/images';
     @ConfigProperty({description: 'Thumbnails, coverted photos, videos will be stored here (write permission required)'})
     tempFolder: string = 'demo/tmp';
-    @ConfigProperty({type: ServerConfig.PhotoProcessingLib})
-    photoProcessingLibrary: PhotoProcessingLib = ServerConfig.PhotoProcessingLib.sharp;
     @ConfigProperty()
     Video: VideoConfig = new VideoConfig();
     @ConfigProperty()

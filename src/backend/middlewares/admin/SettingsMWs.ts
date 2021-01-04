@@ -307,20 +307,16 @@ export class SettingsMWs {
 
     try {
       const settings: {
-        photoProcessingLibrary: ServerConfig.PhotoProcessingLib,
         server: ServerConfig.PhotoConfig,
         client: ClientConfig.PhotoConfig
       } = req.body.settings;
 
-      await ConfigDiagnostics.testThumbnailLib(settings.photoProcessingLibrary);
       await ConfigDiagnostics.testServerPhotoConfig(settings.server);
       await ConfigDiagnostics.testClientPhotoConfig(settings.client);
-      Config.Server.Media.photoProcessingLibrary = settings.photoProcessingLibrary;
       Config.Server.Media.Photo = settings.server;
       Config.Client.Media.Photo = settings.client;
       // only updating explicitly set config (not saving config set by the diagnostics)
       const original = await Config.original();
-      original.Server.Media.photoProcessingLibrary = settings.photoProcessingLibrary;
       original.Server.Media.Photo = settings.server;
       original.Client.Media.Photo = settings.client;
       original.save();

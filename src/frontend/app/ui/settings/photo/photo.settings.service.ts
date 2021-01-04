@@ -7,7 +7,6 @@ import {ClientConfig} from '../../../../../common/config/public/ClientConfig';
 
 @Injectable()
 export class PhotoSettingsService extends AbstractSettingsService<{
-  photoProcessingLibrary: ServerConfig.PhotoProcessingLib,
   server: ServerConfig.PhotoConfig,
   client: ClientConfig.PhotoConfig
 }> {
@@ -18,7 +17,6 @@ export class PhotoSettingsService extends AbstractSettingsService<{
 
 
   public updateSettings(settings: {
-    photoProcessingLibrary: ServerConfig.PhotoProcessingLib,
     server: ServerConfig.PhotoConfig,
     client: ClientConfig.PhotoConfig
   }): Promise<void> {

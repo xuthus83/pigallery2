@@ -29,7 +29,7 @@ describe('Authentication middleware', () => {
         query: {},
         params: {}
       };
-      const next = (err: ErrorDTO) => {
+      const next: any = (err: ErrorDTO) => {
         expect(err).to.be.undefined;
         done();
       };
@@ -45,7 +45,7 @@ describe('Authentication middleware', () => {
         params: {}
       };
       Config.Client.authenticationRequired = true;
-      const next = (err: ErrorDTO) => {
+      const next: any = (err: ErrorDTO) => {
         expect(err).not.to.be.undefined;
         expect(err.code).to.be.eql(ErrorCodes.NOT_AUTHENTICATED);
         done();
@@ -136,7 +136,7 @@ describe('Authentication middleware', () => {
         },
         sessionOptions: {},
       };
-      const next = (err: ErrorDTO) => {
+      const next: any = (err: ErrorDTO) => {
         expect(err).not.to.be.undefined;
         expect(err.code).to.be.eql(ErrorCodes.ALREADY_AUTHENTICATED);
         done();
@@ -156,7 +156,7 @@ describe('Authentication middleware', () => {
         },
         sessionOptions: {}
       };
-      const next = (err: ErrorDTO) => {
+      const next: any = (err: ErrorDTO) => {
         expect(err).to.be.undefined;
         done();
       };
@@ -173,7 +173,7 @@ describe('Authentication middleware', () => {
         },
         sessionOptions: {}
       };
-      const next = (err: ErrorDTO) => {
+      const next: any = (err: ErrorDTO) => {
         expect(err).not.to.be.undefined;
         expect(err.code).to.be.eql(ErrorCodes.NOT_AUTHORISED);
         done();
@@ -194,7 +194,7 @@ describe('Authentication middleware', () => {
           query: {},
           params: {}
         };
-        const next = (err: ErrorDTO) => {
+        const next: any = (err: ErrorDTO) => {
           expect(err).not.to.be.undefined;
           expect(err.code).to.be.eql(ErrorCodes.INPUT_ERROR);
           done();
@@ -209,7 +209,7 @@ describe('Authentication middleware', () => {
           query: {},
           params: {}
         };
-        const next = (err: ErrorDTO) => {
+        const next: any = (err: ErrorDTO) => {
           expect(err).not.to.be.undefined;
           expect(err.code).to.be.eql(ErrorCodes.INPUT_ERROR);
           done();
@@ -226,7 +226,7 @@ describe('Authentication middleware', () => {
           query: {},
           params: {}
         };
-        const next = (err: ErrorDTO) => {
+        const next: any = (err: ErrorDTO) => {
           expect(err).not.to.be.undefined;
           expect(err.code).to.be.eql(ErrorCodes.INPUT_ERROR);
           done();
@@ -248,7 +248,7 @@ describe('Authentication middleware', () => {
         query: {},
         params: {}
       };
-      const next = (err: ErrorDTO) => {
+      const next: any = (err: ErrorDTO) => {
         expect(err).not.to.be.undefined;
         expect(err.code).to.be.eql(ErrorCodes.CREDENTIAL_NOT_FOUND);
         done();
@@ -275,7 +275,7 @@ describe('Authentication middleware', () => {
         query: {},
         params: {}
       };
-      const next = (err: ErrorDTO) => {
+      const next: any = (err: ErrorDTO) => {
         expect(err).to.be.undefined;
         expect(req.session.user).to.be.eql('test user');
         done();

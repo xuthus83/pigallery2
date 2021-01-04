@@ -22,7 +22,7 @@ export class Worker {
             }
             break;
           case WorkerTaskTypes.thumbnail:
-            result = await PhotoWorker.render((<ThumbnailTask>task).input, (<ThumbnailTask>task).renderer);
+            result = await PhotoWorker.render((<ThumbnailTask>task).input);
             break;
           default:
             throw new Error('Unknown worker task type');
@@ -54,7 +54,6 @@ export interface DiskManagerTask extends WorkerTask {
 
 export interface ThumbnailTask extends WorkerTask {
   input: RendererInput;
-  renderer: ServerConfig.PhotoProcessingLib;
 }
 
 export module WorkerTask {

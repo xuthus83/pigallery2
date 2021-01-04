@@ -100,7 +100,7 @@ export class AuthenticationMWs {
 
     try {
       const password = (req.body ? req.body.password : null) || null;
-      const sharingKey: string = req.query[QueryParams.gallery.sharingKey_query] || req.params[QueryParams.gallery.sharingKey_params];
+      const sharingKey: string = <string>req.query[QueryParams.gallery.sharingKey_query] || <string>req.params[QueryParams.gallery.sharingKey_params];
       const sharing = await ObjectManagers.getInstance().SharingManager.findOne({
         sharingKey: sharingKey
       });
@@ -181,7 +181,7 @@ export class AuthenticationMWs {
   private static async getSharingUser(req: Request) {
     if (Config.Client.Sharing.enabled === true &&
       (!!req.query[QueryParams.gallery.sharingKey_query] || !!req.params[QueryParams.gallery.sharingKey_params])) {
-      const sharingKey: string = req.query[QueryParams.gallery.sharingKey_query] || req.params[QueryParams.gallery.sharingKey_params];
+      const sharingKey: string = <string>req.query[QueryParams.gallery.sharingKey_query] || <string>req.params[QueryParams.gallery.sharingKey_params];
       const sharing = await ObjectManagers.getInstance().SharingManager.findOne({
         sharingKey: sharingKey
       });
