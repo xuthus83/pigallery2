@@ -10,7 +10,14 @@ import {OrientationTypes} from 'ts-exif-parser';
 import {DirectoryEntity} from '../../../../../src/backend/model/database/sql/enitites/DirectoryEntity';
 import {VideoEntity, VideoMetadataEntity} from '../../../../../src/backend/model/database/sql/enitites/VideoEntity';
 import {MediaDimension} from '../../../../../src/common/entities/MediaDTO';
-import {CameraMetadata, FaceRegion, GPSMetadata, PhotoDTO, PhotoMetadata, PositionMetaData} from '../../../../../src/common/entities/PhotoDTO';
+import {
+  CameraMetadata,
+  FaceRegion,
+  GPSMetadata,
+  PhotoDTO,
+  PhotoMetadata,
+  PositionMetaData
+} from '../../../../../src/common/entities/PhotoDTO';
 import {DirectoryDTO} from '../../../../../src/common/entities/DirectoryDTO';
 import {FileDTO} from '../../../../../src/common/entities/FileDTO';
 import {DiskMangerWorker} from '../../../../../src/backend/model/threading/DiskMangerWorker';
@@ -59,6 +66,7 @@ export class TestHelper {
     m.creationDate = Date.now();
     m.fileSize = 123456789;
     m.orientation = OrientationTypes.TOP_LEFT;
+    m.rating = 2;
 
     // TODO: remove when typeorm is fixed
     m.duration = null;
@@ -81,6 +89,7 @@ export class TestHelper {
     const m = new VideoMetadataEntity();
     m.caption = null;
     m.keywords = null;
+    m.rating = null;
     m.size = sd;
     m.creationDate = Date.now();
     m.fileSize = 123456789;
@@ -252,7 +261,8 @@ export class TestHelper {
       creationDate: Date.now(),
       fileSize: rndInt(10000),
       orientation: OrientationTypes.TOP_LEFT,
-      caption: rndStr()
+      caption: rndStr(),
+      rating: <any>rndInt(5),
     };
 
 

@@ -40,7 +40,7 @@ export class GalleryGridComponent implements OnChanges, OnInit, AfterViewInit, O
   @ViewChildren(GalleryPhotoComponent) gridPhotoQL: QueryList<GalleryPhotoComponent>;
   @Input() media: MediaDTO[];
   @Input() lightbox: GalleryLightboxComponent;
-  photosToRender: Array<GridMedia> = [];
+  photosToRender: GridMedia[] = [];
   containerWidth = 0;
   screenHeight = 0;
   public IMAGE_MARGIN = 2;

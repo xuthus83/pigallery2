@@ -47,6 +47,7 @@
     "country": "test country őúéáűóöí-.,)(=/%!+\"'",
     "state": "test state őúéáűóöí-.,)("
   },
+  "rating": 3,
   "size": {
     "height": 10,
     "width": 14

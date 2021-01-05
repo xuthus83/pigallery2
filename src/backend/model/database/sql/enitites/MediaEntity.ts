@@ -43,6 +43,9 @@ export class MediaMetadataEntity implements MediaMetadata {
   @Column(type => PositionMetaDataEntity)
   positionData: PositionMetaDataEntity;
 
+  @Column('tinyint', {unsigned: true})
+  rating: 0 | 1 | 2 | 3 | 4 | 5;
+
   @Column('tinyint', {unsigned: true, default: OrientationTypes.TOP_LEFT})
   orientation: OrientationTypes;
 

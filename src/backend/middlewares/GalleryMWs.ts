@@ -74,6 +74,7 @@ export class GalleryMWs {
           delete (<VideoDTO>m).metadata.bitRate;
           delete (<VideoDTO>m).metadata.duration;
         } else if (MediaDTO.isVideo(m)) {
+          delete (<PhotoDTO>m).metadata.rating;
           delete (<PhotoDTO>m).metadata.caption;
           delete (<PhotoDTO>m).metadata.cameraData;
           delete (<PhotoDTO>m).metadata.orientation;

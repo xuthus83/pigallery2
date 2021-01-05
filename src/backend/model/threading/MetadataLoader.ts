@@ -203,16 +203,20 @@ export class MetadataLoader {
 
             metadata.creationDate = metadata.creationDate || 0;
 
-            if (Config.Client.Faces.enabled) {
-              try {
-
-                const ret = ExifReader.load(data);
+            try {
+              // TODO: clean up the three different exif readers,
+              //  and keep the minimum amount only
+              const exif = ExifReader.load(data);
+              if (exif.Rating) {
+                metadata.rating = <any>parseInt(exif.Rating.value, 10);
+              }
+              if (Config.Client.Faces.enabled) {
                 const faces: FaceRegion[] = [];
-                if (ret.Regions && ret.Regions.value.RegionList && ret.Regions.value.RegionList.value) {
-                  for (let i = 0; i < ret.Regions.value.RegionList.value.length; i++) {
+                if (exif.Regions && exif.Regions.value.RegionList && exif.Regions.value.RegionList.value) {
+                  for (let i = 0; i < exif.Regions.value.RegionList.value.length; i++) {
 
                     let type, name, box;
-                    const regionRoot = ret.Regions.value.RegionList.value[i] as any;
+                    const regionRoot = exif.Regions.value.RegionList.value[i] as any;
                     const createFaceBox = (w: string, h: string, x: string, y: string) => {
                       return {
                         width: Math.round(parseFloat(w) * metadata.size.width),
@@ -268,8 +272,8 @@ export class MetadataLoader {
                     }
                   });
                 }
-              } catch (err) {
               }
+            } catch (err) {
             }
 
 
