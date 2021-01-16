@@ -9,12 +9,12 @@ import {
   DateSearch,
   DistanceSearch,
   OrientationSearch,
-  OrientationSearchTypes,
   ORSearchQuery,
   RatingSearch,
   ResolutionSearch,
   SearchQueryDTO,
   SearchQueryTypes,
+  SomeOfSearchQuery,
   TextSearch,
   TextSearchQueryTypes
 } from '../../../../../src/common/entities/SearchQueryDTO';
@@ -98,10 +98,11 @@ describe('SearchManager', (sqlHelper: SQLTestHelper) => {
     const connection = await SQLConnection.getConnection();
     ObjectManagers.getInstance().IndexingManager.indexDirectory = () => Promise.resolve(null);
 
+
     const im = new IndexingManagerTest();
     await im.saveToDB(directory);
-    await im.saveToDB(subDir);
-    await im.saveToDB(subDir2);
+    // await im.saveToDB(subDir);
+    // await im.saveToDB(subDir2);
 
     if (ObjectManagers.getInstance().IndexingManager &&
       ObjectManagers.getInstance().IndexingManager.IsSavingInProgress) {
@@ -389,7 +390,7 @@ describe('SearchManager', (sqlHelper: SQLTestHelper) => {
         searchText: null,
         searchType: null,
         directories: [],
-        media: [p, p2],
+        media: [p, p2, p4],
         metaFile: [],
         resultOverflow: false
       }));
@@ -467,7 +468,7 @@ describe('SearchManager', (sqlHelper: SQLTestHelper) => {
         searchText: null,
         searchType: null,
         directories: [],
-        media: [p, p2],
+        media: [p, p2, p4],
         metaFile: [],
         resultOverflow: false
       }));
@@ -487,7 +488,7 @@ describe('SearchManager', (sqlHelper: SQLTestHelper) => {
         searchText: null,
         searchType: null,
         directories: [],
-        media: [p, p2],
+        media: [p, p2, p4],
         metaFile: [],
         resultOverflow: false
       }));
@@ -515,6 +516,84 @@ describe('SearchManager', (sqlHelper: SQLTestHelper) => {
 
     });
 
+
+    it('should minimum of', async () => {
+      const sm = new SearchManager();
+
+      let query: SomeOfSearchQuery = <SomeOfSearchQuery>{
+        type: SearchQueryTypes.SOME_OF,
+        list: [<TextSearch>{text: 'jpg', type: SearchQueryTypes.file_name},
+          <TextSearch>{text: 'mp4', type: SearchQueryTypes.file_name}]
+      };
+
+      expect(Utils.clone(await sm.aSearch(query))).to.deep.equalInAnyOrder(removeDir(<SearchResultDTO>{
+        searchText: null,
+        searchType: null,
+        directories: [],
+        media: [p, p2, p_faceLess, p4, v],
+        metaFile: [],
+        resultOverflow: false
+      }));
+
+      query = <SomeOfSearchQuery>{
+        type: SearchQueryTypes.SOME_OF,
+        list: [<TextSearch>{text: 'R2', type: SearchQueryTypes.person},
+          <TextSearch>{text: 'Anakin', type: SearchQueryTypes.person},
+          <TextSearch>{text: 'Luke', type: SearchQueryTypes.person}]
+      };
+
+      expect(Utils.clone(await sm.aSearch(query))).to.deep.equalInAnyOrder(removeDir(<SearchResultDTO>{
+        searchText: null,
+        searchType: null,
+        directories: [],
+        media: [p, p2, p4],
+        metaFile: [],
+        resultOverflow: false
+      }));
+
+
+      query.min = 2;
+
+      expect(Utils.clone(await sm.aSearch(query))).to.deep.equalInAnyOrder(removeDir(<SearchResultDTO>{
+        searchText: null,
+        searchType: null,
+        directories: [],
+        media: [p, p2, p4],
+        metaFile: [],
+        resultOverflow: false
+      }));
+
+      query.min = 3;
+
+      expect(Utils.clone(await sm.aSearch(query))).to.deep.equalInAnyOrder(removeDir(<SearchResultDTO>{
+        searchText: null,
+        searchType: null,
+        directories: [],
+        media: [],
+        metaFile: [],
+        resultOverflow: false
+      }));
+
+      query = <SomeOfSearchQuery>{
+        type: SearchQueryTypes.SOME_OF,
+        min: 3,
+        list: [<TextSearch>{text: 'sw', type: SearchQueryTypes.file_name},
+          <TextSearch>{text: 'R2', type: SearchQueryTypes.person},
+          <TextSearch>{text: 'Kamino', type: SearchQueryTypes.position},
+          <TextSearch>{text: 'Han', type: SearchQueryTypes.person}]
+      };
+
+      expect(Utils.clone(await sm.aSearch(query))).to.deep.equalInAnyOrder(removeDir(<SearchResultDTO>{
+        searchText: null,
+        searchType: null,
+        directories: [],
+        media: [p2],
+        metaFile: [],
+        resultOverflow: false
+      }));
+
+    });
+
     describe('should search text', async () => {
       it('as any', async () => {
         const sm = new SearchManager();
@@ -529,6 +608,17 @@ describe('SearchManager', (sqlHelper: SQLTestHelper) => {
           resultOverflow: false
         }));
 
+
+        expect(Utils.clone(await sm.aSearch(<TextSearch>{text: 'sw', negate: true, type: SearchQueryTypes.any_text})))
+          .to.deep.equalInAnyOrder(removeDir(<SearchResultDTO>{
+          searchText: null,
+          searchType: null,
+          directories: [],
+          media: [],
+          metaFile: [],
+          resultOverflow: false
+        }));
+
         expect(Utils.clone(await sm.aSearch(<TextSearch>{text: 'Boba', type: SearchQueryTypes.any_text})))
           .to.deep.equalInAnyOrder(removeDir(<SearchResultDTO>{
           searchText: null,
@@ -538,6 +628,28 @@ describe('SearchManager', (sqlHelper: SQLTestHelper) => {
           metaFile: [],
           resultOverflow: false
         }));
+
+        expect(Utils.clone(await sm.aSearch(<TextSearch>{text: 'Boba', negate: true, type: SearchQueryTypes.any_text})))
+          .to.deep.equalInAnyOrder(removeDir(<SearchResultDTO>{
+          searchText: null,
+          searchType: null,
+          directories: [],
+          media: [p2, p_faceLess, p4],
+          metaFile: [],
+          resultOverflow: false
+        }));
+
+        // all should have faces
+        const sRet = await sm.aSearch(<TextSearch>{text: 'Boba', negate: true, type: SearchQueryTypes.any_text});
+        for (let i = 0; i < sRet.media.length; ++i) {
+          if (sRet.media[i].id === p_faceLess.id) {
+            continue;
+          }
+          console.log(sRet.media[i]);
+          expect((<PhotoDTO>sRet.media[i]).metadata.faces).to.be.not.an('undefined');
+          expect((<PhotoDTO>sRet.media[i]).metadata.faces).to.be.lengthOf.above(1);
+        }
+
 
         expect(Utils.clone(await sm.aSearch(<TextSearch>{
           text: 'Boba',
@@ -816,6 +928,21 @@ describe('SearchManager', (sqlHelper: SQLTestHelper) => {
       }));
 
       expect(Utils.clone(await sm.aSearch(<DateSearch>{
+        before: p.metadata.creationDate,
+        after: p.metadata.creationDate,
+        negate: true,
+        type: SearchQueryTypes.date
+      })))
+        .to.deep.equalInAnyOrder(removeDir(<SearchResultDTO>{
+        searchText: null,
+        searchType: null,
+        directories: [],
+        media: [p2, p_faceLess, p4, v],
+        metaFile: [],
+        resultOverflow: false
+      }));
+
+      expect(Utils.clone(await sm.aSearch(<DateSearch>{
         before: p.metadata.creationDate + 1000000000,
         after: 0, type: SearchQueryTypes.date
       })))
@@ -854,6 +981,16 @@ describe('SearchManager', (sqlHelper: SQLTestHelper) => {
         resultOverflow: false
       }));
 
+      expect(Utils.clone(await sm.aSearch(<RatingSearch>{min: 0, max: 5, negate: true, type: SearchQueryTypes.rating})))
+        .to.deep.equalInAnyOrder(removeDir(<SearchResultDTO>{
+        searchText: null,
+        searchType: null,
+        directories: [],
+        media: [],
+        metaFile: [],
+        resultOverflow: false
+      }));
+
       expect(Utils.clone(await sm.aSearch(<RatingSearch>{min: 2, max: 2, type: SearchQueryTypes.rating})))
         .to.deep.equalInAnyOrder(removeDir(<SearchResultDTO>{
         searchText: null,
@@ -864,6 +1001,15 @@ describe('SearchManager', (sqlHelper: SQLTestHelper) => {
         resultOverflow: false
       }));
 
+      expect(Utils.clone(await sm.aSearch(<RatingSearch>{min: 2, max: 2, negate: true, type: SearchQueryTypes.rating})))
+        .to.deep.equalInAnyOrder(removeDir(<SearchResultDTO>{
+        searchText: null,
+        searchType: null,
+        directories: [],
+        media: [p, p_faceLess],
+        metaFile: [],
+        resultOverflow: false
+      }));
     });
 
 
@@ -900,6 +1046,16 @@ describe('SearchManager', (sqlHelper: SQLTestHelper) => {
         resultOverflow: false
       }));
 
+      expect(Utils.clone(await sm.aSearch(<ResolutionSearch>{min: 2, max: 3, negate: true, type: SearchQueryTypes.resolution})))
+        .to.deep.equalInAnyOrder(removeDir(<SearchResultDTO>{
+        searchText: null,
+        searchType: null,
+        directories: [],
+        media: [p, v, p4],
+        metaFile: [],
+        resultOverflow: false
+      }));
+
       expect(Utils.clone(await sm.aSearch(<ResolutionSearch>{min: 3, type: SearchQueryTypes.resolution})))
         .to.deep.equalInAnyOrder(removeDir(<SearchResultDTO>{
         searchText: null,
@@ -917,7 +1073,7 @@ describe('SearchManager', (sqlHelper: SQLTestHelper) => {
       const sm = new SearchManager();
 
       expect(Utils.clone(await sm.aSearch(<OrientationSearch>{
-        orientation: OrientationSearchTypes.portrait,
+        landscape: false,
         type: SearchQueryTypes.orientation
       })))
         .to.deep.equalInAnyOrder(removeDir(<SearchResultDTO>{
@@ -930,7 +1086,7 @@ describe('SearchManager', (sqlHelper: SQLTestHelper) => {
       }));
 
       expect(Utils.clone(await sm.aSearch(<OrientationSearch>{
-        orientation: OrientationSearchTypes.landscape,
+        landscape: true,
         type: SearchQueryTypes.orientation
       })))
         .to.deep.equalInAnyOrder(removeDir(<SearchResultDTO>{
@@ -980,6 +1136,22 @@ describe('SearchManager', (sqlHelper: SQLTestHelper) => {
         searchType: null,
         directories: [],
         media: [p, p2],
+        metaFile: [],
+        resultOverflow: false
+      }));
+
+
+      expect(Utils.clone(await sm.aSearch(<DistanceSearch>{
+        from: {GPSData: {latitude: 0, longitude: 0}},
+        distance: 112 * 10, // number of km per degree = ~111km
+        negate: true,
+        type: SearchQueryTypes.distance
+      })))
+        .to.deep.equalInAnyOrder(removeDir(<SearchResultDTO>{
+        searchText: null,
+        searchType: null,
+        directories: [],
+        media: [p_faceLess, p4],
         metaFile: [],
         resultOverflow: false
       }));

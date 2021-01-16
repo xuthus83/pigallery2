@@ -24,30 +24,47 @@ export enum TextSearchQueryTypes {
   exact_match = 1, like = 2
 }
 
-export enum OrientationSearchTypes {
-  portrait = 1, landscape = 2
+
+export namespace SearchQueryDTO {
+  export const negate = (query: SearchQueryDTO): SearchQueryDTO => {
+    switch (query.type) {
+      case SearchQueryTypes.AND:
+        query.type = SearchQueryTypes.OR;
+        (<SearchListQuery>query).list = (<SearchListQuery>query).list.map(q => SearchQueryDTO.negate(q));
+        return query;
+      case SearchQueryTypes.OR:
+        query.type = SearchQueryTypes.AND;
+        (<SearchListQuery>query).list = (<SearchListQuery>query).list.map(q => SearchQueryDTO.negate(q));
+        return query;
+
+      case SearchQueryTypes.orientation:
+        (<OrientationSearch>query).landscape = !(<OrientationSearch>query).landscape;
+        return query;
+
+      case SearchQueryTypes.date:
+      case SearchQueryTypes.rating:
+      case SearchQueryTypes.resolution:
+      case SearchQueryTypes.distance:
+      case SearchQueryTypes.any_text:
+      case SearchQueryTypes.person:
+      case SearchQueryTypes.position:
+      case SearchQueryTypes.keyword:
+      case SearchQueryTypes.caption:
+      case SearchQueryTypes.file_name:
+      case SearchQueryTypes.directory:
+        (<NegatableSearchQuery>query).negate = !(<NegatableSearchQuery>query).negate;
+        return query;
+
+      case SearchQueryTypes.SOME_OF:
+        throw new Error('Some of not supported');
+    }
+  };
 }
 
 export interface SearchQueryDTO {
   type: SearchQueryTypes;
 }
 
-export interface ANDSearchQuery extends SearchQueryDTO {
-  type: SearchQueryTypes.AND;
-  list: SearchQueryDTO[];
-}
-
-export interface ORSearchQuery extends SearchQueryDTO {
-  type: SearchQueryTypes.OR;
-  list: SearchQueryDTO[];
-}
-
-export interface SomeOfSearchQuery extends SearchQueryDTO, RangeSearchQuery {
-  type: SearchQueryTypes.SOME_OF;
-  list: NegatableSearchQuery[];
-  min?: number; // at least this amount of items
-  max?: number; // maximum this amount of items
-}
 
 export interface NegatableSearchQuery extends SearchQueryDTO {
   negate?: boolean; // if true negates the expression
@@ -58,6 +75,26 @@ export interface RangeSearchQuery extends SearchQueryDTO {
   max?: number;
 }
 
+export interface SearchListQuery extends SearchQueryDTO {
+  list: SearchQueryDTO[];
+}
+
+
+export interface ANDSearchQuery extends SearchQueryDTO, SearchListQuery {
+  type: SearchQueryTypes.AND;
+  list: SearchQueryDTO[];
+}
+
+export interface ORSearchQuery extends SearchQueryDTO, SearchListQuery {
+  type: SearchQueryTypes.OR;
+  list: SearchQueryDTO[];
+}
+
+export interface SomeOfSearchQuery extends SearchQueryDTO, SearchListQuery {
+  type: SearchQueryTypes.SOME_OF;
+  list: NegatableSearchQuery[];
+  min?: number; // at least this amount of items
+}
 
 export interface TextSearch extends NegatableSearchQuery {
   type: SearchQueryTypes.any_text |
@@ -87,20 +124,20 @@ export interface DateSearch extends NegatableSearchQuery {
   before?: number;
 }
 
-export interface RatingSearch extends NegatableSearchQuery, RangeSearchQuery {
+export interface RatingSearch extends RangeSearchQuery, NegatableSearchQuery {
   type: SearchQueryTypes.rating;
   min?: number;
   max?: number;
 }
 
-export interface ResolutionSearch extends NegatableSearchQuery, RangeSearchQuery {
+export interface ResolutionSearch extends RangeSearchQuery, NegatableSearchQuery {
   type: SearchQueryTypes.resolution;
   min?: number; // in megapixels
   max?: number; // in megapixels
 }
 
-export interface OrientationSearch extends NegatableSearchQuery {
+export interface OrientationSearch {
   type: SearchQueryTypes.orientation;
-  orientation: OrientationSearchTypes;
+  landscape: boolean;
 }
 

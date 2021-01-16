@@ -148,6 +148,9 @@ export class TestHelper {
     }, <FaceRegion>{
       box: {height: 10, width: 10, left: 105, top: 105},
       name: 'Arvíztűrő Tükörfúrógép'
+    }, <FaceRegion>{
+      box: {height: 10, width: 10, left: 201, top: 201},
+      name: 'R2-D2'
     }] as any[];
     return p;
   }
@@ -178,6 +181,9 @@ export class TestHelper {
     }, <FaceRegion>{
       box: {height: 10, width: 10, left: 101, top: 101},
       name: 'Obivan Kenobi'
+    }, <FaceRegion>{
+      box: {height: 10, width: 10, left: 201, top: 201},
+      name: 'R2-D2'
     }] as any[];
     return p;
   }
@@ -224,6 +230,7 @@ export class TestHelper {
     p.metadata.creationDate = Date.now() - 4000;
     p.metadata.size.height = 3000;
     p.metadata.size.width = 2000;
+
     p.metadata.faces = [<FaceRegion>{
       box: {height: 10, width: 10, left: 10, top: 10},
       name: 'Kylo Ren'
@@ -233,7 +240,11 @@ export class TestHelper {
     }, <FaceRegion>{
       box: {height: 10, width: 10, left: 101, top: 101},
       name: 'Obivan Kenobi'
+    }, <FaceRegion>{
+      box: {height: 10, width: 10, left: 201, top: 201},
+      name: 'R2-D2'
     }] as any[];
+
     return p;
   }
 

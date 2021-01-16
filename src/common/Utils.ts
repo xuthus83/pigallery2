@@ -240,4 +240,24 @@ export class Utils {
       (value <= 3.402823466 * E && value >= 1.175494351 * nE));
   }
 
+  public static getAnyX(num: number, arr: any[], start = 0): any[][] {
+    if (num <= 0 || num > arr.length || start >= arr.length) {
+      return [];
+    }
+    if (num <= 1) {
+      return arr.slice(start).map(e => [e]);
+    }
+    if (num === arr.length - start) {
+      return [arr.slice(start)];
+    }
+    const ret: any[][] = [];
+    for (let i = start; i < arr.length; ++i) {
+      Utils.getAnyX(num - 1, arr, i + 1).forEach(a => {
+        a.push(arr[i]);
+        ret.push(a);
+      });
+    }
+    return ret;
+  }
+
 }

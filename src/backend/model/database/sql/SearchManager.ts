@@ -15,17 +15,19 @@ import {
   DateSearch,
   DistanceSearch,
   OrientationSearch,
-  OrientationSearchTypes,
   ORSearchQuery,
   RatingSearch,
   ResolutionSearch,
+  SearchListQuery,
   SearchQueryDTO,
   SearchQueryTypes,
+  SomeOfSearchQuery,
   TextSearch,
   TextSearchQueryTypes
 } from '../../../../common/entities/SearchQueryDTO';
 import {GalleryManager} from './GalleryManager';
 import {ObjectManagers} from '../../ObjectManagers';
+import {Utils} from '../../../../common/Utils';
 
 export class SearchManager implements ISearchManager {
 
@@ -145,6 +147,7 @@ export class SearchManager implements ISearchManager {
 
   async aSearch(query: SearchQueryDTO) {
     query = this.flattenSameOfQueries(query);
+    console.log(JSON.stringify(query, null, 4));
     query = await this.getGPSData(query);
     const connection = await SQLConnection.getConnection();
 
@@ -367,10 +370,17 @@ export class SearchManager implements ISearchManager {
           textParam['minLat' + paramCounter.value] = minLat;
           textParam['maxLon' + paramCounter.value] = maxLon;
           textParam['minLon' + paramCounter.value] = minLon;
-          q.where(`media.metadata.positionData.GPSData.latitude < :maxLat${paramCounter.value}`, textParam);
-          q.andWhere(`media.metadata.positionData.GPSData.latitude > :minLat${paramCounter.value}`, textParam);
-          q.andWhere(`media.metadata.positionData.GPSData.longitude < :maxLon${paramCounter.value}`, textParam);
-          q.andWhere(`media.metadata.positionData.GPSData.longitude > :minLon${paramCounter.value}`, textParam);
+          if (!(<DistanceSearch>query).negate) {
+            q.where(`media.metadata.positionData.GPSData.latitude < :maxLat${paramCounter.value}`, textParam);
+            q.andWhere(`media.metadata.positionData.GPSData.latitude > :minLat${paramCounter.value}`, textParam);
+            q.andWhere(`media.metadata.positionData.GPSData.longitude < :maxLon${paramCounter.value}`, textParam);
+            q.andWhere(`media.metadata.positionData.GPSData.longitude > :minLon${paramCounter.value}`, textParam);
+          } else {
+            q.where(`media.metadata.positionData.GPSData.latitude > :maxLat${paramCounter.value}`, textParam);
+            q.orWhere(`media.metadata.positionData.GPSData.latitude < :minLat${paramCounter.value}`, textParam);
+            q.orWhere(`media.metadata.positionData.GPSData.longitude > :maxLon${paramCounter.value}`, textParam);
+            q.orWhere(`media.metadata.positionData.GPSData.longitude < :minLon${paramCounter.value}`, textParam);
+          }
           return q;
         });
 
@@ -379,17 +389,22 @@ export class SearchManager implements ISearchManager {
           if (typeof (<DateSearch>query).before === 'undefined' && typeof (<DateSearch>query).after === 'undefined') {
             throw new Error('Invalid search query: Date Query should contain before or after value');
           }
-          if (typeof (<DateSearch>query).before !== 'undefined') {
-            const textParam: any = {};
-            textParam['before' + paramCounter.value] = (<DateSearch>query).before;
-            q.where(`media.metadata.creationDate <= :before${paramCounter.value}`, textParam);
-          }
+          const whereFN = (<TextSearch>query).negate ? 'orWhere' : 'andWhere';
+          const relation = (<TextSearch>query).negate ? '<' : '>=';
+          const relationRev = (<TextSearch>query).negate ? '>' : '<=';
 
           if (typeof (<DateSearch>query).after !== 'undefined') {
             const textParam: any = {};
             textParam['after' + paramCounter.value] = (<DateSearch>query).after;
-            q.andWhere(`media.metadata.creationDate >= :after${paramCounter.value}`, textParam);
+            q.where(`media.metadata.creationDate ${relation} :after${paramCounter.value}`, textParam);
           }
+
+          if (typeof (<DateSearch>query).before !== 'undefined') {
+            const textParam: any = {};
+            textParam['before' + paramCounter.value] = (<DateSearch>query).before;
+            q[whereFN](`media.metadata.creationDate ${relationRev} :before${paramCounter.value}`, textParam);
+          }
+
           paramCounter.value++;
           return q;
         });
@@ -399,16 +414,20 @@ export class SearchManager implements ISearchManager {
           if (typeof (<RatingSearch>query).min === 'undefined' && typeof (<RatingSearch>query).max === 'undefined') {
             throw new Error('Invalid search query: Rating Query should contain min or max value');
           }
+
+          const whereFN = (<TextSearch>query).negate ? 'orWhere' : 'andWhere';
+          const relation = (<TextSearch>query).negate ? '<' : '>=';
+          const relationRev = (<TextSearch>query).negate ? '>' : '<=';
           if (typeof (<RatingSearch>query).min !== 'undefined') {
             const textParam: any = {};
             textParam['min' + paramCounter.value] = (<RatingSearch>query).min;
-            q.where(`media.metadata.rating >= :min${paramCounter.value}`, textParam);
+            q.where(`media.metadata.rating ${relation}  :min${paramCounter.value}`, textParam);
           }
 
           if (typeof (<RatingSearch>query).max !== 'undefined') {
             const textParam: any = {};
             textParam['max' + paramCounter.value] = (<RatingSearch>query).max;
-            q.andWhere(`media.metadata.rating <= :max${paramCounter.value}`, textParam);
+            q[whereFN](`media.metadata.rating ${relationRev}  :max${paramCounter.value}`, textParam);
           }
           paramCounter.value++;
           return q;
@@ -419,16 +438,20 @@ export class SearchManager implements ISearchManager {
           if (typeof (<ResolutionSearch>query).min === 'undefined' && typeof (<ResolutionSearch>query).max === 'undefined') {
             throw new Error('Invalid search query: Rating Query should contain min or max value');
           }
+
+          const whereFN = (<TextSearch>query).negate ? 'orWhere' : 'andWhere';
+          const relation = (<TextSearch>query).negate ? '<' : '>=';
+          const relationRev = (<TextSearch>query).negate ? '>' : '<=';
           if (typeof (<ResolutionSearch>query).min !== 'undefined') {
             const textParam: any = {};
             textParam['min' + paramCounter.value] = (<RatingSearch>query).min * 1000 * 1000;
-            q.where(`media.metadata.size.width * media.metadata.size.height >= :min${paramCounter.value}`, textParam);
+            q.where(`media.metadata.size.width * media.metadata.size.height ${relation} :min${paramCounter.value}`, textParam);
           }
 
           if (typeof (<ResolutionSearch>query).max !== 'undefined') {
             const textParam: any = {};
             textParam['max' + paramCounter.value] = (<RatingSearch>query).max * 1000 * 1000;
-            q.andWhere(`media.metadata.size.width * media.metadata.size.height <= :max${paramCounter.value}`, textParam);
+            q[whereFN](`media.metadata.size.width * media.metadata.size.height ${relationRev} :max${paramCounter.value}`, textParam);
           }
           paramCounter.value++;
           return q;
@@ -436,11 +459,10 @@ export class SearchManager implements ISearchManager {
 
       case SearchQueryTypes.orientation:
         return new Brackets(q => {
-          if ((<OrientationSearch>query).orientation === OrientationSearchTypes.landscape) {
+          if ((<OrientationSearch>query).landscape) {
             q.where('media.metadata.size.width >= media.metadata.size.height');
-          }
-          if ((<OrientationSearch>query).orientation === OrientationSearchTypes.portrait) {
-            q.andWhere('media.metadata.size.width <= media.metadata.size.height');
+          } else {
+            q.where('media.metadata.size.width <= media.metadata.size.height');
           }
           paramCounter.value++;
           return q;
@@ -458,6 +480,11 @@ export class SearchManager implements ISearchManager {
         return (<TextSearch>query).matchType === TextSearchQueryTypes.exact_match ? str : `%${str}%`;
       };
 
+      const LIKE = (<TextSearch>query).negate ? 'NOT LIKE' : 'LIKE';
+      // if the expression is negated, we use AND instead of OR as nowhere should that match
+      const whereFN = (<TextSearch>query).negate ? 'andWhere' : 'orWhere';
+      const whereFNRev = (<TextSearch>query).negate ? 'orWhere' : 'andWhere';
+
       const textParam: any = {};
       paramCounter.value++;
       textParam['text' + paramCounter.value] = createMatchString((<TextSearch>query).text);
@@ -468,17 +495,17 @@ export class SearchManager implements ISearchManager {
 
 
         textParam['fullPath' + paramCounter.value] = createMatchString(dirPathStr);
-        q.orWhere(`directory.path LIKE :fullPath${paramCounter.value} COLLATE utf8_general_ci`,
+        q[whereFN](`directory.path ${LIKE} :fullPath${paramCounter.value} COLLATE utf8_general_ci`,
           textParam);
 
         const directoryPath = GalleryManager.parseRelativeDirePath(dirPathStr);
-        q.orWhere(new Brackets(dq => {
+        q[whereFN](new Brackets(dq => {
           textParam['dirName' + paramCounter.value] = createMatchString(directoryPath.name);
-          dq.where(`directory.name LIKE :dirName${paramCounter.value} COLLATE utf8_general_ci`,
+          dq[whereFNRev](`directory.name ${LIKE} :dirName${paramCounter.value} COLLATE utf8_general_ci`,
             textParam);
           if (dirPathStr.includes('/')) {
             textParam['parentName' + paramCounter.value] = createMatchString(directoryPath.parent);
-            dq.andWhere(`directory.path LIKE :parentName${paramCounter.value} COLLATE utf8_general_ci`,
+            dq[whereFNRev](`directory.path ${LIKE} :parentName${paramCounter.value} COLLATE utf8_general_ci`,
               textParam);
           }
           return dq;
@@ -486,29 +513,39 @@ export class SearchManager implements ISearchManager {
       }
 
       if (query.type === SearchQueryTypes.any_text || query.type === SearchQueryTypes.file_name) {
-        q.orWhere(`media.name LIKE :text${paramCounter.value} COLLATE utf8_general_ci`,
+        q[whereFN](`media.name ${LIKE} :text${paramCounter.value} COLLATE utf8_general_ci`,
           textParam);
       }
 
       if (query.type === SearchQueryTypes.any_text || query.type === SearchQueryTypes.caption) {
-        q.orWhere(`media.metadata.caption LIKE :text${paramCounter.value} COLLATE utf8_general_ci`,
+        q[whereFN](`media.metadata.caption ${LIKE} :text${paramCounter.value} COLLATE utf8_general_ci`,
           textParam);
       }
       if (query.type === SearchQueryTypes.any_text || query.type === SearchQueryTypes.person) {
-        q.orWhere(`person.name LIKE :text${paramCounter.value} COLLATE utf8_general_ci`,
-          textParam);
+        if (!(<TextSearch>query).negate) {
+          q[whereFN](`person.name ${LIKE} :text${paramCounter.value} COLLATE utf8_general_ci`,
+            textParam);
+        } else {
+          // because of the Left JOIN on the faces, we also need to check for NULL
+          q[whereFN](new Brackets(dq => {
+            dq.where(`person.name ${LIKE} :text${paramCounter.value} COLLATE utf8_general_ci`,
+              textParam);
+            dq.orWhere(`person.name is NULL`);
+            return dq;
+          }));
+        }
       }
 
       if (query.type === SearchQueryTypes.any_text || query.type === SearchQueryTypes.position) {
-        q.orWhere(`media.metadata.positionData.country LIKE :text${paramCounter.value} COLLATE utf8_general_ci`,
+        q[whereFN](`media.metadata.positionData.country ${LIKE} :text${paramCounter.value} COLLATE utf8_general_ci`,
           textParam)
-          .orWhere(`media.metadata.positionData.state LIKE :text${paramCounter.value} COLLATE utf8_general_ci`,
-            textParam)
-          .orWhere(`media.metadata.positionData.city LIKE :text${paramCounter.value} COLLATE utf8_general_ci`,
-            textParam);
+          [whereFN](`media.metadata.positionData.state ${LIKE} :text${paramCounter.value} COLLATE utf8_general_ci`,
+          textParam)
+          [whereFN](`media.metadata.positionData.city ${LIKE} :text${paramCounter.value} COLLATE utf8_general_ci`,
+          textParam);
       }
       if (query.type === SearchQueryTypes.any_text || query.type === SearchQueryTypes.keyword) {
-        q.orWhere(`media.metadata.keywords LIKE :text${paramCounter.value} COLLATE utf8_general_ci`,
+        q[whereFN](`media.metadata.keywords ${LIKE} :text${paramCounter.value} COLLATE utf8_general_ci`,
           textParam);
       }
       return q;
@@ -516,6 +553,41 @@ export class SearchManager implements ISearchManager {
   }
 
   private flattenSameOfQueries(query: SearchQueryDTO): SearchQueryDTO {
+    switch (query.type) {
+      case SearchQueryTypes.AND:
+      case SearchQueryTypes.OR:
+        return <SearchListQuery>{
+          type: query.type,
+          list: (<SearchListQuery>query).list.map(q => this.flattenSameOfQueries(q))
+        };
+      case SearchQueryTypes.SOME_OF:
+        const someOfQ = <SomeOfSearchQuery>query;
+        someOfQ.min = someOfQ.min || 1;
+
+        if (someOfQ.min === 1) {
+          return this.flattenSameOfQueries(<ORSearchQuery>{
+            type: SearchQueryTypes.OR,
+            list: (<SearchListQuery>someOfQ).list
+          });
+        }
+
+        if (someOfQ.min === (<SearchListQuery>query).list.length) {
+          return this.flattenSameOfQueries(<ANDSearchQuery>{
+            type: SearchQueryTypes.AND,
+            list: (<SearchListQuery>someOfQ).list
+          });
+        }
+
+        const combinations: SearchQueryDTO[][] = Utils.getAnyX(someOfQ.min, (<SearchListQuery>query).list);
+
+
+        return this.flattenSameOfQueries(<ORSearchQuery>{
+          type: SearchQueryTypes.OR,
+          list: combinations.map(c => <ANDSearchQuery>{
+            type: SearchQueryTypes.AND, list: c
+          })
+        });
+    }
     return query;
   }
 
