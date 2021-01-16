@@ -24,20 +24,24 @@ const LOG_TAG = '[GalleryManager]';
 
 export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
 
+  public static parseRelativeDirePath(relativeDirectoryName: string): { name: string, parent: string } {
+
+    relativeDirectoryName = DiskMangerWorker.normalizeDirPath(relativeDirectoryName);
+    return {
+      name: path.basename(relativeDirectoryName),
+      parent: path.join(path.dirname(relativeDirectoryName), path.sep),
+    };
+  }
 
   public async listDirectory(relativeDirectoryName: string,
                              knownLastModified?: number,
                              knownLastScanned?: number): Promise<DirectoryDTO> {
-
-    relativeDirectoryName = DiskMangerWorker.normalizeDirPath(relativeDirectoryName);
-    const directoryName = path.basename(relativeDirectoryName);
-    const directoryParent = path.join(path.dirname(relativeDirectoryName), path.sep);
+    const directoryPath = GalleryManager.parseRelativeDirePath(relativeDirectoryName);
     const connection = await SQLConnection.getConnection();
     const stat = fs.statSync(path.join(ProjectPath.ImageFolder, relativeDirectoryName));
     const lastModified = DiskMangerWorker.calcLastModified(stat);
 
-
-    const dir = await this.selectParentDir(connection, directoryName, directoryParent);
+    const dir = await this.selectParentDir(connection, directoryPath.name, directoryPath.parent);
     if (dir && dir.lastScanned != null) {
       // If it seems that the content did not changed, do not work on it
       if (knownLastModified && knownLastScanned

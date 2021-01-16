@@ -8,11 +8,12 @@ import {ProjectPath} from '../../src/backend/ProjectPath';
 declare let describe: any;
 const savedDescribe = describe;
 
+
 export class SQLTestHelper {
 
   static enable = {
     sqlite: true,
-    mysql: true
+    mysql: process.env.TEST_MYSQL !== 'false'
   };
   public static readonly savedDescribe = savedDescribe;
   tempDir: string;
@@ -39,6 +40,7 @@ export class SQLTestHelper {
       }
     });
   }
+
 
   public async initDB() {
     if (this.dbType === ServerConfig.DatabaseType.sqlite) {

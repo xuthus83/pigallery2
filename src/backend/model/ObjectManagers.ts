@@ -8,6 +8,7 @@ import {IIndexingManager} from './database/interfaces/IIndexingManager';
 import {IPersonManager} from './database/interfaces/IPersonManager';
 import {IVersionManager} from './database/interfaces/IVersionManager';
 import {IJobManager} from './database/interfaces/IJobManager';
+import {LocationManager} from './database/LocationManager';
 
 export class ObjectManagers {
 
@@ -21,6 +22,7 @@ export class ObjectManagers {
   private _personManager: IPersonManager;
   private _versionManager: IVersionManager;
   private _jobManager: IJobManager;
+  private _locationManager: LocationManager;
 
 
   get VersionManager(): IVersionManager {
@@ -29,6 +31,14 @@ export class ObjectManagers {
 
   set VersionManager(value: IVersionManager) {
     this._versionManager = value;
+  }
+
+  get LocationManager(): LocationManager {
+    return this._locationManager;
+  }
+
+  set LocationManager(value: LocationManager) {
+    this._locationManager = value;
   }
 
   get PersonManager(): IPersonManager {
@@ -129,6 +139,7 @@ export class ObjectManagers {
     ObjectManagers.getInstance().IndexingManager = new IndexingManager();
     ObjectManagers.getInstance().PersonManager = new PersonManager();
     ObjectManagers.getInstance().VersionManager = new VersionManager();
+    ObjectManagers.getInstance().LocationManager = new LocationManager();
     this.InitCommonManagers();
   }
 
@@ -149,6 +160,7 @@ export class ObjectManagers {
     ObjectManagers.getInstance().IndexingManager = new IndexingManager();
     ObjectManagers.getInstance().PersonManager = new PersonManager();
     ObjectManagers.getInstance().VersionManager = new VersionManager();
+    ObjectManagers.getInstance().LocationManager = new LocationManager();
     this.InitCommonManagers();
     Logger.debug('SQL DB inited');
   }

@@ -24,19 +24,26 @@ import {DiskMangerWorker} from '../../../../../src/backend/model/threading/DiskM
 
 export class TestHelper {
 
-  public static getDirectoryEntry() {
+  public static getDirectoryEntry(parent: DirectoryDTO = null, name = 'wars dir') {
 
     const dir = new DirectoryEntity();
-    dir.name = 'wars dir';
-    dir.path = '.';
+    dir.name = name;
+    dir.path = DiskMangerWorker.pathFromParent({path: '', name: '.'});
     dir.mediaCount = 0;
+    dir.directories = [];
+    dir.metaFile = [];
+    dir.media = [];
     dir.lastModified = Date.now();
-    dir.lastScanned = null;
-
+    dir.lastScanned = Date.now();
+    // dir.parent = null;
+    if (parent !== null) {
+      dir.path = DiskMangerWorker.pathFromParent(parent);
+      parent.directories.push(dir);
+    }
     return dir;
   }
 
-  public static getPhotoEntry(dir: DirectoryEntity) {
+  public static getPhotoEntry(dir: DirectoryDTO) {
     const sd = new MediaDimensionEntity();
     sd.height = 200;
     sd.width = 200;
@@ -66,7 +73,7 @@ export class TestHelper {
     m.creationDate = Date.now();
     m.fileSize = 123456789;
     m.orientation = OrientationTypes.TOP_LEFT;
-    m.rating = 2;
+   // m.rating = 0; no rating by default
 
     // TODO: remove when typeorm is fixed
     m.duration = null;
@@ -75,13 +82,13 @@ export class TestHelper {
 
     const d = new PhotoEntity();
     d.name = 'test media.jpg';
-    d.directory = dir;
+    dir.media.push(d);
     d.metadata = m;
     dir.mediaCount++;
     return d;
   }
 
-  public static getVideoEntry(dir: DirectoryEntity) {
+  public static getVideoEntry(dir: DirectoryDTO) {
     const sd = new MediaDimensionEntity();
     sd.height = 200;
     sd.width = 200;
@@ -99,20 +106,32 @@ export class TestHelper {
 
 
     const d = new VideoEntity();
-    d.name = 'test video.jpg';
-    d.directory = dir;
+    d.name = 'test video.mp4';
+    dir.media.push(d);
     d.metadata = m;
     return d;
   }
 
-  public static getPhotoEntry1(dir: DirectoryEntity) {
+  public static getVideoEntry1(dir: DirectoryDTO) {
+    const p = TestHelper.getVideoEntry(dir);
+    p.name = 'swVideo.mp4';
+    return p;
+  }
+
+  public static getPhotoEntry1(dir: DirectoryDTO) {
     const p = TestHelper.getPhotoEntry(dir);
 
     p.metadata.caption = 'Han Solo\'s dice';
     p.metadata.keywords = ['Boba Fett', 'star wars', 'Anakin', 'death star'];
     p.metadata.positionData.city = 'Mos Eisley';
     p.metadata.positionData.country = 'Tatooine';
-    p.name = 'sw1';
+    p.name = 'sw1.jpg';
+    p.metadata.positionData.GPSData.latitude = 10;
+    p.metadata.positionData.GPSData.longitude = 10;
+    p.metadata.creationDate = Date.now() - 1000;
+    p.metadata.rating = 1;
+    p.metadata.size.height = 1000;
+    p.metadata.size.width = 1000;
 
     p.metadata.faces = [<FaceRegion>{
       box: {height: 10, width: 10, left: 10, top: 10},
@@ -133,23 +152,81 @@ export class TestHelper {
     return p;
   }
 
-  public static getVideoEntry1(dir: DirectoryEntity) {
-    const p = TestHelper.getVideoEntry(dir);
-    p.name = 'swVideo';
-    return p;
-  }
 
-  public static getPhotoEntry2(dir: DirectoryEntity) {
+  public static getPhotoEntry2(dir: DirectoryDTO) {
     const p = TestHelper.getPhotoEntry(dir);
 
-    p.metadata.keywords = ['Padmé Amidala', 'star wars', 'Natalie Portman', 'death star'];
+    p.metadata.caption = 'Light saber';
+    p.metadata.keywords = ['Padmé Amidala', 'star wars', 'Natalie Portman', 'death star', 'wookiee'];
     p.metadata.positionData.city = 'Derem City';
     p.metadata.positionData.state = 'Research City';
     p.metadata.positionData.country = 'Kamino';
-    p.name = 'sw2';
+    p.name = 'sw2.jpg';
+    p.metadata.positionData.GPSData.latitude = -10;
+    p.metadata.positionData.GPSData.longitude = -10;
+    p.metadata.creationDate = Date.now() - 2000;
+    p.metadata.rating = 2;
+    p.metadata.size.height = 2000;
+    p.metadata.size.width = 1000;
+
     p.metadata.faces = [<FaceRegion>{
       box: {height: 10, width: 10, left: 10, top: 10},
       name: 'Padmé Amidala'
+    }, <FaceRegion>{
+      box: {height: 10, width: 10, left: 101, top: 101},
+      name: 'Anakin Skywalker'
+    }, <FaceRegion>{
+      box: {height: 10, width: 10, left: 101, top: 101},
+      name: 'Obivan Kenobi'
+    }] as any[];
+    return p;
+  }
+
+  public static getPhotoEntry3(dir: DirectoryDTO) {
+    const p = TestHelper.getPhotoEntry(dir);
+
+    p.metadata.caption = 'Amber stone';
+    p.metadata.keywords = ['star wars', 'wookiees'];
+    p.metadata.positionData.city = 'Castilon';
+    p.metadata.positionData.state = 'Devaron';
+    p.metadata.positionData.country = 'Ajan Kloss';
+    p.name = 'sw3.jpg';
+    p.metadata.positionData.GPSData.latitude = 10;
+    p.metadata.positionData.GPSData.longitude = 15;
+    p.metadata.creationDate = Date.now() - 3000;
+    p.metadata.rating = 3;
+    p.metadata.size.height = 1000;
+    p.metadata.size.width = 2000;
+    p.metadata.faces = [<FaceRegion>{
+      box: {height: 10, width: 10, left: 10, top: 10},
+      name: 'Kylo Ren'
+    }, <FaceRegion>{
+      box: {height: 10, width: 10, left: 101, top: 101},
+      name: 'Leia Organa'
+    }, <FaceRegion>{
+      box: {height: 10, width: 10, left: 103, top: 103},
+      name: 'Han Solo'
+    }] as any[];
+    return p;
+  }
+
+  public static getPhotoEntry4(dir: DirectoryDTO) {
+    const p = TestHelper.getPhotoEntry(dir);
+
+    p.metadata.caption = 'Millennium falcon';
+    p.metadata.keywords = ['star wars', 'ewoks'];
+    p.metadata.positionData.city = 'Tipoca City';
+    p.metadata.positionData.state = 'Exegol';
+    p.metadata.positionData.country = 'Jedha';
+    p.name = 'sw4.jpg';
+    p.metadata.positionData.GPSData.latitude = 15;
+    p.metadata.positionData.GPSData.longitude = 10;
+    p.metadata.creationDate = Date.now() - 4000;
+    p.metadata.size.height = 3000;
+    p.metadata.size.width = 2000;
+    p.metadata.faces = [<FaceRegion>{
+      box: {height: 10, width: 10, left: 10, top: 10},
+      name: 'Kylo Ren'
     }, <FaceRegion>{
       box: {height: 10, width: 10, left: 101, top: 101},
       name: 'Anakin Skywalker'
