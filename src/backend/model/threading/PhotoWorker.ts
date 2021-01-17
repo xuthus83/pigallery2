@@ -67,7 +67,7 @@ export class VideoRendererFactory {
           if (!!err || data === null) {
             return reject('[FFmpeg] ' + err.toString());
           }
-          /// console.log(data);
+
           let width = null;
           let height = null;
           for (let i = 0; i < data.streams.length; i++) {

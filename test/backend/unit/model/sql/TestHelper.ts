@@ -73,7 +73,7 @@ export class TestHelper {
     m.creationDate = Date.now();
     m.fileSize = 123456789;
     m.orientation = OrientationTypes.TOP_LEFT;
-   // m.rating = 0; no rating by default
+    // m.rating = 0; no rating by default
 
     // TODO: remove when typeorm is fixed
     m.duration = null;
@@ -82,6 +82,7 @@ export class TestHelper {
 
     const d = new PhotoEntity();
     d.name = 'test media.jpg';
+    d.directory = <any>dir;
     dir.media.push(d);
     d.metadata = m;
     dir.mediaCount++;

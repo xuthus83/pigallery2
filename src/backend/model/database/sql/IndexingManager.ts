@@ -2,7 +2,7 @@ import {DirectoryDTO} from '../../../../common/entities/DirectoryDTO';
 import {DirectoryEntity} from './enitites/DirectoryEntity';
 import {SQLConnection} from './SQLConnection';
 import {DiskManager} from '../../DiskManger';
-import {PhotoEntity} from './enitites/PhotoEntity';
+import {PhotoEntity, PhotoMetadataEntity} from './enitites/PhotoEntity';
 import {Utils} from '../../../../common/Utils';
 import {FaceRegion, PhotoMetadata} from '../../../../common/entities/PhotoDTO';
 import {Connection, Repository} from 'typeorm';
@@ -206,10 +206,10 @@ export class IndexingManager implements IIndexingManager {
       .getMany());
 
     const mediaChange: any = {
-      saveP: [],
-      saveV: [],
-      insertP: [],
-      insertV: []
+      saveP: [], // save/update photo
+      saveV: [], // save/update video
+      insertP: [], // insert photo
+      insertV: [] // insert video
     };
     const facesPerPhoto: { faces: FaceRegionEntry[], mediaName: string }[] = [];
     for (let i = 0; i < media.length; i++) {
@@ -223,14 +223,17 @@ export class IndexingManager implements IIndexingManager {
       }
 
       const scannedFaces = (<PhotoMetadata>media[i].metadata).faces || [];
-      delete (<PhotoMetadata>media[i].metadata).faces;
+      if ((<PhotoMetadata>media[i].metadata).faces) { // if it has faces, cache them
+        (<PhotoMetadataEntity>media[i].metadata).persons = (<PhotoMetadata>media[i].metadata).faces.map(f => f.name);
+      }
+      delete (<PhotoMetadata>media[i].metadata).faces; // this is a separated DB, lets save separately
 
       if (mediaItem == null) { // not in DB yet
         media[i].directory = null;
         mediaItem = <any>Utils.clone(media[i]);
         mediaItem.directory = <any>{id: parentDirId};
         (MediaDTO.isPhoto(mediaItem) ? mediaChange.insertP : mediaChange.insertV).push(mediaItem);
-      } else {
+      } else { // already in the DB, only needs to be updated
         delete (<PhotoMetadata>mediaItem.metadata).faces;
         if (!Utils.equalsFilter(mediaItem.metadata, media[i].metadata)) {
           mediaItem.metadata = <any>media[i].metadata;

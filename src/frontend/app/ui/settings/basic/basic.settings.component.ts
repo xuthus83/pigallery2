@@ -61,7 +61,6 @@ export class BasicSettingsComponent extends SettingsComponent<BasicConfigDTO> {
   }
 
   onUrlChanged() {
-    console.log('called');
     if (this.urlBaseChanged === false) {
       this.states.urlBase.value = this.calcBaseUrl();
     } else {

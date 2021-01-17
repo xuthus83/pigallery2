@@ -1,11 +1,10 @@
 import {DirectoryDTO} from './DirectoryDTO';
-import {SearchTypes} from './AutoCompleteItem';
 import {FileDTO} from './FileDTO';
 import {MediaDTO} from './MediaDTO';
+import {SearchQueryDTO} from './SearchQueryDTO';
 
 export interface SearchResultDTO {
-  searchText: string;
-  searchType?: SearchTypes;
+  searchQuery: SearchQueryDTO;
   directories: DirectoryDTO[];
   media: MediaDTO[];
   metaFile: FileDTO[];
