@@ -17,6 +17,5 @@ export interface IGalleryManager {
                 knownLastModified?: number,
                 knownLastScanned?: number): Promise<DirectoryDTO>;
 
-  getRandomPhoto(queryFilter: RandomQuery): Promise<PhotoDTO>;
 
 }

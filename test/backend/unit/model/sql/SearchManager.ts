@@ -105,30 +105,6 @@ describe('SearchManager', (sqlHelper: SQLTestHelper) => {
   const setUpSqlDB = async () => {
     await sqlHelper.initDB();
     await setUpTestGallery();
-    /*
-        const savePhoto = async (photo: PhotoDTO) => {
-          const savedPhoto = await pr.save(photo);
-          if (!photo.metadata.faces) {
-            return;
-          }
-          for (let i = 0; i < photo.metadata.faces.length; i++) {
-            const face = photo.metadata.faces[i];
-            const person = await conn.getRepository(PersonEntry).save({name: face.name});
-            await conn.getRepository(FaceRegionEntry).save({box: face.box, person: person, media: savedPhoto});
-          }
-        };
-        const conn = await SQLConnection.getConnection();
-
-        const pr = conn.getRepository(PhotoEntity);
-
-        await conn.getRepository(DirectoryEntity).save(p.directory);
-        await savePhoto(p);
-        await savePhoto(p2);
-        await savePhoto(p_faceLess);
-
-        await conn.getRepository(VideoEntity).save(v);*/
-
-    //  await SQLConnection.close();
   };
 
 
@@ -151,53 +127,46 @@ describe('SearchManager', (sqlHelper: SQLTestHelper) => {
       return a.text.localeCompare(b.text);
     };
 
-    expect((await sm.autocomplete('tat'))).to.deep.equalInAnyOrder([new AutoCompleteItem('Tatooine', SearchQueryTypes.position)]);
-    expect((await sm.autocomplete('star'))).to.deep.equalInAnyOrder([new AutoCompleteItem('star wars', SearchQueryTypes.keyword),
+    expect((await sm.autocomplete('tat', SearchQueryTypes.any_text))).to.deep.equalInAnyOrder([
+      new AutoCompleteItem('Tatooine', SearchQueryTypes.position)]);
+    expect((await sm.autocomplete('star', SearchQueryTypes.any_text))).to.deep.equalInAnyOrder([
+      new AutoCompleteItem('star wars', SearchQueryTypes.keyword),
       new AutoCompleteItem('death star', SearchQueryTypes.keyword)]);
 
-    expect((await sm.autocomplete('wars'))).to.deep.equalInAnyOrder([new AutoCompleteItem('star wars', SearchQueryTypes.keyword),
+    expect((await sm.autocomplete('wars', SearchQueryTypes.any_text))).to.deep.equalInAnyOrder([
+      new AutoCompleteItem('star wars', SearchQueryTypes.keyword),
       new AutoCompleteItem('wars dir', SearchQueryTypes.directory)]);
 
-    expect((await sm.autocomplete('arch'))).eql([new AutoCompleteItem('Research City', SearchQueryTypes.position)]);
+    expect((await sm.autocomplete('arch', SearchQueryTypes.any_text))).eql([
+      new AutoCompleteItem('Research City', SearchQueryTypes.position)]);
 
     Config.Client.Search.AutoComplete.maxItemsPerCategory = 99999;
-    expect((await sm.autocomplete('a')).sort(cmp)).eql([
-      new AutoCompleteItem('Boba Fett', SearchQueryTypes.keyword),
-      new AutoCompleteItem('Boba Fett', SearchQueryTypes.person),
+    expect((await sm.autocomplete('wa', SearchQueryTypes.any_text))).to.deep.equalInAnyOrder([
       new AutoCompleteItem('star wars', SearchQueryTypes.keyword),
-      new AutoCompleteItem('Anakin', SearchQueryTypes.keyword),
       new AutoCompleteItem('Anakin Skywalker', SearchQueryTypes.person),
       new AutoCompleteItem('Luke Skywalker', SearchQueryTypes.person),
-      new AutoCompleteItem('Han Solo', SearchQueryTypes.person),
-      new AutoCompleteItem('death star', SearchQueryTypes.keyword),
-      new AutoCompleteItem('Padmé Amidala', SearchQueryTypes.person),
-      new AutoCompleteItem('Obivan Kenobi', SearchQueryTypes.person),
-      new AutoCompleteItem('Arvíztűrő Tükörfúrógép', SearchQueryTypes.person),
-      new AutoCompleteItem('Padmé Amidala', SearchQueryTypes.keyword),
-      new AutoCompleteItem('Natalie Portman', SearchQueryTypes.keyword),
-      new AutoCompleteItem('Han Solo\'s dice', SearchQueryTypes.caption),
-      new AutoCompleteItem('Kamino', SearchQueryTypes.position),
-      new AutoCompleteItem('Tatooine', SearchQueryTypes.position),
-      new AutoCompleteItem('wars dir', SearchQueryTypes.directory),
-      new AutoCompleteItem('Research City', SearchQueryTypes.position)].sort(cmp));
+      new AutoCompleteItem('wars dir', SearchQueryTypes.directory)]);
 
     Config.Client.Search.AutoComplete.maxItemsPerCategory = 1;
-    expect((await sm.autocomplete('a')).sort(cmp)).eql([
-      new AutoCompleteItem('Anakin', SearchQueryTypes.keyword),
+    expect((await sm.autocomplete('a', SearchQueryTypes.any_text))).to.deep.equalInAnyOrder([
+      new AutoCompleteItem('Ajan Kloss', SearchQueryTypes.position),
+      new AutoCompleteItem('Amber stone', SearchQueryTypes.caption),
       new AutoCompleteItem('star wars', SearchQueryTypes.keyword),
-      new AutoCompleteItem('death star', SearchQueryTypes.keyword),
       new AutoCompleteItem('Anakin Skywalker', SearchQueryTypes.person),
-      new AutoCompleteItem('Han Solo\'s dice', SearchQueryTypes.caption),
-      new AutoCompleteItem('Kamino', SearchQueryTypes.position),
-      new AutoCompleteItem('Research City', SearchQueryTypes.position),
-      new AutoCompleteItem('wars dir', SearchQueryTypes.directory),
-      new AutoCompleteItem('Boba Fett', SearchQueryTypes.keyword)].sort(cmp));
+      new AutoCompleteItem('Castilon', SearchQueryTypes.position),
+      new AutoCompleteItem('Devaron', SearchQueryTypes.position),
+      new AutoCompleteItem('The Phantom Menace', SearchQueryTypes.directory)]);
     Config.Client.Search.AutoComplete.maxItemsPerCategory = 5;
 
-    expect((await sm.autocomplete('sw')).sort(cmp)).to.deep.equalInAnyOrder([new AutoCompleteItem('sw1', SearchQueryTypes.file_name),
-      new AutoCompleteItem('sw2', SearchQueryTypes.file_name), new AutoCompleteItem(v.name, SearchQueryTypes.file_name)].sort(cmp));
+    expect((await sm.autocomplete('sw', SearchQueryTypes.any_text))).to.deep.equalInAnyOrder([
+      new AutoCompleteItem('sw1.jpg', SearchQueryTypes.file_name),
+      new AutoCompleteItem('sw2.jpg', SearchQueryTypes.file_name),
+      new AutoCompleteItem('sw3.jpg', SearchQueryTypes.file_name),
+      new AutoCompleteItem('sw4.jpg', SearchQueryTypes.file_name),
+      new AutoCompleteItem(v.name, SearchQueryTypes.file_name)]);
 
-    expect((await sm.autocomplete(v.name)).sort(cmp)).to.deep.equalInAnyOrder([new AutoCompleteItem(v.name, SearchQueryTypes.file_name)]);
+    expect((await sm.autocomplete(v.name, SearchQueryTypes.any_text))).to.deep.equalInAnyOrder(
+      [new AutoCompleteItem(v.name, SearchQueryTypes.file_name)]);
 
   });
 
@@ -896,7 +865,7 @@ describe('SearchManager', (sqlHelper: SQLTestHelper) => {
         resultOverflow: false
       }));
 
-       query = <RatingSearch>{min: 0, max: 5, type: SearchQueryTypes.rating};
+      query = <RatingSearch>{min: 0, max: 5, type: SearchQueryTypes.rating};
       expect(Utils.clone(await sm.search(query)))
         .to.deep.equalInAnyOrder(removeDir(<SearchResultDTO>{
         searchQuery: query,
@@ -1117,57 +1086,22 @@ describe('SearchManager', (sqlHelper: SQLTestHelper) => {
 
   });
 
-  it('should instant search', async () => {
+
+  it('should get random photo', async () => {
     const sm = new SearchManager();
 
-    expect(Utils.clone(await sm.instantSearch('sw'))).to.deep.equalInAnyOrder(Utils.clone({
-      searchText: 'sw',
-      directories: [],
-      media: [p, p2, v],
-      metaFile: [],
-      resultOverflow: false
-    }));
+    let query = <TextSearch>{
+      text: 'xyz',
+      type: SearchQueryTypes.keyword
+    };
+    expect(await sm.getRandomPhoto(query)).to.not.exist;
 
-    expect(Utils.clone(await sm.instantSearch('Tatooine'))).to.deep.equalInAnyOrder(Utils.clone({
-      searchText: 'Tatooine',
-      directories: [],
-      media: [p],
-      metaFile: [],
-      resultOverflow: false
-    }));
-
-    expect(Utils.clone(await sm.instantSearch('ortm'))).to.deep.equalInAnyOrder(Utils.clone({
-      searchText: 'ortm',
-      directories: [],
-      media: [p2, p_faceLess],
-      metaFile: [],
-      resultOverflow: false
-    }));
-
-
-    expect(Utils.clone(await sm.instantSearch('wa'))).to.deep.equalInAnyOrder(Utils.clone({
-      searchText: 'wa',
-      directories: [dir],
-      media: [p, p2, p_faceLess],
-      metaFile: [],
-      resultOverflow: false
-    }));
-
-    expect(Utils.clone(await sm.instantSearch('han'))).to.deep.equalInAnyOrder(Utils.clone({
-      searchText: 'han',
-      directories: [],
-      media: [p],
-      metaFile: [],
-      resultOverflow: false
-    }));
-    expect(Utils.clone(await sm.instantSearch('Boba'))).to.deep.equalInAnyOrder(Utils.clone({
-      searchText: 'Boba',
-      directories: [],
-      media: [p],
-      metaFile: [],
-      resultOverflow: false
-    }));
+    query = <TextSearch>{
+      text: 'wookiees',
+      matchType: TextSearchQueryTypes.exact_match,
+      type: SearchQueryTypes.keyword
+    };
+    expect(Utils.clone(await sm.getRandomPhoto(query))).to.deep.equalInAnyOrder(searchifyMedia(p_faceLess));
   });
-
 
 });

@@ -25,7 +25,6 @@ export class GalleryRouter {
     this.addDirectoryList(app);
 
     this.addSearch(app);
-    this.addInstantSearch(app);
     this.addAutoComplete(app);
   }
 
@@ -199,20 +198,6 @@ export class GalleryRouter {
     );
   }
 
-  protected static addInstantSearch(app: Express) {
-    app.get('/api/instant-search/:text',
-      // common part
-      AuthenticationMWs.authenticate,
-      AuthenticationMWs.authorise(UserRoles.Guest),
-      VersionMWs.injectGalleryVersion,
-
-      // specific part
-      GalleryMWs.instantSearch,
-      ThumbnailGeneratorMWs.addThumbnailInformation,
-      GalleryMWs.cleanUpGalleryResults,
-      RenderingMWs.renderResult
-    );
-  }
 
   protected static addAutoComplete(app: Express) {
     app.get('/api/autocomplete/:text',

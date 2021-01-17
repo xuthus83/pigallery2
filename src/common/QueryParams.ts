@@ -10,7 +10,8 @@ export const QueryParams = {
       maxResolution: 'toRes'
     },
     search: {
-      type: 'type'
+      type: 'type',
+      query: 'qs'
     },
     photo: 'p',
     sharingKey_query: 'sk',

@@ -25,12 +25,6 @@ export module ClientConfig {
   export class SearchConfig {
     @ConfigProperty()
     enabled: boolean = true;
-    @ConfigProperty()
-    instantSearchEnabled: boolean = true;
-    @ConfigProperty({type: 'unsignedInt'})
-    InstantSearchTimeout: number = 3000;
-    @ConfigProperty({type: 'unsignedInt'})
-    instantSearchCacheTimeout: number = 1000 * 60 * 60;
     @ConfigProperty({type: 'unsignedInt'})
     searchCacheTimeout: number = 1000 * 60 * 60;
     @ConfigProperty()

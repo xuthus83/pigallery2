@@ -4,19 +4,17 @@ import {NextFunction, Request, Response} from 'express';
 import {ErrorCodes, ErrorDTO} from '../../common/entities/Error';
 import {DirectoryDTO} from '../../common/entities/DirectoryDTO';
 import {ObjectManagers} from '../model/ObjectManagers';
-import {SearchTypes} from '../../common/entities/AutoCompleteItem';
 import {ContentWrapper} from '../../common/entities/ConentWrapper';
 import {PhotoDTO} from '../../common/entities/PhotoDTO';
 import {ProjectPath} from '../ProjectPath';
 import {Config} from '../../common/config/private/Config';
 import {UserDTO} from '../../common/entities/UserDTO';
-import {RandomQuery} from '../model/database/interfaces/IGalleryManager';
 import {MediaDTO} from '../../common/entities/MediaDTO';
 import {VideoDTO} from '../../common/entities/VideoDTO';
 import {Utils} from '../../common/Utils';
 import {QueryParams} from '../../common/QueryParams';
 import {VideoProcessing} from '../model/fileprocessing/VideoProcessing';
-import {DiskMangerWorker} from '../model/threading/DiskMangerWorker';
+import {SearchQueryDTO, SearchQueryTypes} from '../../common/entities/SearchQueryDTO';
 
 
 export class GalleryMWs {
@@ -115,53 +113,6 @@ export class GalleryMWs {
   }
 
 
-  public static async getRandomImage(req: Request, res: Response, next: NextFunction) {
-    if (Config.Client.RandomPhoto.enabled === false) {
-      return next();
-    }
-    try {
-      const query: RandomQuery = {};
-      if (req.query.directory) {
-        query.directory = DiskMangerWorker.normalizeDirPath(<string>req.query.directory);
-      }
-      if (req.query.recursive === 'true') {
-        query.recursive = true;
-      }
-      if (req.query.orientation) {
-        query.orientation = parseInt(req.query.orientation.toString(), 10);
-      }
-      if (req.query.maxResolution) {
-        query.maxResolution = parseFloat(req.query.maxResolution.toString());
-      }
-      if (req.query.minResolution) {
-        query.minResolution = parseFloat(req.query.minResolution.toString());
-      }
-      if (req.query.fromDate) {
-        query.fromDate = new Date(<string>req.query.fromDate);
-      }
-      if (req.query.toDate) {
-        query.toDate = new Date(<string>req.query.toDate);
-      }
-      if (query.minResolution && query.maxResolution && query.maxResolution < query.minResolution) {
-        return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, 'Input error: min resolution is greater than the max resolution'));
-      }
-      if (query.toDate && query.fromDate && query.toDate.getTime() < query.fromDate.getTime()) {
-        return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, 'Input error: to date is earlier than from date'));
-      }
-
-      const photo = await ObjectManagers.getInstance()
-        .GalleryManager.getRandomPhoto(query);
-      if (!photo) {
-        return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, 'No photo found'));
-      }
-
-      req.params.mediaPath = path.join(photo.directory.path, photo.directory.name, photo.name);
-      return next();
-    } catch (e) {
-      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, 'Can\'t get random photo: ' + e.toString()));
-    }
-  }
-
   public static async loadFile(req: Request, res: Response, next: NextFunction) {
     if (!(req.params.mediaPath)) {
       return next();
@@ -203,7 +154,7 @@ export class GalleryMWs {
 
 
   public static async search(req: Request, res: Response, next: NextFunction) {
-    if (Config.Client.Search.enabled === false) {
+    if (Config.Client.Search.enabled === false || !req.query[QueryParams.gallery.search.query]) {
       return next();
     }
 
@@ -211,12 +162,10 @@ export class GalleryMWs {
       return next();
     }
 
-    let type: SearchTypes;
-    if (req.query[QueryParams.gallery.search.type]) {
-      type = parseInt(<string>req.query[QueryParams.gallery.search.type], 10);
-    }
+    const query: SearchQueryDTO = <any>req.query[QueryParams.gallery.search.type];
+
     try {
-      const result = await ObjectManagers.getInstance().SearchManager.search(req.params.text, type);
+      const result = await ObjectManagers.getInstance().SearchManager.search(query);
 
       result.directories.forEach(dir => dir.media = dir.media || []);
       req.resultPipe = new ContentWrapper(null, result);
@@ -226,25 +175,6 @@ export class GalleryMWs {
     }
   }
 
-  public static async instantSearch(req: Request, res: Response, next: NextFunction) {
-    if (Config.Client.Search.instantSearchEnabled === false) {
-      return next();
-    }
-
-    if (!(req.params.text)) {
-      return next();
-    }
-
-    try {
-      const result = await ObjectManagers.getInstance().SearchManager.instantSearch(req.params.text);
-
-      result.directories.forEach(dir => dir.media = dir.media || []);
-      req.resultPipe = new ContentWrapper(null, result);
-      return next();
-    } catch (err) {
-      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, 'Error during searching', err));
-    }
-  }
 
   public static async autocomplete(req: Request, res: Response, next: NextFunction) {
     if (Config.Client.Search.AutoComplete.enabled === false) {
@@ -254,13 +184,38 @@ export class GalleryMWs {
       return next();
     }
 
+    let type: SearchQueryTypes = SearchQueryTypes.any_text;
+    if (req.query[QueryParams.gallery.search.type]) {
+      type = parseInt(<string>req.query[QueryParams.gallery.search.type], 10);
+    }
     try {
-      req.resultPipe = await ObjectManagers.getInstance().SearchManager.autocomplete(req.params.text);
+      req.resultPipe = await ObjectManagers.getInstance().SearchManager.autocomplete(req.params.text, type);
       return next();
     } catch (err) {
       return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, 'Error during searching', err));
     }
 
+  }
+
+
+  public static async getRandomImage(req: Request, res: Response, next: NextFunction) {
+    if (Config.Client.RandomPhoto.enabled === false) {
+      return next();
+    }
+    try {
+      const query: SearchQueryDTO = <any>req.query[QueryParams.gallery.search.type];
+
+      const photo = await ObjectManagers.getInstance()
+        .SearchManager.getRandomPhoto(query);
+      if (!photo) {
+        return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, 'No photo found'));
+      }
+
+      req.params.mediaPath = path.join(photo.directory.path, photo.directory.name, photo.name);
+      return next();
+    } catch (e) {
+      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, 'Can\'t get random photo: ' + e.toString()));
+    }
   }
 
 

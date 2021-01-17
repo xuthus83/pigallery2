@@ -27,6 +27,8 @@ import {
 import {GalleryManager} from './GalleryManager';
 import {ObjectManagers} from '../../ObjectManagers';
 import {Utils} from '../../../../common/Utils';
+import {PhotoDTO} from '../../../../common/entities/PhotoDTO';
+import {ServerConfig} from '../../../../common/config/private/PrivateConfig';
 
 export class SearchManager implements ISearchManager {
 
@@ -43,7 +45,7 @@ export class SearchManager implements ISearchManager {
     return a;
   }
 
-  async autocomplete(text: string): Promise<AutoCompleteItem[]> {
+  async autocomplete(text: string, type: SearchQueryTypes): Promise<AutoCompleteItem[]> {
 
     const connection = await SQLConnection.getConnection();
 
@@ -54,86 +56,81 @@ export class SearchManager implements ISearchManager {
     const directoryRepository = connection.getRepository(DirectoryEntity);
 
 
-    (await photoRepository
-      .createQueryBuilder('photo')
-      .select('DISTINCT(photo.metadata.keywords)')
-      .where('photo.metadata.keywords LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
-      .limit(Config.Client.Search.AutoComplete.maxItemsPerCategory)
-      .getRawMany())
-      .map(r => <Array<string>>(<string>r.metadataKeywords).split(','))
-      .forEach(keywords => {
-        result = result.concat(this.encapsulateAutoComplete(keywords
-          .filter(k => k.toLowerCase().indexOf(text.toLowerCase()) !== -1), SearchQueryTypes.keyword));
-      });
+    if (type === SearchQueryTypes.any_text || type === SearchQueryTypes.keyword) {
+      (await photoRepository
+        .createQueryBuilder('photo')
+        .select('DISTINCT(photo.metadata.keywords)')
+        .where('photo.metadata.keywords LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
+        .limit(Config.Client.Search.AutoComplete.maxItemsPerCategory)
+        .getRawMany())
+        .map(r => <Array<string>>(<string>r.metadataKeywords).split(','))
+        .forEach(keywords => {
+          result = result.concat(this.encapsulateAutoComplete(keywords
+            .filter(k => k.toLowerCase().indexOf(text.toLowerCase()) !== -1), SearchQueryTypes.keyword));
+        });
+    }
 
-    result = result.concat(this.encapsulateAutoComplete((await personRepository
-      .createQueryBuilder('person')
-      .select('DISTINCT(person.name)')
-      .where('person.name LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
-      .limit(Config.Client.Search.AutoComplete.maxItemsPerCategory)
-      .orderBy('person.name')
-      .getRawMany())
-      .map(r => r.name), SearchQueryTypes.person));
+    if (type === SearchQueryTypes.any_text || type === SearchQueryTypes.person) {
+      result = result.concat(this.encapsulateAutoComplete((await personRepository
+        .createQueryBuilder('person')
+        .select('DISTINCT(person.name)')
+        .where('person.name LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
+        .limit(Config.Client.Search.AutoComplete.maxItemsPerCategory)
+        .orderBy('person.name')
+        .getRawMany())
+        .map(r => r.name), SearchQueryTypes.person));
+    }
 
-    (await photoRepository
-      .createQueryBuilder('photo')
-      .select('photo.metadata.positionData.country as country, ' +
-        'photo.metadata.positionData.state as state, photo.metadata.positionData.city as city')
-      .where('photo.metadata.positionData.country LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
-      .orWhere('photo.metadata.positionData.state LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
-      .orWhere('photo.metadata.positionData.city LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
-      .groupBy('photo.metadata.positionData.country, photo.metadata.positionData.state, photo.metadata.positionData.city')
-      .limit(Config.Client.Search.AutoComplete.maxItemsPerCategory)
-      .getRawMany())
-      .filter(pm => !!pm)
-      .map(pm => <Array<string>>[pm.city || '', pm.country || '', pm.state || ''])
-      .forEach(positions => {
-        result = result.concat(this.encapsulateAutoComplete(positions
-          .filter(p => p.toLowerCase().indexOf(text.toLowerCase()) !== -1), SearchQueryTypes.position));
-      });
+    if (type === SearchQueryTypes.any_text || type === SearchQueryTypes.position) {
+      (await photoRepository
+        .createQueryBuilder('photo')
+        .select('photo.metadata.positionData.country as country, ' +
+          'photo.metadata.positionData.state as state, photo.metadata.positionData.city as city')
+        .where('photo.metadata.positionData.country LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
+        .orWhere('photo.metadata.positionData.state LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
+        .orWhere('photo.metadata.positionData.city LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
+        .groupBy('photo.metadata.positionData.country, photo.metadata.positionData.state, photo.metadata.positionData.city')
+        .limit(Config.Client.Search.AutoComplete.maxItemsPerCategory)
+        .getRawMany())
+        .filter(pm => !!pm)
+        .map(pm => <Array<string>>[pm.city || '', pm.country || '', pm.state || ''])
+        .forEach(positions => {
+          result = result.concat(this.encapsulateAutoComplete(positions
+            .filter(p => p.toLowerCase().indexOf(text.toLowerCase()) !== -1), SearchQueryTypes.position));
+        });
+    }
 
-    result = result.concat(this.encapsulateAutoComplete((await mediaRepository
-      .createQueryBuilder('media')
-      .select('DISTINCT(media.name)')
-      .where('media.name LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
-      .limit(Config.Client.Search.AutoComplete.maxItemsPerCategory)
-      .getRawMany())
-      .map(r => r.name), SearchQueryTypes.file_name));
+    if (type === SearchQueryTypes.any_text || type === SearchQueryTypes.file_name) {
+      result = result.concat(this.encapsulateAutoComplete((await mediaRepository
+        .createQueryBuilder('media')
+        .select('DISTINCT(media.name)')
+        .where('media.name LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
+        .limit(Config.Client.Search.AutoComplete.maxItemsPerCategory)
+        .getRawMany())
+        .map(r => r.name), SearchQueryTypes.file_name));
+    }
 
+    if (type === SearchQueryTypes.any_text || type === SearchQueryTypes.caption) {
+      result = result.concat(this.encapsulateAutoComplete((await photoRepository
+        .createQueryBuilder('media')
+        .select('DISTINCT(media.metadata.caption) as caption')
+        .where('media.metadata.caption LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
+        .limit(Config.Client.Search.AutoComplete.maxItemsPerCategory)
+        .getRawMany())
+        .map(r => r.caption), SearchQueryTypes.caption));
+    }
 
-    result = result.concat(this.encapsulateAutoComplete((await photoRepository
-      .createQueryBuilder('media')
-      .select('DISTINCT(media.metadata.caption) as caption')
-      .where('media.metadata.caption LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
-      .limit(Config.Client.Search.AutoComplete.maxItemsPerCategory)
-      .getRawMany())
-      .map(r => r.caption), SearchQueryTypes.caption));
-
-
-    result = result.concat(this.encapsulateAutoComplete((await directoryRepository
-      .createQueryBuilder('dir')
-      .select('DISTINCT(dir.name)')
-      .where('dir.name LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
-      .limit(Config.Client.Search.AutoComplete.maxItemsPerCategory)
-      .getRawMany())
-      .map(r => r.name), SearchQueryTypes.directory));
-
+    if (type === SearchQueryTypes.any_text || type === SearchQueryTypes.directory) {
+      result = result.concat(this.encapsulateAutoComplete((await directoryRepository
+        .createQueryBuilder('dir')
+        .select('DISTINCT(dir.name)')
+        .where('dir.name LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
+        .limit(Config.Client.Search.AutoComplete.maxItemsPerCategory)
+        .getRawMany())
+        .map(r => r.name), SearchQueryTypes.directory));
+    }
 
     return SearchManager.autoCompleteItemsUnique(result);
-  }
-
-  async getGPSData(query: SearchQueryDTO) {
-    if ((query as ANDSearchQuery | ORSearchQuery).list) {
-      for (let i = 0; i < (query as ANDSearchQuery | ORSearchQuery).list.length; ++i) {
-        (query as ANDSearchQuery | ORSearchQuery).list[i] =
-          await this.getGPSData((query as ANDSearchQuery | ORSearchQuery).list[i]);
-      }
-    }
-    if (query.type === SearchQueryTypes.distance && (<DistanceSearch>query).from.text) {
-      (<DistanceSearch>query).from.GPSData =
-        await ObjectManagers.getInstance().LocationManager.getGPSData((<DistanceSearch>query).from.text);
-    }
-    return query;
   }
 
   async search(queryIN: SearchQueryDTO) {
@@ -188,51 +185,34 @@ export class SearchManager implements ISearchManager {
     return result;
   }
 
-  async instantSearch(text: string): Promise<SearchResultDTO> {
+  public async getRandomPhoto(query: SearchQueryDTO): Promise<PhotoDTO> {
     const connection = await SQLConnection.getConnection();
-
-    const result: SearchResultDTO = {
-      searchQuery: <TextSearch>{type: SearchQueryTypes.any_text, text: text},
-      // searchType:undefined, not adding this
-      directories: [],
-      media: [],
-      metaFile: [],
-      resultOverflow: false
-    };
-
-    const query = await connection.getRepository(MediaEntity).createQueryBuilder('media')
-      .innerJoin(q => q.from(MediaEntity, 'media')
-          .select('distinct media.id')
-          .limit(10)
-          .leftJoin('media.directory', 'directory')
-          .leftJoin('media.metadata.faces', 'faces')
-          .leftJoin('faces.person', 'person')
-          .where('media.metadata.keywords LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
-          .orWhere('media.metadata.positionData.country LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
-          .orWhere('media.metadata.positionData.state LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
-          .orWhere('media.metadata.positionData.city LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
-          .orWhere('media.name LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
-          .orWhere('media.metadata.caption LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
-          .orWhere('person.name LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
-        ,
-        'innerMedia',
-        'media.id=innerMedia.id')
-      .leftJoinAndSelect('media.directory', 'directory')
-      .leftJoinAndSelect('media.metadata.faces', 'faces')
-      .leftJoinAndSelect('faces.person', 'person');
+    const sqlQuery: SelectQueryBuilder<PhotoEntity> = connection
+      .getRepository(PhotoEntity)
+      .createQueryBuilder('media')
+      .innerJoinAndSelect('media.directory', 'directory')
+      .where(this.buildWhereQuery(query));
 
 
-    result.media = await this.loadMediaWithFaces(query);
+    if (Config.Server.Database.type === ServerConfig.DatabaseType.mysql) {
+      return await sqlQuery.groupBy('RAND(), media.id').limit(1).getOne();
+    }
+    return await sqlQuery.groupBy('RANDOM()').limit(1).getOne();
 
+  }
 
-    result.directories = await connection
-      .getRepository(DirectoryEntity)
-      .createQueryBuilder('dir')
-      .where('dir.name LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
-      .limit(10)
-      .getMany();
-
-    return result;
+  private async getGPSData(query: SearchQueryDTO) {
+    if ((query as ANDSearchQuery | ORSearchQuery).list) {
+      for (let i = 0; i < (query as ANDSearchQuery | ORSearchQuery).list.length; ++i) {
+        (query as ANDSearchQuery | ORSearchQuery).list[i] =
+          await this.getGPSData((query as ANDSearchQuery | ORSearchQuery).list[i]);
+      }
+    }
+    if (query.type === SearchQueryTypes.distance && (<DistanceSearch>query).from.text) {
+      (<DistanceSearch>query).from.GPSData =
+        await ObjectManagers.getInstance().LocationManager.getGPSData((<DistanceSearch>query).from.text);
+    }
+    return query;
   }
 
   private buildWhereQuery(query: SearchQueryDTO, paramCounter = {value: 0}): Brackets {

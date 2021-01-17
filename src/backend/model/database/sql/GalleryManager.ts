@@ -19,6 +19,7 @@ import {FaceRegionEntry} from './enitites/FaceRegionEntry';
 import {ObjectManagers} from '../../ObjectManagers';
 import {DuplicatesDTO} from '../../../../common/entities/DuplicatesDTO';
 import {ServerConfig} from '../../../../common/config/private/PrivateConfig';
+import {SearchQueryDTO} from '../../../../common/entities/SearchQueryDTO';
 
 const LOG_TAG = '[GalleryManager]';
 
@@ -87,62 +88,6 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
 
   }
 
-  public async getRandomPhoto(queryFilter: RandomQuery): Promise<PhotoDTO> {
-    const connection = await SQLConnection.getConnection();
-    const photosRepository = connection.getRepository(PhotoEntity);
-    const query: SelectQueryBuilder<PhotoEntity> = photosRepository.createQueryBuilder('photo');
-    query.innerJoinAndSelect('photo.directory', 'directory');
-
-    if (queryFilter.directory) {
-      const directoryName = path.basename(queryFilter.directory);
-      const directoryParent = path.join(path.dirname(queryFilter.directory), path.sep);
-
-      query.where(new Brackets(qb => {
-        qb.where('directory.name = :name AND directory.path = :path', {
-          name: directoryName,
-          path: directoryParent
-        });
-
-        if (queryFilter.recursive) {
-          qb.orWhere('directory.path LIKE :text COLLATE utf8_general_ci', {text: queryFilter.directory + '%'});
-        }
-      }));
-    }
-
-    if (queryFilter.fromDate) {
-      query.andWhere('photo.metadata.creationDate >= :fromDate', {
-        fromDate: queryFilter.fromDate.getTime()
-      });
-    }
-    if (queryFilter.toDate) {
-      query.andWhere('photo.metadata.creationDate <= :toDate', {
-        toDate: queryFilter.toDate.getTime()
-      });
-    }
-    if (queryFilter.minResolution) {
-      query.andWhere('photo.metadata.size.width * photo.metadata.size.height >= :minRes', {
-        minRes: queryFilter.minResolution * 1000 * 1000
-      });
-    }
-
-    if (queryFilter.maxResolution) {
-      query.andWhere('photo.metadata.size.width * photo.metadata.size.height <= :maxRes', {
-        maxRes: queryFilter.maxResolution * 1000 * 1000
-      });
-    }
-    if (queryFilter.orientation === OrientationType.landscape) {
-      query.andWhere('photo.metadata.size.width >= photo.metadata.size.height');
-    }
-    if (queryFilter.orientation === OrientationType.portrait) {
-      query.andWhere('photo.metadata.size.width <= photo.metadata.size.height');
-    }
-
-    if (Config.Server.Database.type === ServerConfig.DatabaseType.mysql) {
-      return await query.groupBy('RAND(), photo.id').limit(1).getOne();
-    }
-    return await query.groupBy('RANDOM()').limit(1).getOne();
-
-  }
 
   async countDirectories(): Promise<number> {
     const connection = await SQLConnection.getConnection();
