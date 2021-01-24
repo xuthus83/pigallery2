@@ -291,18 +291,27 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
     }
     if (dir.directories) {
       for (let i = 0; i < dir.directories.length; i++) {
+        const dirName = GalleryManager.getAbsoluteDirName(dir.directories[i]);
         dir.directories[i].media = await connection
           .getRepository(MediaEntity)
           .createQueryBuilder('media')
+          .innerJoinAndSelect('media.directory', 'directory')
           .where('media.directory = :dir', {
             dir: dir.directories[i].id
           })
-          .orderBy('media.metadata.creationDate', 'ASC')
+          .orWhere("directory.path like :parentPath||'%'", {
+                       parentPath: dirName
+          })
+          .orderBy('media.metadata.creationDate', 'DESC')
           .limit(Config.Server.Indexing.folderPreviewSize)
           .getMany();
         dir.directories[i].isPartial = true;
 
-        for (let j = 0; j < dir.directories[i].media.length; j++) {
+        const dirs = dir.directories[i]
+        for (let j = 0; j < dirs.media.length; j++) {
+          const mediaDirName = GalleryManager.getAbsoluteDirName(dirs.media[j].directory);
+          const name = mediaDirName.substring(dirName.length);
+          dir.directories[i].media[j].name = name + dir.directories[i].media[j].name
           dir.directories[i].media[j].directory = dir.directories[i];
           dir.directories[i].media[j].readyThumbnails = [];
           dir.directories[i].media[j].readyIcon = false;
@@ -311,4 +320,9 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
     }
   }
 
+  public static getAbsoluteDirName(dir: DirectoryEntity) {
+    const path = dir.path;
+    const currentRoot = (path === "./" ? "" :  path) ;
+    return currentRoot + dir.name + "/";
+  }
 }
