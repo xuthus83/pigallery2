@@ -6,7 +6,7 @@
         name="listSearchType"
         class="form-control"
         [(ngModel)]="queryEntry.type"
-        (ngModelChange)="onChangeType($event)">
+        (ngModelChange)="onChangeType()">
         <option *ngFor="let opt of SearchQueryTypesEnum" [ngValue]="opt.key">{{opt.value}}
         </option>
       </select>
@@ -51,7 +51,7 @@
         name="searchType"
         class="form-control"
         [(ngModel)]="queryEntry.type"
-        (ngModelChange)="onChangeType(queryEntry)">
+        (ngModelChange)="onChangeType()">
         <option *ngFor="let opt of SearchQueryTypesEnum" [ngValue]="opt.key">{{opt.value}}
         </option>
       </select>

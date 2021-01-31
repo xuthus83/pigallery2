@@ -90,6 +90,80 @@ export namespace SearchQueryDTO {
 
       case SearchQueryTypes.SOME_OF:
         throw new Error('Some of not supported');
+
+      default:
+        throw new Error('Unknown type' + query.type);
+    }
+  };
+  export const stringify = (query: SearchQueryDTO): string => {
+    if (!query || !query.type) {
+      return '';
+    }
+    switch (query.type) {
+      case SearchQueryTypes.AND:
+        return '(' + (<SearchListQuery>query).list.map(q => SearchQueryDTO.stringify(q)).join(' AND ') + ')';
+
+      case SearchQueryTypes.OR:
+        return '(' + (<SearchListQuery>query).list.map(q => SearchQueryDTO.stringify(q)).join(' OR ') + ')';
+
+      case SearchQueryTypes.SOME_OF:
+        if ((<SomeOfSearchQuery>query).min) {
+          return (<SomeOfSearchQuery>query).min + ' OF: (' +
+            (<SearchListQuery>query).list.map(q => SearchQueryDTO.stringify(q)).join(', ') + ')';
+        }
+        return 'SOME OF: (' +
+          (<SearchListQuery>query).list.map(q => SearchQueryDTO.stringify(q)).join(', ') + ')';
+
+
+      case SearchQueryTypes.orientation:
+        return 'orientation: ' + (<OrientationSearch>query).landscape ? 'landscape' : 'portrait';
+
+      case SearchQueryTypes.date:
+        let ret = '';
+        if ((<DateSearch>query).after) {
+          ret += 'from: ' + (<DateSearch>query).after;
+        }
+        if ((<DateSearch>query).before) {
+          ret += ' to: ' + (<DateSearch>query).before;
+        }
+        return ret.trim();
+      case SearchQueryTypes.rating:
+        let rating = '';
+        if ((<RatingSearch>query).min) {
+          rating += 'min-rating: ' + (<RatingSearch>query).min;
+        }
+        if ((<RatingSearch>query).max) {
+          rating += ' max-rating: ' + (<RatingSearch>query).max;
+        }
+        return rating.trim();
+      case SearchQueryTypes.resolution:
+        let res = '';
+        if ((<ResolutionSearch>query).min) {
+          res += 'min-resolution: ' + (<ResolutionSearch>query).min;
+        }
+        if ((<RatingSearch>query).max) {
+          res += ' max-resolution: ' + (<ResolutionSearch>query).max;
+        }
+        return res.trim();
+      case SearchQueryTypes.distance:
+        return (<DistanceSearch>query).distance + ' km from: ' + (<DistanceSearch>query).from.text;
+
+      case SearchQueryTypes.any_text:
+        return (<TextSearch>query).text;
+
+      case SearchQueryTypes.person:
+      case SearchQueryTypes.position:
+      case SearchQueryTypes.keyword:
+      case SearchQueryTypes.caption:
+      case SearchQueryTypes.file_name:
+      case SearchQueryTypes.directory:
+        if (!(<TextSearch>query).text) {
+          return '';
+        }
+        return SearchQueryTypes[query.type] + ':' + (<TextSearch>query).text;
+
+      default:
+        throw new Error('Unknown type: ' + query.type);
     }
   };
 }

@@ -97,7 +97,7 @@ export class GallerySearchQueryEntryComponent implements ControlValueAccessor, V
     this.AsListQuery.list.push(<TextSearch>{type: SearchQueryTypes.any_text, text: ''});
   }
 
-  onChangeType($event: any) {
+  onChangeType() {
     if (this.IsListQuery) {
       delete this.AsTextQuery.text;
       this.AsListQuery.list = this.AsListQuery.list || [

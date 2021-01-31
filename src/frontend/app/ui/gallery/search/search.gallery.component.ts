@@ -48,12 +48,11 @@ export class GallerySearchComponent implements OnDestroy {
     });
   }
 
-  public get rawSearchText() {
-    return JSON.stringify(this.searchQueryDTO);
+  public get rawSearchText(): string {
+    return SearchQueryDTO.stringify(this.searchQueryDTO);
   }
 
-  public set rawSearchText(val: any) {
-
+  public set rawSearchText(val: string) {
   }
 
   get HTMLSearchQuery() {
