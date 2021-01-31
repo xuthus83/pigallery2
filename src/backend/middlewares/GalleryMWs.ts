@@ -162,7 +162,7 @@ export class GalleryMWs {
       return next();
     }
 
-    const query: SearchQueryDTO = <any>req.query[QueryParams.gallery.search.type];
+    const query: SearchQueryDTO = <any>req.query[QueryParams.gallery.search.query];
 
     try {
       const result = await ObjectManagers.getInstance().SearchManager.search(query);
@@ -203,7 +203,7 @@ export class GalleryMWs {
       return next();
     }
     try {
-      const query: SearchQueryDTO = <any>req.query[QueryParams.gallery.search.type];
+      const query: SearchQueryDTO = <any>req.query[QueryParams.gallery.search.query];
 
       const photo = await ObjectManagers.getInstance()
         .SearchManager.getRandomPhoto(query);

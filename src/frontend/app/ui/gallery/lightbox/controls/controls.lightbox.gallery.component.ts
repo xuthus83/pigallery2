@@ -6,8 +6,8 @@ import {Observable, Subscription, timer} from 'rxjs';
 import {filter} from 'rxjs/operators';
 import {PhotoDTO} from '../../../../../../common/entities/PhotoDTO';
 import {GalleryLightboxMediaComponent} from '../media/media.lightbox.gallery.component';
-import {SearchTypes} from '../../../../../../common/entities/AutoCompleteItem';
 import {Config} from '../../../../../../common/config/public/Config';
+import {SearchQueryTypes} from '../../../../../../common/entities/SearchQueryDTO';
 
 export enum PlayBackStates {
   Paused = 1,
@@ -46,13 +46,13 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
   public controllersAlwaysOn = false;
   public controllersVisible = true;
   public drag = {x: 0, y: 0};
-  public SearchTypes = SearchTypes;
+  public SearchQueryTypes = SearchQueryTypes;
   private visibilityTimer: number = null;
   private timer: Observable<number>;
   private timerSub: Subscription;
   private prevDrag = {x: 0, y: 0};
   private prevZoom = 1;
-  private faceContainerDim = {width: 0, height: 0};
+  public faceContainerDim = {width: 0, height: 0};
 
   constructor(public fullScreenService: FullScreenService) {
   }

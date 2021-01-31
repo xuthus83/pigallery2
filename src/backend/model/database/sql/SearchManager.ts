@@ -22,7 +22,7 @@ import {
   SearchQueryTypes,
   SomeOfSearchQuery,
   TextSearch,
-  TextSearchQueryTypes
+  TextSearchQueryMatchTypes
 } from '../../../../common/entities/SearchQueryDTO';
 import {GalleryManager} from './GalleryManager';
 import {ObjectManagers} from '../../ObjectManagers';
@@ -359,7 +359,7 @@ export class SearchManager implements ISearchManager {
     return new Brackets((q: WhereExpression) => {
 
       const createMatchString = (str: string) => {
-        return (<TextSearch>query).matchType === TextSearchQueryTypes.exact_match ? str : `%${str}%`;
+        return (<TextSearch>query).matchType === TextSearchQueryMatchTypes.exact_match ? str : `%${str}%`;
       };
 
       const LIKE = (<TextSearch>query).negate ? 'NOT LIKE' : 'LIKE';
@@ -416,7 +416,7 @@ export class SearchManager implements ISearchManager {
       // Matching for array type fields
       const matchArrayField = (fieldName: string) => {
         q[whereFN](new Brackets(qbr => {
-          if ((<TextSearch>query).matchType !== TextSearchQueryTypes.exact_match) {
+          if ((<TextSearch>query).matchType !== TextSearchQueryMatchTypes.exact_match) {
             qbr[whereFN](`${fieldName} ${LIKE} :text${paramCounter.value} COLLATE utf8_general_ci`,
               textParam);
           } else {

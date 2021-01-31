@@ -15,7 +15,7 @@ import {
   SearchQueryTypes,
   SomeOfSearchQuery,
   TextSearch,
-  TextSearchQueryTypes
+  TextSearchQueryMatchTypes
 } from '../../../../../src/common/entities/SearchQueryDTO';
 import {IndexingManager} from '../../../../../src/backend/model/database/sql/IndexingManager';
 import {DirectoryDTO} from '../../../../../src/common/entities/DirectoryDTO';
@@ -482,7 +482,7 @@ describe('SearchManager', (sqlHelper: SQLTestHelper) => {
         query = <TextSearch>{
           text: 'Boba',
           type: SearchQueryTypes.any_text,
-          matchType: TextSearchQueryTypes.exact_match
+          matchType: TextSearchQueryMatchTypes.exact_match
         };
         expect(Utils.clone(await sm.search(query)))
           .to.deep.equalInAnyOrder(removeDir(<SearchResultDTO>{
@@ -496,7 +496,7 @@ describe('SearchManager', (sqlHelper: SQLTestHelper) => {
         query = <TextSearch>{
           text: 'Boba Fett',
           type: SearchQueryTypes.any_text,
-          matchType: TextSearchQueryTypes.exact_match
+          matchType: TextSearchQueryMatchTypes.exact_match
         };
 
         expect(Utils.clone(await sm.search(query)))
@@ -571,7 +571,7 @@ describe('SearchManager', (sqlHelper: SQLTestHelper) => {
 
         query = <TextSearch>{
           text: 'star wars',
-          matchType: TextSearchQueryTypes.exact_match,
+          matchType: TextSearchQueryMatchTypes.exact_match,
           type: SearchQueryTypes.keyword
         };
 
@@ -585,7 +585,7 @@ describe('SearchManager', (sqlHelper: SQLTestHelper) => {
 
         query = <TextSearch>{
           text: 'wookiees',
-          matchType: TextSearchQueryTypes.exact_match,
+          matchType: TextSearchQueryMatchTypes.exact_match,
           type: SearchQueryTypes.keyword
         };
 
@@ -684,14 +684,14 @@ describe('SearchManager', (sqlHelper: SQLTestHelper) => {
 
         query = <TextSearch>{
           text: '/wars dir',
-          matchType: TextSearchQueryTypes.exact_match,
+          matchType: TextSearchQueryMatchTypes.exact_match,
           type: SearchQueryTypes.directory
         };
 
 
         expect(Utils.clone(await sm.search(<TextSearch>{
           text: '/wars dir',
-          matchType: TextSearchQueryTypes.exact_match,
+          matchType: TextSearchQueryMatchTypes.exact_match,
           type: SearchQueryTypes.directory
         }))).to.deep.equalInAnyOrder(removeDir(<SearchResultDTO>{
           searchQuery: query,
@@ -704,7 +704,7 @@ describe('SearchManager', (sqlHelper: SQLTestHelper) => {
 
         query = <TextSearch>{
           text: '/wars dir/Return of the Jedi',
-          matchType: TextSearchQueryTypes.exact_match,
+          matchType: TextSearchQueryMatchTypes.exact_match,
           type: SearchQueryTypes.directory
         };
 
@@ -718,7 +718,7 @@ describe('SearchManager', (sqlHelper: SQLTestHelper) => {
 
         query = <TextSearch>{
           text: '/wars dir/Return of the Jedi',
-          matchType: TextSearchQueryTypes.exact_match,
+          matchType: TextSearchQueryMatchTypes.exact_match,
           type: SearchQueryTypes.directory
         };
 
@@ -752,7 +752,7 @@ describe('SearchManager', (sqlHelper: SQLTestHelper) => {
         query = <TextSearch>{
           text: 'Boba',
           type: SearchQueryTypes.person,
-          matchType: TextSearchQueryTypes.exact_match
+          matchType: TextSearchQueryMatchTypes.exact_match
         };
 
         expect(Utils.clone(await sm.search(query))).to.deep.equalInAnyOrder(removeDir(<SearchResultDTO>{
@@ -766,13 +766,13 @@ describe('SearchManager', (sqlHelper: SQLTestHelper) => {
         query = <TextSearch>{
           text: 'Boba Fett',
           type: SearchQueryTypes.person,
-          matchType: TextSearchQueryTypes.exact_match
+          matchType: TextSearchQueryMatchTypes.exact_match
         };
 
         expect(Utils.clone(await sm.search(<TextSearch>{
           text: 'Boba Fett',
           type: SearchQueryTypes.person,
-          matchType: TextSearchQueryTypes.exact_match
+          matchType: TextSearchQueryMatchTypes.exact_match
         }))).to.deep.equalInAnyOrder(removeDir(<SearchResultDTO>{
           searchQuery: query,
           directories: [],
@@ -1098,7 +1098,7 @@ describe('SearchManager', (sqlHelper: SQLTestHelper) => {
 
     query = <TextSearch>{
       text: 'wookiees',
-      matchType: TextSearchQueryTypes.exact_match,
+      matchType: TextSearchQueryMatchTypes.exact_match,
       type: SearchQueryTypes.keyword
     };
     expect(Utils.clone(await sm.getRandomPhoto(query))).to.deep.equalInAnyOrder(searchifyMedia(p_faceLess));

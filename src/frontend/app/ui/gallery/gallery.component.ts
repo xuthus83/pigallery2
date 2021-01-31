@@ -3,7 +3,6 @@ import {AuthenticationService} from '../../model/network/authentication.service'
 import {ActivatedRoute, Params, Router} from '@angular/router';
 import {GalleryService} from './gallery.service';
 import {GalleryGridComponent} from './grid/grid.gallery.component';
-import {SearchTypes} from '../../../../common/entities/AutoCompleteItem';
 import {Config} from '../../../../common/config/public/Config';
 import {DirectoryDTO} from '../../../../common/entities/DirectoryDTO';
 import {SearchResultDTO} from '../../../../common/entities/SearchResultDTO';
@@ -18,7 +17,7 @@ import {PhotoDTO} from '../../../../common/entities/PhotoDTO';
 import {QueryParams} from '../../../../common/QueryParams';
 import {SeededRandomService} from '../../model/seededRandom.service';
 import {take} from 'rxjs/operators';
-import {FileDTO} from '../../../../common/entities/FileDTO';
+import {SearchQueryTypes} from '../../../../common/entities/SearchQueryDTO';
 
 @Component({
   selector: 'app-gallery',
@@ -37,7 +36,7 @@ export class GalleryComponent implements OnInit, OnDestroy {
   public isPhotoWithLocation = false;
   public countDown: { day: number, hour: number, minute: number, second: number } = null;
   public readonly mapEnabled: boolean;
-  readonly SearchTypes: typeof SearchTypes;
+  readonly SearchTypes: typeof SearchQueryTypes;
   private $counter: Observable<number>;
   private subscription: { [key: string]: Subscription } = {
     content: null,
@@ -54,7 +53,7 @@ export class GalleryComponent implements OnInit, OnDestroy {
               private _navigation: NavigationService,
               private rndService: SeededRandomService) {
     this.mapEnabled = Config.Client.Map.enabled;
-    this.SearchTypes = SearchTypes;
+    this.SearchTypes = SearchQueryTypes;
     PageHelper.showScrollY();
   }
 
@@ -115,15 +114,10 @@ export class GalleryComponent implements OnInit, OnDestroy {
   }
 
   private onRoute = async (params: Params) => {
-    const searchText = params[QueryParams.gallery.searchText];
-    if (searchText && searchText !== '') {
-      const typeString: string = params[QueryParams.gallery.search.type];
-      let type: SearchTypes = null;
-      if (typeString && typeString !== '') {
-        type = <any>SearchTypes[<any>typeString];
-      }
+    const searchQuery = params[QueryParams.gallery.search.query];
+    if (searchQuery) {
 
-      this._galleryService.search(searchText, type).catch(console.error);
+      this._galleryService.search(searchQuery).catch(console.error);
 
       return;
     }

@@ -12,15 +12,48 @@ export enum SearchQueryTypes {
 
   // TEXT search types
   any_text = 100,
-  person,
-  keyword,
-  position,
   caption,
-  file_name,
   directory,
+  file_name,
+  keyword,
+  person,
+  position,
 }
 
-export enum TextSearchQueryTypes {
+export const ListSearchQueryTypes = [
+  SearchQueryTypes.AND,
+  SearchQueryTypes.OR,
+  SearchQueryTypes.SOME_OF,
+];
+export const TextSearchQueryTypes = [
+  SearchQueryTypes.any_text,
+  SearchQueryTypes.caption,
+  SearchQueryTypes.directory,
+  SearchQueryTypes.file_name,
+  SearchQueryTypes.keyword,
+  SearchQueryTypes.person,
+  SearchQueryTypes.position,
+];
+
+export const MetadataSearchQueryTypes = [
+  // non-text metadata
+  SearchQueryTypes.date,
+  SearchQueryTypes.rating,
+  SearchQueryTypes.distance,
+  SearchQueryTypes.resolution,
+  SearchQueryTypes.orientation,
+
+  // TEXT search types
+  SearchQueryTypes.any_text,
+  SearchQueryTypes.caption,
+  SearchQueryTypes.directory,
+  SearchQueryTypes.file_name,
+  SearchQueryTypes.keyword,
+  SearchQueryTypes.person,
+  SearchQueryTypes.position,
+];
+
+export enum TextSearchQueryMatchTypes {
   exact_match = 1, like = 2
 }
 
@@ -104,7 +137,7 @@ export interface TextSearch extends NegatableSearchQuery {
     SearchQueryTypes.caption |
     SearchQueryTypes.file_name |
     SearchQueryTypes.directory;
-  matchType: TextSearchQueryTypes;
+  matchType: TextSearchQueryMatchTypes;
   text: string;
 }
 

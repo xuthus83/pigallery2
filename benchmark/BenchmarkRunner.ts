@@ -4,7 +4,6 @@ import {DiskMangerWorker} from '../src/backend/model/threading/DiskMangerWorker'
 import {IndexingManager} from '../src/backend/model/database/sql/IndexingManager';
 import * as path from 'path';
 import * as fs from 'fs';
-import {SearchTypes} from '../src/common/entities/AutoCompleteItem';
 import {Utils} from '../src/common/Utils';
 import {DirectoryDTO} from '../src/common/entities/DirectoryDTO';
 import {ServerConfig} from '../src/common/config/private/PrivateConfig';
@@ -21,6 +20,7 @@ import {GalleryRouter} from '../src/backend/routes/GalleryRouter';
 import {Express} from 'express';
 import {PersonRouter} from '../src/backend/routes/PersonRouter';
 import {QueryParams} from '../src/common/QueryParams';
+import {SearchQueryTypes, TextSearch} from '../src/common/entities/SearchQueryDTO';
 
 
 export interface BenchmarkResult {
@@ -46,10 +46,6 @@ class BMGalleryRouter extends GalleryRouter {
 
   public static addSearch(app: Express) {
     GalleryRouter.addSearch(app);
-  }
-
-  public static addInstantSearch(app: Express) {
-    GalleryRouter.addInstantSearch(app);
   }
 
   public static addAutoComplete(app: Express) {
@@ -128,16 +124,15 @@ export class BenchmarkRunner {
     return await bm.run(this.RUNS);
   }
 
-  async bmAllSearch(text: string): Promise<{ result: BenchmarkResult, searchType: SearchTypes }[]> {
+  async bmAllSearch(text: string): Promise<{ result: BenchmarkResult, searchType: SearchQueryTypes }[]> {
     await this.setupDB();
-    const types = Utils.enumToArray(SearchTypes).map(a => a.key).concat([null]);
-    const results: { result: BenchmarkResult, searchType: SearchTypes }[] = [];
+    const types = Utils.enumToArray(SearchQueryTypes).map(a => a.key).concat([null]);
+    const results: { result: BenchmarkResult, searchType: SearchQueryTypes }[] = [];
 
     for (let i = 0; i < types.length; i++) {
       const req = Utils.clone(this.requestTemplate);
-      req.params.text = text;
-      req.query[QueryParams.gallery.search.type] = types[i];
-      const bm = new Benchmark('Searching for `' + text + '` as `' + (types[i] ? SearchTypes[types[i]] : 'any') + '`', req);
+      req.query[QueryParams.gallery.search.query] = <TextSearch>{type: types[i], text: text};
+      const bm = new Benchmark('Searching for `' + text + '` as `' + (types[i] ? SearchQueryTypes[types[i]] : 'any') + '`', req);
       BMGalleryRouter.addSearch(bm.BmExpressApp);
 
       results.push({result: await bm.run(this.RUNS), searchType: types[i]});
@@ -145,14 +140,6 @@ export class BenchmarkRunner {
     return results;
   }
 
-  async bmInstantSearch(text: string): Promise<BenchmarkResult> {
-    await this.setupDB();
-    const req = Utils.clone(this.requestTemplate);
-    req.params.text = text;
-    const bm = new Benchmark('Instant search for `' + text + '`', req);
-    BMGalleryRouter.addInstantSearch(bm.BmExpressApp);
-    return await bm.run(this.RUNS);
-  }
 
   async bmAutocomplete(text: string): Promise<BenchmarkResult> {
     await this.setupDB();

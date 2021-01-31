@@ -27,7 +27,7 @@ export function galleryMatcherFunction(
   }
   if (path === 'search') {
     if (segments.length > 1) {
-      posParams[QueryParams.gallery.searchText] = segments[1];
+      posParams[QueryParams.gallery.search.query] = segments[1];
     }
     return {consumed: segments.slice(0, Math.min(segments.length, 2)), posParams};
   }

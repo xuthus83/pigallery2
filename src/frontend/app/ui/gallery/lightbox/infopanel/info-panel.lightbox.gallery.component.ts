@@ -6,7 +6,7 @@ import {VideoDTO, VideoMetadata} from '../../../../../../common/entities/VideoDT
 import {Utils} from '../../../../../../common/Utils';
 import {QueryService} from '../../../../model/query.service';
 import {MapService} from '../../map/map.service';
-import {SearchTypes} from '../../../../../../common/entities/AutoCompleteItem';
+import {SearchQueryTypes} from '../../../../../../common/entities/SearchQueryDTO';
 
 @Component({
   selector: 'app-info-panel',
@@ -19,8 +19,8 @@ export class InfoPanelLightboxComponent implements OnInit {
 
   public readonly mapEnabled: boolean;
   public readonly searchEnabled: boolean;
-  keywords: { value: string, type: SearchTypes }[] = null;
-  readonly SearchTypes: typeof SearchTypes = SearchTypes;
+  keywords: { value: string, type: SearchQueryTypes }[] = null;
+  readonly SearchQueryTypes: typeof SearchQueryTypes = SearchQueryTypes;
 
   constructor(public queryService: QueryService,
               public mapService: MapService) {
@@ -59,9 +59,9 @@ export class InfoPanelLightboxComponent implements OnInit {
       if (Config.Client.Faces.enabled) {
         const names: string[] = (metadata.faces || []).map(f => f.name);
         this.keywords = names.filter((name, index) => names.indexOf(name) === index)
-          .map(n => ({value: n, type: SearchTypes.person}));
+          .map(n => ({value: n, type: SearchQueryTypes.person}));
       }
-      this.keywords = this.keywords.concat((metadata.keywords || []).map(k => ({value: k, type: SearchTypes.keyword})));
+      this.keywords = this.keywords.concat((metadata.keywords || []).map(k => ({value: k, type: SearchQueryTypes.keyword})));
     }
 
   }

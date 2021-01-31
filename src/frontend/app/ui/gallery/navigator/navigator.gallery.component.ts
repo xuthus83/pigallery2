@@ -10,7 +10,7 @@ import {Utils} from '../../../../../common/Utils';
 import {SortingMethods} from '../../../../../common/entities/SortingMethods';
 import {Config} from '../../../../../common/config/public/Config';
 import {SearchResultDTO} from '../../../../../common/entities/SearchResultDTO';
-import {SearchTypes} from '../../../../../common/entities/AutoCompleteItem';
+import {SearchQueryTypes} from '../../../../../common/entities/SearchQueryDTO';
 
 @Component({
   selector: 'app-gallery-navbar',
@@ -27,7 +27,7 @@ export class GalleryNavigatorComponent implements OnChanges {
   sortingMethodsType: { key: number; value: string }[] = [];
   config = Config;
   DefaultSorting = Config.Client.Other.defaultPhotoSortingMethod;
-  readonly SearchTypes = SearchTypes;
+  readonly SearchQueryTypes = SearchQueryTypes;
   private readonly RootFolderName: string;
 
   constructor(private _authService: AuthenticationService,

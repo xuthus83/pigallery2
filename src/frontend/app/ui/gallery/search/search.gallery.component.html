@@ -7,7 +7,7 @@
            (keyup)="onSearchChange($event)"
            (blur)="onFocusLost()"
            (focus)="onFocus()"
-           [(ngModel)]="searchText"
+           [(ngModel)]="rawSearchText"
            #name="ngModel"
            size="30"
            ngControl="search"
@@ -19,26 +19,63 @@
     <div class="autocomplete-list" *ngIf="autoCompleteItems.length > 0"
          (mouseover)="setMouseOverAutoComplete(true)" (mouseout)="setMouseOverAutoComplete(false)">
       <div class="autocomplete-item" *ngFor="let item of autoCompleteItems">
-        <a [routerLink]="['/search', item.text, {type: SearchTypes[item.type]}]">
+        <div>
                     <span [ngSwitch]="item.type">
-                      <span *ngSwitchCase="SearchTypes.photo" class="oi oi-image"></span>
-                      <span *ngSwitchCase="SearchTypes.person" class="oi oi-person"></span>
-                      <span *ngSwitchCase="SearchTypes.video" class="oi oi-video"></span>
-                      <span *ngSwitchCase="SearchTypes.directory" class="oi oi-folder"></span>
-                      <span *ngSwitchCase="SearchTypes.keyword" class="oi oi-tag"></span>
-                      <span *ngSwitchCase="SearchTypes.position" class="oi oi-map-marker"></span>
+                      <span *ngSwitchCase="SearchQueryTypes.caption" class="oi oi-image"></span>
+                      <span *ngSwitchCase="SearchQueryTypes.directory" class="oi oi-folder"></span>
+                      <span *ngSwitchCase="SearchQueryTypes.file_name" class="oi oi-image"></span>
+                      <span *ngSwitchCase="SearchQueryTypes.keyword" class="oi oi-tag"></span>
+                      <span *ngSwitchCase="SearchQueryTypes.person" class="oi oi-person"></span>
+                      <span *ngSwitchCase="SearchQueryTypes.position" class="oi oi-map-marker"></span>
                     </span>
           {{item.preText}}<strong>{{item.highLightText}}</strong>{{item.postText}}
-        </a>
+        </div>
       </div>
     </div>
 
     <div class="input-group-btn" style="display: block">
       <button class="btn btn-light" type="button"
-              [routerLink]="['/search', searchText]">
+              [routerLink]="['/search', HTMLSearchQuery]">
         <span class="oi oi-magnifying-glass"></span>
+      </button>
+    </div>
+
+    <div class="input-group-btn" style="display: block">
+      <button class="btn btn-light" type="button" (click)="openModal(searchModal)">
+        <span class="oi oi-chevron-bottom"></span>
       </button>
     </div>
   </div>
 </form>
 
+
+<ng-template #searchModal>
+  <!-- sharing Modal-->
+  <div class="modal-header">
+    <h5 class="modal-title" i18n>Search</h5>
+    <button type="button" class="close" (click)="hideModal()" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form #searchPanelForm="ngForm" class="form-horizontal">
+      <input type="text"
+             class="form-control"
+             i18n-placeholder
+             placeholder="Search"
+             disabled
+             [ngModel]="rawSearchText"
+             size="30"
+             name="srch-term-preview"
+             id="srch-term-preview"
+             autocomplete="off">
+
+      <app-gallery-search-query-entry
+        [(ngModel)]="searchQueryDTO"
+        name="search-root"
+        (delete)="resetQuery()">
+
+      </app-gallery-search-query-entry>
+    </form>
+  </div>
+</ng-template>

@@ -1,12 +1,13 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {RouterLink} from '@angular/router';
 import {PersonDTO} from '../../../../../common/entities/PersonDTO';
-import {SearchTypes} from '../../../../../common/entities/AutoCompleteItem';
 import {DomSanitizer} from '@angular/platform-browser';
 import {PersonThumbnail, ThumbnailManagerService} from '../../gallery/thumbnailManager.service';
 import {FacesService} from '../faces.service';
 import {AuthenticationService} from '../../../model/network/authentication.service';
 import {Config} from '../../../../../common/config/public/Config';
+import {SearchQueryTypes, TextSearch, TextSearchQueryMatchTypes} from '../../../../../common/entities/SearchQueryDTO';
+import {QueryParams} from '../../../../../common/QueryParams';
 
 @Component({
   selector: 'app-face',
@@ -19,7 +20,7 @@ export class FaceComponent implements OnInit, OnDestroy {
   @Input() size: number;
 
   thumbnail: PersonThumbnail = null;
-  SearchTypes = SearchTypes;
+  public searchQuery: any;
 
   constructor(private thumbnailService: ThumbnailManagerService,
               private _sanitizer: DomSanitizer,
@@ -34,6 +35,12 @@ export class FaceComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.thumbnail = this.thumbnailService.getPersonThumbnail(this.person);
+    this.searchQuery = {};
+    this.searchQuery[QueryParams.gallery.search.query] = <TextSearch>{
+      type: SearchQueryTypes.person,
+      text: this.person.name,
+      matchType: TextSearchQueryMatchTypes.exact_match
+    };
 
   }
 

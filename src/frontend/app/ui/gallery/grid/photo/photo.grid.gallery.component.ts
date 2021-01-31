@@ -1,12 +1,12 @@
 import {Component, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Dimension, IRenderable} from '../../../../model/IRenderable';
 import {GridMedia} from '../GridMedia';
-import {SearchTypes} from '../../../../../../common/entities/AutoCompleteItem';
 import {RouterLink} from '@angular/router';
 import {Thumbnail, ThumbnailManagerService} from '../../thumbnailManager.service';
 import {Config} from '../../../../../../common/config/public/Config';
 import {PageHelper} from '../../../../model/page.helper';
 import {PhotoDTO, PhotoMetadata} from '../../../../../../common/entities/PhotoDTO';
+import {SearchQueryTypes} from '../../../../../../common/entities/SearchQueryDTO';
 
 @Component({
   selector: 'app-gallery-grid-photo',
@@ -20,11 +20,11 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, OnDestroy {
   @ViewChild('photoContainer', {static: true}) container: ElementRef;
 
   thumbnail: Thumbnail;
-  keywords: { value: string, type: SearchTypes }[] = null;
+  keywords: { value: string, type: SearchQueryTypes }[] = null;
   infoBarVisible = false;
   animationTimer: number = null;
 
-  readonly SearchTypes: typeof SearchTypes = SearchTypes;
+  readonly SearchQueryTypes: typeof SearchQueryTypes = SearchQueryTypes;
   searchEnabled = true;
 
   wasInView: boolean = null;
@@ -60,9 +60,9 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, OnDestroy {
       if (Config.Client.Faces.enabled) {
         const names: string[] = (metadata.faces || []).map(f => f.name);
         this.keywords = names.filter((name, index) => names.indexOf(name) === index)
-          .map(n => ({value: n, type: SearchTypes.person}));
+          .map(n => ({value: n, type: SearchQueryTypes.person}));
       }
-      this.keywords = this.keywords.concat((metadata.keywords || []).map(k => ({value: k, type: SearchTypes.keyword})));
+      this.keywords = this.keywords.concat((metadata.keywords || []).map(k => ({value: k, type: SearchQueryTypes.keyword})));
     }
 
   }

@@ -2,11 +2,12 @@ import {Injectable} from '@angular/core';
 import {DirectoryDTO} from '../../../../common/entities/DirectoryDTO';
 import {Utils} from '../../../../common/Utils';
 import {Config} from '../../../../common/config/public/Config';
-import {AutoCompleteItem, SearchTypes} from '../../../../common/entities/AutoCompleteItem';
+import {AutoCompleteItem} from '../../../../common/entities/AutoCompleteItem';
 import {SearchResultDTO} from '../../../../common/entities/SearchResultDTO';
 import {MediaDTO} from '../../../../common/entities/MediaDTO';
 import {SortingMethods} from '../../../../common/entities/SortingMethods';
 import {VersionService} from '../../model/version.service';
+import {SearchQueryDTO} from '../../../../common/entities/SearchQueryDTO';
 
 interface CacheItem<T> {
   timestamp: number;
@@ -21,7 +22,6 @@ export class GalleryCacheService {
   private static readonly INSTANT_SEARCH_PREFIX = 'instant_search:';
   private static readonly SEARCH_PREFIX = 'search:';
   private static readonly SORTING_PREFIX = 'sorting:';
-  private static readonly SEARCH_TYPE_PREFIX = ':type:';
   private static readonly VERSION = 'version';
 
   constructor(private versionService: VersionService) {
@@ -40,7 +40,7 @@ export class GalleryCacheService {
     const tmp = localStorage.getItem(key);
     if (tmp != null) {
       const value: CacheItem<SearchResultDTO> = JSON.parse(tmp);
-      if (value.timestamp < Date.now() - Config.Client.Search.instantSearchCacheTimeout) {
+      if (value.timestamp < Date.now() - Config.Client.Search.searchCacheTimeout) {
         localStorage.removeItem(key);
         return null;
       }
@@ -158,19 +158,15 @@ export class GalleryCacheService {
     }
   }
 
-  public getSearch(text: string, type?: SearchTypes): SearchResultDTO {
+  public getSearch(query: SearchQueryDTO): SearchResultDTO {
     if (Config.Client.Other.enableCache === false) {
       return null;
     }
-    let key = GalleryCacheService.SEARCH_PREFIX + text;
-    if (typeof type !== 'undefined' && type !== null) {
-      key += GalleryCacheService.SEARCH_TYPE_PREFIX + type;
-    }
-
+    const key = GalleryCacheService.SEARCH_PREFIX + JSON.stringify(query);
     return GalleryCacheService.loadCacheItem(key);
   }
 
-  public setSearch(text: string, type: SearchTypes, searchResult: SearchResultDTO): void {
+  public setSearch(query: SearchQueryDTO, searchResult: SearchResultDTO): void {
     if (Config.Client.Other.enableCache === false) {
       return;
     }
@@ -178,10 +174,7 @@ export class GalleryCacheService {
       timestamp: Date.now(),
       item: searchResult
     };
-    let key = GalleryCacheService.SEARCH_PREFIX + text;
-    if (typeof type !== 'undefined' && type !== null) {
-      key += GalleryCacheService.SEARCH_TYPE_PREFIX + type;
-    }
+    const key = GalleryCacheService.SEARCH_PREFIX + JSON.stringify(query);
     try {
       localStorage.setItem(key, JSON.stringify(tmp));
     } catch (e) {

@@ -93,6 +93,7 @@ import {JobButtonComponent} from './ui/settings/jobs/button/job-button.settings.
 import {ErrorInterceptor} from './model/network/helper/error.interceptor';
 import {CSRFInterceptor} from './model/network/helper/csrf.interceptor';
 import {SettingsEntryComponent} from './ui/settings/_abstract/settings-entry/settings-entry.component';
+import {GallerySearchQueryEntryComponent} from './ui/gallery/search/query-enrty/query-entry.search.gallery.component';
 
 
 @Injectable()
@@ -174,6 +175,7 @@ export function translationsFactory(locale: string) {
     GalleryMapLightboxComponent,
     FrameComponent,
     GallerySearchComponent,
+    GallerySearchQueryEntryComponent,
     GalleryShareComponent,
     GalleryNavigatorComponent,
     GalleryPhotoComponent,

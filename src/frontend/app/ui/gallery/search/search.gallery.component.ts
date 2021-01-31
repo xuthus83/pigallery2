@@ -1,12 +1,15 @@
-import {Component, OnDestroy} from '@angular/core';
+import {Component, OnDestroy, TemplateRef} from '@angular/core';
 import {AutoCompleteService} from './autocomplete.service';
-import {AutoCompleteItem, SearchTypes} from '../../../../../common/entities/AutoCompleteItem';
+import {AutoCompleteItem} from '../../../../../common/entities/AutoCompleteItem';
 import {ActivatedRoute, Params, RouterLink} from '@angular/router';
 import {GalleryService} from '../gallery.service';
 import {Subscription} from 'rxjs';
 import {Config} from '../../../../../common/config/public/Config';
 import {NavigationService} from '../../../model/navigation.service';
 import {QueryParams} from '../../../../../common/QueryParams';
+import {MetadataSearchQueryTypes, SearchQueryDTO, SearchQueryTypes, TextSearch} from '../../../../../common/entities/SearchQueryDTO';
+import {BsModalService} from 'ngx-bootstrap/modal';
+import {BsModalRef} from 'ngx-bootstrap/modal/bs-modal-ref.service';
 
 @Component({
   selector: 'app-gallery-search',
@@ -17,29 +20,46 @@ import {QueryParams} from '../../../../../common/QueryParams';
 export class GallerySearchComponent implements OnDestroy {
 
   autoCompleteItems: AutoCompleteRenderItem[] = [];
-  public searchText = '';
+  public searchQueryDTO: SearchQueryDTO = <TextSearch>{type: SearchQueryTypes.any_text, text: ''};
+  mouseOverAutoComplete = false;
+  readonly SearchQueryTypes: typeof SearchQueryTypes;
+  modalRef: BsModalRef;
+  public readonly MetadataSearchQueryTypes: { value: string; key: SearchQueryTypes }[];
   private cache = {
     lastAutocomplete: '',
     lastInstantSearch: ''
   };
-  mouseOverAutoComplete = false;
-
-  readonly SearchTypes: typeof SearchTypes;
   private readonly subscription: Subscription = null;
 
   constructor(private _autoCompleteService: AutoCompleteService,
               private _galleryService: GalleryService,
               private navigationService: NavigationService,
-              private _route: ActivatedRoute) {
+              private _route: ActivatedRoute,
+              private modalService: BsModalService) {
 
-    this.SearchTypes = SearchTypes;
+    this.SearchQueryTypes = SearchQueryTypes;
+    this.MetadataSearchQueryTypes = MetadataSearchQueryTypes.map(v => ({key: v, value: SearchQueryTypes[v]}));
 
     this.subscription = this._route.params.subscribe((params: Params) => {
-      const searchText = params[QueryParams.gallery.searchText];
-      if (searchText && searchText !== '') {
-        this.searchText = searchText;
+      const searchQuery = params[QueryParams.gallery.search.query];
+      if (searchQuery) {
+        this.searchQueryDTO = searchQuery;
       }
     });
+  }
+
+  public get rawSearchText() {
+    return JSON.stringify(this.searchQueryDTO);
+  }
+
+  public set rawSearchText(val: any) {
+
+  }
+
+  get HTMLSearchQuery() {
+    const searchQuery: any = {};
+    searchQuery[QueryParams.gallery.search.query] = this.searchQueryDTO;
+    return searchQuery;
   }
 
 
@@ -57,19 +77,9 @@ export class GallerySearchComponent implements OnDestroy {
     if (Config.Client.Search.AutoComplete.enabled &&
       this.cache.lastAutocomplete !== searchText) {
       this.cache.lastAutocomplete = searchText;
-      this.autocomplete(searchText).catch(console.error);
+      // this.autocomplete(searchText).catch(console.error);
     }
 
-    if (Config.Client.Search.instantSearchEnabled &&
-      this.cache.lastInstantSearch !== searchText) {
-      this.cache.lastInstantSearch = searchText;
-      if (searchText === '') {
-        return this.navigationService.toGallery().catch(console.error);
-      }
-      this._galleryService.runInstantSearch(searchText);
-      this.navigationService.search(searchText).catch(console.error);
-
-    }
   }
 
 
@@ -84,8 +94,24 @@ export class GallerySearchComponent implements OnDestroy {
   }
 
   public onFocus() {
-    this.autocomplete(this.searchText).catch(console.error);
+    // TODO: implement autocomplete
+    // this.autocomplete(this.searchText).catch(console.error);
   }
+
+  public async openModal(template: TemplateRef<any>) {
+    this.modalRef = this.modalService.show(template, {class: 'modal-lg'});
+    document.body.style.paddingRight = '0px';
+  }
+
+  public hideModal() {
+    this.modalRef.hide();
+    this.modalRef = null;
+  }
+
+  resetQuery() {
+    this.searchQueryDTO = <TextSearch>{text: '', type: SearchQueryTypes.any_text};
+  }
+
 
   private emptyAutoComplete() {
     this.autoCompleteItems = [];
@@ -126,9 +152,9 @@ class AutoCompleteRenderItem {
   public preText = '';
   public highLightText = '';
   public postText = '';
-  public type: SearchTypes;
+  public type: SearchQueryTypes;
 
-  constructor(public text: string, searchText: string, type: SearchTypes) {
+  constructor(public text: string, searchText: string, type: SearchQueryTypes) {
     const preIndex = text.toLowerCase().indexOf(searchText.toLowerCase());
     if (preIndex > -1) {
       this.preText = text.substring(0, preIndex);
