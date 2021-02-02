@@ -19,6 +19,7 @@ import {QueryParams} from '../../../../common/QueryParams';
 import {SeededRandomService} from '../../model/seededRandom.service';
 import {take} from 'rxjs/operators';
 import {FileDTO} from '../../../../common/entities/FileDTO';
+import { compare } from 'natural-orderby';
 
 @Component({
   selector: 'app-gallery',
@@ -172,27 +173,11 @@ export class GalleryComponent implements OnInit, OnDestroy {
     switch (this._galleryService.sorting.value) {
       case SortingMethods.ascName:
       case SortingMethods.ascDate:
-        this.directories.sort((a: DirectoryDTO, b: DirectoryDTO) => {
-          if (a.name.toLowerCase() < b.name.toLowerCase()) {
-            return -1;
-          }
-          if (a.name.toLowerCase() > b.name.toLowerCase()) {
-            return 1;
-          }
-          return 0;
-        });
+        this.directories.sort((a: DirectoryDTO, b: DirectoryDTO) => compare()(a.name, b.name));
         break;
       case SortingMethods.descName:
       case SortingMethods.descDate:
-        this.directories.sort((a: DirectoryDTO, b: DirectoryDTO) => {
-          if (a.name.toLowerCase() < b.name.toLowerCase()) {
-            return 1;
-          }
-          if (a.name.toLowerCase() > b.name.toLowerCase()) {
-            return -1;
-          }
-          return 0;
-        });
+        this.directories.sort((a: DirectoryDTO, b: DirectoryDTO) => compare({ order: 'desc' })(a.name, b.name));
         break;
       case SortingMethods.random:
         this.rndService.setSeed(this.directories.length);
