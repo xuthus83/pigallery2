@@ -11,18 +11,21 @@ import {Brackets, SelectQueryBuilder, WhereExpression} from 'typeorm';
 import {Config} from '../../../../common/config/private/Config';
 import {
   ANDSearchQuery,
-  DateSearch,
   DistanceSearch,
+  FromDateSearch,
+  MaxRatingSearch,
+  MaxResolutionSearch,
+  MinRatingSearch,
+  MinResolutionSearch,
   OrientationSearch,
   ORSearchQuery,
-  RatingSearch,
-  ResolutionSearch,
   SearchListQuery,
   SearchQueryDTO,
   SearchQueryTypes,
   SomeOfSearchQuery,
   TextSearch,
-  TextSearchQueryMatchTypes
+  TextSearchQueryMatchTypes,
+  ToDateSearch
 } from '../../../../common/entities/SearchQueryDTO';
 import {GalleryManager} from './GalleryManager';
 import {ObjectManagers} from '../../ObjectManagers';
@@ -266,75 +269,100 @@ export class SearchManager implements ISearchManager {
           return q;
         });
 
-      case SearchQueryTypes.date:
+      case SearchQueryTypes.from_date:
         return new Brackets(q => {
-          if (typeof (<DateSearch>query).before === 'undefined' && typeof (<DateSearch>query).after === 'undefined') {
-            throw new Error('Invalid search query: Date Query should contain before or after value');
+          if (typeof (<FromDateSearch>query).value === 'undefined') {
+            throw new Error('Invalid search query: Date Query should contain from value');
           }
           const whereFN = (<TextSearch>query).negate ? 'orWhere' : 'andWhere';
           const relation = (<TextSearch>query).negate ? '<' : '>=';
           const relationRev = (<TextSearch>query).negate ? '>' : '<=';
 
-          if (typeof (<DateSearch>query).after !== 'undefined') {
-            const textParam: any = {};
-            textParam['after' + paramCounter.value] = (<DateSearch>query).after;
-            q.where(`media.metadata.creationDate ${relation} :after${paramCounter.value}`, textParam);
-          }
+          const textParam: any = {};
+          textParam['from' + paramCounter.value] = (<FromDateSearch>query).value;
+          q.where(`media.metadata.creationDate ${relation} :from${paramCounter.value}`, textParam);
 
-          if (typeof (<DateSearch>query).before !== 'undefined') {
-            const textParam: any = {};
-            textParam['before' + paramCounter.value] = (<DateSearch>query).before;
-            q[whereFN](`media.metadata.creationDate ${relationRev} :before${paramCounter.value}`, textParam);
-          }
 
           paramCounter.value++;
           return q;
         });
 
-      case SearchQueryTypes.rating:
+      case SearchQueryTypes.to_date:
         return new Brackets(q => {
-          if (typeof (<RatingSearch>query).min === 'undefined' && typeof (<RatingSearch>query).max === 'undefined') {
-            throw new Error('Invalid search query: Rating Query should contain min or max value');
+          if (typeof (<ToDateSearch>query).value === 'undefined') {
+            throw new Error('Invalid search query: Date Query should contain to value');
+          }
+          const relation = (<TextSearch>query).negate ? '>' : '<=';
+
+          const textParam: any = {};
+          textParam['to' + paramCounter.value] = (<ToDateSearch>query).value;
+          q.where(`media.metadata.creationDate ${relation} :to${paramCounter.value}`, textParam);
+
+          paramCounter.value++;
+          return q;
+        });
+
+      case SearchQueryTypes.min_rating:
+        return new Brackets(q => {
+          if (typeof (<MinRatingSearch>query).value === 'undefined') {
+            throw new Error('Invalid search query: Rating Query should contain minvalue');
           }
 
-          const whereFN = (<TextSearch>query).negate ? 'orWhere' : 'andWhere';
           const relation = (<TextSearch>query).negate ? '<' : '>=';
-          const relationRev = (<TextSearch>query).negate ? '>' : '<=';
-          if (typeof (<RatingSearch>query).min !== 'undefined') {
-            const textParam: any = {};
-            textParam['min' + paramCounter.value] = (<RatingSearch>query).min;
-            q.where(`media.metadata.rating ${relation}  :min${paramCounter.value}`, textParam);
+
+          const textParam: any = {};
+          textParam['min' + paramCounter.value] = (<MinRatingSearch>query).value;
+          q.where(`media.metadata.rating ${relation}  :min${paramCounter.value}`, textParam);
+
+          paramCounter.value++;
+          return q;
+        });
+      case SearchQueryTypes.max_rating:
+        return new Brackets(q => {
+          if (typeof (<MaxRatingSearch>query).value === 'undefined') {
+            throw new Error('Invalid search query: Rating Query should contain  max value');
           }
 
-          if (typeof (<RatingSearch>query).max !== 'undefined') {
+          const relation = (<TextSearch>query).negate ? '>' : '<=';
+
+          if (typeof (<MaxRatingSearch>query).value !== 'undefined') {
             const textParam: any = {};
-            textParam['max' + paramCounter.value] = (<RatingSearch>query).max;
-            q[whereFN](`media.metadata.rating ${relationRev}  :max${paramCounter.value}`, textParam);
+            textParam['max' + paramCounter.value] = (<MaxRatingSearch>query).value;
+            q.where(`media.metadata.rating ${relation}  :max${paramCounter.value}`, textParam);
           }
           paramCounter.value++;
           return q;
         });
 
-      case SearchQueryTypes.resolution:
+      case SearchQueryTypes.min_resolution:
         return new Brackets(q => {
-          if (typeof (<ResolutionSearch>query).min === 'undefined' && typeof (<ResolutionSearch>query).max === 'undefined') {
+          if (typeof (<MinResolutionSearch>query).value === 'undefined') {
+            throw new Error('Invalid search query: Resolution Query should contain min value');
+          }
+
+          const relation = (<TextSearch>query).negate ? '<' : '>=';
+
+          const textParam: any = {};
+          textParam['min' + paramCounter.value] = (<MinResolutionSearch>query).value * 1000 * 1000;
+          q.where(`media.metadata.size.width * media.metadata.size.height ${relation} :min${paramCounter.value}`, textParam);
+
+
+          paramCounter.value++;
+          return q;
+        });
+
+      case SearchQueryTypes.max_resolution:
+        return new Brackets(q => {
+          if (typeof (<MaxResolutionSearch>query).value === 'undefined') {
             throw new Error('Invalid search query: Rating Query should contain min or max value');
           }
 
-          const whereFN = (<TextSearch>query).negate ? 'orWhere' : 'andWhere';
-          const relation = (<TextSearch>query).negate ? '<' : '>=';
-          const relationRev = (<TextSearch>query).negate ? '>' : '<=';
-          if (typeof (<ResolutionSearch>query).min !== 'undefined') {
-            const textParam: any = {};
-            textParam['min' + paramCounter.value] = (<RatingSearch>query).min * 1000 * 1000;
-            q.where(`media.metadata.size.width * media.metadata.size.height ${relation} :min${paramCounter.value}`, textParam);
-          }
+          const relation = (<TextSearch>query).negate ? '>' : '<=';
 
-          if (typeof (<ResolutionSearch>query).max !== 'undefined') {
-            const textParam: any = {};
-            textParam['max' + paramCounter.value] = (<RatingSearch>query).max * 1000 * 1000;
-            q[whereFN](`media.metadata.size.width * media.metadata.size.height ${relationRev} :max${paramCounter.value}`, textParam);
-          }
+          const textParam: any = {};
+          textParam['max' + paramCounter.value] = (<MaxResolutionSearch>query).value * 1000 * 1000;
+          q.where(`media.metadata.size.width * media.metadata.size.height ${relation} :max${paramCounter.value}`, textParam);
+
           paramCounter.value++;
           return q;
         });

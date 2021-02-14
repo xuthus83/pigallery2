@@ -54,6 +54,11 @@ export class Utils {
     return ret.substr(ret.length - length);
   }
 
+  /**
+   * Checks if the two input (let them be objects or arrays or just primitives) are equal
+   * @param object
+   * @param filter
+   */
   static equalsFilter(object: any, filter: any): boolean {
     if (typeof filter !== 'object' || filter == null) {
       return object === filter;

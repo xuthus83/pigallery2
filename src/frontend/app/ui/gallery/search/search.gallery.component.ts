@@ -21,6 +21,7 @@ export class GallerySearchComponent implements OnDestroy {
 
   autoCompleteItems: AutoCompleteRenderItem[] = [];
   public searchQueryDTO: SearchQueryDTO = <TextSearch>{type: SearchQueryTypes.any_text, text: ''};
+  public rawSearchText: string;
   mouseOverAutoComplete = false;
   readonly SearchQueryTypes: typeof SearchQueryTypes;
   modalRef: BsModalRef;
@@ -48,12 +49,6 @@ export class GallerySearchComponent implements OnDestroy {
     });
   }
 
-  public get rawSearchText(): string {
-    return SearchQueryDTO.stringify(this.searchQueryDTO);
-  }
-
-  public set rawSearchText(val: string) {
-  }
 
   get HTMLSearchQuery() {
     const searchQuery: any = {};
@@ -80,7 +75,6 @@ export class GallerySearchComponent implements OnDestroy {
     }
 
   }
-
 
   public setMouseOverAutoComplete(value: boolean) {
     this.mouseOverAutoComplete = value;
@@ -111,6 +105,18 @@ export class GallerySearchComponent implements OnDestroy {
     this.searchQueryDTO = <TextSearch>{text: '', type: SearchQueryTypes.any_text};
   }
 
+  onQueryChange() {
+    this.rawSearchText = SearchQueryDTO.stringify(this.searchQueryDTO);
+  }
+
+  validateRawSearchText() {
+    try {
+      this.searchQueryDTO = SearchQueryDTO.parse(this.rawSearchText);
+      console.log(this.searchQueryDTO);
+    } catch (e) {
+      console.error(e);
+    }
+  }
 
   private emptyAutoComplete() {
     this.autoCompleteItems = [];

@@ -5,17 +5,20 @@ import {Utils} from '../../../../../src/common/Utils';
 import {SQLTestHelper} from '../../../SQLTestHelper';
 import {
   ANDSearchQuery,
-  DateSearch,
   DistanceSearch,
+  FromDateSearch,
+  MaxRatingSearch,
+  MaxResolutionSearch,
+  MinRatingSearch,
+  MinResolutionSearch,
   OrientationSearch,
   ORSearchQuery,
-  RatingSearch,
-  ResolutionSearch,
   SearchQueryDTO,
   SearchQueryTypes,
   SomeOfSearchQuery,
   TextSearch,
-  TextSearchQueryMatchTypes
+  TextSearchQueryMatchTypes,
+  ToDateSearch
 } from '../../../../../src/common/entities/SearchQueryDTO';
 import {IndexingManager} from '../../../../../src/backend/model/database/sql/IndexingManager';
 import {DirectoryDTO} from '../../../../../src/common/entities/DirectoryDTO';
@@ -789,7 +792,7 @@ describe('SearchManager', (sqlHelper: SQLTestHelper) => {
     it('should search date', async () => {
       const sm = new SearchManager();
 
-      let query = <DateSearch>{before: 0, after: 0, type: SearchQueryTypes.date};
+      let query: any = <FromDateSearch>{value: 0, type: SearchQueryTypes.from_date};
 
       expect(Utils.clone(await sm.search(query)))
         .to.deep.equalInAnyOrder(removeDir(<SearchResultDTO>{
@@ -800,9 +803,8 @@ describe('SearchManager', (sqlHelper: SQLTestHelper) => {
         resultOverflow: false
       }));
 
-      query = <DateSearch>{
-        before: p.metadata.creationDate,
-        after: p.metadata.creationDate, type: SearchQueryTypes.date
+      query = <ToDateSearch>{
+        value: p.metadata.creationDate, type: SearchQueryTypes.to_date
       };
 
       expect(Utils.clone(await sm.search(query)))
@@ -814,11 +816,10 @@ describe('SearchManager', (sqlHelper: SQLTestHelper) => {
         resultOverflow: false
       }));
 
-      query = <DateSearch>{
-        before: p.metadata.creationDate,
-        after: p.metadata.creationDate,
+      query = <FromDateSearch>{
+        value: p.metadata.creationDate,
         negate: true,
-        type: SearchQueryTypes.date
+        type: SearchQueryTypes.from_date
       };
 
       expect(Utils.clone(await sm.search(query)))
@@ -830,15 +831,12 @@ describe('SearchManager', (sqlHelper: SQLTestHelper) => {
         resultOverflow: false
       }));
 
-      query = <DateSearch>{
-        before: p.metadata.creationDate + 1000000000,
-        after: 0, type: SearchQueryTypes.date
+      query = <ToDateSearch>{
+        value: p.metadata.creationDate + 1000000000,
+        type: SearchQueryTypes.to_date
       };
 
-      expect(Utils.clone(await sm.search(<DateSearch>{
-        before: p.metadata.creationDate + 1000000000,
-        after: 0, type: SearchQueryTypes.date
-      })))
+      expect(Utils.clone(await sm.search(query)))
         .to.deep.equalInAnyOrder(removeDir(<SearchResultDTO>{
         searchQuery: query,
         directories: [],
@@ -853,7 +851,7 @@ describe('SearchManager', (sqlHelper: SQLTestHelper) => {
     it('should search rating', async () => {
       const sm = new SearchManager();
 
-      let query = <RatingSearch>{min: 0, max: 0, type: SearchQueryTypes.rating};
+      let query: MinRatingSearch | MaxRatingSearch = <MinRatingSearch>{value: 0, type: SearchQueryTypes.min_rating};
 
 
       expect(Utils.clone(await sm.search(query)))
@@ -865,7 +863,7 @@ describe('SearchManager', (sqlHelper: SQLTestHelper) => {
         resultOverflow: false
       }));
 
-      query = <RatingSearch>{min: 0, max: 5, type: SearchQueryTypes.rating};
+      query = <MaxRatingSearch>{value: 5, type: SearchQueryTypes.max_rating};
       expect(Utils.clone(await sm.search(query)))
         .to.deep.equalInAnyOrder(removeDir(<SearchResultDTO>{
         searchQuery: query,
@@ -875,7 +873,7 @@ describe('SearchManager', (sqlHelper: SQLTestHelper) => {
         resultOverflow: false
       }));
 
-      query = <RatingSearch>{min: 0, max: 5, negate: true, type: SearchQueryTypes.rating};
+      query = <MaxRatingSearch>{value: 5, negate: true, type: SearchQueryTypes.max_rating};
       expect(Utils.clone(await sm.search(query)))
         .to.deep.equalInAnyOrder(removeDir(<SearchResultDTO>{
         searchQuery: query,
@@ -885,7 +883,7 @@ describe('SearchManager', (sqlHelper: SQLTestHelper) => {
         resultOverflow: false
       }));
 
-      query = <RatingSearch>{min: 2, max: 2, type: SearchQueryTypes.rating};
+      query = <MinRatingSearch>{value: 2, type: SearchQueryTypes.min_rating};
       expect(Utils.clone(await sm.search(query)))
         .to.deep.equalInAnyOrder(removeDir(<SearchResultDTO>{
         searchQuery: query,
@@ -895,7 +893,7 @@ describe('SearchManager', (sqlHelper: SQLTestHelper) => {
         resultOverflow: false
       }));
 
-      query = <RatingSearch>{min: 2, max: 2, negate: true, type: SearchQueryTypes.rating};
+      query = <MinRatingSearch>{value: 2, negate: true, type: SearchQueryTypes.min_rating};
       expect(Utils.clone(await sm.search(query)))
         .to.deep.equalInAnyOrder(removeDir(<SearchResultDTO>{
         searchQuery: query,
@@ -910,7 +908,9 @@ describe('SearchManager', (sqlHelper: SQLTestHelper) => {
     it('should search resolution', async () => {
       const sm = new SearchManager();
 
-      let query = <ResolutionSearch>{min: 0, max: 0, type: SearchQueryTypes.resolution};
+      let query: MinResolutionSearch | MaxResolutionSearch =
+        <MinResolutionSearch>{value: 0, type: SearchQueryTypes.min_resolution};
+
       expect(Utils.clone(await sm.search(query)))
         .to.deep.equalInAnyOrder(removeDir(<SearchResultDTO>{
         searchQuery: query,
@@ -920,7 +920,7 @@ describe('SearchManager', (sqlHelper: SQLTestHelper) => {
         resultOverflow: false
       }));
 
-      query = <ResolutionSearch>{max: 1, type: SearchQueryTypes.resolution};
+      query = <MaxResolutionSearch>{value: 1, type: SearchQueryTypes.max_resolution};
       expect(Utils.clone(await sm.search(query)))
         .to.deep.equalInAnyOrder(removeDir(<SearchResultDTO>{
         searchQuery: query,
@@ -930,7 +930,7 @@ describe('SearchManager', (sqlHelper: SQLTestHelper) => {
         resultOverflow: false
       }));
 
-      query = <ResolutionSearch>{min: 2, max: 3, type: SearchQueryTypes.resolution};
+      query = <MinResolutionSearch>{value: 2, type: SearchQueryTypes.min_resolution};
       expect(Utils.clone(await sm.search(query)))
         .to.deep.equalInAnyOrder(removeDir(<SearchResultDTO>{
         searchQuery: query,
@@ -940,7 +940,7 @@ describe('SearchManager', (sqlHelper: SQLTestHelper) => {
         resultOverflow: false
       }));
 
-      query = <ResolutionSearch>{min: 2, max: 3, negate: true, type: SearchQueryTypes.resolution};
+      query = <MaxResolutionSearch>{value: 3, negate: true, type: SearchQueryTypes.max_resolution};
       expect(Utils.clone(await sm.search(query)))
         .to.deep.equalInAnyOrder(removeDir(<SearchResultDTO>{
         searchQuery: query,
@@ -950,7 +950,7 @@ describe('SearchManager', (sqlHelper: SQLTestHelper) => {
         resultOverflow: false
       }));
 
-      query = <ResolutionSearch>{min: 3, type: SearchQueryTypes.resolution};
+      query = <MinResolutionSearch>{value: 3, negate: true, type: SearchQueryTypes.min_resolution};
       expect(Utils.clone(await sm.search(query)))
         .to.deep.equalInAnyOrder(removeDir(<SearchResultDTO>{
         searchQuery: query,
@@ -1094,6 +1094,8 @@ describe('SearchManager', (sqlHelper: SQLTestHelper) => {
       text: 'xyz',
       type: SearchQueryTypes.keyword
     };
+
+    // tslint:disable-next-line
     expect(await sm.getRandomPhoto(query)).to.not.exist;
 
     query = <TextSearch>{

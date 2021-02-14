@@ -8,6 +8,7 @@
            (blur)="onFocusLost()"
            (focus)="onFocus()"
            [(ngModel)]="rawSearchText"
+           (ngModelChange)="validateRawSearchText()"
            #name="ngModel"
            size="30"
            ngControl="search"
@@ -63,8 +64,8 @@
              class="form-control"
              i18n-placeholder
              placeholder="Search"
-             disabled
-             [ngModel]="rawSearchText"
+             [(ngModel)]="rawSearchText"
+             (ngModelChange)="validateRawSearchText()"
              size="30"
              name="srch-term-preview"
              id="srch-term-preview"
@@ -72,6 +73,7 @@
 
       <app-gallery-search-query-entry
         [(ngModel)]="searchQueryDTO"
+        (change)="onQueryChange()"
         name="search-root"
         (delete)="resetQuery()">
 

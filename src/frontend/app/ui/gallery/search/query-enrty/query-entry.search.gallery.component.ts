@@ -1,11 +1,10 @@
 import {Component, EventEmitter, forwardRef, OnChanges, Output} from '@angular/core';
 import {
-  DateSearch,
   DistanceSearch,
   ListSearchQueryTypes,
   OrientationSearch,
-  RatingSearch,
-  ResolutionSearch,
+  RangeSearch,
+  RangeSearchQueryTypes,
   SearchListQuery,
   SearchQueryDTO,
   SearchQueryTypes,
@@ -42,12 +41,18 @@ export class GallerySearchQueryEntryComponent implements ControlValueAccessor, V
 
   constructor() {
     this.SearchQueryTypesEnum = Utils.enumToArray(SearchQueryTypes);
+    // Range queries need to be added as AND with min and max sub entry
+    this.SearchQueryTypesEnum.filter(e => !RangeSearchQueryTypes.includes(e.key));
+    this.SearchQueryTypesEnum.push({value: 'Date', key: SearchQueryTypes.AND});
+    this.SearchQueryTypesEnum.push({value: 'Rating', key: SearchQueryTypes.AND});
+    this.SearchQueryTypesEnum.push({value: 'Resolution', key: SearchQueryTypes.AND});
 
   }
 
   get IsTextQuery(): boolean {
     return this.queryEntry && TextSearchQueryTypes.includes(this.queryEntry.type);
   }
+
 
   get IsListQuery(): boolean {
     return this.queryEntry && ListSearchQueryTypes.includes(this.queryEntry.type);
@@ -57,13 +62,10 @@ export class GallerySearchQueryEntryComponent implements ControlValueAccessor, V
     return <any>this.queryEntry;
   }
 
-  get AsDateQuery(): DateSearch {
+  get AsRangeQuery(): RangeSearch {
     return <any>this.queryEntry;
   }
 
-  get AsResolutionQuery(): ResolutionSearch {
-    return <any>this.queryEntry;
-  }
 
   get AsOrientationQuery(): OrientationSearch {
     return <any>this.queryEntry;
@@ -73,9 +75,6 @@ export class GallerySearchQueryEntryComponent implements ControlValueAccessor, V
     return <any>this.queryEntry;
   }
 
-  get AsRatingQuery(): RatingSearch {
-    return <any>this.queryEntry;
-  }
 
   get AsSomeOfQuery(): SomeOfSearchQuery {
     return <any>this.queryEntry;
@@ -132,12 +131,8 @@ export class GallerySearchQueryEntryComponent implements ControlValueAccessor, V
   }
 
   ngOnChanges(): void {
-   // console.log('ngOnChanges', this.queryEntry);
+    // console.log('ngOnChanges', this.queryEntry);
 
-  }
-
-  public onChange(value: any): void {
-  //  console.log('onChange', this.queryEntry);
   }
 
   public onTouched(): void {
@@ -145,17 +140,26 @@ export class GallerySearchQueryEntryComponent implements ControlValueAccessor, V
 
   public writeValue(obj: any): void {
     this.queryEntry = obj;
-  //  console.log('write value', this.queryEntry);
+    //  console.log('write value', this.queryEntry);
     this.ngOnChanges();
   }
 
-  public registerOnChange(fn: any): void {
-  //  console.log('registerOnChange', fn);
-    this.onChange = fn;
+  registerOnChange(fn: (_: any) => void): void {
+    this.propagateChange = fn;
   }
 
-  public registerOnTouched(fn: any): void {
-    this.onTouched = fn;
+  registerOnTouched(fn: () => void): void {
+    this.propagateTouch = fn;
   }
+
+  public onChange(event: any) {
+    this.propagateChange(this.queryEntry);
+  }
+
+  private propagateChange = (_: any) => {
+  };
+
+  private propagateTouch = (_: any) => {
+  };
 }
 
