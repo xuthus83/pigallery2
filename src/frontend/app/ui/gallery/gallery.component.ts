@@ -172,12 +172,16 @@ export class GalleryComponent implements OnInit, OnDestroy {
     }
     switch (this._galleryService.sorting.value) {
       case SortingMethods.ascName:
-      case SortingMethods.ascDate:
         this.directories.sort((a: DirectoryDTO, b: DirectoryDTO) => compare()(a.name, b.name));
         break;
+      case SortingMethods.ascDate:
+        this.directories.sort((a: DirectoryDTO, b: DirectoryDTO) => compare()(a.lastModified, b.lastModified));
+        break;
       case SortingMethods.descName:
-      case SortingMethods.descDate:
         this.directories.sort((a: DirectoryDTO, b: DirectoryDTO) => compare({ order: 'desc' })(a.name, b.name));
+        break;
+      case SortingMethods.descDate:
+        this.directories.sort((a: DirectoryDTO, b: DirectoryDTO) => compare({ order: 'desc' })(a.lastModified, b.lastModified));
         break;
       case SortingMethods.random:
         this.rndService.setSeed(this.directories.length);
