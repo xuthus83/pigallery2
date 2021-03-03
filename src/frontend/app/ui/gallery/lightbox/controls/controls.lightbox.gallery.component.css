@@ -231,6 +231,7 @@ input[type="range"].zoom-progress::-moz-range-track {
 .face-name {
   white-space: nowrap;
   color: white;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
   margin-left: -100%;
   margin-right: -100%;
   text-align: center;
