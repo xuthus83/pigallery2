@@ -8,7 +8,7 @@
           <context context-type="sourcefile">app/ui/login/login.component.html</context>
           <context context-type="linenumber">10</context>
         </context-group>
-        <target>Logga in</target>
+        <target>Vänligen logga in</target>
       </trans-unit>
       <trans-unit id="f5006bd06a75b0b5719b47cd81a516d1a923ef88" datatype="html">
         <source>
@@ -79,7 +79,7 @@
           <context context-type="sourcefile">app/ui/login/login.component.html</context>
           <context context-type="linenumber">68</context>
         </context-group>
-        <target>Inloggning</target>
+        <target>Logga in</target>
       </trans-unit>
       <trans-unit id="64034510da88fc99130864f733500fcd62aedb01" datatype="html">
         <source>
@@ -1262,7 +1262,7 @@
           <context context-type="sourcefile">app/ui/settings/photo/photo.settings.component.html</context>
           <context context-type="linenumber">33</context>
         </context-group>
-        <target>Omvandlar</target>
+        <target>Omvandling</target>
       </trans-unit>
       <trans-unit id="4843bece0b4fd22459f9cd9e849b119e492ca8a9" datatype="html">
         <source>Downsizes photos for faster preview loading. (Zooming in to the photo loads the original).</source>
@@ -1294,7 +1294,7 @@
           <context context-type="sourcefile">app/ui/settings/photo/photo.settings.component.html</context>
           <context context-type="linenumber">50</context>
         </context-group>
-        <target>Den kortaste kanten av den omvandlade bilden skalas ner till detta, medan bildförhållandet bevaras.</target>
+        <target>Den kortaste kanten på den omvandlade bilden skalas ner till detta, medan bildförhållandet bevaras.</target>
       </trans-unit>
       <trans-unit id="219e36c6747ef991081a68fc8ab2678677583e11" datatype="html">
         <source>Reads and show *.gpx files on the map</source>
@@ -1525,7 +1525,7 @@
           <context context-type="sourcefile">app/ui/settings/basic/basic.settings.component.html</context>
           <context context-type="linenumber">54</context>
         </context-group>
-        <target>Miniatyrer, koverterade bilder, videos kommer att sparas här (skrivrättighet krävs))</target>
+        <target>Miniatyrer, konverterade bilder, videos kommer att sparas här (skrivrättighet krävs))</target>
       </trans-unit>
       <trans-unit id="682679bea54c7cdc8fad228e65f4e35d8cf62275" datatype="html">
         <source>Page public url</source>
