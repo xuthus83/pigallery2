@@ -321,7 +321,7 @@
           <context context-type="sourcefile">app/ui/gallery/random-query-builder/random-query-builder.gallery.component.html</context>
           <context context-type="linenumber">46</context>
         </context-group>
-        <target>Inkludera underkataloger:</target>
+        <target>Inkludera undermappar:</target>
       </trans-unit>
       <trans-unit id="ac26f1ef0bc7eb42fdabd901d99cb23728abcd4f" datatype="html">
         <source>Valid:</source>
@@ -773,7 +773,7 @@
           <context context-type="sourcefile">app/ui/settings/database/database.settings.component.html</context>
           <context context-type="linenumber">21</context>
         </context-group>
-        <target>Databaskatalog</target>
+        <target>Databasmapp</target>
       </trans-unit>
       <trans-unit id="ddf9119f4ecf386d179fad00363dbfb85a59e451" datatype="html">
         <source>All file-based data will be stored here (sqlite database, user database in case of memory db, job history data)</source>
@@ -1082,7 +1082,7 @@
           <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
           <context context-type="linenumber">35</context>
         </context-group>
-        <target>För att möjliggöra en jämn videoström, rekommenderas videoomvandling till en lägre bitrate än serverns uppladningshastighet.</target>
+        <target>För att möjliggöra en jämn videoström rekommenderas videoomvandling till en lägre bitrate än serverns uppladningshastighet.</target>
       </trans-unit>
       <trans-unit id="2563716b6cdad527d4d01f0aa49368d1a876263f" datatype="html">
         <source>The transcoded videos will be save to the thumbnail folder.</source>
@@ -1090,7 +1090,7 @@
           <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
           <context context-type="linenumber">39</context>
         </context-group>
-        <target>Omvandlad video sparas i samma katalog som miniatyrerna.</target>
+        <target>Omvandlad video sparas i samma mapp som miniatyrerna.</target>
       </trans-unit>
       <trans-unit id="5c159049e5e44f672041b3ff2c85328cda14a740" datatype="html">
         <source>You can trigger the transcoding manually, but you can also create an automatic encoding job
@@ -1101,7 +1101,7 @@
           <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
           <context context-type="linenumber">40</context>
         </context-group>
-        <target>Du kan trigga videoomvandlingen manuellt, men du kan även skapa ett shemalagt omvandlingsjob i den avancerade inställningsmenyn.</target>
+        <target>Du kan trigga videoomvandlingen manuellt, men du kan även skapa ett schemalagt omvandlingsjob i den avancerade inställningsmenyn.</target>
       </trans-unit>
       <trans-unit id="7722a92a1fc887570b4f4d8a7bb916f067f32028" datatype="html">
         <source>Format</source>
@@ -1420,7 +1420,7 @@
           <context context-type="sourcefile">app/ui/settings/share/share.settings.component.html</context>
           <context context-type="linenumber">63</context>
         </context-group>
-        <target>Katalog</target>
+        <target>Mapp</target>
       </trans-unit>
       <trans-unit id="a20424156b8816671f61879f0574a4f27d7b16b9" datatype="html">
         <source>Creator</source>
@@ -1500,7 +1500,7 @@
           <context context-type="sourcefile">app/ui/settings/basic/basic.settings.component.html</context>
           <context context-type="linenumber">42</context>
         </context-group>
-        <target>Bildkatalog</target>
+        <target>Bildmapp</target>
       </trans-unit>
       <trans-unit id="b4b17c583a52ad8b6b15882c46d04ddbd7335816" datatype="html">
         <source>Images are loaded from this folder (read permission required)</source>
@@ -1508,7 +1508,7 @@
           <context context-type="sourcefile">app/ui/settings/basic/basic.settings.component.html</context>
           <context context-type="linenumber">43</context>
         </context-group>
-        <target>Bilder laddas från denna katalog (läsrättighet krävs)</target>
+        <target>Bilder laddas från denna mapp (läsrättighet krävs)</target>
       </trans-unit>
       <trans-unit id="cec8ee6e412792ec14d7c0219c8df1c32d897b17" datatype="html">
         <source>Temp folder</source>
@@ -1516,7 +1516,7 @@
           <context context-type="sourcefile">app/ui/settings/basic/basic.settings.component.html</context>
           <context context-type="linenumber">53</context>
         </context-group>
-        <target>Katalog för tillfälliga filer</target>
+        <target>Mapp för tillfälliga filer</target>
       </trans-unit>
       <trans-unit id="fce2bae239675640e9dae62ed1b936b92e77f9d6" datatype="html">
         <source>Thumbnails, converted photos, videos will be stored here (write
@@ -1645,7 +1645,7 @@
           <context context-type="sourcefile">app/ui/settings/other/other.settings.component.html</context>
           <context context-type="linenumber">15</context>
         </context-group>
-        <target>Kör katalogsökning och miniatyrgenerering (endast för Jimp) i en annan tråd.</target>
+        <target>Kör mappsökning och miniatyrgenerering (endast för Jimp) i en annan tråd.</target>
       </trans-unit>
       <trans-unit id="46aa6890679de37f7171c72b36ee1a18182a3e37" datatype="html">
         <source>Thumbnail threads</source>
@@ -1717,7 +1717,7 @@
           <context context-type="sourcefile">app/ui/settings/other/other.settings.component.html</context>
           <context context-type="linenumber">51</context>
         </context-group>
-        <target>Cachar kataloginnehåll och sökresultat för bättre prestanda.</target>
+        <target>Cachar mappinnehåll och sökresultat för bättre prestanda.</target>
       </trans-unit>
       <trans-unit id="444a85e1dff192c11fecdb4ae588a422ea385077" datatype="html">
         <source>Caption first naming</source>
@@ -1757,7 +1757,7 @@
           <context context-type="sourcefile">app/ui/settings/other/other.settings.component.html</context>
           <context context-type="linenumber">70</context>
         </context-group>
-        <target>Visa antal bilder i katalogen.</target>
+        <target>Visa antal bilder i mappen.</target>
       </trans-unit>
       <trans-unit id="15b229419fe525b3a517f3cb296326053a6e69f0" datatype="html">
         <source>Default photo sorting method</source>
@@ -1832,7 +1832,7 @@
           <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
           <context context-type="linenumber">45</context>
         </context-group>
-        <target>';' separerade strängar. Om en post börjar med '/' behandlas den som en absolut sökväg. Om det inte börjar med '/' men innehåller ett '/', är sökvägen relativt bildkatalogen. Om den inte innehåller '/' kommer alla mappar med detta namn att uteslutas.</target>
+        <target>';' separerade strängar. Om en post börjar med '/' behandlas den som en absolut sökväg. Om det inte börjar med '/' men innehåller ett '/', är sökvägen relativt bildmappen. Om den inte innehåller '/' kommer alla mappar med detta namn att uteslutas.</target>
       </trans-unit>
       <trans-unit id="d72c5948a085a73fd3ebf14c7bf4f9aa32556d2d" datatype="html">
         <source>Exclude Folder List</source>
@@ -1840,7 +1840,7 @@
           <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
           <context context-type="linenumber">37</context>
         </context-group>
-        <target>Kataloger som inte ska indexeras</target>
+        <target>Mappar som inte ska indexeras</target>
       </trans-unit>
       <trans-unit id="ec488cec3aebfd972cec39cac2cb6da8b31f3ada" datatype="html">
         <source>Files that mark a folder to be excluded from indexing</source>
@@ -1848,7 +1848,7 @@
           <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
           <context context-type="linenumber">58</context>
         </context-group>
-        <target>Fil som innehåller en lista med kataloger som inte ska indexeras</target>
+        <target>Fil som innehåller en lista med mappar som inte ska indexeras</target>
       </trans-unit>
       <trans-unit id="0d13afc6d6a484b4acc162cf31e195c16c563c1d" datatype="html">
         <source>';' separated strings. Any folder that contains a file with this name will be excluded from
@@ -1874,7 +1874,7 @@
           <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
           <context context-type="linenumber">83</context>
         </context-group>
-        <target>Om du lägger till en ny katalog, så indexeras den automatiskt.</target>
+        <target>Om du lägger till en ny mapp, så indexeras den automatiskt.</target>
       </trans-unit>
       <trans-unit id="2622cf599561bd3154f42feef9ac9960a316a6eb" datatype="html">
         <source>If you would like to trigger indexing manually, click index button.</source>
@@ -1882,7 +1882,7 @@
           <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
           <context context-type="linenumber">84</context>
         </context-group>
-        <target>Om du vill trigga indexering manuellt, klicka på indexknappen.</target>
+        <target>Om du vill trigga indexering manuellt, klicka på indexering.</target>
       </trans-unit>
       <trans-unit id="56949ecea1cfe94dcd1a269282c047549cda1de8" datatype="html">
         <source>Note: search only works among the indexed directories</source>
@@ -1890,7 +1890,7 @@
           <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
           <context context-type="linenumber">87</context>
         </context-group>
-        <target>Obs: sökning fungerar bara i de indexerade katalogerna</target>
+        <target>Obs: sökning fungerar bara i de indexerade mapparna</target>
       </trans-unit>
       <trans-unit id="fed617f53bda7660e3f3cf4e7c62fa6d39e2ca16" datatype="html">
         <source>
@@ -1908,7 +1908,7 @@
           <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
           <context context-type="linenumber">116</context>
         </context-group>
-        <target>Kataloger</target>
+        <target>Mappar</target>
       </trans-unit>
       <trans-unit id="f84ece8c3bbbf088cb70cf95792ae14dfe51bf96" datatype="html">
         <source>Photos</source>
@@ -2271,7 +2271,7 @@
           <context context-type="sourcefile">src/frontend/app/model/backendtext.service.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>Temp-katalogrensning</target>
+        <target>Temp-mapprensning</target>
       </trans-unit>
       <trans-unit id="85b9773b9a3caeb9f0fd69b2b8fa7284bda6b492" datatype="html">
         <source>Server error</source>
@@ -2482,7 +2482,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/settings/indexing/indexing.settings.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>Katalogindexering</target>
+        <target>Indexering av mappar</target>
       </trans-unit>
       <trans-unit id="03b2c27d0f1dd0ebdf6eb756bd43914d5127ca8a" datatype="html">
         <source>low</source>
@@ -2514,7 +2514,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/settings/indexing/indexing.settings.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>Katalogindexering startad</target>
+        <target>Mappindexering startad</target>
       </trans-unit>
       <trans-unit id="c5a3929b71a7b8090a763cc3434f8756184effdc" datatype="html">
         <source>Folder indexing interrupted</source>
@@ -2522,7 +2522,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/settings/indexing/indexing.settings.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>Katalogindexering avbruten</target>
+        <target>Mappindexering avbruten</target>
       </trans-unit>
       <trans-unit id="3a894c33925f9b669fa1f2732e45ae32cc815ee8" datatype="html">
         <source>Resetting  database</source>
