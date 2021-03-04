@@ -256,7 +256,7 @@
           <context context-type="sourcefile">app/ui/frame/frame.component.html</context>
           <context context-type="linenumber">51</context>
         </context-group>
-        <target>dubletter</target>
+        <target>Dubbletter</target>
       </trans-unit>
       <trans-unit id="121cc5391cd2a5115bc2b3160379ee5b36cd7716" datatype="html">
         <source>Settings</source>
@@ -580,7 +580,7 @@
           <context context-type="sourcefile">app/ui/duplicates/duplicates.component.html</context>
           <context context-type="linenumber">8</context>
         </context-group>
-        <target>Inga dubletter hittades</target>
+        <target>Inga dubbletter hittades</target>
       </trans-unit>
       <trans-unit id="61a209aa6ed27029d7b42d7e0e8472707794b974" datatype="html">
         <source>
