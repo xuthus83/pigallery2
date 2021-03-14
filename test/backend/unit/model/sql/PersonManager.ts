@@ -15,6 +15,7 @@ import {MediaDTO} from '../../../../../src/common/entities/MediaDTO';
 // to help WebStorm to handle the test cases
 declare let describe: any;
 declare const after: any;
+declare const before: any;
 declare const it: any;
 
 
@@ -54,7 +55,7 @@ describe('PersonManager', (sqlHelper: SQLTestHelper) => {
   };
 
 
-  beforeEach(async () => {
+  before(async () => {
     await setUpSqlDB();
   });
 

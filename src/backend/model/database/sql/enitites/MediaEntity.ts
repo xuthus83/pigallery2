@@ -52,7 +52,9 @@ export class MediaMetadataEntity implements MediaMetadata {
   @OneToMany(type => FaceRegionEntry, faceRegion => faceRegion.media)
   faces: FaceRegionEntry[];
 
-  @Column('simple-array', {select: false, nullable: true})
+  @Column({type: 'simple-array', select: false, nullable: true,
+    charset: columnCharsetCS.charset,
+    collation: columnCharsetCS.collation})
   persons: string[]; // Caches the list of persons. Only used for searching
 
   @Column('int', {unsigned: true})

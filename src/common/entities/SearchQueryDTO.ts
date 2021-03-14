@@ -121,7 +121,6 @@ export namespace SearchQueryDTO {
   };
 
   export const parse = (str: string, implicitOR = true): SearchQueryDTO => {
-    console.log('parsing: ' + str);
     str = str.replace(/\s\s+/g, ' ') // remove double spaces
       .replace(/:\s+/g, ':').replace(/\)(?=\S)/g, ') ').trim();
 
