@@ -3,7 +3,6 @@ import {AuthenticationService} from '../../model/network/authentication.service'
 import {ActivatedRoute, Params, Router} from '@angular/router';
 import {GalleryService} from './gallery.service';
 import {GalleryGridComponent} from './grid/grid.gallery.component';
-import {SearchTypes} from '../../../../common/entities/AutoCompleteItem';
 import {Config} from '../../../../common/config/public/Config';
 import {DirectoryDTO} from '../../../../common/entities/DirectoryDTO';
 import {SearchResultDTO} from '../../../../common/entities/SearchResultDTO';
@@ -18,8 +17,7 @@ import {PhotoDTO} from '../../../../common/entities/PhotoDTO';
 import {QueryParams} from '../../../../common/QueryParams';
 import {SeededRandomService} from '../../model/seededRandom.service';
 import {take} from 'rxjs/operators';
-import {SearchQueryTypes} from '../../../../common/entities/SearchQueryDTO';
-import { compare } from 'natural-orderby';
+import {compare} from 'natural-orderby';
 
 @Component({
   selector: 'app-gallery',
@@ -38,7 +36,6 @@ export class GalleryComponent implements OnInit, OnDestroy {
   public isPhotoWithLocation = false;
   public countDown: { day: number, hour: number, minute: number, second: number } = null;
   public readonly mapEnabled: boolean;
-  readonly SearchTypes: typeof SearchTypes;
   private $counter: Observable<number>;
   private subscription: { [key: string]: Subscription } = {
     content: null,
@@ -55,7 +52,6 @@ export class GalleryComponent implements OnInit, OnDestroy {
               private _navigation: NavigationService,
               private rndService: SeededRandomService) {
     this.mapEnabled = Config.Client.Map.enabled;
-    this.SearchTypes = SearchTypes;
     PageHelper.showScrollY();
   }
 
@@ -173,10 +169,10 @@ export class GalleryComponent implements OnInit, OnDestroy {
         this.directories.sort((a: DirectoryDTO, b: DirectoryDTO) => compare()(a.lastModified, b.lastModified));
         break;
       case SortingMethods.descName:
-        this.directories.sort((a: DirectoryDTO, b: DirectoryDTO) => compare({ order: 'desc' })(a.name, b.name));
+        this.directories.sort((a: DirectoryDTO, b: DirectoryDTO) => compare({order: 'desc'})(a.name, b.name));
         break;
       case SortingMethods.descDate:
-        this.directories.sort((a: DirectoryDTO, b: DirectoryDTO) => compare({ order: 'desc' })(a.lastModified, b.lastModified));
+        this.directories.sort((a: DirectoryDTO, b: DirectoryDTO) => compare({order: 'desc'})(a.lastModified, b.lastModified));
         break;
       case SortingMethods.random:
         this.rndService.setSeed(this.directories.length);

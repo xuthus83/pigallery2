@@ -1,4 +1,4 @@
-import {IGalleryManager, RandomQuery} from '../interfaces/IGalleryManager';
+import {IGalleryManager} from '../interfaces/IGalleryManager';
 import {DirectoryDTO} from '../../../../common/entities/DirectoryDTO';
 import * as path from 'path';
 import * as fs from 'fs';
@@ -9,8 +9,7 @@ import {ProjectPath} from '../../../ProjectPath';
 import {Config} from '../../../../common/config/private/Config';
 import {ISQLGalleryManager} from './IGalleryManager';
 import {PhotoDTO} from '../../../../common/entities/PhotoDTO';
-import {OrientationType} from '../../../../common/entities/RandomQueryDTO';
-import {Brackets, Connection, SelectQueryBuilder} from 'typeorm';
+import {Connection} from 'typeorm';
 import {MediaEntity} from './enitites/MediaEntity';
 import {VideoEntity} from './enitites/VideoEntity';
 import {DiskMangerWorker} from '../../threading/DiskMangerWorker';
@@ -19,7 +18,6 @@ import {FaceRegionEntry} from './enitites/FaceRegionEntry';
 import {ObjectManagers} from '../../ObjectManagers';
 import {DuplicatesDTO} from '../../../../common/entities/DuplicatesDTO';
 import {ServerConfig} from '../../../../common/config/private/PrivateConfig';
-import {SearchQueryDTO} from '../../../../common/entities/SearchQueryDTO';
 
 const LOG_TAG = '[GalleryManager]';
 
