@@ -274,9 +274,7 @@ export class SearchManager implements ISearchManager {
           if (typeof (<FromDateSearch>query).value === 'undefined') {
             throw new Error('Invalid search query: Date Query should contain from value');
           }
-          const whereFN = (<TextSearch>query).negate ? 'orWhere' : 'andWhere';
           const relation = (<TextSearch>query).negate ? '<' : '>=';
-          const relationRev = (<TextSearch>query).negate ? '>' : '<=';
 
           const textParam: any = {};
           textParam['from' + paramCounter.value] = (<FromDateSearch>query).value;

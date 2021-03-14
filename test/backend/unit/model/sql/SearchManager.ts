@@ -792,7 +792,7 @@ describe('SearchManager', (sqlHelper: SQLTestHelper) => {
     it('should search date', async () => {
       const sm = new SearchManager();
 
-      let query: any = <FromDateSearch>{value: 0, type: SearchQueryTypes.from_date};
+      let query: any = <ToDateSearch>{value: 0, type: SearchQueryTypes.to_date};
 
       expect(Utils.clone(await sm.search(query)))
         .to.deep.equalInAnyOrder(removeDir(<SearchResultDTO>{
@@ -803,15 +803,15 @@ describe('SearchManager', (sqlHelper: SQLTestHelper) => {
         resultOverflow: false
       }));
 
-      query = <ToDateSearch>{
-        value: p.metadata.creationDate, type: SearchQueryTypes.to_date
+      query = <FromDateSearch>{
+        value: p.metadata.creationDate, type: SearchQueryTypes.from_date
       };
 
       expect(Utils.clone(await sm.search(query)))
         .to.deep.equalInAnyOrder(removeDir(<SearchResultDTO>{
         searchQuery: query,
         directories: [],
-        media: [p],
+        media: [p, v],
         metaFile: [],
         resultOverflow: false
       }));
@@ -826,7 +826,7 @@ describe('SearchManager', (sqlHelper: SQLTestHelper) => {
         .to.deep.equalInAnyOrder(removeDir(<SearchResultDTO>{
         searchQuery: query,
         directories: [],
-        media: [p2, p_faceLess, p4, v],
+        media: [p2, p_faceLess, p4],
         metaFile: [],
         resultOverflow: false
       }));
@@ -851,7 +851,7 @@ describe('SearchManager', (sqlHelper: SQLTestHelper) => {
     it('should search rating', async () => {
       const sm = new SearchManager();
 
-      let query: MinRatingSearch | MaxRatingSearch = <MinRatingSearch>{value: 0, type: SearchQueryTypes.min_rating};
+      let query: MinRatingSearch | MaxRatingSearch = <MaxRatingSearch>{value: 0, type: SearchQueryTypes.max_rating};
 
 
       expect(Utils.clone(await sm.search(query)))
@@ -888,7 +888,7 @@ describe('SearchManager', (sqlHelper: SQLTestHelper) => {
         .to.deep.equalInAnyOrder(removeDir(<SearchResultDTO>{
         searchQuery: query,
         directories: [],
-        media: [p2],
+        media: [p2, p_faceLess],
         metaFile: [],
         resultOverflow: false
       }));
@@ -898,7 +898,7 @@ describe('SearchManager', (sqlHelper: SQLTestHelper) => {
         .to.deep.equalInAnyOrder(removeDir(<SearchResultDTO>{
         searchQuery: query,
         directories: [],
-        media: [p, p_faceLess],
+        media: [p],
         metaFile: [],
         resultOverflow: false
       }));
@@ -909,7 +909,7 @@ describe('SearchManager', (sqlHelper: SQLTestHelper) => {
       const sm = new SearchManager();
 
       let query: MinResolutionSearch | MaxResolutionSearch =
-        <MinResolutionSearch>{value: 0, type: SearchQueryTypes.min_resolution};
+        <MaxResolutionSearch>{value: 0, type: SearchQueryTypes.max_resolution};
 
       expect(Utils.clone(await sm.search(query)))
         .to.deep.equalInAnyOrder(removeDir(<SearchResultDTO>{
@@ -930,27 +930,28 @@ describe('SearchManager', (sqlHelper: SQLTestHelper) => {
         resultOverflow: false
       }));
 
-      query = <MinResolutionSearch>{value: 2, type: SearchQueryTypes.min_resolution};
+      query = <MinResolutionSearch>{value: 3, type: SearchQueryTypes.min_resolution};
       expect(Utils.clone(await sm.search(query)))
         .to.deep.equalInAnyOrder(removeDir(<SearchResultDTO>{
         searchQuery: query,
         directories: [],
-        media: [p2, p_faceLess],
+        media: [p4],
+        metaFile: [],
+        resultOverflow: false
+      }));
+
+
+      query = <MinResolutionSearch>{value: 3, negate: true, type: SearchQueryTypes.min_resolution};
+      expect(Utils.clone(await sm.search(query)))
+        .to.deep.equalInAnyOrder(removeDir(<SearchResultDTO>{
+        searchQuery: query,
+        directories: [],
+        media: [p, p2,  p_faceLess, v],
         metaFile: [],
         resultOverflow: false
       }));
 
       query = <MaxResolutionSearch>{value: 3, negate: true, type: SearchQueryTypes.max_resolution};
-      expect(Utils.clone(await sm.search(query)))
-        .to.deep.equalInAnyOrder(removeDir(<SearchResultDTO>{
-        searchQuery: query,
-        directories: [],
-        media: [p, v, p4],
-        metaFile: [],
-        resultOverflow: false
-      }));
-
-      query = <MinResolutionSearch>{value: 3, negate: true, type: SearchQueryTypes.min_resolution};
       expect(Utils.clone(await sm.search(query)))
         .to.deep.equalInAnyOrder(removeDir(<SearchResultDTO>{
         searchQuery: query,

@@ -2,7 +2,7 @@ import {GPSMetadata} from './PhotoDTO';
 import {Utils} from '../Utils';
 
 export enum SearchQueryTypes {
-  AND = 1, OR, SOME_OF,
+  AND = 1, OR, SOME_OF, UNKNOWN_RELATION = 99999,
 
   // non-text metadata
   // |- range types
@@ -120,17 +120,22 @@ export namespace SearchQueryDTO {
     }
   };
 
-  export const parse = (str: string): SearchQueryDTO => {
-    console.log(str);
+  export const parse = (str: string, implicitOR = true): SearchQueryDTO => {
+    console.log('parsing: ' + str);
     str = str.replace(/\s\s+/g, ' ') // remove double spaces
       .replace(/:\s+/g, ':').replace(/\)(?=\S)/g, ') ').trim();
 
     if (str.charAt(0) === '(' && str.charAt(str.length - 1) === ')') {
       str = str.slice(1, str.length - 1);
     }
-    const fistNonBRSpace = () => {
+    const fistSpace = (start = 0) => {
       const bracketIn = [];
-      for (let i = 0; i < str.length; ++i) {
+      let quotationMark = false;
+      for (let i = start; i < str.length; ++i) {
+        if (str.charAt(i) === '"') {
+          quotationMark = !quotationMark;
+          continue;
+        }
         if (str.charAt(i) === '(') {
           bracketIn.push(i);
           continue;
@@ -140,7 +145,9 @@ export namespace SearchQueryDTO {
           continue;
         }
 
-        if (bracketIn.length === 0 && str.charAt(i) === ' ') {
+        if (quotationMark === false &&
+          bracketIn.length === 0 &&
+          str.charAt(i) === ' ') {
           return i;
         }
       }
@@ -148,34 +155,41 @@ export namespace SearchQueryDTO {
     };
 
     // tokenize
-    const tokenEnd = fistNonBRSpace();
+    const tokenEnd = fistSpace();
 
     if (tokenEnd !== str.length - 1) {
       if (str.startsWith(' and', tokenEnd)) {
         return <ANDSearchQuery>{
           type: SearchQueryTypes.AND,
-          list: [SearchQueryDTO.parse(str.slice(0, tokenEnd)), // trim brackets
-            SearchQueryDTO.parse(str.slice(tokenEnd + 4))]
+          list: [SearchQueryDTO.parse(str.slice(0, tokenEnd), implicitOR), // trim brackets
+            SearchQueryDTO.parse(str.slice(tokenEnd + 4), implicitOR)]
         };
-      } else {
-        let padding = 0;
-        if (str.startsWith(' or', tokenEnd)) {
-          padding = 3;
-        }
+      } else if (str.startsWith(' or', tokenEnd)) {
         return <ORSearchQuery>{
           type: SearchQueryTypes.OR,
-          list: [SearchQueryDTO.parse(str.slice(0, tokenEnd)), // trim brackets
-            SearchQueryDTO.parse(str.slice(tokenEnd + padding))]
+          list: [SearchQueryDTO.parse(str.slice(0, tokenEnd), implicitOR), // trim brackets
+            SearchQueryDTO.parse(str.slice(tokenEnd + 3), implicitOR)]
+        };
+      } else { // Relation cannot be detected
+        return <SearchListQuery>{
+          type: implicitOR === true ? SearchQueryTypes.OR : SearchQueryTypes.UNKNOWN_RELATION,
+          list: [SearchQueryDTO.parse(str.slice(0, tokenEnd), implicitOR), // trim brackets
+            SearchQueryDTO.parse(str.slice(tokenEnd), implicitOR)]
         };
       }
     }
     if (str.startsWith('some-of:') ||
       new RegExp(/^\d*-of:/).test(str)) {
       const prefix = str.startsWith('some-of:') ? 'some-of:' : new RegExp(/^\d*-of:/).exec(str)[0];
-      let tmpList: any = SearchQueryDTO.parse(str.slice(prefix.length + 1, -1)); // trim brackets
+      let tmpList: any = SearchQueryDTO.parse(str.slice(prefix.length + 1, -1), false); // trim brackets
+      //  console.log(JSON.stringify(tmpList, null, 4));
       const unfoldList = (q: SearchListQuery): SearchQueryDTO[] => {
         if (q.list) {
-          return [].concat.apply([], q.list.map(e => unfoldList(<any>e))); // flatten array
+          if (q.type === SearchQueryTypes.UNKNOWN_RELATION) {
+            return [].concat.apply([], q.list.map(e => unfoldList(<any>e))); // flatten array
+          } else {
+            q.list.forEach(e => unfoldList(<any>e));
+          }
         }
         return [q];
       };

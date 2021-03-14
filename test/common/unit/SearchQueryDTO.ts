@@ -13,6 +13,7 @@ import {
   SearchQueryTypes,
   SomeOfSearchQuery,
   TextSearch,
+  TextSearchQueryMatchTypes,
   ToDateSearch
 } from '../../../src/common/entities/SearchQueryDTO';
 
@@ -33,6 +34,11 @@ describe('SearchQueryDTO', () => {
       check(<TextSearch>{type: SearchQueryTypes.caption, text: 'caption'});
       check(<TextSearch>{type: SearchQueryTypes.file_name, text: 'filename'});
       check(<TextSearch>{type: SearchQueryTypes.position, text: 'New York'});
+      check(<TextSearch>{
+        type: SearchQueryTypes.position,
+        matchType: TextSearchQueryMatchTypes.exact_match,
+        text: 'New York'
+      });
     });
 
     it('Date search', () => {
@@ -62,6 +68,18 @@ describe('SearchQueryDTO', () => {
           <TextSearch>{type: SearchQueryTypes.position, text: 'New York'}
         ]
       });
+
+      check(<ANDSearchQuery>{
+        type: SearchQueryTypes.AND,
+        list: [
+          <TextSearch>{type: SearchQueryTypes.keyword, text: 'big boom'},
+          <TextSearch>{
+            type: SearchQueryTypes.position,
+            matchType: TextSearchQueryMatchTypes.exact_match,
+            text: 'New York'
+          }
+        ]
+      });
       check(<ANDSearchQuery>{
         type: SearchQueryTypes.AND,
         list: [
@@ -73,6 +91,21 @@ describe('SearchQueryDTO', () => {
               <TextSearch>{type: SearchQueryTypes.position, text: 'New York'}
             ]
           }
+        ]
+      });
+      check(<ANDSearchQuery>{
+        type: SearchQueryTypes.AND,
+        list: [
+          <SomeOfSearchQuery>{
+            type: SearchQueryTypes.SOME_OF,
+            min: 2,
+            list: [
+              <TextSearch>{type: SearchQueryTypes.keyword, text: 'big boom'},
+              <TextSearch>{type: SearchQueryTypes.position, text: 'New York'},
+              <TextSearch>{type: SearchQueryTypes.caption, text: 'caption test'}
+            ]
+          },
+          <TextSearch>{type: SearchQueryTypes.position, text: 'New York'}
         ]
       });
     });
@@ -104,6 +137,21 @@ describe('SearchQueryDTO', () => {
         list: [
           <TextSearch>{type: SearchQueryTypes.keyword, text: 'big boom'},
           <TextSearch>{type: SearchQueryTypes.position, text: 'New York'}
+        ]
+      });
+      check(<SomeOfSearchQuery>{
+        type: SearchQueryTypes.SOME_OF,
+        list: [
+          <TextSearch>{
+            type: SearchQueryTypes.keyword,
+            matchType: TextSearchQueryMatchTypes.exact_match,
+            text: 'big boom'
+          },
+          <TextSearch>{
+            type: SearchQueryTypes.position,
+            matchType: TextSearchQueryMatchTypes.exact_match,
+            text: 'New York'
+          },
         ]
       });
       check(<SomeOfSearchQuery>{
