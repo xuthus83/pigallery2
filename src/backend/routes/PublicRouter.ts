@@ -105,7 +105,7 @@ export class PublicRouter {
           ],
           display: 'standalone',
           orientation: 'any',
-          start_url: Config.Client.publicUrl,
+          start_url: Config.Client.publicUrl === '' ? '.' : Config.Client.publicUrl,
           background_color: '#000000',
           theme_color: '#000000'
         });

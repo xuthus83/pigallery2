@@ -28,6 +28,7 @@ import {SortingMethods} from '../../../../../common/entities/SortingMethods';
 import {MediaDTO} from '../../../../../common/entities/MediaDTO';
 import {QueryParams} from '../../../../../common/QueryParams';
 import {SeededRandomService} from '../../../model/seededRandom.service';
+import { compare } from 'natural-orderby';
 
 @Component({
   selector: 'app-gallery-grid',
@@ -230,26 +231,10 @@ export class GalleryGridComponent implements OnChanges, OnInit, AfterViewInit, O
   private sortPhotos() {
     switch (this.galleryService.sorting.value) {
       case SortingMethods.ascName:
-        this.media.sort((a: PhotoDTO, b: PhotoDTO) => {
-          if (a.name.toLowerCase() < b.name.toLowerCase()) {
-            return -1;
-          }
-          if (a.name.toLowerCase() > b.name.toLowerCase()) {
-            return 1;
-          }
-          return 0;
-        });
+        this.media.sort((a: PhotoDTO, b: PhotoDTO) => compare()(a.name, b.name));
         break;
       case SortingMethods.descName:
-        this.media.sort((a: PhotoDTO, b: PhotoDTO) => {
-          if (a.name.toLowerCase() < b.name.toLowerCase()) {
-            return 1;
-          }
-          if (a.name.toLowerCase() > b.name.toLowerCase()) {
-            return -1;
-          }
-          return 0;
-        });
+        this.media.sort((a: PhotoDTO, b: PhotoDTO) => compare({order: 'desc' })(a.name, b.name));
         break;
       case SortingMethods.ascDate:
         this.media.sort((a: PhotoDTO, b: PhotoDTO) => {
