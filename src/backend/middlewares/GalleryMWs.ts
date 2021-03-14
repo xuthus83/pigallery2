@@ -154,15 +154,11 @@ export class GalleryMWs {
 
 
   public static async search(req: Request, res: Response, next: NextFunction) {
-    if (Config.Client.Search.enabled === false || !req.query[QueryParams.gallery.search.query]) {
+    if (Config.Client.Search.enabled === false || !(req.params.searchQueryDTO)) {
       return next();
     }
 
-    if (!(req.params.text)) {
-      return next();
-    }
-
-    const query: SearchQueryDTO = <any>req.query[QueryParams.gallery.search.query];
+    const query: SearchQueryDTO = JSON.parse(<any>req.params.searchQueryDTO);
 
     try {
       const result = await ObjectManagers.getInstance().SearchManager.search(query);
@@ -199,11 +195,12 @@ export class GalleryMWs {
 
 
   public static async getRandomImage(req: Request, res: Response, next: NextFunction) {
-    if (Config.Client.RandomPhoto.enabled === false) {
+    if (Config.Client.RandomPhoto.enabled === false || !(req.params.searchQueryDTO)) {
       return next();
     }
+
     try {
-      const query: SearchQueryDTO = <any>req.query[QueryParams.gallery.search.query];
+      const query: SearchQueryDTO = JSON.parse(<any>req.params.searchQueryDTO);
 
       const photo = await ObjectManagers.getInstance()
         .SearchManager.getRandomPhoto(query);

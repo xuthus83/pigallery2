@@ -9,6 +9,7 @@
            (focus)="onFocus()"
            [(ngModel)]="rawSearchText"
            (ngModelChange)="validateRawSearchText()"
+           (keydown.enter)="Search()"
            #name="ngModel"
            size="30"
            ngControl="search"
@@ -78,6 +79,14 @@
         (delete)="resetQuery()">
 
       </app-gallery-search-query-entry>
+
+      <div class="input-group-btn float-right" style="display: block">
+        <button class="btn btn-primary" type="button"
+                [routerLink]="['/search', HTMLSearchQuery]"
+                (click)="hideModal()">
+          <span class="oi oi-magnifying-glass"></span> Search
+        </button>
+      </div>
     </form>
   </div>
 </ng-template>

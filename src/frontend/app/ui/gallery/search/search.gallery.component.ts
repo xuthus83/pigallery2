@@ -1,7 +1,7 @@
 import {Component, OnDestroy, TemplateRef} from '@angular/core';
 import {AutoCompleteService} from './autocomplete.service';
 import {AutoCompleteItem} from '../../../../../common/entities/AutoCompleteItem';
-import {ActivatedRoute, Params, RouterLink} from '@angular/router';
+import {ActivatedRoute, Params, Router, RouterLink} from '@angular/router';
 import {GalleryService} from '../gallery.service';
 import {Subscription} from 'rxjs';
 import {Config} from '../../../../../common/config/public/Config';
@@ -36,24 +36,27 @@ export class GallerySearchComponent implements OnDestroy {
               private _galleryService: GalleryService,
               private navigationService: NavigationService,
               private _route: ActivatedRoute,
+              public router: Router,
               private modalService: BsModalService) {
 
     this.SearchQueryTypes = SearchQueryTypes;
     this.MetadataSearchQueryTypes = MetadataSearchQueryTypes.map(v => ({key: v, value: SearchQueryTypes[v]}));
 
     this.subscription = this._route.params.subscribe((params: Params) => {
-      const searchQuery = params[QueryParams.gallery.search.query];
+      if (!params[QueryParams.gallery.search.query]) {
+        return;
+      }
+      const searchQuery = JSON.parse(params[QueryParams.gallery.search.query]);
       if (searchQuery) {
         this.searchQueryDTO = searchQuery;
+        this.onQueryChange();
       }
     });
   }
 
 
   get HTMLSearchQuery() {
-    const searchQuery: any = {};
-    searchQuery[QueryParams.gallery.search.query] = this.searchQueryDTO;
-    return searchQuery;
+    return JSON.stringify(this.searchQueryDTO);
   }
 
 
@@ -116,6 +119,10 @@ export class GallerySearchComponent implements OnDestroy {
     } catch (e) {
       console.error(e);
     }
+  }
+
+  Search() {
+    this.router.navigate(['/search', this.HTMLSearchQuery]).catch(console.error);
   }
 
   private emptyAutoComplete() {

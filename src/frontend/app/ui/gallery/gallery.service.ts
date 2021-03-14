@@ -128,9 +128,7 @@ export class GalleryService {
     const cw = new ContentWrapper();
     cw.searchResult = this.galleryCacheService.getSearch(query);
     if (cw.searchResult == null) {
-      const params: { [key: string]: any } = {};
-      params[QueryParams.gallery.search.query] = query;
-      cw.searchResult = (await this.networkService.getJson<ContentWrapper>('/search', params)).searchResult;
+      cw.searchResult = (await this.networkService.getJson<ContentWrapper>('/search/' + query)).searchResult;
       this.galleryCacheService.setSearch(query, cw.searchResult);
     }
 

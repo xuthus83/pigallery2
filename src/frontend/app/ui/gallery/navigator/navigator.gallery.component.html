@@ -10,15 +10,7 @@
   <ol *ngIf="searchResult" class="breadcrumb">
     <li class="active">
       <ng-container i18n>Searching for:</ng-container>
-      <span class="search-type" [ngSwitch]="searchResult.searchType">
-                      <span *ngSwitchCase="SearchTypes.photo" class="oi oi-image"></span>
-                      <span *ngSwitchCase="SearchTypes.video" class="oi oi-video"></span>
-                      <span *ngSwitchCase="SearchTypes.directory" class="oi oi-folder"></span>
-                      <span *ngSwitchCase="SearchTypes.keyword" class="oi oi-tag"></span>
-                      <span *ngSwitchCase="SearchTypes.person" class="oi oi-person"></span>
-                      <span *ngSwitchCase="SearchTypes.position" class="oi oi-map-marker"></span>
-                    </span>
-      <strong> {{searchResult.searchText}}</strong>
+      <strong> {{searchResult.searchQuery | searchQuery}}</strong>
     </li>
   </ol>
 

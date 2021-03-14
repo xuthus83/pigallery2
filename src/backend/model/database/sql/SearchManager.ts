@@ -450,12 +450,15 @@ export class SearchManager implements ISearchManager {
               textParam['CtextC' + paramCounter.value] = `%,${(<TextSearch>query).text},%`;
               textParam['Ctext' + paramCounter.value] = `%,${(<TextSearch>query).text}`;
               textParam['textC' + paramCounter.value] = `${(<TextSearch>query).text},%`;
+              textParam['text_exact' + paramCounter.value] = `${(<TextSearch>query).text}`;
 
               qb[whereFN](`${fieldName} ${LIKE} :CtextC${paramCounter.value} COLLATE utf8_general_ci`,
                 textParam);
               qb[whereFN](`${fieldName} ${LIKE} :Ctext${paramCounter.value} COLLATE utf8_general_ci`,
                 textParam);
               qb[whereFN](`${fieldName} ${LIKE} :textC${paramCounter.value} COLLATE utf8_general_ci`,
+                textParam);
+              qb[whereFN](`${fieldName} ${LIKE} :text_exact${paramCounter.value} COLLATE utf8_general_ci`,
                 textParam);
             }));
           }

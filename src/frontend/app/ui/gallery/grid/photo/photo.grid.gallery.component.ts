@@ -6,7 +6,7 @@ import {Thumbnail, ThumbnailManagerService} from '../../thumbnailManager.service
 import {Config} from '../../../../../../common/config/public/Config';
 import {PageHelper} from '../../../../model/page.helper';
 import {PhotoDTO, PhotoMetadata} from '../../../../../../common/entities/PhotoDTO';
-import {SearchQueryTypes} from '../../../../../../common/entities/SearchQueryDTO';
+import {SearchQueryDTO, SearchQueryTypes, TextSearch, TextSearchQueryMatchTypes} from '../../../../../../common/entities/SearchQueryDTO';
 
 @Component({
   selector: 'app-gallery-grid-photo',
@@ -89,6 +89,18 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, OnDestroy {
       this.wasInView = isInView;
       this.thumbnail.Visible = isInView;
     }
+  }
+
+  getPositionSearchQuery(): string {
+    return JSON.stringify(<TextSearch>{type: SearchQueryTypes.position, text: this.getPositionText()});
+  }
+
+  getTextSearchQuery(name: string, type: SearchQueryTypes): string {
+    return JSON.stringify(<TextSearch>{
+      type: type,
+      matchType: TextSearchQueryMatchTypes.exact_match,
+      text: name
+    });
   }
 
   getPositionText(): string {

@@ -6,7 +6,7 @@ import {VideoDTO, VideoMetadata} from '../../../../../../common/entities/VideoDT
 import {Utils} from '../../../../../../common/Utils';
 import {QueryService} from '../../../../model/query.service';
 import {MapService} from '../../map/map.service';
-import {SearchQueryTypes} from '../../../../../../common/entities/SearchQueryDTO';
+import {SearchQueryTypes, TextSearch, TextSearchQueryMatchTypes} from '../../../../../../common/entities/SearchQueryDTO';
 
 @Component({
   selector: 'app-info-panel',
@@ -121,5 +121,14 @@ export class InfoPanelLightboxComponent implements OnInit {
   close() {
     this.closed.emit();
   }
+
+  getTextSearchQuery(name: string, type: SearchQueryTypes): string {
+    return JSON.stringify(<TextSearch>{
+      type: type,
+      matchType: TextSearchQueryMatchTypes.exact_match,
+      text: name
+    });
+  }
+
 }
 

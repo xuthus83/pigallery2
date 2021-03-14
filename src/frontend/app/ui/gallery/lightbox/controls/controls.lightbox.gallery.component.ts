@@ -7,7 +7,7 @@ import {filter} from 'rxjs/operators';
 import {PhotoDTO} from '../../../../../../common/entities/PhotoDTO';
 import {GalleryLightboxMediaComponent} from '../media/media.lightbox.gallery.component';
 import {Config} from '../../../../../../common/config/public/Config';
-import {SearchQueryTypes} from '../../../../../../common/entities/SearchQueryDTO';
+import {SearchQueryTypes, TextSearch, TextSearchQueryMatchTypes} from '../../../../../../common/entities/SearchQueryDTO';
 
 export enum PlayBackStates {
   Paused = 1,
@@ -47,12 +47,12 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
   public controllersVisible = true;
   public drag = {x: 0, y: 0};
   public SearchQueryTypes = SearchQueryTypes;
+  public faceContainerDim = {width: 0, height: 0};
   private visibilityTimer: number = null;
   private timer: Observable<number>;
   private timerSub: Subscription;
   private prevDrag = {x: 0, y: 0};
   private prevZoom = 1;
-  public faceContainerDim = {width: 0, height: 0};
 
   constructor(public fullScreenService: FullScreenService) {
   }
@@ -296,6 +296,14 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
     this.closed.emit();
   }
 
+  getPersonSearchQuery(name: string): string {
+    return JSON.stringify(<TextSearch>{
+      type: SearchQueryTypes.person,
+      matchType: TextSearchQueryMatchTypes.exact_match,
+      text: name
+    });
+  }
+
   private checkZoomAndDrag() {
     const fixDrag = (drag: { x: number, y: number }) => {
       if (this.zoom === 1) {
@@ -378,6 +386,5 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
       this.faceContainerDim.width = this.photoFrameDim.width;
     }
   }
-
 }
 

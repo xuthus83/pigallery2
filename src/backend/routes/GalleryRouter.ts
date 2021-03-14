@@ -113,7 +113,7 @@ export class GalleryRouter {
   }
 
   protected static addRandom(app: Express) {
-    app.get(['/api/gallery/random'],
+    app.get(['/api/gallery/random/:searchQueryDTO'],
       // common part
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Guest),
@@ -184,7 +184,7 @@ export class GalleryRouter {
   }
 
   protected static addSearch(app: Express) {
-    app.get('/api/search/:text',
+    app.get('/api/search/:searchQueryDTO',
       // common part
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Guest),
