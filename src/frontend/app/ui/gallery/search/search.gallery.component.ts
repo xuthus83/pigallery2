@@ -115,7 +115,6 @@ export class GallerySearchComponent implements OnDestroy {
   validateRawSearchText() {
     try {
       this.searchQueryDTO = SearchQueryDTO.parse(this.rawSearchText);
-      console.log(this.searchQueryDTO);
     } catch (e) {
       console.error(e);
     }

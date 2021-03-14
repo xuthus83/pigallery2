@@ -89,7 +89,6 @@ export class GallerySearchQueryEntryComponent implements ControlValueAccessor, V
   }
 
   addQuery(): void {
-    console.log('clicked', this.IsListQuery);
     if (!this.IsListQuery) {
       return;
     }

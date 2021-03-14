@@ -59,8 +59,7 @@ export class RandomQueryBuilderGalleryComponent implements OnInit, OnDestroy {
     try {
       this.searchQueryDTO = SearchQueryDTO.parse(this.rawSearchText);
       this.url = NetworkService.buildUrl(Config.Client.publicUrl + '/api/gallery/random/' + this.HTMLSearchQuery);
-      console.log(this.searchQueryDTO);
-    } catch (e) {
+     } catch (e) {
       console.error(e);
     }
   }
