@@ -36,9 +36,19 @@
   text-decoration: none;
 }
 
-#srch-term {
-  border-bottom-left-radius: 0;
-  border-bottom-width: 0;
+.search-text {
+  border: 0;
+  z-index: 6;
+  width: 500px;
+  background: transparent;
+}
+
+.search-hint {
+  width: 500px;
+  background: white;
+  z-index: 1;
+  position: absolute;
+  border: 0;
 }
 
 form {

@@ -3,13 +3,14 @@ import {AutoCompleteService} from './autocomplete.service';
 import {AutoCompleteItem} from '../../../../../common/entities/AutoCompleteItem';
 import {ActivatedRoute, Params, Router, RouterLink} from '@angular/router';
 import {GalleryService} from '../gallery.service';
-import {Subscription} from 'rxjs';
+import {BehaviorSubject, Subscription} from 'rxjs';
 import {Config} from '../../../../../common/config/public/Config';
 import {NavigationService} from '../../../model/navigation.service';
 import {QueryParams} from '../../../../../common/QueryParams';
 import {MetadataSearchQueryTypes, SearchQueryDTO, SearchQueryTypes, TextSearch} from '../../../../../common/entities/SearchQueryDTO';
 import {BsModalService} from 'ngx-bootstrap/modal';
 import {BsModalRef} from 'ngx-bootstrap/modal/bs-modal-ref.service';
+import {SearchQueryParserService} from './search-query-parser.service';
 
 @Component({
   selector: 'app-gallery-search',
@@ -31,8 +32,10 @@ export class GallerySearchComponent implements OnDestroy {
     lastInstantSearch: ''
   };
   private readonly subscription: Subscription = null;
+  private autocompleteItems: BehaviorSubject<AutoCompleteItem[]>;
 
   constructor(private _autoCompleteService: AutoCompleteService,
+              private _searchQueryParserService: SearchQueryParserService,
               private _galleryService: GalleryService,
               private navigationService: NavigationService,
               private _route: ActivatedRoute,
@@ -54,6 +57,17 @@ export class GallerySearchComponent implements OnDestroy {
     });
   }
 
+  get SearchHint() {
+    if (!this.autocompleteItems ||
+      !this.autocompleteItems.value || this.autocompleteItems.value.length === 0) {
+      return this.rawSearchText;
+    }
+    const searchText = this.getAutocompleteToken();
+    if (this.autocompleteItems.value[0].text.startsWith(searchText)) {
+      return this.rawSearchText + this.autocompleteItems.value[0].text.substr(searchText.length);
+    }
+    return this.rawSearchText;
+  }
 
   get HTMLSearchQuery() {
     return JSON.stringify(this.searchQueryDTO);
@@ -66,15 +80,21 @@ export class GallerySearchComponent implements OnDestroy {
     }
   }
 
+  getAutocompleteToken(): string {
+    if (this.rawSearchText.trim().length === 0) {
+      return '';
+    }
+    const tokens = this.rawSearchText.split(' ');
+    return tokens[tokens.length - 1];
+
+  }
+
   onSearchChange(event: KeyboardEvent) {
-
-
-    const searchText = (<HTMLInputElement>event.target).value.trim();
-
+    const searchText = this.getAutocompleteToken();
     if (Config.Client.Search.AutoComplete.enabled &&
       this.cache.lastAutocomplete !== searchText) {
       this.cache.lastAutocomplete = searchText;
-      // this.autocomplete(searchText).catch(console.error);
+      this.autocomplete(searchText).catch(console.error);
     }
 
   }
@@ -109,12 +129,12 @@ export class GallerySearchComponent implements OnDestroy {
   }
 
   onQueryChange() {
-    this.rawSearchText = SearchQueryDTO.stringify(this.searchQueryDTO);
+    this.rawSearchText = this._searchQueryParserService.stringify(this.searchQueryDTO);
   }
 
   validateRawSearchText() {
     try {
-      this.searchQueryDTO = SearchQueryDTO.parse(this.rawSearchText);
+      this.searchQueryDTO = this._searchQueryParserService.parse(this.rawSearchText);
     } catch (e) {
       console.error(e);
     }
@@ -122,6 +142,13 @@ export class GallerySearchComponent implements OnDestroy {
 
   Search() {
     this.router.navigate(['/search', this.HTMLSearchQuery]).catch(console.error);
+  }
+
+  applyHint($event: any) {
+    if ($event.target.selectionStart !== this.rawSearchText.length) {
+      return;
+    }
+    this.rawSearchText = this.SearchHint;
   }
 
   private emptyAutoComplete() {
@@ -132,15 +159,16 @@ export class GallerySearchComponent implements OnDestroy {
     if (!Config.Client.Search.AutoComplete.enabled) {
       return;
     }
-    if (searchText.trim() === '.') {
+
+    if (searchText.trim().length === 0 ||
+      searchText.trim() === '.') {
       return;
     }
 
 
     if (searchText.trim().length > 0) {
       try {
-        const items = await this._autoCompleteService.autoComplete(searchText);
-        this.showSuggestions(items, searchText);
+        this.autocompleteItems = this._autoCompleteService.autoComplete(searchText);
       } catch (error) {
         console.error(error);
       }

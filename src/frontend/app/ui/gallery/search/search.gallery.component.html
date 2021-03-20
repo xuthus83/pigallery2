@@ -1,7 +1,7 @@
 <form class="navbar-form" role="search" #SearchForm="ngForm">
   <div class="input-group">
     <input type="text"
-           class="form-control "
+           class="form-control search-text"
            i18n-placeholder
            placeholder="Search"
            (keyup)="onSearchChange($event)"
@@ -10,11 +10,23 @@
            [(ngModel)]="rawSearchText"
            (ngModelChange)="validateRawSearchText()"
            (keydown.enter)="Search()"
+           (keydown.arrowRight)="applyHint($event)"
            #name="ngModel"
            size="30"
            ngControl="search"
            name="srch-term"
            id="srch-term"
+           autocomplete="off">
+    <input type="text"
+           class="form-control search-hint"
+           [ngModel]="SearchHint"
+           i18n-placeholder
+           placeholder="Search"
+           disabled
+           value="test hint"
+           size="30"
+           name="srch-term-hint"
+           id="srch-term-hint"
            autocomplete="off">
 
 
@@ -62,7 +74,7 @@
   <div class="modal-body">
     <form #searchPanelForm="ngForm" class="form-horizontal">
       <input type="text"
-             class="form-control"
+             class="form-control search-text"
              i18n-placeholder
              placeholder="Search"
              [(ngModel)]="rawSearchText"

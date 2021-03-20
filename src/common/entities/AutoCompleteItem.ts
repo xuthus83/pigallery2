@@ -1,7 +1,7 @@
 import {SearchQueryTypes} from './SearchQueryDTO';
 
 export class AutoCompleteItem {
-  constructor(public text: string, public type: SearchQueryTypes) {
+  constructor(public text: string, public type: SearchQueryTypes = null) {
   }
 
   equals(other: AutoCompleteItem) {

@@ -95,6 +95,8 @@ import {CSRFInterceptor} from './model/network/helper/csrf.interceptor';
 import {SettingsEntryComponent} from './ui/settings/_abstract/settings-entry/settings-entry.component';
 import {GallerySearchQueryEntryComponent} from './ui/gallery/search/query-enrty/query-entry.search.gallery.component';
 import {StringifySearchQuery} from './pipes/StringifySearchQuery';
+import {AutoCompleteService} from './ui/gallery/search/autocomplete.service';
+import {SearchQueryParserService} from './ui/gallery/search/search-query-parser.service';
 
 
 @Injectable()
@@ -231,6 +233,8 @@ export function translationsFactory(locale: string) {
     GalleryCacheService,
     GalleryService,
     MapService,
+    SearchQueryParserService,
+    AutoCompleteService,
     AuthenticationService,
     ThumbnailLoaderService,
     ThumbnailManagerService,

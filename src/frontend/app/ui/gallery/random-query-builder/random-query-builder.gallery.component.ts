@@ -11,6 +11,7 @@ import {Subscription} from 'rxjs';
 import {SearchQueryDTO, SearchQueryTypes, TextSearch} from '../../../../../common/entities/SearchQueryDTO';
 import {ActivatedRoute, Params} from '@angular/router';
 import {QueryParams} from '../../../../../common/QueryParams';
+import {SearchQueryParserService} from '../search/search-query-parser.service';
 
 
 @Component({
@@ -34,6 +35,7 @@ export class RandomQueryBuilderGalleryComponent implements OnInit, OnDestroy {
 
   constructor(public _galleryService: GalleryService,
               private  _notification: NotificationService,
+              private _searchQueryParserService: SearchQueryParserService,
               public i18n: I18n,
               private _route: ActivatedRoute,
               private modalService: BsModalService) {
@@ -57,7 +59,7 @@ export class RandomQueryBuilderGalleryComponent implements OnInit, OnDestroy {
 
   validateRawSearchText() {
     try {
-      this.searchQueryDTO = SearchQueryDTO.parse(this.rawSearchText);
+      this.searchQueryDTO = this._searchQueryParserService.parse(this.rawSearchText);
       this.url = NetworkService.buildUrl(Config.Client.publicUrl + '/api/gallery/random/' + this.HTMLSearchQuery);
      } catch (e) {
       console.error(e);
@@ -65,7 +67,7 @@ export class RandomQueryBuilderGalleryComponent implements OnInit, OnDestroy {
   }
 
   onQueryChange() {
-    this.rawSearchText = SearchQueryDTO.stringify(this.searchQueryDTO);
+    this.rawSearchText = this._searchQueryParserService.stringify(this.searchQueryDTO);
     this.url = NetworkService.buildUrl(Config.Client.publicUrl + '/api/gallery/random/' + this.HTMLSearchQuery);
   }
 
