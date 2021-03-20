@@ -4,7 +4,6 @@ import {
   ListSearchQueryTypes,
   OrientationSearch,
   RangeSearch,
-  RangeSearchQueryTypes,
   SearchListQuery,
   SearchQueryDTO,
   SearchQueryTypes,
@@ -42,11 +41,8 @@ export class GallerySearchQueryEntryComponent implements ControlValueAccessor, V
   constructor() {
     this.SearchQueryTypesEnum = Utils.enumToArray(SearchQueryTypes);
     // Range queries need to be added as AND with min and max sub entry
-    this.SearchQueryTypesEnum.filter(e => !RangeSearchQueryTypes.includes(e.key));
-    this.SearchQueryTypesEnum.push({value: 'Date', key: SearchQueryTypes.AND});
-    this.SearchQueryTypesEnum.push({value: 'Rating', key: SearchQueryTypes.AND});
-    this.SearchQueryTypesEnum.push({value: 'Resolution', key: SearchQueryTypes.AND});
-
+    this.SearchQueryTypesEnum =
+      this.SearchQueryTypesEnum.filter(e => e.key !== SearchQueryTypes.UNKNOWN_RELATION);
   }
 
   get IsTextQuery(): boolean {
