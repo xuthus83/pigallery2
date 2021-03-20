@@ -1,6 +1,11 @@
 import {SearchQueryTypes} from './SearchQueryDTO';
 
-export class AutoCompleteItem {
+export interface IAutoCompleteItem {
+  text: string;
+  type?: SearchQueryTypes;
+}
+
+export class AutoCompleteItem implements IAutoCompleteItem {
   constructor(public text: string, public type: SearchQueryTypes = null) {
   }
 

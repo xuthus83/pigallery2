@@ -30,9 +30,9 @@
            autocomplete="off">
 
 
-    <div class="autocomplete-list" *ngIf="autoCompleteItems.length > 0"
+    <div class="autocomplete-list" *ngIf="autoCompleteRenders.length > 0"
          (mouseover)="setMouseOverAutoComplete(true)" (mouseout)="setMouseOverAutoComplete(false)">
-      <div class="autocomplete-item" *ngFor="let item of autoCompleteItems">
+      <div class="autocomplete-item" (click)="applyAutoComplete(item)" *ngFor="let item of autoCompleteRenders">
         <div>
                     <span [ngSwitch]="item.type">
                       <span *ngSwitchCase="SearchQueryTypes.caption" class="oi oi-image"></span>

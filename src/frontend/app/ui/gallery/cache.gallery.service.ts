@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {DirectoryDTO} from '../../../../common/entities/DirectoryDTO';
 import {Utils} from '../../../../common/Utils';
 import {Config} from '../../../../common/config/public/Config';
-import {AutoCompleteItem} from '../../../../common/entities/AutoCompleteItem';
+import {AutoCompleteItem, IAutoCompleteItem} from '../../../../common/entities/AutoCompleteItem';
 import {SearchResultDTO} from '../../../../common/entities/SearchResultDTO';
 import {MediaDTO} from '../../../../common/entities/MediaDTO';
 import {SortingMethods} from '../../../../common/entities/SortingMethods';
@@ -101,14 +101,14 @@ export class GalleryCacheService {
     return null;
   }
 
-  public getAutoComplete(text: string): AutoCompleteItem[] {
+  public getAutoComplete(text: string): IAutoCompleteItem[] {
     if (Config.Client.Other.enableCache === false) {
       return null;
     }
     const key = GalleryCacheService.AUTO_COMPLETE_PREFIX + text;
     const tmp = localStorage.getItem(key);
     if (tmp != null) {
-      const value: CacheItem<AutoCompleteItem[]> = JSON.parse(tmp);
+      const value: CacheItem<IAutoCompleteItem[]> = JSON.parse(tmp);
       if (value.timestamp < Date.now() - Config.Client.Search.AutoComplete.cacheTimeout) {
         localStorage.removeItem(key);
         return null;
@@ -118,11 +118,11 @@ export class GalleryCacheService {
     return null;
   }
 
-  public setAutoComplete(text: string, items: Array<AutoCompleteItem>): void {
+  public setAutoComplete(text: string, items: Array<IAutoCompleteItem>): void {
     if (Config.Client.Other.enableCache === false) {
       return;
     }
-    const tmp: CacheItem<Array<AutoCompleteItem>> = {
+    const tmp: CacheItem<Array<IAutoCompleteItem>> = {
       timestamp: Date.now(),
       item: items
     };
