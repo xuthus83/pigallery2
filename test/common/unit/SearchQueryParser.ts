@@ -16,12 +16,36 @@ import {
   TextSearchQueryMatchTypes,
   ToDateSearch
 } from '../../../src/common/entities/SearchQueryDTO';
+import {QueryKeywords, SearchQueryParser} from '../../../src/common/SearchQueryParser';
 
 describe('SearchQueryDTO', () => {
 
+  const keywords: QueryKeywords = {
+    NSomeOf: '-of',
+    and: 'and',
+    caption: 'caption',
+    directory: 'directory',
+    file_name: 'file-name',
+    from: 'from',
+    keyword: 'keyword',
+    landscape: 'landscape',
+    maxRating: 'max-rating',
+    maxResolution: 'max-resolution',
+    minRating: 'min-rating',
+    minResolution: 'min-resolution',
+    or: 'or',
+    orientation: 'orientation',
+    person: 'person',
+    portrait: 'portrait',
+    position: 'position',
+    someOf: 'some-of',
+    to: 'to',
+    kmFrom: 'km-from'
+  };
 
   const check = (query: SearchQueryDTO) => {
-    expect(SearchQueryDTO.parse(SearchQueryDTO.stringify(query))).to.deep.equals(query, SearchQueryDTO.stringify(query));
+    const parser = new SearchQueryParser(keywords);
+    expect(parser.parse(parser.stringify(query))).to.deep.equals(query, parser.stringify(query));
 
   };
 
