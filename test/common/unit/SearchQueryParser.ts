@@ -18,7 +18,7 @@ import {
 } from '../../../src/common/entities/SearchQueryDTO';
 import {QueryKeywords, SearchQueryParser} from '../../../src/common/SearchQueryParser';
 
-describe('SearchQueryDTO', () => {
+describe('SearchQueryParser', () => {
 
   const keywords: QueryKeywords = {
     NSomeOf: '-of',

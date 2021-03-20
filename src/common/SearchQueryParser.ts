@@ -106,10 +106,10 @@ export class SearchQueryParser {
       }
     }
     if (str.startsWith(this.keywords.someOf + ':') ||
-      new RegExp(/^\d*-of:/).test(str)) {
+      new RegExp('^\\d*-' + this.keywords.NSomeOf + ':').test(str)) {
       const prefix = str.startsWith(this.keywords.someOf + ':') ?
         this.keywords.someOf + ':' :
-        new RegExp(/^\d*-of:/).exec(str)[0];
+        new RegExp('^\\d*-' + this.keywords.NSomeOf + ':').exec(str)[0];
       let tmpList: any = this.parse(str.slice(prefix.length + 1, -1), false); // trim brackets
       //  console.log(JSON.stringify(tmpList, null, 4));
       const unfoldList = (q: SearchListQuery): SearchQueryDTO[] => {
@@ -127,7 +127,7 @@ export class SearchQueryParser {
         type: SearchQueryTypes.SOME_OF,
         list: tmpList
       };
-      if (new RegExp('/^\d*-' + this.keywords.NSomeOf + ':/').test(str)) {
+      if (new RegExp('^\\d*-' + this.keywords.NSomeOf + ':').test(str)) {
         ret.min = parseInt(new RegExp(/^\d*/).exec(str)[0], 10);
       }
       return ret;
@@ -170,8 +170,8 @@ export class SearchQueryParser {
         value: parseInt(str.slice((this.keywords.maxResolution + ':').length), 10)
       };
     }
-    if (new RegExp('/^\d*-' + this.keywords.kmFrom + ':/').test(str)) {
-      let from = str.slice(new RegExp('/^\d*-' + this.keywords.kmFrom + ':/').exec(str)[0].length);
+    if (new RegExp('^\\d*-' + this.keywords.kmFrom + ':').test(str)) {
+      let from = str.slice(new RegExp('^\\d*-' + this.keywords.kmFrom + ':').exec(str)[0].length);
       if (from.charAt(0) === '(' && from.charAt(from.length - 1) === ')') {
         from = from.slice(1, from.length - 1);
       }
@@ -279,12 +279,12 @@ export class SearchQueryParser {
           return '';
         }
         if ((<TextSearch>query).matchType === TextSearchQueryMatchTypes.exact_match) {
-          return SearchQueryTypes[query.type] + ':"' + (<TextSearch>query).text + '"';
+          return (<any>this.keywords)[SearchQueryTypes[query.type]] + ':"' + (<TextSearch>query).text + '"';
 
         } else if ((<TextSearch>query).text.indexOf(' ') !== -1) {
-          return SearchQueryTypes[query.type] + ':(' + (<TextSearch>query).text + ')';
+          return (<any>this.keywords)[SearchQueryTypes[query.type]] + ':(' + (<TextSearch>query).text + ')';
         }
-        return SearchQueryTypes[query.type] + ':' + (<TextSearch>query).text;
+        return (<any>this.keywords)[SearchQueryTypes[query.type]] + ':' + (<TextSearch>query).text;
 
       default:
         throw new Error('Unknown type: ' + query.type);

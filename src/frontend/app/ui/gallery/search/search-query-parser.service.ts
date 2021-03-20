@@ -6,7 +6,7 @@ import {SearchQueryDTO} from '../../../../../common/entities/SearchQueryDTO';
 export class SearchQueryParserService {
 
   public readonly keywords: QueryKeywords = {
-    NSomeOf: '-of',
+    NSomeOf: 'of',
     and: 'and',
     caption: 'caption',
     directory: 'directory',
