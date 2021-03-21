@@ -7,7 +7,6 @@ import {FacesService} from '../faces.service';
 import {AuthenticationService} from '../../../model/network/authentication.service';
 import {Config} from '../../../../../common/config/public/Config';
 import {SearchQueryTypes, TextSearch, TextSearchQueryMatchTypes} from '../../../../../common/entities/SearchQueryDTO';
-import {QueryParams} from '../../../../../common/QueryParams';
 
 @Component({
   selector: 'app-face',
@@ -20,7 +19,7 @@ export class FaceComponent implements OnInit, OnDestroy {
   @Input() size: number;
 
   thumbnail: PersonThumbnail = null;
-  public searchQuery: any;
+  public searchQueryDTOstr: string;
 
   constructor(private thumbnailService: ThumbnailManagerService,
               private _sanitizer: DomSanitizer,
@@ -35,12 +34,11 @@ export class FaceComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.thumbnail = this.thumbnailService.getPersonThumbnail(this.person);
-    this.searchQuery = {};
-    this.searchQuery[QueryParams.gallery.search.query] = <TextSearch>{
+    this.searchQueryDTOstr = JSON.stringify(<TextSearch>{
       type: SearchQueryTypes.person,
       text: this.person.name,
       matchType: TextSearchQueryMatchTypes.exact_match
-    };
+    });
 
   }
 
