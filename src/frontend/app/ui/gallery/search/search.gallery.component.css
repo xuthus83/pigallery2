@@ -20,7 +20,7 @@
   font-size: 17px;
 }
 
-.autocomplete-item a {
+.autocomplete-item {
   color: #333;
   padding: 0 20px;
   line-height: 1.42857143;
@@ -28,14 +28,11 @@
   display: block;
 }
 
-.autocomplete-item:hover {
+.autocomplete-item-selected {
   background-color: #007bff;
+  color: #FFF;
 }
 
-.autocomplete-item:hover a {
-  color: #FFF;
-  text-decoration: none;
-}
 
 .search-text {
   border: 0;

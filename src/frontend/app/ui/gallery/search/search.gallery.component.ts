@@ -26,6 +26,7 @@ export class GallerySearchComponent implements OnDestroy {
   readonly SearchQueryTypes: typeof SearchQueryTypes;
   modalRef: BsModalRef;
   public readonly MetadataSearchQueryTypes: { value: string; key: SearchQueryTypes }[];
+  public highlightedAutoCompleteItem = 0;
   private cache = {
     lastAutocomplete: '',
     lastInstantSearch: ''
@@ -62,11 +63,11 @@ export class GallerySearchComponent implements OnDestroy {
       return this.rawSearchText;
     }
     const searchText = this.getAutocompleteToken();
-    if (searchText === '') {
-      return this.rawSearchText;
+    if (searchText.current === '') {
+      return this.rawSearchText + this.autoCompleteItems.value[this.highlightedAutoCompleteItem].queryHint;
     }
-    if (this.autoCompleteItems.value[0].queryHint.startsWith(searchText)) {
-      return this.rawSearchText + this.autoCompleteItems.value[0].queryHint.substr(searchText.length);
+    if (this.autoCompleteItems.value[0].queryHint.startsWith(searchText.current)) {
+      return this.rawSearchText + this.autoCompleteItems.value[this.highlightedAutoCompleteItem].queryHint.substr(searchText.current.length);
     }
     return this.rawSearchText;
   }
@@ -82,20 +83,23 @@ export class GallerySearchComponent implements OnDestroy {
     }
   }
 
-  getAutocompleteToken(): string {
+  getAutocompleteToken(): { current: string, prev: string } {
     if (this.rawSearchText.trim().length === 0) {
-      return '';
+      return {current: '', prev: ''};
     }
     const tokens = this.rawSearchText.split(' ');
-    return tokens[tokens.length - 1];
+    return {
+      current: tokens[tokens.length - 1],
+      prev: (tokens.length > 2 ? tokens[tokens.length - 2] : '')
+    };
 
   }
 
   onSearchChange(event: KeyboardEvent) {
     const searchText = this.getAutocompleteToken();
     if (Config.Client.Search.AutoComplete.enabled &&
-      this.cache.lastAutocomplete !== searchText) {
-      this.cache.lastAutocomplete = searchText;
+      this.cache.lastAutocomplete !== searchText.current) {
+      this.cache.lastAutocomplete = searchText.current;
       this.autocomplete(searchText).catch(console.error);
     }
 
@@ -157,35 +161,55 @@ export class GallerySearchComponent implements OnDestroy {
 
   applyAutoComplete(item: AutoCompleteRenderItem) {
     const token = this.getAutocompleteToken();
-    this.rawSearchText = this.rawSearchText.substr(0, this.rawSearchText.length - token.length)
+    this.rawSearchText = this.rawSearchText.substr(0, this.rawSearchText.length - token.current.length)
       + item.queryHint;
     this.emptyAutoComplete();
     this.validateRawSearchText();
   }
 
+  setMouseOverAutoCompleteItem(i: number) {
+    this.highlightedAutoCompleteItem = i;
+  }
+
+  selectAutocompleteUp() {
+    if (this.highlightedAutoCompleteItem > 0) {
+      this.highlightedAutoCompleteItem--;
+    }
+  }
+
+  selectAutocompleteDown() {
+    if (this.autoCompleteItems &&
+      this.highlightedAutoCompleteItem < this.autoCompleteItems.value.length - 1) {
+      this.highlightedAutoCompleteItem++;
+    }
+  }
+
+  OnEnter($event: any) {
+    if (this.autoCompleteRenders.length === 0) {
+      this.Search();
+      return;
+    }
+    this.applyAutoComplete(this.autoCompleteRenders[this.highlightedAutoCompleteItem]);
+  }
+
   private emptyAutoComplete() {
+    this.highlightedAutoCompleteItem = 0;
     this.autoCompleteRenders = [];
   }
 
-  private async autocomplete(searchText: string) {
+  private async autocomplete(searchText: { current: string, prev: string }) {
     if (!Config.Client.Search.AutoComplete.enabled) {
       return;
     }
 
-    if (searchText.trim().length === 0 ||
-      searchText.trim() === '.') {
-      return;
-    }
-
-
-    if (searchText.trim().length > 0) {
+    if (this.rawSearchText.trim().length > 0) { // are we searching for anything?
       try {
         if (this.autoCompleteItems) {
           this.autoCompleteItems.unsubscribe();
         }
         this.autoCompleteItems = this._autoCompleteService.autoComplete(searchText);
         this.autoCompleteItems.subscribe(() => {
-          this.showSuggestions(this.autoCompleteItems.value, searchText);
+          this.showSuggestions(this.autoCompleteItems.value, searchText.current);
         });
       } catch (error) {
         console.error(error);

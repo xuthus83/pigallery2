@@ -2,12 +2,12 @@ import {Injectable} from '@angular/core';
 import {DirectoryDTO} from '../../../../common/entities/DirectoryDTO';
 import {Utils} from '../../../../common/Utils';
 import {Config} from '../../../../common/config/public/Config';
-import {AutoCompleteItem, IAutoCompleteItem} from '../../../../common/entities/AutoCompleteItem';
+import {IAutoCompleteItem} from '../../../../common/entities/AutoCompleteItem';
 import {SearchResultDTO} from '../../../../common/entities/SearchResultDTO';
 import {MediaDTO} from '../../../../common/entities/MediaDTO';
 import {SortingMethods} from '../../../../common/entities/SortingMethods';
 import {VersionService} from '../../model/version.service';
-import {SearchQueryDTO} from '../../../../common/entities/SearchQueryDTO';
+import {SearchQueryDTO, SearchQueryTypes} from '../../../../common/entities/SearchQueryDTO';
 
 interface CacheItem<T> {
   timestamp: number;
@@ -101,11 +101,11 @@ export class GalleryCacheService {
     return null;
   }
 
-  public getAutoComplete(text: string): IAutoCompleteItem[] {
+  public getAutoComplete(text: string, type: SearchQueryTypes): IAutoCompleteItem[] {
     if (Config.Client.Other.enableCache === false) {
       return null;
     }
-    const key = GalleryCacheService.AUTO_COMPLETE_PREFIX + text;
+    const key = GalleryCacheService.AUTO_COMPLETE_PREFIX + text + (type ? '_' + type : '');
     const tmp = localStorage.getItem(key);
     if (tmp != null) {
       const value: CacheItem<IAutoCompleteItem[]> = JSON.parse(tmp);
@@ -118,16 +118,17 @@ export class GalleryCacheService {
     return null;
   }
 
-  public setAutoComplete(text: string, items: Array<IAutoCompleteItem>): void {
+  public setAutoComplete(text: string, type: SearchQueryTypes, items: Array<IAutoCompleteItem>): void {
     if (Config.Client.Other.enableCache === false) {
       return;
     }
+    const key = GalleryCacheService.AUTO_COMPLETE_PREFIX + text + (type ? '_' + type : '');
     const tmp: CacheItem<Array<IAutoCompleteItem>> = {
       timestamp: Date.now(),
       item: items
     };
     try {
-      localStorage.setItem(GalleryCacheService.AUTO_COMPLETE_PREFIX + text, JSON.stringify(tmp));
+      localStorage.setItem(key, JSON.stringify(tmp));
     } catch (e) {
       this.reset();
       console.error(e);

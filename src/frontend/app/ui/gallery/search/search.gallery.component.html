@@ -9,8 +9,10 @@
            (focus)="onFocus()"
            [(ngModel)]="rawSearchText"
            (ngModelChange)="validateRawSearchText()"
-           (keydown.enter)="Search()"
+           (keydown.enter)="OnEnter($event)"
            (keydown.arrowRight)="applyHint($event)"
+           (keydown.arrowUp)="selectAutocompleteUp()"
+           (keydown.arrowDown)="selectAutocompleteDown()"
            #name="ngModel"
            size="30"
            ngControl="search"
@@ -32,7 +34,11 @@
 
     <div class="autocomplete-list" *ngIf="autoCompleteRenders.length > 0"
          (mouseover)="setMouseOverAutoComplete(true)" (mouseout)="setMouseOverAutoComplete(false)">
-      <div class="autocomplete-item" (click)="applyAutoComplete(item)" *ngFor="let item of autoCompleteRenders">
+      <div class="autocomplete-item"
+           [ngClass]="{'autocomplete-item-selected':highlightedAutoCompleteItem == i}"
+           (mouseover)="setMouseOverAutoCompleteItem(i)"
+           (click)="applyAutoComplete(item)"
+           *ngFor="let item of autoCompleteRenders; let i = index">
         <div>
                     <span [ngSwitch]="item.type">
                       <span *ngSwitchCase="SearchQueryTypes.caption" class="oi oi-image"></span>

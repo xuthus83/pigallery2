@@ -5,11 +5,14 @@ import {GalleryCacheService} from '../cache.gallery.service';
 import {SearchQueryParserService} from './search-query-parser.service';
 import {BehaviorSubject} from 'rxjs';
 import {SearchQueryTypes, TextSearchQueryTypes} from '../../../../../common/entities/SearchQueryDTO';
+import {QueryParams} from '../../../../../common/QueryParams';
 
 @Injectable()
 export class AutoCompleteService {
 
   private keywords: string[] = [];
+  private relationKeywords: string[] = [];
+  private textSearchKeywordsMap: { [key: string]: SearchQueryTypes } = {};
 
   constructor(private _networkService: NetworkService,
               private _searchQueryParserService: SearchQueryParserService,
@@ -27,21 +30,59 @@ export class AutoCompleteService {
     for (let i = 0; i < 10; i++) {
       this.keywords.push(i + this._searchQueryParserService.keywords.NSomeOf);
     }
+
+    TextSearchQueryTypes.forEach(t => {
+      this.textSearchKeywordsMap[(<any>this._searchQueryParserService.keywords)[SearchQueryTypes[t]]] = t;
+    });
   }
 
-  public autoComplete(text: string): BehaviorSubject<RenderableAutoCompleteItem[]> {
+  public autoComplete(text: { current: string, prev: string }): BehaviorSubject<RenderableAutoCompleteItem[]> {
     const items: BehaviorSubject<RenderableAutoCompleteItem[]> = new BehaviorSubject(
-      this.sortResults(text, this.getQueryKeywords(text)));
-    const cached = this._galleryCacheService.getAutoComplete(text);
+      this.sortResults(text.current, this.getQueryKeywords(text)));
+
+    const type = this.getTypeFromPrefix(text.current);
+    const searchText = this.getPrefixLessSearchText(text.current);
+    if (searchText === '') {
+      return items;
+    }
+    this.typedAutoComplete(searchText, type, items);
+    return items;
+  }
+
+  public typedAutoComplete(text: string, type: SearchQueryTypes,
+                           items?: BehaviorSubject<RenderableAutoCompleteItem[]>): BehaviorSubject<RenderableAutoCompleteItem[]> {
+    items = items || new BehaviorSubject([]);
+
+    const cached = this._galleryCacheService.getAutoComplete(text, type);
     if (cached == null) {
-      this._networkService.getJson<IAutoCompleteItem[]>('/autocomplete/' + text).then(ret => {
-        this._galleryCacheService.setAutoComplete(text, ret);
+      const acParams: any = {};
+      if (type) {
+        acParams[QueryParams.gallery.search.type] = type;
+      }
+      this._networkService.getJson<IAutoCompleteItem[]>('/autocomplete/' + text, acParams).then(ret => {
+        this._galleryCacheService.setAutoComplete(text, type, ret);
         items.next(this.sortResults(text, ret.map(i => this.ACItemToRenderable(i)).concat(items.value)));
       });
     } else {
       items.next(this.sortResults(text, cached.map(i => this.ACItemToRenderable(i)).concat(items.value)));
     }
     return items;
+  }
+
+  private getTypeFromPrefix(text: string): SearchQueryTypes {
+    const tokens = text.split(':');
+    if (tokens.length !== 2) {
+      return null;
+    }
+    return this.textSearchKeywordsMap[tokens[0]] || null;
+  }
+
+  private getPrefixLessSearchText(text: string): string {
+    const tokens = text.split(':');
+    if (tokens.length !== 2) {
+      return text;
+    }
+    return tokens[1];
   }
 
   private ACItemToRenderable(item: IAutoCompleteItem): RenderableAutoCompleteItem {
@@ -52,7 +93,7 @@ export class AutoCompleteService {
       return {
         text: item.text, type: item.type,
         queryHint:
-          (<any>this._searchQueryParserService.keywords)[SearchQueryTypes[item.type]] + ':(' + item.text + ')'
+          (<any>this._searchQueryParserService.keywords)[SearchQueryTypes[item.type]] + ':"' + item.text + '"'
       };
     }
     return {
@@ -73,9 +114,20 @@ export class AutoCompleteService {
 
   }
 
-  private getQueryKeywords(text: string): RenderableAutoCompleteItem[] {
+  private getQueryKeywords(text: { current: string, prev: string }): RenderableAutoCompleteItem[] {
+    // if empty, recommend "and"
+    if (text.current === '') {
+      if (text.prev !== this._searchQueryParserService.keywords.and) {
+        return [{
+          text: this._searchQueryParserService.keywords.and,
+          queryHint: this._searchQueryParserService.keywords.and
+        }];
+      } else {
+        return [];
+      }
+    }
     return this.keywords
-      .filter(key => key.startsWith(text))
+      .filter(key => key.startsWith(text.current))
       .map(key => ({
         text: key,
         queryHint: key
