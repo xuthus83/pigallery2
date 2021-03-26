@@ -1,9 +1,8 @@
 import {Component, OnDestroy, TemplateRef} from '@angular/core';
-import {AutoCompleteService, RenderableAutoCompleteItem} from './autocomplete.service';
+import {AutoCompleteService} from './autocomplete.service';
 import {ActivatedRoute, Params, Router, RouterLink} from '@angular/router';
 import {GalleryService} from '../gallery.service';
-import {BehaviorSubject, Subscription} from 'rxjs';
-import {Config} from '../../../../../common/config/public/Config';
+import {Subscription} from 'rxjs';
 import {NavigationService} from '../../../model/navigation.service';
 import {QueryParams} from '../../../../../common/QueryParams';
 import {MetadataSearchQueryTypes, SearchQueryDTO, SearchQueryTypes, TextSearch} from '../../../../../common/entities/SearchQueryDTO';
@@ -19,20 +18,13 @@ import {SearchQueryParserService} from './search-query-parser.service';
 })
 export class GallerySearchComponent implements OnDestroy {
 
-  autoCompleteRenders: AutoCompleteRenderItem[] = [];
   public searchQueryDTO: SearchQueryDTO = <TextSearch>{type: SearchQueryTypes.any_text, text: ''};
   public rawSearchText = '';
   mouseOverAutoComplete = false;
   readonly SearchQueryTypes: typeof SearchQueryTypes;
   modalRef: BsModalRef;
   public readonly MetadataSearchQueryTypes: { value: string; key: SearchQueryTypes }[];
-  public highlightedAutoCompleteItem = 0;
-  private cache = {
-    lastAutocomplete: '',
-    lastInstantSearch: ''
-  };
   private readonly subscription: Subscription = null;
-  private autoCompleteItems: BehaviorSubject<RenderableAutoCompleteItem[]>;
 
   constructor(private _autoCompleteService: AutoCompleteService,
               private _searchQueryParserService: SearchQueryParserService,
@@ -57,21 +49,6 @@ export class GallerySearchComponent implements OnDestroy {
     });
   }
 
-  get SearchHint() {
-    if (!this.autoCompleteItems ||
-      !this.autoCompleteItems.value || this.autoCompleteItems.value.length === 0) {
-      return this.rawSearchText;
-    }
-    const searchText = this.getAutocompleteToken();
-    if (searchText.current === '') {
-      return this.rawSearchText + this.autoCompleteItems.value[this.highlightedAutoCompleteItem].queryHint;
-    }
-    if (this.autoCompleteItems.value[0].queryHint.startsWith(searchText.current)) {
-      return this.rawSearchText + this.autoCompleteItems.value[this.highlightedAutoCompleteItem].queryHint.substr(searchText.current.length);
-    }
-    return this.rawSearchText;
-  }
-
   get HTMLSearchQuery() {
     return JSON.stringify(this.searchQueryDTO);
   }
@@ -81,43 +58,6 @@ export class GallerySearchComponent implements OnDestroy {
     if (this.subscription !== null) {
       this.subscription.unsubscribe();
     }
-  }
-
-  getAutocompleteToken(): { current: string, prev: string } {
-    if (this.rawSearchText.trim().length === 0) {
-      return {current: '', prev: ''};
-    }
-    const tokens = this.rawSearchText.split(' ');
-    return {
-      current: tokens[tokens.length - 1],
-      prev: (tokens.length > 2 ? tokens[tokens.length - 2] : '')
-    };
-
-  }
-
-  onSearchChange(event: KeyboardEvent) {
-    const searchText = this.getAutocompleteToken();
-    if (Config.Client.Search.AutoComplete.enabled &&
-      this.cache.lastAutocomplete !== searchText.current) {
-      this.cache.lastAutocomplete = searchText.current;
-      this.autocomplete(searchText).catch(console.error);
-    }
-
-  }
-
-  public setMouseOverAutoComplete(value: boolean) {
-    this.mouseOverAutoComplete = value;
-  }
-
-  public onFocusLost() {
-    if (this.mouseOverAutoComplete === false) {
-      this.autoCompleteRenders = [];
-    }
-  }
-
-  public onFocus() {
-    // TODO: implement autocomplete
-    // this.autocomplete(this.searchText).catch(console.error);
   }
 
   public async openModal(template: TemplateRef<any>) {
@@ -136,7 +76,7 @@ export class GallerySearchComponent implements OnDestroy {
 
   onQueryChange() {
     this.rawSearchText = this._searchQueryParserService.stringify(this.searchQueryDTO);
-    this.validateRawSearchText();
+    // this.validateRawSearchText();
   }
 
   validateRawSearchText() {
@@ -151,102 +91,7 @@ export class GallerySearchComponent implements OnDestroy {
     this.router.navigate(['/search', this.HTMLSearchQuery]).catch(console.error);
   }
 
-  applyHint($event: any) {
-    if ($event.target.selectionStart !== this.rawSearchText.length) {
-      return;
-    }
-    this.rawSearchText = this.SearchHint;
-    this.validateRawSearchText();
-  }
 
-  applyAutoComplete(item: AutoCompleteRenderItem) {
-    const token = this.getAutocompleteToken();
-    this.rawSearchText = this.rawSearchText.substr(0, this.rawSearchText.length - token.current.length)
-      + item.queryHint;
-    this.emptyAutoComplete();
-    this.validateRawSearchText();
-  }
-
-  setMouseOverAutoCompleteItem(i: number) {
-    this.highlightedAutoCompleteItem = i;
-  }
-
-  selectAutocompleteUp() {
-    if (this.highlightedAutoCompleteItem > 0) {
-      this.highlightedAutoCompleteItem--;
-    }
-  }
-
-  selectAutocompleteDown() {
-    if (this.autoCompleteItems &&
-      this.highlightedAutoCompleteItem < this.autoCompleteItems.value.length - 1) {
-      this.highlightedAutoCompleteItem++;
-    }
-  }
-
-  OnEnter($event: any) {
-    if (this.autoCompleteRenders.length === 0) {
-      this.Search();
-      return;
-    }
-    this.applyAutoComplete(this.autoCompleteRenders[this.highlightedAutoCompleteItem]);
-  }
-
-  private emptyAutoComplete() {
-    this.highlightedAutoCompleteItem = 0;
-    this.autoCompleteRenders = [];
-  }
-
-  private async autocomplete(searchText: { current: string, prev: string }) {
-    if (!Config.Client.Search.AutoComplete.enabled) {
-      return;
-    }
-
-    if (this.rawSearchText.trim().length > 0) { // are we searching for anything?
-      try {
-        if (this.autoCompleteItems) {
-          this.autoCompleteItems.unsubscribe();
-        }
-        this.autoCompleteItems = this._autoCompleteService.autoComplete(searchText);
-        this.autoCompleteItems.subscribe(() => {
-          this.showSuggestions(this.autoCompleteItems.value, searchText.current);
-        });
-      } catch (error) {
-        console.error(error);
-      }
-
-    } else {
-      this.emptyAutoComplete();
-    }
-  }
-
-  private showSuggestions(suggestions: RenderableAutoCompleteItem[], searchText: string) {
-    this.emptyAutoComplete();
-    suggestions.forEach((item: RenderableAutoCompleteItem) => {
-      const renderItem = new AutoCompleteRenderItem(item.text, searchText, item.type, item.queryHint);
-      this.autoCompleteRenders.push(renderItem);
-    });
-  }
 }
 
-class AutoCompleteRenderItem {
-  public preText = '';
-  public highLightText = '';
-  public postText = '';
-  public type: SearchQueryTypes;
-  public queryHint: string;
-
-  constructor(public text: string, searchText: string, type: SearchQueryTypes, queryHint: string) {
-    const preIndex = text.toLowerCase().indexOf(searchText.toLowerCase());
-    if (preIndex > -1) {
-      this.preText = text.substring(0, preIndex);
-      this.highLightText = text.substring(preIndex, preIndex + searchText.length);
-      this.postText = text.substring(preIndex + searchText.length);
-    } else {
-      this.postText = text;
-    }
-    this.type = type;
-    this.queryHint = queryHint;
-  }
-}
 

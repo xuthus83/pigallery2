@@ -97,6 +97,7 @@ import {GallerySearchQueryEntryComponent} from './ui/gallery/search/query-enrty/
 import {StringifySearchQuery} from './pipes/StringifySearchQuery';
 import {AutoCompleteService} from './ui/gallery/search/autocomplete.service';
 import {SearchQueryParserService} from './ui/gallery/search/search-query-parser.service';
+import {GallerySearchFieldComponent} from './ui/gallery/search/search-field/search-field.gallery.component';
 
 
 @Injectable()
@@ -179,6 +180,7 @@ export function translationsFactory(locale: string) {
     FrameComponent,
     GallerySearchComponent,
     GallerySearchQueryEntryComponent,
+    GallerySearchFieldComponent,
     GalleryShareComponent,
     GalleryNavigatorComponent,
     GalleryPhotoComponent,

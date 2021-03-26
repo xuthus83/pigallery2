@@ -32,16 +32,11 @@
     </div>
     <hr/>
     <form #searchPanelForm="ngForm" class="form-horizontal">
-      <input type="text"
-             class="form-control"
-             i18n-placeholder
-             placeholder="Search"
-             [(ngModel)]="rawSearchText"
-             (ngModelChange)="validateRawSearchText()"
-             size="30"
-             name="srch-term-preview"
-             id="srch-term-preview"
-             autocomplete="off">
+      <app-gallery-search-field [(ngModel)]="rawSearchText"
+                                (ngModelChange)="validateRawSearchText()"
+                                name="form-search-field">
+
+      </app-gallery-search-field>
 
       <app-gallery-search-query-entry
         [(ngModel)]="searchQueryDTO"

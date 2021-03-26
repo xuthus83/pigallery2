@@ -1,4 +1,4 @@
-import {Component, EventEmitter, forwardRef, OnChanges, Output} from '@angular/core';
+import {Component, EventEmitter, forwardRef, Output} from '@angular/core';
 import {
   DistanceSearch,
   ListSearchQueryTypes,
@@ -32,7 +32,7 @@ import {ControlValueAccessor, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, Val
     }
   ]
 })
-export class GallerySearchQueryEntryComponent implements ControlValueAccessor, Validator, OnChanges {
+export class GallerySearchQueryEntryComponent implements ControlValueAccessor, Validator {
   public queryEntry: SearchQueryDTO;
   public SearchQueryTypesEnum: { value: string; key: SearchQueryTypes }[];
   public SearchQueryTypes = SearchQueryTypes;
@@ -114,7 +114,7 @@ export class GallerySearchQueryEntryComponent implements ControlValueAccessor, V
     } else {
       delete this.AsOrientationQuery.landscape;
     }
-    this.onChange(this.queryEntry);
+    this.onChange();
   }
 
   deleteItem() {
@@ -125,18 +125,12 @@ export class GallerySearchQueryEntryComponent implements ControlValueAccessor, V
     this.AsListQuery.list.splice(i, 1);
   }
 
-  ngOnChanges(): void {
-    // console.log('ngOnChanges', this.queryEntry);
-
-  }
 
   public onTouched(): void {
   }
 
   public writeValue(obj: any): void {
     this.queryEntry = obj;
-    //  console.log('write value', this.queryEntry);
-    this.ngOnChanges();
   }
 
   registerOnChange(fn: (_: any) => void): void {
@@ -147,7 +141,7 @@ export class GallerySearchQueryEntryComponent implements ControlValueAccessor, V
     this.propagateTouch = fn;
   }
 
-  public onChange(event: any) {
+  public onChange() {
     this.propagateChange(this.queryEntry);
   }
 

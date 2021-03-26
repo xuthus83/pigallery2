@@ -1,57 +1,13 @@
 <form class="navbar-form" role="search" #SearchForm="ngForm">
   <div class="input-group">
-    <input type="text"
-           class="form-control search-text"
-           i18n-placeholder
-           placeholder="Search"
-           (keyup)="onSearchChange($event)"
-           (blur)="onFocusLost()"
-           (focus)="onFocus()"
-           [(ngModel)]="rawSearchText"
-           (ngModelChange)="validateRawSearchText()"
-           (keydown.enter)="OnEnter($event)"
-           (keydown.arrowRight)="applyHint($event)"
-           (keydown.arrowUp)="selectAutocompleteUp()"
-           (keydown.arrowDown)="selectAutocompleteDown()"
-           #name="ngModel"
-           size="30"
-           ngControl="search"
-           name="srch-term"
-           id="srch-term"
-           autocomplete="off">
-    <input type="text"
-           class="form-control search-hint"
-           [ngModel]="SearchHint"
-           i18n-placeholder
-           placeholder="Search"
-           disabled
-           value="test hint"
-           size="30"
-           name="srch-term-hint"
-           id="srch-term-hint"
-           autocomplete="off">
 
+    <app-gallery-search-field  [(ngModel)]="rawSearchText"
+                              (ngModelChange)="validateRawSearchText()"
+                               class="search-field"
+                               (search)="Search()"
+    name="search-field">
 
-    <div class="autocomplete-list" *ngIf="autoCompleteRenders.length > 0"
-         (mouseover)="setMouseOverAutoComplete(true)" (mouseout)="setMouseOverAutoComplete(false)">
-      <div class="autocomplete-item"
-           [ngClass]="{'autocomplete-item-selected':highlightedAutoCompleteItem == i}"
-           (mouseover)="setMouseOverAutoCompleteItem(i)"
-           (click)="applyAutoComplete(item)"
-           *ngFor="let item of autoCompleteRenders; let i = index">
-        <div>
-                    <span [ngSwitch]="item.type">
-                      <span *ngSwitchCase="SearchQueryTypes.caption" class="oi oi-image"></span>
-                      <span *ngSwitchCase="SearchQueryTypes.directory" class="oi oi-folder"></span>
-                      <span *ngSwitchCase="SearchQueryTypes.file_name" class="oi oi-image"></span>
-                      <span *ngSwitchCase="SearchQueryTypes.keyword" class="oi oi-tag"></span>
-                      <span *ngSwitchCase="SearchQueryTypes.person" class="oi oi-person"></span>
-                      <span *ngSwitchCase="SearchQueryTypes.position" class="oi oi-map-marker"></span>
-                    </span>
-          {{item.preText}}<strong>{{item.highLightText}}</strong>{{item.postText}}
-        </div>
-      </div>
-    </div>
+    </app-gallery-search-field>
 
     <div class="input-group-btn" style="display: block">
       <button class="btn btn-light" type="button"
@@ -79,16 +35,12 @@
   </div>
   <div class="modal-body">
     <form #searchPanelForm="ngForm" class="form-horizontal">
-      <input type="text"
-             class="form-control search-text"
-             i18n-placeholder
-             placeholder="Search"
-             [(ngModel)]="rawSearchText"
-             (ngModelChange)="validateRawSearchText()"
-             size="30"
-             name="srch-term-preview"
-             id="srch-term-preview"
-             autocomplete="off">
+      <app-gallery-search-field [(ngModel)]="rawSearchText"
+                                (ngModelChange)="validateRawSearchText()"
+                                (search)="Search()"
+                                name="form-search-field">
+
+      </app-gallery-search-field>
 
       <app-gallery-search-query-entry
         [(ngModel)]="searchQueryDTO"
