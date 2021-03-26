@@ -4,13 +4,13 @@
 
 This project reached to a point when I cannot maintain it alone. 
 I'm happy to see that some people already submitted some pull requests (PR) so everyone can benefit their changes.
-In general I'm happy to merge PRs, but I recommend to file a ticket and ask first if it is OK.
+In general, I'm happy to merge PRs, but I recommend filling a ticket and ask first if it is OK.
 
 
 
 ## How to develop
 
-1. Download the sourcefiles
+1. Download the source files
 2. install dependencies `npm install`
 3. Build client  `npm run run-dev`
    * This will build the client with english localization and will keep building if you change the source files
@@ -34,7 +34,7 @@ Overview:
 |-- test -- contains the unit and integration tets <----- be nice and write tests to your feature
 ```
 
-Source strucure:
+Source structure:
 ```
 |-- src -- contains the rource files <-------- This is what you need
   |-- backend -- nodejs backend code
