@@ -38,7 +38,7 @@ export class GallerySearchFieldComponent implements ControlValueAccessor, Valida
   mouseOverAutoComplete = false;
   readonly SearchQueryTypes: typeof SearchQueryTypes;
   public readonly MetadataSearchQueryTypes: { value: string; key: SearchQueryTypes }[];
-  public highlightedAutoCompleteItem = 0;
+  public highlightedAutoCompleteItem = -1;
   private cache = {
     lastAutocomplete: '',
     lastInstantSearch: ''
@@ -63,13 +63,14 @@ export class GallerySearchFieldComponent implements ControlValueAccessor, Valida
       !this.autoCompleteItems.value || this.autoCompleteItems.value.length === 0) {
       return this.rawSearchText;
     }
+    const itemIndex = this.highlightedAutoCompleteItem < 0 ? 0 : this.highlightedAutoCompleteItem;
     const searchText = this.getAutocompleteToken();
     if (searchText.current === '') {
-      return this.rawSearchText + this.autoCompleteItems.value[this.highlightedAutoCompleteItem].queryHint;
+      return this.rawSearchText + this.autoCompleteItems.value[itemIndex].queryHint;
     }
     if (this.autoCompleteItems.value[0].queryHint.startsWith(searchText.current)) {
       return this.rawSearchText + this.autoCompleteItems
-        .value[this.highlightedAutoCompleteItem].queryHint.substr(searchText.current.length);
+        .value[itemIndex].queryHint.substr(searchText.current.length);
     }
     return this.rawSearchText;
   }
@@ -154,7 +155,7 @@ export class GallerySearchFieldComponent implements ControlValueAccessor, Valida
   }
 
   OnEnter($event: any) {
-    if (this.autoCompleteRenders.length === 0) {
+    if (this.autoCompleteRenders.length === 0 || this.highlightedAutoCompleteItem === -1) {
       this.search.emit();
       return;
     }
@@ -189,7 +190,7 @@ export class GallerySearchFieldComponent implements ControlValueAccessor, Valida
   }
 
   private emptyAutoComplete() {
-    this.highlightedAutoCompleteItem = 0;
+    this.highlightedAutoCompleteItem = -1;
     this.autoCompleteRenders = [];
   }
 
