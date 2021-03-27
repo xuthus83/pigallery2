@@ -166,6 +166,15 @@ export class MetadataLoader {
                 const info = imageSize(fullPath);
                 metadata.size = {width: info.width, height: info.height};
               }
+              if (OrientationTypes.BOTTOM_LEFT < metadata.orientation &&
+                metadata.orientation <= OrientationTypes.LEFT_BOTTOM &&
+                metadata.size.width > metadata.size.height) {
+                // noinspection JSSuspiciousNameCombination
+                const height = metadata.size.width;
+                // noinspection JSSuspiciousNameCombination
+                metadata.size.width = metadata.size.height;
+                metadata.size.height = height;
+              }
             } catch (err) {
               Logger.debug(LOG_TAG, 'Error parsing exif', fullPath, err);
               try {

@@ -12,10 +12,11 @@ describe('DiskMangerWorker', () => {
     ProjectPath.ImageFolder = path.join(__dirname, '/../../../assets');
     const dir = await DiskMangerWorker.scanDirectory('/');
     // should match the number of media (photo/video) files in the assets folder
-    expect(dir.media.length).to.be.equals(7);
+    expect(dir.media.length).to.be.equals(9);
     const expected = require(path.join(__dirname, '/../../../assets/test image öüóőúéáű-.,.json'));
-    expect(Utils.clone(dir.media[3].name)).to.be.deep.equal('test image öüóőúéáű-.,.jpg');
-    expect(Utils.clone(dir.media[3].metadata)).to.be.deep.equal(expected);
+    const i = dir.media.findIndex(m => m.name === 'test image öüóőúéáű-.,.jpg');
+    expect(Utils.clone(dir.media[i].name)).to.be.deep.equal('test image öüóőúéáű-.,.jpg');
+    expect(Utils.clone(dir.media[i].metadata)).to.be.deep.equal(expected);
   });
 
 });

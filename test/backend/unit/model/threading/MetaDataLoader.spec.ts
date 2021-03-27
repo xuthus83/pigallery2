@@ -31,6 +31,19 @@ describe('MetadataLoader', () => {
     expect(Utils.clone(data)).to.be.deep.equal(expected);
   });
 
+  describe('should load jpg with proper height and orientation', () => {
+    it('jpg 1', async () => {
+      const data = await MetadataLoader.loadPhotoMetadata(path.join(__dirname, '/../../../assets/broken_orientation_exif.jpg'));
+      const expected = require(path.join(__dirname, '/../../../assets/broken_orientation_exif.json'));
+      expect(Utils.clone(data)).to.be.deep.equal(expected);
+    });
+    it('jpg 2', async () => {
+      const data = await MetadataLoader.loadPhotoMetadata(path.join(__dirname, '/../../../assets/broken_orientation_exif2.jpg'));
+      const expected = require(path.join(__dirname, '/../../../assets/broken_orientation_exif2.json'));
+      expect(Utils.clone(data)).to.be.deep.equal(expected);
+    });
+  });
+
 
   it('should load jpg edited with exiftool', async () => {
     const data = await MetadataLoader.loadPhotoMetadata(path.join(__dirname, '/../../../assets/exiftool.jpg'));
@@ -48,6 +61,8 @@ describe('MetadataLoader', () => {
   it('should respect mp4 rotate transformation', async () => {
     const data = await MetadataLoader.loadVideoMetadata(path.join(__dirname, '/../../../assets/video_rotate.mp4'));
     const expected = require(path.join(__dirname, '/../../../assets/video_rotate.json'));
+    delete data.duration;
+    delete expected.duration;
     expect(Utils.clone(data)).to.be.deep.equal(expected);
   });
 
