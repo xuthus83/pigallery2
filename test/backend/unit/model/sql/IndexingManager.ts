@@ -1,4 +1,3 @@
-import {expect} from 'chai';
 import * as fs from 'fs';
 import {Config} from '../../../../../src/common/config/private/Config';
 import {SQLConnection} from '../../../../../src/backend/model/database/sql/SQLConnection';
@@ -17,6 +16,12 @@ import {SQLTestHelper} from '../../../SQLTestHelper';
 import {VersionManager} from '../../../../../src/backend/model/database/sql/VersionManager';
 import {DiskMangerWorker} from '../../../../../src/backend/model/threading/DiskMangerWorker';
 import {ServerConfig} from '../../../../../src/common/config/private/PrivateConfig';
+
+const deepEqualInAnyOrder = require('deep-equal-in-any-order');
+const chai = require('chai');
+
+chai.use(deepEqualInAnyOrder);
+const {expect} = chai;
 
 class GalleryManagerTest extends GalleryManager {
 
@@ -62,6 +67,14 @@ describe('IndexingManager', (sqlHelper: SQLTestHelper) => {
   after(async () => {
     await sqlHelper.clearDB();
   });
+
+  const setPartial = (dir: DirectoryDTO) => {
+    dir.preview = dir.media[0];
+    dir.isPartial = true;
+    delete dir.directories;
+    delete dir.metaFile;
+    delete dir.media;
+  };
 
   const removeIds = (dir: DirectoryDTO) => {
     delete dir.id;
@@ -131,18 +144,10 @@ describe('IndexingManager', (sqlHelper: SQLTestHelper) => {
 
     DirectoryDTO.removeReferences(selected);
     removeIds(selected);
-    subDir1.preview = subDir1.media[0];
-    subDir1.isPartial = true;
-    delete subDir1.directories;
-    delete subDir1.metaFile;
-    delete subDir1.media;
-    subDir2.preview = subDir2.media[0];
-    subDir2.isPartial = true;
-    delete subDir2.directories;
-    delete subDir2.metaFile;
-    delete subDir2.media;
+    setPartial(subDir1);
+    setPartial(subDir2);
     expect(Utils.clone(Utils.removeNullOrEmptyObj(selected)))
-      .to.deep.equal(Utils.clone(Utils.removeNullOrEmptyObj(parent)));
+      .to.deep.equalInAnyOrder(Utils.clone(Utils.removeNullOrEmptyObj(parent)));
   });
 
   it('should support case sensitive directory path', async () => {
@@ -169,13 +174,9 @@ describe('IndexingManager', (sqlHelper: SQLTestHelper) => {
 
       DirectoryDTO.removeReferences(selected);
       removeIds(selected);
-      subDir1.isPartial = true;
-      subDir1.preview = subDir1.media[0];
-      delete subDir1.directories;
-      delete subDir1.metaFile;
-      delete subDir1.media;
+      setPartial(subDir1);
       expect(Utils.clone(Utils.removeNullOrEmptyObj(selected)))
-        .to.deep.equal(Utils.clone(Utils.removeNullOrEmptyObj(parent1)));
+        .to.deep.equalInAnyOrder(Utils.clone(Utils.removeNullOrEmptyObj(parent1)));
     }
     {
       const selected = await gm.selectParentDir(conn, parent2.name, parent2.path);
@@ -189,7 +190,7 @@ describe('IndexingManager', (sqlHelper: SQLTestHelper) => {
       delete subDir2.metaFile;
       delete subDir2.media;
       expect(Utils.clone(Utils.removeNullOrEmptyObj(selected)))
-        .to.deep.equal(Utils.clone(Utils.removeNullOrEmptyObj(parent2)));
+        .to.deep.equalInAnyOrder(Utils.clone(Utils.removeNullOrEmptyObj(parent2)));
     }
   });
 
@@ -222,13 +223,9 @@ describe('IndexingManager', (sqlHelper: SQLTestHelper) => {
 
     DirectoryDTO.removeReferences(selected);
     removeIds(selected);
-    subDir.isPartial = true;
-    subDir.preview = subDir.media[0];
-    delete subDir.directories;
-    delete subDir.metaFile;
-    delete subDir.media;
+    setPartial(subDir);
     expect(Utils.clone(Utils.removeNullOrEmptyObj(selected)))
-      .to.deep.equal(Utils.clone(Utils.removeNullOrEmptyObj(parent)));
+      .to.deep.equalInAnyOrder(Utils.clone(Utils.removeNullOrEmptyObj(parent)));
   });
 
 
@@ -260,13 +257,9 @@ describe('IndexingManager', (sqlHelper: SQLTestHelper) => {
 
     DirectoryDTO.removeReferences(selected);
     removeIds(selected);
-    subDir.isPartial = true;
-    subDir.preview = subDir.media[0];
-    delete subDir.directories;
-    delete subDir.metaFile;
-    delete subDir.media;
+    setPartial(subDir);
     expect(Utils.clone(Utils.removeNullOrEmptyObj(selected)))
-      .to.deep.equal(Utils.clone(Utils.removeNullOrEmptyObj(parent)));
+      .to.deep.equalInAnyOrder(Utils.clone(Utils.removeNullOrEmptyObj(parent)));
   });
 
   it('should save parent directory', async () => {
@@ -291,13 +284,9 @@ describe('IndexingManager', (sqlHelper: SQLTestHelper) => {
 
     DirectoryDTO.removeReferences(selected);
     removeIds(selected);
-    subDir.isPartial = true;
-    subDir.preview = subDir.media[0];
-    delete subDir.directories;
-    delete subDir.metaFile;
-    delete subDir.media;
+    setPartial(subDir);
     expect(Utils.clone(Utils.removeNullOrEmptyObj(selected)))
-      .to.deep.equal(Utils.clone(Utils.removeNullOrEmptyObj(parent)));
+      .to.deep.equalInAnyOrder(Utils.clone(Utils.removeNullOrEmptyObj(parent)));
   });
 
 
@@ -334,7 +323,7 @@ describe('IndexingManager', (sqlHelper: SQLTestHelper) => {
     DirectoryDTO.removeReferences(selected);
     removeIds(selected);
     expect(Utils.clone(Utils.removeNullOrEmptyObj(selected)))
-      .to.deep.equal(Utils.clone(Utils.removeNullOrEmptyObj(parent)));
+      .to.deep.equalInAnyOrder(Utils.clone(Utils.removeNullOrEmptyObj(parent)));
   });
 
   it('should skip meta files', async () => {
@@ -357,7 +346,7 @@ describe('IndexingManager', (sqlHelper: SQLTestHelper) => {
     DirectoryDTO.removeReferences(selected);
     removeIds(selected);
     expect(Utils.clone(Utils.removeNullOrEmptyObj(selected)))
-      .to.deep.equal(Utils.clone(Utils.removeNullOrEmptyObj(parent)));
+      .to.deep.equalInAnyOrder(Utils.clone(Utils.removeNullOrEmptyObj(parent)));
   });
 
   it('should update sub directory', async () => {
@@ -392,7 +381,7 @@ describe('IndexingManager', (sqlHelper: SQLTestHelper) => {
     removeIds(selected);
     // selected.directories[0].parent = selected;
     expect(Utils.clone(Utils.removeNullOrEmptyObj(selected)))
-      .to.deep.equal(Utils.clone(Utils.removeNullOrEmptyObj(subDir)));
+      .to.deep.equalInAnyOrder(Utils.clone(Utils.removeNullOrEmptyObj(subDir)));
   });
 
   it('should avoid race condition', async () => {
@@ -421,15 +410,11 @@ describe('IndexingManager', (sqlHelper: SQLTestHelper) => {
 
     DirectoryDTO.removeReferences(selected);
     removeIds(selected);
-    subDir.isPartial = true;
-    subDir.preview = subDir.media[0];
-    delete subDir.directories;
-    delete subDir.metaFile;
-    delete subDir.media;
+    setPartial(subDir);
     delete sp1.metadata.faces;
     delete sp2.metadata.faces;
     expect(Utils.clone(Utils.removeNullOrEmptyObj(selected)))
-      .to.deep.equal(Utils.clone(Utils.removeNullOrEmptyObj(parent)));
+      .to.deep.equalInAnyOrder(Utils.clone(Utils.removeNullOrEmptyObj(parent)));
   });
 
 
@@ -451,7 +436,7 @@ describe('IndexingManager', (sqlHelper: SQLTestHelper) => {
 
 
     const selected = await gm.selectParentDir(conn, subDir.name, subDir.path);
-    expect(selected.media.length).to.deep.equal(subDir.media.length);
+    expect(selected.media.length).to.equal(subDir.media.length);
   }) as any).timeout(40000);
 
   SQLTestHelper.savedDescribe('Test listDirectory', () => {
