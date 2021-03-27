@@ -97,8 +97,6 @@ export module ServerConfig {
   @SubConfigClass()
   export class IndexingConfig {
     @ConfigProperty()
-    folderPreviewSize: number = 2;
-    @ConfigProperty()
     cachedFolderTimeout: number = 1000 * 60 * 60; // Do not rescans the folder if seems ok
     @ConfigProperty({type: ReIndexingSensitivity})
     reIndexingSensitivity: ReIndexingSensitivity = ReIndexingSensitivity.low;

@@ -68,6 +68,9 @@ describe('IndexingManager', (sqlHelper: SQLTestHelper) => {
     dir.media.forEach((media: MediaDTO) => {
       delete media.id;
     });
+    if (dir.preview) {
+      delete dir.preview.id;
+    }
     if (dir.metaFile) {
       if (dir.metaFile.length === 0) {
         delete dir.metaFile;
@@ -128,12 +131,16 @@ describe('IndexingManager', (sqlHelper: SQLTestHelper) => {
 
     DirectoryDTO.removeReferences(selected);
     removeIds(selected);
+    subDir1.preview = subDir1.media[0];
     subDir1.isPartial = true;
     delete subDir1.directories;
     delete subDir1.metaFile;
+    delete subDir1.media;
+    subDir2.preview = subDir2.media[0];
     subDir2.isPartial = true;
     delete subDir2.directories;
     delete subDir2.metaFile;
+    delete subDir2.media;
     expect(Utils.clone(Utils.removeNullOrEmptyObj(selected)))
       .to.deep.equal(Utils.clone(Utils.removeNullOrEmptyObj(parent)));
   });
@@ -163,8 +170,10 @@ describe('IndexingManager', (sqlHelper: SQLTestHelper) => {
       DirectoryDTO.removeReferences(selected);
       removeIds(selected);
       subDir1.isPartial = true;
+      subDir1.preview = subDir1.media[0];
       delete subDir1.directories;
       delete subDir1.metaFile;
+      delete subDir1.media;
       expect(Utils.clone(Utils.removeNullOrEmptyObj(selected)))
         .to.deep.equal(Utils.clone(Utils.removeNullOrEmptyObj(parent1)));
     }
@@ -175,8 +184,10 @@ describe('IndexingManager', (sqlHelper: SQLTestHelper) => {
       DirectoryDTO.removeReferences(selected);
       removeIds(selected);
       subDir2.isPartial = true;
+      subDir2.preview = subDir2.media[0];
       delete subDir2.directories;
       delete subDir2.metaFile;
+      delete subDir2.media;
       expect(Utils.clone(Utils.removeNullOrEmptyObj(selected)))
         .to.deep.equal(Utils.clone(Utils.removeNullOrEmptyObj(parent2)));
     }
@@ -212,8 +223,10 @@ describe('IndexingManager', (sqlHelper: SQLTestHelper) => {
     DirectoryDTO.removeReferences(selected);
     removeIds(selected);
     subDir.isPartial = true;
+    subDir.preview = subDir.media[0];
     delete subDir.directories;
     delete subDir.metaFile;
+    delete subDir.media;
     expect(Utils.clone(Utils.removeNullOrEmptyObj(selected)))
       .to.deep.equal(Utils.clone(Utils.removeNullOrEmptyObj(parent)));
   });
@@ -248,8 +261,10 @@ describe('IndexingManager', (sqlHelper: SQLTestHelper) => {
     DirectoryDTO.removeReferences(selected);
     removeIds(selected);
     subDir.isPartial = true;
+    subDir.preview = subDir.media[0];
     delete subDir.directories;
     delete subDir.metaFile;
+    delete subDir.media;
     expect(Utils.clone(Utils.removeNullOrEmptyObj(selected)))
       .to.deep.equal(Utils.clone(Utils.removeNullOrEmptyObj(parent)));
   });
@@ -277,8 +292,10 @@ describe('IndexingManager', (sqlHelper: SQLTestHelper) => {
     DirectoryDTO.removeReferences(selected);
     removeIds(selected);
     subDir.isPartial = true;
+    subDir.preview = subDir.media[0];
     delete subDir.directories;
     delete subDir.metaFile;
+    delete subDir.media;
     expect(Utils.clone(Utils.removeNullOrEmptyObj(selected)))
       .to.deep.equal(Utils.clone(Utils.removeNullOrEmptyObj(parent)));
   });
@@ -405,8 +422,10 @@ describe('IndexingManager', (sqlHelper: SQLTestHelper) => {
     DirectoryDTO.removeReferences(selected);
     removeIds(selected);
     subDir.isPartial = true;
+    subDir.preview = subDir.media[0];
     delete subDir.directories;
     delete subDir.metaFile;
+    delete subDir.media;
     delete sp1.metadata.faces;
     delete sp2.metadata.faces;
     expect(Utils.clone(Utils.removeNullOrEmptyObj(selected)))

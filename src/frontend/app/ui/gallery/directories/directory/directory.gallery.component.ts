@@ -28,10 +28,7 @@ export class GalleryDirectoryComponent implements OnInit, OnDestroy {
   }
 
   public get SamplePhoto(): MediaDTO {
-    if (this.directory.media.length > 0) {
-      return this.directory.media[0];
-    }
-    return null;
+    return this.directory.preview;
   }
 
   getSanitizedThUrl() {
@@ -59,7 +56,7 @@ export class GalleryDirectoryComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    if (this.directory.media.length > 0) {
+    if (this.directory.preview) {
       this.thumbnail = this.thumbnailService.getThumbnail(new Media(this.SamplePhoto, this.size, this.size));
     }
   }

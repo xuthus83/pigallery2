@@ -36,15 +36,7 @@ export class DiskManager {
     } else {
       directory = await DiskMangerWorker.scanDirectory(relativeDirectoryName, settings);
     }
-    const addDirs = (dir: DirectoryDTO) => {
-      dir.media.forEach((ph) => {
-        ph.directory = dir;
-      });
-      dir.directories.forEach((d) => {
-        addDirs(d);
-      });
-    };
-    addDirs(directory);
+    DirectoryDTO.addReferences(directory);
     return directory;
   }
 

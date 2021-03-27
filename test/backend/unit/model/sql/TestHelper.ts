@@ -259,6 +259,7 @@ export class TestHelper {
       mediaCount: 0,
       directories: [],
       metaFile: [],
+      preview: null,
       media: [],
       lastModified: Date.now(),
       lastScanned: null,

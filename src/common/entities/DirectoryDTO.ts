@@ -12,6 +12,7 @@ export interface DirectoryDTO<S extends FileDTO = MediaDTO> {
   parent: DirectoryDTO<S>;
   mediaCount: number;
   directories: DirectoryDTO<S>[];
+  preview: S;
   media: S[];
   metaFile: FileDTO[];
 }
@@ -22,6 +23,9 @@ export module DirectoryDTO {
       media.directory = dir;
     });
 
+    if (dir.preview) {
+      dir.preview.directory = dir;
+    }
     if (dir.metaFile) {
       dir.metaFile.forEach((file: FileDTO) => {
         file.directory = dir;
@@ -41,6 +45,9 @@ export module DirectoryDTO {
       dir.media.forEach((media: MediaDTO) => {
         media.directory = null;
       });
+    }
+    if (dir.preview) {
+      dir.preview.directory = null;
     }
     if (dir.metaFile) {
       dir.metaFile.forEach((file: FileDTO) => {

@@ -54,6 +54,8 @@ export class DirectoryEntity implements DirectoryDTO {
   @OneToMany(type => DirectoryEntity, dir => dir.parent)
   public directories: DirectoryEntity[];
 
+  public preview: MediaEntity;
+
   @OneToMany(type => MediaEntity, media => media.directory)
   public media: MediaEntity[];
 

@@ -104,6 +104,7 @@ export class DiskMangerWorker {
       directories: [],
       isPartial: false,
       mediaCount: 0,
+      preview: null,
       media: [],
       metaFile: []
     };
@@ -117,7 +118,7 @@ export class DiskMangerWorker {
       const file = list[i];
       const fullFilePath = path.normalize(path.join(absoluteDirectoryName, file));
       if ((await fsp.stat(fullFilePath)).isDirectory()) {
-        if (settings.noDirectory === true ||
+        if (settings.noDirectory === true || settings.previewOnly === true ||
           await DiskMangerWorker.excludeDir(file, relativeDirectoryName, absoluteDirectoryName)) {
           continue;
         }
@@ -125,11 +126,7 @@ export class DiskMangerWorker {
         // create preview directory
         const d = await DiskMangerWorker.scanDirectory(path.join(relativeDirectoryName, file),
           {
-            maxPhotos: Config.Server.Indexing.folderPreviewSize,
-            noMetaFile: true,
-            noVideo: true,
-            noDirectory: true,
-            noPhoto: settings.noChildDirPhotos || settings.noPhoto
+            previewOnly: true
           }
         );
 
@@ -141,18 +138,23 @@ export class DiskMangerWorker {
         if (settings.noPhoto === true) {
           continue;
         }
-        directory.media.push(<PhotoDTO>{
+
+        const photo = <PhotoDTO>{
           name: file,
           directory: null,
           metadata: settings.noMetadata === true ? null : await MetadataLoader.loadPhotoMetadata(fullFilePath)
-        });
+        };
 
-
-        if (settings.maxPhotos && directory.media.length > settings.maxPhotos) {
+        if (!directory.preview) {
+          directory.preview = photo;
+        }
+        if (settings.previewOnly === true) {
           break;
         }
+        directory.media.push(photo);
+
       } else if (VideoProcessing.isVideo(fullFilePath)) {
-        if (Config.Client.Media.Video.enabled === false || settings.noVideo === true) {
+        if (Config.Client.Media.Video.enabled === false || settings.noVideo === true || settings.previewOnly === true) {
           continue;
         }
         try {
@@ -166,7 +168,7 @@ export class DiskMangerWorker {
         }
 
       } else if (DiskMangerWorker.isMetaFile(fullFilePath)) {
-        if (Config.Client.MetaFile.enabled === false || settings.noMetaFile === true) {
+        if (Config.Client.MetaFile.enabled === false || settings.noMetaFile === true || settings.previewOnly === true) {
           continue;
         }
 
@@ -193,7 +195,7 @@ export class DiskMangerWorker {
 
 export namespace DiskMangerWorker {
   export interface DirectoryScanSettings {
-    maxPhotos?: number;
+    previewOnly?: boolean;
     noMetaFile?: boolean;
     noVideo?: boolean;
     noPhoto?: boolean;

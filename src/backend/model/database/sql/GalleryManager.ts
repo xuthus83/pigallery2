@@ -86,7 +86,6 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
 
   }
 
-
   async countDirectories(): Promise<number> {
     const connection = await SQLConnection.getConnection();
     return await connection.getRepository(DirectoryEntity)
@@ -102,7 +101,6 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
       .getRawOne();
     return sum || 0;
   }
-
 
   async countPhotos(): Promise<number> {
     const connection = await SQLConnection.getConnection();
@@ -238,38 +236,32 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
     }
     if (dir.directories) {
       for (let i = 0; i < dir.directories.length; i++) {
-        const dirName = GalleryManager.getAbsoluteDirName(dir.directories[i]);
-        dir.directories[i].media = await connection
+
+        const _path = dir.path;
+        const currentRoot = (_path === './' ? '' : _path);
+        const dirName = currentRoot + dir.name + path.sep;
+        dir.directories[i].media = [];
+        dir.directories[i].preview = await connection
           .getRepository(MediaEntity)
           .createQueryBuilder('media')
           .innerJoinAndSelect('media.directory', 'directory')
           .where('media.directory = :dir', {
             dir: dir.directories[i].id
           })
-          .orWhere("directory.path like :parentPath||'%'", {
-                       parentPath: dirName
+          .orWhere('directory.path like :parentPath||\'%\'', {
+            parentPath: dirName
           })
           .orderBy('media.metadata.creationDate', 'DESC')
-          .limit(Config.Server.Indexing.folderPreviewSize)
-          .getMany();
+          .limit(1)
+          .getOne();
         dir.directories[i].isPartial = true;
 
-        const dirs = dir.directories[i]
-        for (let j = 0; j < dirs.media.length; j++) {
-          const mediaDirName = GalleryManager.getAbsoluteDirName(dirs.media[j].directory);
-          const name = mediaDirName.substring(dirName.length);
-          dir.directories[i].media[j].name = name + dir.directories[i].media[j].name
-          dir.directories[i].media[j].directory = dir.directories[i];
-          dir.directories[i].media[j].readyThumbnails = [];
-          dir.directories[i].media[j].readyIcon = false;
+        if (dir.directories[i].preview) {
+          dir.directories[i].preview.directory = dir.directories[i];
+          dir.directories[i].preview.readyThumbnails = [];
+          dir.directories[i].preview.readyIcon = false;
         }
       }
     }
-  }
-
-  public static getAbsoluteDirName(dir: DirectoryEntity) {
-    const path = dir.path;
-    const currentRoot = (path === "./" ? "" :  path) ;
-    return currentRoot + dir.name + "/";
   }
 }

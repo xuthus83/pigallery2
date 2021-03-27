@@ -31,6 +31,7 @@ export class ThumbnailGeneratorMWs {
       }
 
     } catch (error) {
+      console.error(error);
       return next(new ErrorDTO(ErrorCodes.SERVER_ERROR, 'error during postprocessing result (adding thumbnail info)', error.toString()));
 
     }
@@ -62,7 +63,8 @@ export class ThumbnailGeneratorMWs {
       }
 
     } catch (error) {
-      return next(new ErrorDTO(ErrorCodes.SERVER_ERROR, 'error during postprocessing result (adding thumbnail info)', error.toString()));
+      return next(new ErrorDTO(ErrorCodes.SERVER_ERROR, 'error during postprocessing result (adding thumbnail info for persons)',
+        error.toString()));
 
     }
 
@@ -139,6 +141,9 @@ export class ThumbnailGeneratorMWs {
     if (typeof directory.media !== 'undefined') {
       ThumbnailGeneratorMWs.addThInfoToPhotos(directory.media);
     }
+    if (directory.preview) {
+      ThumbnailGeneratorMWs.addThInfoToAPhoto(directory.preview);
+    }
     if (typeof directory.directories !== 'undefined') {
       for (let i = 0; i < directory.directories.length; i++) {
         ThumbnailGeneratorMWs.addThInfoTODir(directory.directories[i]);
@@ -148,22 +153,27 @@ export class ThumbnailGeneratorMWs {
 
   private static addThInfoToPhotos(photos: MediaDTO[]) {
     for (let i = 0; i < photos.length; i++) {
-      const fullMediaPath = path.join(ProjectPath.ImageFolder, photos[i].directory.path, photos[i].directory.name, photos[i].name);
-      for (let j = 0; j < Config.Client.Media.Thumbnail.thumbnailSizes.length; j++) {
-        const size = Config.Client.Media.Thumbnail.thumbnailSizes[j];
-        const thPath = PhotoProcessing.generateConvertedPath(fullMediaPath, size);
-        if (fs.existsSync(thPath) === true) {
-          if (typeof photos[i].readyThumbnails === 'undefined') {
-            photos[i].readyThumbnails = [];
-          }
-          photos[i].readyThumbnails.push(size);
+      this.addThInfoToAPhoto(photos[i]);
+    }
+  }
+
+  private static addThInfoToAPhoto(photo: MediaDTO) {
+    const fullMediaPath = path.join(ProjectPath.ImageFolder, photo.directory.path, photo.directory.name, photo.name);
+    for (let j = 0; j < Config.Client.Media.Thumbnail.thumbnailSizes.length; j++) {
+      const size = Config.Client.Media.Thumbnail.thumbnailSizes[j];
+      const thPath = PhotoProcessing.generateConvertedPath(fullMediaPath, size);
+      if (fs.existsSync(thPath) === true) {
+        if (typeof photo.readyThumbnails === 'undefined') {
+          photo.readyThumbnails = [];
         }
-      }
-      const iconPath = PhotoProcessing.generateConvertedPath(fullMediaPath, Config.Client.Media.Thumbnail.iconSize);
-      if (fs.existsSync(iconPath) === true) {
-        photos[i].readyIcon = true;
+        photo.readyThumbnails.push(size);
       }
     }
+    const iconPath = PhotoProcessing.generateConvertedPath(fullMediaPath, Config.Client.Media.Thumbnail.iconSize);
+    if (fs.existsSync(iconPath) === true) {
+      photo.readyIcon = true;
+    }
+
   }
 
 }

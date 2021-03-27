@@ -37,6 +37,9 @@ export class IndexingManager implements IIndexingManager {
         const scannedDirectory = await DiskManager.scanDirectory(relativeDirectoryName);
 
         // returning with the result
+        if (scannedDirectory.preview) {
+          scannedDirectory.preview.readyThumbnails = [];
+        }
         scannedDirectory.media.forEach(p => p.readyThumbnails = []);
         resolve(scannedDirectory);
 
