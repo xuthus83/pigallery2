@@ -132,7 +132,7 @@ describe('IndexingManager', (sqlHelper: SQLTestHelper) => {
     const subDir1 = TestHelper.getRandomizedDirectoryEntry(parent, 'subDir');
     const p1 = TestHelper.getRandomizedPhotoEntry(subDir1, 'subPhoto1', 0);
     const subDir2 = TestHelper.getRandomizedDirectoryEntry(parent, 'SUBDIR');
-    const p2 = TestHelper.getRandomizedPhotoEntry(subDir2, 'subPhoto1', 0);
+    const p2 = TestHelper.getRandomizedPhotoEntry(subDir2, 'subPhoto2', 0);
 
 
     DirectoryDTO.removeReferences(parent);
@@ -158,8 +158,8 @@ describe('IndexingManager', (sqlHelper: SQLTestHelper) => {
     const parent2 = TestHelper.getRandomizedDirectoryEntry(null, 'PARENT');
     const subDir1 = TestHelper.getRandomizedDirectoryEntry(parent1, 'subDir');
     const p1 = TestHelper.getRandomizedPhotoEntry(subDir1, 'subPhoto1', 0);
-    const subDir2 = TestHelper.getRandomizedDirectoryEntry(parent2, 'subDir');
-    const p2 = TestHelper.getRandomizedPhotoEntry(subDir2, 'subPhoto1', 0);
+    const subDir2 = TestHelper.getRandomizedDirectoryEntry(parent2, 'subDir2');
+    const p2 = TestHelper.getRandomizedPhotoEntry(subDir2, 'subPhoto2', 0);
 
 
     DirectoryDTO.removeReferences(parent1);
@@ -184,11 +184,7 @@ describe('IndexingManager', (sqlHelper: SQLTestHelper) => {
 
       DirectoryDTO.removeReferences(selected);
       removeIds(selected);
-      subDir2.isPartial = true;
-      subDir2.preview = subDir2.media[0];
-      delete subDir2.directories;
-      delete subDir2.metaFile;
-      delete subDir2.media;
+      setPartial(subDir2);
       expect(Utils.clone(Utils.removeNullOrEmptyObj(selected)))
         .to.deep.equalInAnyOrder(Utils.clone(Utils.removeNullOrEmptyObj(parent2)));
     }
