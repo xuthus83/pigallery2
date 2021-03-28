@@ -4,34 +4,33 @@ pigallery2 uses [typeconfig](https://github.com/bpatrik/typeconfig) for configur
 `npm start -- --help` prints the following:
 
 ```
-Usage: <appname> [options] 
+Usage: <appname> [options]
 
-Meta cli options: 
---help                           prints this manual 
---config-path                    sets the config file location 
---config-attachState             prints the value state (default, readonly, volatile, etc..) to the config file 
---config-attachDesc              prints description to the config file 
---config-rewrite-cli             updates the config file with the options from cli switches 
---config-rewrite-env             updates the config file with the options from environmental variables 
---config-string-enum             enums are stored as string in the config file (instead of numbers) 
---config-save-if-not-exist       creates config file if not exist 
---config-save-and-exist          creates config file and terminates 
+Meta cli options:
+--help                           prints this manual
+--config-path                    sets the config file location
+--config-attachState             prints the value state (default, readonly, volatile, etc..) to the config file
+--config-attachDesc              prints description to the config file
+--config-rewrite-cli             updates the config file with the options from cli switches
+--config-rewrite-env             updates the config file with the options from environmental variables
+--config-string-enum             enums are stored as string in the config file (instead of numbers)
+--config-save-if-not-exist       creates config file if not exist
+--config-save-and-exist          creates config file and terminates
 
-<appname> can be configured through the configuration file, cli switches and environmental variables. 
-All settings are case sensitive. 
-Example for setting config MyConf through cli: '<appname> --MyConf=5' 
-and through env variable: 'SET MyConf=5' . 
+<appname> can be configured through the configuration file, cli switches and environmental variables.
+All settings are case sensitive.
+Example for setting config MyConf through cli: '<appname> --MyConf=5'
+and through env variable: 'SET MyConf=5' .
 
-Default values can be also overwritten by prefixing the options with 'default-', 
+Default values can be also overwritten by prefixing the options with 'default-',
  like '<appname> --default-MyConf=5' and  'SET default-MyConf=5'
 
-App CLI options: 
+App CLI options:
   --Server-sessionSecret                                 (default: [])
   --Server-port                                          (default: 80)
   --Server-host                                          (default: '0.0.0.0')
   --Server-Media-folder                                 Images are loaded from this folder (read permission required) (default: 'demo/images')
   --Server-Media-tempFolder                             Thumbnails, coverted photos, videos will be stored here (write permission required) (default: 'demo/tmp')
-  --Server-Media-photoProcessingLibrary                  (default: 'sharp')
   --Server-Media-Video-transcoding-bitRate               (default: 5242880)
   --Server-Media-Video-transcoding-resolution            (default: 720)
   --Server-Media-Video-transcoding-fps                   (default: 25)
@@ -48,6 +47,7 @@ App CLI options:
   --Server-Threading-thumbnailThreads                   Number of threads that are used to generate thumbnails. If 0, number of 'CPU cores -1' threads will be used. (default: 0)
   --Server-Database-type                                 (default: 'sqlite')
   --Server-Database-dbFolder                             (default: 'db')
+  --Server-Database-sqlite-DBFileName                    (default: 'sqlite.db')
   --Server-Database-mysql-host                           (default: 'localhost')
   --Server-Database-mysql-port                           (default: 3306)
   --Server-Database-mysql-database                       (default: 'pigallery2')
@@ -55,28 +55,26 @@ App CLI options:
   --Server-Database-mysql-password                       (default: '')
   --Server-Sharing-updateTimeout                         (default: 300000)
   --Server-sessionTimeout                               unit: ms (default: 604800000)
-  --Server-Indexing-folderPreviewSize                    (default: 2)
   --Server-Indexing-cachedFolderTimeout                  (default: 3600000)
   --Server-Indexing-reIndexingSensitivity                (default: 'low')
-  --Server-Indexing-excludeFolderList                   If an entry starts with '/' it is treated as an absolute path. If it doesn't start with '/' but contains a '/', the path is relative to the image directory. If it doesn't contain a '/', any folder with this name will be excluded. (default: [])
+  --Server-Indexing-excludeFolderList                   If an entry starts with '/' it is treated as an absolute path. If it doesn't start with '/' but contains a '/', the path is relative to the image directory. If it doesn't contain a '/', any folder with this name will be excluded. (default: [".Trash-1000",".dtrash","$RECYCLE.BIN"])
   --Server-Indexing-excludeFileList                     Any folder that contains a file with this name will be excluded from indexing. (default: [])
   --Server-photoMetadataSize                            only this many bites will be loaded when scanning photo for metadata (default: 524288)
   --Server-Duplicates-listingLimit                       (default: 1000)
   --Server-Log-level                                     (default: 'info')
   --Server-Log-sqlLevel                                  (default: 'error')
   --Server-Jobs-maxSavedProgress                        Job history size (default: 10)
-  --Server-Jobs-scheduled                                (default: [{"name":"Indexing","jobName":"Indexing","config":{},"allowParallelRun":false,"trigger":{"type":1}},{"name":"Thumbnail Generation","jobName":"Thumbnail Generation","config":{"sizes":[240]},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"Indexing"}},{"name":"Photo Converting","jobName":"Photo Converting","config":{},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"Thumbnail Generation"}},{"name":"Video Converting","jobName":"Video Converting","config":{},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"Photo Converting"}},{"name":"Temp Folder Cleaning","jobName":"Temp Folder Cleaning","config":{},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"Video Converting"}}])
+  --Server-Jobs-scheduled                                (default: [{"name":"Indexing","jobName":"Indexing","config":{},"allowParallelRun":false,"trigger":{"type":1}},{"name":"Thumbnail Generation","jobName":"Thumbnail Generation","config":{"sizes":[240],"indexedOnly":true},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"Indexing"}},{"name":"Photo Converting","jobName":"Photo Converting","config":{"indexedOnly":true},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"Thumbnail Generation"}},{"name":"Video Converting","jobName":"Video Converting","config":{"indexedOnly":true},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"Photo Converting"}},{"name":"Temp Folder Cleaning","jobName":"Temp Folder Cleaning","config":{"indexedOnly":true},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"Video Converting"}}])
   --Client-applicationTitle                              (default: 'PiGallery 2')
   --Client-publicUrl                                     (default: '')
   --Client-urlBase                                       (default: '')
   --Client-Search-enabled                                (default: true)
-  --Client-Search-instantSearchEnabled                   (default: true)
-  --Client-Search-InstantSearchTimeout                   (default: 3000)
-  --Client-Search-instantSearchCacheTimeout              (default: 3600000)
   --Client-Search-searchCacheTimeout                     (default: 3600000)
   --Client-Search-AutoComplete-enabled                   (default: true)
   --Client-Search-AutoComplete-maxItemsPerCategory       (default: 5)
   --Client-Search-AutoComplete-cacheTimeout              (default: 3600000)
+  --Client-Search-maxMediaResult                         (default: 2000)
+  --Client-Search-maxDirectoryResult                     (default: 200)
   --Client-Sharing-enabled                               (default: true)
   --Client-Sharing-passwordProtected                     (default: true)
   --Client-Map-enabled                                   (default: true)
@@ -102,15 +100,15 @@ App CLI options:
   --Client-Faces-enabled                                 (default: true)
   --Client-Faces-keywordsToPersons                       (default: true)
   --Client-Faces-writeAccessMinRole                      (default: 'Admin')
+  --Client-Faces-readAccessMinRole                       (default: 'User')
 
-Environmental variables: 
+Environmental variables:
   Server-sessionSecret                               (default: [])
   Server-port                                        (default: 80)
   PORT                                               same as Server-port
   Server-host                                        (default: '0.0.0.0')
   Server-Media-folder                               Images are loaded from this folder (read permission required) (default: 'demo/images')
   Server-Media-tempFolder                           Thumbnails, coverted photos, videos will be stored here (write permission required) (default: 'demo/tmp')
-  Server-Media-photoProcessingLibrary                (default: 'sharp')
   Server-Media-Video-transcoding-bitRate             (default: 5242880)
   Server-Media-Video-transcoding-resolution          (default: 720)
   Server-Media-Video-transcoding-fps                 (default: 25)
@@ -127,6 +125,7 @@ Environmental variables:
   Server-Threading-thumbnailThreads                 Number of threads that are used to generate thumbnails. If 0, number of 'CPU cores -1' threads will be used. (default: 0)
   Server-Database-type                               (default: 'sqlite')
   Server-Database-dbFolder                           (default: 'db')
+  Server-Database-sqlite-DBFileName                  (default: 'sqlite.db')
   Server-Database-mysql-host                         (default: 'localhost')
   MYSQL_HOST                                         same as Server-Database-mysql-host
   Server-Database-mysql-port                         (default: 3306)
@@ -139,28 +138,26 @@ Environmental variables:
   MYSQL_PASSWORD                                     same as Server-Database-mysql-password
   Server-Sharing-updateTimeout                       (default: 300000)
   Server-sessionTimeout                             unit: ms (default: 604800000)
-  Server-Indexing-folderPreviewSize                  (default: 2)
   Server-Indexing-cachedFolderTimeout                (default: 3600000)
   Server-Indexing-reIndexingSensitivity              (default: 'low')
-  Server-Indexing-excludeFolderList                 If an entry starts with '/' it is treated as an absolute path. If it doesn't start with '/' but contains a '/', the path is relative to the image directory. If it doesn't contain a '/', any folder with this name will be excluded. (default: [])
+  Server-Indexing-excludeFolderList                 If an entry starts with '/' it is treated as an absolute path. If it doesn't start with '/' but contains a '/', the path is relative to the image directory. If it doesn't contain a '/', any folder withthis name will be excluded. (default: [".Trash-1000",".dtrash","$RECYCLE.BIN"])
   Server-Indexing-excludeFileList                   Any folder that contains a file with this name will be excluded from indexing. (default: [])
   Server-photoMetadataSize                          only this many bites will be loaded when scanning photo for metadata (default: 524288)
   Server-Duplicates-listingLimit                     (default: 1000)
   Server-Log-level                                   (default: 'info')
   Server-Log-sqlLevel                                (default: 'error')
   Server-Jobs-maxSavedProgress                      Job history size (default: 10)
-  Server-Jobs-scheduled                              (default: [{"name":"Indexing","jobName":"Indexing","config":{},"allowParallelRun":false,"trigger":{"type":1}},{"name":"Thumbnail Generation","jobName":"Thumbnail Generation","config":{"sizes":[240]},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"Indexing"}},{"name":"Photo Converting","jobName":"Photo Converting","config":{},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"Thumbnail Generation"}},{"name":"Video Converting","jobName":"Video Converting","config":{},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"Photo Converting"}},{"name":"Temp Folder Cleaning","jobName":"Temp Folder Cleaning","config":{},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"Video Converting"}}])
+  Server-Jobs-scheduled                              (default: [{"name":"Indexing","jobName":"Indexing","config":{},"allowParallelRun":false,"trigger":{"type":1}},{"name":"Thumbnail Generation","jobName":"Thumbnail Generation","config":{"sizes":[240],"indexedOnly":true},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"Indexing"}},{"name":"Photo Converting","jobName":"Photo Converting","config":{"indexedOnly":true},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"Thumbnail Generation"}},{"name":"Video Converting","jobName":"Video Converting","config":{"indexedOnly":true},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"Photo Converting"}},{"name":"Temp Folder Cleaning","jobName":"Temp Folder Cleaning","config":{"indexedOnly":true},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"Video Converting"}}])
   Client-applicationTitle                            (default: 'PiGallery 2')
   Client-publicUrl                                   (default: '')
   Client-urlBase                                     (default: '')
   Client-Search-enabled                              (default: true)
-  Client-Search-instantSearchEnabled                 (default: true)
-  Client-Search-InstantSearchTimeout                 (default: 3000)
-  Client-Search-instantSearchCacheTimeout            (default: 3600000)
   Client-Search-searchCacheTimeout                   (default: 3600000)
   Client-Search-AutoComplete-enabled                 (default: true)
   Client-Search-AutoComplete-maxItemsPerCategory     (default: 5)
   Client-Search-AutoComplete-cacheTimeout            (default: 3600000)
+  Client-Search-maxMediaResult                       (default: 2000)
+  Client-Search-maxDirectoryResult                   (default: 200)
   Client-Sharing-enabled                             (default: true)
   Client-Sharing-passwordProtected                   (default: true)
   Client-Map-enabled                                 (default: true)
@@ -186,6 +183,7 @@ Environmental variables:
   Client-Faces-enabled                               (default: true)
   Client-Faces-keywordsToPersons                     (default: true)
   Client-Faces-writeAccessMinRole                    (default: 'Admin')
+  Client-Faces-readAccessMinRole                     (default: 'User')
 ```
 
  ### `config.json` sample:
@@ -200,7 +198,6 @@ Environmental variables:
             "folder": "demo/images",
             "//[tempFolder]": "Thumbnails, coverted photos, videos will be stored here (write permission required)",
             "tempFolder": "demo/tmp",
-            "photoProcessingLibrary": "sharp",
             "Video": {
                 "transcoding": {
                     "bitRate": 5242880,
@@ -238,6 +235,9 @@ Environmental variables:
         "Database": {
             "type": "sqlite",
             "dbFolder": "db",
+            "sqlite": {
+                "DBFileName": "sqlite.db"
+            },
             "mysql": {
                 "host": "localhost",
                 "port": 3306,
@@ -252,11 +252,14 @@ Environmental variables:
         "//[sessionTimeout]": "unit: ms",
         "sessionTimeout": 604800000,
         "Indexing": {
-            "folderPreviewSize": 2,
             "cachedFolderTimeout": 3600000,
             "reIndexingSensitivity": "low",
             "//[excludeFolderList]": "If an entry starts with '/' it is treated as an absolute path. If it doesn't start with '/' but contains a '/', the path is relative to the image directory. If it doesn't contain a '/', any folder with this name will be excluded.",
-            "excludeFolderList": [],
+            "excludeFolderList": [
+                ".Trash-1000",
+                ".dtrash",
+                "$RECYCLE.BIN"
+            ],
             "//[excludeFileList]": "Any folder that contains a file with this name will be excluded from indexing.",
             "excludeFileList": []
         },
@@ -288,7 +291,8 @@ Environmental variables:
                     "config": {
                         "sizes": [
                             240
-                        ]
+                        ],
+                        "indexedOnly": true
                     },
                     "allowParallelRun": false,
                     "trigger": {
@@ -299,7 +303,9 @@ Environmental variables:
                 {
                     "name": "Photo Converting",
                     "jobName": "Photo Converting",
-                    "config": {},
+                    "config": {
+                        "indexedOnly": true
+                    },
                     "allowParallelRun": false,
                     "trigger": {
                         "type": "after",
@@ -309,7 +315,9 @@ Environmental variables:
                 {
                     "name": "Video Converting",
                     "jobName": "Video Converting",
-                    "config": {},
+                    "config": {
+                        "indexedOnly": true
+                    },
                     "allowParallelRun": false,
                     "trigger": {
                         "type": "after",
@@ -319,7 +327,9 @@ Environmental variables:
                 {
                     "name": "Temp Folder Cleaning",
                     "jobName": "Temp Folder Cleaning",
-                    "config": {},
+                    "config": {
+                        "indexedOnly": true
+                    },
                     "allowParallelRun": false,
                     "trigger": {
                         "type": "after",
@@ -335,15 +345,14 @@ Environmental variables:
         "urlBase": "",
         "Search": {
             "enabled": true,
-            "instantSearchEnabled": true,
-            "InstantSearchTimeout": 3000,
-            "instantSearchCacheTimeout": 3600000,
             "searchCacheTimeout": 3600000,
             "AutoComplete": {
                 "enabled": true,
                 "maxItemsPerCategory": 5,
                 "cacheTimeout": 3600000
-            }
+            },
+            "maxMediaResult": 2000,
+            "maxDirectoryResult": 200
         },
         "Sharing": {
             "enabled": true,
@@ -400,7 +409,9 @@ Environmental variables:
         "Faces": {
             "enabled": true,
             "keywordsToPersons": true,
-            "writeAccessMinRole": "Admin"
+            "writeAccessMinRole": "Admin",
+            "readAccessMinRole": "User"
         }
     }
-}```
+}
+```
