@@ -40,7 +40,7 @@ export module DirectoryDTO {
     }
   };
 
-  export const removeReferences = (dir: DirectoryDTO): void => {
+  export const removeReferences = (dir: DirectoryDTO): DirectoryDTO => {
     if (dir.media) {
       dir.media.forEach((media: MediaDTO) => {
         media.directory = null;
@@ -60,6 +60,8 @@ export module DirectoryDTO {
         directory.parent = null;
       });
     }
+
+    return dir;
 
   };
   export const filterPhotos = (dir: DirectoryDTO): PhotoDTO[] => {

@@ -24,6 +24,8 @@ import {DiskMangerWorker} from '../../../../../src/backend/model/threading/DiskM
 
 export class TestHelper {
 
+  static creationCounter = 0;
+
   public static getDirectoryEntry(parent: DirectoryDTO = null, name = 'wars dir') {
 
     const dir = new DirectoryEntity();
@@ -156,7 +158,6 @@ export class TestHelper {
     return p;
   }
 
-
   public static getPhotoEntry2(dir: DirectoryDTO) {
     const p = TestHelper.getPhotoEntry(dir);
 
@@ -249,7 +250,6 @@ export class TestHelper {
     return p;
   }
 
-
   public static getRandomizedDirectoryEntry(parent: DirectoryDTO = null, forceStr: string = null) {
 
     const dir: DirectoryDTO = {
@@ -263,7 +263,7 @@ export class TestHelper {
       media: [],
       lastModified: Date.now(),
       lastScanned: null,
-      parent: null
+      parent: parent
     };
     if (parent !== null) {
       dir.path = DiskMangerWorker.pathFromParent(parent);
@@ -271,7 +271,6 @@ export class TestHelper {
     }
     return dir;
   }
-
 
   public static getRandomizedGPXEntry(dir: DirectoryDTO, forceStr: string = null): FileDTO {
     const d: FileDTO = {
@@ -282,7 +281,6 @@ export class TestHelper {
     dir.metaFile.push(d);
     return d;
   }
-
 
   public static getRandomizedFace(media: PhotoDTO, forceStr: string = null) {
     const rndStr = () => {
@@ -348,7 +346,7 @@ export class TestHelper {
       cameraData: cd,
       positionData: pd,
       size: sd,
-      creationDate: Date.now(),
+      creationDate: Date.now() + ++TestHelper.creationCounter,
       fileSize: rndInt(10000),
       orientation: OrientationTypes.TOP_LEFT,
       caption: rndStr(),
@@ -356,7 +354,7 @@ export class TestHelper {
     };
 
 
-    const d: PhotoDTO = {
+    const p: PhotoDTO = {
       id: null,
       name: rndStr() + '.jpg',
       directory: dir,
@@ -366,11 +364,27 @@ export class TestHelper {
     };
 
     for (let i = 0; i < faces; i++) {
-      this.getRandomizedFace(d, 'Person ' + i);
+      this.getRandomizedFace(p, 'Person ' + i);
     }
 
-    dir.media.push(d);
-    return d;
+    dir.media.push(p);
+    TestHelper.updatePreview(dir);
+    return p;
+  }
+
+  static updatePreview(dir: DirectoryDTO) {
+    if (dir.media.length > 0) {
+      dir.preview = dir.media.sort((a, b) => b.metadata.creationDate - a.metadata.creationDate)[0];
+    } else {
+      const filtered = dir.directories.filter(d => d.preview).map(d => d.preview);
+      if (filtered.length > 0) {
+        dir.preview = filtered.sort((a, b) => b.metadata.creationDate - a.metadata.creationDate)[0];
+      }
+    }
+    if (dir.parent) {
+      TestHelper.updatePreview(dir.parent);
+    }
+
   }
 
 

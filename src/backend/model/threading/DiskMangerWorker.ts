@@ -148,10 +148,14 @@ export class DiskMangerWorker {
         if (!directory.preview) {
           directory.preview = photo;
         }
+        // add the preview photo to the list of media, so it will be saved to the DB
+        // and can be queried to populate previews,
+        // otherwise we do not return media list that is only partial
+        directory.media.push(photo);
+
         if (settings.previewOnly === true) {
           break;
         }
-        directory.media.push(photo);
 
       } else if (VideoProcessing.isVideo(fullFilePath)) {
         if (Config.Client.Media.Video.enabled === false || settings.noVideo === true || settings.previewOnly === true) {

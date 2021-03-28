@@ -2,14 +2,13 @@ import {expect} from 'chai';
 import {PersonManager} from '../../../../../src/backend/model/database/sql/PersonManager';
 import {SQLTestHelper} from '../../../SQLTestHelper';
 import {TestHelper} from './TestHelper';
-import {PhotoDTO, PhotoMetadata} from '../../../../../src/common/entities/PhotoDTO';
+import {PhotoDTO} from '../../../../../src/common/entities/PhotoDTO';
 import {Utils} from '../../../../../src/common/Utils';
 import {PersonWithSampleRegion} from '../../../../../src/common/entities/PersonDTO';
 import {DirectoryDTO} from '../../../../../src/common/entities/DirectoryDTO';
 import {VideoDTO} from '../../../../../src/common/entities/VideoDTO';
 import {SQLConnection} from '../../../../../src/backend/model/database/sql/SQLConnection';
 import {PersonEntry} from '../../../../../src/backend/model/database/sql/enitites/PersonEntry';
-import {MediaDTO} from '../../../../../src/common/entities/MediaDTO';
 
 
 // to help WebStorm to handle the test cases
@@ -36,17 +35,17 @@ describe('PersonManager', (sqlHelper: SQLTestHelper) => {
   const setUpSqlDB = async () => {
     await sqlHelper.initDB();
     const directory: DirectoryDTO = TestHelper.getDirectoryEntry();
-    TestHelper.getPhotoEntry1(directory);
-    TestHelper.getPhotoEntry2(directory);
+    p = TestHelper.getPhotoEntry1(directory);
+    p2 = TestHelper.getPhotoEntry2(directory);
     const pFaceLess = TestHelper.getPhotoEntry3(directory);
     delete pFaceLess.metadata.faces;
-    TestHelper.getVideoEntry1(directory);
+    v = TestHelper.getVideoEntry1(directory);
 
     dir = await SQLTestHelper.persistTestDir(directory);
-    p = <any>dir.media[0];
-    p2 = <any>dir.media[1];
+    p = <any>dir.media.filter(m => m.name === p.name)[0];
+    p2 = <any>dir.media.filter(m => m.name === p2.name)[0];
     p_faceLess = <any>dir.media[2];
-    v = <any>dir.media[3];
+    v = <any>dir.media.filter(m => m.name === v.name)[0];
     savedPerson = await (await SQLConnection.getConnection()).getRepository(PersonEntry).find({
       relations: ['sampleRegion',
         'sampleRegion.media',
@@ -62,7 +61,6 @@ describe('PersonManager', (sqlHelper: SQLTestHelper) => {
   after(async () => {
     await sqlHelper.clearDB();
   });
-
 
 
   it('should get person', async () => {

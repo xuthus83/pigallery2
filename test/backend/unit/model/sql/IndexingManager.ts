@@ -69,7 +69,9 @@ describe('IndexingManager', (sqlHelper: SQLTestHelper) => {
   });
 
   const setPartial = (dir: DirectoryDTO) => {
-    dir.preview = dir.media[0];
+    if (!dir.preview && dir.media && dir.media.length > 0) {
+      dir.preview = dir.media[0];
+    }
     dir.isPartial = true;
     delete dir.directories;
     delete dir.metaFile;
@@ -188,6 +190,62 @@ describe('IndexingManager', (sqlHelper: SQLTestHelper) => {
       expect(Utils.clone(Utils.removeNullOrEmptyObj(selected)))
         .to.deep.equalInAnyOrder(Utils.clone(Utils.removeNullOrEmptyObj(parent2)));
     }
+  });
+
+
+  it('should select preview', async () => {
+    const selectDirectory = async (_gm: GalleryManagerTest, dir: DirectoryDTO) => {
+      const conn = await SQLConnection.getConnection();
+      const selected = await _gm.selectParentDir(conn, dir.name, dir.path);
+      await _gm.fillParentDir(conn, selected);
+
+      DirectoryDTO.removeReferences(selected);
+      removeIds(selected);
+      return selected;
+    };
+
+    const gm = new GalleryManagerTest();
+    const im = new IndexingManagerTest();
+
+
+    const parent = TestHelper.getRandomizedDirectoryEntry(null, 'parent');
+
+
+    const checkParent = async () => {
+      const selected = await selectDirectory(gm, parent);
+      const cloned = Utils.removeNullOrEmptyObj(Utils.clone(parent));
+      if (cloned.directories) {
+        cloned.directories.forEach(d => setPartial(d));
+      }
+      expect(Utils.clone(Utils.removeNullOrEmptyObj(selected)))
+        .to.deep.equalInAnyOrder(cloned);
+    };
+
+    const saveToDBAndCheck = async (dir: DirectoryDTO) => {
+      DirectoryDTO.removeReferences(parent);
+      await im.saveToDB(Utils.clone(dir));
+      await checkParent();
+      DirectoryDTO.addReferences(parent);
+    };
+
+    await saveToDBAndCheck(parent);
+
+    const subDir1 = TestHelper.getRandomizedDirectoryEntry(parent, 'subDir');
+    await saveToDBAndCheck(parent);
+
+    const p1 = TestHelper.getRandomizedPhotoEntry(subDir1, 'subPhoto1', 0);
+    await saveToDBAndCheck(subDir1);
+
+    const subDir2 = TestHelper.getRandomizedDirectoryEntry(parent, 'subDir2');
+    await saveToDBAndCheck(parent);
+
+    const p2 = TestHelper.getRandomizedPhotoEntry(subDir2, 'subPhoto2', 0);
+    await saveToDBAndCheck(subDir2);
+
+    const p = TestHelper.getRandomizedPhotoEntry(parent, 'photo', 0);
+    await saveToDBAndCheck(parent);
+
+
   });
 
 

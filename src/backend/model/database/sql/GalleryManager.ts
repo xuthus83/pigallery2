@@ -18,6 +18,7 @@ import {FaceRegionEntry} from './enitites/FaceRegionEntry';
 import {ObjectManagers} from '../../ObjectManagers';
 import {DuplicatesDTO} from '../../../../common/entities/DuplicatesDTO';
 import {ServerConfig} from '../../../../common/config/private/PrivateConfig';
+import DatabaseType = ServerConfig.DatabaseType;
 
 const LOG_TAG = '[GalleryManager]';
 
@@ -202,13 +203,41 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
         path: directoryParent
       })
       .leftJoinAndSelect('directory.directories', 'directories')
-      .leftJoinAndSelect('directory.media', 'media');
+      .leftJoinAndSelect('directory.media', 'media')
+      .orderBy('media.metadata.creationDate', 'DESC');
 
     if (Config.Client.MetaFile.enabled === true) {
       query.leftJoinAndSelect('directory.metaFile', 'metaFile');
     }
 
     return await query.getOne();
+  }
+
+  protected async fillPreviewFromSubDir(connection: Connection, dir: DirectoryEntity): Promise<void> {
+    dir.media = [];
+    const query = connection
+      .getRepository(MediaEntity)
+      .createQueryBuilder('media')
+      .innerJoinAndSelect('media.directory', 'directory');
+
+    if (Config.Server.Database.type === DatabaseType.mysql) {
+      query.where('directory.path like :path || \'%\'', {
+        path: (DiskMangerWorker.pathFromParent(dir))
+      });
+    } else {
+      query.where('directory.path GLOB :path', {
+        path: DiskMangerWorker.pathFromParent(dir) + '*'
+      });
+    }
+    dir.preview = await query.orderBy('media.metadata.creationDate', 'DESC')
+      .limit(1)
+      .getOne();
+
+    if (dir.preview) {
+      dir.preview.directory = dir;
+      dir.preview.readyThumbnails = [];
+      dir.preview.readyIcon = false;
+    }
   }
 
   protected async fillParentDir(connection: Connection, dir: DirectoryEntity): Promise<void> {
@@ -232,14 +261,15 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
           .filter(fe => fe.media.id === dir.media[i].id)
           .map(f => ({box: f.box, name: f.person.name}));
       }
-
+      if (dir.media.length > 0) {
+        dir.preview = dir.media[0];
+      } else {
+        await this.fillPreviewFromSubDir(connection, dir);
+      }
     }
     if (dir.directories) {
       for (let i = 0; i < dir.directories.length; i++) {
 
-        const _path = dir.path;
-        const currentRoot = (_path === './' ? '' : _path);
-        const dirName = currentRoot + dir.name + path.sep;
         dir.directories[i].media = [];
         dir.directories[i].preview = await connection
           .getRepository(MediaEntity)
@@ -247,9 +277,6 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
           .innerJoinAndSelect('media.directory', 'directory')
           .where('media.directory = :dir', {
             dir: dir.directories[i].id
-          })
-          .orWhere('directory.path like :parentPath||\'%\'', {
-            parentPath: dirName
           })
           .orderBy('media.metadata.creationDate', 'DESC')
           .limit(1)
@@ -260,6 +287,8 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
           dir.directories[i].preview.directory = dir.directories[i];
           dir.directories[i].preview.readyThumbnails = [];
           dir.directories[i].preview.readyIcon = false;
+        } else {
+          await this.fillPreviewFromSubDir(connection, dir.directories[i]);
         }
       }
     }

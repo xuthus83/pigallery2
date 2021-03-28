@@ -24,7 +24,7 @@ export class Utils {
   }
 
 
-  static removeNullOrEmptyObj(obj: any) {
+  static removeNullOrEmptyObj<T extends any>(obj: T): T {
     if (typeof obj !== 'object' || obj == null) {
       return obj;
     }

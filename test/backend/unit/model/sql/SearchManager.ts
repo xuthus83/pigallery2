@@ -90,17 +90,17 @@ describe('SearchManager', (sqlHelper: SQLTestHelper) => {
     const directory: DirectoryDTO = TestHelper.getDirectoryEntry();
     const subDir = TestHelper.getDirectoryEntry(directory, 'The Phantom Menace');
     const subDir2 = TestHelper.getDirectoryEntry(directory, 'Return of the Jedi');
-    TestHelper.getPhotoEntry1(directory);
-    TestHelper.getPhotoEntry2(directory);
-    TestHelper.getPhotoEntry4(subDir2);
+    p = TestHelper.getPhotoEntry1(directory);
+    p2 = TestHelper.getPhotoEntry2(directory);
+    p4 = TestHelper.getPhotoEntry4(subDir2);
     const pFaceLess = TestHelper.getPhotoEntry3(subDir);
     delete pFaceLess.metadata.faces;
-    TestHelper.getVideoEntry1(directory);
+    v = TestHelper.getVideoEntry1(directory);
 
     dir = await SQLTestHelper.persistTestDir(directory);
-    p = <any>dir.media[0];
-    p2 = <any>dir.media[1];
-    v = <any>dir.media[2];
+    p = <any>dir.media.filter(m => m.name === p.name)[0];
+    p2 = <any>dir.media.filter(m => m.name === p2.name)[0];
+    v = <any>dir.media.filter(m => m.name === v.name)[0];
     p4 = <any>dir.directories[1].media[0];
     p_faceLess = <any>dir.directories[0].media[0];
   };
@@ -176,9 +176,11 @@ describe('SearchManager', (sqlHelper: SQLTestHelper) => {
   const searchifyMedia = (m: MediaDTO): MediaDTO => {
     const tmpM = m.directory.media;
     const tmpD = m.directory.directories;
+    const tmpP = m.directory.preview;
     const tmpMT = m.directory.metaFile;
     delete m.directory.directories;
     delete m.directory.media;
+    delete m.directory.preview;
     delete m.directory.metaFile;
     const ret = Utils.clone(m);
     if ((ret.metadata as PhotoMetadata).faces && !(ret.metadata as PhotoMetadata).faces.length) {
@@ -186,6 +188,7 @@ describe('SearchManager', (sqlHelper: SQLTestHelper) => {
     }
     m.directory.directories = tmpD;
     m.directory.media = tmpM;
+    m.directory.preview = tmpP;
     m.directory.metaFile = tmpMT;
     return ret;
   };
@@ -946,7 +949,7 @@ describe('SearchManager', (sqlHelper: SQLTestHelper) => {
         .to.deep.equalInAnyOrder(removeDir(<SearchResultDTO>{
         searchQuery: query,
         directories: [],
-        media: [p, p2,  p_faceLess, v],
+        media: [p, p2, p_faceLess, v],
         metaFile: [],
         resultOverflow: false
       }));
