@@ -51,7 +51,7 @@ describe('MetadataLoader', () => {
         const expected = require(path.join(__dirname, '/../../../assets/orientation/Landscape.json'));
         expected.orientation = i;
         delete data.fileSize;
-        delete expected.fileSize;
+        delete data.creationDate;
         expect(Utils.clone(data)).to.be.deep.equal(expected);
       });
       it('Portrait ' + i, async () => {
@@ -59,7 +59,7 @@ describe('MetadataLoader', () => {
         const expected = require(path.join(__dirname, '/../../../assets/orientation/Portrait.json'));
         expected.orientation = i;
         delete data.fileSize;
-        delete expected.fileSize;
+        delete data.creationDate;
         expect(Utils.clone(data)).to.be.deep.equal(expected);
       });
     }
