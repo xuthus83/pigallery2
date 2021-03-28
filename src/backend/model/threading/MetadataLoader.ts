@@ -154,9 +154,6 @@ export class MetadataLoader {
 
               }
 
-              if (exif.tags.Orientation) {
-                metadata.orientation = exif.tags.Orientation;
-              }
 
               if (exif.imageSize) {
                 metadata.size = {width: exif.imageSize.width, height: exif.imageSize.height};
@@ -165,15 +162,6 @@ export class MetadataLoader {
               } else {
                 const info = imageSize(fullPath);
                 metadata.size = {width: info.width, height: info.height};
-              }
-              if (OrientationTypes.BOTTOM_LEFT < metadata.orientation &&
-                metadata.orientation <= OrientationTypes.LEFT_BOTTOM &&
-                metadata.size.width > metadata.size.height) {
-                // noinspection JSSuspiciousNameCombination
-                const height = metadata.size.width;
-                // noinspection JSSuspiciousNameCombination
-                metadata.size.width = metadata.size.height;
-                metadata.size.height = height;
               }
             } catch (err) {
               Logger.debug(LOG_TAG, 'Error parsing exif', fullPath, err);
@@ -218,6 +206,17 @@ export class MetadataLoader {
               const exif = ExifReader.load(data);
               if (exif.Rating) {
                 metadata.rating = <any>parseInt(exif.Rating.value, 10);
+              }
+
+              if (exif.Orientation) {
+                metadata.orientation = <any>parseInt(<any>exif.Orientation.value, 10);
+                if (OrientationTypes.BOTTOM_LEFT < metadata.orientation) {
+                  // noinspection JSSuspiciousNameCombination
+                  const height = metadata.size.width;
+                  // noinspection JSSuspiciousNameCombination
+                  metadata.size.width = metadata.size.height;
+                  metadata.size.height = height;
+                }
               }
               if (Config.Client.Faces.enabled) {
                 const faces: FaceRegion[] = [];

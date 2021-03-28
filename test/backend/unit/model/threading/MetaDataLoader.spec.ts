@@ -33,15 +33,36 @@ describe('MetadataLoader', () => {
 
   describe('should load jpg with proper height and orientation', () => {
     it('jpg 1', async () => {
-      const data = await MetadataLoader.loadPhotoMetadata(path.join(__dirname, '/../../../assets/broken_orientation_exif.jpg'));
-      const expected = require(path.join(__dirname, '/../../../assets/broken_orientation_exif.json'));
+      const data = await MetadataLoader.loadPhotoMetadata(path.join(__dirname, '/../../../assets/orientation/broken_orientation_exif.jpg'));
+      const expected = require(path.join(__dirname, '/../../../assets/orientation/broken_orientation_exif.json'));
       expect(Utils.clone(data)).to.be.deep.equal(expected);
     });
     it('jpg 2', async () => {
-      const data = await MetadataLoader.loadPhotoMetadata(path.join(__dirname, '/../../../assets/broken_orientation_exif2.jpg'));
-      const expected = require(path.join(__dirname, '/../../../assets/broken_orientation_exif2.json'));
+      const data = await MetadataLoader.loadPhotoMetadata(path.join(__dirname, '/../../../assets/orientation/broken_orientation_exif2.jpg'));
+      const expected = require(path.join(__dirname, '/../../../assets/orientation/broken_orientation_exif2.json'));
       expect(Utils.clone(data)).to.be.deep.equal(expected);
     });
+  });
+
+  describe('should read orientation', () => {
+    for (let i = 0; i <= 8; ++i) {
+      it('Landscape ' + i, async () => {
+        const data = await MetadataLoader.loadPhotoMetadata(path.join(__dirname, '/../../../assets/orientation/Landscape_' + i + '.jpg'));
+        const expected = require(path.join(__dirname, '/../../../assets/orientation/Landscape.json'));
+        expected.orientation = i;
+        delete data.fileSize;
+        delete expected.fileSize;
+        expect(Utils.clone(data)).to.be.deep.equal(expected);
+      });
+      it('Portrait ' + i, async () => {
+        const data = await MetadataLoader.loadPhotoMetadata(path.join(__dirname, '/../../../assets/orientation/Portrait_' + i + '.jpg'));
+        const expected = require(path.join(__dirname, '/../../../assets/orientation/Portrait.json'));
+        expected.orientation = i;
+        delete data.fileSize;
+        delete expected.fileSize;
+        expect(Utils.clone(data)).to.be.deep.equal(expected);
+      });
+    }
   });
 
 
