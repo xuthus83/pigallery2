@@ -34,7 +34,9 @@ export class MediaMetadataEntity implements MediaMetadata {
   @Column('int', {unsigned: true})
   fileSize: number;
 
-  @Column('simple-array')
+  @Column({type: 'simple-array',
+    charset: columnCharsetCS.charset,
+    collation: columnCharsetCS.collation})
   keywords: string[];
 
   @Column(type => CameraMetadataEntity)
