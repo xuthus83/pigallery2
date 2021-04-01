@@ -59,6 +59,9 @@ export class GallerySearchFieldComponent implements ControlValueAccessor, Valida
   }
 
   get SearchHint() {
+    if (!this.rawSearchText) {
+      return '';
+    }
     if (!this.autoCompleteItems ||
       !this.autoCompleteItems.value || this.autoCompleteItems.value.length === 0) {
       return this.rawSearchText;
