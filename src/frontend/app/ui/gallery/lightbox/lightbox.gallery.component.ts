@@ -9,7 +9,7 @@ import {Subscription} from 'rxjs';
 import {ActivatedRoute, Params, Router} from '@angular/router';
 import {PageHelper} from '../../../model/page.helper';
 import {QueryService} from '../../../model/query.service';
-import {MediaDTO} from '../../../../../common/entities/MediaDTO';
+import {MediaBaseDTO, MediaDTO} from '../../../../../common/entities/MediaDTO';
 import {QueryParams} from '../../../../../common/QueryParams';
 import {GalleryService} from '../gallery.service';
 import {PhotoDTO} from '../../../../../common/entities/PhotoDTO';
@@ -184,7 +184,7 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
     }
   }
 
-  public showLigthbox(photo: MediaDTO) {
+  public showLigthbox(photo: MediaBaseDTO) {
     if (this.controls) {
       this.controls.resetZoom();
     }
@@ -414,7 +414,7 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
 
   }
 
-  private findPhotoComponent(media: MediaDTO): GalleryPhotoComponent {
+  private findPhotoComponent(media: MediaBaseDTO): GalleryPhotoComponent {
     const galleryPhotoComponents = this.gridPhotoQL.toArray();
     for (let i = 0; i < galleryPhotoComponents.length; i++) {
       if (galleryPhotoComponents[i].gridMedia.media === media) {
@@ -424,7 +424,7 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
     return null;
   }
 
-  private calcLightBoxPhotoDimension(photo: MediaDTO): Dimension {
+  private calcLightBoxPhotoDimension(photo: MediaBaseDTO): Dimension {
     let width: number;
     let height: number;
     const photoAspect = photo.metadata.size.width / photo.metadata.size.height;

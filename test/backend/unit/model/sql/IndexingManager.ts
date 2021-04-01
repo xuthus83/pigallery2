@@ -12,7 +12,7 @@ import {FileDTO} from '../../../../../src/common/entities/FileDTO';
 import {IndexingManager} from '../../../../../src/backend/model/database/sql/IndexingManager';
 import {ObjectManagers} from '../../../../../src/backend/model/ObjectManagers';
 import {PersonManager} from '../../../../../src/backend/model/database/sql/PersonManager';
-import {SQLTestHelper} from '../../../SQLTestHelper';
+import {DBTestHelper} from '../../../DBTestHelper';
 import {VersionManager} from '../../../../../src/backend/model/database/sql/VersionManager';
 import {DiskMangerWorker} from '../../../../../src/backend/model/threading/DiskMangerWorker';
 import {ServerConfig} from '../../../../../src/common/config/private/PrivateConfig';
@@ -52,9 +52,9 @@ class IndexingManagerTest extends IndexingManager {
 declare let describe: any;
 declare const after: any;
 declare const it: any;
-describe = SQLTestHelper.describe;
+describe = DBTestHelper.describe();
 
-describe('IndexingManager', (sqlHelper: SQLTestHelper) => {
+describe('IndexingManager', (sqlHelper: DBTestHelper) => {
 
 
   beforeEach(async () => {
@@ -112,14 +112,14 @@ describe('IndexingManager', (sqlHelper: SQLTestHelper) => {
     p1.name = 'test.jpg';
     p2.name = 'Test.jpg';
 
-    DirectoryDTO.removeReferences(parent);
+    DirectoryDTO.packDirectory(parent);
     await im.saveToDB(Utils.clone(parent));
 
     const conn = await SQLConnection.getConnection();
     const selected = await gm.selectParentDir(conn, parent.name, parent.path);
     await gm.fillParentDir(conn, selected);
 
-    DirectoryDTO.removeReferences(selected);
+    DirectoryDTO.packDirectory(selected);
     removeIds(selected);
     expect(Utils.clone(Utils.removeNullOrEmptyObj(selected)))
       .to.deep.equal(Utils.clone(Utils.removeNullOrEmptyObj(parent)));
@@ -130,21 +130,21 @@ describe('IndexingManager', (sqlHelper: SQLTestHelper) => {
     const gm = new GalleryManagerTest();
     const im = new IndexingManagerTest();
 
-    const parent = TestHelper.getRandomizedDirectoryEntry();
+    const parent = TestHelper.getRandomizedDirectoryEntry(null, 'parent');
     const subDir1 = TestHelper.getRandomizedDirectoryEntry(parent, 'subDir');
     const p1 = TestHelper.getRandomizedPhotoEntry(subDir1, 'subPhoto1', 0);
     const subDir2 = TestHelper.getRandomizedDirectoryEntry(parent, 'SUBDIR');
     const p2 = TestHelper.getRandomizedPhotoEntry(subDir2, 'subPhoto2', 0);
 
 
-    DirectoryDTO.removeReferences(parent);
+    DirectoryDTO.packDirectory(parent);
     await im.saveToDB(Utils.clone(parent));
 
     const conn = await SQLConnection.getConnection();
     const selected = await gm.selectParentDir(conn, parent.name, parent.path);
     await gm.fillParentDir(conn, selected);
 
-    DirectoryDTO.removeReferences(selected);
+    DirectoryDTO.packDirectory(selected);
     removeIds(selected);
     setPartial(subDir1);
     setPartial(subDir2);
@@ -164,9 +164,9 @@ describe('IndexingManager', (sqlHelper: SQLTestHelper) => {
     const p2 = TestHelper.getRandomizedPhotoEntry(subDir2, 'subPhoto2', 0);
 
 
-    DirectoryDTO.removeReferences(parent1);
+    DirectoryDTO.packDirectory(parent1);
     await im.saveToDB(Utils.clone(parent1));
-    DirectoryDTO.removeReferences(parent2);
+    DirectoryDTO.packDirectory(parent2);
     await im.saveToDB(Utils.clone(parent2));
 
     const conn = await SQLConnection.getConnection();
@@ -174,7 +174,7 @@ describe('IndexingManager', (sqlHelper: SQLTestHelper) => {
       const selected = await gm.selectParentDir(conn, parent1.name, parent1.path);
       await gm.fillParentDir(conn, selected);
 
-      DirectoryDTO.removeReferences(selected);
+      DirectoryDTO.packDirectory(selected);
       removeIds(selected);
       setPartial(subDir1);
       expect(Utils.clone(Utils.removeNullOrEmptyObj(selected)))
@@ -184,7 +184,7 @@ describe('IndexingManager', (sqlHelper: SQLTestHelper) => {
       const selected = await gm.selectParentDir(conn, parent2.name, parent2.path);
       await gm.fillParentDir(conn, selected);
 
-      DirectoryDTO.removeReferences(selected);
+      DirectoryDTO.packDirectory(selected);
       removeIds(selected);
       setPartial(subDir2);
       expect(Utils.clone(Utils.removeNullOrEmptyObj(selected)))
@@ -199,7 +199,7 @@ describe('IndexingManager', (sqlHelper: SQLTestHelper) => {
       const selected = await _gm.selectParentDir(conn, dir.name, dir.path);
       await _gm.fillParentDir(conn, selected);
 
-      DirectoryDTO.removeReferences(selected);
+      DirectoryDTO.packDirectory(selected);
       removeIds(selected);
       return selected;
     };
@@ -222,10 +222,10 @@ describe('IndexingManager', (sqlHelper: SQLTestHelper) => {
     };
 
     const saveToDBAndCheck = async (dir: DirectoryDTO) => {
-      DirectoryDTO.removeReferences(parent);
+      DirectoryDTO.packDirectory(parent);
       await im.saveToDB(Utils.clone(dir));
       await checkParent();
-      DirectoryDTO.addReferences(parent);
+      DirectoryDTO.unpackDirectory(parent);
     };
 
     await saveToDBAndCheck(parent);
@@ -262,20 +262,20 @@ describe('IndexingManager', (sqlHelper: SQLTestHelper) => {
     const sp2 = TestHelper.getRandomizedPhotoEntry(subDir, 'subPhoto2', 0);
 
 
-    DirectoryDTO.removeReferences(subDir);
+    DirectoryDTO.packDirectory(subDir);
     await im.saveToDB(Utils.clone(subDir));
 
     parent.directories.push(subDir);
 
 
-    DirectoryDTO.removeReferences(parent);
+    DirectoryDTO.packDirectory(parent);
     await im.saveToDB(Utils.clone(parent));
 
     const conn = await SQLConnection.getConnection();
     const selected = await gm.selectParentDir(conn, parent.name, parent.path);
     await gm.fillParentDir(conn, selected);
 
-    DirectoryDTO.removeReferences(selected);
+    DirectoryDTO.packDirectory(selected);
     removeIds(selected);
     setPartial(subDir);
     expect(Utils.clone(Utils.removeNullOrEmptyObj(selected)))
@@ -296,20 +296,20 @@ describe('IndexingManager', (sqlHelper: SQLTestHelper) => {
     const sp2 = TestHelper.getRandomizedPhotoEntry(subDir, 'subPhoto2', 0);
 
 
-    DirectoryDTO.removeReferences(subDir);
+    DirectoryDTO.packDirectory(subDir);
     await im.saveToDB(Utils.clone(subDir));
 
     parent.directories.push(subDir);
 
 
-    DirectoryDTO.removeReferences(parent);
+    DirectoryDTO.packDirectory(parent);
     await im.saveToDB(Utils.clone(parent));
 
     const conn = await SQLConnection.getConnection();
     const selected = await gm.selectParentDir(conn, parent.name, parent.path);
     await gm.fillParentDir(conn, selected);
 
-    DirectoryDTO.removeReferences(selected);
+    DirectoryDTO.packDirectory(selected);
     removeIds(selected);
     setPartial(subDir);
     expect(Utils.clone(Utils.removeNullOrEmptyObj(selected)))
@@ -329,14 +329,14 @@ describe('IndexingManager', (sqlHelper: SQLTestHelper) => {
     const sp2 = TestHelper.getRandomizedPhotoEntry(subDir, 'subPhoto2', 0);
 
 
-    DirectoryDTO.removeReferences(parent);
+    DirectoryDTO.packDirectory(parent);
     await im.saveToDB(Utils.clone(parent));
 
     const conn = await SQLConnection.getConnection();
     const selected = await gm.selectParentDir(conn, parent.name, parent.path);
     await gm.fillParentDir(conn, selected);
 
-    DirectoryDTO.removeReferences(selected);
+    DirectoryDTO.packDirectory(selected);
     removeIds(selected);
     setPartial(subDir);
     expect(Utils.clone(Utils.removeNullOrEmptyObj(selected)))
@@ -367,14 +367,14 @@ describe('IndexingManager', (sqlHelper: SQLTestHelper) => {
     p2.metadata.positionData.GPSData.longitude = minFloat;
 
 
-    DirectoryDTO.removeReferences(parent);
+    DirectoryDTO.packDirectory(parent);
     await im.saveToDB(Utils.clone(parent));
 
     const conn = await SQLConnection.getConnection();
     const selected = await gm.selectParentDir(conn, parent.name, parent.path);
     await gm.fillParentDir(conn, selected);
 
-    DirectoryDTO.removeReferences(selected);
+    DirectoryDTO.packDirectory(selected);
     removeIds(selected);
     expect(Utils.clone(Utils.removeNullOrEmptyObj(selected)))
       .to.deep.equalInAnyOrder(Utils.clone(Utils.removeNullOrEmptyObj(parent)));
@@ -387,7 +387,7 @@ describe('IndexingManager', (sqlHelper: SQLTestHelper) => {
     const p1 = TestHelper.getRandomizedPhotoEntry(parent, 'Photo1');
     const p2 = TestHelper.getRandomizedPhotoEntry(parent, 'Photo2');
     const gpx = TestHelper.getRandomizedGPXEntry(parent, 'GPX1');
-    DirectoryDTO.removeReferences(parent);
+    DirectoryDTO.packDirectory(parent);
     Config.Client.MetaFile.enabled = true;
     await im.saveToDB(Utils.clone(parent));
 
@@ -397,7 +397,7 @@ describe('IndexingManager', (sqlHelper: SQLTestHelper) => {
     await gm.fillParentDir(conn, selected);
 
     delete parent.metaFile;
-    DirectoryDTO.removeReferences(selected);
+    DirectoryDTO.packDirectory(selected);
     removeIds(selected);
     expect(Utils.clone(Utils.removeNullOrEmptyObj(selected)))
       .to.deep.equalInAnyOrder(Utils.clone(Utils.removeNullOrEmptyObj(parent)));
@@ -414,13 +414,13 @@ describe('IndexingManager', (sqlHelper: SQLTestHelper) => {
     subDir.name = 'subDir';
     const sp1 = TestHelper.getRandomizedPhotoEntry(subDir, 'subPhoto1');
 
-    DirectoryDTO.removeReferences(parent);
+    DirectoryDTO.packDirectory(parent);
     await im.saveToDB(Utils.clone(parent));
 
     const sp2 = TestHelper.getRandomizedPhotoEntry(subDir, 'subPhoto2');
     const sp3 = TestHelper.getRandomizedPhotoEntry(subDir, 'subPhoto3');
 
-    DirectoryDTO.removeReferences(subDir);
+    DirectoryDTO.packDirectory(subDir);
     await im.saveToDB(Utils.clone(subDir));
 
     const conn = await SQLConnection.getConnection();
@@ -429,7 +429,7 @@ describe('IndexingManager', (sqlHelper: SQLTestHelper) => {
 
     // subDir.isPartial = true;
     //  delete subDir.directories;
-    DirectoryDTO.removeReferences(selected);
+    DirectoryDTO.packDirectory(selected);
     delete subDir.parent;
     delete subDir.metaFile;
     removeIds(selected);
@@ -452,7 +452,7 @@ describe('IndexingManager', (sqlHelper: SQLTestHelper) => {
     const sp2 = TestHelper.getRandomizedPhotoEntry(subDir, 'subPhoto2', 1);
 
 
-    DirectoryDTO.removeReferences(parent);
+    DirectoryDTO.packDirectory(parent);
     const s1 = im.queueForSave(Utils.clone(parent));
     const s2 = im.queueForSave(Utils.clone(parent));
     const s3 = im.queueForSave(Utils.clone(parent));
@@ -462,9 +462,10 @@ describe('IndexingManager', (sqlHelper: SQLTestHelper) => {
     const selected = await gm.selectParentDir(conn, parent.name, parent.path);
     await gm.fillParentDir(conn, selected);
 
-    DirectoryDTO.removeReferences(selected);
+    DirectoryDTO.packDirectory(selected);
     removeIds(selected);
     setPartial(subDir);
+    parent.directories.forEach(d => delete (<any>d.preview.metadata).faces);
     delete sp1.metadata.faces;
     delete sp2.metadata.faces;
     expect(Utils.clone(Utils.removeNullOrEmptyObj(selected)))
@@ -478,14 +479,14 @@ describe('IndexingManager', (sqlHelper: SQLTestHelper) => {
     const im = new IndexingManagerTest();
     Config.Client.MetaFile.enabled = true;
     const parent = TestHelper.getRandomizedDirectoryEntry();
-    DirectoryDTO.removeReferences(parent);
+    DirectoryDTO.packDirectory(parent);
     await im.saveToDB(Utils.clone(parent));
     const subDir = TestHelper.getRandomizedDirectoryEntry(parent, 'subDir');
     for (let i = 0; i < 1500; i++) {
       TestHelper.getRandomizedPhotoEntry(subDir, 'p' + i);
     }
 
-    DirectoryDTO.removeReferences(parent);
+    DirectoryDTO.packDirectory(parent);
     await im.saveToDB(subDir);
 
 
@@ -493,7 +494,7 @@ describe('IndexingManager', (sqlHelper: SQLTestHelper) => {
     expect(selected.media.length).to.equal(subDir.media.length);
   }) as any).timeout(40000);
 
-  SQLTestHelper.savedDescribe('Test listDirectory', () => {
+  DBTestHelper.savedDescribe('Test listDirectory', () => {
     const statSync = fs.statSync;
     let dirTime = 0;
     const indexedTime = {

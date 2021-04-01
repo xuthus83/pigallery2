@@ -4,7 +4,7 @@ import {Utils} from '../../../../common/Utils';
 import {Config} from '../../../../common/config/public/Config';
 import {IAutoCompleteItem} from '../../../../common/entities/AutoCompleteItem';
 import {SearchResultDTO} from '../../../../common/entities/SearchResultDTO';
-import {MediaDTO} from '../../../../common/entities/MediaDTO';
+import {MediaBaseDTO, MediaDTO} from '../../../../common/entities/MediaDTO';
 import {SortingMethods} from '../../../../common/entities/SortingMethods';
 import {VersionService} from '../../model/version.service';
 import {SearchQueryDTO, SearchQueryTypes} from '../../../../common/entities/SearchQueryDTO';
@@ -193,7 +193,7 @@ export class GalleryCacheService {
       if (value != null) {
         const directory: DirectoryDTO = JSON.parse(value);
 
-        DirectoryDTO.addReferences(directory);
+        DirectoryDTO.unpackDirectory(directory);
         return directory;
       }
     } catch (e) {
@@ -231,7 +231,7 @@ export class GalleryCacheService {
    * Update media state at cache too (Eg.: thumbnail rendered)
    * @param media
    */
-  public mediaUpdated(media: MediaDTO): void {
+  public mediaUpdated(media: MediaBaseDTO): void {
 
     if (Config.Client.Other.enableCache === false) {
       return;

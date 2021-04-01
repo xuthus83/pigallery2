@@ -106,7 +106,7 @@ export class GalleryService {
         return;
       }
 
-      DirectoryDTO.addReferences(<DirectoryDTO>cw.directory);
+      DirectoryDTO.unpackDirectory(<DirectoryDTO>cw.directory);
 
       this.lastDirectory = <DirectoryDTO>cw.directory;
       this.setContent(cw);

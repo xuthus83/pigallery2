@@ -234,9 +234,9 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
       .getOne();
 
     if (dir.preview) {
-      dir.preview.directory = dir;
       dir.preview.readyThumbnails = [];
       dir.preview.readyIcon = false;
+      console.log(dir.preview.directory);
     }
   }
 

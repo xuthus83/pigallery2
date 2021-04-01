@@ -7,6 +7,7 @@ import {Media} from '../../Media';
 import {Thumbnail, ThumbnailManagerService} from '../../thumbnailManager.service';
 import {QueryService} from '../../../../model/query.service';
 import {MediaDTO} from '../../../../../../common/entities/MediaDTO';
+import {PreviewPhotoDTO} from '../../../../../../common/entities/PhotoDTO';
 
 
 @Component({
@@ -27,7 +28,7 @@ export class GalleryDirectoryComponent implements OnInit, OnDestroy {
 
   }
 
-  public get SamplePhoto(): MediaDTO {
+  public get SamplePhoto(): PreviewPhotoDTO {
     return this.directory.preview;
   }
 

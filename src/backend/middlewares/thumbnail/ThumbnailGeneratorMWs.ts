@@ -7,7 +7,7 @@ import {DirectoryDTO} from '../../../common/entities/DirectoryDTO';
 import {ProjectPath} from '../../ProjectPath';
 import {Config} from '../../../common/config/private/Config';
 import {ThumbnailSourceType} from '../../model/threading/PhotoWorker';
-import {MediaDTO} from '../../../common/entities/MediaDTO';
+import {MediaBaseDTO, MediaDTO} from '../../../common/entities/MediaDTO';
 import {PhotoProcessing} from '../../model/fileprocessing/PhotoProcessing';
 import {PersonWithSampleRegion} from '../../../common/entities/PersonDTO';
 
@@ -138,11 +138,12 @@ export class ThumbnailGeneratorMWs {
 
 
   private static addThInfoTODir(directory: DirectoryDTO) {
+    console.log(directory.path, directory.name);
     if (typeof directory.media !== 'undefined') {
       ThumbnailGeneratorMWs.addThInfoToPhotos(directory.media);
     }
     if (directory.preview) {
-      ThumbnailGeneratorMWs.addThInfoToAPhoto(directory.preview);
+       ThumbnailGeneratorMWs.addThInfoToAPhoto(directory.preview);
     }
     if (typeof directory.directories !== 'undefined') {
       for (let i = 0; i < directory.directories.length; i++) {
@@ -157,7 +158,7 @@ export class ThumbnailGeneratorMWs {
     }
   }
 
-  private static addThInfoToAPhoto(photo: MediaDTO) {
+  private static addThInfoToAPhoto(photo: MediaBaseDTO) {
     const fullMediaPath = path.join(ProjectPath.ImageFolder, photo.directory.path, photo.directory.name, photo.name);
     for (let j = 0; j < Config.Client.Media.Thumbnail.thumbnailSizes.length; j++) {
       const size = Config.Client.Media.Thumbnail.thumbnailSizes[j];

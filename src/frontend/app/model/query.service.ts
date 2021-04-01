@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {ShareService} from '../ui/gallery/share.service';
-import {MediaDTO} from '../../../common/entities/MediaDTO';
+import {MediaBaseDTO, MediaDTO} from '../../../common/entities/MediaDTO';
 import {QueryParams} from '../../../common/QueryParams';
 import {Utils} from '../../../common/Utils';
 import {GalleryService} from '../ui/gallery/gallery.service';
@@ -15,7 +15,7 @@ export class QueryService {
               private galleryService: GalleryService) {
   }
 
-  getMediaStringId(media: MediaDTO): string {
+  getMediaStringId(media: MediaBaseDTO): string {
     if (this.galleryService.isSearchResult()) {
       return Utils.concatUrls(media.directory.path, media.directory.name, media.name);
     } else {
@@ -23,7 +23,7 @@ export class QueryService {
     }
   }
 
-  getParams(media?: MediaDTO): { [key: string]: string } {
+  getParams(media?: MediaBaseDTO): { [key: string]: string } {
     const query: { [key: string]: string } = {};
     if (media) {
       query[QueryParams.gallery.photo] = this.getMediaStringId(media);

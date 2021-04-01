@@ -4,14 +4,14 @@ import {SharingManager} from '../../../../../src/backend/model/database/sql/Shar
 import {SharingDTO} from '../../../../../src/common/entities/SharingDTO';
 import {UserEntity} from '../../../../../src/backend/model/database/sql/enitites/UserEntity';
 import {UserDTO, UserRoles} from '../../../../../src/common/entities/UserDTO';
-import {SQLTestHelper} from '../../../SQLTestHelper';
+import {DBTestHelper} from '../../../DBTestHelper';
 
 // to help WebStorm to handle the test cases
 declare let describe: any;
 declare const after: any;
-describe = SQLTestHelper.describe;
+describe = DBTestHelper.describe();
 
-describe('SharingManager', (sqlHelper: SQLTestHelper) => {
+describe('SharingManager', (sqlHelper: DBTestHelper) => {
 
 
   let creator: UserDTO = null;

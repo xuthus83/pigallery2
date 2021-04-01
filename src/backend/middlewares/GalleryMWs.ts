@@ -85,7 +85,7 @@ export class GalleryMWs {
     };
 
     if (cw.directory) {
-      DirectoryDTO.removeReferences(cw.directory);
+      DirectoryDTO.packDirectory(cw.directory);
       // TODO: remove when typeorm inheritance is fixed (and handles proper inheritance)
       cleanUpMedia(cw.directory.media);
     }

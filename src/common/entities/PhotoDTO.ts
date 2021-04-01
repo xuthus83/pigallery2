@@ -1,8 +1,15 @@
-import {DirectoryDTO} from './DirectoryDTO';
+import {DirectoryBaseDTO, DirectoryDTO} from './DirectoryDTO';
 import {OrientationTypes} from 'ts-exif-parser';
-import {MediaDimension, MediaDTO, MediaMetadata} from './MediaDTO';
+import {MediaBaseDTO, MediaDimension, MediaDTO, MediaMetadata} from './MediaDTO';
 
-export interface PhotoDTO extends MediaDTO {
+export interface PreviewPhotoDTO extends MediaBaseDTO {
+  name: string;
+  directory: DirectoryBaseDTO;
+  readyThumbnails: Array<number>;
+  readyIcon: boolean;
+}
+
+export interface PhotoDTO extends PreviewPhotoDTO, MediaDTO {
   id: number;
   name: string;
   directory: DirectoryDTO;

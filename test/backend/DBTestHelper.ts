@@ -11,6 +11,7 @@ import {DiskMangerWorker} from '../../src/backend/model/threading/DiskMangerWork
 import {IndexingManager} from '../../src/backend/model/database/sql/IndexingManager';
 import {GalleryManager} from '../../src/backend/model/database/sql/GalleryManager';
 import {Connection} from 'typeorm';
+import {Utils} from '../../src/common/Utils';
 
 declare let describe: any;
 const savedDescribe = describe;
@@ -33,9 +34,10 @@ class GalleryManagerTest extends GalleryManager {
   }
 }
 
-export class SQLTestHelper {
+export class DBTestHelper {
 
   static enable = {
+    memory: false,
     sqlite: true,
     mysql: process.env.TEST_MYSQL !== 'false'
   };
@@ -46,23 +48,39 @@ export class SQLTestHelper {
     this.tempDir = path.join(__dirname, './tmp');
   }
 
-  static describe(name: string, tests: (helper?: SQLTestHelper) => void) {
-    savedDescribe(name, async () => {
-      if (SQLTestHelper.enable.sqlite) {
-        const helper = new SQLTestHelper(ServerConfig.DatabaseType.sqlite);
-        savedDescribe('sqlite', () => {
-          return tests(helper);
-        });
-      }
-      if (SQLTestHelper.enable.mysql) {
-        const helper = new SQLTestHelper(ServerConfig.DatabaseType.mysql);
-        savedDescribe('mysql', function () {
-          this.timeout(99999999);
-          // @ts-ignore
-          return tests(helper);
-        });
-      }
-    });
+  static describe(settingsOverride: {
+    memory?: boolean;
+    sqlite?: boolean;
+    mysql?: boolean;
+  } = {}) {
+    const settings = Utils.clone(DBTestHelper.enable);
+    for (const key of Object.keys(settingsOverride)) {
+      (<any>settings)[key] = (<any>settingsOverride)[key];
+    }
+    return (name: string, tests: (helper?: DBTestHelper) => void) => {
+      savedDescribe(name, async () => {
+        if (settings.sqlite) {
+          const helper = new DBTestHelper(ServerConfig.DatabaseType.sqlite);
+          savedDescribe('sqlite', () => {
+            return tests(helper);
+          });
+        }
+        if (settings.mysql) {
+          const helper = new DBTestHelper(ServerConfig.DatabaseType.mysql);
+          savedDescribe('mysql', function () {
+            this.timeout(99999999); // hint for the test environment
+            // @ts-ignore
+            return tests(helper);
+          });
+        }
+        if (settings.memory) {
+          const helper = new DBTestHelper(ServerConfig.DatabaseType.memory);
+          savedDescribe('memory', () => {
+            return tests(helper);
+          });
+        }
+      });
+    };
   }
 
   public static async persistTestDir(directory: DirectoryDTO): Promise<DirectoryEntity> {
@@ -103,7 +121,7 @@ export class SQLTestHelper {
   public async initDB() {
     if (this.dbType === ServerConfig.DatabaseType.sqlite) {
       await this.initSQLite();
-    } else {
+    } else if (this.dbType === ServerConfig.DatabaseType.mysql) {
       await this.initMySQL();
     }
   }
@@ -112,8 +130,10 @@ export class SQLTestHelper {
   public async clearDB() {
     if (this.dbType === ServerConfig.DatabaseType.sqlite) {
       await this.clearUpSQLite();
-    } else {
+    } else if (this.dbType === ServerConfig.DatabaseType.mysql) {
       await this.clearUpMysql();
+    } else if (this.dbType === ServerConfig.DatabaseType.memory) {
+      await this.clearUpMemory();
     }
   }
 
@@ -133,7 +153,8 @@ export class SQLTestHelper {
   }
 
   private async resetSQLite() {
-    await SQLConnection.close();
+    await ObjectManagers.reset();
+    // await SQLConnection.close();
     await fs.promises.rmdir(this.tempDir, {recursive: true});
   }
 
@@ -155,6 +176,10 @@ export class SQLTestHelper {
   }
 
   private async clearUpSQLite() {
+    return this.resetSQLite();
+  }
+
+  private async clearUpMemory() {
     return this.resetSQLite();
   }
 }

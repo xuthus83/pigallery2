@@ -1,14 +1,14 @@
 import {Utils} from '../../../../common/Utils';
 import {MediaIcon} from './MediaIcon';
 import {Config} from '../../../../common/config/public/Config';
-import {MediaDTO} from '../../../../common/entities/MediaDTO';
+import {MediaBaseDTO, MediaDTO} from '../../../../common/entities/MediaDTO';
 
 export class Media extends MediaIcon {
 
   static readonly sortedThumbnailSizes = Config.Client.Media.Thumbnail.thumbnailSizes
     .sort((a, b) => a - b);
 
-  constructor(media: MediaDTO, public renderWidth: number, public renderHeight: number) {
+  constructor(media: MediaBaseDTO, public renderWidth: number, public renderHeight: number) {
     super(media);
   }
 

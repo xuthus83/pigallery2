@@ -36,7 +36,7 @@ export class DiskManager {
     } else {
       directory = await DiskMangerWorker.scanDirectory(relativeDirectoryName, settings);
     }
-    DirectoryDTO.addReferences(directory);
+    DirectoryDTO.unpackDirectory(directory);
     return directory;
   }
 

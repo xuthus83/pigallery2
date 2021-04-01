@@ -11,6 +11,7 @@ import {Logger} from '../../Logger';
 import {SupportedFormats} from '../../../common/SupportedFormats';
 import {VideoProcessing} from '../fileprocessing/VideoProcessing';
 import {PhotoProcessing} from '../fileprocessing/PhotoProcessing';
+import {Utils} from '../../../common/Utils';
 
 
 export class DiskMangerWorker {
@@ -132,6 +133,7 @@ export class DiskMangerWorker {
 
         d.lastScanned = 0; // it was not a fully scan
         d.isPartial = true;
+
         directory.directories.push(d);
 
       } else if (PhotoProcessing.isPhoto(fullFilePath)) {
@@ -146,7 +148,12 @@ export class DiskMangerWorker {
         };
 
         if (!directory.preview) {
-          directory.preview = photo;
+          directory.preview = Utils.clone(photo);
+
+          directory.preview.directory = {
+            path: directory.path,
+            name: directory.name
+          };
         }
         // add the preview photo to the list of media, so it will be saved to the DB
         // and can be queried to populate previews,

@@ -1,6 +1,6 @@
 import {expect} from 'chai';
 import {PersonManager} from '../../../../../src/backend/model/database/sql/PersonManager';
-import {SQLTestHelper} from '../../../SQLTestHelper';
+import {DBTestHelper} from '../../../DBTestHelper';
 import {TestHelper} from './TestHelper';
 import {PhotoDTO} from '../../../../../src/common/entities/PhotoDTO';
 import {Utils} from '../../../../../src/common/Utils';
@@ -18,9 +18,9 @@ declare const before: any;
 declare const it: any;
 
 
-describe = SQLTestHelper.describe;
+describe = DBTestHelper.describe();
 
-describe('PersonManager', (sqlHelper: SQLTestHelper) => {
+describe('PersonManager', (sqlHelper: DBTestHelper) => {
 
 
   let dir: DirectoryDTO;
@@ -41,7 +41,7 @@ describe('PersonManager', (sqlHelper: SQLTestHelper) => {
     delete pFaceLess.metadata.faces;
     v = TestHelper.getVideoEntry1(directory);
 
-    dir = await SQLTestHelper.persistTestDir(directory);
+    dir = await DBTestHelper.persistTestDir(directory);
     p = <any>dir.media.filter(m => m.name === p.name)[0];
     p2 = <any>dir.media.filter(m => m.name === p2.name)[0];
     p_faceLess = <any>dir.media[2];

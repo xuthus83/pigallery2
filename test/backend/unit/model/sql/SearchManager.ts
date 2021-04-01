@@ -2,7 +2,7 @@ import {LocationManager} from '../../../../../src/backend/model/database/Locatio
 import {SearchManager} from '../../../../../src/backend/model/database/sql/SearchManager';
 import {SearchResultDTO} from '../../../../../src/common/entities/SearchResultDTO';
 import {Utils} from '../../../../../src/common/Utils';
-import {SQLTestHelper} from '../../../SQLTestHelper';
+import {DBTestHelper} from '../../../DBTestHelper';
 import {
   ANDSearchQuery,
   DistanceSearch,
@@ -44,7 +44,7 @@ declare let describe: any;
 declare const after: any;
 declare const before: any;
 const tmpDescribe = describe;
-describe = SQLTestHelper.describe; // fake it os IDE plays nicely (recognize the test)
+describe = DBTestHelper.describe(); // fake it os IDE plays nicely (recognize the test)
 
 
 class IndexingManagerTest extends IndexingManager {
@@ -65,7 +65,7 @@ class GalleryManagerTest extends GalleryManager {
   }
 }
 
-describe('SearchManager', (sqlHelper: SQLTestHelper) => {
+describe('SearchManager', (sqlHelper: DBTestHelper) => {
   describe = tmpDescribe;
   let dir: DirectoryDTO;
   /**
@@ -97,7 +97,7 @@ describe('SearchManager', (sqlHelper: SQLTestHelper) => {
     delete pFaceLess.metadata.faces;
     v = TestHelper.getVideoEntry1(directory);
 
-    dir = await SQLTestHelper.persistTestDir(directory);
+    dir = await DBTestHelper.persistTestDir(directory);
     p = <any>dir.media.filter(m => m.name === p.name)[0];
     p2 = <any>dir.media.filter(m => m.name === p2.name)[0];
     v = <any>dir.media.filter(m => m.name === v.name)[0];
