@@ -77,10 +77,14 @@ export class AutoCompleteService {
     return this.textSearchKeywordsMap[tokens[0]] || null;
   }
 
-  private getPrefixLessSearchText(text: string): string {
+  public getPrefixLessSearchText(text: string): string {
     const tokens = text.split(':');
     if (tokens.length !== 2) {
       return text;
+    }
+    // make sure autocomplete works for 'keyword:"' searches
+    if (tokens[1].charAt(0) === '"' || tokens[1].charAt(0) === '(') {
+      return tokens[1].substring(1);
     }
     return tokens[1];
   }
@@ -120,7 +124,8 @@ export class AutoCompleteService {
       if (text.prev !== this._searchQueryParserService.keywords.and) {
         return [{
           text: this._searchQueryParserService.keywords.and,
-          queryHint: this._searchQueryParserService.keywords.and
+          queryHint: this._searchQueryParserService.keywords.and,
+          notSearchable: true
         }];
       } else {
         return [];
@@ -130,11 +135,13 @@ export class AutoCompleteService {
       .filter(key => key.startsWith(text.current))
       .map(key => ({
         text: key,
-        queryHint: key
+        queryHint: key,
+        notSearchable: true
       }));
   }
 }
 
 export interface RenderableAutoCompleteItem extends IAutoCompleteItem {
   queryHint: string;
+  notSearchable?: boolean; // prevent triggering search if it is not a full search term
 }

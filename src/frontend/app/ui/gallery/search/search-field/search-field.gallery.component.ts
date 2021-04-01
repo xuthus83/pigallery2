@@ -128,8 +128,15 @@ export class GallerySearchFieldComponent implements ControlValueAccessor, Valida
     if ($event.target.selectionStart !== this.rawSearchText.length) {
       return;
     }
-    this.rawSearchText = this.SearchHint;
-    this.onChange();
+    // if no item selected, apply hint
+    if (this.highlightedAutoCompleteItem < 0) {
+      this.rawSearchText = this.SearchHint;
+      this.onChange();
+      return;
+    }
+
+    // force apply selected autocomplete item
+    this.applyAutoComplete(this.autoCompleteRenders[this.highlightedAutoCompleteItem]);
   }
 
   applyAutoComplete(item: AutoCompleteRenderItem) {
@@ -138,6 +145,14 @@ export class GallerySearchFieldComponent implements ControlValueAccessor, Valida
       + item.queryHint;
     this.onChange();
     this.emptyAutoComplete();
+  }
+
+  searchAutoComplete(item: AutoCompleteRenderItem) {
+    this.applyAutoComplete(item);
+
+    if (!item.notSearchable) {
+      this.search.emit();
+    }
   }
 
   setMouseOverAutoCompleteItem(i: number) {
@@ -158,11 +173,13 @@ export class GallerySearchFieldComponent implements ControlValueAccessor, Valida
   }
 
   OnEnter($event: any) {
+    // no autocomplete shown, just search whatever is there.
     if (this.autoCompleteRenders.length === 0 || this.highlightedAutoCompleteItem === -1) {
       this.search.emit();
       return;
     }
-    this.applyAutoComplete(this.autoCompleteRenders[this.highlightedAutoCompleteItem]);
+    // search selected autocomplete
+    this.searchAutoComplete(this.autoCompleteRenders[this.highlightedAutoCompleteItem]);
   }
 
   public onTouched(): void {
@@ -223,7 +240,7 @@ export class GallerySearchFieldComponent implements ControlValueAccessor, Valida
   private showSuggestions(suggestions: RenderableAutoCompleteItem[], searchText: string) {
     this.emptyAutoComplete();
     suggestions.forEach((item: RenderableAutoCompleteItem) => {
-      const renderItem = new AutoCompleteRenderItem(item.text, searchText, item.type, item.queryHint);
+      const renderItem = new AutoCompleteRenderItem(item.text, this._autoCompleteService.getPrefixLessSearchText(searchText), item.type, item.queryHint, item.notSearchable);
       this.autoCompleteRenders.push(renderItem);
     });
   }
@@ -241,8 +258,9 @@ class AutoCompleteRenderItem {
   public postText = '';
   public type: SearchQueryTypes;
   public queryHint: string;
+  public notSearchable: boolean;
 
-  constructor(public text: string, searchText: string, type: SearchQueryTypes, queryHint: string) {
+  constructor(public text: string, searchText: string, type: SearchQueryTypes, queryHint: string, notSearchable = false) {
     const preIndex = text.toLowerCase().indexOf(searchText.toLowerCase());
     if (preIndex > -1) {
       this.preText = text.substring(0, preIndex);
@@ -253,6 +271,7 @@ class AutoCompleteRenderItem {
     }
     this.type = type;
     this.queryHint = queryHint;
+    this.notSearchable = notSearchable;
   }
 }
 
