@@ -116,22 +116,33 @@ export class MetadataLoader {
                 exif.tags.Make || exif.tags.FNumber ||
                 exif.tags.ExposureTime || exif.tags.FocalLength ||
                 exif.tags.LensModel) {
-                metadata.cameraData = {
-                  model: exif.tags.Model,
-                  make: exif.tags.Make,
-                  lens: exif.tags.LensModel
-                };
-                if (Utils.isUInt32(exif.tags.ISO)) {
-                  metadata.cameraData.ISO = exif.tags.ISO;
+                if (exif.tags.Model && exif.tags.Model !== '') {
+                  metadata.cameraData = metadata.cameraData || {};
+                  metadata.cameraData.model = '' + exif.tags.Model;
                 }
-                if (Utils.isFloat32(exif.tags.ISO)) {
-                  metadata.cameraData.focalLength = exif.tags.FocalLength;
+                if (exif.tags.Make && exif.tags.Make !== '') {
+                  metadata.cameraData = metadata.cameraData || {};
+                  metadata.cameraData.make = '' + exif.tags.Make;
+                }
+                if (exif.tags.LensModel && exif.tags.LensModel !== '') {
+                  metadata.cameraData = metadata.cameraData || {};
+                  metadata.cameraData.lens = '' + exif.tags.LensModel;
+                }
+                if (Utils.isUInt32(exif.tags.ISO)) {
+                  metadata.cameraData = metadata.cameraData || {};
+                  metadata.cameraData.ISO = parseInt('' + exif.tags.ISO, 10);
+                }
+                if (Utils.isFloat32(exif.tags.FocalLength)) {
+                  metadata.cameraData = metadata.cameraData || {};
+                  metadata.cameraData.focalLength = parseFloat('' + exif.tags.FocalLength);
                 }
                 if (Utils.isFloat32(exif.tags.ExposureTime)) {
-                  metadata.cameraData.exposure = exif.tags.ExposureTime;
+                  metadata.cameraData = metadata.cameraData || {};
+                  metadata.cameraData.exposure = parseFloat('' + exif.tags.ExposureTime);
                 }
                 if (Utils.isFloat32(exif.tags.FNumber)) {
-                  metadata.cameraData.fStop = exif.tags.FNumber;
+                  metadata.cameraData = metadata.cameraData || {};
+                  metadata.cameraData.fStop = parseFloat('' + exif.tags.FNumber);
                 }
               }
               if (!isNaN(exif.tags.GPSLatitude) || exif.tags.GPSLongitude || exif.tags.GPSAltitude) {
@@ -151,7 +162,6 @@ export class MetadataLoader {
 
               if (exif.tags.CreateDate || exif.tags.DateTimeOriginal || exif.tags.ModifyDate) {
                 metadata.creationDate = (exif.tags.DateTimeOriginal || exif.tags.CreateDate || exif.tags.ModifyDate) * 1000;
-
               }
 
 

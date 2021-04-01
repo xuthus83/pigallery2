@@ -231,10 +231,12 @@ export class Utils {
   }
 
   public static isUInt32(value: number, max: number = 4294967295) {
+    value = parseInt('' + value, 10);
     return !isNaN(value) && value >= 0 && value <= max;
   }
 
   public static isInt32(value: number) {
+    value = parseFloat('' + value);
     return !isNaN(value) && value >= -2147483648 && value <= 2147483647;
   }
 
