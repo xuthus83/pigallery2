@@ -1036,7 +1036,7 @@
           <context context-type="sourcefile">app/ui/settings/thumbnail/thumbnail.settings.component.html</context>
           <context context-type="linenumber">39</context>
         </context-group>
-        <target state="needs-l10n">The best matching size will be generated. (More sizes give better quality, but use more storage and CPU to render.)</target>
+        <target state="translated">Saranno generate anteprime con la dimensione più ottimale. (Più dimensioni forniscono qualità migliore, ma usano più spazio e tempo di CPU per la creazione) </target>
       </trans-unit>
       <trans-unit id="eca363353e36c2ea99496b8d3fb4b99a5c63b62f" datatype="html">
         <source>';' separated integers. If size is 240, that shorter side of the thumbnail will have 160
@@ -1046,7 +1046,7 @@
           <context context-type="sourcefile">app/ui/settings/thumbnail/thumbnail.settings.component.html</context>
           <context context-type="linenumber">43</context>
         </context-group>
-        <target state="needs-l10n">';' separated integers. If size is 240, that shorter side of the thumbnail will have 160 pixels.</target>
+        <target state="translated">integer separati da ';'. Se il lato è 240, il lato corto dell'anteprima avrà 160 pixel.</target>
       </trans-unit>
       <trans-unit id="695e937f7b52084765c07a2b1269a040024a2363" datatype="html">
         <source>Thumbnail sizes</source>
@@ -1054,7 +1054,7 @@
           <context context-type="sourcefile">app/ui/settings/thumbnail/thumbnail.settings.component.html</context>
           <context context-type="linenumber">30</context>
         </context-group>
-        <target state="needs-l10n">Thumbnail sizes</target>
+        <target state="translated">Dimensione anteprime</target>
       </trans-unit>
       <trans-unit id="69149fe434cf1b0d9bafe5ead5d126101bb5162e" datatype="html">
         <source>Video support uses ffmpeg. ffmpeg and ffprobe binaries need to be available in the PATH or
@@ -1065,7 +1065,7 @@
           <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
           <context context-type="linenumber">26</context>
         </context-group>
-        <target state="needs-l10n">Video support uses ffmpeg. ffmpeg and ffprobe binaries need to be available in the PATH or the @ffmpeg-installer/ffmpeg and @ffprobe-installer/ffprobe optional node packages need to be installed.</target>
+        <target state="translated">Per i video viene usato ffmpeg. I binari di ffmpeg e ffprobe devono essere disponibili nella PATH oppure i package di node opzionali @ffmpeg-installer/ffmpeg e @ffprobe-installer/ffprobe devono essere installati</target>
       </trans-unit>
       <trans-unit id="8fbfaec401808fd2433e6b694c11122de317ab19" datatype="html">
         <source>Video transcoding:</source>
@@ -1073,7 +1073,7 @@
           <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
           <context context-type="linenumber">33</context>
         </context-group>
-        <target state="needs-l10n">Video transcoding:</target>
+        <target state="translated">Transcodifica video:</target>
       </trans-unit>
       <trans-unit id="e4535a01533b3a6f9f803428e90a31618c8d173e" datatype="html">
         <source>To ensure smooth video playback, video transcoding is recommended to a lower bit rate than
@@ -1084,7 +1084,7 @@
           <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
           <context context-type="linenumber">35</context>
         </context-group>
-        <target state="needs-l10n">To ensure smooth video playback, video transcoding is recommended to a lower bit rate than the server's upload rate.</target>
+        <target state="translated">Per garantire una riproduzione fluida dei video, è raccomandato scegliere un bitrate per la transcodifica inferiore alla banda di upload del server.</target>
       </trans-unit>
       <trans-unit id="2563716b6cdad527d4d01f0aa49368d1a876263f" datatype="html">
         <source>The transcoded videos will be save to the thumbnail folder.</source>
@@ -1092,7 +1092,7 @@
           <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
           <context context-type="linenumber">39</context>
         </context-group>
-        <target state="needs-l10n">The transcoded videos will be save to the thumbnail folder.</target>
+        <target state="translated">I video transcodificati saranno salvati nella cartella delle anteprime.</target>
       </trans-unit>
       <trans-unit id="5c159049e5e44f672041b3ff2c85328cda14a740" datatype="html">
         <source>You can trigger the transcoding manually, but you can also create an automatic encoding job
@@ -1103,7 +1103,7 @@
           <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
           <context context-type="linenumber">40</context>
         </context-group>
-        <target state="needs-l10n">You can trigger the transcoding manually, but you can also create an automatic encoding job in advanced settings mode.</target>
+        <target state="translated">Puoi eseguire la transcodifica manualmente, ma puoi anche impostare la codifica automatica nelle impostazioni avanzate.</target>
       </trans-unit>
       <trans-unit id="7722a92a1fc887570b4f4d8a7bb916f067f32028" datatype="html">
         <source>Format</source>
@@ -1139,7 +1139,7 @@
           <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
           <context context-type="linenumber">67</context>
         </context-group>
-        <target state="needs-l10n">The height of the output video will be scaled down to this, while keeping the aspect ratio.</target>
+        <target state="translated">L'altezza del video in uscita sarà scalata a questa, mantenendo il rapporto base altezza.</target>
       </trans-unit>
       <trans-unit id="b78bb5b721abd47e61ef2338c7070c83c1e3bd32" datatype="html">
         <source>FPS</source>
@@ -1155,7 +1155,7 @@
           <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
           <context context-type="linenumber">78</context>
         </context-group>
-        <target state="needs-l10n">Target frame per second (fps) of the output video will be scaled down this this.</target>
+        <target state="translated">Il video di output avrà questi frame al secondo.</target>
       </trans-unit>
       <trans-unit id="bff9e9bcea920ffed20cedd60107bf09472fbb8e" datatype="html">
         <source>Bit rate</source>
@@ -1173,7 +1173,7 @@
           <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
           <context context-type="linenumber">104</context>
         </context-group>
-        <target state="needs-l10n">Target bit rate of the output video will be scaled down this this. This should be less than the upload rate of your home server.</target>
+        <target state="translated">Il bit rate del video di output sarà ridotto a questo. Deve essere inferiore alla banda di upload del server.</target>
       </trans-unit>
       <trans-unit id="148d5d78e94f20a20c3ad3b01d704a3497a8c761" datatype="html">
         <source>CRF</source>
@@ -1189,7 +1189,7 @@
           <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
           <context context-type="linenumber">113</context>
         </context-group>
-        <target state="needs-l10n">The range of the Constant Rate Factor (CRF) scale is 0–51, where 0 is lossless, 23 is the default, and 51 is worst quality possible.</target>
+        <target state="translated">La scala del fattore qualità (CRF) è da 0 a 51, dove 0 è lossless, 23 è il default e 51 è la peggior qualità possibile.</target>
       </trans-unit>
       <trans-unit id="962533863b61fce4a1ac5a852936185f58039695" datatype="html">
         <source>Preset</source>
@@ -1197,7 +1197,7 @@
           <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
           <context context-type="linenumber">121</context>
         </context-group>
-        <target state="needs-l10n">Preset</target>
+        <target state="translated">Preimpostazioni</target>
       </trans-unit>
       <trans-unit id="b990e080e67c16cef76ca1f879e659de50ce1c36" datatype="html">
         <source>A preset is a collection of options that will provide a certain encoding speed to compression ratio. A slower preset will provide better compression (compression is quality per filesize).</source>
@@ -1205,7 +1205,7 @@
           <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
           <context context-type="linenumber">122</context>
         </context-group>
-        <target state="needs-l10n">A preset is a collection of options that will provide a certain encoding speed to compression ratio. A slower preset will provide better compression (compression is quality per filesize).</target>
+        <target state="translated">Una preimpostazione è un set di opzioni che fornisce un buona velocità di codifica mantenendo una buona compressione. Una preimpostazione più lenta fornirà una compressione migliore.A</target>
       </trans-unit>
       <trans-unit id="25ce84764ffa614804d96c740bec339fe91f4a25" datatype="html">
         <source>Custom Options</source>
@@ -1221,7 +1221,7 @@
           <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
           <context context-type="linenumber">131</context>
         </context-group>
-        <target state="needs-l10n">; separated values. It will be sent to ffmpeg as it is, as custom options.</target>
+        <target state="translated">valori separati da ; saranno forniti a ffmpeg così come sono, come opzioni personalizzate. </target>
       </trans-unit>
       <trans-unit id="1b239b0422945f36c35b5559b4b0c135922fe299" datatype="html">
         <source>It is highly recommended to use hardware accelerated (sharp or gm) lib for thumbnail
@@ -1231,7 +1231,7 @@
           <context context-type="sourcefile">app/ui/settings/photo/photo.settings.component.html</context>
           <context context-type="linenumber">9</context>
         </context-group>
-        <target state="needs-l10n">It is highly recommended to use hardware accelerated (sharp or gm) lib for thumbnail generation</target>
+        <target state="translated">È molto raccomandato di usare un algoritmo con accelerazione hardware (sharp o gm) per generare le anteprime</target>
       </trans-unit>
       <trans-unit id="8ae2dddf71604792d10a35e6e2f75d58bd498e88" datatype="html">
         <source>Make sure that sharp node module is installed (npm install sharp).
@@ -1240,7 +1240,7 @@
           <context context-type="sourcefile">app/ui/settings/photo/photo.settings.component.html</context>
           <context context-type="linenumber">23</context>
         </context-group>
-        <target state="needs-l10n">Make sure that sharp node module is installed (npm install sharp).</target>
+        <target state="translated">Assicuratevi che il modulo sharp su node sia installato (npm install sharp).</target>
       </trans-unit>
       <trans-unit id="6f49ee2673fb82fe8dd1a7da0bada14a4156bf30" datatype="html">
         <source>Thumbnail generation library</source>
@@ -1248,7 +1248,7 @@
           <context context-type="sourcefile">app/ui/settings/photo/photo.settings.component.html</context>
           <context context-type="linenumber">16</context>
         </context-group>
-        <target state="needs-l10n">Thumbnail generation library</target>
+        <target state="translated">Libreria per la generazione di anteprime</target>
       </trans-unit>
       <trans-unit id="ab123cb43ad6623f84c33f28274418c88667e866" datatype="html">
         <source>Photo converting:</source>
@@ -1256,7 +1256,7 @@
           <context context-type="sourcefile">app/ui/settings/photo/photo.settings.component.html</context>
           <context context-type="linenumber">30</context>
         </context-group>
-        <target state="needs-l10n">Photo converting:</target>
+        <target state="translated">Conversione foto:</target>
       </trans-unit>
       <trans-unit id="cf3e07d622499cbe9d8c177163f65eceaa11a1de" datatype="html">
         <source>Converting</source>
@@ -1272,7 +1272,7 @@
           <context context-type="sourcefile">app/ui/settings/photo/photo.settings.component.html</context>
           <context context-type="linenumber">34</context>
         </context-group>
-        <target state="needs-l10n">Downsizes photos for faster preview loading. (Zooming in to the photo loads the original).</target>
+        <target state="translated">Ridimensiona le foto per un caricamento più veloce dell'anteprima. (Ingrandendo la foto si carica l'originale).</target>
       </trans-unit>
       <trans-unit id="bde4bd51a111d48a1ca72824bac39c71dffd8ebd" datatype="html">
         <source>On the fly converting</source>
@@ -1280,7 +1280,7 @@
           <context context-type="sourcefile">app/ui/settings/photo/photo.settings.component.html</context>
           <context context-type="linenumber">40</context>
         </context-group>
-        <target state="needs-l10n">On the fly converting</target>
+        <target state="translated">Conversione al volo</target>
       </trans-unit>
       <trans-unit id="a9a7b9d2773aa49ff4f41b01b55e0a51d664eecf" datatype="html">
         <source>Converts photos on the fly, when they are requested.</source>
@@ -1288,7 +1288,7 @@
           <context context-type="sourcefile">app/ui/settings/photo/photo.settings.component.html</context>
           <context context-type="linenumber">41</context>
         </context-group>
-        <target state="needs-l10n">Converts photos on the fly, when they are requested.</target>
+        <target state="translated">Converte foto al volo, quando sono richieste.</target>
       </trans-unit>
       <trans-unit id="80cc0fbf9f0d48616526417a81db35703e7ed2a7" datatype="html">
         <source>The shorter edge of the converted photo will be scaled down to this, while keeping the aspect ratio.</source>
