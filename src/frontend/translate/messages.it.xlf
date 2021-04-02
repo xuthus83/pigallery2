@@ -2668,7 +2668,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/settings/jobs/progress/job-progress.settings.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target state="translated">in esecuzione&#16;</target>
+        <target state="translated">in esecuzione</target>
       </trans-unit>
       <trans-unit id="d18e7f06f6326d16b5fa80d3dcb70fa4fcd0fff2" datatype="html">
         <source>cancelling</source>
