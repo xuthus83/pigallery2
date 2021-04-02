@@ -159,7 +159,6 @@ export class MetadataLoader {
                   metadata.positionData.GPSData.altitude = exif.tags.GPSAltitude;
                 }
               }
-
               if (exif.tags.CreateDate || exif.tags.DateTimeOriginal || exif.tags.ModifyDate) {
                 metadata.creationDate = (exif.tags.DateTimeOriginal || exif.tags.CreateDate || exif.tags.ModifyDate) * 1000;
               }
@@ -208,7 +207,7 @@ export class MetadataLoader {
               // Logger.debug(LOG_TAG, 'Error parsing iptc data', fullPath, err);
             }
 
-            metadata.creationDate = metadata.creationDate || 0;
+            metadata.creationDate = Math.max(metadata.creationDate || 0, 0);
 
             try {
               // TODO: clean up the three different exif readers,

@@ -240,7 +240,8 @@ export class GallerySearchFieldComponent implements ControlValueAccessor, Valida
   private showSuggestions(suggestions: RenderableAutoCompleteItem[], searchText: string) {
     this.emptyAutoComplete();
     suggestions.forEach((item: RenderableAutoCompleteItem) => {
-      const renderItem = new AutoCompleteRenderItem(item.text, this._autoCompleteService.getPrefixLessSearchText(searchText), item.type, item.queryHint, item.notSearchable);
+      const renderItem = new AutoCompleteRenderItem(item.text, this._autoCompleteService.getPrefixLessSearchText(searchText),
+        item.type, item.queryHint, item.notSearchable);
       this.autoCompleteRenders.push(renderItem);
     });
   }

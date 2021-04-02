@@ -2,6 +2,8 @@ import {expect} from 'chai';
 import {MetadataLoader} from '../../../../../src/backend/model/threading/MetadataLoader';
 import {Utils} from '../../../../../src/common/Utils';
 import * as path from 'path';
+import * as fs from 'fs';
+import {PhotoProcessing} from '../../../../../src/backend/model/fileprocessing/PhotoProcessing';
 
 describe('MetadataLoader', () => {
 
@@ -38,10 +40,35 @@ describe('MetadataLoader', () => {
       expect(Utils.clone(data)).to.be.deep.equal(expected);
     });
     it('jpg 2', async () => {
-      const data = await MetadataLoader.loadPhotoMetadata(path.join(__dirname, '/../../../assets/orientation/broken_orientation_exif2.jpg'));
+      const data = await MetadataLoader.loadPhotoMetadata(
+        path.join(__dirname, '/../../../assets/orientation/broken_orientation_exif2.jpg'));
       const expected = require(path.join(__dirname, '/../../../assets/orientation/broken_orientation_exif2.json'));
       expect(Utils.clone(data)).to.be.deep.equal(expected);
     });
+  });
+
+  describe('should load jpg with edge case exif data', () => {
+    const root = path.join(__dirname, '/../../../assets/edge_case_exif_data');
+    const files = fs.readdirSync(root);
+    for (let i = 0; i < files.length; ++i) {
+      const fullFilePath = path.join(root, files[i]);
+      if (PhotoProcessing.isPhoto(fullFilePath)) {
+        it(files[i], async () => {
+          const data = await MetadataLoader.loadPhotoMetadata(fullFilePath);
+          const expected = require(fullFilePath.split('.').slice(0, -1).join('.') + '.json');
+          if (expected.skip) {
+            expected.skip.forEach((s: string) => {
+              delete (<any>data)[s];
+              delete expected[s];
+            });
+            delete expected.skip;
+          }
+          expect(Utils.clone(data)).to.be.deep.equal(expected);
+        });
+      }
+
+    }
+
   });
 
   describe('should read orientation', () => {
