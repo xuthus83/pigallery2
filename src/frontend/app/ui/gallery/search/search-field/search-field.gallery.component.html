@@ -36,7 +36,7 @@
     <div class="autocomplete-item"
          [ngClass]="{'autocomplete-item-selected':highlightedAutoCompleteItem == i}"
          (mouseover)="setMouseOverAutoCompleteItem(i)"
-         (click)="applyAutoComplete(item)"
+         (click)="searchAutoComplete(item)"
          *ngFor="let item of autoCompleteRenders; let i = index">
       <div>
                     <span [ngSwitch]="item.type">
