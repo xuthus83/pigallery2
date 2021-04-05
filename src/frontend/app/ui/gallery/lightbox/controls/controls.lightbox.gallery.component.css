@@ -232,10 +232,10 @@ input[type="range"].zoom-progress::-moz-range-track {
 .face-name {
   white-space: nowrap;
   color: white;
-  margin-left: -100%;
-  margin-right: -100%;
   text-align: center;
-  display: block;
+  display: table;
+  background-color:rgba(0,0,0,0.2);
+  border-radius: 5px !important;
 }
 
 .face-box {
