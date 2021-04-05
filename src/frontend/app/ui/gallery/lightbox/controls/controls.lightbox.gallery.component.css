@@ -234,6 +234,7 @@ input[type="range"].zoom-progress::-moz-range-track {
   color: white;
   text-align: center;
   display: table;
+  font-weight: bold;
   background-color:rgba(0,0,0,0.2);
   border-radius: 5px !important;
 }
