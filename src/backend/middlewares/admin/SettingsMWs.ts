@@ -376,21 +376,11 @@ export class SettingsMWs {
 
     try {
       const settings: OtherConfigDTO = req.body.settings;
-      Config.Client.Other.enableCache = settings.Client.enableCache;
-      Config.Client.Other.captionFirstNaming = settings.Client.captionFirstNaming;
-      Config.Client.Other.enableOnScrollRendering = settings.Client.enableOnScrollRendering;
-      Config.Client.Other.enableOnScrollThumbnailPrioritising = settings.Client.enableOnScrollThumbnailPrioritising;
-      Config.Client.Other.defaultPhotoSortingMethod = settings.Client.defaultPhotoSortingMethod;
-      Config.Client.Other.NavBar.showItemCount = settings.Client.NavBar.showItemCount;
+      Config.Client.Other = settings.Client;
 
       // only updating explicitly set config (not saving config set by the diagnostics)
       const original = await Config.original();
-      original.Client.Other.enableCache = settings.Client.enableCache;
-      original.Client.Other.captionFirstNaming = settings.Client.captionFirstNaming;
-      original.Client.Other.enableOnScrollRendering = settings.Client.enableOnScrollRendering;
-      original.Client.Other.enableOnScrollThumbnailPrioritising = settings.Client.enableOnScrollThumbnailPrioritising;
-      original.Client.Other.defaultPhotoSortingMethod = settings.Client.defaultPhotoSortingMethod;
-      original.Client.Other.NavBar.showItemCount = settings.Client.NavBar.showItemCount;
+      original.Client.Other = settings.Client;
       original.Server.Threading.enabled = settings.Server.enabled;
       original.Server.Threading.thumbnailThreads = settings.Server.thumbnailThreads;
       await original.save();

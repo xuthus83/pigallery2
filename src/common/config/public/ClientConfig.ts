@@ -99,6 +99,8 @@ export module ClientConfig {
     enableOnScrollRendering: boolean = true;
     @ConfigProperty({type: SortingMethods})
     defaultPhotoSortingMethod: SortingMethods = SortingMethods.ascDate;
+    @ConfigProperty({description: 'If enabled directories will be sorted by date, like photos, otherwise by name. Directory date is the last modification time of that directory not the creation date of the oldest photo'})
+    enableDirectorySortingByDate: boolean = false;
     @ConfigProperty()
     enableOnScrollThumbnailPrioritising: boolean = true;
     @ConfigProperty()
