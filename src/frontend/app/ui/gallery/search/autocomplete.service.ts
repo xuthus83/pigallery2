@@ -12,7 +12,6 @@ import {SearchQueryParser} from '../../../../../common/SearchQueryParser';
 export class AutoCompleteService {
 
   private keywords: string[] = [];
-  private relationKeywords: string[] = [];
   private textSearchKeywordsMap: { [key: string]: SearchQueryTypes } = {};
 
   constructor(private _networkService: NetworkService,
@@ -29,7 +28,11 @@ export class AutoCompleteService {
     this.keywords.push(this._searchQueryParserService.keywords.and);
     this.keywords.push(this._searchQueryParserService.keywords.or);
     for (let i = 0; i < 10; i++) {
-      this.keywords.push(i + this._searchQueryParserService.keywords.NSomeOf);
+      this.keywords.push(i + '-' + this._searchQueryParserService.keywords.NSomeOf + ':( )');
+    }
+
+    for (let i = 0; i < 10; i++) {
+      this.keywords.push(i + '-' + this._searchQueryParserService.keywords.kmFrom + ':');
     }
 
     this.keywords.push(this._searchQueryParserService.keywords.to + ':' +
@@ -55,11 +58,11 @@ export class AutoCompleteService {
     if (searchText === '') {
       return items;
     }
-    this.typedAutoComplete(searchText, type, items);
+    this.typedAutoComplete(searchText, text.current, type, items);
     return items;
   }
 
-  public typedAutoComplete(text: string, type: SearchQueryTypes,
+  public typedAutoComplete(text: string, fullText: string, type: SearchQueryTypes,
                            items?: BehaviorSubject<RenderableAutoCompleteItem[]>): BehaviorSubject<RenderableAutoCompleteItem[]> {
     items = items || new BehaviorSubject([]);
 
@@ -71,10 +74,10 @@ export class AutoCompleteService {
       }
       this._networkService.getJson<IAutoCompleteItem[]>('/autocomplete/' + text, acParams).then(ret => {
         this._galleryCacheService.setAutoComplete(text, type, ret);
-        items.next(this.sortResults(text, ret.map(i => this.ACItemToRenderable(i)).concat(items.value)));
+        items.next(this.sortResults(text, ret.map(i => this.ACItemToRenderable(i, fullText)).concat(items.value)));
       });
     } else {
-      items.next(this.sortResults(text, cached.map(i => this.ACItemToRenderable(i)).concat(items.value)));
+      items.next(this.sortResults(text, cached.map(i => this.ACItemToRenderable(i, fullText)).concat(items.value)));
     }
     return items;
   }
@@ -91,23 +94,37 @@ export class AutoCompleteService {
     return tokens[1];
   }
 
+
   private getTypeFromPrefix(text: string): SearchQueryTypes {
     const tokens = text.split(':');
     if (tokens.length !== 2) {
       return null;
     }
+    if (new RegExp('^\\d*-' + this._searchQueryParserService.keywords.kmFrom).test(tokens[0])) {
+      return SearchQueryTypes.distance;
+    }
     return this.textSearchKeywordsMap[tokens[0]] || null;
   }
 
-  private ACItemToRenderable(item: IAutoCompleteItem): RenderableAutoCompleteItem {
+  private ACItemToRenderable(item: IAutoCompleteItem, searchToken: string): RenderableAutoCompleteItem {
     if (!item.type) {
       return {text: item.text, queryHint: item.text};
     }
-    if (TextSearchQueryTypes.includes(item.type) && item.type !== SearchQueryTypes.any_text) {
+    if ((TextSearchQueryTypes.includes(item.type) ||
+      item.type === SearchQueryTypes.distance) &&
+      item.type !== SearchQueryTypes.any_text) {
+      let queryHint = (<any>this._searchQueryParserService.keywords)[SearchQueryTypes[item.type]] + ':"' + item.text + '"';
+
+      // if its a distance search, change hint text
+      const tokens = searchToken.split(':');
+      if (tokens.length === 2 &&
+        new RegExp('^\\d*-' + this._searchQueryParserService.keywords.kmFrom).test(tokens[0])) {
+        queryHint = tokens[0] + ':"' + item.text + '"';
+      }
+
       return {
         text: item.text, type: item.type,
-        queryHint:
-          (<any>this._searchQueryParserService.keywords)[SearchQueryTypes[item.type]] + ':"' + item.text + '"'
+        queryHint: queryHint
       };
     }
     return {

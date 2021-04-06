@@ -15,6 +15,7 @@ import {Utils} from '../../common/Utils';
 import {QueryParams} from '../../common/QueryParams';
 import {VideoProcessing} from '../model/fileprocessing/VideoProcessing';
 import {SearchQueryDTO, SearchQueryTypes} from '../../common/entities/SearchQueryDTO';
+import {LocationLookupException} from '../exceptions/LocationLookupException';
 
 
 export class GalleryMWs {
@@ -167,6 +168,9 @@ export class GalleryMWs {
       req.resultPipe = new ContentWrapper(null, result);
       return next();
     } catch (err) {
+      if (err instanceof LocationLookupException) {
+        return next(new ErrorDTO(ErrorCodes.LocationLookUp_ERROR, 'Cannot find location: ' + err.location, err));
+      }
       return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, 'Error during searching', err));
     }
   }

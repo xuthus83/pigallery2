@@ -34,7 +34,7 @@
   <div class="autocomplete-list" *ngIf="autoCompleteRenders.length > 0"
        (mouseover)="setMouseOverAutoComplete(true)" (mouseout)="setMouseOverAutoComplete(false)">
     <div class="autocomplete-item"
-         [ngClass]="{'autocomplete-item-selected':highlightedAutoCompleteItem == i}"
+         [ngClass]="{'autocomplete-item-selected': highlightedAutoCompleteItem === i}"
          (mouseover)="setMouseOverAutoCompleteItem(i)"
          (click)="searchAutoComplete(item)"
          *ngFor="let item of autoCompleteRenders; let i = index">
@@ -46,6 +46,7 @@
                       <span *ngSwitchCase="SearchQueryTypes.keyword" class="oi oi-tag"></span>
                       <span *ngSwitchCase="SearchQueryTypes.person" class="oi oi-person"></span>
                       <span *ngSwitchCase="SearchQueryTypes.position" class="oi oi-map-marker"></span>
+                     <span *ngSwitchCase="SearchQueryTypes.distance" class="oi oi-map-marker"></span>
                     </span>
         {{item.preText}}<strong>{{item.highLightText}}</strong>{{item.postText}}
       </div>

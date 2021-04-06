@@ -11,12 +11,13 @@ import {SortingMethods} from '../../../../common/entities/SortingMethods';
 import {QueryParams} from '../../../../common/QueryParams';
 import {PG2ConfMap} from '../../../../common/PG2ConfMap';
 import {SearchQueryDTO} from '../../../../common/entities/SearchQueryDTO';
+import {ErrorCodes} from '../../../../common/entities/Error';
 
 
 @Injectable()
 export class GalleryService {
 
-  public content: BehaviorSubject<ContentWrapper>;
+  public content: BehaviorSubject<ContentWrapperWithError>;
   public sorting: BehaviorSubject<SortingMethods>;
   lastRequest: { directory: string } = {
     directory: null
@@ -29,7 +30,7 @@ export class GalleryService {
               private galleryCacheService: GalleryCacheService,
               private _shareService: ShareService,
               private navigationService: NavigationService) {
-    this.content = new BehaviorSubject<ContentWrapper>(new ContentWrapper());
+    this.content = new BehaviorSubject<ContentWrapperWithError>(new ContentWrapperWithError());
     this.sorting = new BehaviorSubject<SortingMethods>(Config.Client.Other.defaultPhotoSortingMethod);
   }
 
@@ -56,7 +57,7 @@ export class GalleryService {
   }
 
 
-  setContent(content: ContentWrapper): void {
+  setContent(content: ContentWrapperWithError): void {
     this.content.next(content);
     if (content.directory) {
       const sort = this.galleryCacheService.getSorting(content.directory);
@@ -70,7 +71,7 @@ export class GalleryService {
 
 
   public async loadDirectory(directoryName: string): Promise<void> {
-    const content = new ContentWrapper();
+    const content = new ContentWrapperWithError();
 
     content.directory = this.galleryCacheService.getDirectory(directoryName);
     content.searchResult = null;
@@ -93,7 +94,7 @@ export class GalleryService {
     }
 
     try {
-      const cw = await this.networkService.getJson<ContentWrapper>('/gallery/content/' + directoryName, params);
+      const cw = await this.networkService.getJson<ContentWrapperWithError>('/gallery/content/' + directoryName, params);
 
 
       if (!cw || cw.notModified === true) {
@@ -124,12 +125,20 @@ export class GalleryService {
     this.ongoingSearch = query;
 
 
-    this.setContent(new ContentWrapper());
-    const cw = new ContentWrapper();
+    this.setContent(new ContentWrapperWithError());
+    const cw = new ContentWrapperWithError();
     cw.searchResult = this.galleryCacheService.getSearch(query);
     if (cw.searchResult == null) {
-      cw.searchResult = (await this.networkService.getJson<ContentWrapper>('/search/' + query)).searchResult;
-      this.galleryCacheService.setSearch(query, cw.searchResult);
+      try {
+        cw.searchResult = (await this.networkService.getJson<ContentWrapper>('/search/' + query)).searchResult;
+        this.galleryCacheService.setSearch(query, cw.searchResult);
+      } catch (e) {
+        if (e.code === ErrorCodes.LocationLookUp_ERROR) {
+          cw.error = 'Cannot find location: ' + e.message;
+        } else {
+          throw e;
+        }
+      }
     }
 
     if (this.ongoingSearch !== query) {
@@ -145,4 +154,9 @@ export class GalleryService {
   }
 
 
+}
+
+
+export class ContentWrapperWithError extends ContentWrapper {
+  public error: string;
 }

@@ -22,7 +22,8 @@ export enum ErrorCodes {
 
   SETTINGS_ERROR = 13,
   TASK_ERROR = 14,
-  JOB_ERROR = 15
+  JOB_ERROR = 15,
+  LocationLookUp_ERROR = 16,
 }
 
 export class ErrorDTO {

@@ -999,7 +999,7 @@ describe('SearchManager', (sqlHelper: DBTestHelper) => {
 
     });
 
-    it('should search  distance', async () => {
+    it('should search distance', async () => {
       ObjectManagers.getInstance().LocationManager = new LocationManager();
       const sm = new SearchManager();
 

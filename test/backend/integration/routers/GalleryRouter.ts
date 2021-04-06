@@ -62,7 +62,6 @@ describe('GalleryRouter', (sqlHelper: DBTestHelper) => {
       expect(result.body.error).to.be.equal(null);
       expect(result.body.result).to.not.be.equal(null);
       expect(result.body.result.directory).to.not.be.equal(null);
-      console.log(result.body.result.directory);
     });
 
     it('should load gallery twice (to force loading form db)', async () => {

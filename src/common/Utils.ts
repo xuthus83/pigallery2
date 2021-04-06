@@ -268,3 +268,35 @@ export class Utils {
   }
 
 }
+
+export namespace Utils {
+  export class LRU<V> {
+    data: { [key: string]: { value: V, usage: number } } = {};
+
+
+    constructor(public readonly size: number) {
+    }
+
+    set(key: string, value: V): void {
+      this.data[key] = {usage: Date.now(), value: value};
+      if (Object.keys(this.data).length > this.size) {
+        let oldestK = key;
+        let oldest = this.data[oldestK].usage;
+        for (const k in this.data) {
+          if (this.data[k].usage < oldest) {
+            oldestK = k;
+            oldest = this.data[oldestK].usage;
+          }
+        }
+        delete this.data[oldestK];
+      }
+    }
+
+    get(key: string): V {
+      if (!this.data[key]) {
+        return;
+      }
+      return this.data[key].value;
+    }
+  }
+}

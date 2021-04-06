@@ -138,7 +138,6 @@ export class ThumbnailGeneratorMWs {
 
 
   private static addThInfoTODir(directory: DirectoryDTO) {
-    console.log(directory.path, directory.name);
     if (typeof directory.media !== 'undefined') {
       ThumbnailGeneratorMWs.addThInfoToPhotos(directory.media);
     }

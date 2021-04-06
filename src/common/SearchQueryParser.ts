@@ -146,7 +146,7 @@ export class SearchQueryParser {
         this.keywords.someOf + ':' :
         new RegExp('^\\d*-' + this.keywords.NSomeOf + ':').exec(str)[0];
       let tmpList: any = this.parse(str.slice(prefix.length + 1, -1), false); // trim brackets
-      //  console.log(JSON.stringify(tmpList, null, 4));
+
       const unfoldList = (q: SearchListQuery): SearchQueryDTO[] => {
         if (q.list) {
           if (q.type === SearchQueryTypes.UNKNOWN_RELATION) {
@@ -207,7 +207,8 @@ export class SearchQueryParser {
     }
     if (new RegExp('^\\d*-' + this.keywords.kmFrom + ':').test(str)) {
       let from = str.slice(new RegExp('^\\d*-' + this.keywords.kmFrom + ':').exec(str)[0].length);
-      if (from.charAt(0) === '(' && from.charAt(from.length - 1) === ')') {
+      if ((from.charAt(0) === '(' && from.charAt(from.length - 1) === ')') ||
+        (from.charAt(0) === '"' && from.charAt(from.length - 1) === '"')) {
         from = from.slice(1, from.length - 1);
       }
       return <DistanceSearch>{

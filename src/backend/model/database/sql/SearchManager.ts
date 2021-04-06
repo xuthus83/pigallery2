@@ -84,7 +84,7 @@ export class SearchManager implements ISearchManager {
         .map(r => r.name), SearchQueryTypes.person));
     }
 
-    if (type === SearchQueryTypes.any_text || type === SearchQueryTypes.position) {
+    if (type === SearchQueryTypes.any_text || type === SearchQueryTypes.position || type === SearchQueryTypes.distance) {
       (await photoRepository
         .createQueryBuilder('photo')
         .select('photo.metadata.positionData.country as country, ' +
@@ -99,7 +99,8 @@ export class SearchManager implements ISearchManager {
         .map(pm => <Array<string>>[pm.city || '', pm.country || '', pm.state || ''])
         .forEach(positions => {
           result = result.concat(this.encapsulateAutoComplete(positions
-            .filter(p => p.toLowerCase().indexOf(text.toLowerCase()) !== -1), SearchQueryTypes.position));
+              .filter(p => p.toLowerCase().indexOf(text.toLowerCase()) !== -1),
+            type === SearchQueryTypes.distance ? type : SearchQueryTypes.position));
         });
     }
 
@@ -241,12 +242,18 @@ export class SearchManager implements ISearchManager {
           latDelta = (1 / ((2 * Math.PI / 360) * earth)),  // 1 km in degree
           lonDelta = (1 / ((2 * Math.PI / 360) * earth));  // 1 km in degree
 
-        const minLat = (<DistanceSearch>query).from.GPSData.latitude - ((<DistanceSearch>query).distance * latDelta),
-          maxLat = (<DistanceSearch>query).from.GPSData.latitude + ((<DistanceSearch>query).distance * latDelta),
-          minLon = (<DistanceSearch>query).from.GPSData.latitude -
-            ((<DistanceSearch>query).distance * lonDelta) / Math.cos(minLat * (Math.PI / 180)),
-          maxLon = (<DistanceSearch>query).from.GPSData.latitude +
-            ((<DistanceSearch>query).distance * lonDelta) / Math.cos(maxLat * (Math.PI / 180));
+        // TODO: properly handle latitude / longitude boundaries
+        const trimRange = (value: number, min: number, max: number) => {
+          return Math.min(Math.max(value, min), max);
+        };
+
+        const minLat = trimRange((<DistanceSearch>query).from.GPSData.latitude - ((<DistanceSearch>query).distance * latDelta), -90, 90),
+          maxLat = trimRange((<DistanceSearch>query).from.GPSData.latitude + ((<DistanceSearch>query).distance * latDelta), -90, 90),
+          minLon = trimRange((<DistanceSearch>query).from.GPSData.longitude -
+            ((<DistanceSearch>query).distance * lonDelta) / Math.cos(minLat * (Math.PI / 180)), -180, 180),
+          maxLon = trimRange((<DistanceSearch>query).from.GPSData.longitude +
+            ((<DistanceSearch>query).distance * lonDelta) / Math.cos(maxLat * (Math.PI / 180)), -180, 180);
+
 
         return new Brackets(q => {
           const textParam: any = {};
