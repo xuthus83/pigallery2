@@ -220,7 +220,7 @@ input[type="range"].zoom-progress::-moz-range-track {
 .face {
   opacity: 0.7;
   position: absolute;
-  transition: opacity .2s ease-in-out;
+  transition: opacity 0.5s;
 }
 
 #controllers-container.dim-controls .face,
