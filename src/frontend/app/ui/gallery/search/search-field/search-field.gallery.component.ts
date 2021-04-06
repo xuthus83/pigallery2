@@ -221,8 +221,9 @@ export class GallerySearchFieldComponent implements ControlValueAccessor, Valida
 
     if (this.rawSearchText.trim().length > 0) { // are we searching for anything?
       try {
-        if (this.autoCompleteItems) {
-          this.autoCompleteItems.unsubscribe();
+        if (this.autoCompleteItemsSubscription) {
+          this.autoCompleteItemsSubscription.unsubscribe();
+          this.autoCompleteItemsSubscription = null;
         }
         this.autoCompleteItems = this._autoCompleteService.autoComplete(searchText);
         this.autoCompleteItemsSubscription = this.autoCompleteItems.subscribe(() => {

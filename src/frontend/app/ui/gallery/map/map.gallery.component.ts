@@ -5,6 +5,7 @@ import {GalleryMapLightboxComponent} from './lightbox/lightbox.map.gallery.compo
 import {FileDTO} from '../../../../../common/entities/FileDTO';
 import {MapService} from './map.service';
 import {MapComponent} from '@yaga/leaflet-ng2';
+import {Config} from '../../../../../common/config/public/Config';
 
 @Component({
   selector: 'app-gallery-map',
@@ -51,14 +52,14 @@ export class GalleryMapComponent implements OnChanges, IRenderable, AfterViewIni
     this.mapPhotos = this.photos.filter(p => {
       return p.metadata && p.metadata.positionData && p.metadata.positionData.GPSData &&
         p.metadata.positionData.GPSData.latitude && p.metadata.positionData.GPSData.longitude;
-    }).map(p => {
+    }).slice(0, Config.Client.Map.maxPreviewMarkers).map(p => {
       return {
         lat: p.metadata.positionData.GPSData.latitude,
         lng: p.metadata.positionData.GPSData.longitude
       };
     });
 
-    if (this.yagaMap) {
+    if (this.yagaMap && this.mapPhotos.length > 0) {
       this.yagaMap.setView(this.mapPhotos[0], 99);
       this.yagaMap.fitBounds(this.mapPhotos.map(mp => <[number, number]>[mp.lat, mp.lng]));
       this.yagaMap.zoom = 0;

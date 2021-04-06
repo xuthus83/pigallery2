@@ -61,6 +61,8 @@ export module ClientConfig {
   export class MapConfig {
     @ConfigProperty()
     enabled: boolean = true;
+    @ConfigProperty({type: 'unsignedInt', description: 'Maximum number of markers to be shown on the map preview on the gallery page.'})
+    maxPreviewMarkers: number = 50;
     @ConfigProperty()
     useImageMarkers: boolean = true;
     @ConfigProperty({type: MapProviders})
