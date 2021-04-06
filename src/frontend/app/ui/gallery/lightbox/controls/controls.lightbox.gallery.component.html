@@ -51,11 +51,11 @@
        (click)="mediaElement.playPause()">
 
     <div class="faces-container"
-         [style.top.px]="photoFrameDim.height/2"
-         [style.left.px]="photoFrameDim.width/2"
-         [style.width.px]="faceContainerDim.width"
-         [style.height.px]="faceContainerDim.height"
-         *ngIf="facesEnabled && activePhoto && zoom == 1 && activePhoto.gridMedia.Photo.metadata.faces && activePhoto.gridMedia.Photo.metadata.faces.length > 0">
+         [style.top.px]="photoFrameDim.height/2 + drag.y"
+         [style.left.px]="photoFrameDim.width/2 + drag.x"
+         [style.width.px]="faceContainerDim.width* zoom"
+         [style.height.px]="faceContainerDim.height* zoom"
+         *ngIf="facesEnabled && activePhoto  && activePhoto.gridMedia.Photo.metadata.faces && activePhoto.gridMedia.Photo.metadata.faces.length > 0">
       <a
         class="face"
         [routerLink]="['/search', getPersonSearchQuery(face.name)]"
