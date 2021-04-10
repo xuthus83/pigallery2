@@ -3,7 +3,7 @@ import {AuthenticationService} from '../../../model/network/authentication.servi
 import {Utils} from '../../../../../common/Utils';
 import {NotificationService} from '../../../model/notification.service';
 import {NavigationService} from '../../../model/navigation.service';
-import {SettingsComponent} from '../_abstract/abstract.settings.component';
+import {SettingsComponentDirective} from '../_abstract/abstract.settings.component';
 import {DatabaseSettingsService} from './database.settings.service';
 import {I18n} from '@ngx-translate/i18n-polyfill';
 import {ServerConfig} from '../../../../../common/config/private/PrivateConfig';
@@ -15,7 +15,7 @@ import {ServerConfig} from '../../../../../common/config/private/PrivateConfig';
     '../_abstract/abstract.settings.component.css'],
   providers: [DatabaseSettingsService],
 })
-export class DatabaseSettingsComponent extends SettingsComponent<ServerConfig.DataBaseConfig> implements OnInit {
+export class DatabaseSettingsComponent extends SettingsComponentDirective<ServerConfig.DataBaseConfig> implements OnInit {
 
   public types = Utils.enumToArray(ServerConfig.DatabaseType);
   public DatabaseType = ServerConfig.DatabaseType;

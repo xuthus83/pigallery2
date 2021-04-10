@@ -58,7 +58,7 @@ export class GallerySearchQueryEntryComponent implements ControlValueAccessor, V
     return <any>this.queryEntry;
   }
 
-  get AsRangeQuery(): RangeSearch {
+  public get AsRangeQuery(): RangeSearch {
     return <any>this.queryEntry;
   }
 

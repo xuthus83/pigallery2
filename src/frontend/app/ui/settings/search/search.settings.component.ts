@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {SettingsComponent} from '../_abstract/abstract.settings.component';
+import {SettingsComponentDirective} from '../_abstract/abstract.settings.component';
 import {AuthenticationService} from '../../../model/network/authentication.service';
 import {NavigationService} from '../../../model/navigation.service';
 import {NotificationService} from '../../../model/notification.service';
@@ -14,7 +14,7 @@ import {ClientConfig} from '../../../../../common/config/public/ClientConfig';
     '../_abstract/abstract.settings.component.css'],
   providers: [SearchSettingsService],
 })
-export class SearchSettingsComponent extends SettingsComponent<ClientConfig.SearchConfig> {
+export class SearchSettingsComponent extends SettingsComponentDirective<ClientConfig.SearchConfig> {
 
   constructor(_authService: AuthenticationService,
               _navigation: NavigationService,

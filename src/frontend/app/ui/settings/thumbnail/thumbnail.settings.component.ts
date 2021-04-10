@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {SettingsComponent} from '../_abstract/abstract.settings.component';
+import {SettingsComponentDirective} from '../_abstract/abstract.settings.component';
 import {AuthenticationService} from '../../../model/network/authentication.service';
 import {NavigationService} from '../../../model/navigation.service';
 import {NotificationService} from '../../../model/notification.service';
@@ -19,7 +19,7 @@ import {ClientConfig} from '../../../../../common/config/public/ClientConfig';
   providers: [ThumbnailSettingsService],
 })
 export class ThumbnailSettingsComponent
-  extends SettingsComponent<{ server: ServerConfig.ThumbnailConfig, client: ClientConfig.ThumbnailConfig }>
+  extends SettingsComponentDirective<{ server: ServerConfig.ThumbnailConfig, client: ClientConfig.ThumbnailConfig }>
   implements OnInit {
   JobProgressStates = JobProgressStates;
   readonly jobName = DefaultsJobs[DefaultsJobs['Thumbnail Generation']];

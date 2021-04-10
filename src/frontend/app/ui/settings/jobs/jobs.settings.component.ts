@@ -3,7 +3,7 @@ import {JobsSettingsService} from './jobs.settings.service';
 import {AuthenticationService} from '../../../model/network/authentication.service';
 import {NavigationService} from '../../../model/navigation.service';
 import {NotificationService} from '../../../model/notification.service';
-import {SettingsComponent} from '../_abstract/abstract.settings.component';
+import {SettingsComponentDirective} from '../_abstract/abstract.settings.component';
 import {I18n} from '@ngx-translate/i18n-polyfill';
 import {ScheduledJobsService} from '../scheduled-jobs.service';
 import {
@@ -27,7 +27,7 @@ import {ServerConfig} from '../../../../../common/config/private/PrivateConfig';
     '../_abstract/abstract.settings.component.css'],
   providers: [JobsSettingsService]
 })
-export class JobsSettingsComponent extends SettingsComponent<ServerConfig.JobConfig, JobsSettingsService>
+export class JobsSettingsComponent extends SettingsComponentDirective<ServerConfig.JobConfig, JobsSettingsService>
   implements OnInit, OnDestroy, OnChanges {
 
   @ViewChild('jobModal', {static: false}) public jobModal: ModalDirective;

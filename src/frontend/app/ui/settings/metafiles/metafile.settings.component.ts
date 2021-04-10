@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {MetaFileSettingsService} from './metafile.settings.service';
-import {SettingsComponent} from '../_abstract/abstract.settings.component';
+import {SettingsComponentDirective} from '../_abstract/abstract.settings.component';
 import {AuthenticationService} from '../../../model/network/authentication.service';
 import {NavigationService} from '../../../model/navigation.service';
 import {NotificationService} from '../../../model/notification.service';
@@ -15,7 +15,7 @@ import {ClientConfig} from '../../../../../common/config/public/ClientConfig';
     '../_abstract/abstract.settings.component.css'],
   providers: [MetaFileSettingsService],
 })
-export class MetaFileSettingsComponent extends SettingsComponent<ClientConfig.MetaFileConfig> {
+export class MetaFileSettingsComponent extends SettingsComponentDirective<ClientConfig.MetaFileConfig> {
 
   constructor(_authService: AuthenticationService,
               _navigation: NavigationService,

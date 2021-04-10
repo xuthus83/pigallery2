@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {SettingsComponent} from '../_abstract/abstract.settings.component';
+import {SettingsComponentDirective} from '../_abstract/abstract.settings.component';
 import {AuthenticationService} from '../../../model/network/authentication.service';
 import {NavigationService} from '../../../model/navigation.service';
 import {NotificationService} from '../../../model/notification.service';
@@ -15,7 +15,7 @@ import {SharingDTO} from '../../../../../common/entities/SharingDTO';
     '../_abstract/abstract.settings.component.css'],
   providers: [ShareSettingsService],
 })
-export class ShareSettingsComponent extends SettingsComponent<ClientConfig.SharingConfig, ShareSettingsService> implements OnInit {
+export class ShareSettingsComponent extends SettingsComponentDirective<ClientConfig.SharingConfig, ShareSettingsService> implements OnInit {
 
 
   public shares: SharingDTO[] = [];

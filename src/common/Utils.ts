@@ -24,14 +24,14 @@ export class Utils {
   }
 
 
-  static removeNullOrEmptyObj<T extends any>(obj: T): T {
+  static removeNullOrEmptyObj<T extends { [key: string]: any }>(obj: T): T {
     if (typeof obj !== 'object' || obj == null) {
       return obj;
     }
 
     const keys = Object.keys(obj);
     for (let i = 0; i < keys.length; i++) {
-      const key = keys[i];
+      const key: string = keys[i];
       if (obj[key] !== null && typeof obj[key] === 'object') {
         if (Utils.removeNullOrEmptyObj(obj[key])) {
           if (Object.keys(obj[key]).length === 0) {

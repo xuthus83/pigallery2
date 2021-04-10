@@ -4,7 +4,7 @@ import {AuthenticationService} from '../../../model/network/authentication.servi
 import {NavigationService} from '../../../model/navigation.service';
 import {NotificationService} from '../../../model/notification.service';
 import {ErrorDTO} from '../../../../../common/entities/Error';
-import {SettingsComponent} from '../_abstract/abstract.settings.component';
+import {SettingsComponentDirective} from '../_abstract/abstract.settings.component';
 import {Utils} from '../../../../../common/Utils';
 import {I18n} from '@ngx-translate/i18n-polyfill';
 import {ScheduledJobsService} from '../scheduled-jobs.service';
@@ -19,7 +19,7 @@ import {ServerConfig} from '../../../../../common/config/private/PrivateConfig';
     '../_abstract/abstract.settings.component.css'],
   providers: [IndexingSettingsService],
 })
-export class IndexingSettingsComponent extends SettingsComponent<ServerConfig.IndexingConfig, IndexingSettingsService>
+export class IndexingSettingsComponent extends SettingsComponentDirective<ServerConfig.IndexingConfig, IndexingSettingsService>
   implements OnInit, OnDestroy {
 
 

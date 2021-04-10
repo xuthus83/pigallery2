@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {VideoSettingsService} from './video.settings.service';
-import {SettingsComponent} from '../_abstract/abstract.settings.component';
+import {SettingsComponentDirective} from '../_abstract/abstract.settings.component';
 import {AuthenticationService} from '../../../model/network/authentication.service';
 import {NavigationService} from '../../../model/navigation.service';
 import {NotificationService} from '../../../model/notification.service';
@@ -19,7 +19,7 @@ import {ClientConfig} from '../../../../../common/config/public/ClientConfig';
     '../_abstract/abstract.settings.component.css'],
   providers: [VideoSettingsService],
 })
-export class VideoSettingsComponent extends SettingsComponent<{ server: ServerConfig.VideoConfig, client: ClientConfig.VideoConfig }> {
+export class VideoSettingsComponent extends SettingsComponentDirective<{ server: ServerConfig.VideoConfig, client: ClientConfig.VideoConfig }> {
 
   readonly resolutionTypes: ServerConfig.resolutionType[] = [360, 480, 720, 1080, 1440, 2160, 4320];
 
@@ -29,7 +29,7 @@ export class VideoSettingsComponent extends SettingsComponent<{ server: ServerCo
     mp4: ['libx264', 'libx265'].map((e: ServerConfig.codecType) => ({key: e, value: e}))
   };
   formats: { key: ServerConfig.formatType, value: ServerConfig.formatType }[] = ['mp4', 'webm']
-      .map((e: ServerConfig.formatType) => ({key: e, value: e}));
+    .map((e: ServerConfig.formatType) => ({key: e, value: e}));
   fps = [24, 25, 30, 48, 50, 60].map(e => ({key: e, value: e}));
 
   JobProgressStates = JobProgressStates;
@@ -78,7 +78,7 @@ export class VideoSettingsComponent extends SettingsComponent<{ server: ServerCo
       bitRate = 8 * 1024 * 1024;
     } else if (resolution <= 1440) {
       bitRate = 16 * 1024 * 1024;
-    } else  {
+    } else {
       bitRate = 40 * 1024 * 1024;
     }
 
@@ -91,7 +91,7 @@ export class VideoSettingsComponent extends SettingsComponent<{ server: ServerCo
 
   updateBitRate() {
     this.states.server.transcoding.bitRate.value = this.getRecommendedBitRate(this.states.server.transcoding.resolution.value,
-        this.states.server.transcoding.fps.value);
+      this.states.server.transcoding.fps.value);
   }
 
   formatChanged(format: ServerConfig.formatType) {

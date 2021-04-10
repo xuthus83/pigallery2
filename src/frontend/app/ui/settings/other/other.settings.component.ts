@@ -1,5 +1,5 @@
 import {Component, OnChanges} from '@angular/core';
-import {SettingsComponent} from '../_abstract/abstract.settings.component';
+import {SettingsComponentDirective} from '../_abstract/abstract.settings.component';
 import {AuthenticationService} from '../../../model/network/authentication.service';
 import {NavigationService} from '../../../model/navigation.service';
 import {NotificationService} from '../../../model/notification.service';
@@ -17,7 +17,7 @@ import {StringifySortingMethod} from '../../../pipes/StringifySortingMethod';
     '../_abstract/abstract.settings.component.css'],
   providers: [OtherSettingsService],
 })
-export class OtherSettingsComponent extends SettingsComponent<OtherConfigDTO> implements OnChanges {
+export class OtherSettingsComponent extends SettingsComponentDirective<OtherConfigDTO> implements OnChanges {
 
 
   types: { key: number; value: string }[] = [];

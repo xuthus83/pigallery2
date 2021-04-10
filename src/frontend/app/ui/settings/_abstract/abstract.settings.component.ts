@@ -1,4 +1,4 @@
-import {Input, OnChanges, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
+import {Directive, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
 import {AuthenticationService} from '../../../model/network/authentication.service';
 import {UserRoles} from '../../../../../common/entities/UserDTO';
 import {Utils} from '../../../../../common/Utils';
@@ -34,7 +34,9 @@ interface RecursiveState extends ConfigState {
   [key: string]: RecursiveState;
 }
 
-export abstract class SettingsComponent<T extends { [key: string]: any }, S extends AbstractSettingsService<T> = AbstractSettingsService<T>>
+@Directive()
+export abstract class SettingsComponentDirective<T extends { [key: string]: any },
+  S extends AbstractSettingsService<T> = AbstractSettingsService<T>>
   implements OnInit, OnDestroy, OnChanges, ISettingsComponent {
 
   @Input()
@@ -199,8 +201,8 @@ export abstract class SettingsComponent<T extends { [key: string]: any }, S exte
       for (const key of Object.keys(obj)) {
         to[key] = {};
         if (obj[key].isConfigType || (typeof obj[key] === 'object' && typeof obj[key].value === 'undefined')) {
-           add(obj[key], to[key]);
-           continue;
+          add(obj[key], to[key]);
+          continue;
         }
         to[key] = obj[key].value;
       }

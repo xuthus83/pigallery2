@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {MapSettingsService} from './map.settings.service';
-import {SettingsComponent} from '../_abstract/abstract.settings.component';
+import {SettingsComponentDirective} from '../_abstract/abstract.settings.component';
 import {AuthenticationService} from '../../../model/network/authentication.service';
 import {NavigationService} from '../../../model/navigation.service';
 import {NotificationService} from '../../../model/notification.service';
@@ -16,7 +16,7 @@ import {ClientConfig} from '../../../../../common/config/public/ClientConfig';
     '../_abstract/abstract.settings.component.css'],
   providers: [MapSettingsService],
 })
-export class MapSettingsComponent extends SettingsComponent<ClientConfig.MapConfig> {
+export class MapSettingsComponent extends SettingsComponentDirective<ClientConfig.MapConfig> {
 
   public mapProviders: { key: number, value: string }[] = [];
   public MapProviders = ClientConfig.MapProviders;
