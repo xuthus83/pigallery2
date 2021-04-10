@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpResponse} from '@angular/common/http';
 import {Message} from '../../../../common/entities/Message';
-import {SlimLoadingBarService} from 'ng2-slim-loading-bar';
+import {LoadingBarService} from '@ngx-loading-bar/core';
 import {ErrorCodes, ErrorDTO} from '../../../../common/entities/Error';
 import {Config} from '../../../../common/config/public/Config';
 import {Utils} from '../../../../common/Utils';
@@ -15,7 +15,7 @@ export class NetworkService {
   private globalErrorHandlers: Array<(error: ErrorDTO) => boolean> = [];
 
   constructor(private _http: HttpClient,
-              private slimLoadingBarService: SlimLoadingBarService,
+              private loadingBarService: LoadingBarService,
               private versionService: VersionService) {
   }
 
@@ -37,19 +37,17 @@ export class NetworkService {
 
   public getXML<T>(url: string): Promise<Document> {
 
-    this.slimLoadingBarService.visible = true;
-    this.slimLoadingBarService.start(() => {
-      this.slimLoadingBarService.visible = false;
-    });
+
+    this.loadingBarService.useRef().start();
 
     const process = (res: string): Document => {
-      this.slimLoadingBarService.complete();
+      this.loadingBarService.useRef().complete();
       const parser = new DOMParser();
       return parser.parseFromString(res, 'text/xml');
     };
 
     const err = (error: any) => {
-      this.slimLoadingBarService.complete();
+      this.loadingBarService.useRef().complete();
       return this.handleError(error);
     };
 
@@ -82,13 +80,10 @@ export class NetworkService {
   private callJson<T>(method: 'get' | 'post' | 'delete' | 'put', url: string, data: any = {}): Promise<T> {
     const body = data;
 
-    this.slimLoadingBarService.visible = true;
-    this.slimLoadingBarService.start(() => {
-      this.slimLoadingBarService.visible = false;
-    });
+    this.loadingBarService.useRef().start();
 
     const process = (res: HttpResponse<Message<T>>): T => {
-      this.slimLoadingBarService.complete();
+      this.loadingBarService.useRef().complete();
       const msg = res.body;
       if (res.headers.has(CustomHeaders.dataVersion)) {
         this.versionService.onNewVersion(res.headers.get(CustomHeaders.dataVersion));
@@ -103,7 +98,7 @@ export class NetworkService {
     };
 
     const err = (error: any) => {
-      this.slimLoadingBarService.complete();
+      this.loadingBarService.useRef().complete();
       return this.handleError(error);
     };
 

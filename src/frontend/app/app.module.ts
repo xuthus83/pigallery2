@@ -12,6 +12,7 @@ import {AuthenticationService} from './model/network/authentication.service';
 import {UserMangerSettingsComponent} from './ui/settings/usermanager/usermanager.settings.component';
 import {FrameComponent} from './ui/frame/frame.component';
 import {YagaModule} from '@yaga/leaflet-ng2';
+import { LoadingBarModule } from '@ngx-loading-bar/core';
 import {GalleryLightboxMediaComponent} from './ui/gallery/lightbox/media/media.lightbox.gallery.component';
 import {GalleryPhotoLoadingComponent} from './ui/gallery/grid/photo/loading/loading.photo.grid.gallery.component';
 import {GalleryNavigatorComponent} from './ui/gallery/navigator/navigator.gallery.component';
@@ -29,7 +30,6 @@ import {GalleryMapComponent} from './ui/gallery/map/map.gallery.component';
 import {GalleryMapLightboxComponent} from './ui/gallery/map/lightbox/lightbox.map.gallery.component';
 import {ThumbnailManagerService} from './ui/gallery/thumbnailManager.service';
 import {OverlayService} from './ui/gallery/overlay.service';
-import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 import {GalleryShareComponent} from './ui/gallery/share/share.gallery.component';
 import {ShareLoginComponent} from './ui/sharelogin/share-login.component';
 import {ShareService} from './ui/gallery/share.service';
@@ -154,10 +154,10 @@ export function translationsFactory(locale: string) {
     CollapseModule.forRoot(),
     PopoverModule.forRoot(),
     BsDropdownModule.forRoot(),
-    SlimLoadingBarModule.forRoot(),
     BsDatepickerModule.forRoot(),
     YagaModule,
-    TimepickerModule.forRoot()
+    TimepickerModule.forRoot(),
+    LoadingBarModule
   ],
   declarations: [AppComponent,
     LoginComponent,

@@ -55,9 +55,9 @@ export abstract class FileJob<S extends { indexedOnly: boolean } = { indexedOnly
     return files;
   }
 
-  protected abstract async shouldProcess(filePath: string): Promise<boolean>;
+  protected abstract shouldProcess(filePath: string): Promise<boolean>;
 
-  protected abstract async processFile(filePath: string): Promise<void>;
+  protected abstract processFile(filePath: string): Promise<void>;
 
   protected async step(): Promise<boolean> {
     if (this.directoryQueue.length === 0 && this.fileQueue.length === 0) {

@@ -77,9 +77,9 @@ export abstract class Job<T = void> implements IJob<T> {
     };
   }
 
-  protected abstract async step(): Promise<boolean>;
+  protected abstract step(): Promise<boolean>;
 
-  protected abstract async init(): Promise<void>;
+  protected abstract init(): Promise<void>;
 
   private onFinish(): void {
     if (this.InProgress === false) {

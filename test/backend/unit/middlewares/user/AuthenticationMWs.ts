@@ -1,3 +1,4 @@
+/* tslint:disable:no-unused-expression */
 import {expect} from 'chai';
 import {AuthenticationMWs} from '../../../../../src/backend/middlewares/user/AuthenticationMWs';
 import {ErrorCodes, ErrorDTO} from '../../../../../src/common/entities/Error';
@@ -80,7 +81,6 @@ describe('Authentication middleware', () => {
         authoriseDirPath(<any>req, <any>{sendStatus: resolve}, () => {
           resolve('ok');
         });
-        resolve();
       });
     };
 

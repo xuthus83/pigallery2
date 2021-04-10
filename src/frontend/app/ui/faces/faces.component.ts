@@ -3,7 +3,7 @@ import {FacesService} from './faces.service';
 import {QueryService} from '../../model/query.service';
 import {map} from 'rxjs/operators';
 import {PersonDTO} from '../../../../common/entities/PersonDTO';
-import {Observable} from 'rxjs/Observable';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-faces',
