@@ -9,6 +9,7 @@
   "bin": "./src/backend/index.js",
   "scripts": {
     "build": "tsc && gulp build-prod",
+    "build-en": "tsc && gulp build-prod --languages=en",
     "create-release": "gulp create-release",
     "build-backend": "tsc",
     "pretest": "tsc",
@@ -120,7 +121,7 @@
     "mocha": "8.3.2",
     "natural-orderby": "2.0.3",
     "ng2-cookies": "1.0.12",
-    "ngx-bootstrap": "5.2.0",
+    "ngx-bootstrap": "6.2.0",
     "ngx-clipboard": "14.0.1",
     "ngx-toastr": "13.2.1",
     "nyc": "15.1.0",

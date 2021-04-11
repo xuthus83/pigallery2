@@ -7,6 +7,8 @@
       "root": "",
       "sourceRoot": "src/frontend",
       "projectType": "application",
+      "schematics": {},
+      "prefix": "app",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
@@ -21,10 +23,10 @@
               "src/frontend/assets"
             ],
             "styles": [
-              "./node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "./node_modules/ngx-bootstrap/datepicker/bs-datepicker.css",
-              "./node_modules/open-iconic/font/css/open-iconic-bootstrap.css",
-              "./node_modules/ngx-toastr/toastr.css",
+              "bootstrap/dist/css/bootstrap.min.css",
+              "ngx-bootstrap/datepicker/bs-datepicker.css",
+              "open-iconic/font/css/open-iconic-bootstrap.css",
+              "ngx-toastr/toastr.css",
               "src/frontend/styles.css"
             ],
             "scripts": []
@@ -34,7 +36,6 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": true,
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
@@ -75,11 +76,11 @@
             "tsConfig": "src/frontend/tsconfig.spec.json",
             "scripts": [],
             "styles": [
-              "./node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "node_modules/ngx-toastr/toastr.css",
-              "node_modules/bootstrap/dist/css/bootstrap.css",
-              "node_modules/open-iconic/font/css/open-iconic-bootstrap.css",
-              "node_modules/ngx-bootstrap/datepicker/bs-datepicker.css",
+              "bootstrap/dist/css/bootstrap.min.css",
+              "ngx-toastr/toastr.css",
+              "bootstrap/dist/css/bootstrap.css",
+              "open-iconic/font/css/open-iconic-bootstrap.css",
+              "ngx-bootstrap/datepicker/bs-datepicker.css",
               "src/frontend/styles.css"
             ],
             "assets": [

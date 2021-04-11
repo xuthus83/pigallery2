@@ -34,11 +34,11 @@ export class FacesComponent implements OnInit {
   }
 
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.updateSize();
   }
 
-  private updateSize() {
+  private updateSize(): void {
     const size = 220 + 5;
     // body - container margin
     const containerWidth = this.container.nativeElement.clientWidth - 30;

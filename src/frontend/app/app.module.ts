@@ -2,7 +2,6 @@ import {Injectable, LOCALE_ID, NgModule, TRANSLATIONS, TRANSLATIONS_FORMAT} from
 import {BrowserModule, HAMMER_GESTURE_CONFIG, HammerGestureConfig} from '@angular/platform-browser';
 import {FormsModule} from '@angular/forms';
 import {AppComponent} from './app.component';
-import {appRoutes} from './app.routing';
 import {UserService} from './model/network/user.service';
 import {GalleryService} from './ui/gallery/gallery.service';
 import {NetworkService} from './model/network/network.service';
@@ -12,7 +11,7 @@ import {AuthenticationService} from './model/network/authentication.service';
 import {UserMangerSettingsComponent} from './ui/settings/usermanager/usermanager.settings.component';
 import {FrameComponent} from './ui/frame/frame.component';
 import {YagaModule} from '@yaga/leaflet-ng2';
-import { LoadingBarModule } from '@ngx-loading-bar/core';
+import {LoadingBarModule} from '@ngx-loading-bar/core';
 import {GalleryLightboxMediaComponent} from './ui/gallery/lightbox/media/media.lightbox.gallery.component';
 import {GalleryPhotoLoadingComponent} from './ui/gallery/grid/photo/loading/loading.photo.grid.gallery.component';
 import {GalleryNavigatorComponent} from './ui/gallery/navigator/navigator.gallery.component';
@@ -98,6 +97,7 @@ import {StringifySearchQuery} from './pipes/StringifySearchQuery';
 import {AutoCompleteService} from './ui/gallery/search/autocomplete.service';
 import {SearchQueryParserService} from './ui/gallery/search/search-query-parser.service';
 import {GallerySearchFieldComponent} from './ui/gallery/search/search-field/search-field.gallery.component';
+import {AppRoutingModule} from './app.routing';
 
 
 @Injectable()
@@ -112,31 +112,31 @@ export class MyHammerConfig extends HammerGestureConfig {
 
 
 export class CustomUrlSerializer implements UrlSerializer {
-  private _defaultUrlSerializer: DefaultUrlSerializer = new DefaultUrlSerializer();
+  private defaultUrlSerializer: DefaultUrlSerializer = new DefaultUrlSerializer();
 
   parse(url: string): UrlTree {
     // Encode parentheses
     url = url.replace(/\(/g, '%28').replace(/\)/g, '%29');
     // Use the default serializer.
-    return this._defaultUrlSerializer.parse(url);
+    return this.defaultUrlSerializer.parse(url);
   }
 
   serialize(tree: UrlTree): string {
-    return this._defaultUrlSerializer.serialize(tree).replace(/%28/g, '(').replace(/%29/g, ')');
+    return this.defaultUrlSerializer.serialize(tree).replace(/%28/g, '(').replace(/%29/g, ')');
   }
 }
 
 // use the require method provided by webpack
 declare const require: (path: string) => string;
 
-export function translationsFactory(locale: string) {
+export function translationsFactory(locale: string): string {
   locale = locale || 'en'; // default to english if no locale
 
   // default locale, nothing to translate
   if (locale === 'en') {
     return '';
   }
-  return (<any>require(`raw-loader!../translate/messages.${locale}.xlf`)).default;
+  return (require(`raw-loader!../translate/messages.${locale}.xlf`) as any).default;
 }
 
 @NgModule({
@@ -145,7 +145,7 @@ export function translationsFactory(locale: string) {
     FormsModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    appRoutes,
+    AppRoutingModule,
     ClipboardModule,
     JwBootstrapSwitchNg2Module,
     TooltipModule.forRoot(),

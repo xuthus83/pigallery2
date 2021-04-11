@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {ShareService} from '../ui/gallery/share.service';
-import {MediaBaseDTO, MediaDTO} from '../../../common/entities/MediaDTO';
+import {MediaBaseDTO} from '../../../common/entities/MediaDTO';
 import {QueryParams} from '../../../common/QueryParams';
 import {Utils} from '../../../common/Utils';
 import {GalleryService} from '../ui/gallery/gallery.service';
@@ -36,7 +36,7 @@ export class QueryService {
     return query;
   }
 
-  getParamsForDirs(directory: DirectoryDTO) {
+  getParamsForDirs(directory: DirectoryDTO): { [key: string]: any } {
     const params: { [key: string]: any } = {};
     if (Config.Client.Sharing.enabled === true) {
       if (this.shareService.isSharing()) {

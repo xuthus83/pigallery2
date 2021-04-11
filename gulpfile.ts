@@ -263,7 +263,7 @@ gulp.task('extract-locale', async (cb) => {
   console.log('creating source translation file:  locale.source.xlf');
   try {
     {
-      const {stdout, stderr} = await execPr('ng xi18n --out-file=./../../locale.source.xlf  --i18n-format=xlf --i18n-locale=en',
+      const {stdout, stderr} = await execPr('ng extract-i18n --out-file=./../../locale.source.xlf  --i18n-format=xlf --i18n-locale=en',
         {maxBuffer: 1024 * 1024});
       console.log(stdout);
       console.error(stderr);

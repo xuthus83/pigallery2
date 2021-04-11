@@ -1,7 +1,7 @@
 import {Component, Input, OnChanges, OnDestroy, TemplateRef} from '@angular/core';
 import {JobProgressDTO, JobProgressStates} from '../../../../../../common/entities/job/JobProgressDTO';
 import {Subscription, timer} from 'rxjs';
-import {BsModalRef, BsModalService} from 'ngx-bootstrap';
+import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 import {I18n} from '@ngx-translate/i18n-polyfill';
 import {BackendtextService} from '../../../../model/backendtext.service';
 

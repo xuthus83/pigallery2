@@ -10,6 +10,8 @@ import {ErrorCodes, ErrorDTO} from '../../../../common/entities/Error';
 import {CookieNames} from '../../../../common/CookieNames';
 import {ShareService} from '../../ui/gallery/share.service';
 
+/* Injected config / user from server side */
+// tslint:disable-next-line:no-internal-module no-namespace
 declare module ServerInject {
   export let user: UserDTO;
 }
@@ -19,8 +21,8 @@ export class AuthenticationService {
 
   public readonly user: BehaviorSubject<UserDTO>;
 
-  constructor(private _userService: UserService,
-              private _networkService: NetworkService,
+  constructor(private userService: UserService,
+              private networkService: NetworkService,
               private shareService: ShareService) {
     this.user = new BehaviorSubject(null);
 
@@ -29,20 +31,23 @@ export class AuthenticationService {
       if (typeof ServerInject !== 'undefined' && typeof ServerInject.user !== 'undefined') {
         this.user.next(ServerInject.user);
       }
-      this.getSessionUser();
+      this.getSessionUser().catch(console.error);
     } else {
       if (Config.Client.authenticationRequired === false) {
-        this.user.next(<UserDTO>{name: UserRoles[Config.Client.unAuthenticatedUserRole], role: Config.Client.unAuthenticatedUserRole});
+        this.user.next({
+          name: UserRoles[Config.Client.unAuthenticatedUserRole],
+          role: Config.Client.unAuthenticatedUserRole
+        } as UserDTO);
       }
     }
 
-    _networkService.addGlobalErrorHandler((error: ErrorDTO) => {
+    networkService.addGlobalErrorHandler((error: ErrorDTO) => {
       if (error.code === ErrorCodes.NOT_AUTHENTICATED) {
         this.user.next(null);
         return true;
       }
       if (error.code === ErrorCodes.NOT_AUTHORISED) {
-        this.logout();
+        this.logout().catch(console.error);
         return true;
       }
       return false;
@@ -51,19 +56,19 @@ export class AuthenticationService {
     // TODO: refactor architecture remove shareService dependency
     window.setTimeout(() => {
       this.user.subscribe((u) => {
-        this.shareService.onNewUser(u);
+        this.shareService.onNewUser(u).catch(console.error);
       });
     }, 0);
   }
 
   public async login(credential: LoginCredential): Promise<UserDTO> {
-    const user = await this._userService.login(credential);
+    const user = await this.userService.login(credential);
     this.user.next(user);
     return user;
   }
 
   public async shareLogin(password: string): Promise<UserDTO> {
-    const user = await this._userService.shareLogin(password);
+    const user = await this.userService.shareLogin(password);
     this.user.next(user);
     return user;
   }
@@ -75,18 +80,18 @@ export class AuthenticationService {
     return !!this.user.value;
   }
 
-  public isAuthorized(role: UserRoles) {
+  public isAuthorized(role: UserRoles): boolean {
     return this.user.value && this.user.value.role >= role;
   }
 
-  public async logout() {
-    await this._userService.logout();
+  public async logout(): Promise<void> {
+    await this.userService.logout();
     this.user.next(null);
   }
 
   private async getSessionUser(): Promise<void> {
     try {
-      this.user.next(await this._userService.getSessionUser());
+      this.user.next(await this.userService.getSessionUser());
     } catch (error) {
       console.error(error);
     }
