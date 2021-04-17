@@ -3,7 +3,6 @@ import {GalleryService} from '../gallery.service';
 import {ContentWrapper} from '../../../../../common/entities/ConentWrapper';
 import {Config} from '../../../../../common/config/public/Config';
 import {NotificationService} from '../../../model/notification.service';
-import {I18n} from '@ngx-translate/i18n-polyfill';
 import {BsModalService} from 'ngx-bootstrap/modal';
 import {BsModalRef} from 'ngx-bootstrap/modal/bs-modal-ref.service';
 import {NetworkService} from '../../../model/network/network.service';
@@ -33,15 +32,14 @@ export class RandomQueryBuilderGalleryComponent implements OnInit, OnDestroy {
 
   private readonly subscription: Subscription = null;
 
-  constructor(public _galleryService: GalleryService,
-              private  _notification: NotificationService,
-              private _searchQueryParserService: SearchQueryParserService,
-              public i18n: I18n,
-              private _route: ActivatedRoute,
+  constructor(public galleryService: GalleryService,
+              private notification: NotificationService,
+              private searchQueryParserService: SearchQueryParserService,
+              private route: ActivatedRoute,
               private modalService: BsModalService) {
     this.resetQuery();
 
-    this.subscription = this._route.params.subscribe((params: Params) => {
+    this.subscription = this.route.params.subscribe((params: Params) => {
       if (!params[QueryParams.gallery.search.query]) {
         return;
       }
@@ -53,26 +51,26 @@ export class RandomQueryBuilderGalleryComponent implements OnInit, OnDestroy {
     });
   }
 
-  get HTMLSearchQuery() {
+  get HTMLSearchQuery(): string {
     return JSON.stringify(this.searchQueryDTO);
   }
 
-  validateRawSearchText() {
+  validateRawSearchText(): void {
     try {
-      this.searchQueryDTO = this._searchQueryParserService.parse(this.rawSearchText);
+      this.searchQueryDTO = this.searchQueryParserService.parse(this.rawSearchText);
       this.url = NetworkService.buildUrl(Config.Client.publicUrl + '/api/gallery/random/' + this.HTMLSearchQuery);
-     } catch (e) {
+    } catch (e) {
       console.error(e);
     }
   }
 
-  onQueryChange() {
-    this.rawSearchText = this._searchQueryParserService.stringify(this.searchQueryDTO);
+  onQueryChange(): void {
+    this.rawSearchText = this.searchQueryParserService.stringify(this.searchQueryDTO);
     this.url = NetworkService.buildUrl(Config.Client.publicUrl + '/api/gallery/random/' + this.HTMLSearchQuery);
   }
 
-  ngOnInit() {
-    this.contentSubscription = this._galleryService.content.subscribe((content: ContentWrapper) => {
+  ngOnInit(): void {
+    this.contentSubscription = this.galleryService.content.subscribe((content: ContentWrapper) => {
       this.enabled = !!content.directory;
       if (!this.enabled) {
         return;
@@ -81,7 +79,7 @@ export class RandomQueryBuilderGalleryComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     if (this.contentSubscription !== null) {
       this.contentSubscription.unsubscribe();
     }
@@ -92,7 +90,7 @@ export class RandomQueryBuilderGalleryComponent implements OnInit, OnDestroy {
   }
 
 
-  openModal(template: TemplateRef<any>) {
+  openModal(template: TemplateRef<any>): boolean {
     if (!this.enabled) {
       return;
     }
@@ -106,18 +104,18 @@ export class RandomQueryBuilderGalleryComponent implements OnInit, OnDestroy {
     return false;
   }
 
-  onCopy() {
-    this._notification.success(this.i18n('Url has been copied to clipboard'));
+  onCopy(): void {
+    this.notification.success($localize`Url has been copied to clipboard`);
   }
 
-  public hideModal() {
+  public hideModal(): void {
     this.modalRef.hide();
     this.modalRef = null;
   }
 
 
-  resetQuery() {
-    this.searchQueryDTO = <TextSearch>{text: '', type: SearchQueryTypes.any_text};
+  resetQuery(): void {
+    this.searchQueryDTO = {text: '', type: SearchQueryTypes.any_text} as TextSearch;
   }
 
 

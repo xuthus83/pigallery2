@@ -1,9 +1,8 @@
 import {Component, Input, OnChanges} from '@angular/core';
 import {DirectoryDTO} from '../../../../../common/entities/DirectoryDTO';
-import {Router, RouterLink} from '@angular/router';
+import {RouterLink} from '@angular/router';
 import {UserDTO} from '../../../../../common/entities/UserDTO';
 import {AuthenticationService} from '../../../model/network/authentication.service';
-import {I18n} from '@ngx-translate/i18n-polyfill';
 import {QueryService} from '../../../model/query.service';
 import {GalleryService} from '../gallery.service';
 import {Utils} from '../../../../../common/Utils';
@@ -30,20 +29,18 @@ export class GalleryNavigatorComponent implements OnChanges {
   readonly SearchQueryTypes = SearchQueryTypes;
   private readonly RootFolderName: string;
 
-  constructor(private _authService: AuthenticationService,
+  constructor(private authService: AuthenticationService,
               public queryService: QueryService,
-              public galleryService: GalleryService,
-              private router: Router,
-              private i18n: I18n) {
+              public galleryService: GalleryService) {
     this.sortingMethodsType = Utils.enumToArray(SortingMethods);
-    this.RootFolderName = this.i18n('Images');
+    this.RootFolderName = $localize`Images`;
   }
 
   get ItemCount(): number {
     return this.directory ? this.directory.mediaCount : this.searchResult.media.length;
   }
 
-  ngOnChanges() {
+  ngOnChanges(): void {
     this.getPath();
     this.DefaultSorting = this.galleryService.getDefaultSorting(this.directory);
   }
@@ -66,7 +63,7 @@ export class GalleryNavigatorComponent implements OnChanges {
       }
     }
 
-    const user = this._authService.user.value;
+    const user = this.authService.user.value;
     const arr: NavigatorPath[] = [];
 
     // create root link
@@ -80,9 +77,9 @@ export class GalleryNavigatorComponent implements OnChanges {
     dirs.forEach((name, index) => {
       const route = dirs.slice(0, dirs.indexOf(name) + 1).join('/');
       if (dirs.length - 1 === index) {
-        arr.push({name: name, route: null});
+        arr.push({name, route: null});
       } else {
-        arr.push({name: name, route: UserDTO.isDirectoryPathAvailable(route, user.permissions) ? route : null});
+        arr.push({name, route: UserDTO.isDirectoryPathAvailable(route, user.permissions) ? route : null});
       }
     });
 
@@ -92,24 +89,10 @@ export class GalleryNavigatorComponent implements OnChanges {
 
   }
 
-  setSorting(sorting: SortingMethods) {
+  setSorting(sorting: SortingMethods): void {
     this.galleryService.setSorting(sorting);
   }
 
-  /*
-
-    @HostListener('window:keydown', ['$event'])
-    onKeyPress(e: KeyboardEvent) {
-      if (this.routes.length < 2) {
-        return;
-      }
-      const event: KeyboardEvent = window.event ? <any>window.event : e;
-      if (event.altKey === true && event.key === 'ArrowUp') {
-        const path = this.routes[this.routes.length - 2];
-        this.router.navigate(['/gallery', path.route],
-          {queryParams: this.queryService.getParams()}).catch(console.error);
-      }
-    }*/
 }
 
 interface NavigatorPath {

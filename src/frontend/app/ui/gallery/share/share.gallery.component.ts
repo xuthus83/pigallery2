@@ -7,7 +7,6 @@ import {SharingDTO} from '../../../../../common/entities/SharingDTO';
 import {Config} from '../../../../../common/config/public/Config';
 import {NotificationService} from '../../../model/notification.service';
 import {DirectoryDTO} from '../../../../../common/entities/DirectoryDTO';
-import {I18n} from '@ngx-translate/i18n-polyfill';
 import {BsModalService} from 'ngx-bootstrap/modal';
 import {BsModalRef} from 'ngx-bootstrap/modal/bs-modal-ref.service';
 import {Subscription} from 'rxjs';
@@ -29,7 +28,7 @@ export class GalleryShareComponent implements OnInit, OnDestroy {
       amount: 30,
       type: ValidityTypes.Days
     },
-    password: <string>null
+    password: null as string
   };
   currentDir = '';
   sharing: SharingDTO = null;
@@ -44,34 +43,33 @@ export class GalleryShareComponent implements OnInit, OnDestroy {
     No: 'No'
   };
 
-  constructor(private _sharingService: ShareService,
-              public _galleryService: GalleryService,
-              private  _notification: NotificationService,
-              public i18n: I18n,
+  constructor(private sharingService: ShareService,
+              public galleryService: GalleryService,
+              private  notification: NotificationService,
               private modalService: BsModalService) {
 
-    this.text.Yes = i18n('Yes');
-    this.text.No = i18n('No');
+    this.text.Yes = $localize`Yes`;
+    this.text.No = $localize`No`;
   }
 
 
-  ngOnInit() {
-    this.contentSubscription = this._galleryService.content.subscribe((content: ContentWrapper) => {
+  ngOnInit(): void {
+    this.contentSubscription = this.galleryService.content.subscribe((content: ContentWrapper) => {
       this.enabled = !!content.directory;
       if (!this.enabled) {
         return;
       }
-      this.currentDir = Utils.concatUrls((<DirectoryDTO>content.directory).path, (<DirectoryDTO>content.directory).name);
+      this.currentDir = Utils.concatUrls((content.directory as DirectoryDTO).path, (content.directory as DirectoryDTO).name);
     });
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     if (this.contentSubscription !== null) {
       this.contentSubscription.unsubscribe();
     }
   }
 
-  calcValidity() {
+  calcValidity(): number {
     switch (parseInt(this.input.valid.type.toString(), 10)) {
       case ValidityTypes.Minutes:
         return this.input.valid.amount * 1000 * 60;
@@ -85,23 +83,23 @@ export class GalleryShareComponent implements OnInit, OnDestroy {
     throw new Error('unknown type: ' + this.input.valid.type);
   }
 
-  async update() {
+  async update(): Promise<void> {
     if (this.sharing == null) {
       return;
     }
-    this.url = this.i18n('loading..');
-    this.sharing = await this._sharingService.updateSharing(this.currentDir,
+    this.url = $localize`loading..`;
+    this.sharing = await this.sharingService.updateSharing(this.currentDir,
       this.sharing.id, this.input.includeSubfolders, this.input.password, this.calcValidity());
     this.url = Config.Client.publicUrl + '/share/' + this.sharing.sharingKey;
   }
 
-  async get() {
-    this.url = this.i18n('loading..');
-    this.sharing = await this._sharingService.createSharing(this.currentDir, this.input.includeSubfolders, this.calcValidity());
+  async get(): Promise<void> {
+    this.url = $localize`loading..`;
+    this.sharing = await this.sharingService.createSharing(this.currentDir, this.input.includeSubfolders, this.calcValidity());
     this.url = Config.Client.publicUrl + '/share/' + this.sharing.sharingKey;
   }
 
-  async openModal(template: TemplateRef<any>) {
+  async openModal(template: TemplateRef<any>): Promise<void> {
     await this.get();
     this.input.password = '';
     if (this.modalRef) {
@@ -111,11 +109,11 @@ export class GalleryShareComponent implements OnInit, OnDestroy {
     document.body.style.paddingRight = '0px';
   }
 
-  onCopy() {
-    this._notification.success(this.i18n('Url has been copied to clipboard'));
+  onCopy(): void {
+    this.notification.success($localize`Url has been copied to clipboard`);
   }
 
-  public hideModal() {
+  public hideModal(): void {
     this.modalRef.hide();
     this.modalRef = null;
     this.sharing = null;

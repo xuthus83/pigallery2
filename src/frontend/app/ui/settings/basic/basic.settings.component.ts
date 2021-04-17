@@ -5,7 +5,6 @@ import {NavigationService} from '../../../model/navigation.service';
 import {NotificationService} from '../../../model/notification.service';
 import {BasicSettingsService} from './basic.settings.service';
 import {BasicConfigDTO} from '../../../../../common/entities/settings/BasicConfigDTO';
-import {I18n} from '@ngx-translate/i18n-polyfill';
 
 @Component({
   selector: 'app-settings-basic',
@@ -20,12 +19,11 @@ export class BasicSettingsComponent extends SettingsComponentDirective<BasicConf
   urlBaseChanged = false;
   urlError = false;
 
-  constructor(_authService: AuthenticationService,
-              _navigation: NavigationService,
-              _settingsService: BasicSettingsService,
-              notification: NotificationService,
-              i18n: I18n) {
-    super(i18n('Basic'), _authService, _navigation, _settingsService, notification, i18n, s => ({
+  constructor(authService: AuthenticationService,
+              navigation: NavigationService,
+              settingsService: BasicSettingsService,
+              notification: NotificationService) {
+    super($localize`Basic`, authService, navigation, settingsService, notification, s => ({
       port: s.Server.port,
       host: s.Server.host,
       imagesFolder: s.Server.Media.folder,
@@ -40,7 +38,7 @@ export class BasicSettingsComponent extends SettingsComponentDirective<BasicConf
   public async save(): Promise<boolean> {
     const val = await super.save();
     if (val === true) {
-      this.notification.info(this.i18n('Restart the server to apply the new settings'));
+      this.notification.info($localize`Restart the server to apply the new settings`);
     }
     return val;
   }
@@ -56,11 +54,11 @@ export class BasicSettingsComponent extends SettingsComponentDirective<BasicConf
 
   }
 
-  checkUrlError() {
+  checkUrlError(): void {
     this.urlError = this.states.urlBase.value !== this.calcBaseUrl();
   }
 
-  onUrlChanged() {
+  onUrlChanged(): void {
     if (this.urlBaseChanged === false) {
       this.states.urlBase.value = this.calcBaseUrl();
     } else {
@@ -73,7 +71,7 @@ export class BasicSettingsComponent extends SettingsComponentDirective<BasicConf
     this.urlBaseChanged = true;
 
     this.checkUrlError();
-  };
+  }
 
 }
 

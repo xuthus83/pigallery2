@@ -4,7 +4,6 @@ import {AuthenticationService} from '../../../model/network/authentication.servi
 import {NavigationService} from '../../../model/navigation.service';
 import {NotificationService} from '../../../model/notification.service';
 import {SearchSettingsService} from './search.settings.service';
-import {I18n} from '@ngx-translate/i18n-polyfill';
 import {ClientConfig} from '../../../../../common/config/public/ClientConfig';
 
 @Component({
@@ -16,12 +15,11 @@ import {ClientConfig} from '../../../../../common/config/public/ClientConfig';
 })
 export class SearchSettingsComponent extends SettingsComponentDirective<ClientConfig.SearchConfig> {
 
-  constructor(_authService: AuthenticationService,
-              _navigation: NavigationService,
-              _settingsService: SearchSettingsService,
-              notification: NotificationService,
-              i18n: I18n) {
-    super(i18n('Search'), _authService, _navigation, _settingsService, notification, i18n, s => s.Client.Search);
+  constructor(authService: AuthenticationService,
+              navigation: NavigationService,
+              settingsService: SearchSettingsService,
+              notification: NotificationService) {
+    super($localize`Search`, authService, navigation, settingsService, notification, s => s.Client.Search);
   }
 
 

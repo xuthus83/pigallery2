@@ -1,5 +1,4 @@
 import {Component, forwardRef, Input, OnChanges} from '@angular/core';
-import {I18n} from '@ngx-translate/i18n-polyfill';
 import {ControlValueAccessor, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator} from '@angular/forms';
 import {Utils} from '../../../../../../common/Utils';
 import {propertyTypes} from 'typeconfig/common';
@@ -52,7 +51,7 @@ export class SettingsEntryComponent implements ControlValueAccessor, Validator, 
 
   // value: { default: any, setting: any, original: any, readonly?: boolean, onChange: () => void };
 
-  constructor(private i18n: I18n) {
+  constructor() {
   }
 
   get changed(): boolean {
@@ -128,9 +127,9 @@ export class SettingsEntryComponent implements ControlValueAccessor, Validator, 
     }
     this.title = '';
     if (this.state.readonly) {
-      this.title = this.i18n('readonly') + ', ';
+      this.title = $localize`readonly` + ', ';
     }
-    this.title += this.i18n('default value') + ': ' + this.defaultStr;
+    this.title += $localize`default value` + ': ' + this.defaultStr;
     if (this.name) {
       this.idName = this.GUID + this.name.toLowerCase().replace(new RegExp(' ', 'gm'), '-');
     }

@@ -2101,7 +2101,7 @@
         </context-group>
         <target>Entrar</target>
       </trans-unit>
-      <trans-unit id="0c21667e83715139c6d1159ca0be23f7ca6678d7" datatype="html">
+      <trans-unit id="5732878542640870310" datatype="html">
         <source>Size to generate</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/model/backendtext.service.ts</context>
@@ -2109,7 +2109,7 @@
         </context-group>
         <target>Tamaño a generar</target>
       </trans-unit>
-      <trans-unit id="77c38520db0a8b490b83f0ad6c5fa66111025921" datatype="html">
+      <trans-unit id="8013041896880554958" datatype="html">
         <source>These thumbnails will be generated. The list should be a subset of the enabled thumbnail sizes</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/model/backendtext.service.ts</context>
@@ -2117,7 +2117,7 @@
         </context-group>
         <target>Estas miniaturas serán generadas. La lista debe ser un subconjunto de los tamaños de miniaturas habilitados</target>
       </trans-unit>
-      <trans-unit id="3c51560499be2189db6fa9734ff94fb6da24059c" datatype="html">
+      <trans-unit id="3188623303493603851" datatype="html">
         <source>Indexed only</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/model/backendtext.service.ts</context>
@@ -2125,7 +2125,7 @@
         </context-group>
         <target>Sólo indexados</target>
       </trans-unit>
-      <trans-unit id="264cbf385990b302b714fbca47f145b265736f67" datatype="html">
+      <trans-unit id="613209736940517083" datatype="html">
         <source>Only checks indexed files.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/model/backendtext.service.ts</context>
@@ -2133,7 +2133,7 @@
         </context-group>
         <target>Sólo comprueba los archivos indexados.</target>
       </trans-unit>
-      <trans-unit id="f53ab04e9d8449445abf482bf44b521e2e695c3c" datatype="html">
+      <trans-unit id="4973087105311508591" datatype="html">
         <source>Indexing</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/model/backendtext.service.ts</context>
@@ -2141,7 +2141,7 @@
         </context-group>
         <target>Indexación</target>
       </trans-unit>
-      <trans-unit id="d114a5b2955a3a63dcc4da1c4ae023de4649ad54" datatype="html">
+      <trans-unit id="1450675569154063839" datatype="html">
         <source>Database Reset</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/model/backendtext.service.ts</context>
@@ -2149,7 +2149,7 @@
         </context-group>
         <target>Restablecimiento de la base de datos</target>
       </trans-unit>
-      <trans-unit id="220985eaaac727d93c4962c4c2becbd5ca9ebdd2" datatype="html">
+      <trans-unit id="992332743525399881" datatype="html">
         <source>Thumbnail Generation</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/model/backendtext.service.ts</context>
@@ -2157,7 +2157,7 @@
         </context-group>
         <target>Generación de miniaturas</target>
       </trans-unit>
-      <trans-unit id="dfc03812da82b0b9efe42c1137108d3e8f137434" datatype="html">
+      <trans-unit id="3065040946301318733" datatype="html">
         <source>Photo Converting</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/model/backendtext.service.ts</context>
@@ -2165,7 +2165,7 @@
         </context-group>
         <target>Conversión de fotos</target>
       </trans-unit>
-      <trans-unit id="b8be653cc5ec0ed93fc294025a5a5ad5556e1d81" datatype="html">
+      <trans-unit id="5318730037252758397" datatype="html">
         <source>Video Converting</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/model/backendtext.service.ts</context>
@@ -2173,7 +2173,7 @@
         </context-group>
         <target>Conversión de vídeos</target>
       </trans-unit>
-      <trans-unit id="7366222f311f8b246b34c328ea08dfcd91ac831f" datatype="html">
+      <trans-unit id="1549098823304357760" datatype="html">
         <source>Temp Folder Cleaning</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/model/backendtext.service.ts</context>
@@ -2181,7 +2181,7 @@
         </context-group>
         <target>Limpieza de la carpeta temporal</target>
       </trans-unit>
-      <trans-unit id="85b9773b9a3caeb9f0fd69b2b8fa7284bda6b492" datatype="html">
+      <trans-unit id="1677142486230902467" datatype="html">
         <source>Server error</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/model/notification.service.ts</context>
@@ -2193,7 +2193,7 @@
         </context-group>
         <target>Error del servidor</target>
       </trans-unit>
-      <trans-unit id="f8e38165d83447ee7596b6d2986e16abe7bb42a6" datatype="html">
+      <trans-unit id="2642163697922706049" datatype="html">
         <source>Server info</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/model/notification.service.ts</context>
@@ -2201,7 +2201,7 @@
         </context-group>
         <target>Información del servidor</target>
       </trans-unit>
-      <trans-unit id="69f5c8276a390f22d64236a3d4849b1f2c308ef1" datatype="html">
+      <trans-unit id="8398233202919865612" datatype="html">
         <source>h</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/pipes/DurationPipe.ts</context>
@@ -2210,7 +2210,7 @@
         <note priority="1" from="meaning">hour</note>
         <target>h</target>
       </trans-unit>
-      <trans-unit id="7001154a37e238b0800a22a3629b60128690515c" datatype="html">
+      <trans-unit id="8033953731717586115" datatype="html">
         <source>m</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/pipes/DurationPipe.ts</context>
@@ -2219,7 +2219,7 @@
         <note priority="1" from="meaning">minute</note>
         <target>m</target>
       </trans-unit>
-      <trans-unit id="75ecedd96576b01de81bf0c5f515b658d3c94091" datatype="html">
+      <trans-unit id="2155832126259145609" datatype="html">
         <source>s</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/pipes/DurationPipe.ts</context>
@@ -2228,7 +2228,7 @@
         <note priority="1" from="meaning">second</note>
         <target>s</target>
       </trans-unit>
-      <trans-unit id="2ce162878bbc73bd49c7a3b51d6db6a10da4f21f" datatype="html">
+      <trans-unit id="8214150102443660196" datatype="html">
         <source>ascending name</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/pipes/StringifySortingMethod.ts</context>
@@ -2236,7 +2236,7 @@
         </context-group>
         <target>nombre ascendente</target>
       </trans-unit>
-      <trans-unit id="5f6c10fa70a64acf16325e813e3cd6485df01b7c" datatype="html">
+      <trans-unit id="3980925891294984568" datatype="html">
         <source>descending name</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/pipes/StringifySortingMethod.ts</context>
@@ -2244,7 +2244,7 @@
         </context-group>
         <target>nombre descendente</target>
       </trans-unit>
-      <trans-unit id="33cbb9be635d087d7ec1a4827bdc938ee785bb96" datatype="html">
+      <trans-unit id="6855905689297288578" datatype="html">
         <source>ascending date</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/pipes/StringifySortingMethod.ts</context>
@@ -2252,7 +2252,7 @@
         </context-group>
         <target>fecha ascendente</target>
       </trans-unit>
-      <trans-unit id="de879950dc2e77b3d8e9b4efe9d6c0051fba37d4" datatype="html">
+      <trans-unit id="3789846122694325400" datatype="html">
         <source>descending date</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/pipes/StringifySortingMethod.ts</context>
@@ -2260,7 +2260,7 @@
         </context-group>
         <target>fecha descendente</target>
       </trans-unit>
-      <trans-unit id="63b8a172f11bb90da8fbca54f34f2c71a205225b" datatype="html">
+      <trans-unit id="8893285757291009420" datatype="html">
         <source>random</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/pipes/StringifySortingMethod.ts</context>
@@ -2268,7 +2268,7 @@
         </context-group>
         <target>aleatorio</target>
       </trans-unit>
-      <trans-unit id="b73f7f5060fb22a1e9ec462b1bb02493fa3ab866" datatype="html">
+      <trans-unit id="414887388288176527" datatype="html">
         <source>Images</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/gallery/navigator/navigator.gallery.component.ts</context>
@@ -2276,7 +2276,7 @@
         </context-group>
         <target>Imágenes</target>
       </trans-unit>
-      <trans-unit id="867c1b6839b592cec2156dd0b8a0009fe1557bfa" datatype="html">
+      <trans-unit id="8681331350836567926" datatype="html">
         <source>Url has been copied to clipboard</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/gallery/random-query-builder/random-query-builder.gallery.component.ts</context>
@@ -2288,7 +2288,7 @@
         </context-group>
         <target>La URL ha sido copiada en el portapapeles</target>
       </trans-unit>
-      <trans-unit id="4f20f2d5a6882190892e58b85f6ccbedfa737952" datatype="html">
+      <trans-unit id="2807800733729323332" datatype="html">
         <source>Yes</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/gallery/share/share.gallery.component.ts</context>
@@ -2296,7 +2296,7 @@
         </context-group>
         <target>Sí</target>
       </trans-unit>
-      <trans-unit id="3d3ae7deebc5949b0c1c78b9847886a94321d9fd" datatype="html">
+      <trans-unit id="3542042671420335679" datatype="html">
         <source>No</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/gallery/share/share.gallery.component.ts</context>
@@ -2304,7 +2304,7 @@
         </context-group>
         <target>No</target>
       </trans-unit>
-      <trans-unit id="381b3a21fe4e53a0ca52dbc6e07073c172489230" datatype="html">
+      <trans-unit id="765974048716015903" datatype="html">
         <source>loading..</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/gallery/share/share.gallery.component.ts</context>
@@ -2316,7 +2316,7 @@
         </context-group>
         <target>cargando...</target>
       </trans-unit>
-      <trans-unit id="04e4b67fdc5f633a81e0ab32c1751ab20e6e3034" datatype="html">
+      <trans-unit id="1353646366342026793" datatype="html">
         <source>settings saved</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/_abstract/abstract.settings.component.ts</context>
@@ -2324,7 +2324,7 @@
         </context-group>
         <target>ajustes guardados</target>
       </trans-unit>
-      <trans-unit id="1e035e6ccfab771cad4226b2ad230cb0d4a88cba" datatype="html">
+      <trans-unit id="4648900870671159218" datatype="html">
         <source>Success</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/_abstract/abstract.settings.component.ts</context>
@@ -2340,7 +2340,7 @@
         </context-group>
         <target>Éxito</target>
       </trans-unit>
-      <trans-unit id="4f959d275f8dfeefa0a647587cff1ecb483be588" datatype="html">
+      <trans-unit id="3279583516959443817" datatype="html">
         <source>readonly</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/_abstract/settings-entry/settings-entry.component.ts</context>
@@ -2348,7 +2348,7 @@
         </context-group>
         <target>sólo lectura</target>
       </trans-unit>
-      <trans-unit id="ada3ed98fe7952aac6cd3e2831d4cf3aac20ce0a" datatype="html">
+      <trans-unit id="2331083694651605942" datatype="html">
         <source>default value</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/_abstract/settings-entry/settings-entry.component.ts</context>
@@ -2356,7 +2356,7 @@
         </context-group>
         <target>valor por defecto</target>
       </trans-unit>
-      <trans-unit id="380ab580741bec31346978e7cab8062d6970408d" datatype="html">
+      <trans-unit id="8643289769990675407" datatype="html">
         <source>Basic</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/basic/basic.settings.component.ts</context>
@@ -2364,7 +2364,7 @@
         </context-group>
         <target>Básico</target>
       </trans-unit>
-      <trans-unit id="6244017173fe88802248f410e78f2e637f98f634" datatype="html">
+      <trans-unit id="7522636860183719635" datatype="html">
         <source>Restart the server to apply the new settings</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/basic/basic.settings.component.ts</context>
@@ -2376,23 +2376,7 @@
         </context-group>
         <target>Reinicie el servidor para aplicar la nueva configuración</target>
       </trans-unit>
-      <trans-unit id="fb324ec7da611c6283caa6fc6257c39a56d6aaf7" datatype="html">
-        <source>Database</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/frontend/app/ui/settings/database/database.settings.component.ts</context>
-          <context context-type="linenumber">1</context>
-        </context-group>
-        <target>Base de datos</target>
-      </trans-unit>
-      <trans-unit id="f3476208ece51779488bbf9e267d58e1fa8b6d23" datatype="html">
-        <source>Faces</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/frontend/app/ui/settings/faces/faces.settings.component.ts</context>
-          <context context-type="linenumber">1</context>
-        </context-group>
-        <target>Caras</target>
-      </trans-unit>
-      <trans-unit id="87b1696eb068572c3908643c425ee3090938c1a0" datatype="html">
+      <trans-unit id="4727311471133444690" datatype="html">
         <source>Folder indexing</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/indexing/indexing.settings.component.ts</context>
@@ -2400,7 +2384,7 @@
         </context-group>
         <target>Indexación de carpetas</target>
       </trans-unit>
-      <trans-unit id="03b2c27d0f1dd0ebdf6eb756bd43914d5127ca8a" datatype="html">
+      <trans-unit id="7897565236366850950" datatype="html">
         <source>low</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/indexing/indexing.settings.component.ts</context>
@@ -2408,7 +2392,7 @@
         </context-group>
         <target>bajo</target>
       </trans-unit>
-      <trans-unit id="c611dbfd81ae6fd4d7e5332f85ee78f9740fe000" datatype="html">
+      <trans-unit id="4688460977394283086" datatype="html">
         <source>medium</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/indexing/indexing.settings.component.ts</context>
@@ -2416,7 +2400,7 @@
         </context-group>
         <target>medio</target>
       </trans-unit>
-      <trans-unit id="fef2f6e70c3eaa2f29dbec8069e13bca1b75b222" datatype="html">
+      <trans-unit id="2602838849414645735" datatype="html">
         <source>high</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/indexing/indexing.settings.component.ts</context>
@@ -2424,7 +2408,7 @@
         </context-group>
         <target>alto</target>
       </trans-unit>
-      <trans-unit id="44876e25a81487f655dff4340f89b1b259b19587" datatype="html">
+      <trans-unit id="8600969352447706682" datatype="html">
         <source>Folder indexing started</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/indexing/indexing.settings.component.ts</context>
@@ -2432,7 +2416,7 @@
         </context-group>
         <target>Indexación de carpetas iniciada</target>
       </trans-unit>
-      <trans-unit id="c5a3929b71a7b8090a763cc3434f8756184effdc" datatype="html">
+      <trans-unit id="7752045260127147962" datatype="html">
         <source>Folder indexing interrupted</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/indexing/indexing.settings.component.ts</context>
@@ -2440,7 +2424,7 @@
         </context-group>
         <target>Indexación de carpetas interrumpida</target>
       </trans-unit>
-      <trans-unit id="3a894c33925f9b669fa1f2732e45ae32cc815ee8" datatype="html">
+      <trans-unit id="7112590034883471455" datatype="html">
         <source>Resetting  database</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/indexing/indexing.settings.component.ts</context>
@@ -2448,7 +2432,7 @@
         </context-group>
         <target>Restableciendo la base de datos</target>
       </trans-unit>
-      <trans-unit id="7df922c2d1346ede267a63efed399f489c0c9907" datatype="html">
+      <trans-unit id="3030272344799552884" datatype="html">
         <source>Job started</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/jobs/button/job-button.settings.component.ts</context>
@@ -2456,7 +2440,7 @@
         </context-group>
         <target>Trabajo iniciado</target>
       </trans-unit>
-      <trans-unit id="b8d05f3701688493a899c9c05d588e8c6b2909ef" datatype="html">
+      <trans-unit id="2836205394227530190" datatype="html">
         <source>Stopping job</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/jobs/button/job-button.settings.component.ts</context>
@@ -2464,7 +2448,7 @@
         </context-group>
         <target>Parando el trabajo</target>
       </trans-unit>
-      <trans-unit id="43f1cc191ebc0b8ce89f6916aa634f5a57158798" datatype="html">
+      <trans-unit id="3229595422546554334" datatype="html">
         <source>Jobs</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/jobs/jobs.settings.component.ts</context>
@@ -2472,23 +2456,7 @@
         </context-group>
         <target>Trabajos</target>
       </trans-unit>
-      <trans-unit id="ca420aebba5bdcb97c2704532fd6cb675599628c" datatype="html">
-        <source>after</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/frontend/app/ui/settings/jobs/jobs.settings.component.ts</context>
-          <context context-type="linenumber">1</context>
-        </context-group>
-        <target>después de</target>
-      </trans-unit>
-      <trans-unit id="e113e3450a367a1dff703fc5e0403a497ca73a7c" datatype="html">
-        <source>never</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/frontend/app/ui/settings/jobs/jobs.settings.component.ts</context>
-          <context context-type="linenumber">1</context>
-        </context-group>
-        <target>nunca</target>
-      </trans-unit>
-      <trans-unit id="dbccf2ff21e41ba9f760ef7ccb18caa7ca9a7d37" datatype="html">
+      <trans-unit id="1461196514655349848" datatype="html">
         <source>periodic</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/jobs/jobs.settings.component.ts</context>
@@ -2496,7 +2464,7 @@
         </context-group>
         <target>periódico</target>
       </trans-unit>
-      <trans-unit id="543935afc44141d45216131ada149945aa784b27" datatype="html">
+      <trans-unit id="151283875747851076" datatype="html">
         <source>scheduled</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/jobs/jobs.settings.component.ts</context>
@@ -2504,7 +2472,7 @@
         </context-group>
         <target>programado</target>
       </trans-unit>
-      <trans-unit id="a43c57a7cbebf57eb33a2eae5e994c91d9887596" datatype="html">
+      <trans-unit id="8739442281958563044" datatype="html">
         <source>Monday</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/jobs/jobs.settings.component.ts</context>
@@ -2512,7 +2480,7 @@
         </context-group>
         <target>Lunes</target>
       </trans-unit>
-      <trans-unit id="48a2a35957ce394eb2c59ae35c99642360af70ee" datatype="html">
+      <trans-unit id="9176037901730521018" datatype="html">
         <source>Tuesday</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/jobs/jobs.settings.component.ts</context>
@@ -2520,7 +2488,7 @@
         </context-group>
         <target>Martes</target>
       </trans-unit>
-      <trans-unit id="b0af441f9ba8b82952b9ec10fb8c62e8fec67df9" datatype="html">
+      <trans-unit id="8798932904948432529" datatype="html">
         <source>Wednesday</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/jobs/jobs.settings.component.ts</context>
@@ -2528,7 +2496,7 @@
         </context-group>
         <target>Miércoles</target>
       </trans-unit>
-      <trans-unit id="55c583b99c809818ec27df065ccf05357a6ac10b" datatype="html">
+      <trans-unit id="1433683192825895947" datatype="html">
         <source>Thursday</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/jobs/jobs.settings.component.ts</context>
@@ -2536,7 +2504,7 @@
         </context-group>
         <target>Jueves</target>
       </trans-unit>
-      <trans-unit id="e91b54925dc5f490753f60f53ef6f8b4609e6215" datatype="html">
+      <trans-unit id="3730139500618908668" datatype="html">
         <source>Friday</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/jobs/jobs.settings.component.ts</context>
@@ -2544,7 +2512,7 @@
         </context-group>
         <target>Viernes</target>
       </trans-unit>
-      <trans-unit id="c0d2dd391a3eca8e841a5d0e035cd268280eb68e" datatype="html">
+      <trans-unit id="1830554030016307335" datatype="html">
         <source>Saturday</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/jobs/jobs.settings.component.ts</context>
@@ -2552,7 +2520,7 @@
         </context-group>
         <target>Sábado</target>
       </trans-unit>
-      <trans-unit id="8339364b054610983b7f2334bb807fff7613bddf" datatype="html">
+      <trans-unit id="6950140976689343775" datatype="html">
         <source>Sunday</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/jobs/jobs.settings.component.ts</context>
@@ -2560,7 +2528,7 @@
         </context-group>
         <target>Domingo</target>
       </trans-unit>
-      <trans-unit id="f64c76c7c7c71baddef3dc6a93e4394b8fdb69f4" datatype="html">
+      <trans-unit id="6320319413541466015" datatype="html">
         <source>day</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/jobs/jobs.settings.component.ts</context>
@@ -2568,7 +2536,7 @@
         </context-group>
         <target>día</target>
       </trans-unit>
-      <trans-unit id="a5c310bc3e11a0c0b40aef2e12659cb513ba8a1d" datatype="html">
+      <trans-unit id="6816983613862053954" datatype="html">
         <source>processed</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/jobs/progress/job-progress.settings.component.ts</context>
@@ -2576,7 +2544,7 @@
         </context-group>
         <target>procesados</target>
       </trans-unit>
-      <trans-unit id="86ea578044c75ec61a041835d0d6d8a2c668e145" datatype="html">
+      <trans-unit id="2136984849049323349" datatype="html">
         <source>skipped</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/jobs/progress/job-progress.settings.component.ts</context>
@@ -2584,7 +2552,7 @@
         </context-group>
         <target>omitidos</target>
       </trans-unit>
-      <trans-unit id="8754c2dbc855d18ee90ffff136caedfd64f71e83" datatype="html">
+      <trans-unit id="7126464771610287155" datatype="html">
         <source>all</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/jobs/progress/job-progress.settings.component.ts</context>
@@ -2592,7 +2560,7 @@
         </context-group>
         <target>todos</target>
       </trans-unit>
-      <trans-unit id="09fe06e2448282e6e0301f8127d7205e4ec4cc3b" datatype="html">
+      <trans-unit id="4000123028861070708" datatype="html">
         <source>running</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/jobs/progress/job-progress.settings.component.ts</context>
@@ -2600,7 +2568,7 @@
         </context-group>
         <target>ejecutándose</target>
       </trans-unit>
-      <trans-unit id="d18e7f06f6326d16b5fa80d3dcb70fa4fcd0fff2" datatype="html">
+      <trans-unit id="2919141718048459530" datatype="html">
         <source>cancelling</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/jobs/progress/job-progress.settings.component.ts</context>
@@ -2608,7 +2576,7 @@
         </context-group>
         <target>cancelando</target>
       </trans-unit>
-      <trans-unit id="c0cde1cacf3dd26d2893c874cee668ee43da44f7" datatype="html">
+      <trans-unit id="5955314125015446309" datatype="html">
         <source>canceled</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/jobs/progress/job-progress.settings.component.ts</context>
@@ -2616,7 +2584,7 @@
         </context-group>
         <target>cancelado</target>
       </trans-unit>
-      <trans-unit id="bf8b2649755a28c54ff73ce872ebae185671291d" datatype="html">
+      <trans-unit id="8013973649266860157" datatype="html">
         <source>interrupted</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/jobs/progress/job-progress.settings.component.ts</context>
@@ -2624,7 +2592,7 @@
         </context-group>
         <target>interrumpido</target>
       </trans-unit>
-      <trans-unit id="6ec09b0ca4ffa1903dfecc23a43148043887f21f" datatype="html">
+      <trans-unit id="2059708434886905909" datatype="html">
         <source>finished</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/jobs/progress/job-progress.settings.component.ts</context>
@@ -2632,7 +2600,7 @@
         </context-group>
         <target>finalizado</target>
       </trans-unit>
-      <trans-unit id="d2a2915d79ff31439a174fc3a147004542291e29" datatype="html">
+      <trans-unit id="5813867925497374051" datatype="html">
         <source>Map</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/map/map.settings.component.ts</context>
@@ -2640,7 +2608,7 @@
         </context-group>
         <target>Mapa</target>
       </trans-unit>
-      <trans-unit id="3610ff97c9b9af9a23aa02a1a05d561c8fa03f42" datatype="html">
+      <trans-unit id="5007962937899031099" datatype="html">
         <source>Meta file</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/metafiles/metafile.settings.component.ts</context>
@@ -2648,7 +2616,7 @@
         </context-group>
         <target>Archivo Meta</target>
       </trans-unit>
-      <trans-unit id="c2a9de3714f5767b174d0424bc8abe2dc37acc41" datatype="html">
+      <trans-unit id="8693603235657020323" datatype="html">
         <source>Other</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/other/other.settings.component.ts</context>
@@ -2656,15 +2624,7 @@
         </context-group>
         <target>Otros</target>
       </trans-unit>
-      <trans-unit id="321e4419a943044e674beb55b8039f42a9761ca5" datatype="html">
-        <source>Info</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/frontend/app/ui/settings/other/other.settings.component.ts</context>
-          <context context-type="linenumber">1</context>
-        </context-group>
-        <target>Información</target>
-      </trans-unit>
-      <trans-unit id="a4179dfcd78cace8b98cdeb5a74ef60ea2360163" datatype="html">
+      <trans-unit id="5750485945694679561" datatype="html">
         <source>Photo</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/photo/photo.settings.component.ts</context>
@@ -2672,7 +2632,7 @@
         </context-group>
         <target>Foto</target>
       </trans-unit>
-      <trans-unit id="ed3fc8103cfe2c6b999115b6d5dcbe7a2528a477" datatype="html">
+      <trans-unit id="943622778225300320" datatype="html">
         <source>(recommended)</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/photo/photo.settings.component.ts</context>
@@ -2680,7 +2640,7 @@
         </context-group>
         <target>(recomendado)</target>
       </trans-unit>
-      <trans-unit id="37e17739aa72ee0616a2f908ae66092778f3d626" datatype="html">
+      <trans-unit id="3565724666233872817" datatype="html">
         <source>(deprecated, will be removed)</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/photo/photo.settings.component.ts</context>
@@ -2688,7 +2648,7 @@
         </context-group>
         <target>(obsoleto, será eliminado)</target>
       </trans-unit>
-      <trans-unit id="59b428a89fc1e287f2fb60806ed5f0588cb9c270" datatype="html">
+      <trans-unit id="6185382492926150685" datatype="html">
         <source>Random Photo</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/random-photo/random-photo.settings.component.ts</context>
@@ -2696,7 +2656,7 @@
         </context-group>
         <target>Foto aleatoria</target>
       </trans-unit>
-      <trans-unit id="bf5ce15a43de0abbce2193b3061a208eb35f7195" datatype="html">
+      <trans-unit id="7393380261620707212" datatype="html">
         <source>Job finished</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/scheduled-jobs.service.ts</context>
@@ -2704,23 +2664,7 @@
         </context-group>
         <target>Trabajo finalizado</target>
       </trans-unit>
-      <trans-unit id="7e892ba15f2c6c17e83510e273b3e10fc32ea016" datatype="html">
-        <source>Search</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/frontend/app/ui/settings/search/search.settings.component.ts</context>
-          <context context-type="linenumber">1</context>
-        </context-group>
-        <target>Buscar</target>
-      </trans-unit>
-      <trans-unit id="0bd8b27f60a1f098a53e06328426d818e3508ff9" datatype="html">
-        <source>Share</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/frontend/app/ui/settings/share/share.settings.component.ts</context>
-          <context context-type="linenumber">1</context>
-        </context-group>
-        <target>Compartir</target>
-      </trans-unit>
-      <trans-unit id="45dda89cf029b7d7b457a8dff01dc4b9a6485816" datatype="html">
+      <trans-unit id="3434410278501759813" datatype="html">
         <source>Thumbnail</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/thumbnail/thumbnail.settings.component.ts</context>
@@ -2728,7 +2672,7 @@
         </context-group>
         <target>Miniatura</target>
       </trans-unit>
-      <trans-unit id="427589505741d1da181b756815701e756184cb8d" datatype="html">
+      <trans-unit id="7321299026311900359" datatype="html">
         <source>Password protection</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/usermanager/usermanager.settings.component.ts</context>
@@ -2736,23 +2680,7 @@
         </context-group>
         <target>Protección con contraseña</target>
       </trans-unit>
-      <trans-unit id="f50a33d3c339f8f4a465141f8caa5d2d8c005251" datatype="html">
-        <source>Enabled</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/frontend/app/ui/settings/usermanager/usermanager.settings.component.ts</context>
-          <context context-type="linenumber">1</context>
-        </context-group>
-        <target>Habilitar</target>
-      </trans-unit>
-      <trans-unit id="f39256070bfc0714020dfee08895421fc1527014" datatype="html">
-        <source>Disabled</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/frontend/app/ui/settings/usermanager/usermanager.settings.component.ts</context>
-          <context context-type="linenumber">1</context>
-        </context-group>
-        <target>Deshabilitar</target>
-      </trans-unit>
-      <trans-unit id="9556266f0a2b1762a44b686f2bb21dbfefb01c12" datatype="html">
+      <trans-unit id="802458941707537739" datatype="html">
         <source>Low</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/usermanager/usermanager.settings.component.ts</context>
@@ -2760,7 +2688,7 @@
         </context-group>
         <target>Bajo</target>
       </trans-unit>
-      <trans-unit id="72279141a67cc042d9864102b703216cc8a428a3" datatype="html">
+      <trans-unit id="8063651736083474594" datatype="html">
         <source>High</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/usermanager/usermanager.settings.component.ts</context>
@@ -2768,7 +2696,7 @@
         </context-group>
         <target>Alto</target>
       </trans-unit>
-      <trans-unit id="0028f40243cb1360bc3d7cb9d4512219bcbd428f" datatype="html">
+      <trans-unit id="3045212756852862690" datatype="html">
         <source>Password protection enabled</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/usermanager/usermanager.settings.component.ts</context>
@@ -2776,7 +2704,7 @@
         </context-group>
         <target>Protección por contraseña habilitada</target>
       </trans-unit>
-      <trans-unit id="c76b3ba44c5b7ab363729f81f763b29ef5d7a641" datatype="html">
+      <trans-unit id="6686475463493886772" datatype="html">
         <source>Server restart is recommended.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/usermanager/usermanager.settings.component.ts</context>
@@ -2784,7 +2712,7 @@
         </context-group>
         <target>Se recomienda reiniciar el servidor.</target>
       </trans-unit>
-      <trans-unit id="00de5dcd17a5ebd17e67e0688bc638e01bc510a4" datatype="html">
+      <trans-unit id="573767317440649405" datatype="html">
         <source>Password protection disabled</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/usermanager/usermanager.settings.component.ts</context>
@@ -2792,13 +2720,17 @@
         </context-group>
         <target>Protección por contraseña deshabilitada</target>
       </trans-unit>
-      <trans-unit id="2d1ea268a6a9f483dbc2cbfe19bf4256a57a6af4" datatype="html">
+      <trans-unit id="6549265851868599441" datatype="html">
         <source>Video</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/video/video.settings.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
         <target>Vídeo</target>
+      </trans-unit>
+      <trans-unit id="1821735653273245237" datatype="html">
+        <source>User creation error!</source>
+        <target>User creation error!</target>
       </trans-unit>
     </body>
   </file>

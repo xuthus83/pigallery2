@@ -4,7 +4,6 @@ import {SettingsComponentDirective} from '../_abstract/abstract.settings.compone
 import {AuthenticationService} from '../../../model/network/authentication.service';
 import {NavigationService} from '../../../model/navigation.service';
 import {NotificationService} from '../../../model/notification.service';
-import {I18n} from '@ngx-translate/i18n-polyfill';
 import {ClientConfig} from '../../../../../common/config/public/ClientConfig';
 
 
@@ -17,12 +16,11 @@ import {ClientConfig} from '../../../../../common/config/public/ClientConfig';
 })
 export class MetaFileSettingsComponent extends SettingsComponentDirective<ClientConfig.MetaFileConfig> {
 
-  constructor(_authService: AuthenticationService,
-              _navigation: NavigationService,
-              _settingsService: MetaFileSettingsService,
-              notification: NotificationService,
-              i18n: I18n) {
-    super(i18n('Meta file'), _authService, _navigation, _settingsService, notification, i18n, s => s.Client.MetaFile);
+  constructor(authService: AuthenticationService,
+              navigation: NavigationService,
+              settingsService: MetaFileSettingsService,
+              notification: NotificationService) {
+    super($localize`Meta file`, authService, navigation, settingsService, notification, s => s.Client.MetaFile);
   }
 
 

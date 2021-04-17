@@ -6,10 +6,9 @@ import {NotificationService} from '../../../model/notification.service';
 import {ErrorDTO} from '../../../../../common/entities/Error';
 import {SettingsComponentDirective} from '../_abstract/abstract.settings.component';
 import {Utils} from '../../../../../common/Utils';
-import {I18n} from '@ngx-translate/i18n-polyfill';
 import {ScheduledJobsService} from '../scheduled-jobs.service';
 import {DefaultsJobs, JobDTO} from '../../../../../common/entities/job/JobDTO';
-import {JobProgressStates} from '../../../../../common/entities/job/JobProgressDTO';
+import {JobProgressDTO, JobProgressStates} from '../../../../../common/entities/job/JobProgressDTO';
 import {ServerConfig} from '../../../../../common/config/private/PrivateConfig';
 
 @Component({
@@ -28,34 +27,32 @@ export class IndexingSettingsComponent extends SettingsComponentDirective<Server
   readonly indexingJobName = DefaultsJobs[DefaultsJobs.Indexing];
   readonly resetJobName = DefaultsJobs[DefaultsJobs['Database Reset']];
 
-  constructor(_authService: AuthenticationService,
-              _navigation: NavigationService,
-              _settingsService: IndexingSettingsService,
+  constructor(authService: AuthenticationService,
+              navigation: NavigationService,
+              settingsService: IndexingSettingsService,
               public jobsService: ScheduledJobsService,
-              notification: NotificationService,
-              i18n: I18n) {
+              notification: NotificationService) {
 
-    super(i18n('Folder indexing'),
-      _authService,
-      _navigation,
-      _settingsService,
+    super($localize`Folder indexing`,
+      authService,
+      navigation,
+      settingsService,
       notification,
-      i18n,
       s => s.Server.Indexing);
 
   }
 
-  get Progress() {
+  get Progress(): JobProgressDTO {
     return this.jobsService.progress.value[JobDTO.getHashName(DefaultsJobs[DefaultsJobs.Indexing])];
   }
 
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     super.ngOnDestroy();
     this.jobsService.unsubscribeFromProgress();
   }
 
-  async ngOnInit() {
+  async ngOnInit(): Promise<void> {
     super.ngOnInit();
     this.jobsService.subscribeToProgress();
     this.types = Utils
@@ -63,31 +60,31 @@ export class IndexingSettingsComponent extends SettingsComponentDirective<Server
     this.types.forEach(v => {
       switch (v.value) {
         case 'low':
-          v.value = this.i18n('low');
+          v.value = $localize`low`;
           break;
         case 'medium':
-          v.value = this.i18n('medium');
+          v.value = $localize`medium`;
           break;
         case 'high':
-          v.value = this.i18n('high');
+          v.value = $localize`high`;
           break;
       }
     });
   }
 
 
-  async index() {
+  async index(): Promise<boolean> {
     this.inProgress = true;
     this.error = '';
     try {
       await this.jobsService.start(DefaultsJobs[DefaultsJobs.Indexing]);
-      this.notification.info(this.i18n('Folder indexing started'));
+      this.notification.info($localize`Folder indexing started`);
       this.inProgress = false;
       return true;
     } catch (err) {
       console.log(err);
       if (err.message) {
-        this.error = (<ErrorDTO>err).message;
+        this.error = (err as ErrorDTO).message;
       }
     }
 
@@ -95,18 +92,18 @@ export class IndexingSettingsComponent extends SettingsComponentDirective<Server
     return false;
   }
 
-  async cancelIndexing() {
+  async cancelIndexing(): Promise<boolean> {
     this.inProgress = true;
     this.error = '';
     try {
       await this.jobsService.stop(DefaultsJobs[DefaultsJobs.Indexing]);
-      this.notification.info(this.i18n('Folder indexing interrupted'));
+      this.notification.info($localize`Folder indexing interrupted`);
       this.inProgress = false;
       return true;
     } catch (err) {
       console.log(err);
       if (err.message) {
-        this.error = (<ErrorDTO>err).message;
+        this.error = (err as ErrorDTO).message;
       }
     }
 
@@ -114,18 +111,18 @@ export class IndexingSettingsComponent extends SettingsComponentDirective<Server
     return false;
   }
 
-  async resetDatabase() {
+  async resetDatabase(): Promise<boolean> {
     this.inProgress = true;
     this.error = '';
     try {
       await this.jobsService.start(DefaultsJobs[DefaultsJobs['Database Reset']]);
-      this.notification.info(this.i18n('Resetting  database'));
+      this.notification.info($localize`Resetting  database`);
       this.inProgress = false;
       return true;
     } catch (err) {
       console.log(err);
       if (err.message) {
-        this.error = (<ErrorDTO>err).message;
+        this.error = (err as ErrorDTO).message;
       }
     }
 

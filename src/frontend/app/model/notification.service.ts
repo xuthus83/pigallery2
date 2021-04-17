@@ -4,7 +4,6 @@ import {NetworkService} from './network/network.service';
 import {AuthenticationService} from './network/authentication.service';
 import {NotificationDTO, NotificationType} from '../../../common/entities/NotificationDTO';
 import {UserDTO, UserRoles} from '../../../common/entities/UserDTO';
-import {I18n} from '@ngx-translate/i18n-polyfill';
 
 export interface CountedNotificationDTO extends NotificationDTO {
   count: number;
@@ -21,27 +20,26 @@ export class NotificationService {
   numberOfNotifications = 0;
   lastUser: UserDTO = null;
 
-  constructor(private _toastr: ToastrService,
-              private _networkService: NetworkService,
-              private _authService: AuthenticationService,
-              public i18n: I18n) {
+  constructor(private toastr: ToastrService,
+              private networkService: NetworkService,
+              private authService: AuthenticationService) {
 
-    this._authService.user.subscribe(() => {
-      if (this._authService.isAuthenticated() &&
+    this.authService.user.subscribe(() => {
+      if (this.authService.isAuthenticated() &&
         (!this.lastUser ||
-          this.lastUser.id !== this._authService.user.value.id) &&
-        this._authService.user.value.role >= UserRoles.Guest) {
+          this.lastUser.id !== this.authService.user.value.id) &&
+        this.authService.user.value.role >= UserRoles.Guest) {
         this.getServerNotifications();
       }
-      this.lastUser = this._authService.user.value;
+      this.lastUser = this.authService.user.value;
     });
   }
 
   get Toastr(): ToastrService {
-    return this._toastr;
+    return this.toastr;
   }
 
-  groupNotifications(notifications: NotificationDTO[]) {
+  groupNotifications(notifications: NotificationDTO[]): void {
     const groups: { [key: string]: { notification: NotificationDTO, count: number } } = {};
     notifications.forEach(n => {
       let key = n.message;
@@ -60,9 +58,9 @@ export class NotificationService {
 
   }
 
-  async getServerNotifications() {
+  async getServerNotifications(): Promise<void> {
     try {
-      this.groupNotifications((await this._networkService.getJson<NotificationDTO[]>('/notifications')) || []);
+      this.groupNotifications((await this.networkService.getJson<NotificationDTO[]>('/notifications')) || []);
       this.countedNotifications.forEach((noti) => {
         let msg = '(' + noti.count + ') ' + noti.message;
         if (noti.details) {
@@ -70,13 +68,13 @@ export class NotificationService {
         }
         switch (noti.type) {
           case  NotificationType.error:
-            this.error(msg, this.i18n('Server error'));
+            this.error(msg, $localize`Server error`);
             break;
           case  NotificationType.warning:
-            this.warning(msg, this.i18n('Server error'));
+            this.warning(msg, $localize`Server error`);
             break;
           case  NotificationType.info:
-            this.info(msg, this.i18n('Server info'));
+            this.info(msg, $localize`Server info`);
             break;
         }
       });
@@ -86,18 +84,18 @@ export class NotificationService {
   }
 
   success(text: string, title: string = null): void {
-    this._toastr.success(text, title, this.options);
+    this.toastr.success(text, title, this.options);
   }
 
   error(text: string, title?: string): void {
-    this._toastr.error(text, title, this.options);
+    this.toastr.error(text, title, this.options);
   }
 
   warning(text: string, title?: string): void {
-    this._toastr.warning(text, title, this.options);
+    this.toastr.warning(text, title, this.options);
   }
 
   info(text: string, title: string = null): void {
-    this._toastr.info(text, title, this.options);
+    this.toastr.info(text, title, this.options);
   }
 }

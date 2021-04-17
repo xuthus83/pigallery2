@@ -1,4 +1,4 @@
-import {Injectable, LOCALE_ID, NgModule, TRANSLATIONS, TRANSLATIONS_FORMAT} from '@angular/core';
+import {Injectable, NgModule} from '@angular/core';
 import {BrowserModule, HAMMER_GESTURE_CONFIG, HammerGestureConfig} from '@angular/platform-browser';
 import {FormsModule} from '@angular/forms';
 import {AppComponent} from './app.component';
@@ -57,7 +57,6 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {DefaultUrlSerializer, UrlSerializer, UrlTree} from '@angular/router';
 import {IndexingSettingsComponent} from './ui/settings/indexing/indexing.settings.component';
 import {LanguageComponent} from './ui/language/language.component';
-import {I18n} from '@ngx-translate/i18n-polyfill';
 import {QueryService} from './model/query.service';
 import {IconizeSortingMethod} from './pipes/IconizeSortingMethod';
 import {StringifySortingMethod} from './pipes/StringifySortingMethod';
@@ -126,18 +125,6 @@ export class CustomUrlSerializer implements UrlSerializer {
   }
 }
 
-// use the require method provided by webpack
-declare const require: (path: string) => string;
-
-export function translationsFactory(locale: string): string {
-  locale = locale || 'en'; // default to english if no locale
-
-  // default locale, nothing to translate
-  if (locale === 'en') {
-    return '';
-  }
-  return (require(`raw-loader!../translate/messages.${locale}.xlf`) as any).default;
-}
 
 @NgModule({
   imports: [
@@ -251,14 +238,7 @@ export function translationsFactory(locale: string): string {
     FacesService,
     VersionService,
     ScheduledJobsService,
-    BackendtextService,
-    {
-      provide: TRANSLATIONS,
-      useFactory: translationsFactory,
-      deps: [LOCALE_ID]
-    },
-    {provide: TRANSLATIONS_FORMAT, useValue: 'xlf'},
-    I18n
+    BackendtextService
   ],
   bootstrap: [AppComponent]
 })
