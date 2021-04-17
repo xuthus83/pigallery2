@@ -256,7 +256,7 @@
           <context context-type="sourcefile">app/ui/frame/frame.component.html</context>
           <context context-type="linenumber">51</context>
         </context-group>
-        <target state="translated">duplicati</target>
+        <target state="translated">Duplicati</target>
       </trans-unit>
       <trans-unit id="121cc5391cd2a5115bc2b3160379ee5b36cd7716" datatype="html">
         <source>Settings</source>
@@ -1036,7 +1036,7 @@
           <context context-type="sourcefile">app/ui/settings/thumbnail/thumbnail.settings.component.html</context>
           <context context-type="linenumber">39</context>
         </context-group>
-        <target state="needs-l10n">The best matching size will be generated. (More sizes give better quality, but use more storage and CPU to render.)</target>
+        <target state="translated">Saranno generate anteprime con la dimensione più ottimale. (Più dimensioni forniscono qualità migliore, ma usano più spazio e tempo di CPU per la creazione) </target>
       </trans-unit>
       <trans-unit id="eca363353e36c2ea99496b8d3fb4b99a5c63b62f" datatype="html">
         <source>';' separated integers. If size is 240, that shorter side of the thumbnail will have 160
@@ -1046,7 +1046,7 @@
           <context context-type="sourcefile">app/ui/settings/thumbnail/thumbnail.settings.component.html</context>
           <context context-type="linenumber">43</context>
         </context-group>
-        <target state="needs-l10n">';' separated integers. If size is 240, that shorter side of the thumbnail will have 160 pixels.</target>
+        <target state="translated">integer separati da ';'. Se il lato è 240, il lato corto dell'anteprima avrà 160 pixel.</target>
       </trans-unit>
       <trans-unit id="695e937f7b52084765c07a2b1269a040024a2363" datatype="html">
         <source>Thumbnail sizes</source>
@@ -1054,7 +1054,7 @@
           <context context-type="sourcefile">app/ui/settings/thumbnail/thumbnail.settings.component.html</context>
           <context context-type="linenumber">30</context>
         </context-group>
-        <target state="needs-l10n">Thumbnail sizes</target>
+        <target state="translated">Dimensione anteprime</target>
       </trans-unit>
       <trans-unit id="69149fe434cf1b0d9bafe5ead5d126101bb5162e" datatype="html">
         <source>Video support uses ffmpeg. ffmpeg and ffprobe binaries need to be available in the PATH or
@@ -1065,7 +1065,7 @@
           <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
           <context context-type="linenumber">26</context>
         </context-group>
-        <target state="needs-l10n">Video support uses ffmpeg. ffmpeg and ffprobe binaries need to be available in the PATH or the @ffmpeg-installer/ffmpeg and @ffprobe-installer/ffprobe optional node packages need to be installed.</target>
+        <target state="translated">Per i video viene usato ffmpeg. I binari di ffmpeg e ffprobe devono essere disponibili nella PATH oppure i package di node opzionali @ffmpeg-installer/ffmpeg e @ffprobe-installer/ffprobe devono essere installati</target>
       </trans-unit>
       <trans-unit id="8fbfaec401808fd2433e6b694c11122de317ab19" datatype="html">
         <source>Video transcoding:</source>
@@ -1073,7 +1073,7 @@
           <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
           <context context-type="linenumber">33</context>
         </context-group>
-        <target state="needs-l10n">Video transcoding:</target>
+        <target state="translated">Transcodifica video:</target>
       </trans-unit>
       <trans-unit id="e4535a01533b3a6f9f803428e90a31618c8d173e" datatype="html">
         <source>To ensure smooth video playback, video transcoding is recommended to a lower bit rate than
@@ -1084,7 +1084,7 @@
           <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
           <context context-type="linenumber">35</context>
         </context-group>
-        <target state="needs-l10n">To ensure smooth video playback, video transcoding is recommended to a lower bit rate than the server's upload rate.</target>
+        <target state="translated">Per garantire una riproduzione fluida dei video, è raccomandato scegliere un bitrate per la transcodifica inferiore alla banda di upload del server.</target>
       </trans-unit>
       <trans-unit id="2563716b6cdad527d4d01f0aa49368d1a876263f" datatype="html">
         <source>The transcoded videos will be save to the thumbnail folder.</source>
@@ -1092,7 +1092,7 @@
           <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
           <context context-type="linenumber">39</context>
         </context-group>
-        <target state="needs-l10n">The transcoded videos will be save to the thumbnail folder.</target>
+        <target state="translated">I video transcodificati saranno salvati nella cartella delle anteprime.</target>
       </trans-unit>
       <trans-unit id="5c159049e5e44f672041b3ff2c85328cda14a740" datatype="html">
         <source>You can trigger the transcoding manually, but you can also create an automatic encoding job
@@ -1103,7 +1103,7 @@
           <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
           <context context-type="linenumber">40</context>
         </context-group>
-        <target state="needs-l10n">You can trigger the transcoding manually, but you can also create an automatic encoding job in advanced settings mode.</target>
+        <target state="translated">Puoi eseguire la transcodifica manualmente, ma puoi anche impostare la codifica automatica nelle impostazioni avanzate.</target>
       </trans-unit>
       <trans-unit id="7722a92a1fc887570b4f4d8a7bb916f067f32028" datatype="html">
         <source>Format</source>
@@ -1139,7 +1139,7 @@
           <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
           <context context-type="linenumber">67</context>
         </context-group>
-        <target state="needs-l10n">The height of the output video will be scaled down to this, while keeping the aspect ratio.</target>
+        <target state="translated">L'altezza del video in uscita sarà scalata a questa, mantenendo il rapporto base altezza.</target>
       </trans-unit>
       <trans-unit id="b78bb5b721abd47e61ef2338c7070c83c1e3bd32" datatype="html">
         <source>FPS</source>
@@ -1155,7 +1155,7 @@
           <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
           <context context-type="linenumber">78</context>
         </context-group>
-        <target state="needs-l10n">Target frame per second (fps) of the output video will be scaled down this this.</target>
+        <target state="translated">Il video di output avrà questi frame al secondo.</target>
       </trans-unit>
       <trans-unit id="bff9e9bcea920ffed20cedd60107bf09472fbb8e" datatype="html">
         <source>Bit rate</source>
@@ -1173,7 +1173,7 @@
           <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
           <context context-type="linenumber">104</context>
         </context-group>
-        <target state="needs-l10n">Target bit rate of the output video will be scaled down this this. This should be less than the upload rate of your home server.</target>
+        <target state="translated">Il bit rate del video di output sarà ridotto a questo. Deve essere inferiore alla banda di upload del server.</target>
       </trans-unit>
       <trans-unit id="148d5d78e94f20a20c3ad3b01d704a3497a8c761" datatype="html">
         <source>CRF</source>
@@ -1189,7 +1189,7 @@
           <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
           <context context-type="linenumber">113</context>
         </context-group>
-        <target state="needs-l10n">The range of the Constant Rate Factor (CRF) scale is 0–51, where 0 is lossless, 23 is the default, and 51 is worst quality possible.</target>
+        <target state="translated">La scala del fattore qualità (CRF) è da 0 a 51, dove 0 è lossless, 23 è il default e 51 è la peggior qualità possibile.</target>
       </trans-unit>
       <trans-unit id="962533863b61fce4a1ac5a852936185f58039695" datatype="html">
         <source>Preset</source>
@@ -1197,7 +1197,7 @@
           <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
           <context context-type="linenumber">121</context>
         </context-group>
-        <target state="needs-l10n">Preset</target>
+        <target state="translated">Preimpostazioni</target>
       </trans-unit>
       <trans-unit id="b990e080e67c16cef76ca1f879e659de50ce1c36" datatype="html">
         <source>A preset is a collection of options that will provide a certain encoding speed to compression ratio. A slower preset will provide better compression (compression is quality per filesize).</source>
@@ -1205,7 +1205,7 @@
           <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
           <context context-type="linenumber">122</context>
         </context-group>
-        <target state="needs-l10n">A preset is a collection of options that will provide a certain encoding speed to compression ratio. A slower preset will provide better compression (compression is quality per filesize).</target>
+        <target state="translated">Una preimpostazione è un set di opzioni che fornisce un buona velocità di codifica mantenendo una buona compressione. Una preimpostazione più lenta fornirà una compressione migliore.A</target>
       </trans-unit>
       <trans-unit id="25ce84764ffa614804d96c740bec339fe91f4a25" datatype="html">
         <source>Custom Options</source>
@@ -1221,7 +1221,7 @@
           <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
           <context context-type="linenumber">131</context>
         </context-group>
-        <target state="needs-l10n">; separated values. It will be sent to ffmpeg as it is, as custom options.</target>
+        <target state="translated">valori separati da ; saranno forniti a ffmpeg così come sono, come opzioni personalizzate. </target>
       </trans-unit>
       <trans-unit id="1b239b0422945f36c35b5559b4b0c135922fe299" datatype="html">
         <source>It is highly recommended to use hardware accelerated (sharp or gm) lib for thumbnail
@@ -1231,7 +1231,7 @@
           <context context-type="sourcefile">app/ui/settings/photo/photo.settings.component.html</context>
           <context context-type="linenumber">9</context>
         </context-group>
-        <target state="needs-l10n">It is highly recommended to use hardware accelerated (sharp or gm) lib for thumbnail generation</target>
+        <target state="translated">È molto raccomandato di usare un algoritmo con accelerazione hardware (sharp o gm) per generare le anteprime</target>
       </trans-unit>
       <trans-unit id="8ae2dddf71604792d10a35e6e2f75d58bd498e88" datatype="html">
         <source>Make sure that sharp node module is installed (npm install sharp).
@@ -1240,7 +1240,7 @@
           <context context-type="sourcefile">app/ui/settings/photo/photo.settings.component.html</context>
           <context context-type="linenumber">23</context>
         </context-group>
-        <target state="needs-l10n">Make sure that sharp node module is installed (npm install sharp).</target>
+        <target state="translated">Assicuratevi che il modulo sharp su node sia installato (npm install sharp).</target>
       </trans-unit>
       <trans-unit id="6f49ee2673fb82fe8dd1a7da0bada14a4156bf30" datatype="html">
         <source>Thumbnail generation library</source>
@@ -1248,7 +1248,7 @@
           <context context-type="sourcefile">app/ui/settings/photo/photo.settings.component.html</context>
           <context context-type="linenumber">16</context>
         </context-group>
-        <target state="needs-l10n">Thumbnail generation library</target>
+        <target state="translated">Libreria per la generazione di anteprime</target>
       </trans-unit>
       <trans-unit id="ab123cb43ad6623f84c33f28274418c88667e866" datatype="html">
         <source>Photo converting:</source>
@@ -1256,7 +1256,7 @@
           <context context-type="sourcefile">app/ui/settings/photo/photo.settings.component.html</context>
           <context context-type="linenumber">30</context>
         </context-group>
-        <target state="needs-l10n">Photo converting:</target>
+        <target state="translated">Conversione foto:</target>
       </trans-unit>
       <trans-unit id="cf3e07d622499cbe9d8c177163f65eceaa11a1de" datatype="html">
         <source>Converting</source>
@@ -1272,7 +1272,7 @@
           <context context-type="sourcefile">app/ui/settings/photo/photo.settings.component.html</context>
           <context context-type="linenumber">34</context>
         </context-group>
-        <target state="needs-l10n">Downsizes photos for faster preview loading. (Zooming in to the photo loads the original).</target>
+        <target state="translated">Ridimensiona le foto per un caricamento più veloce dell'anteprima. (Ingrandendo la foto si carica l'originale).</target>
       </trans-unit>
       <trans-unit id="bde4bd51a111d48a1ca72824bac39c71dffd8ebd" datatype="html">
         <source>On the fly converting</source>
@@ -1280,7 +1280,7 @@
           <context context-type="sourcefile">app/ui/settings/photo/photo.settings.component.html</context>
           <context context-type="linenumber">40</context>
         </context-group>
-        <target state="needs-l10n">On the fly converting</target>
+        <target state="translated">Conversione al volo</target>
       </trans-unit>
       <trans-unit id="a9a7b9d2773aa49ff4f41b01b55e0a51d664eecf" datatype="html">
         <source>Converts photos on the fly, when they are requested.</source>
@@ -1288,7 +1288,7 @@
           <context context-type="sourcefile">app/ui/settings/photo/photo.settings.component.html</context>
           <context context-type="linenumber">41</context>
         </context-group>
-        <target state="needs-l10n">Converts photos on the fly, when they are requested.</target>
+        <target state="translated">Converte foto al volo, quando sono richieste.</target>
       </trans-unit>
       <trans-unit id="80cc0fbf9f0d48616526417a81db35703e7ed2a7" datatype="html">
         <source>The shorter edge of the converted photo will be scaled down to this, while keeping the aspect ratio.</source>
@@ -1296,7 +1296,7 @@
           <context context-type="sourcefile">app/ui/settings/photo/photo.settings.component.html</context>
           <context context-type="linenumber">50</context>
         </context-group>
-        <target state="needs-l10n">The shorter edge of the converted photo will be scaled down to this, while keeping the aspect ratio.</target>
+        <target state="translated">Il bordo più corto della foto convertita sarà ridimensionato a questo, mantenendo il rapporto base altezza.</target>
       </trans-unit>
       <trans-unit id="219e36c6747ef991081a68fc8ab2678677583e11" datatype="html">
         <source>Reads and show *.gpx files on the map</source>
@@ -1304,7 +1304,7 @@
           <context context-type="sourcefile">app/ui/settings/metafiles/metafile.settings.component.html</context>
           <context context-type="linenumber">25</context>
         </context-group>
-        <target state="needs-l10n">Reads and show *.gpx files on the map</target>
+        <target state="translated">Legge e mostra i file *.gpx sulla mappa</target>
       </trans-unit>
       <trans-unit id="fba3e700d434667e68ec31f38b2fed451955b6a3" datatype="html">
         <source>Autocomplete</source>
@@ -1320,7 +1320,7 @@
           <context context-type="sourcefile">app/ui/settings/search/search.settings.component.html</context>
           <context context-type="linenumber">33</context>
         </context-group>
-        <target state="needs-l10n">Show hints while typing search query.</target>
+        <target state="translated">Mostra suggerimenti durante la digitazione della ricerca.</target>
       </trans-unit>
       <trans-unit id="4f3e132bcb74ee7c0a19eff3915163699c249340" datatype="html">
         <source>Instant search</source>
@@ -1336,7 +1336,7 @@
           <context context-type="sourcefile">app/ui/settings/search/search.settings.component.html</context>
           <context context-type="linenumber">40</context>
         </context-group>
-        <target state="needs-l10n">Enables showing search results, while typing search query.</target>
+        <target state="translated">Abilita la ricerca durante la digitazione.</target>
       </trans-unit>
       <trans-unit id="fca20aaca9607b7bcfd32718fa299d107c73c32a" datatype="html">
         <source>
@@ -1346,7 +1346,7 @@
           <context context-type="sourcefile">app/ui/settings/search/search.settings.component.html</context>
           <context context-type="linenumber">48</context>
         </context-group>
-        <target state="needs-l10n">Search is not supported with these settings</target>
+        <target state="translated">La ricerca non è supportata con le impostazioni correnti.</target>
       </trans-unit>
       <trans-unit id="6024b74e5baa9004f52b2d91fe37321412e328e4" datatype="html">
         <source>Password protected</source>
@@ -1354,7 +1354,7 @@
           <context context-type="sourcefile">app/ui/settings/share/share.settings.component.html</context>
           <context context-type="linenumber">29</context>
         </context-group>
-        <target state="needs-l10n">Password protected</target>
+        <target state="translated">Protetto da password</target>
       </trans-unit>
       <trans-unit id="e8365a7cd7ced8dd79bdde76d301b8f75887df83" datatype="html">
         <source>Enables password protected sharing links.</source>
@@ -1362,7 +1362,7 @@
           <context context-type="sourcefile">app/ui/settings/share/share.settings.component.html</context>
           <context context-type="linenumber">30</context>
         </context-group>
-        <target state="needs-l10n">Enables password protected sharing links.</target>
+        <target state="translated">Abilita la condivisione di link protetti da password.</target>
       </trans-unit>
       <trans-unit id="ec3e07d68edadc3aa5ad84f316e43f739a2bd962" datatype="html">
         <source>
@@ -1372,7 +1372,7 @@
           <context context-type="sourcefile">app/ui/settings/share/share.settings.component.html</context>
           <context context-type="linenumber">38</context>
         </context-group>
-        <target state="needs-l10n">Sharing is not supported with these settings</target>
+        <target state="translated">La condivisione non è supportata con le impostazioni correnti</target>
       </trans-unit>
       <trans-unit id="b8f78167ef95c21d032b15614e8239cc033a0fd2" datatype="html">
         <source>Save
@@ -1460,7 +1460,7 @@
           <context context-type="sourcefile">app/ui/settings/random-photo/random-photo.settings.component.html</context>
           <context context-type="linenumber">28</context>
         </context-group>
-        <target state="needs-l10n">This feature enables you to generate 'random photo' urls. That URL returns a photo random selected from your gallery. You can use the url with 3rd party application like random changing desktop background.</target>
+        <target state="translated">Questa funzione ti permette di generare un indirizzo per "foto casuali". Questo URL restituisce una foto selezionata a caso dalla tua galleria. Puoi usare l'URL con applicazioni di terze parti come il cambio casuale dello sfondo del desktop.</target>
       </trans-unit>
       <trans-unit id="6c02e8541a2e670f80de8b5a218ea14a16bb6c42" datatype="html">
         <source>
@@ -1470,7 +1470,7 @@
           <context context-type="sourcefile">app/ui/settings/random-photo/random-photo.settings.component.html</context>
           <context context-type="linenumber">35</context>
         </context-group>
-        <target state="needs-l10n">Random Photo is not supported with these settings</target>
+        <target state="translated">La generazione di link di foto casuali non è supportata con le impostazioni correnti</target>
       </trans-unit>
       <trans-unit id="870d05214ce19848ea4b7fe698e9a2e73db0c715" datatype="html">
         <source>Page title</source>
@@ -1486,7 +1486,7 @@
           <context context-type="sourcefile">app/ui/settings/basic/basic.settings.component.html</context>
           <context context-type="linenumber">22</context>
         </context-group>
-        <target state="needs-l10n">Server will accept connections from this IPv6 or IPv4 address.</target>
+        <target state="translated">Il server accetterà connessioni su questo indirizzo IPv4 o IPv6.</target>
       </trans-unit>
       <trans-unit id="0559356d4e98ee90a10ff16250a2bf139eac649b" datatype="html">
         <source>Port number. Port 80 is usually what you need.</source>
@@ -1494,7 +1494,7 @@
           <context context-type="sourcefile">app/ui/settings/basic/basic.settings.component.html</context>
           <context context-type="linenumber">32</context>
         </context-group>
-        <target state="needs-l10n">Port number. Port 80 is usually what you need.</target>
+        <target state="translated">Numero porta. Di solito è 80.</target>
       </trans-unit>
       <trans-unit id="50c6dfe7491fc0710eafbc2781138fc213ee2168" datatype="html">
         <source>Images folder</source>
@@ -1502,7 +1502,7 @@
           <context context-type="sourcefile">app/ui/settings/basic/basic.settings.component.html</context>
           <context context-type="linenumber">42</context>
         </context-group>
-        <target state="needs-l10n">Images folder</target>
+        <target state="translated">Cartella immagini</target>
       </trans-unit>
       <trans-unit id="b4b17c583a52ad8b6b15882c46d04ddbd7335816" datatype="html">
         <source>Images are loaded from this folder (read permission required)</source>
@@ -1510,7 +1510,7 @@
           <context context-type="sourcefile">app/ui/settings/basic/basic.settings.component.html</context>
           <context context-type="linenumber">43</context>
         </context-group>
-        <target state="needs-l10n">Images are loaded from this folder (read permission required)</target>
+        <target state="translated">Le foto sono caricate da questa cartella (il server deve avere il permesso in lettura)</target>
       </trans-unit>
       <trans-unit id="cec8ee6e412792ec14d7c0219c8df1c32d897b17" datatype="html">
         <source>Temp folder</source>
@@ -1518,7 +1518,7 @@
           <context context-type="sourcefile">app/ui/settings/basic/basic.settings.component.html</context>
           <context context-type="linenumber">53</context>
         </context-group>
-        <target state="needs-l10n">Temp folder</target>
+        <target state="translated">Cartella temporanea</target>
       </trans-unit>
       <trans-unit id="fce2bae239675640e9dae62ed1b936b92e77f9d6" datatype="html">
         <source>Thumbnails, converted photos, videos will be stored here (write
@@ -1527,7 +1527,7 @@
           <context context-type="sourcefile">app/ui/settings/basic/basic.settings.component.html</context>
           <context context-type="linenumber">54</context>
         </context-group>
-        <target state="needs-l10n">Thumbnails, converted photos, videos will be stored here (write permission required)</target>
+        <target state="translated">Anteprime, foto convertite, video ricodificati saranno salvati qui (il server deve avere il permesso in scrittura)</target>
       </trans-unit>
       <trans-unit id="682679bea54c7cdc8fad228e65f4e35d8cf62275" datatype="html">
         <source>Page public url</source>
@@ -1535,7 +1535,7 @@
           <context context-type="sourcefile">app/ui/settings/basic/basic.settings.component.html</context>
           <context context-type="linenumber">65</context>
         </context-group>
-        <target state="needs-l10n">Page public url</target>
+        <target state="translated">URL pubblica</target>
       </trans-unit>
       <trans-unit id="ca2d1bbe06466b79ae63d3b9ffb71983b018bbdc" datatype="html">
         <source>If you access the page form local network its good to know the public
@@ -1544,7 +1544,7 @@
           <context context-type="sourcefile">app/ui/settings/basic/basic.settings.component.html</context>
           <context context-type="linenumber">68</context>
         </context-group>
-        <target state="needs-l10n">If you access the page form local network its good to know the public url for creating sharing link</target>
+        <target state="translated">Se si accede alla pagina dalla rete locale è bene conoscere l'URL pubblico per creare il link di condivisione</target>
       </trans-unit>
       <trans-unit id="52e8e9fdcd08e89225892a7657140dbf41020b76" datatype="html">
         <source>Url Base</source>
@@ -1563,7 +1563,7 @@
           <context context-type="sourcefile">app/ui/settings/basic/basic.settings.component.html</context>
           <context context-type="linenumber">78</context>
         </context-group>
-        <target state="needs-l10n">If you access the gallery under a sub url (like: http://mydomain.com/myGallery), set it here. If it is not working you might miss the '/' from the beginning of the url.</target>
+        <target state="translated">Se accedi alla galleria sotto un sub URL (come: http://esempio.it/LeMieFoto), impostalo qui. Se non funziona ti sarai dimenticato la '/' all'inizio dell'URL.</target>
       </trans-unit>
       <trans-unit id="f268a48c3f70d641ccb99786fe49f21a769eb2bb" datatype="html">
         <source>
@@ -1573,7 +1573,7 @@
           <context context-type="sourcefile">app/ui/settings/basic/basic.settings.component.html</context>
           <context context-type="linenumber">90</context>
         </context-group>
-        <target state="needs-l10n">The public url and the url base are not matching. Some of the functionality might not work.</target>
+        <target state="translated">L'URL pubblico e l'URL di base non corrispondono. Alcune funzionalità potrebbero non funzionare.</target>
       </trans-unit>
       <trans-unit id="a20e57ed1eb4d083455f5dd3f0d5b51328e7217a" datatype="html">
         <source>Override keywords</source>
@@ -1581,7 +1581,7 @@
           <context context-type="sourcefile">app/ui/settings/faces/faces.settings.component.html</context>
           <context context-type="linenumber">31</context>
         </context-group>
-        <target state="needs-l10n">Override keywords</target>
+        <target state="translated">Ignorare le parole chiave</target>
       </trans-unit>
       <trans-unit id="6dd2bf03cc78892ef8476c01524abc3e69263b41" datatype="html">
         <source>If a photo has the same face (person) name and keyword, the app removes the duplicate, keeping the face only.</source>
@@ -1589,7 +1589,7 @@
           <context context-type="sourcefile">app/ui/settings/faces/faces.settings.component.html</context>
           <context context-type="linenumber">33</context>
         </context-group>
-        <target state="needs-l10n">If a photo has the same face (person) name and keyword, the app removes the duplicate, keeping the face only.</target>
+        <target state="translated">Se una foto ha lo stesso volto (persona) nome e parola chiave, l'applicazione rimuove il duplicato, mantenendo solo il volto.</target>
       </trans-unit>
       <trans-unit id="32422a2f6e71d138d840d3fa927e492cfa57ef8e" datatype="html">
         <source>Face starring right</source>
@@ -1597,7 +1597,7 @@
           <context context-type="sourcefile">app/ui/settings/faces/faces.settings.component.html</context>
           <context context-type="linenumber">38</context>
         </context-group>
-        <target state="needs-l10n">Face starring right</target>
+        <target state="translated">Ruoli che possono rendere preferita una faccia</target>
       </trans-unit>
       <trans-unit id="82774b234f55dc57cdc78c709586971b7520119b" datatype="html">
         <source>Required minimum right to start (favourite) a face.</source>
@@ -1605,7 +1605,7 @@
           <context context-type="sourcefile">app/ui/settings/faces/faces.settings.component.html</context>
           <context context-type="linenumber">40</context>
         </context-group>
-        <target state="needs-l10n">Required minimum right to start (favourite) a face.</target>
+        <target state="translated">Ruolo minimo per rendere preferita una faccia.</target>
       </trans-unit>
       <trans-unit id="efddd8cd82869370d3846b05c546a4335f44625f" datatype="html">
         <source>
@@ -1615,7 +1615,7 @@
           <context context-type="sourcefile">app/ui/settings/faces/faces.settings.component.html</context>
           <context context-type="linenumber">46</context>
         </context-group>
-        <target state="needs-l10n">Faces are not supported with these settings.</target>
+        <target state="translated">Le facce sono supportate con le impostazioni correnti.</target>
       </trans-unit>
       <trans-unit id="07807dce2e0dc33743530dd6a8b0d1f24094884d" datatype="html">
         <source>Error: </source>
@@ -1647,7 +1647,7 @@
           <context context-type="sourcefile">app/ui/settings/other/other.settings.component.html</context>
           <context context-type="linenumber">15</context>
         </context-group>
-        <target state="needs-l10n">Runs directory scanning and thumbnail generation (only for Jimp) in a different thread.</target>
+        <target state="translated">Esegue la scansione delle directory e la generazione di anteprime (solo per Jimp) in un altro thread.</target>
       </trans-unit>
       <trans-unit id="46aa6890679de37f7171c72b36ee1a18182a3e37" datatype="html">
         <source>Thumbnail threads</source>
@@ -1679,7 +1679,7 @@
           <context context-type="sourcefile">app/ui/settings/other/other.settings.component.html</context>
           <context context-type="linenumber">36</context>
         </context-group>
-        <target state="needs-l10n">Scroll based thumbnail generation</target>
+        <target state="translated">Generazione di anteprime basata sullo scorrimento</target>
       </trans-unit>
       <trans-unit id="da2fbe7d3e1c40fa96a5fc357ac658fea47de8a8" datatype="html">
         <source>Those thumbnails get higher priority that are visible on the screen.</source>
@@ -1687,7 +1687,7 @@
           <context context-type="sourcefile">app/ui/settings/other/other.settings.component.html</context>
           <context context-type="linenumber">37</context>
         </context-group>
-        <target state="needs-l10n">Those thumbnails get higher priority that are visible on the screen.</target>
+        <target state="translated">Queste miniature hanno una priorità più alta e sono visibili sullo schermo.</target>
       </trans-unit>
       <trans-unit id="1a693eac5c0c9ee65ea4e8db6e097806141e91f5" datatype="html">
         <source>Lazy image rendering</source>
@@ -1695,7 +1695,7 @@
           <context context-type="sourcefile">app/ui/settings/other/other.settings.component.html</context>
           <context context-type="linenumber">43</context>
         </context-group>
-        <target state="needs-l10n">Lazy image rendering</target>
+        <target state="translated">Rendering immagine "lazy" (viene scaricata solo quando è visualizzata)</target>
       </trans-unit>
       <trans-unit id="14b10bc346bb6c68226043fd65f47708d0fc3ca9" datatype="html">
         <source>Shows only the required amount of photos at once. Renders more if page bottom is reached.</source>
@@ -1703,7 +1703,7 @@
           <context context-type="sourcefile">app/ui/settings/other/other.settings.component.html</context>
           <context context-type="linenumber">44</context>
         </context-group>
-        <target state="needs-l10n">Shows only the required amount of photos at once. Renders more if page bottom is reached.</target>
+        <target state="translated">Mostra solo la quantità necessaria di foto in una volta sola. Ne genera di più se si raggiunge il fondo della pagina.</target>
       </trans-unit>
       <trans-unit id="1fa92c6ce274f878b2625587daa7e08b2a3a8b38" datatype="html">
         <source>Cache</source>
@@ -1719,7 +1719,7 @@
           <context context-type="sourcefile">app/ui/settings/other/other.settings.component.html</context>
           <context context-type="linenumber">51</context>
         </context-group>
-        <target state="needs-l10n">Caches directory contents and search results for better performance.</target>
+        <target state="translated">Memorizza nella cache i contenuti delle directory e i risultati della ricerca per migliorare le prestazioni.</target>
       </trans-unit>
       <trans-unit id="444a85e1dff192c11fecdb4ae588a422ea385077" datatype="html">
         <source>Caption first naming</source>
@@ -1727,7 +1727,7 @@
           <context context-type="sourcefile">app/ui/settings/other/other.settings.component.html</context>
           <context context-type="linenumber">57</context>
         </context-group>
-        <target state="needs-l10n">Caption first naming</target>
+        <target state="translated">Denomina con didascalia</target>
       </trans-unit>
       <trans-unit id="90050bc42ac8fdb700abf83eec3a97f5c3e0e4a6" datatype="html">
         <source>Show the caption (IPTC 120) tags from the EXIF data instead of the filenames.</source>
@@ -1735,7 +1735,7 @@
           <context context-type="sourcefile">app/ui/settings/other/other.settings.component.html</context>
           <context context-type="linenumber">58</context>
         </context-group>
-        <target state="needs-l10n">Show the caption (IPTC 120) tags from the EXIF data instead of the filenames.</target>
+        <target state="translated">Mostra i tag delle didascalie (IPTC 120) dai dati EXIF invece dei nomi dei file.</target>
       </trans-unit>
       <trans-unit id="0efc9c8107ab5af400ea695f606b9a4b2637f947" datatype="html">
         <source>Navigation bar:</source>
@@ -1743,7 +1743,7 @@
           <context context-type="sourcefile">app/ui/settings/other/other.settings.component.html</context>
           <context context-type="linenumber">66</context>
         </context-group>
-        <target state="needs-l10n">Navigation bar:</target>
+        <target state="translated">Barra di navigazione:</target>
       </trans-unit>
       <trans-unit id="08fe06e1621e602fbf5b6fa1f8cd9df29888a1a2" datatype="html">
         <source>Show item count</source>
@@ -1751,7 +1751,7 @@
           <context context-type="sourcefile">app/ui/settings/other/other.settings.component.html</context>
           <context context-type="linenumber">69</context>
         </context-group>
-        <target state="needs-l10n">Show item count</target>
+        <target state="translated">Mostra il totale degli elementi</target>
       </trans-unit>
       <trans-unit id="e08aabdc8c28c546db6e08ae05b160d9d85ab49a" datatype="html">
         <source>Show the number of items (photos) in the folder.</source>
@@ -1759,7 +1759,7 @@
           <context context-type="sourcefile">app/ui/settings/other/other.settings.component.html</context>
           <context context-type="linenumber">70</context>
         </context-group>
-        <target state="needs-l10n">Show the number of items (photos) in the folder.</target>
+        <target state="translated">Mostra il numero di elementi (foto) nella cartella.</target>
       </trans-unit>
       <trans-unit id="15b229419fe525b3a517f3cb296326053a6e69f0" datatype="html">
         <source>Default photo sorting method</source>
@@ -1767,7 +1767,7 @@
           <context context-type="sourcefile">app/ui/settings/other/other.settings.component.html</context>
           <context context-type="linenumber">81</context>
         </context-group>
-        <target state="needs-l10n">Default photo sorting method</target>
+        <target state="translated">Metodo predefinito di ordinamento delle foto</target>
       </trans-unit>
       <trans-unit id="1be10583851301763cfa3b55d74670808986a583" datatype="html">
         <source>Index cache timeout [ms]</source>
@@ -1775,7 +1775,7 @@
           <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
           <context context-type="linenumber">12</context>
         </context-group>
-        <target state="needs-l10n">Index cache timeout [ms]</target>
+        <target state="translated">Timeout cache indice [ms]</target>
       </trans-unit>
       <trans-unit id="972cfa9d554dc25de6d18c500b5ec58193f77b92" datatype="html">
         <source>If there was no indexing in this time, it reindexes. (skipped if indexes are in DB and sensitivity is low)</source>
@@ -1783,7 +1783,7 @@
           <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
           <context context-type="linenumber">13</context>
         </context-group>
-        <target state="needs-l10n">If there was no indexing in this time, it reindexes. (skipped if indexes are in DB and sensitivity is low)</target>
+        <target state="translated">Se non c'è stata indicizzazione in questo tempo, reindicizza. (saltato se gli indici sono nel DB e la sensibilità è bassa)</target>
       </trans-unit>
       <trans-unit id="95cda683cfb2041ad808023f29e40d16981b3c5e" datatype="html">
         <source>Sub folder preview size</source>
@@ -1791,7 +1791,7 @@
           <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
           <context context-type="linenumber">20</context>
         </context-group>
-        <target state="needs-l10n">Sub folder preview size</target>
+        <target state="translated">Dimensione dell'anteprima della sottocartella</target>
       </trans-unit>
       <trans-unit id="b892e74eb6142f5343fdfc9869805be21316fdd7" datatype="html">
         <source>Reads this many photos from sub folders.</source>
@@ -1799,7 +1799,7 @@
           <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
           <context context-type="linenumber">21</context>
         </context-group>
-        <target state="needs-l10n">Reads this many photos from sub folders.</target>
+        <target state="translated">Legge questo numero di foto dalle sottocartelle.</target>
       </trans-unit>
       <trans-unit id="d0a8aab4720af5526787eec8cfe8dd2e1bf20cac" datatype="html">
         <source>Folder reindexing sensitivity</source>
@@ -1807,7 +1807,7 @@
           <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
           <context context-type="linenumber">29</context>
         </context-group>
-        <target state="needs-l10n">Folder reindexing sensitivity</target>
+        <target state="translated">Sensibilità di reindicizzazione delle cartelle</target>
       </trans-unit>
       <trans-unit id="95602c810bd9b096ba2fe418944710c1d4d14668" datatype="html">
         <source>Set the reindexing sensitivity. High value check the folders for change more often.</source>
@@ -1815,7 +1815,7 @@
           <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
           <context context-type="linenumber">31</context>
         </context-group>
-        <target state="needs-l10n">Set the reindexing sensitivity. High value check the folders for change more often.</target>
+        <target state="translated">Imposta la sensibilità di reindicizzazione. Con un valore alto si controllano più spesso le cartelle per i cambiamenti.</target>
       </trans-unit>
       <trans-unit id="1b336e22fb96268d45dabcd515f6ae3ba5b8270f" datatype="html">
         <source>Folders to exclude from indexing</source>
@@ -1823,7 +1823,7 @@
           <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
           <context context-type="linenumber">42</context>
         </context-group>
-        <target state="needs-l10n">Folders to exclude from indexing</target>
+        <target state="translated">Cartelle da escludere dall'indicizzazione</target>
       </trans-unit>
       <trans-unit id="ea6b12abc9f596075d109a4624d32cb57c3a09c3" datatype="html">
         <source>';' separated strings. If an entry starts with '/' it is treated as an absolute path. If it doesn't
@@ -1834,7 +1834,7 @@
           <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
           <context context-type="linenumber">45</context>
         </context-group>
-        <target state="needs-l10n">';' separated strings. If an entry starts with '/' it is treated as an absolute path. If it doesn't start with '/' but contains a '/', the path is relative to the image directory. If it doesn't contain a '/', any folder with this name will be excluded.</target>
+        <target state="translated">stringhe separate da ';'. Se una voce inizia con '/' è trattata come un percorso assoluto. Se non inizia con '/' ma contiene una '/', il percorso è relativo alla directory dell'immagine. Se non contiene una '/', qualsiasi cartella con questo nome sarà esclusa.</target>
       </trans-unit>
       <trans-unit id="d72c5948a085a73fd3ebf14c7bf4f9aa32556d2d" datatype="html">
         <source>Exclude Folder List</source>
@@ -1842,7 +1842,7 @@
           <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
           <context context-type="linenumber">37</context>
         </context-group>
-        <target state="needs-l10n">Exclude Folder List</target>
+        <target state="translated">Lista di cartelle escluse</target>
       </trans-unit>
       <trans-unit id="ec488cec3aebfd972cec39cac2cb6da8b31f3ada" datatype="html">
         <source>Files that mark a folder to be excluded from indexing</source>
@@ -1850,7 +1850,7 @@
           <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
           <context context-type="linenumber">58</context>
         </context-group>
-        <target state="needs-l10n">Files that mark a folder to be excluded from indexing</target>
+        <target state="translated">Nomi di file che, se presenti in una cartella, la escludono dall'indicizzazione</target>
       </trans-unit>
       <trans-unit id="0d13afc6d6a484b4acc162cf31e195c16c563c1d" datatype="html">
         <source>';' separated strings. Any folder that contains a file with this name will be excluded from
@@ -1860,7 +1860,7 @@
           <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
           <context context-type="linenumber">61</context>
         </context-group>
-        <target state="needs-l10n">';' separated strings. Any folder that contains a file with this name will be excluded from indexing.</target>
+        <target state="translated">stringhe separate da ';'. Se una cartella contiene un file con questo nome, sarà esclusa dall'indicizzazione.</target>
       </trans-unit>
       <trans-unit id="f62035b2bdc507f3ccd7a808230ffb6ad5729062" datatype="html">
         <source>Exclude File List</source>
@@ -1868,7 +1868,7 @@
           <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
           <context context-type="linenumber">53</context>
         </context-group>
-        <target state="needs-l10n">Exclude File List</target>
+        <target state="translated">Lista esclusioni file</target>
       </trans-unit>
       <trans-unit id="b0eaa3abce5af3b71c03fe678062333b7b950430" datatype="html">
         <source>If you add a new folder to your gallery, the site indexes it automatically.</source>
@@ -1876,7 +1876,7 @@
           <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
           <context context-type="linenumber">83</context>
         </context-group>
-        <target state="needs-l10n">If you add a new folder to your gallery, the site indexes it automatically.</target>
+        <target state="translated">Se aggiungi una nuova cartella alla galleria, il sito la indicizzerà automaticamente.</target>
       </trans-unit>
       <trans-unit id="2622cf599561bd3154f42feef9ac9960a316a6eb" datatype="html">
         <source>If you would like to trigger indexing manually, click index button.</source>
@@ -1884,7 +1884,7 @@
           <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
           <context context-type="linenumber">84</context>
         </context-group>
-        <target state="needs-l10n">If you would like to trigger indexing manually, click index button.</target>
+        <target state="translated">Se vuoi attivare l'indicizzazione manualmente, clicca sul pulsante indicizza.</target>
       </trans-unit>
       <trans-unit id="56949ecea1cfe94dcd1a269282c047549cda1de8" datatype="html">
         <source>Note: search only works among the indexed directories</source>
@@ -1892,7 +1892,7 @@
           <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
           <context context-type="linenumber">87</context>
         </context-group>
-        <target state="needs-l10n">Note: search only works among the indexed directories</target>
+        <target state="translated">Nota: la ricerca funziona solo tra le directory indicizzate</target>
       </trans-unit>
       <trans-unit id="fed617f53bda7660e3f3cf4e7c62fa6d39e2ca16" datatype="html">
         <source>
@@ -1984,7 +1984,7 @@
           <context context-type="sourcefile">app/ui/settings/jobs/progress/job-progress.settings.component.html</context>
           <context context-type="linenumber">43</context>
         </context-group>
-        <target state="needs-l10n">time elapsed</target>
+        <target state="translated">tempo trascorso</target>
       </trans-unit>
       <trans-unit id="84b516c4d38a09d8bbe8312569aeddfac65cdf6a" datatype="html">
         <source>Processed</source>
@@ -2079,7 +2079,7 @@
           <context context-type="sourcefile">app/ui/settings/jobs/jobs.settings.component.html</context>
           <context context-type="linenumber">76</context>
         </context-group>
-        <target state="needs-l10n">Set the time to run the job.</target>
+        <target state="translated">Imposta l'orario di esecuzione del lavoro.</target>
       </trans-unit>
       <trans-unit id="c35e7fa24615c2c8d9e6d618caecdbd090f3a303" datatype="html">
         <source>After:</source>
@@ -2096,7 +2096,7 @@
           <context context-type="sourcefile">app/ui/settings/jobs/jobs.settings.component.html</context>
           <context context-type="linenumber">93</context>
         </context-group>
-        <target state="needs-l10n">The job will run after that job finishes.</target>
+        <target state="translated">Il lavoro verrà eseguito dopo la fine di quel lavoro.</target>
       </trans-unit>
       <trans-unit id="ef36f0dc0067decf548cc11905ef3100f5bbd004" datatype="html">
         <source>At:</source>
@@ -2116,7 +2116,7 @@
           <context context-type="sourcefile">app/ui/settings/jobs/jobs.settings.component.html</context>
           <context context-type="linenumber">129</context>
         </context-group>
-        <target state="needs-l10n">Allow parallel run</target>
+        <target state="translated">Consentire il funzionamento in parallelo</target>
       </trans-unit>
       <trans-unit id="5230ebf1e8c837caa3871f3807c5390b4fc156c8" datatype="html">
         <source>Enables the job to start even if an other job is already running.
@@ -2125,7 +2125,7 @@
           <context context-type="sourcefile">app/ui/settings/jobs/jobs.settings.component.html</context>
           <context context-type="linenumber">145</context>
         </context-group>
-        <target state="needs-l10n">Enables the job to start even if an other job is already running.</target>
+        <target state="translated">Permette al lavoro di partire anche se un altro lavoro è già in esecuzione.</target>
       </trans-unit>
       <trans-unit id="06a2d1d53517fb6ae65f61bc4acfdc1bfe7f0fc8" datatype="html">
         <source>';' separated integers.
@@ -2134,7 +2134,7 @@
           <context context-type="sourcefile">app/ui/settings/jobs/jobs.settings.component.html</context>
           <context context-type="linenumber">200</context>
         </context-group>
-        <target state="needs-l10n">';' separated integers.</target>
+        <target state="translated">numeri separati da ';'.</target>
       </trans-unit>
       <trans-unit id="6ff865ebc673e7fe5ed9367575e44833ef811693" datatype="html">
         <source>+ Add Job
@@ -2143,7 +2143,7 @@
           <context context-type="sourcefile">app/ui/settings/jobs/jobs.settings.component.html</context>
           <context context-type="linenumber">228</context>
         </context-group>
-        <target state="needs-l10n">+ Add Job</target>
+        <target state="translated">+ Aggiungi lavoro</target>
       </trans-unit>
       <trans-unit id="7f17fec3daa31daa99d46536c60c9f0c52b2ddb7" datatype="html">
         <source>Add new job</source>
@@ -2151,7 +2151,7 @@
           <context context-type="sourcefile">app/ui/settings/jobs/jobs.settings.component.html</context>
           <context context-type="linenumber">243</context>
         </context-group>
-        <target state="needs-l10n">Add new job</target>
+        <target state="translated">Aggiungi nuovo lavoro</target>
       </trans-unit>
       <trans-unit id="e0cd1c4d0403eae9abd4fa5244a2c53199182f53" datatype="html">
         <source>Select a job to schedule.
@@ -2160,7 +2160,7 @@
           <context context-type="sourcefile">app/ui/settings/jobs/jobs.settings.component.html</context>
           <context context-type="linenumber">257</context>
         </context-group>
-        <target state="needs-l10n">Select a job to schedule.</target>
+        <target state="translated">Seleziona un lavoro da pianificare.</target>
       </trans-unit>
       <trans-unit id="280c473125432bab70e5b806be43abf804f1e79b" datatype="html">
         <source>Add Job
@@ -2169,7 +2169,7 @@
           <context context-type="sourcefile">app/ui/settings/jobs/jobs.settings.component.html</context>
           <context context-type="linenumber">265</context>
         </context-group>
-        <target state="needs-l10n">Add Job</target>
+        <target state="translated">Aggiungi lavoro</target>
       </trans-unit>
       <trans-unit id="10e5a07c03f39bc20f787b382c4d899bcefa2a2f" datatype="html">
         <source>Run now</source>
@@ -2185,7 +2185,7 @@
           <context context-type="sourcefile">app/ui/settings/jobs/button/job-button.settings.component.html</context>
           <context context-type="linenumber">2</context>
         </context-group>
-        <target state="needs-l10n">Trigger job run manually</target>
+        <target state="translated">Avviare il lavoro manualmente</target>
       </trans-unit>
       <trans-unit id="d7b35c384aecd25a516200d6921836374613dfe7" datatype="html">
         <source>Cancel</source>
@@ -2201,7 +2201,7 @@
           <context context-type="sourcefile">src/frontend/app/model/backendtext.service.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target state="needs-l10n">Size to generate</target>
+        <target state="translated">Dimensione da generare</target>
       </trans-unit>
       <trans-unit id="77c38520db0a8b490b83f0ad6c5fa66111025921" datatype="html">
         <source>These thumbnails will be generated. The list should be a subset of the enabled thumbnail sizes</source>
@@ -2209,7 +2209,7 @@
           <context context-type="sourcefile">src/frontend/app/model/backendtext.service.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target state="needs-l10n">These thumbnails will be generated. The list should be a subset of the enabled thumbnail sizes</target>
+        <target state="translated">Queste anteprime saranno generate. L'elenco dovrebbe essere un sottoinsieme delle dimensioni delle anteprime abilitate</target>
       </trans-unit>
       <trans-unit id="3c51560499be2189db6fa9734ff94fb6da24059c" datatype="html">
         <source>Indexed only</source>
@@ -2217,7 +2217,7 @@
           <context context-type="sourcefile">src/frontend/app/model/backendtext.service.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target state="needs-l10n">Indexed only</target>
+        <target state="translated">Solo indicizzati</target>
       </trans-unit>
       <trans-unit id="264cbf385990b302b714fbca47f145b265736f67" datatype="html">
         <source>Only checks indexed files.</source>
@@ -2225,7 +2225,7 @@
           <context context-type="sourcefile">src/frontend/app/model/backendtext.service.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target state="needs-l10n">Only checks indexed files.</target>
+        <target state="translated">Controlla solo i file indicizzati.</target>
       </trans-unit>
       <trans-unit id="f53ab04e9d8449445abf482bf44b521e2e695c3c" datatype="html">
         <source>Indexing</source>
@@ -2233,7 +2233,7 @@
           <context context-type="sourcefile">src/frontend/app/model/backendtext.service.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target state="needs-l10n">Indexing</target>
+        <target state="translated">Indicizzazione</target>
       </trans-unit>
       <trans-unit id="d114a5b2955a3a63dcc4da1c4ae023de4649ad54" datatype="html">
         <source>Database Reset</source>
@@ -2273,7 +2273,7 @@
           <context context-type="sourcefile">src/frontend/app/model/backendtext.service.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target state="needs-l10n">Temp Folder Cleaning</target>
+        <target state="translated">Pulizia della cartella temporanea</target>
       </trans-unit>
       <trans-unit id="85b9773b9a3caeb9f0fd69b2b8fa7284bda6b492" datatype="html">
         <source>Server error</source>
@@ -2302,7 +2302,7 @@
           <context context-type="linenumber">1</context>
         </context-group>
         <note priority="1" from="meaning">hour</note>
-        <target state="needs-l10n">h</target>
+        <target state="translated">o</target>
       </trans-unit>
       <trans-unit id="7001154a37e238b0800a22a3629b60128690515c" datatype="html">
         <source>m</source>
@@ -2311,7 +2311,7 @@
           <context context-type="linenumber">1</context>
         </context-group>
         <note priority="1" from="meaning">minute</note>
-        <target state="needs-l10n">m</target>
+        <target state="translated">m</target>
       </trans-unit>
       <trans-unit id="75ecedd96576b01de81bf0c5f515b658d3c94091" datatype="html">
         <source>s</source>
@@ -2320,7 +2320,7 @@
           <context context-type="linenumber">1</context>
         </context-group>
         <note priority="1" from="meaning">second</note>
-        <target state="needs-l10n">s</target>
+        <target state="translated">s</target>
       </trans-unit>
       <trans-unit id="2ce162878bbc73bd49c7a3b51d6db6a10da4f21f" datatype="html">
         <source>ascending name</source>
@@ -2328,7 +2328,7 @@
           <context context-type="sourcefile">src/frontend/app/pipes/StringifySortingMethod.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target state="needs-l10n">ascending name</target>
+        <target state="translated">nome in ordine crescente</target>
       </trans-unit>
       <trans-unit id="5f6c10fa70a64acf16325e813e3cd6485df01b7c" datatype="html">
         <source>descending name</source>
@@ -2336,7 +2336,7 @@
           <context context-type="sourcefile">src/frontend/app/pipes/StringifySortingMethod.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target state="needs-l10n">descending name</target>
+        <target state="translated">nome in ordine decrescente</target>
       </trans-unit>
       <trans-unit id="33cbb9be635d087d7ec1a4827bdc938ee785bb96" datatype="html">
         <source>ascending date</source>
@@ -2344,7 +2344,7 @@
           <context context-type="sourcefile">src/frontend/app/pipes/StringifySortingMethod.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target state="needs-l10n">ascending date</target>
+        <target state="translated">data in ordine crescente</target>
       </trans-unit>
       <trans-unit id="de879950dc2e77b3d8e9b4efe9d6c0051fba37d4" datatype="html">
         <source>descending date</source>
@@ -2352,7 +2352,7 @@
           <context context-type="sourcefile">src/frontend/app/pipes/StringifySortingMethod.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target state="needs-l10n">descending date</target>
+        <target state="translated">data in ordine decrescente</target>
       </trans-unit>
       <trans-unit id="63b8a172f11bb90da8fbca54f34f2c71a205225b" datatype="html">
         <source>random</source>
@@ -2404,7 +2404,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/share/share.gallery.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target state="needs-l10n">Url has been copied to clipboard</target>
+        <target state="translated">L'indirizzo è stato copiato negli appunti</target>
       </trans-unit>
       <trans-unit id="381b3a21fe4e53a0ca52dbc6e07073c172489230" datatype="html">
         <source>loading..</source>
@@ -2416,7 +2416,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/share/share.gallery.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target state="needs-l10n">loading..</target>
+        <target state="translated">Caricamento...</target>
       </trans-unit>
       <trans-unit id="04e4b67fdc5f633a81e0ab32c1751ab20e6e3034" datatype="html">
         <source>settings saved</source>
@@ -2424,7 +2424,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/settings/_abstract/abstract.settings.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target state="needs-l10n">settings saved</target>
+        <target state="translated">impostazioni salvate</target>
       </trans-unit>
       <trans-unit id="1e035e6ccfab771cad4226b2ad230cb0d4a88cba" datatype="html">
         <source>Success</source>
@@ -2448,7 +2448,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/settings/_abstract/settings-entry/settings-entry.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target state="needs-l10n">readonly</target>
+        <target state="translated">Sola lettura</target>
       </trans-unit>
       <trans-unit id="ada3ed98fe7952aac6cd3e2831d4cf3aac20ce0a" datatype="html">
         <source>default value</source>
@@ -2476,7 +2476,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/settings/other/other.settings.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target state="needs-l10n">Restart the server to apply the new settings</target>
+        <target state="translated">Riavvia il server per applicare le nuove impostazioni</target>
       </trans-unit>
       <trans-unit id="87b1696eb068572c3908643c425ee3090938c1a0" datatype="html">
         <source>Folder indexing</source>
@@ -2484,7 +2484,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/settings/indexing/indexing.settings.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target state="needs-l10n">Folder indexing</target>
+        <target state="translated">Indicizzazione cartelle</target>
       </trans-unit>
       <trans-unit id="03b2c27d0f1dd0ebdf6eb756bd43914d5127ca8a" datatype="html">
         <source>low</source>
@@ -2516,7 +2516,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/settings/indexing/indexing.settings.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target state="needs-l10n">Folder indexing started</target>
+        <target state="translated">Indicizzazione cartelle iniziata</target>
       </trans-unit>
       <trans-unit id="c5a3929b71a7b8090a763cc3434f8756184effdc" datatype="html">
         <source>Folder indexing interrupted</source>
@@ -2524,7 +2524,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/settings/indexing/indexing.settings.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target state="needs-l10n">Folder indexing interrupted</target>
+        <target state="translated">Indicizzazione cartelle interrotta</target>
       </trans-unit>
       <trans-unit id="3a894c33925f9b669fa1f2732e45ae32cc815ee8" datatype="html">
         <source>Resetting  database</source>
