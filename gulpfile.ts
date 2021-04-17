@@ -35,7 +35,7 @@ const getSwitch = (name: string, def: string = null): string => {
   return def;
 };
 
-gulp.task('build-backend', function () {
+gulp.task('build-backend', function() {
   return gulp.src([
     'src/common/**/*.ts',
     'src/backend/**/*.ts',
@@ -95,30 +95,13 @@ const resetAppModule = async (language: string) => {
 
 const createFrontendTask = (type: string, language: string, script: string) => {
   gulp.task(type, async (cb) => {
-    let error;
     try {
-      // TODO: remove this once i18n-pollify is removed from the project
-      // Adding filtered translation as webpack would pack all translations into the created release
-      await createDynamicTranslationFile(language);
-      await setDynTransFileAtAppModule(language);
       const {stdout, stderr} = await execPr(script);
       console.log(stdout);
       console.error(stderr);
     } catch (e) {
       console.error(e);
-      error = e;
-    } finally {
-      try {
-        await resetAppModule(language);
-      } catch (e) {
-
-      }
-      try {
-        await removeDynamicTranslationFile(language);
-      } catch (e) {
-
-      }
-      cb(error);
+      cb(e);
     }
   });
 };
@@ -152,27 +135,14 @@ const getLanguages = () => {
 };
 
 gulp.task('build-frontend', (() => {
-  const languages = getLanguages().filter((l) => {
-    return l !== 'en';
-  });
   const tasks = [];
-  createFrontendTask('build-frontend-release default', 'en',
-    'ng build --aot --prod --output-path=./release/dist --no-progress --i18n-locale=en' +
-    ' --i18n-format xlf --i18n-file src/frontend/' + translationFolder + '/messages.en.xlf' +
-    ' --i18n-missing-translation warning');
+  createFrontendTask('build-frontend-release default', 'all',
+    'ng build --prod  --no-progress');
   tasks.push('build-frontend-release default');
-  for (let i = 0; i < languages.length; i++) {
-    createFrontendTask('build-frontend-release ' + languages[i], languages[i],
-      'ng build --aot --prod --output-path=./release/dist/' + languages[i] +
-      ' --no-progress --i18n-locale=' + languages[i] +
-      ' --i18n-format xlf --i18n-file src/frontend/' + translationFolder + '/messages.' + languages[i] + '.xlf' +
-      ' --i18n-missing-translation warning');
-    tasks.push('build-frontend-release ' + languages[i]);
-  }
   return gulp.series(...tasks);
 })());
 
-gulp.task('copy-static', function () {
+gulp.task('copy-static', function() {
   return gulp.src([
     'src/backend/model/diagnostics/blank.jpg',
     'README.md',
@@ -181,7 +151,7 @@ gulp.task('copy-static', function () {
     .pipe(gulp.dest('./release'));
 });
 
-gulp.task('copy-package', function () {
+gulp.task('copy-package', function() {
   return gulp.src([
     'package.json'], {base: '.'})
     .pipe(jeditor((json: {
@@ -225,7 +195,7 @@ gulp.task('copy-package', function () {
 });
 
 
-gulp.task('zip-release', function () {
+gulp.task('zip-release', function() {
   return gulp.src(['release/**/*'], {base: './release'})
     .pipe(zip('pigallery2.zip'))
     .pipe(gulp.dest('.'));
@@ -235,27 +205,17 @@ gulp.task('create-release', gulp.series('build-frontend', 'build-backend', 'copy
 
 
 const simpleBuild = (isProd: boolean) => {
-  const languages = getLanguages().filter((l) => {
-    return l !== 'en';
-  });
   const tasks = [];
-  let cmd = 'ng build --aot ';
+  let cmd = 'ng build ';
   if (isProd) {
     cmd += ' --prod --no-extract-licenses ';
   }
-  createFrontendTask('build-frontend default', 'en', cmd + '--output-path=./dist --no-progress --no-progress --i18n-locale en' +
-    ' --i18n-format=xlf --i18n-file=src/frontend/' + translationFolder + '/messages.en.xlf' + ' --i18n-missing-translation warning');
-  tasks.push('build-frontend default');
-  if (!process.env.CI) { // don't build languages if running in CI
-    for (let i = 0; i < languages.length; i++) {
-      createFrontendTask('build-frontend ' + languages[i], languages[i], cmd +
-        '--output-path=./dist/' + languages[i] +
-        ' --no-progress --i18n-locale ' + languages[i] +
-        ' --i18n-format=xlf --i18n-file=src/frontend/' + translationFolder +
-        '/messages.' + languages[i] + '.xlf' + ' --i18n-missing-translation warning');
-      tasks.push('build-frontend ' + languages[i]);
-    }
+  if (!process.env.CI) {
+    createFrontendTask('build-frontend default', 'all', cmd);
+  } else {
+    createFrontendTask('build-frontend default', 'all', cmd + '--localize=false');
   }
+  tasks.push('build-frontend default');
   return gulp.series(...tasks);
 };
 
@@ -263,7 +223,7 @@ gulp.task('extract-locale', async (cb) => {
   console.log('creating source translation file:  locale.source.xlf');
   try {
     {
-      const {stdout, stderr} = await execPr('ng extract-i18n --out-file=./../../locale.source.xlf  --i18n-format=xlf --i18n-locale=en',
+      const {stdout, stderr} = await execPr('ng extract-i18n --out-file=locale.source.xlf  --format=xlf',
         {maxBuffer: 1024 * 1024});
       console.log(stdout);
       console.error(stderr);
@@ -299,12 +259,15 @@ const translate = async (list: any[], cb: (err?: any) => void) => {
 const merge = async (list: any[], cb: (err?: any) => void) => {
   try {
     const localsStr = '"[\\"' + list.join('\\",\\"') + '\\"]"';
-    const {stdout, stderr} = await execPr('xlf-google-translate ' +
+    const command = 'xlf-google-translate ' +
       '--method="extend-only" ' +
       '--source-lang="en" ' +
       '--source-file="./locale.source.xlf" ' +
       '--destination-filename="messages" ' +
-      '--destination-folder="./src/frontend/"' + translationFolder + ' --destination-languages=' + localsStr);
+      '--destination-folder="./src/frontend/' + translationFolder + '" ' +
+      '--destination-languages=' + localsStr;
+    console.log(command);
+    const {stdout, stderr} = await execPr(command);
     console.log(stdout);
     console.error(stderr);
     cb();
@@ -314,10 +277,10 @@ const merge = async (list: any[], cb: (err?: any) => void) => {
   }
 };
 
-gulp.task('update-translation-only', function (cb) {
+gulp.task('update-translation-only', function(cb) {
   translate(getLanguages(), cb).catch(console.error);
 });
-gulp.task('merge-translation-only', function (cb) {
+gulp.task('merge-translation-only', function(cb) {
   merge(getLanguages(), cb).catch(console.error);
 });
 
@@ -346,7 +309,7 @@ gulp.task('add-translation-only', (cb) => {
 });
 
 gulp.task('generate-man', async (cb) => {
-  const defCFG =  ConfigClassBuilder.attachInterface(new PrivateConfigClass());
+  const defCFG = ConfigClassBuilder.attachInterface(new PrivateConfigClass());
   defCFG.Server.sessionSecret = [];
   let txt = '# Pigallery 2 man page\n';
   txt += 'pigallery2 uses [typeconfig](https://github.com/bpatrik/typeconfig) for configuration\n\n';

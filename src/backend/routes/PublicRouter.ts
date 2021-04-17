@@ -26,24 +26,20 @@ declare global {
 export class PublicRouter {
 
 
-  public static route(app: Express) {
-    const setLocale = (req: Request, res: Response, next: Function) => {
-      let localePath = '';
+  public static route(app: Express): void {
+    const setLocale = (req: Request, res: Response, next: NextFunction) => {
       let selectedLocale = req['locale'];
       if (req.cookies && req.cookies[CookieNames.lang]) {
         if (Config.Client.languages.indexOf(req.cookies[CookieNames.lang]) !== -1) {
           selectedLocale = req.cookies[CookieNames.lang];
         }
       }
-      if (selectedLocale !== 'en') {
-        localePath = selectedLocale;
-      }
       res.cookie(CookieNames.lang, selectedLocale);
-      req['localePath'] = localePath;
+      req['localePath'] = selectedLocale;
       next();
     };
 
-    const renderIndex = (req: Request, res: Response, next: Function) => {
+    const renderIndex = (req: Request, res: Response, next: NextFunction) => {
       ejs.renderFile(path.join(ProjectPath.FrontendFolder, req['localePath'], 'index.html'),
         res.tpl, (err, str) => {
           if (err) {
@@ -69,14 +65,14 @@ export class PublicRouter {
 
         res.tpl.user = null;
         if (req.session.user) {
-          res.tpl.user = <UserDTO>{
+          res.tpl.user = {
             id: req.session.user.id,
             name: req.session.user.name,
             csrfToken: req.session.user.csrfToken,
             role: req.session.user.role,
             usedSharingKey: req.session.user.usedSharingKey,
             permissions: req.session.user.permissions
-          };
+          } as UserDTO;
 
           if (!res.tpl.user.csrfToken && req.csrfToken) {
             res.tpl.user.csrfToken = req.csrfToken();

@@ -9,13 +9,52 @@
       "projectType": "application",
       "schematics": {},
       "prefix": "app",
+      "i18n": {
+        "sourceLocale": {
+          "code": "en",
+          "baseHref": ""
+        },
+        "locales": {
+          "es": {
+            "baseHref": "",
+            "translation": "src/frontend/translate/messages.es.xlf"
+          },
+          "fr": {
+            "baseHref": "",
+            "translation": "src/frontend/translate/messages.fr.xlf"
+          },
+          "hu": {
+            "baseHref": "",
+            "translation": "src/frontend/translate/messages.hu.xlf"
+          },
+          "it": {
+            "baseHref": "",
+            "translation": "src/frontend/translate/messages.it.xlf"
+          },
+          "ro": {
+            "baseHref": "",
+            "translation": "src/frontend/translate/messages.ro.xlf"
+          },
+          "ru": {
+            "baseHref": "",
+            "translation": "src/frontend/translate/messages.ru.xlf"
+          },
+          "sv": {
+            "baseHref": "",
+            "translation": "src/frontend/translate/messages.sv.xlf"
+          }
+        }
+      },
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "localize": true,
+            "aot": true,
             "crossOrigin": "anonymous",
             "outputPath": "dist",
             "index": "src/frontend/index.html",
+            "progress": true,
             "main": "src/frontend/main.ts",
             "tsConfig": "src/frontend/tsconfig.app.json",
             "polyfills": "src/frontend/polyfills.ts",
@@ -29,15 +68,22 @@
               "ngx-toastr/toastr.css",
               "src/frontend/styles.css"
             ],
-            "scripts": []
+            "scripts": [],
+            "i18nMissingTranslation": "warning"
           },
           "configurations": {
+            "dev": {
+              "localize": [
+                "en"
+              ],
+              "outputPath": "dist",
+              "watch": true
+            },
             "production": {
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
               "namedChunks": false,
-              "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,

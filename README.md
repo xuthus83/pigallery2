@@ -125,12 +125,9 @@ apt-get install build-essential  libkrb5-dev gcc g++
 ## 2. Translate the page to your own language
 1. [Install Pigallery2](#121-b-install-from-source) from source (with the release it won't work) 
 2. add your language e.g: fr
-   ```bash
-   npm run add-translation -- --fr
-   ```
-   it creates a new `messages.fr.xls` file at `src/frontend/translate` folder, 
-   it will already contain dummy translation with google translate.
-3. 'fix' the dummy translation
+   * copy `src/frontend/translate/messages.en.xls` to `src/frontend/translate/messages.fr.xls`
+   * add the new translation to the `angular.json` `projects->pigallery2->i18n->locales` section 
+3. translate the file by updating the `<target>` tags
 4. test if it works:
    build and start the app
    ```bash
