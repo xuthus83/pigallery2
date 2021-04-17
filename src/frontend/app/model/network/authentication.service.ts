@@ -56,7 +56,7 @@ export class AuthenticationService {
     // TODO: refactor architecture remove shareService dependency
     window.setTimeout(() => {
       this.user.subscribe((u) => {
-        this.shareService.onNewUser(u).catch(console.error);
+        this.shareService.onNewUser(u);
       });
     }, 0);
   }
