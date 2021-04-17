@@ -18,9 +18,7 @@
           <context context-type="sourcefile">app/ui/login/login.component.html</context>
           <context context-type="linenumber">12</context>
         </context-group>
-        <target>
-          Nombre de usuario o contraseña incorrectos
-        </target>
+        <target>Nombre de usuario o contraseña incorrectos</target>
       </trans-unit>
       <trans-unit id="08c74dc9762957593b91f6eb5d65efdfc975bf48" datatype="html">
         <source>Username</source>
@@ -81,9 +79,7 @@
           <context context-type="sourcefile">app/ui/login/login.component.html</context>
           <context context-type="linenumber">68</context>
         </context-group>
-        <target>
-          Iniciar sesión
-        </target>
+        <target>Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="64034510da88fc99130864f733500fcd62aedb01" datatype="html">
         <source>
@@ -102,9 +98,7 @@
           <context context-type="sourcefile">app/ui/sharelogin/share-login.component.html</context>
           <context context-type="linenumber">41</context>
         </context-group>
-        <target>
-          Entrar
-        </target>
+        <target>Entrar</target>
       </trans-unit>
       <trans-unit id="e576d10a00b926dc56802231438eea7831b602ee" datatype="html">
         <source>download</source>
@@ -204,10 +198,7 @@
           <context context-type="sourcefile">app/ui/gallery/lightbox/lightbox.gallery.component.html</context>
           <context context-type="linenumber">22</context>
         </context-group>
-        <target>
-            Lo más probable es que el video no esté transcodificado.
-            Se puede hacer en la configuración.
-            Necesita transcodificar estos videos para verlos en línea:</target>
+        <target>Lo más probable es que el video no esté transcodificado. Se puede hacer en la configuración. Necesita transcodificar estos videos para verlos en línea:</target>
       </trans-unit>
       <trans-unit id="f3cda2936c4e70d5b920b2c243ec634222743ba1" datatype="html">
         <source>Link availability</source>
@@ -601,11 +592,7 @@
           <context context-type="sourcefile">app/ui/settings/_abstract/settings-entry/settings-entry.component.html</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target>
-          Parece que está ejecutando la aplicación en un contenedor Docker.
-          Esta configuración no se debe modificar en el Docker.
-          Asegúrese de que sabe lo que está haciendo.
-        </target>
+        <target>Parece que está ejecutando la aplicación en un contenedor Docker. Esta configuración no se debe modificar en el Docker. Asegúrese de que sabe lo que está haciendo.</target>
       </trans-unit>
       <trans-unit id="f39256070bfc0714020dfee08895421fc1527014" datatype="html">
         <source>Disabled</source>
@@ -849,7 +836,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/photo/photo.settings.component.html</context>
-          <context context-type="linenumber">39</context>
+          <context context-type="linenumber">61</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/metafiles/metafile.settings.component.html</context>
@@ -902,7 +889,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/photo/photo.settings.component.html</context>
-          <context context-type="linenumber">43</context>
+          <context context-type="linenumber">65</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/metafiles/metafile.settings.component.html</context>
@@ -932,7 +919,7 @@
           <context context-type="sourcefile">app/ui/settings/jobs/jobs.settings.component.html</context>
           <context context-type="linenumber">225</context>
         </context-group>
-        <target>Reiniciar</target>
+        <target>Restablecer</target>
       </trans-unit>
       <trans-unit id="2780e50203a2f635b9fba81e3dd37e3ee06e000c" datatype="html">
         <source>Use image markers</source>
@@ -1007,13 +994,13 @@
         </context-group>
         <target>Miniatura de calidad</target>
       </trans-unit>
-      <trans-unit id="33310fee17ab5d249f5e30519cce5169caf7c216" datatype="html">
-        <source>High quality may be slow.</source>
+      <trans-unit id="b2d8e74a49c92e56ab68a248c5090187b16da0ae" datatype="html">
+        <source>High quality may be slow. Especially with Jimp.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/thumbnail/thumbnail.settings.component.html</context>
           <context context-type="linenumber">12</context>
         </context-group>
-        <target>La alta calidad puede ser lenta.</target>
+        <target>High quality may be slow. Especially with Jimp.</target>
       </trans-unit>
       <trans-unit id="c3fdaf1072cec7268c059bbefca87bb37e481d47" datatype="html">
         <source>Icon size</source>
@@ -1047,8 +1034,7 @@
           <context context-type="sourcefile">app/ui/settings/thumbnail/thumbnail.settings.component.html</context>
           <context context-type="linenumber">39</context>
         </context-group>
-        <target>Se generará el tamaño óptimo. (Tamaños más grandes ofrecen mejor calidad, pero se usa más
-            almacenamiento y CPU para renderizar las miniaturas).</target>
+        <target>Se generará el tamaño óptimo. (Tamaños más grandes ofrecen mejor calidad, pero se usa más almacenamiento y CPU para renderizar las miniaturas).</target>
       </trans-unit>
       <trans-unit id="eca363353e36c2ea99496b8d3fb4b99a5c63b62f" datatype="html">
         <source>';' separated integers. If size is 240, that shorter side of the thumbnail will have 160
@@ -1058,8 +1044,7 @@
           <context context-type="sourcefile">app/ui/settings/thumbnail/thumbnail.settings.component.html</context>
           <context context-type="linenumber">43</context>
         </context-group>
-        <target>Usar ';' para separar los enteros. Si el tamaño es 240, el lado más pequeño de la miniatura tendrá 160
-            píxeles.</target>
+        <target>Usar ';' para separar los enteros. Si el tamaño es 240, el lado más pequeño de la miniatura tendrá 160 píxeles.</target>
       </trans-unit>
       <trans-unit id="695e937f7b52084765c07a2b1269a040024a2363" datatype="html">
         <source>Thumbnail sizes</source>
@@ -1078,8 +1063,7 @@
           <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
           <context context-type="linenumber">26</context>
         </context-group>
-        <target>El video hace uso de ffmpeg. O los binarios ffmpeg y ffprobe están disponibles en el PATH o
-          es necesario tener instalados los paquetes de node @ffmpeg-installer/ffmpeg y @ffprobe-installer/ffprobe.</target>
+        <target>El video hace uso de ffmpeg. O los binarios ffmpeg y ffprobe están disponibles en el PATH o es necesario tener instalados los paquetes de node @ffmpeg-installer/ffmpeg y @ffprobe-installer/ffprobe.</target>
       </trans-unit>
       <trans-unit id="8fbfaec401808fd2433e6b694c11122de317ab19" datatype="html">
         <source>Video transcoding:</source>
@@ -1098,8 +1082,7 @@
           <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
           <context context-type="linenumber">35</context>
         </context-group>
-        <target>Para garantizar una reproducción de video fluida, se recomienda la transcodificación de video a una tasa de bits más baja que
-          la tasa de carga del servidor.</target>
+        <target>Para garantizar una reproducción de video fluida, se recomienda la transcodificación de video a una tasa de bits más baja que la tasa de carga del servidor.</target>
       </trans-unit>
       <trans-unit id="2563716b6cdad527d4d01f0aa49368d1a876263f" datatype="html">
         <source>The transcoded videos will be save to the thumbnail folder.</source>
@@ -1118,8 +1101,7 @@
           <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
           <context context-type="linenumber">40</context>
         </context-group>
-        <target>Puede activar la transcodificación manualmente, pero también puede crear un trabajo de codificación automático
-          en el modo de configuración avanzada.</target>
+        <target>Puede activar la transcodificación manualmente, pero también puede crear un trabajo de codificación automático en el modo de configuración avanzada.</target>
       </trans-unit>
       <trans-unit id="7722a92a1fc887570b4f4d8a7bb916f067f32028" datatype="html">
         <source>Format</source>
@@ -1145,7 +1127,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/photo/photo.settings.component.html</context>
-          <context context-type="linenumber">27</context>
+          <context context-type="linenumber">49</context>
         </context-group>
         <target>Resolución</target>
       </trans-unit>
@@ -1189,8 +1171,7 @@
           <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
           <context context-type="linenumber">104</context>
         </context-group>
-        <target>La tasa de bits del video de salida se reducirá a esta.
-            Dicha tasa debería ser menor que la tasa de subida del servidor.</target>
+        <target>La tasa de bits del video de salida se reducirá a esta. Dicha tasa debería ser menor que la tasa de subida del servidor.</target>
       </trans-unit>
       <trans-unit id="148d5d78e94f20a20c3ad3b01d704a3497a8c761" datatype="html">
         <source>CRF</source>
@@ -1240,11 +1221,41 @@
         </context-group>
         <target>Separa los valores usando ";". Se enviará tal cual a ffmpeg como opciones personalizadas.</target>
       </trans-unit>
+      <trans-unit id="1b239b0422945f36c35b5559b4b0c135922fe299" datatype="html">
+        <source>It is highly recommended to use hardware accelerated (sharp or gm) lib for thumbnail
+        generation
+      </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/photo/photo.settings.component.html</context>
+          <context context-type="linenumber">9</context>
+        </context-group>
+        <target>It is highly recommended to use hardware accelerated (sharp or gm) lib for thumbnail
+        generation
+      </target>
+      </trans-unit>
+      <trans-unit id="8ae2dddf71604792d10a35e6e2f75d58bd498e88" datatype="html">
+        <source>Make sure that sharp node module is installed (npm install sharp).
+          </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/photo/photo.settings.component.html</context>
+          <context context-type="linenumber">23</context>
+        </context-group>
+        <target>Make sure that sharp node module is installed (npm install sharp).
+          </target>
+      </trans-unit>
+      <trans-unit id="6f49ee2673fb82fe8dd1a7da0bada14a4156bf30" datatype="html">
+        <source>Thumbnail generation library</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/ui/settings/photo/photo.settings.component.html</context>
+          <context context-type="linenumber">16</context>
+        </context-group>
+        <target>Thumbnail generation library</target>
+      </trans-unit>
       <trans-unit id="ab123cb43ad6623f84c33f28274418c88667e866" datatype="html">
         <source>Photo converting:</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/photo/photo.settings.component.html</context>
-          <context context-type="linenumber">8</context>
+          <context context-type="linenumber">30</context>
         </context-group>
         <target>Conversión de fotos:</target>
       </trans-unit>
@@ -1252,7 +1263,7 @@
         <source>Converting</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/photo/photo.settings.component.html</context>
-          <context context-type="linenumber">11</context>
+          <context context-type="linenumber">33</context>
         </context-group>
         <target>Conversión</target>
       </trans-unit>
@@ -1260,7 +1271,7 @@
         <source>Downsizes photos for faster preview loading. (Zooming in to the photo loads the original).</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/photo/photo.settings.component.html</context>
-          <context context-type="linenumber">12</context>
+          <context context-type="linenumber">34</context>
         </context-group>
         <target>Reduce el tamaño de las fotos para una vista previa más rápida. (Al acercar la foto, se carga el tamaño original).</target>
       </trans-unit>
@@ -1268,7 +1279,7 @@
         <source>On the fly converting</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/photo/photo.settings.component.html</context>
-          <context context-type="linenumber">18</context>
+          <context context-type="linenumber">40</context>
         </context-group>
         <target>Conversión sobre la marcha</target>
       </trans-unit>
@@ -1276,7 +1287,7 @@
         <source>Converts photos on the fly, when they are requested.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/photo/photo.settings.component.html</context>
-          <context context-type="linenumber">19</context>
+          <context context-type="linenumber">41</context>
         </context-group>
         <target>Convierte las fotos en el momento en que han sido solicitadas.</target>
       </trans-unit>
@@ -1284,7 +1295,7 @@
         <source>The shorter edge of the converted photo will be scaled down to this, while keeping the aspect ratio.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/photo/photo.settings.component.html</context>
-          <context context-type="linenumber">28</context>
+          <context context-type="linenumber">50</context>
         </context-group>
         <target>El lado más corto de la foto convertida se reducirá a esta resolución (manteniendo la relación de aspecto).</target>
       </trans-unit>
@@ -1362,9 +1373,7 @@
           <context context-type="sourcefile">app/ui/settings/share/share.settings.component.html</context>
           <context context-type="linenumber">38</context>
         </context-group>
-        <target>
-        El uso compartido no es compatible con esta configuración
-      </target>
+        <target>El uso compartido no es compatible con esta configuración</target>
       </trans-unit>
       <trans-unit id="b8f78167ef95c21d032b15614e8239cc033a0fd2" datatype="html">
         <source>Save
@@ -1377,8 +1386,7 @@
           <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
           <context context-type="linenumber">72</context>
         </context-group>
-        <target>Guardar
-        </target>
+        <target>Guardar</target>
       </trans-unit>
       <trans-unit id="ae9e824f2eaba4400a5cb66ad946c433dc45b3d5" datatype="html">
         <source>Reset
@@ -1391,8 +1399,7 @@
           <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
           <context context-type="linenumber">76</context>
         </context-group>
-        <target>Restablecer
-        </target>
+        <target>Restablecer</target>
       </trans-unit>
       <trans-unit id="ec4a974407cc4ee8128ffc3ec50f6effd1b197ec" datatype="html">
         <source>Shared links:</source>
@@ -1442,9 +1449,7 @@
           <context context-type="sourcefile">app/ui/settings/share/share.settings.component.html</context>
           <context context-type="linenumber">84</context>
         </context-group>
-        <target>
-          Ningún enlace de uso compartido fue creado.
-        </target>
+        <target>Ningún enlace de uso compartido fue creado.</target>
       </trans-unit>
       <trans-unit id="445a71ab2f91f21a6d54acf86fb9796b1ac20bbb" datatype="html">
         <source>
@@ -1456,12 +1461,7 @@
           <context context-type="sourcefile">app/ui/settings/random-photo/random-photo.settings.component.html</context>
           <context context-type="linenumber">28</context>
         </context-group>
-        <target>
-          Esta característica te permite generar direcciones de 'imágenes aleatorias'.
-          Dicha URL devuelve imágen seleccionado aleatoriamente de tu galería.
-          Puedes usar esa URL con una aplicación externa, como por ejemplo, una encargada de
-          cambiar el fondo del escritorio del dispositivo de forma aleatoria.
-        </target>
+        <target>Esta característica te permite generar direcciones de 'imágenes aleatorias'. Dicha URL devuelve imágen seleccionado aleatoriamente de tu galería. Puedes usar esa URL con una aplicación externa, como por ejemplo, una encargada de cambiar el fondo del escritorio del dispositivo de forma aleatoria.</target>
       </trans-unit>
       <trans-unit id="6c02e8541a2e670f80de8b5a218ea14a16bb6c42" datatype="html">
         <source>
@@ -1471,9 +1471,7 @@
           <context context-type="sourcefile">app/ui/settings/random-photo/random-photo.settings.component.html</context>
           <context context-type="linenumber">35</context>
         </context-group>
-        <target>
-        Las imágenes aleatorias no son compatibles con esta configuración
-      </target>
+        <target>Las imágenes aleatorias no son compatibles con esta configuración</target>
       </trans-unit>
       <trans-unit id="870d05214ce19848ea4b7fe698e9a2e73db0c715" datatype="html">
         <source>Page title</source>
@@ -1547,10 +1545,7 @@
           <context context-type="sourcefile">app/ui/settings/basic/basic.settings.component.html</context>
           <context context-type="linenumber">68</context>
         </context-group>
-        <target>
-          Si se accede a la página desde una red local, se debe conocer cual es la URL pública para así
-          poder generar los enlaces de uso compartido.
-        </target>
+        <target>Si se accede a la página desde una red local, se debe conocer cual es la URL pública para así poder generar los enlaces de uso compartido.</target>
       </trans-unit>
       <trans-unit id="52e8e9fdcd08e89225892a7657140dbf41020b76" datatype="html">
         <source>Url Base</source>
@@ -1569,9 +1564,7 @@
           <context context-type="sourcefile">app/ui/settings/basic/basic.settings.component.html</context>
           <context context-type="linenumber">78</context>
         </context-group>
-        <target>Si se accede a la galería desde una subdirección (like:
-            http://mydomain.com/myGallery), establecela aquí. Si no funciona,
-            se puede omitir el '/' del inicio de la URL.</target>
+        <target>Si se accede a la galería desde una subdirección (like: http://mydomain.com/myGallery), establecela aquí. Si no funciona, se puede omitir el '/' del inicio de la URL.</target>
       </trans-unit>
       <trans-unit id="f268a48c3f70d641ccb99786fe49f21a769eb2bb" datatype="html">
         <source>
@@ -1581,9 +1574,7 @@
           <context context-type="sourcefile">app/ui/settings/basic/basic.settings.component.html</context>
           <context context-type="linenumber">90</context>
         </context-group>
-        <target>
-        La URL pública y la URL base no coinciden. Algunas funcionalidades es posible que no funcionen.
-      </target>
+        <target>La URL pública y la URL base no coinciden. Algunas funcionalidades es posible que no funcionen.</target>
       </trans-unit>
       <trans-unit id="a20e57ed1eb4d083455f5dd3f0d5b51328e7217a" datatype="html">
         <source>Override keywords</source>
@@ -1609,13 +1600,13 @@
         </context-group>
         <target>Permiso para destacar cara</target>
       </trans-unit>
-      <trans-unit id="9064a22f60447567a2d38c59fae4340fb5803491" datatype="html">
-        <source>Required minimum right to star (favourite) a face.</source>
+      <trans-unit id="82774b234f55dc57cdc78c709586971b7520119b" datatype="html">
+        <source>Required minimum right to start (favourite) a face.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/faces/faces.settings.component.html</context>
           <context context-type="linenumber">40</context>
         </context-group>
-        <target>Mínimo permiso requerido para destacar (poner como favorita) una cara.</target>
+        <target>Required minimum right to start (favourite) a face.</target>
       </trans-unit>
       <trans-unit id="efddd8cd82869370d3846b05c546a4335f44625f" datatype="html">
         <source>
@@ -1625,9 +1616,7 @@
           <context context-type="sourcefile">app/ui/settings/faces/faces.settings.component.html</context>
           <context context-type="linenumber">46</context>
         </context-group>
-        <target>
-        Las caras no son compatibles con esta configuración.
-      </target>
+        <target>Las caras no son compatibles con esta configuración.</target>
       </trans-unit>
       <trans-unit id="07807dce2e0dc33743530dd6a8b0d1f24094884d" datatype="html">
         <source>Error: </source>
@@ -1635,7 +1624,7 @@
           <context context-type="sourcefile">app/ui/settings/other/other.settings.component.html</context>
           <context context-type="linenumber">7</context>
         </context-group>
-        <target>Error: </target>
+        <target>Error:</target>
       </trans-unit>
       <trans-unit id="052fa597b5d3e4c2a81b35c8ed250487d43cabe5" datatype="html">
         <source>Threads:</source>
@@ -1653,13 +1642,13 @@
         </context-group>
         <target>Ejecución en paralelo</target>
       </trans-unit>
-      <trans-unit id="10bb6051b469e4ae0ff1e54b5fd13f5773c60d36" datatype="html">
-        <source>Runs directory scanning in a different thread.</source>
+      <trans-unit id="5c7a193c6d354fddd0e72c0a73d743310a4573c2" datatype="html">
+        <source>Runs directory scanning and thumbnail generation (only for Jimp) in a different thread.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/ui/settings/other/other.settings.component.html</context>
           <context context-type="linenumber">15</context>
         </context-group>
-        <target>Ejecuta el escaneo de directorios en distintos hilos en paralelo.</target>
+        <target>Runs directory scanning and thumbnail generation (only for Jimp) in a different thread.</target>
       </trans-unit>
       <trans-unit id="46aa6890679de37f7171c72b36ee1a18182a3e37" datatype="html">
         <source>Thumbnail threads</source>
@@ -1846,11 +1835,7 @@
           <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
           <context context-type="linenumber">45</context>
         </context-group>
-        <target>
-          Separar las cadenas con ';'. Si una entrada empieza por '/' se trata como una ruta absoluta.
-          Si no empieza por '/' pero contiene un '/', la ruta es relativa al directorio de la imagen.
-          Si no contiene un '/', cualquier carpeta con este nombre será excluida.
-        </target>
+        <target>Separar las cadenas con ';'. Si una entrada empieza por '/' se trata como una ruta absoluta. Si no empieza por '/' pero contiene un '/', la ruta es relativa al directorio de la imagen. Si no contiene un '/', cualquier carpeta con este nombre será excluida.</target>
       </trans-unit>
       <trans-unit id="d72c5948a085a73fd3ebf14c7bf4f9aa32556d2d" datatype="html">
         <source>Exclude Folder List</source>
@@ -1876,9 +1861,7 @@
           <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
           <context context-type="linenumber">61</context>
         </context-group>
-        <target>
-          Separar las cadenas con ';'. Cualquier carpeta que contenga un archivo con este nombre será excluida de la indexación.
-        </target>
+        <target>Separar las cadenas con ';'. Cualquier carpeta que contenga un archivo con este nombre será excluida de la indexación.</target>
       </trans-unit>
       <trans-unit id="f62035b2bdc507f3ccd7a808230ffb6ad5729062" datatype="html">
         <source>Exclude File List</source>
@@ -1920,9 +1903,7 @@
           <context context-type="sourcefile">app/ui/settings/indexing/indexing.settings.component.html</context>
           <context context-type="linenumber">112</context>
         </context-group>
-        <target>
-          Estadísticas:
-        </target>
+        <target>Estadísticas:</target>
       </trans-unit>
       <trans-unit id="3fde556358b58d910adc30abaaff2433f0bb5f6c" datatype="html">
         <source>Folders</source>
@@ -1972,9 +1953,7 @@
           <context context-type="sourcefile">app/ui/settings/jobs/progress/job-progress.settings.component.html</context>
           <context context-type="linenumber">2</context>
         </context-group>
-        <target>
-          Última ejecución:
-        </target>
+        <target>Última ejecución:</target>
       </trans-unit>
       <trans-unit id="656bec4412d5bc54e8638f4959a022492c480a49" datatype="html">
         <source>Run between</source>
@@ -2048,9 +2027,7 @@
           <context context-type="sourcefile">app/ui/settings/jobs/progress/job-progress.settings.component.html</context>
           <context context-type="linenumber">110</context>
         </context-group>
-        <target>
-          Registros
-        </target>
+        <target>Registros</target>
       </trans-unit>
       <trans-unit id="18443428b116a10f17fbd067bde0553c00db45f1" datatype="html">
         <source>every</source>
@@ -2103,9 +2080,7 @@
           <context context-type="sourcefile">app/ui/settings/jobs/jobs.settings.component.html</context>
           <context context-type="linenumber">76</context>
         </context-group>
-        <target>
-          Establezca la hora de ejecución del trabajo.
-        </target>
+        <target>Establezca la hora de ejecución del trabajo.</target>
       </trans-unit>
       <trans-unit id="c35e7fa24615c2c8d9e6d618caecdbd090f3a303" datatype="html">
         <source>After:</source>
@@ -2122,9 +2097,7 @@
           <context context-type="sourcefile">app/ui/settings/jobs/jobs.settings.component.html</context>
           <context context-type="linenumber">93</context>
         </context-group>
-        <target>
-          El trabajo se ejecutará después de que este trabajo termine.
-        </target>
+        <target>El trabajo se ejecutará después de que este trabajo termine.</target>
       </trans-unit>
       <trans-unit id="ef36f0dc0067decf548cc11905ef3100f5bbd004" datatype="html">
         <source>At:</source>
@@ -2153,9 +2126,7 @@
           <context context-type="sourcefile">app/ui/settings/jobs/jobs.settings.component.html</context>
           <context context-type="linenumber">145</context>
         </context-group>
-        <target>
-          Permite que el trabajo se inicie incluso si otro trabajo ya se está ejecutando.
-        </target>
+        <target>Permite que el trabajo se inicie incluso si otro trabajo ya se está ejecutando.</target>
       </trans-unit>
       <trans-unit id="06a2d1d53517fb6ae65f61bc4acfdc1bfe7f0fc8" datatype="html">
         <source>';' separated integers.
@@ -2164,9 +2135,7 @@
           <context context-type="sourcefile">app/ui/settings/jobs/jobs.settings.component.html</context>
           <context context-type="linenumber">200</context>
         </context-group>
-        <target>
-          Separar los enteros con ';'.
-        </target>
+        <target>Separar los enteros con ';'.</target>
       </trans-unit>
       <trans-unit id="6ff865ebc673e7fe5ed9367575e44833ef811693" datatype="html">
         <source>+ Add Job
@@ -2175,8 +2144,7 @@
           <context context-type="sourcefile">app/ui/settings/jobs/jobs.settings.component.html</context>
           <context context-type="linenumber">228</context>
         </context-group>
-        <target>+ Añadir trabajo
-      </target>
+        <target>+ Añadir trabajo</target>
       </trans-unit>
       <trans-unit id="7f17fec3daa31daa99d46536c60c9f0c52b2ddb7" datatype="html">
         <source>Add new job</source>
@@ -2193,9 +2161,7 @@
           <context context-type="sourcefile">app/ui/settings/jobs/jobs.settings.component.html</context>
           <context context-type="linenumber">257</context>
         </context-group>
-        <target>
-          Seleccione un trabajo para ser programado.
-        </target>
+        <target>Seleccione un trabajo para ser programado.</target>
       </trans-unit>
       <trans-unit id="280c473125432bab70e5b806be43abf804f1e79b" datatype="html">
         <source>Add Job
@@ -2204,9 +2170,7 @@
           <context context-type="sourcefile">app/ui/settings/jobs/jobs.settings.component.html</context>
           <context context-type="linenumber">265</context>
         </context-group>
-        <target>
-          Añadir trabajo
-        </target>
+        <target>Añadir trabajo</target>
       </trans-unit>
       <trans-unit id="10e5a07c03f39bc20f787b382c4d899bcefa2a2f" datatype="html">
         <source>Run now</source>

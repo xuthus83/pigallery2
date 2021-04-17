@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-  <file source-language="en" datatype="plaintext" original="ng2.template" target-language="it">
+  <file source-language="en" datatype="plaintext" original="ng2.template">
     <body>
       <trans-unit id="380bac8029fe968edf74d1856635666bf8b55516" datatype="html">
         <source>Please log in</source>
@@ -592,8 +592,7 @@
           <context context-type="sourcefile">app/ui/settings/_abstract/settings-entry/settings-entry.component.html</context>
           <context context-type="linenumber">1</context>
         </context-group>
-        <target state="translated">Sembra che tu stia eseguendo l'applicazione in un container Docker. Questa impostazione non dovrebbe essere cambiata in docker. Stai attento a quello che fai.
-</target>
+        <target state="translated">Sembra che tu stia eseguendo l'applicazione in un container Docker. Questa impostazione non dovrebbe essere cambiata in docker. Stai attento a quello che fai.</target>
       </trans-unit>
       <trans-unit id="f39256070bfc0714020dfee08895421fc1527014" datatype="html">
         <source>Disabled</source>
@@ -920,8 +919,7 @@
           <context context-type="sourcefile">app/ui/settings/jobs/jobs.settings.component.html</context>
           <context context-type="linenumber">225</context>
         </context-group>
-        <target state="translated">Reset
-      </target>
+        <target state="translated">Reset</target>
       </trans-unit>
       <trans-unit id="2780e50203a2f635b9fba81e3dd37e3ee06e000c" datatype="html">
         <source>Use image markers</source>
@@ -1036,7 +1034,7 @@
           <context context-type="sourcefile">app/ui/settings/thumbnail/thumbnail.settings.component.html</context>
           <context context-type="linenumber">39</context>
         </context-group>
-        <target state="translated">Saranno generate anteprime con la dimensione più ottimale. (Più dimensioni forniscono qualità migliore, ma usano più spazio e tempo di CPU per la creazione) </target>
+        <target state="translated">Saranno generate anteprime con la dimensione più ottimale. (Più dimensioni forniscono qualità migliore, ma usano più spazio e tempo di CPU per la creazione)</target>
       </trans-unit>
       <trans-unit id="eca363353e36c2ea99496b8d3fb4b99a5c63b62f" datatype="html">
         <source>';' separated integers. If size is 240, that shorter side of the thumbnail will have 160
@@ -1221,7 +1219,7 @@
           <context context-type="sourcefile">app/ui/settings/video/video.settings.component.html</context>
           <context context-type="linenumber">131</context>
         </context-group>
-        <target state="translated">valori separati da ; saranno forniti a ffmpeg così come sono, come opzioni personalizzate. </target>
+        <target state="translated">valori separati da ; saranno forniti a ffmpeg così come sono, come opzioni personalizzate.</target>
       </trans-unit>
       <trans-unit id="1b239b0422945f36c35b5559b4b0c135922fe299" datatype="html">
         <source>It is highly recommended to use hardware accelerated (sharp or gm) lib for thumbnail
