@@ -5,7 +5,7 @@ import {NotificationService} from '../../../model/notification.service';
 import {NavigationService} from '../../../model/navigation.service';
 import {SettingsComponentDirective} from '../_abstract/abstract.settings.component';
 import {DatabaseSettingsService} from './database.settings.service';
-import {ServerConfig} from '../../../../../common/config/private/PrivateConfig';
+import {DatabaseType, ServerConfig, ServerDataBaseConfig} from '../../../../../common/config/private/PrivateConfig';
 
 @Component({
   selector: 'app-settings-database',
@@ -14,10 +14,10 @@ import {ServerConfig} from '../../../../../common/config/private/PrivateConfig';
     '../_abstract/abstract.settings.component.css'],
   providers: [DatabaseSettingsService],
 })
-export class DatabaseSettingsComponent extends SettingsComponentDirective<ServerConfig.DataBaseConfig> implements OnInit {
+export class DatabaseSettingsComponent extends SettingsComponentDirective<ServerDataBaseConfig> implements OnInit {
 
-  public types = Utils.enumToArray(ServerConfig.DatabaseType);
-  public DatabaseType = ServerConfig.DatabaseType;
+  public types = Utils.enumToArray(DatabaseType);
+  public DatabaseType = DatabaseType;
 
   constructor(authService: AuthenticationService,
               navigation: NavigationService,

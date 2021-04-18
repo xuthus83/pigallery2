@@ -6,7 +6,7 @@ import * as path from 'path';
 import * as fs from 'fs';
 import {Utils} from '../src/common/Utils';
 import {DirectoryDTO} from '../src/common/entities/DirectoryDTO';
-import {ServerConfig} from '../src/common/config/private/PrivateConfig';
+import {DatabaseType, ReIndexingSensitivity} from '../src/common/config/private/PrivateConfig';
 import {ProjectPath} from '../src/backend/ProjectPath';
 import {Benchmark} from './Benchmark';
 import {IndexingJob} from '../src/backend/model/jobs/jobs/IndexingJob';
@@ -40,21 +40,21 @@ export class BMIndexingManager extends IndexingManager {
 
 
 class BMGalleryRouter extends GalleryRouter {
-  public static addDirectoryList(app: Express) {
+  public static addDirectoryList(app: Express): void {
     GalleryRouter.addDirectoryList(app);
   }
 
-  public static addSearch(app: Express) {
+  public static addSearch(app: Express): void {
     GalleryRouter.addSearch(app);
   }
 
-  public static addAutoComplete(app: Express) {
+  public static addAutoComplete(app: Express): void {
     GalleryRouter.addAutoComplete(app);
   }
 }
 
 class BMPersonRouter extends PersonRouter {
-  public static addGetPersons(app: Express) {
+  public static addGetPersons(app: Express): void {
     PersonRouter.addGetPersons(app);
   }
 }
@@ -77,10 +77,10 @@ export class BenchmarkRunner {
     await this.init();
     await this.resetDB();
     const dir = await DiskMangerWorker.scanDirectory(this.biggestDirPath);
-    const bm = new Benchmark('Saving directory to DB', null, () => this.resetDB());
+    const bm = new Benchmark('Saving directory to DB', null, (): Promise<void> => this.resetDB());
     bm.addAStep({
       name: 'Saving directory to DB',
-      fn: () => {
+      fn: (): Promise<void> => {
         const im = new BMIndexingManager();
         return im.saveToDB(dir);
       }
@@ -93,19 +93,19 @@ export class BenchmarkRunner {
     const bm = new Benchmark('Scanning directory');
     bm.addAStep({
       name: 'Scanning directory',
-      fn: async () => new ContentWrapper(await DiskMangerWorker.scanDirectory(this.biggestDirPath))
+      fn: async (): Promise<ContentWrapper> => new ContentWrapper(await DiskMangerWorker.scanDirectory(this.biggestDirPath))
     });
     return await bm.run(this.RUNS);
   }
 
   async bmListDirectory(): Promise<BenchmarkResult> {
-    Config.Server.Indexing.reIndexingSensitivity = ServerConfig.ReIndexingSensitivity.low;
+    Config.Server.Indexing.reIndexingSensitivity = ReIndexingSensitivity.low;
     await this.init();
     await this.setupDB();
     const req = Utils.clone(this.requestTemplate);
     req.params.directory = this.biggestDirPath;
     const bm = new Benchmark('List directory', req,
-      async () => {
+      async (): Promise<void> => {
         await ObjectManagers.reset();
         await ObjectManagers.InitSQLManagers();
       });
@@ -115,8 +115,8 @@ export class BenchmarkRunner {
 
   async bmListPersons(): Promise<BenchmarkResult> {
     await this.setupDB();
-    Config.Server.Indexing.reIndexingSensitivity = ServerConfig.ReIndexingSensitivity.low;
-    const bm = new Benchmark('Listing Faces', Utils.clone(this.requestTemplate), async () => {
+    Config.Server.Indexing.reIndexingSensitivity = ReIndexingSensitivity.low;
+    const bm = new Benchmark('Listing Faces', Utils.clone(this.requestTemplate), async (): Promise<void> => {
       await ObjectManagers.reset();
       await ObjectManagers.InitSQLManagers();
     });
@@ -126,16 +126,16 @@ export class BenchmarkRunner {
 
   async bmAllSearch(text: string): Promise<{ result: BenchmarkResult, searchType: SearchQueryTypes }[]> {
     await this.setupDB();
-    const types = Utils.enumToArray(SearchQueryTypes).map(a => a.key).concat([null]);
+    const types = Utils.enumToArray(SearchQueryTypes).map((a): number => a.key).concat([null]);
     const results: { result: BenchmarkResult, searchType: SearchQueryTypes }[] = [];
 
-    for (let i = 0; i < types.length; i++) {
+    for (const type of types) {
       const req = Utils.clone(this.requestTemplate);
-      req.query[QueryParams.gallery.search.query] = <TextSearch>{type: types[i], text: text};
-      const bm = new Benchmark('Searching for `' + text + '` as `' + (types[i] ? SearchQueryTypes[types[i]] : 'any') + '`', req);
+      req.query[QueryParams.gallery.search.query] = ({type, text} as TextSearch);
+      const bm = new Benchmark('Searching for `' + text + '` as `' + (type ? SearchQueryTypes[type] : 'any') + '`', req);
       BMGalleryRouter.addSearch(bm.BmExpressApp);
 
-      results.push({result: await bm.run(this.RUNS), searchType: types[i]});
+      results.push({result: await bm.run(this.RUNS), searchType: type});
     }
     return results;
   }
@@ -150,7 +150,7 @@ export class BenchmarkRunner {
     return await bm.run(this.RUNS);
   }
 
-  async getStatistic() {
+  async getStatistic(): Promise<string> {
     await this.setupDB();
     const gm = new GalleryManager();
     const pm = new PersonManager();
@@ -165,7 +165,7 @@ export class BenchmarkRunner {
 
   }
 
-  private async init() {
+  private async init(): Promise<string> {
     if (this.inited === false) {
       await this.setupDB();
 
@@ -176,7 +176,7 @@ export class BenchmarkRunner {
       while (queue.length > 0) {
         const dirPath = queue.shift();
         const dir = await gm.listDirectory(dirPath);
-        dir.directories.forEach(d => queue.push(path.join(d.path + d.name)));
+        dir.directories.forEach((d): number => queue.push(path.join(d.path + d.name)));
         if (biggest < dir.media.length) {
           biggestPath = path.join(dir.path + dir.name);
           biggest = dir.media.length;
@@ -191,11 +191,11 @@ export class BenchmarkRunner {
   }
 
 
-  private resetDB = async () => {
+  private resetDB = async (): Promise<void> => {
     Config.Server.Threading.enabled = false;
     await ObjectManagers.reset();
     await fs.promises.rmdir(ProjectPath.DBFolder, {recursive: true});
-    Config.Server.Database.type = ServerConfig.DatabaseType.sqlite;
+    Config.Server.Database.type = DatabaseType.sqlite;
     Config.Server.Jobs.scheduled = [];
     await ObjectManagers.InitSQLManagers();
   };
@@ -203,16 +203,16 @@ export class BenchmarkRunner {
   private async setupDB(): Promise<void> {
     Config.Server.Threading.enabled = false;
     await this.resetDB();
-    await new Promise<void>((resolve, reject) => {
+    await new Promise<void>((resolve, reject): void => {
       try {
         const indexingJob = new IndexingJob();
 
         indexingJob.JobListener = {
-          onJobFinished: (job: IJob<any>, state: JobProgressStates, soloRun: boolean) => {
+          onJobFinished: (job: IJob<any>, state: JobProgressStates, soloRun: boolean): void => {
             resolve();
           },
 
-          onProgressUpdate: (progress: JobProgress) => {
+          onProgressUpdate: (progress: JobProgress): void => {
           }
         };
         indexingJob.start().catch(console.error);

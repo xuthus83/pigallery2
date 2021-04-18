@@ -15,7 +15,7 @@ export class TimeStampTimePickerComponent {
   @Input() name: string;
 
   @Input()
-  public get timestamp() {
+  public get timestamp(): number {
     return this.timestampValue;
   }
 

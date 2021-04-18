@@ -4,7 +4,7 @@ import {AuthenticationService} from '../../../model/network/authentication.servi
 import {NavigationService} from '../../../model/navigation.service';
 import {NotificationService} from '../../../model/notification.service';
 import {RandomPhotoSettingsService} from './random-photo.settings.service';
-import {ClientConfig} from '../../../../../common/config/public/ClientConfig';
+import {ClientRandomPhotoConfig} from '../../../../../common/config/public/ClientConfig';
 
 @Component({
   selector: 'app-settings-random-photo',
@@ -13,13 +13,13 @@ import {ClientConfig} from '../../../../../common/config/public/ClientConfig';
     '../_abstract/abstract.settings.component.css'],
   providers: [RandomPhotoSettingsService],
 })
-export class RandomPhotoSettingsComponent extends SettingsComponentDirective<ClientConfig.RandomPhotoConfig> {
+export class RandomPhotoSettingsComponent extends SettingsComponentDirective<ClientRandomPhotoConfig> {
 
   constructor(authService: AuthenticationService,
               navigation: NavigationService,
               settingsService: RandomPhotoSettingsService,
               notification: NotificationService) {
-    super($localize`Random Photo`, authService, navigation, settingsService, notification,  s => s.Client.RandomPhoto);
+    super($localize`Random Photo`, authService, navigation, settingsService, notification, s => s.Client.RandomPhoto);
   }
 
 

@@ -28,19 +28,19 @@ export class PublicRouter {
 
   public static route(app: Express): void {
     const setLocale = (req: Request, res: Response, next: NextFunction) => {
-      let selectedLocale = req['locale'];
+      let selectedLocale = req.locale;
       if (req.cookies && req.cookies[CookieNames.lang]) {
         if (Config.Client.languages.indexOf(req.cookies[CookieNames.lang]) !== -1) {
           selectedLocale = req.cookies[CookieNames.lang];
         }
       }
       res.cookie(CookieNames.lang, selectedLocale);
-      req['localePath'] = selectedLocale;
+      req.localePath = selectedLocale;
       next();
     };
 
     const renderIndex = (req: Request, res: Response, next: NextFunction) => {
-      ejs.renderFile(path.join(ProjectPath.FrontendFolder, req['localePath'], 'index.html'),
+      ejs.renderFile(path.join(ProjectPath.FrontendFolder, req.localePath, 'index.html'),
         res.tpl, (err, str) => {
           if (err) {
             return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, err.message));
@@ -121,7 +121,7 @@ export class PublicRouter {
 
     const renderFile = (subDir: string = '') => {
       return (req: Request, res: Response) => {
-        const file = path.join(ProjectPath.FrontendFolder, req['localePath'], subDir, req.params.file);
+        const file = path.join(ProjectPath.FrontendFolder, req.localePath, subDir, req.params.file);
         fs.exists(file, (exists: boolean) => {
           if (!exists) {
             return res.sendStatus(404);

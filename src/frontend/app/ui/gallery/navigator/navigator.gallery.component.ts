@@ -1,7 +1,7 @@
 import {Component, Input, OnChanges} from '@angular/core';
 import {DirectoryDTO} from '../../../../../common/entities/DirectoryDTO';
 import {RouterLink} from '@angular/router';
-import {UserDTO} from '../../../../../common/entities/UserDTO';
+import {UserDTO, UserDTOUtils} from '../../../../../common/entities/UserDTO';
 import {AuthenticationService} from '../../../model/network/authentication.service';
 import {QueryService} from '../../../model/query.service';
 import {GalleryService} from '../gallery.service';
@@ -70,7 +70,7 @@ export class GalleryNavigatorComponent implements OnChanges {
     if (dirs.length === 0) {
       arr.push({name: this.RootFolderName, route: null});
     } else {
-      arr.push({name: this.RootFolderName, route: UserDTO.isDirectoryPathAvailable('/', user.permissions) ? '/' : null});
+      arr.push({name: this.RootFolderName, route: UserDTOUtils.isDirectoryPathAvailable('/', user.permissions) ? '/' : null});
     }
 
     // create rest navigation
@@ -79,7 +79,7 @@ export class GalleryNavigatorComponent implements OnChanges {
       if (dirs.length - 1 === index) {
         arr.push({name, route: null});
       } else {
-        arr.push({name, route: UserDTO.isDirectoryPathAvailable(route, user.permissions) ? route : null});
+        arr.push({name, route: UserDTOUtils.isDirectoryPathAvailable(route, user.permissions) ? route : null});
       }
     });
 

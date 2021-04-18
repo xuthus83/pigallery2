@@ -42,10 +42,10 @@ export class SettingsEntryComponent implements ControlValueAccessor, Validator, 
   isNumberArray = false;
   isNumber = false;
   type = 'text';
-  _options: { key: number | string; value: string | number; }[] = [];
+  optionsView: { key: number | string; value: string | number; }[] = [];
   title: string;
   idName: string;
-  _disabled: boolean;
+  disabled: boolean;
   private readonly GUID = Utils.GUID();
 
 
@@ -55,7 +55,7 @@ export class SettingsEntryComponent implements ControlValueAccessor, Validator, 
   }
 
   get changed(): boolean {
-    if (this._disabled) {
+    if (this.disabled) {
       return false;
     }
     if (this.state.type === 'array') {
@@ -115,7 +115,7 @@ export class SettingsEntryComponent implements ControlValueAccessor, Validator, 
   }
 
   setDisabledState?(isDisabled: boolean): void {
-    this._disabled = isDisabled;
+    this.disabled = isDisabled;
   }
 
   ngOnChanges(): void {
@@ -139,12 +139,12 @@ export class SettingsEntryComponent implements ControlValueAccessor, Validator, 
       this.state.type === 'integer' || this.state.type === 'float' || this.state.type === 'positiveFloat';
     if (this.state.isEnumType) {
       if (this.options) {
-        this._options = this.options;
+        this.optionsView = this.options;
       } else {
         if (this.optionMap) {
-          this._options = Utils.enumToArray(this.state.type).map(this.optionMap);
+          this.optionsView = Utils.enumToArray(this.state.type).map(this.optionMap);
         } else {
-          this._options = Utils.enumToArray(this.state.type);
+          this.optionsView = Utils.enumToArray(this.state.type);
         }
       }
     }

@@ -17,8 +17,8 @@ import {Logger} from '../../../Logger';
 import {FaceRegionEntry} from './enitites/FaceRegionEntry';
 import {ObjectManagers} from '../../ObjectManagers';
 import {DuplicatesDTO} from '../../../../common/entities/DuplicatesDTO';
-import {ServerConfig} from '../../../../common/config/private/PrivateConfig';
-import DatabaseType = ServerConfig.DatabaseType;
+import {DatabaseType, ReIndexingSensitivity} from '../../../../common/config/private/PrivateConfig';
+
 
 const LOG_TAG = '[GalleryManager]';
 
@@ -47,11 +47,11 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
       if (knownLastModified && knownLastScanned
         && lastModified === knownLastModified &&
         dir.lastScanned === knownLastScanned) {
-        if (Config.Server.Indexing.reIndexingSensitivity === ServerConfig.ReIndexingSensitivity.low) {
+        if (Config.Server.Indexing.reIndexingSensitivity === ReIndexingSensitivity.low) {
           return null;
         }
         if (Date.now() - dir.lastScanned <= Config.Server.Indexing.cachedFolderTimeout &&
-          Config.Server.Indexing.reIndexingSensitivity === ServerConfig.ReIndexingSensitivity.medium) {
+          Config.Server.Indexing.reIndexingSensitivity === ReIndexingSensitivity.medium) {
           return null;
         }
       }
@@ -66,13 +66,13 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
 
       // not indexed since a while, index it in a lazy manner
       if ((Date.now() - dir.lastScanned > Config.Server.Indexing.cachedFolderTimeout &&
-        Config.Server.Indexing.reIndexingSensitivity >= ServerConfig.ReIndexingSensitivity.medium) ||
-        Config.Server.Indexing.reIndexingSensitivity >= ServerConfig.ReIndexingSensitivity.high) {
+        Config.Server.Indexing.reIndexingSensitivity >= ReIndexingSensitivity.medium) ||
+        Config.Server.Indexing.reIndexingSensitivity >= ReIndexingSensitivity.high) {
         // on the fly reindexing
 
         Logger.silly(LOG_TAG, 'lazy reindexing reason: cache timeout: lastScanned: '
           + (Date.now() - dir.lastScanned) + ' ms ago, cachedFolderTimeout:' + Config.Server.Indexing.cachedFolderTimeout);
-        ObjectManagers.getInstance().IndexingManager.indexDirectory(relativeDirectoryName).catch((err) => {
+        ObjectManagers.getInstance().IndexingManager.indexDirectory(relativeDirectoryName).catch((err): void => {
           console.error(err);
         });
       }
@@ -117,12 +117,12 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
       .getCount();
   }
 
-  public async getPossibleDuplicates() {
+  public async getPossibleDuplicates(): Promise<DuplicatesDTO[]> {
     const connection = await SQLConnection.getConnection();
     const mediaRepository = connection.getRepository(MediaEntity);
 
     let duplicates = await mediaRepository.createQueryBuilder('media')
-      .innerJoin(query => query.from(MediaEntity, 'innerMedia')
+      .innerJoin((query): any => query.from(MediaEntity, 'innerMedia')
           .select(['innerMedia.name as name', 'innerMedia.metadata.fileSize as fileSize', 'count(*)'])
           .groupBy('innerMedia.name, innerMedia.metadata.fileSize')
           .having('count(*)>1'),
@@ -136,7 +136,7 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
     const duplicateParis: DuplicatesDTO[] = [];
     const processDuplicates = (duplicateList: MediaEntity[],
                                equalFn: (a: MediaEntity, b: MediaEntity) => boolean,
-                               checkDuplicates: boolean = false) => {
+                               checkDuplicates: boolean = false): void => {
       let i = duplicateList.length - 1;
       while (i >= 0) {
         const list = [duplicateList[i]];
@@ -152,12 +152,12 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
         }
         if (checkDuplicates) {
           // ad to group if one already existed
-          const foundDuplicates = duplicateParis.find(dp =>
-            !!dp.media.find(m =>
-              !!list.find(lm => lm.id === m.id)));
+          const foundDuplicates = duplicateParis.find((dp): boolean =>
+            !!dp.media.find((m): boolean =>
+              !!list.find((lm): boolean => lm.id === m.id)));
           if (foundDuplicates) {
-            list.forEach(lm => {
-              if (!!foundDuplicates.media.find(m => m.id === lm.id)) {
+            list.forEach((lm): void => {
+              if (!!foundDuplicates.media.find((m): boolean => m.id === lm.id)) {
                 return;
               }
               foundDuplicates.media.push(lm);
@@ -171,12 +171,12 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
     };
 
     processDuplicates(duplicates,
-      (a, b) => a.name === b.name &&
+      (a, b): boolean => a.name === b.name &&
         a.metadata.fileSize === b.metadata.fileSize);
 
 
     duplicates = await mediaRepository.createQueryBuilder('media')
-      .innerJoin(query => query.from(MediaEntity, 'innerMedia')
+      .innerJoin((query): any => query.from(MediaEntity, 'innerMedia')
           .select(['innerMedia.metadata.creationDate as creationDate', 'innerMedia.metadata.fileSize as fileSize', 'count(*)'])
           .groupBy('innerMedia.metadata.creationDate, innerMedia.metadata.fileSize')
           .having('count(*)>1'),
@@ -187,7 +187,7 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
       .limit(Config.Server.Duplicates.listingLimit).getMany();
 
     processDuplicates(duplicates,
-      (a, b) => a.metadata.creationDate === b.metadata.creationDate &&
+      (a, b): boolean => a.metadata.creationDate === b.metadata.creationDate &&
         a.metadata.fileSize === b.metadata.fileSize, true);
 
     return duplicateParis;
@@ -252,13 +252,13 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
           'face.box.top', 'face.box.width', 'face.box.height',
           'media.id', 'person.name', 'person.id'])
         .getMany();
-      for (let i = 0; i < dir.media.length; i++) {
-        dir.media[i].directory = dir;
-        dir.media[i].readyThumbnails = [];
-        dir.media[i].readyIcon = false;
-        (<PhotoDTO>dir.media[i]).metadata.faces = indexedFaces
-          .filter(fe => fe.media.id === dir.media[i].id)
-          .map(f => ({box: f.box, name: f.person.name}));
+      for (const item of dir.media) {
+        item.directory = dir;
+        item.readyThumbnails = [];
+        item.readyIcon = false;
+        (item as PhotoDTO).metadata.faces = indexedFaces
+          .filter((fe): boolean => fe.media.id === item.id)
+          .map((f): { name: any; box: any } => ({box: f.box, name: f.person.name}));
       }
       if (dir.media.length > 0) {
         dir.preview = dir.media[0];
@@ -267,27 +267,27 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
       }
     }
     if (dir.directories) {
-      for (let i = 0; i < dir.directories.length; i++) {
+      for (const item of dir.directories) {
 
-        dir.directories[i].media = [];
-        dir.directories[i].preview = await connection
+        item.media = [];
+        item.preview = await connection
           .getRepository(MediaEntity)
           .createQueryBuilder('media')
           .innerJoinAndSelect('media.directory', 'directory')
           .where('media.directory = :dir', {
-            dir: dir.directories[i].id
+            dir: item.id
           })
           .orderBy('media.metadata.creationDate', 'DESC')
           .limit(1)
           .getOne();
-        dir.directories[i].isPartial = true;
+        item.isPartial = true;
 
-        if (dir.directories[i].preview) {
-          dir.directories[i].preview.directory = dir.directories[i];
-          dir.directories[i].preview.readyThumbnails = [];
-          dir.directories[i].preview.readyIcon = false;
+        if (item.preview) {
+          item.preview.directory = item;
+          item.preview.readyThumbnails = [];
+          item.preview.readyIcon = false;
         } else {
-          await this.fillPreviewFromSubDir(connection, dir.directories[i]);
+          await this.fillPreviewFromSubDir(connection, item);
         }
       }
     }

@@ -6,11 +6,11 @@ import {SearchQueryParserService} from '../ui/gallery/search/search-query-parser
 @Pipe({name: 'searchQuery'})
 export class StringifySearchQuery implements PipeTransform {
   constructor(
-    private _searchQueryParserService: SearchQueryParserService) {
+    private searchQueryParserService: SearchQueryParserService) {
   }
 
   transform(query: SearchQueryDTO): string {
-    return this._searchQueryParserService.stringify(query);
+    return this.searchQueryParserService.stringify(query);
   }
 }
 

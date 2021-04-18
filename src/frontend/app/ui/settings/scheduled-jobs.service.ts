@@ -3,7 +3,7 @@ import {BehaviorSubject} from 'rxjs';
 import {JobProgressDTO, JobProgressStates} from '../../../../common/entities/job/JobProgressDTO';
 import {NetworkService} from '../../model/network/network.service';
 import {JobScheduleDTO} from '../../../../common/entities/job/JobScheduleDTO';
-import {JobDTO} from '../../../../common/entities/job/JobDTO';
+import {JobDTO, JobDTOUtils} from '../../../../common/entities/job/JobDTO';
 import {BackendtextService} from '../../model/backendtext.service';
 import {NotificationService} from '../../model/notification.service';
 
@@ -24,7 +24,7 @@ export class ScheduledJobsService {
   }
 
   getProgress(schedule: JobScheduleDTO): JobProgressDTO {
-    return this.progress.value[JobDTO.getHashName(schedule.jobName, schedule.config)];
+    return this.progress.value[JobDTOUtils.getHashName(schedule.jobName, schedule.config)];
   }
 
   subscribeToProgress(): void {
@@ -99,10 +99,10 @@ export class ScheduledJobsService {
 
   private addDummyProgress(jobName: string, config: any): void {
     const prgs = this.progress.value;
-    prgs[JobDTO.getHashName(jobName, config)] = {
+    prgs[JobDTOUtils.getHashName(jobName, config)] = {
       jobName,
       state: JobProgressStates.running,
-      HashName: JobDTO.getHashName(jobName, config),
+      HashName: JobDTOUtils.getHashName(jobName, config),
       logs: [], steps: {
         skipped: 0,
         processed: 0,

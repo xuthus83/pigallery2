@@ -2,7 +2,7 @@ import {Config} from '../../src/common/config/private/Config';
 import * as path from 'path';
 import * as fs from 'fs';
 import {SQLConnection} from '../../src/backend/model/database/sql/SQLConnection';
-import {ServerConfig} from '../../src/common/config/private/PrivateConfig';
+import {DatabaseType, ServerConfig} from '../../src/common/config/private/PrivateConfig';
 import {ProjectPath} from '../../src/backend/ProjectPath';
 import {DirectoryDTO} from '../../src/common/entities/DirectoryDTO';
 import {DirectoryEntity} from '../../src/backend/model/database/sql/enitites/DirectoryEntity';
@@ -44,7 +44,7 @@ export class DBTestHelper {
   public static readonly savedDescribe = savedDescribe;
   tempDir: string;
 
-  constructor(public dbType: ServerConfig.DatabaseType) {
+  constructor(public dbType: DatabaseType) {
     this.tempDir = path.join(__dirname, './tmp');
   }
 
@@ -52,29 +52,29 @@ export class DBTestHelper {
     memory?: boolean;
     sqlite?: boolean;
     mysql?: boolean;
-  } = {}) {
+  } = {}): (name: string, tests: (helper?: DBTestHelper) => void) => void {
     const settings = Utils.clone(DBTestHelper.enable);
     for (const key of Object.keys(settingsOverride)) {
-      (<any>settings)[key] = (<any>settingsOverride)[key];
+      (settings as any)[key] = (settingsOverride as any)[key];
     }
     return (name: string, tests: (helper?: DBTestHelper) => void) => {
       savedDescribe(name, async () => {
         if (settings.sqlite) {
-          const helper = new DBTestHelper(ServerConfig.DatabaseType.sqlite);
+          const helper = new DBTestHelper(DatabaseType.sqlite);
           savedDescribe('sqlite', () => {
             return tests(helper);
           });
         }
         if (settings.mysql) {
-          const helper = new DBTestHelper(ServerConfig.DatabaseType.mysql);
-          savedDescribe('mysql', function () {
+          const helper = new DBTestHelper(DatabaseType.mysql);
+          savedDescribe('mysql', function(): void {
             this.timeout(99999999); // hint for the test environment
             // @ts-ignore
             return tests(helper);
           });
         }
         if (settings.memory) {
-          const helper = new DBTestHelper(ServerConfig.DatabaseType.memory);
+          const helper = new DBTestHelper(DatabaseType.memory);
           savedDescribe('memory', () => {
             return tests(helper);
           });
@@ -108,7 +108,7 @@ export class DBTestHelper {
       for (let i = 0; i < d.directories.length; i++) {
         d.directories[i] = await gm.selectParentDir(connection, d.directories[i].name,
           path.join(DiskMangerWorker.pathFromParent(d), path.sep));
-        await gm.fillParentDir(connection, <any>d.directories[i]);
+        await gm.fillParentDir(connection, d.directories[i] as any);
         await populateDir(d.directories[i]);
       }
     };
@@ -118,48 +118,48 @@ export class DBTestHelper {
     return dir;
   }
 
-  public async initDB() {
-    if (this.dbType === ServerConfig.DatabaseType.sqlite) {
+  public async initDB(): Promise<void> {
+    if (this.dbType === DatabaseType.sqlite) {
       await this.initSQLite();
-    } else if (this.dbType === ServerConfig.DatabaseType.mysql) {
+    } else if (this.dbType === DatabaseType.mysql) {
       await this.initMySQL();
     }
   }
 
 
-  public async clearDB() {
-    if (this.dbType === ServerConfig.DatabaseType.sqlite) {
+  public async clearDB(): Promise<void> {
+    if (this.dbType === DatabaseType.sqlite) {
       await this.clearUpSQLite();
-    } else if (this.dbType === ServerConfig.DatabaseType.mysql) {
+    } else if (this.dbType === DatabaseType.mysql) {
       await this.clearUpMysql();
-    } else if (this.dbType === ServerConfig.DatabaseType.memory) {
+    } else if (this.dbType === DatabaseType.memory) {
       await this.clearUpMemory();
     }
   }
 
-  private async initSQLite() {
+  private async initSQLite(): Promise<void> {
     await this.resetSQLite();
 
-    Config.Server.Database.type = ServerConfig.DatabaseType.sqlite;
+    Config.Server.Database.type = DatabaseType.sqlite;
     Config.Server.Database.dbFolder = this.tempDir;
     ProjectPath.reset();
   }
 
-  private async initMySQL() {
-    Config.Server.Database.type = ServerConfig.DatabaseType.mysql;
+  private async initMySQL(): Promise<void> {
+    Config.Server.Database.type = DatabaseType.mysql;
     Config.Server.Database.mysql.database = 'pigallery2_test';
 
     await this.resetMySQL();
   }
 
-  private async resetSQLite() {
+  private async resetSQLite(): Promise<void> {
     await ObjectManagers.reset();
     // await SQLConnection.close();
     await fs.promises.rmdir(this.tempDir, {recursive: true});
   }
 
-  private async resetMySQL() {
-    Config.Server.Database.type = ServerConfig.DatabaseType.mysql;
+  private async resetMySQL(): Promise<void> {
+    Config.Server.Database.type = DatabaseType.mysql;
     Config.Server.Database.mysql.database = 'pigallery2_test';
     const conn = await SQLConnection.getConnection();
     await conn.query('DROP DATABASE IF EXISTS ' + conn.options.database);
@@ -167,19 +167,19 @@ export class DBTestHelper {
     await SQLConnection.close();
   }
 
-  private async clearUpMysql() {
-    Config.Server.Database.type = ServerConfig.DatabaseType.mysql;
+  private async clearUpMysql(): Promise<void> {
+    Config.Server.Database.type = DatabaseType.mysql;
     Config.Server.Database.mysql.database = 'pigallery2_test';
     const conn = await SQLConnection.getConnection();
     await conn.query('DROP DATABASE IF EXISTS ' + conn.options.database);
     await SQLConnection.close();
   }
 
-  private async clearUpSQLite() {
+  private async clearUpSQLite(): Promise<void> {
     return this.resetSQLite();
   }
 
-  private async clearUpMemory() {
+  private async clearUpMemory(): Promise<void> {
     return this.resetSQLite();
   }
 }

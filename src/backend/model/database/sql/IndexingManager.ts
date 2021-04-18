@@ -7,7 +7,7 @@ import {Utils} from '../../../../common/Utils';
 import {FaceRegion, PhotoMetadata} from '../../../../common/entities/PhotoDTO';
 import {Connection, Repository} from 'typeorm';
 import {MediaEntity} from './enitites/MediaEntity';
-import {MediaDTO} from '../../../../common/entities/MediaDTO';
+import {MediaDTO, MediaDTOUtils} from '../../../../common/entities/MediaDTO';
 import {VideoEntity} from './enitites/VideoEntity';
 import {FileEntity} from './enitites/FileEntity';
 import {FileDTO} from '../../../../common/entities/FileDTO';
@@ -27,12 +27,12 @@ export class IndexingManager implements IIndexingManager {
   private savingQueue: DirectoryDTO[] = [];
   private isSaving = false;
 
-  get IsSavingInProgress() {
+  get IsSavingInProgress(): boolean {
     return this.SavingReady !== null;
   }
 
   public indexDirectory(relativeDirectoryName: string): Promise<DirectoryDTO> {
-    return new Promise(async (resolve, reject) => {
+    return new Promise(async (resolve, reject): Promise<void> => {
       try {
         const scannedDirectory = await DiskManager.scanDirectory(relativeDirectoryName);
 
@@ -40,7 +40,7 @@ export class IndexingManager implements IIndexingManager {
         if (scannedDirectory.preview) {
           scannedDirectory.preview.readyThumbnails = [];
         }
-        scannedDirectory.media.forEach(p => p.readyThumbnails = []);
+        scannedDirectory.media.forEach((p): any[] => p.readyThumbnails = []);
         resolve(scannedDirectory);
 
         this.queueForSave(scannedDirectory).catch(console.error);
@@ -61,13 +61,13 @@ export class IndexingManager implements IIndexingManager {
       .getRepository(DirectoryEntity)
       .createQueryBuilder('directory')
       .delete()
-      .execute().then(() => {
+      .execute().then((): void => {
       });
   }
 
   // Todo fix it, once typeorm support connection pools for sqlite
-  protected async queueForSave(scannedDirectory: DirectoryDTO) {
-    if (this.savingQueue.findIndex(dir => dir.name === scannedDirectory.name &&
+  protected async queueForSave(scannedDirectory: DirectoryDTO): Promise<void> {
+    if (this.savingQueue.findIndex((dir): boolean => dir.name === scannedDirectory.name &&
       dir.path === scannedDirectory.path &&
       dir.lastModified === scannedDirectory.lastModified &&
       dir.lastScanned === scannedDirectory.lastScanned &&
@@ -77,7 +77,7 @@ export class IndexingManager implements IIndexingManager {
     }
     this.savingQueue.push(scannedDirectory);
     if (!this.SavingReady) {
-      this.SavingReady = new Promise<void>((resolve) => {
+      this.SavingReady = new Promise<void>((resolve): void => {
         this.SavingReadyPR = resolve;
       });
     }
@@ -115,24 +115,24 @@ export class IndexingManager implements IIndexingManager {
       return currentDir.id;
 
     } else {
-      return (await directoryRepository.insert(<DirectoryEntity>{
+      return (await directoryRepository.insert({
         mediaCount: scannedDirectory.mediaCount,
         lastModified: scannedDirectory.lastModified,
         lastScanned: scannedDirectory.lastScanned,
         name: scannedDirectory.name,
         path: scannedDirectory.path
-      })).identifiers[0].id;
+      } as DirectoryEntity)).identifiers[0].id;
     }
   }
 
-  protected async saveChildDirs(connection: Connection, currentDirId: number, scannedDirectory: DirectoryDTO) {
+  protected async saveChildDirs(connection: Connection, currentDirId: number, scannedDirectory: DirectoryDTO): Promise<void> {
     const directoryRepository = connection.getRepository(DirectoryEntity);
 
     // update subdirectories that does not have a parent
     await directoryRepository
       .createQueryBuilder()
       .update(DirectoryEntity)
-      .set({parent: <any>currentDirId})
+      .set({parent: currentDirId as any})
       .where('path = :path',
         {path: DiskMangerWorker.pathFromParent(scannedDirectory)})
       .andWhere('name NOT LIKE :root', {root: DiskMangerWorker.dirName('.')})
@@ -146,18 +146,18 @@ export class IndexingManager implements IIndexingManager {
         dir: currentDirId
       }).getMany();
 
-    for (let i = 0; i < scannedDirectory.directories.length; i++) {
+    for (const directory of scannedDirectory.directories) {
       // Was this child Dir already indexed before?
-      const dirIndex = childDirectories.findIndex(d => d.name === scannedDirectory.directories[i].name);
+      const dirIndex = childDirectories.findIndex((d): boolean => d.name === directory.name);
 
       if (dirIndex !== -1) { // directory found
         childDirectories.splice(dirIndex, 1);
       } else { // dir does not exists yet
-        scannedDirectory.directories[i].parent = <any>{id: currentDirId};
-        (<DirectoryEntity>scannedDirectory.directories[i]).lastScanned = null; // new child dir, not fully scanned yet
-        const d = await directoryRepository.insert(<DirectoryEntity>scannedDirectory.directories[i]);
+        directory.parent = ({id: currentDirId} as any);
+        (directory as DirectoryEntity).lastScanned = null; // new child dir, not fully scanned yet
+        const d = await directoryRepository.insert(directory as DirectoryEntity);
 
-        await this.saveMedia(connection, d.identifiers[0].id, scannedDirectory.directories[i].media);
+        await this.saveMedia(connection, d.identifiers[0].id, directory.media);
       }
     }
 
@@ -176,20 +176,20 @@ export class IndexingManager implements IIndexingManager {
 
 
     const metaFilesToSave = [];
-    for (let i = 0; i < scannedDirectory.metaFile.length; i++) {
+    for (const item of scannedDirectory.metaFile) {
       let metaFile: FileDTO = null;
       for (let j = 0; j < indexedMetaFiles.length; j++) {
-        if (indexedMetaFiles[j].name === scannedDirectory.metaFile[i].name) {
+        if (indexedMetaFiles[j].name === item.name) {
           metaFile = indexedMetaFiles[j];
           indexedMetaFiles.splice(j, 1);
           break;
         }
       }
       if (metaFile == null) { // not in DB yet
-        scannedDirectory.metaFile[i].directory = null;
-        metaFile = Utils.clone(scannedDirectory.metaFile[i]);
-        scannedDirectory.metaFile[i].directory = scannedDirectory;
-        metaFile.directory = <any>{id: currentDirID};
+        item.directory = null;
+        metaFile = Utils.clone(item);
+        item.directory = scannedDirectory;
+        metaFile.directory = ({id: currentDirID} as any);
         metaFilesToSave.push(metaFile);
       }
     }
@@ -197,7 +197,7 @@ export class IndexingManager implements IIndexingManager {
     await fileRepository.remove(indexedMetaFiles, {chunk: Math.max(Math.ceil(indexedMetaFiles.length / 500), 1)});
   }
 
-  protected async saveMedia(connection: Connection, parentDirId: number, media: MediaDTO[]) {
+  protected async saveMedia(connection: Connection, parentDirId: number, media: MediaDTO[]): Promise<void> {
     const mediaRepository = connection.getRepository(MediaEntity);
     const photoRepository = connection.getRepository(PhotoEntity);
     const videoRepository = connection.getRepository(VideoEntity);
@@ -215,6 +215,7 @@ export class IndexingManager implements IIndexingManager {
       insertV: [] // insert video
     };
     const facesPerPhoto: { faces: FaceRegionEntry[], mediaName: string }[] = [];
+    // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < media.length; i++) {
       let mediaItem: MediaEntity = null;
       for (let j = 0; j < indexedMedia.length; j++) {
@@ -225,22 +226,22 @@ export class IndexingManager implements IIndexingManager {
         }
       }
 
-      const scannedFaces = (<PhotoMetadata>media[i].metadata).faces || [];
-      if ((<PhotoMetadata>media[i].metadata).faces) { // if it has faces, cache them
-        (<PhotoMetadataEntity>media[i].metadata).persons = (<PhotoMetadata>media[i].metadata).faces.map(f => f.name);
+      const scannedFaces = (media[i].metadata as PhotoMetadata).faces || [];
+      if ((media[i].metadata as PhotoMetadata).faces) { // if it has faces, cache them
+        (media[i].metadata as PhotoMetadataEntity).persons = (media[i].metadata as PhotoMetadata).faces.map(f => f.name);
       }
-      delete (<PhotoMetadata>media[i].metadata).faces; // this is a separated DB, lets save separately
+      delete (media[i].metadata as PhotoMetadata).faces; // this is a separated DB, lets save separately
 
       if (mediaItem == null) { // not in DB yet
         media[i].directory = null;
-        mediaItem = <any>Utils.clone(media[i]);
-        mediaItem.directory = <any>{id: parentDirId};
-        (MediaDTO.isPhoto(mediaItem) ? mediaChange.insertP : mediaChange.insertV).push(mediaItem);
+        mediaItem = (Utils.clone(media[i]) as any);
+        mediaItem.directory = ({id: parentDirId} as any);
+        (MediaDTOUtils.isPhoto(mediaItem) ? mediaChange.insertP : mediaChange.insertV).push(mediaItem);
       } else { // already in the DB, only needs to be updated
-        delete (<PhotoMetadata>mediaItem.metadata).faces;
+        delete (mediaItem.metadata as PhotoMetadata).faces;
         if (!Utils.equalsFilter(mediaItem.metadata, media[i].metadata)) {
-          mediaItem.metadata = <any>media[i].metadata;
-          (MediaDTO.isPhoto(mediaItem) ? mediaChange.saveP : mediaChange.saveV).push(mediaItem);
+          mediaItem.metadata = (media[i].metadata as any);
+          (MediaDTOUtils.isPhoto(mediaItem) ? mediaChange.saveP : mediaChange.saveV).push(mediaItem);
 
         }
       }
@@ -261,9 +262,9 @@ export class IndexingManager implements IIndexingManager {
       .getMany());
 
     const faces: FaceRegionEntry[] = [];
-    facesPerPhoto.forEach(group => {
-      const mIndex = indexedMedia.findIndex(m => m.name === group.mediaName);
-      group.faces.forEach((sf: FaceRegionEntry) => sf.media = <any>{id: indexedMedia[mIndex].id});
+    facesPerPhoto.forEach((group): void => {
+      const mIndex = indexedMedia.findIndex((m): boolean => m.name === group.mediaName);
+      group.faces.forEach((sf: FaceRegionEntry): any => sf.media = ({id: indexedMedia[mIndex].id} as any));
 
       faces.push(...group.faces);
       indexedMedia.splice(mIndex, 1);
@@ -273,14 +274,14 @@ export class IndexingManager implements IIndexingManager {
     await mediaRepository.remove(indexedMedia);
   }
 
-  protected async saveFaces(connection: Connection, parentDirId: number, scannedFaces: FaceRegion[]) {
+  protected async saveFaces(connection: Connection, parentDirId: number, scannedFaces: FaceRegion[]): Promise<void> {
     const faceRepository = connection.getRepository(FaceRegionEntry);
 
     const persons: string[] = [];
 
-    for (let i = 0; i < scannedFaces.length; i++) {
-      if (persons.indexOf(scannedFaces[i].name) === -1) {
-        persons.push(scannedFaces[i].name);
+    for (const face of scannedFaces) {
+      if (persons.indexOf(face.name) === -1) {
+        persons.push(face.name);
       }
     }
     await ObjectManagers.getInstance().PersonManager.saveAll(persons);
@@ -296,6 +297,7 @@ export class IndexingManager implements IIndexingManager {
 
 
     const faceToInsert = [];
+    // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < scannedFaces.length; i++) {
       let face: FaceRegionEntry = null;
       for (let j = 0; j < indexedFaces.length; j++) {
@@ -311,7 +313,7 @@ export class IndexingManager implements IIndexingManager {
       }
 
       if (face == null) {
-        (<FaceRegionEntry>scannedFaces[i]).person = await ObjectManagers.getInstance().PersonManager.get(scannedFaces[i].name);
+        (scannedFaces[i] as FaceRegionEntry).person = await ObjectManagers.getInstance().PersonManager.get(scannedFaces[i].name);
         faceToInsert.push(scannedFaces[i]);
       }
     }

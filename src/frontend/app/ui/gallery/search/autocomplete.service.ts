@@ -14,38 +14,39 @@ export class AutoCompleteService {
   private keywords: string[] = [];
   private textSearchKeywordsMap: { [key: string]: SearchQueryTypes } = {};
 
-  constructor(private _networkService: NetworkService,
-              private _searchQueryParserService: SearchQueryParserService,
-              private _galleryCacheService: GalleryCacheService) {
-    this.keywords = Object.values(this._searchQueryParserService.keywords)
-      .filter(k => k !== this._searchQueryParserService.keywords.or &&
-        k !== this._searchQueryParserService.keywords.and &&
-        k !== this._searchQueryParserService.keywords.portrait &&
-        k !== this._searchQueryParserService.keywords.kmFrom &&
-        k !== this._searchQueryParserService.keywords.NSomeOf)
+  constructor(private networkService: NetworkService,
+              private searchQueryParserService: SearchQueryParserService,
+              private galleryCacheService: GalleryCacheService) {
+    this.keywords = Object.values(this.searchQueryParserService.keywords)
+      .filter(k => k !== this.searchQueryParserService.keywords.or &&
+        k !== this.searchQueryParserService.keywords.and &&
+        k !== this.searchQueryParserService.keywords.portrait &&
+        k !== this.searchQueryParserService.keywords.kmFrom &&
+        k !== this.searchQueryParserService.keywords.NSomeOf)
       .map(k => k + ':');
 
-    this.keywords.push(this._searchQueryParserService.keywords.and);
-    this.keywords.push(this._searchQueryParserService.keywords.or);
+    this.keywords.push(this.searchQueryParserService.keywords.and);
+    this.keywords.push(this.searchQueryParserService.keywords.or);
     for (let i = 0; i < 10; i++) {
-      this.keywords.push(i + '-' + this._searchQueryParserService.keywords.NSomeOf + ':( )');
+      this.keywords.push(i + '-' + this.searchQueryParserService.keywords.NSomeOf + ':( )');
     }
 
     for (let i = 0; i < 10; i++) {
-      this.keywords.push(i + '-' + this._searchQueryParserService.keywords.kmFrom + ':');
+      this.keywords.push(i + '-' + this.searchQueryParserService.keywords.kmFrom + ':');
     }
 
-    this.keywords.push(this._searchQueryParserService.keywords.to + ':' +
-      SearchQueryParser.stringifyText((new Date).getFullYear().toString()));
-    this.keywords.push(this._searchQueryParserService.keywords.to + ':' +
-      SearchQueryParser.stringifyText((new Date).toLocaleDateString()));
-    this.keywords.push(this._searchQueryParserService.keywords.from + ':' +
-      SearchQueryParser.stringifyText((new Date).getFullYear().toString()));
-    this.keywords.push(this._searchQueryParserService.keywords.from + ':' +
-      SearchQueryParser.stringifyText((new Date).toLocaleDateString()));
+    this.keywords.push(this.searchQueryParserService.keywords.to + ':' +
+      SearchQueryParser.stringifyText((new Date()).getFullYear().toString()));
+    this.keywords.push(this.searchQueryParserService.keywords.to + ':' +
+      SearchQueryParser.stringifyText((new Date()).toLocaleDateString()));
+
+    this.keywords.push(this.searchQueryParserService.keywords.from + ':' +
+      SearchQueryParser.stringifyText((new Date()).getFullYear().toString()));
+    this.keywords.push(this.searchQueryParserService.keywords.from + ':' +
+      SearchQueryParser.stringifyText((new Date()).toLocaleDateString()));
 
     TextSearchQueryTypes.forEach(t => {
-      this.textSearchKeywordsMap[(<any>this._searchQueryParserService.keywords)[SearchQueryTypes[t]]] = t;
+      this.textSearchKeywordsMap[(this.searchQueryParserService.keywords as any)[SearchQueryTypes[t]]] = t;
     });
   }
 
@@ -66,14 +67,14 @@ export class AutoCompleteService {
                            items?: BehaviorSubject<RenderableAutoCompleteItem[]>): BehaviorSubject<RenderableAutoCompleteItem[]> {
     items = items || new BehaviorSubject([]);
 
-    const cached = this._galleryCacheService.getAutoComplete(text, type);
+    const cached = this.galleryCacheService.getAutoComplete(text, type);
     if (cached == null) {
       const acParams: any = {};
       if (type) {
         acParams[QueryParams.gallery.search.type] = type;
       }
-      this._networkService.getJson<IAutoCompleteItem[]>('/autocomplete/' + text, acParams).then(ret => {
-        this._galleryCacheService.setAutoComplete(text, type, ret);
+      this.networkService.getJson<IAutoCompleteItem[]>('/autocomplete/' + text, acParams).then(ret => {
+        this.galleryCacheService.setAutoComplete(text, type, ret);
         items.next(this.sortResults(text, ret.map(i => this.ACItemToRenderable(i, fullText)).concat(items.value)));
       });
     } else {
@@ -100,7 +101,7 @@ export class AutoCompleteService {
     if (tokens.length !== 2) {
       return null;
     }
-    if (new RegExp('^\\d*-' + this._searchQueryParserService.keywords.kmFrom).test(tokens[0])) {
+    if (new RegExp('^\\d*-' + this.searchQueryParserService.keywords.kmFrom).test(tokens[0])) {
       return SearchQueryTypes.distance;
     }
     return this.textSearchKeywordsMap[tokens[0]] || null;
@@ -113,18 +114,18 @@ export class AutoCompleteService {
     if ((TextSearchQueryTypes.includes(item.type) ||
       item.type === SearchQueryTypes.distance) &&
       item.type !== SearchQueryTypes.any_text) {
-      let queryHint = (<any>this._searchQueryParserService.keywords)[SearchQueryTypes[item.type]] + ':"' + item.text + '"';
+      let queryHint = (this.searchQueryParserService.keywords as any)[SearchQueryTypes[item.type]] + ':"' + item.text + '"';
 
       // if its a distance search, change hint text
       const tokens = searchToken.split(':');
       if (tokens.length === 2 &&
-        new RegExp('^\\d*-' + this._searchQueryParserService.keywords.kmFrom).test(tokens[0])) {
+        new RegExp('^\\d*-' + this.searchQueryParserService.keywords.kmFrom).test(tokens[0])) {
         queryHint = tokens[0] + ':"' + item.text + '"';
       }
 
       return {
         text: item.text, type: item.type,
-        queryHint: queryHint
+        queryHint
       };
     }
     return {
@@ -132,7 +133,7 @@ export class AutoCompleteService {
     };
   }
 
-  private sortResults(text: string, items: RenderableAutoCompleteItem[]) {
+  private sortResults(text: string, items: RenderableAutoCompleteItem[]): RenderableAutoCompleteItem[] {
     return items.sort((a, b) => {
       if ((a.text.startsWith(text) && b.text.startsWith(text)) ||
         (!a.text.startsWith(text) && !b.text.startsWith(text))) {
@@ -148,10 +149,10 @@ export class AutoCompleteService {
   private getQueryKeywords(text: { current: string, prev: string }): RenderableAutoCompleteItem[] {
     // if empty, recommend "and"
     if (text.current === '') {
-      if (text.prev !== this._searchQueryParserService.keywords.and) {
+      if (text.prev !== this.searchQueryParserService.keywords.and) {
         return [{
-          text: this._searchQueryParserService.keywords.and,
-          queryHint: this._searchQueryParserService.keywords.and,
+          text: this.searchQueryParserService.keywords.and,
+          queryHint: this.searchQueryParserService.keywords.and,
           notSearchable: true
         }];
       } else {

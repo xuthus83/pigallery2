@@ -35,7 +35,7 @@ const getSwitch = (name: string, def: string = null): string => {
   return def;
 };
 
-gulp.task('build-backend', function() {
+gulp.task('build-backend', function(): any {
   return gulp.src([
     'src/common/**/*.ts',
     'src/backend/**/*.ts',
@@ -47,18 +47,18 @@ gulp.task('build-backend', function() {
 });
 
 
-const createDynamicTranslationFile = async (language: string) => {
+const createDynamicTranslationFile = async (language: string): Promise<void> => {
   // load
   const folder = './src/frontend/' + translationFolder;
   const data: string = await fsp.readFile(path.join(folder, `messages.${language}.xlf`), 'utf-8');
   const translationXml: XLIFF.Root = await xml2js.parseStringPromise(data);
 
   // clean translations, keep only .ts transaltions
-  const hasTsTranslation = (cg: XLIFF.ContextGroup) =>
-    cg.context.findIndex((c: any) => c.$['context-type'] === 'sourcefile' && c._.endsWith('.ts')) !== -1;
+  const hasTsTranslation = (cg: XLIFF.ContextGroup): boolean =>
+    cg.context.findIndex((c: any): boolean => c.$['context-type'] === 'sourcefile' && c._.endsWith('.ts')) !== -1;
   const translations = translationXml.xliff.file[0].body[0]['trans-unit'];
-  const filtered = translations.filter(tr => tr['context-group'].findIndex(hasTsTranslation) !== -1);
-  filtered.forEach(tr => delete tr['context-group']);
+  const filtered = translations.filter((tr): boolean => tr['context-group'].findIndex(hasTsTranslation) !== -1);
+  filtered.forEach((tr): boolean => delete tr['context-group']);
   translationXml.xliff.file[0].body[0]['trans-unit'] = filtered;
 
   // save
@@ -68,13 +68,13 @@ const createDynamicTranslationFile = async (language: string) => {
 
 };
 
-const removeDynamicTranslationFile = async (language: string) => {
+const removeDynamicTranslationFile = async (language: string): Promise<void> => {
   const translationFile = path.join('./src/frontend/', translationFolder, `ts-only-msg.${language}.xlf`);
   fsp.unlink(translationFile);
 };
 
 
-const setDynTransFileAtAppModule = async (language: string) => {
+const setDynTransFileAtAppModule = async (language: string): Promise<void> => {
   const file = './src/frontend/app/app.module.ts';
   let data: string = await fsp.readFile(file, 'utf-8');
   const from = 'messages.${locale}.xlf';
@@ -83,7 +83,7 @@ const setDynTransFileAtAppModule = async (language: string) => {
   await fsp.writeFile(file, data);
 };
 
-const resetAppModule = async (language: string) => {
+const resetAppModule = async (language: string): Promise<void> => {
   const file = './src/frontend/app/app.module.ts';
   let data: string = await fsp.readFile(file, 'utf-8');
   const from = 'messages.${locale}.xlf';
@@ -93,8 +93,8 @@ const resetAppModule = async (language: string) => {
 };
 
 
-const createFrontendTask = (type: string, language: string, script: string) => {
-  gulp.task(type, async (cb) => {
+const createFrontendTask = (type: string, language: string, script: string): void => {
+  gulp.task(type, async (cb): Promise<void> => {
     try {
       const {stdout, stderr} = await execPr(script);
       console.log(stdout);
@@ -107,12 +107,12 @@ const createFrontendTask = (type: string, language: string, script: string) => {
 };
 
 
-const getLanguages = () => {
+const getLanguages = (): any[] | string[] => {
   if (!fs.existsSync('./src/frontend/' + translationFolder)) {
     return [];
   }
   const dirCont = fs.readdirSync('./src/frontend/' + translationFolder);
-  const files: string[] = dirCont.filter((elm) => {
+  const files: string[] = dirCont.filter((elm): any => {
     return elm.match(/.*\.[a-zA-Z]+\.(xlf)/ig);
   });
 
@@ -122,19 +122,19 @@ const getLanguages = () => {
     languageFilter = getSwitch('languages').split(',');
   }
 
-  let languages = files.map((f: string) => {
+  let languages = files.map((f: string): string => {
     return f.split('.')[1];
   });
 
   if (languageFilter !== null) {
-    languages = languages.filter((l) => {
+    languages = languages.filter((l): boolean => {
       return languageFilter.indexOf(l) !== -1;
     });
   }
   return languages;
 };
 
-gulp.task('build-frontend', (() => {
+gulp.task('build-frontend', ((): any => {
   const tasks = [];
   createFrontendTask('build-frontend-release default', 'all',
     'ng build --prod  --no-progress');
@@ -142,7 +142,7 @@ gulp.task('build-frontend', (() => {
   return gulp.series(...tasks);
 })());
 
-gulp.task('copy-static', function() {
+gulp.task('copy-static', function(): any {
   return gulp.src([
     'src/backend/model/diagnostics/blank.jpg',
     'README.md',
@@ -151,7 +151,7 @@ gulp.task('copy-static', function() {
     .pipe(gulp.dest('./release'));
 });
 
-gulp.task('copy-package', function() {
+gulp.task('copy-package', function(): any {
   return gulp.src([
     'package.json'], {base: '.'})
     .pipe(jeditor((json: {
@@ -161,7 +161,7 @@ gulp.task('copy-package', function() {
       optionalDependencies: { [key: string]: string },
       buildTime: string,
       buildCommitHash: string
-    }) => {
+    }): { devDependencies: { [p: string]: string }; scripts: { [p: string]: string }; dependencies: { [p: string]: string }; optionalDependencies: { [p: string]: string }; buildTime: string; buildCommitHash: string } => {
       delete json.devDependencies;
       json.scripts = {start: 'node ./src/backend/index.js'};
 
@@ -195,7 +195,7 @@ gulp.task('copy-package', function() {
 });
 
 
-gulp.task('zip-release', function() {
+gulp.task('zip-release', function(): any {
   return gulp.src(['release/**/*'], {base: './release'})
     .pipe(zip('pigallery2.zip'))
     .pipe(gulp.dest('.'));
@@ -204,7 +204,7 @@ gulp.task('zip-release', function() {
 gulp.task('create-release', gulp.series('build-frontend', 'build-backend', 'copy-static', 'copy-package', 'zip-release'));
 
 
-const simpleBuild = (isProd: boolean) => {
+const simpleBuild = (isProd: boolean): any => {
   const tasks = [];
   let cmd = 'ng build ';
   if (isProd) {
@@ -219,7 +219,7 @@ const simpleBuild = (isProd: boolean) => {
   return gulp.series(...tasks);
 };
 
-gulp.task('extract-locale', async (cb) => {
+gulp.task('extract-locale', async (cb): Promise<any> => {
   console.log('creating source translation file:  locale.source.xlf');
   try {
     {
@@ -240,7 +240,7 @@ gulp.task('extract-locale', async (cb) => {
   }
 });
 
-const translate = async (list: any[], cb: (err?: any) => void) => {
+const translate = async (list: any[], cb: (err?: any) => void): Promise<void> => {
   try {
     const localsStr = '"[\\"' + list.join('\\",\\"') + '\\"]"';
     const {stdout, stderr} = await execPr('xlf-google-translate ' +
@@ -256,7 +256,7 @@ const translate = async (list: any[], cb: (err?: any) => void) => {
     return cb(e);
   }
 };
-const merge = async (list: any[], cb: (err?: any) => void) => {
+const merge = async (list: any[], cb: (err?: any) => void): Promise<void> => {
   try {
     const localsStr = '"[\\"' + list.join('\\",\\"') + '\\"]"';
     const command = 'xlf-google-translate ' +
@@ -277,10 +277,10 @@ const merge = async (list: any[], cb: (err?: any) => void) => {
   }
 };
 
-gulp.task('update-translation-only', function(cb) {
+gulp.task('update-translation-only', function(cb): void {
   translate(getLanguages(), cb).catch(console.error);
 });
-gulp.task('merge-translation-only', function(cb) {
+gulp.task('merge-translation-only', function(cb): void {
   merge(getLanguages(), cb).catch(console.error);
 });
 
@@ -289,7 +289,7 @@ gulp.task('update-translation', gulp.series('extract-locale', 'update-translatio
 gulp.task('merge-new-translation', gulp.series('extract-locale', 'merge-translation-only'));
 
 
-gulp.task('add-translation-only', (cb) => {
+gulp.task('add-translation-only', (cb): any => {
   const languages = getLanguages();
   let lng = null;
   for (let i = 0; i < process.argv.length - 1; i++) {
@@ -308,7 +308,7 @@ gulp.task('add-translation-only', (cb) => {
   translate([lng], cb);
 });
 
-gulp.task('generate-man', async (cb) => {
+gulp.task('generate-man', async (cb): Promise<void> => {
   const defCFG = ConfigClassBuilder.attachInterface(new PrivateConfigClass());
   defCFG.Server.sessionSecret = [];
   let txt = '# Pigallery 2 man page\n';

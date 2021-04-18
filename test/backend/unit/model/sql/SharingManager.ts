@@ -50,7 +50,7 @@ describe('SharingManager', (sqlHelper: DBTestHelper) => {
       sharingKey: 'testKey',
       path: '/',
       password: null,
-      creator: creator,
+      creator,
       expires: Date.now() + 1000,
       includeSubfolders: true,
       timeStamp: Date.now()
@@ -75,7 +75,7 @@ describe('SharingManager', (sqlHelper: DBTestHelper) => {
       sharingKey: 'testKey',
       path: '/',
       password: null,
-      creator: creator,
+      creator,
       expires: Date.now() + 1000,
       includeSubfolders: true,
       timeStamp: Date.now()
@@ -100,7 +100,7 @@ describe('SharingManager', (sqlHelper: DBTestHelper) => {
       sharingKey: 'testKey',
       path: '/',
       password: null,
-      creator: creator,
+      creator,
       expires: Date.now() + 1000,
       includeSubfolders: true,
       timeStamp: Date.now()
@@ -116,7 +116,7 @@ describe('SharingManager', (sqlHelper: DBTestHelper) => {
       sharingKey: saved.sharingKey,
       path: saved.path,
       password: null,
-      creator: creator,
+      creator,
       expires: Date.now() + 2000,
       includeSubfolders: false,
       timeStamp: Date.now()

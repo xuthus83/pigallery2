@@ -7,9 +7,9 @@ import {ErrorDTO} from '../../../../../common/entities/Error';
 import {SettingsComponentDirective} from '../_abstract/abstract.settings.component';
 import {Utils} from '../../../../../common/Utils';
 import {ScheduledJobsService} from '../scheduled-jobs.service';
-import {DefaultsJobs, JobDTO} from '../../../../../common/entities/job/JobDTO';
+import {DefaultsJobs, JobDTOUtils} from '../../../../../common/entities/job/JobDTO';
 import {JobProgressDTO, JobProgressStates} from '../../../../../common/entities/job/JobProgressDTO';
-import {ServerConfig} from '../../../../../common/config/private/PrivateConfig';
+import {ReIndexingSensitivity, ServerIndexingConfig} from '../../../../../common/config/private/PrivateConfig';
 
 @Component({
   selector: 'app-settings-indexing',
@@ -18,7 +18,7 @@ import {ServerConfig} from '../../../../../common/config/private/PrivateConfig';
     '../_abstract/abstract.settings.component.css'],
   providers: [IndexingSettingsService],
 })
-export class IndexingSettingsComponent extends SettingsComponentDirective<ServerConfig.IndexingConfig, IndexingSettingsService>
+export class IndexingSettingsComponent extends SettingsComponentDirective<ServerIndexingConfig, IndexingSettingsService>
   implements OnInit, OnDestroy {
 
 
@@ -43,7 +43,7 @@ export class IndexingSettingsComponent extends SettingsComponentDirective<Server
   }
 
   get Progress(): JobProgressDTO {
-    return this.jobsService.progress.value[JobDTO.getHashName(DefaultsJobs[DefaultsJobs.Indexing])];
+    return this.jobsService.progress.value[JobDTOUtils.getHashName(DefaultsJobs[DefaultsJobs.Indexing])];
   }
 
 
@@ -56,7 +56,7 @@ export class IndexingSettingsComponent extends SettingsComponentDirective<Server
     super.ngOnInit();
     this.jobsService.subscribeToProgress();
     this.types = Utils
-      .enumToArray(ServerConfig.ReIndexingSensitivity);
+      .enumToArray(ReIndexingSensitivity);
     this.types.forEach(v => {
       switch (v.value) {
         case 'low':

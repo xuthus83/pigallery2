@@ -8,19 +8,19 @@ import {ShareService} from '../../ui/gallery/share.service';
 import {VersionService} from '../version.service';
 
 class MockShareService {
-  wait() {
+  wait(): Promise<boolean> {
     return Promise.resolve(true);
   }
 
-  isSharing() {
+  isSharing(): boolean {
     return false;
   }
 }
 
-describe('UserService', () => {
+describe('UserService', (): void => {
 
 
-  beforeEach(() => {
+  beforeEach((): void => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       providers: [
@@ -34,20 +34,20 @@ describe('UserService', () => {
   });
 
   it('should call postJson at login', inject([UserService, NetworkService],
-    async (userService: UserService, networkService: NetworkService) => {
+    async (userService: UserService, networkService: NetworkService): Promise<void> => {
       spyOn(networkService, 'postJson');
       const credential = new LoginCredential('name', 'pass');
       await userService.login(credential);
       expect(networkService.postJson).toHaveBeenCalled();
-      expect((<any>networkService.postJson).calls.argsFor(0)).toEqual(['/user/login', {'loginCredential': credential}]);
+      expect((networkService.postJson as any).calls.argsFor(0)).toEqual(['/user/login', {loginCredential: credential}]);
     }));
 
   it('should call getJson at getSessionUser', inject([UserService, NetworkService],
-    async (userService: UserService, networkService: NetworkService) => {
+    async (userService: UserService, networkService: NetworkService): Promise<void> => {
       spyOn(networkService, 'getJson');
       await userService.getSessionUser();
       expect(networkService.getJson).toHaveBeenCalled();
-      expect((<any>networkService.getJson).calls.argsFor(0)).toEqual(['/user/me']);
+      expect((networkService.getJson as any).calls.argsFor(0)).toEqual(['/user/me']);
     }));
 
 

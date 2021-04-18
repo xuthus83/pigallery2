@@ -33,10 +33,10 @@ const upTime = (new Date()).toISOString();
   }
 })
 export class PrivateConfigClass implements IPrivateConfig {
-  @ConfigProperty({type: ServerConfig.Config})
-  Server: ServerConfig.Config = new ServerConfig.Config();
-  @ConfigProperty({type: ClientConfig.Config})
-  Client: IConfigClass & ClientConfig.Config = new ClientConfig.Config() as (IConfigClass & ClientConfig.Config);
+  @ConfigProperty({type: ServerConfig})
+  Server: ServerConfig = new ServerConfig();
+  @ConfigProperty({type: ClientConfig})
+  Client: IConfigClass & ClientConfig = new ClientConfig() as (IConfigClass & ClientConfig);
 
   constructor() {
     if (!this.Server.sessionSecret || this.Server.sessionSecret.length === 0) {

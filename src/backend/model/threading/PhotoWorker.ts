@@ -59,21 +59,21 @@ export class VideoRendererFactory {
     const ffmpeg = FFmpegFactory.get();
     const path = require('path');
     return (input: RendererInput): Promise<void> => {
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve, reject): void => {
 
         Logger.silly('[FFmpeg] rendering thumbnail: ' + input.mediaPath);
 
-        ffmpeg(input.mediaPath).ffprobe((err: any, data: FfprobeData) => {
+        ffmpeg(input.mediaPath).ffprobe((err: any, data: FfprobeData): void => {
           if (!!err || data === null) {
             return reject('[FFmpeg] ' + err.toString());
           }
 
           let width = null;
           let height = null;
-          for (let i = 0; i < data.streams.length; i++) {
-            if (data.streams[i].width) {
-              width = data.streams[i].width;
-              height = data.streams[i].height;
+          for (const stream of data.streams) {
+            if (stream.width) {
+              width = stream.width;
+              height = stream.height;
               break;
             }
           }
@@ -85,26 +85,26 @@ export class VideoRendererFactory {
           const folder = path.dirname(input.outPath);
           let executedCmd = '';
           command
-            .on('start', (cmd) => {
+            .on('start', (cmd): void => {
               executedCmd = cmd;
             })
-            .on('end', () => {
+            .on('end', (): void => {
               resolve();
             })
-            .on('error', (e) => {
+            .on('error', (e): void => {
               reject('[FFmpeg] ' + e.toString() + ' executed: ' + executedCmd);
             })
             .outputOptions(['-qscale:v 4']);
           if (input.makeSquare === false) {
             const newSize = width < height ? Math.min(input.size, width) + 'x?' : '?x' + Math.min(input.size, height);
             command.takeScreenshots({
-              timemarks: ['10%'], size: newSize, filename: fileName, folder: folder
+              timemarks: ['10%'], size: newSize, filename: fileName, folder
             });
 
 
           } else {
             command.takeScreenshots({
-              timemarks: ['10%'], size: input.size + 'x' + input.size, filename: fileName, folder: folder
+              timemarks: ['10%'], size: input.size + 'x' + input.size, filename: fileName, folder
             });
           }
         });
@@ -119,7 +119,7 @@ export class ImageRendererFactory {
     return ImageRendererFactory.Sharp();
   }
 
-  public static Sharp() {
+  public static Sharp(): (input: RendererInput) => Promise<void> {
     const sharp = require('sharp');
     sharp.cache(false);
     return async (input: RendererInput): Promise<void> => {
@@ -136,11 +136,11 @@ export class ImageRendererFactory {
       if (input.makeSquare === false) {
         if (metadata.height > metadata.width) {
           image.resize(Math.min(input.size, metadata.width), null, {
-            kernel: kernel
+            kernel
           });
         } else {
           image.resize(null, Math.min(input.size, metadata.height), {
-            kernel: kernel
+            kernel
           });
         }
 
@@ -148,7 +148,7 @@ export class ImageRendererFactory {
       } else {
         image
           .resize(input.size, input.size, {
-            kernel: kernel,
+            kernel,
             position: sharp.gravity.centre,
             fit: 'cover'
           });

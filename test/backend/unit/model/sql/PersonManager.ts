@@ -28,7 +28,7 @@ describe('PersonManager', (sqlHelper: DBTestHelper) => {
   let v: VideoDTO;
   let p: PhotoDTO;
   let p2: PhotoDTO;
-  let p_faceLess: PhotoDTO;
+  let pFaceLess: PhotoDTO;
 
   let savedPerson: PersonWithSampleRegion[] = [];
 
@@ -37,15 +37,15 @@ describe('PersonManager', (sqlHelper: DBTestHelper) => {
     const directory: DirectoryDTO = TestHelper.getDirectoryEntry();
     p = TestHelper.getPhotoEntry1(directory);
     p2 = TestHelper.getPhotoEntry2(directory);
-    const pFaceLess = TestHelper.getPhotoEntry3(directory);
-    delete pFaceLess.metadata.faces;
+    const pFaceLessTmp = TestHelper.getPhotoEntry3(directory);
+    delete pFaceLessTmp.metadata.faces;
     v = TestHelper.getVideoEntry1(directory);
 
     dir = await DBTestHelper.persistTestDir(directory);
-    p = <any>dir.media.filter(m => m.name === p.name)[0];
-    p2 = <any>dir.media.filter(m => m.name === p2.name)[0];
-    p_faceLess = <any>dir.media[2];
-    v = <any>dir.media.filter(m => m.name === v.name)[0];
+    p = (dir.media.filter(m => m.name === p.name)[0] as any);
+    p2 = (dir.media.filter(m => m.name === p2.name)[0] as any);
+    pFaceLess = (dir.media[2] as any);
+    v = (dir.media.filter(m => m.name === v.name)[0] as any);
     savedPerson = await (await SQLConnection.getConnection()).getRepository(PersonEntry).find({
       relations: ['sampleRegion',
         'sampleRegion.media',

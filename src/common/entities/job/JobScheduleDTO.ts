@@ -35,9 +35,9 @@ export interface JobScheduleDTO {
 }
 
 
-export module JobScheduleDTO {
+export const JobScheduleDTOUtils = {
 
-  const getNextDayOfTheWeek = (refDate: Date, dayOfWeek: number) => {
+  getNextDayOfTheWeek: (refDate: Date, dayOfWeek: number) => {
     const date = new Date(refDate);
     date.setDate(refDate.getDate() + (dayOfWeek + 1 + 7 - refDate.getDay()) % 7);
     if (date.getDay() === refDate.getDay()) {
@@ -45,9 +45,9 @@ export module JobScheduleDTO {
     }
     date.setHours(0, 0, 0, 0);
     return date;
-  };
+  },
 
-  const nextValidDate = (date: Date, h: number, m: number, dayDiff: number): Date => {
+  nextValidDate: (date: Date, h: number, m: number, dayDiff: number): Date => {
 
     date.setSeconds(0);
     if (date.getHours() < h || (date.getHours() === h && date.getMinutes() < m)) {
@@ -59,9 +59,9 @@ export module JobScheduleDTO {
       date.setMinutes(m);
     }
     return date;
-  };
+  },
 
-  export const getNextRunningDate = (refDate: Date, schedule: JobScheduleDTO): Date => {
+  getNextRunningDate: (refDate: Date, schedule: JobScheduleDTO): Date => {
     switch (schedule.trigger.type) {
       case JobTriggerType.scheduled:
         return new Date(schedule.trigger.time);
@@ -73,13 +73,13 @@ export module JobScheduleDTO {
         const minute = (schedule.trigger.atTime / 1000 / 60) % 60;
 
         if (schedule.trigger.periodicity <= 6) { // Between Monday and Sunday
-          const nextRunDate = getNextDayOfTheWeek(refDate, schedule.trigger.periodicity);
-          return nextValidDate(nextRunDate, hour, minute, 7 * 24 * 60 * 60 * 1000);
+          const nextRunDate = JobScheduleDTOUtils.getNextDayOfTheWeek(refDate, schedule.trigger.periodicity);
+          return JobScheduleDTOUtils.nextValidDate(nextRunDate, hour, minute, 7 * 24 * 60 * 60 * 1000);
         }
 
         // every day
-        return nextValidDate(new Date(refDate), hour, minute, 24 * 60 * 60 * 1000);
+        return JobScheduleDTOUtils.nextValidDate(new Date(refDate), hour, minute, 24 * 60 * 60 * 1000);
     }
     return null;
-  };
-}
+  }
+};

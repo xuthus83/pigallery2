@@ -4,7 +4,7 @@ import {AuthenticationService} from '../../../model/network/authentication.servi
 import {NavigationService} from '../../../model/navigation.service';
 import {NotificationService} from '../../../model/notification.service';
 import {ShareSettingsService} from './share.settings.service';
-import {ClientConfig} from '../../../../../common/config/public/ClientConfig';
+import {ClientConfig, ClientSharingConfig} from '../../../../../common/config/public/ClientConfig';
 import {SharingDTO} from '../../../../../common/entities/SharingDTO';
 
 @Component({
@@ -14,7 +14,7 @@ import {SharingDTO} from '../../../../../common/entities/SharingDTO';
     '../_abstract/abstract.settings.component.css'],
   providers: [ShareSettingsService],
 })
-export class ShareSettingsComponent extends SettingsComponentDirective<ClientConfig.SharingConfig, ShareSettingsService> implements OnInit {
+export class ShareSettingsComponent extends SettingsComponentDirective<ClientSharingConfig, ShareSettingsService> implements OnInit {
 
 
   public shares: SharingDTO[] = [];

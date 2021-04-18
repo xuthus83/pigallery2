@@ -4,7 +4,7 @@ import {SettingsComponentDirective} from '../_abstract/abstract.settings.compone
 import {AuthenticationService} from '../../../model/network/authentication.service';
 import {NavigationService} from '../../../model/navigation.service';
 import {NotificationService} from '../../../model/notification.service';
-import {ClientConfig} from '../../../../../common/config/public/ClientConfig';
+import {ClientConfig, ClientMetaFileConfig} from '../../../../../common/config/public/ClientConfig';
 
 
 @Component({
@@ -14,7 +14,7 @@ import {ClientConfig} from '../../../../../common/config/public/ClientConfig';
     '../_abstract/abstract.settings.component.css'],
   providers: [MetaFileSettingsService],
 })
-export class MetaFileSettingsComponent extends SettingsComponentDirective<ClientConfig.MetaFileConfig> {
+export class MetaFileSettingsComponent extends SettingsComponentDirective<ClientMetaFileConfig> {
 
   constructor(authService: AuthenticationService,
               navigation: NavigationService,

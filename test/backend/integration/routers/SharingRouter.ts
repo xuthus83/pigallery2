@@ -11,7 +11,7 @@ import {SuperAgentStatic} from 'superagent';
 import {RouteTestingHelper} from './RouteTestingHelper';
 import {QueryParams} from '../../../../src/common/QueryParams';
 import {ErrorCodes} from '../../../../src/common/entities/Error';
-import {ServerConfig} from '../../../../src/common/config/private/PrivateConfig';
+import {DatabaseType, ServerConfig} from '../../../../src/common/config/private/PrivateConfig';
 
 
 process.env.NODE_ENV = 'test';
@@ -29,7 +29,7 @@ describe('SharingRouter', () => {
     role: UserRoles.User,
     permissions: null
   };
-  const {password: _pass, ...expectedUser} = testUser;
+  const {password: pass, ...expectedUser} = testUser;
   const tempDir = path.join(__dirname, '../../tmp');
   let server: Server;
   const setUp = async () => {
@@ -37,7 +37,7 @@ describe('SharingRouter', () => {
     Config.Client.authenticationRequired = true;
     Config.Server.Threading.enabled = false;
     Config.Client.Sharing.enabled = true;
-    Config.Server.Database.type = ServerConfig.DatabaseType.sqlite;
+    Config.Server.Database.type = DatabaseType.sqlite;
     Config.Server.Database.dbFolder = tempDir;
 
     server = new Server();
@@ -73,11 +73,11 @@ describe('SharingRouter', () => {
     const result = await (chai.request(srv.App) as SuperAgentStatic)
       .post('/api/user/login')
       .send({
-        loginCredential: <LoginCredential>{
+        loginCredential: {
           password: testUser.password,
           username: testUser.name,
           rememberMe: false
-        }
+        } as LoginCredential
       });
 
     shouldBeValidUser(result, expectedUser);

@@ -5,12 +5,12 @@ import {Express} from 'express';
 import {SettingsMWs} from '../../middlewares/admin/SettingsMWs';
 
 export class SettingsRouter {
-  public static route(app: Express) {
+  public static route(app: Express): void {
 
     this.addSettings(app);
   }
 
-  private static addSettings(app: Express) {
+  private static addSettings(app: Express): void {
     app.get('/api/settings',
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Admin),

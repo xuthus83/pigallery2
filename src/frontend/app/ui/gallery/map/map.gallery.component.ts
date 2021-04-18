@@ -48,11 +48,11 @@ export class GalleryMapComponent implements OnChanges, IRenderable, AfterViewIni
     return !isIOS;
   }
 
-  ngOnChanges() {
-    this.mapPhotos = this.photos.filter(p => {
+  ngOnChanges(): void {
+    this.mapPhotos = this.photos.filter((p): number => {
       return p.metadata && p.metadata.positionData && p.metadata.positionData.GPSData &&
         p.metadata.positionData.GPSData.latitude && p.metadata.positionData.GPSData.longitude;
-    }).slice(0, Config.Client.Map.maxPreviewMarkers).map(p => {
+    }).slice(0, Config.Client.Map.maxPreviewMarkers).map((p): { lng: number; lat: number } => {
       return {
         lat: p.metadata.positionData.GPSData.latitude,
         lng: p.metadata.positionData.GPSData.longitude
@@ -61,33 +61,33 @@ export class GalleryMapComponent implements OnChanges, IRenderable, AfterViewIni
 
     if (this.yagaMap && this.mapPhotos.length > 0) {
       this.yagaMap.setView(this.mapPhotos[0], 99);
-      this.yagaMap.fitBounds(this.mapPhotos.map(mp => <[number, number]>[mp.lat, mp.lng]));
+      this.yagaMap.fitBounds(this.mapPhotos.map((mp): [number, number] => [mp.lat, mp.lng] as [number, number]));
       this.yagaMap.zoom = 0;
     }
 
   }
 
-  ngAfterViewInit() {
-    setTimeout(() => {
+  ngAfterViewInit(): void {
+    setTimeout((): void => {
       //    this.height = this.mapElement.nativeElement.clientHeight;
       this.yagaMap.setView(this.mapPhotos[0], 99);
-      this.yagaMap.fitBounds(this.mapPhotos.map(mp => <[number, number]>[mp.lat, mp.lng]));
+      this.yagaMap.fitBounds(this.mapPhotos.map((mp): [number, number] => [mp.lat, mp.lng] as [number, number]));
       this.yagaMap.zoom = 0;
     }, 0);
   }
 
 
-  click() {
+  click(): void {
     this.mapLightbox.show(this.getDimension());
   }
 
   public getDimension(): Dimension {
-    return <Dimension>{
+    return {
       top: this.mapElement.nativeElement.offsetTop,
       left: this.mapElement.nativeElement.offsetLeft,
       width: this.mapElement.nativeElement.offsetWidth,
       height: this.mapElement.nativeElement.offsetHeight
-    };
+    } as Dimension;
   }
 }
 

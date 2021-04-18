@@ -11,7 +11,7 @@ import {ErrorRouter} from './ErrorRouter';
 
 export class Router {
 
-  public static route(app: Express) {
+  public static route(app: Express): void {
 
     PublicRouter.route(app);
 

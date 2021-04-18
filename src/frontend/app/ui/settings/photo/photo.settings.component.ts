@@ -5,10 +5,10 @@ import {AuthenticationService} from '../../../model/network/authentication.servi
 import {NavigationService} from '../../../model/navigation.service';
 import {NotificationService} from '../../../model/notification.service';
 import {ScheduledJobsService} from '../scheduled-jobs.service';
-import {DefaultsJobs, JobDTO} from '../../../../../common/entities/job/JobDTO';
+import {DefaultsJobs, JobDTO, JobDTOUtils} from '../../../../../common/entities/job/JobDTO';
 import {JobProgressDTO, JobProgressStates} from '../../../../../common/entities/job/JobProgressDTO';
-import {ServerConfig} from '../../../../../common/config/private/PrivateConfig';
-import {ClientConfig} from '../../../../../common/config/public/ClientConfig';
+import {ServerConfig, ServerPhotoConfig} from '../../../../../common/config/private/PrivateConfig';
+import {ClientConfig, ClientPhotoConfig} from '../../../../../common/config/public/ClientConfig';
 
 
 @Component({
@@ -19,8 +19,8 @@ import {ClientConfig} from '../../../../../common/config/public/ClientConfig';
   providers: [PhotoSettingsService],
 })
 export class PhotoSettingsComponent extends SettingsComponentDirective<{
-  server: ServerConfig.PhotoConfig,
-  client: ClientConfig.PhotoConfig
+  server: ServerPhotoConfig,
+  client: ClientPhotoConfig
 }> {
   readonly resolutionTypes = [720, 1080, 1440, 2160, 4320];
   resolutions: { key: number, value: string }[] = [];
@@ -45,7 +45,7 @@ export class PhotoSettingsComponent extends SettingsComponentDirective<{
   }
 
   get Progress(): JobProgressDTO {
-    return this.jobsService.progress.value[JobDTO.getHashName(DefaultsJobs[DefaultsJobs['Photo Converting']])];
+    return this.jobsService.progress.value[JobDTOUtils.getHashName(DefaultsJobs[DefaultsJobs['Photo Converting']])];
   }
 
   libTypesMap = (v: { key: number, value: string }) => {
@@ -55,7 +55,7 @@ export class PhotoSettingsComponent extends SettingsComponentDirective<{
       v.value += ' ' + $localize`(deprecated, will be removed)`;
     }
     return v;
-  };
+  }
 }
 
 

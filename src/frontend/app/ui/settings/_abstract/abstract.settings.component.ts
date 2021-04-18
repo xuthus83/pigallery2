@@ -65,7 +65,7 @@ export abstract class SettingsComponentDirective<T extends { [key: string]: any 
                         private sliceFN?: (s: WebConfig) => T) {
     if (this.sliceFN) {
       this.settingsSubscription = this.settingsService.Settings.subscribe(this.onNewSettings);
-      this.onNewSettings(this.settingsService._settingsService.settings.value);
+      this.onNewSettings(this.settingsService.settingsService.settings.value);
     }
   }
 

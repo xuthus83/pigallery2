@@ -18,8 +18,7 @@ import {FaceRegionEntry} from './enitites/FaceRegionEntry';
 import {PersonEntry} from './enitites/PersonEntry';
 import {Utils} from '../../../../common/Utils';
 import * as path from 'path';
-import {ServerConfig} from '../../../../common/config/private/PrivateConfig';
-import DatabaseType = ServerConfig.DatabaseType;
+import {DatabaseType, ServerDataBaseConfig, SQLLogLevel} from '../../../../common/config/private/PrivateConfig';
 
 
 export class SQLConnection {
@@ -47,8 +46,8 @@ export class SQLConnection {
         VersionEntity
       ];
       options.synchronize = false;
-      if (Config.Server.Log.sqlLevel !== ServerConfig.SQLLogLevel.none) {
-        options.logging = ServerConfig.SQLLogLevel[Config.Server.Log.sqlLevel];
+      if (Config.Server.Log.sqlLevel !== SQLLogLevel.none) {
+        options.logging = SQLLogLevel[Config.Server.Log.sqlLevel];
       }
 
       this.connection = await this.createConnection(options);
@@ -57,7 +56,7 @@ export class SQLConnection {
     return this.connection;
   }
 
-  public static async tryConnection(config: ServerConfig.DataBaseConfig) {
+  public static async tryConnection(config: ServerDataBaseConfig): Promise<boolean> {
     try {
       await getConnection('test').close();
     } catch (err) {
@@ -77,8 +76,8 @@ export class SQLConnection {
       VersionEntity
     ];
     options.synchronize = false;
-    if (Config.Server.Log.sqlLevel !== ServerConfig.SQLLogLevel.none) {
-      options.logging = ServerConfig.SQLLogLevel[Config.Server.Log.sqlLevel];
+    if (Config.Server.Log.sqlLevel !== SQLLogLevel.none) {
+      options.logging = SQLLogLevel[Config.Server.Log.sqlLevel];
     }
     const conn = await this.createConnection(options);
     await SQLConnection.schemeSync(conn);
@@ -102,7 +101,7 @@ export class SQLConnection {
 
   }
 
-  public static async close() {
+  public static async close(): Promise<void> {
     try {
       if (this.connection != null) {
         await this.connection.close();
@@ -114,11 +113,11 @@ export class SQLConnection {
     }
   }
 
-  public static getSQLiteDB(config: ServerConfig.DataBaseConfig) {
+  public static getSQLiteDB(config: ServerDataBaseConfig): any {
     return path.join(ProjectPath.getAbsolutePath(config.dbFolder), 'sqlite.db');
   }
 
-  private static async createConnection(options: ConnectionOptions) {
+  private static async createConnection(options: ConnectionOptions): Promise<Connection> {
     if (options.type === 'sqlite') {
       return await createConnection(options);
     }
@@ -139,7 +138,7 @@ export class SQLConnection {
     }
   }
 
-  private static async schemeSync(connection: Connection) {
+  private static async schemeSync(connection: Connection): Promise<void> {
     let version = null;
     try {
       version = await connection.getRepository(VersionEntity).findOne();
@@ -172,9 +171,9 @@ export class SQLConnection {
     }
   }
 
-  private static getDriver(config: ServerConfig.DataBaseConfig): ConnectionOptions {
+  private static getDriver(config: ServerDataBaseConfig): ConnectionOptions {
     let driver: ConnectionOptions = null;
-    if (config.type === ServerConfig.DatabaseType.mysql) {
+    if (config.type === DatabaseType.mysql) {
       driver = {
         type: 'mysql',
         host: config.mysql.host,
@@ -184,7 +183,7 @@ export class SQLConnection {
         database: config.mysql.database,
         charset: 'utf8'
       };
-    } else if (config.type === ServerConfig.DatabaseType.sqlite) {
+    } else if (config.type === DatabaseType.sqlite) {
       driver = {
         type: 'sqlite',
         database: path.join(ProjectPath.getAbsolutePath(config.dbFolder), config.sqlite.DBFileName)

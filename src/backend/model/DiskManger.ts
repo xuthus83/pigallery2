@@ -1,8 +1,8 @@
-import {DirectoryDTO} from '../../common/entities/DirectoryDTO';
+import {DirectoryDTO, DirectoryDTOUtils} from '../../common/entities/DirectoryDTO';
 import {Logger} from '../Logger';
 import {Config} from '../../common/config/private/Config';
 import {DiskManagerTH} from './threading/ThreadPool';
-import {DiskMangerWorker} from './threading/DiskMangerWorker';
+import {DirectoryScanSettings, DiskMangerWorker} from './threading/DiskMangerWorker';
 import {FileDTO} from '../../common/entities/FileDTO';
 
 
@@ -11,7 +11,7 @@ const LOG_TAG = '[DiskManager]';
 export class DiskManager {
   static threadPool: DiskManagerTH = null;
 
-  public static init() {
+  public static init(): void {
     if (Config.Server.Threading.enabled === true) {
       DiskManager.threadPool = new DiskManagerTH(1);
     }
@@ -19,13 +19,13 @@ export class DiskManager {
 
 
   public static async scanDirectoryNoMetadata(relativeDirectoryName: string,
-                                              settings: DiskMangerWorker.DirectoryScanSettings = {}): Promise<DirectoryDTO<FileDTO>> {
+                                              settings: DirectoryScanSettings = {}): Promise<DirectoryDTO<FileDTO>> {
     settings.noMetadata = true;
     return this.scanDirectory(relativeDirectoryName, settings);
   }
 
   public static async scanDirectory(relativeDirectoryName: string,
-                                    settings: DiskMangerWorker.DirectoryScanSettings = {}): Promise<DirectoryDTO> {
+                                    settings: DirectoryScanSettings = {}): Promise<DirectoryDTO> {
 
     Logger.silly(LOG_TAG, 'scanning directory:', relativeDirectoryName);
 
@@ -36,7 +36,7 @@ export class DiskManager {
     } else {
       directory = await DiskMangerWorker.scanDirectory(relativeDirectoryName, settings);
     }
-    DirectoryDTO.unpackDirectory(directory);
+    DirectoryDTOUtils.unpackDirectory(directory);
     return directory;
   }
 

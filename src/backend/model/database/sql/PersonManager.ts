@@ -14,7 +14,7 @@ export class PersonManager implements ISQLPersonManager {
     const repository = connection.getRepository(PersonEntry);
     const person = await repository.createQueryBuilder('person')
       .limit(1)
-      .where('person.name LIKE :name COLLATE utf8_general_ci', {name: name}).getOne();
+      .where('person.name LIKE :name COLLATE utf8_general_ci', {name}).getOne();
 
 
     if (typeof partialPerson.name !== 'undefined') {
@@ -63,7 +63,7 @@ export class PersonManager implements ISQLPersonManager {
     if (this.persons === null) {
       await this.loadAll();
     }
-    return this.persons.find(p => p.name === name);
+    return this.persons.find((p): boolean => p.name === name);
   }
 
 
@@ -73,11 +73,11 @@ export class PersonManager implements ISQLPersonManager {
     const personRepository = connection.getRepository(PersonEntry);
     await this.loadAll();
 
-    for (let i = 0; i < names.length; i++) {
+    for (const item of names) {
 
-      const person = this.persons.find(p => p.name === names[i]);
+      const person = this.persons.find((p): boolean => p.name === item);
       if (!person) {
-        toSave.push({name: names[i]});
+        toSave.push({name: item});
       }
     }
 
@@ -91,13 +91,13 @@ export class PersonManager implements ISQLPersonManager {
   }
 
 
-  public async onGalleryIndexUpdate() {
+  public async onGalleryIndexUpdate(): Promise<void> {
     await this.updateCounts();
     await this.updateSamplePhotos();
   }
 
 
-  private async updateCounts() {
+  private async updateCounts(): Promise<void> {
     const connection = await SQLConnection.getConnection();
     await connection.query('UPDATE person_entry SET count = ' +
       ' (SELECT COUNT(1) FROM face_region_entry WHERE face_region_entry.personId = person_entry.id)');
@@ -111,7 +111,7 @@ export class PersonManager implements ISQLPersonManager {
       .execute();
   }
 
-  private async updateSamplePhotos() {
+  private async updateSamplePhotos(): Promise<void> {
     const connection = await SQLConnection.getConnection();
     await connection.query('update person_entry set sampleRegionId = ' +
       '(Select face_region_entry.id from  media_entity ' +

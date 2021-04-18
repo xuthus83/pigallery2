@@ -3,7 +3,7 @@ import * as fs from 'fs';
 import {Config} from '../../../../../src/common/config/private/Config';
 import {SQLConnection} from '../../../../../src/backend/model/database/sql/SQLConnection';
 import {Server} from '../../../../../src/backend/server';
-import {ServerConfig} from '../../../../../src/common/config/private/PrivateConfig';
+import {DatabaseType, ServerConfig} from '../../../../../src/common/config/private/PrivateConfig';
 import {ProjectPath} from '../../../../../src/backend/ProjectPath';
 
 process.env.NODE_ENV = 'test';
@@ -18,7 +18,7 @@ describe('SettingsRouter', () => {
   beforeEach(async () => {
     await fs.promises.rmdir(tempDir, {recursive: true});
     Config.Server.Threading.enabled = false;
-    Config.Server.Database.type = ServerConfig.DatabaseType.sqlite;
+    Config.Server.Database.type = DatabaseType.sqlite;
     Config.Server.Database.dbFolder = tempDir;
     ProjectPath.reset();
   });

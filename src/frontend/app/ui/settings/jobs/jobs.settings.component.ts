@@ -7,7 +7,7 @@ import {SettingsComponentDirective} from '../_abstract/abstract.settings.compone
 import {ScheduledJobsService} from '../scheduled-jobs.service';
 import {
   AfterJobTrigger,
-  JobScheduleDTO,
+  JobScheduleDTO, JobScheduleDTOUtils,
   JobTriggerType,
   NeverJobTrigger,
   PeriodicJobTrigger,
@@ -17,7 +17,7 @@ import {ConfigTemplateEntry} from '../../../../../common/entities/job/JobDTO';
 import {ModalDirective} from 'ngx-bootstrap/modal';
 import {JobProgressDTO, JobProgressStates} from '../../../../../common/entities/job/JobProgressDTO';
 import {BackendtextService} from '../../../model/backendtext.service';
-import {ServerConfig} from '../../../../../common/config/private/PrivateConfig';
+import {ServerConfig, ServerJobConfig} from '../../../../../common/config/private/PrivateConfig';
 
 @Component({
   selector: 'app-settings-jobs',
@@ -26,7 +26,7 @@ import {ServerConfig} from '../../../../../common/config/private/PrivateConfig';
     '../_abstract/abstract.settings.component.css'],
   providers: [JobsSettingsService]
 })
-export class JobsSettingsComponent extends SettingsComponentDirective<ServerConfig.JobConfig, JobsSettingsService>
+export class JobsSettingsComponent extends SettingsComponentDirective<ServerJobConfig, JobsSettingsService>
   implements OnInit, OnDestroy, OnChanges {
 
   @ViewChild('jobModal', {static: false}) public jobModal: ModalDirective;
@@ -192,7 +192,7 @@ export class JobsSettingsComponent extends SettingsComponentDirective<ServerConf
         return this.getNextRunningDate(parent, list, depth + 1) + 0.001;
       }
     }
-    const d = JobScheduleDTO.getNextRunningDate(new Date(), sch);
+    const d = JobScheduleDTOUtils.getNextRunningDate(new Date(), sch);
     return d !== null ? d.getTime() : 0;
   }
 }

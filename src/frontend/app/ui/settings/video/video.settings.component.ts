@@ -5,10 +5,10 @@ import {AuthenticationService} from '../../../model/network/authentication.servi
 import {NavigationService} from '../../../model/navigation.service';
 import {NotificationService} from '../../../model/notification.service';
 import {ScheduledJobsService} from '../scheduled-jobs.service';
-import {DefaultsJobs, JobDTO} from '../../../../../common/entities/job/JobDTO';
+import {DefaultsJobs, JobDTOUtils} from '../../../../../common/entities/job/JobDTO';
 import {JobProgressDTO, JobProgressStates} from '../../../../../common/entities/job/JobProgressDTO';
-import {ServerConfig} from '../../../../../common/config/private/PrivateConfig';
-import {ClientConfig} from '../../../../../common/config/public/ClientConfig';
+import {ServerVideoConfig, videoCodecType, videoFormatType, videoResolutionType} from '../../../../../common/config/private/PrivateConfig';
+import {ClientVideoConfig} from '../../../../../common/config/public/ClientConfig';
 
 
 @Component({
@@ -19,17 +19,17 @@ import {ClientConfig} from '../../../../../common/config/public/ClientConfig';
   providers: [VideoSettingsService],
 })
 export class VideoSettingsComponent
-  extends SettingsComponentDirective<{ server: ServerConfig.VideoConfig, client: ClientConfig.VideoConfig }> {
+  extends SettingsComponentDirective<{ server: ServerVideoConfig, client: ClientVideoConfig }> {
 
-  readonly resolutionTypes: ServerConfig.resolutionType[] = [360, 480, 720, 1080, 1440, 2160, 4320];
+  readonly resolutionTypes: videoResolutionType[] = [360, 480, 720, 1080, 1440, 2160, 4320];
 
   resolutions: { key: number, value: string }[] = [];
-  codecs: { [key: string]: { key: ServerConfig.codecType, value: ServerConfig.codecType }[] } = {
-    webm: ['libvpx', 'libvpx-vp9'].map((e: ServerConfig.codecType) => ({key: e, value: e})),
-    mp4: ['libx264', 'libx265'].map((e: ServerConfig.codecType) => ({key: e, value: e}))
+  codecs: { [key: string]: { key: videoCodecType, value: videoCodecType }[] } = {
+    webm: ['libvpx', 'libvpx-vp9'].map((e: videoCodecType) => ({key: e, value: e})),
+    mp4: ['libx264', 'libx265'].map((e: videoCodecType) => ({key: e, value: e}))
   };
-  formats: { key: ServerConfig.formatType, value: ServerConfig.formatType }[] = ['mp4', 'webm']
-    .map((e: ServerConfig.formatType) => ({key: e, value: e}));
+  formats: { key: videoFormatType, value: videoFormatType }[] = ['mp4', 'webm']
+    .map((e: videoFormatType) => ({key: e, value: e}));
   fps = [24, 25, 30, 48, 50, 60].map(e => ({key: e, value: e}));
 
   JobProgressStates = JobProgressStates;
@@ -54,7 +54,7 @@ export class VideoSettingsComponent
 
 
   get Progress(): JobProgressDTO {
-    return this.jobsService.progress.value[JobDTO.getHashName(DefaultsJobs[DefaultsJobs['Video Converting']])];
+    return this.jobsService.progress.value[JobDTOUtils.getHashName(DefaultsJobs[DefaultsJobs['Video Converting']])];
   }
 
   get bitRate(): number {
@@ -93,7 +93,7 @@ export class VideoSettingsComponent
       this.states.server.transcoding.fps.value);
   }
 
-  formatChanged(format: ServerConfig.formatType): void {
+  formatChanged(format: videoFormatType): void {
     this.states.server.transcoding.codec.value = this.codecs[format][0].key;
   }
 

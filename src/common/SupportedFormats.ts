@@ -21,19 +21,19 @@ export const SupportedFormats = {
   TranscodeNeed: {
     // based on libvips, all supported formats for sharp: https://github.com/libvips/libvips
     // all supported formats for gm: http://www.graphicsmagick.org/GraphicsMagick.html
-    Photos: <string[]>[],
+    Photos: [] as string[],
     Videos: [
       'avi', 'mkv', 'mov', 'wmv', 'flv', 'mts', 'm2ts', 'mpg', '3gp', 'm4v', 'mpeg', 'vob',
       'divx', 'xvid', 'ts'
     ],
   },
   WithDots: {
-    Photos: <string[]>[],
-    Videos: <string[]>[],
-    MetaFiles: <string[]>[],
+    Photos: [] as string[],
+    Videos: [] as string[],
+    MetaFiles: [] as string[],
     TranscodeNeed: {
-      Photos: <string[]>[],
-      Videos: <string[]>[],
+      Photos: [] as string[],
+      Videos: [] as string[],
     }
   }
 };

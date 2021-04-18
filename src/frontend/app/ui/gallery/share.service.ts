@@ -66,7 +66,7 @@ export class ShareService {
         this.inited = true;
       }
     }
-  };
+  }
 
 
   public wait(): Promise<void> {

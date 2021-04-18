@@ -1,6 +1,6 @@
 import {BenchmarkResult} from './BenchmarkRunner';
 import {ContentWrapper} from '../src/common/entities/ConentWrapper';
-import {Express} from 'express';
+import {Express, NextFunction} from 'express';
 import {Utils} from '../src/common/Utils';
 import {Message} from '../src/common/entities/Message';
 
@@ -20,30 +20,30 @@ class BMExpressApp {
     this.benchmark = benchmark;
   }
 
-  get(match: string | string[], ...functions: ((req: any, res: any, next: Function) => void)[]) {
-    functions.forEach(f => {
+  get(match: string | string[], ...functions: ((req: any, res: any, next: NextFunction) => void)[]): void {
+    functions.forEach((f): void => {
       this.benchmark.addAStep({
         name: this.camelToSpaceSeparated(f.name),
-        fn: (request: any) => this.nextToPromise(f, request)
+        fn: (request: any): Promise<void> => this.nextToPromise(f, request)
       });
     });
   }
 
-  private camelToSpaceSeparated(text: string) {
+  private camelToSpaceSeparated(text: string): string {
     const result = (text.replace(/([A-Z])/g, ' $1')).toLocaleLowerCase();
     return result.charAt(0).toUpperCase() + result.slice(1);
   }
 
-  private nextToPromise(fn: (req: any, res: any, next: Function) => void, request: any) {
-    return new Promise<void>((resolve, reject) => {
+  private nextToPromise(fn: (req: any, res: any, next: NextFunction) => void, request: any): Promise<void> {
+    return new Promise<void>((resolve, reject): void => {
       const response = {
-        header: () => {
+        header: (): void => {
         },
-        json: (data: any) => {
+        json: (data: any): void => {
           resolve(data);
         }
       };
-      fn(request, response, (err?: any) => {
+      fn(request, response, (err?: any): void => {
         if (err) {
           return reject(err);
         }
@@ -76,7 +76,7 @@ export class Benchmark {
   }
 
   get BmExpressApp(): Express {
-    return (<unknown>this.bmExpressApp) as Express;
+    return (this.bmExpressApp as unknown) as Express;
   }
 
   async run(RUNS: number): Promise<BenchmarkResult> {
@@ -106,7 +106,7 @@ export class Benchmark {
 
     const ret = this.outputToBMResult(this.name, scanned[scanned.length - 1]);
     ret.duration = duration;
-    ret.subBenchmarks = scanned.map((o, i) => {
+    ret.subBenchmarks = scanned.map((o, i): BenchmarkResult => {
         const stepBm = this.outputToBMResult(this.steps[i].name, o);
         stepBm.duration = stepTimer[i] / RUNS;
         return stepBm;
@@ -120,7 +120,7 @@ export class Benchmark {
     if (output) {
       if (Array.isArray(output)) {
         return {
-          name: name,
+          name,
           duration: null,
           items: output.length,
         };
@@ -128,7 +128,7 @@ export class Benchmark {
 
       if (output instanceof ContentWrapper) {
         return {
-          name: name,
+          name,
           duration: null,
           contentWrapper: output
         };
@@ -137,7 +137,7 @@ export class Benchmark {
         const msg = output.result;
         if (Array.isArray(msg)) {
           return {
-            name: name,
+            name,
             duration: null,
             items: msg.length,
           };
@@ -145,7 +145,7 @@ export class Benchmark {
 
         if (msg instanceof ContentWrapper) {
           return {
-            name: name,
+            name,
             duration: null,
             contentWrapper: msg
           };
@@ -154,7 +154,7 @@ export class Benchmark {
 
     }
     return {
-      name: name,
+      name,
       duration: null
     };
   }
@@ -188,7 +188,7 @@ export class Benchmark {
     return stepTimer;
   }
 
-  addAStep(step: BenchmarkStep) {
+  addAStep(step: BenchmarkStep): void {
     this.steps.push(step);
   }
 

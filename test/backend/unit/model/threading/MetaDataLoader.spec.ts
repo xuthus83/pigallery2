@@ -50,15 +50,15 @@ describe('MetadataLoader', () => {
   describe('should load jpg with edge case exif data', () => {
     const root = path.join(__dirname, '/../../../assets/edge_case_exif_data');
     const files = fs.readdirSync(root);
-    for (let i = 0; i < files.length; ++i) {
-      const fullFilePath = path.join(root, files[i]);
+    for (const item of files) {
+      const fullFilePath = path.join(root, item);
       if (PhotoProcessing.isPhoto(fullFilePath)) {
-        it(files[i], async () => {
+        it(item, async () => {
           const data = await MetadataLoader.loadPhotoMetadata(fullFilePath);
           const expected = require(fullFilePath.split('.').slice(0, -1).join('.') + '.json');
           if (expected.skip) {
             expected.skip.forEach((s: string) => {
-              delete (<any>data)[s];
+              delete (data as any)[s];
               delete expected[s];
             });
             delete expected.skip;

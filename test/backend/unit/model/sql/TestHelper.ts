@@ -9,14 +9,15 @@ import {
 import {OrientationTypes} from 'ts-exif-parser';
 import {DirectoryEntity} from '../../../../../src/backend/model/database/sql/enitites/DirectoryEntity';
 import {VideoEntity, VideoMetadataEntity} from '../../../../../src/backend/model/database/sql/enitites/VideoEntity';
-import {MediaDimension} from '../../../../../src/common/entities/MediaDTO';
+import {MediaDimension, MediaDTO} from '../../../../../src/common/entities/MediaDTO';
 import {
   CameraMetadata,
   FaceRegion,
   GPSMetadata,
   PhotoDTO,
   PhotoMetadata,
-  PositionMetaData
+  PositionMetaData,
+  PreviewPhotoDTO
 } from '../../../../../src/common/entities/PhotoDTO';
 import {DirectoryDTO} from '../../../../../src/common/entities/DirectoryDTO';
 import {FileDTO} from '../../../../../src/common/entities/FileDTO';
@@ -26,7 +27,7 @@ export class TestHelper {
 
   static creationCounter = 0;
 
-  public static getDirectoryEntry(parent: DirectoryDTO = null, name = 'wars dir') {
+  public static getDirectoryEntry(parent: DirectoryDTO = null, name = 'wars dir'): DirectoryEntity {
 
     const dir = new DirectoryEntity();
     dir.name = name;
@@ -45,7 +46,7 @@ export class TestHelper {
     return dir;
   }
 
-  public static getPhotoEntry(dir: DirectoryDTO) {
+  public static getPhotoEntry(dir: DirectoryDTO): PhotoEntity {
     const sd = new MediaDimensionEntity();
     sd.height = 200;
     sd.width = 200;
@@ -84,14 +85,14 @@ export class TestHelper {
 
     const d = new PhotoEntity();
     d.name = 'test media.jpg';
-    d.directory = <any>dir;
+    d.directory = (dir as any);
     dir.media.push(d);
     d.metadata = m;
     dir.mediaCount++;
     return d;
   }
 
-  public static getVideoEntry(dir: DirectoryDTO) {
+  public static getVideoEntry(dir: DirectoryDTO): VideoEntity {
     const sd = new MediaDimensionEntity();
     sd.height = 200;
     sd.width = 200;
@@ -115,13 +116,13 @@ export class TestHelper {
     return d;
   }
 
-  public static getVideoEntry1(dir: DirectoryDTO) {
+  public static getVideoEntry1(dir: DirectoryDTO): VideoEntity {
     const p = TestHelper.getVideoEntry(dir);
     p.name = 'swVideo.mp4';
     return p;
   }
 
-  public static getPhotoEntry1(dir: DirectoryDTO) {
+  public static getPhotoEntry1(dir: DirectoryDTO): PhotoEntity {
     const p = TestHelper.getPhotoEntry(dir);
 
     p.metadata.caption = 'Han Solo\'s dice';
@@ -136,29 +137,29 @@ export class TestHelper {
     p.metadata.size.height = 1000;
     p.metadata.size.width = 1000;
 
-    p.metadata.faces = [<FaceRegion>{
+    p.metadata.faces = [{
       box: {height: 10, width: 10, left: 10, top: 10},
       name: 'Boba Fett'
-    }, <FaceRegion>{
+    } as FaceRegion, {
       box: {height: 10, width: 10, left: 102, top: 102},
       name: 'Luke Skywalker'
-    }, <FaceRegion>{
+    } as FaceRegion, {
       box: {height: 10, width: 10, left: 103, top: 103},
       name: 'Han Solo'
-    }, <FaceRegion>{
+    } as FaceRegion, {
       box: {height: 10, width: 10, left: 104, top: 104},
       name: 'Unkle Ben'
-    }, <FaceRegion>{
+    } as FaceRegion, {
       box: {height: 10, width: 10, left: 105, top: 105},
       name: 'Arvíztűrő Tükörfúrógép'
-    }, <FaceRegion>{
+    } as FaceRegion, {
       box: {height: 10, width: 10, left: 201, top: 201},
       name: 'R2-D2'
-    }] as any[];
+    } as FaceRegion] as any[];
     return p;
   }
 
-  public static getPhotoEntry2(dir: DirectoryDTO) {
+  public static getPhotoEntry2(dir: DirectoryDTO): PhotoEntity {
     const p = TestHelper.getPhotoEntry(dir);
 
     p.metadata.caption = 'Light saber';
@@ -174,23 +175,23 @@ export class TestHelper {
     p.metadata.size.height = 2000;
     p.metadata.size.width = 1000;
 
-    p.metadata.faces = [<FaceRegion>{
+    p.metadata.faces = [{
       box: {height: 10, width: 10, left: 10, top: 10},
       name: 'Padmé Amidala'
-    }, <FaceRegion>{
+    } as FaceRegion, {
       box: {height: 10, width: 10, left: 101, top: 101},
       name: 'Anakin Skywalker'
-    }, <FaceRegion>{
+    } as FaceRegion, {
       box: {height: 10, width: 10, left: 101, top: 101},
       name: 'Obivan Kenobi'
-    }, <FaceRegion>{
+    } as FaceRegion, {
       box: {height: 10, width: 10, left: 201, top: 201},
       name: 'R2-D2'
-    }] as any[];
+    } as FaceRegion] as any[];
     return p;
   }
 
-  public static getPhotoEntry3(dir: DirectoryDTO) {
+  public static getPhotoEntry3(dir: DirectoryDTO): PhotoEntity {
     const p = TestHelper.getPhotoEntry(dir);
 
     p.metadata.caption = 'Amber stone';
@@ -205,20 +206,20 @@ export class TestHelper {
     p.metadata.rating = 3;
     p.metadata.size.height = 1000;
     p.metadata.size.width = 2000;
-    p.metadata.faces = [<FaceRegion>{
+    p.metadata.faces = [{
       box: {height: 10, width: 10, left: 10, top: 10},
       name: 'Kylo Ren'
-    }, <FaceRegion>{
+    } as FaceRegion, {
       box: {height: 10, width: 10, left: 101, top: 101},
       name: 'Leia Organa'
-    }, <FaceRegion>{
+    } as FaceRegion, {
       box: {height: 10, width: 10, left: 103, top: 103},
       name: 'Han Solo'
-    }] as any[];
+    } as FaceRegion] as any[];
     return p;
   }
 
-  public static getPhotoEntry4(dir: DirectoryDTO) {
+  public static getPhotoEntry4(dir: DirectoryDTO): PhotoEntity {
     const p = TestHelper.getPhotoEntry(dir);
 
     p.metadata.caption = 'Millennium falcon';
@@ -233,24 +234,24 @@ export class TestHelper {
     p.metadata.size.height = 3000;
     p.metadata.size.width = 2000;
 
-    p.metadata.faces = [<FaceRegion>{
+    p.metadata.faces = [{
       box: {height: 10, width: 10, left: 10, top: 10},
       name: 'Kylo Ren'
-    }, <FaceRegion>{
+    } as FaceRegion, {
       box: {height: 10, width: 10, left: 101, top: 101},
       name: 'Anakin Skywalker'
-    }, <FaceRegion>{
+    } as FaceRegion, {
       box: {height: 10, width: 10, left: 101, top: 101},
       name: 'Obivan Kenobi'
-    }, <FaceRegion>{
+    } as FaceRegion, {
       box: {height: 10, width: 10, left: 201, top: 201},
       name: 'R2-D2'
-    }] as any[];
+    } as FaceRegion] as any[];
 
     return p;
   }
 
-  public static getRandomizedDirectoryEntry(parent: DirectoryDTO = null, forceStr: string = null) {
+  public static getRandomizedDirectoryEntry(parent: DirectoryDTO = null, forceStr: string = null): DirectoryDTO<MediaDTO> {
 
     const dir: DirectoryDTO = {
       id: null,
@@ -263,7 +264,7 @@ export class TestHelper {
       media: [],
       lastModified: Date.now(),
       lastScanned: null,
-      parent: parent
+      parent
     };
     if (parent !== null) {
       dir.path = DiskMangerWorker.pathFromParent(parent);
@@ -282,12 +283,12 @@ export class TestHelper {
     return d;
   }
 
-  public static getRandomizedFace(media: PhotoDTO, forceStr: string = null) {
-    const rndStr = () => {
+  public static getRandomizedFace(media: PhotoDTO, forceStr: string = null): FaceRegion {
+    const rndStr = (): string => {
       return forceStr + '_' + Math.random().toString(36).substring(7);
     };
 
-    const rndInt = (max = 5000) => {
+    const rndInt = (max = 5000): number => {
       return Math.floor(Math.random() * max);
     };
 
@@ -308,11 +309,11 @@ export class TestHelper {
   public static getRandomizedPhotoEntry(dir: DirectoryDTO, forceStr: string = null, faces: number = 2): PhotoDTO {
 
 
-    const rndStr = () => {
+    const rndStr = (): string => {
       return forceStr + '_' + Math.random().toString(36).substring(7);
     };
 
-    const rndInt = (max = 5000) => {
+    const rndInt = (max = 5000): number => {
       return Math.floor(Math.random() * max);
     };
 
@@ -350,7 +351,7 @@ export class TestHelper {
       fileSize: rndInt(10000),
       orientation: OrientationTypes.TOP_LEFT,
       caption: rndStr(),
-      rating: <any>rndInt(5),
+      rating: rndInt(5) as any,
     };
 
 
@@ -372,13 +373,13 @@ export class TestHelper {
     return p;
   }
 
-  static updatePreview(dir: DirectoryDTO) {
+  static updatePreview(dir: DirectoryDTO): void {
     if (dir.media.length > 0) {
-      dir.preview = dir.media.sort((a, b) => b.metadata.creationDate - a.metadata.creationDate)[0];
+      dir.preview = dir.media.sort((a, b): number => b.metadata.creationDate - a.metadata.creationDate)[0];
     } else {
-      const filtered = dir.directories.filter(d => d.preview).map(d => d.preview);
+      const filtered = dir.directories.filter((d): PreviewPhotoDTO => d.preview).map((d): PreviewPhotoDTO => d.preview);
       if (filtered.length > 0) {
-        dir.preview = filtered.sort((a, b) => b.metadata.creationDate - a.metadata.creationDate)[0];
+        dir.preview = filtered.sort((a, b): number => b.metadata.creationDate - a.metadata.creationDate)[0];
       }
     }
     if (dir.parent) {

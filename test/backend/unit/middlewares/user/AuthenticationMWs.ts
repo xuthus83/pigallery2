@@ -51,10 +51,10 @@ describe('Authentication middleware', () => {
         expect(err.code).to.be.eql(ErrorCodes.NOT_AUTHENTICATED);
         done();
       };
-      AuthenticationMWs.authenticate(req, <any>{
+      AuthenticationMWs.authenticate(req, {
         status: () => {
         }
-      }, next);
+      } as any, next);
 
     });
   });
@@ -64,7 +64,7 @@ describe('Authentication middleware', () => {
 
     const req = {
       session: {
-        user: {permissions: <string[]>null}
+        user: {permissions: null as string[]}
       },
       sessionOptions: {},
       query: {},
@@ -78,7 +78,7 @@ describe('Authentication middleware', () => {
     const test = (relativePath: string): Promise<string | number> => {
       return new Promise((resolve) => {
         req.params.path = path.normalize(relativePath);
-        authoriseDirPath(<any>req, <any>{sendStatus: resolve}, () => {
+        authoriseDirPath(req as any, {sendStatus: resolve} as any, () => {
           resolve('ok');
         });
       });
@@ -253,11 +253,11 @@ describe('Authentication middleware', () => {
         expect(err.code).to.be.eql(ErrorCodes.CREDENTIAL_NOT_FOUND);
         done();
       };
-      ObjectManagers.getInstance().UserManager = <UserManager>{
+      ObjectManagers.getInstance().UserManager = {
         findOne: (filter): Promise<UserDTO> => {
           return Promise.reject(null);
         }
-      };
+      } as UserManager;
       AuthenticationMWs.login(req, null, next);
 
 
@@ -280,11 +280,11 @@ describe('Authentication middleware', () => {
         expect(req.session.user).to.be.eql('test user');
         done();
       };
-      ObjectManagers.getInstance().UserManager = <IUserManager>{
+      ObjectManagers.getInstance().UserManager = {
         findOne: (filter) => {
-          return Promise.resolve(<any>'test user');
+          return Promise.resolve('test user' as any);
         }
-      };
+      } as IUserManager;
       AuthenticationMWs.login(req, null, next);
 
 

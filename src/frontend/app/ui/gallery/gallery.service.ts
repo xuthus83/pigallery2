@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {NetworkService} from '../../model/network/network.service';
 import {ContentWrapper} from '../../../../common/entities/ConentWrapper';
-import {DirectoryDTO} from '../../../../common/entities/DirectoryDTO';
+import {DirectoryDTO, DirectoryDTOUtils} from '../../../../common/entities/DirectoryDTO';
 import {GalleryCacheService} from './cache.gallery.service';
 import {BehaviorSubject} from 'rxjs';
 import {Config} from '../../../../common/config/public/Config';
@@ -28,7 +28,7 @@ export class GalleryService {
 
   constructor(private networkService: NetworkService,
               private galleryCacheService: GalleryCacheService,
-              private _shareService: ShareService,
+              private shareService: ShareService,
               private navigationService: NavigationService) {
     this.content = new BehaviorSubject<ContentWrapperWithError>(new ContentWrapperWithError());
     this.sorting = new BehaviorSubject<SortingMethods>(Config.Client.Other.defaultPhotoSortingMethod);
@@ -38,7 +38,7 @@ export class GalleryService {
     if (directory && directory.metaFile) {
       for (const file in PG2ConfMap.sorting) {
         if (directory.metaFile.some(f => f.name === file)) {
-          return (<any>PG2ConfMap.sorting)[file];
+          return (PG2ConfMap.sorting as any)[file];
         }
       }
     }
@@ -82,8 +82,8 @@ export class GalleryService {
 
     const params: { [key: string]: any } = {};
     if (Config.Client.Sharing.enabled === true) {
-      if (this._shareService.isSharing()) {
-        params[QueryParams.gallery.sharingKey_query] = this._shareService.getSharingKey();
+      if (this.shareService.isSharing()) {
+        params[QueryParams.gallery.sharingKey_query] = this.shareService.getSharingKey();
       }
     }
 
@@ -107,9 +107,9 @@ export class GalleryService {
         return;
       }
 
-      DirectoryDTO.unpackDirectory(<DirectoryDTO>cw.directory);
+      DirectoryDTOUtils.unpackDirectory(cw.directory as DirectoryDTO);
 
-      this.lastDirectory = <DirectoryDTO>cw.directory;
+      this.lastDirectory = (cw.directory as DirectoryDTO);
       this.setContent(cw);
     } catch (e) {
       console.error(e);

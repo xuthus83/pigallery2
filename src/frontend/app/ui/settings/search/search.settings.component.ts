@@ -4,7 +4,7 @@ import {AuthenticationService} from '../../../model/network/authentication.servi
 import {NavigationService} from '../../../model/navigation.service';
 import {NotificationService} from '../../../model/notification.service';
 import {SearchSettingsService} from './search.settings.service';
-import {ClientConfig} from '../../../../../common/config/public/ClientConfig';
+import {ClientConfig, ClientSearchConfig} from '../../../../../common/config/public/ClientConfig';
 
 @Component({
   selector: 'app-settings-search',
@@ -13,7 +13,7 @@ import {ClientConfig} from '../../../../../common/config/public/ClientConfig';
     '../_abstract/abstract.settings.component.css'],
   providers: [SearchSettingsService],
 })
-export class SearchSettingsComponent extends SettingsComponentDirective<ClientConfig.SearchConfig> {
+export class SearchSettingsComponent extends SettingsComponentDirective<ClientSearchConfig> {
 
   constructor(authService: AuthenticationService,
               navigation: NavigationService,

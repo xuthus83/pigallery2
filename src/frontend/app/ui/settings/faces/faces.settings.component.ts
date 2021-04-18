@@ -6,7 +6,7 @@ import {NotificationService} from '../../../model/notification.service';
 import {FacesSettingsService} from './faces.settings.service';
 import {Utils} from '../../../../../common/Utils';
 import {UserRoles} from '../../../../../common/entities/UserDTO';
-import {ClientConfig} from '../../../../../common/config/public/ClientConfig';
+import {ClientConfig, ClientFacesConfig} from '../../../../../common/config/public/ClientConfig';
 
 @Component({
   selector: 'app-settings-faces',
@@ -15,7 +15,7 @@ import {ClientConfig} from '../../../../../common/config/public/ClientConfig';
     '../_abstract/abstract.settings.component.css'],
   providers: [FacesSettingsService],
 })
-export class FacesSettingsComponent extends SettingsComponentDirective<ClientConfig.FacesConfig> {
+export class FacesSettingsComponent extends SettingsComponentDirective<ClientFacesConfig> {
 
   public readonly userRoles = Utils
     .enumToArray(UserRoles)

@@ -17,7 +17,7 @@ import {Utils} from '../../../common/Utils';
 export class DiskMangerWorker {
 
 
-  public static calcLastModified(stat: Stats) {
+  public static calcLastModified(stat: Stats): number {
     return Math.max(stat.ctime.getTime(), stat.mtime.getTime());
   }
 
@@ -34,14 +34,14 @@ export class DiskMangerWorker {
     return path.join(this.normalizeDirPath(path.join(parent.path, parent.name)), path.sep);
   }
 
-  public static dirName(name: string) {
+  public static dirName(name: string): any {
     if (name.trim().length === 0) {
       return '.';
     }
     return path.basename(name);
   }
 
-  public static async excludeDir(name: string, relativeDirectoryName: string, absoluteDirectoryName: string) {
+  public static async excludeDir(name: string, relativeDirectoryName: string, absoluteDirectoryName: string): Promise<boolean> {
     if (Config.Server.Indexing.excludeFolderList.length === 0 &&
       Config.Server.Indexing.excludeFileList.length === 0) {
       return false;
@@ -49,9 +49,7 @@ export class DiskMangerWorker {
     const absoluteName = path.normalize(path.join(absoluteDirectoryName, name));
     const relativeName = path.normalize(path.join(relativeDirectoryName, name));
 
-    for (let j = 0; j < Config.Server.Indexing.excludeFolderList.length; j++) {
-      const exclude = Config.Server.Indexing.excludeFolderList[j];
-
+    for (const exclude of Config.Server.Indexing.excludeFolderList) {
       if (exclude.startsWith('/')) {
         if (exclude === absoluteName) {
           return true;
@@ -67,9 +65,7 @@ export class DiskMangerWorker {
       }
     }
     // exclude dirs that have the given files (like .ignore)
-    for (let j = 0; j < Config.Server.Indexing.excludeFileList.length; j++) {
-      const exclude = Config.Server.Indexing.excludeFileList[j];
-
+    for (const exclude of Config.Server.Indexing.excludeFileList) {
       try {
         await fsp.access(path.join(absoluteName, exclude));
         return true;
@@ -81,13 +77,13 @@ export class DiskMangerWorker {
   }
 
   public static async scanDirectoryNoMetadata(relativeDirectoryName: string,
-                                              settings: DiskMangerWorker.DirectoryScanSettings = {}): Promise<DirectoryDTO<FileDTO>> {
+                                              settings: DirectoryScanSettings = {}): Promise<DirectoryDTO<FileDTO>> {
     settings.noMetadata = true;
     return this.scanDirectory(relativeDirectoryName, settings);
   }
 
   public static async scanDirectory(relativeDirectoryName: string,
-                                    settings: DiskMangerWorker.DirectoryScanSettings = {}): Promise<DirectoryDTO> {
+                                    settings: DirectoryScanSettings = {}): Promise<DirectoryDTO> {
 
     relativeDirectoryName = this.normalizeDirPath(relativeDirectoryName);
     const directoryName = DiskMangerWorker.dirName(relativeDirectoryName);
@@ -115,8 +111,7 @@ export class DiskMangerWorker {
       return directory;
     }
     const list = await fsp.readdir(absoluteDirectoryName);
-    for (let i = 0; i < list.length; i++) {
-      const file = list[i];
+    for (const file of list) {
       const fullFilePath = path.normalize(path.join(absoluteDirectoryName, file));
       if ((await fsp.stat(fullFilePath)).isDirectory()) {
         if (settings.noDirectory === true || settings.previewOnly === true ||
@@ -141,11 +136,11 @@ export class DiskMangerWorker {
           continue;
         }
 
-        const photo = <PhotoDTO>{
+        const photo = {
           name: file,
           directory: null,
           metadata: settings.noMetadata === true ? null : await MetadataLoader.loadPhotoMetadata(fullFilePath)
-        };
+        } as PhotoDTO;
 
         if (!directory.preview) {
           directory.preview = Utils.clone(photo);
@@ -169,11 +164,11 @@ export class DiskMangerWorker {
           continue;
         }
         try {
-          directory.media.push(<VideoDTO>{
+          directory.media.push({
             name: file,
             directory: null,
             metadata: settings.noMetadata === true ? null : await MetadataLoader.loadVideoMetadata(fullFilePath)
-          });
+          } as VideoDTO);
         } catch (e) {
           Logger.warn('Media loading error, skipping: ' + file + ', reason: ' + e.toString());
         }
@@ -183,10 +178,10 @@ export class DiskMangerWorker {
           continue;
         }
 
-        directory.metaFile.push(<FileDTO>{
+        directory.metaFile.push({
           name: file,
           directory: null,
-        });
+        } as FileDTO);
 
       }
     }
@@ -197,21 +192,19 @@ export class DiskMangerWorker {
   }
 
 
-  private static isMetaFile(fullPath: string) {
+  private static isMetaFile(fullPath: string): boolean {
     const extension = path.extname(fullPath).toLowerCase();
     return SupportedFormats.WithDots.MetaFiles.indexOf(extension) !== -1;
   }
 
 }
 
-export namespace DiskMangerWorker {
-  export interface DirectoryScanSettings {
-    previewOnly?: boolean;
-    noMetaFile?: boolean;
-    noVideo?: boolean;
-    noPhoto?: boolean;
-    noDirectory?: boolean;
-    noMetadata?: boolean;
-    noChildDirPhotos?: boolean;
-  }
+export interface DirectoryScanSettings {
+  previewOnly?: boolean;
+  noMetaFile?: boolean;
+  noVideo?: boolean;
+  noPhoto?: boolean;
+  noDirectory?: boolean;
+  noMetadata?: boolean;
+  noChildDirPhotos?: boolean;
 }
