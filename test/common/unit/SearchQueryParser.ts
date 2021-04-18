@@ -52,170 +52,170 @@ describe('SearchQueryParser', () => {
 
   describe('should serialize and deserialize', () => {
     it('Text search', () => {
-      check(<TextSearch>{type: SearchQueryTypes.any_text, text: 'test'});
-      check(<TextSearch>{type: SearchQueryTypes.person, text: 'person_test'});
-      check(<TextSearch>{type: SearchQueryTypes.directory, text: 'directory'});
-      check(<TextSearch>{type: SearchQueryTypes.keyword, text: 'big boom'});
-      check(<TextSearch>{type: SearchQueryTypes.caption, text: 'caption'});
-      check(<TextSearch>{type: SearchQueryTypes.file_name, text: 'filename'});
-      check(<TextSearch>{type: SearchQueryTypes.position, text: 'New York'});
-      check(<TextSearch>{
+      check({type: SearchQueryTypes.any_text, text: 'test'} as TextSearch);
+      check({type: SearchQueryTypes.person, text: 'person_test'} as TextSearch);
+      check({type: SearchQueryTypes.directory, text: 'directory'} as TextSearch);
+      check({type: SearchQueryTypes.keyword, text: 'big boom'} as TextSearch);
+      check({type: SearchQueryTypes.caption, text: 'caption'} as TextSearch);
+      check({type: SearchQueryTypes.file_name, text: 'filename'} as TextSearch);
+      check({type: SearchQueryTypes.position, text: 'New York'} as TextSearch);
+      check({
         type: SearchQueryTypes.position,
         matchType: TextSearchQueryMatchTypes.exact_match,
         text: 'New York'
-      });
+      } as TextSearch);
     });
 
     it('Date search', () => {
-      check(<FromDateSearch>{type: SearchQueryTypes.from_date, value: (new Date(2020, 1, 10)).getTime()});
-      check(<FromDateSearch>{type: SearchQueryTypes.from_date, value: (new Date(2020, 1, 1)).getTime()});
-      check(<ToDateSearch>{type: SearchQueryTypes.to_date, value: (new Date(2020, 1, 20)).getTime()});
-      check(<ToDateSearch>{type: SearchQueryTypes.to_date, value: (new Date(2020, 1, 1)).getTime()});
+      check({type: SearchQueryTypes.from_date, value: (new Date(2020, 1, 10)).getTime()} as FromDateSearch);
+      check({type: SearchQueryTypes.from_date, value: (new Date(2020, 1, 1)).getTime()} as FromDateSearch);
+      check({type: SearchQueryTypes.to_date, value: (new Date(2020, 1, 20)).getTime()} as ToDateSearch);
+      check({type: SearchQueryTypes.to_date, value: (new Date(2020, 1, 1)).getTime()} as ToDateSearch);
 
       const parser = new SearchQueryParser(keywords);
       // test if date gets simplified on 1st of Jan.
-      let query: RangeSearch = <ToDateSearch>{type: SearchQueryTypes.to_date, value: (new Date(2020, 0, 1)).getTime()};
+      let query: RangeSearch = {type: SearchQueryTypes.to_date, value: (new Date(2020, 0, 1)).getTime()} as ToDateSearch;
       expect(parser.parse(keywords.to + ':' + (new Date(query.value)).getFullYear()))
         .to.deep.equals(query, parser.stringify(query));
 
-      query = <FromDateSearch>{type: SearchQueryTypes.from_date, value: (new Date(2020, 0, 1)).getTime()};
+      query = ({type: SearchQueryTypes.from_date, value: (new Date(2020, 0, 1)).getTime()} as FromDateSearch);
       expect(parser.parse(keywords.from + ':' + (new Date(query.value)).getFullYear()))
         .to.deep.equals(query, parser.stringify(query));
 
     });
     it('Rating search', () => {
-      check(<MinRatingSearch>{type: SearchQueryTypes.min_rating, value: 10});
-      check(<MaxRatingSearch>{type: SearchQueryTypes.max_rating, value: 1});
+      check({type: SearchQueryTypes.min_rating, value: 10} as MinRatingSearch);
+      check({type: SearchQueryTypes.max_rating, value: 1} as MaxRatingSearch);
     });
     it('Resolution search', () => {
-      check(<MinResolutionSearch>{type: SearchQueryTypes.min_resolution, value: 10});
-      check(<MaxResolutionSearch>{type: SearchQueryTypes.max_resolution, value: 5});
+      check({type: SearchQueryTypes.min_resolution, value: 10} as MinResolutionSearch);
+      check({type: SearchQueryTypes.max_resolution, value: 5} as MaxResolutionSearch);
     });
     it('Distance search', () => {
-      check(<DistanceSearch>{type: SearchQueryTypes.distance, distance: 10, from: {text: 'New York'}});
+      check({type: SearchQueryTypes.distance, distance: 10, from: {text: 'New York'}} as DistanceSearch);
     });
     it('OrientationSearch search', () => {
-      check(<OrientationSearch>{type: SearchQueryTypes.orientation, landscape: true});
-      check(<OrientationSearch>{type: SearchQueryTypes.orientation, landscape: false});
+      check({type: SearchQueryTypes.orientation, landscape: true} as OrientationSearch);
+      check({type: SearchQueryTypes.orientation, landscape: false} as OrientationSearch);
     });
     it('And search', () => {
-      check(<ANDSearchQuery>{
+      check({
         type: SearchQueryTypes.AND,
         list: [
-          <TextSearch>{type: SearchQueryTypes.keyword, text: 'big boom'},
-          <TextSearch>{type: SearchQueryTypes.position, text: 'New York'}
+          {type: SearchQueryTypes.keyword, text: 'big boom'} as TextSearch,
+          {type: SearchQueryTypes.position, text: 'New York'} as TextSearch
         ]
-      });
+      } as ANDSearchQuery);
 
-      check(<ANDSearchQuery>{
+      check({
         type: SearchQueryTypes.AND,
         list: [
-          <TextSearch>{type: SearchQueryTypes.keyword, text: 'big boom'},
-          <TextSearch>{
+          {type: SearchQueryTypes.keyword, text: 'big boom'} as TextSearch,
+          {
             type: SearchQueryTypes.position,
             matchType: TextSearchQueryMatchTypes.exact_match,
             text: 'New York'
-          }
+          } as TextSearch
         ]
-      });
-      check(<ANDSearchQuery>{
+      } as ANDSearchQuery);
+      check({
         type: SearchQueryTypes.AND,
         list: [
-          <TextSearch>{type: SearchQueryTypes.keyword, text: 'big boom'},
-          <ANDSearchQuery>{
+          {type: SearchQueryTypes.keyword, text: 'big boom'} as TextSearch,
+          {
             type: SearchQueryTypes.AND,
             list: [
-              <TextSearch>{type: SearchQueryTypes.caption, text: 'caption'},
-              <TextSearch>{type: SearchQueryTypes.position, text: 'New York'}
+              {type: SearchQueryTypes.caption, text: 'caption'} as TextSearch,
+              {type: SearchQueryTypes.position, text: 'New York'} as TextSearch
             ]
-          }
+          } as ANDSearchQuery
         ]
-      });
-      check(<ANDSearchQuery>{
+      } as ANDSearchQuery);
+      check({
         type: SearchQueryTypes.AND,
         list: [
-          <SomeOfSearchQuery>{
+          {
             type: SearchQueryTypes.SOME_OF,
             min: 2,
             list: [
-              <TextSearch>{type: SearchQueryTypes.keyword, text: 'big boom'},
-              <TextSearch>{type: SearchQueryTypes.position, text: 'New York'},
-              <TextSearch>{type: SearchQueryTypes.caption, text: 'caption test'}
+              {type: SearchQueryTypes.keyword, text: 'big boom'} as TextSearch,
+              {type: SearchQueryTypes.position, text: 'New York'} as TextSearch,
+              {type: SearchQueryTypes.caption, text: 'caption test'} as TextSearch
             ]
-          },
-          <TextSearch>{type: SearchQueryTypes.position, text: 'New York'}
+          } as SomeOfSearchQuery,
+          {type: SearchQueryTypes.position, text: 'New York'} as TextSearch
         ]
-      });
+      } as ANDSearchQuery);
     });
     it('Or search', () => {
-      check(<ORSearchQuery>{
+      check({
         type: SearchQueryTypes.OR,
         list: [
-          <TextSearch>{type: SearchQueryTypes.keyword, text: 'big boom'},
-          <TextSearch>{type: SearchQueryTypes.position, text: 'New York'}
+          {type: SearchQueryTypes.keyword, text: 'big boom'} as TextSearch,
+          {type: SearchQueryTypes.position, text: 'New York'} as TextSearch
         ]
-      });
-      check(<ORSearchQuery>{
+      } as ORSearchQuery);
+      check({
         type: SearchQueryTypes.OR,
         list: [
-          <ORSearchQuery>{
+          {
             type: SearchQueryTypes.OR,
             list: [
-              <TextSearch>{type: SearchQueryTypes.keyword, text: 'big boom'},
-              <TextSearch>{type: SearchQueryTypes.person, text: 'person_test'}
+              {type: SearchQueryTypes.keyword, text: 'big boom'} as TextSearch,
+              {type: SearchQueryTypes.person, text: 'person_test'} as TextSearch
             ]
-          },
-          <TextSearch>{type: SearchQueryTypes.position, text: 'New York'}
+          } as ORSearchQuery,
+          {type: SearchQueryTypes.position, text: 'New York'} as TextSearch
         ]
-      });
+      } as ORSearchQuery);
     });
     it('Some of search', () => {
-      check(<SomeOfSearchQuery>{
+      check({
         type: SearchQueryTypes.SOME_OF,
         list: [
-          <TextSearch>{type: SearchQueryTypes.keyword, text: 'big boom'},
-          <TextSearch>{type: SearchQueryTypes.position, text: 'New York'}
+          {type: SearchQueryTypes.keyword, text: 'big boom'} as TextSearch,
+          {type: SearchQueryTypes.position, text: 'New York'} as TextSearch
         ]
-      });
-      check(<SomeOfSearchQuery>{
+      } as SomeOfSearchQuery);
+      check({
         type: SearchQueryTypes.SOME_OF,
         list: [
-          <TextSearch>{
+          {
             type: SearchQueryTypes.keyword,
             matchType: TextSearchQueryMatchTypes.exact_match,
             text: 'big boom'
-          },
-          <TextSearch>{
+          } as TextSearch,
+          {
             type: SearchQueryTypes.position,
             matchType: TextSearchQueryMatchTypes.exact_match,
             text: 'New York'
-          },
+          } as TextSearch,
         ]
-      });
-      check(<SomeOfSearchQuery>{
+      } as SomeOfSearchQuery);
+      check({
         type: SearchQueryTypes.SOME_OF,
         min: 2,
         list: [
-          <TextSearch>{type: SearchQueryTypes.keyword, text: 'big boom'},
-          <TextSearch>{type: SearchQueryTypes.position, text: 'New York'},
-          <TextSearch>{type: SearchQueryTypes.caption, text: 'caption test'}
+          {type: SearchQueryTypes.keyword, text: 'big boom'} as TextSearch,
+          {type: SearchQueryTypes.position, text: 'New York'} as TextSearch,
+          {type: SearchQueryTypes.caption, text: 'caption test'} as TextSearch
         ]
-      });
-      check(<SomeOfSearchQuery>{
+      } as SomeOfSearchQuery);
+      check({
         type: SearchQueryTypes.SOME_OF,
         min: 2,
         list: [
-          <TextSearch>{type: SearchQueryTypes.keyword, text: 'big boom'},
-          <TextSearch>{type: SearchQueryTypes.person, text: 'person_test'},
-          <ANDSearchQuery>{
+          {type: SearchQueryTypes.keyword, text: 'big boom'} as TextSearch,
+          {type: SearchQueryTypes.person, text: 'person_test'} as TextSearch,
+          {
             type: SearchQueryTypes.AND,
             list: [
-              <TextSearch>{type: SearchQueryTypes.caption, text: 'caption'},
-              <TextSearch>{type: SearchQueryTypes.position, text: 'New York'}
+              {type: SearchQueryTypes.caption, text: 'caption'} as TextSearch,
+              {type: SearchQueryTypes.position, text: 'New York'} as TextSearch
             ]
-          }
+          } as ANDSearchQuery
         ]
-      });
+      } as SomeOfSearchQuery);
     });
   });
 

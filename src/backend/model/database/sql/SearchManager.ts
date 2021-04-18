@@ -31,7 +31,7 @@ import {GalleryManager} from './GalleryManager';
 import {ObjectManagers} from '../../ObjectManagers';
 import {Utils} from '../../../../common/Utils';
 import {PhotoDTO} from '../../../../common/entities/PhotoDTO';
-import {ServerConfig} from '../../../../common/config/private/PrivateConfig';
+import {DatabaseType} from '../../../../common/config/private/PrivateConfig';
 
 export class SearchManager implements ISearchManager {
 
@@ -66,10 +66,10 @@ export class SearchManager implements ISearchManager {
         .where('photo.metadata.keywords LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
         .limit(Config.Client.Search.AutoComplete.maxItemsPerCategory)
         .getRawMany())
-        .map(r => <Array<string>>(<string>r.metadataKeywords).split(','))
-        .forEach(keywords => {
+        .map((r): Array<string> => (r.metadataKeywords as string).split(',') as Array<string>)
+        .forEach((keywords): void => {
           result = result.concat(this.encapsulateAutoComplete(keywords
-            .filter(k => k.toLowerCase().indexOf(text.toLowerCase()) !== -1), SearchQueryTypes.keyword));
+            .filter((k): boolean => k.toLowerCase().indexOf(text.toLowerCase()) !== -1), SearchQueryTypes.keyword));
         });
     }
 
@@ -95,11 +95,11 @@ export class SearchManager implements ISearchManager {
         .groupBy('photo.metadata.positionData.country, photo.metadata.positionData.state, photo.metadata.positionData.city')
         .limit(Config.Client.Search.AutoComplete.maxItemsPerCategory)
         .getRawMany())
-        .filter(pm => !!pm)
-        .map(pm => <Array<string>>[pm.city || '', pm.country || '', pm.state || ''])
-        .forEach(positions => {
+        .filter((pm): boolean => !!pm)
+        .map((pm): Array<string> => [pm.city || '', pm.country || '', pm.state || ''] as Array<string>)
+        .forEach((positions): void => {
           result = result.concat(this.encapsulateAutoComplete(positions
-              .filter(p => p.toLowerCase().indexOf(text.toLowerCase()) !== -1),
+              .filter((p): boolean => p.toLowerCase().indexOf(text.toLowerCase()) !== -1),
             type === SearchQueryTypes.distance ? type : SearchQueryTypes.position));
         });
     }
@@ -137,7 +137,7 @@ export class SearchManager implements ISearchManager {
     return SearchManager.autoCompleteItemsUnique(result);
   }
 
-  async search(queryIN: SearchQueryDTO) {
+  async search(queryIN: SearchQueryDTO): Promise<SearchResultDTO> {
     let query = this.flattenSameOfQueries(queryIN);
     query = await this.getGPSData(query);
     const connection = await SQLConnection.getConnection();
@@ -152,7 +152,7 @@ export class SearchManager implements ISearchManager {
 
 
     const sqlQuery = await connection.getRepository(MediaEntity).createQueryBuilder('media')
-      .innerJoin(q => {
+      .innerJoin((q): any => {
           const subQuery = q.from(MediaEntity, 'media')
             .select('distinct media.id')
             .limit(Config.Client.Search.maxMediaResult + 1);
@@ -198,23 +198,23 @@ export class SearchManager implements ISearchManager {
       .where(this.buildWhereQuery(query));
 
 
-    if (Config.Server.Database.type === ServerConfig.DatabaseType.mysql) {
+    if (Config.Server.Database.type === DatabaseType.mysql) {
       return await sqlQuery.groupBy('RAND(), media.id').limit(1).getOne();
     }
     return await sqlQuery.groupBy('RANDOM()').limit(1).getOne();
 
   }
 
-  private async getGPSData(query: SearchQueryDTO) {
+  private async getGPSData(query: SearchQueryDTO): Promise<SearchQueryDTO> {
     if ((query as ANDSearchQuery | ORSearchQuery).list) {
       for (let i = 0; i < (query as ANDSearchQuery | ORSearchQuery).list.length; ++i) {
         (query as ANDSearchQuery | ORSearchQuery).list[i] =
           await this.getGPSData((query as ANDSearchQuery | ORSearchQuery).list[i]);
       }
     }
-    if (query.type === SearchQueryTypes.distance && (<DistanceSearch>query).from.text) {
-      (<DistanceSearch>query).from.GPSData =
-        await ObjectManagers.getInstance().LocationManager.getGPSData((<DistanceSearch>query).from.text);
+    if (query.type === SearchQueryTypes.distance && (query as DistanceSearch).from.text) {
+      (query as DistanceSearch).from.GPSData =
+        await ObjectManagers.getInstance().LocationManager.getGPSData((query as DistanceSearch).from.text);
     }
     return query;
   }
@@ -222,13 +222,13 @@ export class SearchManager implements ISearchManager {
   private buildWhereQuery(query: SearchQueryDTO, paramCounter = {value: 0}): Brackets {
     switch (query.type) {
       case SearchQueryTypes.AND:
-        return new Brackets(q => {
-          (<ANDSearchQuery>query).list.forEach(sq => q.andWhere(this.buildWhereQuery(sq, paramCounter)));
+        return new Brackets((q): any => {
+          (query as ANDSearchQuery).list.forEach((sq): any => q.andWhere(this.buildWhereQuery(sq, paramCounter)));
           return q;
         });
       case SearchQueryTypes.OR:
-        return new Brackets(q => {
-          (<ANDSearchQuery>query).list.forEach(sq => q.orWhere(this.buildWhereQuery(sq, paramCounter)));
+        return new Brackets((q): any => {
+          (query as ANDSearchQuery).list.forEach((sq): any => q.orWhere(this.buildWhereQuery(sq, paramCounter)));
           return q;
         });
 
@@ -238,31 +238,33 @@ export class SearchManager implements ISearchManager {
          * This is a best effort calculation, not fully accurate in order to have higher performance.
          * see: https://stackoverflow.com/a/50506609
          */
-        const earth = 6378.137,  // radius of the earth in kilometer
-          latDelta = (1 / ((2 * Math.PI / 360) * earth)),  // 1 km in degree
-          lonDelta = (1 / ((2 * Math.PI / 360) * earth));  // 1 km in degree
+        const earth = 6378.137;  // radius of the earth in kilometer
+        const latDelta = (1 / ((2 * Math.PI / 360) * earth));  // 1 km in degree
+        const lonDelta = (1 / ((2 * Math.PI / 360) * earth));  // 1 km in degree
 
         // TODO: properly handle latitude / longitude boundaries
-        const trimRange = (value: number, min: number, max: number) => {
+        const trimRange = (value: number, min: number, max: number): number => {
           return Math.min(Math.max(value, min), max);
         };
 
-        const minLat = trimRange((<DistanceSearch>query).from.GPSData.latitude - ((<DistanceSearch>query).distance * latDelta), -90, 90),
-          maxLat = trimRange((<DistanceSearch>query).from.GPSData.latitude + ((<DistanceSearch>query).distance * latDelta), -90, 90),
-          minLon = trimRange((<DistanceSearch>query).from.GPSData.longitude -
-            ((<DistanceSearch>query).distance * lonDelta) / Math.cos(minLat * (Math.PI / 180)), -180, 180),
-          maxLon = trimRange((<DistanceSearch>query).from.GPSData.longitude +
-            ((<DistanceSearch>query).distance * lonDelta) / Math.cos(maxLat * (Math.PI / 180)), -180, 180);
+        const minLat = trimRange((query as DistanceSearch).from.GPSData.latitude -
+          ((query as DistanceSearch).distance * latDelta), -90, 90);
+        const maxLat = trimRange((query as DistanceSearch).from.GPSData.latitude +
+          ((query as DistanceSearch).distance * latDelta), -90, 90);
+        const minLon = trimRange((query as DistanceSearch).from.GPSData.longitude -
+          ((query as DistanceSearch).distance * lonDelta) / Math.cos(minLat * (Math.PI / 180)), -180, 180);
+        const maxLon = trimRange((query as DistanceSearch).from.GPSData.longitude +
+          ((query as DistanceSearch).distance * lonDelta) / Math.cos(maxLat * (Math.PI / 180)), -180, 180);
 
 
-        return new Brackets(q => {
+        return new Brackets((q): any => {
           const textParam: any = {};
           paramCounter.value++;
           textParam['maxLat' + paramCounter.value] = maxLat;
           textParam['minLat' + paramCounter.value] = minLat;
           textParam['maxLon' + paramCounter.value] = maxLon;
           textParam['minLon' + paramCounter.value] = minLon;
-          if (!(<DistanceSearch>query).negate) {
+          if (!(query as DistanceSearch).negate) {
             q.where(`media.metadata.positionData.GPSData.latitude < :maxLat${paramCounter.value}`, textParam);
             q.andWhere(`media.metadata.positionData.GPSData.latitude > :minLat${paramCounter.value}`, textParam);
             q.andWhere(`media.metadata.positionData.GPSData.longitude < :maxLon${paramCounter.value}`, textParam);
@@ -277,14 +279,14 @@ export class SearchManager implements ISearchManager {
         });
 
       case SearchQueryTypes.from_date:
-        return new Brackets(q => {
-          if (typeof (<FromDateSearch>query).value === 'undefined') {
+        return new Brackets((q): any => {
+          if (typeof (query as FromDateSearch).value === 'undefined') {
             throw new Error('Invalid search query: Date Query should contain from value');
           }
-          const relation = (<TextSearch>query).negate ? '<' : '>=';
+          const relation = (query as TextSearch).negate ? '<' : '>=';
 
           const textParam: any = {};
-          textParam['from' + paramCounter.value] = (<FromDateSearch>query).value;
+          textParam['from' + paramCounter.value] = (query as FromDateSearch).value;
           q.where(`media.metadata.creationDate ${relation} :from${paramCounter.value}`, textParam);
 
 
@@ -293,14 +295,14 @@ export class SearchManager implements ISearchManager {
         });
 
       case SearchQueryTypes.to_date:
-        return new Brackets(q => {
-          if (typeof (<ToDateSearch>query).value === 'undefined') {
+        return new Brackets((q): any => {
+          if (typeof (query as ToDateSearch).value === 'undefined') {
             throw new Error('Invalid search query: Date Query should contain to value');
           }
-          const relation = (<TextSearch>query).negate ? '>' : '<=';
+          const relation = (query as TextSearch).negate ? '>' : '<=';
 
           const textParam: any = {};
-          textParam['to' + paramCounter.value] = (<ToDateSearch>query).value;
+          textParam['to' + paramCounter.value] = (query as ToDateSearch).value;
           q.where(`media.metadata.creationDate ${relation} :to${paramCounter.value}`, textParam);
 
           paramCounter.value++;
@@ -308,31 +310,31 @@ export class SearchManager implements ISearchManager {
         });
 
       case SearchQueryTypes.min_rating:
-        return new Brackets(q => {
-          if (typeof (<MinRatingSearch>query).value === 'undefined') {
+        return new Brackets((q): any => {
+          if (typeof (query as MinRatingSearch).value === 'undefined') {
             throw new Error('Invalid search query: Rating Query should contain minvalue');
           }
 
-          const relation = (<TextSearch>query).negate ? '<' : '>=';
+          const relation = (query as TextSearch).negate ? '<' : '>=';
 
           const textParam: any = {};
-          textParam['min' + paramCounter.value] = (<MinRatingSearch>query).value;
+          textParam['min' + paramCounter.value] = (query as MinRatingSearch).value;
           q.where(`media.metadata.rating ${relation}  :min${paramCounter.value}`, textParam);
 
           paramCounter.value++;
           return q;
         });
       case SearchQueryTypes.max_rating:
-        return new Brackets(q => {
-          if (typeof (<MaxRatingSearch>query).value === 'undefined') {
+        return new Brackets((q): any => {
+          if (typeof (query as MaxRatingSearch).value === 'undefined') {
             throw new Error('Invalid search query: Rating Query should contain  max value');
           }
 
-          const relation = (<TextSearch>query).negate ? '>' : '<=';
+          const relation = (query as TextSearch).negate ? '>' : '<=';
 
-          if (typeof (<MaxRatingSearch>query).value !== 'undefined') {
+          if (typeof (query as MaxRatingSearch).value !== 'undefined') {
             const textParam: any = {};
-            textParam['max' + paramCounter.value] = (<MaxRatingSearch>query).value;
+            textParam['max' + paramCounter.value] = (query as MaxRatingSearch).value;
             q.where(`media.metadata.rating ${relation}  :max${paramCounter.value}`, textParam);
           }
           paramCounter.value++;
@@ -340,15 +342,15 @@ export class SearchManager implements ISearchManager {
         });
 
       case SearchQueryTypes.min_resolution:
-        return new Brackets(q => {
-          if (typeof (<MinResolutionSearch>query).value === 'undefined') {
+        return new Brackets((q): any => {
+          if (typeof (query as MinResolutionSearch).value === 'undefined') {
             throw new Error('Invalid search query: Resolution Query should contain min value');
           }
 
-          const relation = (<TextSearch>query).negate ? '<' : '>=';
+          const relation = (query as TextSearch).negate ? '<' : '>=';
 
           const textParam: any = {};
-          textParam['min' + paramCounter.value] = (<MinResolutionSearch>query).value * 1000 * 1000;
+          textParam['min' + paramCounter.value] = (query as MinResolutionSearch).value * 1000 * 1000;
           q.where(`media.metadata.size.width * media.metadata.size.height ${relation} :min${paramCounter.value}`, textParam);
 
 
@@ -357,15 +359,15 @@ export class SearchManager implements ISearchManager {
         });
 
       case SearchQueryTypes.max_resolution:
-        return new Brackets(q => {
-          if (typeof (<MaxResolutionSearch>query).value === 'undefined') {
+        return new Brackets((q): any => {
+          if (typeof (query as MaxResolutionSearch).value === 'undefined') {
             throw new Error('Invalid search query: Rating Query should contain min or max value');
           }
 
-          const relation = (<TextSearch>query).negate ? '>' : '<=';
+          const relation = (query as TextSearch).negate ? '>' : '<=';
 
           const textParam: any = {};
-          textParam['max' + paramCounter.value] = (<MaxResolutionSearch>query).value * 1000 * 1000;
+          textParam['max' + paramCounter.value] = (query as MaxResolutionSearch).value * 1000 * 1000;
           q.where(`media.metadata.size.width * media.metadata.size.height ${relation} :max${paramCounter.value}`, textParam);
 
           paramCounter.value++;
@@ -373,8 +375,8 @@ export class SearchManager implements ISearchManager {
         });
 
       case SearchQueryTypes.orientation:
-        return new Brackets(q => {
-          if ((<OrientationSearch>query).landscape) {
+        return new Brackets((q): any => {
+          if ((query as OrientationSearch).landscape) {
             q.where('media.metadata.size.width >= media.metadata.size.height');
           } else {
             q.where('media.metadata.size.width <= media.metadata.size.height');
@@ -391,22 +393,22 @@ export class SearchManager implements ISearchManager {
 
     return new Brackets((q: WhereExpression) => {
 
-      const createMatchString = (str: string) => {
-        return (<TextSearch>query).matchType === TextSearchQueryMatchTypes.exact_match ? str : `%${str}%`;
+      const createMatchString = (str: string): string => {
+        return (query as TextSearch).matchType === TextSearchQueryMatchTypes.exact_match ? str : `%${str}%`;
       };
 
-      const LIKE = (<TextSearch>query).negate ? 'NOT LIKE' : 'LIKE';
+      const LIKE = (query as TextSearch).negate ? 'NOT LIKE' : 'LIKE';
       // if the expression is negated, we use AND instead of OR as nowhere should that match
-      const whereFN = (<TextSearch>query).negate ? 'andWhere' : 'orWhere';
-      const whereFNRev = (<TextSearch>query).negate ? 'orWhere' : 'andWhere';
+      const whereFN = (query as TextSearch).negate ? 'andWhere' : 'orWhere';
+      const whereFNRev = (query as TextSearch).negate ? 'orWhere' : 'andWhere';
 
       const textParam: any = {};
       paramCounter.value++;
-      textParam['text' + paramCounter.value] = createMatchString((<TextSearch>query).text);
+      textParam['text' + paramCounter.value] = createMatchString((query as TextSearch).text);
 
       if (query.type === SearchQueryTypes.any_text ||
         query.type === SearchQueryTypes.directory) {
-        const dirPathStr = ((<TextSearch>query).text).replace(new RegExp('\\\\', 'g'), '/');
+        const dirPathStr = ((query as TextSearch).text).replace(new RegExp('\\\\', 'g'), '/');
 
 
         textParam['fullPath' + paramCounter.value] = createMatchString(dirPathStr);
@@ -414,7 +416,7 @@ export class SearchManager implements ISearchManager {
           textParam);
 
         const directoryPath = GalleryManager.parseRelativeDirePath(dirPathStr);
-        q[whereFN](new Brackets(dq => {
+        q[whereFN](new Brackets((dq): any => {
           textParam['dirName' + paramCounter.value] = createMatchString(directoryPath.name);
           dq[whereFNRev](`directory.name ${LIKE} :dirName${paramCounter.value} COLLATE utf8_general_ci`,
             textParam);
@@ -447,17 +449,17 @@ export class SearchManager implements ISearchManager {
       }
 
       // Matching for array type fields
-      const matchArrayField = (fieldName: string) => {
-        q[whereFN](new Brackets(qbr => {
-          if ((<TextSearch>query).matchType !== TextSearchQueryMatchTypes.exact_match) {
+      const matchArrayField = (fieldName: string): void => {
+        q[whereFN](new Brackets((qbr): void => {
+          if ((query as TextSearch).matchType !== TextSearchQueryMatchTypes.exact_match) {
             qbr[whereFN](`${fieldName} ${LIKE} :text${paramCounter.value} COLLATE utf8_general_ci`,
               textParam);
           } else {
-            qbr[whereFN](new Brackets(qb => {
-              textParam['CtextC' + paramCounter.value] = `%,${(<TextSearch>query).text},%`;
-              textParam['Ctext' + paramCounter.value] = `%,${(<TextSearch>query).text}`;
-              textParam['textC' + paramCounter.value] = `${(<TextSearch>query).text},%`;
-              textParam['text_exact' + paramCounter.value] = `${(<TextSearch>query).text}`;
+            qbr[whereFN](new Brackets((qb): void => {
+              textParam['CtextC' + paramCounter.value] = `%,${(query as TextSearch).text},%`;
+              textParam['Ctext' + paramCounter.value] = `%,${(query as TextSearch).text}`;
+              textParam['textC' + paramCounter.value] = `${(query as TextSearch).text},%`;
+              textParam['text_exact' + paramCounter.value] = `${(query as TextSearch).text}`;
 
               qb[whereFN](`${fieldName} ${LIKE} :CtextC${paramCounter.value} COLLATE utf8_general_ci`,
                 textParam);
@@ -469,7 +471,7 @@ export class SearchManager implements ISearchManager {
                 textParam);
             }));
           }
-          if ((<TextSearch>query).negate) {
+          if ((query as TextSearch).negate) {
             qbr.orWhere(`${fieldName} IS NULL`);
           }
         }));
@@ -491,72 +493,73 @@ export class SearchManager implements ISearchManager {
     switch (query.type) {
       case SearchQueryTypes.AND:
       case SearchQueryTypes.OR:
-        return <SearchListQuery>{
+        return {
           type: query.type,
-          list: (<SearchListQuery>query).list.map(q => this.flattenSameOfQueries(q))
-        };
+          list: (query as SearchListQuery).list.map((q): SearchQueryDTO => this.flattenSameOfQueries(q))
+        } as SearchListQuery;
       case SearchQueryTypes.SOME_OF:
-        const someOfQ = <SomeOfSearchQuery>query;
+        const someOfQ = query as SomeOfSearchQuery;
         someOfQ.min = someOfQ.min || 1;
 
         if (someOfQ.min === 1) {
-          return this.flattenSameOfQueries(<ORSearchQuery>{
+          return this.flattenSameOfQueries({
             type: SearchQueryTypes.OR,
-            list: (<SearchListQuery>someOfQ).list
-          });
+            list: (someOfQ as SearchListQuery).list
+          } as ORSearchQuery);
         }
 
-        if (someOfQ.min === (<SearchListQuery>query).list.length) {
-          return this.flattenSameOfQueries(<ANDSearchQuery>{
+        if (someOfQ.min === (query as SearchListQuery).list.length) {
+          return this.flattenSameOfQueries({
             type: SearchQueryTypes.AND,
-            list: (<SearchListQuery>someOfQ).list
-          });
+            list: (someOfQ as SearchListQuery).list
+          } as ANDSearchQuery);
         }
 
-        const combinations: SearchQueryDTO[][] = Utils.getAnyX(someOfQ.min, (<SearchListQuery>query).list);
+        const combinations: SearchQueryDTO[][] = Utils.getAnyX(someOfQ.min, (query as SearchListQuery).list);
 
 
-        return this.flattenSameOfQueries(<ORSearchQuery>{
+        return this.flattenSameOfQueries({
           type: SearchQueryTypes.OR,
-          list: combinations.map(c => <ANDSearchQuery>{
+          list: combinations.map((c): ANDSearchQuery => ({
             type: SearchQueryTypes.AND, list: c
-          })
-        });
+          } as ANDSearchQuery))
+        } as ORSearchQuery);
+
     }
     return query;
   }
 
   private encapsulateAutoComplete(values: string[], type: SearchQueryTypes): Array<AutoCompleteItem> {
     const res: AutoCompleteItem[] = [];
-    values.forEach((value) => {
+    values.forEach((value): void => {
       res.push(new AutoCompleteItem(value, type));
     });
     return res;
   }
 
-  private async loadMediaWithFaces(query: SelectQueryBuilder<MediaEntity>) {
+  private async loadMediaWithFaces(query: SelectQueryBuilder<MediaEntity>): Promise<MediaEntity[]> {
     const rawAndEntities = await query.orderBy('media.id').getRawAndEntities();
     const media: MediaEntity[] = rawAndEntities.entities;
 
     let rawIndex = 0;
-    for (let i = 0; i < media.length; i++) {
+    for (const item of media) {
 
-      if (rawAndEntities.raw[rawIndex].media_id !== media[i].id) {
+      if (rawAndEntities.raw[rawIndex].media_id !== item.id) {
         throw new Error('index mismatch');
       }
 
       // media without a face
       if (rawAndEntities.raw[rawIndex].faces_id === null) {
-        delete media[i].metadata.faces;
+        delete item.metadata.faces;
         rawIndex++;
         continue;
       }
 
       // process all faces for one media
-      media[i].metadata.faces = [];
+      item.metadata.faces = [];
 
-      while (rawAndEntities.raw[rawIndex].media_id === media[i].id) {
-        media[i].metadata.faces.push(<any>FaceRegionEntry.fromRawToDTO(rawAndEntities.raw[rawIndex]));
+      while (rawAndEntities.raw[rawIndex].media_id === item.id) {
+        item.metadata.faces.push(FaceRegionEntry.fromRawToDTO(rawAndEntities.raw[rawIndex]) as any);
         rawIndex++;
         if (rawIndex >= rawAndEntities.raw.length) {
           return media;

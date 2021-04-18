@@ -72,26 +72,26 @@ export enum TextSearchQueryMatchTypes {
 }
 
 
-export namespace SearchQueryDTO {
-  export const getRangedQueryPair = (type: SearchQueryTypes): SearchQueryTypes => {
+export const SearchQueryDTOUtils = {
+  getRangedQueryPair: (type: SearchQueryTypes): SearchQueryTypes => {
     if (rangedTypePairs[type]) {
       return rangedTypePairs[type];
     }
     throw new Error('Unknown ranged type');
-  };
-  export const negate = (query: SearchQueryDTO): SearchQueryDTO => {
+  },
+  negate: (query: SearchQueryDTO): SearchQueryDTO => {
     switch (query.type) {
       case SearchQueryTypes.AND:
         query.type = SearchQueryTypes.OR;
-        (<SearchListQuery>query).list = (<SearchListQuery>query).list.map(q => SearchQueryDTO.negate(q));
+        (query as SearchListQuery).list = (query as SearchListQuery).list.map(q => SearchQueryDTOUtils.negate(q));
         return query;
       case SearchQueryTypes.OR:
         query.type = SearchQueryTypes.AND;
-        (<SearchListQuery>query).list = (<SearchListQuery>query).list.map(q => SearchQueryDTO.negate(q));
+        (query as SearchListQuery).list = (query as SearchListQuery).list.map(q => SearchQueryDTOUtils.negate(q));
         return query;
 
       case SearchQueryTypes.orientation:
-        (<OrientationSearch>query).landscape = !(<OrientationSearch>query).landscape;
+        (query as OrientationSearch).landscape = !(query as OrientationSearch).landscape;
         return query;
 
       case SearchQueryTypes.from_date:
@@ -108,7 +108,7 @@ export namespace SearchQueryDTO {
       case SearchQueryTypes.caption:
       case SearchQueryTypes.file_name:
       case SearchQueryTypes.directory:
-        (<NegatableSearchQuery>query).negate = !(<NegatableSearchQuery>query).negate;
+        (query as NegatableSearchQuery).negate = !(query as NegatableSearchQuery).negate;
         return query;
 
       case SearchQueryTypes.SOME_OF:
@@ -117,8 +117,8 @@ export namespace SearchQueryDTO {
       default:
         throw new Error('Unknown type' + query.type);
     }
-  };
-}
+  }
+};
 
 export interface SearchQueryDTO {
   type: SearchQueryTypes;

@@ -42,7 +42,7 @@ export class GallerySearchQueryEntryComponent implements ControlValueAccessor, V
     this.SearchQueryTypesEnum = Utils.enumToArray(SearchQueryTypes);
     // Range queries need to be added as AND with min and max sub entry
     this.SearchQueryTypesEnum =
-      this.SearchQueryTypesEnum.filter(e => e.key !== SearchQueryTypes.UNKNOWN_RELATION);
+      this.SearchQueryTypesEnum.filter((e): boolean => e.key !== SearchQueryTypes.UNKNOWN_RELATION);
   }
 
   get IsTextQuery(): boolean {
@@ -55,29 +55,29 @@ export class GallerySearchQueryEntryComponent implements ControlValueAccessor, V
   }
 
   get AsListQuery(): SearchListQuery {
-    return <any>this.queryEntry;
+    return this.queryEntry as any;
   }
 
-  get AsRangeQuery(): RangeSearch {
-    return <any>this.queryEntry;
+  public get AsRangeQuery(): RangeSearch {
+    return this.queryEntry as any;
   }
 
 
   get AsOrientationQuery(): OrientationSearch {
-    return <any>this.queryEntry;
+    return this.queryEntry as any;
   }
 
   get AsDistanceQuery(): DistanceSearch {
-    return <any>this.queryEntry;
+    return this.queryEntry as any;
   }
 
 
   get AsSomeOfQuery(): SomeOfSearchQuery {
-    return <any>this.queryEntry;
+    return this.queryEntry as any;
   }
 
   get AsTextQuery(): TextSearch {
-    return <any>this.queryEntry;
+    return this.queryEntry as any;
   }
 
   validate(control: FormControl): ValidationErrors {
@@ -88,15 +88,15 @@ export class GallerySearchQueryEntryComponent implements ControlValueAccessor, V
     if (!this.IsListQuery) {
       return;
     }
-    this.AsListQuery.list.push(<TextSearch>{type: SearchQueryTypes.any_text, text: ''});
+    this.AsListQuery.list.push({type: SearchQueryTypes.any_text, text: ''} as TextSearch);
   }
 
-  onChangeType() {
+  onChangeType(): void {
     if (this.IsListQuery) {
       delete this.AsTextQuery.text;
       this.AsListQuery.list = this.AsListQuery.list || [
-        <TextSearch>{type: SearchQueryTypes.any_text, text: ''},
-        <TextSearch>{type: SearchQueryTypes.any_text, text: ''}
+        {type: SearchQueryTypes.any_text, text: ''} as TextSearch,
+        {type: SearchQueryTypes.any_text, text: ''} as TextSearch
       ];
     } else {
       delete this.AsListQuery.list;
@@ -117,11 +117,11 @@ export class GallerySearchQueryEntryComponent implements ControlValueAccessor, V
     this.onChange();
   }
 
-  deleteItem() {
+  deleteItem(): void {
     this.delete.emit();
   }
 
-  itemDeleted(i: number) {
+  itemDeleted(i: number): void {
     this.AsListQuery.list.splice(i, 1);
   }
 
@@ -141,14 +141,14 @@ export class GallerySearchQueryEntryComponent implements ControlValueAccessor, V
     this.propagateTouch = fn;
   }
 
-  public onChange() {
+  public onChange(): void {
     this.propagateChange(this.queryEntry);
   }
 
-  private propagateChange = (_: any) => {
+  private propagateChange = (_: any): void => {
   };
 
-  private propagateTouch = (_: any) => {
+  private propagateTouch = (_: any): void => {
   };
 }
 

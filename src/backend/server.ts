@@ -20,11 +20,11 @@ import * as _csrf from 'csurf';
 import * as unless from 'express-unless';
 import {Event} from '../common/event/Event';
 import {QueryParams} from '../common/QueryParams';
-import {ServerConfig} from '../common/config/private/PrivateConfig';
 import {ConfigClassBuilder} from 'typeconfig/node';
 import {ConfigClassOptions} from 'typeconfig/src/decorators/class/IConfigClass';
+import {DatabaseType} from '../common/config/private/PrivateConfig';
 
-const _session = require('cookie-session');
+const session = require('cookie-session');
 
 declare var process: NodeJS.Process;
 
@@ -51,7 +51,7 @@ export class Server {
     Logger.info(LOG_TAG, 'running diagnostics...');
     await ConfigDiagnostics.runDiagnostics();
     Logger.verbose(LOG_TAG, 'using config from ' +
-      (<ConfigClassOptions>ConfigClassBuilder.attachPrivateInterface(Config).__options).configPath + ':');
+      (ConfigClassBuilder.attachPrivateInterface(Config).__options as ConfigClassOptions).configPath + ':');
     Logger.verbose(LOG_TAG, JSON.stringify(Config, null, '\t'));
 
     this.app = _express();
@@ -65,7 +65,7 @@ export class Server {
      * Session above all
      */
 
-    this.app.use(_session({
+    this.app.use(session({
       name: CookieNames.session,
       keys: Config.Server.sessionSecret
     }));
@@ -95,7 +95,7 @@ export class Server {
     Localizations.init();
 
     this.app.use(locale(Config.Client.languages, 'en'));
-    if (Config.Server.Database.type !== ServerConfig.DatabaseType.memory) {
+    if (Config.Server.Database.type !== DatabaseType.memory) {
       await ObjectManagers.InitSQLManagers();
     } else {
       await ObjectManagers.InitMemoryManagers();

@@ -15,7 +15,7 @@ class ProjectPathClass {
     this.reset();
   }
 
-  normalizeRelative(pathStr: string) {
+  normalizeRelative(pathStr: string): any {
     return path.join(pathStr, path.sep);
   }
 
@@ -27,7 +27,7 @@ class ProjectPathClass {
     return path.relative(this.ImageFolder, pathStr);
   }
 
-  reset() {
+  reset(): void {
     this.Root = path.join(__dirname, '/../../');
     this.FrontendFolder = path.join(this.Root, 'dist');
     this.ImageFolder = this.getAbsolutePath(Config.Server.Media.folder);

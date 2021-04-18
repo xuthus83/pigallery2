@@ -8,7 +8,7 @@ import {Utils} from '../../common/Utils';
 export class PersonMWs {
 
 
-  public static async updatePerson(req: Request, res: Response, next: NextFunction) {
+  public static async updatePerson(req: Request, res: Response, next: NextFunction): Promise<any> {
     if (!req.params.name) {
       return next();
     }
@@ -24,7 +24,7 @@ export class PersonMWs {
     }
   }
 
-  public static async getPerson(req: Request, res: Response, next: NextFunction) {
+  public static async getPerson(req: Request, res: Response, next: NextFunction): Promise<any> {
     if (!req.params.name) {
       return next();
     }
@@ -40,7 +40,7 @@ export class PersonMWs {
   }
 
 
-  public static async listPersons(req: Request, res: Response, next: NextFunction) {
+  public static async listPersons(req: Request, res: Response, next: NextFunction): Promise<any> {
     try {
       req.resultPipe = await ObjectManagers.getInstance()
         .PersonManager.getAll();
@@ -53,14 +53,14 @@ export class PersonMWs {
   }
 
 
-  public static async cleanUpPersonResults(req: Request, res: Response, next: NextFunction) {
+  public static async cleanUpPersonResults(req: Request, res: Response, next: NextFunction): Promise<any> {
     if (!req.resultPipe) {
       return next();
     }
     try {
       const persons = Utils.clone(req.resultPipe as PersonWithSampleRegion[]);
-      for (let i = 0; i < persons.length; i++) {
-        delete persons[i].sampleRegion;
+      for (const item of persons) {
+        delete item.sampleRegion;
       }
       req.resultPipe = persons;
       return next();

@@ -18,7 +18,7 @@ import {SearchQueryParserService} from './search-query-parser.service';
 })
 export class GallerySearchComponent implements OnDestroy {
 
-  public searchQueryDTO: SearchQueryDTO = <TextSearch>{type: SearchQueryTypes.any_text, text: ''};
+  public searchQueryDTO: SearchQueryDTO = {type: SearchQueryTypes.any_text, text: ''} as TextSearch;
   public rawSearchText = '';
   mouseOverAutoComplete = false;
   readonly SearchQueryTypes: typeof SearchQueryTypes;
@@ -26,18 +26,18 @@ export class GallerySearchComponent implements OnDestroy {
   public readonly MetadataSearchQueryTypes: { value: string; key: SearchQueryTypes }[];
   private readonly subscription: Subscription = null;
 
-  constructor(private _autoCompleteService: AutoCompleteService,
-              private _searchQueryParserService: SearchQueryParserService,
-              private _galleryService: GalleryService,
+  constructor(private autoCompleteService: AutoCompleteService,
+              private searchQueryParserService: SearchQueryParserService,
+              private galleryService: GalleryService,
               private navigationService: NavigationService,
-              private _route: ActivatedRoute,
+              private route: ActivatedRoute,
               public router: Router,
               private modalService: BsModalService) {
 
     this.SearchQueryTypes = SearchQueryTypes;
-    this.MetadataSearchQueryTypes = MetadataSearchQueryTypes.map(v => ({key: v, value: SearchQueryTypes[v]}));
+    this.MetadataSearchQueryTypes = MetadataSearchQueryTypes.map((v) => ({key: v, value: SearchQueryTypes[v]}));
 
-    this.subscription = this._route.params.subscribe((params: Params) => {
+    this.subscription = this.route.params.subscribe((params: Params): void => {
       if (!params[QueryParams.gallery.search.query]) {
         return;
       }
@@ -49,45 +49,45 @@ export class GallerySearchComponent implements OnDestroy {
     });
   }
 
-  get HTMLSearchQuery() {
+  get HTMLSearchQuery(): string {
     return JSON.stringify(this.searchQueryDTO);
   }
 
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     if (this.subscription !== null) {
       this.subscription.unsubscribe();
     }
   }
 
-  public async openModal(template: TemplateRef<any>) {
+  public async openModal(template: TemplateRef<any>): Promise<void> {
     this.modalRef = this.modalService.show(template, {class: 'modal-lg'});
     document.body.style.paddingRight = '0px';
   }
 
-  public hideModal() {
+  public hideModal(): void {
     this.modalRef.hide();
     this.modalRef = null;
   }
 
-  resetQuery() {
-    this.searchQueryDTO = <TextSearch>{text: '', type: SearchQueryTypes.any_text};
+  resetQuery(): void {
+    this.searchQueryDTO = ({text: '', type: SearchQueryTypes.any_text} as TextSearch);
   }
 
-  onQueryChange() {
-    this.rawSearchText = this._searchQueryParserService.stringify(this.searchQueryDTO);
+  onQueryChange(): void {
+    this.rawSearchText = this.searchQueryParserService.stringify(this.searchQueryDTO);
     // this.validateRawSearchText();
   }
 
-  validateRawSearchText() {
+  validateRawSearchText(): void {
     try {
-      this.searchQueryDTO = this._searchQueryParserService.parse(this.rawSearchText);
+      this.searchQueryDTO = this.searchQueryParserService.parse(this.rawSearchText);
     } catch (e) {
       console.error(e);
     }
   }
 
-  Search() {
+  Search(): void {
     this.router.navigate(['/search', this.HTMLSearchQuery]).catch(console.error);
   }
 

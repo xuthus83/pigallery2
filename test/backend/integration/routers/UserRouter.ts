@@ -11,7 +11,7 @@ import {Utils} from '../../../../src/common/Utils';
 import {SuperAgentStatic} from 'superagent';
 import {RouteTestingHelper} from './RouteTestingHelper';
 import {ErrorCodes} from '../../../../src/common/entities/Error';
-import {ServerConfig} from '../../../../src/common/config/private/PrivateConfig';
+import {DatabaseType, ServerConfig} from '../../../../src/common/config/private/PrivateConfig';
 import {ProjectPath} from '../../../../src/backend/ProjectPath';
 
 
@@ -36,7 +36,7 @@ describe('UserRouter', () => {
   const setUp = async () => {
     await fs.promises.rmdir(tempDir, {recursive: true});
     Config.Server.Threading.enabled = false;
-    Config.Server.Database.type = ServerConfig.DatabaseType.sqlite;
+    Config.Server.Database.type = DatabaseType.sqlite;
     Config.Server.Database.dbFolder = tempDir;
     ProjectPath.reset();
 
@@ -66,11 +66,11 @@ describe('UserRouter', () => {
     const result = await (chai.request(srv.App) as SuperAgentStatic)
       .post('/api/user/login')
       .send({
-        loginCredential: <LoginCredential>{
+        loginCredential: {
           password: testUser.password,
           username: testUser.name,
           rememberMe: false
-        }
+        } as LoginCredential
       });
 
     checkUserResult(result, expectedUser);
@@ -181,10 +181,10 @@ describe('UserRouter', () => {
       const result = await chai.request(server.App)
         .get('/api/user/me');
 
-      const expectedGuestUser = <UserDTO>{
+      const expectedGuestUser = {
         name: UserRoles[Config.Client.unAuthenticatedUserRole],
         role: Config.Client.unAuthenticatedUserRole
-      };
+      } as UserDTO;
 
 
       checkUserResult(result, expectedGuestUser);

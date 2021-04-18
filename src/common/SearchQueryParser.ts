@@ -121,23 +121,23 @@ export class SearchQueryParser {
 
     if (tokenEnd !== str.length - 1) {
       if (str.startsWith(' ' + this.keywords.and, tokenEnd)) {
-        return <ANDSearchQuery>{
+        return {
           type: SearchQueryTypes.AND,
           list: [this.parse(str.slice(0, tokenEnd), implicitOR), // trim brackets
             this.parse(str.slice(tokenEnd + (' ' + this.keywords.and).length), implicitOR)]
-        };
+        } as ANDSearchQuery;
       } else if (str.startsWith(' ' + this.keywords.or, tokenEnd)) {
-        return <ORSearchQuery>{
+        return {
           type: SearchQueryTypes.OR,
           list: [this.parse(str.slice(0, tokenEnd), implicitOR), // trim brackets
             this.parse(str.slice(tokenEnd + (' ' + this.keywords.or).length), implicitOR)]
-        };
+        } as ORSearchQuery;
       } else { // Relation cannot be detected
-        return <SearchListQuery>{
+        return {
           type: implicitOR === true ? SearchQueryTypes.OR : SearchQueryTypes.UNKNOWN_RELATION,
           list: [this.parse(str.slice(0, tokenEnd), implicitOR), // trim brackets
             this.parse(str.slice(tokenEnd), implicitOR)]
-        };
+        } as SearchListQuery;
       }
     }
     if (str.startsWith(this.keywords.someOf + ':') ||
@@ -150,18 +150,18 @@ export class SearchQueryParser {
       const unfoldList = (q: SearchListQuery): SearchQueryDTO[] => {
         if (q.list) {
           if (q.type === SearchQueryTypes.UNKNOWN_RELATION) {
-            return [].concat.apply([], q.list.map(e => unfoldList(<any>e))); // flatten array
+            return [].concat.apply([], q.list.map(e => unfoldList(e as any))); // flatten array
           } else {
-            q.list.forEach(e => unfoldList(<any>e));
+            q.list.forEach(e => unfoldList(e as any));
           }
         }
         return [q];
       };
-      tmpList = unfoldList(<SearchListQuery>tmpList);
-      const ret = <SomeOfSearchQuery>{
+      tmpList = unfoldList(tmpList as SearchListQuery);
+      const ret = {
         type: SearchQueryTypes.SOME_OF,
         list: tmpList
-      };
+      } as SomeOfSearchQuery;
       if (new RegExp('^\\d*-' + this.keywords.NSomeOf + ':').test(str)) {
         ret.min = parseInt(new RegExp(/^\d*/).exec(str)[0], 10);
       }
@@ -169,41 +169,41 @@ export class SearchQueryParser {
     }
 
     if (str.startsWith(this.keywords.from + ':')) {
-      return <FromDateSearch>{
+      return {
         type: SearchQueryTypes.from_date,
         value: SearchQueryParser.parseDate(str.substring((this.keywords.from + ':').length))
-      };
+      } as FromDateSearch;
     }
     if (str.startsWith(this.keywords.to + ':')) {
-      return <ToDateSearch>{
+      return {
         type: SearchQueryTypes.to_date,
         value: SearchQueryParser.parseDate(str.substring((this.keywords.to + ':').length))
-      };
+      } as ToDateSearch;
     }
 
     if (str.startsWith(this.keywords.minRating + ':')) {
-      return <MinRatingSearch>{
+      return {
         type: SearchQueryTypes.min_rating,
         value: parseInt(str.slice((this.keywords.minRating + ':').length), 10)
-      };
+      } as MinRatingSearch;
     }
     if (str.startsWith(this.keywords.maxRating + ':')) {
-      return <MaxRatingSearch>{
+      return {
         type: SearchQueryTypes.max_rating,
         value: parseInt(str.slice((this.keywords.maxRating + ':').length), 10)
-      };
+      } as MaxRatingSearch;
     }
     if (str.startsWith(this.keywords.minResolution + ':')) {
-      return <MinResolutionSearch>{
+      return {
         type: SearchQueryTypes.min_resolution,
         value: parseInt(str.slice((this.keywords.minResolution + ':').length), 10)
-      };
+      } as MinResolutionSearch;
     }
     if (str.startsWith(this.keywords.maxResolution + ':')) {
-      return <MaxResolutionSearch>{
+      return {
         type: SearchQueryTypes.max_resolution,
         value: parseInt(str.slice((this.keywords.maxResolution + ':').length), 10)
-      };
+      } as MaxResolutionSearch;
     }
     if (new RegExp('^\\d*-' + this.keywords.kmFrom + ':').test(str)) {
       let from = str.slice(new RegExp('^\\d*-' + this.keywords.kmFrom + ':').exec(str)[0].length);
@@ -211,42 +211,42 @@ export class SearchQueryParser {
         (from.charAt(0) === '"' && from.charAt(from.length - 1) === '"')) {
         from = from.slice(1, from.length - 1);
       }
-      return <DistanceSearch>{
+      return {
         type: SearchQueryTypes.distance,
         distance: parseInt(new RegExp(/^\d*/).exec(str)[0], 10),
         from: {text: from}
-      };
+      } as DistanceSearch;
     }
 
     if (str.startsWith(this.keywords.orientation + ':')) {
-      return <OrientationSearch>{
+      return {
         type: SearchQueryTypes.orientation,
         landscape: str.slice((this.keywords.orientation + ':').length) === this.keywords.landscape
-      };
+      } as OrientationSearch;
     }
 
     // parse text search
     const tmp = TextSearchQueryTypes.map(type => ({
-      key: (<any>this.keywords)[SearchQueryTypes[type]] + ':',
-      queryTemplate: <TextSearch>{type: type, text: ''}
+      key: (this.keywords as any)[SearchQueryTypes[type]] + ':',
+      queryTemplate: {type, text: ''} as TextSearch
     }));
-    for (let i = 0; i < tmp.length; ++i) {
-      if (str.startsWith(tmp[i].key)) {
-        const ret: TextSearch = Utils.clone(tmp[i].queryTemplate);
-        if (str.charAt(tmp[i].key.length) === '"' && str.charAt(str.length - 1) === '"') {
-          ret.text = str.slice(tmp[i].key.length + 1, str.length - 1);
+    for (const typeTmp of tmp) {
+      if (str.startsWith(typeTmp.key)) {
+        const ret: TextSearch = Utils.clone(typeTmp.queryTemplate);
+        if (str.charAt(typeTmp.key.length) === '"' && str.charAt(str.length - 1) === '"') {
+          ret.text = str.slice(typeTmp.key.length + 1, str.length - 1);
           ret.matchType = TextSearchQueryMatchTypes.exact_match;
-        } else if (str.charAt(tmp[i].key.length) === '(' && str.charAt(str.length - 1) === ')') {
-          ret.text = str.slice(tmp[i].key.length + 1, str.length - 1);
+        } else if (str.charAt(typeTmp.key.length) === '(' && str.charAt(str.length - 1) === ')') {
+          ret.text = str.slice(typeTmp.key.length + 1, str.length - 1);
         } else {
-          ret.text = str.slice(tmp[i].key.length);
+          ret.text = str.slice(typeTmp.key.length);
         }
         return ret;
       }
     }
 
 
-    return <TextSearch>{type: SearchQueryTypes.any_text, text: str};
+    return {type: SearchQueryTypes.any_text, text: str} as TextSearch;
   }
 
   public stringify(query: SearchQueryDTO): string {
@@ -255,51 +255,52 @@ export class SearchQueryParser {
     }
     switch (query.type) {
       case SearchQueryTypes.AND:
-        return '(' + (<SearchListQuery>query).list.map(q => this.stringify(q)).join(' ' + this.keywords.and + ' ') + ')';
+        return '(' + (query as SearchListQuery).list.map(q => this.stringify(q)).join(' ' + this.keywords.and + ' ') + ')';
 
       case SearchQueryTypes.OR:
-        return '(' + (<SearchListQuery>query).list.map(q => this.stringify(q)).join(' ' + this.keywords.or + ' ') + ')';
+        return '(' + (query as SearchListQuery).list.map(q => this.stringify(q)).join(' ' + this.keywords.or + ' ') + ')';
 
       case SearchQueryTypes.SOME_OF:
-        if ((<SomeOfSearchQuery>query).min) {
-          return (<SomeOfSearchQuery>query).min + '-' + this.keywords.NSomeOf + ':(' +
-            (<SearchListQuery>query).list.map(q => this.stringify(q)).join(' ') + ')';
+        if ((query as SomeOfSearchQuery).min) {
+          return (query as SomeOfSearchQuery).min + '-' + this.keywords.NSomeOf + ':(' +
+            (query as SearchListQuery).list.map(q => this.stringify(q)).join(' ') + ')';
         }
         return this.keywords.someOf + ':(' +
-          (<SearchListQuery>query).list.map(q => this.stringify(q)).join(' ') + ')';
+          (query as SearchListQuery).list.map(q => this.stringify(q)).join(' ') + ')';
 
 
       case SearchQueryTypes.orientation:
-        return this.keywords.orientation + ':' + ((<OrientationSearch>query).landscape ? this.keywords.landscape : this.keywords.portrait);
+        return this.keywords.orientation + ':' +
+          ((query as OrientationSearch).landscape ? this.keywords.landscape : this.keywords.portrait);
 
       case SearchQueryTypes.from_date:
-        if (!(<FromDateSearch>query).value) {
+        if (!(query as FromDateSearch).value) {
           return '';
         }
         return this.keywords.from + ':' +
-          SearchQueryParser.stringifyDate((<FromDateSearch>query).value);
+          SearchQueryParser.stringifyDate((query as FromDateSearch).value);
       case SearchQueryTypes.to_date:
-        if (!(<ToDateSearch>query).value) {
+        if (!(query as ToDateSearch).value) {
           return '';
         }
         return this.keywords.to + ':' +
-          SearchQueryParser.stringifyDate((<ToDateSearch>query).value);
+          SearchQueryParser.stringifyDate((query as ToDateSearch).value);
       case SearchQueryTypes.min_rating:
-        return this.keywords.minRating + ':' + (isNaN((<RangeSearch>query).value) ? '' : (<RangeSearch>query).value);
+        return this.keywords.minRating + ':' + (isNaN((query as RangeSearch).value) ? '' : (query as RangeSearch).value);
       case SearchQueryTypes.max_rating:
-        return this.keywords.maxRating + ':' + (isNaN((<RangeSearch>query).value) ? '' : (<RangeSearch>query).value);
+        return this.keywords.maxRating + ':' + (isNaN((query as RangeSearch).value) ? '' : (query as RangeSearch).value);
       case SearchQueryTypes.min_resolution:
-        return this.keywords.minResolution + ':' + (isNaN((<RangeSearch>query).value) ? '' : (<RangeSearch>query).value);
+        return this.keywords.minResolution + ':' + (isNaN((query as RangeSearch).value) ? '' : (query as RangeSearch).value);
       case SearchQueryTypes.max_resolution:
-        return this.keywords.maxResolution + ':' + (isNaN((<RangeSearch>query).value) ? '' : (<RangeSearch>query).value);
+        return this.keywords.maxResolution + ':' + (isNaN((query as RangeSearch).value) ? '' : (query as RangeSearch).value);
       case SearchQueryTypes.distance:
-        if ((<DistanceSearch>query).from.text.indexOf(' ') !== -1) {
-          return (<DistanceSearch>query).distance + '-' + this.keywords.kmFrom + ':(' + (<DistanceSearch>query).from.text + ')';
+        if ((query as DistanceSearch).from.text.indexOf(' ') !== -1) {
+          return (query as DistanceSearch).distance + '-' + this.keywords.kmFrom + ':(' + (query as DistanceSearch).from.text + ')';
         }
-        return (<DistanceSearch>query).distance + '-' + this.keywords.kmFrom + ':' + (<DistanceSearch>query).from.text;
+        return (query as DistanceSearch).distance + '-' + this.keywords.kmFrom + ':' + (query as DistanceSearch).from.text;
 
       case SearchQueryTypes.any_text:
-        return SearchQueryParser.stringifyText((<TextSearch>query).text, (<TextSearch>query).matchType);
+        return SearchQueryParser.stringifyText((query as TextSearch).text, (query as TextSearch).matchType);
 
       case SearchQueryTypes.person:
       case SearchQueryTypes.position:
@@ -307,11 +308,11 @@ export class SearchQueryParser {
       case SearchQueryTypes.caption:
       case SearchQueryTypes.file_name:
       case SearchQueryTypes.directory:
-        if (!(<TextSearch>query).text) {
+        if (!(query as TextSearch).text) {
           return '';
         }
-        return (<any>this.keywords)[SearchQueryTypes[query.type]] + ':' +
-          SearchQueryParser.stringifyText((<TextSearch>query).text, (<TextSearch>query).matchType);
+        return (this.keywords as any)[SearchQueryTypes[query.type]] + ':' +
+          SearchQueryParser.stringifyText((query as TextSearch).text, (query as TextSearch).matchType);
 
       default:
         throw new Error('Unknown type: ' + query.type);

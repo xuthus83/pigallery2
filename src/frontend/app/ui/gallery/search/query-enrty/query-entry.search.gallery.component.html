@@ -20,7 +20,7 @@
         title="At least this many"
         i18n-title
         [(ngModel)]="AsSomeOfQuery.min"
-        (ngModelChange)="onChange(queryEntry)"
+        (ngModelChange)="onChange()"
         name="someOfMinValue"
         id="someOfMinValue"
         required="required">
@@ -38,7 +38,7 @@
     </button>
     <div class="container query-list">
       <app-gallery-search-query-entry *ngFor="let sq of AsListQuery.list; index as i"
-                                      [(ngModel)]="sq"
+                                      [(ngModel)]="AsListQuery.list[i]"
                                       (delete)="itemDeleted(i)">
       </app-gallery-search-query-entry>
     </div>
@@ -65,8 +65,8 @@
         placeholder="Search text"
         class="form-control input-md"
         [(ngModel)]="AsTextQuery.text"
-        (change)="onChange(queryEntry)"
-        (ngModelChange)="onChange(queryEntry)"
+        (change)="onChange()"
+        (ngModelChange)="onChange()"
         type="text"/>
     </div>
     <ng-container [ngSwitch]="queryEntry.type">
@@ -77,7 +77,7 @@
                  min="0"
                  step="0.1"
                  [(ngModel)]="AsDistanceQuery.distance"
-                 (ngModelChange)="onChange(queryEntry)"
+                 (ngModelChange)="onChange()"
                  name="distance" required>
           <div class="input-group-append">
             <span class="input-group-text">km</span>
@@ -92,7 +92,7 @@
                  i18n-title
                  class="form-control input-md"
                  [(ngModel)]="AsDistanceQuery.from.text"
-                 (ngModelChange)="onChange(queryEntry)"
+                 (ngModelChange)="onChange()"
                  type="text">
         </div>
       </div>
@@ -132,7 +132,7 @@
                max="5"
                class="form-control input-md"
                [(ngModel)]="AsRangeQuery.value"
-               (ngModelChange)="onChange(queryEntry)"
+               (ngModelChange)="onChange()"
                type="number">
       </div>
       <div *ngSwitchCase="SearchQueryTypes.max_rating" class="col-md-8 input-group">
@@ -146,7 +146,7 @@
                max="5"
                class="form-control input-md"
                [(ngModel)]="AsRangeQuery.value"
-               (ngModelChange)="onChange(queryEntry)"
+               (ngModelChange)="onChange()"
                type="number">
       </div>
       <div *ngSwitchCase="SearchQueryTypes.min_resolution" class="col-md-8 input-group">
@@ -160,7 +160,7 @@
                min="0"
                class="form-control input-md"
                [(ngModel)]="AsRangeQuery.value"
-               (ngModelChange)="onChange(queryEntry)"
+               (ngModelChange)="onChange()"
                type="number">
         <div class="input-group-append">
           <span class="input-group-text">Mpx</span>
@@ -177,7 +177,7 @@
                [min]="0"
                class="form-control input-md"
                [(ngModel)]="AsRangeQuery.value"
-               (ngModelChange)="onChange(queryEntry)"
+               (ngModelChange)="onChange()"
                type="number">
         <div class="input-group-append">
           <span class="input-group-text">Mpx</span>
@@ -199,7 +199,7 @@
             i18n-switch-on-text
             switch-handle-width="100"
             switch-label-width="20"
-            (ngModelChange)="onChange(queryEntry)"
+            (ngModelChange)="onChange()"
             [(ngModel)]="AsOrientationQuery.landscape">
           </bSwitch>
         </div>

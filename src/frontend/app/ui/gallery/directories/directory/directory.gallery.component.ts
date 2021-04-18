@@ -1,12 +1,11 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {DomSanitizer} from '@angular/platform-browser';
+import {DomSanitizer, SafeStyle} from '@angular/platform-browser';
 import {DirectoryDTO} from '../../../../../../common/entities/DirectoryDTO';
 import {RouterLink} from '@angular/router';
 import {Utils} from '../../../../../../common/Utils';
 import {Media} from '../../Media';
 import {Thumbnail, ThumbnailManagerService} from '../../thumbnailManager.service';
 import {QueryService} from '../../../../model/query.service';
-import {MediaDTO} from '../../../../../../common/entities/MediaDTO';
 import {PreviewPhotoDTO} from '../../../../../../common/entities/PhotoDTO';
 
 
@@ -19,11 +18,10 @@ import {PreviewPhotoDTO} from '../../../../../../common/entities/PhotoDTO';
 export class GalleryDirectoryComponent implements OnInit, OnDestroy {
   @Input() directory: DirectoryDTO;
   @Input() size: number;
-//  @ViewChild('dirContainer') container: ElementRef;
   thumbnail: Thumbnail = null;
 
   constructor(private thumbnailService: ThumbnailManagerService,
-              private _sanitizer: DomSanitizer,
+              private sanitizer: DomSanitizer,
               public queryService: QueryService) {
 
   }
@@ -32,8 +30,8 @@ export class GalleryDirectoryComponent implements OnInit, OnDestroy {
     return this.directory.preview;
   }
 
-  getSanitizedThUrl() {
-    return this._sanitizer.bypassSecurityTrustStyle('url(' +
+  getSanitizedThUrl(): SafeStyle {
+    return this.sanitizer.bypassSecurityTrustStyle('url(' +
       encodeURI(this.thumbnail.Src)
         .replace(/\(/g, '%28')
         .replace(/'/g, '%27')
@@ -46,17 +44,17 @@ export class GalleryDirectoryComponent implements OnInit, OnDestroy {
        && document.body.scrollTop + window.innerHeight > this.container.nativeElement.offsetTop;
    }*/
 
-  getDirectoryPath() {
+  getDirectoryPath(): string {
     return Utils.concatUrls(this.directory.path, this.directory.name);
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     if (this.thumbnail != null) {
       this.thumbnail.destroy();
     }
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     if (this.directory.preview) {
       this.thumbnail = this.thumbnailService.getThumbnail(new Media(this.SamplePhoto, this.size, this.size));
     }

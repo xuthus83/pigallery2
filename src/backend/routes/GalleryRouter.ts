@@ -10,7 +10,7 @@ import {SupportedFormats} from '../../common/SupportedFormats';
 import {PhotoConverterMWs} from '../middlewares/thumbnail/PhotoConverterMWs';
 
 export class GalleryRouter {
-  public static route(app: Express) {
+  public static route(app: Express): void {
 
     this.addGetImageIcon(app);
     this.addGetVideoIcon(app);
@@ -28,7 +28,7 @@ export class GalleryRouter {
     this.addAutoComplete(app);
   }
 
-  protected static addDirectoryList(app: Express) {
+  protected static addDirectoryList(app: Express): void {
     app.get(['/api/gallery/content/:directory(*)', '/api/gallery/', '/api/gallery//'],
       // common part
       AuthenticationMWs.authenticate,
@@ -45,7 +45,7 @@ export class GalleryRouter {
   }
 
 
-  protected static addGetImage(app: Express) {
+  protected static addGetImage(app: Express): void {
     app.get(['/api/gallery/content/:mediaPath(*\.(' + SupportedFormats.Photos.join('|') + '))'],
       // common part
       AuthenticationMWs.authenticate,
@@ -58,7 +58,7 @@ export class GalleryRouter {
     );
   }
 
-  protected static addGetBestFitImage(app: Express) {
+  protected static addGetBestFitImage(app: Express): void {
     app.get(['/api/gallery/content/:mediaPath(*\.(' + SupportedFormats.Photos.join('|') + '))/bestFit'],
       // common part
       AuthenticationMWs.authenticate,
@@ -72,7 +72,7 @@ export class GalleryRouter {
     );
   }
 
-  protected static addGetVideo(app: Express) {
+  protected static addGetVideo(app: Express): void {
     app.get(['/api/gallery/content/:mediaPath(*\.(' + SupportedFormats.Videos.join('|') + '))'],
       // common part
       AuthenticationMWs.authenticate,
@@ -85,7 +85,7 @@ export class GalleryRouter {
     );
   }
 
-  protected static addGetBestFitVideo(app: Express) {
+  protected static addGetBestFitVideo(app: Express): void {
     app.get(['/api/gallery/content/:mediaPath(*\.(' + SupportedFormats.Videos.join('|') + '))/bestFit'],
       // common part
       AuthenticationMWs.authenticate,
@@ -99,7 +99,7 @@ export class GalleryRouter {
     );
   }
 
-  protected static addGetMetaFile(app: Express) {
+  protected static addGetMetaFile(app: Express): void {
     app.get(['/api/gallery/content/:mediaPath(*\.(' + SupportedFormats.MetaFiles.join('|') + '))'],
       // common part
       AuthenticationMWs.authenticate,
@@ -112,7 +112,7 @@ export class GalleryRouter {
     );
   }
 
-  protected static addRandom(app: Express) {
+  protected static addRandom(app: Express): void {
     app.get(['/api/gallery/random/:searchQueryDTO'],
       // common part
       AuthenticationMWs.authenticate,
@@ -126,7 +126,7 @@ export class GalleryRouter {
     );
   }
 
-  protected static addGetPhotoThumbnail(app: Express) {
+  protected static addGetPhotoThumbnail(app: Express): void {
     app.get('/api/gallery/content/:mediaPath(*\.(' + SupportedFormats.Photos.join('|') + '))/thumbnail/:size?',
       // common part
       AuthenticationMWs.authenticate,
@@ -140,7 +140,7 @@ export class GalleryRouter {
     );
   }
 
-  protected static addGetVideoThumbnail(app: Express) {
+  protected static addGetVideoThumbnail(app: Express): void {
     app.get('/api/gallery/content/:mediaPath(*\.(' + SupportedFormats.Videos.join('|') + '))/thumbnail/:size?',
       // common part
       AuthenticationMWs.authenticate,
@@ -155,7 +155,7 @@ export class GalleryRouter {
   }
 
 
-  protected static addGetVideoIcon(app: Express) {
+  protected static addGetVideoIcon(app: Express): void {
     app.get('/api/gallery/content/:mediaPath(*\.(' + SupportedFormats.Videos.join('|') + '))/icon',
       // common part
       AuthenticationMWs.authenticate,
@@ -169,7 +169,7 @@ export class GalleryRouter {
     );
   }
 
-  protected static addGetImageIcon(app: Express) {
+  protected static addGetImageIcon(app: Express): void {
     app.get('/api/gallery/content/:mediaPath(*\.(' + SupportedFormats.Photos.join('|') + '))/icon',
       // common part
       AuthenticationMWs.authenticate,
@@ -183,7 +183,7 @@ export class GalleryRouter {
     );
   }
 
-  protected static addSearch(app: Express) {
+  protected static addSearch(app: Express): void {
     app.get('/api/search/:searchQueryDTO',
       // common part
       AuthenticationMWs.authenticate,
@@ -199,7 +199,7 @@ export class GalleryRouter {
   }
 
 
-  protected static addAutoComplete(app: Express) {
+  protected static addAutoComplete(app: Express): void {
     app.get('/api/autocomplete/:text',
       // common part
       AuthenticationMWs.authenticate,

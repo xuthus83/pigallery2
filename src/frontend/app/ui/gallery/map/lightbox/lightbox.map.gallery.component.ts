@@ -23,8 +23,8 @@ export class GalleryMapLightboxComponent implements OnChanges, AfterViewInit {
 
   @Input() photos: PhotoDTO[];
   @Input() gpxFiles: FileDTO[];
-  public lightboxDimension: Dimension = <Dimension>{top: 0, left: 0, width: 0, height: 0};
-  public mapDimension: Dimension = <Dimension>{top: 0, left: 0, width: 0, height: 0};
+  public lightboxDimension: Dimension = {top: 0, left: 0, width: 0, height: 0} as Dimension;
+  public mapDimension: Dimension = {top: 0, left: 0, width: 0, height: 0} as Dimension;
   public visible = false;
   public controllersVisible = false;
   public opacity = 1.0;
@@ -42,7 +42,7 @@ export class GalleryMapLightboxComponent implements OnChanges, AfterViewInit {
   }
 
 
-  ngOnChanges() {
+  ngOnChanges(): void {
     if (this.visible === false) {
       return;
     }
@@ -50,11 +50,11 @@ export class GalleryMapLightboxComponent implements OnChanges, AfterViewInit {
 
   }
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
     // TODO: remove it once yaga/leaflet-ng2 is fixes.
     //  See issue: https://github.com/yagajs/leaflet-ng2/issues/440
     let i = 0;
-    this.yagaMap.eachLayer(l => {
+    this.yagaMap.eachLayer((l): void => {
       if (i >= 3 || (this.paths.length === 0 && i >= 2)) {
         this.yagaMap.removeLayer(l);
       }
@@ -63,54 +63,54 @@ export class GalleryMapLightboxComponent implements OnChanges, AfterViewInit {
   }
 
   @HostListener('window:resize', ['$event'])
-  async onResize() {
-    this.lightboxDimension = <Dimension>{
+  async onResize(): Promise<void> {
+    this.lightboxDimension = ({
       top: 0,
       left: 0,
       width: this.getScreenWidth(),
       height: this.getScreenHeight()
-    };
-    this.mapDimension = <Dimension>{
+    } as Dimension);
+    this.mapDimension = ({
       top: 0,
       left: 0,
       width: this.getScreenWidth(),
       height: this.getScreenHeight()
-    };
+    } as Dimension);
     await Utils.wait(0);
     this.yagaMap.invalidateSize();
   }
 
 
-  public async show(position: Dimension) {
+  public async show(position: Dimension): Promise<void> {
     this.hideImages();
     this.visible = true;
     this.opacity = 1.0;
     this.startPosition = position;
     this.lightboxDimension = position;
     this.lightboxDimension.top -= PageHelper.ScrollY;
-    this.mapDimension = <Dimension>{
+    this.mapDimension = ({
       top: 0,
       left: 0,
       width: this.getScreenWidth(),
       height: this.getScreenHeight()
-    };
+    } as Dimension);
     this.showImages();
     this.centerMap();
     PageHelper.hideScrollY();
     await Utils.wait(0);
-    this.lightboxDimension = <Dimension>{
+    this.lightboxDimension = ({
       top: 0,
       left: 0,
       width: this.getScreenWidth(),
       height: this.getScreenHeight()
-    };
+    } as Dimension);
     await Utils.wait(350);
     this.yagaMap.invalidateSize();
     this.centerMap();
     this.controllersVisible = true;
   }
 
-  public hide() {
+  public hide(): void {
     this.fullScreenService.exitFullScreen();
     this.controllersVisible = false;
     const to = this.startPosition;
@@ -124,21 +124,21 @@ export class GalleryMapLightboxComponent implements OnChanges, AfterViewInit {
     this.lightboxDimension.top -= PageHelper.ScrollY;
     PageHelper.showScrollY();
     this.opacity = 0.0;
-    setTimeout(() => {
+    setTimeout((): void => {
       this.visible = false;
       this.hideImages();
       this.yagaMap.zoom = 2;
     }, 500);
   }
 
-  showImages() {
+  showImages(): void {
     this.hideImages();
 
-    this.mapPhotos = this.photos.filter(p => {
+    this.mapPhotos = this.photos.filter((p): number => {
       return p.metadata && p.metadata.positionData && p.metadata.positionData.GPSData
         && p.metadata.positionData.GPSData.latitude
         && p.metadata.positionData.GPSData.longitude;
-    }).map(p => {
+    }).map((p): MapPhoto => {
       let width = 500;
       let height = 500;
       const size = p.metadata.size;
@@ -155,8 +155,8 @@ export class GalleryMapLightboxComponent implements OnChanges, AfterViewInit {
         lng: p.metadata.positionData.GPSData.longitude,
         iconThumbnail: iconTh,
         preview: {
-          width: width,
-          height: height,
+          width,
+          height,
           thumbnail: this.thumbnailService.getLazyThumbnail(new Media(p, width, height))
         }
 
@@ -165,7 +165,7 @@ export class GalleryMapLightboxComponent implements OnChanges, AfterViewInit {
         if (iconTh.Available === true) {
           obj.iconUrl = iconTh.Src;
         } else {
-          iconTh.OnLoad = () => {
+          iconTh.OnLoad = (): void => {
             obj.iconUrl = iconTh.Src;
           };
         }
@@ -178,13 +178,13 @@ export class GalleryMapLightboxComponent implements OnChanges, AfterViewInit {
 
   }
 
-  public loadPreview(mp: MapPhoto) {
+  public loadPreview(mp: MapPhoto): void {
     mp.preview.thumbnail.load();
     mp.preview.thumbnail.CurrentlyWaiting = true;
   }
 
-  hideImages() {
-    this.mapPhotos.forEach((mp) => {
+  hideImages(): void {
+    this.mapPhotos.forEach((mp): void => {
       mp.iconThumbnail.destroy();
       mp.preview.thumbnail.destroy();
     });
@@ -192,11 +192,11 @@ export class GalleryMapLightboxComponent implements OnChanges, AfterViewInit {
   }
 
   @HostListener('window:keydown', ['$event'])
-  onKeyPress(e: KeyboardEvent) {
+  onKeyPress(e: KeyboardEvent): void {
     if (this.visible !== true) {
       return;
     }
-    const event: KeyboardEvent = window.event ? <any>window.event : e;
+    const event: KeyboardEvent = window.event ? window.event as any : e;
     switch (event.key) {
       case 'f':
       case 'F':
@@ -212,14 +212,15 @@ export class GalleryMapLightboxComponent implements OnChanges, AfterViewInit {
     }
   }
 
-  private centerMap() {
+  private centerMap(): void {
     if (this.mapPhotos.length > 0) {
-      this.yagaMap.fitBounds(<any>this.mapPhotos);
+      this.yagaMap.fitBounds(this.mapPhotos as any);
     }
   }
 
   private async loadGPXFiles(): Promise<void> {
     this.paths = [];
+    // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < this.gpxFiles.length; i++) {
       const file = this.gpxFiles[i];
       const path = await this.mapService.getMapPath(file);
@@ -229,15 +230,15 @@ export class GalleryMapLightboxComponent implements OnChanges, AfterViewInit {
       if (path.length === 0) {
         continue;
       }
-      this.paths.push(<LatLng[]>path);
+      this.paths.push(path as LatLng[]);
     }
   }
 
-  private getScreenWidth() {
+  private getScreenWidth(): number {
     return window.innerWidth;
   }
 
-  private getScreenHeight() {
+  private getScreenHeight(): number {
     return window.innerHeight;
   }
 

@@ -16,7 +16,7 @@ import {
 } from '../../../../../src/backend/model/database/sql/enitites/PhotoEntity';
 import {MediaDimensionEntity} from '../../../../../src/backend/model/database/sql/enitites/MediaEntity';
 import {VersionEntity} from '../../../../../src/backend/model/database/sql/enitites/VersionEntity';
-import {ServerConfig} from '../../../../../src/common/config/private/PrivateConfig';
+import {DatabaseType, ServerConfig} from '../../../../../src/common/config/private/PrivateConfig';
 import {ProjectPath} from '../../../../../src/backend/ProjectPath';
 
 
@@ -27,7 +27,7 @@ describe('Typeorm integration', () => {
   const setUpSqlDB = async () => {
     await fs.promises.rmdir(tempDir, {recursive: true});
 
-    Config.Server.Database.type = ServerConfig.DatabaseType.sqlite;
+    Config.Server.Database.type = DatabaseType.sqlite;
     Config.Server.Database.dbFolder = tempDir;
     ProjectPath.reset();
 

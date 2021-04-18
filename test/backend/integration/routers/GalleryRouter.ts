@@ -6,8 +6,7 @@ import {expect} from 'chai';
 import {SuperAgentStatic} from 'superagent';
 import {ProjectPath} from '../../../../src/backend/ProjectPath';
 import {DBTestHelper} from '../../DBTestHelper';
-import {ServerConfig} from '../../../../src/common/config/private/PrivateConfig';
-import ReIndexingSensitivity = ServerConfig.ReIndexingSensitivity;
+import {ReIndexingSensitivity} from '../../../../src/common/config/private/PrivateConfig';
 
 
 process.env.NODE_ENV = 'test';

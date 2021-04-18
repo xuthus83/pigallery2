@@ -33,7 +33,7 @@
         i18n-description i18n-name
         [ngModel]="states.port"
         required="true"
-        [dockerWarning]="(_settingsService.Settings | async).Server.Environment.isDocker"
+        [dockerWarning]="(settingsService.Settings | async).Server.Environment.isDocker"
         [simplifiedMode]="simplifiedMode">
       </app-settings-entry>
 
@@ -44,7 +44,7 @@
         placeholder="path"
         i18n-description i18n-name
         required
-        [dockerWarning]="(_settingsService.Settings | async).Server.Environment.isDocker"
+        [dockerWarning]="(settingsService.Settings | async).Server.Environment.isDocker"
         [ngModel]="states.imagesFolder">
       </app-settings-entry>
 
@@ -56,7 +56,7 @@
         placeholder="path"
         i18n-description i18n-name
         required="true"
-        [dockerWarning]="(_settingsService.Settings | async).Server.Environment.isDocker"
+        [dockerWarning]="(settingsService.Settings | async).Server.Environment.isDocker"
         [ngModel]="states.tempFolder">
       </app-settings-entry>
 

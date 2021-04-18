@@ -1,8 +1,7 @@
-import {Injectable, LOCALE_ID, NgModule, TRANSLATIONS, TRANSLATIONS_FORMAT} from '@angular/core';
+import {Injectable, NgModule} from '@angular/core';
 import {BrowserModule, HAMMER_GESTURE_CONFIG, HammerGestureConfig} from '@angular/platform-browser';
 import {FormsModule} from '@angular/forms';
 import {AppComponent} from './app.component';
-import {appRoutes} from './app.routing';
 import {UserService} from './model/network/user.service';
 import {GalleryService} from './ui/gallery/gallery.service';
 import {NetworkService} from './model/network/network.service';
@@ -12,6 +11,7 @@ import {AuthenticationService} from './model/network/authentication.service';
 import {UserMangerSettingsComponent} from './ui/settings/usermanager/usermanager.settings.component';
 import {FrameComponent} from './ui/frame/frame.component';
 import {YagaModule} from '@yaga/leaflet-ng2';
+import {LoadingBarModule} from '@ngx-loading-bar/core';
 import {GalleryLightboxMediaComponent} from './ui/gallery/lightbox/media/media.lightbox.gallery.component';
 import {GalleryPhotoLoadingComponent} from './ui/gallery/grid/photo/loading/loading.photo.grid.gallery.component';
 import {GalleryNavigatorComponent} from './ui/gallery/navigator/navigator.gallery.component';
@@ -29,7 +29,6 @@ import {GalleryMapComponent} from './ui/gallery/map/map.gallery.component';
 import {GalleryMapLightboxComponent} from './ui/gallery/map/lightbox/lightbox.map.gallery.component';
 import {ThumbnailManagerService} from './ui/gallery/thumbnailManager.service';
 import {OverlayService} from './ui/gallery/overlay.service';
-import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 import {GalleryShareComponent} from './ui/gallery/share/share.gallery.component';
 import {ShareLoginComponent} from './ui/sharelogin/share-login.component';
 import {ShareService} from './ui/gallery/share.service';
@@ -58,7 +57,6 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {DefaultUrlSerializer, UrlSerializer, UrlTree} from '@angular/router';
 import {IndexingSettingsComponent} from './ui/settings/indexing/indexing.settings.component';
 import {LanguageComponent} from './ui/language/language.component';
-import {I18n} from '@ngx-translate/i18n-polyfill';
 import {QueryService} from './model/query.service';
 import {IconizeSortingMethod} from './pipes/IconizeSortingMethod';
 import {StringifySortingMethod} from './pipes/StringifySortingMethod';
@@ -98,6 +96,7 @@ import {StringifySearchQuery} from './pipes/StringifySearchQuery';
 import {AutoCompleteService} from './ui/gallery/search/autocomplete.service';
 import {SearchQueryParserService} from './ui/gallery/search/search-query-parser.service';
 import {GallerySearchFieldComponent} from './ui/gallery/search/search-field/search-field.gallery.component';
+import {AppRoutingModule} from './app.routing';
 
 
 @Injectable()
@@ -112,32 +111,20 @@ export class MyHammerConfig extends HammerGestureConfig {
 
 
 export class CustomUrlSerializer implements UrlSerializer {
-  private _defaultUrlSerializer: DefaultUrlSerializer = new DefaultUrlSerializer();
+  private defaultUrlSerializer: DefaultUrlSerializer = new DefaultUrlSerializer();
 
   parse(url: string): UrlTree {
     // Encode parentheses
     url = url.replace(/\(/g, '%28').replace(/\)/g, '%29');
     // Use the default serializer.
-    return this._defaultUrlSerializer.parse(url);
+    return this.defaultUrlSerializer.parse(url);
   }
 
   serialize(tree: UrlTree): string {
-    return this._defaultUrlSerializer.serialize(tree).replace(/%28/g, '(').replace(/%29/g, ')');
+    return this.defaultUrlSerializer.serialize(tree).replace(/%28/g, '(').replace(/%29/g, ')');
   }
 }
 
-// use the require method provided by webpack
-declare const require: (path: string) => string;
-
-export function translationsFactory(locale: string) {
-  locale = locale || 'en'; // default to english if no locale
-
-  // default locale, nothing to translate
-  if (locale === 'en') {
-    return '';
-  }
-  return (<any>require(`raw-loader!../translate/messages.${locale}.xlf`)).default;
-}
 
 @NgModule({
   imports: [
@@ -145,7 +132,7 @@ export function translationsFactory(locale: string) {
     FormsModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    appRoutes,
+    AppRoutingModule,
     ClipboardModule,
     JwBootstrapSwitchNg2Module,
     TooltipModule.forRoot(),
@@ -154,10 +141,10 @@ export function translationsFactory(locale: string) {
     CollapseModule.forRoot(),
     PopoverModule.forRoot(),
     BsDropdownModule.forRoot(),
-    SlimLoadingBarModule.forRoot(),
     BsDatepickerModule.forRoot(),
     YagaModule,
-    TimepickerModule.forRoot()
+    TimepickerModule.forRoot(),
+    LoadingBarModule
   ],
   declarations: [AppComponent,
     LoginComponent,
@@ -251,14 +238,7 @@ export function translationsFactory(locale: string) {
     FacesService,
     VersionService,
     ScheduledJobsService,
-    BackendtextService,
-    {
-      provide: TRANSLATIONS,
-      useFactory: translationsFactory,
-      deps: [LOCALE_ID]
-    },
-    {provide: TRANSLATIONS_FORMAT, useValue: 'xlf'},
-    I18n
+    BackendtextService
   ],
   bootstrap: [AppComponent]
 })

@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {CameraMetadata, PhotoDTO, PhotoMetadata, PositionMetaData} from '../../../../../../common/entities/PhotoDTO';
 import {Config} from '../../../../../../common/config/public/Config';
-import {MediaDTO} from '../../../../../../common/entities/MediaDTO';
+import {MediaDTO, MediaDTOUtils} from '../../../../../../common/entities/MediaDTO';
 import {VideoDTO, VideoMetadata} from '../../../../../../common/entities/VideoDTO';
 import {Utils} from '../../../../../../common/Utils';
 import {QueryService} from '../../../../model/query.service';
@@ -32,59 +32,60 @@ export class InfoPanelLightboxComponent implements OnInit {
     return Utils.concatUrls(this.media.directory.path, this.media.directory.name, this.media.name);
   }
 
-  get DirectoryPath() {
+  get DirectoryPath(): string {
     return Utils.concatUrls(this.media.directory.path, this.media.directory.name);
   }
 
   get VideoData(): VideoMetadata {
-    if (typeof (<VideoDTO>this.media).metadata.bitRate === 'undefined') {
+    if (typeof (this.media as VideoDTO).metadata.bitRate === 'undefined') {
       return null;
     }
-    return (<VideoDTO>this.media).metadata;
+    return (this.media as VideoDTO).metadata;
   }
 
   get PositionData(): PositionMetaData {
-    return (<PhotoDTO>this.media).metadata.positionData;
+    return (this.media as PhotoDTO).metadata.positionData;
   }
 
   get CameraData(): CameraMetadata {
-    return (<PhotoDTO>this.media).metadata.cameraData;
+    return (this.media as PhotoDTO).metadata.cameraData;
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     const metadata = this.media.metadata as PhotoMetadata;
     if ((metadata.keywords && metadata.keywords.length > 0) ||
       (metadata.faces && metadata.faces.length > 0)) {
       this.keywords = [];
       if (Config.Client.Faces.enabled) {
-        const names: string[] = (metadata.faces || []).map(f => f.name);
-        this.keywords = names.filter((name, index) => names.indexOf(name) === index)
-          .map(n => ({value: n, type: SearchQueryTypes.person}));
+        const names: string[] = (metadata.faces || []).map((f): string => f.name);
+        this.keywords = names.filter((name, index): boolean => names.indexOf(name) === index)
+          .map((n): { type: SearchQueryTypes; value: string } => ({value: n, type: SearchQueryTypes.person}));
       }
-      this.keywords = this.keywords.concat((metadata.keywords || []).map(k => ({value: k, type: SearchQueryTypes.keyword})));
+      this.keywords = this.keywords.concat((metadata.keywords || []).map((k): { type: SearchQueryTypes; value: string } =>
+        ({value: k, type: SearchQueryTypes.keyword})));
     }
 
   }
 
-  isPhoto() {
-    return this.media && MediaDTO.isPhoto(this.media);
+  isPhoto(): boolean {
+    return this.media && MediaDTOUtils.isPhoto(this.media);
   }
 
-  calcMpx() {
+  calcMpx(): string {
     return (this.media.metadata.size.width * this.media.metadata.size.height / 1000000).toFixed(2);
   }
 
-  isThisYear() {
+  isThisYear(): boolean {
     return (new Date()).getFullYear() ===
       (new Date(this.media.metadata.creationDate)).getFullYear();
   }
 
-  getTime() {
+  getTime(): string {
     const date = new Date(this.media.metadata.creationDate);
     return date.toTimeString().split(' ')[0];
   }
 
-  toFraction(f: number) {
+  toFraction(f: number): string | number {
     if (f > 1) {
       return f;
     }
@@ -92,42 +93,42 @@ export class InfoPanelLightboxComponent implements OnInit {
   }
 
   hasPositionData(): boolean {
-    return !!(<PhotoDTO>this.media).metadata.positionData &&
-      !!((<PhotoDTO>this.media).metadata.positionData.city ||
-        (<PhotoDTO>this.media).metadata.positionData.state ||
-        (<PhotoDTO>this.media).metadata.positionData.country);
+    return !!(this.media as PhotoDTO).metadata.positionData &&
+      !!((this.media as PhotoDTO).metadata.positionData.city ||
+        (this.media as PhotoDTO).metadata.positionData.state ||
+        (this.media as PhotoDTO).metadata.positionData.country);
   }
 
-  hasGPS() {
-    return (<PhotoDTO>this.media).metadata.positionData && (<PhotoDTO>this.media).metadata.positionData.GPSData &&
-      (<PhotoDTO>this.media).metadata.positionData.GPSData.latitude && (<PhotoDTO>this.media).metadata.positionData.GPSData.longitude;
+  hasGPS(): number {
+    return (this.media as PhotoDTO).metadata.positionData && (this.media as PhotoDTO).metadata.positionData.GPSData &&
+      (this.media as PhotoDTO).metadata.positionData.GPSData.latitude && (this.media as PhotoDTO).metadata.positionData.GPSData.longitude;
   }
 
   getPositionText(): string {
-    if (!(<PhotoDTO>this.media).metadata.positionData) {
+    if (!(this.media as PhotoDTO).metadata.positionData) {
       return '';
     }
-    let str = (<PhotoDTO>this.media).metadata.positionData.city ||
-      (<PhotoDTO>this.media).metadata.positionData.state || '';
+    let str = (this.media as PhotoDTO).metadata.positionData.city ||
+      (this.media as PhotoDTO).metadata.positionData.state || '';
 
     if (str.length !== 0) {
       str += ', ';
     }
-    str += (<PhotoDTO>this.media).metadata.positionData.country || '';
+    str += (this.media as PhotoDTO).metadata.positionData.country || '';
 
     return str;
   }
 
-  close() {
+  close(): void {
     this.closed.emit();
   }
 
   getTextSearchQuery(name: string, type: SearchQueryTypes): string {
-    return JSON.stringify(<TextSearch>{
-      type: type,
+    return JSON.stringify({
+      type,
       matchType: TextSearchQueryMatchTypes.exact_match,
       text: name
-    });
+    } as TextSearch);
   }
 
 }

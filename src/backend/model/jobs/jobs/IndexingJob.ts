@@ -4,7 +4,7 @@ import {Config} from '../../../../common/config/private/Config';
 import {Job} from './Job';
 import {ConfigTemplateEntry, DefaultsJobs} from '../../../../common/entities/job/JobDTO';
 import {JobProgressStates} from '../../../../common/entities/job/JobProgressDTO';
-import {ServerConfig} from '../../../../common/config/private/PrivateConfig';
+import {DatabaseType, ServerConfig} from '../../../../common/config/private/PrivateConfig';
 
 
 export class IndexingJob extends Job {
@@ -13,11 +13,11 @@ export class IndexingJob extends Job {
   public readonly ConfigTemplate: ConfigTemplateEntry[] = null;
 
   public get Supported(): boolean {
-    return Config.Server.Database.type !== ServerConfig.DatabaseType.memory;
+    return Config.Server.Database.type !== DatabaseType.memory;
   }
 
 
-  protected async init() {
+  protected async init(): Promise<void> {
     this.directoriesToIndex.push('/');
   }
 
@@ -36,8 +36,8 @@ export class IndexingJob extends Job {
       return false;
     }
     this.Progress.Processed++;
-    for (let i = 0; i < scanned.directories.length; i++) {
-      this.directoriesToIndex.push(path.join(scanned.directories[i].path, scanned.directories[i].name));
+    for (const item of scanned.directories) {
+      this.directoriesToIndex.push(path.join(item.path, item.name));
     }
     return true;
   }

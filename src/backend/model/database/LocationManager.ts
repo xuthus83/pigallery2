@@ -1,11 +1,11 @@
 import {GPSMetadata} from '../../../common/entities/PhotoDTO';
 import * as NodeGeocoder from 'node-geocoder';
 import {LocationLookupException} from '../../exceptions/LocationLookupException';
-import {Utils} from '../../../common/Utils';
+import {LRU} from '../../../common/Utils';
 
 export class LocationManager {
   readonly geocoder: NodeGeocoder.Geocoder;
-  cache = new Utils.LRU<GPSMetadata>(100);
+  cache = new LRU<GPSMetadata>(100);
 
   constructor() {
     this.geocoder = NodeGeocoder({provider: 'openstreetmap'});

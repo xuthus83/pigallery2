@@ -15,7 +15,7 @@ export class TempFolderCleaningJob extends Job {
   private tempRootCleaned = false;
 
 
-  protected async init() {
+  protected async init(): Promise<void> {
     this.tempRootCleaned = false;
     this.directoryQueue = [];
     this.directoryQueue.push(ProjectPath.TranscodedFolder);
@@ -49,20 +49,20 @@ export class TempFolderCleaningJob extends Job {
     return (await fs.promises.readdir(dirPath)).map(f => path.normalize(path.join(dirPath, f)));
   }
 
-  protected async stepTempDirectory() {
+  protected async stepTempDirectory(): Promise<boolean> {
     const files = await this.readDir(ProjectPath.TempFolder);
     const validFiles = [ProjectPath.TranscodedFolder, ProjectPath.FacesFolder];
-    for (let i = 0; i < files.length; ++i) {
-      if (validFiles.indexOf(files[i]) === -1) {
-        this.Progress.log('processing: ' + files[i]);
+    for (const file of files) {
+      if (validFiles.indexOf(file) === -1) {
+        this.Progress.log('processing: ' + file);
         this.Progress.Processed++;
-        if ((await fs.promises.stat(files[i])).isDirectory()) {
-          await fs.promises.rmdir(files[i], {recursive: true});
+        if ((await fs.promises.stat(file)).isDirectory()) {
+          await fs.promises.rmdir(file, {recursive: true});
         } else {
-          await fs.promises.unlink(files[i]);
+          await fs.promises.unlink(file);
         }
       } else {
-        this.Progress.log('skipping: ' + files[i]);
+        this.Progress.log('skipping: ' + file);
         this.Progress.Skipped++;
       }
     }
@@ -73,7 +73,7 @@ export class TempFolderCleaningJob extends Job {
 
   }
 
-  protected async stepConvertedDirectory() {
+  protected async stepConvertedDirectory(): Promise<boolean> {
 
     const filePath = this.directoryQueue.shift();
     const stat = await fs.promises.stat(filePath);

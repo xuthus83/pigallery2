@@ -9,7 +9,7 @@ export class AutoCompleteItem implements IAutoCompleteItem {
   constructor(public text: string, public type: SearchQueryTypes = null) {
   }
 
-  equals(other: AutoCompleteItem) {
+  equals(other: AutoCompleteItem): boolean {
     return this.text === other.text && this.type === other.type;
   }
 }

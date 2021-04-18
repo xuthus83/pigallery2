@@ -25,10 +25,10 @@ import {ActivatedRoute, Params, Router} from '@angular/router';
 import {QueryService} from '../../../model/query.service';
 import {GalleryService} from '../gallery.service';
 import {SortingMethods} from '../../../../../common/entities/SortingMethods';
-import {MediaDTO} from '../../../../../common/entities/MediaDTO';
+import {MediaDTO, MediaDTOUtils} from '../../../../../common/entities/MediaDTO';
 import {QueryParams} from '../../../../../common/QueryParams';
 import {SeededRandomService} from '../../../model/seededRandom.service';
-import { compare } from 'natural-orderby';
+import {compare} from 'natural-orderby';
 
 @Component({
   selector: 'app-gallery-grid',
@@ -71,8 +71,8 @@ export class GalleryGridComponent implements OnChanges, OnInit, AfterViewInit, O
               private rndService: SeededRandomService) {
   }
 
-  ngOnInit() {
-    this.subscriptions.route = this.route.queryParams.subscribe((params: Params) => {
+  ngOnInit(): void {
+    this.subscriptions.route = this.route.queryParams.subscribe((params: Params): void => {
       if (params[QueryParams.gallery.photo] && params[QueryParams.gallery.photo] !== '') {
         this.delayedRenderUpToPhoto = params[QueryParams.gallery.photo];
         if (!this.media || this.media.length === 0) {
@@ -82,21 +82,21 @@ export class GalleryGridComponent implements OnChanges, OnInit, AfterViewInit, O
         this.renderUpToMedia(params[QueryParams.gallery.photo]);
       }
     });
-    this.subscriptions.sorting = this.galleryService.sorting.subscribe(() => {
+    this.subscriptions.sorting = this.galleryService.sorting.subscribe((): void => {
       this.clearRenderedPhotos();
       this.sortPhotos();
       this.renderPhotos();
     });
   }
 
-  ngOnChanges() {
+  ngOnChanges(): void {
     if (this.isAfterViewInit === false) {
       return;
     }
     this.updateContainerDimensions();
     this.sortPhotos();
     this.mergeNewPhotos();
-    this.helperTime = window.setTimeout(() => {
+    this.helperTime = window.setTimeout((): void => {
       this.renderPhotos();
       if (this.delayedRenderUpToPhoto) {
         this.renderUpToMedia(this.delayedRenderUpToPhoto);
@@ -104,7 +104,7 @@ export class GalleryGridComponent implements OnChanges, OnInit, AfterViewInit, O
     }, 0);
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
 
     if (this.helperTime != null) {
       clearTimeout(this.helperTime);
@@ -120,7 +120,7 @@ export class GalleryGridComponent implements OnChanges, OnInit, AfterViewInit, O
   }
 
   @HostListener('window:resize')
-  onResize() {
+  onResize(): void {
     if (this.isAfterViewInit === false) {
       return;
     }
@@ -134,24 +134,24 @@ export class GalleryGridComponent implements OnChanges, OnInit, AfterViewInit, O
     this.renderPhotos(renderedIndex);
   }
 
-  photoClicked(media: MediaDTO) {
+  photoClicked(media: MediaDTO): void {
     this.router.navigate([], {queryParams: this.queryService.getParams(media)});
   }
 
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
     this.lightbox.setGridPhotoQL(this.gridPhotoQL);
 
     if (Config.Client.Other.enableOnScrollThumbnailPrioritising === true) {
-      this.gridPhotoQL.changes.subscribe(() => {
-        this.scrollListenerPhotos = this.gridPhotoQL.filter(pc => pc.ScrollListener);
+      this.gridPhotoQL.changes.subscribe((): void => {
+        this.scrollListenerPhotos = this.gridPhotoQL.filter((pc): boolean => pc.ScrollListener);
       });
     }
 
     this.updateContainerDimensions();
     this.sortPhotos();
     this.clearRenderedPhotos();
-    this.helperTime = window.setTimeout(() => {
+    this.helperTime = window.setTimeout((): void => {
       this.renderPhotos();
     }, 0);
     this.isAfterViewInit = true;
@@ -182,8 +182,8 @@ export class GalleryGridComponent implements OnChanges, OnInit, AfterViewInit, O
     const rowHeight = Math.min(photoRowBuilder.calcRowHeight(), maxRowHeight);
     const imageHeight = rowHeight - (this.IMAGE_MARGIN * 2);
 
-    photoRowBuilder.getPhotoRow().forEach((photo) => {
-      const imageWidth = imageHeight * MediaDTO.calcAspectRatio(photo);
+    photoRowBuilder.getPhotoRow().forEach((photo): void => {
+      const imageWidth = imageHeight * MediaDTOUtils.calcAspectRatio(photo);
       this.photosToRender.push(new GridMedia(photo, imageWidth, imageHeight, this.renderedPhotoIndex));
     });
 
@@ -192,18 +192,18 @@ export class GalleryGridComponent implements OnChanges, OnInit, AfterViewInit, O
   }
 
   @HostListener('window:scroll')
-  onScroll() {
+  onScroll(): void {
     if (!this.onScrollFired &&
       // should we trigger this at all?
       (this.renderedPhotoIndex < this.media.length || this.scrollListenerPhotos.length > 0)) {
-      window.requestAnimationFrame(() => {
+      window.requestAnimationFrame((): void => {
         this.renderPhotos();
 
         if (Config.Client.Other.enableOnScrollThumbnailPrioritising === true) {
-          this.scrollListenerPhotos.forEach((pc: GalleryPhotoComponent) => {
+          this.scrollListenerPhotos.forEach((pc: GalleryPhotoComponent): void => {
             pc.onScroll();
           });
-          this.scrollListenerPhotos = this.scrollListenerPhotos.filter(pc => pc.ScrollListener);
+          this.scrollListenerPhotos = this.scrollListenerPhotos.filter((pc): boolean => pc.ScrollListener);
         }
 
         this.onScrollFired = false;
@@ -212,8 +212,8 @@ export class GalleryGridComponent implements OnChanges, OnInit, AfterViewInit, O
     }
   }
 
-  private renderUpToMedia(mediaStringId: string) {
-    const index = this.media.findIndex(p => this.queryService.getMediaStringId(p) === mediaStringId);
+  private renderUpToMedia(mediaStringId: string): void {
+    const index = this.media.findIndex((p): boolean => this.queryService.getMediaStringId(p) === mediaStringId);
     if (index === -1) {
       this.router.navigate([], {queryParams: this.queryService.getParams()});
       return;
@@ -222,33 +222,33 @@ export class GalleryGridComponent implements OnChanges, OnInit, AfterViewInit, O
     }
   }
 
-  private clearRenderedPhotos() {
+  private clearRenderedPhotos(): void {
     this.photosToRender = [];
     this.renderedPhotoIndex = 0;
     this.changeDetector.detectChanges();
   }
 
-  private sortPhotos() {
+  private sortPhotos(): void {
     switch (this.galleryService.sorting.value) {
       case SortingMethods.ascName:
         this.media.sort((a: PhotoDTO, b: PhotoDTO) => compare()(a.name, b.name));
         break;
       case SortingMethods.descName:
-        this.media.sort((a: PhotoDTO, b: PhotoDTO) => compare({order: 'desc' })(a.name, b.name));
+        this.media.sort((a: PhotoDTO, b: PhotoDTO) => compare({order: 'desc'})(a.name, b.name));
         break;
       case SortingMethods.ascDate:
-        this.media.sort((a: PhotoDTO, b: PhotoDTO) => {
+        this.media.sort((a: PhotoDTO, b: PhotoDTO): number => {
           return a.metadata.creationDate - b.metadata.creationDate;
         });
         break;
       case SortingMethods.descDate:
-        this.media.sort((a: PhotoDTO, b: PhotoDTO) => {
+        this.media.sort((a: PhotoDTO, b: PhotoDTO): number => {
           return b.metadata.creationDate - a.metadata.creationDate;
         });
         break;
       case SortingMethods.random:
         this.rndService.setSeed(this.media.length);
-        this.media.sort((a: PhotoDTO, b: PhotoDTO) => {
+        this.media.sort((a: PhotoDTO, b: PhotoDTO): number => {
           if (a.name.toLowerCase() < b.name.toLowerCase()) {
             return -1;
           }
@@ -256,7 +256,7 @@ export class GalleryGridComponent implements OnChanges, OnInit, AfterViewInit, O
             return 1;
           }
           return 0;
-        }).sort(() => {
+        }).sort((): number => {
           return this.rndService.get() - 0.5;
         });
         break;
@@ -265,7 +265,7 @@ export class GalleryGridComponent implements OnChanges, OnInit, AfterViewInit, O
 
   }
 
-  private mergeNewPhotos() {
+  private mergeNewPhotos(): void {
     // merge new data with old one
     let lastSameIndex = 0;
     let lastRowId = null;
@@ -301,7 +301,7 @@ export class GalleryGridComponent implements OnChanges, OnInit, AfterViewInit, O
    * Returns true, if scroll is >= 70% to render more images.
    * Or of onscroll rendering is off: return always to render all the images at once
    * @param offset Add height to the client height (content is not yet added to the dom, but calculate with it)
-   * @returns {boolean}
+   * @returns boolean
    */
   private shouldRenderMore(offset: number = 0): boolean {
     return Config.Client.Other.enableOnScrollRendering === false ||
@@ -309,7 +309,7 @@ export class GalleryGridComponent implements OnChanges, OnInit, AfterViewInit, O
       || (document.body.clientHeight + offset) * 0.85 < window.innerHeight;
   }
 
-  private renderPhotos(numberOfPhotos: number = 0) {
+  private renderPhotos(numberOfPhotos: number = 0): void {
     if (this.containerWidth === 0 ||
       this.renderedPhotoIndex >= this.media.length ||
       !this.shouldRenderMore()) {

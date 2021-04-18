@@ -6,7 +6,7 @@ import {DiskManager} from '../../DiskManger';
 import {ProjectPath} from '../../../ProjectPath';
 import {Config} from '../../../../common/config/private/Config';
 import {DiskMangerWorker} from '../../threading/DiskMangerWorker';
-import {ServerConfig} from '../../../../common/config/private/PrivateConfig';
+import {ReIndexingSensitivity} from '../../../../common/config/private/PrivateConfig';
 
 export class GalleryManager implements IGalleryManager {
 
@@ -17,7 +17,7 @@ export class GalleryManager implements IGalleryManager {
       const lastModified = DiskMangerWorker.calcLastModified(stat);
       if (Date.now() - knownLastScanned <= Config.Server.Indexing.cachedFolderTimeout &&
         lastModified === knownLastModified &&
-        Config.Server.Indexing.reIndexingSensitivity < ServerConfig.ReIndexingSensitivity.high) {
+        Config.Server.Indexing.reIndexingSensitivity < ReIndexingSensitivity.high) {
         return Promise.resolve(null);
       }
     }

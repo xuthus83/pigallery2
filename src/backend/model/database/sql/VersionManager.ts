@@ -31,7 +31,7 @@ export class VersionManager implements IVersionManager {
     return crypto.createHash('md5').update(versionString).digest('hex');
   }
 
-  async updateDataVersion() {
+  async updateDataVersion(): Promise<void> {
     const connection = await SQLConnection.getConnection();
     const dir = await connection.getRepository(DirectoryEntity)
       .createQueryBuilder('directory')

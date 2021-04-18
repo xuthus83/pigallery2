@@ -51,8 +51,8 @@ const printResult = (result: BenchmarkResult, isSubResult = false) => {
     printLine('| **' + result.name + '** | | **' + (result.duration).toFixed(1) + ' ms** | **' + details + '** |');
   }
   if (result.subBenchmarks && result.subBenchmarks.length > 1) {
-    for (let i = 0; i < result.subBenchmarks.length; i++) {
-      printResult(result.subBenchmarks[i], true);
+    for (const item of result.subBenchmarks) {
+      printResult(item, true);
     }
   }
 };

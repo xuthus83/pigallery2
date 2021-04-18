@@ -45,30 +45,30 @@ export class MetadataLoader {
 
 
           try {
-            for (let i = 0; i < data.streams.length; i++) {
-              if (data.streams[i].width) {
-                metadata.size.width = data.streams[i].width;
-                metadata.size.height = data.streams[i].height;
+            for (const stream of data.streams) {
+              if (stream.width) {
+                metadata.size.width = stream.width;
+                metadata.size.height = stream.height;
 
-                if (Utils.isInt32(parseInt(data.streams[i].rotation, 10)) &&
-                  (Math.abs(parseInt(data.streams[i].rotation, 10)) / 90) % 2 === 1) {
+                if (Utils.isInt32(parseInt('' + stream.rotation, 10)) &&
+                  (Math.abs(parseInt('' + stream.rotation, 10)) / 90) % 2 === 1) {
                   // noinspection JSSuspiciousNameCombination
-                  metadata.size.width = data.streams[i].height;
+                  metadata.size.width = stream.height;
                   // noinspection JSSuspiciousNameCombination
-                  metadata.size.height = data.streams[i].width;
+                  metadata.size.height = stream.width;
                 }
 
-                if (Utils.isInt32(Math.floor(parseFloat(data.streams[i].duration) * 1000))) {
-                  metadata.duration = Math.floor(parseFloat(data.streams[i].duration) * 1000);
+                if (Utils.isInt32(Math.floor(parseFloat(stream.duration) * 1000))) {
+                  metadata.duration = Math.floor(parseFloat(stream.duration) * 1000);
                 }
 
-                if (Utils.isInt32(parseInt(data.streams[i].bit_rate, 10))) {
-                  metadata.bitRate = parseInt(data.streams[i].bit_rate, 10) || null;
+                if (Utils.isInt32(parseInt(stream.bit_rate, 10))) {
+                  metadata.bitRate = parseInt(stream.bit_rate, 10) || null;
                 }
-                if (Utils.isInt32(parseInt(data.streams[i].avg_frame_rate, 10))) {
-                  metadata.fps = parseInt(data.streams[i].avg_frame_rate, 10) || null;
+                if (Utils.isInt32(parseInt(stream.avg_frame_rate, 10))) {
+                  metadata.fps = parseInt(stream.avg_frame_rate, 10) || null;
                 }
-                metadata.creationDate = Date.parse(data.streams[i].tags.creation_time) || metadata.creationDate;
+                metadata.creationDate = Date.parse(stream.tags.creation_time) || metadata.creationDate;
                 break;
               }
             }
@@ -201,7 +201,7 @@ export class MetadataLoader {
               }
               metadata.keywords = iptcData.keywords || [];
 
-              metadata.creationDate = <number>(iptcData.date_time ? iptcData.date_time.getTime() : metadata.creationDate);
+              metadata.creationDate = ((iptcData.date_time ? iptcData.date_time.getTime() : metadata.creationDate) as number);
 
             } catch (err) {
               // Logger.debug(LOG_TAG, 'Error parsing iptc data', fullPath, err);
@@ -214,11 +214,11 @@ export class MetadataLoader {
               //  and keep the minimum amount only
               const exif = ExifReader.load(data);
               if (exif.Rating) {
-                metadata.rating = <any>parseInt(exif.Rating.value, 10);
+                metadata.rating = (parseInt(exif.Rating.value, 10) as any);
               }
 
               if (exif.Orientation) {
-                metadata.orientation = <any>parseInt(<any>exif.Orientation.value, 10);
+                metadata.orientation = (parseInt(exif.Orientation.value as any, 10) as any);
                 if (OrientationTypes.BOTTOM_LEFT < metadata.orientation) {
                   // noinspection JSSuspiciousNameCombination
                   const height = metadata.size.width;
@@ -230,10 +230,11 @@ export class MetadataLoader {
               if (Config.Client.Faces.enabled) {
                 const faces: FaceRegion[] = [];
                 if (exif.Regions && exif.Regions.value.RegionList && exif.Regions.value.RegionList.value) {
-                  for (let i = 0; i < exif.Regions.value.RegionList.value.length; i++) {
+                  for (const regionRoot of exif.Regions.value.RegionList.value as any[]) {
 
-                    let type, name, box;
-                    const regionRoot = exif.Regions.value.RegionList.value[i] as any;
+                    let type;
+                    let name;
+                    let box;
                     const createFaceBox = (w: string, h: string, x: string, y: string) => {
                       return {
                         width: Math.round(parseFloat(w) * metadata.size.width),
@@ -276,7 +277,7 @@ export class MetadataLoader {
                     // convert center base box to corner based box
                     box.left = Math.max(0, box.left - box.width / 2);
                     box.top = Math.max(0, box.top - box.height / 2);
-                    faces.push({name: name, box: box});
+                    faces.push({name, box});
                   }
                 }
                 if (Config.Client.Faces.keywordsToPersons && faces.length > 0) {

@@ -1,4 +1,4 @@
-import {MediaDTO} from './MediaDTO';
+import {MediaDTO, MediaDTOUtils} from './MediaDTO';
 import {FileDTO} from './FileDTO';
 import {PhotoDTO, PreviewPhotoDTO} from './PhotoDTO';
 import {Utils} from '../Utils';
@@ -23,8 +23,8 @@ export interface DirectoryDTO<S extends FileDTO = MediaDTO> extends DirectoryBas
   metaFile: FileDTO[];
 }
 
-export module DirectoryDTO {
-  export const unpackDirectory = (dir: DirectoryDTO): void => {
+export const DirectoryDTOUtils = {
+  unpackDirectory: (dir: DirectoryDTO): void => {
     dir.media.forEach((media: MediaDTO) => {
       media.directory = dir;
     });
@@ -37,13 +37,13 @@ export module DirectoryDTO {
 
     if (dir.directories) {
       dir.directories.forEach((directory: DirectoryDTO) => {
-        unpackDirectory(directory);
+        DirectoryDTOUtils.unpackDirectory(directory);
         directory.parent = dir;
       });
     }
-  };
+  },
 
-  export const packDirectory = (dir: DirectoryDTO): DirectoryDTO => {
+  packDirectory: (dir: DirectoryDTO): DirectoryDTO => {
     if (dir.preview) {
       dir.preview.directory = {
         path: dir.preview.directory.path,
@@ -68,18 +68,18 @@ export module DirectoryDTO {
     }
     if (dir.directories) {
       dir.directories.forEach((directory: DirectoryDTO) => {
-        packDirectory(directory);
+        DirectoryDTOUtils.packDirectory(directory);
         directory.parent = null;
       });
     }
 
     return dir;
 
-  };
-  export const filterPhotos = (dir: DirectoryDTO): PhotoDTO[] => {
-    return <PhotoDTO[]>dir.media.filter(m => MediaDTO.isPhoto(m));
-  };
-  export const filterVideos = (dir: DirectoryDTO): PhotoDTO[] => {
-    return <PhotoDTO[]>dir.media.filter(m => MediaDTO.isPhoto(m));
-  };
-}
+  },
+  filterPhotos: (dir: DirectoryDTO): PhotoDTO[] => {
+    return dir.media.filter(m => MediaDTOUtils.isPhoto(m)) as PhotoDTO[];
+  },
+  filterVideos: (dir: DirectoryDTO): PhotoDTO[] => {
+    return dir.media.filter(m => MediaDTOUtils.isPhoto(m)) as PhotoDTO[];
+  }
+};

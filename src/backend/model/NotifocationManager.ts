@@ -12,11 +12,11 @@ export class NotificationManager {
     ];
 
 
-  public static error(message: string, details?: any, req?: Request) {
+  public static error(message: string, details?: any, req?: Request): void {
     const noti: NotificationDTO = {
       type: NotificationType.error,
-      message: message,
-      details: details
+      message,
+      details
     };
     if (req) {
       noti.request = {
@@ -28,11 +28,11 @@ export class NotificationManager {
     NotificationManager.notifications.push(noti);
   }
 
-  public static warning(message: string, details?: any, req?: Request) {
+  public static warning(message: string, details?: any, req?: Request): void {
     const noti: NotificationDTO = {
       type: NotificationType.warning,
-      message: message,
-      details: details
+      message,
+      details
     };
     if (req) {
       noti.request = {

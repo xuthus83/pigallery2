@@ -15,11 +15,11 @@ export class MediaIcon {
     return this.media.name.substr(this.media.name.lastIndexOf('.') + 1);
   }
 
-  iconLoaded() {
+  iconLoaded(): void {
     this.media.readyIcon = true;
   }
 
-  isIconAvailable() {
+  isIconAvailable(): boolean {
     return this.media.readyIcon;
   }
 
@@ -27,19 +27,19 @@ export class MediaIcon {
     return Utils.concatUrls(this.media.directory.path, this.media.directory.name, this.media.name);
   }
 
-  getIconPath() {
+  getIconPath(): string {
     return Utils.concatUrls(Config.Client.urlBase,
       '/api/gallery/content/',
       this.media.directory.path, this.media.directory.name, this.media.name, 'icon');
   }
 
-  getMediaPath() {
+  getMediaPath(): string {
     return Utils.concatUrls(Config.Client.urlBase,
       '/api/gallery/content/',
       this.media.directory.path, this.media.directory.name, this.media.name);
   }
 
-  getBestFitMediaPath() {
+  getBestFitMediaPath(): string {
     return Utils.concatUrls(this.getMediaPath(), '/bestFit');
   }
 

@@ -14,11 +14,11 @@ export class DirectoriesComponent implements OnChanges {
   constructor(private container: ElementRef) {
   }
 
-  ngOnChanges() {
+  ngOnChanges(): void {
     this.updateSize();
   }
 
-  private updateSize() {
+  private updateSize(): void {
     if (window.innerWidth < window.innerHeight) {
       // On portrait mode, show 2 directories side by side with some padding
       this.size = Math.round(window.innerWidth / 2) - 25;

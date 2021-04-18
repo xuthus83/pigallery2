@@ -34,9 +34,11 @@ export class MediaMetadataEntity implements MediaMetadata {
   @Column('int', {unsigned: true})
   fileSize: number;
 
-  @Column({type: 'simple-array',
+  @Column({
+    type: 'simple-array',
     charset: columnCharsetCS.charset,
-    collation: columnCharsetCS.collation})
+    collation: columnCharsetCS.collation
+  })
   keywords: string[];
 
   @Column(type => CameraMetadataEntity)
@@ -54,9 +56,11 @@ export class MediaMetadataEntity implements MediaMetadata {
   @OneToMany(type => FaceRegionEntry, faceRegion => faceRegion.media)
   faces: FaceRegionEntry[];
 
-  @Column({type: 'simple-array', select: false, nullable: true,
+  @Column({
+    type: 'simple-array', select: false, nullable: true,
     charset: columnCharsetCS.charset,
-    collation: columnCharsetCS.collation})
+    collation: columnCharsetCS.collation
+  })
   persons: string[]; // Caches the list of persons. Only used for searching
 
   @Column('int', {unsigned: true})

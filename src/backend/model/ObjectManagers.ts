@@ -12,100 +12,100 @@ import {LocationManager} from './database/LocationManager';
 
 export class ObjectManagers {
 
-  private static _instance: ObjectManagers = null;
+  private static instance: ObjectManagers = null;
 
-  private _galleryManager: IGalleryManager;
-  private _userManager: IUserManager;
-  private _searchManager: ISearchManager;
-  private _sharingManager: ISharingManager;
-  private _indexingManager: IIndexingManager;
-  private _personManager: IPersonManager;
-  private _versionManager: IVersionManager;
-  private _jobManager: IJobManager;
-  private _locationManager: LocationManager;
+  private galleryManager: IGalleryManager;
+  private userManager: IUserManager;
+  private searchManager: ISearchManager;
+  private sharingManager: ISharingManager;
+  private indexingManager: IIndexingManager;
+  private personManager: IPersonManager;
+  private versionManager: IVersionManager;
+  private jobManager: IJobManager;
+  private locationManager: LocationManager;
 
 
   get VersionManager(): IVersionManager {
-    return this._versionManager;
+    return this.versionManager;
   }
 
   set VersionManager(value: IVersionManager) {
-    this._versionManager = value;
+    this.versionManager = value;
   }
 
   get LocationManager(): LocationManager {
-    return this._locationManager;
+    return this.locationManager;
   }
 
   set LocationManager(value: LocationManager) {
-    this._locationManager = value;
+    this.locationManager = value;
   }
 
   get PersonManager(): IPersonManager {
-    return this._personManager;
+    return this.personManager;
   }
 
   set PersonManager(value: IPersonManager) {
-    this._personManager = value;
+    this.personManager = value;
   }
 
   get IndexingManager(): IIndexingManager {
-    return this._indexingManager;
+    return this.indexingManager;
   }
 
   set IndexingManager(value: IIndexingManager) {
-    this._indexingManager = value;
+    this.indexingManager = value;
   }
 
 
   get GalleryManager(): IGalleryManager {
-    return this._galleryManager;
+    return this.galleryManager;
   }
 
   set GalleryManager(value: IGalleryManager) {
-    this._galleryManager = value;
+    this.galleryManager = value;
   }
 
   get UserManager(): IUserManager {
-    return this._userManager;
+    return this.userManager;
   }
 
   set UserManager(value: IUserManager) {
-    this._userManager = value;
+    this.userManager = value;
   }
 
   get SearchManager(): ISearchManager {
-    return this._searchManager;
+    return this.searchManager;
   }
 
   set SearchManager(value: ISearchManager) {
-    this._searchManager = value;
+    this.searchManager = value;
   }
 
   get SharingManager(): ISharingManager {
-    return this._sharingManager;
+    return this.sharingManager;
   }
 
   set SharingManager(value: ISharingManager) {
-    this._sharingManager = value;
+    this.sharingManager = value;
   }
 
   get JobManager(): IJobManager {
-    return this._jobManager;
+    return this.jobManager;
   }
 
   set JobManager(value: IJobManager) {
-    this._jobManager = value;
+    this.jobManager = value;
   }
 
-  public static getInstance() {
-    if (this._instance === null) {
-      this._instance = new ObjectManagers();
+  public static getInstance(): ObjectManagers {
+    if (this.instance === null) {
+      this.instance = new ObjectManagers();
     }
-    return this._instance;
+    return this.instance;
   }
 
-  public static async reset() {
+  public static async reset(): Promise<void> {
     if (ObjectManagers.getInstance().IndexingManager &&
       ObjectManagers.getInstance().IndexingManager.IsSavingInProgress) {
       await ObjectManagers.getInstance().IndexingManager.SavingReady;
@@ -114,16 +114,16 @@ export class ObjectManagers {
       ObjectManagers.getInstance().JobManager.stopSchedules();
     }
     await SQLConnection.close();
-    this._instance = null;
+    this.instance = null;
   }
 
 
-  public static async InitCommonManagers() {
+  public static async InitCommonManagers(): Promise<void> {
     const JobManager = require('./jobs/JobManager').JobManager;
     ObjectManagers.getInstance().JobManager = new JobManager();
   }
 
-  public static async InitMemoryManagers() {
+  public static async InitMemoryManagers(): Promise<void> {
     await ObjectManagers.reset();
     const GalleryManager = require('./database/memory/GalleryManager').GalleryManager;
     const UserManager = require('./database/memory/UserManager').UserManager;
@@ -143,7 +143,7 @@ export class ObjectManagers {
     this.InitCommonManagers();
   }
 
-  public static async InitSQLManagers() {
+  public static async InitSQLManagers(): Promise<void> {
     await ObjectManagers.reset();
     await SQLConnection.init();
     const GalleryManager = require('./database/sql/GalleryManager').GalleryManager;

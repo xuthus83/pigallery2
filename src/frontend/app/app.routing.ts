@@ -1,4 +1,4 @@
-import {ModuleWithProviders} from '@angular/core';
+import {NgModule} from '@angular/core';
 import {RouterModule, Routes, UrlMatchResult, UrlSegment} from '@angular/router';
 import {LoginComponent} from './ui/login/login.component';
 import {GalleryComponent} from './ui/gallery/gallery.component';
@@ -40,7 +40,7 @@ export function galleryMatcherFunction(
   return null;
 }
 
-const ROUTES: Routes = [
+const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent
@@ -73,7 +73,10 @@ const ROUTES: Routes = [
   {path: '**', redirectTo: '/login', pathMatch: 'full'}
 ];
 
-export const appRoutes: ModuleWithProviders = RouterModule.forRoot(ROUTES, {
-  anchorScrolling: 'enabled'
-});
 
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
+})
+export class AppRoutingModule {
+}
