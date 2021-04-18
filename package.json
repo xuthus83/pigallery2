@@ -48,7 +48,7 @@
     "locale": "0.1.0",
     "node-geocoder": "3.27.0",
     "reflect-metadata": "0.1.13",
-    "sharp": "0.27.2",
+    "sharp": "0.23.4",
     "sqlite3": "5.0.0",
     "ts-exif-parser": "0.2.1",
     "ts-node-iptc": "1.0.11",
@@ -92,7 +92,7 @@
     "@types/jsonwebtoken": "8.5.1",
     "@types/node": "14.14.37",
     "@types/node-geocoder": "3.24.1",
-    "@types/sharp": "0.28.0",
+    "@types/sharp": "0.23.1",
     "@types/winston": "2.4.4",
     "@types/xml2js": "0.4.8",
     "@yaga/leaflet-ng2": "1.0.0",
@@ -140,6 +140,9 @@
     "xlf-google-translate": "1.0.0-beta.21",
     "xml2js": "0.4.23",
     "zone.js": "0.11.4"
+  },
+  "//": {
+    "TODO":"sharp 0.28.1 fails arm/v7 build as Prebuilt libvips 8.10.6 binaries are not yet available for linuxmusl-armv7. https://sharp.pixelplumbing.com/install"
   },
   "optionalDependencies": {
     "@ffmpeg-installer/ffmpeg": "1.0.20",
