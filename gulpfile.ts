@@ -35,16 +35,14 @@ const getSwitch = (name: string, def: string = null): string => {
   return def;
 };
 
-gulp.task('build-backend', function(): any {
-  return gulp.src([
+gulp.task('build-backend', (): any =>
+  gulp.src([
     'src/common/**/*.ts',
     'src/backend/**/*.ts',
     'benchmark/**/*.ts'], {base: '.'})
     .pipe(tsBackendProject())
     .js
-    .pipe(gulp.dest('./release'));
-
-});
+    .pipe(gulp.dest('./release')));
 
 
 const createDynamicTranslationFile = async (language: string): Promise<void> => {
@@ -137,69 +135,70 @@ const getLanguages = (): any[] | string[] => {
 gulp.task('build-frontend', ((): any => {
   const tasks = [];
   createFrontendTask('build-frontend-release default', 'all',
-    'ng build --prod  --no-progress');
+    'ng build --prod  --no-progress  --output-path=./release/dist');
   tasks.push('build-frontend-release default');
   return gulp.series(...tasks);
 })());
 
-gulp.task('copy-static', function(): any {
-  return gulp.src([
-    'src/backend/model/diagnostics/blank.jpg',
-    'README.md',
-    //  'package-lock.json', should not add, it keeps optional packages optional even with --force-opt-packages.
-    'LICENSE'], {base: '.'})
-    .pipe(gulp.dest('./release'));
-});
+gulp.task('copy-static', (): any => gulp.src([
+  'src/backend/model/diagnostics/blank.jpg',
+  'README.md',
+  //  'package-lock.json', should not add, it keeps optional packages optional even with --force-opt-packages.
+  'LICENSE'], {base: '.'})
+  .pipe(gulp.dest('./release')));
 
-gulp.task('copy-package', function(): any {
-  return gulp.src([
-    'package.json'], {base: '.'})
-    .pipe(jeditor((json: {
-      devDependencies: { [key: string]: string },
-      scripts: { [key: string]: string },
-      dependencies: { [key: string]: string },
-      optionalDependencies: { [key: string]: string },
-      buildTime: string,
-      buildCommitHash: string
-    }): { devDependencies: { [p: string]: string }; scripts: { [p: string]: string }; dependencies: { [p: string]: string }; optionalDependencies: { [p: string]: string }; buildTime: string; buildCommitHash: string } => {
-      delete json.devDependencies;
-      json.scripts = {start: 'node ./src/backend/index.js'};
+gulp.task('copy-package', (): any => gulp.src([
+  'package.json'], {base: '.'})
+  .pipe(jeditor((json: {
+    devDependencies: { [key: string]: string },
+    scripts: { [key: string]: string },
+    dependencies: { [key: string]: string },
+    optionalDependencies: { [key: string]: string },
+    buildTime: string,
+    buildCommitHash: string
+  }): {
+    devDependencies: { [p: string]: string };
+    scripts: { [p: string]: string };
+    dependencies: { [p: string]: string };
+    optionalDependencies: { [p: string]: string };
+    buildTime: string; buildCommitHash: string
+  } => {
+    delete json.devDependencies;
+    json.scripts = {start: 'node ./src/backend/index.js'};
 
-      if (getSwitch('skip-opt-packages')) {
-        const skipPackages = getSwitch('skip-opt-packages').split(',');
-        for (const pkg of skipPackages) {
-          for (const key of Object.keys(json.optionalDependencies)) {
-            if (key.indexOf(pkg) !== -1) {
-              delete json.optionalDependencies[key];
-            }
+    if (getSwitch('skip-opt-packages')) {
+      const skipPackages = getSwitch('skip-opt-packages').split(',');
+      for (const pkg of skipPackages) {
+        for (const key of Object.keys(json.optionalDependencies)) {
+          if (key.indexOf(pkg) !== -1) {
+            delete json.optionalDependencies[key];
           }
         }
       }
+    }
 
-      if (!!getSwitch('force-opt-packages')) {
-        for (const key of Object.keys(json.optionalDependencies)) {
-          json.dependencies[key] = json.optionalDependencies[key];
-        }
-        delete json.optionalDependencies;
+    if (!!getSwitch('force-opt-packages')) {
+      for (const key of Object.keys(json.optionalDependencies)) {
+        json.dependencies[key] = json.optionalDependencies[key];
       }
-      json.buildTime = (new Date()).toISOString();
+      delete json.optionalDependencies;
+    }
+    json.buildTime = (new Date()).toISOString();
 
-      try {
-        json.buildCommitHash = require('child_process').execSync('git rev-parse HEAD').toString().trim();
-      } catch (e) {
-      }
+    try {
+      json.buildCommitHash = require('child_process').execSync('git rev-parse HEAD').toString().trim();
+    } catch (e) {
+    }
 
-      return json;
-    }))
-    .pipe(gulp.dest('./release'));
-});
+    return json;
+  }))
+  .pipe(gulp.dest('./release')));
 
 
-gulp.task('zip-release', function(): any {
-  return gulp.src(['release/**/*'], {base: './release'})
+gulp.task('zip-release', (): any =>
+  gulp.src(['release/**/*'], {base: './release'})
     .pipe(zip('pigallery2.zip'))
-    .pipe(gulp.dest('.'));
-});
+    .pipe(gulp.dest('.')));
 
 gulp.task('create-release', gulp.series('build-frontend', 'build-backend', 'copy-static', 'copy-package', 'zip-release'));
 
@@ -277,10 +276,10 @@ const merge = async (list: any[], cb: (err?: any) => void): Promise<void> => {
   }
 };
 
-gulp.task('update-translation-only', function(cb): void {
+gulp.task('update-translation-only', (cb): void => {
   translate(getLanguages(), cb).catch(console.error);
 });
-gulp.task('merge-translation-only', function(cb): void {
+gulp.task('merge-translation-only', (cb): void => {
   merge(getLanguages(), cb).catch(console.error);
 });
 
