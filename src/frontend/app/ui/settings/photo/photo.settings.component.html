@@ -33,6 +33,15 @@
         required="true">
       </app-settings-entry>
 
+      <app-settings-entry
+        name="Load full resolution image on zoom"
+        description="Enables loading the full resolution image on zoom in the ligthbox (preview)."
+        i18n-description i18n-name
+        [ngModel]="states.client.loadFullImageOnZoom"
+        [simplifiedMode]="simplifiedMode"
+        [disabled]="!states.client.Converting.enabled.value">
+      </app-settings-entry>
+
 
       <button class="btn btn-success float-right"
               [disabled]="!settingsForm.form.valid || !changed || inProgress"

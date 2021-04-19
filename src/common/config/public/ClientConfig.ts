@@ -123,6 +123,8 @@ export class PhotoConvertingConfig {
 export class ClientPhotoConfig {
   @ConfigProperty()
   Converting: PhotoConvertingConfig = new PhotoConvertingConfig();
+  @ConfigProperty({description: 'Enables loading the full resolution image on zoom in the ligthbox (preview).'})
+  loadFullImageOnZoom: boolean = true;
 }
 
 @SubConfigClass()

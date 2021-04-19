@@ -2736,6 +2736,14 @@
         <source>Forever</source>
         <target>Örökké</target>
       </trans-unit>
+      <trans-unit id="9104939499698249234" datatype="html">
+        <source>Load full resolution image on zoom</source>
+        <target>Load full resolution image on zoom</target>
+      </trans-unit>
+      <trans-unit id="6870206109332559881" datatype="html">
+        <source>Enables loading the full resolution image on zoom in the ligthbox (preview).</source>
+        <target>Enables loading the full resolution image on zoom in the ligthbox (preview).</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

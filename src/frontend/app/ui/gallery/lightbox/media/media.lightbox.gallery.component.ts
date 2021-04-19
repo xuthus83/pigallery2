@@ -1,6 +1,6 @@
 import {Component, ElementRef, EventEmitter, Input, OnChanges, Output, ViewChild} from '@angular/core';
 import {GridMedia} from '../../grid/GridMedia';
-import {MediaDTO, MediaDTOUtils} from '../../../../../../common/entities/MediaDTO';
+import {MediaDTOUtils} from '../../../../../../common/entities/MediaDTO';
 import {DomSanitizer, SafeStyle} from '@angular/platform-browser';
 import {SupportedFormats} from '../../../../../../common/SupportedFormats';
 import {Config} from '../../../../../../common/config/public/Config';
@@ -164,7 +164,8 @@ export class GalleryLightboxMediaComponent implements OnChanges {
       return;
     }
 
-    if (this.zoom === 1) {
+    if (this.zoom === 1 ||
+      Config.Client.Media.Photo.loadFullImageOnZoom === false) {
       if (this.photo.src == null) {
         if (Config.Client.Media.Photo.Converting.enabled === true) {
           this.photo.src = this.gridMedia.getBestFitMediaPath();
