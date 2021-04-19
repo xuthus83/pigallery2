@@ -56,7 +56,7 @@ export class AutoCompleteService {
 
     const type = this.getTypeFromPrefix(text.current);
     const searchText = this.getPrefixLessSearchText(text.current);
-    if (searchText === '') {
+    if (searchText === '' || searchText === '.') {
       return items;
     }
     this.typedAutoComplete(searchText, text.current, type, items);

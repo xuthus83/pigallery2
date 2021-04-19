@@ -1,11 +1,8 @@
 import {Component, ElementRef, EventEmitter, forwardRef, OnDestroy, Output, ViewChild} from '@angular/core';
-import {ActivatedRoute, Router, RouterLink} from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 import {BehaviorSubject, Subscription} from 'rxjs';
 import {AutoCompleteService, RenderableAutoCompleteItem} from '../autocomplete.service';
 import {MetadataSearchQueryTypes, SearchQueryTypes} from '../../../../../../common/entities/SearchQueryDTO';
-import {SearchQueryParserService} from '../search-query-parser.service';
-import {GalleryService} from '../../gallery.service';
-import {NavigationService} from '../../../../model/navigation.service';
 import {Config} from '../../../../../../common/config/public/Config';
 import {ControlValueAccessor, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator} from '@angular/forms';
 
@@ -47,10 +44,6 @@ export class GallerySearchFieldComponent implements ControlValueAccessor, Valida
   private autoCompleteItems: BehaviorSubject<RenderableAutoCompleteItem[]>;
 
   constructor(private autoCompleteService: AutoCompleteService,
-              private searchQueryParserService: SearchQueryParserService,
-              private galleryService: GalleryService,
-              private navigationService: NavigationService,
-              private route: ActivatedRoute,
               public router: Router) {
 
     this.SearchQueryTypes = SearchQueryTypes;

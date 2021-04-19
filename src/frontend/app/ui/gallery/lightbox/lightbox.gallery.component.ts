@@ -9,7 +9,7 @@ import {Subscription} from 'rxjs';
 import {ActivatedRoute, Params, Router} from '@angular/router';
 import {PageHelper} from '../../../model/page.helper';
 import {QueryService} from '../../../model/query.service';
-import {MediaBaseDTO, MediaDTO} from '../../../../../common/entities/MediaDTO';
+import {MediaBaseDTO} from '../../../../../common/entities/MediaDTO';
 import {QueryParams} from '../../../../../common/QueryParams';
 import {GalleryService} from '../gallery.service';
 import {PhotoDTO} from '../../../../../common/entities/PhotoDTO';
@@ -157,7 +157,7 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
     }
   }
 
-//noinspection JSUnusedGlobalSymbols
+
   @HostListener('window:resize', ['$event'])
   onResize(): void {
     this.updatePhotoFrameDim();
@@ -340,11 +340,14 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
     this.photoFrameDim.width = Math.max(window.innerWidth - this.infoPanelWidth, 0);
     this.photoFrameDim.height = window.innerHeight;
     this.photoFrameDim.aspect = Math.round(this.photoFrameDim.width / this.photoFrameDim.height * 100) / 100;
-  }
+  };
 
   private navigateToPhoto(photoIndex: number): void {
     this.router.navigate([],
-      {queryParams: this.queryService.getParams(this.gridPhotoQL.toArray()[photoIndex].gridMedia.media)}).catch(console.error);
+      {
+        queryParams:
+          this.queryService.getParams(this.gridPhotoQL.toArray()[photoIndex].gridMedia.media)
+      }).catch(console.error);
   }
 
   private showPhoto(photoIndex: number, resize: boolean = true): void {
