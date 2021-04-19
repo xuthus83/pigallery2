@@ -32,7 +32,8 @@ export class ShareLoginComponent implements OnInit {
       await this.authService.shareLogin(this.password);
 
     } catch (error) {
-      if (error && error.code === ErrorCodes.CREDENTIAL_NOT_FOUND) {
+      if (error && error.code === ErrorCodes.CREDENTIAL_NOT_FOUND ||
+        error === 'Unauthorized') {
         this.loginError = true;
       }
     }

@@ -60,6 +60,11 @@ export class GalleryComponent implements OnInit, OnDestroy {
     if (this.shareService.sharingSubject.value == null) {
       return;
     }
+    // if the timer is longer than 10 years, just do not show it
+    if ((this.shareService.sharingSubject.value.expires - Date.now()) / 1000 / 86400 / 365 > 10) {
+      return;
+    }
+
     t = Math.floor((this.shareService.sharingSubject.value.expires - Date.now()) / 1000);
     this.countDown = ({} as any);
     this.countDown.day = Math.floor(t / 86400);
@@ -132,7 +137,7 @@ export class GalleryComponent implements OnInit, OnDestroy {
     directoryName = directoryName || '';
 
     this.galleryService.loadDirectory(directoryName);
-  }
+  };
 
   private onContentChange = (content: ContentWrapper): void => {
     const tmp = (content.searchResult || content.directory || {
@@ -153,7 +158,7 @@ export class GalleryComponent implements OnInit, OnDestroy {
         break;
       }
     }
-  }
+  };
 
   private sortDirectories(): void {
     if (!this.directories) {

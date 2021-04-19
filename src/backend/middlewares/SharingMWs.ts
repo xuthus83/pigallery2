@@ -55,7 +55,9 @@ export class SharingMWs {
       path: directoryName,
       password: createSharing.password,
       creator: req.session.user,
-      expires: Date.now() + createSharing.valid,
+      expires: createSharing.valid >= 0 ? // if === -1 its forever
+        Date.now() + createSharing.valid :
+        (new Date(9999, 0, 1)).getTime(), // never expire
       includeSubfolders: createSharing.includeSubfolders,
       timeStamp: Date.now()
     };
@@ -86,7 +88,9 @@ export class SharingMWs {
       sharingKey: '',
       password: (updateSharing.password && updateSharing.password !== '') ? updateSharing.password : null,
       creator: req.session.user,
-      expires: Date.now() + updateSharing.valid,
+      expires: updateSharing.valid >= 0 // if === -1 its forever
+        ? Date.now() + updateSharing.valid :
+        (new Date(9999, 0, 1)).getTime(), // never expire
       includeSubfolders: updateSharing.includeSubfolders,
       timeStamp: Date.now()
     };

@@ -26,7 +26,7 @@ export class GalleryShareComponent implements OnInit, OnDestroy {
     includeSubfolders: true,
     valid: {
       amount: 30,
-      type: ValidityTypes.Days
+      type: ValidityTypes.Days as ValidityTypes
     },
     password: null as string
   };
@@ -79,6 +79,8 @@ export class GalleryShareComponent implements OnInit, OnDestroy {
         return this.input.valid.amount * 1000 * 60 * 60 * 24;
       case ValidityTypes.Months:
         return this.input.valid.amount * 1000 * 60 * 60 * 24 * 30;
+      case ValidityTypes.Forever:
+        return -1;
     }
     throw new Error('unknown type: ' + this.input.valid.type);
   }
@@ -124,5 +126,5 @@ export class GalleryShareComponent implements OnInit, OnDestroy {
 
 
 export enum ValidityTypes {
-  Minutes = 1, Hours = 2, Days = 3, Months = 4
+  Minutes = 1, Hours = 2, Days = 3, Months = 4, Forever = 99
 }
