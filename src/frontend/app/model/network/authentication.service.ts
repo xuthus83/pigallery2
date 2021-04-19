@@ -3,12 +3,12 @@ import {UserDTO, UserRoles} from '../../../../common/entities/UserDTO';
 import {BehaviorSubject} from 'rxjs';
 import {UserService} from './user.service';
 import {LoginCredential} from '../../../../common/entities/LoginCredential';
-import {Cookie} from 'ng2-cookies';
 import {Config} from '../../../../common/config/public/Config';
 import {NetworkService} from './network.service';
 import {ErrorCodes, ErrorDTO} from '../../../../common/entities/Error';
 import {CookieNames} from '../../../../common/CookieNames';
 import {ShareService} from '../../ui/gallery/share.service';
+import { CookieService } from 'ngx-cookie-service';
 
 /* Injected config / user from server side */
 // tslint:disable-next-line:no-internal-module no-namespace
@@ -23,11 +23,12 @@ export class AuthenticationService {
 
   constructor(private userService: UserService,
               private networkService: NetworkService,
-              private shareService: ShareService) {
+              private shareService: ShareService,
+              private cookieService: CookieService) {
     this.user = new BehaviorSubject(null);
 
     // picking up session..
-    if (this.isAuthenticated() === false && Cookie.get(CookieNames.session) != null) {
+    if (this.isAuthenticated() === false && this.cookieService.get(CookieNames.session) != null) {
       if (typeof ServerInject !== 'undefined' && typeof ServerInject.user !== 'undefined') {
         this.user.next(ServerInject.user);
       }

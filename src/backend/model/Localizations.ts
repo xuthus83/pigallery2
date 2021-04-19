@@ -13,7 +13,7 @@ export class Localizations {
     const dirCont = fs.readdirSync(ProjectPath.FrontendFolder)
       .filter((f): any => fs.statSync(path.join(ProjectPath.FrontendFolder, f)).isDirectory());
     Config.Client.languages = dirCont.filter((d): boolean => notLanguage.indexOf(d) === -1);
-    Config.Client.languages.push('en');
+    Config.Client.languages.sort();
   }
 
 }

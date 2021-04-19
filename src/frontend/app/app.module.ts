@@ -97,6 +97,7 @@ import {AutoCompleteService} from './ui/gallery/search/autocomplete.service';
 import {SearchQueryParserService} from './ui/gallery/search/search-query-parser.service';
 import {GallerySearchFieldComponent} from './ui/gallery/search/search-field/search-field.gallery.component';
 import {AppRoutingModule} from './app.routing';
+import {CookieService} from 'ngx-cookie-service';
 
 
 @Injectable()
@@ -239,7 +240,8 @@ export class CustomUrlSerializer implements UrlSerializer {
     FacesService,
     VersionService,
     ScheduledJobsService,
-    BackendtextService
+    BackendtextService,
+    CookieService
   ],
   bootstrap: [AppComponent]
 })
