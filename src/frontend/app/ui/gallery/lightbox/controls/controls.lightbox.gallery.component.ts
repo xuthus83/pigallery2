@@ -1,5 +1,5 @@
 import {Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
-import {MediaDTO, MediaDTOUtils} from '../../../../../../common/entities/MediaDTO';
+import {MediaDTOUtils} from '../../../../../../common/entities/MediaDTO';
 import {FullScreenService} from '../../fullscreen.service';
 import {GalleryPhotoComponent} from '../../grid/photo/photo.grid.gallery.component';
 import {Observable, Subscription, timer} from 'rxjs';
@@ -370,7 +370,7 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
 
   private hideControls = () => {
     this.controllersDimmed = true;
-  }
+  };
 
   private updateFaceContainerDim(): void {
     if (!this.activePhoto) {

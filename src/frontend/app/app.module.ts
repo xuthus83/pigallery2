@@ -1,5 +1,5 @@
 import {Injectable, NgModule} from '@angular/core';
-import {BrowserModule, HAMMER_GESTURE_CONFIG, HammerGestureConfig} from '@angular/platform-browser';
+import {BrowserModule, HAMMER_GESTURE_CONFIG, HammerGestureConfig, HammerModule} from '@angular/platform-browser';
 import {FormsModule} from '@angular/forms';
 import {AppComponent} from './app.component';
 import {UserService} from './model/network/user.service';
@@ -129,6 +129,7 @@ export class CustomUrlSerializer implements UrlSerializer {
 @NgModule({
   imports: [
     BrowserModule,
+    HammerModule,
     FormsModule,
     HttpClientModule,
     BrowserAnimationsModule,
