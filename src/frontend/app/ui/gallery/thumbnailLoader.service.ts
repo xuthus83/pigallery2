@@ -3,7 +3,8 @@ import {GalleryCacheService} from './cache.gallery.service';
 import {Media} from './Media';
 import {MediaIcon} from './MediaIcon';
 import {Config} from '../../../../common/config/public/Config';
-import {Person, PersonDTO} from '../../../../common/entities/PersonDTO';
+import {PersonDTO} from '../../../../common/entities/PersonDTO';
+import {Person} from '../faces/Person';
 
 export enum ThumbnailLoadingPriority {
   extraHigh = 4, high = 3, medium = 2, low = 1
@@ -51,7 +52,7 @@ export class ThumbnailLoaderService {
     };
 
     curImg.src = task.path;
-  }
+  };
 
   removeTask(taskEntry: ThumbnailTaskEntity): void {
 

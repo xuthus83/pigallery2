@@ -2,7 +2,8 @@ import {Injectable} from '@angular/core';
 import {ThumbnailLoaderService, ThumbnailLoadingListener, ThumbnailLoadingPriority, ThumbnailTaskEntity} from './thumbnailLoader.service';
 import {Media} from './Media';
 import {MediaIcon} from './MediaIcon';
-import {Person, PersonDTO} from '../../../../common/entities/PersonDTO';
+import {PersonDTO} from '../../../../common/entities/PersonDTO';
+import {Person} from '../faces/Person';
 
 
 @Injectable()

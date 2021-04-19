@@ -13,17 +13,3 @@ export interface PersonDTO {
 }
 
 
-export class Person implements PersonDTO {
-  isFavourite: boolean;
-  count: number;
-  id: number;
-  name: string;
-
-
-  constructor() {
-  }
-
-  public static getThumbnailUrl(that: PersonDTO): string {
-    return '/api/person/' + that.name + '/thumbnail';
-  }
-}
