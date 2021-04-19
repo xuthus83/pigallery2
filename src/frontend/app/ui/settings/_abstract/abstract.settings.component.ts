@@ -51,7 +51,7 @@ export abstract class SettingsComponentDirective<T extends { [key: string]: any 
   public inProgress = false;
   public error: string = null;
   public changed = false;
-  public states: RecursiveState =  {} as any;
+  public states: RecursiveState = {} as any;
 
 
   private subscription: Subscription = null;
@@ -100,7 +100,7 @@ export abstract class SettingsComponentDirective<T extends { [key: string]: any 
     };
     addOriginal(this.states);
     this.ngOnChanges();
-  }
+  };
 
   settingsSame(newSettings: T, original: T): boolean {
     if (typeof original !== 'object' || original == null) {
@@ -133,6 +133,8 @@ export abstract class SettingsComponentDirective<T extends { [key: string]: any 
   onOptionChange = () => {
     setTimeout(() => {
       const settingsSame = (state: RecursiveState): boolean => {
+
+
         if (typeof state === 'undefined') {
           return true;
         }
@@ -142,7 +144,9 @@ export abstract class SettingsComponentDirective<T extends { [key: string]: any 
         if (typeof state.original !== 'undefined') {
           return state.value === state.original;
         }
+
         const keys = Object.keys(state);
+
         for (const key of keys) {
           if (settingsSame(state[key]) === false) {
             return false;
@@ -154,7 +158,7 @@ export abstract class SettingsComponentDirective<T extends { [key: string]: any 
 
       this.changed = !settingsSame(this.states);
     }, 0);
-  }
+  };
 
   ngOnInit(): void {
     if (!this.authService.isAuthenticated() ||
