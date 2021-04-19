@@ -212,13 +212,22 @@ export class GalleryGridComponent implements OnChanges, OnInit, AfterViewInit, O
     }
   }
 
+  /**
+   * Makes sure that the photo with the given mediaString is visible on the screen
+   * @param mediaStringId
+   * @private
+   */
   private renderUpToMedia(mediaStringId: string): void {
     const index = this.media.findIndex((p): boolean => this.queryService.getMediaStringId(p) === mediaStringId);
     if (index === -1) {
       this.router.navigate([], {queryParams: this.queryService.getParams()});
       return;
     }
-    while (this.renderedPhotoIndex < index && this.renderARow()) {
+    // Make sure that at leas one more photo is rendered
+    // It is possible that only the last few pixels of a photo is visible,
+    // so not required to render more, but the scrollbar does not trigger more photos to render
+    // (on ligthbox navigation)
+    while (this.renderedPhotoIndex - 1 < (index + 1) && this.renderARow() !== null) {
     }
   }
 
@@ -265,6 +274,8 @@ export class GalleryGridComponent implements OnChanges, OnInit, AfterViewInit, O
 
   }
 
+  // TODO: This is deprecated,
+  // we do not post update galleries anymore since the preview member in the DriectoryDTO
   private mergeNewPhotos(): void {
     // merge new data with old one
     let lastSameIndex = 0;
