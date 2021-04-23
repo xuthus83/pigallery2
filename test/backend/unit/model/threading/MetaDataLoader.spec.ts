@@ -26,6 +26,11 @@ describe('MetadataLoader', () => {
     expect(Utils.clone(data)).to.be.deep.equal(expected);
   });
 
+  it('should load xmp section dc:subject into keywords', async () => { 
+    const data = await MetadataLoader.loadPhotoMetadata(path.join(__dirname, '/../../../assets/xmp/xmp_subject.jpg')); 
+    const expected = require(path.join(__dirname, '/../../../assets/xmp/xmp_subject.json')); 
+    expect(Utils.clone(data)).to.be.deep.equal(expected); 
+  }); 
 
   it('should load jpg 2', async () => {
     const data = await MetadataLoader.loadPhotoMetadata(path.join(__dirname, '/../../../assets/old_photo.jpg'));
