@@ -7,6 +7,8 @@ import {Config} from '../../../../../../common/config/public/Config';
 import {PageHelper} from '../../../../model/page.helper';
 import {PhotoDTO, PhotoMetadata} from '../../../../../../common/entities/PhotoDTO';
 import {SearchQueryTypes, TextSearch, TextSearchQueryMatchTypes} from '../../../../../../common/entities/SearchQueryDTO';
+import {UserRoles} from '../../../../../../common/entities/UserDTO';
+import {AuthenticationService} from '../../../../model/network/authentication.service';
 
 @Component({
   selector: 'app-gallery-grid-photo',
@@ -29,8 +31,9 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, OnDestroy {
 
   wasInView: boolean = null;
 
-  constructor(private thumbnailService: ThumbnailManagerService) {
-    this.searchEnabled = Config.Client.Search.enabled;
+  constructor(private thumbnailService: ThumbnailManagerService,
+              private authService: AuthenticationService) {
+    this.searchEnabled = Config.Client.Search.enabled && this.authService.canSearch();
   }
 
   get ScrollListener(): boolean {

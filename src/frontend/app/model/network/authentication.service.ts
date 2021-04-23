@@ -8,7 +8,7 @@ import {NetworkService} from './network.service';
 import {ErrorCodes, ErrorDTO} from '../../../../common/entities/Error';
 import {CookieNames} from '../../../../common/CookieNames';
 import {ShareService} from '../../ui/gallery/share.service';
-import { CookieService } from 'ngx-cookie-service';
+import {CookieService} from 'ngx-cookie-service';
 
 /* Injected config / user from server side */
 // tslint:disable-next-line:no-internal-module no-namespace
@@ -83,6 +83,10 @@ export class AuthenticationService {
 
   public isAuthorized(role: UserRoles): boolean {
     return this.user.value && this.user.value.role >= role;
+  }
+
+  public canSearch(): boolean {
+    return this.isAuthorized(UserRoles.Guest);
   }
 
   public async logout(): Promise<void> {

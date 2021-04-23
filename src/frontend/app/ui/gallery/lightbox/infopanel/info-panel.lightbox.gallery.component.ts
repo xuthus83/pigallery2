@@ -7,6 +7,7 @@ import {Utils} from '../../../../../../common/Utils';
 import {QueryService} from '../../../../model/query.service';
 import {MapService} from '../../map/map.service';
 import {SearchQueryTypes, TextSearch, TextSearchQueryMatchTypes} from '../../../../../../common/entities/SearchQueryDTO';
+import {AuthenticationService} from '../../../../model/network/authentication.service';
 
 @Component({
   selector: 'app-info-panel',
@@ -23,9 +24,10 @@ export class InfoPanelLightboxComponent implements OnInit {
   readonly SearchQueryTypes: typeof SearchQueryTypes = SearchQueryTypes;
 
   constructor(public queryService: QueryService,
-              public mapService: MapService) {
+              public mapService: MapService,
+              private authService: AuthenticationService) {
     this.mapEnabled = Config.Client.Map.enabled;
-    this.searchEnabled = Config.Client.Search.enabled;
+    this.searchEnabled = Config.Client.Search.enabled && this.authService.canSearch();
   }
 
   get FullPath(): string {

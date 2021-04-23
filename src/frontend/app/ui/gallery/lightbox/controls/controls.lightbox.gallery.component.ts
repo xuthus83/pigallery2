@@ -8,6 +8,7 @@ import {PhotoDTO} from '../../../../../../common/entities/PhotoDTO';
 import {GalleryLightboxMediaComponent} from '../media/media.lightbox.gallery.component';
 import {Config} from '../../../../../../common/config/public/Config';
 import {SearchQueryTypes, TextSearch, TextSearchQueryMatchTypes} from '../../../../../../common/entities/SearchQueryDTO';
+import {AuthenticationService} from '../../../../model/network/authentication.service';
 
 export enum PlayBackStates {
   Paused = 1,
@@ -48,13 +49,16 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
   public drag = {x: 0, y: 0};
   public SearchQueryTypes = SearchQueryTypes;
   public faceContainerDim = {width: 0, height: 0};
+  public searchEnabled: boolean;
   private visibilityTimer: number = null;
   private timer: Observable<number>;
   private timerSub: Subscription;
   private prevDrag = {x: 0, y: 0};
   private prevZoom = 1;
 
-  constructor(public fullScreenService: FullScreenService) {
+  constructor(public fullScreenService: FullScreenService,
+              private authService: AuthenticationService) {
+    this.searchEnabled = Config.Client.Search.enabled && this.authService.canSearch();
   }
 
   public get Zoom(): number {

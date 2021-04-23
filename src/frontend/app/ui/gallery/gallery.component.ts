@@ -99,9 +99,9 @@ export class GalleryComponent implements OnInit, OnDestroy {
 
       return this.navigation.toLogin();
     }
-    this.showSearchBar = Config.Client.Search.enabled && this.authService.isAuthorized(UserRoles.Guest);
+    this.showSearchBar = Config.Client.Search.enabled && this.authService.canSearch();
     this.showShare = Config.Client.Sharing.enabled && this.authService.isAuthorized(UserRoles.User);
-    this.showRandomPhotoBuilder = Config.Client.RandomPhoto.enabled && this.authService.isAuthorized(UserRoles.Guest);
+    this.showRandomPhotoBuilder = Config.Client.RandomPhoto.enabled && this.authService.isAuthorized(UserRoles.User);
     this.subscription.content = this.galleryService.content.subscribe(this.onContentChange);
     this.subscription.route = this.route.params.subscribe(this.onRoute);
 
