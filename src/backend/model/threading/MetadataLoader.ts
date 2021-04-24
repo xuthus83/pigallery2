@@ -216,7 +216,11 @@ export class MetadataLoader {
               if (exif.Rating) {
                 metadata.rating = (parseInt(exif.Rating.value, 10) as any);
               }
-
+	      if(exif.subject && exif.subject.value){
+                for(let i=0; i < exif.subject.value.length; i++){
+                  metadata.keywords.push(exif.subject.value[i].value);
+                }
+              }
               if (exif.Orientation) {
                 metadata.orientation = (parseInt(exif.Orientation.value as any, 10) as any);
                 if (OrientationTypes.BOTTOM_LEFT < metadata.orientation) {

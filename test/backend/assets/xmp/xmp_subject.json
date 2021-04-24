@@ -1,10 +1,22 @@
 {
+  "cameraData": {
+    "ISO": 50,
+    "exposure": 0.007751937984496124,
+    "fStop": 2.4,
+    "focalLength": 4.32,
+    "make": "samsung",
+    "model": "SM-G975F"
+  },
+  "creationDate": 1614703656000,
+  "fileSize": 7909,
+  "orientation": 1,
+  "rating": 50,
+  "Rating": 3,
   "keywords": [
     "Max",
     "Spaß",
     "Yanik"
   ],
-  "Rating": 3,
   "size": {
     "height": 47,
     "width": 100
