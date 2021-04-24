@@ -216,10 +216,14 @@ export class MetadataLoader {
               if (exif.Rating) {
                 metadata.rating = (parseInt(exif.Rating.value, 10) as any);
               }
-              if(exif.subject && exif.subject.value){
+              if(exif.subject && exif.subject.value && exif.subject.value.length > 0){
+                if(metadata.keywords == undefined) {
+                  metadata.keywords = [];
+                }
                 for(let i=0; i < exif.subject.value.length; i++){
-                  if(metadata.keywords.indexOf(exif.subject.value[i].value) == -1) {
-                    metadata.keywords.push(exif.subject.value[i].value);
+                  const kw = exif.subject.value[i].description;
+                  if(metadata.keywords.indexOf(kw) == -1) {
+                    metadata.keywords.push(kw);
                   }
                 }
               }
