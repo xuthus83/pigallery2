@@ -216,9 +216,11 @@ export class MetadataLoader {
               if (exif.Rating) {
                 metadata.rating = (parseInt(exif.Rating.value, 10) as any);
               }
-	      if(exif.subject && exif.subject.value){
+              if(exif.subject && exif.subject.value){
                 for(let i=0; i < exif.subject.value.length; i++){
-                  metadata.keywords.push(exif.subject.value[i].value);
+                  if(metadata.keywords.indexOf(exif.subject.value[i].value) == -1) {
+                    metadata.keywords.push(exif.subject.value[i].value);
+                  }
                 }
               }
               if (exif.Orientation) {
