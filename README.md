@@ -212,9 +212,12 @@ apt-get install build-essential  libkrb5-dev gcc g++
  
  
 ## 4. Suggest/endorse new features
-  You are welcome to suggest new features to the application via [github issues](https://github.com/bpatrik/pigallery2/issues).
-  I cannot guarantee any deadline with the development of a new feature. (I usually fix bugs within a week/weeks.)
-  I will give a higher priority to a feature that has more 'likes' (i.e.: `+1`-s or thumbs ups) on it.
+  You are welcome to suggest new features to the application via [github issues](https://github.com/bpatrik/pigallery2/issues).  
+  Unfortunatly, lately I only have a limited time for this hobby project of mine. 
+  So, I mostly focuse on those features that are align with my needs. Sorry :(.
+  Although, I try to fixs bugs ASAP (that can still take from a few days to months).
+  I also try to implement some of the feature requests that have a lots of 'likes' (i.e.: `+1`-s or thumbs ups) on it.
+  If you have a feature that you really would like to happen, I welcome contributions to the app. See [CONTRIBUTING.md](https://github.com/bpatrik/pigallery2/blob/master/CONTRIBUTING.md) for more details.
 
 ## 5. Known errors
 * IOS map issue
