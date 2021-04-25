@@ -59,13 +59,19 @@
             "tsConfig": "src/frontend/tsconfig.app.json",
             "polyfills": "src/frontend/polyfills.ts",
             "assets": [
-              "src/frontend/assets"
+              "src/frontend/assets",
+              {
+                "glob": "**/*",
+                "input": "node_modules/leaflet/dist/images/",
+                "output": "./"
+              }
             ],
             "styles": [
               "bootstrap/dist/css/bootstrap.min.css",
               "ngx-bootstrap/datepicker/bs-datepicker.css",
               "open-iconic/font/css/open-iconic-bootstrap.css",
               "ngx-toastr/toastr.css",
+              "leaflet/dist/leaflet.css",
               "src/frontend/styles.css"
             ],
             "scripts": [],
@@ -73,11 +79,8 @@
           },
           "configurations": {
             "dev": {
-              "localize": [
-                "en",
-                "hu"
-              ],
-              "outputPath": "dist",
+              "outputPath": "dist/en",
+              "localize": false,
               "watch": true
             },
             "production": {
@@ -140,10 +143,16 @@
               "bootstrap/dist/css/bootstrap.css",
               "open-iconic/font/css/open-iconic-bootstrap.css",
               "ngx-bootstrap/datepicker/bs-datepicker.css",
+              "leaflet/dist/leaflet.css",
               "src/frontend/styles.css"
             ],
             "assets": [
-              "src/frontend/assets"
+              "src/frontend/assets",
+              {
+                "glob": "**/*",
+                "input": "node_modules/leaflet/dist/images/",
+                "output": "./"
+              }
             ]
           }
         },

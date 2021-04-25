@@ -1,4 +1,4 @@
-<div class="content">
+<div class="content d-flex flex-column">
   <div class="modal-header">
     <h2 class="modal-title" i18n>Info</h2>
     <button type="button" class="close" (click)="close()" aria-label="Close">
@@ -90,19 +90,19 @@
       <span class="details-icon oi oi-tags"></span>
     </div>
     <div class="col-10 keywords">
-        <ng-template ngFor let-keyword [ngForOf]="keywords" let-last="last">
-          <a *ngIf="searchEnabled"
-             [routerLink]="['/search', getTextSearchQuery(keyword.value,keyword.type)]" [ngSwitch]="keyword.type">
-            <ng-template [ngSwitchCase]="SearchQueryTypes.keyword">#</ng-template><!--
+      <ng-template ngFor let-keyword [ngForOf]="keywords" let-last="last">
+        <a *ngIf="searchEnabled"
+           [routerLink]="['/search', getTextSearchQuery(keyword.value,keyword.type)]" [ngSwitch]="keyword.type">
+          <ng-template [ngSwitchCase]="SearchQueryTypes.keyword">#</ng-template><!--
        -->
-            <ng-template [ngSwitchCase]="SearchQueryTypes.person"><span class="oi oi-person"></span></ng-template><!--
+          <ng-template [ngSwitchCase]="SearchQueryTypes.person"><span class="oi oi-person"></span></ng-template><!--
        -->{{keyword.value}}</a>
-          <span *ngIf="!searchEnabled" [ngSwitch]="keyword.type">
+        <span *ngIf="!searchEnabled" [ngSwitch]="keyword.type">
           <ng-template [ngSwitchCase]="SearchQueryTypes.keyword">#</ng-template><!--
        --><ng-template [ngSwitchCase]="SearchQueryTypes.person"><span class="oi oi-person"></span></ng-template><!--
        -->{{keyword.value}}</span>
-          <ng-template [ngIf]="!last">,&#32;</ng-template>
-        </ng-template>
+        <ng-template [ngIf]="!last">,&#32;</ng-template>
+      </ng-template>
     </div>
   </div>
 
@@ -123,20 +123,19 @@
       </div>
     </div>
   </div>
+  <div class="mt-auto" style="height: 400px">
+    <div
+      *ngIf="hasGPS() && mapEnabled"
 
-  <div id="map" *ngIf="hasGPS() && mapEnabled">
-    <yaga-map [zoom]="10"
-              [lat]="PositionData.GPSData.latitude"
-              [lng]="PositionData.GPSData.longitude">
-      <yaga-marker
-        [lat]="PositionData.GPSData.latitude"
-        [lng]="PositionData.GPSData.longitude">
-      </yaga-marker>
-      <yaga-attribution-control
-        prefix=""
-        [attributions]="mapService.Attributions">
-      </yaga-attribution-control>
-      <yaga-tile-layer [url]="mapService.MapLayer"></yaga-tile-layer>
-    </yaga-map>
+      id="map"
+      leaflet
+      [leafletOptions]="{zoom:10,
+          center:{lat:PositionData.GPSData.latitude,
+          lng:PositionData.GPSData.longitude},
+          layers:[baseLayer],
+          zoomControl: false}"
+      [leafletLayers]="markerLayer">
+    </div>
   </div>
+
 </div>

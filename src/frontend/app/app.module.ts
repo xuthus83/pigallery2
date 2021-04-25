@@ -10,7 +10,7 @@ import {FullScreenService} from './ui/gallery/fullscreen.service';
 import {AuthenticationService} from './model/network/authentication.service';
 import {UserMangerSettingsComponent} from './ui/settings/usermanager/usermanager.settings.component';
 import {FrameComponent} from './ui/frame/frame.component';
-import {YagaModule} from '@yaga/leaflet-ng2';
+import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import {LoadingBarModule} from '@ngx-loading-bar/core';
 import {GalleryLightboxMediaComponent} from './ui/gallery/lightbox/media/media.lightbox.gallery.component';
 import {GalleryPhotoLoadingComponent} from './ui/gallery/grid/photo/loading/loading.photo.grid.gallery.component';
@@ -144,9 +144,9 @@ export class CustomUrlSerializer implements UrlSerializer {
     PopoverModule.forRoot(),
     BsDropdownModule.forRoot(),
     BsDatepickerModule.forRoot(),
-    YagaModule,
     TimepickerModule.forRoot(),
-    LoadingBarModule
+    LoadingBarModule,
+    LeafletModule
   ],
   declarations: [AppComponent,
     LoginComponent,

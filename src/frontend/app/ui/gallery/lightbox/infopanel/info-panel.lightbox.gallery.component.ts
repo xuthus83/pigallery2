@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
 import {CameraMetadata, PhotoDTO, PhotoMetadata, PositionMetaData} from '../../../../../../common/entities/PhotoDTO';
 import {Config} from '../../../../../../common/config/public/Config';
 import {MediaDTO, MediaDTOUtils} from '../../../../../../common/entities/MediaDTO';
@@ -8,26 +8,31 @@ import {QueryService} from '../../../../model/query.service';
 import {MapService} from '../../map/map.service';
 import {SearchQueryTypes, TextSearch, TextSearchQueryMatchTypes} from '../../../../../../common/entities/SearchQueryDTO';
 import {AuthenticationService} from '../../../../model/network/authentication.service';
+import {LatLngLiteral, marker, Marker, TileLayer, tileLayer} from 'leaflet';
 
 @Component({
   selector: 'app-info-panel',
   styleUrls: ['./info-panel.lightbox.gallery.component.css'],
   templateUrl: './info-panel.lightbox.gallery.component.html',
 })
-export class InfoPanelLightboxComponent implements OnInit {
+export class InfoPanelLightboxComponent implements OnInit, OnChanges {
   @Input() media: MediaDTO;
   @Output() closed = new EventEmitter();
 
   public readonly mapEnabled: boolean;
   public readonly searchEnabled: boolean;
-  keywords: { value: string, type: SearchQueryTypes }[] = null;
-  readonly SearchQueryTypes: typeof SearchQueryTypes = SearchQueryTypes;
+  public keywords: { value: string, type: SearchQueryTypes }[] = null;
+  public readonly SearchQueryTypes: typeof SearchQueryTypes = SearchQueryTypes;
+
+  public baseLayer: TileLayer;
+  public markerLayer: Marker[] = [];
 
   constructor(public queryService: QueryService,
               public mapService: MapService,
               private authService: AuthenticationService) {
     this.mapEnabled = Config.Client.Map.enabled;
     this.searchEnabled = Config.Client.Search.enabled && this.authService.canSearch();
+    this.baseLayer = tileLayer(mapService.MapLayer, {attribution: mapService.ShortAttributions});
   }
 
   get FullPath(): string {
@@ -51,6 +56,15 @@ export class InfoPanelLightboxComponent implements OnInit {
 
   get CameraData(): CameraMetadata {
     return (this.media as PhotoDTO).metadata.cameraData;
+  }
+
+  ngOnChanges(): void {
+    if (this.hasGPS()) {
+      this.markerLayer = [marker({
+        lat: this.PositionData.GPSData.latitude,
+        lng: this.PositionData.GPSData.longitude
+      } as LatLngLiteral)];
+    }
   }
 
   ngOnInit(): void {
@@ -101,9 +115,9 @@ export class InfoPanelLightboxComponent implements OnInit {
         (this.media as PhotoDTO).metadata.positionData.country);
   }
 
-  hasGPS(): number {
-    return (this.media as PhotoDTO).metadata.positionData && (this.media as PhotoDTO).metadata.positionData.GPSData &&
-      (this.media as PhotoDTO).metadata.positionData.GPSData.latitude && (this.media as PhotoDTO).metadata.positionData.GPSData.longitude;
+  hasGPS(): boolean {
+    return !!((this.media as PhotoDTO).metadata.positionData && (this.media as PhotoDTO).metadata.positionData.GPSData &&
+      (this.media as PhotoDTO).metadata.positionData.GPSData.latitude && (this.media as PhotoDTO).metadata.positionData.GPSData.longitude);
   }
 
   getPositionText(): string {

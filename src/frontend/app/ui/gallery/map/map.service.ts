@@ -25,37 +25,33 @@ export class MapService {
     ];
   }
 
-  public get ShortAttributions(): string[] {
-    const yaga = '<a href="https://yagajs.org" title="YAGA">YAGA</a>';
-    const lf = '<a href="https://leaflet-ng2.yagajs.org" title="Leaflet in Angular2">leaflet-ng2</a>';
+  public get ShortAttributions(): string {
     const OSM = '<a href="https://www.openstreetmap.org/copyright">OSM</a>';
     const MB = '<a href="https://www.mapbox.com/">Mapbox</a>';
 
 
     if (Config.Client.Map.mapProvider === MapProviders.OpenStreetMap) {
-      return [yaga + ' | &copy; ' + OSM];
+      return '  &copy; ' + OSM;
     }
 
     if (Config.Client.Map.mapProvider === MapProviders.Mapbox) {
-      return [yaga + ' | ' + OSM + ' | ' + MB];
+      return OSM + ' | ' + MB;
     }
-    return [yaga + ' | ' + lf];
+    return '';
   }
 
-  public get Attributions(): string[] {
-    const yagalf = '<a href="https://yagajs.org" title="YAGA">YAGA</a> | ' +
-      '<a href="https://leaflet-ng2.yagajs.org" title="Leaflet in Angular2">leaflet-ng2</a>';
+  public get Attributions(): string {
     const OSM = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>';
     const MB = '&copy; <a href="https://www.mapbox.com/">Mapbox</a>';
 
     if (Config.Client.Map.mapProvider === MapProviders.OpenStreetMap) {
-      return [yagalf + ' | ' + OSM];
+      return OSM;
     }
 
     if (Config.Client.Map.mapProvider === MapProviders.Mapbox) {
-      return [yagalf + ' | ' + OSM + ' | ' + MB];
+      return OSM + ' | ' + MB;
     }
-    return [yagalf];
+    return '';
   }
 
   public get MapLayer(): string {
