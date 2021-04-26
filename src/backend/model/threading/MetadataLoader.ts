@@ -216,7 +216,17 @@ export class MetadataLoader {
               if (exif.Rating) {
                 metadata.rating = (parseInt(exif.Rating.value, 10) as any);
               }
-
+              if(exif.subject && exif.subject.value && exif.subject.value.length > 0){
+                if(metadata.keywords == undefined) {
+                  metadata.keywords = [];
+                }
+                for(let i=0; i < exif.subject.value.length; i++){
+                  const kw = exif.subject.value[i].description;
+                  if(metadata.keywords.indexOf(kw) == -1) {
+                    metadata.keywords.push(kw);
+                  }
+                }
+              }
               if (exif.Orientation) {
                 metadata.orientation = (parseInt(exif.Orientation.value as any, 10) as any);
                 if (OrientationTypes.BOTTOM_LEFT < metadata.orientation) {
