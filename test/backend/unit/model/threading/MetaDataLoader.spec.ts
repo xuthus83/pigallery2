@@ -32,6 +32,12 @@ describe('MetadataLoader', () => {
     expect(Utils.clone(data)).to.be.deep.equal(expected); 
   }); 
 
+  it('should load Rating and not overwrite its value by RatingPercent', async () => { 
+    const data = await MetadataLoader.loadPhotoMetadata(path.join(__dirname, '/../../../assets/two_ratings.jpg')); 
+    const expected = require(path.join(__dirname, '/../../../assets/two_ratings.json')); 
+    expect(Utils.clone(data)).to.be.deep.equal(expected); 
+  }); 
+
   it('should load jpg 2', async () => {
     const data = await MetadataLoader.loadPhotoMetadata(path.join(__dirname, '/../../../assets/old_photo.jpg'));
     const expected = require(path.join(__dirname, '/../../../assets/old_photo.json'));
