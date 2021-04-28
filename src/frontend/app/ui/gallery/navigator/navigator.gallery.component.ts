@@ -93,6 +93,10 @@ export class GalleryNavigatorComponent implements OnChanges {
     this.galleryService.setSorting(sorting);
   }
 
+  getDirectoryPath(): string {
+    return Utils.concatUrls(this.directory.path, this.directory.name);
+  }
+
 }
 
 interface NavigatorPath {

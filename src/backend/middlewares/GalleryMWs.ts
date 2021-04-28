@@ -16,6 +16,7 @@ import {QueryParams} from '../../common/QueryParams';
 import {VideoProcessing} from '../model/fileprocessing/VideoProcessing';
 import {SearchQueryDTO, SearchQueryTypes} from '../../common/entities/SearchQueryDTO';
 import {LocationLookupException} from '../exceptions/LocationLookupException';
+import {SupportedFormats} from '../../common/SupportedFormats';
 
 
 export class GalleryMWs {
@@ -56,6 +57,75 @@ export class GalleryMWs {
     }
   }
 
+  public static async zipDirectory(req: Request, res: Response, next: NextFunction): Promise<any> {
+    if (Config.Client.Other.enableDownloadZip === false) {
+      return next();
+    }
+    const directoryName = req.params.directory || '/';
+    const absoluteDirectoryName = path.join(ProjectPath.ImageFolder, directoryName);
+    try {
+      if ((await fsp.stat(absoluteDirectoryName)).isDirectory() === false) {
+        return next();
+      }
+    } catch (e) {
+      return next();
+    }
+
+    try {
+      const directory = await ObjectManagers.getInstance()
+        .GalleryManager.listDirectory(directoryName,
+          parseInt(req.query[QueryParams.gallery.knownLastModified] as string, 10),
+          parseInt(req.query[QueryParams.gallery.knownLastScanned] as string, 10));
+
+      if (directory == null) {
+        req.resultPipe = new ContentWrapper(null, null, true);
+        return next();
+      }
+      if (req.session.user.permissions &&
+        req.session.user.permissions.length > 0 &&
+        req.session.user.permissions[0] !== '/*') {
+        (directory as DirectoryDTO).directories = (directory as DirectoryDTO).directories.filter((d): boolean =>
+          UserDTOUtils.isDirectoryAvailable(d, req.session.user.permissions));
+      }
+
+      res.set('Content-Type', 'application/zip');
+      res.set('Content-Disposition', 'attachment; filename=Gallery.zip');
+
+      const fs = require('fs');
+      const archiver = require('archiver');
+      const archive = archiver('zip');
+
+      res.on('close', function() {
+        console.log('zip ' + archive.pointer() + ' bytes');
+      });
+
+      archive.on('error', function(err: any) {
+        throw err;
+      });
+
+      archive.pipe(res);
+
+      // append photos in selected directory
+      for (const ext of SupportedFormats.WithDots.Photos) {
+        archive.glob(`*${ext}`, {cwd:absoluteDirectoryName, nocase:true});
+      }
+      // append videos in selected directory
+      for (const ext of SupportedFormats.WithDots.Videos) {
+        archive.glob(`*${ext}`, {cwd:absoluteDirectoryName, nocase:true});
+      }
+
+      await archive.finalize(function(err: any) {
+        if (err) {
+          throw err;
+        }
+        req.resultPipe = true;
+      });
+      return next();
+
+    } catch (err) {
+      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, 'Error creating zip', err));
+    }
+  }
 
   public static cleanUpGalleryResults(req: Request, res: Response, next: NextFunction): any {
     if (!req.resultPipe) {

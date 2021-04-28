@@ -71,6 +71,13 @@ export class RenderingMWs {
     return res.sendFile(req.resultPipe, {maxAge: 31536000, dotfiles: 'allow'});
   }
 
+  public static renderZipStream(req: Request, res: Response, next: NextFunction): any {
+    if (!req.resultPipe) {
+      return next();
+    }
+    return res;
+  }
+
   public static renderOK(req: Request, res: Response, next: NextFunction): void {
     const message = new Message<string>(null, 'ok');
     res.json(message);
