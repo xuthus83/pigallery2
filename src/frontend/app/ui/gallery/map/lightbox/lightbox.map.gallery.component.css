@@ -84,3 +84,50 @@
   left: calc(50% - 25px);
 }
 
+::ng-deep .marker-cluster-small {
+  background-color: rgba(0, 148, 255, 0.6);
+  width: 30px;
+  height: 30px;
+  color: white;
+}
+
+::ng-deep .marker-cluster-small div {
+  background-color: #0094ff;
+  width: 20px;
+  height: 20px;
+}
+
+::ng-deep .marker-cluster-small span {
+  line-height: 20px;
+}
+
+
+::ng-deep .marker-cluster-medium {
+  background-color: rgba(0, 123, 255, 0.6);
+  color: white;
+}
+
+::ng-deep .marker-cluster-medium div {
+  background-color: #007bff;
+}
+
+::ng-deep .marker-cluster-large {
+  background-color: rgba(0, 98, 255, 0.6);
+  width: 50px;
+  height: 50px;
+  color: white;
+}
+
+::ng-deep .marker-cluster-large div {
+  background-color: #0062ff;
+  width: 40px;
+  height: 40px;
+}
+
+::ng-deep .marker-cluster-large span {
+  font-size: 16px;
+  line-height: 39px;
+}
+
+
+

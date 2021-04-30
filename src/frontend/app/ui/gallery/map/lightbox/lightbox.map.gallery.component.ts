@@ -13,6 +13,7 @@ import {MapService} from '../map.service';
 import {
   control,
   Control,
+  divIcon,
   icon,
   LatLng,
   latLng,
@@ -23,6 +24,8 @@ import {
   MapOptions,
   Marker,
   marker,
+  markerClusterGroup,
+  MarkerClusterGroup,
   Point,
   polyline,
   tileLayer
@@ -47,13 +50,43 @@ export class GalleryMapLightboxComponent implements OnChanges {
   @ViewChild('root', {static: true}) elementRef: ElementRef;
   public mapOptions: MapOptions = {
     zoom: 2,
+    // setting max zoom is needed to MarkerCluster https://github.com/Leaflet/Leaflet.markercluster/issues/611
+    maxZoom: 2,
     center: latLng(0, 0)
   };
   private smallIconSize = new Point(Config.Client.Media.Thumbnail.iconSize * 0.75, Config.Client.Media.Thumbnail.iconSize * 0.75);
   private iconSize = new Point(Config.Client.Media.Thumbnail.iconSize, Config.Client.Media.Thumbnail.iconSize);
-  private mapLayersControlOption: LeafletControlLayersConfig & { overlays: { Photos: LayerGroup, Paths: LayerGroup } } =
-    {baseLayers: {}, overlays: {Photos: layerGroup([]), Paths: layerGroup([])}};
+  private usedIconSize = this.iconSize;
+  private mapLayersControlOption: LeafletControlLayersConfig & { overlays: { Photos: MarkerClusterGroup, Paths: LayerGroup } } =
+    {
+      baseLayers: {}, overlays: {
+        Photos: markerClusterGroup({
+          animate: true,
+          animateAddingMarkers: true,
+          iconCreateFunction: (cluster) => {
+            const childCount = cluster.getChildCount();
+            let size: number;
+            let c = ' marker-cluster-';
+            if (childCount < 10) {
+              c += 'small';
+              size = 30;
+            } else if (childCount < 100) {
+              c += 'medium';
+              size = 40;
+            } else {
+              c += 'large';
+              size = 50;
+            }
 
+            return divIcon({
+              html: '<div><span>' + childCount + '</span></div>',
+              className: 'marker-cluster' + c,
+              iconSize: new Point(size, size)
+            });
+          }
+        }), Paths: layerGroup([])
+      }
+    };
   private mapLayerControl: Control.Layers;
   private thumbnailsOnLoad: ThumbnailBase[] = [];
   private startPosition: Dimension = null;
@@ -229,7 +262,7 @@ export class GalleryMapLightboxComponent implements OnChanges {
         const setIcon = () => {
           mkr.setIcon(icon({
             iconUrl: iconTh.Src,
-            iconSize: this.iconSize, // size of the icon
+            iconSize: this.usedIconSize, // size of the icon
           }));
         };
 
@@ -281,19 +314,27 @@ export class GalleryMapLightboxComponent implements OnChanges {
 
   onMapReady(map: Map): void {
     this.leafletMap = map;
+    this.leafletMap.setMaxZoom(undefined);
     this.leafletMap.zoomControl.setPosition('bottomright');
     this.mapLayerControl.addTo(this.leafletMap);
   }
 
   onLeafletZoom(): void {
+
+    if (Config.Client.Map.useImageMarkers === false) {
+      return;
+    }
+    if ((this.leafletMap.getZoom() < 15 && this.usedIconSize === this.smallIconSize) ||
+      (this.leafletMap.getZoom() >= 15 && this.usedIconSize === this.iconSize)) {
+
+      // all set no change needed
+      return;
+    }
+    this.usedIconSize = this.leafletMap.getZoom() < 15 ? this.smallIconSize : this.iconSize;
     (this.mapLayersControlOption.overlays.Photos.getLayers() as Marker[]).forEach(mkr => {
-      if (this.leafletMap.getZoom() < 15) {
-        mkr.getIcon().options.iconSize = this.smallIconSize;
-        mkr.setIcon(mkr.getIcon());
-      } else {
-        mkr.getIcon().options.iconSize = this.iconSize;
-        mkr.setIcon(mkr.getIcon());
-      }
+
+      mkr.getIcon().options.iconSize = this.usedIconSize;
+      mkr.setIcon(mkr.getIcon());
     });
   }
 

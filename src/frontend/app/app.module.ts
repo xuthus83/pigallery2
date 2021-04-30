@@ -10,7 +10,7 @@ import {FullScreenService} from './ui/gallery/fullscreen.service';
 import {AuthenticationService} from './model/network/authentication.service';
 import {UserMangerSettingsComponent} from './ui/settings/usermanager/usermanager.settings.component';
 import {FrameComponent} from './ui/frame/frame.component';
-import { LeafletModule } from '@asymmetrik/ngx-leaflet';
+import {LeafletModule} from '@asymmetrik/ngx-leaflet';
 import {LoadingBarModule} from '@ngx-loading-bar/core';
 import {GalleryLightboxMediaComponent} from './ui/gallery/lightbox/media/media.lightbox.gallery.component';
 import {GalleryPhotoLoadingComponent} from './ui/gallery/grid/photo/loading/loading.photo.grid.gallery.component';
@@ -98,6 +98,7 @@ import {SearchQueryParserService} from './ui/gallery/search/search-query-parser.
 import {GallerySearchFieldComponent} from './ui/gallery/search/search-field/search-field.gallery.component';
 import {AppRoutingModule} from './app.routing';
 import {CookieService} from 'ngx-cookie-service';
+import {LeafletMarkerClusterModule} from '@asymmetrik/ngx-leaflet-markercluster';
 
 
 @Injectable()
@@ -146,7 +147,8 @@ export class CustomUrlSerializer implements UrlSerializer {
     BsDatepickerModule.forRoot(),
     TimepickerModule.forRoot(),
     LoadingBarModule,
-    LeafletModule
+    LeafletModule,
+    LeafletMarkerClusterModule
   ],
   declarations: [AppComponent,
     LoginComponent,
