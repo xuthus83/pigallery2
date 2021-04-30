@@ -163,7 +163,7 @@ export class GalleryGridComponent implements OnChanges, OnInit, AfterViewInit, O
       return null;
     }
 
-    let maxRowHeight = this.screenHeight / this.MIN_ROW_COUNT;
+    let maxRowHeight = this.getMaxRowHeight();
     const minRowHeight = this.screenHeight / this.MAX_ROW_COUNT;
 
     const photoRowBuilder = new GridRowBuilder(this.media,
@@ -210,6 +210,10 @@ export class GalleryGridComponent implements OnChanges, OnInit, AfterViewInit, O
       });
       this.onScrollFired = true;
     }
+  }
+
+  private getMaxRowHeight(): number {
+    return this.screenHeight / this.MIN_ROW_COUNT;
   }
 
   /**
@@ -315,8 +319,9 @@ export class GalleryGridComponent implements OnChanges, OnInit, AfterViewInit, O
    * @returns boolean
    */
   private shouldRenderMore(offset: number = 0): boolean {
+    const bottomOffset = this.getMaxRowHeight() * 2;
     return Config.Client.Other.enableOnScrollRendering === false ||
-      PageHelper.ScrollY >= (document.body.clientHeight + offset - window.innerHeight) * 0.7
+      PageHelper.ScrollY >= (document.body.clientHeight + offset - window.innerHeight) - bottomOffset
       || (document.body.clientHeight + offset) * 0.85 < window.innerHeight;
   }
 

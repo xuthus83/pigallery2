@@ -11,16 +11,13 @@
   </app-gallery-grid-photo-loading>
 
 
-  <div *ngIf="gridMedia.isVideo()" class="video-indicator"
-       [style.marginTop.px]="-container.nativeElement.offsetHeight"
-       [style.marginLeft.px]="container.nativeElement.offsetWidth">
+  <div *ngIf="gridMedia.isVideo()" class="video-indicator">
     {{gridMedia.Video.metadata.duration  | duration}} <span class="oi oi-video"></span></div>
 
 
   <!--Info box -->
   <div class="info"
-       *ngIf="infoBarVisible"
-       [style.width.px]="container.nativeElement.offsetWidth">
+       *ngIf="infoBarVisible" >
     <div class="photo-name">{{Title}}</div>
 
     <div class="photo-position" *ngIf="gridMedia.hasPositionData()">

@@ -7,7 +7,6 @@ import {Config} from '../../../../../../common/config/public/Config';
 import {PageHelper} from '../../../../model/page.helper';
 import {PhotoDTO, PhotoMetadata} from '../../../../../../common/entities/PhotoDTO';
 import {SearchQueryTypes, TextSearch, TextSearchQueryMatchTypes} from '../../../../../../common/entities/SearchQueryDTO';
-import {UserRoles} from '../../../../../../common/entities/UserDTO';
 import {AuthenticationService} from '../../../../model/network/authentication.service';
 
 @Component({
@@ -143,15 +142,14 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, OnDestroy {
         left: 0,
         width: 0,
         height: 0
-      } as Dimension;
+      };
     }
-
     return {
-      top: this.imageRef.nativeElement.offsetTop,
-      left: this.imageRef.nativeElement.offsetLeft,
+      top: this.imageRef.nativeElement.offsetParent.offsetTop,
+      left: this.imageRef.nativeElement.offsetParent.offsetLeft,
       width: this.imageRef.nativeElement.width,
       height: this.imageRef.nativeElement.height
-    } as Dimension;
+    };
   }
 
 }
