@@ -1,5 +1,6 @@
 :host {
   position: relative;
+  overflow: hidden;
 }
 
 img {
@@ -88,8 +89,9 @@ img {
   color: white;
   font-size: medium;
   display: table-caption;
-  position: relative;
+  position: absolute;
   padding: 5px;
+  width: 100%;
   margin-top: 0;
 
   transition: transform .3s ease-out, background-color .3s ease-out;

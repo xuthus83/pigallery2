@@ -17,8 +17,7 @@
 
   <!--Info box -->
   <div class="info"
-       *ngIf="infoBarVisible"
-       [style.width.px]="container.nativeElement.offsetWidth">
+       *ngIf="infoBarVisible" >
     <div class="photo-name">{{Title}}</div>
 
     <div class="photo-position" *ngIf="gridMedia.hasPositionData()">
