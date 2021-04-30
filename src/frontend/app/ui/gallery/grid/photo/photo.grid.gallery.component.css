@@ -1,3 +1,7 @@
+:host {
+  position: relative;
+}
+
 img {
   width: inherit;
   height: inherit;
@@ -61,7 +65,7 @@ img {
 
   100% {
     transform: translateY(-100%);
-    background: rgba(0,0,0,0.8);
+    background: rgba(0, 0, 0, 0.8);
   }
 }
 
@@ -69,7 +73,7 @@ img {
 
   0% {
     transform: translateY(-100%);
-    background: rgba(0,0,0,0.8);
+    background: rgba(0, 0, 0, 0.8);
   }
   100% {
     transform: translateY(0);
@@ -126,7 +130,8 @@ a {
   font-size: large;
   padding: 5px;
   position: absolute;
-  transform: translate(-100%);
+  top: 0;
+  right: 0;
   white-space: nowrap;
   border-bottom-left-radius: 15px !important;
   background-color: rgba(0, 0, 0, 0.5);
