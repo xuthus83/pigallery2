@@ -99,6 +99,7 @@ import {GallerySearchFieldComponent} from './ui/gallery/search/search-field/sear
 import {AppRoutingModule} from './app.routing';
 import {CookieService} from 'ngx-cookie-service';
 import {LeafletMarkerClusterModule} from '@asymmetrik/ngx-leaflet-markercluster';
+import {icon, Marker} from 'leaflet';
 
 
 @Injectable()
@@ -126,6 +127,23 @@ export class CustomUrlSerializer implements UrlSerializer {
     return this.defaultUrlSerializer.serialize(tree).replace(/%28/g, '(').replace(/%29/g, ')');
   }
 }
+
+// Fixes Leaflet icon path issue:
+// https://stackoverflow.com/questions/41144319/leaflet-marker-not-found-production-env
+const iconRetinaUrl = 'assets/marker-icon-2x.png';
+const iconUrl = 'assets/marker-icon.png';
+const shadowUrl = 'assets/marker-shadow.png';
+const iconDefault = icon({
+  iconRetinaUrl,
+  iconUrl,
+  shadowUrl,
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  tooltipAnchor: [16, -28],
+  shadowSize: [41, 41]
+});
+Marker.prototype.options.icon = iconDefault;
 
 
 @NgModule({
