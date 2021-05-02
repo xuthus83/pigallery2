@@ -2744,6 +2744,14 @@
         <source>Enables loading the full resolution image on zoom in the ligthbox (preview).</source>
         <target>Enables loading the full resolution image on zoom in the ligthbox (preview).</target>
       </trans-unit>
+      <trans-unit id="7747085006165494563" datatype="html">
+        <source>Maximum media result</source>
+        <target>Maximum keresési eredmény</target>
+      </trans-unit>
+      <trans-unit id="1146747007849883580" datatype="html">
+        <source>Maximum number of photos and videos that listed in one search result</source>
+        <target>Maximum ennyi képet is videót fog listázni az alkalmazás egy keresési eredményben</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
