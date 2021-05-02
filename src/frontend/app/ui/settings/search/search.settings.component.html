@@ -36,11 +36,14 @@
         </app-settings-entry>
 
         <app-settings-entry
-          name="Instant search"
-          description="Enables showing search results, while typing search query."
+          name="Maximum media result"
+          description="Maximum number of photos and videos that listed in one search reasult"
           i18n-description i18n-name
-          [ngModel]="states.instantSearchEnabled">
+          [ngModel]="states.maxMediaResult"
+          [simplifiedMode]="simplifiedMode"
+          required="true">
         </app-settings-entry>
+
 
 
 

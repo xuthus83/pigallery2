@@ -28,7 +28,7 @@ export class ClientSearchConfig {
   @ConfigProperty()
   AutoComplete: AutoCompleteConfig = new AutoCompleteConfig();
   @ConfigProperty({type: 'unsignedInt'})
-  maxMediaResult: number = 2000;
+  maxMediaResult: number = 10000;
   @ConfigProperty({type: 'unsignedInt'})
   maxDirectoryResult: number = 200;
 }
