@@ -61,8 +61,7 @@ export class GalleryMapLightboxComponent implements OnChanges {
     {
       baseLayers: {}, overlays: {
         Photos: markerClusterGroup({
-          animate: true,
-          animateAddingMarkers: true,
+          maxClusterRadius: 20,
           iconCreateFunction: (cluster) => {
             const childCount = cluster.getChildCount();
             let size: number;
@@ -158,7 +157,7 @@ export class GalleryMapLightboxComponent implements OnChanges {
       height: GalleryMapLightboxComponent.getScreenHeight()
     } as Dimension);
     this.showImages();
-    this.centerMap();
+    //  this.centerMap();
     PageHelper.hideScrollY();
     await Utils.wait(0);
     this.lightboxDimension = ({
@@ -197,7 +196,6 @@ export class GalleryMapLightboxComponent implements OnChanges {
   showImages(): void {
     this.hideImages();
 
-    this.mapLayersControlOption.overlays.Photos.clearLayers();
 
     // make sure to enable photos layers when opening map
     if (this.leafletMap && !this.leafletMap.hasLayer(this.mapLayersControlOption.overlays.Photos)) {
@@ -264,6 +262,7 @@ export class GalleryMapLightboxComponent implements OnChanges {
             iconUrl: iconTh.Src,
             iconSize: this.usedIconSize, // size of the icon
           }));
+          mkr.options.alt = p.name;
         };
 
         if (iconTh.Available === true) {
@@ -289,6 +288,8 @@ export class GalleryMapLightboxComponent implements OnChanges {
       th.destroy();
     });
     this.thumbnailsOnLoad = [];
+
+    this.mapLayersControlOption.overlays.Photos.clearLayers();
   }
 
   @HostListener('window:keydown', ['$event'])
@@ -332,7 +333,10 @@ export class GalleryMapLightboxComponent implements OnChanges {
     }
     this.usedIconSize = this.leafletMap.getZoom() < 15 ? this.smallIconSize : this.iconSize;
     (this.mapLayersControlOption.overlays.Photos.getLayers() as Marker[]).forEach(mkr => {
-
+      // if alt is not present icon is not yet set, so do not change the size
+      if (!mkr.options.alt) {
+        return;
+      }
       mkr.getIcon().options.iconSize = this.usedIconSize;
       mkr.setIcon(mkr.getIcon());
     });
