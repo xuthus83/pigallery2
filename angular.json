@@ -42,6 +42,10 @@
           "sv": {
             "baseHref": "",
             "translation": "src/frontend/translate/messages.sv.xlf"
+          },
+          "pl": {
+            "baseHref": "",
+            "translation": "src/frontend/translate/messages.pl.xlf"
           }
         }
       },
