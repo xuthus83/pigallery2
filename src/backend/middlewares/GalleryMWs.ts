@@ -81,12 +81,6 @@ export class GalleryMWs {
         req.resultPipe = new ContentWrapper(null, null, true);
         return next();
       }
-      if (req.session.user.permissions &&
-        req.session.user.permissions.length > 0 &&
-        req.session.user.permissions[0] !== '/*') {
-        (directory as DirectoryDTO).directories = (directory as DirectoryDTO).directories.filter((d): boolean =>
-          UserDTOUtils.isDirectoryAvailable(d, req.session.user.permissions));
-      }
 
       res.set('Content-Type', 'application/zip');
       res.set('Content-Disposition', 'attachment; filename=Gallery.zip');
