@@ -94,7 +94,7 @@ export class GalleryNavigatorComponent implements OnChanges {
   }
 
   getDownloadZipLink(): string {
-    return Config.Client.urlBase + '/api/gallery/zip/' + this.getDirectoryPath();
+    return Utils.concatUrls(Config.Client.urlBase, '/api/gallery/zip/', this.getDirectoryPath());
   }
 
   getDirectoryPath(): string {
