@@ -72,16 +72,6 @@ export class GalleryMWs {
     }
 
     try {
-      const directory = await ObjectManagers.getInstance()
-        .GalleryManager.listDirectory(directoryName,
-          parseInt(req.query[QueryParams.gallery.knownLastModified] as string, 10),
-          parseInt(req.query[QueryParams.gallery.knownLastScanned] as string, 10));
-
-      if (directory == null) {
-        req.resultPipe = new ContentWrapper(null, null, true);
-        return next();
-      }
-
       res.set('Content-Type', 'application/zip');
       res.set('Content-Disposition', 'attachment; filename=Gallery.zip');
 
