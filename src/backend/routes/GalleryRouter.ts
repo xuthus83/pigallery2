@@ -53,8 +53,7 @@ export class GalleryRouter {
       AuthenticationMWs.authorisePath('directory', true),
 
       // specific part
-      GalleryMWs.zipDirectory,
-      RenderingMWs.renderZipStream
+      GalleryMWs.zipDirectory
     );
   }
 

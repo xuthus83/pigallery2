@@ -76,6 +76,7 @@
     "@angular/platform-browser-dynamic": "11.2.9",
     "@angular/router": "11.2.9",
     "@ngx-loading-bar/core": "5.1.1",
+    "@types/archiver": "^5.1.0",
     "@types/bcrypt": "3.0.1",
     "@types/bcryptjs": "2.4.2",
     "@types/chai": "4.2.16",

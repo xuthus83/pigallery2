@@ -1,5 +1,6 @@
 import * as path from 'path';
 import {promises as fsp} from 'fs';
+import * as archiver from 'archiver';
 import {NextFunction, Request, Response} from 'express';
 import {ErrorCodes, ErrorDTO} from '../../common/entities/Error';
 import {DirectoryDTO, DirectoryDTOUtils} from '../../common/entities/DirectoryDTO';
@@ -75,8 +76,6 @@ export class GalleryMWs {
       res.set('Content-Type', 'application/zip');
       res.set('Content-Disposition', 'attachment; filename=Gallery.zip');
 
-      const fs = require('fs');
-      const archiver = require('archiver');
       const archive = archiver('zip');
 
       res.on('close', function() {
@@ -89,21 +88,18 @@ export class GalleryMWs {
 
       archive.pipe(res);
 
-      // append photos in selected directory
+      // append photos in absoluteDirectoryName
+      // using case-insensitive glob of extensions
       for (const ext of SupportedFormats.WithDots.Photos) {
         archive.glob(`*${ext}`, {cwd:absoluteDirectoryName, nocase:true});
       }
-      // append videos in selected directory
+      // append videos in absoluteDirectoryName
+      // using case-insensitive glob of extensions
       for (const ext of SupportedFormats.WithDots.Videos) {
         archive.glob(`*${ext}`, {cwd:absoluteDirectoryName, nocase:true});
       }
 
-      await archive.finalize(function(err: any) {
-        if (err) {
-          throw err;
-        }
-        req.resultPipe = true;
-      });
+      await archive.finalize();
       return next();
 
     } catch (err) {
