@@ -254,22 +254,24 @@ export class GalleryMapLightboxComponent implements OnChanges {
 
       // Setting photo icon
       if (Config.Client.Map.useImageMarkers === true) {
-        const iconTh = this.thumbnailService.getIcon(new MediaIcon(p));
-        this.thumbnailsOnLoad.push(iconTh);
-        iconTh.Visible = true;
-        const setIcon = () => {
-          mkr.setIcon(icon({
-            iconUrl: iconTh.Src,
-            iconSize: this.usedIconSize, // size of the icon
-          }));
-          mkr.options.alt = p.name;
-        };
+        mkr.on('add', () => {
+          const iconTh = this.thumbnailService.getIcon(new MediaIcon(p));
+          this.thumbnailsOnLoad.push(iconTh);
+          iconTh.Visible = true;
+          const setIcon = () => {
+            mkr.setIcon(icon({
+              iconUrl: iconTh.Src,
+              iconSize: this.usedIconSize, // size of the icon
+            }));
+            mkr.options.alt = p.name;
+          };
+          if (iconTh.Available === true) {
+            setIcon();
+          } else {
+            iconTh.OnLoad = setIcon;
+          }
+        });
 
-        if (iconTh.Available === true) {
-          setIcon();
-        } else {
-          iconTh.OnLoad = setIcon;
-        }
       }
     });
     if (this.gpxFiles) {
