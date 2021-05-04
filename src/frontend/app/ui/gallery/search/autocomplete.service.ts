@@ -68,17 +68,21 @@ export class AutoCompleteService {
     items = items || new BehaviorSubject([]);
 
     const cached = this.galleryCacheService.getAutoComplete(text, type);
-    if (cached == null) {
-      const acParams: any = {};
-      if (type) {
-        acParams[QueryParams.gallery.search.type] = type;
+    try {
+      if (cached == null) {
+        const acParams: any = {};
+        if (type) {
+          acParams[QueryParams.gallery.search.type] = type;
+        }
+        this.networkService.getJson<IAutoCompleteItem[]>('/autocomplete/' + text, acParams).then(ret => {
+          this.galleryCacheService.setAutoComplete(text, type, ret);
+          items.next(this.sortResults(text, ret.map(i => this.ACItemToRenderable(i, fullText)).concat(items.value)));
+        });
+      } else {
+        items.next(this.sortResults(text, cached.map(i => this.ACItemToRenderable(i, fullText)).concat(items.value)));
       }
-      this.networkService.getJson<IAutoCompleteItem[]>('/autocomplete/' + text, acParams).then(ret => {
-        this.galleryCacheService.setAutoComplete(text, type, ret);
-        items.next(this.sortResults(text, ret.map(i => this.ACItemToRenderable(i, fullText)).concat(items.value)));
-      });
-    } else {
-      items.next(this.sortResults(text, cached.map(i => this.ACItemToRenderable(i, fullText)).concat(items.value)));
+    } catch (e) {
+      console.error(e);
     }
     return items;
   }

@@ -196,7 +196,7 @@ export class GalleryRouter {
   }
 
   protected static addSearch(app: Express): void {
-    app.get('/api/search/:searchQueryDTO',
+    app.get('/api/search/:searchQueryDTO(*)',
       // common part
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Guest),
@@ -212,7 +212,7 @@ export class GalleryRouter {
 
 
   protected static addAutoComplete(app: Express): void {
-    app.get('/api/autocomplete/:text',
+    app.get('/api/autocomplete/:text(*)',
       // common part
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Guest),
