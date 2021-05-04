@@ -135,6 +135,15 @@ export class AutoCompleteService {
 
   private sortResults(text: string, items: RenderableAutoCompleteItem[]): RenderableAutoCompleteItem[] {
     return items.sort((a, b) => {
+      // prioritize persons higher
+      if (a.type !== b.type) {
+        if (a.type === SearchQueryTypes.person) {
+          return -1;
+        } else if (b.type === SearchQueryTypes.person) {
+          return 1;
+        }
+      }
+
       if ((a.text.startsWith(text) && b.text.startsWith(text)) ||
         (!a.text.startsWith(text) && !b.text.startsWith(text))) {
         return a.text.localeCompare(b.text);
