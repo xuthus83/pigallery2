@@ -262,6 +262,7 @@ export class GalleryMapLightboxComponent implements OnChanges {
             mkr.setIcon(icon({
               iconUrl: iconTh.Src,
               iconSize: this.usedIconSize, // size of the icon
+              className: 'photo-icon'
             }));
             mkr.options.alt = p.name;
           };
