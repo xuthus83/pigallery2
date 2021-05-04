@@ -19,7 +19,6 @@ import {SearchQueryDTO, SearchQueryTypes} from '../../common/entities/SearchQuer
 import {LocationLookupException} from '../exceptions/LocationLookupException';
 import {SupportedFormats} from '../../common/SupportedFormats';
 
-
 export class GalleryMWs {
 
 
@@ -76,7 +75,9 @@ export class GalleryMWs {
       res.set('Content-Type', 'application/zip');
       res.set('Content-Disposition', 'attachment; filename=Gallery.zip');
 
-      const archive = archiver('zip');
+      const archive = archiver('zip', {
+        store: true, // disable compression
+      });
 
       res.on('close', function() {
         console.log('zip ' + archive.pointer() + ' bytes');
