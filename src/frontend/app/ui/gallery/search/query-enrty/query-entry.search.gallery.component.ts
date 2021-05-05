@@ -9,6 +9,7 @@ import {
   SearchQueryTypes,
   SomeOfSearchQuery,
   TextSearch,
+  TextSearchQueryMatchTypes,
   TextSearchQueryTypes
 } from '../../../../../../common/entities/SearchQueryDTO';
 import {Utils} from '../../../../../../common/Utils';
@@ -36,6 +37,7 @@ export class GallerySearchQueryEntryComponent implements ControlValueAccessor, V
   public queryEntry: SearchQueryDTO;
   public SearchQueryTypesEnum: { value: string; key: SearchQueryTypes }[];
   public SearchQueryTypes = SearchQueryTypes;
+  public TextSearchQueryMatchTypes = TextSearchQueryMatchTypes;
   @Output() delete = new EventEmitter<void>();
 
   constructor() {
@@ -143,6 +145,12 @@ export class GallerySearchQueryEntryComponent implements ControlValueAccessor, V
 
   public onChange(): void {
     this.propagateChange(this.queryEntry);
+  }
+
+  public toggleMatchType(): void {
+    this.AsTextQuery.matchType = this.AsTextQuery.matchType === TextSearchQueryMatchTypes.exact_match ?
+      TextSearchQueryMatchTypes.like : TextSearchQueryMatchTypes.exact_match;
+    this.onChange();
   }
 
   private propagateChange = (_: any): void => {

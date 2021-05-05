@@ -59,6 +59,11 @@
       </select>
     </div>
     <div class="input-group col-md-8" *ngIf="IsTextQuery">
+      <span title="exact match"
+            p18n-title
+            class="match-type"
+            (click)="toggleMatchType()"
+            [class.exact-match]="AsTextQuery.matchType === TextSearchQueryMatchTypes.exact_match">"</span>
       <input
         id="searchField"
         name="searchField"
@@ -68,6 +73,11 @@
         (change)="onChange()"
         (ngModelChange)="onChange()"
         type="text"/>
+      <span title="exact match"
+            p18n-title
+            class="match-type"
+            (click)="toggleMatchType()"
+            [class.exact-match]="AsTextQuery.matchType === TextSearchQueryMatchTypes.exact_match">"</span>
     </div>
     <ng-container [ngSwitch]="queryEntry.type">
       <div *ngSwitchCase="SearchQueryTypes.distance" class="col-md-8 d-flex">

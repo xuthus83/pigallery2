@@ -121,22 +121,26 @@ export class SearchQueryParser {
 
     if (tokenEnd !== str.length - 1) {
       if (str.startsWith(' ' + this.keywords.and, tokenEnd)) {
+        const rest = this.parse(str.slice(tokenEnd + (' ' + this.keywords.and).length), implicitOR);
         return {
           type: SearchQueryTypes.AND,
           list: [this.parse(str.slice(0, tokenEnd), implicitOR), // trim brackets
-            this.parse(str.slice(tokenEnd + (' ' + this.keywords.and).length), implicitOR)]
+            ...(rest.type === SearchQueryTypes.AND ? (rest as SearchListQuery).list : [rest])]
         } as ANDSearchQuery;
       } else if (str.startsWith(' ' + this.keywords.or, tokenEnd)) {
+        const rest = this.parse(str.slice(tokenEnd + (' ' + this.keywords.or).length), implicitOR);
         return {
           type: SearchQueryTypes.OR,
           list: [this.parse(str.slice(0, tokenEnd), implicitOR), // trim brackets
-            this.parse(str.slice(tokenEnd + (' ' + this.keywords.or).length), implicitOR)]
+            ...(rest.type === SearchQueryTypes.OR ? (rest as SearchListQuery).list : [rest])]
         } as ORSearchQuery;
       } else { // Relation cannot be detected
+        const t = implicitOR === true ? SearchQueryTypes.OR : SearchQueryTypes.UNKNOWN_RELATION;
+        const rest = this.parse(str.slice(tokenEnd), implicitOR);
         return {
-          type: implicitOR === true ? SearchQueryTypes.OR : SearchQueryTypes.UNKNOWN_RELATION,
+          type: t,
           list: [this.parse(str.slice(0, tokenEnd), implicitOR), // trim brackets
-            this.parse(str.slice(tokenEnd), implicitOR)]
+            ...(rest.type === t ? (rest as SearchListQuery).list : [rest])]
         } as SearchListQuery;
       }
     }
@@ -249,24 +253,33 @@ export class SearchQueryParser {
     return {type: SearchQueryTypes.any_text, text: str} as TextSearch;
   }
 
+
   public stringify(query: SearchQueryDTO): string {
+    const ret = this.stringifyOnEntry(query);
+    if (ret.charAt(0) === '(' && ret.charAt(ret.length - 1) === ')') {
+      return ret.slice(1, ret.length - 1);
+    }
+    return ret;
+  }
+
+  private stringifyOnEntry(query: SearchQueryDTO): string {
     if (!query || !query.type) {
       return '';
     }
     switch (query.type) {
       case SearchQueryTypes.AND:
-        return '(' + (query as SearchListQuery).list.map(q => this.stringify(q)).join(' ' + this.keywords.and + ' ') + ')';
+        return '(' + (query as SearchListQuery).list.map(q => this.stringifyOnEntry(q)).join(' ' + this.keywords.and + ' ') + ')';
 
       case SearchQueryTypes.OR:
-        return '(' + (query as SearchListQuery).list.map(q => this.stringify(q)).join(' ' + this.keywords.or + ' ') + ')';
+        return '(' + (query as SearchListQuery).list.map(q => this.stringifyOnEntry(q)).join(' ' + this.keywords.or + ' ') + ')';
 
       case SearchQueryTypes.SOME_OF:
         if ((query as SomeOfSearchQuery).min) {
           return (query as SomeOfSearchQuery).min + '-' + this.keywords.NSomeOf + ':(' +
-            (query as SearchListQuery).list.map(q => this.stringify(q)).join(' ') + ')';
+            (query as SearchListQuery).list.map(q => this.stringifyOnEntry(q)).join(' ') + ')';
         }
         return this.keywords.someOf + ':(' +
-          (query as SearchListQuery).list.map(q => this.stringify(q)).join(' ') + ')';
+          (query as SearchListQuery).list.map(q => this.stringifyOnEntry(q)).join(' ') + ')';
 
 
       case SearchQueryTypes.orientation:

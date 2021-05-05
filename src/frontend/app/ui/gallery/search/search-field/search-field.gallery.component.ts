@@ -109,14 +109,10 @@ export class GallerySearchFieldComponent implements ControlValueAccessor, Valida
   }
 
   public onFocusLost(): void {
+    return;
     if (this.mouseOverAutoComplete === false) {
       this.autoCompleteRenders = [];
     }
-  }
-
-  public onFocus(): void {
-    // TODO: implement autocomplete
-    // this.autocomplete(this.searchText).catch(console.error);
   }
 
 

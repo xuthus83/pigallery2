@@ -13,6 +13,19 @@
   z-index: 7;
 }
 
+.insert-button {
+  margin-right: -15px;
+  display: none;
+  margin-top: 2px;
+}
+
+.autocomplete-item-selected .insert-button {
+  display: block;
+}
+.autocomplete-item-selected .insert-button:hover {
+  color: black;
+}
+
 .autocomplete-item {
   cursor: pointer;
   padding-top: 2px;
