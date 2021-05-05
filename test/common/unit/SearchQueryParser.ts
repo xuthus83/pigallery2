@@ -122,13 +122,8 @@ describe('SearchQueryParser', () => {
         type: SearchQueryTypes.AND,
         list: [
           {type: SearchQueryTypes.keyword, text: 'big boom'} as TextSearch,
-          {
-            type: SearchQueryTypes.AND,
-            list: [
-              {type: SearchQueryTypes.caption, text: 'caption'} as TextSearch,
-              {type: SearchQueryTypes.position, text: 'New York'} as TextSearch
-            ]
-          } as ANDSearchQuery
+          {type: SearchQueryTypes.caption, text: 'caption'} as TextSearch,
+          {type: SearchQueryTypes.position, text: 'New York'} as TextSearch
         ]
       } as ANDSearchQuery);
       check({
@@ -158,13 +153,8 @@ describe('SearchQueryParser', () => {
       check({
         type: SearchQueryTypes.OR,
         list: [
-          {
-            type: SearchQueryTypes.OR,
-            list: [
-              {type: SearchQueryTypes.keyword, text: 'big boom'} as TextSearch,
-              {type: SearchQueryTypes.person, text: 'person_test'} as TextSearch
-            ]
-          } as ORSearchQuery,
+          {type: SearchQueryTypes.keyword, text: 'big boom'} as TextSearch,
+          {type: SearchQueryTypes.person, text: 'person_test'} as TextSearch,
           {type: SearchQueryTypes.position, text: 'New York'} as TextSearch
         ]
       } as ORSearchQuery);
