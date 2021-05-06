@@ -1,4 +1,5 @@
 import {Component, ElementRef, Input, OnChanges} from '@angular/core';
+import { DeviceDetectorService } from 'ngx-device-detector';
 import {DirectoryDTO} from '../../../../../common/entities/DirectoryDTO';
 
 @Component({
@@ -10,8 +11,10 @@ export class DirectoriesComponent implements OnChanges {
 
   @Input() directories: DirectoryDTO[];
   size: number;
+  isDesktop: boolean;
 
-  constructor(private container: ElementRef) {
+  constructor(private container: ElementRef, private deviceService: DeviceDetectorService) {
+    this.isDesktop = this.deviceService.isDesktop();
   }
 
   ngOnChanges(): void {
@@ -19,7 +22,7 @@ export class DirectoriesComponent implements OnChanges {
   }
 
   private updateSize(): void {
-    if (window.innerWidth < window.innerHeight) {
+    if (!this.isDesktop && window.innerWidth < window.innerHeight) {
       // On portrait mode, show 2 directories side by side with some padding
       this.size = Math.round(window.innerWidth / 2) - 25;
     } else {
