@@ -362,6 +362,7 @@ export class SettingsMWs {
       Config.Server.port = settings.port;
       Config.Server.host = settings.host;
       Config.Server.Media.folder = settings.imagesFolder;
+      Config.Server.Media.tempFolder = settings.tempFolder;
       Config.Client.publicUrl = settings.publicUrl;
       Config.Client.urlBase = settings.urlBase;
       Config.Client.applicationTitle = settings.applicationTitle;
@@ -370,6 +371,7 @@ export class SettingsMWs {
       original.Server.port = settings.port;
       original.Server.host = settings.host;
       original.Server.Media.folder = settings.imagesFolder;
+      original.Server.Media.folder = settings.tempFolder;
       original.Client.publicUrl = settings.publicUrl;
       original.Client.urlBase = settings.urlBase;
       original.Client.applicationTitle = settings.applicationTitle;
