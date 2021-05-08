@@ -15,13 +15,22 @@
   </ol>
 
   <div class="right-side">
-    <a *ngIf="config.Client.Other.enableDownloadZip && directory && ItemCount > 0" [href]="getDownloadZipLink()"
-      [queryParams]="queryService.getParams()">Download</a>
-    <div class="divider" *ngIf="directory && ItemCount > 0">&nbsp;</div>
-    <div class="photos-count" *ngIf="ItemCount > 0 && config.Client.Other.NavBar.showItemCount">
-      {{ItemCount}} <span i18n>items</span>
-    </div>
-    <div class="divider" *ngIf="ItemCount > 0 && config.Client.Other.NavBar.showItemCount">&nbsp;</div>
+    <ng-container *ngIf="ItemCount > 0 && config.Client.Other.NavBar.showItemCount">
+      <div class="photos-count">
+        {{ItemCount}} <span i18n>items</span>
+      </div>
+      <div class="divider">&nbsp;</div>
+    </ng-container>
+
+    <ng-container *ngIf="config.Client.Other.enableDownloadZip && directory && ItemCount > 0">
+      <a *ngIf="config.Client.Other.enableDownloadZip && directory && ItemCount > 0"
+         [href]="getDownloadZipLink()"
+         class="btn  btn-download">
+         <span class="oi oi-data-transfer-download"
+               title="download" i18n-title></span>
+      </a>
+      <div class="divider">&nbsp;</div>
+    </ng-container>
     <div class="btn-group" dropdown placement="bottom right">
       <button id="button-alignment" dropdownToggle type="button"
               class="btn btn-secondary dropdown-toggle"

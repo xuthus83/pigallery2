@@ -1,7 +1,7 @@
 import {Component, Input, OnChanges} from '@angular/core';
 import {DirectoryDTO} from '../../../../../common/entities/DirectoryDTO';
 import {RouterLink} from '@angular/router';
-import {UserDTO, UserDTOUtils} from '../../../../../common/entities/UserDTO';
+import {UserDTOUtils} from '../../../../../common/entities/UserDTO';
 import {AuthenticationService} from '../../../model/network/authentication.service';
 import {QueryService} from '../../../model/query.service';
 import {GalleryService} from '../gallery.service';
@@ -94,7 +94,13 @@ export class GalleryNavigatorComponent implements OnChanges {
   }
 
   getDownloadZipLink(): string {
-    return Utils.concatUrls(Config.Client.urlBase, '/api/gallery/zip/', this.getDirectoryPath());
+    let queryParams = '';
+    Object.entries(this.queryService.getParams()).forEach(e => {
+      queryParams += e[0] + '=' + e[1];
+    });
+    return Utils.concatUrls(Config.Client.urlBase,
+      '/api/gallery/zip/',
+      this.getDirectoryPath(), '?' + queryParams);
   }
 
   getDirectoryPath(): string {
