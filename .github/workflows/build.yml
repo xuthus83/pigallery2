@@ -132,4 +132,4 @@ jobs:
           tags: |
             bpatrik/pigallery2:nightly-${{ matrix.container }}
             bpatrik/pigallery2:${{ steps.vars.outputs.tag }}-${{ matrix.container == 'buster' ? '' : matrix.container }}
-            bpatrik/pigallery2:latest-${{ matrix.container == 'buster' ? '' : matrix.container }}
+            bpatrik/pigallery2:latest-${{ matrix.container == 'buster' && '' || matrix.container }}
