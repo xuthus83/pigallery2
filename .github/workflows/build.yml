@@ -78,9 +78,13 @@ jobs:
         with:
           name: pigallery2-release
           path: release
-  build-alpine:
+  build-docker:
     runs-on: [ubuntu-latest]
     needs: [create-release]
+    strategy:
+      matrix:
+        container: [alpine, stretch, buster]
+    
     steps:
       -
         name: Set tag
@@ -107,127 +111,25 @@ jobs:
           username: ${{ secrets.REGISTRY_USERNAME }}
           password: ${{ secrets.REGISTRY_PASSWORD }}
       -
-        name: Build and push alpine nightly
+        name: Build and push nightly
         if: startsWith(steps.vars.outputs.type , 'head')
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: docker/alpine/Dockerfile.build
+          file: docker/${{ matrix.container }}/Dockerfile.build
           platforms: linux/amd64,linux/arm64,linux/arm/v7
           push: true
-          tags: bpatrik/pigallery2:nightly-alpine
+          tags: bpatrik/pigallery2:nightly-${{ matrix.container }}
       -
         name: Build and push alpine release
         if: startsWith(steps.vars.outputs.type , 'tag')
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: docker/alpine/Dockerfile.build
+          file: docker/${{ matrix.container }}/Dockerfile.build
           platforms: linux/amd64,linux/arm64,linux/arm/v7
           push: true
           tags: |
-            bpatrik/pigallery2:nightly-alpine
-            bpatrik/pigallery2:${{ steps.vars.outputs.tag }}-alpine
-            bpatrik/pigallery2:latest-alpine
-  build-stretch:
-    runs-on: [ubuntu-latest]
-    needs: [create-release]
-    steps:
-      -
-        name: Set tag
-        id: vars
-        run: echo ::set-output name=tag::$(echo ${GITHUB_REF:10}) && echo ::set-output name=type::$(echo ${GITHUB_REF:5})
-      -
-        name: Checkout
-        uses: actions/checkout@v2
-      -
-        uses: actions/download-artifact@v2
-        with:
-          name: pigallery2-release
-          path: pigallery2-release
-      -
-        name: Set up QEMU
-        uses: docker/setup-qemu-action@v1
-      -
-        name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
-      -
-        name: Login to DockerHub
-        uses: docker/login-action@v1
-        with:
-          username: ${{ secrets.REGISTRY_USERNAME }}
-          password: ${{ secrets.REGISTRY_PASSWORD }}
-      -
-        name: Build and push debian stretch nightly
-        if: startsWith(steps.vars.outputs.type , 'head')
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          file: docker/debian-stretch/Dockerfile.build
-          platforms: linux/amd64,linux/arm64,linux/arm/v7
-          push: true
-          tags: bpatrik/pigallery2:nightly-stretch
-      -
-        name: Build and push debian stretch release
-        if: startsWith(steps.vars.outputs.type , 'tag')
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          file: docker/debian-stretch/Dockerfile.build
-          platforms: linux/amd64,linux/arm64,linux/arm/v7
-          push: true
-          tags: |
-            bpatrik/pigallery2:nightly-stretch
-            bpatrik/pigallery2:${{ steps.vars.outputs.tag }}-stretch
-            bpatrik/pigallery2:latest-stretch
-  build-buster:
-    runs-on: [ubuntu-latest]
-    needs: [create-release]
-    steps:
-      -
-        name: Set tag
-        id: vars
-        run: echo ::set-output name=tag::$(echo ${GITHUB_REF:10}) && echo ::set-output name=type::$(echo ${GITHUB_REF:5})
-      -
-        name: Checkout
-        uses: actions/checkout@v2
-      -
-        uses: actions/download-artifact@v2
-        with:
-          name: pigallery2-release
-          path: pigallery2-release
-      -
-        name: Set up QEMU
-        uses: docker/setup-qemu-action@v1
-      -
-        name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
-      -
-        name: Login to DockerHub
-        uses: docker/login-action@v1
-        with:
-          username: ${{ secrets.REGISTRY_USERNAME }}
-          password: ${{ secrets.REGISTRY_PASSWORD }}
-      -
-        name: Build and push debian buster nightly
-        if: startsWith(steps.vars.outputs.type , 'head')
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          file: docker/debian-buster/Dockerfile.build
-          platforms: linux/amd64,linux/arm64,linux/arm/v7
-          push: true
-          tags: bpatrik/pigallery2:nightly-buster
-      -
-        name: Build and push debian buster release
-        if: startsWith(steps.vars.outputs.type , 'tag')
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          file: docker/debian-buster/Dockerfile.build
-          platforms: linux/amd64,linux/arm64,linux/arm/v7
-          push: true
-          tags: |
-            bpatrik/pigallery2:nightly-buster
-            bpatrik/pigallery2:${{ steps.vars.outputs.tag }}
-            bpatrik/pigallery2:latest
+            bpatrik/pigallery2:nightly-${{ matrix.container }}
+            bpatrik/pigallery2:${{ steps.vars.outputs.tag }}-${{ matrix.container == 'buster' ? '' : matrix.container }}
+            bpatrik/pigallery2:latest-${{ matrix.container == 'buster' ? '' : matrix.container }}
