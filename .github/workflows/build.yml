@@ -83,7 +83,7 @@ jobs:
     needs: [create-release]
     strategy:
       matrix:
-        container: [alpine, stretch, buster]
+        container: [alpine, debian-stretch, debian-buster]
     
     steps:
       -
@@ -121,7 +121,7 @@ jobs:
           push: true
           tags: bpatrik/pigallery2:nightly-${{ matrix.container }}
       -
-        name: Build and push alpine release
+        name: Build and push release
         if: startsWith(steps.vars.outputs.type , 'tag')
         uses: docker/build-push-action@v2
         with:
@@ -131,5 +131,5 @@ jobs:
           push: true
           tags: |
             bpatrik/pigallery2:nightly-${{ matrix.container }}
-            bpatrik/pigallery2:${{ steps.vars.outputs.tag }}-${{ matrix.container == 'buster' && '' || matrix.container }}
-            bpatrik/pigallery2:latest-${{ matrix.container == 'buster' && '' || matrix.container }}
+            bpatrik/pigallery2:${{ steps.vars.outputs.tag }}-${{ matrix.container == 'debian-buster' && '' || matrix.container }}
+            bpatrik/pigallery2:latest-${{ matrix.container == 'debian-buster' && '' || matrix.container }}
