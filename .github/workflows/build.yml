@@ -111,8 +111,16 @@ jobs:
           username: ${{ secrets.REGISTRY_USERNAME }}
           password: ${{ secrets.REGISTRY_PASSWORD }}
       -
-        name: Build and push nightly
-        if: startsWith(steps.vars.outputs.type , 'head')
+        name: Test build on Pull request
+        if: ${{ startsWith(steps.vars.outputs.type , 'head') &&  github.event.issue.pull_request }}
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: docker/${{ matrix.container }}/Dockerfile.build
+          platforms: linux/amd64,linux/arm64,linux/arm/v7
+      -
+        name: Build and push nightly on new master commit
+        if: ${{ startsWith(steps.vars.outputs.type , 'head') &&  !github.event.issue.pull_request }}
         uses: docker/build-push-action@v2
         with:
           context: .
@@ -121,8 +129,8 @@ jobs:
           push: true
           tags: bpatrik/pigallery2:nightly-${{ matrix.container }}
       -
-        name: Build and push release
-        if: startsWith(steps.vars.outputs.type , 'tag')
+        name: Build and push release on new Tag
+        if: ${{ startsWith(steps.vars.outputs.type , 'tag') &&  !github.event.issue.pull_request }}
         uses: docker/build-push-action@v2
         with:
           context: .
