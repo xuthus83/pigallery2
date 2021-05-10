@@ -3,6 +3,141 @@
 These results are created mostly for development, but the results are public for curious users.
 
 You can also run it on your files by using the [docker-compose.yml](docker-compose) file.
+## PiGallery2 v1.8.6, 10.05.2021
+**Versions**: v1.8.6, build time: 2021-05-10T11:13:55.634Z, git commit: a75a28f5c45e38b9053400c3fecd0fbcdff35fbb
+**System**: Raspberry Pi 4 4G Model B, SandisK Mobile Ultra 32Gb CLass10, UHS-I, HDD: Western Digital Elements 1TB (WDBUZG0010BBK)
+
+**Gallery**: directories: 31, photos: 2036, videos: 35, diskUsage : 22.08GB, persons : 1241, unique persons (faces): 14
+
+| Action | Sub action | Average Duration | Result  |
+|:------:|:----------:|:----------------:|:-------:|
+| **Scanning directory** | | **9877.1 ms** | **media: 698, directories: 0** |
+| **Saving directory to DB** | | **3734.9 ms** | **-** |
+| **List directory** | | **350.5 ms** | **media: 698, directories: 0** |
+| | Authenticate | 0.1 ms | - |
+| | Normalize path param | 0.0 ms | - |
+| | Authorise path | 0.0 ms | - |
+| | Inject gallery version | 5.1 ms | - |
+| | List directory | 267.3 ms | media: 698, directories: 0 |
+| | Add thumbnail information | 60.2 ms | media: 698, directories: 0 |
+| | Clean up gallery results | 17.5 ms | media: 698, directories: 0 |
+| | Render result | 0.0 ms | media: 698, directories: 0 |
+| **Listing Faces** | | **15.8 ms** | **items: 14** |
+| | Authenticate | 0.1 ms | - |
+| | Authorise | 0.0 ms | - |
+| | Inject gallery version | 3.2 ms | - |
+| | List persons | 10.2 ms | items: 14 |
+| | Add thumbnail info for persons | 1.0 ms | items: 14 |
+| | Clean up person results | 1.0 ms | items: 14 |
+| | Render result | 0.0 ms | items: 14 |
+| **Searching for `a`** | | **1025.4 ms** | **media: 2001, directories: 0** |
+| | Authenticate | 0.1 ms | - |
+| | Authorise | 0.0 ms | - |
+| | Inject gallery version | 0.2 ms | - |
+| | Search | 811.6 ms | media: 2001, directories: 0 |
+| | Add thumbnail information | 163.2 ms | media: 2001, directories: 0 |
+| | Clean up gallery results | 50.2 ms | media: 2001, directories: 0 |
+| | Render result | 0.0 ms | media: 2001, directories: 0 |
+| **Searching for `caption:a`** | | **8.6 ms** | **media: 0, directories: 0** |
+| | Authenticate | 0.0 ms | - |
+| | Authorise | 0.0 ms | - |
+| | Inject gallery version | 0.1 ms | - |
+| | Search | 8.2 ms | media: 0, directories: 0 |
+| | Add thumbnail information | 0.1 ms | media: 0, directories: 0 |
+| | Clean up gallery results | 0.0 ms | media: 0, directories: 0 |
+| | Render result | 0.0 ms | media: 0, directories: 0 |
+| **Searching for `directory:a`** | | **858.3 ms** | **media: 1705, directories: 0** |
+| | Authenticate | 0.0 ms | - |
+| | Authorise | 0.0 ms | - |
+| | Inject gallery version | 0.2 ms | - |
+| | Search | 678.5 ms | media: 1705, directories: 0 |
+| | Add thumbnail information | 139.8 ms | media: 1705, directories: 0 |
+| | Clean up gallery results | 39.5 ms | media: 1705, directories: 0 |
+| | Render result | 0.0 ms | media: 1705, directories: 0 |
+| **Searching for `file-name:a`** | | **45.5 ms** | **media: 79, directories: 0** |
+| | Authenticate | 0.0 ms | - |
+| | Authorise | 0.0 ms | - |
+| | Inject gallery version | 0.2 ms | - |
+| | Search | 36.7 ms | media: 79, directories: 0 |
+| | Add thumbnail information | 6.5 ms | media: 79, directories: 0 |
+| | Clean up gallery results | 1.9 ms | media: 79, directories: 0 |
+| | Render result | 0.0 ms | media: 79, directories: 0 |
+| **Searching for `keyword:a`** | | **765.2 ms** | **media: 1534, directories: 0** |
+| | Authenticate | 0.0 ms | - |
+| | Authorise | 0.0 ms | - |
+| | Inject gallery version | 0.3 ms | - |
+| | Search | 601.4 ms | media: 1534, directories: 0 |
+| | Add thumbnail information | 126.1 ms | media: 1534, directories: 0 |
+| | Clean up gallery results | 37.1 ms | media: 1534, directories: 0 |
+| | Render result | 0.0 ms | media: 1534, directories: 0 |
+| **Searching for `person:a`** | | **483.6 ms** | **media: 768, directories: 0** |
+| | Authenticate | 0.0 ms | - |
+| | Authorise | 0.0 ms | - |
+| | Inject gallery version | 0.2 ms | - |
+| | Search | 399.7 ms | media: 768, directories: 0 |
+| | Add thumbnail information | 63.1 ms | media: 768, directories: 0 |
+| | Clean up gallery results | 20.2 ms | media: 768, directories: 0 |
+| | Render result | 0.0 ms | media: 768, directories: 0 |
+| **Searching for `position:a`** | | **634.2 ms** | **media: 1133, directories: 0** |
+| | Authenticate | 0.0 ms | - |
+| | Authorise | 0.0 ms | - |
+| | Inject gallery version | 0.2 ms | - |
+| | Search | 514.6 ms | media: 1133, directories: 0 |
+| | Add thumbnail information | 92.9 ms | media: 1133, directories: 0 |
+| | Clean up gallery results | 26.4 ms | media: 1133, directories: 0 |
+| | Render result | 0.0 ms | media: 1133, directories: 0 |
+| **Searching for `.`** | | **1072.0 ms** | **media: 2001, directories: 0** |
+| | Authenticate | 0.0 ms | - |
+| | Authorise | 0.0 ms | - |
+| | Inject gallery version | 0.2 ms | - |
+| | Search | 860.1 ms | media: 2001, directories: 0 |
+| | Add thumbnail information | 164.0 ms | media: 2001, directories: 0 |
+| | Clean up gallery results | 47.5 ms | media: 2001, directories: 0 |
+| | Render result | 0.0 ms | media: 2001, directories: 0 |
+| **Searching for `<Most common name>`** | | **145.9 ms** | **media: 238, directories: 0** |
+| | Authenticate | 0.0 ms | - |
+| | Authorise | 0.0 ms | - |
+| | Inject gallery version | 0.2 ms | - |
+| | Search | 118.7 ms | media: 238, directories: 0 |
+| | Add thumbnail information | 20.3 ms | media: 238, directories: 0 |
+| | Clean up gallery results | 6.5 ms | media: 238, directories: 0 |
+| | Render result | 0.0 ms | media: 238, directories: 0 |
+| **Searching for `<Most AND second common names>`** | | **31.3 ms** | **media: 20, directories: 0** |
+| | Authenticate | 0.0 ms | - |
+| | Authorise | 0.0 ms | - |
+| | Inject gallery version | 0.1 ms | - |
+| | Search | 28.5 ms | media: 20, directories: 0 |
+| | Add thumbnail information | 1.8 ms | media: 20, directories: 0 |
+| | Clean up gallery results | 0.6 ms | media: 20, directories: 0 |
+| | Render result | 0.0 ms | media: 20, directories: 0 |
+| **Searching for `<Most OR second common names>`** | | **281.7 ms** | **media: 423, directories: 0** |
+| | Authenticate | 0.0 ms | - |
+| | Authorise | 0.0 ms | - |
+| | Inject gallery version | 0.2 ms | - |
+| | Search | 234.3 ms | media: 423, directories: 0 |
+| | Add thumbnail information | 36.2 ms | media: 423, directories: 0 |
+| | Clean up gallery results | 10.8 ms | media: 423, directories: 0 |
+| | Render result | 0.0 ms | media: 423, directories: 0 |
+| **Searching for `<Contain at least 2 out of all names>`** | | **4596.3 ms** | **media: 288, directories: 0** |
+| | Authenticate | 0.0 ms | - |
+| | Authorise | 0.0 ms | - |
+| | Inject gallery version | 0.2 ms | - |
+| | Search | 4558.1 ms | media: 288, directories: 0 |
+| | Add thumbnail information | 26.7 ms | media: 288, directories: 0 |
+| | Clean up gallery results | 11.0 ms | media: 288, directories: 0 |
+| | Render result | 0.0 ms | media: 288, directories: 0 |
+| **Auto complete for `a`** | | **20.7 ms** | **items: 30** |
+| | Authenticate | 0.1 ms | - |
+| | Authorise | 0.0 ms | - |
+| | Inject gallery version | 0.2 ms | - |
+| | Autocomplete | 20.4 ms | items: 30 |
+| | Render result | 0.0 ms | items: 30 |
+
+run for : 1586292.0ms
+*Measurements run 50 times and an average was calculated.
+
+
+
 
 ## PiGallery2 v1.8.2, 31.12.2020
 **System**: Raspberry Pi 4 4G Model B, SandisK Mobile Ultra 32Gb CLass10, UHS-I, HDD: Western Digital Elements 1TB (WDBUZG0010BBK)
