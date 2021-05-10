@@ -19,8 +19,17 @@ import {PersonManager} from '../src/backend/model/database/sql/PersonManager';
 import {GalleryRouter} from '../src/backend/routes/GalleryRouter';
 import {Express} from 'express';
 import {PersonRouter} from '../src/backend/routes/PersonRouter';
-import {QueryParams} from '../src/common/QueryParams';
-import {SearchQueryTypes, TextSearch} from '../src/common/entities/SearchQueryDTO';
+import {
+  ANDSearchQuery,
+  ORSearchQuery,
+  SearchQueryDTO,
+  SearchQueryTypes,
+  SomeOfSearchQuery,
+  TextSearch,
+  TextSearchQueryMatchTypes,
+  TextSearchQueryTypes
+} from '../src/common/entities/SearchQueryDTO';
+import {QueryKeywords, SearchQueryParser} from '../src/common/SearchQueryParser';
 
 
 export interface BenchmarkResult {
@@ -124,18 +133,107 @@ export class BenchmarkRunner {
     return await bm.run(this.RUNS);
   }
 
-  async bmAllSearch(text: string): Promise<{ result: BenchmarkResult, searchType: SearchQueryTypes }[]> {
+  async bmAllSearch(): Promise<{ result: BenchmarkResult, searchQuery: SearchQueryDTO }[]> {
     await this.setupDB();
-    const types = Utils.enumToArray(SearchQueryTypes).map((a): number => a.key).concat([null]);
-    const results: { result: BenchmarkResult, searchType: SearchQueryTypes }[] = [];
 
-    for (const type of types) {
+    const queryKeywords: QueryKeywords = {
+      NSomeOf: '-of',
+      and: 'and',
+      caption: 'caption',
+      directory: 'directory',
+      file_name: 'file-name',
+      from: 'from',
+      keyword: 'keyword',
+      landscape: 'landscape',
+      maxRating: 'max-rating',
+      maxResolution: 'max-resolution',
+      minRating: 'min-rating',
+      minResolution: 'min-resolution',
+      or: 'or',
+      orientation: 'orientation',
+      person: 'person',
+      portrait: 'portrait',
+      position: 'position',
+      someOf: 'some-of',
+      to: 'to',
+      kmFrom: 'km-from'
+    };
+    const queryParser = new SearchQueryParser(queryKeywords);
+    const names = (await ObjectManagers.getInstance().PersonManager.getAll()).sort((a, b) => b.count - a.count);
+    const queries: { query: SearchQueryDTO, description: string }[] = TextSearchQueryTypes.map(t => {
+      const q = {
+        type: t, text: 'a'
+      };
+      return {
+        query: q, description: queryParser.stringify(q)
+      };
+    });
+    // searching for everything
+    queries.push({
+      query: {
+        type: SearchQueryTypes.any_text, text: '.'
+      } as TextSearch, description: queryParser.stringify({
+        type: SearchQueryTypes.any_text, text: '.'
+      } as TextSearch)
+    });
+    if (names.length > 0) {
+      queries.push({
+        query: {
+          type: SearchQueryTypes.person, text: names[0].name,
+          matchType: TextSearchQueryMatchTypes.exact_match
+        } as TextSearch, description: '<Most common name>'
+      });
+    }
+    if (names.length > 1) {
+      queries.push({
+        query: {
+          type: SearchQueryTypes.AND, list: [
+            {
+              type: SearchQueryTypes.person, text: names[0].name,
+              matchType: TextSearchQueryMatchTypes.exact_match
+            } as TextSearch,
+            {
+              type: SearchQueryTypes.person, text: names[1].name,
+              matchType: TextSearchQueryMatchTypes.exact_match
+            } as TextSearch
+          ]
+        } as ANDSearchQuery, description: '<Most AND second common names>'
+      });
+      queries.push({
+        query: {
+          type: SearchQueryTypes.OR, list: [
+            {
+              type: SearchQueryTypes.person, text: names[0].name,
+              matchType: TextSearchQueryMatchTypes.exact_match
+            } as TextSearch,
+            {
+              type: SearchQueryTypes.person, text: names[1].name,
+              matchType: TextSearchQueryMatchTypes.exact_match
+            } as TextSearch
+          ]
+        } as ORSearchQuery, description: '<Most OR second common names>'
+      });
+      queries.push({
+        query: {
+          type: SearchQueryTypes.SOME_OF,
+          min: 2,
+          list: names.map(n => ({
+            type: SearchQueryTypes.person, text: n.name,
+            matchType: TextSearchQueryMatchTypes.exact_match
+          } as TextSearch))
+        } as SomeOfSearchQuery, description: '<Contain at least 2 out of all names>'
+      });
+    }
+    const results: { result: BenchmarkResult, searchQuery: SearchQueryDTO }[] = [];
+
+    for (const entry of queries) {
       const req = Utils.clone(this.requestTemplate);
-      req.query[QueryParams.gallery.search.query] = ({type, text} as TextSearch);
-      const bm = new Benchmark('Searching for `' + text + '` as `' + (type ? SearchQueryTypes[type] : 'any') + '`', req);
+      req.params.searchQueryDTO = JSON.stringify(entry.query);
+
+      const bm = new Benchmark('Searching for `' + entry.description + '`', req);
       BMGalleryRouter.addSearch(bm.BmExpressApp);
 
-      results.push({result: await bm.run(this.RUNS), searchType: type});
+      results.push({result: await bm.run(this.RUNS), searchQuery: entry.query});
     }
     return results;
   }

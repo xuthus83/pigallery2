@@ -9,7 +9,7 @@ import {ContentWrapper} from '../../common/entities/ConentWrapper';
 import {PhotoDTO} from '../../common/entities/PhotoDTO';
 import {ProjectPath} from '../ProjectPath';
 import {Config} from '../../common/config/private/Config';
-import {UserDTO, UserDTOUtils} from '../../common/entities/UserDTO';
+import {UserDTOUtils} from '../../common/entities/UserDTO';
 import {MediaDTO, MediaDTOUtils} from '../../common/entities/MediaDTO';
 import {VideoDTO} from '../../common/entities/VideoDTO';
 import {Utils} from '../../common/Utils';
@@ -79,11 +79,11 @@ export class GalleryMWs {
         store: true, // disable compression
       });
 
-      res.on('close', function() {
+      res.on('close', () => {
         console.log('zip ' + archive.pointer() + ' bytes');
       });
 
-      archive.on('error', function(err: any) {
+      archive.on('error', (err: any) => {
         throw err;
       });
 
@@ -92,12 +92,12 @@ export class GalleryMWs {
       // append photos in absoluteDirectoryName
       // using case-insensitive glob of extensions
       for (const ext of SupportedFormats.WithDots.Photos) {
-        archive.glob(`*${ext}`, {cwd:absoluteDirectoryName, nocase:true});
+        archive.glob(`*${ext}`, {cwd: absoluteDirectoryName, nocase: true});
       }
       // append videos in absoluteDirectoryName
       // using case-insensitive glob of extensions
       for (const ext of SupportedFormats.WithDots.Videos) {
-        archive.glob(`*${ext}`, {cwd:absoluteDirectoryName, nocase:true});
+        archive.glob(`*${ext}`, {cwd: absoluteDirectoryName, nocase: true});
       }
 
       await archive.finalize();

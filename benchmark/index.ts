@@ -70,7 +70,7 @@ const run = async () => {
   printResult(await bm.bmSaveDirectory());
   printResult(await bm.bmListDirectory());
   printResult(await bm.bmListPersons());
-  (await bm.bmAllSearch('a')).forEach(res => printResult(res.result));
+  (await bm.bmAllSearch()).forEach(res => printResult(res.result));
   printResult(await bm.bmAutocomplete('a'));
   printLine('*Measurements run ' + RUNS + ' times and an average was calculated.');
   console.log(resultsText);

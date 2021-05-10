@@ -19,33 +19,33 @@ import {
 } from '../../../src/common/entities/SearchQueryDTO';
 import {QueryKeywords, SearchQueryParser} from '../../../src/common/SearchQueryParser';
 
+const queryKeywords: QueryKeywords = {
+  NSomeOf: '-of',
+  and: 'and',
+  caption: 'caption',
+  directory: 'directory',
+  file_name: 'file-name',
+  from: 'from',
+  keyword: 'keyword',
+  landscape: 'landscape',
+  maxRating: 'max-rating',
+  maxResolution: 'max-resolution',
+  minRating: 'min-rating',
+  minResolution: 'min-resolution',
+  or: 'or',
+  orientation: 'orientation',
+  person: 'person',
+  portrait: 'portrait',
+  position: 'position',
+  someOf: 'some-of',
+  to: 'to',
+  kmFrom: 'km-from'
+};
+
 describe('SearchQueryParser', () => {
 
-  const keywords: QueryKeywords = {
-    NSomeOf: '-of',
-    and: 'and',
-    caption: 'caption',
-    directory: 'directory',
-    file_name: 'file-name',
-    from: 'from',
-    keyword: 'keyword',
-    landscape: 'landscape',
-    maxRating: 'max-rating',
-    maxResolution: 'max-resolution',
-    minRating: 'min-rating',
-    minResolution: 'min-resolution',
-    or: 'or',
-    orientation: 'orientation',
-    person: 'person',
-    portrait: 'portrait',
-    position: 'position',
-    someOf: 'some-of',
-    to: 'to',
-    kmFrom: 'km-from'
-  };
-
   const check = (query: SearchQueryDTO) => {
-    const parser = new SearchQueryParser(keywords);
+    const parser = new SearchQueryParser(queryKeywords);
     expect(parser.parse(parser.stringify(query))).to.deep.equals(query, parser.stringify(query));
 
   };
@@ -72,14 +72,14 @@ describe('SearchQueryParser', () => {
       check({type: SearchQueryTypes.to_date, value: (new Date(2020, 1, 20)).getTime()} as ToDateSearch);
       check({type: SearchQueryTypes.to_date, value: (new Date(2020, 1, 1)).getTime()} as ToDateSearch);
 
-      const parser = new SearchQueryParser(keywords);
+      const parser = new SearchQueryParser(queryKeywords);
       // test if date gets simplified on 1st of Jan.
       let query: RangeSearch = {type: SearchQueryTypes.to_date, value: (new Date(2020, 0, 1)).getTime()} as ToDateSearch;
-      expect(parser.parse(keywords.to + ':' + (new Date(query.value)).getFullYear()))
+      expect(parser.parse(queryKeywords.to + ':' + (new Date(query.value)).getFullYear()))
         .to.deep.equals(query, parser.stringify(query));
 
       query = ({type: SearchQueryTypes.from_date, value: (new Date(2020, 0, 1)).getTime()} as FromDateSearch);
-      expect(parser.parse(keywords.from + ':' + (new Date(query.value)).getFullYear()))
+      expect(parser.parse(queryKeywords.from + ':' + (new Date(query.value)).getFullYear()))
         .to.deep.equals(query, parser.stringify(query));
 
     });
