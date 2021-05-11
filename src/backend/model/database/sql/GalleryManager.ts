@@ -60,7 +60,13 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
       if (dir.lastModified !== lastModified) {
         Logger.silly(LOG_TAG, 'Reindexing reason: lastModified mismatch: known: '
           + dir.lastModified + ', current:' + lastModified);
-        return ObjectManagers.getInstance().IndexingManager.indexDirectory(relativeDirectoryName);
+        const ret = await ObjectManagers.getInstance().IndexingManager.indexDirectory(relativeDirectoryName);
+        for (const subDir of ret.directories) {
+          if (!subDir.preview) { // if sub directories does not have photos, so cannot show a preview, try get one from DB
+            await this.fillPreviewFromSubDir(connection, subDir);
+          }
+        }
+        return ret;
       }
 
 
@@ -213,7 +219,7 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
     return await query.getOne();
   }
 
-  protected async fillPreviewFromSubDir(connection: Connection, dir: DirectoryEntity): Promise<void> {
+  protected async fillPreviewFromSubDir(connection: Connection, dir: DirectoryDTO): Promise<void> {
     dir.media = [];
     const query = connection
       .getRepository(MediaEntity)
