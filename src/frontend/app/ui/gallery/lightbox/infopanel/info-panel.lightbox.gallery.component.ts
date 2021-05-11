@@ -50,6 +50,11 @@ export class InfoPanelLightboxComponent implements OnInit, OnChanges {
     return (this.media as VideoDTO).metadata;
   }
 
+
+  get Rating(): number {
+    return (this.media as PhotoDTO).metadata.rating;
+  }
+
   get PositionData(): PositionMetaData {
     return (this.media as PhotoDTO).metadata.positionData;
   }

@@ -84,6 +84,17 @@
     </div>
   </div>
 
+  <div class="row" *ngIf="Rating">
+    <div class="col-2" title="rating" p18n-rating>
+      <span class="details-icon oi oi-star"></span>
+    </div>
+    <div class="col-10">
+      <div class="details-main mt-2" [title]="Rating + ' stars'">
+        <span *ngFor="let stars of [].constructor(Rating)" class="oi oi-star text-dark mr-1"></span>
+        <span *ngFor="let stars of [].constructor(5-Rating)" class="oi oi-star text-muted mr-1"></span>
+      </div>
+    </div>
+  </div>
 
   <div class="row" *ngIf="keywords">
     <div class="col-2">
