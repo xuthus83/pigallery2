@@ -149,6 +149,9 @@ export class SearchManager implements ISearchManager {
       resultOverflow: false
     };
 
+    // This trick enables us to list less rows as faces will be concatenated into one row
+    // Also typeorm does not support automatic mapping of nested foreign keys
+    // (i.e: leftJoinAndSelect('media.metadata.faces', 'faces')  does not work)
     const facesQuery = Config.Server.Database.type === DatabaseType.mysql ?
       'CONCAT(\'[\' , GROUP_CONCAT(  \'{"name": "\' , person.name , \'", "box": {"top":\' , faces.box.top , \', "left":\' , faces.box.left , \', "height":\' , faces.box.height ,\', "width":\' , faces.box.width , \'}}\'  ) ,\']\') as media_metadataFaces' :
       '\'[\' || GROUP_CONCAT(  \'{"name": "\' || person.name || \'", "box": {"top":\' || faces.box.top || \', "left":\' || faces.box.left || \', "height":\' || faces.box.height ||\', "width":\' || faces.box.width || \'}}\'  ) ||\']\' as media_metadataFaces';
