@@ -6,7 +6,6 @@ import {PhotoEntity} from './enitites/PhotoEntity';
 import {DirectoryEntity} from './enitites/DirectoryEntity';
 import {MediaEntity} from './enitites/MediaEntity';
 import {PersonEntry} from './enitites/PersonEntry';
-import {FaceRegionEntry} from './enitites/FaceRegionEntry';
 import {Brackets, SelectQueryBuilder, WhereExpression} from 'typeorm';
 import {Config} from '../../../../common/config/private/Config';
 import {
@@ -150,41 +149,36 @@ export class SearchManager implements ISearchManager {
       resultOverflow: false
     };
 
+    const facesQuery = Config.Server.Database.type === DatabaseType.mysql ?
+      'CONCAT(\'[\' , GROUP_CONCAT(  \'{"name": "\' , person.name , \'", "box": {"top":\' , faces.box.top , \', "left":\' , faces.box.left , \', "height":\' , faces.box.height ,\', "width":\' , faces.box.width , \'}}\'  ) ,\']\') as media_metadataFaces' :
+      '\'[\' || GROUP_CONCAT(  \'{"name": "\' || person.name || \'", "box": {"top":\' || faces.box.top || \', "left":\' || faces.box.left || \', "height":\' || faces.box.height ||\', "width":\' || faces.box.width || \'}}\'  ) ||\']\' as media_metadataFaces';
 
-    const sqlQuery = await connection.getRepository(MediaEntity).createQueryBuilder('media')
-      .innerJoin((q): any => {
-          const subQuery = q.from(MediaEntity, 'media')
-            .select('distinct media.id')
-            .limit(Config.Client.Search.maxMediaResult + 1);
-
-          subQuery.leftJoin('media.directory', 'directory')
-            .where(this.buildWhereQuery(query));
-
-          return subQuery;
-        },
-        'innerMedia',
-        'media.id=innerMedia.id')
+    const rawAndEntries = await connection
+      .getRepository(MediaEntity)
+      .createQueryBuilder('media')
+      .select(['media', facesQuery])
+      .where(this.buildWhereQuery(query))
       .leftJoinAndSelect('media.directory', 'directory')
-      .leftJoinAndSelect('media.metadata.faces', 'faces')
-      .leftJoinAndSelect('faces.person', 'person');
+      .leftJoin('media.metadata.faces', 'faces')
+      .leftJoin('faces.person', 'person')
+      .limit(Config.Client.Search.maxMediaResult + 1)
+      .groupBy('media.id')
+      .getRawAndEntities();
 
+    for (let i = 0; i < rawAndEntries.entities.length; ++i) {
+      if (rawAndEntries.raw[i].media_metadataFaces) {
+        rawAndEntries.entities[i].metadata.faces = JSON.parse(rawAndEntries.raw[i].media_metadataFaces);
+      }
+    }
 
-    result.media = await this.loadMediaWithFaces(sqlQuery);
+    result.media = rawAndEntries.entities;
 
     if (result.media.length > Config.Client.Search.maxMediaResult) {
       result.resultOverflow = true;
     }
 
-    /* result.directories = await connection
-       .getRepository(DirectoryEntity)
-       .createQueryBuilder('dir')
-       .where('dir.name LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
-       .limit(Config.Client.Search.maxMediaResult + 1)
-       .getMany();
 
-    if (result.directories.length > Config.Client.Search.maxDirectoryResult) {
-      result.resultOverflow = true;
-    }*/
+    // TODO: implement directory search. Search now only returns with photos and videos
 
     return result;
   }
@@ -537,35 +531,4 @@ export class SearchManager implements ISearchManager {
     return res;
   }
 
-  private async loadMediaWithFaces(query: SelectQueryBuilder<MediaEntity>): Promise<MediaEntity[]> {
-    const rawAndEntities = await query.orderBy('media.id').getRawAndEntities();
-    const media: MediaEntity[] = rawAndEntities.entities;
-
-    let rawIndex = 0;
-    for (const item of media) {
-
-      if (rawAndEntities.raw[rawIndex].media_id !== item.id) {
-        throw new Error('index mismatch');
-      }
-
-      // media without a face
-      if (rawAndEntities.raw[rawIndex].faces_id === null) {
-        delete item.metadata.faces;
-        rawIndex++;
-        continue;
-      }
-
-      // process all faces for one media
-      item.metadata.faces = [];
-
-      while (rawAndEntities.raw[rawIndex].media_id === item.id) {
-        item.metadata.faces.push(FaceRegionEntry.fromRawToDTO(rawAndEntities.raw[rawIndex]) as any);
-        rawIndex++;
-        if (rawIndex >= rawAndEntities.raw.length) {
-          return media;
-        }
-      }
-    }
-    return media;
-  }
 }

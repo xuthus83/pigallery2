@@ -34,20 +34,4 @@ export class FaceRegionEntry {
 
   name: string;
 
-  public static fromRawToDTO(raw: {
-    faces_id: number,
-    faces_mediaId: number,
-    faces_personId: number,
-    faces_boxHeight: number,
-    faces_boxWidth: number,
-    faces_boxLeft: number,
-    faces_boxTop: number,
-    person_id: number,
-    person_name: string
-  }): FaceRegion {
-    return {
-      box: {width: raw.faces_boxWidth, height: raw.faces_boxHeight, left: raw.faces_boxLeft, top: raw.faces_boxTop},
-      name: raw.person_name
-    };
-  }
 }
