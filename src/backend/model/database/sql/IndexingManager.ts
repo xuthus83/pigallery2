@@ -228,7 +228,8 @@ export class IndexingManager implements IIndexingManager {
 
       const scannedFaces = (media[i].metadata as PhotoMetadata).faces || [];
       if ((media[i].metadata as PhotoMetadata).faces) { // if it has faces, cache them
-        (media[i].metadata as PhotoMetadataEntity).persons = (media[i].metadata as PhotoMetadata).faces.map(f => f.name);
+        // make the list distinct (some photos may contain the same person multiple times)
+        (media[i].metadata as PhotoMetadataEntity).persons = [...new Set((media[i].metadata as PhotoMetadata).faces.map(f => f.name))];
       }
       delete (media[i].metadata as PhotoMetadata).faces; // this is a separated DB, lets save separately
 
