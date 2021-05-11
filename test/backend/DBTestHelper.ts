@@ -123,6 +123,8 @@ export class DBTestHelper {
       await this.initSQLite();
     } else if (this.dbType === DatabaseType.mysql) {
       await this.initMySQL();
+    } else if (this.dbType === DatabaseType.memory) {
+      Config.Server.Database.type = DatabaseType.memory;
     }
   }
 
