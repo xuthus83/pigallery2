@@ -99,7 +99,7 @@
     "@types/sharp": "0.28.1",
     "@types/winston": "2.4.4",
     "@types/xml2js": "0.4.8",
-    "bootstrap": "5.0.0",
+    "bootstrap": "4.6.0",
     "chai": "4.3.4",
     "chai-http": "4.3.0",
     "codelyzer": "6.0.2",
