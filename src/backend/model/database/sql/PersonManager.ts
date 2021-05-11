@@ -30,24 +30,12 @@ export class PersonManager implements ISQLPersonManager {
     return person;
   }
 
-
-  private async loadAll(): Promise<void> {
-    const connection = await SQLConnection.getConnection();
-    const personRepository = connection.getRepository(PersonEntry);
-    this.persons = await personRepository.find({
-      relations: ['sampleRegion',
-        'sampleRegion.media',
-        'sampleRegion.media.directory']
-    });
-  }
-
   public async getAll(): Promise<PersonEntry[]> {
     if (this.persons === null) {
       await this.loadAll();
     }
     return this.persons;
   }
-
 
   /**
    * Used for statistic
@@ -65,7 +53,6 @@ export class PersonManager implements ISQLPersonManager {
     }
     return this.persons.find((p): boolean => p.name === name);
   }
-
 
   public async saveAll(names: string[]): Promise<void> {
     const toSave: { name: string }[] = [];
@@ -90,12 +77,21 @@ export class PersonManager implements ISQLPersonManager {
 
   }
 
-
   public async onGalleryIndexUpdate(): Promise<void> {
     await this.updateCounts();
     await this.updateSamplePhotos();
+    await this.loadAll();
   }
 
+  private async loadAll(): Promise<void> {
+    const connection = await SQLConnection.getConnection();
+    const personRepository = connection.getRepository(PersonEntry);
+    this.persons = await personRepository.find({
+      relations: ['sampleRegion',
+        'sampleRegion.media',
+        'sampleRegion.media.directory']
+    });
+  }
 
   private async updateCounts(): Promise<void> {
     const connection = await SQLConnection.getConnection();

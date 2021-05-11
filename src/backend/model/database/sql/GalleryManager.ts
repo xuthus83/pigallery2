@@ -77,10 +77,8 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
         // on the fly reindexing
 
         Logger.silly(LOG_TAG, 'lazy reindexing reason: cache timeout: lastScanned: '
-          + (Date.now() - dir.lastScanned) + ' ms ago, cachedFolderTimeout:' + Config.Server.Indexing.cachedFolderTimeout);
-        ObjectManagers.getInstance().IndexingManager.indexDirectory(relativeDirectoryName).catch((err): void => {
-          console.error(err);
-        });
+          + (Date.now() - dir.lastScanned) + 'ms ago, cachedFolderTimeout:' + Config.Server.Indexing.cachedFolderTimeout);
+        ObjectManagers.getInstance().IndexingManager.indexDirectory(relativeDirectoryName).catch(console.error);
       }
       await this.fillParentDir(connection, dir);
       return dir;

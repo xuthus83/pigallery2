@@ -42,7 +42,7 @@ export class ThumbnailGeneratorMWs {
 
 
   // tslint:disable-next-line:typedef
-  public static addThumbnailInfoForPersons(req: Request, res: Response, next: NextFunction): any {
+  public static addThumbnailInfoForPersons(req: Request, res: Response, next: NextFunction): void {
     if (!req.resultPipe) {
       return next();
     }
@@ -51,7 +51,11 @@ export class ThumbnailGeneratorMWs {
       const size: number = Config.Client.Media.Thumbnail.personThumbnailSize;
 
       const persons: PersonWithSampleRegion[] = req.resultPipe;
+
       for (const item of persons) {
+        if (!item.sampleRegion) {
+          continue;
+        }
         // load parameters
         const mediaPath = path.join(ProjectPath.ImageFolder,
           item.sampleRegion.media.directory.path,
