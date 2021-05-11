@@ -6,6 +6,8 @@ import {ProjectPath} from '../../../../../src/backend/ProjectPath';
 import {Utils} from '../../../../../src/common/Utils';
 
 describe('DiskMangerWorker', () => {
+  // loading default settings (this might have been changed by other tests
+  Config.loadSync();
 
   it('should parse metadata', async () => {
     Config.Server.Media.folder = path.join(__dirname, '/../../../assets');

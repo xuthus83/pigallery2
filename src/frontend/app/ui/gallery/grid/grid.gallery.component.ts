@@ -218,8 +218,6 @@ export class GalleryGridComponent implements OnChanges, OnInit, AfterViewInit, O
 
   /**
    * Makes sure that the photo with the given mediaString is visible on the screen
-   * @param mediaStringId
-   * @private
    */
   private renderUpToMedia(mediaStringId: string): void {
     const index = this.media.findIndex((p): boolean => this.queryService.getMediaStringId(p) === mediaStringId);
