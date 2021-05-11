@@ -253,7 +253,7 @@ export class MetadataLoader {
                       };
                     };
 
-                    /* Adobe Lightroom based face region structure*/
+                    /* Adobe Lightroom based face region structure */
                     if (regionRoot.value &&
                       regionRoot.value['rdf:Description'] &&
                       regionRoot.value['rdf:Description'].value &&

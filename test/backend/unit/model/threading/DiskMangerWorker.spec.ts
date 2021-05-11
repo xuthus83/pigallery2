@@ -4,10 +4,19 @@ import * as path from 'path';
 import {Config} from '../../../../../src/common/config/private/Config';
 import {ProjectPath} from '../../../../../src/backend/ProjectPath';
 import {Utils} from '../../../../../src/common/Utils';
+import {DatabaseType} from '../../../../../src/common/config/private/PrivateConfig';
+
+declare const before: any;
 
 describe('DiskMangerWorker', () => {
-  // loading default settings (this might have been changed by other tests
-  Config.loadSync();
+  // loading default settings (this might have been changed by other tests)
+  before(() => {
+    Config.loadSync();
+    Config.Server.Database.type = DatabaseType.sqlite;
+    Config.Client.Faces.enabled = true;
+    Config.Client.Faces.keywordsToPersons = true;
+  });
+
 
   it('should parse metadata', async () => {
     Config.Server.Media.folder = path.join(__dirname, '/../../../assets');

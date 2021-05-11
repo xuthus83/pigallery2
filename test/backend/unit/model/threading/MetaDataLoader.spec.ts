@@ -5,10 +5,20 @@ import * as path from 'path';
 import * as fs from 'fs';
 import {PhotoProcessing} from '../../../../../src/backend/model/fileprocessing/PhotoProcessing';
 import {Config} from '../../../../../src/common/config/private/Config';
+import {DatabaseType} from '../../../../../src/common/config/private/PrivateConfig';
+
+declare const before: any;
 
 describe('MetadataLoader', () => {
-  // loading default settings (this might have been changed by other tests
-  Config.loadSync();
+  // loading default settings (this might have been changed by other tests)
+
+  before(() => {
+    Config.loadSync();
+    Config.Server.Database.type = DatabaseType.sqlite;
+    Config.Client.Faces.enabled = true;
+    Config.Client.Faces.keywordsToPersons = true;
+  });
+
 
   it('should load png', async () => {
     const data = await MetadataLoader.loadPhotoMetadata(path.join(__dirname, '/../../../assets/test_png.png'));
