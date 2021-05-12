@@ -16,4 +16,6 @@ export interface ISQLGalleryManager extends IGalleryManager {
   countMediaSize(): Promise<number>;
 
   getPossibleDuplicates(): Promise<DuplicatesDTO[]>;
+
+  selectDirStructure(directory: string): Promise<DirectoryDTO>;
 }

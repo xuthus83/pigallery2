@@ -57,12 +57,11 @@ export class IndexingManager implements IIndexingManager {
   async resetDB(): Promise<void> {
     Logger.info(LOG_TAG, 'Resetting DB');
     const connection = await SQLConnection.getConnection();
-    return connection
+    await connection
       .getRepository(DirectoryEntity)
       .createQueryBuilder('directory')
       .delete()
-      .execute().then((): void => {
-      });
+      .execute();
   }
 
   // Todo fix it, once typeorm support connection pools for sqlite

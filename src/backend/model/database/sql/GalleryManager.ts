@@ -198,6 +198,24 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
 
   }
 
+  /**
+   * Returns with the directories only, does not include media or metafiles
+   */
+  public async selectDirStructure(relativeDirectoryName: string): Promise<DirectoryEntity> {
+    const directoryPath = GalleryManager.parseRelativeDirePath(relativeDirectoryName);
+    const connection = await SQLConnection.getConnection();
+    const query = connection
+      .getRepository(DirectoryEntity)
+      .createQueryBuilder('directory')
+      .where('directory.name = :name AND directory.path = :path', {
+        name: directoryPath.name,
+        path: directoryPath.parent
+      })
+      .leftJoinAndSelect('directory.directories', 'directories');
+
+    return await query.getOne();
+  }
+
   protected async selectParentDir(connection: Connection, directoryName: string, directoryParent: string): Promise<DirectoryEntity> {
     const query = connection
       .getRepository(DirectoryEntity)

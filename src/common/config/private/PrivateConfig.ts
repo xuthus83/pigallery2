@@ -221,7 +221,7 @@ export class ServerJobConfig {
     new JobScheduleConfig(DefaultsJobs[DefaultsJobs.Indexing],
       DefaultsJobs[DefaultsJobs.Indexing],
       false,
-      new NeverJobTrigger(), {}
+      new NeverJobTrigger(), {indexChangesOnly: true}
     ),
     new JobScheduleConfig(DefaultsJobs[DefaultsJobs['Thumbnail Generation']],
       DefaultsJobs[DefaultsJobs['Thumbnail Generation']],

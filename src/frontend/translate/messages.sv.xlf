@@ -2752,6 +2752,26 @@
         <source>Maximum number of photos and videos that listed in one search result</source>
         <target>Maximum number of photos and videos that listed in one search result</target>
       </trans-unit>
+      <trans-unit id="1524055079900109760" datatype="html">
+        <source>Download Zip</source>
+        <target>Download Zip</target>
+      </trans-unit>
+      <trans-unit id="8061493549899716713" datatype="html">
+        <source>Enable download zip of a directory contents</source>
+        <target>Enable download zip of a directory contents</target>
+      </trans-unit>
+      <trans-unit id="8335094363935357421" datatype="html">
+        <source>Index changes only</source>
+        <target>Index changes only</target>
+      </trans-unit>
+      <trans-unit id="2887355625408505193" datatype="html">
+        <source>Only indexes a folder if it got changed.</source>
+        <target>Only indexes a folder if it got changed.</target>
+      </trans-unit>
+      <trans-unit id="759454492324260485" datatype="html">
+        <source>Maximum number of photos and videos that listed in one search result.</source>
+        <target>Maximum number of photos and videos that listed in one search result.</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

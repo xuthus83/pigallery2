@@ -77,7 +77,7 @@ export class IndexingSettingsComponent extends SettingsComponentDirective<Server
     this.inProgress = true;
     this.error = '';
     try {
-      await this.jobsService.start(DefaultsJobs[DefaultsJobs.Indexing]);
+      await this.jobsService.start(DefaultsJobs[DefaultsJobs.Indexing], {indexChangesOnly: true});
       this.notification.info($localize`Folder indexing started`);
       this.inProgress = false;
       return true;

@@ -313,7 +313,7 @@ export class BenchmarkRunner {
           onProgressUpdate: (progress: JobProgress): void => {
           }
         };
-        indexingJob.start().catch(console.error);
+        indexingJob.start({indexChangesOnly: false}).catch(console.error);
       } catch (e) {
         console.error(e);
         reject(e);

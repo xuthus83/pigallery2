@@ -2752,6 +2752,26 @@
         <source>Maximum number of photos and videos that listed in one search result</source>
         <target>Maximum ennyi képet is videót fog listázni az alkalmazás egy keresési eredményben</target>
       </trans-unit>
+      <trans-unit id="1524055079900109760" datatype="html">
+        <source>Download Zip</source>
+        <target>ZIP-elt letöltés</target>
+      </trans-unit>
+      <trans-unit id="8061493549899716713" datatype="html">
+        <source>Enable download zip of a directory contents</source>
+        <target>Engedélyezi a mappa letöltését ZIP-elve</target>
+      </trans-unit>
+      <trans-unit id="8335094363935357421" datatype="html">
+        <source>Index changes only</source>
+        <target>Csak változások indexelése</target>
+      </trans-unit>
+      <trans-unit id="2887355625408505193" datatype="html">
+        <source>Only indexes a folder if it got changed.</source>
+        <target>Csak akkor indexel újra egy mappát, ha az változott</target>
+      </trans-unit>
+      <trans-unit id="759454492324260485" datatype="html">
+        <source>Maximum number of photos and videos that listed in one search result.</source>
+        <target>Maximálisan ennyi képet és mappát listáz ki egy keresési eredménnyel</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

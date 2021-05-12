@@ -8,12 +8,20 @@ export class CameraMetadataEntity implements CameraMetadata {
   @Column('int', {nullable: true, unsigned: true})
   ISO: number;
 
-  @Column('text', {nullable: true})
-  @Column(columnCharsetCS)
+
+  @Column({
+    type: 'text',  nullable: true,
+    charset: columnCharsetCS.charset,
+    collation: columnCharsetCS.collation
+  })
   model: string;
 
-  @Column('text', {nullable: true})
-  @Column(columnCharsetCS)
+
+  @Column({
+    type: 'text',  nullable: true,
+    charset: columnCharsetCS.charset,
+    collation: columnCharsetCS.collation
+  })
   make: string;
 
   @Column('float', {nullable: true})
@@ -47,18 +55,27 @@ export class PositionMetaDataEntity implements PositionMetaData {
   GPSData: GPSMetadataEntity;
 
   @Index()
-  @Column('text', {nullable: true})
-  @Column(columnCharsetCS)
+  @Column({
+    type: 'text',  nullable: true,
+    charset: columnCharsetCS.charset,
+    collation: columnCharsetCS.collation
+  })
   country: string;
 
   @Index()
-  @Column('text', {nullable: true})
-  @Column(columnCharsetCS)
+  @Column({
+    type: 'text',  nullable: true,
+    charset: columnCharsetCS.charset,
+    collation: columnCharsetCS.collation
+  })
   state: string;
 
   @Index()
-  @Column('text', {nullable: true})
-  @Column(columnCharsetCS)
+  @Column({
+    type: 'text',  nullable: true,
+    charset: columnCharsetCS.charset,
+    collation: columnCharsetCS.collation
+  })
   city: string;
 }
 

@@ -105,6 +105,7 @@ export class TempFolderCleaningJob extends Job {
 
   protected async step(): Promise<boolean> {
     if (this.directoryQueue.length === 0) {
+      this.Progress.Left = 0;
       return false;
     }
     if (this.tempRootCleaned === false) {

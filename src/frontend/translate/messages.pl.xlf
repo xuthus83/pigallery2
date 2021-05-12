@@ -1279,7 +1279,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/settings/jobs/jobs.settings.component.html</context>
           <context context-type="linenumber">228,229</context>
         </context-group>
-        <target>+ Dodaj zadanie </target>
+        <target>+ Dodaj zadanie</target>
       </trans-unit>
       <trans-unit id="8500119868694688450" datatype="html">
         <source>Add new job</source>
@@ -2751,6 +2751,26 @@
       <trans-unit id="1146747007849883580" datatype="html">
         <source>Maximum number of photos and videos that listed in one search result</source>
         <target>Maksymalna liczba zdjęć i plików wideo wyświetlanych w wynikach wyszukiwania</target>
+      </trans-unit>
+      <trans-unit id="1524055079900109760" datatype="html">
+        <source>Download Zip</source>
+        <target>Download Zip</target>
+      </trans-unit>
+      <trans-unit id="8061493549899716713" datatype="html">
+        <source>Enable download zip of a directory contents</source>
+        <target>Enable download zip of a directory contents</target>
+      </trans-unit>
+      <trans-unit id="8335094363935357421" datatype="html">
+        <source>Index changes only</source>
+        <target>Index changes only</target>
+      </trans-unit>
+      <trans-unit id="2887355625408505193" datatype="html">
+        <source>Only indexes a folder if it got changed.</source>
+        <target>Only indexes a folder if it got changed.</target>
+      </trans-unit>
+      <trans-unit id="759454492324260485" datatype="html">
+        <source>Maximum number of photos and videos that listed in one search result.</source>
+        <target>Maximum number of photos and videos that listed in one search result.</target>
       </trans-unit>
     </body>
   </file>
