@@ -16,15 +16,8 @@ export class MediaDimensionEntity implements MediaDimension {
 }
 
 
-const arrayTransformer: ValueTransformer = {
-  to: (value: string[]): string => value ? value.join(',') : null,
-  from: (value: string): string[] => value ? value.split(',') : null
-};
-
 export class MediaMetadataEntity implements MediaMetadata {
-
-  @Index()
-  @Column('varchar', {length: 128})
+  @Column('text')
   caption: string;
 
   @Column(type => MediaDimensionEntity)
@@ -46,11 +39,8 @@ export class MediaMetadataEntity implements MediaMetadata {
   @Column('int', {unsigned: true})
   fileSize: number;
 
-  @Index()
   @Column({
-    type: 'varchar',
-    length: 512,
-    transformer: arrayTransformer,
+    type: 'simple-array',
     charset: columnCharsetCS.charset,
     collation: columnCharsetCS.collation
   })
@@ -62,7 +52,6 @@ export class MediaMetadataEntity implements MediaMetadata {
   @Column(type => PositionMetaDataEntity)
   positionData: PositionMetaDataEntity;
 
-  @Index()
   @Column('tinyint', {unsigned: true})
   rating: 0 | 1 | 2 | 3 | 4 | 5;
 
@@ -75,12 +64,8 @@ export class MediaMetadataEntity implements MediaMetadata {
   /**
    * Caches the list of persons. Only used for searching
    */
-  @Index()
   @Column({
-    type: 'varchar',
-    select: false, nullable: true,
-    length: 512,
-    transformer: arrayTransformer,
+    type: 'simple-array', select: false, nullable: true,
     charset: columnCharsetCS.charset,
     collation: columnCharsetCS.collation
   })
@@ -104,7 +89,6 @@ export abstract class MediaEntity implements MediaDTO {
   @PrimaryGeneratedColumn({unsigned: true})
   id: number;
 
-  @Index()
   @Column(columnCharsetCS)
   name: string;
 

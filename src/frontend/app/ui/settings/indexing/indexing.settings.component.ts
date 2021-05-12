@@ -42,8 +42,12 @@ export class IndexingSettingsComponent extends SettingsComponentDirective<Server
 
   }
 
+  get Config(): any {
+    return {indexChangesOnly: true};
+  }
+
   get Progress(): JobProgressDTO {
-    return this.jobsService.progress.value[JobDTOUtils.getHashName(DefaultsJobs[DefaultsJobs.Indexing])];
+    return this.jobsService.progress.value[JobDTOUtils.getHashName(DefaultsJobs[DefaultsJobs.Indexing], this.Config)];
   }
 
 
@@ -77,7 +81,7 @@ export class IndexingSettingsComponent extends SettingsComponentDirective<Server
     this.inProgress = true;
     this.error = '';
     try {
-      await this.jobsService.start(DefaultsJobs[DefaultsJobs.Indexing], {indexChangesOnly: true});
+      await this.jobsService.start(DefaultsJobs[DefaultsJobs.Indexing],  this.Config);
       this.notification.info($localize`Folder indexing started`);
       this.inProgress = false;
       return true;
