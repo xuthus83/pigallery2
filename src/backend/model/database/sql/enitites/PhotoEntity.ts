@@ -10,7 +10,8 @@ export class CameraMetadataEntity implements CameraMetadata {
 
 
   @Column({
-    type: 'text',  nullable: true,
+    type: 'varchar', nullable: true,
+    length: 64,
     charset: columnCharsetCS.charset,
     collation: columnCharsetCS.collation
   })
@@ -18,7 +19,8 @@ export class CameraMetadataEntity implements CameraMetadata {
 
 
   @Column({
-    type: 'text',  nullable: true,
+    type: 'varchar', nullable: true,
+    length: 64,
     charset: columnCharsetCS.charset,
     collation: columnCharsetCS.collation
   })
@@ -56,7 +58,8 @@ export class PositionMetaDataEntity implements PositionMetaData {
 
   @Index()
   @Column({
-    type: 'text',  nullable: true,
+    type: 'varchar', nullable: true,
+    length: 64,
     charset: columnCharsetCS.charset,
     collation: columnCharsetCS.collation
   })
@@ -64,7 +67,8 @@ export class PositionMetaDataEntity implements PositionMetaData {
 
   @Index()
   @Column({
-    type: 'text',  nullable: true,
+    type: 'varchar', nullable: true,
+    length: 64,
     charset: columnCharsetCS.charset,
     collation: columnCharsetCS.collation
   })
@@ -72,7 +76,8 @@ export class PositionMetaDataEntity implements PositionMetaData {
 
   @Index()
   @Column({
-    type: 'text',  nullable: true,
+    type: 'varchar', nullable: true,
+    length: 64,
     charset: columnCharsetCS.charset,
     collation: columnCharsetCS.collation
   })

@@ -1,4 +1,4 @@
-import {Column, Entity, Index, ManyToOne, OneToMany, PrimaryGeneratedColumn, TableInheritance, Unique} from 'typeorm';
+import {Column, Entity, Index, ManyToOne, OneToMany, PrimaryGeneratedColumn, TableInheritance, Unique, ValueTransformer} from 'typeorm';
 import {DirectoryEntity} from './DirectoryEntity';
 import {MediaDimension, MediaDTO, MediaMetadata} from '../../../../../common/entities/MediaDTO';
 import {OrientationTypes} from 'ts-exif-parser';
@@ -16,10 +16,15 @@ export class MediaDimensionEntity implements MediaDimension {
 }
 
 
+const arrayTransformer: ValueTransformer = {
+  to: (value: string[]): string => value ? value.join(',') : null,
+  from: (value: string): string[] => value ? value.split(',') : null
+};
+
 export class MediaMetadataEntity implements MediaMetadata {
 
   @Index()
-  @Column('text')
+  @Column('varchar', {length: 128})
   caption: string;
 
   @Column(type => MediaDimensionEntity)
@@ -43,7 +48,9 @@ export class MediaMetadataEntity implements MediaMetadata {
 
   @Index()
   @Column({
-    type: 'simple-array',
+    type: 'varchar',
+    length: 512,
+    transformer: arrayTransformer,
     charset: columnCharsetCS.charset,
     collation: columnCharsetCS.collation
   })
@@ -70,7 +77,10 @@ export class MediaMetadataEntity implements MediaMetadata {
    */
   @Index()
   @Column({
-    type: 'simple-array', select: false, nullable: true,
+    type: 'varchar',
+    select: false, nullable: true,
+    length: 512,
+    transformer: arrayTransformer,
     charset: columnCharsetCS.charset,
     collation: columnCharsetCS.collation
   })
