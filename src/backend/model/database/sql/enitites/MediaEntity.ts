@@ -17,12 +17,19 @@ export class MediaDimensionEntity implements MediaDimension {
 
 
 export class MediaMetadataEntity implements MediaMetadata {
+
+  @Index()
   @Column('text')
   caption: string;
 
   @Column(type => MediaDimensionEntity)
   size: MediaDimensionEntity;
 
+  /**
+   * Date in local timezone
+   * Reason: If you look back your holiday photos from a different timezone,
+   * you do not want to see 2AM next to a photo that was taken during lunch
+   */
   @Column('bigint', {
     unsigned: true, transformer: {
       from: v => parseInt(v, 10),
@@ -34,6 +41,7 @@ export class MediaMetadataEntity implements MediaMetadata {
   @Column('int', {unsigned: true})
   fileSize: number;
 
+  @Index()
   @Column({
     type: 'simple-array',
     charset: columnCharsetCS.charset,
@@ -47,6 +55,7 @@ export class MediaMetadataEntity implements MediaMetadata {
   @Column(type => PositionMetaDataEntity)
   positionData: PositionMetaDataEntity;
 
+  @Index()
   @Column('tinyint', {unsigned: true})
   rating: 0 | 1 | 2 | 3 | 4 | 5;
 
@@ -56,12 +65,16 @@ export class MediaMetadataEntity implements MediaMetadata {
   @OneToMany(type => FaceRegionEntry, faceRegion => faceRegion.media)
   faces: FaceRegionEntry[];
 
+  /**
+   * Caches the list of persons. Only used for searching
+   */
+  @Index()
   @Column({
     type: 'simple-array', select: false, nullable: true,
     charset: columnCharsetCS.charset,
     collation: columnCharsetCS.collation
   })
-  persons: string[]; // Caches the list of persons. Only used for searching
+  persons: string[];
 
   @Column('int', {unsigned: true})
   bitRate: number;
@@ -81,6 +94,7 @@ export abstract class MediaEntity implements MediaDTO {
   @PrimaryGeneratedColumn({unsigned: true})
   id: number;
 
+  @Index()
   @Column(columnCharsetCS)
   name: string;
 

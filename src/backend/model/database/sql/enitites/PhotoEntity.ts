@@ -1,6 +1,7 @@
-import {ChildEntity, Column} from 'typeorm';
+import {ChildEntity, Column, Index} from 'typeorm';
 import {CameraMetadata, GPSMetadata, PhotoDTO, PhotoMetadata, PositionMetaData} from '../../../../../common/entities/PhotoDTO';
 import {MediaEntity, MediaMetadataEntity} from './MediaEntity';
+import {columnCharsetCS} from './EntityUtils';
 
 export class CameraMetadataEntity implements CameraMetadata {
 
@@ -8,9 +9,11 @@ export class CameraMetadataEntity implements CameraMetadata {
   ISO: number;
 
   @Column('text', {nullable: true})
+  @Column(columnCharsetCS)
   model: string;
 
   @Column('text', {nullable: true})
+  @Column(columnCharsetCS)
   make: string;
 
   @Column('float', {nullable: true})
@@ -43,13 +46,19 @@ export class PositionMetaDataEntity implements PositionMetaData {
   @Column(type => GPSMetadataEntity)
   GPSData: GPSMetadataEntity;
 
+  @Index()
   @Column('text', {nullable: true})
+  @Column(columnCharsetCS)
   country: string;
 
+  @Index()
   @Column('text', {nullable: true})
+  @Column(columnCharsetCS)
   state: string;
 
+  @Index()
   @Column('text', {nullable: true})
+  @Column(columnCharsetCS)
   city: string;
 }
 

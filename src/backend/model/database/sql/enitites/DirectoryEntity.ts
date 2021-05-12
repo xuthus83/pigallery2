@@ -54,6 +54,7 @@ export class DirectoryEntity implements DirectoryDTO {
   @OneToMany(type => DirectoryEntity, dir => dir.parent)
   public directories: DirectoryEntity[];
 
+  // not saving to database, it is only assigned when querying the DB
   public preview: MediaEntity;
 
   @OneToMany(type => MediaEntity, media => media.directory)
