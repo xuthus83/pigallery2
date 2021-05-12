@@ -21,6 +21,9 @@ const printHeader = async (statistic: string) => {
     ', ' + Utils.zeroPrefix(dt.getDate(), 2) +
     '.' + Utils.zeroPrefix(dt.getMonth() + 1, 2) +
     '.' + dt.getFullYear());
+  if (Config.Server.Environment && Config.Server.Environment.buildCommitHash) {
+    printLine('**Version**: v' + Config.Server.Environment.appVersion + ', built at: ' + new Date(Config.Server.Environment.buildTime) + ', git commit:' + Config.Server.Environment.buildCommitHash);
+  }
   printLine('**System**: ' + BMConfig.system);
   printLine('\n**Gallery**: ' + statistic + '\n');
 };
