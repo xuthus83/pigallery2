@@ -1,4 +1,4 @@
-import {ChildEntity, Column, Index} from 'typeorm';
+import {ChildEntity, Column} from 'typeorm';
 import {CameraMetadata, GPSMetadata, PhotoDTO, PhotoMetadata, PositionMetaData} from '../../../../../common/entities/PhotoDTO';
 import {MediaEntity, MediaMetadataEntity} from './MediaEntity';
 import {columnCharsetCS} from './EntityUtils';
@@ -10,7 +10,7 @@ export class CameraMetadataEntity implements CameraMetadata {
 
 
   @Column({
-    type: 'text',  nullable: true,
+    type: 'text', nullable: true,
     charset: columnCharsetCS.charset,
     collation: columnCharsetCS.collation
   })
@@ -18,7 +18,7 @@ export class CameraMetadataEntity implements CameraMetadata {
 
 
   @Column({
-    type: 'text',  nullable: true,
+    type: 'text', nullable: true,
     charset: columnCharsetCS.charset,
     collation: columnCharsetCS.collation
   })
@@ -54,25 +54,22 @@ export class PositionMetaDataEntity implements PositionMetaData {
   @Column(type => GPSMetadataEntity)
   GPSData: GPSMetadataEntity;
 
-  @Index()
   @Column({
-    type: 'text',  nullable: true,
+    type: 'text', nullable: true,
     charset: columnCharsetCS.charset,
     collation: columnCharsetCS.collation
   })
   country: string;
 
-  @Index()
   @Column({
-    type: 'text',  nullable: true,
+    type: 'text', nullable: true,
     charset: columnCharsetCS.charset,
     collation: columnCharsetCS.collation
   })
   state: string;
 
-  @Index()
   @Column({
-    type: 'text',  nullable: true,
+    type: 'text', nullable: true,
     charset: columnCharsetCS.charset,
     collation: columnCharsetCS.collation
   })
