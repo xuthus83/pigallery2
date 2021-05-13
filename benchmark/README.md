@@ -4,7 +4,7 @@ These results are created mostly for development, but the results are public for
 
 You can also run it on your files by using the [docker-compose.yml](docker-compose) file.
 
-See all benchmark results in [HISTORY.md](HISTROY.md)
+See all benchmark results in [HISTORY.md](HISTORY.md)
 
 ## PiGallery2 v1.8.7, 12.05.2021
 **Versions**: v1.8.7, build time: 2021-05-11T22:16:06.455Z, git commit: 872e63703dded0331590c865b3746182f1b48b10
