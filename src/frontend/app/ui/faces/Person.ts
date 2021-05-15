@@ -13,6 +13,6 @@ export class Person implements PersonDTO {
   }
 
   public static getThumbnailUrl(that: PersonDTO): string {
-    return Utils.concatUrls(Config.Client.urlBase, '/api/person/', that.name, '/thumbnail');
+    return Utils.concatUrls(Config.Client.urlBase, '/api/person/', encodeURIComponent(that.name), '/thumbnail');
   }
 }

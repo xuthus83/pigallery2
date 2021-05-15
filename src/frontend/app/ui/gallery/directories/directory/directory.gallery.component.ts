@@ -31,11 +31,10 @@ export class GalleryDirectoryComponent implements OnInit, OnDestroy {
   }
 
   getSanitizedThUrl(): SafeStyle {
-    return this.sanitizer.bypassSecurityTrustStyle('url(' +
-      encodeURI(this.thumbnail.Src)
-        .replace(/\(/g, '%28')
-        .replace(/'/g, '%27')
-        .replace(/\)/g, '%29') + ')');
+    return this.sanitizer.bypassSecurityTrustStyle('url(' + this.thumbnail.Src
+      .replace(/\(/g, '%28')
+      .replace(/'/g, '%27')
+      .replace(/\)/g, '%29') + ')');
   }
 
   // TODO: implement scroll

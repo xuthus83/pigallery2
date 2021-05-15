@@ -94,7 +94,8 @@ export class GalleryService {
     }
 
     try {
-      const cw = await this.networkService.getJson<ContentWrapperWithError>('/gallery/content/' + directoryName, params);
+      const cw = await this.networkService.getJson<ContentWrapperWithError>('/gallery/content/' +
+        encodeURIComponent(directoryName), params);
 
 
       if (!cw || cw.notModified === true) {

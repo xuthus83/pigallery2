@@ -24,12 +24,12 @@ export class MediaIcon {
   }
 
   getRelativePath(): string {
-    return Utils.concatUrls(this.media.directory.path,
+    return encodeURI(Utils.concatUrls(this.media.directory.path,
       this.media.directory.name,
-      this.media.name)
+      this.media.name))
       // do not escape all urls with encodeURIComponent because that make the URL ugly and not needed
       // do not escape before concatUrls as that would make prevent optimizations
-      .replace(new RegExp('%', 'g'), '%25') // order important
+      // .replace(new RegExp('%', 'g'), '%25') // order important
       .replace(new RegExp('#', 'g'), '%23')
       .replace(new RegExp('\\$', 'g'), '%24');
   }

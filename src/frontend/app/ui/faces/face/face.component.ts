@@ -18,13 +18,13 @@ export class FaceComponent implements OnInit, OnDestroy {
   @Input() person: PersonDTO;
   @Input() size: number;
 
-  thumbnail: PersonThumbnail = null;
+  public thumbnail: PersonThumbnail = null;
   public searchQueryDTOstr: string;
 
   constructor(private thumbnailService: ThumbnailManagerService,
               private sanitizer: DomSanitizer,
               private faceService: FacesService,
-              public  authenticationService: AuthenticationService) {
+              public authenticationService: AuthenticationService) {
 
   }
 
@@ -43,11 +43,10 @@ export class FaceComponent implements OnInit, OnDestroy {
   }
 
   getSanitizedThUrl(): SafeStyle {
-    return this.sanitizer.bypassSecurityTrustStyle('url(' +
-      encodeURI(this.thumbnail.Src)
-        .replace(/\(/g, '%28')
-        .replace(/'/g, '%27')
-        .replace(/\)/g, '%29') + ')');
+    return this.sanitizer.bypassSecurityTrustStyle('url(' + this.thumbnail.Src
+      .replace(/\(/g, '%28')
+      .replace(/'/g, '%27')
+      .replace(/\)/g, '%29') + ')');
   }
 
   ngOnDestroy(): void {
