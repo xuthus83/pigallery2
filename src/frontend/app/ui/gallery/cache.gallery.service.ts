@@ -14,6 +14,7 @@ interface CacheItem<T> {
   item: T;
 }
 
+
 @Injectable()
 export class GalleryCacheService {
 
@@ -25,6 +26,12 @@ export class GalleryCacheService {
   private static readonly VERSION = 'version';
 
   constructor(private versionService: VersionService) {
+
+    // if it was a forced reload not a navigation, clear cache
+    if (GalleryCacheService.wasAReload()) {
+      GalleryCacheService.deleteCache();
+    }
+
     const onNewVersion = (ver: string) => {
       if (ver !== null &&
         localStorage.getItem(GalleryCacheService.VERSION) !== ver) {
@@ -34,6 +41,11 @@ export class GalleryCacheService {
     };
     this.versionService.version.subscribe(onNewVersion);
     onNewVersion(this.versionService.version.value);
+  }
+
+  private static wasAReload(): boolean {
+    const perfEntries = performance.getEntriesByType('navigation') as PerformanceNavigationTiming [];
+    return perfEntries && perfEntries[0] && perfEntries[0].type === 'reload';
   }
 
   private static loadCacheItem(key: string): SearchResultDTO {
