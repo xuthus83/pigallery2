@@ -5,13 +5,15 @@ import {DirectoryDTO} from '../../../common/entities/DirectoryDTO';
 import {RendererInput} from './PhotoWorker';
 import {TaskQue, TaskQueEntry} from './TaskQue';
 import {ITaskExecuter} from './TaskExecuter';
-import {DirectoryScanSettings, DiskMangerWorker} from './DiskMangerWorker';
+import {DirectoryScanSettings} from './DiskMangerWorker';
 
 
 interface WorkerWrapper<O> {
   worker: cluster.Worker;
   poolTask: TaskQueEntry<WorkerTask, O>;
 }
+
+const LOG_TAG = '[ThreadPool]';
 
 export class ThreadPool<O> {
 
@@ -20,7 +22,7 @@ export class ThreadPool<O> {
   private taskQue = new TaskQue<WorkerTask, O>();
 
   constructor(private size: number) {
-    Logger.silly('Creating thread pool with', size, 'workers');
+    Logger.silly(LOG_TAG, 'Creating thread pool with', size, 'workers');
     for (let i = 0; i < size; i++) {
       this.startWorker();
     }
@@ -60,13 +62,13 @@ export class ThreadPool<O> {
     this.workers.push(worker);
     worker.worker.on('online', (): void => {
       ThreadPool.WorkerCount++;
-      Logger.debug('Worker ' + worker.worker.process.pid + ' is online, worker count:', ThreadPool.WorkerCount);
+      Logger.debug(LOG_TAG, 'Worker ' + worker.worker.process.pid + ' is online, worker count:', ThreadPool.WorkerCount);
     });
     worker.worker.on('exit', (code, signal): void => {
       ThreadPool.WorkerCount--;
-      Logger.warn('Worker ' + worker.worker.process.pid + ' died with code: ' + code +
+      Logger.warn(LOG_TAG, 'Worker ' + worker.worker.process.pid + ' died with code: ' + code +
         ', and signal: ' + signal + ', worker count:', ThreadPool.WorkerCount);
-      Logger.debug('Starting a new worker');
+      Logger.debug(LOG_TAG, 'Starting a new worker');
       this.startWorker();
     });
 

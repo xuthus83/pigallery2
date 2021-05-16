@@ -7,10 +7,10 @@ import {DirectoryDTO} from '../../../common/entities/DirectoryDTO';
 
 declare var process: NodeJS.Process;
 declare var global: NodeJS.Global;
-
+const LOG_TAG = '[Worker]';
 export class Worker {
   public static process<O extends (void | DirectoryDTO<MediaDTO>)>(): void {
-    Logger.debug('Worker is waiting for tasks');
+    Logger.debug(LOG_TAG, 'Worker is waiting for tasks');
     process.on('message', async (task: WorkerTask) => {
       try {
         let result = null;

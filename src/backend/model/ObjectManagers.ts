@@ -10,6 +10,8 @@ import {IVersionManager} from './database/interfaces/IVersionManager';
 import {IJobManager} from './database/interfaces/IJobManager';
 import {LocationManager} from './database/LocationManager';
 
+const LOG_TAG = '[ObjectManagers]';
+
 export class ObjectManagers {
 
   private static instance: ObjectManagers = null;
@@ -162,7 +164,7 @@ export class ObjectManagers {
     ObjectManagers.getInstance().VersionManager = new VersionManager();
     ObjectManagers.getInstance().LocationManager = new LocationManager();
     this.InitCommonManagers();
-    Logger.debug('SQL DB inited');
+    Logger.debug(LOG_TAG, 'SQL DB inited');
   }
 
 }
