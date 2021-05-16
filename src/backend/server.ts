@@ -1,7 +1,6 @@
 import {Config} from '../common/config/private/Config';
-import * as _express from 'express';
+import * as express from 'express';
 import {Request} from 'express';
-import * as _bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
 import * as _http from 'http';
 import {Server as HttpServer} from 'http';
@@ -33,7 +32,7 @@ const LOG_TAG = '[server]';
 export class Server {
 
   public onStarted = new Event<void>();
-  private app: _express.Express;
+  private app: express.Express;
   private server: HttpServer;
 
   constructor() {
@@ -54,7 +53,7 @@ export class Server {
       (ConfigClassBuilder.attachPrivateInterface(Config).__options as ConfigClassOptions).configPath + ':');
     Logger.verbose(LOG_TAG, JSON.stringify(Config, null, '\t'));
 
-    this.app = _express();
+    this.app = express();
 
     LoggerRouter.route(this.app);
 
@@ -75,7 +74,7 @@ export class Server {
      * Parse parameters in POST
      */
     // for parsing application/json
-    this.app.use(_bodyParser.json());
+    this.app.use(express.json());
     this.app.use(cookieParser());
     const csuf: any = _csrf();
     csuf.unless = unless;

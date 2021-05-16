@@ -305,11 +305,10 @@ export class GalleryMapLightboxComponent implements OnChanges {
   }
 
   @HostListener('window:keydown', ['$event'])
-  onKeyPress(e: KeyboardEvent): void {
+  onKeyPress(event: KeyboardEvent): void {
     if (this.visible !== true) {
       return;
     }
-    const event: KeyboardEvent = window.event ? window.event as any : e;
     switch (event.key) {
       case 'f':
       case 'F':

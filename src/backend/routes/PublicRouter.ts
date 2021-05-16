@@ -122,12 +122,10 @@ export class PublicRouter {
     const renderFile = (subDir: string = '') => {
       return (req: Request, res: Response) => {
         const file = path.join(ProjectPath.FrontendFolder, req.localePath, subDir, req.params.file);
-        fs.exists(file, (exists: boolean) => {
-          if (!exists) {
-            return res.sendStatus(404);
-          }
-          res.sendFile(file);
-        });
+        if (!fs.existsSync(file)) {
+          return res.sendStatus(404);
+        }
+        res.sendFile(file);
       };
     };
 

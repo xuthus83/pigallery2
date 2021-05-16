@@ -25,7 +25,7 @@ describe('NetworkService Success tests', () => {
       ]
     });
     injector = getTestBed();
-    httpMock = injector.get(HttpTestingController);
+    httpMock = TestBed.inject(HttpTestingController);
   });
 
   afterEach(() => {
@@ -138,7 +138,7 @@ describe('NetworkService Fail tests', () => {
       ]
     });
     injector = getTestBed();
-    httpMock = injector.get(HttpTestingController);
+    httpMock = TestBed.inject(HttpTestingController);
   });
 
   afterEach(() => {

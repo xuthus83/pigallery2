@@ -201,8 +201,7 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
 
 
   @HostListener('window:keydown', ['$event'])
-  onKeyPress(e: KeyboardEvent): void {
-    const event: KeyboardEvent = window.event ? window.event as any : e;
+  onKeyPress(event: KeyboardEvent): void {
     switch (event.key) {
       case 'ArrowLeft':
         if (this.navigation.hasPrev) {
