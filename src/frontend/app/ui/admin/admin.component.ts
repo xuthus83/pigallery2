@@ -7,6 +7,8 @@ import {NavigationService} from '../../model/navigation.service';
 import {ISettingsComponent} from '../settings/_abstract/ISettingsComponent';
 import {PageHelper} from '../../model/page.helper';
 import {SettingsService} from '../settings/settings.service';
+import {CookieNames} from '../../../../common/CookieNames';
+import {CookieService} from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-admin',
@@ -22,7 +24,11 @@ export class AdminComponent implements OnInit, AfterViewInit {
   constructor(private authService: AuthenticationService,
               private navigation: NavigationService,
               public notificationService: NotificationService,
-              public settingsService: SettingsService) {
+              public settingsService: SettingsService,
+              private cookieService: CookieService) {
+    if (this.cookieService.check(CookieNames.advancedSettings)) {
+      this.simplifiedMode = !(this.cookieService.get(CookieNames.advancedSettings) === 'true');
+    }
   }
 
   ngAfterViewInit(): void {
@@ -55,6 +61,9 @@ export class AdminComponent implements OnInit, AfterViewInit {
     return 'info';
   }
 
+  modeToggle(): void {
+    this.cookieService.set(CookieNames.advancedSettings, this.simplifiedMode ? 'false' : 'true');
+  }
 }
 
 

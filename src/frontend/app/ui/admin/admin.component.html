@@ -62,7 +62,8 @@
             i18n-switch-on-text
             switch-handle-width="100"
             switch-label-width="20"
-            [(ngModel)]="simplifiedMode">
+            [(ngModel)]="simplifiedMode"
+            (ngModelChange)="modeToggle()">
           </bSwitch>
         </div>
       </div>
