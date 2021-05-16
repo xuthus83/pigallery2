@@ -47,10 +47,16 @@ jobs:
           sleep 1
         done
 
-    - name: npm install, build, and test
+    - name: npm install and build
       run: |
         npm ci
-        npm run build --if-present
+        npm run build
+
+    - name: tslint
+      run: |
+        npm run lint
+    - name: test
+      run: |
         npm test
       env:
         MYSQL_HOST: localhost
