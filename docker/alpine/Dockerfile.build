@@ -1,6 +1,6 @@
 #-----------------BUILDER-----------------
 #-----------------------------------------
-FROM node:14-alpine3.11 AS builder
+FROM node:14-alpine3.13 AS builder
 RUN apk add --update-cache --repository https://alpine.global.ssl.fastly.net/alpine/v3.11/community/ \
   python build-base sqlite-dev sqlite-libs vips-dev fftw-dev gcc g++ make libc6-compat
 COPY pigallery2-release /app
@@ -14,7 +14,7 @@ RUN mkdir -p /app/data/config && \
 
 #-----------------MAIN--------------------
 #-----------------------------------------
-FROM node:14-alpine3.11 AS main
+FROM node:14-alpine3.13 AS main
 WORKDIR /app
 ENV NODE_ENV=production \
     # overrides only the default value of the settings (the actualy value can be overwritten through config.json)
