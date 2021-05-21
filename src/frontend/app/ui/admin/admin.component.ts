@@ -62,7 +62,8 @@ export class AdminComponent implements OnInit, AfterViewInit {
   }
 
   modeToggle(): void {
-    this.cookieService.set(CookieNames.advancedSettings, this.simplifiedMode ? 'false' : 'true');
+    // save it for some years
+    this.cookieService.set(CookieNames.advancedSettings, this.simplifiedMode ? 'false' : 'true', 365 * 50);
   }
 }
 
