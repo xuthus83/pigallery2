@@ -144,7 +144,7 @@ export class ScheduledJobTrigger implements JobTrigger {
   @ConfigProperty({type: JobTriggerType})
   readonly type = JobTriggerType.scheduled;
 
-  @ConfigProperty()
+  @ConfigProperty({type: 'unsignedInt'})
   time: number;  // data time
 }
 
@@ -152,9 +152,9 @@ export class ScheduledJobTrigger implements JobTrigger {
 export class PeriodicJobTrigger implements JobTrigger {
   @ConfigProperty({type: JobTriggerType})
   readonly type = JobTriggerType.periodic;
-  @ConfigProperty()
+  @ConfigProperty({type: 'unsignedInt', max: 7})
   periodicity: number;  // 0-6: week days 7 every day
-  @ConfigProperty()
+  @ConfigProperty({type: 'unsignedInt', max: 23 * 60 + 59})
   atTime: number; // day time
 }
 

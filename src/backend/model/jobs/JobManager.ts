@@ -90,6 +90,9 @@ export class JobManager implements IJobManager, IJobListener {
     this.timers = [];
   }
 
+  /**
+   * Schedules all jobs to run
+   */
   public runSchedules(): void {
     this.stopSchedules();
     Logger.info(LOG_TAG, 'Running job schedules');
@@ -100,6 +103,9 @@ export class JobManager implements IJobManager, IJobListener {
     return this.getAvailableJobs().find((t): boolean => t.Name === jobName);
   }
 
+  /**
+   * Schedules a single job to run
+   */
   private runSchedule(schedule: JobScheduleDTO): void {
     const nextDate = JobScheduleDTOUtils.getNextRunningDate(new Date(), schedule);
     if (nextDate && nextDate.getTime() > Date.now()) {

@@ -7,12 +7,15 @@ import {Component, EventEmitter, Input, Output} from '@angular/core';
 export class TimeStampTimePickerComponent {
 
   timestampValue = 0;
-  timezoneOffset = (new Date()).getTimezoneOffset() * 60 * 1000;
   @Output() timestampChange = new EventEmitter<number>();
 
   date: Date = new Date();
-
   @Input() name: string;
+
+  constructor() {
+    this.date.setUTCSeconds(0);
+    this.date.setUTCMilliseconds(0);
+  }
 
   @Input()
   public get timestamp(): number {
@@ -20,16 +23,22 @@ export class TimeStampTimePickerComponent {
   }
 
   public set timestamp(val: number) {
-    this.date.setTime(val + this.timezoneOffset);
+    const h = Math.min(23, Math.floor(val / 60));
+    const m = val % 60;
+    this.date.setUTCHours(h);
+    this.date.setUTCMinutes(m);
+
     if (this.timestampValue === val) {
       return;
     }
     this.timestampValue = val;
     this.timestampChange.emit(this.timestampValue);
+
   }
 
   onChange(date: Date | string): void {
-    this.timestamp = (new Date(date)).getTime() - this.timezoneOffset;
+    const d = new Date(date);
+    this.timestamp = d.getUTCHours() * 60 + d.getUTCMinutes();
   }
 
 

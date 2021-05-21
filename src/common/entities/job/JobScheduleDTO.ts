@@ -18,7 +18,7 @@ export interface ScheduledJobTrigger extends JobTrigger {
 export interface PeriodicJobTrigger extends JobTrigger {
   type: JobTriggerType.periodic;
   periodicity: number;  // 0-6: week days 7 every day
-  atTime: number; // day time
+  atTime: number; // day time min value: 0, max: 23*60+59
 }
 
 export interface AfterJobTrigger extends JobTrigger {
@@ -37,26 +37,26 @@ export interface JobScheduleDTO {
 
 export const JobScheduleDTOUtils = {
 
-  getNextDayOfTheWeek: (refDate: Date, dayOfWeek: number) => {
+  getNextDayOfTheWeek: (refDate: Date, dayOfWeek: number): Date => {
     const date = new Date(refDate);
     date.setDate(refDate.getDate() + (dayOfWeek + 1 + 7 - refDate.getDay()) % 7);
     if (date.getDay() === refDate.getDay()) {
       return new Date(refDate);
     }
-    date.setHours(0, 0, 0, 0);
+    date.setUTCHours(0, 0, 0, 0);
     return date;
   },
 
   nextValidDate: (date: Date, h: number, m: number, dayDiff: number): Date => {
-
-    date.setSeconds(0);
-    if (date.getHours() < h || (date.getHours() === h && date.getMinutes() < m)) {
-      date.setHours(h);
-      date.setMinutes(m);
+    date.setUTCSeconds(0);
+    date.setUTCMilliseconds(0);
+    if (date.getUTCHours() < h || (date.getUTCHours() === h && date.getUTCMinutes() < m)) {
+      date.setUTCHours(h);
+      date.setUTCMinutes(m);
     } else {
       date.setTime(date.getTime() + dayDiff);
-      date.setHours(h);
-      date.setMinutes(m);
+      date.setUTCHours(h);
+      date.setUTCMinutes(m);
     }
     return date;
   },
@@ -68,9 +68,8 @@ export const JobScheduleDTOUtils = {
 
       case JobTriggerType.periodic:
 
-
-        const hour = Math.floor(schedule.trigger.atTime / 1000 / (60 * 60));
-        const minute = (schedule.trigger.atTime / 1000 / 60) % 60;
+        const hour = Math.min(23, Math.floor(schedule.trigger.atTime / 60));
+        const minute = schedule.trigger.atTime % 60;
 
         if (schedule.trigger.periodicity <= 6) { // Between Monday and Sunday
           const nextRunDate = JobScheduleDTOUtils.getNextDayOfTheWeek(refDate, schedule.trigger.periodicity);

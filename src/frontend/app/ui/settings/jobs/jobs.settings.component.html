@@ -18,15 +18,13 @@
                 <ng-container [ngSwitch]="schedule.trigger.type">
                   <ng-container *ngSwitchCase="JobTriggerType.periodic">
                     <ng-container i18n>every</ng-container>
-                    {{periods[schedule.trigger.periodicity]}} {{schedule.trigger.atTime | date:"HH:mm":"+0"}}
+                    {{periods[schedule.trigger.periodicity]}} {{atTimeLocal(schedule.trigger.atTime) | date:"HH:mm (z)"}}
                   </ng-container>
                   <ng-container
                     *ngSwitchCase="JobTriggerType.scheduled">{{schedule.trigger.time | date:"medium"}}</ng-container>
                   <ng-container *ngSwitchCase="JobTriggerType.never" i18n>never</ng-container>
                   <ng-container *ngSwitchCase="JobTriggerType.after">
-                    <ng-container i18n>after</ng-container>
-                    :
-                    {{schedule.trigger.afterScheduleName}}
+                    <ng-container i18n>after</ng-container>: {{schedule.trigger.afterScheduleName}}
                   </ng-container>
                 </ng-container>
               </div>

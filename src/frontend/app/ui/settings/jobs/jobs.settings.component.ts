@@ -7,7 +7,8 @@ import {SettingsComponentDirective} from '../_abstract/abstract.settings.compone
 import {ScheduledJobsService} from '../scheduled-jobs.service';
 import {
   AfterJobTrigger,
-  JobScheduleDTO, JobScheduleDTOUtils,
+  JobScheduleDTO,
+  JobScheduleDTOUtils,
   JobTriggerType,
   NeverJobTrigger,
   PeriodicJobTrigger,
@@ -17,7 +18,7 @@ import {ConfigTemplateEntry} from '../../../../../common/entities/job/JobDTO';
 import {ModalDirective} from 'ngx-bootstrap/modal';
 import {JobProgressDTO, JobProgressStates} from '../../../../../common/entities/job/JobProgressDTO';
 import {BackendtextService} from '../../../model/backendtext.service';
-import {ServerConfig, ServerJobConfig} from '../../../../../common/config/private/PrivateConfig';
+import {ServerJobConfig} from '../../../../../common/config/private/PrivateConfig';
 
 @Component({
   selector: 'app-settings-jobs',
@@ -76,6 +77,14 @@ export class JobsSettingsComponent extends SettingsComponentDirective<ServerJobC
       $localize`Saturday`,
       $localize`Sunday`,
       $localize`day`]; // 7
+  }
+
+
+  atTimeLocal(atTime: number): Date {
+    const d = new Date();
+    d.setUTCHours(Math.floor(atTime / 60));
+    d.setUTCMinutes(Math.floor(atTime % 60));
+    return d;
   }
 
   getConfigTemplate(JobName: string): ConfigTemplateEntry[] {
@@ -161,7 +170,7 @@ export class JobsSettingsComponent extends SettingsComponentDirective<ServerJobC
   }
 
   public sortedSchedules(): JobScheduleDTO[] {
-    return this.states.scheduled.value.slice().sort((a: JobScheduleDTO, b: JobScheduleDTO) => {
+    return (this.states.scheduled.value as JobScheduleDTO[]).slice().sort((a: JobScheduleDTO, b: JobScheduleDTO) => {
       return this.getNextRunningDate(a, this.states.scheduled.value) - this.getNextRunningDate(b, this.states.scheduled.value);
     });
   }
@@ -173,7 +182,6 @@ export class JobsSettingsComponent extends SettingsComponentDirective<ServerJobC
     this.states.scheduled.value.push(this.newSchedule);
     this.jobModal.hide();
   }
-
 
   getProgress(schedule: JobScheduleDTO): JobProgressDTO {
     return this.jobsService.getProgress(schedule);
