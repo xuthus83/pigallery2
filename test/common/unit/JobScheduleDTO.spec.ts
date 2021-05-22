@@ -5,7 +5,7 @@ describe('JobScheduleDTO', () => {
 
   it('should get date from schedule', async () => {
 
-    const refDate = new Date(2019, 7, 18, 5, 10, 10, 0); // its a sunday
+    const refDate = new Date(Date.UTC(2019, 7, 18, 5, 10, 10, 0)); // its a sunday
 
 
     expect(JobScheduleDTOUtils.getNextRunningDate(refDate, {
@@ -24,10 +24,10 @@ describe('JobScheduleDTO', () => {
       expect(JobScheduleDTOUtils.getNextRunningDate(refDate, {
         trigger: {
           type: JobTriggerType.periodic,
-          atTime: (h * 60 + m) * 60 * 1000,
+          atTime: (h * 60 + m),
           periodicity: dayOfWeek
         }
-      } as any)).to.be.deep.equal((new Date(2019, 7, nextDay, h, m, 0)), 'for day: ' + dayOfWeek);
+      } as any)).to.be.deep.equal((new Date(Date.UTC(2019, 7, nextDay, h, m, 0))), 'for day: ' + dayOfWeek);
 
       h = 2;
       m = 5;
@@ -35,10 +35,10 @@ describe('JobScheduleDTO', () => {
       expect(JobScheduleDTOUtils.getNextRunningDate(refDate, {
         trigger: {
           type: JobTriggerType.periodic,
-          atTime: (h * 60 + m) * 60 * 1000,
+          atTime: (h * 60 + m),
           periodicity: dayOfWeek
         }
-      } as any)).to.be.deep.equal((new Date(2019, 7, nextDay, h, m, 0)), 'for day: ' + dayOfWeek);
+      } as any)).to.be.deep.equal((new Date(Date.UTC(2019, 7, nextDay, h, m, 0))), 'for day: ' + dayOfWeek);
 
       h = 5;
       m = 10;
@@ -46,10 +46,10 @@ describe('JobScheduleDTO', () => {
       expect(JobScheduleDTOUtils.getNextRunningDate(refDate, {
         trigger: {
           type: JobTriggerType.periodic,
-          atTime: (h * 60 + m) * 60 * 1000,
+          atTime: (h * 60 + m),
           periodicity: dayOfWeek
         }
-      } as any)).to.be.deep.equal((new Date(2019, 7, nextDay, h, m, 0)), 'for day: ' + dayOfWeek);
+      } as any)).to.be.deep.equal((new Date(Date.UTC(2019, 7, nextDay, h, m, 0))), 'for day: ' + dayOfWeek);
     }
 
     {
@@ -58,10 +58,10 @@ describe('JobScheduleDTO', () => {
       expect(JobScheduleDTOUtils.getNextRunningDate(refDate, {
         trigger: {
           type: JobTriggerType.periodic,
-          atTime: (h * 60 + m) * 60 * 1000,
+          atTime: (h * 60 + m),
           periodicity: 7
         }
-      } as any)).to.be.deep.equal((new Date(2019, 7, 18, h, m, 0)));
+      } as any)).to.be.deep.equal((new Date(Date.UTC(2019, 7, 18, h, m, 0))));
     }
     {
       const h = 2;
@@ -69,10 +69,10 @@ describe('JobScheduleDTO', () => {
       expect(JobScheduleDTOUtils.getNextRunningDate(refDate, {
         trigger: {
           type: JobTriggerType.periodic,
-          atTime: (h * 60 + m) * 60 * 1000,
+          atTime: (h * 60 + m),
           periodicity: 7
         }
-      } as any)).to.be.deep.equal((new Date(2019, 7, 19, h, m, 0)));
+      } as any)).to.be.deep.equal((new Date(Date.UTC(2019, 7, 19, h, m, 0))));
     }
   });
 });
