@@ -58,6 +58,13 @@ describe('SearchQueryParser', () => {
       check({type: SearchQueryTypes.any_text, text: 'test'} as TextSearch);
       check({type: SearchQueryTypes.person, text: 'person_test'} as TextSearch);
       check({type: SearchQueryTypes.directory, text: 'directory'} as TextSearch);
+      check({type: SearchQueryTypes.directory, text: '2000.10.15 (Some event)'} as TextSearch);
+      check({
+        type: SearchQueryTypes.directory,
+        text: '2000.10.15 (Some event)',
+        matchType: TextSearchQueryMatchTypes.exact_match
+      } as TextSearch);
+      check({type: SearchQueryTypes.directory, text: '2000.10.15 (Some event) '} as TextSearch);
       check({type: SearchQueryTypes.keyword, text: 'big boom'} as TextSearch);
       check({type: SearchQueryTypes.caption, text: 'caption'} as TextSearch);
       check({type: SearchQueryTypes.file_name, text: 'filename'} as TextSearch);

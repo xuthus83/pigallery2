@@ -87,7 +87,7 @@ export class SearchQueryParser {
 
   public parse(str: string, implicitAND = true): SearchQueryDTO {
     str = str.replace(/\s\s+/g, ' ') // remove double spaces
-      .replace(/:\s+/g, ':').replace(/\)(?=\S)/g, ') ').trim();
+      .replace(/:\s+/g, ':').trim();
 
     if (str.charAt(0) === '(' && str.charAt(str.length - 1) === ')') {
       str = str.slice(1, str.length - 1);
@@ -253,9 +253,11 @@ export class SearchQueryParser {
     for (const typeTmp of tmp) {
       if (str.startsWith(typeTmp.key)) {
         const ret: TextSearch = Utils.clone(typeTmp.queryTemplate);
+        // exact match
         if (str.charAt(typeTmp.key.length) === '"' && str.charAt(str.length - 1) === '"') {
           ret.text = str.slice(typeTmp.key.length + 1, str.length - 1);
           ret.matchType = TextSearchQueryMatchTypes.exact_match;
+        // like match
         } else if (str.charAt(typeTmp.key.length) === '(' && str.charAt(str.length - 1) === ')') {
           ret.text = str.slice(typeTmp.key.length + 1, str.length - 1);
         } else {
