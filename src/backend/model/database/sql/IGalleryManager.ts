@@ -1,6 +1,8 @@
 import {DirectoryDTO} from '../../../../common/entities/DirectoryDTO';
 import {IGalleryManager} from '../interfaces/IGalleryManager';
 import {DuplicatesDTO} from '../../../../common/entities/DuplicatesDTO';
+import {Connection} from 'typeorm';
+import {DirectoryEntity} from './enitites/DirectoryEntity';
 
 export interface ISQLGalleryManager extends IGalleryManager {
   listDirectory(relativeDirectoryName: string,
@@ -18,4 +20,6 @@ export interface ISQLGalleryManager extends IGalleryManager {
   getPossibleDuplicates(): Promise<DuplicatesDTO[]>;
 
   selectDirStructure(directory: string): Promise<DirectoryDTO>;
+
+  fillPreviewForSubDir(connection: Connection, dir: DirectoryEntity): Promise<void>;
 }

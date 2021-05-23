@@ -139,25 +139,8 @@ export class DBTestHelper {
     }
   }
 
-  private async initSQLite(): Promise<void> {
-    await this.resetSQLite();
-
-    Config.Server.Database.type = DatabaseType.sqlite;
-    Config.Server.Database.dbFolder = this.tempDir;
-    ProjectPath.reset();
-  }
-
   private async initMySQL(): Promise<void> {
-    Config.Server.Database.type = DatabaseType.mysql;
-    Config.Server.Database.mysql.database = 'pigallery2_test';
-
     await this.resetMySQL();
-  }
-
-  private async resetSQLite(): Promise<void> {
-    await ObjectManagers.reset();
-    // await SQLConnection.close();
-    await fs.promises.rmdir(this.tempDir, {recursive: true});
   }
 
   private async resetMySQL(): Promise<void> {
@@ -167,9 +150,11 @@ export class DBTestHelper {
     await conn.query('DROP DATABASE IF EXISTS ' + conn.options.database);
     await conn.query('CREATE DATABASE IF NOT EXISTS ' + conn.options.database);
     await SQLConnection.close();
+    await ObjectManagers.InitSQLManagers();
   }
 
   private async clearUpMysql(): Promise<void> {
+    await ObjectManagers.reset();
     Config.Server.Database.type = DatabaseType.mysql;
     Config.Server.Database.mysql.database = 'pigallery2_test';
     const conn = await SQLConnection.getConnection();
@@ -177,8 +162,25 @@ export class DBTestHelper {
     await SQLConnection.close();
   }
 
+  private async initSQLite(): Promise<void> {
+    await this.resetSQLite();
+  }
+
+  private async resetSQLite(): Promise<void> {
+    Config.Server.Database.type = DatabaseType.sqlite;
+    Config.Server.Database.dbFolder = this.tempDir;
+    ProjectPath.reset();
+    await ObjectManagers.reset();
+    await fs.promises.rmdir(this.tempDir, {recursive: true});
+    await ObjectManagers.InitSQLManagers();
+  }
+
   private async clearUpSQLite(): Promise<void> {
-    return this.resetSQLite();
+    Config.Server.Database.type = DatabaseType.sqlite;
+    Config.Server.Database.dbFolder = this.tempDir;
+    ProjectPath.reset();
+    await ObjectManagers.reset();
+    await fs.promises.rmdir(this.tempDir, {recursive: true});
   }
 
   private async clearUpMemory(): Promise<void> {

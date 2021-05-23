@@ -142,6 +142,7 @@ export class GalleryMWs {
       cleanUpMedia(cw.directory.media);
     }
     if (cw.searchResult) {
+      cw.searchResult.directories.forEach(d => DirectoryDTOUtils.packDirectory(d));
       cleanUpMedia(cw.searchResult.media);
     }
 

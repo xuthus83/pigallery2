@@ -56,11 +56,12 @@
         </div>
         <app-gallery-navbar [searchResult]="galleryService.content.value.searchResult"></app-gallery-navbar>
 
+        <app-gallery-directories class="directories" [directories]="directories"></app-gallery-directories>
+
         <app-gallery-map *ngIf="isPhotoWithLocation && mapEnabled"
                          [photos]="galleryService.content.value.searchResult.media"
                          [gpxFiles]="galleryService.content.value.searchResult.metaFile | gpxFiles"></app-gallery-map>
 
-        <app-gallery-directories class="directories" [directories]="directories"></app-gallery-directories>
 
         <app-gallery-grid [media]="galleryService.content.value.searchResult.media"
                           [lightbox]="lightbox"></app-gallery-grid>

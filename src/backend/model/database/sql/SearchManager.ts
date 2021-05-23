@@ -31,6 +31,7 @@ import {ObjectManagers} from '../../ObjectManagers';
 import {Utils} from '../../../../common/Utils';
 import {PhotoDTO} from '../../../../common/entities/PhotoDTO';
 import {DatabaseType} from '../../../../common/config/private/PrivateConfig';
+import {ISQLGalleryManager} from './IGalleryManager';
 
 export class SearchManager implements ISearchManager {
 
@@ -180,8 +181,26 @@ export class SearchManager implements ISearchManager {
       result.resultOverflow = true;
     }
 
+    const dirQuery = this.filterDirectoryQuery(query);
+    if (dirQuery !== null) {
+      result.directories = await connection
+        .getRepository(DirectoryEntity)
+        .createQueryBuilder('directory')
+        .where(this.buildWhereQuery(dirQuery, true))
+        .limit(Config.Client.Search.maxDirectoryResult + 1)
+        .getMany();
 
-    // TODO: implement directory search. Search now only returns with photos and videos
+      // setting previews
+      if (result.directories) {
+        for (const item of result.directories) {
+          await (ObjectManagers.getInstance().GalleryManager as ISQLGalleryManager)
+            .fillPreviewForSubDir(connection, item as DirectoryEntity);
+        }
+      }
+      if (result.directories.length > Config.Client.Search.maxDirectoryResult) {
+        result.resultOverflow = true;
+      }
+    }
 
     return result;
   }
@@ -202,6 +221,43 @@ export class SearchManager implements ISearchManager {
 
   }
 
+  /**
+   * Returns only those part of a query tree that only contains directory related search queries
+   */
+  private filterDirectoryQuery(query: SearchQueryDTO): SearchQueryDTO {
+    switch (query.type) {
+      case SearchQueryTypes.AND:
+        const andRet = {
+          type: SearchQueryTypes.AND,
+          list: (query as SearchListQuery).list.map(q => this.filterDirectoryQuery(q))
+        } as ANDSearchQuery;
+        // if any of the queries contain non dir query thw whole and query is a non dir query
+        if (andRet.list.indexOf(null) !== -1) {
+          return null;
+        }
+        return andRet;
+
+      case SearchQueryTypes.OR:
+        const orRet = {
+          type: SearchQueryTypes.OR,
+          list: (query as SearchListQuery).list.map(q => this.filterDirectoryQuery(q)).filter(q => q !== null)
+        } as ORSearchQuery;
+        if (orRet.list.length === 0) {
+          return null;
+        }
+        return orRet;
+
+      case SearchQueryTypes.any_text:
+      case SearchQueryTypes.directory:
+        return query;
+
+      case SearchQueryTypes.SOME_OF:
+        throw new Error('"Some of" queries should have been already flattened');
+    }
+    // of none of the above, its not a directory search
+    return null;
+  }
+
   private async getGPSData(query: SearchQueryDTO): Promise<SearchQueryDTO> {
     if ((query as ANDSearchQuery | ORSearchQuery).list) {
       for (let i = 0; i < (query as ANDSearchQuery | ORSearchQuery).list.length; ++i) {
@@ -216,21 +272,31 @@ export class SearchManager implements ISearchManager {
     return query;
   }
 
-  private buildWhereQuery(query: SearchQueryDTO, paramCounter = {value: 0}): Brackets {
+  /**
+   * Builds the SQL Where query from search query
+   * @param query input search query
+   * @param paramCounter Helper counter for generating parameterized query
+   * @param directoryOnly Only builds directory related queries
+   * @private
+   */
+  private buildWhereQuery(query: SearchQueryDTO, directoryOnly = false, paramCounter = {value: 0}): Brackets {
     switch (query.type) {
       case SearchQueryTypes.AND:
         return new Brackets((q): any => {
-          (query as ANDSearchQuery).list.forEach((sq): any => q.andWhere(this.buildWhereQuery(sq, paramCounter)));
+          (query as ANDSearchQuery).list.forEach((sq): any => q.andWhere(this.buildWhereQuery(sq, directoryOnly, paramCounter)));
           return q;
         });
       case SearchQueryTypes.OR:
         return new Brackets((q): any => {
-          (query as ANDSearchQuery).list.forEach((sq): any => q.orWhere(this.buildWhereQuery(sq, paramCounter)));
+          (query as ANDSearchQuery).list.forEach((sq): any => q.orWhere(this.buildWhereQuery(sq, directoryOnly, paramCounter)));
           return q;
         });
 
 
       case SearchQueryTypes.distance:
+        if (directoryOnly) {
+          throw new Error('not supported in directoryOnly mode');
+        }
         /**
          * This is a best effort calculation, not fully accurate in order to have higher performance.
          * see: https://stackoverflow.com/a/50506609
@@ -276,6 +342,9 @@ export class SearchManager implements ISearchManager {
         });
 
       case SearchQueryTypes.from_date:
+        if (directoryOnly) {
+          throw new Error('not supported in directoryOnly mode');
+        }
         return new Brackets((q): any => {
           if (typeof (query as FromDateSearch).value === 'undefined') {
             throw new Error('Invalid search query: Date Query should contain from value');
@@ -292,6 +361,9 @@ export class SearchManager implements ISearchManager {
         });
 
       case SearchQueryTypes.to_date:
+        if (directoryOnly) {
+          throw new Error('not supported in directoryOnly mode');
+        }
         return new Brackets((q): any => {
           if (typeof (query as ToDateSearch).value === 'undefined') {
             throw new Error('Invalid search query: Date Query should contain to value');
@@ -307,6 +379,9 @@ export class SearchManager implements ISearchManager {
         });
 
       case SearchQueryTypes.min_rating:
+        if (directoryOnly) {
+          throw new Error('not supported in directoryOnly mode');
+        }
         return new Brackets((q): any => {
           if (typeof (query as MinRatingSearch).value === 'undefined') {
             throw new Error('Invalid search query: Rating Query should contain minvalue');
@@ -322,6 +397,9 @@ export class SearchManager implements ISearchManager {
           return q;
         });
       case SearchQueryTypes.max_rating:
+        if (directoryOnly) {
+          throw new Error('not supported in directoryOnly mode');
+        }
         return new Brackets((q): any => {
           if (typeof (query as MaxRatingSearch).value === 'undefined') {
             throw new Error('Invalid search query: Rating Query should contain  max value');
@@ -339,6 +417,9 @@ export class SearchManager implements ISearchManager {
         });
 
       case SearchQueryTypes.min_resolution:
+        if (directoryOnly) {
+          throw new Error('not supported in directoryOnly mode');
+        }
         return new Brackets((q): any => {
           if (typeof (query as MinResolutionSearch).value === 'undefined') {
             throw new Error('Invalid search query: Resolution Query should contain min value');
@@ -356,6 +437,9 @@ export class SearchManager implements ISearchManager {
         });
 
       case SearchQueryTypes.max_resolution:
+        if (directoryOnly) {
+          throw new Error('not supported in directoryOnly mode');
+        }
         return new Brackets((q): any => {
           if (typeof (query as MaxResolutionSearch).value === 'undefined') {
             throw new Error('Invalid search query: Rating Query should contain min or max value');
@@ -372,6 +456,9 @@ export class SearchManager implements ISearchManager {
         });
 
       case SearchQueryTypes.orientation:
+        if (directoryOnly) {
+          throw new Error('not supported in directoryOnly mode');
+        }
         return new Brackets((q): any => {
           if ((query as OrientationSearch).landscape) {
             q.where('media.metadata.size.width >= media.metadata.size.height');
@@ -391,7 +478,16 @@ export class SearchManager implements ISearchManager {
     return new Brackets((q: WhereExpression) => {
 
       const createMatchString = (str: string): string => {
-        return (query as TextSearch).matchType === TextSearchQueryMatchTypes.exact_match ? str : `%${str}%`;
+        if ((query as TextSearch).matchType === TextSearchQueryMatchTypes.exact_match) {
+          return str;
+        }
+        // MySQL uses C escape syntax in strings, details:
+        // https://stackoverflow.com/questions/14926386/how-to-search-for-slash-in-mysql-and-why-escaping-not-required-for-wher
+        if (Config.Server.Database.type === DatabaseType.mysql) {
+          /// this reqExp replaces the "\\" to "\\\\\"
+          return '%' + str.replace(new RegExp('\\\\', 'g'), '\\\\') + '%';
+        }
+        return `%${str}%`;
       };
 
       const LIKE = (query as TextSearch).negate ? 'NOT LIKE' : 'LIKE';
@@ -426,17 +522,17 @@ export class SearchManager implements ISearchManager {
         }));
       }
 
-      if (query.type === SearchQueryTypes.any_text || query.type === SearchQueryTypes.file_name) {
+      if ((query.type === SearchQueryTypes.any_text && !directoryOnly) || query.type === SearchQueryTypes.file_name) {
         q[whereFN](`media.name ${LIKE} :text${paramCounter.value} COLLATE utf8_general_ci`,
           textParam);
       }
 
-      if (query.type === SearchQueryTypes.any_text || query.type === SearchQueryTypes.caption) {
+      if ((query.type === SearchQueryTypes.any_text && !directoryOnly) || query.type === SearchQueryTypes.caption) {
         q[whereFN](`media.metadata.caption ${LIKE} :text${paramCounter.value} COLLATE utf8_general_ci`,
           textParam);
       }
 
-      if (query.type === SearchQueryTypes.any_text || query.type === SearchQueryTypes.position) {
+      if ((query.type === SearchQueryTypes.any_text && !directoryOnly) || query.type === SearchQueryTypes.position) {
         q[whereFN](`media.metadata.positionData.country ${LIKE} :text${paramCounter.value} COLLATE utf8_general_ci`,
           textParam)
           [whereFN](`media.metadata.positionData.state ${LIKE} :text${paramCounter.value} COLLATE utf8_general_ci`,
@@ -475,11 +571,11 @@ export class SearchManager implements ISearchManager {
       };
 
 
-      if (query.type === SearchQueryTypes.any_text || query.type === SearchQueryTypes.person) {
+      if ((query.type === SearchQueryTypes.any_text && !directoryOnly) || query.type === SearchQueryTypes.person) {
         matchArrayField('media.metadata.persons');
       }
 
-      if (query.type === SearchQueryTypes.any_text || query.type === SearchQueryTypes.keyword) {
+      if ((query.type === SearchQueryTypes.any_text && !directoryOnly) || query.type === SearchQueryTypes.keyword) {
         matchArrayField('media.metadata.keywords');
       }
       return q;

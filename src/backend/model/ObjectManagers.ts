@@ -117,6 +117,7 @@ export class ObjectManagers {
     }
     await SQLConnection.close();
     this.instance = null;
+    Logger.debug(LOG_TAG, 'Object manager reset');
   }
 
 

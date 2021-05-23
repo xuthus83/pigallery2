@@ -216,6 +216,30 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
     return await query.getOne();
   }
 
+  public async fillPreviewForSubDir(connection: Connection, dir: DirectoryEntity): Promise<void> {
+
+    dir.media = [];
+    dir.preview = await connection
+      .getRepository(MediaEntity)
+      .createQueryBuilder('media')
+      .innerJoinAndSelect('media.directory', 'directory')
+      .where('media.directory = :dir', {
+        dir: dir.id
+      })
+      .orderBy('media.metadata.creationDate', 'DESC')
+      .limit(1)
+      .getOne();
+    dir.isPartial = true;
+
+    if (dir.preview) {
+      dir.preview.directory = dir;
+      dir.preview.readyThumbnails = [];
+      dir.preview.readyIcon = false;
+    } else {
+      await this.fillPreviewFromSubDir(connection, dir);
+    }
+  }
+
   protected async selectParentDir(connection: Connection, directoryName: string, directoryParent: string): Promise<DirectoryEntity> {
     const query = connection
       .getRepository(DirectoryEntity)
@@ -290,27 +314,7 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
     }
     if (dir.directories) {
       for (const item of dir.directories) {
-
-        item.media = [];
-        item.preview = await connection
-          .getRepository(MediaEntity)
-          .createQueryBuilder('media')
-          .innerJoinAndSelect('media.directory', 'directory')
-          .where('media.directory = :dir', {
-            dir: item.id
-          })
-          .orderBy('media.metadata.creationDate', 'DESC')
-          .limit(1)
-          .getOne();
-        item.isPartial = true;
-
-        if (item.preview) {
-          item.preview.directory = item;
-          item.preview.readyThumbnails = [];
-          item.preview.readyIcon = false;
-        } else {
-          await this.fillPreviewFromSubDir(connection, item);
-        }
+        await this.fillPreviewForSubDir(connection, item);
       }
     }
   }
