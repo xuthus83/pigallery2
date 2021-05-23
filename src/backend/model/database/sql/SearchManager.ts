@@ -181,24 +181,26 @@ export class SearchManager implements ISearchManager {
       result.resultOverflow = true;
     }
 
-    const dirQuery = this.filterDirectoryQuery(query);
-    if (dirQuery !== null) {
-      result.directories = await connection
-        .getRepository(DirectoryEntity)
-        .createQueryBuilder('directory')
-        .where(this.buildWhereQuery(dirQuery, true))
-        .limit(Config.Client.Search.maxDirectoryResult + 1)
-        .getMany();
+    if (Config.Client.Search.listDirectories === true) {
+      const dirQuery = this.filterDirectoryQuery(query);
+      if (dirQuery !== null) {
+        result.directories = await connection
+          .getRepository(DirectoryEntity)
+          .createQueryBuilder('directory')
+          .where(this.buildWhereQuery(dirQuery, true))
+          .limit(Config.Client.Search.maxDirectoryResult + 1)
+          .getMany();
 
-      // setting previews
-      if (result.directories) {
-        for (const item of result.directories) {
-          await (ObjectManagers.getInstance().GalleryManager as ISQLGalleryManager)
-            .fillPreviewForSubDir(connection, item as DirectoryEntity);
+        // setting previews
+        if (result.directories) {
+          for (const item of result.directories) {
+            await (ObjectManagers.getInstance().GalleryManager as ISQLGalleryManager)
+              .fillPreviewForSubDir(connection, item as DirectoryEntity);
+          }
         }
-      }
-      if (result.directories.length > Config.Client.Search.maxDirectoryResult) {
-        result.resultOverflow = true;
+        if (result.directories.length > Config.Client.Search.maxDirectoryResult) {
+          result.resultOverflow = true;
+        }
       }
     }
 

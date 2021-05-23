@@ -2772,6 +2772,18 @@
         <source>Maximum number of photos and videos that listed in one search result.</source>
         <target>Maximálisan ennyi képet és mappát listáz ki egy keresési eredménnyel</target>
       </trans-unit>
+      <trans-unit id="3200342440195656274" datatype="html">
+        <source>Insert</source>
+        <target>Beillesztés</target>
+      </trans-unit>
+      <trans-unit id="5788628366491057479" datatype="html">
+        <source>List directories"</source>
+        <target>Mappák listázása"</target>
+      </trans-unit>
+      <trans-unit id="1627438365479766712" datatype="html">
+        <source>Search will also return with directories"</source>
+        <target>A keresési eredmény mappákat is fog tartalmazni"</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

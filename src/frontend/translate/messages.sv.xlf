@@ -2772,6 +2772,18 @@
         <source>Maximum number of photos and videos that listed in one search result.</source>
         <target>Maximum number of photos and videos that listed in one search result.</target>
       </trans-unit>
+      <trans-unit id="3200342440195656274" datatype="html">
+        <source>Insert</source>
+        <target>Insert</target>
+      </trans-unit>
+      <trans-unit id="5788628366491057479" datatype="html">
+        <source>List directories"</source>
+        <target>List directories"</target>
+      </trans-unit>
+      <trans-unit id="1627438365479766712" datatype="html">
+        <source>Search will also return with directories"</source>
+        <target>Search will also return with directories"</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

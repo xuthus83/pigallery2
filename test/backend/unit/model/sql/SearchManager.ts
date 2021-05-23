@@ -117,12 +117,14 @@ describe('SearchManager', (sqlHelper: DBTestHelper) => {
 
 
   before(async () => {
+    Config.Client.Search.listDirectories = true;
     await setUpSqlDB();
   });
 
 
   after(async () => {
     await sqlHelper.clearDB();
+    Config.Client.Search.listDirectories = false;
   });
 
   it('should get autocomplete', async () => {

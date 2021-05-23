@@ -29,6 +29,8 @@ export class ClientSearchConfig {
   AutoComplete: AutoCompleteConfig = new AutoCompleteConfig();
   @ConfigProperty({type: 'unsignedInt'})
   maxMediaResult: number = 10000;
+  @ConfigProperty({description: 'Search returns also with directories, not just media'})
+  listDirectories: boolean = false;
   @ConfigProperty({type: 'unsignedInt'})
   maxDirectoryResult: number = 200;
 }

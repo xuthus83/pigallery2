@@ -44,6 +44,13 @@
           required="true">
         </app-settings-entry>
 
+        <app-settings-entry
+          name="List directories"
+          description="Search will also return with directories"
+          i18n-description i18n-name
+          [ngModel]="states.listDirectories"
+          [simplifiedMode]="simplifiedMode">
+        </app-settings-entry>
 
 
 
