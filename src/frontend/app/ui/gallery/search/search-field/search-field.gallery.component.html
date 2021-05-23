@@ -48,7 +48,10 @@
                      <span *ngSwitchCase="SearchQueryTypes.distance" class="oi oi-map-marker"></span>
                     </span>
         {{item.preText}}<strong>{{item.highLightText}}</strong>{{item.postText}}
-        <span class="oi oi-chevron-right insert-button float-right" (click)="applyAutoComplete(item)"></span>
+        <span class="oi oi-chevron-right insert-button float-right" (click)="applyAutoComplete(item)"
+              title="Insert"
+              i18n-title>
+        </span>
       </div>
     </div>
   </div>

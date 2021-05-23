@@ -22,6 +22,12 @@
 .autocomplete-item-selected .insert-button {
   display: block;
 }
+@media (hover: none) {
+  .insert-button {
+    display: block;
+  }
+}
+
 .autocomplete-item-selected .insert-button:hover {
   color: black;
 }
