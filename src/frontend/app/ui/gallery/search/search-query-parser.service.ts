@@ -8,24 +8,26 @@ export class SearchQueryParserService {
   public readonly keywords: QueryKeywords = {
     NSomeOf: 'of',
     and: 'and',
-    caption: 'caption',
-    directory: 'directory',
-    file_name: 'file-name',
-    from: 'from',
-    keyword: 'keyword',
+    or: 'or',
+
+    from: 'after',
+    to: 'before',
     landscape: 'landscape',
     maxRating: 'max-rating',
     maxResolution: 'max-resolution',
     minRating: 'min-rating',
     minResolution: 'min-resolution',
-    or: 'or',
     orientation: 'orientation',
+
     any_text: 'any-text',
+    keyword: 'keyword',
+    caption: 'caption',
+    directory: 'directory',
+    file_name: 'file-name',
     person: 'person',
     portrait: 'portrait',
     position: 'position',
     someOf: 'some-of',
-    to: 'to',
     kmFrom: 'km-from'
   };
   private readonly parser: SearchQueryParser;
