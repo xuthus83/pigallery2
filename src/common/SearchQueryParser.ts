@@ -85,7 +85,7 @@ export class SearchQueryParser {
     return Date.parse(text);
   }
 
-  public parse(str: string, implicitOR = true): SearchQueryDTO {
+  public parse(str: string, implicitAND = true): SearchQueryDTO {
     str = str.replace(/\s\s+/g, ' ') // remove double spaces
       .replace(/:\s+/g, ':').replace(/\)(?=\S)/g, ') ').trim();
 
@@ -123,25 +123,25 @@ export class SearchQueryParser {
 
     if (tokenEnd !== str.length - 1) {
       if (str.startsWith(' ' + this.keywords.and, tokenEnd)) {
-        const rest = this.parse(str.slice(tokenEnd + (' ' + this.keywords.and).length), implicitOR);
+        const rest = this.parse(str.slice(tokenEnd + (' ' + this.keywords.and).length), implicitAND);
         return {
           type: SearchQueryTypes.AND,
-          list: [this.parse(str.slice(0, tokenEnd), implicitOR), // trim brackets
+          list: [this.parse(str.slice(0, tokenEnd), implicitAND), // trim brackets
             ...(rest.type === SearchQueryTypes.AND ? (rest as SearchListQuery).list : [rest])]
         } as ANDSearchQuery;
       } else if (str.startsWith(' ' + this.keywords.or, tokenEnd)) {
-        const rest = this.parse(str.slice(tokenEnd + (' ' + this.keywords.or).length), implicitOR);
+        const rest = this.parse(str.slice(tokenEnd + (' ' + this.keywords.or).length), implicitAND);
         return {
           type: SearchQueryTypes.OR,
-          list: [this.parse(str.slice(0, tokenEnd), implicitOR), // trim brackets
+          list: [this.parse(str.slice(0, tokenEnd), implicitAND), // trim brackets
             ...(rest.type === SearchQueryTypes.OR ? (rest as SearchListQuery).list : [rest])]
         } as ORSearchQuery;
       } else { // Relation cannot be detected
-        const t = implicitOR === true ? SearchQueryTypes.OR : SearchQueryTypes.UNKNOWN_RELATION;
-        const rest = this.parse(str.slice(tokenEnd), implicitOR);
+        const t = implicitAND === true ? SearchQueryTypes.AND : SearchQueryTypes.UNKNOWN_RELATION;
+        const rest = this.parse(str.slice(tokenEnd), implicitAND);
         return {
           type: t,
-          list: [this.parse(str.slice(0, tokenEnd), implicitOR), // trim brackets
+          list: [this.parse(str.slice(0, tokenEnd), implicitAND), // trim brackets
             ...(rest.type === t ? (rest as SearchListQuery).list : [rest])]
         } as SearchListQuery;
       }

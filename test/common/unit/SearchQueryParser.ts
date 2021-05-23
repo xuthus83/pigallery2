@@ -116,6 +116,17 @@ describe('SearchQueryParser', () => {
       check({type: SearchQueryTypes.orientation, landscape: true} as OrientationSearch);
       check({type: SearchQueryTypes.orientation, landscape: false} as OrientationSearch);
     });
+    it('Default logical operator should be AND', () => {
+
+      const parser = new SearchQueryParser(queryKeywords);
+      expect(parser.parse('a b')).to.deep.equals({
+        type: SearchQueryTypes.AND,
+        list: [
+          {type: SearchQueryTypes.any_text, text: 'a'} as TextSearch,
+          {type: SearchQueryTypes.any_text, text: 'b'} as TextSearch
+        ]
+      } as ANDSearchQuery);
+    });
     it('And search', () => {
       check({
         type: SearchQueryTypes.AND,
