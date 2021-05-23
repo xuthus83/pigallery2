@@ -176,10 +176,6 @@ export interface RangeSearch extends NegatableSearchQuery {
   value: number;
 }
 
-export interface RangeSearchGroup extends ANDSearchQuery {
-  list: RangeSearch[];
-}
-
 export interface FromDateSearch extends RangeSearch {
   type: SearchQueryTypes.from_date;
   value: number;

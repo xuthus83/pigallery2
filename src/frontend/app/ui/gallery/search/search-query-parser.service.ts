@@ -20,6 +20,7 @@ export class SearchQueryParserService {
     minResolution: 'min-resolution',
     or: 'or',
     orientation: 'orientation',
+    any_text: 'any-text',
     person: 'person',
     portrait: 'portrait',
     position: 'position',

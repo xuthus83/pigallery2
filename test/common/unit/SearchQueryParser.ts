@@ -34,6 +34,7 @@ const queryKeywords: QueryKeywords = {
   minResolution: 'min-resolution',
   or: 'or',
   orientation: 'orientation',
+  any_text: 'any-text',
   person: 'person',
   portrait: 'portrait',
   position: 'position',
@@ -64,6 +65,14 @@ describe('SearchQueryParser', () => {
         matchType: TextSearchQueryMatchTypes.exact_match,
         text: 'New York'
       } as TextSearch);
+      check({
+        type: SearchQueryTypes.position,
+        matchType: TextSearchQueryMatchTypes.exact_match,
+        negate: true,
+        text: 'New York'
+      } as TextSearch);
+
+      check({type: SearchQueryTypes.any_text, text: 'test', negate: true} as TextSearch);
     });
 
     it('Date search', () => {
@@ -71,6 +80,8 @@ describe('SearchQueryParser', () => {
       check({type: SearchQueryTypes.from_date, value: (new Date(2020, 1, 1)).getTime()} as FromDateSearch);
       check({type: SearchQueryTypes.to_date, value: (new Date(2020, 1, 20)).getTime()} as ToDateSearch);
       check({type: SearchQueryTypes.to_date, value: (new Date(2020, 1, 1)).getTime()} as ToDateSearch);
+      check({type: SearchQueryTypes.from_date, value: (new Date(2020, 1, 1)).getTime(), negate: true} as FromDateSearch);
+      check({type: SearchQueryTypes.to_date, value: (new Date(2020, 1, 1)).getTime(), negate: true} as ToDateSearch);
 
       const parser = new SearchQueryParser(queryKeywords);
       // test if date gets simplified on 1st of Jan.
@@ -86,13 +97,18 @@ describe('SearchQueryParser', () => {
     it('Rating search', () => {
       check({type: SearchQueryTypes.min_rating, value: 10} as MinRatingSearch);
       check({type: SearchQueryTypes.max_rating, value: 1} as MaxRatingSearch);
+      check({type: SearchQueryTypes.min_rating, value: 10, negate: true} as MinRatingSearch);
+      check({type: SearchQueryTypes.max_rating, value: 1, negate: true} as MaxRatingSearch);
     });
     it('Resolution search', () => {
       check({type: SearchQueryTypes.min_resolution, value: 10} as MinResolutionSearch);
       check({type: SearchQueryTypes.max_resolution, value: 5} as MaxResolutionSearch);
+      check({type: SearchQueryTypes.min_resolution, value: 10, negate: true} as MinResolutionSearch);
+      check({type: SearchQueryTypes.max_resolution, value: 5, negate: true} as MaxResolutionSearch);
     });
     it('Distance search', () => {
       check({type: SearchQueryTypes.distance, distance: 10, from: {text: 'New York'}} as DistanceSearch);
+      check({type: SearchQueryTypes.distance, distance: 10, from: {text: 'New York'}, negate: true} as DistanceSearch);
     });
     it('OrientationSearch search', () => {
       check({type: SearchQueryTypes.orientation, landscape: true} as OrientationSearch);

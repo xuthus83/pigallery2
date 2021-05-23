@@ -6,6 +6,7 @@ import {
   MaxResolutionSearch,
   MinRatingSearch,
   MinResolutionSearch,
+  NegatableSearchQuery,
   OrientationSearch,
   ORSearchQuery,
   RangeSearch,
@@ -36,6 +37,7 @@ export interface QueryKeywords {
   and: string;
   from: string;
   to: string;
+  any_text: string;
   caption: string;
   directory: string;
   file_name: string;
@@ -172,45 +174,55 @@ export class SearchQueryParser {
       return ret;
     }
 
-    if (str.startsWith(this.keywords.from + ':')) {
+    const kwStartsWith = (s: string, kw: string): boolean => {
+      return s.startsWith(kw + ':') || s.startsWith(kw + '!:');
+    };
+
+    if (kwStartsWith(str, this.keywords.from)) {
       return {
         type: SearchQueryTypes.from_date,
-        value: SearchQueryParser.parseDate(str.substring((this.keywords.from + ':').length))
+        value: SearchQueryParser.parseDate(str.substring(str.indexOf(':') + 1)),
+        ...(str.startsWith(this.keywords.from + '!:') && {negate: true}) // only add if the value is true
       } as FromDateSearch;
     }
-    if (str.startsWith(this.keywords.to + ':')) {
+    if (kwStartsWith(str, this.keywords.to)) {
       return {
         type: SearchQueryTypes.to_date,
-        value: SearchQueryParser.parseDate(str.substring((this.keywords.to + ':').length))
+        value: SearchQueryParser.parseDate(str.substring(str.indexOf(':') + 1)),
+        ...(str.startsWith(this.keywords.to + '!:') && {negate: true})// only add if the value is true
       } as ToDateSearch;
     }
 
-    if (str.startsWith(this.keywords.minRating + ':')) {
+    if (kwStartsWith(str, this.keywords.minRating)) {
       return {
         type: SearchQueryTypes.min_rating,
-        value: parseInt(str.slice((this.keywords.minRating + ':').length), 10)
+        value: parseInt(str.substring(str.indexOf(':') + 1), 10),
+        ...(str.startsWith(this.keywords.minRating + '!:') && {negate: true}) // only add if the value is true
       } as MinRatingSearch;
     }
-    if (str.startsWith(this.keywords.maxRating + ':')) {
+    if (kwStartsWith(str, this.keywords.maxRating)) {
       return {
         type: SearchQueryTypes.max_rating,
-        value: parseInt(str.slice((this.keywords.maxRating + ':').length), 10)
+        value: parseInt(str.substring(str.indexOf(':') + 1), 10),
+        ...(str.startsWith(this.keywords.maxRating + '!:') && {negate: true}) // only add if the value is true
       } as MaxRatingSearch;
     }
-    if (str.startsWith(this.keywords.minResolution + ':')) {
+    if (kwStartsWith(str, this.keywords.minResolution)) {
       return {
         type: SearchQueryTypes.min_resolution,
-        value: parseInt(str.slice((this.keywords.minResolution + ':').length), 10)
+        value: parseInt(str.substring(str.indexOf(':') + 1), 10),
+        ...(str.startsWith(this.keywords.minResolution + '!:') && {negate: true}) // only add if the value is true
       } as MinResolutionSearch;
     }
-    if (str.startsWith(this.keywords.maxResolution + ':')) {
+    if (kwStartsWith(str, this.keywords.maxResolution)) {
       return {
         type: SearchQueryTypes.max_resolution,
-        value: parseInt(str.slice((this.keywords.maxResolution + ':').length), 10)
+        value: parseInt(str.substring(str.indexOf(':') + 1), 10),
+        ...(str.startsWith(this.keywords.maxResolution + '!:') && {negate: true}) // only add if the value is true
       } as MaxResolutionSearch;
     }
-    if (new RegExp('^\\d*-' + this.keywords.kmFrom + ':').test(str)) {
-      let from = str.slice(new RegExp('^\\d*-' + this.keywords.kmFrom + ':').exec(str)[0].length);
+    if (new RegExp('^\\d*-' + this.keywords.kmFrom + '!?:').test(str)) {
+      let from = str.slice(new RegExp('^\\d*-' + this.keywords.kmFrom + '!?:').exec(str)[0].length);
       if ((from.charAt(0) === '(' && from.charAt(from.length - 1) === ')') ||
         (from.charAt(0) === '"' && from.charAt(from.length - 1) === '"')) {
         from = from.slice(1, from.length - 1);
@@ -218,7 +230,8 @@ export class SearchQueryParser {
       return {
         type: SearchQueryTypes.distance,
         distance: parseInt(new RegExp(/^\d*/).exec(str)[0], 10),
-        from: {text: from}
+        from: {text: from},
+        ...(new RegExp('^\\d*-' + this.keywords.kmFrom + '!:').test(str) && {negate: true}) // only add if the value is true
       } as DistanceSearch;
     }
 
@@ -233,7 +246,10 @@ export class SearchQueryParser {
     const tmp = TextSearchQueryTypes.map(type => ({
       key: (this.keywords as any)[SearchQueryTypes[type]] + ':',
       queryTemplate: {type, text: ''} as TextSearch
-    }));
+    })).concat(TextSearchQueryTypes.map(type => ({
+      key: (this.keywords as any)[SearchQueryTypes[type]] + '!:',
+      queryTemplate: {type, text: '', negate: true} as TextSearch
+    })));
     for (const typeTmp of tmp) {
       if (str.startsWith(typeTmp.key)) {
         const ret: TextSearch = Utils.clone(typeTmp.queryTemplate);
@@ -266,6 +282,7 @@ export class SearchQueryParser {
     if (!query || !query.type) {
       return '';
     }
+    const colon = (query as NegatableSearchQuery).negate === true ? '!:' : ':';
     switch (query.type) {
       case SearchQueryTypes.AND:
         return '(' + (query as SearchListQuery).list.map(q => this.stringifyOnEntry(q)).join(' ' + this.keywords.and + ' ') + ')';
@@ -290,30 +307,35 @@ export class SearchQueryParser {
         if (!(query as FromDateSearch).value) {
           return '';
         }
-        return this.keywords.from + ':' +
+        return this.keywords.from + colon +
           SearchQueryParser.stringifyDate((query as FromDateSearch).value);
       case SearchQueryTypes.to_date:
         if (!(query as ToDateSearch).value) {
           return '';
         }
-        return this.keywords.to + ':' +
+        return this.keywords.to + colon +
           SearchQueryParser.stringifyDate((query as ToDateSearch).value);
       case SearchQueryTypes.min_rating:
-        return this.keywords.minRating + ':' + (isNaN((query as RangeSearch).value) ? '' : (query as RangeSearch).value);
+        return this.keywords.minRating + colon + (isNaN((query as RangeSearch).value) ? '' : (query as RangeSearch).value);
       case SearchQueryTypes.max_rating:
-        return this.keywords.maxRating + ':' + (isNaN((query as RangeSearch).value) ? '' : (query as RangeSearch).value);
+        return this.keywords.maxRating + colon + (isNaN((query as RangeSearch).value) ? '' : (query as RangeSearch).value);
       case SearchQueryTypes.min_resolution:
-        return this.keywords.minResolution + ':' + (isNaN((query as RangeSearch).value) ? '' : (query as RangeSearch).value);
+        return this.keywords.minResolution + colon + (isNaN((query as RangeSearch).value) ? '' : (query as RangeSearch).value);
       case SearchQueryTypes.max_resolution:
-        return this.keywords.maxResolution + ':' + (isNaN((query as RangeSearch).value) ? '' : (query as RangeSearch).value);
+        return this.keywords.maxResolution + colon + (isNaN((query as RangeSearch).value) ? '' : (query as RangeSearch).value);
       case SearchQueryTypes.distance:
         if ((query as DistanceSearch).from.text.indexOf(' ') !== -1) {
-          return (query as DistanceSearch).distance + '-' + this.keywords.kmFrom + ':(' + (query as DistanceSearch).from.text + ')';
+          return (query as DistanceSearch).distance + '-' + this.keywords.kmFrom + colon + '(' + (query as DistanceSearch).from.text + ')';
         }
-        return (query as DistanceSearch).distance + '-' + this.keywords.kmFrom + ':' + (query as DistanceSearch).from.text;
+        return (query as DistanceSearch).distance + '-' + this.keywords.kmFrom + colon + (query as DistanceSearch).from.text;
 
       case SearchQueryTypes.any_text:
-        return SearchQueryParser.stringifyText((query as TextSearch).text, (query as TextSearch).matchType);
+        if (!(query as TextSearch).negate) {
+          return SearchQueryParser.stringifyText((query as TextSearch).text, (query as TextSearch).matchType);
+        } else {
+          return (this.keywords as any)[SearchQueryTypes[query.type]] + colon +
+            SearchQueryParser.stringifyText((query as TextSearch).text, (query as TextSearch).matchType);
+        }
 
       case SearchQueryTypes.person:
       case SearchQueryTypes.position:
@@ -324,7 +346,7 @@ export class SearchQueryParser {
         if (!(query as TextSearch).text) {
           return '';
         }
-        return (this.keywords as any)[SearchQueryTypes[query.type]] + ':' +
+        return (this.keywords as any)[SearchQueryTypes[query.type]] + colon +
           SearchQueryParser.stringifyText((query as TextSearch).text, (query as TextSearch).matchType);
 
       default:
