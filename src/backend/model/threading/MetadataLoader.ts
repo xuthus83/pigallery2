@@ -199,15 +199,21 @@ export class MetadataLoader {
               if (iptcData.caption) {
                 metadata.caption = iptcData.caption.replace(/\0/g, '').trim();
               }
-              metadata.keywords = iptcData.keywords || [];
+              if (Array.isArray(iptcData.keywords)) {
+                metadata.keywords = iptcData.keywords;
+              }
 
-              metadata.creationDate = ((iptcData.date_time ? iptcData.date_time.getTime() : metadata.creationDate) as number);
+              if (iptcData.date_time) {
+                metadata.creationDate = iptcData.date_time.getTime();
+              }
 
             } catch (err) {
               // Logger.debug(LOG_TAG, 'Error parsing iptc data', fullPath, err);
             }
 
-            metadata.creationDate = Math.max(metadata.creationDate || 0, 0);
+            if (!metadata.creationDate) { // creationDate can be negative, when it was created before epoch (1970)
+              metadata.creationDate = 0;
+            }
 
             try {
               // TODO: clean up the three different exif readers,
