@@ -1,5 +1,7 @@
 {
-  "creationDate": 1621859678578,
+  "skip": [
+    "creationDate"
+  ],
   "fileSize": 5860,
   "orientation": 1,
   "size": {
