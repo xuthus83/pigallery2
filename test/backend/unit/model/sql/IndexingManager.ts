@@ -15,7 +15,7 @@ import {PersonManager} from '../../../../../src/backend/model/database/sql/Perso
 import {DBTestHelper} from '../../../DBTestHelper';
 import {VersionManager} from '../../../../../src/backend/model/database/sql/VersionManager';
 import {DiskMangerWorker} from '../../../../../src/backend/model/threading/DiskMangerWorker';
-import {ReIndexingSensitivity, ServerConfig} from '../../../../../src/common/config/private/PrivateConfig';
+import {ReIndexingSensitivity} from '../../../../../src/common/config/private/PrivateConfig';
 
 const deepEqualInAnyOrder = require('deep-equal-in-any-order');
 const chai = require('chai');
@@ -470,6 +470,32 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
     delete sp2.metadata.faces;
     expect(Utils.clone(Utils.removeNullOrEmptyObj(selected)))
       .to.deep.equalInAnyOrder(Utils.clone(Utils.removeNullOrEmptyObj(parent)));
+  });
+
+
+  it('should reset DB', async () => {
+    const gm = new GalleryManagerTest();
+    const im = new IndexingManagerTest();
+
+    const parent = TestHelper.getRandomizedDirectoryEntry();
+    const p1 = TestHelper.getRandomizedPhotoEntry(parent, 'Photo1');
+    const p2 = TestHelper.getRandomizedPhotoEntry(parent, 'Photo2');
+
+    DirectoryDTOUtils.packDirectory(parent);
+    await im.saveToDB(Utils.clone(parent));
+
+    const conn = await SQLConnection.getConnection();
+    const selected = await gm.selectParentDir(conn, parent.name, parent.path);
+    await gm.fillParentDir(conn, selected);
+
+    DirectoryDTOUtils.packDirectory(selected);
+    removeIds(selected);
+    expect(Utils.clone(Utils.removeNullOrEmptyObj(selected)))
+      .to.deep.equal(Utils.clone(Utils.removeNullOrEmptyObj(parent)));
+
+    await im.resetDB();
+    const selectReset = await gm.selectParentDir(conn, parent.name, parent.path);
+    expect(selectReset).to.deep.equal(undefined);
   });
 
 

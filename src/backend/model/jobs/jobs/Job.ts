@@ -77,6 +77,10 @@ export abstract class Job<T = void> implements IJob<T> {
     };
   }
 
+  /**
+   * Returns with true if more steps are left or false if no more
+   * @protected
+   */
   protected abstract step(): Promise<boolean>;
 
   protected abstract init(): Promise<void>;
