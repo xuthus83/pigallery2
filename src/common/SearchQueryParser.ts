@@ -60,13 +60,13 @@ export class SearchQueryParser {
     return text;
   }
 
-  private static stringifyDate(time: number): string {
+  public static stringifyDate(time: number): string {
     const date = new Date(time);
     // simplify date with yeah only if its first of jan
     if (date.getMonth() === 0 && date.getDate() === 1) {
       return date.getFullYear().toString();
     }
-    return this.stringifyText(date.toLocaleDateString());
+    return this.stringifyText(date.toISOString().substring(0, 10));
   }
 
   private static parseDate(text: string): number {
@@ -82,7 +82,12 @@ export class SearchQueryParser {
       d.setFullYear(parseInt(text, 10));
       return d.getTime();
     }
-    return Date.parse(text);
+    const timestamp = Date.parse(text);
+    if (isNaN(timestamp)) {
+      throw new Error('Cannot parse date: ' + text);
+    }
+
+    return timestamp;
   }
 
   public parse(str: string, implicitAND = true): SearchQueryDTO {
@@ -257,7 +262,7 @@ export class SearchQueryParser {
         if (str.charAt(typeTmp.key.length) === '"' && str.charAt(str.length - 1) === '"') {
           ret.text = str.slice(typeTmp.key.length + 1, str.length - 1);
           ret.matchType = TextSearchQueryMatchTypes.exact_match;
-        // like match
+          // like match
         } else if (str.charAt(typeTmp.key.length) === '(' && str.charAt(str.length - 1) === ')') {
           ret.text = str.slice(typeTmp.key.length + 1, str.length - 1);
         } else {

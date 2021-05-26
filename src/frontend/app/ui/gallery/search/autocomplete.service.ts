@@ -38,12 +38,12 @@ export class AutoCompleteService {
     this.keywords.push(this.searchQueryParserService.keywords.to + ':' +
       SearchQueryParser.stringifyText((new Date()).getFullYear().toString()));
     this.keywords.push(this.searchQueryParserService.keywords.to + ':' +
-      SearchQueryParser.stringifyText((new Date()).toLocaleDateString()));
+      SearchQueryParser.stringifyText(SearchQueryParser.stringifyDate(Date.now())));
 
     this.keywords.push(this.searchQueryParserService.keywords.from + ':' +
       SearchQueryParser.stringifyText((new Date()).getFullYear().toString()));
     this.keywords.push(this.searchQueryParserService.keywords.from + ':' +
-      SearchQueryParser.stringifyText((new Date()).toLocaleDateString()));
+      SearchQueryParser.stringifyText(SearchQueryParser.stringifyDate(Date.now())));
 
     TextSearchQueryTypes.forEach(t => {
       this.textSearchKeywordsMap[(this.searchQueryParserService.keywords as any)[SearchQueryTypes[t]]] = t;
