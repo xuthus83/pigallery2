@@ -62,6 +62,7 @@ export class SearchQueryParser {
 
   public static stringifyDate(time: number): string {
     const date = new Date(time);
+
     // simplify date with yeah only if its first of jan
     if (date.getMonth() === 0 && date.getDate() === 1) {
       return date.getFullYear().toString();
@@ -78,12 +79,23 @@ export class SearchQueryParser {
     }
     // it is the year only
     if (text.length === 4) {
-      const d = new Date(2000, 0, 1);
-      d.setFullYear(parseInt(text, 10));
-      return d.getTime();
+      return Date.UTC(parseInt(text, 10), 0, 1, 0, 0, 0, 0);
     }
-    const timestamp = Date.parse(text);
-    if (isNaN(timestamp)) {
+    let timestamp = null;
+    // Parsing ISO string
+    try {
+      const parts = text.split('-').map(t => parseInt(t, 10));
+      if (parts && parts.length === 3) {
+        timestamp = (Date.UTC(parts[0], parts[1] - 1, parts[2])); // Note: months are 0-based
+      }
+    } catch (e) {
+    }
+    // If it could not parse as ISO string, try our luck with Date.parse
+    // https://stackoverflow.com/questions/2587345/why-does-date-parse-give-incorrect-results
+    if (timestamp === null) {
+      timestamp = Date.parse(text);
+    }
+    if (isNaN(timestamp) || timestamp === null) {
       throw new Error('Cannot parse date: ' + text);
     }
 
