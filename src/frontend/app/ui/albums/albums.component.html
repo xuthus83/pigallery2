@@ -1,0 +1,16 @@
+<app-frame>
+
+  <div body #container class="container-fluid">
+    <app-album *ngFor="let album of albumsService.albums | async"
+              [album]="album"
+              [size]="size"></app-album>
+
+    <div class="d-flex no-item-msg"
+         *ngIf="(albumsService.albums | async) && (albumsService.albums | async).length == 0">
+      <div class="flex-fill">
+        <h2>:( <ng-container i18n>No albums to show.</ng-container>
+        </h2>
+      </div>
+    </div>
+  </div>
+</app-frame>

@@ -45,5 +45,8 @@ export class FrameComponent {
     this.authService.logout();
   }
 
+  isAlbumsAvailable(): boolean {
+    return Config.Client.Album.enabled;
+  }
 }
 

@@ -100,6 +100,9 @@ import {AppRoutingModule} from './app.routing';
 import {CookieService} from 'ngx-cookie-service';
 import {LeafletMarkerClusterModule} from '@asymmetrik/ngx-leaflet-markercluster';
 import {icon, Marker} from 'leaflet';
+import {AlbumsComponent} from './ui/albums/albums.component';
+import {AlbumComponent} from './ui/albums/album/album.component';
+import {AlbumsService} from './ui/albums/albums.service';
 
 
 @Injectable()
@@ -178,6 +181,9 @@ Marker.prototype.options.icon = iconDefault;
     LanguageComponent,
     TimeStampDatePickerComponent,
     TimeStampTimePickerComponent,
+    // Albums
+    AlbumsComponent,
+    AlbumComponent,
     // Gallery
     GalleryLightboxMediaComponent,
     GalleryPhotoLoadingComponent,
@@ -241,6 +247,7 @@ Marker.prototype.options.icon = iconDefault;
     NetworkService,
     ShareService,
     UserService,
+    AlbumsService,
     GalleryCacheService,
     GalleryService,
     MapService,
