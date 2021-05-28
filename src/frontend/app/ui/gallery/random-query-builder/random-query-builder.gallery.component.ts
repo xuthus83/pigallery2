@@ -20,8 +20,7 @@ import {SearchQueryParserService} from '../search/search-query-parser.service';
 })
 export class RandomQueryBuilderGalleryComponent implements OnInit, OnDestroy {
 
-  public searchQueryDTO: SearchQueryDTO;
-  public rawSearchText: string;
+  public searchQueryDTO: SearchQueryDTO = {type: SearchQueryTypes.any_text, text: ''} as TextSearch;
   enabled = true;
   url = '';
 
@@ -37,7 +36,6 @@ export class RandomQueryBuilderGalleryComponent implements OnInit, OnDestroy {
               private searchQueryParserService: SearchQueryParserService,
               private route: ActivatedRoute,
               private modalService: BsModalService) {
-    this.resetQuery();
 
     this.subscription = this.route.params.subscribe((params: Params) => {
       if (!params[QueryParams.gallery.search.query]) {
@@ -55,17 +53,8 @@ export class RandomQueryBuilderGalleryComponent implements OnInit, OnDestroy {
     return JSON.stringify(this.searchQueryDTO);
   }
 
-  validateRawSearchText(): void {
-    try {
-      this.searchQueryDTO = this.searchQueryParserService.parse(this.rawSearchText);
-      this.url = NetworkService.buildUrl(Config.Client.publicUrl + '/api/gallery/random/' + this.HTMLSearchQuery);
-    } catch (e) {
-      console.error(e);
-    }
-  }
 
   onQueryChange(): void {
-    this.rawSearchText = this.searchQueryParserService.stringify(this.searchQueryDTO);
     this.url = NetworkService.buildUrl(Config.Client.publicUrl + '/api/gallery/random/' + this.HTMLSearchQuery);
   }
 
@@ -111,11 +100,6 @@ export class RandomQueryBuilderGalleryComponent implements OnInit, OnDestroy {
   public hideModal(): void {
     this.modalRef.hide();
     this.modalRef = null;
-  }
-
-
-  resetQuery(): void {
-    this.searchQueryDTO = {text: '', type: SearchQueryTypes.any_text} as TextSearch;
   }
 
 

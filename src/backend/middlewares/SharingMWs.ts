@@ -117,6 +117,7 @@ export class SharingMWs {
 
     try {
       req.resultPipe = await ObjectManagers.getInstance().SharingManager.deleteSharing(sharingKey);
+      req.resultPipe = 'ok';
       return next();
     } catch (err) {
       return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, 'Error during deleting sharing', err));

@@ -1,11 +1,11 @@
 <form class="navbar-form" role="search" #SearchForm="ngForm">
   <div class="input-group">
 
-    <app-gallery-search-field  [(ngModel)]="rawSearchText"
+    <app-gallery-search-field [(ngModel)]="rawSearchText"
                               (ngModelChange)="validateRawSearchText()"
-                               class="search-field"
-                               (search)="Search()"
-    name="search-field">
+                              class="search-field"
+                              (search)="Search()"
+                              name="search-field">
 
     </app-gallery-search-field>
 
@@ -17,7 +17,7 @@
     </div>
 
     <div class="input-group-btn" style="display: block">
-      <button class="btn btn-light" type="button" (click)="openModal(searchModal)">
+      <button class="btn btn-light" type="button" (click)="openSearchModal(searchModal)">
         <span class="oi oi-chevron-bottom"></span>
       </button>
     </div>
@@ -29,32 +29,63 @@
   <!-- sharing Modal-->
   <div class="modal-header">
     <h5 class="modal-title" i18n>Search</h5>
-    <button type="button" class="close" (click)="hideModal()" data-dismiss="modal" aria-label="Close">
+    <button type="button" class="close" (click)="hideSearchModal()" data-dismiss="modal" aria-label="Close">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
   <div class="modal-body">
     <form #searchPanelForm="ngForm" class="form-horizontal">
-      <app-gallery-search-field [(ngModel)]="rawSearchText"
-                                (ngModelChange)="validateRawSearchText()"
-                                (search)="Search()"
-                                name="form-search-field">
 
-      </app-gallery-search-field>
-
-      <app-gallery-search-query-entry
+      <app-gallery-search-query-builder
+        name="search-query-builder"
         [(ngModel)]="searchQueryDTO"
         (change)="onQueryChange()"
-        name="search-root"
-        (delete)="resetQuery()">
+        (search)="Search()">
+      </app-gallery-search-query-builder>
 
-      </app-gallery-search-query-entry>
 
-      <div class="input-group-btn float-right" style="display: block">
+      <div class="input-group-btn float-right row" style="display: block">
+
+        <button *ngIf="AlbumsEnabled"
+                class="btn btn-secondary mr-2" type="button"
+                [disabled]="rawSearchText == ''"
+                (click)="openSaveSearchModal(saveSearchModal)">
+          <span class="oi oi-folder"></span> Save
+        </button>
         <button class="btn btn-primary" type="button"
                 [routerLink]="['/search', HTMLSearchQuery]"
-                (click)="hideModal()">
+                (click)="hideSearchModal()">
           <span class="oi oi-magnifying-glass"></span> Search
+        </button>
+      </div>
+    </form>
+  </div>
+</ng-template>
+
+<ng-template #saveSearchModal>
+  <!-- sharing Modal-->
+  <div class="modal-header">
+    <h5 class="modal-title" i18n>Save search to album</h5>
+    <button type="button" class="close" (click)="hideSaveSearchModal()" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+
+    <form #saveSearchPanelForm="ngForm" class="form-horizontal">
+      <div class="row">
+        <input
+          id="saveSearchName"
+          name="saveSearchName"
+          placeholder="Search text"
+          class="form-control input-md"
+          [(ngModel)]="saveSearchName"
+          type="text"/>
+      </div>
+      <div class="input-group-btn float-right row mt-2" style="display: block">
+        <button class="btn btn-primary" type="button"
+                (click)="saveSearch()">
+          <span class="oi oi-folder"></span> Save as album
         </button>
       </div>
     </form>

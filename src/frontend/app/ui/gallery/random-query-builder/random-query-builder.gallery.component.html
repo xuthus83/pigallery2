@@ -32,19 +32,12 @@
     </div>
     <hr/>
     <form #searchPanelForm="ngForm" class="form-horizontal">
-      <app-gallery-search-field [(ngModel)]="rawSearchText"
-                                (ngModelChange)="validateRawSearchText()"
-                                name="form-search-field">
-
-      </app-gallery-search-field>
-
-      <app-gallery-search-query-entry
+      <app-gallery-search-query-builder
+        id="album-search-query-builder"
+        name="album-search-query-builder"
         [(ngModel)]="searchQueryDTO"
-        (change)="onQueryChange()"
-        name="search-root"
-        (delete)="resetQuery()">
-
-      </app-gallery-search-query-entry>
+        (change)="onQueryChange()" >
+      </app-gallery-search-query-builder>
 
 
     </form>

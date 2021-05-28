@@ -59,15 +59,5 @@ export class GalleryDirectoryComponent implements OnInit, OnDestroy {
     }
   }
 
-  /*
-    calcSize() {
-      if (this.size == null || PageHelper.isScrollYVisible()) {
-        const size = 220 + 5;
-        const containerWidth = this.container.nativeElement.parentElement.parentElement.clientWidth;
-        this.size = containerWidth / Math.round((containerWidth / size));
-      }
-      return Math.floor(this.size - 5);
-    }
-  */
 }
 

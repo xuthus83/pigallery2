@@ -82,7 +82,7 @@ export class MediaMetadataEntity implements MediaMetadata {
 // TODO: fix inheritance once its working in typeorm
 @Entity()
 @Unique(['name', 'directory'])
-@TableInheritance({column: {type: 'varchar', name: 'type', length: 32}})
+@TableInheritance({column: {type: 'varchar', name: 'type', length: 16}})
 export abstract class MediaEntity implements MediaDTO {
 
   @Index()

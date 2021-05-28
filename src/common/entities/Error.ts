@@ -24,6 +24,8 @@ export enum ErrorCodes {
   TASK_ERROR = 14,
   JOB_ERROR = 15,
   LocationLookUp_ERROR = 16,
+
+  ALBUM_ERROR = 17,
 }
 
 export class ErrorDTO {

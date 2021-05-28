@@ -8,6 +8,7 @@ import {QueryParams} from '../../common/QueryParams';
 import {DuplicateComponent} from './ui/duplicates/duplicates.component';
 import {FacesComponent} from './ui/faces/faces.component';
 import {AuthGuard} from './model/network/helper/auth.guard';
+import {AlbumsComponent} from './ui/albums/albums.component';
 
 export function galleryMatcherFunction(
   segments: UrlSegment[]): UrlMatchResult | null {
@@ -57,6 +58,11 @@ const routes: Routes = [
   {
     path: 'duplicates',
     component: DuplicateComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'albums',
+    component: AlbumsComponent,
     canActivate: [AuthGuard]
   },
   {

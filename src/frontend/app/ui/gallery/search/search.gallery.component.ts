@@ -9,6 +9,8 @@ import {MetadataSearchQueryTypes, SearchQueryDTO, SearchQueryTypes, TextSearch} 
 import {BsModalService} from 'ngx-bootstrap/modal';
 import {BsModalRef} from 'ngx-bootstrap/modal/bs-modal-ref.service';
 import {SearchQueryParserService} from './search-query-parser.service';
+import {AlbumsService} from '../../albums/albums.service';
+import {Config} from '../../../../../common/config/public/Config';
 
 @Component({
   selector: 'app-gallery-search',
@@ -22,13 +24,17 @@ export class GallerySearchComponent implements OnDestroy {
   public rawSearchText = '';
   mouseOverAutoComplete = false;
   readonly SearchQueryTypes: typeof SearchQueryTypes;
-  modalRef: BsModalRef;
   public readonly MetadataSearchQueryTypes: { value: string; key: SearchQueryTypes }[];
+  public saveSearchName: string;
+  AlbumsEnabled = Config.Client.Album.enabled;
+  private searchModalRef: BsModalRef;
   private readonly subscription: Subscription = null;
+  private saveSearchModalRef: BsModalRef;
 
   constructor(private autoCompleteService: AutoCompleteService,
               private searchQueryParserService: SearchQueryParserService,
               private galleryService: GalleryService,
+              private albumService: AlbumsService,
               private navigationService: NavigationService,
               private route: ActivatedRoute,
               public router: Router,
@@ -60,24 +66,33 @@ export class GallerySearchComponent implements OnDestroy {
     }
   }
 
-  public async openModal(template: TemplateRef<any>): Promise<void> {
-    this.modalRef = this.modalService.show(template, {class: 'modal-lg'});
+  public async openSearchModal(template: TemplateRef<any>): Promise<void> {
+    this.searchModalRef = this.modalService.show(template, {class: 'modal-lg'});
     document.body.style.paddingRight = '0px';
   }
 
-  public hideModal(): void {
-    this.modalRef.hide();
-    this.modalRef = null;
+  public hideSearchModal(): void {
+    this.searchModalRef.hide();
+    this.searchModalRef = null;
   }
 
-  resetQuery(): void {
-    this.searchQueryDTO = ({text: '', type: SearchQueryTypes.any_text} as TextSearch);
+  public async openSaveSearchModal(template: TemplateRef<any>): Promise<void> {
+    this.saveSearchModalRef = this.modalService.show(template, {class: 'modal-lg'});
+    document.body.style.paddingRight = '0px';
   }
+
+  public hideSaveSearchModal(): void {
+    this.saveSearchModalRef.hide();
+    this.saveSearchModalRef = null;
+  }
+
 
   onQueryChange(): void {
+    console.log('cahnge', this.searchQueryDTO);
     this.rawSearchText = this.searchQueryParserService.stringify(this.searchQueryDTO);
     // this.validateRawSearchText();
   }
+
 
   validateRawSearchText(): void {
     try {
@@ -92,6 +107,10 @@ export class GallerySearchComponent implements OnDestroy {
   }
 
 
+  async saveSearch(): Promise<void> {
+    await this.albumService.addSavedSearch(this.saveSearchName, this.searchQueryDTO);
+    this.hideSaveSearchModal();
+  }
 }
 
 

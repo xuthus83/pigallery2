@@ -158,7 +158,7 @@ export interface TextSearch extends NegatableSearchQuery {
     SearchQueryTypes.caption |
     SearchQueryTypes.file_name |
     SearchQueryTypes.directory;
-  matchType: TextSearchQueryMatchTypes;
+  matchType?: TextSearchQueryMatchTypes;
   text: string;
 }
 

@@ -19,6 +19,8 @@ import {PersonEntry} from './enitites/PersonEntry';
 import {Utils} from '../../../../common/Utils';
 import * as path from 'path';
 import {DatabaseType, ServerDataBaseConfig, SQLLogLevel} from '../../../../common/config/private/PrivateConfig';
+import {AlbumBaseEntity} from './enitites/album/AlbumBaseEntity';
+import {SavedSearchEntity} from './enitites/album/SavedSearchEntity';
 
 
 export class SQLConnection {
@@ -43,6 +45,8 @@ export class SQLConnection {
         VideoEntity,
         DirectoryEntity,
         SharingEntity,
+        AlbumBaseEntity,
+        SavedSearchEntity,
         VersionEntity
       ];
       options.synchronize = false;
@@ -73,6 +77,8 @@ export class SQLConnection {
       VideoEntity,
       DirectoryEntity,
       SharingEntity,
+      AlbumBaseEntity,
+      SavedSearchEntity,
       VersionEntity
     ];
     options.synchronize = false;

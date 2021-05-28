@@ -1,21 +1,15 @@
-.star {
+.delete {
   margin: 2px;
-  color: #888;
   cursor: default;
-
 }
 
-.star.favourite {
-  color: white;
-}
-
-.star.clickable {
+.delete {
   cursor: pointer;
   transition: all .05s ease-in-out;
   transform: scale(1.0, 1.0);
 }
 
-.star.clickable:hover {
+.delete:hover {
   transform: scale(1.4, 1.4);
 }
 
@@ -46,13 +40,6 @@ a {
   background-position: center;
 }
 
-.button {
-  border: 0;
-  padding: 0;
-  text-align: left;
-
-}
-
 .info {
   background-color: rgba(0, 0, 0, 0.6);
   color: white;
@@ -71,4 +58,3 @@ a:hover .info {
 a:hover .photo-container {
   border-color: #000;
 }
-

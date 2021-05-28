@@ -38,7 +38,7 @@ export class DBTestHelper {
 
   static enable = {
     memory: false,
-    sqlite: true,
+    sqlite: process.env.TEST_SQLITE !== 'false',
     mysql: process.env.TEST_MYSQL !== 'false'
   };
   public static readonly savedDescribe = savedDescribe;
@@ -144,6 +144,7 @@ export class DBTestHelper {
   }
 
   private async resetMySQL(): Promise<void> {
+    await ObjectManagers.reset();
     Config.Server.Database.type = DatabaseType.mysql;
     Config.Server.Database.mysql.database = 'pigallery2_test';
     const conn = await SQLConnection.getConnection();
