@@ -37,14 +37,14 @@ export class AlbumComponent implements OnInit, OnDestroy {
   }
 
   get CanUpdate(): boolean {
-    return this.authenticationService.user.getValue().role >= UserRoles.Admin;
+     return this.authenticationService.user.getValue().role >= UserRoles.Admin;
   }
 
   get RouterLink(): any[] {
     if (this.IsSavedSearch) {
-      return ['/search', this.AsSavedSearch.searchQuery];
+      return ['/search', JSON.stringify(this.AsSavedSearch.searchQuery)];
     }
-    // TODO: add nomral albums here once they are ready
+    // TODO: add "normal" albums here once they are ready, see: https://github.com/bpatrik/pigallery2/issues/301
     return null;
   }
 

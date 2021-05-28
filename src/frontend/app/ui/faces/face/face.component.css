@@ -72,8 +72,3 @@ a:hover .photo-container {
   border-color: #000;
 }
 
-.person-name {
-  display: inline-block;
-  width: 180px;
-  white-space: normal;
-}
