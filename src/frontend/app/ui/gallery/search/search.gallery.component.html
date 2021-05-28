@@ -36,24 +36,19 @@
   <div class="modal-body">
     <form #searchPanelForm="ngForm" class="form-horizontal">
 
-      <app-gallery-search-field [(ngModel)]="rawSearchText"
-                                (ngModelChange)="validateRawSearchText()"
-                                (search)="Search()"
-                                name="form-search-field">
-
-      </app-gallery-search-field>
-      <hr>
-      <app-gallery-search-query-entry
+      <app-gallery-search-query-builder
+        name="search-query-builder"
         [(ngModel)]="searchQueryDTO"
         (change)="onQueryChange()"
-        name="search-root"
-        (delete)="resetQuery()">
+        (ngModelChange)="onQueryChange()"
+        (search)="Search()">
+      </app-gallery-search-query-builder>
 
-      </app-gallery-search-query-entry>
 
       <div class="input-group-btn float-right row" style="display: block">
 
-        <button class="btn btn-secondary mr-2" type="button"
+        <button *ngIf="AlbumsEnabled"
+                class="btn btn-secondary mr-2" type="button"
                 [disabled]="rawSearchText == ''"
                 (click)="openSaveSearchModal(saveSearchModal)">
           <span class="oi oi-folder"></span> Save

@@ -1,5 +1,8 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {AlbumsService} from './albums.service';
+import {BsModalService} from 'ngx-bootstrap/modal';
+import {BsModalRef} from 'ngx-bootstrap/modal/bs-modal-ref.service';
+import {SearchQueryTypes, TextSearch} from '../../../../common/entities/SearchQueryDTO';
 
 @Component({
   selector: 'app-albums',
@@ -9,15 +12,36 @@ import {AlbumsService} from './albums.service';
 export class AlbumsComponent implements OnInit {
   @ViewChild('container', {static: true}) container: ElementRef;
   public size: number;
+  public savedSearch = {
+    name: '',
+    searchQuery: {type: SearchQueryTypes.any_text, text: ''} as TextSearch
+  };
+  private modalRef: BsModalRef;
 
-
-  constructor(public albumsService: AlbumsService) {
+  constructor(public albumsService: AlbumsService,
+              private modalService: BsModalService) {
     this.albumsService.getAlbums().catch(console.error);
   }
 
 
   ngOnInit(): void {
     this.updateSize();
+  }
+
+
+  public async openModal(template: TemplateRef<any>): Promise<void> {
+    this.modalRef = this.modalService.show(template, {class: 'modal-lg'});
+    document.body.style.paddingRight = '0px';
+  }
+
+  public hideModal(): void {
+    this.modalRef.hide();
+    this.modalRef = null;
+  }
+
+  async saveSearch(): Promise<void> {
+    await this.albumsService.addSavedSearch(this.savedSearch.name, this.savedSearch.searchQuery);
+    this.hideModal();
   }
 
   private updateSize(): void {

@@ -103,6 +103,7 @@ import {icon, Marker} from 'leaflet';
 import {AlbumsComponent} from './ui/albums/albums.component';
 import {AlbumComponent} from './ui/albums/album/album.component';
 import {AlbumsService} from './ui/albums/albums.service';
+import {GallerySearchQueryBuilderComponent} from './ui/gallery/search/query-builder/query-bulder.gallery.component';
 
 
 @Injectable()
@@ -196,6 +197,7 @@ Marker.prototype.options.icon = iconDefault;
     GallerySearchComponent,
     GallerySearchQueryEntryComponent,
     GallerySearchFieldComponent,
+    GallerySearchQueryBuilderComponent,
     GalleryShareComponent,
     GalleryNavigatorComponent,
     GalleryPhotoComponent,

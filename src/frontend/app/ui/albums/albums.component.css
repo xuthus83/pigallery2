@@ -3,11 +3,27 @@ app-album {
   display: inline-block;
 }
 
-.no-item-msg{
+.no-item-msg {
   height: 100vh;
   text-align: center;
 }
 
-.no-face-msg h2{
+.no-face-msg h2 {
   color: #6c757d;
+}
+
+.add-saved-search {
+  vertical-align: baseline;
+  position: absolute;
+  margin: 2px;
+}
+
+.add-saved-search .text {
+  position: relative;
+  top: calc(50% - 40px);
+  text-align: center;
+}
+
+.add-saved-search .text .oi {
+  font-size: 80px;
 }
