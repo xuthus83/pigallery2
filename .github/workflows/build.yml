@@ -150,7 +150,7 @@ jobs:
           tags: bpatrik/pigallery2:nightly-${{ matrix.container }}
       -
         name: Build and push release on new Tag
-        if: ${{ startsWith(steps.vars.outputs.type , 'tag') &&  !github.event.issue.pull_request && github.ref == 'refs/heads/master' }}
+        if: ${{ startsWith(steps.vars.outputs.type , 'tag') &&  !github.event.issue.pull_request }}
         uses: docker/build-push-action@v2
         with:
           context: .
