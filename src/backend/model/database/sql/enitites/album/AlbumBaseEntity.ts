@@ -4,7 +4,7 @@ import {columnCharsetCS} from '../EntityUtils';
 import {AlbumBaseDTO} from '../../../../../../common/entities/album/AlbumBaseDTO';
 
 @Entity()
-@TableInheritance({column: {type: 'varchar', name: 'type', length: 16}})
+@TableInheritance({column: {type: 'varchar', name: 'type', length: 24}})
 export class AlbumBaseEntity implements AlbumBaseDTO {
 
   @Index()
