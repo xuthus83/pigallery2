@@ -35,6 +35,13 @@ export class ClientSearchConfig {
   maxDirectoryResult: number = 200;
 }
 
+
+@SubConfigClass()
+export class ClientAlbumConfig {
+  @ConfigProperty()
+  enabled: boolean = true;
+}
+
 @SubConfigClass()
 export class ClientSharingConfig {
   @ConfigProperty()
@@ -171,6 +178,8 @@ export class ClientConfig {
   Search: ClientSearchConfig = new ClientSearchConfig();
   @ConfigProperty()
   Sharing: ClientSharingConfig = new ClientSharingConfig();
+  @ConfigProperty()
+  Album: ClientAlbumConfig = new ClientAlbumConfig();
   @ConfigProperty()
   Map: ClientMapConfig = new ClientMapConfig();
   @ConfigProperty()

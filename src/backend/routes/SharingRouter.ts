@@ -57,7 +57,7 @@ export class SharingRouter {
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Admin),
       SharingMWs.deleteSharing,
-      RenderingMWs.renderOK
+      RenderingMWs.renderResult
     );
   }
 

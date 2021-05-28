@@ -6,8 +6,9 @@ import {ObjectManagers} from '../../ObjectManagers';
 import {ISQLSearchManager} from './ISearchManager';
 import {SearchQueryDTO} from '../../../../common/entities/SearchQueryDTO';
 import {SavedSearchEntity} from './enitites/album/SavedSearchEntity';
+import { IAlbumManager } from '../interfaces/IAlbumManager';
 
-export class AlbumManager {
+export class AlbumManager implements IAlbumManager{
   private static async fillPreviewToAlbum(album: AlbumBaseDTO): Promise<void> {
     if (!(album as SavedSearchDTO).searchQuery) {
       throw new Error('no search query present');

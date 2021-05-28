@@ -9,6 +9,8 @@ import {IPersonManager} from './database/interfaces/IPersonManager';
 import {IVersionManager} from './database/interfaces/IVersionManager';
 import {IJobManager} from './database/interfaces/IJobManager';
 import {LocationManager} from './database/LocationManager';
+import {IAlbumManager} from './database/interfaces/IAlbumManager';
+import {JobManager} from './jobs/JobManager';
 
 const LOG_TAG = '[ObjectManagers]';
 
@@ -25,6 +27,7 @@ export class ObjectManagers {
   private versionManager: IVersionManager;
   private jobManager: IJobManager;
   private locationManager: LocationManager;
+  private albumManager: IAlbumManager;
 
 
   get VersionManager(): IVersionManager {
@@ -41,6 +44,14 @@ export class ObjectManagers {
 
   set LocationManager(value: LocationManager) {
     this.locationManager = value;
+  }
+
+  get AlbumManager(): IAlbumManager {
+    return this.albumManager;
+  }
+
+  set AlbumManager(value: IAlbumManager) {
+    this.albumManager = value;
   }
 
   get PersonManager(): IPersonManager {
@@ -121,51 +132,30 @@ export class ObjectManagers {
   }
 
 
-  public static async InitCommonManagers(): Promise<void> {
-    const JobManager = require('./jobs/JobManager').JobManager;
-    ObjectManagers.getInstance().JobManager = new JobManager();
-  }
-
   public static async InitMemoryManagers(): Promise<void> {
     await ObjectManagers.reset();
-    const GalleryManager = require('./database/memory/GalleryManager').GalleryManager;
-    const UserManager = require('./database/memory/UserManager').UserManager;
-    const SearchManager = require('./database/memory/SearchManager').SearchManager;
-    const SharingManager = require('./database/memory/SharingManager').SharingManager;
-    const IndexingManager = require('./database/memory/IndexingManager').IndexingManager;
-    const PersonManager = require('./database/memory/PersonManager').PersonManager;
-    const VersionManager = require('./database/memory/VersionManager').VersionManager;
-    ObjectManagers.getInstance().GalleryManager = new GalleryManager();
-    ObjectManagers.getInstance().UserManager = new UserManager();
-    ObjectManagers.getInstance().SearchManager = new SearchManager();
-    ObjectManagers.getInstance().SharingManager = new SharingManager();
-    ObjectManagers.getInstance().IndexingManager = new IndexingManager();
-    ObjectManagers.getInstance().PersonManager = new PersonManager();
-    ObjectManagers.getInstance().VersionManager = new VersionManager();
-    ObjectManagers.getInstance().LocationManager = new LocationManager();
-    this.InitCommonManagers();
+    this.initManagers('memory');
+    Logger.debug(LOG_TAG, 'Memory DB inited');
   }
 
   public static async InitSQLManagers(): Promise<void> {
     await ObjectManagers.reset();
     await SQLConnection.init();
-    const GalleryManager = require('./database/sql/GalleryManager').GalleryManager;
-    const UserManager = require('./database/sql/UserManager').UserManager;
-    const SearchManager = require('./database/sql/SearchManager').SearchManager;
-    const SharingManager = require('./database/sql/SharingManager').SharingManager;
-    const IndexingManager = require('./database/sql/IndexingManager').IndexingManager;
-    const PersonManager = require('./database/sql/PersonManager').PersonManager;
-    const VersionManager = require('./database/sql/VersionManager').VersionManager;
-    ObjectManagers.getInstance().GalleryManager = new GalleryManager();
-    ObjectManagers.getInstance().UserManager = new UserManager();
-    ObjectManagers.getInstance().SearchManager = new SearchManager();
-    ObjectManagers.getInstance().SharingManager = new SharingManager();
-    ObjectManagers.getInstance().IndexingManager = new IndexingManager();
-    ObjectManagers.getInstance().PersonManager = new PersonManager();
-    ObjectManagers.getInstance().VersionManager = new VersionManager();
-    ObjectManagers.getInstance().LocationManager = new LocationManager();
-    this.InitCommonManagers();
+    this.initManagers('sql');
     Logger.debug(LOG_TAG, 'SQL DB inited');
+  }
+
+  private static initManagers(type: 'memory' | 'sql'): void {
+    ObjectManagers.getInstance().AlbumManager = new (require(`./database/${type}/AlbumManager`).AlbumManager)();
+    ObjectManagers.getInstance().GalleryManager = new (require(`./database/${type}/GalleryManager`).GalleryManager)();
+    ObjectManagers.getInstance().IndexingManager = new (require(`./database/${type}/IndexingManager`).IndexingManager)();
+    ObjectManagers.getInstance().PersonManager = new (require(`./database/${type}/PersonManager`).PersonManager)();
+    ObjectManagers.getInstance().SearchManager = new (require(`./database/${type}/SearchManager`).SearchManager)();
+    ObjectManagers.getInstance().SharingManager = new (require(`./database/${type}/SharingManager`).SharingManager)();
+    ObjectManagers.getInstance().UserManager = new (require(`./database/${type}/UserManager`).UserManager)();
+    ObjectManagers.getInstance().VersionManager = new (require(`./database/${type}/VersionManager`).VersionManager)();
+    ObjectManagers.getInstance().JobManager = new JobManager();
+    ObjectManagers.getInstance().LocationManager = new LocationManager();
   }
 
 }
