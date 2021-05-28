@@ -1,5 +1,4 @@
 import {AutoCompleteItem} from '../../../../common/entities/AutoCompleteItem';
-import {ISearchManager} from '../interfaces/ISearchManager';
 import {SearchResultDTO} from '../../../../common/entities/SearchResultDTO';
 import {SQLConnection} from './SQLConnection';
 import {PhotoEntity} from './enitites/PhotoEntity';
@@ -32,8 +31,10 @@ import {Utils} from '../../../../common/Utils';
 import {PhotoDTO} from '../../../../common/entities/PhotoDTO';
 import {DatabaseType} from '../../../../common/config/private/PrivateConfig';
 import {ISQLGalleryManager} from './IGalleryManager';
+import {ISQLSearchManager} from './ISearchManager';
+import {MediaDTO} from '../../../../common/entities/MediaDTO';
 
-export class SearchManager implements ISearchManager {
+export class SearchManager implements ISQLSearchManager {
 
   private static autoCompleteItemsUnique(array: Array<AutoCompleteItem>): Array<AutoCompleteItem> {
     const a = array.concat();
@@ -221,6 +222,21 @@ export class SearchManager implements ISearchManager {
     }
     return await sqlQuery.groupBy('RANDOM()').limit(1).getOne();
 
+  }
+
+  public async getPreview(queryIN: SearchQueryDTO): Promise<MediaDTO> {
+    let query = this.flattenSameOfQueries(queryIN);
+    query = await this.getGPSData(query);
+    const connection = await SQLConnection.getConnection();
+
+    return await connection
+      .getRepository(MediaEntity)
+      .createQueryBuilder('media')
+      .innerJoinAndSelect('media.directory', 'directory')
+      .where(this.buildWhereQuery(query))
+      .orderBy('media.metadata.creationDate', 'DESC')
+      .limit(1)
+      .getOne();
   }
 
   /**
@@ -631,5 +647,6 @@ export class SearchManager implements ISearchManager {
     });
     return res;
   }
+
 
 }
