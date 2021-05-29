@@ -27,7 +27,7 @@ export class GallerySearchComponent implements OnDestroy {
   mouseOverAutoComplete = false;
   readonly SearchQueryTypes: typeof SearchQueryTypes;
   public readonly MetadataSearchQueryTypes: { value: string; key: SearchQueryTypes }[];
-  public saveSearchName: string;
+  public saveSearchName = '';
   private searchModalRef: BsModalRef;
   private readonly subscription: Subscription = null;
   private saveSearchModalRef: BsModalRef;

@@ -1,75 +1,22 @@
-<app-frame>
-
-  <div body #container class="container-fluid">
-    <app-album *ngFor="let album of albumsService.albums | async"
-               [album]="album"
-               [size]="size"></app-album>
-
-    <div class="add-saved-search btn btn-secondary"
-         *ngIf="CanCreateAlbum"
-         [style.width.px]="size"
-         [style.height.px]="size"
-         (click)="openModal(modal)">
-      <div class="text">
-        <span class="oi oi-plus" aria-hidden="true">  </span><br/>
-        <span i18n>Add saved search</span>
-      </div>
-    </div>
-
-    <div class="d-flex no-item-msg"
-         *ngIf="(albumsService.albums | async) && (albumsService.albums | async).length == 0">
-      <div class="flex-fill">
-        <h2>:(
-          <ng-container i18n>No albums to show.</ng-container>
-        </h2>
-      </div>
-    </div>
-  </div>
-</app-frame>
+<button class="btn btn-secondary" type="button"
+        [disabled]="disabled"
+        (click)="openModal(modal)">
+  <span class="oi oi-file" aria-hidden="true"></span>
+  <span i18n>To .pg2conf</span>
+</button>
 
 
 <ng-template #modal>
   <!-- sharing Modal-->
   <div class="modal-header">
-    <h5 class="modal-title" i18n>Add Saved Search</h5>
+    <h5 class="modal-title" i18n>Saved Search to .saved_searches.pg2conf</h5>
     <button type="button" class="close" (click)="hideModal()" data-dismiss="modal" aria-label="Close">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
   <div class="modal-body">
-    <form #savedSearchPanelForm="ngForm" class="form-horizontal">
-      <div class="row">
-
-      </div>
-
-      <div class="form-group">
-        <label for="saveSearchName">Album name</label>
-        <input
-          id="saveSearchName"
-          name="saveSearchName"
-          placeholder="Search text"
-          class="form-control input-md"
-          [(ngModel)]="savedSearch.name"
-          type="text"/>
-      </div>
-      <div class="form-group">
-        <label for="album-search-query-builder">Search query</label>
-        <app-gallery-search-query-builder
-          id="album-search-query-builder"
-          name="album-search-query-builder"
-          [(ngModel)]="savedSearch.searchQuery">
-        </app-gallery-search-query-builder>
-      </div>
-
-
-      <div class="input-group-btn float-right row" style="display: block">
-
-        <button class="btn btn-primary" type="button"
-                [disabled]="savedSearch.searchQuery.text == ''"
-                (click)="saveSearch()">
-          <span class="oi oi-folder"></span> Save
-        </button>
-      </div>
-    </form>
+    <span i18n>Add this json to a '.saved_searches.pg2conf' file in your gallery:</span>
+    <pre class="bg-light mt-2"><code>{{[savedSearchDTO] | json}}</code></pre>
+    <span class="mt-2" i18n>This saved search will be loaded from file during gallery indexing and it will survive a database reset.</span>
   </div>
 </ng-template>

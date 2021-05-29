@@ -104,6 +104,7 @@ import {AlbumsComponent} from './ui/albums/albums.component';
 import {AlbumComponent} from './ui/albums/album/album.component';
 import {AlbumsService} from './ui/albums/albums.service';
 import {GallerySearchQueryBuilderComponent} from './ui/gallery/search/query-builder/query-bulder.gallery.component';
+import {SavedSearchPopupComponent} from './ui/albums/saved-search-popup/saved-search-popup.component';
 
 
 @Injectable()
@@ -185,6 +186,7 @@ Marker.prototype.options.icon = iconDefault;
     // Albums
     AlbumsComponent,
     AlbumComponent,
+    SavedSearchPopupComponent,
     // Gallery
     GalleryLightboxMediaComponent,
     GalleryPhotoLoadingComponent,

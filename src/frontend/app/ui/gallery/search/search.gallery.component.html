@@ -73,17 +73,26 @@
   <div class="modal-body">
 
     <form #saveSearchPanelForm="ngForm" class="form-horizontal">
-      <div class="row">
-        <input
-          id="saveSearchName"
-          name="saveSearchName"
-          placeholder="Search text"
-          class="form-control input-md"
-          [(ngModel)]="saveSearchName"
-          type="text"/>
-      </div>
+
+        <div class="form-group">
+          <label for="saveSearchName">Album name</label>
+          <input
+            id="saveSearchName"
+            name="saveSearchName"
+            placeholder="Album name"
+            class="form-control input-md"
+            required="required"
+            [(ngModel)]="saveSearchName"
+            type="text"/>
+        </div>
       <div class="input-group-btn float-right row mt-2" style="display: block">
+        <app-saved-search-popup-btn
+          [disabled]="saveSearchName == ''"
+          class="mr-2"
+          [savedSearchDTO]="{name:saveSearchName, searchQuery:searchQueryDTO}">
+        </app-saved-search-popup-btn>
         <button class="btn btn-primary" type="button"
+                [disabled]="saveSearchName == ''"
                 (click)="saveSearch()">
           <span class="oi oi-folder"></span> Save as album
         </button>

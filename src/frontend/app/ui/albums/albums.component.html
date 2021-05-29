@@ -38,17 +38,14 @@
   </div>
   <div class="modal-body">
     <form #savedSearchPanelForm="ngForm" class="form-horizontal">
-      <div class="row">
-
-      </div>
-
       <div class="form-group">
         <label for="saveSearchName">Album name</label>
         <input
           id="saveSearchName"
           name="saveSearchName"
-          placeholder="Search text"
+          placeholder="Album name"
           class="form-control input-md"
+          required="required"
           [(ngModel)]="savedSearch.name"
           type="text"/>
       </div>
@@ -63,7 +60,11 @@
 
 
       <div class="input-group-btn float-right row" style="display: block">
-
+        <app-saved-search-popup-btn
+          [disabled]="savedSearch.searchQuery.text == ''"
+          class="mr-2"
+          [savedSearchDTO]="savedSearch">
+        </app-saved-search-popup-btn>
         <button class="btn btn-primary" type="button"
                 [disabled]="savedSearch.searchQuery.text == ''"
                 (click)="saveSearch()">
