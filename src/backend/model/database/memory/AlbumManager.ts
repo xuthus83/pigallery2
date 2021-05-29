@@ -3,10 +3,12 @@ import {SearchQueryDTO} from '../../../../common/entities/SearchQueryDTO';
 import {IAlbumManager} from '../interfaces/IAlbumManager';
 
 export class AlbumManager implements IAlbumManager {
-
-  public async addSavedSearch(name: string, searchQuery: SearchQueryDTO): Promise<void> {
+  addIfNotExistSavedSearch(name: string, searchQuery: SearchQueryDTO, lockedAlbum?: boolean): Promise<void> {
     throw new Error('not supported by memory DB');
+  }
 
+  public async addSavedSearch(name: string, searchQuery: SearchQueryDTO, lockedAlbum?: boolean): Promise<void> {
+    throw new Error('not supported by memory DB');
   }
 
   public async deleteAlbum(id: number): Promise<void> {

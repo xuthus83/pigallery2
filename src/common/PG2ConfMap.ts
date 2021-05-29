@@ -14,3 +14,18 @@ export const PG2ConfMap = {
     '.order_random.pg2conf': SortingMethods.random
   }
 };
+
+/**
+ * These files are processed on the server side,
+ * do not get passed down to the client or saved to the DB
+ */
+
+
+export enum ServerSidePG2ConfAction {
+  SAVED_SEARCH = 1
+}
+
+export const ServerPG2ConfMap: { [key: string]: ServerSidePG2ConfAction } = {
+  '.saved_searches.pg2conf': ServerSidePG2ConfAction.SAVED_SEARCH
+};
+

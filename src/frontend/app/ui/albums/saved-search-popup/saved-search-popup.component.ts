@@ -11,7 +11,7 @@ import {AuthenticationService} from '../../model/network/authentication.service'
   templateUrl: './albums.component.html',
   styleUrls: ['./albums.component.css']
 })
-export class AlbumsComponent implements OnInit {
+export class SavedSearchPopupComponent implements OnInit {
   @ViewChild('container', {static: true}) container: ElementRef;
   public size: number;
   public savedSearch = {

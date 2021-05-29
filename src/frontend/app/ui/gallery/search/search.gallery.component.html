@@ -46,7 +46,7 @@
 
       <div class="input-group-btn float-right row" style="display: block">
 
-        <button *ngIf="AlbumsEnabled"
+        <button *ngIf="CanCreateAlbum"
                 class="btn btn-secondary mr-2" type="button"
                 [disabled]="rawSearchText == ''"
                 (click)="openSaveSearchModal(saveSearchModal)">

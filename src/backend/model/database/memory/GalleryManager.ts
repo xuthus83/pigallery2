@@ -7,10 +7,11 @@ import {ProjectPath} from '../../../ProjectPath';
 import {Config} from '../../../../common/config/private/Config';
 import {DiskMangerWorker} from '../../threading/DiskMangerWorker';
 import {ReIndexingSensitivity} from '../../../../common/config/private/PrivateConfig';
+import {ServerPG2ConfMap} from '../../../../common/PG2ConfMap';
 
 export class GalleryManager implements IGalleryManager {
 
-  public listDirectory(relativeDirectoryName: string, knownLastModified?: number, knownLastScanned?: number): Promise<DirectoryDTO> {
+  public async listDirectory(relativeDirectoryName: string, knownLastModified?: number, knownLastScanned?: number): Promise<DirectoryDTO> {
     // If it seems that the content did not changed, do not work on it
     if (knownLastModified && knownLastScanned) {
       const stat = fs.statSync(path.join(ProjectPath.ImageFolder, relativeDirectoryName));
@@ -21,7 +22,9 @@ export class GalleryManager implements IGalleryManager {
         return Promise.resolve(null);
       }
     }
-    return DiskManager.scanDirectory(relativeDirectoryName);
+    const dir = await DiskManager.scanDirectory(relativeDirectoryName);
+    dir.metaFile = dir.metaFile.filter(m => !ServerPG2ConfMap[m.name]);
+    return dir;
   }
 
 }

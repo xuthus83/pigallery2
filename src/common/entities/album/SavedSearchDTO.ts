@@ -5,7 +5,8 @@ import {SearchQueryDTO} from '../SearchQueryDTO';
 export interface SavedSearchDTO extends AlbumBaseDTO {
   id: number;
   name: string;
-  preview: PreviewPhotoDTO;
+  preview?: PreviewPhotoDTO;
+  locked: boolean;
 
   searchQuery: SearchQueryDTO;
 }

@@ -10,6 +10,7 @@ import {SQLConnection} from '../../../../../src/backend/model/database/sql/SQLCo
 import {AlbumBaseEntity} from '../../../../../src/backend/model/database/sql/enitites/album/AlbumBaseEntity';
 import {Utils} from '../../../../../src/common/Utils';
 import {MediaDTO} from '../../../../../src/common/entities/MediaDTO';
+import {SavedSearchDTO} from '../../../../../src/common/entities/album/SavedSearchDTO';
 
 
 const deepEqualInAnyOrder = require('deep-equal-in-any-order');
@@ -117,8 +118,9 @@ describe('AlbumManager', (sqlHelper: DBTestHelper) => {
       expect(await connection.getRepository(AlbumBaseEntity).find()).to.deep.equalInAnyOrder([{
         id: 1,
         name: 'Test Album',
+        locked: false,
         searchQuery: query
-      }]);
+      } as SavedSearchDTO]);
     });
 
     it('should delete album', async () => {
@@ -129,29 +131,42 @@ describe('AlbumManager', (sqlHelper: DBTestHelper) => {
 
 
       await am.addSavedSearch('Test Album', Utils.clone(query));
-      await am.addSavedSearch('Test Album2', Utils.clone(query));
+      await am.addSavedSearch('Test Album2', Utils.clone(query), true);
 
       expect(await connection.getRepository(AlbumBaseEntity).find()).to.deep.equalInAnyOrder([
         {
           id: 1,
           name: 'Test Album',
+          locked: false,
           searchQuery: query
-        },
+        } as SavedSearchDTO,
         {
           id: 2,
           name: 'Test Album2',
+          locked: true,
           searchQuery: query
-        }]);
+        } as SavedSearchDTO]);
 
       await am.deleteAlbum(1);
       expect(await connection.getRepository(AlbumBaseEntity).find()).to.deep.equalInAnyOrder([{
         id: 2,
         name: 'Test Album2',
+        locked: true,
         searchQuery: query
-      }]);
+      } as SavedSearchDTO]);
 
-      await am.deleteAlbum(2);
-      expect(await connection.getRepository(AlbumBaseEntity).find()).to.deep.equalInAnyOrder([]);
+      try {
+        await am.deleteAlbum(2);
+        expect(false).to.be.equal(true); // should not reach
+      } catch (e) {
+        expect(e.message).to.equal('Could not delete album, id:2');
+      }
+      expect(await connection.getRepository(AlbumBaseEntity).find()).to.deep.equalInAnyOrder([{
+        id: 2,
+        name: 'Test Album2',
+        locked: true,
+        searchQuery: query
+      } as SavedSearchDTO]);
     });
   });
 
@@ -166,8 +181,9 @@ describe('AlbumManager', (sqlHelper: DBTestHelper) => {
       id: 1,
       name: 'Test Album',
       searchQuery: query,
+      locked: false,
       preview: toAlbumPreview(p)
-    }]));
+    } as SavedSearchDTO]));
 
 
   });

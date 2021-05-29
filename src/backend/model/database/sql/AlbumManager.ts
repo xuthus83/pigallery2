@@ -6,9 +6,9 @@ import {ObjectManagers} from '../../ObjectManagers';
 import {ISQLSearchManager} from './ISearchManager';
 import {SearchQueryDTO} from '../../../../common/entities/SearchQueryDTO';
 import {SavedSearchEntity} from './enitites/album/SavedSearchEntity';
-import { IAlbumManager } from '../interfaces/IAlbumManager';
+import {IAlbumManager} from '../interfaces/IAlbumManager';
 
-export class AlbumManager implements IAlbumManager{
+export class AlbumManager implements IAlbumManager {
   private static async fillPreviewToAlbum(album: AlbumBaseDTO): Promise<void> {
     if (!(album as SavedSearchDTO).searchQuery) {
       throw new Error('no search query present');
@@ -17,15 +17,31 @@ export class AlbumManager implements IAlbumManager{
       .getPreview((album as SavedSearchDTO).searchQuery);
   }
 
-  public async addSavedSearch(name: string, searchQuery: SearchQueryDTO): Promise<void> {
+  public async addIfNotExistSavedSearch(name: string, searchQuery: SearchQueryDTO, lockedAlbum: boolean): Promise<void> {
     const connection = await SQLConnection.getConnection();
-    await connection.getRepository(SavedSearchEntity).insert({name, searchQuery});
+    const album = await connection.getRepository(SavedSearchEntity)
+      .findOne({name, searchQuery});
+    if (album) {
+      return;
+    }
+    this.addSavedSearch(name, searchQuery, lockedAlbum);
+  }
 
+  public async addSavedSearch(name: string, searchQuery: SearchQueryDTO, lockedAlbum?: boolean): Promise<void> {
+    const connection = await SQLConnection.getConnection();
+    await connection.getRepository(SavedSearchEntity).insert({name, searchQuery, locked: lockedAlbum});
   }
 
   public async deleteAlbum(id: number): Promise<void> {
     const connection = await SQLConnection.getConnection();
-    await connection.getRepository(AlbumBaseEntity).delete({id});
+
+    if (await connection.getRepository(AlbumBaseEntity)
+      .count({id, locked: false}) !== 1) {
+      throw new Error('Could not delete album, id:' + id);
+    }
+
+    await connection.getRepository(AlbumBaseEntity).delete({id, locked: false});
+
   }
 
   public async getAlbums(): Promise<AlbumBaseDTO[]> {

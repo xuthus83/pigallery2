@@ -15,6 +15,12 @@ export class AlbumBaseEntity implements AlbumBaseDTO {
   @Column(columnCharsetCS)
   name: string;
 
+  /**
+   * Locked albums are not possible to remove
+   */
+  @Column({default: false})
+  locked: boolean;
+
   // not saving to database, it is only assigned when querying the DB
   public preview: MediaEntity;
 

@@ -17,6 +17,11 @@ import {ObjectManagers} from '../../ObjectManagers';
 import {IIndexingManager} from '../interfaces/IIndexingManager';
 import {DiskMangerWorker} from '../../threading/DiskMangerWorker';
 import {Logger} from '../../../Logger';
+import {ServerPG2ConfMap, ServerSidePG2ConfAction} from '../../../../common/PG2ConfMap';
+import {ProjectPath} from '../../../ProjectPath';
+import * as path from 'path';
+import * as fs from 'fs';
+import {SearchQueryDTO} from '../../../../common/entities/SearchQueryDTO';
 
 const LOG_TAG = '[IndexingManager]';
 
@@ -31,6 +36,21 @@ export class IndexingManager implements IIndexingManager {
     return this.SavingReady !== null;
   }
 
+  private static async processServerSidePG2Conf(files: FileDTO[]): Promise<void> {
+    for (const f of files) {
+      if (ServerPG2ConfMap[f.name] === ServerSidePG2ConfAction.SAVED_SEARCH) {
+        const fullMediaPath = path.join(ProjectPath.ImageFolder, f.directory.path, f.directory.name, f.name);
+
+        Logger.silly(LOG_TAG, 'Saving saved searches to DB from:', fullMediaPath);
+        const savedSearches: { name: string, searchQuery: SearchQueryDTO }[] =
+          JSON.parse(await fs.promises.readFile(fullMediaPath, 'utf8'));
+        for (const s of savedSearches) {
+          await ObjectManagers.getInstance().AlbumManager.addIfNotExistSavedSearch(s.name, s.searchQuery, true);
+        }
+      }
+    }
+  }
+
   public indexDirectory(relativeDirectoryName: string): Promise<DirectoryDTO> {
     return new Promise(async (resolve, reject): Promise<void> => {
       try {
@@ -41,8 +61,17 @@ export class IndexingManager implements IIndexingManager {
           scannedDirectory.preview.readyThumbnails = [];
         }
         scannedDirectory.media.forEach((p): any[] => p.readyThumbnails = []);
+
+        // filter server side pg2conf
+        const serverSideConfs = scannedDirectory.metaFile.filter(m => ServerPG2ConfMap[m.name]);
+        scannedDirectory.metaFile = scannedDirectory.metaFile.filter(m => !ServerPG2ConfMap[m.name]);
+
         resolve(scannedDirectory);
 
+        // process server side pg2conf
+        await IndexingManager.processServerSidePG2Conf(serverSideConfs);
+
+        // save directory to DB
         this.queueForSave(scannedDirectory).catch(console.error);
 
       } catch (error) {

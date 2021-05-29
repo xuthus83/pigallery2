@@ -11,6 +11,8 @@ import {BsModalRef} from 'ngx-bootstrap/modal/bs-modal-ref.service';
 import {SearchQueryParserService} from './search-query-parser.service';
 import {AlbumsService} from '../../albums/albums.service';
 import {Config} from '../../../../../common/config/public/Config';
+import {UserRoles} from '../../../../../common/entities/UserDTO';
+import {AuthenticationService} from '../../../model/network/authentication.service';
 
 @Component({
   selector: 'app-gallery-search',
@@ -26,7 +28,6 @@ export class GallerySearchComponent implements OnDestroy {
   readonly SearchQueryTypes: typeof SearchQueryTypes;
   public readonly MetadataSearchQueryTypes: { value: string; key: SearchQueryTypes }[];
   public saveSearchName: string;
-  AlbumsEnabled = Config.Client.Album.enabled;
   private searchModalRef: BsModalRef;
   private readonly subscription: Subscription = null;
   private saveSearchModalRef: BsModalRef;
@@ -38,7 +39,8 @@ export class GallerySearchComponent implements OnDestroy {
               private navigationService: NavigationService,
               private route: ActivatedRoute,
               public router: Router,
-              private modalService: BsModalService) {
+              private modalService: BsModalService,
+              public authenticationService: AuthenticationService) {
 
     this.SearchQueryTypes = SearchQueryTypes;
     this.MetadataSearchQueryTypes = MetadataSearchQueryTypes.map((v) => ({key: v, value: SearchQueryTypes[v]}));
@@ -53,6 +55,12 @@ export class GallerySearchComponent implements OnDestroy {
         this.onQueryChange();
       }
     });
+  }
+
+
+  get CanCreateAlbum(): boolean {
+    return Config.Client.Album.enabled &&
+      this.authenticationService.user.getValue().role >= UserRoles.Admin;
   }
 
   get HTMLSearchQuery(): string {

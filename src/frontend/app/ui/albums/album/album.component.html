@@ -19,10 +19,14 @@
   <!--Info box -->
   <div class="info">
     {{album.name}}
-    <span *ngIf="CanUpdate"
-      (click)="deleteAlbum($event)"
-      class="delete oi oi-trash float-right"></span>
+    <span *ngIf="CanUpdate && !album.locked"
+          (click)="deleteAlbum($event)"
+          class="info-button delete oi oi-trash float-right"></span>
 
+    <span *ngIf="album.locked"
+          title="Album is locked, cannot be deleted from the webpage."
+          i18n-title
+          class="info-button oi oi-lock-locked float-right"></span>
   </div>
 </a>
 

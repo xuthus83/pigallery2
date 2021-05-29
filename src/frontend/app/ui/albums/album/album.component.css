@@ -1,7 +1,8 @@
-.delete {
+.info-button{
   margin: 2px;
   cursor: default;
 }
+
 
 .delete {
   cursor: pointer;
