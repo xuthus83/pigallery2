@@ -22,6 +22,7 @@ export const PG2ConfMap = {
 
 
 export enum ServerSidePG2ConfAction {
+  // Enum always starts from 1 as !!0 === false
   SAVED_SEARCH = 1
 }
 

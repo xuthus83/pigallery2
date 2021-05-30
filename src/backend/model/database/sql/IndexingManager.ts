@@ -41,7 +41,7 @@ export class IndexingManager implements IIndexingManager {
       if (ServerPG2ConfMap[f.name] === ServerSidePG2ConfAction.SAVED_SEARCH) {
         const fullMediaPath = path.join(ProjectPath.ImageFolder, f.directory.path, f.directory.name, f.name);
 
-        Logger.silly(LOG_TAG, 'Saving saved searches to DB from:', fullMediaPath);
+        Logger.silly(LOG_TAG, 'Saving saved-searches to DB from:', fullMediaPath);
         const savedSearches: { name: string, searchQuery: SearchQueryDTO }[] =
           JSON.parse(await fs.promises.readFile(fullMediaPath, 'utf8'));
         for (const s of savedSearches) {
@@ -363,7 +363,7 @@ export class IndexingManager implements IIndexingManager {
     this.isSaving = true;
     try {
       const connection = await SQLConnection.getConnection();
-      const serverSideConfigs = scannedDirectory.metaFile.filter(m => ServerPG2ConfMap[m.name]);
+      const serverSideConfigs = scannedDirectory.metaFile.filter(m => !!ServerPG2ConfMap[m.name]);
       scannedDirectory.metaFile = scannedDirectory.metaFile.filter(m => !ServerPG2ConfMap[m.name]);
       const currentDirId: number = await this.saveParentDir(connection, scannedDirectory);
       await this.saveChildDirs(connection, currentDirId, scannedDirectory);
@@ -372,8 +372,6 @@ export class IndexingManager implements IIndexingManager {
       await ObjectManagers.getInstance().PersonManager.onGalleryIndexUpdate();
       await ObjectManagers.getInstance().VersionManager.updateDataVersion();
       await IndexingManager.processServerSidePG2Conf(serverSideConfigs);
-    } catch (e) {
-      throw e;
     } finally {
       this.isSaving = false;
     }

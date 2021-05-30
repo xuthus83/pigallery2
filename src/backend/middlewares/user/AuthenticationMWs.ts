@@ -173,8 +173,7 @@ export class AuthenticationMWs {
       return next();
 
     } catch (err) {
-      console.error(err);
-      return next(new ErrorDTO(ErrorCodes.CREDENTIAL_NOT_FOUND, 'credentials not found during login'));
+      return next(new ErrorDTO(ErrorCodes.CREDENTIAL_NOT_FOUND, 'credentials not found during login', err));
     }
 
 
