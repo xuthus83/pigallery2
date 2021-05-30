@@ -47,6 +47,7 @@ export class AlbumManager implements IAlbumManager {
   public async getAlbums(): Promise<AlbumBaseDTO[]> {
     const connection = await SQLConnection.getConnection();
     const albums = await connection.getRepository(AlbumBaseEntity).find();
+
     for (const a of albums) {
       await AlbumManager.fillPreviewToAlbum(a);
     }

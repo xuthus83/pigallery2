@@ -736,7 +736,7 @@ describe('SearchManager', (sqlHelper: DBTestHelper) => {
 
         query = ({
           text: '/wars dir/Return of the Jedi',
-      //    matchType: TextSearchQueryMatchTypes.like,
+          //    matchType: TextSearchQueryMatchTypes.like,
           type: SearchQueryTypes.directory
         } as TextSearch);
 
@@ -1114,10 +1114,32 @@ describe('SearchManager', (sqlHelper: DBTestHelper) => {
 
     });
 
+    (it('should execute complex SOME_OF querry', async () => {
+      const sm = new SearchManager();
+
+      const query: SomeOfSearchQuery = {
+        type: SearchQueryTypes.SOME_OF,
+        min: 5,
+        //
+        list: 'abcdefghijklmnopqrstu'.split('').map(t => ({
+          type: SearchQueryTypes.file_name,
+          text: t
+        } as TextSearch))
+      };
+      expect(removeDir(await sm.search(query)))
+        .to.deep.equalInAnyOrder(removeDir({
+        searchQuery: query,
+        directories: [],
+        media: [v],
+        metaFile: [],
+        resultOverflow: false
+      } as SearchResultDTO));
+    }) as any).timeout(40000);
+
     it('search result should return directory', async () => {
       const sm = new SearchManager();
 
-      let query = {
+      const query = {
         text: subDir.name,
         type: SearchQueryTypes.any_text
       } as TextSearch;
@@ -1129,8 +1151,6 @@ describe('SearchManager', (sqlHelper: DBTestHelper) => {
         metaFile: [],
         resultOverflow: false
       } as SearchResultDTO));
-
-
     });
 
   });

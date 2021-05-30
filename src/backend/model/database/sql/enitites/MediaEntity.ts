@@ -29,7 +29,7 @@ export class MediaMetadataEntity implements MediaMetadata {
    * you do not want to see 2AM next to a photo that was taken during lunch
    */
   @Column('bigint', {
-    unsigned: true, transformer: {
+    transformer: {
       from: v => parseInt(v, 10),
       to: v => v
     }

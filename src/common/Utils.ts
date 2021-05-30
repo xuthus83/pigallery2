@@ -49,7 +49,7 @@ export class Utils {
   static shallowClone<T>(object: T): T {
     const c: any = {};
     for (const e of Object.entries(object)) {
-      c[e[0]] = [1];
+      c[e[0]] = e[1];
     }
     return c;
   }

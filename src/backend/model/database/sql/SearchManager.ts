@@ -27,12 +27,12 @@ import {
 } from '../../../../common/entities/SearchQueryDTO';
 import {GalleryManager} from './GalleryManager';
 import {ObjectManagers} from '../../ObjectManagers';
-import {Utils} from '../../../../common/Utils';
 import {PhotoDTO} from '../../../../common/entities/PhotoDTO';
 import {DatabaseType} from '../../../../common/config/private/PrivateConfig';
 import {ISQLGalleryManager} from './IGalleryManager';
 import {ISQLSearchManager} from './ISearchManager';
 import {MediaDTO} from '../../../../common/entities/MediaDTO';
+import {Utils} from '../../../../common/Utils';
 
 export class SearchManager implements ISQLSearchManager {
 
@@ -139,8 +139,7 @@ export class SearchManager implements ISQLSearchManager {
   }
 
   async search(queryIN: SearchQueryDTO): Promise<SearchResultDTO> {
-    let query = this.flattenSameOfQueries(queryIN);
-    query = await this.getGPSData(query);
+    const query = await this.prepareQuery(queryIN);
     const connection = await SQLConnection.getConnection();
 
     const result: SearchResultDTO = {
@@ -225,8 +224,7 @@ export class SearchManager implements ISQLSearchManager {
   }
 
   public async getPreview(queryIN: SearchQueryDTO): Promise<MediaDTO> {
-    let query = this.flattenSameOfQueries(queryIN);
-    query = await this.getGPSData(query);
+    const query = await this.prepareQuery(queryIN);
     const connection = await SQLConnection.getConnection();
 
     return await connection
@@ -237,6 +235,28 @@ export class SearchManager implements ISQLSearchManager {
       .orderBy('media.metadata.creationDate', 'DESC')
       .limit(1)
       .getOne();
+  }
+
+  private async prepareQuery(queryIN: SearchQueryDTO): Promise<SearchQueryDTO> {
+    let query: SearchQueryDTO = this.assignQueryIDs(Utils.clone(queryIN)); // assign local ids before flattening SOME_OF queries
+    query = this.flattenSameOfQueries(query);
+    query = await this.getGPSData(query);
+    return query;
+  }
+
+  /**
+   * Assigning IDs to search queries. It is a help / simplification to typeorm,
+   * so less parameters are needed to pass down to SQL.
+   * Witch SOME_OF query the number of WHERE constrains have O(N!) complexity
+   */
+  private assignQueryIDs(queryIN: SearchQueryDTO, id = {value: 1}): SearchQueryDTO {
+    if ((queryIN as SearchListQuery).list) {
+      (queryIN as SearchListQuery).list.forEach(q => this.assignQueryIDs(q, id));
+      return queryIN;
+    }
+    (queryIN as SearchQueryDTOWithID).queryId = id.value;
+    id.value++;
+    return queryIN;
   }
 
   /**
@@ -297,16 +317,17 @@ export class SearchManager implements ISQLSearchManager {
    * @param directoryOnly Only builds directory related queries
    * @private
    */
-  private buildWhereQuery(query: SearchQueryDTO, directoryOnly = false, paramCounter = {value: 0}): Brackets {
+  private buildWhereQuery(query: SearchQueryDTO, directoryOnly = false): Brackets {
+    const queryId = (query as SearchQueryDTOWithID).queryId;
     switch (query.type) {
       case SearchQueryTypes.AND:
         return new Brackets((q): any => {
-          (query as ANDSearchQuery).list.forEach((sq): any => q.andWhere(this.buildWhereQuery(sq, directoryOnly, paramCounter)));
+          (query as ANDSearchQuery).list.forEach((sq): any => q.andWhere(this.buildWhereQuery(sq, directoryOnly)));
           return q;
         });
       case SearchQueryTypes.OR:
         return new Brackets((q): any => {
-          (query as ANDSearchQuery).list.forEach((sq): any => q.orWhere(this.buildWhereQuery(sq, directoryOnly, paramCounter)));
+          (query as ANDSearchQuery).list.forEach((sq): any => q.orWhere(this.buildWhereQuery(sq, directoryOnly)));
           return q;
         });
 
@@ -340,21 +361,20 @@ export class SearchManager implements ISQLSearchManager {
 
         return new Brackets((q): any => {
           const textParam: any = {};
-          paramCounter.value++;
-          textParam['maxLat' + paramCounter.value] = maxLat;
-          textParam['minLat' + paramCounter.value] = minLat;
-          textParam['maxLon' + paramCounter.value] = maxLon;
-          textParam['minLon' + paramCounter.value] = minLon;
+          textParam['maxLat' + queryId] = maxLat;
+          textParam['minLat' + queryId] = minLat;
+          textParam['maxLon' + queryId] = maxLon;
+          textParam['minLon' + queryId] = minLon;
           if (!(query as DistanceSearch).negate) {
-            q.where(`media.metadata.positionData.GPSData.latitude < :maxLat${paramCounter.value}`, textParam);
-            q.andWhere(`media.metadata.positionData.GPSData.latitude > :minLat${paramCounter.value}`, textParam);
-            q.andWhere(`media.metadata.positionData.GPSData.longitude < :maxLon${paramCounter.value}`, textParam);
-            q.andWhere(`media.metadata.positionData.GPSData.longitude > :minLon${paramCounter.value}`, textParam);
+            q.where(`media.metadata.positionData.GPSData.latitude < :maxLat${queryId}`, textParam);
+            q.andWhere(`media.metadata.positionData.GPSData.latitude > :minLat${queryId}`, textParam);
+            q.andWhere(`media.metadata.positionData.GPSData.longitude < :maxLon${queryId}`, textParam);
+            q.andWhere(`media.metadata.positionData.GPSData.longitude > :minLon${queryId}`, textParam);
           } else {
-            q.where(`media.metadata.positionData.GPSData.latitude > :maxLat${paramCounter.value}`, textParam);
-            q.orWhere(`media.metadata.positionData.GPSData.latitude < :minLat${paramCounter.value}`, textParam);
-            q.orWhere(`media.metadata.positionData.GPSData.longitude > :maxLon${paramCounter.value}`, textParam);
-            q.orWhere(`media.metadata.positionData.GPSData.longitude < :minLon${paramCounter.value}`, textParam);
+            q.where(`media.metadata.positionData.GPSData.latitude > :maxLat${queryId}`, textParam);
+            q.orWhere(`media.metadata.positionData.GPSData.latitude < :minLat${queryId}`, textParam);
+            q.orWhere(`media.metadata.positionData.GPSData.longitude > :maxLon${queryId}`, textParam);
+            q.orWhere(`media.metadata.positionData.GPSData.longitude < :minLon${queryId}`, textParam);
           }
           return q;
         });
@@ -370,11 +390,9 @@ export class SearchManager implements ISQLSearchManager {
           const relation = (query as TextSearch).negate ? '<' : '>=';
 
           const textParam: any = {};
-          textParam['from' + paramCounter.value] = (query as FromDateSearch).value;
-          q.where(`media.metadata.creationDate ${relation} :from${paramCounter.value}`, textParam);
+          textParam['from' + queryId] = (query as FromDateSearch).value;
+          q.where(`media.metadata.creationDate ${relation} :from${queryId}`, textParam);
 
-
-          paramCounter.value++;
           return q;
         });
 
@@ -389,10 +407,9 @@ export class SearchManager implements ISQLSearchManager {
           const relation = (query as TextSearch).negate ? '>' : '<=';
 
           const textParam: any = {};
-          textParam['to' + paramCounter.value] = (query as ToDateSearch).value;
-          q.where(`media.metadata.creationDate ${relation} :to${paramCounter.value}`, textParam);
+          textParam['to' + queryId] = (query as ToDateSearch).value;
+          q.where(`media.metadata.creationDate ${relation} :to${queryId}`, textParam);
 
-          paramCounter.value++;
           return q;
         });
 
@@ -408,10 +425,9 @@ export class SearchManager implements ISQLSearchManager {
           const relation = (query as TextSearch).negate ? '<' : '>=';
 
           const textParam: any = {};
-          textParam['min' + paramCounter.value] = (query as MinRatingSearch).value;
-          q.where(`media.metadata.rating ${relation}  :min${paramCounter.value}`, textParam);
+          textParam['min' + queryId] = (query as MinRatingSearch).value;
+          q.where(`media.metadata.rating ${relation}  :min${queryId}`, textParam);
 
-          paramCounter.value++;
           return q;
         });
       case SearchQueryTypes.max_rating:
@@ -427,10 +443,9 @@ export class SearchManager implements ISQLSearchManager {
 
           if (typeof (query as MaxRatingSearch).value !== 'undefined') {
             const textParam: any = {};
-            textParam['max' + paramCounter.value] = (query as MaxRatingSearch).value;
-            q.where(`media.metadata.rating ${relation}  :max${paramCounter.value}`, textParam);
+            textParam['max' + queryId] = (query as MaxRatingSearch).value;
+            q.where(`media.metadata.rating ${relation}  :max${queryId}`, textParam);
           }
-          paramCounter.value++;
           return q;
         });
 
@@ -446,11 +461,10 @@ export class SearchManager implements ISQLSearchManager {
           const relation = (query as TextSearch).negate ? '<' : '>=';
 
           const textParam: any = {};
-          textParam['min' + paramCounter.value] = (query as MinResolutionSearch).value * 1000 * 1000;
-          q.where(`media.metadata.size.width * media.metadata.size.height ${relation} :min${paramCounter.value}`, textParam);
+          textParam['min' + queryId] = (query as MinResolutionSearch).value * 1000 * 1000;
+          q.where(`media.metadata.size.width * media.metadata.size.height ${relation} :min${queryId}`, textParam);
 
 
-          paramCounter.value++;
           return q;
         });
 
@@ -466,10 +480,9 @@ export class SearchManager implements ISQLSearchManager {
           const relation = (query as TextSearch).negate ? '>' : '<=';
 
           const textParam: any = {};
-          textParam['max' + paramCounter.value] = (query as MaxResolutionSearch).value * 1000 * 1000;
-          q.where(`media.metadata.size.width * media.metadata.size.height ${relation} :max${paramCounter.value}`, textParam);
+          textParam['max' + queryId] = (query as MaxResolutionSearch).value * 1000 * 1000;
+          q.where(`media.metadata.size.width * media.metadata.size.height ${relation} :max${queryId}`, textParam);
 
-          paramCounter.value++;
           return q;
         });
 
@@ -483,7 +496,6 @@ export class SearchManager implements ISQLSearchManager {
           } else {
             q.where('media.metadata.size.width <= media.metadata.size.height');
           }
-          paramCounter.value++;
           return q;
         });
 
@@ -514,26 +526,25 @@ export class SearchManager implements ISQLSearchManager {
       const whereFNRev = (query as TextSearch).negate ? 'orWhere' : 'andWhere';
 
       const textParam: any = {};
-      paramCounter.value++;
-      textParam['text' + paramCounter.value] = createMatchString((query as TextSearch).text);
+      textParam['text' + queryId] = createMatchString((query as TextSearch).text);
 
       if (query.type === SearchQueryTypes.any_text ||
         query.type === SearchQueryTypes.directory) {
         const dirPathStr = ((query as TextSearch).text).replace(new RegExp('\\\\', 'g'), '/');
 
 
-        textParam['fullPath' + paramCounter.value] = createMatchString(dirPathStr);
-        q[whereFN](`directory.path ${LIKE} :fullPath${paramCounter.value} COLLATE utf8_general_ci`,
+        textParam['fullPath' + queryId] = createMatchString(dirPathStr);
+        q[whereFN](`directory.path ${LIKE} :fullPath${queryId} COLLATE utf8_general_ci`,
           textParam);
 
         const directoryPath = GalleryManager.parseRelativeDirePath(dirPathStr);
         q[whereFN](new Brackets((dq): any => {
-          textParam['dirName' + paramCounter.value] = createMatchString(directoryPath.name);
-          dq[whereFNRev](`directory.name ${LIKE} :dirName${paramCounter.value} COLLATE utf8_general_ci`,
+          textParam['dirName' + queryId] = createMatchString(directoryPath.name);
+          dq[whereFNRev](`directory.name ${LIKE} :dirName${queryId} COLLATE utf8_general_ci`,
             textParam);
           if (dirPathStr.includes('/')) {
-            textParam['parentName' + paramCounter.value] = createMatchString(directoryPath.parent);
-            dq[whereFNRev](`directory.path ${LIKE} :parentName${paramCounter.value} COLLATE utf8_general_ci`,
+            textParam['parentName' + queryId] = createMatchString(directoryPath.parent);
+            dq[whereFNRev](`directory.path ${LIKE} :parentName${queryId} COLLATE utf8_general_ci`,
               textParam);
           }
           return dq;
@@ -541,21 +552,21 @@ export class SearchManager implements ISQLSearchManager {
       }
 
       if ((query.type === SearchQueryTypes.any_text && !directoryOnly) || query.type === SearchQueryTypes.file_name) {
-        q[whereFN](`media.name ${LIKE} :text${paramCounter.value} COLLATE utf8_general_ci`,
+        q[whereFN](`media.name ${LIKE} :text${queryId} COLLATE utf8_general_ci`,
           textParam);
       }
 
       if ((query.type === SearchQueryTypes.any_text && !directoryOnly) || query.type === SearchQueryTypes.caption) {
-        q[whereFN](`media.metadata.caption ${LIKE} :text${paramCounter.value} COLLATE utf8_general_ci`,
+        q[whereFN](`media.metadata.caption ${LIKE} :text${queryId} COLLATE utf8_general_ci`,
           textParam);
       }
 
       if ((query.type === SearchQueryTypes.any_text && !directoryOnly) || query.type === SearchQueryTypes.position) {
-        q[whereFN](`media.metadata.positionData.country ${LIKE} :text${paramCounter.value} COLLATE utf8_general_ci`,
+        q[whereFN](`media.metadata.positionData.country ${LIKE} :text${queryId} COLLATE utf8_general_ci`,
           textParam)
-          [whereFN](`media.metadata.positionData.state ${LIKE} :text${paramCounter.value} COLLATE utf8_general_ci`,
+          [whereFN](`media.metadata.positionData.state ${LIKE} :text${queryId} COLLATE utf8_general_ci`,
           textParam)
-          [whereFN](`media.metadata.positionData.city ${LIKE} :text${paramCounter.value} COLLATE utf8_general_ci`,
+          [whereFN](`media.metadata.positionData.city ${LIKE} :text${queryId} COLLATE utf8_general_ci`,
           textParam);
       }
 
@@ -563,22 +574,22 @@ export class SearchManager implements ISQLSearchManager {
       const matchArrayField = (fieldName: string): void => {
         q[whereFN](new Brackets((qbr): void => {
           if ((query as TextSearch).matchType !== TextSearchQueryMatchTypes.exact_match) {
-            qbr[whereFN](`${fieldName} ${LIKE} :text${paramCounter.value} COLLATE utf8_general_ci`,
+            qbr[whereFN](`${fieldName} ${LIKE} :text${queryId} COLLATE utf8_general_ci`,
               textParam);
           } else {
             qbr[whereFN](new Brackets((qb): void => {
-              textParam['CtextC' + paramCounter.value] = `%,${(query as TextSearch).text},%`;
-              textParam['Ctext' + paramCounter.value] = `%,${(query as TextSearch).text}`;
-              textParam['textC' + paramCounter.value] = `${(query as TextSearch).text},%`;
-              textParam['text_exact' + paramCounter.value] = `${(query as TextSearch).text}`;
+              textParam['CtextC' + queryId] = `%,${(query as TextSearch).text},%`;
+              textParam['Ctext' + queryId] = `%,${(query as TextSearch).text}`;
+              textParam['textC' + queryId] = `${(query as TextSearch).text},%`;
+              textParam['text_exact' + queryId] = `${(query as TextSearch).text}`;
 
-              qb[whereFN](`${fieldName} ${LIKE} :CtextC${paramCounter.value} COLLATE utf8_general_ci`,
+              qb[whereFN](`${fieldName} ${LIKE} :CtextC${queryId} COLLATE utf8_general_ci`,
                 textParam);
-              qb[whereFN](`${fieldName} ${LIKE} :Ctext${paramCounter.value} COLLATE utf8_general_ci`,
+              qb[whereFN](`${fieldName} ${LIKE} :Ctext${queryId} COLLATE utf8_general_ci`,
                 textParam);
-              qb[whereFN](`${fieldName} ${LIKE} :textC${paramCounter.value} COLLATE utf8_general_ci`,
+              qb[whereFN](`${fieldName} ${LIKE} :textC${queryId} COLLATE utf8_general_ci`,
                 textParam);
-              qb[whereFN](`${fieldName} ${LIKE} :text_exact${paramCounter.value} COLLATE utf8_general_ci`,
+              qb[whereFN](`${fieldName} ${LIKE} :text_exact${queryId} COLLATE utf8_general_ci`,
                 textParam);
             }));
           }
@@ -626,14 +637,41 @@ export class SearchManager implements ISQLSearchManager {
           } as ANDSearchQuery);
         }
 
-        const combinations: SearchQueryDTO[][] = Utils.getAnyX(someOfQ.min, (query as SearchListQuery).list);
+        const getAllCombinations = (num: number, arr: SearchQueryDTO[], start = 0): SearchQueryDTO[] => {
+          if (num <= 0 || num > arr.length || start >= arr.length) {
+            return [];
+          }
+          if (num <= 1) {
+            return arr.slice(start);
+          }
+          if (num === arr.length - start) {
+            return arr.slice(start);
+          }
+          const ret: ANDSearchQuery[] = [];
+          for (let i = start; i < arr.length - num + 1; ++i) {
+            const subRes = getAllCombinations(num - 1, arr, i + 1);
+            const and: ANDSearchQuery = {
+              type: SearchQueryTypes.AND,
+              list: [
+                arr[i],
+                subRes.length === 1 ? subRes[0] : (
+                  {
+                    type: SearchQueryTypes.OR,
+                    list: subRes
+                  } as ORSearchQuery)
+              ]
+            };
+
+            ret.push(and);
+
+          }
+          return ret;
+        };
 
 
         return this.flattenSameOfQueries({
           type: SearchQueryTypes.OR,
-          list: combinations.map((c): ANDSearchQuery => ({
-            type: SearchQueryTypes.AND, list: c
-          } as ANDSearchQuery))
+          list: getAllCombinations(someOfQ.min, (query as SearchListQuery).list)
         } as ORSearchQuery);
 
     }
@@ -649,4 +687,8 @@ export class SearchManager implements ISQLSearchManager {
   }
 
 
+}
+
+export interface SearchQueryDTOWithID extends SearchQueryDTO {
+  queryId: number;
 }
