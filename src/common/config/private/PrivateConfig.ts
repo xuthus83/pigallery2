@@ -299,7 +299,7 @@ export class ServerPhotoConfig {
 export class ServerMediaConfig {
   @ConfigProperty({description: 'Images are loaded from this folder (read permission required)'})
   folder: string = 'demo/images';
-  @ConfigProperty({description: 'Thumbnails, coverted photos, videos will be stored here (write permission required)'})
+  @ConfigProperty({description: 'Thumbnails, converted photos, videos will be stored here (write permission required)'})
   tempFolder: string = 'demo/tmp';
   @ConfigProperty()
   Video: ServerVideoConfig = new ServerVideoConfig();

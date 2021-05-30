@@ -11,11 +11,14 @@ import {MediaDTO} from '../../../../../src/common/entities/MediaDTO';
 import {FileDTO} from '../../../../../src/common/entities/FileDTO';
 import {IndexingManager} from '../../../../../src/backend/model/database/sql/IndexingManager';
 import {ObjectManagers} from '../../../../../src/backend/model/ObjectManagers';
-import {PersonManager} from '../../../../../src/backend/model/database/sql/PersonManager';
 import {DBTestHelper} from '../../../DBTestHelper';
-import {VersionManager} from '../../../../../src/backend/model/database/sql/VersionManager';
 import {DiskMangerWorker} from '../../../../../src/backend/model/threading/DiskMangerWorker';
 import {ReIndexingSensitivity} from '../../../../../src/common/config/private/PrivateConfig';
+import {AlbumManager} from '../../../../../src/backend/model/database/sql/AlbumManager';
+import {SearchQueryTypes, TextSearch, TextSearchQueryMatchTypes} from '../../../../../src/common/entities/SearchQueryDTO';
+import {ProjectPath} from '../../../../../src/backend/ProjectPath';
+import * as path from 'path';
+import {DiskManager} from '../../../../../src/backend/model/DiskManger';
 
 const deepEqualInAnyOrder = require('deep-equal-in-any-order');
 const chai = require('chai');
@@ -59,12 +62,13 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
 
   beforeEach(async () => {
     await sqlHelper.initDB();
-    ObjectManagers.getInstance().PersonManager = new PersonManager();
-    ObjectManagers.getInstance().VersionManager = new VersionManager();
+    //  ObjectManagers.getInstance().PersonManager = new PersonManager();
+    // ObjectManagers.getInstance().VersionManager = new VersionManager();
   });
 
 
-  after(async () => {
+  afterEach(async () => {
+    Config.loadSync();
     await sqlHelper.clearDB();
   });
 
@@ -472,7 +476,6 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
       .to.deep.equalInAnyOrder(Utils.clone(Utils.removeNullOrEmptyObj(parent)));
   });
 
-
   it('should reset DB', async () => {
     const gm = new GalleryManagerTest();
     const im = new IndexingManagerTest();
@@ -574,4 +577,34 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
     });
   });
 
+
+  DBTestHelper.savedDescribe('should index .pg2conf', () => {
+
+
+    it('.saved_searches.pg2conf', async () => {
+      Config.Server.Threading.enabled = false;
+
+      Config.Server.Media.folder = path.join(__dirname, '/../../../assets');
+      ProjectPath.ImageFolder = path.join(__dirname, '/../../../assets');
+      const im = new IndexingManagerTest();
+      const am = new AlbumManager();
+      const dir = await DiskManager.scanDirectory('/');
+      await im.saveToDB(dir);
+      const albums = await am.getAlbums();
+      expect(albums[0].preview).to.be.an('object');
+      delete albums[0].preview;
+      expect(albums).to.be.equalInAnyOrder([
+        {
+          id: 1,
+          name: 'Alvin',
+          locked: true,
+          searchQuery: {
+            type: SearchQueryTypes.person,
+            text: 'Alvin',
+            matchType: TextSearchQueryMatchTypes.like
+          } as TextSearch
+        }
+      ]);
+    });
+  });
 });

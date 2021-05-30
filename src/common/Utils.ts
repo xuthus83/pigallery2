@@ -46,6 +46,14 @@ export class Utils {
     return JSON.parse(JSON.stringify(object));
   }
 
+  static shallowClone<T>(object: T): T {
+    const c: any = {};
+    for (const e of Object.entries(object)) {
+      c[e[0]] = [1];
+    }
+    return c;
+  }
+
   static zeroPrefix(value: string | number, length: number): string {
     const ret = '00000' + value;
     return ret.substr(ret.length - length);

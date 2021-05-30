@@ -51,6 +51,10 @@ export class IndexingManager implements IIndexingManager {
     }
   }
 
+  /**
+   * Indexes a dir, but returns early with the scanned version,
+   * does not wait for the DB to be saved
+   */
   public indexDirectory(relativeDirectoryName: string): Promise<DirectoryDTO> {
     return new Promise(async (resolve, reject): Promise<void> => {
       try {
@@ -62,14 +66,12 @@ export class IndexingManager implements IIndexingManager {
         }
         scannedDirectory.media.forEach((p): any[] => p.readyThumbnails = []);
 
-        // filter server side pg2conf
-        const serverSideConfs = scannedDirectory.metaFile.filter(m => ServerPG2ConfMap[m.name]);
-        scannedDirectory.metaFile = scannedDirectory.metaFile.filter(m => !ServerPG2ConfMap[m.name]);
 
-        resolve(scannedDirectory);
+        const dirClone = Utils.shallowClone(scannedDirectory);
+        // filter server side only config from returning
+        dirClone.metaFile = dirClone.metaFile.filter(m => !ServerPG2ConfMap[m.name]);
 
-        // process server side pg2conf
-        await IndexingManager.processServerSidePG2Conf(serverSideConfs);
+        resolve(dirClone);
 
         // save directory to DB
         this.queueForSave(scannedDirectory).catch(console.error);
@@ -94,7 +96,11 @@ export class IndexingManager implements IIndexingManager {
   }
 
   // Todo fix it, once typeorm support connection pools for sqlite
+  /**
+   * Queues up a directory to save to the DB.
+   */
   protected async queueForSave(scannedDirectory: DirectoryDTO): Promise<void> {
+    // Is this dir  already queued for saving?
     if (this.savingQueue.findIndex((dir): boolean => dir.name === scannedDirectory.name &&
       dir.path === scannedDirectory.path &&
       dir.lastModified === scannedDirectory.lastModified &&
@@ -357,12 +363,15 @@ export class IndexingManager implements IIndexingManager {
     this.isSaving = true;
     try {
       const connection = await SQLConnection.getConnection();
+      const serverSideConfigs = scannedDirectory.metaFile.filter(m => ServerPG2ConfMap[m.name]);
+      scannedDirectory.metaFile = scannedDirectory.metaFile.filter(m => !ServerPG2ConfMap[m.name]);
       const currentDirId: number = await this.saveParentDir(connection, scannedDirectory);
       await this.saveChildDirs(connection, currentDirId, scannedDirectory);
       await this.saveMedia(connection, currentDirId, scannedDirectory.media);
       await this.saveMetaFiles(connection, currentDirId, scannedDirectory);
       await ObjectManagers.getInstance().PersonManager.onGalleryIndexUpdate();
       await ObjectManagers.getInstance().VersionManager.updateDataVersion();
+      await IndexingManager.processServerSidePG2Conf(serverSideConfigs);
     } catch (e) {
       throw e;
     } finally {

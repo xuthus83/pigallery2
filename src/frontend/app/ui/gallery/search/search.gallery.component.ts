@@ -96,7 +96,6 @@ export class GallerySearchComponent implements OnDestroy {
 
 
   onQueryChange(): void {
-    console.log('cahnge', this.searchQueryDTO);
     this.rawSearchText = this.searchQueryParserService.stringify(this.searchQueryDTO);
     // this.validateRawSearchText();
   }

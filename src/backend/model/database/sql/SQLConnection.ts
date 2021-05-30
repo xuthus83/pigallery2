@@ -22,6 +22,7 @@ import {DatabaseType, ServerDataBaseConfig, SQLLogLevel} from '../../../../commo
 import {AlbumBaseEntity} from './enitites/album/AlbumBaseEntity';
 import {SavedSearchEntity} from './enitites/album/SavedSearchEntity';
 
+const LOG_TAG = '[SQLConnection]';
 
 export class SQLConnection {
 
@@ -53,7 +54,7 @@ export class SQLConnection {
       if (Config.Server.Log.sqlLevel !== SQLLogLevel.none) {
         options.logging = SQLLogLevel[Config.Server.Log.sqlLevel];
       }
-
+      Logger.debug(LOG_TAG, 'Creating connection: ' + DatabaseType[Config.Server.Database.type]);
       this.connection = await this.createConnection(options);
       await SQLConnection.schemeSync(this.connection);
     }
@@ -131,7 +132,7 @@ export class SQLConnection {
       return await createConnection(options);
     } catch (e) {
       if (e.sqlMessage === 'Unknown database \'' + options.database + '\'') {
-        Logger.debug('creating database: ' + options.database);
+        Logger.debug(LOG_TAG, 'creating database: ' + options.database);
         const tmpOption = Utils.clone(options);
         // @ts-ignore
         delete tmpOption.database;
@@ -153,7 +154,7 @@ export class SQLConnection {
     if (version && version.version === DataStructureVersion) {
       return;
     }
-    Logger.info('Updating database scheme');
+    Logger.info(LOG_TAG, 'Updating database scheme');
     if (!version) {
       version = new VersionEntity();
     }
@@ -173,7 +174,7 @@ export class SQLConnection {
       await connection.dropDatabase();
       await connection.synchronize();
       await connection.getRepository(VersionEntity).save(version);
-      Logger.warn('Could not move users to the new db scheme, deleting them. Details:' + e.toString());
+      Logger.warn(LOG_TAG, 'Could not move users to the new db scheme, deleting them. Details:' + e.toString());
     }
   }
 
