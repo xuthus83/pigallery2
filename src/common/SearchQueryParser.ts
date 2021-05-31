@@ -46,8 +46,35 @@ export interface QueryKeywords {
   position: string;
 }
 
+
+export const defaultQueryKeywords: QueryKeywords = {
+  NSomeOf: 'of',
+  and: 'and',
+  or: 'or',
+
+  from: 'after',
+  to: 'before',
+  landscape: 'landscape',
+  maxRating: 'max-rating',
+  maxResolution: 'max-resolution',
+  minRating: 'min-rating',
+  minResolution: 'min-resolution',
+  orientation: 'orientation',
+
+  any_text: 'any-text',
+  keyword: 'keyword',
+  caption: 'caption',
+  directory: 'directory',
+  file_name: 'file-name',
+  person: 'person',
+  portrait: 'portrait',
+  position: 'position',
+  someOf: 'some-of',
+  kmFrom: 'km-from'
+};
+
 export class SearchQueryParser {
-  constructor(private keywords: QueryKeywords) {
+  constructor(private keywords: QueryKeywords = defaultQueryKeywords) {
   }
 
   public static stringifyText(text: string, matchType = TextSearchQueryMatchTypes.like): string {

@@ -237,6 +237,89 @@ export class SearchManager implements ISQLSearchManager {
       .getOne();
   }
 
+  protected flattenSameOfQueries(query: SearchQueryDTO): SearchQueryDTO {
+    switch (query.type) {
+      case SearchQueryTypes.AND:
+      case SearchQueryTypes.OR:
+        return {
+          type: query.type,
+          list: (query as SearchListQuery).list.map((q): SearchQueryDTO => this.flattenSameOfQueries(q))
+        } as SearchListQuery;
+      case SearchQueryTypes.SOME_OF:
+        const someOfQ = query as SomeOfSearchQuery;
+        someOfQ.min = someOfQ.min || 1;
+
+        if (someOfQ.min === 1) {
+          return this.flattenSameOfQueries({
+            type: SearchQueryTypes.OR,
+            list: (someOfQ as SearchListQuery).list
+          } as ORSearchQuery);
+        }
+
+        if (someOfQ.min === (query as SearchListQuery).list.length) {
+          return this.flattenSameOfQueries({
+            type: SearchQueryTypes.AND,
+            list: (someOfQ as SearchListQuery).list
+          } as ANDSearchQuery);
+        }
+
+        const getAllCombinations = (num: number, arr: SearchQueryDTO[], start = 0): SearchQueryDTO[] => {
+          if (num <= 0 || num > arr.length || start >= arr.length) {
+            return null;
+          }
+          if (num <= 1) {
+            return arr.slice(start);
+          }
+          if (num === arr.length - start) {
+            return [{
+              type: SearchQueryTypes.AND,
+              list: arr.slice(start)
+            } as ANDSearchQuery];
+          }
+          const ret: ANDSearchQuery[] = [];
+          for (let i = start; i < arr.length; ++i) {
+            const subRes = getAllCombinations(num - 1, arr, i + 1);
+            if (subRes === null) {
+              break;
+            }
+            const and: ANDSearchQuery = {
+              type: SearchQueryTypes.AND,
+              list: [
+                arr[i]
+              ]
+            };
+            if (subRes.length === 1) {
+              if (subRes[0].type === SearchQueryTypes.AND) {
+                and.list.push(...(subRes[0] as ANDSearchQuery).list);
+              } else {
+                and.list.push(subRes[0]);
+              }
+            } else {
+              and.list.push({
+                type: SearchQueryTypes.OR,
+                list: subRes
+              } as ORSearchQuery);
+            }
+            ret.push(and);
+
+          }
+
+          if (ret.length === 0) {
+            return null;
+          }
+          return ret;
+        };
+
+
+        return this.flattenSameOfQueries({
+          type: SearchQueryTypes.OR,
+          list: getAllCombinations(someOfQ.min, (query as SearchListQuery).list)
+        } as ORSearchQuery);
+
+    }
+    return query;
+  }
+
   private async prepareQuery(queryIN: SearchQueryDTO): Promise<SearchQueryDTO> {
     let query: SearchQueryDTO = this.assignQueryIDs(Utils.clone(queryIN)); // assign local ids before flattening SOME_OF queries
     query = this.flattenSameOfQueries(query);
@@ -609,73 +692,6 @@ export class SearchManager implements ISQLSearchManager {
       }
       return q;
     });
-  }
-
-  private flattenSameOfQueries(query: SearchQueryDTO): SearchQueryDTO {
-    switch (query.type) {
-      case SearchQueryTypes.AND:
-      case SearchQueryTypes.OR:
-        return {
-          type: query.type,
-          list: (query as SearchListQuery).list.map((q): SearchQueryDTO => this.flattenSameOfQueries(q))
-        } as SearchListQuery;
-      case SearchQueryTypes.SOME_OF:
-        const someOfQ = query as SomeOfSearchQuery;
-        someOfQ.min = someOfQ.min || 1;
-
-        if (someOfQ.min === 1) {
-          return this.flattenSameOfQueries({
-            type: SearchQueryTypes.OR,
-            list: (someOfQ as SearchListQuery).list
-          } as ORSearchQuery);
-        }
-
-        if (someOfQ.min === (query as SearchListQuery).list.length) {
-          return this.flattenSameOfQueries({
-            type: SearchQueryTypes.AND,
-            list: (someOfQ as SearchListQuery).list
-          } as ANDSearchQuery);
-        }
-
-        const getAllCombinations = (num: number, arr: SearchQueryDTO[], start = 0): SearchQueryDTO[] => {
-          if (num <= 0 || num > arr.length || start >= arr.length) {
-            return [];
-          }
-          if (num <= 1) {
-            return arr.slice(start);
-          }
-          if (num === arr.length - start) {
-            return arr.slice(start);
-          }
-          const ret: ANDSearchQuery[] = [];
-          for (let i = start; i < arr.length - num + 1; ++i) {
-            const subRes = getAllCombinations(num - 1, arr, i + 1);
-            const and: ANDSearchQuery = {
-              type: SearchQueryTypes.AND,
-              list: [
-                arr[i],
-                subRes.length === 1 ? subRes[0] : (
-                  {
-                    type: SearchQueryTypes.OR,
-                    list: subRes
-                  } as ORSearchQuery)
-              ]
-            };
-
-            ret.push(and);
-
-          }
-          return ret;
-        };
-
-
-        return this.flattenSameOfQueries({
-          type: SearchQueryTypes.OR,
-          list: getAllCombinations(someOfQ.min, (query as SearchListQuery).list)
-        } as ORSearchQuery);
-
-    }
-    return query;
   }
 
   private encapsulateAutoComplete(values: string[], type: SearchQueryTypes): Array<AutoCompleteItem> {

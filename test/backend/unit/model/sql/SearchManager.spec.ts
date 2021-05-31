@@ -13,6 +13,7 @@ import {
   MinResolutionSearch,
   OrientationSearch,
   ORSearchQuery,
+  SearchListQuery,
   SearchQueryDTO,
   SearchQueryTypes,
   SomeOfSearchQuery,
@@ -32,6 +33,7 @@ import {VideoDTO} from '../../../../../src/common/entities/VideoDTO';
 import {MediaDTO} from '../../../../../src/common/entities/MediaDTO';
 import {AutoCompleteItem} from '../../../../../src/common/entities/AutoCompleteItem';
 import {Config} from '../../../../../src/common/config/private/Config';
+import {SearchQueryParser} from '../../../../../src/common/SearchQueryParser';
 
 const deepEqualInAnyOrder = require('deep-equal-in-any-order');
 const chai = require('chai');
@@ -52,6 +54,14 @@ class IndexingManagerTest extends IndexingManager {
   public async saveToDB(scannedDirectory: DirectoryDTO): Promise<void> {
     return super.saveToDB(scannedDirectory);
   }
+}
+
+class SearchManagerTest extends SearchManager {
+
+  public flattenSameOfQueries(query: SearchQueryDTO): SearchQueryDTO {
+    return super.flattenSameOfQueries(query);
+  }
+
 }
 
 class GalleryManagerTest extends GalleryManager {
@@ -1114,7 +1124,68 @@ describe('SearchManager', (sqlHelper: DBTestHelper) => {
 
     });
 
-    (it('should execute complex SOME_OF querry', async () => {
+    /**
+     * flattenSameOfQueries converts converts some-of querries to AND and OR queries
+     * E.g.:
+     * 2-of:(A B C) to (A and (B or C)) or (B and C)
+     * this tests makes sure that all queries has at least 2 constraints
+     */
+    (it('should flatter SOME_OF query', () => {
+      const sm = new SearchManagerTest();
+      const parser = new SearchQueryParser();
+      const alphabet = 'abcdefghijklmnopqrstu';
+
+
+      const shortestDepth = (q: SearchQueryDTO): number => {
+        let depth = 0;
+        if ((q as SearchListQuery).list) {
+          if (q.type === SearchQueryTypes.AND) {
+            for (const l of (q as SearchListQuery).list) {
+              depth += shortestDepth(l);
+            }
+            return depth;
+          }
+          // its an or
+          const lengths = (q as SearchListQuery).list.map(l => shortestDepth(l)).sort();
+
+          if (lengths[0] !== lengths[lengths.length - 1]) {
+            for (const l of (q as SearchListQuery).list) {
+              console.log(shortestDepth(l));
+              console.log(parser.stringify(l));
+            }
+          }
+          return lengths[0];
+        }
+        return 1;
+      };
+
+      const checkBoolLogic = (q: SearchQueryDTO) => {
+        if ((q as SearchListQuery).list) {
+          expect((q as SearchListQuery).list).to.not.equal(1);
+          for (const l of (q as SearchListQuery).list) {
+            checkBoolLogic(l);
+          }
+        }
+      };
+
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 1; i < alphabet.length / 2; ++i) {
+        const query: SomeOfSearchQuery = {
+          type: SearchQueryTypes.SOME_OF,
+          min: i,
+          //
+          list: alphabet.split('').map(t => ({
+            type: SearchQueryTypes.file_name,
+            text: t
+          } as TextSearch))
+        };
+        const q = sm.flattenSameOfQueries(query);
+        expect(shortestDepth(q)).to.equal(i, parser.stringify(query) + '\n' + parser.stringify(q));
+        checkBoolLogic(q);
+      }
+    }) as any).timeout(20000);
+
+    (it('should execute complex SOME_OF query', async () => {
       const sm = new SearchManager();
 
       const query: SomeOfSearchQuery = {

@@ -17,38 +17,13 @@ import {
   TextSearchQueryMatchTypes,
   ToDateSearch
 } from '../../../src/common/entities/SearchQueryDTO';
-import {QueryKeywords, SearchQueryParser} from '../../../src/common/SearchQueryParser';
+import {defaultQueryKeywords, SearchQueryParser} from '../../../src/common/SearchQueryParser';
 
-const queryKeywords: QueryKeywords = {
-  NSomeOf: 'of',
-  and: 'and',
-  or: 'or',
-
-  from: 'after',
-  to: 'before',
-  landscape: 'landscape',
-  maxRating: 'max-rating',
-  maxResolution: 'max-resolution',
-  minRating: 'min-rating',
-  minResolution: 'min-resolution',
-  orientation: 'orientation',
-
-  any_text: 'any-text',
-  keyword: 'keyword',
-  caption: 'caption',
-  directory: 'directory',
-  file_name: 'file-name',
-  person: 'person',
-  portrait: 'portrait',
-  position: 'position',
-  someOf: 'some-of',
-  kmFrom: 'km-from'
-};
 
 describe('SearchQueryParser', () => {
 
   const check = (query: SearchQueryDTO) => {
-    const parser = new SearchQueryParser(queryKeywords);
+    const parser = new SearchQueryParser(defaultQueryKeywords);
     expect(parser.parse(parser.stringify(query))).to.deep.equals(query, parser.stringify(query));
 
   };
@@ -92,14 +67,14 @@ describe('SearchQueryParser', () => {
       check({type: SearchQueryTypes.from_date, value: (Date.UTC(2020, 1, 1)), negate: true} as FromDateSearch);
       check({type: SearchQueryTypes.to_date, value: (Date.UTC(2020, 1, 1)), negate: true} as ToDateSearch);
 
-      const parser = new SearchQueryParser(queryKeywords);
+      const parser = new SearchQueryParser(defaultQueryKeywords);
       // test if date gets simplified on 1st of Jan.
       let query: RangeSearch = {type: SearchQueryTypes.to_date, value: (Date.UTC(2020, 0, 1))} as ToDateSearch;
-      expect(parser.parse(queryKeywords.to + ':' + (new Date(query.value)).getFullYear()))
+      expect(parser.parse(defaultQueryKeywords.to + ':' + (new Date(query.value)).getFullYear()))
         .to.deep.equals(query, parser.stringify(query));
 
       query = ({type: SearchQueryTypes.from_date, value: (Date.UTC(2020, 0, 1))} as FromDateSearch);
-      expect(parser.parse(queryKeywords.from + ':' + (new Date(query.value)).getFullYear()))
+      expect(parser.parse(defaultQueryKeywords.from + ':' + (new Date(query.value)).getFullYear()))
         .to.deep.equals(query, parser.stringify(query));
 
     });
@@ -125,7 +100,7 @@ describe('SearchQueryParser', () => {
     });
     it('Default logical operator should be AND', () => {
 
-      const parser = new SearchQueryParser(queryKeywords);
+      const parser = new SearchQueryParser(defaultQueryKeywords);
       expect(parser.parse('a b')).to.deep.equals({
         type: SearchQueryTypes.AND,
         list: [
