@@ -2784,6 +2784,50 @@
         <source>Search will also return with directories"</source>
         <target>A keresési eredmény mappákat is fog tartalmazni"</target>
       </trans-unit>
+      <trans-unit id="7786160088790041328" datatype="html">
+        <source>Add saved search</source>
+        <target>Mentett keresés hozzáadása</target>
+      </trans-unit>
+      <trans-unit id="3231059240281443547" datatype="html">
+        <source>No albums to show.</source>
+        <target>Nincs Album</target>
+      </trans-unit>
+      <trans-unit id="3017479276216613525" datatype="html">
+        <source>Album is locked, cannot be deleted from the webpage.</source>
+        <target>Az album le van zárva, nem lehet a weboldalon keresztül törölni.</target>
+      </trans-unit>
+      <trans-unit id="5466947574428856253" datatype="html">
+        <source>Save search to album</source>
+        <target>Keresés albumba mentése</target>
+      </trans-unit>
+      <trans-unit id="1692479277642537323" datatype="html">
+        <source>This saved search will be loaded from file during gallery indexing and it will survive a database reset."</source>
+        <target>This saved search will be loaded from file during gallery indexing and it will survive a database reset."</target>
+      </trans-unit>
+      <trans-unit id="2861315058248271208" datatype="html">
+        <source>Add this json to a '.saved_searches.pg2conf' file in your gallery:</source>
+        <target>Add this json to a '.saved_searches.pg2conf' file in your gallery:</target>
+      </trans-unit>
+      <trans-unit id="6733799876332344576" datatype="html">
+        <source>Saved Search to .saved_searches.pg2conf</source>
+        <target>Keresés .saved_searches.pg2conf fájlba mentése</target>
+      </trans-unit>
+      <trans-unit id="4531897455936063912" datatype="html">
+        <source>To .pg2conf</source>
+        <target>.pg2conf fájlba</target>
+      </trans-unit>
+      <trans-unit id="5043933900720743682" datatype="html">
+        <source>Albums</source>
+        <target>Albumok</target>
+      </trans-unit>
+      <trans-unit id="3913155609891930218" datatype="html">
+        <source>Note: custom albums are not supported, see:</source>
+        <target>Megjegyzés: saját albumok nem támogatottak:</target>
+      </trans-unit>
+      <trans-unit id="3211593807292156099" datatype="html">
+        <source>Shows albums tab in the top bar and enables creating saved searches.</source>
+        <target>Megjeleníti az Album fület a felső sávban és engedélyezi a mentett keresések létrehozásást</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

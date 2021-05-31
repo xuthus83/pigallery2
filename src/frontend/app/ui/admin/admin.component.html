@@ -125,6 +125,9 @@
         <app-settings-faces #setting #faces
                             [hidden]="!faces.HasAvailableSettings"
                             [simplifiedMode]="simplifiedMode"></app-settings-faces>
+        <app-settings-albums #setting #albums
+                            [hidden]="!albums.HasAvailableSettings"
+                            [simplifiedMode]="simplifiedMode"></app-settings-albums>
         <app-settings-indexing #setting #indexing
                                [hidden]="!indexing.HasAvailableSettings"
                                [simplifiedMode]="simplifiedMode"></app-settings-indexing>

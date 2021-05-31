@@ -5,6 +5,7 @@ import {SQLConnection} from '../database/sql/SQLConnection';
 import * as fs from 'fs';
 import {FFmpegFactory} from '../FFmpegFactory';
 import {
+  ClientAlbumConfig,
   ClientFacesConfig,
   ClientMapConfig,
   ClientMetaFileConfig,
@@ -30,6 +31,12 @@ const LOG_TAG = '[ConfigDiagnostics]';
 
 
 export class ConfigDiagnostics {
+  static testAlbumsConfig(albumConfig: ClientAlbumConfig, original: IPrivateConfig): void {
+    if (albumConfig.enabled === true &&
+      original.Server.Database.type === DatabaseType.memory) {
+      throw new Error('Memory Database does not support albums');
+    }
+  }
 
   static checkReadWritePermission(path: string): Promise<void> {
     return new Promise((resolve, reject) => {
@@ -271,6 +278,15 @@ export class ConfigDiagnostics {
       NotificationManager.warning('Meta file support error, switching off..', err.toString());
       Logger.warn(LOG_TAG, 'Meta file support error, switching off..', err.toString());
       Config.Client.MetaFile.enabled = false;
+    }
+
+    try {
+      await ConfigDiagnostics.testAlbumsConfig(Config.Client.Album, Config);
+    } catch (ex) {
+      const err: Error = ex;
+      NotificationManager.warning('Albums support error, switching off..', err.toString());
+      Logger.warn(LOG_TAG, 'Meta file support error, switching off..', err.toString());
+      Config.Client.Album.enabled = false;
     }
 
 

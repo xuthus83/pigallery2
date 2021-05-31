@@ -39,7 +39,7 @@ export class ClientSearchConfig {
 @SubConfigClass()
 export class ClientAlbumConfig {
   @ConfigProperty()
-  enabled: boolean = false;
+  enabled: boolean = true;
 }
 
 @SubConfigClass()

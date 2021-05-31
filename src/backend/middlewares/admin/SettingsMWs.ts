@@ -18,6 +18,7 @@ import {
   ServerVideoConfig
 } from '../../../common/config/private/PrivateConfig';
 import {
+  ClientAlbumConfig,
   ClientFacesConfig,
   ClientMapConfig,
   ClientMetaFileConfig,
@@ -146,6 +147,33 @@ export class SettingsMWs {
       // only updating explicitly set config (not saving config set by the diagnostics)
 
       original.Client.MetaFile = (req.body.settings as ClientMetaFileConfig);
+      original.save();
+      await ConfigDiagnostics.runDiagnostics();
+      Logger.info(LOG_TAG, 'new config:');
+      Logger.info(LOG_TAG, JSON.stringify(Config, null, '\t'));
+      return next();
+    } catch (err) {
+      if (err instanceof Error) {
+        return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, 'Settings error: ' + err.toString(), err));
+      }
+      return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, 'Settings error: ' + JSON.stringify(err, null, '  '), err));
+    }
+  }
+
+
+  public static async updateAlbumsSettings(req: Request, res: Response, next: NextFunction): Promise<any> {
+    if ((typeof req.body === 'undefined') || (typeof req.body.settings === 'undefined')) {
+      return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, 'settings is needed'));
+    }
+
+    try {
+      const original = await Config.original();
+      await ConfigDiagnostics.testAlbumsConfig(req.body.settings as ClientAlbumConfig, original);
+
+      Config.Client.Album = (req.body.settings as ClientAlbumConfig);
+      // only updating explicitly set config (not saving config set by the diagnostics)
+
+      original.Client.Album = (req.body.settings as ClientAlbumConfig);
       original.save();
       await ConfigDiagnostics.runDiagnostics();
       Logger.info(LOG_TAG, 'new config:');

@@ -74,6 +74,12 @@ export class SettingsRouter {
       SettingsMWs.updateFacesSettings,
       RenderingMWs.renderOK
     );
+    app.put('/api/settings/albums',
+      AuthenticationMWs.authenticate,
+      AuthenticationMWs.authorise(UserRoles.Admin),
+      SettingsMWs.updateAlbumsSettings,
+      RenderingMWs.renderOK
+    );
     app.put('/api/settings/share',
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Admin),
