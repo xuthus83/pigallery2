@@ -597,12 +597,12 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
       const albums = await am.getAlbums();
     //  expect(albums[0].preview).to.be.an('object');
       delete albums[0].preview;
+      delete albums[0].count;
       expect(albums).to.be.equalInAnyOrder([
         {
           id: 1,
           name: 'Alvin',
           locked: true,
-          count: 1,
           searchQuery: {
             type: SearchQueryTypes.person,
             text: 'Alvin',
