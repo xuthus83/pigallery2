@@ -9,14 +9,6 @@ import {SavedSearchEntity} from './enitites/album/SavedSearchEntity';
 import {IAlbumManager} from '../interfaces/IAlbumManager';
 
 export class AlbumManager implements IAlbumManager {
-  private static async fillPreviewToAlbum(album: AlbumBaseDTO): Promise<void> {
-    if (!(album as SavedSearchDTO).searchQuery) {
-      throw new Error('no search query present');
-    }
-    album.preview = await (ObjectManagers.getInstance().SearchManager as ISQLSearchManager)
-      .getPreview((album as SavedSearchDTO).searchQuery);
-  }
-
   public async addIfNotExistSavedSearch(name: string, searchQuery: SearchQueryDTO, lockedAlbum: boolean): Promise<void> {
     const connection = await SQLConnection.getConnection();
     const album = await connection.getRepository(SavedSearchEntity)
@@ -24,12 +16,13 @@ export class AlbumManager implements IAlbumManager {
     if (album) {
       return;
     }
-    this.addSavedSearch(name, searchQuery, lockedAlbum);
+    await this.addSavedSearch(name, searchQuery, lockedAlbum);
   }
 
   public async addSavedSearch(name: string, searchQuery: SearchQueryDTO, lockedAlbum?: boolean): Promise<void> {
     const connection = await SQLConnection.getConnection();
-    await connection.getRepository(SavedSearchEntity).insert({name, searchQuery, locked: lockedAlbum});
+    const a = await connection.getRepository(SavedSearchEntity).save({name, searchQuery, locked: lockedAlbum});
+    await this.updateAlbum(a);
   }
 
   public async deleteAlbum(id: number): Promise<void> {
@@ -46,12 +39,36 @@ export class AlbumManager implements IAlbumManager {
 
   public async getAlbums(): Promise<AlbumBaseDTO[]> {
     const connection = await SQLConnection.getConnection();
-    const albums = await connection.getRepository(AlbumBaseEntity).find();
+    return await connection.getRepository(AlbumBaseEntity).find({
+      relations: ['preview', 'preview.directory']
+    });
+  }
+
+  public async onGalleryIndexUpdate(): Promise<void> {
+    await this.updateAlbums();
+  }
+
+
+  private async updateAlbums(): Promise<void> {
+    const albums = await this.getAlbums();
 
     for (const a of albums) {
-      await AlbumManager.fillPreviewToAlbum(a);
+      await this.updateAlbum(a as SavedSearchEntity);
     }
-
-    return albums;
   }
+
+  private async updateAlbum(album: SavedSearchEntity): Promise<void> {
+    const connection = await SQLConnection.getConnection();
+    const preview = await (ObjectManagers.getInstance().SearchManager as ISQLSearchManager)
+      .getPreview((album as SavedSearchDTO).searchQuery);
+    const count = await (ObjectManagers.getInstance().SearchManager as ISQLSearchManager)
+      .getCount((album as SavedSearchDTO).searchQuery);
+    await connection
+      .createQueryBuilder()
+      .update(AlbumBaseEntity)
+      .set({preview, count})
+      .where('id = :id', {id: album.id})
+      .execute();
+  }
+
 }

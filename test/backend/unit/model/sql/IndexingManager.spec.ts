@@ -14,11 +14,11 @@ import {ObjectManagers} from '../../../../../src/backend/model/ObjectManagers';
 import {DBTestHelper} from '../../../DBTestHelper';
 import {DiskMangerWorker} from '../../../../../src/backend/model/threading/DiskMangerWorker';
 import {ReIndexingSensitivity} from '../../../../../src/common/config/private/PrivateConfig';
-import {AlbumManager} from '../../../../../src/backend/model/database/sql/AlbumManager';
 import {SearchQueryTypes, TextSearch, TextSearchQueryMatchTypes} from '../../../../../src/common/entities/SearchQueryDTO';
 import {ProjectPath} from '../../../../../src/backend/ProjectPath';
 import * as path from 'path';
 import {DiskManager} from '../../../../../src/backend/model/DiskManger';
+import {AlbumManager} from '../../../../../src/backend/model/database/sql/AlbumManager';
 
 const deepEqualInAnyOrder = require('deep-equal-in-any-order');
 const chai = require('chai');
@@ -47,7 +47,7 @@ class IndexingManagerTest extends IndexingManager {
   }
 
   public async saveToDB(scannedDirectory: DirectoryDTO): Promise<void> {
-    return super.saveToDB(scannedDirectory);
+    return await super.saveToDB(scannedDirectory);
   }
 }
 
@@ -591,16 +591,18 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
       const am = new AlbumManager();
 
       const dir = await DiskManager.scanDirectory('/');
+
       await im.saveToDB(dir);
 
       const albums = await am.getAlbums();
-     // expect(albums[0].preview).to.be.an('object');
+      expect(albums[0].preview).to.be.an('object');
       delete albums[0].preview;
       expect(albums).to.be.equalInAnyOrder([
         {
           id: 1,
           name: 'Alvin',
           locked: true,
+          count: 1,
           searchQuery: {
             type: SearchQueryTypes.person,
             text: 'Alvin',

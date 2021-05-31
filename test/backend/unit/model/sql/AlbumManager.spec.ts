@@ -119,6 +119,7 @@ describe('AlbumManager', (sqlHelper: DBTestHelper) => {
         id: 1,
         name: 'Test Album',
         locked: false,
+        count: 0,
         searchQuery: query
       } as SavedSearchDTO]);
     });
@@ -138,12 +139,14 @@ describe('AlbumManager', (sqlHelper: DBTestHelper) => {
           id: 1,
           name: 'Test Album',
           locked: false,
+          count: 0,
           searchQuery: query
         } as SavedSearchDTO,
         {
           id: 2,
           name: 'Test Album2',
           locked: true,
+          count: 0,
           searchQuery: query
         } as SavedSearchDTO]);
 
@@ -152,6 +155,7 @@ describe('AlbumManager', (sqlHelper: DBTestHelper) => {
         id: 2,
         name: 'Test Album2',
         locked: true,
+        count: 0,
         searchQuery: query
       } as SavedSearchDTO]);
 
@@ -165,6 +169,7 @@ describe('AlbumManager', (sqlHelper: DBTestHelper) => {
         id: 2,
         name: 'Test Album2',
         locked: true,
+        count: 0,
         searchQuery: query
       } as SavedSearchDTO]);
     });
@@ -182,6 +187,7 @@ describe('AlbumManager', (sqlHelper: DBTestHelper) => {
       name: 'Test Album',
       searchQuery: query,
       locked: false,
+      count: 1,
       preview: toAlbumPreview(p)
     } as SavedSearchDTO]));
 

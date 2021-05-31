@@ -237,6 +237,18 @@ export class SearchManager implements ISQLSearchManager {
       .getOne();
   }
 
+  public async getCount(queryIN: SearchQueryDTO): Promise<number> {
+    const query = await this.prepareQuery(queryIN);
+    const connection = await SQLConnection.getConnection();
+
+    return await connection
+      .getRepository(MediaEntity)
+      .createQueryBuilder('media')
+      .innerJoin('media.directory', 'directory')
+      .where(this.buildWhereQuery(query))
+      .getCount();
+  }
+
   protected flattenSameOfQueries(query: SearchQueryDTO): SearchQueryDTO {
     switch (query.type) {
       case SearchQueryTypes.AND:

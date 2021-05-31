@@ -23,4 +23,9 @@ export interface IAlbumManager {
    * Returns with all albums
    */
   getAlbums(): Promise<AlbumBaseDTO[]>;
+
+  /**
+   * Updates previews and album counts
+   */
+  onGalleryIndexUpdate(): Promise<void>;
 }

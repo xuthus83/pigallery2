@@ -14,4 +14,5 @@ export interface ISQLSearchManager extends ISearchManager {
 
   // "Protected" functions. only called from other Managers, not from middlewares
   getPreview(query: SearchQueryDTO): Promise<MediaDTO>;
+  getCount(query: SearchQueryDTO): Promise<number>;
 }

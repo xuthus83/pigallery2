@@ -370,6 +370,7 @@ export class IndexingManager implements IIndexingManager {
       await this.saveMedia(connection, currentDirId, scannedDirectory.media);
       await this.saveMetaFiles(connection, currentDirId, scannedDirectory);
       await ObjectManagers.getInstance().PersonManager.onGalleryIndexUpdate();
+      await ObjectManagers.getInstance().AlbumManager.onGalleryIndexUpdate();
       await ObjectManagers.getInstance().VersionManager.updateDataVersion();
       await IndexingManager.processServerSidePG2Conf(serverSideConfigs);
     } finally {

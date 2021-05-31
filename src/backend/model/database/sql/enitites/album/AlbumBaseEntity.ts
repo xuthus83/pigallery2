@@ -1,4 +1,4 @@
-import {Column, Entity, Index, PrimaryGeneratedColumn, TableInheritance} from 'typeorm';
+import {Column, Entity, Index, ManyToOne, PrimaryGeneratedColumn, TableInheritance} from 'typeorm';
 import {MediaEntity} from '../MediaEntity';
 import {columnCharsetCS} from '../EntityUtils';
 import {AlbumBaseDTO} from '../../../../../../common/entities/album/AlbumBaseDTO';
@@ -21,7 +21,10 @@ export class AlbumBaseEntity implements AlbumBaseDTO {
   @Column({default: false})
   locked: boolean;
 
-  // not saving to database, it is only assigned when querying the DB
+  @Column('int', {unsigned: true, default: 0})
+  count: number;
+
+  @ManyToOne(type => MediaEntity, {onDelete: 'SET NULL', nullable: true})
   public preview: MediaEntity;
 
 }
