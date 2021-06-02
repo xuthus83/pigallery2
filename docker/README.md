@@ -5,6 +5,7 @@ available tags:
  - `v*` (stable): built from the a release with the same version name.
  - `latest` (stable): same as the latest `v*`, built with debian stretch
  - `nightly` : built from the current state of `master`. This might break from time to time. 
+Note: Some changes may require database reset or config changes, see #317 (If you want to reduce the frequency of those, use stable buils (`lastest`)
 
 We support multiple architectures, including `amd64`, `arm32v7`, `arm64v8`.
 
