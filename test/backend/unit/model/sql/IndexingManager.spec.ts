@@ -584,6 +584,7 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
     it('.saved_searches.pg2conf', async () => {
       Config.Server.Threading.enabled = false;
       Config.Client.Album.enabled = true;
+      Config.Client.Faces.enabled = true;
 
       Config.Server.Media.folder = path.join(__dirname, '/../../../assets');
       ProjectPath.ImageFolder = path.join(__dirname, '/../../../assets');
@@ -595,14 +596,14 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
       await im.saveToDB(dir);
 
       const albums = await am.getAlbums();
-    //  expect(albums[0].preview).to.be.an('object');
+      expect(albums[0].preview).to.be.an('object');
       delete albums[0].preview;
-      delete albums[0].count;
       expect(albums).to.be.equalInAnyOrder([
         {
           id: 1,
           name: 'Alvin',
           locked: true,
+          count: 1,
           searchQuery: {
             type: SearchQueryTypes.person,
             text: 'Alvin',

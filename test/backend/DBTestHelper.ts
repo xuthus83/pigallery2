@@ -2,7 +2,7 @@ import {Config} from '../../src/common/config/private/Config';
 import * as path from 'path';
 import * as fs from 'fs';
 import {SQLConnection} from '../../src/backend/model/database/sql/SQLConnection';
-import {DatabaseType, ServerConfig} from '../../src/common/config/private/PrivateConfig';
+import {DatabaseType} from '../../src/common/config/private/PrivateConfig';
 import {ProjectPath} from '../../src/backend/ProjectPath';
 import {DirectoryDTO} from '../../src/common/entities/DirectoryDTO';
 import {DirectoryEntity} from '../../src/backend/model/database/sql/enitites/DirectoryEntity';
@@ -119,6 +119,7 @@ export class DBTestHelper {
   }
 
   public async initDB(): Promise<void> {
+    await Config.load();
     if (this.dbType === DatabaseType.sqlite) {
       await this.initSQLite();
     } else if (this.dbType === DatabaseType.mysql) {

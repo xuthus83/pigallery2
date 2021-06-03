@@ -127,8 +127,8 @@ describe('SearchManager', (sqlHelper: DBTestHelper) => {
 
 
   before(async () => {
-    Config.Client.Search.listDirectories = true;
     await setUpSqlDB();
+    Config.Client.Search.listDirectories = true;
   });
 
 
