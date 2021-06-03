@@ -295,15 +295,17 @@ export class MetadataLoader {
                     faces.push({name, box});
                   }
                 }
-                if (Config.Client.Faces.keywordsToPersons && faces.length > 0) {
+                if (faces.length > 0) {
                   metadata.faces = faces; // save faces
-                  // remove faces from keywords
-                  metadata.faces.forEach(f => {
-                    const index = metadata.keywords.indexOf(f.name);
-                    if (index !== -1) {
-                      metadata.keywords.splice(index, 1);
-                    }
-                  });
+                  if (Config.Client.Faces.keywordsToPersons) {
+                    // remove faces from keywords
+                    metadata.faces.forEach(f => {
+                      const index = metadata.keywords.indexOf(f.name);
+                      if (index !== -1) {
+                        metadata.keywords.splice(index, 1);
+                      }
+                    });
+                  }
                 }
               }
             } catch (err) {
