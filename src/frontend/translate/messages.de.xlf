@@ -27,7 +27,7 @@
         <target>Git verplfichten</target>
       </trans-unit>
       <trans-unit id="6603859330588429140" datatype="html">
-        <source>Server notifications</source>
+        <source> Server notifications </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/admin/admin.component.html</context>
           <context context-type="linenumber">17,18</context>
@@ -35,7 +35,7 @@
         <target>Serverbenachrichtigungen</target>
       </trans-unit>
       <trans-unit id="881767691558053357" datatype="html">
-        <source>To dismiss these notifications, restart the server.</source>
+        <source> To dismiss these notifications, restart the server. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/admin/admin.component.html</context>
           <context context-type="linenumber">35,36</context>
@@ -92,12 +92,12 @@
         <target>Betriebszeit</target>
       </trans-unit>
       <trans-unit id="2904029998096758375" datatype="html">
-        <source>No duplicates found.</source>
+        <source> No duplicates found </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/duplicates/duplicates.component.html</context>
           <context context-type="linenumber">9,10</context>
         </context-group>
-        <target>Keine Duplikate gefunden.</target>
+        <target> No duplicates found </target>
       </trans-unit>
       <trans-unit id="1262530507063329624" datatype="html">
         <source>No faces to show.</source>
@@ -164,7 +164,7 @@
         <target>Tage</target>
       </trans-unit>
       <trans-unit id="1018831956200649278" datatype="html">
-        <source>Too many results to show. Refine your search.</source>
+        <source> Too many results to show. Refine your search. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/gallery/gallery.component.html</context>
           <context context-type="linenumber">55,56</context>
@@ -288,7 +288,7 @@
         <target>Fehler beim Laden des Videos.</target>
       </trans-unit>
       <trans-unit id="7778584211809714680" datatype="html">
-        <source>Most likely the video is not transcoded. It can be done in the settings. You need to transcode these videos to watch them online:</source>
+        <source> Most likely the video is not transcoded. It can be done in the settings. You need to transcode these videos to watch them online: </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/gallery/lightbox/lightbox.gallery.component.html</context>
           <context context-type="linenumber">23,26</context>
@@ -328,7 +328,7 @@
         <target>Erstellung zufälliger Link</target>
       </trans-unit>
       <trans-unit id="5351591262168826856" datatype="html">
-        <source>Copy</source>
+        <source>Copy </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/gallery/random-query-builder/random-query-builder.gallery.component.html</context>
           <context context-type="linenumber">29,30</context>
@@ -532,7 +532,7 @@
         <target>Bitte einloggen</target>
       </trans-unit>
       <trans-unit id="1023046241952262024" datatype="html">
-        <source>Wrong username or password</source>
+        <source> Wrong username or password </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/login/login.component.html</context>
           <context context-type="linenumber">13,14</context>
@@ -564,7 +564,7 @@
         <target>erinnere mich</target>
       </trans-unit>
       <trans-unit id="5173115640670709698" datatype="html">
-        <source>Login</source>
+        <source>Login </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/login/login.component.html</context>
           <context context-type="linenumber">68,69</context>
@@ -572,7 +572,7 @@
         <target>Anmeldung</target>
       </trans-unit>
       <trans-unit id="5253186130625984783" datatype="html">
-        <source>It seems that you are running the application in a Docker container. This setting should not be changed in docker. Make sure, that you know what you are doing.
+        <source> It seems that you are running the application in a Docker container. This setting should not be changed in docker. Make sure, that you know what you are doing.
 </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/_abstract/settings-entry/settings-entry.component.html</context>
@@ -786,7 +786,7 @@
         <target>Wenn Sie unter einer Sub-URL (z. B. http://mydomain.com/myGallery) auf die Galerie zugreifen, legen Sie diese hier fest. Wenn es nicht funktioniert, fehlt möglicherweise das '/' am Anfang der URL.</target>
       </trans-unit>
       <trans-unit id="720620266004315853" datatype="html">
-        <source>The public url and the url base are not matching. Some of the functionality might not work.</source>
+        <source> The public url and the url base are not matching. Some of the functionality might not work. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/basic/basic.settings.component.html</context>
           <context context-type="linenumber">91,92</context>
@@ -794,7 +794,7 @@
         <target>Die öffentliche URL und die Basis-URL stimmen nicht überein. Einige der Funktionen funktionieren möglicherweise nicht.</target>
       </trans-unit>
       <trans-unit id="662506850593821474" datatype="html">
-        <source>Save</source>
+        <source>Save </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/basic/basic.settings.component.html</context>
           <context context-type="linenumber">96,97</context>
@@ -854,7 +854,7 @@
         <target>Speichern</target>
       </trans-unit>
       <trans-unit id="5562099532623028109" datatype="html">
-        <source>Reset</source>
+        <source>Reset </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/basic/basic.settings.component.html</context>
           <context context-type="linenumber">100,101</context>
@@ -922,7 +922,7 @@
         <target>Art</target>
       </trans-unit>
       <trans-unit id="7143074042212519365" datatype="html">
-        <source>Install manually mysql node module to use mysql (npm install mysql)</source>
+        <source>Install manually mysql node module to use mysql (npm install mysql) </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/database/database.settings.component.html</context>
           <context context-type="linenumber">15,16</context>
@@ -986,7 +986,7 @@
         <target>Erforderliches Mindestrecht, um ein Gesicht zu markieren (Favorit).</target>
       </trans-unit>
       <trans-unit id="3603301297464446974" datatype="html">
-        <source>Faces are not supported with these settings.</source>
+        <source> Faces are not supported with these settings. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/faces/faces.settings.component.html</context>
           <context context-type="linenumber">47,48</context>
@@ -1042,7 +1042,7 @@
         <target>Ordner, die von der Indizierung ausgeschlossen werden sollen</target>
       </trans-unit>
       <trans-unit id="1169525535504005135" datatype="html">
-        <source>';' separated strings. If an entry starts with '/' it is treated as an absolute path. If it doesn't start with '/' but contains a '/', the path is relative to the image directory. If it doesn't contain a '/', any folder with this name will be excluded.</source>
+        <source>';' separated strings. If an entry starts with '/' it is treated as an absolute path. If it doesn't start with '/' but contains a '/', the path is relative to the image directory. If it doesn't contain a '/', any folder with this name will be excluded. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/indexing/indexing.settings.component.html</context>
           <context context-type="linenumber">37,40</context>
@@ -1066,7 +1066,7 @@
         <target>Dateien, die einen Ordner markieren, der von der Indizierung ausgeschlossen werden soll</target>
       </trans-unit>
       <trans-unit id="429061027181061512" datatype="html">
-        <source>';' separated strings. Any folder that contains a file with this name will be excluded from indexing.</source>
+        <source>';' separated strings. Any folder that contains a file with this name will be excluded from indexing. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/indexing/indexing.settings.component.html</context>
           <context context-type="linenumber">53,55</context>
@@ -1098,7 +1098,7 @@
         <target>Hinweis: Die Suche funktioniert nur in den indizierten Verzeichnissen</target>
       </trans-unit>
       <trans-unit id="3466167636009088678" datatype="html">
-        <source>Statistic:</source>
+        <source> Statistic: </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/indexing/indexing.settings.component.html</context>
           <context context-type="linenumber">105,106</context>
@@ -1214,7 +1214,7 @@
         <target>Häufigkeit:</target>
       </trans-unit>
       <trans-unit id="1545019447684907468" datatype="html">
-        <source>Set the time to run the job.</source>
+        <source>Set the time to run the job. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/jobs/jobs.settings.component.html</context>
           <context context-type="linenumber">76,77</context>
@@ -1230,7 +1230,7 @@
         <target>nach:</target>
       </trans-unit>
       <trans-unit id="1963407138412411589" datatype="html">
-        <source>The job will run after that job finishes.</source>
+        <source>The job will run after that job finishes. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/jobs/jobs.settings.component.html</context>
           <context context-type="linenumber">93,94</context>
@@ -1258,7 +1258,7 @@
         <target>parallelen Durchlauf zulassen</target>
       </trans-unit>
       <trans-unit id="6820090689099376148" datatype="html">
-        <source>Enables the job to start even if an other job is already running.</source>
+        <source>Enables the job to start even if an other job is already running. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/jobs/jobs.settings.component.html</context>
           <context context-type="linenumber">145,146</context>
@@ -1266,7 +1266,7 @@
         <target>Ermöglicht das Starten des Jobs, auch wenn bereits ein anderer Job ausgeführt wird.</target>
       </trans-unit>
       <trans-unit id="5242498003738057671" datatype="html">
-        <source>';' separated integers.</source>
+        <source>';' separated integers. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/jobs/jobs.settings.component.html</context>
           <context context-type="linenumber">200,201</context>
@@ -1274,7 +1274,7 @@
         <target>';' getrennte ganze Zahlen.</target>
       </trans-unit>
       <trans-unit id="8008862212814574384" datatype="html">
-        <source>+ Add Job</source>
+        <source>+ Add Job </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/jobs/jobs.settings.component.html</context>
           <context context-type="linenumber">228,229</context>
@@ -1290,7 +1290,7 @@
         <target>neuen Auftrag hinzufügen</target>
       </trans-unit>
       <trans-unit id="2893483139524749280" datatype="html">
-        <source>Select a job to schedule.</source>
+        <source>Select a job to schedule. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/jobs/jobs.settings.component.html</context>
           <context context-type="linenumber">257,258</context>
@@ -1310,7 +1310,7 @@
         <target>Schließen</target>
       </trans-unit>
       <trans-unit id="6188210409712327095" datatype="html">
-        <source>Add Job</source>
+        <source>Add Job </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/jobs/jobs.settings.component.html</context>
           <context context-type="linenumber">265,266</context>
@@ -1318,7 +1318,7 @@
         <target>Auftrag hinzufügen</target>
       </trans-unit>
       <trans-unit id="3615321865355398203" datatype="html">
-        <source>Last run:</source>
+        <source> Last run: </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/jobs/progress/job-progress.settings.component.html</context>
           <context context-type="linenumber">3,4</context>
@@ -1390,7 +1390,7 @@
         <target>Alle</target>
       </trans-unit>
       <trans-unit id="344985694001196609" datatype="html">
-        <source>Logs</source>
+        <source> Logs </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/jobs/progress/job-progress.settings.component.html</context>
           <context context-type="linenumber">111,112</context>
@@ -1434,12 +1434,12 @@
         <target>Name</target>
       </trans-unit>
       <trans-unit id="3853557835274460749" datatype="html">
-        <source>Title URL*</source>
+        <source>Tile Url*</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/map/map.settings.component.html</context>
           <context context-type="linenumber">52</context>
         </context-group>
-        <target>Titel URL*</target>
+        <target>Tile Url*</target>
       </trans-unit>
       <trans-unit id="2480088071603915284" datatype="html">
         <source>*The map module will use these urls to fetch the map tiles.</source>
@@ -1450,7 +1450,7 @@
         <target>* Das Kartenmodul verwendet diese URLs, um die Kartenkacheln abzurufen.</target>
       </trans-unit>
       <trans-unit id="5559929655128993973" datatype="html">
-        <source>+ Add Layer</source>
+        <source>+ Add Layer </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/map/map.settings.component.html</context>
           <context context-type="linenumber">82,83</context>
@@ -1482,7 +1482,7 @@
         <target>Liest und zeigt * .gpx-Dateien auf der Karte an</target>
       </trans-unit>
       <trans-unit id="3145443688760998546" datatype="html">
-        <source>Error:</source>
+        <source>Error: </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/other/other.settings.component.html</context>
           <context context-type="linenumber">7</context>
@@ -1710,7 +1710,7 @@
         <target>Der kürzere Rand des konvertierten Fotos wird unter Beibehaltung des Seitenverhältnisses darauf verkleinert.</target>
       </trans-unit>
       <trans-unit id="8687697587531033527" datatype="html">
-        <source>This feature enables you to generate 'random photo' urls. That URL returns a photo random selected from your gallery. You can use the url with 3rd party application like random changing desktop background.</source>
+        <source> This feature enables you to generate 'random photo' urls. That URL returns a photo random selected from your gallery. You can use the url with 3rd party application like random changing desktop background. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/random-photo/random-photo.settings.component.html</context>
           <context context-type="linenumber">29,32</context>
@@ -1718,7 +1718,7 @@
         <target>Mit dieser Funktion können Sie URLs für zufällige Fotos erstellen. Diese URL gibt ein zufälliges Foto zurück, das aus Ihrer Galerie ausgewählt wurde. Sie können die URL mit Anwendungen von Drittanbietern verwenden, z. B. mit zufällig wechselnden Desktop-Hintergründen.</target>
       </trans-unit>
       <trans-unit id="7279049492322958709" datatype="html">
-        <source>Random Photo is not supported with these settings</source>
+        <source> Random Photo is not supported with these settings </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/random-photo/random-photo.settings.component.html</context>
           <context context-type="linenumber">36,37</context>
@@ -1758,7 +1758,7 @@
         <target>Aktiviert die Anzeige von Suchergebnissen während der Eingabe einer Suchanfrage.</target>
       </trans-unit>
       <trans-unit id="2110159159447052410" datatype="html">
-        <source>Search is not supported with these settings</source>
+        <source> Search is not supported with these settings </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/search/search.settings.component.html</context>
           <context context-type="linenumber">49,50</context>
@@ -1782,7 +1782,7 @@
         <target>Aktiviert passwortgeschützte Freigabelinks.</target>
       </trans-unit>
       <trans-unit id="5314273501490247820" datatype="html">
-        <source>Sharing is not supported with these settings</source>
+        <source> Sharing is not supported with these settings </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/share/share.settings.component.html</context>
           <context context-type="linenumber">39,40</context>
@@ -1830,7 +1830,7 @@
         <target>Ablaufdatum</target>
       </trans-unit>
       <trans-unit id="4938468904180779002" datatype="html">
-        <source>No sharing was created.</source>
+        <source> No sharing was created. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/share/share.settings.component.html</context>
           <context context-type="linenumber">85,86</context>
@@ -1886,7 +1886,7 @@
         <target>Größe der Vorschaubilder.</target>
       </trans-unit>
       <trans-unit id="9168085709932370234" datatype="html">
-        <source>The best matching size will be generated. (More sizes give better quality, but use more storage and CPU to render.)</source>
+        <source>The best matching size will be generated. (More sizes give better quality, but use more storage and CPU to render.) </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/thumbnail/thumbnail.settings.component.html</context>
           <context context-type="linenumber">39,41</context>
@@ -1894,7 +1894,7 @@
         <target>Die am besten passende Größe wird generiert. (Mehr Größen ergeben eine bessere Qualität, verwenden jedoch mehr Speicher und CPU zum Rendern.)</target>
       </trans-unit>
       <trans-unit id="4240916069361249816" datatype="html">
-        <source>';' separated integers. If size is 240, that shorter side of the thumbnail will have 160 pixels.</source>
+        <source>';' separated integers. If size is 240, that shorter side of the thumbnail will have 160 pixels. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/thumbnail/thumbnail.settings.component.html</context>
           <context context-type="linenumber">43,45</context>
@@ -1910,7 +1910,7 @@
         <target>Rolle</target>
       </trans-unit>
       <trans-unit id="4686867435965660873" datatype="html">
-        <source>+ Add user</source>
+        <source>+ Add user </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/usermanager/usermanager.settings.component.html</context>
           <context context-type="linenumber">55,56</context>
@@ -1918,7 +1918,7 @@
         <target>+ Nutzer hinzufügen</target>
       </trans-unit>
       <trans-unit id="1804954897767721868" datatype="html">
-        <source>To protect the site with password / have login enable this.</source>
+        <source> To protect the site with password / have login enable this. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/usermanager/usermanager.settings.component.html</context>
           <context context-type="linenumber">59,60</context>
@@ -1934,7 +1934,7 @@
         <target>Neuen Benutzer hinzufügen</target>
       </trans-unit>
       <trans-unit id="4032325907350308427" datatype="html">
-        <source>Add User</source>
+        <source>Add User </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/usermanager/usermanager.settings.component.html</context>
           <context context-type="linenumber">90,91</context>
@@ -1942,7 +1942,7 @@
         <target>Benutzer hinzufügen</target>
       </trans-unit>
       <trans-unit id="212156329687359765" datatype="html">
-        <source>Video support uses ffmpeg. ffmpeg and ffprobe binaries need to be available in the PATH or the @ffmpeg-installer/ffmpeg and @ffprobe-installer/ffprobe optional node packages need to be installed.</source>
+        <source>Video support uses ffmpeg. ffmpeg and ffprobe binaries need to be available in the PATH or the @ffmpeg-installer/ffmpeg and @ffprobe-installer/ffprobe optional node packages need to be installed. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/video/video.settings.component.html</context>
           <context context-type="linenumber">26,29</context>
@@ -1958,7 +1958,7 @@
         <target>Video-Transcodierung:</target>
       </trans-unit>
       <trans-unit id="6550506711010052550" datatype="html">
-        <source>To ensure smooth video playback, video transcoding is recommended to a lower bit rate than the server's upload rate.</source>
+        <source>To ensure smooth video playback, video transcoding is recommended to a lower bit rate than the server's upload rate. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/video/video.settings.component.html</context>
           <context context-type="linenumber">35,38</context>
@@ -1974,7 +1974,7 @@
         <target>Die transkodierten Videos werden im Miniaturbildordner gespeichert.</target>
       </trans-unit>
       <trans-unit id="5785407814671438620" datatype="html">
-        <source>You can trigger the transcoding manually, but you can also create an automatic encoding job in advanced settings mode.</source>
+        <source>You can trigger the transcoding manually, but you can also create an automatic encoding job in advanced settings mode. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/video/video.settings.component.html</context>
           <context context-type="linenumber">40,43</context>
@@ -2086,7 +2086,7 @@
         <target>; getrennte Werte. Es wird unverändert als benutzerdefinierte Option an ffmpeg gesendet.</target>
       </trans-unit>
       <trans-unit id="3295341328615597076" datatype="html">
-        <source>Wrong password</source>
+        <source> Wrong password </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/sharelogin/share-login.component.html</context>
           <context context-type="linenumber">12,13</context>
@@ -2094,7 +2094,7 @@
         <target>Falsches Passwort</target>
       </trans-unit>
       <trans-unit id="8443199995255821192" datatype="html">
-        <source>Enter</source>
+        <source>Enter </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/sharelogin/share-login.component.html</context>
           <context context-type="linenumber">41,42</context>
@@ -2783,6 +2783,58 @@
       <trans-unit id="1627438365479766712" datatype="html">
         <source>Search will also return with directories"</source>
         <target>Die Suche wird auch mit Verzeichnissen zurückgegeben"</target>
+      </trans-unit>
+      <trans-unit id="7786160088790041328" datatype="html">
+        <source>Add saved search</source>
+        <target>Add saved search</target>
+      </trans-unit>
+      <trans-unit id="3231059240281443547" datatype="html">
+        <source>No albums to show.</source>
+        <target>No albums to show.</target>
+      </trans-unit>
+      <trans-unit id="3017479276216613525" datatype="html">
+        <source>Album is locked, cannot be deleted from the webpage.</source>
+        <target>Album is locked, cannot be deleted from the webpage.</target>
+      </trans-unit>
+      <trans-unit id="5466947574428856253" datatype="html">
+        <source>Save search to album</source>
+        <target>Save search to album</target>
+      </trans-unit>
+      <trans-unit id="1692479277642537323" datatype="html">
+        <source>This saved search will be loaded from file during gallery indexing and it will survive a database reset."</source>
+        <target>This saved search will be loaded from file during gallery indexing and it will survive a database reset."</target>
+      </trans-unit>
+      <trans-unit id="2861315058248271208" datatype="html">
+        <source>Add this json to a '.saved_searches.pg2conf' file in your gallery:</source>
+        <target>Add this json to a '.saved_searches.pg2conf' file in your gallery:</target>
+      </trans-unit>
+      <trans-unit id="6733799876332344576" datatype="html">
+        <source>Saved Search to .saved_searches.pg2conf</source>
+        <target>Saved Search to .saved_searches.pg2conf</target>
+      </trans-unit>
+      <trans-unit id="4531897455936063912" datatype="html">
+        <source>To .pg2conf</source>
+        <target>To .pg2conf</target>
+      </trans-unit>
+      <trans-unit id="5043933900720743682" datatype="html">
+        <source>Albums</source>
+        <target>Albums</target>
+      </trans-unit>
+      <trans-unit id="3913155609891930218" datatype="html">
+        <source>Note: custom albums are not supported, see:</source>
+        <target>Note: custom albums are not supported, see:</target>
+      </trans-unit>
+      <trans-unit id="3211593807292156099" datatype="html">
+        <source>Shows albums tab in the top bar and enables creating saved searches.</source>
+        <target>Shows albums tab in the top bar and enables creating saved searches.</target>
+      </trans-unit>
+      <trans-unit id="709142926386769059" datatype="html">
+        <source>List metafiles</source>
+        <target>List metafiles</target>
+      </trans-unit>
+      <trans-unit id="500999559591740527" datatype="html">
+        <source>Search also returns with metafiles from directories that contain a media file of the matched search result</source>
+        <target>Search also returns with metafiles from directories that contain a media file of the matched search result</target>
       </trans-unit>
     </body>
   </file>
