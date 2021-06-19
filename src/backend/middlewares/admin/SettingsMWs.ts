@@ -10,6 +10,7 @@ import {OtherConfigDTO} from '../../../common/entities/settings/OtherConfigDTO';
 import {ProjectPath} from '../../ProjectPath';
 import {
   DatabaseType,
+  IPrivateConfig,
   ServerDataBaseConfig,
   ServerIndexingConfig,
   ServerJobConfig,
@@ -387,22 +388,19 @@ export class SettingsMWs {
     try {
       const settings: BasicConfigDTO = req.body.settings;
       await ConfigDiagnostics.testImageFolder(settings.imagesFolder);
-      Config.Server.port = settings.port;
-      Config.Server.host = settings.host;
-      Config.Server.Media.folder = settings.imagesFolder;
-      Config.Server.Media.tempFolder = settings.tempFolder;
-      Config.Client.publicUrl = settings.publicUrl;
-      Config.Client.urlBase = settings.urlBase;
-      Config.Client.applicationTitle = settings.applicationTitle;
+      const map = (config: IPrivateConfig, input: BasicConfigDTO) => {
+        config.Server.port = input.port;
+        config.Server.host = input.host;
+        config.Server.Media.folder = input.imagesFolder;
+        config.Server.Media.tempFolder = input.tempFolder;
+        config.Client.publicUrl = input.publicUrl;
+        config.Client.urlBase = input.urlBase;
+        config.Client.applicationTitle = input.applicationTitle;
+      };
+      map(Config, settings);
       // only updating explicitly set config (not saving config set by the diagnostics)
       const original = await Config.original();
-      original.Server.port = settings.port;
-      original.Server.host = settings.host;
-      original.Server.Media.folder = settings.imagesFolder;
-      original.Server.Media.folder = settings.tempFolder;
-      original.Client.publicUrl = settings.publicUrl;
-      original.Client.urlBase = settings.urlBase;
-      original.Client.applicationTitle = settings.applicationTitle;
+      map(original, settings);
       original.save();
       ProjectPath.reset();
       await ConfigDiagnostics.runDiagnostics();
