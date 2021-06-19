@@ -33,6 +33,7 @@ import {ISQLGalleryManager} from './IGalleryManager';
 import {ISQLSearchManager} from './ISearchManager';
 import {MediaDTO} from '../../../../common/entities/MediaDTO';
 import {Utils} from '../../../../common/Utils';
+import {FileEntity} from './enitites/FileEntity';
 
 export class SearchManager implements ISQLSearchManager {
 
@@ -156,13 +157,15 @@ export class SearchManager implements ISQLSearchManager {
     const facesQuery = Config.Server.Database.type === DatabaseType.mysql ?
       'CONCAT(\'[\' , GROUP_CONCAT(  \'{"name": "\' , person.name , \'", "box": {"top":\' , faces.box.top , \', "left":\' , faces.box.left , \', "height":\' , faces.box.height ,\', "width":\' , faces.box.width , \'}}\'  ) ,\']\') as media_metadataFaces' :
       '\'[\' || GROUP_CONCAT(  \'{"name": "\' || person.name || \'", "box": {"top":\' || faces.box.top || \', "left":\' || faces.box.left || \', "height":\' || faces.box.height ||\', "width":\' || faces.box.width || \'}}\'  ) ||\']\' as media_metadataFaces';
+    const directorySelect = ['directory.id', 'directory.name', 'directory.path'];
+
 
     const rawAndEntries = await connection
       .getRepository(MediaEntity)
       .createQueryBuilder('media')
-      .select(['media', facesQuery])
+      .select(['media', ...directorySelect, facesQuery])
       .where(this.buildWhereQuery(query))
-      .leftJoinAndSelect('media.directory', 'directory')
+      .leftJoin('media.directory', 'directory')
       .leftJoin('media.metadata.faces', 'faces')
       .leftJoin('faces.person', 'person')
       .limit(Config.Client.Search.maxMediaResult + 1)
@@ -179,6 +182,20 @@ export class SearchManager implements ISQLSearchManager {
 
     if (result.media.length > Config.Client.Search.maxMediaResult) {
       result.resultOverflow = true;
+    }
+
+    if (Config.Client.Search.listMetafiles === true) {
+      result.metaFile = await connection.getRepository(FileEntity)
+        .createQueryBuilder('file')
+        .select(['file', ...directorySelect])
+        .innerJoin(q => q.from(MediaEntity, 'media')
+            .select('distinct directory.id')
+            .where(this.buildWhereQuery(query))
+            .leftJoin('media.directory', 'directory'),
+          'dir',
+          'file.directory=dir.id')
+        .leftJoin('file.directory', 'directory')
+        .getMany();
     }
 
     if (Config.Client.Search.listDirectories === true) {

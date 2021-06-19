@@ -7,16 +7,15 @@ import {UserEntity} from '../../../../../src/backend/model/database/sql/enitites
 import {UserRoles} from '../../../../../src/common/entities/UserDTO';
 import {PasswordHelper} from '../../../../../src/backend/model/PasswordHelper';
 import {DirectoryEntity} from '../../../../../src/backend/model/database/sql/enitites/DirectoryEntity';
+import {PhotoEntity, PhotoMetadataEntity} from '../../../../../src/backend/model/database/sql/enitites/PhotoEntity';
 import {
   CameraMetadataEntity,
   GPSMetadataEntity,
-  PhotoEntity,
-  PhotoMetadataEntity,
+  MediaDimensionEntity,
   PositionMetaDataEntity
-} from '../../../../../src/backend/model/database/sql/enitites/PhotoEntity';
-import {MediaDimensionEntity} from '../../../../../src/backend/model/database/sql/enitites/MediaEntity';
+} from '../../../../../src/backend/model/database/sql/enitites/MediaEntity';
 import {VersionEntity} from '../../../../../src/backend/model/database/sql/enitites/VersionEntity';
-import {DatabaseType, ServerConfig} from '../../../../../src/common/config/private/PrivateConfig';
+import {DatabaseType} from '../../../../../src/common/config/private/PrivateConfig';
 import {ProjectPath} from '../../../../../src/backend/ProjectPath';
 
 

@@ -1,10 +1,10 @@
-import {Column, Entity, Index, ManyToOne, OneToMany, PrimaryGeneratedColumn, TableInheritance, Unique, ValueTransformer} from 'typeorm';
+import {Column, Entity, Index, ManyToOne, OneToMany, PrimaryGeneratedColumn, TableInheritance, Unique} from 'typeorm';
 import {DirectoryEntity} from './DirectoryEntity';
 import {MediaDimension, MediaDTO, MediaMetadata} from '../../../../../common/entities/MediaDTO';
 import {OrientationTypes} from 'ts-exif-parser';
-import {CameraMetadataEntity, PositionMetaDataEntity} from './PhotoEntity';
 import {FaceRegionEntry} from './FaceRegionEntry';
 import {columnCharsetCS} from './EntityUtils';
+import {CameraMetadata, GPSMetadata, PositionMetaData} from '../../../../../common/entities/PhotoDTO';
 
 export class MediaDimensionEntity implements MediaDimension {
 
@@ -13,6 +13,80 @@ export class MediaDimensionEntity implements MediaDimension {
 
   @Column('int')
   height: number;
+}
+
+
+export class CameraMetadataEntity implements CameraMetadata {
+
+  @Column('int', {nullable: true, unsigned: true})
+  ISO: number;
+
+
+  @Column({
+    type: 'text', nullable: true,
+    charset: columnCharsetCS.charset,
+    collation: columnCharsetCS.collation
+  })
+  model: string;
+
+
+  @Column({
+    type: 'text', nullable: true,
+    charset: columnCharsetCS.charset,
+    collation: columnCharsetCS.collation
+  })
+  make: string;
+
+  @Column('float', {nullable: true})
+  fStop: number;
+
+  @Column('float', {nullable: true})
+  exposure: number;
+
+  @Column('float', {nullable: true})
+  focalLength: number;
+
+  @Column('text', {nullable: true})
+  lens: string;
+}
+
+
+export class GPSMetadataEntity implements GPSMetadata {
+
+  @Column('float', {nullable: true})
+  latitude: number;
+  @Column('float', {nullable: true})
+  longitude: number;
+  @Column('int', {nullable: true})
+  altitude: number;
+}
+
+
+export class PositionMetaDataEntity implements PositionMetaData {
+
+  @Column(type => GPSMetadataEntity)
+  GPSData: GPSMetadataEntity;
+
+  @Column({
+    type: 'text', nullable: true,
+    charset: columnCharsetCS.charset,
+    collation: columnCharsetCS.collation
+  })
+  country: string;
+
+  @Column({
+    type: 'text', nullable: true,
+    charset: columnCharsetCS.charset,
+    collation: columnCharsetCS.collation
+  })
+  state: string;
+
+  @Column({
+    type: 'text', nullable: true,
+    charset: columnCharsetCS.charset,
+    collation: columnCharsetCS.collation
+  })
+  city: string;
 }
 
 

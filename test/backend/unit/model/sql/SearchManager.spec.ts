@@ -200,6 +200,9 @@ describe('SearchManager', (sqlHelper: DBTestHelper) => {
     delete m.directory.preview;
     delete m.directory.metaFile;
     const ret = Utils.clone(m);
+    delete ret.directory.lastScanned;
+    delete ret.directory.lastModified;
+    delete ret.directory.mediaCount;
     if ((ret.metadata as PhotoMetadata).faces && !(ret.metadata as PhotoMetadata).faces.length) {
       delete (ret.metadata as PhotoMetadata).faces;
     }

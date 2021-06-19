@@ -1,11 +1,10 @@
-import {MediaDimensionEntity} from '../../../../../src/backend/model/database/sql/enitites/MediaEntity';
 import {
   CameraMetadataEntity,
   GPSMetadataEntity,
-  PhotoEntity,
-  PhotoMetadataEntity,
+  MediaDimensionEntity,
   PositionMetaDataEntity
-} from '../../../../../src/backend/model/database/sql/enitites/PhotoEntity';
+} from '../../../../../src/backend/model/database/sql/enitites/MediaEntity';
+import {PhotoEntity, PhotoMetadataEntity} from '../../../../../src/backend/model/database/sql/enitites/PhotoEntity';
 import {OrientationTypes} from 'ts-exif-parser';
 import {DirectoryEntity} from '../../../../../src/backend/model/database/sql/enitites/DirectoryEntity';
 import {VideoEntity, VideoMetadataEntity} from '../../../../../src/backend/model/database/sql/enitites/VideoEntity';

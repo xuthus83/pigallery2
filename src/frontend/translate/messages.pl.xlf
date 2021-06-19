@@ -2828,6 +2828,14 @@
         <source>Shows albums tab in the top bar and enables creating saved searches.</source>
         <target>Shows albums tab in the top bar and enables creating saved searches.</target>
       </trans-unit>
+      <trans-unit id="709142926386769059" datatype="html">
+        <source>List metafiles</source>
+        <target>List metafiles</target>
+      </trans-unit>
+      <trans-unit id="500999559591740527" datatype="html">
+        <source>Search also returns with metafiles from directories that contain a media file of the matched search result</source>
+        <target>Search also returns with metafiles from directories that contain a media file of the matched search result</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

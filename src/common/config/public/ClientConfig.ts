@@ -31,6 +31,10 @@ export class ClientSearchConfig {
   maxMediaResult: number = 10000;
   @ConfigProperty({description: 'Search returns also with directories, not just media'})
   listDirectories: boolean = false;
+  @ConfigProperty({
+    description: 'Search also returns with metafiles from directories that contain a media file of the matched search result'
+  })
+  listMetafiles: boolean = false;
   @ConfigProperty({type: 'unsignedInt'})
   maxDirectoryResult: number = 200;
 }

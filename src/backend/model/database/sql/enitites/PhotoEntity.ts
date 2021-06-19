@@ -3,78 +3,7 @@ import {CameraMetadata, GPSMetadata, PhotoDTO, PhotoMetadata, PositionMetaData} 
 import {MediaEntity, MediaMetadataEntity} from './MediaEntity';
 import {columnCharsetCS} from './EntityUtils';
 
-export class CameraMetadataEntity implements CameraMetadata {
 
-  @Column('int', {nullable: true, unsigned: true})
-  ISO: number;
-
-
-  @Column({
-    type: 'text', nullable: true,
-    charset: columnCharsetCS.charset,
-    collation: columnCharsetCS.collation
-  })
-  model: string;
-
-
-  @Column({
-    type: 'text', nullable: true,
-    charset: columnCharsetCS.charset,
-    collation: columnCharsetCS.collation
-  })
-  make: string;
-
-  @Column('float', {nullable: true})
-  fStop: number;
-
-  @Column('float', {nullable: true})
-  exposure: number;
-
-  @Column('float', {nullable: true})
-  focalLength: number;
-
-  @Column('text', {nullable: true})
-  lens: string;
-}
-
-
-export class GPSMetadataEntity implements GPSMetadata {
-
-  @Column('float', {nullable: true})
-  latitude: number;
-  @Column('float', {nullable: true})
-  longitude: number;
-  @Column('int', {nullable: true})
-  altitude: number;
-}
-
-
-export class PositionMetaDataEntity implements PositionMetaData {
-
-  @Column(type => GPSMetadataEntity)
-  GPSData: GPSMetadataEntity;
-
-  @Column({
-    type: 'text', nullable: true,
-    charset: columnCharsetCS.charset,
-    collation: columnCharsetCS.collation
-  })
-  country: string;
-
-  @Column({
-    type: 'text', nullable: true,
-    charset: columnCharsetCS.charset,
-    collation: columnCharsetCS.collation
-  })
-  state: string;
-
-  @Column({
-    type: 'text', nullable: true,
-    charset: columnCharsetCS.charset,
-    collation: columnCharsetCS.collation
-  })
-  city: string;
-}
 
 
 export class PhotoMetadataEntity extends MediaMetadataEntity implements PhotoMetadata {
