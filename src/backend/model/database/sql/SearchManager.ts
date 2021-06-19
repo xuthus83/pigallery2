@@ -37,6 +37,14 @@ import {FileEntity} from './enitites/FileEntity';
 
 export class SearchManager implements ISQLSearchManager {
 
+  // This trick enables us to list less rows as faces will be concatenated into one row
+  // Also typeorm does not support automatic mapping of nested foreign keys
+  // (i.e: leftJoinAndSelect('media.metadata.faces', 'faces')  does not work)
+  private FACE_SELECT = Config.Server.Database.type === DatabaseType.mysql ?
+    'CONCAT(\'[\' , GROUP_CONCAT(  \'{"name": "\' , person.name , \'", "box": {"top":\' , faces.box.top , \', "left":\' , faces.box.left , \', "height":\' , faces.box.height ,\', "width":\' , faces.box.width , \'}}\'  ) ,\']\') as media_metadataFaces' :
+    '\'[\' || GROUP_CONCAT(  \'{"name": "\' || person.name || \'", "box": {"top":\' || faces.box.top || \', "left":\' || faces.box.left || \', "height":\' || faces.box.height ||\', "width":\' || faces.box.width || \'}}\'  ) ||\']\' as media_metadataFaces';
+  private DIRECTORY_SELECT = ['directory.id', 'directory.name', 'directory.path'];
+
   private static autoCompleteItemsUnique(array: Array<AutoCompleteItem>): Array<AutoCompleteItem> {
     const a = array.concat();
     for (let i = 0; i < a.length; ++i) {
@@ -151,19 +159,11 @@ export class SearchManager implements ISQLSearchManager {
       resultOverflow: false
     };
 
-    // This trick enables us to list less rows as faces will be concatenated into one row
-    // Also typeorm does not support automatic mapping of nested foreign keys
-    // (i.e: leftJoinAndSelect('media.metadata.faces', 'faces')  does not work)
-    const facesQuery = Config.Server.Database.type === DatabaseType.mysql ?
-      'CONCAT(\'[\' , GROUP_CONCAT(  \'{"name": "\' , person.name , \'", "box": {"top":\' , faces.box.top , \', "left":\' , faces.box.left , \', "height":\' , faces.box.height ,\', "width":\' , faces.box.width , \'}}\'  ) ,\']\') as media_metadataFaces' :
-      '\'[\' || GROUP_CONCAT(  \'{"name": "\' || person.name || \'", "box": {"top":\' || faces.box.top || \', "left":\' || faces.box.left || \', "height":\' || faces.box.height ||\', "width":\' || faces.box.width || \'}}\'  ) ||\']\' as media_metadataFaces';
-    const directorySelect = ['directory.id', 'directory.name', 'directory.path'];
-
 
     const rawAndEntries = await connection
       .getRepository(MediaEntity)
       .createQueryBuilder('media')
-      .select(['media', ...directorySelect, facesQuery])
+      .select(['media', ...this.DIRECTORY_SELECT, this.FACE_SELECT])
       .where(this.buildWhereQuery(query))
       .leftJoin('media.directory', 'directory')
       .leftJoin('media.metadata.faces', 'faces')
@@ -187,7 +187,7 @@ export class SearchManager implements ISQLSearchManager {
     if (Config.Client.Search.listMetafiles === true) {
       result.metaFile = await connection.getRepository(FileEntity)
         .createQueryBuilder('file')
-        .select(['file', ...directorySelect])
+        .select(['file', ...this.DIRECTORY_SELECT])
         .innerJoin(q => q.from(MediaEntity, 'media')
             .select('distinct directory.id')
             .where(this.buildWhereQuery(query))
@@ -229,7 +229,8 @@ export class SearchManager implements ISQLSearchManager {
     const sqlQuery: SelectQueryBuilder<PhotoEntity> = connection
       .getRepository(PhotoEntity)
       .createQueryBuilder('media')
-      .innerJoinAndSelect('media.directory', 'directory')
+      .select(['media', ...this.DIRECTORY_SELECT])
+      .innerJoin('media.directory', 'directory')
       .where(this.buildWhereQuery(query));
 
 

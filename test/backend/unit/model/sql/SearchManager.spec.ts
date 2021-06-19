@@ -30,10 +30,10 @@ import {Connection} from 'typeorm';
 import {DirectoryEntity} from '../../../../../src/backend/model/database/sql/enitites/DirectoryEntity';
 import {GPSMetadata, PhotoDTO, PhotoMetadata} from '../../../../../src/common/entities/PhotoDTO';
 import {VideoDTO} from '../../../../../src/common/entities/VideoDTO';
-import {MediaDTO} from '../../../../../src/common/entities/MediaDTO';
 import {AutoCompleteItem} from '../../../../../src/common/entities/AutoCompleteItem';
 import {Config} from '../../../../../src/common/config/private/Config';
 import {SearchQueryParser} from '../../../../../src/common/SearchQueryParser';
+import {FileDTO} from '../../../../../src/common/entities/FileDTO';
 
 const deepEqualInAnyOrder = require('deep-equal-in-any-order');
 const chai = require('chai');
@@ -82,6 +82,7 @@ describe('SearchManager', (sqlHelper: DBTestHelper) => {
    * |- v
    * |- p
    * |- p2
+   * |- gpx
    * |-> subDir
    *     |- pFaceLess
    * |-> subDir2
@@ -96,6 +97,7 @@ describe('SearchManager', (sqlHelper: DBTestHelper) => {
   let p2: PhotoDTO;
   let pFaceLess: PhotoDTO;
   let p4: PhotoDTO;
+  let gpx: FileDTO;
 
 
   const setUpTestGallery = async (): Promise<void> => {
@@ -104,16 +106,19 @@ describe('SearchManager', (sqlHelper: DBTestHelper) => {
     subDir2 = TestHelper.getDirectoryEntry(directory, 'Return of the Jedi');
     p = TestHelper.getPhotoEntry1(directory);
     p2 = TestHelper.getPhotoEntry2(directory);
+    v = TestHelper.getVideoEntry1(directory);
+    gpx = TestHelper.getRandomizedGPXEntry(directory);
     p4 = TestHelper.getPhotoEntry4(subDir2);
     const pFaceLessTmp = TestHelper.getPhotoEntry3(subDir);
     delete pFaceLessTmp.metadata.faces;
-    v = TestHelper.getVideoEntry1(directory);
 
     dir = await DBTestHelper.persistTestDir(directory);
+
     subDir = dir.directories[0];
     subDir2 = dir.directories[1];
     p = (dir.media.filter(m => m.name === p.name)[0] as any);
     p2 = (dir.media.filter(m => m.name === p2.name)[0] as any);
+    gpx = (dir.metaFile[0] as any);
     v = (dir.media.filter(m => m.name === v.name)[0] as any);
     p4 = (dir.directories[1].media[0] as any);
     pFaceLess = (dir.directories[0].media[0] as any);
@@ -129,12 +134,14 @@ describe('SearchManager', (sqlHelper: DBTestHelper) => {
   before(async () => {
     await setUpSqlDB();
     Config.Client.Search.listDirectories = true;
+    Config.Client.Search.listMetafiles = false;
   });
 
 
   after(async () => {
     await sqlHelper.clearDB();
     Config.Client.Search.listDirectories = false;
+    Config.Client.Search.listMetafiles = false;
   });
 
   it('should get autocomplete', async () => {
@@ -190,7 +197,7 @@ describe('SearchManager', (sqlHelper: DBTestHelper) => {
 
   });
 
-  const searchifyMedia = (m: MediaDTO): MediaDTO => {
+  const searchifyMedia = <T extends FileDTO | PhotoDTO>(m: T): T => {
     const tmpM = m.directory.media;
     const tmpD = m.directory.directories;
     const tmpP = m.directory.preview;
@@ -203,8 +210,9 @@ describe('SearchManager', (sqlHelper: DBTestHelper) => {
     delete ret.directory.lastScanned;
     delete ret.directory.lastModified;
     delete ret.directory.mediaCount;
-    if ((ret.metadata as PhotoMetadata).faces && !(ret.metadata as PhotoMetadata).faces.length) {
-      delete (ret.metadata as PhotoMetadata).faces;
+    if ((ret as PhotoDTO).metadata &&
+      ((ret as PhotoDTO).metadata as PhotoMetadata).faces && !((ret as PhotoDTO).metadata as PhotoMetadata).faces.length) {
+      delete ((ret as PhotoDTO).metadata as PhotoMetadata).faces;
     }
     m.directory.directories = tmpD;
     m.directory.media = tmpM;
@@ -233,11 +241,20 @@ describe('SearchManager', (sqlHelper: DBTestHelper) => {
 
   const removeDir = (result: SearchResultDTO) => {
     result.media = result.media.map(m => searchifyMedia(m));
+    result.metaFile = result.metaFile.map(m => searchifyMedia(m));
     result.directories = result.directories.map(m => searchifyDir(m));
     return Utils.clone(result);
   };
 
   describe('advanced search', async () => {
+    afterEach(async () => {
+      Config.Client.Search.listDirectories = false;
+      Config.Client.Search.listMetafiles = false;
+    });
+    afterEach(async () => {
+      Config.Client.Search.listDirectories = false;
+      Config.Client.Search.listMetafiles = false;
+    });
 
     it('should AND', async () => {
       const sm = new SearchManager();
@@ -484,7 +501,7 @@ describe('SearchManager', (sqlHelper: DBTestHelper) => {
         expect(removeDir(await sm.search(query)))
           .to.deep.equalInAnyOrder(removeDir({
           searchQuery: query,
-          directories: [dir, subDir, subDir2],
+          directories: [],
           media: [],
           metaFile: [],
           resultOverflow: false
@@ -505,7 +522,7 @@ describe('SearchManager', (sqlHelper: DBTestHelper) => {
         expect(removeDir(await sm.search(query)))
           .to.deep.equalInAnyOrder(removeDir({
           searchQuery: query,
-          directories: [dir, subDir, subDir2],
+          directories: [],
           media: [p2, pFaceLess, p4],
           metaFile: [],
           resultOverflow: false
@@ -708,7 +725,7 @@ describe('SearchManager', (sqlHelper: DBTestHelper) => {
 
         expect(removeDir(await sm.search(query))).to.deep.equalInAnyOrder(removeDir({
           searchQuery: query,
-          directories: [subDir2],
+          directories: [],
           media: [p4],
           metaFile: [],
           resultOverflow: false
@@ -721,7 +738,7 @@ describe('SearchManager', (sqlHelper: DBTestHelper) => {
 
         expect(removeDir(await sm.search(query))).to.deep.equalInAnyOrder(removeDir({
           searchQuery: query,
-          directories: [dir, subDir, subDir2],
+          directories: [],
           media: [p, p2, v, pFaceLess, p4],
           metaFile: [],
           resultOverflow: false
@@ -740,7 +757,7 @@ describe('SearchManager', (sqlHelper: DBTestHelper) => {
           type: SearchQueryTypes.directory
         } as TextSearch))).to.deep.equalInAnyOrder(removeDir({
           searchQuery: query,
-          directories: [dir],
+          directories: [],
           media: [p, p2, v],
           metaFile: [],
           resultOverflow: false
@@ -755,7 +772,7 @@ describe('SearchManager', (sqlHelper: DBTestHelper) => {
 
         expect(removeDir(await sm.search(query))).to.deep.equalInAnyOrder(removeDir({
           searchQuery: query,
-          directories: [subDir2],
+          directories: [],
           media: [p4],
           metaFile: [],
           resultOverflow: false
@@ -769,7 +786,7 @@ describe('SearchManager', (sqlHelper: DBTestHelper) => {
 
         expect(removeDir(await sm.search(query))).to.deep.equalInAnyOrder(removeDir({
           searchQuery: query,
-          directories: [subDir2],
+          directories: [],
           media: [p4],
           metaFile: [],
           resultOverflow: false
@@ -1211,6 +1228,7 @@ describe('SearchManager', (sqlHelper: DBTestHelper) => {
     }) as any).timeout(40000);
 
     it('search result should return directory', async () => {
+      Config.Client.Search.listDirectories = true;
       const sm = new SearchManager();
 
       const query = {
@@ -1223,6 +1241,24 @@ describe('SearchManager', (sqlHelper: DBTestHelper) => {
         directories: [subDir],
         media: [pFaceLess],
         metaFile: [],
+        resultOverflow: false
+      } as SearchResultDTO));
+    });
+    it('search result should return meta files', async () => {
+      Config.Client.Search.listMetafiles = true;
+      const sm = new SearchManager();
+
+      const query = {
+        text: dir.name,
+        type: SearchQueryTypes.any_text,
+        matchType: TextSearchQueryMatchTypes.exact_match
+      } as TextSearch;
+      expect(removeDir(await sm.search(query)))
+        .to.deep.equalInAnyOrder(removeDir({
+        searchQuery: query,
+        directories: [],
+        media: [p, p2, v],
+        metaFile: [gpx],
         resultOverflow: false
       } as SearchResultDTO));
     });

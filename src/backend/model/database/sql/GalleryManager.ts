@@ -312,6 +312,11 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
         await this.fillPreviewFromSubDir(connection, dir);
       }
     }
+    if (dir.metaFile) {
+      for (const item of dir.metaFile) {
+        item.directory = dir;
+      }
+    }
     if (dir.directories) {
       for (const item of dir.directories) {
         await this.fillPreviewForSubDir(connection, item);
