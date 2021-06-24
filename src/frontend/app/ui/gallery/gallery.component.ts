@@ -165,6 +165,7 @@ export class GalleryComponent implements OnInit, OnDestroy {
       return;
     }
     switch (this.galleryService.sorting.value) {
+      case SortingMethods.ascRating: // directories does not have rating
       case SortingMethods.ascName:
         this.directories.sort((a: DirectoryDTO, b: DirectoryDTO) => compare()(a.name, b.name));
         break;
@@ -175,6 +176,8 @@ export class GalleryComponent implements OnInit, OnDestroy {
         }
         this.directories.sort((a: DirectoryDTO, b: DirectoryDTO) => compare()(a.name, b.name));
         break;
+
+      case SortingMethods.descRating: // directories does not have rating
       case SortingMethods.descName:
         this.directories.sort((a: DirectoryDTO, b: DirectoryDTO) => compare({order: 'desc'})(a.name, b.name));
         break;

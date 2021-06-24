@@ -257,6 +257,12 @@ export class GalleryGridComponent implements OnChanges, OnInit, AfterViewInit, O
           return b.metadata.creationDate - a.metadata.creationDate;
         });
         break;
+      case SortingMethods.ascRating:
+        this.media.sort((a: PhotoDTO, b: PhotoDTO) => (a.metadata.rating || 0) - (b.metadata.rating || 0));
+        break;
+      case SortingMethods.descRating:
+        this.media.sort((a: PhotoDTO, b: PhotoDTO) => (b.metadata.rating || 0) - (a.metadata.rating || 0));
+        break;
       case SortingMethods.random:
         this.rndService.setSeed(this.media.length);
         this.media.sort((a: PhotoDTO, b: PhotoDTO): number => {

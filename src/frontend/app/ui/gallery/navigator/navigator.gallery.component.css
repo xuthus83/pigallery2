@@ -30,7 +30,11 @@ ol {
 }
 
 .dropdown-menu {
-  min-width: 10rem;
+  min-width: 13rem;
+}
+
+.dropdown-item{
+  padding: 0.25rem 0.5rem;
 }
 
 .row {

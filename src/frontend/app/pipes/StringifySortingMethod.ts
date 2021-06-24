@@ -9,6 +9,10 @@ export class StringifySortingMethod implements PipeTransform {
 
   transform(method: SortingMethods): string {
     switch (method) {
+      case SortingMethods.ascRating:
+        return $localize`ascending rating`;
+      case SortingMethods.descRating:
+        return $localize`descending rating`;
       case SortingMethods.ascName:
         return $localize`ascending name`;
       case SortingMethods.descName:

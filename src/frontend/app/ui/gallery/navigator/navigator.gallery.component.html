@@ -43,7 +43,9 @@
         <li class="row dropdown-item" role="menuitem"
             *ngFor="let type of sortingMethodsType"
             (click)="setSorting(type.key)">
-          <div class="col-3" [outerHTML]="type.key | iconizeSorting"></div>
+          <div class="col-3">
+            <div [outerHTML]="type.key | iconizeSorting"></div>
+          </div>
           <div class="col-9">{{type.key | stringifySorting}}</div>
         </li>
       </ul>
