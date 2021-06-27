@@ -4,7 +4,7 @@ import * as fs from 'fs';
 import {SQLConnection} from '../../src/backend/model/database/sql/SQLConnection';
 import {DatabaseType} from '../../src/common/config/private/PrivateConfig';
 import {ProjectPath} from '../../src/backend/ProjectPath';
-import {DirectoryDTO} from '../../src/common/entities/DirectoryDTO';
+import {DirectoryBaseDTO, ParentDirectoryDTO} from '../../src/common/entities/DirectoryDTO';
 import {DirectoryEntity} from '../../src/backend/model/database/sql/enitites/DirectoryEntity';
 import {ObjectManagers} from '../../src/backend/model/ObjectManagers';
 import {DiskMangerWorker} from '../../src/backend/model/threading/DiskMangerWorker';
@@ -18,7 +18,7 @@ const savedDescribe = describe;
 
 class IndexingManagerTest extends IndexingManager {
 
-  public async saveToDB(scannedDirectory: DirectoryDTO): Promise<void> {
+  public async saveToDB(scannedDirectory: ParentDirectoryDTO): Promise<void> {
     return super.saveToDB(scannedDirectory);
   }
 }
@@ -83,14 +83,14 @@ export class DBTestHelper {
     };
   }
 
-  public static async persistTestDir(directory: DirectoryDTO): Promise<DirectoryEntity> {
+  public static async persistTestDir(directory: DirectoryBaseDTO): Promise<DirectoryEntity> {
     await ObjectManagers.InitSQLManagers();
     const connection = await SQLConnection.getConnection();
     ObjectManagers.getInstance().IndexingManager.indexDirectory = () => Promise.resolve(null);
 
 
     const im = new IndexingManagerTest();
-    await im.saveToDB(directory);
+    await im.saveToDB(directory as ParentDirectoryDTO);
     // not saving subdirs. saveToDB destroys data
     // await im.saveToDB(subDir);
     // await im.saveToDB(subDir2);
@@ -104,7 +104,7 @@ export class DBTestHelper {
     const dir = await gm.selectParentDir(connection, directory.name, path.join(path.dirname('.'), path.sep));
     await gm.fillParentDir(connection, dir);
 
-    const populateDir = async (d: DirectoryDTO) => {
+    const populateDir = async (d: DirectoryBaseDTO) => {
       for (let i = 0; i < d.directories.length; i++) {
         d.directories[i] = await gm.selectParentDir(connection, d.directories[i].name,
           path.join(DiskMangerWorker.pathFromParent(d), path.sep));

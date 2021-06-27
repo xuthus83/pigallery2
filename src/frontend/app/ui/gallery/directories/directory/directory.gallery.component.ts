@@ -1,6 +1,6 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {DomSanitizer, SafeStyle} from '@angular/platform-browser';
-import {DirectoryDTO} from '../../../../../../common/entities/DirectoryDTO';
+import {SubDirectoryDTO} from '../../../../../../common/entities/DirectoryDTO';
 import {RouterLink} from '@angular/router';
 import {Utils} from '../../../../../../common/Utils';
 import {Media} from '../../Media';
@@ -16,7 +16,7 @@ import {PreviewPhotoDTO} from '../../../../../../common/entities/PhotoDTO';
   providers: [RouterLink],
 })
 export class GalleryDirectoryComponent implements OnInit, OnDestroy {
-  @Input() directory: DirectoryDTO;
+  @Input() directory: SubDirectoryDTO;
   @Input() size: number;
   thumbnail: Thumbnail = null;
 

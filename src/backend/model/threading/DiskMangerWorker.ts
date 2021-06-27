@@ -1,6 +1,6 @@
 import {promises as fsp, Stats} from 'fs';
 import * as path from 'path';
-import {DirectoryDTO} from '../../../common/entities/DirectoryDTO';
+import {ParentDirectoryDTO, SubDirectoryDTO} from '../../../common/entities/DirectoryDTO';
 import {PhotoDTO} from '../../../common/entities/PhotoDTO';
 import {ProjectPath} from '../../ProjectPath';
 import {Config} from '../../../common/config/private/Config';
@@ -77,13 +77,13 @@ export class DiskMangerWorker {
   }
 
   public static async scanDirectoryNoMetadata(relativeDirectoryName: string,
-                                              settings: DirectoryScanSettings = {}): Promise<DirectoryDTO<FileDTO>> {
+                                              settings: DirectoryScanSettings = {}): Promise<ParentDirectoryDTO<FileDTO>> {
     settings.noMetadata = true;
-    return this.scanDirectory(relativeDirectoryName, settings);
+    return (await this.scanDirectory(relativeDirectoryName, settings)) as ParentDirectoryDTO<FileDTO>;
   }
 
   public static async scanDirectory(relativeDirectoryName: string,
-                                    settings: DirectoryScanSettings = {}): Promise<DirectoryDTO> {
+                                    settings: DirectoryScanSettings = {}): Promise<ParentDirectoryDTO> {
 
     relativeDirectoryName = this.normalizeDirPath(relativeDirectoryName);
     const directoryName = DiskMangerWorker.dirName(relativeDirectoryName);
@@ -91,7 +91,7 @@ export class DiskMangerWorker {
     const absoluteDirectoryName = path.join(ProjectPath.ImageFolder, relativeDirectoryName);
 
     const stat = await fsp.stat(path.join(ProjectPath.ImageFolder, relativeDirectoryName));
-    const directory: DirectoryDTO = {
+    const directory: ParentDirectoryDTO = {
       id: null,
       parent: null,
       name: directoryName,
@@ -124,7 +124,7 @@ export class DiskMangerWorker {
           {
             previewOnly: true
           }
-        );
+        ) as SubDirectoryDTO;
 
         d.lastScanned = 0; // it was not a fully scan
         d.isPartial = true;

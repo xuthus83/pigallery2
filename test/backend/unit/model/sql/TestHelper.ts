@@ -18,7 +18,7 @@ import {
   PositionMetaData,
   PreviewPhotoDTO
 } from '../../../../../src/common/entities/PhotoDTO';
-import {DirectoryDTO} from '../../../../../src/common/entities/DirectoryDTO';
+import {DirectoryBaseDTO} from '../../../../../src/common/entities/DirectoryDTO';
 import {FileDTO} from '../../../../../src/common/entities/FileDTO';
 import {DiskMangerWorker} from '../../../../../src/backend/model/threading/DiskMangerWorker';
 
@@ -26,7 +26,7 @@ export class TestHelper {
 
   static creationCounter = 0;
 
-  public static getDirectoryEntry(parent: DirectoryDTO = null, name = 'wars dir'): DirectoryEntity {
+  public static getDirectoryEntry(parent: DirectoryBaseDTO = null, name = 'wars dir'): DirectoryEntity {
 
     const dir = new DirectoryEntity();
     dir.name = name;
@@ -45,7 +45,7 @@ export class TestHelper {
     return dir;
   }
 
-  public static getPhotoEntry(dir: DirectoryDTO): PhotoEntity {
+  public static getPhotoEntry(dir: DirectoryBaseDTO): PhotoEntity {
     const sd = new MediaDimensionEntity();
     sd.height = 200;
     sd.width = 200;
@@ -91,7 +91,7 @@ export class TestHelper {
     return d;
   }
 
-  public static getVideoEntry(dir: DirectoryDTO): VideoEntity {
+  public static getVideoEntry(dir: DirectoryBaseDTO): VideoEntity {
     const sd = new MediaDimensionEntity();
     sd.height = 200;
     sd.width = 200;
@@ -115,13 +115,13 @@ export class TestHelper {
     return d;
   }
 
-  public static getVideoEntry1(dir: DirectoryDTO): VideoEntity {
+  public static getVideoEntry1(dir: DirectoryBaseDTO): VideoEntity {
     const p = TestHelper.getVideoEntry(dir);
     p.name = 'swVideo.mp4';
     return p;
   }
 
-  public static getPhotoEntry1(dir: DirectoryDTO): PhotoEntity {
+  public static getPhotoEntry1(dir: DirectoryBaseDTO): PhotoEntity {
     const p = TestHelper.getPhotoEntry(dir);
 
     p.metadata.caption = 'Han Solo\'s dice';
@@ -158,7 +158,7 @@ export class TestHelper {
     return p;
   }
 
-  public static getPhotoEntry2(dir: DirectoryDTO): PhotoEntity {
+  public static getPhotoEntry2(dir: DirectoryBaseDTO): PhotoEntity {
     const p = TestHelper.getPhotoEntry(dir);
 
     p.metadata.caption = 'Light saber';
@@ -190,7 +190,7 @@ export class TestHelper {
     return p;
   }
 
-  public static getPhotoEntry3(dir: DirectoryDTO): PhotoEntity {
+  public static getPhotoEntry3(dir: DirectoryBaseDTO): PhotoEntity {
     const p = TestHelper.getPhotoEntry(dir);
 
     p.metadata.caption = 'Amber stone';
@@ -218,7 +218,7 @@ export class TestHelper {
     return p;
   }
 
-  public static getPhotoEntry4(dir: DirectoryDTO): PhotoEntity {
+  public static getPhotoEntry4(dir: DirectoryBaseDTO): PhotoEntity {
     const p = TestHelper.getPhotoEntry(dir);
 
     p.metadata.caption = 'Millennium falcon';
@@ -250,9 +250,9 @@ export class TestHelper {
     return p;
   }
 
-  public static getRandomizedDirectoryEntry(parent: DirectoryDTO = null, forceStr: string = null): DirectoryDTO<MediaDTO> {
+  public static getRandomizedDirectoryEntry(parent: DirectoryBaseDTO = null, forceStr: string = null): DirectoryBaseDTO<MediaDTO> {
 
-    const dir: DirectoryDTO = {
+    const dir: DirectoryBaseDTO = {
       id: null,
       name: DiskMangerWorker.dirName(forceStr || Math.random().toString(36).substring(7)),
       path: DiskMangerWorker.pathFromParent({path: '', name: '.'}),
@@ -272,7 +272,7 @@ export class TestHelper {
     return dir;
   }
 
-  public static getRandomizedGPXEntry(dir: DirectoryDTO, forceStr: string = null): FileDTO {
+  public static getRandomizedGPXEntry(dir: DirectoryBaseDTO, forceStr: string = null): FileDTO {
     const d: FileDTO = {
       id: null,
       name: forceStr + '_' + Math.random().toString(36).substring(7) + '.gpx',
@@ -305,7 +305,7 @@ export class TestHelper {
     return f;
   }
 
-  public static getRandomizedPhotoEntry(dir: DirectoryDTO, forceStr: string = null, faces: number = 2): PhotoDTO {
+  public static getRandomizedPhotoEntry(dir: DirectoryBaseDTO, forceStr: string = null, faces: number = 2): PhotoDTO {
 
 
     const rndStr = (): string => {
@@ -372,7 +372,7 @@ export class TestHelper {
     return p;
   }
 
-  static updatePreview(dir: DirectoryDTO): void {
+  static updatePreview(dir: DirectoryBaseDTO): void {
     if (dir.media.length > 0) {
       dir.preview = dir.media.sort((a, b): number => b.metadata.creationDate - a.metadata.creationDate)[0];
     } else {

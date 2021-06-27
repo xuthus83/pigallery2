@@ -1,14 +1,9 @@
-import {DirectoryBaseDTO, DirectoryDTO} from './DirectoryDTO';
+import {DirectoryPathDTO} from './DirectoryDTO';
 
-export interface FileBaseDTO {
+
+export interface FileDTO {
   id: number;
   name: string;
-  directory: DirectoryBaseDTO;
-}
-
-export interface FileDTO extends FileBaseDTO {
-  id: number;
-  name: string;
-  directory: DirectoryDTO;
+  directory: DirectoryPathDTO;
 }
 

@@ -1,6 +1,6 @@
 import {Component, ElementRef, Input, OnChanges} from '@angular/core';
-import { DeviceDetectorService } from 'ngx-device-detector';
-import {DirectoryDTO} from '../../../../../common/entities/DirectoryDTO';
+import {DeviceDetectorService} from 'ngx-device-detector';
+import {SubDirectoryDTO} from '../../../../../common/entities/DirectoryDTO';
 
 @Component({
   selector: 'app-gallery-directories',
@@ -9,7 +9,7 @@ import {DirectoryDTO} from '../../../../../common/entities/DirectoryDTO';
 })
 export class DirectoriesComponent implements OnChanges {
 
-  @Input() directories: DirectoryDTO[];
+  @Input() directories: SubDirectoryDTO[];
   size: number;
   isDesktop: boolean;
 

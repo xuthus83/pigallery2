@@ -3,7 +3,7 @@ import {DuplicateService} from './duplicates.service';
 import {Utils} from '../../../../common/Utils';
 import {QueryService} from '../../model/query.service';
 import {DuplicatesDTO} from '../../../../common/entities/DuplicatesDTO';
-import {DirectoryDTO} from '../../../../common/entities/DirectoryDTO';
+import {DirectoryPathDTO} from '../../../../common/entities/DirectoryDTO';
 import {Subscription} from 'rxjs';
 import {Config} from '../../../../common/config/public/Config';
 import {PageHelper} from '../../model/page.helper';
@@ -51,16 +51,17 @@ export class DuplicateComponent implements OnDestroy {
       this.duplicateCount.photos = duplicates.reduce((prev: number, curr): number => prev + curr.media.length, 0);
       this.duplicateCount.pairs = duplicates.length;
 
-      const getMostFrequentDir = (dupls: DuplicatesDTO[]): DirectoryDTO<MediaDTO> | null => {
+      const getMostFrequentDir = (dupls: DuplicatesDTO[]): DirectoryPathDTO | null => {
         if (dupls.length === 0) {
           return null;
         }
-        const dirFrequency: { [key: number]: { count: number, dir: DirectoryDTO } } = {};
+        const dirFrequency: { [key: string]: { count: number, dir: DirectoryPathDTO } } = {};
         dupls.forEach((d): void => d.media.forEach((m): void => {
-          dirFrequency[m.directory.id] = dirFrequency[m.directory.id] || {dir: m.directory, count: 0};
-          dirFrequency[m.directory.id].count++;
+          const k = Utils.concatUrls(m.directory.path, m.directory.name);
+          dirFrequency[k] = dirFrequency[k] || {dir: m.directory, count: 0};
+          dirFrequency[k].count++;
         }));
-        let max: { count: number, dir: DirectoryDTO } = {count: -1, dir: null};
+        let max: { count: number, dir: DirectoryPathDTO } = {count: -1, dir: null};
         for (const freq of Object.values(dirFrequency)) {
           if (max.count <= freq.count) {
             max = freq;
@@ -71,8 +72,10 @@ export class DuplicateComponent implements OnDestroy {
 
       while (duplicates.length > 0) {
         const dir = getMostFrequentDir(duplicates);
-        const group = duplicates.filter((d): MediaDTO => d.media.find((m): boolean => m.directory.id === dir.id));
-        duplicates = duplicates.filter((d): boolean => !d.media.find((m): boolean => m.directory.id === dir.id));
+        const group = duplicates.filter((d): MediaDTO =>
+          d.media.find((m): boolean => m.directory.name === dir.name && m.directory.path === dir.path));
+        duplicates = duplicates.filter((d): boolean =>
+          !d.media.find((m): boolean => m.directory.name === dir.name && m.directory.path === dir.path));
         this.directoryGroups.push({name: this.getDirectoryPath(dir) + ' (' + group.length + ')', duplicates: group});
       }
       this.renderMore();
@@ -86,7 +89,7 @@ export class DuplicateComponent implements OnDestroy {
     }
   }
 
-  getDirectoryPath(directory: DirectoryDTO): string {
+  getDirectoryPath(directory: DirectoryPathDTO): string {
     return Utils.concatUrls(directory.path, directory.name);
   }
 

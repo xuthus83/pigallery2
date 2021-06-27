@@ -1,5 +1,4 @@
 import {Utils} from '../../../common/Utils';
-import {DirectoryDTO} from '../../../common/entities/DirectoryDTO';
 
 
 export interface TaskQueEntry<I, O> {

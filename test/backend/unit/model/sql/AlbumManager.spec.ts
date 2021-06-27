@@ -1,5 +1,5 @@
 import {DBTestHelper} from '../../../DBTestHelper';
-import {DirectoryDTO} from '../../../../../src/common/entities/DirectoryDTO';
+import { ParentDirectoryDTO, SubDirectoryDTO} from '../../../../../src/common/entities/DirectoryDTO';
 import {TestHelper} from './TestHelper';
 import {ObjectManagers} from '../../../../../src/backend/model/ObjectManagers';
 import {PhotoDTO, PhotoMetadata} from '../../../../../src/common/entities/PhotoDTO';
@@ -40,9 +40,9 @@ describe('AlbumManager', (sqlHelper: DBTestHelper) => {
    *     |- p4
    */
 
-  let dir: DirectoryDTO;
-  let subDir: DirectoryDTO;
-  let subDir2: DirectoryDTO;
+  let dir: ParentDirectoryDTO;
+  let subDir: SubDirectoryDTO;
+  let subDir2: SubDirectoryDTO;
   let v: VideoDTO;
   let p: PhotoDTO;
   let p2: PhotoDTO;
@@ -51,7 +51,7 @@ describe('AlbumManager', (sqlHelper: DBTestHelper) => {
 
 
   const setUpTestGallery = async (): Promise<void> => {
-    const directory: DirectoryDTO = TestHelper.getDirectoryEntry();
+    const directory: ParentDirectoryDTO = TestHelper.getDirectoryEntry();
     subDir = TestHelper.getDirectoryEntry(directory, 'The Phantom Menace');
     subDir2 = TestHelper.getDirectoryEntry(directory, 'Return of the Jedi');
     p = TestHelper.getRandomizedPhotoEntry(directory, 'Photo1');
@@ -78,20 +78,22 @@ describe('AlbumManager', (sqlHelper: DBTestHelper) => {
 
 
   const toAlbumPreview = (m: MediaDTO): MediaDTO => {
-    const tmpM = m.directory.media;
-    const tmpD = m.directory.directories;
-    const tmpP = m.directory.preview;
-    const tmpMT = m.directory.metaFile;
-    delete m.directory.directories;
-    delete m.directory.media;
-    delete m.directory.preview;
-    delete m.directory.metaFile;
+    // generated dirs for test contain everything, not like return values from the server.
+    const tmpDir: ParentDirectoryDTO = m.directory as ParentDirectoryDTO;
+    const tmpM = tmpDir.media;
+    const tmpD = tmpDir.directories;
+    const tmpP = tmpDir.preview;
+    const tmpMT = tmpDir.metaFile;
+    delete tmpDir.directories;
+    delete tmpDir.media;
+    delete tmpDir.preview;
+    delete tmpDir.metaFile;
     const ret = Utils.clone(m);
     delete (ret.metadata as PhotoMetadata).faces;
-    m.directory.directories = tmpD;
-    m.directory.media = tmpM;
-    m.directory.preview = tmpP;
-    m.directory.metaFile = tmpMT;
+    tmpDir.directories = tmpD;
+    tmpDir.media = tmpM;
+    tmpDir.preview = tmpP;
+    tmpDir.metaFile = tmpMT;
     return ret;
   };
 

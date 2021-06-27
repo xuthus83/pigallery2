@@ -1,4 +1,4 @@
-import {DirectoryDTO} from './DirectoryDTO';
+import {DirectoryPathDTO} from './DirectoryDTO';
 import {Utils} from '../Utils';
 
 export enum UserRoles {
@@ -50,7 +50,7 @@ export const UserDTOUtils = {
   },
 
 
-  isDirectoryAvailable: (directory: DirectoryDTO, permissions: string[]): boolean => {
+  isDirectoryAvailable: (directory: DirectoryPathDTO, permissions: string[]): boolean => {
     return UserDTOUtils.isDirectoryPathAvailable(
       Utils.concatUrls(directory.path, directory.name), permissions);
   }

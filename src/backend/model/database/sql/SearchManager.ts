@@ -241,14 +241,14 @@ export class SearchManager implements ISQLSearchManager {
 
   }
 
-  public async getPreview(queryIN: SearchQueryDTO): Promise<MediaDTO> {
+  public async getPreview(queryIN: SearchQueryDTO, ): Promise<MediaDTO> {
     const query = await this.prepareQuery(queryIN);
     const connection = await SQLConnection.getConnection();
 
     return await connection
       .getRepository(MediaEntity)
       .createQueryBuilder('media')
-      .innerJoinAndSelect('media.directory', 'directory')
+      .select(['media', ...this.DIRECTORY_SELECT])
       .where(this.buildWhereQuery(query))
       .orderBy('media.metadata.creationDate', 'DESC')
       .limit(1)

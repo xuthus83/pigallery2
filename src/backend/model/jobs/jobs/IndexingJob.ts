@@ -9,9 +9,10 @@ import {DatabaseType} from '../../../../common/config/private/PrivateConfig';
 import {DiskMangerWorker} from '../../threading/DiskMangerWorker';
 import {ProjectPath} from '../../../ProjectPath';
 import {backendTexts} from '../../../../common/BackendTexts';
-import {DirectoryDTO} from '../../../../common/entities/DirectoryDTO';
+import {ParentDirectoryDTO} from '../../../../common/entities/DirectoryDTO';
 import {ISQLGalleryManager} from '../../database/sql/IGalleryManager';
 import {Logger} from '../../../Logger';
+import {FileDTO} from '../../../../common/entities/FileDTO';
 
 
 export class IndexingJob<S extends { indexChangesOnly: boolean } = { indexChangesOnly: boolean }> extends Job<S> {
@@ -45,7 +46,7 @@ export class IndexingJob<S extends { indexChangesOnly: boolean } = { indexChange
     const directory = this.directoriesToIndex.shift();
     this.Progress.Left = this.directoriesToIndex.length;
 
-    let scanned: DirectoryDTO;
+    let scanned: ParentDirectoryDTO<FileDTO>;
     let dirChanged = true;
 
     // check if the folder got modified if only changes need to be indexed

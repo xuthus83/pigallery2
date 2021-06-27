@@ -3,11 +3,11 @@ import * as fs from 'fs';
 import {NextFunction, Request, Response} from 'express';
 import {ErrorCodes, ErrorDTO} from '../../../common/entities/Error';
 import {ContentWrapper} from '../../../common/entities/ConentWrapper';
-import {DirectoryDTO} from '../../../common/entities/DirectoryDTO';
+import {ParentDirectoryDTO, SubDirectoryDTO} from '../../../common/entities/DirectoryDTO';
 import {ProjectPath} from '../../ProjectPath';
 import {Config} from '../../../common/config/private/Config';
 import {ThumbnailSourceType} from '../../model/threading/PhotoWorker';
-import {MediaBaseDTO, MediaDTO} from '../../../common/entities/MediaDTO';
+import {MediaDTO} from '../../../common/entities/MediaDTO';
 import {PhotoProcessing} from '../../model/fileprocessing/PhotoProcessing';
 import {PersonWithSampleRegion} from '../../../common/entities/PersonDTO';
 
@@ -144,17 +144,12 @@ export class ThumbnailGeneratorMWs {
   }
 
 
-  private static addThInfoTODir(directory: DirectoryDTO): void {
+  private static addThInfoTODir(directory: ParentDirectoryDTO | SubDirectoryDTO): void {
     if (typeof directory.media !== 'undefined') {
       ThumbnailGeneratorMWs.addThInfoToPhotos(directory.media);
     }
     if (directory.preview) {
       ThumbnailGeneratorMWs.addThInfoToAPhoto(directory.preview);
-    }
-    if (typeof directory.directories !== 'undefined') {
-      for (const item of directory.directories) {
-        ThumbnailGeneratorMWs.addThInfoTODir(item);
-      }
     }
   }
 
@@ -164,7 +159,7 @@ export class ThumbnailGeneratorMWs {
     }
   }
 
-  private static addThInfoToAPhoto(photo: MediaBaseDTO): void {
+  private static addThInfoToAPhoto(photo: MediaDTO): void {
     const fullMediaPath = path.join(ProjectPath.ImageFolder, photo.directory.path, photo.directory.name, photo.name);
     for (const size of Config.Client.Media.Thumbnail.thumbnailSizes) {
       const thPath = PhotoProcessing.generateConvertedPath(fullMediaPath, size);

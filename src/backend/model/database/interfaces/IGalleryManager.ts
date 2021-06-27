@@ -1,9 +1,9 @@
-import {DirectoryDTO} from '../../../../common/entities/DirectoryDTO';
+import {ParentDirectoryDTO} from '../../../../common/entities/DirectoryDTO';
 
 export interface IGalleryManager {
   listDirectory(relativeDirectoryName: string,
                 knownLastModified?: number,
-                knownLastScanned?: number): Promise<DirectoryDTO>;
+                knownLastScanned?: number): Promise<ParentDirectoryDTO>;
 
 
 }

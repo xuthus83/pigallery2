@@ -3,13 +3,14 @@ import {Logger} from '../../Logger';
 import {PhotoWorker, RendererInput} from './PhotoWorker';
 import {Utils} from '../../../common/Utils';
 import {MediaDTO} from '../../../common/entities/MediaDTO';
-import {DirectoryDTO} from '../../../common/entities/DirectoryDTO';
+import {ParentDirectoryDTO} from '../../../common/entities/DirectoryDTO';
 
 declare var process: NodeJS.Process;
 declare var global: NodeJS.Global;
 const LOG_TAG = '[Worker]';
+
 export class Worker {
-  public static process<O extends (void | DirectoryDTO<MediaDTO>)>(): void {
+  public static process<O extends (void | ParentDirectoryDTO<MediaDTO>)>(): void {
     Logger.debug(LOG_TAG, 'Worker is waiting for tasks');
     process.on('message', async (task: WorkerTask) => {
       try {

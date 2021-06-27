@@ -5,7 +5,7 @@ import {TestHelper} from './TestHelper';
 import {PhotoDTO} from '../../../../../src/common/entities/PhotoDTO';
 import {Utils} from '../../../../../src/common/Utils';
 import {PersonWithSampleRegion} from '../../../../../src/common/entities/PersonDTO';
-import {DirectoryDTO} from '../../../../../src/common/entities/DirectoryDTO';
+import {ParentDirectoryDTO} from '../../../../../src/common/entities/DirectoryDTO';
 import {VideoDTO} from '../../../../../src/common/entities/VideoDTO';
 import {SQLConnection} from '../../../../../src/backend/model/database/sql/SQLConnection';
 import {PersonEntry} from '../../../../../src/backend/model/database/sql/enitites/PersonEntry';
@@ -23,7 +23,7 @@ describe = DBTestHelper.describe();
 describe('PersonManager', (sqlHelper: DBTestHelper) => {
 
 
-  let dir: DirectoryDTO;
+  let dir: ParentDirectoryDTO;
 
   let v: VideoDTO;
   let p: PhotoDTO;
@@ -34,7 +34,7 @@ describe('PersonManager', (sqlHelper: DBTestHelper) => {
 
   const setUpSqlDB = async () => {
     await sqlHelper.initDB();
-    const directory: DirectoryDTO = TestHelper.getDirectoryEntry();
+    const directory: ParentDirectoryDTO = TestHelper.getDirectoryEntry();
     p = TestHelper.getPhotoEntry1(directory);
     p2 = TestHelper.getPhotoEntry2(directory);
     const pFaceLessTmp = TestHelper.getPhotoEntry3(directory);

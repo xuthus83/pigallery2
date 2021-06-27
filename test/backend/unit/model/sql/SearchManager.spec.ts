@@ -22,7 +22,7 @@ import {
   ToDateSearch
 } from '../../../../../src/common/entities/SearchQueryDTO';
 import {IndexingManager} from '../../../../../src/backend/model/database/sql/IndexingManager';
-import {DirectoryDTO} from '../../../../../src/common/entities/DirectoryDTO';
+import {DirectoryBaseDTO, ParentDirectoryDTO, SubDirectoryDTO} from '../../../../../src/common/entities/DirectoryDTO';
 import {TestHelper} from './TestHelper';
 import {ObjectManagers} from '../../../../../src/backend/model/ObjectManagers';
 import {GalleryManager} from '../../../../../src/backend/model/database/sql/GalleryManager';
@@ -51,7 +51,7 @@ describe = DBTestHelper.describe(); // fake it os IDE plays nicely (recognize th
 
 class IndexingManagerTest extends IndexingManager {
 
-  public async saveToDB(scannedDirectory: DirectoryDTO): Promise<void> {
+  public async saveToDB(scannedDirectory: ParentDirectoryDTO): Promise<void> {
     return super.saveToDB(scannedDirectory);
   }
 }
@@ -89,9 +89,9 @@ describe('SearchManager', (sqlHelper: DBTestHelper) => {
    *     |- p4
    */
 
-  let dir: DirectoryDTO;
-  let subDir: DirectoryDTO;
-  let subDir2: DirectoryDTO;
+  let dir: ParentDirectoryDTO;
+  let subDir: SubDirectoryDTO;
+  let subDir2: SubDirectoryDTO;
   let v: VideoDTO;
   let p: PhotoDTO;
   let p2: PhotoDTO;
@@ -101,7 +101,7 @@ describe('SearchManager', (sqlHelper: DBTestHelper) => {
 
 
   const setUpTestGallery = async (): Promise<void> => {
-    const directory: DirectoryDTO = TestHelper.getDirectoryEntry();
+    const directory: ParentDirectoryDTO = TestHelper.getDirectoryEntry();
     subDir = TestHelper.getDirectoryEntry(directory, 'The Phantom Menace');
     subDir2 = TestHelper.getDirectoryEntry(directory, 'Return of the Jedi');
     p = TestHelper.getPhotoEntry1(directory);
@@ -198,30 +198,31 @@ describe('SearchManager', (sqlHelper: DBTestHelper) => {
   });
 
   const searchifyMedia = <T extends FileDTO | PhotoDTO>(m: T): T => {
-    const tmpM = m.directory.media;
-    const tmpD = m.directory.directories;
-    const tmpP = m.directory.preview;
-    const tmpMT = m.directory.metaFile;
-    delete m.directory.directories;
-    delete m.directory.media;
-    delete m.directory.preview;
-    delete m.directory.metaFile;
+    const tmpDir: DirectoryBaseDTO = m.directory as DirectoryBaseDTO;
+    const tmpM = tmpDir.media;
+    const tmpD = tmpDir.directories;
+    const tmpP = tmpDir.preview;
+    const tmpMT = tmpDir.metaFile;
+    delete tmpDir.directories;
+    delete tmpDir.media;
+    delete tmpDir.preview;
+    delete tmpDir.metaFile;
     const ret = Utils.clone(m);
-    delete ret.directory.lastScanned;
-    delete ret.directory.lastModified;
-    delete ret.directory.mediaCount;
+    delete (ret.directory as DirectoryBaseDTO).lastScanned;
+    delete (ret.directory as DirectoryBaseDTO).lastModified;
+    delete (ret.directory as DirectoryBaseDTO).mediaCount;
     if ((ret as PhotoDTO).metadata &&
       ((ret as PhotoDTO).metadata as PhotoMetadata).faces && !((ret as PhotoDTO).metadata as PhotoMetadata).faces.length) {
       delete ((ret as PhotoDTO).metadata as PhotoMetadata).faces;
     }
-    m.directory.directories = tmpD;
-    m.directory.media = tmpM;
-    m.directory.preview = tmpP;
-    m.directory.metaFile = tmpMT;
+    tmpDir.directories = tmpD;
+    tmpDir.media = tmpM;
+    tmpDir.preview = tmpP;
+    tmpDir.metaFile = tmpMT;
     return ret;
   };
 
-  const searchifyDir = (d: DirectoryDTO): DirectoryDTO => {
+  const searchifyDir = (d: DirectoryBaseDTO): DirectoryBaseDTO => {
     const tmpM = d.media;
     const tmpD = d.directories;
     const tmpP = d.preview;
@@ -242,7 +243,7 @@ describe('SearchManager', (sqlHelper: DBTestHelper) => {
   const removeDir = (result: SearchResultDTO) => {
     result.media = result.media.map(m => searchifyMedia(m));
     result.metaFile = result.metaFile.map(m => searchifyMedia(m));
-    result.directories = result.directories.map(m => searchifyDir(m));
+    result.directories = result.directories.map(m => searchifyDir(m) as SubDirectoryDTO);
     return Utils.clone(result);
   };
 

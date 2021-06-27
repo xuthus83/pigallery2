@@ -1,13 +1,13 @@
 import {Utils} from '../../../../common/Utils';
 import {Config} from '../../../../common/config/public/Config';
-import {MediaBaseDTO, MediaDTO} from '../../../../common/entities/MediaDTO';
+import {MediaDTO} from '../../../../common/entities/MediaDTO';
 
 export class MediaIcon {
 
 
   protected replacementSizeCache: number | boolean = false;
 
-  constructor(public media: MediaBaseDTO) {
+  constructor(public media: MediaDTO) {
 
   }
 

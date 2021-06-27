@@ -5,7 +5,6 @@ import {IndexingManager} from '../src/backend/model/database/sql/IndexingManager
 import * as path from 'path';
 import * as fs from 'fs';
 import {Utils} from '../src/common/Utils';
-import {DirectoryDTO} from '../src/common/entities/DirectoryDTO';
 import {DatabaseType, ReIndexingSensitivity} from '../src/common/config/private/PrivateConfig';
 import {ProjectPath} from '../src/backend/ProjectPath';
 import {Benchmark} from './Benchmark';
@@ -30,6 +29,7 @@ import {
   TextSearchQueryTypes
 } from '../src/common/entities/SearchQueryDTO';
 import {QueryKeywords, SearchQueryParser} from '../src/common/SearchQueryParser';
+import {DirectoryBaseDTO, ParentDirectoryDTO} from '../src/common/entities/DirectoryDTO';
 
 
 export interface BenchmarkResult {
@@ -43,7 +43,7 @@ export interface BenchmarkResult {
 
 export class BMIndexingManager extends IndexingManager {
 
-  public async saveToDB(scannedDirectory: DirectoryDTO): Promise<void> {
+  public async saveToDB(scannedDirectory: ParentDirectoryDTO): Promise<void> {
     return super.saveToDB(scannedDirectory);
   }
 }
@@ -92,7 +92,7 @@ export class BenchmarkRunner {
       name: 'Saving directory to DB',
       fn: (): Promise<void> => {
         const im = new BMIndexingManager();
-        return im.saveToDB(dir);
+        return im.saveToDB(dir as ParentDirectoryDTO);
       }
     });
     return await bm.run(this.RUNS);

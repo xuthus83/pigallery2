@@ -1,10 +1,10 @@
 import {Injectable} from '@angular/core';
-import {DirectoryDTO, DirectoryDTOUtils} from '../../../../common/entities/DirectoryDTO';
+import {DirectoryDTOUtils, DirectoryPathDTO, ParentDirectoryDTO} from '../../../../common/entities/DirectoryDTO';
 import {Utils} from '../../../../common/Utils';
 import {Config} from '../../../../common/config/public/Config';
 import {IAutoCompleteItem} from '../../../../common/entities/AutoCompleteItem';
 import {SearchResultDTO} from '../../../../common/entities/SearchResultDTO';
-import {MediaBaseDTO} from '../../../../common/entities/MediaDTO';
+import {MediaDTO} from '../../../../common/entities/MediaDTO';
 import {SortingMethods} from '../../../../common/entities/SortingMethods';
 import {VersionService} from '../../model/version.service';
 import {SearchQueryDTO, SearchQueryTypes} from '../../../../common/entities/SearchQueryDTO';
@@ -83,7 +83,7 @@ export class GalleryCacheService {
     }
   }
 
-  public getSorting(dir: DirectoryDTO): SortingMethods {
+  public getSorting(dir: DirectoryPathDTO): SortingMethods {
     const key = GalleryCacheService.SORTING_PREFIX + dir.path + '/' + dir.name;
     const tmp = localStorage.getItem(key);
     if (tmp != null) {
@@ -92,7 +92,7 @@ export class GalleryCacheService {
     return null;
   }
 
-  public removeSorting(dir: DirectoryDTO): void {
+  public removeSorting(dir: DirectoryPathDTO): void {
     try {
       const key = GalleryCacheService.SORTING_PREFIX + dir.path + '/' + dir.name;
       localStorage.removeItem(key);
@@ -102,7 +102,7 @@ export class GalleryCacheService {
     }
   }
 
-  public setSorting(dir: DirectoryDTO, sorting: SortingMethods): SortingMethods {
+  public setSorting(dir: DirectoryPathDTO, sorting: SortingMethods): SortingMethods {
     try {
       const key = GalleryCacheService.SORTING_PREFIX + dir.path + '/' + dir.name;
       localStorage.setItem(key, sorting.toString());
@@ -196,14 +196,14 @@ export class GalleryCacheService {
     }
   }
 
-  public getDirectory(directoryName: string): DirectoryDTO {
+  public getDirectory(directoryName: string): ParentDirectoryDTO {
     if (Config.Client.Other.enableCache === false) {
       return null;
     }
     try {
       const value = localStorage.getItem(GalleryCacheService.CONTENT_PREFIX + Utils.concatUrls(directoryName));
       if (value != null) {
-        const directory: DirectoryDTO = JSON.parse(value);
+        const directory: ParentDirectoryDTO = JSON.parse(value);
 
         DirectoryDTOUtils.unpackDirectory(directory);
         return directory;
@@ -213,7 +213,7 @@ export class GalleryCacheService {
     return null;
   }
 
-  public setDirectory(directory: DirectoryDTO): void {
+  public setDirectory(directory: ParentDirectoryDTO): void {
     if (Config.Client.Other.enableCache === false) {
       return;
     }
@@ -226,7 +226,7 @@ export class GalleryCacheService {
     try {
       // try to fit it
       localStorage.setItem(key, JSON.stringify(directory));
-      directory.directories.forEach((dir: DirectoryDTO) => {
+      directory.directories.forEach((dir) => {
         const subKey = GalleryCacheService.CONTENT_PREFIX + Utils.concatUrls(dir.path, dir.name);
         if (localStorage.getItem(subKey) == null) { // don't override existing
           localStorage.setItem(subKey, JSON.stringify(dir));
@@ -243,7 +243,7 @@ export class GalleryCacheService {
    * Update media state at cache too (Eg.: thumbnail rendered)
    * @param media: MediaBaseDTO
    */
-  public mediaUpdated(media: MediaBaseDTO): void {
+  public mediaUpdated(media: MediaDTO): void {
 
     if (Config.Client.Other.enableCache === false) {
       return;
@@ -253,7 +253,7 @@ export class GalleryCacheService {
       const directoryName = Utils.concatUrls(media.directory.path, media.directory.name);
       const value = localStorage.getItem(directoryName);
       if (value != null) {
-        const directory: DirectoryDTO = JSON.parse(value);
+        const directory: ParentDirectoryDTO = JSON.parse(value);
         directory.media.forEach((p) => {
           if (p.name === media.name) {
             // update data

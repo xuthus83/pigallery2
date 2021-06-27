@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {NetworkService} from '../../model/network/network.service';
 import {ContentWrapper} from '../../../../common/entities/ConentWrapper';
-import {DirectoryDTO, DirectoryDTOUtils} from '../../../../common/entities/DirectoryDTO';
+import {DirectoryDTOUtils, ParentDirectoryDTO} from '../../../../common/entities/DirectoryDTO';
 import {GalleryCacheService} from './cache.gallery.service';
 import {BehaviorSubject} from 'rxjs';
 import {Config} from '../../../../common/config/public/Config';
@@ -22,7 +22,7 @@ export class GalleryService {
   lastRequest: { directory: string } = {
     directory: null
   };
-  private lastDirectory: DirectoryDTO;
+  private lastDirectory: ParentDirectoryDTO;
   private searchId: any;
   private ongoingSearch: SearchQueryDTO = null;
 
@@ -34,7 +34,7 @@ export class GalleryService {
     this.sorting = new BehaviorSubject<SortingMethods>(Config.Client.Other.defaultPhotoSortingMethod);
   }
 
-  getDefaultSorting(directory: DirectoryDTO): SortingMethods {
+  getDefaultSorting(directory: ParentDirectoryDTO): SortingMethods {
     if (directory && directory.metaFile) {
       for (const file in PG2ConfMap.sorting) {
         if (directory.metaFile.some(f => f.name === file)) {
@@ -108,9 +108,9 @@ export class GalleryService {
         return;
       }
 
-      DirectoryDTOUtils.unpackDirectory(cw.directory as DirectoryDTO);
+      DirectoryDTOUtils.unpackDirectory(cw.directory);
 
-      this.lastDirectory = (cw.directory as DirectoryDTO);
+      this.lastDirectory = cw.directory;
       this.setContent(cw);
     } catch (e) {
       console.error(e);

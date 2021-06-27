@@ -1,20 +1,13 @@
-import {DirectoryBaseDTO, DirectoryDTO} from './DirectoryDTO';
+import {DirectoryPathDTO} from './DirectoryDTO';
 import {PhotoDTO} from './PhotoDTO';
-import {FileBaseDTO, FileDTO} from './FileDTO';
+import {FileDTO} from './FileDTO';
 import {SupportedFormats} from '../SupportedFormats';
 
-export interface MediaBaseDTO extends FileBaseDTO {
-  name: string;
-  directory: DirectoryBaseDTO;
-  metadata: MediaMetadata;
-  readyThumbnails: number[];
-  readyIcon: boolean;
-}
 
-export interface MediaDTO extends FileDTO, MediaBaseDTO {
+export interface MediaDTO extends FileDTO {
   id: number;
   name: string;
-  directory: DirectoryDTO;
+  directory: DirectoryPathDTO;
   metadata: MediaMetadata;
   readyThumbnails: number[];
   readyIcon: boolean;
@@ -35,7 +28,7 @@ export interface MediaDimension {
 }
 
 export const MediaDTOUtils = {
-  hasPositionData: (media: MediaBaseDTO): boolean => {
+  hasPositionData: (media: MediaDTO): boolean => {
     return !!(media as PhotoDTO).metadata.positionData &&
       !!((media as PhotoDTO).metadata.positionData.city ||
         (media as PhotoDTO).metadata.positionData.state ||
@@ -45,11 +38,11 @@ export const MediaDTOUtils = {
           (media as PhotoDTO).metadata.positionData.GPSData.latitude &&
           (media as PhotoDTO).metadata.positionData.GPSData.longitude));
   },
-  isPhoto: (media: FileBaseDTO): boolean => {
+  isPhoto: (media: FileDTO): boolean => {
     return !MediaDTOUtils.isVideo(media);
   },
 
-  isVideo: (media: FileBaseDTO): boolean => {
+  isVideo: (media: FileDTO): boolean => {
     const lower = media.name.toLowerCase();
     for (const ext of SupportedFormats.WithDots.Videos) {
       if (lower.endsWith(ext)) {
@@ -69,7 +62,7 @@ export const MediaDTOUtils = {
     return false;
   },
 
-  isVideoTranscodingNeeded: (media: FileBaseDTO): boolean => {
+  isVideoTranscodingNeeded: (media: FileDTO): boolean => {
     const lower = media.name.toLowerCase();
     for (const ext of SupportedFormats.WithDots.TranscodeNeed.Videos) {
       if (lower.endsWith(ext)) {
@@ -80,7 +73,7 @@ export const MediaDTOUtils = {
   },
 
 
-  calcAspectRatio: (photo: MediaBaseDTO): number => {
+  calcAspectRatio: (photo: MediaDTO): number => {
     return photo.metadata.size.width / photo.metadata.size.height;
   }
 };

@@ -4,7 +4,7 @@ import {ActivatedRoute, Params, Router} from '@angular/router';
 import {GalleryService} from './gallery.service';
 import {GalleryGridComponent} from './grid/grid.gallery.component';
 import {Config} from '../../../../common/config/public/Config';
-import {DirectoryDTO} from '../../../../common/entities/DirectoryDTO';
+import {ParentDirectoryDTO, SubDirectoryDTO} from '../../../../common/entities/DirectoryDTO';
 import {SearchResultDTO} from '../../../../common/entities/SearchResultDTO';
 import {ShareService} from './share.service';
 import {NavigationService} from '../../model/navigation.service';
@@ -32,7 +32,7 @@ export class GalleryComponent implements OnInit, OnDestroy {
   public showShare = false;
   public showRandomPhotoBuilder = false;
 
-  public directories: DirectoryDTO[] = [];
+  public directories: SubDirectoryDTO[] = [];
   public isPhotoWithLocation = false;
   public countDown: { day: number, hour: number, minute: number, second: number } = null;
   public readonly mapEnabled: boolean;
@@ -143,7 +143,7 @@ export class GalleryComponent implements OnInit, OnDestroy {
     const tmp = (content.searchResult || content.directory || {
       directories: [],
       media: []
-    }) as DirectoryDTO | SearchResultDTO;
+    }) as ParentDirectoryDTO | SearchResultDTO;
     this.directories = tmp.directories;
     this.sortDirectories();
     this.isPhotoWithLocation = false;
@@ -167,30 +167,30 @@ export class GalleryComponent implements OnInit, OnDestroy {
     switch (this.galleryService.sorting.value) {
       case SortingMethods.ascRating: // directories does not have rating
       case SortingMethods.ascName:
-        this.directories.sort((a: DirectoryDTO, b: DirectoryDTO) => compare()(a.name, b.name));
+        this.directories.sort((a, b) => compare()(a.name, b.name));
         break;
       case SortingMethods.ascDate:
         if (Config.Client.Other.enableDirectorySortingByDate === true) {
-          this.directories.sort((a: DirectoryDTO, b: DirectoryDTO) => compare()(a.lastModified, b.lastModified));
+          this.directories.sort((a, b) => compare()(a.lastModified, b.lastModified));
           break;
         }
-        this.directories.sort((a: DirectoryDTO, b: DirectoryDTO) => compare()(a.name, b.name));
+        this.directories.sort((a, b) => compare()(a.name, b.name));
         break;
 
       case SortingMethods.descRating: // directories does not have rating
       case SortingMethods.descName:
-        this.directories.sort((a: DirectoryDTO, b: DirectoryDTO) => compare({order: 'desc'})(a.name, b.name));
+        this.directories.sort((a, b) => compare({order: 'desc'})(a.name, b.name));
         break;
       case SortingMethods.descDate:
         if (Config.Client.Other.enableDirectorySortingByDate === true) {
-          this.directories.sort((a: DirectoryDTO, b: DirectoryDTO) => compare({order: 'desc'})(a.lastModified, b.lastModified));
+          this.directories.sort((a, b) => compare({order: 'desc'})(a.lastModified, b.lastModified));
           break;
         }
-        this.directories.sort((a: DirectoryDTO, b: DirectoryDTO) => compare({order: 'desc'})(a.name, b.name));
+        this.directories.sort((a, b) => compare({order: 'desc'})(a.name, b.name));
         break;
       case SortingMethods.random:
         this.rndService.setSeed(this.directories.length);
-        this.directories.sort((a: DirectoryDTO, b: DirectoryDTO): number => {
+        this.directories.sort((a, b): number => {
           if (a.name.toLowerCase() < b.name.toLowerCase()) {
             return 1;
           }

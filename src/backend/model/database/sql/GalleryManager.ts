@@ -1,5 +1,5 @@
 import {IGalleryManager} from '../interfaces/IGalleryManager';
-import {DirectoryDTO} from '../../../../common/entities/DirectoryDTO';
+import {DirectoryPathDTO, ParentDirectoryDTO, SubDirectoryDTO} from '../../../../common/entities/DirectoryDTO';
 import * as path from 'path';
 import * as fs from 'fs';
 import {DirectoryEntity} from './enitites/DirectoryEntity';
@@ -35,7 +35,7 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
 
   public async listDirectory(relativeDirectoryName: string,
                              knownLastModified?: number,
-                             knownLastScanned?: number): Promise<DirectoryDTO> {
+                             knownLastScanned?: number): Promise<ParentDirectoryDTO> {
     const directoryPath = GalleryManager.parseRelativeDirePath(relativeDirectoryName);
     const connection = await SQLConnection.getConnection();
     const stat = fs.statSync(path.join(ProjectPath.ImageFolder, relativeDirectoryName));
@@ -259,7 +259,7 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
     return await query.getOne();
   }
 
-  protected async fillPreviewFromSubDir(connection: Connection, dir: DirectoryDTO): Promise<void> {
+  protected async fillPreviewFromSubDir(connection: Connection, dir: SubDirectoryDTO): Promise<void> {
     dir.media = [];
     const query = connection
       .getRepository(MediaEntity)

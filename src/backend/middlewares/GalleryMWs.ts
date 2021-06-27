@@ -3,7 +3,7 @@ import {promises as fsp} from 'fs';
 import * as archiver from 'archiver';
 import {NextFunction, Request, Response} from 'express';
 import {ErrorCodes, ErrorDTO} from '../../common/entities/Error';
-import {DirectoryDTO, DirectoryDTOUtils} from '../../common/entities/DirectoryDTO';
+import {DirectoryDTOUtils, ParentDirectoryDTO} from '../../common/entities/DirectoryDTO';
 import {ObjectManagers} from '../model/ObjectManagers';
 import {ContentWrapper} from '../../common/entities/ConentWrapper';
 import {PhotoDTO} from '../../common/entities/PhotoDTO';
@@ -46,7 +46,7 @@ export class GalleryMWs {
       if (req.session.user.permissions &&
         req.session.user.permissions.length > 0 &&
         req.session.user.permissions[0] !== '/*') {
-        (directory as DirectoryDTO).directories = (directory as DirectoryDTO).directories.filter((d): boolean =>
+        directory.directories = directory.directories.filter((d): boolean =>
           UserDTOUtils.isDirectoryAvailable(d, req.session.user.permissions));
       }
       req.resultPipe = new ContentWrapper(directory, null);
@@ -149,11 +149,8 @@ export class GalleryMWs {
 
     if (Config.Client.Media.Video.enabled === false) {
       if (cw.directory) {
-        const removeVideos = (dir: DirectoryDTO): void => {
+        const removeVideos = (dir: ParentDirectoryDTO): void => {
           dir.media = dir.media.filter((m): boolean => !MediaDTOUtils.isVideo(m));
-          if (dir.directories) {
-            dir.directories.forEach((d): void => removeVideos(d));
-          }
         };
         removeVideos(cw.directory);
       }

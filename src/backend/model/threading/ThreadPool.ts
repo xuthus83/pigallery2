@@ -1,7 +1,7 @@
 import * as cluster from 'cluster';
 import {Logger} from '../../Logger';
 import {DiskManagerTask, ThumbnailTask, WorkerMessage, WorkerTask, WorkerTaskTypes} from './Worker';
-import {DirectoryDTO} from '../../../common/entities/DirectoryDTO';
+import {ParentDirectoryDTO} from '../../../common/entities/DirectoryDTO';
 import {RendererInput} from './PhotoWorker';
 import {TaskQue, TaskQueEntry} from './TaskQue';
 import {ITaskExecuter} from './TaskExecuter';
@@ -89,8 +89,8 @@ export class ThreadPool<O> {
 
 }
 
-export class DiskManagerTH extends ThreadPool<DirectoryDTO> implements ITaskExecuter<string, DirectoryDTO> {
-  execute(relativeDirectoryName: string, settings: DirectoryScanSettings = {}): Promise<DirectoryDTO> {
+export class DiskManagerTH extends ThreadPool<ParentDirectoryDTO> implements ITaskExecuter<string, ParentDirectoryDTO> {
+  execute(relativeDirectoryName: string, settings: DirectoryScanSettings = {}): Promise<ParentDirectoryDTO> {
     return super.executeTask({
       type: WorkerTaskTypes.diskManager,
       relativeDirectoryName,

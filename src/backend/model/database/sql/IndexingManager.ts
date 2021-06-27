@@ -1,4 +1,4 @@
-import {DirectoryDTO} from '../../../../common/entities/DirectoryDTO';
+import {ParentDirectoryDTO} from '../../../../common/entities/DirectoryDTO';
 import {DirectoryEntity} from './enitites/DirectoryEntity';
 import {SQLConnection} from './SQLConnection';
 import {DiskManager} from '../../DiskManger';
@@ -29,7 +29,7 @@ export class IndexingManager implements IIndexingManager {
 
   SavingReady: Promise<void> = null;
   private SavingReadyPR: () => void = null;
-  private savingQueue: DirectoryDTO[] = [];
+  private savingQueue: ParentDirectoryDTO[] = [];
   private isSaving = false;
 
   get IsSavingInProgress(): boolean {
@@ -55,7 +55,7 @@ export class IndexingManager implements IIndexingManager {
    * Indexes a dir, but returns early with the scanned version,
    * does not wait for the DB to be saved
    */
-  public indexDirectory(relativeDirectoryName: string): Promise<DirectoryDTO> {
+  public indexDirectory(relativeDirectoryName: string): Promise<ParentDirectoryDTO> {
     return new Promise(async (resolve, reject): Promise<void> => {
       try {
         const scannedDirectory = await DiskManager.scanDirectory(relativeDirectoryName);
@@ -99,7 +99,7 @@ export class IndexingManager implements IIndexingManager {
   /**
    * Queues up a directory to save to the DB.
    */
-  protected async queueForSave(scannedDirectory: DirectoryDTO): Promise<void> {
+  protected async queueForSave(scannedDirectory: ParentDirectoryDTO): Promise<void> {
     // Is this dir  already queued for saving?
     if (this.savingQueue.findIndex((dir): boolean => dir.name === scannedDirectory.name &&
       dir.path === scannedDirectory.path &&
@@ -133,7 +133,7 @@ export class IndexingManager implements IIndexingManager {
 
   }
 
-  protected async saveParentDir(connection: Connection, scannedDirectory: DirectoryDTO): Promise<number> {
+  protected async saveParentDir(connection: Connection, scannedDirectory: ParentDirectoryDTO): Promise<number> {
     const directoryRepository = connection.getRepository(DirectoryEntity);
 
     const currentDir: DirectoryEntity = await directoryRepository.createQueryBuilder('directory')
@@ -159,7 +159,7 @@ export class IndexingManager implements IIndexingManager {
     }
   }
 
-  protected async saveChildDirs(connection: Connection, currentDirId: number, scannedDirectory: DirectoryDTO): Promise<void> {
+  protected async saveChildDirs(connection: Connection, currentDirId: number, scannedDirectory: ParentDirectoryDTO): Promise<void> {
     const directoryRepository = connection.getRepository(DirectoryEntity);
 
     // update subdirectories that does not have a parent
@@ -200,7 +200,7 @@ export class IndexingManager implements IIndexingManager {
 
   }
 
-  protected async saveMetaFiles(connection: Connection, currentDirID: number, scannedDirectory: DirectoryDTO): Promise<void> {
+  protected async saveMetaFiles(connection: Connection, currentDirID: number, scannedDirectory: ParentDirectoryDTO): Promise<void> {
     const fileRepository = connection.getRepository(FileEntity);
     // save files
     const indexedMetaFiles = await fileRepository.createQueryBuilder('file')
@@ -359,7 +359,7 @@ export class IndexingManager implements IIndexingManager {
 
   }
 
-  protected async saveToDB(scannedDirectory: DirectoryDTO): Promise<void> {
+  protected async saveToDB(scannedDirectory: ParentDirectoryDTO): Promise<void> {
     this.isSaving = true;
     try {
       const connection = await SQLConnection.getConnection();

@@ -1,5 +1,5 @@
 import {Component, Input, OnChanges} from '@angular/core';
-import {DirectoryDTO} from '../../../../../common/entities/DirectoryDTO';
+import {ParentDirectoryDTO} from '../../../../../common/entities/DirectoryDTO';
 import {RouterLink} from '@angular/router';
 import {UserDTOUtils} from '../../../../../common/entities/UserDTO';
 import {AuthenticationService} from '../../../model/network/authentication.service';
@@ -18,7 +18,7 @@ import {SearchQueryTypes} from '../../../../../common/entities/SearchQueryDTO';
   providers: [RouterLink],
 })
 export class GalleryNavigatorComponent implements OnChanges {
-  @Input() directory: DirectoryDTO;
+  @Input() directory: ParentDirectoryDTO;
   @Input() searchResult: SearchResultDTO;
 
   routes: NavigatorPath[] = [];

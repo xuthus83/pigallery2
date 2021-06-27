@@ -1,11 +1,11 @@
 import {Injectable} from '@angular/core';
 import {ShareService} from '../ui/gallery/share.service';
-import {MediaBaseDTO} from '../../../common/entities/MediaDTO';
+import {MediaDTO} from '../../../common/entities/MediaDTO';
 import {QueryParams} from '../../../common/QueryParams';
 import {Utils} from '../../../common/Utils';
 import {GalleryService} from '../ui/gallery/gallery.service';
 import {Config} from '../../../common/config/public/Config';
-import {DirectoryDTO} from '../../../common/entities/DirectoryDTO';
+import {ParentDirectoryDTO, SubDirectoryDTO} from '../../../common/entities/DirectoryDTO';
 
 @Injectable()
 export class QueryService {
@@ -15,7 +15,7 @@ export class QueryService {
               private galleryService: GalleryService) {
   }
 
-  getMediaStringId(media: MediaBaseDTO): string {
+  getMediaStringId(media: MediaDTO): string {
     if (this.galleryService.isSearchResult()) {
       return Utils.concatUrls(media.directory.path, media.directory.name, media.name);
     } else {
@@ -23,7 +23,7 @@ export class QueryService {
     }
   }
 
-  getParams(media?: MediaBaseDTO): { [key: string]: string } {
+  getParams(media?: MediaDTO): { [key: string]: string } {
     const query: { [key: string]: string } = {};
     if (media) {
       query[QueryParams.gallery.photo] = this.getMediaStringId(media);
@@ -36,7 +36,7 @@ export class QueryService {
     return query;
   }
 
-  getParamsForDirs(directory: DirectoryDTO): { [key: string]: any } {
+  getParamsForDirs(directory: ParentDirectoryDTO | SubDirectoryDTO): { [key: string]: any } {
     const params: { [key: string]: any } = {};
     if (Config.Client.Sharing.enabled === true) {
       if (this.shareService.isSharing()) {
