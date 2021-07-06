@@ -39,9 +39,13 @@ export class AlbumManager implements IAlbumManager {
 
   public async getAlbums(): Promise<AlbumBaseDTO[]> {
     const connection = await SQLConnection.getConnection();
-    return await connection.getRepository(AlbumBaseEntity).find({
-      relations: ['preview', 'preview.directory']
-    });
+    return await connection.getRepository(AlbumBaseEntity)
+      .createQueryBuilder('album')
+      .innerJoin('album.preview', 'preview')
+      .innerJoin('preview.directory', 'directory')
+      .select(['album', 'preview.name',
+        'directory.name',
+        'directory.path']).getMany();
   }
 
   public async onGalleryIndexUpdate(): Promise<void> {
@@ -59,10 +63,11 @@ export class AlbumManager implements IAlbumManager {
 
   private async updateAlbum(album: SavedSearchEntity): Promise<void> {
     const connection = await SQLConnection.getConnection();
-    const preview = await (ObjectManagers.getInstance().SearchManager as ISQLSearchManager)
-      .getPreview((album as SavedSearchDTO).searchQuery);
+    const preview = await ObjectManagers.getInstance().PreviewManager
+      .getAlbumPreview(album);
     const count = await (ObjectManagers.getInstance().SearchManager as ISQLSearchManager)
       .getCount((album as SavedSearchDTO).searchQuery);
+
     await connection
       .createQueryBuilder()
       .update(AlbumBaseEntity)

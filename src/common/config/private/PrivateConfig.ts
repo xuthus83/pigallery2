@@ -5,6 +5,8 @@ import {ClientConfig} from '../public/ClientConfig';
 import {SubConfigClass} from 'typeconfig/src/decorators/class/SubConfigClass';
 import {ConfigProperty} from 'typeconfig/src/decorators/property/ConfigPropoerty';
 import {DefaultsJobs} from '../../entities/job/JobDTO';
+import {SearchQueryDTO} from '../../entities/SearchQueryDTO';
+import {SortingMethods} from '../../entities/SortingMethods';
 
 export enum DatabaseType {
   memory = 1, mysql = 2, sqlite = 3
@@ -296,6 +298,17 @@ export class ServerPhotoConfig {
 }
 
 @SubConfigClass()
+export class ServerPreviewConfig {
+  @ConfigProperty({type: 'object'})
+  SearchQuery: SearchQueryDTO = null;
+  @ConfigProperty({arrayType: SortingMethods})
+  Sorting: SortingMethods[] = [
+    SortingMethods.descRating,
+    SortingMethods.descDate
+  ];
+}
+
+@SubConfigClass()
 export class ServerMediaConfig {
   @ConfigProperty({description: 'Images are loaded from this folder (read permission required)'})
   folder: string = 'demo/images';
@@ -336,6 +349,8 @@ export class ServerConfig {
   host: string = '0.0.0.0';
   @ConfigProperty()
   Media: ServerMediaConfig = new ServerMediaConfig();
+  @ConfigProperty()
+  Preview: ServerPreviewConfig = new ServerPreviewConfig();
   @ConfigProperty()
   Threading: ServerThreadingConfig = new ServerThreadingConfig();
   @ConfigProperty()

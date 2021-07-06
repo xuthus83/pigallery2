@@ -31,7 +31,6 @@ import {PhotoDTO} from '../../../../common/entities/PhotoDTO';
 import {DatabaseType} from '../../../../common/config/private/PrivateConfig';
 import {ISQLGalleryManager} from './IGalleryManager';
 import {ISQLSearchManager} from './ISearchManager';
-import {MediaDTO} from '../../../../common/entities/MediaDTO';
 import {Utils} from '../../../../common/Utils';
 import {FileEntity} from './enitites/FileEntity';
 
@@ -231,7 +230,7 @@ export class SearchManager implements ISQLSearchManager {
       .createQueryBuilder('media')
       .select(['media', ...this.DIRECTORY_SELECT])
       .innerJoin('media.directory', 'directory')
-      .where(this.buildWhereQuery(query));
+      .where(await this.prepareAndBuildWhereQuery(query));
 
 
     if (Config.Server.Database.type === DatabaseType.mysql) {
@@ -241,185 +240,27 @@ export class SearchManager implements ISQLSearchManager {
 
   }
 
-  public async getPreview(queryIN: SearchQueryDTO, ): Promise<MediaDTO> {
-    const query = await this.prepareQuery(queryIN);
-    const connection = await SQLConnection.getConnection();
 
-    return await connection
-      .getRepository(MediaEntity)
-      .createQueryBuilder('media')
-      .select(['media', ...this.DIRECTORY_SELECT])
-      .where(this.buildWhereQuery(query))
-      .orderBy('media.metadata.creationDate', 'DESC')
-      .limit(1)
-      .getOne();
-  }
-
-  public async getCount(queryIN: SearchQueryDTO): Promise<number> {
-    const query = await this.prepareQuery(queryIN);
+  public async getCount(query: SearchQueryDTO): Promise<number> {
     const connection = await SQLConnection.getConnection();
 
     return await connection
       .getRepository(MediaEntity)
       .createQueryBuilder('media')
       .innerJoin('media.directory', 'directory')
-      .where(this.buildWhereQuery(query))
+      .where(await this.prepareAndBuildWhereQuery(query))
       .getCount();
   }
 
-  protected flattenSameOfQueries(query: SearchQueryDTO): SearchQueryDTO {
-    switch (query.type) {
-      case SearchQueryTypes.AND:
-      case SearchQueryTypes.OR:
-        return {
-          type: query.type,
-          list: (query as SearchListQuery).list.map((q): SearchQueryDTO => this.flattenSameOfQueries(q))
-        } as SearchListQuery;
-      case SearchQueryTypes.SOME_OF:
-        const someOfQ = query as SomeOfSearchQuery;
-        someOfQ.min = someOfQ.min || 1;
-
-        if (someOfQ.min === 1) {
-          return this.flattenSameOfQueries({
-            type: SearchQueryTypes.OR,
-            list: (someOfQ as SearchListQuery).list
-          } as ORSearchQuery);
-        }
-
-        if (someOfQ.min === (query as SearchListQuery).list.length) {
-          return this.flattenSameOfQueries({
-            type: SearchQueryTypes.AND,
-            list: (someOfQ as SearchListQuery).list
-          } as ANDSearchQuery);
-        }
-
-        const getAllCombinations = (num: number, arr: SearchQueryDTO[], start = 0): SearchQueryDTO[] => {
-          if (num <= 0 || num > arr.length || start >= arr.length) {
-            return null;
-          }
-          if (num <= 1) {
-            return arr.slice(start);
-          }
-          if (num === arr.length - start) {
-            return [{
-              type: SearchQueryTypes.AND,
-              list: arr.slice(start)
-            } as ANDSearchQuery];
-          }
-          const ret: ANDSearchQuery[] = [];
-          for (let i = start; i < arr.length; ++i) {
-            const subRes = getAllCombinations(num - 1, arr, i + 1);
-            if (subRes === null) {
-              break;
-            }
-            const and: ANDSearchQuery = {
-              type: SearchQueryTypes.AND,
-              list: [
-                arr[i]
-              ]
-            };
-            if (subRes.length === 1) {
-              if (subRes[0].type === SearchQueryTypes.AND) {
-                and.list.push(...(subRes[0] as ANDSearchQuery).list);
-              } else {
-                and.list.push(subRes[0]);
-              }
-            } else {
-              and.list.push({
-                type: SearchQueryTypes.OR,
-                list: subRes
-              } as ORSearchQuery);
-            }
-            ret.push(and);
-
-          }
-
-          if (ret.length === 0) {
-            return null;
-          }
-          return ret;
-        };
-
-
-        return this.flattenSameOfQueries({
-          type: SearchQueryTypes.OR,
-          list: getAllCombinations(someOfQ.min, (query as SearchListQuery).list)
-        } as ORSearchQuery);
-
-    }
-    return query;
+  public async prepareAndBuildWhereQuery(queryIN: SearchQueryDTO, directoryOnly = false): Promise<Brackets> {
+    const query = await this.prepareQuery(queryIN);
+    return this.buildWhereQuery(query, directoryOnly);
   }
 
-  private async prepareQuery(queryIN: SearchQueryDTO): Promise<SearchQueryDTO> {
+  public async prepareQuery(queryIN: SearchQueryDTO): Promise<SearchQueryDTO> {
     let query: SearchQueryDTO = this.assignQueryIDs(Utils.clone(queryIN)); // assign local ids before flattening SOME_OF queries
     query = this.flattenSameOfQueries(query);
     query = await this.getGPSData(query);
-    return query;
-  }
-
-  /**
-   * Assigning IDs to search queries. It is a help / simplification to typeorm,
-   * so less parameters are needed to pass down to SQL.
-   * Witch SOME_OF query the number of WHERE constrains have O(N!) complexity
-   */
-  private assignQueryIDs(queryIN: SearchQueryDTO, id = {value: 1}): SearchQueryDTO {
-    if ((queryIN as SearchListQuery).list) {
-      (queryIN as SearchListQuery).list.forEach(q => this.assignQueryIDs(q, id));
-      return queryIN;
-    }
-    (queryIN as SearchQueryDTOWithID).queryId = id.value;
-    id.value++;
-    return queryIN;
-  }
-
-  /**
-   * Returns only those part of a query tree that only contains directory related search queries
-   */
-  private filterDirectoryQuery(query: SearchQueryDTO): SearchQueryDTO {
-    switch (query.type) {
-      case SearchQueryTypes.AND:
-        const andRet = {
-          type: SearchQueryTypes.AND,
-          list: (query as SearchListQuery).list.map(q => this.filterDirectoryQuery(q))
-        } as ANDSearchQuery;
-        // if any of the queries contain non dir query thw whole and query is a non dir query
-        if (andRet.list.indexOf(null) !== -1) {
-          return null;
-        }
-        return andRet;
-
-      case SearchQueryTypes.OR:
-        const orRet = {
-          type: SearchQueryTypes.OR,
-          list: (query as SearchListQuery).list.map(q => this.filterDirectoryQuery(q)).filter(q => q !== null)
-        } as ORSearchQuery;
-        if (orRet.list.length === 0) {
-          return null;
-        }
-        return orRet;
-
-      case SearchQueryTypes.any_text:
-      case SearchQueryTypes.directory:
-        return query;
-
-      case SearchQueryTypes.SOME_OF:
-        throw new Error('"Some of" queries should have been already flattened');
-    }
-    // of none of the above, its not a directory search
-    return null;
-  }
-
-  private async getGPSData(query: SearchQueryDTO): Promise<SearchQueryDTO> {
-    if ((query as ANDSearchQuery | ORSearchQuery).list) {
-      for (let i = 0; i < (query as ANDSearchQuery | ORSearchQuery).list.length; ++i) {
-        (query as ANDSearchQuery | ORSearchQuery).list[i] =
-          await this.getGPSData((query as ANDSearchQuery | ORSearchQuery).list[i]);
-      }
-    }
-    if (query.type === SearchQueryTypes.distance && (query as DistanceSearch).from.text) {
-      (query as DistanceSearch).from.GPSData =
-        await ObjectManagers.getInstance().LocationManager.getGPSData((query as DistanceSearch).from.text);
-    }
     return query;
   }
 
@@ -430,7 +271,7 @@ export class SearchManager implements ISQLSearchManager {
    * @param directoryOnly Only builds directory related queries
    * @private
    */
-  private buildWhereQuery(query: SearchQueryDTO, directoryOnly = false): Brackets {
+  public buildWhereQuery(query: SearchQueryDTO, directoryOnly = false): Brackets {
     const queryId = (query as SearchQueryDTOWithID).queryId;
     switch (query.type) {
       case SearchQueryTypes.AND:
@@ -722,6 +563,155 @@ export class SearchManager implements ISQLSearchManager {
       }
       return q;
     });
+  }
+
+  protected flattenSameOfQueries(query: SearchQueryDTO): SearchQueryDTO {
+    switch (query.type) {
+      case SearchQueryTypes.AND:
+      case SearchQueryTypes.OR:
+        return {
+          type: query.type,
+          list: (query as SearchListQuery).list.map((q): SearchQueryDTO => this.flattenSameOfQueries(q))
+        } as SearchListQuery;
+      case SearchQueryTypes.SOME_OF:
+        const someOfQ = query as SomeOfSearchQuery;
+        someOfQ.min = someOfQ.min || 1;
+
+        if (someOfQ.min === 1) {
+          return this.flattenSameOfQueries({
+            type: SearchQueryTypes.OR,
+            list: (someOfQ as SearchListQuery).list
+          } as ORSearchQuery);
+        }
+
+        if (someOfQ.min === (query as SearchListQuery).list.length) {
+          return this.flattenSameOfQueries({
+            type: SearchQueryTypes.AND,
+            list: (someOfQ as SearchListQuery).list
+          } as ANDSearchQuery);
+        }
+
+        const getAllCombinations = (num: number, arr: SearchQueryDTO[], start = 0): SearchQueryDTO[] => {
+          if (num <= 0 || num > arr.length || start >= arr.length) {
+            return null;
+          }
+          if (num <= 1) {
+            return arr.slice(start);
+          }
+          if (num === arr.length - start) {
+            return [{
+              type: SearchQueryTypes.AND,
+              list: arr.slice(start)
+            } as ANDSearchQuery];
+          }
+          const ret: ANDSearchQuery[] = [];
+          for (let i = start; i < arr.length; ++i) {
+            const subRes = getAllCombinations(num - 1, arr, i + 1);
+            if (subRes === null) {
+              break;
+            }
+            const and: ANDSearchQuery = {
+              type: SearchQueryTypes.AND,
+              list: [
+                arr[i]
+              ]
+            };
+            if (subRes.length === 1) {
+              if (subRes[0].type === SearchQueryTypes.AND) {
+                and.list.push(...(subRes[0] as ANDSearchQuery).list);
+              } else {
+                and.list.push(subRes[0]);
+              }
+            } else {
+              and.list.push({
+                type: SearchQueryTypes.OR,
+                list: subRes
+              } as ORSearchQuery);
+            }
+            ret.push(and);
+
+          }
+
+          if (ret.length === 0) {
+            return null;
+          }
+          return ret;
+        };
+
+
+        return this.flattenSameOfQueries({
+          type: SearchQueryTypes.OR,
+          list: getAllCombinations(someOfQ.min, (query as SearchListQuery).list)
+        } as ORSearchQuery);
+
+    }
+    return query;
+  }
+
+  /**
+   * Assigning IDs to search queries. It is a help / simplification to typeorm,
+   * so less parameters are needed to pass down to SQL.
+   * Witch SOME_OF query the number of WHERE constrains have O(N!) complexity
+   */
+  private assignQueryIDs(queryIN: SearchQueryDTO, id = {value: 1}): SearchQueryDTO {
+    if ((queryIN as SearchListQuery).list) {
+      (queryIN as SearchListQuery).list.forEach(q => this.assignQueryIDs(q, id));
+      return queryIN;
+    }
+    (queryIN as SearchQueryDTOWithID).queryId = id.value;
+    id.value++;
+    return queryIN;
+  }
+
+  /**
+   * Returns only those part of a query tree that only contains directory related search queries
+   */
+  private filterDirectoryQuery(query: SearchQueryDTO): SearchQueryDTO {
+    switch (query.type) {
+      case SearchQueryTypes.AND:
+        const andRet = {
+          type: SearchQueryTypes.AND,
+          list: (query as SearchListQuery).list.map(q => this.filterDirectoryQuery(q))
+        } as ANDSearchQuery;
+        // if any of the queries contain non dir query thw whole and query is a non dir query
+        if (andRet.list.indexOf(null) !== -1) {
+          return null;
+        }
+        return andRet;
+
+      case SearchQueryTypes.OR:
+        const orRet = {
+          type: SearchQueryTypes.OR,
+          list: (query as SearchListQuery).list.map(q => this.filterDirectoryQuery(q)).filter(q => q !== null)
+        } as ORSearchQuery;
+        if (orRet.list.length === 0) {
+          return null;
+        }
+        return orRet;
+
+      case SearchQueryTypes.any_text:
+      case SearchQueryTypes.directory:
+        return query;
+
+      case SearchQueryTypes.SOME_OF:
+        throw new Error('"Some of" queries should have been already flattened');
+    }
+    // of none of the above, its not a directory search
+    return null;
+  }
+
+  private async getGPSData(query: SearchQueryDTO): Promise<SearchQueryDTO> {
+    if ((query as ANDSearchQuery | ORSearchQuery).list) {
+      for (let i = 0; i < (query as ANDSearchQuery | ORSearchQuery).list.length; ++i) {
+        (query as ANDSearchQuery | ORSearchQuery).list[i] =
+          await this.getGPSData((query as ANDSearchQuery | ORSearchQuery).list[i]);
+      }
+    }
+    if (query.type === SearchQueryTypes.distance && (query as DistanceSearch).from.text) {
+      (query as DistanceSearch).from.GPSData =
+        await ObjectManagers.getInstance().LocationManager.getGPSData((query as DistanceSearch).from.text);
+    }
+    return query;
   }
 
   private encapsulateAutoComplete(values: string[], type: SearchQueryTypes): Array<AutoCompleteItem> {

@@ -66,11 +66,11 @@ class SearchManagerTest extends SearchManager {
 
 class GalleryManagerTest extends GalleryManager {
 
-  public async selectParentDir(connection: Connection, directoryName: string, directoryParent: string): Promise<DirectoryEntity> {
+  public async selectParentDir(connection: Connection, directoryName: string, directoryParent: string): Promise<ParentDirectoryDTO> {
     return super.selectParentDir(connection, directoryName, directoryParent);
   }
 
-  public async fillParentDir(connection: Connection, dir: DirectoryEntity): Promise<void> {
+  public async fillParentDir(connection: Connection, dir: ParentDirectoryDTO): Promise<void> {
     return super.fillParentDir(connection, dir);
   }
 }

@@ -1,9 +1,9 @@
 import {SearchQueryDTO, SearchQueryTypes} from '../../../../common/entities/SearchQueryDTO';
-import {MediaDTO} from '../../../../common/entities/MediaDTO';
 import {ISearchManager} from '../interfaces/ISearchManager';
 import {AutoCompleteItem} from '../../../../common/entities/AutoCompleteItem';
 import {SearchResultDTO} from '../../../../common/entities/SearchResultDTO';
 import {PhotoDTO} from '../../../../common/entities/PhotoDTO';
+import {Brackets} from 'typeorm';
 
 export interface ISQLSearchManager extends ISearchManager {
   autocomplete(text: string, type: SearchQueryTypes): Promise<AutoCompleteItem[]>;
@@ -13,6 +13,7 @@ export interface ISQLSearchManager extends ISearchManager {
   getRandomPhoto(queryFilter: SearchQueryDTO): Promise<PhotoDTO>;
 
   // "Protected" functions. only called from other Managers, not from middlewares
-  getPreview(query: SearchQueryDTO): Promise<MediaDTO>;
   getCount(query: SearchQueryDTO): Promise<number>;
+
+  prepareAndBuildWhereQuery(query: SearchQueryDTO, directoryOnly?: boolean): Promise<Brackets>;
 }

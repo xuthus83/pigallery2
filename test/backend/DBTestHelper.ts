@@ -25,11 +25,11 @@ class IndexingManagerTest extends IndexingManager {
 
 class GalleryManagerTest extends GalleryManager {
 
-  public async selectParentDir(connection: Connection, directoryName: string, directoryParent: string): Promise<DirectoryEntity> {
+  public async selectParentDir(connection: Connection, directoryName: string, directoryParent: string): Promise<ParentDirectoryDTO> {
     return super.selectParentDir(connection, directoryName, directoryParent);
   }
 
-  public async fillParentDir(connection: Connection, dir: DirectoryEntity): Promise<void> {
+  public async fillParentDir(connection: Connection, dir: ParentDirectoryDTO): Promise<void> {
     return super.fillParentDir(connection, dir);
   }
 }
@@ -83,7 +83,7 @@ export class DBTestHelper {
     };
   }
 
-  public static async persistTestDir(directory: DirectoryBaseDTO): Promise<DirectoryEntity> {
+  public static async persistTestDir(directory: DirectoryBaseDTO): Promise<ParentDirectoryDTO> {
     await ObjectManagers.InitSQLManagers();
     const connection = await SQLConnection.getConnection();
     ObjectManagers.getInstance().IndexingManager.indexDirectory = () => Promise.resolve(null);

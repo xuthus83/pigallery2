@@ -91,7 +91,7 @@ export const DirectoryDTOUtils = {
       dir.preview.directory = {
         path: dir.preview.directory.path,
         name: dir.preview.directory.name,
-      };
+      } as DirectoryPathDTO;
 
       // make sure that it is not a same object as one of the photo in the media[]
       // as the next foreach would remove the directory

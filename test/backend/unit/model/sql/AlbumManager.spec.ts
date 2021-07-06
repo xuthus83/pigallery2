@@ -1,8 +1,8 @@
 import {DBTestHelper} from '../../../DBTestHelper';
-import { ParentDirectoryDTO, SubDirectoryDTO} from '../../../../../src/common/entities/DirectoryDTO';
+import {ParentDirectoryDTO, SubDirectoryDTO} from '../../../../../src/common/entities/DirectoryDTO';
 import {TestHelper} from './TestHelper';
 import {ObjectManagers} from '../../../../../src/backend/model/ObjectManagers';
-import {PhotoDTO, PhotoMetadata} from '../../../../../src/common/entities/PhotoDTO';
+import {PhotoDTO} from '../../../../../src/common/entities/PhotoDTO';
 import {VideoDTO} from '../../../../../src/common/entities/VideoDTO';
 import {AlbumManager} from '../../../../../src/backend/model/database/sql/AlbumManager';
 import {SearchQueryTypes, TextSearch} from '../../../../../src/common/entities/SearchQueryDTO';
@@ -89,7 +89,9 @@ describe('AlbumManager', (sqlHelper: DBTestHelper) => {
     delete tmpDir.preview;
     delete tmpDir.metaFile;
     const ret = Utils.clone(m);
-    delete (ret.metadata as PhotoMetadata).faces;
+    delete ret.id;
+    ret.directory = {path: ret.directory.path, name: ret.directory.name};
+    delete ret.metadata;
     tmpDir.directories = tmpD;
     tmpDir.media = tmpM;
     tmpDir.preview = tmpP;

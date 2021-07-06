@@ -4,33 +4,33 @@ pigallery2 uses [typeconfig](https://github.com/bpatrik/typeconfig) for configur
 `npm start -- --help` prints the following:
 
 ```
-Usage: <appname> [options]
+Usage: <appname> [options] 
 
-Meta cli options:
---help                           prints this manual
---config-path                    sets the config file location
---config-attachState             prints the value state (default, readonly, volatile, etc..) to the config file
---config-attachDesc              prints description to the config file
---config-rewrite-cli             updates the config file with the options from cli switches
---config-rewrite-env             updates the config file with the options from environmental variables
---config-string-enum             enums are stored as string in the config file (instead of numbers)
---config-save-if-not-exist       creates config file if not exist
---config-save-and-exist          creates config file and terminates
+Meta cli options: 
+--help                           prints this manual 
+--config-path                    sets the config file location 
+--config-attachState             prints the value state (default, readonly, volatile, etc..) to the config file 
+--config-attachDesc              prints description to the config file 
+--config-rewrite-cli             updates the config file with the options from cli switches 
+--config-rewrite-env             updates the config file with the options from environmental variables 
+--config-string-enum             enums are stored as string in the config file (instead of numbers) 
+--config-save-if-not-exist       creates config file if not exist 
+--config-save-and-exist          creates config file and terminates 
 
-<appname> can be configured through the configuration file, cli switches and environmental variables.
-All settings are case sensitive.
-Example for setting config MyConf through cli: '<appname> --MyConf=5'
-and through env variable: 'SET MyConf=5' .
+<appname> can be configured through the configuration file, cli switches and environmental variables. 
+All settings are case sensitive. 
+Example for setting config MyConf through cli: '<appname> --MyConf=5' 
+and through env variable: 'SET MyConf=5' . 
 
-Default values can be also overwritten by prefixing the options with 'default-',
+Default values can be also overwritten by prefixing the options with 'default-', 
  like '<appname> --default-MyConf=5' and  'SET default-MyConf=5'
 
-App CLI options:
+App CLI options: 
   --Server-sessionSecret                                 (default: [])
   --Server-port                                          (default: 80)
   --Server-host                                          (default: '0.0.0.0')
   --Server-Media-folder                                 Images are loaded from this folder (read permission required) (default: 'demo/images')
-  --Server-Media-tempFolder                             Thumbnails, coverted photos, videos will be stored here (write permission required) (default: 'demo/tmp')
+  --Server-Media-tempFolder                             Thumbnails, converted photos, videos will be stored here (write permission required) (default: 'demo/tmp')
   --Server-Media-Video-transcoding-bitRate               (default: 5242880)
   --Server-Media-Video-transcoding-resolution            (default: 720)
   --Server-Media-Video-transcoding-fps                   (default: 25)
@@ -43,6 +43,8 @@ App CLI options:
   --Server-Media-Photo-Converting-resolution             (default: 1080)
   --Server-Media-Thumbnail-qualityPriority              if true, photos will have better quality. (default: true)
   --Server-Media-Thumbnail-personFaceMargin              (default: 0.6)
+  --Server-Preview-SearchQuery                           (default: null)
+  --Server-Preview-Sorting                               (default: [6,4])
   --Server-Threading-enabled                            App can run on multiple thread (default: true)
   --Server-Threading-thumbnailThreads                   Number of threads that are used to generate thumbnails. If 0, number of 'CPU cores -1' threads will be used. (default: 0)
   --Server-Database-type                                 (default: 'sqlite')
@@ -64,7 +66,7 @@ App CLI options:
   --Server-Log-level                                     (default: 'info')
   --Server-Log-sqlLevel                                  (default: 'error')
   --Server-Jobs-maxSavedProgress                        Job history size (default: 10)
-  --Server-Jobs-scheduled                                (default: [{"name":"Indexing","jobName":"Indexing","config":{},"allowParallelRun":false,"trigger":{"type":1}},{"name":"Thumbnail Generation","jobName":"Thumbnail Generation","config":{"sizes":[240],"indexedOnly":true},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"Indexing"}},{"name":"Photo Converting","jobName":"Photo Converting","config":{"indexedOnly":true},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"Thumbnail Generation"}},{"name":"Video Converting","jobName":"Video Converting","config":{"indexedOnly":true},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"Photo Converting"}},{"name":"Temp Folder Cleaning","jobName":"Temp Folder Cleaning","config":{"indexedOnly":true},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"Video Converting"}}])
+  --Server-Jobs-scheduled                                (default: [{"name":"Indexing","jobName":"Indexing","config":{"indexChangesOnly":true},"allowParallelRun":false,"trigger":{"type":1}},{"name":"Thumbnail Generation","jobName":"Thumbnail Generation","config":{"sizes":[240],"indexedOnly":true},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"Indexing"}},{"name":"Photo Converting","jobName":"Photo Converting","config":{"indexedOnly":true},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"Thumbnail Generation"}},{"name":"Video Converting","jobName":"Video Converting","config":{"indexedOnly":true},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"Photo Converting"}},{"name":"Temp Folder Cleaning","jobName":"Temp Folder Cleaning","config":{"indexedOnly":true},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"Video Converting"}}])
   --Client-applicationTitle                              (default: 'PiGallery 2')
   --Client-publicUrl                                     (default: '')
   --Client-urlBase                                       (default: '')
@@ -73,11 +75,15 @@ App CLI options:
   --Client-Search-AutoComplete-enabled                   (default: true)
   --Client-Search-AutoComplete-maxItemsPerCategory       (default: 5)
   --Client-Search-AutoComplete-cacheTimeout              (default: 3600000)
-  --Client-Search-maxMediaResult                         (default: 2000)
+  --Client-Search-maxMediaResult                         (default: 10000)
+  --Client-Search-listDirectories                       Search returns also with directories, not just media (default: false)
+  --Client-Search-listMetafiles                         Search also returns with metafiles from directories that contain a media file of the matched search result (default: false)
   --Client-Search-maxDirectoryResult                     (default: 200)
   --Client-Sharing-enabled                               (default: true)
   --Client-Sharing-passwordProtected                     (default: true)
+  --Client-Album-enabled                                 (default: true)
   --Client-Map-enabled                                   (default: true)
+  --Client-Map-maxPreviewMarkers                        Maximum number of markers to be shown on the map preview on the gallery page. (default: 50)
   --Client-Map-useImageMarkers                           (default: true)
   --Client-Map-mapProvider                               (default: 'OpenStreetMap')
   --Client-Map-mapboxAccessToken                         (default: '')
@@ -86,9 +92,11 @@ App CLI options:
   --Client-Other-enableCache                             (default: true)
   --Client-Other-enableOnScrollRendering                 (default: true)
   --Client-Other-defaultPhotoSortingMethod               (default: 'ascDate')
+  --Client-Other-enableDirectorySortingByDate           If enabled directories will be sorted by date, like photos, otherwise by name. Directory date is the last modification time of that directory not the creation date of the oldest photo (default: false)
   --Client-Other-enableOnScrollThumbnailPrioritising     (default: true)
   --Client-Other-NavBar-showItemCount                    (default: true)
   --Client-Other-captionFirstNaming                      (default: false)
+  --Client-Other-enableDownloadZip                       (default: false)
   --Client-authenticationRequired                        (default: true)
   --Client-unAuthenticatedUserRole                       (default: 'Admin')
   --Client-Media-Thumbnail-iconSize                      (default: 45)
@@ -96,19 +104,20 @@ App CLI options:
   --Client-Media-Thumbnail-thumbnailSizes                (default: [240,480])
   --Client-Media-Video-enabled                           (default: true)
   --Client-Media-Photo-Converting-enabled                (default: true)
+  --Client-Media-Photo-loadFullImageOnZoom              Enables loading the full resolution image on zoom in the ligthbox (preview). (default: true)
   --Client-MetaFile-enabled                              (default: true)
   --Client-Faces-enabled                                 (default: true)
   --Client-Faces-keywordsToPersons                       (default: true)
   --Client-Faces-writeAccessMinRole                      (default: 'Admin')
   --Client-Faces-readAccessMinRole                       (default: 'User')
 
-Environmental variables:
+Environmental variables: 
   Server-sessionSecret                               (default: [])
   Server-port                                        (default: 80)
   PORT                                               same as Server-port
   Server-host                                        (default: '0.0.0.0')
   Server-Media-folder                               Images are loaded from this folder (read permission required) (default: 'demo/images')
-  Server-Media-tempFolder                           Thumbnails, coverted photos, videos will be stored here (write permission required) (default: 'demo/tmp')
+  Server-Media-tempFolder                           Thumbnails, converted photos, videos will be stored here (write permission required) (default: 'demo/tmp')
   Server-Media-Video-transcoding-bitRate             (default: 5242880)
   Server-Media-Video-transcoding-resolution          (default: 720)
   Server-Media-Video-transcoding-fps                 (default: 25)
@@ -121,6 +130,8 @@ Environmental variables:
   Server-Media-Photo-Converting-resolution           (default: 1080)
   Server-Media-Thumbnail-qualityPriority            if true, photos will have better quality. (default: true)
   Server-Media-Thumbnail-personFaceMargin            (default: 0.6)
+  Server-Preview-SearchQuery                         (default: null)
+  Server-Preview-Sorting                             (default: [6,4])
   Server-Threading-enabled                          App can run on multiple thread (default: true)
   Server-Threading-thumbnailThreads                 Number of threads that are used to generate thumbnails. If 0, number of 'CPU cores -1' threads will be used. (default: 0)
   Server-Database-type                               (default: 'sqlite')
@@ -140,14 +151,14 @@ Environmental variables:
   Server-sessionTimeout                             unit: ms (default: 604800000)
   Server-Indexing-cachedFolderTimeout                (default: 3600000)
   Server-Indexing-reIndexingSensitivity              (default: 'low')
-  Server-Indexing-excludeFolderList                 If an entry starts with '/' it is treated as an absolute path. If it doesn't start with '/' but contains a '/', the path is relative to the image directory. If it doesn't contain a '/', any folder withthis name will be excluded. (default: [".Trash-1000",".dtrash","$RECYCLE.BIN"])
+  Server-Indexing-excludeFolderList                 If an entry starts with '/' it is treated as an absolute path. If it doesn't start with '/' but contains a '/', the path is relative to the image directory. If it doesn't contain a '/', any folder with this name will be excluded. (default: [".Trash-1000",".dtrash","$RECYCLE.BIN"])
   Server-Indexing-excludeFileList                   Any folder that contains a file with this name will be excluded from indexing. (default: [])
   Server-photoMetadataSize                          only this many bites will be loaded when scanning photo for metadata (default: 524288)
   Server-Duplicates-listingLimit                     (default: 1000)
   Server-Log-level                                   (default: 'info')
   Server-Log-sqlLevel                                (default: 'error')
   Server-Jobs-maxSavedProgress                      Job history size (default: 10)
-  Server-Jobs-scheduled                              (default: [{"name":"Indexing","jobName":"Indexing","config":{},"allowParallelRun":false,"trigger":{"type":1}},{"name":"Thumbnail Generation","jobName":"Thumbnail Generation","config":{"sizes":[240],"indexedOnly":true},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"Indexing"}},{"name":"Photo Converting","jobName":"Photo Converting","config":{"indexedOnly":true},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"Thumbnail Generation"}},{"name":"Video Converting","jobName":"Video Converting","config":{"indexedOnly":true},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"Photo Converting"}},{"name":"Temp Folder Cleaning","jobName":"Temp Folder Cleaning","config":{"indexedOnly":true},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"Video Converting"}}])
+  Server-Jobs-scheduled                              (default: [{"name":"Indexing","jobName":"Indexing","config":{"indexChangesOnly":true},"allowParallelRun":false,"trigger":{"type":1}},{"name":"Thumbnail Generation","jobName":"Thumbnail Generation","config":{"sizes":[240],"indexedOnly":true},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"Indexing"}},{"name":"Photo Converting","jobName":"Photo Converting","config":{"indexedOnly":true},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"Thumbnail Generation"}},{"name":"Video Converting","jobName":"Video Converting","config":{"indexedOnly":true},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"Photo Converting"}},{"name":"Temp Folder Cleaning","jobName":"Temp Folder Cleaning","config":{"indexedOnly":true},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"Video Converting"}}])
   Client-applicationTitle                            (default: 'PiGallery 2')
   Client-publicUrl                                   (default: '')
   Client-urlBase                                     (default: '')
@@ -156,11 +167,15 @@ Environmental variables:
   Client-Search-AutoComplete-enabled                 (default: true)
   Client-Search-AutoComplete-maxItemsPerCategory     (default: 5)
   Client-Search-AutoComplete-cacheTimeout            (default: 3600000)
-  Client-Search-maxMediaResult                       (default: 2000)
+  Client-Search-maxMediaResult                       (default: 10000)
+  Client-Search-listDirectories                     Search returns also with directories, not just media (default: false)
+  Client-Search-listMetafiles                       Search also returns with metafiles from directories that contain a media file of the matched search result (default: false)
   Client-Search-maxDirectoryResult                   (default: 200)
   Client-Sharing-enabled                             (default: true)
   Client-Sharing-passwordProtected                   (default: true)
+  Client-Album-enabled                               (default: true)
   Client-Map-enabled                                 (default: true)
+  Client-Map-maxPreviewMarkers                      Maximum number of markers to be shown on the map preview on the gallery page. (default: 50)
   Client-Map-useImageMarkers                         (default: true)
   Client-Map-mapProvider                             (default: 'OpenStreetMap')
   Client-Map-mapboxAccessToken                       (default: '')
@@ -169,9 +184,11 @@ Environmental variables:
   Client-Other-enableCache                           (default: true)
   Client-Other-enableOnScrollRendering               (default: true)
   Client-Other-defaultPhotoSortingMethod             (default: 'ascDate')
+  Client-Other-enableDirectorySortingByDate         If enabled directories will be sorted by date, like photos, otherwise by name. Directory date is the last modification time of that directory not the creation date of the oldest photo (default: false)
   Client-Other-enableOnScrollThumbnailPrioritising   (default: true)
   Client-Other-NavBar-showItemCount                  (default: true)
   Client-Other-captionFirstNaming                    (default: false)
+  Client-Other-enableDownloadZip                     (default: false)
   Client-authenticationRequired                      (default: true)
   Client-unAuthenticatedUserRole                     (default: 'Admin')
   Client-Media-Thumbnail-iconSize                    (default: 45)
@@ -179,6 +196,7 @@ Environmental variables:
   Client-Media-Thumbnail-thumbnailSizes              (default: [240,480])
   Client-Media-Video-enabled                         (default: true)
   Client-Media-Photo-Converting-enabled              (default: true)
+  Client-Media-Photo-loadFullImageOnZoom            Enables loading the full resolution image on zoom in the ligthbox (preview). (default: true)
   Client-MetaFile-enabled                            (default: true)
   Client-Faces-enabled                               (default: true)
   Client-Faces-keywordsToPersons                     (default: true)
@@ -196,7 +214,7 @@ Environmental variables:
         "Media": {
             "//[folder]": "Images are loaded from this folder (read permission required)",
             "folder": "demo/images",
-            "//[tempFolder]": "Thumbnails, coverted photos, videos will be stored here (write permission required)",
+            "//[tempFolder]": "Thumbnails, converted photos, videos will be stored here (write permission required)",
             "tempFolder": "demo/tmp",
             "Video": {
                 "transcoding": {
@@ -225,6 +243,13 @@ Environmental variables:
                 "qualityPriority": true,
                 "personFaceMargin": 0.6
             }
+        },
+        "Preview": {
+            "SearchQuery": null,
+            "Sorting": [
+                6,
+                4
+            ]
         },
         "Threading": {
             "//[enabled]": "App can run on multiple thread",
@@ -279,7 +304,9 @@ Environmental variables:
                 {
                     "name": "Indexing",
                     "jobName": "Indexing",
-                    "config": {},
+                    "config": {
+                        "indexChangesOnly": true
+                    },
                     "allowParallelRun": false,
                     "trigger": {
                         "type": "never"
@@ -351,15 +378,24 @@ Environmental variables:
                 "maxItemsPerCategory": 5,
                 "cacheTimeout": 3600000
             },
-            "maxMediaResult": 2000,
+            "maxMediaResult": 10000,
+            "//[listDirectories]": "Search returns also with directories, not just media",
+            "listDirectories": false,
+            "//[listMetafiles]": "Search also returns with metafiles from directories that contain a media file of the matched search result",
+            "listMetafiles": false,
             "maxDirectoryResult": 200
         },
         "Sharing": {
             "enabled": true,
             "passwordProtected": true
         },
+        "Album": {
+            "enabled": true
+        },
         "Map": {
             "enabled": true,
+            "//[maxPreviewMarkers]": "Maximum number of markers to be shown on the map preview on the gallery page.",
+            "maxPreviewMarkers": 50,
             "useImageMarkers": true,
             "mapProvider": "OpenStreetMap",
             "mapboxAccessToken": "",
@@ -377,11 +413,14 @@ Environmental variables:
             "enableCache": true,
             "enableOnScrollRendering": true,
             "defaultPhotoSortingMethod": "ascDate",
+            "//[enableDirectorySortingByDate]": "If enabled directories will be sorted by date, like photos, otherwise by name. Directory date is the last modification time of that directory not the creation date of the oldest photo",
+            "enableDirectorySortingByDate": false,
             "enableOnScrollThumbnailPrioritising": true,
             "NavBar": {
                 "showItemCount": true
             },
-            "captionFirstNaming": false
+            "captionFirstNaming": false,
+            "enableDownloadZip": false
         },
         "authenticationRequired": true,
         "unAuthenticatedUserRole": "Admin",
@@ -400,7 +439,9 @@ Environmental variables:
             "Photo": {
                 "Converting": {
                     "enabled": true
-                }
+                },
+                "//[loadFullImageOnZoom]": "Enables loading the full resolution image on zoom in the ligthbox (preview).",
+                "loadFullImageOnZoom": true
             }
         },
         "MetaFile": {
@@ -413,5 +454,4 @@ Environmental variables:
             "readAccessMinRole": "User"
         }
     }
-}
-```
+}```

@@ -11,6 +11,7 @@ import {IJobManager} from './database/interfaces/IJobManager';
 import {LocationManager} from './database/LocationManager';
 import {IAlbumManager} from './database/interfaces/IAlbumManager';
 import {JobManager} from './jobs/JobManager';
+import {IPreviewManager} from './database/interfaces/IPreviewManager';
 
 const LOG_TAG = '[ObjectManagers]';
 
@@ -24,6 +25,7 @@ export class ObjectManagers {
   private sharingManager: ISharingManager;
   private indexingManager: IIndexingManager;
   private personManager: IPersonManager;
+  private previewManager: IPreviewManager;
   private versionManager: IVersionManager;
   private jobManager: IJobManager;
   private locationManager: LocationManager;
@@ -60,6 +62,13 @@ export class ObjectManagers {
 
   set PersonManager(value: IPersonManager) {
     this.personManager = value;
+  }
+  get PreviewManager(): IPreviewManager {
+    return this.previewManager;
+  }
+
+  set PreviewManager(value: IPreviewManager) {
+    this.previewManager = value;
   }
 
   get IndexingManager(): IIndexingManager {
@@ -150,6 +159,7 @@ export class ObjectManagers {
     ObjectManagers.getInstance().GalleryManager = new (require(`./database/${type}/GalleryManager`).GalleryManager)();
     ObjectManagers.getInstance().IndexingManager = new (require(`./database/${type}/IndexingManager`).IndexingManager)();
     ObjectManagers.getInstance().PersonManager = new (require(`./database/${type}/PersonManager`).PersonManager)();
+    ObjectManagers.getInstance().PreviewManager = new (require(`./database/${type}/PreviewManager`).PreviewManager)();
     ObjectManagers.getInstance().SearchManager = new (require(`./database/${type}/SearchManager`).SearchManager)();
     ObjectManagers.getInstance().SharingManager = new (require(`./database/${type}/SharingManager`).SharingManager)();
     ObjectManagers.getInstance().UserManager = new (require(`./database/${type}/UserManager`).UserManager)();

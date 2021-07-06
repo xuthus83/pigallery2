@@ -19,6 +19,7 @@ import {ProjectPath} from '../../../../../src/backend/ProjectPath';
 import * as path from 'path';
 import {DiskManager} from '../../../../../src/backend/model/DiskManger';
 import {AlbumManager} from '../../../../../src/backend/model/database/sql/AlbumManager';
+import {SortingMethods} from '../../../../../src/common/entities/SortingMethods';
 
 const deepEqualInAnyOrder = require('deep-equal-in-any-order');
 const chai = require('chai');
@@ -29,11 +30,11 @@ const {expect} = chai;
 class GalleryManagerTest extends GalleryManager {
 
 
-  public async selectParentDir(connection: Connection, directoryName: string, directoryParent: string): Promise<DirectoryEntity> {
+  public async selectParentDir(connection: Connection, directoryName: string, directoryParent: string): Promise<ParentDirectoryDTO> {
     return super.selectParentDir(connection, directoryName, directoryParent);
   }
 
-  public async fillParentDir(connection: Connection, dir: DirectoryEntity): Promise<void> {
+  public async fillParentDir(connection: Connection, dir: ParentDirectoryDTO): Promise<void> {
     return super.fillParentDir(connection, dir);
   }
 
@@ -69,6 +70,7 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
 
   afterEach(async () => {
     Config.loadSync();
+    Config.Server.Preview.Sorting = [SortingMethods.descRating];
     await sqlHelper.clearDB();
   });
 
@@ -82,7 +84,28 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
     delete dir.media;
   };
 
-  const removeIds = (dir: DirectoryBaseDTO) => {
+  const makePreview = (m: MediaDTO) => {
+    delete (m.directory as ParentDirectoryDTO).id;
+    delete m.metadata;
+    return m;
+  };
+
+  const indexifyReturn = (dir: DirectoryBaseDTO): DirectoryBaseDTO => {
+    const d = Utils.clone(dir);
+
+    delete d.preview;
+    if (d.directories) {
+      for (const subD of d.directories) {
+        if (subD.preview) {
+          delete subD.preview.metadata;
+        }
+      }
+    }
+
+    return d;
+  };
+
+  const removeIds = (dir: DirectoryBaseDTO): DirectoryBaseDTO => {
     delete dir.id;
     dir.media.forEach((media: MediaDTO) => {
       delete media.id;
@@ -104,6 +127,8 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
         removeIds(directory);
       });
     }
+
+    return dir;
   };
 
   it('should support case sensitive file names', async () => {
@@ -124,9 +149,9 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
     await gm.fillParentDir(conn, selected);
 
     DirectoryDTOUtils.packDirectory(selected);
-    removeIds(selected);
-    expect(Utils.clone(Utils.removeNullOrEmptyObj(selected)))
-      .to.deep.equal(Utils.clone(Utils.removeNullOrEmptyObj(parent)));
+
+    expect(Utils.clone(Utils.removeNullOrEmptyObj(removeIds(selected))))
+      .to.deep.equalInAnyOrder(Utils.removeNullOrEmptyObj(indexifyReturn(parent)));
   });
 
 
@@ -153,7 +178,7 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
     setPartial(subDir1);
     setPartial(subDir2);
     expect(Utils.clone(Utils.removeNullOrEmptyObj(selected)))
-      .to.deep.equalInAnyOrder(Utils.clone(Utils.removeNullOrEmptyObj(parent)));
+      .to.deep.equalInAnyOrder(Utils.removeNullOrEmptyObj(indexifyReturn(parent)));
   });
 
   it('should support case sensitive directory path', async () => {
@@ -182,7 +207,7 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
       removeIds(selected);
       setPartial(subDir1);
       expect(Utils.clone(Utils.removeNullOrEmptyObj(selected)))
-        .to.deep.equalInAnyOrder(Utils.clone(Utils.removeNullOrEmptyObj(parent1)));
+        .to.deep.equalInAnyOrder(Utils.removeNullOrEmptyObj(indexifyReturn(parent1)));
     }
     {
       const selected = await gm.selectParentDir(conn, parent2.name, parent2.path);
@@ -192,7 +217,7 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
       removeIds(selected);
       setPartial(subDir2);
       expect(Utils.clone(Utils.removeNullOrEmptyObj(selected)))
-        .to.deep.equalInAnyOrder(Utils.clone(Utils.removeNullOrEmptyObj(parent2)));
+        .to.deep.equalInAnyOrder(Utils.removeNullOrEmptyObj(indexifyReturn(parent2)));
     }
   });
 
@@ -217,7 +242,7 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
 
     const checkParent = async () => {
       const selected = await selectDirectory(gm, parent);
-      const cloned = Utils.removeNullOrEmptyObj(Utils.clone(parent));
+      const cloned = Utils.removeNullOrEmptyObj(indexifyReturn(parent));
       if (cloned.directories) {
         cloned.directories.forEach(d => setPartial(d));
       }
@@ -263,8 +288,11 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
     const subDir = TestHelper.getRandomizedDirectoryEntry(null, 'subDir');
     subDir.path = DiskMangerWorker.pathFromParent(parent);
     const sp1 = TestHelper.getRandomizedPhotoEntry(subDir, 'subPhoto1', 0);
+    sp1.metadata.rating = 5;
     const sp2 = TestHelper.getRandomizedPhotoEntry(subDir, 'subPhoto2', 0);
-
+    sp2.metadata.rating = 3;
+    subDir.preview = sp1;
+    Config.Server.Preview.Sorting = [SortingMethods.descRating];
 
     DirectoryDTOUtils.packDirectory(subDir);
     await im.saveToDB(Utils.clone(subDir) as ParentDirectoryDTO);
@@ -283,7 +311,7 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
     removeIds(selected);
     setPartial(subDir);
     expect(Utils.clone(Utils.removeNullOrEmptyObj(selected)))
-      .to.deep.equalInAnyOrder(Utils.clone(Utils.removeNullOrEmptyObj(parent)));
+      .to.deep.equalInAnyOrder(Utils.removeNullOrEmptyObj(indexifyReturn(parent)));
   });
 
 
@@ -297,7 +325,11 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
     const subDir = TestHelper.getRandomizedDirectoryEntry(null, 'subDir');
     subDir.path = DiskMangerWorker.pathFromParent(parent);
     const sp1 = TestHelper.getRandomizedPhotoEntry(subDir, 'subPhoto1', 0);
+    sp1.metadata.rating = 5;
     const sp2 = TestHelper.getRandomizedPhotoEntry(subDir, 'subPhoto2', 0);
+    sp2.metadata.rating = 3;
+    subDir.preview = sp1;
+    Config.Server.Preview.Sorting = [SortingMethods.descRating];
 
 
     DirectoryDTOUtils.packDirectory(subDir);
@@ -317,7 +349,7 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
     removeIds(selected);
     setPartial(subDir);
     expect(Utils.clone(Utils.removeNullOrEmptyObj(selected)))
-      .to.deep.equalInAnyOrder(Utils.clone(Utils.removeNullOrEmptyObj(parent)));
+      .to.deep.equalInAnyOrder(Utils.removeNullOrEmptyObj(indexifyReturn(parent)));
   });
 
   it('should save parent directory', async () => {
@@ -330,8 +362,11 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
     const gpx = TestHelper.getRandomizedGPXEntry(parent, 'GPX1');
     const subDir = TestHelper.getRandomizedDirectoryEntry(parent, 'subDir');
     const sp1 = TestHelper.getRandomizedPhotoEntry(subDir, 'subPhoto1', 0);
+    sp1.metadata.rating = 5;
     const sp2 = TestHelper.getRandomizedPhotoEntry(subDir, 'subPhoto2', 0);
-
+    sp2.metadata.rating = 3;
+    subDir.preview = sp1;
+    Config.Server.Preview.Sorting = [SortingMethods.descRating];
 
     DirectoryDTOUtils.packDirectory(parent);
     await im.saveToDB(Utils.clone(parent) as ParentDirectoryDTO);
@@ -344,7 +379,7 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
     removeIds(selected);
     setPartial(subDir);
     expect(Utils.clone(Utils.removeNullOrEmptyObj(selected)))
-      .to.deep.equalInAnyOrder(Utils.clone(Utils.removeNullOrEmptyObj(parent)));
+      .to.deep.equalInAnyOrder(Utils.removeNullOrEmptyObj(indexifyReturn(parent)));
   });
 
 
@@ -381,7 +416,7 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
     DirectoryDTOUtils.packDirectory(selected);
     removeIds(selected);
     expect(Utils.clone(Utils.removeNullOrEmptyObj(selected)))
-      .to.deep.equalInAnyOrder(Utils.clone(Utils.removeNullOrEmptyObj(parent)));
+      .to.deep.equalInAnyOrder(Utils.removeNullOrEmptyObj(indexifyReturn(parent)));
   });
 
   it('should skip meta files', async () => {
@@ -404,7 +439,7 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
     DirectoryDTOUtils.packDirectory(selected);
     removeIds(selected);
     expect(Utils.clone(Utils.removeNullOrEmptyObj(selected)))
-      .to.deep.equalInAnyOrder(Utils.clone(Utils.removeNullOrEmptyObj(parent)));
+      .to.deep.equalInAnyOrder(Utils.removeNullOrEmptyObj(indexifyReturn(parent)));
   });
 
   it('should update sub directory', async () => {
@@ -439,7 +474,7 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
     removeIds(selected);
     // selected.directories[0].parent = selected;
     expect(Utils.clone(Utils.removeNullOrEmptyObj(selected)))
-      .to.deep.equalInAnyOrder(Utils.clone(Utils.removeNullOrEmptyObj(subDir)));
+      .to.deep.equalInAnyOrder(Utils.removeNullOrEmptyObj(indexifyReturn(subDir)));
   });
 
   it('should avoid race condition', async () => {
@@ -453,8 +488,11 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
     const gpx = TestHelper.getRandomizedGPXEntry(parent, 'GPX1');
     const subDir = TestHelper.getRandomizedDirectoryEntry(parent, 'subDir');
     const sp1 = TestHelper.getRandomizedPhotoEntry(subDir, 'subPhoto1', 1);
+    sp1.metadata.rating = 5;
     const sp2 = TestHelper.getRandomizedPhotoEntry(subDir, 'subPhoto2', 1);
-
+    sp2.metadata.rating = 3;
+    subDir.preview = sp1;
+    Config.Server.Preview.Sorting = [SortingMethods.descRating];
 
     DirectoryDTOUtils.packDirectory(parent);
     const s1 = im.queueForSave(Utils.clone(parent) as ParentDirectoryDTO);
@@ -473,7 +511,7 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
     delete sp1.metadata.faces;
     delete sp2.metadata.faces;
     expect(Utils.clone(Utils.removeNullOrEmptyObj(selected)))
-      .to.deep.equalInAnyOrder(Utils.clone(Utils.removeNullOrEmptyObj(parent)));
+      .to.deep.equalInAnyOrder(Utils.removeNullOrEmptyObj(indexifyReturn(parent)));
   });
 
   it('should reset DB', async () => {
@@ -494,7 +532,7 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
     DirectoryDTOUtils.packDirectory(selected);
     removeIds(selected);
     expect(Utils.clone(Utils.removeNullOrEmptyObj(selected)))
-      .to.deep.equal(Utils.clone(Utils.removeNullOrEmptyObj(parent)));
+      .to.deep.equal(Utils.removeNullOrEmptyObj(indexifyReturn(parent)));
 
     await im.resetDB();
     const selectReset = await gm.selectParentDir(conn, parent.name, parent.path);
