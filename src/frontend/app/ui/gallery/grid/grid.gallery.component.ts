@@ -28,7 +28,6 @@ import {SortingMethods} from '../../../../../common/entities/SortingMethods';
 import {MediaDTO, MediaDTOUtils} from '../../../../../common/entities/MediaDTO';
 import {QueryParams} from '../../../../../common/QueryParams';
 import {SeededRandomService} from '../../../model/seededRandom.service';
-import {compare} from 'natural-orderby';
 
 @Component({
   selector: 'app-gallery-grid',
@@ -239,13 +238,15 @@ export class GalleryGridComponent implements OnChanges, OnInit, AfterViewInit, O
     this.changeDetector.detectChanges();
   }
 
+  private collator = new Intl.Collator(undefined, {numeric: true});
+
   private sortPhotos(): void {
     switch (this.galleryService.sorting.value) {
       case SortingMethods.ascName:
-        this.media.sort((a: PhotoDTO, b: PhotoDTO) => compare()(a.name, b.name));
+        this.media.sort((a: PhotoDTO, b: PhotoDTO) => this.collator.compare(a.name, b.name));
         break;
       case SortingMethods.descName:
-        this.media.sort((a: PhotoDTO, b: PhotoDTO) => compare({order: 'desc'})(a.name, b.name));
+        this.media.sort((a: PhotoDTO, b: PhotoDTO) => this.collator.compare(b.name, a.name));
         break;
       case SortingMethods.ascDate:
         this.media.sort((a: PhotoDTO, b: PhotoDTO): number => {
@@ -378,6 +379,3 @@ export class GalleryGridComponent implements OnChanges, OnInit, AfterViewInit, O
 
 
 }
-
-
-

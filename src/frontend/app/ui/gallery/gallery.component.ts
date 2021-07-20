@@ -17,7 +17,6 @@ import {PhotoDTO} from '../../../../common/entities/PhotoDTO';
 import {QueryParams} from '../../../../common/QueryParams';
 import {SeededRandomService} from '../../model/seededRandom.service';
 import {take} from 'rxjs/operators';
-import {compare} from 'natural-orderby';
 
 @Component({
   selector: 'app-gallery',
@@ -160,6 +159,8 @@ export class GalleryComponent implements OnInit, OnDestroy {
     }
   };
 
+  private collator = new Intl.Collator(undefined, {numeric: true});
+
   private sortDirectories(): void {
     if (!this.directories) {
       return;
@@ -167,26 +168,25 @@ export class GalleryComponent implements OnInit, OnDestroy {
     switch (this.galleryService.sorting.value) {
       case SortingMethods.ascRating: // directories does not have rating
       case SortingMethods.ascName:
-        this.directories.sort((a, b) => compare()(a.name, b.name));
+        this.directories.sort((a, b) => this.collator.compare(a.name, b.name));
         break;
       case SortingMethods.ascDate:
         if (Config.Client.Other.enableDirectorySortingByDate === true) {
-          this.directories.sort((a, b) => compare()(a.lastModified, b.lastModified));
+          this.directories.sort((a, b) => a.lastModified - b.lastModified);
           break;
         }
-        this.directories.sort((a, b) => compare()(a.name, b.name));
+        this.directories.sort((a, b) => this.collator.compare(a.name, b.name));
         break;
-
       case SortingMethods.descRating: // directories does not have rating
       case SortingMethods.descName:
-        this.directories.sort((a, b) => compare({order: 'desc'})(a.name, b.name));
+        this.directories.sort((a, b) => this.collator.compare(b.name, a.name));
         break;
       case SortingMethods.descDate:
         if (Config.Client.Other.enableDirectorySortingByDate === true) {
-          this.directories.sort((a, b) => compare({order: 'desc'})(a.lastModified, b.lastModified));
+          this.directories.sort((a, b) => b.lastModified - a.lastModified);
           break;
         }
-        this.directories.sort((a, b) => compare({order: 'desc'})(a.name, b.name));
+        this.directories.sort((a, b) => this.collator.compare(b.name, a.name));
         break;
       case SortingMethods.random:
         this.rndService.setSeed(this.directories.length);
@@ -207,4 +207,3 @@ export class GalleryComponent implements OnInit, OnDestroy {
 
   }
 }
-
