@@ -2,8 +2,12 @@ import {GPSMetadata} from '../../../common/entities/PhotoDTO';
 import * as NodeGeocoder from 'node-geocoder';
 import {LocationLookupException} from '../../exceptions/LocationLookupException';
 import {LRU} from '../../../common/Utils';
+import {IObjectManager} from './interfaces/IObjectManager';
+import {ParentDirectoryDTO} from '../../../common/entities/DirectoryDTO';
 
-export class LocationManager {
+export class LocationManager implements IObjectManager {
+  // onNewDataVersion only need for TypeScript, otherwise the interface is not implemented.
+  readonly onNewDataVersion: (changedDir?: ParentDirectoryDTO) => Promise<void>;
   readonly geocoder: NodeGeocoder.Geocoder;
   cache = new LRU<GPSMetadata>(100);
 

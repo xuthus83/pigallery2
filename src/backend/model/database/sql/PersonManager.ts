@@ -77,7 +77,7 @@ export class PersonManager implements ISQLPersonManager {
 
   }
 
-  public async onGalleryIndexUpdate(): Promise<void> {
+  public async onNewDataVersion(): Promise<void> {
     await this.updateCounts();
     await this.updateSamplePhotos();
     await this.loadAll();

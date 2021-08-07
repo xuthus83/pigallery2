@@ -1,7 +1,8 @@
 import {SavedSearchDTO} from '../../../../common/entities/album/SavedSearchDTO';
 import {PreviewPhotoDTO} from '../../../../common/entities/PhotoDTO';
+import {IObjectManager} from './IObjectManager';
 
-export interface IPreviewManager {
+export interface IPreviewManager extends IObjectManager {
   getPreviewForDirectory(dir: { id: number, name: string, path: string }): Promise<PreviewPhotoDTOWithID>;
 
   getAlbumPreview(album: SavedSearchDTO): Promise<PreviewPhotoDTOWithID>;

@@ -1,7 +1,8 @@
 import {SearchQueryDTO} from '../../../../common/entities/SearchQueryDTO';
 import {AlbumBaseDTO} from '../../../../common/entities/album/AlbumBaseDTO';
+import {IObjectManager} from './IObjectManager';
 
-export interface IAlbumManager {
+export interface IAlbumManager extends IObjectManager{
   /**
    * Creates a saved search type of album
    */
@@ -27,5 +28,5 @@ export interface IAlbumManager {
   /**
    * Updates previews and album counts
    */
-  onGalleryIndexUpdate(): Promise<void>;
+  onNewDataVersion(): Promise<void>;
 }

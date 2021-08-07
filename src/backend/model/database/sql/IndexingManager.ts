@@ -95,6 +95,23 @@ export class IndexingManager implements IIndexingManager {
       .execute();
   }
 
+  public async saveToDB(scannedDirectory: ParentDirectoryDTO): Promise<void> {
+    this.isSaving = true;
+    try {
+      const connection = await SQLConnection.getConnection();
+      const serverSideConfigs = scannedDirectory.metaFile.filter(m => !!ServerPG2ConfMap[m.name]);
+      scannedDirectory.metaFile = scannedDirectory.metaFile.filter(m => !ServerPG2ConfMap[m.name]);
+      const currentDirId: number = await this.saveParentDir(connection, scannedDirectory);
+      await this.saveChildDirs(connection, currentDirId, scannedDirectory);
+      await this.saveMedia(connection, currentDirId, scannedDirectory.media);
+      await this.saveMetaFiles(connection, currentDirId, scannedDirectory);
+      await IndexingManager.processServerSidePG2Conf(serverSideConfigs);
+      await ObjectManagers.getInstance().onDataChange(scannedDirectory);
+    } finally {
+      this.isSaving = false;
+    }
+  }
+
   // Todo fix it, once typeorm support connection pools for sqlite
   /**
    * Queues up a directory to save to the DB.
@@ -357,25 +374,6 @@ export class IndexingManager implements IIndexingManager {
     }
     await faceRepository.remove(indexedFaces, {chunk: Math.max(Math.ceil(indexedFaces.length / 500), 1)});
 
-  }
-
-  protected async saveToDB(scannedDirectory: ParentDirectoryDTO): Promise<void> {
-    this.isSaving = true;
-    try {
-      const connection = await SQLConnection.getConnection();
-      const serverSideConfigs = scannedDirectory.metaFile.filter(m => !!ServerPG2ConfMap[m.name]);
-      scannedDirectory.metaFile = scannedDirectory.metaFile.filter(m => !ServerPG2ConfMap[m.name]);
-      const currentDirId: number = await this.saveParentDir(connection, scannedDirectory);
-      await this.saveChildDirs(connection, currentDirId, scannedDirectory);
-      await this.saveMedia(connection, currentDirId, scannedDirectory.media);
-      await this.saveMetaFiles(connection, currentDirId, scannedDirectory);
-      await ObjectManagers.getInstance().PersonManager.onGalleryIndexUpdate();
-      await ObjectManagers.getInstance().AlbumManager.onGalleryIndexUpdate();
-      await ObjectManagers.getInstance().VersionManager.updateDataVersion();
-      await IndexingManager.processServerSidePG2Conf(serverSideConfigs);
-    } finally {
-      this.isSaving = false;
-    }
   }
 
   private async saveChunk<T>(repository: Repository<any>, entities: T[], size: number): Promise<T[]> {

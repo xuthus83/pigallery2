@@ -12,6 +12,8 @@ import {LocationManager} from './database/LocationManager';
 import {IAlbumManager} from './database/interfaces/IAlbumManager';
 import {JobManager} from './jobs/JobManager';
 import {IPreviewManager} from './database/interfaces/IPreviewManager';
+import {ParentDirectoryDTO} from '../../common/entities/DirectoryDTO';
+import {IObjectManager} from './database/interfaces/IObjectManager';
 
 const LOG_TAG = '[ObjectManagers]';
 
@@ -19,6 +21,7 @@ export class ObjectManagers {
 
   private static instance: ObjectManagers = null;
 
+  private readonly managers: IObjectManager[];
   private galleryManager: IGalleryManager;
   private userManager: IUserManager;
   private searchManager: ISearchManager;
@@ -32,12 +35,20 @@ export class ObjectManagers {
   private albumManager: IAlbumManager;
 
 
+  constructor() {
+    this.managers = [];
+  }
+
   get VersionManager(): IVersionManager {
     return this.versionManager;
   }
 
   set VersionManager(value: IVersionManager) {
+    if (this.versionManager) {
+      this.managers.splice(this.managers.indexOf(this.versionManager), 1);
+    }
     this.versionManager = value;
+    this.managers.push(this.versionManager);
   }
 
   get LocationManager(): LocationManager {
@@ -45,7 +56,11 @@ export class ObjectManagers {
   }
 
   set LocationManager(value: LocationManager) {
+    if (this.locationManager) {
+      this.managers.splice(this.managers.indexOf(this.locationManager), 1);
+    }
     this.locationManager = value;
+    this.managers.push(this.locationManager);
   }
 
   get AlbumManager(): IAlbumManager {
@@ -53,7 +68,11 @@ export class ObjectManagers {
   }
 
   set AlbumManager(value: IAlbumManager) {
+    if (this.albumManager) {
+      this.managers.splice(this.managers.indexOf(this.albumManager), 1);
+    }
     this.albumManager = value;
+    this.managers.push(this.albumManager);
   }
 
   get PersonManager(): IPersonManager {
@@ -61,14 +80,23 @@ export class ObjectManagers {
   }
 
   set PersonManager(value: IPersonManager) {
+    if (this.personManager) {
+      this.managers.splice(this.managers.indexOf(this.personManager), 1);
+    }
     this.personManager = value;
+    this.managers.push(this.personManager);
   }
+
   get PreviewManager(): IPreviewManager {
     return this.previewManager;
   }
 
   set PreviewManager(value: IPreviewManager) {
+    if (this.previewManager) {
+      this.managers.splice(this.managers.indexOf(this.previewManager), 1);
+    }
     this.previewManager = value;
+    this.managers.push(this.previewManager);
   }
 
   get IndexingManager(): IIndexingManager {
@@ -76,7 +104,11 @@ export class ObjectManagers {
   }
 
   set IndexingManager(value: IIndexingManager) {
+    if (this.indexingManager) {
+      this.managers.splice(this.managers.indexOf(this.indexingManager), 1);
+    }
     this.indexingManager = value;
+    this.managers.push(this.indexingManager);
   }
 
 
@@ -85,7 +117,11 @@ export class ObjectManagers {
   }
 
   set GalleryManager(value: IGalleryManager) {
+    if (this.galleryManager) {
+      this.managers.splice(this.managers.indexOf(this.galleryManager), 1);
+    }
     this.galleryManager = value;
+    this.managers.push(this.galleryManager);
   }
 
   get UserManager(): IUserManager {
@@ -93,7 +129,11 @@ export class ObjectManagers {
   }
 
   set UserManager(value: IUserManager) {
+    if (this.userManager) {
+      this.managers.splice(this.managers.indexOf(this.userManager), 1);
+    }
     this.userManager = value;
+    this.managers.push(this.userManager);
   }
 
   get SearchManager(): ISearchManager {
@@ -101,7 +141,11 @@ export class ObjectManagers {
   }
 
   set SearchManager(value: ISearchManager) {
+    if (this.searchManager) {
+      this.managers.splice(this.managers.indexOf(this.searchManager), 1);
+    }
     this.searchManager = value;
+    this.managers.push(this.searchManager);
   }
 
   get SharingManager(): ISharingManager {
@@ -109,7 +153,11 @@ export class ObjectManagers {
   }
 
   set SharingManager(value: ISharingManager) {
+    if (this.sharingManager) {
+      this.managers.splice(this.managers.indexOf(this.sharingManager), 1);
+    }
     this.sharingManager = value;
+    this.managers.push(this.sharingManager);
   }
 
   get JobManager(): IJobManager {
@@ -117,7 +165,11 @@ export class ObjectManagers {
   }
 
   set JobManager(value: IJobManager) {
+    if (this.jobManager) {
+      this.managers.splice(this.managers.indexOf(this.jobManager), 1);
+    }
     this.jobManager = value;
+    this.managers.push(this.jobManager);
   }
 
   public static getInstance(): ObjectManagers {
@@ -128,6 +180,7 @@ export class ObjectManagers {
   }
 
   public static async reset(): Promise<void> {
+    Logger.silly(LOG_TAG, 'Object manager reset begin');
     if (ObjectManagers.getInstance().IndexingManager &&
       ObjectManagers.getInstance().IndexingManager.IsSavingInProgress) {
       await ObjectManagers.getInstance().IndexingManager.SavingReady;
@@ -139,7 +192,6 @@ export class ObjectManagers {
     this.instance = null;
     Logger.debug(LOG_TAG, 'Object manager reset');
   }
-
 
   public static async InitMemoryManagers(): Promise<void> {
     await ObjectManagers.reset();
@@ -166,6 +218,19 @@ export class ObjectManagers {
     ObjectManagers.getInstance().VersionManager = new (require(`./database/${type}/VersionManager`).VersionManager)();
     ObjectManagers.getInstance().JobManager = new JobManager();
     ObjectManagers.getInstance().LocationManager = new LocationManager();
+  }
+
+  public async onDataChange(changedDir: ParentDirectoryDTO = null): Promise<void> {
+    await this.VersionManager.onNewDataVersion(changedDir);
+
+    for (const manager of this.managers) {
+      if (manager === this.versionManager) {
+        continue;
+      }
+      if (manager.onNewDataVersion) {
+        await manager.onNewDataVersion(changedDir);
+      }
+    }
   }
 
 }

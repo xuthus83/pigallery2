@@ -5,7 +5,6 @@ import {SQLConnection} from '../../src/backend/model/database/sql/SQLConnection'
 import {DatabaseType} from '../../src/common/config/private/PrivateConfig';
 import {ProjectPath} from '../../src/backend/ProjectPath';
 import {DirectoryBaseDTO, ParentDirectoryDTO} from '../../src/common/entities/DirectoryDTO';
-import {DirectoryEntity} from '../../src/backend/model/database/sql/enitites/DirectoryEntity';
 import {ObjectManagers} from '../../src/backend/model/ObjectManagers';
 import {DiskMangerWorker} from '../../src/backend/model/threading/DiskMangerWorker';
 import {IndexingManager} from '../../src/backend/model/database/sql/IndexingManager';
@@ -89,8 +88,7 @@ export class DBTestHelper {
     ObjectManagers.getInstance().IndexingManager.indexDirectory = () => Promise.resolve(null);
 
 
-    const im = new IndexingManagerTest();
-    await im.saveToDB(directory as ParentDirectoryDTO);
+    await ObjectManagers.getInstance().IndexingManager.saveToDB(directory as ParentDirectoryDTO);
     // not saving subdirs. saveToDB destroys data
     // await im.saveToDB(subDir);
     // await im.saveToDB(subDir2);

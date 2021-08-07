@@ -72,7 +72,7 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
 
       // not indexed since a while, index it in a lazy manner
       if ((Date.now() - dir.lastScanned > Config.Server.Indexing.cachedFolderTimeout &&
-        Config.Server.Indexing.reIndexingSensitivity >= ReIndexingSensitivity.medium) ||
+          Config.Server.Indexing.reIndexingSensitivity >= ReIndexingSensitivity.medium) ||
         Config.Server.Indexing.reIndexingSensitivity >= ReIndexingSensitivity.high) {
         // on the fly reindexing
 
@@ -224,7 +224,7 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
     dir.media = [];
     dir.preview = await ObjectManagers.getInstance().PreviewManager.getPreviewForDirectory(dir);
     dir.isPartial = true;
-    
+
     if (dir.preview) {
       dir.preview.readyThumbnails = [];
       dir.preview.readyIcon = false;

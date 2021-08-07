@@ -48,7 +48,7 @@ export class AlbumManager implements IAlbumManager {
         'directory.path']).getMany();
   }
 
-  public async onGalleryIndexUpdate(): Promise<void> {
+  public async onNewDataVersion(): Promise<void> {
     await this.updateAlbums();
   }
 
