@@ -3,6 +3,10 @@ import {SearchQueryDTO} from '../../../../common/entities/SearchQueryDTO';
 import {IAlbumManager} from '../interfaces/IAlbumManager';
 
 export class AlbumManager implements IAlbumManager {
+  onNewDataVersion(): Promise<void> {
+    throw new Error('not supported by memory DB');
+  }
+
   public async onGalleryIndexUpdate(): Promise<void> {
     throw new Error('not supported by memory DB');
   }
