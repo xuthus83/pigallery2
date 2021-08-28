@@ -3,7 +3,7 @@
     {
       "box": {
         "height": 18,
-        "left": 2.5,
+        "left": 3,
         "top": 8,
         "width": 21
       },
@@ -12,8 +12,8 @@
     {
       "box": {
         "height": 7,
-        "left": 13.5,
-        "top": 0.5,
+        "left": 14,
+        "top": 1,
         "width": 9
       },
       "name": "leaf"
