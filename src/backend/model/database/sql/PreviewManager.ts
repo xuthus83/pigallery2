@@ -9,6 +9,7 @@ import {ISQLSearchManager} from './ISearchManager';
 import {IPreviewManager, PreviewPhotoDTOWithID} from '../interfaces/IPreviewManager';
 import {SQLConnection} from './SQLConnection';
 import {SavedSearchDTO} from '../../../../common/entities/album/SavedSearchDTO';
+import {SearchQueryDTO} from '../../../../common/entities/SearchQueryDTO';
 
 
 const LOG_TAG = '[PreviewManager]';
@@ -45,7 +46,7 @@ export class PreviewManager implements IPreviewManager {
     return query;
   }
 
-  public async getAlbumPreview(album: SavedSearchDTO): Promise<PreviewPhotoDTOWithID> {
+  public async getAlbumPreview(album: { searchQuery: SearchQueryDTO }): Promise<PreviewPhotoDTOWithID> {
 
     const albumQuery = await (ObjectManagers.getInstance().SearchManager as ISQLSearchManager).prepareAndBuildWhereQuery(album.searchQuery);
     const connection = await SQLConnection.getConnection();

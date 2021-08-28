@@ -1171,8 +1171,6 @@ describe('SearchManager', (sqlHelper: DBTestHelper) => {
 
           if (lengths[0] !== lengths[lengths.length - 1]) {
             for (const l of (q as SearchListQuery).list) {
-              console.log(shortestDepth(l));
-              console.log(parser.stringify(l));
             }
           }
           return lengths[0];

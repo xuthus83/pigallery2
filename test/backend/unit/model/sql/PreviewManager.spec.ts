@@ -181,10 +181,6 @@ describe('PreviewManager', (sqlHelper: DBTestHelper) => {
     const pm = new PreviewManager();
     Config.Server.Preview.SearchQuery = null;
     expect(Utils.clone(await pm.getAlbumPreview({
-      name: 'test',
-      id: 0,
-      count: 0,
-      locked: false,
       searchQuery: {
         type: SearchQueryTypes.any_text,
         text: 'sw'
@@ -192,10 +188,6 @@ describe('PreviewManager', (sqlHelper: DBTestHelper) => {
     }))).to.deep.equalInAnyOrder(previewifyMedia(p4));
     Config.Server.Preview.SearchQuery = {type: SearchQueryTypes.any_text, text: 'Boba'} as TextSearch;
     expect(Utils.clone(await pm.getAlbumPreview({
-      name: 'test',
-      id: 0,
-      count: 0,
-      locked: false,
       searchQuery: {
         type: SearchQueryTypes.any_text,
         text: 'sw'
@@ -203,10 +195,6 @@ describe('PreviewManager', (sqlHelper: DBTestHelper) => {
     }))).to.deep.equalInAnyOrder(previewifyMedia(p));
     Config.Server.Preview.SearchQuery = {type: SearchQueryTypes.any_text, text: 'Derem'} as TextSearch;
     expect(Utils.clone(await pm.getAlbumPreview({
-      name: 'test',
-      id: 0,
-      count: 0,
-      locked: false,
       searchQuery: {
         type: SearchQueryTypes.any_text,
         text: 'sw'

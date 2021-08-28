@@ -67,7 +67,11 @@ describe('PersonManager', (sqlHelper: DBTestHelper) => {
     const pm = new PersonManager();
     const person = Utils.clone(savedPerson[0]);
 
-    expect(await pm.get('Boba Fett')).to.deep.equal(person);
+    const selected = Utils.clone(await pm.get('Boba Fett'));
+    delete selected.sampleRegion;
+    delete person.sampleRegion;
+    person.count = 1;
+    expect(selected).to.deep.equal(person);
 
     expect((await pm.get('Boba Fett') as PersonWithSampleRegion).sampleRegion.media.name).to.deep.equal(p.name);
   });

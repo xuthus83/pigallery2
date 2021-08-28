@@ -22,6 +22,7 @@ import {ProjectPath} from '../../../ProjectPath';
 import * as path from 'path';
 import * as fs from 'fs';
 import {SearchQueryDTO} from '../../../../common/entities/SearchQueryDTO';
+import {PersonEntry} from './enitites/PersonEntry';
 
 const LOG_TAG = '[IndexingManager]';
 
@@ -328,16 +329,18 @@ export class IndexingManager implements IIndexingManager {
 
   protected async saveFaces(connection: Connection, parentDirId: number, scannedFaces: FaceRegion[]): Promise<void> {
     const faceRepository = connection.getRepository(FaceRegionEntry);
+    const personRepository = connection.getRepository(PersonEntry);
 
-    const persons: string[] = [];
+    const persons: { name: string, faceRegion: FaceRegion }[] = [];
 
     for (const face of scannedFaces) {
-      if (persons.indexOf(face.name) === -1) {
-        persons.push(face.name);
+      if (persons.findIndex(f => f.name === face.name) === -1) {
+        persons.push({name: face.name, faceRegion: face});
       }
     }
     await ObjectManagers.getInstance().PersonManager.saveAll(persons);
-
+    // get saved persons without triggering denormalized data update (i.e.: do not use PersonManager.get).
+    const savedPersons = await personRepository.find();
 
     const indexedFaces = await faceRepository.createQueryBuilder('face')
       .leftJoin('face.media', 'media')
@@ -351,6 +354,8 @@ export class IndexingManager implements IIndexingManager {
     const faceToInsert = [];
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < scannedFaces.length; i++) {
+
+      // was the face region already indexed
       let face: FaceRegionEntry = null;
       for (let j = 0; j < indexedFaces.length; j++) {
         if (indexedFaces[j].box.height === scannedFaces[i].box.height &&
@@ -360,12 +365,12 @@ export class IndexingManager implements IIndexingManager {
           indexedFaces[j].person.name === scannedFaces[i].name) {
           face = indexedFaces[j];
           indexedFaces.splice(j, 1);
-          break;
+          break; // region found, stop processing
         }
       }
 
       if (face == null) {
-        (scannedFaces[i] as FaceRegionEntry).person = await ObjectManagers.getInstance().PersonManager.get(scannedFaces[i].name);
+        (scannedFaces[i] as FaceRegionEntry).person = savedPersons.find(p => p.name === scannedFaces[i].name);
         faceToInsert.push(scannedFaces[i]);
       }
     }
