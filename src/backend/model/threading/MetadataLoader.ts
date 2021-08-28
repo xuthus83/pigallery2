@@ -290,8 +290,8 @@ export class MetadataLoader {
                       continue;
                     }
                     // convert center base box to corner based box
-                    box.left = Math.max(0, box.left - box.width / 2);
-                    box.top = Math.max(0, box.top - box.height / 2);
+                    box.left = Math.round(Math.max(0, box.left - box.width / 2));
+                    box.top = Math.round(Math.max(0, box.top - box.height / 2));
                     faces.push({name, box});
                   }
                 }
