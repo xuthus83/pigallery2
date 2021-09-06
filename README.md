@@ -62,7 +62,7 @@ Full node install on raspberry pi description: https://www.w3schools.com/nodejs/
 ```bash
 cd ~
 wget https://github.com/bpatrik/pigallery2/releases/download/1.9.0/pigallery2-release.zip
-unzip pigallery2.zip -d pigallery2
+unzip pigallery2-release.zip -d pigallery2
 cd pigallery2
 npm install
 ```
