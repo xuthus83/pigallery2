@@ -5,12 +5,11 @@ import {ObjectManagers} from '../../model/ObjectManagers';
 import {Logger} from '../../Logger';
 import {Config} from '../../../common/config/private/Config';
 import {ConfigDiagnostics} from '../../model/diagnostics/ConfigDiagnostics';
-import {BasicConfigDTO} from '../../../common/entities/settings/BasicConfigDTO';
+import {BasicConfigDTO, BasicConfigDTOUtil} from '../../../common/entities/settings/BasicConfigDTO';
 import {OtherConfigDTO} from '../../../common/entities/settings/OtherConfigDTO';
 import {ProjectPath} from '../../ProjectPath';
 import {
   DatabaseType,
-  IPrivateConfig,
   ServerDataBaseConfig,
   ServerIndexingConfig,
   ServerJobConfig,
@@ -388,19 +387,11 @@ export class SettingsMWs {
     try {
       const settings: BasicConfigDTO = req.body.settings;
       await ConfigDiagnostics.testImageFolder(settings.imagesFolder);
-      const map = (config: IPrivateConfig, input: BasicConfigDTO) => {
-        config.Server.port = input.port;
-        config.Server.host = input.host;
-        config.Server.Media.folder = input.imagesFolder;
-        config.Server.Media.tempFolder = input.tempFolder;
-        config.Client.publicUrl = input.publicUrl;
-        config.Client.urlBase = input.urlBase;
-        config.Client.applicationTitle = input.applicationTitle;
-      };
-      map(Config, settings);
+
+      BasicConfigDTOUtil.mapToConf(Config, settings);
       // only updating explicitly set config (not saving config set by the diagnostics)
       const original = await Config.original();
-      map(original, settings);
+      BasicConfigDTOUtil.mapToConf(original, settings);
       original.save();
       ProjectPath.reset();
       await ConfigDiagnostics.runDiagnostics();

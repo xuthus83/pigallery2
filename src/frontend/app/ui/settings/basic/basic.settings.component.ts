@@ -4,7 +4,7 @@ import {AuthenticationService} from '../../../model/network/authentication.servi
 import {NavigationService} from '../../../model/navigation.service';
 import {NotificationService} from '../../../model/notification.service';
 import {BasicSettingsService} from './basic.settings.service';
-import {BasicConfigDTO} from '../../../../../common/entities/settings/BasicConfigDTO';
+import {BasicConfigDTO, BasicConfigDTOUtil} from '../../../../../common/entities/settings/BasicConfigDTO';
 
 @Component({
   selector: 'app-settings-basic',
@@ -23,15 +23,8 @@ export class BasicSettingsComponent extends SettingsComponentDirective<BasicConf
               navigation: NavigationService,
               settingsService: BasicSettingsService,
               notification: NotificationService) {
-    super($localize`Basic`, authService, navigation, settingsService, notification, s => ({
-      port: s.Server.port,
-      host: s.Server.host,
-      imagesFolder: s.Server.Media.folder,
-      tempFolder: s.Server.Media.tempFolder,
-      applicationTitle: s.Client.applicationTitle,
-      publicUrl: s.Client.publicUrl,
-      urlBase: s.Client.urlBase
-    }));
+    super($localize`Basic`, authService, navigation, settingsService, notification,
+      BasicConfigDTOUtil.mapToDTO);
     this.checkUrlError();
   }
 
@@ -71,7 +64,7 @@ export class BasicSettingsComponent extends SettingsComponentDirective<BasicConf
     this.urlBaseChanged = true;
 
     this.checkUrlError();
-  }
+  };
 
 }
 
