@@ -57,6 +57,27 @@ export class NetworkService {
       .catch(err);
   }
 
+  public getText<T>(url: string): Promise<string> {
+
+
+    this.loadingBarService.useRef().start();
+
+    const process = (res: string): string => {
+      this.loadingBarService.useRef().complete();
+      return res;
+    };
+
+    const err = (error: any) => {
+      this.loadingBarService.useRef().complete();
+      return this.handleError(error);
+    };
+
+    return this.http.get(this.apiBaseUrl + url, {responseType: 'text'})
+      .toPromise()
+      .then(process)
+      .catch(err);
+  }
+
   public postJson<T>(url: string, data: any = {}): Promise<T> {
     return this.callJson('post', url, data);
   }

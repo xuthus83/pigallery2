@@ -1,15 +1,41 @@
 .container-fluid {
   width: 100%;
-  padding:0;
+  padding: 0;
   margin-top: -20px;
 }
 
+.blog-map-row {
+  width: 100%;
+  display: flex;
+  margin-top: 0.2em;
+  margin-bottom: 0.2em;
+  position: relative;
+  min-height: 80px;
+}
+
+.btn-blog-details {
+  width: calc(100% - 5px);
+  position: absolute;
+  bottom: 0;
+  margin-left: 2px;
+  margin-right: 2px;
+  background-image: linear-gradient(transparent, #aaa);
+  border: 0;
+}
+
+app-gallery-blog {
+  float: left;
+  width: 100%;
+  margin-right: 0.25em;
+  margin-left: 2px;
+}
+
 app-gallery-map {
-  margin-right: 0;
-  margin-left: auto;
   display: block;
   height: 80px;
   width: 100px;
+  position: absolute;
+  right: 4px
 }
 
 .directories {

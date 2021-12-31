@@ -30,6 +30,7 @@ export class GalleryComponent implements OnInit, OnDestroy {
   public showSearchBar = false;
   public showShare = false;
   public showRandomPhotoBuilder = false;
+  public blogOpen = false;
 
   public directories: SubDirectoryDTO[] = [];
   public isPhotoWithLocation = false;
@@ -42,6 +43,7 @@ export class GalleryComponent implements OnInit, OnDestroy {
     timer: null,
     sorting: null
   };
+  private collator = new Intl.Collator(undefined, {numeric: true});
 
   constructor(public galleryService: GalleryService,
               private authService: AuthenticationService,
@@ -53,7 +55,6 @@ export class GalleryComponent implements OnInit, OnDestroy {
     this.mapEnabled = Config.Client.Map.enabled;
     PageHelper.showScrollY();
   }
-
 
   updateTimer(t: number): void {
     if (this.shareService.sharingSubject.value == null) {
@@ -158,8 +159,6 @@ export class GalleryComponent implements OnInit, OnDestroy {
       }
     }
   };
-
-  private collator = new Intl.Collator(undefined, {numeric: true});
 
   private sortDirectories(): void {
     if (!this.directories) {

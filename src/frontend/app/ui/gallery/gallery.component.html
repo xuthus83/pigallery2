@@ -27,7 +27,7 @@
   </ng-container>
 
 
-  <div body class="container-fluid" >
+  <div body class="container-fluid">
     <ng-container *ngIf="galleryService.content.value.error">
       <div class="alert alert-danger" role="alert">
         {{galleryService.content.value.error}}
@@ -40,9 +40,21 @@
 
         <app-gallery-directories class="directories" [directories]="directories"></app-gallery-directories>
 
-        <app-gallery-map *ngIf="isPhotoWithLocation && mapEnabled"
-                         [photos]="galleryService.content.value.directory.media"
-                         [gpxFiles]="galleryService.content.value.directory.metaFile | gpxFiles"></app-gallery-map>
+        <div class="blog-map-row">
+          <ng-container
+            *ngIf="galleryService.content.value.directory.metaFile && (galleryService.content.value.directory.metaFile | mdFiles).length>0">
+            <app-gallery-blog [collapsed]="!blogOpen"
+                              [mdFiles]="galleryService.content.value.directory.metaFile | mdFiles"></app-gallery-blog>
+
+
+            <button class="btn btn-blog-details" (click)="blogOpen=!blogOpen"><span
+              class="oi oi-chevron-{{blogOpen ? 'top' : 'bottom'}}"></span>
+            </button>
+          </ng-container>
+          <app-gallery-map *ngIf="isPhotoWithLocation && mapEnabled"
+                           [photos]="galleryService.content.value.directory.media"
+                           [gpxFiles]="galleryService.content.value.directory.metaFile | gpxFiles"></app-gallery-map>
+        </div>
         <app-gallery-grid [media]="galleryService.content.value.directory.media"
                           [lightbox]="lightbox"></app-gallery-grid>
 
@@ -58,10 +70,21 @@
 
         <app-gallery-directories class="directories" [directories]="directories"></app-gallery-directories>
 
-        <app-gallery-map *ngIf="isPhotoWithLocation && mapEnabled"
-                         [photos]="galleryService.content.value.searchResult.media"
-                         [gpxFiles]="galleryService.content.value.searchResult.metaFile | gpxFiles"></app-gallery-map>
+        <div class="blog-map-row">
+          <ng-container
+            *ngIf="galleryService.content.value.searchResult.metaFile && (galleryService.content.value.searchResult.metaFile | mdFiles).length>0">
 
+            <app-gallery-blog [collapsed]="!blogOpen"
+                              [mdFiles]="galleryService.content.value.searchResult.metaFile | mdFiles"></app-gallery-blog>
+
+            <button class="btn btn-blog-details" (click)="blogOpen=!blogOpen"><span
+              class="oi oi-chevron-{{blogOpen ? 'top' : 'bottom'}}"></span>
+            </button>
+          </ng-container>
+          <app-gallery-map *ngIf="isPhotoWithLocation && mapEnabled"
+                           [photos]="galleryService.content.value.searchResult.media"
+                           [gpxFiles]="galleryService.content.value.searchResult.metaFile | gpxFiles"></app-gallery-map>
+        </div>
 
         <app-gallery-grid [media]="galleryService.content.value.searchResult.media"
                           [lightbox]="lightbox"></app-gallery-grid>

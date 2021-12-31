@@ -53,7 +53,7 @@ import {SettingsService} from './ui/settings/settings.service';
 import {ShareSettingsComponent} from './ui/settings/share/share.settings.component';
 import {BasicSettingsComponent} from './ui/settings/basic/basic.settings.component';
 import {OtherSettingsComponent} from './ui/settings/other/other.settings.component';
-import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from '@angular/common/http';
 import {DefaultUrlSerializer, UrlSerializer, UrlTree} from '@angular/router';
 import {IndexingSettingsComponent} from './ui/settings/indexing/indexing.settings.component';
 import {LanguageComponent} from './ui/language/language.component';
@@ -106,7 +106,11 @@ import {AlbumsService} from './ui/albums/albums.service';
 import {GallerySearchQueryBuilderComponent} from './ui/gallery/search/query-builder/query-bulder.gallery.component';
 import {SavedSearchPopupComponent} from './ui/albums/saved-search-popup/saved-search-popup.component';
 import {AlbumsSettingsComponent} from './ui/settings/albums/albums.settings.component';
-
+import { MarkdownModule } from 'ngx-markdown';
+import {GalleryBlogComponent} from './ui/gallery/blog/blog.gallery.component';
+import {MDFilesFilterPipe} from './pipes/MDFilesFilterPipe';
+import {FileDTOToPathPipe} from './pipes/FileDTOToPathPipe';
+import {BlogService} from './ui/gallery/blog/blog.service';
 
 @Injectable()
 export class MyHammerConfig extends HammerGestureConfig {
@@ -172,7 +176,8 @@ Marker.prototype.options.icon = iconDefault;
     TimepickerModule.forRoot(),
     LoadingBarModule,
     LeafletModule,
-    LeafletMarkerClusterModule
+    LeafletMarkerClusterModule,
+    MarkdownModule.forRoot({ loader: HttpClient }),
   ],
   declarations: [AppComponent,
     LoginComponent,
@@ -194,6 +199,7 @@ Marker.prototype.options.icon = iconDefault;
     GalleryGridComponent,
     GalleryDirectoryComponent,
     GalleryLightboxComponent,
+    GalleryBlogComponent,
     GalleryMapComponent,
     GalleryMapLightboxComponent,
     FrameComponent,
@@ -242,7 +248,9 @@ Marker.prototype.options.icon = iconDefault;
     DurationPipe,
     FileSizePipe,
     GPXFilesFilterPipe,
-    StringifySearchQuery
+    MDFilesFilterPipe,
+    StringifySearchQuery,
+    FileDTOToPathPipe
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: CSRFInterceptor, multi: true},
@@ -257,6 +265,7 @@ Marker.prototype.options.icon = iconDefault;
     GalleryCacheService,
     GalleryService,
     MapService,
+    BlogService,
     SearchQueryParserService,
     AutoCompleteService,
     AuthenticationService,
