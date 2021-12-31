@@ -21,6 +21,7 @@ import * as path from 'path';
 import {DatabaseType, ServerDataBaseConfig, SQLLogLevel} from '../../../../common/config/private/PrivateConfig';
 import {AlbumBaseEntity} from './enitites/album/AlbumBaseEntity';
 import {SavedSearchEntity} from './enitites/album/SavedSearchEntity';
+import {NotificationManager} from '../../NotifocationManager';
 
 const LOG_TAG = '[SQLConnection]';
 
@@ -104,6 +105,12 @@ export class SQLConnection {
       a.password = PasswordHelper.cryptPassword('admin');
       a.role = UserRoles.Admin;
       await userRepository.save(a);
+    }
+    const defAdmins = await userRepository.find({name: 'admin', role: UserRoles.Admin});
+    for (const a of defAdmins) {
+      if (PasswordHelper.comparePassword('admin', a.password)) {
+        NotificationManager.error('Using default admin user!', 'You are using the default admin/admin user/password, please change or remove it.');
+      }
     }
 
   }
