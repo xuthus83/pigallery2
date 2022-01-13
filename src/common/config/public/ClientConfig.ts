@@ -3,6 +3,7 @@ import 'reflect-metadata';
 import {SortingMethods} from '../../entities/SortingMethods';
 import {UserRoles} from '../../entities/UserDTO';
 import {ConfigProperty, SubConfigClass} from 'typeconfig/common';
+import {DatabaseType, IPrivateConfig} from '../private/PrivateConfig';
 
 
 export enum MapProviders {
@@ -70,7 +71,13 @@ export class MapLayers {
 
 @SubConfigClass()
 export class ClientMapConfig {
-  @ConfigProperty()
+  @ConfigProperty<boolean, IPrivateConfig>({
+    onNewValue: (value, config) => {
+      if (value === false) {
+        config.Client.MetaFile.gpx = false;
+      }
+    }
+  })
   enabled: boolean = true;
   @ConfigProperty({type: 'unsignedInt', description: 'Maximum number of markers to be shown on the map preview on the gallery page.'})
   maxPreviewMarkers: number = 50;

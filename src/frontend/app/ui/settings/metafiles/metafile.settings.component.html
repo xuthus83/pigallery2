@@ -11,6 +11,7 @@
         name="*.gpx files"
         description="Reads *.gpx files and renders them on the map."
         i18n-description i18n-name
+        [disabled]="!(settingsService.Settings | async).Client.Map.enabled"
         [ngModel]="states.gpx">
       </app-settings-entry>
 
