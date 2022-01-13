@@ -8,7 +8,7 @@ export class UserEntity implements UserDTO {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({unique: true})
   name: string;
 
   @Column()

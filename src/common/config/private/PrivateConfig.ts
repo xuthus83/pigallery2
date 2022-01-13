@@ -7,6 +7,7 @@ import {ConfigProperty} from 'typeconfig/src/decorators/property/ConfigPropoerty
 import {DefaultsJobs} from '../../entities/job/JobDTO';
 import {SearchQueryDTO} from '../../entities/SearchQueryDTO';
 import {SortingMethods} from '../../entities/SortingMethods';
+import {UserRoles} from '../../entities/UserDTO';
 
 export enum DatabaseType {
   memory = 1, mysql = 2, sqlite = 3
@@ -56,6 +57,28 @@ export class SQLiteConfig {
   DBFileName: string = 'sqlite.db';
 }
 
+@SubConfigClass()
+export class UserConfig {
+
+  @ConfigProperty()
+  name: string;
+
+  @ConfigProperty({type: UserRoles})
+  role: UserRoles;
+
+  @ConfigProperty()
+  password: string;
+
+  @ConfigProperty()
+  encryptedPassword: string;
+
+
+  constructor(name: string, password: string, role: UserRoles) {
+    this.name = name;
+    this.role = role;
+    this.password = password;
+  }
+}
 
 @SubConfigClass()
 export class ServerDataBaseConfig {
@@ -78,6 +101,10 @@ export class ServerDataBaseConfig {
 
   @ConfigProperty()
   mysql?: MySQLConfig = new MySQLConfig();
+
+  @ConfigProperty({arrayType: UserConfig})
+  enforcedUsers: UserConfig[] = [new UserConfig('admin', 'admin', UserRoles.Admin)];
+
 }
 
 @SubConfigClass()

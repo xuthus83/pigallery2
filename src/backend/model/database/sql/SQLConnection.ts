@@ -96,21 +96,28 @@ export class SQLConnection {
   public static async init(): Promise<void> {
     const connection = await this.getConnection();
 
-    // Add dummy Admin to the db
+    // Adding enforced users to the db
     const userRepository = connection.getRepository(UserEntity);
-    const admins = await userRepository.find({role: UserRoles.Admin});
-    if (admins.length === 0) {
-      const a = new UserEntity();
-      a.name = 'admin';
-      a.password = PasswordHelper.cryptPassword('admin');
-      a.role = UserRoles.Admin;
-      await userRepository.save(a);
-    }
-    const defAdmins = await userRepository.find({name: 'admin', role: UserRoles.Admin});
-    for (const a of defAdmins) {
-      if (PasswordHelper.comparePassword('admin', a.password)) {
-        NotificationManager.error('Using default admin user!', 'You are using the default admin/admin user/password, please change or remove it.');
+    for (const uc of Config.Server.Database.enforcedUsers) {
+      const user = await userRepository.findOne({name: uc.name});
+      if (!user) {
+        Logger.info(LOG_TAG, 'Saving enforced user: ' + uc.name);
+        const a = new UserEntity();
+        a.name = uc.name;
+        // encrypt password and save back to the db
+        if (!uc.encryptedPassword) {
+          uc.encryptedPassword = PasswordHelper.cryptPassword(uc.password);
+          uc.password = '';
+          await Config.save();
+        }
+        a.password = uc.encryptedPassword;
+        a.role = uc.role;
+        await userRepository.save(a);
       }
+    }
+    const defAdmin = await userRepository.findOne({name: 'admin', role: UserRoles.Admin});
+    if (PasswordHelper.comparePassword('admin', defAdmin.password)) {
+      NotificationManager.error('Using default admin user!', 'You are using the default admin/admin user/password, please change or remove it.');
     }
 
   }

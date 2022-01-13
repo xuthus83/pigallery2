@@ -3,7 +3,7 @@ import 'reflect-metadata';
 import {SortingMethods} from '../../entities/SortingMethods';
 import {UserRoles} from '../../entities/UserDTO';
 import {ConfigProperty, SubConfigClass} from 'typeconfig/common';
-import {DatabaseType, IPrivateConfig} from '../private/PrivateConfig';
+import {IPrivateConfig} from '../private/PrivateConfig';
 
 
 export enum MapProviders {
