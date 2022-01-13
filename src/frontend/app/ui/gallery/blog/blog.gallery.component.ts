@@ -17,6 +17,13 @@ export class GalleryBlogComponent implements OnChanges {
   constructor(public blogService: BlogService) {
   }
 
+  get SampleText(): string {
+    if (!this.markdowns || this.markdowns.length < 1) {
+      return '';
+    }
+    return this.markdowns[0].length < 203 ? this.markdowns[0] : this.markdowns[0].substr(0, 200) + '...';
+  }
+
   onError($event: string): void {
 
   }

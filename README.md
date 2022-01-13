@@ -213,8 +213,8 @@ apt-get install build-essential  libkrb5-dev gcc g++
     * List of these files are passed down to the UI modify its behaviour.
     * Currently, supported custom, per folder sorting.
  * Dockerized 
- * **Markdown based blogging support** - `future plan`
-   * you can write some note in the blog.md for every directory
+ * **Markdown based blogging support** 
+   * you can write some note in the *.md files for every directory
  * bug free :) - `In progress`
  
  

@@ -4,12 +4,22 @@
   margin-top: -20px;
 }
 
+.blog-wrapper {
+  opacity: 0.8;
+  display: flex;
+  position: relative;
+}
+
+.blog-wrapper:hover {
+  opacity: 1;
+}
+
 .blog-map-row {
   width: 100%;
   display: flex;
+  position: relative;
   margin-top: 0.2em;
   margin-bottom: 0.2em;
-  position: relative;
   min-height: 80px;
 }
 
@@ -19,8 +29,13 @@
   bottom: 0;
   margin-left: 2px;
   margin-right: 2px;
-  background-image: linear-gradient(transparent, #aaa);
+  color: #333;
   border: 0;
+}
+
+.btn-blog-details:hover {
+  color: #000;
+  background-image: linear-gradient(transparent, #ccc);
 }
 
 app-gallery-blog {
