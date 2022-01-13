@@ -154,8 +154,12 @@ export class ClientMediaConfig {
 
 @SubConfigClass()
 export class ClientMetaFileConfig {
-  @ConfigProperty()
-  enabled: boolean = true;
+  @ConfigProperty({description: 'Reads *.gpx files and renders them on the map'})
+  gpx: boolean = true;
+  @ConfigProperty({description: 'Reads *.md files in a directory and shows the next to the map'})
+  markdown: boolean = true;
+  @ConfigProperty({description: 'Reads *.pg2conf files'})
+  pg2conf: boolean = true;
 }
 
 @SubConfigClass()

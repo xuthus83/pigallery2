@@ -427,10 +427,14 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
     const p2 = TestHelper.getRandomizedPhotoEntry(parent, 'Photo2');
     const gpx = TestHelper.getRandomizedGPXEntry(parent, 'GPX1');
     DirectoryDTOUtils.packDirectory(parent);
-    Config.Client.MetaFile.enabled = true;
+    Config.Client.MetaFile.gpx = true;
+    Config.Client.MetaFile.markdown = true;
+    Config.Client.MetaFile.pg2conf = true;
     await im.saveToDB(Utils.clone(parent) as ParentDirectoryDTO);
 
-    Config.Client.MetaFile.enabled = false;
+    Config.Client.MetaFile.gpx = false;
+    Config.Client.MetaFile.markdown = false;
+    Config.Client.MetaFile.pg2conf = false;
     const conn = await SQLConnection.getConnection();
     const selected = await gm.selectParentDir(conn, parent.name, parent.path);
     await gm.fillParentDir(conn, selected);
@@ -481,7 +485,9 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
     const conn = await SQLConnection.getConnection();
     const gm = new GalleryManagerTest();
     const im = new IndexingManagerTest();
-    Config.Client.MetaFile.enabled = true;
+    Config.Client.MetaFile.gpx = true;
+    Config.Client.MetaFile.markdown = true;
+    Config.Client.MetaFile.pg2conf = true;
     const parent = TestHelper.getRandomizedDirectoryEntry();
     const p1 = TestHelper.getRandomizedPhotoEntry(parent, 'Photo1');
     const p2 = TestHelper.getRandomizedPhotoEntry(parent, 'Photo2');
@@ -544,7 +550,9 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
     const conn = await SQLConnection.getConnection();
     const gm = new GalleryManagerTest();
     const im = new IndexingManagerTest();
-    Config.Client.MetaFile.enabled = true;
+    Config.Client.MetaFile.gpx = true;
+    Config.Client.MetaFile.markdown = true;
+    Config.Client.MetaFile.pg2conf = true;
     const parent = TestHelper.getRandomizedDirectoryEntry();
     DirectoryDTOUtils.packDirectory(parent);
     await im.saveToDB(Utils.clone(parent) as ParentDirectoryDTO);

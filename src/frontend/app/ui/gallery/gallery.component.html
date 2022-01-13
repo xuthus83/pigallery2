@@ -28,78 +28,52 @@
 
 
   <div body class="container-fluid">
-    <ng-container *ngIf="galleryService.content.value.error">
+    <ng-container *ngIf="ContentWrapper.error">
       <div class="alert alert-danger" role="alert">
-        {{galleryService.content.value.error}}
+        {{ContentWrapper.error}}
       </div>
     </ng-container>
-    <ng-container *ngIf="!galleryService.content.value.error">
-      <ng-container *ngIf="galleryService.content.value.directory">
+    <ng-container *ngIf="!ContentWrapper.error && (ContentWrapper.searchResult || ContentWrapper.directory)">
+      <!-- Show search result overflow -->
+      <div class="alert alert-info" role="alert"
+           *ngIf="ContentWrapper.searchResult && ContentWrapper.searchResult.resultOverflow == true" i18n>
+        Too many results to show. Refine your search.
+      </div>
 
-        <app-gallery-navbar [directory]="galleryService.content.value.directory"></app-gallery-navbar>
-
-        <app-gallery-directories class="directories" [directories]="directories"></app-gallery-directories>
-
-        <div class="blog-map-row">
-          <ng-container
-            *ngIf="galleryService.content.value.directory.metaFile && (galleryService.content.value.directory.metaFile | mdFiles).length>0">
-            <app-gallery-blog [collapsed]="!blogOpen"
-                              [mdFiles]="galleryService.content.value.directory.metaFile | mdFiles"></app-gallery-blog>
+      <!-- Its safe to hand over both as only one should have a value (search result or dir listing)-->
+      <app-gallery-navbar [searchResult]="ContentWrapper.searchResult"
+                          [directory]="ContentWrapper.directory"></app-gallery-navbar>
 
 
-            <button class="btn btn-blog-details" (click)="blogOpen=!blogOpen"><span
-              class="oi oi-chevron-{{blogOpen ? 'top' : 'bottom'}}"></span>
-            </button>
-          </ng-container>
-          <app-gallery-map *ngIf="isPhotoWithLocation && mapEnabled"
-                           [photos]="galleryService.content.value.directory.media"
-                           [gpxFiles]="galleryService.content.value.directory.metaFile | gpxFiles"></app-gallery-map>
-        </div>
-        <app-gallery-grid [media]="galleryService.content.value.directory.media"
-                          [lightbox]="lightbox"></app-gallery-grid>
+      <app-gallery-directories class="directories" [directories]="directories"></app-gallery-directories>
+
+      <div class="blog-map-row">
+        <ng-container
+          *ngIf="config.Client.MetaFile.markdown && Content.metaFile && (Content.metaFile | mdFiles).length>0">
+          <app-gallery-blog [collapsed]="!blogOpen"
+                            [mdFiles]="Content.metaFile | mdFiles"></app-gallery-blog>
 
 
-      </ng-container>
-      <!-- Search-->
-      <ng-container *ngIf="galleryService.content.value.searchResult">
-        <div class="alert alert-info" role="alert"
-             *ngIf="galleryService.content.value.searchResult.resultOverflow == true" i18n>
-          Too many results to show. Refine your search.
-        </div>
-        <app-gallery-navbar [searchResult]="galleryService.content.value.searchResult"></app-gallery-navbar>
+          <button class="btn btn-blog-details" (click)="blogOpen=!blogOpen"><span
+            class="oi oi-chevron-{{blogOpen ? 'top' : 'bottom'}}"></span>
+          </button>
+        </ng-container>
+        <app-gallery-map *ngIf="isPhotoWithLocation && mapEnabled"
+                         [photos]="Content.media | photosOnly"
+                         [gpxFiles]="Content.metaFile | gpxFiles"></app-gallery-map>
+      </div>
+      <app-gallery-grid [media]="Content.media"
+                        [lightbox]="lightbox"></app-gallery-grid>
 
-        <app-gallery-directories class="directories" [directories]="directories"></app-gallery-directories>
-
-        <div class="blog-map-row">
-          <ng-container
-            *ngIf="galleryService.content.value.searchResult.metaFile && (galleryService.content.value.searchResult.metaFile | mdFiles).length>0">
-
-            <app-gallery-blog [collapsed]="!blogOpen"
-                              [mdFiles]="galleryService.content.value.searchResult.metaFile | mdFiles"></app-gallery-blog>
-
-            <button class="btn btn-blog-details" (click)="blogOpen=!blogOpen"><span
-              class="oi oi-chevron-{{blogOpen ? 'top' : 'bottom'}}"></span>
-            </button>
-          </ng-container>
-          <app-gallery-map *ngIf="isPhotoWithLocation && mapEnabled"
-                           [photos]="galleryService.content.value.searchResult.media"
-                           [gpxFiles]="galleryService.content.value.searchResult.metaFile | gpxFiles"></app-gallery-map>
-        </div>
-
-        <app-gallery-grid [media]="galleryService.content.value.searchResult.media"
-                          [lightbox]="lightbox"></app-gallery-grid>
-
-
-      </ng-container>
     </ng-container>
   </div>
 
   <div body class="container"
        style="width: 100%; padding:0"
-       *ngIf="(!galleryService.content.value.directory ||
-        galleryService.content.value.directory.isPartial == true)
-       && !galleryService.content.value.searchResult
-       && !galleryService.content.value.error">
+       *ngIf="(!ContentWrapper.directory ||
+        ContentWrapper.directory.isPartial == true)
+       && !ContentWrapper.searchResult
+       && !ContentWrapper.error">
     <div class="spinner">
 
     </div>

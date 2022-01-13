@@ -2,27 +2,31 @@
   <div class="card mb-4">
     <h5 class="card-header">
       {{Name}}
-      <div class="switch-wrapper">
-        <bSwitch
-          class="switch"
-          name="enabled"
-          switch-on-color="success"
-          switch-inverse="true"
-          switch-off-text="Disabled"
-          switch-on-text="Enabled"
-          i18n-switch-off-text
-          i18n-switch-on-text
-          [switch-disabled]="inProgress"
-          switch-handle-width="100"
-          switch-label-width="20"
-          [(ngModel)]="states.enabled.value">
-        </bSwitch>
-      </div>
     </h5>
     <div class="card-body">
       <div [hidden]="!error" class="alert alert-danger" role="alert"><strong>Error: </strong>{{error}}</div>
 
-      <ng-container i18n>Reads and show *.gpx files on the map and *.md files (blogs) in the gallery.</ng-container>&nbsp;
+
+      <app-settings-entry
+        name="*.gpx files"
+        description="Reads *.gpx files and renders them on the map."
+        i18n-description i18n-name
+        [ngModel]="states.gpx">
+      </app-settings-entry>
+
+      <app-settings-entry
+        name="Markdown files"
+        description="Reads *.md files in a directory and shows the next to the map."
+        i18n-description i18n-name
+        [ngModel]="states.markdown">
+      </app-settings-entry>
+
+      <app-settings-entry
+        name="*.pg2conf files"
+        description="Reads *.md files in a directory and shows the next to the map."
+        i18n-description i18n-name
+        [ngModel]="states.markdown">
+      </app-settings-entry>
 
 
       <button class="btn btn-success float-right"

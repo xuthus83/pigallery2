@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {AuthenticationService} from '../../model/network/authentication.service';
 import {ActivatedRoute, Params, Router} from '@angular/router';
-import {GalleryService} from './gallery.service';
+import {ContentWrapperWithError, GalleryService} from './gallery.service';
 import {GalleryGridComponent} from './grid/grid.gallery.component';
 import {Config} from '../../../../common/config/public/Config';
 import {ParentDirectoryDTO, SubDirectoryDTO} from '../../../../common/entities/DirectoryDTO';
@@ -32,6 +32,7 @@ export class GalleryComponent implements OnInit, OnDestroy {
   public showRandomPhotoBuilder = false;
   public blogOpen = false;
 
+  config = Config;
   public directories: SubDirectoryDTO[] = [];
   public isPhotoWithLocation = false;
   public countDown: { day: number, hour: number, minute: number, second: number } = null;
@@ -54,6 +55,15 @@ export class GalleryComponent implements OnInit, OnDestroy {
               private rndService: SeededRandomService) {
     this.mapEnabled = Config.Client.Map.enabled;
     PageHelper.showScrollY();
+  }
+
+  get Content(): SearchResultDTO | ParentDirectoryDTO {
+    const cont = (this.ContentWrapper.searchResult || this.ContentWrapper.directory);
+    return cont ? cont : {} as any;
+  }
+
+  get ContentWrapper(): ContentWrapperWithError {
+    return this.galleryService.content.value;
   }
 
   updateTimer(t: number): void {

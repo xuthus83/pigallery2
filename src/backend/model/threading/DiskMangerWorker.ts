@@ -174,10 +174,11 @@ export class DiskMangerWorker {
         }
 
       } else if (DiskMangerWorker.isMetaFile(fullFilePath)) {
-        if (Config.Client.MetaFile.enabled === false || settings.noMetaFile === true || settings.previewOnly === true) {
+        if (!DiskMangerWorker.isEnabledMetaFile(fullFilePath) ||
+          settings.noMetaFile === true ||
+          settings.previewOnly === true) {
           continue;
         }
-
         directory.metaFile.push({
           name: file,
           directory: null,
@@ -196,6 +197,22 @@ export class DiskMangerWorker {
     const extension = path.extname(fullPath).toLowerCase();
     return SupportedFormats.WithDots.MetaFiles.indexOf(extension) !== -1;
   }
+
+  private static isEnabledMetaFile(fullPath: string): boolean {
+    const extension = path.extname(fullPath).toLowerCase();
+
+    switch (extension) {
+      case '.gpx':
+        return Config.Client.MetaFile.gpx;
+      case '.md':
+        return Config.Client.MetaFile.markdown;
+      case '.pg2conf':
+        return Config.Client.MetaFile.pg2conf;
+    }
+
+    return false;
+  }
+
 
 }
 

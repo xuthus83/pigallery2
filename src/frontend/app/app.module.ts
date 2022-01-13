@@ -106,11 +106,12 @@ import {AlbumsService} from './ui/albums/albums.service';
 import {GallerySearchQueryBuilderComponent} from './ui/gallery/search/query-builder/query-bulder.gallery.component';
 import {SavedSearchPopupComponent} from './ui/albums/saved-search-popup/saved-search-popup.component';
 import {AlbumsSettingsComponent} from './ui/settings/albums/albums.settings.component';
-import { MarkdownModule } from 'ngx-markdown';
+import {MarkdownModule} from 'ngx-markdown';
 import {GalleryBlogComponent} from './ui/gallery/blog/blog.gallery.component';
 import {MDFilesFilterPipe} from './pipes/MDFilesFilterPipe';
 import {FileDTOToPathPipe} from './pipes/FileDTOToPathPipe';
 import {BlogService} from './ui/gallery/blog/blog.service';
+import {PhotoFilterPipe} from './pipes/PhotoFilterPipe';
 
 @Injectable()
 export class MyHammerConfig extends HammerGestureConfig {
@@ -177,7 +178,7 @@ Marker.prototype.options.icon = iconDefault;
     LoadingBarModule,
     LeafletModule,
     LeafletMarkerClusterModule,
-    MarkdownModule.forRoot({ loader: HttpClient }),
+    MarkdownModule.forRoot({loader: HttpClient}),
   ],
   declarations: [AppComponent,
     LoginComponent,
@@ -250,7 +251,8 @@ Marker.prototype.options.icon = iconDefault;
     GPXFilesFilterPipe,
     MDFilesFilterPipe,
     StringifySearchQuery,
-    FileDTOToPathPipe
+    FileDTOToPathPipe,
+    PhotoFilterPipe
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: CSRFInterceptor, multi: true},

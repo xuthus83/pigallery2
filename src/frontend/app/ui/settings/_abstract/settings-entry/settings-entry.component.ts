@@ -31,7 +31,7 @@ export class SettingsEntryComponent implements ControlValueAccessor, Validator, 
   @Input() options: { key: number | string, value: number | string }[];
   @Input() simplifiedMode = false;
   @Input() allowSpaces = false;
-  @Input() description: boolean;
+  @Input() description: string;
   state: {
     isEnumType: boolean,
     isConfigType: boolean,

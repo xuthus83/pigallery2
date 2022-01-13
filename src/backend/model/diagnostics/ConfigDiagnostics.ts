@@ -65,8 +65,7 @@ export class ConfigDiagnostics {
 
 
   static async testMetaFileConfig(metaFileConfig: ClientMetaFileConfig, config: IPrivateConfig): Promise<void> {
-    // TODO: now we have metadata for pg2conf files too not only gpx that also runs without map
-    if (metaFileConfig.enabled === true &&
+    if (metaFileConfig.gpx === true &&
       config.Client.Map.enabled === false) {
       throw new Error('*.gpx meta files are not supported without MAP');
     }
@@ -275,9 +274,9 @@ export class ConfigDiagnostics {
       await ConfigDiagnostics.testMetaFileConfig(Config.Client.MetaFile, Config);
     } catch (ex) {
       const err: Error = ex;
-      NotificationManager.warning('Meta file support error, switching off..', err.toString());
+      NotificationManager.warning('Meta file support error, switching off gpx..', err.toString());
       Logger.warn(LOG_TAG, 'Meta file support error, switching off..', err.toString());
-      Config.Client.MetaFile.enabled = false;
+      Config.Client.MetaFile.gpx = false;
     }
 
     try {

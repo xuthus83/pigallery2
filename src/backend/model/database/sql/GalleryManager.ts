@@ -242,7 +242,11 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
       .leftJoinAndSelect('directory.directories', 'directories')
       .leftJoinAndSelect('directory.media', 'media');
 
-    if (Config.Client.MetaFile.enabled === true) {
+    // TODO: do better filtering
+    // NOTE: it should not cause an issue as it also do not shave to the DB
+    if (Config.Client.MetaFile.gpx === true ||
+      Config.Client.MetaFile.pg2conf === true ||
+      Config.Client.MetaFile.markdown === true) {
       query.leftJoinAndSelect('directory.metaFile', 'metaFile');
     }
 
