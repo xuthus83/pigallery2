@@ -66,10 +66,10 @@ export class UserConfig {
   @ConfigProperty({type: UserRoles})
   role: UserRoles;
 
-  @ConfigProperty()
+  @ConfigProperty({description: 'Unencrypted, temporary password'})
   password: string;
 
-  @ConfigProperty()
+  @ConfigProperty({description: 'Encrypted password'})
   encryptedPassword: string;
 
 
@@ -102,7 +102,10 @@ export class ServerDataBaseConfig {
   @ConfigProperty()
   mysql?: MySQLConfig = new MySQLConfig();
 
-  @ConfigProperty({arrayType: UserConfig})
+  @ConfigProperty({
+    arrayType: UserConfig,
+    description: 'Creates these users in the DB if they do not exist. If a user with this name exist, it wont be overwritten, even if the role is different.'
+  })
   enforcedUsers: UserConfig[] = [new UserConfig('admin', 'admin', UserRoles.Admin)];
 
 }
