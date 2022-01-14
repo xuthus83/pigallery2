@@ -296,7 +296,7 @@ export class BenchmarkRunner {
   private resetDB = async (): Promise<void> => {
     Config.Server.Threading.enabled = false;
     await ObjectManagers.reset();
-    await fs.promises.rmdir(ProjectPath.DBFolder, {recursive: true});
+    await fs.promises.rm(ProjectPath.DBFolder, {recursive: true});
     Config.Server.Database.type = DatabaseType.sqlite;
     Config.Server.Jobs.scheduled = [];
     await ObjectManagers.InitSQLManagers();

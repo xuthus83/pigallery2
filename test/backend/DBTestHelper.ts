@@ -171,7 +171,7 @@ export class DBTestHelper {
     Config.Server.Database.dbFolder = this.tempDir;
     ProjectPath.reset();
     await ObjectManagers.reset();
-    await fs.promises.rmdir(this.tempDir, {recursive: true});
+    await fs.promises.rm(this.tempDir, {recursive: true, force: true});
     await ObjectManagers.InitSQLManagers();
   }
 
@@ -180,7 +180,7 @@ export class DBTestHelper {
     Config.Server.Database.dbFolder = this.tempDir;
     ProjectPath.reset();
     await ObjectManagers.reset();
-    await fs.promises.rmdir(this.tempDir, {recursive: true});
+    await fs.promises.rm(this.tempDir, {recursive: true, force: true});
   }
 
   private async clearUpMemory(): Promise<void> {

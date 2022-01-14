@@ -34,7 +34,7 @@ describe('UserRouter', () => {
   const tempDir = path.join(__dirname, '../../tmp');
   let server: Server;
   const setUp = async () => {
-    await fs.promises.rmdir(tempDir, {recursive: true});
+    await fs.promises.rm(tempDir, {recursive: true});
     Config.Server.Threading.enabled = false;
     Config.Server.Database.type = DatabaseType.sqlite;
     Config.Server.Database.dbFolder = tempDir;
@@ -49,7 +49,7 @@ describe('UserRouter', () => {
   };
   const tearDown = async () => {
     await SQLConnection.close();
-    await fs.promises.rmdir(tempDir, {recursive: true});
+    await fs.promises.rm(tempDir, {recursive: true});
   };
 
   const checkUserResult = (result: any, user: any) => {

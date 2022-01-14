@@ -16,7 +16,7 @@ describe('SettingsRouter', () => {
 
   const tempDir = path.join(__dirname, '../../tmp');
   beforeEach(async () => {
-    await fs.promises.rmdir(tempDir, {recursive: true});
+    await fs.promises.rm(tempDir, {recursive: true});
     Config.Server.Threading.enabled = false;
     Config.Server.Database.type = DatabaseType.sqlite;
     Config.Server.Database.dbFolder = tempDir;
@@ -26,7 +26,7 @@ describe('SettingsRouter', () => {
 
   afterEach(async () => {
     await SQLConnection.close();
-    await fs.promises.rmdir(tempDir, {recursive: true});
+    await fs.promises.rm(tempDir, {recursive: true});
   });
 
   describe('/GET settings', () => {
