@@ -22,6 +22,7 @@ import {DatabaseType, ServerDataBaseConfig, SQLLogLevel} from '../../../../commo
 import {AlbumBaseEntity} from './enitites/album/AlbumBaseEntity';
 import {SavedSearchEntity} from './enitites/album/SavedSearchEntity';
 import {NotificationManager} from '../../NotifocationManager';
+import {isArray} from '../../../../../node_modules/ngx-bootstrap/chronos';
 
 const LOG_TAG = '[SQLConnection]';
 
@@ -98,25 +99,28 @@ export class SQLConnection {
 
     // Adding enforced users to the db
     const userRepository = connection.getRepository(UserEntity);
-    for (const uc of Config.Server.Database.enforcedUsers) {
-      const user = await userRepository.findOne({name: uc.name});
-      if (!user) {
-        Logger.info(LOG_TAG, 'Saving enforced user: ' + uc.name);
-        const a = new UserEntity();
-        a.name = uc.name;
-        // encrypt password and save back to the db
-        if (!uc.encryptedPassword) {
-          uc.encryptedPassword = PasswordHelper.cryptPassword(uc.password);
-          uc.password = '';
-          await Config.save();
+    if (isArray(Config.Server.Database.enforcedUsers) &&
+      Config.Server.Database.enforcedUsers.length > 0) {
+      for (const uc of Config.Server.Database.enforcedUsers) {
+        const user = await userRepository.findOne({name: uc.name});
+        if (!user) {
+          Logger.info(LOG_TAG, 'Saving enforced user: ' + uc.name);
+          const a = new UserEntity();
+          a.name = uc.name;
+          // encrypt password and save back to the db
+          if (!uc.encryptedPassword) {
+            uc.encryptedPassword = PasswordHelper.cryptPassword(uc.password);
+            uc.password = '';
+            await Config.save();
+          }
+          a.password = uc.encryptedPassword;
+          a.role = uc.role;
+          await userRepository.save(a);
         }
-        a.password = uc.encryptedPassword;
-        a.role = uc.role;
-        await userRepository.save(a);
       }
     }
     const defAdmin = await userRepository.findOne({name: 'admin', role: UserRoles.Admin});
-    if (PasswordHelper.comparePassword('admin', defAdmin.password)) {
+    if (defAdmin && PasswordHelper.comparePassword('admin', defAdmin.password)) {
       NotificationManager.error('Using default admin user!', 'You are using the default admin/admin user/password, please change or remove it.');
     }
 

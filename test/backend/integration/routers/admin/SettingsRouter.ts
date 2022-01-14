@@ -34,6 +34,7 @@ describe('SettingsRouter', () => {
       Config.Client.authenticationRequired = false;
       const originalSettings = await Config.original();
       originalSettings.Server.sessionSecret = null;
+      originalSettings.Server.Database.enforcedUsers = null;
       const srv = new Server();
       await srv.onStarted.wait();
       const result = await chai.request(srv.App)

@@ -79,7 +79,9 @@ export class RenderingMWs {
 
   public static async renderConfig(req: Request, res: Response, next: NextFunction): Promise<void> {
     const originalConf = await Config.original();
+    // These are sensitive information, do not send to the client side
     originalConf.Server.sessionSecret = null;
+    originalConf.Server.Database.enforcedUsers = null;
     const message = new Message<PrivateConfigClass>(null, originalConf.toJSON({
       attachState: true,
       attachVolatile: true
