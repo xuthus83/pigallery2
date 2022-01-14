@@ -3,7 +3,6 @@ language: node_js
 node_js:
   - '15'
   - '16'
-  - '17'
 env:
   - PORT=35000 MYSQL_HOST='localhost' MYSQL_PASSWORD='' MYSQL_USERNAME='root' MYSQL_DATABASE='pigallery2_test'
 services:
