@@ -38,6 +38,7 @@ export interface DirectoryBaseDTO<S extends FileDTO = MediaDTO> extends Director
   media?: S[];
   metaFile?: FileDTO[];
   preview?: PreviewPhotoDTO;
+  validPreview?: boolean; // does not go to the client side
 }
 
 export interface ParentDirectoryDTO<S extends FileDTO = MediaDTO> extends DirectoryBaseDTO<S> {
@@ -64,6 +65,7 @@ export interface SubDirectoryDTO<S extends FileDTO = MediaDTO> extends Directory
   parent: ParentDirectoryDTO<S>;
   mediaCount: number;
   preview: PreviewPhotoDTO;
+  validPreview?: boolean; // does not go to the client side
 }
 
 export const DirectoryDTOUtils = {
@@ -115,6 +117,8 @@ export const DirectoryDTOUtils = {
         directory.parent = null;
       });
     }
+
+    delete dir.validPreview; // should not go to the client side;
 
     return dir;
 

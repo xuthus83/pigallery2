@@ -56,7 +56,12 @@ export class DirectoryEntity implements ParentDirectoryDTO<MediaDTO>, SubDirecto
   public directories: DirectoryEntity[];
 
   // not saving to database, it is only assigned when querying the DB
+  @ManyToOne(type => MediaEntity, {onDelete: 'SET NULL'})
   public preview: MediaEntity;
+
+  // On galley change, preview will be invalid
+  @Column({default: false})
+  validPreview: boolean;
 
   @OneToMany(type => MediaEntity, media => media.directory)
   public media: MediaEntity[];

@@ -29,50 +29,12 @@ describe = DBTestHelper.describe(); // fake it os IDE plays nicely (recognize th
 
 describe('AlbumManager', (sqlHelper: DBTestHelper) => {
   describe = tmpDescribe;
-  /**
-   * dir
-   * |- v
-   * |- p
-   * |- p2
-   * |-> subDir
-   *     |- p3
-   * |-> subDir2
-   *     |- p4
-   */
-
-  let dir: ParentDirectoryDTO;
-  let subDir: SubDirectoryDTO;
-  let subDir2: SubDirectoryDTO;
-  let v: VideoDTO;
-  let p: PhotoDTO;
-  let p2: PhotoDTO;
-  let p3: PhotoDTO;
-  let p4: PhotoDTO;
 
 
-  const setUpTestGallery = async (): Promise<void> => {
-    const directory: ParentDirectoryDTO = TestHelper.getDirectoryEntry();
-    subDir = TestHelper.getDirectoryEntry(directory, 'The Phantom Menace');
-    subDir2 = TestHelper.getDirectoryEntry(directory, 'Return of the Jedi');
-    p = TestHelper.getRandomizedPhotoEntry(directory, 'Photo1');
-    p2 = TestHelper.getRandomizedPhotoEntry(directory, 'Photo2');
-    p3 = TestHelper.getRandomizedPhotoEntry(subDir, 'Photo3');
-    p4 = TestHelper.getRandomizedPhotoEntry(subDir2, 'Photo4');
-    v = TestHelper.getVideoEntry1(directory);
-
-    dir = await DBTestHelper.persistTestDir(directory);
-    subDir = dir.directories[0];
-    subDir2 = dir.directories[1];
-    p = (dir.media.filter(m => m.name === p.name)[0] as any);
-    p2 = (dir.media.filter(m => m.name === p2.name)[0] as any);
-    v = (dir.media.filter(m => m.name === v.name)[0] as any);
-    p3 = (dir.directories[0].media[0] as any);
-    p4 = (dir.directories[1].media[0] as any);
-  };
 
   const setUpSqlDB = async () => {
     await sqlHelper.initDB();
-    await setUpTestGallery();
+    await sqlHelper.setUpTestGallery();
     await ObjectManagers.InitSQLManagers();
   };
 
@@ -192,7 +154,7 @@ describe('AlbumManager', (sqlHelper: DBTestHelper) => {
       searchQuery: query,
       locked: false,
       count: 1,
-      preview: toAlbumPreview(p)
+      preview: toAlbumPreview(sqlHelper.testGalleyEntities.p)
     } as SavedSearchDTO]));
 
 

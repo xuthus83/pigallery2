@@ -4,13 +4,16 @@ import * as fs from 'fs';
 import {SQLConnection} from '../../src/backend/model/database/sql/SQLConnection';
 import {DatabaseType} from '../../src/common/config/private/PrivateConfig';
 import {ProjectPath} from '../../src/backend/ProjectPath';
-import {DirectoryBaseDTO, ParentDirectoryDTO} from '../../src/common/entities/DirectoryDTO';
+import {DirectoryBaseDTO, ParentDirectoryDTO, SubDirectoryDTO} from '../../src/common/entities/DirectoryDTO';
 import {ObjectManagers} from '../../src/backend/model/ObjectManagers';
 import {DiskMangerWorker} from '../../src/backend/model/threading/DiskMangerWorker';
 import {IndexingManager} from '../../src/backend/model/database/sql/IndexingManager';
 import {GalleryManager} from '../../src/backend/model/database/sql/GalleryManager';
 import {Connection} from 'typeorm';
 import {Utils} from '../../src/common/Utils';
+import {TestHelper} from './unit/model/sql/TestHelper';
+import {VideoDTO} from '../../src/common/entities/VideoDTO';
+import {PhotoDTO} from '../../src/common/entities/PhotoDTO';
 
 declare let describe: any;
 const savedDescribe = describe;
@@ -42,6 +45,36 @@ export class DBTestHelper {
   };
   public static readonly savedDescribe = savedDescribe;
   tempDir: string;
+  public readonly testGalleyEntities: {
+    dir: ParentDirectoryDTO,
+    subDir: SubDirectoryDTO,
+    subDir2: SubDirectoryDTO,
+    v: VideoDTO,
+    p: PhotoDTO,
+    p2: PhotoDTO,
+    p3: PhotoDTO,
+    p4: PhotoDTO
+  } = {
+    /**
+     * dir
+     * |- v
+     * |- p
+     * |- p2
+     * |-> subDir
+     *     |- p3
+     * |-> subDir2
+     *     |- p4
+     */
+
+    dir: null,
+    subDir: null,
+    subDir2: null,
+    v: null,
+    p: null,
+    p2: null,
+    p3: null,
+    p4: null
+  };
 
   constructor(public dbType: DatabaseType) {
     this.tempDir = path.join(__dirname, './tmp');
@@ -127,7 +160,6 @@ export class DBTestHelper {
     }
   }
 
-
   public async clearDB(): Promise<void> {
     if (this.dbType === DatabaseType.sqlite) {
       await this.clearUpSQLite();
@@ -136,6 +168,26 @@ export class DBTestHelper {
     } else if (this.dbType === DatabaseType.memory) {
       await this.clearUpMemory();
     }
+  }
+
+  public async setUpTestGallery(): Promise<void> {
+    const directory: ParentDirectoryDTO = TestHelper.getDirectoryEntry();
+    this.testGalleyEntities.subDir = TestHelper.getDirectoryEntry(directory, 'The Phantom Menace');
+    this.testGalleyEntities.subDir2 = TestHelper.getDirectoryEntry(directory, 'Return of the Jedi');
+    this.testGalleyEntities.p = TestHelper.getRandomizedPhotoEntry(directory, 'Photo1');
+    this.testGalleyEntities.p2 = TestHelper.getRandomizedPhotoEntry(directory, 'Photo2');
+    this.testGalleyEntities.p3 = TestHelper.getRandomizedPhotoEntry(this.testGalleyEntities.subDir, 'Photo3');
+    this.testGalleyEntities.p4 = TestHelper.getRandomizedPhotoEntry(this.testGalleyEntities.subDir2, 'Photo4');
+    this.testGalleyEntities.v = TestHelper.getVideoEntry1(directory);
+
+    this.testGalleyEntities.dir = await DBTestHelper.persistTestDir(directory);
+    this.testGalleyEntities.subDir = this.testGalleyEntities.dir.directories[0];
+    this.testGalleyEntities.subDir2 = this.testGalleyEntities.dir.directories[1];
+    this.testGalleyEntities.p = (this.testGalleyEntities.dir.media.filter(m => m.name === this.testGalleyEntities.p.name)[0] as any);
+    this.testGalleyEntities.p2 = (this.testGalleyEntities.dir.media.filter(m => m.name === this.testGalleyEntities.p2.name)[0] as any);
+    this.testGalleyEntities.v = (this.testGalleyEntities.dir.media.filter(m => m.name === this.testGalleyEntities.v.name)[0] as any);
+    this.testGalleyEntities.p3 = (this.testGalleyEntities.dir.directories[0].media[0] as any);
+    this.testGalleyEntities.p4 = (this.testGalleyEntities.dir.directories[1].media[0] as any);
   }
 
   private async initMySQL(): Promise<void> {

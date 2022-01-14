@@ -34,11 +34,11 @@ export class DiskMangerWorker {
     return path.join(this.normalizeDirPath(path.join(parent.path, parent.name)), path.sep);
   }
 
-  public static dirName(name: string): any {
-    if (name.trim().length === 0) {
+  public static dirName(dirPath: string): string {
+    if (dirPath.trim().length === 0) {
       return '.';
     }
-    return path.basename(name);
+    return path.basename(dirPath);
   }
 
   public static async excludeDir(name: string, relativeDirectoryName: string, absoluteDirectoryName: string): Promise<boolean> {
@@ -102,6 +102,7 @@ export class DiskMangerWorker {
       isPartial: false,
       mediaCount: 0,
       preview: null,
+      validPreview: false,
       media: [],
       metaFile: []
     };

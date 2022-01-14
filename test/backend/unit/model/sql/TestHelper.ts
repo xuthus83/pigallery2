@@ -260,6 +260,7 @@ export class TestHelper {
       directories: [],
       metaFile: [],
       preview: null,
+      validPreview: false,
       media: [],
       lastModified: Date.now(),
       lastScanned: null,

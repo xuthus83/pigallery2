@@ -9,7 +9,7 @@ import {ProjectPath} from '../../../ProjectPath';
 import {Config} from '../../../../common/config/private/Config';
 import {ISQLGalleryManager} from './IGalleryManager';
 import {PhotoDTO} from '../../../../common/entities/PhotoDTO';
-import {Connection} from 'typeorm';
+import {Brackets, Connection, WhereExpression} from 'typeorm';
 import {MediaEntity} from './enitites/MediaEntity';
 import {VideoEntity} from './enitites/VideoEntity';
 import {DiskMangerWorker} from '../../threading/DiskMangerWorker';
@@ -217,18 +217,64 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
   }
 
   /**
-   * Sets preview for the directory
+   * Sets preview for the directory and caches it in the DB
    */
   public async fillPreviewForSubDir(connection: Connection, dir: SubDirectoryDTO): Promise<void> {
 
-    dir.media = [];
-    dir.preview = await ObjectManagers.getInstance().PreviewManager.getPreviewForDirectory(dir);
-    dir.isPartial = true;
+    if (!dir.preview || !dir.validPreview) {
 
+      dir.preview = await ObjectManagers.getInstance().PreviewManager.getPreviewForDirectory(dir);
+      // write preview back to db
+      await connection.createQueryBuilder()
+        .update(DirectoryEntity).set({preview: dir.preview, validPreview: true}).where('id = :dir', {
+          dir: dir.id
+        }).execute();
+    }
+
+
+    dir.media = [];
+    dir.isPartial = true;
     if (dir.preview) {
       dir.preview.readyThumbnails = [];
       dir.preview.readyIcon = false;
     }
+  }
+
+  public async onNewDataVersion(changedDir: ParentDirectoryDTO): Promise<void> {
+    // Invalidating Album preview
+    let fullPath = DiskMangerWorker.normalizeDirPath(path.join(changedDir.path, changedDir.name));
+    const query = (await SQLConnection.getConnection())
+      .createQueryBuilder()
+      .update(DirectoryEntity)
+      .set({validPreview: false});
+
+    let i = 0;
+    const root = DiskMangerWorker.pathFromRelativeDirName('.');
+    while (fullPath !== root) {
+      const name = DiskMangerWorker.dirName(fullPath);
+      const parentPath = DiskMangerWorker.pathFromRelativeDirName(fullPath);
+      fullPath = parentPath;
+      ++i;
+      query.orWhere(new Brackets((q: WhereExpression) => {
+        const param: { [key: string]: string } = {};
+        param['name' + i] = name;
+        param['path' + i] = parentPath;
+        q.where(`path = :path${i}`, param);
+        q.andWhere(`name = :name${i}`, param);
+      }));
+    }
+
+    ++i;
+    query.orWhere(new Brackets((q: WhereExpression) => {
+      const param: { [key: string]: string } = {};
+      param['name' + i] = DiskMangerWorker.dirName('.');
+      param['path' + i] = DiskMangerWorker.pathFromRelativeDirName('.');
+      q.where(`path = :path${i}`, param);
+      q.andWhere(`name = :name${i}`, param);
+    }));
+
+
+    await query.execute();
   }
 
   protected async selectParentDir(connection: Connection, directoryName: string, directoryParent: string): Promise<ParentDirectoryDTO> {
@@ -240,7 +286,16 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
         path: directoryParent
       })
       .leftJoinAndSelect('directory.directories', 'directories')
-      .leftJoinAndSelect('directory.media', 'media');
+      .leftJoinAndSelect('directory.media', 'media')
+      .leftJoinAndSelect('directories.preview', 'preview')
+      .leftJoinAndSelect('preview.directory', 'previewDirectory')
+      .select(['directory',
+        'directories',
+        'media',
+        'preview.name',
+        'previewDirectory.name',
+        'previewDirectory.path']);
+
 
     // TODO: do better filtering
     // NOTE: it should not cause an issue as it also do not shave to the DB
@@ -252,7 +307,6 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
 
     return await query.getOne();
   }
-
 
   protected async fillParentDir(connection: Connection, dir: ParentDirectoryDTO): Promise<void> {
     if (dir.media) {

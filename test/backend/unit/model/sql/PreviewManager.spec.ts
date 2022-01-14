@@ -134,6 +134,7 @@ describe('PreviewManager', (sqlHelper: DBTestHelper) => {
     delete tmpDir.directories;
     delete tmpDir.media;
     delete tmpDir.preview;
+    delete tmpDir.validPreview;
     delete tmpDir.metaFile;
     const ret = Utils.clone(m);
     delete (ret.directory as DirectoryBaseDTO).id;

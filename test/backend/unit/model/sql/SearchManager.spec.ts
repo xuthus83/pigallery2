@@ -206,6 +206,7 @@ describe('SearchManager', (sqlHelper: DBTestHelper) => {
     delete tmpDir.directories;
     delete tmpDir.media;
     delete tmpDir.preview;
+    delete tmpDir.validPreview;
     delete tmpDir.metaFile;
     const ret = Utils.clone(m);
     delete (ret.directory as DirectoryBaseDTO).lastScanned;
@@ -230,6 +231,7 @@ describe('SearchManager', (sqlHelper: DBTestHelper) => {
     delete d.directories;
     delete d.media;
     delete d.preview;
+    delete d.validPreview;
     delete d.metaFile;
     const ret = Utils.clone(d);
     d.directories = tmpD;
