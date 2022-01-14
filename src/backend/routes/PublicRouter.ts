@@ -78,7 +78,15 @@ export class PublicRouter {
             res.tpl.user.csrfToken = req.csrfToken();
           }
         }
-        res.tpl.Config = {Client: Config.Client.toJSON({attachVolatile: true})};
+        const confCopy = {Client: Config.Client.toJSON({attachVolatile: true})};
+        // Escaping html tags, like <script></script>
+        confCopy.Client.Other.customHTMLHead = confCopy.Client.Other.customHTMLHead.replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#039;');
+        res.tpl.Config = confCopy;
+        res.tpl.customHTMLHead = Config.Client.Other.customHTMLHead;
 
         return next();
       });

@@ -112,6 +112,8 @@ export class NavBarConfig {
 @SubConfigClass()
 export class ClientOtherConfig {
   @ConfigProperty()
+  customHTMLHead: string = '';
+  @ConfigProperty()
   enableCache: boolean = true;
   @ConfigProperty()
   enableOnScrollRendering: boolean = true;

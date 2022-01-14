@@ -105,6 +105,14 @@
         required="true">
       </app-settings-entry>
 
+      <app-settings-entry
+        name="Custom HTML Head"
+        description="Injects the content of this between the <head></head> HTML tags of the app. (You can use it add analytics or custom code to the app)"
+        [ngModel]="states.Client.customHTMLHead"
+        i18n-name
+        [simplifiedMode]="simplifiedMode">
+      </app-settings-entry>
+
 
 
       <button class="btn btn-success float-right"
