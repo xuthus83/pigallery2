@@ -221,6 +221,27 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
     }
   });
 
+  it('should support emoji in names', async () => {
+    const gm = new GalleryManagerTest();
+    const im = new IndexingManagerTest();
+
+    const parent = TestHelper.getRandomizedDirectoryEntry(null, 'parent dir 😀');
+    const p1 = TestHelper.getRandomizedPhotoEntry(parent, 'Photo1');
+    p1.name = 'test.jpg';
+
+    DirectoryDTOUtils.packDirectory(parent);
+    await im.saveToDB(Utils.clone(parent) as ParentDirectoryDTO);
+
+    const conn = await SQLConnection.getConnection();
+    const selected = await gm.selectParentDir(conn, parent.name, parent.path);
+    await gm.fillParentDir(conn, selected);
+
+    DirectoryDTOUtils.packDirectory(selected);
+
+    expect(Utils.clone(Utils.removeNullOrEmptyObj(removeIds(selected))))
+      .to.deep.equalInAnyOrder(Utils.removeNullOrEmptyObj(indexifyReturn(parent)));
+  });
+
 
   it('should select preview', async () => {
     const selectDirectory = async (gmTest: GalleryManagerTest, dir: DirectoryBaseDTO): Promise<ParentDirectoryDTO> => {

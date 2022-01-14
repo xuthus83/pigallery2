@@ -5,6 +5,7 @@ import {PersonDTO} from '../../../../common/entities/PersonDTO';
 import {ISQLPersonManager} from './IPersonManager';
 import {Logger} from '../../../Logger';
 import {FaceRegion} from '../../../../common/entities/PhotoDTO';
+import {SQL_COLLATE} from './enitites/EntityUtils';
 
 
 const LOG_TAG = '[PersonManager]';
@@ -47,7 +48,7 @@ export class PersonManager implements ISQLPersonManager {
     const repository = connection.getRepository(PersonEntry);
     const person = await repository.createQueryBuilder('person')
       .limit(1)
-      .where('person.name LIKE :name COLLATE utf8_general_ci', {name}).getOne();
+      .where('person.name LIKE :name COLLATE ' + SQL_COLLATE, {name}).getOne();
 
 
     if (typeof partialPerson.name !== 'undefined') {
@@ -93,7 +94,7 @@ export class PersonManager implements ISQLPersonManager {
     const personRepository = connection.getRepository(PersonEntry);
     const faceRegionRepository = connection.getRepository(FaceRegionEntry);
 
-    const savedPersons =  await personRepository.find();
+    const savedPersons = await personRepository.find();
     // filter already existing persons
     for (const personToSave of persons) {
 

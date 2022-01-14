@@ -33,6 +33,7 @@ import {ISQLGalleryManager} from './IGalleryManager';
 import {ISQLSearchManager} from './ISearchManager';
 import {Utils} from '../../../../common/Utils';
 import {FileEntity} from './enitites/FileEntity';
+import {SQL_COLLATE} from './enitites/EntityUtils';
 
 export class SearchManager implements ISQLSearchManager {
 
@@ -72,7 +73,7 @@ export class SearchManager implements ISQLSearchManager {
       (await photoRepository
         .createQueryBuilder('photo')
         .select('DISTINCT(photo.metadata.keywords)')
-        .where('photo.metadata.keywords LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
+        .where('photo.metadata.keywords LIKE :text COLLATE ' + SQL_COLLATE, {text: '%' + text + '%'})
         .limit(Config.Client.Search.AutoComplete.maxItemsPerCategory)
         .getRawMany())
         .map((r): Array<string> => (r.metadataKeywords as string).split(',') as Array<string>)
@@ -86,7 +87,7 @@ export class SearchManager implements ISQLSearchManager {
       result = result.concat(this.encapsulateAutoComplete((await personRepository
         .createQueryBuilder('person')
         .select('DISTINCT(person.name)')
-        .where('person.name LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
+        .where('person.name LIKE :text COLLATE ' + SQL_COLLATE, {text: '%' + text + '%'})
         .limit(Config.Client.Search.AutoComplete.maxItemsPerCategory)
         .orderBy('person.name')
         .getRawMany())
@@ -98,9 +99,9 @@ export class SearchManager implements ISQLSearchManager {
         .createQueryBuilder('photo')
         .select('photo.metadata.positionData.country as country, ' +
           'photo.metadata.positionData.state as state, photo.metadata.positionData.city as city')
-        .where('photo.metadata.positionData.country LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
-        .orWhere('photo.metadata.positionData.state LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
-        .orWhere('photo.metadata.positionData.city LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
+        .where('photo.metadata.positionData.country LIKE :text COLLATE ' + SQL_COLLATE, {text: '%' + text + '%'})
+        .orWhere('photo.metadata.positionData.state LIKE :text COLLATE ' + SQL_COLLATE, {text: '%' + text + '%'})
+        .orWhere('photo.metadata.positionData.city LIKE :text COLLATE ' + SQL_COLLATE, {text: '%' + text + '%'})
         .groupBy('photo.metadata.positionData.country, photo.metadata.positionData.state, photo.metadata.positionData.city')
         .limit(Config.Client.Search.AutoComplete.maxItemsPerCategory)
         .getRawMany())
@@ -117,7 +118,7 @@ export class SearchManager implements ISQLSearchManager {
       result = result.concat(this.encapsulateAutoComplete((await mediaRepository
         .createQueryBuilder('media')
         .select('DISTINCT(media.name)')
-        .where('media.name LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
+        .where('media.name LIKE :text COLLATE ' + SQL_COLLATE, {text: '%' + text + '%'})
         .limit(Config.Client.Search.AutoComplete.maxItemsPerCategory)
         .getRawMany())
         .map(r => r.name), SearchQueryTypes.file_name));
@@ -127,7 +128,7 @@ export class SearchManager implements ISQLSearchManager {
       result = result.concat(this.encapsulateAutoComplete((await photoRepository
         .createQueryBuilder('media')
         .select('DISTINCT(media.metadata.caption) as caption')
-        .where('media.metadata.caption LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
+        .where('media.metadata.caption LIKE :text COLLATE ' + SQL_COLLATE, {text: '%' + text + '%'})
         .limit(Config.Client.Search.AutoComplete.maxItemsPerCategory)
         .getRawMany())
         .map(r => r.caption), SearchQueryTypes.caption));
@@ -137,7 +138,7 @@ export class SearchManager implements ISQLSearchManager {
       result = result.concat(this.encapsulateAutoComplete((await directoryRepository
         .createQueryBuilder('dir')
         .select('DISTINCT(dir.name)')
-        .where('dir.name LIKE :text COLLATE utf8_general_ci', {text: '%' + text + '%'})
+        .where('dir.name LIKE :text COLLATE ' + SQL_COLLATE, {text: '%' + text + '%'})
         .limit(Config.Client.Search.AutoComplete.maxItemsPerCategory)
         .getRawMany())
         .map(r => r.name), SearchQueryTypes.directory));
@@ -488,17 +489,17 @@ export class SearchManager implements ISQLSearchManager {
 
 
         textParam['fullPath' + queryId] = createMatchString(dirPathStr);
-        q[whereFN](`directory.path ${LIKE} :fullPath${queryId} COLLATE utf8_general_ci`,
+        q[whereFN](`directory.path ${LIKE} :fullPath${queryId} COLLATE ` + SQL_COLLATE,
           textParam);
 
         const directoryPath = GalleryManager.parseRelativeDirePath(dirPathStr);
         q[whereFN](new Brackets((dq): any => {
           textParam['dirName' + queryId] = createMatchString(directoryPath.name);
-          dq[whereFNRev](`directory.name ${LIKE} :dirName${queryId} COLLATE utf8_general_ci`,
+          dq[whereFNRev](`directory.name ${LIKE} :dirName${queryId} COLLATE ${SQL_COLLATE}`,
             textParam);
           if (dirPathStr.includes('/')) {
             textParam['parentName' + queryId] = createMatchString(directoryPath.parent);
-            dq[whereFNRev](`directory.path ${LIKE} :parentName${queryId} COLLATE utf8_general_ci`,
+            dq[whereFNRev](`directory.path ${LIKE} :parentName${queryId} COLLATE ${SQL_COLLATE}`,
               textParam);
           }
           return dq;
@@ -506,21 +507,21 @@ export class SearchManager implements ISQLSearchManager {
       }
 
       if ((query.type === SearchQueryTypes.any_text && !directoryOnly) || query.type === SearchQueryTypes.file_name) {
-        q[whereFN](`media.name ${LIKE} :text${queryId} COLLATE utf8_general_ci`,
+        q[whereFN](`media.name ${LIKE} :text${queryId} COLLATE ${SQL_COLLATE}`,
           textParam);
       }
 
       if ((query.type === SearchQueryTypes.any_text && !directoryOnly) || query.type === SearchQueryTypes.caption) {
-        q[whereFN](`media.metadata.caption ${LIKE} :text${queryId} COLLATE utf8_general_ci`,
+        q[whereFN](`media.metadata.caption ${LIKE} :text${queryId} COLLATE ${SQL_COLLATE}`,
           textParam);
       }
 
       if ((query.type === SearchQueryTypes.any_text && !directoryOnly) || query.type === SearchQueryTypes.position) {
-        q[whereFN](`media.metadata.positionData.country ${LIKE} :text${queryId} COLLATE utf8_general_ci`,
+        q[whereFN](`media.metadata.positionData.country ${LIKE} :text${queryId} COLLATE ${SQL_COLLATE}`,
           textParam)
-          [whereFN](`media.metadata.positionData.state ${LIKE} :text${queryId} COLLATE utf8_general_ci`,
+          [whereFN](`media.metadata.positionData.state ${LIKE} :text${queryId} COLLATE ${SQL_COLLATE}`,
           textParam)
-          [whereFN](`media.metadata.positionData.city ${LIKE} :text${queryId} COLLATE utf8_general_ci`,
+          [whereFN](`media.metadata.positionData.city ${LIKE} :text${queryId} COLLATE ${SQL_COLLATE}`,
           textParam);
       }
 
@@ -528,7 +529,7 @@ export class SearchManager implements ISQLSearchManager {
       const matchArrayField = (fieldName: string): void => {
         q[whereFN](new Brackets((qbr): void => {
           if ((query as TextSearch).matchType !== TextSearchQueryMatchTypes.exact_match) {
-            qbr[whereFN](`${fieldName} ${LIKE} :text${queryId} COLLATE utf8_general_ci`,
+            qbr[whereFN](`${fieldName} ${LIKE} :text${queryId} COLLATE ${SQL_COLLATE}`,
               textParam);
           } else {
             qbr[whereFN](new Brackets((qb): void => {
@@ -537,13 +538,13 @@ export class SearchManager implements ISQLSearchManager {
               textParam['textC' + queryId] = `${(query as TextSearch).text},%`;
               textParam['text_exact' + queryId] = `${(query as TextSearch).text}`;
 
-              qb[whereFN](`${fieldName} ${LIKE} :CtextC${queryId} COLLATE utf8_general_ci`,
+              qb[whereFN](`${fieldName} ${LIKE} :CtextC${queryId} COLLATE ${SQL_COLLATE}`,
                 textParam);
-              qb[whereFN](`${fieldName} ${LIKE} :Ctext${queryId} COLLATE utf8_general_ci`,
+              qb[whereFN](`${fieldName} ${LIKE} :Ctext${queryId} COLLATE ${SQL_COLLATE}`,
                 textParam);
-              qb[whereFN](`${fieldName} ${LIKE} :textC${queryId} COLLATE utf8_general_ci`,
+              qb[whereFN](`${fieldName} ${LIKE} :textC${queryId} COLLATE ${SQL_COLLATE}`,
                 textParam);
-              qb[whereFN](`${fieldName} ${LIKE} :text_exact${queryId} COLLATE utf8_general_ci`,
+              qb[whereFN](`${fieldName} ${LIKE} :text_exact${queryId} COLLATE ${SQL_COLLATE}`,
                 textParam);
             }));
           }

@@ -206,7 +206,7 @@ export class SQLConnection {
         username: config.mysql.username,
         password: config.mysql.password,
         database: config.mysql.database,
-        charset: 'utf8'
+        charset: 'utf8mb4'
       };
     } else if (config.type === DatabaseType.sqlite) {
       driver = {
