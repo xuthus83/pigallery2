@@ -3,7 +3,7 @@ import * as fs from 'fs';
 import {Config} from '../../../../../src/common/config/private/Config';
 import {SQLConnection} from '../../../../../src/backend/model/database/sql/SQLConnection';
 import {Server} from '../../../../../src/backend/server';
-import {DatabaseType, ServerConfig} from '../../../../../src/common/config/private/PrivateConfig';
+import {DatabaseType} from '../../../../../src/common/config/private/PrivateConfig';
 import {ProjectPath} from '../../../../../src/backend/ProjectPath';
 
 process.env.NODE_ENV = 'test';
@@ -16,7 +16,7 @@ describe('SettingsRouter', () => {
 
   const tempDir = path.join(__dirname, '../../tmp');
   beforeEach(async () => {
-    await fs.promises.rm(tempDir, {recursive: true});
+    await fs.promises.rm(tempDir, {recursive: true, force: true});
     Config.Server.Threading.enabled = false;
     Config.Server.Database.type = DatabaseType.sqlite;
     Config.Server.Database.dbFolder = tempDir;
@@ -26,7 +26,7 @@ describe('SettingsRouter', () => {
 
   afterEach(async () => {
     await SQLConnection.close();
-    await fs.promises.rm(tempDir, {recursive: true});
+    await fs.promises.rm(tempDir, {recursive: true, force: true});
   });
 
   describe('/GET settings', () => {

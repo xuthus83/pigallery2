@@ -29,7 +29,7 @@ import {
   TextSearchQueryTypes
 } from '../src/common/entities/SearchQueryDTO';
 import {QueryKeywords, SearchQueryParser} from '../src/common/SearchQueryParser';
-import {DirectoryBaseDTO, ParentDirectoryDTO} from '../src/common/entities/DirectoryDTO';
+import {ParentDirectoryDTO} from '../src/common/entities/DirectoryDTO';
 
 
 export interface BenchmarkResult {
@@ -296,7 +296,7 @@ export class BenchmarkRunner {
   private resetDB = async (): Promise<void> => {
     Config.Server.Threading.enabled = false;
     await ObjectManagers.reset();
-    await fs.promises.rm(ProjectPath.DBFolder, {recursive: true});
+    await fs.promises.rm(ProjectPath.DBFolder, {recursive: true, force: true});
     Config.Server.Database.type = DatabaseType.sqlite;
     Config.Server.Jobs.scheduled = [];
     await ObjectManagers.InitSQLManagers();

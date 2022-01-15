@@ -11,7 +11,7 @@ import {SuperAgentStatic} from 'superagent';
 import {RouteTestingHelper} from './RouteTestingHelper';
 import {QueryParams} from '../../../../src/common/QueryParams';
 import {ErrorCodes} from '../../../../src/common/entities/Error';
-import {DatabaseType, ServerConfig} from '../../../../src/common/config/private/PrivateConfig';
+import {DatabaseType} from '../../../../src/common/config/private/PrivateConfig';
 
 
 process.env.NODE_ENV = 'test';
@@ -33,7 +33,7 @@ describe('SharingRouter', () => {
   const tempDir = path.join(__dirname, '../../tmp');
   let server: Server;
   const setUp = async () => {
-    await fs.promises.rm(tempDir, {recursive: true});
+    await fs.promises.rm(tempDir, {recursive: true, force: true});
     Config.Client.authenticationRequired = true;
     Config.Server.Threading.enabled = false;
     Config.Client.Sharing.enabled = true;
@@ -49,7 +49,7 @@ describe('SharingRouter', () => {
   };
   const tearDown = async () => {
     await SQLConnection.close();
-    await fs.promises.rm(tempDir, {recursive: true});
+    await fs.promises.rm(tempDir, {recursive: true, force: true});
   };
 
   const shouldBeValidUser = (result: any, user: any) => {

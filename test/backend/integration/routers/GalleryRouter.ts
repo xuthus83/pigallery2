@@ -29,7 +29,7 @@ describe('GalleryRouter', (sqlHelper: DBTestHelper) => {
   let server: Server;
   const setUp = async () => {
     await sqlHelper.initDB();
-    await fs.promises.rm(tempDir, {recursive: true});
+    await fs.promises.rm(tempDir, {recursive: true, force: true});
     Config.Client.authenticationRequired = false;
     Config.Server.Threading.enabled = false;
     Config.Client.Media.Video.enabled = true;

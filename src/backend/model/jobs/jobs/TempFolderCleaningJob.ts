@@ -57,7 +57,7 @@ export class TempFolderCleaningJob extends Job {
         this.Progress.log('processing: ' + file);
         this.Progress.Processed++;
         if ((await fs.promises.stat(file)).isDirectory()) {
-          await fs.promises.rm(file, {recursive: true});
+          await fs.promises.rmdir(file, {recursive: true});
         } else {
           await fs.promises.unlink(file);
         }
@@ -83,7 +83,7 @@ export class TempFolderCleaningJob extends Job {
       if (await this.isValidDirectory(filePath) === false) {
         this.Progress.log('processing: ' + filePath);
         this.Progress.Processed++;
-        await fs.promises.rm(filePath, {recursive: true});
+        await fs.promises.rmdir(filePath, {recursive: true});
       } else {
         this.Progress.log('skipping: ' + filePath);
         this.Progress.Skipped++;

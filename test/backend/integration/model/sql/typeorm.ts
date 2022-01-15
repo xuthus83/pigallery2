@@ -24,7 +24,7 @@ describe('Typeorm integration', () => {
 
   const tempDir = path.join(__dirname, '../../tmp');
   const setUpSqlDB = async () => {
-    await fs.promises.rm(tempDir, {recursive: true});
+    await fs.promises.rm(tempDir, {recursive: true, force:true});
 
     Config.Server.Database.type = DatabaseType.sqlite;
     Config.Server.Database.dbFolder = tempDir;
@@ -34,7 +34,7 @@ describe('Typeorm integration', () => {
 
   const teardownUpSqlDB = async () => {
     await SQLConnection.close();
-    await fs.promises.rm(tempDir, {recursive: true});
+    await fs.promises.rmdir(tempDir, {recursive: true});
   };
 
   beforeEach(async () => {
