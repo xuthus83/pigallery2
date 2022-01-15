@@ -22,7 +22,6 @@ import {DatabaseType, ServerDataBaseConfig, SQLLogLevel} from '../../../../commo
 import {AlbumBaseEntity} from './enitites/album/AlbumBaseEntity';
 import {SavedSearchEntity} from './enitites/album/SavedSearchEntity';
 import {NotificationManager} from '../../NotifocationManager';
-import {isArray} from '../../../../../node_modules/ngx-bootstrap/chronos';
 
 const LOG_TAG = '[SQLConnection]';
 
@@ -99,7 +98,7 @@ export class SQLConnection {
 
     // Adding enforced users to the db
     const userRepository = connection.getRepository(UserEntity);
-    if (isArray(Config.Server.Database.enforcedUsers) &&
+    if (Array.isArray(Config.Server.Database.enforcedUsers) &&
       Config.Server.Database.enforcedUsers.length > 0) {
       for (const uc of Config.Server.Database.enforcedUsers) {
         const user = await userRepository.findOne({name: uc.name});
