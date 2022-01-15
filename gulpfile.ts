@@ -167,7 +167,7 @@ gulp.task('copy-package', (): any => gulp.src([
     json.scripts = {start: 'node ./src/backend/index.js'};
 
     if (getSwitch('skip-opt-packages')) {
-      const skipPackages = getSwitch('skip-opt-packages').split(',');
+      const skipPackages = getSwitch('skip-opt-packages').replace(new RegExp(' ', 'g'), ',').split(',');
       for (const pkg of skipPackages) {
         for (const key of Object.keys(json.optionalDependencies)) {
           if (key.indexOf(pkg) !== -1) {
