@@ -35,6 +35,8 @@ export class BackendtextService {
     switch (job as DefaultsJobs) {
       case DefaultsJobs.Indexing:
         return $localize`Indexing`;
+      case DefaultsJobs['Preview Filling']:
+        return $localize`Preview Filling`;
       case DefaultsJobs['Database Reset']:
         return $localize`Database Reset`;
       case DefaultsJobs['Thumbnail Generation']:

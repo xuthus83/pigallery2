@@ -8,8 +8,8 @@ import {SortingMethods} from '../../../../common/entities/SortingMethods';
 import {ISQLSearchManager} from './ISearchManager';
 import {IPreviewManager, PreviewPhotoDTOWithID} from '../interfaces/IPreviewManager';
 import {SQLConnection} from './SQLConnection';
-import {SavedSearchDTO} from '../../../../common/entities/album/SavedSearchDTO';
 import {SearchQueryDTO} from '../../../../common/entities/SearchQueryDTO';
+import {DirectoryEntity} from './enitites/DirectoryEntity';
 
 
 const LOG_TAG = '[PreviewManager]';
@@ -79,7 +79,17 @@ export class PreviewManager implements IPreviewManager {
     return previewMedia || null;
   }
 
-  public async getPreviewForDirectory(dir: { id: number, name: string, path: string }): Promise<PreviewPhotoDTOWithID> {
+
+  public async getPartialDirsWithoutPreviews(): Promise<{ id: number, name: string, path: string }[]> {
+    const connection = await SQLConnection.getConnection();
+    return await connection
+      .getRepository(DirectoryEntity)
+      .createQueryBuilder('directory')
+      .where('directory.validPreview = :validPreview', {validPreview: 0}) // 0 === false
+      .select(['name', 'id', 'path']).getRawMany();
+  }
+
+  public async setAndGetPreviewForDirectory(dir: { id: number, name: string, path: string }): Promise<PreviewPhotoDTOWithID> {
     const connection = await SQLConnection.getConnection();
     const previewQuery = (): SelectQueryBuilder<MediaEntity> => {
       const query = connection
@@ -112,7 +122,8 @@ export class PreviewManager implements IPreviewManager {
       return query;
     };
 
-    let previewMedia = null;
+
+    let previewMedia: PreviewPhotoDTOWithID = null;
     if (Config.Server.Preview.SearchQuery) {
       previewMedia = await previewQuery()
         .andWhere(await (ObjectManagers.getInstance().SearchManager as ISQLSearchManager)
@@ -126,6 +137,13 @@ export class PreviewManager implements IPreviewManager {
         .limit(1)
         .getOne();
     }
+
+    // set validPreview bit to true even if there is no preview (to prevent future updates)
+    await connection.createQueryBuilder()
+      .update(DirectoryEntity).set({preview: previewMedia, validPreview: true}).where('id = :dir', {
+        dir: dir.id
+      }).execute();
+
     return previewMedia || null;
   }
 

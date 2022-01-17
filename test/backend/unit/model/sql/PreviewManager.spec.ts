@@ -14,6 +14,8 @@ import {PreviewManager} from '../../../../../src/backend/model/database/sql/Prev
 import {Config} from '../../../../../src/common/config/private/Config';
 import {SortingMethods} from '../../../../../src/common/entities/SortingMethods';
 import {Utils} from '../../../../../src/common/Utils';
+import {SQLConnection} from '../../../../../src/backend/model/database/sql/SQLConnection';
+import {DirectoryEntity} from '../../../../../src/backend/model/database/sql/enitites/DirectoryEntity';
 
 const deepEqualInAnyOrder = require('deep-equal-in-any-order');
 const chai = require('chai');
@@ -156,25 +158,40 @@ describe('PreviewManager', (sqlHelper: DBTestHelper) => {
     Config.Server.Preview.Sorting = [SortingMethods.descRating, SortingMethods.descDate];
   });
 
+
+  it('should list directories without preview', async () => {
+    const pm = new PreviewManager();
+    const partialDir = (d: DirectoryBaseDTO) => {
+      return {id: d.id, name: d.name, path: d.path};
+    };
+    expect(await pm.getPartialDirsWithoutPreviews()).to.deep.equalInAnyOrder([partialDir(dir)]);
+    const conn = await SQLConnection.getConnection();
+
+    await conn.createQueryBuilder()
+      .update(DirectoryEntity).set({validPreview: false}).execute();
+
+    expect(await pm.getPartialDirsWithoutPreviews()).to.deep.equalInAnyOrder([dir, subDir, subDir2].map(d => partialDir(d)));
+  });
+
   it('should sort directory preview', async () => {
     const pm = new PreviewManager();
     Config.Server.Preview.Sorting = [SortingMethods.descRating, SortingMethods.descDate];
-    expect(Utils.clone(await pm.getPreviewForDirectory(subDir))).to.deep.equalInAnyOrder(previewifyMedia(p2));
+    expect(Utils.clone(await pm.setAndGetPreviewForDirectory(subDir))).to.deep.equalInAnyOrder(previewifyMedia(p2));
     Config.Server.Preview.Sorting = [SortingMethods.descDate];
-    expect(Utils.clone(await pm.getPreviewForDirectory(subDir))).to.deep.equalInAnyOrder(previewifyMedia(pFaceLess));
+    expect(Utils.clone(await pm.setAndGetPreviewForDirectory(subDir))).to.deep.equalInAnyOrder(previewifyMedia(pFaceLess));
     Config.Server.Preview.Sorting = [SortingMethods.descRating];
-    expect(Utils.clone(await pm.getPreviewForDirectory(dir))).to.deep.equalInAnyOrder(previewifyMedia(p4));
+    expect(Utils.clone(await pm.setAndGetPreviewForDirectory(dir))).to.deep.equalInAnyOrder(previewifyMedia(p4));
   });
 
   it('should get preview for directory', async () => {
     const pm = new PreviewManager();
 
     Config.Server.Preview.SearchQuery = {type: SearchQueryTypes.any_text, text: 'Boba'} as TextSearch;
-    expect(Utils.clone(await pm.getPreviewForDirectory(subDir))).to.deep.equalInAnyOrder(previewifyMedia(p));
+    expect(Utils.clone(await pm.setAndGetPreviewForDirectory(subDir))).to.deep.equalInAnyOrder(previewifyMedia(p));
     Config.Server.Preview.SearchQuery = {type: SearchQueryTypes.any_text, text: 'Derem'} as TextSearch;
-    expect(Utils.clone(await pm.getPreviewForDirectory(subDir))).to.deep.equalInAnyOrder(previewifyMedia(p2));
-    expect(Utils.clone(await pm.getPreviewForDirectory(dir))).to.deep.equalInAnyOrder(previewifyMedia(p2));
-    expect(Utils.clone(await pm.getPreviewForDirectory(subDir2))).to.deep.equalInAnyOrder(previewifyMedia(p4));
+    expect(Utils.clone(await pm.setAndGetPreviewForDirectory(subDir))).to.deep.equalInAnyOrder(previewifyMedia(p2));
+    expect(Utils.clone(await pm.setAndGetPreviewForDirectory(dir))).to.deep.equalInAnyOrder(previewifyMedia(p2));
+    expect(Utils.clone(await pm.setAndGetPreviewForDirectory(subDir2))).to.deep.equalInAnyOrder(previewifyMedia(p4));
 
   });
 

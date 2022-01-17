@@ -9,7 +9,8 @@ export enum DefaultsJobs {
   'Video Converting' = 3,
   'Photo Converting' = 4,
   'Thumbnail Generation' = 5,
-  'Temp Folder Cleaning' = 6
+  'Temp Folder Cleaning' = 6,
+  'Preview Filling' = 7
 }
 
 export interface ConfigTemplateEntry {

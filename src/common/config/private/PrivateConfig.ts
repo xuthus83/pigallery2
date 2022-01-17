@@ -255,10 +255,15 @@ export class ServerJobConfig {
       false,
       new NeverJobTrigger(), {indexChangesOnly: true}
     ),
+    new JobScheduleConfig(DefaultsJobs[DefaultsJobs['Preview Filling']],
+      DefaultsJobs[DefaultsJobs['Preview Filling']],
+      false,
+      new NeverJobTrigger(), {}
+    ),
     new JobScheduleConfig(DefaultsJobs[DefaultsJobs['Thumbnail Generation']],
       DefaultsJobs[DefaultsJobs['Thumbnail Generation']],
       false,
-      new AfterJobTrigger(DefaultsJobs[DefaultsJobs.Indexing]), {sizes: [240], indexedOnly: true}
+      new AfterJobTrigger(DefaultsJobs[DefaultsJobs['Preview Filling']]), {sizes: [240], indexedOnly: true}
     ),
     new JobScheduleConfig(DefaultsJobs[DefaultsJobs['Photo Converting']],
       DefaultsJobs[DefaultsJobs['Photo Converting']],

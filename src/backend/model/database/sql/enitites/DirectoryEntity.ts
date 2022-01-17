@@ -60,7 +60,7 @@ export class DirectoryEntity implements ParentDirectoryDTO<MediaDTO>, SubDirecto
   public preview: MediaEntity;
 
   // On galley change, preview will be invalid
-  @Column({default: false})
+  @Column({type: 'boolean', default: false})
   validPreview: boolean;
 
   @OneToMany(type => MediaEntity, media => media.directory)

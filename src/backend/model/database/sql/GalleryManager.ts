@@ -216,19 +216,14 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
     return await query.getOne();
   }
 
+
   /**
    * Sets preview for the directory and caches it in the DB
    */
   public async fillPreviewForSubDir(connection: Connection, dir: SubDirectoryDTO): Promise<void> {
 
-    if (!dir.preview || !dir.validPreview) {
-
-      dir.preview = await ObjectManagers.getInstance().PreviewManager.getPreviewForDirectory(dir);
-      // write preview back to db
-      await connection.createQueryBuilder()
-        .update(DirectoryEntity).set({preview: dir.preview, validPreview: true}).where('id = :dir', {
-          dir: dir.id
-        }).execute();
+    if (!dir.validPreview) {
+      dir.preview = await ObjectManagers.getInstance().PreviewManager.setAndGetPreviewForDirectory(dir);
     }
 
 

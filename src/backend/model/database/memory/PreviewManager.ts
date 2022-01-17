@@ -4,10 +4,13 @@ import {MediaDTO} from '../../../../common/entities/MediaDTO';
 import {SavedSearchDTO} from '../../../../common/entities/album/SavedSearchDTO';
 
 export class PreviewManager implements IPreviewManager {
+  getPartialDirsWithoutPreviews(): Promise<{ id: number; name: string; path: string }[]> {
+    throw new Error('not implemented');
+  }
   getAlbumPreview(album: SavedSearchDTO): Promise<MediaDTO> {
     throw new Error('not implemented');
   }
-  getPreviewForDirectory(dir: DirectoryPathDTO): Promise<MediaDTO> {
+  setAndGetPreviewForDirectory(dir: DirectoryPathDTO): Promise<MediaDTO> {
     throw new Error('not implemented');
   }
 }

@@ -268,7 +268,6 @@ export class SearchManager implements ISQLSearchManager {
   /**
    * Builds the SQL Where query from search query
    * @param query input search query
-   * @param paramCounter Helper counter for generating parameterized query
    * @param directoryOnly Only builds directory related queries
    * @private
    */
