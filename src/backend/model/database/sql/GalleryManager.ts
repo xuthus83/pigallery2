@@ -222,7 +222,7 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
    */
   public async fillPreviewForSubDir(connection: Connection, dir: SubDirectoryDTO): Promise<void> {
 
-    if (!dir.validPreview) {
+    if (!dir.preview || !dir.validPreview) {
       dir.preview = await ObjectManagers.getInstance().PreviewManager.setAndGetPreviewForDirectory(dir);
     }
 
