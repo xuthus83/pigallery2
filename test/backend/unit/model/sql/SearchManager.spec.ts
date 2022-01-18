@@ -27,7 +27,6 @@ import {TestHelper} from './TestHelper';
 import {ObjectManagers} from '../../../../../src/backend/model/ObjectManagers';
 import {GalleryManager} from '../../../../../src/backend/model/database/sql/GalleryManager';
 import {Connection} from 'typeorm';
-import {DirectoryEntity} from '../../../../../src/backend/model/database/sql/enitites/DirectoryEntity';
 import {GPSMetadata, PhotoDTO, PhotoMetadata} from '../../../../../src/common/entities/PhotoDTO';
 import {VideoDTO} from '../../../../../src/common/entities/VideoDTO';
 import {AutoCompleteItem} from '../../../../../src/common/entities/AutoCompleteItem';
@@ -230,8 +229,6 @@ describe('SearchManager', (sqlHelper: DBTestHelper) => {
     const tmpMT = d.metaFile;
     delete d.directories;
     delete d.media;
-    delete d.preview;
-    delete d.validPreview;
     delete d.metaFile;
     const ret = Utils.clone(d);
     d.directories = tmpD;
@@ -1232,6 +1229,17 @@ describe('SearchManager', (sqlHelper: DBTestHelper) => {
       Config.Client.Search.listDirectories = true;
       const sm = new SearchManager();
 
+      const cloned = Utils.clone(searchifyDir(subDir));
+      cloned.validPreview = true;
+      cloned.preview = {
+        directory: {
+          name: subDir.name,
+          path: subDir.path
+        },
+        name: pFaceLess.name,
+        readyIcon: false,
+        readyThumbnails: []
+      } as any;
       const query = {
         text: subDir.name,
         type: SearchQueryTypes.any_text
@@ -1239,7 +1247,7 @@ describe('SearchManager', (sqlHelper: DBTestHelper) => {
       expect(removeDir(await sm.search(query)))
         .to.deep.equalInAnyOrder(removeDir({
         searchQuery: query,
-        directories: [subDir],
+        directories: [cloned],
         media: [pFaceLess],
         metaFile: [],
         resultOverflow: false

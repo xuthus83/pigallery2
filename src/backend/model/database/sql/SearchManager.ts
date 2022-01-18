@@ -205,7 +205,13 @@ export class SearchManager implements ISQLSearchManager {
           .getRepository(DirectoryEntity)
           .createQueryBuilder('directory')
           .where(this.buildWhereQuery(dirQuery, true))
+          .leftJoinAndSelect('directory.preview', 'preview')
+          .leftJoinAndSelect('preview.directory', 'previewDirectory')
           .limit(Config.Client.Search.maxDirectoryResult + 1)
+          .select(['directory',
+            'preview.name',
+            'previewDirectory.name',
+            'previewDirectory.path'])
           .getMany();
 
         // setting previews
