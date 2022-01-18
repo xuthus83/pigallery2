@@ -221,6 +221,7 @@ export class MetadataLoader {
               const exif = ExifReader.load(data);
               if (exif.Rating) {
                 metadata.rating = (parseInt(exif.Rating.value, 10) as any);
+                if(metadata.rating < 0) { metadata.rating = 0; }
               }
               if (exif.subject && exif.subject.value && exif.subject.value.length > 0) {
                 if (metadata.keywords === undefined) {
