@@ -118,6 +118,17 @@ export class SQLConnection {
         }
       }
     }
+
+    // Add dummy Admin to the db
+    const admins = await userRepository.find({role: UserRoles.Admin});
+    if (admins.length === 0) {
+      const a = new UserEntity();
+      a.name = 'admin';
+      a.password = PasswordHelper.cryptPassword('admin');
+      a.role = UserRoles.Admin;
+      await userRepository.save(a);
+    }
+
     const defAdmin = await userRepository.findOne({name: 'admin', role: UserRoles.Admin});
     if (defAdmin && PasswordHelper.comparePassword('admin', defAdmin.password)) {
       NotificationManager.error('Using default admin user!', 'You are using the default admin/admin user/password, please change or remove it.');

@@ -106,8 +106,7 @@ export class ServerDataBaseConfig {
     arrayType: UserConfig,
     description: 'Creates these users in the DB if they do not exist. If a user with this name exist, it wont be overwritten, even if the role is different.'
   })
-  enforcedUsers: UserConfig[] = [new UserConfig('admin', 'admin', UserRoles.Admin)];
-
+  enforcedUsers: UserConfig[] = [];
 }
 
 @SubConfigClass()
