@@ -24,8 +24,12 @@ import {
   ServerDataBaseConfig,
   ServerJobConfig,
   ServerPhotoConfig,
+  ServerPreviewConfig,
   ServerVideoConfig
 } from '../../../common/config/private/PrivateConfig';
+import {SearchQueryParser} from '../../../common/SearchQueryParser';
+import {SearchQueryTypes, TextSearch} from '../../../common/entities/SearchQueryDTO';
+import {Utils} from '../../../common/Utils';
 
 const LOG_TAG = '[ConfigDiagnostics]';
 
@@ -225,6 +229,13 @@ export class ConfigDiagnostics {
   }
 
 
+  static async testPreviewConfig(settings: ServerPreviewConfig): Promise<void> {
+    const sp = new SearchQueryParser();
+    if (!Utils.equalsFilter(sp.parse(sp.stringify(settings.SearchQuery)), settings.SearchQuery)) {
+      throw new Error('SearchQuery is not valid');
+    }
+  }
+
   static async runDiagnostics(): Promise<void> {
 
     if (Config.Server.Database.type !== DatabaseType.memory) {
@@ -313,6 +324,16 @@ export class ConfigDiagnostics {
         'Please adjust the config properly.', err.toString());
       Logger.warn(LOG_TAG, 'Search is not supported with these settings, switching off..', err.toString());
       Config.Client.Search.enabled = false;
+    }
+
+
+    try {
+      await ConfigDiagnostics.testPreviewConfig(Config.Server.Preview);
+    } catch (ex) {
+      const err: Error = ex;
+      NotificationManager.warning('Preview settings are not valid, resetting search query', err.toString());
+      Logger.warn(LOG_TAG, 'Preview settings are not valid, resetting search query', err.toString());
+      Config.Server.Preview.SearchQuery = {type: SearchQueryTypes.any_text, text: ''} as TextSearch;
     }
 
     try {

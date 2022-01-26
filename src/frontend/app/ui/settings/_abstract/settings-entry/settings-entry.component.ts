@@ -2,6 +2,22 @@ import {Component, forwardRef, Input, OnChanges} from '@angular/core';
 import {ControlValueAccessor, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator} from '@angular/forms';
 import {Utils} from '../../../../../../common/Utils';
 import {propertyTypes} from 'typeconfig/common';
+import {SearchQueryParserService} from '../../../gallery/search/search-query-parser.service';
+
+interface IState {
+  isEnumArrayType: boolean;
+  isEnumType: boolean;
+  isConfigType: boolean;
+  default: any;
+  value: any;
+  min?: number;
+  max?: number;
+  type: propertyTypes;
+  arrayType: propertyTypes;
+  original: any;
+  readonly?: boolean;
+
+}
 
 @Component({
   selector: 'app-settings-entry',
@@ -32,13 +48,8 @@ export class SettingsEntryComponent implements ControlValueAccessor, Validator, 
   @Input() simplifiedMode = false;
   @Input() allowSpaces = false;
   @Input() description: string;
-  state: {
-    isEnumType: boolean,
-    isConfigType: boolean,
-    default: any, value: any, min?: number, max?: number,
-    type: propertyTypes, arrayType: propertyTypes,
-    original: any, readonly?: boolean
-  };
+  @Input() typeOverride: 'searchQuery';
+  state: IState;
   isNumberArray = false;
   isNumber = false;
   type = 'text';
@@ -49,9 +60,7 @@ export class SettingsEntryComponent implements ControlValueAccessor, Validator, 
   private readonly GUID = Utils.GUID();
 
 
-  // value: { default: any, setting: any, original: any, readonly?: boolean, onChange: () => void };
-
-  constructor() {
+  constructor(private searchQueryParserService: SearchQueryParserService) {
   }
 
   get changed(): boolean {
@@ -61,7 +70,7 @@ export class SettingsEntryComponent implements ControlValueAccessor, Validator, 
     if (this.state.type === 'array') {
       return !Utils.equalsFilter(this.state.value, this.state.default);
     }
-    return this.state.value !== this.state.default;
+    return !Utils.equalsFilter(this.state.value, this.state.default);
   }
 
   get shouldHide(): boolean {
@@ -79,6 +88,11 @@ export class SettingsEntryComponent implements ControlValueAccessor, Validator, 
 
   get defaultStr(): string {
 
+
+    if (this.typeOverride === 'searchQuery') {
+      return '\'' + this.searchQueryParserService.stringify(this.state.default) + '\'';
+    }
+
     if (this.state.type === 'array' && this.state.arrayType === 'string') {
       return (this.state.default || []).join(';');
     }
@@ -86,7 +100,23 @@ export class SettingsEntryComponent implements ControlValueAccessor, Validator, 
     return this.state.default;
   }
 
-  get value(): any {
+
+  get Values(): any[] {
+    if (Array.isArray(this.state.value)) {
+      return this.state.value;
+    }
+    return [this.state.value];
+  }
+
+  get Type(): any {
+    return this.typeOverride || this.state.type;
+  }
+
+  get IsEnumType(): boolean {
+    return this.state.isEnumType === true || this.state.isEnumArrayType === true;
+  }
+
+  get StringValue(): any {
     if (this.state.type === 'array' &&
       (this.state.arrayType === 'string' || this.isNumberArray)) {
       return this.state.value.join(';');
@@ -95,7 +125,7 @@ export class SettingsEntryComponent implements ControlValueAccessor, Validator, 
     return this.state.value;
   }
 
-  set value(value: any) {
+  set StringValue(value: any) {
     if (this.state.type === 'array' &&
       (this.state.arrayType === 'string' || this.isNumberArray)) {
       value = value.replace(new RegExp(',', 'g'), ';');
@@ -137,14 +167,15 @@ export class SettingsEntryComponent implements ControlValueAccessor, Validator, 
       this.state.arrayType === 'integer' || this.state.arrayType === 'float' || this.state.arrayType === 'positiveFloat';
     this.isNumber = this.state.type === 'unsignedInt' ||
       this.state.type === 'integer' || this.state.type === 'float' || this.state.type === 'positiveFloat';
-    if (this.state.isEnumType) {
+    const eClass = this.state.isEnumType ? this.state.type : this.state.arrayType;
+    if (this.state.isEnumType || this.state.isEnumArrayType) {
       if (this.options) {
         this.optionsView = this.options;
       } else {
         if (this.optionMap) {
-          this.optionsView = Utils.enumToArray(this.state.type).map(this.optionMap);
+          this.optionsView = Utils.enumToArray(eClass).map(this.optionMap);
         } else {
-          this.optionsView = Utils.enumToArray(this.state.type);
+          this.optionsView = Utils.enumToArray(eClass);
         }
       }
     }
@@ -185,6 +216,16 @@ export class SettingsEntryComponent implements ControlValueAccessor, Validator, 
 
   public registerOnTouched(fn: any): void {
     this.onTouched = fn;
+  }
+
+  AddNew(): void {
+    if (this.state.type === 'array') {
+      this.state.value.push(this.state.value[this.state.value.length - 1]);
+    }
+  }
+
+  remove(i: number): void {
+    (this.state.value as any[]).splice(i, 1);
   }
 
 }

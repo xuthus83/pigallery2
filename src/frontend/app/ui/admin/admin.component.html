@@ -25,7 +25,8 @@
             {{notification.details | json}}
             <ng-container *ngIf="notification.request">
               <br/>
-              Request: "{{notification.request.method}}", url: "{{notification.request.url}}", status code: "{{notification.request.statusCode}}"
+              Request: "{{notification.request.method}}", url: "{{notification.request.url}}", status code:
+              "{{notification.request.statusCode}}"
             </ng-container>
           </div>
         </ng-container>
@@ -74,7 +75,8 @@
         <nav class="nav flex-column sticky-top">
           <div class="card">
             <div class="card-body text-md-left text-center align-content-md-start align-content-center">
-              <h5 i18n="title of left card in settings page that contains settings contents" class="card-title">Menu</h5>
+              <h5 i18n="title of left card in settings page that contains settings contents" class="card-title">
+                Menu</h5>
               <button class="btn btn-link nav-link  text-md-left py-md-1 px-md-0"
                       *ngFor="let s of contents; let i=index;"
                       (click)="scrollTo(i)"
@@ -104,6 +106,9 @@
         <app-settings-thumbnail #setting #thumbnail
                                 [hidden]="!thumbnail.HasAvailableSettings"
                                 [simplifiedMode]="simplifiedMode"></app-settings-thumbnail>
+        <app-settings-preview #setting #preview
+                              [hidden]="!preview.HasAvailableSettings"
+                              [simplifiedMode]="simplifiedMode"></app-settings-preview>
         <app-settings-search #setting #search
                              [hidden]="!search.HasAvailableSettings"
                              [simplifiedMode]="simplifiedMode"></app-settings-search>
@@ -126,8 +131,8 @@
                             [hidden]="!faces.HasAvailableSettings"
                             [simplifiedMode]="simplifiedMode"></app-settings-faces>
         <app-settings-albums #setting #albums
-                            [hidden]="!albums.HasAvailableSettings"
-                            [simplifiedMode]="simplifiedMode"></app-settings-albums>
+                             [hidden]="!albums.HasAvailableSettings"
+                             [simplifiedMode]="simplifiedMode"></app-settings-albums>
         <app-settings-indexing #setting #indexing
                                [hidden]="!indexing.HasAvailableSettings"
                                [simplifiedMode]="simplifiedMode"></app-settings-indexing>
@@ -141,7 +146,7 @@
       <div class="col-12">
         <div class="text-right">
           <ng-container i18n>Up time</ng-container><!--
-          -->: {{(settingsService.settings | async).Server.Environment.upTime | date:'medium'}}
+            -->: {{(settingsService.settings | async).Server.Environment.upTime | date:'medium'}}
         </div>
       </div>
     </div>

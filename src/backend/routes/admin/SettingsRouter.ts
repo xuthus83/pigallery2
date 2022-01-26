@@ -68,6 +68,12 @@ export class SettingsRouter {
       SettingsMWs.updateSearchSettings,
       RenderingMWs.renderOK
     );
+    app.put('/api/settings/preview',
+      AuthenticationMWs.authenticate,
+      AuthenticationMWs.authorise(UserRoles.Admin),
+      SettingsMWs.updatePreviewSettings,
+      RenderingMWs.renderOK
+    );
     app.put('/api/settings/faces',
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Admin),

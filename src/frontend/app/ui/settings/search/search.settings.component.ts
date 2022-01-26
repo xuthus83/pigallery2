@@ -4,7 +4,7 @@ import {AuthenticationService} from '../../../model/network/authentication.servi
 import {NavigationService} from '../../../model/navigation.service';
 import {NotificationService} from '../../../model/notification.service';
 import {SearchSettingsService} from './search.settings.service';
-import {ClientConfig, ClientSearchConfig} from '../../../../../common/config/public/ClientConfig';
+import {ClientSearchConfig} from '../../../../../common/config/public/ClientConfig';
 
 @Component({
   selector: 'app-settings-search',

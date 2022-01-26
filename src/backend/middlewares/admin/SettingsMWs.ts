@@ -14,6 +14,7 @@ import {
   ServerIndexingConfig,
   ServerJobConfig,
   ServerPhotoConfig,
+  ServerPreviewConfig,
   ServerThumbnailConfig,
   ServerVideoConfig
 } from '../../../common/config/private/PrivateConfig';
@@ -88,6 +89,31 @@ export class SettingsMWs {
       // only updating explicitly set config (not saving config set by the diagnostics)
       const original = await Config.original();
       original.Client.Map = (req.body.settings as ClientMapConfig);
+      original.save();
+      await ConfigDiagnostics.runDiagnostics();
+      Logger.info(LOG_TAG, 'new config:');
+      Logger.info(LOG_TAG, JSON.stringify(Config, null, '\t'));
+      return next();
+    } catch (err) {
+      if (err instanceof Error) {
+        return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, 'Settings error: ' + err.toString(), err));
+      }
+      return next(new ErrorDTO(ErrorCodes.SETTINGS_ERROR, 'Settings error: ' + JSON.stringify(err, null, '  '), err));
+    }
+  }
+
+  public static async updatePreviewSettings(req: Request, res: Response, next: NextFunction): Promise<any> {
+    if ((typeof req.body === 'undefined') || (typeof req.body.settings === 'undefined')) {
+      return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, 'settings is needed'));
+    }
+
+    try {
+      await ConfigDiagnostics.testPreviewConfig(req.body.settings as ServerPreviewConfig);
+
+      Config.Server.Preview = (req.body.settings as ServerPreviewConfig);
+      // only updating explicitly set config (not saving config set by the diagnostics)
+      const original = await Config.original();
+      original.Server.Preview = (req.body.settings as ServerPreviewConfig);
       original.save();
       await ConfigDiagnostics.runDiagnostics();
       Logger.info(LOG_TAG, 'new config:');

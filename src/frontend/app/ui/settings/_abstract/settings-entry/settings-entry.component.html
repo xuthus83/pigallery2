@@ -13,47 +13,89 @@
     <div class="col-md-10">
 
       <div class="input-group">
-        <input
-          *ngIf="!state.isEnumType && state.type !== 'boolean'"
-          [type]="type" [min]="state.min" [max]="state.max" class="form-control" [placeholder]="PlaceHolder"
+
+
+        <app-gallery-search-field
+          *ngIf="!IsEnumType && Type === 'searchQuery'"
+          [(ngModel)]="state.value"
+          [id]="idName"
+          [name]="idName"
           [title]="title"
-          [(ngModel)]="value"
+          [disabled]="state.readonly || disabled"
+          (change)="onChange($event)"
+          placeholder="Search Query">
+
+        </app-gallery-search-field>
+
+        <input
+          *ngIf="!IsEnumType && Type !== 'boolean' && Type !== 'searchQuery'"
+          [type]="type" [min]="state.min" [max]="state.max" class="form-control"
+          [placeholder]="PlaceHolder"
+          [title]="title"
+          [(ngModel)]="StringValue"
           (ngModelChange)="onChange($event)"
           [name]="idName"
           [disabled]="state.readonly || disabled"
           [id]="idName"
           required="required">
 
-        <select
-          *ngIf="state.isEnumType === true"
-          [id]="idName"
-          [name]="idName"
-          [title]="title"
-          (ngModelChange)="onChange($event)"
-          [disabled]="state.readonly || disabled"
-          class="form-control" [(ngModel)]="state.value">
-          <option *ngFor="let opt of optionsView" [ngValue]="opt.key">{{opt.value}}
-          </option>
-        </select>
+        <ng-container *ngIf="IsEnumType || Type === 'boolean'">
+          <ng-container *ngFor="let _ of Values; let i=index">
+            <div class="row col-12 mt-1 m-0 p-0">
+              <div class="col p-0">
+                <select
+                  *ngIf="IsEnumType"
+                  [id]="'list_'+idName+i"
+                  [name]="'list_'+idName+i"
+                  [title]="title"
+                  (ngModelChange)="onChange($event)"
+                  [disabled]="state.readonly || disabled"
+                  class="form-control" [(ngModel)]="Values[i]">
+                  <option *ngFor="let opt of optionsView" [ngValue]="opt.key">{{opt.value}}
+                  </option>
+                </select>
 
-        <bSwitch
-          *ngIf="state.type === 'boolean'"
-          class="switch"
-          [id]="idName"
-          [name]="idName"
-          [title]="title"
-          [disabled]="state.readonly || disabled"
-          switch-on-color="primary"
-          switch-inverse="true"
-          switch-off-text="Disabled"
-          switch-on-text="Enabled"
-          i18n-switch-off-text
-          i18n-switch-on-text
-          switch-handle-width="100"
-          switch-label-width="20"
-          (ngModelChange)="onChange($event)"
-          [(ngModel)]="state.value">
-        </bSwitch>
+                <bSwitch
+                  *ngIf="Type === 'boolean'"
+                  class="switch"
+                  [id]="'list_'+idName+i"
+                  [name]="'list_'+idName+i"
+                  [title]="title"
+                  [disabled]="state.readonly || disabled"
+                  switch-on-color="primary"
+                  switch-inverse="true"
+                  switch-off-text="Disabled"
+                  switch-on-text="Enabled"
+                  i18n-switch-off-text
+                  i18n-switch-on-text
+                  switch-handle-width="100"
+                  switch-label-width="20"
+                  (ngModelChange)="onChange($event)"
+                  [(ngModel)]="Values[i]">
+                </bSwitch>
+
+              </div>
+              <ng-container *ngIf="state.type === 'array'">
+                <div class="col-auto pr-0">
+                  <button class="btn btn-secondary float-right"
+                          [id]="'list_btn_'+idName+i"
+                          [name]="'list_btn_'+idName+i" (click)="remove(i)"><span
+                    class="oi oi-trash"></span>
+                  </button>
+                </div>
+              </ng-container>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="state.type === 'array'">
+            <div class="col-12 p-0">
+              <button class="btn btn-primary mt-1 float-right"
+                      [id]="'btn_add_'+idName"
+                      [name]="'btn_add_'+idName"
+                      (click)="AddNew()">+Add
+              </button>
+            </div>
+          </ng-container>
+        </ng-container>
         <div class="input-group-append">
           <span
             triggers="mouseenter:mouseleave"

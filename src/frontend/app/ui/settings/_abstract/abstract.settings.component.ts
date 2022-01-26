@@ -176,7 +176,7 @@ export abstract class SettingsComponentDirective<T extends { [key: string]: any 
 
   ngOnChanges(): void {
     this.hasAvailableSettings = ((this.settingsService.isSupported() &&
-      this.settingsService.showInSimplifiedMode())
+        this.settingsService.showInSimplifiedMode())
       || !this.simplifiedMode);
   }
 

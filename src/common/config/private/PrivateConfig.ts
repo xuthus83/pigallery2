@@ -5,7 +5,7 @@ import {ClientConfig} from '../public/ClientConfig';
 import {SubConfigClass} from 'typeconfig/src/decorators/class/SubConfigClass';
 import {ConfigProperty} from 'typeconfig/src/decorators/property/ConfigPropoerty';
 import {DefaultsJobs} from '../../entities/job/JobDTO';
-import {SearchQueryDTO} from '../../entities/SearchQueryDTO';
+import {SearchQueryDTO, SearchQueryTypes, TextSearch} from '../../entities/SearchQueryDTO';
 import {SortingMethods} from '../../entities/SortingMethods';
 import {UserRoles} from '../../entities/UserDTO';
 
@@ -334,7 +334,7 @@ export class ServerPhotoConfig {
 @SubConfigClass()
 export class ServerPreviewConfig {
   @ConfigProperty({type: 'object'})
-  SearchQuery: SearchQueryDTO = null;
+  SearchQuery: SearchQueryDTO = {type: SearchQueryTypes.any_text, text: ''} as TextSearch;
   @ConfigProperty({arrayType: SortingMethods})
   Sorting: SortingMethods[] = [
     SortingMethods.descRating,

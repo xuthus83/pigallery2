@@ -1,13 +1,13 @@
 <form class="navbar-form" role="search" #SearchForm="ngForm">
   <div class="input-group">
 
-    <app-gallery-search-field [(ngModel)]="rawSearchText"
+    <app-gallery-search-field-base [(ngModel)]="rawSearchText"
                               (ngModelChange)="validateRawSearchText()"
                               class="search-field"
                               (search)="Search()"
                               name="search-field">
 
-    </app-gallery-search-field>
+    </app-gallery-search-field-base>
 
     <div class="input-group-btn" style="display: block">
       <button class="btn btn-light" type="button"

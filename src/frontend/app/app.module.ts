@@ -95,7 +95,7 @@ import {GallerySearchQueryEntryComponent} from './ui/gallery/search/query-enrty/
 import {StringifySearchQuery} from './pipes/StringifySearchQuery';
 import {AutoCompleteService} from './ui/gallery/search/autocomplete.service';
 import {SearchQueryParserService} from './ui/gallery/search/search-query-parser.service';
-import {GallerySearchFieldComponent} from './ui/gallery/search/search-field/search-field.gallery.component';
+import {GallerySearchFieldBaseComponent} from './ui/gallery/search/search-field-base/search-field-base.gallery.component';
 import {AppRoutingModule} from './app.routing';
 import {CookieService} from 'ngx-cookie-service';
 import {LeafletMarkerClusterModule} from '@asymmetrik/ngx-leaflet-markercluster';
@@ -112,6 +112,8 @@ import {MDFilesFilterPipe} from './pipes/MDFilesFilterPipe';
 import {FileDTOToPathPipe} from './pipes/FileDTOToPathPipe';
 import {BlogService} from './ui/gallery/blog/blog.service';
 import {PhotoFilterPipe} from './pipes/PhotoFilterPipe';
+import {PreviewSettingsComponent} from './ui/settings/preview/preview.settings.component';
+import {GallerySearchFieldComponent} from './ui/gallery/search/search-field/search-field.gallery.component';
 
 @Injectable()
 export class MyHammerConfig extends HammerGestureConfig {
@@ -206,6 +208,7 @@ Marker.prototype.options.icon = iconDefault;
     FrameComponent,
     GallerySearchComponent,
     GallerySearchQueryEntryComponent,
+    GallerySearchFieldBaseComponent,
     GallerySearchFieldComponent,
     GallerySearchQueryBuilderComponent,
     GalleryShareComponent,
@@ -241,6 +244,7 @@ Marker.prototype.options.icon = iconDefault;
     JobProgressComponent,
     JobsSettingsComponent,
     JobButtonComponent,
+    PreviewSettingsComponent,
 
     // Pipes
     StringifyRole,

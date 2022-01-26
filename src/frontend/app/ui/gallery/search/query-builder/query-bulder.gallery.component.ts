@@ -1,4 +1,4 @@
-import {Component, EventEmitter, forwardRef, Output} from '@angular/core';
+import {Component, EventEmitter, forwardRef, Input, Output} from '@angular/core';
 import {SearchQueryDTO, SearchQueryTypes, TextSearch} from '../../../../../../common/entities/SearchQueryDTO';
 import {ControlValueAccessor, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator} from '@angular/forms';
 import {SearchQueryParserService} from '../search-query-parser.service';
@@ -23,6 +23,7 @@ import {SearchQueryParserService} from '../search-query-parser.service';
 export class GallerySearchQueryBuilderComponent implements ControlValueAccessor, Validator {
   public searchQueryDTO: SearchQueryDTO = {type: SearchQueryTypes.any_text, text: ''} as TextSearch;
   @Output() search = new EventEmitter<void>();
+  @Input() placeholder: string;
   public rawSearchText = '';
 
 
@@ -59,6 +60,7 @@ export class GallerySearchQueryBuilderComponent implements ControlValueAccessor,
 
   public writeValue(obj: any): void {
     this.searchQueryDTO = obj;
+    this.rawSearchText = this.searchQueryParserService.stringify(this.searchQueryDTO);
   }
 
   registerOnChange(fn: (_: any) => void): void {
