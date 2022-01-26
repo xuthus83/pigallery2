@@ -74,6 +74,10 @@ export class AlbumManager implements IAlbumManager {
   }
 
   public async onNewDataVersion(): Promise<void> {
+    await this.resetPreviews();
+  }
+
+  public async resetPreviews(): Promise<void> {
     this.isDBValid = false;
   }
 

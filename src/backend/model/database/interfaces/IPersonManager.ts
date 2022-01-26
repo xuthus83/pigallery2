@@ -12,4 +12,6 @@ export interface IPersonManager extends IObjectManager {
   saveAll(person: { name: string, faceRegion: FaceRegion }[]): Promise<void>;
 
   updatePerson(name: string, partialPerson: PersonDTO): Promise<PersonEntry>;
+
+  resetPreviews(): Promise<void>;
 }

@@ -36,12 +36,21 @@
 
 
       <app-settings-job-button class="mt-2 mt-md-0 float-left"
+                               #previewFillingButton
                                [soloRun]="true"
                                (jobError)="error=$event"
                                [jobName]="jobName"
                                [allowParallelRun]="false"
                                [config]="Config"></app-settings-job-button>
 
+
+      <app-settings-job-button class="ml-md-2 mt-2 mt-md-0"
+                               danger="true"
+                               [soloRun]="true"
+                               (jobError)="error=$event"
+                               [allowParallelRun]="false"
+                               [disabled]="previewFillingButton.Running"
+                               [jobName]="resetJobName"></app-settings-job-button>
 
       <ng-container *ngIf="Progress != null">
         <br/>

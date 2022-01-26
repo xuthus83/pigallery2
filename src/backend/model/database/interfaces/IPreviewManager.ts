@@ -8,6 +8,9 @@ export interface IPreviewManager extends IObjectManager {
   getAlbumPreview(album: { searchQuery: SearchQueryDTO }): Promise<PreviewPhotoDTOWithID>;
 
   getPartialDirsWithoutPreviews(): Promise<{ id: number; name: string; path: string }[]>;
+
+
+  resetPreviews(): Promise<void>;
 }
 
 // ID is need within the backend so it can be saved to DB (ID is the external key)

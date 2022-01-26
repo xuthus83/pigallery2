@@ -6,6 +6,7 @@ import {PhotoConvertingJob} from './jobs/PhotoConvertingJob';
 import {ThumbnailGenerationJob} from './jobs/ThumbnailGenerationJob';
 import {TempFolderCleaningJob} from './jobs/TempFolderCleaningJob';
 import {PreviewFillingJob} from './jobs/PreviewFillingJob';
+import {PreviewRestJob} from './jobs/PreviewResetJob';
 
 export class JobRepository {
 
@@ -33,8 +34,9 @@ export class JobRepository {
 
 
 JobRepository.Instance.register(new IndexingJob());
-JobRepository.Instance.register(new PreviewFillingJob());
 JobRepository.Instance.register(new DBRestJob());
+JobRepository.Instance.register(new PreviewFillingJob());
+JobRepository.Instance.register(new PreviewRestJob());
 JobRepository.Instance.register(new VideoConvertingJob());
 JobRepository.Instance.register(new PhotoConvertingJob());
 JobRepository.Instance.register(new ThumbnailGenerationJob());

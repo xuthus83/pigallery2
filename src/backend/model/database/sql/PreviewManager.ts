@@ -10,7 +10,8 @@ import {IPreviewManager, PreviewPhotoDTOWithID} from '../interfaces/IPreviewMana
 import {SQLConnection} from './SQLConnection';
 import {SearchQueryDTO} from '../../../../common/entities/SearchQueryDTO';
 import {DirectoryEntity} from './enitites/DirectoryEntity';
-
+import {ParentDirectoryDTO} from '../../../../common/entities/DirectoryDTO';
+import * as path from 'path';
 
 const LOG_TAG = '[PreviewManager]';
 
@@ -44,6 +45,50 @@ export class PreviewManager implements IPreviewManager {
     }
 
     return query;
+  }
+
+  public async resetPreviews(): Promise<void> {
+    const connection = await SQLConnection.getConnection();
+    await connection.createQueryBuilder()
+      .update(DirectoryEntity)
+      .set({validPreview: false}).execute();
+  }
+
+  public async onNewDataVersion(changedDir: ParentDirectoryDTO): Promise<void> {
+    // Invalidating Album preview
+    let fullPath = DiskMangerWorker.normalizeDirPath(path.join(changedDir.path, changedDir.name));
+    const query = (await SQLConnection.getConnection())
+      .createQueryBuilder()
+      .update(DirectoryEntity)
+      .set({validPreview: false});
+
+    let i = 0;
+    const root = DiskMangerWorker.pathFromRelativeDirName('.');
+    while (fullPath !== root) {
+      const name = DiskMangerWorker.dirName(fullPath);
+      const parentPath = DiskMangerWorker.pathFromRelativeDirName(fullPath);
+      fullPath = parentPath;
+      ++i;
+      query.orWhere(new Brackets((q: WhereExpression) => {
+        const param: { [key: string]: string } = {};
+        param['name' + i] = name;
+        param['path' + i] = parentPath;
+        q.where(`path = :path${i}`, param);
+        q.andWhere(`name = :name${i}`, param);
+      }));
+    }
+
+    ++i;
+    query.orWhere(new Brackets((q: WhereExpression) => {
+      const param: { [key: string]: string } = {};
+      param['name' + i] = DiskMangerWorker.dirName('.');
+      param['path' + i] = DiskMangerWorker.pathFromRelativeDirName('.');
+      q.where(`path = :path${i}`, param);
+      q.andWhere(`name = :name${i}`, param);
+    }));
+
+
+    await query.execute();
   }
 
   public async getAlbumPreview(album: { searchQuery: SearchQueryDTO }): Promise<PreviewPhotoDTOWithID> {

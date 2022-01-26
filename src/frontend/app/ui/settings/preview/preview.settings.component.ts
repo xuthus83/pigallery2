@@ -21,6 +21,7 @@ export class PreviewSettingsComponent
   implements OnInit {
   JobProgressStates = JobProgressStates;
   readonly jobName = DefaultsJobs[DefaultsJobs['Preview Filling']];
+  readonly resetJobName = DefaultsJobs[DefaultsJobs['Preview Reset']];
 
   constructor(authService: AuthenticationService,
               navigation: NavigationService,

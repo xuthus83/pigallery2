@@ -235,42 +235,6 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
     }
   }
 
-  public async onNewDataVersion(changedDir: ParentDirectoryDTO): Promise<void> {
-    // Invalidating Album preview
-    let fullPath = DiskMangerWorker.normalizeDirPath(path.join(changedDir.path, changedDir.name));
-    const query = (await SQLConnection.getConnection())
-      .createQueryBuilder()
-      .update(DirectoryEntity)
-      .set({validPreview: false});
-
-    let i = 0;
-    const root = DiskMangerWorker.pathFromRelativeDirName('.');
-    while (fullPath !== root) {
-      const name = DiskMangerWorker.dirName(fullPath);
-      const parentPath = DiskMangerWorker.pathFromRelativeDirName(fullPath);
-      fullPath = parentPath;
-      ++i;
-      query.orWhere(new Brackets((q: WhereExpression) => {
-        const param: { [key: string]: string } = {};
-        param['name' + i] = name;
-        param['path' + i] = parentPath;
-        q.where(`path = :path${i}`, param);
-        q.andWhere(`name = :name${i}`, param);
-      }));
-    }
-
-    ++i;
-    query.orWhere(new Brackets((q: WhereExpression) => {
-      const param: { [key: string]: string } = {};
-      param['name' + i] = DiskMangerWorker.dirName('.');
-      param['path' + i] = DiskMangerWorker.pathFromRelativeDirName('.');
-      q.where(`path = :path${i}`, param);
-      q.andWhere(`name = :name${i}`, param);
-    }));
-
-
-    await query.execute();
-  }
 
   protected async selectParentDir(connection: Connection, directoryName: string, directoryParent: string): Promise<ParentDirectoryDTO> {
     const query = connection

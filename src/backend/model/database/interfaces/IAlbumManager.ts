@@ -2,7 +2,7 @@ import {SearchQueryDTO} from '../../../../common/entities/SearchQueryDTO';
 import {AlbumBaseDTO} from '../../../../common/entities/album/AlbumBaseDTO';
 import {IObjectManager} from './IObjectManager';
 
-export interface IAlbumManager extends IObjectManager{
+export interface IAlbumManager extends IObjectManager {
   /**
    * Creates a saved search type of album
    */
@@ -29,4 +29,6 @@ export interface IAlbumManager extends IObjectManager{
    * Updates previews and album counts
    */
   onNewDataVersion(): Promise<void>;
+
+  resetPreviews(): Promise<void>;
 }

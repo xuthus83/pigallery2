@@ -121,6 +121,10 @@ export class PersonManager implements ISQLPersonManager {
   }
 
   public async onNewDataVersion(): Promise<void> {
+    await this.resetPreviews();
+  }
+
+  public async resetPreviews(): Promise<void> {
     this.persons = null;
     this.isDBValid = false;
   }
