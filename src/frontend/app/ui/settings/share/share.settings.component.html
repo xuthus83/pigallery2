@@ -2,7 +2,7 @@
   <div class="card mb-4"
        [ngClass]="states.enabled.value && !settingsService.isSupported()?'panel-warning':''">
     <h5 class="card-header">
-      {{Name}}
+      <span class="oi oi-{{icon}}"></span> {{Name}}
       <div class="switch-wrapper">
         <bSwitch
           class="switch"
@@ -30,6 +30,7 @@
           description="Enables password protected sharing links."
           i18n-description i18n-name
           [ngModel]="states.passwordProtected"
+          [simplifiedMode]="simplifiedMode"
           required="true">
         </app-settings-entry>
 

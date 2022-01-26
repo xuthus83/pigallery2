@@ -5,10 +5,10 @@ import {AuthenticationService} from '../../../model/network/authentication.servi
 import {NavigationService} from '../../../model/navigation.service';
 import {NotificationService} from '../../../model/notification.service';
 import {ScheduledJobsService} from '../scheduled-jobs.service';
-import {DefaultsJobs, JobDTO, JobDTOUtils} from '../../../../../common/entities/job/JobDTO';
+import {DefaultsJobs, JobDTOUtils} from '../../../../../common/entities/job/JobDTO';
 import {JobProgressDTO, JobProgressStates} from '../../../../../common/entities/job/JobProgressDTO';
-import {ServerConfig, ServerPhotoConfig} from '../../../../../common/config/private/PrivateConfig';
-import {ClientConfig, ClientPhotoConfig} from '../../../../../common/config/public/ClientConfig';
+import {ServerPhotoConfig} from '../../../../../common/config/private/PrivateConfig';
+import {ClientPhotoConfig} from '../../../../../common/config/public/ClientConfig';
 
 
 @Component({
@@ -33,7 +33,7 @@ export class PhotoSettingsComponent extends SettingsComponentDirective<{
               settingsService: PhotoSettingsService,
               public jobsService: ScheduledJobsService,
               notification: NotificationService) {
-    super($localize`Photo`, authService, navigation, settingsService, notification, s => ({
+    super($localize`Photo`, 'camera-slr', authService, navigation, settingsService, notification, s => ({
       client: s.Client.Media.Photo,
       server: s.Server.Media.Photo
     }));
@@ -55,7 +55,7 @@ export class PhotoSettingsComponent extends SettingsComponentDirective<{
       v.value += ' ' + $localize`(deprecated, will be removed)`;
     }
     return v;
-  }
+  };
 }
 
 

@@ -81,7 +81,7 @@
                       *ngFor="let s of contents; let i=index;"
                       (click)="scrollTo(i)"
                       [hidden]="!s.HasAvailableSettings">
-                {{s.Name}}
+               <span class="oi oi-{{s.icon}}"></span> {{s.Name}}
               </button>
             </div>
           </div>

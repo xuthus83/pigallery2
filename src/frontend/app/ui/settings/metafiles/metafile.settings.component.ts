@@ -4,7 +4,7 @@ import {SettingsComponentDirective} from '../_abstract/abstract.settings.compone
 import {AuthenticationService} from '../../../model/network/authentication.service';
 import {NavigationService} from '../../../model/navigation.service';
 import {NotificationService} from '../../../model/notification.service';
-import {ClientConfig, ClientMetaFileConfig} from '../../../../../common/config/public/ClientConfig';
+import {ClientMetaFileConfig} from '../../../../../common/config/public/ClientConfig';
 
 
 @Component({
@@ -20,7 +20,7 @@ export class MetaFileSettingsComponent extends SettingsComponentDirective<Client
               navigation: NavigationService,
               settingsService: MetaFileSettingsService,
               notification: NotificationService) {
-    super($localize`Meta file`, authService, navigation, settingsService, notification, s => s.Client.MetaFile);
+    super($localize`Meta file`, 'file', authService, navigation, settingsService, notification, s => s.Client.MetaFile);
   }
 
 

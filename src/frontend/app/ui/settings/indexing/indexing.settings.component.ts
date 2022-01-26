@@ -34,6 +34,7 @@ export class IndexingSettingsComponent extends SettingsComponentDirective<Server
               notification: NotificationService) {
 
     super($localize`Folder indexing`,
+      'pie-chart',
       authService,
       navigation,
       settingsService,

@@ -23,7 +23,7 @@ export class BasicSettingsComponent extends SettingsComponentDirective<BasicConf
               navigation: NavigationService,
               settingsService: BasicSettingsService,
               notification: NotificationService) {
-    super($localize`Basic`, authService, navigation, settingsService, notification,
+    super($localize`Basic`, 'star', authService, navigation, settingsService, notification,
       BasicConfigDTOUtil.mapToDTO);
     this.checkUrlError();
   }

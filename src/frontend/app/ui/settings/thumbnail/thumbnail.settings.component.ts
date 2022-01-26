@@ -4,11 +4,11 @@ import {AuthenticationService} from '../../../model/network/authentication.servi
 import {NavigationService} from '../../../model/navigation.service';
 import {NotificationService} from '../../../model/notification.service';
 import {ThumbnailSettingsService} from './thumbnail.settings.service';
-import {DefaultsJobs, JobDTO, JobDTOUtils} from '../../../../../common/entities/job/JobDTO';
+import {DefaultsJobs, JobDTOUtils} from '../../../../../common/entities/job/JobDTO';
 import {ScheduledJobsService} from '../scheduled-jobs.service';
 import {JobProgressDTO, JobProgressStates} from '../../../../../common/entities/job/JobProgressDTO';
-import {ServerConfig, ServerThumbnailConfig} from '../../../../../common/config/private/PrivateConfig';
-import {ClientConfig, ClientThumbnailConfig} from '../../../../../common/config/public/ClientConfig';
+import {ServerThumbnailConfig} from '../../../../../common/config/private/PrivateConfig';
+import {ClientThumbnailConfig} from '../../../../../common/config/public/ClientConfig';
 
 @Component({
   selector: 'app-settings-thumbnail',
@@ -28,7 +28,7 @@ export class ThumbnailSettingsComponent
               settingsService: ThumbnailSettingsService,
               notification: NotificationService,
               public jobsService: ScheduledJobsService) {
-    super($localize`Thumbnail`, authService, navigation, settingsService, notification, s => ({
+    super($localize`Thumbnail`, 'image', authService, navigation, settingsService, notification, s => ({
       client: s.Client.Media.Thumbnail,
       server: s.Server.Media.Thumbnail
     }));

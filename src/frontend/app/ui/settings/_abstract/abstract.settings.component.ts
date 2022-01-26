@@ -58,6 +58,7 @@ export abstract class SettingsComponentDirective<T extends { [key: string]: any 
   private readonly settingsSubscription: Subscription = null;
 
   protected constructor(private name: string,
+                        public icon: string,
                         protected authService: AuthenticationService,
                         private navigation: NavigationService,
                         public settingsService: S,

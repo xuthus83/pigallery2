@@ -24,7 +24,7 @@ export class MapSettingsComponent extends SettingsComponentDirective<ClientMapCo
               navigation: NavigationService,
               settingsService: MapSettingsService,
               notification: NotificationService) {
-    super($localize`Map`, authService, navigation, settingsService, notification, s => s.Client.Map);
+    super($localize`Map`,'map-marker', authService, navigation, settingsService, notification, s => s.Client.Map);
 
     this.mapProviders = Utils.enumToArray(MapProviders);
   }

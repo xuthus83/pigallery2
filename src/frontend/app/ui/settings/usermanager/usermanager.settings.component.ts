@@ -29,6 +29,7 @@ export class UserMangerSettingsComponent implements OnInit, ISettingsComponent {
   Changed = false;
 
 
+  icon = 'person';
   text = {
     Enabled: 'Enabled',
     Disabled: 'Disabled',

@@ -2,7 +2,7 @@
   <div class="card mb-4"
        [ngClass]="states.enabled.value && !settingsService.isSupported()?'panel-warning':''">
     <h5 class="card-header">
-      {{Name}}
+      <span class="oi oi-{{icon}}"></span> {{Name}}
       <div class="switch-wrapper"
            [class.changed-settings]="states.enabled.value != states.enabled.default">
         <bSwitch

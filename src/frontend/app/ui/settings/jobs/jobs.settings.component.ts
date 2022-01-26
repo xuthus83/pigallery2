@@ -55,6 +55,7 @@ export class JobsSettingsComponent extends SettingsComponentDirective<ServerJobC
               notification: NotificationService) {
 
     super($localize`Jobs`,
+      'project',
       authService,
       navigation,
       settingsService,

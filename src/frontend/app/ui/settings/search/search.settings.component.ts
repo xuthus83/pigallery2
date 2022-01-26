@@ -19,7 +19,7 @@ export class SearchSettingsComponent extends SettingsComponentDirective<ClientSe
               navigation: NavigationService,
               settingsService: SearchSettingsService,
               notification: NotificationService) {
-    super($localize`Search`, authService, navigation, settingsService, notification, s => s.Client.Search);
+    super($localize`Search`, 'magnifying-glass', authService, navigation, settingsService, notification, s => s.Client.Search);
   }
 
 

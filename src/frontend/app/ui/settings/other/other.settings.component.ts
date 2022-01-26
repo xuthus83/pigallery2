@@ -29,7 +29,7 @@ export class OtherSettingsComponent extends SettingsComponentDirective<OtherConf
               settingsService: OtherSettingsService,
               notification: NotificationService,
               private formatter: StringifySortingMethod) {
-    super($localize`Other`, authService, navigation, settingsService, notification, s => ({
+    super($localize`Other`, 'target', authService, navigation, settingsService, notification, s => ({
       Server: s.Server.Threading,
       Client: s.Client.Other
     }));

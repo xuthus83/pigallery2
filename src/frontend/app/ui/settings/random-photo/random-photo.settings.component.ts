@@ -19,7 +19,7 @@ export class RandomPhotoSettingsComponent extends SettingsComponentDirective<Cli
               navigation: NavigationService,
               settingsService: RandomPhotoSettingsService,
               notification: NotificationService) {
-    super($localize`Random Photo`, authService, navigation, settingsService, notification, s => s.Client.RandomPhoto);
+    super($localize`Random Photo`, 'random', authService, navigation, settingsService, notification, s => s.Client.RandomPhoto);
   }
 
 

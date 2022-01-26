@@ -40,7 +40,7 @@ export class VideoSettingsComponent
               settingsService: VideoSettingsService,
               public jobsService: ScheduledJobsService,
               notification: NotificationService) {
-    super($localize`Video`, authService, navigation, settingsService, notification, s => ({
+    super($localize`Video`, 'video', authService, navigation, settingsService, notification, s => ({
       client: s.Client.Media.Video,
       server: s.Server.Media.Video
     }));

@@ -6,7 +6,7 @@ import {NotificationService} from '../../../model/notification.service';
 import {FacesSettingsService} from './faces.settings.service';
 import {Utils} from '../../../../../common/Utils';
 import {UserRoles} from '../../../../../common/entities/UserDTO';
-import {ClientConfig, ClientFacesConfig} from '../../../../../common/config/public/ClientConfig';
+import {ClientFacesConfig} from '../../../../../common/config/public/ClientConfig';
 
 @Component({
   selector: 'app-settings-faces',
@@ -27,7 +27,7 @@ export class FacesSettingsComponent extends SettingsComponentDirective<ClientFac
               navigation: NavigationService,
               settingsService: FacesSettingsService,
               notification: NotificationService) {
-    super($localize`Faces`, authService, navigation, settingsService, notification, s => s.Client.Faces);
+    super($localize`Faces`, 'people', authService, navigation, settingsService, notification, s => s.Client.Faces);
 
   }
 

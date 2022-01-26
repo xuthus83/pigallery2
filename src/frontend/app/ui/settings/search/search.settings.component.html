@@ -2,7 +2,7 @@
   <div class="card mb-4"
        [ngClass]="states.enabled.value && !settingsService.isSupported()?'panel-warning':''">
     <h5 class="card-header">
-      {{Name}}
+      <span class="oi oi-{{icon}}"></span> {{Name}}
       <div class="switch-wrapper">
         <bSwitch
           class="switch"
@@ -32,6 +32,7 @@
           name="Autocomplete"
           description="Show hints while typing search query."
           i18n-description i18n-name
+          [simplifiedMode]="simplifiedMode"
           [ngModel]="states.AutoComplete.enabled">
         </app-settings-entry>
 

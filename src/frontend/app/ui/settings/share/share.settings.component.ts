@@ -4,7 +4,7 @@ import {AuthenticationService} from '../../../model/network/authentication.servi
 import {NavigationService} from '../../../model/navigation.service';
 import {NotificationService} from '../../../model/notification.service';
 import {ShareSettingsService} from './share.settings.service';
-import {ClientConfig, ClientSharingConfig} from '../../../../../common/config/public/ClientConfig';
+import {ClientSharingConfig} from '../../../../../common/config/public/ClientConfig';
 import {SharingDTO} from '../../../../../common/entities/SharingDTO';
 
 @Component({
@@ -23,7 +23,7 @@ export class ShareSettingsComponent extends SettingsComponentDirective<ClientSha
               navigation: NavigationService,
               settingsService: ShareSettingsService,
               notification: NotificationService) {
-    super($localize`Share`, authService, navigation, settingsService, notification, s => s.Client.Sharing);
+    super($localize`Share`, 'share', authService, navigation, settingsService, notification, s => s.Client.Sharing);
   }
 
   ngOnInit(): void {

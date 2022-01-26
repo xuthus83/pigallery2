@@ -20,7 +20,7 @@ export class AlbumsSettingsComponent extends SettingsComponentDirective<ClientAl
               navigation: NavigationService,
               settingsService: AlbumsSettingsService,
               notification: NotificationService) {
-    super($localize`Albums`, authService, navigation, settingsService, notification, s => s.Client.Album);
+    super($localize`Albums`, 'grid-two-up', authService, navigation, settingsService, notification, s => s.Client.Album);
   }
 
 

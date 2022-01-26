@@ -28,7 +28,7 @@ export class PreviewSettingsComponent
               settingsService: PreviewSettingsService,
               notification: NotificationService,
               public jobsService: ScheduledJobsService) {
-    super($localize`Preview`, authService, navigation, settingsService, notification, s => s.Server.Preview);
+    super($localize`Preview`, 'image', authService, navigation, settingsService, notification, s => s.Server.Preview);
   }
 
   get Config(): any {
