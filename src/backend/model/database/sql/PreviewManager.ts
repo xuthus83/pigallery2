@@ -8,10 +8,11 @@ import {SortingMethods} from '../../../../common/entities/SortingMethods';
 import {ISQLSearchManager} from './ISearchManager';
 import {IPreviewManager, PreviewPhotoDTOWithID} from '../interfaces/IPreviewManager';
 import {SQLConnection} from './SQLConnection';
-import {SearchQueryDTO} from '../../../../common/entities/SearchQueryDTO';
+import {SearchQueryDTO, SearchQueryTypes, TextSearch} from '../../../../common/entities/SearchQueryDTO';
 import {DirectoryEntity} from './enitites/DirectoryEntity';
 import {ParentDirectoryDTO} from '../../../../common/entities/DirectoryDTO';
 import * as path from 'path';
+import {Utils} from '../../../../common/Utils';
 
 const LOG_TAG = '[PreviewManager]';
 
@@ -108,7 +109,8 @@ export class PreviewManager implements IPreviewManager {
     };
 
     let previewMedia = null;
-    if (Config.Server.Preview.SearchQuery) {
+    if (Config.Server.Preview.SearchQuery &&
+      !Utils.equalsFilter(Config.Server.Preview.SearchQuery, {type: SearchQueryTypes.any_text, text: ''} as TextSearch)) {
       previewMedia = await (await previewQuery())
         .andWhere(await (ObjectManagers.getInstance().SearchManager as ISQLSearchManager)
           .prepareAndBuildWhereQuery(Config.Server.Preview.SearchQuery))
@@ -169,7 +171,11 @@ export class PreviewManager implements IPreviewManager {
 
 
     let previewMedia: PreviewPhotoDTOWithID = null;
-    if (Config.Server.Preview.SearchQuery) {
+    if (Config.Server.Preview.SearchQuery &&
+      !Utils.equalsFilter(Config.Server.Preview.SearchQuery, {
+        type: SearchQueryTypes.any_text,
+        text: ''
+      } as TextSearch)) {
       previewMedia = await previewQuery()
         .andWhere(await (ObjectManagers.getInstance().SearchManager as ISQLSearchManager)
           .prepareAndBuildWhereQuery(Config.Server.Preview.SearchQuery))

@@ -221,4 +221,45 @@ describe('PreviewManager', (sqlHelper: DBTestHelper) => {
 
   });
 
+
+  it('should invalidate and update preview', async () => {
+    const gm = new GalleryManagerTest();
+    const pm = new PreviewManager();
+    const conn = await SQLConnection.getConnection();
+
+    const selectDir = async () => {
+      return await conn.getRepository(DirectoryEntity).findOne({id: subDir.id}, {
+        join: {
+          alias: 'dir',
+          leftJoinAndSelect: {preview: 'dir.preview'}
+        }
+      });
+    };
+
+
+    let subdir = await selectDir();
+
+    expect(subdir.validPreview).to.equal(true);
+    expect(subdir.preview.id).to.equal(2);
+
+    // new version should invalidate
+    await pm.onNewDataVersion(subDir as ParentDirectoryDTO);
+    subdir = await selectDir();
+    expect(subdir.validPreview).to.equal(false);
+    // during invalidation, we do not remove the previous preview (it's good to show at least some photo)
+    expect(subdir.preview.id).to.equal(2);
+
+    await conn.createQueryBuilder()
+      .update(DirectoryEntity)
+      .set({validPreview: false, preview: null}).execute();
+    expect((await selectDir()).preview).to.equal(null);
+
+    const res = await gm.selectParentDir(conn, dir.name, dir.path);
+    await gm.fillParentDir(conn, res);
+    subdir = await selectDir();
+    expect(subdir.validPreview).to.equal(true);
+    expect(subdir.preview.id).to.equal(2);
+
+  });
+
 });
