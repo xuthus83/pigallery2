@@ -154,6 +154,9 @@ describe('PreviewManager', (sqlHelper: DBTestHelper) => {
 
   after(async () => {
     await sqlHelper.clearDB();
+  });
+
+  afterEach(() => {
     Config.Server.Preview.SearchQuery = null;
     Config.Server.Preview.Sorting = [SortingMethods.descRating, SortingMethods.descDate];
   });
@@ -218,9 +221,15 @@ describe('PreviewManager', (sqlHelper: DBTestHelper) => {
         text: 'sw'
       } as TextSearch
     }))).to.deep.equalInAnyOrder(previewifyMedia(p2));
-
+    // Having a preview search query that does not return valid result
+    Config.Server.Preview.SearchQuery = {type: SearchQueryTypes.any_text, text: 'wont find it'} as TextSearch;
+    expect(Utils.clone(await pm.getAlbumPreview({
+      searchQuery: {
+        type: SearchQueryTypes.any_text,
+        text: 'Derem'
+      } as TextSearch
+    }))).to.deep.equalInAnyOrder(previewifyMedia(p2));
   });
-
 
   it('should invalidate and update preview', async () => {
     const gm = new GalleryManagerTest();
@@ -240,14 +249,14 @@ describe('PreviewManager', (sqlHelper: DBTestHelper) => {
     let subdir = await selectDir();
 
     expect(subdir.validPreview).to.equal(true);
-    expect(subdir.preview.id).to.equal(2);
+    expect(subdir.preview.id).to.equal(p2.id);
 
     // new version should invalidate
     await pm.onNewDataVersion(subDir as ParentDirectoryDTO);
     subdir = await selectDir();
     expect(subdir.validPreview).to.equal(false);
     // during invalidation, we do not remove the previous preview (it's good to show at least some photo)
-    expect(subdir.preview.id).to.equal(2);
+    expect(subdir.preview.id).to.equal(p2.id);
 
     await conn.createQueryBuilder()
       .update(DirectoryEntity)
@@ -258,7 +267,7 @@ describe('PreviewManager', (sqlHelper: DBTestHelper) => {
     await gm.fillParentDir(conn, res);
     subdir = await selectDir();
     expect(subdir.validPreview).to.equal(true);
-    expect(subdir.preview.id).to.equal(2);
+    expect(subdir.preview.id).to.equal(p2.id);
 
   });
 

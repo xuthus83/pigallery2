@@ -36,7 +36,7 @@ export class PreviewManager implements IPreviewManager {
           query.addOrderBy('media.rating', 'ASC');
           break;
         case SortingMethods.descName:
-          query.addOrderBy('media.name', 'ASC');
+          query.addOrderBy('media.name', 'DESC');
           break;
         case SortingMethods.ascName:
           query.addOrderBy('media.name', 'ASC');
@@ -94,10 +94,10 @@ export class PreviewManager implements IPreviewManager {
 
   public async getAlbumPreview(album: { searchQuery: SearchQueryDTO }): Promise<PreviewPhotoDTOWithID> {
 
-    const albumQuery = await (ObjectManagers.getInstance().SearchManager as ISQLSearchManager).prepareAndBuildWhereQuery(album.searchQuery);
+    const albumQuery: Brackets = await (ObjectManagers.getInstance().SearchManager as ISQLSearchManager).prepareAndBuildWhereQuery(album.searchQuery);
     const connection = await SQLConnection.getConnection();
 
-    const previewQuery = async (): Promise<SelectQueryBuilder<MediaEntity>> => {
+    const previewQuery = (): SelectQueryBuilder<MediaEntity> => {
       const query = connection
         .getRepository(MediaEntity)
         .createQueryBuilder('media')
@@ -111,7 +111,7 @@ export class PreviewManager implements IPreviewManager {
     let previewMedia = null;
     if (Config.Server.Preview.SearchQuery &&
       !Utils.equalsFilter(Config.Server.Preview.SearchQuery, {type: SearchQueryTypes.any_text, text: ''} as TextSearch)) {
-      previewMedia = await (await previewQuery())
+      previewMedia = await previewQuery()
         .andWhere(await (ObjectManagers.getInstance().SearchManager as ISQLSearchManager)
           .prepareAndBuildWhereQuery(Config.Server.Preview.SearchQuery))
         .limit(1)
@@ -119,7 +119,7 @@ export class PreviewManager implements IPreviewManager {
     }
 
     if (!previewMedia) {
-      previewMedia = await (await previewQuery())
+      previewMedia = await previewQuery()
         .limit(1)
         .getOne();
     }
