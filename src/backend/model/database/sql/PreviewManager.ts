@@ -24,16 +24,16 @@ export class PreviewManager implements IPreviewManager {
     for (const sort of Config.Server.Preview.Sorting) {
       switch (sort) {
         case SortingMethods.descDate:
-          query.addOrderBy('media.creationDate', 'DESC');
+          query.addOrderBy('media.metadata.creationDate', 'DESC');
           break;
         case SortingMethods.ascDate:
-          query.addOrderBy('media.creationDate', 'ASC');
+          query.addOrderBy('media.metadata.creationDate', 'ASC');
           break;
         case SortingMethods.descRating:
-          query.addOrderBy('media.rating', 'DESC');
+          query.addOrderBy('media.metadata.rating', 'DESC');
           break;
         case SortingMethods.ascRating:
-          query.addOrderBy('media.rating', 'ASC');
+          query.addOrderBy('media.metadata.rating', 'ASC');
           break;
         case SortingMethods.descName:
           query.addOrderBy('media.name', 'DESC');

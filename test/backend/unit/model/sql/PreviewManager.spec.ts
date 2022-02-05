@@ -184,6 +184,8 @@ describe('PreviewManager', (sqlHelper: DBTestHelper) => {
     expect(Utils.clone(await pm.setAndGetPreviewForDirectory(subDir))).to.deep.equalInAnyOrder(previewifyMedia(pFaceLess));
     Config.Server.Preview.Sorting = [SortingMethods.descRating];
     expect(Utils.clone(await pm.setAndGetPreviewForDirectory(dir))).to.deep.equalInAnyOrder(previewifyMedia(p4));
+    Config.Server.Preview.Sorting = [SortingMethods.descName];
+    expect(Utils.clone(await pm.setAndGetPreviewForDirectory(dir))).to.deep.equalInAnyOrder(previewifyMedia(v));
   });
 
   it('should get preview for directory', async () => {
