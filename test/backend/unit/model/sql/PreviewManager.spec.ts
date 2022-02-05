@@ -231,6 +231,14 @@ describe('PreviewManager', (sqlHelper: DBTestHelper) => {
         text: 'Derem'
       } as TextSearch
     }))).to.deep.equalInAnyOrder(previewifyMedia(p2));
+    // having a saved search that does not have any image
+    Config.Server.Preview.SearchQuery = {type: SearchQueryTypes.any_text, text: 'Derem'} as TextSearch;
+    expect(Utils.clone(await pm.getAlbumPreview({
+      searchQuery: {
+        type: SearchQueryTypes.any_text,
+        text: 'wont find it'
+      } as TextSearch
+    }))).to.deep.equal(null);
   });
 
   it('should invalidate and update preview', async () => {

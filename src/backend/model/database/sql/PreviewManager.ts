@@ -94,7 +94,8 @@ export class PreviewManager implements IPreviewManager {
 
   public async getAlbumPreview(album: { searchQuery: SearchQueryDTO }): Promise<PreviewPhotoDTOWithID> {
 
-    const albumQuery: Brackets = await (ObjectManagers.getInstance().SearchManager as ISQLSearchManager).prepareAndBuildWhereQuery(album.searchQuery);
+    const albumQuery: Brackets = await (ObjectManagers.getInstance().SearchManager as ISQLSearchManager)
+      .prepareAndBuildWhereQuery(album.searchQuery);
     const connection = await SQLConnection.getConnection();
 
     const previewQuery = (): SelectQueryBuilder<MediaEntity> => {
@@ -111,9 +112,10 @@ export class PreviewManager implements IPreviewManager {
     let previewMedia = null;
     if (Config.Server.Preview.SearchQuery &&
       !Utils.equalsFilter(Config.Server.Preview.SearchQuery, {type: SearchQueryTypes.any_text, text: ''} as TextSearch)) {
+      const previewFilterQuery = await (ObjectManagers.getInstance().SearchManager as ISQLSearchManager)
+        .prepareAndBuildWhereQuery(Config.Server.Preview.SearchQuery);
       previewMedia = await previewQuery()
-        .andWhere(await (ObjectManagers.getInstance().SearchManager as ISQLSearchManager)
-          .prepareAndBuildWhereQuery(Config.Server.Preview.SearchQuery))
+        .andWhere(previewFilterQuery)
         .limit(1)
         .getOne();
     }

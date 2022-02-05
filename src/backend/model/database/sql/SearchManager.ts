@@ -44,6 +44,8 @@ export class SearchManager implements ISQLSearchManager {
     'CONCAT(\'[\' , GROUP_CONCAT(  \'{"name": "\' , person.name , \'", "box": {"top":\' , faces.box.top , \', "left":\' , faces.box.left , \', "height":\' , faces.box.height ,\', "width":\' , faces.box.width , \'}}\'  ) ,\']\') as media_metadataFaces' :
     '\'[\' || GROUP_CONCAT(  \'{"name": "\' || person.name || \'", "box": {"top":\' || faces.box.top || \', "left":\' || faces.box.left || \', "height":\' || faces.box.height ||\', "width":\' || faces.box.width || \'}}\'  ) ||\']\' as media_metadataFaces';
   private DIRECTORY_SELECT = ['directory.id', 'directory.name', 'directory.path'];
+  // makes all search query params unique, so typeorm wont mix them
+  private queryIdBase = 0;
 
   private static autoCompleteItemsUnique(array: Array<AutoCompleteItem>): Array<AutoCompleteItem> {
     const a = array.concat();
@@ -246,7 +248,6 @@ export class SearchManager implements ISQLSearchManager {
     return await sqlQuery.groupBy('RANDOM()').limit(1).getOne();
 
   }
-
 
   public async getCount(query: SearchQueryDTO): Promise<number> {
     const connection = await SQLConnection.getConnection();
@@ -660,11 +661,21 @@ export class SearchManager implements ISQLSearchManager {
    * Witch SOME_OF query the number of WHERE constrains have O(N!) complexity
    */
   private assignQueryIDs(queryIN: SearchQueryDTO, id = {value: 1}): SearchQueryDTO {
+
+    // It is possible that one SQL query contains multiple searchQueries
+    // (like: where (<searchQuery1> AND (<searchQuery2>))
+    // lets make params unique across multiple queries
+    if (id.value === 1) {
+      this.queryIdBase++;
+      if (this.queryIdBase > 10000) {
+        this.queryIdBase = 0;
+      }
+    }
     if ((queryIN as SearchListQuery).list) {
       (queryIN as SearchListQuery).list.forEach(q => this.assignQueryIDs(q, id));
       return queryIN;
     }
-    (queryIN as SearchQueryDTOWithID).queryId = id.value;
+    (queryIN as SearchQueryDTOWithID).queryId = this.queryIdBase + '_' + id.value;
     id.value++;
     return queryIN;
   }
@@ -732,5 +743,5 @@ export class SearchManager implements ISQLSearchManager {
 }
 
 export interface SearchQueryDTOWithID extends SearchQueryDTO {
-  queryId: number;
+  queryId: string;
 }
