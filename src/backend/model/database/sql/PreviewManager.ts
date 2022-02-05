@@ -161,9 +161,9 @@ export class PreviewManager implements IPreviewManager {
           }
         }));
       if (Config.Server.Database.type === DatabaseType.mysql) {
-        query.orderBy('CHAR_LENGTH(directory.path)', 'DESC'); // shorter the path, its higher up in the hierarchy
+        query.orderBy('CHAR_LENGTH(directory.path)', 'ASC'); // shorter the path, its higher up in the hierarchy
       } else {
-        query.orderBy('LENGTH(directory.path)', 'DESC'); // shorter the path, its higher up in the hierarchy
+        query.orderBy('LENGTH(directory.path)', 'ASC'); // shorter the path, its higher up in the hierarchy
       }
 
 
