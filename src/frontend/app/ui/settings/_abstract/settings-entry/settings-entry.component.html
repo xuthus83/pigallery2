@@ -16,7 +16,7 @@
 
 
         <app-gallery-search-field
-          *ngIf="!IsEnumType && Type === 'searchQuery'"
+          *ngIf="Type === 'searchQuery'"
           [(ngModel)]="state.value"
           [id]="idName"
           [name]="idName"
@@ -28,7 +28,7 @@
         </app-gallery-search-field>
 
         <input
-          *ngIf="!IsEnumType && Type !== 'boolean' && Type !== 'searchQuery'"
+          *ngIf="!state.isEnumType && !state.isEnumArrayType && Type !== 'boolean' && Type !== 'searchQuery'"
           [type]="type" [min]="state.min" [max]="state.max" class="form-control"
           [placeholder]="PlaceHolder"
           [title]="title"
@@ -39,40 +39,53 @@
           [id]="idName"
           required="required">
 
-        <ng-container *ngIf="IsEnumType || Type === 'boolean'">
-          <ng-container *ngFor="let _ of Values; let i=index">
+        <select
+          *ngIf="state.isEnumType"
+          [id]="idName"
+          [name]="idName"
+          [title]="title"
+          (ngModelChange)="onChange($event)"
+          [disabled]="state.readonly || disabled"
+          class="form-control" [(ngModel)]="state.value">
+          <option *ngFor="let opt of optionsView" [ngValue]="opt.key">{{opt.value}}
+          </option>
+        </select>
+
+
+        <bSwitch
+          *ngIf="Type === 'boolean'"
+          class="switch"
+          [id]="idName"
+          [name]="idName"
+          [title]="title"
+          [disabled]="state.readonly || disabled"
+          switch-on-color="primary"
+          switch-inverse="true"
+          switch-off-text="Disabled"
+          switch-on-text="Enabled"
+          i18n-switch-off-text
+          i18n-switch-on-text
+          switch-handle-width="100"
+          switch-label-width="20"
+          (ngModelChange)="onChange($event)"
+          [(ngModel)]="state.value">
+        </bSwitch>
+
+        <ng-container *ngIf="state.isEnumArrayType">
+          <ng-container *ngFor="let _ of state.value; let i=index">
             <div class="row col-12 mt-1 m-0 p-0">
               <div class="col p-0">
                 <select
-                  *ngIf="IsEnumType"
                   [id]="'list_'+idName+i"
                   [name]="'list_'+idName+i"
                   [title]="title"
                   (ngModelChange)="onChange($event)"
                   [disabled]="state.readonly || disabled"
-                  class="form-control" [(ngModel)]="Values[i]">
+                  class="form-control" [(ngModel)]="state.value[i]">
                   <option *ngFor="let opt of optionsView" [ngValue]="opt.key">{{opt.value}}
                   </option>
                 </select>
 
-                <bSwitch
-                  *ngIf="Type === 'boolean'"
-                  class="switch"
-                  [id]="'list_'+idName+i"
-                  [name]="'list_'+idName+i"
-                  [title]="title"
-                  [disabled]="state.readonly || disabled"
-                  switch-on-color="primary"
-                  switch-inverse="true"
-                  switch-off-text="Disabled"
-                  switch-on-text="Enabled"
-                  i18n-switch-off-text
-                  i18n-switch-on-text
-                  switch-handle-width="100"
-                  switch-label-width="20"
-                  (ngModelChange)="onChange($event)"
-                  [(ngModel)]="Values[i]">
-                </bSwitch>
 
               </div>
               <ng-container *ngIf="state.type === 'array'">

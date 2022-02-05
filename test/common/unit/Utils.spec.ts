@@ -34,4 +34,23 @@ describe('Utils', () => {
     expect(Utils.findClosestinSorted(10, [3, 20])).to.be.equal(3);
     expect(Utils.findClosestinSorted(10, [20])).to.be.equal(20);
   });
+  it('should equal', () => {
+
+    expect(Utils.equalsFilter('abc', 'abc')).to.be.equal(true);
+    expect(Utils.equalsFilter('abc', 'abcd')).to.be.equal(false);
+    expect(Utils.equalsFilter(10, 10)).to.be.equal(true);
+    expect(Utils.equalsFilter(10, 11)).to.be.equal(false);
+    expect(Utils.equalsFilter(true, true)).to.be.equal(true);
+    expect(Utils.equalsFilter(false, false)).to.be.equal(true);
+    expect(Utils.equalsFilter(false, true)).to.be.equal(false);
+    expect(Utils.equalsFilter(true, false)).to.be.equal(false);
+    expect(Utils.equalsFilter(0, false)).to.be.equal(false);
+    expect(Utils.equalsFilter(0, 0)).to.be.equal(true);
+    expect(Utils.equalsFilter(false, 0)).to.be.equal(false);
+    expect(Utils.equalsFilter(null, null)).to.be.equal(true);
+    expect(Utils.equalsFilter(null, false)).to.be.equal(false);
+    expect(Utils.equalsFilter(false, null)).to.be.equal(false);
+    expect(Utils.equalsFilter({a: 0}, {b: 0})).to.be.equal(false);
+    expect(Utils.equalsFilter({a: 0}, {a: 0})).to.be.equal(true);
+  });
 });

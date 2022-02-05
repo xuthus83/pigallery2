@@ -58,6 +58,7 @@ export class SettingsEntryComponent implements ControlValueAccessor, Validator, 
   idName: string;
   disabled: boolean;
   private readonly GUID = Utils.GUID();
+  private singleValueWrapper: { set: (value: any) => void; get: () => any };
 
 
   constructor(private searchQueryParserService: SearchQueryParserService) {
@@ -66,9 +67,6 @@ export class SettingsEntryComponent implements ControlValueAccessor, Validator, 
   get changed(): boolean {
     if (this.disabled) {
       return false;
-    }
-    if (this.state.type === 'array') {
-      return !Utils.equalsFilter(this.state.value, this.state.default);
     }
     return !Utils.equalsFilter(this.state.value, this.state.default);
   }
@@ -101,19 +99,8 @@ export class SettingsEntryComponent implements ControlValueAccessor, Validator, 
   }
 
 
-  get Values(): any[] {
-    if (Array.isArray(this.state.value)) {
-      return this.state.value;
-    }
-    return [this.state.value];
-  }
-
   get Type(): any {
     return this.typeOverride || this.state.type;
-  }
-
-  get IsEnumType(): boolean {
-    return this.state.isEnumType === true || this.state.isEnumArrayType === true;
   }
 
   get StringValue(): any {
