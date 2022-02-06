@@ -48,6 +48,8 @@ export class SettingsEntryComponent implements ControlValueAccessor, Validator, 
   @Input() simplifiedMode = false;
   @Input() allowSpaces = false;
   @Input() description: string;
+  @Input() link: string;
+  @Input() linkText: string;
   @Input() typeOverride: 'searchQuery';
   state: IState;
   isNumberArray = false;

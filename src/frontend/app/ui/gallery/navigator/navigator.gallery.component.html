@@ -23,11 +23,20 @@
     </ng-container>
 
     <ng-container *ngIf="config.Client.Other.enableDownloadZip && directory && ItemCount > 0">
-      <a *ngIf="config.Client.Other.enableDownloadZip && directory && ItemCount > 0"
-         [href]="getDownloadZipLink()"
+      <a [href]="getDownloadZipLink()"
          class="btn  btn-download">
          <span class="oi oi-data-transfer-download"
                title="download" i18n-title></span>
+      </a>
+      <div class="divider">&nbsp;</div>
+    </ng-container>
+
+    <ng-container *ngIf="config.Client.Other.enableDirectoryFlattening && directory">
+      <a
+        [routerLink]="['/search', getDirectoryFlattenSearchQuery()]"
+         class="btn  btn-download">
+         <span class="oi oi-fork"
+               title="Flatten directory" i18n-title></span>
       </a>
       <div class="divider">&nbsp;</div>
     </ng-container>

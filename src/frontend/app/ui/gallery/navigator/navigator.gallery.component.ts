@@ -9,7 +9,7 @@ import {Utils} from '../../../../../common/Utils';
 import {SortingMethods} from '../../../../../common/entities/SortingMethods';
 import {Config} from '../../../../../common/config/public/Config';
 import {SearchResultDTO} from '../../../../../common/entities/SearchResultDTO';
-import {SearchQueryTypes} from '../../../../../common/entities/SearchQueryDTO';
+import {SearchQueryTypes, TextSearch, TextSearchQueryMatchTypes} from '../../../../../common/entities/SearchQueryDTO';
 
 @Component({
   selector: 'app-gallery-navbar',
@@ -107,6 +107,13 @@ export class GalleryNavigatorComponent implements OnChanges {
     return Utils.concatUrls(this.directory.path, this.directory.name);
   }
 
+  getDirectoryFlattenSearchQuery(): string {
+    return JSON.stringify({
+      type: SearchQueryTypes.directory,
+      matchType: TextSearchQueryMatchTypes.like,
+      text: Utils.concatUrls('./', this.directory.path, this.directory.name)
+    } as TextSearch);
+  }
 }
 
 interface NavigatorPath {

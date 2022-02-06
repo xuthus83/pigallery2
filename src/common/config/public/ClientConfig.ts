@@ -129,6 +129,8 @@ export class ClientOtherConfig {
   captionFirstNaming: boolean = false; // shows the caption instead of the filename in the photo grid
   @ConfigProperty()
   enableDownloadZip: boolean = false;
+  @ConfigProperty({description: 'Adds a button to flattens the file structure, by listing the content of all subdirectories.'})
+  enableDirectoryFlattening: boolean = false;
 }
 
 @SubConfigClass()

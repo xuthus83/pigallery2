@@ -118,6 +118,7 @@
         </div>
       </div>
       <small class="form-text text-muted" *ngIf="description">{{description}}
+        <a *ngIf="link" [href]="link">{{linkText || link}}</a>
       </small>
       <ng-content></ng-content>
     </div>

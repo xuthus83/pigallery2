@@ -62,9 +62,18 @@
 
       <app-settings-entry
         name="Download Zip"
-        description="Enable download zip of a directory contents"
+        description="[Experimental: does not work for searches] Enable download zip of a directory contents"
         i18n-description i18n-name
         [ngModel]="states.Client.enableDownloadZip">
+      </app-settings-entry>
+
+      <app-settings-entry
+        name="Directory flattening"
+        description="[Experimental: won't work if the gallery multiple folders with the same path] Adds a button to flattens the file structure, by listing the content of all subdirectories."
+        link="https://github.com/bpatrik/pigallery2/issues/174"
+        linkText="See 174."
+        i18n-description i18n-name
+        [ngModel]="states.Client.enableDirectoryFlattening">
       </app-settings-entry>
 
 
