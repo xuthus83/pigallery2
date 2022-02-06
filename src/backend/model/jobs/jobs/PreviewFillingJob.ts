@@ -20,6 +20,7 @@ export class PreviewFillingJob extends Job {
 
   protected async step(): Promise<boolean> {
     if (!this.directoryToSetPreview) {
+      this.Progress.log('Loading Directories to process');
       this.directoryToSetPreview = await ObjectManagers.getInstance().PreviewManager.getPartialDirsWithoutPreviews();
       this.Progress.Left = this.directoryToSetPreview.length + 2;
       return true;
@@ -65,7 +66,7 @@ export class PreviewFillingJob extends Job {
       return false;
     }
     const directory = this.directoryToSetPreview.shift();
-    this.Progress.log('Setting preview: ' + directory.path + '/' + directory.name);
+    this.Progress.log('Setting preview: ' + directory.path  + directory.name);
     this.Progress.Left = this.directoryToSetPreview.length;
 
     await ObjectManagers.getInstance().PreviewManager.setAndGetPreviewForDirectory(directory);
