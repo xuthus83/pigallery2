@@ -21,7 +21,7 @@ services:
     volumes:
       - "./pigallery2/config:/app/data/config" # CHANGE ME
       - "db-data:/app/data/db"
-      - "./pigallery2/images:/app/data/images" # CHANGE ME
+      - "./pigallery2/images:/app/data/images:ro" # CHANGE ME, ':ro' mean read-only
       - "./pigallery2/tmp:/app/data/tmp" # CHANGE ME
     expose:
       - "80"
