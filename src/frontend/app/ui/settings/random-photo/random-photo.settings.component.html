@@ -25,10 +25,17 @@
 
       <ng-container *ngIf="states.enabled.value  || settingsService.isSupported()">
 
-        <div class="alert alert-secondary" role="alert" i18n>
-          This feature enables you to generate 'random photo' urls.
-          That URL returns a photo random selected from your gallery.
-          You can use the url with 3rd party application like random changing desktop background.
+        <div class="alert alert-secondary" role="alert">
+          <ng-container i18n>
+            This feature enables you to generate 'random photo' urls.
+            That URL returns a photo random selected from your gallery.
+            You can use the url with 3rd party application like random changing desktop background.
+          </ng-container>
+          <br/>
+          <ng-container i18n>
+            Note: With the current implementation, it poses a security risk. See:
+          </ng-container>
+          <a href="https://github.com/bpatrik/pigallery2/issues/392">#392</a>
         </div>
 
       </ng-container>
