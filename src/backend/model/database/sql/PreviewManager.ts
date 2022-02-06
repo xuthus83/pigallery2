@@ -160,11 +160,9 @@ export class PreviewManager implements IPreviewManager {
             });
           }
         }));
-      if (Config.Server.Database.type === DatabaseType.mysql) {
-        query.orderBy('CHAR_LENGTH(directory.path)', 'ASC'); // shorter the path, its higher up in the hierarchy
-      } else {
-        query.orderBy('LENGTH(directory.path)', 'ASC'); // shorter the path, its higher up in the hierarchy
-      }
+      // Select from the directory if any otherwise from any subdirectories.
+      // (There is no priority between subdirectories)
+      query.orderBy(`CASE WHEN directory.id = ${dir.id} THEN 0 ELSE 1 END`, 'ASC');
 
 
       PreviewManager.setSorting(query);
