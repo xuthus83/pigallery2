@@ -158,5 +158,5 @@ jobs:
           push: true
           tags: |
             bpatrik/pigallery2:nightly-${{ matrix.container }}
-            bpatrik/pigallery2:${{ steps.vars.outputs.tag }}-${{ matrix.container == 'debian-buster' && '' || join(['-',matrix.container],'') }}
-            bpatrik/pigallery2:latest${{ matrix.container == 'debian-buster' && '' || join(['-',matrix.container],'') }}
+            bpatrik/pigallery2:${{ matrix.container == 'debian-buster' && steps.vars.outputs.tag  || format('{0}-{1}',steps.vars.outputs.tag,matrix.container) }}
+            bpatrik/pigallery2:${{ matrix.container == 'debian-buster' && 'latest' || format('latest-{0}',matrix.container) }}
