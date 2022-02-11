@@ -1,29 +1,29 @@
 <nav class="nav-container" aria-label="breadcrumb">
-  <ol *ngIf="directory" id="directory-path" class="breadcrumb">
-    <li *ngFor="let path of routes" class="breadcrumb-item">
+  <ol *ngIf="isDirectory | async" id="directory-path" class="breadcrumb">
+    <li *ngFor="let path of Routes | async" class="breadcrumb-item">
       <a *ngIf="path.route" [routerLink]="['/gallery',path.route]"
          [queryParams]="queryService.getParams()">{{path.name}}</a>
       <ng-container *ngIf="!path.route">{{path.name}}</ng-container>
     </li>
   </ol>
 
-  <ol *ngIf="searchResult" class="breadcrumb">
+  <ol *ngIf="!(isDirectory | async)" class="breadcrumb">
     <li class="active">
       <ng-container i18n>Searching for:</ng-container>
-      <strong> {{searchResult.searchQuery | searchQuery}}</strong>
+      <strong> {{(wrappedContent | async).searchQuery | searchQuery}}</strong>
     </li>
   </ol>
 
   <div class="right-side">
-    <ng-container *ngIf="ItemCount > 0 && config.Client.Other.NavBar.showItemCount">
+    <ng-container *ngIf="(ItemCount | async) > 0 && config.Client.Other.NavBar.showItemCount">
       <div class="photos-count">
-        {{ItemCount}} <span i18n>items</span>
+        {{ItemCount | async}} <span i18n>items</span>
       </div>
       <div class="divider">&nbsp;</div>
     </ng-container>
 
-    <ng-container *ngIf="config.Client.Other.enableDownloadZip && directory && ItemCount > 0">
-      <a [href]="getDownloadZipLink()"
+    <ng-container *ngIf="config.Client.Other.enableDownloadZip && (isDirectory | async) && (ItemCount | async) > 0">
+      <a [href]="getDownloadZipLink() | async"
          class="btn  btn-download">
          <span class="oi oi-data-transfer-download"
                title="download" i18n-title></span>
@@ -31,10 +31,10 @@
       <div class="divider">&nbsp;</div>
     </ng-container>
 
-    <ng-container *ngIf="config.Client.Other.enableDirectoryFlattening && directory">
+    <ng-container *ngIf="config.Client.Other.enableDirectoryFlattening && (isDirectory | async)">
       <a
-        [routerLink]="['/search', getDirectoryFlattenSearchQuery()]"
-         class="btn  btn-download">
+        [routerLink]="['/search', getDirectoryFlattenSearchQuery() | async]"
+        class="btn  btn-download">
          <span class="oi oi-fork"
                title="Flatten directory" i18n-title></span>
       </a>
@@ -43,9 +43,9 @@
     <div class="btn-group" dropdown placement="bottom right">
       <button id="button-alignment" dropdownToggle type="button"
               class="btn btn-secondary dropdown-toggle"
-              [ngClass]="{'btn-secondary':galleryService.sorting.value !== DefaultSorting}"
+              [ngClass]="{'btn-secondary':sortingService.sorting.value !== (DefaultSorting | async)}"
               aria-controls="dropdown-alignment"
-              [innerHTML]="galleryService.sorting.value| iconizeSorting">
+              [innerHTML]="sortingService.sorting.value | iconizeSorting">
       </button>
       <ul id="dropdown-alignment" *dropdownMenu class="dropdown-menu dropdown-menu-right"
           role="menu" aria-labelledby="button-alignment">
@@ -62,4 +62,3 @@
   </div>
 
 </nav>
-

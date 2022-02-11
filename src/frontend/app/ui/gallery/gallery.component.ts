@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {AuthenticationService} from '../../model/network/authentication.service';
 import {ActivatedRoute, Params, Router} from '@angular/router';
-import {ContentWrapperWithError, GalleryService} from './gallery.service';
+import {ContentWrapperWithError, DirectoryContent, GalleryService} from './gallery.service';
 import {GalleryGridComponent} from './grid/grid.gallery.component';
 import {Config} from '../../../../common/config/public/Config';
 import {ParentDirectoryDTO, SubDirectoryDTO} from '../../../../common/entities/DirectoryDTO';
@@ -12,11 +12,12 @@ import {UserRoles} from '../../../../common/entities/UserDTO';
 import {interval, Observable, Subscription} from 'rxjs';
 import {ContentWrapper} from '../../../../common/entities/ConentWrapper';
 import {PageHelper} from '../../model/page.helper';
-import {SortingMethods} from '../../../../common/entities/SortingMethods';
 import {PhotoDTO} from '../../../../common/entities/PhotoDTO';
 import {QueryParams} from '../../../../common/QueryParams';
-import {SeededRandomService} from '../../model/seededRandom.service';
-import {take} from 'rxjs/operators';
+import {map, take} from 'rxjs/operators';
+import {GallerySortingService} from './navigator/sorting.service';
+import {Media} from './Media';
+import {MediaDTO} from '../../../../common/entities/MediaDTO';
 
 @Component({
   selector: 'app-gallery',
@@ -37,6 +38,8 @@ export class GalleryComponent implements OnInit, OnDestroy {
   public isPhotoWithLocation = false;
   public countDown: { day: number, hour: number, minute: number, second: number } = null;
   public readonly mapEnabled: boolean;
+  public readonly directoryContent: Observable<DirectoryContent>;
+  public readonly mediaObs: Observable<MediaDTO[]>;
   private $counter: Observable<number>;
   private subscription: { [key: string]: Subscription } = {
     content: null,
@@ -44,7 +47,6 @@ export class GalleryComponent implements OnInit, OnDestroy {
     timer: null,
     sorting: null
   };
-  private collator = new Intl.Collator(undefined, {numeric: true});
 
   constructor(public galleryService: GalleryService,
               private authService: AuthenticationService,
@@ -52,15 +54,13 @@ export class GalleryComponent implements OnInit, OnDestroy {
               private shareService: ShareService,
               private route: ActivatedRoute,
               private navigation: NavigationService,
-              private rndService: SeededRandomService) {
+              private sortingService: GallerySortingService) {
     this.mapEnabled = Config.Client.Map.enabled;
+    this.directoryContent = this.sortingService.applySorting(this.galleryService.directoryContent);
+    this.mediaObs = this.directoryContent.pipe(map(c => c?.media));
     PageHelper.showScrollY();
   }
 
-  get Content(): SearchResultDTO | ParentDirectoryDTO {
-    const cont = (this.ContentWrapper.searchResult || this.ContentWrapper.directory);
-    return cont ? cont : {} as any;
-  }
 
   get ContentWrapper(): ContentWrapperWithError {
     return this.galleryService.content.value;
@@ -119,11 +119,11 @@ export class GalleryComponent implements OnInit, OnDestroy {
       this.$counter = interval(1000);
       this.subscription.timer = this.$counter.subscribe((x): void => this.updateTimer(x));
     }
-
-    this.subscription.sorting = this.galleryService.sorting.subscribe((): void => {
-      this.sortDirectories();
-    });
-
+    /*
+        this.subscription.sorting = this.galleryService.sorting.subscribe((): void => {
+          this.sortDirectories();
+        });
+    */
   }
 
   private onRoute = async (params: Params): Promise<void> => {
@@ -155,7 +155,7 @@ export class GalleryComponent implements OnInit, OnDestroy {
       media: []
     }) as ParentDirectoryDTO | SearchResultDTO;
     this.directories = tmp.directories;
-    this.sortDirectories();
+    // this.sortDirectories();
     this.isPhotoWithLocation = false;
 
     for (const media of tmp.media as PhotoDTO[]) {
@@ -169,50 +169,4 @@ export class GalleryComponent implements OnInit, OnDestroy {
       }
     }
   };
-
-  private sortDirectories(): void {
-    if (!this.directories) {
-      return;
-    }
-    switch (this.galleryService.sorting.value) {
-      case SortingMethods.ascRating: // directories does not have rating
-      case SortingMethods.ascName:
-        this.directories.sort((a, b) => this.collator.compare(a.name, b.name));
-        break;
-      case SortingMethods.ascDate:
-        if (Config.Client.Other.enableDirectorySortingByDate === true) {
-          this.directories.sort((a, b) => a.lastModified - b.lastModified);
-          break;
-        }
-        this.directories.sort((a, b) => this.collator.compare(a.name, b.name));
-        break;
-      case SortingMethods.descRating: // directories does not have rating
-      case SortingMethods.descName:
-        this.directories.sort((a, b) => this.collator.compare(b.name, a.name));
-        break;
-      case SortingMethods.descDate:
-        if (Config.Client.Other.enableDirectorySortingByDate === true) {
-          this.directories.sort((a, b) => b.lastModified - a.lastModified);
-          break;
-        }
-        this.directories.sort((a, b) => this.collator.compare(b.name, a.name));
-        break;
-      case SortingMethods.random:
-        this.rndService.setSeed(this.directories.length);
-        this.directories.sort((a, b): number => {
-          if (a.name.toLowerCase() < b.name.toLowerCase()) {
-            return 1;
-          }
-          if (a.name.toLowerCase() > b.name.toLowerCase()) {
-            return -1;
-          }
-          return 0;
-        }).sort((): number => {
-          return this.rndService.get() - 0.5;
-        });
-        break;
-
-    }
-
-  }
 }

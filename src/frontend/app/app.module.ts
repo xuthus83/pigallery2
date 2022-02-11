@@ -114,6 +114,8 @@ import {BlogService} from './ui/gallery/blog/blog.service';
 import {PhotoFilterPipe} from './pipes/PhotoFilterPipe';
 import {PreviewSettingsComponent} from './ui/settings/preview/preview.settings.component';
 import {GallerySearchFieldComponent} from './ui/gallery/search/search-field/search-field.gallery.component';
+import {GalleryFilterComponent} from './ui/gallery/filter/filter.gallery.component';
+import {GallerySortingService} from './ui/gallery/navigator/sorting.service';
 
 @Injectable()
 export class MyHammerConfig extends HammerGestureConfig {
@@ -213,6 +215,7 @@ Marker.prototype.options.icon = iconDefault;
     GallerySearchQueryBuilderComponent,
     GalleryShareComponent,
     GalleryNavigatorComponent,
+    GalleryFilterComponent,
     GalleryPhotoComponent,
     AdminComponent,
     InfoPanelLightboxComponent,
@@ -270,6 +273,7 @@ Marker.prototype.options.icon = iconDefault;
     AlbumsService,
     GalleryCacheService,
     GalleryService,
+    GallerySortingService,
     MapService,
     BlogService,
     SearchQueryParserService,
