@@ -1,23 +1,20 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {AuthenticationService} from '../../model/network/authentication.service';
 import {ActivatedRoute, Params, Router} from '@angular/router';
-import {ContentWrapperWithError, DirectoryContent, GalleryService} from './gallery.service';
+import {ContentService, ContentWrapperWithError, DirectoryContent} from './content.service';
 import {GalleryGridComponent} from './grid/grid.gallery.component';
 import {Config} from '../../../../common/config/public/Config';
-import {ParentDirectoryDTO, SubDirectoryDTO} from '../../../../common/entities/DirectoryDTO';
-import {SearchResultDTO} from '../../../../common/entities/SearchResultDTO';
 import {ShareService} from './share.service';
 import {NavigationService} from '../../model/navigation.service';
 import {UserRoles} from '../../../../common/entities/UserDTO';
 import {interval, Observable, Subscription} from 'rxjs';
-import {ContentWrapper} from '../../../../common/entities/ConentWrapper';
 import {PageHelper} from '../../model/page.helper';
 import {PhotoDTO} from '../../../../common/entities/PhotoDTO';
 import {QueryParams} from '../../../../common/QueryParams';
-import {map, take} from 'rxjs/operators';
+import {take} from 'rxjs/operators';
 import {GallerySortingService} from './navigator/sorting.service';
-import {Media} from './Media';
 import {MediaDTO} from '../../../../common/entities/MediaDTO';
+import {FilterService} from './filter/filter.service';
 
 @Component({
   selector: 'app-gallery',
@@ -34,11 +31,10 @@ export class GalleryComponent implements OnInit, OnDestroy {
   public blogOpen = false;
 
   config = Config;
-  public directories: SubDirectoryDTO[] = [];
   public isPhotoWithLocation = false;
   public countDown: { day: number, hour: number, minute: number, second: number } = null;
   public readonly mapEnabled: boolean;
-  public readonly directoryContent: Observable<DirectoryContent>;
+  public directoryContent: DirectoryContent;
   public readonly mediaObs: Observable<MediaDTO[]>;
   private $counter: Observable<number>;
   private subscription: { [key: string]: Subscription } = {
@@ -48,16 +44,15 @@ export class GalleryComponent implements OnInit, OnDestroy {
     sorting: null
   };
 
-  constructor(public galleryService: GalleryService,
+  constructor(public galleryService: ContentService,
               private authService: AuthenticationService,
               private router: Router,
               private shareService: ShareService,
               private route: ActivatedRoute,
               private navigation: NavigationService,
+              private filterService: FilterService,
               private sortingService: GallerySortingService) {
     this.mapEnabled = Config.Client.Map.enabled;
-    this.directoryContent = this.sortingService.applySorting(this.galleryService.directoryContent);
-    this.mediaObs = this.directoryContent.pipe(map(c => c?.media));
     PageHelper.showScrollY();
   }
 
@@ -112,7 +107,10 @@ export class GalleryComponent implements OnInit, OnDestroy {
     this.showSearchBar = Config.Client.Search.enabled && this.authService.canSearch();
     this.showShare = Config.Client.Sharing.enabled && this.authService.isAuthorized(UserRoles.User);
     this.showRandomPhotoBuilder = Config.Client.RandomPhoto.enabled && this.authService.isAuthorized(UserRoles.User);
-    this.subscription.content = this.galleryService.content.subscribe(this.onContentChange);
+    this.subscription.content = this.sortingService.applySorting(
+      this.filterService.applyFilters(this.galleryService.directoryContent)).subscribe((dc: DirectoryContent) => {
+      this.onContentChange(dc);
+    });
     this.subscription.route = this.route.params.subscribe(this.onRoute);
 
     if (this.shareService.isSharing()) {
@@ -149,16 +147,17 @@ export class GalleryComponent implements OnInit, OnDestroy {
     this.galleryService.loadDirectory(directoryName);
   };
 
-  private onContentChange = (content: ContentWrapper): void => {
-    const tmp = (content.searchResult || content.directory || {
-      directories: [],
-      media: []
-    }) as ParentDirectoryDTO | SearchResultDTO;
-    this.directories = tmp.directories;
-    // this.sortDirectories();
+  private onContentChange = (content: DirectoryContent): void => {
+    if (!content) {
+      return;
+    }
+    this.directoryContent = content;
+
+    // enforce change detection on grid
+    this.directoryContent.media = this.directoryContent.media?.slice();
     this.isPhotoWithLocation = false;
 
-    for (const media of tmp.media as PhotoDTO[]) {
+    for (const media of content.media as PhotoDTO[]) {
       if (media.metadata &&
         media.metadata.positionData &&
         media.metadata.positionData.GPSData &&

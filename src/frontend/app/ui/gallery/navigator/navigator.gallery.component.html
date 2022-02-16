@@ -10,7 +10,7 @@
   <ol *ngIf="!(isDirectory | async)" class="breadcrumb">
     <li class="active">
       <ng-container i18n>Searching for:</ng-container>
-      <strong> {{(wrappedContent | async).searchQuery | searchQuery}}</strong>
+      <strong> {{(wrappedContent | async)?.searchResult?.searchQuery | searchQuery}}</strong>
     </li>
   </ol>
 
@@ -24,7 +24,7 @@
 
     <ng-container *ngIf="config.Client.Other.enableDownloadZip && (isDirectory | async) && (ItemCount | async) > 0">
       <a [href]="getDownloadZipLink() | async"
-         class="btn  btn-download">
+         class="btn  btn-navbar">
          <span class="oi oi-data-transfer-download"
                title="download" i18n-title></span>
       </a>
@@ -34,12 +34,19 @@
     <ng-container *ngIf="config.Client.Other.enableDirectoryFlattening && (isDirectory | async)">
       <a
         [routerLink]="['/search', getDirectoryFlattenSearchQuery() | async]"
-        class="btn  btn-download">
+        class="btn  btn-navbar">
          <span class="oi oi-fork"
                title="Flatten directory" i18n-title></span>
       </a>
       <div class="divider">&nbsp;</div>
     </ng-container>
+    <a class="btn  btn-navbar"
+       [class.btn-secondary]="showFilters"
+       (click)="showFilters = ! showFilters">
+         <span class="oi oi-spreadsheet"
+               title="Filters" i18n-title></span>
+    </a>
+    <div class="divider">&nbsp;</div>
     <div class="btn-group" dropdown placement="bottom right">
       <button id="button-alignment" dropdownToggle type="button"
               class="btn btn-secondary dropdown-toggle"
@@ -62,3 +69,5 @@
   </div>
 
 </nav>
+
+<app-gallery-filter *ngIf="showFilters"></app-gallery-filter>

@@ -3,7 +3,7 @@ import {RouterLink} from '@angular/router';
 import {UserDTOUtils} from '../../../../../common/entities/UserDTO';
 import {AuthenticationService} from '../../../model/network/authentication.service';
 import {QueryService} from '../../../model/query.service';
-import {ContentWrapperWithError, DirectoryContent, GalleryService} from '../gallery.service';
+import {ContentService, ContentWrapperWithError, DirectoryContent} from '../content.service';
 import {Utils} from '../../../../../common/Utils';
 import {SortingMethods} from '../../../../../common/entities/SortingMethods';
 import {Config} from '../../../../../common/config/public/Config';
@@ -27,12 +27,12 @@ export class GalleryNavigatorComponent {
   readonly SearchQueryTypes = SearchQueryTypes;
   wrappedContent: Observable<ContentWrapperWithError>;
   public directoryContent: Observable<DirectoryContent>;
+  showFilters = false;
   private readonly RootFolderName: string;
-
 
   constructor(private authService: AuthenticationService,
               public queryService: QueryService,
-              public galleryService: GalleryService,
+              public galleryService: ContentService,
               public sortingService: GallerySortingService) {
     this.sortingMethodsType = Utils.enumToArray(SortingMethods);
     this.RootFolderName = $localize`Images`;

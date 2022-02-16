@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit, TemplateRef} from '@angular/core';
-import {GalleryService} from '../gallery.service';
+import {ContentService} from '../content.service';
 import {ContentWrapper} from '../../../../../common/entities/ConentWrapper';
 import {Config} from '../../../../../common/config/public/Config';
 import {NotificationService} from '../../../model/notification.service';
@@ -31,7 +31,7 @@ export class RandomQueryBuilderGalleryComponent implements OnInit, OnDestroy {
 
   private readonly subscription: Subscription = null;
 
-  constructor(public galleryService: GalleryService,
+  constructor(public galleryService: ContentService,
               private notification: NotificationService,
               private searchQueryParserService: SearchQueryParserService,
               private route: ActivatedRoute,

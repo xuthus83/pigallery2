@@ -5,6 +5,7 @@ import {
   ElementRef,
   HostListener,
   Input,
+  OnChanges,
   OnDestroy,
   OnInit,
   QueryList,
@@ -18,10 +19,10 @@ import {GalleryPhotoComponent} from './photo/photo.grid.gallery.component';
 import {OverlayService} from '../overlay.service';
 import {Config} from '../../../../../common/config/public/Config';
 import {PageHelper} from '../../../model/page.helper';
-import {Observable, Subscription} from 'rxjs';
+import {Subscription} from 'rxjs';
 import {ActivatedRoute, Params, Router} from '@angular/router';
 import {QueryService} from '../../../model/query.service';
-import {GalleryService} from '../gallery.service';
+import {ContentService} from '../content.service';
 import {MediaDTO, MediaDTOUtils} from '../../../../../common/entities/MediaDTO';
 import {QueryParams} from '../../../../../common/QueryParams';
 
@@ -30,13 +31,12 @@ import {QueryParams} from '../../../../../common/QueryParams';
   templateUrl: './grid.gallery.component.html',
   styleUrls: ['./grid.gallery.component.css'],
 })
-export class GalleryGridComponent implements OnInit, AfterViewInit, OnDestroy {
+export class GalleryGridComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
 
   @ViewChild('gridContainer', {static: false}) gridContainer: ElementRef;
   @ViewChildren(GalleryPhotoComponent) gridPhotoQL: QueryList<GalleryPhotoComponent>;
-  @Input() mediaObs: Observable<MediaDTO[]>;
   @Input() lightbox: GalleryLightboxComponent;
-  media: MediaDTO[];
+  @Input() media: MediaDTO[];
   photosToRender: GridMedia[] = [];
   containerWidth = 0;
   screenHeight = 0;
@@ -60,9 +60,13 @@ export class GalleryGridComponent implements OnInit, AfterViewInit, OnDestroy {
               private changeDetector: ChangeDetectorRef,
               public queryService: QueryService,
               private router: Router,
-              public galleryService: GalleryService,
+              public galleryService: ContentService,
               private route: ActivatedRoute) {
 
+  }
+
+  ngOnChanges(): void {
+    this.onChange();
   }
 
   ngOnInit(): void {
@@ -75,10 +79,6 @@ export class GalleryGridComponent implements OnInit, AfterViewInit, OnDestroy {
 
         this.renderUpToMedia(params[QueryParams.gallery.photo]);
       }
-    });
-    this.mediaObs.subscribe((m) => {
-      this.media = m || [];
-      this.onChange();
     });
   }
 

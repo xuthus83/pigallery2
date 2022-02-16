@@ -6,7 +6,7 @@ import {BehaviorSubject, Observable} from 'rxjs';
 import {Config} from '../../../../../common/config/public/Config';
 import {SortingMethods} from '../../../../../common/entities/SortingMethods';
 import {PG2ConfMap} from '../../../../../common/PG2ConfMap';
-import {DirectoryContent, GalleryService} from '../gallery.service';
+import {DirectoryContent, ContentService} from '../content.service';
 import {PhotoDTO} from '../../../../../common/entities/PhotoDTO';
 import {map, mergeMap} from 'rxjs/operators';
 import {SeededRandomService} from '../../../model/seededRandom.service';
@@ -19,7 +19,7 @@ export class GallerySortingService {
 
   constructor(private networkService: NetworkService,
               private galleryCacheService: GalleryCacheService,
-              private galleryService: GalleryService,
+              private galleryService: ContentService,
               private rndService: SeededRandomService) {
     this.sorting = new BehaviorSubject<SortingMethods>(Config.Client.Other.defaultPhotoSortingMethod);
     this.galleryService.content.subscribe((c) => {
@@ -57,11 +57,16 @@ export class GallerySortingService {
   }
 
   public applySorting(directoryContent: Observable<DirectoryContent>): Observable<DirectoryContent> {
-    return directoryContent.pipe(mergeMap((c) => {
+    return directoryContent.pipe(mergeMap((dirContent) => {
       return this.sorting.pipe(map((sorting: SortingMethods) => {
-        if (!c) {
-          return c;
+        if (!dirContent) {
+          return dirContent;
         }
+        const c = {
+          media: dirContent.media,
+          directories: dirContent.directories,
+          metaFile: dirContent.metaFile
+        };
         if (c.directories) {
           switch (sorting) {
             case SortingMethods.ascRating: // directories do not have rating

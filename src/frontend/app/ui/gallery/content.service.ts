@@ -16,7 +16,7 @@ import {FileDTO} from '../../../../common/entities/FileDTO';
 
 
 @Injectable()
-export class GalleryService {
+export class ContentService {
 
   public content: BehaviorSubject<ContentWrapperWithError>;
   public directoryContent: Observable<DirectoryContent>;
