@@ -12,15 +12,15 @@
 
 .photos-count {
   display: inline-block;
+  padding-right: 10px;
 }
 
-.btn-download {
-  padding-left: 1px;
-  padding-right: 1px;
+.btn-navbar {
 }
+
 
 .divider {
-  margin: 5px 5px 5px 10px;
+  margin-left: 5px;
   border-left: 1px solid #6c757d;
   display: inline-block;
 }
@@ -33,7 +33,7 @@ ol {
   min-width: 13rem;
 }
 
-.dropdown-item{
+.dropdown-item {
   padding: 0.25rem 0.5rem;
 }
 

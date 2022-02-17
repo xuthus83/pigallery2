@@ -1,0 +1,23 @@
+.filter-column {
+  max-height: 12em;
+  overflow-y: auto;
+}
+
+.filter-option {
+  cursor: pointer;
+}
+
+.filter-container {
+  margin-top: -1rem;
+}
+
+.filter-container > card-body {
+  margin: 0;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.unselected {
+  color: #6c757d;
+  background-color: #fff;
+}

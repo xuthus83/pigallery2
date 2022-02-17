@@ -1,7 +1,7 @@
 import {Component, OnDestroy, TemplateRef} from '@angular/core';
 import {AutoCompleteService} from './autocomplete.service';
 import {ActivatedRoute, Params, Router, RouterLink} from '@angular/router';
-import {GalleryService} from '../gallery.service';
+import {ContentService} from '../content.service';
 import {Subscription} from 'rxjs';
 import {NavigationService} from '../../../model/navigation.service';
 import {QueryParams} from '../../../../../common/QueryParams';
@@ -34,7 +34,7 @@ export class GallerySearchComponent implements OnDestroy {
 
   constructor(private autoCompleteService: AutoCompleteService,
               private searchQueryParserService: SearchQueryParserService,
-              private galleryService: GalleryService,
+              private galleryService: ContentService,
               private albumService: AlbumsService,
               private navigationService: NavigationService,
               private route: ActivatedRoute,

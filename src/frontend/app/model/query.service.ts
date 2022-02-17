@@ -3,7 +3,7 @@ import {ShareService} from '../ui/gallery/share.service';
 import {MediaDTO} from '../../../common/entities/MediaDTO';
 import {QueryParams} from '../../../common/QueryParams';
 import {Utils} from '../../../common/Utils';
-import {GalleryService} from '../ui/gallery/gallery.service';
+import {ContentService} from '../ui/gallery/content.service';
 import {Config} from '../../../common/config/public/Config';
 import {ParentDirectoryDTO, SubDirectoryDTO} from '../../../common/entities/DirectoryDTO';
 
@@ -12,7 +12,7 @@ export class QueryService {
 
 
   constructor(private shareService: ShareService,
-              private galleryService: GalleryService) {
+              private galleryService: ContentService) {
   }
 
   getMediaStringId(media: MediaDTO): string {

@@ -3,7 +3,7 @@ import {BrowserModule, HAMMER_GESTURE_CONFIG, HammerGestureConfig, HammerModule}
 import {FormsModule} from '@angular/forms';
 import {AppComponent} from './app.component';
 import {UserService} from './model/network/user.service';
-import {GalleryService} from './ui/gallery/gallery.service';
+import {ContentService} from './ui/gallery/content.service';
 import {NetworkService} from './model/network/network.service';
 import {GalleryCacheService} from './ui/gallery/cache.gallery.service';
 import {FullScreenService} from './ui/gallery/fullscreen.service';
@@ -114,6 +114,9 @@ import {BlogService} from './ui/gallery/blog/blog.service';
 import {PhotoFilterPipe} from './pipes/PhotoFilterPipe';
 import {PreviewSettingsComponent} from './ui/settings/preview/preview.settings.component';
 import {GallerySearchFieldComponent} from './ui/gallery/search/search-field/search-field.gallery.component';
+import {GalleryFilterComponent} from './ui/gallery/filter/filter.gallery.component';
+import {GallerySortingService} from './ui/gallery/navigator/sorting.service';
+import {FilterService} from './ui/gallery/filter/filter.service';
 
 @Injectable()
 export class MyHammerConfig extends HammerGestureConfig {
@@ -213,6 +216,7 @@ Marker.prototype.options.icon = iconDefault;
     GallerySearchQueryBuilderComponent,
     GalleryShareComponent,
     GalleryNavigatorComponent,
+    GalleryFilterComponent,
     GalleryPhotoComponent,
     AdminComponent,
     InfoPanelLightboxComponent,
@@ -269,7 +273,9 @@ Marker.prototype.options.icon = iconDefault;
     UserService,
     AlbumsService,
     GalleryCacheService,
-    GalleryService,
+    ContentService,
+    FilterService,
+    GallerySortingService,
     MapService,
     BlogService,
     SearchQueryParserService,

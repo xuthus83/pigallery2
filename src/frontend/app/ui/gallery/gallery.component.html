@@ -41,18 +41,18 @@
       </div>
 
       <!-- Its safe to hand over both as only one should have a value (search result or dir listing)-->
-      <app-gallery-navbar [searchResult]="ContentWrapper.searchResult"
-                          [directory]="ContentWrapper.directory"></app-gallery-navbar>
+      <app-gallery-navbar></app-gallery-navbar>
 
 
-      <app-gallery-directories class="directories" [directories]="directories"></app-gallery-directories>
+      <app-gallery-directories class="directories"
+                               [directories]="directoryContent.directories || []"></app-gallery-directories>
 
       <div class="blog-map-row">
         <div class="blog-wrapper"
-          [style.width]="blogOpen ?  '100%' : 'calc(100% - 100px)'"
-          *ngIf="config.Client.MetaFile.markdown && Content.metaFile && (Content.metaFile | mdFiles).length>0">
+             [style.width]="blogOpen ?  '100%' : 'calc(100% - 100px)'"
+             *ngIf="config.Client.MetaFile.markdown  && directoryContent.metaFile && (directoryContent.metaFile | mdFiles).length>0">
           <app-gallery-blog [collapsed]="!blogOpen"
-                            [mdFiles]="Content.metaFile | mdFiles"></app-gallery-blog>
+                            [mdFiles]="directoryContent.metaFile | mdFiles"></app-gallery-blog>
 
 
           <button class="btn btn-blog-details" (click)="blogOpen=!blogOpen"><span
@@ -60,10 +60,10 @@
           </button>
         </div>
         <app-gallery-map *ngIf="isPhotoWithLocation && mapEnabled"
-                         [photos]="Content.media | photosOnly"
-                         [gpxFiles]="Content.metaFile | gpxFiles"></app-gallery-map>
+                         [photos]="directoryContent.media | photosOnly"
+                         [gpxFiles]="directoryContent.metaFile | gpxFiles"></app-gallery-map>
       </div>
-      <app-gallery-grid [media]="Content.media"
+      <app-gallery-grid [media]="directoryContent.media"
                         [lightbox]="lightbox"></app-gallery-grid>
 
     </ng-container>
