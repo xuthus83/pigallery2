@@ -37,7 +37,7 @@ export class FilterService {
     },
     {
       name: $localize`Faces`,
-      mapFn: (m: PhotoDTO): string[] => m.metadata.faces?.map(f => f.name),
+      mapFn: (m: PhotoDTO): string[] => (m.metadata.faces ? m.metadata.faces.map(f => f.name) : ['<' + $localize`no face` + '>']),
       renderType: FilterRenderType.enum,
       isArrayValue: true,
     },
