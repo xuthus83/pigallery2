@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {PhotoDTO} from '../../../../../common/entities/PhotoDTO';
 import {DirectoryContent} from '../content.service';
-import {map, mergeMap} from 'rxjs/operators';
+import {map, switchMap} from 'rxjs/operators';
 
 export enum FilterRenderType {
   enum = 1, range = 2
@@ -90,11 +90,13 @@ export class FilterService {
   }
 
   public applyFilters(directoryContent: Observable<DirectoryContent>): Observable<DirectoryContent> {
-    return directoryContent.pipe(mergeMap((dirContent: DirectoryContent) => {
+    return directoryContent.pipe(switchMap((dirContent: DirectoryContent) => {
+
       return this.selectedFilters.pipe(map((filters: SelectedFilter[]) => {
         if (!dirContent || !dirContent.media || !this.filtersVisible) {
           return dirContent;
         }
+
 
         // clone, so the original won't get overwritten
         const c = {
@@ -102,6 +104,7 @@ export class FilterService {
           directories: dirContent.directories,
           metaFile: dirContent.metaFile
         };
+
         for (const f of filters) {
 
           // get options

@@ -6,9 +6,9 @@ import {BehaviorSubject, Observable} from 'rxjs';
 import {Config} from '../../../../../common/config/public/Config';
 import {SortingMethods} from '../../../../../common/entities/SortingMethods';
 import {PG2ConfMap} from '../../../../../common/PG2ConfMap';
-import {DirectoryContent, ContentService} from '../content.service';
+import {ContentService, DirectoryContent} from '../content.service';
 import {PhotoDTO} from '../../../../../common/entities/PhotoDTO';
-import {map, mergeMap} from 'rxjs/operators';
+import {map, switchMap} from 'rxjs/operators';
 import {SeededRandomService} from '../../../model/seededRandom.service';
 
 
@@ -57,7 +57,7 @@ export class GallerySortingService {
   }
 
   public applySorting(directoryContent: Observable<DirectoryContent>): Observable<DirectoryContent> {
-    return directoryContent.pipe(mergeMap((dirContent) => {
+    return directoryContent.pipe(switchMap((dirContent) => {
       return this.sorting.pipe(map((sorting: SortingMethods) => {
         if (!dirContent) {
           return dirContent;

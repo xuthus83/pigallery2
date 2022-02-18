@@ -40,94 +40,92 @@ export class GalleryNavigatorComponent {
     this.directoryContent = this.wrappedContent.pipe(map(c => c.directory ? c.directory : c.searchResult));
   }
 
-  get isDirectory(): Observable<boolean> {
-    return this.wrappedContent.pipe(map(c => !!c.directory));
+  get isDirectory(): boolean {
+    return !!this.galleryService.content.value.directory;
   }
 
-  get ItemCount(): Observable<number> {
-    return this.wrappedContent.pipe(map(c => c.directory ? c.directory.mediaCount : (c.searchResult ? c.searchResult.media.length : 0)));
+  get ItemCount(): number {
+    const c = this.galleryService.content.value;
+    return c.directory ? c.directory.mediaCount : (c.searchResult ? c.searchResult.media.length : 0);
   }
 
-  get Routes(): Observable<NavigatorPath[]> {
-    return this.wrappedContent.pipe(map((c) => {
-      if (!c.directory) {
-        return [];
+  get Routes(): NavigatorPath[] {
+
+    const c = this.galleryService.content.value;
+    if (!c.directory) {
+      return [];
+    }
+
+    const path = c.directory.path.replace(new RegExp('\\\\', 'g'), '/');
+
+    const dirs = path.split('/');
+    dirs.push(c.directory.name);
+
+    // removing empty strings
+    for (let i = 0; i < dirs.length; i++) {
+      if (!dirs[i] || 0 === dirs[i].length || '.' === dirs[i]) {
+        dirs.splice(i, 1);
+        i--;
       }
+    }
 
-      const path = c.directory.path.replace(new RegExp('\\\\', 'g'), '/');
+    const user = this.authService.user.value;
+    const arr: NavigatorPath[] = [];
 
-      const dirs = path.split('/');
-      dirs.push(c.directory.name);
+    // create root link
+    if (dirs.length === 0) {
+      arr.push({name: this.RootFolderName, route: null});
+    } else {
+      arr.push({name: this.RootFolderName, route: UserDTOUtils.isDirectoryPathAvailable('/', user.permissions) ? '/' : null});
+    }
 
-      // removing empty strings
-      for (let i = 0; i < dirs.length; i++) {
-        if (!dirs[i] || 0 === dirs[i].length || '.' === dirs[i]) {
-          dirs.splice(i, 1);
-          i--;
-        }
-      }
-
-      const user = this.authService.user.value;
-      const arr: NavigatorPath[] = [];
-
-      // create root link
-      if (dirs.length === 0) {
-        arr.push({name: this.RootFolderName, route: null});
+    // create rest navigation
+    dirs.forEach((name, index) => {
+      const route = dirs.slice(0, dirs.indexOf(name) + 1).join('/');
+      if (dirs.length - 1 === index) {
+        arr.push({name, route: null});
       } else {
-        arr.push({name: this.RootFolderName, route: UserDTOUtils.isDirectoryPathAvailable('/', user.permissions) ? '/' : null});
+        arr.push({name, route: UserDTOUtils.isDirectoryPathAvailable(route, user.permissions) ? route : null});
       }
+    });
 
-      // create rest navigation
-      dirs.forEach((name, index) => {
-        const route = dirs.slice(0, dirs.indexOf(name) + 1).join('/');
-        if (dirs.length - 1 === index) {
-          arr.push({name, route: null});
-        } else {
-          arr.push({name, route: UserDTOUtils.isDirectoryPathAvailable(route, user.permissions) ? route : null});
-        }
-      });
+    return arr;
 
-      return arr;
-    }));
   }
 
-  get DefaultSorting(): Observable<SortingMethods> {
-    return this.wrappedContent.pipe(map(c =>
-      this.sortingService.getDefaultSorting(c.directory)
-    ));
+  get DefaultSorting(): SortingMethods {
+    return this.sortingService.getDefaultSorting(this.galleryService.content.value.directory);
   }
 
   setSorting(sorting: SortingMethods): void {
     this.sortingService.setSorting(sorting);
   }
 
-  getDownloadZipLink(): Observable<string> {
-    return this.wrappedContent.pipe(map((c) => {
-      if (!c.directory) {
-        return null;
-      }
-      let queryParams = '';
-      Object.entries(this.queryService.getParams()).forEach(e => {
-        queryParams += e[0] + '=' + e[1];
-      });
-      return Utils.concatUrls(Config.Client.urlBase,
-        '/api/gallery/zip/',
-        c.directory.path, c.directory.name, '?' + queryParams);
-    }));
-
+  getDownloadZipLink(): string {
+    const c = this.galleryService.content.value;
+    if (!c.directory) {
+      return null;
+    }
+    let queryParams = '';
+    Object.entries(this.queryService.getParams()).forEach(e => {
+      queryParams += e[0] + '=' + e[1];
+    });
+    return Utils.concatUrls(Config.Client.urlBase,
+      '/api/gallery/zip/',
+      c.directory.path, c.directory.name, '?' + queryParams);
   }
 
-  getDirectoryFlattenSearchQuery(): Observable<string> {
-    return this.wrappedContent.pipe(map((c) => {
-      if (!c.directory) {
-        return null;
-      }
-      return JSON.stringify({
-        type: SearchQueryTypes.directory,
-        matchType: TextSearchQueryMatchTypes.like,
-        text: Utils.concatUrls('./', c.directory.path, c.directory.name)
-      } as TextSearch);
-    }));
+  getDirectoryFlattenSearchQuery(): string {
+    const c = this.galleryService.content.value;
+    if (!c.directory) {
+      return null;
+    }
+    return JSON.stringify({
+      type: SearchQueryTypes.directory,
+      matchType: TextSearchQueryMatchTypes.like,
+      text: Utils.concatUrls('./', c.directory.path, c.directory.name)
+    } as TextSearch);
+
   }
 
 }
