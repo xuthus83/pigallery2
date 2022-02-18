@@ -8,16 +8,22 @@ export enum FilterRenderType {
   enum = 1, range = 2
 }
 
-interface Filter {
+export interface Filter {
   name: string;
   mapFn: (m: PhotoDTO) => (string | number)[] | (string | number);
   renderType: FilterRenderType;
   isArrayValue?: boolean;
 }
 
-interface SelectedFilter {
+export interface FilterOption {
+  name: string;
+  count: number;
+  selected: boolean;
+}
+
+export interface SelectedFilter {
   filter: Filter;
-  options: { name: string, count: number, selected: boolean }[];
+  options: FilterOption[];
 }
 
 @Injectable()
@@ -34,6 +40,12 @@ export class FilterService {
       mapFn: (m: PhotoDTO): string[] => m.metadata.faces?.map(f => f.name),
       renderType: FilterRenderType.enum,
       isArrayValue: true,
+    },
+    {
+      name: $localize`Faces groups`,
+      mapFn: (m: PhotoDTO): string => m.metadata.faces?.map(f => f.name).sort().join(', '),
+      renderType: FilterRenderType.enum,
+      isArrayValue: false,
     },
     /*  {
         name: $localize`Date`,
@@ -77,10 +89,10 @@ export class FilterService {
       filter: this.AVAILABLE_FILTERS[1],
       options: []
     }, {
-      filter: this.AVAILABLE_FILTERS[4],
+      filter: this.AVAILABLE_FILTERS[5],
       options: []
     }, {
-      filter: this.AVAILABLE_FILTERS[2],
+      filter: this.AVAILABLE_FILTERS[3],
       options: []
     }
   ]);

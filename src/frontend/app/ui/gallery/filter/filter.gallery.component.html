@@ -11,14 +11,22 @@
         <ul class="list-group" *ngIf="filter.options.length > 0">
           <li
             *ngFor="let option of filter.options"
-            [class.unselected] = "!option.selected"
+            [class.unselected]="!option.selected"
             (click)="option.selected = !option.selected; filterService.onFilterChange()"
             class="filter-option list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-            {{option.name === undefined ? unknownText : option.name}}
+
+            <div>
+              <span (click)="toggleSelectOnly(filter, option, $event)"
+                    class="oi oi-pin" title="Select only this"
+                    [ngClass]="isOnlySelected(filter,option) ? 'filter-only-selected' : 'filter-pin'"
+                    i18n-title></span>
+              {{option.name === undefined ? unknownText : option.name}}
+            </div>
             <span class="badge badge-pill"
-                  [class.badge-primary] = "option.selected"
-                  [class.badge-secondary] = "!option.selected"
+                  [class.badge-primary]="option.selected"
+                  [class.badge-secondary]="!option.selected"
             >{{option.count}}</span>
+
 
           </li>
         </ul>
