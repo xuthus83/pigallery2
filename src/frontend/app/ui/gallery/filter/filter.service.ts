@@ -47,13 +47,11 @@ export class FilterService {
       renderType: FilterRenderType.enum,
       isArrayValue: false,
     },
-    /*  {
-        name: $localize`Date`,
-        mapFn: (m: PhotoDTO): number => m.metadata.creationDate,
-        renderType: FilterRenderType.date
-      },*/
-
-
+    {
+      name: $localize`Caption`,
+      mapFn: (m: PhotoDTO): string => m.metadata.caption,
+      renderType: FilterRenderType.enum
+    },
     {
       name: $localize`Rating`,
       mapFn: (m: PhotoDTO): number => m.metadata.rating,
@@ -62,6 +60,11 @@ export class FilterService {
     {
       name: $localize`Camera`,
       mapFn: (m: PhotoDTO): string => m.metadata.cameraData?.model,
+      renderType: FilterRenderType.enum
+    },
+    {
+      name: $localize`Lens`,
+      mapFn: (m: PhotoDTO): string => m.metadata.cameraData?.lens,
       renderType: FilterRenderType.enum
     },
     {
@@ -89,10 +92,10 @@ export class FilterService {
       filter: this.AVAILABLE_FILTERS[1],
       options: []
     }, {
-      filter: this.AVAILABLE_FILTERS[5],
+      filter: this.AVAILABLE_FILTERS[7],
       options: []
     }, {
-      filter: this.AVAILABLE_FILTERS[3],
+      filter: this.AVAILABLE_FILTERS[4],
       options: []
     }
   ]);
