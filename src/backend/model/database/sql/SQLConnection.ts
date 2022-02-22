@@ -22,6 +22,7 @@ import {DatabaseType, ServerDataBaseConfig, SQLLogLevel} from '../../../../commo
 import {AlbumBaseEntity} from './enitites/album/AlbumBaseEntity';
 import {SavedSearchEntity} from './enitites/album/SavedSearchEntity';
 import {NotificationManager} from '../../NotifocationManager';
+import {ActiveExperiments, Experiments} from '../../../../../benchmark/Experiments';
 
 const LOG_TAG = '[SQLConnection]';
 
@@ -34,6 +35,12 @@ export class SQLConnection {
   }
 
   public static async getConnection(): Promise<Connection> {
+    if (ActiveExperiments[Experiments.db.name] === Experiments.db.groups.sqlite3) {
+      Config.Server.Database.type = DatabaseType.sqlite;
+    }
+    if (ActiveExperiments[Experiments.db.name] === Experiments.db.groups.betterSqlite) {
+      Config.Server.Database.type = DatabaseType.better_sqlite3;
+    }
     if (this.connection == null) {
       const options: any = this.getDriver(Config.Server.Database);
       //   options.name = 'main';
@@ -222,6 +229,11 @@ export class SQLConnection {
       driver = {
         type: 'sqlite',
         database: path.join(ProjectPath.getAbsolutePath(config.dbFolder), config.sqlite.DBFileName)
+      };
+    } else if (config.type === DatabaseType.better_sqlite3) {
+      driver = {
+        type: 'better-sqlite3',
+        database: path.join(ProjectPath.getAbsolutePath(config.dbFolder), 'better_', config.sqlite.DBFileName)
       };
     }
     return driver;
