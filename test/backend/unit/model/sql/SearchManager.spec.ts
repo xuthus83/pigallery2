@@ -166,23 +166,28 @@ describe('SearchManager', (sqlHelper: DBTestHelper) => {
     expect((await sm.autocomplete('arch', SearchQueryTypes.any_text))).eql([
       new AutoCompleteItem('Research City', SearchQueryTypes.position)]);
 
-    Config.Client.Search.AutoComplete.maxItemsPerCategory = 99999;
+    Config.Client.Search.AutoComplete.targetItemsPerCategory = 99999;
     expect((await sm.autocomplete('wa', SearchQueryTypes.any_text))).to.deep.equalInAnyOrder([
       new AutoCompleteItem('star wars', SearchQueryTypes.keyword),
       new AutoCompleteItem('Anakin Skywalker', SearchQueryTypes.person),
       new AutoCompleteItem('Luke Skywalker', SearchQueryTypes.person),
       new AutoCompleteItem('wars dir', SearchQueryTypes.directory)]);
 
-    Config.Client.Search.AutoComplete.maxItemsPerCategory = 1;
+    Config.Client.Search.AutoComplete.targetItemsPerCategory = 1;
     expect((await sm.autocomplete('a', SearchQueryTypes.any_text))).to.deep.equalInAnyOrder([
       new AutoCompleteItem('Ajan Kloss', SearchQueryTypes.position),
+      new AutoCompleteItem('Tipoca City', SearchQueryTypes.position),
       new AutoCompleteItem('Amber stone', SearchQueryTypes.caption),
+      new AutoCompleteItem('Millennium falcon', SearchQueryTypes.caption),
       new AutoCompleteItem('star wars', SearchQueryTypes.keyword),
       new AutoCompleteItem('Anakin Skywalker', SearchQueryTypes.person),
+      new AutoCompleteItem('Obivan Kenobi', SearchQueryTypes.person),
       new AutoCompleteItem('Castilon', SearchQueryTypes.position),
       new AutoCompleteItem('Devaron', SearchQueryTypes.position),
+      new AutoCompleteItem('Jedha', SearchQueryTypes.position),
+      new AutoCompleteItem('wars dir', SearchQueryTypes.directory),
       new AutoCompleteItem('The Phantom Menace', SearchQueryTypes.directory)]);
-    Config.Client.Search.AutoComplete.maxItemsPerCategory = 5;
+    Config.Client.Search.AutoComplete.targetItemsPerCategory = 5;
 
     expect((await sm.autocomplete('sw', SearchQueryTypes.any_text))).to.deep.equalInAnyOrder([
       new AutoCompleteItem('sw1.jpg', SearchQueryTypes.file_name),
