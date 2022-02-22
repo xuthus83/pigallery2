@@ -87,17 +87,22 @@ export class Benchmark {
   }
 
   async run(RUNS: number): Promise<BenchmarkResult[]> {
-    const ret = [await this.runAnExperiment(RUNS)];
+    const ret: BenchmarkResult[] = [];
+    const r = async (): Promise<void> => {
+      if (this.beforeAll) {
+        await this.beforeAll();
+      }
+      ret.push(await this.runAnExperiment(RUNS));
+      if (this.afterAll) {
+        await this.afterAll();
+      }
+    };
+
+    await r();
     for (const exp of Object.values(Experiments)) {
       for (const group of Object.values(exp.groups)) {
         ActiveExperiments[exp.name] = group;
-        if (this.beforeAll) {
-          await this.beforeAll();
-        }
-        ret.push(await this.runAnExperiment(RUNS));
-        if (this.afterAll) {
-          await this.afterAll();
-        }
+        await r();
         ret[ret.length - 1].experiment = exp.name + '=' + group;
       }
       delete ActiveExperiments[exp.name];
