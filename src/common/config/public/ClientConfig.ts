@@ -15,7 +15,9 @@ export class AutoCompleteConfig {
   @ConfigProperty()
   enabled: boolean = true;
   @ConfigProperty({type: 'unsignedInt'})
-  maxItemsPerCategory: number = 5;
+  targetItemsPerCategory: number = 5;
+  @ConfigProperty({type: 'unsignedInt'})
+  maxItems: number = 30;
   @ConfigProperty({type: 'unsignedInt'})
   cacheTimeout: number = 1000 * 60 * 60;
 }

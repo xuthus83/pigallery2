@@ -64,39 +64,42 @@ export class SearchManager implements ISQLSearchManager {
 
     const connection = await SQLConnection.getConnection();
 
-    let result: AutoCompleteItem[] = [];
     const photoRepository = connection.getRepository(PhotoEntity);
     const mediaRepository = connection.getRepository(MediaEntity);
     const personRepository = connection.getRepository(PersonEntry);
     const directoryRepository = connection.getRepository(DirectoryEntity);
 
+    const partialResult: AutoCompleteItem[][] = [];
 
     if (type === SearchQueryTypes.any_text || type === SearchQueryTypes.keyword) {
+      const acList: AutoCompleteItem[] = [];
       (await photoRepository
         .createQueryBuilder('photo')
         .select('DISTINCT(photo.metadata.keywords)')
         .where('photo.metadata.keywords LIKE :text COLLATE ' + SQL_COLLATE, {text: '%' + text + '%'})
-        .limit(Config.Client.Search.AutoComplete.maxItemsPerCategory)
+        .limit(Config.Client.Search.AutoComplete.targetItemsPerCategory * 2)
         .getRawMany())
         .map((r): Array<string> => (r.metadataKeywords as string).split(',') as Array<string>)
         .forEach((keywords): void => {
-          result = result.concat(this.encapsulateAutoComplete(keywords
+          acList.push(...this.encapsulateAutoComplete(keywords
             .filter((k): boolean => k.toLowerCase().indexOf(text.toLowerCase()) !== -1), SearchQueryTypes.keyword));
         });
+      partialResult.push(acList);
     }
 
     if (type === SearchQueryTypes.any_text || type === SearchQueryTypes.person) {
-      result = result.concat(this.encapsulateAutoComplete((await personRepository
+      partialResult.push(this.encapsulateAutoComplete((await personRepository
         .createQueryBuilder('person')
         .select('DISTINCT(person.name)')
         .where('person.name LIKE :text COLLATE ' + SQL_COLLATE, {text: '%' + text + '%'})
-        .limit(Config.Client.Search.AutoComplete.maxItemsPerCategory)
-        .orderBy('person.name')
+        .limit(Config.Client.Search.AutoComplete.targetItemsPerCategory * 2)
+        .orderBy('person.count', 'DESC')
         .getRawMany())
         .map(r => r.name), SearchQueryTypes.person));
     }
 
     if (type === SearchQueryTypes.any_text || type === SearchQueryTypes.position || type === SearchQueryTypes.distance) {
+      const acList: AutoCompleteItem[] = [];
       (await photoRepository
         .createQueryBuilder('photo')
         .select('photo.metadata.positionData.country as country, ' +
@@ -105,45 +108,55 @@ export class SearchManager implements ISQLSearchManager {
         .orWhere('photo.metadata.positionData.state LIKE :text COLLATE ' + SQL_COLLATE, {text: '%' + text + '%'})
         .orWhere('photo.metadata.positionData.city LIKE :text COLLATE ' + SQL_COLLATE, {text: '%' + text + '%'})
         .groupBy('photo.metadata.positionData.country, photo.metadata.positionData.state, photo.metadata.positionData.city')
-        .limit(Config.Client.Search.AutoComplete.maxItemsPerCategory)
+        .limit(Config.Client.Search.AutoComplete.targetItemsPerCategory * 2)
         .getRawMany())
         .filter((pm): boolean => !!pm)
         .map((pm): Array<string> => [pm.city || '', pm.country || '', pm.state || ''] as Array<string>)
         .forEach((positions): void => {
-          result = result.concat(this.encapsulateAutoComplete(positions
+          acList.push(...this.encapsulateAutoComplete(positions
               .filter((p): boolean => p.toLowerCase().indexOf(text.toLowerCase()) !== -1),
             type === SearchQueryTypes.distance ? type : SearchQueryTypes.position));
         });
+      partialResult.push(acList);
     }
 
     if (type === SearchQueryTypes.any_text || type === SearchQueryTypes.file_name) {
-      result = result.concat(this.encapsulateAutoComplete((await mediaRepository
+      partialResult.push(this.encapsulateAutoComplete((await mediaRepository
         .createQueryBuilder('media')
         .select('DISTINCT(media.name)')
         .where('media.name LIKE :text COLLATE ' + SQL_COLLATE, {text: '%' + text + '%'})
-        .limit(Config.Client.Search.AutoComplete.maxItemsPerCategory)
+        .limit(Config.Client.Search.AutoComplete.targetItemsPerCategory * 2)
         .getRawMany())
         .map(r => r.name), SearchQueryTypes.file_name));
     }
 
     if (type === SearchQueryTypes.any_text || type === SearchQueryTypes.caption) {
-      result = result.concat(this.encapsulateAutoComplete((await photoRepository
+      partialResult.push(this.encapsulateAutoComplete((await photoRepository
         .createQueryBuilder('media')
         .select('DISTINCT(media.metadata.caption) as caption')
         .where('media.metadata.caption LIKE :text COLLATE ' + SQL_COLLATE, {text: '%' + text + '%'})
-        .limit(Config.Client.Search.AutoComplete.maxItemsPerCategory)
+        .limit(Config.Client.Search.AutoComplete.targetItemsPerCategory * 2)
         .getRawMany())
         .map(r => r.caption), SearchQueryTypes.caption));
     }
 
     if (type === SearchQueryTypes.any_text || type === SearchQueryTypes.directory) {
-      result = result.concat(this.encapsulateAutoComplete((await directoryRepository
+      partialResult.push(this.encapsulateAutoComplete((await directoryRepository
         .createQueryBuilder('dir')
         .select('DISTINCT(dir.name)')
         .where('dir.name LIKE :text COLLATE ' + SQL_COLLATE, {text: '%' + text + '%'})
-        .limit(Config.Client.Search.AutoComplete.maxItemsPerCategory)
+        .limit(Config.Client.Search.AutoComplete.targetItemsPerCategory * 2)
         .getRawMany())
         .map(r => r.name), SearchQueryTypes.directory));
+    }
+
+    let result: AutoCompleteItem[];
+
+    // if not enough items are available, load more from one category
+    if ([].concat(...partialResult).length < Config.Client.Search.AutoComplete.maxItems) {
+      result = [].concat(...(partialResult));
+    } else {
+      result = [].concat(...(partialResult.map(l => l.slice(0, Config.Client.Search.AutoComplete.targetItemsPerCategory))));
     }
 
     return SearchManager.autoCompleteItemsUnique(result);
