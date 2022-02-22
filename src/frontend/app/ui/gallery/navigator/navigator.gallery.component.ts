@@ -20,14 +20,14 @@ import {GallerySortingService} from './sorting.service';
 })
 export class GalleryNavigatorComponent {
 
-  SortingMethods = SortingMethods;
-  sortingMethodsType: { key: number; value: string }[] = [];
-  readonly config = Config;
+  public SortingMethods = SortingMethods;
+  public sortingMethodsType: { key: number; value: string }[] = [];
+  public readonly config = Config;
   // DefaultSorting = Config.Client.Other.defaultPhotoSortingMethod;
-  readonly SearchQueryTypes = SearchQueryTypes;
-  wrappedContent: Observable<ContentWrapperWithError>;
+  public readonly SearchQueryTypes = SearchQueryTypes;
+  public wrappedContent: Observable<ContentWrapperWithError>;
   public directoryContent: Observable<DirectoryContent>;
-  showFilters = false;
+  public showFilters = false;
   private readonly RootFolderName: string;
 
   constructor(private authService: AuthenticationService,
