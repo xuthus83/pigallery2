@@ -35,12 +35,6 @@ export class SQLConnection {
   }
 
   public static async getConnection(): Promise<Connection> {
-    if (ActiveExperiments[Experiments.db.name] === Experiments.db.groups.sqlite3) {
-      Config.Server.Database.type = DatabaseType.sqlite;
-    }
-    if (ActiveExperiments[Experiments.db.name] === Experiments.db.groups.betterSqlite) {
-      Config.Server.Database.type = DatabaseType.better_sqlite3;
-    }
     if (this.connection == null) {
       const options: any = this.getDriver(Config.Server.Database);
       //   options.name = 'main';
@@ -62,7 +56,7 @@ export class SQLConnection {
       if (Config.Server.Log.sqlLevel !== SQLLogLevel.none) {
         options.logging = SQLLogLevel[Config.Server.Log.sqlLevel];
       }
-      Logger.debug(LOG_TAG, 'Creating connection: ' + DatabaseType[Config.Server.Database.type]);
+      Logger.debug(LOG_TAG, 'Creating connection: ' + DatabaseType[Config.Server.Database.type], 'with:', options.type);
       this.connection = await this.createConnection(options);
       await SQLConnection.schemeSync(this.connection);
     }
@@ -160,7 +154,7 @@ export class SQLConnection {
   }
 
   private static async createConnection(options: ConnectionOptions): Promise<Connection> {
-    if (options.type === 'sqlite') {
+    if (options.type === 'sqlite' || options.type === 'better-sqlite3') {
       return await createConnection(options);
     }
     try {
@@ -226,14 +220,22 @@ export class SQLConnection {
         charset: 'utf8mb4'
       };
     } else if (config.type === DatabaseType.sqlite) {
-      driver = {
-        type: 'sqlite',
-        database: path.join(ProjectPath.getAbsolutePath(config.dbFolder), config.sqlite.DBFileName)
-      };
+
+      if (ActiveExperiments[Experiments.db.name] === Experiments.db.groups.betterSqlite) {
+        driver = {
+          type: 'better-sqlite3',
+          database: path.join(ProjectPath.getAbsolutePath(config.dbFolder), 'better_' + config.sqlite.DBFileName)
+        };
+      } else {
+        driver = {
+          type: 'sqlite',
+          database: path.join(ProjectPath.getAbsolutePath(config.dbFolder), config.sqlite.DBFileName)
+        };
+      }
     } else if (config.type === DatabaseType.better_sqlite3) {
       driver = {
         type: 'better-sqlite3',
-        database: path.join(ProjectPath.getAbsolutePath(config.dbFolder), 'better_', config.sqlite.DBFileName)
+        database: path.join(ProjectPath.getAbsolutePath(config.dbFolder), 'better_' + config.sqlite.DBFileName)
       };
     }
     return driver;
