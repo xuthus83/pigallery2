@@ -10,7 +10,7 @@ import {SortingMethods} from '../../entities/SortingMethods';
 import {UserRoles} from '../../entities/UserDTO';
 
 export enum DatabaseType {
-  memory = 1, mysql = 2, sqlite = 3, better_sqlite3
+  memory = 1, mysql = 2, sqlite = 3
 }
 
 export enum LogLevel {

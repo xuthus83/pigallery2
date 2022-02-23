@@ -22,7 +22,6 @@ import {DatabaseType, ServerDataBaseConfig, SQLLogLevel} from '../../../../commo
 import {AlbumBaseEntity} from './enitites/album/AlbumBaseEntity';
 import {SavedSearchEntity} from './enitites/album/SavedSearchEntity';
 import {NotificationManager} from '../../NotifocationManager';
-import {ActiveExperiments, Experiments} from '../../../../../benchmark/Experiments';
 
 const LOG_TAG = '[SQLConnection]';
 
@@ -56,7 +55,7 @@ export class SQLConnection {
       if (Config.Server.Log.sqlLevel !== SQLLogLevel.none) {
         options.logging = SQLLogLevel[Config.Server.Log.sqlLevel];
       }
-      Logger.debug(LOG_TAG, 'Creating connection: ' + DatabaseType[Config.Server.Database.type], 'with:', options.type);
+      Logger.debug(LOG_TAG, 'Creating connection: ' + DatabaseType[Config.Server.Database.type], ', with driver:', options.type);
       this.connection = await this.createConnection(options);
       await SQLConnection.schemeSync(this.connection);
     }
@@ -220,23 +219,11 @@ export class SQLConnection {
         charset: 'utf8mb4'
       };
     } else if (config.type === DatabaseType.sqlite) {
-
-      if (ActiveExperiments[Experiments.db.name] === Experiments.db.groups.betterSqlite) {
-        driver = {
-          type: 'better-sqlite3',
-          database: path.join(ProjectPath.getAbsolutePath(config.dbFolder), 'better_' + config.sqlite.DBFileName)
-        };
-      } else {
-        driver = {
-          type: 'sqlite',
-          database: path.join(ProjectPath.getAbsolutePath(config.dbFolder), config.sqlite.DBFileName)
-        };
-      }
-    } else if (config.type === DatabaseType.better_sqlite3) {
       driver = {
         type: 'better-sqlite3',
-        database: path.join(ProjectPath.getAbsolutePath(config.dbFolder), 'better_' + config.sqlite.DBFileName)
+        database: path.join(ProjectPath.getAbsolutePath(config.dbFolder), config.sqlite.DBFileName)
       };
+
     }
     return driver;
   }
