@@ -55,7 +55,7 @@ export class SQLConnection {
       if (Config.Server.Log.sqlLevel !== SQLLogLevel.none) {
         options.logging = SQLLogLevel[Config.Server.Log.sqlLevel];
       }
-      Logger.debug(LOG_TAG, 'Creating connection: ' + DatabaseType[Config.Server.Database.type]);
+      Logger.debug(LOG_TAG, 'Creating connection: ' + DatabaseType[Config.Server.Database.type], ', with driver:', options.type);
       this.connection = await this.createConnection(options);
       await SQLConnection.schemeSync(this.connection);
     }
@@ -153,7 +153,7 @@ export class SQLConnection {
   }
 
   private static async createConnection(options: ConnectionOptions): Promise<Connection> {
-    if (options.type === 'sqlite') {
+    if (options.type === 'sqlite' || options.type === 'better-sqlite3') {
       return await createConnection(options);
     }
     try {
@@ -220,9 +220,10 @@ export class SQLConnection {
       };
     } else if (config.type === DatabaseType.sqlite) {
       driver = {
-        type: 'sqlite',
+        type: 'better-sqlite3',
         database: path.join(ProjectPath.getAbsolutePath(config.dbFolder), config.sqlite.DBFileName)
       };
+
     }
     return driver;
   }

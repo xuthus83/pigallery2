@@ -62,17 +62,23 @@ export class Benchmark {
   request: any;
   beforeEach: () => Promise<any>;
   afterEach: () => Promise<any>;
+  beforeAll: () => Promise<any>;
+  afterAll: () => Promise<any>;
   private readonly bmExpressApp: BMExpressApp;
 
 
   constructor(name: string,
               request: any = {},
               beforeEach?: () => Promise<any>,
-              afterEach?: () => Promise<any>) {
+              afterEach?: () => Promise<any>,
+              beforeAll?: () => Promise<any>,
+              afterAll?: () => Promise<any>) {
     this.name = name;
     this.request = request;
     this.beforeEach = beforeEach;
     this.afterEach = afterEach;
+    this.beforeAll = beforeAll;
+    this.afterAll = afterAll;
     this.bmExpressApp = new BMExpressApp(this);
   }
 
@@ -81,11 +87,22 @@ export class Benchmark {
   }
 
   async run(RUNS: number): Promise<BenchmarkResult[]> {
-    const ret = [await this.runAnExperiment(RUNS)];
+    const ret: BenchmarkResult[] = [];
+    const r = async (): Promise<void> => {
+      if (this.beforeAll) {
+        await this.beforeAll();
+      }
+      ret.push(await this.runAnExperiment(RUNS));
+      if (this.afterAll) {
+        await this.afterAll();
+      }
+    };
+
+    await r();
     for (const exp of Object.values(Experiments)) {
       for (const group of Object.values(exp.groups)) {
         ActiveExperiments[exp.name] = group;
-        ret.push(await this.runAnExperiment(RUNS));
+        await r();
         ret[ret.length - 1].experiment = exp.name + '=' + group;
       }
       delete ActiveExperiments[exp.name];

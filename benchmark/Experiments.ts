@@ -1,8 +1,8 @@
 export const Experiments = {
-  loadPhotoMetadata: {
-    name: 'loadPhotoMetadata',
+  db: {
+    name: 'SQlite',
     groups: {
-      exifr: 'exifr', exifrAll: 'exifrAll', exifrSelected: 'exifrSelected', exifreader: 'exifreader', exiftool: 'exiftool'
+      betterSqlite: 'better-sqlite'
     }
   }
 };

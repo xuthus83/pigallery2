@@ -84,10 +84,13 @@ export class BenchmarkRunner {
   }
 
   async bmSaveDirectory(): Promise<BenchmarkResult[]> {
-    await this.init();
-    await this.resetDB();
     const dir = await DiskMangerWorker.scanDirectory(this.biggestDirPath);
-    const bm = new Benchmark('Saving directory to DB', null, (): Promise<void> => this.resetDB());
+    const bm = new Benchmark('Saving directory to DB', null,
+      (): Promise<void> => this.resetDB(), null,
+      async (): Promise<void> => {
+        await this.init();
+        await this.setupDB();
+      });
     bm.addAStep({
       name: 'Saving directory to DB',
       fn: (): Promise<void> => {
@@ -100,7 +103,11 @@ export class BenchmarkRunner {
 
   async bmScanDirectory(): Promise<BenchmarkResult[]> {
     await this.init();
-    const bm = new Benchmark('Scanning directory');
+    const bm = new Benchmark('Scanning directory', {}, null,
+      null,
+      async (): Promise<void> => {
+        await this.init();
+      });
     bm.addAStep({
       name: 'Scanning directory',
       fn: async (): Promise<ContentWrapper> => new ContentWrapper(await DiskMangerWorker.scanDirectory(this.biggestDirPath))
@@ -109,27 +116,31 @@ export class BenchmarkRunner {
   }
 
   async bmListDirectory(): Promise<BenchmarkResult[]> {
-    Config.Server.Indexing.reIndexingSensitivity = ReIndexingSensitivity.low;
-    await this.init();
-    await this.setupDB();
     const req = Utils.clone(this.requestTemplate);
     req.params.directory = this.biggestDirPath;
     const bm = new Benchmark('List directory', req,
       async (): Promise<void> => {
         await ObjectManagers.reset();
         await ObjectManagers.InitSQLManagers();
+      }, null,
+      async (): Promise<void> => {
+        Config.Server.Indexing.reIndexingSensitivity = ReIndexingSensitivity.low;
+        await this.init();
+        await this.setupDB();
       });
     BMGalleryRouter.addDirectoryList(bm.BmExpressApp);
     return await bm.run(this.RUNS);
   }
 
   async bmListPersons(): Promise<BenchmarkResult[]> {
-    await this.setupDB();
-    Config.Server.Indexing.reIndexingSensitivity = ReIndexingSensitivity.low;
     const bm = new Benchmark('Listing Faces', Utils.clone(this.requestTemplate), async (): Promise<void> => {
-      await ObjectManagers.reset();
-      await ObjectManagers.InitSQLManagers();
-    });
+        await ObjectManagers.reset();
+        await ObjectManagers.InitSQLManagers();
+      }, null,
+      async (): Promise<void> => {
+        Config.Server.Indexing.reIndexingSensitivity = ReIndexingSensitivity.low;
+        await this.setupDB();
+      });
     BMPersonRouter.addGetPersons(bm.BmExpressApp);
     return await bm.run(this.RUNS);
   }
@@ -234,7 +245,10 @@ export class BenchmarkRunner {
       const req = Utils.clone(this.requestTemplate);
       req.params.searchQueryDTO = JSON.stringify(entry.query);
 
-      const bm = new Benchmark('Searching for `' + entry.description + '`', req);
+      const bm = new Benchmark('Searching for `' + entry.description + '`', req, null, null,
+        async (): Promise<void> => {
+          await this.setupDB();
+        });
       BMGalleryRouter.addSearch(bm.BmExpressApp);
 
       results.push({result: await bm.run(this.RUNS), searchQuery: entry.query});
@@ -244,10 +258,12 @@ export class BenchmarkRunner {
 
 
   async bmAutocomplete(text: string): Promise<BenchmarkResult[]> {
-    await this.setupDB();
     const req = Utils.clone(this.requestTemplate);
     req.params.text = text;
-    const bm = new Benchmark('Auto complete for `' + text + '`', req);
+    const bm = new Benchmark('Auto complete for `' + text + '`', req, null, null,
+      async (): Promise<void> => {
+        await this.setupDB();
+      });
     BMGalleryRouter.addAutoComplete(bm.BmExpressApp);
     return await bm.run(this.RUNS);
   }
