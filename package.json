@@ -21,8 +21,6 @@
     "build-stats": "ng build  --stats-json",
     "analyze": "webpack-bundle-analyzer dist/en/stats.json",
     "merge-new-translation": "gulp merge-new-translation",
-    "merge-translation-only": "gulp merge-translation-only",
-    "add-translation": "gulp add-translation",
     "generate-man": "gulp generate-man"
   },
   "repository": {

@@ -227,11 +227,6 @@ gulp.task('extract-locale', async (cb): Promise<any> => {
       console.log(stdout);
       console.error(stderr);
     }
-    {
-      const {stdout, stderr} = await execPr('ngx-extractor -i src/frontend/**/*.ts -f xlf --out-file locale.source.xlf');
-      console.log(stdout);
-      console.error(stderr);
-    }
     cb();
   } catch (e) {
     console.error(e);
