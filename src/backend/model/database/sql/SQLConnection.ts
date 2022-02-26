@@ -96,6 +96,9 @@ export class SQLConnection {
   public static async init(): Promise<void> {
     const connection = await this.getConnection();
 
+    if (Config.Client.authenticationRequired !== true) {
+      return;
+    }
     // Adding enforced users to the db
     const userRepository = connection.getRepository(UserEntity);
     if (Array.isArray(Config.Server.Database.enforcedUsers) &&
