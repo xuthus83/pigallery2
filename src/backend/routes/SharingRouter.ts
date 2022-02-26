@@ -4,6 +4,7 @@ import {RenderingMWs} from '../middlewares/RenderingMWs';
 import {SharingMWs} from '../middlewares/SharingMWs';
 import * as express from 'express';
 import {QueryParams} from '../../common/QueryParams';
+import {ServerTimingMWs} from '../middlewares/ServerTimingMWs';
 
 export class SharingRouter {
   public static route(app: express.Express): void {
@@ -20,6 +21,7 @@ export class SharingRouter {
     app.post('/api/share/login',
       AuthenticationMWs.inverseAuthenticate,
       AuthenticationMWs.shareLogin,
+      ServerTimingMWs.addServerTiming,
       RenderingMWs.renderSessionUser
     );
   }
@@ -29,6 +31,7 @@ export class SharingRouter {
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.LimitedGuest),
       SharingMWs.getSharing,
+      ServerTimingMWs.addServerTiming,
       RenderingMWs.renderSharing
     );
   }
@@ -38,6 +41,7 @@ export class SharingRouter {
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.User),
       SharingMWs.createSharing,
+      ServerTimingMWs.addServerTiming,
       RenderingMWs.renderSharing
     );
   }
@@ -47,6 +51,7 @@ export class SharingRouter {
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.User),
       SharingMWs.updateSharing,
+      ServerTimingMWs.addServerTiming,
       RenderingMWs.renderSharing
     );
   }
@@ -57,6 +62,7 @@ export class SharingRouter {
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Admin),
       SharingMWs.deleteSharing,
+      ServerTimingMWs.addServerTiming,
       RenderingMWs.renderResult
     );
   }
@@ -66,6 +72,7 @@ export class SharingRouter {
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.User),
       SharingMWs.listSharing,
+      ServerTimingMWs.addServerTiming,
       RenderingMWs.renderSharingList
     );
   }

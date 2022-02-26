@@ -8,6 +8,7 @@ import {AuthenticationMWs} from '../middlewares/user/AuthenticationMWs';
 import {CookieNames} from '../../common/CookieNames';
 import {ErrorCodes, ErrorDTO} from '../../common/entities/Error';
 import {UserDTO} from '../../common/entities/UserDTO';
+import {ServerTimeEntry} from '../middlewares/ServerTimingMWs';
 
 declare global {
   namespace Express {
@@ -15,6 +16,7 @@ declare global {
       locale?: string;
       localePath?: string;
       tpl?: any;
+      timing?: { [key: string]: ServerTimeEntry } ;
     }
 
     interface Response {
@@ -92,13 +94,13 @@ export class PublicRouter {
       });
 
     app.get('/heartbeat',
-      (req: Request, res: Response, next: NextFunction) => {
+      (req: Request, res: Response) => {
         res.sendStatus(200);
       }
     );
 
     app.get('/manifest.json',
-      (req: Request, res: Response, next: NextFunction) => {
+      (req: Request, res: Response) => {
         res.send({
           name: Config.Client.applicationTitle,
           icons: [

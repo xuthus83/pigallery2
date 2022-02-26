@@ -10,9 +10,12 @@ import {ThumbnailSourceType} from '../../model/threading/PhotoWorker';
 import {MediaDTO} from '../../../common/entities/MediaDTO';
 import {PhotoProcessing} from '../../model/fileprocessing/PhotoProcessing';
 import {PersonWithSampleRegion} from '../../../common/entities/PersonDTO';
+import {ServerTime} from '../ServerTimingMWs';
 
 
 export class ThumbnailGeneratorMWs {
+
+  @ServerTime('2.th', 'Thumbnail decoration')
   public static async addThumbnailInformation(req: Request, res: Response, next: NextFunction): Promise<any> {
     if (!req.resultPipe) {
       return next();

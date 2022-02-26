@@ -8,6 +8,7 @@ import {ThumbnailSourceType} from '../model/threading/PhotoWorker';
 import {VersionMWs} from '../middlewares/VersionMWs';
 import {SupportedFormats} from '../../common/SupportedFormats';
 import {PhotoConverterMWs} from '../middlewares/thumbnail/PhotoConverterMWs';
+import {ServerTimingMWs} from '../middlewares/ServerTimingMWs';
 
 export class GalleryRouter {
   public static route(app: Express): void {
@@ -41,6 +42,7 @@ export class GalleryRouter {
       GalleryMWs.listDirectory,
       ThumbnailGeneratorMWs.addThumbnailInformation,
       GalleryMWs.cleanUpGalleryResults,
+      ServerTimingMWs.addServerTiming,
       RenderingMWs.renderResult
     );
   }
@@ -53,6 +55,7 @@ export class GalleryRouter {
       AuthenticationMWs.authorisePath('directory', true),
 
       // specific part
+      ServerTimingMWs.addServerTiming,
       GalleryMWs.zipDirectory
     );
   }
@@ -66,6 +69,7 @@ export class GalleryRouter {
 
       // specific part
       GalleryMWs.loadFile,
+      ServerTimingMWs.addServerTiming,
       RenderingMWs.renderFile
     );
   }
@@ -80,6 +84,7 @@ export class GalleryRouter {
       // specific part
       GalleryMWs.loadFile,
       PhotoConverterMWs.convertPhoto,
+      ServerTimingMWs.addServerTiming,
       RenderingMWs.renderFile
     );
   }
@@ -93,6 +98,7 @@ export class GalleryRouter {
 
       // specific part
       GalleryMWs.loadFile,
+      ServerTimingMWs.addServerTiming,
       RenderingMWs.renderFile
     );
   }
@@ -107,6 +113,7 @@ export class GalleryRouter {
       // specific part
       GalleryMWs.loadFile,
       GalleryMWs.loadBestFitVideo,
+      ServerTimingMWs.addServerTiming,
       RenderingMWs.renderFile
     );
   }
@@ -120,6 +127,7 @@ export class GalleryRouter {
 
       // specific part
       GalleryMWs.loadFile,
+      ServerTimingMWs.addServerTiming,
       RenderingMWs.renderFile
     );
   }
@@ -134,6 +142,7 @@ export class GalleryRouter {
       // specific part
       GalleryMWs.getRandomImage,
       GalleryMWs.loadFile,
+      ServerTimingMWs.addServerTiming,
       RenderingMWs.renderFile
     );
   }
@@ -148,6 +157,7 @@ export class GalleryRouter {
       // specific part
       GalleryMWs.loadFile,
       ThumbnailGeneratorMWs.generateThumbnailFactory(ThumbnailSourceType.Photo),
+      ServerTimingMWs.addServerTiming,
       RenderingMWs.renderFile
     );
   }
@@ -162,6 +172,7 @@ export class GalleryRouter {
       // specific part
       GalleryMWs.loadFile,
       ThumbnailGeneratorMWs.generateThumbnailFactory(ThumbnailSourceType.Video),
+      ServerTimingMWs.addServerTiming,
       RenderingMWs.renderFile
     );
   }
@@ -177,6 +188,7 @@ export class GalleryRouter {
       // specific part
       GalleryMWs.loadFile,
       ThumbnailGeneratorMWs.generateIconFactory(ThumbnailSourceType.Video),
+      ServerTimingMWs.addServerTiming,
       RenderingMWs.renderFile
     );
   }
@@ -191,6 +203,7 @@ export class GalleryRouter {
       // specific part
       GalleryMWs.loadFile,
       ThumbnailGeneratorMWs.generateIconFactory(ThumbnailSourceType.Photo),
+      ServerTimingMWs.addServerTiming,
       RenderingMWs.renderFile
     );
   }
@@ -206,6 +219,7 @@ export class GalleryRouter {
       GalleryMWs.search,
       ThumbnailGeneratorMWs.addThumbnailInformation,
       GalleryMWs.cleanUpGalleryResults,
+      ServerTimingMWs.addServerTiming,
       RenderingMWs.renderResult
     );
   }
@@ -220,6 +234,7 @@ export class GalleryRouter {
 
       // specific part
       GalleryMWs.autocomplete,
+      ServerTimingMWs.addServerTiming,
       RenderingMWs.renderResult
     );
   }

@@ -161,6 +161,8 @@ export class ServerLogConfig {
   level: LogLevel = LogLevel.info;
   @ConfigProperty({type: SQLLogLevel})
   sqlLevel: SQLLogLevel = SQLLogLevel.error;
+  @ConfigProperty()
+  logServerTiming: boolean = false;
 }
 
 

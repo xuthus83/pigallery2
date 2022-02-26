@@ -18,10 +18,12 @@ import {VideoProcessing} from '../model/fileprocessing/VideoProcessing';
 import {SearchQueryDTO, SearchQueryTypes} from '../../common/entities/SearchQueryDTO';
 import {LocationLookupException} from '../exceptions/LocationLookupException';
 import {SupportedFormats} from '../../common/SupportedFormats';
+import {ServerTime} from './ServerTimingMWs';
 
 export class GalleryMWs {
 
 
+  @ServerTime('1.db', 'List Directory')
   public static async listDirectory(req: Request, res: Response, next: NextFunction): Promise<any> {
     const directoryName = req.params.directory || '/';
     const absoluteDirectoryName = path.join(ProjectPath.ImageFolder, directoryName);
@@ -57,6 +59,7 @@ export class GalleryMWs {
     }
   }
 
+  @ServerTime('1.zip', 'Zip Directory')
   public static async zipDirectory(req: Request, res: Response, next: NextFunction): Promise<any> {
     if (Config.Client.Other.enableDownloadZip === false) {
       return next();
@@ -108,6 +111,7 @@ export class GalleryMWs {
     }
   }
 
+  @ServerTime('3.cleanUp', 'Clean up')
   public static cleanUpGalleryResults(req: Request, res: Response, next: NextFunction): any {
     if (!req.resultPipe) {
       return next();
@@ -203,6 +207,7 @@ export class GalleryMWs {
   }
 
 
+  @ServerTime('1.db', 'Search')
   public static async search(req: Request, res: Response, next: NextFunction): Promise<any> {
     if (Config.Client.Search.enabled === false || !(req.params.searchQueryDTO)) {
       return next();
@@ -225,6 +230,7 @@ export class GalleryMWs {
   }
 
 
+  @ServerTime('1.db', 'Autocomplete')
   public static async autocomplete(req: Request, res: Response, next: NextFunction): Promise<any> {
     if (Config.Client.Search.AutoComplete.enabled === false) {
       return next();

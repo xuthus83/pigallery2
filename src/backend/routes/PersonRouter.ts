@@ -6,6 +6,7 @@ import {PersonMWs} from '../middlewares/PersonMWs';
 import {ThumbnailGeneratorMWs} from '../middlewares/thumbnail/ThumbnailGeneratorMWs';
 import {VersionMWs} from '../middlewares/VersionMWs';
 import {Config} from '../../common/config/private/Config';
+import {ServerTimingMWs} from '../middlewares/ServerTimingMWs';
 
 export class PersonRouter {
   public static route(app: Express): void {
@@ -25,6 +26,7 @@ export class PersonRouter {
 
       // specific part
       PersonMWs.updatePerson,
+      ServerTimingMWs.addServerTiming,
       RenderingMWs.renderResult
     );
   }
@@ -41,6 +43,7 @@ export class PersonRouter {
       // PersonMWs.addSamplePhotoForAll,
       ThumbnailGeneratorMWs.addThumbnailInfoForPersons,
       PersonMWs.cleanUpPersonResults,
+      ServerTimingMWs.addServerTiming,
       RenderingMWs.renderResult
     );
   }
@@ -55,6 +58,7 @@ export class PersonRouter {
       // specific part
       PersonMWs.getPerson,
       ThumbnailGeneratorMWs.generatePersonThumbnail,
+      ServerTimingMWs.addServerTiming,
       RenderingMWs.renderFile
     );
   }

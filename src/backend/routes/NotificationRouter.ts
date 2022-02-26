@@ -4,6 +4,7 @@ import {RenderingMWs} from '../middlewares/RenderingMWs';
 import {NotificationMWs} from '../middlewares/NotificationMWs';
 import {Express} from 'express';
 import {VersionMWs} from '../middlewares/VersionMWs';
+import {ServerTimingMWs} from '../middlewares/ServerTimingMWs';
 
 export class NotificationRouter {
   public static route(app: Express): void {
@@ -17,6 +18,7 @@ export class NotificationRouter {
       AuthenticationMWs.authorise(UserRoles.Guest),
       VersionMWs.injectGalleryVersion,
       NotificationMWs.list,
+      ServerTimingMWs.addServerTiming,
       RenderingMWs.renderResult
     );
   }

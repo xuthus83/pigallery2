@@ -4,6 +4,7 @@ import {RenderingMWs} from '../middlewares/RenderingMWs';
 import {UserRoles} from '../../common/entities/UserDTO';
 import {VersionMWs} from '../middlewares/VersionMWs';
 import {AlbumMWs} from '../middlewares/AlbumMWs';
+import {ServerTimingMWs} from '../middlewares/ServerTimingMWs';
 
 export class AlbumRouter {
   public static route(app: Express): void {
@@ -23,6 +24,7 @@ export class AlbumRouter {
 
       // specific part
       AlbumMWs.listAlbums,
+      ServerTimingMWs.addServerTiming,
       RenderingMWs.renderResult
     );
   }
@@ -36,6 +38,7 @@ export class AlbumRouter {
 
       // specific part
       AlbumMWs.deleteAlbum,
+      ServerTimingMWs.addServerTiming,
       RenderingMWs.renderResult
     );
   }
@@ -49,6 +52,7 @@ export class AlbumRouter {
 
       // specific part
       AlbumMWs.createSavedSearch,
+      ServerTimingMWs.addServerTiming,
       RenderingMWs.renderResult
     );
   }

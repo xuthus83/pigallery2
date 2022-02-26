@@ -4,6 +4,7 @@ import {UserRoles} from '../../common/entities/UserDTO';
 import {AuthenticationMWs} from '../middlewares/user/AuthenticationMWs';
 import {UserRequestConstrainsMWs} from '../middlewares/user/UserRequestConstrainsMWs';
 import {RenderingMWs} from '../middlewares/RenderingMWs';
+import {ServerTimingMWs} from '../middlewares/ServerTimingMWs';
 
 export class UserRouter {
   public static route(app: Express): void {
@@ -23,6 +24,7 @@ export class UserRouter {
     app.post('/api/user/login',
       AuthenticationMWs.inverseAuthenticate,
       AuthenticationMWs.login,
+      ServerTimingMWs.addServerTiming,
       RenderingMWs.renderSessionUser
     );
   }
@@ -30,6 +32,7 @@ export class UserRouter {
   private static addLogout(app: Express): void {
     app.post('/api/user/logout',
       AuthenticationMWs.logout,
+      ServerTimingMWs.addServerTiming,
       RenderingMWs.renderOK
     );
   }
@@ -38,6 +41,7 @@ export class UserRouter {
   private static addGetSessionUser(app: Express): void {
     app.get('/api/user/me',
       AuthenticationMWs.authenticate,
+      ServerTimingMWs.addServerTiming,
       RenderingMWs.renderSessionUser
     );
   }
@@ -48,6 +52,7 @@ export class UserRouter {
       AuthenticationMWs.authenticate,
       UserRequestConstrainsMWs.forceSelfRequest,
       UserMWs.changePassword,
+      ServerTimingMWs.addServerTiming,
       RenderingMWs.renderOK
     );
   }
@@ -58,6 +63,7 @@ export class UserRouter {
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Admin),
       UserMWs.createUser,
+      ServerTimingMWs.addServerTiming,
       RenderingMWs.renderOK
     );
   }
@@ -68,6 +74,7 @@ export class UserRouter {
       AuthenticationMWs.authorise(UserRoles.Admin),
       UserRequestConstrainsMWs.notSelfRequest,
       UserMWs.deleteUser,
+      ServerTimingMWs.addServerTiming,
       RenderingMWs.renderOK
     );
   }
@@ -78,6 +85,7 @@ export class UserRouter {
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Admin),
       UserMWs.listUsers,
+      ServerTimingMWs.addServerTiming,
       RenderingMWs.renderResult
     );
   }
@@ -88,6 +96,7 @@ export class UserRouter {
       AuthenticationMWs.authorise(UserRoles.Admin),
       UserRequestConstrainsMWs.notSelfRequestOr2Admins,
       UserMWs.changeRole,
+      ServerTimingMWs.addServerTiming,
       RenderingMWs.renderOK
     );
   }
