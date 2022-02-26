@@ -42,6 +42,8 @@ export const ServerTime = (id: string, name: string) => {
 };
 
 
+const forcedDebug = process.env.NODE_ENV === 'debug';
+
 export class ServerTimingMWs {
 
 
@@ -49,8 +51,8 @@ export class ServerTimingMWs {
    * Add server timing
    */
   public static async addServerTiming(req: Request, res: Response, next: NextFunction): Promise<any> {
-    if (Config.Server.Log.logServerTiming === false || !req.timing) {
-      next();
+    if ((Config.Server.Log.logServerTiming === false && !forcedDebug) || !req.timing) {
+      return next();
     }
     const l = Object.entries(req.timing).filter(e => e[1].endTime).map(e => `${e[0]};dur=${e[1].endTime};desc="${e[1].name}"`);
     res.header('Server-Timing', l.join(', '));
