@@ -19,6 +19,10 @@
             "baseHref": "",
             "translation": "src/frontend/translate/messages.cn.xlf"
           },
+          "de": {
+            "baseHref": "",
+            "translation": "src/frontend/translate/messages.de.xlf"
+          },
           "es": {
             "baseHref": "",
             "translation": "src/frontend/translate/messages.es.xlf"
