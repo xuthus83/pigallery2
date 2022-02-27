@@ -35,6 +35,10 @@
             "baseHref": "",
             "translation": "src/frontend/translate/messages.hu.xlf"
           },
+          "id": {
+            "baseHref": "",
+            "translation": "src/frontend/translate/messages.id.xlf"
+          },
           "it": {
             "baseHref": "",
             "translation": "src/frontend/translate/messages.it.xlf"
