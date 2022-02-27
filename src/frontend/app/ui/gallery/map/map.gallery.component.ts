@@ -30,6 +30,7 @@ export class GalleryMapComponent implements OnChanges, IRenderable {
     doubleClickZoom: false,
     boxZoom: false,
     zoom: 0,
+    center: [0, 0]
   };
   markerLayer: Marker[] = [];
 
@@ -42,9 +43,11 @@ export class GalleryMapComponent implements OnChanges, IRenderable {
 
   onMapReady(map: Map): void {
     this.leafletMap = map;
-    this.leafletMap.setView(this.markerLayer[0].getLatLng(), 99);
-    this.leafletMap.fitBounds(this.markerLayer.map((mp): [number, number] =>
-      [mp.getLatLng().lat, mp.getLatLng().lng] as [number, number]));
+    if (this.markerLayer.length > 0) {
+      this.leafletMap.setView(this.markerLayer[0].getLatLng(), 99);
+      this.leafletMap.fitBounds(this.markerLayer.map((mp): [number, number] =>
+        [mp.getLatLng().lat, mp.getLatLng().lng] as [number, number]));
+    }
     this.leafletMap.setZoom(0);
   }
 

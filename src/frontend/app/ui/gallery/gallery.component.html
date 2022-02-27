@@ -59,7 +59,7 @@
             class="oi oi-chevron-{{blogOpen ? 'top' : 'bottom'}}"></span>
           </button>
         </div>
-        <app-gallery-map *ngIf="isPhotoWithLocation && mapEnabled"
+        <app-gallery-map *ngIf="(isPhotoWithLocation || (directoryContent?.metaFile | gpxFiles)?.length > 0) && mapEnabled"
                          [photos]="directoryContent?.media | photosOnly"
                          [gpxFiles]="directoryContent?.metaFile | gpxFiles"></app-gallery-map>
       </div>

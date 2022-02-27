@@ -354,6 +354,9 @@ export class GalleryMapLightboxComponent implements OnChanges {
   }
 
   private centerMap(): void {
+    if (this.mapLayersControlOption.overlays.Photos.getLayers().length === 0) {
+      return;
+    }
     this.leafletMap.fitBounds(
       latLngBounds((this.mapLayersControlOption.overlays.Photos.getLayers() as Marker[])
         .map(m => m.getLatLng())
