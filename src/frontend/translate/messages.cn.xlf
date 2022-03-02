@@ -64,7 +64,7 @@
           <context context-type="sourcefile">src/frontend/app/model/backendtext.service.ts</context>
           <context context-type="linenumber">39</context>
         </context-group>
-        <target>Preview Filling</target>
+        <target>预览填充</target>
       </trans-unit>
       <trans-unit id="1450675569154063839" datatype="html">
         <source>Database Reset</source>
@@ -159,7 +159,7 @@
           <context context-type="sourcefile">src/frontend/app/pipes/StringifySortingMethod.ts</context>
           <context context-type="linenumber">13</context>
         </context-group>
-        <target>ascending rating</target>
+        <target>评分升序</target>
       </trans-unit>
       <trans-unit id="4728103878318666061" datatype="html">
         <source>descending rating</source>
@@ -167,7 +167,7 @@
           <context context-type="sourcefile">src/frontend/app/pipes/StringifySortingMethod.ts</context>
           <context context-type="linenumber">15</context>
         </context-group>
-        <target>descending rating</target>
+        <target>评分降序</target>
       </trans-unit>
       <trans-unit id="8214150102443660196" datatype="html">
         <source>ascending name</source>
@@ -356,7 +356,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/albums/saved-search-popup/saved-search-popup.component.html</context>
           <context context-type="linenumber">20</context>
         </context-group>
-        <target>This saved search will be loaded from file during gallery indexing and it will survive a database reset.</target>
+        <target>保存的搜索将在图库索引期间从文件中加载, 并且不会受数据库重置影响.</target>
       </trans-unit>
       <trans-unit id="2904029998096758375" datatype="html">
         <source> No duplicates found </source>
@@ -416,7 +416,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/frame/frame.component.html</context>
           <context context-type="linenumber">54</context>
         </context-group>
-        <target>Duplicates</target>
+        <target>重复</target>
       </trans-unit>
       <trans-unit id="4930506384627295710" datatype="html">
         <source>Settings</source>
@@ -440,7 +440,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/filter/filter.gallery.component.html</context>
           <context context-type="linenumber">67</context>
         </context-group>
-        <target>Select only this</target>
+        <target>只选择这个</target>
       </trans-unit>
       <trans-unit id="1046995673577274517" datatype="html">
         <source>Nothing to filter</source>
@@ -448,7 +448,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/filter/filter.gallery.component.html</context>
           <context context-type="linenumber">80</context>
         </context-group>
-        <target>Nothing to filter</target>
+        <target>没有什么可以过滤的</target>
       </trans-unit>
       <trans-unit id="4097761430561209267" datatype="html">
         <source>unknown</source>
@@ -456,7 +456,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/filter/filter.gallery.component.ts</context>
           <context context-type="linenumber">20</context>
         </context-group>
-        <target>unknown</target>
+        <target>未知</target>
       </trans-unit>
       <trans-unit id="1604795977599078115" datatype="html">
         <source>Keywords</source>
@@ -464,7 +464,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/filter/filter.service.ts</context>
           <context context-type="linenumber">33</context>
         </context-group>
-        <target>Keywords</target>
+        <target>关键词</target>
       </trans-unit>
       <trans-unit id="2519596434061402334" datatype="html">
         <source>no face</source>
@@ -472,7 +472,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/filter/filter.service.ts</context>
           <context context-type="linenumber">40</context>
         </context-group>
-        <target>no face</target>
+        <target>没有人脸</target>
       </trans-unit>
       <trans-unit id="6424207774190031517" datatype="html">
         <source>Faces groups</source>
@@ -480,7 +480,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/filter/filter.service.ts</context>
           <context context-type="linenumber">45</context>
         </context-group>
-        <target>Faces groups</target>
+        <target>人脸分组</target>
       </trans-unit>
       <trans-unit id="6838559377527923778" datatype="html">
         <source>Caption</source>
@@ -488,7 +488,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/filter/filter.service.ts</context>
           <context context-type="linenumber">51</context>
         </context-group>
-        <target>Caption</target>
+        <target>标题</target>
       </trans-unit>
       <trans-unit id="3706222784708785028" datatype="html">
         <source>Rating</source>
@@ -496,7 +496,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/filter/filter.service.ts</context>
           <context context-type="linenumber">56</context>
         </context-group>
-        <target>Rating</target>
+        <target>评分</target>
       </trans-unit>
       <trans-unit id="5087678602655068553" datatype="html">
         <source>Camera</source>
@@ -504,7 +504,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/filter/filter.service.ts</context>
           <context context-type="linenumber">61</context>
         </context-group>
-        <target>Camera</target>
+        <target>相机</target>
       </trans-unit>
       <trans-unit id="6950975828565350688" datatype="html">
         <source>Lens</source>
@@ -512,7 +512,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/filter/filter.service.ts</context>
           <context context-type="linenumber">66</context>
         </context-group>
-        <target>Lens</target>
+        <target>镜片</target>
       </trans-unit>
       <trans-unit id="2314075913167237221" datatype="html">
         <source>City</source>
@@ -520,7 +520,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/filter/filter.service.ts</context>
           <context context-type="linenumber">71</context>
         </context-group>
-        <target>City</target>
+        <target>城市</target>
       </trans-unit>
       <trans-unit id="5911214550882917183" datatype="html">
         <source>State</source>
@@ -528,7 +528,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/filter/filter.service.ts</context>
           <context context-type="linenumber">76</context>
         </context-group>
-        <target>State</target>
+        <target>状态</target>
       </trans-unit>
       <trans-unit id="516176798986294299" datatype="html">
         <source>Country</source>
@@ -536,7 +536,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/filter/filter.service.ts</context>
           <context context-type="linenumber">81</context>
         </context-group>
-        <target>Country</target>
+        <target>国家</target>
       </trans-unit>
       <trans-unit id="2817799343282769458" datatype="html">
         <source>Link availability</source>
@@ -716,7 +716,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/navigator/navigator.gallery.component.html</context>
           <context context-type="linenumber">39</context>
         </context-group>
-        <target>Flatten directory</target>
+        <target>展开目录</target>
       </trans-unit>
       <trans-unit id="4163272119298020373" datatype="html">
         <source>Filters</source>
@@ -724,7 +724,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/navigator/navigator.gallery.component.html</context>
           <context context-type="linenumber">48</context>
         </context-group>
-        <target>Filters</target>
+        <target>过滤器</target>
       </trans-unit>
       <trans-unit id="414887388288176527" datatype="html">
         <source>Images</source>
@@ -2326,7 +2326,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/settings/metafiles/metafile.settings.component.html</context>
           <context context-type="linenumber">11</context>
         </context-group>
-        <target>*.gpx files</target>
+        <target>*.gpx 文件</target>
       </trans-unit>
       <trans-unit id="1872426751751480239" datatype="html">
         <source>Reads *.gpx files and renders them on the map.</source>
@@ -2334,7 +2334,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/settings/metafiles/metafile.settings.component.html</context>
           <context context-type="linenumber">12</context>
         </context-group>
-        <target>Reads *.gpx files and renders them on the map.</target>
+        <target>读取 *.gpx 文件并将它们渲染在地图上.</target>
       </trans-unit>
       <trans-unit id="5084395604268421279" datatype="html">
         <source>Markdown files</source>
@@ -2342,7 +2342,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/settings/metafiles/metafile.settings.component.html</context>
           <context context-type="linenumber">19</context>
         </context-group>
-        <target>Markdown files</target>
+        <target>Markdown 文件</target>
       </trans-unit>
       <trans-unit id="7631702888933785803" datatype="html">
         <source>Reads *.md files in a directory and shows the next to the map.</source>
@@ -2350,7 +2350,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/settings/metafiles/metafile.settings.component.html</context>
           <context context-type="linenumber">20</context>
         </context-group>
-        <target>Reads *.md files in a directory and shows the next to the map.</target>
+        <target>读取目录中的 *.md 文件并在地图旁边显示.</target>
       </trans-unit>
       <trans-unit id="4773152636094540112" datatype="html">
         <source>*.pg2conf files</source>
@@ -2358,7 +2358,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/settings/metafiles/metafile.settings.component.html</context>
           <context context-type="linenumber">26</context>
         </context-group>
-        <target>*.pg2conf files</target>
+        <target>*.pg2conf 文件</target>
       </trans-unit>
       <trans-unit id="5218083154266393990" datatype="html">
         <source>Reads *.pg2conf files (You can use it for custom sorting and save search (albums)).</source>
@@ -2366,7 +2366,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/settings/metafiles/metafile.settings.component.html</context>
           <context context-type="linenumber">27</context>
         </context-group>
-        <target>Reads *.pg2conf files (You can use it for custom sorting and save search (albums)).</target>
+        <target>读取 *.pg2conf 文件(您可以将其用于自定义排序和保存搜索(相册)).</target>
       </trans-unit>
       <trans-unit id="5007962937899031099" datatype="html">
         <source>Meta file</source>
@@ -2510,7 +2510,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/settings/other/other.settings.component.html</context>
           <context context-type="linenumber">65</context>
         </context-group>
-        <target>[Experimental: does not work for searches] Enable download zip of a directory contents</target>
+        <target>[实验性: 不适用于搜索] 启用下载目录内容的zip包</target>
       </trans-unit>
       <trans-unit id="6121078413919868273" datatype="html">
         <source>Directory flattening</source>
@@ -2518,7 +2518,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/settings/other/other.settings.component.html</context>
           <context context-type="linenumber">71</context>
         </context-group>
-        <target>Directory flattening</target>
+        <target>目录展开</target>
       </trans-unit>
       <trans-unit id="6190713519835527523" datatype="html">
         <source>[Experimental: won't work if the gallery multiple folders with the same path] Adds a button to flattens the file structure, by listing the content of all subdirectories.</source>
@@ -2526,7 +2526,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/settings/other/other.settings.component.html</context>
           <context context-type="linenumber">72</context>
         </context-group>
-        <target>[Experimental: won't work if the gallery multiple folders with the same path] Adds a button to flattens the file structure, by listing the content of all subdirectories.</target>
+        <target>[实验性: 如果图库具有相同路径的多个文件夹将不起作用] 添加一个按钮以展开文件结构, 这会列出所有子目录的内容.</target>
       </trans-unit>
       <trans-unit id="7828128386671267084" datatype="html">
         <source>Navigation bar:</source>
@@ -2582,7 +2582,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/settings/other/other.settings.component.html</context>
           <context context-type="linenumber">118</context>
         </context-group>
-        <target>Custom HTML Head</target>
+        <target>自定义 HTML 头</target>
       </trans-unit>
       <trans-unit id="8693603235657020323" datatype="html">
         <source>Other</source>
@@ -2698,7 +2698,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/settings/preview/preview.settings.component.html</context>
           <context context-type="linenumber">10</context>
         </context-group>
-        <target>Preview Filter query</target>
+        <target>预览过滤器查询</target>
       </trans-unit>
       <trans-unit id="8057311155363402628" datatype="html">
         <source>Filters the sub-folders with this search query</source>
@@ -2706,7 +2706,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/settings/preview/preview.settings.component.html</context>
           <context context-type="linenumber">11</context>
         </context-group>
-        <target>Filters the sub-folders with this search query</target>
+        <target>使用此搜索查询过滤子文件夹</target>
       </trans-unit>
       <trans-unit id="5715914415821890522" datatype="html">
         <source>Preview Sorting</source>
@@ -2714,7 +2714,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/settings/preview/preview.settings.component.html</context>
           <context context-type="linenumber">20</context>
         </context-group>
-        <target>Preview Sorting</target>
+        <target>预览排序</target>
       </trans-unit>
       <trans-unit id="8702555920098757260" datatype="html">
         <source>If multiple preview is available sorts them by these methods and selects the first one.</source>
@@ -2722,7 +2722,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/settings/preview/preview.settings.component.html</context>
           <context context-type="linenumber">21</context>
         </context-group>
-        <target>If multiple preview is available sorts them by these methods and selects the first one.</target>
+        <target>如果有多个预览可用, 则按这些方法对它们进行排序并选择第一个.</target>
       </trans-unit>
       <trans-unit id="1295614462098694869" datatype="html">
         <source>Preview</source>
@@ -2730,7 +2730,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/settings/preview/preview.settings.component.ts</context>
           <context context-type="linenumber">31</context>
         </context-group>
-        <target>Preview</target>
+        <target>预览</target>
       </trans-unit>
       <trans-unit id="8687697587531033527" datatype="html">
         <source> This feature enables you to generate 'random photo' urls. That URL returns a photo random selected from your gallery. You can use the url with 3rd party application like random changing desktop background. </source>
@@ -2746,7 +2746,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/settings/random-photo/random-photo.settings.component.html</context>
           <context context-type="linenumber">36,37</context>
         </context-group>
-        <target>Note: With the current implementation, it poses a security risk. See:</target>
+        <target>注意: 对于目前的代码实现, 它会带来安全风险.</target>
       </trans-unit>
       <trans-unit id="7279049492322958709" datatype="html">
         <source> Random Photo is not supported with these settings </source>
@@ -2810,7 +2810,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/settings/search/search.settings.component.html</context>
           <context context-type="linenumber">49</context>
         </context-group>
-        <target>List directories</target>
+        <target>列出目录</target>
       </trans-unit>
       <trans-unit id="1627438365479766712" datatype="html">
         <source>Search will also return with directories</source>
@@ -2818,7 +2818,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/settings/search/search.settings.component.html</context>
           <context context-type="linenumber">50</context>
         </context-group>
-        <target>Search will also return with directories</target>
+        <target>搜索也将返回目录</target>
       </trans-unit>
       <trans-unit id="709142926386769059" datatype="html">
         <source>List metafiles</source>
