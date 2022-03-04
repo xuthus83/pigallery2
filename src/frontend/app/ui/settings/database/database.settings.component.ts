@@ -31,6 +31,14 @@ export class DatabaseSettingsComponent extends SettingsComponentDirective<Server
   }
 
 
+  dbTypesMap = (v: { key: number, value: string }) => {
+    if (v.key === DatabaseType.sqlite) {
+      v.value += ' ' + $localize`(recommended)`;
+    } else if (v.value === DatabaseType[DatabaseType.memory]) {
+      v.value += ' ' + $localize`(deprecated, will be removed)`;
+    }
+    return v;
+  };
 }
 
 
