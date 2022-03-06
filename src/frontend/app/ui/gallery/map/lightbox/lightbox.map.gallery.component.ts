@@ -387,14 +387,32 @@ export class GalleryMapLightboxComponent implements OnChanges {
     for (let i = 0; i < this.gpxFiles.length; i++) {
       const file = this.gpxFiles[i];
       const path = await this.mapService.getMapPath(file);
+      const wpoints = await this.mapService.getMapPoints(file);
       if (file !== this.gpxFiles[i]) { // check race condition
         return;
       }
-      if (path.length === 0) {
-        continue;
+      if (path.length !== 0) {
+        this.mapLayersControlOption.overlays.Paths.addLayer(marker(path[0] as LatLng));
+        this.mapLayersControlOption.overlays.Paths.addLayer(polyline(path as LatLng[]));
+        // console.log('Trk path is not empty, in file ' + i + ', path[0]=' + JSON.stringify(path[0]));
+        // continue;
+      } else {
+        // console.log('No trk path in file ' + i);
+        // continue;
       }
-      this.mapLayersControlOption.overlays.Paths.addLayer(marker(path[0] as LatLng));
-      this.mapLayersControlOption.overlays.Paths.addLayer(polyline(path as LatLng[]));
+      if (wpoints.length !== 0) {
+        // console.log('Wpt exist in file ' + i + ', wpoints[0]=' + JSON.stringify(wpoints[0]) +', wpoints.length=' + wpoints.length);
+        wpoints_loop: for (let wpt_i = 0; i < wpoints.length; wpt_i++) {
+          // console.log('item number ' + wpt_i + ' out of ' + wpoints.length + ', coord=' + JSON.stringify(wpoints[wpt_i]));
+          if (wpoints[wpt_i] === undefined) {
+            break wpoints_loop;
+        }
+          this.mapLayersControlOption.overlays.Paths.addLayer(marker(wpoints[wpt_i] as LatLng));
+        }
+        // console.log('Wpoints plotted.');
+      } else {
+        // console.log('No wpt points in file ' + i);
+      }
     }
   }
 }
