@@ -48,14 +48,6 @@ export class PhotoSettingsComponent extends SettingsComponentDirective<{
     return this.jobsService.progress.value[JobDTOUtils.getHashName(DefaultsJobs[DefaultsJobs['Photo Converting']])];
   }
 
-  libTypesMap = (v: { key: number, value: string }) => {
-    if (v.value.toLowerCase() === 'sharp') {
-      v.value += ' ' + $localize`(recommended)`;
-    } else {
-      v.value += ' ' + $localize`(deprecated, will be removed)`;
-    }
-    return v;
-  };
 }
 
 

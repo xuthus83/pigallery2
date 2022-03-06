@@ -15,7 +15,7 @@ export class LanguageComponent {
   current: string = null;
 
   constructor(private cookieService: CookieService) {
-    this.languages = Config.Client.languages;
+    this.languages = Config.Client.languages.sort();
     if (this.cookieService.get(CookieNames.lang) != null) {
       this.current = this.cookieService.get(CookieNames.lang);
     }

@@ -59,8 +59,8 @@ export class ClientSharingConfig {
 
 @SubConfigClass()
 export class ClientRandomPhotoConfig {
-  @ConfigProperty({description: 'Enables random link generation. NOTE: With the current implementation, it poses a security risk. See https://github.com/bpatrik/pigallery2/issues/392'})
-  enabled: boolean = false;
+  @ConfigProperty({description: 'Enables random link generation.'})
+  enabled: boolean = true;
 }
 
 @SubConfigClass()
