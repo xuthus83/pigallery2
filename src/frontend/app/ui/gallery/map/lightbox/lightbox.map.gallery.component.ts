@@ -386,8 +386,7 @@ export class GalleryMapLightboxComponent implements OnChanges {
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < this.gpxFiles.length; i++) {
       const file = this.gpxFiles[i];
-      const path = await this.mapService.getMapCoordinates(file,'trkpt');
-      const wpoints = await this.mapService.getMapCoordinates(file,'wpt');
+      const [path,wpoints] = await this.mapService.getMapCoordinates(file);
       if (file !== this.gpxFiles[i]) { // check race condition
         return;
       }
