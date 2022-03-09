@@ -70,11 +70,11 @@ export class MapService {
   }
 
 
-  public async getMapPath(file: FileDTO): Promise<MapPath[]> {
+  public async getMapCoordinates(file: FileDTO, tagname: string): Promise<MapCoordinates[]> {
     const filePath = Utils.concatUrls(file.directory.path, file.directory.name, file.name);
     const gpx = await this.networkService.getXML('/gallery/content/' + filePath);
-    const elements = gpx.getElementsByTagName('trkpt');
-    const points: MapPath[] = [];
+    const elements = gpx.getElementsByTagName(tagname);
+    const points: MapCoordinates[] = [];
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < elements.length; i++) {
       points.push({
@@ -84,33 +84,10 @@ export class MapService {
     }
     return points;
   }
-  
-  // Waypoints <wpt> from GPX files:
-  public async getMapPoints(file: FileDTO): Promise<MapPoints[]> {
-    const filePath = Utils.concatUrls(file.directory.path, file.directory.name, file.name);
-    const gpx = await this.networkService.getXML('/gallery/content/' + filePath);
-    const elements = gpx.getElementsByTagName('wpt');
-    const wpoints: MapPoints[] = [];
-    // tslint:disable-next-line:prefer-for-of
-    for (let i = 0; i < elements.length; i++) {
-      wpoints.push({
-        lat: parseFloat(elements[i].getAttribute('lat')),
-        lng: parseFloat(elements[i].getAttribute('lon'))
-      });
-    }
-    console.log('From file ' + filePath + ', wpoints=' + JSON.stringify(wpoints));
-    return wpoints;
-  }
-
 }
 
 
-export interface MapPath {
-  lat: number;
-  lng: number;
-}
-
-export interface MapPoints {
+export interface MapCoordinates {
   lat: number;
   lng: number;
 }
