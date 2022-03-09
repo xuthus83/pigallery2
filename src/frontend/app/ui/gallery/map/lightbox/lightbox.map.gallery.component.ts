@@ -386,8 +386,8 @@ export class GalleryMapLightboxComponent implements OnChanges {
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < this.gpxFiles.length; i++) {
       const file = this.gpxFiles[i];
-      const path = await this.mapService.getMapPath(file);
-      const wpoints = await this.mapService.getMapPoints(file);
+      const path = await this.mapService.getMapCoordinates(file,'trkpt');
+      const wpoints = await this.mapService.getMapCoordinates(file,'wpt');
       if (file !== this.gpxFiles[i]) { // check race condition
         return;
       }
@@ -395,10 +395,8 @@ export class GalleryMapLightboxComponent implements OnChanges {
         this.mapLayersControlOption.overlays.Paths.addLayer(marker(path[0] as LatLng));
         this.mapLayersControlOption.overlays.Paths.addLayer(polyline(path as LatLng[]));
         // console.log('Trk path is not empty, in file ' + i + ', path[0]=' + JSON.stringify(path[0]));
-        // continue;
       } else {
         // console.log('No trk path in file ' + i);
-        // continue;
       }
       if (wpoints.length !== 0) {
         // console.log('Wpt exist in file ' + i + ', wpoints[0]=' + JSON.stringify(wpoints[0]) +', wpoints.length=' + wpoints.length);
