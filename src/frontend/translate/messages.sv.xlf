@@ -938,7 +938,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/database/database.settings.component.html</context>
-          <context context-type="linenumber">65</context>
+          <context context-type="linenumber">66</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/usermanager/usermanager.settings.component.html</context>
@@ -1050,7 +1050,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/database/database.settings.component.html</context>
-          <context context-type="linenumber">56</context>
+          <context context-type="linenumber">57</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/usermanager/usermanager.settings.component.html</context>
@@ -1247,7 +1247,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/database/database.settings.component.html</context>
-          <context context-type="linenumber">77,78</context>
+          <context context-type="linenumber">78,79</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/faces/faces.settings.component.html</context>
@@ -1315,7 +1315,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/database/database.settings.component.html</context>
-          <context context-type="linenumber">81,82</context>
+          <context context-type="linenumber">82,83</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/faces/faces.settings.component.html</context>
@@ -1387,7 +1387,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/database/database.settings.component.html</context>
-          <context context-type="linenumber">34</context>
+          <context context-type="linenumber">35</context>
         </context-group>
         <target>Värd</target>
       </trans-unit>
@@ -1407,7 +1407,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/database/database.settings.component.html</context>
-          <context context-type="linenumber">41</context>
+          <context context-type="linenumber">42</context>
         </context-group>
         <target>Port</target>
       </trans-unit>
@@ -1528,7 +1528,7 @@
         <source>Install manually mysql node module to use mysql (npm install mysql) </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/database/database.settings.component.html</context>
-          <context context-type="linenumber">15,16</context>
+          <context context-type="linenumber">16,17</context>
         </context-group>
         <target>Installera mysql node-modulen manuellt för att använda mysql (npm install mysql)</target>
       </trans-unit>
@@ -1536,7 +1536,7 @@
         <source>Database folder</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/database/database.settings.component.html</context>
-          <context context-type="linenumber">21</context>
+          <context context-type="linenumber">22</context>
         </context-group>
         <target>Databasmapp</target>
       </trans-unit>
@@ -1544,7 +1544,7 @@
         <source>All file-based data will be stored here (sqlite database, user database in case of memory db, job history data)</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/database/database.settings.component.html</context>
-          <context context-type="linenumber">22</context>
+          <context context-type="linenumber">23</context>
         </context-group>
         <target>All filbaserad data sparas här (sqlite databas, användardatabas om minnes-db, jobb historik)</target>
       </trans-unit>
@@ -1552,13 +1552,29 @@
         <source>Database</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/database/database.settings.component.html</context>
-          <context context-type="linenumber">49</context>
+          <context context-type="linenumber">50</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/database/database.settings.component.ts</context>
           <context context-type="linenumber">26</context>
         </context-group>
         <target>Databas</target>
+      </trans-unit>
+      <trans-unit id="943622778225300320" datatype="html">
+        <source>(recommended)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/frontend/app/ui/settings/database/database.settings.component.ts</context>
+          <context context-type="linenumber">36</context>
+        </context-group>
+        <target>(rekommenderad)</target>
+      </trans-unit>
+      <trans-unit id="3565724666233872817" datatype="html">
+        <source>(deprecated, will be removed)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/frontend/app/ui/settings/database/database.settings.component.ts</context>
+          <context context-type="linenumber">38</context>
+        </context-group>
+        <target>(stöds ej längre, kommer att tas bort)</target>
       </trans-unit>
       <trans-unit id="6946816815826261880" datatype="html">
         <source>Override keywords</source>
@@ -2676,22 +2692,6 @@
         </context-group>
         <target>Foto</target>
       </trans-unit>
-      <trans-unit id="943622778225300320" datatype="html">
-        <source>(recommended)</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/frontend/app/ui/settings/photo/photo.settings.component.ts</context>
-          <context context-type="linenumber">53</context>
-        </context-group>
-        <target>(rekommenderad)</target>
-      </trans-unit>
-      <trans-unit id="3565724666233872817" datatype="html">
-        <source>(deprecated, will be removed)</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/frontend/app/ui/settings/photo/photo.settings.component.ts</context>
-          <context context-type="linenumber">55</context>
-        </context-group>
-        <target>(stöds ej längre, kommer att tas bort)</target>
-      </trans-unit>
       <trans-unit id="17157041269775457" datatype="html">
         <source>Preview Filter query</source>
         <context-group purpose="location">
@@ -2740,13 +2740,13 @@
         </context-group>
         <target>Denna funktion skapar en url till en slumpvis vald bild. Du kan använda denna url med en tredjepartsapplikation, som till exempel för att byta skrivbordsbakgrund</target>
       </trans-unit>
-      <trans-unit id="6480179239550432194" datatype="html">
-        <source> Note: With the current implementation, it poses a security risk. See: </source>
+      <trans-unit id="6568082585574838409" datatype="html">
+        <source> Note: With the current implementation, random link also requires login. See: </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/random-photo/random-photo.settings.component.html</context>
           <context context-type="linenumber">36,37</context>
         </context-group>
-        <target>Note: With the current implementation, it poses a security risk. See:</target>
+        <target> Note: With the current implementation, random link also requires login. See: </target>
       </trans-unit>
       <trans-unit id="7279049492322958709" datatype="html">
         <source> Random Photo is not supported with these settings </source>
