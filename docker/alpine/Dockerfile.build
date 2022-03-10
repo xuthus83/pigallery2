@@ -2,7 +2,10 @@
 #-----------------------------------------
 FROM node:14-alpine3.15 AS builder
 RUN apk add --update-cache --repository https://alpine.global.ssl.fastly.net/alpine/v3.15/community/ \
-  python3 build-base sqlite-dev sqlite-libs vips-dev vips fftw-dev gcc g++ make libc6-compat && ln -snf /usr/bin/python3 /usr/bin/python
+  python3 build-base sqlite-dev sqlite-libs fftw-dev gcc g++ make libc6-compat && ln -snf /usr/bin/python3 /usr/bin/python \
+
+RUN apk add --update-cache --repository https://alpine.global.ssl.fastly.net/alpine/edge/community/ vips-dev>8.12.2-r3 vips>8.12.2-r3
+
 COPY pigallery2-release /app
 WORKDIR /app
 RUN npm install --unsafe-perm
@@ -25,8 +28,10 @@ ENV NODE_ENV=production \
     PI_DOCKER=true
 
 EXPOSE 80
-RUN apk add --update-cache --repository https://alpine.global.ssl.fastly.net/alpine/v3.15/community/ \
-    vips ffmpeg
+RUN apk add --update-cache --repository https://alpine.global.ssl.fastly.net/alpine/v3.15/community/ ffmpeg
+RUN apk add --update-cache --repository https://alpine.global.ssl.fastly.net/alpine/edge/community/  vips>8.12.2-r3
+
+
 COPY --from=builder /app /app
 VOLUME ["/app/data/config", "/app/data/db", "/app/data/images", "/app/data/tmp"]
 HEALTHCHECK --interval=40s --timeout=30s --retries=3 --start-period=60s \

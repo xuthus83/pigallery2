@@ -92,7 +92,7 @@ jobs:
     needs: [ create-release ]
     strategy:
       matrix:
-        container: [ alpine, debian-stretch ]
+        container: [  debian-stretch ]
 
     steps:
       - name: Set tag
@@ -113,14 +113,13 @@ jobs:
         with:
           username: ${{ secrets.REGISTRY_USERNAME }}
           password: ${{ secrets.REGISTRY_PASSWORD }}
-      - name: Test build on Pull request and test branches
-        if: ${{ startsWith(steps.vars.outputs.type , 'head') &&  ((github.event.issue.pull_request && github.ref == 'refs/heads/master') || github.ref != 'refs/heads/master') }}
+      - name: Build docker
         uses: docker/build-push-action@v2
         with:
           context: .
           file: docker/${{ matrix.container }}/Dockerfile.build
           platforms: linux/amd64,linux/arm64
-      - name: Build experimental
+      - name: Push experimental
         if: ${{ github.ref == 'refs/heads/experimental' }}
         uses: docker/build-push-action@v2
         with:
@@ -129,7 +128,7 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: bpatrik/pigallery2:experimental-${{ matrix.container }}
-      - name: Build and push nightly on new master commit
+      - name: Push nightly on new master commit
         if: ${{ startsWith(steps.vars.outputs.type , 'head') &&  !github.event.issue.pull_request && github.ref == 'refs/heads/master' }}
         uses: docker/build-push-action@v2
         with:
@@ -138,7 +137,7 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: bpatrik/pigallery2:nightly-${{ matrix.container }}
-      - name: Build and push release on new Tag
+      - name: Push release on new Tag
         if: ${{ startsWith(steps.vars.outputs.type , 'tag') &&  !github.event.issue.pull_request }}
         uses: docker/build-push-action@v2
         with:
@@ -155,7 +154,7 @@ jobs:
     needs: [ create-release ]
     strategy:
       matrix:
-        container: [ debian-buster ]
+        container: [alpine, debian-buster ]
 
     steps:
       - name: Set tag
@@ -176,14 +175,13 @@ jobs:
         with:
           username: ${{ secrets.REGISTRY_USERNAME }}
           password: ${{ secrets.REGISTRY_PASSWORD }}
-      - name: Test build on Pull request and test branches
-        if: ${{ startsWith(steps.vars.outputs.type , 'head') &&  ((github.event.issue.pull_request && github.ref == 'refs/heads/master') || github.ref != 'refs/heads/master') }}
+      - name: Build docker
         uses: docker/build-push-action@v2
         with:
           context: .
           file: docker/${{ matrix.container }}/Dockerfile.build
           platforms: linux/amd64,linux/arm64,linux/arm/v7
-      - name: Build experimental
+      - name: Push experimental
         if: ${{ github.ref == 'refs/heads/experimental' }}
         uses: docker/build-push-action@v2
         with:
@@ -192,7 +190,7 @@ jobs:
           platforms: linux/amd64,linux/arm64,linux/arm/v7
           push: true
           tags: bpatrik/pigallery2:experimental-${{ matrix.container }}
-      - name: Build and push nightly on new master commit
+      - name: Push nightly on new master commit
         if: ${{ startsWith(steps.vars.outputs.type , 'head') &&  !github.event.issue.pull_request && github.ref == 'refs/heads/master' }}
         uses: docker/build-push-action@v2
         with:
@@ -201,7 +199,7 @@ jobs:
           platforms: linux/amd64,linux/arm64,linux/arm/v7
           push: true
           tags: bpatrik/pigallery2:nightly-${{ matrix.container }}
-      - name: Build and push release on new Tag
+      - name: Push release on new Tag
         if: ${{ startsWith(steps.vars.outputs.type , 'tag') &&  !github.event.issue.pull_request }}
         uses: docker/build-push-action@v2
         with:
