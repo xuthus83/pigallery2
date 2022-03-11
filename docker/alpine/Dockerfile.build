@@ -2,7 +2,7 @@
 #-----------------------------------------
 FROM node:14-alpine3.15 AS builder
 RUN apk add --update-cache --repository https://alpine.global.ssl.fastly.net/alpine/v3.15/community/ \
-  python3 build-base sqlite-dev sqlite-libs fftw-dev gcc g++ make libc6-compat && ln -snf /usr/bin/python3 /usr/bin/python \
+  python3 build-base sqlite-dev sqlite-libs fftw-dev gcc g++ make libc6-compat && ln -snf /usr/bin/python3 /usr/bin/python
 
 RUN apk add --update-cache --repository https://alpine.global.ssl.fastly.net/alpine/edge/community/ vips-dev>8.12.2-r3 vips>8.12.2-r3
 
