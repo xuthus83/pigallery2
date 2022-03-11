@@ -396,10 +396,9 @@ export class GalleryMapLightboxComponent implements OnChanges {
         this.mapLayersControlOption.overlays.Paths.addLayer(polyline(path as LatLng[]));
       }
       if (wpoints.length !== 0) {
-        console.log("wpoints.length=" + wpoints.length);
-        wpoints_loop: for (let wpt_i = 0; i < wpoints.length; wpt_i++) {
+        wpoints_loop: for (let wpt_i = 0; wpt_i < wpoints.length; wpt_i++) {
           if (wpoints[wpt_i] === undefined) {
-            break wpoints_loop;
+            continue wpoints_loop;
           }
           this.mapLayersControlOption.overlays.Paths.addLayer(marker(wpoints[wpt_i] as LatLng));
         }
