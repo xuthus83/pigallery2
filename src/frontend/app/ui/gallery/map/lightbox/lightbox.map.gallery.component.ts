@@ -15,7 +15,6 @@ import {
   Control,
   divIcon,
   icon,
-  LatLng,
   latLng,
   latLngBounds,
   layerGroup,
@@ -392,11 +391,11 @@ export class GalleryMapLightboxComponent implements OnChanges {
       }
       if (parsedGPX.path.length !== 0) {
         // render the beginning of the path with a marker
-        this.mapLayersControlOption.overlays.Paths.addLayer(marker(parsedGPX.path[0] as LatLng));
-        this.mapLayersControlOption.overlays.Paths.addLayer(polyline(parsedGPX.path as LatLng[]));
+        this.mapLayersControlOption.overlays.Paths.addLayer(marker(parsedGPX.path[0]));
+        this.mapLayersControlOption.overlays.Paths.addLayer(polyline(parsedGPX.path));
       }
       parsedGPX.markers.forEach(mc => {
-        this.mapLayersControlOption.overlays.Paths.addLayer(marker(mc as LatLng));
+        this.mapLayersControlOption.overlays.Paths.addLayer(marker(mc));
       });
     }
   }

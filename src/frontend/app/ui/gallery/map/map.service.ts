@@ -4,6 +4,7 @@ import {FileDTO} from '../../../../../common/entities/FileDTO';
 import {Utils} from '../../../../../common/Utils';
 import {Config} from '../../../../../common/config/public/Config';
 import {MapLayers, MapProviders} from '../../../../../common/config/public/ClientConfig';
+import {LatLngLiteral} from 'leaflet';
 
 
 @Injectable()
@@ -70,12 +71,12 @@ export class MapService {
   }
 
 
-  public async getMapCoordinates(file: FileDTO): Promise<{ path: MapCoordinates[], markers: MapCoordinates[] }> {
+  public async getMapCoordinates(file: FileDTO): Promise<{ path: LatLngLiteral[], markers: LatLngLiteral[] }> {
     const filePath = Utils.concatUrls(file.directory.path, file.directory.name, file.name);
     const gpx = await this.networkService.getXML('/gallery/content/' + filePath);
-    const getCoordinates = (tagName: string): MapCoordinates[] => {
+    const getCoordinates = (tagName: string): LatLngLiteral[] => {
       const elements = gpx.getElementsByTagName(tagName);
-      const ret: MapCoordinates[] = [];
+      const ret: LatLngLiteral[] = [];
       // tslint:disable-next-line:prefer-for-of
       for (let i = 0; i < elements.length; i++) {
         ret.push({
@@ -91,10 +92,4 @@ export class MapService {
       markers: getCoordinates('wpt')
     };
   }
-}
-
-
-export interface MapCoordinates {
-  lat: number;
-  lng: number;
 }
