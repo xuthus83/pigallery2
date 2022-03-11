@@ -386,23 +386,18 @@ export class GalleryMapLightboxComponent implements OnChanges {
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < this.gpxFiles.length; i++) {
       const file = this.gpxFiles[i];
-      // get <trkpt> items into path[] and <wpt> items into wpoints[]
-      const [path,wpoints] = await this.mapService.getMapCoordinates(file);
+      const parsedGPX = await this.mapService.getMapCoordinates(file);
       if (file !== this.gpxFiles[i]) { // check race condition
         return;
       }
-      if (path.length !== 0) {
-        this.mapLayersControlOption.overlays.Paths.addLayer(marker(path[0] as LatLng));
-        this.mapLayersControlOption.overlays.Paths.addLayer(polyline(path as LatLng[]));
+      if (parsedGPX.path.length !== 0) {
+        // render the beginning of the path with a marker
+        this.mapLayersControlOption.overlays.Paths.addLayer(marker(parsedGPX.path[0] as LatLng));
+        this.mapLayersControlOption.overlays.Paths.addLayer(polyline(parsedGPX.path as LatLng[]));
       }
-      if (wpoints.length !== 0) {
-        wpoints_loop: for (let wpt_i = 0; wpt_i < wpoints.length; wpt_i++) {
-          if (wpoints[wpt_i] === undefined) {
-            continue wpoints_loop;
-          }
-          this.mapLayersControlOption.overlays.Paths.addLayer(marker(wpoints[wpt_i] as LatLng));
-        }
-      }
+      parsedGPX.markers.forEach(mc => {
+        this.mapLayersControlOption.overlays.Paths.addLayer(marker(mc as LatLng));
+      });
     }
   }
 }

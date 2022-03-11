@@ -70,24 +70,26 @@ export class MapService {
   }
 
 
-  public async getMapCoordinates(file: FileDTO): Promise<MapCoordinates[][]> {
+  public async getMapCoordinates(file: FileDTO): Promise<{ path: MapCoordinates[], markers: MapCoordinates[] }> {
     const filePath = Utils.concatUrls(file.directory.path, file.directory.name, file.name);
     const gpx = await this.networkService.getXML('/gallery/content/' + filePath);
-    const tagnames=['trkpt','wpt'];
-    var coordinates: MapCoordinates[][]=[];
-    tagnames.forEach(function (item, index) {
-      const elements=gpx.getElementsByTagName(item);
-      const points: MapCoordinates[] = [];
+    const getCoordinates = (tagName: string): MapCoordinates[] => {
+      const elements = gpx.getElementsByTagName(tagName);
+      const ret: MapCoordinates[] = [];
       // tslint:disable-next-line:prefer-for-of
       for (let i = 0; i < elements.length; i++) {
-        points.push({
+        ret.push({
           lat: parseFloat(elements[i].getAttribute('lat')),
           lng: parseFloat(elements[i].getAttribute('lon'))
         });
       }
-      coordinates[index]=points;
-    })
-    return coordinates;
+      return ret;
+    };
+
+    return {
+      path: getCoordinates('trkpt'),
+      markers: getCoordinates('wpt')
+    };
   }
 }
 
