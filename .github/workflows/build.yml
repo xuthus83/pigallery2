@@ -166,5 +166,7 @@ jobs:
           push: true
           tags: |
             bpatrik/pigallery2:nightly-${{ matrix.container }}
+            bpatrik/pigallery2:${{ steps.vars.outputs.tag }}-${{ matrix.container }}
+            bpatrik/pigallery2:latest-${{ matrix.container }}
             bpatrik/pigallery2:${{ steps.vars.outputs.tag }}
             bpatrik/pigallery2:latest
