@@ -227,7 +227,7 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
 
     const parent = TestHelper.getRandomizedDirectoryEntry(null, 'parent dir 😀');
     const p1 = TestHelper.getRandomizedPhotoEntry(parent, 'Photo1');
-    p1.name = 'test.jpg';
+    p1.name = 'test 😀.jpg';
 
     DirectoryDTOUtils.packDirectory(parent);
     await im.saveToDB(Utils.clone(parent) as ParentDirectoryDTO);
