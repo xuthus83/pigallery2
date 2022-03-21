@@ -37,7 +37,7 @@ export interface BenchmarkResult {
   experiment?: string;
   duration: number;
   contentWrapper?: ContentWrapper;
-  items?: number;
+  items?: any[];
   subBenchmarks?: BenchmarkResult[];
 }
 

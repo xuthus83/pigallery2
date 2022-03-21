@@ -29,7 +29,7 @@ export const ServerTime = (id: string, name: string) => {
       return;
     }
     const m = descriptor.value;
-    descriptor.value = (req: Request, res: Response, next: NextFunction) => {
+    const customAction = (req: Request, res: Response, next: NextFunction) => {
       req.timing = req.timing || {};
       req.timing[id] = new ServerTimeEntry(name);
       req.timing[id].start();
@@ -38,6 +38,8 @@ export const ServerTime = (id: string, name: string) => {
         next(err);
       });
     };
+    descriptor.value = new Function('action', 'return function ' + m.name + '(...args){ action(...args) };')(customAction);
+
   };
 };
 

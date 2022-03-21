@@ -1,10 +1,6 @@
-export const Experiments = {
-  db: {
-    name: 'SQlite',
-    groups: {
-      betterSqlite: 'better-sqlite'
-    }
-  }
+export const Experiments:
+  { [key: string]: { name: string, groups: { [key: string]: string } } } = {
+
 };
 
 export const ActiveExperiments: { [key: string]: string } = {};
