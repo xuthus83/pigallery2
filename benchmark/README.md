@@ -150,6 +150,7 @@ See all benchmark results in [HISTORY.md](HISTORY.md)
 | | Autocomplete | 13.0 ms | items: 24, size: 979.00B |
 | | Add server timing | 0.1 ms | items: 24, size: 979.00B |
 | | Render result | 0.0 ms | items: 24, size: 979.00B |
+
 *Measurements run 20 times and an average was calculated.
 Full runtime: 1522539.0ms
 
