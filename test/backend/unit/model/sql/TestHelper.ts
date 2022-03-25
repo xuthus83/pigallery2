@@ -5,7 +5,6 @@ import {
   PositionMetaDataEntity
 } from '../../../../../src/backend/model/database/sql/enitites/MediaEntity';
 import {PhotoEntity, PhotoMetadataEntity} from '../../../../../src/backend/model/database/sql/enitites/PhotoEntity';
-import {OrientationTypes} from 'ts-exif-parser';
 import {DirectoryEntity} from '../../../../../src/backend/model/database/sql/enitites/DirectoryEntity';
 import {VideoEntity, VideoMetadataEntity} from '../../../../../src/backend/model/database/sql/enitites/VideoEntity';
 import {MediaDimension, MediaDTO} from '../../../../../src/common/entities/MediaDTO';
@@ -50,7 +49,6 @@ export class TestHelper {
     sd.height = 200;
     sd.width = 200;
     const gps = new GPSMetadataEntity();
-    gps.altitude = 1;
     gps.latitude = 1;
     gps.longitude = 1;
     const pd = new PositionMetaDataEntity();

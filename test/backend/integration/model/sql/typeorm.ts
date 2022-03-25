@@ -24,7 +24,7 @@ describe('Typeorm integration', () => {
 
   const tempDir = path.join(__dirname, '../../tmp');
   const setUpSqlDB = async () => {
-    await fs.promises.rm(tempDir, {recursive: true, force:true});
+    await fs.promises.rm(tempDir, {recursive: true, force: true});
 
     Config.Server.Database.type = DatabaseType.sqlite;
     Config.Server.Database.dbFolder = tempDir;
@@ -65,7 +65,6 @@ describe('Typeorm integration', () => {
     sd.height = 200;
     sd.width = 200;
     const gps = new GPSMetadataEntity();
-    gps.altitude = 1;
     gps.latitude = 1;
     gps.longitude = 1;
     const pd = new PositionMetaDataEntity();
