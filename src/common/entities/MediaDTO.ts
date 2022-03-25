@@ -34,7 +34,6 @@ export const MediaDTOUtils = {
         (media as PhotoDTO).metadata.positionData.state ||
         (media as PhotoDTO).metadata.positionData.country ||
         ((media as PhotoDTO).metadata.positionData.GPSData &&
-          (media as PhotoDTO).metadata.positionData.GPSData.altitude &&
           (media as PhotoDTO).metadata.positionData.GPSData.latitude &&
           (media as PhotoDTO).metadata.positionData.GPSData.longitude));
   },

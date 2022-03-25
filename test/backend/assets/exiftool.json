@@ -25,12 +25,10 @@
     "USA",
     "Yosemite"
   ],
-  "orientation": 1,
   "positionData": {
     "GPSData": {
-      "altitude": 1960,
       "latitude": 37.746765,
-      "longitude": -119.52988333333333
+      "longitude": -119.529883
     },
     "country": "United States",
     "state": "California"

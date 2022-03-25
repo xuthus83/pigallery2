@@ -1,7 +1,7 @@
 {
   "cameraData": {
     "ISO": 3200,
-    "exposure": 0.00125,
+    "exposure": 0.0013,
     "fStop": 5.6,
     "focalLength": 85,
     "lens": "EF-S15-85mm f/3.5-5.6 IS USM",
@@ -36,11 +36,9 @@
     "USA",
     "űáéúőóüö ŰÁÉÚŐÓÜÖ"
   ],
-  "orientation": 1,
   "positionData": {
     "GPSData": {
-      "altitude": 90,
-      "latitude": 37.871093333333334,
+      "latitude": 37.871093,
       "longitude": -122.25678
     },
     "city": "test city őúéáűóöí-.,)(=",
