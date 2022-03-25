@@ -1,7 +1,6 @@
 import {Column, Entity, Index, ManyToOne, OneToMany, PrimaryGeneratedColumn, TableInheritance, Unique} from 'typeorm';
 import {DirectoryEntity} from './DirectoryEntity';
 import {MediaDimension, MediaDTO, MediaMetadata} from '../../../../../common/entities/MediaDTO';
-import {OrientationTypes} from 'ts-exif-parser';
 import {FaceRegionEntry} from './FaceRegionEntry';
 import {columnCharsetCS} from './EntityUtils';
 import {CameraMetadata, GPSMetadata, PositionMetaData} from '../../../../../common/entities/PhotoDTO';
@@ -57,8 +56,6 @@ export class GPSMetadataEntity implements GPSMetadata {
   latitude: number;
   @Column('float', {nullable: true})
   longitude: number;
-  @Column('int', {nullable: true})
-  altitude: number;
 }
 
 
@@ -128,9 +125,6 @@ export class MediaMetadataEntity implements MediaMetadata {
 
   @Column('tinyint', {unsigned: true})
   rating: 0 | 1 | 2 | 3 | 4 | 5;
-
-  @Column('tinyint', {unsigned: true, default: OrientationTypes.TOP_LEFT})
-  orientation: OrientationTypes;
 
   @OneToMany(type => FaceRegionEntry, faceRegion => faceRegion.media)
   faces: FaceRegionEntry[];

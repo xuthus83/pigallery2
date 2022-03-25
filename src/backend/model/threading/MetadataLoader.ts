@@ -97,7 +97,6 @@ export class MetadataLoader {
           }
           const metadata: PhotoMetadata = {
             size: {width: 1, height: 1},
-            orientation: OrientationTypes.TOP_LEFT,
             creationDate: 0,
             fileSize: 0
           };
@@ -138,11 +137,11 @@ export class MetadataLoader {
                 }
                 if (Utils.isFloat32(exif.tags.ExposureTime)) {
                   metadata.cameraData = metadata.cameraData || {};
-                  metadata.cameraData.exposure = parseFloat('' + exif.tags.ExposureTime);
+                  metadata.cameraData.exposure = parseFloat(parseFloat('' + exif.tags.ExposureTime).toFixed(4));
                 }
                 if (Utils.isFloat32(exif.tags.FNumber)) {
                   metadata.cameraData = metadata.cameraData || {};
-                  metadata.cameraData.fStop = parseFloat('' + exif.tags.FNumber);
+                  metadata.cameraData.fStop = parseFloat(parseFloat('' + exif.tags.FNumber).toFixed(2));
                 }
               }
               if (!isNaN(exif.tags.GPSLatitude) || exif.tags.GPSLongitude || exif.tags.GPSAltitude) {
@@ -150,13 +149,10 @@ export class MetadataLoader {
                 metadata.positionData.GPSData = {};
 
                 if (Utils.isFloat32(exif.tags.GPSLongitude)) {
-                  metadata.positionData.GPSData.longitude = exif.tags.GPSLongitude;
+                  metadata.positionData.GPSData.longitude = parseFloat(exif.tags.GPSLongitude.toFixed(6));
                 }
                 if (Utils.isFloat32(exif.tags.GPSLatitude)) {
-                  metadata.positionData.GPSData.latitude = exif.tags.GPSLatitude;
-                }
-                if (Utils.isInt32(exif.tags.GPSAltitude)) {
-                  metadata.positionData.GPSData.altitude = exif.tags.GPSAltitude;
+                  metadata.positionData.GPSData.latitude = parseFloat(exif.tags.GPSLatitude.toFixed(6));
                 }
               }
               if (exif.tags.CreateDate || exif.tags.DateTimeOriginal || exif.tags.ModifyDate) {
@@ -221,7 +217,9 @@ export class MetadataLoader {
               const exif = ExifReader.load(data);
               if (exif.Rating) {
                 metadata.rating = (parseInt(exif.Rating.value, 10) as any);
-                if(metadata.rating < 0) { metadata.rating = 0; }
+                if (metadata.rating < 0) {
+                  metadata.rating = 0;
+                }
               }
               if (exif.subject && exif.subject.value && exif.subject.value.length > 0) {
                 if (metadata.keywords === undefined) {
@@ -234,8 +232,8 @@ export class MetadataLoader {
                 }
               }
               if (exif.Orientation) {
-                metadata.orientation = (parseInt(exif.Orientation.value as any, 10) as any);
-                if (OrientationTypes.BOTTOM_LEFT < metadata.orientation) {
+                const orientation = (parseInt(exif.Orientation.value as any, 10) as any);
+                if (OrientationTypes.BOTTOM_LEFT < orientation) {
                   // noinspection JSSuspiciousNameCombination
                   const height = metadata.size.width;
                   // noinspection JSSuspiciousNameCombination

@@ -36,7 +36,6 @@ export interface PhotoMetadata extends MediaMetadata {
   keywords?: string[];
   cameraData?: CameraMetadata;
   positionData?: PositionMetaData;
-  orientation: OrientationTypes;
   size: MediaDimension;
   creationDate: number;
   fileSize: number;
@@ -52,9 +51,8 @@ export interface PositionMetaData {
 }
 
 export interface GPSMetadata {
-  latitude?: number;
-  longitude?: number;
-  altitude?: number;
+  latitude?: number; // float with precision: 6
+  longitude?: number; // float with precision: 6
 }
 
 
@@ -62,8 +60,8 @@ export interface CameraMetadata {
   ISO?: number;
   model?: string;
   make?: string;
-  fStop?: number;
-  exposure?: number;
+  fStop?: number; // float with precision: 2
+  exposure?: number; // float with precision: 4
   focalLength?: number;
   lens?: string;
 }

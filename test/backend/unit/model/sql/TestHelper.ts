@@ -74,7 +74,6 @@ export class TestHelper {
     m.size = sd;
     m.creationDate = Date.now();
     m.fileSize = 123456789;
-    m.orientation = OrientationTypes.TOP_LEFT;
     // m.rating = 0; no rating by default
 
     // TODO: remove when typeorm is fixed
@@ -323,7 +322,6 @@ export class TestHelper {
     };
 
     const gps: GPSMetadata = {
-      altitude: rndInt(1000),
       latitude: rndInt(1000),
       longitude: rndInt(1000)
     };
@@ -349,7 +347,6 @@ export class TestHelper {
       size: sd,
       creationDate: Date.now() + ++TestHelper.creationCounter,
       fileSize: rndInt(10000),
-      orientation: OrientationTypes.TOP_LEFT,
       caption: rndStr(),
       rating: rndInt(5) as any,
     };

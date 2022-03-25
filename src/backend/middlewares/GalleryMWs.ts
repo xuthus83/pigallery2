@@ -124,6 +124,7 @@ export class GalleryMWs {
 
     const cleanUpMedia = (media: MediaDTO[]): void => {
       media.forEach((m): void => {
+        delete m.id;
         if (MediaDTOUtils.isPhoto(m)) {
           delete (m as VideoDTO).metadata.bitRate;
           delete (m as VideoDTO).metadata.duration;
@@ -131,10 +132,11 @@ export class GalleryMWs {
           delete (m as PhotoDTO).metadata.rating;
           delete (m as PhotoDTO).metadata.caption;
           delete (m as PhotoDTO).metadata.cameraData;
-          delete (m as PhotoDTO).metadata.orientation;
-          delete (m as PhotoDTO).metadata.orientation;
           delete (m as PhotoDTO).metadata.keywords;
           delete (m as PhotoDTO).metadata.positionData;
+        }
+        if (m.directory) {
+          delete (m.directory as any).id;
         }
         Utils.removeNullOrEmptyObj(m);
       });

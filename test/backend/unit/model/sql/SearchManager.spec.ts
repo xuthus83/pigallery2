@@ -1067,8 +1067,7 @@ describe('SearchManager', (sqlHelper: DBTestHelper) => {
       ObjectManagers.getInstance().LocationManager.getGPSData = async (): Promise<GPSMetadata> => {
         return {
           longitude: 10,
-          latitude: 10,
-          altitude: 0
+          latitude: 10
         };
       };
 
