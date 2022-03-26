@@ -14,7 +14,6 @@ export class Media extends MediaIcon {
 
 
   thumbnailLoaded(): void {
-    console.log(this.media.name, this.media.missingThumbnails);
     if (!this.isThumbnailAvailable()) {
       this.media.missingThumbnails = this.media.missingThumbnails || 0;
       this.media.missingThumbnails -= MediaIcon.ThumbnailMap[this.getThumbnailSize()];
