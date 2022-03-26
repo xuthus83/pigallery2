@@ -5,8 +5,6 @@ import {MediaDimension, MediaDTO, MediaMetadata} from './MediaDTO';
 export interface PreviewPhotoDTO extends MediaDTO {
   name: string;
   directory: DirectoryPathDTO;
-  readyThumbnails: number[];
-  readyIcon: boolean;
 }
 
 export interface PhotoDTO extends PreviewPhotoDTO, MediaDTO {
@@ -14,8 +12,7 @@ export interface PhotoDTO extends PreviewPhotoDTO, MediaDTO {
   name: string;
   directory: DirectoryPathDTO;
   metadata: PhotoMetadata;
-  readyThumbnails: number[];
-  readyIcon: boolean;
+  missingThumbnails?: number;
 }
 
 export interface FaceRegionBox {

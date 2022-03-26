@@ -167,8 +167,5 @@ export abstract class MediaEntity implements MediaDTO {
   @Column(type => MediaMetadataEntity)
   metadata: MediaMetadataEntity;
 
-  readyThumbnails: number[] = [];
-
-  readyIcon = false;
-
+  missingThumbnails: number;
 }

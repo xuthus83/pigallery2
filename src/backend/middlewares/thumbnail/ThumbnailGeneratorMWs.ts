@@ -14,6 +14,7 @@ import {ServerTime} from '../ServerTimingMWs';
 
 
 export class ThumbnailGeneratorMWs {
+  private static ThumbnailMap: { [key: number]: number };
 
   @ServerTime('2.th', 'Thumbnail decoration')
   public static async addThumbnailInformation(req: Request, res: Response, next: NextFunction): Promise<any> {
@@ -67,7 +68,7 @@ export class ThumbnailGeneratorMWs {
         // generate thumbnail path
         const thPath = PhotoProcessing.generatePersonThumbnailPath(mediaPath, item.sampleRegion, size);
 
-        item.readyThumbnail = fs.existsSync(thPath);
+        item.missingThumbnail = !fs.existsSync(thPath);
       }
 
     } catch (error) {
@@ -148,6 +149,7 @@ export class ThumbnailGeneratorMWs {
 
 
   private static addThInfoTODir(directory: ParentDirectoryDTO | SubDirectoryDTO): void {
+    ThumbnailGeneratorMWs.ThumbnailMap = Config.Client.Media.Thumbnail.generateThumbnailMap();
     if (typeof directory.media !== 'undefined') {
       ThumbnailGeneratorMWs.addThInfoToPhotos(directory.media);
     }
@@ -164,20 +166,16 @@ export class ThumbnailGeneratorMWs {
 
   private static addThInfoToAPhoto(photo: MediaDTO): void {
     const fullMediaPath = path.join(ProjectPath.ImageFolder, photo.directory.path, photo.directory.name, photo.name);
-    for (const size of Config.Client.Media.Thumbnail.thumbnailSizes) {
-      const thPath = PhotoProcessing.generateConvertedPath(fullMediaPath, size);
-      if (fs.existsSync(thPath) === true) {
-        if (typeof photo.readyThumbnails === 'undefined') {
-          photo.readyThumbnails = [];
+    for (const size of Object.keys(ThumbnailGeneratorMWs.ThumbnailMap)) {
+      const thPath = PhotoProcessing.generateConvertedPath(fullMediaPath, size as any);
+      if (fs.existsSync(thPath) !== true) {
+        if (typeof photo.missingThumbnails === 'undefined') {
+          photo.missingThumbnails = 0;
         }
-        photo.readyThumbnails.push(size);
+        // this is a bitwise operation
+        photo.missingThumbnails += ThumbnailGeneratorMWs.ThumbnailMap[size as any];
       }
     }
-    const iconPath = PhotoProcessing.generateConvertedPath(fullMediaPath, Config.Client.Media.Thumbnail.iconSize);
-    if (fs.existsSync(iconPath) === true) {
-      photo.readyIcon = true;
-    }
-
   }
 
 }

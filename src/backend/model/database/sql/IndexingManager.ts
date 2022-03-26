@@ -61,13 +61,6 @@ export class IndexingManager implements IIndexingManager {
       try {
         const scannedDirectory = await DiskManager.scanDirectory(relativeDirectoryName);
 
-        // returning with the result
-        if (scannedDirectory.preview) {
-          scannedDirectory.preview.readyThumbnails = [];
-        }
-        scannedDirectory.media.forEach((p): any[] => p.readyThumbnails = []);
-
-
         const dirClone = Utils.shallowClone(scannedDirectory);
         // filter server side only config from returning
         dirClone.metaFile = dirClone.metaFile.filter(m => !ServerPG2ConfMap[m.name]);

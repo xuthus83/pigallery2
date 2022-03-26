@@ -8,7 +8,7 @@ export interface PersonDTO {
   id: number;
   name: string;
   count: number;
-  readyThumbnail?: boolean;
+  missingThumbnail?: boolean;
   isFavourite: boolean;
 }
 

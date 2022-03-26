@@ -1240,9 +1240,7 @@ describe('SearchManager', (sqlHelper: DBTestHelper) => {
           name: subDir.name,
           path: subDir.path
         },
-        name: pFaceLess.name,
-        readyIcon: false,
-        readyThumbnails: []
+        name: pFaceLess.name
       } as any;
       const query = {
         text: subDir.name,

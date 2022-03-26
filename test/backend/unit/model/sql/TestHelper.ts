@@ -354,9 +354,7 @@ export class TestHelper {
       id: null,
       name: rndStr() + '.jpg',
       directory: dir,
-      metadata: m,
-      readyThumbnails: [],
-      readyIcon: false
+      metadata: m
     };
 
     for (let i = 0; i < faces; i++) {
