@@ -83,7 +83,7 @@ export class PersonThumbnail extends ThumbnailBase {
     super(thumbnailService);
     this.src = '';
     this.error = false;
-    if (this.person.readyThumbnail) {
+    if (!this.person.missingThumbnail) {
       this.src = Person.getThumbnailUrl(person);
       this.available = true;
       if (this.onLoad) {

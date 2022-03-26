@@ -103,6 +103,17 @@ export class ClientThumbnailConfig {
   thumbnailSizes: number[] = [240, 480];
   @ConfigProperty({volatile: true})
   concurrentThumbnailGenerations: number = 1;
+
+  /**
+   * Generates a map for bitwise operation from icon and normal thumbnails
+   */
+  generateThumbnailMap(): { [key: number]: number } {
+    const m: { [key: number]: number } = {};
+    [this.iconSize, ...this.thumbnailSizes.sort()].forEach((v, i) => {
+      m[v] = Math.pow(2, i + 1);
+    });
+    return m;
+  }
 }
 
 @SubConfigClass()

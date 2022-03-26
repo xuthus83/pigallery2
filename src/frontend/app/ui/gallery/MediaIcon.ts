@@ -3,7 +3,7 @@ import {Config} from '../../../../common/config/public/Config';
 import {MediaDTO} from '../../../../common/entities/MediaDTO';
 
 export class MediaIcon {
-
+  protected static readonly  ThumbnailMap = Config.Client.Media.Thumbnail.generateThumbnailMap();
 
   protected replacementSizeCache: number | boolean = false;
 
@@ -16,11 +16,12 @@ export class MediaIcon {
   }
 
   iconLoaded(): void {
-    this.media.readyIcon = true;
+    this.media.missingThumbnails -= MediaIcon.ThumbnailMap[Config.Client.Media.Thumbnail.iconSize];
   }
 
   isIconAvailable(): boolean {
-    return this.media.readyIcon;
+    // tslint:disable-next-line:no-bitwise
+    return (this.media.missingThumbnails & MediaIcon.ThumbnailMap[Config.Client.Media.Thumbnail.iconSize]) === 0;
   }
 
   getRelativePath(): string {

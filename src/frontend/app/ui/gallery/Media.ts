@@ -14,9 +14,13 @@ export class Media extends MediaIcon {
 
 
   thumbnailLoaded(): void {
+    console.log(this.media.name, this.media.missingThumbnails);
     if (!this.isThumbnailAvailable()) {
-      this.media.readyThumbnails = this.media.readyThumbnails || [];
-      this.media.readyThumbnails.push(this.getThumbnailSize());
+      this.media.missingThumbnails = this.media.missingThumbnails || 0;
+      this.media.missingThumbnails -= MediaIcon.ThumbnailMap[this.getThumbnailSize()];
+      if (this.media.missingThumbnails < 0) {
+        throw new Error('missingThumbnails got below 0');
+      }
     }
   }
 
@@ -31,10 +35,12 @@ export class Media extends MediaIcon {
       this.replacementSizeCache = null;
 
       const size = this.getThumbnailSize();
-      if (!!this.media.readyThumbnails) {
-        for (const item of this.media.readyThumbnails) {
-          if (item < size) {
-            this.replacementSizeCache = item;
+      if (!!this.media.missingThumbnails) {
+        for (const thSize of Config.Client.Media.Thumbnail.thumbnailSizes) {
+          // tslint:disable-next-line:no-bitwise
+          if ((this.media.missingThumbnails & MediaIcon.ThumbnailMap[thSize]) === 0 &&
+            thSize < size) {
+            this.replacementSizeCache = thSize;
             break;
           }
         }
@@ -48,7 +54,8 @@ export class Media extends MediaIcon {
   }
 
   isThumbnailAvailable(): boolean {
-    return this.media.readyThumbnails && this.media.readyThumbnails.indexOf(this.getThumbnailSize()) !== -1;
+    // tslint:disable-next-line:no-bitwise
+    return (this.media.missingThumbnails & MediaIcon.ThumbnailMap[this.getThumbnailSize()]) === 0;
   }
 
   getReplacementThumbnailPath(): string {

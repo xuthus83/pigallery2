@@ -244,24 +244,27 @@ export class GalleryCacheService {
    * @param media: MediaBaseDTO
    */
   public mediaUpdated(media: MediaDTO): void {
-
     if (Config.Client.Other.enableCache === false) {
       return;
     }
 
     try {
-      const directoryName = Utils.concatUrls(media.directory.path, media.directory.name);
-      const value = localStorage.getItem(directoryName);
+      const directoryKey = GalleryCacheService.CONTENT_PREFIX + Utils.concatUrls(media.directory.path, media.directory.name);
+      const value = localStorage.getItem(directoryKey);
       if (value != null) {
         const directory: ParentDirectoryDTO = JSON.parse(value);
         directory.media.forEach((p) => {
           if (p.name === media.name) {
             // update data
             p.metadata = media.metadata;
-            p.readyThumbnails = media.readyThumbnails;
+            if (media.missingThumbnails) {
+              p.missingThumbnails = media.missingThumbnails;
+            } else {
+              delete p.missingThumbnails;
+            }
 
             // save changes
-            localStorage.setItem(directoryName, JSON.stringify(directory));
+            localStorage.setItem(directoryKey, JSON.stringify(directory));
             return;
           }
         });

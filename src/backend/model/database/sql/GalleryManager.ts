@@ -229,10 +229,6 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
 
     dir.media = [];
     dir.isPartial = true;
-    if (dir.preview) {
-      dir.preview.readyThumbnails = [];
-      dir.preview.readyIcon = false;
-    }
   }
 
 
@@ -282,8 +278,6 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
         .getMany();
       for (const item of dir.media) {
         item.directory = dir;
-        item.readyThumbnails = [];
-        item.readyIcon = false;
         (item as PhotoDTO).metadata.faces = indexedFaces
           .filter((fe): boolean => fe.media.id === item.id)
           .map((f): { name: any; box: any } => ({box: f.box, name: f.person.name}));
