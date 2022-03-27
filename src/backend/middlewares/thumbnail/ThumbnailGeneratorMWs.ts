@@ -14,7 +14,7 @@ import {ServerTime} from '../ServerTimingMWs';
 
 
 export class ThumbnailGeneratorMWs {
-  private static ThumbnailMap: { [key: number]: number };
+  private static ThumbnailMap: { [key: number]: number }  = Config.Client.Media.Thumbnail.generateThumbnailMap();
 
   @ServerTime('2.th', 'Thumbnail decoration')
   public static async addThumbnailInformation(req: Request, res: Response, next: NextFunction): Promise<any> {

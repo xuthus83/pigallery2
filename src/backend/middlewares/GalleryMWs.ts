@@ -123,7 +123,7 @@ export class GalleryMWs {
     }
 
     const cleanUpMedia = (media: MediaDTO[]): void => {
-      media.forEach((m): void => {
+      for (const m of media) {
         delete m.id;
         if (MediaDTOUtils.isPhoto(m)) {
           delete (m as VideoDTO).metadata.bitRate;
@@ -139,7 +139,7 @@ export class GalleryMWs {
           delete (m.directory as any).id;
         }
         Utils.removeNullOrEmptyObj(m);
-      });
+      }
     };
 
     if (cw.directory) {
