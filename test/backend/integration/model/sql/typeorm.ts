@@ -34,7 +34,7 @@ describe('Typeorm integration', () => {
 
   const teardownUpSqlDB = async () => {
     await SQLConnection.close();
-    await fs.promises.rmdir(tempDir, {recursive: true});
+    await fs.promises.rm(tempDir, {recursive: true});
   };
 
   beforeEach(async () => {
