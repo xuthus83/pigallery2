@@ -90,7 +90,7 @@ export class SearchManager implements ISQLSearchManager {
     if (type === SearchQueryTypes.any_text || type === SearchQueryTypes.person) {
       partialResult.push(this.encapsulateAutoComplete((await personRepository
         .createQueryBuilder('person')
-        .select('DISTINCT(person.name)')
+        .select('DISTINCT(person.name), person.count')
         .where('person.name LIKE :text COLLATE ' + SQL_COLLATE, {text: '%' + text + '%'})
         .limit(Config.Client.Search.AutoComplete.targetItemsPerCategory * 2)
         .orderBy('person.count', 'DESC')

@@ -411,8 +411,8 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
     const parent = TestHelper.getRandomizedDirectoryEntry();
     const p1 = TestHelper.getRandomizedPhotoEntry(parent, 'Photo1');
     const p2 = TestHelper.getRandomizedPhotoEntry(parent, 'Photo2');
-    const minFloat = 1.1 * Math.pow(10, -38);
-    const maxFloat = 3.4 * Math.pow(10, +38);
+    const minFloat = parseFloat((1.1 * Math.pow(10, -38)).toFixed(10));
+    const maxFloat = parseFloat((3.4 * Math.pow(10, +38)).toFixed(10));
     p1.metadata.cameraData.fStop = minFloat;
     p2.metadata.cameraData.fStop = maxFloat;
     p1.metadata.cameraData.exposure = minFloat;
@@ -561,7 +561,7 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
 
     await im.resetDB();
     const selectReset = await gm.selectParentDir(conn, parent.name, parent.path);
-    expect(selectReset).to.deep.equal(undefined);
+    expect(selectReset).to.deep.equal(null);
   });
 
 
