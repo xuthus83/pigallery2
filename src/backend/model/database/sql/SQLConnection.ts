@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import {Connection, ConnectionOptions, createConnection, getConnection} from 'typeorm';
+import {Connection, DataSourceOptions, createConnection, getConnection} from 'typeorm';
 import {UserEntity} from './enitites/UserEntity';
 import {UserRoles} from '../../../../common/entities/UserDTO';
 import {PhotoEntity} from './enitites/PhotoEntity';
@@ -104,7 +104,7 @@ export class SQLConnection {
     if (Array.isArray(Config.Server.Database.enforcedUsers) &&
       Config.Server.Database.enforcedUsers.length > 0) {
       for (const uc of Config.Server.Database.enforcedUsers) {
-        const user = await userRepository.findOne({name: uc.name});
+        const user = await userRepository.findOneBy({name: uc.name});
         if (!user) {
           Logger.info(LOG_TAG, 'Saving enforced user: ' + uc.name);
           const a = new UserEntity();
@@ -123,7 +123,7 @@ export class SQLConnection {
     }
 
     // Add dummy Admin to the db
-    const admins = await userRepository.find({role: UserRoles.Admin});
+    const admins = await userRepository.findBy({role: UserRoles.Admin});
     if (admins.length === 0) {
       const a = new UserEntity();
       a.name = 'admin';
@@ -132,7 +132,7 @@ export class SQLConnection {
       await userRepository.save(a);
     }
 
-    const defAdmin = await userRepository.findOne({name: 'admin', role: UserRoles.Admin});
+    const defAdmin = await userRepository.findOneBy({name: 'admin', role: UserRoles.Admin});
     if (defAdmin && PasswordHelper.comparePassword('admin', defAdmin.password)) {
       NotificationManager.error('Using default admin user!', 'You are using the default admin/admin user/password, please change or remove it.');
     }
@@ -155,7 +155,7 @@ export class SQLConnection {
     return path.join(ProjectPath.getAbsolutePath(config.dbFolder), 'sqlite.db');
   }
 
-  private static async createConnection(options: ConnectionOptions): Promise<Connection> {
+  private static async createConnection(options: DataSourceOptions): Promise<Connection> {
     if (options.type === 'sqlite' || options.type === 'better-sqlite3') {
       return await createConnection(options);
     }
@@ -179,7 +179,7 @@ export class SQLConnection {
   private static async schemeSync(connection: Connection): Promise<void> {
     let version = null;
     try {
-      version = await connection.getRepository(VersionEntity).findOne();
+      version = (await connection.getRepository(VersionEntity).find())[0];
     } catch (ex) {
     }
     if (version && version.version === DataStructureVersion) {
@@ -209,8 +209,8 @@ export class SQLConnection {
     }
   }
 
-  private static getDriver(config: ServerDataBaseConfig): ConnectionOptions {
-    let driver: ConnectionOptions = null;
+  private static getDriver(config: ServerDataBaseConfig): DataSourceOptions {
+    let driver: DataSourceOptions = null;
     if (config.type === DatabaseType.mysql) {
       driver = {
         type: 'mysql',

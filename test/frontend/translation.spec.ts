@@ -1,7 +1,7 @@
 import {ProjectPath} from '../../src/backend/ProjectPath';
 import {promises as fsp} from 'fs';
 const chai = require('chai');
-import path = require('path');
+import * as path from 'path';
 const {expect} = chai;
 
 // to help WebStorm to handle the test cases

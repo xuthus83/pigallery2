@@ -8,9 +8,10 @@
     "downlevelIteration": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "target": "es2020",
-    "module": "commonjs",
+    "target": "es2017",
+    "module": "CommonJS",
     "lib": [
+      "es2018",
       "dom"
     ]
   },

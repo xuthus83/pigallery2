@@ -14,8 +14,6 @@ import {backendTexts} from '../../../../common/BackendTexts';
 import {ProjectPath} from '../../../ProjectPath';
 import {DatabaseType} from '../../../../common/config/private/PrivateConfig';
 
-declare var global: NodeJS.Global;
-
 
 const LOG_TAG = '[FileJob]';
 

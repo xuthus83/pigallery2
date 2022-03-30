@@ -36,7 +36,7 @@ export class AlbumManager implements IAlbumManager {
   public async addIfNotExistSavedSearch(name: string, searchQuery: SearchQueryDTO, lockedAlbum: boolean): Promise<void> {
     const connection = await SQLConnection.getConnection();
     const album = await connection.getRepository(SavedSearchEntity)
-      .findOne({name, searchQuery});
+      .findOneBy({name, searchQuery});
     if (album) {
       return;
     }
@@ -53,7 +53,7 @@ export class AlbumManager implements IAlbumManager {
     const connection = await SQLConnection.getConnection();
 
     if (await connection.getRepository(AlbumBaseEntity)
-      .count({id, locked: false}) !== 1) {
+      .countBy({id, locked: false}) !== 1) {
       throw new Error('Could not delete album, id:' + id);
     }
 

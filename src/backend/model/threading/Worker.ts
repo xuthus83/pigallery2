@@ -6,7 +6,6 @@ import {MediaDTO} from '../../../common/entities/MediaDTO';
 import {ParentDirectoryDTO} from '../../../common/entities/DirectoryDTO';
 
 declare var process: NodeJS.Process;
-declare var global: NodeJS.Global;
 const LOG_TAG = '[Worker]';
 
 export class Worker {

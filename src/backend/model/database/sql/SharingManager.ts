@@ -4,7 +4,7 @@ import {SQLConnection} from './SQLConnection';
 import {SharingEntity} from './enitites/SharingEntity';
 import {Config} from '../../../../common/config/private/Config';
 import {PasswordHelper} from '../../PasswordHelper';
-import {DeleteResult} from 'typeorm';
+import {DeleteResult, FindOptionsWhere} from 'typeorm';
 
 export class SharingManager implements ISharingManager {
 
@@ -20,7 +20,7 @@ export class SharingManager implements ISharingManager {
 
   async deleteSharing(sharingKey: string): Promise<void> {
     const connection = await SQLConnection.getConnection();
-    const sharing = await connection.getRepository(SharingEntity).findOne({sharingKey});
+    const sharing = await connection.getRepository(SharingEntity).findOneBy({sharingKey});
     await connection.getRepository(SharingEntity).remove(sharing);
   }
 
@@ -32,10 +32,10 @@ export class SharingManager implements ISharingManager {
       .leftJoinAndSelect('share.creator', 'creator').getMany();
   }
 
-  async findOne(filter: any): Promise<SharingDTO> {
+  async findOne(filter: FindOptionsWhere<SharingDTO>): Promise<SharingDTO> {
     await SharingManager.removeExpiredLink();
     const connection = await SQLConnection.getConnection();
-    return await connection.getRepository(SharingEntity).findOne(filter);
+    return await connection.getRepository(SharingEntity).findOneBy(filter);
   }
 
   async createSharing(sharing: SharingDTO): Promise<SharingDTO> {
@@ -50,7 +50,7 @@ export class SharingManager implements ISharingManager {
   async updateSharing(inSharing: SharingDTO, forceUpdate: boolean): Promise<SharingDTO> {
     const connection = await SQLConnection.getConnection();
 
-    const sharing = await connection.getRepository(SharingEntity).findOne({
+    const sharing = await connection.getRepository(SharingEntity).findOneBy({
       id: inSharing.id,
       creator: inSharing.creator.id as any,
       path: inSharing.path

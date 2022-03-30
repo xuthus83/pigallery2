@@ -1,4 +1,5 @@
 import * as cluster from 'cluster';
+import {Worker} from 'cluster';
 import {Logger} from '../../Logger';
 import {DiskManagerTask, ThumbnailTask, WorkerMessage, WorkerTask, WorkerTaskTypes} from './Worker';
 import {ParentDirectoryDTO} from '../../../common/entities/DirectoryDTO';
@@ -9,7 +10,7 @@ import {DirectoryScanSettings} from './DiskMangerWorker';
 
 
 interface WorkerWrapper<O> {
-  worker: cluster.Worker;
+  worker: Worker;
   poolTask: TaskQueEntry<WorkerTask, O>;
 }
 
@@ -58,7 +59,7 @@ export class ThreadPool<O> {
   }
 
   private startWorker(): void {
-    const worker = {poolTask: null, worker: cluster.fork()} as WorkerWrapper<O>;
+    const worker = {poolTask: null, worker: (cluster as any).fork()} as WorkerWrapper<O>;
     this.workers.push(worker);
     worker.worker.on('online', (): void => {
       ThreadPool.WorkerCount++;
