@@ -25,9 +25,9 @@ export class UserManager implements IUserManager {
 
   }
 
-  public async find(filter: any): Promise<any> {
+  public async find(filter: FindOptionsWhere<UserDTO>): Promise<any> {
     const connection = await SQLConnection.getConnection();
-    return await connection.getRepository(UserEntity).find(filter);
+    return await connection.getRepository(UserEntity).findBy(filter);
   }
 
   public async createUser(user: UserDTO): Promise<any> {

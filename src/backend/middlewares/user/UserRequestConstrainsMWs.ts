@@ -1,4 +1,5 @@
 import {NextFunction, Request, Response} from 'express';
+import { MoreThanOrEqual } from 'typeorm';
 import {ErrorCodes, ErrorDTO} from '../../../common/entities/Error';
 import {UserRoles} from '../../../common/entities/UserDTO';
 import {ObjectManagers} from '../../model/ObjectManagers';
@@ -40,7 +41,7 @@ export class UserRequestConstrainsMWs {
 
     // TODO: fix it!
     try {
-      const result = await ObjectManagers.getInstance().UserManager.find({minRole: UserRoles.Admin});
+      const result = await ObjectManagers.getInstance().UserManager.find({role: MoreThanOrEqual(UserRoles.Admin)});
       if (result.length <= 1) {
         return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR));
       }
