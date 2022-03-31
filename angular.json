@@ -83,13 +83,13 @@
               }
             ],
             "styles": [
-              "bootstrap/dist/css/bootstrap.css",
-              "ngx-bootstrap/datepicker/bs-datepicker.css",
-              "open-iconic/font/css/open-iconic-bootstrap.css",
-              "ngx-toastr/toastr.css",
-              "leaflet/dist/leaflet.css",
-              "leaflet.markercluster/dist/MarkerCluster.css",
-              "leaflet.markercluster/dist/MarkerCluster.Default.css",
+              "node_modules/bootstrap/dist/css/bootstrap.css",
+              "node_modules/ngx-bootstrap/datepicker/bs-datepicker.css",
+              "node_modules/open-iconic/font/css/open-iconic-bootstrap.css",
+              "node_modules/ngx-toastr/toastr.css",
+              "node_modules/leaflet/dist/leaflet.css",
+              "node_modules/leaflet.markercluster/dist/MarkerCluster.css",
+              "node_modules/leaflet.markercluster/dist/MarkerCluster.Default.css",
               "src/frontend/styles.css"
             ],
             "scripts": [
@@ -101,6 +101,12 @@
             "dev": {
               "outputPath": "dist/en",
               "localize": false,
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true,
               "watch": true
             },
             "production": {
@@ -158,14 +164,14 @@
             "tsConfig": "src/frontend/tsconfig.spec.json",
             "scripts": [],
             "styles": [
-              "bootstrap/dist/css/bootstrap.min.css",
-              "ngx-toastr/toastr.css",
-              "bootstrap/dist/css/bootstrap.css",
-              "open-iconic/font/css/open-iconic-bootstrap.css",
-              "ngx-bootstrap/datepicker/bs-datepicker.css",
-              "leaflet/dist/leaflet.css",
-              "leaflet.markercluster/dist/MarkerCluster.css",
-              "leaflet.markercluster/dist/MarkerCluster.Default.css",
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "node_modules/ngx-toastr/toastr.css",
+              "node_modules/bootstrap/dist/css/bootstrap.css",
+              "node_modules/open-iconic/font/css/open-iconic-bootstrap.css",
+              "node_modules/ngx-bootstrap/datepicker/bs-datepicker.css",
+              "node_modules/leaflet/dist/leaflet.css",
+              "node_modules/leaflet.markercluster/dist/MarkerCluster.css",
+              "node_modules/leaflet.markercluster/dist/MarkerCluster.Default.css",
               "src/frontend/styles.css"
             ],
             "assets": [
