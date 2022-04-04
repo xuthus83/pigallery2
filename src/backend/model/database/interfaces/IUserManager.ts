@@ -1,6 +1,6 @@
-import {UserDTO, UserRoles} from '../../../../common/entities/UserDTO';
-import {IObjectManager} from './IObjectManager';
-import {FindOptionsWhere} from 'typeorm';
+import { UserDTO, UserRoles } from '../../../../common/entities/UserDTO';
+import { IObjectManager } from './IObjectManager';
+import { FindOptionsWhere } from 'typeorm';
 
 export interface IUserManager extends IObjectManager {
   findOne(filter: FindOptionsWhere<UserDTO>): Promise<UserDTO>;

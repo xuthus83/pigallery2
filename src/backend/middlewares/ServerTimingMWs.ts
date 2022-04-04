@@ -1,12 +1,10 @@
-import {NextFunction, Request, Response} from 'express';
-import {Config} from '../../common/config/private/Config';
-
+import { NextFunction, Request, Response } from 'express';
+import { Config } from '../../common/config/private/Config';
 
 export class ServerTimeEntry {
   public name: string;
   startHR: any;
   public endTime: number = null;
-
 
   constructor(name: string) {
     this.name = name;
@@ -18,13 +16,16 @@ export class ServerTimeEntry {
 
   public end(): void {
     const duration = process.hrtime(this.startHR);
-    this.endTime = (duration[0] * 1E3) + (duration[1] * 1e-6);
+    this.endTime = duration[0] * 1e3 + duration[1] * 1e-6;
   }
 }
 
-
 export const ServerTime = (id: string, name: string) => {
-  return (target: any, propertyName: string, descriptor: TypedPropertyDescriptor<any>): any => {
+  return (
+    target: any,
+    propertyName: string,
+    descriptor: TypedPropertyDescriptor<any>
+  ): any => {
     if (Config.Server.Log.logServerTiming === false) {
       return;
     }
@@ -38,27 +39,34 @@ export const ServerTime = (id: string, name: string) => {
         next(err);
       });
     };
-    descriptor.value = new Function('action', 'return function ' + m.name + '(...args){ action(...args) };')(customAction);
-
+    descriptor.value = new Function(
+      'action',
+      'return function ' + m.name + '(...args){ action(...args) };'
+    )(customAction);
   };
 };
 
-
-const forcedDebug = process.env.NODE_ENV === 'debug';
+const forcedDebug = process.env['NODE_ENV'] === 'debug';
 
 export class ServerTimingMWs {
-
-
   /**
    * Add server timing
    */
-  public static async addServerTiming(req: Request, res: Response, next: NextFunction): Promise<any> {
-    if ((Config.Server.Log.logServerTiming === false && !forcedDebug) || !req.timing) {
+  public static async addServerTiming(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<any> {
+    if (
+      (Config.Server.Log.logServerTiming === false && !forcedDebug) ||
+      !req.timing
+    ) {
       return next();
     }
-    const l = Object.entries(req.timing).filter(e => e[1].endTime).map(e => `${e[0]};dur=${e[1].endTime};desc="${e[1].name}"`);
+    const l = Object.entries(req.timing)
+      .filter((e) => e[1].endTime)
+      .map((e) => `${e[0]};dur=${e[1].endTime};desc="${e[1].name}"`);
     res.header('Server-Timing', l.join(', '));
     next();
   }
-
 }

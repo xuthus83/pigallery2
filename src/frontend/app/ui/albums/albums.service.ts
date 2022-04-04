@@ -1,9 +1,8 @@
-import {Injectable} from '@angular/core';
-import {NetworkService} from '../../model/network/network.service';
-import {BehaviorSubject} from 'rxjs';
-import {AlbumBaseDTO} from '../../../../common/entities/album/AlbumBaseDTO';
-import {SearchQueryDTO} from '../../../../common/entities/SearchQueryDTO';
-
+import { Injectable } from '@angular/core';
+import { NetworkService } from '../../model/network/network.service';
+import { BehaviorSubject } from 'rxjs';
+import { AlbumBaseDTO } from '../../../../common/entities/album/AlbumBaseDTO';
+import { SearchQueryDTO } from '../../../../common/entities/SearchQueryDTO';
 
 @Injectable()
 export class AlbumsService {
@@ -13,10 +12,12 @@ export class AlbumsService {
     this.albums = new BehaviorSubject<AlbumBaseDTO[]>(null);
   }
 
-
   public async getAlbums(): Promise<void> {
-    this.albums.next((await this.networkService.getJson<AlbumBaseDTO[]>('/albums'))
-      .sort((a, b): number => a.name.localeCompare(b.name)));
+    this.albums.next(
+      (await this.networkService.getJson<AlbumBaseDTO[]>('/albums')).sort(
+        (a, b): number => a.name.localeCompare(b.name)
+      )
+    );
   }
 
   async deleteAlbum(album: AlbumBaseDTO): Promise<void> {
@@ -24,8 +25,14 @@ export class AlbumsService {
     await this.getAlbums();
   }
 
-  async addSavedSearch(name: string, searchQuery: SearchQueryDTO): Promise<void> {
-    await this.networkService.putJson('/albums/saved-searches', {name, searchQuery});
+  async addSavedSearch(
+    name: string,
+    searchQuery: SearchQueryDTO
+  ): Promise<void> {
+    await this.networkService.putJson('/albums/saved-searches', {
+      name,
+      searchQuery,
+    });
     await this.getAlbums();
   }
 }

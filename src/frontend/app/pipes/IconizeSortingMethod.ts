@@ -1,8 +1,7 @@
-import {Pipe, PipeTransform} from '@angular/core';
-import {SortingMethods} from '../../../common/entities/SortingMethods';
+import { Pipe, PipeTransform } from '@angular/core';
+import { SortingMethods } from '../../../common/entities/SortingMethods';
 
-
-@Pipe({name: 'iconizeSorting'})
+@Pipe({ name: 'iconizeSorting' })
 export class IconizeSortingMethod implements PipeTransform {
   transform(method: SortingMethods): string {
     switch (method) {

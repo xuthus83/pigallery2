@@ -1,7 +1,24 @@
-import {Component, EventEmitter, forwardRef, Input, Output} from '@angular/core';
-import {SearchQueryDTO, SearchQueryTypes, TextSearch} from '../../../../../../common/entities/SearchQueryDTO';
-import {ControlValueAccessor, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator} from '@angular/forms';
-import {SearchQueryParserService} from '../search-query-parser.service';
+import {
+  Component,
+  EventEmitter,
+  forwardRef,
+  Input,
+  Output,
+} from '@angular/core';
+import {
+  SearchQueryDTO,
+  SearchQueryTypes,
+  TextSearch,
+} from '../../../../../../common/entities/SearchQueryDTO';
+import {
+  ControlValueAccessor,
+  FormControl,
+  NG_VALIDATORS,
+  NG_VALUE_ACCESSOR,
+  ValidationErrors,
+  Validator,
+} from '@angular/forms';
+import { SearchQueryParserService } from '../search-query-parser.service';
 
 @Component({
   selector: 'app-gallery-search-query-builder',
@@ -11,56 +28,64 @@ import {SearchQueryParserService} from '../search-query-parser.service';
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => GallerySearchQueryBuilderComponent),
-      multi: true
+      multi: true,
     },
     {
       provide: NG_VALIDATORS,
       useExisting: forwardRef(() => GallerySearchQueryBuilderComponent),
-      multi: true
-    }
-  ]
+      multi: true,
+    },
+  ],
 })
-export class GallerySearchQueryBuilderComponent implements ControlValueAccessor, Validator {
-  public searchQueryDTO: SearchQueryDTO = {type: SearchQueryTypes.any_text, text: ''} as TextSearch;
+export class GallerySearchQueryBuilderComponent
+  implements ControlValueAccessor, Validator
+{
+  public searchQueryDTO: SearchQueryDTO = {
+    type: SearchQueryTypes.any_text,
+    text: '',
+  } as TextSearch;
   @Output() search = new EventEmitter<void>();
-  @Input() placeholder: string;
+  @Input() placeholder: string = "Search";
   public rawSearchText = '';
 
-
-  constructor(
-    private searchQueryParserService: SearchQueryParserService) {
-  }
-
+  constructor(private searchQueryParserService: SearchQueryParserService) {}
 
   validateRawSearchText(): void {
     try {
-      this.searchQueryDTO = this.searchQueryParserService.parse(this.rawSearchText);
+      this.searchQueryDTO = this.searchQueryParserService.parse(
+        this.rawSearchText
+      );
       this.onChange();
     } catch (e) {
       console.error(e);
     }
   }
 
-
   resetQuery(): void {
-    this.searchQueryDTO = ({text: '', type: SearchQueryTypes.any_text} as TextSearch);
+    this.searchQueryDTO = {
+      text: '',
+      type: SearchQueryTypes.any_text,
+    } as TextSearch;
   }
 
   onQueryChange(): void {
-    this.rawSearchText = this.searchQueryParserService.stringify(this.searchQueryDTO);
+    this.rawSearchText = this.searchQueryParserService.stringify(
+      this.searchQueryDTO
+    );
     this.onChange();
   }
 
   validate(control: FormControl): ValidationErrors {
-    return {required: true};
+    return { required: true };
   }
 
-  public onTouched(): void {
-  }
+  public onTouched(): void {}
 
   public writeValue(obj: any): void {
     this.searchQueryDTO = obj;
-    this.rawSearchText = this.searchQueryParserService.stringify(this.searchQueryDTO);
+    this.rawSearchText = this.searchQueryParserService.stringify(
+      this.searchQueryDTO
+    );
   }
 
   registerOnChange(fn: (_: any) => void): void {
@@ -75,10 +100,7 @@ export class GallerySearchQueryBuilderComponent implements ControlValueAccessor,
     this.propagateChange(this.searchQueryDTO);
   }
 
+  private propagateChange = (_: any): void => {};
 
-  private propagateChange = (_: any): void => {
-  };
-
-  private propagateTouch = (_: any): void => {
-  };
+  private propagateTouch = (_: any): void => {};
 }

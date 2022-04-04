@@ -1,10 +1,12 @@
-import {Injectable} from '@angular/core';
-import {QueryKeywords, SearchQueryParser} from '../../../../../common/SearchQueryParser';
-import {SearchQueryDTO} from '../../../../../common/entities/SearchQueryDTO';
+import { Injectable } from '@angular/core';
+import {
+  QueryKeywords,
+  SearchQueryParser,
+} from '../../../../../common/SearchQueryParser';
+import { SearchQueryDTO } from '../../../../../common/entities/SearchQueryDTO';
 
 @Injectable()
 export class SearchQueryParserService {
-
   public readonly keywords: QueryKeywords = {
     NSomeOf: 'of',
     and: 'and',
@@ -28,14 +30,13 @@ export class SearchQueryParserService {
     portrait: 'portrait',
     position: 'position',
     someOf: 'some-of',
-    kmFrom: 'km-from'
+    kmFrom: 'km-from',
   };
   private readonly parser: SearchQueryParser;
 
   constructor() {
     this.parser = new SearchQueryParser(this.keywords);
   }
-
 
   public parse(str: string): SearchQueryDTO {
     return this.parser.parse(str);
@@ -44,6 +45,4 @@ export class SearchQueryParserService {
   stringify(query: SearchQueryDTO): string {
     return this.parser.stringify(query);
   }
-
-
 }

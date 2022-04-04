@@ -1190,7 +1190,7 @@ describe('SearchManager', (sqlHelper: DBTestHelper) => {
         }
       };
 
-      // tslint:disable-next-line:prefer-for-of
+      // eslint-disable-next-line @typescript-eslint/prefer-for-of
       for (let i = 1; i < alphabet.length / 2; ++i) {
         const query: SomeOfSearchQuery = {
           type: SearchQueryTypes.SOME_OF,
@@ -1285,7 +1285,7 @@ describe('SearchManager', (sqlHelper: DBTestHelper) => {
       type: SearchQueryTypes.keyword
     } as TextSearch;
 
-    // tslint:disable-next-line
+    // eslint-disable-next-line
     expect(await sm.getRandomPhoto(query)).to.not.exist;
 
     query = ({
