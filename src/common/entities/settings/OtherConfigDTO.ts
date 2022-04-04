@@ -1,6 +1,5 @@
-import {ServerConfig, ServerThreadingConfig} from '../../config/private/PrivateConfig';
-import {ClientConfig, ClientOtherConfig} from '../../config/public/ClientConfig';
-
+import { ServerThreadingConfig } from '../../config/private/PrivateConfig';
+import { ClientOtherConfig } from '../../config/public/ClientConfig';
 
 export interface OtherConfigDTO {
   Server: ServerThreadingConfig;

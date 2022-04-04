@@ -1,4 +1,4 @@
-/* tslint:disable:no-inferrable-types */
+/* eslint-disable @typescript-eslint/no-inferrable-types */
 import 'reflect-metadata';
 import {ClientConfig} from '../public/ClientConfig';
 import {ServerConfig} from './PrivateConfig';

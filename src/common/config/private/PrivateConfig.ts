@@ -1,55 +1,87 @@
-/* tslint:disable:no-inferrable-types */
+/* eslint-disable @typescript-eslint/no-inferrable-types */
 import 'reflect-metadata';
-import {JobScheduleDTO, JobTrigger, JobTriggerType} from '../../entities/job/JobScheduleDTO';
-import {ClientConfig} from '../public/ClientConfig';
-import {SubConfigClass} from 'typeconfig/src/decorators/class/SubConfigClass';
-import {ConfigProperty} from 'typeconfig/src/decorators/property/ConfigPropoerty';
-import {DefaultsJobs} from '../../entities/job/JobDTO';
-import {SearchQueryDTO, SearchQueryTypes, TextSearch} from '../../entities/SearchQueryDTO';
-import {SortingMethods} from '../../entities/SortingMethods';
-import {UserRoles} from '../../entities/UserDTO';
+import {
+  JobScheduleDTO,
+  JobTrigger,
+  JobTriggerType,
+} from '../../entities/job/JobScheduleDTO';
+import { ClientConfig } from '../public/ClientConfig';
+import { SubConfigClass } from 'typeconfig/src/decorators/class/SubConfigClass';
+import { ConfigProperty } from 'typeconfig/src/decorators/property/ConfigPropoerty';
+import { DefaultsJobs } from '../../entities/job/JobDTO';
+import {
+  SearchQueryDTO,
+  SearchQueryTypes,
+  TextSearch,
+} from '../../entities/SearchQueryDTO';
+import { SortingMethods } from '../../entities/SortingMethods';
+import { UserRoles } from '../../entities/UserDTO';
 
 export enum DatabaseType {
-  memory = 1, mysql = 2, sqlite = 3
+  memory = 1,
+  mysql = 2,
+  sqlite = 3,
 }
 
 export enum LogLevel {
-  error = 1, warn = 2, info = 3, verbose = 4, debug = 5, silly = 6
+  error = 1,
+  warn = 2,
+  info = 3,
+  verbose = 4,
+  debug = 5,
+  silly = 6,
 }
 
 export enum SQLLogLevel {
-  none = 1, error = 2, all = 3
+  none = 1,
+  error = 2,
+  all = 3,
 }
 
-
 export enum ReIndexingSensitivity {
-  low = 1, medium = 2, high = 3
+  low = 1,
+  medium = 2,
+  high = 3,
 }
 
 export enum FFmpegPresets {
-  ultrafast = 1, superfast = 2, veryfast = 3, faster = 4, fast = 5, medium = 6,
-  slow = 7, slower = 8, veryslow = 9, placebo = 10
+  ultrafast = 1,
+  superfast = 2,
+  veryfast = 3,
+  faster = 4,
+  fast = 5,
+  medium = 6,
+  slow = 7,
+  slower = 8,
+  veryslow = 9,
+  placebo = 10,
 }
 
-
 export type videoCodecType = 'libvpx-vp9' | 'libx264' | 'libvpx' | 'libx265';
-export type videoResolutionType = 240 | 360 | 480 | 720 | 1080 | 1440 | 2160 | 4320;
+export type videoResolutionType =
+  | 240
+  | 360
+  | 480
+  | 720
+  | 1080
+  | 1440
+  | 2160
+  | 4320;
 export type videoFormatType = 'mp4' | 'webm';
 
 @SubConfigClass()
 export class MySQLConfig {
-  @ConfigProperty({envAlias: 'MYSQL_HOST'})
+  @ConfigProperty({ envAlias: 'MYSQL_HOST' })
   host: string = 'localhost';
-  @ConfigProperty({envAlias: 'MYSQL_PORT', min: 0, max: 65535})
+  @ConfigProperty({ envAlias: 'MYSQL_PORT', min: 0, max: 65535 })
   port: number = 3306;
-  @ConfigProperty({envAlias: 'MYSQL_DATABASE'})
+  @ConfigProperty({ envAlias: 'MYSQL_DATABASE' })
   database: string = 'pigallery2';
-  @ConfigProperty({envAlias: 'MYSQL_USERNAME'})
+  @ConfigProperty({ envAlias: 'MYSQL_USERNAME' })
   username: string = '';
-  @ConfigProperty({envAlias: 'MYSQL_PASSWORD', type: 'password'})
+  @ConfigProperty({ envAlias: 'MYSQL_PASSWORD', type: 'password' })
   password: string = '';
 }
-
 
 @SubConfigClass()
 export class SQLiteConfig {
@@ -59,19 +91,17 @@ export class SQLiteConfig {
 
 @SubConfigClass()
 export class UserConfig {
-
   @ConfigProperty()
   name: string;
 
-  @ConfigProperty({type: UserRoles})
+  @ConfigProperty({ type: UserRoles })
   role: UserRoles;
 
-  @ConfigProperty({description: 'Unencrypted, temporary password'})
+  @ConfigProperty({ description: 'Unencrypted, temporary password' })
   password: string;
 
-  @ConfigProperty({description: 'Encrypted password'})
-  encryptedPassword: string;
-
+  @ConfigProperty({ description: 'Encrypted password' })
+  encryptedPassword: string | undefined;
 
   constructor(name: string, password: string, role: UserRoles) {
     this.name = name;
@@ -85,11 +115,11 @@ export class ServerDataBaseConfig {
   @ConfigProperty<DatabaseType, IPrivateConfig>({
     type: DatabaseType,
     onNewValue: (value, config) => {
-      if (value === DatabaseType.memory) {
+      if (config && value === DatabaseType.memory) {
         config.Client.Search.enabled = false;
         config.Client.Sharing.enabled = false;
       }
-    }
+    },
   })
   type: DatabaseType = DatabaseType.sqlite;
 
@@ -104,16 +134,17 @@ export class ServerDataBaseConfig {
 
   @ConfigProperty({
     arrayType: UserConfig,
-    description: 'Creates these users in the DB if they do not exist. If a user with this name exist, it wont be overwritten, even if the role is different.'
+    description:
+      'Creates these users in the DB if they do not exist. If a user with this name exist, it wont be overwritten, even if the role is different.',
   })
   enforcedUsers: UserConfig[] = [];
 }
 
 @SubConfigClass()
 export class ServerThumbnailConfig {
-  @ConfigProperty({description: 'if true, photos will have better quality.'})
+  @ConfigProperty({ description: 'if true, photos will have better quality.' })
   qualityPriority: boolean = true;
-  @ConfigProperty({type: 'ratio'})
+  @ConfigProperty({ type: 'ratio' })
   personFaceMargin: number = 0.6; // in ration [0-1]
 }
 
@@ -123,29 +154,36 @@ export class ServerSharingConfig {
   updateTimeout: number = 1000 * 60 * 5;
 }
 
-
 @SubConfigClass()
 export class ServerIndexingConfig {
   @ConfigProperty()
   cachedFolderTimeout: number = 1000 * 60 * 60; // Do not rescans the folder if seems ok
-  @ConfigProperty({type: ReIndexingSensitivity})
+  @ConfigProperty({ type: ReIndexingSensitivity })
   reIndexingSensitivity: ReIndexingSensitivity = ReIndexingSensitivity.low;
   @ConfigProperty({
     arrayType: 'string',
-    description: 'If an entry starts with \'/\' it is treated as an absolute path.' +
-      ' If it doesn\'t start with \'/\' but contains a \'/\', the path is relative to the image directory.' +
-      ' If it doesn\'t contain a \'/\', any folder with this name will be excluded.'
+    description:
+      "If an entry starts with '/' it is treated as an absolute path." +
+      " If it doesn't start with '/' but contains a '/', the path is relative to the image directory." +
+      " If it doesn't contain a '/', any folder with this name will be excluded.",
   })
   excludeFolderList: string[] = ['.Trash-1000', '.dtrash', '$RECYCLE.BIN'];
-  @ConfigProperty({arrayType: 'string', description: 'Any folder that contains a file with this name will be excluded from indexing.'})
+  @ConfigProperty({
+    arrayType: 'string',
+    description:
+      'Any folder that contains a file with this name will be excluded from indexing.',
+  })
   excludeFileList: string[] = [];
 }
 
 @SubConfigClass()
 export class ServerThreadingConfig {
-  @ConfigProperty({description: 'App can run on multiple thread'})
+  @ConfigProperty({ description: 'App can run on multiple thread' })
   enabled: boolean = true;
-  @ConfigProperty({description: 'Number of threads that are used to generate thumbnails. If 0, number of \'CPU cores -1\' threads will be used.'})
+  @ConfigProperty({
+    description:
+      "Number of threads that are used to generate thumbnails. If 0, number of 'CPU cores -1' threads will be used.",
+  })
   thumbnailThreads: number = 0; // if zero-> CPU count -1
 }
 
@@ -157,57 +195,53 @@ export class ServerDuplicatesConfig {
 
 @SubConfigClass()
 export class ServerLogConfig {
-  @ConfigProperty({type: LogLevel})
+  @ConfigProperty({ type: LogLevel })
   level: LogLevel = LogLevel.info;
-  @ConfigProperty({type: SQLLogLevel})
+  @ConfigProperty({ type: SQLLogLevel })
   sqlLevel: SQLLogLevel = SQLLogLevel.error;
   @ConfigProperty()
   logServerTiming: boolean = false;
 }
 
-
 @SubConfigClass()
 export class NeverJobTrigger implements JobTrigger {
-  @ConfigProperty({type: JobTriggerType})
+  @ConfigProperty({ type: JobTriggerType })
   readonly type = JobTriggerType.never;
 }
 
 @SubConfigClass()
 export class ScheduledJobTrigger implements JobTrigger {
-  @ConfigProperty({type: JobTriggerType})
+  @ConfigProperty({ type: JobTriggerType })
   readonly type = JobTriggerType.scheduled;
 
-  @ConfigProperty({type: 'unsignedInt'})
-  time: number;  // data time
+  @ConfigProperty({ type: 'unsignedInt' })
+  time: number; // data time
 }
 
 @SubConfigClass()
 export class PeriodicJobTrigger implements JobTrigger {
-  @ConfigProperty({type: JobTriggerType})
+  @ConfigProperty({ type: JobTriggerType })
   readonly type = JobTriggerType.periodic;
-  @ConfigProperty({type: 'unsignedInt', max: 7})
-  periodicity: number;  // 0-6: week days 7 every day
-  @ConfigProperty({type: 'unsignedInt', max: 23 * 60 + 59})
-  atTime: number; // day time
+  @ConfigProperty({ type: 'unsignedInt', max: 7 })
+  periodicity: number | undefined; // 0-6: week days 7 every day
+  @ConfigProperty({ type: 'unsignedInt', max: 23 * 60 + 59 })
+  atTime: number | undefined; // day time
 }
 
 @SubConfigClass()
 export class AfterJobTrigger implements JobTrigger {
-
-  @ConfigProperty({type: JobTriggerType})
+  @ConfigProperty({ type: JobTriggerType })
   readonly type = JobTriggerType.after;
   @ConfigProperty()
-  afterScheduleName: string; // runs after schedule
+  afterScheduleName: string | undefined; // runs after schedule
 
   constructor(afterScheduleName?: string) {
     this.afterScheduleName = afterScheduleName;
   }
 }
 
-
 @SubConfigClass()
 export class JobScheduleConfig implements JobScheduleDTO {
-
   @ConfigProperty()
   name: string;
   @ConfigProperty()
@@ -231,12 +265,25 @@ export class JobScheduleConfig implements JobScheduleDTO {
           return PeriodicJobTrigger;
       }
       return null;
-    }
+    },
   })
-  trigger: AfterJobTrigger | NeverJobTrigger | PeriodicJobTrigger | ScheduledJobTrigger;
+  trigger:
+    | AfterJobTrigger
+    | NeverJobTrigger
+    | PeriodicJobTrigger
+    | ScheduledJobTrigger;
 
-  constructor(name: string, jobName: string, allowParallelRun: boolean,
-              trigger: AfterJobTrigger | NeverJobTrigger | PeriodicJobTrigger | ScheduledJobTrigger, config: any) {
+  constructor(
+    name: string,
+    jobName: string,
+    allowParallelRun: boolean,
+    trigger:
+      | AfterJobTrigger
+      | NeverJobTrigger
+      | PeriodicJobTrigger
+      | ScheduledJobTrigger,
+    config: any
+  ) {
     this.name = name;
     this.jobName = jobName;
     this.config = config;
@@ -247,51 +294,62 @@ export class JobScheduleConfig implements JobScheduleDTO {
 
 @SubConfigClass()
 export class ServerJobConfig {
-  @ConfigProperty({type: 'integer', description: 'Job history size'})
+  @ConfigProperty({ type: 'integer', description: 'Job history size' })
   maxSavedProgress: number = 10;
-  @ConfigProperty({arrayType: JobScheduleConfig})
+  @ConfigProperty({ arrayType: JobScheduleConfig })
   scheduled: JobScheduleConfig[] = [
-    new JobScheduleConfig(DefaultsJobs[DefaultsJobs.Indexing],
+    new JobScheduleConfig(
+      DefaultsJobs[DefaultsJobs.Indexing],
       DefaultsJobs[DefaultsJobs.Indexing],
       false,
-      new NeverJobTrigger(), {indexChangesOnly: true}
+      new NeverJobTrigger(),
+      { indexChangesOnly: true }
     ),
-    new JobScheduleConfig(DefaultsJobs[DefaultsJobs['Preview Filling']],
+    new JobScheduleConfig(
+      DefaultsJobs[DefaultsJobs['Preview Filling']],
       DefaultsJobs[DefaultsJobs['Preview Filling']],
       false,
-      new NeverJobTrigger(), {}
+      new NeverJobTrigger(),
+      {}
     ),
-    new JobScheduleConfig(DefaultsJobs[DefaultsJobs['Thumbnail Generation']],
+    new JobScheduleConfig(
+      DefaultsJobs[DefaultsJobs['Thumbnail Generation']],
       DefaultsJobs[DefaultsJobs['Thumbnail Generation']],
       false,
-      new AfterJobTrigger(DefaultsJobs[DefaultsJobs['Preview Filling']]), {sizes: [240], indexedOnly: true}
+      new AfterJobTrigger(DefaultsJobs[DefaultsJobs['Preview Filling']]),
+      { sizes: [240], indexedOnly: true }
     ),
-    new JobScheduleConfig(DefaultsJobs[DefaultsJobs['Photo Converting']],
+    new JobScheduleConfig(
+      DefaultsJobs[DefaultsJobs['Photo Converting']],
       DefaultsJobs[DefaultsJobs['Photo Converting']],
       false,
-      new AfterJobTrigger(DefaultsJobs[DefaultsJobs['Thumbnail Generation']]), {indexedOnly: true}
+      new AfterJobTrigger(DefaultsJobs[DefaultsJobs['Thumbnail Generation']]),
+      { indexedOnly: true }
     ),
-    new JobScheduleConfig(DefaultsJobs[DefaultsJobs['Video Converting']],
+    new JobScheduleConfig(
+      DefaultsJobs[DefaultsJobs['Video Converting']],
       DefaultsJobs[DefaultsJobs['Video Converting']],
       false,
-      new AfterJobTrigger(DefaultsJobs[DefaultsJobs['Photo Converting']]), {indexedOnly: true}
+      new AfterJobTrigger(DefaultsJobs[DefaultsJobs['Photo Converting']]),
+      { indexedOnly: true }
     ),
-    new JobScheduleConfig(DefaultsJobs[DefaultsJobs['Temp Folder Cleaning']],
+    new JobScheduleConfig(
+      DefaultsJobs[DefaultsJobs['Temp Folder Cleaning']],
       DefaultsJobs[DefaultsJobs['Temp Folder Cleaning']],
       false,
-      new AfterJobTrigger(DefaultsJobs[DefaultsJobs['Video Converting']]), {indexedOnly: true}
+      new AfterJobTrigger(DefaultsJobs[DefaultsJobs['Video Converting']]),
+      { indexedOnly: true }
     ),
   ];
 }
 
-
 @SubConfigClass()
 export class VideoTranscodingConfig {
-  @ConfigProperty({type: 'unsignedInt'})
+  @ConfigProperty({ type: 'unsignedInt' })
   bitRate: number = 5 * 1024 * 1024;
-  @ConfigProperty({type: 'unsignedInt'})
+  @ConfigProperty({ type: 'unsignedInt' })
   resolution: videoResolutionType = 720;
-  @ConfigProperty({type: 'positiveFloat'})
+  @ConfigProperty({ type: 'positiveFloat' })
   fps: number = 25;
   @ConfigProperty()
   codec: videoCodecType = 'libx264';
@@ -299,17 +357,22 @@ export class VideoTranscodingConfig {
   format: videoFormatType = 'mp4';
   @ConfigProperty({
     type: 'unsignedInt',
-    description: 'Constant Rate Factor. The range of the CRF scale is 0–51, where 0 is lossless, 23 is the default, and 51 is worst quality possible.',
-    max: 51
+    description:
+      'Constant Rate Factor. The range of the CRF scale is 0–51, where 0 is lossless, 23 is the default, and 51 is worst quality possible.',
+    max: 51,
   })
   crf: number = 23;
   @ConfigProperty({
     type: FFmpegPresets,
-    description: 'A preset is a collection of options that will provide a certain encoding speed to compression ratio'
+    description:
+      'A preset is a collection of options that will provide a certain encoding speed to compression ratio',
   })
   preset: FFmpegPresets = FFmpegPresets.medium;
 
-  @ConfigProperty({arrayType: 'string', description: 'It will be sent to ffmpeg as it is, as custom options.'})
+  @ConfigProperty({
+    arrayType: 'string',
+    description: 'It will be sent to ffmpeg as it is, as custom options.',
+  })
   customOptions: string[] = [];
 }
 
@@ -321,9 +384,11 @@ export class ServerVideoConfig {
 
 @SubConfigClass()
 export class PhotoConvertingConfig {
-  @ConfigProperty({description: 'Converts photos on the fly, when they are requested.'})
+  @ConfigProperty({
+    description: 'Converts photos on the fly, when they are requested.',
+  })
   onTheFly: boolean = true;
-  @ConfigProperty({type: 'unsignedInt'})
+  @ConfigProperty({ type: 'unsignedInt' })
   resolution: videoResolutionType = 1080;
 }
 
@@ -335,20 +400,29 @@ export class ServerPhotoConfig {
 
 @SubConfigClass()
 export class ServerPreviewConfig {
-  @ConfigProperty({type: 'object'})
-  SearchQuery: SearchQueryDTO = {type: SearchQueryTypes.any_text, text: ''} as TextSearch;
-  @ConfigProperty({arrayType: SortingMethods})
+  @ConfigProperty({ type: 'object' })
+  SearchQuery: SearchQueryDTO = {
+    type: SearchQueryTypes.any_text,
+    text: '',
+  } as TextSearch;
+  @ConfigProperty({ arrayType: SortingMethods })
   Sorting: SortingMethods[] = [
     SortingMethods.descRating,
-    SortingMethods.descDate
+    SortingMethods.descDate,
   ];
 }
 
 @SubConfigClass()
 export class ServerMediaConfig {
-  @ConfigProperty({description: 'Images are loaded from this folder (read permission required)'})
+  @ConfigProperty({
+    description:
+      'Images are loaded from this folder (read permission required)',
+  })
   folder: string = 'demo/images';
-  @ConfigProperty({description: 'Thumbnails, converted photos, videos will be stored here (write permission required)'})
+  @ConfigProperty({
+    description:
+      'Thumbnails, converted photos, videos will be stored here (write permission required)',
+  })
   tempFolder: string = 'demo/tmp';
   @ConfigProperty()
   Video: ServerVideoConfig = new ServerVideoConfig();
@@ -358,28 +432,27 @@ export class ServerMediaConfig {
   Thumbnail: ServerThumbnailConfig = new ServerThumbnailConfig();
 }
 
-
 @SubConfigClass()
 export class ServerEnvironmentConfig {
-  @ConfigProperty({volatile: true})
-  upTime: string;
-  @ConfigProperty({volatile: true})
-  appVersion: string;
-  @ConfigProperty({volatile: true})
-  buildTime: string;
-  @ConfigProperty({volatile: true})
-  buildCommitHash: string;
-  @ConfigProperty({volatile: true})
-  isDocker: boolean;
+  @ConfigProperty({ volatile: true })
+  upTime: string | undefined;
+  @ConfigProperty({ volatile: true })
+  appVersion: string | undefined;
+  @ConfigProperty({ volatile: true })
+  buildTime: string | undefined;
+  @ConfigProperty({ volatile: true })
+  buildCommitHash: string | undefined;
+  @ConfigProperty({ volatile: true })
+  isDocker: boolean | undefined;
 }
 
 @SubConfigClass()
 export class ServerConfig {
-  @ConfigProperty({volatile: true})
+  @ConfigProperty({ volatile: true })
   Environment: ServerEnvironmentConfig = new ServerEnvironmentConfig();
-  @ConfigProperty({arrayType: 'string'})
+  @ConfigProperty({ arrayType: 'string' })
   sessionSecret: string[] = [];
-  @ConfigProperty({type: 'unsignedInt', envAlias: 'PORT', min: 0, max: 65535})
+  @ConfigProperty({ type: 'unsignedInt', envAlias: 'PORT', min: 0, max: 65535 })
   port: number = 80;
   @ConfigProperty()
   host: string = '0.0.0.0';
@@ -393,11 +466,15 @@ export class ServerConfig {
   Database: ServerDataBaseConfig = new ServerDataBaseConfig();
   @ConfigProperty()
   Sharing: ServerSharingConfig = new ServerSharingConfig();
-  @ConfigProperty({type: 'unsignedInt', description: 'unit: ms'})
+  @ConfigProperty({ type: 'unsignedInt', description: 'unit: ms' })
   sessionTimeout: number = 1000 * 60 * 60 * 24 * 7; // in ms
   @ConfigProperty()
   Indexing: ServerIndexingConfig = new ServerIndexingConfig();
-  @ConfigProperty({type: 'unsignedInt', description: 'only this many bites will be loaded when scanning photo for metadata'})
+  @ConfigProperty({
+    type: 'unsignedInt',
+    description:
+      'only this many bites will be loaded when scanning photo for metadata',
+  })
   photoMetadataSize: number = 512 * 1024; // only this many bites will be loaded when scanning photo for metadata
   @ConfigProperty()
   Duplicates: ServerDuplicatesConfig = new ServerDuplicatesConfig();
@@ -407,9 +484,7 @@ export class ServerConfig {
   Jobs: ServerJobConfig = new ServerJobConfig();
 }
 
-
 export interface IPrivateConfig {
   Server: ServerConfig;
   Client: ClientConfig;
-
 }

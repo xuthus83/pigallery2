@@ -12,7 +12,7 @@
 
   <div class="collapse navbar-collapse" id="navbarNav" [collapse]="collapsed">
     <ul class="navbar-nav mr-auto">
-      <li class="nav-item" >
+      <li class="nav-item">
         <a class="nav-link"
            [routerLink]="['/gallery']"
            [queryParams]="queryService.getParams()" [class.active]="isLinkActive('/gallery')" i18n>Gallery</a>
@@ -33,7 +33,7 @@
           <span class="oi oi-person"></span> {{user.value.name}}</span>
       </li>
       <li class="nav-item ml-2">
-        <app-language class="navbar-btn" isDark="true"></app-language>
+        <app-language class="navbar-btn" [isDark]="true"></app-language>
       </li>
       <div class="btn-group" dropdown placement="bottom"
            *ngIf="isAdmin() || authenticationRequired">
@@ -49,7 +49,7 @@
             role="menu" aria-labelledby="button-alignment">
           <ng-content select="[navbar-menu]"></ng-content>
           <li role="menuitem" *ngIf="isAdmin()">
-            <a class="dropdown-item"  [routerLink]="['/duplicates']">
+            <a class="dropdown-item" [routerLink]="['/duplicates']">
               <span class="oi oi-layers"></span>
               <ng-container i18n>Duplicates</ng-container>
             </a>

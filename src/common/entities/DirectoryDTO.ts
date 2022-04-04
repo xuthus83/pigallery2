@@ -1,12 +1,13 @@
-import {MediaDTO, MediaDTOUtils} from './MediaDTO';
-import {FileDTO} from './FileDTO';
-import {PhotoDTO, PreviewPhotoDTO} from './PhotoDTO';
-import {Utils} from '../Utils';
+import { MediaDTO, MediaDTOUtils } from './MediaDTO';
+import { FileDTO } from './FileDTO';
+import { PhotoDTO, PreviewPhotoDTO } from './PhotoDTO';
+import { Utils } from '../Utils';
 
 export interface DirectoryPathDTO {
   name: string;
   path: string;
 }
+
 //
 // export interface DirectoryDTO<S extends FileDTO = MediaDTO> extends DirectoryPathDTO {
 //   id: number;
@@ -23,8 +24,8 @@ export interface DirectoryPathDTO {
 //   metaFile: FileDTO[];
 // }
 
-
-export interface DirectoryBaseDTO<S extends FileDTO = MediaDTO> extends DirectoryPathDTO {
+export interface DirectoryBaseDTO<S extends FileDTO = MediaDTO>
+  extends DirectoryPathDTO {
   id: number;
   name: string;
   path: string;
@@ -41,7 +42,8 @@ export interface DirectoryBaseDTO<S extends FileDTO = MediaDTO> extends Director
   validPreview?: boolean; // does not go to the client side
 }
 
-export interface ParentDirectoryDTO<S extends FileDTO = MediaDTO> extends DirectoryBaseDTO<S> {
+export interface ParentDirectoryDTO<S extends FileDTO = MediaDTO>
+  extends DirectoryBaseDTO<S> {
   id: number;
   name: string;
   path: string;
@@ -55,7 +57,8 @@ export interface ParentDirectoryDTO<S extends FileDTO = MediaDTO> extends Direct
   metaFile: FileDTO[];
 }
 
-export interface SubDirectoryDTO<S extends FileDTO = MediaDTO> extends DirectoryBaseDTO<S> {
+export interface SubDirectoryDTO<S extends FileDTO = MediaDTO>
+  extends DirectoryBaseDTO<S> {
   id: number;
   name: string;
   path: string;
@@ -121,12 +124,11 @@ export const DirectoryDTOUtils = {
     delete dir.validPreview; // should not go to the client side;
 
     return dir;
-
   },
   filterPhotos: (dir: DirectoryBaseDTO): PhotoDTO[] => {
-    return dir.media.filter(m => MediaDTOUtils.isPhoto(m)) as PhotoDTO[];
+    return dir.media.filter((m) => MediaDTOUtils.isPhoto(m)) as PhotoDTO[];
   },
   filterVideos: (dir: DirectoryBaseDTO): PhotoDTO[] => {
-    return dir.media.filter(m => MediaDTOUtils.isPhoto(m)) as PhotoDTO[];
-  }
+    return dir.media.filter((m) => MediaDTOUtils.isPhoto(m)) as PhotoDTO[];
+  },
 };

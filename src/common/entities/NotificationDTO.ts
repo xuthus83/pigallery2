@@ -1,5 +1,7 @@
 export enum NotificationType {
-  error = 1, warning = 2, info = 3
+  error = 1,
+  warning = 2,
+  info = 3,
 }
 
 export interface NotificationDTO {
@@ -7,8 +9,8 @@ export interface NotificationDTO {
   message: string;
   details?: any;
   request?: {
-    method: string,
-    url: string,
-    statusCode: number
+    method: string;
+    url: string;
+    statusCode: number;
   };
 }

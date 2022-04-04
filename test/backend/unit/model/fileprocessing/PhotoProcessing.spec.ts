@@ -7,7 +7,7 @@ import {PhotoProcessing} from '../../../../../src/backend/model/fileprocessing/P
 
 describe('PhotoProcessing', () => {
 
-  // tslint:disable:no-unused-expression
+  /* eslint-disable no-unused-expressions,@typescript-eslint/no-unused-expressions */
   it('should generate converted file path', async () => {
 
     Config.load();
@@ -33,7 +33,7 @@ describe('PhotoProcessing', () => {
     }
   });
 
-  // tslint:disable:no-unused-expression
+  /* eslint-disable no-unused-expressions,@typescript-eslint/no-unused-expressions */
   it('should generate converted thumbnail path', async () => {
 
     Config.load();

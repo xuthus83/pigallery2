@@ -46,7 +46,7 @@
        (swiperight)="zoom == 1 && previousPhoto.emit()"
        (swipeup)="zoom == 1 && closed.emit()"
        (tap)="tap($event)"
-       (pan)="pan($event)"
+       (pan)="pan($any($event))"
        (wheel)="wheel($event)"
        (click)="mediaElement.playPause()">
 

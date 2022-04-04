@@ -1,7 +1,7 @@
-import {Component, Input} from '@angular/core';
-import {Config} from '../../../../common/config/public/Config';
-import {CookieNames} from '../../../../common/CookieNames';
-import {CookieService} from 'ngx-cookie-service';
+import { Component, Input } from '@angular/core';
+import { Config } from '../../../../common/config/public/Config';
+import { CookieNames } from '../../../../common/CookieNames';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-language',
@@ -9,7 +9,6 @@ import {CookieService} from 'ngx-cookie-service';
   styleUrls: ['./language.component.css'],
 })
 export class LanguageComponent {
-
   @Input() isDark: boolean;
   languages: string[] = [];
   current: string = null;
@@ -20,6 +19,5 @@ export class LanguageComponent {
       this.current = this.cookieService.get(CookieNames.lang);
     }
   }
-
 }
 

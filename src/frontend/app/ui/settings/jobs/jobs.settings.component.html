@@ -18,13 +18,14 @@
                 <ng-container [ngSwitch]="schedule.trigger.type">
                   <ng-container *ngSwitchCase="JobTriggerType.periodic">
                     <ng-container i18n>every</ng-container>
-                    {{periods[schedule.trigger.periodicity]}} {{atTimeLocal(schedule.trigger.atTime) | date:"HH:mm (z)"}}
+                    {{periods[$any(schedule.trigger).periodicity]}} {{atTimeLocal($any(schedule.trigger).atTime) | date:"HH:mm (z)"}}
                   </ng-container>
                   <ng-container
-                    *ngSwitchCase="JobTriggerType.scheduled">{{schedule.trigger.time | date:"medium"}}</ng-container>
+                    *ngSwitchCase="JobTriggerType.scheduled">{{$any(schedule.trigger).time | date:"medium"}}</ng-container>
                   <ng-container *ngSwitchCase="JobTriggerType.never" i18n>never</ng-container>
                   <ng-container *ngSwitchCase="JobTriggerType.after">
-                    <ng-container i18n>after</ng-container>: {{schedule.trigger.afterScheduleName}}
+                    <ng-container i18n>after</ng-container>
+                    : {{$any(schedule.trigger).afterScheduleName}}
                   </ng-container>
                 </ng-container>
               </div>
@@ -131,12 +132,12 @@
                       [name]="'allowParallelRun'+'_'+i"
                       [id]="'allowParallelRun'+'_'+i"
                       switch-on-color="primary"
-                      switch-inverse="true"
+                      [switch-inverse]="true"
                       switch-off-text="Disabled"
                       switch-on-text="Enabled"
                       i18n-switch-off-text i18n-switch-on-text
-                      switch-handle-width="100"
-                      switch-label-width="20"
+                      [switch-handle-width]="100"
+                      [switch-label-width]="20"
                       [(ngModel)]="schedule.allowParallelRun">
                     </bSwitch>
                     <small class="form-text text-muted"
@@ -164,12 +165,12 @@
                           [name]="configEntry.id+'_'+i"
                           [id]="configEntry.id+'_'+i"
                           switch-on-color="primary"
-                          switch-inverse="true"
+                          [switch-inverse]="true"
                           switch-off-text="Disabled"
                           switch-on-text="Enabled"
                           i18n-switch-off-text i18n-switch-on-text
-                          switch-handle-width="100"
-                          switch-label-width="20"
+                          [switch-handle-width]="100"
+                          [switch-label-width]="20"
                           [(ngModel)]="schedule.config[configEntry.id]">
                         </bSwitch>
                       </ng-container>

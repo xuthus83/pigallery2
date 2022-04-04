@@ -56,13 +56,13 @@
             name="simplifiedMode"
             switch-off-color="warning"
             switch-on-color="primary"
-            switch-inverse="true"
+            [switch-inverse]="true"
             switch-off-text="Advanced"
             switch-on-text="Simplified"
             i18n-switch-off-text
             i18n-switch-on-text
-            switch-handle-width="100"
-            switch-label-width="20"
+            [switch-handle-width]="100"
+            [switch-label-width]="20"
             [(ngModel)]="simplifiedMode"
             (ngModelChange)="modeToggle()">
           </bSwitch>
@@ -81,7 +81,7 @@
                       *ngFor="let s of contents; let i=index;"
                       (click)="scrollTo(i)"
                       [hidden]="!s.HasAvailableSettings">
-               <span class="oi oi-{{s.icon}}"></span> {{s.Name}}
+                <span class="oi oi-{{s.icon}}"></span> {{s.Name}}
               </button>
             </div>
           </div>

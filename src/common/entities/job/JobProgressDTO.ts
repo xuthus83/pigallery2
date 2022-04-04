@@ -1,7 +1,10 @@
 export enum JobProgressStates {
-  running = 1, cancelling = 2, interrupted = 3, canceled = 4, finished = 5
+  running = 1,
+  cancelling = 2,
+  interrupted = 3,
+  canceled = 4,
+  finished = 5,
 }
-
 
 export interface JobProgressLogDTO {
   id: number;
@@ -13,14 +16,14 @@ export interface JobProgressDTO {
   jobName: string;
   HashName: string;
   steps: {
-    all: number,
-    processed: number,
-    skipped: number,
+    all: number;
+    processed: number;
+    skipped: number;
   };
   state: JobProgressStates;
   logs: JobProgressLogDTO[];
   time: {
-    start: number,
-    end: number
+    start: number;
+    end: number;
   };
 }

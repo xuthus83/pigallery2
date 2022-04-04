@@ -8,14 +8,14 @@
           class="switch"
           name="enabled"
           switch-on-color="success"
-          switch-inverse="true"
+          [switch-inverse]="true"
           switch-off-text="Disabled"
           switch-on-text="Enabled"
           i18n-switch-off-text
           i18n-switch-on-text
           [switch-disabled]="inProgress || !settingsService.isSupported()"
-          switch-handle-width="100"
-          switch-label-width="20"
+          [switch-handle-width]="100"
+          [switch-label-width]="20"
           [(ngModel)]="states.enabled.value">
         </bSwitch>
       </div>

@@ -1,5 +1,4 @@
-import {IPrivateConfig} from '../../config/private/PrivateConfig';
-
+import { IPrivateConfig } from '../../config/private/PrivateConfig';
 
 export interface BasicConfigDTO {
   imagesFolder: string;
@@ -19,7 +18,7 @@ export const BasicConfigDTOUtil = {
     tempFolder: s.Server.Media.tempFolder,
     applicationTitle: s.Client.applicationTitle,
     publicUrl: s.Client.publicUrl,
-    urlBase: s.Client.urlBase
+    urlBase: s.Client.urlBase,
   }),
   mapToConf: (config: IPrivateConfig, input: BasicConfigDTO) => {
     config.Server.port = input.port;
@@ -29,5 +28,5 @@ export const BasicConfigDTOUtil = {
     config.Client.publicUrl = input.publicUrl;
     config.Client.urlBase = input.urlBase;
     config.Client.applicationTitle = input.applicationTitle;
-  }
+  },
 };

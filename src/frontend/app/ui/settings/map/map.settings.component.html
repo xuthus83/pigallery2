@@ -7,14 +7,14 @@
           class="switch"
           name="enabled"
           switch-on-color="success"
-          switch-inverse="true"
+          [switch-inverse]="true"
           switch-off-text="Disabled"
           switch-on-text="Enabled"
           i18n-switch-off-text
           i18n-switch-on-text
           [switch-disabled]="inProgress"
-          switch-handle-width="100"
-          switch-label-width="20"
+          [switch-handle-width]="100"
+          [switch-label-width]="20"
           [(ngModel)]="states.enabled.value">
         </bSwitch>
       </div>
@@ -22,8 +22,6 @@
     <div class="card-body">
       <div [hidden]="!error" class="alert alert-danger" role="alert"><strong>Error: </strong>{{error}}</div>
       <ng-container *ngIf="states.enabled.value">
-
-
 
 
         <app-settings-entry
@@ -35,13 +33,12 @@
         </app-settings-entry>
 
 
-
         <app-settings-entry
           name="Map provider"
           i18n-name
           [ngModel]="states.mapProvider"
           [simplifiedMode]="simplifiedMode"
-          required="true">
+          [required]="true">
         </app-settings-entry>
 
 
@@ -91,7 +88,7 @@
           i18n-name
           placeholder="Mapbox access token"
           [ngModel]="states.mapboxAccessToken"
-          required="true">
+          [required]="true">
           <small class="form-text text-muted">
             <ng-container i18n>MapBox needs an access token to work, create one at</ng-container>
             &nbsp;<a href="https://www.mapbox.com">https://www.mapbox.com</a>.

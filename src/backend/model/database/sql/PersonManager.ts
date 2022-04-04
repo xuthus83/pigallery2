@@ -1,12 +1,11 @@
-import {SQLConnection} from './SQLConnection';
-import {PersonEntry} from './enitites/PersonEntry';
-import {FaceRegionEntry} from './enitites/FaceRegionEntry';
-import {PersonDTO} from '../../../../common/entities/PersonDTO';
-import {ISQLPersonManager} from './IPersonManager';
-import {Logger} from '../../../Logger';
-import {FaceRegion} from '../../../../common/entities/PhotoDTO';
-import {SQL_COLLATE} from './enitites/EntityUtils';
-
+import { SQLConnection } from './SQLConnection';
+import { PersonEntry } from './enitites/PersonEntry';
+import { FaceRegionEntry } from './enitites/FaceRegionEntry';
+import { PersonDTO } from '../../../../common/entities/PersonDTO';
+import { ISQLPersonManager } from './IPersonManager';
+import { Logger } from '../../../Logger';
+import { FaceRegion } from '../../../../common/entities/PhotoDTO';
+import { SQL_COLLATE } from './enitites/EntityUtils';
 
 const LOG_TAG = '[PersonManager]';
 
@@ -19,8 +18,10 @@ export class PersonManager implements ISQLPersonManager {
 
   private static async updateCounts(): Promise<void> {
     const connection = await SQLConnection.getConnection();
-    await connection.query('UPDATE person_entry SET count = ' +
-      ' (SELECT COUNT(1) FROM face_region_entry WHERE face_region_entry.personId = person_entry.id)');
+    await connection.query(
+      'UPDATE person_entry SET count = ' +
+        ' (SELECT COUNT(1) FROM face_region_entry WHERE face_region_entry.personId = person_entry.id)'
+    );
 
     // remove persons without photo
     await connection
@@ -33,23 +34,28 @@ export class PersonManager implements ISQLPersonManager {
 
   private static async updateSamplePhotos(): Promise<void> {
     const connection = await SQLConnection.getConnection();
-    await connection.query('update person_entry set sampleRegionId = ' +
-      '(Select face_region_entry.id from  media_entity ' +
-      'left join face_region_entry on media_entity.id = face_region_entry.mediaId ' +
-      'where face_region_entry.personId=person_entry.id ' +
-      'order by media_entity.metadataCreationdate desc ' +
-      'limit 1)');
-
+    await connection.query(
+      'update person_entry set sampleRegionId = ' +
+        '(Select face_region_entry.id from  media_entity ' +
+        'left join face_region_entry on media_entity.id = face_region_entry.mediaId ' +
+        'where face_region_entry.personId=person_entry.id ' +
+        'order by media_entity.metadataCreationdate desc ' +
+        'limit 1)'
+    );
   }
 
-  async updatePerson(name: string, partialPerson: PersonDTO): Promise<PersonEntry> {
+  async updatePerson(
+    name: string,
+    partialPerson: PersonDTO
+  ): Promise<PersonEntry> {
     this.isDBValid = false;
     const connection = await SQLConnection.getConnection();
     const repository = connection.getRepository(PersonEntry);
-    const person = await repository.createQueryBuilder('person')
+    const person = await repository
+      .createQueryBuilder('person')
       .limit(1)
-      .where('person.name LIKE :name COLLATE ' + SQL_COLLATE, {name}).getOne();
-
+      .where('person.name LIKE :name COLLATE ' + SQL_COLLATE, { name })
+      .getOne();
 
     if (typeof partialPerson.name !== 'undefined') {
       person.name = partialPerson.name;
@@ -76,7 +82,8 @@ export class PersonManager implements ISQLPersonManager {
    */
   public async countFaces(): Promise<number> {
     const connection = await SQLConnection.getConnection();
-    return await connection.getRepository(FaceRegionEntry)
+    return await connection
+      .getRepository(FaceRegionEntry)
       .createQueryBuilder('faceRegion')
       .getCount();
   }
@@ -88,8 +95,10 @@ export class PersonManager implements ISQLPersonManager {
     return this.persons.find((p): boolean => p.name === name);
   }
 
-  public async saveAll(persons: { name: string, faceRegion: FaceRegion }[]): Promise<void> {
-    const toSave: { name: string, faceRegion: FaceRegion }[] = [];
+  public async saveAll(
+    persons: { name: string; faceRegion: FaceRegion }[]
+  ): Promise<void> {
+    const toSave: { name: string; faceRegion: FaceRegion }[] = [];
     const connection = await SQLConnection.getConnection();
     const personRepository = connection.getRepository(PersonEntry);
     const faceRegionRepository = connection.getRepository(FaceRegionEntry);
@@ -97,27 +106,28 @@ export class PersonManager implements ISQLPersonManager {
     const savedPersons = await personRepository.find();
     // filter already existing persons
     for (const personToSave of persons) {
-
-      const person = savedPersons.find((p): boolean => p.name === personToSave.name);
+      const person = savedPersons.find(
+        (p): boolean => p.name === personToSave.name
+      );
       if (!person) {
         toSave.push(personToSave);
       }
     }
 
-
     if (toSave.length > 0) {
       for (let i = 0; i < toSave.length / 200; i++) {
         const saving = toSave.slice(i * 200, (i + 1) * 200);
-        const inserted = await personRepository.insert(saving.map(p => ({name: p.name})));
+        const inserted = await personRepository.insert(
+          saving.map((p) => ({ name: p.name }))
+        );
         // setting Person id
         inserted.identifiers.forEach((idObj: { id: number }, j: number) => {
           (saving[j].faceRegion as FaceRegionEntry).person = idObj as any;
         });
-        await faceRegionRepository.insert(saving.map(p => p.faceRegion));
+        await faceRegionRepository.insert(saving.map((p) => p.faceRegion));
       }
     }
     this.isDBValid = false;
-
   }
 
   public async onNewDataVersion(): Promise<void> {
@@ -134,9 +144,11 @@ export class PersonManager implements ISQLPersonManager {
     const connection = await SQLConnection.getConnection();
     const personRepository = connection.getRepository(PersonEntry);
     this.persons = await personRepository.find({
-      relations: ['sampleRegion',
+      relations: [
+        'sampleRegion',
         'sampleRegion.media',
-        'sampleRegion.media.directory']
+        'sampleRegion.media.directory',
+      ],
     });
   }
 
@@ -153,5 +165,4 @@ export class PersonManager implements ISQLPersonManager {
     await PersonManager.updateSamplePhotos();
     this.isDBValid = false;
   }
-
 }

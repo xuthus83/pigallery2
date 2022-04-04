@@ -1,6 +1,7 @@
-app-gallery-search-field{
+app-gallery-search-field {
   width: 100%;
 }
+
 .changed-settings input, .changed-settings select {
   border-color: #007bff;
   border-width: 1px;

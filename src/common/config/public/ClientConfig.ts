@@ -1,24 +1,25 @@
-/* tslint:disable:no-inferrable-types */
+/* eslint-disable @typescript-eslint/no-inferrable-types */
 import 'reflect-metadata';
-import {SortingMethods} from '../../entities/SortingMethods';
-import {UserRoles} from '../../entities/UserDTO';
-import {ConfigProperty, SubConfigClass} from 'typeconfig/common';
-import {IPrivateConfig} from '../private/PrivateConfig';
-
+import { SortingMethods } from '../../entities/SortingMethods';
+import { UserRoles } from '../../entities/UserDTO';
+import { ConfigProperty, SubConfigClass } from 'typeconfig/common';
+import { IPrivateConfig } from '../private/PrivateConfig';
 
 export enum MapProviders {
-  OpenStreetMap = 1, Mapbox = 2, Custom = 3
+  OpenStreetMap = 1,
+  Mapbox = 2,
+  Custom = 3,
 }
 
 @SubConfigClass()
 export class AutoCompleteConfig {
   @ConfigProperty()
   enabled: boolean = true;
-  @ConfigProperty({type: 'unsignedInt'})
+  @ConfigProperty({ type: 'unsignedInt' })
   targetItemsPerCategory: number = 5;
-  @ConfigProperty({type: 'unsignedInt'})
+  @ConfigProperty({ type: 'unsignedInt' })
   maxItems: number = 30;
-  @ConfigProperty({type: 'unsignedInt'})
+  @ConfigProperty({ type: 'unsignedInt' })
   cacheTimeout: number = 1000 * 60 * 60;
 }
 
@@ -26,22 +27,24 @@ export class AutoCompleteConfig {
 export class ClientSearchConfig {
   @ConfigProperty()
   enabled: boolean = true;
-  @ConfigProperty({type: 'unsignedInt'})
+  @ConfigProperty({ type: 'unsignedInt' })
   searchCacheTimeout: number = 1000 * 60 * 60;
   @ConfigProperty()
   AutoComplete: AutoCompleteConfig = new AutoCompleteConfig();
-  @ConfigProperty({type: 'unsignedInt'})
+  @ConfigProperty({ type: 'unsignedInt' })
   maxMediaResult: number = 10000;
-  @ConfigProperty({description: 'Search returns also with directories, not just media'})
+  @ConfigProperty({
+    description: 'Search returns also with directories, not just media',
+  })
   listDirectories: boolean = false;
   @ConfigProperty({
-    description: 'Search also returns with metafiles from directories that contain a media file of the matched search result'
+    description:
+      'Search also returns with metafiles from directories that contain a media file of the matched search result',
   })
   listMetafiles: boolean = true;
-  @ConfigProperty({type: 'unsignedInt'})
+  @ConfigProperty({ type: 'unsignedInt' })
   maxDirectoryResult: number = 200;
 }
-
 
 @SubConfigClass()
 export class ClientAlbumConfig {
@@ -59,7 +62,7 @@ export class ClientSharingConfig {
 
 @SubConfigClass()
 export class ClientRandomPhotoConfig {
-  @ConfigProperty({description: 'Enables random link generation.'})
+  @ConfigProperty({ description: 'Enables random link generation.' })
   enabled: boolean = true;
 }
 
@@ -78,30 +81,34 @@ export class ClientMapConfig {
       if (value === false) {
         config.Client.MetaFile.gpx = false;
       }
-    }
+    },
   })
   enabled: boolean = true;
-  @ConfigProperty({type: 'unsignedInt', description: 'Maximum number of markers to be shown on the map preview on the gallery page.'})
+  @ConfigProperty({
+    type: 'unsignedInt',
+    description:
+      'Maximum number of markers to be shown on the map preview on the gallery page.',
+  })
   maxPreviewMarkers: number = 50;
   @ConfigProperty()
   useImageMarkers: boolean = true;
-  @ConfigProperty({type: MapProviders})
+  @ConfigProperty({ type: MapProviders })
   mapProvider: MapProviders = MapProviders.OpenStreetMap;
   @ConfigProperty()
   mapboxAccessToken: string = '';
-  @ConfigProperty({arrayType: MapLayers})
+  @ConfigProperty({ arrayType: MapLayers })
   customLayers: MapLayers[] = [new MapLayers()];
 }
 
 @SubConfigClass()
 export class ClientThumbnailConfig {
-  @ConfigProperty({type: 'unsignedInt', max: 100})
+  @ConfigProperty({ type: 'unsignedInt', max: 100 })
   iconSize: number = 45;
-  @ConfigProperty({type: 'unsignedInt'})
+  @ConfigProperty({ type: 'unsignedInt' })
   personThumbnailSize: number = 200;
-  @ConfigProperty({arrayType: 'unsignedInt'})
+  @ConfigProperty({ arrayType: 'unsignedInt' })
   thumbnailSizes: number[] = [240, 480];
-  @ConfigProperty({volatile: true})
+  @ConfigProperty({ volatile: true })
   concurrentThumbnailGenerations: number = 1;
 
   /**
@@ -130,9 +137,12 @@ export class ClientOtherConfig {
   enableCache: boolean = true;
   @ConfigProperty()
   enableOnScrollRendering: boolean = true;
-  @ConfigProperty({type: SortingMethods})
+  @ConfigProperty({ type: SortingMethods })
   defaultPhotoSortingMethod: SortingMethods = SortingMethods.ascDate;
-  @ConfigProperty({description: 'If enabled directories will be sorted by date, like photos, otherwise by name. Directory date is the last modification time of that directory not the creation date of the oldest photo'})
+  @ConfigProperty({
+    description:
+      'If enabled directories will be sorted by date, like photos, otherwise by name. Directory date is the last modification time of that directory not the creation date of the oldest photo',
+  })
   enableDirectorySortingByDate: boolean = false;
   @ConfigProperty()
   enableOnScrollThumbnailPrioritising: boolean = true;
@@ -142,7 +152,10 @@ export class ClientOtherConfig {
   captionFirstNaming: boolean = false; // shows the caption instead of the filename in the photo grid
   @ConfigProperty()
   enableDownloadZip: boolean = false;
-  @ConfigProperty({description: 'Adds a button to flattens the file structure, by listing the content of all subdirectories.'})
+  @ConfigProperty({
+    description:
+      'Adds a button to flattens the file structure, by listing the content of all subdirectories.',
+  })
   enableDirectoryFlattening: boolean = false;
 }
 
@@ -162,7 +175,10 @@ export class PhotoConvertingConfig {
 export class ClientPhotoConfig {
   @ConfigProperty()
   Converting: PhotoConvertingConfig = new PhotoConvertingConfig();
-  @ConfigProperty({description: 'Enables loading the full resolution image on zoom in the ligthbox (preview).'})
+  @ConfigProperty({
+    description:
+      'Enables loading the full resolution image on zoom in the ligthbox (preview).',
+  })
   loadFullImageOnZoom: boolean = true;
 }
 
@@ -178,11 +194,19 @@ export class ClientMediaConfig {
 
 @SubConfigClass()
 export class ClientMetaFileConfig {
-  @ConfigProperty({description: 'Reads *.gpx files and renders them on the map.'})
+  @ConfigProperty({
+    description: 'Reads *.gpx files and renders them on the map.',
+  })
   gpx: boolean = true;
-  @ConfigProperty({description: 'Reads *.md files in a directory and shows the next to the map.'})
+  @ConfigProperty({
+    description:
+      'Reads *.md files in a directory and shows the next to the map.',
+  })
   markdown: boolean = true;
-  @ConfigProperty({description: 'Reads *.pg2conf files (You can use it for custom sorting and save search (albums)).'})
+  @ConfigProperty({
+    description:
+      'Reads *.pg2conf files (You can use it for custom sorting and save search (albums)).',
+  })
   pg2conf: boolean = true;
 }
 
@@ -192,9 +216,9 @@ export class ClientFacesConfig {
   enabled: boolean = true;
   @ConfigProperty()
   keywordsToPersons: boolean = true;
-  @ConfigProperty({type: UserRoles})
+  @ConfigProperty({ type: UserRoles })
   writeAccessMinRole: UserRoles = UserRoles.Admin;
-  @ConfigProperty({type: UserRoles})
+  @ConfigProperty({ type: UserRoles })
   readAccessMinRole: UserRoles = UserRoles.User;
 }
 
@@ -220,10 +244,10 @@ export class ClientConfig {
   Other: ClientOtherConfig = new ClientOtherConfig();
   @ConfigProperty()
   authenticationRequired: boolean = true;
-  @ConfigProperty({type: UserRoles})
+  @ConfigProperty({ type: UserRoles })
   unAuthenticatedUserRole: UserRoles = UserRoles.Admin;
-  @ConfigProperty({arrayType: 'string', volatile: true})
-  languages: string[];
+  @ConfigProperty({ arrayType: 'string', volatile: true })
+  languages: string[] | undefined;
   @ConfigProperty()
   Media: ClientMediaConfig = new ClientMediaConfig();
   @ConfigProperty()
@@ -231,6 +255,3 @@ export class ClientConfig {
   @ConfigProperty()
   Faces: ClientFacesConfig = new ClientFacesConfig();
 }
-
-
-

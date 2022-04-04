@@ -6,11 +6,11 @@
         class="switch"
         name="enabled"
         switch-on-color="success"
-        switch-inverse="true"
+        [switch-inverse]="true"
         [switch-off-text]="text.Disabled"
         [switch-on-text]="text.Enabled"
-        switch-handle-width="100"
-        switch-label-width="20"
+        [switch-handle-width]="100"
+        [switch-label-width]="20"
         [switch-disabled]="inProgress"
         [(ngModel)]="enabled"
         (changeState)="switched($event)">
@@ -77,7 +77,7 @@
           <input type="text" class="form-control" i18n-placeholder placeholder="Username"
                  [(ngModel)]="newUser.name" name="name" required>
           <input type="password" class="form-control" i18n-placeholder placeholder="Password"
-                 [(ngModel)]="newUser.password" name="password" autocomplete="off"   required>
+                 [(ngModel)]="newUser.password" name="password" autocomplete="off" required>
           <select class="form-control" [(ngModel)]="newUser.role" name="role" required>
             <option *ngFor="let repository of userRoles" [value]="repository.key">{{repository.value}}
             </option>

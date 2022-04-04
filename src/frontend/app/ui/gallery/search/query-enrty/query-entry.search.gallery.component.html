@@ -114,7 +114,7 @@
                title="From date"
                i18n-title
                [ngModel]="AsRangeQuery.value | date:'yyyy-MM-dd'"
-               (ngModelChange)="AsRangeQuery.value = $event; onChange(queryEntry) "
+               (ngModelChange)="AsRangeQuery.value = $event; onChange() "
                [value]="AsRangeQuery.value | date:'yyyy-MM-dd'" #from_date="ngModel"
                class="form-control input-md"
                type="date">
@@ -126,7 +126,7 @@
                title="To date"
                i18n-title
                [ngModel]="AsRangeQuery.value | date:'yyyy-MM-dd'"
-               (ngModelChange)="AsRangeQuery.value = $event; onChange(queryEntry) "
+               (ngModelChange)="AsRangeQuery.value = $event; onChange() "
                [value]="AsRangeQuery.value | date:'yyyy-MM-dd'" #to_date="ngModel"
                class="form-control input-md"
                type="date">
@@ -202,13 +202,13 @@
             title="Orientation"
             switch-on-color="primary"
             switch-off-color="primary"
-            switch-inverse="true"
+            [switch-inverse]="true"
             switch-off-text="Portrait"
             switch-on-text="Landscape"
             i18n-switch-off-text
             i18n-switch-on-text
-            switch-handle-width="100"
-            switch-label-width="20"
+            [switch-handle-width]="100"
+            [switch-label-width]="20"
             (ngModelChange)="onChange()"
             [(ngModel)]="AsOrientationQuery.landscape">
           </bSwitch>

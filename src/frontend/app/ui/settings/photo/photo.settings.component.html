@@ -31,7 +31,7 @@
         [ngModel]="states.server.Converting.resolution"
         [options]="resolutions"
         [disabled]="!states.client.Converting.enabled.value"
-        required="true">
+        [required]="true">
       </app-settings-entry>
 
       <app-settings-entry

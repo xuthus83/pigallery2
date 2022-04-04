@@ -1,8 +1,7 @@
-import {ISharingManager} from '../interfaces/ISharingManager';
-import {SharingDTO} from '../../../../common/entities/SharingDTO';
+import { ISharingManager } from '../interfaces/ISharingManager';
+import { SharingDTO } from '../../../../common/entities/SharingDTO';
 
 export class SharingManager implements ISharingManager {
-
   deleteSharing(sharingKey: string): Promise<void> {
     throw new Error('not implemented');
   }
@@ -19,9 +18,10 @@ export class SharingManager implements ISharingManager {
     throw new Error('not implemented');
   }
 
-  updateSharing(sharing: SharingDTO, forceUpdate: boolean): Promise<SharingDTO> {
+  updateSharing(
+    sharing: SharingDTO,
+    forceUpdate: boolean
+  ): Promise<SharingDTO> {
     throw new Error('not implemented');
   }
-
-
 }

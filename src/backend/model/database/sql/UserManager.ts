@@ -1,28 +1,23 @@
-import {UserDTO, UserRoles} from '../../../../common/entities/UserDTO';
-import {IUserManager} from '../interfaces/IUserManager';
-import {UserEntity} from './enitites/UserEntity';
-import {SQLConnection} from './SQLConnection';
-import {PasswordHelper} from '../../PasswordHelper';
-import {FindOptionsWhere} from 'typeorm';
-
+import { UserDTO, UserRoles } from '../../../../common/entities/UserDTO';
+import { IUserManager } from '../interfaces/IUserManager';
+import { UserEntity } from './enitites/UserEntity';
+import { SQLConnection } from './SQLConnection';
+import { PasswordHelper } from '../../PasswordHelper';
+import { FindOptionsWhere } from 'typeorm';
 
 export class UserManager implements IUserManager {
-
-  constructor() {
-  }
-
+  constructor() {}
 
   public async findOne(filter: FindOptionsWhere<UserEntity>): Promise<any> {
     const connection = await SQLConnection.getConnection();
     const pass = filter.password as string;
     delete filter.password;
-    const user = (await connection.getRepository(UserEntity).findOneBy(filter));
+    const user = await connection.getRepository(UserEntity).findOneBy(filter);
 
     if (pass && !PasswordHelper.comparePassword(pass, user.password)) {
       throw new Error('No entry found');
     }
     return user;
-
   }
 
   public async find(filter: FindOptionsWhere<UserDTO>): Promise<any> {
@@ -38,22 +33,19 @@ export class UserManager implements IUserManager {
 
   public async deleteUser(id: number): Promise<any> {
     const connection = await SQLConnection.getConnection();
-    const user = await connection.getRepository(UserEntity).findOneBy({id});
+    const user = await connection.getRepository(UserEntity).findOneBy({ id });
     return await connection.getRepository(UserEntity).remove(user);
   }
 
   public async changeRole(id: number, newRole: UserRoles): Promise<any> {
-
     const connection = await SQLConnection.getConnection();
     const userRepository = connection.getRepository(UserEntity);
-    const user = await userRepository.findOneBy({id});
+    const user = await userRepository.findOneBy({ id });
     user.role = newRole;
     return userRepository.save(user);
-
   }
 
   public async changePassword(request: any): Promise<void> {
     throw new Error('not implemented'); // TODO: implement
   }
-
 }

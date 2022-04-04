@@ -1,12 +1,10 @@
-import {TaskQue} from './TaskQue';
-
+import { TaskQue } from './TaskQue';
 
 export interface ITaskExecuter<I, O> {
   execute(input: I): Promise<O>;
 }
 
 export class TaskExecuter<I, O> implements ITaskExecuter<I, O> {
-
   private taskQue = new TaskQue<I, O>();
   private taskInProgress = 0;
   private run = async () => {
@@ -25,9 +23,7 @@ export class TaskExecuter<I, O> implements ITaskExecuter<I, O> {
     process.nextTick(this.run);
   };
 
-  constructor(private size: number, private worker: (input: I) => Promise<O>) {
-  }
-
+  constructor(private size: number, private worker: (input: I) => Promise<O>) {}
 
   execute(input: I): Promise<O> {
     const promise = this.taskQue.add(input).promise.obj;
