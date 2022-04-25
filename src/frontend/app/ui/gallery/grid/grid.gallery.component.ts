@@ -245,6 +245,7 @@ export class GalleryGridComponent
     while (
       this.renderedPhotoIndex - 1 < index + 1 &&
       this.renderARow() !== null
+      // eslint-disable-next-line no-empty
     ) {}
   }
 
@@ -297,7 +298,7 @@ export class GalleryGridComponent
    * @param offset Add height to the client height (content is not yet added to the dom, but calculate with it)
    * @returns boolean
    */
-  private shouldRenderMore(offset: number = 0): boolean {
+  private shouldRenderMore(offset = 0): boolean {
     const bottomOffset = this.getMaxRowHeight() * 2;
     return (
       Config.Client.Other.enableOnScrollRendering === false ||
@@ -310,7 +311,7 @@ export class GalleryGridComponent
     );
   }
 
-  private renderPhotos(numberOfPhotos: number = 0): void {
+  private renderPhotos(numberOfPhotos = 0): void {
     if (!this.media) {
       return;
     }

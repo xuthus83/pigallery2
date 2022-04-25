@@ -196,7 +196,7 @@ export class Thumbnail extends ThumbnailBase {
   constructor(
     private media: Media,
     thumbnailService: ThumbnailLoaderService,
-    autoLoad: boolean = true
+    autoLoad = true
   ) {
     super(thumbnailService);
     if (this.media.isThumbnailAvailable()) {

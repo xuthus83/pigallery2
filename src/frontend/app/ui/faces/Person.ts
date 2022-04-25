@@ -8,7 +8,6 @@ export class Person implements PersonDTO {
   id: number;
   name: string;
 
-  constructor() {}
 
   public static getThumbnailUrl(that: PersonDTO): string {
     return Utils.concatUrls(

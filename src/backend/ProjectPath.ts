@@ -15,7 +15,7 @@ class ProjectPathClass {
     this.reset();
   }
 
-  normalizeRelative(pathStr: string): any {
+  normalizeRelative(pathStr: string): string {
     return path.join(pathStr, path.sep);
   }
 

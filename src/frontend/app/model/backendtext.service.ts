@@ -4,7 +4,6 @@ import { DefaultsJobs } from '../../../common/entities/job/JobDTO';
 
 @Injectable()
 export class BackendtextService {
-  constructor() {}
 
   public get(id: backendText): string {
     switch (id) {

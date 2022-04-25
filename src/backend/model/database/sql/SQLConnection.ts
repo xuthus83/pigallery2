@@ -37,7 +37,6 @@ const LOG_TAG = '[SQLConnection]';
 export class SQLConnection {
   private static connection: Connection = null;
 
-  constructor() {}
 
   public static async getConnection(): Promise<Connection> {
     if (this.connection == null) {
@@ -78,6 +77,7 @@ export class SQLConnection {
   ): Promise<boolean> {
     try {
       await getConnection('test').close();
+      // eslint-disable-next-line no-empty
     } catch (err) {}
     const options: any = this.getDriver(config);
     options.name = 'test';
@@ -189,6 +189,7 @@ export class SQLConnection {
       if (e.sqlMessage === "Unknown database '" + options.database + "'") {
         Logger.debug(LOG_TAG, 'creating database: ' + options.database);
         const tmpOption = Utils.clone(options);
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         delete tmpOption.database;
         const tmpConn = await createConnection(tmpOption);
@@ -206,6 +207,7 @@ export class SQLConnection {
     let version = null;
     try {
       version = (await connection.getRepository(VersionEntity).find())[0];
+      // eslint-disable-next-line no-empty
     } catch (ex) {}
     if (version && version.version === DataStructureVersion) {
       return;
@@ -222,6 +224,7 @@ export class SQLConnection {
         .getRepository(UserEntity)
         .createQueryBuilder('user')
         .getMany();
+      // eslint-disable-next-line no-empty
     } catch (ex) {}
     await connection.dropDatabase();
     await connection.synchronize();

@@ -68,7 +68,9 @@ export class PhotoProcessing {
     try {
       await fsp.access(thPath, fsConstants.R_OK);
       return thPath;
-    } catch (e) {}
+    } catch (e) {
+      // ignoring errors
+    }
 
     const margin = {
       x: Math.round(
@@ -203,7 +205,9 @@ export class PhotoProcessing {
     try {
       await fsp.access(outPath, fsConstants.R_OK);
       return true;
-    } catch (e) {}
+    } catch (e) {
+      // ignoring errors
+    }
     return false;
   }
 
@@ -220,7 +224,9 @@ export class PhotoProcessing {
     try {
       await fsp.access(outPath, fsConstants.R_OK);
       return outPath;
-    } catch (e) {}
+    } catch (e) {
+      // ignoring errors
+    }
 
     // run on other thread
     const input = {

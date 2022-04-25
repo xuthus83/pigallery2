@@ -1,3 +1,4 @@
+/* eslint-disable no-case-declarations */
 export enum JobTriggerType {
   never = 1,
   scheduled = 2,

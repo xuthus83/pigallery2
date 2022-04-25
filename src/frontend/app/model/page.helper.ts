@@ -4,7 +4,6 @@ export class PageHelper {
     (document.compatMode || '') === 'CSS1Compat';
   private static readonly body = document.getElementsByTagName('body')[0];
 
-  constructor() {}
 
   public static get ScrollY(): number {
     return this.supportPageOffset

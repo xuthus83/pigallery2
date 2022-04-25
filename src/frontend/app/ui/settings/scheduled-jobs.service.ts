@@ -47,7 +47,7 @@ export class ScheduledJobsService {
   public async start(
     jobName: string,
     config?: any,
-    soloStart: boolean = false,
+    soloStart = false,
     allowParallelRun = false
   ): Promise<void> {
     try {
@@ -62,9 +62,7 @@ export class ScheduledJobsService {
       );
       // placeholder to force showing running job
       this.addDummyProgress(jobName, config);
-    } catch (e) {
-      throw e;
-    } finally {
+    }  finally {
       delete this.jobStartingStopping[jobName];
       this.forceUpdate();
     }
@@ -88,7 +86,7 @@ export class ScheduledJobsService {
     );
     for (const prg of Object.keys(prevPrg)) {
       if (
-        !this.progress.value.hasOwnProperty(prg) ||
+        !this.progress.value.hasOwn(prg) ||
         // state changed from running to finished
         ((prevPrg[prg].state === JobProgressStates.running ||
           prevPrg[prg].state === JobProgressStates.cancelling) &&

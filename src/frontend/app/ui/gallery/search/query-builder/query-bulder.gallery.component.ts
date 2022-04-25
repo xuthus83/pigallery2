@@ -45,7 +45,7 @@ export class GallerySearchQueryBuilderComponent
     text: '',
   } as TextSearch;
   @Output() search = new EventEmitter<void>();
-  @Input() placeholder: string = "Search";
+  @Input() placeholder = "Search";
   public rawSearchText = '';
 
   constructor(private searchQueryParserService: SearchQueryParserService) {}
@@ -79,6 +79,7 @@ export class GallerySearchQueryBuilderComponent
     return { required: true };
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   public onTouched(): void {}
 
   public writeValue(obj: any): void {
@@ -100,7 +101,9 @@ export class GallerySearchQueryBuilderComponent
     this.propagateChange(this.searchQueryDTO);
   }
 
-  private propagateChange = (_: any): void => {};
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  private propagateChange = (_: unknown): void => {};
 
-  private propagateTouch = (_: any): void => {};
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  private propagateTouch = (_: unknown): void => {};
 }

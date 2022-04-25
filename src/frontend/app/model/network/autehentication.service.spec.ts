@@ -19,11 +19,15 @@ class MockUserService {
 }
 
 class MockNetworkService {
-  addGlobalErrorHandler(fn: (error: ErrorDTO) => boolean): void {}
+  addGlobalErrorHandler(fn: (error: ErrorDTO) => boolean): void {
+    // mock fn
+  }
 }
 
 class MockShareService {
-  onNewUser(user: any): void {}
+  onNewUser(user: any): void {
+    // mock fn
+    }
 }
 
 describe('AuthenticationService', () => {

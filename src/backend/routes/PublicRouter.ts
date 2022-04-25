@@ -11,16 +11,17 @@ import { UserDTO } from '../../common/entities/UserDTO';
 import { ServerTimeEntry } from '../middlewares/ServerTimingMWs';
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Express {
     interface Request {
       locale?: string;
       localePath?: string;
-      tpl?: any;
+      tpl?: Record<string, any>;
       timing?: { [key: string]: ServerTimeEntry };
     }
 
     interface Response {
-      tpl?: any;
+      tpl?: Record<string, any>;
     }
   }
 }
@@ -150,7 +151,7 @@ export class PublicRouter {
       );
     });
 
-    const renderFile = (subDir: string = '') => {
+    const renderFile = (subDir = '') => {
       return (req: Request, res: Response) => {
         const file = path.join(
           ProjectPath.FrontendFolder,

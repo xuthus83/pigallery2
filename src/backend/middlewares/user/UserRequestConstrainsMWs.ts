@@ -9,7 +9,7 @@ export class UserRequestConstrainsMWs {
     req: Request,
     res: Response,
     next: NextFunction
-  ): any {
+  ): void {
     if (
       typeof req.params === 'undefined' ||
       typeof req.params.id === 'undefined'
@@ -27,7 +27,7 @@ export class UserRequestConstrainsMWs {
     req: Request,
     res: Response,
     next: NextFunction
-  ): any {
+  ): void {
     if (
       typeof req.params === 'undefined' ||
       typeof req.params.id === 'undefined'
@@ -46,7 +46,7 @@ export class UserRequestConstrainsMWs {
     req: Request,
     res: Response,
     next: NextFunction
-  ): Promise<any> {
+  ): Promise<void> {
     if (
       typeof req.params === 'undefined' ||
       typeof req.params.id === 'undefined'

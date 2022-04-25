@@ -1,11 +1,11 @@
-import { inject, TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { NetworkService } from './network.service';
-import { UserService } from './user.service';
-import { LoginCredential } from '../../../../common/entities/LoginCredential';
-import { LoadingBarService } from '@ngx-loading-bar/core';
-import { ShareService } from '../../ui/gallery/share.service';
-import { VersionService } from '../version.service';
+import {inject, TestBed} from '@angular/core/testing';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
+import {NetworkService} from './network.service';
+import {UserService} from './user.service';
+import {LoginCredential} from '../../../../common/entities/LoginCredential';
+import {LoadingBarService} from '@ngx-loading-bar/core';
+import {ShareService} from '../../ui/gallery/share.service';
+import {VersionService} from '../version.service';
 
 class MockShareService {
   wait(): Promise<boolean> {
@@ -26,7 +26,7 @@ describe('UserService', (): void => {
         UserService,
         LoadingBarService,
         NetworkService,
-        { provide: ShareService, useClass: MockShareService },
+        {provide: ShareService, useClass: MockShareService},
       ],
     });
   });
@@ -43,7 +43,7 @@ describe('UserService', (): void => {
       expect(networkService.postJson).toHaveBeenCalled();
       expect((networkService.postJson as any).calls.argsFor(0)).toEqual([
         '/user/login',
-        { loginCredential: credential },
+        {loginCredential: credential},
       ]);
     }
   ));

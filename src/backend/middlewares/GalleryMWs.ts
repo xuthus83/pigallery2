@@ -4,6 +4,7 @@ import * as archiver from 'archiver';
 import { NextFunction, Request, Response } from 'express';
 import { ErrorCodes, ErrorDTO } from '../../common/entities/Error';
 import {
+  DirectoryBaseDTO,
   DirectoryDTOUtils,
   ParentDirectoryDTO,
 } from '../../common/entities/DirectoryDTO';
@@ -32,7 +33,7 @@ export class GalleryMWs {
     req: Request,
     res: Response,
     next: NextFunction
-  ): Promise<any> {
+  ): Promise<void> {
     const directoryName = req.params['directory'] || '/';
     const absoluteDirectoryName = path.join(
       ProjectPath.ImageFolder,
@@ -91,7 +92,7 @@ export class GalleryMWs {
     req: Request,
     res: Response,
     next: NextFunction
-  ): Promise<any> {
+  ): Promise<void> {
     if (Config.Client.Other.enableDownloadZip === false) {
       return next();
     }
@@ -120,7 +121,7 @@ export class GalleryMWs {
         console.log('zip ' + archive.pointer() + ' bytes');
       });
 
-      archive.on('error', (err: any) => {
+      archive.on('error', (err: Error) => {
         throw err;
       });
 
@@ -151,7 +152,7 @@ export class GalleryMWs {
     req: Request,
     res: Response,
     next: NextFunction
-  ): any {
+  ): void {
     if (!req.resultPipe) {
       return next();
     }
@@ -175,7 +176,7 @@ export class GalleryMWs {
           delete (m as PhotoDTO).metadata.positionData;
         }
         if (m.directory) {
-          delete (m.directory as any).id;
+          delete (m.directory as DirectoryBaseDTO).id;
         }
         Utils.removeNullOrEmptyObj(m);
       }
@@ -216,7 +217,7 @@ export class GalleryMWs {
     req: Request,
     res: Response,
     next: NextFunction
-  ): Promise<any> {
+  ): Promise<void> {
     if (!req.params['mediaPath']) {
       return next();
     }
@@ -248,7 +249,7 @@ export class GalleryMWs {
     req: Request,
     res: Response,
     next: NextFunction
-  ): Promise<any> {
+  ): Promise<void> {
     if (!req.resultPipe) {
       return next();
     }
@@ -272,7 +273,7 @@ export class GalleryMWs {
     req: Request,
     res: Response,
     next: NextFunction
-  ): Promise<any> {
+  ): Promise<void> {
     if (
       Config.Client.Search.enabled === false ||
       !req.params['searchQueryDTO']
@@ -315,7 +316,7 @@ export class GalleryMWs {
     req: Request,
     res: Response,
     next: NextFunction
-  ): Promise<any> {
+  ): Promise<void> {
     if (Config.Client.Search.AutoComplete.enabled === false) {
       return next();
     }
@@ -345,7 +346,7 @@ export class GalleryMWs {
     req: Request,
     res: Response,
     next: NextFunction
-  ): Promise<any> {
+  ): Promise<void> {
     if (
       Config.Client.RandomPhoto.enabled === false ||
       !req.params['searchQueryDTO']

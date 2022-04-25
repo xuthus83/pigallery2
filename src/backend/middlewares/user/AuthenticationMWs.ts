@@ -27,10 +27,11 @@ export class AuthenticationMWs {
     }
     try {
       const user = await AuthenticationMWs.getSharingUser(req);
-      if (!!user) {
+      if (user) {
         req.session['user'] = user;
         return next();
       }
+      // eslint-disable-next-line no-empty
     } catch (err) {}
 
     return next();
@@ -56,7 +57,7 @@ export class AuthenticationMWs {
 
     try {
       const user = await AuthenticationMWs.getSharingUser(req);
-      if (!!user) {
+      if (user) {
         req.session['user'] = user;
         return next();
       }
@@ -82,6 +83,7 @@ export class AuthenticationMWs {
     ): void {
       req.params[paramName] = path
         .normalize(req.params[paramName] || path.sep)
+        // eslint-disable-next-line no-useless-escape
         .replace(/^(\.\.[\/\\])+/, '');
       return next();
     };

@@ -1,12 +1,13 @@
-import { AutoCompleteItem } from '../../../../common/entities/AutoCompleteItem';
-import { SearchResultDTO } from '../../../../common/entities/SearchResultDTO';
-import { SQLConnection } from './SQLConnection';
-import { PhotoEntity } from './enitites/PhotoEntity';
-import { DirectoryEntity } from './enitites/DirectoryEntity';
-import { MediaEntity } from './enitites/MediaEntity';
-import { PersonEntry } from './enitites/PersonEntry';
-import { Brackets, SelectQueryBuilder, WhereExpression } from 'typeorm';
-import { Config } from '../../../../common/config/private/Config';
+/* eslint-disable no-case-declarations */
+import {AutoCompleteItem} from '../../../../common/entities/AutoCompleteItem';
+import {SearchResultDTO} from '../../../../common/entities/SearchResultDTO';
+import {SQLConnection} from './SQLConnection';
+import {PhotoEntity} from './enitites/PhotoEntity';
+import {DirectoryEntity} from './enitites/DirectoryEntity';
+import {MediaEntity} from './enitites/MediaEntity';
+import {PersonEntry} from './enitites/PersonEntry';
+import {Brackets, SelectQueryBuilder, WhereExpression} from 'typeorm';
+import {Config} from '../../../../common/config/private/Config';
 import {
   ANDSearchQuery,
   DistanceSearch,
@@ -25,15 +26,15 @@ import {
   TextSearchQueryMatchTypes,
   ToDateSearch,
 } from '../../../../common/entities/SearchQueryDTO';
-import { GalleryManager } from './GalleryManager';
-import { ObjectManagers } from '../../ObjectManagers';
-import { PhotoDTO } from '../../../../common/entities/PhotoDTO';
-import { DatabaseType } from '../../../../common/config/private/PrivateConfig';
-import { ISQLGalleryManager } from './IGalleryManager';
-import { ISQLSearchManager } from './ISearchManager';
-import { Utils } from '../../../../common/Utils';
-import { FileEntity } from './enitites/FileEntity';
-import { SQL_COLLATE } from './enitites/EntityUtils';
+import {GalleryManager} from './GalleryManager';
+import {ObjectManagers} from '../../ObjectManagers';
+import {PhotoDTO} from '../../../../common/entities/PhotoDTO';
+import {DatabaseType} from '../../../../common/config/private/PrivateConfig';
+import {ISQLGalleryManager} from './IGalleryManager';
+import {ISQLSearchManager} from './ISearchManager';
+import {Utils} from '../../../../common/Utils';
+import {FileEntity} from './enitites/FileEntity';
+import {SQL_COLLATE} from './enitites/EntityUtils';
 
 export class SearchManager implements ISQLSearchManager {
   // This trick enables us to list less rows as faces will be concatenated into one row
@@ -41,8 +42,8 @@ export class SearchManager implements ISQLSearchManager {
   // (i.e: leftJoinAndSelect('media.metadata.faces', 'faces')  does not work)
   private FACE_SELECT =
     Config.Server.Database.type === DatabaseType.mysql
-      ? "CONCAT('[' , GROUP_CONCAT(  '{\"name\": \"' , person.name , '\", \"box\": {\"top\":' , faces.box.top , ', \"left\":' , faces.box.left , ', \"height\":' , faces.box.height ,', \"width\":' , faces.box.width , '}}'  ) ,']') as media_metadataFaces"
-      : "'[' || GROUP_CONCAT(  '{\"name\": \"' || person.name || '\", \"box\": {\"top\":' || faces.box.top || ', \"left\":' || faces.box.left || ', \"height\":' || faces.box.height ||', \"width\":' || faces.box.width || '}}'  ) ||']' as media_metadataFaces";
+      ? 'CONCAT(\'[\' , GROUP_CONCAT(  \'{"name": "\' , person.name , \'", "box": {"top":\' , faces.box.top , \', "left":\' , faces.box.left , \', "height":\' , faces.box.height ,\', "width":\' , faces.box.width , \'}}\'  ) ,\']\') as media_metadataFaces'
+      : '\'[\' || GROUP_CONCAT(  \'{"name": "\' || person.name || \'", "box": {"top":\' || faces.box.top || \', "left":\' || faces.box.left || \', "height":\' || faces.box.height ||\', "width":\' || faces.box.width || \'}}\'  ) ||\']\' as media_metadataFaces';
   private DIRECTORY_SELECT = [
     'directory.id',
     'directory.name',
@@ -147,22 +148,22 @@ export class SearchManager implements ISQLSearchManager {
           .createQueryBuilder('photo')
           .select(
             'photo.metadata.positionData.country as country, ' +
-              'photo.metadata.positionData.state as state, photo.metadata.positionData.city as city'
+            'photo.metadata.positionData.state as state, photo.metadata.positionData.city as city'
           )
           .where(
             'photo.metadata.positionData.country LIKE :text COLLATE ' +
-              SQL_COLLATE,
-            { text: '%' + text + '%' }
+            SQL_COLLATE,
+            {text: '%' + text + '%'}
           )
           .orWhere(
             'photo.metadata.positionData.state LIKE :text COLLATE ' +
-              SQL_COLLATE,
-            { text: '%' + text + '%' }
+            SQL_COLLATE,
+            {text: '%' + text + '%'}
           )
           .orWhere(
             'photo.metadata.positionData.city LIKE :text COLLATE ' +
-              SQL_COLLATE,
-            { text: '%' + text + '%' }
+            SQL_COLLATE,
+            {text: '%' + text + '%'}
           )
           .groupBy(
             'photo.metadata.positionData.country, photo.metadata.positionData.state, photo.metadata.positionData.city'
@@ -226,7 +227,7 @@ export class SearchManager implements ISQLSearchManager {
               .select('DISTINCT(media.metadata.caption) as caption')
               .where(
                 'media.metadata.caption LIKE :text COLLATE ' + SQL_COLLATE,
-                { text: '%' + text + '%' }
+                {text: '%' + text + '%'}
               )
               .limit(
                 Config.Client.Search.AutoComplete.targetItemsPerCategory * 2
@@ -428,16 +429,18 @@ export class SearchManager implements ISQLSearchManager {
     const queryId = (query as SearchQueryDTOWithID).queryId;
     switch (query.type) {
       case SearchQueryTypes.AND:
-        return new Brackets((q): any => {
-          (query as ANDSearchQuery).list.forEach((sq): any =>
-            q.andWhere(this.buildWhereQuery(sq, directoryOnly))
+        return new Brackets((q): unknown => {
+          (query as ANDSearchQuery).list.forEach((sq) => {
+              q.andWhere(this.buildWhereQuery(sq, directoryOnly));
+            }
           );
           return q;
         });
       case SearchQueryTypes.OR:
-        return new Brackets((q): any => {
-          (query as ANDSearchQuery).list.forEach((sq): any =>
-            q.orWhere(this.buildWhereQuery(sq, directoryOnly))
+        return new Brackets((q): unknown => {
+          (query as ANDSearchQuery).list.forEach((sq) => {
+              q.orWhere(this.buildWhereQuery(sq, directoryOnly));
+            }
           );
           return q;
         });
@@ -461,33 +464,33 @@ export class SearchManager implements ISQLSearchManager {
 
         const minLat = trimRange(
           (query as DistanceSearch).from.GPSData.latitude -
-            (query as DistanceSearch).distance * latDelta,
+          (query as DistanceSearch).distance * latDelta,
           -90,
           90
         );
         const maxLat = trimRange(
           (query as DistanceSearch).from.GPSData.latitude +
-            (query as DistanceSearch).distance * latDelta,
+          (query as DistanceSearch).distance * latDelta,
           -90,
           90
         );
         const minLon = trimRange(
           (query as DistanceSearch).from.GPSData.longitude -
-            ((query as DistanceSearch).distance * lonDelta) /
-              Math.cos(minLat * (Math.PI / 180)),
+          ((query as DistanceSearch).distance * lonDelta) /
+          Math.cos(minLat * (Math.PI / 180)),
           -180,
           180
         );
         const maxLon = trimRange(
           (query as DistanceSearch).from.GPSData.longitude +
-            ((query as DistanceSearch).distance * lonDelta) /
-              Math.cos(maxLat * (Math.PI / 180)),
+          ((query as DistanceSearch).distance * lonDelta) /
+          Math.cos(maxLat * (Math.PI / 180)),
           -180,
           180
         );
 
-        return new Brackets((q): any => {
-          const textParam: any = {};
+        return new Brackets((q): unknown => {
+          const textParam: { [key: string]: number | string } = {};
           textParam['maxLat' + queryId] = maxLat;
           textParam['minLat' + queryId] = minLat;
           textParam['maxLon' + queryId] = maxLon;
@@ -534,7 +537,7 @@ export class SearchManager implements ISQLSearchManager {
         if (directoryOnly) {
           throw new Error('not supported in directoryOnly mode');
         }
-        return new Brackets((q): any => {
+        return new Brackets((q): unknown => {
           if (typeof (query as FromDateSearch).value === 'undefined') {
             throw new Error(
               'Invalid search query: Date Query should contain from value'
@@ -542,7 +545,7 @@ export class SearchManager implements ISQLSearchManager {
           }
           const relation = (query as TextSearch).negate ? '<' : '>=';
 
-          const textParam: any = {};
+          const textParam: { [key: string]: unknown } = {};
           textParam['from' + queryId] = (query as FromDateSearch).value;
           q.where(
             `media.metadata.creationDate ${relation} :from${queryId}`,
@@ -556,7 +559,7 @@ export class SearchManager implements ISQLSearchManager {
         if (directoryOnly) {
           throw new Error('not supported in directoryOnly mode');
         }
-        return new Brackets((q): any => {
+        return new Brackets((q): unknown => {
           if (typeof (query as ToDateSearch).value === 'undefined') {
             throw new Error(
               'Invalid search query: Date Query should contain to value'
@@ -564,7 +567,7 @@ export class SearchManager implements ISQLSearchManager {
           }
           const relation = (query as TextSearch).negate ? '>' : '<=';
 
-          const textParam: any = {};
+          const textParam: { [key: string]: unknown } = {};
           textParam['to' + queryId] = (query as ToDateSearch).value;
           q.where(
             `media.metadata.creationDate ${relation} :to${queryId}`,
@@ -578,7 +581,7 @@ export class SearchManager implements ISQLSearchManager {
         if (directoryOnly) {
           throw new Error('not supported in directoryOnly mode');
         }
-        return new Brackets((q): any => {
+        return new Brackets((q): unknown => {
           if (typeof (query as MinRatingSearch).value === 'undefined') {
             throw new Error(
               'Invalid search query: Rating Query should contain minvalue'
@@ -587,7 +590,7 @@ export class SearchManager implements ISQLSearchManager {
 
           const relation = (query as TextSearch).negate ? '<' : '>=';
 
-          const textParam: any = {};
+          const textParam: { [key: string]: unknown } = {};
           textParam['min' + queryId] = (query as MinRatingSearch).value;
           q.where(
             `media.metadata.rating ${relation}  :min${queryId}`,
@@ -600,7 +603,7 @@ export class SearchManager implements ISQLSearchManager {
         if (directoryOnly) {
           throw new Error('not supported in directoryOnly mode');
         }
-        return new Brackets((q): any => {
+        return new Brackets((q): unknown => {
           if (typeof (query as MaxRatingSearch).value === 'undefined') {
             throw new Error(
               'Invalid search query: Rating Query should contain  max value'
@@ -610,7 +613,7 @@ export class SearchManager implements ISQLSearchManager {
           const relation = (query as TextSearch).negate ? '>' : '<=';
 
           if (typeof (query as MaxRatingSearch).value !== 'undefined') {
-            const textParam: any = {};
+            const textParam: { [key: string]: unknown } = {};
             textParam['max' + queryId] = (query as MaxRatingSearch).value;
             q.where(
               `media.metadata.rating ${relation}  :max${queryId}`,
@@ -624,7 +627,7 @@ export class SearchManager implements ISQLSearchManager {
         if (directoryOnly) {
           throw new Error('not supported in directoryOnly mode');
         }
-        return new Brackets((q): any => {
+        return new Brackets((q): unknown => {
           if (typeof (query as MinResolutionSearch).value === 'undefined') {
             throw new Error(
               'Invalid search query: Resolution Query should contain min value'
@@ -633,7 +636,7 @@ export class SearchManager implements ISQLSearchManager {
 
           const relation = (query as TextSearch).negate ? '<' : '>=';
 
-          const textParam: any = {};
+          const textParam: { [key: string]: unknown } = {};
           textParam['min' + queryId] =
             (query as MinResolutionSearch).value * 1000 * 1000;
           q.where(
@@ -648,7 +651,7 @@ export class SearchManager implements ISQLSearchManager {
         if (directoryOnly) {
           throw new Error('not supported in directoryOnly mode');
         }
-        return new Brackets((q): any => {
+        return new Brackets((q): unknown => {
           if (typeof (query as MaxResolutionSearch).value === 'undefined') {
             throw new Error(
               'Invalid search query: Rating Query should contain min or max value'
@@ -657,7 +660,7 @@ export class SearchManager implements ISQLSearchManager {
 
           const relation = (query as TextSearch).negate ? '>' : '<=';
 
-          const textParam: any = {};
+          const textParam: { [key: string]: unknown } = {};
           textParam['max' + queryId] =
             (query as MaxResolutionSearch).value * 1000 * 1000;
           q.where(
@@ -672,7 +675,7 @@ export class SearchManager implements ISQLSearchManager {
         if (directoryOnly) {
           throw new Error('not supported in directoryOnly mode');
         }
-        return new Brackets((q): any => {
+        return new Brackets((q): unknown => {
           if ((query as OrientationSearch).landscape) {
             q.where('media.metadata.size.width >= media.metadata.size.height');
           } else {
@@ -707,7 +710,7 @@ export class SearchManager implements ISQLSearchManager {
       const whereFN = (query as TextSearch).negate ? 'andWhere' : 'orWhere';
       const whereFNRev = (query as TextSearch).negate ? 'orWhere' : 'andWhere';
 
-      const textParam: any = {};
+      const textParam: { [key: string]: unknown } = {};
       textParam['text' + queryId] = createMatchString(
         (query as TextSearch).text
       );
@@ -729,7 +732,7 @@ export class SearchManager implements ISQLSearchManager {
 
         const directoryPath = GalleryManager.parseRelativeDirePath(dirPathStr);
         q[whereFN](
-          new Brackets((dq): any => {
+          new Brackets((dq): unknown => {
             textParam['dirName' + queryId] = createMatchString(
               directoryPath.name
             );
@@ -778,15 +781,13 @@ export class SearchManager implements ISQLSearchManager {
         q[whereFN](
           `media.metadata.positionData.country ${LIKE} :text${queryId} COLLATE ${SQL_COLLATE}`,
           textParam
-        )
-          [whereFN](
-            `media.metadata.positionData.state ${LIKE} :text${queryId} COLLATE ${SQL_COLLATE}`,
-            textParam
-          )
-          [whereFN](
-            `media.metadata.positionData.city ${LIKE} :text${queryId} COLLATE ${SQL_COLLATE}`,
-            textParam
-          );
+        )[whereFN](
+          `media.metadata.positionData.state ${LIKE} :text${queryId} COLLATE ${SQL_COLLATE}`,
+          textParam
+        )[whereFN](
+          `media.metadata.positionData.city ${LIKE} :text${queryId} COLLATE ${SQL_COLLATE}`,
+          textParam
+        );
       }
 
       // Matching for array type fields
@@ -956,7 +957,7 @@ export class SearchManager implements ISQLSearchManager {
    */
   private assignQueryIDs(
     queryIN: SearchQueryDTO,
-    id = { value: 1 }
+    id = {value: 1}
   ): SearchQueryDTO {
     // It is possible that one SQL query contains multiple searchQueries
     // (like: where (<searchQuery1> AND (<searchQuery2>))

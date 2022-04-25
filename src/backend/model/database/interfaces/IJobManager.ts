@@ -5,7 +5,7 @@ import { IObjectManager } from './IObjectManager';
 export interface IJobManager extends IObjectManager {
   run(
     jobId: string,
-    config: any,
+    config: unknown,
     soloRun: boolean,
     allowParallelRun: boolean
   ): Promise<void>;

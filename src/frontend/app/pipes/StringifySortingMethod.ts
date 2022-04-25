@@ -3,7 +3,6 @@ import { SortingMethods } from '../../../common/entities/SortingMethods';
 
 @Pipe({ name: 'stringifySorting' })
 export class StringifySortingMethod implements PipeTransform {
-  constructor() {}
 
   transform(method: SortingMethods): string {
     switch (method) {

@@ -1,21 +1,14 @@
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  OnInit,
-  QueryList,
-  ViewChildren,
-} from '@angular/core';
-import { AuthenticationService } from '../../model/network/authentication.service';
-import { UserRoles } from '../../../../common/entities/UserDTO';
-import { NotificationService } from '../../model/notification.service';
-import { NotificationType } from '../../../../common/entities/NotificationDTO';
-import { NavigationService } from '../../model/navigation.service';
-import { ISettingsComponent } from '../settings/_abstract/ISettingsComponent';
-import { PageHelper } from '../../model/page.helper';
-import { SettingsService } from '../settings/settings.service';
-import { CookieNames } from '../../../../common/CookieNames';
-import { CookieService } from 'ngx-cookie-service';
+import {AfterViewInit, Component, ElementRef, OnInit, QueryList, ViewChildren,} from '@angular/core';
+import {AuthenticationService} from '../../model/network/authentication.service';
+import {UserRoles} from '../../../../common/entities/UserDTO';
+import {NotificationService} from '../../model/notification.service';
+import {NotificationType} from '../../../../common/entities/NotificationDTO';
+import {NavigationService} from '../../model/navigation.service';
+import {ISettingsComponent} from '../settings/_abstract/ISettingsComponent';
+import {PageHelper} from '../../model/page.helper';
+import {SettingsService} from '../settings/settings.service';
+import {CookieNames} from '../../../../common/CookieNames';
+import {CookieService} from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-admin',
@@ -25,7 +18,7 @@ import { CookieService } from 'ngx-cookie-service';
 export class AdminComponent implements OnInit, AfterViewInit {
   simplifiedMode = true;
   @ViewChildren('setting') settingsComponents: QueryList<ISettingsComponent>;
-  @ViewChildren('setting', { read: ElementRef })
+  @ViewChildren('setting', {read: ElementRef})
   settingsComponentsElemRef: QueryList<ElementRef>;
   contents: ISettingsComponent[] = [];
 
@@ -50,8 +43,7 @@ export class AdminComponent implements OnInit, AfterViewInit {
   scrollTo(i: number): void {
     PageHelper.ScrollY =
       this.settingsComponentsElemRef
-        .toArray()
-        [i].nativeElement.getBoundingClientRect().top + PageHelper.ScrollY;
+        .toArray()[i].nativeElement.getBoundingClientRect().top + PageHelper.ScrollY;
   }
 
   ngOnInit(): void {

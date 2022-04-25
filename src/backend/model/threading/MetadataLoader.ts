@@ -1,17 +1,17 @@
-import { VideoMetadata } from '../../../common/entities/VideoDTO';
-import { FaceRegion, PhotoMetadata } from '../../../common/entities/PhotoDTO';
-import { Config } from '../../../common/config/private/Config';
-import { Logger } from '../../Logger';
+import {VideoMetadata} from '../../../common/entities/VideoDTO';
+import {FaceRegion, PhotoMetadata} from '../../../common/entities/PhotoDTO';
+import {Config} from '../../../common/config/private/Config';
+import {Logger} from '../../Logger';
 import * as fs from 'fs';
-import { imageSize } from 'image-size';
+import {imageSize} from 'image-size';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import * as ExifReader from 'exifreader';
-import { ExifParserFactory, OrientationTypes } from 'ts-exif-parser';
-import { IptcParser } from 'ts-node-iptc';
-import { FFmpegFactory } from '../FFmpegFactory';
-import { FfprobeData } from 'fluent-ffmpeg';
-import { Utils } from '../../../common/Utils';
+import {ExifParserFactory, OrientationTypes} from 'ts-exif-parser';
+import {IptcParser} from 'ts-node-iptc';
+import {FFmpegFactory} from '../FFmpegFactory';
+import {FfprobeData} from 'fluent-ffmpeg';
+import {Utils} from '../../../common/Utils';
 
 const LOG_TAG = '[MetadataLoader]';
 const ffmpeg = FFmpegFactory.get();
@@ -34,7 +34,9 @@ export class MetadataLoader {
         const stat = fs.statSync(fullPath);
         metadata.fileSize = stat.size;
         metadata.creationDate = stat.mtime.getTime();
-      } catch (err) {}
+      } catch (err) {
+        // ignoring errors
+      }
       try {
         ffmpeg(fullPath).ffprobe((err: any, data: FfprobeData) => {
           if (!!err || data === null || !data.streams[0]) {
@@ -78,7 +80,8 @@ export class MetadataLoader {
               }
             }
             // eslint-disable-next-line no-empty
-          } catch (err) {}
+          } catch (err) {
+          }
           metadata.creationDate = metadata.creationDate || 0;
 
           return resolve(metadata);
@@ -97,10 +100,10 @@ export class MetadataLoader {
       fs.read(fd, data, 0, Config.Server.photoMetadataSize, 0, (err) => {
         fs.closeSync(fd);
         if (err) {
-          return reject({ file: fullPath, error: err });
+          return reject({file: fullPath, error: err});
         }
         const metadata: PhotoMetadata = {
-          size: { width: 1, height: 1 },
+          size: {width: 1, height: 1},
           creationDate: 0,
           fileSize: 0,
         };
@@ -109,7 +112,9 @@ export class MetadataLoader {
             const stat = fs.statSync(fullPath);
             metadata.fileSize = stat.size;
             metadata.creationDate = stat.mtime.getTime();
-          } catch (err) {}
+          } catch (err) {
+            // ignoring errors
+          }
 
           try {
             const exif = ExifParserFactory.create(data).parse();
@@ -202,15 +207,15 @@ export class MetadataLoader {
               };
             } else {
               const info = imageSize(fullPath);
-              metadata.size = { width: info.width, height: info.height };
+              metadata.size = {width: info.width, height: info.height};
             }
           } catch (err) {
             Logger.debug(LOG_TAG, 'Error parsing exif', fullPath, err);
             try {
               const info = imageSize(fullPath);
-              metadata.size = { width: info.width, height: info.height };
+              metadata.size = {width: info.width, height: info.height};
             } catch (e) {
-              metadata.size = { width: 1, height: 1 };
+              metadata.size = {width: 1, height: 1};
             }
           }
 
@@ -358,7 +363,7 @@ export class MetadataLoader {
                   // convert center base box to corner based box
                   box.left = Math.round(Math.max(0, box.left - box.width / 2));
                   box.top = Math.round(Math.max(0, box.top - box.height / 2));
-                  faces.push({ name, box });
+                  faces.push({name, box});
                 }
               }
               if (faces.length > 0) {
@@ -374,11 +379,13 @@ export class MetadataLoader {
                 }
               }
             }
-          } catch (err) {}
+          } catch (err) {
+            // ignoring errors
+          }
 
           return resolve(metadata);
         } catch (err) {
-          return reject({ file: fullPath, error: err });
+          return reject({file: fullPath, error: err});
         }
       });
     });

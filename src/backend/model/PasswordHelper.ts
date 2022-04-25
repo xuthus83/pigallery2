@@ -12,6 +12,7 @@ export class PasswordHelper {
   ): boolean {
     try {
       return bcrypt.compareSync(password, encryptedPassword);
+      // eslint-disable-next-line no-empty
     } catch (e) {}
     return false;
   }

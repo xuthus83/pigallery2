@@ -1,9 +1,9 @@
-import { NextFunction, Request, Response } from 'express';
-import { Config } from '../../common/config/private/Config';
+import {NextFunction, Request, Response} from 'express';
+import {Config} from '../../common/config/private/Config';
 
 export class ServerTimeEntry {
   public name: string;
-  startHR: any;
+  startHR: [number, number];
   public endTime: number = null;
 
   constructor(name: string) {
@@ -22,10 +22,10 @@ export class ServerTimeEntry {
 
 export const ServerTime = (id: string, name: string) => {
   return (
-    target: any,
+    target: unknown,
     propertyName: string,
-    descriptor: TypedPropertyDescriptor<any>
-  ): any => {
+    descriptor: TypedPropertyDescriptor<(req: unknown, res: unknown, next: () => void) => void>
+  ): void => {
     if (Config.Server.Log.logServerTiming === false) {
       return;
     }
@@ -34,7 +34,7 @@ export const ServerTime = (id: string, name: string) => {
       req.timing = req.timing || {};
       req.timing[id] = new ServerTimeEntry(name);
       req.timing[id].start();
-      m(req, res, (err?: any) => {
+      m(req, res, (err?: Error) => {
         req.timing[id].end();
         next(err);
       });
@@ -56,7 +56,7 @@ export class ServerTimingMWs {
     req: Request,
     res: Response,
     next: NextFunction
-  ): Promise<any> {
+  ): Promise<void> {
     if (
       (Config.Server.Log.logServerTiming === false && !forcedDebug) ||
       !req.timing

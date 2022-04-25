@@ -198,7 +198,7 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
     const processDuplicates = (
       duplicateList: MediaEntity[],
       equalFn: (a: MediaEntity, b: MediaEntity) => boolean,
-      checkDuplicates: boolean = false
+      checkDuplicates = false
     ): void => {
       let i = duplicateList.length - 1;
       while (i >= 0) {
@@ -224,7 +224,7 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
           if (foundDuplicates) {
             list.forEach((lm): void => {
               if (
-                !!foundDuplicates.media.find((m): boolean => m.id === lm.id)
+                foundDuplicates.media.find((m): boolean => m.id === lm.id)
               ) {
                 return;
               }

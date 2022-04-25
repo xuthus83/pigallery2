@@ -112,7 +112,7 @@ export class GalleryShareComponent implements OnInit, OnDestroy {
     this.url = Config.Client.publicUrl + '/share/' + this.sharing.sharingKey;
   }
 
-  async openModal(template: TemplateRef<any>): Promise<void> {
+  async openModal(template: TemplateRef<unknown>): Promise<void> {
     await this.get();
     this.input.password = '';
     if (this.modalRef) {

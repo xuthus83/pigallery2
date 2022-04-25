@@ -24,13 +24,13 @@ export class ThumbnailGeneratorMWs {
     req: Request,
     res: Response,
     next: NextFunction
-  ): Promise<any> {
+  ): Promise<void> {
     if (!req.resultPipe) {
       return next();
     }
 
     try {
-      const cw: ContentWrapper = req.resultPipe;
+      const cw: ContentWrapper = req.resultPipe as ContentWrapper;
       if (cw.notModified === true) {
         return next();
       }
@@ -67,7 +67,7 @@ export class ThumbnailGeneratorMWs {
     try {
       const size: number = Config.Client.Media.Thumbnail.personThumbnailSize;
 
-      const persons: PersonWithSampleRegion[] = req.resultPipe;
+      const persons: PersonWithSampleRegion[] = req.resultPipe as PersonWithSampleRegion[];
 
       for (const item of persons) {
         if (!item.sampleRegion) {
@@ -107,11 +107,11 @@ export class ThumbnailGeneratorMWs {
     req: Request,
     res: Response,
     next: NextFunction
-  ): Promise<any> {
+  ): Promise<void> {
     if (!req.resultPipe) {
       return next();
     }
-    const person: PersonWithSampleRegion = req.resultPipe;
+    const person: PersonWithSampleRegion = req.resultPipe as PersonWithSampleRegion;
     try {
       req.resultPipe = await PhotoProcessing.generatePersonThumbnail(person);
       return next();
@@ -129,18 +129,18 @@ export class ThumbnailGeneratorMWs {
 
   public static generateThumbnailFactory(
     sourceType: ThumbnailSourceType
-  ): (req: Request, res: Response, next: NextFunction) => Promise<any> {
+  ): (req: Request, res: Response, next: NextFunction) => Promise<void> {
     return async (
       req: Request,
       res: Response,
       next: NextFunction
-    ): Promise<any> => {
+    ): Promise<void> => {
       if (!req.resultPipe) {
         return next();
       }
 
       // load parameters
-      const mediaPath = req.resultPipe;
+      const mediaPath = req.resultPipe as string;
       let size: number =
         parseInt(req.params.size, 10) ||
         Config.Client.Media.Thumbnail.thumbnailSizes[0];
@@ -172,18 +172,18 @@ export class ThumbnailGeneratorMWs {
 
   public static generateIconFactory(
     sourceType: ThumbnailSourceType
-  ): (req: Request, res: Response, next: NextFunction) => Promise<any> {
+  ): (req: Request, res: Response, next: NextFunction) => Promise<void> {
     return async (
       req: Request,
       res: Response,
       next: NextFunction
-    ): Promise<any> => {
+    ): Promise<void> => {
       if (!req.resultPipe) {
         return next();
       }
 
       // load parameters
-      const mediaPath = req.resultPipe;
+      const mediaPath = req.resultPipe as string;
       const size: number = Config.Client.Media.Thumbnail.iconSize;
 
       try {
@@ -232,10 +232,11 @@ export class ThumbnailGeneratorMWs {
       photo.directory.name,
       photo.name
     );
-    for (const size of Object.keys(ThumbnailGeneratorMWs.ThumbnailMap)) {
+    for (const _s of Object.keys(ThumbnailGeneratorMWs.ThumbnailMap)) {
+      const size = parseInt(_s)
       const thPath = PhotoProcessing.generateConvertedPath(
         fullMediaPath,
-        size as any
+        size
       );
       if (fs.existsSync(thPath) !== true) {
         if (typeof photo.missingThumbnails === 'undefined') {
@@ -243,7 +244,7 @@ export class ThumbnailGeneratorMWs {
         }
         // this is a bitwise operation
         photo.missingThumbnails +=
-          ThumbnailGeneratorMWs.ThumbnailMap[size as any];
+          ThumbnailGeneratorMWs.ThumbnailMap[size];
       }
     }
   }

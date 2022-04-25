@@ -101,7 +101,7 @@ export class AdminMWs {
   ): Promise<void> {
     try {
       const id = req.params['id'];
-      const JobConfig: any = req.body.config;
+      const JobConfig: unknown = req.body.config;
       const soloRun: boolean = req.body.soloRun;
       const allowParallelRun: boolean = req.body.allowParallelRun;
       await ObjectManagers.getInstance().JobManager.run(

@@ -80,7 +80,9 @@ export class DiskMangerWorker {
       try {
         await fsp.access(path.join(absoluteName, exclude));
         return true;
-      } catch (e) {}
+      } catch (e) {
+        // ignoring errors
+      }
     }
 
     return false;

@@ -1,20 +1,13 @@
-import { Injectable } from '@angular/core';
-import {
-  DirectoryDTOUtils,
-  DirectoryPathDTO,
-  ParentDirectoryDTO,
-} from '../../../../common/entities/DirectoryDTO';
-import { Utils } from '../../../../common/Utils';
-import { Config } from '../../../../common/config/public/Config';
-import { IAutoCompleteItem } from '../../../../common/entities/AutoCompleteItem';
-import { SearchResultDTO } from '../../../../common/entities/SearchResultDTO';
-import { MediaDTO } from '../../../../common/entities/MediaDTO';
-import { SortingMethods } from '../../../../common/entities/SortingMethods';
-import { VersionService } from '../../model/version.service';
-import {
-  SearchQueryDTO,
-  SearchQueryTypes,
-} from '../../../../common/entities/SearchQueryDTO';
+import {Injectable} from '@angular/core';
+import {DirectoryDTOUtils, DirectoryPathDTO, ParentDirectoryDTO,} from '../../../../common/entities/DirectoryDTO';
+import {Utils} from '../../../../common/Utils';
+import {Config} from '../../../../common/config/public/Config';
+import {IAutoCompleteItem} from '../../../../common/entities/AutoCompleteItem';
+import {SearchResultDTO} from '../../../../common/entities/SearchResultDTO';
+import {MediaDTO} from '../../../../common/entities/MediaDTO';
+import {SortingMethods} from '../../../../common/entities/SortingMethods';
+import {VersionService} from '../../model/version.service';
+import {SearchQueryDTO, SearchQueryTypes,} from '../../../../common/entities/SearchQueryDTO';
 
 interface CacheItem<T> {
   timestamp: number;
@@ -94,7 +87,9 @@ export class GalleryCacheService {
       for (const item of toRemove) {
         localStorage.removeItem(item);
       }
-    } catch (e) {}
+    } catch (e) {
+      // ignoring errors
+    }
   }
 
   public getSorting(dir: DirectoryPathDTO): SortingMethods {
@@ -248,7 +243,9 @@ export class GalleryCacheService {
         DirectoryDTOUtils.unpackDirectory(directory);
         return directory;
       }
-    } catch (e) {}
+    } catch (e) {
+      // ignoring errors
+    }
     return null;
   }
 
@@ -329,6 +326,8 @@ export class GalleryCacheService {
         GalleryCacheService.VERSION,
         this.versionService.version.value
       );
-    } catch (e) {}
+    } catch (e) {
+      // ignoring errors
+    }
   }
 }

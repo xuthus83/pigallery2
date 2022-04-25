@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 import { IPrivateConfig, ServerConfig } from './PrivateConfig';
 import { ClientConfig } from '../public/ClientConfig';
 import * as crypto from 'crypto';

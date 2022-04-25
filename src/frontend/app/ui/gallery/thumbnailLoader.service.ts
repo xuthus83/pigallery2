@@ -121,7 +121,9 @@ export class ThumbnailLoaderService {
   ): ThumbnailTaskEntity {
     return this.load(
       Person.getThumbnailUrl(person),
-      (): void => {},
+      (): void => {
+        // no callback
+      },
       priority,
       listener
     );
@@ -200,7 +202,7 @@ export class ThumbnailLoaderService {
 export interface ThumbnailLoadingListener {
   onStartedLoading: () => void;
   onLoad: () => void;
-  onError: (error: any) => void;
+  onError: (error: Error) => void;
 }
 
 export interface ThumbnailTaskEntity {

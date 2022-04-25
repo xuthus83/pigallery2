@@ -118,7 +118,9 @@ export class SearchQueryParser {
       if (parts && parts.length === 3) {
         timestamp = Date.UTC(parts[0], parts[1] - 1, parts[2]); // Note: months are 0-based
       }
-    } catch (e) {}
+    } catch (e) {
+      // ignoring errors
+    }
     // If it could not parse as ISO string, try our luck with Date.parse
     // https://stackoverflow.com/questions/2587345/why-does-date-parse-give-incorrect-results
     if (timestamp === null) {
@@ -223,17 +225,14 @@ export class SearchQueryParser {
       const prefix = str.startsWith(this.keywords.someOf + ':')
         ? this.keywords.someOf + ':'
         : new RegExp('^\\d*-' + this.keywords.NSomeOf + ':').exec(str)[0];
-      let tmpList: any = this.parse(str.slice(prefix.length + 1, -1), false); // trim brackets
+      let tmpList: SearchQueryDTO | SearchQueryDTO[] = this.parse(str.slice(prefix.length + 1, -1), false); // trim brackets
 
       const unfoldList = (q: SearchListQuery): SearchQueryDTO[] => {
         if (q.list) {
           if (q.type === SearchQueryTypes.UNKNOWN_RELATION) {
-            return [].concat.apply(
-              [],
-              q.list.map((e) => unfoldList(e as any))
-            ); // flatten array
+            return q.list.map((e) => unfoldList(e as SearchListQuery)).flat()  // flatten array
           } else {
-            q.list.forEach((e) => unfoldList(e as any));
+            q.list.forEach((e) => unfoldList(e as SearchListQuery));
           }
         }
         return [q];

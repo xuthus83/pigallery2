@@ -8,7 +8,7 @@ export class PhotoConverterMWs {
     req: Request,
     res: Response,
     next: NextFunction
-  ): Promise<any> {
+  ): Promise<void> {
     if (!req.resultPipe) {
       return next();
     }
@@ -16,7 +16,7 @@ export class PhotoConverterMWs {
     if (Config.Client.Media.Photo.Converting.enabled === false) {
       return res.redirect(req.originalUrl.slice(0, -1 * '\\bestFit'.length));
     }
-    const fullMediaPath = req.resultPipe;
+    const fullMediaPath = req.resultPipe as string;
 
     const convertedVideo = PhotoProcessing.generateConvertedPath(
       fullMediaPath,

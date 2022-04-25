@@ -138,6 +138,7 @@ export class ConfigDiagnostics {
   }
 
   static async testSharp(): Promise<void> {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
     const sharp = require('sharp');
     sharp();
   }

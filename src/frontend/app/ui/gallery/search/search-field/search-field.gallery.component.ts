@@ -1,27 +1,11 @@
-import {
-  Component,
-  EventEmitter,
-  forwardRef,
-  Input,
-  Output,
-} from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
-import { AutoCompleteService } from '../autocomplete.service';
-import { SearchQueryDTO } from '../../../../../../common/entities/SearchQueryDTO';
-import {
-  ControlValueAccessor,
-  FormControl,
-  NG_VALIDATORS,
-  NG_VALUE_ACCESSOR,
-  ValidationErrors,
-  Validator,
-} from '@angular/forms';
-import { SearchQueryParserService } from '../search-query-parser.service';
-import { TemplateRef } from '../../../../../../../node_modules/@angular/core';
-import {
-  BsModalRef,
-  BsModalService,
-} from '../../../../../../../node_modules/ngx-bootstrap/modal';
+import {Component, EventEmitter, forwardRef, Input, Output,} from '@angular/core';
+import {Router, RouterLink} from '@angular/router';
+import {AutoCompleteService} from '../autocomplete.service';
+import {SearchQueryDTO} from '../../../../../../common/entities/SearchQueryDTO';
+import {ControlValueAccessor, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator,} from '@angular/forms';
+import {SearchQueryParserService} from '../search-query-parser.service';
+import {TemplateRef} from '../../../../../../../node_modules/@angular/core';
+import {BsModalRef, BsModalService,} from '../../../../../../../node_modules/ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-gallery-search-field',
@@ -43,8 +27,7 @@ import {
   ],
 })
 export class GallerySearchFieldComponent
-  implements ControlValueAccessor, Validator
-{
+  implements ControlValueAccessor, Validator {
   @Output() search = new EventEmitter<void>();
   @Input() placeholder: string;
   public rawSearchText = '';
@@ -56,7 +39,8 @@ export class GallerySearchFieldComponent
     private searchQueryParserService: SearchQueryParserService,
     private modalService: BsModalService,
     public router: Router
-  ) {}
+  ) {
+  }
 
   public async openSearchModal(template: TemplateRef<any>): Promise<void> {
     this.searchModalRef = this.modalService.show(template, {
@@ -70,16 +54,18 @@ export class GallerySearchFieldComponent
     this.searchModalRef = null;
   }
 
-  public onTouched(): void {}
+  public onTouched(): void {
+    //ignoring
+  }
 
-  public writeValue(obj: any): void {
+  public writeValue(obj: SearchQueryDTO): void {
     this.searchQueryDTO = obj;
     this.rawSearchText = this.searchQueryParserService.stringify(
       this.searchQueryDTO
     );
   }
 
-  registerOnChange(fn: (_: any) => void): void {
+  registerOnChange(fn: (_: unknown) => void): void {
     this.propagateChange = fn;
   }
 
@@ -92,7 +78,7 @@ export class GallerySearchFieldComponent
   }
 
   validate(control: FormControl): ValidationErrors {
-    return { required: true };
+    return {required: true};
   }
 
   onQueryChange(): void {
@@ -113,8 +99,12 @@ export class GallerySearchFieldComponent
     }
   }
 
-  private propagateChange = (_: any): void => {};
+  private propagateChange = (_: SearchQueryDTO): void => {
+    //ignoring
+  };
 
-  private propagateTouch = (_: any): void => {};
+  private propagateTouch = (_: never): void => {
+    //ignoring
+  };
 }
 

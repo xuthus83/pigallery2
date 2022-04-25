@@ -14,7 +14,7 @@ export class NotificationManager {
     },
   ];
 
-  public static error(message: string, details?: any, req?: Request): void {
+  public static error(message: string, details?: unknown, req?: Request): void {
     const noti: NotificationDTO = {
       type: NotificationType.error,
       message,
@@ -30,7 +30,7 @@ export class NotificationManager {
     NotificationManager.notifications.push(noti);
   }
 
-  public static warning(message: string, details?: any, req?: Request): void {
+  public static warning(message: string, details?: unknown, req?: Request): void {
     const noti: NotificationDTO = {
       type: NotificationType.warning,
       message,

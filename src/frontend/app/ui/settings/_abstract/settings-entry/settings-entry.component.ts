@@ -219,11 +219,13 @@ export class SettingsEntryComponent
     return { required: true };
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   public onChange(value: any): void {}
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   public onTouched(): void {}
 
-  public writeValue(obj: any): void {
+  public writeValue(obj: IState): void {
     this.state = obj;
     this.ngOnChanges();
   }

@@ -14,7 +14,7 @@ export class RenderingMWs {
     req: Request,
     res: Response,
     next: NextFunction
-  ): any {
+  ): void {
     if (typeof req.resultPipe === 'undefined') {
       return next();
     }
@@ -26,7 +26,7 @@ export class RenderingMWs {
     req: Request,
     res: Response,
     next: NextFunction
-  ): any {
+  ): void {
     if (!req.session['user']) {
       return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, 'User not exists'));
     }
@@ -51,12 +51,12 @@ export class RenderingMWs {
     req: Request,
     res: Response,
     next: NextFunction
-  ): any {
+  ): void {
     if (!req.resultPipe) {
       return next();
     }
 
-    const { password, creator, ...sharing } = req.resultPipe;
+    const { password, creator, ...sharing } = req.resultPipe as SharingDTO;
     RenderingMWs.renderMessage(res, sharing);
   }
 
@@ -64,12 +64,12 @@ export class RenderingMWs {
     req: Request,
     res: Response,
     next: NextFunction
-  ): any {
+  ): void {
     if (!req.resultPipe) {
       return next();
     }
 
-    const shares: SharingDTO[] = Utils.clone(req.resultPipe);
+    const shares = Utils.clone(req.resultPipe as SharingDTO[]);
     shares.forEach((s): void => {
       delete s.password;
       delete s.creator.password;
@@ -81,11 +81,11 @@ export class RenderingMWs {
     req: Request,
     res: Response,
     next: NextFunction
-  ): any {
+  ): void {
     if (!req.resultPipe) {
       return next();
     }
-    return res.sendFile(req.resultPipe, {
+    return res.sendFile(req.resultPipe as string, {
       maxAge: 31536000,
       dotfiles: 'allow',
     });
@@ -93,8 +93,7 @@ export class RenderingMWs {
 
   public static renderOK(
     req: Request,
-    res: Response,
-    next: NextFunction
+    res: Response
   ): void {
     const message = new Message<string>(null, 'ok');
     res.json(message);
@@ -102,8 +101,7 @@ export class RenderingMWs {
 
   public static async renderConfig(
     req: Request,
-    res: Response,
-    next: NextFunction
+    res: Response
   ): Promise<void> {
     const originalConf = await Config.original();
     // These are sensitive information, do not send to the client side
@@ -114,17 +112,17 @@ export class RenderingMWs {
       originalConf.toJSON({
         attachState: true,
         attachVolatile: true,
-      }) as any
+      }) as PrivateConfigClass
     );
     res.json(message);
   }
 
   public static renderError(
-    err: any,
+    err: Error,
     req: Request,
     res: Response,
     next: NextFunction
-  ): any {
+  ): void {
     if (err instanceof ErrorDTO) {
       if (err.details) {
         Logger.warn('Handled error:');
@@ -143,8 +141,9 @@ export class RenderingMWs {
           delete err.detailsStr;
         }
       }
-      const message = new Message<any>(err, null);
-      return res.json(message);
+      const message = new Message<null>(err, null);
+      res.json(message);
+      return;
     }
     NotificationManager.error('Unknown server error', err, req);
     return next(err);

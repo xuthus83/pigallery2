@@ -36,7 +36,7 @@ export class Media extends MediaIcon {
       this.replacementSizeCache = null;
 
       const size = this.getThumbnailSize();
-      if (!!this.media.missingThumbnails) {
+      if (this.media.missingThumbnails) {
         for (const thSize of Config.Client.Media.Thumbnail.thumbnailSizes) {
           // eslint-disable-next-line no-bitwise
           if (

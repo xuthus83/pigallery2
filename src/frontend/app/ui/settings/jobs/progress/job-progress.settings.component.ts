@@ -120,7 +120,7 @@ export class JobProgressComponent implements OnDestroy, OnChanges {
     }
   }
 
-  openModal(template: TemplateRef<any>): void {
+  openModal(template: TemplateRef<unknown>): void {
     this.modalRef = this.modalService.show(template, { class: 'modal-lg' });
   }
 

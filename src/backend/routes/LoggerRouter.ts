@@ -2,6 +2,7 @@ import { Express, NextFunction, Request, Response } from 'express';
 import { logFN, Logger } from '../Logger';
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Express {
     interface Request {
       _startTime?: number;

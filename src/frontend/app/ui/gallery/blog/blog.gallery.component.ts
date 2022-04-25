@@ -21,10 +21,8 @@ export class GalleryBlogComponent implements OnChanges {
     }
     return this.markdowns[0].length < 203
       ? this.markdowns[0]
-      : this.markdowns[0].substr(0, 200) + '...';
+      : this.markdowns[0].substring(0, 200) + '...';
   }
-
-  onError($event: string): void {}
 
   ngOnChanges(): void {
     this.loadMarkdown().catch(console.error);

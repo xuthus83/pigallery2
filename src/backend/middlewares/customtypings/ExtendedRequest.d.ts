@@ -1,10 +1,10 @@
-import { LoginCredential } from '../../../common/entities/LoginCredential';
-import { UserDTO } from '../../../common/entities/UserDTO';
+import {LoginCredential} from '../../../common/entities/LoginCredential';
+import {UserDTO} from '../../../common/entities/UserDTO';
 
 declare global {
   namespace Express {
     interface Request {
-      resultPipe?: any;
+      resultPipe?: unknown;
       body?: {
         loginCredential?: LoginCredential;
       };

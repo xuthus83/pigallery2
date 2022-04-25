@@ -60,7 +60,9 @@ export class VideoProcessing {
     try {
       await fsp.access(outPath, fsConstants.R_OK);
       return true;
-    } catch (e) {}
+    } catch (e) {
+      // ignoring errors
+    }
 
     return false;
   }
@@ -71,7 +73,9 @@ export class VideoProcessing {
     try {
       await fsp.access(outPath, fsConstants.R_OK);
       return;
-    } catch (e) {}
+    } catch (e) {
+      // ignoring errors
+    }
 
     const metaData = await MetadataLoader.loadVideoMetadata(videoPath);
 

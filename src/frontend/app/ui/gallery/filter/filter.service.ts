@@ -120,7 +120,6 @@ export class FilterService {
     ],
   });
 
-  constructor() {}
 
   public applyFilters(
     directoryContent: Observable<DirectoryContent>

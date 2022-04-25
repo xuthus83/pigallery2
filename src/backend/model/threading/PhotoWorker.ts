@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 import { Metadata, Sharp } from 'sharp';
 import { Logger } from '../../Logger';
 import { FfmpegCommand, FfprobeData } from 'fluent-ffmpeg';
@@ -60,7 +61,7 @@ export class VideoRendererFactory {
       return new Promise((resolve, reject): void => {
         Logger.silly('[FFmpeg] rendering thumbnail: ' + input.mediaPath);
 
-        ffmpeg(input.mediaPath).ffprobe((err: any, data: FfprobeData): void => {
+        ffmpeg(input.mediaPath).ffprobe((err: Error, data: FfprobeData): void => {
           if (!!err || data === null) {
             return reject('[FFmpeg] ' + err.toString());
           }

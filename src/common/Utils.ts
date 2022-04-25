@@ -174,7 +174,7 @@ export class Utils {
   public static enumToArray(EnumType: any): { key: number; value: string }[] {
     const arr: Array<{ key: number; value: string }> = [];
     for (const enumMember in EnumType) {
-      if (!EnumType.hasOwnProperty(enumMember)) {
+      if (!EnumType.hasOwn(enumMember)) {
         continue;
       }
       const key = parseInt(enumMember, 10);
@@ -216,7 +216,7 @@ export class Utils {
     return curr;
   }
 
-  public static isUInt32(value: number, max: number = 4294967295): boolean {
+  public static isUInt32(value: number, max = 4294967295): boolean {
     value = parseInt('' + value, 10);
     return !isNaN(value) && value >= 0 && value <= max;
   }

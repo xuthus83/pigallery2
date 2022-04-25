@@ -81,7 +81,9 @@ export class JobProgress {
     return this.logs;
   }
 
-  onChange = (progress: JobProgress): void => {};
+  onChange = (progress: JobProgress): void => {
+    // abstract function
+  };
 
   log(log: string): void {
     while (this.logs.length > 10) {

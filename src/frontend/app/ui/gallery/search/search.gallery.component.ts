@@ -88,7 +88,7 @@ export class GallerySearchComponent implements OnDestroy {
     }
   }
 
-  public async openSearchModal(template: TemplateRef<any>): Promise<void> {
+  public async openSearchModal(template: TemplateRef<unknown>): Promise<void> {
     this.searchModalRef = this.modalService.show(template, {
       class: 'modal-lg',
     });
@@ -100,7 +100,7 @@ export class GallerySearchComponent implements OnDestroy {
     this.searchModalRef = null;
   }
 
-  public async openSaveSearchModal(template: TemplateRef<any>): Promise<void> {
+  public async openSaveSearchModal(template: TemplateRef<unknown>): Promise<void> {
     this.saveSearchModalRef = this.modalService.show(template, {
       class: 'modal-lg',
     });

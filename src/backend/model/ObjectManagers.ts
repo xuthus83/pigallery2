@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 import { IUserManager } from './database/interfaces/IUserManager';
 import { IGalleryManager } from './database/interfaces/IGalleryManager';
 import { ISearchManager } from './database/interfaces/ISearchManager';

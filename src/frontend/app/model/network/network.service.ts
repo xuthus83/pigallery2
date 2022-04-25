@@ -64,7 +64,7 @@ export class NetworkService {
       return res;
     };
 
-    const err = (error: any) => {
+    const err = (error: Error) => {
       this.loadingBarService.useRef().complete();
       return this.handleError(error);
     };
@@ -76,11 +76,11 @@ export class NetworkService {
       .catch(err);
   }
 
-  public postJson<T>(url: string, data: any = {}): Promise<T> {
+  public postJson<T>(url: string, data = {}): Promise<T> {
     return this.callJson('post', url, data);
   }
 
-  public putJson<T>(url: string, data: any = {}): Promise<T> {
+  public putJson<T>(url: string, data = {}): Promise<T> {
     return this.callJson('put', url, data);
   }
 
@@ -99,7 +99,7 @@ export class NetworkService {
   private callJson<T>(
     method: 'get' | 'post' | 'delete' | 'put',
     url: string,
-    data: any = {}
+    data = {}
   ): Promise<T> {
     const body = data;
 
@@ -113,7 +113,7 @@ export class NetworkService {
           res.headers.get(CustomHeaders.dataVersion)
         );
       }
-      if (!!msg.error) {
+      if (msg.error) {
         if (msg.error.code) {
           (msg.error as any).title = ErrorCodes[msg.error.code];
         }
@@ -122,7 +122,7 @@ export class NetworkService {
       return msg.result;
     };
 
-    const err = (error: any) => {
+    const err = (error: Error) => {
       this.loadingBarService.useRef().complete();
       return this.handleError(error);
     };

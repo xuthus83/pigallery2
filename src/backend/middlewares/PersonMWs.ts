@@ -12,7 +12,7 @@ export class PersonMWs {
     req: Request,
     res: Response,
     next: NextFunction
-  ): Promise<any> {
+  ): Promise<void> {
     if (!req.params['name']) {
       return next();
     }
@@ -39,7 +39,7 @@ export class PersonMWs {
     req: Request,
     res: Response,
     next: NextFunction
-  ): Promise<any> {
+  ): Promise<void> {
     if (!req.params['name']) {
       return next();
     }
@@ -64,7 +64,7 @@ export class PersonMWs {
     req: Request,
     res: Response,
     next: NextFunction
-  ): Promise<any> {
+  ): Promise<void> {
     try {
       req.resultPipe =
         await ObjectManagers.getInstance().PersonManager.getAll();
@@ -85,7 +85,7 @@ export class PersonMWs {
     req: Request,
     res: Response,
     next: NextFunction
-  ): Promise<any> {
+  ): Promise<void> {
     if (!req.resultPipe) {
       return next();
     }

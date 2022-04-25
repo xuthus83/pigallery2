@@ -16,7 +16,9 @@ export class DBRestJob extends Job {
     return Config.Server.Database.type !== DatabaseType.memory;
   }
 
-  protected async init(): Promise<void> {}
+  protected async init(): Promise<void> {
+    // abstract function
+  }
 
   protected async step(): Promise<boolean> {
     this.Progress.Left = 1;

@@ -13,5 +13,4 @@ export interface IUserManager extends IObjectManager {
 
   changeRole(id: number, newRole: UserRoles): Promise<UserDTO>;
 
-  changePassword(request: any): Promise<void>;
 }

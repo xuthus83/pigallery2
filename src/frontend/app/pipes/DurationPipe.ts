@@ -2,7 +2,6 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({ name: 'duration' })
 export class DurationPipe implements PipeTransform {
-  constructor() {}
 
   transform(time: number, separator: ':' | 'string' = 'string'): string {
     const h = Math.floor(time / 1000 / 60 / 60);

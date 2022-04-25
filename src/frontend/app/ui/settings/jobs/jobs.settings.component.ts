@@ -228,7 +228,7 @@ export class JobsSettingsComponent
   private getNextRunningDate(
     sch: JobScheduleDTO,
     list: JobScheduleDTO[],
-    depth: number = 0
+    depth = 0
   ): number {
     if (depth > list.length) {
       return 0;

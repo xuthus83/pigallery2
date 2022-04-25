@@ -42,7 +42,9 @@ export class TempFolderCleaningJob extends Job {
     try {
       await fs.promises.access(originalPath);
       return true;
-    } catch (e) {}
+    } catch (e) {
+      // ignoring errors
+    }
     return false;
   }
 

@@ -11,7 +11,7 @@ export class VersionMWs {
     req: Request,
     res: Response,
     next: NextFunction
-  ): Promise<any> {
+  ): Promise<void> {
     try {
       res.header(
         CustomHeaders.dataVersion,

@@ -230,13 +230,14 @@ export class GallerySearchFieldBaseComponent
     return false;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   public onTouched(): void {}
 
-  public writeValue(obj: any): void {
+  public writeValue(obj: string): void {
     this.rawSearchText = obj;
   }
 
-  registerOnChange(fn: (_: any) => void): void {
+  registerOnChange(fn: (_: unknown) => void): void {
     this.propagateChange = fn;
   }
 

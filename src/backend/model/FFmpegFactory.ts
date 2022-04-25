@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 export class FFmpegFactory {
   public static get(): any {
     const ffmpeg = require('fluent-ffmpeg');
@@ -6,7 +7,9 @@ export class FFmpegFactory {
       ffmpeg.setFfmpegPath(ffmpegPath);
       const ffprobePath = require('ffprobe-static');
       ffmpeg.setFfprobePath(ffprobePath.path);
-    } catch (e) {}
+    } catch (e) {
+      // ignoring errors
+    }
     return ffmpeg;
   }
 }

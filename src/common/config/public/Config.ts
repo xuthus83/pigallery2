@@ -19,7 +19,7 @@ declare namespace ServerInject {
   export const ConfigInject: ClientClass;
 }
 
-export let Config: IWebConfigClass & ClientClass =
+export const Config: IWebConfigClass & ClientClass =
   WebConfigClassBuilder.attachInterface(new ClientClass());
 
 if (

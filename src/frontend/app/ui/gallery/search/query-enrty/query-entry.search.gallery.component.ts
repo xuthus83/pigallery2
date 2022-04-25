@@ -69,27 +69,27 @@ export class GallerySearchQueryEntryComponent
   }
 
   get AsListQuery(): SearchListQuery {
-    return this.queryEntry as any;
+    return this.queryEntry as SearchListQuery;
   }
 
   public get AsRangeQuery(): RangeSearch {
-    return this.queryEntry as any;
+    return this.queryEntry as RangeSearch;
   }
 
   get AsOrientationQuery(): OrientationSearch {
-    return this.queryEntry as any;
+    return this.queryEntry as OrientationSearch;
   }
 
   get AsDistanceQuery(): DistanceSearch {
-    return this.queryEntry as any;
+    return this.queryEntry as DistanceSearch;
   }
 
   get AsSomeOfQuery(): SomeOfSearchQuery {
-    return this.queryEntry as any;
+    return this.queryEntry as SomeOfSearchQuery;
   }
 
   get AsTextQuery(): TextSearch {
-    return this.queryEntry as any;
+    return this.queryEntry as TextSearch;
   }
 
   validate(control: FormControl): ValidationErrors {
@@ -140,13 +140,14 @@ export class GallerySearchQueryEntryComponent
     this.AsListQuery.list.splice(i, 1);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   public onTouched(): void {}
 
-  public writeValue(obj: any): void {
+  public writeValue(obj: SearchQueryDTO): void {
     this.queryEntry = obj;
   }
 
-  registerOnChange(fn: (_: any) => void): void {
+  registerOnChange(fn: (_: unknown) => void): void {
     this.propagateChange = fn;
   }
 
@@ -166,8 +167,10 @@ export class GallerySearchQueryEntryComponent
     this.onChange();
   }
 
-  private propagateChange = (_: any): void => {};
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  private propagateChange = (_: unknown): void => {};
 
-  private propagateTouch = (_: any): void => {};
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  private propagateTouch = (_: unknown): void => {};
 }
 

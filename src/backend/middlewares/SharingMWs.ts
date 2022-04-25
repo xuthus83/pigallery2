@@ -12,7 +12,7 @@ export class SharingMWs {
     req: Request,
     res: Response,
     next: NextFunction
-  ): Promise<any> {
+  ): Promise<void> {
     if (Config.Client.Sharing.enabled === false) {
       return next();
     }
@@ -39,7 +39,7 @@ export class SharingMWs {
     req: Request,
     res: Response,
     next: NextFunction
-  ): Promise<any> {
+  ): Promise<void> {
     if (Config.Client.Sharing.enabled === false) {
       return next();
     }
@@ -104,7 +104,7 @@ export class SharingMWs {
     req: Request,
     res: Response,
     next: NextFunction
-  ): Promise<any> {
+  ): Promise<void> {
     if (Config.Client.Sharing.enabled === false) {
       return next();
     }
@@ -158,7 +158,7 @@ export class SharingMWs {
     req: Request,
     res: Response,
     next: NextFunction
-  ): Promise<any> {
+  ): Promise<void> {
     if (Config.Client.Sharing.enabled === false) {
       return next();
     }
@@ -194,7 +194,7 @@ export class SharingMWs {
     req: Request,
     res: Response,
     next: NextFunction
-  ): Promise<any> {
+  ): Promise<void> {
     if (Config.Client.Sharing.enabled === false) {
       return next();
     }

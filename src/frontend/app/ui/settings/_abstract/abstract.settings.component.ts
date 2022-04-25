@@ -19,12 +19,12 @@ import { ISettingsComponent } from './ISettingsComponent';
 import { WebConfig } from '../../../../../common/config/private/WebConfig';
 import { FormControl } from '@angular/forms';
 
-interface ConfigState {
-  value: any;
-  original: any;
-  default: any;
-  readonly: any;
-  onChange: any;
+interface ConfigState<T = unknown> {
+  value: T;
+  original: T;
+  default: T;
+  readonly: boolean;
+  onChange: ()=>unknown;
   isEnumType: boolean;
   isConfigType: boolean;
 }
@@ -59,7 +59,7 @@ export abstract class SettingsComponentDirective<
   public inProgress = false;
   public error: string = null;
   public changed = false;
-  public states: RecursiveState = {} as any;
+  public states: RecursiveState = {} as RecursiveState;
 
   private subscription: Subscription = null;
   private readonly settingsSubscription: Subscription = null;
@@ -205,11 +205,11 @@ export abstract class SettingsComponentDirective<
   }
 
   stateToSettings(): T {
-    const ret: T = {} as any;
+    const ret: T = {} as T;
 
-    const add = (obj: any, to: any): void => {
+    const add = (obj: Record<string, RecursiveState>, to: Record<string, RecursiveState>): void => {
       for (const key of Object.keys(obj)) {
-        to[key] = {};
+        to[key] = {} as RecursiveState;
         if (
           obj[key].isConfigType ||
           (typeof obj[key] === 'object' &&

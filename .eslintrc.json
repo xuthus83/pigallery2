@@ -27,7 +27,8 @@
     },
     {
       "files": [
-        "*.component.html"
+        "*.component.html",
+        "index.html"
       ],
       "parser": "@angular-eslint/template-parser",
       "parserOptions": {

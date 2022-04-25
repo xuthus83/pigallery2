@@ -1,13 +1,13 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { AuthenticationService } from '../../../model/network/authentication.service';
-import { UserDTO, UserRoles } from '../../../../../common/entities/UserDTO';
-import { Utils } from '../../../../../common/Utils';
-import { UserManagerSettingsService } from './usermanager.settings.service';
-import { ModalDirective } from 'ngx-bootstrap/modal';
-import { NavigationService } from '../../../model/navigation.service';
-import { NotificationService } from '../../../model/notification.service';
-import { ErrorCodes, ErrorDTO } from '../../../../../common/entities/Error';
-import { ISettingsComponent } from '../_abstract/ISettingsComponent';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {AuthenticationService} from '../../../model/network/authentication.service';
+import {UserDTO, UserRoles} from '../../../../../common/entities/UserDTO';
+import {Utils} from '../../../../../common/Utils';
+import {UserManagerSettingsService} from './usermanager.settings.service';
+import {ModalDirective} from 'ngx-bootstrap/modal';
+import {NavigationService} from '../../../model/navigation.service';
+import {NotificationService} from '../../../model/notification.service';
+import {ErrorCodes, ErrorDTO} from '../../../../../common/entities/Error';
+import {ISettingsComponent} from '../_abstract/ISettingsComponent';
 
 @Component({
   selector: 'app-settings-usermanager',
@@ -19,9 +19,9 @@ import { ISettingsComponent } from '../_abstract/ISettingsComponent';
   providers: [UserManagerSettingsService],
 })
 export class UserMangerSettingsComponent implements OnInit, ISettingsComponent {
-  @ViewChild('userModal', { static: false }) public childModal: ModalDirective;
+  @ViewChild('userModal', {static: false}) public childModal: ModalDirective;
   public newUser = {} as UserDTO;
-  public userRoles: any[] = [];
+  public userRoles: { key: number; value: string }[] = [];
   public users: UserDTO[] = [];
   public enabled = true;
   public error: string = null;
@@ -110,7 +110,7 @@ export class UserMangerSettingsComponent implements OnInit, ISettingsComponent {
   }
 
   initNewUser(): void {
-    this.newUser = { role: UserRoles.User } as UserDTO;
+    this.newUser = {role: UserRoles.User} as UserDTO;
     this.childModal.show();
   }
 

@@ -4,6 +4,7 @@ import { Request } from 'express';
 import * as cookieParser from 'cookie-parser';
 import * as _http from 'http';
 import { Server as HttpServer } from 'http';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import * as locale from 'locale';
 import { ObjectManagers } from './model/ObjectManagers';
@@ -23,9 +24,10 @@ import { ConfigClassBuilder } from 'typeconfig/node';
 import { ConfigClassOptions } from 'typeconfig/src/decorators/class/IConfigClass';
 import { DatabaseType } from '../common/config/private/PrivateConfig';
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const session = require('cookie-session');
 
-declare var process: NodeJS.Process;
+declare const process: NodeJS.Process;
 
 const LOG_TAG = '[server]';
 

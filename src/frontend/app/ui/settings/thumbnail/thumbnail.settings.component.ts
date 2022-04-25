@@ -1,20 +1,14 @@
-import { Component, OnInit } from '@angular/core';
-import { SettingsComponentDirective } from '../_abstract/abstract.settings.component';
-import { AuthenticationService } from '../../../model/network/authentication.service';
-import { NavigationService } from '../../../model/navigation.service';
-import { NotificationService } from '../../../model/notification.service';
-import { ThumbnailSettingsService } from './thumbnail.settings.service';
-import {
-  DefaultsJobs,
-  JobDTOUtils,
-} from '../../../../../common/entities/job/JobDTO';
-import { ScheduledJobsService } from '../scheduled-jobs.service';
-import {
-  JobProgressDTO,
-  JobProgressStates,
-} from '../../../../../common/entities/job/JobProgressDTO';
-import { ServerThumbnailConfig } from '../../../../../common/config/private/PrivateConfig';
-import { ClientThumbnailConfig } from '../../../../../common/config/public/ClientConfig';
+import {Component, OnInit} from '@angular/core';
+import {SettingsComponentDirective} from '../_abstract/abstract.settings.component';
+import {AuthenticationService} from '../../../model/network/authentication.service';
+import {NavigationService} from '../../../model/navigation.service';
+import {NotificationService} from '../../../model/notification.service';
+import {ThumbnailSettingsService} from './thumbnail.settings.service';
+import {DefaultsJobs, JobDTOUtils,} from '../../../../../common/entities/job/JobDTO';
+import {ScheduledJobsService} from '../scheduled-jobs.service';
+import {JobProgressDTO, JobProgressStates,} from '../../../../../common/entities/job/JobProgressDTO';
+import {ServerThumbnailConfig} from '../../../../../common/config/private/PrivateConfig';
+import {ClientThumbnailConfig} from '../../../../../common/config/public/ClientConfig';
 
 @Component({
   selector: 'app-settings-thumbnail',
@@ -30,8 +24,7 @@ export class ThumbnailSettingsComponent
     server: ServerThumbnailConfig;
     client: ClientThumbnailConfig;
   }>
-  implements OnInit
-{
+  implements OnInit {
   JobProgressStates = JobProgressStates;
   readonly jobName = DefaultsJobs[DefaultsJobs['Thumbnail Generation']];
 
@@ -56,14 +49,14 @@ export class ThumbnailSettingsComponent
     );
   }
 
-  get Config(): any {
-    return { sizes: this.states.client.thumbnailSizes.original[0] };
+  get Config(): { sizes: number } {
+    return {sizes: this.states.client.thumbnailSizes.original[0]};
   }
 
   get Progress(): JobProgressDTO {
     return this.jobsService.progress.value[
       JobDTOUtils.getHashName(this.jobName, this.Config)
-    ];
+      ];
   }
 
   ngOnInit(): void {

@@ -50,7 +50,7 @@ export class PreviewSettingsComponent
     );
   }
 
-  get Config(): any {
+  get Config(): unknown {
     return {};
   }
 

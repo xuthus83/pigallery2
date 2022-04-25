@@ -5,7 +5,7 @@ import { Utils } from '../../../common/Utils';
 import { MediaDTO } from '../../../common/entities/MediaDTO';
 import { ParentDirectoryDTO } from '../../../common/entities/DirectoryDTO';
 
-declare var process: NodeJS.Process;
+declare const process: NodeJS.Process;
 const LOG_TAG = '[Worker]';
 
 export class Worker {
