@@ -264,7 +264,7 @@ export class MetadataLoader {
             //  and keep the minimum amount only
             const exif = ExifReader.load(data);
             if (exif.Rating) {
-              metadata.rating = parseInt(exif.Rating.value, 10) as any;
+              metadata.rating = parseInt(exif.Rating.value, 10) as 0 | 1 | 2 | 3 | 4 | 5;
               if (metadata.rating < 0) {
                 metadata.rating = 0;
               }
@@ -287,7 +287,7 @@ export class MetadataLoader {
               const orientation = parseInt(
                 exif.Orientation.value as any,
                 10
-              ) as any;
+              ) as number;
               if (OrientationTypes.BOTTOM_LEFT < orientation) {
                 // noinspection JSSuspiciousNameCombination
                 const height = metadata.size.width;

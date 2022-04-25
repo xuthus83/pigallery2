@@ -19,7 +19,7 @@ import {
   TextSearchQueryTypes,
   ToDateSearch,
 } from './entities/SearchQueryDTO';
-import { Utils } from './Utils';
+import {Utils} from './Utils';
 
 export interface QueryKeywords {
   portrait: string;
@@ -72,7 +72,8 @@ export const defaultQueryKeywords: QueryKeywords = {
 };
 
 export class SearchQueryParser {
-  constructor(private keywords: QueryKeywords = defaultQueryKeywords) {}
+  constructor(private keywords: QueryKeywords = defaultQueryKeywords) {
+  }
 
   public static stringifyText(
     text: string,
@@ -115,8 +116,11 @@ export class SearchQueryParser {
     // Parsing ISO string
     try {
       const parts = text.split('-').map((t) => parseInt(t, 10));
+      if (parts && parts.length === 2) {
+        timestamp = Date.UTC(parts[0], parts[1] - 1, 1, 0, 0, 0, 0); // Note: months are 0-based
+      }
       if (parts && parts.length === 3) {
-        timestamp = Date.UTC(parts[0], parts[1] - 1, parts[2]); // Note: months are 0-based
+        timestamp = Date.UTC(parts[0], parts[1] - 1, parts[2], 0, 0, 0, 0); // Note: months are 0-based
       }
     } catch (e) {
       // ignoring errors
@@ -230,7 +234,7 @@ export class SearchQueryParser {
       const unfoldList = (q: SearchListQuery): SearchQueryDTO[] => {
         if (q.list) {
           if (q.type === SearchQueryTypes.UNKNOWN_RELATION) {
-            return q.list.map((e) => unfoldList(e as SearchListQuery)).flat()  // flatten array
+            return q.list.map((e) => unfoldList(e as SearchListQuery)).flat();  // flatten array
           } else {
             q.list.forEach((e) => unfoldList(e as SearchListQuery));
           }
@@ -256,14 +260,14 @@ export class SearchQueryParser {
       return {
         type: SearchQueryTypes.from_date,
         value: SearchQueryParser.parseDate(str.substring(str.indexOf(':') + 1)),
-        ...(str.startsWith(this.keywords.from + '!:') && { negate: true }), // only add if the value is true
+        ...(str.startsWith(this.keywords.from + '!:') && {negate: true}), // only add if the value is true
       } as FromDateSearch;
     }
     if (kwStartsWith(str, this.keywords.to)) {
       return {
         type: SearchQueryTypes.to_date,
         value: SearchQueryParser.parseDate(str.substring(str.indexOf(':') + 1)),
-        ...(str.startsWith(this.keywords.to + '!:') && { negate: true }), // only add if the value is true
+        ...(str.startsWith(this.keywords.to + '!:') && {negate: true}), // only add if the value is true
       } as ToDateSearch;
     }
 
@@ -271,14 +275,14 @@ export class SearchQueryParser {
       return {
         type: SearchQueryTypes.min_rating,
         value: parseInt(str.substring(str.indexOf(':') + 1), 10),
-        ...(str.startsWith(this.keywords.minRating + '!:') && { negate: true }), // only add if the value is true
+        ...(str.startsWith(this.keywords.minRating + '!:') && {negate: true}), // only add if the value is true
       } as MinRatingSearch;
     }
     if (kwStartsWith(str, this.keywords.maxRating)) {
       return {
         type: SearchQueryTypes.max_rating,
         value: parseInt(str.substring(str.indexOf(':') + 1), 10),
-        ...(str.startsWith(this.keywords.maxRating + '!:') && { negate: true }), // only add if the value is true
+        ...(str.startsWith(this.keywords.maxRating + '!:') && {negate: true}), // only add if the value is true
       } as MaxRatingSearch;
     }
     if (kwStartsWith(str, this.keywords.minResolution)) {
@@ -312,7 +316,7 @@ export class SearchQueryParser {
       return {
         type: SearchQueryTypes.distance,
         distance: parseInt(new RegExp(/^\d*/).exec(str)[0], 10),
-        from: { text: from },
+        from: {text: from},
         ...(new RegExp('^\\d*-' + this.keywords.kmFrom + '!:').test(str) && {
           negate: true,
         }), // only add if the value is true
@@ -331,11 +335,11 @@ export class SearchQueryParser {
     // parse text search
     const tmp = TextSearchQueryTypes.map((type) => ({
       key: (this.keywords as any)[SearchQueryTypes[type]] + ':',
-      queryTemplate: { type, text: '' } as TextSearch,
+      queryTemplate: {type, text: ''} as TextSearch,
     })).concat(
       TextSearchQueryTypes.map((type) => ({
         key: (this.keywords as any)[SearchQueryTypes[type]] + '!:',
-        queryTemplate: { type, text: '', negate: true } as TextSearch,
+        queryTemplate: {type, text: '', negate: true} as TextSearch,
       }))
     );
     for (const typeTmp of tmp) {
@@ -361,7 +365,7 @@ export class SearchQueryParser {
       }
     }
 
-    return { type: SearchQueryTypes.any_text, text: str } as TextSearch;
+    return {type: SearchQueryTypes.any_text, text: str} as TextSearch;
   }
 
   public stringify(query: SearchQueryDTO): string {
