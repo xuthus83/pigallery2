@@ -1,38 +1,10 @@
-import { NextFunction, Request, Response } from 'express';
-import { ErrorCodes, ErrorDTO } from '../../../common/entities/Error';
-import { ObjectManagers } from '../../model/ObjectManagers';
-import { Utils } from '../../../common/Utils';
-import { Config } from '../../../common/config/private/Config';
+import {NextFunction, Request, Response} from 'express';
+import {ErrorCodes, ErrorDTO} from '../../../common/entities/Error';
+import {ObjectManagers} from '../../model/ObjectManagers';
+import {Utils} from '../../../common/Utils';
+import {Config} from '../../../common/config/private/Config';
 
 export class UserMWs {
-  public static async changePassword(
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> {
-    if (Config.Client.authenticationRequired === false) {
-      return next(new ErrorDTO(ErrorCodes.USER_MANAGEMENT_DISABLED));
-    }
-    if (
-      typeof req.body === 'undefined' ||
-      typeof req.body.userModReq === 'undefined' ||
-      typeof req.body.userModReq.id === 'undefined' ||
-      typeof req.body.userModReq.oldPassword === 'undefined' ||
-      typeof req.body.userModReq.newPassword === 'undefined'
-    ) {
-      return next();
-    }
-
-    try {
-      await ObjectManagers.getInstance().UserManager.changePassword(
-        req.body.userModReq
-      );
-      return next();
-    } catch (err) {
-      return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, null, err));
-    }
-  }
-
   public static async createUser(
     req: Request,
     res: Response,

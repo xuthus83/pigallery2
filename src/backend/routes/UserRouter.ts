@@ -11,7 +11,6 @@ export class UserRouter {
     this.addLogin(app);
     this.addLogout(app);
     this.addGetSessionUser(app);
-    this.addChangePassword(app);
 
     this.addCreateUser(app);
     this.addDeleteUser(app);
@@ -44,17 +43,6 @@ export class UserRouter {
       AuthenticationMWs.authenticate,
       ServerTimingMWs.addServerTiming,
       RenderingMWs.renderSessionUser
-    );
-  }
-
-  private static addChangePassword(app: Express): void {
-    app.post(
-      '/api/user/:id/password',
-      AuthenticationMWs.authenticate,
-      UserRequestConstrainsMWs.forceSelfRequest,
-      UserMWs.changePassword,
-      ServerTimingMWs.addServerTiming,
-      RenderingMWs.renderOK
     );
   }
 

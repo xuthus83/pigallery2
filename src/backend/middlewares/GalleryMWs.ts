@@ -157,7 +157,7 @@ export class GalleryMWs {
       return next();
     }
 
-    const cw: ContentWrapper = req.resultPipe;
+    const cw = req.resultPipe as ContentWrapper;
     if (cw.notModified === true) {
       return next();
     }
@@ -253,7 +253,7 @@ export class GalleryMWs {
     if (!req.resultPipe) {
       return next();
     }
-    const fullMediaPath: string = req.resultPipe;
+    const fullMediaPath = req.resultPipe as string;
 
     const convertedVideo =
       VideoProcessing.generateConvertedFilePath(fullMediaPath);

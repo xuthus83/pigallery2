@@ -86,10 +86,6 @@ export class UserManager implements IUserManager {
     }
   }
 
-  public async changePassword(request: any): Promise<void> {
-    throw new Error('not implemented'); // TODO: implement
-  }
-
   private loadDB(): void {
     const data = fs.readFileSync(this.dbPath, 'utf8');
     this.db = JSON.parse(data);

@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core';
-import { GalleryCacheService } from './cache.gallery.service';
-import { Media } from './Media';
-import { MediaIcon } from './MediaIcon';
-import { Config } from '../../../../common/config/public/Config';
-import { PersonDTO } from '../../../../common/entities/PersonDTO';
-import { Person } from '../faces/Person';
+import {Injectable} from '@angular/core';
+import {GalleryCacheService} from './cache.gallery.service';
+import {Media} from './Media';
+import {MediaIcon} from './MediaIcon';
+import {Config} from '../../../../common/config/public/Config';
+import {PersonDTO} from '../../../../common/entities/PersonDTO';
+import {Person} from '../faces/Person';
 
 export enum ThumbnailLoadingPriority {
   extraHigh = 4,
@@ -18,13 +18,14 @@ export class ThumbnailLoaderService {
   que: Array<ThumbnailTask> = [];
   runningRequests = 0;
 
-  constructor(private galleryCacheService: GalleryCacheService) {}
+  constructor(private galleryCacheService: GalleryCacheService) {
+  }
 
   run = (): void => {
     if (
       this.que.length === 0 ||
       this.runningRequests >=
-        Config.Client.Media.Thumbnail.concurrentThumbnailGenerations
+      Config.Client.Media.Thumbnail.concurrentThumbnailGenerations
     ) {
       return;
     }
@@ -153,7 +154,7 @@ export class ThumbnailLoaderService {
       this.que.push(thTask);
     }
 
-    const thumbnailTaskEntity = { priority, listener, parentTask: thTask };
+    const thumbnailTaskEntity = {priority, listener, parentTask: thTask};
     thTask.taskEntities.push(thumbnailTaskEntity);
     if (thTask.inProgress === true) {
       listener.onStartedLoading();
@@ -191,7 +192,7 @@ export class ThumbnailLoaderService {
     const i = this.que.indexOf(task);
     if (i === -1) {
       if (task.taskEntities.length !== 0) {
-        console.error("ThumbnailLoader: can't find poolTask to remove");
+        console.error('ThumbnailLoader: can\'t find poolTask to remove');
       }
       return;
     }
@@ -202,7 +203,7 @@ export class ThumbnailLoaderService {
 export interface ThumbnailLoadingListener {
   onStartedLoading: () => void;
   onLoad: () => void;
-  onError: (error: Error) => void;
+  onError: (error: Event | string) => void;
 }
 
 export interface ThumbnailTaskEntity {

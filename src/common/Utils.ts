@@ -174,7 +174,8 @@ export class Utils {
   public static enumToArray(EnumType: any): { key: number; value: string }[] {
     const arr: Array<{ key: number; value: string }> = [];
     for (const enumMember in EnumType) {
-      if (!EnumType.hasOwn(enumMember)) {
+      // eslint-disable-next-line no-prototype-builtins
+      if (!EnumType.hasOwnProperty(enumMember)) {
         continue;
       }
       const key = parseInt(enumMember, 10);
