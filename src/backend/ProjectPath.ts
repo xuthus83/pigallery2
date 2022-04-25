@@ -1,6 +1,6 @@
 import * as path from 'path';
 import * as fs from 'fs';
-import {Config} from '../common/config/private/Config';
+import { Config } from '../common/config/private/Config';
 
 class ProjectPathClass {
   public Root: string;
@@ -15,7 +15,7 @@ class ProjectPathClass {
     this.reset();
   }
 
-  normalizeRelative(pathStr: string): any {
+  normalizeRelative(pathStr: string): string {
     return path.join(pathStr, path.sep);
   }
 
@@ -40,7 +40,6 @@ class ProjectPathClass {
     if (!fs.existsSync(this.TempFolder)) {
       fs.mkdirSync(this.TempFolder);
     }
-
   }
 }
 

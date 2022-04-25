@@ -1,20 +1,19 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {LoginCredential} from '../../../common/entities/LoginCredential';
 import {UserDTO} from '../../../common/entities/UserDTO';
-
 
 declare global {
   namespace Express {
     interface Request {
-
-      resultPipe?: any;
+      resultPipe?: unknown;
       body?: {
-        loginCredential?: LoginCredential
+        loginCredential?: LoginCredential;
       };
       locale?: string;
     }
 
     interface Response {
-      tpl?: any;
+      tpl?: Record<string, any>;
     }
 
     interface Session {

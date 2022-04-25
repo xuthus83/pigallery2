@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {DirectoryDTOUtils, DirectoryPathDTO, ParentDirectoryDTO} from '../../../../common/entities/DirectoryDTO';
+import {DirectoryDTOUtils, DirectoryPathDTO, ParentDirectoryDTO,} from '../../../../common/entities/DirectoryDTO';
 import {Utils} from '../../../../common/Utils';
 import {Config} from '../../../../common/config/public/Config';
 import {IAutoCompleteItem} from '../../../../common/entities/AutoCompleteItem';
@@ -7,17 +7,15 @@ import {SearchResultDTO} from '../../../../common/entities/SearchResultDTO';
 import {MediaDTO} from '../../../../common/entities/MediaDTO';
 import {SortingMethods} from '../../../../common/entities/SortingMethods';
 import {VersionService} from '../../model/version.service';
-import {SearchQueryDTO, SearchQueryTypes} from '../../../../common/entities/SearchQueryDTO';
+import {SearchQueryDTO, SearchQueryTypes,} from '../../../../common/entities/SearchQueryDTO';
 
 interface CacheItem<T> {
   timestamp: number;
   item: T;
 }
 
-
 @Injectable()
 export class GalleryCacheService {
-
   private static readonly CONTENT_PREFIX = 'content:';
   private static readonly AUTO_COMPLETE_PREFIX = 'autocomplete:';
   private static readonly INSTANT_SEARCH_PREFIX = 'instant_search:';
@@ -26,15 +24,16 @@ export class GalleryCacheService {
   private static readonly VERSION = 'version';
 
   constructor(private versionService: VersionService) {
-
     // if it was a forced reload not a navigation, clear cache
     if (GalleryCacheService.wasAReload()) {
       GalleryCacheService.deleteCache();
     }
 
     const onNewVersion = (ver: string) => {
-      if (ver !== null &&
-        localStorage.getItem(GalleryCacheService.VERSION) !== ver) {
+      if (
+        ver !== null &&
+        localStorage.getItem(GalleryCacheService.VERSION) !== ver
+      ) {
         GalleryCacheService.deleteCache();
         localStorage.setItem(GalleryCacheService.VERSION, ver);
       }
@@ -44,7 +43,9 @@ export class GalleryCacheService {
   }
 
   private static wasAReload(): boolean {
-    const perfEntries = performance.getEntriesByType('navigation') as PerformanceNavigationTiming [];
+    const perfEntries = performance.getEntriesByType(
+      'navigation'
+    ) as PerformanceNavigationTiming[];
     return perfEntries && perfEntries[0] && perfEntries[0].type === 'reload';
   }
 
@@ -52,7 +53,10 @@ export class GalleryCacheService {
     const tmp = localStorage.getItem(key);
     if (tmp != null) {
       const value: CacheItem<SearchResultDTO> = JSON.parse(tmp);
-      if (value.timestamp < Date.now() - Config.Client.Search.searchCacheTimeout) {
+      if (
+        value.timestamp <
+        Date.now() - Config.Client.Search.searchCacheTimeout
+      ) {
         localStorage.removeItem(key);
         return null;
       }
@@ -66,10 +70,15 @@ export class GalleryCacheService {
     try {
       const toRemove = [];
       for (let i = 0; i < localStorage.length; i++) {
-        if (localStorage.key(i).startsWith(GalleryCacheService.CONTENT_PREFIX) ||
+        if (
+          localStorage.key(i).startsWith(GalleryCacheService.CONTENT_PREFIX) ||
           localStorage.key(i).startsWith(GalleryCacheService.SEARCH_PREFIX) ||
-          localStorage.key(i).startsWith(GalleryCacheService.INSTANT_SEARCH_PREFIX) ||
-          localStorage.key(i).startsWith(GalleryCacheService.AUTO_COMPLETE_PREFIX)
+          localStorage
+            .key(i)
+            .startsWith(GalleryCacheService.INSTANT_SEARCH_PREFIX) ||
+          localStorage
+            .key(i)
+            .startsWith(GalleryCacheService.AUTO_COMPLETE_PREFIX)
         ) {
           toRemove.push(localStorage.key(i));
         }
@@ -79,7 +88,7 @@ export class GalleryCacheService {
         localStorage.removeItem(item);
       }
     } catch (e) {
-
+      // ignoring errors
     }
   }
 
@@ -94,7 +103,8 @@ export class GalleryCacheService {
 
   public removeSorting(dir: DirectoryPathDTO): void {
     try {
-      const key = GalleryCacheService.SORTING_PREFIX + dir.path + '/' + dir.name;
+      const key =
+        GalleryCacheService.SORTING_PREFIX + dir.path + '/' + dir.name;
       localStorage.removeItem(key);
     } catch (e) {
       this.reset();
@@ -102,9 +112,13 @@ export class GalleryCacheService {
     }
   }
 
-  public setSorting(dir: DirectoryPathDTO, sorting: SortingMethods): SortingMethods {
+  public setSorting(
+    dir: DirectoryPathDTO,
+    sorting: SortingMethods
+  ): SortingMethods {
     try {
-      const key = GalleryCacheService.SORTING_PREFIX + dir.path + '/' + dir.name;
+      const key =
+        GalleryCacheService.SORTING_PREFIX + dir.path + '/' + dir.name;
       localStorage.setItem(key, sorting.toString());
     } catch (e) {
       this.reset();
@@ -113,15 +127,24 @@ export class GalleryCacheService {
     return null;
   }
 
-  public getAutoComplete(text: string, type: SearchQueryTypes): IAutoCompleteItem[] {
+  public getAutoComplete(
+    text: string,
+    type: SearchQueryTypes
+  ): IAutoCompleteItem[] {
     if (Config.Client.Other.enableCache === false) {
       return null;
     }
-    const key = GalleryCacheService.AUTO_COMPLETE_PREFIX + text + (type ? '_' + type : '');
+    const key =
+      GalleryCacheService.AUTO_COMPLETE_PREFIX +
+      text +
+      (type ? '_' + type : '');
     const tmp = localStorage.getItem(key);
     if (tmp != null) {
       const value: CacheItem<IAutoCompleteItem[]> = JSON.parse(tmp);
-      if (value.timestamp < Date.now() - Config.Client.Search.AutoComplete.cacheTimeout) {
+      if (
+        value.timestamp <
+        Date.now() - Config.Client.Search.AutoComplete.cacheTimeout
+      ) {
         localStorage.removeItem(key);
         return null;
       }
@@ -130,14 +153,21 @@ export class GalleryCacheService {
     return null;
   }
 
-  public setAutoComplete(text: string, type: SearchQueryTypes, items: Array<IAutoCompleteItem>): void {
+  public setAutoComplete(
+    text: string,
+    type: SearchQueryTypes,
+    items: Array<IAutoCompleteItem>
+  ): void {
     if (Config.Client.Other.enableCache === false) {
       return;
     }
-    const key = GalleryCacheService.AUTO_COMPLETE_PREFIX + text + (type ? '_' + type : '');
+    const key =
+      GalleryCacheService.AUTO_COMPLETE_PREFIX +
+      text +
+      (type ? '_' + type : '');
     const tmp: CacheItem<Array<IAutoCompleteItem>> = {
       timestamp: Date.now(),
-      item: items
+      item: items,
     };
     try {
       localStorage.setItem(key, JSON.stringify(tmp));
@@ -161,10 +191,13 @@ export class GalleryCacheService {
     }
     const tmp: CacheItem<SearchResultDTO> = {
       timestamp: Date.now(),
-      item: searchResult
+      item: searchResult,
     };
     try {
-      localStorage.setItem(GalleryCacheService.INSTANT_SEARCH_PREFIX + text, JSON.stringify(tmp));
+      localStorage.setItem(
+        GalleryCacheService.INSTANT_SEARCH_PREFIX + text,
+        JSON.stringify(tmp)
+      );
     } catch (e) {
       this.reset();
       console.error(e);
@@ -185,7 +218,7 @@ export class GalleryCacheService {
     }
     const tmp: CacheItem<SearchResultDTO> = {
       timestamp: Date.now(),
-      item: searchResult
+      item: searchResult,
     };
     const key = GalleryCacheService.SEARCH_PREFIX + JSON.stringify(query);
     try {
@@ -201,7 +234,9 @@ export class GalleryCacheService {
       return null;
     }
     try {
-      const value = localStorage.getItem(GalleryCacheService.CONTENT_PREFIX + Utils.concatUrls(directoryName));
+      const value = localStorage.getItem(
+        GalleryCacheService.CONTENT_PREFIX + Utils.concatUrls(directoryName)
+      );
       if (value != null) {
         const directory: ParentDirectoryDTO = JSON.parse(value);
 
@@ -209,6 +244,7 @@ export class GalleryCacheService {
         return directory;
       }
     } catch (e) {
+      // ignoring errors
     }
     return null;
   }
@@ -218,7 +254,9 @@ export class GalleryCacheService {
       return;
     }
 
-    const key = GalleryCacheService.CONTENT_PREFIX + Utils.concatUrls(directory.path, directory.name);
+    const key =
+      GalleryCacheService.CONTENT_PREFIX +
+      Utils.concatUrls(directory.path, directory.name);
     if (directory.isPartial === true && localStorage.getItem(key)) {
       return;
     }
@@ -227,8 +265,11 @@ export class GalleryCacheService {
       // try to fit it
       localStorage.setItem(key, JSON.stringify(directory));
       directory.directories.forEach((dir) => {
-        const subKey = GalleryCacheService.CONTENT_PREFIX + Utils.concatUrls(dir.path, dir.name);
-        if (localStorage.getItem(subKey) == null) { // don't override existing
+        const subKey =
+          GalleryCacheService.CONTENT_PREFIX +
+          Utils.concatUrls(dir.path, dir.name);
+        if (localStorage.getItem(subKey) == null) {
+          // don't override existing
           localStorage.setItem(subKey, JSON.stringify(dir));
         }
       });
@@ -236,7 +277,6 @@ export class GalleryCacheService {
       this.reset();
       console.error(e);
     }
-
   }
 
   /**
@@ -249,7 +289,9 @@ export class GalleryCacheService {
     }
 
     try {
-      const directoryKey = GalleryCacheService.CONTENT_PREFIX + Utils.concatUrls(media.directory.path, media.directory.name);
+      const directoryKey =
+        GalleryCacheService.CONTENT_PREFIX +
+        Utils.concatUrls(media.directory.path, media.directory.name);
       const value = localStorage.getItem(directoryKey);
       if (value != null) {
         const directory: ParentDirectoryDTO = JSON.parse(value);
@@ -273,7 +315,6 @@ export class GalleryCacheService {
       this.reset();
       console.error(e);
     }
-
   }
 
   private reset(): void {
@@ -281,10 +322,12 @@ export class GalleryCacheService {
       const currentUserStr = localStorage.getItem('currentUser');
       localStorage.clear();
       localStorage.setItem('currentUser', currentUserStr);
-      localStorage.setItem(GalleryCacheService.VERSION, this.versionService.version.value);
+      localStorage.setItem(
+        GalleryCacheService.VERSION,
+        this.versionService.version.value
+      );
     } catch (e) {
-
+      // ignoring errors
     }
   }
-
 }

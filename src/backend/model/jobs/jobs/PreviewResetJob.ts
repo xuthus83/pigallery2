@@ -1,9 +1,11 @@
-import {ObjectManagers} from '../../ObjectManagers';
-import {Config} from '../../../../common/config/private/Config';
-import {ConfigTemplateEntry, DefaultsJobs} from '../../../../common/entities/job/JobDTO';
-import {Job} from './Job';
-import {DatabaseType} from '../../../../common/config/private/PrivateConfig';
-
+import { ObjectManagers } from '../../ObjectManagers';
+import { Config } from '../../../../common/config/private/Config';
+import {
+  ConfigTemplateEntry,
+  DefaultsJobs,
+} from '../../../../common/entities/job/JobDTO';
+import { Job } from './Job';
+import { DatabaseType } from '../../../../common/config/private/PrivateConfig';
 
 export class PreviewRestJob extends Job {
   public readonly Name = DefaultsJobs[DefaultsJobs['Preview Reset']];
@@ -15,6 +17,7 @@ export class PreviewRestJob extends Job {
   }
 
   protected async init(): Promise<void> {
+    // abstract function
   }
 
   protected async step(): Promise<boolean> {
@@ -25,6 +28,4 @@ export class PreviewRestJob extends Job {
     await ObjectManagers.getInstance().PersonManager.resetPreviews();
     return false;
   }
-
-
 }

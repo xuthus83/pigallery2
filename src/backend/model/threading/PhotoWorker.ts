@@ -1,10 +1,10 @@
-import {Metadata, Sharp} from 'sharp';
-import {Logger} from '../../Logger';
-import {FfmpegCommand, FfprobeData} from 'fluent-ffmpeg';
-import {FFmpegFactory} from '../FFmpegFactory';
+/* eslint-disable @typescript-eslint/no-var-requires */
+import { Metadata, Sharp } from 'sharp';
+import { Logger } from '../../Logger';
+import { FfmpegCommand, FfprobeData } from 'fluent-ffmpeg';
+import { FFmpegFactory } from '../FFmpegFactory';
 
 export class PhotoWorker {
-
   private static imageRenderer: (input: RendererInput) => Promise<void> = null;
   private static videoRenderer: (input: RendererInput) => Promise<void> = null;
 
@@ -25,18 +25,17 @@ export class PhotoWorker {
     return PhotoWorker.imageRenderer(input);
   }
 
-
   public static renderFromVideo(input: RendererInput): Promise<void> {
     if (PhotoWorker.videoRenderer === null) {
       PhotoWorker.videoRenderer = VideoRendererFactory.build();
     }
     return PhotoWorker.videoRenderer(input);
   }
-
 }
 
 export enum ThumbnailSourceType {
-  Photo = 1, Video = 2
+  Photo = 1,
+  Video = 2,
 }
 
 export interface RendererInput {
@@ -47,10 +46,10 @@ export interface RendererInput {
   outPath: string;
   qualityPriority: boolean;
   cut?: {
-    left: number,
-    top: number,
-    width: number,
-    height: number
+    left: number;
+    top: number;
+    width: number;
+    height: number;
   };
 }
 
@@ -60,10 +59,9 @@ export class VideoRendererFactory {
     const path = require('path');
     return (input: RendererInput): Promise<void> => {
       return new Promise((resolve, reject): void => {
-
         Logger.silly('[FFmpeg] rendering thumbnail: ' + input.mediaPath);
 
-        ffmpeg(input.mediaPath).ffprobe((err: any, data: FfprobeData): void => {
+        ffmpeg(input.mediaPath).ffprobe((err: Error, data: FfprobeData): void => {
           if (!!err || data === null) {
             return reject('[FFmpeg] ' + err.toString());
           }
@@ -96,15 +94,22 @@ export class VideoRendererFactory {
             })
             .outputOptions(['-qscale:v 4']);
           if (input.makeSquare === false) {
-            const newSize = width < height ? Math.min(input.size, width) + 'x?' : '?x' + Math.min(input.size, height);
+            const newSize =
+              width < height
+                ? Math.min(input.size, width) + 'x?'
+                : '?x' + Math.min(input.size, height);
             command.takeScreenshots({
-              timemarks: ['10%'], size: newSize, filename: fileName, folder
+              timemarks: ['10%'],
+              size: newSize,
+              filename: fileName,
+              folder,
             });
-
-
           } else {
             command.takeScreenshots({
-              timemarks: ['10%'], size: input.size + 'x' + input.size, filename: fileName, folder
+              timemarks: ['10%'],
+              size: input.size + 'x' + input.size,
+              filename: fileName,
+              folder,
             });
           }
         });
@@ -114,7 +119,6 @@ export class VideoRendererFactory {
 }
 
 export class ImageRendererFactory {
-
   public static build(): (input: RendererInput) => Promise<void> {
     return ImageRendererFactory.Sharp();
   }
@@ -123,12 +127,19 @@ export class ImageRendererFactory {
     const sharp = require('sharp');
     sharp.cache(false);
     return async (input: RendererInput): Promise<void> => {
-      Logger.silly('[SharpRenderer] rendering photo:' + input.mediaPath + ', size:' + input.size);
-      const image: Sharp = sharp(input.mediaPath, {failOnError: false});
+      Logger.silly(
+        '[SharpRenderer] rendering photo:' +
+          input.mediaPath +
+          ', size:' +
+          input.size
+      );
+      const image: Sharp = sharp(input.mediaPath, { failOnError: false });
       const metadata: Metadata = await image.metadata();
 
-
-      const kernel = input.qualityPriority === true ? sharp.kernel.lanczos3 : sharp.kernel.nearest;
+      const kernel =
+        input.qualityPriority === true
+          ? sharp.kernel.lanczos3
+          : sharp.kernel.nearest;
 
       if (input.cut) {
         image.extract(input.cut);
@@ -136,26 +147,21 @@ export class ImageRendererFactory {
       if (input.makeSquare === false) {
         if (metadata.height > metadata.width) {
           image.resize(Math.min(input.size, metadata.width), null, {
-            kernel
+            kernel,
           });
         } else {
           image.resize(null, Math.min(input.size, metadata.height), {
-            kernel
+            kernel,
           });
         }
-
-
       } else {
-        image
-          .resize(input.size, input.size, {
-            kernel,
-            position: sharp.gravity.centre,
-            fit: 'cover'
-          });
+        image.resize(input.size, input.size, {
+          kernel,
+          position: sharp.gravity.centre,
+          fit: 'cover',
+        });
       }
       await image.withMetadata().jpeg().toFile(input.outPath);
     };
   }
-
-
 }

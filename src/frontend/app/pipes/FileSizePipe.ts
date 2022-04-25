@@ -1,10 +1,7 @@
-import {Pipe, PipeTransform} from '@angular/core';
+import { Pipe, PipeTransform } from '@angular/core';
 
-
-@Pipe({name: 'fileSize'})
+@Pipe({ name: 'fileSize' })
 export class FileSizePipe implements PipeTransform {
-
-
   transform(size: number): string {
     const postFixes = ['B', 'KB', 'MB', 'GB', 'TB'];
     let index = 0;

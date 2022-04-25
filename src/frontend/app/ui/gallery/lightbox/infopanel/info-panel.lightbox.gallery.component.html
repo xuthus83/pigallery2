@@ -1,8 +1,7 @@
 <div class="content d-flex flex-column">
   <div class="modal-header">
     <h2 class="modal-title" i18n>Info</h2>
-    <button type="button" class="close" (click)="close()" aria-label="Close">
-      <span class="oi oi-x" aria-hidden="true"></span>
+    <button type="button"  class="btn-close"  (click)="close()" aria-label="Close">
     </button>
   </div>
   <div class="row">
@@ -90,8 +89,8 @@
     </div>
     <div class="col-10">
       <div class="details-main mt-2" [title]="Rating + ' stars'">
-        <span *ngFor="let stars of [].constructor(Rating)" class="oi oi-star text-dark mr-1"></span>
-        <span *ngFor="let stars of [].constructor(5-Rating)" class="oi oi-star text-muted mr-1"></span>
+        <span *ngFor="let stars of [].constructor(Rating)" class="oi oi-star text-dark me-1"></span>
+        <span *ngFor="let stars of [].constructor(5-Rating)" class="oi oi-star text-muted me-1"></span>
       </div>
     </div>
   </div>

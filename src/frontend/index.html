@@ -10,9 +10,9 @@
   <meta name="theme-color" content="#000000" />
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  
+
   <link rel="apple-touch-icon" href="assets/icon.png">
-  
+
   <link rel="manifest" crossorigin="use-credentials" href="manifest.json">
 
   <link rel="stylesheet"
@@ -23,7 +23,10 @@
     var ServerInject = {user:  <%- JSON.stringify(user); %>, ConfigInject: <%- JSON.stringify(Config); %>}
   </script>
 
-  <%- customHTMLHead %>
+  <script>
+    <%- customHTMLHead %>
+  </script>
+
 </head>
 
 <body style="overflow-y: scroll; padding-right: 0 !important;">

@@ -1,17 +1,18 @@
-import {Injectable} from '@angular/core';
-import {ThumbnailLoaderService, ThumbnailLoadingListener, ThumbnailLoadingPriority, ThumbnailTaskEntity} from './thumbnailLoader.service';
-import {Media} from './Media';
-import {MediaIcon} from './MediaIcon';
-import {PersonDTO} from '../../../../common/entities/PersonDTO';
-import {Person} from '../faces/Person';
-
+import { Injectable } from '@angular/core';
+import {
+  ThumbnailLoaderService,
+  ThumbnailLoadingListener,
+  ThumbnailLoadingPriority,
+  ThumbnailTaskEntity,
+} from './thumbnailLoader.service';
+import { Media } from './Media';
+import { MediaIcon } from './MediaIcon';
+import { PersonDTO } from '../../../../common/entities/PersonDTO';
+import { Person } from '../faces/Person';
 
 @Injectable()
 export class ThumbnailManagerService {
-
-
-  constructor(private thumbnailLoader: ThumbnailLoaderService) {
-  }
+  constructor(private thumbnailLoader: ThumbnailLoaderService) {}
 
   public getThumbnail(photo: Media): Thumbnail {
     return new Thumbnail(photo, this.thumbnailLoader);
@@ -25,15 +26,12 @@ export class ThumbnailManagerService {
     return new IconThumbnail(photo, this.thumbnailLoader);
   }
 
-
   public getPersonThumbnail(person: PersonDTO): PersonThumbnail {
     return new PersonThumbnail(person, this.thumbnailLoader);
   }
 }
 
-
 export abstract class ThumbnailBase {
-
   public loading = false;
   protected available = false;
   protected src: string = null;
@@ -41,16 +39,13 @@ export abstract class ThumbnailBase {
   protected onLoad: () => void = null;
   protected thumbnailTask: ThumbnailTaskEntity = null;
 
-
-  protected constructor(protected thumbnailService: ThumbnailLoaderService) {
-  }
+  protected constructor(protected thumbnailService: ThumbnailLoaderService) {}
 
   abstract set Visible(visible: boolean);
 
   set OnLoad(onLoad: () => void) {
     this.onLoad = onLoad;
   }
-
 
   get Available(): boolean {
     return this.available;
@@ -76,10 +71,11 @@ export abstract class ThumbnailBase {
   }
 }
 
-
 export class PersonThumbnail extends ThumbnailBase {
-
-  constructor(private person: PersonDTO, thumbnailService: ThumbnailLoaderService) {
+  constructor(
+    private person: PersonDTO,
+    thumbnailService: ThumbnailLoaderService
+  ) {
     super(thumbnailService);
     this.src = '';
     this.error = false;
@@ -93,12 +89,13 @@ export class PersonThumbnail extends ThumbnailBase {
     }
 
     setTimeout((): void => {
-
       const listener: ThumbnailLoadingListener = {
-        onStartedLoading: (): void => { // onLoadStarted
+        onStartedLoading: (): void => {
+          // onLoadStarted
           this.loading = true;
         },
-        onLoad: (): void => {// onLoaded
+        onLoad: (): void => {
+          // onLoaded
           this.src = Person.getThumbnailUrl(person);
           if (this.onLoad) {
             this.onLoad();
@@ -107,17 +104,19 @@ export class PersonThumbnail extends ThumbnailBase {
           this.loading = false;
           this.thumbnailTask = null;
         },
-        onError: (): void => {// onError
+        onError: (): void => {
+          // onError
           this.thumbnailTask = null;
           this.loading = false;
           this.error = true;
-        }
+        },
       };
-      this.thumbnailTask = this.thumbnailService.loadPersonThumbnail(person, ThumbnailLoadingPriority.high, listener);
-
-
+      this.thumbnailTask = this.thumbnailService.loadPersonThumbnail(
+        person,
+        ThumbnailLoadingPriority.high,
+        listener
+      );
     }, 0);
-
   }
 
   set Visible(visible: boolean) {
@@ -130,14 +129,13 @@ export class PersonThumbnail extends ThumbnailBase {
       this.thumbnailTask.priority = ThumbnailLoadingPriority.medium;
     }
   }
-
-
 }
 
-
 export class IconThumbnail extends ThumbnailBase {
-
-  constructor(private media: MediaIcon, thumbnailService: ThumbnailLoaderService) {
+  constructor(
+    private media: MediaIcon,
+    thumbnailService: ThumbnailLoaderService
+  ) {
     super(thumbnailService);
     this.src = '';
     this.error = false;
@@ -151,12 +149,13 @@ export class IconThumbnail extends ThumbnailBase {
 
     if (!this.media.isIconAvailable()) {
       setTimeout((): void => {
-
         const listener: ThumbnailLoadingListener = {
-          onStartedLoading: (): void => { // onLoadStarted
+          onStartedLoading: (): void => {
+            // onLoadStarted
             this.loading = true;
           },
-          onLoad: (): void => {// onLoaded
+          onLoad: (): void => {
+            // onLoaded
             this.src = this.media.getIconPath();
             if (this.onLoad) {
               this.onLoad();
@@ -165,18 +164,20 @@ export class IconThumbnail extends ThumbnailBase {
             this.loading = false;
             this.thumbnailTask = null;
           },
-          onError: (): void => {// onError
+          onError: (): void => {
+            // onError
             this.thumbnailTask = null;
             this.loading = false;
             this.error = true;
-          }
+          },
         };
-        this.thumbnailTask = this.thumbnailService.loadIcon(this.media, ThumbnailLoadingPriority.high, listener);
-
-
+        this.thumbnailTask = this.thumbnailService.loadIcon(
+          this.media,
+          ThumbnailLoadingPriority.high,
+          listener
+        );
       }, 0);
     }
-
   }
 
   set Visible(visible: boolean) {
@@ -189,14 +190,14 @@ export class IconThumbnail extends ThumbnailBase {
       this.thumbnailTask.priority = ThumbnailLoadingPriority.medium;
     }
   }
-
-
 }
 
 export class Thumbnail extends ThumbnailBase {
-
-
-  constructor(private media: Media, thumbnailService: ThumbnailLoaderService, autoLoad: boolean = true) {
+  constructor(
+    private media: Media,
+    thumbnailService: ThumbnailLoaderService,
+    autoLoad = true
+  ) {
     super(thumbnailService);
     if (this.media.isThumbnailAvailable()) {
       this.src = this.media.getThumbnailPath();
@@ -255,10 +256,12 @@ export class Thumbnail extends ThumbnailBase {
     if (!this.media.isThumbnailAvailable() && this.thumbnailTask == null) {
       //    setTimeout(() => {
       const listener: ThumbnailLoadingListener = {
-        onStartedLoading: (): void => { // onLoadStarted
+        onStartedLoading: (): void => {
+          // onLoadStarted
           this.loading = true;
         },
-        onLoad: (): void => {// onLoaded
+        onLoad: (): void => {
+          // onLoaded
           this.src = this.media.getThumbnailPath();
           if (this.onLoad) {
             this.onLoad();
@@ -267,20 +270,28 @@ export class Thumbnail extends ThumbnailBase {
           this.loading = false;
           this.thumbnailTask = null;
         },
-        onError: (): void => {// onError
+        onError: (): void => {
+          // onError
           this.thumbnailTask = null;
           this.loading = false;
           this.error = true;
-        }
+        },
       };
       if (this.media.isReplacementThumbnailAvailable()) {
-        this.thumbnailTask = this.thumbnailService.loadImage(this.media, ThumbnailLoadingPriority.medium, listener);
+        this.thumbnailTask = this.thumbnailService.loadImage(
+          this.media,
+          ThumbnailLoadingPriority.medium,
+          listener
+        );
       } else {
-        this.thumbnailTask = this.thumbnailService.loadImage(this.media, ThumbnailLoadingPriority.high, listener);
+        this.thumbnailTask = this.thumbnailService.loadImage(
+          this.media,
+          ThumbnailLoadingPriority.high,
+          listener
+        );
       }
       // }, 0);
     }
   }
-
 }
 

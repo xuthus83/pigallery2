@@ -247,7 +247,8 @@ describe('PreviewManager', (sqlHelper: DBTestHelper) => {
     const conn = await SQLConnection.getConnection();
 
     const selectDir = async () => {
-      return await conn.getRepository(DirectoryEntity).findOne({id: subDir.id}, {
+      return await conn.getRepository(DirectoryEntity).findOne({
+        where: {id: subDir.id},
         join: {
           alias: 'dir',
           leftJoinAndSelect: {preview: 'dir.preview'}

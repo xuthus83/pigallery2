@@ -1,6 +1,5 @@
-import {DirectoryPathDTO} from './DirectoryDTO';
-import {OrientationTypes} from 'ts-exif-parser';
-import {MediaDimension, MediaDTO, MediaMetadata} from './MediaDTO';
+import { DirectoryPathDTO } from './DirectoryDTO';
+import { MediaDimension, MediaDTO, MediaMetadata } from './MediaDTO';
 
 export interface PreviewPhotoDTO extends MediaDTO {
   name: string;
@@ -39,7 +38,6 @@ export interface PhotoMetadata extends MediaMetadata {
   faces?: FaceRegion[];
 }
 
-
 export interface PositionMetaData {
   GPSData?: GPSMetadata;
   country?: string;
@@ -51,7 +49,6 @@ export interface GPSMetadata {
   latitude?: number; // float with precision: 6
   longitude?: number; // float with precision: 6
 }
-
 
 export interface CameraMetadata {
   ISO?: number;

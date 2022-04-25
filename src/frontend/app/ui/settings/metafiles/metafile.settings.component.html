@@ -26,15 +26,15 @@
         name="*.pg2conf files"
         description="Reads *.pg2conf files (You can use it for custom sorting and save search (albums))."
         i18n-description i18n-name
-        [ngModel]="states.markdown">
+        [ngModel]="states.pg2conf">
       </app-settings-entry>
 
 
-      <button class="btn btn-success float-right"
+      <button class="btn btn-success float-end"
               [disabled]="!settingsForm.form.valid || !changed || inProgress"
               (click)="save()" i18n>Save
       </button>
-      <button class="btn btn-secondary float-right"
+      <button class="btn btn-secondary float-end"
               [disabled]=" !changed || inProgress"
               (click)="reset()" i18n>Reset
       </button>

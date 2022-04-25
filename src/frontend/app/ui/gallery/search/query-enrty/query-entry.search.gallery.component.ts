@@ -1,4 +1,4 @@
-import {Component, EventEmitter, forwardRef, Output} from '@angular/core';
+import { Component, EventEmitter, forwardRef, Output } from '@angular/core';
 import {
   DistanceSearch,
   ListSearchQueryTypes,
@@ -10,11 +10,17 @@ import {
   SomeOfSearchQuery,
   TextSearch,
   TextSearchQueryMatchTypes,
-  TextSearchQueryTypes
+  TextSearchQueryTypes,
 } from '../../../../../../common/entities/SearchQueryDTO';
-import {Utils} from '../../../../../../common/Utils';
-import {ControlValueAccessor, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator} from '@angular/forms';
-
+import { Utils } from '../../../../../../common/Utils';
+import {
+  ControlValueAccessor,
+  FormControl,
+  NG_VALIDATORS,
+  NG_VALUE_ACCESSOR,
+  ValidationErrors,
+  Validator,
+} from '@angular/forms';
 
 @Component({
   selector: 'app-gallery-search-query-entry',
@@ -24,16 +30,18 @@ import {ControlValueAccessor, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, Val
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => GallerySearchQueryEntryComponent),
-      multi: true
+      multi: true,
     },
     {
       provide: NG_VALIDATORS,
       useExisting: forwardRef(() => GallerySearchQueryEntryComponent),
-      multi: true
-    }
-  ]
+      multi: true,
+    },
+  ],
 })
-export class GallerySearchQueryEntryComponent implements ControlValueAccessor, Validator {
+export class GallerySearchQueryEntryComponent
+  implements ControlValueAccessor, Validator
+{
   public queryEntry: SearchQueryDTO;
   public SearchQueryTypesEnum: { value: string; key: SearchQueryTypes }[];
   public SearchQueryTypes = SearchQueryTypes;
@@ -43,68 +51,73 @@ export class GallerySearchQueryEntryComponent implements ControlValueAccessor, V
   constructor() {
     this.SearchQueryTypesEnum = Utils.enumToArray(SearchQueryTypes);
     // Range queries need to be added as AND with min and max sub entry
-    this.SearchQueryTypesEnum =
-      this.SearchQueryTypesEnum.filter((e): boolean => e.key !== SearchQueryTypes.UNKNOWN_RELATION);
+    this.SearchQueryTypesEnum = this.SearchQueryTypesEnum.filter(
+      (e): boolean => e.key !== SearchQueryTypes.UNKNOWN_RELATION
+    );
   }
 
   get IsTextQuery(): boolean {
-    return this.queryEntry && TextSearchQueryTypes.includes(this.queryEntry.type);
+    return (
+      this.queryEntry && TextSearchQueryTypes.includes(this.queryEntry.type)
+    );
   }
 
-
   get IsListQuery(): boolean {
-    return this.queryEntry && ListSearchQueryTypes.includes(this.queryEntry.type);
+    return (
+      this.queryEntry && ListSearchQueryTypes.includes(this.queryEntry.type)
+    );
   }
 
   get AsListQuery(): SearchListQuery {
-    return this.queryEntry as any;
+    return this.queryEntry as SearchListQuery;
   }
 
   public get AsRangeQuery(): RangeSearch {
-    return this.queryEntry as any;
+    return this.queryEntry as RangeSearch;
   }
 
-
   get AsOrientationQuery(): OrientationSearch {
-    return this.queryEntry as any;
+    return this.queryEntry as OrientationSearch;
   }
 
   get AsDistanceQuery(): DistanceSearch {
-    return this.queryEntry as any;
+    return this.queryEntry as DistanceSearch;
   }
 
-
   get AsSomeOfQuery(): SomeOfSearchQuery {
-    return this.queryEntry as any;
+    return this.queryEntry as SomeOfSearchQuery;
   }
 
   get AsTextQuery(): TextSearch {
-    return this.queryEntry as any;
+    return this.queryEntry as TextSearch;
   }
 
   validate(control: FormControl): ValidationErrors {
-    return {required: true};
+    return { required: true };
   }
 
   addQuery(): void {
     if (!this.IsListQuery) {
       return;
     }
-    this.AsListQuery.list.push({type: SearchQueryTypes.any_text, text: ''} as TextSearch);
+    this.AsListQuery.list.push({
+      type: SearchQueryTypes.any_text,
+      text: '',
+    } as TextSearch);
   }
 
   onChangeType(): void {
     if (this.IsListQuery) {
       delete this.AsTextQuery.text;
       this.AsListQuery.list = this.AsListQuery.list || [
-        {type: SearchQueryTypes.any_text, text: ''} as TextSearch,
-        {type: SearchQueryTypes.any_text, text: ''} as TextSearch
+        { type: SearchQueryTypes.any_text, text: '' } as TextSearch,
+        { type: SearchQueryTypes.any_text, text: '' } as TextSearch,
       ];
     } else {
       delete this.AsListQuery.list;
     }
     if (this.queryEntry.type === SearchQueryTypes.distance) {
-      this.AsDistanceQuery.from = {text: ''};
+      this.AsDistanceQuery.from = { text: '' };
       this.AsDistanceQuery.distance = 1;
     } else {
       delete this.AsDistanceQuery.from;
@@ -127,15 +140,14 @@ export class GallerySearchQueryEntryComponent implements ControlValueAccessor, V
     this.AsListQuery.list.splice(i, 1);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  public onTouched(): void {}
 
-  public onTouched(): void {
-  }
-
-  public writeValue(obj: any): void {
+  public writeValue(obj: SearchQueryDTO): void {
     this.queryEntry = obj;
   }
 
-  registerOnChange(fn: (_: any) => void): void {
+  registerOnChange(fn: (_: unknown) => void): void {
     this.propagateChange = fn;
   }
 
@@ -148,15 +160,17 @@ export class GallerySearchQueryEntryComponent implements ControlValueAccessor, V
   }
 
   public toggleMatchType(): void {
-    this.AsTextQuery.matchType = this.AsTextQuery.matchType === TextSearchQueryMatchTypes.exact_match ?
-      TextSearchQueryMatchTypes.like : TextSearchQueryMatchTypes.exact_match;
+    this.AsTextQuery.matchType =
+      this.AsTextQuery.matchType === TextSearchQueryMatchTypes.exact_match
+        ? TextSearchQueryMatchTypes.like
+        : TextSearchQueryMatchTypes.exact_match;
     this.onChange();
   }
 
-  private propagateChange = (_: any): void => {
-  };
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  private propagateChange = (_: unknown): void => {};
 
-  private propagateTouch = (_: any): void => {
-  };
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  private propagateTouch = (_: unknown): void => {};
 }
 

@@ -1,8 +1,9 @@
 export class Utils {
   static GUID(): string {
-    const s4 = (): string => Math.floor((1 + Math.random()) * 0x10000)
-      .toString(16)
-      .substring(1);
+    const s4 = (): string =>
+      Math.floor((1 + Math.random()) * 0x10000)
+        .toString(16)
+        .substring(1);
 
     return s4() + s4() + '-' + s4() + s4();
   }
@@ -20,7 +21,6 @@ export class Utils {
       setTimeout(resolve, time);
     });
   }
-
 
   static removeNullOrEmptyObj<T extends { [key: string]: any }>(obj: T): T {
     if (typeof obj !== 'object' || obj == null) {
@@ -81,7 +81,6 @@ export class Utils {
         }
       } else if (object[key] !== filter[key]) {
         return false;
-
       }
     }
 
@@ -97,7 +96,6 @@ export class Utils {
     }
     return size.toFixed(2) + postFixes[index];
   }
-
 
   static createRange(from: number, to: number): Array<number> {
     const arr = new Array(to - from + 1);
@@ -174,46 +172,40 @@ export class Utils {
   }
 
   public static enumToArray(EnumType: any): { key: number; value: string }[] {
-    const arr: Array<{ key: number; value: string; }> = [];
+    const arr: Array<{ key: number; value: string }> = [];
     for (const enumMember in EnumType) {
+      // eslint-disable-next-line no-prototype-builtins
       if (!EnumType.hasOwnProperty(enumMember)) {
         continue;
       }
       const key = parseInt(enumMember, 10);
       if (key >= 0) {
-        arr.push({key, value: EnumType[enumMember]});
+        arr.push({ key, value: EnumType[enumMember] });
       }
     }
     return arr;
   }
 
-
   public static findClosest(num: number, arr: number[]): number {
-
     let curr = arr[0];
     let diff = Math.abs(num - curr);
 
     arr.forEach((value): void => {
-
       const newDiff = Math.abs(num - value);
 
       if (newDiff < diff) {
         diff = newDiff;
         curr = value;
       }
-
     });
 
     return curr;
   }
 
-
   public static findClosestinSorted(num: number, arr: number[]): number {
-
     let curr = arr[0];
     let diff = Math.abs(num - curr);
     for (const item of arr) {
-
       const newDiff = Math.abs(num - item);
       if (newDiff > diff) {
         break;
@@ -222,11 +214,10 @@ export class Utils {
       curr = item;
     }
 
-
     return curr;
   }
 
-  public static isUInt32(value: number, max: number = 4294967295): boolean {
+  public static isUInt32(value: number, max = 4294967295): boolean {
     value = parseInt('' + value, 10);
     return !isNaN(value) && value >= 0 && value <= max;
   }
@@ -239,8 +230,11 @@ export class Utils {
   public static isFloat32(value: number): boolean {
     const E = Math.pow(10, 38);
     const nE = Math.pow(10, -38);
-    return !isNaN(value) && ((value >= -3.402823466 * E && value <= -1.175494351 * nE) ||
-      (value <= 3.402823466 * E && value >= 1.175494351 * nE));
+    return (
+      !isNaN(value) &&
+      ((value >= -3.402823466 * E && value <= -1.175494351 * nE) ||
+        (value <= 3.402823466 * E && value >= 1.175494351 * nE))
+    );
   }
 
   public static getAnyX(num: number, arr: any[], start = 0): any[][] {
@@ -262,18 +256,15 @@ export class Utils {
     }
     return ret;
   }
-
 }
 
 export class LRU<V> {
-  data: { [key: string]: { value: V, usage: number } } = {};
+  data: { [key: string]: { value: V; usage: number } } = {};
 
-
-  constructor(public readonly size: number) {
-  }
+  constructor(public readonly size: number) {}
 
   set(key: string, value: V): void {
-    this.data[key] = {usage: Date.now(), value};
+    this.data[key] = { usage: Date.now(), value };
     if (Object.keys(this.data).length > this.size) {
       let oldestK = key;
       let oldest = this.data[oldestK].usage;
@@ -293,5 +284,4 @@ export class LRU<V> {
     }
     return this.data[key].value;
   }
-
 }

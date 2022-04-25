@@ -1,10 +1,9 @@
 import * as cluster from 'cluster';
+import {Server} from './server';
+import {Worker} from './model/threading/Worker';
 
-if (cluster.isMaster) {
-  const Server = require('./server').Server;
-  // tslint:disable-next-line:no-unused-expression
+if ((cluster as any).isMaster) {
   new Server();
 } else {
-  const Worker = require('./model/threading/Worker').Worker;
   Worker.process();
 }

@@ -1,4 +1,3 @@
 export class UserModificationRequest {
-  constructor(public id: number) {
-  }
+  constructor(public id: number) {}
 }

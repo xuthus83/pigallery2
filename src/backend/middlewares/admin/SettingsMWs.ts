@@ -36,7 +36,7 @@ const LOG_TAG = '[SettingsMWs]';
 
 export class SettingsMWs {
 
-  public static async updateDatabaseSettings(req: Request, res: Response, next: NextFunction): Promise<any> {
+  public static async updateDatabaseSettings(req: Request, res: Response, next: NextFunction): Promise<void> {
 
     if ((typeof req.body === 'undefined') || (typeof req.body.settings === 'undefined')) {
       return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, 'settings is needed'));
@@ -77,7 +77,7 @@ export class SettingsMWs {
     }
   }
 
-  public static async updateMapSettings(req: Request, res: Response, next: NextFunction): Promise<any> {
+  public static async updateMapSettings(req: Request, res: Response, next: NextFunction): Promise<void> {
     if ((typeof req.body === 'undefined') || (typeof req.body.settings === 'undefined')) {
       return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, 'settings is needed'));
     }
@@ -102,7 +102,7 @@ export class SettingsMWs {
     }
   }
 
-  public static async updatePreviewSettings(req: Request, res: Response, next: NextFunction): Promise<any> {
+  public static async updatePreviewSettings(req: Request, res: Response, next: NextFunction): Promise<void> {
     if ((typeof req.body === 'undefined') || (typeof req.body.settings === 'undefined')) {
       return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, 'settings is needed'));
     }
@@ -127,7 +127,7 @@ export class SettingsMWs {
     }
   }
 
-  public static async updateVideoSettings(req: Request, res: Response, next: NextFunction): Promise<any> {
+  public static async updateVideoSettings(req: Request, res: Response, next: NextFunction): Promise<void> {
     if ((typeof req.body === 'undefined') || (typeof req.body.settings === 'undefined')) {
       return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, 'settings is needed'));
     }
@@ -160,7 +160,7 @@ export class SettingsMWs {
     }
   }
 
-  public static async updateMetaFileSettings(req: Request, res: Response, next: NextFunction): Promise<any> {
+  public static async updateMetaFileSettings(req: Request, res: Response, next: NextFunction): Promise<void> {
     if ((typeof req.body === 'undefined') || (typeof req.body.settings === 'undefined')) {
       return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, 'settings is needed'));
     }
@@ -187,7 +187,7 @@ export class SettingsMWs {
   }
 
 
-  public static async updateAlbumsSettings(req: Request, res: Response, next: NextFunction): Promise<any> {
+  public static async updateAlbumsSettings(req: Request, res: Response, next: NextFunction): Promise<void> {
     if ((typeof req.body === 'undefined') || (typeof req.body.settings === 'undefined')) {
       return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, 'settings is needed'));
     }
@@ -213,7 +213,7 @@ export class SettingsMWs {
     }
   }
 
-  public static async updateShareSettings(req: Request, res: Response, next: NextFunction): Promise<any> {
+  public static async updateShareSettings(req: Request, res: Response, next: NextFunction): Promise<void> {
     if ((typeof req.body === 'undefined') || (typeof req.body.settings === 'undefined')) {
       return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, 'settings is needed'));
     }
@@ -238,7 +238,7 @@ export class SettingsMWs {
     }
   }
 
-  public static async updateRandomPhotoSettings(req: Request, res: Response, next: NextFunction): Promise<any> {
+  public static async updateRandomPhotoSettings(req: Request, res: Response, next: NextFunction): Promise<void> {
     if ((typeof req.body === 'undefined') || (typeof req.body.settings === 'undefined')) {
       return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, 'settings is needed'));
     }
@@ -263,7 +263,7 @@ export class SettingsMWs {
     }
   }
 
-  public static async updateSearchSettings(req: Request, res: Response, next: NextFunction): Promise<any> {
+  public static async updateSearchSettings(req: Request, res: Response, next: NextFunction): Promise<void> {
     if ((typeof req.body === 'undefined') || (typeof req.body.settings === 'undefined')) {
       return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, 'settings is needed'));
     }
@@ -288,7 +288,7 @@ export class SettingsMWs {
     }
   }
 
-  public static async updateFacesSettings(req: Request, res: Response, next: NextFunction): Promise<any> {
+  public static async updateFacesSettings(req: Request, res: Response, next: NextFunction): Promise<void> {
     if ((typeof req.body === 'undefined') || (typeof req.body.settings === 'undefined')) {
       return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, 'settings is needed'));
     }
@@ -313,7 +313,7 @@ export class SettingsMWs {
     }
   }
 
-  public static async updateAuthenticationSettings(req: Request, res: Response, next: NextFunction): Promise<any> {
+  public static async updateAuthenticationSettings(req: Request, res: Response, next: NextFunction): Promise<void> {
     if ((typeof req.body === 'undefined') || (typeof req.body.settings === 'undefined')) {
       return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, 'settings is needed'));
     }
@@ -339,7 +339,7 @@ export class SettingsMWs {
     }
   }
 
-  public static async updateThumbnailSettings(req: Request, res: Response, next: NextFunction): Promise<any> {
+  public static async updateThumbnailSettings(req: Request, res: Response, next: NextFunction): Promise<void> {
     if ((typeof req.body === 'undefined') || (typeof req.body.settings === 'undefined')) {
       return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, 'settings is needed'));
     }
@@ -372,7 +372,7 @@ export class SettingsMWs {
     }
   }
 
-  public static async updatePhotoSettings(req: Request, res: Response, next: NextFunction): Promise<any> {
+  public static async updatePhotoSettings(req: Request, res: Response, next: NextFunction): Promise<void> {
     if ((typeof req.body === 'undefined') || (typeof req.body.settings === 'undefined')) {
       return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, 'settings is needed'));
     }
@@ -405,7 +405,7 @@ export class SettingsMWs {
     }
   }
 
-  public static async updateBasicSettings(req: Request, res: Response, next: NextFunction): Promise<any> {
+  public static async updateBasicSettings(req: Request, res: Response, next: NextFunction): Promise<void> {
     if ((typeof req.body === 'undefined') || (typeof req.body.settings === 'undefined')) {
       return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, 'settings is needed'));
     }
@@ -432,7 +432,7 @@ export class SettingsMWs {
     }
   }
 
-  public static async updateOtherSettings(req: Request, res: Response, next: NextFunction): Promise<any> {
+  public static async updateOtherSettings(req: Request, res: Response, next: NextFunction): Promise<void> {
     if ((typeof req.body === 'undefined') || (typeof req.body.settings === 'undefined')) {
       return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, 'settings is needed'));
     }
@@ -459,7 +459,7 @@ export class SettingsMWs {
     }
   }
 
-  public static async updateIndexingSettings(req: Request, res: Response, next: NextFunction): Promise<any> {
+  public static async updateIndexingSettings(req: Request, res: Response, next: NextFunction): Promise<void> {
     if ((typeof req.body === 'undefined') || (typeof req.body.settings === 'undefined')) {
       return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, 'settings is needed'));
     }
@@ -484,7 +484,7 @@ export class SettingsMWs {
     }
   }
 
-  public static async updateJobSettings(req: Request, res: Response, next: NextFunction): Promise<any> {
+  public static async updateJobSettings(req: Request, res: Response, next: NextFunction): Promise<void> {
     if ((typeof req.body === 'undefined') || (typeof req.body.settings === 'undefined')) {
       return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, 'settings is needed'));
     }

@@ -16,7 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [14.x]
+        node-version: [16.x]
 
     services:
        mariadb:
@@ -51,7 +51,7 @@ jobs:
         npm ci
         npm run build
 
-    - name: tslint
+    - name: lint
       run: |
         npm run lint
     - name: test

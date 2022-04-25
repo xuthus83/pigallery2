@@ -6,11 +6,14 @@ export class PasswordHelper {
     return bcrypt.hashSync(password, salt);
   }
 
-  public static comparePassword(password: string, encryptedPassword: string): boolean {
+  public static comparePassword(
+    password: string,
+    encryptedPassword: string
+  ): boolean {
     try {
       return bcrypt.compareSync(password, encryptedPassword);
-    } catch (e) {
-    }
+      // eslint-disable-next-line no-empty
+    } catch (e) {}
     return false;
   }
 }

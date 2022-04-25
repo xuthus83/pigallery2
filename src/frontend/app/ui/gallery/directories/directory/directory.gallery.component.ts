@@ -1,13 +1,15 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {DomSanitizer, SafeStyle} from '@angular/platform-browser';
-import {SubDirectoryDTO} from '../../../../../../common/entities/DirectoryDTO';
-import {RouterLink} from '@angular/router';
-import {Utils} from '../../../../../../common/Utils';
-import {Media} from '../../Media';
-import {Thumbnail, ThumbnailManagerService} from '../../thumbnailManager.service';
-import {QueryService} from '../../../../model/query.service';
-import {PreviewPhotoDTO} from '../../../../../../common/entities/PhotoDTO';
-
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
+import { SubDirectoryDTO } from '../../../../../../common/entities/DirectoryDTO';
+import { RouterLink } from '@angular/router';
+import { Utils } from '../../../../../../common/Utils';
+import { Media } from '../../Media';
+import {
+  Thumbnail,
+  ThumbnailManagerService,
+} from '../../thumbnailManager.service';
+import { QueryService } from '../../../../model/query.service';
+import { PreviewPhotoDTO } from '../../../../../../common/entities/PhotoDTO';
 
 @Component({
   selector: 'app-gallery-directory',
@@ -20,21 +22,24 @@ export class GalleryDirectoryComponent implements OnInit, OnDestroy {
   @Input() size: number;
   thumbnail: Thumbnail = null;
 
-  constructor(private thumbnailService: ThumbnailManagerService,
-              private sanitizer: DomSanitizer,
-              public queryService: QueryService) {
-
-  }
+  constructor(
+    private thumbnailService: ThumbnailManagerService,
+    private sanitizer: DomSanitizer,
+    public queryService: QueryService
+  ) {}
 
   public get SamplePhoto(): PreviewPhotoDTO {
     return this.directory.preview;
   }
 
   getSanitizedThUrl(): SafeStyle {
-    return this.sanitizer.bypassSecurityTrustStyle('url(' + this.thumbnail.Src
-      .replace(/\(/g, '%28')
-      .replace(/'/g, '%27')
-      .replace(/\)/g, '%29') + ')');
+    return this.sanitizer.bypassSecurityTrustStyle(
+      'url(' +
+        this.thumbnail.Src.replace(/\(/g, '%28')
+          .replace(/'/g, '%27')
+          .replace(/\)/g, '%29') +
+        ')'
+    );
   }
 
   // TODO: implement scroll
@@ -55,9 +60,10 @@ export class GalleryDirectoryComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     if (this.directory.preview) {
-      this.thumbnail = this.thumbnailService.getThumbnail(new Media(this.SamplePhoto, this.size, this.size));
+      this.thumbnail = this.thumbnailService.getThumbnail(
+        new Media(this.SamplePhoto, this.size, this.size)
+      );
     }
   }
-
 }
 

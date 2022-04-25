@@ -1,4 +1,4 @@
-import {FaceRegionEntry} from '../../backend/model/database/sql/enitites/FaceRegionEntry';
+import { FaceRegionEntry } from '../../backend/model/database/sql/enitites/FaceRegionEntry';
 
 export interface PersonWithSampleRegion extends PersonDTO {
   sampleRegion: FaceRegionEntry;
