@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 import {ProjectPath} from '../../src/backend/ProjectPath';
 import {promises as fsp} from 'fs';
-const chai = require('chai');
 import * as path from 'path';
+
+const chai = require('chai');
 const {expect} = chai;
 
 // to help WebStorm to handle the test cases
@@ -19,9 +21,12 @@ describe('UI', () => {
 
 
     for (const t of translations) {
-      const lang = t.substr(t.indexOf('.') + 1, 2);
+      let lang = t.substring(t.indexOf('.') + 1, t.indexOf('.') + 3);
       if (lang === 'en') {
         continue; // no need to add 'en' as it is the default language.
+      }
+      if (lang === 'cn') {
+        lang = 'zh'; // zh county code is Chinese
       }
       const translationPath = path.join(base, t).replace(new RegExp('\\\\', 'g'), '/');
       expect(knownTranslations[lang]).to.deep.equal({
