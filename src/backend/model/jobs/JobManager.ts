@@ -59,7 +59,7 @@ export class JobManager implements IJobManager, IJobListener {
       (allowParallelRun === false && this.JobRunning === true) ||
       this.JobNoParallelRunning === true
     ) {
-      throw new Error("Can't start this job while an other is running");
+      throw new Error("Can't start this job while another is running");
     }
 
     const t = this.findJob(jobName);
