@@ -21,7 +21,9 @@ import {DiskManager} from '../../../../../src/backend/model/DiskManger';
 import {AlbumManager} from '../../../../../src/backend/model/database/sql/AlbumManager';
 import {SortingMethods} from '../../../../../src/common/entities/SortingMethods';
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const deepEqualInAnyOrder = require('deep-equal-in-any-order');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const chai = require('chai');
 
 chai.use(deepEqualInAnyOrder);
@@ -53,9 +55,11 @@ class IndexingManagerTest extends IndexingManager {
 }
 
 // to help WebStorm to handle the test cases
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 declare let describe: any;
 declare const after: any;
 declare const it: any;
+// eslint-disable-next-line prefer-const
 describe = DBTestHelper.describe();
 
 describe('IndexingManager', (sqlHelper: DBTestHelper) => {
@@ -152,6 +156,46 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
 
     expect(Utils.clone(Utils.removeNullOrEmptyObj(removeIds(selected))))
       .to.deep.equalInAnyOrder(Utils.removeNullOrEmptyObj(indexifyReturn(parent)));
+  });
+
+
+  it('should stop indexing on empty folder', async () => {
+    const gm = new GalleryManagerTest();
+
+    ProjectPath.reset();
+    ProjectPath.ImageFolder = path.join(__dirname, '/../../../assets');
+    Config.Server.Threading.enabled = false;
+
+    await ObjectManagers.getInstance().IndexingManager.indexDirectory('.');
+    if (ObjectManagers.getInstance().IndexingManager.IsSavingInProgress) {
+      await ObjectManagers.getInstance().IndexingManager.SavingReady;
+    }
+
+    const directoryPath = GalleryManager.parseRelativeDirePath(
+      '.'
+    );
+    const conn = await SQLConnection.getConnection();
+    const selected = await gm.selectParentDir(conn, directoryPath.name,
+      directoryPath.parent);
+    await gm.fillParentDir(conn, selected);
+
+
+    expect(selected?.media?.length)
+      .to.be.greaterThan(0);
+    const tmpDir = path.join(__dirname, '/../../../tmp/rnd5sdf_emptyDir');
+    fs.mkdirSync(tmpDir);
+    ProjectPath.ImageFolder = tmpDir;
+    let notFailed = false;
+    try {
+      await ObjectManagers.getInstance().IndexingManager.indexDirectory('.');
+      notFailed = true;
+    } catch (e) {
+      // it expected to fail
+    }
+    if (notFailed) {
+      expect(true).to.equal(false, 'indexDirectory is expected to fail');
+    }
+
   });
 
 
@@ -605,6 +649,7 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
     });
 
     afterEach(() => {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       fs.statSync = statSync;
     });
@@ -612,6 +657,7 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
     it('with re indexing severity low', async () => {
       Config.Server.Indexing.reIndexingSensitivity = ReIndexingSensitivity.low;
 
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       fs.statSync = () => ({ctime: new Date(dirTime), mtime: new Date(dirTime)});
       const gm = new GalleryManagerTest();

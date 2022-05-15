@@ -1,34 +1,34 @@
-import { ParentDirectoryDTO } from '../../../../common/entities/DirectoryDTO';
-import { DirectoryEntity } from './enitites/DirectoryEntity';
-import { SQLConnection } from './SQLConnection';
-import { DiskManager } from '../../DiskManger';
-import { PhotoEntity, PhotoMetadataEntity } from './enitites/PhotoEntity';
-import { Utils } from '../../../../common/Utils';
+import {ParentDirectoryDTO} from '../../../../common/entities/DirectoryDTO';
+import {DirectoryEntity} from './enitites/DirectoryEntity';
+import {SQLConnection} from './SQLConnection';
+import {DiskManager} from '../../DiskManger';
+import {PhotoEntity, PhotoMetadataEntity} from './enitites/PhotoEntity';
+import {Utils} from '../../../../common/Utils';
 import {
   FaceRegion,
   PhotoMetadata,
 } from '../../../../common/entities/PhotoDTO';
-import { Connection, Repository } from 'typeorm';
-import { MediaEntity } from './enitites/MediaEntity';
-import { MediaDTO, MediaDTOUtils } from '../../../../common/entities/MediaDTO';
-import { VideoEntity } from './enitites/VideoEntity';
-import { FileEntity } from './enitites/FileEntity';
-import { FileDTO } from '../../../../common/entities/FileDTO';
-import { NotificationManager } from '../../NotifocationManager';
-import { FaceRegionEntry } from './enitites/FaceRegionEntry';
-import { ObjectManagers } from '../../ObjectManagers';
-import { IIndexingManager } from '../interfaces/IIndexingManager';
-import { DiskMangerWorker } from '../../threading/DiskMangerWorker';
-import { Logger } from '../../../Logger';
+import {Connection, Repository} from 'typeorm';
+import {MediaEntity} from './enitites/MediaEntity';
+import {MediaDTO, MediaDTOUtils} from '../../../../common/entities/MediaDTO';
+import {VideoEntity} from './enitites/VideoEntity';
+import {FileEntity} from './enitites/FileEntity';
+import {FileDTO} from '../../../../common/entities/FileDTO';
+import {NotificationManager} from '../../NotifocationManager';
+import {FaceRegionEntry} from './enitites/FaceRegionEntry';
+import {ObjectManagers} from '../../ObjectManagers';
+import {IIndexingManager} from '../interfaces/IIndexingManager';
+import {DiskMangerWorker} from '../../threading/DiskMangerWorker';
+import {Logger} from '../../../Logger';
 import {
   ServerPG2ConfMap,
   ServerSidePG2ConfAction,
 } from '../../../../common/PG2ConfMap';
-import { ProjectPath } from '../../../ProjectPath';
+import {ProjectPath} from '../../../ProjectPath';
 import * as path from 'path';
 import * as fs from 'fs';
-import { SearchQueryDTO } from '../../../../common/entities/SearchQueryDTO';
-import { PersonEntry } from './enitites/PersonEntry';
+import {SearchQueryDTO} from '../../../../common/entities/SearchQueryDTO';
+import {PersonEntry} from './enitites/PersonEntry';
 
 const LOG_TAG = '[IndexingManager]';
 
@@ -82,6 +82,14 @@ export class IndexingManager implements IIndexingManager {
     // eslint-disable-next-line no-async-promise-executor
     return new Promise(async (resolve, reject): Promise<void> => {
       try {
+        // Check if root is still a valid (non-empty) folder
+        // With weak devices it is possible that the media that stores
+        // the galley gets unmounted that triggers a full gallery wipe.
+        // Prevent it by stopping indexing on an empty folder.
+        if (fs.readdirSync(ProjectPath.ImageFolder).length === 0) {
+          return reject(new Error('Root directory is empty. This is probably error and would erase gallery database. Stopping indexing.'));
+        }
+
         const scannedDirectory = await DiskManager.scanDirectory(
           relativeDirectoryName
         );
@@ -157,9 +165,9 @@ export class IndexingManager implements IIndexingManager {
           dir.lastModified === scannedDirectory.lastModified &&
           dir.lastScanned === scannedDirectory.lastScanned &&
           (dir.media || dir.media.length) ===
-            (scannedDirectory.media || scannedDirectory.media.length) &&
+          (scannedDirectory.media || scannedDirectory.media.length) &&
           (dir.metaFile || dir.metaFile.length) ===
-            (scannedDirectory.metaFile || scannedDirectory.metaFile.length)
+          (scannedDirectory.metaFile || scannedDirectory.metaFile.length)
       ) !== -1
     ) {
       return;
@@ -230,11 +238,11 @@ export class IndexingManager implements IIndexingManager {
     await directoryRepository
       .createQueryBuilder()
       .update(DirectoryEntity)
-      .set({ parent: currentDirId as any })
+      .set({parent: currentDirId as any})
       .where('path = :path', {
         path: DiskMangerWorker.pathFromParent(scannedDirectory),
       })
-      .andWhere('name NOT LIKE :root', { root: DiskMangerWorker.dirName('.') })
+      .andWhere('name NOT LIKE :root', {root: DiskMangerWorker.dirName('.')})
       .andWhere('parent IS NULL')
       .execute();
 
@@ -258,7 +266,7 @@ export class IndexingManager implements IIndexingManager {
         childDirectories.splice(dirIndex, 1);
       } else {
         // dir does not exists yet
-        directory.parent = { id: currentDirId } as any;
+        directory.parent = {id: currentDirId} as any;
         (directory as DirectoryEntity).lastScanned = null; // new child dir, not fully scanned yet
         const d = await directoryRepository.insert(
           directory as DirectoryEntity
@@ -307,7 +315,7 @@ export class IndexingManager implements IIndexingManager {
         item.directory = null;
         metaFile = Utils.clone(item);
         item.directory = scannedDirectory;
-        metaFile.directory = { id: currentDirID } as any;
+        metaFile.directory = {id: currentDirID} as any;
         metaFilesToSave.push(metaFile);
       }
     }
@@ -369,10 +377,10 @@ export class IndexingManager implements IIndexingManager {
         // not in DB yet
         media[i].directory = null;
         mediaItem = Utils.clone(media[i]) as any;
-        mediaItem.directory = { id: parentDirId } as any;
+        mediaItem.directory = {id: parentDirId} as any;
         (MediaDTOUtils.isPhoto(mediaItem)
-          ? mediaChange.insertP
-          : mediaChange.insertV
+            ? mediaChange.insertP
+            : mediaChange.insertV
         ).push(mediaItem);
       } else {
         // already in the DB, only needs to be updated
@@ -380,8 +388,8 @@ export class IndexingManager implements IIndexingManager {
         if (!Utils.equalsFilter(mediaItem.metadata, media[i].metadata)) {
           mediaItem.metadata = media[i].metadata as any;
           (MediaDTOUtils.isPhoto(mediaItem)
-            ? mediaChange.saveP
-            : mediaChange.saveV
+              ? mediaChange.saveP
+              : mediaChange.saveV
           ).push(mediaItem);
         }
       }
@@ -412,7 +420,7 @@ export class IndexingManager implements IIndexingManager {
       );
       group.faces.forEach(
         (sf: FaceRegionEntry): any =>
-          (sf.media = { id: indexedMedia[mIndex].id } as any)
+          (sf.media = {id: indexedMedia[mIndex].id} as any)
       );
 
       faces.push(...group.faces);
@@ -435,7 +443,7 @@ export class IndexingManager implements IIndexingManager {
 
     for (const face of scannedFaces) {
       if (persons.findIndex((f) => f.name === face.name) === -1) {
-        persons.push({ name: face.name, faceRegion: face });
+        persons.push({name: face.name, faceRegion: face});
       }
     }
     await ObjectManagers.getInstance().PersonManager.saveAll(persons);
