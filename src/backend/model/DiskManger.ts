@@ -52,7 +52,6 @@ export class DiskManager {
         settings
       )) as ParentDirectoryDTO;
     }
-    DirectoryDTOUtils.unpackDirectory(directory);
     return directory;
   }
 }

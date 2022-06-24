@@ -1,22 +1,21 @@
-import { Injectable } from '@angular/core';
-import { NetworkService } from '../../model/network/network.service';
-import { ContentWrapper } from '../../../../common/entities/ConentWrapper';
+import {Injectable} from '@angular/core';
+import {NetworkService} from '../../model/network/network.service';
+import {ContentWrapper} from '../../../../common/entities/ConentWrapper';
 import {
-  DirectoryDTOUtils,
   ParentDirectoryDTO,
   SubDirectoryDTO,
 } from '../../../../common/entities/DirectoryDTO';
-import { GalleryCacheService } from './cache.gallery.service';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { Config } from '../../../../common/config/public/Config';
-import { ShareService } from './share.service';
-import { NavigationService } from '../../model/navigation.service';
-import { QueryParams } from '../../../../common/QueryParams';
-import { SearchQueryDTO } from '../../../../common/entities/SearchQueryDTO';
-import { ErrorCodes } from '../../../../common/entities/Error';
-import { map } from 'rxjs/operators';
-import { MediaDTO } from '../../../../common/entities/MediaDTO';
-import { FileDTO } from '../../../../common/entities/FileDTO';
+import {GalleryCacheService} from './cache.gallery.service';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {Config} from '../../../../common/config/public/Config';
+import {ShareService} from './share.service';
+import {NavigationService} from '../../model/navigation.service';
+import {QueryParams} from '../../../../common/QueryParams';
+import {SearchQueryDTO} from '../../../../common/entities/SearchQueryDTO';
+import {ErrorCodes} from '../../../../common/entities/Error';
+import {map} from 'rxjs/operators';
+import {MediaDTO} from '../../../../common/entities/MediaDTO';
+import {FileDTO} from '../../../../common/entities/FileDTO';
 
 @Injectable()
 export class ContentService {
@@ -48,14 +47,15 @@ export class ContentService {
   }
 
   public async loadDirectory(directoryName: string): Promise<void> {
-    const content = new ContentWrapperWithError();
 
-    content.directory = this.galleryCacheService.getDirectory(directoryName);
-    content.searchResult = null;
+    // load from cache
+    const cw = this.galleryCacheService.getDirectory(directoryName);
 
-    this.setContent(content);
+    ContentWrapper.unpack(cw);
+    this.setContent(cw);
     this.lastRequest.directory = directoryName;
 
+    // prepare server request
     const params: { [key: string]: any } = {};
     if (Config.Client.Sharing.enabled === true) {
       if (this.shareService.isSharing()) {
@@ -65,15 +65,15 @@ export class ContentService {
     }
 
     if (
-      content.directory &&
-      content.directory.lastModified &&
-      content.directory.lastScanned &&
-      !content.directory.isPartial
+      cw.directory &&
+      cw.directory.lastModified &&
+      cw.directory.lastScanned &&
+      !cw.directory.isPartial
     ) {
       params[QueryParams.gallery.knownLastModified] =
-        content.directory.lastModified;
+        cw.directory.lastModified;
       params[QueryParams.gallery.knownLastScanned] =
-        content.directory.lastScanned;
+        cw.directory.lastScanned;
     }
 
     try {
@@ -86,13 +86,13 @@ export class ContentService {
         return;
       }
 
-      this.galleryCacheService.setDirectory(cw.directory); // save it before adding references
+      this.galleryCacheService.setDirectory(cw); // save it before adding references
 
       if (this.lastRequest.directory !== directoryName) {
         return;
       }
 
-      DirectoryDTOUtils.unpackDirectory(cw.directory);
+      ContentWrapper.unpack(cw);
 
       this.lastDirectory = cw.directory;
       this.setContent(cw);
@@ -110,14 +110,11 @@ export class ContentService {
     this.ongoingSearch = query;
 
     this.setContent(new ContentWrapperWithError());
-    const cw = new ContentWrapperWithError();
-    cw.searchResult = this.galleryCacheService.getSearch(query);
-    if (cw.searchResult == null) {
+    let cw = this.galleryCacheService.getSearch(query);
+    if (!cw || cw.searchResult == null) {
       try {
-        cw.searchResult = (
-          await this.networkService.getJson<ContentWrapper>('/search/' + query)
-        ).searchResult;
-        this.galleryCacheService.setSearch(query, cw.searchResult);
+        cw = await this.networkService.getJson<ContentWrapperWithError>('/search/' + query);
+        this.galleryCacheService.setSearch(cw);
       } catch (e) {
         if (e.code === ErrorCodes.LocationLookUp_ERROR) {
           cw.error = 'Cannot find location: ' + e.message;
@@ -131,6 +128,7 @@ export class ContentService {
       return;
     }
 
+    ContentWrapper.unpack(cw);
     this.setContent(cw);
   }
 
@@ -140,7 +138,7 @@ export class ContentService {
 }
 
 export class ContentWrapperWithError extends ContentWrapper {
-  public error: string;
+  public error?: string;
 }
 
 export interface DirectoryContent {

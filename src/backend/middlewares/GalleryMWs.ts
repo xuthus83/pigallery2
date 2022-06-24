@@ -1,31 +1,26 @@
 import * as path from 'path';
-import { promises as fsp } from 'fs';
+import {promises as fsp} from 'fs';
 import * as archiver from 'archiver';
-import { NextFunction, Request, Response } from 'express';
-import { ErrorCodes, ErrorDTO } from '../../common/entities/Error';
+import {NextFunction, Request, Response} from 'express';
+import {ErrorCodes, ErrorDTO} from '../../common/entities/Error';
 import {
-  DirectoryBaseDTO,
-  DirectoryDTOUtils,
   ParentDirectoryDTO,
 } from '../../common/entities/DirectoryDTO';
-import { ObjectManagers } from '../model/ObjectManagers';
-import { ContentWrapper } from '../../common/entities/ConentWrapper';
-import { PhotoDTO } from '../../common/entities/PhotoDTO';
-import { ProjectPath } from '../ProjectPath';
-import { Config } from '../../common/config/private/Config';
-import { UserDTOUtils } from '../../common/entities/UserDTO';
-import { MediaDTO, MediaDTOUtils } from '../../common/entities/MediaDTO';
-import { VideoDTO } from '../../common/entities/VideoDTO';
-import { Utils } from '../../common/Utils';
-import { QueryParams } from '../../common/QueryParams';
-import { VideoProcessing } from '../model/fileprocessing/VideoProcessing';
+import {ObjectManagers} from '../model/ObjectManagers';
+import {ContentWrapper} from '../../common/entities/ConentWrapper';
+import {ProjectPath} from '../ProjectPath';
+import {Config} from '../../common/config/private/Config';
+import {UserDTOUtils} from '../../common/entities/UserDTO';
+import {MediaDTO, MediaDTOUtils} from '../../common/entities/MediaDTO';
+import {QueryParams} from '../../common/QueryParams';
+import {VideoProcessing} from '../model/fileprocessing/VideoProcessing';
 import {
   SearchQueryDTO,
   SearchQueryTypes,
 } from '../../common/entities/SearchQueryDTO';
-import { LocationLookupException } from '../exceptions/LocationLookupException';
-import { SupportedFormats } from '../../common/SupportedFormats';
-import { ServerTime } from './ServerTimingMWs';
+import {LocationLookupException} from '../exceptions/LocationLookupException';
+import {SupportedFormats} from '../../common/SupportedFormats';
+import {ServerTime} from './ServerTimingMWs';
 
 export class GalleryMWs {
   @ServerTime('1.db', 'List Directory')
@@ -130,12 +125,12 @@ export class GalleryMWs {
       // append photos in absoluteDirectoryName
       // using case-insensitive glob of extensions
       for (const ext of SupportedFormats.WithDots.Photos) {
-        archive.glob(`*${ext}`, { cwd: absoluteDirectoryName, nocase: true });
+        archive.glob(`*${ext}`, {cwd: absoluteDirectoryName, nocase: true});
       }
       // append videos in absoluteDirectoryName
       // using case-insensitive glob of extensions
       for (const ext of SupportedFormats.WithDots.Videos) {
-        archive.glob(`*${ext}`, { cwd: absoluteDirectoryName, nocase: true });
+        archive.glob(`*${ext}`, {cwd: absoluteDirectoryName, nocase: true});
       }
 
       await archive.finalize();
@@ -147,7 +142,7 @@ export class GalleryMWs {
     }
   }
 
-  @ServerTime('3.cleanUp', 'Clean up')
+  @ServerTime('3.pack', 'pack result')
   public static cleanUpGalleryResults(
     req: Request,
     res: Response,
@@ -160,38 +155,6 @@ export class GalleryMWs {
     const cw = req.resultPipe as ContentWrapper;
     if (cw.notModified === true) {
       return next();
-    }
-
-    const cleanUpMedia = (media: MediaDTO[]): void => {
-      for (const m of media) {
-        delete m.id;
-        if (MediaDTOUtils.isPhoto(m)) {
-          delete (m as VideoDTO).metadata.bitRate;
-          delete (m as VideoDTO).metadata.duration;
-        } else if (MediaDTOUtils.isVideo(m)) {
-          delete (m as PhotoDTO).metadata.rating;
-          delete (m as PhotoDTO).metadata.caption;
-          delete (m as PhotoDTO).metadata.cameraData;
-          delete (m as PhotoDTO).metadata.keywords;
-          delete (m as PhotoDTO).metadata.positionData;
-        }
-        if (m.directory) {
-          delete (m.directory as DirectoryBaseDTO).id;
-        }
-        Utils.removeNullOrEmptyObj(m);
-      }
-    };
-
-    if (cw.directory) {
-      DirectoryDTOUtils.packDirectory(cw.directory);
-      // TODO: remove when typeorm inheritance is fixed (and handles proper inheritance)
-      cleanUpMedia(cw.directory.media);
-    }
-    if (cw.searchResult) {
-      cw.searchResult.directories.forEach((d) =>
-        DirectoryDTOUtils.packDirectory(d)
-      );
-      cleanUpMedia(cw.searchResult.media);
     }
 
     if (Config.Client.Media.Video.enabled === false) {
@@ -209,6 +172,8 @@ export class GalleryMWs {
         );
       }
     }
+
+    ContentWrapper.pack(cw);
 
     return next();
   }
@@ -236,7 +201,7 @@ export class GalleryMWs {
         new ErrorDTO(
           ErrorCodes.GENERAL_ERROR,
           'no such file:' + req.params['mediaPath'],
-          "can't find file: " + fullMediaPath
+          'can\'t find file: ' + fullMediaPath
         )
       );
     }
@@ -263,7 +228,8 @@ export class GalleryMWs {
       await fsp.access(convertedVideo);
       req.resultPipe = convertedVideo;
       // eslint-disable-next-line no-empty
-    } catch (e) {}
+    } catch (e) {
+    }
 
     return next();
   }
@@ -375,7 +341,7 @@ export class GalleryMWs {
       return next(
         new ErrorDTO(
           ErrorCodes.GENERAL_ERROR,
-          "Can't get random photo: " + e.toString()
+          'Can\'t get random photo: ' + e.toString()
         )
       );
     }
