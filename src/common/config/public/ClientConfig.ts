@@ -204,16 +204,16 @@ export class ClientMetaFileConfig {
     description: 'Reads *.gpx files and renders them on the map.',
   })
   gpx: boolean = true;
-  @ConfigProperty({
-    description: 'Reads *.gpx files and renders them on the map.',
-  })
+
   @ConfigProperty()
   GPXCompressing: ClientGPXCompressingConfig = new ClientGPXCompressingConfig();
+
   @ConfigProperty({
     description:
       'Reads *.md files in a directory and shows the next to the map.',
   })
   markdown: boolean = true;
+
   @ConfigProperty({
     description:
       'Reads *.pg2conf files (You can use it for custom sorting and save search (albums)).',

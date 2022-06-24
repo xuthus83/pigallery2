@@ -1,11 +1,15 @@
-import { Injectable } from '@angular/core';
-import { NetworkService } from '../../../model/network/network.service';
-import { SettingsService } from '../settings.service';
-import { AbstractSettingsService } from '../_abstract/abstract.settings.service';
-import { ClientMetaFileConfig } from '../../../../../common/config/public/ClientConfig';
+import {Injectable} from '@angular/core';
+import {NetworkService} from '../../../model/network/network.service';
+import {SettingsService} from '../settings.service';
+import {AbstractSettingsService} from '../_abstract/abstract.settings.service';
+import {ClientMetaFileConfig} from '../../../../../common/config/public/ClientConfig';
+import {ServerMetaFileConfig} from '../../../../../common/config/private/PrivateConfig';
 
 @Injectable()
-export class MetaFileSettingsService extends AbstractSettingsService<ClientMetaFileConfig> {
+export class MetaFileSettingsService extends AbstractSettingsService<{
+  server: ServerMetaFileConfig;
+  client: ClientMetaFileConfig;
+}> {
   constructor(
     private networkService: NetworkService,
     settingsService: SettingsService
@@ -21,7 +25,10 @@ export class MetaFileSettingsService extends AbstractSettingsService<ClientMetaF
     return false;
   }
 
-  public updateSettings(settings: ClientMetaFileConfig): Promise<void> {
-    return this.networkService.putJson('/settings/metafile', { settings });
+  public updateSettings(settings: {
+    server: ServerMetaFileConfig;
+    client: ClientMetaFileConfig;
+  }): Promise<void> {
+    return this.networkService.putJson('/settings/metafile', {settings});
   }
 }

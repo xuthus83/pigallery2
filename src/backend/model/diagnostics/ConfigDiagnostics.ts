@@ -1,9 +1,9 @@
-import { Config } from '../../../common/config/private/Config';
-import { Logger } from '../../Logger';
-import { NotificationManager } from '../NotifocationManager';
-import { SQLConnection } from '../database/sql/SQLConnection';
+import {Config} from '../../../common/config/private/Config';
+import {Logger} from '../../Logger';
+import {NotificationManager} from '../NotifocationManager';
+import {SQLConnection} from '../database/sql/SQLConnection';
 import * as fs from 'fs';
-import { FFmpegFactory } from '../FFmpegFactory';
+import {FFmpegFactory} from '../FFmpegFactory';
 import {
   ClientAlbumConfig,
   ClientFacesConfig,
@@ -23,17 +23,18 @@ import {
   IPrivateConfig,
   ServerDataBaseConfig,
   ServerJobConfig,
+  ServerMetaFileConfig,
   ServerPhotoConfig,
   ServerPreviewConfig,
   ServerThumbnailConfig,
   ServerVideoConfig,
 } from '../../../common/config/private/PrivateConfig';
-import { SearchQueryParser } from '../../../common/SearchQueryParser';
+import {SearchQueryParser} from '../../../common/SearchQueryParser';
 import {
   SearchQueryTypes,
   TextSearch,
 } from '../../../common/entities/SearchQueryDTO';
-import { Utils } from '../../../common/Utils';
+import {Utils} from '../../../common/Utils';
 
 const LOG_TAG = '[ConfigDiagnostics]';
 
@@ -76,19 +77,26 @@ export class ConfigDiagnostics {
       } catch (e) {
         throw new Error(
           'Cannot read or write sqlite storage file: ' +
-            SQLConnection.getSQLiteDB(databaseConfig)
+          SQLConnection.getSQLiteDB(databaseConfig)
         );
       }
     }
   }
 
-  static async testMetaFileConfig(
+  static async testClientMetaFileConfig(
     metaFileConfig: ClientMetaFileConfig,
     config: IPrivateConfig
   ): Promise<void> {
     if (metaFileConfig.gpx === true && config.Client.Map.enabled === false) {
       throw new Error('*.gpx meta files are not supported without MAP');
     }
+  }
+
+  static async testServerMetaFileConfig(
+    metaFileConfig: ServerMetaFileConfig,
+    config: IPrivateConfig
+  ): Promise<void> {
+    // nothing to check at the moment
   }
 
   static testClientVideoConfig(videoConfig: ClientVideoConfig): Promise<void> {
@@ -101,7 +109,7 @@ export class ConfigDiagnostics {
               return reject(
                 new Error(
                   'Error accessing ffmpeg, cant find executable: ' +
-                    err.toString()
+                  err.toString()
                 )
               );
             }
@@ -110,7 +118,7 @@ export class ConfigDiagnostics {
                 return reject(
                   new Error(
                     'Error accessing ffmpeg-probe, cant find executable: ' +
-                      err2.toString()
+                    err2.toString()
                   )
                 );
               }
@@ -150,7 +158,7 @@ export class ConfigDiagnostics {
   static testImageFolder(folder: string): Promise<void> {
     return new Promise((resolve, reject) => {
       if (!fs.existsSync(folder)) {
-        reject("Images folder not exists: '" + folder + "'");
+        reject('Images folder not exists: \'' + folder + '\'');
       }
       fs.access(folder, fs.constants.R_OK, (err) => {
         if (err) {
@@ -327,8 +335,8 @@ export class ConfigDiagnostics {
       Logger.warn(
         LOG_TAG,
         'Thumbnail hardware acceleration is not possible.' +
-          " 'sharp' node module is not found." +
-          ' Falling back temporally to JS based thumbnail generation'
+        ' \'sharp\' node module is not found.' +
+        ' Falling back temporally to JS based thumbnail generation'
       );
       process.exit(1);
     }
@@ -362,8 +370,27 @@ export class ConfigDiagnostics {
     }
 
     try {
-      await ConfigDiagnostics.testMetaFileConfig(
+      await ConfigDiagnostics.testClientMetaFileConfig(
         Config.Client.MetaFile,
+        Config
+      );
+    } catch (ex) {
+      const err: Error = ex;
+      NotificationManager.warning(
+        'Meta file support error, switching off gpx..',
+        err.toString()
+      );
+      Logger.warn(
+        LOG_TAG,
+        'Meta file support error, switching off..',
+        err.toString()
+      );
+      Config.Client.MetaFile.gpx = false;
+    }
+
+    try {
+      await ConfigDiagnostics.testServerMetaFileConfig(
+        Config.Server.MetaFile,
         Config
       );
     } catch (ex) {
@@ -419,7 +446,7 @@ export class ConfigDiagnostics {
       const err: Error = ex;
       NotificationManager.warning(
         'Search is not supported with these settings. Disabling temporally. ' +
-          'Please adjust the config properly.',
+        'Please adjust the config properly.',
         err.toString()
       );
       Logger.warn(
@@ -455,7 +482,7 @@ export class ConfigDiagnostics {
       const err: Error = ex;
       NotificationManager.warning(
         'Faces are not supported with these settings. Disabling temporally. ' +
-          'Please adjust the config properly.',
+        'Please adjust the config properly.',
         err.toString()
       );
       Logger.warn(
@@ -472,7 +499,7 @@ export class ConfigDiagnostics {
       const err: Error = ex;
       NotificationManager.warning(
         'Some Tasks are not supported with these settings. Disabling temporally. ' +
-          'Please adjust the config properly.',
+        'Please adjust the config properly.',
         err.toString()
       );
       Logger.warn(
@@ -489,7 +516,7 @@ export class ConfigDiagnostics {
       const err: Error = ex;
       NotificationManager.warning(
         'Sharing is not supported with these settings. Disabling temporally. ' +
-          'Please adjust the config properly.',
+        'Please adjust the config properly.',
         err.toString()
       );
       Logger.warn(
@@ -509,7 +536,7 @@ export class ConfigDiagnostics {
       const err: Error = ex;
       NotificationManager.warning(
         'Random Media is not supported with these settings. Disabling temporally. ' +
-          'Please adjust the config properly.',
+        'Please adjust the config properly.',
         err.toString()
       );
       Logger.warn(
@@ -526,13 +553,13 @@ export class ConfigDiagnostics {
       const err: Error = ex;
       NotificationManager.warning(
         'Maps is not supported with these settings. Using open street maps temporally. ' +
-          'Please adjust the config properly.',
+        'Please adjust the config properly.',
         err.toString()
       );
       Logger.warn(
         LOG_TAG,
         'Maps is not supported with these settings. Using open street maps temporally ' +
-          'Please adjust the config properly.',
+        'Please adjust the config properly.',
         err.toString()
       );
       Config.Client.Map.mapProvider = MapProviders.OpenStreetMap;
