@@ -12,21 +12,42 @@
         description="Reads *.gpx files and renders them on the map."
         i18n-description i18n-name
         [disabled]="!(settingsService.Settings | async).Client.Map.enabled"
-        [ngModel]="states.gpx">
+        [ngModel]="states.client.gpx">
       </app-settings-entry>
+
+      <app-settings-entry
+        name="*.gpx compression"
+        description="Enables *.gpx file compression."
+        link="https://github.com/bpatrik/pigallery2/issues/504"
+        linkText="See 504."
+        i18n-description i18n-name
+        [disabled]="!(settingsService.Settings | async).Client.Map.enabled || !states.client.gpx.value"
+        [ngModel]="states.client.GPXCompressing.enabled">
+      </app-settings-entry>
+
+      <app-settings-entry
+        name="OnTheFly *.gpx compression"
+        description="Enables on the fly *.gpx compression."
+        i18n-description i18n-name
+        [simplifiedMode]="simplifiedMode"
+        [disabled]="!(settingsService.Settings | async).Client.Map.enabled || !states.client.GPXCompressing.enabled.value || !states.client.gpx.value"
+        [ngModel]="states.server.GPXCompressing.onTheFly">
+      </app-settings-entry>
+
+      <hr/>
 
       <app-settings-entry
         name="Markdown files"
         description="Reads *.md files in a directory and shows the next to the map."
         i18n-description i18n-name
-        [ngModel]="states.markdown">
+        [ngModel]="states.client.markdown">
       </app-settings-entry>
 
       <app-settings-entry
         name="*.pg2conf files"
         description="Reads *.pg2conf files (You can use it for custom sorting and save search (albums))."
         i18n-description i18n-name
-        [ngModel]="states.pg2conf">
+        [ngModel]="states.client.pg2conf">
       </app-settings-entry>
 
 

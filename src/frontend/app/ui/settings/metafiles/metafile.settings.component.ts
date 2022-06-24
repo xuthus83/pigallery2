@@ -4,7 +4,8 @@ import { SettingsComponentDirective } from '../_abstract/abstract.settings.compo
 import { AuthenticationService } from '../../../model/network/authentication.service';
 import { NavigationService } from '../../../model/navigation.service';
 import { NotificationService } from '../../../model/notification.service';
-import { ClientMetaFileConfig } from '../../../../../common/config/public/ClientConfig';
+import {ClientMetaFileConfig, ClientPhotoConfig} from '../../../../../common/config/public/ClientConfig';
+import {ServerMetaFileConfig, ServerPhotoConfig} from '../../../../../common/config/private/PrivateConfig';
 
 @Component({
   selector: 'app-settings-meta-file',
@@ -15,7 +16,10 @@ import { ClientMetaFileConfig } from '../../../../../common/config/public/Client
   ],
   providers: [MetaFileSettingsService],
 })
-export class MetaFileSettingsComponent extends SettingsComponentDirective<ClientMetaFileConfig> {
+export class MetaFileSettingsComponent extends SettingsComponentDirective<{
+  server: ServerMetaFileConfig;
+  client: ClientMetaFileConfig;
+}> {
   constructor(
     authService: AuthenticationService,
     navigation: NavigationService,
@@ -29,7 +33,10 @@ export class MetaFileSettingsComponent extends SettingsComponentDirective<Client
       navigation,
       settingsService,
       notification,
-      (s) => s.Client.MetaFile
+      (s) => ({
+        client: s.Client.MetaFile,
+        server: s.Server.MetaFile,
+      })
     );
   }
 }

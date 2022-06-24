@@ -6,22 +6,22 @@ import {
   OnChanges,
   ViewChild,
 } from '@angular/core';
-import { PhotoDTO } from '../../../../../../common/entities/PhotoDTO';
-import { Dimension } from '../../../../model/IRenderable';
-import { FullScreenService } from '../../fullscreen.service';
+import {PhotoDTO} from '../../../../../../common/entities/PhotoDTO';
+import {Dimension} from '../../../../model/IRenderable';
+import {FullScreenService} from '../../fullscreen.service';
 import {
   IconThumbnail,
   Thumbnail,
   ThumbnailBase,
   ThumbnailManagerService,
 } from '../../thumbnailManager.service';
-import { MediaIcon } from '../../MediaIcon';
-import { Media } from '../../Media';
-import { PageHelper } from '../../../../model/page.helper';
-import { FileDTO } from '../../../../../../common/entities/FileDTO';
-import { Utils } from '../../../../../../common/Utils';
-import { Config } from '../../../../../../common/config/public/Config';
-import { MapService } from '../map.service';
+import {MediaIcon} from '../../MediaIcon';
+import {Media} from '../../Media';
+import {PageHelper} from '../../../../model/page.helper';
+import {FileDTO} from '../../../../../../common/entities/FileDTO';
+import {Utils} from '../../../../../../common/Utils';
+import {Config} from '../../../../../../common/config/public/Config';
+import {MapService} from '../map.service';
 import {
   control,
   Control,
@@ -41,7 +41,7 @@ import {
   polyline,
   tileLayer,
 } from 'leaflet';
-import { LeafletControlLayersConfig } from '@asymmetrik/ngx-leaflet';
+import {LeafletControlLayersConfig} from '@asymmetrik/ngx-leaflet';
 
 @Component({
   selector: 'app-gallery-map-lightbox',
@@ -66,7 +66,7 @@ export class GalleryMapLightboxComponent implements OnChanges {
   public visible = false;
   public controllersVisible = false;
   public opacity = 1.0;
-  @ViewChild('root', { static: true }) elementRef: ElementRef;
+  @ViewChild('root', {static: true}) elementRef: ElementRef;
   public mapOptions: MapOptions = {
     zoom: 2,
     // setting max zoom is needed to MarkerCluster https://github.com/Leaflet/Leaflet.markercluster/issues/611
@@ -130,7 +130,7 @@ export class GalleryMapLightboxComponent implements OnChanges {
     ];
     for (let i = 0; i < mapService.Layers.length; ++i) {
       const l = mapService.Layers[i];
-      const tl = tileLayer(l.url, { attribution: mapService.Attributions });
+      const tl = tileLayer(l.url, {attribution: mapService.Attributions});
       if (i === 0) {
         this.mapOptions.layers.push(tl);
       }
@@ -140,7 +140,7 @@ export class GalleryMapLightboxComponent implements OnChanges {
     this.mapLayerControl = control.layers(
       this.mapLayersControlOption.baseLayers,
       this.mapLayersControlOption.overlays,
-      { position: 'bottomright' }
+      {position: 'bottomright'}
     );
   }
 
@@ -215,7 +215,7 @@ export class GalleryMapLightboxComponent implements OnChanges {
     if (
       PageHelper.ScrollY > to.top ||
       PageHelper.ScrollY + GalleryMapLightboxComponent.getScreenHeight() <
-        to.top
+      to.top
     ) {
       PageHelper.ScrollY = to.top;
     }
@@ -277,7 +277,7 @@ export class GalleryMapLightboxComponent implements OnChanges {
             `<img style="width: ${width}px; height: ${height}px" ` +
             `src="${photoTh.Src}" alt="preview">`;
           if (!mkr.getPopup()) {
-            mkr.bindPopup(photoPopup, { minWidth: width });
+            mkr.bindPopup(photoPopup, {minWidth: width});
           } else {
             mkr.setPopupContent(photoPopup);
           }
@@ -293,7 +293,7 @@ export class GalleryMapLightboxComponent implements OnChanges {
                   </span>
                   </div>`;
 
-          mkr.bindPopup(noPhotoPopup, { minWidth: width });
+          mkr.bindPopup(noPhotoPopup, {minWidth: width});
           mkr.on('popupopen', () => {
             photoTh.load();
             photoTh.CurrentlyWaiting = true;

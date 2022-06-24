@@ -12,7 +12,7 @@ import {
   DatabaseType,
   ServerDataBaseConfig,
   ServerIndexingConfig,
-  ServerJobConfig,
+  ServerJobConfig, ServerMetaFileConfig,
   ServerPhotoConfig,
   ServerPreviewConfig,
   ServerThumbnailConfig,
@@ -21,7 +21,7 @@ import {
 import {
   ClientAlbumConfig,
   ClientFacesConfig,
-  ClientMapConfig,
+  ClientMapConfig, ClientMediaConfig,
   ClientMetaFileConfig,
   ClientPhotoConfig,
   ClientRandomPhotoConfig,
@@ -166,13 +166,21 @@ export class SettingsMWs {
     }
 
     try {
-      const original = await Config.original();
-      await ConfigDiagnostics.testMetaFileConfig(req.body.settings as ClientMetaFileConfig, original);
+      const settings: {
+        server: ServerMetaFileConfig,
+        client: ClientMetaFileConfig
+      } = req.body.settings;
 
-      Config.Client.MetaFile = (req.body.settings as ClientMetaFileConfig);
+      const original = await Config.original();
+      await ConfigDiagnostics.testClientMetaFileConfig(settings.client, original);
+      await ConfigDiagnostics.testServerMetaFileConfig(settings.server, original);
+
+      Config.Client.MetaFile = settings.client;
+      Config.Server.MetaFile = settings.server;
       // only updating explicitly set config (not saving config set by the diagnostics)
 
-      original.Client.MetaFile = (req.body.settings as ClientMetaFileConfig);
+      original.Client.MetaFile = settings.client;
+      original.Server.MetaFile = settings.server;
       original.save();
       await ConfigDiagnostics.runDiagnostics();
       Logger.info(LOG_TAG, 'new config:');
