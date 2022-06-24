@@ -51,6 +51,7 @@
     "ts-exif-parser": "0.2.2",
     "ts-node-iptc": "1.0.11",
     "typeconfig": "2.0.21",
+    "xml2js": "0.4.23",
     "typeorm": "0.3.4"
   },
   "devDependencies": {
@@ -137,7 +138,6 @@
     "ts-node": "10.7.0",
     "webpack-bundle-analyzer": "4.5.0",
     "xlf-google-translate": "1.0.0-beta.22",
-    "xml2js": "0.4.23",
     "zone.js": "0.11.5"
   },
   "optionalDependencies": {
