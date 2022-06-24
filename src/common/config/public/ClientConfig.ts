@@ -183,6 +183,12 @@ export class ClientPhotoConfig {
 }
 
 @SubConfigClass()
+export class ClientGPXCompressingConfig {
+  @ConfigProperty()
+  enabled: boolean = true;
+}
+
+@SubConfigClass()
 export class ClientMediaConfig {
   @ConfigProperty()
   Thumbnail: ClientThumbnailConfig = new ClientThumbnailConfig();
@@ -198,6 +204,11 @@ export class ClientMetaFileConfig {
     description: 'Reads *.gpx files and renders them on the map.',
   })
   gpx: boolean = true;
+  @ConfigProperty({
+    description: 'Reads *.gpx files and renders them on the map.',
+  })
+  @ConfigProperty()
+  GPXCompressing: ClientGPXCompressingConfig = new ClientGPXCompressingConfig();
   @ConfigProperty({
     description:
       'Reads *.md files in a directory and shows the next to the map.',

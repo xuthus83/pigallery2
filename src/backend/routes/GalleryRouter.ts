@@ -9,6 +9,7 @@ import { VersionMWs } from '../middlewares/VersionMWs';
 import { SupportedFormats } from '../../common/SupportedFormats';
 import { PhotoConverterMWs } from '../middlewares/thumbnail/PhotoConverterMWs';
 import { ServerTimingMWs } from '../middlewares/ServerTimingMWs';
+import {MetaFileMWs} from '../middlewares/MetaFileMWs';
 
 export class GalleryRouter {
   public static route(app: Express): void {
@@ -21,6 +22,7 @@ export class GalleryRouter {
     this.addGetBestFitVideo(app);
     this.addGetVideo(app);
     this.addGetMetaFile(app);
+    this.addGetBestFitMetaFile(app);
     this.addRandom(app);
     this.addDirectoryList(app);
     this.addDirectoryZip(app);
@@ -153,6 +155,26 @@ export class GalleryRouter {
 
       // specific part
       GalleryMWs.loadFile,
+      ServerTimingMWs.addServerTiming,
+      RenderingMWs.renderFile
+    );
+  }
+
+  protected static addGetBestFitMetaFile(app: Express): void {
+    app.get(
+      [
+        '/api/gallery/content/:mediaPath(*.(' +
+        SupportedFormats.MetaFiles.join('|') +
+        '))/bestFit',
+      ],
+      // common part
+      AuthenticationMWs.authenticate,
+      AuthenticationMWs.normalizePathParam('mediaPath'),
+      AuthenticationMWs.authorisePath('mediaPath', false),
+
+      // specific part
+      GalleryMWs.loadFile,
+      MetaFileMWs.compressGPX,
       ServerTimingMWs.addServerTiming,
       RenderingMWs.renderFile
     );
