@@ -1,4 +1,4 @@
-import {ParentDirectoryDTO} from '../../../../common/entities/DirectoryDTO';
+import {DirectoryDTOUtils, DirectoryPathDTO, ParentDirectoryDTO} from '../../../../common/entities/DirectoryDTO';
 import {DirectoryEntity} from './enitites/DirectoryEntity';
 import {SQLConnection} from './SQLConnection';
 import {DiskManager} from '../../DiskManger';
@@ -43,14 +43,15 @@ export class IndexingManager implements IIndexingManager {
   }
 
   private static async processServerSidePG2Conf(
+    parent: DirectoryPathDTO,
     files: FileDTO[]
   ): Promise<void> {
     for (const f of files) {
       if (ServerPG2ConfMap[f.name] === ServerSidePG2ConfAction.SAVED_SEARCH) {
         const fullMediaPath = path.join(
           ProjectPath.ImageFolder,
-          f.directory.path,
-          f.directory.name,
+          parent.path,
+          parent.name,
           f.name
         );
 
@@ -94,12 +95,14 @@ export class IndexingManager implements IIndexingManager {
           relativeDirectoryName
         );
 
-        const dirClone = Utils.shallowClone(scannedDirectory);
+
+        const dirClone = Utils.clone(scannedDirectory);
         // filter server side only config from returning
         dirClone.metaFile = dirClone.metaFile.filter(
           (m) => !ServerPG2ConfMap[m.name]
         );
 
+        DirectoryDTOUtils.addReferences(dirClone);
         resolve(dirClone);
 
         // save directory to DB
@@ -142,7 +145,7 @@ export class IndexingManager implements IIndexingManager {
       await this.saveChildDirs(connection, currentDirId, scannedDirectory);
       await this.saveMedia(connection, currentDirId, scannedDirectory.media);
       await this.saveMetaFiles(connection, currentDirId, scannedDirectory);
-      await IndexingManager.processServerSidePG2Conf(serverSideConfigs);
+      await IndexingManager.processServerSidePG2Conf(scannedDirectory, serverSideConfigs);
       await ObjectManagers.getInstance().onDataChange(scannedDirectory);
     } finally {
       this.isSaving = false;

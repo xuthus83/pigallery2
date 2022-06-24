@@ -23,7 +23,7 @@ import {
 } from '../../../../../src/common/entities/SearchQueryDTO';
 import {IndexingManager} from '../../../../../src/backend/model/database/sql/IndexingManager';
 import {DirectoryBaseDTO, ParentDirectoryDTO, SubDirectoryDTO} from '../../../../../src/common/entities/DirectoryDTO';
-import {TestHelper} from './TestHelper';
+import {TestHelper} from '../../../../TestHelper';
 import {ObjectManagers} from '../../../../../src/backend/model/ObjectManagers';
 import {GalleryManager} from '../../../../../src/backend/model/database/sql/GalleryManager';
 import {Connection} from 'typeorm';
@@ -1039,7 +1039,7 @@ describe('SearchManager', (sqlHelper: DBTestHelper) => {
         .to.deep.equalInAnyOrder(removeDir({
         searchQuery: query,
         directories: [],
-        media: [p, p2, p4, v],
+        media: [p, p2, p4],
         metaFile: [],
         resultOverflow: false
       } as SearchResultDTO));

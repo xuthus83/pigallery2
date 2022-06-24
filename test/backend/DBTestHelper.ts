@@ -11,7 +11,7 @@ import {IndexingManager} from '../../src/backend/model/database/sql/IndexingMana
 import {GalleryManager} from '../../src/backend/model/database/sql/GalleryManager';
 import {Connection} from 'typeorm';
 import {Utils} from '../../src/common/Utils';
-import {TestHelper} from './unit/model/sql/TestHelper';
+import {TestHelper} from '../TestHelper';
 import {VideoDTO} from '../../src/common/entities/VideoDTO';
 import {PhotoDTO} from '../../src/common/entities/PhotoDTO';
 

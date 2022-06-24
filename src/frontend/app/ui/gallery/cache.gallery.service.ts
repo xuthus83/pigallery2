@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {DirectoryDTOUtils, DirectoryPathDTO, ParentDirectoryDTO,} from '../../../../common/entities/DirectoryDTO';
+import { DirectoryPathDTO, ParentDirectoryDTO,} from '../../../../common/entities/DirectoryDTO';
 import {Utils} from '../../../../common/Utils';
 import {Config} from '../../../../common/config/public/Config';
 import {IAutoCompleteItem} from '../../../../common/entities/AutoCompleteItem';
@@ -8,6 +8,8 @@ import {MediaDTO} from '../../../../common/entities/MediaDTO';
 import {SortingMethods} from '../../../../common/entities/SortingMethods';
 import {VersionService} from '../../model/version.service';
 import {SearchQueryDTO, SearchQueryTypes,} from '../../../../common/entities/SearchQueryDTO';
+import {ContentWrapper} from '../../../../common/entities/ConentWrapper';
+import {ContentWrapperWithError} from './content.service';
 
 interface CacheItem<T> {
   timestamp: number;
@@ -49,10 +51,10 @@ export class GalleryCacheService {
     return perfEntries && perfEntries[0] && perfEntries[0].type === 'reload';
   }
 
-  private static loadCacheItem(key: string): SearchResultDTO {
+  private static loadCacheItem(key: string): ContentWrapperWithError {
     const tmp = localStorage.getItem(key);
     if (tmp != null) {
-      const value: CacheItem<SearchResultDTO> = JSON.parse(tmp);
+      const value: CacheItem<ContentWrapperWithError> = JSON.parse(tmp);
       if (
         value.timestamp <
         Date.now() - Config.Client.Search.searchCacheTimeout
@@ -177,34 +179,7 @@ export class GalleryCacheService {
     }
   }
 
-  public getInstantSearch(text: string): SearchResultDTO {
-    if (Config.Client.Other.enableCache === false) {
-      return null;
-    }
-    const key = GalleryCacheService.INSTANT_SEARCH_PREFIX + text;
-    return GalleryCacheService.loadCacheItem(key);
-  }
-
-  public setInstantSearch(text: string, searchResult: SearchResultDTO): void {
-    if (Config.Client.Other.enableCache === false) {
-      return;
-    }
-    const tmp: CacheItem<SearchResultDTO> = {
-      timestamp: Date.now(),
-      item: searchResult,
-    };
-    try {
-      localStorage.setItem(
-        GalleryCacheService.INSTANT_SEARCH_PREFIX + text,
-        JSON.stringify(tmp)
-      );
-    } catch (e) {
-      this.reset();
-      console.error(e);
-    }
-  }
-
-  public getSearch(query: SearchQueryDTO): SearchResultDTO {
+  public getSearch(query: SearchQueryDTO): ContentWrapperWithError {
     if (Config.Client.Other.enableCache === false) {
       return null;
     }
@@ -212,15 +187,15 @@ export class GalleryCacheService {
     return GalleryCacheService.loadCacheItem(key);
   }
 
-  public setSearch(query: SearchQueryDTO, searchResult: SearchResultDTO): void {
+  public setSearch(cw: ContentWrapperWithError): void {
     if (Config.Client.Other.enableCache === false) {
       return;
     }
-    const tmp: CacheItem<SearchResultDTO> = {
+    const tmp: CacheItem<ContentWrapperWithError> = {
       timestamp: Date.now(),
-      item: searchResult,
+      item: cw,
     };
-    const key = GalleryCacheService.SEARCH_PREFIX + JSON.stringify(query);
+    const key = GalleryCacheService.SEARCH_PREFIX + JSON.stringify(cw.searchResult.searchQuery);
     try {
       localStorage.setItem(key, JSON.stringify(tmp));
     } catch (e) {
@@ -229,7 +204,7 @@ export class GalleryCacheService {
     }
   }
 
-  public getDirectory(directoryName: string): ParentDirectoryDTO {
+  public getDirectory(directoryName: string): ContentWrapperWithError {
     if (Config.Client.Other.enableCache === false) {
       return null;
     }
@@ -238,41 +213,29 @@ export class GalleryCacheService {
         GalleryCacheService.CONTENT_PREFIX + Utils.concatUrls(directoryName)
       );
       if (value != null) {
-        const directory: ParentDirectoryDTO = JSON.parse(value);
-
-        DirectoryDTOUtils.unpackDirectory(directory);
-        return directory;
+        return JSON.parse(value);
       }
     } catch (e) {
       // ignoring errors
     }
-    return null;
+    return new ContentWrapperWithError();
   }
 
-  public setDirectory(directory: ParentDirectoryDTO): void {
+  public setDirectory(cw: ContentWrapper): void {
     if (Config.Client.Other.enableCache === false) {
       return;
     }
 
     const key =
       GalleryCacheService.CONTENT_PREFIX +
-      Utils.concatUrls(directory.path, directory.name);
-    if (directory.isPartial === true && localStorage.getItem(key)) {
+      Utils.concatUrls(cw.directory.path, cw.directory.name);
+    if (cw.directory.isPartial === true && localStorage.getItem(key)) {
       return;
     }
 
     try {
       // try to fit it
-      localStorage.setItem(key, JSON.stringify(directory));
-      directory.directories.forEach((dir) => {
-        const subKey =
-          GalleryCacheService.CONTENT_PREFIX +
-          Utils.concatUrls(dir.path, dir.name);
-        if (localStorage.getItem(subKey) == null) {
-          // don't override existing
-          localStorage.setItem(subKey, JSON.stringify(dir));
-        }
-      });
+      localStorage.setItem(key, JSON.stringify(cw));
     } catch (e) {
       this.reset();
       console.error(e);
@@ -295,7 +258,7 @@ export class GalleryCacheService {
       const value = localStorage.getItem(directoryKey);
       if (value != null) {
         const directory: ParentDirectoryDTO = JSON.parse(value);
-        directory.media.forEach((p) => {
+        directory?.media?.forEach((p) => {
           if (p.name === media.name) {
             // update data
             p.metadata = media.metadata;

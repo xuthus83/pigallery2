@@ -55,7 +55,7 @@ const printExperimentResult = (result: BenchmarkResult, isSubResult = false) => 
     if (result.contentWrapper.directory) {
       details = 'media: ' + result.contentWrapper.directory.media.length +
         ', directories: ' + result.contentWrapper.directory.directories.length +
-        ', size: ' + fileSize(JSON.stringify(DirectoryDTOUtils.packDirectory(result.contentWrapper.directory)).length);
+        ', size: ' + fileSize(JSON.stringify(DirectoryDTOUtils.removeReferences(result.contentWrapper.directory)).length);
     } else {
       details = 'media: ' + result.contentWrapper.searchResult.media.length +
         ', directories: ' + result.contentWrapper.searchResult.directories.length +

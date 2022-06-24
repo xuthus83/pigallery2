@@ -1,4 +1,4 @@
-import { ParentDirectoryDTO } from '../../../../common/entities/DirectoryDTO';
+import {DirectoryDTOUtils, ParentDirectoryDTO} from '../../../../common/entities/DirectoryDTO';
 import { IGalleryManager } from '../interfaces/IGalleryManager';
 import * as path from 'path';
 import * as fs from 'fs';
@@ -32,6 +32,7 @@ export class GalleryManager implements IGalleryManager {
       }
     }
     const dir = await DiskManager.scanDirectory(relativeDirectoryName);
+    DirectoryDTOUtils.addReferences(dir);
     dir.metaFile = dir.metaFile.filter((m) => !ServerPG2ConfMap[m.name]);
     return dir;
   }
