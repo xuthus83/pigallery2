@@ -14,7 +14,6 @@ import {backendTexts} from '../../../../common/BackendTexts';
 import {ProjectPath} from '../../../ProjectPath';
 import {DatabaseType} from '../../../../common/config/private/PrivateConfig';
 import {FileEntity} from '../../database/sql/enitites/FileEntity';
-import {global} from '../../../../../node_modules/@angular/compiler/src/util';
 import {DirectoryBaseDTO, DirectoryDTOUtils} from '../../../../common/entities/DirectoryDTO';
 
 const LOG_TAG = '[FileJob]';

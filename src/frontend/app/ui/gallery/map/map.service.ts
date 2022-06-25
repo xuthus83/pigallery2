@@ -95,7 +95,7 @@ export class MapService {
       file.name
     );
     const gpx = await this.networkService.getXML(
-      '/gallery/content/' + filePath
+      '/gallery/content/' + filePath + '/bestFit'
     );
     const getCoordinates = (tagName: string): LatLngLiteral[] => {
       const elements = gpx.getElementsByTagName(tagName);
