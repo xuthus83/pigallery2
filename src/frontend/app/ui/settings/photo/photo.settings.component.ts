@@ -31,7 +31,6 @@ export class PhotoSettingsComponent extends SettingsComponentDirective<{
 }> {
   readonly resolutionTypes = [720, 1080, 1440, 2160, 4320];
   resolutions: { key: number; value: string }[] = [];
-  JobProgressStates = JobProgressStates;
 
   readonly jobName = DefaultsJobs[DefaultsJobs['Photo Converting']];
 

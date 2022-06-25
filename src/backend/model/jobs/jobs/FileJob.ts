@@ -1,27 +1,27 @@
-import { ConfigTemplateEntry } from '../../../../common/entities/job/JobDTO';
-import { Job } from './Job';
+import {ConfigTemplateEntry} from '../../../../common/entities/job/JobDTO';
+import {Job} from './Job';
 import * as path from 'path';
-import { DiskManager } from '../../DiskManger';
-import { DirectoryScanSettings } from '../../threading/DiskMangerWorker';
-import { Logger } from '../../../Logger';
-import { Config } from '../../../../common/config/private/Config';
-import { FileDTO } from '../../../../common/entities/FileDTO';
-import { SQLConnection } from '../../database/sql/SQLConnection';
-import { MediaEntity } from '../../database/sql/enitites/MediaEntity';
-import { PhotoEntity } from '../../database/sql/enitites/PhotoEntity';
-import { VideoEntity } from '../../database/sql/enitites/VideoEntity';
-import { backendTexts } from '../../../../common/BackendTexts';
-import { ProjectPath } from '../../../ProjectPath';
-import { DatabaseType } from '../../../../common/config/private/PrivateConfig';
+import {DiskManager} from '../../DiskManger';
+import {DirectoryScanSettings} from '../../threading/DiskMangerWorker';
+import {Logger} from '../../../Logger';
+import {Config} from '../../../../common/config/private/Config';
+import {FileDTO} from '../../../../common/entities/FileDTO';
+import {SQLConnection} from '../../database/sql/SQLConnection';
+import {MediaEntity} from '../../database/sql/enitites/MediaEntity';
+import {PhotoEntity} from '../../database/sql/enitites/PhotoEntity';
+import {VideoEntity} from '../../database/sql/enitites/VideoEntity';
+import {backendTexts} from '../../../../common/BackendTexts';
+import {ProjectPath} from '../../../ProjectPath';
+import {DatabaseType} from '../../../../common/config/private/PrivateConfig';
+import {FileEntity} from '../../database/sql/enitites/FileEntity';
+import {DirectoryBaseDTO, DirectoryDTOUtils} from '../../../../common/entities/DirectoryDTO';
 
 const LOG_TAG = '[FileJob]';
 
 /**
  * Abstract class for thumbnail creation, file deleting etc.
  */
-export abstract class FileJob<
-  S extends { indexedOnly: boolean } = { indexedOnly: boolean }
-> extends Job<S> {
+export abstract class FileJob<S extends { indexedOnly: boolean } = { indexedOnly: boolean }> extends Job<S> {
   public readonly ConfigTemplate: ConfigTemplateEntry[] = [];
   directoryQueue: string[] = [];
   fileQueue: string[] = [];
@@ -109,6 +109,7 @@ export abstract class FileJob<
     for (const item of scanned.directories) {
       this.directoryQueue.push(path.join(item.path, item.name));
     }
+    DirectoryDTOUtils.addReferences(scanned as DirectoryBaseDTO);
     if (this.scanFilter.noPhoto !== true || this.scanFilter.noVideo !== true) {
       const scannedAndFiltered = await this.filterMediaFiles(scanned.media);
       for (const item of scannedAndFiltered) {
@@ -138,38 +139,67 @@ export abstract class FileJob<
   }
 
   private async loadAllMediaFilesFromDB(): Promise<void> {
-    if (this.scanFilter.noVideo === true && this.scanFilter.noPhoto === true) {
+    if (this.scanFilter.noVideo === true &&
+      this.scanFilter.noPhoto === true &&
+      this.scanFilter.noMetaFile === true) {
       return;
     }
+
     this.Progress.log('Loading files from db');
     Logger.silly(LOG_TAG, 'Loading files from db');
 
     const connection = await SQLConnection.getConnection();
+    if (this.scanFilter.noVideo === false ||
+      this.scanFilter.noPhoto === false) {
 
-    let usedEntity = MediaEntity;
+      let usedEntity = MediaEntity;
 
-    if (this.scanFilter.noVideo === true) {
-      usedEntity = PhotoEntity;
-    } else if (this.scanFilter.noPhoto === true) {
-      usedEntity = VideoEntity;
+      if (this.scanFilter.noVideo === true) {
+        usedEntity = PhotoEntity;
+      } else if (this.scanFilter.noPhoto === true) {
+        usedEntity = VideoEntity;
+      }
+
+      const result = await connection
+        .getRepository(usedEntity)
+        .createQueryBuilder('media')
+        .select(['media.name', 'directory.name', 'directory.path'])
+        .leftJoin('media.directory', 'directory')
+        .getMany();
+
+      const scannedAndFiltered = await this.filterMediaFiles(result);
+      for (const item of scannedAndFiltered) {
+        this.fileQueue.push(
+          path.join(
+            ProjectPath.ImageFolder,
+            item.directory.path,
+            item.directory.name,
+            item.name
+          )
+        );
+      }
     }
+    if (this.scanFilter.noMetaFile === false) {
 
-    const result = await connection
-      .getRepository(usedEntity)
-      .createQueryBuilder('media')
-      .select(['media.name', 'media.id'])
-      .leftJoinAndSelect('media.directory', 'directory')
-      .getMany();
+      const result = await connection
+        .getRepository(FileEntity)
+        .createQueryBuilder('file')
+        .select(['file.name', 'directory.name', 'directory.path'])
+        .leftJoin('file.directory', 'directory')
+        .getMany();
 
-    for (const item of result) {
-      this.fileQueue.push(
-        path.join(
-          ProjectPath.ImageFolder,
-          item.directory.path,
-          item.directory.name,
-          item.name
-        )
-      );
+
+      const scannedAndFiltered = await this.filterMetaFiles(result);
+      for (const item of scannedAndFiltered) {
+        this.fileQueue.push(
+          path.join(
+            ProjectPath.ImageFolder,
+            item.directory.path,
+            item.directory.name,
+            item.name
+          )
+        );
+      }
     }
   }
 }
