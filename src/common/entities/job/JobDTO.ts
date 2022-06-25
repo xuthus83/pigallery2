@@ -11,6 +11,7 @@ export enum DefaultsJobs {
   'Temp Folder Cleaning' = 6,
   'Preview Filling' = 7,
   'Preview Reset' = 8,
+  'GPX Compression' = 9,
 }
 
 export interface ConfigTemplateEntry {

@@ -133,7 +133,7 @@ export class DiskMangerWorker {
     // nothing to scan, we are here for the empty dir
     if (
       settings.noPhoto === true &&
-      settings.noMetadata === true &&
+      settings.noMetaFile === true &&
       settings.noVideo === true
     ) {
       return directory;
@@ -270,6 +270,6 @@ export interface DirectoryScanSettings {
   noVideo?: boolean;
   noPhoto?: boolean;
   noDirectory?: boolean;
-  noMetadata?: boolean;
+  noMetadata?: boolean; // skip parsing images for metadata like exif, iptc
   noChildDirPhotos?: boolean;
 }

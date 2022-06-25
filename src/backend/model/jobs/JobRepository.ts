@@ -7,6 +7,7 @@ import { ThumbnailGenerationJob } from './jobs/ThumbnailGenerationJob';
 import { TempFolderCleaningJob } from './jobs/TempFolderCleaningJob';
 import { PreviewFillingJob } from './jobs/PreviewFillingJob';
 import { PreviewRestJob } from './jobs/PreviewResetJob';
+import {GPXCompressionJob} from './jobs/GPXCompressionJob';
 
 export class JobRepository {
   private static instance: JobRepository = null;
@@ -38,4 +39,5 @@ JobRepository.Instance.register(new PreviewRestJob());
 JobRepository.Instance.register(new VideoConvertingJob());
 JobRepository.Instance.register(new PhotoConvertingJob());
 JobRepository.Instance.register(new ThumbnailGenerationJob());
+JobRepository.Instance.register(new GPXCompressionJob());
 JobRepository.Instance.register(new TempFolderCleaningJob());
