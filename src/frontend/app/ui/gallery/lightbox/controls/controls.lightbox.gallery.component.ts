@@ -10,20 +10,20 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
-import { MediaDTOUtils } from '../../../../../../common/entities/MediaDTO';
-import { FullScreenService } from '../../fullscreen.service';
-import { GalleryPhotoComponent } from '../../grid/photo/photo.grid.gallery.component';
-import { Observable, Subscription, timer } from 'rxjs';
-import { filter } from 'rxjs/operators';
-import { PhotoDTO } from '../../../../../../common/entities/PhotoDTO';
-import { GalleryLightboxMediaComponent } from '../media/media.lightbox.gallery.component';
-import { Config } from '../../../../../../common/config/public/Config';
+import {MediaDTOUtils} from '../../../../../../common/entities/MediaDTO';
+import {FullScreenService} from '../../fullscreen.service';
+import {GalleryPhotoComponent} from '../../grid/photo/photo.grid.gallery.component';
+import {Observable, Subscription, timer} from 'rxjs';
+import {filter} from 'rxjs/operators';
+import {PhotoDTO} from '../../../../../../common/entities/PhotoDTO';
+import {GalleryLightboxMediaComponent} from '../media/media.lightbox.gallery.component';
+import {Config} from '../../../../../../common/config/public/Config';
 import {
   SearchQueryTypes,
   TextSearch,
   TextSearchQueryMatchTypes,
 } from '../../../../../../common/entities/SearchQueryDTO';
-import { AuthenticationService } from '../../../../model/network/authentication.service';
+import {AuthenticationService} from '../../../../model/network/authentication.service';
 
 export enum PlayBackStates {
   Paused = 1,
@@ -39,7 +39,7 @@ export enum PlayBackStates {
 export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
   readonly MAX_ZOOM = 10;
 
-  @ViewChild('root', { static: false }) root: ElementRef;
+  @ViewChild('root', {static: false}) root: ElementRef;
 
   @Output() closed = new EventEmitter();
   @Output() toggleInfoPanel = new EventEmitter();
@@ -47,10 +47,10 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
   @Output() nextPhoto = new EventEmitter();
   @Output() previousPhoto = new EventEmitter();
 
-  @Input() navigation = { hasPrev: true, hasNext: true };
+  @Input() navigation = {hasPrev: true, hasNext: true};
   @Input() activePhoto: GalleryPhotoComponent;
   @Input() mediaElement: GalleryLightboxMediaComponent;
-  @Input() photoFrameDim = { width: 1, height: 1, aspect: 1 };
+  @Input() photoFrameDim = {width: 1, height: 1, aspect: 1};
 
   public readonly facesEnabled = Config.Client.Faces.enabled;
 
@@ -60,14 +60,14 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
   public controllersDimmed = false;
   public controllersAlwaysOn = false;
   public controllersVisible = true;
-  public drag = { x: 0, y: 0 };
+  public drag = {x: 0, y: 0};
   public SearchQueryTypes = SearchQueryTypes;
-  public faceContainerDim = { width: 0, height: 0 };
+  public faceContainerDim = {width: 0, height: 0};
   public searchEnabled: boolean;
   private visibilityTimer: number = null;
   private timer: Observable<number>;
   private timerSub: Subscription;
-  private prevDrag = { x: 0, y: 0 };
+  private prevDrag = {x: 0, y: 0};
   private prevZoom = 1;
 
   constructor(
@@ -257,42 +257,33 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
     }
   }
 
+  private showNextMedia = () => {
+    if (this.mediaElement.imageLoadFinished.this === false ||
+      this.mediaElement.imageLoadFinished.next === false) {
+      return;
+    }
+    // do not skip video if its playing
+    if (
+      this.activePhoto &&
+      this.activePhoto.gridMedia.isVideo() &&
+      !this.mediaElement.Paused
+    ) {
+      return;
+    }
+    this.nextPhoto.emit();
+  };
+
   public play(): void {
     this.pause();
     this.timerSub = this.timer
       .pipe(filter((t) => t % 2 === 0))
-      .subscribe(() => {
-        if (this.mediaElement.imageLoadFinished === false) {
-          return;
-        }
-        // do not skip video if its playing
-        if (
-          this.activePhoto &&
-          this.activePhoto.gridMedia.isVideo() &&
-          !this.mediaElement.Paused
-        ) {
-          return;
-        }
-        this.nextPhoto.emit();
-      });
+      .subscribe(this.showNextMedia);
     this.playBackState = PlayBackStates.Play;
   }
 
   public fastForward(): void {
     this.pause();
-    this.timerSub = this.timer.subscribe(() => {
-      if (this.mediaElement.imageLoadFinished === false) {
-        return;
-      }
-      if (
-        this.activePhoto &&
-        this.activePhoto.gridMedia.isVideo() &&
-        !this.mediaElement.Paused
-      ) {
-        return;
-      }
-      this.nextPhoto.emit();
-    });
+    this.timerSub = this.timer.subscribe(this.showNextMedia);
     this.playBackState = PlayBackStates.FastForward;
   }
 

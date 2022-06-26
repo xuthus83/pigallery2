@@ -7,11 +7,11 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
-import { GridMedia } from '../../grid/GridMedia';
-import { MediaDTOUtils } from '../../../../../../common/entities/MediaDTO';
-import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
-import { SupportedFormats } from '../../../../../../common/SupportedFormats';
-import { Config } from '../../../../../../common/config/public/Config';
+import {GridMedia} from '../../grid/GridMedia';
+import {MediaDTOUtils} from '../../../../../../common/entities/MediaDTO';
+import {DomSanitizer, SafeStyle} from '@angular/platform-browser';
+import {SupportedFormats} from '../../../../../../common/SupportedFormats';
+import {Config} from '../../../../../../common/config/public/Config';
 
 @Component({
   selector: 'app-gallery-lightbox-media',
@@ -20,42 +20,50 @@ import { Config } from '../../../../../../common/config/public/Config';
 })
 export class GalleryLightboxMediaComponent implements OnChanges {
   @Input() gridMedia: GridMedia;
-  @Input() loadMedia = false;
+  @Input() nextGridMedia: GridMedia;
+  @Input() loadMedia = false; // prevents loading media
   @Input() windowAspect = 1;
   @Input() zoom = 1;
-  @Input() drag = { x: 0, y: 0 };
+  @Input() drag = {x: 0, y: 0};
   @Output() videoSourceError = new EventEmitter();
 
-  @ViewChild('video', { static: false }) video: ElementRef<HTMLVideoElement>;
+  @ViewChild('video', {static: false}) video: ElementRef<HTMLVideoElement>;
 
   prevGirdPhoto: GridMedia = null;
 
-  public imageSize = { width: 'auto', height: '100' };
-  public imageLoadFinished = false;
+  public imageSize = {width: 'auto', height: '100'};
+  private nextImage = new Image();
+  // do not skip to the next photo if not both are loaded (or resulted in an error)
+  public imageLoadFinished = {
+    this: false,
+    next: false
+  };
   thumbnailSrc: string = null;
   photo = {
     src: null as string,
     isBestFit: null as boolean,
   };
   public transcodeNeedVideos = SupportedFormats.TranscodeNeed.Videos;
+  // if media not loaded, show thumbnail
   private mediaLoaded = false;
   private videoProgress = 0;
 
-  constructor(public elementRef: ElementRef, private sanitizer: DomSanitizer) {}
+  constructor(public elementRef: ElementRef, private sanitizer: DomSanitizer) {
+  }
 
   get ImageTransform(): SafeStyle {
     return this.sanitizer.bypassSecurityTrustStyle(
       'scale(' +
-        this.zoom +
-        ') translate(calc(' +
-        -50 / this.zoom +
-        '% + ' +
-        this.drag.x / this.zoom +
-        'px), calc(' +
-        -50 / this.zoom +
-        '% + ' +
-        this.drag.y / this.zoom +
-        'px))'
+      this.zoom +
+      ') translate(calc(' +
+      -50 / this.zoom +
+      '% + ' +
+      this.drag.x / this.zoom +
+      'px), calc(' +
+      -50 / this.zoom +
+      '% + ' +
+      this.drag.y / this.zoom +
+      'px))'
     );
   }
 
@@ -120,8 +128,12 @@ export class GalleryLightboxMediaComponent implements OnChanges {
       this.prevGirdPhoto = this.gridMedia;
       this.thumbnailSrc = null;
       this.photo.src = null;
+      this.nextImage.src = "";
       this.mediaLoaded = false;
-      this.imageLoadFinished = false;
+      this.imageLoadFinished = {
+        this: false,
+        next: false
+      };
     }
     this.setImageSize();
     if (
@@ -156,16 +168,18 @@ export class GalleryLightboxMediaComponent implements OnChanges {
 
   onImageError(): void {
     // TODO:handle error
-    this.imageLoadFinished = true;
+    this.imageLoadFinished.this = true;
     console.error(
       'Error: cannot load media for lightbox url: ' +
-        this.gridMedia.getBestFitMediaPath()
+      this.gridMedia.getBestFitMediaPath()
     );
+    this.loadNextPhoto();
   }
 
   onImageLoad(): void {
-    this.imageLoadFinished = true;
+    this.imageLoadFinished.this = true;
     this.mediaLoaded = true;
+    this.loadNextPhoto();
   }
 
   public showThumbnail(): boolean {
@@ -178,9 +192,32 @@ export class GalleryLightboxMediaComponent implements OnChanges {
     );
   }
 
-  onSourceError($event: any): void {
+  onSourceError(): void {
     this.mediaLoaded = false;
     this.videoSourceError.emit();
+  }
+
+  /**
+   * Loads next photo to faster show it on navigation.
+   * Called after the current photo is loaded
+   * @private
+   */
+  private loadNextPhoto(): void {
+    if (!this.nextGridMedia || !this.loadMedia) {
+      return;
+    }
+    // Videos do not support preloading
+    if (!this.nextGridMedia.isPhoto()) {
+      this.imageLoadFinished.next = true;
+      return;
+    }
+    if (Config.Client.Media.Photo.Converting.enabled === true) {
+      this.nextImage.src = this.nextGridMedia.getBestFitMediaPath();
+    } else {
+      this.nextImage.src = this.nextGridMedia.getMediaPath();
+    }
+    this.nextImage.onload = () => this.imageLoadFinished.next = true;
+
   }
 
   private loadPhoto(): void {

@@ -22,7 +22,7 @@
          (error)="onImageError()"
          (timeupdate)="onVideoProgress()"
          #video>
-    <source [src]="gridMedia.getBestFitMediaPath()" (error)="onSourceError($event)">
+    <source [src]="gridMedia.getBestFitMediaPath()" (error)="onSourceError()">
     Something went wrong.
   </video>
 

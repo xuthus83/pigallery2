@@ -6,6 +6,7 @@
 
   <div class="lightbox" #lightbox>
     <app-gallery-lightbox-media [gridMedia]="activePhoto ? activePhoto.gridMedia : null"
+                                [nextGridMedia]="NexGridMedia"
                                 [loadMedia]="!animating"
                                 [zoom]="controls ? controls.Zoom : 1"
                                 [drag]="controls ? controls.drag : {x:0,y:0}"
