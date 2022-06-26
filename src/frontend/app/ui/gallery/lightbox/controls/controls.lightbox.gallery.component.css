@@ -154,6 +154,21 @@
   opacity: 1.0;
 }
 
+@keyframes blink {
+  0% {
+    opacity: 0.5;
+  }
+  25% {
+    opacity: 1.0;
+  }
+  75% {
+    opacity: 1.0;
+  }
+  100% {
+    opacity: 0.5;
+  }
+}
+
 @-webkit-keyframes blink {
   0% {
     opacity: 0.5;

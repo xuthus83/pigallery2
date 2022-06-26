@@ -15,6 +15,7 @@ import {ContentService} from '../content.service';
 import {PhotoDTO} from '../../../../../common/entities/PhotoDTO';
 import {ControlsLightboxComponent} from './controls/controls.lightbox.gallery.component';
 import {SupportedFormats} from '../../../../../common/SupportedFormats';
+import {GridMedia} from '../grid/GridMedia';
 
 export enum LightboxStates {
   Open = 1,
@@ -389,7 +390,7 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
     this.router
       .navigate([], {
         queryParams: this.queryService.getParams(
-          this.gridPhotoQL.toArray()[photoIndex].gridMedia.media
+          this.gridPhotoQL.get(photoIndex).gridMedia.media
         ),
       })
       .catch(console.error);
@@ -440,14 +441,12 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
   }
 
   private updateActivePhoto(photoIndex: number, resize = true): void {
-    const pcList = this.gridPhotoQL.toArray();
-
     if (photoIndex < 0 || photoIndex > this.gridPhotoQL.length) {
       throw new Error('Can\'t find the media');
     }
     this.videoSourceError = false;
     this.activePhotoId = photoIndex;
-    this.activePhoto = pcList[photoIndex];
+    this.activePhoto = this.gridPhotoQL.get(photoIndex);
 
     if (resize) {
       this.animatePhoto(
@@ -455,7 +454,7 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
       );
     }
     this.navigation.hasPrev = photoIndex > 0;
-    this.navigation.hasNext = photoIndex + 1 < pcList.length;
+    this.navigation.hasNext = photoIndex + 1 < this.gridPhotoQL.length;
 
     const to = this.activePhoto.getDimension();
 
@@ -500,6 +499,13 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
     const left = this.photoFrameDim.width / 2 - width / 2;
 
     return {top, left, width, height} as Dimension;
+  }
+
+  get NexGridMedia(): GridMedia {
+    if (this.activePhotoId + 1 < this.gridPhotoQL?.length) {
+      return this.gridPhotoQL.get(this.activePhotoId + 1)?.gridMedia;
+    }
+    return null;
   }
 }
 
