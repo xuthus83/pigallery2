@@ -18,6 +18,7 @@ This is a **fast** (like faster than your PC fast) **directory-first photo galle
 
 ⛔ Weakness:
  * 😥 Its simple. Shows what you have that's it. No gallery changes (photo delete, rotate, enhance, tag, organize, etc), your gallery folder is read-only.
+ * 📁 Optimized for galleries with <100K photos with <5k photos/folder
 
 ## Live Demo
 Live Demo @ heroku: https://pigallery2.herokuapp.com/ 
