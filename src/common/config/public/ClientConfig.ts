@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-inferrable-types */
 import 'reflect-metadata';
-import { SortingMethods } from '../../entities/SortingMethods';
-import { UserRoles } from '../../entities/UserDTO';
-import { ConfigProperty, SubConfigClass } from 'typeconfig/common';
-import { IPrivateConfig } from '../private/PrivateConfig';
+import {SortingMethods} from '../../entities/SortingMethods';
+import {UserRoles} from '../../entities/UserDTO';
+import {ConfigProperty, SubConfigClass} from 'typeconfig/common';
+import {IPrivateConfig} from '../private/PrivateConfig';
 
 export enum MapProviders {
   OpenStreetMap = 1,
@@ -15,11 +15,11 @@ export enum MapProviders {
 export class AutoCompleteConfig {
   @ConfigProperty()
   enabled: boolean = true;
-  @ConfigProperty({ type: 'unsignedInt' })
+  @ConfigProperty({type: 'unsignedInt'})
   targetItemsPerCategory: number = 5;
-  @ConfigProperty({ type: 'unsignedInt' })
+  @ConfigProperty({type: 'unsignedInt'})
   maxItems: number = 30;
-  @ConfigProperty({ type: 'unsignedInt' })
+  @ConfigProperty({type: 'unsignedInt'})
   cacheTimeout: number = 1000 * 60 * 60;
 }
 
@@ -27,11 +27,11 @@ export class AutoCompleteConfig {
 export class ClientSearchConfig {
   @ConfigProperty()
   enabled: boolean = true;
-  @ConfigProperty({ type: 'unsignedInt' })
+  @ConfigProperty({type: 'unsignedInt'})
   searchCacheTimeout: number = 1000 * 60 * 60;
   @ConfigProperty()
   AutoComplete: AutoCompleteConfig = new AutoCompleteConfig();
-  @ConfigProperty({ type: 'unsignedInt' })
+  @ConfigProperty({type: 'unsignedInt'})
   maxMediaResult: number = 10000;
   @ConfigProperty({
     description: 'Search returns also with directories, not just media',
@@ -42,7 +42,7 @@ export class ClientSearchConfig {
       'Search also returns with metafiles from directories that contain a media file of the matched search result',
   })
   listMetafiles: boolean = true;
-  @ConfigProperty({ type: 'unsignedInt' })
+  @ConfigProperty({type: 'unsignedInt'})
   maxDirectoryResult: number = 200;
 }
 
@@ -62,7 +62,7 @@ export class ClientSharingConfig {
 
 @SubConfigClass()
 export class ClientRandomPhotoConfig {
-  @ConfigProperty({ description: 'Enables random link generation.' })
+  @ConfigProperty({description: 'Enables random link generation.'})
   enabled: boolean = true;
 }
 
@@ -92,23 +92,23 @@ export class ClientMapConfig {
   maxPreviewMarkers: number = 50;
   @ConfigProperty()
   useImageMarkers: boolean = true;
-  @ConfigProperty({ type: MapProviders })
+  @ConfigProperty({type: MapProviders})
   mapProvider: MapProviders = MapProviders.OpenStreetMap;
   @ConfigProperty()
   mapboxAccessToken: string = '';
-  @ConfigProperty({ arrayType: MapLayers })
+  @ConfigProperty({arrayType: MapLayers})
   customLayers: MapLayers[] = [new MapLayers()];
 }
 
 @SubConfigClass()
 export class ClientThumbnailConfig {
-  @ConfigProperty({ type: 'unsignedInt', max: 100 })
+  @ConfigProperty({type: 'unsignedInt', max: 100})
   iconSize: number = 45;
-  @ConfigProperty({ type: 'unsignedInt' })
+  @ConfigProperty({type: 'unsignedInt'})
   personThumbnailSize: number = 200;
-  @ConfigProperty({ arrayType: 'unsignedInt' })
+  @ConfigProperty({arrayType: 'unsignedInt'})
   thumbnailSizes: number[] = [240, 480];
-  @ConfigProperty({ volatile: true })
+  @ConfigProperty({volatile: true})
   concurrentThumbnailGenerations: number = 1;
 
   /**
@@ -120,6 +120,13 @@ export class ClientThumbnailConfig {
       m[v] = Math.pow(2, i + 1);
     });
     return m;
+  }
+
+  /**
+   * Generates a map for bitwise operation from icon and normal thumbnails
+   */
+  generateThumbnailMapEntries(): { size: number, bit: number }[] {
+    return Object.entries(this.generateThumbnailMap()).map(v => ({size: parseInt(v[0]), bit: v[1]}));
   }
 }
 
@@ -137,7 +144,7 @@ export class ClientOtherConfig {
   enableCache: boolean = true;
   @ConfigProperty()
   enableOnScrollRendering: boolean = true;
-  @ConfigProperty({ type: SortingMethods })
+  @ConfigProperty({type: SortingMethods})
   defaultPhotoSortingMethod: SortingMethods = SortingMethods.ascDate;
   @ConfigProperty({
     description:
@@ -227,9 +234,9 @@ export class ClientFacesConfig {
   enabled: boolean = true;
   @ConfigProperty()
   keywordsToPersons: boolean = true;
-  @ConfigProperty({ type: UserRoles })
+  @ConfigProperty({type: UserRoles})
   writeAccessMinRole: UserRoles = UserRoles.Admin;
-  @ConfigProperty({ type: UserRoles })
+  @ConfigProperty({type: UserRoles})
   readAccessMinRole: UserRoles = UserRoles.User;
 }
 
@@ -255,9 +262,9 @@ export class ClientConfig {
   Other: ClientOtherConfig = new ClientOtherConfig();
   @ConfigProperty()
   authenticationRequired: boolean = true;
-  @ConfigProperty({ type: UserRoles })
+  @ConfigProperty({type: UserRoles})
   unAuthenticatedUserRole: UserRoles = UserRoles.Admin;
-  @ConfigProperty({ arrayType: 'string', volatile: true })
+  @ConfigProperty({arrayType: 'string', volatile: true})
   languages: string[] | undefined;
   @ConfigProperty()
   Media: ClientMediaConfig = new ClientMediaConfig();

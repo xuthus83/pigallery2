@@ -164,6 +164,10 @@ export class ContentWrapper {
         }
       }
 
+      if (m.missingThumbnails === 0) {
+        delete m.missingThumbnails;
+      }
+
       if (MediaDTOUtils.isPhoto(m)) {
         delete (m as VideoDTO).metadata.bitRate;
         delete (m as VideoDTO).metadata.duration;
