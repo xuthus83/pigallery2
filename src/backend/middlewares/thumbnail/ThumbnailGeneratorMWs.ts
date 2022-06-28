@@ -1,23 +1,23 @@
 import * as path from 'path';
 import * as fs from 'fs';
-import { NextFunction, Request, Response } from 'express';
-import { ErrorCodes, ErrorDTO } from '../../../common/entities/Error';
-import { ContentWrapper } from '../../../common/entities/ConentWrapper';
+import {NextFunction, Request, Response} from 'express';
+import {ErrorCodes, ErrorDTO} from '../../../common/entities/Error';
+import {ContentWrapper} from '../../../common/entities/ConentWrapper';
 import {
   ParentDirectoryDTO,
   SubDirectoryDTO,
 } from '../../../common/entities/DirectoryDTO';
-import { ProjectPath } from '../../ProjectPath';
-import { Config } from '../../../common/config/private/Config';
-import { ThumbnailSourceType } from '../../model/threading/PhotoWorker';
-import { MediaDTO } from '../../../common/entities/MediaDTO';
-import { PhotoProcessing } from '../../model/fileprocessing/PhotoProcessing';
-import { PersonWithSampleRegion } from '../../../common/entities/PersonDTO';
-import { ServerTime } from '../ServerTimingMWs';
+import {ProjectPath} from '../../ProjectPath';
+import {Config} from '../../../common/config/private/Config';
+import {ThumbnailSourceType} from '../../model/threading/PhotoWorker';
+import {MediaDTO} from '../../../common/entities/MediaDTO';
+import {PhotoProcessing} from '../../model/fileprocessing/PhotoProcessing';
+import {PersonWithSampleRegion} from '../../../common/entities/PersonDTO';
+import {ServerTime} from '../ServerTimingMWs';
 
 export class ThumbnailGeneratorMWs {
-  private static ThumbnailMap: { [key: number]: number } =
-    Config.Client.Media.Thumbnail.generateThumbnailMap();
+  private static ThumbnailMapEntries =
+    Config.Client.Media.Thumbnail.generateThumbnailMapEntries();
 
   @ServerTime('2.th', 'Thumbnail decoration')
   public static async addThumbnailInformation(
@@ -34,6 +34,10 @@ export class ThumbnailGeneratorMWs {
       if (cw.notModified === true) {
         return next();
       }
+
+      // regenerate in case the list change since startup
+      ThumbnailGeneratorMWs.ThumbnailMapEntries =
+        Config.Client.Media.Thumbnail.generateThumbnailMapEntries();
       if (cw.directory) {
         ThumbnailGeneratorMWs.addThInfoTODir(cw.directory);
       }
@@ -209,8 +213,6 @@ export class ThumbnailGeneratorMWs {
   private static addThInfoTODir(
     directory: ParentDirectoryDTO | SubDirectoryDTO
   ): void {
-    ThumbnailGeneratorMWs.ThumbnailMap =
-      Config.Client.Media.Thumbnail.generateThumbnailMap();
     if (typeof directory.media !== 'undefined') {
       ThumbnailGeneratorMWs.addThInfoToPhotos(directory.media);
     }
@@ -220,8 +222,8 @@ export class ThumbnailGeneratorMWs {
   }
 
   private static addThInfoToPhotos(photos: MediaDTO[]): void {
-    for (const item of photos) {
-      this.addThInfoToAPhoto(item);
+    for (let i = 0; i < photos.length; ++i) {
+      this.addThInfoToAPhoto(photos[i]);
     }
   }
 
@@ -232,19 +234,18 @@ export class ThumbnailGeneratorMWs {
       photo.directory.name,
       photo.name
     );
-    for (const _s of Object.keys(ThumbnailGeneratorMWs.ThumbnailMap)) {
-      const size = parseInt(_s)
+    for (let i = 0; i < ThumbnailGeneratorMWs.ThumbnailMapEntries.length; ++i) {
+      const entry = ThumbnailGeneratorMWs.ThumbnailMapEntries[i];
       const thPath = PhotoProcessing.generateConvertedPath(
         fullMediaPath,
-        size
+        entry.size
       );
       if (fs.existsSync(thPath) !== true) {
         if (typeof photo.missingThumbnails === 'undefined') {
           photo.missingThumbnails = 0;
         }
         // this is a bitwise operation
-        photo.missingThumbnails +=
-          ThumbnailGeneratorMWs.ThumbnailMap[size];
+        photo.missingThumbnails += entry.bit;
       }
     }
   }

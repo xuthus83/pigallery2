@@ -34,6 +34,9 @@ describe('ContentWrapper', () => {
         delete (m as PhotoDTO).metadata.faces;
         delete (m as PhotoDTO).metadata.positionData;
       }
+      if (m.missingThumbnails === 0) {
+        delete m.missingThumbnails;
+      }
     }
     for (let i = 0; i < content.metaFile.length; ++i) {
       delete content.metaFile[i].id;
