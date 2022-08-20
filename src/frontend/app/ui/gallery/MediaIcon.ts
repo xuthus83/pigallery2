@@ -42,6 +42,7 @@ export class MediaIcon {
         // .replace(new RegExp('%', 'g'), '%25') // order important
         .replace(new RegExp('#', 'g'), '%23')
         .replace(new RegExp('\\$', 'g'), '%24')
+        .replace(new RegExp('\\?', 'g'), '%3F')
     );
   }
 
