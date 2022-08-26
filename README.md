@@ -47,7 +47,7 @@ For configuration and docker-compose files read more [here](docker/README.md) or
 
 
 ### 1.2 Direct Install (if you are familiar with Node.js and building npm packages from source)
-As an alternative, you can also directly install Node.js and the app and run it natively. 
+As an alternative, you can also directly [install Node.js](https://www.scaler.com/topics/javascript/install-node-js/) and the app and run it natively. 
 ### 1.2.0 [Install Node.js](https://nodejs.org/en/download/)
 Download and extract
 ```bash
