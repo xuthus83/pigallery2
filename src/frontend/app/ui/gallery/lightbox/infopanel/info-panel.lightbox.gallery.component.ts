@@ -158,7 +158,7 @@ export class InfoPanelLightboxComponent implements OnInit, OnChanges {
     if (f > 1) {
       return f;
     }
-    return '1/' + 1 / f;
+    return '1/' + Math.round(1 / f);
   }
 
   hasPositionData(): boolean {

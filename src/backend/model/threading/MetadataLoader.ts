@@ -152,7 +152,7 @@ export class MetadataLoader {
               if (Utils.isFloat32(exif.tags.ExposureTime)) {
                 metadata.cameraData = metadata.cameraData || {};
                 metadata.cameraData.exposure = parseFloat(
-                  parseFloat('' + exif.tags.ExposureTime).toFixed(4)
+                  parseFloat('' + exif.tags.ExposureTime).toFixed(6)
                 );
               }
               if (Utils.isFloat32(exif.tags.FNumber)) {
