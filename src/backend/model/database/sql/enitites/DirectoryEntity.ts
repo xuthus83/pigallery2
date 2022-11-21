@@ -61,7 +61,7 @@ export class DirectoryEntity
 
   isPartial?: boolean;
 
-  @Column('smallint', { unsigned: true })
+  @Column('mediumint', { unsigned: true })
   mediaCount: number;
 
   @Index()
