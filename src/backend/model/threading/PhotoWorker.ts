@@ -161,7 +161,7 @@ export class ImageRendererFactory {
           fit: 'cover',
         });
       }
-      await image.withMetadata().jpeg().toFile(input.outPath);
+      await image.withMetadata().webp({effort: 6, quality: 60}).toFile(input.outPath);
     };
   }
 }

@@ -121,7 +121,7 @@ export class PhotoProcessing {
     return path.join(
       ProjectPath.TranscodedFolder,
       ProjectPath.getRelativePathToImages(path.dirname(mediaPath)),
-      file + '_' + size + '.jpg'
+      file + '_' + size + '.webp'
     );
   }
 
@@ -146,7 +146,7 @@ export class PhotoProcessing {
         .digest('hex') +
         '_' +
         size +
-        '.jpg'
+        '.webp'
     );
   }
 
