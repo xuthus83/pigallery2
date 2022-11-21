@@ -1,21 +1,27 @@
 import * as path from 'path';
 import {constants as fsConstants, promises as fsp} from 'fs';
 import * as xml2js from 'xml2js';
-import {ProjectPath} from '../ProjectPath';
-import {Config} from '../../common/config/private/Config';
+import {ProjectPath} from '../../ProjectPath';
+import {Config} from '../../../common/config/private/Config';
+import {SupportedFormats} from '../../../common/SupportedFormats';
 
 type gpxEntry = { '$': { lat: string, lon: string }, ele: string[], time: string[], extensions: unknown };
 
 export class GPXProcessing {
 
+  public static isMetaFile(fullPath: string): boolean {
+    const extension = path.extname(fullPath).toLowerCase();
+    return SupportedFormats.WithDots.MetaFiles.indexOf(extension) !== -1;
+  }
 
   public static generateConvertedPath(filePath: string): string {
-    const file = path.basename(filePath);
     return path.join(
       ProjectPath.TranscodedFolder,
       ProjectPath.getRelativePathToImages(path.dirname(filePath)),
-      file
-    );
+      path.basename(filePath)
+      + '_' + Config.Server.MetaFile.GPXCompressing.minDistance + 'm' +
+      Config.Server.MetaFile.GPXCompressing.minTimeDistance + 'ms' +
+      path.extname(filePath));
   }
 
   public static async isValidConvertedPath(
@@ -25,7 +31,7 @@ export class GPXProcessing {
       ProjectPath.ImageFolder,
       path.relative(
         ProjectPath.TranscodedFolder,
-        convertedPath
+        convertedPath.substring(0, convertedPath.lastIndexOf('_'))
       )
     );
 

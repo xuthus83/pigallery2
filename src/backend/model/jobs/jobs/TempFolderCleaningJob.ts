@@ -4,10 +4,12 @@ import {
 } from '../../../../common/entities/job/JobDTO';
 import * as path from 'path';
 import * as fs from 'fs';
-import { Job } from './Job';
-import { ProjectPath } from '../../../ProjectPath';
-import { PhotoProcessing } from '../../fileprocessing/PhotoProcessing';
-import { VideoProcessing } from '../../fileprocessing/VideoProcessing';
+import {Job} from './Job';
+import {ProjectPath} from '../../../ProjectPath';
+import {PhotoProcessing} from '../../fileprocessing/PhotoProcessing';
+import {VideoProcessing} from '../../fileprocessing/VideoProcessing';
+import {DiskMangerWorker} from '../../threading/DiskMangerWorker';
+import {GPXProcessing} from '../../fileprocessing/GPXProcessing';
 
 export class TempFolderCleaningJob extends Job {
   public readonly Name = DefaultsJobs[DefaultsJobs['Temp Folder Cleaning']];
@@ -29,6 +31,10 @@ export class TempFolderCleaningJob extends Job {
 
     if (VideoProcessing.isVideo(filePath)) {
       return VideoProcessing.isValidConvertedPath(filePath);
+    }
+
+    if (GPXProcessing.isMetaFile(filePath)) {
+      return GPXProcessing.isValidConvertedPath(filePath);
     }
 
     return false;
@@ -62,7 +68,7 @@ export class TempFolderCleaningJob extends Job {
         this.Progress.log('processing: ' + file);
         this.Progress.Processed++;
         if ((await fs.promises.stat(file)).isDirectory()) {
-          await fs.promises.rm(file, { recursive: true });
+          await fs.promises.rm(file, {recursive: true});
         } else {
           await fs.promises.unlink(file);
         }
@@ -84,7 +90,7 @@ export class TempFolderCleaningJob extends Job {
       if ((await this.isValidDirectory(filePath)) === false) {
         this.Progress.log('processing: ' + filePath);
         this.Progress.Processed++;
-        await fs.promises.rm(filePath, { recursive: true });
+        await fs.promises.rm(filePath, {recursive: true});
       } else {
         this.Progress.log('skipping: ' + filePath);
         this.Progress.Skipped++;

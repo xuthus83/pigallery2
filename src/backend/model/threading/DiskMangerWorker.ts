@@ -1,20 +1,20 @@
-import { promises as fsp, Stats } from 'fs';
+import {promises as fsp, Stats} from 'fs';
 import * as path from 'path';
 import {
   ParentDirectoryDTO,
   SubDirectoryDTO,
 } from '../../../common/entities/DirectoryDTO';
-import { PhotoDTO } from '../../../common/entities/PhotoDTO';
-import { ProjectPath } from '../../ProjectPath';
-import { Config } from '../../../common/config/private/Config';
-import { VideoDTO } from '../../../common/entities/VideoDTO';
-import { FileDTO } from '../../../common/entities/FileDTO';
-import { MetadataLoader } from './MetadataLoader';
-import { Logger } from '../../Logger';
-import { SupportedFormats } from '../../../common/SupportedFormats';
-import { VideoProcessing } from '../fileprocessing/VideoProcessing';
-import { PhotoProcessing } from '../fileprocessing/PhotoProcessing';
-import { Utils } from '../../../common/Utils';
+import {PhotoDTO} from '../../../common/entities/PhotoDTO';
+import {ProjectPath} from '../../ProjectPath';
+import {Config} from '../../../common/config/private/Config';
+import {VideoDTO} from '../../../common/entities/VideoDTO';
+import {FileDTO} from '../../../common/entities/FileDTO';
+import {MetadataLoader} from './MetadataLoader';
+import {Logger} from '../../Logger';
+import {VideoProcessing} from '../fileprocessing/VideoProcessing';
+import {PhotoProcessing} from '../fileprocessing/PhotoProcessing';
+import {Utils} from '../../../common/Utils';
+import {GPXProcessing} from '../fileprocessing/GPXProcessing';
 
 export class DiskMangerWorker {
   public static calcLastModified(stat: Stats): number {
@@ -164,7 +164,7 @@ export class DiskMangerWorker {
           }
         )) as SubDirectoryDTO;
 
-        d.lastScanned = 0; // it was not a fully scan
+        d.lastScanned = 0; // it was not a fully scanned
         d.isPartial = true;
 
         directory.directories.push(d);
@@ -218,12 +218,12 @@ export class DiskMangerWorker {
         } catch (e) {
           Logger.warn(
             'Media loading error, skipping: ' +
-              file +
-              ', reason: ' +
-              e.toString()
+            file +
+            ', reason: ' +
+            e.toString()
           );
         }
-      } else if (DiskMangerWorker.isMetaFile(fullFilePath)) {
+      } else if (GPXProcessing.isMetaFile(fullFilePath)) {
         if (
           !DiskMangerWorker.isEnabledMetaFile(fullFilePath) ||
           settings.noMetaFile === true ||
@@ -243,10 +243,6 @@ export class DiskMangerWorker {
     return directory;
   }
 
-  private static isMetaFile(fullPath: string): boolean {
-    const extension = path.extname(fullPath).toLowerCase();
-    return SupportedFormats.WithDots.MetaFiles.indexOf(extension) !== -1;
-  }
 
   private static isEnabledMetaFile(fullPath: string): boolean {
     const extension = path.extname(fullPath).toLowerCase();

@@ -1,7 +1,7 @@
 import {NextFunction, Request, Response} from 'express';
 import * as fs from 'fs';
 import { Config } from '../../common/config/private/Config';
-import { GPXProcessing } from '../model/GPXProcessing';
+import { GPXProcessing } from '../model/fileprocessing/GPXProcessing';
 
 export class MetaFileMWs {
   public static async compressGPX(
