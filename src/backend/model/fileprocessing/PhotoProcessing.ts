@@ -164,7 +164,7 @@ export class PhotoProcessing {
 
     const sizeStr = convertedPath.substring(
       convertedPath.lastIndexOf('_') + 1,
-      convertedPath.length - path.extname(convertedPath).length
+      convertedPath.lastIndexOf('q')
     );
 
     const size = parseInt(sizeStr, 10);
@@ -174,6 +174,19 @@ export class PhotoProcessing {
       (Config.Client.Media.Thumbnail.thumbnailSizes.indexOf(size) === -1 &&
         Config.Server.Media.Photo.Converting.resolution !== size)
     ) {
+      return false;
+    }
+
+    const qualityStr = convertedPath.substring(
+      convertedPath.lastIndexOf('q') + 1,
+      convertedPath.length - path.extname(convertedPath).length
+    );
+
+    const quality = parseInt(qualityStr, 10);
+
+    if ((quality + '').length !== qualityStr.length ||
+      quality < 0 ||
+      quality > 100) {
       return false;
     }
 
