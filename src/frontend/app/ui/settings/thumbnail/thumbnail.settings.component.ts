@@ -50,7 +50,7 @@ export class ThumbnailSettingsComponent
   }
 
   get Config(): { sizes: number } {
-    return {sizes: this.states.client.thumbnailSizes.original[0]};
+    return {sizes: this.states.client.thumbnailSizes.original};
   }
 
   get Progress(): JobProgressDTO {
