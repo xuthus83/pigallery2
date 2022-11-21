@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { Metadata, Sharp } from 'sharp';
-import { Logger } from '../../Logger';
-import { FfmpegCommand, FfprobeData } from 'fluent-ffmpeg';
-import { FFmpegFactory } from '../FFmpegFactory';
+import {Metadata, Sharp} from 'sharp';
+import {Logger} from '../../Logger';
+import {FfmpegCommand, FfprobeData} from 'fluent-ffmpeg';
+import {FFmpegFactory} from '../FFmpegFactory';
 
 export class PhotoWorker {
   private static imageRenderer: (input: RendererInput) => Promise<void> = null;
@@ -44,7 +44,8 @@ export interface RendererInput {
   size: number;
   makeSquare: boolean;
   outPath: string;
-  qualityPriority: boolean;
+  quality: number;
+  useLanczos3: boolean;
   cut?: {
     left: number;
     top: number;
@@ -129,15 +130,15 @@ export class ImageRendererFactory {
     return async (input: RendererInput): Promise<void> => {
       Logger.silly(
         '[SharpRenderer] rendering photo:' +
-          input.mediaPath +
-          ', size:' +
-          input.size
+        input.mediaPath +
+        ', size:' +
+        input.size
       );
-      const image: Sharp = sharp(input.mediaPath, { failOnError: false });
+      const image: Sharp = sharp(input.mediaPath, {failOnError: false});
       const metadata: Metadata = await image.metadata();
 
       const kernel =
-        input.qualityPriority === true
+        input.useLanczos3 === true
           ? sharp.kernel.lanczos3
           : sharp.kernel.nearest;
 
@@ -161,7 +162,7 @@ export class ImageRendererFactory {
           fit: 'cover',
         });
       }
-      await image.withMetadata().webp({effort: 6, quality: 60}).toFile(input.outPath);
+      await image.webp({effort: 6, quality: input.quality}).toFile(input.outPath);
     };
   }
 }

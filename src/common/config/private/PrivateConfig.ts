@@ -142,8 +142,10 @@ export class ServerDataBaseConfig {
 
 @SubConfigClass()
 export class ServerThumbnailConfig {
-  @ConfigProperty({description: 'if true, photos will have better quality.'})
-  qualityPriority: boolean = true;
+  @ConfigProperty({description: 'if true, \'lanczos3\' will used to scale photos, otherwise faster but lowe quality \'nearest\'.'})
+  useLanczos3: boolean = true;
+  @ConfigProperty({description: 'Thumbnail image quality', max: 100, min: 1, type: 'unsignedInt'})
+  quality = 80;
   @ConfigProperty({type: 'ratio'})
   personFaceMargin: number = 0.6; // in ration [0-1]
 }

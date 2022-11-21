@@ -1,18 +1,18 @@
 import * as path from 'path';
-import { constants as fsConstants, promises as fsp } from 'fs';
+import {constants as fsConstants, promises as fsp} from 'fs';
 import * as os from 'os';
 import * as crypto from 'crypto';
-import { ProjectPath } from '../../ProjectPath';
-import { Config } from '../../../common/config/private/Config';
+import {ProjectPath} from '../../ProjectPath';
+import {Config} from '../../../common/config/private/Config';
 import {
   PhotoWorker,
   RendererInput,
   ThumbnailSourceType,
 } from '../threading/PhotoWorker';
-import { ITaskExecuter, TaskExecuter } from '../threading/TaskExecuter';
-import { FaceRegion, PhotoDTO } from '../../../common/entities/PhotoDTO';
-import { SupportedFormats } from '../../../common/SupportedFormats';
-import { PersonWithSampleRegion } from '../../../common/entities/PersonDTO';
+import {ITaskExecuter, TaskExecuter} from '../threading/TaskExecuter';
+import {FaceRegion, PhotoDTO} from '../../../common/entities/PhotoDTO';
+import {SupportedFormats} from '../../../common/SupportedFormats';
+import {PersonWithSampleRegion} from '../../../common/entities/PersonDTO';
 
 export class PhotoProcessing {
   private static initDone = false;
@@ -75,11 +75,11 @@ export class PhotoProcessing {
     const margin = {
       x: Math.round(
         person.sampleRegion.box.width *
-          Config.Server.Media.Thumbnail.personFaceMargin
+        Config.Server.Media.Thumbnail.personFaceMargin
       ),
       y: Math.round(
         person.sampleRegion.box.height *
-          Config.Server.Media.Thumbnail.personFaceMargin
+        Config.Server.Media.Thumbnail.personFaceMargin
       ),
     };
 
@@ -100,7 +100,8 @@ export class PhotoProcessing {
         width: person.sampleRegion.box.width + margin.x,
         height: person.sampleRegion.box.height + margin.y,
       },
-      qualityPriority: Config.Server.Media.Thumbnail.qualityPriority,
+      useLanczos3: Config.Server.Media.Thumbnail.useLanczos3,
+      quality: Config.Server.Media.Thumbnail.quality,
     } as RendererInput;
     input.cut.width = Math.min(
       input.cut.width,
@@ -111,7 +112,7 @@ export class PhotoProcessing {
       photo.metadata.size.height - input.cut.top
     );
 
-    await fsp.mkdir(ProjectPath.FacesFolder, { recursive: true });
+    await fsp.mkdir(ProjectPath.FacesFolder, {recursive: true});
     await PhotoProcessing.taskQue.execute(input);
     return thPath;
   }
@@ -121,7 +122,7 @@ export class PhotoProcessing {
     return path.join(
       ProjectPath.TranscodedFolder,
       ProjectPath.getRelativePathToImages(path.dirname(mediaPath)),
-      file + '_' + size + '.webp'
+      file + '_' + size + 'q' + Config.Server.Media.Thumbnail.quality + '.webp'
     );
   }
 
@@ -136,17 +137,17 @@ export class PhotoProcessing {
         .createHash('md5')
         .update(
           mediaPath +
-            '_' +
-            faceRegion.name +
-            '_' +
-            faceRegion.box.left +
-            '_' +
-            faceRegion.box.top
+          '_' +
+          faceRegion.name +
+          '_' +
+          faceRegion.box.left +
+          '_' +
+          faceRegion.box.top
         )
         .digest('hex') +
-        '_' +
-        size +
-        '.webp'
+      '_' +
+      size +
+      '.webp'
     );
   }
 
@@ -235,12 +236,13 @@ export class PhotoProcessing {
       size,
       outPath,
       makeSquare,
-      qualityPriority: Config.Server.Media.Thumbnail.qualityPriority,
+      useLanczos3: Config.Server.Media.Thumbnail.useLanczos3,
+      quality: Config.Server.Media.Thumbnail.quality,
     } as RendererInput;
 
     const outDir = path.dirname(input.outPath);
 
-    await fsp.mkdir(outDir, { recursive: true });
+    await fsp.mkdir(outDir, {recursive: true});
     await this.taskQue.execute(input);
     return outPath;
   }
