@@ -44,7 +44,7 @@ export class GalleryNavigatorComponent {
     public sortingService: GallerySortingService
   ) {
     this.sortingMethodsType = Utils.enumToArray(SortingMethods);
-    this.RootFolderName = $localize`Images`;
+    this.RootFolderName = $localize`Home`;
     this.wrappedContent = this.galleryService.content;
     this.directoryContent = this.wrappedContent.pipe(
       map((c) => (c.directory ? c.directory : c.searchResult))
