@@ -1,5 +1,5 @@
 export const SupportedFormats = {
-  Photos: ['gif', 'jpeg', 'jpg', 'jpe', 'png', 'webp', 'svg'],
+  Photos: ['gif', 'jpeg', 'jpg', 'jpe', 'png', 'webp', 'svg', 'heic'],
   // Browser supported video formats
   // Read more:  https://www.w3schools.com/html/html5_video.asp
   Videos: ['mp4', 'webm', 'ogv', 'ogg'],
