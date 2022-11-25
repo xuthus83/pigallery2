@@ -162,7 +162,7 @@ export class ImageRendererFactory {
           fit: 'cover',
         });
       }
-      await image.webp({effort: 6, quality: input.quality}).toFile(input.outPath);
+      await image.rotate().webp({effort: 6, quality: input.quality}).toFile(input.outPath);
     };
   }
 }
