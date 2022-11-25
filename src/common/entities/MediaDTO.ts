@@ -1,7 +1,7 @@
-import { DirectoryPathDTO } from './DirectoryDTO';
-import { PhotoDTO } from './PhotoDTO';
-import { FileDTO } from './FileDTO';
-import { SupportedFormats } from '../SupportedFormats';
+import {DirectoryPathDTO} from './DirectoryDTO';
+import {PhotoDTO} from './PhotoDTO';
+import {FileDTO} from './FileDTO';
+import {SupportedFormats} from '../SupportedFormats';
 
 export interface MediaDTO extends FileDTO {
   id: number;

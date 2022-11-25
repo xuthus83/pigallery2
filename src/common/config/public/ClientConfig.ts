@@ -170,6 +170,16 @@ export class ClientOtherConfig {
 export class ClientVideoConfig {
   @ConfigProperty()
   enabled: boolean = true;
+  @ConfigProperty({
+    arrayType: 'string',
+    description: 'Video formats that are supported after transcoding (with the build-in ffmpeg support)'
+  })
+  supportedFormatsWithTranscoding: string[] = ['avi', 'mkv', 'mov', 'wmv', 'flv', 'mts', 'm2ts', 'mpg', '3gp', 'm4v', 'mpeg', 'vob', 'divx', 'xvid', 'ts'];
+  // Browser supported video formats
+  // Read more:  https://www.w3schools.com/html/html5_video.asp
+  @ConfigProperty({arrayType: 'string', description: 'Video formats that are supported also without transcoding'})
+  supportedFormats: string[] = ['mp4', 'webm', 'ogv', 'ogg'];
+
 }
 
 @SubConfigClass()
@@ -187,6 +197,8 @@ export class ClientPhotoConfig {
       'Enables loading the full resolution image on zoom in the ligthbox (preview).',
   })
   loadFullImageOnZoom: boolean = true;
+  @ConfigProperty({arrayType: 'string'})
+  supportedFormats: string[] = ['gif', 'jpeg', 'jpg', 'jpe', 'png', 'webp', 'svg'];
 }
 
 @SubConfigClass()
@@ -226,6 +238,8 @@ export class ClientMetaFileConfig {
       'Reads *.pg2conf files (You can use it for custom sorting and save search (albums)).',
   })
   pg2conf: boolean = true;
+  @ConfigProperty({arrayType: 'string'})
+  supportedFormats: string[] = ['gpx', 'pg2conf', 'md'];
 }
 
 @SubConfigClass()
