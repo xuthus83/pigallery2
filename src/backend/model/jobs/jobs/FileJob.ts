@@ -149,8 +149,8 @@ export abstract class FileJob<S extends { indexedOnly: boolean } = { indexedOnly
     Logger.silly(LOG_TAG, 'Loading files from db');
 
     const connection = await SQLConnection.getConnection();
-    if (this.scanFilter.noVideo === false ||
-      this.scanFilter.noPhoto === false) {
+    if (!this.scanFilter.noVideo ||
+      !this.scanFilter.noPhoto) {
 
       let usedEntity = MediaEntity;
 
@@ -179,7 +179,7 @@ export abstract class FileJob<S extends { indexedOnly: boolean } = { indexedOnly
         );
       }
     }
-    if (this.scanFilter.noMetaFile === false) {
+    if (!this.scanFilter.noMetaFile) {
 
       const result = await connection
         .getRepository(FileEntity)

@@ -17,6 +17,7 @@ import {PersonWithSampleRegion} from '../../../common/entities/PersonDTO';
 export class PhotoProcessing {
   private static initDone = false;
   private static taskQue: ITaskExecuter<RendererInput, void> = null;
+  private static readonly CONVERTED_EXTENSION = '.webp';
 
   public static init(): void {
     if (this.initDone === true) {
@@ -122,7 +123,7 @@ export class PhotoProcessing {
     return path.join(
       ProjectPath.TranscodedFolder,
       ProjectPath.getRelativePathToImages(path.dirname(mediaPath)),
-      file + '_' + size + 'q' + Config.Server.Media.Thumbnail.quality + '.webp'
+      file + '_' + size + 'q' + Config.Server.Media.Thumbnail.quality + PhotoProcessing.CONVERTED_EXTENSION
     );
   }
 
@@ -147,7 +148,7 @@ export class PhotoProcessing {
         .digest('hex') +
       '_' +
       size +
-      '.webp'
+      PhotoProcessing.CONVERTED_EXTENSION
     );
   }
 
@@ -161,6 +162,10 @@ export class PhotoProcessing {
         convertedPath.substring(0, convertedPath.lastIndexOf('_'))
       )
     );
+
+    if (path.extname(convertedPath) !== PhotoProcessing.CONVERTED_EXTENSION) {
+      return false;
+    }
 
     const sizeStr = convertedPath.substring(
       convertedPath.lastIndexOf('_') + 1,
