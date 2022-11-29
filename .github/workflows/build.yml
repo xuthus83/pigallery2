@@ -95,7 +95,7 @@ jobs:
         container: [alpine, debian-buster, debian-bullseye ]
         include:
           - container: alpine
-            platforms: linux/amd64,linux/arm64,linux/arm/v7
+            platforms: linux/amd64,linux/arm64
           - container: debian-buster
             platforms: linux/amd64,linux/arm64,linux/arm/v7
           - container: debian-bullseye
