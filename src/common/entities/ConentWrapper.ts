@@ -80,12 +80,12 @@ export class ContentWrapper {
       delete (media as MediaDTO).metadata.creationDate;
 
 
-      if((media as PhotoDTO).metadata.rating) {
+      if ((media as PhotoDTO).metadata.rating) {
         // @ts-ignore
         (media as PhotoDTO).metadata['r'] = (media as PhotoDTO).metadata.rating;
         delete (media as PhotoDTO).metadata.rating;
       }
-      if((media as PhotoDTO).metadata.caption) {
+      if ((media as PhotoDTO).metadata.caption) {
         // @ts-ignore
         (media as PhotoDTO).metadata['a'] = (media as PhotoDTO).metadata.caption;
         delete (media as PhotoDTO).metadata.caption;
@@ -146,7 +146,28 @@ export class ContentWrapper {
         }
         if ((media as PhotoDTO).metadata.cameraData.model) {
           mapifyOne(cw.map.camera, cw.reverseMap.camera,
-            (media as PhotoDTO).metadata.cameraData, 'model', 'ml');
+            (media as PhotoDTO).metadata.cameraData, 'model', 'o');
+        }
+
+        if ((media as PhotoDTO).metadata.cameraData.ISO) {
+          // @ts-ignore
+          (media as PhotoDTO).metadata.cameraData['i'] = (media as PhotoDTO).metadata.cameraData.ISO;
+          delete (media as PhotoDTO).metadata.cameraData.ISO;
+        }
+        if ((media as PhotoDTO).metadata.cameraData.fStop) {
+          // @ts-ignore
+          (media as PhotoDTO).metadata.cameraData['s'] = (media as PhotoDTO).metadata.cameraData.fStop;
+          delete (media as PhotoDTO).metadata.cameraData.fStop;
+        }
+        if ((media as PhotoDTO).metadata.cameraData.exposure) {
+          // @ts-ignore
+          (media as PhotoDTO).metadata.cameraData['e'] = (media as PhotoDTO).metadata.cameraData.exposure;
+          delete (media as PhotoDTO).metadata.cameraData.exposure;
+        }
+        if ((media as PhotoDTO).metadata.cameraData.focalLength) {
+          // @ts-ignore
+          (media as PhotoDTO).metadata.cameraData['a'] = (media as PhotoDTO).metadata.cameraData.focalLength;
+          delete (media as PhotoDTO).metadata.cameraData.focalLength;
         }
 
         // @ts-ignore
@@ -399,9 +420,38 @@ export class ContentWrapper {
             (media as PhotoDTO).metadata.cameraData, 'make', 'm');
         }
         // @ts-ignore
-        if (typeof (media as PhotoDTO).metadata.cameraData.ml !== 'undefined') {
+        if (typeof (media as PhotoDTO).metadata.cameraData['o'] !== 'undefined') {
           deMapifyOne(cw.map.camera,
-            (media as PhotoDTO).metadata.cameraData, 'model', 'ml');
+            (media as PhotoDTO).metadata.cameraData, 'model', 'o');
+        }
+
+        // @ts-ignore
+        if (typeof (media as PhotoDTO).metadata.cameraData['i'] !== 'undefined') {
+          // @ts-ignore
+          (media as PhotoDTO).metadata.cameraData.ISO = (media as PhotoDTO).metadata.cameraData['i'];
+          // @ts-ignore
+          delete (media as PhotoDTO).metadata.cameraData['i'];
+        }
+        // @ts-ignore
+        if (typeof (media as PhotoDTO).metadata.cameraData['a'] !== 'undefined') {
+          // @ts-ignore
+          (media as PhotoDTO).metadata.cameraData.focalLength = (media as PhotoDTO).metadata.cameraData['a'];
+          // @ts-ignore
+          delete (media as PhotoDTO).metadata.cameraData['a'];
+        }
+        // @ts-ignore
+        if (typeof (media as PhotoDTO).metadata.cameraData['e'] !== 'undefined') {
+          // @ts-ignore
+          (media as PhotoDTO).metadata.cameraData.exposure = (media as PhotoDTO).metadata.cameraData['e'];
+          // @ts-ignore
+          delete (media as PhotoDTO).metadata.cameraData['e'];
+        }
+        // @ts-ignore
+        if (typeof (media as PhotoDTO).metadata.cameraData['s'] !== 'undefined') {
+          // @ts-ignore
+          (media as PhotoDTO).metadata.cameraData.fStop = (media as PhotoDTO).metadata.cameraData['s'];
+          // @ts-ignore
+          delete (media as PhotoDTO).metadata.cameraData['s'];
         }
 
       }
