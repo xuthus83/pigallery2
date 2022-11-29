@@ -44,7 +44,7 @@ export class ContentWrapper {
   }
 
 
-  private static mapify(cw: ContentWrapper, media: FileDTO, isSearchResult: boolean, isPhoto: boolean, isVideo: boolean): void {
+  private static mapify(cw: ContentWrapper, media: FileDTO, isSearchResult: boolean): void {
     if (isSearchResult) {
       const k = JSON.stringify(media.directory);
       if (!cw.reverseMap.directories.has(k)) {
@@ -56,12 +56,41 @@ export class ContentWrapper {
       delete media.directory;
     }
 
+
+    // @ts-ignore
+    (media as MediaDTO)['n'] = (media as MediaDTO).name;
+    delete (media as MediaDTO).name;
+
+    if (typeof (media as MediaDTO).missingThumbnails !== 'undefined') {
+      // @ts-ignore
+      (media as MediaDTO)['t'] = (media as MediaDTO).missingThumbnails;
+      delete (media as MediaDTO).missingThumbnails;
+    }
+
     if ((media as MediaDTO).metadata) {
       // @ts-ignore
-      (media as MediaDTO).metadata.s = [(media as MediaDTO).metadata.size.width, (media as MediaDTO).metadata.size.height];
+      (media as MediaDTO).metadata['d'] = [(media as MediaDTO).metadata.size.width, (media as MediaDTO).metadata.size.height];
       delete (media as MediaDTO).metadata.size;
-    }
-    if (isPhoto) {
+      // @ts-ignore
+      (media as MediaDTO).metadata['s'] = (media as MediaDTO).metadata.fileSize;
+      delete (media as MediaDTO).metadata.fileSize;
+
+      // @ts-ignore
+      (media as MediaDTO).metadata['t'] = (media as MediaDTO).metadata.creationDate / 1000; // skip millies
+      delete (media as MediaDTO).metadata.creationDate;
+
+
+      if((media as PhotoDTO).metadata.rating) {
+        // @ts-ignore
+        (media as PhotoDTO).metadata['r'] = (media as PhotoDTO).metadata.rating;
+        delete (media as PhotoDTO).metadata.rating;
+      }
+      if((media as PhotoDTO).metadata.caption) {
+        // @ts-ignore
+        (media as PhotoDTO).metadata['a'] = (media as PhotoDTO).metadata.caption;
+        delete (media as PhotoDTO).metadata.caption;
+      }
+
       if ((media as PhotoDTO).metadata.faces) {
         for (let i = 0; i < (media as PhotoDTO).metadata.faces.length; ++i) {
           const name = (media as PhotoDTO).metadata.faces[i].name;
@@ -70,10 +99,12 @@ export class ContentWrapper {
             cw.map.faces.push(name);
           }
           // @ts-ignore
-          (media as PhotoDTO).metadata.faces[i].n = cw.reverseMap.faces.get(name);
-          delete (media as PhotoDTO).metadata.faces[i].name;
+          (media as PhotoDTO).metadata.faces[i] = [...(media as PhotoDTO).metadata.faces[i].b, cw.reverseMap.faces.get(name)];
         }
 
+        // @ts-ignore
+        (media as PhotoDTO).metadata['f'] = (media as PhotoDTO).metadata.faces;
+        delete (media as PhotoDTO).metadata.faces;
       }
 
       if ((media as PhotoDTO).metadata.keywords) {
@@ -86,6 +117,9 @@ export class ContentWrapper {
           // @ts-ignore
           (media as PhotoDTO).metadata.keywords[i] = cw.reverseMap.keywords.get(k);
         }
+        // @ts-ignore
+        (media as PhotoDTO).metadata['k'] = (media as PhotoDTO).metadata.keywords;
+        delete (media as PhotoDTO).metadata.keywords;
       }
       const mapifyOne = <T>(map: string[], reverseMap: Map<string, number>,
                             obj: T, key: keyof T, mappedKey: string) => {
@@ -116,7 +150,7 @@ export class ContentWrapper {
         }
 
         // @ts-ignore
-        (media as PhotoDTO).metadata.c = (media as PhotoDTO).metadata.cameraData;
+        (media as PhotoDTO).metadata['c'] = (media as PhotoDTO).metadata.cameraData;
         delete (media as PhotoDTO).metadata.cameraData;
       }
       if ((media as PhotoDTO).metadata.positionData) {
@@ -135,13 +169,17 @@ export class ContentWrapper {
 
         if ((media as PhotoDTO).metadata.positionData.GPSData) {
           // @ts-ignore
-          (media as PhotoDTO).metadata.positionData.g = [(media as PhotoDTO).metadata.positionData.GPSData.latitude, (media as PhotoDTO).metadata.positionData.GPSData.longitude];
+          (media as PhotoDTO).metadata.positionData['g'] = [(media as PhotoDTO).metadata.positionData.GPSData.latitude, (media as PhotoDTO).metadata.positionData.GPSData.longitude];
           delete (media as PhotoDTO).metadata.positionData.GPSData;
         }
         // @ts-ignore
-        (media as PhotoDTO).metadata.p = (media as PhotoDTO).metadata.positionData;
+        (media as PhotoDTO).metadata['p'] = (media as PhotoDTO).metadata.positionData;
         delete (media as PhotoDTO).metadata.positionData;
       }
+
+      // @ts-ignore
+      (media as PhotoDTO)['m'] = (media as PhotoDTO).metadata;
+      delete (media as PhotoDTO).metadata;
     }
 
   }
@@ -177,7 +215,7 @@ export class ContentWrapper {
             delete f.box;
           }
         }
-        ContentWrapper.mapify(cw, m, isSearchResult, true, false);
+        ContentWrapper.mapify(cw, m, isSearchResult);
       } else if (MediaDTOUtils.isVideo(m)) {
         delete (m as PhotoDTO).metadata.rating;
         delete (m as PhotoDTO).metadata.caption;
@@ -185,7 +223,7 @@ export class ContentWrapper {
         delete (m as PhotoDTO).metadata.keywords;
         delete (m as PhotoDTO).metadata.faces;
         delete (m as PhotoDTO).metadata.positionData;
-        ContentWrapper.mapify(cw, m, isSearchResult, false, true);
+        ContentWrapper.mapify(cw, m, isSearchResult);
       }
       Utils.removeNullOrEmptyObj(m);
     }
@@ -215,7 +253,7 @@ export class ContentWrapper {
           delete dir.metaFile[i].directory;
         }
         delete dir.metaFile[i].id;
-        ContentWrapper.mapify(cw, dir.metaFile[i], isSearchResult, false, false);
+        ContentWrapper.mapify(cw, dir.metaFile[i], isSearchResult);
       }
     }
     if (dir.directories) {
@@ -228,7 +266,7 @@ export class ContentWrapper {
     delete (dir as DirectoryBaseDTO).validPreview; // should not go to the client side;
   }
 
-  private static deMapify(cw: ContentWrapper, media: FileDTO, isSearchResult: boolean, isPhoto: boolean, isVideo: boolean): void {
+  private static deMapify(cw: ContentWrapper, media: FileDTO, isSearchResult: boolean): void {
 
     const deMapifyOne = <T>(map: any[],
                             obj: T, key: keyof T, mappedKey: string) => {
@@ -241,36 +279,110 @@ export class ContentWrapper {
       deMapifyOne(cw.map.directories, media, 'directory', 'd');
     }
 
-    if ((media as MediaDTO).metadata) {
+    // @ts-ignore
+    if ((media as MediaDTO)['n']) {
+      // @ts-ignore
+      (media as PhotoDTO).name = (media as PhotoDTO)['n'];
+      // @ts-ignore
+      delete (media as PhotoDTO)['n'];
+    }
+    // @ts-ignore
+    if ((media as MediaDTO)['t']) {
+      // @ts-ignore
+      (media as PhotoDTO).missingThumbnails = (media as PhotoDTO)['t'];
+      // @ts-ignore
+      delete (media as PhotoDTO)['t'];
+    }
+
+    // @ts-ignore
+    if ((media as MediaDTO)['m']) {
+      // @ts-ignore
+      (media as PhotoDTO).metadata = (media as PhotoDTO)['m'];
+      // @ts-ignore
+      delete (media as PhotoDTO)['m'];
+
       (media as MediaDTO).metadata.size = {
         // @ts-ignore
-        width: (media as MediaDTO).metadata.s[0],
+        width: (media as MediaDTO).metadata['d'][0],
         // @ts-ignore
-        height: (media as MediaDTO).metadata.s[1],
+        height: (media as MediaDTO).metadata['d'][1],
       };
       // @ts-ignore
-      delete (media as MediaDTO).metadata.s;
-    }
-    if (isPhoto) {
-      if ((media as PhotoDTO).metadata.faces) {
+      delete (media as MediaDTO).metadata['d'];
+
+
+      // @ts-ignore
+      if (typeof (media as PhotoDTO).metadata['t'] !== 'undefined') {
+        // @ts-ignore
+        (media as PhotoDTO).metadata.creationDate = (media as PhotoDTO).metadata['t'] * 1000;
+        // @ts-ignore
+        delete (media as PhotoDTO).metadata['t'];
+      }
+
+      // @ts-ignore
+      if (typeof (media as PhotoDTO).metadata['r'] !== 'undefined') {
+        // @ts-ignore
+        (media as PhotoDTO).metadata.rating = (media as PhotoDTO).metadata['r'];
+        // @ts-ignore
+        delete (media as PhotoDTO).metadata['r'];
+      }
+
+      // @ts-ignore
+      if (typeof (media as PhotoDTO).metadata['a'] !== 'undefined') {
+        // @ts-ignore
+        (media as PhotoDTO).metadata.caption = (media as PhotoDTO).metadata['a'];
+        // @ts-ignore
+        delete (media as PhotoDTO).metadata['a'];
+      }
+
+      // @ts-ignore
+      (media as PhotoDTO).metadata.fileSize = (media as PhotoDTO).metadata['s'];
+      // @ts-ignore
+      delete (media as PhotoDTO).metadata['s'];
+
+
+      // @ts-ignore
+      if ((media as PhotoDTO).metadata['f']) {
+        // @ts-ignore
+        (media as PhotoDTO).metadata.faces = (media as PhotoDTO).metadata['f'];
+        // @ts-ignore
+        delete (media as PhotoDTO).metadata['f'];
+        for (let j = 0; j < (media as PhotoDTO).metadata.faces.length; ++j) {
+          // @ts-ignore
+          const boxArr: number[] = (media as PhotoDTO).metadata.faces[j];
+          (media as PhotoDTO).metadata.faces[j] = {
+            box: {
+              top: boxArr[0],
+              left: boxArr[1],
+              height: boxArr[2],
+              width: boxArr[3],
+            },
+            // @ts-ignore
+            name: boxArr[4]
+          };
+        }
+
         for (let i = 0; i < (media as PhotoDTO).metadata.faces.length; ++i) {
           // @ts-ignore
-          (media as PhotoDTO).metadata.faces[i].name = cw.map.faces[(media as PhotoDTO).metadata.faces[i].n];
-          // @ts-ignore
-          delete (media as PhotoDTO).metadata.faces[i].n;
+          (media as PhotoDTO).metadata.faces[i].name = cw.map.faces[(media as PhotoDTO).metadata.faces[i].name];
+
         }
 
       }
+      // @ts-ignore
+      if ((media as PhotoDTO).metadata['k']) {
 
-      if ((media as PhotoDTO).metadata.keywords) {
+        // @ts-ignore
+        (media as PhotoDTO).metadata.keywords = (media as PhotoDTO).metadata['k'];
+        // @ts-ignore
+        delete (media as PhotoDTO).metadata['k'];
         for (let i = 0; i < (media as PhotoDTO).metadata.keywords.length; ++i) {
           // @ts-ignore
           (media as PhotoDTO).metadata.keywords[i] = cw.map.keywords[(media as PhotoDTO).metadata.keywords[i]];
         }
       }
-
       // @ts-ignore
-      if ((media as PhotoDTO).metadata.c) {
+      if ((media as PhotoDTO).metadata['c']) {
         // @ts-ignore
         (media as PhotoDTO).metadata.cameraData = (media as PhotoDTO).metadata.c;
         // @ts-ignore
@@ -294,7 +406,7 @@ export class ContentWrapper {
 
       }
       // @ts-ignore
-      if ((media as PhotoDTO).metadata.p) {
+      if ((media as PhotoDTO).metadata['p']) {
         // @ts-ignore
         (media as PhotoDTO).metadata.positionData = (media as PhotoDTO).metadata.p;
         // @ts-ignore
@@ -336,27 +448,9 @@ export class ContentWrapper {
 // clean up media
     for (let i = 0; i < media.length; ++i) {
       const m = media[i];
-      if (MediaDTOUtils.isPhoto(m)) {
-        // compress faces
-        if ((m as PhotoDTO).metadata.faces) {
-          for (let j = 0; j < (m as PhotoDTO).metadata.faces.length; ++j) {
-            const f = (m as PhotoDTO).metadata.faces[j];
-            // @ts-ignore
-            const boxArr = f.b;
-            f.box = {
-              top: boxArr[0],
-              left: boxArr[1],
-              height: boxArr[2],
-              width: boxArr[3],
-            };
-            // @ts-ignore
-            delete f.b;
-          }
-        }
-        ContentWrapper.deMapify(cw, m, isSearchResult, true, false);
-      } else if (MediaDTOUtils.isVideo(m)) {
-        ContentWrapper.deMapify(cw, m, isSearchResult, false, true);
-      }
+
+      ContentWrapper.deMapify(cw, m, isSearchResult);
+
       if (!isSearchResult) {
         m.directory = dir;
       }
@@ -373,7 +467,7 @@ export class ContentWrapper {
         if (!isSearchResult) {
           dir.metaFile[i].directory = dir as DirectoryBaseDTO;
         }
-        ContentWrapper.deMapify(cw, dir.metaFile[i], isSearchResult, false, false);
+        ContentWrapper.deMapify(cw, dir.metaFile[i], isSearchResult);
       }
     }
     if (dir.directories) {
