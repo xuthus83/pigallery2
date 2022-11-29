@@ -92,7 +92,7 @@ npm start
 To configure it, run `PiGallery2` first to create `config.json` file, then edit it and restart.
 The app has a nice UI for settings, you may use that too. 
 
-Default user: `admin` pass: `admin`. (It is not possible to change the admin password, you need to create another user and delete the default `admin` user, see  #220)
+Default user: `admin` pass: `admin`. (It is not possible to change the admin password, you need to create another user and delete the default `admin` user, see  [#220](https://github.com/bpatrik/pigallery2/issues/220))
 
 **Note**: First run, you might have file access issues and port 80 issue, see [#115](https://github.com/bpatrik/pigallery2/issues/115).
 Running `npm start -- --Server-port=8080` will start the app on port 8080 that does not require `root`
