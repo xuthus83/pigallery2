@@ -1,28 +1,28 @@
-import { Config } from '../common/config/private/Config';
+import {Config} from '../common/config/private/Config';
 import * as express from 'express';
-import { Request } from 'express';
+import {Request} from 'express';
 import * as cookieParser from 'cookie-parser';
 import * as _http from 'http';
-import { Server as HttpServer } from 'http';
+import {Server as HttpServer} from 'http';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import * as locale from 'locale';
-import { ObjectManagers } from './model/ObjectManagers';
-import { Logger } from './Logger';
-import { LoggerRouter } from './routes/LoggerRouter';
-import { DiskManager } from './model/DiskManger';
-import { ConfigDiagnostics } from './model/diagnostics/ConfigDiagnostics';
-import { Localizations } from './model/Localizations';
-import { CookieNames } from '../common/CookieNames';
-import { Router } from './routes/Router';
-import { PhotoProcessing } from './model/fileprocessing/PhotoProcessing';
+import {ObjectManagers} from './model/ObjectManagers';
+import {Logger} from './Logger';
+import {LoggerRouter} from './routes/LoggerRouter';
+import {DiskManager} from './model/DiskManger';
+import {ConfigDiagnostics} from './model/diagnostics/ConfigDiagnostics';
+import {Localizations} from './model/Localizations';
+import {CookieNames} from '../common/CookieNames';
+import {Router} from './routes/Router';
+import {PhotoProcessing} from './model/fileprocessing/PhotoProcessing';
 import * as _csrf from 'csurf';
-import * as unless from 'express-unless';
-import { Event } from '../common/event/Event';
-import { QueryParams } from '../common/QueryParams';
-import { ConfigClassBuilder } from 'typeconfig/node';
-import { ConfigClassOptions } from 'typeconfig/src/decorators/class/IConfigClass';
-import { DatabaseType } from '../common/config/private/PrivateConfig';
+import {Event} from '../common/event/Event';
+import {QueryParams} from '../common/QueryParams';
+import {ConfigClassBuilder} from 'typeconfig/node';
+import {ConfigClassOptions} from 'typeconfig/src/decorators/class/IConfigClass';
+import {DatabaseType} from '../common/config/private/PrivateConfig';
+import {unless} from 'express-unless';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const session = require('cookie-session');
@@ -56,11 +56,11 @@ export class Server {
     Logger.verbose(
       LOG_TAG,
       'using config from ' +
-        (
-          ConfigClassBuilder.attachPrivateInterface(Config)
-            .__options as ConfigClassOptions
-        ).configPath +
-        ':'
+      (
+        ConfigClassBuilder.attachPrivateInterface(Config)
+          .__options as ConfigClassOptions
+      ).configPath +
+      ':'
     );
     Logger.verbose(LOG_TAG, JSON.stringify(Config, null, '\t'));
 
@@ -105,11 +105,11 @@ export class Server {
     // enable token generation but do not check it
     this.app.post(
       ['/api/user/login', '/api/share/login'],
-      _csrf({ ignoreMethods: ['POST'] })
+      _csrf({ignoreMethods: ['POST']})
     );
     this.app.get(
       ['/api/user/me', '/api/share/:' + QueryParams.gallery.sharingKey_params],
-      _csrf({ ignoreMethods: ['GET'] })
+      _csrf({ignoreMethods: ['GET']})
     );
 
     DiskManager.init();
