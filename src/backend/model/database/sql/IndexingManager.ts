@@ -15,7 +15,6 @@ import {VideoEntity} from './enitites/VideoEntity';
 import {FileEntity} from './enitites/FileEntity';
 import {FileDTO} from '../../../../common/entities/FileDTO';
 import {NotificationManager} from '../../NotifocationManager';
-import {FaceRegionEntry} from './enitites/FaceRegionEntry';
 import {ObjectManagers} from '../../ObjectManagers';
 import {IIndexingManager} from '../interfaces/IIndexingManager';
 import {DiskMangerWorker} from '../../threading/DiskMangerWorker';
@@ -29,6 +28,7 @@ import * as path from 'path';
 import * as fs from 'fs';
 import {SearchQueryDTO} from '../../../../common/entities/SearchQueryDTO';
 import {PersonEntry} from './enitites/PersonEntry';
+import {PersonJunctionTable} from './enitites/PersonJunctionTable';
 
 const LOG_TAG = '[IndexingManager]';
 
@@ -346,16 +346,16 @@ export class IndexingManager implements IIndexingManager {
       })
       .getMany();
 
-    const mediaChange: any = {
-      saveP: [], // save/update photo
-      saveV: [], // save/update video
-      insertP: [], // insert photo
-      insertV: [], // insert video
+    const mediaChange = {
+      saveP: [] as MediaDTO[], // save/update photo
+      saveV: [] as MediaDTO[], // save/update video
+      insertP: [] as MediaDTO[], // insert photo
+      insertV: [] as MediaDTO[], // insert video
     };
-    const facesPerPhoto: { faces: FaceRegionEntry[]; mediaName: string }[] = [];
+    const personsPerPhoto: { faces: { name: string, mediaId?: number }[]; mediaName: string }[] = [];
     // eslint-disable-next-line @typescript-eslint/prefer-for-of
     for (let i = 0; i < media.length; i++) {
-      let mediaItem: MediaEntity = null;
+      let mediaItem: MediaDTO = null;
       for (let j = 0; j < indexedMedia.length; j++) {
         if (indexedMedia[j].name === media[i].name) {
           mediaItem = indexedMedia[j];
@@ -364,7 +364,7 @@ export class IndexingManager implements IIndexingManager {
         }
       }
 
-      const scannedFaces = (media[i].metadata as PhotoMetadata).faces || [];
+      const scannedFaces: { name: string }[] = (media[i].metadata as PhotoMetadata).faces || [];
       if ((media[i].metadata as PhotoMetadata).faces) {
         // if it has faces, cache them
         // make the list distinct (some photos may contain the same person multiple times)
@@ -374,22 +374,22 @@ export class IndexingManager implements IIndexingManager {
           ),
         ];
       }
-      delete (media[i].metadata as PhotoMetadata).faces; // this is a separated DB, lets save separately
+
 
       if (mediaItem == null) {
-        // not in DB yet
+        // Media not in DB yet
         media[i].directory = null;
-        mediaItem = Utils.clone(media[i]) as any;
+        mediaItem = Utils.clone(media[i]);
         mediaItem.directory = {id: parentDirId} as any;
         (MediaDTOUtils.isPhoto(mediaItem)
             ? mediaChange.insertP
             : mediaChange.insertV
         ).push(mediaItem);
       } else {
-        // already in the DB, only needs to be updated
+        // Media already in the DB, only needs to be updated
         delete (mediaItem.metadata as PhotoMetadata).faces;
         if (!Utils.equalsFilter(mediaItem.metadata, media[i].metadata)) {
-          mediaItem.metadata = media[i].metadata as any;
+          mediaItem.metadata = media[i].metadata;
           (MediaDTOUtils.isPhoto(mediaItem)
               ? mediaChange.saveP
               : mediaChange.saveV
@@ -397,9 +397,9 @@ export class IndexingManager implements IIndexingManager {
         }
       }
 
-      facesPerPhoto.push({
-        faces: scannedFaces as FaceRegionEntry[],
-        mediaName: mediaItem.name,
+      personsPerPhoto.push({
+        faces: scannedFaces,
+        mediaName: mediaItem.name
       });
     }
 
@@ -416,44 +416,44 @@ export class IndexingManager implements IIndexingManager {
       .select(['media.name', 'media.id'])
       .getMany();
 
-    const faces: FaceRegionEntry[] = [];
-    facesPerPhoto.forEach((group): void => {
+    const persons: { name: string; mediaId: number }[] = [];
+    personsPerPhoto.forEach((group): void => {
       const mIndex = indexedMedia.findIndex(
         (m): boolean => m.name === group.mediaName
       );
-      group.faces.forEach(
-        (sf: FaceRegionEntry): any =>
-          (sf.media = {id: indexedMedia[mIndex].id} as any)
+      group.faces.forEach((sf) =>
+        (sf.mediaId = indexedMedia[mIndex].id)
       );
 
-      faces.push(...group.faces);
+      persons.push(...group.faces as { name: string; mediaId: number }[]);
       indexedMedia.splice(mIndex, 1);
     });
 
-    await this.saveFaces(connection, parentDirId, faces);
+    await this.savePersonsToMedia(connection, parentDirId, persons);
     await mediaRepository.remove(indexedMedia);
   }
 
-  protected async saveFaces(
+  protected async savePersonsToMedia(
     connection: Connection,
     parentDirId: number,
-    scannedFaces: FaceRegion[]
+    scannedFaces: { name: string; mediaId: number }[]
   ): Promise<void> {
-    const faceRepository = connection.getRepository(FaceRegionEntry);
+    const personJunctionTable = connection.getRepository(PersonJunctionTable);
     const personRepository = connection.getRepository(PersonEntry);
 
-    const persons: { name: string; faceRegion: FaceRegion }[] = [];
+    const persons: { name: string; mediaId: number }[] = [];
 
+    // Make a set
     for (const face of scannedFaces) {
       if (persons.findIndex((f) => f.name === face.name) === -1) {
-        persons.push({name: face.name, faceRegion: face});
+        persons.push(face);
       }
     }
     await ObjectManagers.getInstance().PersonManager.saveAll(persons);
     // get saved persons without triggering denormalized data update (i.e.: do not use PersonManager.get).
     const savedPersons = await personRepository.find();
 
-    const indexedFaces = await faceRepository
+    const indexedFaces = await personJunctionTable
       .createQueryBuilder('face')
       .leftJoin('face.media', 'media')
       .where('media.directory = :directory', {
@@ -462,19 +462,13 @@ export class IndexingManager implements IIndexingManager {
       .leftJoinAndSelect('face.person', 'person')
       .getMany();
 
-    const faceToInsert = [];
+    const faceToInsert: { person: { id: number }, media: { id: number } }[] = [];
     // eslint-disable-next-line @typescript-eslint/prefer-for-of
     for (let i = 0; i < scannedFaces.length; i++) {
-      // was the face region already indexed
-      let face: FaceRegionEntry = null;
+      // was the Person - media connection already indexed
+      let face: PersonJunctionTable = null;
       for (let j = 0; j < indexedFaces.length; j++) {
-        if (
-          indexedFaces[j].box.height === scannedFaces[i].box.height &&
-          indexedFaces[j].box.width === scannedFaces[i].box.width &&
-          indexedFaces[j].box.left === scannedFaces[i].box.left &&
-          indexedFaces[j].box.top === scannedFaces[i].box.top &&
-          indexedFaces[j].person.name === scannedFaces[i].name
-        ) {
+        if (indexedFaces[j].person.name === scannedFaces[i].name) {
           face = indexedFaces[j];
           indexedFaces.splice(j, 1);
           break; // region found, stop processing
@@ -482,16 +476,18 @@ export class IndexingManager implements IIndexingManager {
       }
 
       if (face == null) {
-        (scannedFaces[i] as FaceRegionEntry).person = savedPersons.find(
-          (p) => p.name === scannedFaces[i].name
-        );
-        faceToInsert.push(scannedFaces[i]);
+        faceToInsert.push({
+          person: savedPersons.find(
+            (p) => p.name === scannedFaces[i].name
+          ),
+          media: {id: scannedFaces[i].mediaId}
+        });
       }
     }
     if (faceToInsert.length > 0) {
-      await this.insertChunk(faceRepository, faceToInsert, 100);
+      await this.insertChunk(personJunctionTable, faceToInsert, 100);
     }
-    await faceRepository.remove(indexedFaces, {
+    await personJunctionTable.remove(indexedFaces, {
       chunk: Math.max(Math.ceil(indexedFaces.length / 500), 1),
     });
   }

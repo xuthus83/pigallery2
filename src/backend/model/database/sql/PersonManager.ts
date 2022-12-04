@@ -1,11 +1,11 @@
-import { SQLConnection } from './SQLConnection';
-import { PersonEntry } from './enitites/PersonEntry';
-import { FaceRegionEntry } from './enitites/FaceRegionEntry';
-import { PersonDTO } from '../../../../common/entities/PersonDTO';
-import { ISQLPersonManager } from './IPersonManager';
-import { Logger } from '../../../Logger';
-import { FaceRegion } from '../../../../common/entities/PhotoDTO';
-import { SQL_COLLATE } from './enitites/EntityUtils';
+import {SQLConnection} from './SQLConnection';
+import {PersonEntry} from './enitites/PersonEntry';
+import {PersonDTO} from '../../../../common/entities/PersonDTO';
+import {ISQLPersonManager} from './IPersonManager';
+import {Logger} from '../../../Logger';
+import {FaceRegion} from '../../../../common/entities/PhotoDTO';
+import {SQL_COLLATE} from './enitites/EntityUtils';
+import {PersonJunctionTable} from './enitites/PersonJunctionTable';
 
 const LOG_TAG = '[PersonManager]';
 
@@ -20,7 +20,7 @@ export class PersonManager implements ISQLPersonManager {
     const connection = await SQLConnection.getConnection();
     await connection.query(
       'UPDATE person_entry SET count = ' +
-        ' (SELECT COUNT(1) FROM face_region_entry WHERE face_region_entry.personId = person_entry.id)'
+      ' (SELECT COUNT(1) FROM person_junction_table WHERE person_junction_table.personId = person_entry.id)'
     );
 
     // remove persons without photo
@@ -36,11 +36,11 @@ export class PersonManager implements ISQLPersonManager {
     const connection = await SQLConnection.getConnection();
     await connection.query(
       'update person_entry set sampleRegionId = ' +
-        '(Select face_region_entry.id from  media_entity ' +
-        'left join face_region_entry on media_entity.id = face_region_entry.mediaId ' +
-        'where face_region_entry.personId=person_entry.id ' +
-        'order by media_entity.metadataCreationdate desc ' +
-        'limit 1)'
+      '(Select person_junction_table.id from  media_entity ' +
+      'left join person_junction_table on media_entity.id = person_junction_table.mediaId ' +
+      'where person_junction_table.personId=person_entry.id ' +
+      'order by media_entity.metadataCreationdate desc ' +
+      'limit 1)'
     );
   }
 
@@ -54,7 +54,7 @@ export class PersonManager implements ISQLPersonManager {
     const person = await repository
       .createQueryBuilder('person')
       .limit(1)
-      .where('person.name LIKE :name COLLATE ' + SQL_COLLATE, { name })
+      .where('person.name LIKE :name COLLATE ' + SQL_COLLATE, {name})
       .getOne();
 
     if (typeof partialPerson.name !== 'undefined') {
@@ -83,8 +83,8 @@ export class PersonManager implements ISQLPersonManager {
   public async countFaces(): Promise<number> {
     const connection = await SQLConnection.getConnection();
     return await connection
-      .getRepository(FaceRegionEntry)
-      .createQueryBuilder('faceRegion')
+      .getRepository(PersonJunctionTable)
+      .createQueryBuilder('personJunction')
       .getCount();
   }
 
@@ -96,12 +96,12 @@ export class PersonManager implements ISQLPersonManager {
   }
 
   public async saveAll(
-    persons: { name: string; faceRegion: FaceRegion }[]
+    persons: { name: string; mediaId: number }[]
   ): Promise<void> {
-    const toSave: { name: string; faceRegion: FaceRegion }[] = [];
+    const toSave: { name: string; mediaId: number }[] = [];
     const connection = await SQLConnection.getConnection();
     const personRepository = connection.getRepository(PersonEntry);
-    const faceRegionRepository = connection.getRepository(FaceRegionEntry);
+    const personJunction = connection.getRepository(PersonJunctionTable);
 
     const savedPersons = await personRepository.find();
     // filter already existing persons
@@ -117,14 +117,13 @@ export class PersonManager implements ISQLPersonManager {
     if (toSave.length > 0) {
       for (let i = 0; i < toSave.length / 200; i++) {
         const saving = toSave.slice(i * 200, (i + 1) * 200);
+        // saving person
         const inserted = await personRepository.insert(
-          saving.map((p) => ({ name: p.name }))
+          saving.map((p) => ({name: p.name}))
         );
-        // setting Person id
-        inserted.identifiers.forEach((idObj: { id: number }, j: number) => {
-          (saving[j].faceRegion as FaceRegionEntry).person = idObj as any;
-        });
-        await faceRegionRepository.insert(saving.map((p) => p.faceRegion));
+        // saving junction table
+        const junctionTable = inserted.identifiers.map((idObj, j) => ({person: idObj, media: {id: saving[j].mediaId}}));
+        await personJunction.insert(junctionTable);
       }
     }
     this.isDBValid = false;
@@ -148,6 +147,7 @@ export class PersonManager implements ISQLPersonManager {
         'sampleRegion',
         'sampleRegion.media',
         'sampleRegion.media.directory',
+        'sampleRegion.media.metadata',
       ],
     });
   }

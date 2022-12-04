@@ -14,10 +14,10 @@ import {
   MediaDTO,
   MediaMetadata,
 } from '../../../../../common/entities/MediaDTO';
-import { FaceRegionEntry } from './FaceRegionEntry';
+import { PersonJunctionTable} from './PersonJunctionTable';
 import { columnCharsetCS } from './EntityUtils';
 import {
-  CameraMetadata,
+  CameraMetadata, FaceRegion,
   GPSMetadata,
   PositionMetaData,
 } from '../../../../../common/entities/PhotoDTO';
@@ -117,6 +117,7 @@ export class MediaMetadataEntity implements MediaMetadata {
       to: (v) => v,
     },
   })
+  @Index()
   creationDate: number;
 
   @Column('int', { unsigned: true })
@@ -136,10 +137,18 @@ export class MediaMetadataEntity implements MediaMetadata {
   positionData: PositionMetaDataEntity;
 
   @Column('tinyint', { unsigned: true })
+  @Index()
   rating: 0 | 1 | 2 | 3 | 4 | 5;
 
-  @OneToMany((type) => FaceRegionEntry, (faceRegion) => faceRegion.media)
-  faces: FaceRegionEntry[];
+  @OneToMany((type) => PersonJunctionTable, (junctionTable) => junctionTable.media)
+  personJunction: PersonJunctionTable[];
+
+  @Column({
+    type:'simple-json',
+    nullable: true,
+    charset: columnCharsetCS.charset,
+    collation: columnCharsetCS.collation})
+  faces: FaceRegion[];
 
   /**
    * Caches the list of persons. Only used for searching

@@ -17,7 +17,9 @@ import {Utils} from '../../../../../src/common/Utils';
 import {SQLConnection} from '../../../../../src/backend/model/database/sql/SQLConnection';
 import {DirectoryEntity} from '../../../../../src/backend/model/database/sql/enitites/DirectoryEntity';
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const deepEqualInAnyOrder = require('deep-equal-in-any-order');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const chai = require('chai');
 
 chai.use(deepEqualInAnyOrder);
@@ -48,12 +50,12 @@ class SearchManagerTest extends SearchManager {
 
 class GalleryManagerTest extends GalleryManager {
 
-  public async selectParentDir(connection: Connection, directoryName: string, directoryParent: string): Promise<ParentDirectoryDTO> {
-    return super.selectParentDir(connection, directoryName, directoryParent);
+  public async getDirIdAndTime(connection: Connection, directoryName: string, directoryParent: string) {
+    return super.getDirIdAndTime(connection, directoryName, directoryParent);
   }
 
-  public async fillParentDir(connection: Connection, dir: ParentDirectoryDTO): Promise<void> {
-    return super.fillParentDir(connection, dir);
+  public async getParentDirFromId(connection: Connection, dir: number): Promise<ParentDirectoryDTO> {
+    return super.getParentDirFromId(connection, dir);
   }
 }
 
@@ -66,7 +68,6 @@ describe('PreviewManager', (sqlHelper: DBTestHelper) => {
    *     |- v
    *     |- p
    *     |- p2
-   *     |- gpx
    * |-> subDir2
    *     |- p4
    */
@@ -79,7 +80,6 @@ describe('PreviewManager', (sqlHelper: DBTestHelper) => {
   let p2: PhotoDTO;
   let pFaceLess: PhotoDTO;
   let p4: PhotoDTO;
-  let gpx: FileDTO;
 
 
   const setUpTestGallery = async (): Promise<void> => {
@@ -94,7 +94,6 @@ describe('PreviewManager', (sqlHelper: DBTestHelper) => {
     p2.metadata.creationDate = 20000;
     v = TestHelper.getVideoEntry1(subDir);
     v.metadata.creationDate = 500;
-    gpx = TestHelper.getRandomizedGPXEntry(subDir);
     const pFaceLessTmp = TestHelper.getPhotoEntry3(subDir);
     pFaceLessTmp.metadata.rating = 0;
     pFaceLessTmp.metadata.creationDate = 400000;
@@ -108,11 +107,15 @@ describe('PreviewManager', (sqlHelper: DBTestHelper) => {
     subDir = dir.directories[0];
     subDir2 = dir.directories[1];
     p = (subDir.media.filter(m => m.name === p.name)[0] as any);
+    p.directory = subDir;
     p2 = (subDir.media.filter(m => m.name === p2.name)[0] as any);
-    gpx = (subDir.metaFile[0] as any);
+    p2.directory = subDir;
     v = (subDir.media.filter(m => m.name === v.name)[0] as any);
+    v.directory = subDir;
     pFaceLess = (subDir.media.filter(m => m.name === pFaceLessTmp.name)[0] as any);
+    pFaceLess.directory = subDir;
     p4 = (subDir2.media[0] as any);
+    p4.directory = subDir2;
   };
 
   const setUpSqlDB = async () => {
@@ -274,8 +277,9 @@ describe('PreviewManager', (sqlHelper: DBTestHelper) => {
       .set({validPreview: false, preview: null}).execute();
     expect((await selectDir()).preview).to.equal(null);
 
-    const res = await gm.selectParentDir(conn, dir.name, dir.path);
-    await gm.fillParentDir(conn, res);
+
+    const res = await gm.getParentDirFromId(conn,
+      (await gm.getDirIdAndTime(conn, dir.name, dir.path)).id);
     subdir = await selectDir();
     expect(subdir.validPreview).to.equal(true);
     expect(subdir.preview.id).to.equal(p2.id);

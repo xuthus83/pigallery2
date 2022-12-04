@@ -4,6 +4,7 @@ import {NextFunction, Request, Response} from 'express';
 import {ErrorCodes, ErrorDTO} from '../../../common/entities/Error';
 import {ContentWrapper} from '../../../common/entities/ConentWrapper';
 import {
+  DirectoryPathDTO,
   ParentDirectoryDTO,
   SubDirectoryDTO,
 } from '../../../common/entities/DirectoryDTO';
@@ -12,8 +13,8 @@ import {Config} from '../../../common/config/private/Config';
 import {ThumbnailSourceType} from '../../model/threading/PhotoWorker';
 import {MediaDTO} from '../../../common/entities/MediaDTO';
 import {PhotoProcessing} from '../../model/fileprocessing/PhotoProcessing';
-import {PersonWithSampleRegion} from '../../../common/entities/PersonDTO';
 import {ServerTime} from '../ServerTimingMWs';
+import {PersonEntry} from '../../model/database/sql/enitites/PersonEntry';
 
 export class ThumbnailGeneratorMWs {
   private static ThumbnailMapEntries =
@@ -71,7 +72,7 @@ export class ThumbnailGeneratorMWs {
     try {
       const size: number = Config.Client.Media.Thumbnail.personThumbnailSize;
 
-      const persons: PersonWithSampleRegion[] = req.resultPipe as PersonWithSampleRegion[];
+      const persons: PersonEntry[] = req.resultPipe as PersonEntry[];
 
       for (const item of persons) {
         if (!item.sampleRegion) {
@@ -88,7 +89,7 @@ export class ThumbnailGeneratorMWs {
         // generate thumbnail path
         const thPath = PhotoProcessing.generatePersonThumbnailPath(
           mediaPath,
-          item.sampleRegion,
+          item.sampleRegion.media.metadata.faces.find(f => f.name === item.name),
           size
         );
 
@@ -115,7 +116,7 @@ export class ThumbnailGeneratorMWs {
     if (!req.resultPipe) {
       return next();
     }
-    const person: PersonWithSampleRegion = req.resultPipe as PersonWithSampleRegion;
+    const person: PersonEntry = req.resultPipe as PersonEntry;
     try {
       req.resultPipe = await PhotoProcessing.generatePersonThumbnail(person);
       return next();
@@ -214,24 +215,24 @@ export class ThumbnailGeneratorMWs {
     directory: ParentDirectoryDTO | SubDirectoryDTO
   ): void {
     if (typeof directory.media !== 'undefined') {
-      ThumbnailGeneratorMWs.addThInfoToPhotos(directory.media);
+      ThumbnailGeneratorMWs.addThInfoToPhotos(directory.media, directory);
     }
     if (directory.preview) {
-      ThumbnailGeneratorMWs.addThInfoToAPhoto(directory.preview);
+      ThumbnailGeneratorMWs.addThInfoToAPhoto(directory.preview, directory);
     }
   }
 
-  private static addThInfoToPhotos(photos: MediaDTO[]): void {
+  private static addThInfoToPhotos(photos: MediaDTO[], directory?: DirectoryPathDTO): void {
     for (let i = 0; i < photos.length; ++i) {
-      this.addThInfoToAPhoto(photos[i]);
+      this.addThInfoToAPhoto(photos[i], directory ? directory : photos[i].directory);
     }
   }
 
-  private static addThInfoToAPhoto(photo: MediaDTO): void {
+  private static addThInfoToAPhoto(photo: MediaDTO, directory: DirectoryPathDTO): void {
     const fullMediaPath = path.join(
       ProjectPath.ImageFolder,
-      photo.directory.path,
-      photo.directory.name,
+      directory.path,
+      directory.name,
       photo.name
     );
     for (let i = 0; i < ThumbnailGeneratorMWs.ThumbnailMapEntries.length; ++i) {

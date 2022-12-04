@@ -7,7 +7,7 @@ export class PersonManager implements IPersonManager {
     throw new Error('not supported by memory DB');
   }
 
-  saveAll(person: { name: string; faceRegion: FaceRegion }[]): Promise<void> {
+  saveAll(person: { name: string; mediaId: number }[]): Promise<void> {
     throw new Error('not supported by memory DB');
   }
 

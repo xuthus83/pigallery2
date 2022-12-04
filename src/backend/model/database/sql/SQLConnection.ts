@@ -19,7 +19,6 @@ import { MediaEntity } from './enitites/MediaEntity';
 import { VideoEntity } from './enitites/VideoEntity';
 import { DataStructureVersion } from '../../../../common/DataStructureVersion';
 import { FileEntity } from './enitites/FileEntity';
-import { FaceRegionEntry } from './enitites/FaceRegionEntry';
 import { PersonEntry } from './enitites/PersonEntry';
 import { Utils } from '../../../../common/Utils';
 import * as path from 'path';
@@ -31,6 +30,7 @@ import {
 import { AlbumBaseEntity } from './enitites/album/AlbumBaseEntity';
 import { SavedSearchEntity } from './enitites/album/SavedSearchEntity';
 import { NotificationManager } from '../../NotifocationManager';
+import {PersonJunctionTable} from './enitites/PersonJunctionTable';
 
 const LOG_TAG = '[SQLConnection]';
 
@@ -45,7 +45,7 @@ export class SQLConnection {
       options.entities = [
         UserEntity,
         FileEntity,
-        FaceRegionEntry,
+        PersonJunctionTable,
         PersonEntry,
         MediaEntity,
         PhotoEntity,
@@ -84,7 +84,7 @@ export class SQLConnection {
     options.entities = [
       UserEntity,
       FileEntity,
-      FaceRegionEntry,
+      PersonJunctionTable,
       PersonEntry,
       MediaEntity,
       PhotoEntity,

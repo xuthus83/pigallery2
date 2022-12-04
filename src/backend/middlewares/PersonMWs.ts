@@ -3,9 +3,9 @@ import { ErrorCodes, ErrorDTO } from '../../common/entities/Error';
 import { ObjectManagers } from '../model/ObjectManagers';
 import {
   PersonDTO,
-  PersonWithSampleRegion,
 } from '../../common/entities/PersonDTO';
 import { Utils } from '../../common/Utils';
+import {PersonEntry} from '../model/database/sql/enitites/PersonEntry';
 
 export class PersonMWs {
   public static async updatePerson(
@@ -90,7 +90,7 @@ export class PersonMWs {
       return next();
     }
     try {
-      const persons = Utils.clone(req.resultPipe as PersonWithSampleRegion[]);
+      const persons = Utils.clone(req.resultPipe as PersonEntry[]);
       for (const item of persons) {
         delete item.sampleRegion;
       }

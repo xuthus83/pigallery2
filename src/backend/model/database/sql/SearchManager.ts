@@ -37,19 +37,12 @@ import {FileEntity} from './enitites/FileEntity';
 import {SQL_COLLATE} from './enitites/EntityUtils';
 
 export class SearchManager implements ISQLSearchManager {
-  // This trick enables us to list less rows as faces will be concatenated into one row
-  // Also typeorm does not support automatic mapping of nested foreign keys
-  // (i.e: leftJoinAndSelect('media.metadata.faces', 'faces')  does not work)
-  private FACE_SELECT =
-    Config.Server.Database.type === DatabaseType.mysql
-      ? 'CONCAT(\'[\' , GROUP_CONCAT(  \'{"name": "\' , person.name , \'", "box": {"top":\' , faces.box.top , \', "left":\' , faces.box.left , \', "height":\' , faces.box.height ,\', "width":\' , faces.box.width , \'}}\'  ) ,\']\') as media_metadataFaces'
-      : '\'[\' || GROUP_CONCAT(  \'{"name": "\' || person.name || \'", "box": {"top":\' || faces.box.top || \', "left":\' || faces.box.left || \', "height":\' || faces.box.height ||\', "width":\' || faces.box.width || \'}}\'  ) ||\']\' as media_metadataFaces';
   private DIRECTORY_SELECT = [
     'directory.id',
     'directory.name',
     'directory.path',
   ];
-  // makes all search query params unique, so typeorm wont mix them
+  // makes all search query params unique, so typeorm won't mix them
   private queryIdBase = 0;
 
   private static autoCompleteItemsUnique(
@@ -293,47 +286,28 @@ export class SearchManager implements ISQLSearchManager {
       resultOverflow: false,
     };
 
-    const rawAndEntries = await connection
+    result.media = await connection
       .getRepository(MediaEntity)
       .createQueryBuilder('media')
-      .select(['media', ...this.DIRECTORY_SELECT, this.FACE_SELECT])
+      .select(['media', ...this.DIRECTORY_SELECT])
       .where(this.buildWhereQuery(query))
       .leftJoin('media.directory', 'directory')
-      .leftJoin('media.metadata.faces', 'faces')
-      .leftJoin('faces.person', 'person')
       .limit(Config.Client.Search.maxMediaResult + 1)
-      .groupBy('media.id')
-      .getRawAndEntities();
+      .getMany();
 
-    for (let i = 0; i < rawAndEntries.entities.length; ++i) {
-      if (rawAndEntries.raw[i].media_metadataFaces) {
-        rawAndEntries.entities[i].metadata.faces = JSON.parse(
-          rawAndEntries.raw[i].media_metadataFaces
-        );
-      }
-    }
-
-    result.media = rawAndEntries.entities;
 
     if (result.media.length > Config.Client.Search.maxMediaResult) {
       result.resultOverflow = true;
     }
 
+
     if (Config.Client.Search.listMetafiles === true) {
+      const dIds = Array.from(new Set(result.media.map(m => (m.directory as unknown as { id: number }).id)));
       result.metaFile = await connection
         .getRepository(FileEntity)
         .createQueryBuilder('file')
         .select(['file', ...this.DIRECTORY_SELECT])
-        .innerJoin(
-          (q) =>
-            q
-              .from(MediaEntity, 'media')
-              .select('distinct directory.id')
-              .where(this.buildWhereQuery(query))
-              .leftJoin('media.directory', 'directory'),
-          'dir',
-          'file.directory=dir.id'
-        )
+        .where(`file.directoryId IN(${dIds})`)
         .leftJoin('file.directory', 'directory')
         .getMany();
     }

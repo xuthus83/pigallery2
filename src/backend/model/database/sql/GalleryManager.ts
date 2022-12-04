@@ -1,26 +1,24 @@
-import { IGalleryManager } from '../interfaces/IGalleryManager';
+import {IGalleryManager} from '../interfaces/IGalleryManager';
 import {
   ParentDirectoryDTO,
   SubDirectoryDTO,
 } from '../../../../common/entities/DirectoryDTO';
 import * as path from 'path';
 import * as fs from 'fs';
-import { DirectoryEntity } from './enitites/DirectoryEntity';
-import { SQLConnection } from './SQLConnection';
-import { PhotoEntity } from './enitites/PhotoEntity';
-import { ProjectPath } from '../../../ProjectPath';
-import { Config } from '../../../../common/config/private/Config';
-import { ISQLGalleryManager } from './IGalleryManager';
-import { PhotoDTO } from '../../../../common/entities/PhotoDTO';
-import { Connection } from 'typeorm';
-import { MediaEntity } from './enitites/MediaEntity';
-import { VideoEntity } from './enitites/VideoEntity';
-import { DiskMangerWorker } from '../../threading/DiskMangerWorker';
-import { Logger } from '../../../Logger';
-import { FaceRegionEntry } from './enitites/FaceRegionEntry';
-import { ObjectManagers } from '../../ObjectManagers';
-import { DuplicatesDTO } from '../../../../common/entities/DuplicatesDTO';
-import { ReIndexingSensitivity } from '../../../../common/config/private/PrivateConfig';
+import {DirectoryEntity} from './enitites/DirectoryEntity';
+import {SQLConnection} from './SQLConnection';
+import {PhotoEntity} from './enitites/PhotoEntity';
+import {ProjectPath} from '../../../ProjectPath';
+import {Config} from '../../../../common/config/private/Config';
+import {ISQLGalleryManager} from './IGalleryManager';
+import {Connection} from 'typeorm';
+import {MediaEntity} from './enitites/MediaEntity';
+import {VideoEntity} from './enitites/VideoEntity';
+import {DiskMangerWorker} from '../../threading/DiskMangerWorker';
+import {Logger} from '../../../Logger';
+import {ObjectManagers} from '../../ObjectManagers';
+import {DuplicatesDTO} from '../../../../common/entities/DuplicatesDTO';
+import {ReIndexingSensitivity} from '../../../../common/config/private/PrivateConfig';
 
 const LOG_TAG = '[GalleryManager]';
 
@@ -52,13 +50,11 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
     );
     const lastModified = DiskMangerWorker.calcLastModified(stat);
 
-    const dir = await this.selectParentDir(
-      connection,
-      directoryPath.name,
-      directoryPath.parent
-    );
+
+    const dir = await this.getDirIdAndTime(connection, directoryPath.name, directoryPath.parent);
+
     if (dir && dir.lastScanned != null) {
-      // If it seems that the content did not changed, do not work on it
+      // If it seems that the content did not change, do not work on it
       if (
         knownLastModified &&
         knownLastScanned &&
@@ -73,9 +69,9 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
         }
         if (
           Date.now() - dir.lastScanned <=
-            Config.Server.Indexing.cachedFolderTimeout &&
+          Config.Server.Indexing.cachedFolderTimeout &&
           Config.Server.Indexing.reIndexingSensitivity ===
-            ReIndexingSensitivity.medium
+          ReIndexingSensitivity.medium
         ) {
           return null;
         }
@@ -85,9 +81,9 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
         Logger.silly(
           LOG_TAG,
           'Reindexing reason: lastModified mismatch: known: ' +
-            dir.lastModified +
-            ', current:' +
-            lastModified
+          dir.lastModified +
+          ', current:' +
+          lastModified
         );
         const ret =
           await ObjectManagers.getInstance().IndexingManager.indexDirectory(
@@ -95,7 +91,7 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
           );
         for (const subDir of ret.directories) {
           if (!subDir.preview) {
-            // if sub directories does not have photos, so cannot show a preview, try get one from DB
+            // if subdirectories do not have photos, so cannot show a preview, try getting one from DB
             await this.fillPreviewForSubDir(connection, subDir);
           }
         }
@@ -107,25 +103,24 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
         (Date.now() - dir.lastScanned >
           Config.Server.Indexing.cachedFolderTimeout &&
           Config.Server.Indexing.reIndexingSensitivity >=
-            ReIndexingSensitivity.medium) ||
+          ReIndexingSensitivity.medium) ||
         Config.Server.Indexing.reIndexingSensitivity >=
-          ReIndexingSensitivity.high
+        ReIndexingSensitivity.high
       ) {
         // on the fly reindexing
 
         Logger.silly(
           LOG_TAG,
           'lazy reindexing reason: cache timeout: lastScanned: ' +
-            (Date.now() - dir.lastScanned) +
-            'ms ago, cachedFolderTimeout:' +
-            Config.Server.Indexing.cachedFolderTimeout
+          (Date.now() - dir.lastScanned) +
+          'ms ago, cachedFolderTimeout:' +
+          Config.Server.Indexing.cachedFolderTimeout
         );
         ObjectManagers.getInstance()
           .IndexingManager.indexDirectory(relativeDirectoryName)
           .catch(console.error);
       }
-      await this.fillParentDir(connection, dir);
-      return dir;
+      return await this.getParentDirFromId(connection, dir.id);
     }
 
     // never scanned (deep indexed), do it and return with it
@@ -145,7 +140,7 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
 
   async countMediaSize(): Promise<number> {
     const connection = await SQLConnection.getConnection();
-    const { sum } = await connection
+    const {sum} = await connection
       .getRepository(MediaEntity)
       .createQueryBuilder('media')
       .select('SUM(media.metadata.fileSize)', 'sum')
@@ -234,7 +229,7 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
           }
         }
 
-        duplicateParis.push({ media: list });
+        duplicateParis.push({media: list});
       }
     };
 
@@ -318,17 +313,30 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
     dir.isPartial = true;
   }
 
-  protected async selectParentDir(
+  protected async getDirIdAndTime(connection: Connection, name: string, path: string): Promise<{ id: number, lastScanned: number, lastModified: number }> {
+    return await connection
+      .getRepository(DirectoryEntity)
+      .createQueryBuilder('directory')
+      .where('directory.name = :name AND directory.path = :path', {
+        name: name,
+        path: path,
+      })
+      .select([
+        'directory.id',
+        'directory.lastScanned',
+        'directory.lastModified',
+      ]).getOne();
+  }
+
+  protected async getParentDirFromId(
     connection: Connection,
-    directoryName: string,
-    directoryParent: string
+    partialDirId: number
   ): Promise<ParentDirectoryDTO> {
     const query = connection
       .getRepository(DirectoryEntity)
       .createQueryBuilder('directory')
-      .where('directory.name = :name AND directory.path = :path', {
-        name: directoryName,
-        path: directoryParent,
+      .where('directory.id = :id', {
+        id: partialDirId
       })
       .leftJoinAndSelect('directory.directories', 'directories')
       .leftJoinAndSelect('directory.media', 'media')
@@ -344,7 +352,7 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
       ]);
 
     // TODO: do better filtering
-    // NOTE: it should not cause an issue as it also do not shave to the DB
+    // NOTE: it should not cause an issue as it also do not save to the DB
     if (
       Config.Client.MetaFile.gpx === true ||
       Config.Client.MetaFile.pg2conf === true ||
@@ -353,52 +361,13 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
       query.leftJoinAndSelect('directory.metaFile', 'metaFile');
     }
 
-    return await query.getOne();
-  }
-
-  protected async fillParentDir(
-    connection: Connection,
-    dir: ParentDirectoryDTO
-  ): Promise<void> {
-    if (dir.media) {
-      const indexedFaces = await connection
-        .getRepository(FaceRegionEntry)
-        .createQueryBuilder('face')
-        .leftJoinAndSelect('face.media', 'media')
-        .where('media.directory = :directory', {
-          directory: dir.id,
-        })
-        .leftJoinAndSelect('face.person', 'person')
-        .select([
-          'face.id',
-          'face.box.left',
-          'face.box.top',
-          'face.box.width',
-          'face.box.height',
-          'media.id',
-          'person.name',
-          'person.id',
-        ])
-        .getMany();
-      for (const item of dir.media) {
-        item.directory = dir;
-        (item as PhotoDTO).metadata.faces = indexedFaces
-          .filter((fe): boolean => fe.media.id === item.id)
-          .map((f): { name: any; box: any } => ({
-            box: f.box,
-            name: f.person.name,
-          }));
-      }
-    }
-    if (dir.metaFile) {
-      for (const item of dir.metaFile) {
-        item.directory = dir;
-      }
-    }
+    const dir = await query.getOne();
     if (dir.directories) {
       for (const item of dir.directories) {
         await this.fillPreviewForSubDir(connection, item);
       }
     }
+
+    return dir;
   }
 }

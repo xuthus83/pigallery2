@@ -12,7 +12,7 @@ import {
 import {ITaskExecuter, TaskExecuter} from '../threading/TaskExecuter';
 import {FaceRegion, PhotoDTO} from '../../../common/entities/PhotoDTO';
 import {SupportedFormats} from '../../../common/SupportedFormats';
-import {PersonWithSampleRegion} from '../../../common/entities/PersonDTO';
+import {PersonEntry} from '../database/sql/enitites/PersonEntry';
 
 export class PhotoProcessing {
   private static initDone = false;
@@ -47,7 +47,7 @@ export class PhotoProcessing {
   }
 
   public static async generatePersonThumbnail(
-    person: PersonWithSampleRegion
+    person: PersonEntry
   ): Promise<string> {
     // load parameters
     const photo: PhotoDTO = person.sampleRegion.media;
@@ -58,10 +58,11 @@ export class PhotoProcessing {
       photo.name
     );
     const size: number = Config.Client.Media.Thumbnail.personThumbnailSize;
+    const faceRegion = person.sampleRegion.media.metadata.faces.find(f => f.name === person.name);
     // generate thumbnail path
     const thPath = PhotoProcessing.generatePersonThumbnailPath(
       mediaPath,
-      person.sampleRegion,
+      faceRegion,
       size
     );
 
@@ -75,11 +76,11 @@ export class PhotoProcessing {
 
     const margin = {
       x: Math.round(
-        person.sampleRegion.box.width *
+        faceRegion.box.width *
         Config.Server.Media.Thumbnail.personFaceMargin
       ),
       y: Math.round(
-        person.sampleRegion.box.height *
+        faceRegion.box.height *
         Config.Server.Media.Thumbnail.personFaceMargin
       ),
     };
@@ -93,13 +94,13 @@ export class PhotoProcessing {
       makeSquare: false,
       cut: {
         left: Math.round(
-          Math.max(0, person.sampleRegion.box.left - margin.x / 2)
+          Math.max(0, faceRegion.box.left - margin.x / 2)
         ),
         top: Math.round(
-          Math.max(0, person.sampleRegion.box.top - margin.y / 2)
+          Math.max(0, faceRegion.box.top - margin.y / 2)
         ),
-        width: person.sampleRegion.box.width + margin.x,
-        height: person.sampleRegion.box.height + margin.y,
+        width: faceRegion.box.width + margin.x,
+        height: faceRegion.box.height + margin.y,
       },
       useLanczos3: Config.Server.Media.Thumbnail.useLanczos3,
       quality: Config.Server.Media.Thumbnail.quality,
