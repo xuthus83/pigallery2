@@ -103,13 +103,19 @@ export class ScheduledJobsService {
     }
   }
 
+  protected isAnyJobRunning(): boolean {
+    return Object.values(this.progress.value)
+      .findIndex(p => p.state === JobProgressStates.running ||
+        p.state === JobProgressStates.cancelling) !== -1;
+  }
+
   protected getProgressPeriodically(): void {
     if (this.timer != null || this.subscribers === 0) {
       return;
     }
     let repeatTime = 5000;
-    if (Object.values(this.progress.value).length === 0) {
-      repeatTime = 10000;
+    if (!this.isAnyJobRunning()) {
+      repeatTime = 15000;
     }
     this.timer = window.setTimeout(async () => {
       this.timer = null;
