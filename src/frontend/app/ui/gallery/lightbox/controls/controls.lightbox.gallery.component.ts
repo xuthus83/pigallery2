@@ -40,7 +40,6 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
   readonly MAX_ZOOM = 10;
 
   @ViewChild('root', {static: false}) root: ElementRef;
-
   @Output() closed = new EventEmitter();
   @Output() toggleInfoPanel = new EventEmitter();
   @Output() toggleFullScreen = new EventEmitter();
@@ -58,7 +57,8 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
   public playBackState: PlayBackStates = PlayBackStates.Paused;
   public PlayBackStates = PlayBackStates;
   public controllersDimmed = false;
-  public controllersAlwaysOn = false;
+  public captionAlwaysOn = false;
+  public facesAlwaysOn = false;
   public controllersVisible = true;
   public drag = {x: 0, y: 0};
   public SearchQueryTypes = SearchQueryTypes;
@@ -114,10 +114,6 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
 
   public containerWidth(): void {
     return this.root.nativeElement.width;
-  }
-
-  public containerHeight(): void {
-    return this.root.nativeElement.height;
   }
 
   ngOnInit(): void {
@@ -244,7 +240,23 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
         break;
       case 'c':
       case 'C':
-        this.controllersAlwaysOn = !this.controllersAlwaysOn;
+        this.captionAlwaysOn = !this.captionAlwaysOn;
+        break;
+      case 'a':
+      case 'A':
+        this.facesAlwaysOn = !this.facesAlwaysOn;
+        break;
+      case 'd':
+      case 'D':
+        if(event.shiftKey){
+          const link = document.createElement('a');
+          link.setAttribute('type', 'hidden');
+          link.href = this.activePhoto.gridMedia.getMediaPath();
+          link.download = this.activePhoto.gridMedia.media.name;
+          document.body.appendChild(link);
+          link.click();
+          link.remove();
+        }
         break;
       case 'Escape': // escape
         this.closed.emit();

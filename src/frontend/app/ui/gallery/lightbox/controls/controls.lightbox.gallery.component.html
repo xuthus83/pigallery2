@@ -1,27 +1,21 @@
-<div id="controllers-container"
-     [ngClass]="(controllersDimmed && !controllersAlwaysOn) ? (activePhoto && activePhoto.gridMedia.isVideo() ? 'dim-controls-video' :'dim-controls'):  ''"
-     #root>
-  <div class="controls-caption" *ngIf="Title">{{Title}}</div>
-  <div class="controls controls-top">
-    <a class="highlight control-button"
-       *ngIf="activePhoto"
-       [href]="activePhoto.gridMedia.getMediaPath()"
-       [download]="activePhoto.gridMedia.media.name">
-        <span class="oi oi-data-transfer-download"
-              title="download" i18n-title></span>
-    </a>
+<div id="controllers-container" #root>
+  <div [class.dim-controls]="controllersDimmed" class="controls-caption"
+       [class.controls-nodim]="captionAlwaysOn"
+       *ngIf="Title">{{Title}}</div>
 
-    <div class=" highlight control-button" (click)="toggleInfoPanel.emit()"
+  <div [class.dim-controls]="controllersDimmed"
+       class="controls controls-top">
+
+    <div class="highlight control-button" (click)="toggleInfoPanel.emit()"
          title="info key: i" i18n-title>
       <span class="oi oi-info"></span>
     </div>
 
     <div *ngIf="fullScreenService.isFullScreenEnabled()"
-         class=" highlight control-button"
+         class="highlight control-button"
          (click)="toggleFullScreen.emit()"
          title="toggle fullscreen, key: f" i18n-title>
         <span class="oi oi-fullscreen-exit">
-
         </span>
     </div>
 
@@ -33,6 +27,63 @@
         </span>
     </div>
 
+    <div class="btn-group" dropdown [insideClick]="true">
+      <button id="button-basic" dropdownToggle type="button"
+              class="border-0 highlight control-button"
+              data-bs-auto-close="outside"
+              aria-controls="dropdown-basic">
+        <span class="oi oi-menu"></span>
+      </button>
+      <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu  dropdown-menu-right"
+          role="menu" aria-labelledby="button-basic">
+        <li role="menuitem">
+          <a *ngIf="activePhoto"
+             [href]="activePhoto.gridMedia.getMediaPath()"
+             [download]="activePhoto.gridMedia.media.name"
+             class="dropdown-item">
+            <span class="oi oi-data-transfer-download pe-2" i18n></span> Download
+            <small>(shift + D)</small>
+          </a>
+        </li>
+        <li role="menuitem">
+          <div class="dropdown-item d-flex justify-content-between">
+            <span title="key: c" i18n-title i18n>Show caption</span>
+            <bSwitch
+              class="switch ps-2"
+              name="caption-switch"
+              switch-on-color="success"
+              [switch-inverse]="true"
+              switch-off-text="on hover"
+              switch-on-text="always"
+              i18n-switch-off-text
+              i18n-switch-on-text
+              [switch-handle-width]="100"
+              [switch-label-width]="20"
+              [(ngModel)]="captionAlwaysOn">
+            </bSwitch>
+          </div>
+        </li>
+        <li role="menuitem ">
+          <div class="dropdown-item d-flex justify-content-between">
+            <span title="key: a" i18n-title i18n>Show faces</span>
+            <bSwitch
+              class="switch ps-2"
+              name="faces-switch"
+              switch-on-color="success"
+              [switch-inverse]="true"
+              switch-off-text="on hover"
+              switch-on-text="always"
+              i18n-switch-off-text
+              i18n-switch-on-text
+              [switch-handle-width]="100"
+              [switch-label-width]="20"
+              [(ngModel)]="facesAlwaysOn">
+            </bSwitch>
+          </div>
+        </li>
+      </ul>
+    </div>
+
     <div class="highlight control-button"
          (click)="closeLightbox()"
          title="close, key: Escape" i18n-title>
@@ -41,6 +92,7 @@
         </span>
     </div>
   </div>
+
   <div id="swipeable-container"
        (swipeleft)="zoom == 1 && nextPhoto.emit()"
        (swiperight)="zoom == 1 && previousPhoto.emit()"
@@ -58,6 +110,7 @@
          *ngIf="facesEnabled && activePhoto  && activePhoto.gridMedia.Photo.metadata.faces && activePhoto.gridMedia.Photo.metadata.faces.length > 0">
       <ng-container *ngIf="searchEnabled">
         <a
+          [class.controls-nodim]="facesAlwaysOn"
           class="face"
           [routerLink]="['/search', getPersonSearchQuery(face.name)]"
           [style.top.%]="face.box.top / activePhoto.gridMedia.Photo.metadata.size.height*100"
@@ -71,6 +124,7 @@
       </ng-container>
       <ng-container *ngIf="!searchEnabled">
         <div
+          [class.dim-controls]="controllersDimmed && !facesAlwaysOn"
           class="face"
           [style.top.%]="face.box.top / activePhoto.gridMedia.Photo.metadata.size.height*100"
           [style.left.%]="face.box.left / activePhoto.gridMedia.Photo.metadata.size.width*100"
@@ -86,16 +140,16 @@
 
   </div>
 
-  <div class="navigation-arrow highlight"
+  <div [class.dim-controls]="controllersDimmed" class="navigation-arrow highlight"
        *ngIf="navigation.hasPrev && zoom == 1" title="key: left arrow" id="leftArrow" i18n-title
        (click)="previousPhoto.emit()"><span
     class="oi oi-chevron-left"></span></div>
-  <div class="navigation-arrow highlight"
+  <div [class.dim-controls]="controllersDimmed" class="navigation-arrow highlight"
        *ngIf="navigation.hasNext && zoom == 1" title="key: right arrow" id="rightArrow" i18n-title
        (click)="nextPhoto.emit()"><span
     class="oi oi-chevron-right"></span></div>
 
-  <div class="controls controls-zoom row" *ngIf="Zoom > 1">
+  <div [class.dim-controls]="controllersDimmed" class="controls controls-zoom row" *ngIf="Zoom > 1">
     <div class="col-1 col-md-4">
         <span (click)="zoomOut()" i18n-title title="Zoom out, key: '-'"
               class="oi oi-zoom-out float-end"></span>
@@ -110,7 +164,7 @@
   </div>
 
 
-  <div class="controls controls-playback"
+  <div [class.dim-controls]="controllersDimmed" class="controls controls-playback"
        *ngIf="zoom == 1 && activePhoto && activePhoto.gridMedia.isPhoto()">
       <span class="oi oi-media-pause highlight control-button"
             [ngClass]="playBackState == PlayBackStates.Paused ? 'button-disabled':''"
@@ -127,7 +181,7 @@
           title="fast auto play"></span>
   </div>
 
-  <div class="controls controls-big-play"
+  <div [class.dim-controls]="controllersDimmed" class="controls controls-big-play"
        *ngIf="activePhoto && activePhoto.gridMedia.isVideo() && mediaElement.Paused">
     <span class="oi oi-media-play"></span>
   </div>
