@@ -21,7 +21,7 @@ import {
 import {
   ClientAlbumConfig,
   ClientFacesConfig,
-  ClientMapConfig, ClientMediaConfig,
+  ClientMapConfig,
   ClientMetaFileConfig,
   ClientPhotoConfig,
   ClientRandomPhotoConfig,

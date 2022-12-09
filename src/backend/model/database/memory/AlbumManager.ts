@@ -1,6 +1,5 @@
-import { AlbumBaseDTO } from '../../../../common/entities/album/AlbumBaseDTO';
-import { SearchQueryDTO } from '../../../../common/entities/SearchQueryDTO';
-import { IAlbumManager } from '../interfaces/IAlbumManager';
+import {AlbumBaseDTO} from '../../../../common/entities/album/AlbumBaseDTO';
+import {IAlbumManager} from '../interfaces/IAlbumManager';
 
 export class AlbumManager implements IAlbumManager {
   resetPreviews(): Promise<void> {
@@ -11,27 +10,15 @@ export class AlbumManager implements IAlbumManager {
     throw new Error('not supported by memory DB');
   }
 
-  public async onGalleryIndexUpdate(): Promise<void> {
+  public async addIfNotExistSavedSearch(): Promise<void> {
     throw new Error('not supported by memory DB');
   }
 
-  public async addIfNotExistSavedSearch(
-    name: string,
-    searchQuery: SearchQueryDTO,
-    lockedAlbum?: boolean
-  ): Promise<void> {
+  public async addSavedSearch(): Promise<void> {
     throw new Error('not supported by memory DB');
   }
 
-  public async addSavedSearch(
-    name: string,
-    searchQuery: SearchQueryDTO,
-    lockedAlbum?: boolean
-  ): Promise<void> {
-    throw new Error('not supported by memory DB');
-  }
-
-  public async deleteAlbum(id: number): Promise<void> {
+  public async deleteAlbum(): Promise<void> {
     throw new Error('not supported by memory DB');
   }
 

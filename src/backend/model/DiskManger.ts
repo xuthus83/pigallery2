@@ -1,15 +1,14 @@
 import {
-  DirectoryDTOUtils,
   ParentDirectoryDTO,
 } from '../../common/entities/DirectoryDTO';
-import { Logger } from '../Logger';
-import { Config } from '../../common/config/private/Config';
-import { DiskManagerTH } from './threading/ThreadPool';
+import {Logger} from '../Logger';
+import {Config} from '../../common/config/private/Config';
+import {DiskManagerTH} from './threading/ThreadPool';
 import {
   DirectoryScanSettings,
   DiskMangerWorker,
 } from './threading/DiskMangerWorker';
-import { FileDTO } from '../../common/entities/FileDTO';
+import {FileDTO} from '../../common/entities/FileDTO';
 
 const LOG_TAG = '[DiskManager]';
 
