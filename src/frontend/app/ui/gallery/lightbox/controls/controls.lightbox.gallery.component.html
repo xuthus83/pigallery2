@@ -1,6 +1,6 @@
 <div id="controllers-container" #root>
   <div [class.dim-controls]="controllersDimmed" class="controls-caption"
-       [class.controls-nodim]="captionAlwaysOn"
+       [class.controls-nodim]="lightboxService.captionAlwaysOn"
        *ngIf="Title">{{Title}}</div>
 
   <div [class.dim-controls]="controllersDimmed"
@@ -59,7 +59,7 @@
               i18n-switch-on-text
               [switch-handle-width]="100"
               [switch-label-width]="20"
-              [(ngModel)]="captionAlwaysOn">
+              [(ngModel)]="lightboxService.captionAlwaysOn">
             </bSwitch>
           </div>
         </li>
@@ -77,7 +77,27 @@
               i18n-switch-on-text
               [switch-handle-width]="100"
               [switch-label-width]="20"
-              [(ngModel)]="facesAlwaysOn">
+              [(ngModel)]="lightboxService.facesAlwaysOn">
+            </bSwitch>
+          </div>
+        </li>
+        <li
+          *ngIf="activePhoto && activePhoto.gridMedia.isVideo()"
+          role="menuitem ">
+          <div class="dropdown-item d-flex justify-content-between">
+            <span title="key: l" i18n-title i18n>Play videos</span>
+            <bSwitch
+              class="switch ps-2"
+              name="faces-switch"
+              switch-on-color="success"
+              [switch-inverse]="true"
+              switch-off-text="once"
+              switch-on-text="loop"
+              i18n-switch-off-text
+              i18n-switch-on-text
+              [switch-handle-width]="100"
+              [switch-label-width]="20"
+              [(ngModel)]="lightboxService.loopVideos">
             </bSwitch>
           </div>
         </li>
@@ -110,7 +130,7 @@
          *ngIf="facesEnabled && activePhoto  && activePhoto.gridMedia.Photo.metadata.faces && activePhoto.gridMedia.Photo.metadata.faces.length > 0">
       <ng-container *ngIf="searchEnabled">
         <a
-          [class.controls-nodim]="facesAlwaysOn"
+          [class.controls-nodim]="lightboxService.facesAlwaysOn"
           class="face"
           [routerLink]="['/search', getPersonSearchQuery(face.name)]"
           [style.top.%]="face.box.top / activePhoto.gridMedia.Photo.metadata.size.height*100"
@@ -124,7 +144,7 @@
       </ng-container>
       <ng-container *ngIf="!searchEnabled">
         <div
-          [class.dim-controls]="controllersDimmed && !facesAlwaysOn"
+          [class.dim-controls]="controllersDimmed && !lightboxService.facesAlwaysOn"
           class="face"
           [style.top.%]="face.box.top / activePhoto.gridMedia.Photo.metadata.size.height*100"
           [style.left.%]="face.box.left / activePhoto.gridMedia.Photo.metadata.size.width*100"

@@ -24,6 +24,7 @@ import {
   TextSearchQueryMatchTypes,
 } from '../../../../../../common/entities/SearchQueryDTO';
 import {AuthenticationService} from '../../../../model/network/authentication.service';
+import {LightboxService} from '../lightbox.service';
 
 export enum PlayBackStates {
   Paused = 1,
@@ -57,8 +58,7 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
   public playBackState: PlayBackStates = PlayBackStates.Paused;
   public PlayBackStates = PlayBackStates;
   public controllersDimmed = false;
-  public captionAlwaysOn = false;
-  public facesAlwaysOn = false;
+
   public controllersVisible = true;
   public drag = {x: 0, y: 0};
   public SearchQueryTypes = SearchQueryTypes;
@@ -71,12 +71,14 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
   private prevZoom = 1;
 
   constructor(
+    public lightboxService: LightboxService,
     public fullScreenService: FullScreenService,
     private authService: AuthenticationService
   ) {
     this.searchEnabled =
       Config.Client.Search.enabled && this.authService.canSearch();
   }
+
 
   public get Zoom(): number {
     return this.zoom;
@@ -240,15 +242,19 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
         break;
       case 'c':
       case 'C':
-        this.captionAlwaysOn = !this.captionAlwaysOn;
+        this.lightboxService.captionAlwaysOn = !this.lightboxService.captionAlwaysOn;
         break;
       case 'a':
       case 'A':
-        this.facesAlwaysOn = !this.facesAlwaysOn;
+        this.lightboxService.facesAlwaysOn = !this.lightboxService.facesAlwaysOn;
+        break;
+      case 'l':
+      case 'L':
+        this.lightboxService.loopVideos = !this.lightboxService.loopVideos;
         break;
       case 'd':
       case 'D':
-        if(event.shiftKey){
+        if (event.shiftKey) {
           const link = document.createElement('a');
           link.setAttribute('type', 'hidden');
           link.href = this.activePhoto.gridMedia.getMediaPath();

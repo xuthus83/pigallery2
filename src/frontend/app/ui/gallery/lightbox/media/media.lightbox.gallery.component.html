@@ -18,6 +18,7 @@
          [style.width.%]="imageSize.width"
          [style.height.%]="imageSize.height"
          (loadstart)="onImageLoad()"
+         [loop]="lightboxService.loopVideos"
          autoplay
          (error)="onImageError()"
          (timeupdate)="onVideoProgress()"

@@ -12,6 +12,7 @@ import {MediaDTOUtils} from '../../../../../../common/entities/MediaDTO';
 import {DomSanitizer, SafeStyle} from '@angular/platform-browser';
 import {SupportedFormats} from '../../../../../../common/SupportedFormats';
 import {Config} from '../../../../../../common/config/public/Config';
+import {LightboxService} from '../lightbox.service';
 
 @Component({
   selector: 'app-gallery-lightbox-media',
@@ -48,7 +49,9 @@ export class GalleryLightboxMediaComponent implements OnChanges {
   private mediaLoaded = false;
   private videoProgress = 0;
 
-  constructor(public elementRef: ElementRef, private sanitizer: DomSanitizer) {
+  constructor(public elementRef: ElementRef,
+              public lightboxService: LightboxService,
+              private sanitizer: DomSanitizer) {
   }
 
   get ImageTransform(): SafeStyle {
@@ -128,7 +131,7 @@ export class GalleryLightboxMediaComponent implements OnChanges {
       this.prevGirdPhoto = this.gridMedia;
       this.thumbnailSrc = null;
       this.photo.src = null;
-      this.nextImage.src = "";
+      this.nextImage.src = '';
       this.mediaLoaded = false;
       this.imageLoadFinished = {
         this: false,
