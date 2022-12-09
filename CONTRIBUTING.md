@@ -26,7 +26,7 @@ In general, I'm happy to merge PRs, but I recommend filling a ticket and ask fir
 Overview:
 ```
 |-- benchmark --A benchmark tool to test the speed of the app (not needed for development)
-|-- demo -- contains some sample photo for https://pigallery2.herokuapp.com/  (not needed for development)
+|-- demo -- contains some sample photo for https://pigallery2.onrender.com/  (not needed for development)
 |-- docker -- contains all docker and docker realted configurations (this is the recommended way for app deplyoment)
 |-- docs -- webpage for http://bpatrik.github.io/pigallery2/
 

@@ -3,7 +3,6 @@
 [![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/bpatrik/pigallery2.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/bpatrik/pigallery2/context:javascript)
 [![Build Status](https://travis-ci.org/bpatrik/pigallery2.svg?branch=master)](https://travis-ci.org/bpatrik/pigallery2)
 [![Coverage Status](https://coveralls.io/repos/github/bpatrik/pigallery2/badge.svg?branch=master)](https://coveralls.io/github/bpatrik/pigallery2?branch=master)
-[![Heroku](https://heroku-badge.herokuapp.com/?app=pigallery2&style=flat)](https://pigallery2.herokuapp.com)
 [![Docker build](https://github.com/bpatrik/pigallery2/workflows/docker-buildx/badge.svg)](https://github.com/bpatrik/pigallery2/actions)
 [![dependencies Status](https://david-dm.org/bpatrik/pigallery2/status.svg)](https://david-dm.org/bpatrik/pigallery2)
  
@@ -21,7 +20,7 @@ This is a **fast** (like faster than your PC fast) **directory-first photo galle
  * 📁 Optimized for galleries with <100K photos with <5k photos/folder
 
 ## Live Demo
-Live Demo @ heroku: https://pigallery2.herokuapp.com/ 
+Live Demo @ render: https://pigallery2.onrender.com/ 
  - the demo page **first load** might take up **30s**: the time while the free webservice boots up
 
 ![PiGallery2 - Animated gif demo](docs/demo.gif)
