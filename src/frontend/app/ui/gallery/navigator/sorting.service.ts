@@ -1,20 +1,21 @@
-import { Injectable } from '@angular/core';
-import { NetworkService } from '../../../model/network/network.service';
-import { ParentDirectoryDTO } from '../../../../../common/entities/DirectoryDTO';
-import { GalleryCacheService } from '../cache.gallery.service';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { Config } from '../../../../../common/config/public/Config';
-import { SortingMethods } from '../../../../../common/entities/SortingMethods';
-import { PG2ConfMap } from '../../../../../common/PG2ConfMap';
-import { ContentService, DirectoryContent } from '../content.service';
-import { PhotoDTO } from '../../../../../common/entities/PhotoDTO';
-import { map, switchMap } from 'rxjs/operators';
-import { SeededRandomService } from '../../../model/seededRandom.service';
+import {Injectable} from '@angular/core';
+import {NetworkService} from '../../../model/network/network.service';
+import {ParentDirectoryDTO} from '../../../../../common/entities/DirectoryDTO';
+import {GalleryCacheService} from '../cache.gallery.service';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {Config} from '../../../../../common/config/public/Config';
+import {SortingMethods} from '../../../../../common/entities/SortingMethods';
+import {PG2ConfMap} from '../../../../../common/PG2ConfMap';
+import {ContentService, ContentWrapperWithError, DirectoryContent} from '../content.service';
+import {PhotoDTO} from '../../../../../common/entities/PhotoDTO';
+import {map, switchMap} from 'rxjs/operators';
+import {SeededRandomService} from '../../../model/seededRandom.service';
+import {ContentWrapper} from '../../../../../common/entities/ConentWrapper';
 
 @Injectable()
 export class GallerySortingService {
   public sorting: BehaviorSubject<SortingMethods>;
-  private collator = new Intl.Collator(undefined, { numeric: true });
+  private collator = new Intl.Collator(undefined, {numeric: true});
 
   constructor(
     private networkService: NetworkService,
@@ -30,20 +31,23 @@ export class GallerySortingService {
         const sort = this.galleryCacheService.getSorting(c.directory);
         if (sort !== null) {
           this.sorting.next(sort);
-        } else {
-          this.sorting.next(this.getDefaultSorting(c.directory));
+          return;
         }
       }
+      this.sorting.next(this.getDefaultSorting(c));
     });
   }
 
-  getDefaultSorting(directory: ParentDirectoryDTO): SortingMethods {
-    if (directory && directory.metaFile) {
+  getDefaultSorting(cw: ContentWrapper): SortingMethods {
+    if (cw.directory && cw.directory.metaFile) {
       for (const file in PG2ConfMap.sorting) {
-        if (directory.metaFile.some((f) => f.name === file)) {
+        if (cw.directory.metaFile.some((f) => f.name === file)) {
           return (PG2ConfMap.sorting as any)[file];
         }
       }
+    }
+    if (cw.searchResult) {
+      return Config.Client.Other.defaultSearchSortingMethod;
     }
     return Config.Client.Other.defaultPhotoSortingMethod;
   }
@@ -53,7 +57,7 @@ export class GallerySortingService {
     if (this.galleryService.content.value.directory) {
       if (
         sorting !==
-        this.getDefaultSorting(this.galleryService.content.value.directory)
+        this.getDefaultSorting(this.galleryService.content.value)
       ) {
         this.galleryCacheService.setSorting(
           this.galleryService.content.value.directory,

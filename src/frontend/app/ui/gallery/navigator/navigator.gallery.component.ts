@@ -118,7 +118,7 @@ export class GalleryNavigatorComponent {
 
   get DefaultSorting(): SortingMethods {
     return this.sortingService.getDefaultSorting(
-      this.galleryService.content.value.directory
+      this.galleryService.content.value
     );
   }
 

@@ -144,13 +144,16 @@ export class ClientOtherConfig {
   enableCache: boolean = true;
   @ConfigProperty()
   enableOnScrollRendering: boolean = true;
-  @ConfigProperty({type: SortingMethods})
+  @ConfigProperty({type: SortingMethods,description:'Default sorting method for directory results'})
   defaultPhotoSortingMethod: SortingMethods = SortingMethods.ascDate;
+
+  @ConfigProperty({type: SortingMethods,description:'Default sorting method for search results'})
+  defaultSearchSortingMethod: SortingMethods = SortingMethods.descDate;
   @ConfigProperty({
     description:
       'If enabled directories will be sorted by date, like photos, otherwise by name. Directory date is the last modification time of that directory not the creation date of the oldest photo',
   })
-  enableDirectorySortingByDate: boolean = false;
+    enableDirectorySortingByDate: boolean = false;
   @ConfigProperty()
   enableOnScrollThumbnailPrioritising: boolean = true;
   @ConfigProperty()
