@@ -10,7 +10,7 @@ import { VersionService } from '../version.service';
 
 @Injectable()
 export class NetworkService {
-  readonly apiBaseUrl = Utils.concatUrls(Config.Client.urlBase, '/api');
+  readonly apiBaseUrl = Utils.concatUrls(Config.Client.urlBase, Config.Client.apiPath);
   private globalErrorHandlers: Array<(error: ErrorDTO) => boolean> = [];
 
   constructor(

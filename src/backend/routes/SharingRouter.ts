@@ -5,6 +5,7 @@ import { SharingMWs } from '../middlewares/SharingMWs';
 import * as express from 'express';
 import { QueryParams } from '../../common/QueryParams';
 import { ServerTimingMWs } from '../middlewares/ServerTimingMWs';
+import {Config} from '../../common/config/private/Config';
 
 export class SharingRouter {
   public static route(app: express.Express): void {
@@ -18,7 +19,7 @@ export class SharingRouter {
 
   private static addShareLogin(app: express.Express): void {
     app.post(
-      '/api/share/login',
+      Config.Client.apiPath + '/share/login',
       AuthenticationMWs.inverseAuthenticate,
       AuthenticationMWs.shareLogin,
       ServerTimingMWs.addServerTiming,
@@ -28,7 +29,7 @@ export class SharingRouter {
 
   private static addGetSharing(app: express.Express): void {
     app.get(
-      '/api/share/:' + QueryParams.gallery.sharingKey_params,
+      Config.Client.apiPath + '/share/:' + QueryParams.gallery.sharingKey_params,
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.LimitedGuest),
       SharingMWs.getSharing,
@@ -39,7 +40,7 @@ export class SharingRouter {
 
   private static addCreateSharing(app: express.Express): void {
     app.post(
-      ['/api/share/:directory(*)', '/api/share/', '/api/share//'],
+      [Config.Client.apiPath + '/share/:directory(*)', Config.Client.apiPath + '/share/', Config.Client.apiPath + '/share//'],
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.User),
       SharingMWs.createSharing,
@@ -50,7 +51,7 @@ export class SharingRouter {
 
   private static addUpdateSharing(app: express.Express): void {
     app.put(
-      ['/api/share/:directory(*)', '/api/share/', '/api/share//'],
+      [Config.Client.apiPath + '/share/:directory(*)', Config.Client.apiPath + '/share/', Config.Client.apiPath + '/share//'],
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.User),
       SharingMWs.updateSharing,
@@ -61,7 +62,7 @@ export class SharingRouter {
 
   private static addDeleteSharing(app: express.Express): void {
     app.delete(
-      ['/api/share/:sharingKey'],
+      [Config.Client.apiPath + '/share/:sharingKey'],
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Admin),
       SharingMWs.deleteSharing,
@@ -72,7 +73,7 @@ export class SharingRouter {
 
   private static addListSharing(app: express.Express): void {
     app.get(
-      ['/api/share/list'],
+      [Config.Client.apiPath + '/share/list'],
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.User),
       SharingMWs.listSharing,

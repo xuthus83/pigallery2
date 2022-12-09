@@ -38,7 +38,7 @@ describe('SettingsRouter', () => {
       const srv = new Server();
       await srv.onStarted.wait();
       const result = await chai.request(srv.App)
-        .get('/api/settings');
+        .get(Config.Client.apiPath + '/settings');
 
       result.res.should.have.status(200);
       result.body.should.be.a('object');

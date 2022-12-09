@@ -1,5 +1,6 @@
 import { Express, NextFunction, Request, Response } from 'express';
 import { logFN, Logger } from '../Logger';
+import {Config} from '../../common/config/private/Config';
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
@@ -41,7 +42,7 @@ export class LoggerRouter {
       return next();
     });
 
-    app.get('/api*', (req: Request, res: Response, next: NextFunction): any => {
+    app.get(Config.Client.apiPath + '*', (req: Request, res: Response, next: NextFunction): any => {
       LoggerRouter.log(Logger.verbose, req, res);
       return next();
     });

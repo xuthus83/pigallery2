@@ -1,16 +1,17 @@
-import { getTestBed, inject, TestBed } from '@angular/core/testing';
+import {getTestBed, inject, TestBed} from '@angular/core/testing';
 import {
   HttpClientTestingModule,
   HttpTestingController,
 } from '@angular/common/http/testing';
-import { NetworkService } from './network.service';
-import { Message } from '../../../../common/entities/Message';
-import { LoadingBarService } from '@ngx-loading-bar/core';
-import { VersionService } from '../version.service';
+import {NetworkService} from './network.service';
+import {Message} from '../../../../common/entities/Message';
+import {LoadingBarService} from '@ngx-loading-bar/core';
+import {VersionService} from '../version.service';
+import {Config} from '../../../../common/config/public/Config';
 
 describe('NetworkService Success tests', () => {
   const testUrl = '/test/url';
-  const testData = { data: 'testData' };
+  const testData = {data: 'testData'};
   const testResponse = 'testResponse';
   const testResponseMessage = new Message(null, testResponse);
   let injector;
@@ -42,7 +43,7 @@ describe('NetworkService Success tests', () => {
           expect(err).toBeUndefined();
         });
 
-      const mockReq = httpMock.expectOne({ method: 'GET' });
+      const mockReq = httpMock.expectOne({method: 'GET'});
       expect(mockReq.cancelled).toBeFalsy();
       expect(mockReq.request.responseType).toEqual('json');
       mockReq.flush(testResponseMessage);
@@ -62,7 +63,7 @@ describe('NetworkService Success tests', () => {
           expect(err).toBeUndefined();
         });
 
-      let mockReq = httpMock.expectOne('/api' + testUrl);
+      let mockReq = httpMock.expectOne(Config.Client.apiPath + testUrl);
       expect(mockReq.cancelled).toBeFalsy();
       expect(mockReq.request.responseType).toEqual('json');
       mockReq.flush(testResponseMessage);
@@ -78,7 +79,7 @@ describe('NetworkService Success tests', () => {
           expect(err).toBeUndefined();
         });
 
-      mockReq = httpMock.expectOne('/api' + testUrl);
+      mockReq = httpMock.expectOne(Config.Client.apiPath + testUrl);
       expect(mockReq.cancelled).toBeFalsy();
       expect(mockReq.request.responseType).toEqual('json');
       expect(mockReq.request.body).toEqual({});
@@ -93,7 +94,7 @@ describe('NetworkService Success tests', () => {
         expect(res).toBe(testResponse);
       });
 
-      const mockReq = httpMock.expectOne({ method: 'DELETE' });
+      const mockReq = httpMock.expectOne({method: 'DELETE'});
       expect(mockReq.cancelled).toBeFalsy();
       expect(mockReq.request.responseType).toEqual('json');
       mockReq.flush(testResponseMessage);
@@ -128,7 +129,7 @@ describe('NetworkService Success tests', () => {
 
 describe('NetworkService Fail tests', () => {
   const testUrl = '/test/url';
-  const testData = { data: 'testData' };
+  const testData = {data: 'testData'};
   const testError = 'testError';
   let injector;
   let httpMock: HttpTestingController;
@@ -156,14 +157,14 @@ describe('NetworkService Fail tests', () => {
         })
         .catch((err) => {
           expect(err).toBe(
-            'Http failure response for /api/test/url: 0 ' + testError
+            `Http failure response for ${Config.Client.apiPath}/test/url: 0 ` + testError
           );
         });
 
-      const mockReq = httpMock.expectOne({ method: 'GET' });
+      const mockReq = httpMock.expectOne({method: 'GET'});
       expect(mockReq.cancelled).toBeFalsy();
       expect(mockReq.request.responseType).toEqual('json');
-      mockReq.error(null, { statusText: testError });
+      mockReq.error(null, {statusText: testError});
     }
   ));
 
@@ -177,15 +178,15 @@ describe('NetworkService Fail tests', () => {
         })
         .catch((err) => {
           expect(err).toBe(
-            'Http failure response for /api/test/url: 0 ' + testError
+            `Http failure response for ${Config.Client.apiPath}/test/url: 0 ` + testError
           );
         });
 
-      const mockReq = httpMock.expectOne({ method: 'POST' });
+      const mockReq = httpMock.expectOne({method: 'POST'});
       expect(mockReq.cancelled).toBeFalsy();
       expect(mockReq.request.responseType).toEqual('json');
       expect(mockReq.request.body).toEqual(testData);
-      mockReq.error(null, { statusText: testError });
+      mockReq.error(null, {statusText: testError});
     }
   ));
 
@@ -199,15 +200,15 @@ describe('NetworkService Fail tests', () => {
         })
         .catch((err) => {
           expect(err).toBe(
-            'Http failure response for /api/test/url: 0 ' + testError
+            `Http failure response for ${Config.Client.apiPath}/test/url: 0 ` + testError
           );
         });
 
-      const mockReq = httpMock.expectOne({ method: 'PUT' });
+      const mockReq = httpMock.expectOne({method: 'PUT'});
       expect(mockReq.cancelled).toBeFalsy();
       expect(mockReq.request.responseType).toEqual('json');
       expect(mockReq.request.body).toEqual(testData);
-      mockReq.error(null, { statusText: testError });
+      mockReq.error(null, {statusText: testError});
     }
   ));
 
@@ -221,14 +222,14 @@ describe('NetworkService Fail tests', () => {
         })
         .catch((err) => {
           expect(err).toBe(
-            'Http failure response for /api/test/url: 0 ' + testError
+            `Http failure response for ${Config.Client.apiPath}/test/url: 0 ` + testError
           );
         });
 
-      const mockReq = httpMock.expectOne({ method: 'DELETE' });
+      const mockReq = httpMock.expectOne({method: 'DELETE'});
       expect(mockReq.cancelled).toBeFalsy();
       expect(mockReq.request.responseType).toEqual('json');
-      mockReq.error(null, { statusText: testError });
+      mockReq.error(null, {statusText: testError});
     }
   ));
 });

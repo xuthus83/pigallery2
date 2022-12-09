@@ -1,15 +1,16 @@
-import { AuthenticationMWs } from '../middlewares/user/AuthenticationMWs';
-import { Express } from 'express';
-import { GalleryMWs } from '../middlewares/GalleryMWs';
-import { RenderingMWs } from '../middlewares/RenderingMWs';
-import { ThumbnailGeneratorMWs } from '../middlewares/thumbnail/ThumbnailGeneratorMWs';
-import { UserRoles } from '../../common/entities/UserDTO';
-import { ThumbnailSourceType } from '../model/threading/PhotoWorker';
-import { VersionMWs } from '../middlewares/VersionMWs';
-import { SupportedFormats } from '../../common/SupportedFormats';
-import { PhotoConverterMWs } from '../middlewares/thumbnail/PhotoConverterMWs';
-import { ServerTimingMWs } from '../middlewares/ServerTimingMWs';
+import {AuthenticationMWs} from '../middlewares/user/AuthenticationMWs';
+import {Express} from 'express';
+import {GalleryMWs} from '../middlewares/GalleryMWs';
+import {RenderingMWs} from '../middlewares/RenderingMWs';
+import {ThumbnailGeneratorMWs} from '../middlewares/thumbnail/ThumbnailGeneratorMWs';
+import {UserRoles} from '../../common/entities/UserDTO';
+import {ThumbnailSourceType} from '../model/threading/PhotoWorker';
+import {VersionMWs} from '../middlewares/VersionMWs';
+import {SupportedFormats} from '../../common/SupportedFormats';
+import {PhotoConverterMWs} from '../middlewares/thumbnail/PhotoConverterMWs';
+import {ServerTimingMWs} from '../middlewares/ServerTimingMWs';
 import {MetaFileMWs} from '../middlewares/MetaFileMWs';
+import {Config} from '../../common/config/private/Config';
 
 export class GalleryRouter {
   public static route(app: Express): void {
@@ -33,7 +34,7 @@ export class GalleryRouter {
 
   protected static addDirectoryList(app: Express): void {
     app.get(
-      ['/api/gallery/content/:directory(*)', '/api/gallery/', '/api/gallery//'],
+      [Config.Client.apiPath + '/gallery/content/:directory(*)', Config.Client.apiPath + '/gallery/', Config.Client.apiPath + '/gallery//'],
       // common part
       AuthenticationMWs.authenticate,
       AuthenticationMWs.normalizePathParam('directory'),
@@ -51,7 +52,7 @@ export class GalleryRouter {
 
   protected static addDirectoryZip(app: Express): void {
     app.get(
-      ['/api/gallery/zip/:directory(*)'],
+      [Config.Client.apiPath + '/gallery/zip/:directory(*)'],
       // common part
       AuthenticationMWs.authenticate,
       AuthenticationMWs.normalizePathParam('directory'),
@@ -66,9 +67,9 @@ export class GalleryRouter {
   protected static addGetImage(app: Express): void {
     app.get(
       [
-        '/api/gallery/content/:mediaPath(*.(' +
-          SupportedFormats.Photos.join('|') +
-          '))',
+        Config.Client.apiPath + '/gallery/content/:mediaPath(*.(' +
+        SupportedFormats.Photos.join('|') +
+        '))',
       ],
       // common part
       AuthenticationMWs.authenticate,
@@ -85,9 +86,9 @@ export class GalleryRouter {
   protected static addGetBestFitImage(app: Express): void {
     app.get(
       [
-        '/api/gallery/content/:mediaPath(*.(' +
-          SupportedFormats.Photos.join('|') +
-          '))/bestFit',
+        Config.Client.apiPath + '/gallery/content/:mediaPath(*.(' +
+        SupportedFormats.Photos.join('|') +
+        '))/bestFit',
       ],
       // common part
       AuthenticationMWs.authenticate,
@@ -105,9 +106,9 @@ export class GalleryRouter {
   protected static addGetVideo(app: Express): void {
     app.get(
       [
-        '/api/gallery/content/:mediaPath(*.(' +
-          SupportedFormats.Videos.join('|') +
-          '))',
+        Config.Client.apiPath + '/gallery/content/:mediaPath(*.(' +
+        SupportedFormats.Videos.join('|') +
+        '))',
       ],
       // common part
       AuthenticationMWs.authenticate,
@@ -124,9 +125,9 @@ export class GalleryRouter {
   protected static addGetBestFitVideo(app: Express): void {
     app.get(
       [
-        '/api/gallery/content/:mediaPath(*.(' +
-          SupportedFormats.Videos.join('|') +
-          '))/bestFit',
+        Config.Client.apiPath + '/gallery/content/:mediaPath(*.(' +
+        SupportedFormats.Videos.join('|') +
+        '))/bestFit',
       ],
       // common part
       AuthenticationMWs.authenticate,
@@ -144,9 +145,9 @@ export class GalleryRouter {
   protected static addGetMetaFile(app: Express): void {
     app.get(
       [
-        '/api/gallery/content/:mediaPath(*.(' +
-          SupportedFormats.MetaFiles.join('|') +
-          '))',
+        Config.Client.apiPath + '/gallery/content/:mediaPath(*.(' +
+        SupportedFormats.MetaFiles.join('|') +
+        '))',
       ],
       // common part
       AuthenticationMWs.authenticate,
@@ -163,7 +164,7 @@ export class GalleryRouter {
   protected static addGetBestFitMetaFile(app: Express): void {
     app.get(
       [
-        '/api/gallery/content/:mediaPath(*.(' +
+        Config.Client.apiPath + '/gallery/content/:mediaPath(*.(' +
         SupportedFormats.MetaFiles.join('|') +
         '))/bestFit',
       ],
@@ -182,7 +183,7 @@ export class GalleryRouter {
 
   protected static addRandom(app: Express): void {
     app.get(
-      ['/api/gallery/random/:searchQueryDTO'],
+      [Config.Client.apiPath + '/gallery/random/:searchQueryDTO'],
       // common part
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Guest),
@@ -198,9 +199,9 @@ export class GalleryRouter {
 
   protected static addGetPhotoThumbnail(app: Express): void {
     app.get(
-      '/api/gallery/content/:mediaPath(*.(' +
-        SupportedFormats.Photos.join('|') +
-        '))/thumbnail/:size?',
+      Config.Client.apiPath + '/gallery/content/:mediaPath(*.(' +
+      SupportedFormats.Photos.join('|') +
+      '))/thumbnail/:size?',
       // common part
       AuthenticationMWs.authenticate,
       AuthenticationMWs.normalizePathParam('mediaPath'),
@@ -216,9 +217,9 @@ export class GalleryRouter {
 
   protected static addGetVideoThumbnail(app: Express): void {
     app.get(
-      '/api/gallery/content/:mediaPath(*.(' +
-        SupportedFormats.Videos.join('|') +
-        '))/thumbnail/:size?',
+      Config.Client.apiPath + '/gallery/content/:mediaPath(*.(' +
+      SupportedFormats.Videos.join('|') +
+      '))/thumbnail/:size?',
       // common part
       AuthenticationMWs.authenticate,
       AuthenticationMWs.normalizePathParam('mediaPath'),
@@ -234,9 +235,9 @@ export class GalleryRouter {
 
   protected static addGetVideoIcon(app: Express): void {
     app.get(
-      '/api/gallery/content/:mediaPath(*.(' +
-        SupportedFormats.Videos.join('|') +
-        '))/icon',
+      Config.Client.apiPath + '/gallery/content/:mediaPath(*.(' +
+      SupportedFormats.Videos.join('|') +
+      '))/icon',
       // common part
       AuthenticationMWs.authenticate,
       AuthenticationMWs.normalizePathParam('mediaPath'),
@@ -252,9 +253,9 @@ export class GalleryRouter {
 
   protected static addGetImageIcon(app: Express): void {
     app.get(
-      '/api/gallery/content/:mediaPath(*.(' +
-        SupportedFormats.Photos.join('|') +
-        '))/icon',
+      Config.Client.apiPath + '/gallery/content/:mediaPath(*.(' +
+      SupportedFormats.Photos.join('|') +
+      '))/icon',
       // common part
       AuthenticationMWs.authenticate,
       AuthenticationMWs.normalizePathParam('mediaPath'),
@@ -270,7 +271,7 @@ export class GalleryRouter {
 
   protected static addSearch(app: Express): void {
     app.get(
-      '/api/search/:searchQueryDTO(*)',
+      Config.Client.apiPath + '/search/:searchQueryDTO(*)',
       // common part
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Guest),
@@ -287,7 +288,7 @@ export class GalleryRouter {
 
   protected static addAutoComplete(app: Express): void {
     app.get(
-      '/api/autocomplete/:text(*)',
+      Config.Client.apiPath + '/autocomplete/:text(*)',
       // common part
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Guest),

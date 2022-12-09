@@ -5,6 +5,7 @@ import { AuthenticationMWs } from '../middlewares/user/AuthenticationMWs';
 import { UserRequestConstrainsMWs } from '../middlewares/user/UserRequestConstrainsMWs';
 import { RenderingMWs } from '../middlewares/RenderingMWs';
 import { ServerTimingMWs } from '../middlewares/ServerTimingMWs';
+import { Config } from '../../common/config/private/Config';
 
 export class UserRouter {
   public static route(app: Express): void {
@@ -20,7 +21,7 @@ export class UserRouter {
 
   private static addLogin(app: Express): void {
     app.post(
-      '/api/user/login',
+      Config.Client.apiPath + '/user/login',
       AuthenticationMWs.inverseAuthenticate,
       AuthenticationMWs.login,
       ServerTimingMWs.addServerTiming,
@@ -30,7 +31,7 @@ export class UserRouter {
 
   private static addLogout(app: Express): void {
     app.post(
-      '/api/user/logout',
+      Config.Client.apiPath + '/user/logout',
       AuthenticationMWs.logout,
       ServerTimingMWs.addServerTiming,
       RenderingMWs.renderOK
@@ -39,7 +40,7 @@ export class UserRouter {
 
   private static addGetSessionUser(app: Express): void {
     app.get(
-      '/api/user/me',
+      Config.Client.apiPath + '/user/me',
       AuthenticationMWs.authenticate,
       ServerTimingMWs.addServerTiming,
       RenderingMWs.renderSessionUser
@@ -48,7 +49,7 @@ export class UserRouter {
 
   private static addCreateUser(app: Express): void {
     app.put(
-      '/api/user',
+      Config.Client.apiPath + '/user',
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Admin),
       UserMWs.createUser,
@@ -59,7 +60,7 @@ export class UserRouter {
 
   private static addDeleteUser(app: Express): void {
     app.delete(
-      '/api/user/:id',
+      Config.Client.apiPath + '/user/:id',
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Admin),
       UserRequestConstrainsMWs.notSelfRequest,
@@ -71,7 +72,7 @@ export class UserRouter {
 
   private static addListUsers(app: Express): void {
     app.get(
-      '/api/user/list',
+      Config.Client.apiPath + '/user/list',
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Admin),
       UserMWs.listUsers,
@@ -82,7 +83,7 @@ export class UserRouter {
 
   private static addChangeRole(app: Express): void {
     app.post(
-      '/api/user/:id/role',
+      Config.Client.apiPath + '/user/:id/role',
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Admin),
       UserRequestConstrainsMWs.notSelfRequestOr2Admins,

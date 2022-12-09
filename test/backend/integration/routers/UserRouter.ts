@@ -64,7 +64,7 @@ describe('UserRouter', () => {
 
   const login = async (srv: Server): Promise<any> => {
     const result = await (chai.request(srv.App) as SuperAgentStatic)
-      .post('/api/user/login')
+      .post(Config.Client.apiPath + '/user/login')
       .send({
         loginCredential: {
           password: testUser.password,
@@ -89,7 +89,7 @@ describe('UserRouter', () => {
     it('it skip login', async () => {
       Config.Client.authenticationRequired = false;
       const result = await chai.request(server.App)
-        .post('/api/user/login');
+        .post(Config.Client.apiPath + '/user/login');
 
       result.res.should.have.status(404);
     });
@@ -107,7 +107,7 @@ describe('UserRouter', () => {
       const loginRes = await login(server);
 
       const result = await chai.request(server.App)
-        .get('/api/user/me')
+        .get(Config.Client.apiPath + '/user/me')
         .set('Cookie', loginRes.res.headers['set-cookie'])
         .set('CSRF-Token', loginRes.body.result.csrfToken);
 
@@ -118,7 +118,7 @@ describe('UserRouter', () => {
       Config.Client.authenticationRequired = true;
 
       const result = await chai.request(server.App)
-        .get('/api/user/me');
+        .get(Config.Client.apiPath + '/user/me');
 
       result.res.should.have.status(401);
     });
@@ -134,7 +134,7 @@ describe('UserRouter', () => {
       const q: any = {};
       q[QueryParams.gallery.sharingKey_query] = sharingKey;
       const result = await chai.request(server.App)
-        .get('/api/user/me?' + QueryParams.gallery.sharingKey_query + '=' + sharingKey)
+        .get(Config.Client.apiPath + '/user/me?' + QueryParams.gallery.sharingKey_query + '=' + sharingKey)
         .set('Cookie', loginRes.res.headers['set-cookie'])
         .set('CSRF-Token', loginRes.body.result.csrfToken);
 
@@ -152,7 +152,7 @@ describe('UserRouter', () => {
       const q: any = {};
       q[QueryParams.gallery.sharingKey_query] = sharing.sharingKey;
       const result = await chai.request(server.App)
-        .get('/api/user/me?' + QueryParams.gallery.sharingKey_query + '=' + sharing.sharingKey);
+        .get(Config.Client.apiPath + '/user/me?' + QueryParams.gallery.sharingKey_query + '=' + sharing.sharingKey);
 
 
       checkUserResult(result, RouteTestingHelper.getExpectedSharingUser(sharing));
@@ -166,7 +166,7 @@ describe('UserRouter', () => {
       const q: any = {};
       q[QueryParams.gallery.sharingKey_query] = sharing.sharingKey;
       const result = await chai.request(server.App)
-        .get('/api/user/me?' + QueryParams.gallery.sharingKey_query + '=' + sharing.sharingKey);
+        .get(Config.Client.apiPath + '/user/me?' + QueryParams.gallery.sharingKey_query + '=' + sharing.sharingKey);
 
 
       result.should.have.status(401);
@@ -179,7 +179,7 @@ describe('UserRouter', () => {
       Config.Client.authenticationRequired = false;
 
       const result = await chai.request(server.App)
-        .get('/api/user/me');
+        .get(Config.Client.apiPath + '/user/me');
 
       const expectedGuestUser = {
         name: UserRoles[Config.Client.unAuthenticatedUserRole],

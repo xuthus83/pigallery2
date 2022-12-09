@@ -144,16 +144,19 @@ export class ClientOtherConfig {
   enableCache: boolean = true;
   @ConfigProperty()
   enableOnScrollRendering: boolean = true;
-  @ConfigProperty({type: SortingMethods,description:'Default sorting method for directory results'})
+
+  @ConfigProperty({type: SortingMethods, description: 'Default sorting method for directory results'})
   defaultPhotoSortingMethod: SortingMethods = SortingMethods.ascDate;
 
-  @ConfigProperty({type: SortingMethods,description:'Default sorting method for search results'})
+  @ConfigProperty({type: SortingMethods, description: 'Default sorting method for search results'})
   defaultSearchSortingMethod: SortingMethods = SortingMethods.descDate;
+
   @ConfigProperty({
     description:
       'If enabled directories will be sorted by date, like photos, otherwise by name. Directory date is the last modification time of that directory not the creation date of the oldest photo',
   })
-    enableDirectorySortingByDate: boolean = false;
+  enableDirectorySortingByDate: boolean = false;
+
   @ConfigProperty()
   enableOnScrollThumbnailPrioritising: boolean = true;
   @ConfigProperty()
@@ -259,34 +262,52 @@ export class ClientFacesConfig {
 
 @SubConfigClass()
 export class ClientConfig {
+
   @ConfigProperty()
   applicationTitle: string = 'PiGallery 2';
+
   @ConfigProperty()
   publicUrl: string = '';
+
   @ConfigProperty()
   urlBase: string = '';
+
+  @ConfigProperty({description: 'PiGallery api path.'})
+  apiPath: string = '/pgapi';
+
   @ConfigProperty()
   Search: ClientSearchConfig = new ClientSearchConfig();
+
   @ConfigProperty()
   Sharing: ClientSharingConfig = new ClientSharingConfig();
+
   @ConfigProperty()
   Album: ClientAlbumConfig = new ClientAlbumConfig();
+
   @ConfigProperty()
   Map: ClientMapConfig = new ClientMapConfig();
+
   @ConfigProperty()
   RandomPhoto: ClientRandomPhotoConfig = new ClientRandomPhotoConfig();
+
   @ConfigProperty()
   Other: ClientOtherConfig = new ClientOtherConfig();
+
   @ConfigProperty()
   authenticationRequired: boolean = true;
+
   @ConfigProperty({type: UserRoles})
   unAuthenticatedUserRole: UserRoles = UserRoles.Admin;
+
   @ConfigProperty({arrayType: 'string', volatile: true})
   languages: string[] | undefined;
+
   @ConfigProperty()
   Media: ClientMediaConfig = new ClientMediaConfig();
+
   @ConfigProperty()
   MetaFile: ClientMetaFileConfig = new ClientMetaFileConfig();
+
   @ConfigProperty()
   Faces: ClientFacesConfig = new ClientFacesConfig();
 }

@@ -93,7 +93,7 @@ export class Server {
       csuf.unless((req: Request) => {
         return (
           Config.Client.authenticationRequired === false ||
-          ['/api/user/login', '/api/user/logout', '/api/share/login'].indexOf(
+          [Config.Client.apiPath + '/user/login', Config.Client.apiPath + '/user/logout', Config.Client.apiPath + '/share/login'].indexOf(
             req.originalUrl
           ) !== -1 ||
           (Config.Client.Sharing.enabled === true &&
@@ -104,11 +104,11 @@ export class Server {
 
     // enable token generation but do not check it
     this.app.post(
-      ['/api/user/login', '/api/share/login'],
+      [Config.Client.apiPath + '/user/login', Config.Client.apiPath + '/share/login'],
       _csrf({ignoreMethods: ['POST']})
     );
     this.app.get(
-      ['/api/user/me', '/api/share/:' + QueryParams.gallery.sharingKey_params],
+      [Config.Client.apiPath + '/user/me', Config.Client.apiPath + '/share/:' + QueryParams.gallery.sharingKey_params],
       _csrf({ignoreMethods: ['GET']})
     );
 

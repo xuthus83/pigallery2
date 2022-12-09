@@ -12,7 +12,7 @@ export class Person implements PersonDTO {
   public static getThumbnailUrl(that: PersonDTO): string {
     return Utils.concatUrls(
       Config.Client.urlBase,
-      '/api/person/',
+      Config.Client.apiPath + '/person/',
       encodeURIComponent(that.name),
       '/thumbnail'
     );

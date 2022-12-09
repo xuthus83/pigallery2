@@ -2,6 +2,7 @@ import { RenderingMWs } from '../middlewares/RenderingMWs';
 import { ErrorCodes, ErrorDTO } from '../../common/entities/Error';
 import { Logger } from '../Logger';
 import { Express, NextFunction, Request, Response } from 'express';
+import {Config} from '../../common/config/private/Config';
 
 export class ErrorRouter {
   public static route(app: Express): void {
@@ -10,7 +11,7 @@ export class ErrorRouter {
   }
 
   private static addApiErrorHandler(app: Express): void {
-    app.use('/api/*', RenderingMWs.renderError);
+    app.use(Config.Client.apiPath + '/*', RenderingMWs.renderError);
   }
 
   private static addGenericHandler(app: Express): void {

@@ -3,6 +3,7 @@ import { UserRoles } from '../../../common/entities/UserDTO';
 import { RenderingMWs } from '../../middlewares/RenderingMWs';
 import { AdminMWs } from '../../middlewares/admin/AdminMWs';
 import { Express } from 'express';
+import { Config } from '../../../common/config/private/Config';
 
 export class AdminRouter {
   public static route(app: Express): void {
@@ -13,7 +14,7 @@ export class AdminRouter {
 
   private static addGetStatistic(app: Express): void {
     app.get(
-      '/api/admin/statistic',
+      Config.Client.apiPath + '/admin/statistic',
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Admin),
       AdminMWs.loadStatistic,
@@ -23,7 +24,7 @@ export class AdminRouter {
 
   private static addGetDuplicates(app: Express): void {
     app.get(
-      '/api/admin/duplicates',
+      Config.Client.apiPath + '/admin/duplicates',
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Admin),
       AdminMWs.getDuplicates,
@@ -33,28 +34,28 @@ export class AdminRouter {
 
   private static addJobs(app: Express): void {
     app.get(
-      '/api/admin/jobs/available',
+      Config.Client.apiPath + '/admin/jobs/available',
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Admin),
       AdminMWs.getAvailableJobs,
       RenderingMWs.renderResult
     );
     app.get(
-      '/api/admin/jobs/scheduled/progress',
+      Config.Client.apiPath + '/admin/jobs/scheduled/progress',
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Admin),
       AdminMWs.getJobProgresses,
       RenderingMWs.renderResult
     );
     app.post(
-      '/api/admin/jobs/scheduled/:id/start',
+      Config.Client.apiPath + '/admin/jobs/scheduled/:id/start',
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Admin),
       AdminMWs.startJob,
       RenderingMWs.renderResult
     );
     app.post(
-      '/api/admin/jobs/scheduled/:id/stop',
+      Config.Client.apiPath + '/admin/jobs/scheduled/:id/stop',
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Admin),
       AdminMWs.stopJob,

@@ -5,6 +5,7 @@ import { NotificationMWs } from '../middlewares/NotificationMWs';
 import { Express } from 'express';
 import { VersionMWs } from '../middlewares/VersionMWs';
 import { ServerTimingMWs } from '../middlewares/ServerTimingMWs';
+import {Config} from '../../common/config/private/Config';
 
 export class NotificationRouter {
   public static route(app: Express): void {
@@ -13,7 +14,7 @@ export class NotificationRouter {
 
   private static addGetNotifications(app: Express): void {
     app.get(
-      '/api/notifications',
+      Config.Client.apiPath + '/notifications',
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Guest),
       VersionMWs.injectGalleryVersion,

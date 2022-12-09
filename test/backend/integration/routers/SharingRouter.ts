@@ -64,14 +64,14 @@ describe('SharingRouter', () => {
 
   const shareLogin = async (srv: Server, sharingKey: string, password?: string): Promise<any> => {
     return (chai.request(srv.App) as SuperAgentStatic)
-      .post('/api/share/login?' + QueryParams.gallery.sharingKey_query + '=' + sharingKey)
+      .post(Config.Client.apiPath + '/share/login?' + QueryParams.gallery.sharingKey_query + '=' + sharingKey)
       .send({password});
 
   };
 
   const login = async (srv: Server): Promise<any> => {
     const result = await (chai.request(srv.App) as SuperAgentStatic)
-      .post('/api/user/login')
+      .post(Config.Client.apiPath + '/user/login')
       .send({
         loginCredential: {
           password: testUser.password,

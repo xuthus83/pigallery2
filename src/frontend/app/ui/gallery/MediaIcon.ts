@@ -49,7 +49,8 @@ export class MediaIcon {
   getIconPath(): string {
     return Utils.concatUrls(
       Config.Client.urlBase,
-      '/api/gallery/content/',
+      Config.Client.apiPath,
+      '/gallery/content/',
       this.getRelativePath(),
       'icon'
     );
@@ -58,7 +59,8 @@ export class MediaIcon {
   getMediaPath(): string {
     return Utils.concatUrls(
       Config.Client.urlBase,
-      '/api/gallery/content/',
+      Config.Client.apiPath,
+      '/gallery/content/',
       this.getRelativePath()
     );
   }

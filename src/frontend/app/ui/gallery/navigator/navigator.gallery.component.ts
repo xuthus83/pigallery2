@@ -1,24 +1,24 @@
-import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
-import { UserDTOUtils } from '../../../../../common/entities/UserDTO';
-import { AuthenticationService } from '../../../model/network/authentication.service';
-import { QueryService } from '../../../model/query.service';
+import {Component} from '@angular/core';
+import {RouterLink} from '@angular/router';
+import {UserDTOUtils} from '../../../../../common/entities/UserDTO';
+import {AuthenticationService} from '../../../model/network/authentication.service';
+import {QueryService} from '../../../model/query.service';
 import {
   ContentService,
   ContentWrapperWithError,
   DirectoryContent,
 } from '../content.service';
-import { Utils } from '../../../../../common/Utils';
-import { SortingMethods } from '../../../../../common/entities/SortingMethods';
-import { Config } from '../../../../../common/config/public/Config';
+import {Utils} from '../../../../../common/Utils';
+import {SortingMethods} from '../../../../../common/entities/SortingMethods';
+import {Config} from '../../../../../common/config/public/Config';
 import {
   SearchQueryTypes,
   TextSearch,
   TextSearchQueryMatchTypes,
 } from '../../../../../common/entities/SearchQueryDTO';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { GallerySortingService } from './sorting.service';
+import {Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
+import {GallerySortingService} from './sorting.service';
 
 @Component({
   selector: 'app-gallery-navbar',
@@ -60,8 +60,8 @@ export class GalleryNavigatorComponent {
     return c.directory
       ? c.directory.mediaCount
       : c.searchResult
-      ? c.searchResult.media.length
-      : 0;
+        ? c.searchResult.media.length
+        : 0;
   }
 
   get Routes(): NavigatorPath[] {
@@ -88,7 +88,7 @@ export class GalleryNavigatorComponent {
 
     // create root link
     if (dirs.length === 0) {
-      arr.push({ name: this.RootFolderName, route: null });
+      arr.push({name: this.RootFolderName, route: null});
     } else {
       arr.push({
         name: this.RootFolderName,
@@ -102,7 +102,7 @@ export class GalleryNavigatorComponent {
     dirs.forEach((name, index) => {
       const route = dirs.slice(0, dirs.indexOf(name) + 1).join('/');
       if (dirs.length - 1 === index) {
-        arr.push({ name, route: null });
+        arr.push({name, route: null});
       } else {
         arr.push({
           name,
@@ -137,7 +137,8 @@ export class GalleryNavigatorComponent {
     });
     return Utils.concatUrls(
       Config.Client.urlBase,
-      '/api/gallery/zip/',
+      Config.Client.apiPath,
+      '/gallery/zip/',
       c.directory.path,
       c.directory.name,
       '?' + queryParams

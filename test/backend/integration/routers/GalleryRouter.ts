@@ -55,7 +55,7 @@ describe('GalleryRouter', (sqlHelper: DBTestHelper) => {
 
     it('should load gallery', async () => {
       const result = await (chai.request(server.App) as SuperAgentStatic)
-        .get('/api/gallery/content/');
+        .get(Config.Client.apiPath + '/gallery/content/');
 
       (result.should as any).have.status(200);
       expect(result.body.error).to.be.equal(null);
@@ -66,10 +66,10 @@ describe('GalleryRouter', (sqlHelper: DBTestHelper) => {
     it('should load gallery twice (to force loading form db)', async () => {
       Config.Server.Indexing.reIndexingSensitivity = ReIndexingSensitivity.low;
       const _ = await (chai.request(server.App) as SuperAgentStatic)
-        .get('/api/gallery/content/orientation');
+        .get(Config.Client.apiPath + '/gallery/content/orientation');
 
       const result = await (chai.request(server.App) as SuperAgentStatic)
-        .get('/api/gallery/content/orientation');
+        .get(Config.Client.apiPath + '/gallery/content/orientation');
 
       (result.should as any).have.status(200);
       expect(result.body.error).to.be.equal(null);
@@ -87,7 +87,7 @@ describe('GalleryRouter', (sqlHelper: DBTestHelper) => {
 
     it('should get video without transcoding', async () => {
       const result = await (chai.request(server.App) as SuperAgentStatic)
-        .get('/api/gallery/content/video.mp4/bestFit');
+        .get(Config.Client.apiPath + '/gallery/content/video.mp4/bestFit');
 
       (result.should as any).have.status(200);
       expect(result.body).to.be.instanceof(Buffer);
