@@ -31,15 +31,16 @@
           <ng-content select="[navbar]"></ng-content>
           <li class="nav-item divider-vertical">
           </li>
-          <li class="nav-item me-2 ms-2 navbar-text">
-             <span *ngIf="authenticationRequired && user.value"
-                   style="white-space: nowrap;">
+          <ng-container *ngIf="authenticationRequired && user.value">
+            <li class="nav-item me-2 ms-2 navbar-text">
+             <span style="white-space: nowrap;">
                 <span class="oi oi-person"></span> {{user.value.name}}
               </span>
-          </li>
-          <li class="nav-item divider-vertical">
-          </li>
-          <li class="nav-item ms-2">
+            </li>
+            <li class="nav-item divider-vertical">
+            </li>
+          </ng-container>
+          <li class="nav-item">
             <span>
               <app-language class="navbar-btn" [isDark]="true"></app-language>
             </span>
