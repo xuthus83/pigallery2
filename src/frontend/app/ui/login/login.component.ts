@@ -26,7 +26,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.authService.isAuthenticated()) {
-      this.navigation.toGallery();
+      this.navigation.toDefault();
     }
   }
 

@@ -7,6 +7,7 @@ import { ShareService } from './ui/gallery/share.service';
 import 'hammerjs';
 import { Subscription } from 'rxjs';
 import { QueryParams } from '../../common/QueryParams';
+import {NavigationService} from './model/navigation.service';
 
 @Component({
   selector: 'app-pi-gallery2',
@@ -19,6 +20,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private router: Router,
     private authenticationService: AuthenticationService,
     private shareService: ShareService,
+    private navigation: NavigationService,
     private title: Title
   ) {}
 
@@ -27,12 +29,12 @@ export class AppComponent implements OnInit, OnDestroy {
     await this.shareService.wait();
     this.subscription = this.authenticationService.user.subscribe(() => {
       if (this.authenticationService.isAuthenticated()) {
-        if (this.isLoginPage()) {
-          return this.toGallery();
+        if (this.navigation.isLoginPage()) {
+          return this.navigation.toDefault();
         }
       } else {
-        if (!this.isLoginPage()) {
-          return this.toLogin();
+        if (!this.navigation.isLoginPage()) {
+          return this.navigation.toLogin();
         }
       }
     });
@@ -44,33 +46,4 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
 
-  private isLoginPage(): boolean {
-    return (
-      this.router.isActive('login', true) ||
-      this.router.isActive('shareLogin', false)
-    );
-  }
-
-  private async toLogin(): Promise<void> {
-    if (this.shareService.isSharing()) {
-      const q: any = {};
-      q[QueryParams.gallery.sharingKey_query] =
-        this.shareService.getSharingKey();
-      await this.router.navigate(['shareLogin'], { queryParams: q });
-      return;
-    } else {
-      await this.router.navigate(['login']);
-      return;
-    }
-  }
-
-  private async toGallery(): Promise<void> {
-    if (this.shareService.isSharing()) {
-      await this.router.navigate(['share', this.shareService.getSharingKey()]);
-      return;
-    } else {
-      await this.router.navigate(['gallery', '']);
-      return;
-    }
-  }
 }

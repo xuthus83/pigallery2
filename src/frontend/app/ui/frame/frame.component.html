@@ -13,17 +13,25 @@
     </button>
     <div class="collapse navbar-collapse text-center" id="navbarCollapse" [collapse]="collapsed">
       <ul class="navbar-nav me-auto mb-2 mb-md-0 text-lg-start">
-        <li class="nav-item">
-          <a class="nav-link"
-             [routerLink]="['/gallery']"
-             [queryParams]="queryService.getParams()" [class.active]="isLinkActive('/gallery')" i18n>Gallery</a>
-        </li>
-        <li class="nav-item" *ngIf="isAlbumsAvailable()">
-          <a class="nav-link" [routerLink]="['/albums']" [class.active]="isLinkActive('/albums')" i18n>Albums</a>
-        </li>
-        <li class="nav-item" *ngIf="isFacesAvailable()">
-          <a class="nav-link" [routerLink]="['/faces']" [class.active]="isLinkActive('/faces')" i18n>Faces</a>
-        </li>
+        <ng-container *ngFor="let link of navbarLinks">
+          <li class="nav-item" *ngIf="link.type === NavigationLinkTypes.albums && isAlbumsAvailable()">
+            <a class="nav-link" [routerLink]="['/albums']" [class.active]="isLinkActive('/albums')" i18n>Albums</a>
+          </li>
+          <li class="nav-item" *ngIf="link.type === NavigationLinkTypes.faces && isFacesAvailable()">
+            <a class="nav-link" [routerLink]="['/faces']" [class.active]="isLinkActive('/faces')" i18n>Faces</a>
+          </li>
+          <li class="nav-item"  *ngIf="link.type === NavigationLinkTypes.gallery">
+            <a class="nav-link"
+               [routerLink]="['/gallery']"
+               [queryParams]="queryService.getParams()" [class.active]="isLinkActive('/gallery')" i18n>Gallery</a>
+          </li>
+          <li class="nav-item" *ngIf="link.type === NavigationLinkTypes.url">
+            <a class="nav-link" [href]="link.url" [class.active]="isLinkActive(link.url)">{{link.name}}</a>
+          </li>
+          <li class="nav-item" *ngIf="link.type === NavigationLinkTypes.search">
+            <a class="nav-link" [routerLink]="['/search', link.SearchQuery | json]" [class.active]="isSearchActive(link.SearchQuery)">{{link.name}}</a>
+          </li>
+        </ng-container>
       </ul>
       <div class="text-lg-end">
         <ul class="navbar-nav">

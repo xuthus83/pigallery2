@@ -4,6 +4,7 @@ import {SortingMethods} from '../../entities/SortingMethods';
 import {UserRoles} from '../../entities/UserDTO';
 import {ConfigProperty, SubConfigClass} from 'typeconfig/common';
 import {IPrivateConfig} from '../private/PrivateConfig';
+import {FromDateSearch, SearchQueryDTO, SearchQueryTypes, TextSearch} from '../../entities/SearchQueryDTO';
 
 export enum MapProviders {
   OpenStreetMap = 1,
@@ -130,10 +131,42 @@ export class ClientThumbnailConfig {
   }
 }
 
+export enum NavigationLinkTypes {
+  gallery = 1, faces, albums, search, url
+}
+
+@SubConfigClass()
+export class NavigationLinkConfig {
+  @ConfigProperty({type: NavigationLinkTypes})
+  type: NavigationLinkTypes = NavigationLinkTypes.gallery;
+  @ConfigProperty({type: 'string'})
+  name?: string;
+  @ConfigProperty({type: 'object'})
+  SearchQuery?: SearchQueryDTO;
+  @ConfigProperty({type: 'string'})
+  url?: string;
+
+
+  constructor(type: NavigationLinkTypes = NavigationLinkTypes.gallery,
+              name?: string, SearchQuery?: SearchQueryDTO, url?: string) {
+
+    this.type = type;
+    this.name = name;
+    this.SearchQuery = SearchQuery;
+    this.url = url;
+  }
+}
+
 @SubConfigClass()
 export class NavBarConfig {
   @ConfigProperty()
   showItemCount: boolean = true;
+  @ConfigProperty({arrayType: NavigationLinkConfig, description: 'List of the navigation bar links'})
+  links: NavigationLinkConfig[] = [
+    new NavigationLinkConfig(NavigationLinkTypes.gallery),
+    new NavigationLinkConfig(NavigationLinkTypes.albums),
+    new NavigationLinkConfig(NavigationLinkTypes.faces),
+  ];
 }
 
 @SubConfigClass()
