@@ -144,6 +144,9 @@ export abstract class Job<T = void> implements IJob<T> {
           this.onFinish();
           return;
         }
+        // giving back the control to the main event loop (Macrotask queue)
+        // https://blog.insiderattack.net/promises-next-ticks-and-immediates-nodejs-event-loop-part-3-9226cbe7a6aa
+        await new Promise(setImmediate);
         this.run();
       } catch (e) {
         Logger.error(LOG_TAG, e);
