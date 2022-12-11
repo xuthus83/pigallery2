@@ -11,13 +11,16 @@ Homepage: http://bpatrik.github.io/pigallery2/
 
 This is a **fast** (like faster than your PC fast) **directory-first photo gallery website**, optimised for running on low resource servers (especially on raspberry pi).
 
-✔️ Strenghts:
+✔️ Strengths:
  * ⚡ Fast, like for real
- * ✔️ Simple. Point to your photos folder and a temp folder and you are good to go
+ * ✔️ Simple. Point to your photos folder and to a temp folder and you are good to go
 
 ⛔ Weakness:
  * 😥 Its simple. Shows what you have that's it. No gallery changes (photo delete, rotate, enhance, tag, organize, etc), your gallery folder is read-only.
- * 📁 Optimized for galleries with <100K photos with <5k photos/folder
+ * 📁 Optimized for galleries with <100K photos with <5k photos/folder 
+      * It will work on bigger galleries, but it wills start to slow down
+
+[You wrote about pigallery2](docs/references/README.md).
 
 ## Live Demo
 Live Demo @ render: https://pigallery2.onrender.com/ 
@@ -41,7 +44,7 @@ Live Demo @ render: https://pigallery2.onrender.com/
 
 [Docker](https://www.docker.com/) with [docker-compose](https://docs.docker.com/compose/) is the official and recommend way of installing and running *Pigallery2*.
 It contains all necessary dependencies, auto restarts on reboot, supports https, easy to upgrade to newer versions.
-For configuration and docker-compose files read more [here](docker/README.md) or check all builds: https://hub.docker.com/r/bpatrik/pigallery2/tags/
+For configuration and docker-compose files read more [here](docker/README.md) or check all builds [here](https://hub.docker.com/r/bpatrik/pigallery2/tags/).
 
 
 
@@ -101,14 +104,14 @@ Adding read/write permissions to all files can solve the file access issue `chmo
 You can run the app up as a service to run it on startup. Read more at [#42](https://github.com/bpatrik/pigallery2/issues/42#issuecomment-458340945)
 
 ### 1.3 Advanced configuration
-You can set up the app the following ways:
- * Using the UI
- * Manually editing the `config.json`
- * Through switches
-   * Like: `node start -- --Server-port=3000 --Client-authenticationRequired=false`
-   * You can check the generated `config.json` for the config hierarchy
- * Through environmental variable
-   * like set env. variable `Server-port` to `3000`   
+You can set up the app any of the following ways:
+ 1. Using the UI (recommended)
+ 2. Manually editing the `config.json`
+ 3. Through switches
+    * Like: `node start -- --Server-port=3000 --Client-authenticationRequired=false`
+    * You can check the generated `config.json` for the config hierarchy
+ 4. Through environmental variable
+    * like set env. variable `Server-port` to `3000`   
 
 Full list of configuration options are available at the [MANPAGE.md](MANPAGE.md).
 
@@ -167,7 +170,7 @@ apt-get install build-essential  libkrb5-dev gcc g++
  * Custom lightbox for full screen photo and video viewing
    * keyboard support for navigation  
    * showing low-res thumbnail while full image loads
-   * Information panel for showing **Exif info**  
+   * Information panel for showing **Exif and IPTC info**  
    * Automatic playing
    * gesture support (swipe left, right, up)
    * shortcut support
@@ -178,7 +181,7 @@ apt-get install build-essential  libkrb5-dev gcc g++
    * .gpx file support: rendering paths to map
    * supports [OSM](https://www.openstreetmap.org) and [Mapbox](https://www.mapbox.com) by default, but you can add any provider that has a tile url
  * **Two modes: SQL database and no-database mode**
-   * both modes supports
+   * both modes support
      * user management
      * password protection can be disabled/enabled
    * database mode supports:
@@ -191,7 +194,7 @@ apt-get install build-essential  libkrb5-dev gcc g++
     * reads Adobe's XMP Face region metadata. (It is defined by the Metadata Working Group (MWG).)
     * shows face bounding box over images
  * internalization / translation support
-   * currently supported languages: eng, hun, ro, ru, fr
+   * currently supported languages: eng, hun, ro, ru, fr, many other
  * Nice design 
     * responsive design (phone, tablet desktop support)
  * Setup page
@@ -219,19 +222,27 @@ apt-get install build-essential  libkrb5-dev gcc g++
  
  
 ## 4. Suggest/endorse new features
-  You are welcome to suggest new features to the application via [github issues](https://github.com/bpatrik/pigallery2/issues).  
-  Unfortunatly, lately I only have a limited time for this hobby project of mine. 
-  So, I mostly focuse on those features that are align with my needs. Sorry :(.
-  Although, I try to fixs bugs ASAP (that can still take from a few days to months).
-  I also try to implement some of the feature requests that have a lots of 'likes' (i.e.: `+1`-s or thumbs ups) on it.
+  Unfortunately, lately I only have a limited time for this hobby project of mine. 
+  So, I mostly focus on those features that are align with my needs. Sorry :(.
+  Although, I try to fix bugs ASAP (that can still take from a few days to months).
+  I also try to implement some feature requests that have a lots of 'likes' (i.e.: `+1`-s or thumbs ups) on it.
   If you have a feature that you really would like to happen, I welcome contributions to the app. See [CONTRIBUTING.md](https://github.com/bpatrik/pigallery2/blob/master/CONTRIBUTING.md) for more details.
 
 ## 5. Known errors
 * IOS map issue
   * Map on IOS prevents using the buttons in the image preview navigation, see #155
 * Video support on weak servers (like raspberry pi) with low upload rate
-  * video playback may use up too much resources and the server might not response for a while. Enable video transcoding in the app, to transcode the videos to lover bitrate. 
-  
+  * video playback may use up too much resources and the server might not respond for a while. Enable video transcoding in the app, to transcode the videos to lover bitrate. 
+
+## 6. Supporting the project
+I'm making this app for my own entertainment,
+but I like to share it with others as the contributions and bug reports make the app better
+and it also does not cost anything to me :)
+
+There is [no way to donate](https://github.com/bpatrik/pigallery2/discussions/328#discussioncomment-894546) to this project at the moment. And I'm also not planning on monetizing it.
+But it warms my hearth [seeing that it is useful for some people](docs/references/README.md). 
+
+
 ## 6. Credits
 Crossbrowser testing sponsored by [Browser Stack](https://www.browserstack.com)
 [<img src="https://camo.githubusercontent.com/a7b268f2785656ab3ca7b1cbb1633ee5affceb8f/68747470733a2f2f64677a6f7139623561736a67312e636c6f756466726f6e742e6e65742f70726f64756374696f6e2f696d616765732f6c61796f75742f6c6f676f2d6865616465722e706e67" alt="Browser Stack" height="31px" style="background: cornflowerblue;">](https://www.browserstack.com)
