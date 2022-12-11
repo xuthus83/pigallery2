@@ -12,13 +12,13 @@ Homepage: http://bpatrik.github.io/pigallery2/
 This is a **fast** (like faster than your PC fast) **directory-first photo gallery website**, optimised for running on low resource servers (especially on raspberry pi).
 
 ✔️ Strengths:
- * ⚡ Fast, like for real
- * ✔️ Simple. Point to your photos folder and to a temp folder and you are good to go
+ * ⚡ Fast, like for real.
+ * ✔️ Simple. Point to your photos folder and to a temp folder and you are good to go.
 
 ⛔ Weakness:
  * 😥 Its simple. Shows what you have that's it. No gallery changes (photo delete, rotate, enhance, tag, organize, etc), your gallery folder is read-only.
- * 📁 Optimized for galleries with <100K photos with <5k photos/folder 
-      * It will work on bigger galleries, but it wills start to slow down
+ * 📁 Optimized for galleries with <100K photos with <5k photos/folder.
+      * It will work on bigger galleries, but it will start to slow down.
 
 [You wrote about pigallery2](docs/references/README.md).
 
