@@ -104,7 +104,7 @@ jobs:
     steps:
       - name: Set tag
         id: vars
-        run: echo "{name}={tag::$(echo ${GITHUB_REF:10})}" >> $GITHUB_OUTPUT && echo "{name}={tag::$(echo ${GITHUB_REF:5})}" >> $GITHUB_OUTPUT
+        run: echo ::set-output name=tag::$(echo ${GITHUB_REF:10}) && echo ::set-output name=type::$(echo ${GITHUB_REF:5})
       - name: Checkout
         uses: actions/checkout@v3
       - uses: actions/download-artifact@v3
