@@ -283,19 +283,21 @@ export class MetadataLoader {
                 }
               }
             }
+            let orientation = OrientationTypes.TOP_LEFT;
             if (exif.Orientation) {
-              const orientation = parseInt(
+              orientation = parseInt(
                 exif.Orientation.value as any,
                 10
               ) as number;
-              if (OrientationTypes.BOTTOM_LEFT < orientation) {
-                // noinspection JSSuspiciousNameCombination
-                const height = metadata.size.width;
-                // noinspection JSSuspiciousNameCombination
-                metadata.size.width = metadata.size.height;
-                metadata.size.height = height;
-              }
             }
+            if (OrientationTypes.BOTTOM_LEFT < orientation) {
+              // noinspection JSSuspiciousNameCombination
+              const height = metadata.size.width;
+              // noinspection JSSuspiciousNameCombination
+              metadata.size.width = metadata.size.height;
+              metadata.size.height = height;
+            }
+
             if (Config.Client.Faces.enabled) {
               const faces: FaceRegion[] = [];
               if (
@@ -314,11 +316,32 @@ export class MetadataLoader {
                     x: string,
                     y: string
                   ) => {
+                    if (OrientationTypes.BOTTOM_LEFT < orientation) {
+                      [x, y] = [y, x];
+                      [w, h] = [h, w];
+                    }
+                    let swapX = 0;
+                    let swapY = 0;
+                    switch (orientation) {
+                      case OrientationTypes.TOP_RIGHT:
+                      case OrientationTypes.RIGHT_TOP:
+                        swapX = 1;
+                        break;
+                      case OrientationTypes.BOTTOM_RIGHT:
+                      case OrientationTypes.RIGHT_BOTTOM:
+                        swapX = 1;
+                        swapY = 1;
+                        break;
+                      case OrientationTypes.BOTTOM_LEFT:
+                      case OrientationTypes.LEFT_BOTTOM:
+                        swapY = 1;
+                        break;
+                    }
                     return {
                       width: Math.round(parseFloat(w) * metadata.size.width),
                       height: Math.round(parseFloat(h) * metadata.size.height),
-                      left: Math.round(parseFloat(x) * metadata.size.width),
-                      top: Math.round(parseFloat(y) * metadata.size.height),
+                      left: Math.round(Math.abs(parseFloat(x) - swapX) * metadata.size.width),
+                      top: Math.round(Math.abs(parseFloat(y) - swapY) * metadata.size.height),
                     };
                   };
 
@@ -360,9 +383,12 @@ export class MetadataLoader {
                   if (type !== 'Face' || !name) {
                     continue;
                   }
+
                   // convert center base box to corner based box
                   box.left = Math.round(Math.max(0, box.left - box.width / 2));
                   box.top = Math.round(Math.max(0, box.top - box.height / 2));
+
+
                   faces.push({name, box});
                 }
               }
