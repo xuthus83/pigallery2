@@ -5,111 +5,112 @@
 
   <div [class.dim-controls]="controllersDimmed"
        class="controls controls-top">
+    <div class="controls-background">
+      <div class="highlight control-button" (click)="toggleInfoPanel.emit()"
+           title="info key: i" i18n-title>
+        <span class="oi oi-info"></span>
+      </div>
 
-    <div class="highlight control-button" (click)="toggleInfoPanel.emit()"
-         title="info key: i" i18n-title>
-      <span class="oi oi-info"></span>
-    </div>
-
-    <div *ngIf="fullScreenService.isFullScreenEnabled()"
-         class="highlight control-button"
-         (click)="toggleFullScreen.emit()"
-         title="toggle fullscreen, key: f" i18n-title>
+      <div *ngIf="fullScreenService.isFullScreenEnabled()"
+           class="highlight control-button"
+           (click)="toggleFullScreen.emit()"
+           title="toggle fullscreen, key: f" i18n-title>
         <span class="oi oi-fullscreen-exit">
         </span>
-    </div>
+      </div>
 
-    <div *ngIf="!fullScreenService.isFullScreenEnabled()"
-         class="highlight control-button"
-         (click)="toggleFullScreen.emit(true)"
-         title="toggle fullscreen, key: f" i18n-title>
+      <div *ngIf="!fullScreenService.isFullScreenEnabled()"
+           class="highlight control-button"
+           (click)="toggleFullScreen.emit(true)"
+           title="toggle fullscreen, key: f" i18n-title>
         <span class="oi oi-fullscreen-enter">
         </span>
-    </div>
+      </div>
 
-    <div class="btn-group" dropdown [insideClick]="true">
-      <button id="button-basic" dropdownToggle type="button"
-              class="border-0 highlight control-button"
-              data-bs-auto-close="outside"
-              aria-controls="dropdown-basic">
-        <span class="oi oi-menu"></span>
-      </button>
-      <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu  dropdown-menu-right"
-          role="menu" aria-labelledby="button-basic">
-        <li role="menuitem">
-          <a *ngIf="activePhoto"
-             [href]="activePhoto.gridMedia.getMediaPath()"
-             [download]="activePhoto.gridMedia.media.name"
-             class="dropdown-item">
-            <span class="oi oi-data-transfer-download pe-2" i18n></span> Download
-            <small>(shift + D)</small>
-          </a>
-        </li>
-        <li role="menuitem">
-          <div class="dropdown-item d-flex justify-content-between">
-            <span title="key: c" i18n-title i18n>Show caption</span>
-            <bSwitch
-              class="switch ps-2"
-              name="caption-switch"
-              switch-on-color="success"
-              [switch-inverse]="true"
-              switch-off-text="on hover"
-              switch-on-text="always"
-              i18n-switch-off-text
-              i18n-switch-on-text
-              [switch-handle-width]="100"
-              [switch-label-width]="20"
-              [(ngModel)]="lightboxService.captionAlwaysOn">
-            </bSwitch>
-          </div>
-        </li>
-        <li role="menuitem ">
-          <div class="dropdown-item d-flex justify-content-between">
-            <span title="key: a" i18n-title i18n>Show faces</span>
-            <bSwitch
-              class="switch ps-2"
-              name="faces-switch"
-              switch-on-color="success"
-              [switch-inverse]="true"
-              switch-off-text="on hover"
-              switch-on-text="always"
-              i18n-switch-off-text
-              i18n-switch-on-text
-              [switch-handle-width]="100"
-              [switch-label-width]="20"
-              [(ngModel)]="lightboxService.facesAlwaysOn">
-            </bSwitch>
-          </div>
-        </li>
-        <li
-          *ngIf="activePhoto && activePhoto.gridMedia.isVideo()"
-          role="menuitem ">
-          <div class="dropdown-item d-flex justify-content-between">
-            <span title="key: l" i18n-title i18n>Play videos</span>
-            <bSwitch
-              class="switch ps-2"
-              name="faces-switch"
-              switch-on-color="success"
-              [switch-inverse]="true"
-              switch-off-text="once"
-              switch-on-text="loop"
-              i18n-switch-off-text
-              i18n-switch-on-text
-              [switch-handle-width]="100"
-              [switch-label-width]="20"
-              [(ngModel)]="lightboxService.loopVideos">
-            </bSwitch>
-          </div>
-        </li>
-      </ul>
-    </div>
+      <div class="btn-group" dropdown [insideClick]="true">
+        <button id="button-basic" dropdownToggle type="button"
+                class="border-0 highlight control-button"
+                data-bs-auto-close="outside"
+                aria-controls="dropdown-basic">
+          <span class="oi oi-menu"></span>
+        </button>
+        <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu  dropdown-menu-right"
+            role="menu" aria-labelledby="button-basic">
+          <li role="menuitem">
+            <a *ngIf="activePhoto"
+               [href]="activePhoto.gridMedia.getMediaPath()"
+               [download]="activePhoto.gridMedia.media.name"
+               class="dropdown-item">
+              <span class="oi oi-data-transfer-download pe-2" i18n></span> Download
+              <small>(shift + D)</small>
+            </a>
+          </li>
+          <li role="menuitem">
+            <div class="dropdown-item d-flex justify-content-between">
+              <span title="key: c" i18n-title i18n>Show caption</span>
+              <bSwitch
+                class="switch ps-2"
+                name="caption-switch"
+                switch-on-color="success"
+                [switch-inverse]="true"
+                switch-off-text="on hover"
+                switch-on-text="always"
+                i18n-switch-off-text
+                i18n-switch-on-text
+                [switch-handle-width]="100"
+                [switch-label-width]="20"
+                [(ngModel)]="lightboxService.captionAlwaysOn">
+              </bSwitch>
+            </div>
+          </li>
+          <li role="menuitem ">
+            <div class="dropdown-item d-flex justify-content-between">
+              <span title="key: a" i18n-title i18n>Show faces</span>
+              <bSwitch
+                class="switch ps-2"
+                name="faces-switch"
+                switch-on-color="success"
+                [switch-inverse]="true"
+                switch-off-text="on hover"
+                switch-on-text="always"
+                i18n-switch-off-text
+                i18n-switch-on-text
+                [switch-handle-width]="100"
+                [switch-label-width]="20"
+                [(ngModel)]="lightboxService.facesAlwaysOn">
+              </bSwitch>
+            </div>
+          </li>
+          <li
+            *ngIf="activePhoto && activePhoto.gridMedia.isVideo()"
+            role="menuitem ">
+            <div class="dropdown-item d-flex justify-content-between">
+              <span title="key: l" i18n-title i18n>Play videos</span>
+              <bSwitch
+                class="switch ps-2"
+                name="faces-switch"
+                switch-on-color="success"
+                [switch-inverse]="true"
+                switch-off-text="once"
+                switch-on-text="loop"
+                i18n-switch-off-text
+                i18n-switch-on-text
+                [switch-handle-width]="100"
+                [switch-label-width]="20"
+                [(ngModel)]="lightboxService.loopVideos">
+              </bSwitch>
+            </div>
+          </li>
+        </ul>
+      </div>
 
-    <div class="highlight control-button"
-         (click)="closeLightbox()"
-         title="close, key: Escape" i18n-title>
+      <div class="highlight control-button"
+           (click)="closeLightbox()"
+           title="close, key: Escape" i18n-title>
         <span class="oi oi-x">
 
         </span>
+      </div>
     </div>
   </div>
 
@@ -186,19 +187,21 @@
 
   <div [class.dim-controls]="controllersDimmed" class="controls controls-playback"
        *ngIf="zoom == 1 && activePhoto && activePhoto.gridMedia.isPhoto()">
-      <span class="oi oi-media-pause highlight control-button"
-            [ngClass]="playBackState == PlayBackStates.Paused ? 'button-disabled':''"
-            (click)="pause()"
-            title="pause"></span>
-    <span
-      class="oi oi-media-play highlight control-button"
-      [ngClass]="playBackState == PlayBackStates.Play ? 'button-active':''"
-      (click)="play()"
-      title="auto play"></span>
-    <span class="oi oi-media-skip-forward highlight control-button"
-          [ngClass]="playBackState == PlayBackStates.FastForward ? 'button-active':''"
-          (click)="fastForward()"
-          title="fast auto play"></span>
+    <div class="controls-background">
+    <span class="oi oi-media-pause highlight control-button"
+          [ngClass]="playBackState == PlayBackStates.Paused ? 'button-disabled':''"
+          (click)="pause()"
+          title="pause"></span>
+      <span
+        class="oi oi-media-play highlight control-button"
+        [ngClass]="playBackState == PlayBackStates.Play ? 'button-active':''"
+        (click)="play()"
+        title="auto play"></span>
+      <span class="oi oi-media-skip-forward highlight control-button"
+            [ngClass]="playBackState == PlayBackStates.FastForward ? 'button-active':''"
+            (click)="fastForward()"
+            title="fast auto play"></span>
+    </div>
   </div>
 
   <div [class.dim-controls]="controllersDimmed" class="controls controls-big-play"
