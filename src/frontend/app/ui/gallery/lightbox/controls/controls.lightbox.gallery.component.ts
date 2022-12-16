@@ -29,7 +29,6 @@ import {LightboxService} from '../lightbox.service';
 export enum PlayBackStates {
   Paused = 1,
   Play = 2,
-  FastForward = 3,
 }
 
 @Component({
@@ -57,6 +56,8 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
   public zoom = 1;
   public playBackState: PlayBackStates = PlayBackStates.Paused;
   public PlayBackStates = PlayBackStates;
+  public playBackDurations = [2,5,10,15,20,30,60];
+  public selectedPlayBackDuration = 5;
   public controllersDimmed = false;
 
   public controllersVisible = true;
@@ -119,7 +120,7 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    this.timer = timer(1000, 2000);
+    this.timer = timer(1000, 1000);
   }
 
   ngOnDestroy(): void {
@@ -291,18 +292,15 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
     this.nextPhoto.emit();
   };
 
-  public play(): void {
+  public play(duration?: number): void {
     this.pause();
+    if (duration) {
+      this.selectedPlayBackDuration = duration;
+    }
     this.timerSub = this.timer
-      .pipe(filter((t) => t % 2 === 0))
+      .pipe(filter((t) => t % this.selectedPlayBackDuration === 0))
       .subscribe(this.showNextMedia);
     this.playBackState = PlayBackStates.Play;
-  }
-
-  public fastForward(): void {
-    this.pause();
-    this.timerSub = this.timer.subscribe(this.showNextMedia);
-    this.playBackState = PlayBackStates.FastForward;
   }
 
   @HostListener('mousemove')

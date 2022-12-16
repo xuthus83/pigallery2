@@ -34,7 +34,7 @@
               aria-controls="dropdown-basic">
         <span class="oi oi-menu"></span>
       </button>
-      <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu  dropdown-menu-right"
+      <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-right"
           role="menu" aria-labelledby="button-basic">
         <li role="menuitem">
           <a *ngIf="activePhoto"
@@ -63,7 +63,7 @@
             </bSwitch>
           </div>
         </li>
-        <li role="menuitem ">
+        <li role="menuitem">
           <div class="dropdown-item d-flex justify-content-between">
             <span title="key: a" i18n-title i18n>Show faces</span>
             <bSwitch
@@ -83,7 +83,7 @@
         </li>
         <li
           *ngIf="activePhoto && activePhoto.gridMedia.isVideo()"
-          role="menuitem ">
+          role="menuitem">
           <div class="dropdown-item d-flex justify-content-between">
             <span title="key: l" i18n-title i18n>Play videos</span>
             <bSwitch
@@ -186,19 +186,35 @@
 
   <div [class.dim-controls]="controllersDimmed" class="controls controls-playback"
        *ngIf="zoom == 1 && activePhoto && activePhoto.gridMedia.isPhoto()">
-      <span class="oi oi-media-pause highlight control-button"
-            [ngClass]="playBackState == PlayBackStates.Paused ? 'button-disabled':''"
-            (click)="pause()"
-            title="pause"></span>
-    <span
-      class="oi oi-media-play highlight control-button"
-      [ngClass]="playBackState == PlayBackStates.Play ? 'button-active':''"
-      (click)="play()"
-      title="auto play"></span>
-    <span class="oi oi-media-skip-forward highlight control-button"
-          [ngClass]="playBackState == PlayBackStates.FastForward ? 'button-active':''"
-          (click)="fastForward()"
-          title="fast auto play"></span>
+
+    <span class="oi oi-media-pause highlight control-button"
+          [ngClass]="playBackState == PlayBackStates.Paused ? 'button-disabled':''"
+          (click)="pause()"
+          title="pause"></span>
+
+    <span class="oi oi-media-play highlight control-button"
+          [ngClass]="playBackState == PlayBackStates.Play ? 'button-active':''"
+          (click)="play()"
+          title="auto play"></span>
+
+    <span class="oi btn-group highlight control-button"
+          dropdown
+          [dropup]="true">
+      <div id="button-duration"
+              dropdownToggle
+              data-bs-auto-close="outside"
+              aria-controls="dropdown-basic">
+        <span class="text-white pe-1">{{selectedPlayBackDuration + 's'}}</span>
+        <span class="oi-clock"></span>
+      </div>
+      <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-right"
+          role="menu" aria-labelledby="button-duration">
+        <li *ngFor="let duration of playBackDurations" role="menuitem" (click)="play(duration)">
+          <a class="dropdown-item" [class]="selectedPlayBackDuration === duration ? 'active' : ''">{{duration}}s</a>
+        </li>
+      </ul>
+    </span>
+
   </div>
 
   <div [class.dim-controls]="controllersDimmed" class="controls controls-big-play"
