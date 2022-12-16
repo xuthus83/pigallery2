@@ -112,7 +112,7 @@ export class UserConfig {
 
 @SubConfigClass()
 export class ServerDataBaseConfig {
-  @ConfigProperty<DatabaseType, IPrivateConfig, string>({
+  @ConfigProperty<DatabaseType, IPrivateConfig>({
     type: DatabaseType,
     onNewValue: (value, config) => {
       if (config && value === DatabaseType.memory) {
