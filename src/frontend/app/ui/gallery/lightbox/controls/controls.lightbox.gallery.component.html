@@ -192,10 +192,11 @@
             [ngClass]="playBackState == PlayBackStates.Paused ? 'button-disabled':''"
             (click)="pause()"
             title="pause"></span>
-      <span class="oi oi-media-play highlight control-button"
-            [ngClass]="playBackState == PlayBackStates.Play ? 'button-active' : ''"
-            (click)="play()"
-            title="auto play"></span>
+      <span
+        class="oi oi-media-play highlight control-button"
+        [ngClass]="playBackState == PlayBackStates.Play ? 'button-active':''"
+        (click)="play()"
+        title="auto play"></span>
       <span class="oi btn-group highlight control-button"
             dropdown
             (isOpenChange)="$event ? pause() : play()"
