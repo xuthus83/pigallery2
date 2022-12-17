@@ -132,6 +132,8 @@ export class GalleryLightboxMediaComponent implements OnChanges {
       this.thumbnailSrc = null;
       this.photo.src = null;
       this.nextImage.src = '';
+      this.nextImage.onload = null;
+      this.nextImage.onerror = null;
       this.mediaLoaded = false;
       this.imageLoadFinished = {
         this: false,
@@ -219,8 +221,16 @@ export class GalleryLightboxMediaComponent implements OnChanges {
     } else {
       this.nextImage.src = this.nextGridMedia.getMediaPath();
     }
-    this.nextImage.onload = () => this.imageLoadFinished.next = true;
 
+    this.nextImage.onload = () => this.imageLoadFinished.next = true;
+    this.nextImage.onerror = () => {
+      console.error('Cant preload:' + this.nextImage.src);
+      this.imageLoadFinished.next = true;
+    };
+
+    if (this.nextImage.complete) {
+      this.imageLoadFinished.next = true;
+    }
   }
 
   private loadPhoto(): void {

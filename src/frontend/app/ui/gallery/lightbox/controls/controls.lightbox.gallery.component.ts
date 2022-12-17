@@ -58,7 +58,7 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
   public zoom = 1;
   public playBackState: PlayBackStates = PlayBackStates.Paused;
   public PlayBackStates = PlayBackStates;
-  public playBackDurations = [2,5,10,15,20,30,60];
+  public playBackDurations = [2, 5, 10, 15, 20, 30, 60];
   public selectedPlayBackDuration: number = null;
   public controllersDimmed = false;
 
@@ -67,6 +67,7 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
   public SearchQueryTypes = SearchQueryTypes;
   public faceContainerDim = {width: 0, height: 0};
   public searchEnabled: boolean;
+
   private visibilityTimer: number = null;
   private timer: Observable<number>;
   private timerSub: Subscription;
@@ -78,7 +79,7 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
     public lightboxService: LightboxService,
     public fullScreenService: FullScreenService,
     private authService: AuthenticationService,
-    private cookieService:CookieService
+    private cookieService: CookieService
   ) {
     this.searchEnabled =
       Config.Client.Search.enabled && this.authService.canSearch();
@@ -315,6 +316,10 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
       this.cookieService.set(CookieNames.playBackDuration, duration + '');
     } else {
       this.cookieService.delete(CookieNames.playBackDuration);
+    }
+    if (this.playBackState === PlayBackStates.Play) {
+      this.pause();
+      this.play();
     }
   }
 
