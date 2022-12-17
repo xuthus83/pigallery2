@@ -301,11 +301,8 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
     this.nextPhoto.emit();
   };
 
-  public play(duration?: number): void {
+  public play(): void {
     this.pause();
-    if (duration) {
-      this.setPlayBackDuration(duration);
-    }
     this.timerSub = this.timer
       .pipe(filter((t) => t % this.selectedPlayBackDuration === 0))
       .subscribe(this.showNextMedia);

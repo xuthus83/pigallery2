@@ -198,6 +198,7 @@
             title="auto play"></span>
       <span class="oi btn-group highlight control-button"
             dropdown
+            (isOpenChange)="$event ? pause() : play()"
             [dropup]="true">
         <div id="button-duration"
              dropdownToggle
@@ -213,7 +214,7 @@
             aria-labelledby="button-duration">
           <li *ngFor="let duration of playBackDurations"
               role="menuitem"
-              (click)="play(duration)">
+              (click)="setPlayBackDuration(duration)">
             <a class="dropdown-item"
                [class]="selectedPlayBackDuration === duration ? 'active' : ''">
               {{duration}}s
