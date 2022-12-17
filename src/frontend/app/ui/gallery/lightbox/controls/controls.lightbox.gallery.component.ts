@@ -11,6 +11,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import {MediaDTOUtils} from '../../../../../../common/entities/MediaDTO';
+import {CookieNames} from '../../../../../../common/CookieNames';
 import {FullScreenService} from '../../fullscreen.service';
 import {GalleryPhotoComponent} from '../../grid/photo/photo.grid.gallery.component';
 import {Observable, Subscription, timer} from 'rxjs';
@@ -25,6 +26,7 @@ import {
 } from '../../../../../../common/entities/SearchQueryDTO';
 import {AuthenticationService} from '../../../../model/network/authentication.service';
 import {LightboxService} from '../lightbox.service';
+import {CookieService} from 'ngx-cookie-service';
 
 export enum PlayBackStates {
   Paused = 1,
@@ -57,7 +59,7 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
   public playBackState: PlayBackStates = PlayBackStates.Paused;
   public PlayBackStates = PlayBackStates;
   public playBackDurations = [2,5,10,15,20,30,60];
-  public selectedPlayBackDuration = 5;
+  public selectedPlayBackDuration: number = null;
   public controllersDimmed = false;
 
   public controllersVisible = true;
@@ -70,11 +72,13 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
   private timerSub: Subscription;
   private prevDrag = {x: 0, y: 0};
   private prevZoom = 1;
+  private defaultPlayBackDuration = 5;
 
   constructor(
     public lightboxService: LightboxService,
     public fullScreenService: FullScreenService,
-    private authService: AuthenticationService
+    private authService: AuthenticationService,
+    private cookieService:CookieService
   ) {
     this.searchEnabled =
       Config.Client.Search.enabled && this.authService.canSearch();
@@ -121,6 +125,11 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
 
   ngOnInit(): void {
     this.timer = timer(1000, 1000);
+    if (this.cookieService.check(CookieNames.playBackDuration)) {
+      this.selectedPlayBackDuration = +this.cookieService.get(CookieNames.playBackDuration);
+    } else {
+      this.selectedPlayBackDuration = this.defaultPlayBackDuration;
+    }
   }
 
   ngOnDestroy(): void {
@@ -295,12 +304,21 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
   public play(duration?: number): void {
     this.pause();
     if (duration) {
-      this.selectedPlayBackDuration = duration;
+      this.setPlayBackDuration(duration);
     }
     this.timerSub = this.timer
       .pipe(filter((t) => t % this.selectedPlayBackDuration === 0))
       .subscribe(this.showNextMedia);
     this.playBackState = PlayBackStates.Play;
+  }
+
+  public setPlayBackDuration(duration: number) {
+    this.selectedPlayBackDuration = duration;
+    if (duration) {
+      this.cookieService.set(CookieNames.playBackDuration, duration + '');
+    } else {
+      this.cookieService.delete(CookieNames.playBackDuration);
+    }
   }
 
   @HostListener('mousemove')
