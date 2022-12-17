@@ -77,7 +77,7 @@ export class MapLayers {
 
 @SubConfigClass()
 export class ClientMapConfig {
-  @ConfigProperty<boolean, IPrivateConfig>({
+  @ConfigProperty<boolean, IPrivateConfig, string>({
     onNewValue: (value, config) => {
       if (value === false) {
         config.Client.MetaFile.gpx = false;
