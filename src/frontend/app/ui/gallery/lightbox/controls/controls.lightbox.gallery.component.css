@@ -283,4 +283,6 @@ input[type="range"].zoom-progress::-moz-range-track {
   opacity: 1;
 }
 
-
+.dropdown-menu {
+  min-width: auto;
+}
