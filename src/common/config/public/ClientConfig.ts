@@ -203,6 +203,8 @@ export class ClientOtherConfig {
       'Adds a button to flattens the file structure, by listing the content of all subdirectories.',
   })
   enableDirectoryFlattening: boolean = false;
+  @ConfigProperty({description:"Default time interval for displaying a photo in the slide show"})
+  defaultSlideshowSpeed: number = 5;
 }
 
 @SubConfigClass()

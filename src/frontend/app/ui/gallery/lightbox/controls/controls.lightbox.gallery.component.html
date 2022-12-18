@@ -53,7 +53,8 @@
               <span class="pe-2" i18n-title title="Slideshow playback speed" i18n>Slideshow speed:</span>
               <select
                 class="form-select d-inline-block w-auto"
-                [(ngModel)]="selectedPlayBackDuration">
+                [(ngModel)]="selectedSlideshowSpeed"
+                (ngModelChange)="slideshowSpeedChanged()">
                 <option *ngFor="let speed of playBackDurations" [value]="speed">{{ speed }}s</option>
               </select>
             </div>
@@ -76,7 +77,7 @@
               </bSwitch>
             </div>
           </li>
-          <li role="menuitem ">
+          <li role="menuitem">
             <div class="dropdown-item d-flex justify-content-between">
               <span title="key: a" i18n-title i18n>Show faces</span>
               <bSwitch

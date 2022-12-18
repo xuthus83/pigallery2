@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import { DirectoryPathDTO, ParentDirectoryDTO,} from '../../../../common/entities/DirectoryDTO';
+import {DirectoryPathDTO, ParentDirectoryDTO,} from '../../../../common/entities/DirectoryDTO';
 import {Utils} from '../../../../common/Utils';
 import {Config} from '../../../../common/config/public/Config';
 import {IAutoCompleteItem} from '../../../../common/entities/AutoCompleteItem';
@@ -24,6 +24,7 @@ export class GalleryCacheService {
   private static readonly SEARCH_PREFIX = 'search:';
   private static readonly SORTING_PREFIX = 'sorting:';
   private static readonly VERSION = 'version';
+  private static readonly SLIDESHOW_SPEED = 'slideshow_speed';
 
   constructor(private versionService: VersionService) {
     // if it was a forced reload not a navigation, clear cache
@@ -291,6 +292,25 @@ export class GalleryCacheService {
       );
     } catch (e) {
       // ignoring errors
+    }
+  }
+
+  getSlideshowSpeed(): number {
+    const key = GalleryCacheService.SLIDESHOW_SPEED;
+    const tmp = localStorage.getItem(key);
+    if (tmp != null) {
+      return parseInt(tmp, 10);
+    }
+    return null;
+  }
+
+  setSlideshowSpeed(speed: number): void {
+    try {
+      const key = GalleryCacheService.SLIDESHOW_SPEED;
+      localStorage.setItem(key, speed.toString());
+    } catch (e) {
+      this.reset();
+      console.error(e);
     }
   }
 }

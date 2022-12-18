@@ -27,6 +27,7 @@ import {
 import {AuthenticationService} from '../../../../model/network/authentication.service';
 import {LightboxService} from '../lightbox.service';
 import {CookieService} from 'ngx-cookie-service';
+import {GalleryCacheService} from '../../cache.gallery.service';
 
 export enum PlayBackStates {
   Paused = 1,
@@ -59,7 +60,7 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
   public playBackState: PlayBackStates = PlayBackStates.Paused;
   public PlayBackStates = PlayBackStates;
   public playBackDurations = [2, 5, 10, 15, 20, 30, 60];
-  public selectedPlayBackDuration: number = null;
+  public selectedSlideshowSpeed: number = null;
   public controllersDimmed = false;
 
   public controllersVisible = true;
@@ -73,13 +74,12 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
   private timerSub: Subscription;
   private prevDrag = {x: 0, y: 0};
   private prevZoom = 1;
-  private defaultPlayBackDuration = 5;
 
   constructor(
     public lightboxService: LightboxService,
     public fullScreenService: FullScreenService,
     private authService: AuthenticationService,
-    private cookieService: CookieService
+    private cacheService: GalleryCacheService
   ) {
     this.searchEnabled =
       Config.Client.Search.enabled && this.authService.canSearch();
@@ -126,10 +126,10 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
 
   ngOnInit(): void {
     this.timer = timer(1000, 1000);
-    if (this.cookieService.check(CookieNames.playBackDuration)) {
-      this.selectedPlayBackDuration = +this.cookieService.get(CookieNames.playBackDuration);
+    if (this.cacheService.getSlideshowSpeed()) {
+      this.selectedSlideshowSpeed = this.cacheService.getSlideshowSpeed();
     } else {
-      this.selectedPlayBackDuration = this.defaultPlayBackDuration;
+      this.selectedSlideshowSpeed = Config.Client.Other.defaultSlideshowSpeed;
     }
   }
 
@@ -305,22 +305,13 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
   public play(): void {
     this.pause();
     this.timerSub = this.timer
-      .pipe(filter((t) => t % this.selectedPlayBackDuration === 0))
+      .pipe(filter((t) => t % this.selectedSlideshowSpeed === 0))
       .subscribe(this.showNextMedia);
     this.playBackState = PlayBackStates.Play;
   }
 
-  public setPlayBackDuration(duration: number) {
-    this.selectedPlayBackDuration = duration;
-    if (duration) {
-      this.cookieService.set(CookieNames.playBackDuration, duration + '');
-    } else {
-      this.cookieService.delete(CookieNames.playBackDuration);
-    }
-    if (this.playBackState === PlayBackStates.Play) {
-      this.pause();
-      this.play();
-    }
+  public slideshowSpeedChanged() {
+    this.cacheService.setSlideshowSpeed(this.selectedSlideshowSpeed);
   }
 
   @HostListener('mousemove')
