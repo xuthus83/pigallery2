@@ -3,6 +3,7 @@ import {
   JobProgressLogDTO,
   JobProgressStates,
 } from '../../../../common/entities/job/JobProgressDTO';
+import {Config} from '../../../../common/config/private/Config';
 
 export class JobProgress {
   private steps = {
@@ -86,7 +87,7 @@ export class JobProgress {
   };
 
   log(log: string): void {
-    while (this.logs.length > 10) {
+    while (this.logs.length > Config.Server.Jobs.maxSavedProgress) {
       this.logs.shift();
     }
     this.logs.push({

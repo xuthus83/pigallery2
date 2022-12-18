@@ -25,6 +25,12 @@ export abstract class FileJob<S extends { indexedOnly: boolean } = { indexedOnly
   public readonly ConfigTemplate: ConfigTemplateEntry[] = [];
   directoryQueue: string[] = [];
   fileQueue: string[] = [];
+  DBProcessing = {
+    mediaLoaded: 0,
+    hasMoreMedia: true,
+    initiated: false
+  };
+
 
   protected constructor(private scanFilter: DirectoryScanSettings) {
     super();
@@ -43,6 +49,11 @@ export abstract class FileJob<S extends { indexedOnly: boolean } = { indexedOnly
   protected async init(): Promise<void> {
     this.directoryQueue = [];
     this.fileQueue = [];
+    this.DBProcessing = {
+      mediaLoaded: 0,
+      hasMoreMedia: true,
+      initiated: false
+    };
     this.directoryQueue.push('/');
   }
 
@@ -59,22 +70,17 @@ export abstract class FileJob<S extends { indexedOnly: boolean } = { indexedOnly
   protected abstract processFile(filePath: string): Promise<void>;
 
   protected async step(): Promise<boolean> {
-    if (this.directoryQueue.length === 0 && this.fileQueue.length === 0) {
+    const DBBased = this.config.indexedOnly &&
+      Config.Server.Database.type !== DatabaseType.memory;
+    if (
+      this.fileQueue.length === 0 &&
+      ((this.directoryQueue.length === 0 && !DBBased) ||
+        (DBBased &&
+          this.DBProcessing.hasMoreMedia === false))) {
       return false;
     }
 
-    if (this.directoryQueue.length > 0) {
-      if (
-        this.config.indexedOnly === true &&
-        Config.Server.Database.type !== DatabaseType.memory
-      ) {
-        await this.loadAllMediaFilesFromDB();
-        this.directoryQueue = [];
-      } else {
-        await this.loadADirectoryFromDisk();
-      }
-    } else if (this.fileQueue.length > 0) {
-      this.Progress.Left = this.fileQueue.length;
+    const processOneFile = async () => {
       const filePath = this.fileQueue.shift();
       try {
         if ((await this.shouldProcess(filePath)) === true) {
@@ -95,7 +101,32 @@ export abstract class FileJob<S extends { indexedOnly: boolean } = { indexedOnly
           'Error during processing file:' + filePath + ', ' + e.toString()
         );
       }
+    };
+
+    if (!DBBased) {
+      if (this.directoryQueue.length > 0) {
+        await this.loadADirectoryFromDisk();
+      } else if (this.fileQueue.length > 0) {
+        this.Progress.Left = this.fileQueue.length;
+        await processOneFile();
+      }
+    } else {
+      if (!this.DBProcessing.initiated) {
+        this.Progress.log('Counting files from db');
+        Logger.silly(LOG_TAG, 'Counting files from db');
+        this.Progress.All = await this.countMediaFromDB();
+        Logger.silly(LOG_TAG, 'Found:' + this.Progress.All);
+        this.DBProcessing.initiated = true;
+        return true;
+      }
+      if (this.fileQueue.length === 0) {
+        await this.loadMediaFilesFromDB();
+      } else {
+        this.Progress.Left = this.fileQueue.length;
+        await processOneFile();
+      }
     }
+
     return true;
   }
 
@@ -138,16 +169,21 @@ export abstract class FileJob<S extends { indexedOnly: boolean } = { indexedOnly
     }
   }
 
-  private async loadAllMediaFilesFromDB(): Promise<void> {
+  private async loadMediaFilesFromDB(): Promise<void> {
     if (this.scanFilter.noVideo === true &&
       this.scanFilter.noPhoto === true &&
       this.scanFilter.noMetaFile === true) {
       return;
     }
 
-    this.Progress.log('Loading files from db');
-    Logger.silly(LOG_TAG, 'Loading files from db');
+    const logStr = `Loading next batch of files from db. Skipping: ${this.DBProcessing.mediaLoaded}, looking for more: ${Config.Server.Jobs.mediaProcessingBatchSize}`;
+    this.Progress.log(logStr);
+    Logger.silly(LOG_TAG, logStr);
 
+    const hasMoreFile = {
+      media: false,
+      metafile: false
+    };
     const connection = await SQLConnection.getConnection();
     if (!this.scanFilter.noVideo ||
       !this.scanFilter.noPhoto) {
@@ -165,8 +201,12 @@ export abstract class FileJob<S extends { indexedOnly: boolean } = { indexedOnly
         .createQueryBuilder('media')
         .select(['media.name', 'directory.name', 'directory.path'])
         .leftJoin('media.directory', 'directory')
+        .offset(this.DBProcessing.mediaLoaded)
+        .limit(Config.Server.Jobs.mediaProcessingBatchSize)
         .getMany();
 
+      hasMoreFile.media = result.length > 0;
+      this.DBProcessing.mediaLoaded += result.length;
       const scannedAndFiltered = await this.filterMediaFiles(result);
       for (const item of scannedAndFiltered) {
         this.fileQueue.push(
@@ -186,9 +226,13 @@ export abstract class FileJob<S extends { indexedOnly: boolean } = { indexedOnly
         .createQueryBuilder('file')
         .select(['file.name', 'directory.name', 'directory.path'])
         .leftJoin('file.directory', 'directory')
+        .offset(this.DBProcessing.mediaLoaded)
+        .limit(Config.Server.Jobs.mediaProcessingBatchSize)
         .getMany();
 
 
+      hasMoreFile.metafile = result.length > 0;
+      this.DBProcessing.mediaLoaded += result.length;
       const scannedAndFiltered = await this.filterMetaFiles(result);
       for (const item of scannedAndFiltered) {
         this.fileQueue.push(
@@ -200,6 +244,43 @@ export abstract class FileJob<S extends { indexedOnly: boolean } = { indexedOnly
           )
         );
       }
+    }
+    this.DBProcessing.hasMoreMedia = hasMoreFile.media || hasMoreFile.metafile;
+  }
+
+  private async countMediaFromDB(): Promise<number> {
+    if (this.scanFilter.noVideo === true &&
+      this.scanFilter.noPhoto === true &&
+      this.scanFilter.noMetaFile === true) {
+      return;
+    }
+    let count = 0;
+    const connection = await SQLConnection.getConnection();
+    if (!this.scanFilter.noVideo ||
+      !this.scanFilter.noPhoto) {
+
+      let usedEntity = MediaEntity;
+
+      if (this.scanFilter.noVideo === true) {
+        usedEntity = PhotoEntity;
+      } else if (this.scanFilter.noPhoto === true) {
+        usedEntity = VideoEntity;
+      }
+
+      count += await connection
+        .getRepository(usedEntity)
+        .createQueryBuilder('media')
+        .getCount();
+
+      if (!this.scanFilter.noMetaFile) {
+
+        count += await connection
+          .getRepository(FileEntity)
+          .createQueryBuilder('file')
+          .getCount();
+
+      }
+      return count;
     }
   }
 }

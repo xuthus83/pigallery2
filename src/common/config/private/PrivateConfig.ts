@@ -316,7 +316,9 @@ export class JobScheduleConfig implements JobScheduleDTO {
 @SubConfigClass()
 export class ServerJobConfig {
   @ConfigProperty({type: 'integer', description: 'Job history size'})
-  maxSavedProgress: number = 10;
+  maxSavedProgress: number = 20;
+  @ConfigProperty({type: 'integer', description: 'Job loads this many photos or videos form the DB for processing'})
+  mediaProcessingBatchSize: number = 1000;
   @ConfigProperty({arrayType: JobScheduleConfig})
   scheduled: JobScheduleConfig[] = [
     new JobScheduleConfig(
