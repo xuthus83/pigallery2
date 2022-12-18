@@ -34,6 +34,7 @@ export class GalleryNavigatorComponent {
   public readonly SearchQueryTypes = SearchQueryTypes;
   public wrappedContent: Observable<ContentWrapperWithError>;
   public directoryContent: Observable<DirectoryContent>;
+  public routes: Observable<NavigatorPath[]>;
   public showFilters = false;
   private readonly RootFolderName: string;
 
@@ -49,6 +50,59 @@ export class GalleryNavigatorComponent {
     this.directoryContent = this.wrappedContent.pipe(
       map((c) => (c.directory ? c.directory : c.searchResult))
     );
+    this.routes = this.galleryService.content.pipe(
+      map((c) => {
+        if (!c.directory) {
+          return [];
+        }
+
+        const path = c.directory.path.replace(new RegExp('\\\\', 'g'), '/');
+
+        const dirs = path.split('/');
+        dirs.push(c.directory.name);
+
+        // removing empty strings
+        for (let i = 0; i < dirs.length; i++) {
+          if (!dirs[i] || 0 === dirs[i].length || '.' === dirs[i]) {
+            dirs.splice(i, 1);
+            i--;
+          }
+        }
+
+        const user = this.authService.user.value;
+        const arr: NavigatorPath[] = [];
+
+        // create root link
+        if (dirs.length === 0) {
+          arr.push({name: this.RootFolderName, route: null});
+        } else {
+          arr.push({
+            name: this.RootFolderName,
+            route: UserDTOUtils.isDirectoryPathAvailable('/', user.permissions)
+              ? '/'
+              : null,
+          });
+        }
+
+        // create rest navigation
+        dirs.forEach((name, index) => {
+          const route = dirs.slice(0, dirs.indexOf(name) + 1).join('/');
+          if (dirs.length - 1 === index) {
+            arr.push({name, route: null});
+          } else {
+            arr.push({
+              name,
+              route: UserDTOUtils.isDirectoryPathAvailable(route, user.permissions)
+                ? route
+                : null,
+            });
+          }
+        });
+
+        return arr;
+
+      })
+    );
   }
 
   get isDirectory(): boolean {
@@ -62,58 +116,6 @@ export class GalleryNavigatorComponent {
       : c.searchResult
         ? c.searchResult.media.length
         : 0;
-  }
-
-  get Routes(): NavigatorPath[] {
-    const c = this.galleryService.content.value;
-    if (!c.directory) {
-      return [];
-    }
-
-    const path = c.directory.path.replace(new RegExp('\\\\', 'g'), '/');
-
-    const dirs = path.split('/');
-    dirs.push(c.directory.name);
-
-    // removing empty strings
-    for (let i = 0; i < dirs.length; i++) {
-      if (!dirs[i] || 0 === dirs[i].length || '.' === dirs[i]) {
-        dirs.splice(i, 1);
-        i--;
-      }
-    }
-
-    const user = this.authService.user.value;
-    const arr: NavigatorPath[] = [];
-
-    // create root link
-    if (dirs.length === 0) {
-      arr.push({name: this.RootFolderName, route: null});
-    } else {
-      arr.push({
-        name: this.RootFolderName,
-        route: UserDTOUtils.isDirectoryPathAvailable('/', user.permissions)
-          ? '/'
-          : null,
-      });
-    }
-
-    // create rest navigation
-    dirs.forEach((name, index) => {
-      const route = dirs.slice(0, dirs.indexOf(name) + 1).join('/');
-      if (dirs.length - 1 === index) {
-        arr.push({name, route: null});
-      } else {
-        arr.push({
-          name,
-          route: UserDTOUtils.isDirectoryPathAvailable(route, user.permissions)
-            ? route
-            : null,
-        });
-      }
-    });
-
-    return arr;
   }
 
   get DefaultSorting(): SortingMethods {
