@@ -841,7 +841,7 @@ export class SearchManager implements ISQLSearchManager {
       case SearchQueryTypes.OR:
         return {
           type: query.type,
-          list: (query as SearchListQuery).list.map(
+          list: ((query as SearchListQuery).list || []).map(
             (q): SearchQueryDTO => this.flattenSameOfQueries(q)
           ),
         } as SearchListQuery;
@@ -856,7 +856,7 @@ export class SearchManager implements ISQLSearchManager {
           } as ORSearchQuery);
         }
 
-        if (someOfQ.min === (query as SearchListQuery).list.length) {
+        if (someOfQ.min === ((query as SearchListQuery).list || []).length) {
           return this.flattenSameOfQueries({
             type: SearchQueryTypes.AND,
             list: (someOfQ as SearchListQuery).list,
