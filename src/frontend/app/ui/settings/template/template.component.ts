@@ -1,39 +1,31 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {MapSettingsService} from '../map/map.settings.service';
-import {TemplateSettingsService} from './template.settings.service';
 import {AuthenticationService} from '../../../model/network/authentication.service';
 import {NavigationService} from '../../../model/navigation.service';
 import {NotificationService} from '../../../model/notification.service';
 import {SettingsComponentDirective} from '../_abstract/abstract.settings.component';
-import {ClientMapConfig} from '../../../../../common/config/public/ClientConfig';
-import {ServerConfig} from '../../../../../common/config/private/PrivateConfig';
 import {SettingsService} from '../settings.service';
 import {WebConfig} from '../../../../../common/config/private/WebConfig';
+import {AbstractSettingsService} from '../_abstract/abstract.settings.service';
 
 
 @Component({
   selector: 'app-settings-template',
   templateUrl: './template.component.html',
   styleUrls: ['./template.component.css',
-    '../_abstract/abstract.settings.component.css'],
-  providers: [TemplateSettingsService],
+    '../_abstract/abstract.settings.component.css']
 })
 export class TemplateComponent extends SettingsComponentDirective<any> implements OnInit {
 
-  @Input() ConfigPath: keyof ServerConfig;
-  @Input() icon: string;
-  public configKeys: string[] = [];
 
   constructor(
     authService: AuthenticationService,
     navigation: NavigationService,
-    settingsService: TemplateSettingsService,
     notification: NotificationService,
+    settingsService: AbstractSettingsService,
     globalSettingsService: SettingsService
   ) {
     super(
       `Template`,
-      '',
       authService,
       navigation,
       settingsService,

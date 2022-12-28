@@ -186,8 +186,8 @@
         </ng-container>
 
         <ng-container *ngIf="ArrayType === 'UserConfig'">
-          <div class="container">
-            <div class="row  mt-1 mb-1 bg-light" *ngFor="let item of state.value; let i = index">
+          <div class="container ps-0 pe-0">
+            <div class="row ms-0 me-0 mt-1 mb-1 bg-light" *ngFor="let item of state.value; let i = index">
               <div class="col ps-0">
                 <input type="text" class="form-control"
                        placeholder="Name"
@@ -208,7 +208,9 @@
                 </select>
               </div>
               <div class="col">
-                <input type="password" class="form-control"
+                <input *ngIf="!item.encrypted"
+                       type="password"
+                       class="form-control"
                        [(ngModel)]="item.password"
                        (ngModelChange)="onChange($event)"
                        [name]="'item_p_'+idName+i"
@@ -216,15 +218,16 @@
                        required>
               </div>
               <div class="col-1 pe-0">
-                <button [disabled]="state.value.length == 1" (click)="remove(i)"
-                        [ngClass]="state.value.length > 1? 'btn-danger':'btn-secondary'"
+                <button [disabled]="(state.value.length == 1 && !state.tags.uiOptional)"
+                        (click)="remove(i)"
+                        [ngClass]="(state.value.length > 1  || state.tags.uiOptional)? 'btn-danger':'btn-secondary'"
                         class="btn float-end">
                   <span class="oi oi-trash" aria-hidden="true" aria-label="Delete"></span>
                 </button>
               </div>
 
             </div>
-            <div class="row">
+            <div class="row me-0">
               <div class="col pe-0">
                 <button class="btn btn-primary float-end"
                         (click)="AddNew()" i18n>+ Add Link

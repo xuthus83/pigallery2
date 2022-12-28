@@ -25,6 +25,7 @@ import {IConfigClassPrivate} from '../../../../../../node_modules/typeconfig/src
 import {IPropertyMetadata} from '../../../../../../node_modules/typeconfig/src/decorators/property/IPropertyState';
 import {IWebConfigClass, IWebConfigClassPrivate} from '../../../../../../node_modules/typeconfig/src/decorators/class/IWebConfigClass';
 import {WebConfigClassBuilder} from '../../../../../../node_modules/typeconfig/src/decorators/builders/WebConfigClassBuilder';
+import {ServerConfig} from '../../../../../common/config/private/PrivateConfig';
 
 interface ConfigState<T = unknown> {
   value: T;
@@ -59,17 +60,14 @@ export interface RecursiveState extends ConfigState {
 
 @Directive()
 export abstract class SettingsComponentDirective<
-  T extends RecursiveState,
-  S extends AbstractSettingsService<T> = AbstractSettingsService<T>
-> implements OnInit, OnDestroy, OnChanges, ISettingsComponent {
-  @Input()
-  public configPriority = ConfigPriority.basic;
+  T extends RecursiveState> implements OnInit, OnDestroy, ISettingsComponent {
+
+  @Input() icon: string;
+  @Input() ConfigPath: string;
 
   @ViewChild('settingsForm', {static: true})
   form: FormControl;
 
-  @Output()
-  hasAvailableSettings = true;
 
   public inProgress = false;
   public error: string = null;
@@ -82,10 +80,9 @@ export abstract class SettingsComponentDirective<
 
   protected constructor(
     protected name: string,
-    public icon: string,
     protected authService: AuthenticationService,
     private navigation: NavigationService,
-    public settingsService: S,
+    public settingsService: AbstractSettingsService,
     protected notification: NotificationService,
     protected globalSettingsService: SettingsService,
     sliceFN?: (s: IWebConfigClassPrivate<TAGS> & WebConfig) => T
@@ -175,8 +172,6 @@ export abstract class SettingsComponentDirective<
       }
     };
     instrument(this.states, null);
-
-    this.ngOnChanges();
   };
 
   onOptionChange = () => {
@@ -224,9 +219,6 @@ export abstract class SettingsComponentDirective<
     });
   }
 
-  ngOnChanges(): void {
-  }
-
   ngOnDestroy(): void {
     if (this.subscription != null) {
       this.subscription.unsubscribe();
@@ -248,7 +240,7 @@ export abstract class SettingsComponentDirective<
     this.inProgress = true;
     this.error = '';
     try {
-      await this.settingsService.updateSettings(this.stateToSettings());
+      await this.settingsService.updateSettings(this.stateToSettings(), this.ConfigPath);
       await this.getSettings();
       this.notification.success(
         this.Name + ' ' + $localize`settings saved`,

@@ -62,7 +62,7 @@ export class Server {
       ).configPath +
       ':'
     );
-    Logger.verbose(LOG_TAG, JSON.stringify(Config, null, '\t'));
+    Logger.verbose(LOG_TAG, JSON.stringify(Config.toJSON({attachDescription: false}), null, '\t'));
 
     this.app = express();
 

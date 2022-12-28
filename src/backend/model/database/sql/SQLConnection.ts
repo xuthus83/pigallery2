@@ -119,16 +119,21 @@ export class SQLConnection {
     ) {
       for (const uc of Config.Users.enforcedUsers) {
         const user = await userRepository.findOneBy({ name: uc.name });
+
+        // encrypt password and save back to the config
+        if(uc.password) {
+          console.log(uc.password);
+          if (!uc.encryptedPassword) {
+            uc.encryptedPassword = PasswordHelper.cryptPassword(uc.password);
+          }
+          uc.encrypted =  !!uc.encryptedPassword;
+          uc.password = '';
+          await Config.save();
+        }
         if (!user) {
           Logger.info(LOG_TAG, 'Saving enforced user: ' + uc.name);
           const a = new UserEntity();
           a.name = uc.name;
-          // encrypt password and save back to the db
-          if (!uc.encryptedPassword) {
-            uc.encryptedPassword = PasswordHelper.cryptPassword(uc.password);
-            uc.password = '';
-            await Config.save();
-          }
           a.password = uc.encryptedPassword;
           a.role = uc.role;
           await userRepository.save(a);

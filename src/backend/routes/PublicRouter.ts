@@ -9,7 +9,7 @@ import {CookieNames} from '../../common/CookieNames';
 import {ErrorCodes, ErrorDTO} from '../../common/entities/Error';
 import {UserDTO} from '../../common/entities/UserDTO';
 import {ServerTimeEntry} from '../middlewares/ServerTimingMWs';
-import {ClientConfig} from '../../common/config/public/ClientConfig';
+import {ClientConfig, TAGS} from '../../common/config/public/ClientConfig';
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
@@ -83,7 +83,11 @@ export class PublicRouter {
           res.tpl.user.csrfToken = req.csrfToken();
         }
       }
-      const confCopy = Config.toJSON({attachVolatile: true, keepTags: {client: true}}) as unknown as ClientConfig;
+      const confCopy = Config.toJSON({
+        attachVolatile: true,
+        skipTags: {secret: true} as TAGS,
+        keepTags: {client: true}
+      }) as unknown as ClientConfig;
       // Escaping html tags, like <script></script>
       confCopy.Server.customHTMLHead =
         confCopy.Server.customHTMLHead

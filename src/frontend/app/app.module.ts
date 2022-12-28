@@ -99,6 +99,7 @@ import {GalleryFilterComponent} from './ui/gallery/filter/filter.gallery.compone
 import {GallerySortingService} from './ui/gallery/navigator/sorting.service';
 import {FilterService} from './ui/gallery/filter/filter.service';
 import {TemplateComponent} from './ui/settings/template/template.component';
+import {AbstractSettingsService} from './ui/settings/_abstract/abstract.settings.service';
 
 @Injectable()
 export class MyHammerConfig extends HammerGestureConfig {
@@ -216,24 +217,24 @@ Marker.prototype.options.icon = iconDefault;
     // Settings
     SettingsEntryComponent,
     TemplateComponent,
-  /*  UserMangerSettingsComponent,
-    DatabaseSettingsComponent,
-    MapSettingsComponent,
-    ThumbnailSettingsComponent,
-    VideoSettingsComponent,
-    PhotoSettingsComponent,
-    MetaFileSettingsComponent,
-    SearchSettingsComponent,
-    ShareSettingsComponent,
-    RandomPhotoSettingsComponent,
-    FacesSettingsComponent,
-    AlbumsSettingsComponent,
-    OtherSettingsComponent,
-    IndexingSettingsComponent,
-    JobsSettingsComponent,
-    JobProgressComponent,
-    JobButtonComponent,
-    PreviewSettingsComponent,*/
+    /*  UserMangerSettingsComponent,
+      DatabaseSettingsComponent,
+      MapSettingsComponent,
+      ThumbnailSettingsComponent,
+      VideoSettingsComponent,
+      PhotoSettingsComponent,
+      MetaFileSettingsComponent,
+      SearchSettingsComponent,
+      ShareSettingsComponent,
+      RandomPhotoSettingsComponent,
+      FacesSettingsComponent,
+      AlbumsSettingsComponent,
+      OtherSettingsComponent,
+      IndexingSettingsComponent,
+      JobsSettingsComponent,
+      JobProgressComponent,
+      JobButtonComponent,
+      PreviewSettingsComponent,*/
 
     // Pipes
     StringifyRole,
@@ -281,6 +282,7 @@ Marker.prototype.options.icon = iconDefault;
     ScheduledJobsService,
     BackendtextService,
     CookieService,
+    AbstractSettingsService
   ],
   bootstrap: [AppComponent],
 })

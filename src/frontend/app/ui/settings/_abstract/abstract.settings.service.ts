@@ -1,9 +1,14 @@
-import { BehaviorSubject } from 'rxjs';
-import { SettingsService } from '../settings.service';
-import { WebConfig } from '../../../../../common/config/private/WebConfig';
+import {BehaviorSubject} from 'rxjs';
+import {SettingsService} from '../settings.service';
+import {WebConfig} from '../../../../../common/config/private/WebConfig';
+import {NetworkService} from '../../../model/network/network.service';
+import {Injectable} from '@angular/core';
 
-export abstract class AbstractSettingsService<T> {
-  protected constructor(public settingsService: SettingsService) {}
+@Injectable()
+export class AbstractSettingsService {
+  constructor(public settingsService: SettingsService,
+              private networkService: NetworkService) {
+  }
 
   get Settings(): BehaviorSubject<WebConfig> {
     return this.settingsService.settings;
@@ -13,6 +18,7 @@ export abstract class AbstractSettingsService<T> {
     return this.settingsService.getSettings();
   }
 
-
-  abstract updateSettings(settings: T): Promise<void>;
+  public updateSettings(settings: Record<string, any>, settingsPath: string): Promise<void> {
+    return this.networkService.putJson('/settings', {settings, settingsPath});
+  }
 }

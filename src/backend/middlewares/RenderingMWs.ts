@@ -1,13 +1,14 @@
-import { NextFunction, Request, Response } from 'express';
-import { ErrorCodes, ErrorDTO } from '../../common/entities/Error';
-import { Message } from '../../common/entities/Message';
-import { Config, PrivateConfigClass } from '../../common/config/private/Config';
-import { UserDTO, UserRoles } from '../../common/entities/UserDTO';
-import { NotificationManager } from '../model/NotifocationManager';
-import { Logger } from '../Logger';
-import { SharingDTO } from '../../common/entities/SharingDTO';
-import { Utils } from '../../common/Utils';
-import { LoggerRouter } from '../routes/LoggerRouter';
+import {NextFunction, Request, Response} from 'express';
+import {ErrorCodes, ErrorDTO} from '../../common/entities/Error';
+import {Message} from '../../common/entities/Message';
+import {Config, PrivateConfigClass} from '../../common/config/private/Config';
+import {UserDTO, UserRoles} from '../../common/entities/UserDTO';
+import {NotificationManager} from '../model/NotifocationManager';
+import {Logger} from '../Logger';
+import {SharingDTO} from '../../common/entities/SharingDTO';
+import {Utils} from '../../common/Utils';
+import {LoggerRouter} from '../routes/LoggerRouter';
+import {TAGS} from '../../common/config/public/ClientConfig';
 
 export class RenderingMWs {
   public static renderResult(
@@ -57,7 +58,7 @@ export class RenderingMWs {
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password, creator, ...sharing } = req.resultPipe as SharingDTO;
+    const {password, creator, ...sharing} = req.resultPipe as SharingDTO;
     RenderingMWs.renderMessage(res, sharing);
   }
 
@@ -107,12 +108,12 @@ export class RenderingMWs {
     const originalConf = await Config.original();
     // These are sensitive information, do not send to the client side
     originalConf.Server.sessionSecret = null;
-    originalConf.Users.enforcedUsers = null;
     const message = new Message<PrivateConfigClass>(
       null,
       originalConf.toJSON({
         attachState: true,
         attachVolatile: true,
+        skipTags: {secret: true} as TAGS
       }) as PrivateConfigClass
     );
     res.json(message);

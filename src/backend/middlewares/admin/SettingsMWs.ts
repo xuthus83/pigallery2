@@ -3,6 +3,8 @@ import {ErrorCodes, ErrorDTO} from '../../../common/entities/Error';
 import {Logger} from '../../Logger';
 import {Config} from '../../../common/config/private/Config';
 import {ConfigDiagnostics} from '../../model/diagnostics/ConfigDiagnostics';
+import {ConfigClassBuilder} from '../../../../node_modules/typeconfig/node';
+import {TAGS} from '../../../common/config/public/ClientConfig';
 
 const LOG_TAG = '[SettingsMWs]';
 
@@ -23,9 +25,18 @@ export class SettingsMWs {
     }
 
     try {
-      const settings = req.body.settings; // Top level settings JSON
+      let settings = req.body.settings; // Top level settings JSON
       const settingsPath: string = req.body.settingsPath; // Name of the top level settings
 
+      const transformer = await Config.original();
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      transformer[settingsPath] = settings;
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      settings = ConfigClassBuilder.attachPrivateInterface(transformer[settingsPath]).toJSON({
+        skipTags: {secret: true} as TAGS
+      });
       const original = await Config.original();
       // only updating explicitly set config (not saving config set by the diagnostics)
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -38,7 +49,7 @@ export class SettingsMWs {
       original.save();
       await ConfigDiagnostics.runDiagnostics();
       Logger.info(LOG_TAG, 'new config:');
-      Logger.info(LOG_TAG, JSON.stringify(Config, null, '\t'));
+      Logger.info(LOG_TAG, JSON.stringify(Config.toJSON({attachDescription: false}), null, '\t'));
       return next();
     } catch (err) {
       if (err instanceof Error) {

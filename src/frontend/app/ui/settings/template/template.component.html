@@ -37,7 +37,7 @@
         {{Name}} <span i18n>config is not supported with these settings.</span>
       </div>
       <button class="btn btn-success float-end"
-              [disabled]="!settingsForm.form.valid || !changed || inProgress"
+              [disabled]="settingsForm.form.invalid || !changed || inProgress"
               (click)="save()" i18n>Save
       </button>
       <button class="btn btn-secondary float-end"

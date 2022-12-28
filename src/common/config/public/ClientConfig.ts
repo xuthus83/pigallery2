@@ -724,7 +724,7 @@ export class ClientServiceConfig {
   @ConfigProperty({
     tags: {
       name: $localize`Page title`
-    }
+    } as TAGS
   })
   applicationTitle: string = 'PiGallery 2';
 
@@ -732,6 +732,7 @@ export class ClientServiceConfig {
     description: $localize`If you access the page form local network its good to know the public url for creating sharing link.`,
     tags: {
       name: $localize`Page public url`,
+      uiOptional: true
     }
   })
   publicUrl: string = '';
@@ -741,7 +742,8 @@ export class ClientServiceConfig {
     tags: {
       name: $localize`Url Base`,
       hint: '/myGallery',
-      priority: ConfigPriority.advanced
+      priority: ConfigPriority.advanced,
+      uiOptional: true
     }
   })
   urlBase: string = '';
@@ -763,7 +765,8 @@ export class ClientServiceConfig {
     tags: {
       name: $localize`Custom HTML Head`,
       priority: ConfigPriority.advanced,
-      githubIssue: 404
+      githubIssue: 404,
+      uiOptional: true
     }
   })
   customHTMLHead: string = '';
@@ -772,7 +775,12 @@ export class ClientServiceConfig {
 @SubConfigClass({tags: {client: true}})
 export class ClientUserConfig {
 
-  @ConfigProperty({
+  @ConfigProperty<boolean, ClientConfig>({
+    onNewValue: (value, config) => {
+      if (config && value === false) {
+        config.Sharing.enabled = false;
+      }
+    },
     tags: {
       name: $localize`Password protection`,
       priority: ConfigPriority.advanced,

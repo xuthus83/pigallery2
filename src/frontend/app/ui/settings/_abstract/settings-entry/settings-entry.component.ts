@@ -316,6 +316,7 @@ export class SettingsEntryComponent
 
   remove(i: number): void {
     (this.state.value as unknown[]).splice(i, 1);
+    this.onChange(null);
   }
 
   /**

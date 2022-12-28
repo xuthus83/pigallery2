@@ -1,26 +1,25 @@
 /* eslint-disable @typescript-eslint/no-inferrable-types */
 import 'reflect-metadata';
-import {
-  JobScheduleDTO,
-  JobTrigger,
-  JobTriggerType,
-} from '../../entities/job/JobScheduleDTO';
+import {JobScheduleDTO, JobTrigger, JobTriggerType,} from '../../entities/job/JobScheduleDTO';
 import {
   ClientConfig,
-  ClientGPXCompressingConfig, ClientMediaConfig,
-  ClientMetaFileConfig, ClientPhotoConfig, ClientPhotoConvertingConfig,
+  ClientGPXCompressingConfig,
+  ClientMediaConfig,
+  ClientMetaFileConfig,
+  ClientPhotoConfig,
+  ClientPhotoConvertingConfig,
   ClientServiceConfig,
-  ClientSharingConfig, ClientThumbnailConfig,
-  ClientUserConfig, ClientVideoConfig, ConfigPriority, MapProviders, TAGS
+  ClientSharingConfig,
+  ClientThumbnailConfig,
+  ClientUserConfig,
+  ClientVideoConfig,
+  ConfigPriority,
+  TAGS
 } from '../public/ClientConfig';
 import {SubConfigClass} from 'typeconfig/src/decorators/class/SubConfigClass';
 import {ConfigProperty} from 'typeconfig/src/decorators/property/ConfigPropoerty';
 import {DefaultsJobs} from '../../entities/job/JobDTO';
-import {
-  SearchQueryDTO,
-  SearchQueryTypes,
-  TextSearch,
-} from '../../entities/SearchQueryDTO';
+import {SearchQueryDTO, SearchQueryTypes, TextSearch,} from '../../entities/SearchQueryDTO';
 import {SortingMethods} from '../../entities/SortingMethods';
 import {UserRoles} from '../../entities/UserDTO';
 
@@ -163,17 +162,18 @@ export class UserConfig {
         priority: ConfigPriority.underTheHood
       },
   })
-  role: UserRoles;
+  role: UserRoles = UserRoles.User;
 
   @ConfigProperty({
     tags:
       {
         name: $localize`Password`,
-        priority: ConfigPriority.underTheHood
+        priority: ConfigPriority.underTheHood,
+        relevant: (c: UserConfig) => !c.encrypted
       },
     description: $localize`Unencrypted, temporary password. App will encrypt it and delete this.`
   })
-  password: string = '';
+  password: string;
   @ConfigProperty({
     tags:
       {
@@ -184,10 +184,25 @@ export class UserConfig {
   })
   encryptedPassword: string | undefined;
 
-  constructor(name: string, password: string, role: UserRoles) {
-    this.name = name;
-    this.role = role;
-    this.password = password;
+  @ConfigProperty({
+    tags:
+      {
+        priority: ConfigPriority.underTheHood,
+        relevant: () => false // never render this on UI. Only used to indicate that encryption is done.
+      } as TAGS,
+  })
+  encrypted: boolean;
+
+  constructor(name?: string, password?: string, role?: UserRoles) {
+    if (name) {
+      this.name = name;
+    }
+    if (typeof role !== 'undefined') {
+      this.role = role;
+    }
+    if (password) {
+      this.password = password;
+    }
   }
 }
 
@@ -195,7 +210,7 @@ export class UserConfig {
 export class ServerDataBaseConfig {
   @ConfigProperty<DatabaseType, ServerConfig>({
     type: DatabaseType,
-    onNewValue: (value: DatabaseType, config: ServerConfig) => {
+    onNewValue: (value, config) => {
       if (config && value === DatabaseType.memory) {
         config.Search.enabled = false;
         config.Sharing.enabled = false;
@@ -248,8 +263,9 @@ export class ServerUserConfig extends ClientUserConfig {
     tags:
       {
         name: $localize`Enforced users`,
-        priority: ConfigPriority.underTheHood
-      },
+        priority: ConfigPriority.underTheHood,
+        uiOptional: true
+      } as TAGS,
     description: $localize`Creates these users in the DB if they do not exist. If a user with this name exist, it won't be overwritten, even if the role is different.`,
   })
   enforcedUsers: UserConfig[] = [];
