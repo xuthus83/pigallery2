@@ -63,7 +63,7 @@ describe('NetworkService Success tests', () => {
           expect(err).toBeUndefined();
         });
 
-      let mockReq = httpMock.expectOne(Config.Client.apiPath + testUrl);
+      let mockReq = httpMock.expectOne(Config.Server.apiPath + testUrl);
       expect(mockReq.cancelled).toBeFalsy();
       expect(mockReq.request.responseType).toEqual('json');
       mockReq.flush(testResponseMessage);
@@ -79,7 +79,7 @@ describe('NetworkService Success tests', () => {
           expect(err).toBeUndefined();
         });
 
-      mockReq = httpMock.expectOne(Config.Client.apiPath + testUrl);
+      mockReq = httpMock.expectOne(Config.Server.apiPath + testUrl);
       expect(mockReq.cancelled).toBeFalsy();
       expect(mockReq.request.responseType).toEqual('json');
       expect(mockReq.request.body).toEqual({});
@@ -157,7 +157,7 @@ describe('NetworkService Fail tests', () => {
         })
         .catch((err) => {
           expect(err).toBe(
-            `Http failure response for ${Config.Client.apiPath}/test/url: 0 ` + testError
+            `Http failure response for ${Config.Server.apiPath}/test/url: 0 ` + testError
           );
         });
 
@@ -178,7 +178,7 @@ describe('NetworkService Fail tests', () => {
         })
         .catch((err) => {
           expect(err).toBe(
-            `Http failure response for ${Config.Client.apiPath}/test/url: 0 ` + testError
+            `Http failure response for ${Config.Server.apiPath}/test/url: 0 ` + testError
           );
         });
 
@@ -200,7 +200,7 @@ describe('NetworkService Fail tests', () => {
         })
         .catch((err) => {
           expect(err).toBe(
-            `Http failure response for ${Config.Client.apiPath}/test/url: 0 ` + testError
+            `Http failure response for ${Config.Server.apiPath}/test/url: 0 ` + testError
           );
         });
 
@@ -222,7 +222,7 @@ describe('NetworkService Fail tests', () => {
         })
         .catch((err) => {
           expect(err).toBe(
-            `Http failure response for ${Config.Client.apiPath}/test/url: 0 ` + testError
+            `Http failure response for ${Config.Server.apiPath}/test/url: 0 ` + testError
           );
         });
 

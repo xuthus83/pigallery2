@@ -170,7 +170,7 @@ export class DuplicateComponent implements OnDestroy {
 
   private shouldRenderMore(): boolean {
     return (
-      Config.Client.Other.enableOnScrollRendering === false ||
+      Config.Gallery.enableOnScrollRendering === false ||
       PageHelper.ScrollY >= PageHelper.MaxScrollY * 0.7 ||
       document.body.clientHeight * 0.85 < window.innerHeight
     );

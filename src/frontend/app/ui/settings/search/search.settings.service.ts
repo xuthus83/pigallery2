@@ -14,13 +14,13 @@ export class SearchSettingsService extends AbstractSettingsService<ClientSearchC
     super(settingsService);
   }
 
-  showInSimplifiedMode(): boolean {
+  hasAvailableSettings(): boolean {
     return false;
   }
 
   public isSupported(): boolean {
     return (
-      this.settingsService.settings.value.Server.Database.type !==
+      this.settingsService.settings.value.Database.type !==
       DatabaseType.memory
     );
   }

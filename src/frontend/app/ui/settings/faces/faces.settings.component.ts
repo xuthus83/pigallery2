@@ -1,12 +1,13 @@
-import { Component } from '@angular/core';
-import { SettingsComponentDirective } from '../_abstract/abstract.settings.component';
-import { AuthenticationService } from '../../../model/network/authentication.service';
-import { NavigationService } from '../../../model/navigation.service';
-import { NotificationService } from '../../../model/notification.service';
-import { FacesSettingsService } from './faces.settings.service';
-import { Utils } from '../../../../../common/Utils';
-import { UserRoles } from '../../../../../common/entities/UserDTO';
-import { ClientFacesConfig } from '../../../../../common/config/public/ClientConfig';
+import {Component} from '@angular/core';
+import {SettingsComponentDirective} from '../_abstract/abstract.settings.component';
+import {AuthenticationService} from '../../../model/network/authentication.service';
+import {NavigationService} from '../../../model/navigation.service';
+import {NotificationService} from '../../../model/notification.service';
+import {FacesSettingsService} from './faces.settings.service';
+import {Utils} from '../../../../../common/Utils';
+import {UserRoles} from '../../../../../common/entities/UserDTO';
+import {ClientFacesConfig} from '../../../../../common/config/public/ClientConfig';
+import {SettingsService} from '../settings.service';
 
 @Component({
   selector: 'app-settings-faces',
@@ -27,7 +28,8 @@ export class FacesSettingsComponent extends SettingsComponentDirective<ClientFac
     authService: AuthenticationService,
     navigation: NavigationService,
     settingsService: FacesSettingsService,
-    notification: NotificationService
+    notification: NotificationService,
+    globalSettingsService: SettingsService
   ) {
     super(
       $localize`Faces`,
@@ -36,7 +38,8 @@ export class FacesSettingsComponent extends SettingsComponentDirective<ClientFac
       navigation,
       settingsService,
       notification,
-      (s) => s.Client.Faces
+      globalSettingsService,
+      (s) => s.Faces
     );
   }
 }

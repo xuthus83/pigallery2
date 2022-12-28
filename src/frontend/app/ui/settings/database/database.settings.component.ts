@@ -1,14 +1,15 @@
-import { Component, OnInit } from '@angular/core';
-import { AuthenticationService } from '../../../model/network/authentication.service';
-import { Utils } from '../../../../../common/Utils';
-import { NotificationService } from '../../../model/notification.service';
-import { NavigationService } from '../../../model/navigation.service';
-import { SettingsComponentDirective } from '../_abstract/abstract.settings.component';
-import { DatabaseSettingsService } from './database.settings.service';
+import {Component, OnInit} from '@angular/core';
+import {AuthenticationService} from '../../../model/network/authentication.service';
+import {Utils} from '../../../../../common/Utils';
+import {NotificationService} from '../../../model/notification.service';
+import {NavigationService} from '../../../model/navigation.service';
+import {SettingsComponentDirective} from '../_abstract/abstract.settings.component';
+import {DatabaseSettingsService} from './database.settings.service';
 import {
   DatabaseType,
   ServerDataBaseConfig,
 } from '../../../../../common/config/private/PrivateConfig';
+import {SettingsService} from '../settings.service';
 
 @Component({
   selector: 'app-settings-database',
@@ -21,8 +22,7 @@ import {
 })
 export class DatabaseSettingsComponent
   extends SettingsComponentDirective<ServerDataBaseConfig>
-  implements OnInit
-{
+  implements OnInit {
   public types = Utils.enumToArray(DatabaseType);
   public DatabaseType = DatabaseType;
 
@@ -30,7 +30,8 @@ export class DatabaseSettingsComponent
     authService: AuthenticationService,
     navigation: NavigationService,
     settingsService: DatabaseSettingsService,
-    notification: NotificationService
+    notification: NotificationService,
+    globalSettingsService: SettingsService
   ) {
     super(
       $localize`Database`,
@@ -39,7 +40,8 @@ export class DatabaseSettingsComponent
       navigation,
       settingsService,
       notification,
-      (s) => s.Server.Database
+      globalSettingsService,
+      (s) => s.Database
     );
   }
 

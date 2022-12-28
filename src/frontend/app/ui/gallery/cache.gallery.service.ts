@@ -3,7 +3,6 @@ import {DirectoryPathDTO, ParentDirectoryDTO,} from '../../../../common/entities
 import {Utils} from '../../../../common/Utils';
 import {Config} from '../../../../common/config/public/Config';
 import {IAutoCompleteItem} from '../../../../common/entities/AutoCompleteItem';
-import {SearchResultDTO} from '../../../../common/entities/SearchResultDTO';
 import {MediaDTO} from '../../../../common/entities/MediaDTO';
 import {SortingMethods} from '../../../../common/entities/SortingMethods';
 import {VersionService} from '../../model/version.service';
@@ -58,7 +57,7 @@ export class GalleryCacheService {
       const value: CacheItem<ContentWrapperWithError> = JSON.parse(tmp);
       if (
         value.timestamp <
-        Date.now() - Config.Client.Search.searchCacheTimeout
+        Date.now() - Config.Search.searchCacheTimeout
       ) {
         localStorage.removeItem(key);
         return null;
@@ -134,7 +133,7 @@ export class GalleryCacheService {
     text: string,
     type: SearchQueryTypes
   ): IAutoCompleteItem[] {
-    if (Config.Client.Other.enableCache === false) {
+    if (Config.Gallery.enableCache === false) {
       return null;
     }
     const key =
@@ -146,7 +145,7 @@ export class GalleryCacheService {
       const value: CacheItem<IAutoCompleteItem[]> = JSON.parse(tmp);
       if (
         value.timestamp <
-        Date.now() - Config.Client.Search.AutoComplete.cacheTimeout
+        Date.now() - Config.Search.AutoComplete.cacheTimeout
       ) {
         localStorage.removeItem(key);
         return null;
@@ -161,7 +160,7 @@ export class GalleryCacheService {
     type: SearchQueryTypes,
     items: Array<IAutoCompleteItem>
   ): void {
-    if (Config.Client.Other.enableCache === false) {
+    if (Config.Gallery.enableCache === false) {
       return;
     }
     const key =
@@ -181,7 +180,7 @@ export class GalleryCacheService {
   }
 
   public getSearch(query: SearchQueryDTO): ContentWrapperWithError {
-    if (Config.Client.Other.enableCache === false) {
+    if (Config.Gallery.enableCache === false) {
       return null;
     }
     const key = GalleryCacheService.SEARCH_PREFIX + JSON.stringify(query);
@@ -189,7 +188,7 @@ export class GalleryCacheService {
   }
 
   public setSearch(cw: ContentWrapperWithError): void {
-    if (Config.Client.Other.enableCache === false) {
+    if (Config.Gallery.enableCache === false) {
       return;
     }
     const tmp: CacheItem<ContentWrapperWithError> = {
@@ -206,7 +205,7 @@ export class GalleryCacheService {
   }
 
   public getDirectory(directoryName: string): ContentWrapperWithError {
-    if (Config.Client.Other.enableCache === false) {
+    if (Config.Gallery.enableCache === false) {
       return null;
     }
     try {
@@ -223,7 +222,7 @@ export class GalleryCacheService {
   }
 
   public setDirectory(cw: ContentWrapper): void {
-    if (Config.Client.Other.enableCache === false) {
+    if (Config.Gallery.enableCache === false) {
       return;
     }
 
@@ -248,7 +247,7 @@ export class GalleryCacheService {
    * @param media: MediaBaseDTO
    */
   public mediaUpdated(media: MediaDTO): void {
-    if (Config.Client.Other.enableCache === false) {
+    if (Config.Gallery.enableCache === false) {
       return;
     }
 

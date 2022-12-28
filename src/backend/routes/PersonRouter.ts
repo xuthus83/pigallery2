@@ -17,10 +17,10 @@ export class PersonRouter {
 
   protected static updatePerson(app: Express): void {
     app.post(
-      [Config.Client.apiPath + '/person/:name'],
+      [Config.Server.apiPath + '/person/:name'],
       // common part
       AuthenticationMWs.authenticate,
-      AuthenticationMWs.authorise(Config.Client.Faces.writeAccessMinRole),
+      AuthenticationMWs.authorise(Config.Faces.writeAccessMinRole),
       VersionMWs.injectGalleryVersion,
 
       // specific part
@@ -32,10 +32,10 @@ export class PersonRouter {
 
   protected static addGetPersons(app: Express): void {
     app.get(
-      [Config.Client.apiPath + '/person'],
+      [Config.Server.apiPath + '/person'],
       // common part
       AuthenticationMWs.authenticate,
-      AuthenticationMWs.authorise(Config.Client.Faces.readAccessMinRole),
+      AuthenticationMWs.authorise(Config.Faces.readAccessMinRole),
       VersionMWs.injectGalleryVersion,
 
       // specific part
@@ -50,7 +50,7 @@ export class PersonRouter {
 
   protected static getPersonThumbnail(app: Express): void {
     app.get(
-      [Config.Client.apiPath + '/person/:name/thumbnail'],
+      [Config.Server.apiPath + '/person/:name/thumbnail'],
       // common part
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.User),

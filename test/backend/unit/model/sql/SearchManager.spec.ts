@@ -140,15 +140,15 @@ describe('SearchManager', (sqlHelper: DBTestHelper) => {
 
   before(async () => {
     await setUpSqlDB();
-    Config.Client.Search.listDirectories = true;
-    Config.Client.Search.listMetafiles = false;
+    Config.Search.listDirectories = true;
+    Config.Search.listMetafiles = false;
   });
 
 
   after(async () => {
     await sqlHelper.clearDB();
-    Config.Client.Search.listDirectories = false;
-    Config.Client.Search.listMetafiles = false;
+    Config.Search.listDirectories = false;
+    Config.Search.listMetafiles = false;
   });
 
   it('should get autocomplete', async () => {
@@ -174,14 +174,14 @@ describe('SearchManager', (sqlHelper: DBTestHelper) => {
     expect((await sm.autocomplete('arch', SearchQueryTypes.any_text))).eql([
       new AutoCompleteItem('Research City', SearchQueryTypes.position)]);
 
-    Config.Client.Search.AutoComplete.targetItemsPerCategory = 99999;
+    Config.Search.AutoComplete.targetItemsPerCategory = 99999;
     expect((await sm.autocomplete('wa', SearchQueryTypes.any_text))).to.deep.equalInAnyOrder([
       new AutoCompleteItem('star wars', SearchQueryTypes.keyword),
       new AutoCompleteItem('Anakin Skywalker', SearchQueryTypes.person),
       new AutoCompleteItem('Luke Skywalker', SearchQueryTypes.person),
       new AutoCompleteItem('wars dir', SearchQueryTypes.directory)]);
 
-    Config.Client.Search.AutoComplete.targetItemsPerCategory = 1;
+    Config.Search.AutoComplete.targetItemsPerCategory = 1;
     expect((await sm.autocomplete('a', SearchQueryTypes.any_text))).to.deep.equalInAnyOrder([
       new AutoCompleteItem('Ajan Kloss', SearchQueryTypes.position),
       new AutoCompleteItem('Tipoca City', SearchQueryTypes.position),
@@ -195,7 +195,7 @@ describe('SearchManager', (sqlHelper: DBTestHelper) => {
       new AutoCompleteItem('Jedha', SearchQueryTypes.position),
       new AutoCompleteItem('wars dir', SearchQueryTypes.directory),
       new AutoCompleteItem('The Phantom Menace', SearchQueryTypes.directory)]);
-    Config.Client.Search.AutoComplete.targetItemsPerCategory = 5;
+    Config.Search.AutoComplete.targetItemsPerCategory = 5;
 
     expect((await sm.autocomplete('sw', SearchQueryTypes.any_text))).to.deep.equalInAnyOrder([
       new AutoCompleteItem('sw1.jpg', SearchQueryTypes.file_name),
@@ -261,12 +261,12 @@ describe('SearchManager', (sqlHelper: DBTestHelper) => {
 
   describe('advanced search', async () => {
     afterEach(async () => {
-      Config.Client.Search.listDirectories = false;
-      Config.Client.Search.listMetafiles = false;
+      Config.Search.listDirectories = false;
+      Config.Search.listMetafiles = false;
     });
     afterEach(async () => {
-      Config.Client.Search.listDirectories = false;
-      Config.Client.Search.listMetafiles = false;
+      Config.Search.listDirectories = false;
+      Config.Search.listMetafiles = false;
     });
 
     it('should AND', async () => {
@@ -1233,7 +1233,7 @@ describe('SearchManager', (sqlHelper: DBTestHelper) => {
     }) as any).timeout(40000);
 
     it('search result should return directory', async () => {
-      Config.Client.Search.listDirectories = true;
+      Config.Search.listDirectories = true;
       const sm = new SearchManager();
 
       const cloned = Utils.clone(searchifyDir(subDir));
@@ -1259,7 +1259,7 @@ describe('SearchManager', (sqlHelper: DBTestHelper) => {
       } as SearchResultDTO));
     });
     it('search result should return meta files', async () => {
-      Config.Client.Search.listMetafiles = true;
+      Config.Search.listMetafiles = true;
       const sm = new SearchManager();
 
       const query = {

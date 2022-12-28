@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
-import { SettingsComponentDirective } from '../_abstract/abstract.settings.component';
-import { AuthenticationService } from '../../../model/network/authentication.service';
-import { NavigationService } from '../../../model/navigation.service';
-import { NotificationService } from '../../../model/notification.service';
-import { SearchSettingsService } from './search.settings.service';
-import { ClientSearchConfig } from '../../../../../common/config/public/ClientConfig';
+import {Component} from '@angular/core';
+import {SettingsComponentDirective} from '../_abstract/abstract.settings.component';
+import {AuthenticationService} from '../../../model/network/authentication.service';
+import {NavigationService} from '../../../model/navigation.service';
+import {NotificationService} from '../../../model/notification.service';
+import {SearchSettingsService} from './search.settings.service';
+import {ClientSearchConfig} from '../../../../../common/config/public/ClientConfig';
+import {SettingsService} from '../settings.service';
 
 @Component({
   selector: 'app-settings-search',
@@ -20,7 +21,8 @@ export class SearchSettingsComponent extends SettingsComponentDirective<ClientSe
     authService: AuthenticationService,
     navigation: NavigationService,
     settingsService: SearchSettingsService,
-    notification: NotificationService
+    notification: NotificationService,
+    globalSettingsService: SettingsService
   ) {
     super(
       $localize`Search`,
@@ -29,7 +31,8 @@ export class SearchSettingsComponent extends SettingsComponentDirective<ClientSe
       navigation,
       settingsService,
       notification,
-      (s) => s.Client.Search
+      globalSettingsService,
+      (s) => s.Search
     );
   }
 }

@@ -63,7 +63,7 @@ export class GalleryComponent implements OnInit, OnDestroy {
     private filterService: FilterService,
     private sortingService: GallerySortingService
   ) {
-    this.mapEnabled = Config.Client.Map.enabled;
+    this.mapEnabled = Config.Map.enabled;
     PageHelper.showScrollY();
   }
 
@@ -120,17 +120,17 @@ export class GalleryComponent implements OnInit, OnDestroy {
       !this.authService.isAuthenticated() &&
       (!this.shareService.isSharing() ||
         (this.shareService.isSharing() &&
-          Config.Client.Sharing.passwordProtected === true))
+          Config.Sharing.passwordProtected === true))
     ) {
       return this.navigation.toLogin();
     }
     this.showSearchBar =
-      Config.Client.Search.enabled && this.authService.canSearch();
+      Config.Search.enabled && this.authService.canSearch();
     this.showShare =
-      Config.Client.Sharing.enabled &&
+      Config.Sharing.enabled &&
       this.authService.isAuthorized(UserRoles.User);
     this.showRandomPhotoBuilder =
-      Config.Client.RandomPhoto.enabled &&
+      Config.RandomPhoto.enabled &&
       this.authService.isAuthorized(UserRoles.User);
     this.subscription.content = this.sortingService
       .applySorting(

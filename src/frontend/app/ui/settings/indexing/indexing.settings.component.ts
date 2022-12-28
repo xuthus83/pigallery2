@@ -1,12 +1,12 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { IndexingSettingsService } from './indexing.settings.service';
-import { AuthenticationService } from '../../../model/network/authentication.service';
-import { NavigationService } from '../../../model/navigation.service';
-import { NotificationService } from '../../../model/notification.service';
-import { ErrorDTO } from '../../../../../common/entities/Error';
-import { SettingsComponentDirective } from '../_abstract/abstract.settings.component';
-import { Utils } from '../../../../../common/Utils';
-import { ScheduledJobsService } from '../scheduled-jobs.service';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {IndexingSettingsService} from './indexing.settings.service';
+import {AuthenticationService} from '../../../model/network/authentication.service';
+import {NavigationService} from '../../../model/navigation.service';
+import {NotificationService} from '../../../model/notification.service';
+import {ErrorDTO} from '../../../../../common/entities/Error';
+import {SettingsComponentDirective} from '../_abstract/abstract.settings.component';
+import {Utils} from '../../../../../common/Utils';
+import {ScheduledJobsService} from '../scheduled-jobs.service';
 import {
   DefaultsJobs,
   JobDTOUtils,
@@ -19,6 +19,7 @@ import {
   ReIndexingSensitivity,
   ServerIndexingConfig,
 } from '../../../../../common/config/private/PrivateConfig';
+import {SettingsService} from '../settings.service';
 
 @Component({
   selector: 'app-settings-indexing',
@@ -34,8 +35,7 @@ export class IndexingSettingsComponent
     ServerIndexingConfig,
     IndexingSettingsService
   >
-  implements OnInit, OnDestroy
-{
+  implements OnInit, OnDestroy {
   types: { key: number; value: string }[] = [];
   JobProgressStates = JobProgressStates;
   readonly indexingJobName = DefaultsJobs[DefaultsJobs.Indexing];
@@ -46,7 +46,8 @@ export class IndexingSettingsComponent
     navigation: NavigationService,
     settingsService: IndexingSettingsService,
     public jobsService: ScheduledJobsService,
-    notification: NotificationService
+    notification: NotificationService,
+    globalSettingsService: SettingsService
   ) {
     super(
       $localize`Folder indexing`,
@@ -55,18 +56,19 @@ export class IndexingSettingsComponent
       navigation,
       settingsService,
       notification,
-      (s) => s.Server.Indexing
+      globalSettingsService,
+      (s) => s.Indexing
     );
   }
 
   get Config(): any {
-    return { indexChangesOnly: true };
+    return {indexChangesOnly: true};
   }
 
   get Progress(): JobProgressDTO {
     return this.jobsService.progress.value[
       JobDTOUtils.getHashName(DefaultsJobs[DefaultsJobs.Indexing], this.Config)
-    ];
+      ];
   }
 
   ngOnDestroy(): void {

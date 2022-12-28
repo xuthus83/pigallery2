@@ -4,7 +4,7 @@ import { MediaDTO } from '../../../../common/entities/MediaDTO';
 
 export class MediaIcon {
   protected static readonly ThumbnailMap =
-    Config.Client.Media.Thumbnail.generateThumbnailMap();
+    Config.Media.Thumbnail.generateThumbnailMap();
 
   protected replacementSizeCache: number | boolean = false;
 
@@ -16,14 +16,14 @@ export class MediaIcon {
 
   iconLoaded(): void {
     this.media.missingThumbnails -=
-      MediaIcon.ThumbnailMap[Config.Client.Media.Thumbnail.iconSize];
+      MediaIcon.ThumbnailMap[Config.Media.Thumbnail.iconSize];
   }
 
   isIconAvailable(): boolean {
     // eslint-disable-next-line no-bitwise
     return (
       (this.media.missingThumbnails &
-        MediaIcon.ThumbnailMap[Config.Client.Media.Thumbnail.iconSize]) ===
+        MediaIcon.ThumbnailMap[Config.Media.Thumbnail.iconSize]) ===
       0
     );
   }
@@ -48,8 +48,8 @@ export class MediaIcon {
 
   getIconPath(): string {
     return Utils.concatUrls(
-      Config.Client.urlBase,
-      Config.Client.apiPath,
+      Config.Server.urlBase,
+      Config.Server.apiPath,
       '/gallery/content/',
       this.getRelativePath(),
       'icon'
@@ -58,8 +58,8 @@ export class MediaIcon {
 
   getMediaPath(): string {
     return Utils.concatUrls(
-      Config.Client.urlBase,
-      Config.Client.apiPath,
+      Config.Server.urlBase,
+      Config.Server.apiPath,
       '/gallery/content/',
       this.getRelativePath()
     );

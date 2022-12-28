@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import { NetworkService } from '../../../model/network/network.service';
 import { SettingsService } from '../settings.service';
 import { AbstractSettingsService } from '../_abstract/abstract.settings.service';
-import { ClientAlbumConfig } from '../../../../../common/config/public/ClientConfig';
+import { ClientMapConfig } from '../../../../../common/config/public/ClientConfig';
 
 @Injectable()
-export class AlbumsSettingsService extends AbstractSettingsService<ClientAlbumConfig> {
+export class TemplateSettingsService extends AbstractSettingsService<any> {
   constructor(
     private networkService: NetworkService,
     settingsService: SettingsService
@@ -13,15 +13,11 @@ export class AlbumsSettingsService extends AbstractSettingsService<ClientAlbumCo
     super(settingsService);
   }
 
-  public isSupported(): boolean {
-    return this.settingsService.settings.value.Map.enabled === true;
-  }
-
   hasAvailableSettings(): boolean {
-    return false;
+    return true;
   }
 
-  public updateSettings(settings: ClientAlbumConfig): Promise<void> {
-    return this.networkService.putJson('/settings/albums', { settings });
+  public updateSettings(settings: ClientMapConfig): Promise<void> {
+    return this.networkService.putJson('/settings', { settings });
   }
 }

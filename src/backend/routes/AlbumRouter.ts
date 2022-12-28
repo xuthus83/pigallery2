@@ -16,7 +16,7 @@ export class AlbumRouter {
 
   private static addListAlbums(app: Express): void {
     app.get(
-      [Config.Client.apiPath + '/albums'],
+      [Config.Server.apiPath + '/albums'],
       // common part
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.User),
@@ -31,7 +31,7 @@ export class AlbumRouter {
 
   private static addDeleteAlbum(app: Express): void {
     app.delete(
-      [Config.Client.apiPath + '/albums/:id'],
+      [Config.Server.apiPath + '/albums/:id'],
       // common part
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Admin),
@@ -46,7 +46,7 @@ export class AlbumRouter {
 
   private static addAddSavedSearch(app: Express): void {
     app.put(
-      [Config.Client.apiPath + '/albums/saved-searches'],
+      [Config.Server.apiPath + '/albums/saved-searches'],
       // common part
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Admin),

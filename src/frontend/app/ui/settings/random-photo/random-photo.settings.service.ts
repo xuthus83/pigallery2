@@ -14,13 +14,13 @@ export class RandomPhotoSettingsService extends AbstractSettingsService<ClientSe
     super(settingsService);
   }
 
-  public showInSimplifiedMode(): boolean {
+  public hasAvailableSettings(): boolean {
     return false;
   }
 
   public isSupported(): boolean {
     return (
-      this.settingsService.settings.value.Server.Database.type !==
+      this.settingsService.settings.value.Database.type !==
       DatabaseType.memory
     );
   }

@@ -20,7 +20,6 @@
         description="Converts photos on the fly, when they are requested."
         i18n-description i18n-name
         [ngModel]="states.server.Converting.onTheFly"
-        [simplifiedMode]="simplifiedMode"
         [disabled]="!states.client.Converting.enabled.value">
       </app-settings-entry>
 
@@ -39,7 +38,6 @@
         description="Enables loading the full resolution image on zoom in the ligthbox (preview)."
         i18n-description i18n-name
         [ngModel]="states.client.loadFullImageOnZoom"
-        [simplifiedMode]="simplifiedMode"
         [disabled]="!states.client.Converting.enabled.value">
       </app-settings-entry>
 

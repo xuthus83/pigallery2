@@ -13,7 +13,7 @@ export class MapSettingsService extends AbstractSettingsService<ClientMapConfig>
     super(settingsService);
   }
 
-  showInSimplifiedMode(): boolean {
+  hasAvailableSettings(): boolean {
     return false;
   }
 

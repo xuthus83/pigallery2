@@ -18,7 +18,7 @@ import {PersonEntry} from '../../model/database/sql/enitites/PersonEntry';
 
 export class ThumbnailGeneratorMWs {
   private static ThumbnailMapEntries =
-    Config.Client.Media.Thumbnail.generateThumbnailMapEntries();
+    Config.Media.Thumbnail.generateThumbnailMapEntries();
 
   @ServerTime('2.th', 'Thumbnail decoration')
   public static async addThumbnailInformation(
@@ -38,7 +38,7 @@ export class ThumbnailGeneratorMWs {
 
       // regenerate in case the list change since startup
       ThumbnailGeneratorMWs.ThumbnailMapEntries =
-        Config.Client.Media.Thumbnail.generateThumbnailMapEntries();
+        Config.Media.Thumbnail.generateThumbnailMapEntries();
       if (cw.directory) {
         ThumbnailGeneratorMWs.addThInfoTODir(cw.directory);
       }
@@ -70,7 +70,7 @@ export class ThumbnailGeneratorMWs {
     }
 
     try {
-      const size: number = Config.Client.Media.Thumbnail.personThumbnailSize;
+      const size: number = Config.Media.Thumbnail.personThumbnailSize;
 
       const persons: PersonEntry[] = req.resultPipe as PersonEntry[];
 
@@ -148,11 +148,11 @@ export class ThumbnailGeneratorMWs {
       const mediaPath = req.resultPipe as string;
       let size: number =
         parseInt(req.params.size, 10) ||
-        Config.Client.Media.Thumbnail.thumbnailSizes[0];
+        Config.Media.Thumbnail.thumbnailSizes[0];
 
       // validate size
-      if (Config.Client.Media.Thumbnail.thumbnailSizes.indexOf(size) === -1) {
-        size = Config.Client.Media.Thumbnail.thumbnailSizes[0];
+      if (Config.Media.Thumbnail.thumbnailSizes.indexOf(size) === -1) {
+        size = Config.Media.Thumbnail.thumbnailSizes[0];
       }
 
       try {
@@ -189,7 +189,7 @@ export class ThumbnailGeneratorMWs {
 
       // load parameters
       const mediaPath = req.resultPipe as string;
-      const size: number = Config.Client.Media.Thumbnail.iconSize;
+      const size: number = Config.Media.Thumbnail.iconSize;
 
       try {
         req.resultPipe = await PhotoProcessing.generateThumbnail(

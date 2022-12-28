@@ -11,8 +11,7 @@
         description="Filters the sub-folders with this search query"
         i18n-description i18n-name
         [ngModel]="states.SearchQuery"
-        [simplifiedMode]="simplifiedMode"
-        [typeOverride]="'searchQuery'"
+        [typeOverride]="'SearchQuery'"
         [required]="true">
       </app-settings-entry>
 
@@ -21,7 +20,6 @@
         description="If multiple preview is available sorts them by these methods and selects the first one."
         i18n-description i18n-name
         [ngModel]="states.Sorting"
-        [simplifiedMode]="simplifiedMode"
         [required]="true">
       </app-settings-entry>
 

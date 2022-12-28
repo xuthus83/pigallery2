@@ -19,8 +19,8 @@ export class GPXProcessing {
       ProjectPath.TranscodedFolder,
       ProjectPath.getRelativePathToImages(path.dirname(filePath)),
       path.basename(filePath)
-      + '_' + Config.Server.MetaFile.GPXCompressing.minDistance + 'm' +
-      Config.Server.MetaFile.GPXCompressing.minTimeDistance + 'ms' +
+      + '_' + Config.MetaFile.GPXCompressing.minDistance + 'm' +
+      Config.MetaFile.GPXCompressing.minTimeDistance + 'ms' +
       path.extname(filePath));
   }
 
@@ -112,8 +112,8 @@ export class GPXProcessing {
       const timeDelta = (Date.parse(list[i].time[0]) - Date.parse(list[i - 1].time[0])); // mill sec.
       const dist = distance(list[i - 1], list[i]); // meters
 
-      return !(timeDelta < Config.Server.MetaFile.GPXCompressing.minTimeDistance &&
-        dist < Config.Server.MetaFile.GPXCompressing.minDistance);
+      return !(timeDelta < Config.MetaFile.GPXCompressing.minTimeDistance &&
+        dist < Config.MetaFile.GPXCompressing.minDistance);
     };
 
     gpxObj.gpx.trk[0].trkseg[0].trkpt = items.filter(gpxEntryFilter).map((v) => {

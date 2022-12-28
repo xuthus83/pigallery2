@@ -14,9 +14,9 @@ describe('MetadataLoader', () => {
 
   before(() => {
     Config.loadSync();
-    Config.Server.Database.type = DatabaseType.sqlite;
-    Config.Client.Faces.enabled = true;
-    Config.Client.Faces.keywordsToPersons = true;
+    Config.Database.type = DatabaseType.sqlite;
+    Config.Faces.enabled = true;
+    Config.Faces.keywordsToPersons = true;
   });
 
 

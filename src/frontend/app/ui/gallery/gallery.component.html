@@ -50,7 +50,7 @@
       <div class="blog-map-row">
         <div class="blog-wrapper"
              [style.width]="blogOpen ?  '100%' : 'calc(100% - 100px)'"
-             *ngIf="config.Client.MetaFile.markdown  && directoryContent?.metaFile && (directoryContent.metaFile | mdFiles).length>0">
+             *ngIf="config.MetaFile.markdown  && directoryContent?.metaFile && (directoryContent.metaFile | mdFiles).length>0">
           <app-gallery-blog [collapsed]="!blogOpen"
                             [mdFiles]="directoryContent.metaFile | mdFiles"></app-gallery-blog>
 

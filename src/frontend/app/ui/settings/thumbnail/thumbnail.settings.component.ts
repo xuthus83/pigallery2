@@ -9,6 +9,7 @@ import {ScheduledJobsService} from '../scheduled-jobs.service';
 import {JobProgressDTO, JobProgressStates,} from '../../../../../common/entities/job/JobProgressDTO';
 import {ServerThumbnailConfig} from '../../../../../common/config/private/PrivateConfig';
 import {ClientThumbnailConfig} from '../../../../../common/config/public/ClientConfig';
+import {SettingsService} from '../settings.service';
 
 @Component({
   selector: 'app-settings-thumbnail',
@@ -20,10 +21,7 @@ import {ClientThumbnailConfig} from '../../../../../common/config/public/ClientC
   providers: [ThumbnailSettingsService],
 })
 export class ThumbnailSettingsComponent
-  extends SettingsComponentDirective<{
-    server: ServerThumbnailConfig;
-    client: ClientThumbnailConfig;
-  }>
+  extends SettingsComponentDirective<ServerThumbnailConfig>
   implements OnInit {
   JobProgressStates = JobProgressStates;
   readonly jobName = DefaultsJobs[DefaultsJobs['Thumbnail Generation']];
@@ -33,7 +31,8 @@ export class ThumbnailSettingsComponent
     navigation: NavigationService,
     settingsService: ThumbnailSettingsService,
     notification: NotificationService,
-    public jobsService: ScheduledJobsService
+    public jobsService: ScheduledJobsService,
+    globalSettingsService: SettingsService
   ) {
     super(
       $localize`Thumbnail`,
@@ -42,10 +41,8 @@ export class ThumbnailSettingsComponent
       navigation,
       settingsService,
       notification,
-      (s) => ({
-        client: s.Client.Media.Thumbnail,
-        server: s.Server.Media.Thumbnail,
-      })
+      globalSettingsService,
+      (s) => s.Media.Thumbnail
     );
   }
 

@@ -59,7 +59,7 @@ export class JobProgressManager {
 
     while (
       Object.keys(this.db.progresses).length >
-      Config.Server.Jobs.maxSavedProgress
+      Config.Jobs.maxSavedProgress
     ) {
       let min: string = null;
       for (const key of Object.keys(this.db.progresses)) {

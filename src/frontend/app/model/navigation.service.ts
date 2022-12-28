@@ -33,8 +33,8 @@ export class NavigationService {
     if (this.shareService.isSharing()) {
       return this.router.navigate(['share', this.shareService.getSharingKey()]);
     } else {
-      if (Config.Client.Other.NavBar.links && Config.Client.Other.NavBar.links.length > 0) {
-        switch (Config.Client.Other.NavBar.links[0].type) {
+      if (Config.Gallery.NavBar.links && Config.Gallery.NavBar.links.length > 0) {
+        switch (Config.Gallery.NavBar.links[0].type) {
           case NavigationLinkTypes.gallery:
             return this.router.navigate(['gallery', '']);
           case NavigationLinkTypes.albums:
@@ -42,7 +42,7 @@ export class NavigationService {
           case NavigationLinkTypes.faces:
             return this.router.navigate(['faces', '']);
           case NavigationLinkTypes.search:
-            return this.router.navigate(['search', JSON.stringify(Config.Client.Other.NavBar.links[0].SearchQuery)]);
+            return this.router.navigate(['search', JSON.stringify(Config.Gallery.NavBar.links[0].SearchQuery)]);
         }
       }
 

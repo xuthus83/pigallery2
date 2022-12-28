@@ -42,7 +42,7 @@ export class LoggerRouter {
       return next();
     });
 
-    app.get(Config.Client.apiPath + '*', (req: Request, res: Response, next: NextFunction): any => {
+    app.get(Config.Server.apiPath + '*', (req: Request, res: Response, next: NextFunction): any => {
       LoggerRouter.log(Logger.verbose, req, res);
       return next();
     });

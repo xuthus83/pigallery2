@@ -6,10 +6,7 @@ import {ClientMetaFileConfig} from '../../../../../common/config/public/ClientCo
 import {ServerMetaFileConfig} from '../../../../../common/config/private/PrivateConfig';
 
 @Injectable()
-export class MetaFileSettingsService extends AbstractSettingsService<{
-  server: ServerMetaFileConfig;
-  client: ClientMetaFileConfig;
-}> {
+export class MetaFileSettingsService extends AbstractSettingsService<ServerMetaFileConfig> {
   constructor(
     private networkService: NetworkService,
     settingsService: SettingsService
@@ -18,17 +15,14 @@ export class MetaFileSettingsService extends AbstractSettingsService<{
   }
 
   public isSupported(): boolean {
-    return this.settingsService.settings.value.Client.Map.enabled === true;
+    return this.settingsService.settings.value.Map.enabled === true;
   }
 
-  showInSimplifiedMode(): boolean {
+  hasAvailableSettings(): boolean {
     return false;
   }
 
-  public updateSettings(settings: {
-    server: ServerMetaFileConfig;
-    client: ClientMetaFileConfig;
-  }): Promise<void> {
+  public updateSettings(settings: ServerMetaFileConfig): Promise<void> {
     return this.networkService.putJson('/settings/metafile', {settings});
   }
 }

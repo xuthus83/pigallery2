@@ -49,7 +49,7 @@
     "sharp": "0.31.2",
     "ts-exif-parser": "0.2.2",
     "ts-node-iptc": "1.0.11",
-    "typeconfig": "2.0.26",
+    "typeconfig": "2.0.29",
     "xml2js": "0.4.23",
     "typeorm": "0.3.10"
   },

@@ -96,8 +96,8 @@ export class MetadataLoader {
     return new Promise<PhotoMetadata>((resolve, reject) => {
       const fd = fs.openSync(fullPath, 'r');
 
-      const data = Buffer.allocUnsafe(Config.Server.photoMetadataSize);
-      fs.read(fd, data, 0, Config.Server.photoMetadataSize, 0, (err) => {
+      const data = Buffer.allocUnsafe(Config.Media.photoMetadataSize);
+      fs.read(fd, data, 0, Config.Media.photoMetadataSize, 0, (err) => {
         fs.closeSync(fd);
         if (err) {
           return reject({file: fullPath, error: err});
@@ -298,7 +298,7 @@ export class MetadataLoader {
               metadata.size.height = height;
             }
 
-            if (Config.Client.Faces.enabled) {
+            if (Config.Faces.enabled) {
               const faces: FaceRegion[] = [];
               if (
                 exif.Regions &&
@@ -394,7 +394,7 @@ export class MetadataLoader {
               }
               if (faces.length > 0) {
                 metadata.faces = faces; // save faces
-                if (Config.Client.Faces.keywordsToPersons) {
+                if (Config.Faces.keywordsToPersons) {
                   // remove faces from keywords
                   metadata.faces.forEach((f) => {
                     const index = metadata.keywords.indexOf(f.name);

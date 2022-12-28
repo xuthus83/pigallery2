@@ -41,10 +41,10 @@ export class AuthenticationService {
       }
       this.getSessionUser().catch(console.error);
     } else {
-      if (Config.Client.authenticationRequired === false) {
+      if (Config.Users.authenticationRequired === false) {
         this.user.next({
-          name: UserRoles[Config.Client.unAuthenticatedUserRole],
-          role: Config.Client.unAuthenticatedUserRole,
+          name: UserRoles[Config.Users.unAuthenticatedUserRole],
+          role: Config.Users.unAuthenticatedUserRole,
         } as UserDTO);
       }
     }
@@ -82,7 +82,7 @@ export class AuthenticationService {
   }
 
   public isAuthenticated(): boolean {
-    if (Config.Client.authenticationRequired === false) {
+    if (Config.Users.authenticationRequired === false) {
       return true;
     }
     return !!this.user.value;

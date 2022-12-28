@@ -93,11 +93,11 @@ export class JobManager implements IJobManager, IJobListener {
     if (state !== JobProgressStates.finished || soloRun === true) {
       return;
     }
-    const sch = Config.Server.Jobs.scheduled.find(
+    const sch = Config.Jobs.scheduled.find(
       (s): boolean => s.jobName === job.Name
     );
     if (sch) {
-      const children = Config.Server.Jobs.scheduled.filter(
+      const children = Config.Jobs.scheduled.filter(
         (s): boolean =>
           s.trigger.type === JobTriggerType.after &&
           (s.trigger as AfterJobTrigger).afterScheduleName === sch.name
@@ -135,7 +135,7 @@ export class JobManager implements IJobManager, IJobListener {
   public runSchedules(): void {
     this.stopSchedules();
     Logger.info(LOG_TAG, 'Running job schedules');
-    Config.Server.Jobs.scheduled.forEach((s): void => this.runSchedule(s));
+    Config.Jobs.scheduled.forEach((s): void => this.runSchedule(s));
   }
 
   protected findJob<T = any>(jobName: string): IJob<T> {

@@ -1,14 +1,15 @@
-import { Component } from '@angular/core';
-import { MetaFileSettingsService } from './metafile.settings.service';
-import { SettingsComponentDirective } from '../_abstract/abstract.settings.component';
-import { AuthenticationService } from '../../../model/network/authentication.service';
-import { NavigationService } from '../../../model/navigation.service';
-import { NotificationService } from '../../../model/notification.service';
+import {Component} from '@angular/core';
+import {MetaFileSettingsService} from './metafile.settings.service';
+import {SettingsComponentDirective} from '../_abstract/abstract.settings.component';
+import {AuthenticationService} from '../../../model/network/authentication.service';
+import {NavigationService} from '../../../model/navigation.service';
+import {NotificationService} from '../../../model/notification.service';
 import {ClientMetaFileConfig, ClientPhotoConfig} from '../../../../../common/config/public/ClientConfig';
 import {ServerMetaFileConfig, ServerPhotoConfig} from '../../../../../common/config/private/PrivateConfig';
 import {DefaultsJobs, JobDTOUtils} from '../../../../../common/entities/job/JobDTO';
 import {JobProgressDTO, JobProgressStates} from '../../../../../common/entities/job/JobProgressDTO';
 import {ScheduledJobsService} from '../scheduled-jobs.service';
+import {SettingsService} from '../settings.service';
 
 @Component({
   selector: 'app-settings-meta-file',
@@ -19,16 +20,14 @@ import {ScheduledJobsService} from '../scheduled-jobs.service';
   ],
   providers: [MetaFileSettingsService],
 })
-export class MetaFileSettingsComponent extends SettingsComponentDirective<{
-  server: ServerMetaFileConfig;
-  client: ClientMetaFileConfig;
-}> {
+export class MetaFileSettingsComponent extends SettingsComponentDirective<ServerMetaFileConfig> {
   constructor(
     authService: AuthenticationService,
     navigation: NavigationService,
     settingsService: MetaFileSettingsService,
     notification: NotificationService,
     public jobsService: ScheduledJobsService,
+    globalSettingsService: SettingsService
   ) {
     super(
       $localize`Meta file`,
@@ -37,13 +36,10 @@ export class MetaFileSettingsComponent extends SettingsComponentDirective<{
       navigation,
       settingsService,
       notification,
-      (s) => ({
-        client: s.Client.MetaFile,
-        server: s.Server.MetaFile,
-      })
+      globalSettingsService,
+      (s) => (s.MetaFile)
     );
   }
-
 
 
   readonly jobName = DefaultsJobs[DefaultsJobs['GPX Compression']];

@@ -24,7 +24,7 @@ export class GallerySortingService {
     private rndService: SeededRandomService
   ) {
     this.sorting = new BehaviorSubject<SortingMethods>(
-      Config.Client.Other.defaultPhotoSortingMethod
+      Config.Gallery.defaultPhotoSortingMethod
     );
     this.galleryService.content.subscribe((c) => {
       if (c.directory) {
@@ -47,9 +47,9 @@ export class GallerySortingService {
       }
     }
     if (cw.searchResult) {
-      return Config.Client.Other.defaultSearchSortingMethod;
+      return Config.Gallery.defaultSearchSortingMethod;
     }
-    return Config.Client.Other.defaultPhotoSortingMethod;
+    return Config.Gallery.defaultPhotoSortingMethod;
   }
 
   setSorting(sorting: SortingMethods): void {
@@ -96,7 +96,7 @@ export class GallerySortingService {
                   break;
                 case SortingMethods.ascDate:
                   if (
-                    Config.Client.Other.enableDirectorySortingByDate === true
+                    Config.Gallery.enableDirectorySortingByDate === true
                   ) {
                     c.directories.sort(
                       (a, b) => a.lastModified - b.lastModified
@@ -115,7 +115,7 @@ export class GallerySortingService {
                   break;
                 case SortingMethods.descDate:
                   if (
-                    Config.Client.Other.enableDirectorySortingByDate === true
+                    Config.Gallery.enableDirectorySortingByDate === true
                   ) {
                     c.directories.sort(
                       (a, b) => b.lastModified - a.lastModified

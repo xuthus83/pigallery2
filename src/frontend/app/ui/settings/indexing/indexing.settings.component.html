@@ -6,7 +6,7 @@
     <div class="card-body">
       <div [hidden]="!error" class="alert alert-danger" role="alert"><strong>Error: </strong>{{error}}</div>
 
-      <ng-container *ngIf="!simplifiedMode">
+      <ng-container *ngIf="configPriority>0">
 
         <app-settings-entry
           name="Index cache timeout [ms]"

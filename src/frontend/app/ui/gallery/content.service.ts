@@ -57,7 +57,7 @@ export class ContentService {
 
     // prepare server request
     const params: { [key: string]: any } = {};
-    if (Config.Client.Sharing.enabled === true) {
+    if (Config.Sharing.enabled === true) {
       if (this.shareService.isSharing()) {
         params[QueryParams.gallery.sharingKey_query] =
           this.shareService.getSharingKey();

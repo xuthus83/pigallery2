@@ -5,7 +5,7 @@ import { Config } from '../../../common/config/public/Config';
 @Pipe({ name: 'gpxFiles' })
 export class GPXFilesFilterPipe implements PipeTransform {
   transform(metaFiles: FileDTO[]): FileDTO[] | null {
-    if (!Config.Client.MetaFile.gpx) {
+    if (!Config.MetaFile.gpx) {
       return [];
     }
     if (!metaFiles) {

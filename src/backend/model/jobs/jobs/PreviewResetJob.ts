@@ -13,7 +13,7 @@ export class PreviewRestJob extends Job {
   protected readonly IsInstant = true;
 
   public get Supported(): boolean {
-    return Config.Server.Database.type !== DatabaseType.memory;
+    return Config.Database.type !== DatabaseType.memory;
   }
 
   protected async init(): Promise<void> {

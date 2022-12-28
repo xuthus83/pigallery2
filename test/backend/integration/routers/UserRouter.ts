@@ -36,8 +36,8 @@ describe('UserRouter', () => {
   const setUp = async () => {
     await fs.promises.rm(tempDir, {recursive: true, force: true});
     Config.Server.Threading.enabled = false;
-    Config.Server.Database.type = DatabaseType.sqlite;
-    Config.Server.Database.dbFolder = tempDir;
+    Config.Database.type = DatabaseType.sqlite;
+    Config.Database.dbFolder = tempDir;
     ProjectPath.reset();
 
 
@@ -64,7 +64,7 @@ describe('UserRouter', () => {
 
   const login = async (srv: Server): Promise<any> => {
     const result = await (chai.request(srv.App) as SuperAgentStatic)
-      .post(Config.Client.apiPath + '/user/login')
+      .post(Config.Server.apiPath + '/user/login')
       .send({
         loginCredential: {
           password: testUser.password,
@@ -82,14 +82,14 @@ describe('UserRouter', () => {
     beforeEach(setUp);
     afterEach(tearDown);
     it('it should login', async () => {
-      Config.Client.authenticationRequired = true;
+      Config.Users.authenticationRequired = true;
       await login(server);
 
     });
     it('it skip login', async () => {
-      Config.Client.authenticationRequired = false;
+      Config.Users.authenticationRequired = false;
       const result = await chai.request(server.App)
-        .post(Config.Client.apiPath + '/user/login');
+        .post(Config.Server.apiPath + '/user/login');
 
       result.res.should.have.status(404);
     });
@@ -102,12 +102,12 @@ describe('UserRouter', () => {
     beforeEach(setUp);
     afterEach(tearDown);
     it('it should GET the authenticated user', async () => {
-      Config.Client.authenticationRequired = true;
+      Config.Users.authenticationRequired = true;
 
       const loginRes = await login(server);
 
       const result = await chai.request(server.App)
-        .get(Config.Client.apiPath + '/user/me')
+        .get(Config.Server.apiPath + '/user/me')
         .set('Cookie', loginRes.res.headers['set-cookie'])
         .set('CSRF-Token', loginRes.body.result.csrfToken);
 
@@ -115,17 +115,17 @@ describe('UserRouter', () => {
     });
 
     it('it should not authenticate', async () => {
-      Config.Client.authenticationRequired = true;
+      Config.Users.authenticationRequired = true;
 
       const result = await chai.request(server.App)
-        .get(Config.Client.apiPath + '/user/me');
+        .get(Config.Server.apiPath + '/user/me');
 
       result.res.should.have.status(401);
     });
 
     it('it should authenticate as user with sharing key', async () => {
-      Config.Client.authenticationRequired = true;
-      Config.Client.Sharing.enabled = true;
+      Config.Users.authenticationRequired = true;
+      Config.Sharing.enabled = true;
 
       const sharingKey = (await RouteTestingHelper.createSharing(testUser)).sharingKey;
 
@@ -134,7 +134,7 @@ describe('UserRouter', () => {
       const q: any = {};
       q[QueryParams.gallery.sharingKey_query] = sharingKey;
       const result = await chai.request(server.App)
-        .get(Config.Client.apiPath + '/user/me?' + QueryParams.gallery.sharingKey_query + '=' + sharingKey)
+        .get(Config.Server.apiPath + '/user/me?' + QueryParams.gallery.sharingKey_query + '=' + sharingKey)
         .set('Cookie', loginRes.res.headers['set-cookie'])
         .set('CSRF-Token', loginRes.body.result.csrfToken);
 
@@ -144,29 +144,29 @@ describe('UserRouter', () => {
 
 
     it('it should authenticate with sharing key', async () => {
-      Config.Client.authenticationRequired = true;
-      Config.Client.Sharing.enabled = true;
+      Config.Users.authenticationRequired = true;
+      Config.Sharing.enabled = true;
       const sharing = (await RouteTestingHelper.createSharing(testUser));
 
 
       const q: any = {};
       q[QueryParams.gallery.sharingKey_query] = sharing.sharingKey;
       const result = await chai.request(server.App)
-        .get(Config.Client.apiPath + '/user/me?' + QueryParams.gallery.sharingKey_query + '=' + sharing.sharingKey);
+        .get(Config.Server.apiPath + '/user/me?' + QueryParams.gallery.sharingKey_query + '=' + sharing.sharingKey);
 
 
       checkUserResult(result, RouteTestingHelper.getExpectedSharingUser(sharing));
     });
     it('it should not authenticate with sharing key without password', async () => {
-      Config.Client.authenticationRequired = true;
-      Config.Client.Sharing.enabled = true;
+      Config.Users.authenticationRequired = true;
+      Config.Sharing.enabled = true;
       const sharing = (await RouteTestingHelper.createSharing(testUser, 'pass_secret'));
 
 
       const q: any = {};
       q[QueryParams.gallery.sharingKey_query] = sharing.sharingKey;
       const result = await chai.request(server.App)
-        .get(Config.Client.apiPath + '/user/me?' + QueryParams.gallery.sharingKey_query + '=' + sharing.sharingKey);
+        .get(Config.Server.apiPath + '/user/me?' + QueryParams.gallery.sharingKey_query + '=' + sharing.sharingKey);
 
 
       result.should.have.status(401);
@@ -176,14 +176,14 @@ describe('UserRouter', () => {
     });
 
     it('it should authenticate as guest', async () => {
-      Config.Client.authenticationRequired = false;
+      Config.Users.authenticationRequired = false;
 
       const result = await chai.request(server.App)
-        .get(Config.Client.apiPath + '/user/me');
+        .get(Config.Server.apiPath + '/user/me');
 
       const expectedGuestUser = {
-        name: UserRoles[Config.Client.unAuthenticatedUserRole],
-        role: Config.Client.unAuthenticatedUserRole
+        name: UserRoles[Config.Users.unAuthenticatedUserRole],
+        role: Config.Users.unAuthenticatedUserRole
       } as UserDTO;
 
 

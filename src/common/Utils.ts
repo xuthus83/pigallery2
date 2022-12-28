@@ -62,7 +62,7 @@ export class Utils {
   /**
    * Checks if the two input (let them be objects or arrays or just primitives) are equal
    */
-  static equalsFilter(object: any, filter: any): boolean {
+  static equalsFilter(object: any, filter: any, skipProp: string[] = []): boolean {
     if (typeof filter !== 'object' || filter == null) {
       return object === filter;
     }
@@ -75,8 +75,11 @@ export class Utils {
     }
     const keys = Object.keys(filter);
     for (const key of keys) {
+      if (skipProp.includes(key)) {
+        continue;
+      }
       if (typeof filter[key] === 'object') {
-        if (Utils.equalsFilter(object[key], filter[key]) === false) {
+        if (Utils.equalsFilter(object[key], filter[key], skipProp) === false) {
           return false;
         }
       } else if (object[key] !== filter[key]) {
@@ -180,7 +183,7 @@ export class Utils {
       }
       const key = parseInt(enumMember, 10);
       if (key >= 0) {
-        arr.push({ key, value: EnumType[enumMember] });
+        arr.push({key, value: EnumType[enumMember]});
       }
     }
     return arr;
@@ -261,10 +264,11 @@ export class Utils {
 export class LRU<V> {
   data: { [key: string]: { value: V; usage: number } } = {};
 
-  constructor(public readonly size: number) {}
+  constructor(public readonly size: number) {
+  }
 
   set(key: string, value: V): void {
-    this.data[key] = { usage: Date.now(), value };
+    this.data[key] = {usage: Date.now(), value};
     if (Object.keys(this.data).length > this.size) {
       let oldestK = key;
       let oldest = this.data[oldestK].usage;

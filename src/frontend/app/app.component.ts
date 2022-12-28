@@ -1,17 +1,17 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AuthenticationService } from './model/network/authentication.service';
-import { Router } from '@angular/router';
-import { Config } from '../../common/config/public/Config';
-import { Title } from '@angular/platform-browser';
-import { ShareService } from './ui/gallery/share.service';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {AuthenticationService} from './model/network/authentication.service';
+import {Router} from '@angular/router';
+import {Config} from '../../common/config/public/Config';
+import {Title} from '@angular/platform-browser';
+import {ShareService} from './ui/gallery/share.service';
 import 'hammerjs';
-import { Subscription } from 'rxjs';
-import { QueryParams } from '../../common/QueryParams';
+import {Subscription} from 'rxjs';
 import {NavigationService} from './model/navigation.service';
 
 @Component({
   selector: 'app-pi-gallery2',
-  template: ` <router-outlet></router-outlet>`,
+  template: `
+    <router-outlet></router-outlet>`,
 })
 export class AppComponent implements OnInit, OnDestroy {
   private subscription: Subscription = null;
@@ -22,10 +22,11 @@ export class AppComponent implements OnInit, OnDestroy {
     private shareService: ShareService,
     private navigation: NavigationService,
     private title: Title
-  ) {}
+  ) {
+  }
 
   async ngOnInit(): Promise<void> {
-    this.title.setTitle(Config.Client.applicationTitle);
+    this.title.setTitle(Config.Server.applicationTitle);
     await this.shareService.wait();
     this.subscription = this.authenticationService.user.subscribe(() => {
       if (this.authenticationService.isAuthenticated()) {

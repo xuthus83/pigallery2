@@ -45,7 +45,7 @@ describe('Authentication middleware', () => {
         query: {},
         params: {}
       };
-      Config.Client.authenticationRequired = true;
+      Config.Users.authenticationRequired = true;
       const next: any = (err: ErrorDTO) => {
         expect(err).not.to.be.undefined;
         expect(err.code).to.be.eql(ErrorCodes.NOT_AUTHENTICATED);

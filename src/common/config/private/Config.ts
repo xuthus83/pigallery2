@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { IPrivateConfig, ServerConfig } from './PrivateConfig';
-import { ClientConfig } from '../public/ClientConfig';
+import {ServerConfig} from './PrivateConfig';
 import * as crypto from 'crypto';
 import * as path from 'path';
-import { ConfigClass, ConfigClassBuilder } from 'typeconfig/node';
-import { ConfigProperty, IConfigClass } from 'typeconfig/common';
+import {ConfigClass, ConfigClassBuilder} from 'typeconfig/node';
+import {IConfigClass} from 'typeconfig/common';
 
 declare const process: any;
 
@@ -32,14 +31,10 @@ const upTime = new Date().toISOString();
     },
   },
 })
-export class PrivateConfigClass implements IPrivateConfig {
-  @ConfigProperty({ type: ServerConfig })
-  Server: ServerConfig = new ServerConfig();
-  @ConfigProperty({ type: ClientConfig })
-  Client: IConfigClass & ClientConfig = new ClientConfig() as IConfigClass &
-    ClientConfig;
+export class PrivateConfigClass extends ServerConfig {
 
   constructor() {
+    super();
     if (!this.Server.sessionSecret || this.Server.sessionSecret.length === 0) {
       this.Server.sessionSecret = [
         crypto.randomBytes(256).toString('hex'),
@@ -48,14 +43,14 @@ export class PrivateConfigClass implements IPrivateConfig {
       ];
     }
 
-    this.Server.Environment.appVersion =
+    this.Environment.appVersion =
       require('../../../../package.json').version;
-    this.Server.Environment.buildTime =
+    this.Environment.buildTime =
       require('../../../../package.json').buildTime;
-    this.Server.Environment.buildCommitHash =
+    this.Environment.buildCommitHash =
       require('../../../../package.json').buildCommitHash;
-    this.Server.Environment.upTime = upTime;
-    this.Server.Environment.isDocker = !!process.env.PI_DOCKER;
+    this.Environment.upTime = upTime;
+    this.Environment.isDocker = !!process.env.PI_DOCKER;
   }
 
   async original(): Promise<PrivateConfigClass & IConfigClass> {
@@ -69,3 +64,4 @@ export const Config = ConfigClassBuilder.attachInterface(
   new PrivateConfigClass()
 );
 Config.loadSync();
+

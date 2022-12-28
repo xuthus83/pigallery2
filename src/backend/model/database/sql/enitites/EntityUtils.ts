@@ -4,13 +4,13 @@ import { DatabaseType } from '../../../../../common/config/private/PrivateConfig
 
 export class ColumnCharsetCS implements ColumnOptions {
   public get charset(): string {
-    return Config.Server.Database.type === DatabaseType.mysql
+    return Config.Database.type === DatabaseType.mysql
       ? 'utf8mb4'
       : 'utf8';
   }
 
   public get collation(): string {
-    return Config.Server.Database.type === DatabaseType.mysql
+    return Config.Database.type === DatabaseType.mysql
       ? 'utf8mb4_bin'
       : null;
   }

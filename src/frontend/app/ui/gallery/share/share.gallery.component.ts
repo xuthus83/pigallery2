@@ -30,7 +30,7 @@ export class GalleryShareComponent implements OnInit, OnDestroy {
   currentDir = '';
   sharing: SharingDTO = null;
   contentSubscription: Subscription = null;
-  readonly passwordProtection = Config.Client.Sharing.passwordProtected;
+  readonly passwordProtection = Config.Sharing.passwordProtected;
   readonly ValidityTypes = ValidityTypes;
 
   modalRef: BsModalRef;
@@ -99,7 +99,7 @@ export class GalleryShareComponent implements OnInit, OnDestroy {
       this.input.password,
       this.calcValidity()
     );
-    this.url = Config.Client.publicUrl + '/share/' + this.sharing.sharingKey;
+    this.url = Config.Server.publicUrl + '/share/' + this.sharing.sharingKey;
   }
 
   async get(): Promise<void> {
@@ -109,7 +109,7 @@ export class GalleryShareComponent implements OnInit, OnDestroy {
       this.input.includeSubfolders,
       this.calcValidity()
     );
-    this.url = Config.Client.publicUrl + '/share/' + this.sharing.sharingKey;
+    this.url = Config.Server.publicUrl + '/share/' + this.sharing.sharingKey;
   }
 
   async openModal(template: TemplateRef<unknown>): Promise<void> {

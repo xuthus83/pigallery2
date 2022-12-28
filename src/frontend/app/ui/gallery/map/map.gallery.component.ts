@@ -79,7 +79,7 @@ export class GalleryMapComponent implements OnChanges, IRenderable {
           p.metadata.positionData.GPSData.longitude
         );
       })
-      .slice(0, Config.Client.Map.maxPreviewMarkers)
+      .slice(0, Config.Map.maxPreviewMarkers)
       .map((p): Marker => {
         return marker({
           lat: p.metadata.positionData.GPSData.latitude,

@@ -1,12 +1,12 @@
 <ng-template #popTemplate>
-  <span i18n>Application version</span>: v{{(settingsService.settings | async).Server.Environment.appVersion}}
-  <ng-container *ngIf="(settingsService.settings | async).Server.Environment.buildTime">
+  <span i18n>Application version</span>: v{{(settingsService.settings | async).Environment.appVersion}}
+  <ng-container *ngIf="(settingsService.settings | async).Environment.buildTime">
     <br/>
-    <span i18n>Built at</span>: {{(settingsService.settings | async).Server.Environment.buildTime | date:'medium' }}
+    <span i18n>Built at</span>: {{(settingsService.settings | async).Environment.buildTime | date:'medium' }}
   </ng-container>
-  <ng-container *ngIf="(settingsService.settings | async).Server.Environment.buildCommitHash">
+  <ng-container *ngIf="(settingsService.settings | async).Environment.buildCommitHash">
     <br/>
-    <span i18n>Git commit</span>: {{(settingsService.settings | async).Server.Environment.buildCommitHash}}
+    <span i18n>Git commit</span>: {{(settingsService.settings | async).Environment.buildCommitHash}}
   </ng-container>
 </ng-template>
 <app-frame>
@@ -45,27 +45,23 @@
              class="version"
              href="https://github.com/bpatrik/pigallery2/releases">
             <span
-              i18n>App version:</span>&nbsp;<span>{{'v' + ((settingsService.settings | async).Server.Environment.appVersion || '----')}}</span>
+              i18n>App version:</span>&nbsp;<span>{{'v' + ((settingsService.settings | async).Environment.appVersion || '----')}}</span>
           </a>
         </div>
         <div class="mb-1">
-          <label class="control-label align-self-end me-2" for="simplifiedMode" i18n>Mode</label>
-          <bSwitch
-            id="simplifiedMode"
-            class="switch"
-            name="simplifiedMode"
-            switch-off-color="warning"
-            switch-on-color="primary"
-            [switch-inverse]="true"
-            switch-off-text="Advanced"
-            switch-on-text="Simplified"
-            i18n-switch-off-text
-            i18n-switch-on-text
-            [switch-handle-width]="100"
-            [switch-label-width]="20"
-            [(ngModel)]="simplifiedMode"
-            (ngModelChange)="modeToggle()">
-          </bSwitch>
+          <label class="control-label align-self-end me-2" for="config-priority" i18n>Mode</label>
+          <select class="form-select d-inline-block w-auto"
+                  aria-label="Configuration priority"
+                  [(ngModel)]="settingsService.configPriority"
+                  (ngModelChange)="settingsService.configPriorityChanged()"
+                  [class.bg-warning]="settingsService.configPriority === ConfigPriority.advanced"
+                  [class.bg-danger]="settingsService.configPriority === ConfigPriority.underTheHood"
+                  id="config-priority">
+            <option class="bg-white"
+                    *ngFor="let cp of configPriorities"
+                    [ngValue]="cp.key">{{cp.value}}
+            </option>
+          </select>
         </div>
       </div>
     </div>
@@ -89,64 +85,70 @@
         </nav>
       </div>
       <div class="col-md-10">
-        <app-settings-basic #setting #basic
-                            [simplifiedMode]="simplifiedMode"
-                            [hidden]="!basic.HasAvailableSettings"></app-settings-basic>
-        <app-settings-usermanager #setting #userManager
-                                  [hidden]="!userManager.HasAvailableSettings"></app-settings-usermanager>
-        <app-settings-database #setting #database
-                               [simplifiedMode]="simplifiedMode"
-                               [hidden]="!database.HasAvailableSettings"></app-settings-database>
-        <app-settings-photo #setting #photo
-                            [hidden]="!photo.HasAvailableSettings"
-                            [simplifiedMode]="simplifiedMode"></app-settings-photo>
-        <app-settings-video #setting #video
-                            [hidden]="!video.HasAvailableSettings"
-                            [simplifiedMode]="simplifiedMode"></app-settings-video>
-        <app-settings-thumbnail #setting #thumbnail
-                                [hidden]="!thumbnail.HasAvailableSettings"
-                                [simplifiedMode]="simplifiedMode"></app-settings-thumbnail>
-        <app-settings-preview #setting #preview
-                              [hidden]="!preview.HasAvailableSettings"
-                              [simplifiedMode]="simplifiedMode"></app-settings-preview>
-        <app-settings-search #setting #search
-                             [hidden]="!search.HasAvailableSettings"
-                             [simplifiedMode]="simplifiedMode"></app-settings-search>
-        <app-settings-share #setting #share
-                            [hidden]="!share.HasAvailableSettings"
-                            [simplifiedMode]="simplifiedMode"></app-settings-share>
-        <app-settings-map #setting #map
-                          [hidden]="!map.HasAvailableSettings"
-                          [simplifiedMode]="simplifiedMode"></app-settings-map>
-        <app-settings-meta-file #setting #metaFile
-                                [hidden]="!metaFile.HasAvailableSettings"
-                                [simplifiedMode]="simplifiedMode"></app-settings-meta-file>
-        <app-settings-other #setting #other
-                            [hidden]="!other.HasAvailableSettings"
-                            [simplifiedMode]="simplifiedMode"></app-settings-other>
-        <app-settings-random-photo #setting #random
-                                   [hidden]="!random.HasAvailableSettings"
-                                   [simplifiedMode]="simplifiedMode"></app-settings-random-photo>
-        <app-settings-faces #setting #faces
-                            [hidden]="!faces.HasAvailableSettings"
-                            [simplifiedMode]="simplifiedMode"></app-settings-faces>
-        <app-settings-albums #setting #albums
-                             [hidden]="!albums.HasAvailableSettings"
-                             [simplifiedMode]="simplifiedMode"></app-settings-albums>
-        <app-settings-indexing #setting #indexing
-                               [hidden]="!indexing.HasAvailableSettings"
-                               [simplifiedMode]="simplifiedMode"></app-settings-indexing>
-        <app-settings-jobs #setting #jobs
-                           [hidden]="!jobs.HasAvailableSettings"
-                           [simplifiedMode]="simplifiedMode"></app-settings-jobs>
+        <app-settings-template #setting #server
+                               icon="list"
+                               [ConfigPath]="'Server'"
+                               [hidden]="!server.HasAvailableSettings"></app-settings-template>
+        <app-settings-template #setting #users
+                               icon="person"
+                               [ConfigPath]="'Users'"
+                               [hidden]="!users.HasAvailableSettings"></app-settings-template>
+        <app-settings-template #setting #db
+                               icon="list"
+                               [ConfigPath]="'Database'"
+                               [hidden]="!db.HasAvailableSettings"></app-settings-template>
+        <app-settings-template #setting #media
+                               icon="camera-slr"
+                               [ConfigPath]="'Media'"
+                               [hidden]="!media.HasAvailableSettings"></app-settings-template>
+        <app-settings-template #setting #gallery
+                               icon="browser"
+                               [ConfigPath]="'Gallery'"
+                               [hidden]="!gallery.HasAvailableSettings"></app-settings-template>
+        <app-settings-template #setting #preview
+                               icon="image"
+                               [ConfigPath]="'Preview'"
+                               [hidden]="!preview.HasAvailableSettings"></app-settings-template>
+        <app-settings-template #setting #metafile
+                               icon="file"
+                               [ConfigPath]="'MetaFile'"
+                               [hidden]="!metafile.HasAvailableSettings"></app-settings-template>
+        <app-settings-template #setting #map
+                               icon="map-marker"
+                               [ConfigPath]="'Map'"
+                               [hidden]="!map.HasAvailableSettings"></app-settings-template>
+        <app-settings-template #setting #sharing
+                               icon="share"
+                               [ConfigPath]="'Sharing'"
+                               [hidden]="!sharing.HasAvailableSettings"></app-settings-template>
+        <app-settings-template #setting #faces
+                               icon="people"
+                               [ConfigPath]="'Faces'"
+                               [hidden]="!faces.HasAvailableSettings"></app-settings-template>
+        <app-settings-template #setting #album
+                               icon="grid-two-up"
+                               [ConfigPath]="'Album'"
+                               [hidden]="!album.HasAvailableSettings"></app-settings-template>
+        <app-settings-template #setting #randomPhoto
+                               icon="random"
+                               [ConfigPath]="'RandomPhoto'"
+                               [hidden]="!randomPhoto.HasAvailableSettings"></app-settings-template>
+        <app-settings-template #setting #duplicates
+                               icon="layers"
+                               [ConfigPath]="'Duplicates'"
+                               [hidden]="!duplicates.HasAvailableSettings"></app-settings-template>
+        <app-settings-template #setting #indexing
+                               icon="pie-chart"
+                               [ConfigPath]="'Indexing'"
+                               [hidden]="!indexing.HasAvailableSettings"></app-settings-template>
       </div>
     </div>
 
     <div class="row mb-3">
       <div class="col-12">
-        <div class="text-right">
+        <div class="text-end">
           <ng-container i18n>Up time</ng-container><!--
-            -->: {{(settingsService.settings | async).Server.Environment.upTime | date:'medium'}}
+            -->: {{(settingsService.settings | async).Environment.upTime | date:'medium'}}
         </div>
       </div>
     </div>

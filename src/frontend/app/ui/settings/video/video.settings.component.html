@@ -47,7 +47,6 @@
         name="Format"
         i18n-name
         [ngModel]="states.server.transcoding.format"
-        [simplifiedMode]="simplifiedMode"
         (ngModelChange)="formatChanged($event)"
         [options]="formats"
         [required]="true">
@@ -57,7 +56,6 @@
         name="Codec"
         i18n-name
         [ngModel]="states.server.transcoding.codec"
-        [simplifiedMode]="simplifiedMode"
         [options]="codecs[states.server.transcoding.format.value]"
         [required]="true">
       </app-settings-entry>
@@ -80,7 +78,6 @@
         [ngModel]="states.server.transcoding.fps"
         (change)="updateBitRate()"
         [options]="fps"
-        [simplifiedMode]="simplifiedMode"
         [required]="true">
       </app-settings-entry>
 
@@ -113,7 +110,6 @@
         description="The range of the Constant Rate Factor (CRF) scale is 0–51, where 0 is lossless, 23 is the default, and 51 is worst quality possible."
         i18n-name i18n-description
         [ngModel]="states.server.transcoding.crf"
-        [simplifiedMode]="simplifiedMode"
         [required]="true">
       </app-settings-entry>
 
@@ -122,7 +118,6 @@
         description="A preset is a collection of options that will provide a certain encoding speed to compression ratio. A slower preset will provide better compression (compression is quality per filesize)."
         i18n-name i18n-description
         [ngModel]="states.server.transcoding.preset"
-        [simplifiedMode]="simplifiedMode"
         [required]="true">
       </app-settings-entry>
 
@@ -133,7 +128,6 @@
         i18n-name i18n-description
         [ngModel]="states.server.transcoding.customOptions"
         [allowSpaces]="true"
-        [simplifiedMode]="simplifiedMode"
         [required]="true">
       </app-settings-entry>
 

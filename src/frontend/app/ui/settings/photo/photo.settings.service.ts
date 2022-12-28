@@ -6,10 +6,7 @@ import { ServerPhotoConfig } from '../../../../../common/config/private/PrivateC
 import { ClientPhotoConfig } from '../../../../../common/config/public/ClientConfig';
 
 @Injectable()
-export class PhotoSettingsService extends AbstractSettingsService<{
-  server: ServerPhotoConfig;
-  client: ClientPhotoConfig;
-}> {
+export class PhotoSettingsService extends AbstractSettingsService<ServerPhotoConfig> {
   constructor(
     private networkService: NetworkService,
     settingsService: SettingsService
@@ -17,10 +14,7 @@ export class PhotoSettingsService extends AbstractSettingsService<{
     super(settingsService);
   }
 
-  public updateSettings(settings: {
-    server: ServerPhotoConfig;
-    client: ClientPhotoConfig;
-  }): Promise<void> {
+  public updateSettings(settings: ServerPhotoConfig): Promise<void> {
     return this.networkService.putJson('/settings/photo', { settings });
   }
 }

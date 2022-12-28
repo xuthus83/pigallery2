@@ -3,13 +3,9 @@ import { NetworkService } from '../../../model/network/network.service';
 import { AbstractSettingsService } from '../_abstract/abstract.settings.service';
 import { SettingsService } from '../settings.service';
 import { ServerThumbnailConfig } from '../../../../../common/config/private/PrivateConfig';
-import { ClientThumbnailConfig } from '../../../../../common/config/public/ClientConfig';
 
 @Injectable()
-export class ThumbnailSettingsService extends AbstractSettingsService<{
-  server: ServerThumbnailConfig;
-  client: ClientThumbnailConfig;
-}> {
+export class ThumbnailSettingsService extends AbstractSettingsService<ServerThumbnailConfig> {
   constructor(
     private networkService: NetworkService,
     settingsService: SettingsService
@@ -17,14 +13,11 @@ export class ThumbnailSettingsService extends AbstractSettingsService<{
     super(settingsService);
   }
 
-  showInSimplifiedMode(): boolean {
+  hasAvailableSettings(): boolean {
     return false;
   }
 
-  public updateSettings(settings: {
-    server: ServerThumbnailConfig;
-    client: ClientThumbnailConfig;
-  }): Promise<void> {
+  public updateSettings(settings: ServerThumbnailConfig): Promise<void> {
     return this.networkService.putJson('/settings/thumbnail', { settings });
   }
 }

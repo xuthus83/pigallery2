@@ -24,7 +24,6 @@
         i18n-description i18n-name
         [ngModel]="states.Server.thumbnailThreads"
         [options]="threads"
-        [simplifiedMode]="simplifiedMode || states.Server.enabled.value == false"
         [required]="true">
       </app-settings-entry>
 
@@ -85,7 +84,6 @@
         description="Show the number of items (photos) in the folder."
         i18n-description i18n-name
         [ngModel]="states.Client.NavBar.showItemCount"
-        [simplifiedMode]="simplifiedMode"
         [required]="true">
       </app-settings-entry>
 
@@ -95,7 +93,6 @@
         i18n-name
         [ngModel]="states.Client.defaultPhotoSortingMethod"
         [optionMap]="sortingMap"
-        [simplifiedMode]="simplifiedMode"
         [required]="true">
       </app-settings-entry>
 
@@ -106,7 +103,6 @@
         link="https://github.com/bpatrik/pigallery2/issues/566"
         linkText="See 566."
         [optionMap]="sortingMap"
-        [simplifiedMode]="simplifiedMode"
         [required]="true">
       </app-settings-entry>
 
@@ -115,7 +111,6 @@
         description="If enabled, directories will be sorted by date, like photos, otherwise by name. Directory date is the last modification time of that directory not the creation date of the oldest photo."
         i18n-description i18n-name
         [ngModel]="states.Client.enableDirectorySortingByDate"
-        [simplifiedMode]="simplifiedMode"
         [required]="true">
       </app-settings-entry>
 
@@ -123,8 +118,7 @@
         name="Custom HTML Head"
         description="Injects the content of this between the <head></head> HTML tags of the app. (You can use it add analytics or custom code to the app)"
         [ngModel]="states.Client.customHTMLHead"
-        i18n-name
-        [simplifiedMode]="simplifiedMode">
+        i18n-name>
       </app-settings-entry>
 
 

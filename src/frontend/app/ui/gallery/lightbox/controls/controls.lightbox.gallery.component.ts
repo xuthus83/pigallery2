@@ -54,7 +54,7 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
   @Input() mediaElement: GalleryLightboxMediaComponent;
   @Input() photoFrameDim = {width: 1, height: 1, aspect: 1};
 
-  public readonly facesEnabled = Config.Client.Faces.enabled;
+  public readonly facesEnabled = Config.Faces.enabled;
 
   public zoom = 1;
   public playBackState: PlayBackStates = PlayBackStates.Paused;
@@ -82,7 +82,7 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
     private cacheService: GalleryCacheService
   ) {
     this.searchEnabled =
-      Config.Client.Search.enabled && this.authService.canSearch();
+      Config.Search.enabled && this.authService.canSearch();
   }
 
 
@@ -129,7 +129,7 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
     if (this.cacheService.getSlideshowSpeed()) {
       this.selectedSlideshowSpeed = this.cacheService.getSlideshowSpeed();
     } else {
-      this.selectedSlideshowSpeed = Config.Client.Other.defaultSlideshowSpeed;
+      this.selectedSlideshowSpeed = Config.Gallery.defaultSlideshowSpeed;
     }
   }
 

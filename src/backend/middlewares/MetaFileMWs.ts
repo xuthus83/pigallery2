@@ -13,7 +13,7 @@ export class MetaFileMWs {
       return next();
     }
     // if conversion is not enabled redirect, so browser can cache the full
-    if (Config.Client.MetaFile.GPXCompressing.enabled === false) {
+    if (Config.MetaFile.GPXCompressing.enabled === false) {
       return res.redirect(req.originalUrl.slice(0, -1 * '\\bestFit'.length));
     }
     const fullPath = req.resultPipe as string;
@@ -28,7 +28,7 @@ export class MetaFileMWs {
       return next();
     }
 
-    if (Config.Server.MetaFile.GPXCompressing.onTheFly === true) {
+    if (Config.MetaFile.GPXCompressing.onTheFly === true) {
       req.resultPipe = await GPXProcessing.compressGPX(fullPath);
       return next();
     }

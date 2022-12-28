@@ -1,15 +1,16 @@
-import { Component } from '@angular/core';
-import { MapSettingsService } from './map.settings.service';
-import { SettingsComponentDirective } from '../_abstract/abstract.settings.component';
-import { AuthenticationService } from '../../../model/network/authentication.service';
-import { NavigationService } from '../../../model/navigation.service';
-import { NotificationService } from '../../../model/notification.service';
-import { Utils } from '../../../../../common/Utils';
+import {Component} from '@angular/core';
+import {MapSettingsService} from './map.settings.service';
+import {SettingsComponentDirective} from '../_abstract/abstract.settings.component';
+import {AuthenticationService} from '../../../model/network/authentication.service';
+import {NavigationService} from '../../../model/navigation.service';
+import {NotificationService} from '../../../model/notification.service';
+import {Utils} from '../../../../../common/Utils';
 import {
   ClientMapConfig,
   MapLayers,
   MapProviders,
 } from '../../../../../common/config/public/ClientConfig';
+import {SettingsService} from '../settings.service';
 
 @Component({
   selector: 'app-settings-map',
@@ -28,7 +29,8 @@ export class MapSettingsComponent extends SettingsComponentDirective<ClientMapCo
     authService: AuthenticationService,
     navigation: NavigationService,
     settingsService: MapSettingsService,
-    notification: NotificationService
+    notification: NotificationService,
+    globalSettingsService: SettingsService
   ) {
     super(
       $localize`Map`,
@@ -37,7 +39,8 @@ export class MapSettingsComponent extends SettingsComponentDirective<ClientMapCo
       navigation,
       settingsService,
       notification,
-      (s) => s.Client.Map
+      globalSettingsService,
+      (s) => s.Map
     );
 
     this.mapProviders = Utils.enumToArray(MapProviders);

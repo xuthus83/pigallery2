@@ -14,7 +14,7 @@ export class NotificationRouter {
 
   private static addGetNotifications(app: Express): void {
     app.get(
-      Config.Client.apiPath + '/notifications',
+      Config.Server.apiPath + '/notifications',
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Guest),
       VersionMWs.injectGalleryVersion,

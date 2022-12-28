@@ -20,7 +20,7 @@ export class ThumbnailGenerationJob extends FileJob<{
       type: 'number-array',
       name: backendTexts.sizeToGenerate.name,
       description: backendTexts.sizeToGenerate.description,
-      defaultValue: [Config.Client.Media.Thumbnail.thumbnailSizes[0]],
+      defaultValue: [Config.Media.Thumbnail.thumbnailSizes[0]],
     });
   }
 
@@ -37,11 +37,11 @@ export class ThumbnailGenerationJob extends FileJob<{
       throw new Error(
         'unknown thumbnails sizes: ' +
         config.sizes +
-        '. It should be an array from:' + Config.Client.Media.Thumbnail.thumbnailSizes
+        '. It should be an array from:' + Config.Media.Thumbnail.thumbnailSizes
       );
     }
     for (const item of config.sizes) {
-      if (Config.Client.Media.Thumbnail.thumbnailSizes.indexOf(item) === -1) {
+      if (Config.Media.Thumbnail.thumbnailSizes.indexOf(item) === -1) {
         throw new Error(
           'unknown thumbnails size: ' +
           item +

@@ -12,10 +12,10 @@ export class LanguageComponent {
   @Input() isDark: boolean;
   languages: string[] = [];
   current: string = null;
-  urlBase = Config.Client.urlBase;
+  urlBase = Config.Server.urlBase;
 
   constructor(private cookieService: CookieService) {
-    this.languages = Config.Client.languages.sort();
+    this.languages = Config.Server.languages.sort();
     if (this.cookieService.get(CookieNames.lang) != null) {
       this.current = this.cookieService.get(CookieNames.lang);
     }

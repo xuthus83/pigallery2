@@ -7,50 +7,65 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
-import { AuthenticationService } from '../../../model/network/authentication.service';
-import { UserRoles } from '../../../../../common/entities/UserDTO';
-import { Utils } from '../../../../../common/Utils';
-import { ErrorDTO } from '../../../../../common/entities/Error';
-import { NotificationService } from '../../../model/notification.service';
-import { NavigationService } from '../../../model/navigation.service';
-import { AbstractSettingsService } from './abstract.settings.service';
-import { Subscription } from 'rxjs';
-import { ISettingsComponent } from './ISettingsComponent';
-import { WebConfig } from '../../../../../common/config/private/WebConfig';
-import { FormControl } from '@angular/forms';
+import {AuthenticationService} from '../../../model/network/authentication.service';
+import {UserRoles} from '../../../../../common/entities/UserDTO';
+import {Utils} from '../../../../../common/Utils';
+import {ErrorDTO} from '../../../../../common/entities/Error';
+import {NotificationService} from '../../../model/notification.service';
+import {NavigationService} from '../../../model/navigation.service';
+import {AbstractSettingsService} from './abstract.settings.service';
+import {Subscription} from 'rxjs';
+import {ISettingsComponent} from './ISettingsComponent';
+import {WebConfig} from '../../../../../common/config/private/WebConfig';
+import {FormControl} from '@angular/forms';
+import {ConfigPriority, TAGS} from '../../../../../common/config/public/ClientConfig';
+import {SettingsService} from '../settings.service';
+import {IConfigClass} from 'typeconfig/common';
+import {IConfigClassPrivate} from '../../../../../../node_modules/typeconfig/src/decorators/class/IConfigClass';
+import {IPropertyMetadata} from '../../../../../../node_modules/typeconfig/src/decorators/property/IPropertyState';
+import {IWebConfigClass, IWebConfigClassPrivate} from '../../../../../../node_modules/typeconfig/src/decorators/class/IWebConfigClass';
+import {WebConfigClassBuilder} from '../../../../../../node_modules/typeconfig/src/decorators/builders/WebConfigClassBuilder';
 
 interface ConfigState<T = unknown> {
   value: T;
   original: T;
   default: T;
   readonly: boolean;
-  onChange: ()=>unknown;
+  tags: TAGS;
+  onChange: () => unknown;
   isEnumType: boolean;
   isConfigType: boolean;
+  isConfigArrayType: boolean;
+  toJSON: () => T;
 }
 
-interface RecursiveState extends ConfigState {
+export interface RecursiveState extends ConfigState {
+  shouldHide: any;
+  volatile: any;
+  tags: any;
+  isConfigType: any;
+  isConfigArrayType: any;
+  onChange: any;
+  isEnumType: any;
   value: any;
   original: any;
   default: any;
   readonly: any;
-  onChange: any;
-  isEnumType: any;
-  isConfigType: any;
+  toJSON: any;
 
   [key: string]: RecursiveState;
 }
 
+
 @Directive()
 export abstract class SettingsComponentDirective<
-  T extends { [key: string]: any },
+  T extends RecursiveState,
   S extends AbstractSettingsService<T> = AbstractSettingsService<T>
-> implements OnInit, OnDestroy, OnChanges, ISettingsComponent
-{
+> implements OnInit, OnDestroy, OnChanges, ISettingsComponent {
   @Input()
-  public simplifiedMode = true;
+  public configPriority = ConfigPriority.basic;
 
-  @ViewChild('settingsForm', { static: true })
+  @ViewChild('settingsForm', {static: true})
   form: FormControl;
 
   @Output()
@@ -62,18 +77,25 @@ export abstract class SettingsComponentDirective<
   public states: RecursiveState = {} as RecursiveState;
 
   private subscription: Subscription = null;
-  private readonly settingsSubscription: Subscription = null;
+  private settingsSubscription: Subscription = null;
+  protected sliceFN?: (s: WebConfig) => T;
 
   protected constructor(
-    private name: string,
+    protected name: string,
     public icon: string,
     protected authService: AuthenticationService,
     private navigation: NavigationService,
     public settingsService: S,
     protected notification: NotificationService,
-    private sliceFN?: (s: WebConfig) => T
+    protected globalSettingsService: SettingsService,
+    sliceFN?: (s: IWebConfigClassPrivate<TAGS> & WebConfig) => T
   ) {
-    if (this.sliceFN) {
+    this.setSliceFN(sliceFN);
+  }
+
+  setSliceFN(sliceFN?: (s: IWebConfigClassPrivate<TAGS> & WebConfig) => T) {
+    if (sliceFN) {
+      this.sliceFN = sliceFN;
       this.settingsSubscription = this.settingsService.Settings.subscribe(
         this.onNewSettings
       );
@@ -90,55 +112,72 @@ export abstract class SettingsComponentDirective<
   }
 
   get HasAvailableSettings(): boolean {
-    return this.hasAvailableSettings;
+    return !this.states?.shouldHide || !this.states?.shouldHide();
   }
 
   onNewSettings = (s: WebConfig) => {
-    this.states = Utils.clone(this.sliceFN(s.State) as any);
-    const addOriginal = (obj: any) => {
-      for (const k of Object.keys(obj)) {
-        if (typeof obj[k].value === 'undefined') {
-          if (typeof obj[k] === 'object') {
-            addOriginal(obj[k]);
+    this.states = this.sliceFN(s.clone()) as RecursiveState;
+    const instrument = (st: RecursiveState, parent: RecursiveState) => {
+      const shouldHide = (state: RecursiveState) => {
+        return () => {
+          if (state.volatile) {
+            return true;
           }
-          continue;
-        }
+          if (state.tags &&
+            ((state.tags.relevant && !state.tags.relevant(parent.value))
+              || state.tags.secret)) {
+            return true;
+          }
 
-        obj[k].original = Utils.clone(obj[k].value);
-        obj[k].onChange = this.onOptionChange;
+          // if all sub elements are hidden, hide the parent too.
+          if (state.isConfigType) {
+            if (Object.keys(state.value.__state).findIndex(k => !st.value.__state[k].shouldHide()) === -1) {
+              return true;
+            }
+          }
+
+
+          if (state.isConfigArrayType) {
+            for (let i = 0; i < state.value?.length; ++i) {
+              if (Object.keys(state.value[i].__state).findIndex(k => !(st.value[i].__state[k].shouldHide && st.value[i].__state[k].shouldHide())) === -1) {
+                return true;
+              }
+            }
+            return false;
+          }
+          return (
+            state.tags?.priority > this.globalSettingsService.configPriority &&
+            Utils.equalsFilter(state.value, state.default,
+              ['__propPath', '__created', '__prototype', '__rootConfig']) &&
+            Utils.equalsFilter(state.original, state.default,
+              ['__propPath', '__created', '__prototype', '__rootConfig'])
+          );
+        };
+      };
+
+      st.shouldHide = shouldHide(st);
+      st.onChange = this.onOptionChange;
+      st.rootConfig = parent?.value;
+      if (typeof st.value !== 'undefined') {
+        st.original = Utils.clone(st.value);
+      }
+      if (st.isConfigType) {
+        for (const k of Object.keys(st.value.__state)) {
+          instrument(st.value.__state[k], st);
+        }
+      }
+      if (st.isConfigArrayType) {
+        for (let i = 0; i < st.value?.length; ++i) {
+          for (const k of Object.keys(st.value[i].__state)) {
+            instrument(st.value[i].__state[k], st);
+          }
+        }
       }
     };
-    addOriginal(this.states);
+    instrument(this.states, null);
+
     this.ngOnChanges();
   };
-
-  settingsSame(newSettings: T, original: T): boolean {
-    if (typeof original !== 'object' || original == null) {
-      return newSettings === original;
-    }
-    if (!newSettings) {
-      return false;
-    }
-    if (Array.isArray(original) && original.length !== newSettings.length) {
-      return false;
-    }
-    const keys = Object.keys(newSettings);
-    for (const key of keys) {
-      if (typeof original[key] === 'undefined') {
-        console.warn('unknown settings: ' + key);
-        return false;
-      }
-      if (typeof original[key] === 'object') {
-        if (this.settingsSame(newSettings[key], original[key]) === false) {
-          return false;
-        }
-      } else if (newSettings[key] !== original[key]) {
-        return false;
-      }
-    }
-
-    return true;
-  }
 
   onOptionChange = () => {
     setTimeout(() => {
@@ -147,7 +186,8 @@ export abstract class SettingsComponentDirective<
           return true;
         }
         if (typeof state.original === 'object') {
-          return Utils.equalsFilter(state.original, state.value);
+          return Utils.equalsFilter(state.value, state.original,
+            ['__propPath', '__created', '__prototype', '__rootConfig', '__state']);
         }
         if (typeof state.original !== 'undefined') {
           return state.value === state.original;
@@ -185,10 +225,6 @@ export abstract class SettingsComponentDirective<
   }
 
   ngOnChanges(): void {
-    this.hasAvailableSettings =
-      (this.settingsService.isSupported() &&
-        this.settingsService.showInSimplifiedMode()) ||
-      !this.simplifiedMode;
   }
 
   ngOnDestroy(): void {
@@ -205,25 +241,7 @@ export abstract class SettingsComponentDirective<
   }
 
   stateToSettings(): T {
-    const ret: T = {} as T;
-
-    const add = (obj: Record<string, RecursiveState>, to: Record<string, RecursiveState>): void => {
-      for (const key of Object.keys(obj)) {
-        to[key] = {} as RecursiveState;
-        if (
-          obj[key].isConfigType ||
-          (typeof obj[key] === 'object' &&
-            typeof obj[key].value === 'undefined')
-        ) {
-          add(obj[key], to[key]);
-          continue;
-        }
-        to[key] = obj[key].value;
-      }
-    };
-    add(this.states, ret);
-
-    return ret;
+    return WebConfigClassBuilder.attachInterface(this.states.value).toJSON();
   }
 
   public async save(): Promise<boolean> {

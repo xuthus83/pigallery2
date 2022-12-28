@@ -160,7 +160,7 @@ export class DBTestHelper {
     } else if (this.dbType === DatabaseType.mysql) {
       await this.initMySQL();
     } else if (this.dbType === DatabaseType.memory) {
-      Config.Server.Database.type = DatabaseType.memory;
+      Config.Database.type = DatabaseType.memory;
     }
   }
 
@@ -215,8 +215,8 @@ export class DBTestHelper {
   private async clearUpMysql(): Promise<void> {
     Logger.debug(LOG_TAG, 'clearing up mysql');
     await ObjectManagers.reset();
-    Config.Server.Database.type = DatabaseType.mysql;
-    Config.Server.Database.mysql.database = 'pigallery2_test';
+    Config.Database.type = DatabaseType.mysql;
+    Config.Database.mysql.database = 'pigallery2_test';
     await fs.promises.rm(this.tempDir, {recursive: true, force: true});
     const conn = await SQLConnection.getConnection();
     await conn.query('DROP DATABASE IF EXISTS ' + conn.options.database);
@@ -235,8 +235,8 @@ export class DBTestHelper {
 
   private async clearUpSQLite(): Promise<void> {
     Logger.debug(LOG_TAG, 'clearing up sqlite');
-    Config.Server.Database.type = DatabaseType.sqlite;
-    Config.Server.Database.dbFolder = this.tempDir;
+    Config.Database.type = DatabaseType.sqlite;
+    Config.Database.dbFolder = this.tempDir;
     ProjectPath.reset();
     await ObjectManagers.reset();
     await fs.promises.rm(this.tempDir, {recursive: true, force: true});

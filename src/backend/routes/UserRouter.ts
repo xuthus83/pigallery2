@@ -21,7 +21,7 @@ export class UserRouter {
 
   private static addLogin(app: Express): void {
     app.post(
-      Config.Client.apiPath + '/user/login',
+      Config.Server.apiPath + '/user/login',
       AuthenticationMWs.inverseAuthenticate,
       AuthenticationMWs.login,
       ServerTimingMWs.addServerTiming,
@@ -31,7 +31,7 @@ export class UserRouter {
 
   private static addLogout(app: Express): void {
     app.post(
-      Config.Client.apiPath + '/user/logout',
+      Config.Server.apiPath + '/user/logout',
       AuthenticationMWs.logout,
       ServerTimingMWs.addServerTiming,
       RenderingMWs.renderOK
@@ -40,7 +40,7 @@ export class UserRouter {
 
   private static addGetSessionUser(app: Express): void {
     app.get(
-      Config.Client.apiPath + '/user/me',
+      Config.Server.apiPath + '/user/me',
       AuthenticationMWs.authenticate,
       ServerTimingMWs.addServerTiming,
       RenderingMWs.renderSessionUser
@@ -49,7 +49,7 @@ export class UserRouter {
 
   private static addCreateUser(app: Express): void {
     app.put(
-      Config.Client.apiPath + '/user',
+      Config.Server.apiPath + '/user',
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Admin),
       UserMWs.createUser,
@@ -60,7 +60,7 @@ export class UserRouter {
 
   private static addDeleteUser(app: Express): void {
     app.delete(
-      Config.Client.apiPath + '/user/:id',
+      Config.Server.apiPath + '/user/:id',
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Admin),
       UserRequestConstrainsMWs.notSelfRequest,
@@ -72,7 +72,7 @@ export class UserRouter {
 
   private static addListUsers(app: Express): void {
     app.get(
-      Config.Client.apiPath + '/user/list',
+      Config.Server.apiPath + '/user/list',
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Admin),
       UserMWs.listUsers,
@@ -83,7 +83,7 @@ export class UserRouter {
 
   private static addChangeRole(app: Express): void {
     app.post(
-      Config.Client.apiPath + '/user/:id/role',
+      Config.Server.apiPath + '/user/:id/role',
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Admin),
       UserRequestConstrainsMWs.notSelfRequestOr2Admins,

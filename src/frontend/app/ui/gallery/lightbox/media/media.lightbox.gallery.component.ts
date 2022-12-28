@@ -216,7 +216,7 @@ export class GalleryLightboxMediaComponent implements OnChanges {
       this.imageLoadFinished.next = true;
       return;
     }
-    if (Config.Client.Media.Photo.Converting.enabled === true) {
+    if (Config.Media.Photo.Converting.enabled === true) {
       this.nextImage.src = this.nextGridMedia.getBestFitMediaPath();
     } else {
       this.nextImage.src = this.nextGridMedia.getMediaPath();
@@ -240,10 +240,10 @@ export class GalleryLightboxMediaComponent implements OnChanges {
 
     if (
       this.zoom === 1 ||
-      Config.Client.Media.Photo.loadFullImageOnZoom === false
+      Config.Media.Photo.Converting.loadFullImageOnZoom === false
     ) {
       if (this.photo.src == null) {
-        if (Config.Client.Media.Photo.Converting.enabled === true) {
+        if (Config.Media.Photo.Converting.enabled === true) {
           this.photo.src = this.gridMedia.getBestFitMediaPath();
           this.photo.isBestFit = true;
         } else {

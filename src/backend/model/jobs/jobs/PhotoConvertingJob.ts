@@ -11,13 +11,13 @@ export class PhotoConvertingJob extends FileJob {
   }
 
   public get Supported(): boolean {
-    return Config.Client.Media.Photo.Converting.enabled === true;
+    return Config.Media.Photo.Converting.enabled === true;
   }
 
   protected async shouldProcess(mPath: string): Promise<boolean> {
     return !(await PhotoProcessing.convertedPhotoExist(
       mPath,
-      Config.Server.Media.Photo.Converting.resolution
+      Config.Media.Photo.Converting.resolution
     ));
   }
 

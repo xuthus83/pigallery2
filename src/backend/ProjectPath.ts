@@ -30,11 +30,11 @@ class ProjectPathClass {
   reset(): void {
     this.Root = path.join(__dirname, '/../../');
     this.FrontendFolder = path.join(this.Root, 'dist');
-    this.ImageFolder = this.getAbsolutePath(Config.Server.Media.folder);
-    this.TempFolder = this.getAbsolutePath(Config.Server.Media.tempFolder);
+    this.ImageFolder = this.getAbsolutePath(Config.Media.folder);
+    this.TempFolder = this.getAbsolutePath(Config.Media.tempFolder);
     this.TranscodedFolder = path.join(this.TempFolder, 'tc');
     this.FacesFolder = path.join(this.TempFolder, 'f');
-    this.DBFolder = this.getAbsolutePath(Config.Server.Database.dbFolder);
+    this.DBFolder = this.getAbsolutePath(Config.Database.dbFolder);
 
     // create thumbnail folder if not exist
     if (!fs.existsSync(this.TempFolder)) {

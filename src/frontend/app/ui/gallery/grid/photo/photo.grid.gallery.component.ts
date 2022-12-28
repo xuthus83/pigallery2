@@ -52,7 +52,7 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, OnDestroy {
     private authService: AuthenticationService
   ) {
     this.searchEnabled =
-      Config.Client.Search.enabled && this.authService.canSearch();
+      Config.Search.enabled && this.authService.canSearch();
   }
 
   get ScrollListener(): boolean {
@@ -60,7 +60,7 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, OnDestroy {
   }
 
   get Title(): string {
-    if (Config.Client.Other.captionFirstNaming === false) {
+    if (Config.Gallery.captionFirstNaming === false) {
       return this.gridMedia.media.name;
     }
     if ((this.gridMedia.media as PhotoDTO).metadata.caption) {
@@ -83,7 +83,7 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, OnDestroy {
       (metadata.faces && metadata.faces.length > 0)
     ) {
       this.keywords = [];
-      if (Config.Client.Faces.enabled) {
+      if (Config.Faces.enabled) {
         const names: string[] = (metadata.faces || []).map(
           (f): string => f.name
         );

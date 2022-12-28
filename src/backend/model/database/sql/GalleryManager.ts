@@ -62,15 +62,15 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
         dir.lastScanned === knownLastScanned
       ) {
         if (
-          Config.Server.Indexing.reIndexingSensitivity ===
+          Config.Indexing.reIndexingSensitivity ===
           ReIndexingSensitivity.low
         ) {
           return null;
         }
         if (
           Date.now() - dir.lastScanned <=
-          Config.Server.Indexing.cachedFolderTimeout &&
-          Config.Server.Indexing.reIndexingSensitivity ===
+          Config.Indexing.cachedFolderTimeout &&
+          Config.Indexing.reIndexingSensitivity ===
           ReIndexingSensitivity.medium
         ) {
           return null;
@@ -101,10 +101,10 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
       // not indexed since a while, index it in a lazy manner
       if (
         (Date.now() - dir.lastScanned >
-          Config.Server.Indexing.cachedFolderTimeout &&
-          Config.Server.Indexing.reIndexingSensitivity >=
+          Config.Indexing.cachedFolderTimeout &&
+          Config.Indexing.reIndexingSensitivity >=
           ReIndexingSensitivity.medium) ||
-        Config.Server.Indexing.reIndexingSensitivity >=
+        Config.Indexing.reIndexingSensitivity >=
         ReIndexingSensitivity.high
       ) {
         // on the fly reindexing
@@ -114,7 +114,7 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
           'lazy reindexing reason: cache timeout: lastScanned: ' +
           (Date.now() - dir.lastScanned) +
           'ms ago, cachedFolderTimeout:' +
-          Config.Server.Indexing.cachedFolderTimeout
+          Config.Indexing.cachedFolderTimeout
         );
         ObjectManagers.getInstance()
           .IndexingManager.indexDirectory(relativeDirectoryName)
@@ -186,7 +186,7 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
       )
       .innerJoinAndSelect('media.directory', 'directory')
       .orderBy('media.name, media.metadata.fileSize')
-      .limit(Config.Server.Duplicates.listingLimit)
+      .limit(Config.Duplicates.listingLimit)
       .getMany();
 
     const duplicateParis: DuplicatesDTO[] = [];
@@ -259,7 +259,7 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
       )
       .innerJoinAndSelect('media.directory', 'directory')
       .orderBy('media.metadata.creationDate, media.metadata.fileSize')
-      .limit(Config.Server.Duplicates.listingLimit)
+      .limit(Config.Duplicates.listingLimit)
       .getMany();
 
     processDuplicates(
@@ -354,9 +354,9 @@ export class GalleryManager implements IGalleryManager, ISQLGalleryManager {
     // TODO: do better filtering
     // NOTE: it should not cause an issue as it also do not save to the DB
     if (
-      Config.Client.MetaFile.gpx === true ||
-      Config.Client.MetaFile.pg2conf === true ||
-      Config.Client.MetaFile.markdown === true
+      Config.MetaFile.gpx === true ||
+      Config.MetaFile.pg2conf === true ||
+      Config.MetaFile.markdown === true
     ) {
       query.leftJoinAndSelect('directory.metaFile', 'metaFile');
     }

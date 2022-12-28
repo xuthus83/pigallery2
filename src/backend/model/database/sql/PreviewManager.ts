@@ -29,7 +29,7 @@ export class PreviewManager implements IPreviewManager {
   private static setSorting<T>(
     query: SelectQueryBuilder<T>
   ): SelectQueryBuilder<T> {
-    for (const sort of Config.Server.Preview.Sorting) {
+    for (const sort of Config.Preview.Sorting) {
       switch (sort) {
         case SortingMethods.descDate:
           query.addOrderBy('media.metadata.creationDate', 'DESC');
@@ -127,15 +127,15 @@ export class PreviewManager implements IPreviewManager {
 
     let previewMedia = null;
     if (
-      Config.Server.Preview.SearchQuery &&
-      !Utils.equalsFilter(Config.Server.Preview.SearchQuery, {
+      Config.Preview.SearchQuery &&
+      !Utils.equalsFilter(Config.Preview.SearchQuery, {
         type: SearchQueryTypes.any_text,
         text: '',
       } as TextSearch)
     ) {
       const previewFilterQuery = await (
         ObjectManagers.getInstance().SearchManager as ISQLSearchManager
-      ).prepareAndBuildWhereQuery(Config.Server.Preview.SearchQuery);
+      ).prepareAndBuildWhereQuery(Config.Preview.SearchQuery);
       previewMedia = await previewQuery()
         .andWhere(previewFilterQuery)
         .limit(1)
@@ -177,7 +177,7 @@ export class PreviewManager implements IPreviewManager {
             q.where('media.directory = :dir', {
               dir: dir.id,
             });
-            if (Config.Server.Database.type === DatabaseType.mysql) {
+            if (Config.Database.type === DatabaseType.mysql) {
               q.orWhere("directory.path like :path || '%'", {
                 path: DiskMangerWorker.pathFromParent(dir),
               });
@@ -201,8 +201,8 @@ export class PreviewManager implements IPreviewManager {
 
     let previewMedia: PreviewPhotoDTOWithID = null;
     if (
-      Config.Server.Preview.SearchQuery &&
-      !Utils.equalsFilter(Config.Server.Preview.SearchQuery, {
+      Config.Preview.SearchQuery &&
+      !Utils.equalsFilter(Config.Preview.SearchQuery, {
         type: SearchQueryTypes.any_text,
         text: '',
       } as TextSearch)
@@ -211,7 +211,7 @@ export class PreviewManager implements IPreviewManager {
         .andWhere(
           await (
             ObjectManagers.getInstance().SearchManager as ISQLSearchManager
-          ).prepareAndBuildWhereQuery(Config.Server.Preview.SearchQuery)
+          ).prepareAndBuildWhereQuery(Config.Preview.SearchQuery)
         )
         .limit(1)
         .getOne();

@@ -139,7 +139,7 @@ export class GalleryGridComponent
   ngAfterViewInit(): void {
     this.lightbox.setGridPhotoQL(this.gridPhotoQL);
 
-    if (Config.Client.Other.enableOnScrollThumbnailPrioritising === true) {
+    if (Config.Gallery.enableOnScrollThumbnailPrioritising === true) {
       this.gridPhotoQL.changes.subscribe((): void => {
         this.scrollListenerPhotos = this.gridPhotoQL.filter(
           (pc): boolean => pc.ScrollListener
@@ -206,7 +206,7 @@ export class GalleryGridComponent
       window.requestAnimationFrame((): void => {
         this.renderPhotos();
 
-        if (Config.Client.Other.enableOnScrollThumbnailPrioritising === true) {
+        if (Config.Gallery.enableOnScrollThumbnailPrioritising === true) {
           this.scrollListenerPhotos.forEach(
             (pc: GalleryPhotoComponent): void => {
               pc.onScroll();
@@ -301,7 +301,7 @@ export class GalleryGridComponent
   private shouldRenderMore(offset = 0): boolean {
     const bottomOffset = this.getMaxRowHeight() * 2;
     return (
-      Config.Client.Other.enableOnScrollRendering === false ||
+      Config.Gallery.enableOnScrollRendering === false ||
       PageHelper.ScrollY >=
         document.body.clientHeight +
           offset -

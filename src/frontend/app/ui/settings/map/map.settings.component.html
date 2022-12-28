@@ -28,8 +28,7 @@
           name="Use image markers"
           description="Map will use thumbnail images as markers instead of the default pin."
           i18n-name i18n-description=""
-          [ngModel]="states.useImageMarkers"
-          [simplifiedMode]="simplifiedMode">
+          [ngModel]="states.useImageMarkers">
         </app-settings-entry>
 
 
@@ -37,7 +36,6 @@
           name="Map provider"
           i18n-name
           [ngModel]="states.mapProvider"
-          [simplifiedMode]="simplifiedMode"
           [required]="true">
         </app-settings-entry>
 

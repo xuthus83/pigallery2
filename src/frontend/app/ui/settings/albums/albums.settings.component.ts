@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
-import { AlbumsSettingsService } from './albums.settings.service';
-import { SettingsComponentDirective } from '../_abstract/abstract.settings.component';
-import { AuthenticationService } from '../../../model/network/authentication.service';
-import { NavigationService } from '../../../model/navigation.service';
-import { NotificationService } from '../../../model/notification.service';
-import { ClientAlbumConfig } from '../../../../../common/config/public/ClientConfig';
+import {Component} from '@angular/core';
+import {AlbumsSettingsService} from './albums.settings.service';
+import {SettingsComponentDirective} from '../_abstract/abstract.settings.component';
+import {AuthenticationService} from '../../../model/network/authentication.service';
+import {NavigationService} from '../../../model/navigation.service';
+import {NotificationService} from '../../../model/notification.service';
+import {ClientAlbumConfig} from '../../../../../common/config/public/ClientConfig';
+import {SettingsService} from '../settings.service';
 
 @Component({
   selector: 'app-settings-albums',
@@ -20,7 +21,8 @@ export class AlbumsSettingsComponent extends SettingsComponentDirective<ClientAl
     authService: AuthenticationService,
     navigation: NavigationService,
     settingsService: AlbumsSettingsService,
-    notification: NotificationService
+    notification: NotificationService,
+    globalSettingsService: SettingsService
   ) {
     super(
       $localize`Albums`,
@@ -29,7 +31,8 @@ export class AlbumsSettingsComponent extends SettingsComponentDirective<ClientAl
       navigation,
       settingsService,
       notification,
-      (s) => s.Client.Album
+      globalSettingsService,
+      (s) => s.Album
     );
   }
 }

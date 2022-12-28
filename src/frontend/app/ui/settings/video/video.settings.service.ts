@@ -6,10 +6,7 @@ import { ClientVideoConfig } from '../../../../../common/config/public/ClientCon
 import { ServerVideoConfig } from '../../../../../common/config/private/PrivateConfig';
 
 @Injectable()
-export class VideoSettingsService extends AbstractSettingsService<{
-  server: ServerVideoConfig;
-  client: ClientVideoConfig;
-}> {
+export class VideoSettingsService extends AbstractSettingsService<ServerVideoConfig> {
   constructor(
     private networkService: NetworkService,
     settingsService: SettingsService
@@ -17,10 +14,7 @@ export class VideoSettingsService extends AbstractSettingsService<{
     super(settingsService);
   }
 
-  public updateSettings(settings: {
-    server: ServerVideoConfig;
-    client: ClientVideoConfig;
-  }): Promise<void> {
+  public updateSettings(settings: ServerVideoConfig): Promise<void> {
     return this.networkService.putJson('/settings/video', { settings });
   }
 }

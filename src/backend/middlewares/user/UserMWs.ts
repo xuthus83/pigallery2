@@ -10,7 +10,7 @@ export class UserMWs {
     res: Response,
     next: NextFunction
   ): Promise<void> {
-    if (Config.Client.authenticationRequired === false) {
+    if (Config.Users.authenticationRequired === false) {
       return next(new ErrorDTO(ErrorCodes.USER_MANAGEMENT_DISABLED));
     }
     if (
@@ -35,7 +35,7 @@ export class UserMWs {
     res: Response,
     next: NextFunction
   ): Promise<void> {
-    if (Config.Client.authenticationRequired === false) {
+    if (Config.Users.authenticationRequired === false) {
       return next(new ErrorDTO(ErrorCodes.USER_MANAGEMENT_DISABLED));
     }
     if (
@@ -60,7 +60,7 @@ export class UserMWs {
     res: Response,
     next: NextFunction
   ): Promise<void> {
-    if (Config.Client.authenticationRequired === false) {
+    if (Config.Users.authenticationRequired === false) {
       return next(new ErrorDTO(ErrorCodes.USER_MANAGEMENT_DISABLED));
     }
     if (
@@ -88,7 +88,7 @@ export class UserMWs {
     res: Response,
     next: NextFunction
   ): Promise<void> {
-    if (Config.Client.authenticationRequired === false) {
+    if (Config.Users.authenticationRequired === false) {
       return next(new ErrorDTO(ErrorCodes.USER_MANAGEMENT_DISABLED));
     }
 

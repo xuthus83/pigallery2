@@ -1,7 +1,6 @@
 import {Config} from '../../../../common/config/private/Config';
 import {DefaultsJobs} from '../../../../common/entities/job/JobDTO';
 import {FileJob} from './FileJob';
-import {PhotoProcessing} from '../../fileprocessing/PhotoProcessing';
 import {GPXProcessing} from '../../fileprocessing/GPXProcessing';
 import {FileDTO} from '../../../../common/entities/FileDTO';
 import {Logger} from '../../../Logger';
@@ -18,7 +17,7 @@ export class GPXCompressionJob extends FileJob {
   }
 
   public get Supported(): boolean {
-    return Config.Client.MetaFile.GPXCompressing.enabled === true;
+    return Config.MetaFile.GPXCompressing.enabled === true;
   }
 
   protected async shouldProcess(fPath: string): Promise<boolean> {

@@ -9,6 +9,8 @@ import {PageHelper} from '../../model/page.helper';
 import {SettingsService} from '../settings/settings.service';
 import {CookieNames} from '../../../../common/CookieNames';
 import {CookieService} from 'ngx-cookie-service';
+import {ConfigPriority} from '../../../../common/config/public/ClientConfig';
+import {Utils} from '../../../../common/Utils';
 
 @Component({
   selector: 'app-admin',
@@ -16,24 +18,20 @@ import {CookieService} from 'ngx-cookie-service';
   styleUrls: ['./admin.component.css'],
 })
 export class AdminComponent implements OnInit, AfterViewInit {
-  simplifiedMode = true;
   @ViewChildren('setting') settingsComponents: QueryList<ISettingsComponent>;
   @ViewChildren('setting', {read: ElementRef})
   settingsComponentsElemRef: QueryList<ElementRef>;
   contents: ISettingsComponent[] = [];
+  configPriorities: { key: number; value: string; }[];
+  public readonly ConfigPriority = ConfigPriority;
 
   constructor(
     private authService: AuthenticationService,
     private navigation: NavigationService,
     public notificationService: NotificationService,
     public settingsService: SettingsService,
-    private cookieService: CookieService
   ) {
-    if (this.cookieService.check(CookieNames.advancedSettings)) {
-      this.simplifiedMode = !(
-        this.cookieService.get(CookieNames.advancedSettings) === 'true'
-      );
-    }
+    this.configPriorities = Utils.enumToArray(ConfigPriority);
   }
 
   ngAfterViewInit(): void {
@@ -66,15 +64,6 @@ export class AdminComponent implements OnInit, AfterViewInit {
         return 'info';
     }
     return 'info';
-  }
-
-  modeToggle(): void {
-    // save it for some years
-    this.cookieService.set(
-      CookieNames.advancedSettings,
-      this.simplifiedMode ? 'false' : 'true',
-      365 * 50
-    );
   }
 }
 

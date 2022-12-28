@@ -16,28 +16,39 @@
 
 
         <app-gallery-search-field
-          *ngIf="Type === 'searchQuery'"
+          *ngIf="Type === 'SearchQuery'"
           [(ngModel)]="state.value"
           [id]="idName"
           [name]="idName"
           [title]="title"
-          [disabled]="state.readonly || disabled"
+          [disabled]="state.readonly || Disabled"
           (change)="onChange($event)"
           placeholder="Search Query">
 
         </app-gallery-search-field>
 
-        <input
-          *ngIf="!state.isEnumType && !state.isEnumArrayType && Type !== 'boolean' && Type !== 'searchQuery'"
-          [type]="type" [min]="state.min" [max]="state.max" class="form-control"
-          [placeholder]="PlaceHolder"
-          [title]="title"
-          [(ngModel)]="StringValue"
-          (ngModelChange)="onChange($event)"
-          [name]="idName"
-          [disabled]="state.readonly || disabled"
-          [id]="idName"
-          required="required">
+        <div class="input-group">
+          <input
+            *ngIf="!state.isEnumType &&
+          !state.isEnumArrayType &&
+          Type !== 'boolean' &&
+          Type !== 'SearchQuery' &&
+          ArrayType !== 'MapLayers' &&
+          ArrayType !== 'NavigationLinkConfig' &&
+          ArrayType !== 'UserConfig'"
+            [type]="type" [min]="state.min" [max]="state.max" class="form-control"
+            [placeholder]="PlaceHolder"
+            [title]="title"
+            [(ngModel)]="StringValue"
+            (ngModelChange)="onChange($event)"
+            [name]="idName"
+            [disabled]="state.readonly || Disabled"
+            [id]="idName"
+            required="required">
+          <div class="input-group-append" *ngIf="state.tags?.unit && !this.state.tags?.uiOptions">
+            <span class="input-group-text">{{state.tags?.unit}}</span>
+          </div>
+        </div>
 
         <select
           *ngIf="state.isEnumType"
@@ -45,9 +56,9 @@
           [name]="idName"
           [title]="title"
           (ngModelChange)="onChange($event)"
-          [disabled]="state.readonly || disabled"
+          [disabled]="state.readonly || Disabled"
           class="form-select" [(ngModel)]="state.value">
-          <option *ngFor="let opt of optionsView" [ngValue]="opt.key">{{opt.value}}
+          <option *ngFor="let opt of getOptionsView(state)" [ngValue]="opt.key">{{opt.value}}
           </option>
         </select>
 
@@ -58,7 +69,7 @@
           [id]="idName"
           [name]="idName"
           [title]="title"
-          [disabled]="state.readonly || disabled"
+          [disabled]="state.readonly || Disabled"
           switch-on-color="primary"
           [switch-inverse]="true"
           switch-off-text="Disabled"
@@ -71,6 +82,158 @@
           [(ngModel)]="state.value">
         </bSwitch>
 
+        <ng-container *ngIf="ArrayType === 'MapLayers'">
+          <div class="container">
+            <table class="table">
+              <thead>
+              <tr>
+                <th scope="col" i18n>Name</th>
+                <th scope="col" i18n>Tile Url*</th>
+                <th scope="col"></th>
+              </tr>
+              </thead>
+              <tr *ngFor="let layer of state.value; let i = index">
+                <td><input type="text" class="form-control" placeholder="Street"
+                           [(ngModel)]="layer.name"
+                           (ngModelChange)="onChange($event)"
+                           [name]="'list_ml_'+idName+i" [id]="'list_ml_'+idName+i" required></td>
+                <td>
+                  <input type="text" class="form-control"
+                         placeholder="http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                         [(ngModel)]="layer.url"
+                         (ngModelChange)="onChange($event)"
+                         [name]="'list_ml_url_'+idName+i" [id]="'list_ml_url_'+idName+i" required>
+                </td>
+                <td>
+                  <button [disabled]="state.value.length == 1" (click)="removeLayer(layer)"
+                          [ngClass]="state.value.length > 1? 'btn-danger':'btn-secondary'"
+                          class="btn float-end">
+                    <span class="oi oi-trash" aria-hidden="true" aria-label="Delete"></span>
+                  </button>
+                </td>
+              </tr>
+            </table>
+
+            <div class="row justify-content-end">
+              <button class="btn btn-primary"
+                      (click)="addNewLayer()" i18n>+ Add Layer
+              </button>
+            </div>
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="ArrayType === 'NavigationLinkConfig'">
+          <div class="container">
+            <div class="row  mt-1 mb-1 bg-light" *ngFor="let link of state.value; let i = index">
+              <div class="col ps-0">
+                <select
+                  [name]="'link_t_'+idName+i"
+                  [id]="'link_t_'+idName+i"
+                  (ngModelChange)="onChange($event)"
+                  class="form-select"
+                  [(ngModel)]="link.type">
+                  <option *ngFor="let opt of getOptionsView(link.__state.type)" [ngValue]="opt.key">{{opt.value}}
+                  </option>
+                </select>
+              </div>
+              <div class="col"
+                   *ngIf="link.type === NavigationLinkTypes.url || link.type === NavigationLinkTypes.search">
+                <input type="text" class="form-control"
+                       placeholder="Name"
+                       [(ngModel)]="link.name"
+                       (ngModelChange)="onChange($event)"
+                       [name]="'link_n_'+idName+i"
+                       [id]="'link_n_'+idName+i" required>
+              </div>
+              <div class="col"
+                   *ngIf="link.type === NavigationLinkTypes.url || link.type === NavigationLinkTypes.search">
+                <input type="text" class="form-control"
+                       *ngIf="link.type === NavigationLinkTypes.url"
+                       placeholder="github.com/bpatrik/pigallery2"
+                       [(ngModel)]="link.url"
+                       (ngModelChange)="onChange($event)"
+                       [name]="'link_u_'+idName+i"
+                       [id]="'link_u_'+idName+i"
+                       required>
+                <app-gallery-search-field
+                  class="d-inline-block"
+                  *ngIf="link.type === NavigationLinkTypes.search"
+                  [(ngModel)]="link.SearchQuery"
+                  [name]="'link_s_'+idName+i"
+                  [id]="'link_s_'+idName+i"
+                  (change)="onChange($event)"
+                  placeholder="Search Query">
+
+                </app-gallery-search-field>
+              </div>
+              <div class="col-1 pe-0">
+                <button [disabled]="state.value.length == 1" (click)="remove(i)"
+                        [ngClass]="state.value.length > 1? 'btn-danger':'btn-secondary'"
+                        class="btn float-end">
+                  <span class="oi oi-trash" aria-hidden="true" aria-label="Delete"></span>
+                </button>
+              </div>
+
+            </div>
+            <div class="row">
+              <div class="col pe-0">
+                <button class="btn btn-primary float-end"
+                        (click)="AddNew()" i18n>+ Add Link
+                </button>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="ArrayType === 'UserConfig'">
+          <div class="container">
+            <div class="row  mt-1 mb-1 bg-light" *ngFor="let item of state.value; let i = index">
+              <div class="col ps-0">
+                <input type="text" class="form-control"
+                       placeholder="Name"
+                       [(ngModel)]="item.name"
+                       (ngModelChange)="onChange($event)"
+                       [name]="'link_n_'+idName+i"
+                       [id]="'link_n_'+idName+i" required>
+              </div>
+              <div class="col">
+                <select
+                  [name]="'item_r_'+idName+i"
+                  [id]="'item_r_'+idName+i"
+                  (ngModelChange)="onChange($event)"
+                  class="form-select"
+                  [(ngModel)]="item.role">
+                  <option *ngFor="let opt of getOptionsView(item.__state.role)" [ngValue]="opt.key">{{opt.value}}
+                  </option>
+                </select>
+              </div>
+              <div class="col">
+                <input type="password" class="form-control"
+                       [(ngModel)]="item.password"
+                       (ngModelChange)="onChange($event)"
+                       [name]="'item_p_'+idName+i"
+                       [id]="'item_p_'+idName+i"
+                       required>
+              </div>
+              <div class="col-1 pe-0">
+                <button [disabled]="state.value.length == 1" (click)="remove(i)"
+                        [ngClass]="state.value.length > 1? 'btn-danger':'btn-secondary'"
+                        class="btn float-end">
+                  <span class="oi oi-trash" aria-hidden="true" aria-label="Delete"></span>
+                </button>
+              </div>
+
+            </div>
+            <div class="row">
+              <div class="col pe-0">
+                <button class="btn btn-primary float-end"
+                        (click)="AddNew()" i18n>+ Add Link
+                </button>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+
         <ng-container *ngIf="state.isEnumArrayType">
           <ng-container *ngFor="let _ of state.value; let i=index">
             <div class="row col-12 mt-1 m-0 p-0">
@@ -80,9 +243,9 @@
                   [name]="'list_'+idName+i"
                   [title]="title"
                   (ngModelChange)="onChange($event)"
-                  [disabled]="state.readonly || disabled"
+                  [disabled]="state.readonly || Disabled"
                   class="form-select" [(ngModel)]="state.value[i]">
-                  <option *ngFor="let opt of optionsView" [ngValue]="opt.key">{{opt.value}}
+                  <option *ngFor="let opt of getOptionsView(state)" [ngValue]="opt.key">{{opt.value}}
                   </option>
                 </select>
 
@@ -118,6 +281,7 @@
         </div>
       </div>
       <small class="form-text text-muted" *ngIf="description">{{description}}
+        <span *ngIf="Type==='array' && (state.arrayType === 'string' || isNumberArray)" i18n>';' separated list.</span>
         <a *ngIf="link" [href]="link">{{linkText || link}}</a>
       </small>
       <ng-content></ng-content>

@@ -13,7 +13,7 @@ export class VideoConvertingJob extends FileJob {
   }
 
   public get Supported(): boolean {
-    return Config.Client.Media.Video.enabled === true;
+    return Config.Media.Video.enabled === true;
   }
 
   protected async shouldProcess(mPath: string): Promise<boolean> {

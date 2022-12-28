@@ -85,7 +85,7 @@ export class SearchManager implements ISQLSearchManager {
           .where('photo.metadata.keywords LIKE :text COLLATE ' + SQL_COLLATE, {
             text: '%' + text + '%',
           })
-          .limit(Config.Client.Search.AutoComplete.targetItemsPerCategory * 2)
+          .limit(Config.Search.AutoComplete.targetItemsPerCategory * 2)
           .getRawMany()
       )
         .map(
@@ -120,7 +120,7 @@ export class SearchManager implements ISQLSearchManager {
                 text: '%' + text + '%',
               })
               .limit(
-                Config.Client.Search.AutoComplete.targetItemsPerCategory * 2
+                Config.Search.AutoComplete.targetItemsPerCategory * 2
               )
               .orderBy('person.count', 'DESC')
               .getRawMany()
@@ -161,7 +161,7 @@ export class SearchManager implements ISQLSearchManager {
           .groupBy(
             'photo.metadata.positionData.country, photo.metadata.positionData.state, photo.metadata.positionData.city'
           )
-          .limit(Config.Client.Search.AutoComplete.targetItemsPerCategory * 2)
+          .limit(Config.Search.AutoComplete.targetItemsPerCategory * 2)
           .getRawMany()
       )
         .filter((pm): boolean => !!pm)
@@ -199,7 +199,7 @@ export class SearchManager implements ISQLSearchManager {
                 text: '%' + text + '%',
               })
               .limit(
-                Config.Client.Search.AutoComplete.targetItemsPerCategory * 2
+                Config.Search.AutoComplete.targetItemsPerCategory * 2
               )
               .getRawMany()
           ).map((r) => r.name),
@@ -223,7 +223,7 @@ export class SearchManager implements ISQLSearchManager {
                 {text: '%' + text + '%'}
               )
               .limit(
-                Config.Client.Search.AutoComplete.targetItemsPerCategory * 2
+                Config.Search.AutoComplete.targetItemsPerCategory * 2
               )
               .getRawMany()
           ).map((r) => r.caption),
@@ -246,7 +246,7 @@ export class SearchManager implements ISQLSearchManager {
                 text: '%' + text + '%',
               })
               .limit(
-                Config.Client.Search.AutoComplete.targetItemsPerCategory * 2
+                Config.Search.AutoComplete.targetItemsPerCategory * 2
               )
               .getRawMany()
           ).map((r) => r.name),
@@ -260,13 +260,13 @@ export class SearchManager implements ISQLSearchManager {
     // if not enough items are available, load more from one category
     if (
       [].concat(...partialResult).length <
-      Config.Client.Search.AutoComplete.maxItems
+      Config.Search.AutoComplete.maxItems
     ) {
       result = [].concat(...partialResult);
     } else {
       result = [].concat(
         ...partialResult.map((l) =>
-          l.slice(0, Config.Client.Search.AutoComplete.targetItemsPerCategory)
+          l.slice(0, Config.Search.AutoComplete.targetItemsPerCategory)
         )
       );
     }
@@ -292,16 +292,16 @@ export class SearchManager implements ISQLSearchManager {
       .select(['media', ...this.DIRECTORY_SELECT])
       .where(this.buildWhereQuery(query))
       .leftJoin('media.directory', 'directory')
-      .limit(Config.Client.Search.maxMediaResult + 1)
+      .limit(Config.Search.maxMediaResult + 1)
       .getMany();
 
 
-    if (result.media.length > Config.Client.Search.maxMediaResult) {
+    if (result.media.length > Config.Search.maxMediaResult) {
       result.resultOverflow = true;
     }
 
 
-    if (Config.Client.Search.listMetafiles === true) {
+    if (Config.Search.listMetafiles === true) {
       const dIds = Array.from(new Set(result.media.map(m => (m.directory as unknown as { id: number }).id)));
       result.metaFile = await connection
         .getRepository(FileEntity)
@@ -312,7 +312,7 @@ export class SearchManager implements ISQLSearchManager {
         .getMany();
     }
 
-    if (Config.Client.Search.listDirectories === true) {
+    if (Config.Search.listDirectories === true) {
       const dirQuery = this.filterDirectoryQuery(query);
       if (dirQuery !== null) {
         result.directories = await connection
@@ -321,7 +321,7 @@ export class SearchManager implements ISQLSearchManager {
           .where(this.buildWhereQuery(dirQuery, true))
           .leftJoinAndSelect('directory.preview', 'preview')
           .leftJoinAndSelect('preview.directory', 'previewDirectory')
-          .limit(Config.Client.Search.maxDirectoryResult + 1)
+          .limit(Config.Search.maxDirectoryResult + 1)
           .select([
             'directory',
             'preview.name',
@@ -339,7 +339,7 @@ export class SearchManager implements ISQLSearchManager {
           }
         }
         if (
-          result.directories.length > Config.Client.Search.maxDirectoryResult
+          result.directories.length > Config.Search.maxDirectoryResult
         ) {
           result.resultOverflow = true;
         }
@@ -358,7 +358,7 @@ export class SearchManager implements ISQLSearchManager {
       .innerJoin('media.directory', 'directory')
       .where(await this.prepareAndBuildWhereQuery(query));
 
-    if (Config.Server.Database.type === DatabaseType.mysql) {
+    if (Config.Database.type === DatabaseType.mysql) {
       return await sqlQuery.groupBy('RAND(), media.id').limit(1).getOne();
     }
     return await sqlQuery.groupBy('RANDOM()').limit(1).getOne();
@@ -672,7 +672,7 @@ export class SearchManager implements ISQLSearchManager {
         }
         // MySQL uses C escape syntax in strings, details:
         // https://stackoverflow.com/questions/14926386/how-to-search-for-slash-in-mysql-and-why-escaping-not-required-for-wher
-        if (Config.Server.Database.type === DatabaseType.mysql) {
+        if (Config.Database.type === DatabaseType.mysql) {
           /// this reqExp replaces the "\\" to "\\\\\"
           return '%' + str.replace(new RegExp('\\\\', 'g'), '\\\\') + '%';
         }
@@ -841,7 +841,7 @@ export class SearchManager implements ISQLSearchManager {
       case SearchQueryTypes.OR:
         return {
           type: query.type,
-          list: (query as SearchListQuery).list.map(
+          list: ((query as SearchListQuery).list || []).map(
             (q): SearchQueryDTO => this.flattenSameOfQueries(q)
           ),
         } as SearchListQuery;

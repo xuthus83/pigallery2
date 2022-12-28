@@ -92,11 +92,11 @@ export class Server {
     this.app.use(
       csuf.unless((req: Request) => {
         return (
-          Config.Client.authenticationRequired === false ||
-          [Config.Client.apiPath + '/user/login', Config.Client.apiPath + '/user/logout', Config.Client.apiPath + '/share/login'].indexOf(
+          Config.Users.authenticationRequired === false ||
+          [Config.Server.apiPath + '/user/login', Config.Server.apiPath + '/user/logout', Config.Server.apiPath + '/share/login'].indexOf(
             req.originalUrl
           ) !== -1 ||
-          (Config.Client.Sharing.enabled === true &&
+          (Config.Sharing.enabled === true &&
             !!req.query[QueryParams.gallery.sharingKey_query])
         );
       })
@@ -104,11 +104,11 @@ export class Server {
 
     // enable token generation but do not check it
     this.app.post(
-      [Config.Client.apiPath + '/user/login', Config.Client.apiPath + '/share/login'],
+      [Config.Server.apiPath + '/user/login', Config.Server.apiPath + '/share/login'],
       _csrf({ignoreMethods: ['POST']})
     );
     this.app.get(
-      [Config.Client.apiPath + '/user/me', Config.Client.apiPath + '/share/:' + QueryParams.gallery.sharingKey_params],
+      [Config.Server.apiPath + '/user/me', Config.Server.apiPath + '/share/:' + QueryParams.gallery.sharingKey_params],
       _csrf({ignoreMethods: ['GET']})
     );
 
@@ -116,8 +116,8 @@ export class Server {
     PhotoProcessing.init();
     Localizations.init();
 
-    this.app.use(locale(Config.Client.languages, 'en'));
-    if (Config.Server.Database.type !== DatabaseType.memory) {
+    this.app.use(locale(Config.Server.languages, 'en'));
+    if (Config.Database.type !== DatabaseType.memory) {
       await ObjectManagers.InitSQLManagers();
     } else {
       await ObjectManagers.InitMemoryManagers();

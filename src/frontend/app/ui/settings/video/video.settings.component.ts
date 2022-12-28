@@ -20,6 +20,7 @@ import {
   videoResolutionType,
 } from '../../../../../common/config/private/PrivateConfig';
 import { ClientVideoConfig } from '../../../../../common/config/public/ClientConfig';
+import {SettingsService} from '../settings.service';
 
 @Component({
   selector: 'app-settings-video',
@@ -30,10 +31,7 @@ import { ClientVideoConfig } from '../../../../../common/config/public/ClientCon
   ],
   providers: [VideoSettingsService],
 })
-export class VideoSettingsComponent extends SettingsComponentDirective<{
-  server: ServerVideoConfig;
-  client: ClientVideoConfig;
-}> {
+export class VideoSettingsComponent extends SettingsComponentDirective<ServerVideoConfig> {
   readonly resolutionTypes: videoResolutionType[] = [
     360, 480, 720, 1080, 1440, 2160, 4320,
   ];
@@ -64,7 +62,8 @@ export class VideoSettingsComponent extends SettingsComponentDirective<{
     navigation: NavigationService,
     settingsService: VideoSettingsService,
     public jobsService: ScheduledJobsService,
-    notification: NotificationService
+    notification: NotificationService,
+    globalSettingsService: SettingsService
   ) {
     super(
       $localize`Video`,
@@ -73,14 +72,12 @@ export class VideoSettingsComponent extends SettingsComponentDirective<{
       navigation,
       settingsService,
       notification,
-      (s) => ({
-        client: s.Client.Media.Video,
-        server: s.Server.Media.Video,
-      })
+      globalSettingsService,
+      (s) => s.Media.Video
     );
 
     const currentRes =
-      settingsService.Settings.value.Server.Media.Video.transcoding.resolution;
+      settingsService.Settings.value.Media.Video.transcoding.resolution;
     if (this.resolutionTypes.indexOf(currentRes) === -1) {
       this.resolutionTypes.push(currentRes);
     }

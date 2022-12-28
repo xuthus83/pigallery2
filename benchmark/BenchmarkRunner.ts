@@ -80,7 +80,7 @@ export class BenchmarkRunner {
   };
 
   constructor(public RUNS: number) {
-    Config.Client.authenticationRequired = false;
+    Config.Users.authenticationRequired = false;
   }
 
   async bmSaveDirectory(): Promise<BenchmarkResult[]> {
@@ -124,7 +124,7 @@ export class BenchmarkRunner {
         await ObjectManagers.InitSQLManagers();
       }, null,
       async (): Promise<void> => {
-        Config.Server.Indexing.reIndexingSensitivity = ReIndexingSensitivity.low;
+        Config.Indexing.reIndexingSensitivity = ReIndexingSensitivity.low;
         await this.init();
         await this.setupDB();
       });
@@ -138,7 +138,7 @@ export class BenchmarkRunner {
         await ObjectManagers.InitSQLManagers();
       }, null,
       async (): Promise<void> => {
-        Config.Server.Indexing.reIndexingSensitivity = ReIndexingSensitivity.low;
+        Config.Indexing.reIndexingSensitivity = ReIndexingSensitivity.low;
         await this.setupDB();
       });
     BMPersonRouter.addGetPersons(bm.BmExpressApp);
@@ -313,8 +313,8 @@ export class BenchmarkRunner {
     Config.Server.Threading.enabled = false;
     await ObjectManagers.reset();
     await fs.promises.rm(ProjectPath.DBFolder, {recursive: true, force: true});
-    Config.Server.Database.type = DatabaseType.sqlite;
-    Config.Server.Jobs.scheduled = [];
+    Config.Database.type = DatabaseType.sqlite;
+    Config.Jobs.scheduled = [];
     await ObjectManagers.InitSQLManagers();
   };
 
@@ -331,6 +331,7 @@ export class BenchmarkRunner {
           },
 
           onProgressUpdate: (progress: JobProgress): void => {
+            // empty
           }
         };
         indexingJob.start({indexChangesOnly: false}).catch(console.error);

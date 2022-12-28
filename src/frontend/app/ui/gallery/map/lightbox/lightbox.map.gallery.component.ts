@@ -74,12 +74,12 @@ export class GalleryMapLightboxComponent implements OnChanges {
     center: latLng(0, 0),
   };
   private smallIconSize = new Point(
-    Config.Client.Media.Thumbnail.iconSize * 0.75,
-    Config.Client.Media.Thumbnail.iconSize * 0.75
+    Config.Media.Thumbnail.iconSize * 0.75,
+    Config.Media.Thumbnail.iconSize * 0.75
   );
   private iconSize = new Point(
-    Config.Client.Media.Thumbnail.iconSize,
-    Config.Client.Media.Thumbnail.iconSize
+    Config.Media.Thumbnail.iconSize,
+    Config.Media.Thumbnail.iconSize
   );
   private usedIconSize = this.iconSize;
   private mapLayersControlOption: LeafletControlLayersConfig & {
@@ -302,7 +302,7 @@ export class GalleryMapLightboxComponent implements OnChanges {
         }
 
         // Setting photo icon
-        if (Config.Client.Map.useImageMarkers === true) {
+        if (Config.Map.useImageMarkers === true) {
           mkr.on('add', () => {
             mkr.off('add');
             const iconTh = this.thumbnailService.getIcon(new MediaIcon(p));
@@ -384,7 +384,7 @@ export class GalleryMapLightboxComponent implements OnChanges {
   }
 
   onLeafletZoom(): void {
-    if (Config.Client.Map.useImageMarkers === false) {
+    if (Config.Map.useImageMarkers === false) {
       return;
     }
     if (

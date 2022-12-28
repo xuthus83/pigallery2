@@ -34,7 +34,7 @@ export class QueryService {
     if (media) {
       query[QueryParams.gallery.photo] = this.getMediaStringId(media);
     }
-    if (Config.Client.Sharing.enabled === true) {
+    if (Config.Sharing.enabled === true) {
       if (this.shareService.isSharing()) {
         query[QueryParams.gallery.sharingKey_query] =
           this.shareService.getSharingKey();
@@ -47,7 +47,7 @@ export class QueryService {
     [key: string]: any;
   } {
     const params: { [key: string]: any } = {};
-    if (Config.Client.Sharing.enabled === true) {
+    if (Config.Sharing.enabled === true) {
       if (this.shareService.isSharing()) {
         params[QueryParams.gallery.sharingKey_query] =
           this.shareService.getSharingKey();

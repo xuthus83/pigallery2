@@ -54,9 +54,9 @@ export class InfoPanelLightboxComponent implements OnInit, OnChanges {
     public mapService: MapService,
     private authService: AuthenticationService
   ) {
-    this.mapEnabled = Config.Client.Map.enabled;
+    this.mapEnabled = Config.Map.enabled;
     this.searchEnabled =
-      Config.Client.Search.enabled && this.authService.canSearch();
+      Config.Search.enabled && this.authService.canSearch();
     this.baseLayer = tileLayer(mapService.MapLayer, {
       attribution: mapService.ShortAttributions,
     });
@@ -114,7 +114,7 @@ export class InfoPanelLightboxComponent implements OnInit, OnChanges {
       (metadata.faces && metadata.faces.length > 0)
     ) {
       this.keywords = [];
-      if (Config.Client.Faces.enabled) {
+      if (Config.Faces.enabled) {
         const names: string[] = (metadata.faces || []).map(
           (f): string => f.name
         );

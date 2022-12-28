@@ -12,9 +12,9 @@ export class Localizations {
       .filter((f): boolean =>
         fs.statSync(path.join(ProjectPath.FrontendFolder, f)).isDirectory()
       );
-    Config.Client.languages = dirCont.filter(
+    Config.Server.languages = dirCont.filter(
       (d): boolean => notLanguage.indexOf(d) === -1
     );
-    Config.Client.languages.sort();
+    Config.Server.languages.sort();
   }
 }

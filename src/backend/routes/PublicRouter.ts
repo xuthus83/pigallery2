@@ -1,14 +1,15 @@
-import { Express, NextFunction, Request, Response } from 'express';
+import {Express, NextFunction, Request, Response} from 'express';
 import * as path from 'path';
 import * as fs from 'fs';
 import * as ejs from 'ejs';
-import { Config } from '../../common/config/private/Config';
-import { ProjectPath } from '../ProjectPath';
-import { AuthenticationMWs } from '../middlewares/user/AuthenticationMWs';
-import { CookieNames } from '../../common/CookieNames';
-import { ErrorCodes, ErrorDTO } from '../../common/entities/Error';
-import { UserDTO } from '../../common/entities/UserDTO';
-import { ServerTimeEntry } from '../middlewares/ServerTimingMWs';
+import {Config} from '../../common/config/private/Config';
+import {ProjectPath} from '../ProjectPath';
+import {AuthenticationMWs} from '../middlewares/user/AuthenticationMWs';
+import {CookieNames} from '../../common/CookieNames';
+import {ErrorCodes, ErrorDTO} from '../../common/entities/Error';
+import {UserDTO} from '../../common/entities/UserDTO';
+import {ServerTimeEntry} from '../middlewares/ServerTimingMWs';
+import {ClientConfig} from '../../common/config/public/ClientConfig';
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
@@ -32,7 +33,7 @@ export class PublicRouter {
       let selectedLocale = req.locale;
       if (req.cookies && req.cookies[CookieNames.lang]) {
         if (
-          Config.Client.languages.indexOf(req.cookies[CookieNames.lang]) !== -1
+          Config.Server.languages.indexOf(req.cookies[CookieNames.lang]) !== -1
         ) {
           selectedLocale = req.cookies[CookieNames.lang];
         }
@@ -57,7 +58,7 @@ export class PublicRouter {
 
     const redirectToBase = (locale: string) => {
       return (req: Request, res: Response) => {
-        if (Config.Client.languages.indexOf(locale) !== -1) {
+        if (Config.Server.languages.indexOf(locale) !== -1) {
           res.cookie(CookieNames.lang, locale);
         }
         res.redirect('/?ln=' + locale);
@@ -82,19 +83,17 @@ export class PublicRouter {
           res.tpl.user.csrfToken = req.csrfToken();
         }
       }
-      const confCopy = {
-        Client: Config.Client.toJSON({ attachVolatile: true }),
-      };
+      const confCopy = Config.toJSON({attachVolatile: true, keepTags: {client: true}}) as unknown as ClientConfig;
       // Escaping html tags, like <script></script>
-      confCopy.Client.Other.customHTMLHead =
-        confCopy.Client.Other.customHTMLHead
+      confCopy.Server.customHTMLHead =
+        confCopy.Server.customHTMLHead
           .replace(/&/g, '&amp;')
           .replace(/</g, '&lt;')
           .replace(/>/g, '&gt;')
           .replace(/"/g, '&quot;')
           .replace(/'/g, '&#039;');
       res.tpl.Config = confCopy;
-      res.tpl.customHTMLHead = Config.Client.Other.customHTMLHead;
+      res.tpl.customHTMLHead = Config.Server.customHTMLHead;
 
       return next();
     });
@@ -105,7 +104,7 @@ export class PublicRouter {
 
     app.get('/manifest.json', (req: Request, res: Response) => {
       res.send({
-        name: Config.Client.applicationTitle,
+        name: Config.Server.applicationTitle,
         icons: [
           {
             src: 'assets/icon_inv.png',
@@ -115,7 +114,7 @@ export class PublicRouter {
         display: 'standalone',
         orientation: 'any',
         start_url:
-          Config.Client.publicUrl === '' ? '.' : Config.Client.publicUrl,
+          Config.Server.publicUrl === '' ? '.' : Config.Server.publicUrl,
         background_color: '#000000',
         theme_color: '#000000',
       });
@@ -137,7 +136,7 @@ export class PublicRouter {
       setLocale,
       renderIndex
     );
-    Config.Client.languages.forEach((l) => {
+    Config.Server.languages.forEach((l) => {
       app.get(
         [
           '/' + l + '/',

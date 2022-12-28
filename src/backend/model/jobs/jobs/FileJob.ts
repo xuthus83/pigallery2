@@ -35,7 +35,7 @@ export abstract class FileJob<S extends { indexedOnly: boolean } = { indexedOnly
   protected constructor(private scanFilter: DirectoryScanSettings) {
     super();
     this.scanFilter.noChildDirPhotos = true;
-    if (Config.Server.Database.type !== DatabaseType.memory) {
+    if (Config.Database.type !== DatabaseType.memory) {
       this.ConfigTemplate.push({
         id: 'indexedOnly',
         type: 'boolean',
@@ -71,7 +71,7 @@ export abstract class FileJob<S extends { indexedOnly: boolean } = { indexedOnly
 
   protected async step(): Promise<boolean> {
     const DBBased = this.config.indexedOnly &&
-      Config.Server.Database.type !== DatabaseType.memory;
+      Config.Database.type !== DatabaseType.memory;
     if (
       this.fileQueue.length === 0 &&
       ((this.directoryQueue.length === 0 && !DBBased) ||
@@ -176,7 +176,7 @@ export abstract class FileJob<S extends { indexedOnly: boolean } = { indexedOnly
       return;
     }
 
-    const logStr = `Loading next batch of files from db. Skipping: ${this.DBProcessing.mediaLoaded}, looking for more: ${Config.Server.Jobs.mediaProcessingBatchSize}`;
+    const logStr = `Loading next batch of files from db. Skipping: ${this.DBProcessing.mediaLoaded}, looking for more: ${Config.Jobs.mediaProcessingBatchSize}`;
     this.Progress.log(logStr);
     Logger.silly(LOG_TAG, logStr);
 
@@ -202,7 +202,7 @@ export abstract class FileJob<S extends { indexedOnly: boolean } = { indexedOnly
         .select(['media.name', 'directory.name', 'directory.path'])
         .leftJoin('media.directory', 'directory')
         .offset(this.DBProcessing.mediaLoaded)
-        .limit(Config.Server.Jobs.mediaProcessingBatchSize)
+        .limit(Config.Jobs.mediaProcessingBatchSize)
         .getMany();
 
       hasMoreFile.media = result.length > 0;
@@ -227,7 +227,7 @@ export abstract class FileJob<S extends { indexedOnly: boolean } = { indexedOnly
         .select(['file.name', 'directory.name', 'directory.path'])
         .leftJoin('file.directory', 'directory')
         .offset(this.DBProcessing.mediaLoaded)
-        .limit(Config.Server.Jobs.mediaProcessingBatchSize)
+        .limit(Config.Jobs.mediaProcessingBatchSize)
         .getMany();
 
 

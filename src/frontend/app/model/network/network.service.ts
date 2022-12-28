@@ -1,23 +1,24 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
-import { Message } from '../../../../common/entities/Message';
-import { LoadingBarService } from '@ngx-loading-bar/core';
-import { ErrorCodes, ErrorDTO } from '../../../../common/entities/Error';
-import { Config } from '../../../../common/config/public/Config';
-import { Utils } from '../../../../common/Utils';
-import { CustomHeaders } from '../../../../common/CustomHeaders';
-import { VersionService } from '../version.service';
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpResponse} from '@angular/common/http';
+import {Message} from '../../../../common/entities/Message';
+import {LoadingBarService} from '@ngx-loading-bar/core';
+import {ErrorCodes, ErrorDTO} from '../../../../common/entities/Error';
+import {Config} from '../../../../common/config/public/Config';
+import {Utils} from '../../../../common/Utils';
+import {CustomHeaders} from '../../../../common/CustomHeaders';
+import {VersionService} from '../version.service';
 
 @Injectable()
 export class NetworkService {
-  readonly apiBaseUrl = Utils.concatUrls(Config.Client.urlBase, Config.Client.apiPath);
+  readonly apiBaseUrl = Utils.concatUrls(Config.Server.urlBase, Config.Server.apiPath);
   private globalErrorHandlers: Array<(error: ErrorDTO) => boolean> = [];
 
   constructor(
     private http: HttpClient,
     private loadingBarService: LoadingBarService,
     private versionService: VersionService
-  ) {}
+  ) {
+  }
 
   public static buildUrl(url: string, data?: { [key: string]: any }): string {
     if (data) {
@@ -50,7 +51,7 @@ export class NetworkService {
     };
 
     return this.http
-      .get(this.apiBaseUrl + url, { responseType: 'text' })
+      .get(this.apiBaseUrl + url, {responseType: 'text'})
       .toPromise()
       .then(process)
       .catch(err);
@@ -70,7 +71,7 @@ export class NetworkService {
     };
 
     return this.http
-      .get(this.apiBaseUrl + url, { responseType: 'text' })
+      .get(this.apiBaseUrl + url, {responseType: 'text'})
       .toPromise()
       .then(process)
       .catch(err);
@@ -130,13 +131,13 @@ export class NetworkService {
     switch (method) {
       case 'get':
         return this.http
-          .get<Message<T>>(this.apiBaseUrl + url, { observe: 'response' })
+          .get<Message<T>>(this.apiBaseUrl + url, {observe: 'response'})
           .toPromise()
           .then(process)
           .catch(err);
       case 'delete':
         return this.http
-          .delete<Message<T>>(this.apiBaseUrl + url, { observe: 'response' })
+          .delete<Message<T>>(this.apiBaseUrl + url, {observe: 'response'})
           .toPromise()
           .then(process)
           .catch(err);
@@ -150,7 +151,7 @@ export class NetworkService {
           .catch(err);
       case 'put':
         return this.http
-          .put<Message<T>>(this.apiBaseUrl + url, body, { observe: 'response' })
+          .put<Message<T>>(this.apiBaseUrl + url, body, {observe: 'response'})
           .toPromise()
           .then(process)
           .catch(err);

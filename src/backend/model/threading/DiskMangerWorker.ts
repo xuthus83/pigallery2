@@ -52,15 +52,15 @@ export class DiskMangerWorker {
     absoluteDirectoryName: string
   ): Promise<boolean> {
     if (
-      Config.Server.Indexing.excludeFolderList.length === 0 &&
-      Config.Server.Indexing.excludeFileList.length === 0
+      Config.Indexing.excludeFolderList.length === 0 &&
+      Config.Indexing.excludeFileList.length === 0
     ) {
       return false;
     }
     const absoluteName = path.normalize(path.join(absoluteDirectoryName, name));
     const relativeName = path.normalize(path.join(relativeDirectoryName, name));
 
-    for (const exclude of Config.Server.Indexing.excludeFolderList) {
+    for (const exclude of Config.Indexing.excludeFolderList) {
       if (exclude.startsWith('/')) {
         if (exclude === absoluteName) {
           return true;
@@ -76,7 +76,7 @@ export class DiskMangerWorker {
       }
     }
     // exclude dirs that have the given files (like .ignore)
-    for (const exclude of Config.Server.Indexing.excludeFileList) {
+    for (const exclude of Config.Indexing.excludeFileList) {
       try {
         await fsp.access(path.join(absoluteName, exclude));
         return true;
@@ -200,7 +200,7 @@ export class DiskMangerWorker {
         }
       } else if (VideoProcessing.isVideo(fullFilePath)) {
         if (
-          Config.Client.Media.Video.enabled === false ||
+          Config.Media.Video.enabled === false ||
           settings.noVideo === true ||
           settings.previewOnly === true
         ) {
@@ -249,11 +249,11 @@ export class DiskMangerWorker {
 
     switch (extension) {
       case '.gpx':
-        return Config.Client.MetaFile.gpx;
+        return Config.MetaFile.gpx;
       case '.md':
-        return Config.Client.MetaFile.markdown;
+        return Config.MetaFile.markdown;
       case '.pg2conf':
-        return Config.Client.MetaFile.pg2conf;
+        return Config.MetaFile.pg2conf;
     }
 
     return false;

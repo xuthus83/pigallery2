@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
-import { SettingsComponentDirective } from '../_abstract/abstract.settings.component';
-import { AuthenticationService } from '../../../model/network/authentication.service';
-import { NavigationService } from '../../../model/navigation.service';
-import { NotificationService } from '../../../model/notification.service';
-import { RandomPhotoSettingsService } from './random-photo.settings.service';
-import { ClientRandomPhotoConfig } from '../../../../../common/config/public/ClientConfig';
+import {Component} from '@angular/core';
+import {SettingsComponentDirective} from '../_abstract/abstract.settings.component';
+import {AuthenticationService} from '../../../model/network/authentication.service';
+import {NavigationService} from '../../../model/navigation.service';
+import {NotificationService} from '../../../model/notification.service';
+import {RandomPhotoSettingsService} from './random-photo.settings.service';
+import {ClientRandomPhotoConfig} from '../../../../../common/config/public/ClientConfig';
+import {SettingsService} from '../settings.service';
 
 @Component({
   selector: 'app-settings-random-photo',
@@ -20,7 +21,8 @@ export class RandomPhotoSettingsComponent extends SettingsComponentDirective<Cli
     authService: AuthenticationService,
     navigation: NavigationService,
     settingsService: RandomPhotoSettingsService,
-    notification: NotificationService
+    notification: NotificationService,
+    globalSettingsService: SettingsService
   ) {
     super(
       $localize`Random Photo`,
@@ -29,7 +31,8 @@ export class RandomPhotoSettingsComponent extends SettingsComponentDirective<Cli
       navigation,
       settingsService,
       notification,
-      (s) => s.Client.RandomPhoto
+      globalSettingsService,
+      (s) => s.RandomPhoto
     );
   }
 }

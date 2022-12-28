@@ -15,15 +15,15 @@ export class ShareSettingsService extends AbstractSettingsService<ClientSharingC
     super(settingsService);
   }
 
-  showInSimplifiedMode(): boolean {
+  hasAvailableSettings(): boolean {
     return false;
   }
 
   public isSupported(): boolean {
     return (
-      this.settingsService.settings.value.Server.Database.type !==
+      this.settingsService.settings.value.Database.type !==
         DatabaseType.memory &&
-      this.settingsService.settings.value.Client.authenticationRequired === true
+      this.settingsService.settings.value.Users.authenticationRequired === true
     );
   }
 
@@ -32,7 +32,7 @@ export class ShareSettingsService extends AbstractSettingsService<ClientSharingC
   }
 
   public getSharingList(): Promise<SharingDTO[]> {
-    if (!this.settingsService.settings.value.Client.Sharing.enabled) {
+    if (!this.settingsService.settings.value.Sharing.enabled) {
       return Promise.resolve([]);
     }
     return this.networkService.getJson('/share/list');

@@ -1,23 +1,23 @@
-import { Component, OnDestroy, TemplateRef } from '@angular/core';
-import { AutoCompleteService } from './autocomplete.service';
-import { ActivatedRoute, Params, Router, RouterLink } from '@angular/router';
-import { ContentService } from '../content.service';
-import { Subscription } from 'rxjs';
-import { NavigationService } from '../../../model/navigation.service';
-import { QueryParams } from '../../../../../common/QueryParams';
+import {Component, OnDestroy, TemplateRef} from '@angular/core';
+import {AutoCompleteService} from './autocomplete.service';
+import {ActivatedRoute, Params, Router, RouterLink} from '@angular/router';
+import {ContentService} from '../content.service';
+import {Subscription} from 'rxjs';
+import {NavigationService} from '../../../model/navigation.service';
+import {QueryParams} from '../../../../../common/QueryParams';
 import {
   MetadataSearchQueryTypes,
   SearchQueryDTO,
   SearchQueryTypes,
   TextSearch,
 } from '../../../../../common/entities/SearchQueryDTO';
-import { BsModalService } from 'ngx-bootstrap/modal';
-import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
-import { SearchQueryParserService } from './search-query-parser.service';
-import { AlbumsService } from '../../albums/albums.service';
-import { Config } from '../../../../../common/config/public/Config';
-import { UserRoles } from '../../../../../common/entities/UserDTO';
-import { AuthenticationService } from '../../../model/network/authentication.service';
+import {BsModalService} from 'ngx-bootstrap/modal';
+import {BsModalRef} from 'ngx-bootstrap/modal/bs-modal-ref.service';
+import {SearchQueryParserService} from './search-query-parser.service';
+import {AlbumsService} from '../../albums/albums.service';
+import {Config} from '../../../../../common/config/public/Config';
+import {UserRoles} from '../../../../../common/entities/UserDTO';
+import {AuthenticationService} from '../../../model/network/authentication.service';
 
 @Component({
   selector: 'app-gallery-search',
@@ -73,7 +73,7 @@ export class GallerySearchComponent implements OnDestroy {
 
   get CanCreateAlbum(): boolean {
     return (
-      Config.Client.Album.enabled &&
+      Config.Album.enabled &&
       this.authenticationService.user.getValue().role >= UserRoles.Admin
     );
   }

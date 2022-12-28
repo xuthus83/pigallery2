@@ -88,7 +88,7 @@ export class GalleryMWs {
     res: Response,
     next: NextFunction
   ): Promise<void> {
-    if (Config.Client.Other.enableDownloadZip === false) {
+    if (Config.Gallery.enableDownloadZip === false) {
       return next();
     }
     const directoryName = req.params['directory'] || '/';
@@ -157,7 +157,7 @@ export class GalleryMWs {
       return next();
     }
 
-    if (Config.Client.Media.Video.enabled === false) {
+    if (Config.Media.Video.enabled === false) {
       if (cw.directory) {
         const removeVideos = (dir: ParentDirectoryDTO): void => {
           dir.media = dir.media.filter(
@@ -241,7 +241,7 @@ export class GalleryMWs {
     next: NextFunction
   ): Promise<void> {
     if (
-      Config.Client.Search.enabled === false ||
+      Config.Search.enabled === false ||
       !req.params['searchQueryDTO']
     ) {
       return next();
@@ -283,7 +283,7 @@ export class GalleryMWs {
     res: Response,
     next: NextFunction
   ): Promise<void> {
-    if (Config.Client.Search.AutoComplete.enabled === false) {
+    if (Config.Search.AutoComplete.enabled === false) {
       return next();
     }
     if (!req.params['text']) {
@@ -314,7 +314,7 @@ export class GalleryMWs {
     next: NextFunction
   ): Promise<void> {
     if (
-      Config.Client.RandomPhoto.enabled === false ||
+      Config.RandomPhoto.enabled === false ||
       !req.params['searchQueryDTO']
     ) {
       return next();

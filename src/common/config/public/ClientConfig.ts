@@ -3,8 +3,14 @@ import 'reflect-metadata';
 import {SortingMethods} from '../../entities/SortingMethods';
 import {UserRoles} from '../../entities/UserDTO';
 import {ConfigProperty, SubConfigClass} from 'typeconfig/common';
-import {IPrivateConfig} from '../private/PrivateConfig';
-import {FromDateSearch, SearchQueryDTO, SearchQueryTypes, TextSearch} from '../../entities/SearchQueryDTO';
+import {SearchQueryDTO} from '../../entities/SearchQueryDTO';
+
+if (typeof $localize === 'undefined') {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  global.$localize = (s) => s;
+}
+
 
 export enum MapProviders {
   OpenStreetMap = 1,
@@ -12,104 +18,303 @@ export enum MapProviders {
   Custom = 3,
 }
 
-@SubConfigClass()
+export enum ConfigPriority {
+  basic = 0, advanced, underTheHood
+}
+
+export type TAGS = {
+  client?: true,
+  priority?: ConfigPriority,
+  name?: string,
+  relevant?: (c: ClientConfig) => boolean,
+  dockerSensitive?: boolean,
+  hint?: string,// UI hint
+  githubIssue?: number,
+  secret?: boolean, // these config properties should never travel out of the server
+  experimental?: boolean, //is it a beta feature
+  unit?: string, // Unit info to display on UI
+  uiType?: 'SearchQuery', // Hint for the UI about the type
+  uiOptions?: (string | number)[], //Hint for the UI about the recommended options
+  uiAllowSpaces?: boolean
+  uiOptional?: boolean; //makes the tag not "required"
+  uiDisabled?: (subConfig: any, config: ClientConfig) => boolean
+};
+
+@SubConfigClass<TAGS>({tags: {client: true}})
 export class AutoCompleteConfig {
-  @ConfigProperty()
-  enabled: boolean = true;
-  @ConfigProperty({type: 'unsignedInt'})
-  targetItemsPerCategory: number = 5;
-  @ConfigProperty({type: 'unsignedInt'})
-  maxItems: number = 30;
-  @ConfigProperty({type: 'unsignedInt'})
-  cacheTimeout: number = 1000 * 60 * 60;
-}
-
-@SubConfigClass()
-export class ClientSearchConfig {
-  @ConfigProperty()
-  enabled: boolean = true;
-  @ConfigProperty({type: 'unsignedInt'})
-  searchCacheTimeout: number = 1000 * 60 * 60;
-  @ConfigProperty()
-  AutoComplete: AutoCompleteConfig = new AutoCompleteConfig();
-  @ConfigProperty({type: 'unsignedInt'})
-  maxMediaResult: number = 10000;
   @ConfigProperty({
-    description: 'Search returns also with directories, not just media',
-  })
-  listDirectories: boolean = false;
-  @ConfigProperty({
-    description:
-      'Search also returns with metafiles from directories that contain a media file of the matched search result',
-  })
-  listMetafiles: boolean = true;
-  @ConfigProperty({type: 'unsignedInt'})
-  maxDirectoryResult: number = 200;
-}
-
-@SubConfigClass()
-export class ClientAlbumConfig {
-  @ConfigProperty()
-  enabled: boolean = true;
-}
-
-@SubConfigClass()
-export class ClientSharingConfig {
-  @ConfigProperty()
-  enabled: boolean = true;
-  @ConfigProperty()
-  passwordProtected: boolean = true;
-}
-
-@SubConfigClass()
-export class ClientRandomPhotoConfig {
-  @ConfigProperty({description: 'Enables random link generation.'})
-  enabled: boolean = true;
-}
-
-@SubConfigClass()
-export class MapLayers {
-  @ConfigProperty()
-  name: string = 'street';
-  @ConfigProperty()
-  url: string = '';
-}
-
-@SubConfigClass()
-export class ClientMapConfig {
-  @ConfigProperty<boolean, IPrivateConfig, string>({
-    onNewValue: (value, config) => {
-      if (value === false) {
-        config.Client.MetaFile.gpx = false;
-      }
-    },
+    tags:
+      {
+        name: $localize`Enable Autocomplete`,
+        priority: ConfigPriority.advanced
+      },
+    description: $localize`Show hints while typing search query.`
   })
   enabled: boolean = true;
   @ConfigProperty({
     type: 'unsignedInt',
-    description:
-      'Maximum number of markers to be shown on the map preview on the gallery page.',
+    tags:
+      {
+        name: $localize`Max items per category`,
+        priority: ConfigPriority.underTheHood
+      },
+    description: $localize`Maximum number autocomplete items shown per category.`
   })
-  maxPreviewMarkers: number = 50;
-  @ConfigProperty()
-  useImageMarkers: boolean = true;
-  @ConfigProperty({type: MapProviders})
-  mapProvider: MapProviders = MapProviders.OpenStreetMap;
-  @ConfigProperty()
-  mapboxAccessToken: string = '';
-  @ConfigProperty({arrayType: MapLayers})
-  customLayers: MapLayers[] = [new MapLayers()];
+  targetItemsPerCategory: number = 5;
+  @ConfigProperty({
+    type: 'unsignedInt',
+    tags:
+      {
+        name: $localize`Maximum items`,
+        priority: ConfigPriority.underTheHood
+      },
+    description: $localize`Maximum number autocomplete items shown at once.`
+  })
+  maxItems: number = 30;
+  @ConfigProperty({
+    type: 'unsignedInt',
+    tags:
+      {
+        name: $localize`Cache timeout`,
+        priority: ConfigPriority.underTheHood,
+        unit: 'ms'
+      },
+    description: $localize`Autocomplete cache timeout. `
+  })
+  cacheTimeout: number = 1000 * 60 * 60;
 }
 
-@SubConfigClass()
+@SubConfigClass({tags: {client: true}})
+export class ClientSearchConfig {
+  @ConfigProperty({
+    tags:
+      {
+        name: $localize`Enable`,
+        priority: ConfigPriority.advanced
+      },
+    description: $localize`Enables searching.`
+  })
+  enabled: boolean = true;
+  @ConfigProperty({
+    type: 'unsignedInt',
+    tags:
+      {
+        name: $localize`Cache timeout`,
+        priority: ConfigPriority.underTheHood,
+        unit: 'ms'
+      },
+    description: $localize`Search cache timeout.`
+  })
+  searchCacheTimeout: number = 1000 * 60 * 60;
+  @ConfigProperty({
+    tags:
+      {
+        name: $localize`Autocomplete`,
+        priority: ConfigPriority.advanced
+      },
+  })
+  AutoComplete: AutoCompleteConfig = new AutoCompleteConfig();
+  @ConfigProperty({
+    type: 'unsignedInt',
+    tags:
+      {
+        name: $localize`Maximum media result`,
+        priority: ConfigPriority.advanced
+      },
+    description: $localize`Maximum number of photos and videos that are listed in one search result.`
+  })
+  maxMediaResult: number = 10000;
+  @ConfigProperty({
+    type: 'unsignedInt', tags:
+      {
+        name: $localize`Maximum directory result`,
+        priority: ConfigPriority.advanced
+      },
+    description: $localize`Maximum number of directories that are listed in one search result.`
+  })
+  maxDirectoryResult: number = 200;
+  @ConfigProperty({
+    tags:
+      {
+        name: $localize`List directories`,
+        priority: ConfigPriority.advanced
+      },
+    description: $localize`Search returns also with directories, not just media.`
+  })
+  listDirectories: boolean = false;
+  @ConfigProperty({
+    tags:
+      {
+        name: $localize`List metafiles`,
+        priority: ConfigPriority.advanced
+      },
+    description: $localize`Search also returns with metafiles from directories that contain a media file of the matched search result.`,
+  })
+  listMetafiles: boolean = true;
+}
+
+@SubConfigClass({tags: {client: true}})
+export class ClientAlbumConfig {
+  @ConfigProperty({
+    tags:
+      {
+        name: $localize`Enable`,
+        priority: ConfigPriority.advanced
+      }
+  })
+  enabled: boolean = true;
+}
+
+@SubConfigClass({tags: {client: true}})
+export class ClientSharingConfig {
+  @ConfigProperty({
+    tags:
+      {
+        name: $localize`Enable`,
+        priority: ConfigPriority.advanced
+      },
+    description: $localize`Enables sharing.`,
+  })
+  enabled: boolean = true;
+  @ConfigProperty({
+    tags:
+      {
+        name: $localize`Password protected`,
+        priority: ConfigPriority.advanced
+      },
+    description: $localize`Enables password protected sharing links.`,
+  })
+  passwordProtected: boolean = true;
+}
+
+@SubConfigClass({tags: {client: true}})
+export class ClientRandomPhotoConfig {
+  @ConfigProperty({
+    tags:
+      {
+        name: $localize`Enable`,
+        priority: ConfigPriority.advanced
+      },
+    description: $localize`Enables random link generation.`,
+  })
+  enabled: boolean = true;
+}
+
+@SubConfigClass({tags: {client: true}})
+export class MapLayers {
+  @ConfigProperty({
+    tags:
+      {
+        priority: ConfigPriority.advanced
+      },
+    description: $localize`Name of a map layer.`,
+  })
+  name: string = 'street';
+  @ConfigProperty({
+    tags:
+      {
+        priority: ConfigPriority.advanced,
+        hint: 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+      },
+    description: $localize`Url of a map layer.`,
+  })
+  url: string = '';
+}
+
+@SubConfigClass({tags: {client: true}})
+export class ClientMapConfig {
+  @ConfigProperty<boolean, ClientConfig, TAGS>({
+    onNewValue: (value, config) => {
+      if (value === false) {
+        config.MetaFile.gpx = false;
+      }
+    },
+    tags: {
+      priority: ConfigPriority.advanced,
+      name: $localize`Enable`
+    }
+  })
+  enabled: boolean = true;
+  @ConfigProperty({
+    tags: {
+      name: $localize`Image Markers`,
+      priority: ConfigPriority.underTheHood
+    },
+    description: $localize`Map will use thumbnail images as markers instead of the default pin.`,
+  })
+  useImageMarkers: boolean = true;
+  @ConfigProperty({
+    type: MapProviders,
+    tags: {
+      name: $localize`Map Provider`,
+      priority: ConfigPriority.advanced
+    }
+  })
+  mapProvider: MapProviders = MapProviders.OpenStreetMap;
+  @ConfigProperty({
+    tags:
+      {
+        name: $localize`Mapbox access token`,
+        relevant: (c: any) => c.mapProvider === MapProviders.Mapbox,
+        priority: ConfigPriority.advanced
+      },
+    description: $localize`MapBox needs an access token to work, create one at https://www.mapbox.com.`,
+  })
+  mapboxAccessToken: string = '';
+  @ConfigProperty({
+    arrayType: MapLayers,
+    description: $localize`The map module will use these urls to fetch the map tiles.`,
+    tags: {
+      relevant: (c: any) => c.mapProvider === MapProviders.Custom,
+      name: $localize`Custom Layers`,
+      priority: ConfigPriority.advanced
+    }
+
+  })
+  customLayers: MapLayers[] = [new MapLayers()];
+
+  @ConfigProperty({
+    type: 'unsignedInt',
+    tags: {
+      name: $localize`Max Preview Markers`,
+      priority: ConfigPriority.underTheHood
+    },
+    description: $localize`Maximum number of markers to be shown on the map preview on the gallery page.`,
+  })
+  maxPreviewMarkers: number = 50;
+}
+
+@SubConfigClass({tags: {client: true}})
 export class ClientThumbnailConfig {
-  @ConfigProperty({type: 'unsignedInt', max: 100})
+  @ConfigProperty({
+    type: 'unsignedInt', max: 100,
+    tags: {
+      name: $localize`Max Preview Markers`,
+      priority: ConfigPriority.underTheHood
+    },
+    description: $localize`Icon size (used on maps).`,
+  })
   iconSize: number = 45;
-  @ConfigProperty({type: 'unsignedInt'})
+  @ConfigProperty({
+    type: 'unsignedInt', tags: {
+      name: $localize`Person thumbnail size`,
+      priority: ConfigPriority.underTheHood
+    },
+    description: $localize`Person (face) thumbnail size.`,
+  })
   personThumbnailSize: number = 200;
-  @ConfigProperty({arrayType: 'unsignedInt'})
+  @ConfigProperty({
+    arrayType: 'unsignedInt', tags: {
+      name: $localize`Thumbnail sizes`,
+      priority: ConfigPriority.advanced
+    },
+    description: $localize`Size of the thumbnails. The best matching size will be generated. More sizes give better quality, but use more storage and CPU to render. If size is 240, that shorter side of the thumbnail will have 160 pixels.`,
+  })
   thumbnailSizes: number[] = [240, 480];
-  @ConfigProperty({volatile: true})
+  @ConfigProperty({
+    volatile: true,
+    description: 'Updated to match he number of CPUs. This manny thumbnail will be concurrently generated.',
+  })
   concurrentThumbnailGenerations: number = 1;
 
   /**
@@ -135,15 +340,42 @@ export enum NavigationLinkTypes {
   gallery = 1, faces, albums, search, url
 }
 
-@SubConfigClass()
+@SubConfigClass({tags: {client: true}})
 export class NavigationLinkConfig {
-  @ConfigProperty({type: NavigationLinkTypes})
+  @ConfigProperty({
+    type: NavigationLinkTypes,
+    tags: {
+      name: $localize`Type`,
+      priority: ConfigPriority.advanced
+    } as TAGS
+  })
   type: NavigationLinkTypes = NavigationLinkTypes.gallery;
-  @ConfigProperty({type: 'string'})
+  @ConfigProperty({
+    type: 'string',
+    tags: {
+      name: $localize`Name`,
+      priority: ConfigPriority.advanced
+    }
+  })
   name?: string;
-  @ConfigProperty({type: 'object'})
+  @ConfigProperty({
+    type: 'object',
+    tags: {
+      name: $localize`SearchQuery`,
+      priority: ConfigPriority.advanced,
+      uiType: 'SearchQuery',
+      relevant: (c: NavigationLinkConfig) => c.type === NavigationLinkTypes.search
+    }
+  })
   SearchQuery?: SearchQueryDTO;
-  @ConfigProperty({type: 'string'})
+  @ConfigProperty({
+    type: 'string',
+    tags: {
+      name: $localize`Url`,
+      priority: ConfigPriority.advanced,
+      relevant: (c: NavigationLinkConfig) => c.type === NavigationLinkTypes.url
+    }
+  })
   url?: string;
 
 
@@ -157,11 +389,26 @@ export class NavigationLinkConfig {
   }
 }
 
-@SubConfigClass()
+@SubConfigClass<TAGS>({tags: {client: true}})
 export class NavBarConfig {
-  @ConfigProperty()
+  @ConfigProperty({
+    tags: {
+      name: $localize`Show item count`,
+      priority: ConfigPriority.underTheHood
+    },
+    description: $localize`Shows the number photos and videos on the navigation bar.`,
+  })
   showItemCount: boolean = true;
-  @ConfigProperty({arrayType: NavigationLinkConfig, description: 'List of the navigation bar links'})
+  @ConfigProperty({
+    arrayType: NavigationLinkConfig,
+    tags: {
+      name: $localize`Links`,
+      priority: ConfigPriority.advanced,
+      experimental: true,
+      githubIssue: 174
+    },
+    description: $localize`Visible links in the top menu.`
+  })
   links: NavigationLinkConfig[] = [
     new NavigationLinkConfig(NavigationLinkTypes.gallery),
     new NavigationLinkConfig(NavigationLinkTypes.albums),
@@ -169,180 +416,462 @@ export class NavBarConfig {
   ];
 }
 
-@SubConfigClass()
-export class ClientOtherConfig {
-  @ConfigProperty()
-  customHTMLHead: string = '';
-  @ConfigProperty()
+@SubConfigClass<TAGS>({tags: {client: true, priority: ConfigPriority.advanced}})
+export class ClientGalleryConfig {
+  @ConfigProperty({
+    tags: {
+      name: $localize`Cache`,
+      priority: ConfigPriority.underTheHood,
+    },
+    description: $localize`Caches directory contents and search results for better performance.`
+  })
   enableCache: boolean = true;
-  @ConfigProperty()
+  @ConfigProperty({
+    tags: {
+      name: $localize`Scroll based thumbnail generation`,
+      priority: ConfigPriority.advanced,
+    },
+    description: $localize`Those thumbnails get higher priority that are visible on the screen.`
+  })
   enableOnScrollRendering: boolean = true;
 
-  @ConfigProperty({type: SortingMethods, description: 'Default sorting method for directory results'})
+  @ConfigProperty({
+    type: SortingMethods, tags: {
+      name: $localize`Default sorting`,
+      priority: ConfigPriority.advanced,
+    },
+    description: $localize`Default sorting method for photo and video in a directory results.`
+  })
   defaultPhotoSortingMethod: SortingMethods = SortingMethods.ascDate;
 
-  @ConfigProperty({type: SortingMethods, description: 'Default sorting method for search results'})
+  @ConfigProperty({
+    type: SortingMethods, tags: {
+      name: $localize`Default search sorting`,
+      priority: ConfigPriority.advanced,
+    },
+    description: $localize`Default sorting method for photo and video in a search results.`
+  })
   defaultSearchSortingMethod: SortingMethods = SortingMethods.descDate;
 
   @ConfigProperty({
-    description:
-      'If enabled directories will be sorted by date, like photos, otherwise by name. Directory date is the last modification time of that directory not the creation date of the oldest photo',
+    tags: {
+      name: $localize`Sort directories by date`,
+      priority: ConfigPriority.advanced,
+    },
+    description: $localize`If enabled, directories will be sorted by date, like photos, otherwise by name. Directory date is the last modification time of that directory not the creation date of the oldest photo.`
   })
   enableDirectorySortingByDate: boolean = false;
 
-  @ConfigProperty()
+  @ConfigProperty({
+    tags: {
+      name: $localize`On scroll thumbnail prioritising`,
+      priority: ConfigPriority.underTheHood,
+    },
+    description: $localize`Those thumbnails will be rendered first that are in view.`
+  })
   enableOnScrollThumbnailPrioritising: boolean = true;
-  @ConfigProperty()
+  @ConfigProperty({
+    type: NavBarConfig,
+    tags: {
+      name: $localize`Navigation bar`,
+      priority: ConfigPriority.advanced,
+    }
+  })
   NavBar: NavBarConfig = new NavBarConfig();
-  @ConfigProperty()
+  @ConfigProperty({
+    tags: {
+      name: $localize`Caption first naming`,
+      priority: ConfigPriority.advanced,
+    },
+    description: $localize`Show the caption (IPTC 120) tags from the EXIF data instead of the filenames.`
+  })
   captionFirstNaming: boolean = false; // shows the caption instead of the filename in the photo grid
-  @ConfigProperty()
+  @ConfigProperty({
+    tags: {
+      name: $localize`Download Zip`,
+      priority: ConfigPriority.advanced,
+      experimental: true,
+      githubIssue: 52
+    },
+    description: $localize`Enable download zip of a directory contents Directory flattening. (Does not work for searches.)`
+  })
   enableDownloadZip: boolean = false;
   @ConfigProperty({
-    description:
-      'Adds a button to flattens the file structure, by listing the content of all subdirectories.',
+    tags: {
+      name: $localize`Directory flattening`,
+      priority: ConfigPriority.advanced,
+      experimental: true,
+      githubIssue: 174
+    },
+    description: $localize`Adds a button to flattens the file structure, by listing the content of all subdirectories. (Won't work if the gallery has multiple folders with the same path.)`
   })
   enableDirectoryFlattening: boolean = false;
-  @ConfigProperty({description:"Default time interval for displaying a photo in the slide show"})
+  @ConfigProperty({
+    tags: {
+      name: $localize`Default slideshow speed`,
+      priority: ConfigPriority.advanced,
+      githubIssue: 570,
+      unit: 's'
+    },
+    description: $localize`Default time interval for displaying a photo in the slide show.`
+  })
   defaultSlideshowSpeed: number = 5;
 }
 
-@SubConfigClass()
+@SubConfigClass({tags: {client: true}})
 export class ClientVideoConfig {
-  @ConfigProperty()
+  @ConfigProperty({
+    tags: {
+      name: $localize`Enable`,
+      priority: ConfigPriority.advanced,
+    }
+  })
   enabled: boolean = true;
   @ConfigProperty({
     arrayType: 'string',
-    description: 'Video formats that are supported after transcoding (with the build-in ffmpeg support)'
+    tags: {
+      name: $localize`Supported formats with transcoding`,
+      priority: ConfigPriority.underTheHood,
+      uiDisabled: (sb: ClientVideoConfig) => !sb.enabled
+    } as TAGS,
+    description: $localize`Video formats that are supported after transcoding (with the build-in ffmpeg support).`
   })
   supportedFormatsWithTranscoding: string[] = ['avi', 'mkv', 'mov', 'wmv', 'flv', 'mts', 'm2ts', 'mpg', '3gp', 'm4v', 'mpeg', 'vob', 'divx', 'xvid', 'ts'];
   // Browser supported video formats
   // Read more:  https://www.w3schools.com/html/html5_video.asp
-  @ConfigProperty({arrayType: 'string', description: 'Video formats that are supported also without transcoding'})
+  @ConfigProperty({
+    arrayType: 'string',
+    tags: {
+      name: $localize`Supported formats without transcoding`,
+      priority: ConfigPriority.underTheHood,
+      uiDisabled: (sb: ClientVideoConfig) => !sb.enabled
+    },
+    description: $localize`Video formats that are supported also without transcoding. Browser supported formats: https://www.w3schools.com/html/html5_video.asp`
+  })
   supportedFormats: string[] = ['mp4', 'webm', 'ogv', 'ogg'];
 
 }
 
-@SubConfigClass()
-export class PhotoConvertingConfig {
-  @ConfigProperty()
-  enabled: boolean = true;
-}
-
-@SubConfigClass()
-export class ClientPhotoConfig {
-  @ConfigProperty()
-  Converting: PhotoConvertingConfig = new PhotoConvertingConfig();
+@SubConfigClass({tags: {client: true}})
+export class ClientPhotoConvertingConfig {
   @ConfigProperty({
-    description:
-      'Enables loading the full resolution image on zoom in the ligthbox (preview).',
+    tags: {
+      name: $localize`Enable`
+    } as TAGS,
+    description: $localize`Enable photo converting.`
+  })
+  enabled: boolean = true;
+
+  @ConfigProperty({
+    tags: {
+      name: $localize`Load full resolution image on zoom.`,
+      priority: ConfigPriority.advanced,
+      uiDisabled: (sc: ClientPhotoConvertingConfig) =>
+        !sc.enabled
+    },
+    description: $localize`Enables loading the full resolution image on zoom in the ligthbox (preview).`,
   })
   loadFullImageOnZoom: boolean = true;
-  @ConfigProperty({arrayType: 'string'})
+}
+
+@SubConfigClass({tags: {client: true}})
+export class ClientPhotoConfig {
+  @ConfigProperty({
+    tags: {
+      name: $localize`Photo converting`,
+      priority: ConfigPriority.advanced
+    }
+  })
+  Converting: ClientPhotoConvertingConfig = new ClientPhotoConvertingConfig();
+
+  @ConfigProperty({
+    arrayType: 'string',
+    tags: {
+      name: $localize`Supported photo formats`,
+      priority: ConfigPriority.underTheHood
+    },
+    description: $localize`Photo formats that are supported.`,
+  })
   supportedFormats: string[] = ['gif', 'jpeg', 'jpg', 'jpe', 'png', 'webp', 'svg'];
 }
 
-@SubConfigClass()
+@SubConfigClass({tags: {client: true}})
 export class ClientGPXCompressingConfig {
-  @ConfigProperty()
+  @ConfigProperty({
+    tags: {
+      name: $localize`Enable GPX compressing`,
+      priority: ConfigPriority.advanced,
+      githubIssue: 504,
+      uiDisabled: (sc: any, c: ClientConfig) => !c.Map.enabled
+    },
+    description: $localize`Enables lossy (based on delta time and distance. Too frequent points are removed) GPX compression.`
+  })
   enabled: boolean = true;
 }
 
-@SubConfigClass()
+@SubConfigClass({tags: {client: true}})
 export class ClientMediaConfig {
-  @ConfigProperty()
+  @ConfigProperty({
+    tags: {
+      name: $localize`Thumbnail`,
+      priority: ConfigPriority.advanced
+    }
+  })
   Thumbnail: ClientThumbnailConfig = new ClientThumbnailConfig();
-  @ConfigProperty()
+  @ConfigProperty({
+    tags: {
+      name: $localize`Video`,
+      priority: ConfigPriority.advanced
+    }
+  })
   Video: ClientVideoConfig = new ClientVideoConfig();
-  @ConfigProperty()
+  @ConfigProperty({
+    tags: {
+      name: $localize`Photo`,
+      priority: ConfigPriority.advanced
+    }
+  })
   Photo: ClientPhotoConfig = new ClientPhotoConfig();
 }
 
-@SubConfigClass()
+@SubConfigClass({tags: {client: true}})
 export class ClientMetaFileConfig {
   @ConfigProperty({
-    description: 'Reads *.gpx files and renders them on the map.',
+    tags: {
+      name: $localize`*.gpx files`,
+      priority: ConfigPriority.advanced,
+      uiDisabled: (sb, c) => !c.Map.enabled
+    } as TAGS,
+    description: $localize`Reads *.gpx files and renders them on the map.`
   })
   gpx: boolean = true;
 
-  @ConfigProperty()
+  @ConfigProperty({
+    tags: {
+      name: $localize`GPX compression`,
+      priority: ConfigPriority.advanced,
+      uiDisabled: (sb, c) => !c.Map.enabled || !sb.gpx
+    } as TAGS
+  })
   GPXCompressing: ClientGPXCompressingConfig = new ClientGPXCompressingConfig();
 
   @ConfigProperty({
-    description:
-      'Reads *.md files in a directory and shows the next to the map.',
+    tags: {
+      name: $localize`Markdown files`,
+      priority: ConfigPriority.advanced
+    },
+    description: $localize`Reads *.md files in a directory and shows the next to the map.`
   })
   markdown: boolean = true;
 
   @ConfigProperty({
-    description:
-      'Reads *.pg2conf files (You can use it for custom sorting and save search (albums)).',
+    tags: {
+      name: $localize`*.pg2conf files`,
+      priority: ConfigPriority.advanced
+    },
+    description: $localize`Reads *.pg2conf files (You can use it for custom sorting and saved search (albums)).`
   })
   pg2conf: boolean = true;
-  @ConfigProperty({arrayType: 'string'})
+  @ConfigProperty({
+    arrayType: 'string',
+    tags: {
+      name: $localize`Supported formats`,
+      priority: ConfigPriority.underTheHood
+    },
+    description: $localize`The app will read and process these files.`
+  })
   supportedFormats: string[] = ['gpx', 'pg2conf', 'md'];
 }
 
-@SubConfigClass()
+@SubConfigClass({tags: {client: true}})
 export class ClientFacesConfig {
-  @ConfigProperty()
+  @ConfigProperty({
+    tags: {
+      name: $localize`Enabled`,
+      priority: ConfigPriority.advanced
+    }
+  })
   enabled: boolean = true;
-  @ConfigProperty()
+  @ConfigProperty({
+    tags: {
+      name: $localize`Override keywords`,
+      priority: ConfigPriority.underTheHood
+    },
+    description: $localize`If a photo has the same face (person) name and keyword, the app removes the duplicate, keeping the face only.`
+  })
   keywordsToPersons: boolean = true;
-  @ConfigProperty({type: UserRoles})
+  @ConfigProperty({
+    type: UserRoles, tags: {
+      name: $localize`Face starring right`,
+      priority: ConfigPriority.underTheHood
+    },
+    description: $localize`Required minimum right to star (favourite) a face.`
+  })
   writeAccessMinRole: UserRoles = UserRoles.Admin;
-  @ConfigProperty({type: UserRoles})
+  @ConfigProperty({
+    type: UserRoles, tags: {
+      name: $localize`Face listing right`,
+      priority: ConfigPriority.underTheHood
+    },
+    description: $localize`Required minimum right to show the faces tab.`
+  })
   readAccessMinRole: UserRoles = UserRoles.User;
 }
 
-@SubConfigClass()
-export class ClientConfig {
+@SubConfigClass({tags: {client: true}})
+export class ClientServiceConfig {
 
-  @ConfigProperty()
+  @ConfigProperty({
+    tags: {
+      name: $localize`Page title`
+    }
+  })
   applicationTitle: string = 'PiGallery 2';
 
-  @ConfigProperty()
+  @ConfigProperty({
+    description: $localize`If you access the page form local network its good to know the public url for creating sharing link.`,
+    tags: {
+      name: $localize`Page public url`,
+    }
+  })
   publicUrl: string = '';
 
-  @ConfigProperty()
+  @ConfigProperty({
+    description: $localize`If you access the gallery under a sub url (like: http://mydomain.com/myGallery), set it here. If it is not working you might miss the '/' from the beginning of the url.`,
+    tags: {
+      name: $localize`Url Base`,
+      hint: '/myGallery',
+      priority: ConfigPriority.advanced
+    }
+  })
   urlBase: string = '';
 
-  @ConfigProperty({description: 'PiGallery api path.'})
+  @ConfigProperty({
+    description: 'PiGallery api path.',
+    tags: {
+      name: $localize`Api path`,
+      priority: ConfigPriority.underTheHood
+    }
+  })
   apiPath: string = '/pgapi';
-
-  @ConfigProperty()
-  Search: ClientSearchConfig = new ClientSearchConfig();
-
-  @ConfigProperty()
-  Sharing: ClientSharingConfig = new ClientSharingConfig();
-
-  @ConfigProperty()
-  Album: ClientAlbumConfig = new ClientAlbumConfig();
-
-  @ConfigProperty()
-  Map: ClientMapConfig = new ClientMapConfig();
-
-  @ConfigProperty()
-  RandomPhoto: ClientRandomPhotoConfig = new ClientRandomPhotoConfig();
-
-  @ConfigProperty()
-  Other: ClientOtherConfig = new ClientOtherConfig();
-
-  @ConfigProperty()
-  authenticationRequired: boolean = true;
-
-  @ConfigProperty({type: UserRoles})
-  unAuthenticatedUserRole: UserRoles = UserRoles.Admin;
 
   @ConfigProperty({arrayType: 'string', volatile: true})
   languages: string[] | undefined;
 
-  @ConfigProperty()
+  @ConfigProperty({
+    description: $localize`Injects the content of this between the <head></head> HTML tags of the app. (You can use it add analytics or custom code to the app).`,
+    tags: {
+      name: $localize`Custom HTML Head`,
+      priority: ConfigPriority.advanced,
+      githubIssue: 404
+    }
+  })
+  customHTMLHead: string = '';
+}
+
+@SubConfigClass({tags: {client: true}})
+export class ClientUserConfig {
+
+  @ConfigProperty({
+    tags: {
+      name: $localize`Password protection`,
+      priority: ConfigPriority.advanced,
+    },
+    description: $localize`Enables user management with login to password protect the gallery.`,
+  })
+  authenticationRequired: boolean = true;
+
+  @ConfigProperty({
+    type: UserRoles, tags: {
+      name: $localize`Default user right`,
+      priority: ConfigPriority.advanced,
+      relevant: (c: any) => c.authenticationRequired === false
+    },
+    description: $localize`Default user right when password protection is disabled.`,
+  })
+  unAuthenticatedUserRole: UserRoles = UserRoles.Admin;
+}
+
+
+@SubConfigClass<TAGS>({tags: {client: true}})
+export class ClientConfig {
+
+  @ConfigProperty({
+    tags: {
+      name: $localize`Server`
+    } as TAGS,
+  })
+  Server: ClientServiceConfig = new ClientServiceConfig();
+
+  @ConfigProperty({
+    tags: {
+      name: $localize`Users`
+    } as TAGS,
+  })
+  Users: ClientUserConfig = new ClientUserConfig();
+
+  @ConfigProperty({
+    tags: {
+      name: $localize`Gallery`
+    } as TAGS,
+  })
+  Gallery: ClientGalleryConfig = new ClientGalleryConfig();
+
+  @ConfigProperty({
+    tags: {
+      name: $localize`Media`
+    } as TAGS,
+  })
   Media: ClientMediaConfig = new ClientMediaConfig();
 
-  @ConfigProperty()
+  @ConfigProperty({
+    tags: {
+      name: $localize`Meta file`
+    } as TAGS,
+  })
   MetaFile: ClientMetaFileConfig = new ClientMetaFileConfig();
 
-  @ConfigProperty()
+  @ConfigProperty({
+    tags: {
+      name: $localize`Album`
+    } as TAGS,
+  })
+  Album: ClientAlbumConfig = new ClientAlbumConfig();
+
+  @ConfigProperty({
+    tags: {
+      name: $localize`Search`
+    } as TAGS,
+  })
+  Search: ClientSearchConfig = new ClientSearchConfig();
+
+  @ConfigProperty({
+    tags: {
+      name: $localize`Sharing`
+    } as TAGS,
+  })
+  Sharing: ClientSharingConfig = new ClientSharingConfig();
+
+  @ConfigProperty({
+    tags: {
+      name: $localize`Map`
+    } as TAGS,
+  })
+  Map: ClientMapConfig = new ClientMapConfig();
+
+  @ConfigProperty({
+    tags: {
+      name: $localize`Faces`
+    } as TAGS,
+  })
   Faces: ClientFacesConfig = new ClientFacesConfig();
+
+  @ConfigProperty({
+    tags: {
+      name: $localize`Random photo`,
+      githubIssue: 392
+    } as TAGS,
+    description: $localize`This feature enables you to generate 'random photo' urls. That URL returns a photo random selected from your gallery. You can use the url with 3rd party application like random changing desktop background. Note: With the current implementation, random link also requires login.`
+  })
+  RandomPhoto: ClientRandomPhotoConfig = new ClientRandomPhotoConfig();
 }

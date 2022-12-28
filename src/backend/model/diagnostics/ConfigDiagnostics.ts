@@ -1,4 +1,4 @@
-import {Config} from '../../../common/config/private/Config';
+import {Config, PrivateConfigClass} from '../../../common/config/private/Config';
 import {Logger} from '../../Logger';
 import {NotificationManager} from '../NotifocationManager';
 import {SQLConnection} from '../database/sql/SQLConnection';
@@ -20,7 +20,6 @@ import {
 } from '../../../common/config/public/ClientConfig';
 import {
   DatabaseType,
-  IPrivateConfig,
   ServerDataBaseConfig,
   ServerJobConfig,
   ServerMetaFileConfig,
@@ -41,11 +40,11 @@ const LOG_TAG = '[ConfigDiagnostics]';
 export class ConfigDiagnostics {
   static testAlbumsConfig(
     albumConfig: ClientAlbumConfig,
-    original: IPrivateConfig
+    original: PrivateConfigClass
   ): void {
     if (
       albumConfig.enabled === true &&
-      original.Server.Database.type === DatabaseType.memory
+      original.Database.type === DatabaseType.memory
     ) {
       throw new Error('Memory Database does not support albums');
     }
@@ -83,25 +82,25 @@ export class ConfigDiagnostics {
     }
   }
 
-  static async testClientMetaFileConfig(
+  static async testMetaFileConfig(
     metaFileConfig: ClientMetaFileConfig,
-    config: IPrivateConfig
+    config: PrivateConfigClass
   ): Promise<void> {
-    if (metaFileConfig.gpx === true && config.Client.Map.enabled === false) {
+    if (metaFileConfig.gpx === true && config.Map.enabled === false) {
       throw new Error('*.gpx meta files are not supported without MAP');
     }
   }
 
-  static async testServerMetaFileConfig(
-    metaFileConfig: ServerMetaFileConfig,
-    config: IPrivateConfig
-  ): Promise<void> {
-    // nothing to check at the moment
-  }
-
-  static testClientVideoConfig(videoConfig: ClientVideoConfig): Promise<void> {
+  static testVideoConfig(videoConfig: ServerVideoConfig,
+                         config: PrivateConfigClass): Promise<void> {
     return new Promise((resolve, reject) => {
       try {
+
+        if (config.Media.Video.enabled === true) {
+          if (videoConfig.transcoding.fps <= 0) {
+            throw new Error('fps should be grater than 0');
+          }
+        }
         if (videoConfig.enabled === true) {
           const ffmpeg = FFmpegFactory.get();
           ffmpeg().getAvailableCodecs((err: Error) => {
@@ -134,16 +133,6 @@ export class ConfigDiagnostics {
     });
   }
 
-  static async testServerVideoConfig(
-    videoConfig: ServerVideoConfig,
-    config: IPrivateConfig
-  ): Promise<void> {
-    if (config.Client.Media.Video.enabled === true) {
-      if (videoConfig.transcoding.fps <= 0) {
-        throw new Error('fps should be grater than 0');
-      }
-    }
-  }
 
   static async testSharp(): Promise<void> {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -172,25 +161,16 @@ export class ConfigDiagnostics {
     });
   }
 
-  static async testServerPhotoConfig(server: ServerPhotoConfig): Promise<void> {
-    return;
-  }
 
-  static async testClientPhotoConfig(client: ClientPhotoConfig): Promise<void> {
-    return;
-  }
-
-  public static async testServerThumbnailConfig(
-    server: ServerThumbnailConfig
+  static async testThumbnailConfig(
+    thumbnailConfig: ServerThumbnailConfig
   ): Promise<void> {
-    if (server.personFaceMargin < 0 || server.personFaceMargin > 1) {
+
+
+    if (thumbnailConfig.personFaceMargin < 0 || thumbnailConfig.personFaceMargin > 1) {
       throw new Error('personFaceMargin should be between 0 and 1');
     }
-  }
 
-  static async testClientThumbnailConfig(
-    thumbnailConfig: ClientThumbnailConfig
-  ): Promise<void> {
     if (isNaN(thumbnailConfig.iconSize) || thumbnailConfig.iconSize <= 0) {
       throw new Error(
         'IconSize has to be >= 0 integer, got: ' + thumbnailConfig.iconSize
@@ -209,20 +189,20 @@ export class ConfigDiagnostics {
 
   static async testTasksConfig(
     task: ServerJobConfig,
-    config: IPrivateConfig
+    config: PrivateConfigClass
   ): Promise<void> {
     return;
   }
 
   static async testFacesConfig(
     faces: ClientFacesConfig,
-    config: IPrivateConfig
+    config: PrivateConfigClass
   ): Promise<void> {
     if (faces.enabled === true) {
-      if (config.Server.Database.type === DatabaseType.memory) {
+      if (config.Database.type === DatabaseType.memory) {
         throw new Error('Memory Database do not support faces');
       }
-      if (config.Client.Search.enabled === false) {
+      if (config.Search.enabled === false) {
         throw new Error('Faces support needs enabled search');
       }
     }
@@ -230,11 +210,11 @@ export class ConfigDiagnostics {
 
   static async testSearchConfig(
     search: ClientSearchConfig,
-    config: IPrivateConfig
+    config: PrivateConfigClass
   ): Promise<void> {
     if (
       search.enabled === true &&
-      config.Server.Database.type === DatabaseType.memory
+      config.Database.type === DatabaseType.memory
     ) {
       throw new Error('Memory Database do not support searching');
     }
@@ -242,17 +222,17 @@ export class ConfigDiagnostics {
 
   static async testSharingConfig(
     sharing: ClientSharingConfig,
-    config: IPrivateConfig
+    config: PrivateConfigClass
   ): Promise<void> {
     if (
       sharing.enabled === true &&
-      config.Server.Database.type === DatabaseType.memory
+      config.Database.type === DatabaseType.memory
     ) {
       throw new Error('Memory Database do not support sharing');
     }
     if (
       sharing.enabled === true &&
-      config.Client.authenticationRequired === false
+      config.Users.authenticationRequired === false
     ) {
       throw new Error('In case of no authentication, sharing is not supported');
     }
@@ -260,11 +240,11 @@ export class ConfigDiagnostics {
 
   static async testRandomPhotoConfig(
     sharing: ClientRandomPhotoConfig,
-    config: IPrivateConfig
+    config: PrivateConfigClass
   ): Promise<void> {
     if (
       sharing.enabled === true &&
-      config.Server.Database.type === DatabaseType.memory
+      config.Database.type === DatabaseType.memory
     ) {
       throw new Error('Memory Database do not support random photo');
     }
@@ -307,10 +287,30 @@ export class ConfigDiagnostics {
     }
   }
 
+  static async testConfig(config: PrivateConfigClass): Promise<void> {
+
+    await ConfigDiagnostics.testDatabase(config.Database);
+    await ConfigDiagnostics.testSharp();
+    await ConfigDiagnostics.testTempFolder(config.Media.tempFolder);
+    await ConfigDiagnostics.testVideoConfig(config.Media.Video, config);
+    await ConfigDiagnostics.testMetaFileConfig(config.MetaFile, config);
+    await ConfigDiagnostics.testAlbumsConfig(config.Album, config);
+    await ConfigDiagnostics.testImageFolder(config.Media.folder);
+    await ConfigDiagnostics.testThumbnailConfig(config.Media.Thumbnail);
+    await ConfigDiagnostics.testSearchConfig(config.Search, config);
+    await ConfigDiagnostics.testPreviewConfig(config.Preview);
+    await ConfigDiagnostics.testFacesConfig(config.Faces, config);
+    await ConfigDiagnostics.testTasksConfig(config.Jobs, config);
+    await ConfigDiagnostics.testSharingConfig(config.Sharing, config);
+    await ConfigDiagnostics.testRandomPhotoConfig(config.Sharing, config);
+    await ConfigDiagnostics.testMapConfig(config.Map);
+
+  }
+
   static async runDiagnostics(): Promise<void> {
-    if (Config.Server.Database.type !== DatabaseType.memory) {
+    if (Config.Database.type !== DatabaseType.memory) {
       try {
-        await ConfigDiagnostics.testDatabase(Config.Server.Database);
+        await ConfigDiagnostics.testDatabase(Config.Database);
       } catch (ex) {
         const err: Error = ex;
         Logger.warn(LOG_TAG, '[SQL error]', err.toString());
@@ -342,7 +342,7 @@ export class ConfigDiagnostics {
     }
 
     try {
-      await ConfigDiagnostics.testTempFolder(Config.Server.Media.tempFolder);
+      await ConfigDiagnostics.testTempFolder(Config.Media.tempFolder);
     } catch (ex) {
       const err: Error = ex;
       NotificationManager.error('Thumbnail folder error', err.toString());
@@ -350,11 +350,7 @@ export class ConfigDiagnostics {
     }
 
     try {
-      await ConfigDiagnostics.testClientVideoConfig(Config.Client.Media.Video);
-      await ConfigDiagnostics.testServerVideoConfig(
-        Config.Server.Media.Video,
-        Config
-      );
+      await ConfigDiagnostics.testVideoConfig(Config.Media.Video, Config);
     } catch (ex) {
       const err: Error = ex;
       NotificationManager.warning(
@@ -366,12 +362,12 @@ export class ConfigDiagnostics {
         'Video support error, switching off..',
         err.toString()
       );
-      Config.Client.Media.Video.enabled = false;
+      Config.Media.Video.enabled = false;
     }
 
     try {
-      await ConfigDiagnostics.testClientMetaFileConfig(
-        Config.Client.MetaFile,
+      await ConfigDiagnostics.testMetaFileConfig(
+        Config.MetaFile,
         Config
       );
     } catch (ex) {
@@ -385,30 +381,11 @@ export class ConfigDiagnostics {
         'Meta file support error, switching off..',
         err.toString()
       );
-      Config.Client.MetaFile.gpx = false;
+      Config.MetaFile.gpx = false;
     }
 
     try {
-      await ConfigDiagnostics.testServerMetaFileConfig(
-        Config.Server.MetaFile,
-        Config
-      );
-    } catch (ex) {
-      const err: Error = ex;
-      NotificationManager.warning(
-        'Meta file support error, switching off gpx..',
-        err.toString()
-      );
-      Logger.warn(
-        LOG_TAG,
-        'Meta file support error, switching off..',
-        err.toString()
-      );
-      Config.Client.MetaFile.gpx = false;
-    }
-
-    try {
-      await ConfigDiagnostics.testAlbumsConfig(Config.Client.Album, Config);
+      await ConfigDiagnostics.testAlbumsConfig(Config.Album, Config);
     } catch (ex) {
       const err: Error = ex;
       NotificationManager.warning(
@@ -420,19 +397,19 @@ export class ConfigDiagnostics {
         'Meta file support error, switching off..',
         err.toString()
       );
-      Config.Client.Album.enabled = false;
+      Config.Album.enabled = false;
     }
 
     try {
-      await ConfigDiagnostics.testImageFolder(Config.Server.Media.folder);
+      await ConfigDiagnostics.testImageFolder(Config.Media.folder);
     } catch (ex) {
       const err: Error = ex;
       NotificationManager.error('Images folder error', err.toString());
       Logger.error(LOG_TAG, 'Images folder error', err.toString());
     }
     try {
-      await ConfigDiagnostics.testClientThumbnailConfig(
-        Config.Client.Media.Thumbnail
+      await ConfigDiagnostics.testThumbnailConfig(
+        Config.Media.Thumbnail
       );
     } catch (ex) {
       const err: Error = ex;
@@ -441,7 +418,7 @@ export class ConfigDiagnostics {
     }
 
     try {
-      await ConfigDiagnostics.testSearchConfig(Config.Client.Search, Config);
+      await ConfigDiagnostics.testSearchConfig(Config.Search, Config);
     } catch (ex) {
       const err: Error = ex;
       NotificationManager.warning(
@@ -454,11 +431,11 @@ export class ConfigDiagnostics {
         'Search is not supported with these settings, switching off..',
         err.toString()
       );
-      Config.Client.Search.enabled = false;
+      Config.Search.enabled = false;
     }
 
     try {
-      await ConfigDiagnostics.testPreviewConfig(Config.Server.Preview);
+      await ConfigDiagnostics.testPreviewConfig(Config.Preview);
     } catch (ex) {
       const err: Error = ex;
       NotificationManager.warning(
@@ -470,14 +447,14 @@ export class ConfigDiagnostics {
         'Preview settings are not valid, resetting search query',
         err.toString()
       );
-      Config.Server.Preview.SearchQuery = {
+      Config.Preview.SearchQuery = {
         type: SearchQueryTypes.any_text,
         text: '',
       } as TextSearch;
     }
 
     try {
-      await ConfigDiagnostics.testFacesConfig(Config.Client.Faces, Config);
+      await ConfigDiagnostics.testFacesConfig(Config.Faces, Config);
     } catch (ex) {
       const err: Error = ex;
       NotificationManager.warning(
@@ -490,11 +467,11 @@ export class ConfigDiagnostics {
         'Faces are not supported with these settings, switching off..',
         err.toString()
       );
-      Config.Client.Faces.enabled = false;
+      Config.Faces.enabled = false;
     }
 
     try {
-      await ConfigDiagnostics.testTasksConfig(Config.Server.Jobs, Config);
+      await ConfigDiagnostics.testTasksConfig(Config.Jobs, Config);
     } catch (ex) {
       const err: Error = ex;
       NotificationManager.warning(
@@ -507,11 +484,11 @@ export class ConfigDiagnostics {
         'Some Tasks not supported with these settings, switching off..',
         err.toString()
       );
-      Config.Client.Faces.enabled = false;
+      Config.Faces.enabled = false;
     }
 
     try {
-      await ConfigDiagnostics.testSharingConfig(Config.Client.Sharing, Config);
+      await ConfigDiagnostics.testSharingConfig(Config.Sharing, Config);
     } catch (ex) {
       const err: Error = ex;
       NotificationManager.warning(
@@ -524,12 +501,12 @@ export class ConfigDiagnostics {
         'Sharing is not supported with these settings, switching off..',
         err.toString()
       );
-      Config.Client.Sharing.enabled = false;
+      Config.Sharing.enabled = false;
     }
 
     try {
       await ConfigDiagnostics.testRandomPhotoConfig(
-        Config.Client.Sharing,
+        Config.Sharing,
         Config
       );
     } catch (ex) {
@@ -544,11 +521,11 @@ export class ConfigDiagnostics {
         'Random Media is not supported with these settings, switching off..',
         err.toString()
       );
-      Config.Client.Sharing.enabled = false;
+      Config.Sharing.enabled = false;
     }
 
     try {
-      await ConfigDiagnostics.testMapConfig(Config.Client.Map);
+      await ConfigDiagnostics.testMapConfig(Config.Map);
     } catch (ex) {
       const err: Error = ex;
       NotificationManager.warning(
@@ -562,7 +539,7 @@ export class ConfigDiagnostics {
         'Please adjust the config properly.',
         err.toString()
       );
-      Config.Client.Map.mapProvider = MapProviders.OpenStreetMap;
+      Config.Map.mapProvider = MapProviders.OpenStreetMap;
     }
   }
 }

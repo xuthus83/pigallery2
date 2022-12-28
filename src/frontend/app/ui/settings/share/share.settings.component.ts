@@ -1,11 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { SettingsComponentDirective } from '../_abstract/abstract.settings.component';
-import { AuthenticationService } from '../../../model/network/authentication.service';
-import { NavigationService } from '../../../model/navigation.service';
-import { NotificationService } from '../../../model/notification.service';
-import { ShareSettingsService } from './share.settings.service';
-import { ClientSharingConfig } from '../../../../../common/config/public/ClientConfig';
-import { SharingDTO } from '../../../../../common/entities/SharingDTO';
+import {Component, OnInit} from '@angular/core';
+import {SettingsComponentDirective} from '../_abstract/abstract.settings.component';
+import {AuthenticationService} from '../../../model/network/authentication.service';
+import {NavigationService} from '../../../model/navigation.service';
+import {NotificationService} from '../../../model/notification.service';
+import {ShareSettingsService} from './share.settings.service';
+import {ClientSharingConfig} from '../../../../../common/config/public/ClientConfig';
+import {SharingDTO} from '../../../../../common/entities/SharingDTO';
+import {SettingsService} from '../settings.service';
 
 @Component({
   selector: 'app-settings-share',
@@ -18,15 +19,15 @@ import { SharingDTO } from '../../../../../common/entities/SharingDTO';
 })
 export class ShareSettingsComponent
   extends SettingsComponentDirective<ClientSharingConfig, ShareSettingsService>
-  implements OnInit
-{
+  implements OnInit {
   public shares: SharingDTO[] = [];
 
   constructor(
     authService: AuthenticationService,
     navigation: NavigationService,
     settingsService: ShareSettingsService,
-    notification: NotificationService
+    notification: NotificationService,
+    globalSettingsService: SettingsService
   ) {
     super(
       $localize`Share`,
@@ -35,7 +36,8 @@ export class ShareSettingsComponent
       navigation,
       settingsService,
       notification,
-      (s) => s.Client.Sharing
+      globalSettingsService,
+      (s) => s.Sharing
     );
   }
 

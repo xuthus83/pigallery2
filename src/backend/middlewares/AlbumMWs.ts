@@ -1,8 +1,8 @@
-import { NextFunction, Request, Response } from 'express';
-import { ErrorCodes, ErrorDTO } from '../../common/entities/Error';
-import { ObjectManagers } from '../model/ObjectManagers';
-import { Utils } from '../../common/Utils';
-import { Config } from '../../common/config/private/Config';
+import {NextFunction, Request, Response} from 'express';
+import {ErrorCodes, ErrorDTO} from '../../common/entities/Error';
+import {ObjectManagers} from '../model/ObjectManagers';
+import {Utils} from '../../common/Utils';
+import {Config} from '../../common/config/private/Config';
 
 export class AlbumMWs {
   public static async listAlbums(
@@ -10,7 +10,7 @@ export class AlbumMWs {
     res: Response,
     next: NextFunction
   ): Promise<void> {
-    if (Config.Client.Album.enabled === false) {
+    if (Config.Album.enabled === false) {
       return next();
     }
     try {
@@ -29,7 +29,7 @@ export class AlbumMWs {
     res: Response,
     next: NextFunction
   ): Promise<void> {
-    if (Config.Client.Album.enabled === false) {
+    if (Config.Album.enabled === false) {
       return next();
     }
     if (!req.params['id'] || !Utils.isUInt32(parseInt(req.params['id'], 10))) {
@@ -57,7 +57,7 @@ export class AlbumMWs {
     res: Response,
     next: NextFunction
   ): Promise<void> {
-    if (Config.Client.Album.enabled === false) {
+    if (Config.Album.enabled === false) {
       return next();
     }
     if (

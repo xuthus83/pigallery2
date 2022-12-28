@@ -160,8 +160,8 @@ describe('PreviewManager', (sqlHelper: DBTestHelper) => {
   });
 
   afterEach(() => {
-    Config.Server.Preview.SearchQuery = null;
-    Config.Server.Preview.Sorting = [SortingMethods.descRating, SortingMethods.descDate];
+    Config.Preview.SearchQuery = null;
+    Config.Preview.Sorting = [SortingMethods.descRating, SortingMethods.descDate];
   });
 
 
@@ -181,22 +181,22 @@ describe('PreviewManager', (sqlHelper: DBTestHelper) => {
 
   it('should sort directory preview', async () => {
     const pm = new PreviewManager();
-    Config.Server.Preview.Sorting = [SortingMethods.descRating, SortingMethods.descDate];
+    Config.Preview.Sorting = [SortingMethods.descRating, SortingMethods.descDate];
     expect(Utils.clone(await pm.setAndGetPreviewForDirectory(subDir))).to.deep.equalInAnyOrder(previewifyMedia(p2));
-    Config.Server.Preview.Sorting = [SortingMethods.descDate];
+    Config.Preview.Sorting = [SortingMethods.descDate];
     expect(Utils.clone(await pm.setAndGetPreviewForDirectory(subDir))).to.deep.equalInAnyOrder(previewifyMedia(pFaceLess));
-    Config.Server.Preview.Sorting = [SortingMethods.descRating];
+    Config.Preview.Sorting = [SortingMethods.descRating];
     expect(Utils.clone(await pm.setAndGetPreviewForDirectory(dir))).to.deep.equalInAnyOrder(previewifyMedia(p4));
-    Config.Server.Preview.Sorting = [SortingMethods.descName];
+    Config.Preview.Sorting = [SortingMethods.descName];
     expect(Utils.clone(await pm.setAndGetPreviewForDirectory(dir))).to.deep.equalInAnyOrder(previewifyMedia(v));
   });
 
   it('should get preview for directory', async () => {
     const pm = new PreviewManager();
 
-    Config.Server.Preview.SearchQuery = {type: SearchQueryTypes.any_text, text: 'Boba'} as TextSearch;
+    Config.Preview.SearchQuery = {type: SearchQueryTypes.any_text, text: 'Boba'} as TextSearch;
     expect(Utils.clone(await pm.setAndGetPreviewForDirectory(subDir))).to.deep.equalInAnyOrder(previewifyMedia(p));
-    Config.Server.Preview.SearchQuery = {type: SearchQueryTypes.any_text, text: 'Derem'} as TextSearch;
+    Config.Preview.SearchQuery = {type: SearchQueryTypes.any_text, text: 'Derem'} as TextSearch;
     expect(Utils.clone(await pm.setAndGetPreviewForDirectory(subDir))).to.deep.equalInAnyOrder(previewifyMedia(p2));
     expect(Utils.clone(await pm.setAndGetPreviewForDirectory(dir))).to.deep.equalInAnyOrder(previewifyMedia(p2));
     expect(Utils.clone(await pm.setAndGetPreviewForDirectory(subDir2))).to.deep.equalInAnyOrder(previewifyMedia(p4));
@@ -205,21 +205,21 @@ describe('PreviewManager', (sqlHelper: DBTestHelper) => {
 
   it('should get preview for saved search', async () => {
     const pm = new PreviewManager();
-    Config.Server.Preview.SearchQuery = null;
+    Config.Preview.SearchQuery = null;
     expect(Utils.clone(await pm.getAlbumPreview({
       searchQuery: {
         type: SearchQueryTypes.any_text,
         text: 'sw'
       } as TextSearch
     }))).to.deep.equalInAnyOrder(previewifyMedia(p4));
-    Config.Server.Preview.SearchQuery = {type: SearchQueryTypes.any_text, text: 'Boba'} as TextSearch;
+    Config.Preview.SearchQuery = {type: SearchQueryTypes.any_text, text: 'Boba'} as TextSearch;
     expect(Utils.clone(await pm.getAlbumPreview({
       searchQuery: {
         type: SearchQueryTypes.any_text,
         text: 'sw'
       } as TextSearch
     }))).to.deep.equalInAnyOrder(previewifyMedia(p));
-    Config.Server.Preview.SearchQuery = {type: SearchQueryTypes.any_text, text: 'Derem'} as TextSearch;
+    Config.Preview.SearchQuery = {type: SearchQueryTypes.any_text, text: 'Derem'} as TextSearch;
     expect(Utils.clone(await pm.getAlbumPreview({
       searchQuery: {
         type: SearchQueryTypes.any_text,
@@ -227,7 +227,7 @@ describe('PreviewManager', (sqlHelper: DBTestHelper) => {
       } as TextSearch
     }))).to.deep.equalInAnyOrder(previewifyMedia(p2));
     // Having a preview search query that does not return valid result
-    Config.Server.Preview.SearchQuery = {type: SearchQueryTypes.any_text, text: 'wont find it'} as TextSearch;
+    Config.Preview.SearchQuery = {type: SearchQueryTypes.any_text, text: 'wont find it'} as TextSearch;
     expect(Utils.clone(await pm.getAlbumPreview({
       searchQuery: {
         type: SearchQueryTypes.any_text,
@@ -235,7 +235,7 @@ describe('PreviewManager', (sqlHelper: DBTestHelper) => {
       } as TextSearch
     }))).to.deep.equalInAnyOrder(previewifyMedia(p2));
     // having a saved search that does not have any image
-    Config.Server.Preview.SearchQuery = {type: SearchQueryTypes.any_text, text: 'Derem'} as TextSearch;
+    Config.Preview.SearchQuery = {type: SearchQueryTypes.any_text, text: 'Derem'} as TextSearch;
     expect(Utils.clone(await pm.getAlbumPreview({
       searchQuery: {
         type: SearchQueryTypes.any_text,

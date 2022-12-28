@@ -34,11 +34,11 @@ describe('SharingRouter', () => {
   let server: Server;
   const setUp = async () => {
     await fs.promises.rm(tempDir, {recursive: true, force: true});
-    Config.Client.authenticationRequired = true;
+    Config.Users.authenticationRequired = true;
     Config.Server.Threading.enabled = false;
-    Config.Client.Sharing.enabled = true;
-    Config.Server.Database.type = DatabaseType.sqlite;
-    Config.Server.Database.dbFolder = tempDir;
+    Config.Sharing.enabled = true;
+    Config.Database.type = DatabaseType.sqlite;
+    Config.Database.dbFolder = tempDir;
 
     server = new Server();
     await server.onStarted.wait();
@@ -64,14 +64,14 @@ describe('SharingRouter', () => {
 
   const shareLogin = async (srv: Server, sharingKey: string, password?: string): Promise<any> => {
     return (chai.request(srv.App) as SuperAgentStatic)
-      .post(Config.Client.apiPath + '/share/login?' + QueryParams.gallery.sharingKey_query + '=' + sharingKey)
+      .post(Config.Server.apiPath + '/share/login?' + QueryParams.gallery.sharingKey_query + '=' + sharingKey)
       .send({password});
 
   };
 
   const login = async (srv: Server): Promise<any> => {
     const result = await (chai.request(srv.App) as SuperAgentStatic)
-      .post(Config.Client.apiPath + '/user/login')
+      .post(Config.Server.apiPath + '/user/login')
       .send({
         loginCredential: {
           password: testUser.password,

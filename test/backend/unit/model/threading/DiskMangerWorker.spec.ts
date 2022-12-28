@@ -12,14 +12,14 @@ describe('DiskMangerWorker', () => {
   // loading default settings (this might have been changed by other tests)
   before(() => {
     Config.loadSync();
-    Config.Server.Database.type = DatabaseType.sqlite;
-    Config.Client.Faces.enabled = true;
-    Config.Client.Faces.keywordsToPersons = true;
+    Config.Database.type = DatabaseType.sqlite;
+    Config.Faces.enabled = true;
+    Config.Faces.keywordsToPersons = true;
   });
 
 
   it('should parse metadata', async () => {
-    Config.Server.Media.folder = path.join(__dirname, '/../../../assets');
+    Config.Media.folder = path.join(__dirname, '/../../../assets');
     ProjectPath.ImageFolder = path.join(__dirname, '/../../../assets');
     const dir = await DiskMangerWorker.scanDirectory('/');
     // should match the number of media (photo/video) files in the assets folder

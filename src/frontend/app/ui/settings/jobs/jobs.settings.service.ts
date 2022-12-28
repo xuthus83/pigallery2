@@ -22,7 +22,7 @@ export class JobsSettingsService extends AbstractSettingsService<ServerJobConfig
     return this.networkService.putJson('/settings/jobs', { settings });
   }
 
-  showInSimplifiedMode(): boolean {
+  hasAvailableSettings(): boolean {
     return false;
   }
 

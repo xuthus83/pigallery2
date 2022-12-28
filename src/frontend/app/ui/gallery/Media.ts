@@ -5,7 +5,7 @@ import {MediaDTO, MediaDTOUtils} from '../../../../common/entities/MediaDTO';
 
 export class Media extends MediaIcon {
   static readonly sortedThumbnailSizes =
-    Config.Client.Media.Thumbnail.thumbnailSizes.sort((a, b): number => a - b);
+    Config.Media.Thumbnail.thumbnailSizes.sort((a, b): number => a - b);
 
   constructor(
     media: MediaDTO,
@@ -37,7 +37,7 @@ export class Media extends MediaIcon {
 
       const size = this.getThumbnailSize();
       if (this.media.missingThumbnails) {
-        for (const thSize of Config.Client.Media.Thumbnail.thumbnailSizes) {
+        for (const thSize of Config.Media.Thumbnail.thumbnailSizes) {
           // eslint-disable-next-line no-bitwise
           if (
             (this.media.missingThumbnails & MediaIcon.ThumbnailMap[thSize]) ===
@@ -69,8 +69,8 @@ export class Media extends MediaIcon {
   getReplacementThumbnailPath(): string {
     const size = this.getReplacementThumbnailSize();
     return Utils.concatUrls(
-      Config.Client.urlBase,
-      Config.Client.apiPath,
+      Config.Server.urlBase,
+      Config.Server.apiPath,
       '/gallery/content/',
       this.getRelativePath(),
       'thumbnail',
@@ -85,8 +85,8 @@ export class Media extends MediaIcon {
   getThumbnailPath(): string {
     const size = this.getThumbnailSize();
     return Utils.concatUrls(
-      Config.Client.urlBase,
-      Config.Client.apiPath,
+      Config.Server.urlBase,
+      Config.Server.apiPath,
       '/gallery/content/',
       this.getRelativePath(),
       'thumbnail',

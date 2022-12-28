@@ -21,7 +21,7 @@ export class LoginComponent implements OnInit {
     private navigation: NavigationService
   ) {
     this.loginCredential = new LoginCredential();
-    this.title = Config.Client.applicationTitle;
+    this.title = Config.Server.applicationTitle;
   }
 
   ngOnInit(): void {

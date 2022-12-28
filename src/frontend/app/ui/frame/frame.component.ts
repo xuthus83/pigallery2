@@ -19,10 +19,10 @@ import {Utils} from '../../../../common/Utils';
 })
 export class FrameComponent {
   public readonly user: BehaviorSubject<UserDTO>;
-  public readonly authenticationRequired = Config.Client.authenticationRequired;
-  public readonly title = Config.Client.applicationTitle;
+  public readonly authenticationRequired = Config.Users.authenticationRequired;
+  public readonly title = Config.Server.applicationTitle;
   public collapsed = true;
-  public readonly navbarLinks = Config.Client.Other.NavBar.links;
+  public readonly navbarLinks = Config.Gallery.NavBar.links;
   public readonly NavigationLinkTypes = NavigationLinkTypes;
   public readonly stringify = JSON.stringify;
 
@@ -41,9 +41,9 @@ export class FrameComponent {
 
   isFacesAvailable(): boolean {
     return (
-      Config.Client.Faces.enabled &&
+      Config.Faces.enabled &&
       this.user.value &&
-      this.user.value.role >= Config.Client.Faces.readAccessMinRole
+      this.user.value.role >= Config.Faces.readAccessMinRole
     );
   }
 
@@ -70,7 +70,7 @@ export class FrameComponent {
   }
 
   isAlbumsAvailable(): boolean {
-    return Config.Client.Album.enabled;
+    return Config.Album.enabled;
   }
 }
 

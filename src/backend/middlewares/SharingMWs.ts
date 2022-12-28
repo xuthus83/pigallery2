@@ -13,7 +13,7 @@ export class SharingMWs {
     res: Response,
     next: NextFunction
   ): Promise<void> {
-    if (Config.Client.Sharing.enabled === false) {
+    if (Config.Sharing.enabled === false) {
       return next();
     }
     const sharingKey = req.params[QueryParams.gallery.sharingKey_params];
@@ -40,7 +40,7 @@ export class SharingMWs {
     res: Response,
     next: NextFunction
   ): Promise<void> {
-    if (Config.Client.Sharing.enabled === false) {
+    if (Config.Sharing.enabled === false) {
       return next();
     }
     if (
@@ -105,7 +105,7 @@ export class SharingMWs {
     res: Response,
     next: NextFunction
   ): Promise<void> {
-    if (Config.Client.Sharing.enabled === false) {
+    if (Config.Sharing.enabled === false) {
       return next();
     }
     if (
@@ -159,7 +159,7 @@ export class SharingMWs {
     res: Response,
     next: NextFunction
   ): Promise<void> {
-    if (Config.Client.Sharing.enabled === false) {
+    if (Config.Sharing.enabled === false) {
       return next();
     }
     if (
@@ -195,7 +195,7 @@ export class SharingMWs {
     res: Response,
     next: NextFunction
   ): Promise<void> {
-    if (Config.Client.Sharing.enabled === false) {
+    if (Config.Sharing.enabled === false) {
       return next();
     }
     try {

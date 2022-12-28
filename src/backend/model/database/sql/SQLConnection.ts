@@ -40,7 +40,7 @@ export class SQLConnection {
 
   public static async getConnection(): Promise<Connection> {
     if (this.connection == null) {
-      const options: any = this.getDriver(Config.Server.Database);
+      const options: any = this.getDriver(Config.Database);
       //   options.name = 'main';
       options.entities = [
         UserEntity,
@@ -62,7 +62,7 @@ export class SQLConnection {
       }
       Logger.debug(
         LOG_TAG,
-        'Creating connection: ' + DatabaseType[Config.Server.Database.type],
+        'Creating connection: ' + DatabaseType[Config.Database.type],
         ', with driver:',
         options.type
       );
@@ -108,16 +108,16 @@ export class SQLConnection {
   public static async init(): Promise<void> {
     const connection = await this.getConnection();
 
-    if (Config.Client.authenticationRequired !== true) {
+    if (Config.Users.authenticationRequired !== true) {
       return;
     }
     // Adding enforced users to the db
     const userRepository = connection.getRepository(UserEntity);
     if (
-      Array.isArray(Config.Server.Database.enforcedUsers) &&
-      Config.Server.Database.enforcedUsers.length > 0
+      Array.isArray(Config.Users.enforcedUsers) &&
+      Config.Users.enforcedUsers.length > 0
     ) {
-      for (const uc of Config.Server.Database.enforcedUsers) {
+      for (const uc of Config.Users.enforcedUsers) {
         const user = await userRepository.findOneBy({ name: uc.name });
         if (!user) {
           Logger.info(LOG_TAG, 'Saving enforced user: ' + uc.name);

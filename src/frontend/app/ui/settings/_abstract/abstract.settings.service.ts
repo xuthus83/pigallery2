@@ -13,13 +13,6 @@ export abstract class AbstractSettingsService<T> {
     return this.settingsService.getSettings();
   }
 
-  public showInSimplifiedMode(): boolean {
-    return true;
-  }
-
-  isSupported(): boolean {
-    return true;
-  }
 
   abstract updateSettings(settings: T): Promise<void>;
 }

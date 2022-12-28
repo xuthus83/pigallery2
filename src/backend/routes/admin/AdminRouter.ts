@@ -14,7 +14,7 @@ export class AdminRouter {
 
   private static addGetStatistic(app: Express): void {
     app.get(
-      Config.Client.apiPath + '/admin/statistic',
+      Config.Server.apiPath + '/admin/statistic',
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Admin),
       AdminMWs.loadStatistic,
@@ -24,7 +24,7 @@ export class AdminRouter {
 
   private static addGetDuplicates(app: Express): void {
     app.get(
-      Config.Client.apiPath + '/admin/duplicates',
+      Config.Server.apiPath + '/admin/duplicates',
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Admin),
       AdminMWs.getDuplicates,
@@ -34,28 +34,28 @@ export class AdminRouter {
 
   private static addJobs(app: Express): void {
     app.get(
-      Config.Client.apiPath + '/admin/jobs/available',
+      Config.Server.apiPath + '/admin/jobs/available',
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Admin),
       AdminMWs.getAvailableJobs,
       RenderingMWs.renderResult
     );
     app.get(
-      Config.Client.apiPath + '/admin/jobs/scheduled/progress',
+      Config.Server.apiPath + '/admin/jobs/scheduled/progress',
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Admin),
       AdminMWs.getJobProgresses,
       RenderingMWs.renderResult
     );
     app.post(
-      Config.Client.apiPath + '/admin/jobs/scheduled/:id/start',
+      Config.Server.apiPath + '/admin/jobs/scheduled/:id/start',
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Admin),
       AdminMWs.startJob,
       RenderingMWs.renderResult
     );
     app.post(
-      Config.Client.apiPath + '/admin/jobs/scheduled/:id/stop',
+      Config.Server.apiPath + '/admin/jobs/scheduled/:id/stop',
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Admin),
       AdminMWs.stopJob,

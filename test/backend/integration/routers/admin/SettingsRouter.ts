@@ -18,8 +18,8 @@ describe('SettingsRouter', () => {
   beforeEach(async () => {
     await fs.promises.rm(tempDir, {recursive: true, force: true});
     Config.Server.Threading.enabled = false;
-    Config.Server.Database.type = DatabaseType.sqlite;
-    Config.Server.Database.dbFolder = tempDir;
+    Config.Database.type = DatabaseType.sqlite;
+    Config.Database.dbFolder = tempDir;
     ProjectPath.reset();
   });
 
@@ -31,20 +31,20 @@ describe('SettingsRouter', () => {
 
   describe('/GET settings', () => {
     it('it should GET the settings', async () => {
-      Config.Client.authenticationRequired = false;
+      Config.Users.authenticationRequired = false;
       const originalSettings = await Config.original();
       originalSettings.Server.sessionSecret = null;
-      originalSettings.Server.Database.enforcedUsers = null;
+      originalSettings.Users.enforcedUsers = null;
       const srv = new Server();
       await srv.onStarted.wait();
       const result = await chai.request(srv.App)
-        .get(Config.Client.apiPath + '/settings');
+        .get(Config.Server.apiPath + '/settings');
 
       result.res.should.have.status(200);
       result.body.should.be.a('object');
       should.equal(result.body.error, null);
       result.body.result.Server.Environment.upTime = null;
-      originalSettings.Server.Environment.upTime = null;
+      originalSettings.Environment.upTime = null;
       result.body.result.should.deep.equal(JSON.parse(JSON.stringify(originalSettings.toJSON({attachState: true, attachVolatile: true}))));
     });
   });

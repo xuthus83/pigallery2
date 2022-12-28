@@ -83,27 +83,27 @@ export class VideoProcessing {
       videoPath,
       output: {
         path: outPath,
-        codec: Config.Server.Media.Video.transcoding.codec,
-        format: Config.Server.Media.Video.transcoding.format,
-        crf: Config.Server.Media.Video.transcoding.crf,
-        preset: Config.Server.Media.Video.transcoding.preset,
-        customOptions: Config.Server.Media.Video.transcoding.customOptions,
+        codec: Config.Media.Video.transcoding.codec,
+        format: Config.Media.Video.transcoding.format,
+        crf: Config.Media.Video.transcoding.crf,
+        preset: Config.Media.Video.transcoding.preset,
+        customOptions: Config.Media.Video.transcoding.customOptions,
       },
     };
 
-    if (metaData.bitRate > Config.Server.Media.Video.transcoding.bitRate) {
+    if (metaData.bitRate > Config.Media.Video.transcoding.bitRate) {
       renderInput.output.bitRate =
-        Config.Server.Media.Video.transcoding.bitRate;
+        Config.Media.Video.transcoding.bitRate;
     }
-    if (metaData.fps > Config.Server.Media.Video.transcoding.fps) {
-      renderInput.output.fps = Config.Server.Media.Video.transcoding.fps;
+    if (metaData.fps > Config.Media.Video.transcoding.fps) {
+      renderInput.output.fps = Config.Media.Video.transcoding.fps;
     }
 
     if (
-      Config.Server.Media.Video.transcoding.resolution < metaData.size.height
+      Config.Media.Video.transcoding.resolution < metaData.size.height
     ) {
       renderInput.output.resolution =
-        Config.Server.Media.Video.transcoding.resolution;
+        Config.Media.Video.transcoding.resolution;
     }
 
     const outDir = path.dirname(renderInput.output.path);
@@ -119,12 +119,12 @@ export class VideoProcessing {
 
   protected static getConvertedFilePostFix(): string {
     return (
-      Math.round(Config.Server.Media.Video.transcoding.bitRate / 1024) +
+      Math.round(Config.Media.Video.transcoding.bitRate / 1024) +
       'k' +
-      Config.Server.Media.Video.transcoding.codec.toString().toLowerCase() +
-      Config.Server.Media.Video.transcoding.resolution +
+      Config.Media.Video.transcoding.codec.toString().toLowerCase() +
+      Config.Media.Video.transcoding.resolution +
       '.' +
-      Config.Server.Media.Video.transcoding.format.toLowerCase()
+      Config.Media.Video.transcoding.format.toLowerCase()
     );
   }
 }

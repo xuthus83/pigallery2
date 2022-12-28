@@ -13,7 +13,7 @@ export class PreviewSettingsService extends AbstractSettingsService<ServerPrevie
     super(settingsService);
   }
 
-  showInSimplifiedMode(): boolean {
+  hasAvailableSettings(): boolean {
     return false;
   }
 

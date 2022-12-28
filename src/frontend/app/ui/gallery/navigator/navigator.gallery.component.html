@@ -18,14 +18,14 @@
 
     </div>
     <div class="ms-auto text-end col-12 col-md-auto">
-      <ng-container *ngIf="ItemCount> 0 && config.Client.Other.NavBar.showItemCount">
+      <ng-container *ngIf="ItemCount> 0 && config.Gallery.NavBar.showItemCount">
         <div class="photos-count">
           {{ItemCount}} <span i18n>items</span>
         </div>
         <div class="divider">&nbsp;</div>
       </ng-container>
 
-      <ng-container *ngIf="config.Client.Other.enableDownloadZip && isDirectory && ItemCount > 0">
+      <ng-container *ngIf="config.Gallery.enableDownloadZip && isDirectory && ItemCount > 0">
         <a [href]="getDownloadZipLink()"
            class="btn  btn-navbar">
          <span class="oi oi-data-transfer-download"
@@ -34,7 +34,7 @@
         <div class="divider">&nbsp;</div>
       </ng-container>
 
-      <ng-container *ngIf="config.Client.Other.enableDirectoryFlattening && isDirectory">
+      <ng-container *ngIf="config.Gallery.enableDirectoryFlattening && isDirectory">
         <a
           [routerLink]="['/search', getDirectoryFlattenSearchQuery()]"
           class="btn  btn-navbar">

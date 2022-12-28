@@ -6,7 +6,7 @@ import {BMConfig} from './BMConfig';
 import {DirectoryDTOUtils} from '../src/common/entities/DirectoryDTO';
 
 
-Config.Server.Media.folder = BMConfig.path;
+Config.Media.folder = BMConfig.path;
 ProjectPath.reset();
 const RUNS = BMConfig.RUNS;
 
@@ -18,12 +18,13 @@ const printLine = (text: string) => {
 
 const printHeader = async (statistic: string) => {
   const dt = new Date();
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
   printLine('## PiGallery2 v' + require('./../package.json').version +
     ', ' + Utils.zeroPrefix(dt.getDate(), 2) +
     '.' + Utils.zeroPrefix(dt.getMonth() + 1, 2) +
     '.' + dt.getFullYear());
-  if (Config.Server.Environment && Config.Server.Environment.buildCommitHash) {
-    printLine('**Version**: v' + Config.Server.Environment.appVersion + ', built at: ' + new Date(Config.Server.Environment.buildTime) + ', git commit:' + Config.Server.Environment.buildCommitHash);
+  if (Config.Environment && Config.Environment.buildCommitHash) {
+    printLine('**Version**: v' + Config.Environment.appVersion + ', built at: ' + new Date(Config.Environment.buildTime) + ', git commit:' + Config.Environment.buildCommitHash);
   }
   printLine('**System**: ' + BMConfig.system);
   printLine('\n**Gallery**: ' + statistic + '\n');

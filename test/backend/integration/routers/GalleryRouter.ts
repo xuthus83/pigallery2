@@ -30,11 +30,11 @@ describe('GalleryRouter', (sqlHelper: DBTestHelper) => {
   const setUp = async () => {
     await sqlHelper.initDB();
     await fs.promises.rm(tempDir, {recursive: true, force: true});
-    Config.Client.authenticationRequired = false;
+    Config.Users.authenticationRequired = false;
     Config.Server.Threading.enabled = false;
-    Config.Client.Media.Video.enabled = true;
-    Config.Server.Media.folder = path.join(__dirname, '../../assets');
-    Config.Server.Media.tempFolder = path.join(__dirname, '../../tmp');
+    Config.Media.Video.enabled = true;
+    Config.Media.folder = path.join(__dirname, '../../assets');
+    Config.Media.tempFolder = path.join(__dirname, '../../tmp');
     ProjectPath.reset();
     //  ProjectPath.ImageFolder = path.join(__dirname, '../../assets');
     // ProjectPath.TempFolder = tempDir;
@@ -55,7 +55,7 @@ describe('GalleryRouter', (sqlHelper: DBTestHelper) => {
 
     it('should load gallery', async () => {
       const result = await (chai.request(server.App) as SuperAgentStatic)
-        .get(Config.Client.apiPath + '/gallery/content/');
+        .get(Config.Server.apiPath + '/gallery/content/');
 
       (result.should as any).have.status(200);
       expect(result.body.error).to.be.equal(null);
@@ -64,12 +64,12 @@ describe('GalleryRouter', (sqlHelper: DBTestHelper) => {
     });
 
     it('should load gallery twice (to force loading form db)', async () => {
-      Config.Server.Indexing.reIndexingSensitivity = ReIndexingSensitivity.low;
+      Config.Indexing.reIndexingSensitivity = ReIndexingSensitivity.low;
       const _ = await (chai.request(server.App) as SuperAgentStatic)
-        .get(Config.Client.apiPath + '/gallery/content/orientation');
+        .get(Config.Server.apiPath + '/gallery/content/orientation');
 
       const result = await (chai.request(server.App) as SuperAgentStatic)
-        .get(Config.Client.apiPath + '/gallery/content/orientation');
+        .get(Config.Server.apiPath + '/gallery/content/orientation');
 
       (result.should as any).have.status(200);
       expect(result.body.error).to.be.equal(null);
@@ -87,7 +87,7 @@ describe('GalleryRouter', (sqlHelper: DBTestHelper) => {
 
     it('should get video without transcoding', async () => {
       const result = await (chai.request(server.App) as SuperAgentStatic)
-        .get(Config.Client.apiPath + '/gallery/content/video.mp4/bestFit');
+        .get(Config.Server.apiPath + '/gallery/content/video.mp4/bestFit');
 
       (result.should as any).have.status(200);
       expect(result.body).to.be.instanceof(Buffer);

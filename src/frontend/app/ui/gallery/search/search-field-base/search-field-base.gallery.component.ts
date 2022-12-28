@@ -141,7 +141,7 @@ export class GallerySearchFieldBaseComponent
   onSearchChange(event: KeyboardEvent): void {
     const searchText = this.getAutocompleteToken();
     if (
-      Config.Client.Search.AutoComplete.enabled &&
+      Config.Search.AutoComplete.enabled &&
       this.cache.lastAutocomplete !== searchText.current
     ) {
       this.cache.lastAutocomplete = searchText.current;
@@ -267,7 +267,7 @@ export class GallerySearchFieldBaseComponent
     current: string;
     prev: string;
   }): Promise<void> {
-    if (!Config.Client.Search.AutoComplete.enabled) {
+    if (!Config.Search.AutoComplete.enabled) {
       return;
     }
 

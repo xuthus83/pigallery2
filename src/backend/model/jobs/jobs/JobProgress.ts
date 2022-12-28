@@ -87,7 +87,7 @@ export class JobProgress {
   };
 
   log(log: string): void {
-    while (this.logs.length > Config.Server.Jobs.maxSavedProgress) {
+    while (this.logs.length > Config.Jobs.maxSavedProgress) {
       this.logs.shift();
     }
     this.logs.push({

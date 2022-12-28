@@ -26,20 +26,20 @@ export class PhotoProcessing {
 
     if (Config.Server.Threading.enabled === true) {
       if (Config.Server.Threading.thumbnailThreads > 0) {
-        Config.Client.Media.Thumbnail.concurrentThumbnailGenerations =
+        Config.Media.Thumbnail.concurrentThumbnailGenerations =
           Config.Server.Threading.thumbnailThreads;
       } else {
-        Config.Client.Media.Thumbnail.concurrentThumbnailGenerations = Math.max(
+        Config.Media.Thumbnail.concurrentThumbnailGenerations = Math.max(
           1,
           os.cpus().length - 1
         );
       }
     } else {
-      Config.Client.Media.Thumbnail.concurrentThumbnailGenerations = 1;
+      Config.Media.Thumbnail.concurrentThumbnailGenerations = 1;
     }
 
     this.taskQue = new TaskExecuter(
-      Config.Client.Media.Thumbnail.concurrentThumbnailGenerations,
+      Config.Media.Thumbnail.concurrentThumbnailGenerations,
       (input): Promise<void> => PhotoWorker.render(input)
     );
 
@@ -57,7 +57,7 @@ export class PhotoProcessing {
       photo.directory.name,
       photo.name
     );
-    const size: number = Config.Client.Media.Thumbnail.personThumbnailSize;
+    const size: number = Config.Media.Thumbnail.personThumbnailSize;
     const faceRegion = person.sampleRegion.media.metadata.faces.find(f => f.name === person.name);
     // generate thumbnail path
     const thPath = PhotoProcessing.generatePersonThumbnailPath(
@@ -77,11 +77,11 @@ export class PhotoProcessing {
     const margin = {
       x: Math.round(
         faceRegion.box.width *
-        Config.Server.Media.Thumbnail.personFaceMargin
+        Config.Media.Thumbnail.personFaceMargin
       ),
       y: Math.round(
         faceRegion.box.height *
-        Config.Server.Media.Thumbnail.personFaceMargin
+        Config.Media.Thumbnail.personFaceMargin
       ),
     };
 
@@ -102,8 +102,8 @@ export class PhotoProcessing {
         width: faceRegion.box.width + margin.x,
         height: faceRegion.box.height + margin.y,
       },
-      useLanczos3: Config.Server.Media.Thumbnail.useLanczos3,
-      quality: Config.Server.Media.Thumbnail.quality,
+      useLanczos3: Config.Media.Thumbnail.useLanczos3,
+      quality: Config.Media.Thumbnail.quality,
     } as RendererInput;
     input.cut.width = Math.min(
       input.cut.width,
@@ -124,7 +124,7 @@ export class PhotoProcessing {
     return path.join(
       ProjectPath.TranscodedFolder,
       ProjectPath.getRelativePathToImages(path.dirname(mediaPath)),
-      file + '_' + size + 'q' + Config.Server.Media.Thumbnail.quality + PhotoProcessing.CONVERTED_EXTENSION
+      file + '_' + size + 'q' + Config.Media.Thumbnail.quality + PhotoProcessing.CONVERTED_EXTENSION
     );
   }
 
@@ -177,8 +177,8 @@ export class PhotoProcessing {
 
     if (
       (size + '').length !== sizeStr.length ||
-      (Config.Client.Media.Thumbnail.thumbnailSizes.indexOf(size) === -1 &&
-        Config.Server.Media.Photo.Converting.resolution !== size)
+      (Config.Media.Thumbnail.thumbnailSizes.indexOf(size) === -1 &&
+        Config.Media.Photo.Converting.resolution !== size)
     ) {
       return false;
     }
@@ -208,7 +208,7 @@ export class PhotoProcessing {
   public static async convertPhoto(mediaPath: string): Promise<string> {
     return this.generateThumbnail(
       mediaPath,
-      Config.Server.Media.Photo.Converting.resolution,
+      Config.Media.Photo.Converting.resolution,
       ThumbnailSourceType.Photo,
       false
     );
@@ -255,8 +255,8 @@ export class PhotoProcessing {
       size,
       outPath,
       makeSquare,
-      useLanczos3: Config.Server.Media.Thumbnail.useLanczos3,
-      quality: Config.Server.Media.Thumbnail.quality,
+      useLanczos3: Config.Media.Thumbnail.useLanczos3,
+      quality: Config.Media.Thumbnail.quality,
     } as RendererInput;
 
     const outDir = path.dirname(input.outPath);

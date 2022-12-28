@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
-import { PhotoSettingsService } from './photo.settings.service';
-import { SettingsComponentDirective } from '../_abstract/abstract.settings.component';
-import { AuthenticationService } from '../../../model/network/authentication.service';
-import { NavigationService } from '../../../model/navigation.service';
-import { NotificationService } from '../../../model/notification.service';
-import { ScheduledJobsService } from '../scheduled-jobs.service';
+import {Component} from '@angular/core';
+import {PhotoSettingsService} from './photo.settings.service';
+import {SettingsComponentDirective} from '../_abstract/abstract.settings.component';
+import {AuthenticationService} from '../../../model/network/authentication.service';
+import {NavigationService} from '../../../model/navigation.service';
+import {NotificationService} from '../../../model/notification.service';
+import {ScheduledJobsService} from '../scheduled-jobs.service';
 import {
   DefaultsJobs,
   JobDTOUtils,
@@ -13,8 +13,9 @@ import {
   JobProgressDTO,
   JobProgressStates,
 } from '../../../../../common/entities/job/JobProgressDTO';
-import { ServerPhotoConfig } from '../../../../../common/config/private/PrivateConfig';
-import { ClientPhotoConfig } from '../../../../../common/config/public/ClientConfig';
+import {ServerPhotoConfig} from '../../../../../common/config/private/PrivateConfig';
+import {ClientPhotoConfig} from '../../../../../common/config/public/ClientConfig';
+import {SettingsService} from '../settings.service';
 
 @Component({
   selector: 'app-settings-photo',
@@ -25,10 +26,7 @@ import { ClientPhotoConfig } from '../../../../../common/config/public/ClientCon
   ],
   providers: [PhotoSettingsService],
 })
-export class PhotoSettingsComponent extends SettingsComponentDirective<{
-  server: ServerPhotoConfig;
-  client: ClientPhotoConfig;
-}> {
+export class PhotoSettingsComponent extends SettingsComponentDirective<ServerPhotoConfig> {
   readonly resolutionTypes = [720, 1080, 1440, 2160, 4320];
   resolutions: { key: number; value: string }[] = [];
 
@@ -39,7 +37,8 @@ export class PhotoSettingsComponent extends SettingsComponentDirective<{
     navigation: NavigationService,
     settingsService: PhotoSettingsService,
     public jobsService: ScheduledJobsService,
-    notification: NotificationService
+    notification: NotificationService,
+    globalSettingsService: SettingsService
   ) {
     super(
       $localize`Photo`,
@@ -48,13 +47,11 @@ export class PhotoSettingsComponent extends SettingsComponentDirective<{
       navigation,
       settingsService,
       notification,
-      (s) => ({
-        client: s.Client.Media.Photo,
-        server: s.Server.Media.Photo,
-      })
+      globalSettingsService,
+      (s) => s.Media.Photo
     );
     const currentRes =
-      settingsService.Settings.value.Server.Media.Photo.Converting.resolution;
+      settingsService.Settings.value.Media.Photo.Converting.resolution;
     if (this.resolutionTypes.indexOf(currentRes) === -1) {
       this.resolutionTypes.push(currentRes);
     }
@@ -67,7 +64,7 @@ export class PhotoSettingsComponent extends SettingsComponentDirective<{
   get Progress(): JobProgressDTO {
     return this.jobsService.progress.value[
       JobDTOUtils.getHashName(DefaultsJobs[DefaultsJobs['Photo Converting']])
-    ];
+      ];
   }
 }
 

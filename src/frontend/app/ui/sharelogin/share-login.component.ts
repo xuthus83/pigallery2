@@ -18,7 +18,7 @@ export class ShareLoginComponent implements OnInit {
     private authService: AuthenticationService,
     private navigation: NavigationService
   ) {
-    this.title = Config.Client.applicationTitle;
+    this.title = Config.Server.applicationTitle;
   }
 
   ngOnInit(): void {

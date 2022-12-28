@@ -14,15 +14,15 @@ export class FacesSettingsService extends AbstractSettingsService<ClientFacesCon
     super(settingsService);
   }
 
-  showInSimplifiedMode(): boolean {
+  hasAvailableSettings(): boolean {
     return false;
   }
 
   public isSupported(): boolean {
     return (
-      this.settingsService.settings.value.Server.Database.type !==
+      this.settingsService.settings.value.Database.type !==
         DatabaseType.memory &&
-      this.settingsService.settings.value.Client.Search.enabled === true
+      this.settingsService.settings.value.Search.enabled === true
     );
   }
 

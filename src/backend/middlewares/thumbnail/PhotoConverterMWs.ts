@@ -13,14 +13,14 @@ export class PhotoConverterMWs {
       return next();
     }
     // if conversion is not enabled redirect, so browser can cache the full
-    if (Config.Client.Media.Photo.Converting.enabled === false) {
+    if (Config.Media.Photo.Converting.enabled === false) {
       return res.redirect(req.originalUrl.slice(0, -1 * '\\bestFit'.length));
     }
     const fullMediaPath = req.resultPipe as string;
 
     const convertedVideo = PhotoProcessing.generateConvertedPath(
       fullMediaPath,
-      Config.Server.Media.Photo.Converting.resolution
+      Config.Media.Photo.Converting.resolution
     );
 
     // check if converted photo exist
@@ -29,7 +29,7 @@ export class PhotoConverterMWs {
       return next();
     }
 
-    if (Config.Server.Media.Photo.Converting.onTheFly === true) {
+    if (Config.Media.Photo.Converting.onTheFly === true) {
       req.resultPipe = await PhotoProcessing.convertPhoto(fullMediaPath);
       return next();
     }

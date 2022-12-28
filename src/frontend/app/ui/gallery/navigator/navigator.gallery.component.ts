@@ -30,7 +30,7 @@ export class GalleryNavigatorComponent {
   public SortingMethods = SortingMethods;
   public sortingMethodsType: { key: number; value: string }[] = [];
   public readonly config = Config;
-  // DefaultSorting = Config.Client.Other.defaultPhotoSortingMethod;
+  // DefaultSorting = Config.Gallery.defaultPhotoSortingMethod;
   public readonly SearchQueryTypes = SearchQueryTypes;
   public wrappedContent: Observable<ContentWrapperWithError>;
   public directoryContent: Observable<DirectoryContent>;
@@ -138,8 +138,8 @@ export class GalleryNavigatorComponent {
       queryParams += e[0] + '=' + e[1];
     });
     return Utils.concatUrls(
-      Config.Client.urlBase,
-      Config.Client.apiPath,
+      Config.Server.urlBase,
+      Config.Server.apiPath,
       '/gallery/zip/',
       c.directory.path,
       c.directory.name,

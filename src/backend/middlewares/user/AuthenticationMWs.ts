@@ -18,10 +18,10 @@ export class AuthenticationMWs {
     res: Response,
     next: NextFunction
   ): Promise<void> {
-    if (Config.Client.authenticationRequired === false) {
+    if (Config.Users.authenticationRequired === false) {
       req.session['user'] = {
-        name: UserRoles[Config.Client.unAuthenticatedUserRole],
-        role: Config.Client.unAuthenticatedUserRole,
+        name: UserRoles[Config.Users.unAuthenticatedUserRole],
+        role: Config.Users.unAuthenticatedUserRole,
       } as UserDTO;
       return next();
     }
@@ -42,10 +42,10 @@ export class AuthenticationMWs {
     res: Response,
     next: NextFunction
   ): Promise<void> {
-    if (Config.Client.authenticationRequired === false) {
+    if (Config.Users.authenticationRequired === false) {
       req.session['user'] = {
-        name: UserRoles[Config.Client.unAuthenticatedUserRole],
-        role: Config.Client.unAuthenticatedUserRole,
+        name: UserRoles[Config.Users.unAuthenticatedUserRole],
+        role: Config.Users.unAuthenticatedUserRole,
       } as UserDTO;
       return next();
     }
@@ -133,7 +133,7 @@ export class AuthenticationMWs {
     res: Response,
     next: NextFunction
   ): Promise<void> {
-    if (Config.Client.Sharing.enabled === false) {
+    if (Config.Sharing.enabled === false) {
       return next();
     }
     // not enough parameter
@@ -160,7 +160,7 @@ export class AuthenticationMWs {
       if (
         !sharing ||
         sharing.expires < Date.now() ||
-        (Config.Client.Sharing.passwordProtected === true &&
+        (Config.Sharing.passwordProtected === true &&
           sharing.password &&
           !PasswordHelper.comparePassword(password, sharing.password))
       ) {
@@ -201,7 +201,7 @@ export class AuthenticationMWs {
     res: Response,
     next: NextFunction
   ): Promise<void | Response> {
-    if (Config.Client.authenticationRequired === false) {
+    if (Config.Users.authenticationRequired === false) {
       return res.sendStatus(404);
     }
 
@@ -253,7 +253,7 @@ export class AuthenticationMWs {
 
   private static async getSharingUser(req: Request): Promise<UserDTO> {
     if (
-      Config.Client.Sharing.enabled === true &&
+      Config.Sharing.enabled === true &&
       (!!req.query[QueryParams.gallery.sharingKey_query] ||
         !!req.params[QueryParams.gallery.sharingKey_params])
     ) {
@@ -270,7 +270,7 @@ export class AuthenticationMWs {
       }
 
       if (
-        Config.Client.Sharing.passwordProtected === true &&
+        Config.Sharing.passwordProtected === true &&
         sharing.password
       ) {
         return null;

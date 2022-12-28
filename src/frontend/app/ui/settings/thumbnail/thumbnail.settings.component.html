@@ -11,8 +11,7 @@
         name="Thumbnail Quality"
         description="High quality may be slow."
         i18n-description i18n-name
-        [ngModel]="states.server.qualityPriority"
-        [simplifiedMode]="simplifiedMode">
+        [ngModel]="states.server.qualityPriority">
       </app-settings-entry>
 
 
@@ -21,7 +20,6 @@
         description="Icon size (used on maps)."
         i18n-description i18n-name
         [ngModel]="states.client.iconSize"
-        [simplifiedMode]="simplifiedMode"
         [required]="true">
       </app-settings-entry>
 
@@ -31,7 +29,6 @@
         i18n-name
         placeholder="240; 480"
         [ngModel]="states.client.thumbnailSizes"
-        [simplifiedMode]="simplifiedMode"
         [required]="true">
         <small class="form-text text-muted">
           <ng-container i18n>Size of the thumbnails.</ng-container>

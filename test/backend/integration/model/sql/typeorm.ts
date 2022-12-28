@@ -26,8 +26,8 @@ describe('Typeorm integration', () => {
   const setUpSqlDB = async () => {
     await fs.promises.rm(tempDir, {recursive: true, force: true});
 
-    Config.Server.Database.type = DatabaseType.sqlite;
-    Config.Server.Database.dbFolder = tempDir;
+    Config.Database.type = DatabaseType.sqlite;
+    Config.Database.dbFolder = tempDir;
     ProjectPath.reset();
 
   };

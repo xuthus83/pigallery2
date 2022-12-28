@@ -38,7 +38,7 @@ export class FaceComponent implements OnInit, OnDestroy {
   get CanUpdate(): boolean {
     return (
       this.authenticationService.user.getValue().role >=
-      Config.Client.Faces.writeAccessMinRole
+      Config.Faces.writeAccessMinRole
     );
   }
 

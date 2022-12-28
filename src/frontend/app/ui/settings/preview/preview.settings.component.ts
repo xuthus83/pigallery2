@@ -1,19 +1,20 @@
-import { Component, OnInit } from '@angular/core';
-import { SettingsComponentDirective } from '../_abstract/abstract.settings.component';
-import { AuthenticationService } from '../../../model/network/authentication.service';
-import { NavigationService } from '../../../model/navigation.service';
-import { NotificationService } from '../../../model/notification.service';
+import {Component, OnInit} from '@angular/core';
+import {SettingsComponentDirective} from '../_abstract/abstract.settings.component';
+import {AuthenticationService} from '../../../model/network/authentication.service';
+import {NavigationService} from '../../../model/navigation.service';
+import {NotificationService} from '../../../model/notification.service';
 import {
   DefaultsJobs,
   JobDTOUtils,
 } from '../../../../../common/entities/job/JobDTO';
-import { ScheduledJobsService } from '../scheduled-jobs.service';
+import {ScheduledJobsService} from '../scheduled-jobs.service';
 import {
   JobProgressDTO,
   JobProgressStates,
 } from '../../../../../common/entities/job/JobProgressDTO';
-import { ServerPreviewConfig } from '../../../../../common/config/private/PrivateConfig';
-import { PreviewSettingsService } from './preview.settings.service';
+import {ServerPreviewConfig} from '../../../../../common/config/private/PrivateConfig';
+import {PreviewSettingsService} from './preview.settings.service';
+import {SettingsService} from '../settings.service';
 
 @Component({
   selector: 'app-settings-preview',
@@ -26,8 +27,7 @@ import { PreviewSettingsService } from './preview.settings.service';
 })
 export class PreviewSettingsComponent
   extends SettingsComponentDirective<ServerPreviewConfig>
-  implements OnInit
-{
+  implements OnInit {
   JobProgressStates = JobProgressStates;
   readonly jobName = DefaultsJobs[DefaultsJobs['Preview Filling']];
   readonly resetJobName = DefaultsJobs[DefaultsJobs['Preview Reset']];
@@ -37,7 +37,8 @@ export class PreviewSettingsComponent
     navigation: NavigationService,
     settingsService: PreviewSettingsService,
     notification: NotificationService,
-    public jobsService: ScheduledJobsService
+    public jobsService: ScheduledJobsService,
+    globalSettingsService: SettingsService
   ) {
     super(
       $localize`Preview`,
@@ -46,7 +47,8 @@ export class PreviewSettingsComponent
       navigation,
       settingsService,
       notification,
-      (s) => s.Server.Preview
+      globalSettingsService,
+      (s) => s.Preview
     );
   }
 
@@ -57,7 +59,7 @@ export class PreviewSettingsComponent
   get Progress(): JobProgressDTO {
     return this.jobsService.progress.value[
       JobDTOUtils.getHashName(this.jobName, this.Config)
-    ];
+      ];
   }
 
   ngOnInit(): void {

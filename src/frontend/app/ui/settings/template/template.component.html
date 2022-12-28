@@ -1,0 +1,81 @@
+<form #settingsForm="ngForm" class="form-horizontal">
+  <div class="card mb-4">
+    <h5 class="card-header">
+      <span class="oi oi-{{icon}}"></span> {{Name}}
+      <div *ngIf="states.value.enabled !== undefined"
+           class="switch-wrapper">
+        <bSwitch
+          class="switch"
+          name="enabled"
+          switch-on-color="success"
+          [switch-inverse]="true"
+          switch-off-text="Disabled"
+          switch-on-text="Enabled"
+          i18n-switch-off-text
+          i18n-switch-on-text
+          [switch-disabled]="inProgress"
+          [switch-handle-width]="100"
+          [switch-label-width]="20"
+          [(ngModel)]="states.value.enabled">
+        </bSwitch>
+      </div>
+    </h5>
+    <div class="card-body">
+      <div [hidden]="!error" class="alert alert-danger" role="alert"><strong>Error: </strong>{{error}}</div>
+      <ng-container *ngIf="states.value.enabled !== false">
+
+        <div class="alert alert-secondary" role="alert" *ngIf="states.description">
+          {{states.description}}
+        </div>
+        <ng-container
+          *ngTemplateOutlet="Recursion; context:{ rStates: states,skipEnabled:true,confPath:ConfigPath }"
+        ></ng-container>
+      </ng-container>
+
+      <div class="panel-info"
+           *ngIf="states.value.enabled === false">
+        {{Name}} <span i18n>config is not supported with these settings.</span>
+      </div>
+      <button class="btn btn-success float-end"
+              [disabled]="!settingsForm.form.valid || !changed || inProgress"
+              (click)="save()" i18n>Save
+      </button>
+      <button class="btn btn-secondary float-end"
+              [disabled]=" !changed || inProgress"
+              (click)="reset()" i18n>Reset
+      </button>
+    </div>
+  </div>
+
+  <ng-template #Recursion let-rStates="rStates" let-skipEnabled="skipEnabled" let-confPath="confPath">
+    <ng-container *ngFor="let ck of getKeys(rStates)">
+      <ng-container *ngIf="!(rStates.value.__state[ck].shouldHide && rStates.value.__state[ck].shouldHide())">
+        <app-settings-entry
+          *ngIf="(ck!=='enabled' || !skipEnabled) && !rStates.value.__state[ck].isConfigType"
+          [name]="confPath+'_'+ck"
+          [defaultName]="ck"
+          [ngModel]="rStates?.value.__state[ck]">
+        </app-settings-entry>
+        <ng-container *ngIf="rStates.value.__state[ck].isConfigType">
+          <div class="row">
+            <div class="col-auto">
+              <h5>{{rStates?.value.__state[ck].tags?.name || ck}}</h5>
+            </div>
+            <div class="col">
+              <hr/>
+            </div>
+          </div>
+          <div class="mt-2">
+            <div class="alert alert-secondary" role="alert" *ngIf="rStates.value.__state[ck]?.description">
+              {{rStates.value.__state[ck]?.description}}
+            </div>
+            <ng-container
+              *ngTemplateOutlet="Recursion; context:{ rStates: rStates.value.__state[ck], confPath:confPath+'.'+ck }"
+            ></ng-container>
+          </div>
+        </ng-container>
+      </ng-container>
+    </ng-container>
+  </ng-template>
+</form>
+

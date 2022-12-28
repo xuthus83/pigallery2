@@ -13,7 +13,7 @@ export class AdminMWs {
     res: Response,
     next: NextFunction
   ): Promise<void> {
-    if (Config.Server.Database.type === DatabaseType.memory) {
+    if (Config.Database.type === DatabaseType.memory) {
       return next(
         new ErrorDTO(
           ErrorCodes.GENERAL_ERROR,
@@ -60,7 +60,7 @@ export class AdminMWs {
     res: Response,
     next: NextFunction
   ): Promise<void> {
-    if (Config.Server.Database.type === DatabaseType.memory) {
+    if (Config.Database.type === DatabaseType.memory) {
       return next(
         new ErrorDTO(
           ErrorCodes.GENERAL_ERROR,

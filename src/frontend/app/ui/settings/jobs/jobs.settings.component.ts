@@ -19,6 +19,8 @@ import {ModalDirective} from 'ngx-bootstrap/modal';
 import {JobProgressDTO, JobProgressStates,} from '../../../../../common/entities/job/JobProgressDTO';
 import {BackendtextService} from '../../../model/backendtext.service';
 import {ServerJobConfig} from '../../../../../common/config/private/PrivateConfig';
+import {ConfigPriority} from '../../../../../common/config/public/ClientConfig';
+import {SettingsService} from '../settings.service';
 
 @Component({
   selector: 'app-settings-jobs',
@@ -55,7 +57,8 @@ export class JobsSettingsComponent
     settingsService: JobsSettingsService,
     public jobsService: ScheduledJobsService,
     public backendTextService: BackendtextService,
-    notification: NotificationService
+    notification: NotificationService,
+    globalSettingsService: SettingsService
   ) {
     super(
       $localize`Jobs`,
@@ -64,10 +67,11 @@ export class JobsSettingsComponent
       navigation,
       settingsService,
       notification,
-      (s) => s.Server.Jobs
+      globalSettingsService,
+      (s) => s.Jobs
     );
 
-    this.hasAvailableSettings = !this.simplifiedMode;
+    this.hasAvailableSettings = this.configPriority > ConfigPriority.basic;
     this.JobTriggerTypeMap = [
       {key: JobTriggerType.after, value: $localize`after`},
       {key: JobTriggerType.never, value: $localize`never`},

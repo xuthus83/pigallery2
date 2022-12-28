@@ -1,4 +1,4 @@
-import { Component, forwardRef, Input, OnChanges } from '@angular/core';
+import {Component, forwardRef, Input, OnChanges} from '@angular/core';
 import {
   ControlValueAccessor,
   FormControl,
@@ -7,22 +7,38 @@ import {
   ValidationErrors,
   Validator,
 } from '@angular/forms';
-import { Utils } from '../../../../../../common/Utils';
-import { propertyTypes } from 'typeconfig/common';
-import { SearchQueryParserService } from '../../../gallery/search/search-query-parser.service';
+import {Utils} from '../../../../../../common/Utils';
+import {IConfigClass, propertyTypes} from 'typeconfig/common';
+import {SearchQueryParserService} from '../../../gallery/search/search-query-parser.service';
+import {
+  ClientThumbnailConfig,
+  ConfigPriority,
+  MapLayers,
+  NavigationLinkConfig, NavigationLinkTypes,
+  TAGS
+} from '../../../../../../common/config/public/ClientConfig';
+import {SettingsService} from '../../settings.service';
+import {WebConfig} from '../../../../../../common/config/private/WebConfig';
+import {UserConfig} from '../../../../../../common/config/private/PrivateConfig';
 
 interface IState {
+  shouldHide(): boolean;
+
   isEnumArrayType: boolean;
   isEnumType: boolean;
   isConfigType: boolean;
+  isConfigArrayType: boolean;
   default: any;
   value: any;
   min?: number;
   max?: number;
   type: propertyTypes;
-  arrayType: propertyTypes;
+  arrayType: any;
   original: any;
+  rootConfig: WebConfig;
   readonly?: boolean;
+  description?: string;
+  tags: TAGS;
 }
 
 @Component({
@@ -44,66 +60,64 @@ interface IState {
   ],
 })
 export class SettingsEntryComponent
-  implements ControlValueAccessor, Validator, OnChanges
-{
-  @Input() name: string;
+  implements ControlValueAccessor, Validator, OnChanges {
+  @Input() defaultName: string;
+  name: string;
   @Input() required: boolean;
   @Input() dockerWarning: boolean;
-  @Input() optionMap: (v: { key: number; value: string }) => {
-    key: number;
-    value: string;
-  };
   @Input() placeholder: string;
-  @Input() options: { key: number | string; value: number | string }[];
-  @Input() simplifiedMode = false;
   @Input() allowSpaces = false;
   @Input() description: string;
   @Input() link: string;
   @Input() linkText: string;
-  @Input() typeOverride: 'searchQuery';
+  @Input() typeOverride: 'SearchQuery';
   state: IState;
   isNumberArray = false;
   isNumber = false;
   type = 'text';
-  optionsView: { key: number | string; value: string | number }[] = [];
   title: string;
   idName: string;
-  disabled: boolean;
   private readonly GUID = Utils.GUID();
-  private singleValueWrapper: { set: (value: any) => void; get: () => any };
+  public NavigationLinkTypesEnum = Utils.enumToArray(NavigationLinkTypes);
+  NavigationLinkTypes = NavigationLinkTypes;
 
-  constructor(private searchQueryParserService: SearchQueryParserService) {}
+  constructor(private searchQueryParserService: SearchQueryParserService,
+              public settingsService: SettingsService,
+  ) {
+  }
 
   get changed(): boolean {
-    if (this.disabled) {
+    if (this.Disabled) {
+      return false;
+    }
+    if (this.state.isConfigArrayType) {
+      for (let i = 0; i < this.state.value?.length; ++i) {
+        for (const k of Object.keys(this.state.value[i].__state)) {
+          if (!Utils.equalsFilter(
+            this.state.value[i]?.__state[k]?.value,
+            this.state.default[i]?.__state[k]?.value,
+            ['__propPath', '__created', '__prototype', '__rootConfig'])) {
+            return true;
+          }
+        }
+      }
       return false;
     }
     return !Utils.equalsFilter(this.state.value, this.state.default);
   }
 
   get shouldHide(): boolean {
-    if (Array.isArray(this.state.value)) {
-      return (
-        this.simplifiedMode &&
-        Utils.equalsFilter(this.state.value, this.state.default) &&
-        Utils.equalsFilter(this.state.original, this.state.default)
-      );
-    }
-    return (
-      this.simplifiedMode &&
-      this.state.value === this.state.default &&
-      this.state.original === this.state.default
-    );
+    return this.state.shouldHide && this.state.shouldHide();
   }
 
   get PlaceHolder(): string {
-    return this.placeholder || this.state.default;
+    return this.placeholder || this.state.tags?.hint || this.state.default;
   }
 
   get defaultStr(): string {
-    if (this.typeOverride === 'searchQuery') {
+    if (this.Type === 'SearchQuery') {
       return (
-        "'" + this.searchQueryParserService.stringify(this.state.default) + "'"
+        '\'' + this.searchQueryParserService.stringify(this.state.default) + '\''
       );
     }
 
@@ -114,28 +128,49 @@ export class SettingsEntryComponent
     return this.state.default;
   }
 
-  get Type(): any {
-    return this.typeOverride || this.state.type;
+  get Type(): string | object {
+    return this.typeOverride || this.state.tags?.uiType || this.state.type;
   }
 
-  get StringValue(): any {
+  get ArrayType(): string {
+    if (this.state.arrayType === MapLayers) {
+      return 'MapLayers';
+    }
+    if (this.state.arrayType === NavigationLinkConfig) {
+      return 'NavigationLinkConfig';
+    }
+    if (this.state.arrayType === UserConfig) {
+      return 'UserConfig';
+    }
+    this.state.arrayType;
+  }
+
+  get StringValue(): string {
     if (
       this.state.type === 'array' &&
       (this.state.arrayType === 'string' || this.isNumberArray)
     ) {
-      return this.state.value.join(';');
+      return (this.state.value || []).join(';');
+    }
+
+    if (this.state.isConfigType) {
+      return JSON.stringify(this.state.value.toJSON());
+    }
+
+    if (typeof this.state.value === 'object') {
+      return JSON.stringify(this.state.value);
     }
 
     return this.state.value;
   }
 
-  set StringValue(value: any) {
+  set StringValue(value: string) {
     if (
       this.state.type === 'array' &&
       (this.state.arrayType === 'string' || this.isNumberArray)
     ) {
       value = value.replace(new RegExp(',', 'g'), ';');
-      if (this.allowSpaces === false) {
+      if (!this.allowSpaces) {
         value = value.replace(new RegExp(' ', 'g'), ';');
       }
       this.state.value = value.split(';').filter((v: string) => v !== '');
@@ -146,21 +181,31 @@ export class SettingsEntryComponent
       }
       return;
     }
+
+    if (typeof this.state.value === 'object') {
+      this.state.value = JSON.parse(value);
+    }
+
     this.state.value = value;
     if (this.isNumber) {
       this.state.value = parseFloat(value);
     }
+
   }
 
-  setDisabledState?(isDisabled: boolean): void {
-    this.disabled = isDisabled;
+
+  get Disabled() {
+    if (!this.state?.tags?.uiDisabled) {
+      return false;
+    }
+    return this.state.tags.uiDisabled(this.state.rootConfig, this.settingsService.settings.value);
   }
 
   ngOnChanges(): void {
     if (!this.state) {
       return;
     }
-    if (this.options) {
+    if (this.state.tags?.uiOptions) {
       this.state.isEnumType = true;
     }
     this.title = '';
@@ -168,6 +213,7 @@ export class SettingsEntryComponent
       this.title = $localize`readonly` + ', ';
     }
     this.title += $localize`default value` + ': ' + this.defaultStr;
+    this.name = this.state?.tags?.name || this.defaultName;
     if (this.name) {
       this.idName =
         this.GUID + this.name.toLowerCase().replace(new RegExp(' ', 'gm'), '-');
@@ -182,20 +228,7 @@ export class SettingsEntryComponent
       this.state.type === 'integer' ||
       this.state.type === 'float' ||
       this.state.type === 'positiveFloat';
-    const eClass = this.state.isEnumType
-      ? this.state.type
-      : this.state.arrayType;
-    if (this.state.isEnumType || this.state.isEnumArrayType) {
-      if (this.options) {
-        this.optionsView = this.options;
-      } else {
-        if (this.optionMap) {
-          this.optionsView = Utils.enumToArray(eClass).map(this.optionMap);
-        } else {
-          this.optionsView = Utils.enumToArray(eClass);
-        }
-      }
-    }
+
 
     if (this.isNumber) {
       this.type = 'number';
@@ -204,9 +237,38 @@ export class SettingsEntryComponent
     } else {
       this.type = 'text';
     }
+    this.description = this.description || this.state.description;
+    if (this.state.tags) {
+      if (typeof this.dockerWarning === 'undefined') {
+        this.dockerWarning = this.state.tags.dockerSensitive && this.settingsService.settings.value.Environment.isDocker;
+      }
+      if (this.state.tags.githubIssue) {
+        this.link = `https://github.com/bpatrik/pigallery2/issues/` + this.state.tags.githubIssue;
+        this.linkText = $localize`See` + ' ' + this.state.tags.githubIssue;
+      }
+      this.name = this.name || this.state.tags.name;
+      this.allowSpaces = this.allowSpaces || this.state.tags.uiAllowSpaces;
+      this.required = this.required || !this.state.tags.uiOptional;
+    }
   }
 
-  validate(control: FormControl): ValidationErrors {
+  getOptionsView(state: IState) {
+    let optionsView: { key: number | string; value: string | number }[];
+    const eClass = state.isEnumType
+      ? state.type
+      : state.arrayType;
+    if (state.tags?.uiOptions) {
+      optionsView = state.tags?.uiOptions.map(o => ({
+        key: o,
+        value: o + (state.tags?.unit ? state.tags?.unit : '')
+      }));
+    } else {
+      optionsView = Utils.enumToArray(eClass);
+    }
+    return optionsView;
+  }
+
+  validate(): ValidationErrors {
     if (
       !this.required ||
       (this.state &&
@@ -216,37 +278,64 @@ export class SettingsEntryComponent
     ) {
       return null;
     }
-    return { required: true };
+    return {required: true};
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  public onChange(value: any): void {}
+  public onChange = (value: unknown): void => {
+    // empty
+  };
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  public onTouched(): void {}
+  public onTouched = (): void => {
+    // empty
+  };
 
   public writeValue(obj: IState): void {
     this.state = obj;
     this.ngOnChanges();
   }
 
-  public registerOnChange(fn: any): void {
+  public registerOnChange(fn: (v: never) => void): void {
     this.onChange = fn;
   }
 
-  public registerOnTouched(fn: any): void {
+  public registerOnTouched(fn: () => void): void {
     this.onTouched = fn;
   }
 
   AddNew(): void {
+    this.state.value = this.state.value || [];
     if (this.state.type === 'array') {
+      if (this.state.isConfigArrayType && this.state.arrayType) {
+        this.state.value.push(new this.state.arrayType());
+        return;
+      }
       this.state.value.push(this.state.value[this.state.value.length - 1]);
     }
+    console.dir(this.state.value);
   }
 
   remove(i: number): void {
-    (this.state.value as any[]).splice(i, 1);
+    (this.state.value as unknown[]).splice(i, 1);
   }
+
+  /**
+   * MapLayer function
+   */
+  addNewLayer(): void {
+    this.state.value.push({
+      name: 'Layer-' + this.state.value.length,
+      url: '',
+    });
+  }
+
+  removeLayer(layer: MapLayers): void {
+    this.state.value.splice(
+      this.state.value.indexOf(layer),
+      1
+    );
+  }
+
+
 }
 
 

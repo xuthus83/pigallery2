@@ -8,9 +8,7 @@ import {IWebConfigClass} from 'typeconfig/common';
  * These configuration will be available at frontend and backend too
  */
 @WebConfigClass()
-export class ClientClass {
-  @ConfigProperty()
-  public Client: ClientConfig = new ClientConfig();
+export class ClientClass extends ClientConfig{
 }
 
 // ConfigInject is getting injected form the server side to the global scope
@@ -29,7 +27,7 @@ if (
   Config.load(ServerInject.ConfigInject);
 }
 
-if (Config.Client.publicUrl === '') {
-  Config.Client.publicUrl = location.origin;
+if (Config.Server.publicUrl === '') {
+  Config.Server.publicUrl = location.origin;
 }
 

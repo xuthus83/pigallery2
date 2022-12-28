@@ -71,7 +71,7 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
 
   afterEach(async () => {
     Config.loadSync();
-    Config.Server.Preview.Sorting = [SortingMethods.descRating];
+    Config.Preview.Sorting = [SortingMethods.descRating];
     await sqlHelper.clearDB();
   });
 
@@ -358,7 +358,7 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
     const sp2 = TestHelper.getRandomizedPhotoEntry(subDir, 'subPhoto2', 0);
     sp2.metadata.rating = 3;
     subDir.preview = sp1;
-    Config.Server.Preview.Sorting = [SortingMethods.descRating];
+    Config.Preview.Sorting = [SortingMethods.descRating];
 
     DirectoryDTOUtils.removeReferences(subDir);
     await im.saveToDB(Utils.clone(subDir) as ParentDirectoryDTO);
@@ -396,7 +396,7 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
     const sp2 = TestHelper.getRandomizedPhotoEntry(subDir, 'subPhoto2', 0);
     sp2.metadata.rating = 3;
     subDir.preview = sp1;
-    Config.Server.Preview.Sorting = [SortingMethods.descRating];
+    Config.Preview.Sorting = [SortingMethods.descRating];
 
 
     DirectoryDTOUtils.removeReferences(subDir);
@@ -433,7 +433,7 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
     const sp2 = TestHelper.getRandomizedPhotoEntry(subDir, 'subPhoto2', 0);
     sp2.metadata.rating = 3;
     subDir.preview = sp1;
-    Config.Server.Preview.Sorting = [SortingMethods.descRating];
+    Config.Preview.Sorting = [SortingMethods.descRating];
 
     DirectoryDTOUtils.removeReferences(parent);
     await im.saveToDB(Utils.clone(parent) as ParentDirectoryDTO);
@@ -492,14 +492,14 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
     const p2 = TestHelper.getRandomizedPhotoEntry(parent, 'Photo2');
     const gpx = TestHelper.getRandomizedGPXEntry(parent, 'GPX1');
     DirectoryDTOUtils.removeReferences(parent);
-    Config.Client.MetaFile.gpx = true;
-    Config.Client.MetaFile.markdown = true;
-    Config.Client.MetaFile.pg2conf = true;
+    Config.MetaFile.gpx = true;
+    Config.MetaFile.markdown = true;
+    Config.MetaFile.pg2conf = true;
     await im.saveToDB(Utils.clone(parent) as ParentDirectoryDTO);
 
-    Config.Client.MetaFile.gpx = false;
-    Config.Client.MetaFile.markdown = false;
-    Config.Client.MetaFile.pg2conf = false;
+    Config.MetaFile.gpx = false;
+    Config.MetaFile.markdown = false;
+    Config.MetaFile.pg2conf = false;
     const conn = await SQLConnection.getConnection();
     const selected = await gm.getParentDirFromId(conn,
       (await gm.getDirIdAndTime(conn, parent.name, parent.path)).id);
@@ -550,9 +550,9 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
     const conn = await SQLConnection.getConnection();
     const gm = new GalleryManagerTest();
     const im = new IndexingManagerTest();
-    Config.Client.MetaFile.gpx = true;
-    Config.Client.MetaFile.markdown = true;
-    Config.Client.MetaFile.pg2conf = true;
+    Config.MetaFile.gpx = true;
+    Config.MetaFile.markdown = true;
+    Config.MetaFile.pg2conf = true;
     const parent = TestHelper.getRandomizedDirectoryEntry();
     const p1 = TestHelper.getRandomizedPhotoEntry(parent, 'Photo1');
     const p2 = TestHelper.getRandomizedPhotoEntry(parent, 'Photo2');
@@ -563,7 +563,7 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
     const sp2 = TestHelper.getRandomizedPhotoEntry(subDir, 'subPhoto2', 1);
     sp2.metadata.rating = 3;
     subDir.preview = sp1;
-    Config.Server.Preview.Sorting = [SortingMethods.descRating];
+    Config.Preview.Sorting = [SortingMethods.descRating];
 
     DirectoryDTOUtils.removeReferences(parent);
     const s1 = im.queueForSave(Utils.clone(parent) as ParentDirectoryDTO);
@@ -615,9 +615,9 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
     const conn = await SQLConnection.getConnection();
     const gm = new GalleryManagerTest();
     const im = new IndexingManagerTest();
-    Config.Client.MetaFile.gpx = true;
-    Config.Client.MetaFile.markdown = true;
-    Config.Client.MetaFile.pg2conf = true;
+    Config.MetaFile.gpx = true;
+    Config.MetaFile.markdown = true;
+    Config.MetaFile.pg2conf = true;
     const parent = TestHelper.getRandomizedDirectoryEntry();
     DirectoryDTOUtils.removeReferences(parent);
     await im.saveToDB(Utils.clone(parent) as ParentDirectoryDTO);
@@ -657,7 +657,7 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
     });
 
     it('with re indexing severity low', async () => {
-      Config.Server.Indexing.reIndexingSensitivity = ReIndexingSensitivity.low;
+      Config.Indexing.reIndexingSensitivity = ReIndexingSensitivity.low;
 
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
@@ -696,10 +696,10 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
 
     it('.saved_searches.pg2conf', async () => {
       Config.Server.Threading.enabled = false;
-      Config.Client.Album.enabled = true;
-      Config.Client.Faces.enabled = true;
+      Config.Album.enabled = true;
+      Config.Faces.enabled = true;
 
-      Config.Server.Media.folder = path.join(__dirname, '/../../../assets');
+      Config.Media.folder = path.join(__dirname, '/../../../assets');
       ProjectPath.ImageFolder = path.join(__dirname, '/../../../assets');
       const im = new IndexingManagerTest();
       const am = new AlbumManager();
