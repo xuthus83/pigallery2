@@ -91,7 +91,14 @@
           #tmpl
           icon="list"
           [ConfigPath]="cp"
-          [hidden]="!tmpl.HasAvailableSettings"></app-settings-template>
+          [hidden]="!tmpl.HasAvailableSettings">
+          <ng-container
+            *ngIf="cp=='Indexing'">
+            <br/>
+            <hr class="mt-2"/>
+            <app-settings-gallery-statistic></app-settings-gallery-statistic>
+          </ng-container>
+        </app-settings-template>
         <!--   <app-settings-template #setting #server
                                   icon="list"
                                   [ConfigPath]="'Server'"

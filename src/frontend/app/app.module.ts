@@ -100,9 +100,10 @@ import {GallerySortingService} from './ui/gallery/navigator/sorting.service';
 import {FilterService} from './ui/gallery/filter/filter.service';
 import {TemplateComponent} from './ui/settings/template/template.component';
 import {AbstractSettingsService} from './ui/settings/_abstract/abstract.settings.service';
-import { WorkflowComponent } from './ui/settings/workflow/workflow.component';
+import {WorkflowComponent} from './ui/settings/workflow/workflow.component';
 import {JobProgressComponent} from './ui/settings/jobs/progress/job-progress.settings.component';
 import {JobButtonComponent} from './ui/settings/jobs/button/job-button.settings.component';
+import {GalleryStatisticComponent} from './ui/settings/gallery-statistic/gallery-statistic.component';
 
 @Injectable()
 export class MyHammerConfig extends HammerGestureConfig {
@@ -222,24 +223,8 @@ Marker.prototype.options.icon = iconDefault;
     TemplateComponent,
     JobProgressComponent,
     JobButtonComponent,
-    /*  UserMangerSettingsComponent,
-      DatabaseSettingsComponent,
-      MapSettingsComponent,
-      ThumbnailSettingsComponent,
-      VideoSettingsComponent,
-      PhotoSettingsComponent,
-      MetaFileSettingsComponent,
-      SearchSettingsComponent,
-      ShareSettingsComponent,
-      RandomPhotoSettingsComponent,
-      FacesSettingsComponent,
-      AlbumsSettingsComponent,
-      OtherSettingsComponent,
-      IndexingSettingsComponent,
-      JobsSettingsComponent,
-      JobProgressComponent,
-      JobButtonComponent,
-      PreviewSettingsComponent,*/
+    WorkflowComponent,
+    GalleryStatisticComponent,
 
     // Pipes
     StringifyRole,
@@ -252,7 +237,6 @@ Marker.prototype.options.icon = iconDefault;
     StringifySearchQuery,
     FileDTOToPathPipe,
     PhotoFilterPipe,
-    WorkflowComponent,
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: CSRFInterceptor, multi: true},
