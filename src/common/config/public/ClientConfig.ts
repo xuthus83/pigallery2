@@ -33,11 +33,18 @@ export type TAGS = {
   secret?: boolean, // these config properties should never travel out of the server
   experimental?: boolean, //is it a beta feature
   unit?: string, // Unit info to display on UI
+  uiIcon?: string,
   uiType?: 'SearchQuery', // Hint for the UI about the type
   uiOptions?: (string | number)[], //Hint for the UI about the recommended options
   uiAllowSpaces?: boolean
   uiOptional?: boolean; //makes the tag not "required"
   uiDisabled?: (subConfig: any, config: ClientConfig) => boolean
+  uiJob?: {
+    job: string,
+    hideProgress: boolean,
+    relevant?: (c: ClientConfig) => boolean,
+    description: string
+  }[]
 };
 
 @SubConfigClass<TAGS>({tags: {client: true}})
@@ -278,7 +285,7 @@ export class ClientMapConfig {
     tags: {
       name: $localize`Max Preview Markers`,
       priority: ConfigPriority.underTheHood
-    },
+    } as TAGS,
     description: $localize`Maximum number of markers to be shown on the map preview on the gallery page.`,
   })
   maxPreviewMarkers: number = 50;
@@ -289,7 +296,8 @@ export class ClientThumbnailConfig {
   @ConfigProperty({
     type: 'unsignedInt', max: 100,
     tags: {
-      name: $localize`Max Preview Markers`,
+      name: $localize`Map Icon size`,
+      unit: 'px',
       priority: ConfigPriority.underTheHood
     },
     description: $localize`Icon size (used on maps).`,
@@ -298,6 +306,7 @@ export class ClientThumbnailConfig {
   @ConfigProperty({
     type: 'unsignedInt', tags: {
       name: $localize`Person thumbnail size`,
+      unit: 'px',
       priority: ConfigPriority.underTheHood
     },
     description: $localize`Person (face) thumbnail size.`,
@@ -732,8 +741,9 @@ export class ClientServiceConfig {
     description: $localize`If you access the page form local network its good to know the public url for creating sharing link.`,
     tags: {
       name: $localize`Page public url`,
+      hint: typeof window !== 'undefined' ? window?.origin : '',
       uiOptional: true
-    }
+    } as TAGS
   })
   publicUrl: string = '';
 
@@ -804,72 +814,57 @@ export class ClientUserConfig {
 @SubConfigClass<TAGS>({tags: {client: true}})
 export class ClientConfig {
 
-  @ConfigProperty({
-    tags: {
-      name: $localize`Server`
-    } as TAGS,
-  })
+  @ConfigProperty()
   Server: ClientServiceConfig = new ClientServiceConfig();
 
-  @ConfigProperty({
-    tags: {
-      name: $localize`Users`
-    } as TAGS,
-  })
+  @ConfigProperty()
   Users: ClientUserConfig = new ClientUserConfig();
 
   @ConfigProperty({
     tags: {
-      name: $localize`Gallery`
+      name: $localize`Gallery`,
+      uiIcon: 'browser'
     } as TAGS,
   })
   Gallery: ClientGalleryConfig = new ClientGalleryConfig();
 
-  @ConfigProperty({
-    tags: {
-      name: $localize`Media`
-    } as TAGS,
-  })
+  @ConfigProperty()
   Media: ClientMediaConfig = new ClientMediaConfig();
 
-  @ConfigProperty({
-    tags: {
-      name: $localize`Meta file`
-    } as TAGS,
-  })
+  @ConfigProperty()
   MetaFile: ClientMetaFileConfig = new ClientMetaFileConfig();
 
   @ConfigProperty({
     tags: {
-      name: $localize`Album`
+      name: $localize`Album`,
+      uiIcon: 'grid-two-up'
     } as TAGS,
   })
   Album: ClientAlbumConfig = new ClientAlbumConfig();
 
   @ConfigProperty({
     tags: {
-      name: $localize`Search`
+      name: $localize`Search`,
+      uiIcon: 'magnifying-glass'
     } as TAGS,
   })
   Search: ClientSearchConfig = new ClientSearchConfig();
 
-  @ConfigProperty({
-    tags: {
-      name: $localize`Sharing`
-    } as TAGS,
-  })
+  @ConfigProperty()
   Sharing: ClientSharingConfig = new ClientSharingConfig();
 
   @ConfigProperty({
     tags: {
-      name: $localize`Map`
+      name: $localize`Map`,
+      uiIcon: 'map-marker'
     } as TAGS,
   })
   Map: ClientMapConfig = new ClientMapConfig();
 
   @ConfigProperty({
     tags: {
-      name: $localize`Faces`
+      name: $localize`Faces`,
+      uiIcon: 'people'
     } as TAGS,
   })
   Faces: ClientFacesConfig = new ClientFacesConfig();
@@ -877,6 +872,7 @@ export class ClientConfig {
   @ConfigProperty({
     tags: {
       name: $localize`Random photo`,
+      uiIcon: 'random',
       githubIssue: 392
     } as TAGS,
     description: $localize`This feature enables you to generate 'random photo' urls. That URL returns a photo random selected from your gallery. You can use the url with 3rd party application like random changing desktop background. Note: With the current implementation, random link also requires login.`

@@ -331,8 +331,9 @@ export class ServerGPXCompressingConfig extends ClientGPXCompressingConfig {
       {
         name: $localize`Min distance`,
         priority: ConfigPriority.underTheHood,
+        unit: 'm',
         uiDisabled: (sc: ServerGPXCompressingConfig, c: ServerConfig) => !c.Map.enabled || !sc.enabled || !c.MetaFile.gpx
-      },
+      } as TAGS,
     description: $localize`Filters out entry that are closer than this in meters.`
   })
   minDistance: number = 5;
@@ -356,8 +357,12 @@ export class ServerMetaFileConfig extends ClientMetaFileConfig {
     tags:
       {
         name: $localize`GPX compression`,
-        priority: ConfigPriority.advanced
-      }
+        priority: ConfigPriority.advanced,
+        uiJob: [{
+          job: DefaultsJobs[DefaultsJobs['GPX Compression']],
+          relevant: (c) => c.MetaFile.GPXCompressing.enabled
+        }]
+      } as TAGS
   })
   GPXCompressing: ServerGPXCompressingConfig = new ServerGPXCompressingConfig();
 }
@@ -419,8 +424,8 @@ export class ServerIndexingConfig {
       {
         name: $localize`Exclude File List`,
         priority: ConfigPriority.advanced,
-        uiOptional: true
-
+        uiOptional: true,
+        hint: $localize`.ignore;.pg2ignore`
       } as TAGS,
     description: $localize`Files that mark a folder to be excluded from indexing. Any folder that contains a file with this name will be excluded from indexing.`,
   })
@@ -610,7 +615,7 @@ export class ServerJobConfig {
       DefaultsJobs[DefaultsJobs.Indexing],
       DefaultsJobs[DefaultsJobs.Indexing],
       new NeverJobTriggerConfig(),
-      {indexChangesOnly: true} // set config explicitly so it not undefined on the UI
+      {indexChangesOnly: true} // set config explicitly so it is not undefined on the UI
     ),
     new JobScheduleConfig(
       DefaultsJobs[DefaultsJobs['Preview Filling']],
@@ -681,7 +686,7 @@ export class VideoTranscodingConfig {
     tags:
       {
         name: $localize`FPS`,
-        priority: ConfigPriority.advanced,
+        priority: ConfigPriority.underTheHood,
         uiOptions: [24, 25, 30, 48, 50, 60]
       },
     description: $localize`Target frame per second (fps) of the output video will be scaled down this this.`
@@ -700,7 +705,7 @@ export class VideoTranscodingConfig {
     tags:
       {
         name: $localize`MP4 codec`,
-        priority: ConfigPriority.advanced,
+        priority: ConfigPriority.underTheHood,
         uiOptions: ['libx264', 'libx265'],
         relevant: (c: any) => c.format === 'mp4'
       }
@@ -710,7 +715,7 @@ export class VideoTranscodingConfig {
     tags:
       {
         name: $localize`Webm Codec`,
-        priority: ConfigPriority.advanced,
+        priority: ConfigPriority.underTheHood,
         uiOptions: ['libvpx', 'libvpx-vp9'],
         relevant: (c: any) => c.format === 'webm'
       }
@@ -782,6 +787,8 @@ export class PhotoConvertingConfig extends ClientPhotoConvertingConfig {
     tags: {
       name: $localize`Resolution`,
       priority: ConfigPriority.advanced,
+      uiOptions: [720, 1080, 1440, 2160, 4320],
+      unit: 'px',
       uiDisabled: (sc: PhotoConvertingConfig) =>
         !sc.enabled
     },
@@ -867,23 +874,34 @@ export class ServerMediaConfig extends ClientMediaConfig {
   @ConfigProperty({
     tags: {
       name: $localize`Video`,
-      priority: ConfigPriority.advanced
-    },
+      priority: ConfigPriority.advanced,
+      uiJob: [
+        {
+          job: DefaultsJobs[DefaultsJobs['Video Converting']],
+          relevant: (c) => c.Media.Video.enabled
+        }]
+    } as TAGS,
     description: $localize`Video support uses ffmpeg. ffmpeg and ffprobe binaries need to be available in the PATH or the @ffmpeg-installer/ffmpeg and @ffprobe-installer/ffprobe optional node packages need to be installed.`
   })
   Video: ServerVideoConfig = new ServerVideoConfig();
   @ConfigProperty({
     tags: {
       name: $localize`Photo`,
-      priority: ConfigPriority.advanced
-    }
+      priority: ConfigPriority.advanced,
+      uiJob: [
+        {
+          job: DefaultsJobs[DefaultsJobs['Photo Converting']],
+          relevant: (c) => c.Media.Photo.Converting.enabled
+        }]
+    } as TAGS
   })
   Photo: ServerPhotoConfig = new ServerPhotoConfig();
   @ConfigProperty({
     tags: {
       name: $localize`Thumbnail`,
-      priority: ConfigPriority.advanced
-    }
+      priority: ConfigPriority.advanced,
+      uiJob: [{job: DefaultsJobs[DefaultsJobs['Thumbnail Generation']]}]
+    } as TAGS
   })
   Thumbnail: ServerThumbnailConfig = new ServerThumbnailConfig();
 }
@@ -965,34 +983,99 @@ export class ServerConfig extends ClientConfig {
   @ConfigProperty({volatile: true})
   Environment: ServerEnvironmentConfig = new ServerEnvironmentConfig();
 
-  @ConfigProperty()
+  @ConfigProperty({
+    tags: {
+      name: $localize`Server`,
+      uiIcon: 'cog'
+    } as TAGS,
+  })
   Server: ServerServiceConfig = new ServerServiceConfig();
 
-  @ConfigProperty()
+  @ConfigProperty({
+    tags: {
+      name: $localize`Database`,
+      uiIcon: 'list'
+    } as TAGS
+  })
   Database: ServerDataBaseConfig = new ServerDataBaseConfig();
 
-  @ConfigProperty()
+  @ConfigProperty({
+    tags: {
+      name: $localize`Users`,
+      uiIcon: 'person'
+    } as TAGS,
+  })
   Users: ServerUserConfig = new ServerUserConfig();
 
-  @ConfigProperty()
+  @ConfigProperty({
+    tags: {
+      name: $localize`Indexing`,
+      uiIcon: 'pie-chart',
+      uiJob: [
+        {
+          job: DefaultsJobs[DefaultsJobs.Indexing],
+          description: $localize`If you add a new folder to your gallery, the site indexes it automatically.  If you would like to trigger indexing manually, click index button. (Note: search only works among the indexed directories.)`
+        }, {
+          job: DefaultsJobs[DefaultsJobs['Database Reset']],
+          hideProgress: true
+        }]
+    } as TAGS
+  })
   Indexing: ServerIndexingConfig = new ServerIndexingConfig();
 
-  @ConfigProperty()
+  @ConfigProperty({
+    tags: {
+      name: $localize`Media`,
+      uiIcon: 'camera-slr'
+    } as TAGS,
+  })
   Media: ServerMediaConfig = new ServerMediaConfig();
 
-  @ConfigProperty()
+  @ConfigProperty({
+    tags: {
+      name: $localize`Meta file`,
+      uiIcon: 'file'
+    } as TAGS,
+  })
   MetaFile: ServerMetaFileConfig = new ServerMetaFileConfig();
 
-  @ConfigProperty()
+  @ConfigProperty({
+    tags: {
+      name: $localize`Preview`,
+      uiIcon: 'image',
+      uiJob: [
+        {
+          job: DefaultsJobs[DefaultsJobs['Preview Filling']],
+        }, {
+          job: DefaultsJobs[DefaultsJobs['Preview Reset']],
+          hideProgress: true
+        }]
+    } as TAGS
+  })
   Preview: ServerPreviewConfig = new ServerPreviewConfig();
 
-  @ConfigProperty()
+  @ConfigProperty({
+    tags: {
+      name: $localize`Sharing`,
+      uiIcon: 'share'
+    } as TAGS,
+  })
   Sharing: ServerSharingConfig = new ServerSharingConfig();
 
-  @ConfigProperty()
+  @ConfigProperty({
+    tags: {
+      name: $localize`Duplicates`,
+      uiIcon: 'layers'
+    } as TAGS
+  })
   Duplicates: ServerDuplicatesConfig = new ServerDuplicatesConfig();
 
-  @ConfigProperty()
+  @ConfigProperty({
+    tags: {
+      name: $localize`Jobs`,
+      uiIcon: 'project'
+    } as TAGS
+  })
   Jobs: ServerJobConfig = new ServerJobConfig();
 }
 

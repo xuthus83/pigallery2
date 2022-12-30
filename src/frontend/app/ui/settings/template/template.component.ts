@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AuthenticationService} from '../../../model/network/authentication.service';
 import {NavigationService} from '../../../model/navigation.service';
 import {NotificationService} from '../../../model/notification.service';
@@ -6,6 +6,9 @@ import {SettingsComponentDirective} from '../_abstract/abstract.settings.compone
 import {SettingsService} from '../settings.service';
 import {WebConfig} from '../../../../../common/config/private/WebConfig';
 import {AbstractSettingsService} from '../_abstract/abstract.settings.service';
+import {JobProgressDTO} from '../../../../../common/entities/job/JobProgressDTO';
+import {JobDTOUtils} from '../../../../../common/entities/job/JobDTO';
+import {ScheduledJobsService} from '../scheduled-jobs.service';
 
 
 @Component({
@@ -22,7 +25,8 @@ export class TemplateComponent extends SettingsComponentDirective<any> implement
     navigation: NavigationService,
     notification: NotificationService,
     settingsService: AbstractSettingsService,
-    globalSettingsService: SettingsService
+    globalSettingsService: SettingsService,
+    public jobsService: ScheduledJobsService,
   ) {
     super(
       authService,
@@ -66,4 +70,7 @@ export class TemplateComponent extends SettingsComponentDirective<any> implement
     });
   }
 
+  getProgress(jobName: string): JobProgressDTO {
+    return this.jobsService.progress.value[JobDTOUtils.getHashName(jobName)];
+  }
 }

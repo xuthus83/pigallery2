@@ -24,9 +24,7 @@
       <div [hidden]="!error" class="alert alert-danger" role="alert"><strong>Error: </strong>{{error}}</div>
       <ng-container *ngIf="states.value.enabled !== false">
 
-        <div class="alert alert-secondary" role="alert" *ngIf="states.description">
-          {{states.description}}
-        </div>
+
         <ng-container
           *ngTemplateOutlet="Recursion; context:{ rStates: states,skipEnabled:true,confPath:ConfigPath }"
         ></ng-container>
@@ -48,16 +46,18 @@
   </div>
 
   <ng-template #Recursion let-rStates="rStates" let-skipEnabled="skipEnabled" let-confPath="confPath">
+    <div class="alert alert-secondary" role="alert" *ngIf="rStates.description">
+      {{rStates.description}}
+    </div>
     <ng-container *ngFor="let ck of getKeys(rStates)">
       <ng-container *ngIf="!(rStates.value.__state[ck].shouldHide && rStates.value.__state[ck].shouldHide())">
         <app-settings-entry
           *ngIf="(ck!=='enabled' || !skipEnabled) && !rStates.value.__state[ck].isConfigType"
           [name]="confPath+'_'+ck"
-          [defaultName]="ck"
           [ngModel]="rStates?.value.__state[ck]">
         </app-settings-entry>
         <ng-container *ngIf="rStates.value.__state[ck].isConfigType">
-          <div class="row">
+          <div class="row mt-2">
             <div class="col-auto">
               <h5>{{rStates?.value.__state[ck].tags?.name || ck}}</h5>
             </div>
@@ -66,9 +66,6 @@
             </div>
           </div>
           <div class="mt-2">
-            <div class="alert alert-secondary" role="alert" *ngIf="rStates.value.__state[ck]?.description">
-              {{rStates.value.__state[ck]?.description}}
-            </div>
             <ng-container
               *ngTemplateOutlet="Recursion; context:{ rStates: rStates.value.__state[ck], confPath:confPath+'.'+ck }"
             ></ng-container>
@@ -76,6 +73,31 @@
         </ng-container>
       </ng-container>
     </ng-container>
+    <div *ngIf="rStates.tags?.uiJob">
+      <ng-container *ngFor="let job of rStates.tags?.uiJob; let i = index">
+        <div class="alert alert-secondary" role="alert" *ngIf="job.description">
+          {{job.description}}
+        </div>
+        <app-settings-job-button
+          *ngIf="!job.relevant || job.relevant(globalSettingsService.settings | async)"
+          class="mt-2 mb-1 mb-md-0 mt-md-0 float-left me-2"
+          [soloRun]="true"
+          (jobError)="error=$event"
+          [allowParallelRun]="false"
+          [danger]="i>0"
+          [jobName]="job.job"></app-settings-job-button>
+      </ng-container>
+
+      <ng-container *ngFor="let job of rStates.tags?.uiJob">
+        <ng-container
+          *ngIf="getProgress(job.job) && !job.hideProgress && (!job.relevant || job.relevant(globalSettingsService.settings | async))">
+          <hr class="mt-1"/>
+          <app-settings-job-progress
+            class="d-block mb-2"
+            [progress]="getProgress(job.job)"></app-settings-job-progress>
+        </ng-container>
+      </ng-container>
+    </div>
   </ng-template>
 </form>
 

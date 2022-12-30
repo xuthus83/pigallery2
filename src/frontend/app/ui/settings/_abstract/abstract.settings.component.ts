@@ -49,8 +49,7 @@ export interface RecursiveState extends ConfigState {
 @Directive()
 export abstract class SettingsComponentDirective<
   T extends RecursiveState> implements OnInit, OnDestroy, ISettingsComponent {
-
-  @Input() icon: string;
+  public icon: string;
   @Input() ConfigPath: string;
 
   @ViewChild('settingsForm', {static: true})
@@ -72,7 +71,7 @@ export abstract class SettingsComponentDirective<
     private navigation: NavigationService,
     public settingsService: AbstractSettingsService,
     protected notification: NotificationService,
-    protected globalSettingsService: SettingsService,
+    public globalSettingsService: SettingsService,
     sliceFN?: (s: IWebConfigClassPrivate<TAGS> & WebConfig) => T
   ) {
     this.setSliceFN(sliceFN);
@@ -108,6 +107,7 @@ export abstract class SettingsComponentDirective<
           if (state.volatile) {
             return true;
           }
+
           if (state.tags &&
             ((state.tags.relevant && !state.tags.relevant(parent.value))
               || state.tags.secret)) {
@@ -135,12 +135,11 @@ export abstract class SettingsComponentDirective<
           return (
             (state.tags?.priority > this.globalSettingsService.configPriority ||
               (this.globalSettingsService.configPriority === ConfigPriority.basic &&
-              state.tags?.dockerSensitive && this.globalSettingsService.settings.value.Environment.isDocker)) && //if this value should not change in Docker, lets hide it
+                state.tags?.dockerSensitive && this.globalSettingsService.settings.value.Environment.isDocker)) && //if this value should not change in Docker, lets hide it
             Utils.equalsFilter(state.value, state.default,
               ['__propPath', '__created', '__prototype', '__rootConfig']) &&
             Utils.equalsFilter(state.original, state.default,
-              ['__propPath', '__created', '__prototype', '__rootConfig'])
-          );
+              ['__propPath', '__created', '__prototype', '__rootConfig']));
         };
       };
 
@@ -164,6 +163,7 @@ export abstract class SettingsComponentDirective<
       }
     };
     instrument(this.states, null);
+    this.icon = this.states.tags?.uiIcon;
   };
 
   onOptionChange = () => {

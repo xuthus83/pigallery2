@@ -1,14 +1,10 @@
-import {
-  ConfigTemplateEntry,
-  DefaultsJobs,
-} from '../../../../common/entities/job/JobDTO';
+import {ConfigTemplateEntry, DefaultsJobs,} from '../../../../common/entities/job/JobDTO';
 import * as path from 'path';
 import * as fs from 'fs';
 import {Job} from './Job';
 import {ProjectPath} from '../../../ProjectPath';
 import {PhotoProcessing} from '../../fileprocessing/PhotoProcessing';
 import {VideoProcessing} from '../../fileprocessing/VideoProcessing';
-import {DiskMangerWorker} from '../../threading/DiskMangerWorker';
 import {GPXProcessing} from '../../fileprocessing/GPXProcessing';
 
 export class TempFolderCleaningJob extends Job {

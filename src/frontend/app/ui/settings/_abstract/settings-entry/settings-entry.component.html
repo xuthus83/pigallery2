@@ -13,8 +13,6 @@
     <div class="col-md-10">
 
       <div class="input-group">
-
-
         <app-gallery-search-field
           *ngIf="Type === 'SearchQuery'"
           [(ngModel)]="state.value"
@@ -296,7 +294,9 @@
       </div>
       <small class="form-text text-muted" *ngIf="description">{{description}}
         <span *ngIf="Type==='array' && (state.arrayType === 'string' || isNumberArray)" i18n>';' separated list.</span>
-        <a *ngIf="link" [href]="link">{{linkText || link}}</a>
+        <a *ngIf="state.tags?.githubIssue"
+           [href]="'https://github.com/bpatrik/pigallery2/issues/'+state.tags?.githubIssue">See
+          #{{state.tags?.githubIssue}}.</a>
       </small>
       <ng-content></ng-content>
     </div>

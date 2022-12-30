@@ -6,7 +6,6 @@ import {
   JobScheduleDTO,
   JobScheduleDTOUtils,
   JobTriggerType,
-  PeriodicJobTrigger,
   ScheduledJobTrigger
 } from '../../../../../common/entities/job/JobScheduleDTO';
 import {ScheduledJobsService} from '../scheduled-jobs.service';
@@ -96,6 +95,9 @@ export class WorkflowComponent implements ControlValueAccessor, Validator, OnIni
   }
 
   atTimeLocal(atTime: number): Date {
+    if (!atTime) {
+      return null;
+    }
     const d = new Date();
     d.setUTCHours(Math.floor(atTime / 60));
     d.setUTCMinutes(Math.floor(atTime % 60));
@@ -156,6 +158,8 @@ export class WorkflowComponent implements ControlValueAccessor, Validator, OnIni
 
       case JobTriggerType.periodic:
         schedule.trigger = new PeriodicJobTriggerConfig();
+        schedule.trigger.periodicity = 7;
+        schedule.trigger.atTime = 0;
         break;
 
       case JobTriggerType.after:

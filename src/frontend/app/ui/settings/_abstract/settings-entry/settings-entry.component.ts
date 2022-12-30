@@ -1,22 +1,9 @@
 import {Component, forwardRef, Input, OnChanges} from '@angular/core';
-import {
-  ControlValueAccessor,
-  FormControl,
-  NG_VALIDATORS,
-  NG_VALUE_ACCESSOR,
-  ValidationErrors,
-  Validator,
-} from '@angular/forms';
+import {ControlValueAccessor, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator,} from '@angular/forms';
 import {Utils} from '../../../../../../common/Utils';
-import {IConfigClass, propertyTypes} from 'typeconfig/common';
+import {propertyTypes} from 'typeconfig/common';
 import {SearchQueryParserService} from '../../../gallery/search/search-query-parser.service';
-import {
-  ClientThumbnailConfig,
-  ConfigPriority,
-  MapLayers,
-  NavigationLinkConfig, NavigationLinkTypes,
-  TAGS
-} from '../../../../../../common/config/public/ClientConfig';
+import {MapLayers, NavigationLinkConfig, NavigationLinkTypes, TAGS} from '../../../../../../common/config/public/ClientConfig';
 import {SettingsService} from '../../settings.service';
 import {WebConfig} from '../../../../../../common/config/private/WebConfig';
 import {JobScheduleConfig, UserConfig} from '../../../../../../common/config/private/PrivateConfig';
@@ -61,16 +48,12 @@ interface IState {
 })
 export class SettingsEntryComponent
   implements ControlValueAccessor, Validator, OnChanges {
-  @Input() defaultName: string;
   name: string;
-  @Input() required: boolean;
-  @Input() dockerWarning: boolean;
-  @Input() placeholder: string;
-  @Input() allowSpaces = false;
-  @Input() description: string;
-  @Input() link: string;
-  @Input() linkText: string;
-  @Input() typeOverride: 'SearchQuery';
+  required: boolean;
+  dockerWarning: boolean;
+  placeholder: string;
+  allowSpaces = false;
+  description: string;
   state: IState;
   isNumberArray = false;
   isNumber = false;
@@ -89,13 +72,14 @@ export class SettingsEntryComponent
     if (this.Disabled) {
       return false;
     }
+
     if (this.state.isConfigArrayType) {
       for (let i = 0; i < this.state.value?.length; ++i) {
         for (const k of Object.keys(this.state.value[i].__state)) {
           if (!Utils.equalsFilter(
             this.state.value[i]?.__state[k]?.value,
             this.state.default[i]?.__state[k]?.value,
-            ['__propPath', '__created', '__prototype', '__rootConfig'])) {
+            ['default', '__propPath', '__created', '__prototype', '__rootConfig'])) {
             return true;
           }
         }
@@ -128,7 +112,7 @@ export class SettingsEntryComponent
   }
 
   get Type(): string | object {
-    return this.typeOverride || this.state.tags?.uiType || this.state.type;
+    return this.state.tags?.uiType || this.state.type;
   }
 
   get ArrayType(): string {
@@ -216,7 +200,7 @@ export class SettingsEntryComponent
       this.title = $localize`readonly` + ', ';
     }
     this.title += $localize`default value` + ': ' + this.defaultStr;
-    this.name = this.state?.tags?.name || this.defaultName;
+    this.name = this.state?.tags?.name;
     if (this.name) {
       this.idName =
         this.GUID + this.name.toLowerCase().replace(new RegExp(' ', 'gm'), '-');
@@ -244,10 +228,6 @@ export class SettingsEntryComponent
     if (this.state.tags) {
       if (typeof this.dockerWarning === 'undefined') {
         this.dockerWarning = this.state.tags.dockerSensitive && this.settingsService.settings.value.Environment.isDocker;
-      }
-      if (this.state.tags.githubIssue) {
-        this.link = `https://github.com/bpatrik/pigallery2/issues/` + this.state.tags.githubIssue;
-        this.linkText = $localize`See` + ' ' + this.state.tags.githubIssue;
       }
       this.name = this.name || this.state.tags.name;
       this.allowSpaces = this.allowSpaces || this.state.tags.uiAllowSpaces;
