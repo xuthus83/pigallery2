@@ -7,10 +7,9 @@ import {NavigationService} from '../../model/navigation.service';
 import {ISettingsComponent} from '../settings/_abstract/ISettingsComponent';
 import {PageHelper} from '../../model/page.helper';
 import {SettingsService} from '../settings/settings.service';
-import {CookieNames} from '../../../../common/CookieNames';
-import {CookieService} from 'ngx-cookie-service';
 import {ConfigPriority} from '../../../../common/config/public/ClientConfig';
 import {Utils} from '../../../../common/Utils';
+import {WebConfig} from '../../../../common/config/private/WebConfig';
 
 @Component({
   selector: 'app-admin',
@@ -24,6 +23,7 @@ export class AdminComponent implements OnInit, AfterViewInit {
   contents: ISettingsComponent[] = [];
   configPriorities: { key: number; value: string; }[];
   public readonly ConfigPriority = ConfigPriority;
+  public readonly configPaths: string[] = [];
 
   constructor(
     private authService: AuthenticationService,
@@ -32,6 +32,7 @@ export class AdminComponent implements OnInit, AfterViewInit {
     public settingsService: SettingsService,
   ) {
     this.configPriorities = Utils.enumToArray(ConfigPriority);
+    this.configPaths = Object.keys((new WebConfig()).State);
   }
 
   ngAfterViewInit(): void {

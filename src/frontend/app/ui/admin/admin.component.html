@@ -85,7 +85,14 @@
         </nav>
       </div>
       <div class="col-md-10">
-        <app-settings-template #setting #server
+        <app-settings-template
+                               *ngFor="let cp of configPaths"
+                               #setting
+                               #tmpl
+                               icon="list"
+                               [ConfigPath]="cp"
+                               [hidden]="!tmpl.HasAvailableSettings"></app-settings-template>
+     <!--   <app-settings-template #setting #server
                                icon="list"
                                [ConfigPath]="'Server'"
                                [hidden]="!server.HasAvailableSettings"></app-settings-template>
@@ -140,7 +147,7 @@
         <app-settings-template #setting #indexing
                                icon="pie-chart"
                                [ConfigPath]="'Indexing'"
-                               [hidden]="!indexing.HasAvailableSettings"></app-settings-template>
+                               [hidden]="!indexing.HasAvailableSettings"></app-settings-template>-->
       </div>
     </div>
 

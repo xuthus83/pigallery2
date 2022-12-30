@@ -25,7 +25,6 @@ export class TemplateComponent extends SettingsComponentDirective<any> implement
     globalSettingsService: SettingsService
   ) {
     super(
-      `Template`,
       authService,
       navigation,
       settingsService,

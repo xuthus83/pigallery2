@@ -10,7 +10,7 @@ export interface JobTrigger {
   type: JobTriggerType;
 }
 
-export interface NeverJobTrigger {
+export interface NeverJobTrigger extends JobTrigger {
   type: JobTriggerType.never;
 }
 
@@ -33,7 +33,7 @@ export interface AfterJobTrigger extends JobTrigger {
 export interface JobScheduleDTO {
   name: string;
   jobName: string;
-  config: any;
+  config: Record<string, string | number | string[] | number[]>;
   allowParallelRun: boolean;
   trigger:
     | NeverJobTrigger

@@ -1,12 +1,4 @@
-import {
-  Directive,
-  Input,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  Output,
-  ViewChild,
-} from '@angular/core';
+import {Directive, Input, OnDestroy, OnInit, ViewChild,} from '@angular/core';
 import {AuthenticationService} from '../../../model/network/authentication.service';
 import {UserRoles} from '../../../../../common/entities/UserDTO';
 import {Utils} from '../../../../../common/Utils';
@@ -20,12 +12,8 @@ import {WebConfig} from '../../../../../common/config/private/WebConfig';
 import {FormControl} from '@angular/forms';
 import {ConfigPriority, TAGS} from '../../../../../common/config/public/ClientConfig';
 import {SettingsService} from '../settings.service';
-import {IConfigClass} from 'typeconfig/common';
-import {IConfigClassPrivate} from '../../../../../../node_modules/typeconfig/src/decorators/class/IConfigClass';
-import {IPropertyMetadata} from '../../../../../../node_modules/typeconfig/src/decorators/property/IPropertyState';
-import {IWebConfigClass, IWebConfigClassPrivate} from '../../../../../../node_modules/typeconfig/src/decorators/class/IWebConfigClass';
+import {IWebConfigClassPrivate} from '../../../../../../node_modules/typeconfig/src/decorators/class/IWebConfigClass';
 import {WebConfigClassBuilder} from '../../../../../../node_modules/typeconfig/src/decorators/builders/WebConfigClassBuilder';
-import {ServerConfig} from '../../../../../common/config/private/PrivateConfig';
 
 interface ConfigState<T = unknown> {
   value: T;
@@ -73,13 +61,13 @@ export abstract class SettingsComponentDirective<
   public error: string = null;
   public changed = false;
   public states: RecursiveState = {} as RecursiveState;
+  protected name: string;
 
   private subscription: Subscription = null;
   private settingsSubscription: Subscription = null;
   protected sliceFN?: (s: WebConfig) => T;
 
   protected constructor(
-    protected name: string,
     protected authService: AuthenticationService,
     private navigation: NavigationService,
     public settingsService: AbstractSettingsService,
@@ -128,7 +116,8 @@ export abstract class SettingsComponentDirective<
 
           // if all sub elements are hidden, hide the parent too.
           if (state.isConfigType) {
-            if (Object.keys(state.value.__state).findIndex(k => !st.value.__state[k].shouldHide()) === -1) {
+            if (state.value.__state &&
+              Object.keys(state.value.__state).findIndex(k => !st.value.__state[k].shouldHide()) === -1) {
               return true;
             }
           }
@@ -136,14 +125,17 @@ export abstract class SettingsComponentDirective<
 
           if (state.isConfigArrayType) {
             for (let i = 0; i < state.value?.length; ++i) {
-              if (Object.keys(state.value[i].__state).findIndex(k => !(st.value[i].__state[k].shouldHide && st.value[i].__state[k].shouldHide())) === -1) {
+              if (state.value[i].__state &&
+                Object.keys(state.value[i].__state).findIndex(k => !(st.value[i].__state[k].shouldHide && st.value[i].__state[k].shouldHide())) === -1) {
                 return true;
               }
             }
             return false;
           }
           return (
-            state.tags?.priority > this.globalSettingsService.configPriority &&
+            (state.tags?.priority > this.globalSettingsService.configPriority ||
+              (this.globalSettingsService.configPriority === ConfigPriority.basic &&
+              state.tags?.dockerSensitive && this.globalSettingsService.settings.value.Environment.isDocker)) && //if this value should not change in Docker, lets hide it
             Utils.equalsFilter(state.value, state.default,
               ['__propPath', '__created', '__prototype', '__rootConfig']) &&
             Utils.equalsFilter(state.original, state.default,

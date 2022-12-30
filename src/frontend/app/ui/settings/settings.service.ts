@@ -7,15 +7,18 @@ import {WebConfigClassBuilder} from 'typeconfig/src/decorators/builders/WebConfi
 import {ConfigPriority} from '../../../../common/config/public/ClientConfig';
 import {CookieNames} from '../../../../common/CookieNames';
 import {CookieService} from 'ngx-cookie-service';
+import {JobDTO} from '../../../../common/entities/job/JobDTO';
 
 @Injectable()
 export class SettingsService {
   public configPriority = ConfigPriority.basic;
   public settings: BehaviorSubject<WebConfig>;
   private fetchingSettings = false;
+  public availableJobs: BehaviorSubject<JobDTO[]>;
 
   constructor(private networkService: NetworkService,
               private cookieService: CookieService) {
+    this.availableJobs = new BehaviorSubject([]);
     this.settings = new BehaviorSubject<WebConfig>(new WebConfig());
     this.getSettings().catch(console.error);
 
@@ -25,6 +28,12 @@ export class SettingsService {
 
     }
 
+  }
+
+  public async getAvailableJobs(): Promise<void> {
+    this.availableJobs.next(
+      await this.networkService.getJson<JobDTO[]>('/admin/jobs/available')
+    );
   }
 
   public async getSettings(): Promise<void> {

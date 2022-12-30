@@ -13,9 +13,14 @@ a {
   margin-left: -4px;
 }
 
-.changed-settings .bootstrap-switch {
+
+.changed-settings.bootstrap-switch {
   border-color: var(--bs-primary);
   border-width: 1px;
+}
+
+.changed-settings .no-changed-settings .bootstrap-switch {
+  border-color: var(--bs-gray-400) !important;
 }
 
 #toast-container > div {

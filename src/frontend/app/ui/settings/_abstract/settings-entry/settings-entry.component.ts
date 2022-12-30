@@ -19,7 +19,7 @@ import {
 } from '../../../../../../common/config/public/ClientConfig';
 import {SettingsService} from '../../settings.service';
 import {WebConfig} from '../../../../../../common/config/private/WebConfig';
-import {UserConfig} from '../../../../../../common/config/private/PrivateConfig';
+import {JobScheduleConfig, UserConfig} from '../../../../../../common/config/private/PrivateConfig';
 
 interface IState {
   shouldHide(): boolean;
@@ -78,7 +78,6 @@ export class SettingsEntryComponent
   title: string;
   idName: string;
   private readonly GUID = Utils.GUID();
-  public NavigationLinkTypesEnum = Utils.enumToArray(NavigationLinkTypes);
   NavigationLinkTypes = NavigationLinkTypes;
 
   constructor(private searchQueryParserService: SearchQueryParserService,
@@ -142,6 +141,10 @@ export class SettingsEntryComponent
     if (this.state.arrayType === UserConfig) {
       return 'UserConfig';
     }
+    if (this.state.arrayType === JobScheduleConfig) {
+      return 'JobScheduleConfig';
+    }
+
     this.state.arrayType;
   }
 

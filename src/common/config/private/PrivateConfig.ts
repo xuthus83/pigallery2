@@ -1,6 +1,14 @@
 /* eslint-disable @typescript-eslint/no-inferrable-types */
 import 'reflect-metadata';
-import {JobScheduleDTO, JobTrigger, JobTriggerType,} from '../../entities/job/JobScheduleDTO';
+import {
+  AfterJobTrigger,
+  JobScheduleDTO,
+  JobTrigger,
+  JobTriggerType,
+  NeverJobTrigger,
+  PeriodicJobTrigger,
+  ScheduledJobTrigger,
+} from '../../entities/job/JobScheduleDTO';
 import {
   ClientConfig,
   ClientGPXCompressingConfig,
@@ -334,8 +342,9 @@ export class ServerGPXCompressingConfig extends ClientGPXCompressingConfig {
       {
         name: $localize`Min time delta`,
         priority: ConfigPriority.underTheHood,
+        unit: 'ms',
         uiDisabled: (sc: ServerGPXCompressingConfig, c: ServerConfig) => !c.Map.enabled || !sc.enabled || !c.MetaFile.gpx
-      },
+      } as TAGS,
     description: $localize`Filters out entry that are closer than this in time in milliseconds.`
   })
   minTimeDistance: number = 5000;
@@ -485,13 +494,13 @@ export class ServerLogConfig {
 }
 
 @SubConfigClass()
-export class NeverJobTrigger implements JobTrigger {
+export class NeverJobTriggerConfig implements NeverJobTrigger {
   @ConfigProperty({type: JobTriggerType})
   readonly type = JobTriggerType.never;
 }
 
 @SubConfigClass()
-export class ScheduledJobTrigger implements JobTrigger {
+export class ScheduledJobTriggerConfig implements ScheduledJobTrigger {
   @ConfigProperty({type: JobTriggerType})
   readonly type = JobTriggerType.scheduled;
 
@@ -500,17 +509,17 @@ export class ScheduledJobTrigger implements JobTrigger {
 }
 
 @SubConfigClass()
-export class PeriodicJobTrigger implements JobTrigger {
+export class PeriodicJobTriggerConfig implements PeriodicJobTrigger {
   @ConfigProperty({type: JobTriggerType})
   readonly type = JobTriggerType.periodic;
   @ConfigProperty({type: 'unsignedInt', max: 7})
-  periodicity: number | undefined; // 0-6: week days 7 every day
+  periodicity: number | undefined = 7; // 0-6: week days 7 every day
   @ConfigProperty({type: 'unsignedInt', max: 23 * 60 + 59})
-  atTime: number | undefined; // day time
+  atTime: number | undefined = 0; // day time
 }
 
 @SubConfigClass()
-export class AfterJobTrigger implements JobTrigger {
+export class AfterJobTriggerConfig implements AfterJobTrigger {
   @ConfigProperty({type: JobTriggerType})
   readonly type = JobTriggerType.after;
   @ConfigProperty()
@@ -528,42 +537,42 @@ export class JobScheduleConfig implements JobScheduleDTO {
   @ConfigProperty()
   jobName: string;
   @ConfigProperty()
-  config: any = {};
+  config: Record<string, string | number | string[] | number[]> = {};
   @ConfigProperty()
-  allowParallelRun: boolean;
+  allowParallelRun: boolean = false;
   @ConfigProperty({
-    type: NeverJobTrigger,
+    type: NeverJobTriggerConfig,
     typeBuilder: (v: JobTrigger) => {
       const type = typeof v.type === 'number' ? v.type : JobTriggerType[v.type];
       switch (type) {
         case JobTriggerType.after:
-          return AfterJobTrigger;
+          return AfterJobTriggerConfig;
         case JobTriggerType.never:
-          return NeverJobTrigger;
+          return NeverJobTriggerConfig;
         case JobTriggerType.scheduled:
-          return ScheduledJobTrigger;
+          return ScheduledJobTriggerConfig;
         case JobTriggerType.periodic:
-          return PeriodicJobTrigger;
+          return PeriodicJobTriggerConfig;
       }
       return null;
     },
   })
   trigger:
-    | AfterJobTrigger
-    | NeverJobTrigger
-    | PeriodicJobTrigger
-    | ScheduledJobTrigger;
+    | AfterJobTriggerConfig
+    | NeverJobTriggerConfig
+    | PeriodicJobTriggerConfig
+    | ScheduledJobTriggerConfig;
 
   constructor(
     name: string,
     jobName: string,
-    allowParallelRun: boolean,
     trigger:
-      | AfterJobTrigger
-      | NeverJobTrigger
-      | PeriodicJobTrigger
-      | ScheduledJobTrigger,
-    config: any
+      | AfterJobTriggerConfig
+      | NeverJobTriggerConfig
+      | PeriodicJobTriggerConfig
+      | ScheduledJobTriggerConfig,
+    config: any = {},
+    allowParallelRun: boolean = false
   ) {
     this.name = name;
     this.jobName = jobName;
@@ -600,43 +609,43 @@ export class ServerJobConfig {
     new JobScheduleConfig(
       DefaultsJobs[DefaultsJobs.Indexing],
       DefaultsJobs[DefaultsJobs.Indexing],
-      false,
-      new NeverJobTrigger(),
-      {indexChangesOnly: true}
+      new NeverJobTriggerConfig(),
+      {indexChangesOnly: true} // set config explicitly so it not undefined on the UI
     ),
     new JobScheduleConfig(
       DefaultsJobs[DefaultsJobs['Preview Filling']],
       DefaultsJobs[DefaultsJobs['Preview Filling']],
-      false,
-      new NeverJobTrigger(),
+      new AfterJobTriggerConfig(DefaultsJobs[DefaultsJobs['Indexing']]),
       {}
     ),
     new JobScheduleConfig(
       DefaultsJobs[DefaultsJobs['Thumbnail Generation']],
       DefaultsJobs[DefaultsJobs['Thumbnail Generation']],
-      false,
-      new AfterJobTrigger(DefaultsJobs[DefaultsJobs['Preview Filling']]),
+      new AfterJobTriggerConfig(DefaultsJobs[DefaultsJobs['Preview Filling']]),
       {sizes: [240], indexedOnly: true}
     ),
     new JobScheduleConfig(
       DefaultsJobs[DefaultsJobs['Photo Converting']],
       DefaultsJobs[DefaultsJobs['Photo Converting']],
-      false,
-      new AfterJobTrigger(DefaultsJobs[DefaultsJobs['Thumbnail Generation']]),
+      new AfterJobTriggerConfig(DefaultsJobs[DefaultsJobs['Thumbnail Generation']]),
       {indexedOnly: true}
     ),
     new JobScheduleConfig(
       DefaultsJobs[DefaultsJobs['Video Converting']],
       DefaultsJobs[DefaultsJobs['Video Converting']],
-      false,
-      new AfterJobTrigger(DefaultsJobs[DefaultsJobs['Photo Converting']]),
+      new AfterJobTriggerConfig(DefaultsJobs[DefaultsJobs['Photo Converting']]),
+      {indexedOnly: true}
+    ),
+    new JobScheduleConfig(
+      DefaultsJobs[DefaultsJobs['GPX Compression']],
+      DefaultsJobs[DefaultsJobs['GPX Compression']],
+      new AfterJobTriggerConfig(DefaultsJobs[DefaultsJobs['Video Converting']]),
       {indexedOnly: true}
     ),
     new JobScheduleConfig(
       DefaultsJobs[DefaultsJobs['Temp Folder Cleaning']],
       DefaultsJobs[DefaultsJobs['Temp Folder Cleaning']],
-      false,
-      new AfterJobTrigger(DefaultsJobs[DefaultsJobs['Video Converting']]),
+      new AfterJobTriggerConfig(DefaultsJobs[DefaultsJobs['GPX Compression']]),
       {indexedOnly: true}
     ),
   ];

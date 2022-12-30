@@ -24,7 +24,6 @@
           [disabled]="state.readonly || Disabled"
           (change)="onChange($event)"
           placeholder="Search Query">
-
         </app-gallery-search-field>
 
         <div class="input-group">
@@ -35,6 +34,7 @@
           Type !== 'SearchQuery' &&
           ArrayType !== 'MapLayers' &&
           ArrayType !== 'NavigationLinkConfig' &&
+          ArrayType !== 'JobScheduleConfig' &&
           ArrayType !== 'UserConfig'"
             [type]="type" [min]="state.min" [max]="state.max" class="form-control"
             [placeholder]="PlaceHolder"
@@ -81,6 +81,17 @@
           (ngModelChange)="onChange($event)"
           [(ngModel)]="state.value">
         </bSwitch>
+
+
+        <app-settings-workflow
+          class="w-100"
+          *ngIf="ArrayType === 'JobScheduleConfig'"
+          [(ngModel)]="state.value"
+          [id]="idName"
+          [name]="idName"
+          [title]="title"
+          (ngModelChange)="onChange($event)">
+        </app-settings-workflow>
 
         <ng-container *ngIf="ArrayType === 'MapLayers'">
           <div class="container">
