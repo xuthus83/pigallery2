@@ -11,6 +11,7 @@ import {Utils} from '../../../../common/Utils';
 import {WebConfig} from '../../../../common/config/private/WebConfig';
 import {ISettingsComponent} from '../settings/template/ISettingsComponent';
 import {WebConfigClassBuilder} from '../../../../../node_modules/typeconfig/src/decorators/builders/WebConfigClassBuilder';
+import {enumToTranslatedArray} from '../EnumTranslations';
 
 @Component({
   selector: 'app-admin',
@@ -32,7 +33,7 @@ export class AdminComponent implements OnInit, AfterViewInit {
     public notificationService: NotificationService,
     public settingsService: SettingsService,
   ) {
-    this.configPriorities = Utils.enumToArray(ConfigPriority);
+    this.configPriorities = enumToTranslatedArray(ConfigPriority);
     const wc = WebConfigClassBuilder.attachPrivateInterface(new WebConfig());
     this.configPaths = Object.keys(wc.State)
       .filter(s => !wc.__state[s].volatile);

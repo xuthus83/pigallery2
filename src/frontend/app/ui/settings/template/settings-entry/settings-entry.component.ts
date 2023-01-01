@@ -7,6 +7,7 @@ import {MapLayers, NavigationLinkConfig, NavigationLinkTypes, TAGS} from '../../
 import {SettingsService} from '../../settings.service';
 import {WebConfig} from '../../../../../../common/config/private/WebConfig';
 import {JobScheduleConfig, UserConfig} from '../../../../../../common/config/private/PrivateConfig';
+import {enumToTranslatedArray} from '../../../EnumTranslations';
 
 interface IState {
   shouldHide(): boolean;
@@ -264,7 +265,7 @@ export class SettingsEntryComponent
         value: o + (state.tags?.unit ? state.tags?.unit : '')
       }));
     } else {
-      optionsView = Utils.enumToArray(eClass);
+      optionsView = enumToTranslatedArray(eClass);
     }
     return optionsView;
   }
