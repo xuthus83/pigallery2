@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {SettingsService} from '../settings.service';
 
 @Component({
@@ -6,14 +6,9 @@ import {SettingsService} from '../settings.service';
   templateUrl: './gallery-statistic.component.html',
   styleUrls: ['./gallery-statistic.component.css']
 })
-export class GalleryStatisticComponent implements OnInit {
+export class GalleryStatisticComponent {
 
-  constructor(
-    public settingsService: SettingsService
-  ) {
-  }
-
-  ngOnInit(): void {
+  constructor(public settingsService: SettingsService) {
   }
 
 }
