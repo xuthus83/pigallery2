@@ -4,17 +4,18 @@ import {NetworkService} from '../../model/network/network.service';
 
 import {WebConfig} from '../../../../common/config/private/WebConfig';
 import {WebConfigClassBuilder} from 'typeconfig/src/decorators/builders/WebConfigClassBuilder';
-import {ConfigPriority} from '../../../../common/config/public/ClientConfig';
+import {ConfigPriority, TAGS} from '../../../../common/config/public/ClientConfig';
 import {CookieNames} from '../../../../common/CookieNames';
 import {CookieService} from 'ngx-cookie-service';
 import {DefaultsJobs, JobDTO} from '../../../../common/entities/job/JobDTO';
 import {StatisticDTO} from '../../../../common/entities/settings/StatisticDTO';
 import {ScheduledJobsService} from './scheduled-jobs.service';
+import {IWebConfigClassPrivate} from '../../../../../node_modules/typeconfig/src/decorators/class/IWebConfigClass';
 
 @Injectable()
 export class SettingsService {
   public configPriority = ConfigPriority.basic;
-  public settings: BehaviorSubject<WebConfig>;
+  public settings: BehaviorSubject<IWebConfigClassPrivate<TAGS> & WebConfig>;
   private fetchingSettings = false;
   public availableJobs: BehaviorSubject<JobDTO[]>;
   public statistic: BehaviorSubject<StatisticDTO>;
@@ -24,7 +25,7 @@ export class SettingsService {
               private cookieService: CookieService) {
     this.statistic = new BehaviorSubject(null);
     this.availableJobs = new BehaviorSubject([]);
-    this.settings = new BehaviorSubject<WebConfig>(new WebConfig());
+    this.settings = new BehaviorSubject<IWebConfigClassPrivate<TAGS> & WebConfig>(WebConfigClassBuilder.attachPrivateInterface(new WebConfig()));
     this.getSettings().catch(console.error);
 
     if (this.cookieService.check(CookieNames.configPriority)) {
@@ -59,7 +60,7 @@ export class SettingsService {
     }
     this.fetchingSettings = true;
     try {
-      const wcg = WebConfigClassBuilder.attachInterface(new WebConfig());
+      const wcg = WebConfigClassBuilder.attachPrivateInterface(new WebConfig());
       wcg.load(
         await this.networkService.getJson<Promise<WebConfig>>('/settings')
       );
@@ -68,6 +69,11 @@ export class SettingsService {
       console.error(e);
     }
     this.fetchingSettings = false;
+  }
+
+
+  public updateSettings(settings: Record<string, any>, settingsPath: string): Promise<void> {
+    return this.networkService.putJson('/settings', {settings, settingsPath});
   }
 
   configPriorityChanged(): void {

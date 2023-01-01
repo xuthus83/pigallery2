@@ -73,7 +73,6 @@ import {ScheduledJobsService} from './ui/settings/scheduled-jobs.service';
 import {BackendtextService} from './model/backendtext.service';
 import {ErrorInterceptor} from './model/network/helper/error.interceptor';
 import {CSRFInterceptor} from './model/network/helper/csrf.interceptor';
-import {SettingsEntryComponent} from './ui/settings/_abstract/settings-entry/settings-entry.component';
 import {GallerySearchQueryEntryComponent} from './ui/gallery/search/query-enrty/query-entry.search.gallery.component';
 import {StringifySearchQuery} from './pipes/StringifySearchQuery';
 import {AutoCompleteService} from './ui/gallery/search/autocomplete.service';
@@ -99,11 +98,11 @@ import {GalleryFilterComponent} from './ui/gallery/filter/filter.gallery.compone
 import {GallerySortingService} from './ui/gallery/navigator/sorting.service';
 import {FilterService} from './ui/gallery/filter/filter.service';
 import {TemplateComponent} from './ui/settings/template/template.component';
-import {AbstractSettingsService} from './ui/settings/_abstract/abstract.settings.service';
 import {WorkflowComponent} from './ui/settings/workflow/workflow.component';
-import {JobProgressComponent} from './ui/settings/jobs/progress/job-progress.settings.component';
-import {JobButtonComponent} from './ui/settings/jobs/button/job-button.settings.component';
 import {GalleryStatisticComponent} from './ui/settings/gallery-statistic/gallery-statistic.component';
+import { JobButtonComponent } from './ui/settings/workflow/button/job-button.settings.component';
+import { JobProgressComponent } from './ui/settings/workflow/progress/job-progress.settings.component';
+import {SettingsEntryComponent} from './ui/settings/template/settings-entry/settings-entry.component';
 
 @Injectable()
 export class MyHammerConfig extends HammerGestureConfig {
@@ -271,8 +270,7 @@ Marker.prototype.options.icon = iconDefault;
     VersionService,
     ScheduledJobsService,
     BackendtextService,
-    CookieService,
-    AbstractSettingsService
+    CookieService
   ],
   bootstrap: [AppComponent],
 })

@@ -12,9 +12,9 @@
     <label class="col-md-2 control-label" [for]="idName">{{name}}</label>
     <div class="col-md-10">
 
-      <div class="input-group">
+      <div class="input-group" [ngSwitch]="uiType">
         <app-gallery-search-field
-          *ngIf="Type === 'SearchQuery'"
+          *ngSwitchCase="'SearchQuery'"
           [(ngModel)]="state.value"
           [id]="idName"
           [name]="idName"
@@ -24,18 +24,11 @@
           placeholder="Search Query">
         </app-gallery-search-field>
 
-        <div class="input-group">
+        <div class="input-group"
+             *ngSwitchCase="'StringInput'">
           <input
-            *ngIf="!state.isEnumType &&
-          !state.isEnumArrayType &&
-          Type !== 'boolean' &&
-          Type !== 'SearchQuery' &&
-          ArrayType !== 'MapLayers' &&
-          ArrayType !== 'NavigationLinkConfig' &&
-          ArrayType !== 'JobScheduleConfig' &&
-          ArrayType !== 'UserConfig'"
-            [type]="type" [min]="state.min" [max]="state.max" class="form-control"
-            [placeholder]="PlaceHolder"
+            [type]="HTMLInputType" [min]="state.min" [max]="state.max" class="form-control"
+            [placeholder]="placeholder"
             [title]="title"
             [(ngModel)]="StringValue"
             (ngModelChange)="onChange($event)"
@@ -49,7 +42,7 @@
         </div>
 
         <select
-          *ngIf="state.isEnumType"
+          *ngSwitchCase="'EnumType'"
           [id]="idName"
           [name]="idName"
           [title]="title"
@@ -62,7 +55,7 @@
 
 
         <bSwitch
-          *ngIf="Type === 'boolean'"
+          *ngSwitchCase="'Boolean'"
           class="switch"
           [id]="idName"
           [name]="idName"
@@ -83,7 +76,7 @@
 
         <app-settings-workflow
           class="w-100"
-          *ngIf="ArrayType === 'JobScheduleConfig'"
+          *ngSwitchCase="'JobScheduleConfig'"
           [(ngModel)]="state.value"
           [id]="idName"
           [name]="idName"
@@ -91,7 +84,7 @@
           (ngModelChange)="onChange($event)">
         </app-settings-workflow>
 
-        <ng-container *ngIf="ArrayType === 'MapLayers'">
+        <ng-container *ngSwitchCase="'MapLayers'">
           <div class="container">
             <table class="table">
               <thead>
@@ -131,7 +124,7 @@
           </div>
         </ng-container>
 
-        <ng-container *ngIf="ArrayType === 'NavigationLinkConfig'">
+        <ng-container *ngSwitchCase="'NavigationLinkConfig'">
           <div class="container">
             <div class="row  mt-1 mb-1 bg-light" *ngFor="let link of state.value; let i = index">
               <div class="col ps-0">
@@ -194,7 +187,7 @@
           </div>
         </ng-container>
 
-        <ng-container *ngIf="ArrayType === 'UserConfig'">
+        <ng-container *ngSwitchCase="'UserConfig'">
           <div class="container ps-0 pe-0">
             <div class="row ms-0 me-0 mt-1 mb-1 bg-light" *ngFor="let item of state.value; let i = index">
               <div class="col ps-0">
@@ -239,14 +232,14 @@
             <div class="row me-0">
               <div class="col pe-0">
                 <button class="btn btn-primary float-end"
-                        (click)="AddNew()" i18n>+ Add Link
+                        (click)="AddNew()" i18n>+ Add
                 </button>
               </div>
             </div>
           </div>
         </ng-container>
 
-        <ng-container *ngIf="state.isEnumArrayType">
+        <ng-container *ngSwitchCase="'EnumArray'">
           <ng-container *ngFor="let _ of state.value; let i=index">
             <div class="row col-12 mt-1 m-0 p-0">
               <div class="col p-0">
@@ -263,7 +256,7 @@
 
 
               </div>
-              <ng-container *ngIf="state.type === 'array'">
+              <ng-container>
                 <div class="col-auto pe-0">
                   <button class="btn btn-secondary float-end"
                           [id]="'list_btn_'+idName+i"
@@ -274,12 +267,12 @@
               </ng-container>
             </div>
           </ng-container>
-          <ng-container *ngIf="state.type === 'array'">
+          <ng-container>
             <div class="col-12 p-0">
               <button class="btn btn-primary mt-1 float-end"
                       [id]="'btn_add_'+idName"
                       [name]="'btn_add_'+idName"
-                      (click)="AddNew()">+Add
+                      (click)="AddNew()" i18n>+Add
               </button>
             </div>
           </ng-container>
@@ -292,13 +285,14 @@
             class="oi oi-warning text-warning warning-icon ms-2" *ngIf="dockerWarning && changed"></span>
         </div>
       </div>
+
       <small class="form-text text-muted" *ngIf="description">{{description}}
-        <span *ngIf="Type==='array' && (state.arrayType === 'string' || isNumberArray)" i18n>';' separated list.</span>
+        <span *ngIf="type==='array' && (state.arrayType === 'string' || isNumberArray)" i18n>';' separated list.</span>
         <a *ngIf="state.tags?.githubIssue"
-           [href]="'https://github.com/bpatrik/pigallery2/issues/'+state.tags?.githubIssue">See
+           [href]="'https://github.com/bpatrik/pigallery2/issues/'+state.tags?.githubIssue">
+          <ng-container i18n>See</ng-container>
           #{{state.tags?.githubIssue}}.</a>
       </small>
-      <ng-content></ng-content>
     </div>
   </div>
 </ng-container>

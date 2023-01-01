@@ -910,7 +910,10 @@ export class ServerMediaConfig extends ClientMediaConfig {
 export class ServerServiceConfig extends ClientServiceConfig {
   @ConfigProperty({
     arrayType: 'string',
-    tags: {secret: true}
+    tags: {
+      secret: true,
+      name: 'sessionSecret'
+    }
   })
   sessionSecret: string[] = [];
 

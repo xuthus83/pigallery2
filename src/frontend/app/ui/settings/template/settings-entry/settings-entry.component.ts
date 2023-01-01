@@ -1,4 +1,4 @@
-import {Component, forwardRef, Input, OnChanges} from '@angular/core';
+import {Component, forwardRef, OnChanges} from '@angular/core';
 import {ControlValueAccessor, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator,} from '@angular/forms';
 import {Utils} from '../../../../../../common/Utils';
 import {propertyTypes} from 'typeconfig/common';
@@ -57,11 +57,15 @@ export class SettingsEntryComponent
   state: IState;
   isNumberArray = false;
   isNumber = false;
-  type = 'text';
+  HTMLInputType = 'text';
   title: string;
   idName: string;
   private readonly GUID = Utils.GUID();
   NavigationLinkTypes = NavigationLinkTypes;
+  public type: string | object;
+  public arrayType: string;
+  public uiType: string;
+
 
   constructor(private searchQueryParserService: SearchQueryParserService,
               public settingsService: SettingsService,
@@ -93,12 +97,8 @@ export class SettingsEntryComponent
     return this.state.shouldHide && this.state.shouldHide();
   }
 
-  get PlaceHolder(): string {
-    return this.placeholder || this.state.tags?.hint || this.state.default;
-  }
-
   get defaultStr(): string {
-    if (this.Type === 'SearchQuery') {
+    if (this.type === 'SearchQuery') {
       return (
         '\'' + this.searchQueryParserService.stringify(this.state.default) + '\''
       );
@@ -111,26 +111,6 @@ export class SettingsEntryComponent
     return this.state.default;
   }
 
-  get Type(): string | object {
-    return this.state.tags?.uiType || this.state.type;
-  }
-
-  get ArrayType(): string {
-    if (this.state.arrayType === MapLayers) {
-      return 'MapLayers';
-    }
-    if (this.state.arrayType === NavigationLinkConfig) {
-      return 'NavigationLinkConfig';
-    }
-    if (this.state.arrayType === UserConfig) {
-      return 'UserConfig';
-    }
-    if (this.state.arrayType === JobScheduleConfig) {
-      return 'JobScheduleConfig';
-    }
-
-    this.state.arrayType;
-  }
 
   get StringValue(): string {
     if (
@@ -192,6 +172,44 @@ export class SettingsEntryComponent
     if (!this.state) {
       return;
     }
+
+    // cache type overrides
+    this.type = this.state.tags?.uiType || this.state.type;
+    this.arrayType = null;
+    if (this.state.arrayType === MapLayers) {
+      this.arrayType = 'MapLayers';
+    } else if (this.state.arrayType === NavigationLinkConfig) {
+      this.arrayType = 'NavigationLinkConfig';
+    } else if (this.state.arrayType === UserConfig) {
+      this.arrayType = 'UserConfig';
+    } else if (this.state.arrayType === JobScheduleConfig) {
+      this.arrayType = 'JobScheduleConfig';
+    } else {
+      this.arrayType = this.state.arrayType;
+    }
+    this.uiType = this.arrayType;
+    if (!this.state.isEnumType &&
+      !this.state.isEnumArrayType &&
+      this.type !== 'boolean' &&
+      this.type !== 'SearchQuery' &&
+      this.arrayType !== 'MapLayers' &&
+      this.arrayType !== 'NavigationLinkConfig' &&
+      this.arrayType !== 'JobScheduleConfig' &&
+      this.arrayType !== 'UserConfig') {
+      this.uiType = 'StringInput';
+    }
+    if (this.type === 'SearchQuery') {
+      this.uiType = 'SearchQuery';
+    } else if (this.state.isEnumType) {
+      this.uiType = 'EnumType';
+    } else if (this.type === 'boolean') {
+      this.uiType = 'Boolean';
+    } else if (this.state.isEnumArrayType) {
+      this.uiType = 'EnumArray';
+    }
+
+    this.placeholder = this.state.tags?.hint || this.state.default;
+
     if (this.state.tags?.uiOptions) {
       this.state.isEnumType = true;
     }
@@ -218,11 +236,11 @@ export class SettingsEntryComponent
 
 
     if (this.isNumber) {
-      this.type = 'number';
+      this.HTMLInputType = 'number';
     } else if (this.state.type === 'password') {
-      this.type = 'password';
+      this.HTMLInputType = 'password';
     } else {
-      this.type = 'text';
+      this.HTMLInputType = 'text';
     }
     this.description = this.description || this.state.description;
     if (this.state.tags) {

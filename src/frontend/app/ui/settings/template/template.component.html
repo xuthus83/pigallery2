@@ -84,7 +84,7 @@
           {{job.description}}
         </div>
         <app-settings-job-button
-          *ngIf="!job.relevant || job.relevant(globalSettingsService.settings | async)"
+          *ngIf="!job.relevant || job.relevant(settingsService.settings | async)"
           class="mt-2 mb-1 mb-md-0 mt-md-0 float-left me-2"
           [soloRun]="true"
           (jobError)="error=$event"
@@ -95,7 +95,7 @@
 
       <ng-container *ngFor="let job of rStates.tags?.uiJob">
         <ng-container
-          *ngIf="getProgress(job.job) && !job.hideProgress && (!job.relevant || job.relevant(globalSettingsService.settings | async))">
+          *ngIf="getProgress(job.job) && !job.hideProgress && (!job.relevant || job.relevant(settingsService.settings | async))">
           <hr class="mt-1"/>
           <app-settings-job-progress
             class="d-block mb-2"
