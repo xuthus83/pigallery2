@@ -31,11 +31,14 @@ import {SearchQueryDTO, SearchQueryTypes, TextSearch,} from '../../entities/Sear
 import {SortingMethods} from '../../entities/SortingMethods';
 import {UserRoles} from '../../entities/UserDTO';
 
+declare let $localize: (s: TemplateStringsArray) => string;
+
 if (typeof $localize === 'undefined') {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   global.$localize = (s) => s;
 }
+
 
 export enum DatabaseType {
   memory = 1,

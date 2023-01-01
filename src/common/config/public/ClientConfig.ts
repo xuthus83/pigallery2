@@ -5,11 +5,13 @@ import {UserRoles} from '../../entities/UserDTO';
 import {ConfigProperty, SubConfigClass} from 'typeconfig/common';
 import {SearchQueryDTO} from '../../entities/SearchQueryDTO';
 
+declare let $localize: (s: TemplateStringsArray) => string;
 if (typeof $localize === 'undefined') {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   global.$localize = (s) => s;
 }
+
 
 
 export enum MapProviders {
