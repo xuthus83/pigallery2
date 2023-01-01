@@ -856,7 +856,7 @@ export class SearchManager implements ISQLSearchManager {
           } as ORSearchQuery);
         }
 
-        if (someOfQ.min === (query as SearchListQuery).list.length) {
+        if (someOfQ.min === ((query as SearchListQuery).list || []).length) {
           return this.flattenSameOfQueries({
             type: SearchQueryTypes.AND,
             list: (someOfQ as SearchListQuery).list,
