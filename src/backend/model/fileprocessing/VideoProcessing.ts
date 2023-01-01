@@ -1,14 +1,11 @@
 import * as path from 'path';
-import { constants as fsConstants, promises as fsp } from 'fs';
-import { ITaskExecuter, TaskExecuter } from '../threading/TaskExecuter';
-import {
-  VideoConverterInput,
-  VideoConverterWorker,
-} from '../threading/VideoConverterWorker';
-import { MetadataLoader } from '../threading/MetadataLoader';
-import { Config } from '../../../common/config/private/Config';
-import { ProjectPath } from '../../ProjectPath';
-import { SupportedFormats } from '../../../common/SupportedFormats';
+import {constants as fsConstants, promises as fsp} from 'fs';
+import {ITaskExecuter, TaskExecuter} from '../threading/TaskExecuter';
+import {VideoConverterInput, VideoConverterWorker,} from '../threading/VideoConverterWorker';
+import {MetadataLoader} from '../threading/MetadataLoader';
+import {Config} from '../../../common/config/private/Config';
+import {ProjectPath} from '../../ProjectPath';
+import {SupportedFormats} from '../../../common/SupportedFormats';
 
 export class VideoProcessing {
   private static taskQue: ITaskExecuter<VideoConverterInput, void> =
@@ -83,7 +80,9 @@ export class VideoProcessing {
       videoPath,
       output: {
         path: outPath,
-        codec: Config.Media.Video.transcoding.codec,
+        codec: Config.Media.Video.transcoding.format === 'mp4' ?
+          Config.Media.Video.transcoding.mp4Codec :
+          Config.Media.Video.transcoding.webmCodec,
         format: Config.Media.Video.transcoding.format,
         crf: Config.Media.Video.transcoding.crf,
         preset: Config.Media.Video.transcoding.preset,
@@ -108,7 +107,7 @@ export class VideoProcessing {
 
     const outDir = path.dirname(renderInput.output.path);
 
-    await fsp.mkdir(outDir, { recursive: true });
+    await fsp.mkdir(outDir, {recursive: true});
     await VideoProcessing.taskQue.execute(renderInput);
   }
 
@@ -121,7 +120,9 @@ export class VideoProcessing {
     return (
       Math.round(Config.Media.Video.transcoding.bitRate / 1024) +
       'k' +
-      Config.Media.Video.transcoding.codec.toString().toLowerCase() +
+      (Config.Media.Video.transcoding.format === 'mp4' ?
+        Config.Media.Video.transcoding.mp4Codec :
+        Config.Media.Video.transcoding.webmCodec).toString().toLowerCase() +
       Config.Media.Video.transcoding.resolution +
       '.' +
       Config.Media.Video.transcoding.format.toLowerCase()

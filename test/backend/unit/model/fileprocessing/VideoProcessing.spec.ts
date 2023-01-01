@@ -27,7 +27,7 @@ describe('VideoProcessing', () => {
     }
     {
       const convertedPath = VideoProcessing.generateConvertedFilePath(videoPath);
-      Config.Media.Video.transcoding.codec = 'codec_text' as any;
+      Config.Media.Video.transcoding.mp4Codec = 'codec_text' as any;
       expect(await VideoProcessing.isValidConvertedPath(convertedPath)).to.be.false;
     }
     {
