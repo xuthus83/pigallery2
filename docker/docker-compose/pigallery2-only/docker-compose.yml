@@ -4,7 +4,7 @@ services:
     image: bpatrik/pigallery2:latest
     container_name: pigallery2
     environment:
-      - NODE_ENV=production
+      - NODE_ENV=production # set to 'debug' for full debug logging
     volumes:
       - "./pigallery2/config:/app/data/config" # CHANGE ME
       - "db-data:/app/data/db"

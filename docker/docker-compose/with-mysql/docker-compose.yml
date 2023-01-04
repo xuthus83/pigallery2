@@ -29,7 +29,7 @@ services:
     command: sh -c 'bin/wait-for pigallery-db:3306 -- --Server-Database-mysql-host=pigallery-db --Server-Database-mysql-username=pigallery2 --Server-Database-mysql-password=pigallery2_pass --Server-Database-mysql-database=pigallery2'
     container_name: pigallery2
     environment:
-      - NODE_ENV=production
+      - NODE_ENV=production # set to 'debug' for full debug logging
     volumes:
       - "./pigallery2/config:/app/data/config" # CHANGE ME
       - "db-data:/app/data/db"
