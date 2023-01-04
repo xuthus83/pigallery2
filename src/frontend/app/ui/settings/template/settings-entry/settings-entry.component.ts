@@ -83,8 +83,9 @@ export class SettingsEntryComponent
         for (const k of Object.keys(this.state.value[i].__state)) {
           if (!Utils.equalsFilter(
             this.state.value[i]?.__state[k]?.value,
-            this.state.default[i]?.__state[k]?.value,
+            this.state.default[i] ? this.state.default[i][k] : undefined,
             ['default', '__propPath', '__created', '__prototype', '__rootConfig'])) {
+
             return true;
           }
         }

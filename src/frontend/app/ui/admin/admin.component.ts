@@ -7,7 +7,6 @@ import {NavigationService} from '../../model/navigation.service';
 import {PageHelper} from '../../model/page.helper';
 import {SettingsService} from '../settings/settings.service';
 import {ConfigPriority} from '../../../../common/config/public/ClientConfig';
-import {Utils} from '../../../../common/Utils';
 import {WebConfig} from '../../../../common/config/private/WebConfig';
 import {ISettingsComponent} from '../settings/template/ISettingsComponent';
 import {WebConfigClassBuilder} from '../../../../../node_modules/typeconfig/src/decorators/builders/WebConfigClassBuilder';

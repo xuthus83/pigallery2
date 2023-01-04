@@ -482,11 +482,10 @@ export class ClientGalleryConfig {
   })
   enableOnScrollThumbnailPrioritising: boolean = true;
   @ConfigProperty({
-    type: NavBarConfig,
     tags: {
       name: $localize`Navigation bar`,
       priority: ConfigPriority.advanced,
-    }
+    } as TAGS
   })
   NavBar: NavBarConfig = new NavBarConfig();
   @ConfigProperty({

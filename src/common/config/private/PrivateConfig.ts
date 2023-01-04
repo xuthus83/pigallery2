@@ -612,13 +612,18 @@ export class ServerJobConfig {
     description: $localize`Jobs load this many photos or videos form the DB for processing at once.`
   })
   mediaProcessingBatchSize: number = 1000;
-  @ConfigProperty({arrayType: JobScheduleConfig})
+  @ConfigProperty({
+    arrayType: JobScheduleConfig,
+    tags: {
+      name: $localize`Scheduled jobs`,
+      priority: ConfigPriority.advanced}
+  })
   scheduled: JobScheduleConfig[] = [
     new JobScheduleConfig(
       DefaultsJobs[DefaultsJobs.Indexing],
       DefaultsJobs[DefaultsJobs.Indexing],
       new NeverJobTriggerConfig(),
-      {indexChangesOnly: true} // set config explicitly so it is not undefined on the UI
+      {indexChangesOnly: true} // set config explicitly, so it is not undefined on the UI
     ),
     new JobScheduleConfig(
       DefaultsJobs[DefaultsJobs['Preview Filling']],

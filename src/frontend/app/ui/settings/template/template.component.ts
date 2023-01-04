@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnChanges, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {AuthenticationService} from '../../../model/network/authentication.service';
 import {NavigationService} from '../../../model/navigation.service';
 import {NotificationService} from '../../../model/notification.service';
@@ -55,7 +55,7 @@ export interface RecursiveState extends ConfigState {
   templateUrl: './template.component.html',
   styleUrls: ['./template.component.css']
 })
-export class TemplateComponent implements OnInit, OnDestroy, ISettingsComponent {
+export class TemplateComponent implements OnInit, OnChanges, OnDestroy, ISettingsComponent {
 
   public icon: string;
   @Input() ConfigPath: string;
@@ -83,6 +83,14 @@ export class TemplateComponent implements OnInit, OnDestroy, ISettingsComponent 
   ) {
   }
 
+  ngOnChanges(): void {
+    if (!this.ConfigPath) {
+      this.setSliceFN(c => ({value: c as any, isConfigType: true, type: WebConfig} as any));
+    } else {
+      this.setSliceFN(c => c.__state[this.ConfigPath]);
+    }
+    this.name = this.states.tags?.name || this.ConfigPath;
+  }
 
   ngOnInit(): void {
 
@@ -100,12 +108,7 @@ export class TemplateComponent implements OnInit, OnDestroy, ISettingsComponent 
       this.onOptionChange();
     });
 
-    if (!this.ConfigPath) {
-      this.setSliceFN(c => ({value: c as any, isConfigType: true, type: WebConfig} as any));
-    } else {
-      this.setSliceFN(c => c.__state[this.ConfigPath]);
-    }
-    this.name = this.states.tags?.name || this.ConfigPath;
+
   }
 
 
