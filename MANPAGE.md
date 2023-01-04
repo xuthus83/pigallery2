@@ -77,7 +77,7 @@ App CLI options:
   --Media-Photo-Converting-loadFullImageOnZoom     Enables loading the full resolution image on zoom in the ligthbox (preview). (default: true)
   --Media-Photo-Converting-onTheFly                Converts photos on the fly, when they are requested. (default: true)
   --Media-Photo-Converting-resolution              The shorter edge of the converted photo will be scaled down to this, while keeping the aspect ratio. (default: 1080)
-  --Media-Photo-supportedFormats                   Photo formats that are supported. (default: ["gif","jpeg","jpg","jpe","png","webp","svg"])
+  --Media-Photo-supportedFormats                   Photo formats that are supported. Browser needs to support these formats natively. Also sharp (libvips) package should be able to convert these formats. (default: ["gif","jpeg","jpg","jpe","png","webp","svg"])
   --Media-folder                                   Images are loaded from this folder (read permission required) (default: 'demo/images')
   --Media-tempFolder                               Thumbnails, converted photos, videos will be stored here (write permission required) (default: 'demo/tmp')
   --Media-photoMetadataSize                        Only this many bites will be loaded when scanning photo/video for metadata. Increase this number if your photos shows up as square. (default: 524288)
@@ -186,7 +186,7 @@ Environmental variables:
   Media-Photo-Converting-loadFullImageOnZoom   Enables loading the full resolution image on zoom in the ligthbox (preview). (default: true)
   Media-Photo-Converting-onTheFly              Converts photos on the fly, when they are requested. (default: true)
   Media-Photo-Converting-resolution            The shorter edge of the converted photo will be scaled down to this, while keeping the aspect ratio. (default: 1080)
-  Media-Photo-supportedFormats                 Photo formats that are supported. (default: ["gif","jpeg","jpg","jpe","png","webp","svg"])
+  Media-Photo-supportedFormats                 Photo formats that are supported. Browser needs to support these formats natively. Also sharp (libvips) package should be able to convert these formats. (default: ["gif","jpeg","jpg","jpe","png","webp","svg"])
   Media-folder                                 Images are loaded from this folder (read permission required) (default: 'demo/images')
   Media-tempFolder                             Thumbnails, converted photos, videos will be stored here (write permission required) (default: 'demo/tmp')
   Media-photoMetadataSize                      Only this many bites will be loaded when scanning photo/video for metadata. Increase this number if your photos shows up as square. (default: 524288)
@@ -498,7 +498,7 @@ Environmental variables:
                 "resolution": 1080
             },
             "//[supportedFormats]": [
-                "Photo formats that are supported."
+                "Photo formats that are supported. Browser needs to support these formats natively. Also sharp (libvips) package should be able to convert these formats."
             ],
             "supportedFormats": [
                 "gif",
