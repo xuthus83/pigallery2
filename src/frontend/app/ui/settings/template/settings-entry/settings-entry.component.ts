@@ -52,6 +52,7 @@ export class SettingsEntryComponent
   name: string;
   required: boolean;
   dockerWarning: boolean;
+  experimental: boolean;
   placeholder: string;
   allowSpaces = false;
   description: string;
@@ -252,6 +253,7 @@ export class SettingsEntryComponent
       this.name = this.name || this.state.tags.name;
       this.allowSpaces = this.allowSpaces || this.state.tags.uiAllowSpaces;
       this.required = this.required || !this.state.tags.uiOptional;
+      this.experimental = this.state.tags.experimental;
     }
   }
 
