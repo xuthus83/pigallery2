@@ -600,7 +600,7 @@ export class ClientPhotoConfig {
       name: $localize`Supported photo formats`,
       priority: ConfigPriority.underTheHood
     },
-    description: $localize`Photo formats that are supported.`,
+    description: $localize`Photo formats that are supported. Browser needs to support these formats natively. Also sharp (libvips) package should be able to convert these formats.`,
   })
   supportedFormats: string[] = ['gif', 'jpeg', 'jpg', 'jpe', 'png', 'webp', 'svg'];
 }
