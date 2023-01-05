@@ -1,4 +1,4 @@
-import { backendText } from '../../BackendTexts';
+import {backendText} from '../../BackendTexts';
 
 export type fieldType = 'string' | 'number' | 'boolean' | 'number-array';
 
@@ -29,6 +29,7 @@ export interface JobDTO {
 
 export const JobDTOUtils = {
   getHashName: (jobName: string, config: any = {}) => {
-    return jobName + '-' + JSON.stringify(config);
+    const sorted = Object.keys(config).sort().reduce((ret, key) => `${ret},${key}:${JSON.stringify(config[key])}`, '');
+    return jobName + '-' + JSON.stringify(sorted);
   },
 };

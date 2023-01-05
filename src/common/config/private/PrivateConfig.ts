@@ -882,6 +882,7 @@ export class ServerMediaConfig extends ClientMediaConfig {
   @ConfigProperty({
     tags: {
       name: $localize`Video`,
+      uiIcon: 'video',
       priority: ConfigPriority.advanced,
       uiJob: [
         {
@@ -895,6 +896,7 @@ export class ServerMediaConfig extends ClientMediaConfig {
   @ConfigProperty({
     tags: {
       name: $localize`Photo`,
+      uiIcon: 'camera-slr',
       priority: ConfigPriority.advanced,
       uiJob: [
         {
@@ -907,6 +909,7 @@ export class ServerMediaConfig extends ClientMediaConfig {
   @ConfigProperty({
     tags: {
       name: $localize`Thumbnail`,
+      uiIcon: 'grid-three-up',
       priority: ConfigPriority.advanced,
       uiJob: [{job: DefaultsJobs[DefaultsJobs['Thumbnail Generation']]}]
     } as TAGS

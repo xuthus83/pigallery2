@@ -1,4 +1,4 @@
-<form #settingsForm="ngForm" class="form-horizontal">
+<form #settingsForm="ngForm" class="form-horizontal" [id]="ConfigPath">
   <div class="card mb-4">
     <h5 class="card-header">
       <span class="oi oi-{{icon}}"></span> {{Name}}
@@ -24,7 +24,7 @@
       <div [hidden]="!error" class="alert alert-danger" role="alert"><strong>Error: </strong>{{error}}</div>
       <ng-container *ngIf="states.value.enabled !== false">
         <ng-container
-          *ngTemplateOutlet="Recursion; context:{ rStates: states,skipEnabled:true,confPath:ConfigPath,skipJobs:true }"
+          *ngTemplateOutlet="Recursion; context:{ rStates: states,topLevel:true,confPath:ConfigPath,skipJobs:true }"
         ></ng-container>
       </ng-container>
 
@@ -32,7 +32,7 @@
            *ngIf="states.value.enabled === false">
         {{Name}} <span i18n>config is not supported with these settings.</span>
       </div>
-      <div class="row">
+      <div class="row mt-2">
         <div class="col" *ngIf="states.tags?.uiJob && !states.tags?.uiJob[0].description">
           <ng-container
             *ngTemplateOutlet="JobTemplate; context:{ uiJob: states.tags?.uiJob }"
@@ -67,7 +67,7 @@
     </div>
   </div>
 
-  <ng-template #Recursion let-rStates="rStates" let-skipEnabled="skipEnabled" let-skipJobs="skipJobs"
+  <ng-template #Recursion let-rStates="rStates" let-topLevel="topLevel" let-skipJobs="skipJobs"
                let-confPath="confPath">
     <div class="alert alert-secondary" role="alert" *ngIf="rStates.description">
       {{rStates.description}}
@@ -75,24 +75,34 @@
     <ng-container *ngFor="let ck of getKeys(rStates)">
       <ng-container *ngIf="!(rStates.value.__state[ck].shouldHide && rStates.value.__state[ck].shouldHide())">
         <app-settings-entry
-          *ngIf="(ck!=='enabled' || !skipEnabled) && !rStates.value.__state[ck].isConfigType"
+          *ngIf="(ck!=='enabled' || !topLevel) && !rStates.value.__state[ck].isConfigType"
           [name]="confPath+'_'+ck"
           [ngModel]="rStates?.value.__state[ck]">
         </app-settings-entry>
         <ng-container *ngIf="rStates.value.__state[ck].isConfigType">
-          <div class="row mt-2">
-            <div class="col-auto">
-              <h5>{{rStates?.value.__state[ck].tags?.name || ck}}</h5>
-            </div>
-            <div class="col">
-              <hr/>
+          <div class="card mt-2 mb-2" *ngIf="topLevel && enableNesting" [id]="ConfigPath+'.'+ck">
+            <div class="card-body">
+              <h5 class="card-title"><span class="oi oi-{{rStates?.value.__state[ck].tags?.uiIcon}}"></span> {{rStates?.value.__state[ck].tags?.name || ck}}</h5>
+              <ng-container
+                *ngTemplateOutlet="Recursion; context:{ rStates: rStates.value.__state[ck], confPath:confPath+'.'+ck }"
+              ></ng-container>
             </div>
           </div>
-          <div class="mt-2">
-            <ng-container
-              *ngTemplateOutlet="Recursion; context:{ rStates: rStates.value.__state[ck], confPath:confPath+'.'+ck }"
-            ></ng-container>
-          </div>
+          <ng-container *ngIf="!topLevel || !enableNesting">
+            <div class="row mt-2">
+              <div class="col-auto">
+                <h5>{{rStates?.value.__state[ck].tags?.name || ck}}</h5>
+              </div>
+              <div class="col">
+                <hr/>
+              </div>
+            </div>
+            <div class="mt-2">
+              <ng-container
+                *ngTemplateOutlet="Recursion; context:{ rStates: rStates.value.__state[ck], confPath:confPath+'.'+ck }"
+              ></ng-container>
+            </div>
+          </ng-container>
         </ng-container>
       </ng-container>
     </ng-container>

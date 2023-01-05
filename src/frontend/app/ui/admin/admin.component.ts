@@ -4,7 +4,7 @@ import {UserRoles} from '../../../../common/entities/UserDTO';
 import {NotificationService} from '../../model/notification.service';
 import {NotificationType} from '../../../../common/entities/NotificationDTO';
 import {NavigationService} from '../../model/navigation.service';
-import {PageHelper} from '../../model/page.helper';
+import {ViewportScroller} from '@angular/common';
 import {SettingsService} from '../settings/settings.service';
 import {ConfigPriority} from '../../../../common/config/public/ClientConfig';
 import {WebConfig} from '../../../../common/config/private/WebConfig';
@@ -29,6 +29,7 @@ export class AdminComponent implements OnInit, AfterViewInit {
   constructor(
     private authService: AuthenticationService,
     private navigation: NavigationService,
+    public viewportScroller: ViewportScroller,
     public notificationService: NotificationService,
     public settingsService: SettingsService,
   ) {
@@ -40,12 +41,6 @@ export class AdminComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     setTimeout(() => (this.contents = this.settingsComponents.toArray()), 0);
-  }
-
-  scrollTo(i: number): void {
-    PageHelper.ScrollY =
-      this.settingsComponentsElemRef
-        .toArray()[i].nativeElement.getBoundingClientRect().top + PageHelper.ScrollY;
   }
 
   ngOnInit(): void {

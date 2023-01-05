@@ -73,12 +73,21 @@
             <div class="card-body text-md-start text-center align-content-md-start align-content-center">
               <h5 i18n="title of left card in settings page that contains settings contents" class="card-title">
                 Menu</h5>
-              <button class="btn btn-link nav-link text-start py-md-1 px-md-0"
-                      *ngFor="let s of contents; let i=index;"
-                      (click)="scrollTo(i)"
-                      [hidden]="!s.HasAvailableSettings">
-                <span class="oi oi-{{s.icon}}"></span> {{s.Name}}
-              </button>
+              <div class="py-md-1 px-md-0"
+                   *ngFor="let s of contents;"
+                   [hidden]="!s.HasAvailableSettings">
+                  <button class="btn btn-link nav-link text-start p-0"
+                          (click)="viewportScroller.scrollToAnchor(s.ConfigPath)"
+                          >
+                    <span class="oi oi-{{s.icon}}"></span> {{s.Name}}
+                  </button>
+                  <button class="btn btn-link nav-link text-start ms-3 p-0"
+                          *ngFor="let n of s.nestedConfigs;"
+                          [hidden]="!n.visible()"
+                          (click)="viewportScroller.scrollToAnchor(n.id)">
+                    <span class="oi oi-{{n.icon}}"></span>  {{n.name}}
+                  </button>
+              </div>
             </div>
           </div>
 
@@ -90,6 +99,7 @@
           #setting
           #tmpl
           [ConfigPath]="cp"
+          [enableNesting]="cp=='Media'"
           [hidden]="!tmpl.HasAvailableSettings">
           <ng-container
             *ngIf="cp=='Indexing'">
