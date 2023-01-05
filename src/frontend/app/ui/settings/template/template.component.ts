@@ -300,7 +300,10 @@ export class TemplateComponent implements OnInit, OnChanges, OnDestroy, ISetting
     return states.keys;
   }
 
-  getProgress(jobName: string): JobProgressDTO {
-    return this.jobsService.progress.value[JobDTOUtils.getHashName(jobName)];
+  getProgress(uiJob: { job: string, config?: any }): JobProgressDTO {
+    if (!uiJob.config) {
+      uiJob.config = this.jobsService.getDefaultConfig(uiJob.job);
+    }
+    return this.jobsService.progress.value[JobDTOUtils.getHashName(uiJob.job, uiJob.config || {})];
   }
 }

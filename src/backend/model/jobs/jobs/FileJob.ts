@@ -21,7 +21,7 @@ const LOG_TAG = '[FileJob]';
 /**
  * Abstract class for thumbnail creation, file deleting etc.
  */
-export abstract class FileJob<S extends { indexedOnly: boolean } = { indexedOnly: boolean }> extends Job<S> {
+export abstract class FileJob<S extends { indexedOnly?: boolean } = { indexedOnly?: boolean }> extends Job<S> {
   public readonly ConfigTemplate: ConfigTemplateEntry[] = [];
   directoryQueue: string[] = [];
   fileQueue: string[] = [];

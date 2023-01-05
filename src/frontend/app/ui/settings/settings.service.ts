@@ -7,7 +7,7 @@ import {WebConfigClassBuilder} from 'typeconfig/src/decorators/builders/WebConfi
 import {ConfigPriority, TAGS} from '../../../../common/config/public/ClientConfig';
 import {CookieNames} from '../../../../common/CookieNames';
 import {CookieService} from 'ngx-cookie-service';
-import {DefaultsJobs, JobDTO} from '../../../../common/entities/job/JobDTO';
+import {DefaultsJobs} from '../../../../common/entities/job/JobDTO';
 import {StatisticDTO} from '../../../../common/entities/settings/StatisticDTO';
 import {ScheduledJobsService} from './scheduled-jobs.service';
 import {IWebConfigClassPrivate} from '../../../../../node_modules/typeconfig/src/decorators/class/IWebConfigClass';
@@ -17,14 +17,12 @@ export class SettingsService {
   public configPriority = ConfigPriority.basic;
   public settings: BehaviorSubject<IWebConfigClassPrivate<TAGS> & WebConfig>;
   private fetchingSettings = false;
-  public availableJobs: BehaviorSubject<JobDTO[]>;
   public statistic: BehaviorSubject<StatisticDTO>;
 
   constructor(private networkService: NetworkService,
               private jobsService: ScheduledJobsService,
               private cookieService: CookieService) {
     this.statistic = new BehaviorSubject(null);
-    this.availableJobs = new BehaviorSubject([]);
     this.settings = new BehaviorSubject<IWebConfigClassPrivate<TAGS> & WebConfig>(WebConfigClassBuilder.attachPrivateInterface(new WebConfig()));
     this.getSettings().catch(console.error);
 
@@ -46,12 +44,6 @@ export class SettingsService {
       }
     });
 
-  }
-
-  public async getAvailableJobs(): Promise<void> {
-    this.availableJobs.next(
-      await this.networkService.getJson<JobDTO[]>('/admin/jobs/available')
-    );
   }
 
   public async getSettings(): Promise<void> {

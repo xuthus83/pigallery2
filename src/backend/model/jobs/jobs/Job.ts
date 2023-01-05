@@ -1,20 +1,16 @@
-import { Logger } from '../../../Logger';
-import { IJob } from './IJob';
-import {
-  ConfigTemplateEntry,
-  JobDTO,
-  JobDTOUtils,
-} from '../../../../common/entities/job/JobDTO';
-import { JobProgress } from './JobProgress';
-import { IJobListener } from './IJobListener';
-import { JobProgressStates } from '../../../../common/entities/job/JobProgressDTO';
+import {Logger} from '../../../Logger';
+import {IJob} from './IJob';
+import {ConfigTemplateEntry, JobDTO, JobDTOUtils,} from '../../../../common/entities/job/JobDTO';
+import {JobProgress} from './JobProgress';
+import {IJobListener} from './IJobListener';
+import {JobProgressStates} from '../../../../common/entities/job/JobProgressDTO';
 
 declare const process: any;
 declare const global: any;
 
 const LOG_TAG = '[JOB]';
 
-export abstract class Job<T = void> implements IJob<T> {
+export abstract class Job<T extends Record<string, any> = Record<string, any>> implements IJob<T> {
   public allowParallelRun: boolean = null;
   protected progress: JobProgress = null;
   protected config: T;
@@ -57,7 +53,15 @@ export abstract class Job<T = void> implements IJob<T> {
       );
       this.soloRun = soloRun;
       this.allowParallelRun = allowParallelRun;
-      this.config = config;
+      this.config = {} as T;
+      if (this.ConfigTemplate) {
+        this.ConfigTemplate.forEach(ct => (this.config as any)[ct.id] = ct.defaultValue);
+      }
+      if (config) {
+        for (const key of Object.keys(config)) {
+          (this.config as any)[key] = config[key];
+        }
+      }
       this.progress = new JobProgress(
         this.Name,
         JobDTOUtils.getHashName(this.Name, this.config)

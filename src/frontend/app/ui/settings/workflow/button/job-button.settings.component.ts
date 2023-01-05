@@ -1,13 +1,10 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import {
-  JobProgressDTO,
-  JobProgressStates,
-} from '../../../../../../common/entities/job/JobProgressDTO';
-import { ErrorDTO } from '../../../../../../common/entities/Error';
-import { ScheduledJobsService } from '../../scheduled-jobs.service';
-import { NotificationService } from '../../../../model/notification.service';
-import { JobDTOUtils } from '../../../../../../common/entities/job/JobDTO';
-import { BackendtextService } from '../../../../model/backendtext.service';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {JobProgressDTO, JobProgressStates,} from '../../../../../../common/entities/job/JobProgressDTO';
+import {ErrorDTO} from '../../../../../../common/entities/Error';
+import {ScheduledJobsService} from '../../scheduled-jobs.service';
+import {NotificationService} from '../../../../model/notification.service';
+import {JobDTOUtils} from '../../../../../../common/entities/job/JobDTO';
+import {BackendtextService} from '../../../../model/backendtext.service';
 
 @Component({
   selector: 'app-settings-job-button',
@@ -16,7 +13,7 @@ import { BackendtextService } from '../../../../model/backendtext.service';
 })
 export class JobButtonComponent {
   @Input() jobName: string;
-  @Input() config: any = {};
+  @Input() config: any;
   @Input() shortName = false;
   @Input() disabled = false;
   @Input() soloRun = false;
@@ -29,7 +26,18 @@ export class JobButtonComponent {
     private notification: NotificationService,
     public jobsService: ScheduledJobsService,
     public backendTextService: BackendtextService
-  ) {}
+  ) {
+  }
+
+  private populateConfig() {
+    if (this.config) {
+      return;
+    }
+    const c = this.jobsService.getDefaultConfig(this.jobName); // can return with null
+    if (c) {
+      this.config = c;
+    }
+  }
 
   public get Running(): boolean {
     return (
@@ -40,13 +48,15 @@ export class JobButtonComponent {
   }
 
   get Progress(): JobProgressDTO {
+    this.populateConfig();
     return this.jobsService.progress.value[
       JobDTOUtils.getHashName(this.jobName, this.config)
-    ];
+      ];
   }
 
   public async start(): Promise<boolean> {
     this.jobError.emit('');
+    this.populateConfig();
     try {
       await this.jobsService.start(
         this.jobName,
@@ -56,8 +66,8 @@ export class JobButtonComponent {
       );
       this.notification.success(
         $localize`Job started` +
-          ': ' +
-          this.backendTextService.getJobName(this.jobName)
+        ': ' +
+        this.backendTextService.getJobName(this.jobName)
       );
       return true;
     } catch (err) {
@@ -76,8 +86,8 @@ export class JobButtonComponent {
       await this.jobsService.stop(this.jobName);
       this.notification.info(
         $localize`Stopping job` +
-          ': ' +
-          this.backendTextService.getJobName(this.jobName)
+        ': ' +
+        this.backendTextService.getJobName(this.jobName)
       );
       return true;
     } catch (err) {

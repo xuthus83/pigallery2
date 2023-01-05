@@ -104,19 +104,11 @@ export class WorkflowComponent implements ControlValueAccessor, Validator, OnIni
     return d;
   }
 
-  getConfigTemplate(JobName: string): ConfigTemplateEntry[] {
-    const job = this.settingsService.availableJobs.value.find(
-      (t) => t.Name === JobName
-    );
-    if (job && job.ConfigTemplate && job.ConfigTemplate.length > 0) {
-      return job.ConfigTemplate;
-    }
-    return null;
-  }
+
 
   ngOnInit(): void {
     this.jobsService.subscribeToProgress();
-    this.settingsService.getAvailableJobs().catch(console.error);
+    this.jobsService.getAvailableJobs().catch(console.error);
   }
 
   ngOnDestroy(): void {
@@ -131,7 +123,7 @@ export class WorkflowComponent implements ControlValueAccessor, Validator, OnIni
   }
 
   jobTypeChanged(schedule: JobScheduleDTO): void {
-    const job = this.settingsService.availableJobs.value.find(
+    const job = this.jobsService.availableJobs.value.find(
       (t) => t.Name === schedule.jobName
     );
     schedule.config = schedule.config || {};
@@ -205,13 +197,13 @@ export class WorkflowComponent implements ControlValueAccessor, Validator, OnIni
   }
 
   prepareNewJob(): void {
-    const jobName = this.settingsService.availableJobs.value[0].Name;
+    const jobName = this.jobsService.availableJobs.value[0].Name;
     this.newSchedule = new JobScheduleConfig('new job',
       jobName,
       new NeverJobTriggerConfig());
 
     // setup job specific config
-    const job = this.settingsService.availableJobs.value.find(
+    const job = this.jobsService.availableJobs.value.find(
       (t) => t.Name === jobName
     );
     this.newSchedule.config = this.newSchedule.config || {};

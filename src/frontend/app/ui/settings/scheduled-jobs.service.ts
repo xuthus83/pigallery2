@@ -3,7 +3,7 @@ import {BehaviorSubject} from 'rxjs';
 import {JobProgressDTO, JobProgressStates,} from '../../../../common/entities/job/JobProgressDTO';
 import {NetworkService} from '../../model/network/network.service';
 import {JobScheduleDTO} from '../../../../common/entities/job/JobScheduleDTO';
-import {JobDTOUtils} from '../../../../common/entities/job/JobDTO';
+import {ConfigTemplateEntry, JobDTO, JobDTOUtils} from '../../../../common/entities/job/JobDTO';
 import {BackendtextService} from '../../model/backendtext.service';
 import {NotificationService} from '../../model/notification.service';
 
@@ -12,6 +12,7 @@ export class ScheduledJobsService {
   public progress: BehaviorSubject<Record<string, JobProgressDTO>>;
   public onJobFinish: EventEmitter<string> = new EventEmitter<string>();
   timer: number = null;
+  public availableJobs: BehaviorSubject<JobDTO[]>;
   public jobStartingStopping: { [key: string]: boolean } = {};
   private subscribers = 0;
 
@@ -21,6 +22,35 @@ export class ScheduledJobsService {
     private backendTextService: BackendtextService
   ) {
     this.progress = new BehaviorSubject({});
+    this.availableJobs = new BehaviorSubject([]);
+  }
+
+
+  public async getAvailableJobs(): Promise<void> {
+    this.availableJobs.next(
+      await this.networkService.getJson<JobDTO[]>('/admin/jobs/available')
+    );
+  }
+
+  public getConfigTemplate(JobName: string): ConfigTemplateEntry[] {
+    const job = this.availableJobs.value.find(
+      (t) => t.Name === JobName
+    );
+    if (job && job.ConfigTemplate && job.ConfigTemplate.length > 0) {
+      return job.ConfigTemplate;
+    }
+    return null;
+  }
+
+  public getDefaultConfig(jobName: string): Record<string, unknown> {
+
+    const ct = this.getConfigTemplate(jobName);
+    if (!ct) {
+      return null;
+    }
+    const config = {} as Record<string, unknown>;
+    ct.forEach(c => config[c.id] = c.defaultValue);
+    return config;
   }
 
   getProgress(schedule: JobScheduleDTO): JobProgressDTO {

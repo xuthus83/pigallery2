@@ -146,9 +146,9 @@
 
       </div>
 
-      <ng-container *ngIf="getConfigTemplate(schedule.jobName) ">
+      <ng-container *ngIf="jobsService.getConfigTemplate(schedule.jobName) ">
         <hr/>
-        <div *ngFor="let configEntry of  getConfigTemplate(schedule.jobName)">
+        <div *ngFor="let configEntry of  jobsService.getConfigTemplate(schedule.jobName)">
 
           <div class="mb-3 row">
             <label class="col-md-2 control-label"
@@ -235,7 +235,7 @@
                   (change)="jobTypeChanged(newSchedule)"
                   [(ngModel)]="newSchedule.jobName"
                   name="newJobName" required>
-            <option *ngFor="let availableJob of settingsService.availableJobs | async"
+            <option *ngFor="let availableJob of jobsService.availableJobs | async"
                     [ngValue]="availableJob.Name">{{backendTextService.getJobName(availableJob.Name)}}
             </option>
           </select>

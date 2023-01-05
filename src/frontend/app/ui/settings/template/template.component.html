@@ -23,10 +23,8 @@
     <div class="card-body">
       <div [hidden]="!error" class="alert alert-danger" role="alert"><strong>Error: </strong>{{error}}</div>
       <ng-container *ngIf="states.value.enabled !== false">
-
-
         <ng-container
-          *ngTemplateOutlet="Recursion; context:{ rStates: states,skipEnabled:true,confPath:ConfigPath }"
+          *ngTemplateOutlet="Recursion; context:{ rStates: states,skipEnabled:true,confPath:ConfigPath,skipJobs:true }"
         ></ng-container>
       </ng-container>
 
@@ -35,6 +33,11 @@
         {{Name}} <span i18n>config is not supported with these settings.</span>
       </div>
       <div class="row">
+        <div class="col" *ngIf="states.tags?.uiJob && !states.tags?.uiJob[0].description">
+          <ng-container
+            *ngTemplateOutlet="JobTemplate; context:{ uiJob: states.tags?.uiJob }"
+          ></ng-container>
+        </div>
         <div class="col">
           <button class="btn btn-success float-end"
                   [disabled]="settingsForm.form.invalid || !changed || inProgress"
@@ -46,11 +49,26 @@
           </button>
         </div>
       </div>
+      <div *ngIf="states.tags?.uiJob && !states.tags?.uiJob[0].description">
+        <ng-container
+          *ngTemplateOutlet="JobProcessTemplate; context:{ uiJob: states.tags?.uiJob }"
+        ></ng-container>
+      </div>
+      <div *ngIf="states.tags?.uiJob && states.tags?.uiJob[0].description">
+        <hr/>
+        <ng-container
+          *ngTemplateOutlet="JobTemplate; context:{ uiJob: states.tags?.uiJob }"
+        ></ng-container>
+        <ng-container
+          *ngTemplateOutlet="JobProcessTemplate; context:{ uiJob: states.tags?.uiJob }"
+        ></ng-container>
+      </div>
       <ng-content></ng-content>
     </div>
   </div>
 
-  <ng-template #Recursion let-rStates="rStates" let-skipEnabled="skipEnabled" let-confPath="confPath">
+  <ng-template #Recursion let-rStates="rStates" let-skipEnabled="skipEnabled" let-skipJobs="skipJobs"
+               let-confPath="confPath">
     <div class="alert alert-secondary" role="alert" *ngIf="rStates.description">
       {{rStates.description}}
     </div>
@@ -78,8 +96,18 @@
         </ng-container>
       </ng-container>
     </ng-container>
-    <div *ngIf="rStates.tags?.uiJob">
-      <ng-container *ngFor="let job of rStates.tags?.uiJob; let i = index">
+    <div *ngIf="rStates.tags?.uiJob && !skipJobs">
+      <ng-container
+        *ngTemplateOutlet="JobTemplate; context:{ uiJob: rStates.tags?.uiJob }"
+      ></ng-container>
+      <ng-container
+        *ngTemplateOutlet="JobProcessTemplate; context:{ uiJob: rStates.tags?.uiJob }"
+      ></ng-container>
+    </div>
+  </ng-template>
+  <ng-template #JobTemplate let-uiJob="uiJob">
+    <div class="mb-2">
+      <ng-container *ngFor="let job of uiJob; let i = index">
         <div class="alert alert-secondary" role="alert" *ngIf="job.description">
           {{job.description}}
         </div>
@@ -93,13 +121,17 @@
           [jobName]="job.job"></app-settings-job-button>
       </ng-container>
 
-      <ng-container *ngFor="let job of rStates.tags?.uiJob">
+    </div>
+  </ng-template>
+  <ng-template #JobProcessTemplate let-uiJob="uiJob">
+    <div>
+      <ng-container *ngFor="let job of uiJob">
         <ng-container
-          *ngIf="getProgress(job.job) && !job.hideProgress && (!job.relevant || job.relevant(settingsService.settings | async))">
+          *ngIf="getProgress(job) && !job.hideProgress && (!job.relevant || job.relevant(settingsService.settings | async))">
           <hr class="mt-1"/>
           <app-settings-job-progress
             class="d-block mb-2"
-            [progress]="getProgress(job.job)"></app-settings-job-progress>
+            [progress]="getProgress(job)"></app-settings-job-progress>
         </ng-container>
       </ng-container>
     </div>

@@ -8,8 +8,8 @@ import {FileDTO} from '../../../../common/entities/FileDTO';
 import {backendTexts} from '../../../../common/BackendTexts';
 
 export class ThumbnailGenerationJob extends FileJob<{
-  sizes: number[];
-  indexedOnly: boolean;
+  sizes?: number[];
+  indexedOnly?: boolean;
 }> {
   public readonly Name = DefaultsJobs[DefaultsJobs['Thumbnail Generation']];
 
@@ -29,16 +29,13 @@ export class ThumbnailGenerationJob extends FileJob<{
   }
 
   start(
-    config: { sizes: number[]; indexedOnly: boolean },
+    config: { sizes?: number[]; indexedOnly?: boolean },
     soloRun = false,
     allowParallelRun = false
   ): Promise<void> {
-    if (!config.sizes || !Array.isArray(config.sizes) || config.sizes.length === 0) {
-      throw new Error(
-        'unknown thumbnails sizes: ' +
-        config.sizes +
-        '. It should be an array from:' + Config.Media.Thumbnail.thumbnailSizes
-      );
+    if (!config || !config.sizes || !Array.isArray(config.sizes) || config.sizes.length === 0) {
+      config = config || {};
+      config.sizes = this.ConfigTemplate.find(ct => ct.id == 'sizes').defaultValue;
     }
     for (const item of config.sizes) {
       if (Config.Media.Thumbnail.thumbnailSizes.indexOf(item) === -1) {
