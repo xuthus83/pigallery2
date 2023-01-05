@@ -1,26 +1,17 @@
-import { IJobManager } from '../database/interfaces/IJobManager';
-import {
-  JobProgressDTO,
-  JobProgressStates,
-} from '../../../common/entities/job/JobProgressDTO';
-import { IJob } from './jobs/IJob';
-import { JobRepository } from './JobRepository';
-import { Config } from '../../../common/config/private/Config';
-import {
-  AfterJobTrigger,
-  JobScheduleDTO,
-  JobScheduleDTOUtils,
-  JobTriggerType,
-} from '../../../common/entities/job/JobScheduleDTO';
-import { Logger } from '../../Logger';
-import { NotificationManager } from '../NotifocationManager';
-import { IJobListener } from './jobs/IJobListener';
-import { JobProgress } from './jobs/JobProgress';
-import { JobProgressManager } from './JobProgressManager';
+import {JobProgressDTO, JobProgressStates,} from '../../../common/entities/job/JobProgressDTO';
+import {IJob} from './jobs/IJob';
+import {JobRepository} from './JobRepository';
+import {Config} from '../../../common/config/private/Config';
+import {AfterJobTrigger, JobScheduleDTO, JobScheduleDTOUtils, JobTriggerType,} from '../../../common/entities/job/JobScheduleDTO';
+import {Logger} from '../../Logger';
+import {NotificationManager} from '../NotifocationManager';
+import {IJobListener} from './jobs/IJobListener';
+import {JobProgress} from './jobs/JobProgress';
+import {JobProgressManager} from './JobProgressManager';
 
 const LOG_TAG = '[JobManager]';
 
-export class JobManager implements IJobManager, IJobListener {
+export class JobManager implements IJobListener {
   protected timers: { schedule: JobScheduleDTO; timer: NodeJS.Timeout }[] = [];
   protected progressManager: JobProgressManager = null;
 
@@ -59,7 +50,7 @@ export class JobManager implements IJobManager, IJobListener {
       (allowParallelRun === false && this.JobRunning === true) ||
       this.JobNoParallelRunning === true
     ) {
-      throw new Error("Can't start this job while another is running");
+      throw new Error('Can\'t start this job while another is running');
     }
 
     const t = this.findJob(jobName);
@@ -154,9 +145,9 @@ export class JobManager implements IJobManager, IJobListener {
       Logger.debug(
         LOG_TAG,
         'running schedule: ' +
-          schedule.jobName +
-          ' at ' +
-          nextDate.toLocaleString(undefined, { hour12: false })
+        schedule.jobName +
+        ' at ' +
+        nextDate.toLocaleString(undefined, {hour12: false})
       );
 
       const timer: NodeJS.Timeout = setTimeout(async (): Promise<void> => {
@@ -169,7 +160,7 @@ export class JobManager implements IJobManager, IJobListener {
         );
         this.runSchedule(schedule);
       }, nextDate.getTime() - Date.now());
-      this.timers.push({ schedule, timer });
+      this.timers.push({schedule, timer});
     } else {
       Logger.debug(LOG_TAG, 'skipping schedule:' + schedule.jobName);
     }

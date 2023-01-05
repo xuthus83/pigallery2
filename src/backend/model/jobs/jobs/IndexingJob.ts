@@ -1,21 +1,15 @@
-import { ObjectManagers } from '../../ObjectManagers';
+import {ObjectManagers} from '../../ObjectManagers';
 import * as path from 'path';
 import * as fs from 'fs';
-import { Config } from '../../../../common/config/private/Config';
-import { Job } from './Job';
-import {
-  ConfigTemplateEntry,
-  DefaultsJobs,
-} from '../../../../common/entities/job/JobDTO';
-import { JobProgressStates } from '../../../../common/entities/job/JobProgressDTO';
-import { DatabaseType } from '../../../../common/config/private/PrivateConfig';
-import { DiskMangerWorker } from '../../threading/DiskMangerWorker';
-import { ProjectPath } from '../../../ProjectPath';
-import { backendTexts } from '../../../../common/BackendTexts';
-import { ParentDirectoryDTO } from '../../../../common/entities/DirectoryDTO';
-import { ISQLGalleryManager } from '../../database/sql/IGalleryManager';
-import { Logger } from '../../../Logger';
-import { FileDTO } from '../../../../common/entities/FileDTO';
+import {Job} from './Job';
+import {ConfigTemplateEntry, DefaultsJobs,} from '../../../../common/entities/job/JobDTO';
+import {JobProgressStates} from '../../../../common/entities/job/JobProgressDTO';
+import {DiskMangerWorker} from '../../threading/DiskMangerWorker';
+import {ProjectPath} from '../../../ProjectPath';
+import {backendTexts} from '../../../../common/BackendTexts';
+import {ParentDirectoryDTO} from '../../../../common/entities/DirectoryDTO';
+import {Logger} from '../../../Logger';
+import {FileDTO} from '../../../../common/entities/FileDTO';
 
 export class IndexingJob<
   S extends { indexChangesOnly: boolean } = { indexChangesOnly: boolean }
@@ -33,7 +27,7 @@ export class IndexingJob<
   ];
 
   public get Supported(): boolean {
-    return Config.Database.type !== DatabaseType.memory;
+    return true;
   }
 
   protected async init(): Promise<void> {
@@ -58,9 +52,7 @@ export class IndexingJob<
     if (this.config.indexChangesOnly) {
       const stat = fs.statSync(path.join(ProjectPath.ImageFolder, directory));
       const lastModified = DiskMangerWorker.calcLastModified(stat);
-      scanned = await (
-        ObjectManagers.getInstance().GalleryManager as ISQLGalleryManager
-      ).selectDirStructure(directory);
+      scanned = await ObjectManagers.getInstance().GalleryManager.selectDirStructure(directory);
       // If not modified and it was scanned before, dir is up-to-date
       if (
         scanned &&

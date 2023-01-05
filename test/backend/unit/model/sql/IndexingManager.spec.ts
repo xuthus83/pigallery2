@@ -1,23 +1,23 @@
 import * as fs from 'fs';
 import {Config} from '../../../../../src/common/config/private/Config';
-import {SQLConnection} from '../../../../../src/backend/model/database/sql/SQLConnection';
-import {GalleryManager} from '../../../../../src/backend/model/database/sql/GalleryManager';
+import {SQLConnection} from '../../../../../src/backend/model/database/SQLConnection';
+import {GalleryManager} from '../../../../../src/backend/model/database/GalleryManager';
 import {DirectoryBaseDTO, DirectoryDTOUtils, ParentDirectoryDTO} from '../../../../../src/common/entities/DirectoryDTO';
 import {TestHelper} from '../../../../TestHelper';
 import {Connection} from 'typeorm';
 import {Utils} from '../../../../../src/common/Utils';
 import {MediaDTO} from '../../../../../src/common/entities/MediaDTO';
 import {FileDTO} from '../../../../../src/common/entities/FileDTO';
-import {IndexingManager} from '../../../../../src/backend/model/database/sql/IndexingManager';
+import {IndexingManager} from '../../../../../src/backend/model/database/IndexingManager';
 import {ObjectManagers} from '../../../../../src/backend/model/ObjectManagers';
 import {DBTestHelper} from '../../../DBTestHelper';
 import {DiskMangerWorker} from '../../../../../src/backend/model/threading/DiskMangerWorker';
-import {ReIndexingSensitivity, SQLLogLevel} from '../../../../../src/common/config/private/PrivateConfig';
+import {ReIndexingSensitivity} from '../../../../../src/common/config/private/PrivateConfig';
 import {SearchQueryTypes, TextSearch, TextSearchQueryMatchTypes} from '../../../../../src/common/entities/SearchQueryDTO';
 import {ProjectPath} from '../../../../../src/backend/ProjectPath';
 import * as path from 'path';
 import {DiskManager} from '../../../../../src/backend/model/DiskManger';
-import {AlbumManager} from '../../../../../src/backend/model/database/sql/AlbumManager';
+import {AlbumManager} from '../../../../../src/backend/model/database/AlbumManager';
 import {SortingMethods} from '../../../../../src/common/entities/SortingMethods';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -666,7 +666,7 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
       gm.getDirIdAndTime = () => {
         return Promise.resolve(indexedTime as any);
       };
-      gm.getParentDirFromId = ():Promise<ParentDirectoryDTO> => {
+      gm.getParentDirFromId = (): Promise<ParentDirectoryDTO> => {
         return Promise.resolve(indexedTime) as unknown as Promise<ParentDirectoryDTO>;
       };
 

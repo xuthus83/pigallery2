@@ -1,8 +1,5 @@
 import {DBTestHelper} from '../../../DBTestHelper';
-import {GalleryManager} from '../../../../../src/backend/model/database/sql/GalleryManager';
-import {ObjectManagers} from '../../../../../src/backend/model/ObjectManagers';
-import {SQLConnection} from '../../../../../src/backend/model/database/sql/SQLConnection';
-import {DirectoryEntity} from '../../../../../src/backend/model/database/sql/enitites/DirectoryEntity';
+import {GalleryManager} from '../../../../../src/backend/model/database/GalleryManager';
 import {ParentDirectoryDTO} from '../../../../../src/common/entities/DirectoryDTO';
 import {Connection} from 'typeorm';
 

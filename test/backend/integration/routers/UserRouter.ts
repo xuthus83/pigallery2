@@ -4,7 +4,7 @@ import {LoginCredential} from '../../../../src/common/entities/LoginCredential';
 import {UserDTO, UserRoles} from '../../../../src/common/entities/UserDTO';
 import * as path from 'path';
 import * as fs from 'fs';
-import {SQLConnection} from '../../../../src/backend/model/database/sql/SQLConnection';
+import {SQLConnection} from '../../../../src/backend/model/database/SQLConnection';
 import {ObjectManagers} from '../../../../src/backend/model/ObjectManagers';
 import {QueryParams} from '../../../../src/common/QueryParams';
 import {Utils} from '../../../../src/common/Utils';

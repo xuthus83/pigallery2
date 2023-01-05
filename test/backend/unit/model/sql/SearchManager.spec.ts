@@ -1,5 +1,5 @@
 import {LocationManager} from '../../../../../src/backend/model/database/LocationManager';
-import {SearchManager} from '../../../../../src/backend/model/database/sql/SearchManager';
+import {SearchManager} from '../../../../../src/backend/model/database/SearchManager';
 import {SearchResultDTO} from '../../../../../src/common/entities/SearchResultDTO';
 import {Utils} from '../../../../../src/common/Utils';
 import {DBTestHelper} from '../../../DBTestHelper';
@@ -21,11 +21,11 @@ import {
   TextSearchQueryMatchTypes,
   ToDateSearch
 } from '../../../../../src/common/entities/SearchQueryDTO';
-import {IndexingManager} from '../../../../../src/backend/model/database/sql/IndexingManager';
+import {IndexingManager} from '../../../../../src/backend/model/database/IndexingManager';
 import {DirectoryBaseDTO, ParentDirectoryDTO, SubDirectoryDTO} from '../../../../../src/common/entities/DirectoryDTO';
 import {TestHelper} from '../../../../TestHelper';
 import {ObjectManagers} from '../../../../../src/backend/model/ObjectManagers';
-import {GalleryManager} from '../../../../../src/backend/model/database/sql/GalleryManager';
+import {GalleryManager} from '../../../../../src/backend/model/database/GalleryManager';
 import {Connection} from 'typeorm';
 import {GPSMetadata, PhotoDTO, PhotoMetadata} from '../../../../../src/common/entities/PhotoDTO';
 import {VideoDTO} from '../../../../../src/common/entities/VideoDTO';

@@ -1,10 +1,10 @@
 import {DBTestHelper} from '../../../DBTestHelper';
-import {ParentDirectoryDTO, SubDirectoryDTO} from '../../../../../src/common/entities/DirectoryDTO';
+import {ParentDirectoryDTO} from '../../../../../src/common/entities/DirectoryDTO';
 import {ObjectManagers} from '../../../../../src/backend/model/ObjectManagers';
-import {AlbumManager} from '../../../../../src/backend/model/database/sql/AlbumManager';
+import {AlbumManager} from '../../../../../src/backend/model/database/AlbumManager';
 import {SearchQueryTypes, TextSearch} from '../../../../../src/common/entities/SearchQueryDTO';
-import {SQLConnection} from '../../../../../src/backend/model/database/sql/SQLConnection';
-import {AlbumBaseEntity} from '../../../../../src/backend/model/database/sql/enitites/album/AlbumBaseEntity';
+import {SQLConnection} from '../../../../../src/backend/model/database/SQLConnection';
+import {AlbumBaseEntity} from '../../../../../src/backend/model/database/enitites/album/AlbumBaseEntity';
 import {Utils} from '../../../../../src/common/Utils';
 import {MediaDTO} from '../../../../../src/common/entities/MediaDTO';
 import {SavedSearchDTO} from '../../../../../src/common/entities/album/SavedSearchDTO';
@@ -28,7 +28,6 @@ describe = DBTestHelper.describe(); // fake it os IDE plays nicely (recognize th
 
 describe('AlbumManager', (sqlHelper: DBTestHelper) => {
   describe = tmpDescribe;
-
 
 
   const setUpSqlDB = async () => {

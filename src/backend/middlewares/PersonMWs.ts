@@ -5,7 +5,7 @@ import {
   PersonDTO,
 } from '../../common/entities/PersonDTO';
 import { Utils } from '../../common/Utils';
-import {PersonEntry} from '../model/database/sql/enitites/PersonEntry';
+import {PersonEntry} from '../model/database/enitites/PersonEntry';
 
 export class PersonMWs {
   public static async updatePerson(

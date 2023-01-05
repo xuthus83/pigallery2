@@ -14,7 +14,7 @@ export class PreviewFillingJob extends Job {
   status: 'Persons' | 'Albums' | 'Directory' = 'Persons';
 
   public get Supported(): boolean {
-    return Config.Database.type !== DatabaseType.memory;
+    return true;
   }
 
   protected async init(): Promise<void> {

@@ -12,7 +12,7 @@ import {
 import {ITaskExecuter, TaskExecuter} from '../threading/TaskExecuter';
 import {FaceRegion, PhotoDTO} from '../../../common/entities/PhotoDTO';
 import {SupportedFormats} from '../../../common/SupportedFormats';
-import {PersonEntry} from '../database/sql/enitites/PersonEntry';
+import {PersonEntry} from '../database/enitites/PersonEntry';
 
 export class PhotoProcessing {
   private static initDone = false;

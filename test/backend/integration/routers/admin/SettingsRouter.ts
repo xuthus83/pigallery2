@@ -1,7 +1,7 @@
 import * as path from 'path';
 import * as fs from 'fs';
 import {Config} from '../../../../../src/common/config/private/Config';
-import {SQLConnection} from '../../../../../src/backend/model/database/sql/SQLConnection';
+import {SQLConnection} from '../../../../../src/backend/model/database/SQLConnection';
 import {Server} from '../../../../../src/backend/server';
 import {DatabaseType, ServerConfig} from '../../../../../src/common/config/private/PrivateConfig';
 import {ProjectPath} from '../../../../../src/backend/ProjectPath';

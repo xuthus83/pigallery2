@@ -2,7 +2,7 @@ import { GPSMetadata } from '../../../common/entities/PhotoDTO';
 import * as NodeGeocoder from 'node-geocoder';
 import { LocationLookupException } from '../../exceptions/LocationLookupException';
 import { LRU } from '../../../common/Utils';
-import { IObjectManager } from './interfaces/IObjectManager';
+import { IObjectManager } from './IObjectManager';
 import { ParentDirectoryDTO } from '../../../common/entities/DirectoryDTO';
 
 export class LocationManager implements IObjectManager {

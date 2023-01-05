@@ -2,19 +2,19 @@ import {expect} from 'chai';
 import * as path from 'path';
 import * as fs from 'fs';
 import {Config} from '../../../../../src/common/config/private/Config';
-import {SQLConnection} from '../../../../../src/backend/model/database/sql/SQLConnection';
-import {UserEntity} from '../../../../../src/backend/model/database/sql/enitites/UserEntity';
+import {SQLConnection} from '../../../../../src/backend/model/database/SQLConnection';
+import {UserEntity} from '../../../../../src/backend/model/database/enitites/UserEntity';
 import {UserRoles} from '../../../../../src/common/entities/UserDTO';
 import {PasswordHelper} from '../../../../../src/backend/model/PasswordHelper';
-import {DirectoryEntity} from '../../../../../src/backend/model/database/sql/enitites/DirectoryEntity';
-import {PhotoEntity, PhotoMetadataEntity} from '../../../../../src/backend/model/database/sql/enitites/PhotoEntity';
+import {DirectoryEntity} from '../../../../../src/backend/model/database/enitites/DirectoryEntity';
+import {PhotoEntity, PhotoMetadataEntity} from '../../../../../src/backend/model/database/enitites/PhotoEntity';
 import {
   CameraMetadataEntity,
   GPSMetadataEntity,
   MediaDimensionEntity,
   PositionMetaDataEntity
-} from '../../../../../src/backend/model/database/sql/enitites/MediaEntity';
-import {VersionEntity} from '../../../../../src/backend/model/database/sql/enitites/VersionEntity';
+} from '../../../../../src/backend/model/database/enitites/MediaEntity';
+import {VersionEntity} from '../../../../../src/backend/model/database/enitites/VersionEntity';
 import {DatabaseType} from '../../../../../src/common/config/private/PrivateConfig';
 import {ProjectPath} from '../../../../../src/backend/ProjectPath';
 
@@ -46,7 +46,7 @@ describe('Typeorm integration', () => {
   });
 
 
-  const getDir = (namePrefix: string = '') => {
+  const getDir = (namePrefix = '') => {
     const d = new DirectoryEntity();
     d.name = namePrefix + 'test dir';
     d.path = '.';

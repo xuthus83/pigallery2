@@ -14,7 +14,7 @@ import {ThumbnailSourceType} from '../../model/threading/PhotoWorker';
 import {MediaDTO} from '../../../common/entities/MediaDTO';
 import {PhotoProcessing} from '../../model/fileprocessing/PhotoProcessing';
 import {ServerTime} from '../ServerTimingMWs';
-import {PersonEntry} from '../../model/database/sql/enitites/PersonEntry';
+import {PersonEntry} from '../../model/database/enitites/PersonEntry';
 
 export class ThumbnailGeneratorMWs {
   private static ThumbnailMapEntries =

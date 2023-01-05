@@ -117,11 +117,7 @@ export class Server {
     Localizations.init();
 
     this.app.use(locale(Config.Server.languages, 'en'));
-    if (Config.Database.type !== DatabaseType.memory) {
-      await ObjectManagers.InitSQLManagers();
-    } else {
-      await ObjectManagers.InitMemoryManagers();
-    }
+    await ObjectManagers.InitSQLManagers();
 
     Router.route(this.app);
 

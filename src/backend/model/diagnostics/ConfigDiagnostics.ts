@@ -1,7 +1,7 @@
 import {Config, PrivateConfigClass} from '../../../common/config/private/Config';
 import {Logger} from '../../Logger';
 import {NotificationManager} from '../NotifocationManager';
-import {SQLConnection} from '../database/sql/SQLConnection';
+import {SQLConnection} from '../database/SQLConnection';
 import * as fs from 'fs';
 import {FFmpegFactory} from '../FFmpegFactory';
 import {
@@ -9,12 +9,9 @@ import {
   ClientFacesConfig,
   ClientMapConfig,
   ClientMetaFileConfig,
-  ClientPhotoConfig,
   ClientRandomPhotoConfig,
   ClientSearchConfig,
   ClientSharingConfig,
-  ClientThumbnailConfig,
-  ClientVideoConfig,
   MapLayers,
   MapProviders,
 } from '../../../common/config/public/ClientConfig';
@@ -22,17 +19,12 @@ import {
   DatabaseType,
   ServerDataBaseConfig,
   ServerJobConfig,
-  ServerMetaFileConfig,
-  ServerPhotoConfig,
   ServerPreviewConfig,
   ServerThumbnailConfig,
   ServerVideoConfig,
 } from '../../../common/config/private/PrivateConfig';
 import {SearchQueryParser} from '../../../common/SearchQueryParser';
-import {
-  SearchQueryTypes,
-  TextSearch,
-} from '../../../common/entities/SearchQueryDTO';
+import {SearchQueryTypes, TextSearch,} from '../../../common/entities/SearchQueryDTO';
 import {Utils} from '../../../common/Utils';
 
 const LOG_TAG = '[ConfigDiagnostics]';
@@ -42,12 +34,7 @@ export class ConfigDiagnostics {
     albumConfig: ClientAlbumConfig,
     original: PrivateConfigClass
   ): void {
-    if (
-      albumConfig.enabled === true &&
-      original.Database.type === DatabaseType.memory
-    ) {
-      throw new Error('Memory Database does not support albums');
-    }
+    // nothing to check
   }
 
   static checkReadWritePermission(path: string): Promise<void> {
@@ -65,9 +52,7 @@ export class ConfigDiagnostics {
   static async testDatabase(
     databaseConfig: ServerDataBaseConfig
   ): Promise<void> {
-    if (databaseConfig.type !== DatabaseType.memory) {
-      await SQLConnection.tryConnection(databaseConfig);
-    }
+    await SQLConnection.tryConnection(databaseConfig);
     if (databaseConfig.type === DatabaseType.sqlite) {
       try {
         await this.checkReadWritePermission(
@@ -199,9 +184,6 @@ export class ConfigDiagnostics {
     config: PrivateConfigClass
   ): Promise<void> {
     if (faces.enabled === true) {
-      if (config.Database.type === DatabaseType.memory) {
-        throw new Error('Memory Database do not support faces');
-      }
       if (config.Search.enabled === false) {
         throw new Error('Faces support needs enabled search');
       }
@@ -212,24 +194,13 @@ export class ConfigDiagnostics {
     search: ClientSearchConfig,
     config: PrivateConfigClass
   ): Promise<void> {
-    if (
-      search.enabled === true &&
-      config.Database.type === DatabaseType.memory
-    ) {
-      throw new Error('Memory Database do not support searching');
-    }
+    //nothing to check
   }
 
   static async testSharingConfig(
     sharing: ClientSharingConfig,
     config: PrivateConfigClass
   ): Promise<void> {
-    if (
-      sharing.enabled === true &&
-      config.Database.type === DatabaseType.memory
-    ) {
-      throw new Error('Memory Database do not support sharing');
-    }
     if (
       sharing.enabled === true &&
       config.Users.authenticationRequired === false
@@ -242,12 +213,7 @@ export class ConfigDiagnostics {
     sharing: ClientRandomPhotoConfig,
     config: PrivateConfigClass
   ): Promise<void> {
-    if (
-      sharing.enabled === true &&
-      config.Database.type === DatabaseType.memory
-    ) {
-      throw new Error('Memory Database do not support random photo');
-    }
+    //nothing to check
   }
 
   static async testMapConfig(map: ClientMapConfig): Promise<void> {
@@ -308,18 +274,16 @@ export class ConfigDiagnostics {
   }
 
   static async runDiagnostics(): Promise<void> {
-    if (Config.Database.type !== DatabaseType.memory) {
-      try {
-        await ConfigDiagnostics.testDatabase(Config.Database);
-      } catch (ex) {
-        const err: Error = ex;
-        Logger.warn(LOG_TAG, '[SQL error]', err.toString());
-        Logger.error(
-          LOG_TAG,
-          'Error during initializing SQL DB, check DB connection and settings'
-        );
-        process.exit(1);
-      }
+    try {
+      await ConfigDiagnostics.testDatabase(Config.Database);
+    } catch (ex) {
+      const err: Error = ex;
+      Logger.warn(LOG_TAG, '[SQL error]', err.toString());
+      Logger.error(
+        LOG_TAG,
+        'Error during initializing SQL DB, check DB connection and settings'
+      );
+      process.exit(1);
     }
 
     try {

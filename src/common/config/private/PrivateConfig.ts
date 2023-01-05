@@ -41,7 +41,6 @@ if (typeof $localize === 'undefined') {
 
 
 export enum DatabaseType {
-  memory = 1,
   mysql = 2,
   sqlite = 3,
 }
@@ -221,17 +220,13 @@ export class UserConfig {
 export class ServerDataBaseConfig {
   @ConfigProperty<DatabaseType, ServerConfig>({
     type: DatabaseType,
-    onNewValue: (value, config) => {
-      if (config && value === DatabaseType.memory) {
-        config.Search.enabled = false;
-        config.Sharing.enabled = false;
-      }
-    },
     tags:
       {
         name: $localize`Type`,
-        priority: ConfigPriority.advanced
-      },
+        priority: ConfigPriority.advanced,
+        githubIssue: 573
+      } as TAGS,
+    description: $localize`SQLite is recommended.`
   })
   type: DatabaseType = DatabaseType.sqlite;
 
@@ -616,7 +611,8 @@ export class ServerJobConfig {
     arrayType: JobScheduleConfig,
     tags: {
       name: $localize`Scheduled jobs`,
-      priority: ConfigPriority.advanced}
+      priority: ConfigPriority.advanced
+    }
   })
   scheduled: JobScheduleConfig[] = [
     new JobScheduleConfig(

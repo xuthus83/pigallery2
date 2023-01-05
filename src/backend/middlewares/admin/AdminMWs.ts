@@ -1,10 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { ErrorCodes, ErrorDTO } from '../../../common/entities/Error';
 import { ObjectManagers } from '../../model/ObjectManagers';
-import { Config } from '../../../common/config/private/Config';
-import { ISQLGalleryManager } from '../../model/database/sql/IGalleryManager';
-import { DatabaseType } from '../../../common/config/private/PrivateConfig';
-import { ISQLPersonManager } from '../../model/database/sql/IPersonManager';
 import { StatisticDTO } from '../../../common/entities/settings/StatisticDTO';
 
 export class AdminMWs {
@@ -13,19 +9,11 @@ export class AdminMWs {
     res: Response,
     next: NextFunction
   ): Promise<void> {
-    if (Config.Database.type === DatabaseType.memory) {
-      return next(
-        new ErrorDTO(
-          ErrorCodes.GENERAL_ERROR,
-          'Statistic is only available for indexed content'
-        )
-      );
-    }
 
     const galleryManager = ObjectManagers.getInstance()
-      .GalleryManager as ISQLGalleryManager;
+      .GalleryManager;
     const personManager = ObjectManagers.getInstance()
-      .PersonManager as ISQLPersonManager;
+      .PersonManager;
     try {
       req.resultPipe = {
         directories: await galleryManager.countDirectories(),
@@ -60,19 +48,10 @@ export class AdminMWs {
     res: Response,
     next: NextFunction
   ): Promise<void> {
-    if (Config.Database.type === DatabaseType.memory) {
-      return next(
-        new ErrorDTO(
-          ErrorCodes.GENERAL_ERROR,
-          'Statistic is only available for indexed content'
-        )
-      );
-    }
 
-    const galleryManager = ObjectManagers.getInstance()
-      .GalleryManager as ISQLGalleryManager;
     try {
-      req.resultPipe = await galleryManager.getPossibleDuplicates();
+      req.resultPipe = await ObjectManagers.getInstance()
+        .GalleryManager.getPossibleDuplicates();
       return next();
     } catch (err) {
       if (err instanceof Error) {

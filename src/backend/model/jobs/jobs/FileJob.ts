@@ -6,14 +6,13 @@ import {DirectoryScanSettings} from '../../threading/DiskMangerWorker';
 import {Logger} from '../../../Logger';
 import {Config} from '../../../../common/config/private/Config';
 import {FileDTO} from '../../../../common/entities/FileDTO';
-import {SQLConnection} from '../../database/sql/SQLConnection';
-import {MediaEntity} from '../../database/sql/enitites/MediaEntity';
-import {PhotoEntity} from '../../database/sql/enitites/PhotoEntity';
-import {VideoEntity} from '../../database/sql/enitites/VideoEntity';
+import {SQLConnection} from '../../database/SQLConnection';
+import {MediaEntity} from '../../database/enitites/MediaEntity';
+import {PhotoEntity} from '../../database/enitites/PhotoEntity';
+import {VideoEntity} from '../../database/enitites/VideoEntity';
 import {backendTexts} from '../../../../common/BackendTexts';
 import {ProjectPath} from '../../../ProjectPath';
-import {DatabaseType} from '../../../../common/config/private/PrivateConfig';
-import {FileEntity} from '../../database/sql/enitites/FileEntity';
+import {FileEntity} from '../../database/enitites/FileEntity';
 import {DirectoryBaseDTO, DirectoryDTOUtils} from '../../../../common/entities/DirectoryDTO';
 
 const LOG_TAG = '[FileJob]';
@@ -35,15 +34,14 @@ export abstract class FileJob<S extends { indexedOnly?: boolean } = { indexedOnl
   protected constructor(private scanFilter: DirectoryScanSettings) {
     super();
     this.scanFilter.noChildDirPhotos = true;
-    if (Config.Database.type !== DatabaseType.memory) {
-      this.ConfigTemplate.push({
-        id: 'indexedOnly',
-        type: 'boolean',
-        name: backendTexts.indexedFilesOnly.name,
-        description: backendTexts.indexedFilesOnly.description,
-        defaultValue: true,
-      });
-    }
+    this.ConfigTemplate.push({
+      id: 'indexedOnly',
+      type: 'boolean',
+      name: backendTexts.indexedFilesOnly.name,
+      description: backendTexts.indexedFilesOnly.description,
+      defaultValue: true,
+    });
+
   }
 
   protected async init(): Promise<void> {
@@ -70,12 +68,10 @@ export abstract class FileJob<S extends { indexedOnly?: boolean } = { indexedOnl
   protected abstract processFile(filePath: string): Promise<void>;
 
   protected async step(): Promise<boolean> {
-    const DBBased = this.config.indexedOnly &&
-      Config.Database.type !== DatabaseType.memory;
     if (
       this.fileQueue.length === 0 &&
-      ((this.directoryQueue.length === 0 && !DBBased) ||
-        (DBBased &&
+      ((this.directoryQueue.length === 0 && !this.config.indexedOnly) ||
+        (this.config.indexedOnly &&
           this.DBProcessing.hasMoreMedia === false))) {
       return false;
     }
@@ -103,7 +99,7 @@ export abstract class FileJob<S extends { indexedOnly?: boolean } = { indexedOnl
       }
     };
 
-    if (!DBBased) {
+    if (!this.config.indexedOnly) {
       if (this.directoryQueue.length > 0) {
         await this.loadADirectoryFromDisk();
       } else if (this.fileQueue.length > 0) {

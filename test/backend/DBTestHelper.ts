@@ -1,14 +1,14 @@
 import {Config} from '../../src/common/config/private/Config';
 import * as path from 'path';
 import * as fs from 'fs';
-import {SQLConnection} from '../../src/backend/model/database/sql/SQLConnection';
+import {SQLConnection} from '../../src/backend/model/database/SQLConnection';
 import {DatabaseType} from '../../src/common/config/private/PrivateConfig';
 import {ProjectPath} from '../../src/backend/ProjectPath';
 import {DirectoryBaseDTO, ParentDirectoryDTO, SubDirectoryDTO} from '../../src/common/entities/DirectoryDTO';
 import {ObjectManagers} from '../../src/backend/model/ObjectManagers';
 import {DiskMangerWorker} from '../../src/backend/model/threading/DiskMangerWorker';
-import {IndexingManager} from '../../src/backend/model/database/sql/IndexingManager';
-import {GalleryManager} from '../../src/backend/model/database/sql/GalleryManager';
+import {IndexingManager} from '../../src/backend/model/database/IndexingManager';
+import {GalleryManager} from '../../src/backend/model/database/GalleryManager';
 import {Connection} from 'typeorm';
 import {Utils} from '../../src/common/Utils';
 import {TestHelper} from '../TestHelper';
@@ -43,7 +43,6 @@ const LOG_TAG = 'DBTestHelper';
 export class DBTestHelper {
 
   static enable = {
-    memory: false,
     sqlite: process.env.TEST_SQLITE !== 'false',
     mysql: process.env.TEST_MYSQL !== 'false'
   };
@@ -108,12 +107,6 @@ export class DBTestHelper {
             return tests(helper);
           });
         }
-        if (settings.memory) {
-          const helper = new DBTestHelper(DatabaseType.memory);
-          savedDescribe('memory', () => {
-            return tests(helper);
-          });
-        }
       });
     };
   }
@@ -159,8 +152,6 @@ export class DBTestHelper {
       await this.initSQLite();
     } else if (this.dbType === DatabaseType.mysql) {
       await this.initMySQL();
-    } else if (this.dbType === DatabaseType.memory) {
-      Config.Database.type = DatabaseType.memory;
     }
   }
 
@@ -169,8 +160,6 @@ export class DBTestHelper {
       await this.clearUpSQLite();
     } else if (this.dbType === DatabaseType.mysql) {
       await this.clearUpMysql();
-    } else if (this.dbType === DatabaseType.memory) {
-      await this.clearUpMemory();
     }
   }
 
@@ -242,7 +231,4 @@ export class DBTestHelper {
     await fs.promises.rm(this.tempDir, {recursive: true, force: true});
   }
 
-  private async clearUpMemory(): Promise<void> {
-    return this.resetSQLite();
-  }
 }

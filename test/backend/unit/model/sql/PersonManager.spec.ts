@@ -1,13 +1,13 @@
 import {expect} from 'chai';
-import {PersonManager} from '../../../../../src/backend/model/database/sql/PersonManager';
+import {PersonManager} from '../../../../../src/backend/model/database/PersonManager';
 import {DBTestHelper} from '../../../DBTestHelper';
 import {TestHelper} from '../../../../TestHelper';
 import {PhotoDTO} from '../../../../../src/common/entities/PhotoDTO';
 import {Utils} from '../../../../../src/common/Utils';
 import {ParentDirectoryDTO} from '../../../../../src/common/entities/DirectoryDTO';
 import {VideoDTO} from '../../../../../src/common/entities/VideoDTO';
-import {SQLConnection} from '../../../../../src/backend/model/database/sql/SQLConnection';
-import {PersonEntry} from '../../../../../src/backend/model/database/sql/enitites/PersonEntry';
+import {SQLConnection} from '../../../../../src/backend/model/database/SQLConnection';
+import {PersonEntry} from '../../../../../src/backend/model/database/enitites/PersonEntry';
 
 
 // to help WebStorm to handle the test cases

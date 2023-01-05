@@ -3,10 +3,10 @@ import {
   GPSMetadataEntity,
   MediaDimensionEntity,
   PositionMetaDataEntity
-} from '../src/backend/model/database/sql/enitites/MediaEntity';
-import {PhotoEntity, PhotoMetadataEntity} from '../src/backend/model/database/sql/enitites/PhotoEntity';
-import {DirectoryEntity} from '../src/backend/model/database/sql/enitites/DirectoryEntity';
-import {VideoEntity, VideoMetadataEntity} from '../src/backend/model/database/sql/enitites/VideoEntity';
+} from '../src/backend/model/database/enitites/MediaEntity';
+import {PhotoEntity, PhotoMetadataEntity} from '../src/backend/model/database/enitites/PhotoEntity';
+import {DirectoryEntity} from '../src/backend/model/database/enitites/DirectoryEntity';
+import {VideoEntity, VideoMetadataEntity} from '../src/backend/model/database/enitites/VideoEntity';
 import {MediaDimension, MediaDTO} from '../src/common/entities/MediaDTO';
 import {
   CameraMetadata,

@@ -1,21 +1,21 @@
-import {SearchManager} from '../../../../../src/backend/model/database/sql/SearchManager';
+import {SearchManager} from '../../../../../src/backend/model/database/SearchManager';
 import {DBTestHelper} from '../../../DBTestHelper';
 import {SearchQueryDTO, SearchQueryTypes, TextSearch} from '../../../../../src/common/entities/SearchQueryDTO';
-import {IndexingManager} from '../../../../../src/backend/model/database/sql/IndexingManager';
+import {IndexingManager} from '../../../../../src/backend/model/database/IndexingManager';
 import {DirectoryBaseDTO, ParentDirectoryDTO, SubDirectoryDTO} from '../../../../../src/common/entities/DirectoryDTO';
 import {TestHelper} from '../../../../TestHelper';
 import {ObjectManagers} from '../../../../../src/backend/model/ObjectManagers';
-import {GalleryManager} from '../../../../../src/backend/model/database/sql/GalleryManager';
+import {GalleryManager} from '../../../../../src/backend/model/database/GalleryManager';
 import {Connection} from 'typeorm';
 import {PhotoDTO} from '../../../../../src/common/entities/PhotoDTO';
 import {VideoDTO} from '../../../../../src/common/entities/VideoDTO';
 import {FileDTO} from '../../../../../src/common/entities/FileDTO';
-import {PreviewManager} from '../../../../../src/backend/model/database/sql/PreviewManager';
+import {PreviewManager} from '../../../../../src/backend/model/database/PreviewManager';
 import {Config} from '../../../../../src/common/config/private/Config';
 import {SortingMethods} from '../../../../../src/common/entities/SortingMethods';
 import {Utils} from '../../../../../src/common/Utils';
-import {SQLConnection} from '../../../../../src/backend/model/database/sql/SQLConnection';
-import {DirectoryEntity} from '../../../../../src/backend/model/database/sql/enitites/DirectoryEntity';
+import {SQLConnection} from '../../../../../src/backend/model/database/SQLConnection';
+import {DirectoryEntity} from '../../../../../src/backend/model/database/enitites/DirectoryEntity';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const deepEqualInAnyOrder = require('deep-equal-in-any-order');

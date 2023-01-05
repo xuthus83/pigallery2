@@ -13,7 +13,7 @@ export class DBRestJob extends Job {
   protected readonly IsInstant = true;
 
   public get Supported(): boolean {
-    return Config.Database.type !== DatabaseType.memory;
+    return true;
   }
 
   protected async init(): Promise<void> {

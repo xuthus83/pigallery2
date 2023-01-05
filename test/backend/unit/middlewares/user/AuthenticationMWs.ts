@@ -4,10 +4,9 @@ import {AuthenticationMWs} from '../../../../../src/backend/middlewares/user/Aut
 import {ErrorCodes, ErrorDTO} from '../../../../../src/common/entities/Error';
 import {UserDTO, UserRoles} from '../../../../../src/common/entities/UserDTO';
 import {ObjectManagers} from '../../../../../src/backend/model/ObjectManagers';
-import {UserManager} from '../../../../../src/backend/model/database/memory/UserManager';
 import {Config} from '../../../../../src/common/config/private/Config';
-import {IUserManager} from '../../../../../src/backend/model/database/interfaces/IUserManager';
 import * as path from 'path';
+import {UserManager} from '../../../../../src/backend/model/database/UserManager';
 
 
 declare const describe: any;
@@ -53,6 +52,7 @@ describe('Authentication middleware', () => {
       };
       AuthenticationMWs.authenticate(req, {
         status: () => {
+          // empty
         }
       } as any, next);
 
@@ -254,7 +254,7 @@ describe('Authentication middleware', () => {
         done();
       };
       ObjectManagers.getInstance().UserManager = {
-        findOne: (filter): Promise<UserDTO> => {
+        findOne: (_: never): Promise<UserDTO> => {
           return Promise.reject(null);
         }
       } as UserManager;
@@ -281,10 +281,10 @@ describe('Authentication middleware', () => {
         done();
       };
       ObjectManagers.getInstance().UserManager = {
-        findOne: (filter) => {
+        findOne: (filter: never) => {
           return Promise.resolve('test user' as any);
         }
-      } as IUserManager;
+      } as UserManager;
       AuthenticationMWs.login(req, null, next);
 
 
