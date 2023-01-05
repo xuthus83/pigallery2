@@ -60,7 +60,7 @@ export class TemplateComponent implements OnInit, OnChanges, OnDestroy, ISetting
   public icon: string;
   @Input() ConfigPath: string;
   @Input() enableNesting: boolean;
-  nestedConfigs: { id: string, name: string, visible: () => boolean,icon:string }[] = [];
+  nestedConfigs: { id: string, name: string, visible: () => boolean, icon: string }[] = [];
 
   @ViewChild('settingsForm', {static: true})
   form: FormControl;
@@ -182,20 +182,28 @@ export class TemplateComponent implements OnInit, OnChanges, OnDestroy, ISetting
             }
           }
 
+          const forcedVisibility = !(state.tags?.priority > this.settingsService.configPriority ||
+            //if this value should not change in Docker, lets hide it
+            (this.settingsService.configPriority === ConfigPriority.basic &&
+              state.tags?.dockerSensitive && this.settingsService.settings.value.Environment.isDocker));
 
           if (state.isConfigArrayType) {
             for (let i = 0; i < state.value?.length; ++i) {
-              if (state.value[i].__state &&
-                Object.keys(state.value[i].__state).findIndex(k => !(st.value[i].__state[k].shouldHide && st.value[i].__state[k].shouldHide())) === -1) {
-                return true;
+              for (const k of Object.keys(state.value[i].__state)) {
+                if (!Utils.equalsFilter(
+                  state.value[i]?.__state[k]?.value,
+                  state.default[i] ? state.default[i][k] : undefined,
+                  ['default', '__propPath', '__created', '__prototype', '__rootConfig'])) {
+
+                  return false;
+                }
               }
             }
-            return false;
+            return !forcedVisibility;
           }
-          return (
-            (state.tags?.priority > this.settingsService.configPriority ||
-              (this.settingsService.configPriority === ConfigPriority.basic &&
-                state.tags?.dockerSensitive && this.settingsService.settings.value.Environment.isDocker)) && //if this value should not change in Docker, lets hide it
+
+
+          return ( !forcedVisibility  &&
             Utils.equalsFilter(state.value, state.default,
               ['__propPath', '__created', '__prototype', '__rootConfig']) &&
             Utils.equalsFilter(state.original, state.default,
