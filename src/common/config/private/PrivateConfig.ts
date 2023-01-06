@@ -98,6 +98,7 @@ export class MySQLConfig {
     tags:
       {
         name: $localize`Host`,
+        uiResetNeeded: {server: true},
         priority: ConfigPriority.advanced
       },
   })
@@ -107,6 +108,7 @@ export class MySQLConfig {
     tags:
       {
         name: $localize`Port`,
+        uiResetNeeded: {server: true},
         priority: ConfigPriority.advanced
       },
   })
@@ -116,6 +118,7 @@ export class MySQLConfig {
     tags:
       {
         name: $localize`Database`,
+        uiResetNeeded: {server: true},
         priority: ConfigPriority.advanced
       },
   })
@@ -125,6 +128,7 @@ export class MySQLConfig {
     tags:
       {
         name: $localize`Username`,
+        uiResetNeeded: {server: true},
         priority: ConfigPriority.advanced
       },
   })
@@ -134,6 +138,7 @@ export class MySQLConfig {
     tags:
       {
         name: $localize`Password`,
+        uiResetNeeded: {server: true},
         priority: ConfigPriority.advanced
       }
   })
@@ -146,6 +151,7 @@ export class SQLiteConfig {
     tags:
       {
         name: $localize`Sqlite db filename`,
+        uiResetNeeded: {server: true},
         priority: ConfigPriority.underTheHood
       },
     description: $localize`Sqlite will save the db with this filename.`,
@@ -224,6 +230,7 @@ export class ServerDataBaseConfig {
       {
         name: $localize`Type`,
         priority: ConfigPriority.advanced,
+        uiResetNeeded: {db: true},
         githubIssue: 573
       } as TAGS,
     description: $localize`SQLite is recommended.`
@@ -234,6 +241,7 @@ export class ServerDataBaseConfig {
     tags:
       {
         name: $localize`Database folder`,
+        uiResetNeeded: {server: true},
         priority: ConfigPriority.advanced
       },
     description: $localize`All file-based data will be stored here (sqlite database, user database in case of memory db, job history data).`,
@@ -244,6 +252,7 @@ export class ServerDataBaseConfig {
     tags:
       {
         name: $localize`SQLite`,
+        uiResetNeeded: {db: true},
         relevant: (c: any) => c.type === DatabaseType.sqlite,
       }
   })
@@ -253,6 +262,7 @@ export class ServerDataBaseConfig {
     tags:
       {
         name: $localize`MySQL`,
+        uiResetNeeded: {db: true},
         relevant: (c: any) => c.type === DatabaseType.mysql,
       }
   })
@@ -270,6 +280,7 @@ export class ServerUserConfig extends ClientUserConfig {
       {
         name: $localize`Enforced users`,
         priority: ConfigPriority.underTheHood,
+        uiResetNeeded: {server: true},
         uiOptional: true,
         githubIssue: 575
       } as TAGS,
@@ -411,6 +422,7 @@ export class ServerIndexingConfig {
       {
         name: $localize`Exclude Folder List`,
         priority: ConfigPriority.advanced,
+        uiResetNeeded: {server: true, db: true},
         uiOptional: true,
         uiAllowSpaces: true
       } as TAGS,
@@ -423,6 +435,7 @@ export class ServerIndexingConfig {
       {
         name: $localize`Exclude File List`,
         priority: ConfigPriority.advanced,
+        uiResetNeeded: {server: true, db: true},
         uiOptional: true,
         hint: $localize`.ignore;.pg2ignore`
       } as TAGS,
@@ -437,6 +450,7 @@ export class ServerThreadingConfig {
     tags:
       {
         name: $localize`Threading`,
+        uiResetNeeded: {server: true},
         priority: ConfigPriority.underTheHood
       },
     description: $localize`Runs directory scanning and thumbnail generation in a different thread.`
@@ -446,6 +460,7 @@ export class ServerThreadingConfig {
     tags:
       {
         name: $localize`Thumbnail threads`,
+        uiResetNeeded: {server: true},
         priority: ConfigPriority.underTheHood
       },
     description: $localize`Number of threads that are used to generate thumbnails. If 0, number of 'CPU cores -1' threads will be used.`,
@@ -819,6 +834,7 @@ export class ServerPreviewConfig {
     type: 'object',
     tags: {
       name: $localize`Preview Filter query`,
+      uiResetNeeded: {db: true},
       priority: ConfigPriority.advanced,
       uiType: 'SearchQuery'
     },
@@ -832,6 +848,7 @@ export class ServerPreviewConfig {
     arrayType: SortingMethods,
     tags: {
       name: $localize`Preview Sorting`,
+      uiResetNeeded: {db: true},
       priority: ConfigPriority.advanced
     },
     description: $localize`If multiple preview is available sorts them by these methods and selects the first one.`,
@@ -848,6 +865,7 @@ export class ServerMediaConfig extends ClientMediaConfig {
     tags: {
       name: $localize`Images folder`,
       priority: ConfigPriority.basic,
+      uiResetNeeded: {server: true},
       dockerSensitive: true
     },
     description: $localize`Images are loaded from this folder (read permission required)`,
@@ -857,6 +875,7 @@ export class ServerMediaConfig extends ClientMediaConfig {
   @ConfigProperty({
     tags: {
       name: $localize`Temp folder`,
+      uiResetNeeded: {server: true},
       priority: ConfigPriority.basic,
       dockerSensitive: true
     },
@@ -940,6 +959,7 @@ export class ServerServiceConfig extends ClientServiceConfig {
     tags: {
       name: $localize`Port`,
       priority: ConfigPriority.advanced,
+      uiResetNeeded: {server: true},
       dockerSensitive: true
     },
     description: $localize`Port number. Port 80 is usually what you need.`,
@@ -951,6 +971,7 @@ export class ServerServiceConfig extends ClientServiceConfig {
     tags: {
       name: $localize`Host`,
       priority: ConfigPriority.advanced,
+      uiResetNeeded: {server: true},
       dockerSensitive: true
     },
     description: $localize`Server will accept connections from this IPv6 or IPv4 address.`,

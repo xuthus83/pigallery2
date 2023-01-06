@@ -96,6 +96,14 @@ export class SettingsEntryComponent
     return !Utils.equalsFilter(this.state.value, this.state.default);
   }
 
+
+  get isOriginal(): boolean {
+    if (this.Disabled) {
+      return true;
+    }
+    return Utils.equalsFilter(this.state.value, this.state.original);
+  }
+
   get shouldHide(): boolean {
     return this.state.shouldHide && this.state.shouldHide();
   }

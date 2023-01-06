@@ -45,7 +45,11 @@ export type TAGS = {
     hideProgress: boolean,
     relevant?: (c: ClientConfig) => boolean,
     description: string
-  }[]
+  }[],
+  uiResetNeeded?: {
+    server?: boolean,
+    db?: boolean
+  }
 };
 
 @SubConfigClass<TAGS>({tags: {client: true}, softReadonly: true})
@@ -533,6 +537,7 @@ export class ClientVideoConfig {
     tags: {
       name: $localize`Enable`,
       priority: ConfigPriority.advanced,
+      uiResetNeeded: {db: true}
     }
   })
   enabled: boolean = true;
@@ -541,7 +546,8 @@ export class ClientVideoConfig {
     tags: {
       name: $localize`Supported formats with transcoding`,
       priority: ConfigPriority.underTheHood,
-      uiDisabled: (sb: ClientVideoConfig) => !sb.enabled
+      uiDisabled: (sb: ClientVideoConfig) => !sb.enabled,
+      uiResetNeeded: {db: true}
     } as TAGS,
     description: $localize`Video formats that are supported after transcoding (with the build-in ffmpeg support).`
   })
@@ -553,7 +559,8 @@ export class ClientVideoConfig {
     tags: {
       name: $localize`Supported formats without transcoding`,
       priority: ConfigPriority.underTheHood,
-      uiDisabled: (sb: ClientVideoConfig) => !sb.enabled
+      uiDisabled: (sb: ClientVideoConfig) => !sb.enabled,
+      uiResetNeeded: {db: true}
     },
     description: $localize`Video formats that are supported also without transcoding. Browser supported formats: https://www.w3schools.com/html/html5_video.asp`
   })
@@ -597,7 +604,8 @@ export class ClientPhotoConfig {
     arrayType: 'string',
     tags: {
       name: $localize`Supported photo formats`,
-      priority: ConfigPriority.underTheHood
+      priority: ConfigPriority.underTheHood,
+      uiResetNeeded: {db: true}
     },
     description: $localize`Photo formats that are supported. Browser needs to support these formats natively. Also sharp (libvips) package should be able to convert these formats.`,
   })
@@ -649,6 +657,7 @@ export class ClientMetaFileConfig {
     tags: {
       name: $localize`*.gpx files`,
       priority: ConfigPriority.advanced,
+      uiResetNeeded: {db: true},
       uiDisabled: (sb, c) => !c.Map.enabled
     } as TAGS,
     description: $localize`Reads *.gpx files and renders them on the map.`
@@ -667,6 +676,7 @@ export class ClientMetaFileConfig {
   @ConfigProperty({
     tags: {
       name: $localize`Markdown files`,
+      uiResetNeeded: {db: true},
       priority: ConfigPriority.advanced
     },
     description: $localize`Reads *.md files in a directory and shows the next to the map.`
@@ -676,6 +686,7 @@ export class ClientMetaFileConfig {
   @ConfigProperty({
     tags: {
       name: $localize`*.pg2conf files`,
+      uiResetNeeded: {db: true},
       priority: ConfigPriority.advanced
     },
     description: $localize`Reads *.pg2conf files (You can use it for custom sorting and saved search (albums)).`
@@ -685,6 +696,7 @@ export class ClientMetaFileConfig {
     arrayType: 'string',
     tags: {
       name: $localize`Supported formats`,
+      uiResetNeeded: {db: true},
       priority: ConfigPriority.underTheHood
     },
     description: $localize`The app will read and process these files.`
@@ -697,15 +709,17 @@ export class ClientFacesConfig {
   @ConfigProperty({
     tags: {
       name: $localize`Enabled`,
-      priority: ConfigPriority.advanced
+      priority: ConfigPriority.advanced,
+      uiResetNeeded: {db: true}
     }
   })
   enabled: boolean = true;
   @ConfigProperty({
     tags: {
       name: $localize`Override keywords`,
-      priority: ConfigPriority.underTheHood
-    },
+      priority: ConfigPriority.underTheHood,
+      uiResetNeeded: {db: true}
+    } as TAGS,
     description: $localize`If a photo has the same face (person) name and keyword, the app removes the duplicate, keeping the face only.`
   })
   keywordsToPersons: boolean = true;
@@ -752,6 +766,7 @@ export class ClientServiceConfig {
     tags: {
       name: $localize`Url Base`,
       hint: '/myGallery',
+      uiResetNeeded: {server: true},
       priority: ConfigPriority.advanced,
       uiOptional: true
     }
@@ -762,6 +777,7 @@ export class ClientServiceConfig {
     description: 'PiGallery api path.',
     tags: {
       name: $localize`Api path`,
+      uiResetNeeded: {server: true},
       priority: ConfigPriority.underTheHood
     }
   })
@@ -775,6 +791,7 @@ export class ClientServiceConfig {
     tags: {
       name: $localize`Custom HTML Head`,
       priority: ConfigPriority.advanced,
+      uiResetNeeded: {server: true},
       githubIssue: 404,
       uiOptional: true
     }
@@ -792,6 +809,7 @@ export class ClientUserConfig {
       }
     },
     tags: {
+      uiResetNeeded: {server: true},
       name: $localize`Password protection`,
     },
     description: $localize`Enables user management with login to password protect the gallery.`,
@@ -802,6 +820,7 @@ export class ClientUserConfig {
     type: UserRoles, tags: {
       name: $localize`Default user right`,
       priority: ConfigPriority.advanced,
+      uiResetNeeded: {server: true},
       relevant: (c: any) => c.authenticationRequired === false
     },
     description: $localize`Default user right when password protection is disabled.`,

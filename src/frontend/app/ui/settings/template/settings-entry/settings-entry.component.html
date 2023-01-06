@@ -284,25 +284,33 @@
             </div>
           </ng-container>
         </ng-container>
-        <div class="input-group-append">
+        <div class="input-group-append" *ngIf="dockerWarning && changed">
           <span
             triggers="mouseenter:mouseleave"
             placement="bottom"
             [popover]="popTemplate"
-            class="oi oi-warning text-warning warning-icon ms-2" *ngIf="dockerWarning && changed"></span>
+            class="oi oi-warning text-warning warning-icon ms-2" ></span>
         </div>
       </div>
 
-      <small class="form-text text-muted" *ngIf="description">
+      <small class="form-text text-muted">
         <ng-container *ngIf="experimental">
           <span class="oi oi-warning"></span>[Experimental]
         </ng-container>
-        {{description}}
+        <ng-container *ngIf="description">{{description}}</ng-container>
         <span *ngIf="type==='array' && (state.arrayType === 'string' || isNumberArray)" i18n>';' separated list.</span>
         <a *ngIf="state.tags?.githubIssue"
            [href]="'https://github.com/bpatrik/pigallery2/issues/'+state.tags?.githubIssue">
           <ng-container i18n>See</ng-container>
           #{{state.tags?.githubIssue}}.</a>
+        <ng-container *ngIf="state.tags?.uiResetNeeded?.db && !isOriginal">
+          <br/>
+          <span class="oi oi-warning" i18n>Reset database after changing this settings!</span>
+        </ng-container>
+        <ng-container *ngIf="state.tags?.uiResetNeeded?.server && !isOriginal">
+          <br/>
+          <span class="oi oi-warning" i18n>Restart server after changing this settings!</span>
+        </ng-container>
       </small>
     </div>
   </div>
