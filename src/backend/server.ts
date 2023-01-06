@@ -21,7 +21,7 @@ import {Event} from '../common/event/Event';
 import {QueryParams} from '../common/QueryParams';
 import {ConfigClassBuilder} from 'typeconfig/node';
 import {ConfigClassOptions} from 'typeconfig/src/decorators/class/IConfigClass';
-import {DatabaseType} from '../common/config/private/PrivateConfig';
+import {DatabaseType, ServerConfig} from '../common/config/private/PrivateConfig';
 import {unless} from 'express-unless';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -58,7 +58,7 @@ export class Server {
       'using config from ' +
       (
         ConfigClassBuilder.attachPrivateInterface(Config)
-          .__options as ConfigClassOptions
+          .__options as ConfigClassOptions<ServerConfig>
       ).configPath +
       ':'
     );
