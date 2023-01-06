@@ -13,7 +13,6 @@ if (typeof $localize === 'undefined') {
 }
 
 
-
 export enum MapProviders {
   OpenStreetMap = 1,
   Mapbox = 2,
@@ -49,7 +48,7 @@ export type TAGS = {
   }[]
 };
 
-@SubConfigClass<TAGS>({tags: {client: true}})
+@SubConfigClass<TAGS>({tags: {client: true}, softReadonly: true})
 export class AutoCompleteConfig {
   @ConfigProperty({
     tags:
@@ -93,7 +92,7 @@ export class AutoCompleteConfig {
   cacheTimeout: number = 1000 * 60 * 60;
 }
 
-@SubConfigClass({tags: {client: true}})
+@SubConfigClass({tags: {client: true}, softReadonly: true})
 export class ClientSearchConfig {
   @ConfigProperty({
     tags:
@@ -162,7 +161,7 @@ export class ClientSearchConfig {
   listMetafiles: boolean = true;
 }
 
-@SubConfigClass({tags: {client: true}})
+@SubConfigClass({tags: {client: true}, softReadonly: true})
 export class ClientAlbumConfig {
   @ConfigProperty({
     tags:
@@ -174,7 +173,7 @@ export class ClientAlbumConfig {
   enabled: boolean = true;
 }
 
-@SubConfigClass({tags: {client: true}})
+@SubConfigClass({tags: {client: true}, softReadonly: true})
 export class ClientSharingConfig {
   @ConfigProperty({
     tags:
@@ -196,7 +195,7 @@ export class ClientSharingConfig {
   passwordProtected: boolean = true;
 }
 
-@SubConfigClass({tags: {client: true}})
+@SubConfigClass({tags: {client: true}, softReadonly: true})
 export class ClientRandomPhotoConfig {
   @ConfigProperty({
     tags:
@@ -209,7 +208,7 @@ export class ClientRandomPhotoConfig {
   enabled: boolean = true;
 }
 
-@SubConfigClass({tags: {client: true}})
+@SubConfigClass({tags: {client: true}, softReadonly: true})
 export class MapLayers {
   @ConfigProperty({
     tags:
@@ -230,7 +229,7 @@ export class MapLayers {
   url: string = '';
 }
 
-@SubConfigClass({tags: {client: true}})
+@SubConfigClass({tags: {client: true}, softReadonly: true})
 export class ClientMapConfig {
   @ConfigProperty<boolean, ClientConfig, TAGS>({
     onNewValue: (value, config) => {
@@ -293,7 +292,7 @@ export class ClientMapConfig {
   maxPreviewMarkers: number = 50;
 }
 
-@SubConfigClass({tags: {client: true}})
+@SubConfigClass({tags: {client: true}, softReadonly: true})
 export class ClientThumbnailConfig {
   @ConfigProperty({
     type: 'unsignedInt', max: 100,
@@ -351,7 +350,7 @@ export enum NavigationLinkTypes {
   gallery = 1, faces, albums, search, url
 }
 
-@SubConfigClass({tags: {client: true}})
+@SubConfigClass({tags: {client: true}, softReadonly: true})
 export class NavigationLinkConfig {
   @ConfigProperty({
     type: NavigationLinkTypes,
@@ -400,7 +399,7 @@ export class NavigationLinkConfig {
   }
 }
 
-@SubConfigClass<TAGS>({tags: {client: true}})
+@SubConfigClass<TAGS>({tags: {client: true}, softReadonly: true})
 export class NavBarConfig {
   @ConfigProperty({
     tags: {
@@ -427,7 +426,7 @@ export class NavBarConfig {
   ];
 }
 
-@SubConfigClass<TAGS>({tags: {client: true, priority: ConfigPriority.advanced}})
+@SubConfigClass<TAGS>({tags: {client: true, priority: ConfigPriority.advanced}, softReadonly: true})
 export class ClientGalleryConfig {
   @ConfigProperty({
     tags: {
@@ -528,7 +527,7 @@ export class ClientGalleryConfig {
   defaultSlideshowSpeed: number = 5;
 }
 
-@SubConfigClass({tags: {client: true}})
+@SubConfigClass({tags: {client: true}, softReadonly: true})
 export class ClientVideoConfig {
   @ConfigProperty({
     tags: {
@@ -562,7 +561,7 @@ export class ClientVideoConfig {
 
 }
 
-@SubConfigClass({tags: {client: true}})
+@SubConfigClass({tags: {client: true}, softReadonly: true})
 export class ClientPhotoConvertingConfig {
   @ConfigProperty({
     tags: {
@@ -584,7 +583,7 @@ export class ClientPhotoConvertingConfig {
   loadFullImageOnZoom: boolean = true;
 }
 
-@SubConfigClass({tags: {client: true}})
+@SubConfigClass({tags: {client: true}, softReadonly: true})
 export class ClientPhotoConfig {
   @ConfigProperty({
     tags: {
@@ -605,7 +604,7 @@ export class ClientPhotoConfig {
   supportedFormats: string[] = ['gif', 'jpeg', 'jpg', 'jpe', 'png', 'webp', 'svg'];
 }
 
-@SubConfigClass({tags: {client: true}})
+@SubConfigClass({tags: {client: true}, softReadonly: true})
 export class ClientGPXCompressingConfig {
   @ConfigProperty({
     tags: {
@@ -619,7 +618,7 @@ export class ClientGPXCompressingConfig {
   enabled: boolean = true;
 }
 
-@SubConfigClass({tags: {client: true}})
+@SubConfigClass({tags: {client: true}, softReadonly: true})
 export class ClientMediaConfig {
   @ConfigProperty({
     tags: {
@@ -644,7 +643,7 @@ export class ClientMediaConfig {
   Photo: ClientPhotoConfig = new ClientPhotoConfig();
 }
 
-@SubConfigClass({tags: {client: true}})
+@SubConfigClass({tags: {client: true}, softReadonly: true})
 export class ClientMetaFileConfig {
   @ConfigProperty({
     tags: {
@@ -693,7 +692,7 @@ export class ClientMetaFileConfig {
   supportedFormats: string[] = ['gpx', 'pg2conf', 'md'];
 }
 
-@SubConfigClass({tags: {client: true}})
+@SubConfigClass({tags: {client: true}, softReadonly: true})
 export class ClientFacesConfig {
   @ConfigProperty({
     tags: {
@@ -728,7 +727,7 @@ export class ClientFacesConfig {
   readAccessMinRole: UserRoles = UserRoles.User;
 }
 
-@SubConfigClass({tags: {client: true}})
+@SubConfigClass({tags: {client: true}, softReadonly: true})
 export class ClientServiceConfig {
 
   @ConfigProperty({
@@ -783,7 +782,7 @@ export class ClientServiceConfig {
   customHTMLHead: string = '';
 }
 
-@SubConfigClass({tags: {client: true}})
+@SubConfigClass({tags: {client: true}, softReadonly: true})
 export class ClientUserConfig {
 
   @ConfigProperty<boolean, ClientConfig>({
@@ -794,7 +793,6 @@ export class ClientUserConfig {
     },
     tags: {
       name: $localize`Password protection`,
-      priority: ConfigPriority.advanced,
     },
     description: $localize`Enables user management with login to password protect the gallery.`,
   })
@@ -812,7 +810,7 @@ export class ClientUserConfig {
 }
 
 
-@SubConfigClass<TAGS>({tags: {client: true}})
+@SubConfigClass<TAGS>({tags: {client: true}, softReadonly: true})
 export class ClientConfig {
 
   @ConfigProperty()

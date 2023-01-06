@@ -76,17 +76,17 @@
               <div class="py-md-1 px-md-0"
                    *ngFor="let s of contents;"
                    [hidden]="!s.HasAvailableSettings">
-                  <button class="btn btn-link nav-link text-start p-0"
-                          (click)="viewportScroller.scrollToAnchor(s.ConfigPath)"
-                          >
-                    <span class="oi oi-{{s.icon}}"></span> {{s.Name}}
-                  </button>
-                  <button class="btn btn-link nav-link text-start ms-3 p-0"
-                          *ngFor="let n of s.nestedConfigs;"
-                          [hidden]="!n.visible()"
-                          (click)="viewportScroller.scrollToAnchor(n.id)">
-                    <span class="oi oi-{{n.icon}}"></span>  {{n.name}}
-                  </button>
+                <button class="btn btn-link nav-link text-start p-0"
+                        (click)="viewportScroller.scrollToAnchor(s.ConfigPath)"
+                >
+                  <span class="oi oi-{{s.icon}}"></span> {{s.Name}}
+                </button>
+                <button class="btn btn-link nav-link text-start ms-3 p-0"
+                        *ngFor="let n of s.nestedConfigs;"
+                        [hidden]="!n.visible()"
+                        (click)="viewportScroller.scrollToAnchor(n.id)">
+                  <span class="oi oi-{{n.icon}}"></span>  {{n.name}}
+                </button>
               </div>
             </div>
           </div>
@@ -107,6 +107,7 @@
             <hr class="mt-2"/>
             <app-settings-gallery-statistic></app-settings-gallery-statistic>
           </ng-container>
+          <app-settings-users *ngIf="cp=='Users'"></app-settings-users>
         </app-settings-template>
       </div>
     </div>

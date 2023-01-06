@@ -3,7 +3,7 @@ import * as path from 'path';
 import { ConfigClass, ConfigClassBuilder } from 'typeconfig/node';
 import { ConfigProperty, SubConfigClass } from 'typeconfig/common';
 
-@SubConfigClass()
+@SubConfigClass({softReadonly: true})
 export class BenchmarksConfig {
   @ConfigProperty()
   bmScanDirectory: boolean = true;

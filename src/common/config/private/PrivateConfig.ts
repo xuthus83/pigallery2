@@ -91,7 +91,7 @@ export type videoResolutionType =
   | 4320;
 export type videoFormatType = 'mp4' | 'webm';
 
-@SubConfigClass()
+@SubConfigClass({softReadonly: true})
 export class MySQLConfig {
   @ConfigProperty({
     envAlias: 'MYSQL_HOST',
@@ -140,7 +140,7 @@ export class MySQLConfig {
   password: string = '';
 }
 
-@SubConfigClass()
+@SubConfigClass({softReadonly: true})
 export class SQLiteConfig {
   @ConfigProperty({
     tags:
@@ -153,7 +153,7 @@ export class SQLiteConfig {
   DBFileName: string = 'sqlite.db';
 }
 
-@SubConfigClass()
+@SubConfigClass({softReadonly: true})
 export class UserConfig {
   @ConfigProperty({
     tags:
@@ -216,7 +216,7 @@ export class UserConfig {
   }
 }
 
-@SubConfigClass()
+@SubConfigClass({softReadonly: true})
 export class ServerDataBaseConfig {
   @ConfigProperty<DatabaseType, ServerConfig>({
     type: DatabaseType,
@@ -262,7 +262,7 @@ export class ServerDataBaseConfig {
 }
 
 
-@SubConfigClass()
+@SubConfigClass({softReadonly: true})
 export class ServerUserConfig extends ClientUserConfig {
   @ConfigProperty({
     arrayType: UserConfig,
@@ -273,13 +273,13 @@ export class ServerUserConfig extends ClientUserConfig {
         uiOptional: true,
         githubIssue: 575
       } as TAGS,
-    description: $localize`Creates these users in the DB if they do not exist. If a user with this name exist, it won't be overwritten, even if the role is different.`,
+    description: $localize`Creates these users in the DB during startup if they do not exist. If a user with this name exist, it won't be overwritten, even if the role is different.`,
   })
   enforcedUsers: UserConfig[] = [];
 }
 
 
-@SubConfigClass()
+@SubConfigClass({softReadonly: true})
 export class ServerThumbnailConfig extends ClientThumbnailConfig {
   @ConfigProperty({
     tags:
@@ -312,7 +312,7 @@ export class ServerThumbnailConfig extends ClientThumbnailConfig {
   personFaceMargin: number = 0.6; // in ration [0-1]
 }
 
-@SubConfigClass()
+@SubConfigClass({softReadonly: true})
 export class ServerGPXCompressingConfig extends ClientGPXCompressingConfig {
   @ConfigProperty({
     tags:
@@ -350,7 +350,7 @@ export class ServerGPXCompressingConfig extends ClientGPXCompressingConfig {
   minTimeDistance: number = 5000;
 }
 
-@SubConfigClass()
+@SubConfigClass({softReadonly: true})
 export class ServerMetaFileConfig extends ClientMetaFileConfig {
   @ConfigProperty({
     tags:
@@ -367,7 +367,7 @@ export class ServerMetaFileConfig extends ClientMetaFileConfig {
 }
 
 
-@SubConfigClass()
+@SubConfigClass({softReadonly: true})
 export class ServerSharingConfig extends ClientSharingConfig {
   @ConfigProperty({
     type: 'unsignedInt',
@@ -382,7 +382,7 @@ export class ServerSharingConfig extends ClientSharingConfig {
   updateTimeout: number = 1000 * 60 * 5;
 }
 
-@SubConfigClass()
+@SubConfigClass({softReadonly: true})
 export class ServerIndexingConfig {
   @ConfigProperty({
     type: 'unsignedInt',
@@ -431,7 +431,7 @@ export class ServerIndexingConfig {
   excludeFileList: string[] = [];
 }
 
-@SubConfigClass()
+@SubConfigClass({softReadonly: true})
 export class ServerThreadingConfig {
   @ConfigProperty({
     tags:
@@ -453,7 +453,7 @@ export class ServerThreadingConfig {
   thumbnailThreads: number = 0; // if zero-> CPU count -1
 }
 
-@SubConfigClass()
+@SubConfigClass({softReadonly: true})
 export class ServerDuplicatesConfig {
   @ConfigProperty({
     type: 'unsignedInt',
@@ -467,7 +467,7 @@ export class ServerDuplicatesConfig {
   listingLimit: number = 1000;
 }
 
-@SubConfigClass()
+@SubConfigClass({softReadonly: true})
 export class ServerLogConfig {
   @ConfigProperty({
     type: LogLevel,
@@ -497,13 +497,13 @@ export class ServerLogConfig {
   logServerTiming: boolean = false;
 }
 
-@SubConfigClass()
+@SubConfigClass({softReadonly: true})
 export class NeverJobTriggerConfig implements NeverJobTrigger {
   @ConfigProperty({type: JobTriggerType})
   readonly type = JobTriggerType.never;
 }
 
-@SubConfigClass()
+@SubConfigClass({softReadonly: true})
 export class ScheduledJobTriggerConfig implements ScheduledJobTrigger {
   @ConfigProperty({type: JobTriggerType})
   readonly type = JobTriggerType.scheduled;
@@ -512,7 +512,7 @@ export class ScheduledJobTriggerConfig implements ScheduledJobTrigger {
   time: number; // data time
 }
 
-@SubConfigClass()
+@SubConfigClass({softReadonly: true})
 export class PeriodicJobTriggerConfig implements PeriodicJobTrigger {
   @ConfigProperty({type: JobTriggerType})
   readonly type = JobTriggerType.periodic;
@@ -522,7 +522,7 @@ export class PeriodicJobTriggerConfig implements PeriodicJobTrigger {
   atTime: number | undefined = 0; // day time
 }
 
-@SubConfigClass()
+@SubConfigClass({softReadonly: true})
 export class AfterJobTriggerConfig implements AfterJobTrigger {
   @ConfigProperty({type: JobTriggerType})
   readonly type = JobTriggerType.after;
@@ -534,7 +534,7 @@ export class AfterJobTriggerConfig implements AfterJobTrigger {
   }
 }
 
-@SubConfigClass()
+@SubConfigClass({softReadonly: true})
 export class JobScheduleConfig implements JobScheduleDTO {
   @ConfigProperty()
   name: string;
@@ -586,7 +586,7 @@ export class JobScheduleConfig implements JobScheduleDTO {
   }
 }
 
-@SubConfigClass()
+@SubConfigClass({softReadonly: true})
 export class ServerJobConfig {
   @ConfigProperty({
     type: 'unsignedInt',
@@ -661,7 +661,7 @@ export class ServerJobConfig {
   ];
 }
 
-@SubConfigClass()
+@SubConfigClass({softReadonly: true})
 export class VideoTranscodingConfig {
   @ConfigProperty({
     type: 'unsignedInt',
@@ -761,7 +761,7 @@ export class VideoTranscodingConfig {
   customOptions: string[] = [];
 }
 
-@SubConfigClass()
+@SubConfigClass({softReadonly: true})
 export class ServerVideoConfig extends ClientVideoConfig {
   @ConfigProperty({
     tags: {
@@ -774,7 +774,7 @@ export class ServerVideoConfig extends ClientVideoConfig {
   transcoding: VideoTranscodingConfig = new VideoTranscodingConfig();
 }
 
-@SubConfigClass()
+@SubConfigClass({softReadonly: true})
 export class PhotoConvertingConfig extends ClientPhotoConvertingConfig {
   @ConfigProperty({
     tags: {
@@ -802,7 +802,7 @@ export class PhotoConvertingConfig extends ClientPhotoConvertingConfig {
   resolution: videoResolutionType = 1080;
 }
 
-@SubConfigClass()
+@SubConfigClass({softReadonly: true})
 export class ServerPhotoConfig extends ClientPhotoConfig {
   @ConfigProperty({
     tags: {
@@ -813,7 +813,7 @@ export class ServerPhotoConfig extends ClientPhotoConfig {
   Converting: PhotoConvertingConfig = new PhotoConvertingConfig();
 }
 
-@SubConfigClass()
+@SubConfigClass({softReadonly: true})
 export class ServerPreviewConfig {
   @ConfigProperty({
     type: 'object',
@@ -842,7 +842,7 @@ export class ServerPreviewConfig {
   ];
 }
 
-@SubConfigClass()
+@SubConfigClass({softReadonly: true})
 export class ServerMediaConfig extends ClientMediaConfig {
   @ConfigProperty({
     tags: {
@@ -914,7 +914,7 @@ export class ServerMediaConfig extends ClientMediaConfig {
   Thumbnail: ServerThumbnailConfig = new ServerThumbnailConfig();
 }
 
-@SubConfigClass()
+@SubConfigClass({softReadonly: true})
 export class ServerServiceConfig extends ClientServiceConfig {
   @ConfigProperty({
     arrayType: 'string',
@@ -974,7 +974,7 @@ export class ServerServiceConfig extends ClientServiceConfig {
   Log: ServerLogConfig = new ServerLogConfig();
 }
 
-@SubConfigClass()
+@SubConfigClass({softReadonly: true})
 export class ServerEnvironmentConfig {
   @ConfigProperty({volatile: true})
   upTime: string | undefined;
@@ -988,7 +988,7 @@ export class ServerEnvironmentConfig {
   isDocker: boolean | undefined;
 }
 
-@SubConfigClass<TAGS>()
+@SubConfigClass<TAGS>({softReadonly: true})
 export class ServerConfig extends ClientConfig {
 
   @ConfigProperty({volatile: true})
