@@ -174,7 +174,7 @@ export class UserConfig {
   })
   role: UserRoles = UserRoles.User;
 
-  @ConfigProperty({
+  @ConfigProperty<string, ServerConfig, TAGS>({
     tags:
       {
         name: $localize`Password`,
@@ -270,7 +270,8 @@ export class ServerUserConfig extends ClientUserConfig {
       {
         name: $localize`Enforced users`,
         priority: ConfigPriority.underTheHood,
-        uiOptional: true
+        uiOptional: true,
+        githubIssue: 575
       } as TAGS,
     description: $localize`Creates these users in the DB if they do not exist. If a user with this name exist, it won't be overwritten, even if the role is different.`,
   })

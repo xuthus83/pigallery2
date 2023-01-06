@@ -189,6 +189,7 @@
         <ng-container *ngSwitchCase="'UserConfig'">
           <div class="container ps-0 pe-0">
             <div class="row ms-0 me-0 mt-1 mb-1 bg-light" *ngFor="let item of state.value; let i = index">
+
               <div class="col ps-0">
                 <input type="text" class="form-control"
                        placeholder="Name"
@@ -217,6 +218,13 @@
                        [name]="'item_p_'+idName+i"
                        [id]="'item_p_'+idName+i"
                        required>
+                <input *ngIf="item.encrypted"
+                       type="password"
+                       class="form-control"
+                       value="*****"
+                       disabled
+                       [name]="'item_p_'+idName+i"
+                       [id]="'item_p_'+idName+i">
               </div>
               <div class="col-1 pe-0">
                 <button [disabled]="(state.value.length == 1 && !state.tags.uiOptional)"

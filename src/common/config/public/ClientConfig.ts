@@ -28,7 +28,7 @@ export type TAGS = {
   client?: true,
   priority?: ConfigPriority,
   name?: string,
-  relevant?: (c: ClientConfig) => boolean,
+  relevant?: (c: any) => boolean,
   dockerSensitive?: boolean,
   hint?: string,// UI hint
   githubIssue?: number,
