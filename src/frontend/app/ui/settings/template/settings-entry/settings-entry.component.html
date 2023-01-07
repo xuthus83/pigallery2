@@ -297,7 +297,7 @@
         <ng-container *ngIf="experimental">
           <span class="oi oi-warning"></span>[Experimental]
         </ng-container>
-        <ng-container *ngIf="description">{{description}}</ng-container>
+        <ng-container *ngIf="description">{{description}} </ng-container>
         <span *ngIf="type==='array' && (state.arrayType === 'string' || isNumberArray)" i18n>';' separated list.</span>
         <a *ngIf="state.tags?.githubIssue"
            [href]="'https://github.com/bpatrik/pigallery2/issues/'+state.tags?.githubIssue">
