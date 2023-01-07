@@ -32,21 +32,21 @@ export class BackendtextService {
       case DefaultsJobs.Indexing:
         return $localize`Indexing`;
       case DefaultsJobs['Database Reset']:
-        return $localize`Database Reset`;
+        return $localize`Database reset`;
       case DefaultsJobs['Thumbnail Generation']:
-        return $localize`Thumbnail Generation`;
+        return $localize`Thumbnail generation`;
       case DefaultsJobs['Photo Converting']:
-        return $localize`Photo Converting`;
+        return $localize`Photo converting`;
       case DefaultsJobs['Video Converting']:
-        return $localize`Video Converting`;
+        return $localize`Video converting`;
       case DefaultsJobs['Temp Folder Cleaning']:
-        return $localize`Temp Folder Cleaning`;
+        return $localize`Temp folder cleaning`;
       case DefaultsJobs['Preview Filling']:
-        return $localize`Preview Filling`;
+        return $localize`Preview filling`;
       case DefaultsJobs['Preview Reset']:
-        return $localize`Preview Reset`;
+        return $localize`Preview reset`;
       case DefaultsJobs['GPX Compression']:
-        return $localize`GPX Compression`;
+        return $localize`GPX compression`;
       default:
         return DefaultsJobs[job as DefaultsJobs];
     }

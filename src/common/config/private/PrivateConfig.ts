@@ -244,7 +244,7 @@ export class ServerDataBaseConfig {
         uiResetNeeded: {server: true},
         priority: ConfigPriority.advanced
       },
-    description: $localize`All file-based data will be stored here (sqlite database, user database in case of memory db, job history data).`,
+    description: $localize`All file-based data will be stored here (sqlite database, job history data).`,
   })
   dbFolder: string = 'db';
 
@@ -298,7 +298,7 @@ export class ServerThumbnailConfig extends ClientThumbnailConfig {
         name: $localize`Enforced users`,
         priority: ConfigPriority.underTheHood
       },
-    description: $localize`if true, 'lanczos3' will used to scale photos, otherwise faster but lowe quality 'nearest'.`
+    description: $localize`if true, 'lanczos3' will used to scale photos, otherwise faster but lower quality 'nearest'.`
   })
   useLanczos3: boolean = true;
   @ConfigProperty({
@@ -507,7 +507,7 @@ export class ServerLogConfig {
       name: $localize`Server timing`,
       priority: ConfigPriority.underTheHood,
     },
-    description: $localize`If enabled. The app ads "Server-Timing" http header to the response.`
+    description: $localize`If enabled, the app ads "Server-Timing" http header to the response.`
   })
   logServerTiming: boolean = false;
 }
@@ -888,9 +888,10 @@ export class ServerMediaConfig extends ClientMediaConfig {
     tags: {
       name: $localize`Metadata read buffer`,
       priority: ConfigPriority.underTheHood,
+      uiResetNeeded: {db: true, server: true},
       githubIssue: 398,
       unit: 'bytes'
-    },
+    } as TAGS,
     description: $localize`Only this many bites will be loaded when scanning photo/video for metadata. Increase this number if your photos shows up as square.`,
   })
   photoMetadataSize: number = 512 * 1024; // only this many bites will be loaded when scanning photo for metadata

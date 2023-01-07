@@ -13,9 +13,7 @@
   <div body class="container-fluid">
 
     <div class="card mb-4" *ngIf="notificationService.countedNotifications.length>0">
-      <h5 class="card-header" i18n>
-        Server notifications
-      </h5>
+      <h5 class="card-header" i18n>Server notifications</h5>
       <div class="card-body">
         <ng-container *ngFor="let notification of notificationService.countedNotifications">
 
