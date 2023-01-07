@@ -65,6 +65,10 @@
           "pl": {
             "baseHref": "",
             "translation": "src/frontend/translate/messages.pl.xlf"
+          },
+          "nl": {
+            "baseHref": "",
+            "translation": "src/frontend/translate/messages.nl.xlf"
           }
         }
       },
