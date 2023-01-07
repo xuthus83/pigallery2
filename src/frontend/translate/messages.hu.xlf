@@ -956,7 +956,7 @@
           <context context-type="sourcefile">src/common/config/private/PrivateConfig.ts</context>
           <context context-type="linenumber">1092</context>
         </context-group>
-        <target>Sharing</target>
+        <target>Megosztás</target>
       </trans-unit>
       <trans-unit id="3587873128318078848" datatype="html">
         <source>Duplicates</source>
@@ -2860,7 +2860,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/navigator/navigator.gallery.component.ts</context>
           <context context-type="linenumber">48</context>
         </context-group>
-        <target>Home</target>
+        <target>Galéria</target>
       </trans-unit>
       <trans-unit id="3445823735428564189" datatype="html">
         <source>Random link</source>
