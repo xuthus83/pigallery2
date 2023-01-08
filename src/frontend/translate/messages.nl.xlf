@@ -1756,7 +1756,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">723</context>
         </context-group>
-        <target>If a photo has the same face (person) name and keyword, the app removes the duplicate, keeping the face only.</target>
+        <target>Als een foto hetzelfde gezicht (persoon) naam en sleutelwoord heeft, zal de app de dubbele verwijderen en alleen het gezicht bewaren.</target>
       </trans-unit>
       <trans-unit id="6000343568689359565" datatype="html">
         <source>Face starring right</source>
@@ -1764,7 +1764,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">728</context>
         </context-group>
-        <target>Face starring right</target>
+        <target>Gezicht 'starring' rechten</target>
       </trans-unit>
       <trans-unit id="2357112787691547745" datatype="html">
         <source>Required minimum right to star (favourite) a face.</source>
@@ -1772,7 +1772,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">731</context>
         </context-group>
-        <target>Required minimum right to star (favourite) a face.</target>
+        <target>Vereiste minimale rechten voor het 'starren' van een gezicht.</target>
       </trans-unit>
       <trans-unit id="2239686600313632759" datatype="html">
         <source>Face listing right</source>
@@ -1780,7 +1780,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">736</context>
         </context-group>
-        <target>Face listing right</target>
+        <target>Gezicht weergave rechten</target>
       </trans-unit>
       <trans-unit id="7717019961331408650" datatype="html">
         <source>Required minimum right to show the faces tab.</source>
@@ -1788,7 +1788,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">739</context>
         </context-group>
-        <target>Required minimum right to show the faces tab.</target>
+        <target>Vereiste minimale rechten voor het weergeven van het gezichten tabblad.</target>
       </trans-unit>
       <trans-unit id="933361080941409912" datatype="html">
         <source>Page title</source>
@@ -1796,7 +1796,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">749</context>
         </context-group>
-        <target>Page title</target>
+        <target>Pagina titel</target>
       </trans-unit>
       <trans-unit id="176222620393429790" datatype="html">
         <source>If you access the page form local network its good to know the public url for creating sharing link.</source>
@@ -1804,7 +1804,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">755</context>
         </context-group>
-        <target>If you access the page form local network its good to know the public url for creating sharing link.</target>
+        <target>Als de pagina via het lokale netwerk wordt gebruikt, is het goed om te weten wat de publieke URL is voor gedeelde links.</target>
       </trans-unit>
       <trans-unit id="5093650417970469070" datatype="html">
         <source>Page public url</source>
@@ -1812,7 +1812,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">757</context>
         </context-group>
-        <target>Page public url</target>
+        <target>Publieke URL van pagina</target>
       </trans-unit>
       <trans-unit id="5431495058415264787" datatype="html">
         <source>If you access the gallery under a sub url (like: http://mydomain.com/myGallery), set it here. If it is not working you might miss the '/' from the beginning of the url.</source>
@@ -1820,7 +1820,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">765</context>
         </context-group>
-        <target>If you access the gallery under a sub url (like: http://mydomain.com/myGallery), set it here. If it is not working you might miss the '/' from the beginning of the url.</target>
+        <target>Als de pagina via een sub url (zoals: http://mydomain.com/myGallery) wordt gebruikt, stel deze dan hier in, anders mist misschien de '/' aan het begin van de URL.</target>
       </trans-unit>
       <trans-unit id="4312373114061005708" datatype="html">
         <source>Url Base</source>
@@ -1828,7 +1828,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">767</context>
         </context-group>
-        <target>Url Base</target>
+        <target>URL basis</target>
       </trans-unit>
       <trans-unit id="5579979532526495209" datatype="html">
         <source>Api path</source>
@@ -1836,7 +1836,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">779</context>
         </context-group>
-        <target>Api path</target>
+        <target>API pad</target>
       </trans-unit>
       <trans-unit id="2663968068169291107" datatype="html">
         <source>Injects the content of this between the &lt;head&gt;&lt;/head&gt; HTML tags of the app. (You can use it add analytics or custom code to the app).</source>
@@ -1844,7 +1844,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">790</context>
         </context-group>
-        <target>Injects the content of this between the &lt;head&gt;&lt;/head&gt; HTML tags of the app. (You can use it add analytics or custom code to the app).</target>
+        <target>Injecteert deze content tussen de &lt;head&gt;&lt;/head&gt; HTML tags van de app. (kan gebruikt worden om analytics of aangepaste code aan te app toe te voegen).</target>
       </trans-unit>
       <trans-unit id="6764366823411649793" datatype="html">
         <source>Custom HTML Head</source>
@@ -1852,7 +1852,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">792</context>
         </context-group>
-        <target>Custom HTML Head</target>
+        <target>Aangepaste HTML Head</target>
       </trans-unit>
       <trans-unit id="7321299026311900359" datatype="html">
         <source>Password protection</source>
@@ -1860,7 +1860,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">813</context>
         </context-group>
-        <target>Password protection</target>
+        <target>Wachtwoordbeveiliging</target>
       </trans-unit>
       <trans-unit id="1001285041433444124" datatype="html">
         <source>Enables user management with login to password protect the gallery.</source>
@@ -1868,7 +1868,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">815</context>
         </context-group>
-        <target>Enables user management with login to password protect the gallery.</target>
+        <target>Schakelt gebruikersbeheer met wachtwoordbeveiliging in om de gallery te beschermen.</target>
       </trans-unit>
       <trans-unit id="6609079253925902817" datatype="html">
         <source>Default user right</source>
@@ -1876,7 +1876,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">821</context>
         </context-group>
-        <target>Default user right</target>
+        <target>Standaard gebruikersrechten</target>
       </trans-unit>
       <trans-unit id="8265334008597043132" datatype="html">
         <source>Default user right when password protection is disabled.</source>
@@ -1884,7 +1884,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">826</context>
         </context-group>
-        <target>Default user right when password protection is disabled.</target>
+        <target>Standaard gebruikersrechten wanneer gebruikersbeheer met wachtwoordbeveiliging is uitgeschakeld.</target>
       </trans-unit>
       <trans-unit id="2181154762165715522" datatype="html">
         <source>Gallery</source>
@@ -1924,7 +1924,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/search/search.gallery.component.html</context>
           <context context-type="linenumber">26,27</context>
         </context-group>
-        <target>Search</target>
+        <target>Zoeken</target>
       </trans-unit>
       <trans-unit id="5813867925497374051" datatype="html">
         <source>Map</source>
@@ -1932,7 +1932,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">876</context>
         </context-group>
-        <target>Map</target>
+        <target>Kaart</target>
       </trans-unit>
       <trans-unit id="169123739434171110" datatype="html">
         <source>Faces</source>
@@ -1952,7 +1952,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/filter/filter.service.ts</context>
           <context context-type="linenumber">40</context>
         </context-group>
-        <target>Faces</target>
+        <target>Gezichten</target>
       </trans-unit>
       <trans-unit id="7466323133996752576" datatype="html">
         <source>Random photo</source>
@@ -1960,7 +1960,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">892</context>
         </context-group>
-        <target>Random photo</target>
+        <target>Willekeurige foto</target>
       </trans-unit>
       <trans-unit id="6931351711601311753" datatype="html">
         <source>This feature enables you to generate 'random photo' urls. That URL returns a photo random selected from your gallery. You can use the url with 3rd party application like random changing desktop background. Note: With the current implementation, random link also requires login.</source>
