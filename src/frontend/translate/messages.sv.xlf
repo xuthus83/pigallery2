@@ -3214,11 +3214,19 @@
         </context-group>
         <target>Jobb färdigt</target>
       </trans-unit>
+      <trans-unit id="2608815712321922387" datatype="html">
+        <source>Active shares</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/frontend/app/ui/settings/sharings-list/sharings-list.component.html</context>
+          <context context-type="linenumber">4,5</context>
+        </context-group>
+        <target>Active shares</target>
+      </trans-unit>
       <trans-unit id="2176659033176029418" datatype="html">
         <source>Key</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/sharings-list/sharings-list.component.html</context>
-          <context context-type="linenumber">7</context>
+          <context context-type="linenumber">15</context>
         </context-group>
         <target>Key</target>
       </trans-unit>
@@ -3226,7 +3234,7 @@
         <source>Folder</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/sharings-list/sharings-list.component.html</context>
-          <context context-type="linenumber">7,8</context>
+          <context context-type="linenumber">15,16</context>
         </context-group>
         <target>Folder</target>
       </trans-unit>
@@ -3234,7 +3242,7 @@
         <source>Creator</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/sharings-list/sharings-list.component.html</context>
-          <context context-type="linenumber">8,9</context>
+          <context context-type="linenumber">16,17</context>
         </context-group>
         <target>Creator</target>
       </trans-unit>
@@ -3242,7 +3250,7 @@
         <source>Expires</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/sharings-list/sharings-list.component.html</context>
-          <context context-type="linenumber">9,10</context>
+          <context context-type="linenumber">17,18</context>
         </context-group>
         <target>Expires</target>
       </trans-unit>
@@ -3250,9 +3258,9 @@
         <source> No sharing was created. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/sharings-list/sharings-list.component.html</context>
-          <context context-type="linenumber">31,32</context>
+          <context context-type="linenumber">39,40</context>
         </context-group>
-        <target> No sharing was created. </target>
+        <target>No sharing was created.</target>
       </trans-unit>
       <trans-unit id="5253186130625984783" datatype="html">
         <source> It seems that you are running the application in a Docker container. This setting should not be changed in docker. Make sure, that you know what you are doing.
