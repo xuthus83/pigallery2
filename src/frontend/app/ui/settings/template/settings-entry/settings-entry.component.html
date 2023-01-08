@@ -66,13 +66,11 @@
           switch-on-text="Enabled"
           i18n-switch-off-text
           i18n-switch-on-text
-          [switch-handle-width]="100"
-          [switch-label-width]="20"
+          [switch-label-width]="30"
           (ngModelChange)="onChange($event)"
           [(ngModel)]="state.value">
         </bSwitch>
-
-
+        
         <app-settings-workflow
           class="w-100"
           *ngSwitchCase="'JobScheduleConfig'"
