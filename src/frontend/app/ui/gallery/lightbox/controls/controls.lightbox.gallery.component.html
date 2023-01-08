@@ -181,8 +181,13 @@
     class="oi oi-chevron-left"></span></div>
   <div [class.dim-controls]="controllersDimmed" class="navigation-arrow highlight"
        *ngIf="navigation.hasNext && zoom == 1" title="key: right arrow" id="rightArrow" i18n-title
-       (click)="nextPhoto.emit()"><span
-    class="oi oi-chevron-right"></span></div>
+       (click)="nextMediaManuallyTriggered()">
+    <span class="oi oi-chevron-right"></span>
+    <canvas
+      *ngIf="playBackState == PlayBackStates.Play"
+      #canvas width="55px" height="55px"></canvas>
+
+  </div>
 
   <div [class.dim-controls]="controllersDimmed" class="controls controls-zoom row" *ngIf="Zoom > 1">
     <div class="col-1 col-md-4">

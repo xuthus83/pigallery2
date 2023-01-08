@@ -1,32 +1,15 @@
-import {
-  Component,
-  ElementRef,
-  EventEmitter,
-  HostListener,
-  Input,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  Output,
-  ViewChild,
-} from '@angular/core';
+import {Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, ViewChild,} from '@angular/core';
 import {MediaDTOUtils} from '../../../../../../common/entities/MediaDTO';
-import {CookieNames} from '../../../../../../common/CookieNames';
 import {FullScreenService} from '../../fullscreen.service';
 import {GalleryPhotoComponent} from '../../grid/photo/photo.grid.gallery.component';
-import {Observable, Subscription, timer} from 'rxjs';
-import {filter} from 'rxjs/operators';
+import {interval, Subscription} from 'rxjs';
+import {filter, skip} from 'rxjs/operators';
 import {PhotoDTO} from '../../../../../../common/entities/PhotoDTO';
 import {GalleryLightboxMediaComponent} from '../media/media.lightbox.gallery.component';
 import {Config} from '../../../../../../common/config/public/Config';
-import {
-  SearchQueryTypes,
-  TextSearch,
-  TextSearchQueryMatchTypes,
-} from '../../../../../../common/entities/SearchQueryDTO';
+import {SearchQueryTypes, TextSearch, TextSearchQueryMatchTypes,} from '../../../../../../common/entities/SearchQueryDTO';
 import {AuthenticationService} from '../../../../model/network/authentication.service';
 import {LightboxService} from '../lightbox.service';
-import {CookieService} from 'ngx-cookie-service';
 import {GalleryCacheService} from '../../cache.gallery.service';
 
 export enum PlayBackStates {
@@ -41,6 +24,9 @@ export enum PlayBackStates {
 })
 export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
   readonly MAX_ZOOM = 10;
+  @ViewChild('canvas')
+  canvas: ElementRef<HTMLCanvasElement>;
+  private ctx: CanvasRenderingContext2D;
 
   @ViewChild('root', {static: false}) root: ElementRef;
   @Output() closed = new EventEmitter();
@@ -70,7 +56,6 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
   public searchEnabled: boolean;
 
   private visibilityTimer: number = null;
-  private timer: Observable<number>;
   private timerSub: Subscription;
   private prevDrag = {x: 0, y: 0};
   private prevZoom = 1;
@@ -125,7 +110,6 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    this.timer = timer(1000, 1000);
     if (this.cacheService.getSlideshowSpeed()) {
       this.selectedSlideshowSpeed = this.cacheService.getSlideshowSpeed();
     } else {
@@ -234,7 +218,7 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
         break;
       case 'ArrowRight':
         if (this.navigation.hasNext) {
-          this.nextPhoto.emit();
+          this.nextMediaManuallyTriggered();
         }
         break;
       case 'i':
@@ -302,10 +286,47 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
     this.nextPhoto.emit();
   };
 
+  private drawSliderProgress(t: number) {
+    let p = 0;
+
+    // Video is a special snowflake. It won't go to next media if a video is playing
+    if (!(this.activePhoto &&
+      this.activePhoto.gridMedia.isVideo() &&
+      !this.mediaElement.Paused)) {
+      p = (t % (this.selectedSlideshowSpeed * 10)) / this.selectedSlideshowSpeed / 10;  // ticks every 100 ms
+
+    }
+    if (!this.canvas) {
+      return;
+    }
+    if (!this.ctx) {
+      this.ctx = this.canvas.nativeElement.getContext('2d');
+    }
+
+    this.ctx.lineWidth = 5;
+    this.ctx.strokeStyle = 'white';
+    this.ctx.clearRect(0, 0, this.canvas.nativeElement.width, this.canvas.nativeElement.height);
+    this.ctx.beginPath();
+    this.ctx.arc(this.canvas.nativeElement.width / 2, this.canvas.nativeElement.height / 2, this.canvas.nativeElement.width / 2 - this.ctx.lineWidth, 0, p * 2 * Math.PI);
+
+    this.ctx.stroke();
+  }
+
+  resetSlideshowTimer(): void {
+    if (this.playBackState == PlayBackStates.Play) {
+      this.play();
+    }
+  }
+
   public play(): void {
     this.pause();
-    this.timerSub = this.timer
-      .pipe(filter((t) => t % this.selectedSlideshowSpeed === 0))
+    this.drawSliderProgress(0);
+    this.timerSub = interval(100)
+      .pipe(filter((t) => {
+        this.drawSliderProgress(t);
+        return t % (this.selectedSlideshowSpeed * 10) === 0; // ticks every 100 ms
+      }))
+      .pipe(skip(1)) // do not skip to next photo right away
       .subscribe(this.showNextMedia);
     this.playBackState = PlayBackStates.Play;
   }
@@ -323,6 +344,7 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
     if (this.timerSub != null) {
       this.timerSub.unsubscribe();
     }
+    this.ctx = null;
     this.playBackState = PlayBackStates.Paused;
   }
 
@@ -411,7 +433,7 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
   }
 
   private hideControls = () => {
-    this.controllersDimmed = true;
+    // this.controllersDimmed = true;
   };
 
   private updateFaceContainerDim(): void {
@@ -431,5 +453,11 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
       this.faceContainerDim.width = this.photoFrameDim.width;
     }
   }
+
+  nextMediaManuallyTriggered() {
+    this.resetSlideshowTimer();
+    this.nextPhoto.emit();
+  }
+
 }
 

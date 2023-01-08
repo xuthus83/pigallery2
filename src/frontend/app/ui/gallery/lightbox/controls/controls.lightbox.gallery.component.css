@@ -286,3 +286,9 @@ input[type="range"].zoom-progress::-moz-range-track {
 .dropdown-menu {
   min-width: auto;
 }
+
+canvas{
+  right: 12px;
+  position: relative;
+  top: -34px;
+}
