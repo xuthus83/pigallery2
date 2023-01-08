@@ -34,6 +34,7 @@ export class GalleryShareComponent implements OnInit, OnDestroy {
   readonly ValidityTypes = ValidityTypes;
 
   modalRef: BsModalRef;
+  invalidSettings = $localize`Invalid settings`
 
   text = {
     Yes: 'Yes',

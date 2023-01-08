@@ -9,7 +9,7 @@
   <!-- sharing Modal-->
   <div class="modal-header">
     <h5 class="modal-title" i18n>Share</h5>
-    <button type="button"  class="btn-close"  (click)="hideModal()" data-dismiss="modal" aria-label="Close">
+    <button type="button" class="btn-close" (click)="hideModal()" data-dismiss="modal" aria-label="Close">
     </button>
   </div>
   <div class="modal-body">
@@ -21,7 +21,9 @@
                  placeholder="link"
                  class="form-control input-md"
                  type="text"
-                 [ngModel]="url">
+                 readonly
+                 [disabled]="!shareForm.form.valid"
+                 [ngModel]="shareForm.form.valid ? url: invalidSettings">
         </div>
         <div class="col-5 col-sm-3">
           <button id="copyButton" name="copyButton"
@@ -68,14 +70,14 @@
         </div>
       </div>
 
-      <div class="row">
+      <div class="row" *ngIf="passwordProtection">
         <div class="col-4">
           <label class="control-label" for="share-password">
             <ng-container i18n>Password</ng-container>
             *:
           </label>
         </div>
-        <div class="col-8" *ngIf="passwordProtection">
+        <div class="col-8">
           <input id="share-password"
                  class="form-control"
                  name="share-password"
