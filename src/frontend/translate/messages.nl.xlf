@@ -1268,7 +1268,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">281</context>
         </context-group>
-        <target>Custom lagen</target>
+        <target>Aangepaste lagen</target>
       </trans-unit>
       <trans-unit id="1382580573983259242" datatype="html">
         <source>Max Preview Markers</source>
@@ -1416,7 +1416,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">448</context>
         </context-group>
-        <target>Voorbeeldafbeeldingen die in beeld zijn krijgen voorrang om gegenereerd te worden.</target>
+        <target>Miniatuurfoto's die in beeld zijn krijgen voorrang om gegenereerd te worden.</target>
       </trans-unit>
       <trans-unit id="177392694971808911" datatype="html">
         <source>Default sorting</source>
@@ -1464,7 +1464,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">475</context>
         </context-group>
-        <target>If enabled, directories will be sorted by date, like photos, otherwise by name. Directory date is the last modification time of that directory not the creation date of the oldest photo.</target>
+        <target>Indien ingeschakeld worden mappen gesorteerd op datum, net als foto's, anders op naam. De mapdatum is de laatste aanpassingsdatum van de map, niet de aanmaakdatum van de oudste foto.</target>
       </trans-unit>
       <trans-unit id="7060776697703711531" datatype="html">
         <source>On scroll thumbnail prioritising</source>
@@ -1472,7 +1472,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">481</context>
         </context-group>
-        <target>On scroll thumbnail prioritising</target>
+        <target>Op scrollen gebaseerde voorbeeldafbeeldingen.</target>
       </trans-unit>
       <trans-unit id="2449365823353179479" datatype="html">
         <source>Those thumbnails will be rendered first that are in view.</source>
@@ -1480,7 +1480,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">484</context>
         </context-group>
-        <target>Those thumbnails will be rendered first that are in view.</target>
+        <target>Miniatuurfoto's die in beeld zijn krijgen voorrang om weergegeven te worden.</target>
       </trans-unit>
       <trans-unit id="4204029540853675536" datatype="html">
         <source>Navigation bar</source>
@@ -1488,7 +1488,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">489</context>
         </context-group>
-        <target>Navigation bar</target>
+        <target>Navigatiebalk</target>
       </trans-unit>
       <trans-unit id="138256296895235303" datatype="html">
         <source>Caption first naming</source>
@@ -1504,7 +1504,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">499</context>
         </context-group>
-        <target>Show the caption (IPTC 120) tags from the EXIF data instead of the filenames.</target>
+        <target>Laat de 'caption' (IPTC 120) tags van de EXIF data zien in plaats van de bestandsnamen.</target>
       </trans-unit>
       <trans-unit id="1524055079900109760" datatype="html">
         <source>Download Zip</source>
@@ -1512,7 +1512,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">504</context>
         </context-group>
-        <target>Download Zip</target>
+        <target>Download ZIP bestanden</target>
       </trans-unit>
       <trans-unit id="3946771566659086037" datatype="html">
         <source>Enable download zip of a directory contents Directory flattening. (Does not work for searches.)</source>
@@ -1520,7 +1520,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">509</context>
         </context-group>
-        <target>Enable download zip of a directory contents Directory flattening. (Does not work for searches.)</target>
+        <target>Schakel het downloaden van ZIP bestand van een map in platgemaakte map (werkt niet voor zoekopdrachten). </target>
       </trans-unit>
       <trans-unit id="6121078413919868273" datatype="html">
         <source>Directory flattening</source>
@@ -1528,7 +1528,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">514</context>
         </context-group>
-        <target>Directory flattening</target>
+        <target>Mappen platmaken</target>
       </trans-unit>
       <trans-unit id="705617377096083016" datatype="html">
         <source>Adds a button to flattens the file structure, by listing the content of all subdirectories. (Won't work if the gallery has multiple folders with the same path.)</source>
@@ -1536,7 +1536,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">519</context>
         </context-group>
-        <target>Adds a button to flattens the file structure, by listing the content of all subdirectories. (Won't work if the gallery has multiple folders with the same path.)</target>
+        <target>Voegt een knop toe voor het platmaken van mappen, waarbij alle inhoud van de submappen wordt weergegeven. (Werkt niet als de gallery meerdere mappen heeft met hetzelfde pad.)</target>
       </trans-unit>
       <trans-unit id="8685965882892653885" datatype="html">
         <source>Default slideshow speed</source>
@@ -1544,7 +1544,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">524</context>
         </context-group>
-        <target>Default slideshow speed</target>
+        <target>Standaard diavoorstelling snelheid</target>
       </trans-unit>
       <trans-unit id="8391296346935301055" datatype="html">
         <source>Default time interval for displaying a photo in the slide show.</source>
@@ -1552,7 +1552,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">529</context>
         </context-group>
-        <target>Default time interval for displaying a photo in the slide show.</target>
+        <target>Standaard tijdsinterval voor het weergeven van een foto in de diavoorstelling.</target>
       </trans-unit>
       <trans-unit id="9185454837312696816" datatype="html">
         <source>Supported formats with transcoding</source>
@@ -1560,7 +1560,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">547</context>
         </context-group>
-        <target>Supported formats with transcoding</target>
+        <target>Ondersteunde bestandsformaten met transcodering</target>
       </trans-unit>
       <trans-unit id="4322859338400777784" datatype="html">
         <source>Video formats that are supported after transcoding (with the build-in ffmpeg support).</source>
@@ -1568,7 +1568,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">552</context>
         </context-group>
-        <target>Video formats that are supported after transcoding (with the build-in ffmpeg support).</target>
+        <target>Bestandsformaten voor video die worden ondersteund na transcodering (met de ingebouwde ffmpeg ondersteuning).</target>
       </trans-unit>
       <trans-unit id="2099861843042326383" datatype="html">
         <source>Supported formats without transcoding</source>
@@ -1576,7 +1576,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">560</context>
         </context-group>
-        <target>Supported formats without transcoding</target>
+        <target>Ondersteunde formaten zonder transcodering</target>
       </trans-unit>
       <trans-unit id="2918342650701087250" datatype="html">
         <source>Video formats that are supported also without transcoding. Browser supported formats: https://www.w3schools.com/html/html5_video.asp</source>
@@ -1584,7 +1584,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">565</context>
         </context-group>
-        <target>Video formats that are supported also without transcoding. Browser supported formats: https://www.w3schools.com/html/html5_video.asp</target>
+        <target>Bestandsformaten voor video die worden ondersteund zonder transcodering. Door de browsers ondersteunde formaten: https://www.w3schools.com/html/html5_video.asp</target>
       </trans-unit>
       <trans-unit id="6335601943118526384" datatype="html">
         <source>Enable photo converting.</source>
@@ -1592,7 +1592,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">577</context>
         </context-group>
-        <target>Enable photo converting.</target>
+        <target>Schakel foto conversie in.</target>
       </trans-unit>
       <trans-unit id="8044411854765524879" datatype="html">
         <source>Load full resolution image on zoom.</source>
@@ -1600,7 +1600,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">583</context>
         </context-group>
-        <target>Load full resolution image on zoom.</target>
+        <target>Laad volledige foto in bij uitvergroten.</target>
       </trans-unit>
       <trans-unit id="6870206109332559881" datatype="html">
         <source>Enables loading the full resolution image on zoom in the ligthbox (preview).</source>
@@ -1608,7 +1608,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">588</context>
         </context-group>
-        <target>Enables loading the full resolution image on zoom in the ligthbox (preview).</target>
+        <target>Schakel inladen van de volledige foto in bij uitvergroten in de lightbox (voorbeeldweergave).</target>
       </trans-unit>
       <trans-unit id="3545289586736261463" datatype="html">
         <source>Photo converting</source>
@@ -1620,7 +1620,7 @@
           <context context-type="sourcefile">src/frontend/app/model/backendtext.service.ts</context>
           <context context-type="linenumber">39</context>
         </context-group>
-        <target>Photo converting</target>
+        <target>Foto conversie</target>
       </trans-unit>
       <trans-unit id="1269143586062804510" datatype="html">
         <source>Supported photo formats</source>
@@ -1628,7 +1628,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">606</context>
         </context-group>
-        <target>Supported photo formats</target>
+        <target>Ondersteunde bestandsformaten voor foto's</target>
       </trans-unit>
       <trans-unit id="1931666821506012028" datatype="html">
         <source>Photo formats that are supported. Browser needs to support these formats natively. Also sharp (libvips) package should be able to convert these formats.</source>
@@ -1636,7 +1636,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">610</context>
         </context-group>
-        <target>Photo formats that are supported. Browser needs to support these formats natively. Also sharp (libvips) package should be able to convert these formats.</target>
+        <target>Ondersteunde bestandsformaten voor foto's. De internetbrowser moet deze bestandsformaten ook ondersteunen. Ook moet het sharp (libvips) package deze bestandsformaten kunnen converteren.</target>
       </trans-unit>
       <trans-unit id="2270178033581723629" datatype="html">
         <source>Enable GPX compressing</source>
@@ -1644,7 +1644,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">619</context>
         </context-group>
-        <target>Enable GPX compressing</target>
+        <target>Schakel GPX compressie in</target>
       </trans-unit>
       <trans-unit id="1033703021916717714" datatype="html">
         <source>Enables lossy (based on delta time and distance. Too frequent points are removed) GPX compression.</source>
@@ -1652,7 +1652,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">624</context>
         </context-group>
-        <target>Enables lossy (based on delta time and distance. Too frequent points are removed) GPX compression.</target>
+        <target>Schakel lossy (gebaseerd op tijd- en afstandsverschil. Te veel voorkomende punten worden verwijderd) GPX compressie in.</target>
       </trans-unit>
       <trans-unit id="1159790075331375705" datatype="html">
         <source>*.gpx files</source>
@@ -1660,7 +1660,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">658</context>
         </context-group>
-        <target>*.gpx files</target>
+        <target>*.gpx bestanden</target>
       </trans-unit>
       <trans-unit id="1872426751751480239" datatype="html">
         <source>Reads *.gpx files and renders them on the map.</source>
@@ -1668,7 +1668,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">663</context>
         </context-group>
-        <target>Reads *.gpx files and renders them on the map.</target>
+        <target>Laad *.gpx bestanden in en laat ze zien op de kaart.</target>
       </trans-unit>
       <trans-unit id="5084395604268421279" datatype="html">
         <source>Markdown files</source>
@@ -1676,7 +1676,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">678</context>
         </context-group>
-        <target>Markdown files</target>
+        <target>Markdown bestanden</target>
       </trans-unit>
       <trans-unit id="7631702888933785803" datatype="html">
         <source>Reads *.md files in a directory and shows the next to the map.</source>
@@ -1684,7 +1684,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">682</context>
         </context-group>
-        <target>Reads *.md files in a directory and shows the next to the map.</target>
+        <target>Laad *.md bestanden in een map in en laat ze zien op de kaart.</target>
       </trans-unit>
       <trans-unit id="4773152636094540112" datatype="html">
         <source>*.pg2conf files</source>
@@ -1692,7 +1692,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">688</context>
         </context-group>
-        <target>*.pg2conf files</target>
+        <target>*.pg2conf bestanden</target>
       </trans-unit>
       <trans-unit id="1722259294720091848" datatype="html">
         <source>Reads *.pg2conf files (You can use it for custom sorting and saved search (albums)).</source>
@@ -1700,7 +1700,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">692</context>
         </context-group>
-        <target>Reads *.pg2conf files (You can use it for custom sorting and saved search (albums)).</target>
+        <target>Leest *.pg2conf bestanden (kan ook worden gebruikt voor aangepast sorteren en opgeslagen zoekopdrachten (albums)).</target>
       </trans-unit>
       <trans-unit id="6014979081471317568" datatype="html">
         <source>Supported formats</source>
@@ -1708,7 +1708,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">698</context>
         </context-group>
-        <target>Supported formats</target>
+        <target>Ondersteunde bestandsformaten</target>
       </trans-unit>
       <trans-unit id="5349838636229861629" datatype="html">
         <source>The app will read and process these files.</source>
@@ -1716,7 +1716,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">702</context>
         </context-group>
-        <target>The app will read and process these files.</target>
+        <target>De app zal deze bestanden lezen en verwerken.</target>
       </trans-unit>
       <trans-unit id="4816216590591222133" datatype="html">
         <source>Enabled</source>
@@ -1740,7 +1740,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/settings/workflow/workflow.component.html</context>
           <context context-type="linenumber">167</context>
         </context-group>
-        <target>Aan</target>
+        <target>Ingeschakeld</target>
       </trans-unit>
       <trans-unit id="6946816815826261880" datatype="html">
         <source>Override keywords</source>
@@ -1748,7 +1748,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">719</context>
         </context-group>
-        <target>Override keywords</target>
+        <target>Overschrijf sleutelwoorden</target>
       </trans-unit>
       <trans-unit id="60528833843807470" datatype="html">
         <source>If a photo has the same face (person) name and keyword, the app removes the duplicate, keeping the face only.</source>
@@ -2183,7 +2183,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/EnumTranslations.ts</context>
           <context context-type="linenumber">28</context>
         </context-group>
-        <target>Custom</target>
+        <target>Aangepast</target>
       </trans-unit>
       <trans-unit id="113099127945736504" datatype="html">
         <source>OpenStreetMap</source>
@@ -3199,8 +3199,7 @@
         <target>Job finished</target>
       </trans-unit>
       <trans-unit id="5253186130625984783" datatype="html">
-        <source> It seems that you are running the application in a Docker container. This setting should not be changed in docker. Make sure, that you know what you are doing.
-</source>
+        <source> It seems that you are running the application in a Docker container. This setting should not be changed in docker. Make sure, that you know what you are doing.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/template/settings-entry/settings-entry.component.html</context>
           <context context-type="linenumber">1,5</context>
@@ -3225,7 +3224,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/settings/workflow/workflow.component.html</context>
           <context context-type="linenumber">165,166</context>
         </context-group>
-        <target>Uit</target>
+        <target>Uitgeschakeld</target>
       </trans-unit>
       <trans-unit id="3853557835274460749" datatype="html">
         <source>Tile Url*</source>
