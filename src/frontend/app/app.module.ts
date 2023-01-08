@@ -104,6 +104,7 @@ import { JobButtonComponent } from './ui/settings/workflow/button/job-button.set
 import { JobProgressComponent } from './ui/settings/workflow/progress/job-progress.settings.component';
 import {SettingsEntryComponent} from './ui/settings/template/settings-entry/settings-entry.component';
 import { UsersComponent } from './ui/settings/users/users.component';
+import { SharingsListComponent } from './ui/settings/sharings-list/sharings-list.component';
 
 @Injectable()
 export class MyHammerConfig extends HammerGestureConfig {
@@ -238,6 +239,7 @@ Marker.prototype.options.icon = iconDefault;
     FileDTOToPathPipe,
     PhotoFilterPipe,
     UsersComponent,
+    SharingsListComponent,
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: CSRFInterceptor, multi: true},
