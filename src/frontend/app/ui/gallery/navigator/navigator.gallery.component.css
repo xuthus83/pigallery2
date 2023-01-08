@@ -1,4 +1,4 @@
-.container-fluid{
+.container-fluid {
   background-color: #e9ecef;
 }
 
@@ -14,13 +14,12 @@
   display: inline-block;
 }
 
-
-.dropdown-menu {
-  min-width: 13rem;
+#sorting-dropdown .dropdown-item.row {
+  flex-wrap: nowrap;
 }
 
 .dropdown-item {
-  padding: 0.25rem 0.5rem;
+  padding: 0.25rem 0.25rem;
 }
 
 .row {

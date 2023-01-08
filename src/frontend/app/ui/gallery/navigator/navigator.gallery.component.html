@@ -56,10 +56,10 @@
         <button id="button-alignment" dropdownToggle type="button"
                 class="btn btn-secondary dropdown-toggle"
                 [ngClass]="{'btn-secondary':sortingService.sorting.value !== DefaultSorting}"
-                aria-controls="dropdown-alignment"
+                aria-controls="sorting-dropdown"
                 [innerHTML]="sortingService.sorting.value | iconizeSorting">
         </button>
-        <ul id="dropdown-alignment" *dropdownMenu class="dropdown-menu dropdown-menu-right"
+        <ul id="sorting-dropdown" *dropdownMenu class="dropdown-menu dropdown-menu-right"
             role="menu" aria-labelledby="button-alignment">
           <li class="row dropdown-item" role="menuitem"
               *ngFor="let type of sortingMethodsType"
