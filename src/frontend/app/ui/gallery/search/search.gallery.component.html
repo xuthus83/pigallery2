@@ -44,12 +44,12 @@
                   class="btn btn-secondary me-2" type="button"
                   [disabled]="rawSearchText == ''"
                   (click)="openSaveSearchModal(saveSearchModal)">
-            <span class="oi oi-folder"></span> Save
+            <span class="oi oi-folder"></span> <ng-container i18n>Save</ng-container>
           </button>
           <button class="btn btn-primary" type="button"
                   [routerLink]="['/search', HTMLSearchQuery]"
                   (click)="hideSearchModal()">
-            <span class="oi oi-magnifying-glass"></span> Search
+            <span class="oi oi-magnifying-glass"></span> <ng-container i18n>Search</ng-container>
           </button>
         </div>
       </div>
@@ -69,7 +69,7 @@
     <form #saveSearchPanelForm="ngForm" class="form-horizontal">
 
       <div class="mb-1">
-        <label for="saveSearchName">Album name</label>
+        <label for="saveSearchName" i18n>Album name</label>
         <input
           id="saveSearchName"
           name="saveSearchName"
@@ -89,7 +89,7 @@
           <button class="btn btn-primary" type="button"
                   [disabled]="saveSearchName == ''"
                   (click)="saveSearch()">
-            <span class="oi oi-folder"></span> Save as album
+            <span class="oi oi-folder"></span> <ng-container i18n>Save as album</ng-container>
           </button>
         </div>
       </div>

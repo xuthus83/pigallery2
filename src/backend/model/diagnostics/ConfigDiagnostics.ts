@@ -249,7 +249,7 @@ export class ConfigDiagnostics {
         settings.SearchQuery
       )
     ) {
-      throw new Error('SearchQuery is not valid');
+      throw new Error('SearchQuery is not valid. Got: ' + JSON.stringify(sp.parse(sp.stringify(settings.SearchQuery))));
     }
   }
 

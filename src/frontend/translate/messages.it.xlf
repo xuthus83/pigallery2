@@ -1921,8 +1921,16 @@
           <context context-type="linenumber">48</context>
         </context-group>
         <context-group purpose="location">
+          <context context-type="sourcefile">src/frontend/app/ui/gallery/search/search-field-base/search-field-base.gallery.component.ts</context>
+          <context context-type="linenumber">54</context>
+        </context-group>
+        <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/gallery/search/search.gallery.component.html</context>
           <context context-type="linenumber">26,27</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/frontend/app/ui/gallery/search/search.gallery.component.html</context>
+          <context context-type="linenumber">52</context>
         </context-group>
         <target state="translated">Cerca</target>
       </trans-unit>
@@ -2922,11 +2930,19 @@
         </context-group>
         <target>At least this many</target>
       </trans-unit>
+      <trans-unit id="3548274206254483489" datatype="html">
+        <source>Search text</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/frontend/app/ui/gallery/search/query-enrty/query-entry.search.gallery.component.html</context>
+          <context context-type="linenumber">73</context>
+        </context-group>
+        <target>Search text</target>
+      </trans-unit>
       <trans-unit id="5203279511751768967" datatype="html">
         <source>From</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/gallery/search/query-enrty/query-entry.search.gallery.component.html</context>
-          <context context-type="linenumber">104</context>
+          <context context-type="linenumber">105</context>
         </context-group>
         <target state="translated">Duplicati</target>
       </trans-unit>
@@ -2934,7 +2950,7 @@
         <source>From date</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/gallery/search/query-enrty/query-entry.search.gallery.component.html</context>
-          <context context-type="linenumber">118</context>
+          <context context-type="linenumber">119</context>
         </context-group>
         <target>From date</target>
       </trans-unit>
@@ -2942,7 +2958,7 @@
         <source>To date</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/gallery/search/query-enrty/query-entry.search.gallery.component.html</context>
-          <context context-type="linenumber">130</context>
+          <context context-type="linenumber">131</context>
         </context-group>
         <target>To date</target>
       </trans-unit>
@@ -2950,11 +2966,11 @@
         <source>Minimum Rating</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/gallery/search/query-enrty/query-entry.search.gallery.component.html</context>
-          <context context-type="linenumber">142</context>
+          <context context-type="linenumber">143</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/gallery/search/query-enrty/query-entry.search.gallery.component.html</context>
-          <context context-type="linenumber">171</context>
+          <context context-type="linenumber">172</context>
         </context-group>
         <target>Minimum Rating</target>
       </trans-unit>
@@ -2962,11 +2978,11 @@
         <source>Maximum Rating</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/gallery/search/query-enrty/query-entry.search.gallery.component.html</context>
-          <context context-type="linenumber">156</context>
+          <context context-type="linenumber">157</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/gallery/search/query-enrty/query-entry.search.gallery.component.html</context>
-          <context context-type="linenumber">188</context>
+          <context context-type="linenumber">189</context>
         </context-group>
         <target>Maximum Rating</target>
       </trans-unit>
@@ -2974,7 +2990,7 @@
         <source>Portrait</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/gallery/search/query-enrty/query-entry.search.gallery.component.html</context>
-          <context context-type="linenumber">210</context>
+          <context context-type="linenumber">211</context>
         </context-group>
         <target state="translated">Verticale</target>
       </trans-unit>
@@ -2982,7 +2998,7 @@
         <source>Landscape</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/gallery/search/query-enrty/query-entry.search.gallery.component.html</context>
-          <context context-type="linenumber">211</context>
+          <context context-type="linenumber">212</context>
         </context-group>
         <target state="translated">Orizzontale</target>
       </trans-unit>
@@ -3006,6 +3022,14 @@
           <x id="INTERPOLATION" equiv-text="r}}"/>
         </target>
       </trans-unit>
+      <trans-unit id="3768927257183755959" datatype="html">
+        <source>Save</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/frontend/app/ui/gallery/search/search.gallery.component.html</context>
+          <context context-type="linenumber">47</context>
+        </context-group>
+        <target state="translated">Salva</target>
+      </trans-unit>
       <trans-unit id="5466947574428856253" datatype="html">
         <source>Save search to album</source>
         <context-group purpose="location">
@@ -3013,6 +3037,22 @@
           <context context-type="linenumber">63,64</context>
         </context-group>
         <target>Save search to album</target>
+      </trans-unit>
+      <trans-unit id="8002146750272130034" datatype="html">
+        <source>Album name</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/frontend/app/ui/gallery/search/search.gallery.component.html</context>
+          <context context-type="linenumber">72,73</context>
+        </context-group>
+        <target>Album name</target>
+      </trans-unit>
+      <trans-unit id="4606777540690493351" datatype="html">
+        <source>Save as album</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/frontend/app/ui/gallery/search/search.gallery.component.html</context>
+          <context context-type="linenumber">92</context>
+        </context-group>
+        <target>Save as album</target>
       </trans-unit>
       <trans-unit id="7419704019640008953" datatype="html">
         <source>Share</source>

@@ -51,7 +51,7 @@ import { AutoCompleteRenderItem } from '../AutoCompleteRenderItem';
 export class GallerySearchFieldBaseComponent
   implements ControlValueAccessor, Validator, OnDestroy
 {
-  @Input() placeholder = 'Search';
+  @Input() placeholder = $localize`Search`;
   @Output() search = new EventEmitter<void>();
 
   @ViewChild('SearchField', { static: false }) searchField: ElementRef;
