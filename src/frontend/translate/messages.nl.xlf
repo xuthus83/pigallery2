@@ -1432,7 +1432,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">457</context>
         </context-group>
-        <target>Default sorting method for photo and video in a directory results.</target>
+        <target>Standaard sortering voor foto's en video's in een map resultaten.</target>
       </trans-unit>
       <trans-unit id="6155309121839598217" datatype="html">
         <source>Default search sorting</source>
@@ -1440,7 +1440,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">463</context>
         </context-group>
-        <target>Default search sorting</target>
+        <target>Standaard sortering zoeken</target>
       </trans-unit>
       <trans-unit id="7941581315950625881" datatype="html">
         <source>Default sorting method for photo and video in a search results.</source>
@@ -1448,7 +1448,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">466</context>
         </context-group>
-        <target>Default sorting method for photo and video in a search results.</target>
+        <target>Standaard sortering voor foto's en video's in een zoekopdracht resultaten.</target>
       </trans-unit>
       <trans-unit id="4152397028845147341" datatype="html">
         <source>Sort directories by date</source>
@@ -1456,7 +1456,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">472</context>
         </context-group>
-        <target>Sort directories by date</target>
+        <target>Sorteer mappen op datum</target>
       </trans-unit>
       <trans-unit id="3147181893618230466" datatype="html">
         <source>If enabled, directories will be sorted by date, like photos, otherwise by name. Directory date is the last modification time of that directory not the creation date of the oldest photo.</source>
@@ -1740,7 +1740,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/settings/workflow/workflow.component.html</context>
           <context context-type="linenumber">167</context>
         </context-group>
-        <target>Enabled</target>
+        <target>Aan</target>
       </trans-unit>
       <trans-unit id="6946816815826261880" datatype="html">
         <source>Override keywords</source>
@@ -3225,7 +3225,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/settings/workflow/workflow.component.html</context>
           <context context-type="linenumber">165,166</context>
         </context-group>
-        <target>Disabled</target>
+        <target>Uit</target>
       </trans-unit>
       <trans-unit id="3853557835274460749" datatype="html">
         <source>Tile Url*</source>
