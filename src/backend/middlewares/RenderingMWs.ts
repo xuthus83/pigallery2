@@ -10,6 +10,8 @@ import {Utils} from '../../common/Utils';
 import {LoggerRouter} from '../routes/LoggerRouter';
 import {TAGS} from '../../common/config/public/ClientConfig';
 
+const forcedDebug = process.env['NODE_ENV'] === 'debug';
+
 export class RenderingMWs {
   public static renderResult(
     req: Request,
@@ -135,9 +137,10 @@ export class RenderingMWs {
         // hide error details for non developers
         if (
           !(
-            req.session &&
-            req.session['user'] &&
-            req.session['user'].role >= UserRoles.Developer
+            forcedDebug ||
+            (req.session &&
+              req.session['user'] &&
+              req.session['user'].role >= UserRoles.Developer)
           )
         ) {
           delete err.detailsStr;

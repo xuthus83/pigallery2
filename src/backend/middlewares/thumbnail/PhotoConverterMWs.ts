@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import * as fs from 'fs';
 import { PhotoProcessing } from '../../model/fileprocessing/PhotoProcessing';
 import { Config } from '../../../common/config/private/Config';
+import {ErrorCodes, ErrorDTO} from '../../../common/entities/Error';
 
 export class PhotoConverterMWs {
   public static async convertPhoto(
@@ -30,7 +31,11 @@ export class PhotoConverterMWs {
     }
 
     if (Config.Media.Photo.Converting.onTheFly === true) {
-      req.resultPipe = await PhotoProcessing.convertPhoto(fullMediaPath);
+      try {
+        req.resultPipe = await PhotoProcessing.convertPhoto(fullMediaPath);
+      }catch (err){
+        return next(new ErrorDTO(ErrorCodes.PHOTO_GENERATION_ERROR, err.message));
+      }
       return next();
     }
 

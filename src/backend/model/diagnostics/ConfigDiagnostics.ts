@@ -274,6 +274,11 @@ export class ConfigDiagnostics {
   }
 
   static async runDiagnostics(): Promise<void> {
+
+    if (process.env['NODE_ENV'] === 'debug') {
+      NotificationManager.warning('You are running the application with NODE_ENV=debug. This exposes a lot of debug information that can be a security vulnerability. Set NODE_ENV=production, when you finished debugging.');
+    }
+
     try {
       await ConfigDiagnostics.testDatabase(Config.Database);
     } catch (ex) {
