@@ -92,7 +92,7 @@
           <context context-type="sourcefile">src/common/config/private/PrivateConfig.ts</context>
           <context context-type="linenumber">153</context>
         </context-group>
-        <target>Sqlite db bestandsnaam</target>
+        <target>Sqlite database bestandsnaam</target>
       </trans-unit>
       <trans-unit id="6242404539171057139" datatype="html">
         <source>Sqlite will save the db with this filename.</source>
@@ -100,7 +100,7 @@
           <context context-type="sourcefile">src/common/config/private/PrivateConfig.ts</context>
           <context context-type="linenumber">157</context>
         </context-group>
-        <target>Sqlite zal de db opslaan met deze bestandsnaam.</target>
+        <target>Sqlite zal de database opslaan met deze bestandsnaam.</target>
       </trans-unit>
       <trans-unit id="8953033926734869941" datatype="html">
         <source>Name</source>
