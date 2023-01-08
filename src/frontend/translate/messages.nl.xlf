@@ -160,7 +160,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">362</context>
         </context-group>
-        <target>Type</target>
+        <target>Database type</target>
       </trans-unit>
       <trans-unit id="1238021661446404501" datatype="html">
         <source>SQLite is recommended.</source>
@@ -356,7 +356,7 @@
           <context context-type="sourcefile">src/common/config/private/PrivateConfig.ts</context>
           <context context-type="linenumber">406</context>
         </context-group>
-        <target>Als er geen indexering was gedurende deze tijd, wordt er geherindexeerd. Overgeslagen als indexen aanwezig zijn in de db en de gevoeligheid laag is.</target>
+        <target>Als er geen indexering was gedurende deze tijd, wordt er geherindexeerd. Wordt overgeslagen als indexen aanwezig zijn in de db en de gevoeligheid laag is.</target>
       </trans-unit>
       <trans-unit id="1334817424484159222" datatype="html">
         <source>Folder reindexing sensitivity</source>
@@ -432,7 +432,7 @@
           <context context-type="sourcefile">src/common/config/private/PrivateConfig.ts</context>
           <context context-type="linenumber">456</context>
         </context-group>
-        <target>Voer mapscannen en miniatuurfoto maken uit in verschillende 'thread'.</target>
+        <target>Voer map scannen en miniatuurfoto's maken uit in verschillende 'threads'.</target>
       </trans-unit>
       <trans-unit id="4920945982811848923" datatype="html">
         <source>Thumbnail threads</source>
@@ -512,7 +512,7 @@
           <context context-type="sourcefile">src/common/config/private/PrivateConfig.ts</context>
           <context context-type="linenumber">510</context>
         </context-group>
-        <target>Als 'aan', zal de app "Server-Timing" http header toevoegen aan het antwoord.</target>
+        <target>Als ingeschakeld zal de app "Server-Timing" HTTP header toevoegen aan het antwoord.</target>
       </trans-unit>
       <trans-unit id="6011589038643567137" datatype="html">
         <source>Max saved progress</source>
@@ -612,7 +612,7 @@
           <context context-type="sourcefile">src/common/config/private/PrivateConfig.ts</context>
           <context context-type="linenumber">718</context>
         </context-group>
-        <target>Formaat</target>
+        <target>Bestandsformaat</target>
       </trans-unit>
       <trans-unit id="4558851785770149120" datatype="html">
         <source>MP4 codec</source>
@@ -652,7 +652,7 @@
           <context context-type="sourcefile">src/common/config/private/PrivateConfig.ts</context>
           <context context-type="linenumber">759</context>
         </context-group>
-        <target>Voorinstelling</target>
+        <target>Preset</target>
       </trans-unit>
       <trans-unit id="5666144931223883408" datatype="html">
         <source>A preset is a collection of options that will provide a certain encoding speed to compression ratio. A slower preset will provide better compression (compression is quality per filesize).</source>
@@ -660,7 +660,7 @@
           <context context-type="sourcefile">src/common/config/private/PrivateConfig.ts</context>
           <context context-type="linenumber">762</context>
         </context-group>
-        <target>Een voorinstelling is een verzameling opties die een bepaalde coderingssnelheid en compressie verhouding geeft. Een langzamere preset geeft betere compressie (compressie is is kwaliteit per bestandsgrootte).</target>
+        <target>Een preset is een verzameling opties die een bepaalde coderingssnelheid en compressie verhouding geeft. Een langzamere preset geeft betere compressie (compressie is is kwaliteit per bestandsgrootte).</target>
       </trans-unit>
       <trans-unit id="3703299113324006523" datatype="html">
         <source>Custom Options</source>
@@ -804,7 +804,7 @@
           <context context-type="sourcefile">src/common/config/private/PrivateConfig.ts</context>
           <context context-type="linenumber">895</context>
         </context-group>
-        <target>Zoveel bytes worden geladen tijdens het scannen van foto's en video's voor metadata. Verhoog deze waarde als foto's verschijnen als vierkant..</target>
+        <target>Zoveel bytes worden geladen tijdens het scannen van foto's en video's voor metadata. Verhoog deze waarde als foto's verschijnen als vierkant.</target>
       </trans-unit>
       <trans-unit id="6549265851868599441" datatype="html">
         <source>Video</source>
@@ -824,7 +824,7 @@
           <context context-type="sourcefile">src/common/config/private/PrivateConfig.ts</context>
           <context context-type="linenumber">910</context>
         </context-group>
-        <target>Video ondersteuning gebruikt ffmpeg. ffmpeg en ffprobe programma's zijn nodig in het PATH of de @ffmpeg-installer/ffmpeg en @ffprobe-installer/ffprobe optionele 'node packages' moeten geinstalleerd zijn.</target>
+        <target>Video ondersteuning gebruikt ffmpeg. ffmpeg en ffprobe programma's zijn nodig in het PATH of de @ffmpeg-installer/ffmpeg en @ffprobe-installer/ffprobe optionele 'node packages' moeten geïnstalleerd zijn.</target>
       </trans-unit>
       <trans-unit id="5750485945694679561" datatype="html">
         <source>Photo</source>
@@ -872,7 +872,7 @@
           <context context-type="sourcefile">src/common/config/private/PrivateConfig.ts</context>
           <context context-type="linenumber">966</context>
         </context-group>
-        <target>Poort nummer. Poort 80 is meestal wat nodig is.</target>
+        <target>Poort nummer. Meestal wordt poort 80 gebruikt.</target>
       </trans-unit>
       <trans-unit id="5922774431911312513" datatype="html">
         <source>Server will accept connections from this IPv6 or IPv4 address.</source>
@@ -924,7 +924,7 @@
           <context context-type="sourcefile">src/common/config/private/PrivateConfig.ts</context>
           <context context-type="linenumber">1050</context>
         </context-group>
-        <target>Als een nieuwe map wordt toegevoegd in de gallery, wordt deze automatisch geindexeerd. Als handmatig indexeren gewenst is, klik op de index knop. (Opmerking: zoeken werkt alleen in geindexeerde mappen).</target>
+        <target>Als een nieuwe map wordt toegevoegd in de gallery, wordt deze automatisch geïndexeerd. Als handmatig indexeren gewenst is, klik op de index knop. (Opmerking: zoeken werkt alleen in geïndexeerde mappen).</target>
       </trans-unit>
       <trans-unit id="3250391385569692601" datatype="html">
         <source>Media</source>
@@ -1400,7 +1400,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">440</context>
         </context-group>
-        <target>Casht mapinhoud en zoekresultaten voor betere prestaties.</target>
+        <target>Cached mapinhoud en zoekresultaten voor betere prestaties.</target>
       </trans-unit>
       <trans-unit id="1555465647399115479" datatype="html">
         <source>Scroll based thumbnail generation</source>
@@ -1496,7 +1496,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">496</context>
         </context-group>
-        <target>Caption first naming</target>
+        <target>Caption first naamgeving</target>
       </trans-unit>
       <trans-unit id="5529709926880329339" datatype="html">
         <source>Show the caption (IPTC 120) tags from the EXIF data instead of the filenames.</source>
@@ -1652,7 +1652,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">624</context>
         </context-group>
-        <target>Schakel lossy (gebaseerd op tijd- en afstandsverschil. Te veel voorkomende punten worden verwijderd) GPX compressie in.</target>
+        <target>Schakel 'lossy' GPX compressie in (gebaseerd op tijd- en afstandsverschil. Te veel voorkomende punten worden verwijderd).</target>
       </trans-unit>
       <trans-unit id="1159790075331375705" datatype="html">
         <source>*.gpx files</source>
@@ -1852,7 +1852,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">792</context>
         </context-group>
-        <target>Aangepaste HTML Head</target>
+        <target>Aangepaste HTML HEAD</target>
       </trans-unit>
       <trans-unit id="7321299026311900359" datatype="html">
         <source>Password protection</source>
@@ -1992,7 +1992,7 @@
           <context context-type="sourcefile">src/frontend/app/model/backendtext.service.ts</context>
           <context context-type="linenumber">15</context>
         </context-group>
-        <target>Alleen geindexeerde bestanden</target>
+        <target>Alleen geïndexeerde bestanden</target>
       </trans-unit>
       <trans-unit id="613209736940517083" datatype="html">
         <source>Only checks indexed files.</source>
@@ -2000,7 +2000,7 @@
           <context context-type="sourcefile">src/frontend/app/model/backendtext.service.ts</context>
           <context context-type="linenumber">17</context>
         </context-group>
-        <target>Controleert alleen geindexeerde bestanden.</target>
+        <target>Controleert alleen geïndexeerde bestanden.</target>
       </trans-unit>
       <trans-unit id="8335094363935357421" datatype="html">
         <source>Index changes only</source>
@@ -2024,7 +2024,7 @@
           <context context-type="sourcefile">src/frontend/app/model/backendtext.service.ts</context>
           <context context-type="linenumber">35</context>
         </context-group>
-        <target>Database reset</target>
+        <target>Database resetten</target>
       </trans-unit>
       <trans-unit id="1623883110045208603" datatype="html">
         <source>Thumbnail generation</source>
@@ -2064,7 +2064,7 @@
           <context context-type="sourcefile">src/frontend/app/model/backendtext.service.ts</context>
           <context context-type="linenumber">47</context>
         </context-group>
-        <target>Voorbeeldweergaven opnieuw instellen</target>
+        <target>Voorbeeldweergaven resetten</target>
       </trans-unit>
       <trans-unit id="1677142486230902467" datatype="html">
         <source>Server error</source>
@@ -2223,7 +2223,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/EnumTranslations.ts</context>
           <context context-type="linenumber">35</context>
         </context-group>
-        <target>midden</target>
+        <target>medium</target>
       </trans-unit>
       <trans-unit id="3789846122694325400" datatype="html">
         <source>descending date</source>
@@ -3316,7 +3316,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/settings/template/template.component.html</context>
           <context context-type="linenumber">33,34</context>
         </context-group>
-        <target>config wordt niet ondersteund met deze instellingen.</target>
+        <target>configuratie wordt niet ondersteund met deze instellingen.</target>
       </trans-unit>
       <trans-unit id="662506850593821474" datatype="html">
         <source>Save </source>
@@ -3332,7 +3332,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/settings/template/template.component.html</context>
           <context context-type="linenumber">49</context>
         </context-group>
-        <target>Reset</target>
+        <target>Resetten</target>
       </trans-unit>
       <trans-unit id="1353646366342026793" datatype="html">
         <source>settings saved</source>
@@ -3688,7 +3688,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/settings/workflow/workflow.component.html</context>
           <context context-type="linenumber">140,141</context>
         </context-group>
-        <target>Staat toe de taak uit te voeren als een andere taak al uitgevoerd wordt.</target>
+        <target>Sta toe de taak uit te voeren als een andere taak al uitgevoerd wordt.</target>
       </trans-unit>
       <trans-unit id="5242498003738057671" datatype="html">
         <source>';' separated integers. </source>
