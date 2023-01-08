@@ -1049,7 +1049,7 @@ export class ServerConfig extends ClientConfig {
           job: DefaultsJobs[DefaultsJobs.Indexing],
           description: $localize`If you add a new folder to your gallery, the site indexes it automatically.  If you would like to trigger indexing manually, click index button. (Note: search only works among the indexed directories.)`
         }, {
-          job: DefaultsJobs[DefaultsJobs['Database Reset']],
+          job: DefaultsJobs[DefaultsJobs['Gallery Reset']],
           hideProgress: true
         }]
     } as TAGS

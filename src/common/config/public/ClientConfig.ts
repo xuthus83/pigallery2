@@ -4,6 +4,7 @@ import {SortingMethods} from '../../entities/SortingMethods';
 import {UserRoles} from '../../entities/UserDTO';
 import {ConfigProperty, SubConfigClass} from 'typeconfig/common';
 import {SearchQueryDTO} from '../../entities/SearchQueryDTO';
+import { DefaultsJobs } from '../../entities/job/JobDTO';
 
 declare let $localize: (s: TemplateStringsArray) => string;
 if (typeof $localize === 'undefined') {
@@ -855,7 +856,11 @@ export class ClientConfig {
   @ConfigProperty({
     tags: {
       name: $localize`Album`,
-      uiIcon: 'grid-two-up'
+      uiIcon: 'grid-two-up',
+      uiJob: [ {
+          job: DefaultsJobs[DefaultsJobs['Album Reset']],
+          hideProgress: true
+        }]
     } as TAGS,
   })
   Album: ClientAlbumConfig = new ClientAlbumConfig();

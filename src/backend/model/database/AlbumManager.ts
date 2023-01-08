@@ -7,6 +7,7 @@ import {SearchQueryDTO} from '../../../common/entities/SearchQueryDTO';
 import {SavedSearchEntity} from './enitites/album/SavedSearchEntity';
 import {Logger} from '../../Logger';
 import {IObjectManager} from './IObjectManager';
+import {DirectoryEntity} from './enitites/DirectoryEntity';
 
 const LOG_TAG = '[AlbumManager]';
 
@@ -109,5 +110,14 @@ export class AlbumManager implements IObjectManager {
       await new Promise(setImmediate);
     }
     this.isDBValid = true;
+  }
+
+  async deleteAll() {
+    const connection = await SQLConnection.getConnection();
+    await connection
+      .getRepository(AlbumBaseEntity)
+      .createQueryBuilder('album')
+      .delete()
+      .execute();
   }
 }

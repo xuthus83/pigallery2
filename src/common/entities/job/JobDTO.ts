@@ -4,7 +4,7 @@ export type fieldType = 'string' | 'number' | 'boolean' | 'number-array';
 
 export enum DefaultsJobs {
   Indexing = 1,
-  'Database Reset' = 2,
+  'Gallery Reset' = 2,
   'Video Converting' = 3,
   'Photo Converting' = 4,
   'Thumbnail Generation' = 5,
@@ -12,6 +12,7 @@ export enum DefaultsJobs {
   'Preview Filling' = 7,
   'Preview Reset' = 8,
   'GPX Compression' = 9,
+  'Album Reset' = 10,
 }
 
 export interface ConfigTemplateEntry {

@@ -38,7 +38,7 @@ export class SettingsService {
     this.jobsService.onJobFinish.subscribe((jobName: string) => {
       if (
         jobName === DefaultsJobs[DefaultsJobs.Indexing] ||
-        jobName === DefaultsJobs[DefaultsJobs['Database Reset']]
+        jobName === DefaultsJobs[DefaultsJobs['Gallery Reset']]
       ) {
         this.loadStatistic();
       }

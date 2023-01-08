@@ -127,7 +127,7 @@
           [soloRun]="true"
           (jobError)="error=$event"
           [allowParallelRun]="false"
-          [danger]="i>0"
+          [danger]="job.job.includes('Reset')"
           [jobName]="job.job"></app-settings-job-button>
       </ng-container>
 

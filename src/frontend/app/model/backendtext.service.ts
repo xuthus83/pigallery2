@@ -31,8 +31,10 @@ export class BackendtextService {
     switch (job as DefaultsJobs) {
       case DefaultsJobs.Indexing:
         return $localize`Indexing`;
-      case DefaultsJobs['Database Reset']:
-        return $localize`Database reset`;
+      case DefaultsJobs['Gallery Reset']:
+        return $localize`Gallery reset`;
+      case DefaultsJobs['Album Reset']:
+        return $localize`Album reset`;
       case DefaultsJobs['Thumbnail Generation']:
         return $localize`Thumbnail generation`;
       case DefaultsJobs['Photo Converting']:

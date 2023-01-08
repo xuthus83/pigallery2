@@ -13,6 +13,7 @@ import * as path from 'path';
 import {Utils} from '../../../common/Utils';
 import {PreviewPhotoDTO} from '../../../common/entities/PhotoDTO';
 import {IObjectManager} from './IObjectManager';
+import {Logger} from '../../Logger';
 
 const LOG_TAG = '[PreviewManager]';
 
@@ -121,7 +122,6 @@ export class PreviewManager implements IObjectManager {
       PreviewManager.setSorting(query);
       return query;
     };
-
     let previewMedia = null;
     if (
       Config.Preview.SearchQuery &&
@@ -130,16 +130,26 @@ export class PreviewManager implements IObjectManager {
         text: '',
       } as TextSearch)
     ) {
-      const previewFilterQuery = await
-        ObjectManagers.getInstance().SearchManager.prepareAndBuildWhereQuery(Config.Preview.SearchQuery);
-      previewMedia = await previewQuery()
-        .andWhere(previewFilterQuery)
-        .limit(1)
-        .getOne();
+      try {
+        const previewFilterQuery = await
+          ObjectManagers.getInstance().SearchManager.prepareAndBuildWhereQuery(Config.Preview.SearchQuery);
+        previewMedia = await previewQuery()
+          .andWhere(previewFilterQuery)
+          .limit(1)
+          .getOne();
+      } catch (e) {
+        Logger.error('Cant get album preview using:', JSON.stringify(album.searchQuery), JSON.stringify(Config.Preview.SearchQuery));
+        throw e;
+      }
     }
 
     if (!previewMedia) {
-      previewMedia = await previewQuery().limit(1).getOne();
+      try {
+        previewMedia = await previewQuery().limit(1).getOne();
+      } catch (e) {
+        Logger.error('Cant get album preview using:', JSON.stringify(album.searchQuery));
+        throw e;
+      }
     }
     return previewMedia || null;
   }
