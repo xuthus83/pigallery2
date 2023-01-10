@@ -92,7 +92,7 @@
           <context context-type="sourcefile">src/common/config/private/PrivateConfig.ts</context>
           <context context-type="linenumber">153</context>
         </context-group>
-        <target>Sqlite database bestandsnaam</target>
+        <target>SQLite database bestandsnaam</target>
       </trans-unit>
       <trans-unit id="6242404539171057139" datatype="html">
         <source>Sqlite will save the db with this filename.</source>
@@ -100,7 +100,7 @@
           <context context-type="sourcefile">src/common/config/private/PrivateConfig.ts</context>
           <context context-type="linenumber">157</context>
         </context-group>
-        <target>Sqlite zal de database opslaan met deze bestandsnaam.</target>
+        <target>SQLite zal de database opslaan met deze bestandsnaam.</target>
       </trans-unit>
       <trans-unit id="8953033926734869941" datatype="html">
         <source>Name</source>
@@ -184,7 +184,7 @@
           <context context-type="sourcefile">src/common/config/private/PrivateConfig.ts</context>
           <context context-type="linenumber">247</context>
         </context-group>
-        <target>Alle bestands-gebaseerde data wordt hier opgeslagen (sqlite database, taakgeschiedenis gegevens).</target>
+        <target>Alle bestands-gebaseerde data wordt hier opgeslagen (SQLite database, taakgeschiedenis gegevens).</target>
       </trans-unit>
       <trans-unit id="3636930811048814547" datatype="html">
         <source>SQLite</source>
@@ -880,7 +880,7 @@
           <context context-type="sourcefile">src/common/config/private/PrivateConfig.ts</context>
           <context context-type="linenumber">978</context>
         </context-group>
-        <target>Server zal verbindingen vanaf dit IPv6 or IPv4 addres accepteren.</target>
+        <target>Server zal verbindingen vanaf dit IPv6 of IPv4 adres accepteren.</target>
       </trans-unit>
       <trans-unit id="4804785061014590286" datatype="html">
         <source>Logs</source>
@@ -924,7 +924,7 @@
           <context context-type="sourcefile">src/common/config/private/PrivateConfig.ts</context>
           <context context-type="linenumber">1050</context>
         </context-group>
-        <target>Als een nieuwe map wordt toegevoegd in de gallery, wordt deze automatisch geïndexeerd. Als handmatig indexeren gewenst is, klik op de index knop. (Opmerking: zoeken werkt alleen in geïndexeerde mappen).</target>
+        <target>Als een nieuwe map wordt toegevoegd in de galerij, wordt deze automatisch geïndexeerd. Als handmatig indexeren gewenst is, klik op de index knop. (Opmerking: zoeken werkt alleen in geïndexeerde mappen).</target>
       </trans-unit>
       <trans-unit id="3250391385569692601" datatype="html">
         <source>Media</source>
@@ -940,7 +940,7 @@
           <context context-type="sourcefile">src/common/config/private/PrivateConfig.ts</context>
           <context context-type="linenumber">1069</context>
         </context-group>
-        <target>Meta bestand</target>
+        <target>Metabestanden</target>
       </trans-unit>
       <trans-unit id="1295614462098694869" datatype="html">
         <source>Preview</source>
@@ -1260,7 +1260,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">279</context>
         </context-group>
-        <target>De kaart module zal deze URL's gebruiken om de kaarttegels op te halen.</target>
+        <target>De kaartmodule zal deze URL's gebruiken om de kaarttegels op te halen.</target>
       </trans-unit>
       <trans-unit id="6452617211342461685" datatype="html">
         <source>Custom Layers</source>
@@ -1284,7 +1284,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">295</context>
         </context-group>
-        <target>Maximum aantal markeringen getoond op de kaart voorbeeldweergave op de gallery pagina.</target>
+        <target>Maximum aantal markeringen getoond op de kaart voorbeeldweergave op de galerij pagina.</target>
       </trans-unit>
       <trans-unit id="5208941380118400380" datatype="html">
         <source>Map Icon size</source>
@@ -1536,7 +1536,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">520</context>
         </context-group>
-        <target>Voegt een knop toe voor het platmaken van mappen, waarbij alle inhoud van de submappen wordt weergegeven. (Werkt niet als de gallery meerdere mappen heeft met hetzelfde pad.)</target>
+        <target>Voegt een knop toe voor het platmaken van mappen, waarbij alle inhoud van de submappen wordt weergegeven. (Werkt niet als de galerij meerdere mappen heeft met hetzelfde pad.)</target>
       </trans-unit>
       <trans-unit id="8685965882892653885" datatype="html">
         <source>Default slideshow speed</source>
@@ -1868,7 +1868,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">816</context>
         </context-group>
-        <target>Schakelt gebruikersbeheer met wachtwoordbeveiliging in om de gallery te beschermen.</target>
+        <target>Schakelt gebruikersbeheer met wachtwoordbeveiliging in om de galerij te beschermen.</target>
       </trans-unit>
       <trans-unit id="6609079253925902817" datatype="html">
         <source>Default user right</source>
@@ -1900,7 +1900,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/frame/frame.component.html</context>
           <context context-type="linenumber">26</context>
         </context-group>
-        <target>Gallery</target>
+        <target>Galerij</target>
       </trans-unit>
       <trans-unit id="1393837337557373364" datatype="html">
         <source>Album</source>
@@ -1976,7 +1976,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">901</context>
         </context-group>
-        <target>Hiermee kunnen 'willekeurige foto' URLs worden gemaakt. Deze URL geeft een willekeurige foto uit de gallery. Deze URL kan worden gebruikt met andere applicaties zoals willekeurige desktop achtergronden. Opmerking: met de huidige implementatie is het nodig om ingelogd te zijn voor de willekeurige foto.</target>
+        <target>Hiermee kunnen 'willekeurige foto' URLs worden gemaakt. Deze URL geeft een willekeurige foto uit de galerij. Deze URL kan worden gebruikt met andere applicaties zoals willekeurige desktop achtergronden. Opmerking: met de huidige implementatie is het nodig om ingelogd te zijn voor de willekeurige foto.</target>
       </trans-unit>
       <trans-unit id="5732878542640870310" datatype="html">
         <source>Size to generate</source>
@@ -2032,7 +2032,7 @@
           <context context-type="sourcefile">src/frontend/app/model/backendtext.service.ts</context>
           <context context-type="linenumber">35</context>
         </context-group>
-        <target>Gallery reset</target>
+        <target>Galerij reset</target>
       </trans-unit>
       <trans-unit id="2046036880411214558" datatype="html">
         <source>Album reset</source>
@@ -2199,7 +2199,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/EnumTranslations.ts</context>
           <context context-type="linenumber">28</context>
         </context-group>
-        <target>Aangepast</target>
+        <target>Eigen keuze</target>
       </trans-unit>
       <trans-unit id="113099127945736504" datatype="html">
         <source>OpenStreetMap</source>
@@ -2432,7 +2432,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/albums/saved-search-popup/saved-search-popup.component.html</context>
           <context context-type="linenumber">17,18</context>
         </context-group>
-        <target>Voeg deze json toe aan een '.saved_searches.pg2conf' bestand in de gallery</target>
+        <target>Voeg deze json toe aan een '.saved_searches.pg2conf' bestand in de galerij</target>
       </trans-unit>
       <trans-unit id="1692479277642537323" datatype="html">
         <source>This saved search will be loaded from file during gallery indexing and it will survive a database reset.</source>
@@ -2876,7 +2876,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/navigator/navigator.gallery.component.ts</context>
           <context context-type="linenumber">48</context>
         </context-group>
-        <target>Thuis</target>
+        <target>Home</target>
       </trans-unit>
       <trans-unit id="3445823735428564189" datatype="html">
         <source>Random link</source>
@@ -2936,7 +2936,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/search/query-enrty/query-entry.search.gallery.component.html</context>
           <context context-type="linenumber">73</context>
         </context-group>
-        <target>Search text</target>
+        <target>Zoekopdracht</target>
       </trans-unit>
       <trans-unit id="5203279511751768967" datatype="html">
         <source>From</source>
@@ -3032,7 +3032,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/search/search.gallery.component.html</context>
           <context context-type="linenumber">72,73</context>
         </context-group>
-        <target>Album name</target>
+        <target>Albumnaam</target>
       </trans-unit>
       <trans-unit id="4606777540690493351" datatype="html">
         <source>Save as album</source>
@@ -3192,7 +3192,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/settings/gallery-statistic/gallery-statistic.component.html</context>
           <context context-type="linenumber">2,4</context>
         </context-group>
-        <target>Statistiek:</target>
+        <target>Statistieken:</target>
       </trans-unit>
       <trans-unit id="1205037876874222931" datatype="html">
         <source>Folders</source>
@@ -3297,7 +3297,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/settings/template/settings-entry/settings-entry.component.html</context>
           <context context-type="linenumber">1,5</context>
         </context-group>
-        <target>It seems that you are running the application in a Docker container. This setting should not be changed in docker. Make sure, that you know what you are doing.</target>
+        <target>Het lijkt erop dat de applicatie in een Docker container draait. Deze instelling zou niet moeten worden aangepast in Docker. Zorg ervoor dat je weet wat je doet.</target>
       </trans-unit>
       <trans-unit id="5769292297914455214" datatype="html">
         <source>Disabled</source>
@@ -3325,7 +3325,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/settings/template/settings-entry/settings-entry.component.html</context>
           <context context-type="linenumber">90</context>
         </context-group>
-        <target>Tile Url*</target>
+        <target>Tile URL*</target>
       </trans-unit>
       <trans-unit id="5559929655128993973" datatype="html">
         <source>+ Add Layer </source>
@@ -3677,7 +3677,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/settings/workflow/progress/job-progress.settings.component.ts</context>
           <context context-type="linenumber">117</context>
         </context-group>
-        <target>geëindigd</target>
+        <target>klaar</target>
       </trans-unit>
       <trans-unit id="8293670171001042991" datatype="html">
         <source>every</source>
