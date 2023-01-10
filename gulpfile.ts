@@ -127,7 +127,7 @@ const getLanguages = (): any[] | string[] => {
   }
   const dirCont = fs.readdirSync('./src/frontend/' + translationFolder);
   const files: string[] = dirCont.filter((elm): any => {
-    return elm.match(/.*\.[a-zA-Z]+\.(xlf)/gi);
+    return elm.match(/.*\.[a-zA-Z]+(-[a-zA-Z]+)?\.(xlf)/gi);
   });
 
   // get languages to filter
