@@ -7,14 +7,22 @@
 }
 
 
-.switch-wrapper {
-  display: inline-block;
-  text-align: right;
-  padding: 0;
-  float: right;
-  margin-top: -4px;
-  margin-bottom: -4px;
+.form-check-input:focus {
+  border-color: var(--bs-success);
+  box-shadow: var(--bs-success);
 
+}
+
+.form-switch .form-check-input:checked {
+  background-color: var(--bs-success);
+}
+
+.form-switch .form-check-input:focus {
+  background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'><circle r='3' fill='%23a3cfbb'/></svg>");
+}
+
+.form-switch .form-check-input:checked {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23fff'/%3e%3c/svg%3e");
 }
 
 .changed-settings input {

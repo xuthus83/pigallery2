@@ -119,23 +119,24 @@
                 [(timestamp)]="schedule.trigger.atTime"></app-timestamp-timepicker>
             </div>
           </div>
+
           <div class="mb-3 row">
             <label class="col-md-2 control-label" [for]="'allowParallelRun'+'_'+i" i18n>Allow parallel run</label>
             <div class="col-md-10">
-              <bSwitch
-                class="switch"
-                [name]="'allowParallelRun'+'_'+i"
-                [id]="'allowParallelRun'+'_'+i"
-                switch-on-color="primary"
-                [switch-inverse]="true"
-                switch-off-text="Disabled"
-                switch-on-text="Enabled"
-                i18n-switch-off-text i18n-switch-on-text
-                [switch-label-width]="30"
-                (ngModelChange)="onChange($event)"
-                [(ngModel)]="schedule.allowParallelRun">
-              </bSwitch>
-              <small class="form-text text-muted ms-2"
+              <div class="input-group">
+
+                <div
+                  class="form-check form-switch  fs-5">
+                  <input class="form-check-input"
+                         type="checkbox"
+                         role="switch"
+                         [name]="'allowParallelRun'+'_'+i"
+                         [id]="'allowParallelRun'+'_'+i"
+                         (ngModelChange)="onChange($event)"
+                         [(ngModel)]="schedule.allowParallelRun">
+                </div>
+              </div>
+              <small class="form-text text-muted"
                      i18n>Enables the job to start even if another job is already running.
               </small>
             </div>
@@ -145,7 +146,7 @@
 
       </div>
 
-      <ng-container *ngIf="jobsService.getConfigTemplate(schedule.jobName) ">
+      <ng-container *ngIf="jobsService.getConfigTemplate(schedule.jobName)">
         <hr/>
         <div *ngFor="let configEntry of  jobsService.getConfigTemplate(schedule.jobName)">
 
@@ -153,48 +154,47 @@
             <label class="col-md-2 control-label"
                    [for]="configEntry.id+'_'+i">{{backendTextService.get(configEntry.name)}}</label>
             <div class="col-md-10">
-              <ng-container [ngSwitch]="configEntry.type">
-                <ng-container *ngSwitchCase="'boolean'">
-                  <bSwitch
-                    class="switch"
-                    [name]="configEntry.id+'_'+i"
-                    [id]="configEntry.id+'_'+i"
-                    switch-on-color="primary"
-                    [switch-inverse]="true"
-                    switch-off-text="Disabled"
-                    switch-on-text="Enabled"
-                    i18n-switch-off-text i18n-switch-on-text
-                    [switch-label-width]="30"
-                    (ngModelChange)="onChange($event)"
-                    [(ngModel)]="schedule.config[configEntry.id]">
-                  </bSwitch>
-                </ng-container>
+              <div class="input-group">
+                <ng-container [ngSwitch]="configEntry.type">
+                  <div
+                    *ngSwitchCase="'boolean'"
+                    class="form-check form-switch  fs-5">
+                    <input class="form-check-input"
+                           type="checkbox"
+                           role="switch"
+                           [name]="configEntry.id+'_'+i"
+                           [id]="configEntry.id+'_'+i"
+                           (ngModelChange)="onChange($event)"
+                           [(ngModel)]="schedule.config[configEntry.id]">
+                  </div>
 
-                <ng-container *ngSwitchCase="'string'">
-                  <input type="text" class="form-control" [name]="configEntry.id+'_'+i"
-                         [id]="configEntry.id+'_'+i"
-                         (ngModelChange)="onChange($event)"
-                         [(ngModel)]="schedule.config[configEntry.id]" required>
-                </ng-container>
+                  <ng-container *ngSwitchCase="'string'">
+                    <input type="text" class="form-control" [name]="configEntry.id+'_'+i"
+                           [id]="configEntry.id+'_'+i"
+                           (ngModelChange)="onChange($event)"
+                           [(ngModel)]="schedule.config[configEntry.id]" required>
+                  </ng-container>
 
-                <ng-container *ngSwitchCase="'number'">
-                  <input type="number" class="form-control" [name]="configEntry.id+'_'+i"
-                         [id]="configEntry.id+'_'+i"
-                         (ngModelChange)="onChange($event)"
-                         [(ngModel)]="schedule.config[configEntry.id]" required>
-                </ng-container>
+                  <ng-container *ngSwitchCase="'number'">
+                    <input type="number" class="form-control" [name]="configEntry.id+'_'+i"
+                           [id]="configEntry.id+'_'+i"
+                           (ngModelChange)="onChange($event)"
+                           [(ngModel)]="schedule.config[configEntry.id]" required>
+                  </ng-container>
 
-                <ng-container *ngSwitchCase="'number-array'">
-                  <input type="text" class="form-control"
-                         [name]="configEntry.id+'_'+i"
-                         [id]="configEntry.id+'_'+i"
-                         (ngModelChange)="setNumberArray(schedule.config,configEntry.id,$event); onChange($event);"
-                         [ngModel]="getNumberArray($any(schedule.config),configEntry.id)" required>
+                  <ng-container *ngSwitchCase="'number-array'">
+                    <input type="text" class="form-control"
+                           [name]="configEntry.id+'_'+i"
+                           [id]="configEntry.id+'_'+i"
+                           (ngModelChange)="setNumberArray(schedule.config,configEntry.id,$event); onChange($event);"
+                           [ngModel]="getNumberArray($any(schedule.config),configEntry.id)" required>
+                  </ng-container>
                 </ng-container>
-              </ng-container>
-              <small class="form-text text-muted ms-2">
+              </div>
+              <small class="form-text text-muted">
                 <ng-container *ngIf="configEntry.type == 'number-array'" i18n>';' separated integers.
-                </ng-container>{{backendTextService.get(configEntry.description)}}
+                </ng-container>
+                {{backendTextService.get(configEntry.description)}}
               </small>
             </div>
           </div>
@@ -224,7 +224,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="jobModalLabel" i18n>Add new job</h5>
-        <button type="button"  class="btn-close"  (click)="jobModal.hide()" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="btn-close" (click)="jobModal.hide()" data-dismiss="modal" aria-label="Close">
         </button>
       </div>
       <form #jobModalForm="ngForm">

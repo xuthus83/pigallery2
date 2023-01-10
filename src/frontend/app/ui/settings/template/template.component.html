@@ -2,21 +2,20 @@
   <div class="card mb-4">
     <h5 class="card-header">
       <span class="oi oi-{{icon}}"></span> {{Name}}
-      <div *ngIf="states.value.enabled !== undefined"
-           class="switch-wrapper">
-        <bSwitch
-          class="switch"
-          name="enabled"
-          switch-on-color="success"
-          [switch-inverse]="true"
-          switch-off-text="Disabled"
-          switch-on-text="Enabled"
-          i18n-switch-off-text
-          i18n-switch-on-text
-          [switch-disabled]="inProgress"
-          [switch-label-width]="30"
-          [(ngModel)]="states.value.enabled">
-        </bSwitch>
+      <div *ngIf="states.value.enabled !== undefined" class="float-end p-0">
+
+        <div
+          class="form-check form-switch">
+          <label class="form-check-label" [for]="ConfigPath+'.enabled'" i18n>Enabled</label>
+
+          <input class="form-check-input"
+                 type="checkbox"
+                 role="switch"
+                 name="enabled"
+                 [id]="ConfigPath+'.enabled'"
+                 [disabled]="inProgress"
+                 [(ngModel)]="states.value.enabled">
+        </div>
       </div>
     </h5>
     <div class="card-body">
@@ -81,7 +80,9 @@
         <ng-container *ngIf="rStates.value.__state[ck].isConfigType">
           <div class="card mt-2 mb-2" *ngIf="topLevel && enableNesting" [id]="ConfigPath+'.'+ck">
             <div class="card-body">
-              <h5 class="card-title"><span class="oi oi-{{rStates?.value.__state[ck].tags?.uiIcon}}"></span> {{rStates?.value.__state[ck].tags?.name || ck}}</h5>
+              <h5 class="card-title"><span
+                class="oi oi-{{rStates?.value.__state[ck].tags?.uiIcon}}"></span> {{rStates?.value.__state[ck].tags?.name || ck}}
+              </h5>
               <ng-container
                 *ngTemplateOutlet="Recursion; context:{ rStates: rStates.value.__state[ck], confPath:confPath+'.'+ck }"
               ></ng-container>

@@ -200,22 +200,16 @@
       </div>
       <div *ngSwitchCase="SearchQueryTypes.orientation" class="col-md-8 d-flex">
         <div class="input-group col-md-6">
-          <bSwitch
-            class="switch"
-            id="orientation"
-            name="orientation"
-            title="Orientation"
-            switch-on-color="primary"
-            switch-off-color="primary"
-            [switch-inverse]="true"
-            switch-off-text="Portrait"
-            switch-on-text="Landscape"
-            i18n-switch-off-text
-            i18n-switch-on-text
-            [switch-label-width]="30"
-            (ngModelChange)="onChange()"
-            [(ngModel)]="AsOrientationQuery.landscape">
-          </bSwitch>
+          <select class="form-select"
+                  [(ngModel)]="AsOrientationQuery.landscape"
+                  (ngModelChange)="onChange()"
+                  id="orientation-select"
+                  name="orientation-select"
+                  title="Orientation"
+                  required>
+            <option [ngValue]="true" i18n>Landscape</option>
+            <option [ngValue]="false" i18n>Portrait</option>
+          </select>
         </div>
       </div>
     </ng-container>

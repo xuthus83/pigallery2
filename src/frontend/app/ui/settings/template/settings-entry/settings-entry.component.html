@@ -53,31 +53,25 @@
         </select>
 
 
-        <bSwitch
-          *ngSwitchCase="'Boolean'"
-          class="switch"
-          [id]="idName"
-          [name]="idName"
-          [title]="title"
-          [disabled]="state.readonly || Disabled"
-          switch-on-color="primary"
-          [switch-inverse]="true"
-          switch-off-text="Disabled"
-          switch-on-text="Enabled"
-          i18n-switch-off-text
-          i18n-switch-on-text
-          [switch-label-width]="30"
-          (ngModelChange)="onChange($event)"
-          [(ngModel)]="state.value">
-        </bSwitch>
-        
+        <div class="form-check form-switch fs-5">
+          <input class="form-check-input"
+                 *ngSwitchCase="'Boolean'"
+                 [id]="idName"
+                 [name]="idName"
+                 [title]="title"
+                 [disabled]="state.readonly || Disabled"
+                 type="checkbox"
+                 role="switch"
+                 (ngModelChange)="onChange($event)"
+                 [(ngModel)]="state.value">
+        </div>
+
         <app-settings-workflow
           class="w-100"
           *ngSwitchCase="'JobScheduleConfig'"
           [(ngModel)]="state.value"
           [id]="idName"
           [name]="idName"
-          [title]="title"
           (ngModelChange)="onChange($event)">
         </app-settings-workflow>
 

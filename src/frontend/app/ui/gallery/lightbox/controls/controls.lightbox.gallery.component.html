@@ -61,55 +61,44 @@
           </li>
           <li role="menuitem">
             <div class="dropdown-item d-flex justify-content-between">
-              <span title="key: c" i18n-title i18n>Show caption</span>
-              <bSwitch
-                class="switch ps-2"
-                name="caption-switch"
-                switch-on-color="success"
-                [switch-inverse]="true"
-                switch-off-text="on hover"
-                switch-on-text="always"
-                i18n-switch-off-text
-                i18n-switch-on-text
-                [switch-label-width]="30"
-                [(ngModel)]="lightboxService.captionAlwaysOn">
-              </bSwitch>
+              <span title="key: c" i18n-title i18n>Always show caption</span>
+              <div class="form-check form-switch">
+                <input class="form-check-input"
+                       type="checkbox"
+                       role="switch"
+                       name="caption-switch"
+                       id="caption-switch"
+                       [(ngModel)]="lightboxService.captionAlwaysOn">
+              </div>
             </div>
           </li>
           <li role="menuitem">
             <div class="dropdown-item d-flex justify-content-between">
-              <span title="key: a" i18n-title i18n>Show faces</span>
-              <bSwitch
-                class="switch ps-2"
-                name="faces-switch"
-                switch-on-color="success"
-                [switch-inverse]="true"
-                switch-off-text="on hover"
-                switch-on-text="always"
-                i18n-switch-off-text
-                i18n-switch-on-text
-                [switch-label-width]="30"
-                [(ngModel)]="lightboxService.facesAlwaysOn">
-              </bSwitch>
+              <span title="key: a" i18n-title i18n>Always show faces</span>
+              <div class="form-check form-switch">
+                <input class="form-check-input"
+                       type="checkbox"
+                       role="switch"
+                       name="faces-switch"
+                       id="faces-switch"
+                       [(ngModel)]="lightboxService.facesAlwaysOn">
+              </div>
             </div>
           </li>
           <li
             *ngIf="activePhoto && activePhoto.gridMedia.isVideo()"
             role="menuitem">
             <div class="dropdown-item d-flex justify-content-between">
-              <span title="key: l" i18n-title i18n>Play videos</span>
-              <bSwitch
-                class="switch ps-2"
-                name="faces-switch"
-                switch-on-color="success"
-                [switch-inverse]="true"
-                switch-off-text="once"
-                switch-on-text="loop"
-                i18n-switch-off-text
-                i18n-switch-on-text
-                [switch-label-width]="30"
-                [(ngModel)]="lightboxService.loopVideos">
-              </bSwitch>
+              <span title="key: l" i18n-title i18n>Loop videos</span>
+
+              <div class="form-check form-switch">
+                <input class="form-check-input"
+                       type="checkbox"
+                       role="switch"
+                       name="loop-videos-switch"
+                       id="loop-videos-switch"
+                       [(ngModel)]="lightboxService.loopVideos">
+              </div>
             </div>
           </li>
         </ul>

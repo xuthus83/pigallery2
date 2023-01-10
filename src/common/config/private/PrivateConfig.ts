@@ -624,10 +624,19 @@ export class ServerJobConfig {
   })
   mediaProcessingBatchSize: number = 1000;
   @ConfigProperty({
+    tags:
+      {
+        name: $localize`test`,
+        priority: ConfigPriority.basic
+      },
+    description: $localize`Jobs load this many photos or videos form the DB for processing at once.`
+  })
+  test: boolean = false;
+  @ConfigProperty({
     arrayType: JobScheduleConfig,
     tags: {
       name: $localize`Scheduled jobs`,
-      priority: ConfigPriority.advanced
+      priority: ConfigPriority.basic
     }
   })
   scheduled: JobScheduleConfig[] = [

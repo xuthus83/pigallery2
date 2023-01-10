@@ -36,7 +36,6 @@ import {BsDatepickerModule} from 'ngx-bootstrap/datepicker';
 import {ToastrModule} from 'ngx-toastr';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {NotificationService} from './model/notification.service';
-import {JwBootstrapSwitchNg2Module} from 'jw-bootstrap-switch-ng2';
 import {ClipboardModule} from 'ngx-clipboard';
 import {NavigationService} from './model/navigation.service';
 import {InfoPanelLightboxComponent} from './ui/gallery/lightbox/infopanel/info-panel.lightbox.gallery.component';
@@ -161,7 +160,6 @@ Marker.prototype.options.icon = iconDefault;
     BrowserAnimationsModule,
     AppRoutingModule,
     ClipboardModule,
-    JwBootstrapSwitchNg2Module,
     TooltipModule.forRoot(),
     ToastrModule.forRoot(),
     ModalModule.forRoot(),

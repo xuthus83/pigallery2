@@ -54,26 +54,24 @@
           <label class="control-label" for="includeSubfolders" i18n>Include subfolders:</label>
         </div>
         <div class="col-8">
-          <bSwitch
-            class="switch"
-            name="includeSubfolders"
-            id="includeSubfolders"
-            [switch-on-color]="'success'"
-            [switch-inverse]="true"
-            [switch-off-text]="text.No"
-            [switch-on-text]="text.Yes"
-            [switch-label-width]="30"
-            (change)="update()"
-            [(ngModel)]="input.includeSubfolders">
-          </bSwitch>
+          <div class="form-check form-switch">
+            <input class="form-check-input"
+                   type="checkbox"
+                   role="switch"
+                   id="includeSubfolders"
+                   name="includeSubfolders"
+                   title="Orientation"
+                   (change)="update()"
+                   [(ngModel)]="input.includeSubfolders">
+          </div>
         </div>
       </div>
 
       <div class="row" *ngIf="passwordProtection">
         <div class="col-4">
           <label class="control-label" for="share-password">
-            <ng-container i18n>Password</ng-container>
-            *:
+            <ng-container i18n>Password</ng-container><!--
+            -->*:
           </label>
         </div>
         <div class="col-8">
