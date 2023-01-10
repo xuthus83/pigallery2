@@ -70,9 +70,9 @@
             "baseHref": "",
             "translation": "src/frontend/translate/messages.nl.xlf"
           },
-          "ptbr": {
+          "pt-br": {
             "baseHref": "",
-            "translation": "src/frontend/translate/messages.ptbr.xlf"
+            "translation": "src/frontend/translate/messages.pt-br.xlf"
           }
         }
       },
