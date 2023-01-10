@@ -3044,7 +3044,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/search/search.gallery.component.html</context>
           <context context-type="linenumber">93</context>
         </context-group>
-        <target>Save as album</target>
+        <target>Opslaan als album</target>
       </trans-unit>
       <trans-unit id="7419704019640008953" datatype="html">
         <source>Share</source>
