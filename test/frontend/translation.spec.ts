@@ -21,7 +21,7 @@ describe('UI', () => {
 
 
     for (const t of translations) {
-      let lang = t.substring(t.indexOf('.') + 1, t.indexOf('.') + 3);
+      let lang = t.substring(t.indexOf('.') + 1, t.length-4);
       if (lang === 'en') {
         continue; // no need to add 'en' as it is the default language.
       }
