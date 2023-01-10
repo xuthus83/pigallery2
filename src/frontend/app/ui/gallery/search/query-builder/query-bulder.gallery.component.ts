@@ -45,7 +45,7 @@ export class GallerySearchQueryBuilderComponent
     text: '',
   } as TextSearch;
   @Output() search = new EventEmitter<void>();
-  @Input() placeholder = "Search";
+  @Input() placeholder = $localize`Search`;
   public rawSearchText = '';
 
   constructor(private searchQueryParserService: SearchQueryParserService) {}
