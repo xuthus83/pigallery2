@@ -4,7 +4,7 @@ import {SortingMethods} from '../../entities/SortingMethods';
 import {UserRoles} from '../../entities/UserDTO';
 import {ConfigProperty, SubConfigClass} from 'typeconfig/common';
 import {SearchQueryDTO} from '../../entities/SearchQueryDTO';
-import { DefaultsJobs } from '../../entities/job/JobDTO';
+import {DefaultsJobs} from '../../entities/job/JobDTO';
 
 declare let $localize: (s: TemplateStringsArray) => string;
 if (typeof $localize === 'undefined') {
@@ -431,7 +431,47 @@ export class NavBarConfig {
   ];
 }
 
-@SubConfigClass<TAGS>({tags: {client: true, priority: ConfigPriority.advanced}, softReadonly: true})
+@SubConfigClass<TAGS>({tags: {client: true}, softReadonly: true})
+export class ClientLightboxConfig {
+
+  @ConfigProperty({
+    tags: {
+      name: $localize`Default slideshow speed`,
+      priority: ConfigPriority.underTheHood,
+      githubIssue: 570,
+      unit: 's'
+    },
+    description: $localize`Default time interval for displaying a photo in the slide show.`
+  })
+  defaultSlideshowSpeed: number = 5;
+
+  @ConfigProperty({
+    tags: {
+      name: $localize`Always show captions`,
+      priority: ConfigPriority.underTheHood,
+    },
+    description: $localize`If enabled, lightbox will always show caption by default, not only on hover.`
+  })
+  captionAlwaysOn: boolean = false;
+  @ConfigProperty({
+    tags: {
+      name: $localize`Always show faces`,
+      priority: ConfigPriority.underTheHood,
+    },
+    description: $localize`If enabled, lightbox will always show faces by default, not only on hover.`
+  })
+  facesAlwaysOn: boolean = false;
+  @ConfigProperty({
+    tags: {
+      name: $localize`Loop Videos`,
+      priority: ConfigPriority.underTheHood,
+    },
+    description: $localize`If enabled, lightbox will loop videos by default.`
+  })
+  loopVideos: boolean = false;
+}
+
+@SubConfigClass<TAGS>({tags: {client: true}, softReadonly: true})
 export class ClientGalleryConfig {
   @ConfigProperty({
     tags: {
@@ -522,14 +562,11 @@ export class ClientGalleryConfig {
   enableDirectoryFlattening: boolean = false;
   @ConfigProperty({
     tags: {
-      name: $localize`Default slideshow speed`,
+      name: $localize`Lightbox`,
       priority: ConfigPriority.advanced,
-      githubIssue: 570,
-      unit: 's'
     },
-    description: $localize`Default time interval for displaying a photo in the slide show.`
   })
-  defaultSlideshowSpeed: number = 5;
+  Lightbox: ClientLightboxConfig = new ClientLightboxConfig();
 }
 
 @SubConfigClass({tags: {client: true}, softReadonly: true})
@@ -857,10 +894,10 @@ export class ClientConfig {
     tags: {
       name: $localize`Album`,
       uiIcon: 'grid-two-up',
-      uiJob: [ {
-          job: DefaultsJobs[DefaultsJobs['Album Reset']],
-          hideProgress: true
-        }]
+      uiJob: [{
+        job: DefaultsJobs[DefaultsJobs['Album Reset']],
+        hideProgress: true
+      }]
     } as TAGS,
   })
   Album: ClientAlbumConfig = new ClientAlbumConfig();

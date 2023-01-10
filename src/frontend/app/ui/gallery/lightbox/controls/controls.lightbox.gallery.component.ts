@@ -113,7 +113,7 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
     if (this.cacheService.getSlideshowSpeed()) {
       this.selectedSlideshowSpeed = this.cacheService.getSlideshowSpeed();
     } else {
-      this.selectedSlideshowSpeed = Config.Gallery.defaultSlideshowSpeed;
+      this.selectedSlideshowSpeed = Config.Gallery.Lightbox.defaultSlideshowSpeed;
     }
   }
 
