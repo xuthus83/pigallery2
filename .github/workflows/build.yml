@@ -145,7 +145,7 @@ jobs:
           push: true
           tags: bpatrik/pigallery2:nightly-${{ matrix.container }}
       - name: Push release on new Tag
-        if: ${{ startsWith(steps.vars.outputs.type , 'tag') &&  !github.event.issue.pull_request &&  matrix.container != 'debian-buster'}}
+        if: ${{ startsWith(steps.vars.outputs.type , 'tag') &&  !github.event.issue.pull_request &&  matrix.container != 'debian-bullseye'}}
         uses: docker/build-push-action@v3
         with:
           context: .
@@ -157,7 +157,7 @@ jobs:
             bpatrik/pigallery2:${{ steps.vars.outputs.tag }}-${{ matrix.container }}
             bpatrik/pigallery2:latest-${{ matrix.container }}
       - name: Push latest on new Tag
-        if: ${{ startsWith(steps.vars.outputs.type , 'tag') &&  !github.event.issue.pull_request &&  matrix.container == 'debian-buster'}}
+        if: ${{ startsWith(steps.vars.outputs.type , 'tag') &&  !github.event.issue.pull_request &&  matrix.container == 'debian-bullseye'}}
         uses: docker/build-push-action@v3
         with:
           context: .
