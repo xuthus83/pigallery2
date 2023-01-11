@@ -4,14 +4,25 @@
     <button type="button"  class="btn-close"  (click)="close()" aria-label="Close">
     </button>
   </div>
+  <div class="row" *ngIf="galleryService.isSearchResult()">
+    <div class="col-2">
+      <span class="details-icon oi oi-folder"></span>
+    </div>
+    <div class="col-10">
+      <a class="details-main dir-link"
+         title="{{DirectoryPath}}"
+         [routerLink]="['/gallery', DirectoryPath]"
+         [queryParams]="queryService.getParams()">
+        {{DirectoryPathStr}}
+      </a>
+    </div>
+  </div>
   <div class="row">
     <div class="col-2">
       <span class="details-icon oi oi-image"></span>
     </div>
     <div class="col-10">
-      <div class="details-main dir-link" title="{{FullPath}}"
-           [routerLink]="['/gallery', DirectoryPath]"
-           [queryParams]="queryService.getParams()">
+      <div class="details-main" >
         {{media.name}}
       </div>
       <div class="details-sub row">

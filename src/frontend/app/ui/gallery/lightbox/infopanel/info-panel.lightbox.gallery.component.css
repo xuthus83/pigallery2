@@ -20,7 +20,7 @@
 }
 
 .details-sub {
-  color: #555;
+  color: var(--bs-gray-700);
   padding: 0;
   font-size: 0.875rem;
 }
@@ -45,24 +45,16 @@
   font-size: 1.2rem;
 }
 
-.dir-link {
-  cursor: pointer;
-}
-
-.dir-link:hover {
-  text-decoration: underline;
-}
-
 .modal-header {
   padding: 0.4rem 1rem;
 }
 
 
-.keywords a {
-  color: #212529;
+.keywords a, a.dir-link {
+  color: var(--bs-gray-900);
 }
 
-.keywords a:hover {
+.keywords a:hover, a.dir-link:hover {
   text-decoration: underline;
 }
 

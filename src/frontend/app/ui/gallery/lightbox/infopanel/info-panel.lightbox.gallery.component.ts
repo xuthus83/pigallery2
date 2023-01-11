@@ -1,36 +1,15 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnChanges,
-  OnInit,
-  Output,
-} from '@angular/core';
-import {
-  CameraMetadata,
-  PhotoDTO,
-  PhotoMetadata,
-  PositionMetaData,
-} from '../../../../../../common/entities/PhotoDTO';
-import { Config } from '../../../../../../common/config/public/Config';
-import {
-  MediaDTO,
-  MediaDTOUtils,
-} from '../../../../../../common/entities/MediaDTO';
-import {
-  VideoDTO,
-  VideoMetadata,
-} from '../../../../../../common/entities/VideoDTO';
-import { Utils } from '../../../../../../common/Utils';
-import { QueryService } from '../../../../model/query.service';
-import { MapService } from '../../map/map.service';
-import {
-  SearchQueryTypes,
-  TextSearch,
-  TextSearchQueryMatchTypes,
-} from '../../../../../../common/entities/SearchQueryDTO';
-import { AuthenticationService } from '../../../../model/network/authentication.service';
-import { LatLngLiteral, marker, Marker, TileLayer, tileLayer } from 'leaflet';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output,} from '@angular/core';
+import {CameraMetadata, PhotoDTO, PhotoMetadata, PositionMetaData,} from '../../../../../../common/entities/PhotoDTO';
+import {Config} from '../../../../../../common/config/public/Config';
+import {MediaDTO, MediaDTOUtils,} from '../../../../../../common/entities/MediaDTO';
+import {VideoDTO, VideoMetadata,} from '../../../../../../common/entities/VideoDTO';
+import {Utils} from '../../../../../../common/Utils';
+import {QueryService} from '../../../../model/query.service';
+import {MapService} from '../../map/map.service';
+import {SearchQueryTypes, TextSearch, TextSearchQueryMatchTypes,} from '../../../../../../common/entities/SearchQueryDTO';
+import {AuthenticationService} from '../../../../model/network/authentication.service';
+import {LatLngLiteral, marker, Marker, TileLayer, tileLayer} from 'leaflet';
+import {ContentService} from '../../content.service';
 
 @Component({
   selector: 'app-info-panel',
@@ -51,6 +30,7 @@ export class InfoPanelLightboxComponent implements OnInit, OnChanges {
 
   constructor(
     public queryService: QueryService,
+    public galleryService: ContentService,
     public mapService: MapService,
     private authService: AuthenticationService
   ) {
@@ -75,6 +55,17 @@ export class InfoPanelLightboxComponent implements OnInit, OnChanges {
       this.media.directory.path,
       this.media.directory.name
     );
+  }
+
+  get DirectoryPathStr(): string {
+    const p = this.DirectoryPath;
+    if (p === '.') {
+      return $localize`Home`;
+    }
+    if (p.length > 25) {
+      return '...' + p.slice(-22);
+    }
+    return p;
   }
 
   get VideoData(): VideoMetadata {
