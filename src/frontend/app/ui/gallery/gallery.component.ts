@@ -1,24 +1,20 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { AuthenticationService } from '../../model/network/authentication.service';
-import { ActivatedRoute, Params, Router } from '@angular/router';
-import {
-  ContentService,
-  ContentWrapperWithError,
-  DirectoryContent,
-} from './content.service';
-import { GalleryGridComponent } from './grid/grid.gallery.component';
-import { Config } from '../../../../common/config/public/Config';
-import { ShareService } from './share.service';
-import { NavigationService } from '../../model/navigation.service';
-import { UserRoles } from '../../../../common/entities/UserDTO';
-import { interval, Observable, Subscription } from 'rxjs';
-import { PageHelper } from '../../model/page.helper';
-import { PhotoDTO } from '../../../../common/entities/PhotoDTO';
-import { QueryParams } from '../../../../common/QueryParams';
-import { take } from 'rxjs/operators';
-import { GallerySortingService } from './navigator/sorting.service';
-import { MediaDTO } from '../../../../common/entities/MediaDTO';
-import { FilterService } from './filter/filter.service';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {AuthenticationService} from '../../model/network/authentication.service';
+import {ActivatedRoute, Params, Router} from '@angular/router';
+import {ContentService, ContentWrapperWithError, DirectoryContent,} from './content.service';
+import {GalleryGridComponent} from './grid/grid.gallery.component';
+import {Config} from '../../../../common/config/public/Config';
+import {ShareService} from './share.service';
+import {NavigationService} from '../../model/navigation.service';
+import {UserRoles} from '../../../../common/entities/UserDTO';
+import {interval, Observable, Subscription} from 'rxjs';
+import {PageHelper} from '../../model/page.helper';
+import {PhotoDTO} from '../../../../common/entities/PhotoDTO';
+import {QueryParams} from '../../../../common/QueryParams';
+import {take} from 'rxjs/operators';
+import {GallerySortingService} from './navigator/sorting.service';
+import {MediaDTO} from '../../../../common/entities/MediaDTO';
+import {FilterService} from './filter/filter.service';
 
 @Component({
   selector: 'app-gallery',
@@ -26,7 +22,7 @@ import { FilterService } from './filter/filter.service';
   styleUrls: ['./gallery.component.css'],
 })
 export class GalleryComponent implements OnInit, OnDestroy {
-  @ViewChild(GalleryGridComponent, { static: false })
+  @ViewChild(GalleryGridComponent, {static: false})
   grid: GalleryGridComponent;
 
   public showSearchBar = false;
@@ -78,9 +74,9 @@ export class GalleryComponent implements OnInit, OnDestroy {
     // if the timer is longer than 10 years, just do not show it
     if (
       (this.shareService.sharingSubject.value.expires - Date.now()) /
-        1000 /
-        86400 /
-        365 >
+      1000 /
+      86400 /
+      365 >
       10
     ) {
       return;
@@ -147,11 +143,6 @@ export class GalleryComponent implements OnInit, OnDestroy {
         this.updateTimer(x)
       );
     }
-    /*
-        this.subscription.sorting = this.galleryService.sorting.subscribe((): void => {
-          this.sortDirectories();
-        });
-    */
   }
 
   private onRoute = async (params: Params): Promise<void> => {
@@ -173,7 +164,7 @@ export class GalleryComponent implements OnInit, OnDestroy {
       qParams[QueryParams.gallery.sharingKey_query] =
         this.shareService.getSharingKey();
       this.router
-        .navigate(['/gallery', sharing.path], { queryParams: qParams })
+        .navigate(['/gallery', sharing.path], {queryParams: qParams})
         .catch(console.error);
       return;
     }

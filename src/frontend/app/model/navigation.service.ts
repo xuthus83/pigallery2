@@ -51,7 +51,6 @@ export class NavigationService {
   }
 
   public async toGallery(): Promise<boolean> {
-    console.log('toGallery');
     await this.shareService.wait();
     if (this.shareService.isSharing()) {
       return this.router.navigate(['share', this.shareService.getSharingKey()]);
