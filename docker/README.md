@@ -1,7 +1,5 @@
 # PiGallery2 docker installation [![Docker build](https://github.com/bpatrik/pigallery2/workflows/docker-buildx/badge.svg)](https://github.com/bpatrik/pigallery2/actions)
 
-## NOTE: alpine does not support armV7 (like Rapsberry Pi) temporary. See https://github.com/bpatrik/pigallery2/issues/295#issuecomment-1032569180
-
 You can use [docker](https://docs.docker.com/install/) to run PiGallery2. See all available docker tags [here](https://hub.docker.com/r/bpatrik/pigallery2/tags/).
 available tags:
  - `v*` (stable): built from the release with the same version name.
