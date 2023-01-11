@@ -11,34 +11,27 @@
         <div class="error-message" [hidden]="loginError==false" i18n>Wrong password</div>
 
 
-        <div class="mb-3">
-          <label class="sr-only" for="password">Password</label>
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <div class="input-group-text"><span class="oi oi-lock-locked"></span></div>
-            </div>
-            <input type="password"
-                   i18n-placeholder
-                   class="form-control"
-                   name="password"
-                   id="password"
-                   placeholder="Password"
-                   autocomplete="login-password"
-                   [(ngModel)]="password"
-                   required>
-          </div>
+        <div class="input-group mb-3">
+          <div class="input-group-text"><span class="oi oi-lock-locked"></span></div>
+          <input type="password"
+                 i18n-placeholder
+                 class="form-control"
+                 name="password"
+                 id="password"
+                 placeholder="Password"
+                 autocomplete="login-password"
+                 autocorrect="off"
+                 autocapitalize="none"
+                 [(ngModel)]="password"
+                 required>
         </div>
 
-
-        <div class="mb-3">
-          <!-- Button -->
-          <div class="col-sm-12 controls">
-            <button class="btn btn-primary btn-lg btn-block"
-                    [disabled]="!LoginForm.form.valid"
-                    type="submit"
-                    name="action" i18n>Enter
-            </button>
-          </div>
+        <div class="col-sm-12 controls d-grid gap-2">
+          <button class="btn btn-primary btn-lg"
+                  [disabled]="!LoginForm.form.valid"
+                  type="submit"
+                  name="action" i18n>Enter
+          </button>
         </div>
       </form>
 
