@@ -20,7 +20,7 @@
       </thead>
       <tbody>
       <tr *ngFor="let share of shares">
-        <td>{{share.sharingKey}}</td>
+        <td><a [href]="sharingUrl + share.sharingKey">{{share.sharingKey}}</a></td>
         <td>{{share.path}}</td>
         <td>{{share.creator.name}}</td>
         <td>{{share.expires | date}}</td>

@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {SharingDTO} from '../../../../../common/entities/SharingDTO';
 import {SharingListService} from './sharing-list.service';
 import {SettingsService} from '../settings.service';
+import {Config} from '../../../../../common/config/public/Config';
 
 @Component({
   selector: 'app-settigns-sharings-list',
@@ -15,6 +16,7 @@ export class SharingsListComponent implements OnInit {
   constructor(public sharingList: SharingListService,
               private settingsService: SettingsService) {
   }
+  sharingUrl =  Config.Server.publicUrl + '/share/';
 
   ngOnInit(): void {
     this.getSharingList();

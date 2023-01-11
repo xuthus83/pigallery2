@@ -10,6 +10,7 @@ import {ErrorCodes, ErrorDTO} from '../../common/entities/Error';
 import {UserDTO} from '../../common/entities/UserDTO';
 import {ServerTimeEntry} from '../middlewares/ServerTimingMWs';
 import {ClientConfig, TAGS} from '../../common/config/public/ClientConfig';
+import {QueryParams} from '../../common/QueryParams';
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
@@ -65,7 +66,8 @@ export class PublicRouter {
       };
     };
 
-    app.use((req: Request, res: Response, next: NextFunction) => {
+    const addTPl = (req: Request, res: Response, next: NextFunction) => {
+
       res.tpl = {};
 
       res.tpl.user = null;
@@ -100,7 +102,9 @@ export class PublicRouter {
       res.tpl.customHTMLHead = Config.Server.customHTMLHead;
 
       return next();
-    });
+    };
+
+    app.use(addTPl);
 
     app.get('/heartbeat', (req: Request, res: Response) => {
       res.sendStatus(200);
@@ -129,7 +133,8 @@ export class PublicRouter {
         '/',
         '/login',
         '/gallery*',
-        '/share*',
+        '/share/:' + QueryParams.gallery.sharingKey_params,
+        '/shareLogin',
         '/admin',
         '/duplicates',
         '/faces',
@@ -137,6 +142,7 @@ export class PublicRouter {
         '/search*',
       ],
       AuthenticationMWs.tryAuthenticate,
+      addTPl, // add template after authentication was successful
       setLocale,
       renderIndex
     );

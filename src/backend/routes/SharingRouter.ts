@@ -1,10 +1,10 @@
-import { AuthenticationMWs } from '../middlewares/user/AuthenticationMWs';
-import { UserRoles } from '../../common/entities/UserDTO';
-import { RenderingMWs } from '../middlewares/RenderingMWs';
-import { SharingMWs } from '../middlewares/SharingMWs';
+import {AuthenticationMWs} from '../middlewares/user/AuthenticationMWs';
+import {UserRoles} from '../../common/entities/UserDTO';
+import {RenderingMWs} from '../middlewares/RenderingMWs';
+import {SharingMWs} from '../middlewares/SharingMWs';
 import * as express from 'express';
-import { QueryParams } from '../../common/QueryParams';
-import { ServerTimingMWs } from '../middlewares/ServerTimingMWs';
+import {QueryParams} from '../../common/QueryParams';
+import {ServerTimingMWs} from '../middlewares/ServerTimingMWs';
 import {Config} from '../../common/config/private/Config';
 
 export class SharingRouter {
@@ -62,7 +62,7 @@ export class SharingRouter {
 
   private static addDeleteSharing(app: express.Express): void {
     app.delete(
-      [Config.Server.apiPath + '/share/:sharingKey'],
+      [Config.Server.apiPath + '/share/:' + QueryParams.gallery.sharingKey_params],
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.Admin),
       SharingMWs.deleteSharing,
