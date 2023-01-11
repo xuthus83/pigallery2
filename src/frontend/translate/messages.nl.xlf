@@ -872,7 +872,7 @@
           <context context-type="sourcefile">src/common/config/private/PrivateConfig.ts</context>
           <context context-type="linenumber">966</context>
         </context-group>
-        <target>Poort nummer. Meestal wordt poort 80 gebruikt.</target>
+        <target>Poortnummer. Meestal wordt poort 80 gebruikt.</target>
       </trans-unit>
       <trans-unit id="5922774431911312513" datatype="html">
         <source>Server will accept connections from this IPv6 or IPv4 address.</source>
@@ -2656,7 +2656,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/gallery.component.html</context>
           <context context-type="linenumber">40,41</context>
         </context-group>
-        <target>Te veel resultaten om weer te geven, Beperk de zoekopdracht.</target>
+        <target>Te veel resultaten om weer te geven, beperk de zoekopdracht.</target>
       </trans-unit>
       <trans-unit id="5920553521143471222" datatype="html">
         <source>info key: i</source>
