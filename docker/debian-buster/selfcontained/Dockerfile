@@ -33,6 +33,9 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 COPY --from=builder /build/release /app
 VOLUME ["/app/data/config", "/app/data/db", "/app/data/images", "/app/data/tmp"]
+
+# Run build time diagnostics to make sure the app would work after build is finished
+RUN ["node", "./src/backend/index", "--expose-gc",  "--run-diagnostics", "--config-path=/app/diagnostics-config.json"]
 HEALTHCHECK --interval=40s --timeout=30s --retries=3 --start-period=60s \
   CMD wget --quiet --tries=1 --no-check-certificate --spider \
   http://localhost:80/heartbeat || exit 1
