@@ -20,28 +20,23 @@ declare let describe: any;
 declare const after: any;
 declare const it: any;
 const tmpDescribe = describe;
-describe = DBTestHelper.describe({memory: true});
+describe = DBTestHelper.describe({sqlite: true});
 
 describe('GalleryRouter', (sqlHelper: DBTestHelper) => {
   describe = tmpDescribe;
 
-  const tempDir = path.join(__dirname, '../../tmp');
+  const tempDir = sqlHelper.tempDir;
   let server: Server;
   const setUp = async () => {
     await sqlHelper.initDB();
-    await fs.promises.rm(tempDir, {recursive: true, force: true});
     Config.Users.authenticationRequired = false;
     Config.Server.Threading.enabled = false;
     Config.Media.Video.enabled = true;
     Config.Media.folder = path.join(__dirname, '../../assets');
-    Config.Media.tempFolder = path.join(__dirname, '../../tmp');
+    Config.Media.tempFolder = tempDir;
     ProjectPath.reset();
-    //  ProjectPath.ImageFolder = path.join(__dirname, '../../assets');
-    // ProjectPath.TempFolder = tempDir;
-
     server = new Server();
     await server.onStarted.wait();
-
   };
   const tearDown = async () => {
     await sqlHelper.clearDB();

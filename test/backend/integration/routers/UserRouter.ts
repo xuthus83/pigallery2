@@ -48,7 +48,7 @@ describe('UserRouter', () => {
     await SQLConnection.close();
   };
   const tearDown = async () => {
-    await SQLConnection.close();
+    await ObjectManagers.reset();
     await fs.promises.rm(tempDir, {recursive: true, force: true});
   };
 
@@ -126,12 +126,13 @@ describe('UserRouter', () => {
     it('it should authenticate as user with sharing key', async () => {
       Config.Users.authenticationRequired = true;
       Config.Sharing.enabled = true;
+      Config.Sharing.passwordProtected = true;
 
       const sharingKey = (await RouteTestingHelper.createSharing(testUser)).sharingKey;
 
 
       const loginRes = await login(server);
-      const q: any = {};
+      const q: Record<string, string> = {};
       q[QueryParams.gallery.sharingKey_query] = sharingKey;
       const result = await chai.request(server.App)
         .get(Config.Server.apiPath + '/user/me?' + QueryParams.gallery.sharingKey_query + '=' + sharingKey)
@@ -146,28 +147,29 @@ describe('UserRouter', () => {
     it('it should authenticate with sharing key', async () => {
       Config.Users.authenticationRequired = true;
       Config.Sharing.enabled = true;
+      Config.Sharing.passwordProtected = true;
       const sharing = (await RouteTestingHelper.createSharing(testUser));
 
 
-      const q: any = {};
+      const q: Record<string, string> = {};
       q[QueryParams.gallery.sharingKey_query] = sharing.sharingKey;
       const result = await chai.request(server.App)
         .get(Config.Server.apiPath + '/user/me?' + QueryParams.gallery.sharingKey_query + '=' + sharing.sharingKey);
-
 
       checkUserResult(result, RouteTestingHelper.getExpectedSharingUser(sharing));
     });
+
     it('it should not authenticate with sharing key without password', async () => {
       Config.Users.authenticationRequired = true;
       Config.Sharing.enabled = true;
+      Config.Sharing.passwordProtected = true;
       const sharing = (await RouteTestingHelper.createSharing(testUser, 'pass_secret'));
 
 
-      const q: any = {};
+      const q: Record<string, string> = {};
       q[QueryParams.gallery.sharingKey_query] = sharing.sharingKey;
       const result = await chai.request(server.App)
         .get(Config.Server.apiPath + '/user/me?' + QueryParams.gallery.sharingKey_query + '=' + sharing.sharingKey);
-
 
       result.should.have.status(401);
       result.body.should.be.a('object');

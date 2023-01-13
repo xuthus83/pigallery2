@@ -1,6 +1,5 @@
 import {Config} from '../../../../src/common/config/private/Config';
 import {Server} from '../../../../src/backend/server';
-import {LoginCredential} from '../../../../src/common/entities/LoginCredential';
 import {UserDTO, UserRoles} from '../../../../src/common/entities/UserDTO';
 import * as path from 'path';
 import * as fs from 'fs';
@@ -10,7 +9,6 @@ import {Utils} from '../../../../src/common/Utils';
 import {SuperAgentStatic} from 'superagent';
 import {RouteTestingHelper} from './RouteTestingHelper';
 import {QueryParams} from '../../../../src/common/QueryParams';
-import {ErrorCodes} from '../../../../src/common/entities/Error';
 import {DatabaseType} from '../../../../src/common/config/private/PrivateConfig';
 
 
@@ -18,9 +16,10 @@ process.env.NODE_ENV = 'test';
 const chai: any = require('chai');
 const chaiHttp = require('chai-http');
 const should = chai.should();
+const {expect} = chai;
 chai.use(chaiHttp);
 
-describe('SharingRouter', () => {
+describe('PublicRouter', () => {
 
   const testUser: UserDTO = {
     id: 1,
@@ -52,60 +51,58 @@ describe('SharingRouter', () => {
     await fs.promises.rm(tempDir, {recursive: true, force: true});
   };
 
-  const shouldBeValidUser = (result: any, user: any) => {
+  const shouldHaveInjectedUser = (result: any, user: any) => {
 
     result.should.have.status(200);
-    result.body.should.be.a('object');
-    should.equal(result.body.error, null);
-    result.body.result.csrfToken.should.be.a('string');
-    const {csrfToken, ...u} = result.body.result;
-    u.should.deep.equal(user);
-  };
+    result.text.should.be.a('string');
+    result.body.should.deep.equal({});
+    const startToken = 'ServerInject = {user:';
+    const endToken = ', ConfigInject';
 
-  const shareLogin = async (srv: Server, sharingKey: string, password?: string): Promise<any> => {
-    return (chai.request(srv.App) as SuperAgentStatic)
-      .post(Config.Server.apiPath + '/share/login?' + QueryParams.gallery.sharingKey_query + '=' + sharingKey)
-      .send({password});
+    const u = JSON.parse(result.text.substring(result.text.indexOf(startToken) + startToken.length, result.text.indexOf(endToken)));
 
+    delete u?.csrfToken;
+    expect(u).to.deep.equal(user);
   };
 
 
-  describe('/POST share/login', () => {
+  describe('/Get share/:' + QueryParams.gallery.sharingKey_params, () => {
 
     beforeEach(setUp);
     afterEach(tearDown);
 
-    it('should login with passworded share', async () => {
+    const fistLoad = async (srv: Server, sharingKey: string): Promise<any> => {
+      return (chai.request(srv.App) as SuperAgentStatic)
+        .get('/share/' + sharingKey);
+    };
+
+    it('should not get default user with passworded share share without password', async () => {
       Config.Sharing.passwordProtected = true;
       const sharing = await RouteTestingHelper.createSharing(testUser, 'secret_pass');
-      const res = await shareLogin(server, sharing.sharingKey, sharing.password);
-      shouldBeValidUser(res, RouteTestingHelper.getExpectedSharingUser(sharing));
+      const res = await fistLoad(server, sharing.sharingKey);
+      shouldHaveInjectedUser(res, null);
     });
 
-    it('should not login with passworded share without password', async () => {
-      Config.Sharing.passwordProtected = true;
-      const sharing = await RouteTestingHelper.createSharing(testUser, 'secret_pass');
-      const result = await shareLogin(server, sharing.sharingKey);
 
-      result.should.have.status(401);
-      result.body.should.be.a('object');
-      result.body.error.should.be.a('object');
-      should.equal(result.body.error.code, ErrorCodes.CREDENTIAL_NOT_FOUND);
-    });
-
-    it('should not login with passworded share but password protection disabled', async () => {
-      Config.Sharing.passwordProtected = false;
-      const sharing = await RouteTestingHelper.createSharing(testUser, 'secret_pass');
-      const res = await shareLogin(server, sharing.sharingKey);
-
-      shouldBeValidUser(res, RouteTestingHelper.getExpectedSharingUser(sharing));
-    });
-
-    it('should login with no-password share', async () => {
+    it('should get default user with no-password share', async () => {
       Config.Sharing.passwordProtected = true;
       const sharing = await RouteTestingHelper.createSharing(testUser);
-      const res = await shareLogin(server, sharing.sharingKey, sharing.password);
-      shouldBeValidUser(res, RouteTestingHelper.getExpectedSharingUser(sharing));
+      const res = await fistLoad(server, sharing.sharingKey);
+      shouldHaveInjectedUser(res, RouteTestingHelper.getExpectedSharingUser(sharing));
+    });
+
+    it('should get default user for no-password share when password protection disabled', async () => {
+      Config.Sharing.passwordProtected = false;
+      const sharing = await RouteTestingHelper.createSharing(testUser);
+      const res = await fistLoad(server, sharing.sharingKey);
+      shouldHaveInjectedUser(res, RouteTestingHelper.getExpectedSharingUser(sharing));
+    });
+
+    it('should get default user for passworded share when password protection disabled', async () => {
+      Config.Sharing.passwordProtected = false;
+      const sharing = await RouteTestingHelper.createSharing(testUser, 'secret_pass');
+      const res = await fistLoad(server, sharing.sharingKey);
+      shouldHaveInjectedUser(res, RouteTestingHelper.getExpectedSharingUser(sharing));
     });
 
 

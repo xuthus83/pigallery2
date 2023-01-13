@@ -84,7 +84,6 @@ export class DBTestHelper {
   }
 
   static describe(settingsOverride: {
-    memory?: boolean;
     sqlite?: boolean;
     mysql?: boolean;
   } = {}): (name: string, tests: (helper?: DBTestHelper) => void) => void {

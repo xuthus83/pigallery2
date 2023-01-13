@@ -6,6 +6,7 @@ import {Server} from '../../../../../src/backend/server';
 import {DatabaseType, ServerConfig} from '../../../../../src/common/config/private/PrivateConfig';
 import {ProjectPath} from '../../../../../src/backend/ProjectPath';
 import {TAGS} from '../../../../../src/common/config/public/ClientConfig';
+import {ObjectManagers} from '../../../../../src/backend/model/ObjectManagers';
 
 process.env.NODE_ENV = 'test';
 const chai: any = require('chai');
@@ -26,7 +27,7 @@ describe('SettingsRouter', () => {
 
 
   afterEach(async () => {
-    await SQLConnection.close();
+    await ObjectManagers.reset();
     await fs.promises.rm(tempDir, {recursive: true, force: true});
   });
 
