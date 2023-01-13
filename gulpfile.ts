@@ -1,6 +1,6 @@
 import * as gulp from 'gulp';
 import * as fs from 'fs';
-import { promises as fsp } from 'fs';
+import {promises as fsp} from 'fs';
 import * as path from 'path';
 import * as util from 'util';
 import * as zip from 'gulp-zip';
@@ -10,9 +10,9 @@ import * as child_process from 'child_process';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import * as jeditor from 'gulp-json-editor';
-import { XLIFF } from 'xlf-google-translate';
-import { PrivateConfigClass } from './src/common/config/private/Config';
-import { ConfigClassBuilder } from 'typeconfig/src/decorators/builders/ConfigClassBuilder';
+import {XLIFF} from 'xlf-google-translate';
+import {PrivateConfigClass} from './src/common/config/private/Config';
+import {ConfigClassBuilder} from 'typeconfig/src/decorators/builders/ConfigClassBuilder';
 
 const execPr = util.promisify(child_process.exec);
 
@@ -106,12 +106,11 @@ const resetAppModule = async (language: string): Promise<void> => {
 
 const createFrontendTask = (
   type: string,
-  language: string,
   script: string
 ): void => {
   gulp.task(type, async (cb): Promise<void> => {
     try {
-      const { stdout, stderr } = await execPr(script);
+      const {stdout, stderr} = await execPr(script);
       console.log(stdout);
       console.error(stderr);
     } catch (e) {
@@ -154,7 +153,6 @@ gulp.task(
     const tasks = [];
     createFrontendTask(
       'build-frontend-release default',
-      'all',
       'ng build --prod  --no-progress  --output-path=./release/dist'
     );
     tasks.push('build-frontend-release default');
@@ -171,14 +169,14 @@ gulp.task('copy-static', (): any =>
         //  'package-lock.json', should not add, it keeps optional packages optional even with --force-opt-packages.
         'LICENSE',
       ],
-      { base: '.' }
+      {base: '.'}
     )
     .pipe(gulp.dest('./release'))
 );
 
 gulp.task('copy-package', (): any =>
   gulp
-    .src(['package.json'], { base: '.' })
+    .src(['package.json'], {base: '.'})
     .pipe(
       jeditor(
         (json: {
@@ -197,7 +195,7 @@ gulp.task('copy-package', (): any =>
           buildCommitHash: string;
         } => {
           delete json.devDependencies;
-          json.scripts = { start: 'node ./src/backend/index.js' };
+          json.scripts = {start: 'node ./src/backend/index.js'};
 
           if (getSwitch('skip-opt-packages')) {
             const skipPackages = getSwitch('skip-opt-packages')
@@ -227,7 +225,8 @@ gulp.task('copy-package', (): any =>
               .toString()
               .trim();
             // eslint-disable-next-line no-empty
-          } catch (e) {}
+          } catch (e) {
+          }
 
           return json;
         }
@@ -238,7 +237,7 @@ gulp.task('copy-package', (): any =>
 
 gulp.task('zip-release', (): any =>
   gulp
-    .src(['release/**/*'], { base: './release' })
+    .src(['release/**/*'], {base: './release'})
     .pipe(zip('pigallery2.zip'))
     .pipe(gulp.dest('.'))
 );
@@ -260,15 +259,7 @@ const simpleBuild = (isProd: boolean): any => {
   if (isProd) {
     cmd += ' --prod --no-extract-licenses ';
   }
-  if (!process.env['CI']) {
-    createFrontendTask('build-frontend default', 'all', cmd);
-  } else {
-    createFrontendTask(
-      'build-frontend default',
-      'all',
-      cmd + '--localize=false'
-    );
-  }
+  createFrontendTask('build-frontend default', cmd);
   tasks.push('build-frontend default');
   return gulp.series(...tasks);
 };
@@ -277,9 +268,9 @@ gulp.task('extract-locale', async (cb): Promise<any> => {
   console.log('creating source translation file:  locale.source.xlf');
   try {
     {
-      const { stdout, stderr } = await execPr(
+      const {stdout, stderr} = await execPr(
         'ng extract-i18n --out-file=locale.source.xlf  --format=xlf',
-        { maxBuffer: 1024 * 1024 }
+        {maxBuffer: 1024 * 1024}
       );
       console.log(stdout);
       console.error(stderr);
@@ -297,15 +288,15 @@ const translate = async (
 ): Promise<void> => {
   try {
     const localsStr = '"[\\"' + list.join('\\",\\"') + '\\"]"';
-    const { stdout, stderr } = await execPr(
+    const {stdout, stderr} = await execPr(
       'xlf-google-translate ' +
-        '--source-lang="en" ' +
-        '--source-file="./locale.source.xlf" ' +
-        '--destination-filename="messages" ' +
-        '--destination-folder="./src/frontend/"' +
-        translationFolder +
-        ' --destination-languages=' +
-        localsStr
+      '--source-lang="en" ' +
+      '--source-file="./locale.source.xlf" ' +
+      '--destination-filename="messages" ' +
+      '--destination-folder="./src/frontend/"' +
+      translationFolder +
+      ' --destination-languages=' +
+      localsStr
     );
     console.log(stdout);
     console.error(stderr);
@@ -330,7 +321,7 @@ const merge = async (list: any[], cb: (err?: any) => void): Promise<void> => {
       '--destination-languages=' +
       localsStr;
     console.log(command);
-    const { stdout, stderr } = await execPr(command);
+    const {stdout, stderr} = await execPr(command);
     console.log(stdout);
     console.error(stderr);
     cb();
@@ -367,14 +358,14 @@ gulp.task('add-translation-only', (cb): any => {
   }
   if (lng == null) {
     console.error(
-      "Error: set language with '--' e.g: npm run add-translation -- --en"
+      'Error: set language with \'--\' e.g: npm run add-translation -- --en'
     );
     return cb();
   }
   if (languages.indexOf(lng) !== -1) {
     console.error(
-      "Error: language already exists, can't add. These language(s) already exist(s): " +
-        languages
+      'Error: language already exists, can\'t add. These language(s) already exist(s): ' +
+      languages
     );
     return cb();
   }
