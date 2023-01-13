@@ -12,6 +12,7 @@ import {NavigationService} from '../../model/navigation.service';
 export class ShareLoginComponent implements OnInit {
   password: string;
   loginError = false;
+  inProgress = false;
   title: string;
 
   constructor(
@@ -30,6 +31,7 @@ export class ShareLoginComponent implements OnInit {
   async onLogin(): Promise<void> {
     this.loginError = false;
 
+    this.inProgress = true;
     try {
       await this.authService.shareLogin(this.password);
     } catch (error) {
@@ -40,6 +42,8 @@ export class ShareLoginComponent implements OnInit {
         this.loginError = true;
       }
     }
+
+    this.inProgress = false;
   }
 }
 

@@ -28,7 +28,7 @@
 
         <div class="col-sm-12 controls d-grid gap-2">
           <button class="btn btn-primary btn-lg"
-                  [disabled]="!LoginForm.form.valid"
+                  [disabled]="!LoginForm.form.valid || inProgress"
                   type="submit"
                   name="action" i18n>Enter
           </button>

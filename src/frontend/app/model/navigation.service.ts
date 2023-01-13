@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 
-import {Router} from '@angular/router';
+import {IsActiveMatchOptions, Router} from '@angular/router';
 import {ShareService} from '../ui/gallery/share.service';
 import {Config} from '../../../common/config/public/Config';
 import {NavigationLinkTypes} from '../../../common/config/public/ClientConfig';
@@ -12,8 +12,10 @@ export class NavigationService {
 
   public isLoginPage(): boolean {
     return (
-      this.router.isActive('login', true) ||
-      this.router.isActive('shareLogin', true)
+      this.router.isActive('login',
+        {paths: 'exact', queryParams: 'exact', fragment: 'ignored', matrixParams: 'ignored'} as IsActiveMatchOptions) ||
+      this.router.isActive('shareLogin',
+        {paths: 'exact', queryParams: 'ignored', fragment: 'ignored', matrixParams: 'ignored'} as IsActiveMatchOptions)
     );
   }
 
