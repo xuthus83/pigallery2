@@ -39,10 +39,10 @@ App CLI options:
   --Server-Threading-thumbnailThreads              Number of threads that are used to generate thumbnails. If 0, number of 'CPU cores -1' threads will be used. (default: 0)
   --Server-Log-level                               Logging level. (default: 'info')
   --Server-Log-sqlLevel                            Logging level for SQL queries. (default: 'error')
-  --Server-Log-logServerTiming                     If enabled. The app ads "Server-Timing" http header to the response. (default: false)
+  --Server-Log-logServerTiming                     If enabled, the app ads "Server-Timing" http header to the response. (default: false)
   --Users-authenticationRequired                   Enables user management with login to password protect the gallery. (default: true)
   --Users-unAuthenticatedUserRole                  Default user right when password protection is disabled. (default: 'Admin')
-  --Users-enforcedUsers                            Creates these users in the DB if they do not exist. If a user with this name exist, it won't be overwritten, even if the role is different. (default: [])
+  --Users-enforcedUsers                            Creates these users in the DB during startup if they do not exist. If a user with this name exist, it won't be overwritten, even if the role is different. (default: [])
   --Gallery-enableCache                            Caches directory contents and search results for better performance. (default: true)
   --Gallery-enableOnScrollRendering                Those thumbnails get higher priority that are visible on the screen. (default: true)
   --Gallery-defaultPhotoSortingMethod              Default sorting method for photo and video in a directory results. (default: 'ascDate')
@@ -54,11 +54,14 @@ App CLI options:
   --Gallery-captionFirstNaming                     Show the caption (IPTC 120) tags from the EXIF data instead of the filenames. (default: false)
   --Gallery-enableDownloadZip                      Enable download zip of a directory contents Directory flattening. (Does not work for searches.) (default: false)
   --Gallery-enableDirectoryFlattening              Adds a button to flattens the file structure, by listing the content of all subdirectories. (Won't work if the gallery has multiple folders with the same path.) (default: false)
-  --Gallery-defaultSlideshowSpeed                  Default time interval for displaying a photo in the slide show. (default: 5)
+  --Gallery-Lightbox-defaultSlideshowSpeed         Default time interval for displaying a photo in the slide show. (default: 5)
+  --Gallery-Lightbox-captionAlwaysOn               If enabled, lightbox will always show caption by default, not only on hover. (default: false)
+  --Gallery-Lightbox-facesAlwaysOn                 If enabled, lightbox will always show faces by default, not only on hover. (default: false)
+  --Gallery-Lightbox-loopVideos                    If enabled, lightbox will loop videos by default. (default: false)
   --Media-Thumbnail-iconSize                       Icon size (used on maps). (default: 45)
   --Media-Thumbnail-personThumbnailSize            Person (face) thumbnail size. (default: 200)
   --Media-Thumbnail-thumbnailSizes                 Size of the thumbnails. The best matching size will be generated. More sizes give better quality, but use more storage and CPU to render. If size is 240, that shorter side of the thumbnail will have 160 pixels. (default: [240,480])
-  --Media-Thumbnail-useLanczos3                    if true, 'lanczos3' will used to scale photos, otherwise faster but lowe quality 'nearest'. (default: true)
+  --Media-Thumbnail-useLanczos3                    if true, 'lanczos3' will used to scale photos, otherwise faster but lower quality 'nearest'. (default: true)
   --Media-Thumbnail-quality                        Between 0-100. (default: 80)
   --Media-Thumbnail-personFaceMargin               Person face size ratio on the face thumbnail. (default: 0.6)
   --Media-Video-enabled                             (default: true)
@@ -72,7 +75,8 @@ App CLI options:
   --Media-Video-transcoding-webmCodec               (default: 'libvpx')
   --Media-Video-transcoding-crf                    The range of the Constant Rate Factor (CRF) scale is 0–51, where 0 is lossless, 23 is the default, and 51 is worst quality possible. (default: 23)
   --Media-Video-transcoding-preset                 A preset is a collection of options that will provide a certain encoding speed to compression ratio. A slower preset will provide better compression (compression is quality per filesize). (default: 'medium')
-  --Media-Video-transcoding-customOptions          It will be sent to ffmpeg as it is, as custom options. (default: [])
+  --Media-Video-transcoding-customOutputOptions    It will be sent to ffmpeg as it is, as custom output options. (default: [])
+  --Media-Video-transcoding-customInputOptions     It will be sent to ffmpeg as it is, as custom input options. (default: [])
   --Media-Photo-Converting-enabled                 Enable photo converting. (default: true)
   --Media-Photo-Converting-loadFullImageOnZoom     Enables loading the full resolution image on zoom in the ligthbox (preview). (default: true)
   --Media-Photo-Converting-onTheFly                Converts photos on the fly, when they are requested. (default: true)
@@ -114,8 +118,8 @@ App CLI options:
   --Faces-writeAccessMinRole                       Required minimum right to star (favourite) a face. (default: 'Admin')
   --Faces-readAccessMinRole                        Required minimum right to show the faces tab. (default: 'User')
   --RandomPhoto-enabled                            Enables random link generation. (default: true)
-  --Database-type                                   (default: 'sqlite')
-  --Database-dbFolder                              All file-based data will be stored here (sqlite database, user database in case of memory db, job history data). (default: 'db')
+  --Database-type                                  SQLite is recommended. (default: 'sqlite')
+  --Database-dbFolder                              All file-based data will be stored here (sqlite database, job history data). (default: 'db')
   --Database-sqlite-DBFileName                     Sqlite will save the db with this filename. (default: 'sqlite.db')
   --Database-mysql-host                             (default: 'localhost')
   --Database-mysql-port                             (default: 3306)
@@ -148,10 +152,10 @@ Environmental variables:
   Server-Threading-thumbnailThreads            Number of threads that are used to generate thumbnails. If 0, number of 'CPU cores -1' threads will be used. (default: 0)
   Server-Log-level                             Logging level. (default: 'info')
   Server-Log-sqlLevel                          Logging level for SQL queries. (default: 'error')
-  Server-Log-logServerTiming                   If enabled. The app ads "Server-Timing" http header to the response. (default: false)
+  Server-Log-logServerTiming                   If enabled, the app ads "Server-Timing" http header to the response. (default: false)
   Users-authenticationRequired                 Enables user management with login to password protect the gallery. (default: true)
   Users-unAuthenticatedUserRole                Default user right when password protection is disabled. (default: 'Admin')
-  Users-enforcedUsers                          Creates these users in the DB if they do not exist. If a user with this name exist, it won't be overwritten, even if the role is different. (default: [])
+  Users-enforcedUsers                          Creates these users in the DB during startup if they do not exist. If a user with this name exist, it won't be overwritten, even if the role is different. (default: [])
   Gallery-enableCache                          Caches directory contents and search results for better performance. (default: true)
   Gallery-enableOnScrollRendering              Those thumbnails get higher priority that are visible on the screen. (default: true)
   Gallery-defaultPhotoSortingMethod            Default sorting method for photo and video in a directory results. (default: 'ascDate')
@@ -163,11 +167,14 @@ Environmental variables:
   Gallery-captionFirstNaming                   Show the caption (IPTC 120) tags from the EXIF data instead of the filenames. (default: false)
   Gallery-enableDownloadZip                    Enable download zip of a directory contents Directory flattening. (Does not work for searches.) (default: false)
   Gallery-enableDirectoryFlattening            Adds a button to flattens the file structure, by listing the content of all subdirectories. (Won't work if the gallery has multiple folders with the same path.) (default: false)
-  Gallery-defaultSlideshowSpeed                Default time interval for displaying a photo in the slide show. (default: 5)
+  Gallery-Lightbox-defaultSlideshowSpeed       Default time interval for displaying a photo in the slide show. (default: 5)
+  Gallery-Lightbox-captionAlwaysOn             If enabled, lightbox will always show caption by default, not only on hover. (default: false)
+  Gallery-Lightbox-facesAlwaysOn               If enabled, lightbox will always show faces by default, not only on hover. (default: false)
+  Gallery-Lightbox-loopVideos                  If enabled, lightbox will loop videos by default. (default: false)
   Media-Thumbnail-iconSize                     Icon size (used on maps). (default: 45)
   Media-Thumbnail-personThumbnailSize          Person (face) thumbnail size. (default: 200)
   Media-Thumbnail-thumbnailSizes               Size of the thumbnails. The best matching size will be generated. More sizes give better quality, but use more storage and CPU to render. If size is 240, that shorter side of the thumbnail will have 160 pixels. (default: [240,480])
-  Media-Thumbnail-useLanczos3                  if true, 'lanczos3' will used to scale photos, otherwise faster but lowe quality 'nearest'. (default: true)
+  Media-Thumbnail-useLanczos3                  if true, 'lanczos3' will used to scale photos, otherwise faster but lower quality 'nearest'. (default: true)
   Media-Thumbnail-quality                      Between 0-100. (default: 80)
   Media-Thumbnail-personFaceMargin             Person face size ratio on the face thumbnail. (default: 0.6)
   Media-Video-enabled                           (default: true)
@@ -181,7 +188,8 @@ Environmental variables:
   Media-Video-transcoding-webmCodec             (default: 'libvpx')
   Media-Video-transcoding-crf                  The range of the Constant Rate Factor (CRF) scale is 0–51, where 0 is lossless, 23 is the default, and 51 is worst quality possible. (default: 23)
   Media-Video-transcoding-preset               A preset is a collection of options that will provide a certain encoding speed to compression ratio. A slower preset will provide better compression (compression is quality per filesize). (default: 'medium')
-  Media-Video-transcoding-customOptions        It will be sent to ffmpeg as it is, as custom options. (default: [])
+  Media-Video-transcoding-customOutputOptions  It will be sent to ffmpeg as it is, as custom output options. (default: [])
+  Media-Video-transcoding-customInputOptions   It will be sent to ffmpeg as it is, as custom input options. (default: [])
   Media-Photo-Converting-enabled               Enable photo converting. (default: true)
   Media-Photo-Converting-loadFullImageOnZoom   Enables loading the full resolution image on zoom in the ligthbox (preview). (default: true)
   Media-Photo-Converting-onTheFly              Converts photos on the fly, when they are requested. (default: true)
@@ -223,8 +231,8 @@ Environmental variables:
   Faces-writeAccessMinRole                     Required minimum right to star (favourite) a face. (default: 'Admin')
   Faces-readAccessMinRole                      Required minimum right to show the faces tab. (default: 'User')
   RandomPhoto-enabled                          Enables random link generation. (default: true)
-  Database-type                                 (default: 'sqlite')
-  Database-dbFolder                            All file-based data will be stored here (sqlite database, user database in case of memory db, job history data). (default: 'db')
+  Database-type                                SQLite is recommended. (default: 'sqlite')
+  Database-dbFolder                            All file-based data will be stored here (sqlite database, job history data). (default: 'db')
   Database-sqlite-DBFileName                   Sqlite will save the db with this filename. (default: 'sqlite.db')
   Database-mysql-host                           (default: 'localhost')
   MYSQL_HOST                                    same as Database-mysql-host
@@ -300,7 +308,7 @@ Environmental variables:
             ],
             "sqlLevel": "error",
             "//[logServerTiming]": [
-                "If enabled. The app ads \"Server-Timing\" http header to the response."
+                "If enabled, the app ads \"Server-Timing\" http header to the response."
             ],
             "logServerTiming": false
         }
@@ -315,7 +323,7 @@ Environmental variables:
         ],
         "unAuthenticatedUserRole": "Admin",
         "//[enforcedUsers]": [
-            "Creates these users in the DB if they do not exist. If a user with this name exist, it won't be overwritten, even if the role is different."
+            "Creates these users in the DB during startup if they do not exist. If a user with this name exist, it won't be overwritten, even if the role is different."
         ],
         "enforcedUsers": []
     },
@@ -376,10 +384,24 @@ Environmental variables:
             "Adds a button to flattens the file structure, by listing the content of all subdirectories. (Won't work if the gallery has multiple folders with the same path.)"
         ],
         "enableDirectoryFlattening": false,
-        "//[defaultSlideshowSpeed]": [
-            "Default time interval for displaying a photo in the slide show."
-        ],
-        "defaultSlideshowSpeed": 5
+        "Lightbox": {
+            "//[defaultSlideshowSpeed]": [
+                "Default time interval for displaying a photo in the slide show."
+            ],
+            "defaultSlideshowSpeed": 5,
+            "//[captionAlwaysOn]": [
+                "If enabled, lightbox will always show caption by default, not only on hover."
+            ],
+            "captionAlwaysOn": false,
+            "//[facesAlwaysOn]": [
+                "If enabled, lightbox will always show faces by default, not only on hover."
+            ],
+            "facesAlwaysOn": false,
+            "//[loopVideos]": [
+                "If enabled, lightbox will loop videos by default."
+            ],
+            "loopVideos": false
+        }
     },
     "Media": {
         "Thumbnail": {
@@ -399,7 +421,7 @@ Environmental variables:
                 480
             ],
             "//[useLanczos3]": [
-                "if true, 'lanczos3' will used to scale photos, otherwise faster but lowe quality 'nearest'."
+                "if true, 'lanczos3' will used to scale photos, otherwise faster but lower quality 'nearest'."
             ],
             "useLanczos3": true,
             "//[quality]": [
@@ -472,10 +494,14 @@ Environmental variables:
                     "A preset is a collection of options that will provide a certain encoding speed to compression ratio. A slower preset will provide better compression (compression is quality per filesize)."
                 ],
                 "preset": "medium",
-                "//[customOptions]": [
-                    "It will be sent to ffmpeg as it is, as custom options."
+                "//[customOutputOptions]": [
+                    "It will be sent to ffmpeg as it is, as custom output options."
                 ],
-                "customOptions": []
+                "customOutputOptions": [],
+                "//[customInputOptions]": [
+                    "It will be sent to ffmpeg as it is, as custom input options."
+                ],
+                "customInputOptions": []
             }
         },
         "Photo": {
@@ -680,9 +706,12 @@ Environmental variables:
         "enabled": true
     },
     "Database": {
+        "//[type]": [
+            "SQLite is recommended."
+        ],
         "type": "sqlite",
         "//[dbFolder]": [
-            "All file-based data will be stored here (sqlite database, user database in case of memory db, job history data)."
+            "All file-based data will be stored here (sqlite database, job history data)."
         ],
         "dbFolder": "db",
         "sqlite": {

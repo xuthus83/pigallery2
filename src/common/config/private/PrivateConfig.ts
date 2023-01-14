@@ -766,14 +766,28 @@ export class VideoTranscodingConfig {
   @ConfigProperty({
     arrayType: 'string',
     tags: {
-      name: $localize`Custom Options`,
+      name: $localize`Custom Output Options`,
       priority: ConfigPriority.underTheHood,
       hint: '-pass 2; -minrate 1M; -maxrate 1M; -bufsize 2M',
       uiAllowSpaces: true
     },
-    description: $localize`It will be sent to ffmpeg as it is, as custom options.`,
+    description: $localize`It will be sent to ffmpeg as it is, as custom output options.`,
   })
-  customOptions: string[] = [];
+  customOutputOptions: string[] = [];
+
+  @ConfigProperty({
+    arrayType: 'string',
+    tags: {
+      name: $localize`Custom Input Options`,
+      priority: ConfigPriority.underTheHood,
+      hint: '-option1; -option2 param2; -option3; -option4 param4',
+      githubIssue: 592,
+      uiAllowSpaces: true
+    } as TAGS,
+    description: $localize`It will be sent to ffmpeg as it is, as custom input options.`,
+  })
+  customInputOptions: string[] = [];
+
 }
 
 @SubConfigClass({softReadonly: true})

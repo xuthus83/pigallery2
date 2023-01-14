@@ -78,6 +78,7 @@ export class VideoProcessing {
 
     const renderInput: VideoConverterInput = {
       videoPath,
+      input: {customOptions: Config.Media.Video.transcoding.customInputOptions},
       output: {
         path: outPath,
         codec: Config.Media.Video.transcoding.format === 'mp4' ?
@@ -86,7 +87,7 @@ export class VideoProcessing {
         format: Config.Media.Video.transcoding.format,
         crf: Config.Media.Video.transcoding.crf,
         preset: Config.Media.Video.transcoding.preset,
-        customOptions: Config.Media.Video.transcoding.customOptions,
+        customOptions: Config.Media.Video.transcoding.customOutputOptions,
       },
     };
 

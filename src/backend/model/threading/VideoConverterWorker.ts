@@ -1,16 +1,14 @@
-import { Logger } from '../../Logger';
-import { promises as fsp } from 'fs';
-import { FfmpegCommand } from 'fluent-ffmpeg';
-import { FFmpegFactory } from '../FFmpegFactory';
-import {
-  FFmpegPresets,
-  videoCodecType,
-  videoFormatType,
-  videoResolutionType,
-} from '../../../common/config/private/PrivateConfig';
+import {Logger} from '../../Logger';
+import {promises as fsp} from 'fs';
+import {FfmpegCommand} from 'fluent-ffmpeg';
+import {FFmpegFactory} from '../FFmpegFactory';
+import {FFmpegPresets, videoCodecType, videoFormatType, videoResolutionType,} from '../../../common/config/private/PrivateConfig';
 
 export interface VideoConverterInput {
   videoPath: string;
+  input: {
+    customOptions?: string[];
+  };
   output: {
     path: string;
     bitRate?: number;
@@ -55,6 +53,11 @@ export class VideoConverterWorker {
         .on('error', (e: any) => {
           reject('[FFmpeg] ' + e.toString() + ' executed: ' + executedCmd);
         });
+
+      // set custom input options
+      if (input.input.customOptions) {
+        command.inputOptions(input.input.customOptions);
+      }
       // set video bitrate
       if (input.output.bitRate) {
         command.videoBitrate(input.output.bitRate / 1024 + 'k');

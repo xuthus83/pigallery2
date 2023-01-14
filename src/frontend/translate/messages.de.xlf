@@ -10,7 +10,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/common/config/private/PrivateConfig.ts</context>
-          <context context-type="linenumber">973</context>
+          <context context-type="linenumber">986</context>
         </context-group>
         <target>Host</target>
       </trans-unit>
@@ -22,7 +22,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/common/config/private/PrivateConfig.ts</context>
-          <context context-type="linenumber">961</context>
+          <context context-type="linenumber">974</context>
         </context-group>
         <target>Port</target>
       </trans-unit>
@@ -34,7 +34,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/common/config/private/PrivateConfig.ts</context>
-          <context context-type="linenumber">1029</context>
+          <context context-type="linenumber">1042</context>
         </context-group>
         <target>Datenbank</target>
       </trans-unit>
@@ -82,7 +82,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/sharelogin/share-login.component.html</context>
-          <context context-type="linenumber">25,26</context>
+          <context context-type="linenumber">21,22</context>
         </context-group>
         <target>Passwort</target>
       </trans-unit>
@@ -422,7 +422,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/common/config/private/PrivateConfig.ts</context>
-          <context context-type="linenumber">984</context>
+          <context context-type="linenumber">997</context>
         </context-group>
         <target>Einfädeln (Threading)</target>
       </trans-unit>
@@ -578,7 +578,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/common/config/private/PrivateConfig.ts</context>
-          <context context-type="linenumber">808</context>
+          <context context-type="linenumber">821</context>
         </context-group>
         <target>Auflösung</target>
       </trans-unit>
@@ -662,27 +662,43 @@
         </context-group>
         <target>Eine Voreinstellung ist eine Sammlung von Optionen, die ein bestimmtes Verhältnis von Codierungsgeschwindigkeit zu Komprimierung bereitstellen. Eine langsamere Voreinstellung bietet eine bessere Komprimierung (Komprimierung ist Qualität pro Dateigröße).</target>
       </trans-unit>
-      <trans-unit id="3703299113324006523" datatype="html">
-        <source>Custom Options</source>
+      <trans-unit id="875741467182223722" datatype="html">
+        <source>Custom Output Options</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/common/config/private/PrivateConfig.ts</context>
           <context context-type="linenumber">769</context>
         </context-group>
-        <target>Benutzerdefinierte Optionen</target>
+        <target>Custom Output Options</target>
       </trans-unit>
-      <trans-unit id="4229754100138290140" datatype="html">
-        <source>It will be sent to ffmpeg as it is, as custom options.</source>
+      <trans-unit id="4633198251733160919" datatype="html">
+        <source>It will be sent to ffmpeg as it is, as custom output options.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/common/config/private/PrivateConfig.ts</context>
           <context context-type="linenumber">774</context>
         </context-group>
-        <target>It will be sent to ffmpeg as it is, as custom options.</target>
+        <target>It will be sent to ffmpeg as it is, as custom output options.</target>
+      </trans-unit>
+      <trans-unit id="2012036823425449881" datatype="html">
+        <source>Custom Input Options</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/common/config/private/PrivateConfig.ts</context>
+          <context context-type="linenumber">781</context>
+        </context-group>
+        <target>Custom Input Options</target>
+      </trans-unit>
+      <trans-unit id="4952811342387778937" datatype="html">
+        <source>It will be sent to ffmpeg as it is, as custom input options.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/common/config/private/PrivateConfig.ts</context>
+          <context context-type="linenumber">786</context>
+        </context-group>
+        <target>It will be sent to ffmpeg as it is, as custom input options.</target>
       </trans-unit>
       <trans-unit id="3617023035573084133" datatype="html">
         <source>Video transcoding</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/common/config/private/PrivateConfig.ts</context>
-          <context context-type="linenumber">783</context>
+          <context context-type="linenumber">796</context>
         </context-group>
         <target>Video transcoding</target>
       </trans-unit>
@@ -690,7 +706,7 @@
         <source>To ensure smooth video playback, video transcoding is recommended to a lower bit rate than the server's upload rate.   The transcoded videos will be save to the thumbnail folder.  You can trigger the transcoding manually, but you can also create an automatic encoding job in advanced settings mode.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/common/config/private/PrivateConfig.ts</context>
-          <context context-type="linenumber">787</context>
+          <context context-type="linenumber">800</context>
         </context-group>
         <target>To ensure smooth video playback, video transcoding is recommended to a lower bit rate than the server's upload rate. The transcoded videos will be save to the thumbnail folder. You can trigger the transcoding manually, but you can also create an automatic encoding job in advanced settings mode.</target>
       </trans-unit>
@@ -698,7 +714,7 @@
         <source>On the fly converting</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/common/config/private/PrivateConfig.ts</context>
-          <context context-type="linenumber">796</context>
+          <context context-type="linenumber">809</context>
         </context-group>
         <target>Im laufenden Betrieb konvertieren</target>
       </trans-unit>
@@ -706,7 +722,7 @@
         <source>Converts photos on the fly, when they are requested.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/common/config/private/PrivateConfig.ts</context>
-          <context context-type="linenumber">802</context>
+          <context context-type="linenumber">815</context>
         </context-group>
         <target>Konvertiert Fotos im laufenden Betrieb, wenn sie angefordert werden.</target>
       </trans-unit>
@@ -714,7 +730,7 @@
         <source>The shorter edge of the converted photo will be scaled down to this, while keeping the aspect ratio.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/common/config/private/PrivateConfig.ts</context>
-          <context context-type="linenumber">815</context>
+          <context context-type="linenumber">828</context>
         </context-group>
         <target>Der kürzere Rand des konvertierten Fotos wird unter Beibehaltung des Seitenverhältnisses darauf verkleinert.</target>
       </trans-unit>
@@ -722,7 +738,7 @@
         <source>Photo resizing</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/common/config/private/PrivateConfig.ts</context>
-          <context context-type="linenumber">824</context>
+          <context context-type="linenumber">837</context>
         </context-group>
         <target>Photo resizing</target>
       </trans-unit>
@@ -730,7 +746,7 @@
         <source>Preview Filter query</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/common/config/private/PrivateConfig.ts</context>
-          <context context-type="linenumber">836</context>
+          <context context-type="linenumber">849</context>
         </context-group>
         <target>Preview Filter query</target>
       </trans-unit>
@@ -738,7 +754,7 @@
         <source>Filters the sub-folders with this search query. If filter results no photo, the app will search again without the filter.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/common/config/private/PrivateConfig.ts</context>
-          <context context-type="linenumber">841</context>
+          <context context-type="linenumber">854</context>
         </context-group>
         <target>Filters the sub-folders with this search query. If filter results no photo, the app will search again without the filter.</target>
       </trans-unit>
@@ -746,7 +762,7 @@
         <source>Preview Sorting</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/common/config/private/PrivateConfig.ts</context>
-          <context context-type="linenumber">850</context>
+          <context context-type="linenumber">863</context>
         </context-group>
         <target>Preview Sorting</target>
       </trans-unit>
@@ -754,7 +770,7 @@
         <source>If multiple preview is available sorts them by these methods and selects the first one.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/common/config/private/PrivateConfig.ts</context>
-          <context context-type="linenumber">854</context>
+          <context context-type="linenumber">867</context>
         </context-group>
         <target>If multiple preview is available sorts them by these methods and selects the first one.</target>
       </trans-unit>
@@ -762,7 +778,7 @@
         <source>Images folder</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/common/config/private/PrivateConfig.ts</context>
-          <context context-type="linenumber">866</context>
+          <context context-type="linenumber">879</context>
         </context-group>
         <target>Bilderordner</target>
       </trans-unit>
@@ -770,7 +786,7 @@
         <source>Images are loaded from this folder (read permission required)</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/common/config/private/PrivateConfig.ts</context>
-          <context context-type="linenumber">871</context>
+          <context context-type="linenumber">884</context>
         </context-group>
         <target>Bilder werden aus diesem Ordner geladen (Leseberechtigung erforderlich)</target>
       </trans-unit>
@@ -778,7 +794,7 @@
         <source>Temp folder</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/common/config/private/PrivateConfig.ts</context>
-          <context context-type="linenumber">877</context>
+          <context context-type="linenumber">890</context>
         </context-group>
         <target>Temp-Ordner</target>
       </trans-unit>
@@ -786,7 +802,7 @@
         <source>Thumbnails, converted photos, videos will be stored here (write permission required)</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/common/config/private/PrivateConfig.ts</context>
-          <context context-type="linenumber">882</context>
+          <context context-type="linenumber">895</context>
         </context-group>
         <target>Vorschaubilder, konvertierte Fotos, Videos werden hier gespeichert (Schreibgenehmigung erforderlich)</target>
       </trans-unit>
@@ -794,7 +810,7 @@
         <source>Metadata read buffer</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/common/config/private/PrivateConfig.ts</context>
-          <context context-type="linenumber">889</context>
+          <context context-type="linenumber">902</context>
         </context-group>
         <target>Metadata read buffer</target>
       </trans-unit>
@@ -802,7 +818,7 @@
         <source>Only this many bites will be loaded when scanning photo/video for metadata. Increase this number if your photos shows up as square.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/common/config/private/PrivateConfig.ts</context>
-          <context context-type="linenumber">895</context>
+          <context context-type="linenumber">908</context>
         </context-group>
         <target>Only this many bites will be loaded when scanning photo/video for metadata. Increase this number if your photos shows up as square.</target>
       </trans-unit>
@@ -810,7 +826,7 @@
         <source>Video</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/common/config/private/PrivateConfig.ts</context>
-          <context context-type="linenumber">901</context>
+          <context context-type="linenumber">914</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
@@ -822,7 +838,7 @@
         <source>Video support uses ffmpeg. ffmpeg and ffprobe binaries need to be available in the PATH or the @ffmpeg-installer/ffmpeg and @ffprobe-installer/ffprobe optional node packages need to be installed.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/common/config/private/PrivateConfig.ts</context>
-          <context context-type="linenumber">910</context>
+          <context context-type="linenumber">923</context>
         </context-group>
         <target>Video support uses ffmpeg. ffmpeg and ffprobe binaries need to be available in the PATH or the @ffmpeg-installer/ffmpeg and @ffprobe-installer/ffprobe optional node packages need to be installed.</target>
       </trans-unit>
@@ -830,7 +846,7 @@
         <source>Photo</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/common/config/private/PrivateConfig.ts</context>
-          <context context-type="linenumber">915</context>
+          <context context-type="linenumber">928</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
@@ -842,7 +858,7 @@
         <source>Thumbnail</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/common/config/private/PrivateConfig.ts</context>
-          <context context-type="linenumber">928</context>
+          <context context-type="linenumber">941</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
@@ -854,7 +870,7 @@
         <source>Session Timeout</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/common/config/private/PrivateConfig.ts</context>
-          <context context-type="linenumber">951</context>
+          <context context-type="linenumber">964</context>
         </context-group>
         <target>Session Timeout</target>
       </trans-unit>
@@ -862,7 +878,7 @@
         <source>Users kept logged in for this long time.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/common/config/private/PrivateConfig.ts</context>
-          <context context-type="linenumber">955</context>
+          <context context-type="linenumber">968</context>
         </context-group>
         <target>Users kept logged in for this long time.</target>
       </trans-unit>
@@ -870,7 +886,7 @@
         <source>Port number. Port 80 is usually what you need.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/common/config/private/PrivateConfig.ts</context>
-          <context context-type="linenumber">966</context>
+          <context context-type="linenumber">979</context>
         </context-group>
         <target>Port-Nummer. Port 80 ist normalerweise der Standardport.</target>
       </trans-unit>
@@ -878,7 +894,7 @@
         <source>Server will accept connections from this IPv6 or IPv4 address.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/common/config/private/PrivateConfig.ts</context>
-          <context context-type="linenumber">978</context>
+          <context context-type="linenumber">991</context>
         </context-group>
         <target>Der Server akzeptiert Verbindungen von dieser IPv6- oder IPv4-Adresse.</target>
       </trans-unit>
@@ -886,7 +902,7 @@
         <source>Logs</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/common/config/private/PrivateConfig.ts</context>
-          <context context-type="linenumber">992</context>
+          <context context-type="linenumber">1005</context>
         </context-group>
         <target>Protokolle</target>
       </trans-unit>
@@ -894,7 +910,7 @@
         <source>Server</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/common/config/private/PrivateConfig.ts</context>
-          <context context-type="linenumber">1021</context>
+          <context context-type="linenumber">1034</context>
         </context-group>
         <target>Server</target>
       </trans-unit>
@@ -902,7 +918,7 @@
         <source>Users</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/common/config/private/PrivateConfig.ts</context>
-          <context context-type="linenumber">1037</context>
+          <context context-type="linenumber">1050</context>
         </context-group>
         <target>Users</target>
       </trans-unit>
@@ -910,7 +926,7 @@
         <source>Indexing</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/common/config/private/PrivateConfig.ts</context>
-          <context context-type="linenumber">1045</context>
+          <context context-type="linenumber">1058</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/model/backendtext.service.ts</context>
@@ -922,7 +938,7 @@
         <source>If you add a new folder to your gallery, the site indexes it automatically.  If you would like to trigger indexing manually, click index button. (Note: search only works among the indexed directories.)</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/common/config/private/PrivateConfig.ts</context>
-          <context context-type="linenumber">1050</context>
+          <context context-type="linenumber">1063</context>
         </context-group>
         <target>If you add a new folder to your gallery, the site indexes it automatically. If you would like to trigger indexing manually, click index button. (Note: search only works among the indexed directories.)</target>
       </trans-unit>
@@ -930,7 +946,7 @@
         <source>Media</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/common/config/private/PrivateConfig.ts</context>
-          <context context-type="linenumber">1061</context>
+          <context context-type="linenumber">1074</context>
         </context-group>
         <target>Media</target>
       </trans-unit>
@@ -938,7 +954,7 @@
         <source>Meta file</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/common/config/private/PrivateConfig.ts</context>
-          <context context-type="linenumber">1069</context>
+          <context context-type="linenumber">1082</context>
         </context-group>
         <target>Meta-Datei</target>
       </trans-unit>
@@ -946,7 +962,7 @@
         <source>Preview</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/common/config/private/PrivateConfig.ts</context>
-          <context context-type="linenumber">1077</context>
+          <context context-type="linenumber">1090</context>
         </context-group>
         <target>Preview</target>
       </trans-unit>
@@ -954,7 +970,7 @@
         <source>Sharing</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/common/config/private/PrivateConfig.ts</context>
-          <context context-type="linenumber">1092</context>
+          <context context-type="linenumber">1105</context>
         </context-group>
         <target>Sharing</target>
       </trans-unit>
@@ -962,7 +978,7 @@
         <source>Duplicates</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/common/config/private/PrivateConfig.ts</context>
-          <context context-type="linenumber">1100</context>
+          <context context-type="linenumber">1113</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/frame/frame.component.html</context>
@@ -974,7 +990,7 @@
         <source>Jobs</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/common/config/private/PrivateConfig.ts</context>
-          <context context-type="linenumber">1108</context>
+          <context context-type="linenumber">1121</context>
         </context-group>
         <target>Aufträge</target>
       </trans-unit>
@@ -2798,7 +2814,7 @@
         <source>duration</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/gallery/lightbox/infopanel/info-panel.lightbox.gallery.component.html</context>
-          <context context-type="linenumber">50</context>
+          <context context-type="linenumber">61</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/workflow/progress/job-progress.settings.component.html</context>
@@ -2810,9 +2826,21 @@
         <source>bit rate</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/gallery/lightbox/infopanel/info-panel.lightbox.gallery.component.html</context>
-          <context context-type="linenumber">56</context>
+          <context context-type="linenumber">67</context>
         </context-group>
         <target>Bitrate</target>
+      </trans-unit>
+      <trans-unit id="2821179408673282599" datatype="html">
+        <source>Home</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/frontend/app/ui/gallery/lightbox/infopanel/info-panel.lightbox.gallery.component.ts</context>
+          <context context-type="linenumber">63</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/frontend/app/ui/gallery/navigator/navigator.gallery.component.ts</context>
+          <context context-type="linenumber">48</context>
+        </context-group>
+        <target>Home</target>
       </trans-unit>
       <trans-unit id="5294987439623514854" datatype="html">
         <source>Error during loading the video.</source>
@@ -2869,14 +2897,6 @@
           <context context-type="linenumber">51</context>
         </context-group>
         <target>Filters</target>
-      </trans-unit>
-      <trans-unit id="2821179408673282599" datatype="html">
-        <source>Home</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/frontend/app/ui/gallery/navigator/navigator.gallery.component.ts</context>
-          <context context-type="linenumber">48</context>
-        </context-group>
-        <target>Home</target>
       </trans-unit>
       <trans-unit id="3445823735428564189" datatype="html">
         <source>Random link</source>
@@ -3900,7 +3920,7 @@
         <source>Enter </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/sharelogin/share-login.component.html</context>
-          <context context-type="linenumber">40</context>
+          <context context-type="linenumber">34</context>
         </context-group>
         <target>Eingabe</target>
       </trans-unit>
