@@ -768,7 +768,7 @@ export class VideoTranscodingConfig {
     tags: {
       name: $localize`Custom Output Options`,
       priority: ConfigPriority.underTheHood,
-      hint: '-pass 2; -minrate 1M; -maxrate 1M; -bufsize 2M',
+      hint: '-pass 2;-minrate 1M;-maxrate 1M;-bufsize 2M',
       uiAllowSpaces: true
     },
     description: $localize`It will be sent to ffmpeg as it is, as custom output options.`,
