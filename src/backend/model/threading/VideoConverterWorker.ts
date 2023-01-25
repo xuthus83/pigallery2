@@ -55,7 +55,7 @@ export class VideoConverterWorker {
         })
         .on('stderr', function (line: string) {
           // Although this is under `stderr` event, all of ffmpeg output come here.
-          Logger.debug(line);
+          Logger.debug('[FFmpeg] ' + line);
         });
 
       // set custom input options
