@@ -52,6 +52,10 @@ export class VideoConverterWorker {
         })
         .on('error', (e: any) => {
           reject('[FFmpeg] ' + e.toString() + ' executed: ' + executedCmd);
+        })
+        .on('stderr', function (line: string) {
+          // Although this is under `stderr` event, all of ffmpeg output come here.
+          Logger.debug('[FFmpeg] ' + line);
         });
 
       // set custom input options
