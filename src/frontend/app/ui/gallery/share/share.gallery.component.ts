@@ -1,14 +1,14 @@
-import { Component, OnDestroy, OnInit, TemplateRef } from '@angular/core';
-import { Utils } from '../../../../../common/Utils';
-import { ShareService } from '../share.service';
-import { ContentService } from '../content.service';
-import { ContentWrapper } from '../../../../../common/entities/ConentWrapper';
-import { SharingDTO } from '../../../../../common/entities/SharingDTO';
-import { Config } from '../../../../../common/config/public/Config';
-import { NotificationService } from '../../../model/notification.service';
-import { BsModalService } from 'ngx-bootstrap/modal';
-import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
-import { Subscription } from 'rxjs';
+import {Component, OnDestroy, OnInit, TemplateRef} from '@angular/core';
+import {Utils} from '../../../../../common/Utils';
+import {ShareService} from '../share.service';
+import {ContentService} from '../content.service';
+import {ContentWrapper} from '../../../../../common/entities/ConentWrapper';
+import {SharingDTO} from '../../../../../common/entities/SharingDTO';
+import {Config} from '../../../../../common/config/public/Config';
+import {NotificationService} from '../../../model/notification.service';
+import {BsModalService} from 'ngx-bootstrap/modal';
+import {BsModalRef} from 'ngx-bootstrap/modal/bs-modal-ref.service';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-gallery-share',
@@ -34,7 +34,7 @@ export class GalleryShareComponent implements OnInit, OnDestroy {
   readonly ValidityTypes = ValidityTypes;
 
   modalRef: BsModalRef;
-  invalidSettings = $localize`Invalid settings`
+  invalidSettings = $localize`Invalid settings`;
 
   text = {
     Yes: 'Yes',
@@ -100,7 +100,7 @@ export class GalleryShareComponent implements OnInit, OnDestroy {
       this.input.password,
       this.calcValidity()
     );
-    this.url = Config.Server.publicUrl + '/share/' + this.sharing.sharingKey;
+    this.url = Utils.concatUrls(Config.Server.publicUrl, '/share/', this.sharing.sharingKey);
   }
 
   async get(): Promise<void> {
@@ -110,7 +110,7 @@ export class GalleryShareComponent implements OnInit, OnDestroy {
       this.input.includeSubfolders,
       this.calcValidity()
     );
-    this.url = Config.Server.publicUrl + '/share/' + this.sharing.sharingKey;
+    this.url = Utils.concatUrls(Config.Server.publicUrl, '/share/', this.sharing.sharingKey);
   }
 
   async openModal(template: TemplateRef<unknown>): Promise<void> {
