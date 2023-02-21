@@ -1,16 +1,15 @@
-import { NextFunction, Request, Response } from 'express';
-import { ErrorCodes, ErrorDTO } from '../../../common/entities/Error';
-import {
-  UserDTO,
-  UserDTOUtils,
-  UserRoles,
-} from '../../../common/entities/UserDTO';
-import { ObjectManagers } from '../../model/ObjectManagers';
-import { Config } from '../../../common/config/private/Config';
-import { PasswordHelper } from '../../model/PasswordHelper';
-import { Utils } from '../../../common/Utils';
-import { QueryParams } from '../../../common/QueryParams';
+import {NextFunction, Request, Response} from 'express';
+import {ErrorCodes, ErrorDTO} from '../../../common/entities/Error';
+import {UserDTO, UserDTOUtils, UserRoles,} from '../../../common/entities/UserDTO';
+import {ObjectManagers} from '../../model/ObjectManagers';
+import {Config} from '../../../common/config/private/Config';
+import {PasswordHelper} from '../../model/PasswordHelper';
+import {Utils} from '../../../common/Utils';
+import {QueryParams} from '../../../common/QueryParams';
 import * as path from 'path';
+import {Logger} from '../../Logger';
+
+const LOG_TAG = 'AuthenticationMWs';
 
 export class AuthenticationMWs {
   public static async tryAuthenticate(
@@ -32,7 +31,8 @@ export class AuthenticationMWs {
         return next();
       }
       // eslint-disable-next-line no-empty
-    } catch (err) {}
+    } catch (err) {
+    }
 
     return next();
   }
@@ -164,6 +164,7 @@ export class AuthenticationMWs {
           sharing.password &&
           !PasswordHelper.comparePassword(password, sharing.password))
       ) {
+        Logger.warn(LOG_TAG, 'Failed login with sharing:' + sharing.sharingKey + ', bad password');
         res.status(401);
         return next(new ErrorDTO(ErrorCodes.CREDENTIAL_NOT_FOUND));
       }
@@ -212,6 +213,7 @@ export class AuthenticationMWs {
       typeof req.body.loginCredential.username === 'undefined' ||
       typeof req.body.loginCredential.password === 'undefined'
     ) {
+      Logger.warn(LOG_TAG, 'Failed login no user or password provided');
       return next(
         new ErrorDTO(
           ErrorCodes.INPUT_ERROR,
@@ -220,7 +222,7 @@ export class AuthenticationMWs {
       );
     }
     try {
-      // lets find the user
+      // let's find the user
       const user = Utils.clone(
         await ObjectManagers.getInstance().UserManager.findOne({
           name: req.body.loginCredential.username,
@@ -236,6 +238,8 @@ export class AuthenticationMWs {
       }
       return next();
     } catch (err) {
+      Logger.warn(LOG_TAG, 'Failed login for user:' + req.body.loginCredential.username
+        + ', bad password');
       return next(
         new ErrorDTO(
           ErrorCodes.CREDENTIAL_NOT_FOUND,
