@@ -3,6 +3,7 @@ import {AuthenticationService} from '../../model/network/authentication.service'
 import {ErrorCodes} from '../../../../common/entities/Error';
 import {Config} from '../../../../common/config/public/Config';
 import {NavigationService} from '../../model/navigation.service';
+import {ShareService} from '../gallery/share.service';
 
 @Component({
   selector: 'app-share-login',
@@ -16,6 +17,7 @@ export class ShareLoginComponent implements OnInit {
   title: string;
 
   constructor(
+    public shareService: ShareService,
     private authService: AuthenticationService,
     private navigation: NavigationService
   ) {

@@ -1,17 +1,18 @@
-import { Injectable } from '@angular/core';
-import { NetworkService } from '../../model/network/network.service';
-import {
-  CreateSharingDTO,
-  SharingDTO,
-} from '../../../../common/entities/SharingDTO';
-import { Router, RoutesRecognized } from '@angular/router';
-import { BehaviorSubject } from 'rxjs';
-import { distinctUntilChanged, filter } from 'rxjs/operators';
-import { QueryParams } from '../../../../common/QueryParams';
-import { UserDTO } from '../../../../common/entities/UserDTO';
+import {Injectable} from '@angular/core';
+import {NetworkService} from '../../model/network/network.service';
+import {CreateSharingDTO, SharingDTO,} from '../../../../common/entities/SharingDTO';
+import {Router, RoutesRecognized} from '@angular/router';
+import {BehaviorSubject} from 'rxjs';
+import {distinctUntilChanged, filter} from 'rxjs/operators';
+import {QueryParams} from '../../../../common/QueryParams';
+import {UserDTO} from '../../../../common/entities/UserDTO';
+
 
 @Injectable()
 export class ShareService {
+  public readonly UnknownSharingKey = {
+    sharingKey: 'UnknownSharingKey'
+  } as SharingDTO;
   param: string = null;
   queryParam: string = null;
   sharingKey: string = null;
@@ -40,11 +41,11 @@ export class ShareService {
         this.param =
           val.state.root.firstChild.params[
             QueryParams.gallery.sharingKey_params
-          ] || null;
+            ] || null;
         this.queryParam =
           val.state.root.firstChild.queryParams[
             QueryParams.gallery.sharingKey_query
-          ] || null;
+            ] || null;
 
         const changed = this.sharingKey !== (this.param || this.queryParam);
         if (changed) {
@@ -130,6 +131,7 @@ export class ShareService {
       );
       this.sharingSubject.next(sharing);
     } catch (e) {
+      this.sharingSubject.next(this.UnknownSharingKey);
       console.error(e);
     }
   }
