@@ -120,8 +120,7 @@ export class GalleryComponent implements OnInit, OnDestroy {
     ) {
       return this.navigation.toLogin();
     }
-    this.showSearchBar =
-      Config.Search.enabled && this.authService.canSearch();
+    this.showSearchBar = this.authService.canSearch();
     this.showShare =
       Config.Sharing.enabled &&
       this.authService.isAuthorized(UserRoles.User);

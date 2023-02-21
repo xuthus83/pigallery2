@@ -51,8 +51,7 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, OnDestroy {
     private thumbnailService: ThumbnailManagerService,
     private authService: AuthenticationService
   ) {
-    this.searchEnabled =
-      Config.Search.enabled && this.authService.canSearch();
+    this.searchEnabled = this.authService.canSearch();
   }
 
   get ScrollListener(): boolean {

@@ -93,7 +93,7 @@ export class AuthenticationService {
   }
 
   public canSearch(): boolean {
-    return this.isAuthorized(UserRoles.Guest);
+    return Config.Search.enabled && this.isAuthorized(UserRoles.Guest);
   }
 
   public async logout(): Promise<void> {

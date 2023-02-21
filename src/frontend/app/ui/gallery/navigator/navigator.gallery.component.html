@@ -34,7 +34,7 @@
         <div class="divider">&nbsp;</div>
       </ng-container>
 
-      <ng-container *ngIf="config.Gallery.enableDirectoryFlattening && isDirectory">
+      <ng-container *ngIf="config.Gallery.enableDirectoryFlattening && isDirectory && authService.canSearch()">
         <a
           [routerLink]="['/search', getDirectoryFlattenSearchQuery()]"
           class="btn  btn-navbar">

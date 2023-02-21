@@ -39,7 +39,7 @@ export class GalleryNavigatorComponent {
   private readonly RootFolderName: string;
 
   constructor(
-    private authService: AuthenticationService,
+    public authService: AuthenticationService,
     public queryService: QueryService,
     public galleryService: ContentService,
     public sortingService: GallerySortingService

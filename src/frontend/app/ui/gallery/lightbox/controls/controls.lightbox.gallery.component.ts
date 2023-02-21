@@ -66,8 +66,7 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
     private authService: AuthenticationService,
     private cacheService: GalleryCacheService
   ) {
-    this.searchEnabled =
-      Config.Search.enabled && this.authService.canSearch();
+    this.searchEnabled = this.authService.canSearch();
   }
 
 

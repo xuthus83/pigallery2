@@ -35,8 +35,7 @@ export class InfoPanelLightboxComponent implements OnInit, OnChanges {
     private authService: AuthenticationService
   ) {
     this.mapEnabled = Config.Map.enabled;
-    this.searchEnabled =
-      Config.Search.enabled && this.authService.canSearch();
+    this.searchEnabled = this.authService.canSearch();
     this.baseLayer = tileLayer(mapService.MapLayer, {
       attribution: mapService.ShortAttributions,
     });
