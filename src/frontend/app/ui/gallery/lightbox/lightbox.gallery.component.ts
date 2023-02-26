@@ -247,8 +247,11 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
   public hide(): void {
     this.router
       .navigate([], {queryParams: this.queryService.getParams()})
+      .then(() => {
+        this.piTitleService.setLastNonMedia();
+      })
       .catch(console.error);
-    this.piTitleService.setLastNonMedia();
+
   }
 
   animatePhoto(from: Dimension, to: Dimension = from): AnimationPlayer {
@@ -397,8 +400,11 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
           this.gridPhotoQL.get(photoIndex).gridMedia.media
         ),
       })
+      .then(() => {
+        this.piTitleService.setMediaTitle(this.gridPhotoQL.get(photoIndex).gridMedia);
+      })
       .catch(console.error);
-    this.piTitleService.setMediaTitle(this.gridPhotoQL.get(photoIndex).gridMedia);
+
   }
 
   private showPhoto(photoIndex: number, resize = true): void {
