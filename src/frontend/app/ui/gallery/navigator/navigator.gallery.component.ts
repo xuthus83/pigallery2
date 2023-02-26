@@ -1,21 +1,13 @@
-import {Component} from '@angular/core';
-import {RouterLink} from '@angular/router';
+import {Component, HostListener} from '@angular/core';
+import {Router, RouterLink} from '@angular/router';
 import {UserDTOUtils} from '../../../../../common/entities/UserDTO';
 import {AuthenticationService} from '../../../model/network/authentication.service';
 import {QueryService} from '../../../model/query.service';
-import {
-  ContentService,
-  ContentWrapperWithError,
-  DirectoryContent,
-} from '../content.service';
+import {ContentService, ContentWrapperWithError, DirectoryContent,} from '../content.service';
 import {Utils} from '../../../../../common/Utils';
 import {SortingMethods} from '../../../../../common/entities/SortingMethods';
 import {Config} from '../../../../../common/config/public/Config';
-import {
-  SearchQueryTypes,
-  TextSearch,
-  TextSearchQueryMatchTypes,
-} from '../../../../../common/entities/SearchQueryDTO';
+import {SearchQueryTypes, TextSearch, TextSearchQueryMatchTypes,} from '../../../../../common/entities/SearchQueryDTO';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {GallerySortingService} from './sorting.service';
@@ -37,12 +29,14 @@ export class GalleryNavigatorComponent {
   public routes: Observable<NavigatorPath[]>;
   public showFilters = false;
   private readonly RootFolderName: string;
+  private parentPath: string = null;
 
   constructor(
     public authService: AuthenticationService,
     public queryService: QueryService,
     public galleryService: ContentService,
-    public sortingService: GallerySortingService
+    public sortingService: GallerySortingService,
+    private router: Router,
   ) {
     this.sortingMethodsType = Utils.enumToArray(SortingMethods);
     this.RootFolderName = $localize`Home`;
@@ -52,6 +46,7 @@ export class GalleryNavigatorComponent {
     );
     this.routes = this.galleryService.content.pipe(
       map((c) => {
+        this.parentPath = null;
         if (!c.directory) {
           return [];
         }
@@ -96,9 +91,15 @@ export class GalleryNavigatorComponent {
                 ? route
                 : null,
             });
+
           }
         });
 
+        // parent directory has a shortcut to navigate to
+        if (arr.length >= 2 && arr[arr.length - 2].route) {
+          this.parentPath = arr[arr.length - 2].route;
+          arr[arr.length - 2].title = $localize`key: alt + up`;
+        }
         return arr;
 
       })
@@ -158,10 +159,32 @@ export class GalleryNavigatorComponent {
       text: Utils.concatUrls('./', c.directory.path, c.directory.name),
     } as TextSearch);
   }
+
+
+  navigateToParentDirectory() {
+    if (!this.parentPath) {
+      return;
+    }
+    this.router.navigate(['/gallery', this.parentPath],
+      {queryParams: this.queryService.getParams()})
+      .catch(console.error);
+  }
+
+  @HostListener('window:keydown', ['$event'])
+  onKeyPress(event: KeyboardEvent): void {
+    switch (event.key) {
+      case 'ArrowUp':
+        if (event.altKey) {
+          this.navigateToParentDirectory();
+        }
+        break;
+    }
+  }
 }
 
 interface NavigatorPath {
   name: string;
   route: string;
+  title?: string;
 }
 

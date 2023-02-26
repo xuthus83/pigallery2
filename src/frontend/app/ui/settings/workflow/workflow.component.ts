@@ -1,5 +1,4 @@
-import {Component, OnDestroy, OnInit, QueryList, ViewChildren} from '@angular/core';
-import {forwardRef} from '../../../../../../node_modules/@angular/core';
+import {Component, forwardRef, OnDestroy, OnInit, QueryList, ViewChildren} from '@angular/core';
 import {ModalDirective} from 'ngx-bootstrap/modal';
 import {
   AfterJobTrigger,
@@ -11,7 +10,6 @@ import {
 import {ScheduledJobsService} from '../scheduled-jobs.service';
 import {BackendtextService} from '../../../model/backendtext.service';
 import {SettingsService} from '../settings.service';
-import {ConfigTemplateEntry} from '../../../../../common/entities/job/JobDTO';
 import {JobProgressDTO, JobProgressStates} from '../../../../../common/entities/job/JobProgressDTO';
 import {
   AfterJobTriggerConfig,
@@ -20,13 +18,7 @@ import {
   PeriodicJobTriggerConfig,
   ScheduledJobTriggerConfig
 } from '../../../../../common/config/private/PrivateConfig';
-import {
-  ControlValueAccessor,
-  NG_VALIDATORS,
-  NG_VALUE_ACCESSOR,
-  ValidationErrors,
-  Validator
-} from '../../../../../../node_modules/@angular/forms';
+import {ControlValueAccessor, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator} from '@angular/forms';
 
 @Component({
   selector: 'app-settings-workflow',
@@ -103,7 +95,6 @@ export class WorkflowComponent implements ControlValueAccessor, Validator, OnIni
     d.setUTCMinutes(Math.floor(atTime % 60));
     return d;
   }
-
 
 
   ngOnInit(): void {

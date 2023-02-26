@@ -7,7 +7,7 @@ import {WebConfig} from '../../../../../common/config/private/WebConfig';
 import {JobProgressDTO} from '../../../../../common/entities/job/JobProgressDTO';
 import {JobDTOUtils} from '../../../../../common/entities/job/JobDTO';
 import {ScheduledJobsService} from '../scheduled-jobs.service';
-import {FormControl} from '../../../../../../node_modules/@angular/forms';
+import {FormControl} from '@angular/forms';
 import {Subscription} from 'rxjs';
 import {IWebConfigClassPrivate} from '../../../../../../node_modules/typeconfig/src/decorators/class/IWebConfigClass';
 import {ConfigPriority, TAGS} from '../../../../../common/config/public/ClientConfig';

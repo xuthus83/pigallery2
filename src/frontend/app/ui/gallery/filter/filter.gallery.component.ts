@@ -1,10 +1,6 @@
-import { Component } from '@angular/core';
+import { OnDestroy,  OnInit,Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { FilterOption, FilterService, SelectedFilter } from './filter.service';
-import {
-  OnDestroy,
-  OnInit,
-} from '../../../../../../node_modules/@angular/core';
 
 @Component({
   selector: 'app-gallery-filter',
