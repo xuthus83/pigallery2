@@ -16,6 +16,7 @@ import {PhotoDTO} from '../../../../../common/entities/PhotoDTO';
 import {ControlsLightboxComponent} from './controls/controls.lightbox.gallery.component';
 import {SupportedFormats} from '../../../../../common/SupportedFormats';
 import {GridMedia} from '../grid/GridMedia';
+import {PiTitleService} from '../../../model/pi-title.service';
 
 export enum LightboxStates {
   Open = 1,
@@ -72,7 +73,8 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
     private router: Router,
     private queryService: QueryService,
     private galleryService: ContentService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private piTitleService: PiTitleService
   ) {
   }
 
@@ -239,12 +241,14 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
     this.overlayService.showOverlay();
     this.blackCanvasOpacity = 1.0;
     this.showPhoto(this.gridPhotoQL.toArray().indexOf(selectedPhoto), false);
+    this.piTitleService.setMediaTitle(selectedPhoto.gridMedia);
   }
 
   public hide(): void {
     this.router
       .navigate([], {queryParams: this.queryService.getParams()})
       .catch(console.error);
+    this.piTitleService.setLastNonMedia();
   }
 
   animatePhoto(from: Dimension, to: Dimension = from): AnimationPlayer {
@@ -394,6 +398,7 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
         ),
       })
       .catch(console.error);
+    this.piTitleService.setMediaTitle(this.gridPhotoQL.get(photoIndex).gridMedia);
   }
 
   private showPhoto(photoIndex: number, resize = true): void {

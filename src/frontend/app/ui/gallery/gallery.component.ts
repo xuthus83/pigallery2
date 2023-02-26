@@ -15,6 +15,7 @@ import {take} from 'rxjs/operators';
 import {GallerySortingService} from './navigator/sorting.service';
 import {MediaDTO} from '../../../../common/entities/MediaDTO';
 import {FilterService} from './filter/filter.service';
+import {PiTitleService} from '../../model/pi-title.service';
 
 @Component({
   selector: 'app-gallery',
@@ -57,7 +58,8 @@ export class GalleryComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private navigation: NavigationService,
     private filterService: FilterService,
-    private sortingService: GallerySortingService
+    private sortingService: GallerySortingService,
+    private piTitleService: PiTitleService
   ) {
     this.mapEnabled = Config.Map.enabled;
     PageHelper.showScrollY();
@@ -148,7 +150,7 @@ export class GalleryComponent implements OnInit, OnDestroy {
     const searchQuery = params[QueryParams.gallery.search.query];
     if (searchQuery) {
       this.galleryService.search(searchQuery).catch(console.error);
-
+      this.piTitleService.setSearchTitle(searchQuery);
       return;
     }
 
@@ -171,6 +173,7 @@ export class GalleryComponent implements OnInit, OnDestroy {
     let directoryName = params[QueryParams.gallery.directory];
     directoryName = directoryName || '';
 
+    this.piTitleService.setDirectoryTitle(directoryName);
     this.galleryService.loadDirectory(directoryName);
   };
 

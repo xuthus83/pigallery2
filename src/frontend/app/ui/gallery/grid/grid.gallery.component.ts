@@ -12,22 +12,19 @@ import {
   ViewChild,
   ViewChildren,
 } from '@angular/core';
-import { GridRowBuilder } from './GridRowBuilder';
-import { GalleryLightboxComponent } from '../lightbox/lightbox.gallery.component';
-import { GridMedia } from './GridMedia';
-import { GalleryPhotoComponent } from './photo/photo.grid.gallery.component';
-import { OverlayService } from '../overlay.service';
-import { Config } from '../../../../../common/config/public/Config';
-import { PageHelper } from '../../../model/page.helper';
-import { Subscription } from 'rxjs';
-import { ActivatedRoute, Params, Router } from '@angular/router';
-import { QueryService } from '../../../model/query.service';
-import { ContentService } from '../content.service';
-import {
-  MediaDTO,
-  MediaDTOUtils,
-} from '../../../../../common/entities/MediaDTO';
-import { QueryParams } from '../../../../../common/QueryParams';
+import {GridRowBuilder} from './GridRowBuilder';
+import {GalleryLightboxComponent} from '../lightbox/lightbox.gallery.component';
+import {GridMedia} from './GridMedia';
+import {GalleryPhotoComponent} from './photo/photo.grid.gallery.component';
+import {OverlayService} from '../overlay.service';
+import {Config} from '../../../../../common/config/public/Config';
+import {PageHelper} from '../../../model/page.helper';
+import {Subscription} from 'rxjs';
+import {ActivatedRoute, Params, Router} from '@angular/router';
+import {QueryService} from '../../../model/query.service';
+import {ContentService} from '../content.service';
+import {MediaDTO, MediaDTOUtils,} from '../../../../../common/entities/MediaDTO';
+import {QueryParams} from '../../../../../common/QueryParams';
 
 @Component({
   selector: 'app-gallery-grid',
@@ -35,9 +32,8 @@ import { QueryParams } from '../../../../../common/QueryParams';
   styleUrls: ['./grid.gallery.component.css'],
 })
 export class GalleryGridComponent
-  implements OnInit, OnChanges, AfterViewInit, OnDestroy
-{
-  @ViewChild('gridContainer', { static: false }) gridContainer: ElementRef;
+  implements OnInit, OnChanges, AfterViewInit, OnDestroy {
+  @ViewChild('gridContainer', {static: false}) gridContainer: ElementRef;
   @ViewChildren(GalleryPhotoComponent)
   gridPhotoQL: QueryList<GalleryPhotoComponent>;
   @Input() lightbox: GalleryLightboxComponent;
@@ -68,7 +64,8 @@ export class GalleryGridComponent
     private router: Router,
     public galleryService: ContentService,
     private route: ActivatedRoute
-  ) {}
+  ) {
+  }
 
   ngOnChanges(): void {
     this.onChange();
@@ -235,7 +232,7 @@ export class GalleryGridComponent
       (p): boolean => this.queryService.getMediaStringId(p) === mediaStringId
     );
     if (index === -1) {
-      this.router.navigate([], { queryParams: this.queryService.getParams() });
+      this.router.navigate([], {queryParams: this.queryService.getParams()});
       return;
     }
     // Make sure that at leas one more photo is rendered
@@ -246,7 +243,8 @@ export class GalleryGridComponent
       this.renderedPhotoIndex - 1 < index + 1 &&
       this.renderARow() !== null
       // eslint-disable-next-line no-empty
-    ) {}
+      ) {
+    }
   }
 
   private clearRenderedPhotos(): void {
@@ -303,10 +301,10 @@ export class GalleryGridComponent
     return (
       Config.Gallery.enableOnScrollRendering === false ||
       PageHelper.ScrollY >=
-        document.body.clientHeight +
-          offset -
-          window.innerHeight -
-          bottomOffset ||
+      document.body.clientHeight +
+      offset -
+      window.innerHeight -
+      bottomOffset ||
       (document.body.clientHeight + offset) * 0.85 < window.innerHeight
     );
   }
@@ -329,7 +327,7 @@ export class GalleryGridComponent
       this.renderedPhotoIndex < this.media.length &&
       (this.shouldRenderMore(renderedContentHeight) === true ||
         this.renderedPhotoIndex < numberOfPhotos)
-    ) {
+      ) {
       const ret = this.renderARow();
       if (ret === null) {
         throw new Error('Grid media rendering failed');

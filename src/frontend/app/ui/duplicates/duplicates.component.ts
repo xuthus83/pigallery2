@@ -1,13 +1,14 @@
-import { Component, HostListener, OnDestroy } from '@angular/core';
-import { DuplicateService } from './duplicates.service';
-import { Utils } from '../../../../common/Utils';
-import { QueryService } from '../../model/query.service';
-import { DuplicatesDTO } from '../../../../common/entities/DuplicatesDTO';
-import { DirectoryPathDTO } from '../../../../common/entities/DirectoryDTO';
-import { Subscription } from 'rxjs';
-import { Config } from '../../../../common/config/public/Config';
-import { PageHelper } from '../../model/page.helper';
-import { MediaDTO } from '../../../../common/entities/MediaDTO';
+import {Component, HostListener, OnDestroy, OnInit} from '@angular/core';
+import {DuplicateService} from './duplicates.service';
+import {Utils} from '../../../../common/Utils';
+import {QueryService} from '../../model/query.service';
+import {DuplicatesDTO} from '../../../../common/entities/DuplicatesDTO';
+import {DirectoryPathDTO} from '../../../../common/entities/DirectoryDTO';
+import {Subscription} from 'rxjs';
+import {Config} from '../../../../common/config/public/Config';
+import {PageHelper} from '../../model/page.helper';
+import {MediaDTO} from '../../../../common/entities/MediaDTO';
+import {PiTitleService} from '../../model/pi-title.service';
 
 interface GroupedDuplicate {
   name: string;
@@ -19,7 +20,7 @@ interface GroupedDuplicate {
   templateUrl: './duplicates.component.html',
   styleUrls: ['./duplicates.component.css'],
 })
-export class DuplicateComponent implements OnDestroy {
+export class DuplicateComponent implements OnDestroy, OnInit {
   directoryGroups: GroupedDuplicate[] = null;
   renderedDirGroups: GroupedDuplicate[] = null;
   renderedIndex = {
@@ -35,13 +36,14 @@ export class DuplicateComponent implements OnDestroy {
 
   constructor(
     public duplicateService: DuplicateService,
-    public queryService: QueryService
+    public queryService: QueryService,
+    private piTitleService: PiTitleService
   ) {
     this.duplicateService.getDuplicates().catch(console.error);
     this.subscription = this.duplicateService.duplicates.subscribe(
       (duplicates: DuplicatesDTO[]): void => {
         this.directoryGroups = [];
-        this.renderedIndex = { group: -1, pairs: 0 };
+        this.renderedIndex = {group: -1, pairs: 0};
         this.renderedDirGroups = [];
         this.duplicateCount = {
           pairs: 0,
@@ -113,6 +115,10 @@ export class DuplicateComponent implements OnDestroy {
     );
   }
 
+  ngOnInit(): void {
+    this.piTitleService.setTitle($localize`Duplicates`);
+  }
+
   ngOnDestroy(): void {
     if (this.subscription) {
       this.subscription.unsubscribe();
@@ -137,7 +143,7 @@ export class DuplicateComponent implements OnDestroy {
     if (
       this.renderedIndex.group === this.directoryGroups.length - 1 &&
       this.renderedIndex.pairs >=
-        this.directoryGroups[this.renderedIndex.group].duplicates.length
+      this.directoryGroups[this.renderedIndex.group].duplicates.length
     ) {
       return;
     }
@@ -145,7 +151,7 @@ export class DuplicateComponent implements OnDestroy {
       if (
         this.renderedDirGroups.length === 0 ||
         this.renderedIndex.pairs >=
-          this.directoryGroups[this.renderedIndex.group].duplicates.length
+        this.directoryGroups[this.renderedIndex.group].duplicates.length
       ) {
         this.renderedDirGroups.push({
           name: this.directoryGroups[++this.renderedIndex.group].name,
@@ -156,7 +162,7 @@ export class DuplicateComponent implements OnDestroy {
       this.renderedDirGroups[this.renderedDirGroups.length - 1].duplicates.push(
         this.directoryGroups[this.renderedIndex.group].duplicates[
           this.renderedIndex.pairs++
-        ]
+          ]
       );
 
       this.renderTimer = window.setTimeout(this.renderMore, 0);

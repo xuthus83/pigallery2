@@ -11,6 +11,7 @@ import {WebConfig} from '../../../../common/config/private/WebConfig';
 import {ISettingsComponent} from '../settings/template/ISettingsComponent';
 import {WebConfigClassBuilder} from '../../../../../node_modules/typeconfig/src/decorators/builders/WebConfigClassBuilder';
 import {enumToTranslatedArray} from '../EnumTranslations';
+import {PiTitleService} from '../../model/pi-title.service';
 
 @Component({
   selector: 'app-admin',
@@ -32,6 +33,7 @@ export class AdminComponent implements OnInit, AfterViewInit {
     public viewportScroller: ViewportScroller,
     public notificationService: NotificationService,
     public settingsService: SettingsService,
+    private piTitleService: PiTitleService
   ) {
     this.configPriorities = enumToTranslatedArray(ConfigPriority);
     const wc = WebConfigClassBuilder.attachPrivateInterface(new WebConfig());
@@ -51,6 +53,7 @@ export class AdminComponent implements OnInit, AfterViewInit {
       this.navigation.toLogin();
       return;
     }
+    this.piTitleService.setTitle($localize`Admin`);
   }
 
   public getCss(type: NotificationType): string {

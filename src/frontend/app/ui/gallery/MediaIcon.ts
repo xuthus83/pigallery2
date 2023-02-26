@@ -1,6 +1,6 @@
-import { Utils } from '../../../../common/Utils';
-import { Config } from '../../../../common/config/public/Config';
-import { MediaDTO } from '../../../../common/entities/MediaDTO';
+import {Utils} from '../../../../common/Utils';
+import {Config} from '../../../../common/config/public/Config';
+import {MediaDTO} from '../../../../common/entities/MediaDTO';
 
 export class MediaIcon {
   protected static readonly ThumbnailMap =
@@ -8,7 +8,8 @@ export class MediaIcon {
 
   protected replacementSizeCache: number | boolean = false;
 
-  constructor(public media: MediaDTO) {}
+  constructor(public media: MediaDTO) {
+  }
 
   getExtension(): string {
     return this.media.name.substr(this.media.name.lastIndexOf('.') + 1);
@@ -28,14 +29,18 @@ export class MediaIcon {
     );
   }
 
+  getReadableRelativePath(): string {
+    return Utils.concatUrls(
+      this.media.directory.path,
+      this.media.directory.name,
+      this.media.name
+    );
+  }
+
   getRelativePath(): string {
     return (
       encodeURI(
-        Utils.concatUrls(
-          this.media.directory.path,
-          this.media.directory.name,
-          this.media.name
-        )
+        this.getReadableRelativePath()
       )
         // do not escape all urls with encodeURIComponent because that make the URL ugly and not needed
         // do not escape before concatUrls as that would make prevent optimizations

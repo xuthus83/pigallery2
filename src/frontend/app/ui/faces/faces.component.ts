@@ -4,6 +4,7 @@ import { QueryService } from '../../model/query.service';
 import { map } from 'rxjs/operators';
 import { PersonDTO } from '../../../../common/entities/PersonDTO';
 import { Observable } from 'rxjs';
+import {PiTitleService} from '../../model/pi-title.service';
 
 @Component({
   selector: 'app-faces',
@@ -18,7 +19,8 @@ export class FacesComponent implements OnInit {
 
   constructor(
     public facesService: FacesService,
-    public queryService: QueryService
+    public queryService: QueryService,
+    private piTitleService: PiTitleService
   ) {
     this.facesService.getPersons().catch(console.error);
     const personCmp = (p1: PersonDTO, p2: PersonDTO) => {
@@ -33,6 +35,7 @@ export class FacesComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.piTitleService.setTitle($localize`Faces`);
     this.updateSize();
   }
 
