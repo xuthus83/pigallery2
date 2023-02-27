@@ -12,7 +12,7 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse text-center" id="navbarCollapse" [collapse]="collapsed">
-      <ul class="navbar-nav mb-0 text-lg-start">
+      <ul class="navbar-nav mb-0 me-2 text-lg-start">
         <ng-container *ngFor="let link of navbarLinks">
           <li class="nav-item" *ngIf="link.type === NavigationLinkTypes.albums && isAlbumsAvailable()">
             <a class="nav-link" [routerLink]="['/albums']" [class.active]="isLinkActive('/albums')" i18n>Albums</a>
@@ -36,7 +36,6 @@
       </ul>
       <div class="text-lg-end w-100">
         <ul class="navbar-nav">
-
           <ng-content select="[navbar]"></ng-content>
           <li class="nav-item divider-vertical">
           </li>
