@@ -6,6 +6,17 @@
       <img src="assets/icon_inv.png" width="30" height="30" class="d-inline-block align-top" alt="">
       <strong class="d-none d-lg-inline-block">{{title}}</strong>
     </a>
+
+    <div class="d-md-none flex-nowrap ">
+      <ul class="navbar-nav flex-row ">
+        <li class="nav-item w-100" *ngIf="showSearch">
+          <app-gallery-search></app-gallery-search>
+        </li>
+        <li class="nav-item" *ngIf="showShare">
+          <app-gallery-share></app-gallery-share>
+        </li>
+      </ul>
+    </div>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
             aria-controls="navbarNav"
             aria-expanded="false" aria-label="Toggle navigation" (click)="collapsed = !collapsed">
@@ -37,6 +48,12 @@
       <div class="text-lg-end w-100">
         <ul class="navbar-nav">
           <ng-content select="[navbar]"></ng-content>
+          <li class="nav-item w-100 d-none d-md-block" *ngIf="showSearch">
+            <app-gallery-search></app-gallery-search>
+          </li>
+          <li class="nav-item d-none  d-md-block" *ngIf="showShare">
+            <app-gallery-share></app-gallery-share>
+          </li>
           <li class="nav-item divider-vertical">
           </li>
           <ng-container *ngIf="authenticationRequired && user.value">
