@@ -7,7 +7,7 @@
       <strong class="d-none d-lg-inline-block">{{title}}</strong>
     </a>
     <div class="collapse navbar-collapse text-center" id="navbarCollapse" [collapse]="collapsed">
-      <ul class="navbar-nav mb-0 me-2 text-lg-start d-none d-md-flex">
+      <ul class="navbar-nav mb-0 me-4 text-lg-start d-none d-md-flex">
         <ng-container *ngFor="let link of navbarLinks">
           <li class="nav-item" *ngIf="link.type === NavigationLinkTypes.albums && isAlbumsAvailable()">
             <a class="nav-link" [routerLink]="['/albums']" [class.active]="isLinkActive('/albums')" i18n>Albums</a>
@@ -33,22 +33,11 @@
         <ul class="navbar-nav">
           <li class="flex-grow-1"></li>
           <ng-content select="[navbar]"></ng-content>
-          <li class="nav-item w-100" *ngIf="showSearch">
-            <app-gallery-search></app-gallery-search>
-          </li>
-          <li class="nav-item" *ngIf="showShare">
-            <app-gallery-share></app-gallery-share>
-          </li>
-          <li class="nav-item divider-vertical  d-xl-block d-none"
-              *ngIf="authenticationRequired && user.value && showShare">
-          </li>
           <ng-container *ngIf="authenticationRequired && user.value">
             <li class="nav-item me-2 ms-2 navbar-text d-xl-block d-none">
              <span style="white-space: nowrap;">
                 <span class="oi oi-person"></span> {{user.value.name}}
               </span>
-            </li>
-            <li class="nav-item divider-vertical  d-xl-block d-none">
             </li>
           </ng-container>
           <li class="nav-item d-xl-block d-none">

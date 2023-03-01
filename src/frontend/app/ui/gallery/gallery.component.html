@@ -1,5 +1,5 @@
 <app-gallery-lightbox #lightbox></app-gallery-lightbox>
-<app-frame [showSearch]="showSearchBar" [showShare]="showShare">
+<app-frame>
 
   <ng-container navbar>
     <li class="nav-item navbar-text"  *ngIf="countDown">
@@ -11,6 +11,12 @@
         {{("0" + countDown.hour).slice(-2)}}:{{("0" + countDown.minute).slice(-2)}}
         :{{("0" + countDown.second).slice(-2)}}
       </span>
+    </li>
+    <li  class="nav-item  w-100" *ngIf="showSearchBar">
+      <app-gallery-search></app-gallery-search>
+    </li>
+    <li class="nav-item"  *ngIf="showShare">
+      <app-gallery-share></app-gallery-share>
     </li>
   </ng-container>
 
