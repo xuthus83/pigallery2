@@ -6,24 +6,7 @@ nav {
   margin-bottom: 20px;
 }
 
-ng2-slim-loading-bar {
-  /* display: block; */
-  z-index: 999999;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-}
 
-.container {
-  width: 100%;
-}
-
-.admin-link {
-  padding-bottom: 0;
-  padding-left: 0;
-  font-size: 18px;
-}
 
 .divider-vertical:first-child {
   display: none;
@@ -39,35 +22,11 @@ ng2-slim-loading-bar {
   border-left-color: #3d3d3d;
 }
 
-@media (max-width: 767px) {
-  .navbar-collapse .nav > .divider-vertical {
-    display: none;
-  }
-
-  .navbar-text {
-    margin-left: 0;
-  }
-}
-
-@media (min-width: 767px) {
-  .navbar-text {
-    margin-left: 0;
-  }
-}
-
 .navbar-badge {
   border-radius: 1rem !important;
   margin-left: -10px;
 }
 
-app-language {
-  display: block;
-}
-
-.navbar-expand .navbar-nav .nav-link {
-  padding-right: 1.0rem;
-  padding-left: 1.0rem;
-}
 
 
 a.dropdown-item, button.dropdown-item, div.dropdown-item {
