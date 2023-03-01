@@ -57,7 +57,7 @@ export class GridRowBuilder {
     let width = 0;
     for (const item of this.photoRow) {
       const size = item.metadata.size;
-      width += size.width / size.height; // summing up aspect ratios
+      width += (size.width / size.height) || 1; // summing up aspect ratios, NaN should be treated as square photo
     }
     const height =
       (this.containerWidth -
