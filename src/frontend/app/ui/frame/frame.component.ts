@@ -18,6 +18,8 @@ import {Utils} from '../../../../common/Utils';
   encapsulation: ViewEncapsulation.Emulated,
 })
 export class FrameComponent {
+  @Input() showSearch = false;
+  @Input() showShare = false;
   public readonly user: BehaviorSubject<UserDTO>;
   public readonly authenticationRequired = Config.Users.authenticationRequired;
   public readonly title = Config.Server.applicationTitle;

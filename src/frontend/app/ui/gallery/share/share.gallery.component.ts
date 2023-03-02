@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, TemplateRef} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit, TemplateRef} from '@angular/core';
 import {Utils} from '../../../../../common/Utils';
 import {ShareService} from '../share.service';
 import {ContentService} from '../content.service';
@@ -17,6 +17,7 @@ import {Subscription} from 'rxjs';
 })
 export class GalleryShareComponent implements OnInit, OnDestroy {
   enabled = true;
+  @Input() dropDownItem = false;
   url = '';
 
   input = {
