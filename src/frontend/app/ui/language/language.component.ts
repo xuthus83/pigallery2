@@ -1,7 +1,8 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, ViewChild} from '@angular/core';
 import {Config} from '../../../../common/config/public/Config';
 import {CookieNames} from '../../../../common/CookieNames';
 import {CookieService} from 'ngx-cookie-service';
+import {BsDropdownDirective} from 'ngx-bootstrap/dropdown';
 
 @Component({
   selector: 'app-language',
@@ -13,6 +14,8 @@ export class LanguageComponent {
   languages: string[] = [];
   current: string = null;
   urlBase = Config.Server.urlBase;
+
+  @ViewChild('dropdown', {static: true}) dropdown: BsDropdownDirective;
 
   constructor(private cookieService: CookieService) {
     this.languages = Config.Server.languages.sort();

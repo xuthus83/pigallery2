@@ -2,7 +2,7 @@
 <app-frame [showSearch]="showSearchBar" [showShare]="showShare">
 
   <ng-container navbar>
-    <li class="nav-item navbar-text"  *ngIf="countDown">
+    <li class="nav-item navbar-text" *ngIf="countDown">
       <span>
         <ng-container i18n>Link availability</ng-container>
         : {{countDown.day}}
@@ -21,6 +21,7 @@
   </ng-container>
 
 
+  <app-gallery-navbar navbar-appendix></app-gallery-navbar>
   <div body class="container-fluid">
     <ng-container *ngIf="ContentWrapper.error">
       <div class="alert alert-danger" role="alert">
@@ -33,9 +34,6 @@
            *ngIf="ContentWrapper.searchResult && ContentWrapper.searchResult.resultOverflow == true" i18n>
         Too many results to show. Refine your search.
       </div>
-
-      <!-- Its safe to hand over both as only one should have a value (search result or dir listing)-->
-      <app-gallery-navbar></app-gallery-navbar>
 
 
       <app-gallery-directories class="directories"

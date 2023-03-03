@@ -1,4 +1,4 @@
-import {Component, HostListener} from '@angular/core';
+import {Component, HostListener, ViewChild} from '@angular/core';
 import {Router, RouterLink} from '@angular/router';
 import {UserDTOUtils} from '../../../../../common/entities/UserDTO';
 import {AuthenticationService} from '../../../model/network/authentication.service';
@@ -11,6 +11,8 @@ import {SearchQueryTypes, TextSearch, TextSearchQueryMatchTypes,} from '../../..
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {GallerySortingService} from './sorting.service';
+import {PageHelper} from '../../../model/page.helper';
+import {BsDropdownDirective} from 'ngx-bootstrap/dropdown';
 
 @Component({
   selector: 'app-gallery-navbar',
@@ -30,6 +32,9 @@ export class GalleryNavigatorComponent {
   public showFilters = false;
   private readonly RootFolderName: string;
   private parentPath: string = null;
+
+  private lastScroll = 0;
+  @ViewChild('dropdown', {static: true}) dropdown: BsDropdownDirective;
 
   constructor(
     public authService: AuthenticationService,
@@ -179,6 +184,16 @@ export class GalleryNavigatorComponent {
         }
         break;
     }
+  }
+
+
+  @HostListener('window:scroll')
+  onScroll(): void {
+    if (this.lastScroll < PageHelper.ScrollY) { // scroll down
+      this.showFilters = false;
+      this.dropdown.hide();
+    }
+    this.lastScroll = PageHelper.ScrollY;
   }
 }
 

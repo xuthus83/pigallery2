@@ -53,7 +53,7 @@
         </a>
         <div class="divider">&nbsp;</div>
       </ng-container>
-      <div class="btn-group" dropdown placement="bottom right">
+      <div class="btn-group" dropdown #dropdown="bs-dropdown" placement="bottom right">
         <button id="button-alignment" dropdownToggle type="button"
                 class="btn btn-secondary dropdown-toggle"
                 [ngClass]="{'btn-secondary':sortingService.sorting.value !== DefaultSorting}"
@@ -78,4 +78,4 @@
 
 </div>
 
-<app-gallery-filter *ngIf="showFilters && ItemCount> 0"></app-gallery-filter>
+<app-gallery-filter *ngIf="showFilters && ItemCount> 0" class="position-absolute w-100"></app-gallery-filter>

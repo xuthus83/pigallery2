@@ -1,12 +1,30 @@
-nav {
-  z-index: 999;
-}
-
-.navbar {
+.navbar-container {
+  z-index: 1040;
   margin-bottom: 20px;
+  position: absolute;
+  width: 100%;
 }
 
+.auto-hide-navbar {
+  position: sticky;
+  top: 0;
+  transform: translateY(0);
+}
 
+.navbar-keep-top {
+  position: relative;
+  transform: translateY(0);
+  transition: transform 0s;
+}
+
+.hide-navbar {
+  transform: translateY(-100%);
+
+}
+
+.animate-navbar {
+  transition: transform 0.3s ease-in-out;
+}
 
 .divider-vertical:first-child {
   display: none;
@@ -26,7 +44,6 @@ nav {
   border-radius: 1rem !important;
   margin-left: -10px;
 }
-
 
 
 a.dropdown-item, button.dropdown-item, div.dropdown-item {
