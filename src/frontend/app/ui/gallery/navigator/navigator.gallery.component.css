@@ -40,3 +40,8 @@ nav {
 .search-type {
   margin-left: 5px;
 }
+
+app-gallery-filter{
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}

@@ -1,5 +1,6 @@
-import {Component, HostListener, ViewChild} from '@angular/core';
+import {Component, ElementRef, HostListener, ViewChild} from '@angular/core';
 import {Router, RouterLink} from '@angular/router';
+import {DomSanitizer} from '@angular/platform-browser';
 import {UserDTOUtils} from '../../../../../common/entities/UserDTO';
 import {AuthenticationService} from '../../../model/network/authentication.service';
 import {QueryService} from '../../../model/query.service';
@@ -35,6 +36,7 @@ export class GalleryNavigatorComponent {
 
   private lastScroll = 0;
   @ViewChild('dropdown', {static: true}) dropdown: BsDropdownDirective;
+  @ViewChild('navigator', { read: ElementRef }) navigatorElement: ElementRef<HTMLInputElement>;
 
   constructor(
     public authService: AuthenticationService,
@@ -42,6 +44,7 @@ export class GalleryNavigatorComponent {
     public galleryService: ContentService,
     public sortingService: GallerySortingService,
     private router: Router,
+    public sanitizer: DomSanitizer
   ) {
     this.sortingMethodsType = Utils.enumToArray(SortingMethods);
     this.RootFolderName = $localize`Home`;
