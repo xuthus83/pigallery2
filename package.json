@@ -14,6 +14,7 @@
     "build-backend": "tsc",
     "pretest": "tsc",
     "test": "ng test  && nyc mocha --recursive test",
+    "test-backend": "tsc && mocha --recursive test",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "start": "node ./src/backend/index",
     "run-dev": "ng build  --configuration=dev",
