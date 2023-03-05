@@ -171,7 +171,10 @@ export class PublicRouter {
         if (!fs.existsSync(file)) {
           return res.sendStatus(404);
         }
-        res.sendFile(file);
+        res.sendFile(file, {
+          maxAge: 31536000,
+          dotfiles: 'allow',
+        });
       };
     };
 
