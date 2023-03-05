@@ -26,7 +26,7 @@ export class ContentService {
   };
   private lastDirectory: ParentDirectoryDTO;
   private searchId: any;
-  private ongoingSearch: SearchQueryDTO = null;
+  private ongoingSearch: string = null;
 
   constructor(
     private networkService: NetworkService,
@@ -102,7 +102,7 @@ export class ContentService {
     }
   }
 
-  public async search(query: SearchQueryDTO): Promise<void> {
+  public async search(query: string): Promise<void> {
     if (this.searchId != null) {
       clearTimeout(this.searchId);
     }
@@ -110,7 +110,7 @@ export class ContentService {
     this.ongoingSearch = query;
 
     this.setContent(new ContentWrapperWithError());
-    let cw = this.galleryCacheService.getSearch(query);
+    let cw = this.galleryCacheService.getSearch(JSON.parse(query));
     if (!cw || cw.searchResult == null) {
       try {
         cw = await this.networkService.getJson<ContentWrapperWithError>('/search/' + query);

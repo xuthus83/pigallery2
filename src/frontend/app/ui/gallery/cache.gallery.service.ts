@@ -183,6 +183,9 @@ export class GalleryCacheService {
     if (Config.Gallery.enableCache === false) {
       return null;
     }
+    if (typeof query === 'string') {
+      throw new Error('query expected to by object. Got:' + query);
+    }
     const key = GalleryCacheService.SEARCH_PREFIX + JSON.stringify(query);
     return GalleryCacheService.loadCacheItem(key);
   }
