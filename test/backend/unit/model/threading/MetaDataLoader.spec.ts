@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 import {expect} from 'chai';
 import {MetadataLoader} from '../../../../../src/backend/model/threading/MetadataLoader';
 import {Utils} from '../../../../../src/common/Utils';
@@ -119,6 +120,12 @@ describe('MetadataLoader', () => {
   it('should load jpg edited with exiftool', async () => {
     const data = await MetadataLoader.loadPhotoMetadata(path.join(__dirname, '/../../../assets/exiftool.jpg'));
     const expected = require(path.join(__dirname, '/../../../assets/exiftool.json'));
+    expect(Utils.clone(data)).to.be.deep.equal(expected);
+  });
+
+  it('should load jpg with provided ImageWidth but missing imageSize', async () => {
+    const data = await MetadataLoader.loadPhotoMetadata(path.join(__dirname, '/../../../assets/imageSizeError.jpg'));
+    const expected = require(path.join(__dirname, '/../../../assets/imageSizeError.json'));
     expect(Utils.clone(data)).to.be.deep.equal(expected);
   });
 

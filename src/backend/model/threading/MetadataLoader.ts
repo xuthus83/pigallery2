@@ -191,7 +191,6 @@ export class MetadataLoader {
                   exif.tags.CreateDate ||
                   exif.tags.ModifyDate) * 1000;
             }
-
             if (exif.imageSize) {
               metadata.size = {
                 width: exif.imageSize.width,
@@ -204,6 +203,14 @@ export class MetadataLoader {
               metadata.size = {
                 width: exif.tags.RelatedImageWidth,
                 height: exif.tags.RelatedImageHeight,
+              };
+            }else if (
+              exif.tags.ImageWidth &&
+              exif.tags.ImageHeight
+            ) {
+              metadata.size = {
+                width: exif.tags.ImageWidth,
+                height: exif.tags.ImageHeight,
               };
             } else {
               const info = imageSize(fullPath);
