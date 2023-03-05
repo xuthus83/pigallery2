@@ -79,6 +79,6 @@
 </div>
 <app-gallery-filter #filterComponent
                     *ngIf="showFilters && ItemCount> 0"
-                    [style.height]="sanitizer.bypassSecurityTrustStyle('calc(100vh - '+(navigatorElement?.nativeElement?.getBoundingClientRect().top+navigatorElement?.nativeElement?.getBoundingClientRect().height)+'px)')"
+                    [style.height]="sanitizer.bypassSecurityTrustStyle('calc(100dvh - '+(navigatorElement?.nativeElement?.getBoundingClientRect().top+navigatorElement?.nativeElement?.getBoundingClientRect().height)+'px)')"
 
                     class="position-absolute w-100"></app-gallery-filter>
