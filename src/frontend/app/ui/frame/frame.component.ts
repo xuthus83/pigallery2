@@ -32,10 +32,14 @@ export class FrameComponent {
   public readonly stringify = JSON.stringify;
 
   /* sticky top navbar */
-  private lastScroll = 0;
+  private lastScroll = {
+    any: 0,
+    up: 0,
+    down: 0
+  };
   public shouldHideNavbar = false;
   public navbarKeepTop = true;
-  public  animateNavbar = false;
+  public animateNavbar = false;
   @ViewChild('navContainer', {static: true}) navContainer: ElementRef;
   @ViewChild('dropdown', {static: true}) dropdown: BsDropdownDirective;
   @ViewChild('languageSelector', {static: true}) languageSelector: LanguageComponent;
@@ -88,35 +92,48 @@ export class FrameComponent {
   }
 
 
-
   @HostListener('window:scroll')
   onScroll(): void {
-    const up = this.lastScroll > PageHelper.ScrollY;
-    const down = this.lastScroll < PageHelper.ScrollY;
+    const scrollPosition = PageHelper.ScrollY;
+    const up = this.lastScroll.any > scrollPosition;
+    const down = this.lastScroll.any < scrollPosition;
+    const upDelay = up && this.lastScroll.down > scrollPosition + window.innerHeight * Config.Gallery.NavBar.NavbarShowHideDelay;
+    const downDelay = down && this.lastScroll.up < scrollPosition - window.innerHeight * Config.Gallery.NavBar.NavbarShowHideDelay;
+
     //we are the top where the navbar by default lives
-    if (this.navContainer.nativeElement.offsetHeight > PageHelper.ScrollY) {
+    if (this.navContainer.nativeElement.offsetHeight > scrollPosition) {
       // do not force move navbar up when we are scrolling up from bottom
       if (this.shouldHideNavbar != false) {
         this.navbarKeepTop = true;
+      }
+      if (down) { // scroll down
+        this.shouldHideNavbar = true;
       }
 
     } else {
       // enable navigation once we left the top part to prevent hide extra animation
       this.animateNavbar = !(this.navbarKeepTop && down);
       this.navbarKeepTop = false;
-      if (down) {
+
+      if (downDelay) { // scroll down
         this.dropdown.hide();
         this.languageSelector.dropdown.hide();
       }
     }
 
-    if (up) { //scroll up
+    if (upDelay) { //scroll up
       this.shouldHideNavbar = false;
-    } else if (down) { // scroll down
+    } else if (downDelay) { // scroll down
       this.shouldHideNavbar = true;
     }
 
-    this.lastScroll = PageHelper.ScrollY;
+    if (up) { //scroll up
+      this.lastScroll.up = scrollPosition;
+    } else if (down) { // scroll down
+      this.lastScroll.down = scrollPosition;
+    }
+
+    this.lastScroll.any = scrollPosition;
   }
 }
 

@@ -34,9 +34,13 @@ export class GalleryNavigatorComponent {
   private readonly RootFolderName: string;
   private parentPath: string = null;
 
-  private lastScroll = 0;
+  private lastScroll = {
+    any: 0,
+    up: 0,
+    down: 0
+  };
   @ViewChild('dropdown', {static: true}) dropdown: BsDropdownDirective;
-  @ViewChild('navigator', { read: ElementRef }) navigatorElement: ElementRef<HTMLInputElement>;
+  @ViewChild('navigator', {read: ElementRef}) navigatorElement: ElementRef<HTMLInputElement>;
 
   constructor(
     public authService: AuthenticationService,
@@ -192,11 +196,18 @@ export class GalleryNavigatorComponent {
 
   @HostListener('window:scroll')
   onScroll(): void {
-    if (this.lastScroll < PageHelper.ScrollY) { // scroll down
-      this.showFilters = false;
-      this.dropdown.hide();
+    const scrollPosition = PageHelper.ScrollY;
+    if (this.lastScroll.any < scrollPosition) { // scroll down
+      //hide delay
+      if (this.lastScroll.up < scrollPosition - window.innerHeight * Config.Gallery.NavBar.NavbarShowHideDelay) {
+        this.showFilters = false;
+        this.dropdown.hide();
+      }
+      this.lastScroll.down = scrollPosition;
+    } else if (this.lastScroll.any > scrollPosition) {
+      this.lastScroll.up = scrollPosition;
     }
-    this.lastScroll = PageHelper.ScrollY;
+    this.lastScroll.any = scrollPosition;
   }
 }
 

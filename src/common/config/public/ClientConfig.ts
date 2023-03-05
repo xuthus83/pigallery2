@@ -429,6 +429,15 @@ export class NavBarConfig {
     new NavigationLinkConfig(NavigationLinkTypes.albums),
     new NavigationLinkConfig(NavigationLinkTypes.faces),
   ];
+  @ConfigProperty({
+    tags: {
+      name: $localize`Navbar show/hide delay`,
+      priority: ConfigPriority.underTheHood
+    },
+    type: 'ratio',
+    description: $localize`Ratio of the page height, you need to scroll to show or hide the navigationbar.`,
+  })
+  NavbarShowHideDelay: number = 0.15;
 }
 
 @SubConfigClass<TAGS>({tags: {client: true}, softReadonly: true})
