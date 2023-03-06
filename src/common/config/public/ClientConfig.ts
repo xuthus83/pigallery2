@@ -431,13 +431,22 @@ export class NavBarConfig {
   ];
   @ConfigProperty({
     tags: {
-      name: $localize`Navbar show/hide delay`,
+      name: $localize`Navbar show delay`,
       priority: ConfigPriority.underTheHood
     },
-    type: 'ratio',
-    description: $localize`Ratio of the page height, you need to scroll to show or hide the navigationbar.`,
+    type: 'positiveFloat',
+    description: $localize`Ratio of the page height, you need to scroll to show the navigation bar.`,
   })
-  NavbarShowHideDelay: number = 0.15;
+  NavbarShowDelay: number = 0.30;
+  @ConfigProperty({
+    tags: {
+      name: $localize`Navbar hide delay`,
+      priority: ConfigPriority.underTheHood
+    },
+    type: 'positiveFloat',
+    description: $localize`Ratio of the page height, you need to scroll to hide the navigation bar.`,
+  })
+  NavbarHideDelay: number = 0.15;
 }
 
 @SubConfigClass<TAGS>({tags: {client: true}, softReadonly: true})

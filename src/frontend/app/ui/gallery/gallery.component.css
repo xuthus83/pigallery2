@@ -55,6 +55,7 @@ app-gallery-map {
 .directories {
   margin-right: 2px;
   margin-left: 2px;
+  display: block;
 }
 
 

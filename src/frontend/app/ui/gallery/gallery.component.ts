@@ -16,6 +16,8 @@ import {GallerySortingService} from './navigator/sorting.service';
 import {MediaDTO} from '../../../../common/entities/MediaDTO';
 import {FilterService} from './filter/filter.service';
 import {PiTitleService} from '../../model/pi-title.service';
+import {GPXFilesFilterPipe} from '../../pipes/GPXFilesFilterPipe';
+import {MDFilesFilterPipe} from '../../pipes/MDFilesFilterPipe';
 
 @Component({
   selector: 'app-gallery',
@@ -59,7 +61,9 @@ export class GalleryComponent implements OnInit, OnDestroy {
     private navigation: NavigationService,
     private filterService: FilterService,
     private sortingService: GallerySortingService,
-    private piTitleService: PiTitleService
+    private piTitleService: PiTitleService,
+    private gpxFilesFilterPipe: GPXFilesFilterPipe,
+    private mdFilesFilterPipe:MDFilesFilterPipe,
   ) {
     this.mapEnabled = Config.Map.enabled;
     PageHelper.showScrollY();
@@ -199,4 +203,12 @@ export class GalleryComponent implements OnInit, OnDestroy {
       }
     }
   };
+
+  get ShowMarkDown():boolean{
+    return this.config.MetaFile.markdown  && this.directoryContent?.metaFile && this.mdFilesFilterPipe.transform(this.directoryContent.metaFile).length>0;
+  }
+
+  get ShowMap():boolean{
+    return (this.isPhotoWithLocation || this.gpxFilesFilterPipe.transform(this.directoryContent?.metaFile)?.length > 0) && this.mapEnabled;
+  }
 }

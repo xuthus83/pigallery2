@@ -97,8 +97,8 @@ export class FrameComponent {
     const scrollPosition = PageHelper.ScrollY;
     const up = this.lastScroll.any > scrollPosition;
     const down = this.lastScroll.any < scrollPosition;
-    const upDelay = up && this.lastScroll.down > scrollPosition + window.innerHeight * Config.Gallery.NavBar.NavbarShowHideDelay;
-    const downDelay = down && this.lastScroll.up < scrollPosition - window.innerHeight * Config.Gallery.NavBar.NavbarShowHideDelay;
+    const upDelay = up && this.lastScroll.down > scrollPosition + window.innerHeight * Config.Gallery.NavBar.NavbarShowDelay;
+    const downDelay = down && this.lastScroll.up < scrollPosition - window.innerHeight * Config.Gallery.NavBar.NavbarHideDelay;
 
     //we are the top where the navbar by default lives
     if (this.navContainer.nativeElement.offsetHeight > scrollPosition) {

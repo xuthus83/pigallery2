@@ -99,11 +99,11 @@ import {FilterService} from './ui/gallery/filter/filter.service';
 import {TemplateComponent} from './ui/settings/template/template.component';
 import {WorkflowComponent} from './ui/settings/workflow/workflow.component';
 import {GalleryStatisticComponent} from './ui/settings/gallery-statistic/gallery-statistic.component';
-import { JobButtonComponent } from './ui/settings/workflow/button/job-button.settings.component';
-import { JobProgressComponent } from './ui/settings/workflow/progress/job-progress.settings.component';
+import {JobButtonComponent} from './ui/settings/workflow/button/job-button.settings.component';
+import {JobProgressComponent} from './ui/settings/workflow/progress/job-progress.settings.component';
 import {SettingsEntryComponent} from './ui/settings/template/settings-entry/settings-entry.component';
-import { UsersComponent } from './ui/settings/users/users.component';
-import { SharingsListComponent } from './ui/settings/sharings-list/sharings-list.component';
+import {UsersComponent} from './ui/settings/users/users.component';
+import {SharingsListComponent} from './ui/settings/sharings-list/sharings-list.component';
 
 @Injectable()
 export class MyHammerConfig extends HammerGestureConfig {
@@ -272,7 +272,9 @@ Marker.prototype.options.icon = iconDefault;
     VersionService,
     ScheduledJobsService,
     BackendtextService,
-    CookieService
+    CookieService,
+    GPXFilesFilterPipe,
+    MDFilesFilterPipe,
   ],
   bootstrap: [AppComponent],
 })

@@ -199,7 +199,7 @@ export class GalleryNavigatorComponent {
     const scrollPosition = PageHelper.ScrollY;
     if (this.lastScroll.any < scrollPosition) { // scroll down
       //hide delay
-      if (this.lastScroll.up < scrollPosition - window.innerHeight * Config.Gallery.NavBar.NavbarShowHideDelay) {
+      if (this.lastScroll.up < scrollPosition - window.innerHeight * Config.Gallery.NavBar.NavbarHideDelay) {
         this.showFilters = false;
         this.dropdown.hide();
       }

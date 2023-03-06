@@ -39,10 +39,10 @@
       <app-gallery-directories class="directories"
                                [directories]="directoryContent?.directories || []"></app-gallery-directories>
 
-      <div class="blog-map-row">
+      <div class="blog-map-row" *ngIf="ShowMarkDown || ShowMap">
         <div class="blog-wrapper"
              [style.width]="blogOpen ?  '100%' : 'calc(100% - 100px)'"
-             *ngIf="config.MetaFile.markdown  && directoryContent?.metaFile && (directoryContent.metaFile | mdFiles).length>0">
+             *ngIf="ShowMarkDown">
           <app-gallery-blog [collapsed]="!blogOpen"
                             [mdFiles]="directoryContent.metaFile | mdFiles"></app-gallery-blog>
 
@@ -52,7 +52,7 @@
           </button>
         </div>
         <app-gallery-map
-          *ngIf="(isPhotoWithLocation || (directoryContent?.metaFile | gpxFiles)?.length > 0) && mapEnabled"
+          *ngIf="ShowMap"
           [photos]="directoryContent?.media | photosOnly"
           [gpxFiles]="directoryContent?.metaFile | gpxFiles"></app-gallery-map>
       </div>
