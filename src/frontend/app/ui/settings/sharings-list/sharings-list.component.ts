@@ -13,12 +13,12 @@ import {Utils} from '../../../../../common/Utils';
 export class SharingsListComponent implements OnInit {
 
   public shares: SharingDTO[] = [];
+  public sharingUrl =  Utils.concatUrls(Config.Server.publicUrl, '/share') + '/';
 
   constructor(public sharingList: SharingListService,
               private settingsService: SettingsService) {
   }
 
-  sharingUrl = Utils.concatUrls(Config.Server.publicUrl, '/share/');
 
   ngOnInit(): void {
     this.getSharingList();

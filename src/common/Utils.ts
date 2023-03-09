@@ -129,7 +129,7 @@ export class Utils {
 
       url += part + '/';
     }
-    url = url.replace(new RegExp('/+', 'g'), '/');
+    url = url.replace(/(https?:\/\/)|(\/){2,}/g, "$1$2")
 
     if (url.trim() === '') {
       url = './';
