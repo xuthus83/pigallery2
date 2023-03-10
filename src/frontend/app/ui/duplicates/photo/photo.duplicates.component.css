@@ -7,7 +7,7 @@
 }
 
 .photo-container {
-  width: inherit;
+  width: 100%;
   height: inherit;
   overflow: hidden;
 }

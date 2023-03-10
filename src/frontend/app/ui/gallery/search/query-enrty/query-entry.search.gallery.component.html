@@ -16,7 +16,8 @@
         <ng-container i18n>At least this many</ng-container>
         (1-{{AsListQuery.list.length}}):</label>
       <input
-        type="number" min="1" [max]="AsListQuery.list.length" class="form-control col-md-2" placeholder="1"
+        type="number" min="1" [max]="AsListQuery.list.length"
+        class="form-control col-md-2" placeholder="1"
         title="At least this many"
         i18n-title
         [(ngModel)]="AsSomeOfQuery.min"
@@ -72,7 +73,7 @@
           name="searchField"
           placeholder="Search text"
           i18n-placeholder
-          class="form-control"
+          class="form-control rounded-2"
           [(ngModel)]="AsTextQuery.text"
           (change)="onChange()"
           (ngModelChange)="onChange()"
@@ -85,35 +86,36 @@
       </div>
     </div>
     <ng-container [ngSwitch]="queryEntry.type">
-      <div *ngSwitchCase="SearchQueryTypes.distance" class="col-md-8 d-flex">
-        <div class="input-group col-md-4">
-          <input type="number" class="form-control" placeholder="1"
-                 id="distance"
-                 min="0"
-                 step="0.1"
-                 [(ngModel)]="AsDistanceQuery.distance"
-                 (ngModelChange)="onChange()"
-                 name="distance" required>
-          <div class="input-group-append">
+      <div *ngSwitchCase="SearchQueryTypes.distance" class="col-md-8 row">
+        <div class="col-md-4">
+          <div class="input-group">
+            <input type="number" class="form-control" placeholder="1"
+                   id="distance"
+                   min="0"
+                   step="0.1"
+                   [(ngModel)]="AsDistanceQuery.distance"
+                   (ngModelChange)="onChange()"
+                   name="distance" required>
             <span class="input-group-text">km</span>
           </div>
         </div>
-        <div class="input-group col-md-8">
-          <label class="col-md-4 control-label" for="maxResolution">From</label>
-          <input id="from"
-                 name="from"
-                 title="From"
-                 placeholder="New York"
-                 i18n-title
-                 class="form-control input-md"
-                 [(ngModel)]="AsDistanceQuery.from.text"
-                 (ngModelChange)="onChange()"
-                 type="text">
+        <div class="col-md-8">
+          <div class="input-group">
+            <label class="control-label me-2" for="maxResolution">From</label>
+            <input id="from"
+                   name="from"
+                   title="From"
+                   placeholder="New York"
+                   i18n-title
+                   class="form-control input-md rounded-2"
+                   [(ngModel)]="AsDistanceQuery.from.text"
+                   (ngModelChange)="onChange()"
+                   type="text">
+          </div>
         </div>
       </div>
       <!-- Range Search Query -->
-      <div *ngSwitchCase="SearchQueryTypes.from_date" class="col-md-8 input-group ">
-        <label class="col-md-4 control-label" for="from_date">From:</label>
+      <div *ngSwitchCase="SearchQueryTypes.from_date" class="col-md-8 d-flex">
         <input id="from_date"
                name="from_date"
                title="From date"
@@ -121,11 +123,10 @@
                [ngModel]="AsRangeQuery.value | date:'yyyy-MM-dd'"
                (ngModelChange)="AsRangeQuery.value = $event; onChange() "
                [value]="AsRangeQuery.value | date:'yyyy-MM-dd'" #from_date="ngModel"
-               class="form-control input-md"
+               class="form-control input-md rounded-2"
                type="date">
       </div>
-      <div *ngSwitchCase="SearchQueryTypes.to_date" class="col-md-8 input-group">
-        <label class="col-md-4 control-label" for="to_date">To:</label>
+      <div *ngSwitchCase="SearchQueryTypes.to_date" class="col-md-8 d-flex">
         <input id="to_date"
                name="to_date"
                title="To date"
@@ -133,11 +134,10 @@
                [ngModel]="AsRangeQuery.value | date:'yyyy-MM-dd'"
                (ngModelChange)="AsRangeQuery.value = $event; onChange() "
                [value]="AsRangeQuery.value | date:'yyyy-MM-dd'" #to_date="ngModel"
-               class="form-control input-md"
+               class="form-control input-md rounded-2"
                type="date">
       </div>
-      <div *ngSwitchCase="SearchQueryTypes.min_rating" class="col-md-8 input-group">
-        <label class="col-md-4 control-label" for="maxResolution">Min:</label>
+      <div *ngSwitchCase="SearchQueryTypes.min_rating" class="col-md-8 d-flex">
         <input id="minRating"
                name="minRating"
                title="Minimum Rating"
@@ -145,13 +145,12 @@
                i18n-title
                min="0"
                max="5"
-               class="form-control input-md"
+               class="form-control input-md rounded-2"
                [(ngModel)]="AsRangeQuery.value"
                (ngModelChange)="onChange()"
                type="number">
       </div>
-      <div *ngSwitchCase="SearchQueryTypes.max_rating" class="col-md-8 input-group">
-        <label class="col-md-4 control-label" for="maxResolution">Max:</label>
+      <div *ngSwitchCase="SearchQueryTypes.max_rating" class="col-md-8 d-flex">
         <input id="maxRating"
                name="maxRating"
                title="Maximum Rating"
@@ -159,48 +158,45 @@
                i18n-title
                min="0"
                max="5"
-               class="form-control input-md"
+               class="form-control input-md rounded-2"
                [(ngModel)]="AsRangeQuery.value"
                (ngModelChange)="onChange()"
                type="number">
       </div>
-      <div *ngSwitchCase="SearchQueryTypes.min_resolution" class="col-md-8 input-group">
-
-        <label class="col-md-4 control-label" for="maxResolution">Min:</label>
-        <input id="minResolution"
-               name="minResolution"
-               title="Minimum Rating"
-               placeholder="0"
-               i18n-title
-               min="0"
-               class="form-control input-md"
-               [(ngModel)]="AsRangeQuery.value"
-               (ngModelChange)="onChange()"
-               type="number">
-        <div class="input-group-append">
+      <div *ngSwitchCase="SearchQueryTypes.min_resolution" class="col-md-8">
+        <div class="input-group">
+          <input id="minResolution"
+                 name="minResolution"
+                 title="Minimum Rating"
+                 placeholder="0"
+                 i18n-title
+                 min="0"
+                 class="form-control input-md"
+                 [(ngModel)]="AsRangeQuery.value"
+                 (ngModelChange)="onChange()"
+                 type="number">
           <span class="input-group-text">Mpx</span>
         </div>
       </div>
 
-      <div *ngSwitchCase="SearchQueryTypes.max_resolution" class="col-md-8 input-group">
-        <label class="col-md-4 control-label" for="maxResolution">Max:</label>
-        <input id="maxResolution"
-               name="maxResolution"
-               title="Maximum Rating"
-               placeholder="5"
-               i18n-title
-               [min]="0"
-               class="form-control input-md"
-               [(ngModel)]="AsRangeQuery.value"
-               (ngModelChange)="onChange()"
-               type="number">
-        <div class="input-group-append">
+      <div *ngSwitchCase="SearchQueryTypes.max_resolution" class="col-md-8">
+        <div class="input-group">
+          <input id="maxResolution"
+                 name="maxResolution"
+                 title="Maximum Rating"
+                 placeholder="5"
+                 i18n-title
+                 [min]="0"
+                 class="form-control input-md"
+                 [(ngModel)]="AsRangeQuery.value"
+                 (ngModelChange)="onChange()"
+                 type="number">
           <span class="input-group-text">Mpx</span>
         </div>
       </div>
       <div *ngSwitchCase="SearchQueryTypes.orientation" class="col-md-8 d-flex">
         <div class="input-group col-md-6">
-          <select class="form-select"
+          <select class="form-select rounded-2"
                   [(ngModel)]="AsOrientationQuery.landscape"
                   (ngModelChange)="onChange()"
                   id="orientation-select"

@@ -17,6 +17,11 @@ bs-dropdown-container {
   z-index: 1;
 }
 
+/* TODO: remove popover in ngx-bootstrap is fixed*/
+.bs-popover-top{
+  position: absolute;
+}
+
 .slim-loading-bar-progress {
   transition: opacity 1s ease-in;
   transition-delay: 1s;
