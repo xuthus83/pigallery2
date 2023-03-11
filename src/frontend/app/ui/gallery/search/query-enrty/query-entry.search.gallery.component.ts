@@ -15,7 +15,7 @@ import {
 import { Utils } from '../../../../../../common/Utils';
 import {
   ControlValueAccessor,
-  FormControl,
+  UntypedFormControl,
   NG_VALIDATORS,
   NG_VALUE_ACCESSOR,
   ValidationErrors,
@@ -92,7 +92,7 @@ export class GallerySearchQueryEntryComponent
     return this.queryEntry as TextSearch;
   }
 
-  validate(control: FormControl): ValidationErrors {
+  validate(control: UntypedFormControl): ValidationErrors {
     return { required: true };
   }
 

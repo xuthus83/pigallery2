@@ -2,7 +2,7 @@ import {Component, EventEmitter, forwardRef, Input, Output,TemplateRef} from '@a
 import {Router, RouterLink} from '@angular/router';
 import {AutoCompleteService} from '../autocomplete.service';
 import {SearchQueryDTO} from '../../../../../../common/entities/SearchQueryDTO';
-import {ControlValueAccessor, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator,} from '@angular/forms';
+import {ControlValueAccessor, UntypedFormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator,} from '@angular/forms';
 import {SearchQueryParserService} from '../search-query-parser.service';
 import {BsModalRef, BsModalService,} from '../../../../../../../node_modules/ngx-bootstrap/modal';
 
@@ -76,7 +76,7 @@ export class GallerySearchFieldComponent
     this.propagateChange(this.searchQueryDTO);
   }
 
-  validate(control: FormControl): ValidationErrors {
+  validate(control: UntypedFormControl): ValidationErrors {
     return {required: true};
   }
 

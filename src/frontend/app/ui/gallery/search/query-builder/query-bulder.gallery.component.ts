@@ -12,7 +12,7 @@ import {
 } from '../../../../../../common/entities/SearchQueryDTO';
 import {
   ControlValueAccessor,
-  FormControl,
+  UntypedFormControl,
   NG_VALIDATORS,
   NG_VALUE_ACCESSOR,
   ValidationErrors,
@@ -75,7 +75,7 @@ export class GallerySearchQueryBuilderComponent
     this.onChange();
   }
 
-  validate(control: FormControl): ValidationErrors {
+  validate(control: UntypedFormControl): ValidationErrors {
     return { required: true };
   }
 
