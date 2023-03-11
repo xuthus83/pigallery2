@@ -46,7 +46,7 @@ export class SettingsMWs {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       Config[settingsPath] = settings;
-      original.save();
+      await original.save();
       await ConfigDiagnostics.runDiagnostics();
       Logger.info(LOG_TAG, 'new config:');
       Logger.info(LOG_TAG, JSON.stringify(Config.toJSON({attachDescription: false}), null, '\t'));
