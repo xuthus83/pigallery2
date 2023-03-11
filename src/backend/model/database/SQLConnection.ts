@@ -125,7 +125,8 @@ export class SQLConnection {
 
     // Add dummy Admin to the db
     const admins = await userRepository.findBy({role: UserRoles.Admin});
-    if (admins.length === 0) {
+    const devs = await userRepository.findBy({role: UserRoles.Developer});
+    if (admins.length === 0 && devs.length === 0) {
       const a = new UserEntity();
       a.name = 'admin';
       a.password = PasswordHelper.cryptPassword('admin');
