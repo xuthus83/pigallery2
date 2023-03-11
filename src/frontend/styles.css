@@ -17,8 +17,8 @@ bs-dropdown-container {
   z-index: 1;
 }
 
-/* TODO: remove popover in ngx-bootstrap is fixed*/
-.bs-popover-top{
+/* TODO: remove popover in ngx-bootstrap, bootstrap 5.3-alpha is fixed */
+.bs-popover-top, .bs-popover-bottom{
   position: absolute;
 }
 
