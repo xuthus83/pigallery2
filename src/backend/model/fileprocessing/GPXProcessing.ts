@@ -82,48 +82,49 @@ export class GPXProcessing {
     await fsp.mkdir(outDir, {recursive: true});
     const gpxStr = await fsp.readFile(filePath);
     const gpxObj = await (new xml2js.Parser()).parseStringPromise(gpxStr);
-    const items: gpxEntry[] = gpxObj.gpx.trk[0].trkseg[0].trkpt;
+    const items: gpxEntry[] = gpxObj.gpx?.trk?.[0]?.trkseg[0]?.trkpt;
 
-    const distance = (entry1: gpxEntry, entry2: gpxEntry) => {
-      const lat1 = parseFloat(entry1.$.lat);
-      const lon1 = parseFloat(entry1.$.lon);
-      const lat2 = parseFloat(entry2.$.lat);
-      const lon2 = parseFloat(entry2.$.lon);
+    if (items) { // only compress paths
+      const distance = (entry1: gpxEntry, entry2: gpxEntry) => {
+        const lat1 = parseFloat(entry1.$.lat);
+        const lon1 = parseFloat(entry1.$.lon);
+        const lat2 = parseFloat(entry2.$.lat);
+        const lon2 = parseFloat(entry2.$.lon);
 
-      // credits to: https://www.movable-type.co.uk/scripts/latlong.html
-      const R = 6371e3; // metres
-      const φ1 = lat1 * Math.PI / 180; // φ, λ in radians
-      const φ2 = lat2 * Math.PI / 180;
-      const Δφ = (lat2 - lat1) * Math.PI / 180;
-      const Δλ = (lon2 - lon1) * Math.PI / 180;
+        // credits to: https://www.movable-type.co.uk/scripts/latlong.html
+        const R = 6371e3; // metres
+        const φ1 = lat1 * Math.PI / 180; // φ, λ in radians
+        const φ2 = lat2 * Math.PI / 180;
+        const Δφ = (lat2 - lat1) * Math.PI / 180;
+        const Δλ = (lon2 - lon1) * Math.PI / 180;
 
-      const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
-        Math.cos(φ1) * Math.cos(φ2) *
-        Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
-      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+          Math.cos(φ1) * Math.cos(φ2) *
+          Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
-      const d = R * c; // in metres
-      return d;
-    };
-    const gpxEntryFilter = (value: gpxEntry, i: number, list: gpxEntry[]) => {
-      if (i === 0 || i >= list.length - 1) { // always keep the first and last items
-        return true;
-      }
-      const timeDelta = (Date.parse(list[i].time[0]) - Date.parse(list[i - 1].time[0])); // mill sec.
-      const dist = distance(list[i - 1], list[i]); // meters
+        const d = R * c; // in metres
+        return d;
+      };
+      const gpxEntryFilter = (value: gpxEntry, i: number, list: gpxEntry[]) => {
+        if (i === 0 || i >= list.length - 1) { // always keep the first and last items
+          return true;
+        }
+        const timeDelta = (Date.parse(list[i].time[0]) - Date.parse(list[i - 1].time[0])); // mill sec.
+        const dist = distance(list[i - 1], list[i]); // meters
 
-      return !(timeDelta < Config.MetaFile.GPXCompressing.minTimeDistance &&
-        dist < Config.MetaFile.GPXCompressing.minDistance);
-    };
+        return !(timeDelta < Config.MetaFile.GPXCompressing.minTimeDistance &&
+          dist < Config.MetaFile.GPXCompressing.minDistance);
+      };
 
-    gpxObj.gpx.trk[0].trkseg[0].trkpt = items.filter(gpxEntryFilter).map((v) => {
-      v.$.lon = parseFloat(v.$.lon).toFixed(6);
-      v.$.lat = parseFloat(v.$.lat).toFixed(6);
-      delete v.ele;
-      delete v.extensions;
-      return v;
-    });
-
+      gpxObj.gpx.trk[0].trkseg[0].trkpt = items.filter(gpxEntryFilter).map((v) => {
+        v.$.lon = parseFloat(v.$.lon).toFixed(6);
+        v.$.lat = parseFloat(v.$.lat).toFixed(6);
+        delete v.ele;
+        delete v.extensions;
+        return v;
+      });
+    }
     await fsp.writeFile(outPath, (new xml2js.Builder({renderOpts: {pretty: false}})).buildObject(gpxObj));
 
     return outPath;
