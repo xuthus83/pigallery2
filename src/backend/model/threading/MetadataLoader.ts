@@ -204,7 +204,7 @@ export class MetadataLoader {
                 width: exif.tags.RelatedImageWidth,
                 height: exif.tags.RelatedImageHeight,
               };
-            }else if (
+            } else if (
               exif.tags.ImageWidth &&
               exif.tags.ImageHeight
             ) {
@@ -269,9 +269,9 @@ export class MetadataLoader {
           try {
             // TODO: clean up the three different exif readers,
             //  and keep the minimum amount only
-            const exif = ExifReader.load(data);
+            const exif: ExifReader.Tags &ExifReader.XmpTags & ExifReader.IccTags = ExifReader.load(data);
             if (exif.Rating) {
-              metadata.rating = parseInt(exif.Rating.value, 10) as 0 | 1 | 2 | 3 | 4 | 5;
+              metadata.rating = parseInt(exif.Rating.value as string, 10) as 0 | 1 | 2 | 3 | 4 | 5;
               if (metadata.rating < 0) {
                 metadata.rating = 0;
               }
@@ -284,7 +284,7 @@ export class MetadataLoader {
               if (metadata.keywords === undefined) {
                 metadata.keywords = [];
               }
-              for (const kw of exif.subject.value) {
+              for (const kw of exif.subject.value as ExifReader.XmpTag[]) {
                 if (metadata.keywords.indexOf(kw.description) === -1) {
                   metadata.keywords.push(kw.description);
                 }
@@ -308,11 +308,9 @@ export class MetadataLoader {
             if (Config.Faces.enabled) {
               const faces: FaceRegion[] = [];
               if (
-                exif.Regions &&
-                exif.Regions.value.RegionList &&
-                exif.Regions.value.RegionList.value
+                ((exif.Regions as any)?.value?.RegionList)?.value
               ) {
-                for (const regionRoot of exif.Regions.value.RegionList
+                for (const regionRoot of (exif.Regions as any).value.RegionList
                   .value as any[]) {
                   let type;
                   let name;
