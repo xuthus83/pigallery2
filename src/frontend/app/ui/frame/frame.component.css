@@ -57,6 +57,5 @@ a.dropdown-item span, button.dropdown-item span, div.dropdown-item span {
 
 
 a.dropdown-item span.badge, button.dropdown-item span.badge {
-  padding: 0.25em 0.37rem 0.25rem 0;
   margin-left: -0.8rem;
 }
