@@ -41,6 +41,7 @@ export class GalleryFilterComponent implements OnInit, OnDestroy {
 
   get ActiveFilters(): {
     filtersVisible: boolean;
+    areFiltersActive: boolean;
     dateFilter: {
       minDate: number;
       maxDate: number;
@@ -121,6 +122,10 @@ export class GalleryFilterComponent implements OnInit, OnDestroy {
       );
     }
     this.filterService.onFilterChange();
+  }
+
+  reset(): void {
+    this.filterService.resetFilters();
   }
 }
 

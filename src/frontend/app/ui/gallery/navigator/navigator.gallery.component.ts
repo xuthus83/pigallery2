@@ -14,6 +14,7 @@ import {map} from 'rxjs/operators';
 import {GallerySortingService} from './sorting.service';
 import {PageHelper} from '../../../model/page.helper';
 import {BsDropdownDirective} from 'ngx-bootstrap/dropdown';
+import {FilterService} from '../filter/filter.service';
 
 @Component({
   selector: 'app-gallery-navbar',
@@ -46,6 +47,7 @@ export class GalleryNavigatorComponent {
     public authService: AuthenticationService,
     public queryService: QueryService,
     public galleryService: ContentService,
+    public filterService: FilterService,
     public sortingService: GallerySortingService,
     private router: Router,
     public sanitizer: DomSanitizer

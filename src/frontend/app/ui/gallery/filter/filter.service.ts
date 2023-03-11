@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { PhotoDTO } from '../../../../../common/entities/PhotoDTO';
-import { DirectoryContent } from '../content.service';
-import { map, switchMap } from 'rxjs/operators';
+import {Injectable} from '@angular/core';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {PhotoDTO} from '../../../../../common/entities/PhotoDTO';
+import {DirectoryContent} from '../content.service';
+import {map, switchMap} from 'rxjs/operators';
 
 export enum FilterRenderType {
   enum = 1,
@@ -94,6 +94,7 @@ export class FilterService {
 
   public readonly activeFilters = new BehaviorSubject({
     filtersVisible: false,
+    areFiltersActive: false,
     dateFilter: {
       minDate: 0,
       maxDate: Date.now(),
@@ -120,15 +121,17 @@ export class FilterService {
     ],
   });
 
+  private readonly HOUR = 60 * 60 * 1000;
 
   public applyFilters(
     directoryContent: Observable<DirectoryContent>
   ): Observable<DirectoryContent> {
     return directoryContent.pipe(
       switchMap((dirContent: DirectoryContent) => {
+        this.resetFilters(false);
         return this.activeFilters.pipe(
           map((afilters) => {
-            if (!dirContent || !dirContent.media || !afilters.filtersVisible) {
+            if (!dirContent || !dirContent.media || (!afilters.filtersVisible && !afilters.areFiltersActive)) {
               return dirContent;
             }
 
@@ -139,8 +142,9 @@ export class FilterService {
               metaFile: dirContent.metaFile,
             };
 
-            // date filters
+            /* Date Selector */
             if (c.media.length > 0) {
+              // Update date filter range
               afilters.dateFilter.minDate = c.media.reduce(
                 (p, curr) => Math.min(p, curr.metadata.creationDate),
                 Number.MAX_VALUE - 1
@@ -149,6 +153,10 @@ export class FilterService {
                 (p, curr) => Math.max(p, curr.metadata.creationDate),
                 Number.MIN_VALUE + 1
               );
+              // Add a few sec padding
+              afilters.dateFilter.minDate -= (afilters.dateFilter.minDate % 1000) + 1000;
+              afilters.dateFilter.maxDate += (afilters.dateFilter.maxDate % 1000) + 1000;
+
               if (afilters.dateFilter.minFilter === Number.MIN_VALUE) {
                 afilters.dateFilter.minFilter = afilters.dateFilter.minDate;
               }
@@ -156,6 +164,7 @@ export class FilterService {
                 afilters.dateFilter.maxFilter = afilters.dateFilter.maxDate;
               }
 
+              // Apply Date filter
               c.media = c.media.filter(
                 (m) =>
                   m.metadata.creationDate >= afilters.dateFilter.minFilter &&
@@ -170,7 +179,8 @@ export class FilterService {
 
             // filters
             for (const f of afilters.selectedFilters) {
-              // get options
+
+              /* Update filter options */
               const valueMap: { [key: string]: any } = {};
               f.options.forEach((o) => {
                 valueMap[o.name] = o;
@@ -204,7 +214,7 @@ export class FilterService {
                 .filter((o) => o.count > 0)
                 .sort((a, b) => b.count - a.count);
 
-              // apply filters
+              /* Apply filters */
               f.options.forEach((opt) => {
                 if (opt.selected) {
                   return;
@@ -225,6 +235,8 @@ export class FilterService {
                 }
               });
             }
+            // If th e number of photos did not change, the filters are not active
+            afilters.areFiltersActive = c.media.length !== dirContent.media.length;
             return c;
           })
         );
@@ -241,12 +253,19 @@ export class FilterService {
       return;
     }
     this.activeFilters.value.filtersVisible = value;
-    if (!this.activeFilters.value.filtersVisible) {
-      this.activeFilters.value.dateFilter.minFilter = Number.MIN_VALUE;
-      this.activeFilters.value.dateFilter.maxFilter = Number.MAX_VALUE;
-      this.activeFilters.value.selectedFilters.forEach((f) => (f.options = []));
+    if ((!this.activeFilters.value.filtersVisible && !this.activeFilters.value.areFiltersActive)) {
+      this.resetFilters(false);
     }
     this.onFilterChange();
+  }
+
+  resetFilters(triggerChangeDetection = true): void {
+    this.activeFilters.value.dateFilter.minFilter = Number.MIN_VALUE;
+    this.activeFilters.value.dateFilter.maxFilter = Number.MAX_VALUE;
+    this.activeFilters.value.selectedFilters.forEach((f) => (f.options = []));
+    if (triggerChangeDetection) {
+      this.onFilterChange();
+    }
   }
 }
 

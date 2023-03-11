@@ -46,7 +46,7 @@
       </ng-container>
       <ng-container *ngIf="ItemCount> 0">
         <a class="btn  btn-navbar"
-           [class.btn-secondary]="showFilters"
+           [class.btn-secondary]="filterService.activeFilters.value.areFiltersActive"
            (click)="showFilters = ! showFilters">
          <span class="oi oi-spreadsheet"
                title="Filters" i18n-title></span>

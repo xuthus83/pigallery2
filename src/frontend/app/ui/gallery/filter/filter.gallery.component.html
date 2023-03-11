@@ -5,6 +5,7 @@
       <div class="col-md-1-half col-12  d-table">
         <div
           *ngIf="ActiveFilters.dateFilter.minFilter !== NUMBER_MIN_VALUE"
+          [title]="ActiveFilters.dateFilter.minFilter | date: 'medium'"
           class="d-table-cell align-middle text-center">
           {{ActiveFilters.dateFilter.minFilter | date: 'longDate'}}
         </div>
@@ -40,6 +41,7 @@
       </div>
       <div class="col-md-1-half col-12  d-table">
         <div class="d-table-cell align-middle text-center"
+             [title]="ActiveFilters.dateFilter.maxFilter | date: 'medium'"
              *ngIf="ActiveFilters.dateFilter.maxFilter !== NUMBER_MAX_VALUE">
           {{ActiveFilters.dateFilter.maxFilter | date: 'longDate'}}
         </div>
@@ -80,6 +82,9 @@
           <div class="card-body text-center" *ngIf="filter.options.length === 0" i18n>Nothing to filter</div>
         </div>
       </div>
+    </div>
+    <div>
+      <button class="btn btn-primary float-end" i18n (click)="reset()">Reset</button>
     </div>
   </div>
 </div>
