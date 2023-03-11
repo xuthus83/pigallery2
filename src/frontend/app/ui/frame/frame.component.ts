@@ -12,6 +12,7 @@ import {Utils} from '../../../../common/Utils';
 import {PageHelper} from '../../model/page.helper';
 import {BsDropdownDirective} from 'ngx-bootstrap/dropdown';
 import {LanguageComponent} from '../language/language.component';
+import {ThemeMode, ThemeService} from '../../model/theme.service';
 
 @Component({
   selector: 'app-frame',
@@ -30,6 +31,7 @@ export class FrameComponent {
   public readonly navbarLinks = Config.Gallery.NavBar.links;
   public readonly NavigationLinkTypes = NavigationLinkTypes;
   public readonly stringify = JSON.stringify;
+  public readonly themesEnabled = Config.Gallery.Themes.enabled;
 
   /* sticky top navbar */
   private lastScroll = {
@@ -44,11 +46,14 @@ export class FrameComponent {
   @ViewChild('dropdown', {static: true}) dropdown: BsDropdownDirective;
   @ViewChild('languageSelector', {static: true}) languageSelector: LanguageComponent;
 
+  ThemeMode = ThemeMode;
+
   constructor(
     private authService: AuthenticationService,
     public notificationService: NotificationService,
     public queryService: QueryService,
-    private router: Router
+    private router: Router,
+    public themeService: ThemeService
   ) {
     this.user = this.authService.user;
   }

@@ -63,7 +63,7 @@
             <li class="nav-item divider-vertical d-xl-block d-none">
             </li>
             <li class="nav-item dropdown">
-              <div class="btn-group" dropdown  #dropdown="bs-dropdown" placement="bottom"
+              <div class="btn-group" dropdown #dropdown="bs-dropdown" placement="bottom"
                    [insideClick]="true">
                 <button id="button-alignment" dropdownToggle
                         type="button" class="btn btn-dark dropdown-toggle"
@@ -87,7 +87,28 @@
                   <li class="nav-item d-xl-none" *ngIf="showShare">
                     <app-gallery-share [dropDownItem]="true"></app-gallery-share>
                   </li>
-                  <hr class="d-xl-none"/>
+                  <li role="menuitem" *ngIf="themesEnabled">
+                    <div class="dropdown-item bg-transparent">
+                      <button class="btn w-100 btn-secondary" (click)="themeService.toggleMode()">
+                        <ng-container [ngSwitch]="themeService.mode">
+                          <ng-container *ngSwitchCase="ThemeMode.light">
+                            <span class="oi oi-sun"></span>
+                            <ng-container i18n>Light</ng-container>
+                          </ng-container>
+                          <ng-container *ngSwitchCase="ThemeMode.dark">
+                            <span class="oi oi-moon"></span>
+                            <ng-container i18n>Dark</ng-container>
+                          </ng-container>
+                          <ng-container *ngSwitchCase="ThemeMode.auto">
+                            <span class="oi oi-moon"></span>
+                            <span class="oi oi-sun" style="margin-left: -0.8rem"></span>
+                            <ng-container i18n>Auto</ng-container>
+                          </ng-container>
+                        </ng-container>
+                      </button>
+                    </div>
+                  </li>
+                  <hr/>
                   <ng-container *ngFor="let link of navbarLinks">
                     <li class="nav-item d-md-none"
                         *ngIf="link.type === NavigationLinkTypes.albums && isAlbumsAvailable()">

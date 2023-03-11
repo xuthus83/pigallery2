@@ -490,6 +490,20 @@ export class ClientLightboxConfig {
 }
 
 @SubConfigClass<TAGS>({tags: {client: true}, softReadonly: true})
+export class ThemesConfig {
+
+  @ConfigProperty({
+    tags: {
+      name: $localize`Enable`,
+      experimental: true
+    } as TAGS,
+    description: $localize`Enable themes and color modes.`
+  })
+  enabled: boolean = false;
+}
+
+
+@SubConfigClass<TAGS>({tags: {client: true}, softReadonly: true})
 export class ClientGalleryConfig {
   @ConfigProperty({
     tags: {
@@ -578,6 +592,7 @@ export class ClientGalleryConfig {
     description: $localize`Adds a button to flattens the file structure, by listing the content of all subdirectories. (Won't work if the gallery has multiple folders with the same path.)`
   })
   enableDirectoryFlattening: boolean = false;
+
   @ConfigProperty({
     tags: {
       name: $localize`Lightbox`,
@@ -585,6 +600,14 @@ export class ClientGalleryConfig {
     },
   })
   Lightbox: ClientLightboxConfig = new ClientLightboxConfig();
+
+  @ConfigProperty({
+    tags: {
+      name: $localize`ThemesConfig`,
+      priority: ConfigPriority.advanced,
+    },
+  })
+  Themes: ThemesConfig = new ThemesConfig();
 }
 
 @SubConfigClass({tags: {client: true}, softReadonly: true})
