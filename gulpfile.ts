@@ -153,7 +153,7 @@ gulp.task(
     const tasks = [];
     createFrontendTask(
       'build-frontend-release default',
-      'ng build --prod  --no-progress  --output-path=./release/dist'
+      'ng build --configuration production  --no-progress  --output-path=./release/dist'
     );
     tasks.push('build-frontend-release default');
     return gulp.series(...tasks);
@@ -257,7 +257,7 @@ const simpleBuild = (isProd: boolean): any => {
   const tasks = [];
   let cmd = 'ng build ';
   if (isProd) {
-    cmd += ' --prod --no-extract-licenses ';
+    cmd += ' --configuration production --no-extract-licenses ';
   }
   createFrontendTask('build-frontend default', cmd);
   tasks.push('build-frontend default');
