@@ -179,9 +179,11 @@
         "test": {
           "builder": "@angular-builders/custom-webpack:karma",
           "options": {
-            "main": "src/frontend/test.ts",
             "karmaConfig": "./karma.conf.js",
-            "polyfills": "src/frontend/polyfills.ts",
+            "polyfills": [
+              "src/frontend/polyfills.ts",
+              "zone.js/testing"
+            ],
             "tsConfig": "src/frontend/tsconfig.spec.json",
             "scripts": [],
             "styles": [
