@@ -10,9 +10,13 @@ import {TAGS} from '../public/ClientConfig';
 declare const process: any;
 
 const upTime = new Date().toISOString();
+// TODO: Refactor Config to be injectable globally.
+// This is a bad habit to let the Config know if its in a testing env.
+const isTesting = ['afterEach', 'after', 'beforeEach', 'before', 'describe', 'it']
+  .every((fn) => (global as any)[fn] instanceof Function);
 
 @ConfigClass<IConfigClass<TAGS> & ServerConfig>({
-  configPath: path.join(__dirname, './../../../../config.json'),
+  configPath: path.join(__dirname, !isTesting ? './../../../../config.json' : './../../../../test/backend/assets/config.json'),
   saveIfNotExist: true,
   attachDescription: true,
   enumsAsString: true,
