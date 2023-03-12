@@ -34,6 +34,7 @@ export class ConfigDiagnostics {
     albumConfig: ClientAlbumConfig,
     original: PrivateConfigClass
   ): void {
+    Logger.debug(LOG_TAG, 'Testing album config');
     // nothing to check
   }
 
@@ -52,6 +53,7 @@ export class ConfigDiagnostics {
   static async testDatabase(
     databaseConfig: ServerDataBaseConfig
   ): Promise<void> {
+    Logger.debug(LOG_TAG, 'Testing database config');
     await SQLConnection.tryConnection(databaseConfig);
     if (databaseConfig.type === DatabaseType.sqlite) {
       try {
@@ -71,6 +73,7 @@ export class ConfigDiagnostics {
     metaFileConfig: ClientMetaFileConfig,
     config: PrivateConfigClass
   ): Promise<void> {
+    Logger.debug(LOG_TAG, 'Testing meta file config');
     if (metaFileConfig.gpx === true && config.Map.enabled === false) {
       throw new Error('*.gpx meta files are not supported without MAP');
     }
@@ -78,6 +81,7 @@ export class ConfigDiagnostics {
 
   static testVideoConfig(videoConfig: ServerVideoConfig,
                          config: PrivateConfigClass): Promise<void> {
+    Logger.debug(LOG_TAG, 'Testing video config with ffmpeg test');
     return new Promise((resolve, reject) => {
       try {
 
@@ -120,16 +124,19 @@ export class ConfigDiagnostics {
 
 
   static async testSharp(): Promise<void> {
+    Logger.debug(LOG_TAG, 'Testing sharp package');
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const sharp = require('sharp');
     sharp();
   }
 
   static async testTempFolder(folder: string): Promise<void> {
+    Logger.debug(LOG_TAG, 'Testing temp folder');
     await this.checkReadWritePermission(folder);
   }
 
   static testImageFolder(folder: string): Promise<void> {
+    Logger.debug(LOG_TAG, 'Testing images folder');
     return new Promise((resolve, reject) => {
       if (!fs.existsSync(folder)) {
         reject('Images folder not exists: \'' + folder + '\'');
@@ -150,6 +157,7 @@ export class ConfigDiagnostics {
   static async testThumbnailConfig(
     thumbnailConfig: ServerThumbnailConfig
   ): Promise<void> {
+    Logger.debug(LOG_TAG, 'Testing thumbnail config');
 
 
     if (thumbnailConfig.personFaceMargin < 0 || thumbnailConfig.personFaceMargin > 1) {
@@ -176,6 +184,7 @@ export class ConfigDiagnostics {
     task: ServerJobConfig,
     config: PrivateConfigClass
   ): Promise<void> {
+    Logger.debug(LOG_TAG, 'Testing tasks config');
     return;
   }
 
@@ -183,6 +192,7 @@ export class ConfigDiagnostics {
     faces: ClientFacesConfig,
     config: PrivateConfigClass
   ): Promise<void> {
+    Logger.debug(LOG_TAG, 'Testing faces config');
     if (faces.enabled === true) {
       if (config.Search.enabled === false) {
         throw new Error('Faces support needs enabled search');
@@ -194,6 +204,7 @@ export class ConfigDiagnostics {
     search: ClientSearchConfig,
     config: PrivateConfigClass
   ): Promise<void> {
+    Logger.debug(LOG_TAG, 'Testing search config');
     //nothing to check
   }
 
@@ -201,6 +212,7 @@ export class ConfigDiagnostics {
     sharing: ClientSharingConfig,
     config: PrivateConfigClass
   ): Promise<void> {
+    Logger.debug(LOG_TAG, 'Testing sharing config');
     if (
       sharing.enabled === true &&
       config.Users.authenticationRequired === false
@@ -213,10 +225,12 @@ export class ConfigDiagnostics {
     sharing: ClientRandomPhotoConfig,
     config: PrivateConfigClass
   ): Promise<void> {
+    Logger.debug(LOG_TAG, 'Testing random photo config');
     //nothing to check
   }
 
   static async testMapConfig(map: ClientMapConfig): Promise<void> {
+    Logger.debug(LOG_TAG, 'Testing map config');
     if (map.enabled === false) {
       return;
     }
@@ -242,6 +256,7 @@ export class ConfigDiagnostics {
   }
 
   static async testPreviewConfig(settings: ServerPreviewConfig): Promise<void> {
+    Logger.debug(LOG_TAG, 'Testing preview config');
     const sp = new SearchQueryParser();
     if (
       !Utils.equalsFilter(
