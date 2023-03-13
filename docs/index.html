@@ -107,9 +107,9 @@
         App supports full <a href="https://en.wikipedia.org/wiki/Boolean_algebra">boolean logic</a> with negation and
         exact or wildcard search.
         It also provides handy suggestions with autocomplete.
-        <br/>
+        <p/>
 
-        Match types:
+        <h5>Match types</h5>
         <code class="code-block p-2 text-light rounded bg-secondary d-block">
           person:"John" # exact match <br/>
           person:(John) # wildcard match <br/>
@@ -125,7 +125,7 @@
     </div>
     <div class="row feature">
       <div class="col">
-        Supported keywords: <br/>
+        <h5>Supported keywords</h5>
         <code class="code-block p-2 text-light rounded bg-secondary d-block">
 
           after:2020<br/>
@@ -146,12 +146,26 @@
           5-km-from:(New York) # photos 5 km from the center of New York <br/>
           any_text:"apple", # searches for apple everywhere, "any_text:" can be omitted
         </code>
-        Bool expressions: <br/>
+        <p/>
+        <h5>Bool expressions</h5>
         <code class="code-block p-2 text-light rounded bg-secondary d-block">
           John and Kate # photos with "John" and "Kate" (any string match) <br/>
           John Kate # same as "John and Kate" <br/>
           John or Kate # photos with "John" or "Kate" (any string match) <br/>
           2-of:(John, Kate, Steve) # lists photos that satisfies at least 2 out of the 3 names (any string match)
+        </code>
+        <p/>
+        <h5>Sort order</h5>
+        Add an empty file like <code class="code-block p-1 text-light rounded bg-secondary">.order_[ORDER].pg2conf</code>
+        to a folder to override the default sorting for that folder.
+        It's not recursively applied to subfolders.<br/>
+        Replace <code class="code-block p-1 text-light rounded bg-secondary">[ORDER]</code> in the above shown filename by one of the following values:<br/>
+        <code class="code-block p-2 text-light rounded bg-secondary d-block">
+          descending_name<br/>
+          ascending_name<br/>
+          descending_date<br/>
+          ascending_date<br/>
+          random<br/>
         </code>
       </div>
     </div>
