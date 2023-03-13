@@ -136,6 +136,7 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, OnDestroy {
   getPositionSearchQuery(): string {
     return JSON.stringify({
       type: SearchQueryTypes.position,
+      matchType: TextSearchQueryMatchTypes.exact_match,
       text: this.getPositionText(),
     } as TextSearch);
   }
@@ -194,4 +195,3 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, OnDestroy {
     };
   }
 }
-
