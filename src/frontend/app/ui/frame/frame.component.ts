@@ -6,13 +6,13 @@ import {Config} from '../../../../common/config/public/Config';
 import {BehaviorSubject} from 'rxjs';
 import {NotificationService} from '../../model/notification.service';
 import {QueryService} from '../../model/query.service';
-import {NavigationLinkTypes} from '../../../../common/config/public/ClientConfig';
+import {NavigationLinkTypes, ThemeModes} from '../../../../common/config/public/ClientConfig';
 import {SearchQueryDTO} from '../../../../common/entities/SearchQueryDTO';
 import {Utils} from '../../../../common/Utils';
 import {PageHelper} from '../../model/page.helper';
 import {BsDropdownDirective} from 'ngx-bootstrap/dropdown';
 import {LanguageComponent} from '../language/language.component';
-import {ThemeMode, ThemeService} from '../../model/theme.service';
+import {ThemeService} from '../../model/theme.service';
 
 @Component({
   selector: 'app-frame',
@@ -46,7 +46,7 @@ export class FrameComponent {
   @ViewChild('dropdown', {static: true}) dropdown: BsDropdownDirective;
   @ViewChild('languageSelector', {static: true}) languageSelector: LanguageComponent;
 
-  ThemeMode = ThemeMode;
+  ThemeModes = ThemeModes;
 
   constructor(
     private authService: AuthenticationService,

@@ -237,6 +237,14 @@ export class MapLayers {
     description: $localize`Url of a map layer.`,
   })
   url: string = '';
+  @ConfigProperty({
+    tags:
+      {
+        priority: ConfigPriority.advanced,
+      },
+    description: $localize`Sets if the layer is dark (used as default in the dark mode).`,
+  })
+  darkLayer: boolean = false;
 }
 
 @SubConfigClass({tags: {client: true}, softReadonly: true})

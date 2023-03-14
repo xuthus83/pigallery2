@@ -91,15 +91,15 @@
                     <div class="dropdown-item bg-transparent">
                       <button class="btn w-100 btn-secondary" (click)="themeService.toggleMode()">
                         <ng-container [ngSwitch]="themeService.mode">
-                          <ng-container *ngSwitchCase="ThemeMode.light">
+                          <ng-container *ngSwitchCase="ThemeModes.light">
                             <span class="oi oi-sun"></span>
                             <ng-container i18n>Light</ng-container>
                           </ng-container>
-                          <ng-container *ngSwitchCase="ThemeMode.dark">
+                          <ng-container *ngSwitchCase="ThemeModes.dark">
                             <span class="oi oi-moon"></span>
                             <ng-container i18n>Dark</ng-container>
                           </ng-container>
-                          <ng-container *ngSwitchCase="ThemeMode.auto">
+                          <ng-container *ngSwitchCase="ThemeModes.auto">
                             <span class="oi oi-moon"></span>
                             <span class="oi oi-sun" style="margin-left: -0.8rem"></span>
                             <ng-container i18n>Auto</ng-container>

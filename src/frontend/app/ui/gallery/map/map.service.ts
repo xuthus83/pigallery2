@@ -3,18 +3,16 @@ import {NetworkService} from '../../../model/network/network.service';
 import {FileDTO} from '../../../../../common/entities/FileDTO';
 import {Utils} from '../../../../../common/Utils';
 import {Config} from '../../../../../common/config/public/Config';
-import {
-  MapLayers,
-  MapProviders,
-} from '../../../../../common/config/public/ClientConfig';
+import {MapLayers, MapProviders,} from '../../../../../common/config/public/ClientConfig';
 import {LatLngLiteral} from 'leaflet';
 
 @Injectable()
 export class MapService {
-  private static readonly OSMLAYERS = [
+  private static readonly OSMLAYERS: MapLayers[] = [
     {
       name: 'street',
       url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      darkLayer: false
     },
   ];
   private static MAPBOXLAYERS: MapLayers[] = [];
@@ -22,22 +20,32 @@ export class MapService {
   constructor(private networkService: NetworkService) {
     MapService.MAPBOXLAYERS = [
       {
-        name: 'street',
+        name: $localize`street`,
         url:
-          'https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/256/{z}/{x}/{y}?access_token=' +
+          'https://api.mapbox.com/styles/v1/mapbox/streets-v12/tiles/256/{z}/{x}/{y}?access_token=' +
           Config.Map.mapboxAccessToken,
+        darkLayer: false
       },
       {
-        name: 'satellite',
+        name: $localize`satellite`,
         url:
           'https://api.mapbox.com/styles/v1/mapbox/satellite-v9/tiles/256/{z}/{x}/{y}?access_token=' +
           Config.Map.mapboxAccessToken,
+        darkLayer: false
       },
       {
-        name: 'hybrid',
+        name: $localize`hybrid`,
         url:
-          'https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v11/tiles/256/{z}/{x}/{y}?access_token=' +
+          'https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v12/tiles/256/{z}/{x}/{y}?access_token=' +
           Config.Map.mapboxAccessToken,
+        darkLayer: false
+      },
+      {
+        name: $localize`dark`,
+        url:
+          'https://api.mapbox.com/styles/v1/mapbox/navigation-night-v1/tiles/256/{z}/{x}/{y}?access_token=' +
+          Config.Map.mapboxAccessToken,
+        darkLayer: true
       },
     ];
   }
@@ -71,11 +79,15 @@ export class MapService {
     return '';
   }
 
-  public get MapLayer(): string {
-    return this.Layers[0].url;
+  public get MapLayer(): MapLayers {
+    return (this.Layers.find(ml => !ml.darkLayer) || this.Layers[0]);
   }
 
-  public get Layers(): { name: string; url: string }[] {
+  public get DarkMapLayer(): MapLayers {
+    return (this.Layers.find(ml => ml.darkLayer) || this.MapLayer);
+  }
+
+  public get Layers(): MapLayers[] {
     switch (Config.Map.mapProvider) {
       case MapProviders.Custom:
         return Config.Map.customLayers;

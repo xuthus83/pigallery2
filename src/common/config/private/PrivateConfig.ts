@@ -181,6 +181,8 @@ export class UserConfig {
   role: UserRoles = UserRoles.User;
 
   @ConfigProperty<string, ServerConfig, TAGS>({
+    type: 'string',
+    constraint: {assert: (val: string, config) => !!val, assertReason: 'Password cant be empty'},
     tags:
       {
         name: $localize`Password`,

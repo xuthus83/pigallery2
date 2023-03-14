@@ -10,6 +10,7 @@ import {SearchQueryTypes, TextSearch, TextSearchQueryMatchTypes,} from '../../..
 import {AuthenticationService} from '../../../../model/network/authentication.service';
 import {LatLngLiteral, marker, Marker, TileLayer, tileLayer} from 'leaflet';
 import {ContentService} from '../../content.service';
+import {ThemeService} from '../../../../model/theme.service';
 
 @Component({
   selector: 'app-info-panel',
@@ -32,13 +33,20 @@ export class InfoPanelLightboxComponent implements OnInit, OnChanges {
     public queryService: QueryService,
     public galleryService: ContentService,
     public mapService: MapService,
-    private authService: AuthenticationService
+    private authService: AuthenticationService,
+    private themeService: ThemeService
   ) {
     this.mapEnabled = Config.Map.enabled;
     this.searchEnabled = this.authService.canSearch();
-    this.baseLayer = tileLayer(mapService.MapLayer, {
-      attribution: mapService.ShortAttributions,
-    });
+    if (this.themeService.darkMode.value) {
+      this.baseLayer = tileLayer(mapService.DarkMapLayer.url, {
+        attribution: mapService.ShortAttributions,
+      });
+    } else {
+      this.baseLayer = tileLayer(mapService.MapLayer.url, {
+        attribution: mapService.ShortAttributions,
+      });
+    }
   }
 
   get FullPath(): string {

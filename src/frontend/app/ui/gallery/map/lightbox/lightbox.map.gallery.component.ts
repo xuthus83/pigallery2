@@ -1,20 +1,8 @@
-import {
-  Component,
-  ElementRef,
-  HostListener,
-  Input,
-  OnChanges,
-  ViewChild,
-} from '@angular/core';
+import {Component, ElementRef, HostListener, Input, OnChanges, ViewChild,} from '@angular/core';
 import {PhotoDTO} from '../../../../../../common/entities/PhotoDTO';
 import {Dimension} from '../../../../model/IRenderable';
 import {FullScreenService} from '../../fullscreen.service';
-import {
-  IconThumbnail,
-  Thumbnail,
-  ThumbnailBase,
-  ThumbnailManagerService,
-} from '../../thumbnailManager.service';
+import {IconThumbnail, Thumbnail, ThumbnailBase, ThumbnailManagerService,} from '../../thumbnailManager.service';
 import {MediaIcon} from '../../MediaIcon';
 import {Media} from '../../Media';
 import {PageHelper} from '../../../../model/page.helper';
@@ -40,8 +28,10 @@ import {
   Point,
   polyline,
   tileLayer,
+  TileLayer
 } from 'leaflet';
 import {LeafletControlLayersConfig} from '@asymmetrik/ngx-leaflet';
+import {ThemeService} from '../../../../model/theme.service';
 
 @Component({
   selector: 'app-gallery-map-lightbox',
@@ -73,6 +63,8 @@ export class GalleryMapLightboxComponent implements OnChanges {
     maxZoom: 2,
     center: latLng(0, 0),
   };
+  defLayer: TileLayer;
+  darkLayer: TileLayer;
   private smallIconSize = new Point(
     Config.Media.Thumbnail.iconSize * 0.75,
     Config.Media.Thumbnail.iconSize * 0.75
@@ -122,7 +114,8 @@ export class GalleryMapLightboxComponent implements OnChanges {
   constructor(
     public fullScreenService: FullScreenService,
     private thumbnailService: ThumbnailManagerService,
-    public mapService: MapService
+    public mapService: MapService,
+    private themeService: ThemeService
   ) {
     this.mapOptions.layers = [
       this.mapLayersControlOption.overlays.Photos,
@@ -131,18 +124,42 @@ export class GalleryMapLightboxComponent implements OnChanges {
     for (let i = 0; i < mapService.Layers.length; ++i) {
       const l = mapService.Layers[i];
       const tl = tileLayer(l.url, {attribution: mapService.Attributions});
-      if (i === 0) {
-        this.mapOptions.layers.push(tl);
+      if (l.url === mapService.MapLayer.url) {
+        this.defLayer = tl;
+      }
+      if (l.url === mapService.DarkMapLayer.url) {
+        this.darkLayer = tl;
       }
       this.mapLayersControlOption.baseLayers[l.name] = tl;
     }
+    if (!this.defLayer || !this.darkLayer) {
+      throw new Error('Cant find default or dark layer');
+    }
+    this.mapOptions.layers.push(this.themeService.darkMode.value ? this.darkLayer : this.defLayer);
 
     this.mapLayerControl = control.layers(
       this.mapLayersControlOption.baseLayers,
       this.mapLayersControlOption.overlays,
       {position: 'bottomright'}
     );
+
+    // update map theme on dark theme
+    this.themeService.darkMode.subscribe(this.selectBaseLayer);
   }
+
+  private selectBaseLayer = () => {
+    if (!this.leafletMap) {
+      return;
+    }
+    if (this.leafletMap.hasLayer(this.defLayer) && this.themeService.darkMode.value) {
+      this.leafletMap.removeLayer(this.defLayer);
+      this.leafletMap.addLayer(this.darkLayer);
+    }
+    if (this.leafletMap.hasLayer(this.darkLayer) && !this.themeService.darkMode.value) {
+      this.leafletMap.removeLayer(this.darkLayer);
+      this.leafletMap.addLayer(this.defLayer);
+    }
+  };
 
   private static getScreenWidth(): number {
     return window.innerWidth;

@@ -203,7 +203,7 @@ export class TemplateComponent implements OnInit, OnChanges, OnDestroy, ISetting
           }
 
 
-          return ( !forcedVisibility  &&
+          return (!forcedVisibility &&
             Utils.equalsFilter(state.value, state.default,
               ['__propPath', '__created', '__prototype', '__rootConfig']) &&
             Utils.equalsFilter(state.original, state.default,
@@ -316,6 +316,11 @@ export class TemplateComponent implements OnInit, OnChanges, OnDestroy, ISetting
         return s[a].tags?.priority - s[b].tags?.priority;
       }
 
+      if (a === 'enabled' && b !== 'enabled') {
+        return -1;
+      } else if (b === 'enabled') {
+        return 1;
+      }
       return (s[a].tags?.name as string || a).localeCompare(s[b].tags?.name || b);
 
     });
