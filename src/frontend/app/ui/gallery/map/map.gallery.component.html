@@ -1,5 +1,5 @@
 <app-gallery-map-lightbox [photos]="photos" [gpxFiles]="gpxFiles"></app-gallery-map-lightbox>
-<div class="clickable" id="map" #map (click)="click()">
+<div class="clickable" id="map" #map>
   <div
     class="leaflet-map"
     leaflet
@@ -7,5 +7,6 @@
     [leafletLayers]="markerLayer"
     (leafletMapReady)="onMapReady($event)">
   </div>
-
+  <div class="overlay" (click)="click()">
+  </div>
 </div>

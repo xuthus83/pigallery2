@@ -129,8 +129,8 @@ export class GalleryMapComponent implements OnChanges, IRenderable {
 
   public getDimension(): Dimension {
     return {
-      top: this.mapElement.nativeElement.offsetTop,
-      left: this.mapElement.nativeElement.offsetLeft,
+      top: this.mapElement.nativeElement.parentElement.offsetParent.offsetTop,
+      left: this.mapElement.nativeElement.parentElement.offsetLeft,
       width: this.mapElement.nativeElement.offsetWidth,
       height: this.mapElement.nativeElement.offsetHeight,
     } as Dimension;

@@ -199,7 +199,7 @@ export class GalleryMapLightboxComponent implements OnChanges {
     this.visible = true;
     this.opacity = 1.0;
     this.startPosition = position;
-    this.lightboxDimension = position;
+    this.lightboxDimension = Utils.clone(position);
     this.lightboxDimension.top -= PageHelper.ScrollY;
     this.mapDimension = {
       top: 0,
@@ -228,7 +228,7 @@ export class GalleryMapLightboxComponent implements OnChanges {
     this.controllersVisible = false;
     const to = this.startPosition;
 
-    // iff target image out of screen -> scroll to there
+    // if target image out of screen -> scroll to there
     if (
       PageHelper.ScrollY > to.top ||
       PageHelper.ScrollY + GalleryMapLightboxComponent.getScreenHeight() <
