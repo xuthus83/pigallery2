@@ -24,6 +24,11 @@ export enum ConfigPriority {
   basic = 0, advanced, underTheHood
 }
 
+
+export enum ThemeModes {
+  light = 1, dark, auto
+}
+
 export type TAGS = {
   client?: true,
   priority?: ConfigPriority,
@@ -500,6 +505,17 @@ export class ThemesConfig {
     description: $localize`Enable themes and color modes.`
   })
   enabled: boolean = false;
+
+  @ConfigProperty({
+    type: ThemeModes,
+    tags: {
+      name: $localize`Default theme mode`,
+      experimental: true,
+      uiDisabled: (sb: ThemesConfig) => !sb.enabled,
+    } as TAGS,
+    description: $localize`Sets the default theme mode that is used for the application.`
+  })
+  defaultMode: ThemeModes = ThemeModes.light;
 }
 
 
@@ -603,7 +619,7 @@ export class ClientGalleryConfig {
 
   @ConfigProperty({
     tags: {
-      name: $localize`ThemesConfig`,
+      name: $localize`Themes`,
       priority: ConfigPriority.advanced,
     },
   })

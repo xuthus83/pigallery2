@@ -1,17 +1,24 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
+import {ThemeModes} from '../../../common/config/public/ClientConfig';
 import {Config} from '../../../common/config/public/Config';
+import {GalleryCacheService} from '../ui/gallery/cache.gallery.service';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class ThemeService {
-  mode: ThemeMode = ThemeMode.light;
+  mode: ThemeModes = ThemeModes.light;
   public readonly darkMode: BehaviorSubject<boolean> = new BehaviorSubject(false);
   public readonly matcher = window.matchMedia('(prefers-color-scheme: dark)');
 
-  constructor() {
+  constructor(private cachingService: GalleryCacheService) {
+    if (cachingService.getThemeMode()) {
+      this.setMode(cachingService.getThemeMode());
+    } else {
+      this.setMode(Config.Gallery.Themes.defaultMode);
+    }
     this.darkMode.subscribe((darkMode: boolean) => {
         this.applyMode(darkMode);
       }
@@ -19,7 +26,7 @@ export class ThemeService {
   }
 
   listenToModePreference() {
-    if (this.mode !== ThemeMode.auto) {
+    if (this.mode !== ThemeModes.auto) {
       return;
     }
     this.darkMode.next(window.matchMedia('(prefers-color-scheme: dark)').matches);
@@ -44,39 +51,36 @@ export class ThemeService {
     }
   }
 
-  setMode(mode: ThemeMode) {
+  setMode(mode: ThemeModes) {
+    if (this.mode === mode) {
+      return;
+    }
     this.mode = mode;
-    if (this.mode === ThemeMode.light) {
+    if (this.mode === ThemeModes.light) {
       this.darkMode.next(false);
       this.stopListening();
-    } else if (this.mode === ThemeMode.dark) {
+    } else if (this.mode === ThemeModes.dark) {
       this.darkMode.next(true);
       this.stopListening();
-    } else if (this.mode === ThemeMode.auto) {
+    } else if (this.mode === ThemeModes.auto) {
       this.listenToModePreference();
     }
+    this.cachingService.setThemeMode(this.mode);
   }
 
 
   toggleMode() {
     switch (this.mode) {
-      case ThemeMode.light:
-        this.setMode(ThemeMode.dark);
+      case ThemeModes.light:
+        this.setMode(ThemeModes.dark);
         break;
-      case ThemeMode.dark:
-        this.setMode(ThemeMode.auto);
+      case ThemeModes.dark:
+        this.setMode(ThemeModes.auto);
         break;
-      case ThemeMode.auto:
-        this.setMode(ThemeMode.light);
+      case ThemeModes.auto:
+        this.setMode(ThemeModes.light);
         break;
     }
   }
 }
 
-export enum ThemeMode {
-  light = 1, dark, auto
-}
-
-export enum AppliedThemeMode {
-  light = 1, dark
-}

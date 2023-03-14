@@ -9,6 +9,7 @@ import {VersionService} from '../../model/version.service';
 import {SearchQueryDTO, SearchQueryTypes,} from '../../../../common/entities/SearchQueryDTO';
 import {ContentWrapper} from '../../../../common/entities/ConentWrapper';
 import {ContentWrapperWithError} from './content.service';
+import {ThemeModes} from '../../../../common/config/public/ClientConfig';
 
 interface CacheItem<T> {
   timestamp: number;
@@ -17,13 +18,14 @@ interface CacheItem<T> {
 
 @Injectable()
 export class GalleryCacheService {
-  private static readonly CONTENT_PREFIX = 'content:';
-  private static readonly AUTO_COMPLETE_PREFIX = 'autocomplete:';
-  private static readonly INSTANT_SEARCH_PREFIX = 'instant_search:';
-  private static readonly SEARCH_PREFIX = 'search:';
-  private static readonly SORTING_PREFIX = 'sorting:';
-  private static readonly VERSION = 'version';
-  private static readonly SLIDESHOW_SPEED = 'slideshow_speed';
+  private static readonly CONTENT_PREFIX = 'CONTENT:';
+  private static readonly AUTO_COMPLETE_PREFIX = 'AUTOCOMPLETE:';
+  private static readonly INSTANT_SEARCH_PREFIX = 'INSTANT_SEARCH:';
+  private static readonly SEARCH_PREFIX = 'SEARCH:';
+  private static readonly SORTING_PREFIX = 'SORTING:';
+  private static readonly VERSION = 'VERSION';
+  private static readonly SLIDESHOW_SPEED = 'SLIDESHOW_SPEED';
+  private static THEME_MODE = 'THEME_MODE';
 
   constructor(private versionService: VersionService) {
     // if it was a forced reload not a navigation, clear cache
@@ -310,6 +312,26 @@ export class GalleryCacheService {
     try {
       const key = GalleryCacheService.SLIDESHOW_SPEED;
       localStorage.setItem(key, speed.toString());
+    } catch (e) {
+      this.reset();
+      console.error(e);
+    }
+  }
+
+  getThemeMode(): ThemeModes {
+    const key = GalleryCacheService.THEME_MODE;
+    const tmp = localStorage.getItem(key) as keyof typeof ThemeModes;
+    if (tmp != null) {
+      return ThemeModes[tmp];
+    }
+    return null;
+  }
+
+
+  setThemeMode(mode: ThemeModes): void {
+    try {
+      const key = GalleryCacheService.THEME_MODE;
+      localStorage.setItem(key, ThemeModes[mode]);
     } catch (e) {
       this.reset();
       console.error(e);
