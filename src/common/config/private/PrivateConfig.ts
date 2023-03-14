@@ -453,11 +453,11 @@ export class ServerThreadingConfig {
       {
         name: $localize`Threading`,
         uiResetNeeded: {server: true},
-        priority: ConfigPriority.underTheHood
-      },
-    description: $localize`Runs directory scanning and thumbnail generation in a different thread.`
+        priority: ConfigPriority.underTheHood,
+      } as TAGS,
+    description: $localize`[Deprecated, will be removed in the next release] Runs directory scanning and thumbnail generation in a different thread.`
   })
-  enabled: boolean = true;
+  enabled: boolean = false;
   @ConfigProperty({
     tags:
       {
