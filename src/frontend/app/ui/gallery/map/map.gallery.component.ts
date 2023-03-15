@@ -7,6 +7,7 @@ import {MapService} from './map.service';
 import {Config} from '../../../../../common/config/public/Config';
 import {LatLngLiteral, Map, MapOptions, Marker, marker, tileLayer, TileLayer} from 'leaflet';
 import {ThemeService} from '../../../model/theme.service';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-gallery-map',
@@ -34,10 +35,15 @@ export class GalleryMapComponent implements OnChanges, IRenderable {
     center: [0, 0],
   };
   markerLayer: Marker[] = [];
+  darkModeSubscription: Subscription;
 
   constructor(public mapService: MapService,
               private themeService: ThemeService) {
     this.initThemeModes();
+  }
+
+  ngOnDestroy(): void {
+    this.darkModeSubscription.unsubscribe();
   }
 
   initThemeModes() {
@@ -56,7 +62,7 @@ export class GalleryMapComponent implements OnChanges, IRenderable {
       this.options.layers = [this.layers.light];
     }
     // update map theme on dark theme
-    this.themeService.darkMode.subscribe((isDark) => {
+    this.darkModeSubscription = this.themeService.darkMode.subscribe((isDark) => {
       if (!this.leafletMap) {
         return;
       }

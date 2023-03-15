@@ -1,4 +1,4 @@
-import {Component, ElementRef, HostListener, Input, OnChanges, ViewChild,} from '@angular/core';
+import {Component, ElementRef, HostListener, Input, OnChanges, OnDestroy, ViewChild,} from '@angular/core';
 import {PhotoDTO} from '../../../../../../common/entities/PhotoDTO';
 import {Dimension} from '../../../../model/IRenderable';
 import {FullScreenService} from '../../fullscreen.service';
@@ -32,13 +32,14 @@ import {
 } from 'leaflet';
 import {LeafletControlLayersConfig} from '@asymmetrik/ngx-leaflet';
 import {ThemeService} from '../../../../model/theme.service';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-gallery-map-lightbox',
   styleUrls: ['./lightbox.map.gallery.component.css'],
   templateUrl: './lightbox.map.gallery.component.html',
 })
-export class GalleryMapLightboxComponent implements OnChanges {
+export class GalleryMapLightboxComponent implements OnChanges, OnDestroy {
   @Input() photos: PhotoDTO[];
   @Input() gpxFiles: FileDTO[];
   public lightboxDimension: Dimension = {
@@ -110,6 +111,7 @@ export class GalleryMapLightboxComponent implements OnChanges {
   private thumbnailsOnLoad: ThumbnailBase[] = [];
   private startPosition: Dimension = null;
   private leafletMap: Map;
+  darkModeSubscription: Subscription;
 
   constructor(
     public fullScreenService: FullScreenService,
@@ -144,7 +146,11 @@ export class GalleryMapLightboxComponent implements OnChanges {
     );
 
     // update map theme on dark theme
-    this.themeService.darkMode.subscribe(this.selectBaseLayer);
+    this.darkModeSubscription = this.themeService.darkMode.subscribe(this.selectBaseLayer);
+  }
+
+  ngOnDestroy(): void {
+    this.darkModeSubscription.unsubscribe();
   }
 
   private selectBaseLayer = () => {
