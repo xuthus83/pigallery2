@@ -48,18 +48,24 @@
         </div>
         <div class="mb-1">
           <label class="control-label align-self-end me-2" for="config-priority" i18n>Mode</label>
-          <select class="form-select d-inline-block w-auto"
-                  aria-label="Configuration priority"
-                  [(ngModel)]="settingsService.configPriority"
-                  (ngModelChange)="settingsService.configPriorityChanged()"
-                  [class.bg-warning]="settingsService.configPriority === ConfigPriority.advanced"
-                  [class.bg-danger]="settingsService.configPriority === ConfigPriority.underTheHood"
-                  id="config-priority">
-            <option class="bg-white"
-                    *ngFor="let cp of configPriorities"
-                    [ngValue]="cp.key">{{cp.value}}
-            </option>
-          </select>
+          <div class="btn-group" dropdown #dropdown="bs-dropdown" placement="bottom right">
+            <button type="button"
+                    dropdownToggle
+                    id="config-priority"
+                    class="btn btn-danger dropdown-toggle"
+                    [class.btn-secondary]="settingsService.configPriority === ConfigPriority.basic"
+                    [class.btn-warning]="settingsService.configPriority === ConfigPriority.advanced"
+                    [class.btn-danger]="settingsService.configPriority === ConfigPriority.underTheHood"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+              {{settingsService.configPriority | stringifyConfigPriority}}
+            </button>
+            <ul class="dropdown-menu dropdown-menu-right" *dropdownMenu>
+              <li *ngFor="let cp of configPriorities">
+                <button class="dropdown-item"
+                        (click)="settingsService.configPriority = cp.key; settingsService.configPriorityChanged()">{{cp.value}}</button>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>

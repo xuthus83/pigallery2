@@ -1,6 +1,6 @@
 <div [hidden]="!error" class="alert alert-danger" role="alert"><strong>Error: </strong>{{error}}</div>
 <div *ngFor="let schedule of sortedSchedules() as sortedSchedules; let i= index">
-  <div class="card bg-light mt-2 mb-2  no-changed-settings {{shouldIdent(schedule,sortedSchedules[i-1])? 'ms-4' : ''}}">
+  <div class="card bg-body-tertiary mt-2 mb-2  no-changed-settings {{shouldIdent(schedule,sortedSchedules[i-1])? 'ms-4' : ''}}">
     <div class="card-header">
       <div class="d-flex justify-content-between">
         <div (click)="showDetails[schedule.name]=!showDetails[schedule.name]">

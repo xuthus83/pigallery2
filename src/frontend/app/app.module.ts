@@ -105,6 +105,7 @@ import {SettingsEntryComponent} from './ui/settings/template/settings-entry/sett
 import {UsersComponent} from './ui/settings/users/users.component';
 import {SharingsListComponent} from './ui/settings/sharings-list/sharings-list.component';
 import {ThemeService} from './model/theme.service';
+import {StringifyConfigPriority} from './pipes/StringifyConfigPriority';
 
 @Injectable()
 export class MyHammerConfig extends HammerGestureConfig {
@@ -235,6 +236,7 @@ Marker.prototype.options.icon = iconDefault;
     GPXFilesFilterPipe,
     MDFilesFilterPipe,
     StringifySearchQuery,
+    StringifyConfigPriority,
     FileDTOToPathPipe,
     PhotoFilterPipe,
     UsersComponent,

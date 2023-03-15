@@ -117,7 +117,7 @@
 
         <ng-container *ngSwitchCase="'NavigationLinkConfig'">
           <div class="container">
-            <div class="row  mt-1 mb-1 bg-light" *ngFor="let link of state.value; let i = index">
+            <div class="row  mt-1 mb-1 bg-body-tertiary" *ngFor="let link of state.value; let i = index">
               <div class="col ps-0">
                 <select
                   [name]="'link_t_'+idName+i"
@@ -180,7 +180,7 @@
 
         <ng-container *ngSwitchCase="'UserConfig'">
           <div class="container ps-0 pe-0">
-            <div class="row ms-0 me-0 mt-1 mb-1 bg-light" *ngFor="let item of state.value; let i = index">
+            <div class="row ms-0 me-0 mt-1 mb-1 bg-body-tertiary" *ngFor="let item of state.value; let i = index">
 
               <div class="col ps-0">
                 <input type="text" class="form-control"
