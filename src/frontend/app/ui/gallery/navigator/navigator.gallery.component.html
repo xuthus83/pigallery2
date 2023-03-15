@@ -28,7 +28,7 @@
 
       <ng-container *ngIf="config.Gallery.enableDownloadZip && isDirectory && ItemCount > 0">
         <a [href]="getDownloadZipLink()"
-           class="btn  btn-navbar">
+           class="btn">
          <span class="oi oi-data-transfer-download"
                title="download" i18n-title></span>
         </a>
@@ -38,14 +38,14 @@
       <ng-container *ngIf="config.Gallery.enableDirectoryFlattening && isDirectory && authService.canSearch()">
         <a
           [routerLink]="['/search', getDirectoryFlattenSearchQuery()]"
-          class="btn  btn-navbar">
+          class="btn">
          <span class="oi oi-fork"
                title="Flatten directory" i18n-title></span>
         </a>
         <div class="divider">&nbsp;</div>
       </ng-container>
       <ng-container *ngIf="ItemCount> 0">
-        <a class="btn  btn-navbar"
+        <a class="btn"
            [class.btn-secondary]="filterService.activeFilters.value.areFiltersActive"
            (click)="showFilters = ! showFilters">
          <span class="oi oi-spreadsheet"
@@ -55,8 +55,8 @@
       </ng-container>
       <div class="btn-group" dropdown #dropdown="bs-dropdown" placement="bottom right">
         <button id="button-alignment" dropdownToggle type="button"
-                class="btn btn-secondary dropdown-toggle"
-                [ngClass]="{'btn-secondary':sortingService.sorting.value !== DefaultSorting}"
+                class="btn dropdown-toggle"
+                [class.btn-secondary]="sortingService.sorting.value !== DefaultSorting"
                 aria-controls="sorting-dropdown"
                 [innerHTML]="sortingService.sorting.value | iconizeSorting">
         </button>

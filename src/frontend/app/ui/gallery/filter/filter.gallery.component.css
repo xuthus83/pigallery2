@@ -53,7 +53,7 @@
 
 .unselected {
   color: #6c757d;
-  background-color: #fff;
+  background-color: var(--bs-body-bg)
 }
 
 .date-filter-wrapper {
@@ -78,7 +78,7 @@
   left: 0;
   height: 7px;
   border-radius: 10px;
-  background-color: #CCC;
+  background-color: var(--bs-tertiary-color);
   margin: 0 7px;
 }
 
@@ -87,7 +87,7 @@
   right: 0;
   height: 7px;
   border-radius: 10px;
-  background-color: #CCC;
+  background-color: var(--bs-tertiary-color);
   margin: 0 7px;
 }
 

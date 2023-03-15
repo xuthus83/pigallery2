@@ -508,9 +508,10 @@ export class ThemesConfig {
   @ConfigProperty({
     tags: {
       name: $localize`Enable`,
-      experimental: true
+      experimental: true,
+      githubIssue: 642
     } as TAGS,
-    description: $localize`Enable themes and color modes.`
+    description: $localize`Enable themes and color modes.  Experimental until bootstrap v5.3 is only alpha.`
   })
   enabled: boolean = false;
 
@@ -518,7 +519,6 @@ export class ThemesConfig {
     type: ThemeModes,
     tags: {
       name: $localize`Default theme mode`,
-      experimental: true,
       uiDisabled: (sb: ThemesConfig) => !sb.enabled,
     } as TAGS,
     description: $localize`Sets the default theme mode that is used for the application.`
