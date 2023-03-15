@@ -2,6 +2,7 @@ import {UserRoles} from '../../../common/entities/UserDTO';
 import {ConfigPriority, MapProviders, NavigationLinkTypes} from '../../../common/config/public/ClientConfig';
 import {ReIndexingSensitivity} from '../../../common/config/private/PrivateConfig';
 import {SortingMethods} from '../../../common/entities/SortingMethods';
+import {SearchQueryTypes} from '../../../common/entities/SearchQueryDTO';
 
 export const EnumTranslations: Record<string, string> = {};
 export const enumToTranslatedArray = (EnumType: any): { key: number; value: string }[] => {
@@ -49,3 +50,24 @@ EnumTranslations[NavigationLinkTypes[NavigationLinkTypes.search]] = $localize`Se
 EnumTranslations[NavigationLinkTypes[NavigationLinkTypes.gallery]] = $localize`Gallery`;
 EnumTranslations[NavigationLinkTypes[NavigationLinkTypes.albums]] = $localize`Albums`;
 EnumTranslations[NavigationLinkTypes[NavigationLinkTypes.faces]] = $localize`Faces`;
+
+
+EnumTranslations[SearchQueryTypes[SearchQueryTypes.AND]] = $localize`And`;
+EnumTranslations[SearchQueryTypes[SearchQueryTypes.OR]] = $localize`Or`;
+EnumTranslations[SearchQueryTypes[SearchQueryTypes.SOME_OF]] = $localize`Some of`;
+EnumTranslations[SearchQueryTypes[SearchQueryTypes.any_text]] = $localize`Any text`;
+EnumTranslations[SearchQueryTypes[SearchQueryTypes.from_date]] = $localize`From`;
+EnumTranslations[SearchQueryTypes[SearchQueryTypes.to_date]] = $localize`Until`;
+EnumTranslations[SearchQueryTypes[SearchQueryTypes.distance]] = $localize`Distance`;
+EnumTranslations[SearchQueryTypes[SearchQueryTypes.min_rating]] = $localize`Min rating`;
+EnumTranslations[SearchQueryTypes[SearchQueryTypes.max_rating]] = $localize`Max rating`;
+EnumTranslations[SearchQueryTypes[SearchQueryTypes.min_resolution]] = $localize`Min resolution`;
+EnumTranslations[SearchQueryTypes[SearchQueryTypes.max_resolution]] = $localize`Max resolution`;
+EnumTranslations[SearchQueryTypes[SearchQueryTypes.directory]] = $localize`Directory`;
+EnumTranslations[SearchQueryTypes[SearchQueryTypes.file_name]] = $localize`File name`;
+EnumTranslations[SearchQueryTypes[SearchQueryTypes.caption]] = $localize`Caption`;
+EnumTranslations[SearchQueryTypes[SearchQueryTypes.orientation]] = $localize`Orientation`;
+EnumTranslations[SearchQueryTypes[SearchQueryTypes.position]] = $localize`Position`;
+EnumTranslations[SearchQueryTypes[SearchQueryTypes.person]] = $localize`Person`;
+EnumTranslations[SearchQueryTypes[SearchQueryTypes.keyword]] = $localize`Keyword`;
+
