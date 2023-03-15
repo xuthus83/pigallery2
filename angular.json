@@ -93,6 +93,7 @@
             "polyfills": "src/frontend/polyfills.ts",
             "assets": [
               "src/frontend/assets",
+              "src/frontend/robots.txt",
               {
                 "glob": "**/*",
                 "input": "node_modules/leaflet/dist/images/",

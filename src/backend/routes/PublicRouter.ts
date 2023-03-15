@@ -44,6 +44,7 @@ export class PublicRouter {
       next();
     };
 
+    // index.html should not be cached as it contains template that can change
     const renderIndex = (req: Request, res: Response, next: NextFunction) => {
       ejs.renderFile(
         path.join(ProjectPath.FrontendFolder, req.localePath, 'index.html'),
