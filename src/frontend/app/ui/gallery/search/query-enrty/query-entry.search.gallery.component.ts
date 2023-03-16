@@ -1,4 +1,4 @@
-import { Component, EventEmitter, forwardRef, Output } from '@angular/core';
+import {Component, EventEmitter, forwardRef, Output} from '@angular/core';
 import {
   DistanceSearch,
   ListSearchQueryTypes,
@@ -12,15 +12,8 @@ import {
   TextSearchQueryMatchTypes,
   TextSearchQueryTypes,
 } from '../../../../../../common/entities/SearchQueryDTO';
-import { Utils } from '../../../../../../common/Utils';
-import {
-  ControlValueAccessor,
-  UntypedFormControl,
-  NG_VALIDATORS,
-  NG_VALUE_ACCESSOR,
-  ValidationErrors,
-  Validator,
-} from '@angular/forms';
+import {Utils} from '../../../../../../common/Utils';
+import {ControlValueAccessor, NG_VALIDATORS, NG_VALUE_ACCESSOR, UntypedFormControl, ValidationErrors, Validator,} from '@angular/forms';
 
 @Component({
   selector: 'app-gallery-search-query-entry',
@@ -40,8 +33,7 @@ import {
   ],
 })
 export class GallerySearchQueryEntryComponent
-  implements ControlValueAccessor, Validator
-{
+  implements ControlValueAccessor, Validator {
   public queryEntry: SearchQueryDTO;
   public SearchQueryTypesEnum: { value: string; key: SearchQueryTypes }[];
   public SearchQueryTypes = SearchQueryTypes;
@@ -93,7 +85,48 @@ export class GallerySearchQueryEntryComponent
   }
 
   validate(control: UntypedFormControl): ValidationErrors {
-    return { required: true };
+    return {required: true};
+  }
+
+  get MatchingTypes(): string[] {
+    if (this.IsListQuery) {
+      return [];
+    }
+    if (this.IsTextQuery) {
+      return ['=~', '=', '!=', '!~'];
+    }
+    return ['=', '!=']; //normal negatable query
+  }
+
+  get SelectedMatchType(): string {
+    if (this.AsTextQuery.matchType !== TextSearchQueryMatchTypes.like) {
+      if (this.AsTextQuery.negate) {
+        return '!=';
+      } else {
+        return '=';
+      }
+    } else {
+      if (this.AsTextQuery.negate) {
+        return '!~';
+      } else {
+        return '=~';
+      }
+    }
+  }
+
+  set SelectedMatchType(value: string) {
+    if (this.IsListQuery) {
+      return;
+    }
+    this.AsTextQuery.negate = value.charAt(0) === '!';
+    if (!this.IsTextQuery) {
+      return;
+    }
+    if (value === '!~' || value === '=~') {
+      this.AsTextQuery.matchType = TextSearchQueryMatchTypes.like;
+    } else {
+      this.AsTextQuery.matchType = TextSearchQueryMatchTypes.exact_match;
+    }
   }
 
   addQuery(): void {
@@ -110,14 +143,14 @@ export class GallerySearchQueryEntryComponent
     if (this.IsListQuery) {
       delete this.AsTextQuery.text;
       this.AsListQuery.list = this.AsListQuery.list || [
-        { type: SearchQueryTypes.any_text, text: '' } as TextSearch,
-        { type: SearchQueryTypes.any_text, text: '' } as TextSearch,
+        {type: SearchQueryTypes.any_text, text: ''} as TextSearch,
+        {type: SearchQueryTypes.any_text, text: ''} as TextSearch,
       ];
     } else {
       delete this.AsListQuery.list;
     }
     if (this.queryEntry.type === SearchQueryTypes.distance) {
-      this.AsDistanceQuery.from = { text: '' };
+      this.AsDistanceQuery.from = {text: ''};
       this.AsDistanceQuery.distance = 1;
     } else {
       delete this.AsDistanceQuery.from;
@@ -136,12 +169,14 @@ export class GallerySearchQueryEntryComponent
     this.delete.emit();
   }
 
-  itemDeleted(i: number): void {
-    this.AsListQuery.list.splice(i, 1);
+  itemDeleted(index: number): void {
+    this.AsListQuery.list.splice(index, 1);
+    this.onChange();
   }
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  public onTouched(): void {}
+  public onTouched(): void {
+  }
 
   public writeValue(obj: SearchQueryDTO): void {
     this.queryEntry = obj;
@@ -159,18 +194,13 @@ export class GallerySearchQueryEntryComponent
     this.propagateChange(this.queryEntry);
   }
 
-  public toggleMatchType(): void {
-    this.AsTextQuery.matchType =
-      this.AsTextQuery.matchType === TextSearchQueryMatchTypes.exact_match
-        ? TextSearchQueryMatchTypes.like
-        : TextSearchQueryMatchTypes.exact_match;
-    this.onChange();
-  }
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  private propagateChange = (_: unknown): void => {};
+  private propagateChange = (_: unknown): void => {
+  };
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  private propagateTouch = (_: unknown): void => {};
+  private propagateTouch = (_: unknown): void => {
+  };
 }
 

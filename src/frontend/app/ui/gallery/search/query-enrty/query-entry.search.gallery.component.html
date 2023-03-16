@@ -51,24 +51,31 @@
     </div>
   </ng-container>
   <ng-container *ngIf="!IsListQuery">
-    <div class="col-md-3">
-      <select
-        id="searchType"
-        name="searchType"
-        class="form-select"
-        [(ngModel)]="queryEntry.type"
-        (ngModelChange)="onChangeType()">
-        <option *ngFor="let opt of SearchQueryTypesEnum" [ngValue]="opt.key">{{opt.key | stringifySearchType}}
-        </option>
-      </select>
-    </div>
-    <div class="col-11 col-md-8" *ngIf="IsTextQuery">
+    <div class="col-lg-4 col-xl-3">
       <div class="input-group">
-      <span title="exact match"
-            p18n-title
-            class="match-type"
-            (click)="toggleMatchType()"
-            [class.exact-match]="AsTextQuery.matchType === TextSearchQueryMatchTypes.exact_match">"</span>
+        <select
+          id="searchType"
+          name="searchType"
+          class="form-select"
+          [(ngModel)]="queryEntry.type"
+          (ngModelChange)="onChangeType()">
+          <option *ngFor="let opt of SearchQueryTypesEnum" [ngValue]="opt.key">{{opt.key | stringifySearchType}}
+          </option>
+        </select>
+        <select
+          id="negate"
+          name="negate"
+          class="form-select w-auto flex-grow-0"
+          title="Negate"
+          p18n-title
+          [(ngModel)]="SelectedMatchType"
+          (ngModelChange)="onChange()">
+          <option *ngFor="let mt of MatchingTypes" [ngValue]="mt">{{mt}}
+        </select>
+      </div>
+    </div>
+    <div class="col-10 col-lg" *ngIf="IsTextQuery">
+      <div class="input-group">
         <input
           id="searchField"
           name="searchField"
@@ -79,15 +86,10 @@
           (change)="onChange()"
           (ngModelChange)="onChange()"
           type="text"/>
-        <span title="exact match"
-              p18n-title
-              class="match-type"
-              (click)="toggleMatchType()"
-              [class.exact-match]="AsTextQuery.matchType === TextSearchQueryMatchTypes.exact_match">"</span>
       </div>
     </div>
     <ng-container [ngSwitch]="queryEntry.type">
-      <div *ngSwitchCase="SearchQueryTypes.distance" class="col-11 col-md-8 ">
+      <div *ngSwitchCase="SearchQueryTypes.distance" class="col-10 col-lg">
         <div class="row">
           <div class="col-md-4">
             <div class="input-group">
@@ -118,7 +120,7 @@
         </div>
       </div>
       <!-- Range Search Query -->
-      <div *ngSwitchCase="SearchQueryTypes.from_date" class="col-11 col-md-8 d-flex">
+      <div *ngSwitchCase="SearchQueryTypes.from_date" class="col-10 col-lg d-flex">
         <input id="from_date"
                name="from_date"
                title="From date"
@@ -129,7 +131,7 @@
                class="form-control input-md rounded-2"
                type="date">
       </div>
-      <div *ngSwitchCase="SearchQueryTypes.to_date" class="col-11 col-md-8 d-flex">
+      <div *ngSwitchCase="SearchQueryTypes.to_date" class="col-10 col-lg d-flex">
         <input id="to_date"
                name="to_date"
                title="To date"
@@ -140,7 +142,7 @@
                class="form-control input-md rounded-2"
                type="date">
       </div>
-      <div *ngSwitchCase="SearchQueryTypes.min_rating" class="col-11 col-md-8 d-flex">
+      <div *ngSwitchCase="SearchQueryTypes.min_rating" class="col-10 col-lg d-flex">
         <input id="minRating"
                name="minRating"
                title="Minimum Rating"
@@ -153,7 +155,7 @@
                (ngModelChange)="onChange()"
                type="number">
       </div>
-      <div *ngSwitchCase="SearchQueryTypes.max_rating" class="col-11 col-md-8 d-flex">
+      <div *ngSwitchCase="SearchQueryTypes.max_rating" class="col-10 col-lg d-flex">
         <input id="maxRating"
                name="maxRating"
                title="Maximum Rating"
@@ -166,7 +168,7 @@
                (ngModelChange)="onChange()"
                type="number">
       </div>
-      <div *ngSwitchCase="SearchQueryTypes.min_resolution" class="col-11 col-md-8">
+      <div *ngSwitchCase="SearchQueryTypes.min_resolution" class="col-10 col-lg">
         <div class="input-group">
           <input id="minResolution"
                  name="minResolution"
@@ -182,7 +184,7 @@
         </div>
       </div>
 
-      <div *ngSwitchCase="SearchQueryTypes.max_resolution" class="col-11 col-md-8">
+      <div *ngSwitchCase="SearchQueryTypes.max_resolution" class="col-10 col-lg">
         <div class="input-group">
           <input id="maxResolution"
                  name="maxResolution"
@@ -197,7 +199,7 @@
           <span class="input-group-text">Mpx</span>
         </div>
       </div>
-      <div *ngSwitchCase="SearchQueryTypes.orientation" class="col-11 col-md-8 d-flex">
+      <div *ngSwitchCase="SearchQueryTypes.orientation" class="col-10 col-lg d-flex">
         <div class="input-group col-md-6">
           <select class="form-select rounded-2"
                   [(ngModel)]="AsOrientationQuery.landscape"
@@ -212,11 +214,13 @@
         </div>
       </div>
     </ng-container>
-    <button [ngClass]="'btn-danger'"
-            class="btn float-end col-1 align-self-center"
-            (click)="deleteItem()">
-      <span class="oi oi-trash" aria-hidden="true" aria-label="Delete"></span>
-    </button>
+    <div class="col-2 col-lg-1 align-self-center">
+      <button [ngClass]="'btn-danger'"
+              class="btn  w-auto float-end"
+              (click)="deleteItem()">
+        <span class="oi oi-trash" aria-hidden="true" aria-label="Delete"></span>
+      </button>
+    </div>
   </ng-container>
 
 </div>

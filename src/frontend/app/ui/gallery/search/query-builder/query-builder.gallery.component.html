@@ -8,7 +8,7 @@
 <hr>
 <app-gallery-search-query-entry
   [(ngModel)]="searchQueryDTO"
-  (change)="onQueryChange()"
+  (change)="onChange()"
   (ngModelChange)="onChange()"
   name="search-root"
   (delete)="resetQuery()">
