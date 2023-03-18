@@ -487,7 +487,7 @@ export class GalleryMapLightboxComponent implements OnChanges, OnDestroy {
           marker(parsedGPX.path[0])
         );
         this.mapLayersControlOption.overlays.Paths.addLayer(
-          polyline(parsedGPX.path)
+          polyline(parsedGPX.path, {smoothFactor: 3})
         );
       }
       parsedGPX.markers.forEach((mc) => {

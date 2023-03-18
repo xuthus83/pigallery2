@@ -346,9 +346,21 @@ export class ServerGPXCompressingConfig extends ClientGPXCompressingConfig {
         unit: 'm',
         uiDisabled: (sc: ServerGPXCompressingConfig, c: ServerConfig) => !c.Map.enabled || !sc.enabled || !c.MetaFile.gpx
       } as TAGS,
-    description: $localize`Filters out entry that are closer than this in meters.`
+    description: $localize`Filters out entry that are closer than this to each other in meters.`
   })
   minDistance: number = 5;
+  @ConfigProperty({
+    type: 'unsignedInt',
+    tags:
+      {
+        name: $localize`Max middle point deviance`,
+        priority: ConfigPriority.underTheHood,
+        unit: 'm',
+        uiDisabled: (sc: ServerGPXCompressingConfig, c: ServerConfig) => !c.Map.enabled || !sc.enabled || !c.MetaFile.gpx
+      } as TAGS,
+    description: $localize`Filters out entry that would fall on the line if we would just connect the previous and the next points. This setting sets the sensitivity for that (higher number, more points are filtered).`
+  })
+  maxMiddleDeviance: number = 5;
   @ConfigProperty({
     type: 'unsignedInt',
     tags:

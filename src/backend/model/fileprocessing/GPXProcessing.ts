@@ -5,9 +5,10 @@ import {ProjectPath} from '../../ProjectPath';
 import {Config} from '../../../common/config/private/Config';
 import {SupportedFormats} from '../../../common/SupportedFormats';
 
-type gpxEntry = { '$': { lat: string, lon: string }, ele: string[], time: string[], extensions: unknown };
+type gpxEntry = { '$': { lat: string, lon: string }, ele?: string[], time: string[], extensions?: unknown };
 
 export class GPXProcessing {
+  private static readonly GPX_FLOAT_ACCURACY = 6;
 
   public static isMetaFile(fullPath: string): boolean {
     const extension = path.extname(fullPath).toLowerCase();
@@ -21,6 +22,7 @@ export class GPXProcessing {
       path.basename(filePath)
       + '_' + Config.MetaFile.GPXCompressing.minDistance + 'm' +
       Config.MetaFile.GPXCompressing.minTimeDistance + 'ms' +
+      Config.MetaFile.GPXCompressing.maxMiddleDeviance + 'm' +
       path.extname(filePath));
   }
 
@@ -117,13 +119,38 @@ export class GPXProcessing {
           dist < Config.MetaFile.GPXCompressing.minDistance);
       };
 
+      const postFilter = (i: number, list: gpxEntry[]) => {
+        if (i === 0 || i >= list.length - 1) { // always keep the first and last items
+          return true;
+        }
+        /* if point on the same line that the next and prev point would draw, lets skip it*/
+        const avg = (a: string, b: string) => ((parseFloat(a) + parseFloat(b)) / 2).toFixed(this.GPX_FLOAT_ACCURACY);
+        const modPoint: gpxEntry = {
+          $: {
+            lat: avg(list[i - 1].$.lat, list[i + 1].$.lat),
+            lon: avg(list[i - 1].$.lon, list[i + 1].$.lon)
+          },
+          time: list[i].time
+        };
+
+        const deviation = distance(modPoint, list[i]); // meters
+        return !(deviation < Config.MetaFile.GPXCompressing.maxMiddleDeviance); // keep if deviation is too big
+      };
+
       gpxObj.gpx.trk[0].trkseg[0].trkpt = items.filter(gpxEntryFilter).map((v) => {
-        v.$.lon = parseFloat(v.$.lon).toFixed(6);
-        v.$.lat = parseFloat(v.$.lat).toFixed(6);
+        v.$.lon = parseFloat(v.$.lon).toFixed(this.GPX_FLOAT_ACCURACY);
+        v.$.lat = parseFloat(v.$.lat).toFixed(this.GPX_FLOAT_ACCURACY);
         delete v.ele;
         delete v.extensions;
         return v;
       });
+
+      for (let i = 0; i < gpxObj.gpx.trk[0].trkseg[0].trkpt.length; ++i) {
+        if (!postFilter(i, gpxObj.gpx.trk[0].trkseg[0].trkpt)) {
+          gpxObj.gpx.trk[0].trkseg[0].trkpt.splice(i, 1);
+          --i;
+        }
+      }
     }
     await fsp.writeFile(outPath, (new xml2js.Builder({renderOpts: {pretty: false}})).buildObject(gpxObj));
 
