@@ -452,7 +452,7 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
   }
 
   private updateActivePhoto(photoIndex: number, resize = true): void {
-    if (photoIndex < 0 || photoIndex > this.gridPhotoQL.length) {
+    if (photoIndex < 0 || photoIndex >= this.gridPhotoQL.length) {
       throw new Error('Can\'t find the media');
     }
     this.videoSourceError = false;

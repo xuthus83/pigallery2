@@ -240,7 +240,7 @@ export class GalleryMapLightboxComponent implements OnChanges, OnDestroy {
   }
 
   public async show(position: Dimension): Promise<void> {
-    this.hideImages();
+    this.clearMap();
     this.visible = true;
     this.opacity = 1.0;
     this.startPosition = position;
@@ -288,13 +288,13 @@ export class GalleryMapLightboxComponent implements OnChanges, OnDestroy {
     this.opacity = 0.0;
     setTimeout((): void => {
       this.visible = false;
-      this.hideImages();
+      this.clearMap();
       this.leafletMap.setZoom(2);
     }, 500);
   }
 
   showImages(): void {
-    this.hideImages();
+    this.clearImages();
 
     // make sure to enable photos layers when opening map
     if (
@@ -410,13 +410,23 @@ export class GalleryMapLightboxComponent implements OnChanges, OnDestroy {
     mp.preview.thumbnail.CurrentlyWaiting = true;
   }
 
-  hideImages(): void {
+  clearMap() {
+    this.clearImages();
+    this.clearPath();
+  }
+
+  clearImages(): void {
     this.thumbnailsOnLoad.forEach((th): void => {
       th.destroy();
     });
     this.thumbnailsOnLoad = [];
 
     this.mapLayersControlOption.overlays.Photos.clearLayers();
+  }
+
+  clearPath(): void {
+    this.pathLayersConfigOrdered.forEach(p => p.layer.clearLayers());
+
   }
 
   @HostListener('window:keydown', ['$event'])
@@ -486,7 +496,7 @@ export class GalleryMapLightboxComponent implements OnChanges, OnDestroy {
   }
 
   private async loadGPXFiles(): Promise<void> {
-    this.pathLayersConfigOrdered.forEach(p => p.layer.clearLayers());
+    this.clearPath();
     if (this.gpxFiles.length === 0) {
 
       this.pathLayersConfigOrdered.forEach(p => {
