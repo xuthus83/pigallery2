@@ -73,6 +73,48 @@
   opacity: 1.0;
 }
 
+::ng-deep .marker-svg-small .marker-svg-wrapper{
+  width: 30px;
+  height: 30px;
+  transform: scale(0.5);
+}
+
+::ng-deep .marker-svg-pin {
+  width: 30px;
+  height: 30px;
+  left: 50%;
+  top: 50%;
+  margin: -15px 0 0 -15px;
+  border-radius: 50% 50% 50% 0;
+  position: absolute;
+  border: 3px solid;
+  transform: rotate(-45deg);
+  background-color: rgba(248, 249, 250, 0.9);
+}
+
+::ng-deep .marker-svg-shadow {
+  content: "";
+  background: rgba(128, 128, 128, 0.4);
+  width: 20px;
+  height: 10px;
+  border-radius: 100%;
+  position: absolute;
+  top: 31px;
+  left: 5px
+}
+
+
+::ng-deep .custom-div-icon svg {
+  position: absolute;
+  width: 16px !important;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  text-align: center;
+}
+
 ::ng-deep .lightbox-map-gallery-component-preview-loading {
   background-color: #bbbbbb;
   color: #7f7f7f;

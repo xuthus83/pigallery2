@@ -100,6 +100,10 @@ export class Utils {
     return size.toFixed(2) + postFixes[index];
   }
 
+  static getUnique(arr: any[]) {
+    return arr.filter((value, index, arr) => arr.indexOf(value) === index);
+  }
+
   static createRange(from: number, to: number): Array<number> {
     const arr = new Array(to - from + 1);
     let c = to - from + 1;
@@ -129,7 +133,7 @@ export class Utils {
 
       url += part + '/';
     }
-    url = url.replace(/(https?:\/\/)|(\/){2,}/g, "$1$2")
+    url = url.replace(/(https?:\/\/)|(\/){2,}/g, '$1$2');
 
     if (url.trim() === '') {
       url = './';

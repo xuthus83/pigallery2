@@ -100,7 +100,7 @@ export class MapService {
 
   public async getMapCoordinates(
     file: FileDTO
-  ): Promise<{ path: LatLngLiteral[]; markers: LatLngLiteral[] }> {
+  ): Promise<{ name: string, path: LatLngLiteral[]; markers: LatLngLiteral[] }> {
     const filePath = Utils.concatUrls(
       file.directory.path,
       file.directory.name,
@@ -121,8 +121,8 @@ export class MapService {
       }
       return ret;
     };
-
     return {
+      name: gpx.getElementsByTagName('name')?.[0]?.textContent || '',
       path: getCoordinates('trkpt'),
       markers: getCoordinates('wpt'),
     };

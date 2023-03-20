@@ -8,6 +8,7 @@ import {Config} from '../../../../../common/config/public/Config';
 import {LatLngLiteral, Map, MapOptions, Marker, marker, tileLayer, TileLayer} from 'leaflet';
 import {ThemeService} from '../../../model/theme.service';
 import {Subscription} from 'rxjs';
+import {MarkerFactory} from './MarkerFactory';
 
 @Component({
   selector: 'app-gallery-map',
@@ -113,7 +114,7 @@ export class GalleryMapComponent implements OnChanges, IRenderable {
         return marker({
           lat: p.metadata.positionData.GPSData.latitude,
           lng: p.metadata.positionData.GPSData.longitude,
-        } as LatLngLiteral);
+        } as LatLngLiteral).setIcon(MarkerFactory.defIconSmall);
       });
 
     if (this.leafletMap && this.markerLayer.length > 0) {

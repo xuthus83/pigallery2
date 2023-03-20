@@ -14,6 +14,7 @@ import {
   control,
   Control,
   divIcon,
+  DivIcon,
   icon,
   latLng,
   latLngBounds,
@@ -33,6 +34,8 @@ import {
 import {LeafletControlLayersConfig} from '@asymmetrik/ngx-leaflet';
 import {ThemeService} from '../../../../model/theme.service';
 import {Subscription} from 'rxjs';
+import {MarkerFactory} from '../MarkerFactory';
+
 
 @Component({
   selector: 'app-gallery-map-lightbox',
@@ -76,7 +79,10 @@ export class GalleryMapLightboxComponent implements OnChanges, OnDestroy {
   );
   private usedIconSize = this.iconSize;
   private mapLayersControlOption: LeafletControlLayersConfig & {
-    overlays: { Photos: MarkerClusterGroup; Paths: LayerGroup };
+    overlays: {
+      Photos: MarkerClusterGroup;
+      [name: string]: LayerGroup;
+    };
   } = {
     baseLayers: {},
     overlays: {
@@ -104,10 +110,37 @@ export class GalleryMapLightboxComponent implements OnChanges, OnDestroy {
           });
         },
       }),
-      Paths: layerGroup([]),
     },
   };
-  private mapLayerControl: Control.Layers;
+  // ordered list
+  private pathLayersConfigOrdered = [
+    {
+      name: $localize`Transportation`,
+      matchers: [/flight/gi, /flying/gi, /drive/gi, /driving/gi] as RegExp[],
+      layer: layerGroup([]),
+      theme: {color: 'var(--bs-orange)', dashArray: '4 8'},
+      icon: null as DivIcon,
+      svgIcon: {
+        width: 567,
+        path: 'M482.3 192c34.2 0 93.7 29 93.7 64c0 36-59.5 64-93.7 64l-116.6 0L265.2 495.9c-5.7 10-16.3 16.1-27.8 16.1l-56.2 0c-10.6 0-18.3-10.2-15.4-20.4l49-171.6L112 320 68.8 377.6c-3 4-7.8 6.4-12.8 6.4l-42 0c-7.8 0-14-6.3-14-14c0-1.3 .2-2.6 .5-3.9L32 256 .5 145.9c-.4-1.3-.5-2.6-.5-3.9c0-7.8 6.3-14 14-14l42 0c5 0 9.8 2.4 12.8 6.4L112 192l102.9 0-49-171.6C162.9 10.2 170.6 0 181.2 0l56.2 0c11.5 0 22.1 6.2 27.8 16.1L365.7 192l116.6 0z'
+      }
+    },
+    {
+      name: $localize`Sport`,
+      matchers: [/run/gi, /walk/gi, /hike/gi, /hiking/gi, /bike/gi, /biking/gi, /cycling/gi] as RegExp[],
+      layer: layerGroup([]),
+      theme: {color: 'var(--bs-primary)'},
+      svgIcon: {
+        width: 417,
+        path: 'M320 48a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zM125.7 175.5c9.9-9.9 23.4-15.5 37.5-15.5c1.9 0 3.8 .1 5.6 .3L137.6 254c-9.3 28 1.7 58.8 26.8 74.5l86.2 53.9-25.4 88.8c-4.9 17 5 34.7 22 39.6s34.7-5 39.6-22l28.7-100.4c5.9-20.6-2.6-42.6-20.7-53.9L238 299l30.9-82.4 5.1 12.3C289 264.7 323.9 288 362.7 288H384c17.7 0 32-14.3 32-32s-14.3-32-32-32H362.7c-12.9 0-24.6-7.8-29.5-19.7l-6.3-15c-14.6-35.1-44.1-61.9-80.5-73.1l-48.7-15c-11.1-3.4-22.7-5.2-34.4-5.2c-31 0-60.8 12.3-82.7 34.3L57.4 153.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l23.1-23.1zM91.2 352H32c-17.7 0-32 14.3-32 32s14.3 32 32 32h69.6c19 0 36.2-11.2 43.9-28.5L157 361.6l-9.5-6c-17.5-10.9-30.5-26.8-37.9-44.9L91.2 352z'
+      }
+    },
+    {
+      name: $localize`Other paths`,
+      matchers: null as RegExp[], layer: layerGroup([]), theme: {color: 'var(--bs-secondary)'}
+    }
+  ];
+  mapLayerControl: Control.Layers;
   private thumbnailsOnLoad: ThumbnailBase[] = [];
   private startPosition: Dimension = null;
   private leafletMap: Map;
@@ -119,10 +152,9 @@ export class GalleryMapLightboxComponent implements OnChanges, OnDestroy {
     public mapService: MapService,
     private themeService: ThemeService
   ) {
-    this.mapOptions.layers = [
-      this.mapLayersControlOption.overlays.Photos,
-      this.mapLayersControlOption.overlays.Paths,
-    ];
+    this.setUpPathLayers();
+    this.mapOptions.layers = [this.mapLayersControlOption.overlays.Photos];
+    this.pathLayersConfigOrdered.forEach(pl => this.mapOptions.layers.push(pl.layer));
     for (let i = 0; i < mapService.Layers.length; ++i) {
       const l = mapService.Layers[i];
       const tl = tileLayer(l.url, {attribution: mapService.Attributions});
@@ -147,6 +179,13 @@ export class GalleryMapLightboxComponent implements OnChanges, OnDestroy {
 
     // update map theme on dark theme
     this.darkModeSubscription = this.themeService.darkMode.subscribe(this.selectBaseLayer);
+  }
+
+  setUpPathLayers() {
+    this.pathLayersConfigOrdered.forEach(pl => {
+      pl.icon = MarkerFactory.getSvgIcon({color: pl.theme.color, svgPath: pl.svgIcon?.path, width: pl.svgIcon?.width});
+      this.mapLayersControlOption.overlays[pl.name] = pl.layer;
+    });
   }
 
   ngOnDestroy(): void {
@@ -324,6 +363,7 @@ export class GalleryMapLightboxComponent implements OnChanges, OnDestroy {
           photoTh.OnLoad = setPopUpPhoto;
         }
 
+        mkr.setIcon(MarkerFactory.defIcon);
         // Setting photo icon
         if (Config.Map.useImageMarkers === true) {
           mkr.on('add', () => {
@@ -446,31 +486,19 @@ export class GalleryMapLightboxComponent implements OnChanges, OnDestroy {
   }
 
   private async loadGPXFiles(): Promise<void> {
-    this.mapLayersControlOption.overlays.Paths.clearLayers();
+    this.pathLayersConfigOrdered.forEach(p => p.layer.clearLayers());
     if (this.gpxFiles.length === 0) {
-      // remove from controls
-      this.mapLayerControl.removeLayer(
-        this.mapLayersControlOption.overlays.Paths
-      );
-      // remove from map
-      if (this.leafletMap) {
-        this.leafletMap.removeLayer(this.mapLayersControlOption.overlays.Paths);
-      }
-    } else {
-      // make sure it does not appear twice
-      this.mapLayerControl.removeLayer(
-        this.mapLayersControlOption.overlays.Paths
-      );
-      this.mapLayerControl.addOverlay(
-        this.mapLayersControlOption.overlays.Paths,
-        'Paths'
-      );
-      if (
-        this.leafletMap &&
-        !this.leafletMap.hasLayer(this.mapLayersControlOption.overlays.Paths)
-      ) {
-        this.leafletMap.addLayer(this.mapLayersControlOption.overlays.Paths);
-      }
+
+      this.pathLayersConfigOrdered.forEach(p => {
+        // remove from controls
+        this.mapLayerControl.removeLayer(p.layer);
+        // remove from map
+        if (this.leafletMap) {
+          this.leafletMap.removeLayer(p.layer);
+        }
+
+      });
+      return;
     }
 
     // eslint-disable-next-line @typescript-eslint/prefer-for-of
@@ -481,19 +509,57 @@ export class GalleryMapLightboxComponent implements OnChanges, OnDestroy {
         // check race condition
         return;
       }
+      const pathLayer = this.pathLayersConfigOrdered.find((pl) => {
+        return pl.matchers === null || // null matchers match everything
+          (parsedGPX.name &&
+            pl.matchers.findIndex(m => m.test(parsedGPX.name)) !== -1);
+      }) || this.pathLayersConfigOrdered[0];
+
       if (parsedGPX.path.length !== 0) {
         // render the beginning of the path with a marker
-        this.mapLayersControlOption.overlays.Paths.addLayer(
-          marker(parsedGPX.path[0])
-        );
-        this.mapLayersControlOption.overlays.Paths.addLayer(
-          polyline(parsedGPX.path, {smoothFactor: 3})
+        const mkr = marker(parsedGPX.path[0]);
+        pathLayer.layer.addLayer(mkr);
+
+        mkr.setIcon(pathLayer.icon);
+
+        // Setting popup photo
+        mkr.bindPopup(file.name + ': ' + parsedGPX.name);
+
+        pathLayer.layer.addLayer(
+          polyline(parsedGPX.path, {
+            smoothFactor: 3,
+            interactive: false,
+            color: pathLayer?.theme?.color,
+            dashArray: pathLayer?.theme?.dashArray
+          })
         );
       }
       parsedGPX.markers.forEach((mc) => {
-        this.mapLayersControlOption.overlays.Paths.addLayer(marker(mc));
+        const mkr = marker(mc);
+        mkr.setIcon(pathLayer.icon);
+        pathLayer.layer.addLayer(mkr);
+        mkr.bindPopup($localize`Latitude` + ': ' + mc.lat + ', ' + $localize`longitude` + ': ' + mc.lng);
       });
     }
+
+    // Add layer to the map
+    this.pathLayersConfigOrdered.filter(pl => pl.layer.getLayers().length > 0).forEach((pl) => {
+      // make sure it does not appear twice
+      this.mapLayerControl.removeLayer(
+        pl.layer
+      );
+      this.mapLayerControl.addOverlay(
+        pl.layer,
+        pl.name
+      );
+      if (
+        this.leafletMap &&
+        !this.leafletMap.hasLayer(pl.layer)
+      ) {
+        this.leafletMap.addLayer(pl.layer);
+      }
+    });
+
   }
 }
 
