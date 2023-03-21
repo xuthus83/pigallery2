@@ -89,7 +89,7 @@
   position: absolute;
   border: 3px solid;
   transform: rotate(-45deg);
-  background-color: rgba(248, 249, 250, 0.9);
+  background-color: rgb(248, 249, 250);
 }
 
 ::ng-deep .marker-svg-shadow {
