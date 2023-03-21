@@ -9,8 +9,8 @@ export class PageHelper {
     return this.supportPageOffset
       ? window.pageYOffset
       : this.isCSS1Compat
-      ? document.documentElement.scrollTop
-      : document.body.scrollTop;
+        ? document.documentElement.scrollTop
+        : document.body.scrollTop;
   }
 
   public static set ScrollY(value: number) {
@@ -33,8 +33,8 @@ export class PageHelper {
     return this.supportPageOffset
       ? window.pageXOffset
       : this.isCSS1Compat
-      ? document.documentElement.scrollLeft
-      : document.body.scrollLeft;
+        ? document.documentElement.scrollLeft
+        : document.body.scrollLeft;
   }
 
   public static showScrollY(): void {
@@ -42,7 +42,8 @@ export class PageHelper {
   }
 
   public static isScrollYVisible(): boolean {
-    return PageHelper.body.style.overflowY === 'scroll';
+    return PageHelper.body.style.overflowY === 'scroll' ||
+      (!PageHelper.body.style.overflowY && document.documentElement.scrollHeight > document.documentElement.clientHeight);
   }
 
   public static hideScrollY(): void {

@@ -1,5 +1,4 @@
 
-
 a {
   text-decoration: none;
 }
@@ -18,7 +17,7 @@ bs-dropdown-container {
 }
 
 /* TODO: remove popover in ngx-bootstrap, bootstrap 5.3-alpha is fixed */
-.bs-popover-top, .bs-popover-bottom{
+.bs-popover-top, .bs-popover-bottom {
   position: absolute;
 }
 
@@ -31,6 +30,7 @@ bs-dropdown-container {
 element.style {
   width: 100px;
 }
-[data-bs-theme=dark] .btn:not(.btn-secondary):not(.btn-danger):not(.btn-warning):not(.btn-primary):not(.btn-success){
+
+[data-bs-theme=dark] .btn:not(.btn-secondary):not(.btn-danger):not(.btn-warning):not(.btn-primary):not(.btn-success) {
   --bs-btn-color: var(--bs-body-color);
 }
