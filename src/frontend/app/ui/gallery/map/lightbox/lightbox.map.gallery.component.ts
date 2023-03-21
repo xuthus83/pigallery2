@@ -520,13 +520,11 @@ export class GalleryMapLightboxComponent implements OnChanges, OnDestroy {
         return;
       }
       const pathLayer = this.pathLayersConfigOrdered.find((pl) => {
-        console.log(pl.matchers,pl?.matchers?.findIndex(m => m.test(parsedGPX.name)) );
         return pl.matchers === null || // null matchers match everything
           (parsedGPX.name &&
             pl.matchers.findIndex(m => m.test(parsedGPX.name)) !== -1);
       }) || this.pathLayersConfigOrdered[0];
 
-      console.log(parsedGPX.name, pathLayer.theme.color);
       if (parsedGPX.path.length !== 0) {
         // render the beginning of the path with a marker
         const mkr = marker(parsedGPX.path[0]);
