@@ -425,7 +425,12 @@ export class GalleryMapLightboxComponent implements OnChanges, OnDestroy {
   }
 
   clearPath(): void {
-    this.pathLayersConfigOrdered.forEach(p => p.layer.clearLayers());
+    this.pathLayersConfigOrdered.forEach(p => {
+      p.layer.clearLayers();
+      this.mapLayerControl.removeLayer(
+        p.layer
+      );
+    });
 
   }
 
@@ -554,10 +559,7 @@ export class GalleryMapLightboxComponent implements OnChanges, OnDestroy {
 
     // Add layer to the map
     this.pathLayersConfigOrdered.filter(pl => pl.layer.getLayers().length > 0).forEach((pl) => {
-      // make sure it does not appear twice
-      this.mapLayerControl.removeLayer(
-        pl.layer
-      );
+
       this.mapLayerControl.addOverlay(
         pl.layer,
         pl.name
