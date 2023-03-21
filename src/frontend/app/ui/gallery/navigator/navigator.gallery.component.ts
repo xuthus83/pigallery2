@@ -124,6 +124,10 @@ export class GalleryNavigatorComponent {
     return !!this.galleryService.content.value.directory;
   }
 
+  get isSearch(): boolean {
+    return !!this.galleryService.content.value.searchResult;
+  }
+
   get ItemCount(): number {
     const c = this.galleryService.content.value;
     return c.directory
