@@ -116,7 +116,7 @@ export class GalleryMapLightboxComponent implements OnChanges, OnDestroy {
   private pathLayersConfigOrdered = [
     {
       name: $localize`Transportation`,
-      matchers: [/flight/gi, /flying/gi, /drive/gi, /driving/gi] as RegExp[],
+      matchers: [/flight/i, /flying/i, /drive/i, /driving/i] as RegExp[],
       layer: layerGroup([]),
       theme: {color: 'var(--bs-orange)', dashArray: '4 8'},
       icon: null as DivIcon,
@@ -127,7 +127,7 @@ export class GalleryMapLightboxComponent implements OnChanges, OnDestroy {
     },
     {
       name: $localize`Sport`,
-      matchers: [/run/gi, /walk/gi, /hike/gi, /hiking/gi, /bike/gi, /biking/gi, /cycling/gi] as RegExp[],
+      matchers: [/run/i, /walk/i, /hike/i, /hiking/i, /bike/i, /biking/i, /cycling/i] as RegExp[],
       layer: layerGroup([]),
       theme: {color: 'var(--bs-primary)'},
       svgIcon: {
@@ -520,11 +520,13 @@ export class GalleryMapLightboxComponent implements OnChanges, OnDestroy {
         return;
       }
       const pathLayer = this.pathLayersConfigOrdered.find((pl) => {
+        console.log(pl.matchers,pl?.matchers?.findIndex(m => m.test(parsedGPX.name)) );
         return pl.matchers === null || // null matchers match everything
           (parsedGPX.name &&
             pl.matchers.findIndex(m => m.test(parsedGPX.name)) !== -1);
       }) || this.pathLayersConfigOrdered[0];
 
+      console.log(parsedGPX.name, pathLayer.theme.color);
       if (parsedGPX.path.length !== 0) {
         // render the beginning of the path with a marker
         const mkr = marker(parsedGPX.path[0]);
