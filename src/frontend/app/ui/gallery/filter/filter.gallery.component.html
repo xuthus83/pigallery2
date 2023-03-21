@@ -75,16 +75,16 @@
                     [class.bg-primary]="option.selected"
                     [class.bg-secondary]="!option.selected"
               >{{option.count}}</span>
-
-
             </li>
           </ul>
           <div class="card-body text-center" *ngIf="filter.options.length === 0" i18n>Nothing to filter</div>
         </div>
       </div>
     </div>
-    <div>
-      <button class="btn btn-primary float-end" i18n (click)="reset()">Reset</button>
+    <div class="row">
+      <div class="col mt-2">
+        <button class="btn btn-primary float-end" i18n (click)="reset()">Reset</button>
+      </div>
     </div>
   </div>
 </div>
