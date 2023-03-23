@@ -1,15 +1,12 @@
-import { Injectable } from '@angular/core';
-import { NetworkService } from '../../../model/network/network.service';
-import { IAutoCompleteItem } from '../../../../../common/entities/AutoCompleteItem';
-import { GalleryCacheService } from '../cache.gallery.service';
-import { SearchQueryParserService } from './search-query-parser.service';
-import { BehaviorSubject } from 'rxjs';
-import {
-  SearchQueryTypes,
-  TextSearchQueryTypes,
-} from '../../../../../common/entities/SearchQueryDTO';
-import { QueryParams } from '../../../../../common/QueryParams';
-import { SearchQueryParser } from '../../../../../common/SearchQueryParser';
+import {Injectable} from '@angular/core';
+import {NetworkService} from '../../../model/network/network.service';
+import {IAutoCompleteItem} from '../../../../../common/entities/AutoCompleteItem';
+import {GalleryCacheService} from '../cache.gallery.service';
+import {SearchQueryParserService} from './search-query-parser.service';
+import {BehaviorSubject} from 'rxjs';
+import {SearchQueryTypes, TextSearchQueryTypes,} from '../../../../../common/entities/SearchQueryDTO';
+import {QueryParams} from '../../../../../common/QueryParams';
+import {SearchQueryParser} from '../../../../../common/SearchQueryParser';
 
 @Injectable()
 export class AutoCompleteService {
@@ -40,42 +37,36 @@ export class AutoCompleteService {
       );
     }
 
-    for (let i = 0; i < 10; i++) {
-      this.keywords.push(
-        i + '-' + this.searchQueryParserService.keywords.kmFrom + ':'
-      );
-    }
-
     this.keywords.push(
       this.searchQueryParserService.keywords.to +
-        ':' +
-        SearchQueryParser.stringifyText(new Date().getFullYear().toString())
+      ':' +
+      SearchQueryParser.stringifyText(new Date().getFullYear().toString())
     );
     this.keywords.push(
       this.searchQueryParserService.keywords.to +
-        ':' +
-        SearchQueryParser.stringifyText(
-          SearchQueryParser.stringifyDate(Date.now())
-        )
+      ':' +
+      SearchQueryParser.stringifyText(
+        SearchQueryParser.stringifyDate(Date.now())
+      )
     );
 
     this.keywords.push(
       this.searchQueryParserService.keywords.from +
-        ':' +
-        SearchQueryParser.stringifyText(new Date().getFullYear().toString())
+      ':' +
+      SearchQueryParser.stringifyText(new Date().getFullYear().toString())
     );
     this.keywords.push(
       this.searchQueryParserService.keywords.from +
-        ':' +
-        SearchQueryParser.stringifyText(
-          SearchQueryParser.stringifyDate(Date.now())
-        )
+      ':' +
+      SearchQueryParser.stringifyText(
+        SearchQueryParser.stringifyDate(Date.now())
+      )
     );
 
     TextSearchQueryTypes.forEach((t) => {
       this.textSearchKeywordsMap[
         (this.searchQueryParserService.keywords as any)[SearchQueryTypes[t]]
-      ] = t;
+        ] = t;
     });
   }
 
@@ -173,7 +164,7 @@ export class AutoCompleteService {
     searchToken: string
   ): RenderableAutoCompleteItem {
     if (!item.type) {
-      return { text: item.text, queryHint: item.text };
+      return {text: item.text, queryHint: item.text};
     }
     if (
       (TextSearchQueryTypes.includes(item.type) ||
@@ -183,7 +174,7 @@ export class AutoCompleteService {
       let queryHint =
         (this.searchQueryParserService.keywords as any)[
           SearchQueryTypes[item.type]
-        ] +
+          ] +
         ':"' +
         item.text +
         '"';
@@ -256,13 +247,25 @@ export class AutoCompleteService {
         return [];
       }
     }
-    return this.keywords
+    const generateMatch = (key: string) => ({
+      text: key,
+      queryHint: key,
+      notSearchable: true,
+    });
+
+    const ret = this.keywords
       .filter((key) => key.startsWith(text.current.toLowerCase()))
-      .map((key) => ({
-        text: key,
-        queryHint: key,
-        notSearchable: true,
-      }));
+      .map(generateMatch);
+
+    // make KmFrom sensitive to all positive distances
+    const starterNum = parseInt(text.current);
+    if (starterNum > 0) {
+      const key = starterNum + '-' + this.searchQueryParserService.keywords.kmFrom + ':';
+      if (key.startsWith(text.current.toLowerCase())) {
+        ret.push(generateMatch(key));
+      }
+    }
+    return ret;
   }
 }
 
