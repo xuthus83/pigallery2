@@ -84,9 +84,8 @@ export class GPXProcessing {
     await fsp.mkdir(outDir, {recursive: true});
     const gpxStr = await fsp.readFile(filePath);
     const gpxObj = await (new xml2js.Parser()).parseStringPromise(gpxStr);
-    const items: gpxEntry[] = gpxObj.gpx?.trk?.[0]?.trkseg[0]?.trkpt;
 
-    if (items) { // only compress paths
+    if (gpxObj.gpx?.trk?.[0].trkseg[0]) { // only compress paths if there is any
       const distance = (entry1: gpxEntry, entry2: gpxEntry) => {
         const lat1 = parseFloat(entry1.$.lat);
         const lon1 = parseFloat(entry1.$.lon);
@@ -137,18 +136,24 @@ export class GPXProcessing {
         return !(deviation < Config.MetaFile.GPXCompressing.maxMiddleDeviance); // keep if deviation is too big
       };
 
-      gpxObj.gpx.trk[0].trkseg[0].trkpt = items.filter(gpxEntryFilter).map((v) => {
-        v.$.lon = parseFloat(v.$.lon).toFixed(this.GPX_FLOAT_ACCURACY);
-        v.$.lat = parseFloat(v.$.lat).toFixed(this.GPX_FLOAT_ACCURACY);
-        delete v.ele;
-        delete v.extensions;
-        return v;
-      });
+      for (let i = 0; i < gpxObj.gpx.trk.length; ++i) {
+        for (let j = 0; j < gpxObj.gpx.trk[0].trkseg.length; ++j) {
+          const trkseg: { trkpt: gpxEntry[] } = gpxObj.gpx.trk[i].trkseg[j];
 
-      for (let i = 0; i < gpxObj.gpx.trk[0].trkseg[0].trkpt.length; ++i) {
-        if (!postFilter(i, gpxObj.gpx.trk[0].trkseg[0].trkpt)) {
-          gpxObj.gpx.trk[0].trkseg[0].trkpt.splice(i, 1);
-          --i;
+          trkseg.trkpt = trkseg.trkpt.filter(gpxEntryFilter).map((v) => {
+            v.$.lon = parseFloat(v.$.lon).toFixed(this.GPX_FLOAT_ACCURACY);
+            v.$.lat = parseFloat(v.$.lat).toFixed(this.GPX_FLOAT_ACCURACY);
+            delete v.ele;
+            delete v.extensions;
+            return v;
+          });
+
+          for (let i = 0; i < trkseg.trkpt.length; ++i) {
+            if (!postFilter(i, trkseg.trkpt)) {
+              trkseg.trkpt.splice(i, 1);
+              --i;
+            }
+          }
         }
       }
     }
