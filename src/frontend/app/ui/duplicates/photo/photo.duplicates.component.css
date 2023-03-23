@@ -7,7 +7,6 @@
 }
 
 .photo-container {
-  width: 100%;
-  height: inherit;
+  display: inline;
   overflow: hidden;
 }
