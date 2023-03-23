@@ -1,6 +1,6 @@
-<div class="input-group">
+<div class="input-group" style="border-radius: inherit">
   <input type="text"
-         class="form-control search-text rounded-2"
+         class="form-control search-text"
          [placeholder]="placeholder"
          (keyup)="onSearchChange($event)"
          (blur)="onFocusLost()"
@@ -18,7 +18,7 @@
          #SearchField
          autocomplete="off">
   <input type="text"
-         class="form-control search-hint rounded-2"
+         class="form-control search-hint"
          [ngModel]="SearchHint"
          name="srch-term-hint"
          #SearchHintField
