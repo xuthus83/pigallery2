@@ -127,7 +127,7 @@ export class GalleryMapLightboxComponent implements OnChanges, OnDestroy {
     },
     {
       name: $localize`Sport`,
-      matchers: [/run/i, /walk/i, /hike/i, /hiking/i, /bike/i, /biking/i, /cycling/i] as RegExp[],
+      matchers: [/run/i, /walk/i, /hike/i, /hiking/i, /bike/i, /biking/i, /cycling/i, /skiing/i] as RegExp[],
       layer: layerGroup([]),
       theme: {color: 'var(--bs-primary)'},
       svgIcon: {
