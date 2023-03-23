@@ -257,7 +257,7 @@ export class AutoCompleteService {
       }
     }
     return this.keywords
-      .filter((key) => key.startsWith(text.current))
+      .filter((key) => key.startsWith(text.current.toLowerCase()))
       .map((key) => ({
         text: key,
         queryHint: key,
