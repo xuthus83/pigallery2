@@ -9,3 +9,7 @@
 *:focus {
   outline: none;
 }
+
+nav.sticky-top {
+  transition: top 0.3s ease-in-out;
+}
