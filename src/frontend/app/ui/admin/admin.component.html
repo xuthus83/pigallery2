@@ -1,4 +1,4 @@
-<app-frame>
+<app-frame #frame>
   <div body class="container-fluid">
 
     <div class="card mb-4" *ngIf="notificationService.countedNotifications.length>0">
@@ -61,7 +61,8 @@
 
     <div class="row mt-2">
       <div class="col-md-2 ">
-        <nav class="nav flex-column sticky-top z-0 pb-2">
+        <nav class="nav flex-column sticky-top z-0 pb-2"
+             [style]="frame.shouldHideNavbar ? '' : 'top:'+(frame.navContainer.nativeElement.offsetHeight)+'px; max-height:calc(100vh - '+(frame.navContainer.nativeElement.offsetHeight)+'px)'">
           <div class="card">
             <div class="card-body text-md-start text-center align-content-md-start align-content-center">
               <h5 i18n="title of left card in settings page that contains settings contents" class="card-title">
