@@ -104,11 +104,10 @@ export class FrameComponent {
     const down = this.lastScroll.any < scrollPosition;
     const upDelay = up && this.lastScroll.down > scrollPosition + window.innerHeight * Config.Gallery.NavBar.NavbarShowDelay;
     const downDelay = down && this.lastScroll.up < scrollPosition - window.innerHeight * Config.Gallery.NavBar.NavbarHideDelay;
-
     //we are the top where the navbar by default lives
     if (this.navContainer.nativeElement.offsetHeight > scrollPosition) {
       // do not force move navbar up when we are scrolling up from bottom
-      if (this.shouldHideNavbar != false) {
+      if (this.shouldHideNavbar != false || scrollPosition <= 0) {
         this.navbarKeepTop = true;
       }
       if (down) { // scroll down
