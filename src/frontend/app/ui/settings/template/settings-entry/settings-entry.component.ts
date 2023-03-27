@@ -1,13 +1,14 @@
-import {Component, forwardRef, OnChanges} from '@angular/core';
+import {Component, forwardRef, OnChanges, TemplateRef} from '@angular/core';
 import {ControlValueAccessor, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator,} from '@angular/forms';
 import {Utils} from '../../../../../../common/Utils';
 import {propertyTypes} from 'typeconfig/common';
 import {SearchQueryParserService} from '../../../gallery/search/search-query-parser.service';
-import {MapLayers, NavigationLinkConfig, NavigationLinkTypes, TAGS} from '../../../../../../common/config/public/ClientConfig';
+import {MapLayers, NavigationLinkConfig, NavigationLinkTypes, TAGS, ThemeConfig} from '../../../../../../common/config/public/ClientConfig';
 import {SettingsService} from '../../settings.service';
 import {WebConfig} from '../../../../../../common/config/private/WebConfig';
 import {JobScheduleConfig, UserConfig} from '../../../../../../common/config/private/PrivateConfig';
 import {enumToTranslatedArray} from '../../../EnumTranslations';
+import {BsModalService} from '../../../../../../../node_modules/ngx-bootstrap/modal';
 
 interface IState {
   shouldHide(): boolean;
@@ -67,10 +68,12 @@ export class SettingsEntryComponent
   public type: string | object;
   public arrayType: string;
   public uiType: string;
+  newThemeModalRef: any;
 
 
   constructor(private searchQueryParserService: SearchQueryParserService,
               public settingsService: SettingsService,
+              private modalService: BsModalService,
   ) {
   }
 
@@ -171,6 +174,18 @@ export class SettingsEntryComponent
 
   }
 
+  get AvailableThemes() {
+    return [{
+      key: 'default',
+      value: $localize`default`
+    }, ...(this.state.rootConfig as any).__state.availableThemes.value
+      .map((th: ThemeConfig) => ({key: th.name, value: th.name}))];
+  }
+
+
+  get SelectedThemeSettings(): { theme: string } {
+    return (this.state.value as ThemeConfig[]).find(th => th.name === (this.state.rootConfig as any).__state.selectedTheme.value) || {theme: 'N/A'};
+  }
 
   get Disabled() {
     if (!this.state?.tags?.uiDisabled) {
@@ -209,8 +224,8 @@ export class SettingsEntryComponent
       this.arrayType !== 'UserConfig') {
       this.uiType = 'StringInput';
     }
-    if (this.type === 'SearchQuery') {
-      this.uiType = 'SearchQuery';
+    if (this.type === this.state.tags?.uiType) {
+      this.uiType = this.state.tags?.uiType;
     } else if (this.state.isEnumType) {
       this.uiType = 'EnumType';
     } else if (this.type === 'boolean') {
@@ -301,6 +316,7 @@ export class SettingsEntryComponent
   public onTouched = (): void => {
     // empty
   };
+  newThemeName: string;
 
   public writeValue(obj: IState): void {
     this.state = obj;
@@ -324,7 +340,6 @@ export class SettingsEntryComponent
       }
       this.state.value.push(this.state.value[this.state.value.length - 1]);
     }
-    console.dir(this.state.value);
   }
 
   remove(i: number): void {
@@ -349,6 +364,44 @@ export class SettingsEntryComponent
     );
   }
 
+
+  addNewTheme(): void {
+    const availableThemes = (this.state.rootConfig as any).__state.availableThemes;
+    if (!this.newThemeName ||
+      (availableThemes.value as ThemeConfig[]).find(th => th.name === this.newThemeName)) {
+      return;
+    }
+    this.state.value = this.newThemeName;
+    availableThemes.value.push(new availableThemes.arrayType(this.newThemeName, ''));
+    this.newThemeName = '';
+    this.onChange(null);
+    this.hideNewThemeModal();
+  }
+
+
+  removeTheme(): void {
+    const availableThemes = (this.state.rootConfig as any).__state.availableThemes;
+    const i = (availableThemes.value as ThemeConfig[]).findIndex(th => th.name === this.state.value);
+    if (i >= 0) {
+      this.state.value = 'default';
+      availableThemes.value.splice(i, 1);
+      this.onChange(null);
+    }
+
+  }
+
+  showNewThemeModal(template: TemplateRef<any>): void {
+    this.newThemeModalRef = this.modalService.show(template, {
+      class: 'modal-lg',
+    });
+    document.body.style.paddingRight = '0px';
+  }
+
+
+  public hideNewThemeModal(): void {
+    this.newThemeModalRef.hide();
+    this.newThemeModalRef = null;
+  }
 
 }
 

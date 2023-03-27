@@ -101,6 +101,8 @@ export class PublicRouter {
           .replace(/'/g, '&#039;');
       res.tpl.Config = confCopy;
       res.tpl.customHTMLHead = Config.Server.customHTMLHead;
+      const selectedTheme = Config.Gallery.Themes.availableThemes.find(th=>th.name === Config.Gallery.Themes.selectedTheme)?.theme || '';
+      res.tpl.usedTheme = selectedTheme;
 
       return next();
     };

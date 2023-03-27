@@ -1,14 +1,13 @@
 import {ClientConfig} from './ClientConfig';
 import {WebConfigClass} from 'typeconfig/src/decorators/class/WebConfigClass';
 import {WebConfigClassBuilder} from 'typeconfig/src/decorators/builders/WebConfigClassBuilder';
-import {ConfigProperty} from 'typeconfig/src/decorators/property/ConfigPropoerty';
 import {IWebConfigClass} from 'typeconfig/common';
 
 /**
  * These configuration will be available at frontend and backend too
  */
 @WebConfigClass()
-export class ClientClass extends ClientConfig{
+export class ClientClass extends ClientConfig {
 }
 
 // ConfigInject is getting injected form the server side to the global scope

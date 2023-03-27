@@ -53,9 +53,9 @@
         </select>
 
 
-        <div class="form-check form-switch fs-5">
+        <div class="form-check form-switch fs-5"
+             *ngSwitchCase="'Boolean'">
           <input class="form-check-input"
-                 *ngSwitchCase="'Boolean'"
                  [id]="idName"
                  [name]="idName"
                  [title]="title"
@@ -65,6 +65,82 @@
                  (ngModelChange)="onChange($event)"
                  [(ngModel)]="state.value">
         </div>
+
+        <div class="input-group"
+             *ngSwitchCase="'ThemeSelector'">
+          <select
+            [id]="idName"
+            [name]="idName"
+            [title]="title"
+            (ngModelChange)="onChange($event)"
+            [disabled]="state.readonly || Disabled"
+            class="form-select" [(ngModel)]="state.value">
+            <option *ngFor="let th of AvailableThemes" [ngValue]="th.key">{{th.value}}
+            </option>
+          </select>
+
+          <button class="btn btn-primary"
+                  (click)="showNewThemeModal(newThemeModal)">
+            <span class="oi oi-plus me-2"></span>
+            <ng-container i18n>Add new</ng-container>
+          </button>
+          <button class="btn btn-danger"
+                  *ngIf="state.value !== 'default'"
+                  (click)="removeTheme()">
+            <span class="oi oi-trash"></span>
+          </button>
+
+          <ng-template #newThemeModal>
+            <div class="modal-header">
+              <h5 class="modal-title" i18n>Add new theme</h5>
+              <button type="button" class="btn-close" (click)="hideNewThemeModal()" data-dismiss="modal"
+                      aria-label="Close">
+              </button>
+            </div>
+            <div class="modal-body">
+              <form class="form-horizontal">
+                <label for="themeName" i18n>Theme name</label>
+                <input
+                  id="themeName"
+                  name="themeName"
+                  placeholder="name"
+                  i18n-placeholder
+                  class="form-control input-md"
+                  required="required"
+                  [(ngModel)]="newThemeName"
+                  type="text"/>
+              </form>
+            </div>
+
+            <div class="modal-footer">
+
+              <div class="btn-group float-end row mt-2" role="group" style="display: block">
+                <div class="pe-0">
+                  <button class="btn btn-primary" type="button"
+                          (click)="addNewTheme()">
+                    <span class="oi oi-plus me-2"></span>
+                    <ng-container i18n>Add new Theme</ng-container>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </div>
+
+        <textarea
+          rows="5"
+          *ngSwitchCase="'SelectedThemeSettings'"
+          type="text"
+          class="form-control"
+          [title]="title"
+          [id]="idName"
+          [(ngModel)]="SelectedThemeSettings.theme"
+          (ngModelChange)="onChange($event)"
+          [name]="idName"
+          [disabled]="state.readonly || Disabled"
+          required="required">
+        </textarea>
+
 
         <app-settings-workflow
           class="w-100"
@@ -231,7 +307,7 @@
               </div>
 
             </div>
-            <div class="row me-0" >
+            <div class="row me-0">
               <div class="col pe-0">
                 <button class="btn btn-primary float-end"
                         [disabled]="state.readonly"
@@ -285,7 +361,7 @@
             triggers="mouseenter:mouseleave"
             placement="bottom"
             [popover]="popTemplate"
-            class="oi oi-warning text-warning warning-icon ms-2" ></span>
+            class="oi oi-warning text-warning warning-icon ms-2"></span>
         </div>
       </div>
 

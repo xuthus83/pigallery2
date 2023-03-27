@@ -41,7 +41,7 @@ export type TAGS = {
   experimental?: boolean, //is it a beta feature
   unit?: string, // Unit info to display on UI
   uiIcon?: string,
-  uiType?: 'SearchQuery', // Hint for the UI about the type
+  uiType?: 'SearchQuery' | 'ThemeSelector' | 'SelectedThemeSettings', // Hint for the UI about the type
   uiOptions?: (string | number)[], //Hint for the UI about the recommended options
   uiAllowSpaces?: boolean
   uiOptional?: boolean; //makes the tag not "required"
@@ -503,6 +503,30 @@ export class ClientLightboxConfig {
 }
 
 @SubConfigClass<TAGS>({tags: {client: true}, softReadonly: true})
+export class ThemeConfig {
+
+  constructor(name?: string, theme?: string) {
+    this.name = name;
+    this.theme = theme;
+  }
+
+  @ConfigProperty({
+    tags: {
+      name: $localize`Name`,
+    } as TAGS,
+    description: $localize`Name of the theme`
+  })
+  name: string;
+  @ConfigProperty({
+    tags: {
+      name: $localize`Theme`,
+    } as TAGS,
+    description: $localize`Adds these css settings as it is to the end of the body tag of the page.`
+  })
+  theme: string;
+}
+
+@SubConfigClass<TAGS>({tags: {client: true}, softReadonly: true})
 export class ThemesConfig {
 
   @ConfigProperty({
@@ -524,6 +548,42 @@ export class ThemesConfig {
     description: $localize`Sets the default theme mode that is used for the application.`
   })
   defaultMode: ThemeModes = ThemeModes.light;
+
+  @ConfigProperty({
+    type: 'string',
+    tags: {
+      name: $localize`Selected theme`,
+      uiDisabled: (sb: ThemesConfig) => !sb.enabled,
+      uiType: 'ThemeSelector'
+    } as TAGS,
+    description: $localize`Selected theme to use on the site.`
+  })
+  selectedTheme: 'default' | string = 'classic';
+
+  @ConfigProperty({
+    arrayType: ThemeConfig,
+    tags: {
+      name: $localize`Selected theme css`, //this is a 'hack' to the UI settings. UI will only show the selected setting's css
+      uiDisabled: (sb: ThemesConfig) => !sb.enabled,
+      relevant: (c: ThemesConfig) => c.selectedTheme !== 'default',
+      uiType: 'SelectedThemeSettings'
+    } as TAGS,
+    description: $localize`Adds these css settings as it is to the end of the body tag of the page.`
+  })
+  availableThemes: ThemeConfig[] = [
+    new ThemeConfig(
+      'classic',
+      ':root nav.navbar {\n' +
+      '--bs-navbar-color: rgba(255, 255, 255, 0.55);\n' +
+      '--bs-navbar-hover-color: rgba(255, 255, 255, 0.75);\n' +
+      '--bs-navbar-disabled-color: rgba(255, 255, 255, 0.25);\n' +
+      '--bs-navbar-active-color: #fff;\n' +
+      '--bs-navbar-brand-color: #fff;\n' +
+      '--bs-navbar-brand-hover-color: #fff;\n' +
+      '--bs-bg-opacity: 1;\n' +
+      'background-color: rgba(var(--bs-dark-rgb), var(--bs-bg-opacity)) !important;\n' +
+      '}'
+    )];
 }
 
 
@@ -629,7 +689,8 @@ export class ClientGalleryConfig {
     tags: {
       name: $localize`Themes`,
       priority: ConfigPriority.advanced,
-    },
+    } as TAGS,
+    description:$localize`Pigallery2 uses Bootstrap 5.3 (https://getbootstrap.com/docs/5.3) for design (css, layout). In dark mode it sets 'data-bs-theme="dark"' to the <html> to take advantage bootstrap's color modes. For theming, read more at: https://getbootstrap.com/docs/5.3/customize/color-modes/`
   })
   Themes: ThemesConfig = new ThemesConfig();
 }
