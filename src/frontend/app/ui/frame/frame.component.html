@@ -1,6 +1,6 @@
 <ngx-loading-bar [includeSpinner]="false" color="#337ab7" height="3px"></ngx-loading-bar>
 <div #navContainer class="navbar-container auto-hide-navbar"
-     [class.navbar-keep-top]="navbarKeepTop"
+     [class.navbar-keep-top]="navbarKeepTop || fixNavbarOnTop"
      [class.hide-navbar]="!navbarKeepTop && shouldHideNavbar"
      [class.animate-navbar]="animateNavbar">
   <nav class="navbar navbar-expand bg-body">
@@ -64,7 +64,7 @@
             </li>
             <li class="nav-item dropdown">
               <div class="btn-group" dropdown #dropdown="bs-dropdown" placement="bottom"
-                   [insideClick]="true">
+                   [autoClose]="false"  container="body">
                 <button id="button-alignment" dropdownToggle
                         type="button" class="btn btn-dark dropdown-toggle"
                         aria-controls="dropdown-alignment">
@@ -148,12 +148,35 @@
                   </ng-container>
                   <hr class="d-md-none"/>
 
-                  <ng-content select="[navbar-menu]"></ng-content>
-                  <li role="menuitem" *ngIf="isAdmin()">
-                    <a class="dropdown-item" [routerLink]="['/duplicates']">
-                      <span class="oi oi-layers"></span>
-                      <ng-container i18n>Duplicates</ng-container>
+                  <li role="menuitem" dropdown [autoClose]="false"
+                      placement="bottom left" container="body">
+                    <a dropdownToggle class="dropdown-item">
+                      <span class="oi oi-command"></span>
+                      <ng-container i18n>Tools</ng-container>
                     </a>
+                    <ul class="dropdown-menu dropdown-menu-start" *dropdownMenu role="menu">
+                      <ng-content select="[navbar-menu]"></ng-content>
+                      <li role="menuitem" *ngIf="isAdmin()">
+                        <a class="dropdown-item"
+                           [routerLink]="['/duplicates']">
+                          <span class="oi oi-layers"></span>
+                          <ng-container i18n>Duplicates</ng-container>
+                        </a>
+                      </li>
+                      <li role="menuitem">
+                        <div class="dropdown-item d-flex justify-content-between">
+                          <span title="key: c" i18n-title i18n>Fix nabvar</span>
+                          <div class="form-check form-switch">
+                            <input class="form-check-input"
+                                   type="checkbox"
+                                   role="switch"
+                                   name="fix-navbar"
+                                   id="fix-switch"
+                                   [(ngModel)]="fixNavbarOnTop">
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
                   </li>
                   <li role="menuitem" *ngIf="isAdmin()">
                     <a class="dropdown-item" [routerLink]="['/admin']">

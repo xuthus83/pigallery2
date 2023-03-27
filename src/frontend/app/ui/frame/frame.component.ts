@@ -42,6 +42,7 @@ export class FrameComponent {
   public shouldHideNavbar = false;
   public navbarKeepTop = true;
   public animateNavbar = false;
+  public fixNavbarOnTop = false;
   @ViewChild('navContainer', {static: true}) navContainer: ElementRef;
   @ViewChild('dropdown', {static: true}) dropdown: BsDropdownDirective;
   @ViewChild('languageSelector', {static: true}) languageSelector: LanguageComponent;
