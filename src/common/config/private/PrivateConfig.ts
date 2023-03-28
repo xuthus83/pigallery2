@@ -314,6 +314,16 @@ export class ServerThumbnailConfig extends ClientThumbnailConfig {
   })
   quality = 80;
   @ConfigProperty({
+    type: 'boolean',
+    tags:
+      {
+        name: $localize`Use chroma subsampling.`,
+        priority: ConfigPriority.underTheHood
+      },
+    description: $localize`Use high quality chroma subsampling in webp. See: https://sharp.pixelplumbing.com/api-output#webp.`
+  })
+  smartSubsample = true;
+  @ConfigProperty({
     type: 'ratio',
     tags:
       {

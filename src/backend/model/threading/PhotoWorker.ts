@@ -46,6 +46,7 @@ export interface RendererInput {
   outPath: string;
   quality: number;
   useLanczos3: boolean;
+  smartSubsample: boolean;
   cut?: {
     left: number;
     top: number;
@@ -162,7 +163,7 @@ export class ImageRendererFactory {
           fit: 'cover',
         });
       }
-      await image.rotate().webp({effort: 6, quality: input.quality}).toFile(input.outPath);
+      await image.rotate().webp({effort: 6, quality: input.quality, smartSubsample: input.smartSubsample}).toFile(input.outPath);
     };
   }
 }

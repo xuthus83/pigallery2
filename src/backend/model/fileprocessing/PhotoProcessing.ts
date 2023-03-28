@@ -4,11 +4,7 @@ import * as os from 'os';
 import * as crypto from 'crypto';
 import {ProjectPath} from '../../ProjectPath';
 import {Config} from '../../../common/config/private/Config';
-import {
-  PhotoWorker,
-  RendererInput,
-  ThumbnailSourceType,
-} from '../threading/PhotoWorker';
+import {PhotoWorker, RendererInput, ThumbnailSourceType,} from '../threading/PhotoWorker';
 import {ITaskExecuter, TaskExecuter} from '../threading/TaskExecuter';
 import {FaceRegion, PhotoDTO} from '../../../common/entities/PhotoDTO';
 import {SupportedFormats} from '../../../common/SupportedFormats';
@@ -124,7 +120,7 @@ export class PhotoProcessing {
     return path.join(
       ProjectPath.TranscodedFolder,
       ProjectPath.getRelativePathToImages(path.dirname(mediaPath)),
-      file + '_' + size + 'q' + Config.Media.Thumbnail.quality + PhotoProcessing.CONVERTED_EXTENSION
+      file + '_' + size + 'q' + Config.Media.Thumbnail.quality + (Config.Media.Thumbnail.smartSubsample ? 'cs' : '') + PhotoProcessing.CONVERTED_EXTENSION
     );
   }
 
@@ -257,6 +253,7 @@ export class PhotoProcessing {
       makeSquare,
       useLanczos3: Config.Media.Thumbnail.useLanczos3,
       quality: Config.Media.Thumbnail.quality,
+      smartSubsample: Config.Media.Thumbnail.smartSubsample,
     } as RendererInput;
 
     const outDir = path.dirname(input.outPath);
