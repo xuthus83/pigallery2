@@ -100,6 +100,7 @@ export class PhotoProcessing {
       },
       useLanczos3: Config.Media.Thumbnail.useLanczos3,
       quality: Config.Media.Thumbnail.quality,
+      smartSubsample: Config.Media.Thumbnail.smartSubsample,
     } as RendererInput;
     input.cut.width = Math.min(
       input.cut.width,
@@ -149,6 +150,10 @@ export class PhotoProcessing {
     );
   }
 
+  /**
+   * Tells if the path is valid with the current config
+   * @param convertedPath
+   */
   public static async isValidConvertedPath(
     convertedPath: string
   ): Promise<boolean> {
@@ -179,16 +184,24 @@ export class PhotoProcessing {
       return false;
     }
 
-    const qualityStr = convertedPath.substring(
+
+    let qualityStr = convertedPath.substring(
       convertedPath.lastIndexOf('q') + 1,
       convertedPath.length - path.extname(convertedPath).length
     );
 
+
+    if (Config.Media.Thumbnail.smartSubsample) {
+      if (!qualityStr.endsWith('cs')) { // remove chromatic subsampling flag if exists
+        return false;
+      }
+      qualityStr = qualityStr.slice(0, -2);
+    }
+
     const quality = parseInt(qualityStr, 10);
 
     if ((quality + '').length !== qualityStr.length ||
-      quality < 0 ||
-      quality > 100) {
+      quality !== Config.Media.Thumbnail.quality) {
       return false;
     }
 
