@@ -1,33 +1,11 @@
-import {
-  Component,
-  ElementRef,
-  EventEmitter,
-  forwardRef,
-  Input,
-  OnDestroy,
-  Output,
-  ViewChild,
-} from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
-import { BehaviorSubject, Subscription } from 'rxjs';
-import {
-  AutoCompleteService,
-  RenderableAutoCompleteItem,
-} from '../autocomplete.service';
-import {
-  MetadataSearchQueryTypes,
-  SearchQueryTypes,
-} from '../../../../../../common/entities/SearchQueryDTO';
-import { Config } from '../../../../../../common/config/public/Config';
-import {
-  ControlValueAccessor,
-  UntypedFormControl,
-  NG_VALIDATORS,
-  NG_VALUE_ACCESSOR,
-  ValidationErrors,
-  Validator,
-} from '@angular/forms';
-import { AutoCompleteRenderItem } from '../AutoCompleteRenderItem';
+import {Component, ElementRef, EventEmitter, forwardRef, Input, OnDestroy, Output, ViewChild,} from '@angular/core';
+import {Router, RouterLink} from '@angular/router';
+import {BehaviorSubject, Subscription} from 'rxjs';
+import {AutoCompleteService, RenderableAutoCompleteItem,} from '../autocomplete.service';
+import {MetadataSearchQueryTypes, SearchQueryTypes,} from '../../../../../../common/entities/SearchQueryDTO';
+import {Config} from '../../../../../../common/config/public/Config';
+import {ControlValueAccessor, NG_VALIDATORS, NG_VALUE_ACCESSOR, UntypedFormControl, ValidationErrors, Validator,} from '@angular/forms';
+import {AutoCompleteRenderItem} from '../AutoCompleteRenderItem';
 
 @Component({
   selector: 'app-gallery-search-field-base',
@@ -49,13 +27,12 @@ import { AutoCompleteRenderItem } from '../AutoCompleteRenderItem';
   ],
 })
 export class GallerySearchFieldBaseComponent
-  implements ControlValueAccessor, Validator, OnDestroy
-{
+  implements ControlValueAccessor, Validator, OnDestroy {
   @Input() placeholder = $localize`Search`;
   @Output() search = new EventEmitter<void>();
 
-  @ViewChild('SearchField', { static: false }) searchField: ElementRef;
-  @ViewChild('SearchHintField', { static: false }) searchHintField: ElementRef;
+  @ViewChild('SearchField', {static: false}) searchField: ElementRef;
+  @ViewChild('SearchHintField', {static: false}) searchHintField: ElementRef;
 
   autoCompleteRenders: AutoCompleteRenderItem[] = [];
   public rawSearchText = '';
@@ -129,7 +106,7 @@ export class GallerySearchFieldBaseComponent
 
   getAutocompleteToken(): { current: string; prev: string } {
     if (this.rawSearchText.trim().length === 0) {
-      return { current: '', prev: '' };
+      return {current: '', prev: ''};
     }
     const tokens = this.rawSearchText.split(' ');
     return {
@@ -231,7 +208,8 @@ export class GallerySearchFieldBaseComponent
   }
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  public onTouched(): void {}
+  public onTouched(): void {
+  }
 
   public writeValue(obj: string): void {
     this.rawSearchText = obj;
@@ -250,7 +228,7 @@ export class GallerySearchFieldBaseComponent
   }
 
   validate(control: UntypedFormControl): ValidationErrors {
-    return { required: true };
+    return {required: true};
   }
 
   Scrolled(): void {
@@ -259,6 +237,7 @@ export class GallerySearchFieldBaseComponent
   }
 
   private emptyAutoComplete(): void {
+    this.mouseOverAutoComplete = false;
     this.highlightedAutoCompleteItem = -1;
     this.autoCompleteRenders = [];
   }
@@ -314,9 +293,11 @@ export class GallerySearchFieldBaseComponent
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars,@typescript-eslint/no-empty-function
-  private propagateChange = (_: string): void => {};
+  private propagateChange = (_: string): void => {
+  };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars,@typescript-eslint/no-empty-function
-  private propagateTouch = (_: never): void => {};
+  private propagateTouch = (_: never): void => {
+  };
 }
 
