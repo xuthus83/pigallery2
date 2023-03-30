@@ -12,6 +12,7 @@ import {SearchQueryParser} from '../../../../../common/SearchQueryParser';
 export class AutoCompleteService {
   private keywords: string[] = [];
   private textSearchKeywordsMap: { [key: string]: SearchQueryTypes } = {};
+  private noACKeywordsMap: { [key: string]: SearchQueryTypes } = {}; // these commands do not have autocompete
 
   constructor(
     private networkService: NetworkService,
@@ -25,7 +26,9 @@ export class AutoCompleteService {
           k !== this.searchQueryParserService.keywords.and &&
           k !== this.searchQueryParserService.keywords.portrait &&
           k !== this.searchQueryParserService.keywords.kmFrom &&
-          k !== this.searchQueryParserService.keywords.NSomeOf
+          k !== this.searchQueryParserService.keywords.NSomeOf &&
+          k !== this.searchQueryParserService.keywords.minRating &&
+          k !== this.searchQueryParserService.keywords.maxRating
       )
       .map((k) => k + ':');
 
@@ -36,6 +39,7 @@ export class AutoCompleteService {
         i + '-' + this.searchQueryParserService.keywords.NSomeOf + ':( )'
       );
     }
+
 
     this.keywords.push(
       this.searchQueryParserService.keywords.to +
@@ -68,6 +72,16 @@ export class AutoCompleteService {
         (this.searchQueryParserService.keywords as any)[SearchQueryTypes[t]]
         ] = t;
     });
+
+    this.noACKeywordsMap[this.searchQueryParserService.keywords.minRating]
+      = SearchQueryTypes.min_rating;
+    this.noACKeywordsMap[this.searchQueryParserService.keywords.maxRating]
+      = SearchQueryTypes.max_rating;
+
+    this.noACKeywordsMap[this.searchQueryParserService.keywords.minResolution]
+      = SearchQueryTypes.min_resolution;
+    this.noACKeywordsMap[this.searchQueryParserService.keywords.maxResolution]
+      = SearchQueryTypes.max_resolution;
   }
 
   public autoComplete(text: {
@@ -79,16 +93,17 @@ export class AutoCompleteService {
         this.sortResults(text.current, this.getQueryKeywords(text))
       );
 
-    const type = this.getTypeFromPrefix(text.current);
+    const prefixType = this.getTypeFromPrefix(text.current);
     const searchText = this.getPrefixLessSearchText(text.current);
-    if (searchText === '' || searchText === '.') {
+    if (searchText === '' || searchText === '.' || prefixType.noAc) {
       return items;
     }
-    this.typedAutoComplete(searchText, text.current, type, items);
+
+    this.typedAutoComplete(searchText, text.current, prefixType.type, items);
     return items;
   }
 
-  public typedAutoComplete(
+  private typedAutoComplete(
     text: string,
     fullText: string,
     type: SearchQueryTypes,
@@ -109,7 +124,7 @@ export class AutoCompleteService {
             this.galleryCacheService.setAutoComplete(text, type, ret);
             items.next(
               this.sortResults(
-                text,
+                fullText,
                 ret
                   .map((i) => this.ACItemToRenderable(i, fullText))
                   .concat(items.value)
@@ -119,7 +134,7 @@ export class AutoCompleteService {
       } else {
         items.next(
           this.sortResults(
-            text,
+            fullText,
             cached
               .map((i) => this.ACItemToRenderable(i, fullText))
               .concat(items.value)
@@ -144,19 +159,27 @@ export class AutoCompleteService {
     return tokens[1];
   }
 
-  private getTypeFromPrefix(text: string): SearchQueryTypes {
+  /**
+   * Returns with the type or tells no autocompete recommendations from the server
+   * @param text
+   * @private
+   */
+  private getTypeFromPrefix(text: string): { type?: SearchQueryTypes, noAc?: boolean } {
     const tokens = text.split(':');
     if (tokens.length !== 2) {
-      return null;
+      return {type: null};
     }
     if (
       new RegExp('^\\d*-' + this.searchQueryParserService.keywords.kmFrom).test(
         tokens[0]
       )
     ) {
-      return SearchQueryTypes.distance;
+      return {type: SearchQueryTypes.distance};
     }
-    return this.textSearchKeywordsMap[tokens[0]] || null;
+    if (this.noACKeywordsMap[tokens[0]]) {
+      return {type: this.noACKeywordsMap[tokens[0]], noAc: true};
+    }
+    return {type: this.textSearchKeywordsMap[tokens[0]] || null};
   }
 
   private ACItemToRenderable(
@@ -207,7 +230,10 @@ export class AutoCompleteService {
     text: string,
     items: RenderableAutoCompleteItem[]
   ): RenderableAutoCompleteItem[] {
+    const textLC = text.toLowerCase();
     return items.sort((a, b) => {
+      const aLC = a.text.toLowerCase();
+      const bLC = b.text.toLowerCase();
       // prioritize persons higher
       if (a.type !== b.type) {
         if (a.type === SearchQueryTypes.person) {
@@ -218,11 +244,11 @@ export class AutoCompleteService {
       }
 
       if (
-        (a.text.startsWith(text) && b.text.startsWith(text)) ||
-        (!a.text.startsWith(text) && !b.text.startsWith(text))
+        (aLC.startsWith(textLC) && bLC.startsWith(textLC)) ||
+        (!aLC.startsWith(textLC) && !bLC.startsWith(textLC))
       ) {
-        return a.text.localeCompare(b.text);
-      } else if (a.text.startsWith(text)) {
+        return aLC.localeCompare(bLC);
+      } else if (aLC.startsWith(textLC)) {
         return -1;
       }
       return 1;
@@ -265,6 +291,26 @@ export class AutoCompleteService {
         ret.push(generateMatch(key));
       }
     }
+
+    // only showing rating recommendations of the full query is typed
+    const mrKey = this.searchQueryParserService.keywords.minRating + ':';
+    const mxrKey = this.searchQueryParserService.keywords.maxRating + ':';
+    if (text.current.toLowerCase().startsWith(mrKey)) {
+      for (let i = 1; i <= 5; ++i) {
+        ret.push(generateMatch(mrKey + i));
+      }
+    } else if (mrKey.startsWith(text.current.toLowerCase())) {
+      ret.push(generateMatch(mrKey));
+    }
+
+    if (text.current.toLowerCase().startsWith(mxrKey)) {
+      for (let i = 1; i <= 5; ++i) {
+        ret.push(generateMatch(mxrKey + i));
+      }
+    } else if (mxrKey.startsWith(text.current.toLowerCase())) {
+      ret.push(generateMatch(mxrKey));
+    }
+
     return ret;
   }
 }
