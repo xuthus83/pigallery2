@@ -3,9 +3,13 @@ import {Metadata, Sharp} from 'sharp';
 import {Logger} from '../../Logger';
 import {FfmpegCommand, FfprobeData} from 'fluent-ffmpeg';
 import {FFmpegFactory} from '../FFmpegFactory';
+const path = require('path');
+
+const sharp = require('sharp');
+
+sharp.cache(false);
 
 export class PhotoWorker {
-  private static imageRenderer: (input: RendererInput) => Promise<void> = null;
   private static videoRenderer: (input: RendererInput) => Promise<void> = null;
 
   public static render(input: RendererInput): Promise<void> {
@@ -19,10 +23,7 @@ export class PhotoWorker {
   }
 
   public static renderFromImage(input: RendererInput): Promise<void> {
-    if (PhotoWorker.imageRenderer === null) {
-      PhotoWorker.imageRenderer = ImageRendererFactory.build();
-    }
-    return PhotoWorker.imageRenderer(input);
+    return ImageRendererFactory.render(input);
   }
 
   public static renderFromVideo(input: RendererInput): Promise<void> {
@@ -58,7 +59,6 @@ export interface RendererInput {
 export class VideoRendererFactory {
   public static build(): (input: RendererInput) => Promise<void> {
     const ffmpeg = FFmpegFactory.get();
-    const path = require('path');
     return (input: RendererInput): Promise<void> => {
       return new Promise((resolve, reject): void => {
         Logger.silly('[FFmpeg] rendering thumbnail: ' + input.mediaPath);
@@ -121,49 +121,43 @@ export class VideoRendererFactory {
 }
 
 export class ImageRendererFactory {
-  public static build(): (input: RendererInput) => Promise<void> {
-    return ImageRendererFactory.Sharp();
-  }
 
-  public static Sharp(): (input: RendererInput) => Promise<void> {
-    const sharp = require('sharp');
-    sharp.cache(false);
-    return async (input: RendererInput): Promise<void> => {
-      Logger.silly(
-        '[SharpRenderer] rendering photo:' +
-        input.mediaPath +
-        ', size:' +
-        input.size
-      );
-      const image: Sharp = sharp(input.mediaPath, {failOnError: false});
-      const metadata: Metadata = await image.metadata();
+  public static async render(input: RendererInput): Promise<void> {
+    Logger.silly(
+      '[SharpRenderer] rendering photo:' +
+      input.mediaPath +
+      ', size:' +
+      input.size
+    );
+    const image: Sharp = sharp(input.mediaPath, {failOnError: false});
+    const metadata: Metadata = await image.metadata();
 
-      const kernel =
-        input.useLanczos3 === true
-          ? sharp.kernel.lanczos3
-          : sharp.kernel.nearest;
+    const kernel =
+      input.useLanczos3 === true
+        ? sharp.kernel.lanczos3
+        : sharp.kernel.nearest;
 
-      if (input.cut) {
-        image.extract(input.cut);
-      }
-      if (input.makeSquare === false) {
-        if (metadata.height > metadata.width) {
-          image.resize(Math.min(input.size, metadata.width), null, {
-            kernel,
-          });
-        } else {
-          image.resize(null, Math.min(input.size, metadata.height), {
-            kernel,
-          });
-        }
-      } else {
-        image.resize(input.size, input.size, {
+    if (input.cut) {
+      image.extract(input.cut);
+    }
+    if (input.makeSquare === false) {
+      if (metadata.height > metadata.width) {
+        image.resize(Math.min(input.size, metadata.width), null, {
           kernel,
-          position: sharp.gravity.centre,
-          fit: 'cover',
+        });
+      } else {
+        image.resize(null, Math.min(input.size, metadata.height), {
+          kernel,
         });
       }
-      await image.rotate().webp({effort: 6, quality: input.quality, smartSubsample: input.smartSubsample}).toFile(input.outPath);
-    };
+    } else {
+      image.resize(input.size, input.size, {
+        kernel,
+        position: sharp.gravity.centre,
+        fit: 'cover',
+      });
+    }
+    await image.rotate().webp({effort: 6, quality: input.quality, smartSubsample: input.smartSubsample}).toFile(input.outPath);
+
   }
 }
