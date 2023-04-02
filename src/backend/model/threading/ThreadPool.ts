@@ -125,14 +125,3 @@ export class DiskManagerTH
   }
 }
 
-export class ThumbnailTH
-  extends ThreadPool<void>
-  implements ITaskExecuter<RendererInput, void>
-{
-  execute(input: RendererInput): Promise<void> {
-    return super.executeTask({
-      type: WorkerTaskTypes.thumbnail,
-      input,
-    } as ThumbnailTask);
-  }
-}

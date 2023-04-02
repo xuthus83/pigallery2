@@ -76,51 +76,50 @@ export abstract class FileJob<S extends { indexedOnly?: boolean } = { indexedOnl
       return false;
     }
 
-    const processOneFile = async () => {
-      const filePath = this.fileQueue.shift();
-      try {
-        if ((await this.shouldProcess(filePath)) === true) {
-          this.Progress.Processed++;
-          this.Progress.log('processing: ' + filePath);
-          await this.processFile(filePath);
-        } else {
-          this.Progress.log('skipping: ' + filePath);
-          this.Progress.Skipped++;
-        }
-      } catch (e) {
-        console.error(e);
-        Logger.error(
-          LOG_TAG,
-          'Error during processing file:' + filePath + ', ' + e.toString()
-        );
-        this.Progress.log(
-          'Error during processing file:' + filePath + ', ' + e.toString()
-        );
-      }
-    };
+
 
     if (!this.config.indexedOnly) {
       if (this.directoryQueue.length > 0) {
         await this.loadADirectoryFromDisk();
+        return true
       } else if (this.fileQueue.length > 0) {
         this.Progress.Left = this.fileQueue.length;
-        await processOneFile();
       }
     } else {
       if (!this.DBProcessing.initiated) {
         this.Progress.log('Counting files from db');
         Logger.silly(LOG_TAG, 'Counting files from db');
         this.Progress.All = await this.countMediaFromDB();
+        this.Progress.log('Found:' + this.Progress.All);
         Logger.silly(LOG_TAG, 'Found:' + this.Progress.All);
         this.DBProcessing.initiated = true;
         return true;
       }
       if (this.fileQueue.length === 0) {
         await this.loadMediaFilesFromDB();
-      } else {
-        this.Progress.Left = this.fileQueue.length;
-        await processOneFile();
+        return true;
       }
+    }
+
+    const filePath = this.fileQueue.shift();
+    try {
+      if ((await this.shouldProcess(filePath)) === true) {
+        this.Progress.Processed++;
+        this.Progress.log('processing: ' + filePath);
+        await this.processFile(filePath);
+      } else {
+        this.Progress.log('skipping: ' + filePath);
+        this.Progress.Skipped++;
+      }
+    } catch (e) {
+      console.error(e);
+      Logger.error(
+        LOG_TAG,
+        'Error during processing file:' + filePath + ', ' + e.toString()
+      );
+      this.Progress.log(
+        'Error during processing file:' + filePath + ', ' + e.toString()
+      );
     }
 
     return true;
