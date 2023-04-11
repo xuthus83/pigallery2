@@ -15,10 +15,10 @@ export interface PhotoDTO extends PreviewPhotoDTO, MediaDTO {
 }
 
 export interface FaceRegionBox {
-  width: number;
-  height: number;
-  left: number;
-  top: number;
+  width: number; // in pixels
+  height: number; // in pixels
+  left: number; // in pixels
+  top: number; // in pixels
 }
 
 export interface FaceRegion {

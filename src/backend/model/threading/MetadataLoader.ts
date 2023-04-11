@@ -342,6 +342,7 @@ export class MetadataLoader {
                         swapY = 1;
                         break;
                     }
+                    // converting ratio to px
                     return {
                       width: Math.round(parseFloat(w) * metadata.size.width),
                       height: Math.round(parseFloat(h) * metadata.size.height),
