@@ -3,6 +3,42 @@
   <div class="card-body">
     <div class="row">
       <div class="col-md-1-half col-12  d-table">
+      </div>
+      <div class="col-md-9 col-12 date-frequency" *ngIf="showStatistic">
+        <ng-container *ngFor="let freq of MediaCountOverTime; count as length">
+          <div class="d-inline-block date-frequency-column"
+               [style.width.%]="(1/length)*100"
+               [title]="(freq.date | date: 'medium') + ' (' + freq.count+')'">
+            <div class=" text-center  " [style.height.%]="100-(freq.count/freq.max)*100">
+              <div class="d-none d-lg-block" *ngIf="freq.count < freq.max/2">{{freq.count}}</div>
+            </div>
+            <div class="text-bg-primary text-center  border border-primary"
+                 [class.text-bg-secondary]="freq.endDate.getTime()<ActiveFilters.dateFilter.minFilter || freq.date.getTime()>ActiveFilters.dateFilter.maxFilter "
+                 [class.border-secondary]="freq.endDate.getTime()<ActiveFilters.dateFilter.minFilter || freq.date.getTime()>ActiveFilters.dateFilter.maxFilter "
+                 [style.height.%]="(freq.count/freq.max)*100">
+              <div class="d-none d-lg-block" *ngIf="freq.count >= freq.max/2">{{freq.count}}</div>
+            </div>
+            <div class="text-center d-none d-md-block">
+              {{freq.date | date: freq.dateStr}}
+            </div>
+          </div>
+        </ng-container>
+      </div>
+      <div class="col-md-1-half col-12  d-table"></div>
+
+    </div>
+    <div class="row">
+      <div class="position-absolute">
+        <div class="text-center">
+          <span
+            [class.oi-chevron-bottom]="showStatistic"
+            [class.oi-chevron-top]="!showStatistic"
+            (click)="showStatistic = !showStatistic"
+            style="top: -2px; cursor: pointer"
+            class="oi"></span>
+        </div>
+      </div>
+      <div class="col-md-1-half col-12  d-table">
         <div
           *ngIf="ActiveFilters.dateFilter.minFilter !== NUMBER_MIN_VALUE"
           [title]="ActiveFilters.dateFilter.minFilter | date: 'medium'"

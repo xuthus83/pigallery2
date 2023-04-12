@@ -120,14 +120,15 @@ export class FilterService {
       },
     ],
   });
+  public prefiltered: DirectoryContent;
 
-  private readonly HOUR = 60 * 60 * 1000;
 
   public applyFilters(
     directoryContent: Observable<DirectoryContent>
   ): Observable<DirectoryContent> {
     return directoryContent.pipe(
       switchMap((dirContent: DirectoryContent) => {
+        this.prefiltered = dirContent;
         this.resetFilters(false);
         return this.activeFilters.pipe(
           map((afilters) => {

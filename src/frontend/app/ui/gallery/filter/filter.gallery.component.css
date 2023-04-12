@@ -158,3 +158,10 @@ div.date-filter-wrapper > input[type=range]::-ms-tooltip {
   display: none;
 }
 
+.date-frequency .date-frequency-column div {
+  box-sizing: content-box;
+}
+
+.date-frequency > div {
+  height: 40px;
+}
