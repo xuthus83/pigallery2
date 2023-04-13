@@ -145,8 +145,10 @@ export class FilterService {
     const Y2 = Y * 2;
     const Y5 = Y * 5;
     const Dec = Y * 10;
+    const Dec2 = Y * 20;
+    const Dec5 = Y * 50;
     const Sen = Y * 100;
-    const divs = [H, D, M, Y, Y2, Y5, Dec, Sen];
+    const divs = [H, D, M, Y, Y2, Y5, Dec, Dec2, Dec5, Sen];
 
     // finding the resolution
     let usedDiv = H;
