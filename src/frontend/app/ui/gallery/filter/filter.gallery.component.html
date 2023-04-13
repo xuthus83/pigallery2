@@ -5,10 +5,13 @@
       <div class="col-md-1-half col-12  d-table">
       </div>
       <div class="col-md-9 col-12 date-frequency" *ngIf="showStatistic">
-        <ng-container *ngFor="let freq of MediaCountOverTime; count as length">
+        <ng-container *ngFor="let freq of filterService.statistic; count as length">
           <div class="d-inline-block date-frequency-column"
                [style.width.%]="(1/length)*100"
-               [title]="(freq.date | date: 'medium') + ' (' + freq.count+')'">
+               container="body"
+               triggers="mouseenter:mouseleave"
+               placement="bottom start"
+               [popover]="(freq.date | date: 'medium') + ' (' + freq.count+')'">
             <div class=" text-center  " [style.height.%]="100-(freq.count/freq.max)*100">
               <div class="d-none d-lg-block" *ngIf="freq.count < freq.max/2">{{freq.count}}</div>
             </div>
@@ -18,7 +21,7 @@
                  [style.height.%]="(freq.count/freq.max)*100">
               <div class="d-none d-lg-block" *ngIf="freq.count >= freq.max/2">{{freq.count}}</div>
             </div>
-            <div class="text-center d-none d-md-block">
+            <div class="text-center d-none d-xl-block overflow-x-hidden text-nowrap ps-1 pe-1">
               {{freq.date | date: freq.dateStr}}
             </div>
           </div>
@@ -28,8 +31,8 @@
 
     </div>
     <div class="row">
-      <div class="position-absolute">
-        <div class="text-center">
+      <div class="position-absolute" *ngIf="filterService.statistic.length>1">
+        <div class="text-md-center">
           <span
             [class.oi-chevron-bottom]="showStatistic"
             [class.oi-chevron-top]="!showStatistic"
