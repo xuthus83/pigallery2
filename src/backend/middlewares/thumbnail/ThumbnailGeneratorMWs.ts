@@ -3,11 +3,7 @@ import * as fs from 'fs';
 import {NextFunction, Request, Response} from 'express';
 import {ErrorCodes, ErrorDTO} from '../../../common/entities/Error';
 import {ContentWrapper} from '../../../common/entities/ConentWrapper';
-import {
-  DirectoryPathDTO,
-  ParentDirectoryDTO,
-  SubDirectoryDTO,
-} from '../../../common/entities/DirectoryDTO';
+import {DirectoryPathDTO, ParentDirectoryDTO, SubDirectoryDTO,} from '../../../common/entities/DirectoryDTO';
 import {ProjectPath} from '../../ProjectPath';
 import {Config} from '../../../common/config/private/Config';
 import {ThumbnailSourceType} from '../../model/threading/PhotoWorker';
@@ -69,12 +65,14 @@ export class ThumbnailGeneratorMWs {
       return next();
     }
 
+    let erroredItem: PersonEntry = null;
     try {
       const size: number = Config.Media.Thumbnail.personThumbnailSize;
 
       const persons: PersonEntry[] = req.resultPipe as PersonEntry[];
 
       for (const item of persons) {
+        erroredItem = item;
         if (!item.sampleRegion) {
           continue;
         }
@@ -99,7 +97,7 @@ export class ThumbnailGeneratorMWs {
       return next(
         new ErrorDTO(
           ErrorCodes.SERVER_ERROR,
-          'error during postprocessing result (adding thumbnail info for persons)',
+          `Error during postprocessing result: adding thumbnail info for persons. Failed on: person ${erroredItem?.name}, at ${erroredItem?.sampleRegion?.media?.name} `,
           error.toString()
         )
       );
