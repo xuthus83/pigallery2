@@ -74,6 +74,7 @@ export class ThumbnailGeneratorMWs {
       for (const item of persons) {
         erroredItem = item;
         if (!item.sampleRegion) {
+          item.missingThumbnail = true;
           continue;
         }
         // load parameters
