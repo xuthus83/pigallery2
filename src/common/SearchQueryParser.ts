@@ -1,5 +1,7 @@
 import {
   ANDSearchQuery,
+  DatePatternFrequency,
+  DatePatternSearch,
   DistanceSearch,
   FromDateSearch,
   MaxRatingSearch,
@@ -22,6 +24,15 @@ import {
 import {Utils} from './Utils';
 
 export interface QueryKeywords {
+  days_ago: any;
+  years_ago: string;
+  months_ago: string;
+  weeks_ago: string;
+  every_year: string;
+  every_month: string;
+  every_week: string;
+  lastNDays: string;
+  sameDay: string;
   portrait: string;
   landscape: string;
   orientation: string;
@@ -52,12 +63,27 @@ export const defaultQueryKeywords: QueryKeywords = {
 
   from: 'after',
   to: 'before',
-  landscape: 'landscape',
+
   maxRating: 'max-rating',
   maxResolution: 'max-resolution',
   minRating: 'min-rating',
   minResolution: 'min-resolution',
+
+  kmFrom: 'km-from',
   orientation: 'orientation',
+  landscape: 'landscape',
+  portrait: 'portrait',
+
+
+  years_ago: '%d-years-ago',
+  months_ago: '%d-months-ago',
+  weeks_ago: '%d-weeks-ago',
+  days_ago: '%d-days-ago',
+  every_year: 'every-year',
+  every_month: 'every-month',
+  every_week: 'every-week',
+  lastNDays: 'last-%d-days',
+  sameDay: 'same-day',
 
   any_text: 'any-text',
   keyword: 'keyword',
@@ -65,10 +91,8 @@ export const defaultQueryKeywords: QueryKeywords = {
   directory: 'directory',
   file_name: 'file-name',
   person: 'person',
-  portrait: 'portrait',
   position: 'position',
   someOf: 'some-of',
-  kmFrom: 'km-from',
 };
 
 export class SearchQueryParser {
@@ -143,6 +167,13 @@ export class SearchQueryParser {
       .replace(/:\s+/g, ':')
       .trim();
 
+
+    const humanToRegexpStr = (str: string) => {
+      return str.replace(/%d/g, '\\d*');
+    };
+    const intFromRegexp = (str: string) => {
+      return parseInt(new RegExp(/\d+/).exec(str)[0], 10);
+    };
     if (str.charAt(0) === '(' && str.charAt(str.length - 1) === ')') {
       str = str.slice(1, str.length - 1);
     }
@@ -315,7 +346,7 @@ export class SearchQueryParser {
       }
       return {
         type: SearchQueryTypes.distance,
-        distance: parseInt(new RegExp(/^\d*/).exec(str)[0], 10),
+        distance: intFromRegexp(str),
         from: {text: from},
         ...(new RegExp('^\\d*-' + this.keywords.kmFrom + '!:').test(str) && {
           negate: true,
@@ -330,6 +361,45 @@ export class SearchQueryParser {
           str.slice((this.keywords.orientation + ':').length) ===
           this.keywords.landscape,
       } as OrientationSearch;
+    }
+
+
+    if (kwStartsWith(str, this.keywords.sameDay) ||
+      new RegExp('^' + humanToRegexpStr(this.keywords.lastNDays) + '!?:').test(str)) {
+      const freqStr = str.slice(str.indexOf(':') + 1);
+      let freq: DatePatternFrequency = null;
+      let ago;
+      if (freqStr == this.keywords.every_week) {
+        freq = DatePatternFrequency.every_week;
+      } else if (freqStr == this.keywords.every_month) {
+        freq = DatePatternFrequency.every_month;
+      } else if (freqStr == this.keywords.every_year) {
+        freq = DatePatternFrequency.every_year;
+      } else if (new RegExp('^' + humanToRegexpStr(this.keywords.days_ago) + '$').test(freqStr)) {
+        freq = DatePatternFrequency.days_ago;
+        ago = intFromRegexp(freqStr);
+      } else if (new RegExp('^' + humanToRegexpStr(this.keywords.weeks_ago) + '$').test(freqStr)) {
+        freq = DatePatternFrequency.weeks_ago;
+        ago = intFromRegexp(freqStr);
+      } else if (new RegExp('^' + humanToRegexpStr(this.keywords.months_ago) + '$').test(freqStr)) {
+        freq = DatePatternFrequency.months_ago;
+        ago = intFromRegexp(freqStr);
+      } else if (new RegExp('^' + humanToRegexpStr(this.keywords.years_ago) + '$').test(freqStr)) {
+        freq = DatePatternFrequency.years_ago;
+        ago = intFromRegexp(freqStr);
+      }
+
+      if (freq) {
+        const ret = {
+          type: SearchQueryTypes.date_pattern,
+          daysLength: kwStartsWith(str, this.keywords.sameDay) ? 0 : intFromRegexp(str),
+          frequency: freq
+        } as DatePatternSearch;
+        if (ago) {
+          ret.agoNumber = ago;
+        }
+        return ret;
+      }
     }
 
     // parse text search
@@ -422,14 +492,6 @@ export class SearchQueryParser {
           ')'
         );
 
-      case SearchQueryTypes.orientation:
-        return (
-          this.keywords.orientation +
-          ':' +
-          ((query as OrientationSearch).landscape
-            ? this.keywords.landscape
-            : this.keywords.portrait)
-        );
 
       case SearchQueryTypes.from_date:
         if (!(query as FromDateSearch).value) {
@@ -500,7 +562,49 @@ export class SearchQueryParser {
           colon +
           (query as DistanceSearch).from.text
         );
-
+      case SearchQueryTypes.orientation:
+        return (
+          this.keywords.orientation +
+          ':' +
+          ((query as OrientationSearch).landscape
+            ? this.keywords.landscape
+            : this.keywords.portrait)
+        );
+      case SearchQueryTypes.date_pattern: {
+        const q = (query as DatePatternSearch);
+        let strBuilder = '';
+        if (q.daysLength <= 0) {
+          strBuilder += this.keywords.sameDay;
+        } else {
+          strBuilder += this.keywords.lastNDays.replace(/%d/g, q.daysLength.toString());
+        }
+        strBuilder += ':';
+        switch (q.frequency) {
+          case DatePatternFrequency.every_week:
+            strBuilder += this.keywords.every_week;
+            break;
+          case DatePatternFrequency.every_month:
+            strBuilder += this.keywords.every_month;
+            break;
+          case DatePatternFrequency.every_year:
+            strBuilder += this.keywords.every_year;
+            break;
+          case DatePatternFrequency.days_ago:
+            strBuilder += this.keywords.days_ago.replace(/%d/g, q.agoNumber.toString());
+            break;
+          case DatePatternFrequency.weeks_ago:
+            strBuilder += this.keywords.weeks_ago.replace(/%d/g, q.agoNumber.toString());
+            break;
+          case DatePatternFrequency.months_ago:
+            strBuilder += this.keywords.months_ago.replace(/%d/g, q.agoNumber.toString());
+            break;
+          case DatePatternFrequency.years_ago:
+            strBuilder += this.keywords.years_ago.replace(/%d/g, q.agoNumber.toString());
+            break;
+        }
+        console.log(strBuilder);
+        return strBuilder;
+      }
       case SearchQueryTypes.any_text:
         if (!(query as TextSearch).negate) {
           return SearchQueryParser.stringifyText(

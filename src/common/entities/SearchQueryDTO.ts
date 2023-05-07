@@ -1,4 +1,4 @@
-import { GPSMetadata } from './PhotoDTO';
+import {GPSMetadata} from './PhotoDTO';
 
 export enum SearchQueryTypes {
   AND = 1,
@@ -17,6 +17,7 @@ export enum SearchQueryTypes {
 
   distance,
   orientation,
+  date_pattern,
 
   // TEXT search types
   any_text = 100,
@@ -26,6 +27,8 @@ export enum SearchQueryTypes {
   keyword,
   person,
   position,
+
+
 }
 
 export const ListSearchQueryTypes = [
@@ -221,5 +224,17 @@ export interface MaxResolutionSearch extends RangeSearch {
 export interface OrientationSearch {
   type: SearchQueryTypes.orientation;
   landscape: boolean;
+}
+
+export enum DatePatternFrequency {
+  every_week = 1, every_month, every_year,
+  days_ago = 10, weeks_ago, months_ago, years_ago
+}
+
+export interface DatePatternSearch {
+  type: SearchQueryTypes.date_pattern;
+  daysLength: number; // days
+  frequency: DatePatternFrequency;
+  agoNumber?: number;
 }
 

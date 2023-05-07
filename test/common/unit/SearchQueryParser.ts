@@ -1,6 +1,8 @@
 import {expect} from 'chai';
 import {
   ANDSearchQuery,
+  DatePatternFrequency,
+  DatePatternSearch,
   DistanceSearch,
   FromDateSearch,
   MaxRatingSearch,
@@ -109,6 +111,42 @@ describe('SearchQueryParser', () => {
     it('OrientationSearch search', () => {
       check({type: SearchQueryTypes.orientation, landscape: true} as OrientationSearch);
       check({type: SearchQueryTypes.orientation, landscape: false} as OrientationSearch);
+    });
+    it('Date patter search', () => {
+      for (let i = 0; i <= 10; ++i) {
+        check({
+          type: SearchQueryTypes.date_pattern, daysLength: i,
+          frequency: DatePatternFrequency.every_week
+        } as DatePatternSearch);
+        check({
+          type: SearchQueryTypes.date_pattern, daysLength: i,
+          frequency: DatePatternFrequency.every_month
+        } as DatePatternSearch);
+        check({
+          type: SearchQueryTypes.date_pattern, daysLength: i,
+          frequency: DatePatternFrequency.every_year
+        } as DatePatternSearch);
+        check({
+          type: SearchQueryTypes.date_pattern, daysLength: i,
+          frequency: DatePatternFrequency.days_ago,
+          agoNumber: 1
+        } as DatePatternSearch);
+        check({
+          type: SearchQueryTypes.date_pattern, daysLength: i,
+          frequency: DatePatternFrequency.weeks_ago,
+          agoNumber: 1
+        } as DatePatternSearch);
+        check({
+          type: SearchQueryTypes.date_pattern, daysLength: i,
+          frequency: DatePatternFrequency.months_ago,
+          agoNumber: 1
+        } as DatePatternSearch);
+        check({
+          type: SearchQueryTypes.date_pattern, daysLength: i,
+          frequency: DatePatternFrequency.years_ago,
+          agoNumber: 1
+        } as DatePatternSearch);
+      }
     });
     it('Default logical operator should be AND', () => {
 
