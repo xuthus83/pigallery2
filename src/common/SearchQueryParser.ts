@@ -602,7 +602,6 @@ export class SearchQueryParser {
             strBuilder += this.keywords.years_ago.replace(/%d/g, q.agoNumber.toString());
             break;
         }
-        console.log(strBuilder);
         return strBuilder;
       }
       case SearchQueryTypes.any_text:
