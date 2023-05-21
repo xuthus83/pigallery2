@@ -131,6 +131,15 @@ export class Server {
     this.server.listen(Config.Server.port, Config.Server.host);
     this.server.on('error', this.onError);
     this.server.on('listening', this.onListening);
+    this.server.on('close', this.onClose);
+
+    // Sigterm handler
+    process.on('SIGTERM', () => {
+      Logger.info(LOG_TAG, 'SIGTERM signal received');
+      this.server.close(() => {
+        process.exit(0);
+      });
+    });
 
     this.onStarted.trigger();
   }
@@ -169,6 +178,13 @@ export class Server {
     const bind =
       typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
     Logger.info(LOG_TAG, 'Listening on ' + bind);
+  };
+
+  /**
+   * Event listener for HTTP server "close" event.
+   */
+  private onClose = () => {
+    Logger.info(LOG_TAG, 'Closed http server');
   };
 }
 
