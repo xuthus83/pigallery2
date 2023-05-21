@@ -127,6 +127,10 @@ body {
   text-align: left;
 }
 
+ul {
+  text-align: left;
+}
+
 hr {
   background: white;
   margin-top: 0;
@@ -140,5 +144,3 @@ hr {
 .banner-photo {
   margin-bottom: 30px;
 }
-
-
