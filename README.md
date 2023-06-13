@@ -233,6 +233,8 @@ apt-get install build-essential  libkrb5-dev gcc g++
   * Map on IOS prevents using the buttons in the image preview navigation, see #155
 * Video support on weak servers (like raspberry pi) with low upload rate
   * video playback may use up too much resources and the server might not respond for a while. Enable video transcoding in the app, to transcode the videos to lover bitrate. 
+* When using an Apache proxy, sub folders are not accessible
+  * add `AllowEncodedSlashes On` in the configuration of the proxy
 
 ## 6. Supporting the project
 I'm making this app for my own entertainment,
@@ -246,4 +248,3 @@ But it warms my hearth [seeing that it is useful for some people](docs/reference
 ## 6. Credits
 Crossbrowser testing sponsored by [Browser Stack](https://www.browserstack.com)
 [<img src="https://camo.githubusercontent.com/a7b268f2785656ab3ca7b1cbb1633ee5affceb8f/68747470733a2f2f64677a6f7139623561736a67312e636c6f756466726f6e742e6e65742f70726f64756374696f6e2f696d616765732f6c61796f75742f6c6f676f2d6865616465722e706e67" alt="Browser Stack" height="31px" style="background: cornflowerblue;">](https://www.browserstack.com)
-
