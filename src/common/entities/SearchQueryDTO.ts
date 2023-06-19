@@ -231,10 +231,11 @@ export enum DatePatternFrequency {
   days_ago = 10, weeks_ago, months_ago, years_ago
 }
 
-export interface DatePatternSearch {
+export interface DatePatternSearch extends NegatableSearchQuery {
   type: SearchQueryTypes.date_pattern;
   daysLength: number; // days
   frequency: DatePatternFrequency;
   agoNumber?: number;
+  negate?: boolean;
 }
 

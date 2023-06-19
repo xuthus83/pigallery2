@@ -10,6 +10,8 @@ import {Brackets, SelectQueryBuilder, WhereExpression} from 'typeorm';
 import {Config} from '../../../common/config/private/Config';
 import {
   ANDSearchQuery,
+  DatePatternFrequency,
+  DatePatternSearch,
   DistanceSearch,
   FromDateSearch,
   MaxRatingSearch,
@@ -653,6 +655,105 @@ export class SearchManager {
           }
           return q;
         });
+
+      case SearchQueryTypes.date_pattern: {
+        const tq = query as DatePatternSearch;
+
+        return new Brackets((q): unknown => {
+          // Fixed frequency
+          if ((tq.frequency === DatePatternFrequency.years_ago ||
+            tq.frequency === DatePatternFrequency.months_ago ||
+            tq.frequency === DatePatternFrequency.weeks_ago ||
+            tq.frequency === DatePatternFrequency.days_ago)) {
+
+            if (!tq.agoNumber) {
+              throw new Error('ago number is missing on date patter search query with frequency: ' + DatePatternFrequency[tq.frequency]);
+            }
+            const to = new Date();
+            to.setHours(0, 0, 0, 0);
+            to.setUTCDate(to.getUTCDate() + 1);
+
+            switch (tq.frequency) {
+              case DatePatternFrequency.days_ago:
+                to.setUTCDate(to.getUTCDate() - tq.agoNumber);
+                break;
+              case DatePatternFrequency.weeks_ago:
+                to.setUTCDate(to.getUTCDate() - tq.agoNumber * 7);
+                break;
+
+              case DatePatternFrequency.months_ago:
+                to.setUTCMonth(to.getUTCMonth() - tq.agoNumber);
+                break;
+
+              case DatePatternFrequency.years_ago:
+                to.setUTCFullYear(to.getUTCFullYear() - tq.agoNumber);
+                break;
+            }
+            const from = new Date(to);
+            from.setUTCDate(from.getUTCDate() - tq.daysLength);
+
+            const textParam: { [key: string]: unknown } = {};
+            textParam['to' + queryId] = to.getTime();
+            textParam['from' + queryId] = from.getTime();
+            if (tq.negate) {
+
+              q.where(
+                `media.metadata.creationDate >= :to${queryId}`,
+                textParam
+              ).orWhere(`media.metadata.creationDate < :from${queryId}`,
+                textParam);
+            } else {
+              q.where(
+                `media.metadata.creationDate < :to${queryId}`,
+                textParam
+              ).andWhere(`media.metadata.creationDate >= :from${queryId}`,
+                textParam);
+            }
+
+          } else {
+            // recurring
+
+            const textParam: { [key: string]: unknown } = {};
+            textParam['diff' + queryId] = tq.daysLength;
+
+            const relationTop = tq.negate ? '>' : '<=';
+            const relationBottom = tq.negate ? '<=' : '>';
+            switch (tq.frequency) {
+              case DatePatternFrequency.every_year:
+                if(tq.daysLength >= 365){
+                  return q;
+                }
+                q.where(
+                  `CAST(strftime('%j',media.metadataCreationDate/1000, 'unixepoch') AS INTEGER) ${relationTop} CAST(strftime('%j','now') AS INTEGER)`
+                ).andWhere(`CAST(strftime('%j',media.metadataCreationDate/1000, 'unixepoch') AS INTEGER) ${relationBottom} CAST(strftime('%j','now','-:diff${queryId} day') AS INTEGER)`,
+                  textParam);
+                break;
+              case DatePatternFrequency.every_month:
+                if(tq.daysLength >=31){
+                  return q;
+                }
+                q.where(
+                  `CAST(strftime('%d',media.metadataCreationDate/1000, 'unixepoch') AS INTEGER) ${relationTop} CAST(strftime('%d','now') AS INTEGER)`
+                ).andWhere(`CAST(strftime('%d',media.metadataCreationDate/1000, 'unixepoch') AS INTEGER) ${relationBottom} CAST(strftime('%d','now','-:diff${queryId} day') AS INTEGER)`,
+                  textParam);
+                break;
+              case DatePatternFrequency.every_week:
+                if(tq.daysLength >= 7){
+                  return q;
+                }
+                q.where(
+                  `CAST(strftime('%w',media.metadataCreationDate/1000, 'unixepoch') AS INTEGER) ${relationTop} CAST(strftime('%w','now') AS INTEGER)`
+                ).andWhere(`CAST(strftime('%w',media.metadataCreationDate/1000, 'unixepoch') AS INTEGER) ${relationBottom} CAST(strftime('%w','now','-:diff${queryId} day') AS INTEGER)`,
+                  textParam);
+                break;
+            }
+
+
+          }
+
+          return q;
+        });
+      }
 
       case SearchQueryTypes.SOME_OF:
         throw new Error('Some of not supported');

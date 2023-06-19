@@ -213,6 +213,55 @@
           </select>
         </div>
       </div>
+      <div *ngSwitchCase="SearchQueryTypes.date_pattern" class="col-10 col-lg d-flex">
+
+        <div class="row">
+          <div class="input-group col-md-6">
+            <span class="input-group-text" i18n>Last</span>
+            <input id="daysLength"
+                   name="daysLength"
+                   title="Last N Days"
+                   placeholder="1"
+                   i18n-title
+                   [min]="0"
+                   class="form-control input-md"
+                   [(ngModel)]="AsDatePatternQuery.daysLength"
+                   (ngModelChange)="onChange()"
+                   type="number">
+            <span class="input-group-text" i18n>days</span>
+          </div>
+
+          <div class="input-group col-md-6">
+            <input
+              *ngIf="AsDatePatternQuery.frequency == DatePatternFrequency.days_ago || AsDatePatternQuery.frequency == DatePatternFrequency.weeks_ago || AsDatePatternQuery.frequency == DatePatternFrequency.months_ago || AsDatePatternQuery.frequency == DatePatternFrequency.years_ago"
+              id="agoNumber"
+              name="agoNumber"
+              title="Ago"
+              placeholder="1"
+              i18n-title
+              [min]="0"
+              class="form-control input-md"
+              [(ngModel)]="AsDatePatternQuery.agoNumber"
+              (ngModelChange)="onChange()"
+              type="number">
+            <select class="form-select rounded-2"
+                    [(ngModel)]="AsDatePatternQuery.frequency"
+                    (ngModelChange)="onChange()"
+                    id="date_pattern-select"
+                    name="date_pattern-select"
+                    title="Date Pattern"
+                    required>
+              <option [ngValue]="DatePatternFrequency.days_ago" i18n>Day(s) ago</option>
+              <option [ngValue]="DatePatternFrequency.weeks_ago" i18n>Week(s) ago</option>
+              <option [ngValue]="DatePatternFrequency.months_ago" i18n>Month(s) ago</option>
+              <option [ngValue]="DatePatternFrequency.years_ago" i18n>Year(s) ago</option>
+              <option [ngValue]="DatePatternFrequency.every_week" i18n>Every week</option>
+              <option [ngValue]="DatePatternFrequency.every_month" i18n>Every Month</option>
+              <option [ngValue]="DatePatternFrequency.every_year" i18n>Every year</option>
+            </select>
+          </div>
+        </div>
+      </div>
     </ng-container>
     <div class="col-2 col-lg-1 align-self-center">
       <button [ngClass]="'btn-danger'"

@@ -1,5 +1,7 @@
 import {Component, EventEmitter, forwardRef, Output} from '@angular/core';
 import {
+  DatePatternFrequency,
+  DatePatternSearch,
   DistanceSearch,
   ListSearchQueryTypes,
   OrientationSearch,
@@ -37,6 +39,7 @@ export class GallerySearchQueryEntryComponent
   public queryEntry: SearchQueryDTO;
   public SearchQueryTypesEnum: { value: string; key: SearchQueryTypes }[];
   public SearchQueryTypes = SearchQueryTypes;
+  public DatePatternFrequency = DatePatternFrequency;
   public TextSearchQueryMatchTypes = TextSearchQueryMatchTypes;
   @Output() delete = new EventEmitter<void>();
 
@@ -70,6 +73,10 @@ export class GallerySearchQueryEntryComponent
 
   get AsOrientationQuery(): OrientationSearch {
     return this.queryEntry as OrientationSearch;
+  }
+
+  get AsDatePatternQuery(): DatePatternSearch {
+    return this.queryEntry as DatePatternSearch;
   }
 
   get AsDistanceQuery(): DistanceSearch {
@@ -161,6 +168,16 @@ export class GallerySearchQueryEntryComponent
       this.AsOrientationQuery.landscape = true;
     } else {
       delete this.AsOrientationQuery.landscape;
+    }
+
+
+    if (this.queryEntry.type === SearchQueryTypes.date_pattern) {
+      this.AsDatePatternQuery.daysLength = 0;
+      this.AsDatePatternQuery.frequency = DatePatternFrequency.every_year;
+    } else {
+      delete this.AsDatePatternQuery.daysLength;
+      delete this.AsDatePatternQuery.frequency;
+      delete this.AsDatePatternQuery.agoNumber;
     }
     this.onChange();
   }

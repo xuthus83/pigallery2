@@ -24,7 +24,7 @@ import {
 import {Utils} from './Utils';
 
 export interface QueryKeywords {
-  days_ago: any;
+  days_ago: string;
   years_ago: string;
   months_ago: string;
   weeks_ago: string;
@@ -572,6 +572,7 @@ export class SearchQueryParser {
         );
       case SearchQueryTypes.date_pattern: {
         const q = (query as DatePatternSearch);
+        q.daysLength = q.daysLength || 0;
         let strBuilder = '';
         if (q.daysLength <= 0) {
           strBuilder += this.keywords.sameDay;
@@ -590,16 +591,16 @@ export class SearchQueryParser {
             strBuilder += this.keywords.every_year;
             break;
           case DatePatternFrequency.days_ago:
-            strBuilder += this.keywords.days_ago.replace(/%d/g, q.agoNumber.toString());
+            strBuilder += this.keywords.days_ago.replace(/%d/g, (q.agoNumber || 0).toString());
             break;
           case DatePatternFrequency.weeks_ago:
-            strBuilder += this.keywords.weeks_ago.replace(/%d/g, q.agoNumber.toString());
+            strBuilder += this.keywords.weeks_ago.replace(/%d/g, (q.agoNumber || 0).toString());
             break;
           case DatePatternFrequency.months_ago:
-            strBuilder += this.keywords.months_ago.replace(/%d/g, q.agoNumber.toString());
+            strBuilder += this.keywords.months_ago.replace(/%d/g, (q.agoNumber || 0).toString());
             break;
           case DatePatternFrequency.years_ago:
-            strBuilder += this.keywords.years_ago.replace(/%d/g, q.agoNumber.toString());
+            strBuilder += this.keywords.years_ago.replace(/%d/g, (q.agoNumber || 0).toString());
             break;
         }
         return strBuilder;
