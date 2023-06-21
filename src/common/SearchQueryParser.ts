@@ -161,6 +161,10 @@ export class SearchQueryParser {
     return timestamp;
   }
 
+  public static humanToRegexpStr(str: string) {
+    return str.replace(/%d/g, '\\d*');
+  }
+
   public parse(str: string, implicitAND = true): SearchQueryDTO {
     str = str
       .replace(/\s\s+/g, ' ') // remove double spaces
@@ -168,9 +172,6 @@ export class SearchQueryParser {
       .trim();
 
 
-    const humanToRegexpStr = (str: string) => {
-      return str.replace(/%d/g, '\\d*');
-    };
     const intFromRegexp = (str: string) => {
       return parseInt(new RegExp(/\d+/).exec(str)[0], 10);
     };
@@ -365,7 +366,7 @@ export class SearchQueryParser {
 
 
     if (kwStartsWith(str, this.keywords.sameDay) ||
-      new RegExp('^' + humanToRegexpStr(this.keywords.lastNDays) + '!?:').test(str)) {
+      new RegExp('^' + SearchQueryParser.humanToRegexpStr(this.keywords.lastNDays) + '!?:').test(str)) {
       const freqStr = str.slice(str.indexOf(':') + 1);
       let freq: DatePatternFrequency = null;
       let ago;
@@ -375,16 +376,16 @@ export class SearchQueryParser {
         freq = DatePatternFrequency.every_month;
       } else if (freqStr == this.keywords.every_year) {
         freq = DatePatternFrequency.every_year;
-      } else if (new RegExp('^' + humanToRegexpStr(this.keywords.days_ago) + '$').test(freqStr)) {
+      } else if (new RegExp('^' + SearchQueryParser.humanToRegexpStr(this.keywords.days_ago) + '$').test(freqStr)) {
         freq = DatePatternFrequency.days_ago;
         ago = intFromRegexp(freqStr);
-      } else if (new RegExp('^' + humanToRegexpStr(this.keywords.weeks_ago) + '$').test(freqStr)) {
+      } else if (new RegExp('^' + SearchQueryParser.humanToRegexpStr(this.keywords.weeks_ago) + '$').test(freqStr)) {
         freq = DatePatternFrequency.weeks_ago;
         ago = intFromRegexp(freqStr);
-      } else if (new RegExp('^' + humanToRegexpStr(this.keywords.months_ago) + '$').test(freqStr)) {
+      } else if (new RegExp('^' + SearchQueryParser.humanToRegexpStr(this.keywords.months_ago) + '$').test(freqStr)) {
         freq = DatePatternFrequency.months_ago;
         ago = intFromRegexp(freqStr);
-      } else if (new RegExp('^' + humanToRegexpStr(this.keywords.years_ago) + '$').test(freqStr)) {
+      } else if (new RegExp('^' + SearchQueryParser.humanToRegexpStr(this.keywords.years_ago) + '$').test(freqStr)) {
         freq = DatePatternFrequency.years_ago;
         ago = intFromRegexp(freqStr);
       }

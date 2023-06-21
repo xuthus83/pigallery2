@@ -28,7 +28,15 @@ export class AutoCompleteService {
           k !== this.searchQueryParserService.keywords.kmFrom &&
           k !== this.searchQueryParserService.keywords.NSomeOf &&
           k !== this.searchQueryParserService.keywords.minRating &&
-          k !== this.searchQueryParserService.keywords.maxRating
+          k !== this.searchQueryParserService.keywords.maxRating &&
+          k !== this.searchQueryParserService.keywords.every_week &&
+          k !== this.searchQueryParserService.keywords.every_month &&
+          k !== this.searchQueryParserService.keywords.every_year &&
+          k !== this.searchQueryParserService.keywords.weeks_ago &&
+          k !== this.searchQueryParserService.keywords.days_ago &&
+          k !== this.searchQueryParserService.keywords.months_ago &&
+          k !== this.searchQueryParserService.keywords.years_ago &&
+          k !== this.searchQueryParserService.keywords.lastNDays
       )
       .map((k) => k + ':');
 
@@ -40,6 +48,11 @@ export class AutoCompleteService {
       );
     }
 
+    for (let i = 1; i < 5; i++) {
+      this.keywords.push(
+        this.searchQueryParserService.keywords.lastNDays.replace(/%d/g, i.toString()) + ':'
+      );
+    }
 
     this.keywords.push(
       this.searchQueryParserService.keywords.to +
@@ -303,12 +316,30 @@ export class AutoCompleteService {
       ret.push(generateMatch(mrKey));
     }
 
+
     if (text.current.toLowerCase().startsWith(mxrKey)) {
       for (let i = 1; i <= 5; ++i) {
         ret.push(generateMatch(mxrKey + i));
       }
     } else if (mxrKey.startsWith(text.current.toLowerCase())) {
       ret.push(generateMatch(mxrKey));
+    }
+
+    // Date patterns
+    if (new RegExp('^' +
+        SearchQueryParser.humanToRegexpStr(this.searchQueryParserService.keywords.lastNDays) + '!?:$', 'i')
+        .test(text.current) ||
+      new RegExp('^' + this.searchQueryParserService.keywords.sameDay + '!?:$', 'i')
+        .test(text.current)) {
+      ret.push(generateMatch(text.current + this.searchQueryParserService.keywords.every_week));
+      ret.push(generateMatch(text.current + this.searchQueryParserService.keywords.every_month));
+      ret.push(generateMatch(text.current + this.searchQueryParserService.keywords.every_year));
+
+      ret.push(generateMatch(text.current + this.searchQueryParserService.keywords.days_ago.replace(/%d/g, '2')));
+      ret.push(generateMatch(text.current + this.searchQueryParserService.keywords.weeks_ago.replace(/%d/g, '2')));
+      ret.push(generateMatch(text.current + this.searchQueryParserService.keywords.months_ago.replace(/%d/g, '2')));
+      ret.push(generateMatch(text.current + this.searchQueryParserService.keywords.years_ago.replace(/%d/g, '2')));
+
     }
 
     return ret;
