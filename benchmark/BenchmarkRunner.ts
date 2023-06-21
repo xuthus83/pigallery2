@@ -162,6 +162,17 @@ export class BenchmarkRunner {
       minResolution: 'min-resolution',
       orientation: 'orientation',
 
+
+      years_ago: '%d-years-ago',
+      months_ago: '%d-months-ago',
+      weeks_ago: '%d-weeks-ago',
+      days_ago: '%d-days-ago',
+      every_year: 'every-year',
+      every_month: 'every-month',
+      every_week: 'every-week',
+      lastNDays: 'last-%d-days',
+      sameDay: 'same-day',
+
       any_text: 'any-text',
       keyword: 'keyword',
       caption: 'caption',
