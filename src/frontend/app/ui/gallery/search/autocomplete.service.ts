@@ -42,13 +42,13 @@ export class AutoCompleteService {
 
     this.keywords.push(this.searchQueryParserService.keywords.and);
     this.keywords.push(this.searchQueryParserService.keywords.or);
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 5; i++) {
       this.keywords.push(
         i + '-' + this.searchQueryParserService.keywords.NSomeOf + ':( )'
       );
     }
 
-    for (let i = 1; i < 5; i++) {
+    for (let i = 1; i < 3; i++) {
       this.keywords.push(
         this.searchQueryParserService.keywords.lastNDays.replace(/%d/g, i.toString()) + ':'
       );

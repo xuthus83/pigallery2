@@ -69,7 +69,7 @@ export class AutoCompleteItemsPerCategoryConfig {
       },
     description: $localize`Maximum number autocomplete items shown at once. If there is not enough items to reach this value, it takes upto double of the individual items.`
   })
-  maxItems: number = 30;
+  maxItems: number = 20;
 
   @ConfigProperty({
     type: 'unsignedInt',
