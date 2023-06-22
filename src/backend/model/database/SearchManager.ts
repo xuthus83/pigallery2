@@ -85,7 +85,7 @@ export class SearchManager {
           .where('photo.metadata.keywords LIKE :text COLLATE ' + SQL_COLLATE, {
             text: '%' + text + '%',
           })
-          .limit(Config.Search.AutoComplete.targetItemsPerCategory * 2)
+          .limit(Config.Search.AutoComplete.ItemsPerCategory.keyword*2)
           .getRawMany()
       )
         .map(
@@ -120,7 +120,7 @@ export class SearchManager {
                 text: '%' + text + '%',
               })
               .limit(
-                Config.Search.AutoComplete.targetItemsPerCategory * 2
+                Config.Search.AutoComplete.ItemsPerCategory.person*2
               )
               .orderBy('person.count', 'DESC')
               .getRawMany()
@@ -161,7 +161,7 @@ export class SearchManager {
           .groupBy(
             'photo.metadata.positionData.country, photo.metadata.positionData.state, photo.metadata.positionData.city'
           )
-          .limit(Config.Search.AutoComplete.targetItemsPerCategory * 2)
+          .limit(Config.Search.AutoComplete.ItemsPerCategory.position*2)
           .getRawMany()
       )
         .filter((pm): boolean => !!pm)
@@ -199,7 +199,7 @@ export class SearchManager {
                 text: '%' + text + '%',
               })
               .limit(
-                Config.Search.AutoComplete.targetItemsPerCategory * 2
+                Config.Search.AutoComplete.ItemsPerCategory.file_name*2
               )
               .getRawMany()
           ).map((r) => r.name),
@@ -223,7 +223,7 @@ export class SearchManager {
                 {text: '%' + text + '%'}
               )
               .limit(
-                Config.Search.AutoComplete.targetItemsPerCategory * 2
+                Config.Search.AutoComplete.ItemsPerCategory.caption*2
               )
               .getRawMany()
           ).map((r) => r.caption),
@@ -246,7 +246,7 @@ export class SearchManager {
                 text: '%' + text + '%',
               })
               .limit(
-                Config.Search.AutoComplete.targetItemsPerCategory * 2
+                Config.Search.AutoComplete.ItemsPerCategory.directory*2
               )
               .getRawMany()
           ).map((r) => r.name),
@@ -260,13 +260,13 @@ export class SearchManager {
     // if not enough items are available, load more from one category
     if (
       [].concat(...partialResult).length <
-      Config.Search.AutoComplete.maxItems
+      Config.Search.AutoComplete.ItemsPerCategory.maxItems
     ) {
       result = [].concat(...partialResult);
     } else {
       result = [].concat(
         ...partialResult.map((l) =>
-          l.slice(0, Config.Search.AutoComplete.targetItemsPerCategory)
+          l.slice(0, (Config.Search.AutoComplete.ItemsPerCategory as any)[SearchQueryTypes[l[0].type]])
         )
       );
     }

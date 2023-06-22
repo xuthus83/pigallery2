@@ -59,6 +59,86 @@ export type TAGS = {
 };
 
 @SubConfigClass<TAGS>({tags: {client: true}, softReadonly: true})
+export class AutoCompleteItemsPerCategoryConfig {
+  @ConfigProperty({
+    type: 'unsignedInt',
+    tags:
+      {
+        name: $localize`Maximum items`,
+        priority: ConfigPriority.underTheHood
+      },
+    description: $localize`Maximum number autocomplete items shown at once. If there is not enough items to reach this value, it takes upto double of the individual items.`
+  })
+  maxItems: number = 30;
+
+  @ConfigProperty({
+    type: 'unsignedInt',
+    tags:
+      {
+        name: $localize`Max photo items`,
+        priority: ConfigPriority.underTheHood
+      },
+    description: $localize`Maximum number autocomplete items shown per photo category.`
+  })
+  file_name: number = 2;
+
+  @ConfigProperty({
+    type: 'unsignedInt',
+    tags:
+      {
+        name: $localize`Max directory items`,
+        priority: ConfigPriority.underTheHood
+      },
+    description: $localize`Maximum number autocomplete items shown per directory category.`
+  })
+  directory: number = 2;
+
+  @ConfigProperty({
+    type: 'unsignedInt',
+    tags:
+      {
+        name: $localize`Max caption items`,
+        priority: ConfigPriority.underTheHood
+      },
+    description: $localize`Maximum number autocomplete items shown per caption category.`
+  })
+  caption: number = 3;
+
+  @ConfigProperty({
+    type: 'unsignedInt',
+    tags:
+      {
+        name: $localize`Max position items`,
+        priority: ConfigPriority.underTheHood
+      },
+    description: $localize`Maximum number autocomplete items shown per position category.`
+  })
+  position: number = 3;
+
+  @ConfigProperty({
+    type: 'unsignedInt',
+    tags:
+      {
+        name: $localize`Max faces items`,
+        priority: ConfigPriority.underTheHood
+      },
+    description: $localize`Maximum number autocomplete items shown per faces category.`
+  })
+  person: number = 5;
+
+  @ConfigProperty({
+    type: 'unsignedInt',
+    tags:
+      {
+        name: $localize`Max keyword items`,
+        priority: ConfigPriority.underTheHood
+      },
+    description: $localize`Maximum number autocomplete items shown per keyword category.`
+  })
+  keyword: number = 5;
+}
+
+@SubConfigClass<TAGS>({tags: {client: true}, softReadonly: true})
 export class AutoCompleteConfig {
   @ConfigProperty({
     tags:
@@ -69,8 +149,8 @@ export class AutoCompleteConfig {
     description: $localize`Show hints while typing search query.`
   })
   enabled: boolean = true;
+
   @ConfigProperty({
-    type: 'unsignedInt',
     tags:
       {
         name: $localize`Max items per category`,
@@ -78,17 +158,8 @@ export class AutoCompleteConfig {
       },
     description: $localize`Maximum number autocomplete items shown per category.`
   })
-  targetItemsPerCategory: number = 5;
-  @ConfigProperty({
-    type: 'unsignedInt',
-    tags:
-      {
-        name: $localize`Maximum items`,
-        priority: ConfigPriority.underTheHood
-      },
-    description: $localize`Maximum number autocomplete items shown at once.`
-  })
-  maxItems: number = 30;
+  ItemsPerCategory: AutoCompleteItemsPerCategoryConfig = new AutoCompleteItemsPerCategoryConfig();
+
   @ConfigProperty({
     type: 'unsignedInt',
     tags:
@@ -690,7 +761,7 @@ export class ClientGalleryConfig {
       name: $localize`Themes`,
       priority: ConfigPriority.advanced,
     } as TAGS,
-    description:$localize`Pigallery2 uses Bootstrap 5.3 (https://getbootstrap.com/docs/5.3) for design (css, layout). In dark mode it sets 'data-bs-theme="dark"' to the <html> to take advantage bootstrap's color modes. For theming, read more at: https://getbootstrap.com/docs/5.3/customize/color-modes/`
+    description: $localize`Pigallery2 uses Bootstrap 5.3 (https://getbootstrap.com/docs/5.3) for design (css, layout). In dark mode it sets 'data-bs-theme="dark"' to the <html> to take advantage bootstrap's color modes. For theming, read more at: https://getbootstrap.com/docs/5.3/customize/color-modes/`
   })
   Themes: ThemesConfig = new ThemesConfig();
 }
