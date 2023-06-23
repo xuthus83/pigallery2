@@ -180,14 +180,14 @@ describe('SearchManager', (sqlHelper: DBTestHelper) => {
     expect((await sm.autocomplete('arch', SearchQueryTypes.any_text))).eql([
       new AutoCompleteItem('Research City', SearchQueryTypes.position)]);
 
-    Config.Search.AutoComplete.targetItemsPerCategory = 99999;
+    Config.Search.AutoComplete.ItemsPerCategory.maxItems = 99999;
     expect((await sm.autocomplete('wa', SearchQueryTypes.any_text))).to.deep.equalInAnyOrder([
       new AutoCompleteItem('star wars', SearchQueryTypes.keyword),
       new AutoCompleteItem('Anakin Skywalker', SearchQueryTypes.person),
       new AutoCompleteItem('Luke Skywalker', SearchQueryTypes.person),
       new AutoCompleteItem('wars dir', SearchQueryTypes.directory)]);
 
-    Config.Search.AutoComplete.targetItemsPerCategory = 1;
+    Config.Search.AutoComplete.ItemsPerCategory.maxItems = 1;
     expect((await sm.autocomplete('a', SearchQueryTypes.any_text))).to.deep.equalInAnyOrder([
       new AutoCompleteItem('Ajan Kloss', SearchQueryTypes.position),
       new AutoCompleteItem('Tipoca City', SearchQueryTypes.position),
@@ -201,7 +201,7 @@ describe('SearchManager', (sqlHelper: DBTestHelper) => {
       new AutoCompleteItem('Jedha', SearchQueryTypes.position),
       new AutoCompleteItem('wars dir', SearchQueryTypes.directory),
       new AutoCompleteItem('The Phantom Menace', SearchQueryTypes.directory)]);
-    Config.Search.AutoComplete.targetItemsPerCategory = 5;
+    Config.Search.AutoComplete.ItemsPerCategory.maxItems = 5;
 
     expect((await sm.autocomplete('sw', SearchQueryTypes.any_text))).to.deep.equalInAnyOrder([
       new AutoCompleteItem('sw1.jpg', SearchQueryTypes.file_name),
