@@ -280,7 +280,7 @@ export class AutoCompleteService {
       } else if (aLC.startsWith(textLC)) {
         return -1;
       }
-      return basicCompare();
+      return 1;
     });
   }
 
