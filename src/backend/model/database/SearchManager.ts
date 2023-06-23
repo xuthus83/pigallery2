@@ -85,7 +85,7 @@ export class SearchManager {
           .where('photo.metadata.keywords LIKE :text COLLATE ' + SQL_COLLATE, {
             text: '%' + text + '%',
           })
-          .limit(Config.Search.AutoComplete.ItemsPerCategory.keyword*2)
+          .limit(Config.Search.AutoComplete.ItemsPerCategory.keyword)
           .getRawMany()
       )
         .map(
@@ -120,7 +120,7 @@ export class SearchManager {
                 text: '%' + text + '%',
               })
               .limit(
-                Config.Search.AutoComplete.ItemsPerCategory.person*2
+                Config.Search.AutoComplete.ItemsPerCategory.person
               )
               .orderBy('person.count', 'DESC')
               .getRawMany()
@@ -161,7 +161,7 @@ export class SearchManager {
           .groupBy(
             'photo.metadata.positionData.country, photo.metadata.positionData.state, photo.metadata.positionData.city'
           )
-          .limit(Config.Search.AutoComplete.ItemsPerCategory.position*2)
+          .limit(Config.Search.AutoComplete.ItemsPerCategory.position )
           .getRawMany()
       )
         .filter((pm): boolean => !!pm)
@@ -199,7 +199,7 @@ export class SearchManager {
                 text: '%' + text + '%',
               })
               .limit(
-                Config.Search.AutoComplete.ItemsPerCategory.file_name*2
+                Config.Search.AutoComplete.ItemsPerCategory.fileName
               )
               .getRawMany()
           ).map((r) => r.name),
@@ -223,7 +223,7 @@ export class SearchManager {
                 {text: '%' + text + '%'}
               )
               .limit(
-                Config.Search.AutoComplete.ItemsPerCategory.caption*2
+                Config.Search.AutoComplete.ItemsPerCategory.caption
               )
               .getRawMany()
           ).map((r) => r.caption),
@@ -246,7 +246,7 @@ export class SearchManager {
                 text: '%' + text + '%',
               })
               .limit(
-                Config.Search.AutoComplete.ItemsPerCategory.directory*2
+                Config.Search.AutoComplete.ItemsPerCategory.directory
               )
               .getRawMany()
           ).map((r) => r.name),
@@ -255,21 +255,22 @@ export class SearchManager {
       );
     }
 
-    let result: AutoCompleteItem[];
+    const result: AutoCompleteItem[] = [];
 
-    // if not enough items are available, load more from one category
-    if (
-      [].concat(...partialResult).length <
-      Config.Search.AutoComplete.ItemsPerCategory.maxItems
-    ) {
-      result = [].concat(...partialResult);
-    } else {
-      result = [].concat(
-        ...partialResult.map((l) =>
-          l.slice(0, (Config.Search.AutoComplete.ItemsPerCategory as any)[SearchQueryTypes[l[0].type]])
-        )
-      );
+    while (result.length < Config.Search.AutoComplete.ItemsPerCategory.maxItems) {
+      let adding = false;
+      for (let i = 0; i < partialResult.length; ++i) {
+        if (partialResult[i].length <= 0) {
+          continue;
+        }
+        result.push(partialResult[i].pop());
+        adding = true;
+      }
+      if (!adding) {
+        break;
+      }
     }
+
 
     return SearchManager.autoCompleteItemsUnique(result);
   }
@@ -720,7 +721,7 @@ export class SearchManager {
             const relationBottom = tq.negate ? '<=' : '>';
             switch (tq.frequency) {
               case DatePatternFrequency.every_year:
-                if(tq.daysLength >= 365){
+                if (tq.daysLength >= 365) {
                   return q;
                 }
                 q.where(
@@ -729,7 +730,7 @@ export class SearchManager {
                   textParam);
                 break;
               case DatePatternFrequency.every_month:
-                if(tq.daysLength >=31){
+                if (tq.daysLength >= 31) {
                   return q;
                 }
                 q.where(
@@ -738,7 +739,7 @@ export class SearchManager {
                   textParam);
                 break;
               case DatePatternFrequency.every_week:
-                if(tq.daysLength >= 7){
+                if (tq.daysLength >= 7) {
                   return q;
                 }
                 q.where(

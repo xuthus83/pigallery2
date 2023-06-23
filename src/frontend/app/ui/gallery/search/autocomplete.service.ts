@@ -244,27 +244,43 @@ export class AutoCompleteService {
     items: RenderableAutoCompleteItem[]
   ): RenderableAutoCompleteItem[] {
     const textLC = text.toLowerCase();
+    // Source: https://stackoverflow.com/questions/3446170/escape-string-for-use-in-javascript-regex
+    const isStartRgx = new RegExp('(\\s|^)' + textLC.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
     return items.sort((a, b) => {
       const aLC = a.text.toLowerCase();
       const bLC = b.text.toLowerCase();
-      // prioritize persons higher
-      if (a.type !== b.type) {
-        if (a.type === SearchQueryTypes.person) {
-          return -1;
-        } else if (b.type === SearchQueryTypes.person) {
-          return 1;
-        }
-      }
 
-      if (
-        (aLC.startsWith(textLC) && bLC.startsWith(textLC)) ||
-        (!aLC.startsWith(textLC) && !bLC.startsWith(textLC))
-      ) {
+      const basicCompare = () => {
+        // prioritize persons higher
+        if (a.type !== b.type) {
+          if (a.type === SearchQueryTypes.person) {
+            return -1;
+          } else if (b.type === SearchQueryTypes.person) {
+            return 1;
+          }
+        }
         return aLC.localeCompare(bLC);
+      };
+
+      // both starts with the searched string
+      if (aLC.startsWith(textLC) && bLC.startsWith(textLC)) {
+        return basicCompare();
+
+        // none starts with the searched string
+      } else if (!aLC.startsWith(textLC) && !bLC.startsWith(textLC)) {
+
+        if ((isStartRgx.test(aLC) && isStartRgx.test(bLC)) ||
+          (!isStartRgx.test(aLC) && !isStartRgx.test(bLC))) {
+          return basicCompare();
+        } else if (isStartRgx.test(aLC)) {
+          return -1;
+        }
+        return 1;
+        // one of them starts with the searched string
       } else if (aLC.startsWith(textLC)) {
         return -1;
       }
-      return 1;
+      return basicCompare();
     });
   }
 

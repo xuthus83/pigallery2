@@ -80,7 +80,7 @@ export class AutoCompleteItemsPerCategoryConfig {
       },
     description: $localize`Maximum number autocomplete items shown per photo category.`
   })
-  file_name: number = 2;
+  fileName: number = 2;
 
   @ConfigProperty({
     type: 'unsignedInt',
