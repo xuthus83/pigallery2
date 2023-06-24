@@ -161,7 +161,7 @@ export class SearchManager {
           .groupBy(
             'photo.metadata.positionData.country, photo.metadata.positionData.state, photo.metadata.positionData.city'
           )
-          .limit(Config.Search.AutoComplete.ItemsPerCategory.position )
+          .limit(Config.Search.AutoComplete.ItemsPerCategory.position)
           .getRawMany()
       )
         .filter((pm): boolean => !!pm)
@@ -658,6 +658,9 @@ export class SearchManager {
         });
 
       case SearchQueryTypes.date_pattern: {
+        if (directoryOnly) {
+          throw new Error('not supported in directoryOnly mode');
+        }
         const tq = query as DatePatternSearch;
 
         return new Brackets((q): unknown => {
@@ -719,33 +722,40 @@ export class SearchManager {
 
             const relationTop = tq.negate ? '>' : '<=';
             const relationBottom = tq.negate ? '<=' : '>';
+
+            const addWhere = (duration: string) => {
+
+              if (Config.Database.type === DatabaseType.sqlite) {
+                q.where(
+                  `CAST(strftime('${duration}',media.metadataCreationDate/1000, 'unixepoch') AS INTEGER) ${relationTop} CAST(strftime('${duration}','now') AS INTEGER)`
+                ).andWhere(`CAST(strftime('${duration}',media.metadataCreationDate/1000, 'unixepoch') AS INTEGER) ${relationBottom} CAST(strftime('${duration}','now','-:diff${queryId} day') AS INTEGER)`,
+                  textParam);
+              } else {
+
+                q.where(
+                  `CAST(FROM_UNIXTIME(media.metadataCreationDate/1000, '${duration}') AS SIGNED) ${relationTop} CAST(DATE_FORMAT(CURDATE(),'${duration}') AS SIGNED)`
+                ).andWhere(`CAST(FROM_UNIXTIME(media.metadataCreationDate/1000, '${duration}') AS SIGNED) ${relationBottom} CAST(DATE_FORMAT((DATE_ADD(curdate(), INTERVAL -:diff${queryId} DAY)),'${duration}') AS SIGNED)`,
+                  textParam);
+              }
+            };
             switch (tq.frequency) {
               case DatePatternFrequency.every_year:
                 if (tq.daysLength >= 365) {
                   return q;
                 }
-                q.where(
-                  `CAST(strftime('%j',media.metadataCreationDate/1000, 'unixepoch') AS INTEGER) ${relationTop} CAST(strftime('%j','now') AS INTEGER)`
-                ).andWhere(`CAST(strftime('%j',media.metadataCreationDate/1000, 'unixepoch') AS INTEGER) ${relationBottom} CAST(strftime('%j','now','-:diff${queryId} day') AS INTEGER)`,
-                  textParam);
+                addWhere('%j');
                 break;
               case DatePatternFrequency.every_month:
                 if (tq.daysLength >= 31) {
                   return q;
                 }
-                q.where(
-                  `CAST(strftime('%d',media.metadataCreationDate/1000, 'unixepoch') AS INTEGER) ${relationTop} CAST(strftime('%d','now') AS INTEGER)`
-                ).andWhere(`CAST(strftime('%d',media.metadataCreationDate/1000, 'unixepoch') AS INTEGER) ${relationBottom} CAST(strftime('%d','now','-:diff${queryId} day') AS INTEGER)`,
-                  textParam);
+                addWhere('%d');
                 break;
               case DatePatternFrequency.every_week:
                 if (tq.daysLength >= 7) {
                   return q;
                 }
-                q.where(
-                  `CAST(strftime('%w',media.metadataCreationDate/1000, 'unixepoch') AS INTEGER) ${relationTop} CAST(strftime('%w','now') AS INTEGER)`
-                ).andWhere(`CAST(strftime('%w',media.metadataCreationDate/1000, 'unixepoch') AS INTEGER) ${relationBottom} CAST(strftime('%w','now','-:diff${queryId} day') AS INTEGER)`,
-                  textParam);
+                addWhere('%w');
                 break;
             }
 

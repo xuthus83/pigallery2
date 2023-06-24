@@ -118,6 +118,7 @@ describe('SearchManager', (sqlHelper: DBTestHelper) => {
     p4.metadata.creationDate = Date.now() - 60 * 60 * 24 * 366 * 1000;
     const pFaceLessTmp = TestHelper.getPhotoEntry3(subDir);
     delete pFaceLessTmp.metadata.faces;
+    pFaceLessTmp.metadata.creationDate = Date.now() - 60 * 60 * 24 * 32 * 1000;
 
     dir = await DBTestHelper.persistTestDir(directory);
 
@@ -189,19 +190,14 @@ describe('SearchManager', (sqlHelper: DBTestHelper) => {
 
     Config.Search.AutoComplete.ItemsPerCategory.maxItems = 1;
     expect((await sm.autocomplete('a', SearchQueryTypes.any_text))).to.deep.equalInAnyOrder([
-      new AutoCompleteItem('Ajan Kloss', SearchQueryTypes.position),
-      new AutoCompleteItem('Tipoca City', SearchQueryTypes.position),
-      new AutoCompleteItem('Amber stone', SearchQueryTypes.caption),
-      new AutoCompleteItem('Millennium falcon', SearchQueryTypes.caption),
-      new AutoCompleteItem('star wars', SearchQueryTypes.keyword),
-      new AutoCompleteItem('Anakin Skywalker', SearchQueryTypes.person),
-      new AutoCompleteItem('Obivan Kenobi', SearchQueryTypes.person),
-      new AutoCompleteItem('Castilon', SearchQueryTypes.position),
-      new AutoCompleteItem('Devaron', SearchQueryTypes.position),
-      new AutoCompleteItem('Jedha', SearchQueryTypes.position),
-      new AutoCompleteItem('wars dir', SearchQueryTypes.directory),
-      new AutoCompleteItem('The Phantom Menace', SearchQueryTypes.directory)]);
+      new AutoCompleteItem('Han Solo', SearchQueryTypes.person),
+      new AutoCompleteItem('Han Solo\'s dice', SearchQueryTypes.caption),
+      new AutoCompleteItem('Research City', SearchQueryTypes.position),
+      new AutoCompleteItem('death star', SearchQueryTypes.keyword),
+      new AutoCompleteItem('wars dir', SearchQueryTypes.directory)]);
     Config.Search.AutoComplete.ItemsPerCategory.maxItems = 5;
+    Config.Search.AutoComplete.ItemsPerCategory.fileName = 5;
+    Config.Search.AutoComplete.ItemsPerCategory.fileName = 5;
 
     expect((await sm.autocomplete('sw', SearchQueryTypes.any_text))).to.deep.equalInAnyOrder([
       new AutoCompleteItem('sw1.jpg', SearchQueryTypes.file_name),
@@ -987,6 +983,22 @@ describe('SearchManager', (sqlHelper: DBTestHelper) => {
         searchQuery: query,
         directories: [],
         media: [],
+        metaFile: [],
+        resultOverflow: false
+      } as SearchResultDTO));
+
+      query = {
+        daysLength: 3,
+        agoNumber: 1,
+        frequency: DatePatternFrequency.months_ago,
+        type: SearchQueryTypes.date_pattern
+      } as DatePatternSearch;
+
+      expect(Utils.clone(await sm.search(query)))
+        .to.deep.equalInAnyOrder(removeDir({
+        searchQuery: query,
+        directories: [],
+        media: [pFaceLess],
         metaFile: [],
         resultOverflow: false
       } as SearchResultDTO));
