@@ -318,6 +318,138 @@ export class MapLayers {
   darkLayer: boolean = false;
 }
 
+export enum MapPathGroupTypes {
+  Transportation = 1, Sport, Custom
+}
+
+
+@SubConfigClass({tags: {client: true}, softReadonly: true})
+export class SVGIconConfig {
+
+  constructor(viewBoxWidth: number = 512, path: string = '') {
+    this.viewBoxWidth = viewBoxWidth;
+    this.path = path;
+  }
+
+  @ConfigProperty({
+    tags: {
+      name: $localize`SBG icon viewBox  with`,
+      priority: ConfigPriority.advanced
+    },
+    description: $localize`You need the with from the SVG viewBox (assuming height is 512). See: https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/viewBox`,
+  })
+  viewBoxWidth: number = 512;
+
+  @ConfigProperty({
+    tags: {
+      name: $localize`SVG path`,
+      priority: ConfigPriority.advanced
+    },
+    description: $localize`Path element of the SVG icon. Icons used on the map: fontawesome.com/icons.`,
+  })
+  path: string = '';
+}
+
+@SubConfigClass({tags: {client: true}, softReadonly: true})
+export class PathThemeConfig {
+
+
+  constructor(color: string = '', dashArray: string = '', svgIcon: SVGIconConfig = new SVGIconConfig()) {
+    this.color = color;
+    this.dashArray = dashArray;
+    this.svgIcon = svgIcon;
+  }
+
+  @ConfigProperty({
+    tags: {
+      name: $localize`Color`,
+      priority: ConfigPriority.advanced
+    },
+    description: $localize`Color of the path. Use any valid css colors.`,
+  })
+  color: string = '';
+
+  @ConfigProperty({
+    tags: {
+      name: $localize`Dash pattern`,
+      priority: ConfigPriority.advanced
+    },
+    description: $localize`Dash pattern of the path. Represents the spacing and length of the dash. Read more about dash array at: https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/stroke-dasharray.`,
+  })
+  dashArray: string = '';
+
+
+  @ConfigProperty({
+    type: SVGIconConfig,
+    tags: {
+      name: $localize`Svg Icon`,
+      priority: ConfigPriority.advanced
+    },
+    description: $localize`Set the icon of the map marker pin.`,
+  })
+  svgIcon: SVGIconConfig = new SVGIconConfig();
+}
+
+@SubConfigClass({tags: {client: true}, softReadonly: true})
+export class MapPathGroupThemeConfig {
+
+
+  constructor(matchers: string[] = [], theme: PathThemeConfig = new PathThemeConfig()) {
+    this.matchers = matchers;
+    this.theme = theme;
+  }
+
+
+  @ConfigProperty({
+    arrayType: 'string',
+    tags: {
+      name: $localize`Matcher`,
+      priority: ConfigPriority.advanced
+    },
+    description: $localize`List of regex string to match the name of the path. Case insensitive.`,
+  })
+  matchers: string[] = [];
+
+  @ConfigProperty({
+    type: PathThemeConfig,
+    tags: {
+      name: $localize`Path and icon theme`,
+      priority: ConfigPriority.advanced
+    },
+    description: $localize`List of regex string to match the name of the path.`,
+  })
+  theme: PathThemeConfig = new PathThemeConfig();
+}
+
+@SubConfigClass({tags: {client: true}, softReadonly: true})
+export class MapPathGroupConfig {
+
+
+  constructor(name: string = '', matchers: MapPathGroupThemeConfig[] = []) {
+    this.name = name;
+    this.matchers = matchers;
+  }
+
+  @ConfigProperty({
+    tags: {
+      name: $localize`Name`,
+      priority: ConfigPriority.advanced
+    },
+    description: $localize`Name of the marker and path group on the map.`,
+  })
+  name: string = '';
+
+  @ConfigProperty({
+    arrayType: MapPathGroupThemeConfig,
+    tags: {
+      name: $localize`Matchers`,
+      priority: ConfigPriority.advanced
+    },
+    description: $localize`Matchers for a given map and path theme.`,
+  })
+  matchers: MapPathGroupThemeConfig[] = [];
+}
+
 @SubConfigClass({tags: {client: true}, softReadonly: true})
 export class ClientMapConfig {
   @ConfigProperty<boolean, ClientConfig, TAGS>({
@@ -379,6 +511,39 @@ export class ClientMapConfig {
     description: $localize`Maximum number of markers to be shown on the map preview on the gallery page.`,
   })
   maxPreviewMarkers: number = 50;
+
+
+  @ConfigProperty({
+    arrayType: MapPathGroupConfig,
+    tags: {
+      name: $localize`Path and marker group`,
+      priority: ConfigPriority.advanced
+    } as TAGS,
+    description: $localize`Markers are grouped and themed by these settings`,
+  })
+  MapPathGroupConfig: MapPathGroupConfig[] = [
+    new MapPathGroupConfig('Transportation',
+      [new MapPathGroupThemeConfig(
+        ['flight', 'flying', 'drive', 'driving'],
+        new PathThemeConfig('var(--bs-orange)',
+          '4 8',
+          new SVGIconConfig(567, 'M482.3 192c34.2 0 93.7 29 93.7 64c0 36-59.5 64-93.7 64l-116.6 0L265.2 495.9c-5.7 10-16.3 16.1-27.8 16.1l-56.2 0c-10.6 0-18.3-10.2-15.4-20.4l49-171.6L112 320 68.8 377.6c-3 4-7.8 6.4-12.8 6.4l-42 0c-7.8 0-14-6.3-14-14c0-1.3 .2-2.6 .5-3.9L32 256 .5 145.9c-.4-1.3-.5-2.6-.5-3.9c0-7.8 6.3-14 14-14l42 0c5 0 9.8 2.4 12.8 6.4L112 192l102.9 0-49-171.6C162.9 10.2 170.6 0 181.2 0l56.2 0c11.5 0 22.1 6.2 27.8 16.1L365.7 192l116.6 0z')
+        )
+      )]),
+    new MapPathGroupConfig('Sport',
+      [new MapPathGroupThemeConfig(
+        ['run', 'walk', 'hike', 'hiking', 'bike', 'biking', 'cycling', 'skiing'],
+        new PathThemeConfig('var(--bs-primary)',
+          '',
+          new SVGIconConfig(417, 'M320 48a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zM125.7 175.5c9.9-9.9 23.4-15.5 37.5-15.5c1.9 0 3.8 .1 5.6 .3L137.6 254c-9.3 28 1.7 58.8 26.8 74.5l86.2 53.9-25.4 88.8c-4.9 17 5 34.7 22 39.6s34.7-5 39.6-22l28.7-100.4c5.9-20.6-2.6-42.6-20.7-53.9L238 299l30.9-82.4 5.1 12.3C289 264.7 323.9 288 362.7 288H384c17.7 0 32-14.3 32-32s-14.3-32-32-32H362.7c-12.9 0-24.6-7.8-29.5-19.7l-6.3-15c-14.6-35.1-44.1-61.9-80.5-73.1l-48.7-15c-11.1-3.4-22.7-5.2-34.4-5.2c-31 0-60.8 12.3-82.7 34.3L57.4 153.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l23.1-23.1zM91.2 352H32c-17.7 0-32 14.3-32 32s14.3 32 32 32h69.6c19 0 36.2-11.2 43.9-28.5L157 361.6l-9.5-6c-17.5-10.9-30.5-26.8-37.9-44.9L91.2 352z')
+        )
+      )]),
+    new MapPathGroupConfig('Other paths',
+      [new MapPathGroupThemeConfig(
+        [], // Match all
+        new PathThemeConfig('var(--bs-secondary)')
+      )])
+  ];
 }
 
 @SubConfigClass({tags: {client: true}, softReadonly: true})

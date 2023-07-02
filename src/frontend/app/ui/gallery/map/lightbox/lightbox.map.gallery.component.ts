@@ -13,8 +13,8 @@ import {MapService} from '../map.service';
 import {
   control,
   Control,
-  divIcon,
   DivIcon,
+  divIcon,
   icon,
   latLng,
   latLngBounds,
@@ -113,33 +113,15 @@ export class GalleryMapLightboxComponent implements OnChanges, OnDestroy {
     },
   };
   // ordered list
-  private pathLayersConfigOrdered = [
-    {
-      name: $localize`Transportation`,
-      matchers: [/flight/i, /flying/i, /drive/i, /driving/i] as RegExp[],
-      layer: layerGroup([]),
-      theme: {color: 'var(--bs-orange)', dashArray: '4 8'},
-      icon: null as DivIcon,
-      svgIcon: {
-        width: 567,
-        path: 'M482.3 192c34.2 0 93.7 29 93.7 64c0 36-59.5 64-93.7 64l-116.6 0L265.2 495.9c-5.7 10-16.3 16.1-27.8 16.1l-56.2 0c-10.6 0-18.3-10.2-15.4-20.4l49-171.6L112 320 68.8 377.6c-3 4-7.8 6.4-12.8 6.4l-42 0c-7.8 0-14-6.3-14-14c0-1.3 .2-2.6 .5-3.9L32 256 .5 145.9c-.4-1.3-.5-2.6-.5-3.9c0-7.8 6.3-14 14-14l42 0c5 0 9.8 2.4 12.8 6.4L112 192l102.9 0-49-171.6C162.9 10.2 170.6 0 181.2 0l56.2 0c11.5 0 22.1 6.2 27.8 16.1L365.7 192l116.6 0z'
-      }
-    },
-    {
-      name: $localize`Sport`,
-      matchers: [/run/i, /walk/i, /hike/i, /hiking/i, /bike/i, /biking/i, /cycling/i, /skiing/i] as RegExp[],
-      layer: layerGroup([]),
-      theme: {color: 'var(--bs-primary)'},
-      svgIcon: {
-        width: 417,
-        path: 'M320 48a48 48 0 1 0 -96 0 48 48 0 1 0 96 0zM125.7 175.5c9.9-9.9 23.4-15.5 37.5-15.5c1.9 0 3.8 .1 5.6 .3L137.6 254c-9.3 28 1.7 58.8 26.8 74.5l86.2 53.9-25.4 88.8c-4.9 17 5 34.7 22 39.6s34.7-5 39.6-22l28.7-100.4c5.9-20.6-2.6-42.6-20.7-53.9L238 299l30.9-82.4 5.1 12.3C289 264.7 323.9 288 362.7 288H384c17.7 0 32-14.3 32-32s-14.3-32-32-32H362.7c-12.9 0-24.6-7.8-29.5-19.7l-6.3-15c-14.6-35.1-44.1-61.9-80.5-73.1l-48.7-15c-11.1-3.4-22.7-5.2-34.4-5.2c-31 0-60.8 12.3-82.7 34.3L57.4 153.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l23.1-23.1zM91.2 352H32c-17.7 0-32 14.3-32 32s14.3 32 32 32h69.6c19 0 36.2-11.2 43.9-28.5L157 361.6l-9.5-6c-17.5-10.9-30.5-26.8-37.9-44.9L91.2 352z'
-      }
-    },
-    {
-      name: $localize`Other paths`,
-      matchers: null as RegExp[], layer: layerGroup([]), theme: {color: 'var(--bs-secondary)'}
-    }
-  ];
+  private pathLayersConfigOrdered: {
+    name: string,
+    layer: LayerGroup,
+    themes?: {
+      matchers?: RegExp[],
+      theme?: { color: string, dashArray: string },
+      icon?: DivIcon
+    }[],
+  }[] = [];
   mapLayerControl: Control.Layers;
   private thumbnailsOnLoad: ThumbnailBase[] = [];
   private startPosition: Dimension = null;
@@ -182,8 +164,45 @@ export class GalleryMapLightboxComponent implements OnChanges, OnDestroy {
   }
 
   setUpPathLayers() {
+
+
+    Config.Map.MapPathGroupConfig.forEach((conf, i) => {
+      let nameI18n = conf.name;
+      switch (conf.name) {
+        case 'Sport':
+          nameI18n = $localize`Sport`;
+          break;
+        case 'Transportation':
+          nameI18n = $localize`Transportation`;
+          break;
+        case 'Other paths':
+          nameI18n = $localize`Other paths`;
+          break;
+      }
+      const pl = {
+        name: nameI18n,
+        layer: layerGroup([]),
+        themes: conf.matchers.map(ths => {
+          return {
+            matchers: ths.matchers.map(s => new RegExp(s, 'i')),
+            theme: ths.theme,
+            icon: MarkerFactory.getSvgIcon({
+              color: ths.theme.color,
+              svgPath: ths.theme.svgIcon?.path,
+              width: ths.theme.svgIcon?.viewBoxWidth
+            })
+          };
+        })
+      };
+
+      this.pathLayersConfigOrdered.push(pl);
+
+    });
+    if (this.pathLayersConfigOrdered.length === 0) {
+      this.pathLayersConfigOrdered.push({name: $localize`Other paths`, layer: layerGroup([])});
+    }
+
     this.pathLayersConfigOrdered.forEach(pl => {
-      pl.icon = MarkerFactory.getSvgIcon({color: pl.theme.color, svgPath: pl.svgIcon?.path, width: pl.svgIcon?.width});
       this.mapLayersControlOption.overlays[pl.name] = pl.layer;
     });
   }
@@ -524,11 +543,27 @@ export class GalleryMapLightboxComponent implements OnChanges, OnDestroy {
         // check race condition
         return;
       }
-      const pathLayer = this.pathLayersConfigOrdered.find((pl) => {
-        return pl.matchers === null || // null matchers match everything
-          (parsedGPX.name &&
-            pl.matchers.findIndex(m => m.test(parsedGPX.name)) !== -1);
-      }) || this.pathLayersConfigOrdered[0];
+
+      let pathLayer: { layer: LayerGroup, icon?: DivIcon, theme?: { color?: string, dashArray?: string } };
+      for (const pl of this.pathLayersConfigOrdered) {
+        pathLayer = {layer: pl.layer, icon: MarkerFactory.defIcon};
+        if (!pl.themes || pl.themes.length === 0) {
+          break;
+        }
+        const th = pl.themes.find((th) => {
+          return !th.matchers || th.matchers.length == 0 || // null/empty matchers match everything
+            (parsedGPX.name &&
+              th.matchers.findIndex(m => m.test(parsedGPX.name)) !== -1);
+        });
+        if (th) {
+          pathLayer.theme = th.theme;
+          pathLayer.icon = th.icon || pathLayer.icon;
+          break;
+        }
+      }
+      if (!pathLayer) {
+        pathLayer = {layer: this.pathLayersConfigOrdered[0].layer, icon: MarkerFactory.defIcon};
+      }
 
       if (parsedGPX.path.length !== 0) {
         // render the beginning of the path with a marker
@@ -537,7 +572,7 @@ export class GalleryMapLightboxComponent implements OnChanges, OnDestroy {
 
         mkr.setIcon(pathLayer.icon);
 
-        // Setting popup photo
+        // Setting popup info
         mkr.bindPopup(file.name + ': ' + parsedGPX.name);
 
         pathLayer.layer.addLayer(

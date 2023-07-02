@@ -176,7 +176,7 @@ export class TemplateComponent implements OnInit, OnChanges, OnDestroy, ISetting
 
           // if all sub elements are hidden, hide the parent too.
           if (state.isConfigType) {
-            if (state.value.__state &&
+            if (state.value && state.value.__state &&
               Object.keys(state.value.__state).findIndex(k => !st.value.__state[k].shouldHide()) === -1) {
               return true;
             }
