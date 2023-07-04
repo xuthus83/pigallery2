@@ -3,7 +3,7 @@ import {ControlValueAccessor, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors
 import {Utils} from '../../../../../../common/Utils';
 import {propertyTypes} from 'typeconfig/common';
 import {SearchQueryParserService} from '../../../gallery/search/search-query-parser.service';
-import {MapLayers, NavigationLinkConfig, NavigationLinkTypes, TAGS, ThemeConfig} from '../../../../../../common/config/public/ClientConfig';
+import {MapLayers, MapPathGroupConfig, MapPathGroupThemeConfig, NavigationLinkConfig, NavigationLinkTypes, TAGS, ThemeConfig} from '../../../../../../common/config/public/ClientConfig';
 import {SettingsService} from '../../settings.service';
 import {WebConfig} from '../../../../../../common/config/private/WebConfig';
 import {JobScheduleConfig, UserConfig} from '../../../../../../common/config/private/PrivateConfig';
@@ -206,6 +206,10 @@ export class SettingsEntryComponent
       this.arrayType = 'MapLayers';
     } else if (this.state.arrayType === NavigationLinkConfig) {
       this.arrayType = 'NavigationLinkConfig';
+    } else if (this.state.arrayType === MapPathGroupConfig) {
+      this.arrayType = 'MapPathGroupConfig';
+    } else if (this.state.arrayType === MapPathGroupThemeConfig) {
+      this.arrayType = 'MapPathGroupThemeConfig';
     } else if (this.state.arrayType === UserConfig) {
       this.arrayType = 'UserConfig';
     } else if (this.state.arrayType === JobScheduleConfig) {
@@ -220,6 +224,8 @@ export class SettingsEntryComponent
       this.type !== 'SearchQuery' &&
       this.arrayType !== 'MapLayers' &&
       this.arrayType !== 'NavigationLinkConfig' &&
+      this.arrayType !== 'MapPathGroupConfig' &&
+      this.arrayType !== 'MapPathGroupThemeConfig' &&
       this.arrayType !== 'JobScheduleConfig' &&
       this.arrayType !== 'UserConfig') {
       this.uiType = 'StringInput';

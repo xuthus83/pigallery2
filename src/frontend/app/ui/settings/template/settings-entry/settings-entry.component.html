@@ -191,6 +191,108 @@
           </div>
         </ng-container>
 
+        <ng-container *ngSwitchCase="'MapPathGroupThemeConfig'">
+          <div class="container">
+            <div class="row  mt-1 mb-1 bg-body-tertiary" *ngFor="let val of state.value; let i = index">
+              <div class="row  mt-1 mb-1 bg-body-tertiary">
+                <div class="col ps-0">
+                  <app-settings-entry
+                    [ngModel]="val.__state.matchers"
+                    [name]="'val_m_'+idName+i"
+                    [id]="'val_m_'+idName+i"
+                    (change)="onChange($event)"></app-settings-entry>
+                </div>
+                <div class="col-1 pe-0">
+                  <button [disabled]="state.value.length == 1" (click)="remove(i)"
+                          [ngClass]="state.value.length > 1? 'btn-danger':'btn-secondary'"
+                          class="btn float-end">
+                    <span class="oi oi-trash" aria-hidden="true" aria-label="Delete"></span>
+                  </button>
+                </div>
+              </div>
+              <div class="row  mt-1 mb-1 bg-body-tertiary">
+                <app-settings-entry
+                  [ngModel]="val.theme.__state.color"
+                  [name]="'color_m_'+idName+i"
+                  [id]="'color_m_'+idName+i"
+                  (change)="onChange($event)"></app-settings-entry>
+              </div>
+              <div class="row  mt-1 mb-1 bg-body-tertiary">
+
+                <app-settings-entry
+                  [ngModel]="val.theme.__state.dashArray"
+                  [name]="'dashArray_n_'+idName+i"
+                  [id]="'dashArray_n_'+idName+i"
+                  (change)="onChange($event)"></app-settings-entry>
+              </div>
+              <div class="row  mt-1 mb-1 bg-body-tertiary">
+                <app-settings-entry
+                  [ngModel]="val.theme.svgIcon.__state.viewBoxWidth"
+                  [name]="'viewBoxWidth_n_'+idName+i"
+                  [id]="'viewBoxWidth_n_'+idName+i"
+                  (change)="onChange($event)"></app-settings-entry>
+              </div>
+              <div class="row  mt-1 mb-1 bg-body-tertiary">
+                <app-settings-entry
+                  [ngModel]="val.theme.svgIcon.__state.path"
+                  [name]="'path_n_'+idName+i"
+                  [id]="'path_n_'+idName+i"
+                  (change)="onChange($event)"></app-settings-entry>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col pe-0">
+                <button class="btn btn-primary float-end"
+                        (click)="AddNew()" i18n>+ Add Link
+                </button>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'MapPathGroupConfig'">
+          <div class="container">
+            <div class="bg-body-tertiary row mt-1 mb-1" *ngFor="let arr of state.value; let i = index">
+              <div class="row  mt-1 mb-1 me-0 ms-0 pe-0 ps-0">
+                <div class="col ps-0">
+                  <input type="text" class="form-control"
+                         placeholder="Name"
+                         [(ngModel)]="arr.name"
+                         (ngModelChange)="onChange($event)"
+                         [name]="'arr_n_'+idName+i"
+                         [id]="'arr_n_'+idName+i" required>
+                </div>
+                <div class="col-1 pe-0">
+                  <button [disabled]="state.value.length == 1" (click)="remove(i)"
+                          [ngClass]="state.value.length > 1? 'btn-danger':'btn-secondary'"
+                          class="btn float-end">
+                    <span class="oi oi-trash" aria-hidden="true" aria-label="Delete"></span>
+                  </button>
+                </div>
+
+              </div>
+              <div class="row  mt-1 mb-1 me-0 ms-0">
+
+                <div class="col">
+                  <app-settings-entry
+                    [ngModel]="arr.__state.matchers"
+                    [name]="'arr_m_'+idName+i"
+                    [id]="'arr_m_'+idName+i"
+                    (change)="onChange($event)"></app-settings-entry>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col pe-0">
+                <button class="btn btn-primary float-end"
+                        (click)="AddNew()" i18n>+ Add Link
+                </button>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+
         <ng-container *ngSwitchCase="'NavigationLinkConfig'">
           <div class="container">
             <div class="row  mt-1 mb-1 bg-body-tertiary" *ngFor="let link of state.value; let i = index">

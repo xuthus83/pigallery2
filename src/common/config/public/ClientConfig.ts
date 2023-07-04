@@ -403,7 +403,7 @@ export class MapPathGroupThemeConfig {
   @ConfigProperty({
     arrayType: 'string',
     tags: {
-      name: $localize`Matcher`,
+      name: $localize`Matchers`,
       priority: ConfigPriority.advanced
     },
     description: $localize`List of regex string to match the name of the path. Case insensitive.`,
@@ -442,7 +442,7 @@ export class MapPathGroupConfig {
   @ConfigProperty({
     arrayType: MapPathGroupThemeConfig,
     tags: {
-      name: $localize`Matchers`,
+      name: $localize`Path themes`,
       priority: ConfigPriority.advanced
     },
     description: $localize`Matchers for a given map and path theme.`,
@@ -516,7 +516,7 @@ export class ClientMapConfig {
   @ConfigProperty({
     arrayType: MapPathGroupConfig,
     tags: {
-      name: $localize`Path and marker group`,
+      name: $localize`Path theme groups`,
       priority: ConfigPriority.advanced
     } as TAGS,
     description: $localize`Markers are grouped and themed by these settings`,
