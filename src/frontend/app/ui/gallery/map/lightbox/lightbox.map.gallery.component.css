@@ -107,6 +107,7 @@
 ::ng-deep .custom-div-icon svg {
   position: absolute;
   width: 16px !important;
+  max-height: 20px;
   left: 0;
   right: 0;
   top: 0;
