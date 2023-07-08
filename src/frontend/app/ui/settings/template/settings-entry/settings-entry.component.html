@@ -266,7 +266,7 @@
 
         <ng-container *ngSwitchCase="'MapPathGroupThemeConfig'">
           <div class="container">
-            <div class="row  mt-1 mb-1 bg-body-tertiary" *ngFor="let val of state.value; let i = index">
+            <div class="row  mt-1 mb-1 bg-body-tertiary" *ngFor="let val of state.value; index as i; last as isLast">
               <div class="row  mt-1 mb-1 bg-body-tertiary">
                 <div class="col ps-0">
                   <app-settings-entry
@@ -306,12 +306,14 @@
                   (ngModelChange)="onChange($event)">
                 </app-settings-entry>
               </div>
+
+              <hr *ngIf="!isLast"/>
             </div>
 
             <div class="row">
               <div class="col pe-0">
                 <button class="btn btn-primary float-end"
-                        (click)="AddNew()" i18n>+ Add Link
+                        (click)="AddNew()" i18n>+ Add matcher
                 </button>
               </div>
             </div>
@@ -354,7 +356,7 @@
             <div class="row">
               <div class="col pe-0">
                 <button class="btn btn-primary float-end"
-                        (click)="AddNew()" i18n>+ Add Link
+                        (click)="AddNew()" i18n>+ Add path theme group
                 </button>
               </div>
             </div>
