@@ -3,7 +3,7 @@ import {DivIcon, setOptions} from 'leaflet';
 export interface SvgIconOptions {
   color?: string;
   svgPath?: string;
-  width?: number;
+  viewBox?: string;
   small?: boolean;
 }
 
@@ -11,8 +11,8 @@ const SvgIcon: { new(options?: SvgIconOptions): DivIcon } = DivIcon.extend({
   initialize: function(options: SvgIconOptions = {}) {
     options.color = options.color || 'var(--bs-primary)';
     options.svgPath = options.svgPath || 'M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256S114.6 512 256 512z';
-    options.width = options.width || 512;
-    const svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + options.width + ' 512"><path fill="' + options.color + '" d="' + options.svgPath + '"/></svg>';
+    options.viewBox = options.viewBox || '0 0 512 512';
+    const svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="' + options.viewBox + '"><path fill="' + options.color + '" d="' + options.svgPath + '"/></svg>';
     setOptions(this, {
       iconSize: options.small ? [15, 15] : [30, 30],
       iconAnchor: options.small ? [15, 28] : [15, 35],

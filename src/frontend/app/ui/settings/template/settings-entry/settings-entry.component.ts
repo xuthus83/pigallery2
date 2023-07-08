@@ -3,7 +3,15 @@ import {ControlValueAccessor, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors
 import {Utils} from '../../../../../../common/Utils';
 import {propertyTypes} from 'typeconfig/common';
 import {SearchQueryParserService} from '../../../gallery/search/search-query-parser.service';
-import {MapLayers, MapPathGroupConfig, MapPathGroupThemeConfig, NavigationLinkConfig, NavigationLinkTypes, TAGS, ThemeConfig} from '../../../../../../common/config/public/ClientConfig';
+import {
+  MapLayers,
+  MapPathGroupConfig,
+  MapPathGroupThemeConfig,
+  NavigationLinkConfig,
+  NavigationLinkTypes,
+  TAGS,
+  ThemeConfig
+} from '../../../../../../common/config/public/ClientConfig';
 import {SettingsService} from '../../settings.service';
 import {WebConfig} from '../../../../../../common/config/private/WebConfig';
 import {JobScheduleConfig, UserConfig} from '../../../../../../common/config/private/PrivateConfig';
@@ -69,6 +77,7 @@ export class SettingsEntryComponent
   public arrayType: string;
   public uiType: string;
   newThemeModalRef: any;
+  iconModal: { ref?: any, error?: string };
 
 
   constructor(private searchQueryParserService: SearchQueryParserService,
@@ -217,11 +226,16 @@ export class SettingsEntryComponent
     } else {
       this.arrayType = this.state.arrayType;
     }
+
+    if (this.state.tags?.uiOptions) {
+      this.state.isEnumType = true;
+    }
     this.uiType = this.arrayType;
     if (!this.state.isEnumType &&
       !this.state.isEnumArrayType &&
       this.type !== 'boolean' &&
       this.type !== 'SearchQuery' &&
+      this.type !== 'SVGIconConfig' &&
       this.arrayType !== 'MapLayers' &&
       this.arrayType !== 'NavigationLinkConfig' &&
       this.arrayType !== 'MapPathGroupConfig' &&
@@ -242,9 +256,6 @@ export class SettingsEntryComponent
 
     this.placeholder = this.state.tags?.hint || this.state.default;
 
-    if (this.state.tags?.uiOptions) {
-      this.state.isEnumType = true;
-    }
     this.title = '';
     if (this.state.readonly) {
       this.title = $localize`readonly` + ', ';
@@ -404,9 +415,52 @@ export class SettingsEntryComponent
   }
 
 
+  showIconModal(template: TemplateRef<any>): void {
+    this.iconModal = {};
+    this.iconModal.ref = this.modalService.show(template, {
+      class: 'modal-lg',
+    });
+    document.body.style.paddingRight = '0px';
+  }
+
+
   public hideNewThemeModal(): void {
     this.newThemeModalRef.hide();
     this.newThemeModalRef = null;
+  }
+
+  hideIconModal(): void {
+    if (!this.iconModal) {
+      return;
+    }
+    this.iconModal.ref.hide();
+    delete this.iconModal;
+  }
+
+  newSvgFile(event: Event): void {
+
+    const file: File = (event.target as HTMLInputElement).files[0];
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      console.log(reader.result);
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(reader.result as string, 'image/svg+xml');
+      try {
+        const wb = doc.documentElement.getAttribute('viewBox');
+        const path = doc.documentElement.getElementsByTagName('path')[0].getAttribute('d');
+        this.state.value.path = path;
+        this.state.value.viewBox = wb;
+      } catch (e) {
+        console.error(e);
+        if (this.iconModal) {
+          this.iconModal.error = 'Can\'t parse SVG file: ' + e.toState;
+        }
+      }
+      this.onChange(null);
+    };
+    reader.readAsText(file);
+
   }
 
 }

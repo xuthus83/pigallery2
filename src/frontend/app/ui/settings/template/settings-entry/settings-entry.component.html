@@ -151,6 +151,79 @@
           (ngModelChange)="onChange($event)">
         </app-settings-workflow>
 
+        <ng-container *ngSwitchCase="'SVGIconConfig'">
+          <button class="btn btn-outline-primary"
+                  (click)="showIconModal(iconModalTmp)">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="1em"
+                 [attr.viewBox]="state.value.viewBox || '0 0 512 512'">
+              <path [attr.d]="state.value.path"/>
+            </svg>
+          </button>
+
+
+          <ng-template #iconModalTmp>
+            <div class="modal-header">
+              <h5 class="modal-title" i18n>Icon</h5>
+              <button type="button" class="btn-close" (click)="hideIconModal()" data-dismiss="modal"
+                      aria-label="Close">
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="row mb-4">
+                <div class="col text-center">
+                  <svg xmlns="http://www.w3.org/2000/svg"
+                       width="2em"
+                       [attr.viewBox]="state.value.viewBox || '0 0 512 512'">
+                    <path [attr.d]="state.value.path"/>
+                  </svg>
+                </div>
+              </div>
+              <div *ngIf="iconModal?.error" class="alert alert-danger">{{iconModal.error}}</div>
+
+              <div class="row">
+                <div class="col-md-2 control-label">
+                  <label [for]="'icon_f_'+idName" class="form-label" i18n>Load from SVG file</label>
+                </div>
+                <div class="col-md-10">
+                  <input type="file" class="form-control" [id]="'icon_f_'+idName" accept="image/svg+xml"
+                         (change)="newSvgFile($event)">
+
+                  <small class="form-text text-muted" i18n>To auto load these values from file: pick an SVG file with a
+                    single 'path'. You can use e.g: http://fontawesome.com/icons.
+                  </small>
+                </div>
+
+              </div>
+              <hr/>
+
+              <app-settings-entry
+                [ngModel]="state.value.__state.viewBox"
+                [name]="'icon_w_'+idName"
+                [id]="'icon_w_'+idName"
+                (change)="onChange($event)"></app-settings-entry>
+
+              <app-settings-entry
+                [ngModel]="state.value.__state.path"
+                [name]="'icon_p_'+idName"
+                [id]="'icon_p_'+idName"
+                (change)="onChange($event)"></app-settings-entry>
+            </div>
+
+            <div class="modal-footer">
+
+              <div class="btn-group float-end row mt-2" role="group" style="display: block">
+                <div class="pe-0">
+                  <button class="btn btn-primary" type="button"
+                          (click)="hideIconModal()">
+                    <ng-container i18n>Save & Close</ng-container>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </ng-container>
+
         <ng-container *ngSwitchCase="'MapLayers'">
           <div class="container">
             <table class="table">
@@ -227,17 +300,11 @@
               </div>
               <div class="row  mt-1 mb-1 bg-body-tertiary">
                 <app-settings-entry
-                  [ngModel]="val.theme.svgIcon.__state.viewBoxWidth"
-                  [name]="'viewBoxWidth_n_'+idName+i"
-                  [id]="'viewBoxWidth_n_'+idName+i"
-                  (change)="onChange($event)"></app-settings-entry>
-              </div>
-              <div class="row  mt-1 mb-1 bg-body-tertiary">
-                <app-settings-entry
-                  [ngModel]="val.theme.svgIcon.__state.path"
-                  [name]="'path_n_'+idName+i"
-                  [id]="'path_n_'+idName+i"
-                  (change)="onChange($event)"></app-settings-entry>
+                  [ngModel]="val.theme.__state.svgIcon"
+                  [name]="'svgIcon_'+idName+i"
+                  [id]="'svgIcon_'+idName+i"
+                  (ngModelChange)="onChange($event)">
+                </app-settings-entry>
               </div>
             </div>
 
@@ -279,7 +346,8 @@
                     [ngModel]="arr.__state.matchers"
                     [name]="'arr_m_'+idName+i"
                     [id]="'arr_m_'+idName+i"
-                    (change)="onChange($event)"></app-settings-entry>
+                    (ngModelChange)="onChange($event)">
+                  </app-settings-entry>
                 </div>
               </div>
             </div>
