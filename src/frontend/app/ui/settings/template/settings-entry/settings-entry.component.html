@@ -156,6 +156,7 @@
                   (click)="showIconModal(iconModalTmp)">
             <svg xmlns="http://www.w3.org/2000/svg"
                  width="1em"
+                 fill="var(--bs-btn-color)"
                  [attr.viewBox]="state.value.viewBox || '0 0 512 512'">
               <path [attr.d]="state.value.path"/>
             </svg>
@@ -174,6 +175,7 @@
                 <div class="col text-center">
                   <svg xmlns="http://www.w3.org/2000/svg"
                        width="2em"
+                       fill="var(--bs-body-color)"
                        [attr.viewBox]="state.value.viewBox || '0 0 512 512'">
                     <path [attr.d]="state.value.path"/>
                   </svg>
@@ -199,12 +201,14 @@
 
               <app-settings-entry
                 [ngModel]="state.value.__state.viewBox"
+                [noChangeDetection]="true"
                 [name]="'icon_w_'+idName"
                 [id]="'icon_w_'+idName"
                 (change)="onChange($event)"></app-settings-entry>
 
               <app-settings-entry
                 [ngModel]="state.value.__state.path"
+                [noChangeDetection]="true"
                 [name]="'icon_p_'+idName"
                 [id]="'icon_p_'+idName"
                 (change)="onChange($event)"></app-settings-entry>
@@ -271,6 +275,7 @@
                 <div class="col ps-0">
                   <app-settings-entry
                     [ngModel]="val.__state.matchers"
+                    [noChangeDetection]="true"
                     [name]="'val_m_'+idName+i"
                     [id]="'val_m_'+idName+i"
                     (change)="onChange($event)"></app-settings-entry>
@@ -286,6 +291,7 @@
               <div class="row  mt-1 mb-1 bg-body-tertiary">
                 <app-settings-entry
                   [ngModel]="val.theme.__state.color"
+                  [noChangeDetection]="true"
                   [name]="'color_m_'+idName+i"
                   [id]="'color_m_'+idName+i"
                   (change)="onChange($event)"></app-settings-entry>
@@ -294,6 +300,7 @@
 
                 <app-settings-entry
                   [ngModel]="val.theme.__state.dashArray"
+                  [noChangeDetection]="true"
                   [name]="'dashArray_n_'+idName+i"
                   [id]="'dashArray_n_'+idName+i"
                   (change)="onChange($event)"></app-settings-entry>
@@ -301,6 +308,7 @@
               <div class="row  mt-1 mb-1 bg-body-tertiary">
                 <app-settings-entry
                   [ngModel]="val.theme.__state.svgIcon"
+                  [noChangeDetection]="true"
                   [name]="'svgIcon_'+idName+i"
                   [id]="'svgIcon_'+idName+i"
                   (ngModelChange)="onChange($event)">
@@ -345,6 +353,7 @@
 
                 <div class="col">
                   <app-settings-entry
+                    [noChangeDetection]="true"
                     [ngModel]="arr.__state.matchers"
                     [name]="'arr_m_'+idName+i"
                     [id]="'arr_m_'+idName+i"

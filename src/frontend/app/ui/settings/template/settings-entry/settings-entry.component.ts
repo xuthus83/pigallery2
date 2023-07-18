@@ -1,4 +1,4 @@
-import {Component, forwardRef, OnChanges, TemplateRef} from '@angular/core';
+import {Component, forwardRef, Input, OnChanges, TemplateRef} from '@angular/core';
 import {ControlValueAccessor, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator,} from '@angular/forms';
 import {Utils} from '../../../../../../common/Utils';
 import {propertyTypes} from 'typeconfig/common';
@@ -78,6 +78,7 @@ export class SettingsEntryComponent
   public uiType: string;
   newThemeModalRef: any;
   iconModal: { ref?: any, error?: string };
+  @Input() noChangeDetection = false;
 
 
   constructor(private searchQueryParserService: SearchQueryParserService,
@@ -87,7 +88,7 @@ export class SettingsEntryComponent
   }
 
   get changed(): boolean {
-    if (this.Disabled) {
+    if (this.Disabled || this.noChangeDetection) {
       return false;
     }
 
