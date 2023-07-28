@@ -18,6 +18,7 @@ import {
   icon,
   latLng,
   latLngBounds,
+  LatLngLiteral,
   layerGroup,
   LayerGroup,
   Map,
@@ -127,6 +128,7 @@ export class GalleryMapLightboxComponent implements OnChanges, OnDestroy {
   private startPosition: Dimension = null;
   private leafletMap: Map;
   darkModeSubscription: Subscription;
+  private longPathSEPairs: { [key: string]: number } = {}; // stores how often a long distance path pair comes up
 
   constructor(
     public fullScreenService: FullScreenService,
@@ -450,6 +452,7 @@ export class GalleryMapLightboxComponent implements OnChanges, OnDestroy {
         p.layer
       );
     });
+    this.longPathSEPairs = {};
 
   }
 
@@ -519,6 +522,63 @@ export class GalleryMapLightboxComponent implements OnChanges, OnDestroy {
     );
   }
 
+  private addArchForLongDistancePaths(parsedGPX: { name: string, path: LatLngLiteral[]; markers: LatLngLiteral[] }) {
+
+    const DISTANCE_TRIGGER = 0.5;
+    for (let i = 0; i < parsedGPX.path.length - 1; ++i) {
+      const dst = (a: LatLngLiteral, b: LatLngLiteral) => {
+        return Math.sqrt(Math.pow(a.lat - b.lat, 2) +
+          Math.pow(a.lng - b.lng, 2));
+      };
+
+      if (Math.abs(parsedGPX.path[i].lng - parsedGPX.path[i + 1].lng) > DISTANCE_TRIGGER) {
+        const s = parsedGPX.path[i];
+        const e = parsedGPX.path[i + 1];
+        const k = `${s.lat.toFixed(2)},${s.lng.toFixed(2)},${e.lat.toFixed(2)},${e.lng.toFixed(2)}`;
+        this.longPathSEPairs[k] = (this.longPathSEPairs[k] || 0) + 1;
+        const occurrence = this.longPathSEPairs[k]-1;
+        // transofrming occurrence to the following
+        // 0, 1, -1, 2, -2, 3, -3;
+        // 0, 1,  2, 3,  4, 6,  7;
+        const multip = (((occurrence) % 2 == 1 ? 1 : -1) * Math.floor((occurrence + 1) / 2));
+        const archScale = 0.3 + multip * 0.1;
+        const d = dst(s, e); //start end distance
+        const newPoints: LatLngLiteral[] = [];
+
+        const N = Math.round(d / DISTANCE_TRIGGER); // number of new points
+        const m: LatLngLiteral = { //mid point
+          lat: (s.lat + e.lat) / 2,
+          lng: (s.lng + e.lng) / 2,
+        };
+        const md = d / 2; // distance of the ends form mid point
+        for (let j = 1; j < N; ++j) {
+          const p = {
+            lat: s.lat + (j / N) * (e.lat - s.lat),
+            lng: s.lng + (j / N) * (e.lng - s.lng)
+          };
+          // simple pythagorean to have something like an arch.
+          const a = dst(p, m);
+          const c = md;
+          const b = Math.sqrt(Math.pow(c, 2) - Math.pow(a, 2));
+          p.lat += b * archScale;//* d10p;
+
+          newPoints.push(p);
+        }
+        newPoints.forEach(mc => {
+
+          const mkr = marker(mc);
+          mkr.setIcon(MarkerFactory.defIconSmall);
+          //   pathLayer.layer.addLayer(mkr);
+        });
+
+        parsedGPX.path.splice(i + 1, 0, ...newPoints);
+        i += newPoints.length;
+      }
+    }
+
+  }
+
+
   private async loadGPXFiles(): Promise<void> {
     this.clearPath();
     if (this.gpxFiles.length === 0) {
@@ -574,6 +634,9 @@ export class GalleryMapLightboxComponent implements OnChanges, OnDestroy {
 
         // Setting popup info
         mkr.bindPopup(file.name + ': ' + parsedGPX.name);
+
+        //add arch for long paths
+        this.addArchForLongDistancePaths(parsedGPX);
 
         pathLayer.layer.addLayer(
           polyline(parsedGPX.path, {
