@@ -578,6 +578,15 @@ export class ClientMapConfig {
         new PathThemeConfig('var(--bs-secondary)')
       )])
   ];
+  @ConfigProperty({
+    type: 'unsignedInt',
+    tags: {
+      name: $localize`Bend long path trigger`,
+      priority: ConfigPriority.underTheHood
+    } as TAGS,
+    description: $localize`Map will bend the path if two points are this far apart on latititude axes. This intended to bend flight if only the end and the start points are given.`,
+  })
+  bendLongPathsTrigger: number = 1;
 }
 
 @SubConfigClass({tags: {client: true}, softReadonly: true})

@@ -524,14 +524,13 @@ export class GalleryMapLightboxComponent implements OnChanges, OnDestroy {
 
   private addArchForLongDistancePaths(parsedGPX: { name: string, path: LatLngLiteral[]; markers: LatLngLiteral[] }) {
 
-    const DISTANCE_TRIGGER = 0.5;
     for (let i = 0; i < parsedGPX.path.length - 1; ++i) {
       const dst = (a: LatLngLiteral, b: LatLngLiteral) => {
         return Math.sqrt(Math.pow(a.lat - b.lat, 2) +
           Math.pow(a.lng - b.lng, 2));
       };
 
-      if (Math.abs(parsedGPX.path[i].lng - parsedGPX.path[i + 1].lng) > DISTANCE_TRIGGER) {
+      if (Math.abs(parsedGPX.path[i].lng - parsedGPX.path[i + 1].lng) > Config.Map.bendLongPathsTrigger) {
         const s = parsedGPX.path[i];
         const e = parsedGPX.path[i + 1];
         const k = `${s.lat.toFixed(2)},${s.lng.toFixed(2)},${e.lat.toFixed(2)},${e.lng.toFixed(2)}`;
@@ -545,7 +544,7 @@ export class GalleryMapLightboxComponent implements OnChanges, OnDestroy {
         const d = dst(s, e); //start end distance
         const newPoints: LatLngLiteral[] = [];
 
-        const N = Math.round(d / DISTANCE_TRIGGER); // number of new points
+        const N = Math.round(d / Config.Map.bendLongPathsTrigger); // number of new points
         const m: LatLngLiteral = { //mid point
           lat: (s.lat + e.lat) / 2,
           lng: (s.lng + e.lng) / 2,
