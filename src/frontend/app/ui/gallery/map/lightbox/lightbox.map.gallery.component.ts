@@ -530,12 +530,33 @@ export class GalleryMapLightboxComponent implements OnChanges, OnDestroy {
           Math.pow(a.lng - b.lng, 2));
       };
 
+      /**
+       * Sort points then prints them as string
+       * @param a
+       * @param b
+       */
+      const getKey = (a: LatLngLiteral, b: LatLngLiteral) => {
+        const KEY_PRECISION = 2;
+        if (parseFloat(a.lat.toFixed(KEY_PRECISION)) > parseFloat(b.lat.toFixed(KEY_PRECISION))) {
+          const tmp = b;
+          b = a;
+          a = tmp;
+        } else if (a.lat.toFixed(KEY_PRECISION) == b.lat.toFixed(KEY_PRECISION)) { // let's keep string so no precision issue
+          if (parseFloat(a.lng.toFixed(KEY_PRECISION)) > parseFloat(b.lng.toFixed(KEY_PRECISION))) {
+            const tmp = b;
+            b = a;
+            a = tmp;
+          }
+        }
+        return `${a.lat.toFixed(KEY_PRECISION)},${a.lng.toFixed(KEY_PRECISION)},${b.lat.toFixed(KEY_PRECISION)},${b.lng.toFixed(KEY_PRECISION)}`;
+
+      };
       if (Math.abs(parsedGPX.path[i].lng - parsedGPX.path[i + 1].lng) > Config.Map.bendLongPathsTrigger) {
         const s = parsedGPX.path[i];
         const e = parsedGPX.path[i + 1];
-        const k = `${s.lat.toFixed(2)},${s.lng.toFixed(2)},${e.lat.toFixed(2)},${e.lng.toFixed(2)}`;
+        const k = getKey(s, e);
         this.longPathSEPairs[k] = (this.longPathSEPairs[k] || 0) + 1;
-        const occurrence = this.longPathSEPairs[k]-1;
+        const occurrence = this.longPathSEPairs[k] - 1;
         // transofrming occurrence to the following
         // 0, 1, -1, 2, -2, 3, -3;
         // 0, 1,  2, 3,  4, 6,  7;
