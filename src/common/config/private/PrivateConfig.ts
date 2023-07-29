@@ -395,6 +395,9 @@ export class ServerMetaFileConfig extends ClientMetaFileConfig {
         uiJob: [{
           job: DefaultsJobs[DefaultsJobs['GPX Compression']],
           relevant: (c) => c.MetaFile.GPXCompressing.enabled
+        },{
+          job: DefaultsJobs[DefaultsJobs['Delete Compressed GPX']],
+          relevant: (c) => c.MetaFile.GPXCompressing.enabled
         }]
       } as TAGS
   })

@@ -15,6 +15,11 @@ export class GPXProcessing {
     return SupportedFormats.WithDots.MetaFiles.indexOf(extension) !== -1;
   }
 
+  public static isGPXFile(fullPath: string): boolean {
+    const extension = path.extname(fullPath).toLowerCase();
+    return extension === '.gpx';
+  }
+
   public static generateConvertedPath(filePath: string): string {
     return path.join(
       ProjectPath.TranscodedFolder,

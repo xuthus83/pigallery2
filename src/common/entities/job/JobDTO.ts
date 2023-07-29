@@ -13,6 +13,7 @@ export enum DefaultsJobs {
   'Preview Reset' = 8,
   'GPX Compression' = 9,
   'Album Reset' = 10,
+  'Delete Compressed GPX' = 11
 }
 
 export interface ConfigTemplateEntry {
