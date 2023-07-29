@@ -3,9 +3,7 @@ import {promises as fsp} from 'fs';
 import * as archiver from 'archiver';
 import {NextFunction, Request, Response} from 'express';
 import {ErrorCodes, ErrorDTO} from '../../common/entities/Error';
-import {
-  ParentDirectoryDTO,
-} from '../../common/entities/DirectoryDTO';
+import {ParentDirectoryDTO,} from '../../common/entities/DirectoryDTO';
 import {ObjectManagers} from '../model/ObjectManagers';
 import {ContentWrapper} from '../../common/entities/ConentWrapper';
 import {ProjectPath} from '../ProjectPath';
@@ -14,13 +12,11 @@ import {UserDTOUtils} from '../../common/entities/UserDTO';
 import {MediaDTO, MediaDTOUtils} from '../../common/entities/MediaDTO';
 import {QueryParams} from '../../common/QueryParams';
 import {VideoProcessing} from '../model/fileprocessing/VideoProcessing';
-import {
-  SearchQueryDTO,
-  SearchQueryTypes,
-} from '../../common/entities/SearchQueryDTO';
+import {SearchQueryDTO, SearchQueryTypes,} from '../../common/entities/SearchQueryDTO';
 import {LocationLookupException} from '../exceptions/LocationLookupException';
 import {SupportedFormats} from '../../common/SupportedFormats';
 import {ServerTime} from './ServerTimingMWs';
+import {SortingMethods} from '../../common/entities/SortingMethods';
 
 export class GalleryMWs {
   @ServerTime('1.db', 'List Directory')
@@ -325,16 +321,16 @@ export class GalleryMWs {
         req.params['searchQueryDTO'] as string
       );
 
-      const photo =
-        await ObjectManagers.getInstance().SearchManager.getRandomPhoto(query);
-      if (!photo) {
+      const photos =
+        await ObjectManagers.getInstance().SearchManager.getNMedia(query, [SortingMethods.random], 1, true);
+      if (!photos || photos.length !== 1) {
         return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, 'No photo found'));
       }
 
       req.params['mediaPath'] = path.join(
-        photo.directory.path,
-        photo.directory.name,
-        photo.name
+        photos[0].directory.path,
+        photos[0].directory.name,
+        photos[0].name
       );
       return next();
     } catch (e) {

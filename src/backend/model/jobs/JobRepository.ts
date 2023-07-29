@@ -10,6 +10,7 @@ import {PreviewRestJob} from './jobs/PreviewResetJob';
 import {GPXCompressionJob} from './jobs/GPXCompressionJob';
 import {AlbumRestJob} from './jobs/AlbumResetJob';
 import {GPXCompressionResetJob} from './jobs/GPXCompressionResetJob';
+import {TopPickSendJob} from './jobs/TopPickSendJob';
 
 export class JobRepository {
   private static instance: JobRepository = null;
@@ -45,3 +46,4 @@ JobRepository.Instance.register(new GPXCompressionJob());
 JobRepository.Instance.register(new TempFolderCleaningJob());
 JobRepository.Instance.register(new AlbumRestJob());
 JobRepository.Instance.register(new GPXCompressionResetJob());
+JobRepository.Instance.register(new TopPickSendJob());

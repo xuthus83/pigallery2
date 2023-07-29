@@ -30,11 +30,11 @@ import {
 } from '../../../common/entities/SearchQueryDTO';
 import {GalleryManager} from './GalleryManager';
 import {ObjectManagers} from '../ObjectManagers';
-import {PhotoDTO} from '../../../common/entities/PhotoDTO';
 import {DatabaseType} from '../../../common/config/private/PrivateConfig';
 import {Utils} from '../../../common/Utils';
 import {FileEntity} from './enitites/FileEntity';
 import {SQL_COLLATE} from './enitites/EntityUtils';
+import {SortingMethods} from '../../../common/entities/SortingMethods';
 
 export class SearchManager {
   private DIRECTORY_SELECT = [
@@ -348,19 +348,61 @@ export class SearchManager {
     return result;
   }
 
-  public async getRandomPhoto(query: SearchQueryDTO): Promise<PhotoDTO> {
+
+  private static setSorting<T>(
+    query: SelectQueryBuilder<T>,
+    sortings: SortingMethods[]
+  ): SelectQueryBuilder<T> {
+    if (!sortings || !Array.isArray(sortings)) {
+      return query;
+    }
+    if (sortings.includes(SortingMethods.random) && sortings.length > 0) {
+      throw new Error('Error during applying sorting: Can\' randomize and also sort the result. Bad input:' + sortings.map(s => SortingMethods[s]).join(', '));
+    }
+    for (const sort of sortings) {
+      switch (sort) {
+        case SortingMethods.descDate:
+          query.addOrderBy('media.metadata.creationDate', 'DESC');
+          break;
+        case SortingMethods.ascDate:
+          query.addOrderBy('media.metadata.creationDate', 'ASC');
+          break;
+        case SortingMethods.descRating:
+          query.addOrderBy('media.metadata.rating', 'DESC');
+          break;
+        case SortingMethods.ascRating:
+          query.addOrderBy('media.metadata.rating', 'ASC');
+          break;
+        case SortingMethods.descName:
+          query.addOrderBy('media.name', 'DESC');
+          break;
+        case SortingMethods.ascName:
+          query.addOrderBy('media.name', 'ASC');
+          break;
+        case SortingMethods.random:
+          if (Config.Database.type === DatabaseType.mysql) {
+            query.groupBy('RAND(), media.id');
+          }
+          query.groupBy('RANDOM()');
+          break;
+      }
+    }
+
+    return query;
+  }
+
+  public async getNMedia(query: SearchQueryDTO, sortings: SortingMethods[], take: number, photoOnly = false) {
     const connection = await SQLConnection.getConnection();
     const sqlQuery: SelectQueryBuilder<PhotoEntity> = connection
-      .getRepository(PhotoEntity)
+      .getRepository(photoOnly ? PhotoEntity : MediaEntity)
       .createQueryBuilder('media')
       .select(['media', ...this.DIRECTORY_SELECT])
       .innerJoin('media.directory', 'directory')
       .where(await this.prepareAndBuildWhereQuery(query));
+    SearchManager.setSorting(sqlQuery, sortings);
 
-    if (Config.Database.type === DatabaseType.mysql) {
-      return await sqlQuery.groupBy('RAND(), media.id').limit(1).getOne();
-    }
-    return await sqlQuery.groupBy('RANDOM()').limit(1).getOne();
+    return sqlQuery.limit(take).getMany();
+
   }
 
   public async getCount(query: SearchQueryDTO): Promise<number> {
