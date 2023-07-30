@@ -85,7 +85,7 @@ export class ConfigDiagnostics {
   private static async testEmailMessagingConfig(Messaging: MessagingConfig, config: PrivateConfigClass): Promise<void> {
     Logger.debug(LOG_TAG, 'Testing EmailMessaging config');
 
-    if (Messaging.Email.type === EmailMessagingType.sendmail && !Config.Environment.sendMailAvailable) {
+    if (Messaging.Email.type === EmailMessagingType.sendmail && ServerEnvironment.sendMailAvailable === false) {
       throw new Error('sendmail e-mail sending method is not supported as the sendmail application cannot be found in the OS.');
     }
   }
@@ -306,12 +306,12 @@ export class ConfigDiagnostics {
       sendmail: true,
     });
     try {
-      Config.Environment.sendMailAvailable = await transporter.verify();
+      ServerEnvironment.sendMailAvailable = await transporter.verify();
     } catch (e) {
-      Config.Environment.sendMailAvailable = false;
+      ServerEnvironment.sendMailAvailable = false;
     }
-    ServerEnvironment.sendMailAvailable = Config.Environment.sendMailAvailable;
-    if (!Config.Environment.sendMailAvailable) {
+    Config.Environment.sendMailAvailable = ServerEnvironment.sendMailAvailable;
+    if (!ServerEnvironment.sendMailAvailable) {
       Config.Messaging.Email.type = EmailMessagingType.SMTP;
       Logger.info(LOG_TAG, 'Sendmail is not available on the OS. You will need to use an SMTP server if you wish the app to send mails.');
     }

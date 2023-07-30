@@ -55,7 +55,7 @@ describe('Settings middleware', () => {
   it('should save enforced users settings', (done: (err?: any) => void) => {
 
     ServerEnvironment.sendMailAvailable = false;
-    Config.Environment.sendMailAvailable = false
+    Config.Environment.sendMailAvailable = false;
     Config.Messaging.Email.type = EmailMessagingType.sendmail;
     const req: any = {
       session: {},
@@ -80,9 +80,14 @@ describe('Settings middleware', () => {
         expect(Config.Users.enforcedUsers[0].name).to.be.equal('Apple');
         expect(Config.Users.enforcedUsers.length).to.be.equal(1);
         Config.original().then((cfg) => {
-          expect(cfg.Users.enforcedUsers.length).to.be.equal(1);
-          expect(cfg.Users.enforcedUsers[0].name).to.be.equal('Apple');
-          done();
+          try {
+            expect(cfg.Users.enforcedUsers.length).to.be.equal(1);
+            expect(cfg.Users.enforcedUsers[0].name).to.be.equal('Apple');
+            done();
+          } catch (err) {
+            console.error(err);
+            done(err);
+          }
         }).catch(done);
       } catch (err) {
         console.error(err);
