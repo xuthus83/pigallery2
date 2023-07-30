@@ -23,6 +23,7 @@ describe('Settings middleware', () => {
   it('should save empty enforced users settings', (done: (err?: any) => void) => {
 
     ServerEnvironment.sendMailAvailable = false;
+    Config.Environment.sendMailAvailable = false;
     const req: any = {
       session: {},
       sessionOptions: {},
@@ -51,6 +52,7 @@ describe('Settings middleware', () => {
   it('should save enforced users settings', (done: (err?: any) => void) => {
 
     ServerEnvironment.sendMailAvailable = false;
+    Config.Environment.sendMailAvailable = false;
     const req: any = {
       session: {},
       sessionOptions: {},

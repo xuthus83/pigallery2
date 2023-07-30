@@ -711,7 +711,6 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
       const albums = await am.getAlbums();
       expect(albums[0].preview).to.be.an('object');
       delete albums[0].preview;
-      console.log(albums);
       expect(albums).to.be.deep.equal([
         {
           id: 1,
