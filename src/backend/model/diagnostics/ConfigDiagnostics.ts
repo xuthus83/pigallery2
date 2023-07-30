@@ -26,6 +26,8 @@ import {
 import {SearchQueryParser} from '../../../common/SearchQueryParser';
 import {SearchQueryTypes, TextSearch,} from '../../../common/entities/SearchQueryDTO';
 import {Utils} from '../../../common/Utils';
+import {createTransport} from 'nodemailer';
+import {EmailMessagingType, MessagingConfig} from '../../../common/config/private/MessagingConfig';
 
 const LOG_TAG = '[ConfigDiagnostics]';
 
@@ -76,6 +78,14 @@ export class ConfigDiagnostics {
     Logger.debug(LOG_TAG, 'Testing meta file config');
     if (metaFileConfig.gpx === true && config.Map.enabled === false) {
       throw new Error('*.gpx meta files are not supported without MAP');
+    }
+  }
+
+  private static async testEmailMessagingConfig(Messaging: MessagingConfig, config: PrivateConfigClass): Promise<void> {
+    Logger.debug(LOG_TAG, 'Testing EmailMessaging config');
+
+    if(Messaging.Email.type === EmailMessagingType.sendmail && !Config.Environment.sendMailAvailable){
+      throw new Error('sendmail e-mail sending method is not supported as the sendmail application cannot be found in the OS.')
     }
   }
 
@@ -285,13 +295,46 @@ export class ConfigDiagnostics {
     await ConfigDiagnostics.testSharingConfig(config.Sharing, config);
     await ConfigDiagnostics.testRandomPhotoConfig(config.Sharing, config);
     await ConfigDiagnostics.testMapConfig(config.Map);
+    await ConfigDiagnostics.testEmailMessagingConfig(config.Messaging, config);
 
+  }
+
+  static async checkEnvironment(Config:PrivateConfigClass): Promise<void> {
+    Logger.debug(LOG_TAG, 'Checking sendmail availability');
+    const transporter = createTransport({
+      sendmail: true,
+    });
+    try {
+      Config.Environment.sendMailAvailable = await transporter.verify();
+    } catch (e) {
+      Config.Environment.sendMailAvailable = false;
+    }
+    if (!Config.Environment.sendMailAvailable) {
+      Config.Messaging.Email.type = EmailMessagingType.SMTP;
+      Logger.info(LOG_TAG, 'Sendmail is not available on the OS. You will need to use an SMTP server if you wish the app to send mails.');
+    }
   }
 
   static async runDiagnostics(): Promise<void> {
 
     if (process.env['NODE_ENV'] === 'debug') {
       NotificationManager.warning('You are running the application with NODE_ENV=debug. This exposes a lot of debug information that can be a security vulnerability. Set NODE_ENV=production, when you finished debugging.');
+    }
+
+    try {
+      await ConfigDiagnostics.checkEnvironment(Config);
+    } catch (ex) {
+      const err: Error = ex;
+      NotificationManager.error(
+        'Error during checking environment',
+        err.toString()
+      );
+      Logger.error(
+        LOG_TAG,
+        'Error during checking environment',
+        err.toString()
+      );
+      process.exit(1);
     }
 
     try {
@@ -525,5 +568,23 @@ export class ConfigDiagnostics {
       );
       Config.Map.mapProvider = MapProviders.OpenStreetMap;
     }
+    try {
+      await ConfigDiagnostics.testEmailMessagingConfig(Config.Messaging, Config);
+    } catch (ex) {
+      const err: Error = ex;
+      NotificationManager.warning(
+        'Setting to SMTP method.',
+        err.toString()
+      );
+      Logger.warn(
+        LOG_TAG,
+        'Setting to SMTP method.',
+        err.toString()
+      );
+      Config.Messaging.Email.type = EmailMessagingType.SMTP;
+    }
+
+
   }
+
 }

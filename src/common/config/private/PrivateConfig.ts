@@ -30,6 +30,7 @@ import {DefaultsJobs} from '../../entities/job/JobDTO';
 import {SearchQueryDTO, SearchQueryTypes, TextSearch,} from '../../entities/SearchQueryDTO';
 import {SortingMethods} from '../../entities/SortingMethods';
 import {UserRoles} from '../../entities/UserDTO';
+import {MessagingConfig} from './MessagingConfig';
 
 declare let $localize: (s: TemplateStringsArray) => string;
 
@@ -395,7 +396,7 @@ export class ServerMetaFileConfig extends ClientMetaFileConfig {
         uiJob: [{
           job: DefaultsJobs[DefaultsJobs['GPX Compression']],
           relevant: (c) => c.MetaFile.GPXCompressing.enabled
-        },{
+        }, {
           job: DefaultsJobs[DefaultsJobs['Delete Compressed GPX']],
           relevant: (c) => c.MetaFile.GPXCompressing.enabled
         }]
@@ -1049,7 +1050,13 @@ export class ServerEnvironmentConfig {
   buildCommitHash: string | undefined;
   @ConfigProperty({volatile: true})
   isDocker: boolean | undefined;
+  @ConfigProperty({
+    volatile: true,
+    description: 'App updates on start-up if sendmail binary is available'
+  })
+  sendMailAvailable: boolean | undefined;
 }
+
 
 @SubConfigClass<TAGS>({softReadonly: true})
 export class ServerConfig extends ClientConfig {
@@ -1143,6 +1150,16 @@ export class ServerConfig extends ClientConfig {
     } as TAGS
   })
   Duplicates: ServerDuplicatesConfig = new ServerDuplicatesConfig();
+
+  @ConfigProperty({
+    tags: {
+      name: $localize`Messaging`,
+      uiIcon: 'chat',
+      githubIssue: 683
+    } as TAGS,
+    description: $localize`The App can send messages (like photos on the same day a year ago. aka: "Top Pick"). Here you can configure the delivery method.`
+  })
+  Messaging: MessagingConfig = new MessagingConfig();
 
   @ConfigProperty({
     tags: {

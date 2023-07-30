@@ -5,9 +5,18 @@ import {SortingMethods} from '../../../../common/entities/SortingMethods';
 import {DatePatternFrequency, DatePatternSearch, SearchQueryDTO, SearchQueryTypes} from '../../../../common/entities/SearchQueryDTO';
 import {ObjectManagers} from '../../ObjectManagers';
 import {PhotoEntity} from '../../database/enitites/PhotoEntity';
+import {EmailMediaMessenger} from '../../mediamessengers/EmailMediaMessenger';
 
 
-export class TopPickSendJob extends Job<{ searchQuery: SearchQueryDTO, sortBy: SortingMethods[], pickAmount: number }> {
+export class TopPickSendJob extends Job<{
+  searchQuery: SearchQueryDTO,
+  sortBy: SortingMethods[],
+  pickAmount: number,
+  emailTo: string,
+  emailFrom: string,
+  emailSubject: string,
+  emailText: string,
+}> {
   public readonly Name = DefaultsJobs[DefaultsJobs['Top Pick Sending']];
   public readonly Supported: boolean = true;
   public readonly ConfigTemplate: ConfigTemplateEntry[] = [
@@ -33,6 +42,30 @@ export class TopPickSendJob extends Job<{ searchQuery: SearchQueryDTO, sortBy: S
       name: backendTexts.pickAmount.name,
       description: backendTexts.pickAmount.description,
       defaultValue: 5,
+    }, {
+      id: 'emailTo',
+      type: 'email',
+      name: backendTexts.emailTo.name,
+      description: backendTexts.emailTo.description,
+      defaultValue: '',
+    }, {
+      id: 'emailFrom',
+      type: 'email',
+      name: backendTexts.emailFrom.name,
+      description: backendTexts.emailFrom.description,
+      defaultValue: 'norelpy@pigallery2.com',
+    }, {
+      id: 'emailSubject',
+      type: 'string',
+      name: backendTexts.emailSubject.name,
+      description: backendTexts.emailSubject.description,
+      defaultValue: 'Latest photos for you',
+    }, {
+      id: 'emailText',
+      type: 'string',
+      name: backendTexts.emailText.name,
+      description: backendTexts.emailText.description,
+      defaultValue: 'I hand picked these photos just for you:',
     },
   ];
   private status: 'Listing' | 'Sending' = 'Listing';
@@ -64,11 +97,20 @@ export class TopPickSendJob extends Job<{ searchQuery: SearchQueryDTO, sortBy: S
     this.Progress.log('Collecting Photos and videos to Send');
     this.Progress.Processed++;
     this.mediaList = await ObjectManagers.getInstance().SearchManager.getNMedia(this.config.searchQuery, this.config.sortBy, this.config.pickAmount);
-   // console.log(this.mediaList);
+    // console.log(this.mediaList);
     return false;
   }
 
   private async stepSending(): Promise<boolean> {
+    this.Progress.log('Sending emails');
+    const messenger = new EmailMediaMessenger();
+    await messenger.sendMedia({
+      from: this.config.emailFrom,
+      to: this.config.emailTo,
+      subject: this.config.emailSubject,
+      text: this.config.emailText
+    }, this.mediaList);
+    this.Progress.Processed++;
     return false;
   }
 }

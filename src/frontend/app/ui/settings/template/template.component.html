@@ -71,6 +71,10 @@
                let-confPath="confPath">
     <div class="alert alert-secondary" role="alert" *ngIf="rStates.description">
       {{rStates.description}}
+      <a *ngIf="rStates.tags?.githubIssue"
+         [href]="'https://github.com/bpatrik/pigallery2/issues/'+rStates.tags?.githubIssue">
+        <ng-container i18n>See</ng-container>
+        #{{rStates.tags?.githubIssue}}.</a>
     </div>
     <ng-container *ngFor="let ck of getKeys(rStates)">
       <ng-container *ngIf="!(rStates.value.__state[ck].shouldHide && rStates.value.__state[ck].shouldHide())">

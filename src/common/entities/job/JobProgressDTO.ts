@@ -4,6 +4,7 @@ export enum JobProgressStates {
   interrupted = 3,
   canceled = 4,
   finished = 5,
+  failed = 6,
 }
 
 export interface JobProgressLogDTO {
