@@ -8,6 +8,7 @@ import {Config} from '../../../../../src/common/config/private/Config';
 import {UserRoles} from '../../../../../src/common/entities/UserDTO';
 import {ConfigClassBuilder} from '../../../../../node_modules/typeconfig/node';
 import {ServerEnvironment} from '../../../../../src/backend/Environment';
+import {EmailMessagingType} from '../../../../../src/common/config/private/MessagingConfig';
 
 
 declare const describe: any;
@@ -24,6 +25,7 @@ describe('Settings middleware', () => {
 
     ServerEnvironment.sendMailAvailable = false;
     Config.Environment.sendMailAvailable = false;
+    Config.Messaging.Email.type = EmailMessagingType.sendmail;
     const req: any = {
       session: {},
       sessionOptions: {},
@@ -52,7 +54,8 @@ describe('Settings middleware', () => {
   it('should save enforced users settings', (done: (err?: any) => void) => {
 
     ServerEnvironment.sendMailAvailable = false;
-    Config.Environment.sendMailAvailable = false;
+    Config.Environment.sendMailAvailable = false
+    Config.Messaging.Email.type = EmailMessagingType.sendmail;;
     const req: any = {
       session: {},
       sessionOptions: {},
