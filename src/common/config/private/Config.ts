@@ -81,12 +81,15 @@ export class PrivateConfigClass extends ServerConfig {
       require('../../../../package.json').buildCommitHash;
     this.Environment.upTime = upTime;
     this.Environment.isDocker = !!process.env.PI_DOCKER;
+    console.log('CONFIG', ServerEnvironment);
     if (typeof ServerEnvironment.sendMailAvailable !== 'undefined') {
       this.Environment.sendMailAvailable = ServerEnvironment.sendMailAvailable;
       if(!this.Environment.sendMailAvailable){ //onNewValue is not yet available as a callback
         this.Messaging.Email.type = EmailMessagingType.SMTP;
       }
     }
+    console.log('CONFIG', this.Environment.sendMailAvailable);
+    console.log('CONFIG', this.Messaging.Email.type);
   }
 
   async original(): Promise<PrivateConfigClass & IConfigClass> {

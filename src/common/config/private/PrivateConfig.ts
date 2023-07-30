@@ -1054,9 +1054,11 @@ export class ServerEnvironmentConfig {
   @ConfigProperty<boolean, ServerConfig, TAGS>({
     volatile: true,
     onNewValue: (value, config) => {
+      console.log('onNewValue', value, config.Messaging.Email.type);
       if (value === false) {
         config.Messaging.Email.type = EmailMessagingType.SMTP;
       }
+      console.log('onNewValue after', value, config.Messaging.Email.type);
     },
     description: 'App updates on start-up if sendmail binary is available'
   })

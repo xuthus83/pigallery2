@@ -36,6 +36,7 @@ describe('Settings middleware', () => {
         settings: ConfigClassBuilder.attachPrivateInterface(new ServerUserConfig()).toJSON()
       }
     };
+    console.log('Settings', req);
     req.body.settings.enforcedUsers = [];
     const next: any = (err: ErrorDTO) => {
       try {
@@ -55,7 +56,7 @@ describe('Settings middleware', () => {
 
     ServerEnvironment.sendMailAvailable = false;
     Config.Environment.sendMailAvailable = false
-    Config.Messaging.Email.type = EmailMessagingType.sendmail;;
+    Config.Messaging.Email.type = EmailMessagingType.sendmail;
     const req: any = {
       session: {},
       sessionOptions: {},
