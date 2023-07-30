@@ -7,6 +7,7 @@ import {IConfigClass} from 'typeconfig/common';
 import {PasswordHelper} from '../../../backend/model/PasswordHelper';
 import {TAGS} from '../public/ClientConfig';
 import {ServerEnvironment} from '../../../backend/Environment';
+import {EmailMessagingType} from './MessagingConfig';
 
 declare const process: any;
 
@@ -82,6 +83,9 @@ export class PrivateConfigClass extends ServerConfig {
     this.Environment.isDocker = !!process.env.PI_DOCKER;
     if (typeof ServerEnvironment.sendMailAvailable !== 'undefined') {
       this.Environment.sendMailAvailable = ServerEnvironment.sendMailAvailable;
+      if(!this.Environment.sendMailAvailable){ //onNewValue is not yet available as a callback
+        this.Messaging.Email.type = EmailMessagingType.SMTP;
+      }
     }
   }
 

@@ -6,6 +6,8 @@ import {SettingsMWs} from '../../../../../src/backend/middlewares/admin/Settings
 import {ServerUserConfig} from '../../../../../src/common/config/private/PrivateConfig';
 import {Config} from '../../../../../src/common/config/private/Config';
 import {UserRoles} from '../../../../../src/common/entities/UserDTO';
+import {ConfigClassBuilder} from '../../../../../node_modules/typeconfig/node';
+import {ServerEnvironment} from '../../../../../src/backend/Environment';
 
 
 declare const describe: any;
@@ -19,6 +21,8 @@ describe('Settings middleware', () => {
   });
 
   it('should save empty enforced users settings', (done: (err?: any) => void) => {
+
+    ServerEnvironment.sendMailAvailable = false;
     const req: any = {
       session: {},
       sessionOptions: {},
@@ -26,12 +30,13 @@ describe('Settings middleware', () => {
       params: {},
       body: {
         settingsPath: 'Users',
-        settings: new ServerUserConfig()
+        settings: ConfigClassBuilder.attachPrivateInterface(new ServerUserConfig()).toJSON()
       }
     };
     req.body.settings.enforcedUsers = [];
     const next: any = (err: ErrorDTO) => {
       try {
+        expect(err).to.be.undefined;
         expect(Config.Users.enforcedUsers.length).to.be.equal(0);
         done();
       } catch (err) {
