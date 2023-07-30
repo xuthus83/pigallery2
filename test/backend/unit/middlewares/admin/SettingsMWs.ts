@@ -22,7 +22,7 @@ describe('Settings middleware', () => {
   });
 
   it('should save empty enforced users settings', (done: (err?: any) => void) => {
-
+    console.log('sarting - should save empty enforced users settings');
     ServerEnvironment.sendMailAvailable = false;
     Config.Environment.sendMailAvailable = false;
     Config.Messaging.Email.type = EmailMessagingType.SMTP;
@@ -53,6 +53,7 @@ describe('Settings middleware', () => {
 
   });
   it('should save enforced users settings', (done: (err?: any) => void) => {
+    console.log('sarting - should save enforced users settings');
 
     ServerEnvironment.sendMailAvailable = false;
     Config.Environment.sendMailAvailable = false;
