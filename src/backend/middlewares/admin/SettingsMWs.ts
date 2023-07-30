@@ -45,10 +45,14 @@ export class SettingsMWs {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       original[settingsPath] = settings;
+      console.log('orig');
+      console.log(original.Messaging);
       await ConfigDiagnostics.testConfig(original);
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       Config[settingsPath] = settings;
+      console.log('Config');
+      console.log(Config.Messaging);
       await original.save();
       await ConfigDiagnostics.runDiagnostics();
       Logger.info(LOG_TAG, 'new config:');
