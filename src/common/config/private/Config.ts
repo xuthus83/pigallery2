@@ -18,7 +18,8 @@ const isTesting = ['afterEach', 'after', 'beforeEach', 'before', 'describe', 'it
   .every((fn) => (global as any)[fn] instanceof Function);
 
 @ConfigClass<IConfigClass<TAGS> & ServerConfig>({
-  configPath: path.join(__dirname, !isTesting ? './../../../../config.json' : './../../../../test/backend/assets/config.json'),
+  configPath: path.join(__dirname, !isTesting ? './../../../../config.json' : './../../../../test/backend/tmp/config.json'),
+  crateConfigPathIfNotExists: isTesting,
   saveIfNotExist: true,
   attachDescription: true,
   enumsAsString: true,
@@ -84,7 +85,7 @@ export class PrivateConfigClass extends ServerConfig {
     console.log('CONFIG', ServerEnvironment);
     if (typeof ServerEnvironment.sendMailAvailable !== 'undefined') {
       this.Environment.sendMailAvailable = ServerEnvironment.sendMailAvailable;
-      if(!this.Environment.sendMailAvailable){ //onNewValue is not yet available as a callback
+      if (!this.Environment.sendMailAvailable) { //onNewValue is not yet available as a callback
         this.Messaging.Email.type = EmailMessagingType.SMTP;
       }
     }

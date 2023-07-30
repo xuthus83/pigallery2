@@ -9,6 +9,8 @@ import {UserRoles} from '../../../../../src/common/entities/UserDTO';
 import {ConfigClassBuilder} from '../../../../../node_modules/typeconfig/node';
 import {ServerEnvironment} from '../../../../../src/backend/Environment';
 import {EmailMessagingType} from '../../../../../src/common/config/private/MessagingConfig';
+import * as fs from 'fs';
+import * as path from 'path';
 
 
 declare const describe: any;
@@ -17,8 +19,10 @@ declare const beforeEach: any;
 
 describe('Settings middleware', () => {
 
-  beforeEach(() => {
-    ObjectManagers.reset();
+  const tempDir = path.join(__dirname, '../../../tmp');
+  beforeEach(async () => {
+    await ObjectManagers.reset();
+    await fs.promises.rm(tempDir, {recursive: true, force: true});
   });
 
   it('should save empty enforced users settings', (done: (err?: any) => void) => {
