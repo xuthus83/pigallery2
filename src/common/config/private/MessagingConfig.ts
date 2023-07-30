@@ -3,7 +3,13 @@ import {SubConfigClass} from '../../../../node_modules/typeconfig/src/decorators
 import {ConfigPriority, TAGS} from '../public/ClientConfig';
 import {ConfigProperty} from '../../../../node_modules/typeconfig/src/decorators/property/ConfigPropoerty';
 import {ServerConfig} from './PrivateConfig';
+declare let $localize: (s: TemplateStringsArray) => string;
 
+if (typeof $localize === 'undefined') {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  global.$localize = (s) => s;
+}
 export enum EmailMessagingType {
   sendmail = 1,
   SMTP = 2,
