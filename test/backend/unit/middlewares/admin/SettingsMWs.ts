@@ -25,7 +25,7 @@ describe('Settings middleware', () => {
 
     ServerEnvironment.sendMailAvailable = false;
     Config.Environment.sendMailAvailable = false;
-    Config.Messaging.Email.type = EmailMessagingType.sendmail;
+    Config.Messaging.Email.type = EmailMessagingType.SMTP;
     const req: any = {
       session: {},
       sessionOptions: {},
@@ -56,7 +56,7 @@ describe('Settings middleware', () => {
 
     ServerEnvironment.sendMailAvailable = false;
     Config.Environment.sendMailAvailable = false;
-    Config.Messaging.Email.type = EmailMessagingType.sendmail;
+    Config.Messaging.Email.type = EmailMessagingType.SMTP;
     const req: any = {
       session: {},
       sessionOptions: {},
