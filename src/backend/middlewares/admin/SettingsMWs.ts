@@ -47,12 +47,16 @@ export class SettingsMWs {
       original[settingsPath] = settings;
       console.log('orig');
       console.log(original.Messaging);
+      console.log(original.Messaging.Email);
+      console.log(original.Messaging.Email.type);
       await ConfigDiagnostics.testConfig(original);
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       Config[settingsPath] = settings;
       console.log('Config');
       console.log(Config.Messaging);
+      console.log(Config.Messaging.Email);
+      console.log(Config.Messaging.Email.type);
       await original.save();
       await ConfigDiagnostics.runDiagnostics();
       Logger.info(LOG_TAG, 'new config:');
