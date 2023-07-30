@@ -30,7 +30,7 @@ import {DefaultsJobs} from '../../entities/job/JobDTO';
 import {SearchQueryDTO, SearchQueryTypes, TextSearch,} from '../../entities/SearchQueryDTO';
 import {SortingMethods} from '../../entities/SortingMethods';
 import {UserRoles} from '../../entities/UserDTO';
-import {MessagingConfig} from './MessagingConfig';
+import {EmailMessagingType, MessagingConfig} from './MessagingConfig';
 
 declare let $localize: (s: TemplateStringsArray) => string;
 
@@ -904,6 +904,7 @@ export class ServerPreviewConfig {
 @SubConfigClass({softReadonly: true})
 export class ServerMediaConfig extends ClientMediaConfig {
   @ConfigProperty({
+
     tags: {
       name: $localize`Images folder`,
       priority: ConfigPriority.basic,
@@ -1050,8 +1051,13 @@ export class ServerEnvironmentConfig {
   buildCommitHash: string | undefined;
   @ConfigProperty({volatile: true})
   isDocker: boolean | undefined;
-  @ConfigProperty({
+  @ConfigProperty<boolean, ServerConfig, TAGS>({
     volatile: true,
+    onNewValue: (value, config) => {
+      if (value === false) {
+        config.Messaging.Email.type = EmailMessagingType.SMTP;
+      }
+    },
     description: 'App updates on start-up if sendmail binary is available'
   })
   sendMailAvailable: boolean | undefined;

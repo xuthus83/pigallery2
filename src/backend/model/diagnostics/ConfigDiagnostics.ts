@@ -28,6 +28,7 @@ import {SearchQueryTypes, TextSearch,} from '../../../common/entities/SearchQuer
 import {Utils} from '../../../common/Utils';
 import {createTransport} from 'nodemailer';
 import {EmailMessagingType, MessagingConfig} from '../../../common/config/private/MessagingConfig';
+import {ServerEnvironment} from '../../Environment';
 
 const LOG_TAG = '[ConfigDiagnostics]';
 
@@ -84,8 +85,8 @@ export class ConfigDiagnostics {
   private static async testEmailMessagingConfig(Messaging: MessagingConfig, config: PrivateConfigClass): Promise<void> {
     Logger.debug(LOG_TAG, 'Testing EmailMessaging config');
 
-    if(Messaging.Email.type === EmailMessagingType.sendmail && !Config.Environment.sendMailAvailable){
-      throw new Error('sendmail e-mail sending method is not supported as the sendmail application cannot be found in the OS.')
+    if (Messaging.Email.type === EmailMessagingType.sendmail && !Config.Environment.sendMailAvailable) {
+      throw new Error('sendmail e-mail sending method is not supported as the sendmail application cannot be found in the OS.');
     }
   }
 
@@ -299,7 +300,7 @@ export class ConfigDiagnostics {
 
   }
 
-  static async checkEnvironment(Config:PrivateConfigClass): Promise<void> {
+  static async checkAndSetEnvironment(): Promise<void> {
     Logger.debug(LOG_TAG, 'Checking sendmail availability');
     const transporter = createTransport({
       sendmail: true,
@@ -309,6 +310,7 @@ export class ConfigDiagnostics {
     } catch (e) {
       Config.Environment.sendMailAvailable = false;
     }
+    ServerEnvironment.sendMailAvailable = Config.Environment.sendMailAvailable;
     if (!Config.Environment.sendMailAvailable) {
       Config.Messaging.Email.type = EmailMessagingType.SMTP;
       Logger.info(LOG_TAG, 'Sendmail is not available on the OS. You will need to use an SMTP server if you wish the app to send mails.');
@@ -322,7 +324,7 @@ export class ConfigDiagnostics {
     }
 
     try {
-      await ConfigDiagnostics.checkEnvironment(Config);
+      await ConfigDiagnostics.checkAndSetEnvironment();
     } catch (ex) {
       const err: Error = ex;
       NotificationManager.error(
