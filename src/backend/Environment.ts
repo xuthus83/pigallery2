@@ -1,6 +1,4 @@
 /**
  * Keeps the environment context
  */
-export const ServerEnvironment = {
-  sendMailAvailable: false
-};
+export const ServerEnvironment: { sendMailAvailable?: boolean } = {};

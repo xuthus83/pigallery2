@@ -382,8 +382,9 @@ export class SearchManager {
         case SortingMethods.random:
           if (Config.Database.type === DatabaseType.mysql) {
             query.groupBy('RAND(), media.id');
+          } else {
+            query.groupBy('RANDOM()');
           }
-          query.groupBy('RANDOM()');
           break;
       }
     }

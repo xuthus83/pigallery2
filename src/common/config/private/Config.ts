@@ -7,8 +7,6 @@ import {IConfigClass} from 'typeconfig/common';
 import {PasswordHelper} from '../../../backend/model/PasswordHelper';
 import {TAGS} from '../public/ClientConfig';
 import {ServerEnvironment} from '../../../backend/Environment';
-import {EmailMessagingType} from './MessagingConfig';
-import {Logger} from '../../../backend/Logger';
 
 declare const process: any;
 
@@ -82,7 +80,9 @@ export class PrivateConfigClass extends ServerConfig {
       require('../../../../package.json').buildCommitHash;
     this.Environment.upTime = upTime;
     this.Environment.isDocker = !!process.env.PI_DOCKER;
-    this.Environment.sendMailAvailable = ServerEnvironment.sendMailAvailable;
+    if (typeof ServerEnvironment.sendMailAvailable !== 'undefined') {
+      this.Environment.sendMailAvailable = ServerEnvironment.sendMailAvailable;
+    }
   }
 
   async original(): Promise<PrivateConfigClass & IConfigClass> {
