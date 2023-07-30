@@ -356,7 +356,7 @@ export class SearchManager {
     if (!sortings || !Array.isArray(sortings)) {
       return query;
     }
-    if (sortings.includes(SortingMethods.random) && sortings.length > 0) {
+    if (sortings.includes(SortingMethods.random) && sortings.length > 1) {
       throw new Error('Error during applying sorting: Can\' randomize and also sort the result. Bad input:' + sortings.map(s => SortingMethods[s]).join(', '));
     }
     for (const sort of sortings) {

@@ -1406,14 +1406,14 @@ describe('SearchManager', (sqlHelper: DBTestHelper) => {
     } as TextSearch;
 
     // eslint-disable-next-line
-    expect(await sm.getNMedia(query, [SortingMethods.random], 1, true)).to.not.exist;
+    expect(await sm.getNMedia(query, [SortingMethods.random], 1, true)).to.deep.equalInAnyOrder([]);
 
     query = ({
       text: 'wookiees',
       matchType: TextSearchQueryMatchTypes.exact_match,
       type: SearchQueryTypes.keyword
     } as TextSearch);
-    expect(Utils.clone(await sm.getNMedia(query, [SortingMethods.random], 1, true))).to.deep.equalInAnyOrder(searchifyMedia(pFaceLess));
+    expect(Utils.clone(await sm.getNMedia(query, [SortingMethods.random], 1, true))).to.deep.equalInAnyOrder([searchifyMedia(pFaceLess)]);
   });
 
 });
