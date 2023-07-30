@@ -40,6 +40,7 @@ describe('Settings middleware', () => {
         expect(Config.Users.enforcedUsers.length).to.be.equal(0);
         done();
       } catch (err) {
+        console.error(err);
         done(err);
       }
     };
@@ -48,6 +49,8 @@ describe('Settings middleware', () => {
 
   });
   it('should save enforced users settings', (done: (err?: any) => void) => {
+
+    ServerEnvironment.sendMailAvailable = false;
     const req: any = {
       session: {},
       sessionOptions: {},
@@ -76,6 +79,7 @@ describe('Settings middleware', () => {
           done();
         }).catch(done);
       } catch (err) {
+        console.error(err);
         done(err);
       }
     };
