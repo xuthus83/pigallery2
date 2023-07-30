@@ -17,6 +17,8 @@ export class BackendtextService {
         return $localize`Only checks indexed files.`;
       case backendTexts.indexChangesOnly.name:
         return $localize`Index changes only`;
+      case backendTexts.indexChangesOnly.description:
+        return $localize`Only indexes a folder if it got changed.`;
       case backendTexts.searchQuery.name:
         return $localize`Search query`;
       case backendTexts.searchQuery.description:

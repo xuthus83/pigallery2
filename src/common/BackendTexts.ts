@@ -4,11 +4,11 @@ export const backendTexts = {
   sizeToGenerate: {name: 20, description: 22},
   indexChangesOnly: {name: 30, description: 32},
   searchQuery: {name: 40, description: 42},
-  sortBy: {name: 100, description: 102},
-  pickAmount: {name: 50, description: 52},
-  emailTo: {name: 60, description: 62},
-  emailFrom: {name: 70, description: 72},
-  emailSubject: {name: 80, description: 82},
-  emailText: {name: 90, description: 92}
+  sortBy: {name: 50, description: 52},
+  pickAmount: {name: 60, description: 62},
+  emailTo: {name: 70, description: 72},
+  emailFrom: {name: 80, description: 82},
+  emailSubject: {name: 90, description: 92},
+  emailText: {name: 100, description: 102}
 
 };
