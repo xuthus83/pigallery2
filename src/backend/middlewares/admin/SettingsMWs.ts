@@ -28,8 +28,6 @@ export class SettingsMWs {
       let settings = req.body.settings; // Top level settings JSON
       const settingsPath: string = req.body.settingsPath; // Name of the top level settings
       const transformer = await Config.original();
-      console.log('pre settings' + settingsPath);
-      console.log(settings);
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       transformer[settingsPath] = settings;
@@ -38,29 +36,15 @@ export class SettingsMWs {
       settings = ConfigClassBuilder.attachPrivateInterface(transformer[settingsPath]).toJSON({
         skipTags: {secret: true} as TAGS
       });
-      console.log('post settings'+ settingsPath);
-      console.log(settings);
       const original = await Config.original();
-      console.log('orig pre');
-      console.log(ConfigClassBuilder.attachPrivateInterface(original.Messaging).toJSON());
-      console.log(original.Messaging.Email);
-      console.log(original.Messaging.Email.type);
       // only updating explicitly set config (not saving config set by the diagnostics)
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       original[settingsPath] = settings;
-      console.log('orig');
-      console.log(ConfigClassBuilder.attachPrivateInterface(original.Messaging).toJSON());
-      console.log(original.Messaging.Email);
-      console.log(original.Messaging.Email.type);
       await ConfigDiagnostics.testConfig(original);
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       Config[settingsPath] = settings;
-      console.log('Config');
-      console.log(Config.Messaging);
-      console.log(Config.Messaging.Email);
-      console.log(Config.Messaging.Email.type);
       await original.save();
       await ConfigDiagnostics.runDiagnostics();
       Logger.info(LOG_TAG, 'new config:');
