@@ -7,7 +7,6 @@ export const backendTexts = {
   sortBy: {name: 50, description: 52},
   pickAmount: {name: 60, description: 62},
   emailTo: {name: 70, description: 72},
-  emailFrom: {name: 80, description: 82},
   emailSubject: {name: 90, description: 92},
   emailText: {name: 100, description: 102}
 

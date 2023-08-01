@@ -159,6 +159,17 @@ export class WorkflowComponent implements ControlValueAccessor, Validator, OnIni
     }
   }
 
+  setEmailArray(configElement: any, id: string, value: string): void {
+    value = value.replace(new RegExp(',', 'g'), ';');
+    value = value.replace(new RegExp(' ', 'g'), ';');
+    configElement[id] = value
+      .split(';').filter((i: string) => i != '');
+  }
+
+  getArray(configElement: Record<string, number[]>, id: string): string {
+    return configElement[id] && Array.isArray(configElement[id]) ? configElement[id].join('; ') : '';
+  }
+
   setNumberArray(configElement: any, id: string, value: string): void {
     value = value.replace(new RegExp(',', 'g'), ';');
     value = value.replace(new RegExp(' ', 'g'), ';');
@@ -168,9 +179,6 @@ export class WorkflowComponent implements ControlValueAccessor, Validator, OnIni
       .filter((i: number) => !isNaN(i) && i > 0);
   }
 
-  getNumberArray(configElement: Record<string, number[]>, id: string): string {
-    return configElement[id] ? configElement[id].join('; ') : '';
-  }
 
   public shouldIdent(curr: JobScheduleDTO, prev: JobScheduleDTO): boolean {
     return (
@@ -284,7 +292,6 @@ export class WorkflowComponent implements ControlValueAccessor, Validator, OnIni
   }
 
 
-
   AsSortArray(configElement: string | number | string[] | number[]): SortingMethods[] {
     return configElement as SortingMethods[];
   }
@@ -294,6 +301,6 @@ export class WorkflowComponent implements ControlValueAccessor, Validator, OnIni
   }
 
   AddNewSorting(configElement: string | number | string[] | number[]): void {
-    (configElement as SortingMethods[]).push(SortingMethods.ascDate)
+    (configElement as SortingMethods[]).push(SortingMethods.ascDate);
   }
 }

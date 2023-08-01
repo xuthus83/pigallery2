@@ -35,10 +35,6 @@ export class BackendtextService {
         return $localize`E-mail to`;
       case backendTexts.emailTo.description:
         return $localize`E-mail address of the recipient.`;
-      case backendTexts.emailFrom.name:
-        return $localize`E-mail From`;
-      case backendTexts.emailFrom.description:
-        return $localize`E-mail sender address.`;
       case backendTexts.emailSubject.name:
         return $localize`Subject`;
       case backendTexts.emailSubject.description:

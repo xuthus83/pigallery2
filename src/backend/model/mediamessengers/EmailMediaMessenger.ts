@@ -42,7 +42,6 @@ export class EmailMediaMessenger {
   }
 
   public async sendMedia(mailSettings: {
-    from: string,
     to: string,
     subject: string,
     text: string
@@ -60,11 +59,11 @@ export class EmailMediaMessenger {
     for (let i = 0; i < media.length; ++i) {
       const thPath = await this.getThumbnail(media[i]);
       const linkUrl = Utils.concatUrls(Config.Server.publicUrl, '/gallery/', path.join(media[i].directory.path, media[i].directory.name));
-      const location = (media[0].metadata as PhotoMetadata).positionData?.country ?
-        (media[0].metadata as PhotoMetadata).positionData?.country :
-        ((media[0].metadata as PhotoMetadata).positionData?.city ?
-          (media[0].metadata as PhotoMetadata).positionData?.city : '');
-      const caption = (new Date(media[0].metadata.creationDate)).getFullYear() + (location ? ', ' + location : '');
+      const location = (media[i].metadata as PhotoMetadata).positionData?.country ?
+        (media[i].metadata as PhotoMetadata).positionData?.country :
+        ((media[i].metadata as PhotoMetadata).positionData?.city ?
+          (media[i].metadata as PhotoMetadata).positionData?.city : '');
+      const caption = (new Date(media[i].metadata.creationDate)).getFullYear() + (location ? ', ' + location : '');
       attachments.push({
         filename: media[i].name,
         path: thPath,
@@ -84,7 +83,7 @@ export class EmailMediaMessenger {
     }
 
     return await this.transporter.sendMail({
-      from: mailSettings.from,
+      from: Config.Messaging.Email.emailFrom,
       to: mailSettings.to,
       subject: mailSettings.subject,
       html: htmlStart + htmlMiddle + htmlEnd,

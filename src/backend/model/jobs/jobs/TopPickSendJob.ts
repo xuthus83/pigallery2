@@ -44,17 +44,11 @@ export class TopPickSendJob extends Job<{
       defaultValue: 5,
     }, {
       id: 'emailTo',
-      type: 'email',
+      type: 'string-array',
       name: backendTexts.emailTo.name,
       description: backendTexts.emailTo.description,
-      defaultValue: '',
-    }, {
-      id: 'emailFrom',
-      type: 'email',
-      name: backendTexts.emailFrom.name,
-      description: backendTexts.emailFrom.description,
-      defaultValue: 'norelpy@pigallery2.com',
-    }, {
+      defaultValue: [],
+    },  {
       id: 'emailSubject',
       type: 'string',
       name: backendTexts.emailSubject.name,
@@ -105,7 +99,6 @@ export class TopPickSendJob extends Job<{
     this.Progress.log('Sending emails');
     const messenger = new EmailMediaMessenger();
     await messenger.sendMedia({
-      from: this.config.emailFrom,
       to: this.config.emailTo,
       subject: this.config.emailSubject,
       text: this.config.emailText

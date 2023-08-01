@@ -3,6 +3,7 @@ import {SubConfigClass} from '../../../../node_modules/typeconfig/src/decorators
 import {ConfigPriority, TAGS} from '../public/ClientConfig';
 import {ConfigProperty} from '../../../../node_modules/typeconfig/src/decorators/property/ConfigPropoerty';
 import {ServerConfig} from './PrivateConfig';
+
 declare let $localize: (s: TemplateStringsArray) => string;
 
 if (typeof $localize === 'undefined') {
@@ -10,6 +11,7 @@ if (typeof $localize === 'undefined') {
   // @ts-ignore
   global.$localize = (s) => s;
 }
+
 export enum EmailMessagingType {
   sendmail = 1,
   SMTP = 2,
@@ -90,6 +92,16 @@ export class EmailMessagingConfig {
     description: $localize`Sendmail uses the built in unix binary if available. STMP connects to any STMP server of your choice.`
   })
   type: EmailMessagingType = EmailMessagingType.sendmail;
+
+  @ConfigProperty<EmailMessagingType, EmailMessagingConfig>({
+    tags:
+      {
+        name: $localize`Sender email`,
+        priority: ConfigPriority.advanced,
+      } as TAGS,
+    description: $localize`Some services do not allow sending from random e-mail addresses. Set this accordingly.`
+  })
+  emailFrom: string = 'noreply@pigallery2.com';
 
   @ConfigProperty({
     tags:
