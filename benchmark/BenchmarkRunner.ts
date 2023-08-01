@@ -28,7 +28,7 @@ import {
   TextSearchQueryMatchTypes,
   TextSearchQueryTypes
 } from '../src/common/entities/SearchQueryDTO';
-import {QueryKeywords, SearchQueryParser} from '../src/common/SearchQueryParser';
+import {defaultQueryKeywords, QueryKeywords, SearchQueryParser} from '../src/common/SearchQueryParser';
 import {ParentDirectoryDTO} from '../src/common/entities/DirectoryDTO';
 
 
@@ -148,43 +148,7 @@ export class BenchmarkRunner {
   async bmAllSearch(): Promise<{ result: BenchmarkResult[], searchQuery: SearchQueryDTO }[]> {
     await this.setupDB();
 
-    const queryKeywords: QueryKeywords = {
-      NSomeOf: 'of',
-      and: 'and',
-      or: 'or',
-
-      from: 'after',
-      to: 'before',
-      landscape: 'landscape',
-      maxRating: 'max-rating',
-      maxResolution: 'max-resolution',
-      minRating: 'min-rating',
-      minResolution: 'min-resolution',
-      orientation: 'orientation',
-
-
-      years_ago: '%d-years-ago',
-      months_ago: '%d-months-ago',
-      weeks_ago: '%d-weeks-ago',
-      days_ago: '%d-days-ago',
-      every_year: 'every-year',
-      every_month: 'every-month',
-      every_week: 'every-week',
-      lastNDays: 'last-%d-days',
-      sameDay: 'same-day',
-
-      any_text: 'any-text',
-      keyword: 'keyword',
-      caption: 'caption',
-      directory: 'directory',
-      file_name: 'file-name',
-      person: 'person',
-      portrait: 'portrait',
-      position: 'position',
-      someOf: 'some-of',
-      kmFrom: 'km-from'
-    };
-    const queryParser = new SearchQueryParser(queryKeywords);
+    const queryParser = new SearchQueryParser(defaultQueryKeywords);
     const names = (await ObjectManagers.getInstance().PersonManager.getAll()).sort((a, b) => b.count - a.count);
     const queries: { query: SearchQueryDTO, description: string }[] = TextSearchQueryTypes.map(t => {
       const q = {
