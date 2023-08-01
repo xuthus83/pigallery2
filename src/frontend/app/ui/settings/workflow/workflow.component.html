@@ -1,6 +1,7 @@
 <div [hidden]="!error" class="alert alert-danger" role="alert"><strong>Error: </strong>{{error}}</div>
 <div *ngFor="let schedule of sortedSchedules() as sortedSchedules; let i= index">
-  <div class="card bg-body-tertiary mt-2 mb-2  no-changed-settings {{shouldIdent(schedule,sortedSchedules[i-1])? 'ms-4' : ''}}">
+  <div
+    class="card bg-body-tertiary mt-2 mb-2  no-changed-settings {{shouldIdent(schedule,sortedSchedules[i-1])? 'ms-4' : ''}}">
     <div class="card-header">
       <div class="d-flex justify-content-between">
         <div (click)="showDetails[schedule.name]=!showDetails[schedule.name]">
@@ -175,6 +176,14 @@
                            [(ngModel)]="schedule.config[configEntry.id]" required>
                   </ng-container>
 
+                  <ng-container *ngSwitchCase="'email'">
+                    <input type="email" class="form-control" [name]="configEntry.id+'_'+i"
+                           [id]="configEntry.id+'_'+i"
+                           placeholder="adress@domain.com"
+                           (ngModelChange)="onChange($event)"
+                           [(ngModel)]="schedule.config[configEntry.id]" required>
+                  </ng-container>
+
                   <ng-container *ngSwitchCase="'number'">
                     <input type="number" class="form-control" [name]="configEntry.id+'_'+i"
                            [id]="configEntry.id+'_'+i"
@@ -188,6 +197,54 @@
                            [id]="configEntry.id+'_'+i"
                            (ngModelChange)="setNumberArray(schedule.config,configEntry.id,$event); onChange($event);"
                            [ngModel]="getNumberArray($any(schedule.config),configEntry.id)" required>
+                  </ng-container>
+
+                  <app-gallery-search-field
+                    *ngSwitchCase="'SearchQuery'"
+                    [(ngModel)]="schedule.config[configEntry.id]"
+                    [id]="configEntry.id+'_'+i"
+                    [name]="configEntry.id+'_'+i"
+                    (change)="onChange($event)"
+                    placeholder="Search Query">
+                  </app-gallery-search-field>
+
+
+                  <ng-container *ngSwitchCase="'sort-array'">
+                    <ng-container *ngFor="let _ of AsSortArray(schedule.config[configEntry.id]); let j=index">
+                      <div class="row col-12 mt-1 m-0 p-0">
+                        <div class="col p-0">
+                          <select
+                            [id]="configEntry.id+'_'+i+'_'+j"
+                            [name]="configEntry.id+'_'+i+'_'+j"
+                            (ngModelChange)="onChange($event)"
+                            class="form-select" [(ngModel)]="AsSortArray(schedule.config[configEntry.id])[j]">
+                            <option *ngFor="let opt of SortingMethods" [ngValue]="opt.key">{{opt.value}}
+                            </option>
+                          </select>
+
+
+                        </div>
+                        <ng-container>
+                          <div class="col-auto pe-0">
+                            <button class="btn btn-secondary float-end"
+                                    [id]="'list_btn_'+configEntry.id+'_'+i+'_'+j"
+                                    [name]="'list_btn_'+configEntry.id+'_'+i+'_'+j"
+                                    (click)="removeSorting(schedule.config[configEntry.id],j)"><span
+                              class="oi oi-trash"></span>
+                            </button>
+                          </div>
+                        </ng-container>
+                      </div>
+                    </ng-container>
+                    <ng-container>
+                      <div class="col-12 p-0">
+                        <button class="btn btn-primary mt-1 float-end"
+                                [id]="'btn_add_'+configEntry.id+'_'+i"
+                                [name]="'btn_add_'+configEntry.id+'_'+i"
+                                (click)="AddNewSorting(schedule.config[configEntry.id])" i18n>+ Add
+                        </button>
+                      </div>
+                    </ng-container>
                   </ng-container>
                 </ng-container>
               </div>

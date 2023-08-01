@@ -35,6 +35,7 @@ import {AutoCompleteItem} from '../../../../../src/common/entities/AutoCompleteI
 import {Config} from '../../../../../src/common/config/private/Config';
 import {SearchQueryParser} from '../../../../../src/common/SearchQueryParser';
 import {FileDTO} from '../../../../../src/common/entities/FileDTO';
+import {SortingMethods} from '../../../../../src/common/entities/SortingMethods';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const deepEqualInAnyOrder = require('deep-equal-in-any-order');
@@ -1405,14 +1406,14 @@ describe('SearchManager', (sqlHelper: DBTestHelper) => {
     } as TextSearch;
 
     // eslint-disable-next-line
-    expect(await sm.getRandomPhoto(query)).to.not.exist;
+    expect(await sm.getNMedia(query, [SortingMethods.random], 1, true)).to.deep.equalInAnyOrder([]);
 
     query = ({
       text: 'wookiees',
       matchType: TextSearchQueryMatchTypes.exact_match,
       type: SearchQueryTypes.keyword
     } as TextSearch);
-    expect(Utils.clone(await sm.getRandomPhoto(query))).to.deep.equalInAnyOrder(searchifyMedia(pFaceLess));
+    expect(Utils.clone(await sm.getNMedia(query, [SortingMethods.random], 1, true))).to.deep.equalInAnyOrder([searchifyMedia(pFaceLess)]);
   });
 
 });

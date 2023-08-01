@@ -27,7 +27,6 @@ export class SettingsMWs {
     try {
       let settings = req.body.settings; // Top level settings JSON
       const settingsPath: string = req.body.settingsPath; // Name of the top level settings
-
       const transformer = await Config.original();
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore

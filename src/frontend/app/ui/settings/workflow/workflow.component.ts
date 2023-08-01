@@ -19,6 +19,8 @@ import {
   ScheduledJobTriggerConfig
 } from '../../../../../common/config/private/PrivateConfig';
 import {ControlValueAccessor, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator} from '@angular/forms';
+import {enumToTranslatedArray} from '../../EnumTranslations';
+import {SortingMethods} from '../../../../../common/entities/SortingMethods';
 
 @Component({
   selector: 'app-settings-workflow',
@@ -60,6 +62,9 @@ export class WorkflowComponent implements ControlValueAccessor, Validator, OnIni
     },
     allowParallelRun: false,
   };
+
+  SortingMethods = enumToTranslatedArray(SortingMethods);
+
 
   error: string;
 
@@ -278,4 +283,17 @@ export class WorkflowComponent implements ControlValueAccessor, Validator, OnIni
     this.onTouched = fn;
   }
 
+
+
+  AsSortArray(configElement: string | number | string[] | number[]): SortingMethods[] {
+    return configElement as SortingMethods[];
+  }
+
+  removeSorting(configElement: string | number | string[] | number[], j: number): void {
+    (configElement as SortingMethods[]).splice(j);
+  }
+
+  AddNewSorting(configElement: string | number | string[] | number[]): void {
+    (configElement as SortingMethods[]).push(SortingMethods.ascDate)
+  }
 }

@@ -6,6 +6,8 @@ import {ConfigClass, ConfigClassBuilder} from 'typeconfig/node';
 import {IConfigClass} from 'typeconfig/common';
 import {PasswordHelper} from '../../../backend/model/PasswordHelper';
 import {TAGS} from '../public/ClientConfig';
+import {ServerEnvironment} from '../../../backend/Environment';
+import {EmailMessagingType} from './MessagingConfig';
 
 declare const process: any;
 
@@ -16,7 +18,8 @@ const isTesting = ['afterEach', 'after', 'beforeEach', 'before', 'describe', 'it
   .every((fn) => (global as any)[fn] instanceof Function);
 
 @ConfigClass<IConfigClass<TAGS> & ServerConfig>({
-  configPath: path.join(__dirname, !isTesting ? './../../../../config.json' : './../../../../test/backend/assets/config.json'),
+  configPath: path.join(__dirname, !isTesting ? './../../../../config.json' : './../../../../test/backend/tmp/config.json'),
+  crateConfigPathIfNotExists: isTesting,
   saveIfNotExist: true,
   attachDescription: true,
   enumsAsString: true,
@@ -79,6 +82,12 @@ export class PrivateConfigClass extends ServerConfig {
       require('../../../../package.json').buildCommitHash;
     this.Environment.upTime = upTime;
     this.Environment.isDocker = !!process.env.PI_DOCKER;
+    if (typeof ServerEnvironment.sendMailAvailable !== 'undefined') {
+      this.Environment.sendMailAvailable = ServerEnvironment.sendMailAvailable;
+      if (!this.Environment.sendMailAvailable) { //onNewValue is not yet available as a callback
+        this.Messaging.Email.type = EmailMessagingType.SMTP;
+      }
+    }
   }
 
   async original(): Promise<PrivateConfigClass & IConfigClass> {

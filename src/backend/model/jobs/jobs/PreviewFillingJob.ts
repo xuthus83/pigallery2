@@ -1,11 +1,6 @@
-import { ObjectManagers } from '../../ObjectManagers';
-import {
-  ConfigTemplateEntry,
-  DefaultsJobs,
-} from '../../../../common/entities/job/JobDTO';
-import { Job } from './Job';
-import { Config } from '../../../../common/config/private/Config';
-import { DatabaseType } from '../../../../common/config/private/PrivateConfig';
+import {ObjectManagers} from '../../ObjectManagers';
+import {ConfigTemplateEntry, DefaultsJobs,} from '../../../../common/entities/job/JobDTO';
+import {Job} from './Job';
 
 export class PreviewFillingJob extends Job {
   public readonly Name = DefaultsJobs[DefaultsJobs['Preview Filling']];
@@ -18,7 +13,7 @@ export class PreviewFillingJob extends Job {
   }
 
   protected async init(): Promise<void> {
-    // abstract function
+    this.status = 'Persons';
   }
 
   protected async step(): Promise<boolean> {

@@ -115,6 +115,8 @@ export class JobProgressComponent implements OnDestroy, OnChanges {
         return $localize`interrupted`;
       case JobProgressStates.finished:
         return $localize`finished`;
+      case JobProgressStates.failed:
+        return $localize`failed`;
       default:
         return 'unknown state';
     }
