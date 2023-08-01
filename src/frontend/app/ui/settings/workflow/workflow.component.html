@@ -176,12 +176,12 @@
                            [(ngModel)]="schedule.config[configEntry.id]" required>
                   </ng-container>
 
-                  <ng-container *ngSwitchCase="'email'">
-                    <input type="email" class="form-control" [name]="configEntry.id+'_'+i"
+                  <ng-container *ngSwitchCase="'string-array'">
+                    <input type="text" class="form-control"
+                           [name]="configEntry.id+'_'+i"
                            [id]="configEntry.id+'_'+i"
-                           placeholder="adress@domain.com"
-                           (ngModelChange)="onChange($event)"
-                           [(ngModel)]="schedule.config[configEntry.id]" required>
+                           (ngModelChange)="setEmailArray(schedule.config,configEntry.id,$event); onChange($event);"
+                           [ngModel]="getArray($any(schedule.config),configEntry.id)" required>
                   </ng-container>
 
                   <ng-container *ngSwitchCase="'number'">
@@ -196,7 +196,7 @@
                            [name]="configEntry.id+'_'+i"
                            [id]="configEntry.id+'_'+i"
                            (ngModelChange)="setNumberArray(schedule.config,configEntry.id,$event); onChange($event);"
-                           [ngModel]="getNumberArray($any(schedule.config),configEntry.id)" required>
+                           [ngModel]="getArray($any(schedule.config),configEntry.id)" required>
                   </ng-container>
 
                   <app-gallery-search-field

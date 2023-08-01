@@ -42,7 +42,6 @@ export class EmailMediaMessenger {
   }
 
   public async sendMedia(mailSettings: {
-    from: string,
     to: string,
     subject: string,
     text: string
@@ -84,7 +83,7 @@ export class EmailMediaMessenger {
     }
 
     return await this.transporter.sendMail({
-      from: mailSettings.from,
+      from: Config.Messaging.Email.emailFrom,
       to: mailSettings.to,
       subject: mailSettings.subject,
       html: htmlStart + htmlMiddle + htmlEnd,
