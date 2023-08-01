@@ -179,6 +179,18 @@ export class GallerySortingService {
                       (b.metadata.rating || 0) - (a.metadata.rating || 0)
                   );
                   break;
+                case SortingMethods.ascPersonCount:
+                  c.media.sort(
+                    (a: PhotoDTO, b: PhotoDTO) =>
+                      (a.metadata?.faces?.length || 0) - (b.metadata?.faces?.length || 0)
+                  );
+                  break;
+                case SortingMethods.descPersonCount:
+                  c.media.sort(
+                    (a: PhotoDTO, b: PhotoDTO) =>
+                      (b.metadata?.faces?.length || 0) - (a.metadata?.faces?.length || 0)
+                  );
+                  break;
                 case SortingMethods.random:
                   this.rndService.setSeed(c.media.length);
                   c.media

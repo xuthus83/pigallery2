@@ -16,8 +16,10 @@ export class SearchQueryParserService {
     to: 'before',
     landscape: 'landscape',
     maxRating: 'max-rating',
-    maxResolution: 'max-resolution',
     minRating: 'min-rating',
+    minPersonCount: 'min-persons',
+    maxPersonCount: 'max-persons',
+    maxResolution: 'max-resolution',
     minResolution: 'min-resolution',
     orientation: 'orientation',
 

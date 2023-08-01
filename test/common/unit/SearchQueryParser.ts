@@ -5,8 +5,9 @@ import {
   DatePatternSearch,
   DistanceSearch,
   FromDateSearch,
+  MaxPersonCountSearch,
   MaxRatingSearch,
-  MaxResolutionSearch,
+  MaxResolutionSearch, MinPersonCountSearch,
   MinRatingSearch,
   MinResolutionSearch,
   OrientationSearch,
@@ -97,6 +98,12 @@ describe('SearchQueryParser', () => {
       check({type: SearchQueryTypes.max_rating, value: 1} as MaxRatingSearch);
       check({type: SearchQueryTypes.min_rating, value: 10, negate: true} as MinRatingSearch);
       check({type: SearchQueryTypes.max_rating, value: 1, negate: true} as MaxRatingSearch);
+    });
+    it('Person count search', () => {
+      check({type: SearchQueryTypes.min_person_count, value: 10} as MinPersonCountSearch);
+      check({type: SearchQueryTypes.max_person_count, value: 1} as MaxPersonCountSearch);
+      check({type: SearchQueryTypes.min_person_count, value: 10, negate: true} as MinPersonCountSearch);
+      check({type: SearchQueryTypes.max_person_count, value: 1, negate: true} as MaxPersonCountSearch);
     });
     it('Resolution search', () => {
       check({type: SearchQueryTypes.min_resolution, value: 10} as MinResolutionSearch);

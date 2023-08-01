@@ -43,6 +43,8 @@ EnumTranslations[SortingMethods[SortingMethods.ascName]] = $localize`ascending n
 EnumTranslations[SortingMethods[SortingMethods.descRating]] = $localize`descending rating`;
 EnumTranslations[SortingMethods[SortingMethods.ascRating]] = $localize`ascending rating`;
 EnumTranslations[SortingMethods[SortingMethods.random]] = $localize`random`;
+EnumTranslations[SortingMethods[SortingMethods.ascPersonCount]] = $localize`ascending persons`;
+EnumTranslations[SortingMethods[SortingMethods.descPersonCount]] = $localize`descending persons`;
 
 
 EnumTranslations[NavigationLinkTypes[NavigationLinkTypes.url]] = $localize`Url`;

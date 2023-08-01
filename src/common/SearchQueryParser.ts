@@ -4,10 +4,6 @@ import {
   DatePatternSearch,
   DistanceSearch,
   FromDateSearch,
-  MaxRatingSearch,
-  MaxResolutionSearch,
-  MinRatingSearch,
-  MinResolutionSearch,
   NegatableSearchQuery,
   OrientationSearch,
   ORSearchQuery,
@@ -41,6 +37,8 @@ export interface QueryKeywords {
   minResolution: string;
   maxRating: string;
   minRating: string;
+  maxPersonCount: string;
+  minPersonCount: string;
   NSomeOf: string;
   someOf: string;
   or: string;
@@ -65,8 +63,10 @@ export const defaultQueryKeywords: QueryKeywords = {
   to: 'before',
 
   maxRating: 'max-rating',
-  maxResolution: 'max-resolution',
   minRating: 'min-rating',
+  maxPersonCount: 'max-persons',
+  minPersonCount: 'min-persons',
+  maxResolution: 'max-resolution',
   minResolution: 'min-resolution',
 
   kmFrom: 'km-from',
@@ -303,38 +303,28 @@ export class SearchQueryParser {
       } as ToDateSearch;
     }
 
-    if (kwStartsWith(str, this.keywords.minRating)) {
-      return {
-        type: SearchQueryTypes.min_rating,
-        value: parseInt(str.substring(str.indexOf(':') + 1), 10),
-        ...(str.startsWith(this.keywords.minRating + '!:') && {negate: true}), // only add if the value is true
-      } as MinRatingSearch;
+    const addValueRangeParser = (matcher: string, type: SearchQueryTypes): RangeSearch | undefined => {
+      if (kwStartsWith(str, matcher)) {
+        return {
+          type: type,
+          value: parseInt(str.substring(str.indexOf(':') + 1), 10),
+          ...(str.startsWith(matcher + '!:') && {negate: true}), // only add if the value is true
+        } as RangeSearch;
+      }
+    };
+
+    const range = addValueRangeParser(this.keywords.minRating, SearchQueryTypes.min_rating) ||
+      addValueRangeParser(this.keywords.maxRating, SearchQueryTypes.max_rating) ||
+      addValueRangeParser(this.keywords.minResolution, SearchQueryTypes.min_resolution) ||
+      addValueRangeParser(this.keywords.maxResolution, SearchQueryTypes.max_resolution) ||
+      addValueRangeParser(this.keywords.minPersonCount, SearchQueryTypes.min_person_count) ||
+      addValueRangeParser(this.keywords.maxPersonCount, SearchQueryTypes.max_person_count);
+
+    if (range) {
+      return range;
     }
-    if (kwStartsWith(str, this.keywords.maxRating)) {
-      return {
-        type: SearchQueryTypes.max_rating,
-        value: parseInt(str.substring(str.indexOf(':') + 1), 10),
-        ...(str.startsWith(this.keywords.maxRating + '!:') && {negate: true}), // only add if the value is true
-      } as MaxRatingSearch;
-    }
-    if (kwStartsWith(str, this.keywords.minResolution)) {
-      return {
-        type: SearchQueryTypes.min_resolution,
-        value: parseInt(str.substring(str.indexOf(':') + 1), 10),
-        ...(str.startsWith(this.keywords.minResolution + '!:') && {
-          negate: true,
-        }), // only add if the value is true
-      } as MinResolutionSearch;
-    }
-    if (kwStartsWith(str, this.keywords.maxResolution)) {
-      return {
-        type: SearchQueryTypes.max_resolution,
-        value: parseInt(str.substring(str.indexOf(':') + 1), 10),
-        ...(str.startsWith(this.keywords.maxResolution + '!:') && {
-          negate: true,
-        }), // only add if the value is true
-      } as MaxResolutionSearch;
-    }
+
+
     if (new RegExp('^\\d*-' + this.keywords.kmFrom + '!?:').test(str)) {
       let from = str.slice(
         new RegExp('^\\d*-' + this.keywords.kmFrom + '!?:').exec(str)[0].length
@@ -523,6 +513,22 @@ export class SearchQueryParser {
       case SearchQueryTypes.max_rating:
         return (
           this.keywords.maxRating +
+          colon +
+          (isNaN((query as RangeSearch).value)
+            ? ''
+            : (query as RangeSearch).value)
+        );
+      case SearchQueryTypes.min_person_count:
+        return (
+          this.keywords.minPersonCount +
+          colon +
+          (isNaN((query as RangeSearch).value)
+            ? ''
+            : (query as RangeSearch).value)
+        );
+      case SearchQueryTypes.max_person_count:
+        return (
+          this.keywords.maxPersonCount +
           colon +
           (isNaN((query as RangeSearch).value)
             ? ''

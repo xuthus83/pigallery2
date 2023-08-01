@@ -35,7 +35,7 @@ export class TopPickSendJob extends Job<{
       type: 'sort-array',
       name: backendTexts.sortBy.name,
       description: backendTexts.sortBy.description,
-      defaultValue: [SortingMethods.descRating],
+      defaultValue: [SortingMethods.descRating, SortingMethods.descPersonCount],
     }, {
       id: 'pickAmount',
       type: 'number',
@@ -48,7 +48,7 @@ export class TopPickSendJob extends Job<{
       name: backendTexts.emailTo.name,
       description: backendTexts.emailTo.description,
       defaultValue: [],
-    },  {
+    }, {
       id: 'emailSubject',
       type: 'string',
       name: backendTexts.emailSubject.name,

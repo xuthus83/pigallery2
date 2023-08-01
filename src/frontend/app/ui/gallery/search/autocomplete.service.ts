@@ -29,6 +29,8 @@ export class AutoCompleteService {
           k !== this.searchQueryParserService.keywords.NSomeOf &&
           k !== this.searchQueryParserService.keywords.minRating &&
           k !== this.searchQueryParserService.keywords.maxRating &&
+          k !== this.searchQueryParserService.keywords.minPersonCount &&
+          k !== this.searchQueryParserService.keywords.maxPersonCount &&
           k !== this.searchQueryParserService.keywords.every_week &&
           k !== this.searchQueryParserService.keywords.every_month &&
           k !== this.searchQueryParserService.keywords.every_year &&
@@ -90,6 +92,11 @@ export class AutoCompleteService {
       = SearchQueryTypes.min_rating;
     this.noACKeywordsMap[this.searchQueryParserService.keywords.maxRating]
       = SearchQueryTypes.max_rating;
+
+    this.noACKeywordsMap[this.searchQueryParserService.keywords.minPersonCount]
+      = SearchQueryTypes.min_person_count;
+    this.noACKeywordsMap[this.searchQueryParserService.keywords.maxPersonCount]
+      = SearchQueryTypes.max_person_count;
 
     this.noACKeywordsMap[this.searchQueryParserService.keywords.minResolution]
       = SearchQueryTypes.min_resolution;
@@ -321,25 +328,33 @@ export class AutoCompleteService {
       }
     }
 
-    // only showing rating recommendations of the full query is typed
-    const mrKey = this.searchQueryParserService.keywords.minRating + ':';
-    const mxrKey = this.searchQueryParserService.keywords.maxRating + ':';
-    if (text.current.toLowerCase().startsWith(mrKey)) {
-      for (let i = 1; i <= 5; ++i) {
-        ret.push(generateMatch(mrKey + i));
+
+    const addRangeAutoComp = (minStr: string, maxStr: string, minRange: number, maxRange: number) => {
+      // only showing rating recommendations of the full query is typed
+      const mrKey = minStr + ':';
+      const mxrKey = maxStr + ':';
+      if (text.current.toLowerCase().startsWith(mrKey)) {
+        for (let i = minRange; i <= maxRange; ++i) {
+          ret.push(generateMatch(mrKey + i));
+        }
+      } else if (mrKey.startsWith(text.current.toLowerCase())) {
+        ret.push(generateMatch(mrKey));
       }
-    } else if (mrKey.startsWith(text.current.toLowerCase())) {
-      ret.push(generateMatch(mrKey));
-    }
 
 
-    if (text.current.toLowerCase().startsWith(mxrKey)) {
-      for (let i = 1; i <= 5; ++i) {
-        ret.push(generateMatch(mxrKey + i));
+      if (text.current.toLowerCase().startsWith(mxrKey)) {
+        for (let i = minRange; i <= maxRange; ++i) {
+          ret.push(generateMatch(mxrKey + i));
+        }
+      } else if (mxrKey.startsWith(text.current.toLowerCase())) {
+        ret.push(generateMatch(mxrKey));
       }
-    } else if (mxrKey.startsWith(text.current.toLowerCase())) {
-      ret.push(generateMatch(mxrKey));
-    }
+    };
+    addRangeAutoComp(this.searchQueryParserService.keywords.minRating,
+      this.searchQueryParserService.keywords.maxRating, 1, 5);
+    addRangeAutoComp(this.searchQueryParserService.keywords.minPersonCount,
+      this.searchQueryParserService.keywords.maxPersonCount, 0, 9);
+
 
     // Date patterns
     if (new RegExp('^' +

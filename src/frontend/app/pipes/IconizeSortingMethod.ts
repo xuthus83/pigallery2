@@ -9,6 +9,10 @@ export class IconizeSortingMethod implements PipeTransform {
         return '<span class="oi oi-sort-ascending"></span><span class="oi oi-star text-bold"></span>';
       case SortingMethods.descRating:
         return '<span class="oi oi-sort-descending"></span><span class="oi oi-star text-bold"></span>';
+      case SortingMethods.ascPersonCount:
+        return '<span class="oi oi-sort-ascending"></span><span class="oi oi-person text-bold"></span>';
+      case SortingMethods.descPersonCount:
+        return '<span class="oi oi-sort-descending"></span><span class="oi oi-person text-bold"></span>';
       case SortingMethods.ascName:
         return '<span class="oi oi-sort-ascending"></span><strong>A</strong>';
       case SortingMethods.descName:

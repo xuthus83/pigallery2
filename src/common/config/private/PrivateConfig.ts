@@ -898,6 +898,7 @@ export class ServerPreviewConfig {
   Sorting: SortingMethods[] = [
     SortingMethods.descRating,
     SortingMethods.descDate,
+    SortingMethods.descPersonCount,
   ];
 }
 

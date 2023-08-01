@@ -13,6 +13,8 @@ export const PG2ConfMap = {
     '.order_descending_rating.pg2conf': SortingMethods.descRating,
     '.order_ascending_rating.pg2conf': SortingMethods.ascRating,
     '.order_random.pg2conf': SortingMethods.random,
+    '.order_descending_person_count.pg2conf': SortingMethods.descPersonCount,
+    '.order_ascending_person_count.pg2conf': SortingMethods.descPersonCount,
   },
 };
 

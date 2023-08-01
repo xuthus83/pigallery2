@@ -14,10 +14,14 @@ export enum SearchQueryTypes {
   max_rating,
   min_resolution,
   max_resolution,
+  min_person_count,
+  max_person_count,
 
-  distance,
+  distance = 50,
   orientation,
-  date_pattern,
+
+
+  date_pattern = 60,
 
   // TEXT search types
   any_text = 100,
@@ -208,6 +212,17 @@ export interface MinRatingSearch extends RangeSearch {
 
 export interface MaxRatingSearch extends RangeSearch {
   type: SearchQueryTypes.max_rating;
+  value: number;
+}
+
+
+export interface MinPersonCountSearch extends RangeSearch {
+  type: SearchQueryTypes.min_person_count;
+  value: number;
+}
+
+export interface MaxPersonCountSearch extends RangeSearch {
+  type: SearchQueryTypes.max_person_count;
   value: number;
 }
 

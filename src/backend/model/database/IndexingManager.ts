@@ -367,6 +367,7 @@ export class IndexingManager {
           ),
         ];
       }
+      (media[i].metadata as PhotoMetadataEntity).personsLength = (media[i].metadata as PhotoMetadataEntity)?.persons?.length || 0;
 
 
       if (mediaItem == null) {

@@ -9,8 +9,10 @@ import {
   DatePatternSearch,
   DistanceSearch,
   FromDateSearch,
+  MaxPersonCountSearch,
   MaxRatingSearch,
   MaxResolutionSearch,
+  MinPersonCountSearch,
   MinRatingSearch,
   MinResolutionSearch,
   OrientationSearch,
@@ -1093,6 +1095,83 @@ describe('SearchManager', (sqlHelper: DBTestHelper) => {
       } as SearchResultDTO));
     });
 
+
+    it('should search person count', async () => {
+      const sm = new SearchManager();
+
+      let query: MinPersonCountSearch | MaxPersonCountSearch = {value: 0, type: SearchQueryTypes.max_person_count} as MaxPersonCountSearch;
+
+
+      expect(Utils.clone(await sm.search(query)))
+        .to.deep.equalInAnyOrder(removeDir({
+        searchQuery: query,
+        directories: [],
+        media: [pFaceLess, v],
+        metaFile: [],
+        resultOverflow: false
+      } as SearchResultDTO));
+
+      query = ({value: 20, type: SearchQueryTypes.max_person_count} as MaxPersonCountSearch);
+      expect(Utils.clone(await sm.search(query)))
+        .to.deep.equalInAnyOrder(removeDir({
+        searchQuery: query,
+        directories: [],
+        media: [p, p2, pFaceLess, p4, v],
+        metaFile: [],
+        resultOverflow: false
+      } as SearchResultDTO));
+
+      query = ({value: 20, negate: true, type: SearchQueryTypes.max_person_count} as MaxPersonCountSearch);
+      expect(Utils.clone(await sm.search(query)))
+        .to.deep.equalInAnyOrder(removeDir({
+        searchQuery: query,
+        directories: [],
+        media: [],
+        metaFile: [],
+        resultOverflow: false
+      } as SearchResultDTO));
+
+
+      query = ({value: 4, type: SearchQueryTypes.max_person_count} as MaxPersonCountSearch);
+      expect(Utils.clone(await sm.search(query)))
+        .to.deep.equalInAnyOrder(removeDir({
+        searchQuery: query,
+        directories: [],
+        media: [p2, p4, pFaceLess, v],
+        metaFile: [],
+        resultOverflow: false
+      } as SearchResultDTO));
+
+      query = ({value: 2, type: SearchQueryTypes.min_person_count} as MinPersonCountSearch);
+      expect(Utils.clone(await sm.search(query)))
+        .to.deep.equalInAnyOrder(removeDir({
+        searchQuery: query,
+        directories: [],
+        media: [p, p2, p4],
+        metaFile: [],
+        resultOverflow: false
+      } as SearchResultDTO));
+
+      query = ({value: 6, type: SearchQueryTypes.min_person_count} as MinPersonCountSearch);
+      expect(Utils.clone(await sm.search(query)))
+        .to.deep.equalInAnyOrder(removeDir({
+        searchQuery: query,
+        directories: [],
+        media: [p],
+        metaFile: [],
+        resultOverflow: false
+      } as SearchResultDTO));
+
+      query = ({value: 2, negate: true, type: SearchQueryTypes.min_person_count} as MinPersonCountSearch);
+      expect(Utils.clone(await sm.search(query)))
+        .to.deep.equalInAnyOrder(removeDir({
+        searchQuery: query,
+        directories: [],
+        media: [v, pFaceLess],
+        metaFile: [],
+        resultOverflow: false
+      } as SearchResultDTO));
+    });
 
     it('should search resolution', async () => {
       const sm = new SearchManager();

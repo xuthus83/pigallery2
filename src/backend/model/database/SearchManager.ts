@@ -13,9 +13,9 @@ import {
   DatePatternFrequency,
   DatePatternSearch,
   DistanceSearch,
-  FromDateSearch,
+  FromDateSearch, MaxPersonCountSearch,
   MaxRatingSearch,
-  MaxResolutionSearch,
+  MaxResolutionSearch, MinPersonCountSearch,
   MinRatingSearch,
   MinResolutionSearch,
   OrientationSearch,
@@ -379,6 +379,12 @@ export class SearchManager {
         case SortingMethods.ascName:
           query.addOrderBy('media.name', 'ASC');
           break;
+        case SortingMethods.descPersonCount:
+          query.addOrderBy('media.metadata.personsLength', 'DESC');
+          break;
+        case SortingMethods.ascPersonCount:
+          query.addOrderBy('media.metadata.personsLength', 'ASC');
+          break;
         case SortingMethods.random:
           if (Config.Database.type === DatabaseType.mysql) {
             query.groupBy('RAND(), media.id');
@@ -633,6 +639,52 @@ export class SearchManager {
             textParam['max' + queryId] = (query as MaxRatingSearch).value;
             q.where(
               `media.metadata.rating ${relation}  :max${queryId}`,
+              textParam
+            );
+          }
+          return q;
+        });
+
+      case SearchQueryTypes.min_person_count:
+        if (directoryOnly) {
+          throw new Error('not supported in directoryOnly mode');
+        }
+        return new Brackets((q): unknown => {
+          if (typeof (query as MinPersonCountSearch).value === 'undefined') {
+            throw new Error(
+              'Invalid search query: Person count Query should contain minvalue'
+            );
+          }
+
+          const relation = (query as TextSearch).negate ? '<' : '>=';
+
+          const textParam: { [key: string]: unknown } = {};
+          textParam['min' + queryId] = (query as MinPersonCountSearch).value;
+          q.where(
+            `media.metadata.personsLength ${relation}  :min${queryId}`,
+            textParam
+          );
+
+          return q;
+        });
+      case SearchQueryTypes.max_person_count:
+        if (directoryOnly) {
+          throw new Error('not supported in directoryOnly mode');
+        }
+        return new Brackets((q): unknown => {
+          if (typeof (query as MaxPersonCountSearch).value === 'undefined') {
+            throw new Error(
+              'Invalid search query: Person count Query should contain max value'
+            );
+          }
+
+          const relation = (query as TextSearch).negate ? '>' : '<=';
+
+          if (typeof (query as MaxRatingSearch).value !== 'undefined') {
+            const textParam: { [key: string]: unknown } = {};
+            textParam['max' + queryId] = (query as MaxPersonCountSearch).value;
+            q.where(
+              `media.metadata.personsLength ${relation}  :max${queryId}`,
               textParam
             );
           }
