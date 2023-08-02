@@ -148,6 +148,9 @@ export class GalleryGridComponent
     this.clearRenderedPhotos();
     this.helperTime = window.setTimeout((): void => {
       this.renderPhotos();
+      if (this.delayedRenderUpToPhoto) {
+        this.renderUpToMedia(this.delayedRenderUpToPhoto);
+      }
     }, 0);
     this.isAfterViewInit = true;
   }
