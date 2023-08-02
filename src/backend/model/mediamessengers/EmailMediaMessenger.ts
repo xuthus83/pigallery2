@@ -57,6 +57,7 @@ export class EmailMediaMessenger {
       '  </tbody>\n' +
       '</table>';
     let htmlMiddle = '';
+    const numberOfColumns = media.length >= 6 ? 3 : 2;
     for (let i = 0; i < media.length; ++i) {
       const thPath = await this.getThumbnail(media[i]);
       const linkUrl = Utils.concatUrls(Config.Server.publicUrl, '/gallery/', encodeURIComponent(path.join(media[i].directory.path, media[i].directory.name))) +
@@ -71,15 +72,15 @@ export class EmailMediaMessenger {
         path: thPath,
         cid: 'img' + i
       });
-      if (i % 2 == 0) {
+      if (i % numberOfColumns == 0) {
         htmlMiddle += '<tr>';
       }
       htmlMiddle += '<td>\n' +
-        '      <a style="display: block;text-align: center;" href="' + linkUrl + '"><img alt="' + media[i].name + '" style="max-width: 200px; height: 150px" src="cid:img' + i + '"/></a>\n' +
+        '      <a style="display: block;text-align: center;" href="' + linkUrl + '"><img alt="' + media[i].name + '" style="max-width: 200px; max-height: 150px;  height:auto; width:auto;" src="cid:img' + i + '"/></a>\n' +
         caption +
         '    </td>\n';
 
-      if (i % 2 == 1 || i === media.length - 1) {
+      if (i % numberOfColumns == (numberOfColumns - 1) || i === media.length - 1) {
         htmlMiddle += '</tr>';
       }
     }
