@@ -58,7 +58,7 @@ export class EmailMediaMessenger {
     let htmlMiddle = '';
     for (let i = 0; i < media.length; ++i) {
       const thPath = await this.getThumbnail(media[i]);
-      const linkUrl = Utils.concatUrls(Config.Server.publicUrl, '/gallery/', path.join(media[i].directory.path, media[i].directory.name));
+      const linkUrl = Utils.concatUrls(Config.Server.publicUrl, '/gallery/',encodeURIComponent(path.join(media[i].directory.path, media[i].directory.name)));
       const location = (media[i].metadata as PhotoMetadata).positionData?.country ?
         (media[i].metadata as PhotoMetadata).positionData?.country :
         ((media[i].metadata as PhotoMetadata).positionData?.city ?
