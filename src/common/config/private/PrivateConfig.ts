@@ -183,7 +183,6 @@ export class UserConfig {
 
   @ConfigProperty<string, ServerConfig, TAGS>({
     type: 'string',
-    constraint: {assert: (val: string, config) => !!val, assertReason: 'Password cant be empty'},
     tags:
       {
         name: $localize`Password`,
@@ -193,6 +192,7 @@ export class UserConfig {
     description: $localize`Unencrypted, temporary password. App will encrypt it and delete this.`
   })
   password: string;
+
   @ConfigProperty({
     tags:
       {

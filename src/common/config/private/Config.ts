@@ -56,6 +56,9 @@ const isTesting = ['afterEach', 'after', 'beforeEach', 'before', 'describe', 'it
         uc.encrypted = !!uc.encryptedPassword;
         changed = true;
       }
+      if (!uc.encrypted && !uc.password) {
+        throw new Error('Password error for enforced user: ' + uc.name);
+      }
     }
     if (changed) {
       config.saveSync();
