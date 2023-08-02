@@ -77,11 +77,10 @@ export abstract class FileJob<S extends { indexedOnly?: boolean } = { indexedOnl
     }
 
 
-
     if (!this.config.indexedOnly) {
       if (this.directoryQueue.length > 0) {
         await this.loadADirectoryFromDisk();
-        return true
+        return true;
       } else if (this.fileQueue.length > 0) {
         this.Progress.Left = this.fileQueue.length;
       }
@@ -138,6 +137,11 @@ export abstract class FileJob<S extends { indexedOnly?: boolean } = { indexedOnl
     DirectoryDTOUtils.addReferences(scanned as DirectoryBaseDTO);
     if (this.scanFilter.noPhoto !== true || this.scanFilter.noVideo !== true) {
       const scannedAndFiltered = await this.filterMediaFiles(scanned.media);
+      const skipped = scanned.media.length - scannedAndFiltered.length;
+      if (skipped > 0) {
+        this.Progress.log('batch skipping: ' + skipped);
+        this.Progress.Skipped += skipped;
+      }
       for (const item of scannedAndFiltered) {
         this.fileQueue.push(
           path.join(
@@ -151,6 +155,11 @@ export abstract class FileJob<S extends { indexedOnly?: boolean } = { indexedOnl
     }
     if (this.scanFilter.noMetaFile !== true) {
       const scannedAndFiltered = await this.filterMetaFiles(scanned.metaFile);
+      const skipped = scanned.metaFile.length - scannedAndFiltered.length;
+      if (skipped > 0) {
+        this.Progress.log('batch skipping: ' + skipped);
+        this.Progress.Skipped += skipped;
+      }
       for (const item of scannedAndFiltered) {
         this.fileQueue.push(
           path.join(
@@ -203,6 +212,11 @@ export abstract class FileJob<S extends { indexedOnly?: boolean } = { indexedOnl
       hasMoreFile.media = result.length > 0;
       this.DBProcessing.mediaLoaded += result.length;
       const scannedAndFiltered = await this.filterMediaFiles(result);
+      const skipped = result.length - scannedAndFiltered.length;
+      if (skipped > 0) {
+        this.Progress.log('batch skipping: ' + skipped);
+        this.Progress.Skipped += skipped;
+      }
       for (const item of scannedAndFiltered) {
         this.fileQueue.push(
           path.join(
@@ -229,6 +243,11 @@ export abstract class FileJob<S extends { indexedOnly?: boolean } = { indexedOnl
       hasMoreFile.metafile = result.length > 0;
       this.DBProcessing.mediaLoaded += result.length;
       const scannedAndFiltered = await this.filterMetaFiles(result);
+      const skipped = result.length - scannedAndFiltered.length;
+      if (skipped > 0) {
+        this.Progress.log('batch skipping: ' + skipped);
+        this.Progress.Skipped += skipped;
+      }
       for (const item of scannedAndFiltered) {
         this.fileQueue.push(
           path.join(
@@ -266,16 +285,16 @@ export abstract class FileJob<S extends { indexedOnly?: boolean } = { indexedOnl
         .getRepository(usedEntity)
         .createQueryBuilder('media')
         .getCount();
-
-      if (!this.scanFilter.noMetaFile) {
-
-        count += await connection
-          .getRepository(FileEntity)
-          .createQueryBuilder('file')
-          .getCount();
-
-      }
-      return count;
     }
+    if (!this.scanFilter.noMetaFile) {
+
+      count += await connection
+        .getRepository(FileEntity)
+        .createQueryBuilder('file')
+        .getCount();
+
+    }
+    return count;
+
   }
 }
