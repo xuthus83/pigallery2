@@ -31,6 +31,7 @@ import {SearchQueryDTO, SearchQueryTypes, TextSearch,} from '../../entities/Sear
 import {SortingMethods} from '../../entities/SortingMethods';
 import {UserRoles} from '../../entities/UserDTO';
 import {EmailMessagingType, MessagingConfig} from './MessagingConfig';
+import {MediaPickDTO} from '../../entities/MediaPickDTO';
 
 declare let $localize: (s: TemplateStringsArray) => string;
 
@@ -584,7 +585,7 @@ export class JobScheduleConfig implements JobScheduleDTO {
   @ConfigProperty()
   jobName: string;
   @ConfigProperty()
-  config: Record<string, string | number | string[] | number[]> = {};
+  config: Record<string, string | number | string[] | number[] | MediaPickDTO[]> = {};
   @ConfigProperty()
   allowParallelRun: boolean = false;
   @ConfigProperty({

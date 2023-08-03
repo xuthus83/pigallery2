@@ -1,4 +1,6 @@
 /* eslint-disable no-case-declarations */
+import {MediaPickDTO} from '../MediaPickDTO';
+
 export enum JobTriggerType {
   never = 1,
   scheduled = 2,
@@ -33,7 +35,7 @@ export interface AfterJobTrigger extends JobTrigger {
 export interface JobScheduleDTO {
   name: string;
   jobName: string;
-  config: Record<string, string | number | string[] | number[]>;
+  config: Record<string, string | number | string[] | number[] | MediaPickDTO[]>;
   allowParallelRun: boolean;
   trigger:
     | NeverJobTrigger

@@ -19,18 +19,10 @@ export class BackendtextService {
         return $localize`Index changes only`;
       case backendTexts.indexChangesOnly.description:
         return $localize`Only indexes a folder if it got changed.`;
-      case backendTexts.searchQuery.name:
-        return $localize`Search query`;
-      case backendTexts.searchQuery.description:
-        return $localize`Search query to list photos and videos.`;
-      case backendTexts.sortBy.name:
-        return $localize`Sorting`;
-      case backendTexts.sortBy.description:
-        return $localize`Sorts the photos and videos by this.`;
-      case backendTexts.pickAmount.name:
-        return $localize`Pick`;
-      case backendTexts.pickAmount.description:
-        return $localize`Number of photos and videos to pick.`;
+      case backendTexts.mediaPick.name:
+        return $localize`Media selectors`;
+      case backendTexts.mediaPick.description:
+        return $localize`Set these search queries to find photos and videos to email.`;
       case backendTexts.emailTo.name:
         return $localize`E-mail to`;
       case backendTexts.emailTo.description:

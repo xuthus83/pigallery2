@@ -2,16 +2,15 @@ import {ConfigTemplateEntry, DefaultsJobs,} from '../../../../common/entities/jo
 import {Job} from './Job';
 import {backendTexts} from '../../../../common/BackendTexts';
 import {SortingMethods} from '../../../../common/entities/SortingMethods';
-import {DatePatternFrequency, DatePatternSearch, SearchQueryDTO, SearchQueryTypes} from '../../../../common/entities/SearchQueryDTO';
+import {DatePatternFrequency, DatePatternSearch, SearchQueryTypes} from '../../../../common/entities/SearchQueryDTO';
 import {ObjectManagers} from '../../ObjectManagers';
 import {PhotoEntity} from '../../database/enitites/PhotoEntity';
 import {EmailMediaMessenger} from '../../mediamessengers/EmailMediaMessenger';
+import {MediaPickDTO} from '../../../../common/entities/MediaPickDTO';
 
 
 export class TopPickSendJob extends Job<{
-  searchQuery: SearchQueryDTO,
-  sortBy: SortingMethods[],
-  pickAmount: number,
+  mediaPick: MediaPickDTO[],
   emailTo: string,
   emailFrom: string,
   emailSubject: string,
@@ -21,27 +20,19 @@ export class TopPickSendJob extends Job<{
   public readonly Supported: boolean = true;
   public readonly ConfigTemplate: ConfigTemplateEntry[] = [
     {
-      id: 'searchQuery',
-      type: 'SearchQuery',
-      name: backendTexts.searchQuery.name,
-      description: backendTexts.searchQuery.description,
-      defaultValue: {
-        type: SearchQueryTypes.date_pattern,
-        daysLength: 7,
-        frequency: DatePatternFrequency.every_year
-      } as DatePatternSearch,
-    }, {
-      id: 'sortby',
-      type: 'sort-array',
-      name: backendTexts.sortBy.name,
-      description: backendTexts.sortBy.description,
-      defaultValue: [SortingMethods.descRating, SortingMethods.descPersonCount],
-    }, {
-      id: 'pickAmount',
-      type: 'number',
-      name: backendTexts.pickAmount.name,
-      description: backendTexts.pickAmount.description,
-      defaultValue: 5,
+      id: 'mediaPick',
+      type: 'MediaPickDTO-array',
+      name: backendTexts.mediaPick.name,
+      description: backendTexts.mediaPick.description,
+      defaultValue: [{
+        searchQuery: {
+          type: SearchQueryTypes.date_pattern,
+          daysLength: 7,
+          frequency: DatePatternFrequency.every_year
+        } as DatePatternSearch,
+        sortBy: [SortingMethods.descRating, SortingMethods.descPersonCount],
+        pick: 5
+      }] as MediaPickDTO[],
     }, {
       id: 'emailTo',
       type: 'string-array',
@@ -88,15 +79,26 @@ export class TopPickSendJob extends Job<{
   }
 
   private async stepListing(): Promise<boolean> {
-    this.Progress.log('Collecting Photos and videos to Send');
+    this.Progress.log('Collecting Photos and videos to Send.');
+    this.mediaList = [];
+    for (let i = 0; i < this.config.mediaPick.length; ++i) {
+      const media = await ObjectManagers.getInstance().SearchManager.getNMedia(this.config.mediaPick[i].searchQuery, this.config.mediaPick[i].sortBy, this.config.mediaPick[i].pick);
+      this.Progress.log('Find ' + media.length + ' photos and videos from ' + (i + 1) + '. load');
+      this.mediaList = this.mediaList.concat(media);
+    }
+
     this.Progress.Processed++;
-    this.mediaList = await ObjectManagers.getInstance().SearchManager.getNMedia(this.config.searchQuery, this.config.sortBy, this.config.pickAmount);
     // console.log(this.mediaList);
     return false;
   }
 
   private async stepSending(): Promise<boolean> {
-    this.Progress.log('Sending emails');
+    if (this.mediaList.length <= 0) {
+      this.Progress.log('No photos found skipping e-mail sending.');
+      this.Progress.Skipped++;
+      return false;
+    }
+    this.Progress.log('Sending emails of ' + this.mediaList.length + ' photos.');
     const messenger = new EmailMediaMessenger();
     await messenger.sendMedia({
       to: this.config.emailTo,
