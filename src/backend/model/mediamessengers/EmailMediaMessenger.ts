@@ -1,7 +1,6 @@
 import {createTransport, Transporter} from 'nodemailer';
 import {MediaDTO, MediaDTOUtils} from '../../../common/entities/MediaDTO';
 import {Config} from '../../../common/config/private/Config';
-import {EmailMessagingType} from '../../../common/config/private/MessagingConfig';
 import {PhotoProcessing} from '../fileprocessing/PhotoProcessing';
 import {ThumbnailSourceType} from '../threading/PhotoWorker';
 import {ProjectPath} from '../../ProjectPath';
@@ -14,11 +13,6 @@ export class EmailMediaMessenger {
   transporter: Transporter;
 
   constructor() {
-    if (Config.Messaging.Email.type === EmailMessagingType.sendmail) {
-      this.transporter = createTransport({
-        sendmail: true
-      });
-    } else {
       this.transporter = createTransport({
         host: Config.Messaging.Email.smtp.host,
         port: Config.Messaging.Email.smtp.port,
@@ -29,8 +23,6 @@ export class EmailMediaMessenger {
           pass: Config.Messaging.Email.smtp.password
         }
       });
-    }
-
   }
 
   private async getThumbnail(m: MediaDTO) {

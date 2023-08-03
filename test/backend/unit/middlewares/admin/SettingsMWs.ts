@@ -7,8 +7,6 @@ import {ServerUserConfig} from '../../../../../src/common/config/private/Private
 import {Config} from '../../../../../src/common/config/private/Config';
 import {UserRoles} from '../../../../../src/common/entities/UserDTO';
 import {ConfigClassBuilder} from '../../../../../node_modules/typeconfig/node';
-import {ServerEnvironment} from '../../../../../src/backend/Environment';
-import {EmailMessagingType} from '../../../../../src/common/config/private/MessagingConfig';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -26,9 +24,6 @@ describe('Settings middleware', () => {
   });
 
   it('should save empty enforced users settings', (done: (err?: any) => void) => {
-    ServerEnvironment.sendMailAvailable = false;
-    Config.Environment.sendMailAvailable = false;
-    Config.Messaging.Email.type = EmailMessagingType.SMTP;
     const req: any = {
       session: {},
       sessionOptions: {},
@@ -56,9 +51,6 @@ describe('Settings middleware', () => {
   });
   it('should save enforced users settings', (done: (err?: any) => void) => {
 
-    ServerEnvironment.sendMailAvailable = false;
-    Config.Environment.sendMailAvailable = false;
-    Config.Messaging.Email.type = EmailMessagingType.SMTP;
     const req: any = {
       session: {},
       sessionOptions: {},

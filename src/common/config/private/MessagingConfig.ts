@@ -12,10 +12,6 @@ if (typeof $localize === 'undefined') {
   global.$localize = (s) => s;
 }
 
-export enum EmailMessagingType {
-  sendmail = 1,
-  SMTP = 2,
-}
 
 @SubConfigClass<TAGS>({softReadonly: true})
 export class EmailSMTPMessagingConfig {
@@ -81,19 +77,8 @@ export class EmailSMTPMessagingConfig {
 
 @SubConfigClass<TAGS>({softReadonly: true})
 export class EmailMessagingConfig {
-  @ConfigProperty<EmailMessagingType, EmailMessagingConfig>({
-    type: EmailMessagingType,
-    tags:
-      {
-        name: $localize`Sending method`,
-        priority: ConfigPriority.advanced,
-        uiDisabled: (sc: EmailMessagingConfig, c: ServerConfig) => !c.Environment.sendMailAvailable
-      } as TAGS,
-    description: $localize`Sendmail uses the built in unix binary if available. STMP connects to any STMP server of your choice.`
-  })
-  type: EmailMessagingType = EmailMessagingType.sendmail;
 
-  @ConfigProperty<EmailMessagingType, EmailMessagingConfig>({
+  @ConfigProperty({
     tags:
       {
         name: $localize`Sender email`,
@@ -107,7 +92,6 @@ export class EmailMessagingConfig {
     tags:
       {
         name: $localize`SMTP`,
-        relevant: (c: any) => c.type === EmailMessagingType.SMTP,
       }
   })
   smtp?: EmailSMTPMessagingConfig = new EmailSMTPMessagingConfig();
