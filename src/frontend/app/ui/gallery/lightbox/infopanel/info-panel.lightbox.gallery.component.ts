@@ -159,7 +159,7 @@ export class InfoPanelLightboxComponent implements OnInit, OnChanges {
     return '1/' + Math.round(1 / f);
   }
 
-  hasPositionData(): boolean {
+  hasTextPositionData(): boolean {
     return (
       !!(this.media as PhotoDTO).metadata.positionData &&
       !!(
