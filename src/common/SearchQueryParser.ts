@@ -357,7 +357,8 @@ export class SearchQueryParser {
 
     if (kwStartsWith(str, this.keywords.sameDay) ||
       new RegExp('^' + SearchQueryParser.humanToRegexpStr(this.keywords.lastNDays) + '!?:').test(str)) {
-      const freqStr = str.slice(str.indexOf(':') + 1);
+
+      const freqStr = str.indexOf('!:') === -1 ? str.slice(str.indexOf(':') + 1) : str.slice(str.indexOf('!:') + 2);
       let freq: DatePatternFrequency = null;
       let ago;
       if (freqStr == this.keywords.every_week) {
@@ -381,15 +382,16 @@ export class SearchQueryParser {
       }
 
       if (freq) {
-        const ret = {
+        return {
           type: SearchQueryTypes.date_pattern,
           daysLength: kwStartsWith(str, this.keywords.sameDay) ? 0 : intFromRegexp(str),
-          frequency: freq
+          frequency: freq,
+          ...((new RegExp('^' + SearchQueryParser.humanToRegexpStr(this.keywords.lastNDays) + '!:').test(str) ||
+            str.startsWith(this.keywords.sameDay + '!:')) && {
+            negate: true
+          }),
+          ...(ago && {agoNumber: ago})
         } as DatePatternSearch;
-        if (ago) {
-          ret.agoNumber = ago;
-        }
-        return ret;
       }
     }
 
@@ -585,6 +587,9 @@ export class SearchQueryParser {
           strBuilder += this.keywords.sameDay;
         } else {
           strBuilder += this.keywords.lastNDays.replace(/%d/g, q.daysLength.toString());
+        }
+        if (q.negate === true) {
+          strBuilder += '!';
         }
         strBuilder += ':';
         switch (q.frequency) {

@@ -153,6 +153,12 @@ describe('SearchQueryParser', () => {
           frequency: DatePatternFrequency.years_ago,
           agoNumber: 1
         } as DatePatternSearch);
+        check({
+          type: SearchQueryTypes.date_pattern, daysLength: i,
+          frequency: DatePatternFrequency.years_ago,
+          agoNumber: 1,
+          negate: true
+        } as DatePatternSearch);
       }
     });
     it('Default logical operator should be AND', () => {
