@@ -1,12 +1,11 @@
 import {Injectable} from '@angular/core';
 import {NetworkService} from '../../../model/network/network.service';
-import {ParentDirectoryDTO} from '../../../../../common/entities/DirectoryDTO';
 import {GalleryCacheService} from '../cache.gallery.service';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {Config} from '../../../../../common/config/public/Config';
 import {SortingMethods} from '../../../../../common/entities/SortingMethods';
 import {PG2ConfMap} from '../../../../../common/PG2ConfMap';
-import {ContentService, ContentWrapperWithError, DirectoryContent} from '../content.service';
+import {ContentService, DirectoryContent} from '../content.service';
 import {PhotoDTO} from '../../../../../common/entities/PhotoDTO';
 import {map, switchMap} from 'rxjs/operators';
 import {SeededRandomService} from '../../../model/seededRandom.service';
@@ -27,8 +26,8 @@ export class GallerySortingService {
       Config.Gallery.defaultPhotoSortingMethod
     );
     this.galleryService.content.subscribe((c) => {
-      if (c.directory) {
-        const sort = this.galleryCacheService.getSorting(c.directory);
+      if (c) {
+        const sort = this.galleryCacheService.getSorting(c);
         if (sort !== null) {
           this.sorting.next(sort);
           return;
@@ -54,18 +53,18 @@ export class GallerySortingService {
 
   setSorting(sorting: SortingMethods): void {
     this.sorting.next(sorting);
-    if (this.galleryService.content.value.directory) {
+    if (this.galleryService.content.value) {
       if (
         sorting !==
         this.getDefaultSorting(this.galleryService.content.value)
       ) {
         this.galleryCacheService.setSorting(
-          this.galleryService.content.value.directory,
+          this.galleryService.content.value,
           sorting
         );
       } else {
         this.galleryCacheService.removeSorting(
-          this.galleryService.content.value.directory
+          this.galleryService.content.value
         );
       }
     }

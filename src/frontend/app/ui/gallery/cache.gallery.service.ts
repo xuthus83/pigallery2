@@ -10,6 +10,7 @@ import {SearchQueryDTO, SearchQueryTypes,} from '../../../../common/entities/Sea
 import {ContentWrapper} from '../../../../common/entities/ConentWrapper';
 import {ContentWrapperWithError} from './content.service';
 import {ThemeModes} from '../../../../common/config/public/ClientConfig';
+import {SearchResultDTO} from '../../../../common/entities/SearchResultDTO';
 
 interface CacheItem<T> {
   timestamp: number;
@@ -96,8 +97,13 @@ export class GalleryCacheService {
     }
   }
 
-  public getSorting(dir: DirectoryPathDTO): SortingMethods {
-    const key = GalleryCacheService.SORTING_PREFIX + dir.path + '/' + dir.name;
+  public getSorting(cw: ContentWrapper): SortingMethods {
+    let key = GalleryCacheService.SORTING_PREFIX;
+    if (cw?.searchResult?.searchQuery) {
+      key += JSON.stringify(cw.searchResult.searchQuery);
+    } else {
+      key += cw?.directory?.path + '/' + cw?.directory?.name;
+    }
     const tmp = localStorage.getItem(key);
     if (tmp != null) {
       return parseInt(tmp, 10);
@@ -105,10 +111,14 @@ export class GalleryCacheService {
     return null;
   }
 
-  public removeSorting(dir: DirectoryPathDTO): void {
+  public removeSorting(cw: ContentWrapper): void {
     try {
-      const key =
-        GalleryCacheService.SORTING_PREFIX + dir.path + '/' + dir.name;
+      let key = GalleryCacheService.SORTING_PREFIX;
+      if (cw?.searchResult?.searchQuery) {
+        key += JSON.stringify(cw.searchResult.searchQuery);
+      } else {
+        key += cw?.directory?.path + '/' + cw?.directory?.name;
+      }
       localStorage.removeItem(key);
     } catch (e) {
       this.reset();
@@ -117,12 +127,16 @@ export class GalleryCacheService {
   }
 
   public setSorting(
-    dir: DirectoryPathDTO,
+    cw: ContentWrapper,
     sorting: SortingMethods
   ): SortingMethods {
     try {
-      const key =
-        GalleryCacheService.SORTING_PREFIX + dir.path + '/' + dir.name;
+      let key = GalleryCacheService.SORTING_PREFIX;
+      if (cw?.searchResult?.searchQuery) {
+        key += JSON.stringify(cw.searchResult.searchQuery);
+      } else {
+        key += cw?.directory?.path + '/' + cw?.directory?.name;
+      }
       localStorage.setItem(key, sorting.toString());
     } catch (e) {
       this.reset();
