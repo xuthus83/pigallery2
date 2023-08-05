@@ -10,7 +10,7 @@
          *ngIf="thumbnail && thumbnail.Available"
          [style.background-image]="getSanitizedThUrl()"></div>
 
-    <span *ngIf="!thumbnail || !thumbnail.Available" class="oi oi-folder no-image rounded"
+    <span *ngIf="!thumbnail || !thumbnail.Available" class="oi oi-folder no-image"
           aria-hidden="true">
     </span>
   </div>
