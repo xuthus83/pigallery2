@@ -27,7 +27,12 @@ element.style {
   width: 100px;
 }
 
-
+/*
+Creating btn-tertiary until bootstrap supports it our of the box.
+ */
+/*
+This is mostly btn-light
+*/
 .btn-tertiary, [data-bs-theme=light] .btn-tertiary   {
   --bs-btn-color: #000;
   --bs-btn-bg: #f8f9fa;
@@ -45,6 +50,9 @@ element.style {
   --bs-btn-disabled-border-color: #f8f9fa;
 }
 
+/*
+This is mostly btn-dark + border fix
+*/
 [data-bs-theme=dark] .btn-tertiary   {
   --bs-btn-color: #fff;
   --bs-btn-bg: #212529;

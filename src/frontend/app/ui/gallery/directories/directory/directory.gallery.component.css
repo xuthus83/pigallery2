@@ -3,14 +3,14 @@ a {
 }
 
 .photo-container {
-  border: 2px solid #333;
+  border: 1px solid #333;
   width: 180px;
   height: 180px;
   background-color: #bbbbbb;
 }
 
-.no-image {
 
+.no-image {
   color: #7f7f7f;
   font-size: 80px;
   top: calc(50% - 40px);
