@@ -11,11 +11,10 @@
   font-size: xx-large;
   left: 0;
   background-color: rgba(0, 0, 0, 0.2);
-  border-radius: 5px !important;
 }
 
 .navigation-arrow span {
-  top: 20px;
+  vertical-align: bottom;
 }
 
 #controllers-container {

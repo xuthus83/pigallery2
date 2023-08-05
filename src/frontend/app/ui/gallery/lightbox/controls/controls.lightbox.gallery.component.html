@@ -161,11 +161,11 @@
 
   </div>
 
-  <div [class.dim-controls]="controllersDimmed" class="navigation-arrow highlight"
+  <div [class.dim-controls]="controllersDimmed" class="navigation-arrow highlight rounded-end"
        *ngIf="navigation.hasPrev && zoom == 1" title="key: left arrow" id="leftArrow" i18n-title
        (click)="previousPhoto.emit()"><span
     class="oi oi-chevron-left"></span></div>
-  <div [class.dim-controls]="controllersDimmed" class="navigation-arrow highlight"
+  <div [class.dim-controls]="controllersDimmed" class="navigation-arrow highlight rounded-start"
        *ngIf="navigation.hasNext && zoom == 1" title="key: right arrow" id="rightArrow" i18n-title
        (click)="nextMediaManuallyTriggered()">
     <span class="oi oi-chevron-right"></span>
