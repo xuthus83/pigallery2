@@ -240,12 +240,12 @@ input[type="range"].zoom-progress::-moz-range-track {
 }
 
 .face {
-  opacity: 0.0;
   position: absolute;
   transition: opacity 0.5s;
 }
 
 .face-name {
+  opacity: 0.0;
   white-space: nowrap;
   color: white;
   text-align: center;
@@ -253,19 +253,26 @@ input[type="range"].zoom-progress::-moz-range-track {
   font-weight: bold;
   background-color: rgba(0, 0, 0, 0.2);
   border-radius: 5px !important;
+  transition: opacity 0.5s;
 }
 
 .face-box {
+  opacity: 0.0;
   height: 100%;
   border: 2px solid #FFF;
   border-radius: 5px !important;
+  transition: opacity 0.5s;
 }
 
-.face.controls-nodim {
+.face .face-box.controls-nodim {
+  opacity: 0.2;
+}
+
+.face .face-name.controls-nodim {
   opacity: 0.7;
 }
 
-.face:hover {
+.face:hover,.face:hover .face-box,.face:hover .face-name {
   opacity: 1.0;
   text-decoration: none;
 }

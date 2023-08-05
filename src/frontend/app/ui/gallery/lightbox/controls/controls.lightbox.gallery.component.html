@@ -131,7 +131,6 @@
          *ngIf="facesEnabled && activePhoto && activePhoto.gridMedia.Photo.metadata.faces && activePhoto.gridMedia.Photo.metadata.faces.length > 0">
       <ng-container *ngIf="searchEnabled">
         <a
-          [class.controls-nodim]="lightboxService.facesAlwaysOn"
           class="face"
           [routerLink]="['/search', getPersonSearchQuery(face.name)]"
           [style.top.%]="face.box.top / activePhoto.gridMedia.Photo.metadata.size.height*100"
@@ -139,21 +138,26 @@
           [style.height.%]="face.box.height / activePhoto.gridMedia.Photo.metadata.size.height*100"
           [style.width.%]="face.box.width / activePhoto.gridMedia.Photo.metadata.size.width*100"
           *ngFor="let face of activePhoto.gridMedia.Photo.metadata.faces">
-          <div class="face-box"></div>
-          <span class="face-name">{{face.name}}</span>
+          <div class="face-box"
+               [class.controls-nodim]="lightboxService.facesAlwaysOn"></div>
+          <span class="face-name"
+                [class.controls-nodim]="lightboxService.facesAlwaysOn">{{face.name}}</span>
         </a>
       </ng-container>
       <ng-container *ngIf="!searchEnabled">
         <div
-          [class.dim-controls]="controllersDimmed && !lightboxService.facesAlwaysOn"
           class="face"
           [style.top.%]="face.box.top / activePhoto.gridMedia.Photo.metadata.size.height*100"
           [style.left.%]="face.box.left / activePhoto.gridMedia.Photo.metadata.size.width*100"
           [style.height.%]="face.box.height / activePhoto.gridMedia.Photo.metadata.size.height*100"
           [style.width.%]="face.box.width / activePhoto.gridMedia.Photo.metadata.size.width*100"
           *ngFor="let face of activePhoto.gridMedia.Photo.metadata.faces">
-          <div class="face-box"></div>
-          <span class="face-name">{{face.name}}</span>
+          <div class="face-box"
+               [class.controls-nodim]="lightboxService.facesAlwaysOn">
+          </div>
+          <span class="face-name"
+                [class.controls-nodim]="lightboxService.facesAlwaysOn"
+          >{{face.name}}</span>
         </div>
       </ng-container>
     </div>
