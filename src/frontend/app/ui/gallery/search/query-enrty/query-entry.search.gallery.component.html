@@ -168,11 +168,37 @@
                (ngModelChange)="onChange()"
                type="number">
       </div>
+      <div *ngSwitchCase="SearchQueryTypes.min_person_count" class="col-10 col-lg d-flex">
+        <input id="min_person_count"
+               name="min_person_count"
+               title="Minimum Person count"
+               placeholder="0"
+               i18n-title
+               min="0"
+               max="5"
+               class="form-control input-md rounded-2"
+               [(ngModel)]="AsRangeQuery.value"
+               (ngModelChange)="onChange()"
+               type="number">
+      </div>
+      <div *ngSwitchCase="SearchQueryTypes.max_person_count" class="col-10 col-lg d-flex">
+        <input id="max_person_count"
+               name="max_person_count"
+               title="Maximum Person count"
+               placeholder="5"
+               i18n-title
+               min="0"
+               max="5"
+               class="form-control input-md rounded-2"
+               [(ngModel)]="AsRangeQuery.value"
+               (ngModelChange)="onChange()"
+               type="number">
+      </div>
       <div *ngSwitchCase="SearchQueryTypes.min_resolution" class="col-10 col-lg">
         <div class="input-group">
           <input id="minResolution"
                  name="minResolution"
-                 title="Minimum Rating"
+                 title="Minimum Resolution"
                  placeholder="0"
                  i18n-title
                  min="0"
@@ -188,7 +214,7 @@
         <div class="input-group">
           <input id="maxResolution"
                  name="maxResolution"
-                 title="Maximum Rating"
+                 title="Maximum Resolution"
                  placeholder="5"
                  i18n-title
                  [min]="0"
