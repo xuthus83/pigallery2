@@ -811,12 +811,11 @@ export class ThemesConfig {
   @ConfigProperty({
     tags: {
       name: $localize`Enable`,
-      experimental: true,
       githubIssue: 642
     } as TAGS,
-    description: $localize`Enable themes and color modes.  Experimental until bootstrap v5.3 is only alpha.`
+    description: $localize`Enable themes and color modes.`
   })
-  enabled: boolean = false;
+  enabled: boolean = true;
 
   @ConfigProperty({
     type: ThemeModes,
@@ -826,7 +825,7 @@ export class ThemesConfig {
     } as TAGS,
     description: $localize`Sets the default theme mode that is used for the application.`
   })
-  defaultMode: ThemeModes = ThemeModes.light;
+  defaultMode: ThemeModes = ThemeModes.auto;
 
   @ConfigProperty({
     type: 'string',

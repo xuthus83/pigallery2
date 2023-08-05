@@ -1,6 +1,10 @@
 :host {
   position: relative;
   overflow: hidden;
+  transition: scale .3s ease-out;
+}
+:host:hover {
+  scale: 98%;
 }
 
 img {
