@@ -105,7 +105,7 @@ import {SettingsEntryComponent} from './ui/settings/template/settings-entry/sett
 import {UsersComponent} from './ui/settings/users/users.component';
 import {SharingsListComponent} from './ui/settings/sharings-list/sharings-list.component';
 import {ThemeService} from './model/theme.service';
-import {StringifyConfigPriority} from './pipes/StringifyConfigPriority';
+import {StringifyEnum} from './pipes/StringifyEnum';
 import {StringifySearchType} from './pipes/StringifySearchType';
 import {MarkerFactory} from './ui/gallery/map/MarkerFactory';
 
@@ -224,7 +224,7 @@ Marker.prototype.options.icon = MarkerFactory.defIcon;
     GPXFilesFilterPipe,
     MDFilesFilterPipe,
     StringifySearchQuery,
-    StringifyConfigPriority,
+    StringifyEnum,
     StringifySearchType,
     FileDTOToPathPipe,
     PhotoFilterPipe,

@@ -21,7 +21,7 @@ export enum MapProviders {
 }
 
 export enum ConfigPriority {
-  basic = 0, advanced, underTheHood
+  basic = 1, advanced, underTheHood
 }
 
 

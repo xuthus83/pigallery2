@@ -36,7 +36,7 @@
           </a>
         </div>
         <div class="mb-1">
-          <label class="control-label align-self-end me-2" for="config-priority" i18n>Mode</label>
+          <label class="control-label align-self-end me-2" for="config-priority" i18n>Mode:</label>
           <div class="btn-group" dropdown #dropdown="bs-dropdown" placement="bottom right">
             <button type="button"
                     dropdownToggle
@@ -46,12 +46,29 @@
                     [class.btn-warning]="settingsService.configPriority === ConfigPriority.advanced"
                     [class.btn-danger]="settingsService.configPriority === ConfigPriority.underTheHood"
                     data-bs-toggle="dropdown" aria-expanded="false">
-              {{settingsService.configPriority | stringifyConfigPriority}}
+              {{ConfigPriority[settingsService.configPriority] | stringifyEnum}}
             </button>
             <ul class="dropdown-menu dropdown-menu-right" *dropdownMenu>
               <li *ngFor="let cp of configPriorities">
                 <button class="dropdown-item"
-                        (click)="settingsService.configPriority = cp.key; settingsService.configPriorityChanged()">{{cp.value}}</button>
+                        (click)="settingsService.configPriority = cp.key; settingsService.configSetupChanged()">{{cp.value}}</button>
+              </li>
+            </ul>
+          </div>
+          <div class="ms-2 btn-group" dropdown #dropdown="bs-dropdown" placement="bottom right">
+            <button type="button"
+                    dropdownToggle
+                    id="config-style"
+                    class="btn dropdown-toggle"
+                    [class.btn-secondary]="settingsService.configStyle == ConfigStyle.full"
+                    [class.btn-primary]="settingsService.configStyle == ConfigStyle.compact"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+              {{ConfigStyle[settingsService.configStyle] | stringifyEnum}}
+            </button>
+            <ul class="dropdown-menu dropdown-menu-right" *dropdownMenu>
+              <li *ngFor="let cp of configStyles">
+                <button class="dropdown-item"
+                        (click)="settingsService.configStyle = cp.key; settingsService.configSetupChanged()">{{cp.value}}</button>
               </li>
             </ul>
           </div>

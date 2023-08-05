@@ -2,7 +2,7 @@ import {Component, Input, OnChanges, OnDestroy, OnInit, ViewChild} from '@angula
 import {AuthenticationService} from '../../../model/network/authentication.service';
 import {NavigationService} from '../../../model/navigation.service';
 import {NotificationService} from '../../../model/notification.service';
-import {SettingsService} from '../settings.service';
+import {ConfigStyle, SettingsService} from '../settings.service';
 import {WebConfig} from '../../../../../common/config/private/WebConfig';
 import {JobProgressDTO} from '../../../../../common/entities/job/JobProgressDTO';
 import {JobDTOUtils} from '../../../../../common/entities/job/JobDTO';
@@ -75,6 +75,8 @@ export class TemplateComponent implements OnInit, OnChanges, OnDestroy, ISetting
   private subscription: Subscription = null;
   private settingsSubscription: Subscription = null;
   protected sliceFN?: (s: IWebConfigClassPrivate<TAGS> & WebConfig) => ConfigState;
+
+  public readonly ConfigStyle = ConfigStyle;
 
   constructor(
     protected authService: AuthenticationService,

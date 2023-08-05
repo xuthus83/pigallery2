@@ -12,9 +12,16 @@ import {StatisticDTO} from '../../../../common/entities/settings/StatisticDTO';
 import {ScheduledJobsService} from './scheduled-jobs.service';
 import {IWebConfigClassPrivate} from '../../../../../node_modules/typeconfig/src/decorators/class/IWebConfigClass';
 
+
+export enum ConfigStyle {
+  full = 1, compact
+}
+
+
 @Injectable()
 export class SettingsService {
   public configPriority = ConfigPriority.basic;
+  public configStyle = ConfigStyle.full;
   public settings: BehaviorSubject<IWebConfigClassPrivate<TAGS> & WebConfig>;
   private fetchingSettings = false;
   public statistic: BehaviorSubject<StatisticDTO>;
@@ -29,6 +36,10 @@ export class SettingsService {
     if (this.cookieService.check(CookieNames.configPriority)) {
       this.configPriority =
         parseInt(this.cookieService.get(CookieNames.configPriority));
+    }
+    if (this.cookieService.check(CookieNames.configStyle)) {
+      this.configStyle =
+        parseInt(this.cookieService.get(CookieNames.configStyle));
     }
 
 
@@ -68,11 +79,17 @@ export class SettingsService {
     return this.networkService.putJson('/settings', {settings, settingsPath});
   }
 
-  configPriorityChanged(): void {
+  configSetupChanged(): void {
     // save it for some years
     this.cookieService.set(
       CookieNames.configPriority,
       this.configPriority.toString(),
+      365 * 50
+    );
+    // save it for some years
+    this.cookieService.set(
+      CookieNames.configStyle,
+      this.configStyle.toString(),
       365 * 50
     );
   }

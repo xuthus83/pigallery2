@@ -12,7 +12,7 @@ import {
   TAGS,
   ThemeConfig
 } from '../../../../../../common/config/public/ClientConfig';
-import {SettingsService} from '../../settings.service';
+import {ConfigStyle, SettingsService} from '../../settings.service';
 import {WebConfig} from '../../../../../../common/config/private/WebConfig';
 import {JobScheduleConfig, UserConfig} from '../../../../../../common/config/private/PrivateConfig';
 import {enumToTranslatedArray} from '../../../EnumTranslations';
@@ -79,6 +79,7 @@ export class SettingsEntryComponent
   newThemeModalRef: any;
   iconModal: { ref?: any, error?: string };
   @Input() noChangeDetection = false;
+  public readonly ConfigStyle = ConfigStyle;
 
 
   constructor(private searchQueryParserService: SearchQueryParserService,

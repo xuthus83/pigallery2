@@ -63,13 +63,15 @@
                         [ngValue]="jobTrigger.key">{{jobTrigger.value}}
                 </option>
               </select>
-              <small class="form-text text-muted"
+              <small class="form-text text-muted" *ngIf="settingsService.configStyle == ConfigStyle.full"
                      i18n>Set the time to run the job.
               </small>
             </div>
           </div>
 
-          <div class="mb-3 row" *ngIf="schedule.trigger.type == JobTriggerType.after">
+          <div class="mb-1 row"
+               [class.mb-3]="settingsService.configStyle == ConfigStyle.full"
+               *ngIf="schedule.trigger.type == JobTriggerType.after">
             <label class="col-md-2 control-label" [for]="'triggerAfter'+i" i18n>After:</label>
             <div class="col-md-10">
               <select class="form-select"
@@ -82,14 +84,16 @@
                   </option>
                 </ng-container>
               </select>
-              <small class="form-text text-muted"
+              <small class="form-text text-muted" *ngIf="settingsService.configStyle == ConfigStyle.full"
                      i18n>The job will run after that job finishes.
               </small>
             </div>
           </div>
 
 
-          <div class="mb-3 row" *ngIf="schedule.trigger.type == JobTriggerType.scheduled">
+          <div class="mb-1 row"
+               [class.mb-3]="settingsService.configStyle == ConfigStyle.full"
+               *ngIf="schedule.trigger.type == JobTriggerType.scheduled">
             <label class="col-md-2 control-label" [for]="'triggerTime'+i" i18n>At:</label>
             <div class="col-md-10">
               <app-timestamp-datepicker
@@ -99,7 +103,9 @@
             </div>
           </div>
 
-          <div class="mb-3 row" *ngIf="schedule.trigger.type == JobTriggerType.periodic">
+          <div class="mb-1 row"
+               [class.mb-3]="settingsService.configStyle == ConfigStyle.full"
+               *ngIf="schedule.trigger.type == JobTriggerType.periodic">
             <label class="col-md-2 control-label" [for]="'periodicity'+i" i18n>At:</label>
             <div class="col-md-10">
               <select
@@ -121,7 +127,8 @@
             </div>
           </div>
 
-          <div class="mb-3 row">
+          <div class="mb-1 row"
+               [class.mb-3]="settingsService.configStyle == ConfigStyle.full">
             <label class="col-md-2 control-label" [for]="'allowParallelRun'+'_'+i" i18n>Allow parallel run</label>
             <div class="col-md-10">
               <div class="input-group">
@@ -137,7 +144,7 @@
                          [(ngModel)]="schedule.allowParallelRun">
                 </div>
               </div>
-              <small class="form-text text-muted"
+              <small class="form-text text-muted" *ngIf="settingsService.configStyle == ConfigStyle.full"
                      i18n>Enables the job to start even if another job is already running.
               </small>
             </div>
@@ -151,7 +158,8 @@
         <hr/>
         <div *ngFor="let configEntry of  jobsService.getConfigTemplate(schedule.jobName)">
 
-          <div class="mb-3 row">
+          <div class="mb-1 row"
+               [class.mb-3]="settingsService.configStyle == ConfigStyle.full">
             <label class="col-md-2 control-label"
                    [for]="configEntry.id+'_'+i">{{backendTextService.get(configEntry.name)}}</label>
             <div class="col-md-10">
@@ -211,7 +219,8 @@
                   <ng-container *ngSwitchCase="'MediaPickDTO-array'">
                     <ng-container *ngFor="let mp of AsMediaPickDTOArray(schedule.config[configEntry.id]); let j=index">
 
-                      <div class="mb-3 row">
+                      <div class="mb-1 row"
+                           [class.mb-3]="settingsService.configStyle == ConfigStyle.full">
                         <label class="col-md-2 control-label"
                                [for]="configEntry.id+'_'+i" i18n>Search Query - {{(j + 1)}}</label>
                         <div class="col-md-10">
@@ -224,12 +233,13 @@
                               placeholder="Search Query">
                             </app-gallery-search-field>
                           </div>
-                          <small class="form-text text-muted" i18n>
+                          <small class="form-text text-muted" *ngIf="settingsService.configStyle == ConfigStyle.full" i18n>
                             Search query to list photos and videos.
                           </small>
                         </div>
                       </div>
-                      <div class="mb-3 row">
+                      <div class="mb-1 row"
+                           [class.mb-3]="settingsService.configStyle == ConfigStyle.full">
                         <label class="col-md-2 control-label"
                                [for]="configEntry.id+'_'+i" i18n>Sort by</label>
                         <div class="col-md-10">
@@ -270,12 +280,13 @@
                               </button>
                             </div>
                           </div>
-                          <small class="form-text text-muted" i18n>
+                          <small class="form-text text-muted" *ngIf="settingsService.configStyle == ConfigStyle.full" i18n>
                             Sorts the photos and videos by this.
                           </small>
                         </div>
                       </div>
-                      <div class="mb-3 row">
+                      <div class="mb-1 row"
+                           [class.mb-3]="settingsService.configStyle == ConfigStyle.full">
                         <label class="col-md-2 control-label"
                                [for]="configEntry.id+'_'+i" i18n>Pick</label>
                         <div class="col-md-10">
@@ -285,7 +296,7 @@
                                    (ngModelChange)="onChange($event)"
                                    [(ngModel)]="mp.pick" required>
                           </div>
-                          <small class="form-text text-muted" i18n>
+                          <small class="form-text text-muted" *ngIf="settingsService.configStyle == ConfigStyle.full" i18n>
                             Number of photos and videos to pick.
                           </small>
                         </div>
@@ -319,7 +330,7 @@
 
                 </ng-container>
               </div>
-              <small class="form-text text-muted">
+              <small class="form-text text-muted" *ngIf="settingsService.configStyle == ConfigStyle.full">
                 <ng-container *ngIf="configEntry.type == 'number-array'" i18n>';' separated integers.
                 </ng-container>
                 {{backendTextService.get(configEntry.description)}}
@@ -365,7 +376,7 @@
                     [ngValue]="availableJob.Name">{{backendTextService.getJobName(availableJob.Name)}}
             </option>
           </select>
-          <small class="form-text text-muted"
+          <small class="form-text text-muted" *ngIf="settingsService.configStyle == ConfigStyle.full"
                  i18n>Select a job to schedule.
           </small>
 

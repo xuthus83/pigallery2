@@ -5,7 +5,8 @@
 </ng-template>
 
 <ng-container *ngIf="state">
-  <div class="mb-3 row"
+  <div class="mb-1 row"
+       [class.mb-3]="settingsService.configStyle == ConfigStyle.full"
        [class.changed-settings]="changed"
        [class.docker-warning]="dockerWarning"
        [hidden]="shouldHide">
@@ -546,7 +547,7 @@
         </div>
       </div>
 
-      <small class="form-text text-muted">
+      <small class="form-text text-muted" *ngIf="settingsService.configStyle == ConfigStyle.full">
         <ng-container *ngIf="experimental">
           <span class="oi oi-warning"></span>[Experimental]
         </ng-container>

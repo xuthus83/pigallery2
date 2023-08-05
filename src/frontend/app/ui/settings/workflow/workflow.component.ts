@@ -9,7 +9,7 @@ import {
 } from '../../../../../common/entities/job/JobScheduleDTO';
 import {ScheduledJobsService} from '../scheduled-jobs.service';
 import {BackendtextService} from '../../../model/backendtext.service';
-import {SettingsService} from '../settings.service';
+import {ConfigStyle, SettingsService} from '../settings.service';
 import {JobProgressDTO, JobProgressStates} from '../../../../../common/entities/job/JobProgressDTO';
 import {
   AfterJobTriggerConfig,
@@ -64,7 +64,7 @@ export class WorkflowComponent implements ControlValueAccessor, Validator, OnIni
     },
     allowParallelRun: false,
   };
-
+  public readonly ConfigStyle = ConfigStyle;
   SortingMethods = enumToTranslatedArray(SortingMethods);
 
 
@@ -317,4 +317,5 @@ export class WorkflowComponent implements ControlValueAccessor, Validator, OnIni
       pick: 5
     });
   }
+
 }

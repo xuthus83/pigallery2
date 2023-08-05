@@ -319,7 +319,7 @@ export class ServerThumbnailConfig extends ClientThumbnailConfig {
     type: 'boolean',
     tags:
         {
-          name: $localize`Use chroma subsampling.`,
+          name: $localize`Use chroma subsampling`,
           priority: ConfigPriority.underTheHood
         },
     description: $localize`Use high quality chroma subsampling in webp. See: https://sharp.pixelplumbing.com/api-output#webp.`
