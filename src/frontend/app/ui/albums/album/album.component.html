@@ -2,11 +2,11 @@
    style="display: inline-block;">
 
 
-  <div class="photo-container rounded"
+  <div class="photo-container  rounded overflow-hidden"
        [style.width.px]="size"
        [style.height.px]="size">
 
-    <div class="photo rounded"
+    <div class="photo "
          *ngIf="thumbnail && thumbnail.Available"
          [style.background-image]="getSanitizedThUrl()"></div>
 
