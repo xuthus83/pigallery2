@@ -84,7 +84,7 @@
           [ngModel]="rStates?.value.__state[ck]">
         </app-settings-entry>
         <ng-container *ngIf="rStates.value.__state[ck].isConfigType">
-          <div class="card mt-2 mb-2" *ngIf="topLevel && enableNesting" [id]="ConfigPath+'.'+ck">
+          <div class="card mt-2 mb-2" *ngIf="topLevel && rStates?.value.__state[ck].tags?.uiIcon" [id]="ConfigPath+'.'+ck">
             <div class="card-body">
               <h5 class="card-title"><span
                 class="oi oi-{{rStates?.value.__state[ck].tags?.uiIcon}}"></span> {{rStates?.value.__state[ck].tags?.name || ck}}
@@ -94,7 +94,7 @@
               ></ng-container>
             </div>
           </div>
-          <ng-container *ngIf="!topLevel || !enableNesting">
+          <ng-container *ngIf="!topLevel || !rStates?.value.__state[ck].tags?.uiIcon">
             <div class="row mt-2">
               <div class="col-auto">
                 <h5>{{rStates?.value.__state[ck].tags?.name || ck}}</h5>

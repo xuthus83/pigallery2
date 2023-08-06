@@ -966,6 +966,7 @@ export class ClientGalleryConfig {
   @ConfigProperty({
     tags: {
       name: $localize`Themes`,
+      uiIcon: 'brush',
       priority: ConfigPriority.advanced,
     } as TAGS,
     description: $localize`Pigallery2 uses Bootstrap 5.3 (https://getbootstrap.com/docs/5.3) for design (css, layout). In dark mode it sets 'data-bs-theme="dark"' to the <html> to take advantage bootstrap's color modes. For theming, read more at: https://getbootstrap.com/docs/5.3/customize/color-modes/`

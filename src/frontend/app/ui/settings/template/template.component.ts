@@ -59,7 +59,6 @@ export class TemplateComponent implements OnInit, OnChanges, OnDestroy, ISetting
 
   public icon: string;
   @Input() ConfigPath: string;
-  @Input() enableNesting: boolean;
   nestedConfigs: { id: string, name: string, visible: () => boolean, icon: string }[] = [];
 
   @ViewChild('settingsForm', {static: true})
@@ -95,9 +94,9 @@ export class TemplateComponent implements OnInit, OnChanges, OnDestroy, ISetting
     }
     this.name = this.states.tags?.name || this.ConfigPath;
     this.nestedConfigs = [];
-    if (this.enableNesting) {
       for (const key of this.getKeys(this.states)) {
-        if (this.states.value.__state[key].isConfigType) {
+        if (this.states.value.__state[key].isConfigType &&
+          this.states?.value.__state[key].tags?.uiIcon) {
           this.nestedConfigs.push({
             id: this.ConfigPath + '.' + key,
             name: this.states?.value.__state[key].tags?.name,
@@ -106,7 +105,7 @@ export class TemplateComponent implements OnInit, OnChanges, OnDestroy, ISetting
           });
         }
       }
-    }
+
   }
 
   ngOnInit(): void {
