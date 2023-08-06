@@ -49,10 +49,7 @@ app-gallery-map {
   position: absolute;
   right: 4px
 }
-.blog-wrapper + app-gallery-map {
-  border-top-right-radius: var(--bs-border-radius);
-  border-bottom-right-radius: var(--bs-border-radius);
-}
+
 
 .directories {
   margin-right: 2px;

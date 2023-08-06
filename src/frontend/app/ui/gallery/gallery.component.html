@@ -52,6 +52,8 @@
           </button>
         </div>
         <app-gallery-map
+          class="rounded"
+          [class.rounded-start-0]="ShowMarkDown"
           *ngIf="ShowMap"
           [photos]="directoryContent?.media | photosOnly"
           [gpxFiles]="directoryContent?.metaFile | gpxFiles"></app-gallery-map>
