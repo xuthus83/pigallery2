@@ -10,7 +10,6 @@ import {BsDropdownDirective} from 'ngx-bootstrap/dropdown';
   styleUrls: ['./language.component.css'],
 })
 export class LanguageComponent {
-  @Input() isDark: boolean;
   languages: string[] = [];
   current: string = null;
   urlBase = Config.Server.urlBase;

@@ -57,7 +57,7 @@
             </ng-container>
             <li class="nav-item d-xl-block d-none">
             <span>
-              <app-language #languageSelector class="navbar-btn" [isDark]="true"></app-language>
+              <app-language #languageSelector class="navbar-btn" ></app-language>
             </span>
             </li>
             <li class="nav-item divider-vertical d-xl-block d-none">
@@ -66,7 +66,7 @@
               <div class="btn-group" dropdown #dropdown="bs-dropdown" placement="bottom"
                    [autoClose]="false"  container="body">
                 <button id="button-alignment" dropdownToggle
-                        type="button" class="btn btn-dark dropdown-toggle"
+                        type="button" class="btn btn-tertiary dropdown-toggle"
                         aria-controls="dropdown-alignment">
                   <span class="oi oi-menu"></span>
                   <span *ngIf="isAdmin() && notificationService.numberOfNotifications>0"
@@ -81,7 +81,7 @@
                       <ng-container *ngIf="authenticationRequired && user.value">
                         <span class="oi oi-person"></span>{{user.value.name}}
                       </ng-container>
-                      <app-language class="navbar-btn d-inline-block" [isDark]="false"></app-language>
+                      <app-language class="navbar-btn d-inline-block"></app-language>
                     </div>
                   </li>
                   <li class="nav-item d-xl-none" *ngIf="showShare">
