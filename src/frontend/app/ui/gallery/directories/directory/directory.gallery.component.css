@@ -1,3 +1,11 @@
+:host {
+  transition: scale .3s ease-out;
+}
+
+:host:hover {
+  scale: 98%;
+}
+
 a {
   position: relative;
 }

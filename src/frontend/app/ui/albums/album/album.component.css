@@ -1,3 +1,11 @@
+:host {
+  transition: scale .3s ease-out;
+}
+
+:host:hover {
+  scale: 98%;
+}
+
 .info-button {
   margin: 2px;
   cursor: default;

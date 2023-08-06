@@ -1,3 +1,11 @@
+:host {
+  transition: scale .3s ease-out;
+}
+
+:host:hover {
+  scale: 98%;
+}
+
 .star {
   margin: 2px;
   color: #888;
