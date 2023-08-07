@@ -123,7 +123,9 @@ export class PublicRouter {
           },
         ],
         display: 'standalone',
-        orientation: 'natural',
+        "categories": [
+          "photo"
+        ],
         start_url:
           Config.Server.publicUrl === '' ? '.' : Config.Server.publicUrl,
         background_color: '#000000',
