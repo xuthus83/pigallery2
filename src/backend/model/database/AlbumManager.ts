@@ -81,8 +81,8 @@ export class AlbumManager implements IObjectManager {
     return await connection
       .getRepository(AlbumBaseEntity)
       .createQueryBuilder('album')
-      .innerJoin('album.preview', 'preview')
-      .innerJoin('preview.directory', 'directory')
+      .leftJoin('album.preview', 'preview')
+      .leftJoin('preview.directory', 'directory')
       .select(['album', 'preview.name', 'directory.name', 'directory.path'])
       .getMany();
   }
