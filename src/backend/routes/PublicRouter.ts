@@ -123,8 +123,8 @@ export class PublicRouter {
           },
         ],
         display: 'standalone',
-        "categories": [
-          "photo"
+        categories: [
+          'photo'
         ],
         start_url:
           Config.Server.publicUrl === '' ? '.' : Config.Server.publicUrl,
