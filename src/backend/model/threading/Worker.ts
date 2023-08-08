@@ -1,9 +1,9 @@
-import { DirectoryScanSettings, DiskMangerWorker } from './DiskMangerWorker';
-import { Logger } from '../../Logger';
-import { PhotoWorker, RendererInput } from './PhotoWorker';
-import { Utils } from '../../../common/Utils';
-import { MediaDTO } from '../../../common/entities/MediaDTO';
-import { ParentDirectoryDTO } from '../../../common/entities/DirectoryDTO';
+import {DirectoryScanSettings, DiskMangerWorker} from './DiskMangerWorker';
+import {Logger} from '../../Logger';
+import {MediaRendererInput, PhotoWorker} from './PhotoWorker';
+import {Utils} from '../../../common/Utils';
+import {MediaDTO} from '../../../common/entities/MediaDTO';
+import {ParentDirectoryDTO} from '../../../common/entities/DirectoryDTO';
 
 declare const process: NodeJS.Process;
 const LOG_TAG = '[Worker]';
@@ -35,7 +35,7 @@ export class Worker {
           result,
         } as WorkerMessage<O>);
       } catch (err) {
-        process.send({ error: err, result: null });
+        process.send({error: err, result: null});
       }
     });
   }
@@ -56,7 +56,7 @@ export interface DiskManagerTask extends WorkerTask {
 }
 
 export interface ThumbnailTask extends WorkerTask {
-  input: RendererInput;
+  input: MediaRendererInput;
 }
 
 export const WorkerTask = {

@@ -1,18 +1,11 @@
 import * as cluster from 'cluster';
-import { Worker } from 'cluster';
-import { Logger } from '../../Logger';
-import {
-  DiskManagerTask,
-  ThumbnailTask,
-  WorkerMessage,
-  WorkerTask,
-  WorkerTaskTypes,
-} from './Worker';
-import { ParentDirectoryDTO } from '../../../common/entities/DirectoryDTO';
-import { RendererInput } from './PhotoWorker';
-import { TaskQue, TaskQueEntry } from './TaskQue';
-import { ITaskExecuter } from './TaskExecuter';
-import { DirectoryScanSettings } from './DiskMangerWorker';
+import {Worker} from 'cluster';
+import {Logger} from '../../Logger';
+import {DiskManagerTask, WorkerMessage, WorkerTask, WorkerTaskTypes,} from './Worker';
+import {ParentDirectoryDTO} from '../../../common/entities/DirectoryDTO';
+import {TaskQue, TaskQueEntry} from './TaskQue';
+import {ITaskExecuter} from './TaskExecuter';
+import {DirectoryScanSettings} from './DiskMangerWorker';
 
 interface WorkerWrapper<O> {
   worker: Worker;
@@ -81,12 +74,12 @@ export class ThreadPool<O> {
       Logger.warn(
         LOG_TAG,
         'Worker ' +
-          worker.worker.process.pid +
-          ' died with code: ' +
-          code +
-          ', and signal: ' +
-          signal +
-          ', worker count:',
+        worker.worker.process.pid +
+        ' died with code: ' +
+        code +
+        ', and signal: ' +
+        signal +
+        ', worker count:',
         ThreadPool.WorkerCount
       );
       Logger.debug(LOG_TAG, 'Starting a new worker');
@@ -111,8 +104,7 @@ export class ThreadPool<O> {
 
 export class DiskManagerTH
   extends ThreadPool<ParentDirectoryDTO>
-  implements ITaskExecuter<string, ParentDirectoryDTO>
-{
+  implements ITaskExecuter<string, ParentDirectoryDTO> {
   execute(
     relativeDirectoryName: string,
     settings: DirectoryScanSettings = {}
