@@ -60,3 +60,17 @@ a.dropdown-item span, button.dropdown-item span, div.dropdown-item span {
 a.dropdown-item span.badge, button.dropdown-item span.badge {
   margin-left: -0.8rem;
 }
+
+.btn-scroll-up {
+  position: fixed;
+  width: 3em;
+  height: 3em;
+  right: -3em;
+  bottom: 3em;
+  transition: 0.3s right;
+  z-index: 999;
+}
+
+.show-btn-scroll-up{
+  right: 1em;
+}

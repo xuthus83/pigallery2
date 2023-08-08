@@ -35,8 +35,8 @@ This is mostly btn-light
 */
 .btn-tertiary, [data-bs-theme=light] .btn-tertiary   {
   --bs-btn-color: #000;
-  --bs-btn-bg: #f8f9fa;
-  --bs-btn-border-color: #f8f9fa;
+  --bs-btn-bg: var(--bs-body-bg);
+  --bs-btn-border-color: var(--bs-border-color);
   --bs-btn-hover-color: #000;
   --bs-btn-hover-bg: #d3d4d5;
   --bs-btn-hover-border-color: #c6c7c8;
@@ -55,7 +55,7 @@ This is mostly btn-dark + border fix
 */
 [data-bs-theme=dark] .btn-tertiary   {
   --bs-btn-color: #fff;
-  --bs-btn-bg: rgba(var(--bs-body-color-rgb), 0.03);
+  --bs-btn-bg: var(--bs-body-bg);
   --bs-btn-border-color: var(--bs-border-color);
   --bs-btn-hover-color: #fff;
   --bs-btn-hover-bg: #424649;

@@ -29,6 +29,10 @@ export enum ThemeModes {
   light = 1, dark, auto
 }
 
+export enum ScrollUpModes {
+  never = 1, mobileOnly, always
+}
+
 export type TAGS = {
   client?: true,
   priority?: ConfigPriority,
@@ -739,6 +743,17 @@ export class NavBarConfig {
     description: $localize`Ratio of the page height, you need to scroll to hide the navigation bar.`,
   })
   NavbarHideDelay: number = 0.15;
+
+  @ConfigProperty({
+    tags: {
+      name: $localize`Show scroll up button`,
+      priority: ConfigPriority.underTheHood
+    },
+    type: ScrollUpModes,
+    description: $localize`Set when the floating scroll-up button should be visible.`,
+  })
+  showScrollUpButton: ScrollUpModes = ScrollUpModes.mobileOnly;
+
 }
 
 @SubConfigClass<TAGS>({tags: {client: true}, softReadonly: true})
