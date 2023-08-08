@@ -11,6 +11,7 @@ import { AlbumBaseDTO } from '../../../../../common/entities/album/AlbumBaseDTO'
 import { Media } from '../../gallery/Media';
 import { SavedSearchDTO } from '../../../../../common/entities/album/SavedSearchDTO';
 import { UserRoles } from '../../../../../common/entities/UserDTO';
+import {Config} from '../../../../../common/config/public/Config';
 
 @Component({
   selector: 'app-album',
@@ -21,6 +22,7 @@ import { UserRoles } from '../../../../../common/entities/UserDTO';
 export class AlbumComponent implements OnInit, OnDestroy {
   @Input() album: AlbumBaseDTO;
   @Input() size: number;
+  public readonly svgIcon = Config.Server.svgIcon;
 
   public thumbnail: Thumbnail = null;
 

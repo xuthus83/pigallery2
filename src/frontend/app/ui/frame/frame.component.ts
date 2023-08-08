@@ -32,6 +32,7 @@ export class FrameComponent {
   public readonly NavigationLinkTypes = NavigationLinkTypes;
   public readonly stringify = JSON.stringify;
   public readonly themesEnabled = Config.Gallery.Themes.enabled;
+  public readonly svgIcon = Config.Server.svgIcon;
 
   /* sticky top navbar */
   private lastScroll = {

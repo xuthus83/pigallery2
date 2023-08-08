@@ -79,11 +79,11 @@
     <ng-container *ngFor="let ck of getKeys(rStates)">
       <ng-container *ngIf="!(rStates.value.__state[ck].shouldHide && rStates.value.__state[ck].shouldHide())">
         <app-settings-entry
-          *ngIf="(ck!=='enabled' || !topLevel) && !rStates.value.__state[ck].isConfigType"
+          *ngIf="(ck!=='enabled' || !topLevel) && !isExpandableConfig(rStates.value.__state[ck])"
           [name]="confPath+'_'+ck"
           [ngModel]="rStates?.value.__state[ck]">
         </app-settings-entry>
-        <ng-container *ngIf="rStates.value.__state[ck].isConfigType">
+        <ng-container *ngIf="isExpandableConfig(rStates.value.__state[ck])">
           <div class="card mt-2 mb-2" *ngIf="topLevel && rStates?.value.__state[ck].tags?.uiIcon" [id]="ConfigPath+'.'+ck">
             <div class="card-body">
               <h5 class="card-title"><span

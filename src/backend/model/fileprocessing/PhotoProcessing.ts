@@ -4,15 +4,16 @@ import * as os from 'os';
 import * as crypto from 'crypto';
 import {ProjectPath} from '../../ProjectPath';
 import {Config} from '../../../common/config/private/Config';
-import {PhotoWorker, RendererInput, ThumbnailSourceType,} from '../threading/PhotoWorker';
+import {MediaRendererInput, PhotoWorker, SvgRendererInput, ThumbnailSourceType,} from '../threading/PhotoWorker';
 import {ITaskExecuter, TaskExecuter} from '../threading/TaskExecuter';
 import {FaceRegion, PhotoDTO} from '../../../common/entities/PhotoDTO';
 import {SupportedFormats} from '../../../common/SupportedFormats';
 import {PersonEntry} from '../database/enitites/PersonEntry';
+import {SVGIconConfig} from '../../../common/config/public/ClientConfig';
 
 export class PhotoProcessing {
   private static initDone = false;
-  private static taskQue: ITaskExecuter<RendererInput, void> = null;
+  private static taskQue: ITaskExecuter<MediaRendererInput | SvgRendererInput, void> = null;
   private static readonly CONVERTED_EXTENSION = '.webp';
 
   public static init(): void {
@@ -101,7 +102,7 @@ export class PhotoProcessing {
       useLanczos3: Config.Media.Thumbnail.useLanczos3,
       quality: Config.Media.Thumbnail.quality,
       smartSubsample: Config.Media.Thumbnail.smartSubsample,
-    } as RendererInput;
+    } as MediaRendererInput;
     input.cut.width = Math.min(
       input.cut.width,
       photo.metadata.size.width - input.cut.left
@@ -240,6 +241,7 @@ export class PhotoProcessing {
     return false;
   }
 
+
   public static async generateThumbnail(
     mediaPath: string,
     size: number,
@@ -267,7 +269,7 @@ export class PhotoProcessing {
       useLanczos3: Config.Media.Thumbnail.useLanczos3,
       quality: Config.Media.Thumbnail.quality,
       smartSubsample: Config.Media.Thumbnail.smartSubsample,
-    } as RendererInput;
+    } as MediaRendererInput;
 
     const outDir = path.dirname(input.outPath);
 
@@ -280,5 +282,42 @@ export class PhotoProcessing {
     const extension = path.extname(fullPath).toLowerCase();
     return SupportedFormats.WithDots.Photos.indexOf(extension) !== -1;
   }
+
+  public static async renderSVG(
+    svgString: SVGIconConfig,
+    outPath: string,
+    color = '#000'
+  ): Promise<string> {
+
+    // check if file already exist
+    try {
+      await fsp.access(outPath, fsConstants.R_OK);
+      return outPath;
+    } catch (e) {
+      // ignoring errors
+    }
+
+    const size = 256;
+    // run on other thread
+    const input = {
+      type: ThumbnailSourceType.Photo,
+      svgString: `<svg width="${size}" height="${size}" xmlns="http://www.w3.org/2000/svg"
+viewBox="${Config.Server.svgIcon.viewBox || '0 0 512 512'}">
+<path fill="${color}" d="${Config.Server.svgIcon.path}"/></svg>`,
+      size: size,
+      outPath,
+      makeSquare: false,
+      useLanczos3: Config.Media.Thumbnail.useLanczos3,
+      quality: Config.Media.Thumbnail.quality,
+      smartSubsample: Config.Media.Thumbnail.smartSubsample,
+    } as SvgRendererInput;
+
+    const outDir = path.dirname(input.outPath);
+
+    await fsp.mkdir(outDir, {recursive: true});
+    await this.taskQue.execute(input);
+    return outPath;
+  }
+
 }
 

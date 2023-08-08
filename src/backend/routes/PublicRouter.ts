@@ -11,6 +11,7 @@ import {UserDTO} from '../../common/entities/UserDTO';
 import {ServerTimeEntry} from '../middlewares/ServerTimingMWs';
 import {ClientConfig, TAGS} from '../../common/config/public/ClientConfig';
 import {QueryParams} from '../../common/QueryParams';
+import {PhotoProcessing} from '../model/fileprocessing/PhotoProcessing';
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
@@ -101,7 +102,7 @@ export class PublicRouter {
           .replace(/'/g, '&#039;');
       res.tpl.Config = confCopy;
       res.tpl.customHTMLHead = Config.Server.customHTMLHead;
-      const selectedTheme = Config.Gallery.Themes.availableThemes.find(th=>th.name === Config.Gallery.Themes.selectedTheme)?.theme || '';
+      const selectedTheme = Config.Gallery.Themes.availableThemes.find(th => th.name === Config.Gallery.Themes.selectedTheme)?.theme || '';
       res.tpl.usedTheme = selectedTheme;
 
       return next();
@@ -118,7 +119,11 @@ export class PublicRouter {
         name: Config.Server.applicationTitle,
         icons: [
           {
-            src: 'assets/icon_inv.png',
+            src: 'icon_inv.svg',
+            sizes: 'any',
+          },
+          {
+            src: 'icon_inv.png',
             sizes: '48x48 72x72 96x96 128x128 256x256',
           },
         ],
@@ -131,6 +136,47 @@ export class PublicRouter {
         background_color: '#000000',
         theme_color: '#000000',
       });
+    });
+
+    app.get('/icon.svg', (req: Request, res: Response) => {
+      res.set('Cache-control', 'public, max-age=31536000');
+      res.send('<svg xmlns="http://www.w3.org/2000/svg"' +
+        ' viewBox="' + (Config.Server.svgIcon.viewBox || '0 0 512 512') + '">' +
+        '<path d="' + Config.Server.svgIcon.path + '"/></svg>');
+    });
+
+    app.get('/icon_inv.svg', (req: Request, res: Response) => {
+      res.set('Cache-control', 'public, max-age=31536000');
+      res.send('<svg xmlns="http://www.w3.org/2000/svg"' +
+        ' viewBox="' + (Config.Server.svgIcon.viewBox || '0 0 512 512') + '">' +
+        '<path fill="#FFF" d="' + Config.Server.svgIcon.path + '"/></svg>');
+    });
+
+
+    app.get('/icon.png', async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const p = path.join(ProjectPath.TempFolder, '/icon.png');
+        await PhotoProcessing.renderSVG(Config.Server.svgIcon, p);
+        res.sendFile(p, {
+          maxAge: 31536000,
+          dotfiles: 'allow',
+        });
+      } catch (e) {
+        return next(e);
+      }
+    });
+
+    app.get('/icon_inv.png', async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const p = path.join(ProjectPath.TempFolder, '/icon_inv.png');
+        await PhotoProcessing.renderSVG(Config.Server.svgIcon, p, '#FFF');
+        res.sendFile(p, {
+          maxAge: 31536000,
+          dotfiles: 'allow',
+        });
+      } catch (e) {
+        return next(e);
+      }
     });
 
     app.get(

@@ -1,15 +1,13 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
-import { SubDirectoryDTO } from '../../../../../../common/entities/DirectoryDTO';
-import { RouterLink } from '@angular/router';
-import { Utils } from '../../../../../../common/Utils';
-import { Media } from '../../Media';
-import {
-  Thumbnail,
-  ThumbnailManagerService,
-} from '../../thumbnailManager.service';
-import { QueryService } from '../../../../model/query.service';
-import { PreviewPhotoDTO } from '../../../../../../common/entities/PhotoDTO';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {DomSanitizer, SafeStyle} from '@angular/platform-browser';
+import {SubDirectoryDTO} from '../../../../../../common/entities/DirectoryDTO';
+import {RouterLink} from '@angular/router';
+import {Utils} from '../../../../../../common/Utils';
+import {Media} from '../../Media';
+import {Thumbnail, ThumbnailManagerService,} from '../../thumbnailManager.service';
+import {QueryService} from '../../../../model/query.service';
+import {PreviewPhotoDTO} from '../../../../../../common/entities/PhotoDTO';
+import {Config} from '../../../../../../common/config/public/Config';
 
 @Component({
   selector: 'app-gallery-directory',
@@ -26,7 +24,8 @@ export class GalleryDirectoryComponent implements OnInit, OnDestroy {
     private thumbnailService: ThumbnailManagerService,
     private sanitizer: DomSanitizer,
     public queryService: QueryService
-  ) {}
+  ) {
+  }
 
   public get SamplePhoto(): PreviewPhotoDTO {
     return this.directory.preview;
@@ -35,10 +34,10 @@ export class GalleryDirectoryComponent implements OnInit, OnDestroy {
   getSanitizedThUrl(): SafeStyle {
     return this.sanitizer.bypassSecurityTrustStyle(
       'url(' +
-        this.thumbnail.Src.replace(/\(/g, '%28')
-          .replace(/'/g, '%27')
-          .replace(/\)/g, '%29') +
-        ')'
+      this.thumbnail.Src.replace(/\(/g, '%28')
+        .replace(/'/g, '%27')
+        .replace(/\)/g, '%29') +
+      ')'
     );
   }
 

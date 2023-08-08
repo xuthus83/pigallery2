@@ -1,32 +1,32 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
+import * as sharp from 'sharp';
 import {Metadata, Sharp} from 'sharp';
 import {Logger} from '../../Logger';
 import {FfmpegCommand, FfprobeData} from 'fluent-ffmpeg';
 import {FFmpegFactory} from '../FFmpegFactory';
-const path = require('path');
+import * as path from 'path';
 
-const sharp = require('sharp');
 
 sharp.cache(false);
 
 export class PhotoWorker {
-  private static videoRenderer: (input: RendererInput) => Promise<void> = null;
+  private static videoRenderer: (input: MediaRendererInput) => Promise<void> = null;
 
-  public static render(input: RendererInput): Promise<void> {
+  public static render(input: SvgRendererInput | MediaRendererInput): Promise<void> {
     if (input.type === ThumbnailSourceType.Photo) {
       return this.renderFromImage(input);
     }
     if (input.type === ThumbnailSourceType.Video) {
-      return this.renderFromVideo(input);
+      return this.renderFromVideo(input as MediaRendererInput);
     }
     throw new Error('Unsupported media type to render thumbnail:' + input.type);
   }
 
-  public static renderFromImage(input: RendererInput): Promise<void> {
+  public static renderFromImage(input: SvgRendererInput | MediaRendererInput): Promise<void> {
     return ImageRendererFactory.render(input);
   }
 
-  public static renderFromVideo(input: RendererInput): Promise<void> {
+  public static renderFromVideo(input: MediaRendererInput): Promise<void> {
     if (PhotoWorker.videoRenderer === null) {
       PhotoWorker.videoRenderer = VideoRendererFactory.build();
     }
@@ -39,15 +39,13 @@ export enum ThumbnailSourceType {
   Video = 2,
 }
 
-export interface RendererInput {
+interface RendererInput {
   type: ThumbnailSourceType;
-  mediaPath: string;
   size: number;
   makeSquare: boolean;
   outPath: string;
   quality: number;
   useLanczos3: boolean;
-  smartSubsample: boolean;
   cut?: {
     left: number;
     top: number;
@@ -56,10 +54,19 @@ export interface RendererInput {
   };
 }
 
+export interface MediaRendererInput extends RendererInput {
+  mediaPath: string;
+  smartSubsample: boolean;
+}
+
+export interface SvgRendererInput extends RendererInput {
+  svgString: string;
+}
+
 export class VideoRendererFactory {
-  public static build(): (input: RendererInput) => Promise<void> {
+  public static build(): (input: MediaRendererInput) => Promise<void> {
     const ffmpeg = FFmpegFactory.get();
-    return (input: RendererInput): Promise<void> => {
+    return (input: MediaRendererInput): Promise<void> => {
       return new Promise((resolve, reject): void => {
         Logger.silly('[FFmpeg] rendering thumbnail: ' + input.mediaPath);
 
@@ -122,16 +129,22 @@ export class VideoRendererFactory {
 
 export class ImageRendererFactory {
 
-  public static async render(input: RendererInput): Promise<void> {
-    Logger.silly(
-      '[SharpRenderer] rendering photo:' +
-      input.mediaPath +
-      ', size:' +
-      input.size
-    );
-    const image: Sharp = sharp(input.mediaPath, {failOnError: false});
-    const metadata: Metadata = await image.metadata();
+  public static async render(input: MediaRendererInput | SvgRendererInput): Promise<void> {
 
+    let image: Sharp;
+    if ((input as MediaRendererInput).mediaPath) {
+      Logger.silly(
+        '[SharpRenderer] rendering photo:' +
+        (input as MediaRendererInput).mediaPath +
+        ', size:' +
+        input.size
+      );
+      image = sharp((input as MediaRendererInput).mediaPath, {failOnError: false});
+    } else {
+      const svg_buffer = Buffer.from((input as SvgRendererInput).svgString);
+      image = sharp(svg_buffer, { density: 450 });
+    }
+    const metadata: Metadata = await image.metadata();
     const kernel =
       input.useLanczos3 === true
         ? sharp.kernel.lanczos3
@@ -157,7 +170,17 @@ export class ImageRendererFactory {
         fit: 'cover',
       });
     }
-    await image.rotate().webp({effort: 6, quality: input.quality, smartSubsample: input.smartSubsample}).toFile(input.outPath);
+    if ((input as MediaRendererInput).mediaPath) {
+      await image.rotate().webp({
+        effort: 6,
+        quality: input.quality,
+        smartSubsample: (input as MediaRendererInput).smartSubsample
+      }).toFile(input.outPath);
+    } else {
+      if ((input as SvgRendererInput).svgString) {
+        await image.rotate().png({effort: 6, quality: input.quality}).toFile(input.outPath);
+      }
+    }
 
   }
 }

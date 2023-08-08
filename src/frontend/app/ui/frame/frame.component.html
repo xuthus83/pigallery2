@@ -7,7 +7,7 @@
     <div class="container-fluid">
       <a class="navbar-brand d-none d-sm-block" [routerLink]="['/gallery']"
          [queryParams]="queryService.getParams()">
-        <img src="assets/icon_inv.png" width="30" height="30" class="d-inline-block align-top" alt="">
+        <app-icon class="d-inline-block align-top" [width]="30" [height]="30" ></app-icon>
         <strong class="d-none d-lg-inline-block">{{title}}</strong>
       </a>
       <div class="collapse navbar-collapse text-center" id="navbarCollapse" [collapse]="collapsed">

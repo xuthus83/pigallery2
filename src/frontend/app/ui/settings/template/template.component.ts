@@ -94,17 +94,17 @@ export class TemplateComponent implements OnInit, OnChanges, OnDestroy, ISetting
     }
     this.name = this.states.tags?.name || this.ConfigPath;
     this.nestedConfigs = [];
-      for (const key of this.getKeys(this.states)) {
-        if (this.states.value.__state[key].isConfigType &&
-          this.states?.value.__state[key].tags?.uiIcon) {
-          this.nestedConfigs.push({
-            id: this.ConfigPath + '.' + key,
-            name: this.states?.value.__state[key].tags?.name,
-            icon: this.states?.value.__state[key].tags?.uiIcon,
-            visible: () => !(this.states.value.__state[key].shouldHide && this.states.value.__state[key].shouldHide())
-          });
-        }
+    for (const key of this.getKeys(this.states)) {
+      if (this.states.value.__state[key].isConfigType &&
+        this.states?.value.__state[key].tags?.uiIcon) {
+        this.nestedConfigs.push({
+          id: this.ConfigPath + '.' + key,
+          name: this.states?.value.__state[key].tags?.name,
+          icon: this.states?.value.__state[key].tags?.uiIcon,
+          visible: () => !(this.states.value.__state[key].shouldHide && this.states.value.__state[key].shouldHide())
+        });
       }
+    }
 
   }
 
@@ -270,6 +270,10 @@ export class TemplateComponent implements OnInit, OnChanges, OnDestroy, ISetting
     this.getSettings();
   }
 
+  isExpandableConfig(c: ConfigState) {
+    return c.isConfigType && c.tags?.uiType !== 'SVGIconConfig';
+  }
+
 
   public async save(): Promise<boolean> {
     this.inProgress = true;
@@ -306,8 +310,8 @@ export class TemplateComponent implements OnInit, OnChanges, OnDestroy, ISetting
     }
     const s = states.value.__state;
     const keys = Object.keys(s).sort((a, b) => {
-      if ((s[a].isConfigType || s[a].isConfigArrayType) !== (s[b].isConfigType || s[b].isConfigArrayType)) {
-        if (s[a].isConfigType || s[a].isConfigArrayType) {
+      if ((this.isExpandableConfig(s[a]) || s[a].isConfigArrayType) !== (this.isExpandableConfig(s[b]) || s[b].isConfigArrayType)) {
+        if (this.isExpandableConfig(s[a]) || s[a].isConfigArrayType) {
           return 1;
         } else {
           return -1;

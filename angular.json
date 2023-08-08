@@ -92,7 +92,6 @@
             "tsConfig": "src/frontend/tsconfig.app.json",
             "polyfills": "src/frontend/polyfills.ts",
             "assets": [
-              "src/frontend/assets",
               "src/frontend/robots.txt",
               {
                 "glob": "**/*",
@@ -199,7 +198,6 @@
               "src/frontend/styles.css"
             ],
             "assets": [
-              "src/frontend/assets",
               {
                 "glob": "**/*",
                 "input": "node_modules/leaflet/dist/images/",

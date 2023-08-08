@@ -80,7 +80,7 @@ import {GallerySearchFieldBaseComponent} from './ui/gallery/search/search-field-
 import {AppRoutingModule} from './app.routing';
 import {CookieService} from 'ngx-cookie-service';
 import {LeafletMarkerClusterModule} from '@asymmetrik/ngx-leaflet-markercluster';
-import {icon, Marker} from 'leaflet';
+import {Marker} from 'leaflet';
 import {AlbumsComponent} from './ui/albums/albums.component';
 import {AlbumComponent} from './ui/albums/album/album.component';
 import {AlbumsService} from './ui/albums/albums.service';
@@ -108,6 +108,7 @@ import {ThemeService} from './model/theme.service';
 import {StringifyEnum} from './pipes/StringifyEnum';
 import {StringifySearchType} from './pipes/StringifySearchType';
 import {MarkerFactory} from './ui/gallery/map/MarkerFactory';
+import {IconComponent} from './icon.component';
 
 @Injectable()
 export class MyHammerConfig extends HammerGestureConfig {
@@ -165,6 +166,7 @@ Marker.prototype.options.icon = MarkerFactory.defIcon;
   ],
   declarations: [
     AppComponent,
+    IconComponent,
     LoginComponent,
     ShareLoginComponent,
     GalleryComponent,
