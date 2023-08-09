@@ -120,7 +120,9 @@ export class PublicRouter {
         icons: [
           {
             src: 'icon_inv.svg',
-            sizes: 'any',
+            sizes: "48x48 72x72 96x96 128x128 256x256 512x512",
+            type: "image/svg+xml",
+            purpose: "any"
           },
           {
             src: 'icon_inv.png',
@@ -140,16 +142,37 @@ export class PublicRouter {
 
     app.get('/icon.svg', (req: Request, res: Response) => {
       res.set('Cache-control', 'public, max-age=31536000');
+      res.header('Content-Type', 'image/svg+xml');
       res.send('<svg xmlns="http://www.w3.org/2000/svg"' +
         ' viewBox="' + (Config.Server.svgIcon.viewBox || '0 0 512 512') + '">' +
         '<path d="' + Config.Server.svgIcon.path + '"/></svg>');
     });
 
-    app.get('/icon_inv.svg', (req: Request, res: Response) => {
+
+    app.get('/icon_auto.svg', (req: Request, res: Response) => {
       res.set('Cache-control', 'public, max-age=31536000');
+      res.header('Content-Type', 'image/svg+xml');
       res.send('<svg xmlns="http://www.w3.org/2000/svg"' +
         ' viewBox="' + (Config.Server.svgIcon.viewBox || '0 0 512 512') + '">' +
-        '<path fill="#FFF" d="' + Config.Server.svgIcon.path + '"/></svg>');
+        '<style>' +
+        '    path {' +
+        '      fill: black;' +
+        '    }' +
+        '    @media (prefers-color-scheme: dark) {' +
+        '      path {' +
+        '        fill: white;' +
+        '      }' +
+        '    }' +
+        '  </style>' +
+        '<path d="' + Config.Server.svgIcon.path + '"/></svg>');
+    });
+
+    app.get('/icon_inv.svg', (req: Request, res: Response) => {
+      res.set('Cache-control', 'public, max-age=31536000');
+      res.header('Content-Type', 'image/svg+xml');
+      res.send('<svg xmlns="http://www.w3.org/2000/svg"' +
+        ' viewBox="' + (Config.Server.svgIcon.viewBox || '0 0 512 512') + '">' +
+        '<path style="fill:white" d="' + Config.Server.svgIcon.path + '"/></svg>');
     });
 
 
@@ -169,7 +192,7 @@ export class PublicRouter {
     app.get('/icon_inv.png', async (req: Request, res: Response, next: NextFunction) => {
       try {
         const p = path.join(ProjectPath.TempFolder, '/icon_inv.png');
-        await PhotoProcessing.renderSVG(Config.Server.svgIcon, p, '#FFF');
+        await PhotoProcessing.renderSVG(Config.Server.svgIcon, p, 'white');
         res.sendFile(p, {
           maxAge: 31536000,
           dotfiles: 'allow',
