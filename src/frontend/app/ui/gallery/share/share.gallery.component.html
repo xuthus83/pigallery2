@@ -117,5 +117,32 @@
         </div>
       </div>
     </form>
+    <ng-container *ngIf="activeShares && activeShares.length>0">
+      <hr/>
+        <table class="table table-hover">
+          <thead>
+          <tr>
+            <th i18n>Key</th>
+            <th i18n>Creator</th>
+            <th i18n>Expires</th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let share of activeShares">
+            <td><a [href]="sharingService.getUrl(share)">{{share.sharingKey}}</a></td>
+            <td>{{share.creator.name}}</td>
+            <td>{{share.expires | date}}</td>
+            <td>
+              <button (click)="deleteSharing(share)"
+                      [disabled]="share.sharingKey == sharing?.sharingKey"
+                      class="btn btn-danger float-end">
+                <span class="oi oi-trash" aria-hidden="true" aria-label="Delete"></span>
+              </button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+    </ng-container>
   </div>
 </ng-template>

@@ -37,13 +37,15 @@ export class GalleryShareComponent implements OnInit, OnDestroy {
   modalRef: BsModalRef;
   invalidSettings = $localize`Invalid settings`;
 
+  activeShares: SharingDTO[] = [];
+
   text = {
     Yes: 'Yes',
     No: 'No',
   };
 
   constructor(
-    private sharingService: ShareService,
+    public sharingService: ShareService,
     public galleryService: ContentService,
     private notification: NotificationService,
     private modalService: BsModalService
@@ -54,7 +56,8 @@ export class GalleryShareComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.contentSubscription = this.galleryService.content.subscribe(
-      (content: ContentWrapper) => {
+      async (content: ContentWrapper) => {
+        this.activeShares = [];
         this.enabled = !!content.directory;
         if (!this.enabled) {
           return;
@@ -63,6 +66,7 @@ export class GalleryShareComponent implements OnInit, OnDestroy {
           content.directory.path,
           content.directory.name
         );
+        await this.updateActiveSharesList();
       }
     );
   }
@@ -70,6 +74,21 @@ export class GalleryShareComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     if (this.contentSubscription !== null) {
       this.contentSubscription.unsubscribe();
+    }
+  }
+
+
+  async deleteSharing(sharing: SharingDTO): Promise<void> {
+    await this.sharingService.deleteSharing(sharing);
+    await this.updateActiveSharesList();
+  }
+
+  private async updateActiveSharesList() {
+    try {
+      this.activeShares = await this.sharingService.getSharingListForDir(this.currentDir);
+    } catch (e) {
+      this.activeShares = [];
+      console.error(e);
     }
   }
 
@@ -112,6 +131,7 @@ export class GalleryShareComponent implements OnInit, OnDestroy {
       this.calcValidity()
     );
     this.url = Utils.concatUrls(Config.Server.publicUrl, '/share/', this.sharing.sharingKey);
+    await this.updateActiveSharesList();
   }
 
   async openModal(template: TemplateRef<unknown>): Promise<void> {

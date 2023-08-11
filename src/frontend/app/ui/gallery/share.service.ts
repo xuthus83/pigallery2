@@ -6,6 +6,8 @@ import {BehaviorSubject} from 'rxjs';
 import {distinctUntilChanged, filter} from 'rxjs/operators';
 import {QueryParams} from '../../../../common/QueryParams';
 import {UserDTO} from '../../../../common/entities/UserDTO';
+import {Utils} from '../../../../common/Utils';
+import {Config} from '../../../../common/config/public/Config';
 
 
 @Injectable()
@@ -60,6 +62,11 @@ export class ShareService {
       }
     });
   }
+
+  public getUrl(share: SharingDTO): string {
+    return Utils.concatUrls(Config.Server.publicUrl, '/share/', share.sharingKey);
+  }
+
 
   onNewUser = async (user: UserDTO) => {
     if (user && !!user.usedSharingKey) {
@@ -134,5 +141,24 @@ export class ShareService {
       this.sharingSubject.next(this.UnknownSharingKey);
       console.error(e);
     }
+  }
+
+  public async getSharingListForDir(
+    dir: string
+  ): Promise<SharingDTO[]> {
+    return this.networkService.getJson('/share/list/' + dir);
+  }
+
+
+
+  public getSharingList(): Promise<SharingDTO[]> {
+    if (!Config.Sharing.enabled) {
+      return Promise.resolve([]);
+    }
+    return this.networkService.getJson('/share/listAll');
+  }
+
+  public deleteSharing(sharing: SharingDTO): Promise<void> {
+    return this.networkService.deleteJson('/share/' + sharing.sharingKey);
   }
 }

@@ -151,11 +151,7 @@ export class AuthenticationMWs {
       const sharingKey: string =
         (req.query[QueryParams.gallery.sharingKey_query] as string) ||
         (req.params[QueryParams.gallery.sharingKey_params] as string);
-      const sharing = await ObjectManagers.getInstance().SharingManager.findOne(
-        {
-          sharingKey,
-        }
-      );
+      const sharing = await ObjectManagers.getInstance().SharingManager.findOne(sharingKey);
 
       if (
         !sharing ||
@@ -264,11 +260,7 @@ export class AuthenticationMWs {
       const sharingKey: string =
         (req.query[QueryParams.gallery.sharingKey_query] as string) ||
         (req.params[QueryParams.gallery.sharingKey_params] as string);
-      const sharing = await ObjectManagers.getInstance().SharingManager.findOne(
-        {
-          sharingKey,
-        }
-      );
+      const sharing = await ObjectManagers.getInstance().SharingManager.findOne(sharingKey);
       if (!sharing || sharing.expires < Date.now()) {
         return null;
       }

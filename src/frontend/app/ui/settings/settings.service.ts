@@ -11,6 +11,9 @@ import {DefaultsJobs} from '../../../../common/entities/job/JobDTO';
 import {StatisticDTO} from '../../../../common/entities/settings/StatisticDTO';
 import {ScheduledJobsService} from './scheduled-jobs.service';
 import {IWebConfigClassPrivate} from '../../../../../node_modules/typeconfig/src/decorators/class/IWebConfigClass';
+import {SharingDTO} from '../../../../common/entities/SharingDTO';
+import {Utils} from '../../../../common/Utils';
+import {Config} from '../../../../common/config/public/Config';
 
 
 export enum ConfigStyle {
