@@ -519,6 +519,7 @@ export class ClientMapConfig {
     arrayType: MapPathGroupConfig,
     tags: {
       name: $localize`Path theme groups`,
+      githubIssue:647,
       priority: ConfigPriority.underTheHood
     } as TAGS,
     description: $localize`Markers are grouped and themed by these settings`,
