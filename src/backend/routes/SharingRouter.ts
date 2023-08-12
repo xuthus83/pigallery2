@@ -14,6 +14,7 @@ export class SharingRouter {
     this.addCreateSharing(app);
     this.addUpdateSharing(app);
     this.addListSharing(app);
+    this.addListSharingForDir(app);
     this.addDeleteSharing(app);
   }
 
@@ -64,7 +65,7 @@ export class SharingRouter {
     app.delete(
       [Config.Server.apiPath + '/share/:' + QueryParams.gallery.sharingKey_params],
       AuthenticationMWs.authenticate,
-      AuthenticationMWs.authorise(UserRoles.Admin),
+      AuthenticationMWs.authorise(UserRoles.User),
       SharingMWs.deleteSharing,
       ServerTimingMWs.addServerTiming,
       RenderingMWs.renderResult
@@ -73,10 +74,23 @@ export class SharingRouter {
 
   private static addListSharing(app: express.Express): void {
     app.get(
-      [Config.Server.apiPath + '/share/list'],
+      [Config.Server.apiPath + '/share/listAll'],
+      AuthenticationMWs.authenticate,
+      AuthenticationMWs.authorise(UserRoles.Admin),
+      SharingMWs.listSharing,
+      ServerTimingMWs.addServerTiming,
+      RenderingMWs.renderSharingList
+    );
+  }
+
+  private static addListSharingForDir(app: express.Express): void {
+    app.get(
+      [Config.Server.apiPath + '/share/list/:directory(*)',
+        Config.Server.apiPath + '/share/list//',
+        Config.Server.apiPath + '/share/list'],
       AuthenticationMWs.authenticate,
       AuthenticationMWs.authorise(UserRoles.User),
-      SharingMWs.listSharing,
+      SharingMWs.listSharingForDir,
       ServerTimingMWs.addServerTiming,
       RenderingMWs.renderSharingList
     );

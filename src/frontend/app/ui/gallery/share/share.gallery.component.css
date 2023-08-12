@@ -24,3 +24,12 @@ a.dropdown-item, button.dropdown-item, div.dropdown-item {
 a.dropdown-item span, button.dropdown-item span, div.dropdown-item span {
   padding-right: 0.8rem;
 }
+
+a.list-shares-button {
+  cursor: pointer;
+  color: inherit;
+}
+
+a.list-shares-button:hover {
+  text-decoration: underline;
+}
