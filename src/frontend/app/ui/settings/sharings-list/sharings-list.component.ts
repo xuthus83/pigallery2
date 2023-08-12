@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {SharingDTO} from '../../../../../common/entities/SharingDTO';
 import {SettingsService} from '../settings.service';
 import {ShareService} from '../../gallery/share.service';
+import {AuthenticationService} from '../../../model/network/authentication.service';
+import {UserRoles} from '../../../../../common/entities/UserDTO';
 
 @Component({
   selector: 'app-settigns-sharings-list',
