@@ -1,6 +1,5 @@
 .navigation-arrow {
-  width: 30px;
-  min-width: 60px;
+  width: 60px;
   height: 100px;
   z-index: 3;
   position: absolute;
@@ -8,13 +7,18 @@
   display: inline-block;
   padding: 15px;
   cursor: pointer;
-  font-size: xx-large;
+  font-size: xxx-large;
   left: 0;
   background-color: rgba(0, 0, 0, 0.2);
 }
 
-.navigation-arrow span {
-  vertical-align: bottom;
+.navigation-arrow ng-icon {
+  margin-left: -0.3em;
+  margin-right: -0.3em;
+  transform: translateY(-50%);
+  top: 50%;
+  position: relative;
+  line-height: 0;
 }
 
 #controllers-container {
@@ -67,10 +71,10 @@
 
 
 .controls .control-button {
-  margin-left: 0.2em;
-  margin-right: 0.2em;
+  margin-left: 0.1em;
+  margin-right: 0.1em;
   display: inline-block;
-  padding: 0 0.5rem;
+  padding: 0 0.2rem;
   font-size: 1.5rem;
   color: white;
   background-color: transparent;
@@ -119,14 +123,14 @@
   z-index: 3;
 }
 
-.controls-video .oi,
+.controls-video ng-icon,
 .controls-video input {
   color: white;
   cursor: pointer;
 
 }
 
-.controls-big-play span {
+.controls-big-play ng-icon {
   font-size: 20vh;
   position: absolute;
   top: 50%;
@@ -136,10 +140,10 @@
 
 .controls-video input[type=range] {
   padding: 0;
-  margin-top: 6px;
+  margin-top: 10px;
 }
 
-.controls-video .oi {
+.controls-video ng-icon {
   text-align: center;
   max-width: 45px;
   margin-left: 10px;
@@ -196,7 +200,6 @@
 .controls-zoom {
   bottom: 0;
   position: absolute;
-  margin-bottom: 10px;
   margin-right: 0;
   margin-left: 0;
 }
@@ -211,7 +214,7 @@
 
 input[type="range"].zoom-progress {
   height: 11px;
-  margin-top: 3px;
+  margin-top: 9px;
   border: 1px solid white;
   background: transparent;
   padding: 0;
@@ -226,7 +229,7 @@ input[type="range"].zoom-progress::-moz-range-track {
 }
 
 
-.controls-zoom .oi {
+.controls-zoom ng-icon {
   cursor: pointer;
 }
 
@@ -272,7 +275,7 @@ input[type="range"].zoom-progress::-moz-range-track {
   opacity: 0.7;
 }
 
-.face:hover,.face:hover .face-box,.face:hover .face-name {
+.face:hover, .face:hover .face-box, .face:hover .face-name {
   opacity: 1.0;
   text-decoration: none;
 }
@@ -293,8 +296,9 @@ input[type="range"].zoom-progress::-moz-range-track {
   min-width: auto;
 }
 
-canvas{
+canvas {
   right: 12px;
   position: relative;
-  top: -34px;
+  top: -50%;
+  transform: translateY(-50%);
 }

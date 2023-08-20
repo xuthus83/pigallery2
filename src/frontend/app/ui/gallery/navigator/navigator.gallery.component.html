@@ -29,7 +29,7 @@
       <ng-container *ngIf="config.Gallery.enableDownloadZip && isDirectory && ItemCount > 0">
         <a [href]="getDownloadZipLink()"
            class="btn  btn-outline-secondary btn-navigator">
-          <ng-icon name="ionCloudDownloadOutline" title="download" i18n-title></ng-icon>
+          <ng-icon name="ionDownloadOutline" title="download" i18n-title></ng-icon>
         </a>
         <div class="divider">&nbsp;</div>
       </ng-container>
@@ -39,7 +39,7 @@
           [routerLink]="['/search', getDirectoryFlattenSearchQuery()]"
           class="btn btn-outline-secondary btn-navigator">
           <ng-icon name="ionGitBranchOutline"
-                   title="Flatten directory" i18n-title></ng-icon>
+                   title="Show all subdirectories" i18n-title></ng-icon>
         </a>
         <div class="divider">&nbsp;</div>
       </ng-container>

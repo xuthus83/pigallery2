@@ -50,6 +50,7 @@ app-gallery-filter {
   cursor: pointer;
 }
 
+
 .btn-navigator:not(:hover):not(.btn-secondary) {
   --bs-text-opacity: 1;
   color: rgba(var(--bs-body-color-rgb), var(--bs-text-opacity)) !important;
