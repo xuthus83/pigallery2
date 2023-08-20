@@ -3,6 +3,7 @@ import {Config} from '../../common/config/public/Config';
 
 @Component({
   selector: 'app-icon',
+  styles: [':host {line-height: 0}'],
   template: `
     <svg xmlns="http://www.w3.org/2000/svg"
          [attr.width]="width"

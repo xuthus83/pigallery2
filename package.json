@@ -76,6 +76,8 @@
     "@angular/router": "15.2.2",
     "@asymmetrik/ngx-leaflet": "15.0.1",
     "@asymmetrik/ngx-leaflet-markercluster": "15.0.0",
+    "@ng-icons/core": "24.0.0",
+    "@ng-icons/ionicons": "24.0.0",
     "@ngx-loading-bar/core": "6.0.2",
     "@types/archiver": "5.3.1",
     "@types/bcrypt": "5.0.0",

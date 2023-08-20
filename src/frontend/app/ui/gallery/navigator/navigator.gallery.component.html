@@ -28,9 +28,8 @@
 
       <ng-container *ngIf="config.Gallery.enableDownloadZip && isDirectory && ItemCount > 0">
         <a [href]="getDownloadZipLink()"
-           class="btn">
-         <span class="oi oi-data-transfer-download"
-               title="download" i18n-title></span>
+           class="btn  btn-outline-secondary btn-navigator">
+          <ng-icon name="ionCloudDownloadOutline" title="download" i18n-title></ng-icon>
         </a>
         <div class="divider">&nbsp;</div>
       </ng-container>
@@ -38,27 +37,27 @@
       <ng-container *ngIf="config.Gallery.enableDirectoryFlattening && isDirectory && authService.canSearch()">
         <a
           [routerLink]="['/search', getDirectoryFlattenSearchQuery()]"
-          class="btn">
-         <span class="oi oi-fork"
-               title="Flatten directory" i18n-title></span>
+          class="btn btn-outline-secondary btn-navigator">
+          <ng-icon name="ionGitBranchOutline"
+                   title="Flatten directory" i18n-title></ng-icon>
         </a>
         <div class="divider">&nbsp;</div>
       </ng-container>
       <ng-container *ngIf="ItemCount> 0">
-        <a class="btn"
+        <a class="btn btn-outline-secondary btn-navigator"
            [class.btn-secondary]="filterService.activeFilters.value.areFiltersActive"
            (click)="showFilters = ! showFilters">
-         <span class="oi oi-spreadsheet"
-               title="Filters" i18n-title></span>
+          <ng-icon name="ionFunnelOutline"
+                   title="Filters" i18n-title></ng-icon>
         </a>
         <div class="divider">&nbsp;</div>
       </ng-container>
       <div class="btn-group" dropdown #dropdown="bs-dropdown" placement="bottom right">
         <button id="button-alignment" dropdownToggle type="button"
-                class="btn dropdown-toggle"
+                class="btn dropdown-toggle  btn-outline-secondary btn-navigator"
                 [class.btn-secondary]="sortingService.sorting.value !== DefaultSorting"
-                aria-controls="sorting-dropdown"
-                [innerHTML]="sortingService.sorting.value | iconizeSorting">
+                aria-controls="sorting-dropdown">
+          <app-sorting-method-icon [method]="sortingService.sorting.value"></app-sorting-method-icon>
         </button>
         <ul id="sorting-dropdown" *dropdownMenu class="dropdown-menu dropdown-menu-right"
             role="menu" aria-labelledby="button-alignment">
@@ -66,7 +65,7 @@
               *ngFor="let type of sortingMethodsType"
               (click)="setSorting(type.key)">
             <div class="col-3">
-              <div [outerHTML]="type.key | iconizeSorting"></div>
+              <app-sorting-method-icon [method]="type.key"></app-sorting-method-icon>
             </div>
             <div class="col-9">{{type.key | stringifySorting}}</div>
           </li>
