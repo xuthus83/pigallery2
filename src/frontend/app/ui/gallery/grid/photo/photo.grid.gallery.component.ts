@@ -1,30 +1,13 @@
-import {
-  Component,
-  ElementRef,
-  Input,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
-import { Dimension, IRenderable } from '../../../../model/IRenderable';
-import { GridMedia } from '../GridMedia';
-import { RouterLink } from '@angular/router';
-import {
-  Thumbnail,
-  ThumbnailManagerService,
-} from '../../thumbnailManager.service';
-import { Config } from '../../../../../../common/config/public/Config';
-import { PageHelper } from '../../../../model/page.helper';
-import {
-  PhotoDTO,
-  PhotoMetadata,
-} from '../../../../../../common/entities/PhotoDTO';
-import {
-  SearchQueryTypes,
-  TextSearch,
-  TextSearchQueryMatchTypes,
-} from '../../../../../../common/entities/SearchQueryDTO';
-import { AuthenticationService } from '../../../../model/network/authentication.service';
+import {Component, ElementRef, Input, OnDestroy, OnInit, ViewChild,} from '@angular/core';
+import {Dimension, IRenderable} from '../../../../model/IRenderable';
+import {GridMedia} from '../GridMedia';
+import {RouterLink} from '@angular/router';
+import {Thumbnail, ThumbnailManagerService,} from '../../thumbnailManager.service';
+import {Config} from '../../../../../../common/config/public/Config';
+import {PageHelper} from '../../../../model/page.helper';
+import {PhotoDTO, PhotoMetadata,} from '../../../../../../common/entities/PhotoDTO';
+import {SearchQueryTypes, TextSearch, TextSearchQueryMatchTypes,} from '../../../../../../common/entities/SearchQueryDTO';
+import {AuthenticationService} from '../../../../model/network/authentication.service';
 
 @Component({
   selector: 'app-gallery-grid-photo',
@@ -34,8 +17,8 @@ import { AuthenticationService } from '../../../../model/network/authentication.
 })
 export class GalleryPhotoComponent implements IRenderable, OnInit, OnDestroy {
   @Input() gridMedia: GridMedia;
-  @ViewChild('img', { static: false }) imageRef: ElementRef;
-  @ViewChild('photoContainer', { static: true }) container: ElementRef;
+  @ViewChild('img', {static: false}) imageRef: ElementRef;
+  @ViewChild('photoContainer', {static: true}) container: ElementRef;
 
   thumbnail: Thumbnail;
   keywords: { value: string; type: SearchQueryTypes }[] = null;
@@ -115,10 +98,10 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, OnDestroy {
   isInView(): boolean {
     return (
       PageHelper.ScrollY <
-        this.container.nativeElement.offsetTop +
-          this.container.nativeElement.clientHeight &&
+      this.container.nativeElement.offsetTop +
+      this.container.nativeElement.clientHeight &&
       PageHelper.ScrollY + window.innerHeight >
-        this.container.nativeElement.offsetTop
+      this.container.nativeElement.offsetTop
     );
   }
 
@@ -156,8 +139,8 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, OnDestroy {
     return (
       (this.gridMedia.media as PhotoDTO).metadata.positionData.city ||
       (this.gridMedia.media as PhotoDTO).metadata.positionData.state ||
-      (this.gridMedia.media as PhotoDTO).metadata.positionData.country
-    );
+      (this.gridMedia.media as PhotoDTO).metadata.positionData.country || ''
+    ).trim();
   }
 
   mouseOver(): void {

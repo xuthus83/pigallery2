@@ -130,6 +130,7 @@ import {
   ionLocationOutline,
   ionLogOutOutline,
   ionMenuOutline,
+  ionMoonOutline,
   ionPeopleOutline,
   ionPersonOutline, ionPricetagOutline, ionSaveOutline,
   ionSearchOutline,
@@ -137,8 +138,10 @@ import {
   ionShareSocialOutline,
   ionShuffleOutline,
   ionStarOutline,
+  ionSunnyOutline,
   ionTextOutline,
   ionTrashOutline,
+  ionVideocamOutline,
 } from '@ng-icons/ionicons';
 import {SortingMethodIconComponent} from './ui/sorting-method-icon/sorting-method-icon.component';
 
@@ -193,7 +196,8 @@ Marker.prototype.options.icon = MarkerFactory.defIcon;
       ionChevronForwardOutline, ionChevronDownOutline,
       ionTrashOutline,ionSaveOutline,ionAddOutline,
       ionTextOutline, ionFolderOutline, ionDocumentOutline, ionImageOutline,
-      ionPricetagOutline, ionLocationOutline
+      ionPricetagOutline, ionLocationOutline,
+      ionSunnyOutline,ionMoonOutline,ionVideocamOutline
     }),
     ClipboardModule,
     TooltipModule.forRoot(),

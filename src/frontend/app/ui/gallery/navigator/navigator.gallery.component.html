@@ -46,6 +46,7 @@
       <ng-container *ngIf="ItemCount> 0">
         <a class="btn btn-outline-secondary btn-navigator"
            [class.btn-secondary]="filterService.activeFilters.value.areFiltersActive"
+           [class.btn-outline-secondary]="!filterService.activeFilters.value.areFiltersActive"
            (click)="showFilters = ! showFilters">
           <ng-icon name="ionFunnelOutline"
                    title="Filters" i18n-title></ng-icon>
@@ -56,12 +57,13 @@
         <button id="button-alignment" dropdownToggle type="button"
                 class="btn dropdown-toggle  btn-outline-secondary btn-navigator"
                 [class.btn-secondary]="sortingService.sorting.value !== DefaultSorting"
+                [class.btn-outline-secondary]="sortingService.sorting.value == DefaultSorting"
                 aria-controls="sorting-dropdown">
           <app-sorting-method-icon [method]="sortingService.sorting.value"></app-sorting-method-icon>
         </button>
         <ul id="sorting-dropdown" *dropdownMenu class="dropdown-menu dropdown-menu-right"
             role="menu" aria-labelledby="button-alignment">
-          <li class="row dropdown-item" role="menuitem"
+          <li class="row dropdown-item sorting-item" role="menuitem"
               *ngFor="let type of sortingMethodsType"
               (click)="setSorting(type.key)">
             <div class="col-3">

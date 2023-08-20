@@ -42,11 +42,15 @@ app-gallery-filter {
   overscroll-behavior: contain;
 }
 
-.btn-navigator{
+.btn-navigator {
   border: none;
 }
 
-.btn-navigator:not(:hover) {
+.sorting-item {
+  cursor: pointer;
+}
+
+.btn-navigator:not(:hover):not(.btn-secondary) {
   --bs-text-opacity: 1;
   color: rgba(var(--bs-body-color-rgb), var(--bs-text-opacity)) !important;
 }
