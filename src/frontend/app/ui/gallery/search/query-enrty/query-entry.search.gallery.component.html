@@ -36,7 +36,7 @@
     <button [ngClass]="'btn-danger'"
             class="btn float-end col-1 align-self-center"
             (click)="deleteItem()">
-      <span class="oi oi-trash" aria-hidden="true" aria-label="Delete"></span>
+      <ng-icon name="ionTrashOutline" title="Delete" i18n-title></ng-icon>
     </button>
     <div class="container query-list">
       <app-gallery-search-query-entry *ngFor="let sq of AsListQuery.list; index as i"
@@ -46,7 +46,12 @@
     </div>
     <div class="col query-list d-flex justify-content-start">
       <button class="btn btn-primary" (click)="addQuery()">
-        <span class="oi oi-plus" aria-hidden="true" aria-label="Add"> Add</span>
+        <ng-icon
+          class="me-1"
+          style="margin-left: -0.1em; margin-right: -0.1em"
+          name="ionAddOutline"
+          title="Add" i18n-title></ng-icon>
+        <span i18n>Add</span>
       </button>
     </div>
   </ng-container>
@@ -293,7 +298,7 @@
       <button [ngClass]="'btn-danger'"
               class="btn  w-auto float-end"
               (click)="deleteItem()">
-        <span class="oi oi-trash" aria-hidden="true" aria-label="Delete"></span>
+        <ng-icon name="ionTrashOutline" title="Delete" i18n-title></ng-icon>
       </button>
     </div>
   </ng-container>

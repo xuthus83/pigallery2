@@ -51,6 +51,7 @@ This is mostly btn-light
 }
 
 ng-icon {
+  vertical-align: text-top;
   font-size: 1.15em
 }
 
