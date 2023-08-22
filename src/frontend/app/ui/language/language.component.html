@@ -9,7 +9,7 @@
     <ng-container *ngIf="current != null">
       {{current}}
     </ng-container>
-    <span *ngIf="current == null" class="oi oi-globe"></span>
+    <ng-icon  *ngIf="current == null" name="ionGlobeOutline"></ng-icon>
 
   </button>
   <div *dropdownMenu class="dropdown-menu" aria-labelledby="language">
