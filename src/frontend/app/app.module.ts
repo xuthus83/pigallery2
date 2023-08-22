@@ -115,6 +115,7 @@ import {
   ionArrowDownOutline,
   ionArrowUpOutline,
   ionCalendarOutline,
+  ionCameraOutline,
   ionChevronBackOutline,
   ionChevronDownOutline,
   ionChevronForwardOutline,
@@ -147,6 +148,7 @@ import {
   ionSettingsOutline,
   ionShareSocialOutline,
   ionShuffleOutline,
+  ionStar,
   ionStarOutline,
   ionSunnyOutline,
   ionTextOutline,
@@ -201,7 +203,7 @@ Marker.prototype.options.icon = MarkerFactory.defIcon;
     NgIconsModule.withIcons({
       ionDownloadOutline, ionFunnelOutline,
       ionGitBranchOutline, ionArrowDownOutline, ionArrowUpOutline,
-      ionStarOutline, ionCalendarOutline, ionPersonOutline, ionShuffleOutline,
+      ionStarOutline, ionStar, ionCalendarOutline, ionPersonOutline, ionShuffleOutline,
       ionPeopleOutline,
       ionMenuOutline, ionShareSocialOutline,
       ionImagesOutline, ionLinkOutline, ionSearchOutline, ionHammerOutline, ionCopyOutline,
@@ -213,7 +215,8 @@ Marker.prototype.options.icon = MarkerFactory.defIcon;
       ionSunnyOutline, ionMoonOutline, ionVideocamOutline,
       ionInformationOutline, ionContractOutline, ionExpandOutline, ionCloseOutline,
       ionTimerOutline,
-      ionPlayOutline, ionPauseOutline, ionVolumeMediumOutline, ionVolumeMuteOutline
+      ionPlayOutline, ionPauseOutline, ionVolumeMediumOutline, ionVolumeMuteOutline,
+      ionCameraOutline
     }),
     ClipboardModule,
     TooltipModule.forRoot(),
