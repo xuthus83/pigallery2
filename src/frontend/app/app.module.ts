@@ -133,7 +133,7 @@ import {
   ionImagesOutline,
   ionInformationOutline,
   ionLinkOutline,
-  ionLocationOutline,
+  ionLocationOutline, ionLockClosedOutline,
   ionLogOutOutline,
   ionMenuOutline,
   ionMoonOutline,
@@ -217,7 +217,7 @@ Marker.prototype.options.icon = MarkerFactory.defIcon;
       ionInformationOutline, ionContractOutline, ionExpandOutline, ionCloseOutline,
       ionTimerOutline,
       ionPlayOutline, ionPauseOutline, ionVolumeMediumOutline, ionVolumeMuteOutline,
-      ionCameraOutline, ionWarningOutline
+      ionCameraOutline, ionWarningOutline, ionLockClosedOutline
     }),
     ClipboardModule,
     TooltipModule.forRoot(),
