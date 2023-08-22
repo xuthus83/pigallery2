@@ -40,11 +40,16 @@ a {
 }
 
 .no-image {
-  position: absolute;
-  color: #7f7f7f;
-  font-size: 80px;
-  top: calc(50% - 40px);
-  left: calc(50% - 40px);
+  display: block;
+  color: var(--bs-secondary-color);
+  font-size: 100px;
+  top: calc(50% - 20px);
+  left: calc(50%);
+  transform: translate(-50%, -50%);
+  position: relative;
+}
+.no-image ::ng-deep svg {
+  --ng-icon__stroke-width: 32;
 }
 
 .photo {

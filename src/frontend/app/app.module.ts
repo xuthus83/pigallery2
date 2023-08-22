@@ -157,6 +157,7 @@ import {
   ionVideocamOutline,
   ionVolumeMediumOutline,
   ionVolumeMuteOutline,
+  ionWarningOutline,
 } from '@ng-icons/ionicons';
 import {SortingMethodIconComponent} from './ui/sorting-method-icon/sorting-method-icon.component';
 
@@ -216,7 +217,7 @@ Marker.prototype.options.icon = MarkerFactory.defIcon;
       ionInformationOutline, ionContractOutline, ionExpandOutline, ionCloseOutline,
       ionTimerOutline,
       ionPlayOutline, ionPauseOutline, ionVolumeMediumOutline, ionVolumeMuteOutline,
-      ionCameraOutline
+      ionCameraOutline, ionWarningOutline
     }),
     ClipboardModule,
     TooltipModule.forRoot(),

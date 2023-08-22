@@ -73,7 +73,11 @@
   opacity: 1.0;
 }
 
-::ng-deep .marker-svg-small .marker-svg-wrapper{
+::ng-deep .leaflet-container a.leaflet-popup-close-button span{
+  font-size: x-large;
+}
+
+::ng-deep .marker-svg-small .marker-svg-wrapper {
   width: 30px;
   height: 30px;
   transform: scale(0.5);
@@ -118,13 +122,17 @@
 
 ::ng-deep .lightbox-map-gallery-component-preview-loading {
   background-color: #bbbbbb;
-  color: #7f7f7f;
-  font-size: 50px;
+  color: var(--bs-secondary-color-rgb);
 }
 
-::ng-deep .lightbox-map-gallery-component-preview-loading span {
-  top: calc(50% - 25px);
-  left: calc(50% - 25px);
+::ng-deep .lightbox-map-gallery-component-preview-loading svg {
+  top: calc(50%);
+  left: calc(50%);
+  opacity: 0.75; /* making sure that --bs-secondary-color used as color does not make ghosting line effect*/
+  transform: translate(-50%, -50%);
+  display: block;
+  position: relative;
+  --ng-icon__size: 250px
 }
 
 ::ng-deep .marker-cluster-small {

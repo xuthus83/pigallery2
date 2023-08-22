@@ -36,6 +36,7 @@ import {LeafletControlLayersConfig} from '@asymmetrik/ngx-leaflet';
 import {ThemeService} from '../../../../model/theme.service';
 import {Subscription} from 'rxjs';
 import {MarkerFactory} from '../MarkerFactory';
+import {ionImageOutline, ionWarningOutline} from '@ng-icons/ionicons';
 
 
 @Component({
@@ -371,9 +372,7 @@ export class GalleryMapLightboxComponent implements OnChanges, OnDestroy {
         } else {
           const noPhotoPopup = `<div class="lightbox-map-gallery-component-preview-loading"
                                  style="width: ${width}px; height: ${height}px">
-                  <span class="oi ${photoTh.Error ? 'oi-warning' : 'oi-image'}"
-                        aria-hidden="true">
-                  </span>
+                  ${photoTh.Error ? ionWarningOutline : ionImageOutline}
                   </div>`;
 
           mkr.bindPopup(noPhotoPopup, {minWidth: width});

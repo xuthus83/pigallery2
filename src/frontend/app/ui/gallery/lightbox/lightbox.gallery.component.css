@@ -42,3 +42,7 @@ app-info-panel {
   -webkit-transition: all 0.3s ease-in-out;
 }
 
+
+ng-icon.h2 ::ng-deep svg {
+  vertical-align: bottom;
+}
