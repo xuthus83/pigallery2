@@ -29,3 +29,7 @@
 .error-message {
   color: #d9534f;
 }
+
+ng-icon ::ng-deep svg {
+  vertical-align: text-top;
+}

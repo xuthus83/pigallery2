@@ -22,8 +22,8 @@
           </ng-container>
         </div>
         <div>
-          <button class="btn btn-danger ms-0" (click)="remove(schedule)"><span
-            class="oi oi-trash"></span>
+          <button class="btn btn-danger ms-0" (click)="remove(schedule)">
+            <ng-icon name="ionTrashOutline" title="Delete" i18n-title></ng-icon>
           </button>
           <app-settings-job-button class="ms-md-2 mt-2 mt-md-0"
                                    (jobError)="error=$event"
@@ -266,8 +266,8 @@
                                           [disabled]="mp.sortBy.length < 2"
                                           [id]="'list_btn_'+configEntry.id+'_'+i+'_'+j+'_'+k"
                                           [name]="'list_btn_'+configEntry.id+'_'+i+'_'+j+'_'+k"
-                                          (click)="removeFromArray(mp.sortBy,k)"><span
-                                    class="oi oi-trash"></span>
+                                          (click)="removeFromArray(mp.sortBy,k)">
+                                    <ng-icon name="ionTrashOutline" title="Delete" i18n-title></ng-icon>
                                   </button>
                                 </div>
                               </div>
@@ -276,7 +276,9 @@
                               <button class="btn btn-primary mt-1 float-end"
                                       [id]="'btn_add_'+configEntry.id+'_'+i+'_'+j"
                                       [name]="'btn_add_'+configEntry.id+'_'+i+'_'+j"
-                                      (click)="AddNewSorting(mp.sortBy)" i18n>+ Add
+                                      (click)="AddNewSorting(mp.sortBy)">
+                                <ng-icon name="ionAddOutline" class="me-1"></ng-icon>
+                                <span i18n>Add</span>
                               </button>
                             </div>
                           </div>
@@ -309,8 +311,8 @@
                                 [disabled]="AsMediaPickDTOArray(schedule.config[configEntry.id]).length < 2"
                                 [id]="'list_btn_'+configEntry.id+'_'+i+'_'+j"
                                 [name]="'list_btn_'+configEntry.id+'_'+i+'_'+j"
-                                (click)="removeFromArray(AsMediaPickDTOArray(schedule.config[configEntry.id]),j)"><span
-                          class="oi oi-trash"></span>
+                                (click)="removeFromArray(AsMediaPickDTOArray(schedule.config[configEntry.id]),j)">
+                          <ng-icon name="ionTrashOutline" title="Delete" i18n-title></ng-icon>
                         </button>
                       </div>
                       <hr/>
@@ -321,7 +323,9 @@
                         <button class="btn btn-primary mt-1 float-end"
                                 [id]="'btn_add_'+configEntry.id+'_'+i"
                                 [name]="'btn_add_'+configEntry.id+'_'+i"
-                                (click)="AddNewMediaPickDTO(schedule.config[configEntry.id])" i18n>+ Add
+                                (click)="AddNewMediaPickDTO(schedule.config[configEntry.id])">
+                          <ng-icon name="ionAddOutline" class="me-1"></ng-icon>
+                          <span i18n>Add</span>
                         </button>
                       </div>
                     </ng-container>
@@ -352,7 +356,9 @@
 </div>
 
 <button class="btn btn-primary float-end mt-2"
-        (click)="prepareNewJob()" i18n>+ Add Job
+        (click)="prepareNewJob()">
+  <ng-icon name="ionAddOutline" class="me-1"></ng-icon>
+  <span i18n>Add Job</span>
 </button>
 
 

@@ -47,13 +47,13 @@
                 class="btn btn-secondary me-2" type="button"
                 [disabled]="rawSearchText == ''"
                 (click)="openSaveSearchModal(saveSearchModal)">
-          <ng-icon name="ionSaveOutline" class="me-2"></ng-icon>
+          <ng-icon name="ionSaveOutline" class="me-1"></ng-icon>
           <ng-container i18n>Save</ng-container>
         </button>
         <button class="btn btn-primary" type="button"
                 [routerLink]="['/search', HTMLSearchQuery]"
                 (click)="hideSearchModal()">
-          <ng-icon name="ionSearchOutline" class="me-2"></ng-icon>
+          <ng-icon name="ionSearchOutline" class="me-1"></ng-icon>
           <ng-container i18n>Search</ng-container>
         </button>
       </div>
@@ -94,7 +94,7 @@
           <button class="btn btn-primary" type="button"
                   [disabled]="saveSearchName == ''"
                   (click)="saveSearch()">
-            <ng-icon name="ionSaveOutline" class="me-2"></ng-icon>
+            <ng-icon name="ionSaveOutline" class="me-1"></ng-icon>
             <ng-container i18n>Save as album</ng-container>
           </button>
         </div>
