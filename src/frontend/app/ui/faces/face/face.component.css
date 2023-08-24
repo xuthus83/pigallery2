@@ -13,6 +13,10 @@
 
 }
 
+ng-icon.star ::ng-deep svg {
+  vertical-align: top;
+}
+
 .star.favourite {
   color: white;
 }

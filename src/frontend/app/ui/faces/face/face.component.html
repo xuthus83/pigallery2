@@ -17,9 +17,12 @@
 
   <!--Info box -->
   <div class="info rounded-bottom">
-      <span (click)="CanUpdate && toggleFavourite($event)"
-            class="star oi oi-star"
-            [ngClass]="{'favourite':person.isFavourite, 'clickable':CanUpdate}"></span>
+    <ng-icon class="star"
+             name="ionStarOutline"
+             [class.favourite]="person.isFavourite"
+             [class.clickable]="CanUpdate"
+             (click)="CanUpdate && toggleFavourite($event)"
+    ></ng-icon>
     {{person.name}} ({{person.count}})
 
   </div>

@@ -2,7 +2,8 @@
   <div class="card mb-4">
     <div class="card-header">
       <h5 class="d-inline-block mb-0">
-        <span class="oi oi-{{icon}}"></span> {{Name}}
+        <ng-icon [name]="icon"></ng-icon>
+        {{Name}}
       </h5>
       <div *ngIf="states.value.enabled !== undefined" class="float-end p-0">
 
@@ -69,7 +70,8 @@
 
   <ng-template #Recursion let-rStates="rStates" let-topLevel="topLevel" let-skipJobs="skipJobs"
                let-confPath="confPath">
-    <div class="alert alert-secondary" role="alert" *ngIf="rStates.description && settingsService.configStyle == ConfigStyle.full">
+    <div class="alert alert-secondary" role="alert"
+         *ngIf="rStates.description && settingsService.configStyle == ConfigStyle.full">
       {{rStates.description}}
       <a *ngIf="rStates.tags?.githubIssue"
          [href]="'https://github.com/bpatrik/pigallery2/issues/'+rStates.tags?.githubIssue">
@@ -84,10 +86,12 @@
           [ngModel]="rStates?.value.__state[ck]">
         </app-settings-entry>
         <ng-container *ngIf="isExpandableConfig(rStates.value.__state[ck])">
-          <div class="card mt-2 mb-2" *ngIf="topLevel && rStates?.value.__state[ck].tags?.uiIcon" [id]="ConfigPath+'.'+ck">
+          <div class="card mt-2 mb-2" *ngIf="topLevel && rStates?.value.__state[ck].tags?.uiIcon"
+               [id]="ConfigPath+'.'+ck">
             <div class="card-body">
-              <h5 class="card-title"><span
-                class="oi oi-{{rStates?.value.__state[ck].tags?.uiIcon}}"></span> {{rStates?.value.__state[ck].tags?.name || ck}}
+              <h5 class="card-title">
+                <ng-icon [name]="rStates?.value.__state[ck].tags?.uiIcon"></ng-icon>
+                {{rStates?.value.__state[ck].tags?.name || ck}}
               </h5>
               <ng-container
                 *ngTemplateOutlet="Recursion; context:{ rStates: rStates.value.__state[ck], confPath:confPath+'.'+ck }"
@@ -124,7 +128,8 @@
   <ng-template #JobTemplate let-uiJob="uiJob">
     <div class="mb-2">
       <ng-container *ngFor="let job of uiJob; let i = index">
-        <div class="alert alert-secondary" role="alert" *ngIf="job.description  && settingsService.configStyle == ConfigStyle.full">
+        <div class="alert alert-secondary" role="alert"
+             *ngIf="job.description  && settingsService.configStyle == ConfigStyle.full">
           {{job.description}}
         </div>
         <app-settings-job-button

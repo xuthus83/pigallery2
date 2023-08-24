@@ -944,7 +944,7 @@ export class ServerMediaConfig extends ClientMediaConfig {
   @ConfigProperty({
     tags: {
       name: $localize`Video`,
-      uiIcon: 'video',
+      uiIcon: 'ionVideocamOutline',
       priority: ConfigPriority.advanced,
       uiJob: [
         {
@@ -958,7 +958,7 @@ export class ServerMediaConfig extends ClientMediaConfig {
   @ConfigProperty({
     tags: {
       name: $localize`Photo`,
-      uiIcon: 'camera-slr',
+      uiIcon: 'ionCameraOutline',
       priority: ConfigPriority.advanced,
       uiJob: [
         {
@@ -971,7 +971,7 @@ export class ServerMediaConfig extends ClientMediaConfig {
   @ConfigProperty({
     tags: {
       name: $localize`Thumbnail`,
-      uiIcon: 'grid-three-up',
+      uiIcon: 'ionImageOutline',
       priority: ConfigPriority.advanced,
       uiJob: [{job: DefaultsJobs[DefaultsJobs['Thumbnail Generation']]}]
     } as TAGS
@@ -1065,7 +1065,7 @@ export class ServerConfig extends ClientConfig {
   @ConfigProperty({
     tags: {
       name: $localize`Server`,
-      uiIcon: 'cog'
+      uiIcon: 'ionCloudOutline'
     } as TAGS,
   })
   Server: ServerServiceConfig = new ServerServiceConfig();
@@ -1073,7 +1073,7 @@ export class ServerConfig extends ClientConfig {
   @ConfigProperty({
     tags: {
       name: $localize`Database`,
-      uiIcon: 'list'
+      uiIcon: 'ionServerOutline'
     } as TAGS
   })
   Database: ServerDataBaseConfig = new ServerDataBaseConfig();
@@ -1081,7 +1081,7 @@ export class ServerConfig extends ClientConfig {
   @ConfigProperty({
     tags: {
       name: $localize`Users`,
-      uiIcon: 'person'
+      uiIcon: 'ionPersonOutline'
     } as TAGS,
   })
   Users: ServerUserConfig = new ServerUserConfig();
@@ -1089,7 +1089,7 @@ export class ServerConfig extends ClientConfig {
   @ConfigProperty({
     tags: {
       name: $localize`Indexing`,
-      uiIcon: 'pie-chart',
+      uiIcon: 'ionFileTrayFullOutline',
       uiJob: [
         {
           job: DefaultsJobs[DefaultsJobs.Indexing],
@@ -1105,7 +1105,7 @@ export class ServerConfig extends ClientConfig {
   @ConfigProperty({
     tags: {
       name: $localize`Media`,
-      uiIcon: 'camera-slr'
+      uiIcon: 'ionImagesOutline'
     } as TAGS,
   })
   Media: ServerMediaConfig = new ServerMediaConfig();
@@ -1113,7 +1113,7 @@ export class ServerConfig extends ClientConfig {
   @ConfigProperty({
     tags: {
       name: $localize`Meta file`,
-      uiIcon: 'file'
+      uiIcon: 'ionDocumentOutline'
     } as TAGS,
   })
   MetaFile: ServerMetaFileConfig = new ServerMetaFileConfig();
@@ -1121,7 +1121,7 @@ export class ServerConfig extends ClientConfig {
   @ConfigProperty({
     tags: {
       name: $localize`Preview`,
-      uiIcon: 'image',
+      uiIcon: 'ionImageOutline',
       uiJob: [
         {
           job: DefaultsJobs[DefaultsJobs['Preview Filling']],
@@ -1136,7 +1136,7 @@ export class ServerConfig extends ClientConfig {
   @ConfigProperty({
     tags: {
       name: $localize`Sharing`,
-      uiIcon: 'share'
+      uiIcon: 'ionShareSocialOutline'
     } as TAGS,
   })
   Sharing: ServerSharingConfig = new ServerSharingConfig();
@@ -1144,7 +1144,7 @@ export class ServerConfig extends ClientConfig {
   @ConfigProperty({
     tags: {
       name: $localize`Duplicates`,
-      uiIcon: 'layers'
+      uiIcon: 'ionCopyOutline'
     } as TAGS
   })
   Duplicates: ServerDuplicatesConfig = new ServerDuplicatesConfig();
@@ -1152,7 +1152,7 @@ export class ServerConfig extends ClientConfig {
   @ConfigProperty({
     tags: {
       name: $localize`Messaging`,
-      uiIcon: 'chat',
+      uiIcon: 'ionChatboxOutline',
       githubIssue: 683
     } as TAGS,
     description: $localize`The App can send messages (like photos on the same day a year ago. aka: "Top Pick"). Here you can configure the delivery method.`
@@ -1162,7 +1162,7 @@ export class ServerConfig extends ClientConfig {
   @ConfigProperty({
     tags: {
       name: $localize`Jobs`,
-      uiIcon: 'project'
+      uiIcon: 'ionPlayOutline'
     } as TAGS
   })
   Jobs: ServerJobConfig = new ServerJobConfig();
