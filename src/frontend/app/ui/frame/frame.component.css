@@ -52,8 +52,17 @@ a.dropdown-item, button.dropdown-item, div.dropdown-item {
   padding: 0.3rem 1.0rem 0.3rem 0.8rem;
 }
 
-a.dropdown-item span, button.dropdown-item span, div.dropdown-item span {
-  padding-right: 0.8rem;
+a.dropdown-item ng-icon, button.dropdown-item ng-icon, div.dropdown-item ng-icon {
+  margin-right: 0.5rem;
+}
+
+ng-icon {
+  vertical-align: text-top;
+}
+
+.btn-scroll-up ng-icon {
+  font-size: x-large;
+  margin: -0.2em;
 }
 
 
@@ -71,6 +80,6 @@ a.dropdown-item span.badge, button.dropdown-item span.badge {
   z-index: 999;
 }
 
-.show-btn-scroll-up{
+.show-btn-scroll-up {
   right: 1em;
 }

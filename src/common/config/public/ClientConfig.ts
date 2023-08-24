@@ -982,7 +982,7 @@ export class ClientGalleryConfig {
   @ConfigProperty({
     tags: {
       name: $localize`Themes`,
-      uiIcon: 'brush',
+      uiIcon: 'ionBrushOutline',
       priority: ConfigPriority.advanced,
     } as TAGS,
     description: $localize`Pigallery2 uses Bootstrap 5.3 (https://getbootstrap.com/docs/5.3) for design (css, layout). In dark mode it sets 'data-bs-theme="dark"' to the <html> to take advantage bootstrap's color modes. For theming, read more at: https://getbootstrap.com/docs/5.3/customize/color-modes/`
@@ -1313,7 +1313,7 @@ export class ClientConfig {
   @ConfigProperty({
     tags: {
       name: $localize`Gallery`,
-      uiIcon: 'browser'
+      uiIcon: 'ionBrowsersOutline'
     } as TAGS,
   })
   Gallery: ClientGalleryConfig = new ClientGalleryConfig();
@@ -1327,7 +1327,7 @@ export class ClientConfig {
   @ConfigProperty({
     tags: {
       name: $localize`Album`,
-      uiIcon: 'grid-two-up',
+      uiIcon: 'ionAlbumsOutline',
       uiJob: [{
         job: DefaultsJobs[DefaultsJobs['Album Reset']],
         hideProgress: true
@@ -1339,7 +1339,7 @@ export class ClientConfig {
   @ConfigProperty({
     tags: {
       name: $localize`Search`,
-      uiIcon: 'magnifying-glass'
+      uiIcon: 'ionSearchOutline'
     } as TAGS,
   })
   Search: ClientSearchConfig = new ClientSearchConfig();
@@ -1350,7 +1350,7 @@ export class ClientConfig {
   @ConfigProperty({
     tags: {
       name: $localize`Map`,
-      uiIcon: 'map-marker'
+      uiIcon: 'ionLocationOutline'
     } as TAGS,
   })
   Map: ClientMapConfig = new ClientMapConfig();
@@ -1358,7 +1358,7 @@ export class ClientConfig {
   @ConfigProperty({
     tags: {
       name: $localize`Faces`,
-      uiIcon: 'people'
+      uiIcon: 'ionPeopleOutline'
     } as TAGS,
   })
   Faces: ClientFacesConfig = new ClientFacesConfig();
@@ -1366,7 +1366,7 @@ export class ClientConfig {
   @ConfigProperty({
     tags: {
       name: $localize`Random photo`,
-      uiIcon: 'random',
+      uiIcon: 'ionShuffleOutline',
       githubIssue: 392
     } as TAGS,
     description: $localize`This feature enables you to generate 'random photo' urls. That URL returns a photo random selected from your gallery. You can use the url with 3rd party application like random changing desktop background. Note: With the current implementation, random link also requires login.`

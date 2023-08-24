@@ -42,6 +42,7 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
   public status: LightboxStates = LightboxStates.Closed;
   public infoPanelVisible = false;
   public infoPanelWidth = 0;
+  private infoPanelMaxWidth = 400;
   public animating = false;
   public photoFrameDim = {width: 1, height: 1, aspect: 1};
   public videoSourceError = false;
@@ -93,7 +94,15 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
     }
   }
 
+  private updateInfoPanelWidth() {
+    this.infoPanelMaxWidth = Math.min(400, Math.ceil(window.innerWidth + 1));
+    if ((window.innerWidth - this.infoPanelMaxWidth) < this.infoPanelMaxWidth * 0.3) {
+      this.infoPanelMaxWidth = Math.ceil(window.innerWidth + 1);
+    }
+  }
+
   ngOnInit(): void {
+    this.infoPanelMaxWidth = 1000;
     this.updatePhotoFrameDim();
     this.subscription.route = this.route.queryParams.subscribe(
       (params: Params): any => {
@@ -286,7 +295,7 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
   }
 
   public toggleInfoPanel(): void {
-    if (this.infoPanelWidth !== 400) {
+    if (this.infoPanelWidth !== this.infoPanelMaxWidth) {
       this.showInfoPanel();
     } else {
       this.hideInfoPanel();
@@ -315,7 +324,7 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
         {
           top: 0,
           left: 0,
-          width: Math.max(this.photoFrameDim.width - 400, 0),
+          width: Math.max(this.photoFrameDim.width - this.infoPanelMaxWidth, 0),
           height: this.photoFrameDim.height,
         } as Dimension,
         {
@@ -333,12 +342,13 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
   }
 
   showInfoPanel(): void {
+    this.updateInfoPanelWidth();
     this.infoPanelVisible = true;
 
     const starPhotoPos = this.calcLightBoxPhotoDimension(
       this.activePhoto.gridMedia.media
     );
-    this.infoPanelWidth = 400;
+    this.infoPanelWidth = this.infoPanelMaxWidth;
     this.updatePhotoFrameDim();
     const endPhotoPos = this.calcLightBoxPhotoDimension(
       this.activePhoto.gridMedia.media
@@ -348,7 +358,7 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
       {
         top: 0,
         left: 0,
-        width: this.photoFrameDim.width + 400,
+        width: this.photoFrameDim.width + this.infoPanelMaxWidth,
         height: this.photoFrameDim.height,
       } as Dimension,
       {

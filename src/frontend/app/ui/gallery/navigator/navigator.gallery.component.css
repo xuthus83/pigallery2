@@ -22,7 +22,6 @@
 .row {
   margin: 0;
   display: flex;
-  cursor: pointer;
 }
 
 nav {
@@ -38,7 +37,21 @@ nav {
   margin-left: 5px;
 }
 
-app-gallery-filter{
+app-gallery-filter {
   overflow-y: auto;
   overscroll-behavior: contain;
+}
+
+.btn-navigator {
+  border: none;
+}
+
+.sorting-item {
+  cursor: pointer;
+}
+
+
+.btn-navigator:not(:hover):not(.btn-secondary) {
+  --bs-text-opacity: 1;
+  color: rgba(var(--bs-body-color-rgb), var(--bs-text-opacity)) !important;
 }

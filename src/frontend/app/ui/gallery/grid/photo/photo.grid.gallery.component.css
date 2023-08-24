@@ -153,6 +153,6 @@ a {
   background-color: rgba(0, 0, 0, 0.8);
 }
 
-.photo-keywords .oi-person {
+.photo-keywords ng-icon {
   margin-right: 2px;
 }

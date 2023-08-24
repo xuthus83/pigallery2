@@ -35,3 +35,7 @@
     margin-top: calc((100vh - 120px - 295px) / 2 - 60px)
   }
 }
+
+ng-icon ::ng-deep svg {
+  vertical-align: text-top;
+}

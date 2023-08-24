@@ -48,7 +48,6 @@ import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule,} from '@angular/common/
 import {DefaultUrlSerializer, UrlSerializer, UrlTree} from '@angular/router';
 import {LanguageComponent} from './ui/language/language.component';
 import {QueryService} from './model/query.service';
-import {IconizeSortingMethod} from './pipes/IconizeSortingMethod';
 import {StringifySortingMethod} from './pipes/StringifySortingMethod';
 import {RandomQueryBuilderGalleryComponent} from './ui/gallery/random-query-builder/random-query-builder.gallery.component';
 import {DurationPipe} from './pipes/DurationPipe';
@@ -109,6 +108,74 @@ import {StringifyEnum} from './pipes/StringifyEnum';
 import {StringifySearchType} from './pipes/StringifySearchType';
 import {MarkerFactory} from './ui/gallery/map/MarkerFactory';
 import {IconComponent} from './icon.component';
+import {NgIconsModule} from '@ng-icons/core';
+import {
+  ionAddOutline,
+  ionAlbumsOutline,
+  ionArrowDownOutline,
+  ionArrowUpOutline,
+  ionBrowsersOutline,
+  ionBrushOutline,
+  ionCalendarOutline,
+  ionCameraOutline,
+  ionChatboxOutline,
+  ionCheckmarkOutline,
+  ionChevronBackOutline,
+  ionChevronDownOutline,
+  ionChevronForwardOutline,
+  ionChevronUpOutline,
+  ionCloseOutline,
+  ionCloudOutline,
+  ionContractOutline,
+  ionCopyOutline,
+  ionDocumentOutline,
+  ionDownloadOutline,
+  ionExpandOutline,
+  ionFileTrayFullOutline,
+  ionFlagOutline,
+  ionFolderOutline,
+  ionFunnelOutline,
+  ionGitBranchOutline,
+  ionGlobeOutline,
+  ionHammerOutline,
+  ionImageOutline,
+  ionImagesOutline,
+  ionInformationOutline,
+  ionLinkOutline,
+  ionLocationOutline,
+  ionLockClosedOutline,
+  ionLogOutOutline,
+  ionMenuOutline,
+  ionMoonOutline,
+  ionPauseOutline,
+  ionPeopleOutline,
+  ionPersonOutline,
+  ionPieChartOutline,
+  ionPlayOutline,
+  ionPricetagOutline,
+  ionPulseOutline,
+  ionRemoveOutline,
+  ionResizeOutline,
+  ionSaveOutline,
+  ionSearchOutline,
+  ionServerOutline,
+  ionSettingsOutline,
+  ionShareSocialOutline,
+  ionShuffleOutline,
+  ionStar,
+  ionStarOutline,
+  ionStopOutline,
+  ionSunnyOutline,
+  ionTextOutline,
+  ionTimeOutline,
+  ionTimerOutline,
+  ionTrashOutline,
+  ionVideocamOutline,
+  ionVolumeMediumOutline,
+  ionVolumeMuteOutline,
+  ionWarningOutline
+} from '@ng-icons/ionicons';
+import {SortingMethodIconComponent} from './ui/sorting-method-icon/sorting-method-icon.component';
 
 @Injectable()
 export class MyHammerConfig extends HammerGestureConfig {
@@ -150,6 +217,28 @@ Marker.prototype.options.icon = MarkerFactory.defIcon;
     HttpClientModule,
     BrowserAnimationsModule,
     AppRoutingModule,
+    NgIconsModule.withIcons({
+      ionDownloadOutline, ionFunnelOutline,
+      ionGitBranchOutline, ionArrowDownOutline, ionArrowUpOutline,
+      ionStarOutline, ionStar, ionCalendarOutline, ionPersonOutline, ionShuffleOutline,
+      ionPeopleOutline,
+      ionMenuOutline, ionShareSocialOutline,
+      ionImagesOutline, ionLinkOutline, ionSearchOutline, ionHammerOutline, ionCopyOutline,
+      ionAlbumsOutline, ionSettingsOutline, ionLogOutOutline,
+      ionChevronForwardOutline, ionChevronDownOutline, ionChevronBackOutline,
+      ionTrashOutline, ionSaveOutline, ionAddOutline, ionRemoveOutline,
+      ionTextOutline, ionFolderOutline, ionDocumentOutline, ionImageOutline,
+      ionPricetagOutline, ionLocationOutline,
+      ionSunnyOutline, ionMoonOutline, ionVideocamOutline,
+      ionInformationOutline, ionContractOutline, ionExpandOutline, ionCloseOutline,
+      ionTimerOutline,
+      ionPlayOutline, ionPauseOutline, ionVolumeMediumOutline, ionVolumeMuteOutline,
+      ionCameraOutline, ionWarningOutline, ionLockClosedOutline, ionChevronUpOutline,
+      ionFlagOutline, ionGlobeOutline, ionPieChartOutline, ionStopOutline,
+      ionTimeOutline, ionCheckmarkOutline, ionPulseOutline, ionResizeOutline,
+      ionCloudOutline, ionChatboxOutline, ionServerOutline, ionFileTrayFullOutline,ionBrushOutline,
+      ionBrowsersOutline
+    }),
     ClipboardModule,
     TooltipModule.forRoot(),
     ToastrModule.forRoot(),
@@ -219,7 +308,6 @@ Marker.prototype.options.icon = MarkerFactory.defIcon;
 
     // Pipes
     StringifyRole,
-    IconizeSortingMethod,
     StringifySortingMethod,
     DurationPipe,
     FileSizePipe,
@@ -232,6 +320,7 @@ Marker.prototype.options.icon = MarkerFactory.defIcon;
     PhotoFilterPipe,
     UsersComponent,
     SharingsListComponent,
+    SortingMethodIconComponent,
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: CSRFInterceptor, multi: true},

@@ -33,7 +33,7 @@ Creating btn-tertiary until bootstrap supports it our of the box.
 /*
 This is mostly btn-light
 */
-.btn-tertiary, [data-bs-theme=light] .btn-tertiary   {
+.btn-tertiary, [data-bs-theme=light] .btn-tertiary {
   --bs-btn-color: #000;
   --bs-btn-bg: var(--bs-body-bg);
   --bs-btn-border-color: var(--bs-border-color);
@@ -50,10 +50,29 @@ This is mostly btn-light
   --bs-btn-disabled-border-color: #f8f9fa;
 }
 
+ng-icon {
+  vertical-align: text-top;
+  font-size: 1.15em
+}
+
+ng-icon svg {
+  vertical-align: unset;
+  --ng-icon__stroke-width: 40;
+}
+
+.rounded-start-bottom {
+  border-bottom-left-radius: var(--bs-border-radius) !important;
+}
+
+.rounded-start-top {
+  border-top-left-radius: var(--bs-border-radius) !important;
+}
+
+
 /*
 This is mostly btn-dark + border fix
 */
-[data-bs-theme=dark] .btn-tertiary   {
+[data-bs-theme=dark] .btn-tertiary {
   --bs-btn-color: #fff;
   --bs-btn-bg: var(--bs-body-bg);
   --bs-btn-border-color: var(--bs-border-color);
@@ -68,7 +87,7 @@ This is mostly btn-dark + border fix
   --bs-btn-disabled-color: #fff;
   --bs-btn-disabled-bg: #212529;
   --bs-btn-disabled-border-color: #212529;
- /* border: var(--bs-border-width) solid var(--bs-border-color);*/
+  /* border: var(--bs-border-width) solid var(--bs-border-color);*/
 }
 
 

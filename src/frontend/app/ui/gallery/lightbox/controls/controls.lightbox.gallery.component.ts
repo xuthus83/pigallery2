@@ -304,6 +304,7 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
 
     this.ctx.lineWidth = 5;
     this.ctx.strokeStyle = 'white';
+    this.ctx.lineCap = 'round';
     this.ctx.clearRect(0, 0, this.canvas.nativeElement.width, this.canvas.nativeElement.height);
     this.ctx.beginPath();
     this.ctx.arc(this.canvas.nativeElement.width / 2, this.canvas.nativeElement.height / 2, this.canvas.nativeElement.width / 2 - this.ctx.lineWidth, 0, p * 2 * Math.PI);
@@ -432,7 +433,7 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
   }
 
   private hideControls = () => {
-    this.controllersDimmed = true;
+    //this.controllersDimmed = true;
   };
 
   private updateFaceContainerDim(): void {
