@@ -4,8 +4,8 @@
        *ngIf="Title">{{Title}}</div>
 
   <div [class.dim-controls]="controllersDimmed"
-       class="controls controls-top">
-    <div class="controls-background">
+       class="controls controls-top pt-1">
+    <div class="controls-background rounded-start-bottom pe-1">
       <div class="highlight control-button" (click)="toggleInfoPanel.emit()"
            title="info key: i" i18n-title>
         <ng-icon class="align-top" size="1.2em" name="ionInformationOutline"></ng-icon>
@@ -180,7 +180,7 @@
 
   </div>
 
-  <div [class.dim-controls]="controllersDimmed" class="controls controls-zoom row mb-2" *ngIf="Zoom > 1">
+  <div [class.dim-controls]="controllersDimmed" class="controls controls-zoom row mb-3" *ngIf="Zoom > 1">
     <div class="col-1 col-md-4">
       <ng-icon name="ionRemoveOutline" class="float-end highlight"
                (click)="zoomOut()" i18n-title title="Zoom out, key: '-'"></ng-icon>
@@ -197,29 +197,29 @@
 
   <div [class.dim-controls]="controllersDimmed" class="controls controls-playback"
        *ngIf="zoom == 1 && activePhoto && activePhoto.gridMedia.isPhoto()">
-    <div class="controls-background  mb-2 me-2">
+    <div class="controls-background rounded-start-top pe-1 pb-1">
       <ng-icon
         *ngIf="playBackState == PlayBackStates.Play"
         name="ionPauseOutline"
-        class=" highlight control-button button-active"
+        class=" highlight control-button button-active me-2 mb-2"
         (click)="pause()"
         title="Pause" i18n-title></ng-icon>
 
       <ng-icon
         *ngIf="playBackState == PlayBackStates.Paused"
         name="ionPlayOutline"
-        class="highlight control-button"
+        class="highlight control-button me-2 mb-2"
         (click)="play()"
         title="Auto play" i18n-title></ng-icon>
     </div>
   </div>
 
-  <div [class.dim-controls]="controllersDimmed" class="controls controls-big-play mb-2"
+  <div [class.dim-controls]="controllersDimmed" class="controls controls-big-play mb-3"
        *ngIf="activePhoto && activePhoto.gridMedia.isVideo() && mediaElement.Paused">
     <ng-icon name="ionPlayOutline"></ng-icon>
   </div>
 
-  <div class="controls controls-video row mb-2" *ngIf="activePhoto && activePhoto.gridMedia.isVideo()">
+  <div class="controls controls-video row mb-3" *ngIf="activePhoto && activePhoto.gridMedia.isVideo()">
     <div class="col-1">
       <ng-icon [name]="!mediaElement.Paused ? 'ionPauseOutline' :'ionPlayOutline'"
                (click)="mediaElement.playPause()"></ng-icon>

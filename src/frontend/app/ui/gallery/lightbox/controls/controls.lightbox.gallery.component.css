@@ -58,11 +58,10 @@
 }
 
 .controls-background {
-  padding: 5px;
   display: inline-block;
   background-color: rgba(0, 0, 0, 0.2);
-  border-radius: 5px;
 }
+
 
 
 .controls .control-button {

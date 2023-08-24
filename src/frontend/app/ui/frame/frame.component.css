@@ -60,6 +60,11 @@ ng-icon {
   vertical-align: text-top;
 }
 
+.btn-scroll-up ng-icon {
+  font-size: x-large;
+  margin: -0.2em;
+}
+
 
 a.dropdown-item span.badge, button.dropdown-item span.badge {
   margin-left: -0.8rem;
