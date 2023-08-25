@@ -11,11 +11,13 @@
          *ngIf="thumbnail && thumbnail.Available"
          [style.background-image]="getSanitizedThUrl()"></div>
 
-    <app-icon *ngIf="!thumbnail || !thumbnail.Available"  class="no-image"></app-icon>
+    <app-icon *ngIf="!thumbnail || !thumbnail.Available" class="no-image"></app-icon>
   </div>
   <!--Info box -->
   <div class="info rounded-bottom">
-    <div class="directory-name">{{directory.name}}</div>
+    <div class="directory-name">{{directory.name}}
+      <ng-container *ngIf="directory.lastScanned>0 && directory.mediaCount > 0">({{directory.mediaCount}})</ng-container>
+    </div>
 
   </div>
 </a>
