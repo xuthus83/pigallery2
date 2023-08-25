@@ -6,6 +6,7 @@ import {Config} from '../../common/config/public/Config';
   styles: [':host {line-height: 0}'],
   template: `
       <svg xmlns="http://www.w3.org/2000/svg"
+           style="vertical-align: baseline"
            [attr.width]="width"
            [attr.height]="height"
            fill="currentcolor"

@@ -1,5 +1,5 @@
 import {UserRoles} from '../../../common/entities/UserDTO';
-import {ConfigPriority, MapProviders, NavigationLinkTypes} from '../../../common/config/public/ClientConfig';
+import {ConfigPriority, MapProviders, NavigationLinkTypes, ScrollUpModes} from '../../../common/config/public/ClientConfig';
 import {ReIndexingSensitivity} from '../../../common/config/private/PrivateConfig';
 import {SortingMethods} from '../../../common/entities/SortingMethods';
 import {SearchQueryTypes} from '../../../common/entities/SearchQueryDTO';
@@ -27,6 +27,9 @@ EnumTranslations[ConfigPriority[ConfigPriority.basic]] = $localize`Basic`;
 EnumTranslations[ConfigPriority[ConfigPriority.advanced]] = $localize`Advanced`;
 EnumTranslations[ConfigPriority[ConfigPriority.underTheHood]] = $localize`Under the hood`;
 
+EnumTranslations[ScrollUpModes[ScrollUpModes.always]] = $localize`Always`;
+EnumTranslations[ScrollUpModes[ScrollUpModes.mobileOnly]] = $localize`Mobile only`;
+EnumTranslations[ScrollUpModes[ScrollUpModes.never]] = $localize`Never`;
 
 EnumTranslations[ConfigStyle[ConfigStyle.full]] = $localize`Full`;
 EnumTranslations[ConfigStyle[ConfigStyle.compact]] = $localize`Compact`;
