@@ -120,9 +120,9 @@ export class PublicRouter {
         icons: [
           {
             src: 'icon_inv.svg',
-            sizes: "48x48 72x72 96x96 128x128 256x256 512x512",
-            type: "image/svg+xml",
-            purpose: "any"
+            sizes: '48x48 72x72 96x96 128x128 256x256 512x512',
+            type: 'image/svg+xml',
+            purpose: 'any maskable'
           },
           {
             src: 'icon_inv.png',
@@ -170,7 +170,7 @@ export class PublicRouter {
     app.get('/icon_inv.svg', (req: Request, res: Response) => {
       res.set('Cache-control', 'public, max-age=31536000');
       res.header('Content-Type', 'image/svg+xml');
-      res.send('<svg style="fill:white" xmlns="http://www.w3.org/2000/svg"' +
+      res.send('<svg style="fill:white" width="512" height="512" xmlns="http://www.w3.org/2000/svg"' +
         ' viewBox="' + (Config.Server.svgIcon.viewBox || '0 0 512 512') + '">' +
         Config.Server.svgIcon.items + '</svg>');
     });
