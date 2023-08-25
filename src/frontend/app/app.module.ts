@@ -176,6 +176,7 @@ import {
   ionWarningOutline
 } from '@ng-icons/ionicons';
 import {SortingMethodIconComponent} from './ui/sorting-method-icon/sorting-method-icon.component';
+import {SafeHtmlPipe} from './pipes/SafeHTMLPipe';
 
 @Injectable()
 export class MyHammerConfig extends HammerGestureConfig {
@@ -236,7 +237,7 @@ Marker.prototype.options.icon = MarkerFactory.defIcon;
       ionCameraOutline, ionWarningOutline, ionLockClosedOutline, ionChevronUpOutline,
       ionFlagOutline, ionGlobeOutline, ionPieChartOutline, ionStopOutline,
       ionTimeOutline, ionCheckmarkOutline, ionPulseOutline, ionResizeOutline,
-      ionCloudOutline, ionChatboxOutline, ionServerOutline, ionFileTrayFullOutline,ionBrushOutline,
+      ionCloudOutline, ionChatboxOutline, ionServerOutline, ionFileTrayFullOutline, ionBrushOutline,
       ionBrowsersOutline
     }),
     ClipboardModule,
@@ -321,6 +322,7 @@ Marker.prototype.options.icon = MarkerFactory.defIcon;
     UsersComponent,
     SharingsListComponent,
     SortingMethodIconComponent,
+    SafeHtmlPipe
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: CSRFInterceptor, multi: true},

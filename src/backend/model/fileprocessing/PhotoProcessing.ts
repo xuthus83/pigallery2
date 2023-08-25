@@ -301,9 +301,8 @@ export class PhotoProcessing {
     // run on other thread
     const input = {
       type: ThumbnailSourceType.Photo,
-      svgString: `<svg width="${size}" height="${size}" xmlns="http://www.w3.org/2000/svg"
-viewBox="${Config.Server.svgIcon.viewBox || '0 0 512 512'}">
-<path fill="${color}" d="${Config.Server.svgIcon.path}"/></svg>`,
+      svgString: `<svg fill="${color}" width="${size}" height="${size}" xmlns="http://www.w3.org/2000/svg"
+viewBox="${Config.Server.svgIcon.viewBox || '0 0 512 512'}">d="${Config.Server.svgIcon.items}</svg>`,
       size: size,
       outPath,
       makeSquare: false,

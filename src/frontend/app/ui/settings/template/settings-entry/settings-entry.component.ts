@@ -17,6 +17,7 @@ import {WebConfig} from '../../../../../../common/config/private/WebConfig';
 import {JobScheduleConfig, UserConfig} from '../../../../../../common/config/private/PrivateConfig';
 import {enumToTranslatedArray} from '../../../EnumTranslations';
 import {BsModalService} from '../../../../../../../node_modules/ngx-bootstrap/modal';
+import {Config} from '../../../../../../common/config/public/Config';
 
 interface IState {
   shouldHide(): boolean;
@@ -450,8 +451,8 @@ export class SettingsEntryComponent
       const doc = parser.parseFromString(reader.result as string, 'image/svg+xml');
       try {
         const wb = doc.documentElement.getAttribute('viewBox');
-        const path = doc.documentElement.getElementsByTagName('path')[0].getAttribute('d');
-        this.state.value.path = path;
+        const items = doc.documentElement.innerHTML;
+        this.state.value.items = items;
         this.state.value.viewBox = wb;
       } catch (e) {
         console.error(e);
@@ -465,6 +466,7 @@ export class SettingsEntryComponent
 
   }
 
+  protected readonly Config = Config;
 }
 
 
