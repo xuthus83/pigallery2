@@ -257,7 +257,7 @@ export class GalleryGridComponent
   }
 
   // TODO: This is deprecated,
-  // we do not post update galleries anymore since the preview member in the DriectoryDTO
+  // we do not post update galleries anymore since the cover member in the DriectoryDTO
   private mergeNewPhotos(): void {
     // merge new data with old one
     let lastSameIndex = 0;

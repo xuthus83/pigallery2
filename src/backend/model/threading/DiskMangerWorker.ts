@@ -124,8 +124,8 @@ export class DiskMangerWorker {
       directories: [],
       isPartial: false,
       mediaCount: 0,
-      preview: null,
-      validPreview: false,
+      cover: null,
+      validCover: false,
       media: [],
       metaFile: [],
     };
@@ -146,7 +146,7 @@ export class DiskMangerWorker {
       if ((await fsp.stat(fullFilePath)).isDirectory()) {
         if (
           settings.noDirectory === true ||
-          settings.previewOnly === true ||
+          settings.coverOnly === true ||
           (await DiskMangerWorker.excludeDir(
             file,
             relativeDirectoryName,
@@ -156,11 +156,11 @@ export class DiskMangerWorker {
           continue;
         }
 
-        // create preview directory
+        // create cover directory
         const d = (await DiskMangerWorker.scanDirectory(
           path.join(relativeDirectoryName, file),
           {
-            previewOnly: true,
+            coverOnly: true,
           }
         )) as SubDirectoryDTO;
 
@@ -182,27 +182,27 @@ export class DiskMangerWorker {
               : await MetadataLoader.loadPhotoMetadata(fullFilePath),
         } as PhotoDTO;
 
-        if (!directory.preview) {
-          directory.preview = Utils.clone(photo);
+        if (!directory.cover) {
+          directory.cover = Utils.clone(photo);
 
-          directory.preview.directory = {
+          directory.cover.directory = {
             path: directory.path,
             name: directory.name,
           };
         }
-        // add the preview photo to the list of media, so it will be saved to the DB
-        // and can be queried to populate previews,
+        // add the cover photo to the list of media, so it will be saved to the DB
+        // and can be queried to populate covers,
         // otherwise we do not return media list that is only partial
         directory.media.push(photo);
 
-        if (settings.previewOnly === true) {
+        if (settings.coverOnly === true) {
           break;
         }
       } else if (VideoProcessing.isVideo(fullFilePath)) {
         if (
           Config.Media.Video.enabled === false ||
           settings.noVideo === true ||
-          settings.previewOnly === true
+          settings.coverOnly === true
         ) {
           continue;
         }
@@ -227,7 +227,7 @@ export class DiskMangerWorker {
         if (
           !DiskMangerWorker.isEnabledMetaFile(fullFilePath) ||
           settings.noMetaFile === true ||
-          settings.previewOnly === true
+          settings.coverOnly === true
         ) {
           continue;
         }
@@ -261,7 +261,7 @@ export class DiskMangerWorker {
 }
 
 export interface DirectoryScanSettings {
-  previewOnly?: boolean;
+  coverOnly?: boolean;
   noMetaFile?: boolean;
   noVideo?: boolean;
   noPhoto?: boolean;

@@ -24,5 +24,5 @@ export class AlbumBaseEntity implements AlbumBaseDTO {
   count: number;
 
   @ManyToOne((type) => MediaEntity, {onDelete: 'SET NULL', nullable: true})
-  public preview: MediaEntity;
+  public cover: MediaEntity;
 }

@@ -19,15 +19,15 @@ export class AlbumManager implements IObjectManager {
 
   private static async updateAlbum(album: SavedSearchEntity): Promise<void> {
     const connection = await SQLConnection.getConnection();
-    const preview =
-      await ObjectManagers.getInstance().PreviewManager.getAlbumPreview(album);
+    const cover =
+      await ObjectManagers.getInstance().CoverManager.getAlbumCover(album);
     const count = await
       ObjectManagers.getInstance().SearchManager.getCount((album as SavedSearchDTO).searchQuery);
 
     await connection
       .createQueryBuilder()
       .update(AlbumBaseEntity)
-      .set({preview, count})
+      .set({cover: cover, count})
       .where('id = :id', {id: album.id})
       .execute();
   }
@@ -81,17 +81,17 @@ export class AlbumManager implements IObjectManager {
     return await connection
       .getRepository(AlbumBaseEntity)
       .createQueryBuilder('album')
-      .leftJoin('album.preview', 'preview')
-      .leftJoin('preview.directory', 'directory')
-      .select(['album', 'preview.name', 'directory.name', 'directory.path'])
+      .leftJoin('album.cover', 'cover')
+      .leftJoin('cover.directory', 'directory')
+      .select(['album', 'cover.name', 'directory.name', 'directory.path'])
       .getMany();
   }
 
   public async onNewDataVersion(): Promise<void> {
-    await this.resetPreviews();
+    await this.resetCovers();
   }
 
-  public async resetPreviews(): Promise<void> {
+  public async resetCovers(): Promise<void> {
     this.isDBValid = false;
   }
 

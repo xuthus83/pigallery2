@@ -15,7 +15,7 @@ import {
   PhotoDTO,
   PhotoMetadata,
   PositionMetaData,
-  PreviewPhotoDTO
+  CoverPhotoDTO
 } from '../src/common/entities/PhotoDTO';
 import {DirectoryBaseDTO, DirectoryPathDTO} from '../src/common/entities/DirectoryDTO';
 import {FileDTO} from '../src/common/entities/FileDTO';
@@ -274,8 +274,8 @@ export class TestHelper {
       mediaCount: 0,
       directories: [],
       metaFile: [],
-      preview: null,
-      validPreview: false,
+      cover: null,
+      validCover: false,
       media: [],
       lastModified: Date.now(),
       lastScanned: null,
@@ -380,21 +380,21 @@ export class TestHelper {
     }
 
     dir.media.push(p);
-    TestHelper.updatePreview(dir);
+    TestHelper.updateCover(dir);
     return p;
   }
 
-  static updatePreview(dir: DirectoryBaseDTO): void {
+  static updateCover(dir: DirectoryBaseDTO): void {
     if (dir.media.length > 0) {
-      dir.preview = dir.media.sort((a, b): number => b.metadata.creationDate - a.metadata.creationDate)[0];
+      dir.cover = dir.media.sort((a, b): number => b.metadata.creationDate - a.metadata.creationDate)[0];
     } else {
-      const filtered = dir.directories.filter((d): PreviewPhotoDTO => d.preview).map((d): PreviewPhotoDTO => d.preview);
+      const filtered = dir.directories.filter((d): CoverPhotoDTO => d.cover).map((d): CoverPhotoDTO => d.cover);
       if (filtered.length > 0) {
-        dir.preview = filtered.sort((a, b): number => b.metadata.creationDate - a.metadata.creationDate)[0];
+        dir.cover = filtered.sort((a, b): number => b.metadata.creationDate - a.metadata.creationDate)[0];
       }
     }
     if (dir.parent) {
-      TestHelper.updatePreview(dir.parent);
+      TestHelper.updateCover(dir.parent);
     }
 
   }

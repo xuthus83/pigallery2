@@ -10,7 +10,7 @@ import {Connection} from 'typeorm';
 import {PhotoDTO} from '../../../../../src/common/entities/PhotoDTO';
 import {VideoDTO} from '../../../../../src/common/entities/VideoDTO';
 import {FileDTO} from '../../../../../src/common/entities/FileDTO';
-import {PreviewManager} from '../../../../../src/backend/model/database/PreviewManager';
+import {CoverManager} from '../../../../../src/backend/model/database/CoverManager';
 import {Config} from '../../../../../src/common/config/private/Config';
 import {SortingMethods} from '../../../../../src/common/entities/SortingMethods';
 import {Utils} from '../../../../../src/common/Utils';
@@ -59,7 +59,7 @@ class GalleryManagerTest extends GalleryManager {
   }
 }
 
-describe('PreviewManager', (sqlHelper: DBTestHelper) => {
+describe('CoverManager', (sqlHelper: DBTestHelper) => {
   describe = tmpDescribe;
   /**
    * dir
@@ -134,12 +134,12 @@ describe('PreviewManager', (sqlHelper: DBTestHelper) => {
     const tmpDir: DirectoryBaseDTO = m.directory as DirectoryBaseDTO;
     const tmpM = tmpDir.media;
     const tmpD = tmpDir.directories;
-    const tmpP = tmpDir.preview;
+    const tmpP = tmpDir.cover;
     const tmpMT = tmpDir.metaFile;
     delete tmpDir.directories;
     delete tmpDir.media;
-    delete tmpDir.preview;
-    delete tmpDir.validPreview;
+    delete tmpDir.cover;
+    delete tmpDir.validCover;
     delete tmpDir.metaFile;
     const ret = Utils.clone(m);
     delete (ret.directory as DirectoryBaseDTO).id;
@@ -149,7 +149,7 @@ describe('PreviewManager', (sqlHelper: DBTestHelper) => {
     delete (ret as PhotoDTO).metadata;
     tmpDir.directories = tmpD;
     tmpDir.media = tmpM;
-    tmpDir.preview = tmpP;
+    tmpDir.cover = tmpP;
     tmpDir.metaFile = tmpMT;
     return ret;
   };
@@ -160,83 +160,83 @@ describe('PreviewManager', (sqlHelper: DBTestHelper) => {
   });
 
   afterEach(() => {
-    Config.Preview.SearchQuery = null;
-    Config.Preview.Sorting = [SortingMethods.descRating, SortingMethods.descDate];
+    Config.AlbumCover.SearchQuery = null;
+    Config.AlbumCover.Sorting = [SortingMethods.descRating, SortingMethods.descDate];
   });
 
 
-  it('should list directories without preview', async () => {
-    const pm = new PreviewManager();
+  it('should list directories without cover', async () => {
+    const pm = new CoverManager();
     const partialDir = (d: DirectoryBaseDTO) => {
       return {id: d.id, name: d.name, path: d.path};
     };
-    expect(await pm.getPartialDirsWithoutPreviews()).to.deep.equalInAnyOrder([partialDir(dir)]);
+    expect(await pm.getPartialDirsWithoutCovers()).to.deep.equalInAnyOrder([partialDir(dir)]);
     const conn = await SQLConnection.getConnection();
 
     await conn.createQueryBuilder()
-      .update(DirectoryEntity).set({validPreview: false}).execute();
+      .update(DirectoryEntity).set({validCover: false}).execute();
 
-    expect(await pm.getPartialDirsWithoutPreviews()).to.deep.equalInAnyOrder([dir, subDir, subDir2].map(d => partialDir(d)));
+    expect(await pm.getPartialDirsWithoutCovers()).to.deep.equalInAnyOrder([dir, subDir, subDir2].map(d => partialDir(d)));
   });
 
-  it('should sort directory preview', async () => {
-    const pm = new PreviewManager();
-    Config.Preview.Sorting = [SortingMethods.descRating, SortingMethods.descDate];
-    expect(Utils.clone(await pm.setAndGetPreviewForDirectory(subDir))).to.deep.equalInAnyOrder(previewifyMedia(p2));
-    Config.Preview.Sorting = [SortingMethods.descDate];
-    expect(Utils.clone(await pm.setAndGetPreviewForDirectory(subDir))).to.deep.equalInAnyOrder(previewifyMedia(pFaceLess));
-    Config.Preview.Sorting = [SortingMethods.descRating];
-    expect(Utils.clone(await pm.setAndGetPreviewForDirectory(dir))).to.deep.equalInAnyOrder(previewifyMedia(p4));
-    Config.Preview.Sorting = [SortingMethods.descName];
-    expect(Utils.clone(await pm.setAndGetPreviewForDirectory(dir))).to.deep.equalInAnyOrder(previewifyMedia(v));
+  it('should sort directory cover', async () => {
+    const pm = new CoverManager();
+    Config.AlbumCover.Sorting = [SortingMethods.descRating, SortingMethods.descDate];
+    expect(Utils.clone(await pm.setAndGetCoverForDirectory(subDir))).to.deep.equalInAnyOrder(previewifyMedia(p2));
+    Config.AlbumCover.Sorting = [SortingMethods.descDate];
+    expect(Utils.clone(await pm.setAndGetCoverForDirectory(subDir))).to.deep.equalInAnyOrder(previewifyMedia(pFaceLess));
+    Config.AlbumCover.Sorting = [SortingMethods.descRating];
+    expect(Utils.clone(await pm.setAndGetCoverForDirectory(dir))).to.deep.equalInAnyOrder(previewifyMedia(p4));
+    Config.AlbumCover.Sorting = [SortingMethods.descName];
+    expect(Utils.clone(await pm.setAndGetCoverForDirectory(dir))).to.deep.equalInAnyOrder(previewifyMedia(v));
   });
 
-  it('should get preview for directory', async () => {
-    const pm = new PreviewManager();
+  it('should get cover for directory', async () => {
+    const pm = new CoverManager();
 
-    Config.Preview.SearchQuery = {type: SearchQueryTypes.any_text, text: 'Boba'} as TextSearch;
-    expect(Utils.clone(await pm.setAndGetPreviewForDirectory(subDir))).to.deep.equalInAnyOrder(previewifyMedia(p));
-    Config.Preview.SearchQuery = {type: SearchQueryTypes.any_text, text: 'Derem'} as TextSearch;
-    expect(Utils.clone(await pm.setAndGetPreviewForDirectory(subDir))).to.deep.equalInAnyOrder(previewifyMedia(p2));
-    expect(Utils.clone(await pm.setAndGetPreviewForDirectory(dir))).to.deep.equalInAnyOrder(previewifyMedia(p2));
-    expect(Utils.clone(await pm.setAndGetPreviewForDirectory(subDir2))).to.deep.equalInAnyOrder(previewifyMedia(p4));
+    Config.AlbumCover.SearchQuery = {type: SearchQueryTypes.any_text, text: 'Boba'} as TextSearch;
+    expect(Utils.clone(await pm.setAndGetCoverForDirectory(subDir))).to.deep.equalInAnyOrder(previewifyMedia(p));
+    Config.AlbumCover.SearchQuery = {type: SearchQueryTypes.any_text, text: 'Derem'} as TextSearch;
+    expect(Utils.clone(await pm.setAndGetCoverForDirectory(subDir))).to.deep.equalInAnyOrder(previewifyMedia(p2));
+    expect(Utils.clone(await pm.setAndGetCoverForDirectory(dir))).to.deep.equalInAnyOrder(previewifyMedia(p2));
+    expect(Utils.clone(await pm.setAndGetCoverForDirectory(subDir2))).to.deep.equalInAnyOrder(previewifyMedia(p4));
 
   });
 
-  it('should get preview for saved search', async () => {
-    const pm = new PreviewManager();
-    Config.Preview.SearchQuery = null;
-    expect(Utils.clone(await pm.getAlbumPreview({
+  it('should get cover for saved search', async () => {
+    const pm = new CoverManager();
+    Config.AlbumCover.SearchQuery = null;
+    expect(Utils.clone(await pm.getAlbumCover({
       searchQuery: {
         type: SearchQueryTypes.any_text,
         text: 'sw'
       } as TextSearch
     }))).to.deep.equalInAnyOrder(previewifyMedia(p4));
-    Config.Preview.SearchQuery = {type: SearchQueryTypes.any_text, text: 'Boba'} as TextSearch;
-    expect(Utils.clone(await pm.getAlbumPreview({
+    Config.AlbumCover.SearchQuery = {type: SearchQueryTypes.any_text, text: 'Boba'} as TextSearch;
+    expect(Utils.clone(await pm.getAlbumCover({
       searchQuery: {
         type: SearchQueryTypes.any_text,
         text: 'sw'
       } as TextSearch
     }))).to.deep.equalInAnyOrder(previewifyMedia(p));
-    Config.Preview.SearchQuery = {type: SearchQueryTypes.any_text, text: 'Derem'} as TextSearch;
-    expect(Utils.clone(await pm.getAlbumPreview({
+    Config.AlbumCover.SearchQuery = {type: SearchQueryTypes.any_text, text: 'Derem'} as TextSearch;
+    expect(Utils.clone(await pm.getAlbumCover({
       searchQuery: {
         type: SearchQueryTypes.any_text,
         text: 'sw'
       } as TextSearch
     }))).to.deep.equalInAnyOrder(previewifyMedia(p2));
     // Having a preview search query that does not return valid result
-    Config.Preview.SearchQuery = {type: SearchQueryTypes.any_text, text: 'wont find it'} as TextSearch;
-    expect(Utils.clone(await pm.getAlbumPreview({
+    Config.AlbumCover.SearchQuery = {type: SearchQueryTypes.any_text, text: 'wont find it'} as TextSearch;
+    expect(Utils.clone(await pm.getAlbumCover({
       searchQuery: {
         type: SearchQueryTypes.any_text,
         text: 'Derem'
       } as TextSearch
     }))).to.deep.equalInAnyOrder(previewifyMedia(p2));
     // having a saved search that does not have any image
-    Config.Preview.SearchQuery = {type: SearchQueryTypes.any_text, text: 'Derem'} as TextSearch;
-    expect(Utils.clone(await pm.getAlbumPreview({
+    Config.AlbumCover.SearchQuery = {type: SearchQueryTypes.any_text, text: 'Derem'} as TextSearch;
+    expect(Utils.clone(await pm.getAlbumCover({
       searchQuery: {
         type: SearchQueryTypes.any_text,
         text: 'wont find it'
@@ -244,9 +244,9 @@ describe('PreviewManager', (sqlHelper: DBTestHelper) => {
     }))).to.deep.equal(null);
   });
 
-  it('should invalidate and update preview', async () => {
+  it('should invalidate and update cover', async () => {
     const gm = new GalleryManagerTest();
-    const pm = new PreviewManager();
+    const pm = new CoverManager();
     const conn = await SQLConnection.getConnection();
 
     const selectDir = async () => {
@@ -254,7 +254,7 @@ describe('PreviewManager', (sqlHelper: DBTestHelper) => {
         where: {id: subDir.id},
         join: {
           alias: 'dir',
-          leftJoinAndSelect: {preview: 'dir.preview'}
+          leftJoinAndSelect: {cover: 'dir.cover'}
         }
       });
     };
@@ -262,27 +262,27 @@ describe('PreviewManager', (sqlHelper: DBTestHelper) => {
 
     let subdir = await selectDir();
 
-    expect(subdir.validPreview).to.equal(true);
-    expect(subdir.preview.id).to.equal(p2.id);
+    expect(subdir.validCover).to.equal(true);
+    expect(subdir.cover.id).to.equal(p2.id);
 
     // new version should invalidate
     await pm.onNewDataVersion(subDir as ParentDirectoryDTO);
     subdir = await selectDir();
-    expect(subdir.validPreview).to.equal(false);
-    // during invalidation, we do not remove the previous preview (it's good to show at least some photo)
-    expect(subdir.preview.id).to.equal(p2.id);
+    expect(subdir.validCover).to.equal(false);
+    // during invalidation, we do not remove the previous cover (it's good to show at least some photo)
+    expect(subdir.cover.id).to.equal(p2.id);
 
     await conn.createQueryBuilder()
       .update(DirectoryEntity)
-      .set({validPreview: false, preview: null}).execute();
-    expect((await selectDir()).preview).to.equal(null);
+      .set({validCover: false, cover: null}).execute();
+    expect((await selectDir()).cover).to.equal(null);
 
 
     const res = await gm.getParentDirFromId(conn,
       (await gm.getDirIdAndTime(conn, dir.name, dir.path)).id);
     subdir = await selectDir();
-    expect(subdir.validPreview).to.equal(true);
-    expect(subdir.preview.id).to.equal(p2.id);
+    expect(subdir.validCover).to.equal(true);
+    expect(subdir.cover.id).to.equal(p2.id);
 
   });
 

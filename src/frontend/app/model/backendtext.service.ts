@@ -59,10 +59,10 @@ export class BackendtextService {
         return $localize`Video converting`;
       case DefaultsJobs['Temp Folder Cleaning']:
         return $localize`Temp folder cleaning`;
-      case DefaultsJobs['Preview Filling']:
-        return $localize`Preview filling`;
-      case DefaultsJobs['Preview Reset']:
-        return $localize`Preview reset`;
+      case DefaultsJobs['Album Cover Filling']:
+        return $localize`Album Cover filling`;
+      case DefaultsJobs['Album Cover Reset']:
+        return $localize`Album Cover reset`;
       case DefaultsJobs['GPX Compression']:
         return $localize`GPX compression`;
       default:

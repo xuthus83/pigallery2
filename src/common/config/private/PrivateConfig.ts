@@ -667,15 +667,15 @@ export class ServerJobConfig {
         {indexChangesOnly: true} // set config explicitly, so it is not undefined on the UI
     ),
     new JobScheduleConfig(
-        DefaultsJobs[DefaultsJobs['Preview Filling']],
-        DefaultsJobs[DefaultsJobs['Preview Filling']],
+        DefaultsJobs[DefaultsJobs['Album Cover Filling']],
+        DefaultsJobs[DefaultsJobs['Album Cover Filling']],
         new AfterJobTriggerConfig(DefaultsJobs[DefaultsJobs['Indexing']]),
         {}
     ),
     new JobScheduleConfig(
         DefaultsJobs[DefaultsJobs['Thumbnail Generation']],
         DefaultsJobs[DefaultsJobs['Thumbnail Generation']],
-        new AfterJobTriggerConfig(DefaultsJobs[DefaultsJobs['Preview Filling']]),
+        new AfterJobTriggerConfig(DefaultsJobs[DefaultsJobs['Album Cover Filling']]),
         {sizes: [240], indexedOnly: true}
     ),
     new JobScheduleConfig(
@@ -872,11 +872,11 @@ export class ServerPhotoConfig extends ClientPhotoConfig {
 }
 
 @SubConfigClass({softReadonly: true})
-export class ServerPreviewConfig {
+export class ServerAlbumCoverConfig {
   @ConfigProperty({
     type: 'object',
     tags: {
-      name: $localize`Preview Filter query`,
+      name: $localize`Cover Filter query`,
       uiResetNeeded: {db: true},
       priority: ConfigPriority.advanced,
       uiType: 'SearchQuery'
@@ -890,11 +890,11 @@ export class ServerPreviewConfig {
   @ConfigProperty({
     arrayType: SortingMethods,
     tags: {
-      name: $localize`Preview Sorting`,
+      name: $localize`Cover Sorting`,
       uiResetNeeded: {db: true},
       priority: ConfigPriority.advanced
     },
-    description: $localize`If multiple preview is available sorts them by these methods and selects the first one.`,
+    description: $localize`If multiple cover is available sorts them by these methods and selects the first one.`,
   })
   Sorting: SortingMethods[] = [
     SortingMethods.descRating,
@@ -1120,18 +1120,18 @@ export class ServerConfig extends ClientConfig {
 
   @ConfigProperty({
     tags: {
-      name: $localize`Preview`,
+      name: $localize`Album cover`,
       uiIcon: 'ionImageOutline',
       uiJob: [
         {
-          job: DefaultsJobs[DefaultsJobs['Preview Filling']],
+          job: DefaultsJobs[DefaultsJobs['Album Cover Filling']],
         }, {
-          job: DefaultsJobs[DefaultsJobs['Preview Reset']],
+          job: DefaultsJobs[DefaultsJobs['Album Cover Reset']],
           hideProgress: true
         }]
     } as TAGS
   })
-  Preview: ServerPreviewConfig = new ServerPreviewConfig();
+  AlbumCover: ServerAlbumCoverConfig = new ServerAlbumCoverConfig();
 
   @ConfigProperty({
     tags: {

@@ -251,15 +251,15 @@ export class ContentWrapper {
   }
 
   private static packDirectory(cw: ContentWrapper, dir: DirectoryBaseDTO | SearchResultDTO, isSearchResult = false): void {
-    if ((dir as DirectoryBaseDTO).preview) {
-      (dir as DirectoryBaseDTO).preview.directory = {
-        path: (dir as DirectoryBaseDTO).preview.directory.path,
-        name: (dir as DirectoryBaseDTO).preview.directory.name,
+    if ((dir as DirectoryBaseDTO).cover) {
+      (dir as DirectoryBaseDTO).cover.directory = {
+        path: (dir as DirectoryBaseDTO).cover.directory.path,
+        name: (dir as DirectoryBaseDTO).cover.directory.name,
       } as DirectoryPathDTO;
 
       // make sure that it is not a same object as one of the photo in the media[]
       // as the next foreach would remove the directory
-      (dir as DirectoryBaseDTO).preview = Utils.clone((dir as DirectoryBaseDTO).preview);
+      (dir as DirectoryBaseDTO).cover = Utils.clone((dir as DirectoryBaseDTO).cover);
     }
 
     if (dir.media) {
@@ -284,7 +284,7 @@ export class ContentWrapper {
       }
     }
 
-    delete (dir as DirectoryBaseDTO).validPreview; // should not go to the client side;
+    delete (dir as DirectoryBaseDTO).validCover; // should not go to the client side;
   }
 
   private static deMapify(cw: ContentWrapper, media: FileDTO, isSearchResult: boolean): void {

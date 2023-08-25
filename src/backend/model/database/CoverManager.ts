@@ -11,24 +11,24 @@ import {DirectoryEntity} from './enitites/DirectoryEntity';
 import {ParentDirectoryDTO} from '../../../common/entities/DirectoryDTO';
 import * as path from 'path';
 import {Utils} from '../../../common/Utils';
-import {PreviewPhotoDTO} from '../../../common/entities/PhotoDTO';
+import {CoverPhotoDTO} from '../../../common/entities/PhotoDTO';
 import {IObjectManager} from './IObjectManager';
 import {Logger} from '../../Logger';
 
-const LOG_TAG = '[PreviewManager]';
+const LOG_TAG = '[CoverManager]';
 
 // ID is need within the backend so it can be saved to DB (ID is the external key)
-export interface PreviewPhotoDTOWithID extends PreviewPhotoDTO {
+export interface CoverPhotoDTOWithID extends CoverPhotoDTO {
   id: number;
 }
 
-export class PreviewManager implements IObjectManager {
+export class CoverManager implements IObjectManager {
   private static DIRECTORY_SELECT = ['directory.name', 'directory.path'];
 
   private static setSorting<T>(
     query: SelectQueryBuilder<T>
   ): SelectQueryBuilder<T> {
-    for (const sort of Config.Preview.Sorting) {
+    for (const sort of Config.AlbumCover.Sorting) {
       switch (sort) {
         case SortingMethods.descDate:
           query.addOrderBy('media.metadata.creationDate', 'DESC');
@@ -54,24 +54,24 @@ export class PreviewManager implements IObjectManager {
     return query;
   }
 
-  public async resetPreviews(): Promise<void> {
+  public async resetCovers(): Promise<void> {
     const connection = await SQLConnection.getConnection();
     await connection
       .createQueryBuilder()
       .update(DirectoryEntity)
-      .set({validPreview: false})
+      .set({validCover: false})
       .execute();
   }
 
   public async onNewDataVersion(changedDir: ParentDirectoryDTO): Promise<void> {
-    // Invalidating Album preview
+    // Invalidating Album cover
     let fullPath = DiskMangerWorker.normalizeDirPath(
       path.join(changedDir.path, changedDir.name)
     );
     const query = (await SQLConnection.getConnection())
       .createQueryBuilder()
       .update(DirectoryEntity)
-      .set({validPreview: false});
+      .set({validCover: false});
 
     let i = 0;
     const root = DiskMangerWorker.pathFromRelativeDirName('.');
@@ -105,79 +105,79 @@ export class PreviewManager implements IObjectManager {
     await query.execute();
   }
 
-  public async getAlbumPreview(album: {
+  public async getAlbumCover(album: {
     searchQuery: SearchQueryDTO;
-  }): Promise<PreviewPhotoDTOWithID> {
+  }): Promise<CoverPhotoDTOWithID> {
     const albumQuery: Brackets = await
       ObjectManagers.getInstance().SearchManager.prepareAndBuildWhereQuery(album.searchQuery);
     const connection = await SQLConnection.getConnection();
 
-    const previewQuery = (): SelectQueryBuilder<MediaEntity> => {
+    const coverQuery = (): SelectQueryBuilder<MediaEntity> => {
       const query = connection
         .getRepository(MediaEntity)
         .createQueryBuilder('media')
         .innerJoin('media.directory', 'directory')
-        .select(['media.name', 'media.id', ...PreviewManager.DIRECTORY_SELECT])
+        .select(['media.name', 'media.id', ...CoverManager.DIRECTORY_SELECT])
         .where(albumQuery);
-      PreviewManager.setSorting(query);
+      CoverManager.setSorting(query);
       return query;
     };
-    let previewMedia = null;
+    let coverMedia = null;
     if (
-      Config.Preview.SearchQuery &&
-      !Utils.equalsFilter(Config.Preview.SearchQuery, {
+      Config.AlbumCover.SearchQuery &&
+      !Utils.equalsFilter(Config.AlbumCover.SearchQuery, {
         type: SearchQueryTypes.any_text,
         text: '',
       } as TextSearch)
     ) {
       try {
-        const previewFilterQuery = await
-          ObjectManagers.getInstance().SearchManager.prepareAndBuildWhereQuery(Config.Preview.SearchQuery);
-        previewMedia = await previewQuery()
-          .andWhere(previewFilterQuery)
+        const coverFilterQuery = await
+          ObjectManagers.getInstance().SearchManager.prepareAndBuildWhereQuery(Config.AlbumCover.SearchQuery);
+        coverMedia = await coverQuery()
+          .andWhere(coverFilterQuery)
           .limit(1)
           .getOne();
       } catch (e) {
-        Logger.error('Cant get album preview using:', JSON.stringify(album.searchQuery), JSON.stringify(Config.Preview.SearchQuery));
+        Logger.error('Cant get album cover using:', JSON.stringify(album.searchQuery), JSON.stringify(Config.AlbumCover.SearchQuery));
         throw e;
       }
     }
 
-    if (!previewMedia) {
+    if (!coverMedia) {
       try {
-        previewMedia = await previewQuery().limit(1).getOne();
+        coverMedia = await coverQuery().limit(1).getOne();
       } catch (e) {
-        Logger.error('Cant get album preview using:', JSON.stringify(album.searchQuery));
+        Logger.error('Cant get album cover using:', JSON.stringify(album.searchQuery));
         throw e;
       }
     }
-    return previewMedia || null;
+    return coverMedia || null;
   }
 
-  public async getPartialDirsWithoutPreviews(): Promise<
+  public async getPartialDirsWithoutCovers(): Promise<
     { id: number; name: string; path: string }[]
   > {
     const connection = await SQLConnection.getConnection();
     return await connection
       .getRepository(DirectoryEntity)
       .createQueryBuilder('directory')
-      .where('directory.validPreview = :validPreview', {validPreview: 0}) // 0 === false
+      .where('directory.validCover = :validCover', {validCover: 0}) // 0 === false
       .select(['name', 'id', 'path'])
       .getRawMany();
   }
 
-  public async setAndGetPreviewForDirectory(dir: {
+  public async setAndGetCoverForDirectory(dir: {
     id: number;
     name: string;
     path: string;
-  }): Promise<PreviewPhotoDTOWithID> {
+  }): Promise<CoverPhotoDTOWithID> {
     const connection = await SQLConnection.getConnection();
-    const previewQuery = (): SelectQueryBuilder<MediaEntity> => {
+    const coverQuery = (): SelectQueryBuilder<MediaEntity> => {
       const query = connection
         .getRepository(MediaEntity)
         .createQueryBuilder('media')
         .innerJoin('media.directory', 'directory')
-        .select(['media.name', 'media.id', ...PreviewManager.DIRECTORY_SELECT])
+        .select(['media.name', 'media.id', ...CoverManager.DIRECTORY_SELECT])
         .where(
           new Brackets((q: WhereExpression) => {
             q.where('media.directory = :dir', {
@@ -201,40 +201,40 @@ export class PreviewManager implements IObjectManager {
         'ASC'
       );
 
-      PreviewManager.setSorting(query);
+      CoverManager.setSorting(query);
       return query;
     };
 
-    let previewMedia: PreviewPhotoDTOWithID = null;
+    let coverMedia: CoverPhotoDTOWithID = null;
     if (
-      Config.Preview.SearchQuery &&
-      !Utils.equalsFilter(Config.Preview.SearchQuery, {
+      Config.AlbumCover.SearchQuery &&
+      !Utils.equalsFilter(Config.AlbumCover.SearchQuery, {
         type: SearchQueryTypes.any_text,
         text: '',
       } as TextSearch)
     ) {
-      previewMedia = await previewQuery()
+      coverMedia = await coverQuery()
         .andWhere(
-          await ObjectManagers.getInstance().SearchManager.prepareAndBuildWhereQuery(Config.Preview.SearchQuery)
+          await ObjectManagers.getInstance().SearchManager.prepareAndBuildWhereQuery(Config.AlbumCover.SearchQuery)
         )
         .limit(1)
         .getOne();
     }
 
-    if (!previewMedia) {
-      previewMedia = await previewQuery().limit(1).getOne();
+    if (!coverMedia) {
+      coverMedia = await coverQuery().limit(1).getOne();
     }
 
-    // set validPreview bit to true even if there is no preview (to prevent future updates)
+    // set validCover bit to true even if there is no cover (to prevent future updates)
     await connection
       .createQueryBuilder()
       .update(DirectoryEntity)
-      .set({preview: previewMedia, validPreview: true})
+      .set({cover: coverMedia, validCover: true})
       .where('id = :dir', {
         dir: dir.id,
       })
       .execute();
 
-    return previewMedia || null;
+    return coverMedia || null;
   }
 }

@@ -6,7 +6,7 @@ import {Utils} from '../../../../../../common/Utils';
 import {Media} from '../../Media';
 import {Thumbnail, ThumbnailManagerService,} from '../../thumbnailManager.service';
 import {QueryService} from '../../../../model/query.service';
-import {PreviewPhotoDTO} from '../../../../../../common/entities/PhotoDTO';
+import {CoverPhotoDTO} from '../../../../../../common/entities/PhotoDTO';
 import {Config} from '../../../../../../common/config/public/Config';
 
 @Component({
@@ -27,8 +27,8 @@ export class GalleryDirectoryComponent implements OnInit, OnDestroy {
   ) {
   }
 
-  public get SamplePhoto(): PreviewPhotoDTO {
-    return this.directory.preview;
+  public get SamplePhoto(): CoverPhotoDTO {
+    return this.directory.cover;
   }
 
   getSanitizedThUrl(): SafeStyle {
@@ -58,7 +58,7 @@ export class GalleryDirectoryComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    if (this.directory.preview) {
+    if (this.directory.cover) {
       this.thumbnail = this.thumbnailService.getThumbnail(
         new Media(this.SamplePhoto, this.size, this.size)
       );

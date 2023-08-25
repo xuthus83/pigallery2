@@ -216,8 +216,8 @@ export class ThumbnailGeneratorMWs {
     if (typeof directory.media !== 'undefined') {
       ThumbnailGeneratorMWs.addThInfoToPhotos(directory.media, directory);
     }
-    if (directory.preview) {
-      ThumbnailGeneratorMWs.addThInfoToAPhoto(directory.preview, directory);
+    if (directory.cover) {
+      ThumbnailGeneratorMWs.addThInfoToAPhoto(directory.cover, directory);
     }
   }
 

@@ -2,10 +2,10 @@ import {ObjectManagers} from '../../ObjectManagers';
 import {ConfigTemplateEntry, DefaultsJobs,} from '../../../../common/entities/job/JobDTO';
 import {Job} from './Job';
 
-export class PreviewFillingJob extends Job {
-  public readonly Name = DefaultsJobs[DefaultsJobs['Preview Filling']];
+export class AlbumCoverFillingJob extends Job {
+  public readonly Name = DefaultsJobs[DefaultsJobs['Album Cover Filling']];
   public readonly ConfigTemplate: ConfigTemplateEntry[] = null;
-  directoryToSetPreview: { id: number; name: string; path: string }[] = null;
+  directoryToSetCover: { id: number; name: string; path: string }[] = null;
   status: 'Persons' | 'Albums' | 'Directory' = 'Persons';
 
   public get Supported(): boolean {
@@ -17,11 +17,11 @@ export class PreviewFillingJob extends Job {
   }
 
   protected async step(): Promise<boolean> {
-    if (!this.directoryToSetPreview) {
+    if (!this.directoryToSetCover) {
       this.Progress.log('Loading Directories to process');
-      this.directoryToSetPreview =
-        await ObjectManagers.getInstance().PreviewManager.getPartialDirsWithoutPreviews();
-      this.Progress.Left = this.directoryToSetPreview.length + 2;
+      this.directoryToSetCover =
+        await ObjectManagers.getInstance().CoverManager.getPartialDirsWithoutCovers();
+      this.Progress.Left = this.directoryToSetCover.length + 2;
       return true;
     }
 
@@ -31,18 +31,18 @@ export class PreviewFillingJob extends Job {
         this.status = 'Albums';
         return true;
       case 'Albums':
-        await this.stepAlbumPreview();
+        await this.stepAlbumCover();
         this.status = 'Directory';
         return true;
       case 'Directory':
-        return await this.stepDirectoryPreview();
+        return await this.stepDirectoryCover();
     }
     return false;
   }
 
-  private async stepAlbumPreview(): Promise<boolean> {
+  private async stepAlbumCover(): Promise<boolean> {
     await ObjectManagers.getInstance().AlbumManager.getAlbums();
-    this.Progress.log('Updating Albums preview');
+    this.Progress.log('Updating Albums cover');
     this.Progress.Processed++;
     return false;
   }
@@ -54,22 +54,22 @@ export class PreviewFillingJob extends Job {
     return false;
   }
 
-  private async stepDirectoryPreview(): Promise<boolean> {
-    if (this.directoryToSetPreview.length === 0) {
-      this.directoryToSetPreview =
-        await ObjectManagers.getInstance().PreviewManager.getPartialDirsWithoutPreviews();
+  private async stepDirectoryCover(): Promise<boolean> {
+    if (this.directoryToSetCover.length === 0) {
+      this.directoryToSetCover =
+        await ObjectManagers.getInstance().CoverManager.getPartialDirsWithoutCovers();
       // double check if there is really no more
-      if (this.directoryToSetPreview.length > 0) {
+      if (this.directoryToSetCover.length > 0) {
         return true; // continue
       }
       this.Progress.Left = 0;
       return false;
     }
-    const directory = this.directoryToSetPreview.shift();
-    this.Progress.log('Setting preview: ' + directory.path + directory.name);
-    this.Progress.Left = this.directoryToSetPreview.length;
+    const directory = this.directoryToSetCover.shift();
+    this.Progress.log('Setting cover: ' + directory.path + directory.name);
+    this.Progress.Left = this.directoryToSetCover.length;
 
-    await ObjectManagers.getInstance().PreviewManager.setAndGetPreviewForDirectory(
+    await ObjectManagers.getInstance().CoverManager.setAndGetCoverForDirectory(
       directory
     );
     this.Progress.Processed++;

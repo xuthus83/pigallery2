@@ -86,9 +86,9 @@ export class GalleryManager  {
             relativeDirectoryName
           );
         for (const subDir of ret.directories) {
-          if (!subDir.preview) {
-            // if subdirectories do not have photos, so cannot show a preview, try getting one from DB
-            await this.fillPreviewForSubDir(connection, subDir);
+          if (!subDir.cover) {
+            // if subdirectories do not have photos, so cannot show a cover, try getting one from DB
+            await this.fillCoverForSubDir(connection, subDir);
           }
         }
         return ret;
@@ -292,15 +292,15 @@ export class GalleryManager  {
   }
 
   /**
-   * Sets preview for the directory and caches it in the DB
+   * Sets cover for the directory and caches it in the DB
    */
-  public async fillPreviewForSubDir(
+  public async fillCoverForSubDir(
     connection: Connection,
     dir: SubDirectoryDTO
   ): Promise<void> {
-    if (!dir.validPreview) {
-      dir.preview =
-        await ObjectManagers.getInstance().PreviewManager.setAndGetPreviewForDirectory(
+    if (!dir.validCover) {
+      dir.cover =
+        await ObjectManagers.getInstance().CoverManager.setAndGetCoverForDirectory(
           dir
         );
     }
@@ -336,15 +336,15 @@ export class GalleryManager  {
       })
       .leftJoinAndSelect('directory.directories', 'directories')
       .leftJoinAndSelect('directory.media', 'media')
-      .leftJoinAndSelect('directories.preview', 'preview')
-      .leftJoinAndSelect('preview.directory', 'previewDirectory')
+      .leftJoinAndSelect('directories.cover', 'cover')
+      .leftJoinAndSelect('cover.directory', 'coverDirectory')
       .select([
         'directory',
         'directories',
         'media',
-        'preview.name',
-        'previewDirectory.name',
-        'previewDirectory.path',
+        'cover.name',
+        'coverDirectory.name',
+        'coverDirectory.path',
       ]);
 
     // TODO: do better filtering
@@ -360,7 +360,7 @@ export class GalleryManager  {
     const dir = await query.getOne();
     if (dir.directories) {
       for (const item of dir.directories) {
-        await this.fillPreviewForSubDir(connection, item);
+        await this.fillCoverForSubDir(connection, item);
       }
     }
 

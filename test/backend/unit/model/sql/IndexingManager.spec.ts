@@ -71,13 +71,13 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
 
   afterEach(async () => {
     Config.loadSync();
-    Config.Preview.Sorting = [SortingMethods.descRating];
+    Config.AlbumCover.Sorting = [SortingMethods.descRating];
     await sqlHelper.clearDB();
   });
 
   const setPartial = (dir: DirectoryBaseDTO) => {
-    if (!dir.preview && dir.media && dir.media.length > 0) {
-      dir.preview = dir.media[0];
+    if (!dir.cover && dir.media && dir.media.length > 0) {
+      dir.cover = dir.media[0];
     }
     dir.isPartial = true;
     delete dir.directories;
@@ -94,11 +94,11 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
   const indexifyReturn = (dir: DirectoryBaseDTO): DirectoryBaseDTO => {
     const d = Utils.clone(dir);
 
-    delete d.preview;
+    delete d.cover;
     if (d.directories) {
       for (const subD of d.directories) {
-        if (subD.preview) {
-          delete subD.preview.metadata;
+        if (subD.cover) {
+          delete subD.cover.metadata;
         }
       }
     }
@@ -111,8 +111,8 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
     dir.media.forEach((media: MediaDTO) => {
       delete media.id;
     });
-    if (dir.preview) {
-      delete dir.preview.id;
+    if (dir.cover) {
+      delete dir.cover.id;
     }
     if (dir.metaFile) {
       if (dir.metaFile.length === 0) {
@@ -288,7 +288,7 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
   });
 
 
-  it('should select preview', async () => {
+  it('should select cover', async () => {
     const selectDirectory = async (gmTest: GalleryManagerTest, dir: DirectoryBaseDTO): Promise<ParentDirectoryDTO> => {
       const conn = await SQLConnection.getConnection();
       const selected = await gmTest.getParentDirFromId(conn,
@@ -357,8 +357,8 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
     sp1.metadata.rating = 5;
     const sp2 = TestHelper.getRandomizedPhotoEntry(subDir, 'subPhoto2', 0);
     sp2.metadata.rating = 3;
-    subDir.preview = sp1;
-    Config.Preview.Sorting = [SortingMethods.descRating];
+    subDir.cover = sp1;
+    Config.AlbumCover.Sorting = [SortingMethods.descRating];
 
     DirectoryDTOUtils.removeReferences(subDir);
     await im.saveToDB(Utils.clone(subDir) as ParentDirectoryDTO);
@@ -395,8 +395,8 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
     sp1.metadata.rating = 5;
     const sp2 = TestHelper.getRandomizedPhotoEntry(subDir, 'subPhoto2', 0);
     sp2.metadata.rating = 3;
-    subDir.preview = sp1;
-    Config.Preview.Sorting = [SortingMethods.descRating];
+    subDir.cover = sp1;
+    Config.AlbumCover.Sorting = [SortingMethods.descRating];
 
 
     DirectoryDTOUtils.removeReferences(subDir);
@@ -432,8 +432,8 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
     sp1.metadata.rating = 5;
     const sp2 = TestHelper.getRandomizedPhotoEntry(subDir, 'subPhoto2', 0);
     sp2.metadata.rating = 3;
-    subDir.preview = sp1;
-    Config.Preview.Sorting = [SortingMethods.descRating];
+    subDir.cover = sp1;
+    Config.AlbumCover.Sorting = [SortingMethods.descRating];
 
     DirectoryDTOUtils.removeReferences(parent);
     await im.saveToDB(Utils.clone(parent) as ParentDirectoryDTO);
@@ -562,8 +562,8 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
     sp1.metadata.rating = 5;
     const sp2 = TestHelper.getRandomizedPhotoEntry(subDir, 'subPhoto2', 1);
     sp2.metadata.rating = 3;
-    subDir.preview = sp1;
-    Config.Preview.Sorting = [SortingMethods.descRating];
+    subDir.cover = sp1;
+    Config.AlbumCover.Sorting = [SortingMethods.descRating];
 
     DirectoryDTOUtils.removeReferences(parent);
     const s1 = im.queueForSave(Utils.clone(parent) as ParentDirectoryDTO);
@@ -578,7 +578,7 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
     DirectoryDTOUtils.removeReferences(selected);
     removeIds(selected);
     setPartial(subDir);
-    parent.directories.forEach(d => delete (d.preview.metadata as any).faces);
+    parent.directories.forEach(d => delete (d.cover.metadata as any).faces);
     delete sp1.metadata.faces;
     delete sp2.metadata.faces;
     expect(Utils.clone(Utils.removeNullOrEmptyObj(selected)))
@@ -709,8 +709,8 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
       await im.saveToDB(dir);
 
       const albums = await am.getAlbums();
-      expect(albums[0].preview).to.be.an('object');
-      delete albums[0].preview;
+      expect(albums[0].cover).to.be.an('object');
+      delete albums[0].cover;
       expect(albums).to.be.deep.equal([
         {
           id: 1,

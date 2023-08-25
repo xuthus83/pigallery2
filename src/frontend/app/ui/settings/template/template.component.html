@@ -34,7 +34,7 @@
         {{Name}} <span i18n>config is not supported with these settings.</span>
       </div>
       <div class="row mt-2">
-        <div class="col" *ngIf="states.tags?.uiJob && !states.tags?.uiJob[0].description">
+        <div class="col-auto" *ngIf="states.tags?.uiJob && !states.tags?.uiJob[0].description">
           <ng-container
             *ngTemplateOutlet="JobTemplate; context:{ uiJob: states.tags?.uiJob }"
           ></ng-container>

@@ -320,21 +320,21 @@ export class SearchManager {
           .getRepository(DirectoryEntity)
           .createQueryBuilder('directory')
           .where(this.buildWhereQuery(dirQuery, true))
-          .leftJoinAndSelect('directory.preview', 'preview')
-          .leftJoinAndSelect('preview.directory', 'previewDirectory')
+          .leftJoinAndSelect('directory.cover', 'cover')
+          .leftJoinAndSelect('cover.directory', 'coverDirectory')
           .limit(Config.Search.maxDirectoryResult + 1)
           .select([
             'directory',
-            'preview.name',
-            'previewDirectory.name',
-            'previewDirectory.path',
+            'cover.name',
+            'coverDirectory.name',
+            'coverDirectory.path',
           ])
           .getMany();
 
-        // setting previews
+        // setting covers
         if (result.directories) {
           for (const item of result.directories) {
-            await ObjectManagers.getInstance().GalleryManager.fillPreviewForSubDir(connection, item as DirectoryEntity);
+            await ObjectManagers.getInstance().GalleryManager.fillCoverForSubDir(connection, item as DirectoryEntity);
           }
         }
         if (

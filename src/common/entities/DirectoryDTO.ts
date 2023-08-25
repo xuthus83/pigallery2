@@ -1,6 +1,6 @@
 import { MediaDTO, MediaDTOUtils } from './MediaDTO';
 import { FileDTO } from './FileDTO';
-import { PhotoDTO, PreviewPhotoDTO } from './PhotoDTO';
+import { PhotoDTO, CoverPhotoDTO } from './PhotoDTO';
 import { Utils } from '../Utils';
 
 export interface DirectoryPathDTO {
@@ -24,8 +24,8 @@ export interface DirectoryBaseDTO<S extends FileDTO = MediaDTO>
   directories?: DirectoryBaseDTO<S>[];
   media?: S[];
   metaFile?: FileDTO[];
-  preview?: PreviewPhotoDTO;
-  validPreview?: boolean; // does not go to the client side
+  cover?: CoverPhotoDTO;
+  validCover?: boolean; // does not go to the client side
 }
 
 export interface ParentDirectoryDTO<S extends FileDTO = MediaDTO>
@@ -53,8 +53,8 @@ export interface SubDirectoryDTO<S extends FileDTO = MediaDTO>
   isPartial?: boolean;
   parent: ParentDirectoryDTO<S>;
   mediaCount: number;
-  preview: PreviewPhotoDTO;
-  validPreview?: boolean; // does not go to the client side
+  cover: CoverPhotoDTO;
+  validCover?: boolean; // does not go to the client side
 }
 
 export const DirectoryDTOUtils = {
@@ -78,15 +78,15 @@ export const DirectoryDTOUtils = {
   },
 
   removeReferences: (dir: DirectoryBaseDTO): DirectoryBaseDTO => {
-    if (dir.preview) {
-      dir.preview.directory = {
-        path: dir.preview.directory.path,
-        name: dir.preview.directory.name,
+    if (dir.cover) {
+      dir.cover.directory = {
+        path: dir.cover.directory.path,
+        name: dir.cover.directory.name,
       } as DirectoryPathDTO;
 
       // make sure that it is not a same object as one of the photo in the media[]
       // as the next foreach would remove the directory
-      dir.preview = Utils.clone(dir.preview);
+      dir.cover = Utils.clone(dir.cover);
     }
 
     if (dir.media) {
@@ -107,7 +107,7 @@ export const DirectoryDTOUtils = {
       });
     }
 
-    delete dir.validPreview; // should not go to the client side;
+    delete dir.validCover; // should not go to the client side;
 
     return dir;
   },

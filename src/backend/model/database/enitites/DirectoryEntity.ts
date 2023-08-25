@@ -46,7 +46,7 @@ export class DirectoryEntity
   public lastModified: number;
 
   /**
-   * Last time the directory was fully scanned, not only for a few media to create a preview
+   * Last time the directory was fully scanned, not only for a few media to create a cover
    */
   @Column({
     type: 'bigint',
@@ -75,11 +75,11 @@ export class DirectoryEntity
 
   // not saving to database, it is only assigned when querying the DB
   @ManyToOne((type) => MediaEntity, { onDelete: 'SET NULL' })
-  public preview: MediaEntity;
+  public cover: MediaEntity;
 
-  // On galley change, preview will be invalid
+  // On galley change, cover will be invalid
   @Column({ type: 'boolean', default: false })
-  validPreview: boolean;
+  validCover: boolean;
 
   @OneToMany((type) => MediaEntity, (media) => media.directory)
   public media: MediaEntity[];
