@@ -95,7 +95,7 @@ export class GalleryNavigatorComponent {
 
         // create rest navigation
         dirs.forEach((name, index) => {
-          const route = dirs.slice(0, dirs.indexOf(name) + 1).join('/');
+          const route = dirs.slice(0, index + 1).join('/');
           if (dirs.length - 1 === index) {
             arr.push({name, route: null});
           } else {
