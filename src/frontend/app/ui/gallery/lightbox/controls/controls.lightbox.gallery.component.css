@@ -13,12 +13,17 @@
 }
 
 .navigation-arrow ng-icon {
-  margin-left: -0.3em;
-  margin-right: -0.3em;
-  transform: translateY(-50%);
   top: 50%;
-  position: relative;
+  left: 50%;
+  position: absolute;
   line-height: 0;
+}
+
+.navigation-arrow-left ng-icon {
+  transform: translate(-55%,-50%);
+}
+.navigation-arrow-right ng-icon {
+  transform: translate(-45%,-50%);
 }
 
 #controllers-container {
@@ -83,6 +88,13 @@
   position: absolute;
   z-index: 4;
   top: 0;
+}
+.controls-top ng-icon {
+  vertical-align: middle;
+}
+
+.controls-top ng-icon ::ng-deep svg {
+  vertical-align: top;
 }
 
 .controls-caption {
@@ -291,8 +303,8 @@ input[type="range"].zoom-progress::-moz-range-track {
 }
 
 canvas {
-  right: 12px;
-  position: relative;
-  top: -50%;
-  transform: translateY(-50%);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }

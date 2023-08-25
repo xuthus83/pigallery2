@@ -8,14 +8,14 @@
     <div class="controls-background rounded-start-bottom pe-1 pt-1">
       <div class="highlight control-button" (click)="toggleInfoPanel.emit()"
            title="info key: i" i18n-title>
-        <ng-icon class="align-top" size="1.2em" name="ionInformationOutline"></ng-icon>
+        <ng-icon  name="ionInformationOutline"></ng-icon>
       </div>
 
       <div *ngIf="fullScreenService.isFullScreenEnabled()"
            class="highlight control-button"
            (click)="toggleFullScreen.emit()"
            title="toggle fullscreen, key: f" i18n-title>
-        <ng-icon style="margin-right: 0.2em; margin-top: -0.05em" class="align-top" size="0.9em"
+        <ng-icon size="0.85em"
                  name="ionContractOutline"></ng-icon>
       </div>
 
@@ -23,7 +23,7 @@
            class="highlight control-button"
            (click)="toggleFullScreen.emit(true)"
            title="toggle fullscreen, key: f" i18n-title>
-        <ng-icon style="margin-right: 0.2em; margin-top: -0.05em" class="align-top" size="0.9em"
+        <ng-icon   size="0.85em"
                  name="ionExpandOutline"></ng-icon>
       </div>
 
@@ -32,7 +32,7 @@
                 class="border-0 highlight control-button"
                 data-bs-auto-close="outside"
                 aria-controls="dropdown-basic">
-          <ng-icon size="1.2em" name="ionMenuOutline"></ng-icon>
+          <ng-icon size="1.2em"  name="ionMenuOutline"></ng-icon>
         </button>
         <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-right"
             role="menu" aria-labelledby="button-basic">
@@ -165,12 +165,12 @@
 
   </div>
 
-  <div [class.dim-controls]="controllersDimmed" class="navigation-arrow highlight rounded-end"
+  <div [class.dim-controls]="controllersDimmed" class="navigation-arrow navigation-arrow-left highlight rounded-end"
        *ngIf="navigation.hasPrev && zoom == 1" title="key: left arrow" id="leftArrow" i18n-title
        (click)="previousPhoto.emit()">
     <ng-icon name="ionChevronBackOutline"></ng-icon>
   </div>
-  <div [class.dim-controls]="controllersDimmed" class="navigation-arrow highlight rounded-start"
+  <div [class.dim-controls]="controllersDimmed" class="navigation-arrow navigation-arrow-right highlight rounded-start"
        *ngIf="navigation.hasNext && zoom == 1" title="key: right arrow" id="rightArrow" i18n-title
        (click)="nextMediaManuallyTriggered()">
     <ng-icon name="ionChevronForwardOutline"></ng-icon>

@@ -282,7 +282,7 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
     ) {
       return;
     }
-    this.nextPhoto.emit();
+  //  this.nextPhoto.emit();
   };
 
   private drawSliderProgress(t: number) {
