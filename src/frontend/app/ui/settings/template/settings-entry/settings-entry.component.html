@@ -159,8 +159,8 @@
             <svg xmlns="http://www.w3.org/2000/svg"
                  width="1em"
                  fill="currentcolor"
-                 [attr.viewBox]="state.value.viewBox || '0 0 512 512'">
-              <path [attr.d]="state.value.path"/>
+                 [attr.viewBox]="state.value.viewBox || '0 0 512 512'"
+                 [innerHtml]="state.value.items | safeHtml">
             </svg>
           </button>
 
@@ -178,8 +178,8 @@
                   <svg xmlns="http://www.w3.org/2000/svg"
                        width="2em"
                        fill="currentcolor"
-                       [attr.viewBox]="state.value.viewBox || '0 0 512 512'">
-                    <path [attr.d]="state.value.path"/>
+                       [attr.viewBox]="state.value.viewBox || '0 0 512 512'"
+                       [innerHtml]="state.value.items | safeHtml">
                   </svg>
                 </div>
               </div>
@@ -209,10 +209,10 @@
                 (change)="onChange($event)"></app-settings-entry>
 
               <app-settings-entry
-                [ngModel]="state.value.__state.path"
+                [ngModel]="state.value.__state.items"
                 [noChangeDetection]="true"
-                [name]="'icon_p_'+idName"
-                [id]="'icon_p_'+idName"
+                [name]="'icon_i_'+idName"
+                [id]="'icon_i_'+idName"
                 (change)="onChange($event)"></app-settings-entry>
             </div>
 

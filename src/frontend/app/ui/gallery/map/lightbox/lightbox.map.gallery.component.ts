@@ -191,7 +191,7 @@ export class GalleryMapLightboxComponent implements OnChanges, OnDestroy {
             theme: ths.theme,
             icon: MarkerFactory.getSvgIcon({
               color: ths.theme.color,
-              svgPath: ths.theme.svgIcon?.path,
+              svgItems: ths.theme.svgIcon?.items,
               viewBox: ths.theme.svgIcon?.viewBox
             })
           };

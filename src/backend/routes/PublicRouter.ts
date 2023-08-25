@@ -145,7 +145,7 @@ export class PublicRouter {
       res.header('Content-Type', 'image/svg+xml');
       res.send('<svg xmlns="http://www.w3.org/2000/svg"' +
         ' viewBox="' + (Config.Server.svgIcon.viewBox || '0 0 512 512') + '">' +
-        '<path d="' + Config.Server.svgIcon.path + '"/></svg>');
+        Config.Server.svgIcon.items + '</svg>');
     });
 
 
@@ -155,24 +155,24 @@ export class PublicRouter {
       res.send('<svg xmlns="http://www.w3.org/2000/svg"' +
         ' viewBox="' + (Config.Server.svgIcon.viewBox || '0 0 512 512') + '">' +
         '<style>' +
-        '    path {' +
+        '    path, circle {' +
         '      fill: black;' +
         '    }' +
         '    @media (prefers-color-scheme: dark) {' +
-        '      path {' +
+        '      path, circle {' +
         '        fill: white;' +
         '      }' +
         '    }' +
         '  </style>' +
-        '<path d="' + Config.Server.svgIcon.path + '"/></svg>');
+        Config.Server.svgIcon.items + '</svg>');
     });
 
     app.get('/icon_inv.svg', (req: Request, res: Response) => {
       res.set('Cache-control', 'public, max-age=31536000');
       res.header('Content-Type', 'image/svg+xml');
-      res.send('<svg xmlns="http://www.w3.org/2000/svg"' +
+      res.send('<svg style="fill:white" xmlns="http://www.w3.org/2000/svg"' +
         ' viewBox="' + (Config.Server.svgIcon.viewBox || '0 0 512 512') + '">' +
-        '<path style="fill:white" d="' + Config.Server.svgIcon.path + '"/></svg>');
+        Config.Server.svgIcon.items + '</svg>');
     });
 
 

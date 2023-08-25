@@ -5,13 +5,13 @@ import {Config} from '../../common/config/public/Config';
   selector: 'app-icon',
   styles: [':host {line-height: 0}'],
   template: `
-    <svg xmlns="http://www.w3.org/2000/svg"
-         [attr.width]="width"
-         [attr.height]="height"
-         fill="currentcolor"
-         [attr.viewBox]="Config.Server.svgIcon.viewBox || '0 0 512 512'">
-      <path [attr.d]="Config.Server.svgIcon.path"/>
-    </svg>`,
+      <svg xmlns="http://www.w3.org/2000/svg"
+           [attr.width]="width"
+           [attr.height]="height"
+           fill="currentcolor"
+           [attr.viewBox]="Config.Server.svgIcon.viewBox || '0 0 512 512'"
+           [innerHtml]="Config.Server.svgIcon.items | safeHtml">
+      </svg>`,
 })
 export class IconComponent {
 
