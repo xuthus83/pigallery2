@@ -45,7 +45,7 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
   public zoom = 1;
   public playBackState: PlayBackStates = PlayBackStates.Paused;
   public PlayBackStates = PlayBackStates;
-  public playBackDurations = [2, 5, 10, 15, 20, 30, 60];
+  public playBackDurations = [1, 2, 5, 10, 15, 20, 30, 60];
   public selectedSlideshowSpeed: number = null;
   public controllersDimmed = false;
 
