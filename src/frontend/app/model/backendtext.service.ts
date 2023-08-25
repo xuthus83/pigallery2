@@ -60,9 +60,9 @@ export class BackendtextService {
       case DefaultsJobs['Temp Folder Cleaning']:
         return $localize`Temp folder cleaning`;
       case DefaultsJobs['Album Cover Filling']:
-        return $localize`Album Cover filling`;
+        return $localize`Album cover filling`;
       case DefaultsJobs['Album Cover Reset']:
-        return $localize`Album Cover reset`;
+        return $localize`Album cover reset`;
       case DefaultsJobs['GPX Compression']:
         return $localize`GPX compression`;
       default:
