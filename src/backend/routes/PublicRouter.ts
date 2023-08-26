@@ -35,7 +35,7 @@ export class PublicRouter {
       let selectedLocale = req.locale;
       if (req.cookies && req.cookies[CookieNames.lang]) {
         if (
-          Config.Server.languages.indexOf(req.cookies[CookieNames.lang]) !== -1
+            Config.Server.languages.indexOf(req.cookies[CookieNames.lang]) !== -1
         ) {
           selectedLocale = req.cookies[CookieNames.lang];
         }
@@ -48,14 +48,14 @@ export class PublicRouter {
     // index.html should not be cached as it contains template that can change
     const renderIndex = (req: Request, res: Response, next: NextFunction) => {
       ejs.renderFile(
-        path.join(ProjectPath.FrontendFolder, req.localePath, 'index.html'),
-        res.tpl,
-        (err, str) => {
-          if (err) {
-            return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, err.message));
+          path.join(ProjectPath.FrontendFolder, req.localePath, 'index.html'),
+          res.tpl,
+          (err, str) => {
+            if (err) {
+              return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, err.message));
+            }
+            res.send(str);
           }
-          res.send(str);
-        }
       );
     };
 
@@ -94,12 +94,12 @@ export class PublicRouter {
       }) as unknown as ClientConfig;
       // Escaping html tags, like <script></script>
       confCopy.Server.customHTMLHead =
-        confCopy.Server.customHTMLHead
-          .replace(/&/g, '&amp;')
-          .replace(/</g, '&lt;')
-          .replace(/>/g, '&gt;')
-          .replace(/"/g, '&quot;')
-          .replace(/'/g, '&#039;');
+          confCopy.Server.customHTMLHead
+              .replace(/&/g, '&amp;')
+              .replace(/</g, '&lt;')
+              .replace(/>/g, '&gt;')
+              .replace(/"/g, '&quot;')
+              .replace(/'/g, '&#039;');
       res.tpl.Config = confCopy;
       res.tpl.customHTMLHead = Config.Server.customHTMLHead;
       const selectedTheme = Config.Gallery.Themes.availableThemes.find(th => th.name === Config.Gallery.Themes.selectedTheme)?.theme || '';
@@ -119,13 +119,19 @@ export class PublicRouter {
         name: Config.Server.applicationTitle,
         icons: [
           {
-            src: 'icon_inv.svg',
-            sizes: '48x48 72x72 96x96 128x128 256x256 512x512',
+            src: 'icon_auto.svg',
+            sizes: 'any',
             type: 'image/svg+xml',
-            purpose: 'any maskable'
+            purpose: 'any'
           },
           {
-            src: 'icon_inv.png',
+            src: 'icon_padding_auto.svg',
+            sizes: 'any',
+            type: 'image/svg+xml',
+            purpose: 'maskable'
+          },
+          {
+            src: 'icon_white.png',
             sizes: '48x48 72x72 96x96 128x128 256x256',
           },
         ],
@@ -134,45 +140,112 @@ export class PublicRouter {
           'photo'
         ],
         start_url:
-          Config.Server.publicUrl === '' ? '.' : Config.Server.publicUrl,
-        background_color: '#000000',
+            Config.Server.publicUrl === '' ? '.' : Config.Server.publicUrl,
+        background_color: '#212529',
         theme_color: '#000000',
       });
     });
 
+    const getIcon = (theme: 'auto' | string | null = null, paddingPercent = 0): string => {
+      const vBs = (Config.Server.svgIcon.viewBox || '').split(' ').slice(0, 4).map(s => parseFloat(s));
+      vBs[0] = vBs[0] || 0;
+      vBs[1] = vBs[1] || 0;
+      vBs[2] = vBs[2] || 512;
+      vBs[3] = vBs[3] || 512;
+
+      // make icon rectangle
+      //add padding to all sides equally. ie: center icon
+      const icon_size = Math.max(vBs[2], vBs[3]);
+      const pw = icon_size - vBs[2];
+      const ph = icon_size - vBs[3];
+      vBs[0] -= pw / 2;
+      vBs[1] -= ph / 2;
+      vBs[2] = icon_size;
+      vBs[3] = icon_size;
+
+      const addPadding = (p: number) => {
+        if (p <= 0) {
+          return;
+        }
+        const size = Math.max(vBs[2], vBs[3]);
+        vBs[0] -= size * (p / 2);
+        vBs[1] -= size * (p / 2);
+        vBs[2] += size * (p);
+        vBs[3] += size * (p);
+      };
+
+      const circle_size = icon_size * 1.38;
+      addPadding(0.38);
+      addPadding(paddingPercent);
+
+
+      const canvasMid = {
+        x: vBs[2] / 2 + vBs[0],
+        y: vBs[3] / 2 + vBs[1],
+      };
+
+      return '<svg ' +
+          ' xmlns="http://www.w3.org/2000/svg"' +
+          ' viewBox="' + vBs.join(' ') + '">' +
+          (theme === 'auto' ? ('<style>' +
+                  '    path, circle {' +
+                  '      fill: black;' +
+                  '    }' +
+                  '   circle.bg {' +
+                  '    fill: white;' +
+                  '   }' +
+                  '    @media (prefers-color-scheme: dark) {' +
+                  '      path, circle {' +
+                  '        fill: white;' +
+                  '      }' +
+                  '   circle.bg {' +
+                  '    fill: black;' +
+                  '   }' +
+                  '    }' +
+                  '  </style>') :
+              (theme != null ?
+                  ('<style>' +
+                      '    path, circle {' +
+                      '      fill: ' + theme + ';' +
+                      '    }' +
+                      '   circle.bg {' +
+                      '    fill: black;' +
+                      '   }' +
+                      '  </style>')
+                  : '<style>' +
+                  '   circle.bg {' +
+                  '    fill: white;' +
+                  '   }' +
+                  '  </style>')) +
+          '<circle class="bg" cy="' + (canvasMid.y) + '" cx="' + (canvasMid.x) + '"  r="' + (circle_size / 2) + '"></circle>' +
+          Config.Server.svgIcon.items + '</svg>';
+    };
+
     app.get('/icon.svg', (req: Request, res: Response) => {
       res.set('Cache-control', 'public, max-age=31536000');
       res.header('Content-Type', 'image/svg+xml');
-      res.send('<svg xmlns="http://www.w3.org/2000/svg"' +
-        ' viewBox="' + (Config.Server.svgIcon.viewBox || '0 0 512 512') + '">' +
-        Config.Server.svgIcon.items + '</svg>');
+      res.send(getIcon());
+    });
+
+
+    app.get('/icon_padding_auto.svg', (req: Request, res: Response) => {
+      res.set('Cache-control', 'public, max-age=31536000');
+      res.header('Content-Type', 'image/svg+xml');
+      // Use 40% padding: https://w3c.github.io/manifest/#icon-masks
+      res.send(getIcon('auto', 0.4));
     });
 
 
     app.get('/icon_auto.svg', (req: Request, res: Response) => {
       res.set('Cache-control', 'public, max-age=31536000');
       res.header('Content-Type', 'image/svg+xml');
-      res.send('<svg xmlns="http://www.w3.org/2000/svg"' +
-        ' viewBox="' + (Config.Server.svgIcon.viewBox || '0 0 512 512') + '">' +
-        '<style>' +
-        '    path, circle {' +
-        '      fill: black;' +
-        '    }' +
-        '    @media (prefers-color-scheme: dark) {' +
-        '      path, circle {' +
-        '        fill: white;' +
-        '      }' +
-        '    }' +
-        '  </style>' +
-        Config.Server.svgIcon.items + '</svg>');
+      res.send(getIcon('auto'));
     });
 
-    app.get('/icon_inv.svg', (req: Request, res: Response) => {
+    app.get('/icon_white.svg', (req: Request, res: Response) => {
       res.set('Cache-control', 'public, max-age=31536000');
       res.header('Content-Type', 'image/svg+xml');
-      res.send('<svg style="fill:white" width="512" height="512" xmlns="http://www.w3.org/2000/svg"' +
-        ' viewBox="' + (Config.Server.svgIcon.viewBox || '0 0 512 512') + '">' +
-        Config.Server.svgIcon.items + '</svg>');
+      res.send(getIcon('white'));
     });
 
 
@@ -189,7 +262,7 @@ export class PublicRouter {
       }
     });
 
-    app.get('/icon_inv.png', async (req: Request, res: Response, next: NextFunction) => {
+    app.get('/icon_white.png', async (req: Request, res: Response, next: NextFunction) => {
       try {
         const p = path.join(ProjectPath.TempFolder, '/icon_inv.png');
         await PhotoProcessing.renderSVG(Config.Server.svgIcon, p, 'white');
@@ -203,44 +276,44 @@ export class PublicRouter {
     });
 
     app.get(
-      [
-        '/',
-        '/login',
-        '/gallery*',
-        '/share/:' + QueryParams.gallery.sharingKey_params,
-        '/shareLogin',
-        '/admin',
-        '/duplicates',
-        '/faces',
-        '/albums',
-        '/search*',
-      ],
-      AuthenticationMWs.tryAuthenticate,
-      addTPl, // add template after authentication was successful
-      setLocale,
-      renderIndex
+        [
+          '/',
+          '/login',
+          '/gallery*',
+          '/share/:' + QueryParams.gallery.sharingKey_params,
+          '/shareLogin',
+          '/admin',
+          '/duplicates',
+          '/faces',
+          '/albums',
+          '/search*',
+        ],
+        AuthenticationMWs.tryAuthenticate,
+        addTPl, // add template after authentication was successful
+        setLocale,
+        renderIndex
     );
     Config.Server.languages.forEach((l) => {
       app.get(
-        [
-          '/' + l + '/',
-          '/' + l + '/login',
-          '/' + l + '/gallery*',
-          '/' + l + '/share*',
-          '/' + l + '/admin',
-          '/' + l + '/search*',
-        ],
-        redirectToBase(l)
+          [
+            '/' + l + '/',
+            '/' + l + '/login',
+            '/' + l + '/gallery*',
+            '/' + l + '/share*',
+            '/' + l + '/admin',
+            '/' + l + '/search*',
+          ],
+          redirectToBase(l)
       );
     });
 
     const renderFile = (subDir = '') => {
       return (req: Request, res: Response) => {
         const file = path.join(
-          ProjectPath.FrontendFolder,
-          req.localePath,
-          subDir,
-          req.params.file
+            ProjectPath.FrontendFolder,
+            req.localePath,
+            subDir,
+            req.params.file
         );
         if (!fs.existsSync(file)) {
           return res.sendStatus(404);
@@ -253,16 +326,16 @@ export class PublicRouter {
     };
 
     app.get(
-      '/assets/:file(*)',
-      setLocale,
-      AuthenticationMWs.normalizePathParam('file'),
-      renderFile('assets')
+        '/assets/:file(*)',
+        setLocale,
+        AuthenticationMWs.normalizePathParam('file'),
+        renderFile('assets')
     );
     app.get(
-      '/:file',
-      setLocale,
-      AuthenticationMWs.normalizePathParam('file'),
-      renderFile()
+        '/:file',
+        setLocale,
+        AuthenticationMWs.normalizePathParam('file'),
+        renderFile()
     );
   }
 }
