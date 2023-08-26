@@ -32,7 +32,7 @@ import {QueryParams} from '../../../../../common/QueryParams';
   styleUrls: ['./grid.gallery.component.css'],
 })
 export class GalleryGridComponent
-  implements OnInit, OnChanges, AfterViewInit, OnDestroy {
+    implements OnInit, OnChanges, AfterViewInit, OnDestroy {
   @ViewChild('gridContainer', {static: false}) gridContainer: ElementRef;
   @ViewChildren(GalleryPhotoComponent)
   gridPhotoQL: QueryList<GalleryPhotoComponent>;
@@ -55,15 +55,16 @@ export class GalleryGridComponent
   private MAX_ROW_COUNT = 5;
   private onScrollFired = false;
   private helperTime: number = null;
+  public renderDelayTimer: number = null; // delays render on resize
   private renderedPhotoIndex = 0;
 
   constructor(
-    private overlayService: OverlayService,
-    private changeDetector: ChangeDetectorRef,
-    public queryService: QueryService,
-    private router: Router,
-    public galleryService: ContentService,
-    private route: ActivatedRoute
+      private overlayService: OverlayService,
+      private changeDetector: ChangeDetectorRef,
+      public queryService: QueryService,
+      private router: Router,
+      public galleryService: ContentService,
+      private route: ActivatedRoute
   ) {
   }
 
@@ -73,19 +74,19 @@ export class GalleryGridComponent
 
   ngOnInit(): void {
     this.subscriptions.route = this.route.queryParams.subscribe(
-      (params: Params): void => {
-        if (
-          params[QueryParams.gallery.photo] &&
-          params[QueryParams.gallery.photo] !== ''
-        ) {
-          this.delayedRenderUpToPhoto = params[QueryParams.gallery.photo];
-          if (!this.media || this.media.length === 0) {
-            return;
-          }
+        (params: Params): void => {
+          if (
+              params[QueryParams.gallery.photo] &&
+              params[QueryParams.gallery.photo] !== ''
+          ) {
+            this.delayedRenderUpToPhoto = params[QueryParams.gallery.photo];
+            if (!this.media || this.media.length === 0) {
+              return;
+            }
 
-          this.renderUpToMedia(params[QueryParams.gallery.photo]);
+            this.renderUpToMedia(params[QueryParams.gallery.photo]);
+          }
         }
-      }
     );
   }
 
@@ -94,7 +95,6 @@ export class GalleryGridComponent
       return;
     }
     this.updateContainerDimensions();
-    this.mergeNewPhotos();
     this.helperTime = window.setTimeout((): void => {
       this.renderPhotos();
       if (this.delayedRenderUpToPhoto) {
@@ -107,6 +107,10 @@ export class GalleryGridComponent
     if (this.helperTime != null) {
       clearTimeout(this.helperTime);
     }
+    if (this.renderDelayTimer) {
+      clearTimeout(this.renderDelayTimer);
+      this.renderDelayTimer = null;
+    }
     if (this.subscriptions.route !== null) {
       this.subscriptions.route.unsubscribe();
       this.subscriptions.route = null;
@@ -118,13 +122,20 @@ export class GalleryGridComponent
     if (this.isAfterViewInit === false) {
       return;
     }
-    // render the same amount of images on resize
-    const renderedIndex = this.renderedPhotoIndex;
-    // do not rerender if container is not changes
-    if (this.updateContainerDimensions() === false) {
-      return;
+    if (this.renderDelayTimer) {
+      clearTimeout(this.renderDelayTimer);
+      this.renderDelayTimer = null;
     }
-    this.renderPhotos(renderedIndex);
+    this.renderDelayTimer = window.setTimeout(() => {
+      this.renderDelayTimer = null;
+      // render the same amount of images on resize
+      const renderedIndex = this.renderedPhotoIndex;
+      // do not rerender if container is not changes
+      if (this.updateContainerDimensions() === false) {
+        return;
+      }
+      this.renderPhotos(renderedIndex);
+    }, 100);
   }
 
   photoClicked(media: MediaDTO): void {
@@ -139,7 +150,7 @@ export class GalleryGridComponent
     if (Config.Gallery.enableOnScrollThumbnailPrioritising === true) {
       this.gridPhotoQL.changes.subscribe((): void => {
         this.scrollListenerPhotos = this.gridPhotoQL.filter(
-          (pc): boolean => pc.ScrollListener
+            (pc): boolean => pc.ScrollListener
         );
       });
     }
@@ -157,8 +168,8 @@ export class GalleryGridComponent
 
   public renderARow(): number {
     if (
-      this.renderedPhotoIndex >= this.media.length ||
-      this.containerWidth === 0
+        this.renderedPhotoIndex >= this.media.length ||
+        this.containerWidth === 0
     ) {
       return null;
     }
@@ -167,10 +178,10 @@ export class GalleryGridComponent
     const minRowHeight = this.screenHeight / this.MAX_ROW_COUNT;
 
     const photoRowBuilder = new GridRowBuilder(
-      this.media,
-      this.renderedPhotoIndex,
-      this.IMAGE_MARGIN,
-      this.containerWidth - this.overlayService.getPhantomScrollbarWidth()
+        this.media,
+        this.renderedPhotoIndex,
+        this.IMAGE_MARGIN,
+        this.containerWidth - this.overlayService.getPhantomScrollbarWidth()
     );
 
     photoRowBuilder.addPhotos(this.TARGET_COL_COUNT);
@@ -186,7 +197,7 @@ export class GalleryGridComponent
     photoRowBuilder.getPhotoRow().forEach((photo): void => {
       const imageWidth = imageHeight * MediaDTOUtils.calcAspectRatio(photo);
       this.photosToRender.push(
-        new GridMedia(photo, imageWidth, imageHeight, this.renderedPhotoIndex)
+          new GridMedia(photo, imageWidth, imageHeight, this.renderedPhotoIndex)
       );
     });
 
@@ -197,23 +208,23 @@ export class GalleryGridComponent
   @HostListener('window:scroll')
   onScroll(): void {
     if (
-      !this.onScrollFired &&
-      this.media &&
-      // should we trigger this at all?
-      (this.renderedPhotoIndex < this.media.length ||
-        this.scrollListenerPhotos.length > 0)
+        !this.onScrollFired &&
+        this.media &&
+        // should we trigger this at all?
+        (this.renderedPhotoIndex < this.media.length ||
+            this.scrollListenerPhotos.length > 0)
     ) {
       window.requestAnimationFrame((): void => {
         this.renderPhotos();
 
         if (Config.Gallery.enableOnScrollThumbnailPrioritising === true) {
           this.scrollListenerPhotos.forEach(
-            (pc: GalleryPhotoComponent): void => {
-              pc.onScroll();
-            }
+              (pc: GalleryPhotoComponent): void => {
+                pc.onScroll();
+              }
           );
           this.scrollListenerPhotos = this.scrollListenerPhotos.filter(
-            (pc): boolean => pc.ScrollListener
+              (pc): boolean => pc.ScrollListener
           );
         }
 
@@ -232,7 +243,7 @@ export class GalleryGridComponent
    */
   private renderUpToMedia(mediaStringId: string): void {
     const index = this.media.findIndex(
-      (p): boolean => this.queryService.getMediaStringId(p) === mediaStringId
+        (p): boolean => this.queryService.getMediaStringId(p) === mediaStringId
     );
     if (index === -1) {
       this.router.navigate([], {queryParams: this.queryService.getParams()});
@@ -243,10 +254,10 @@ export class GalleryGridComponent
     // so not required to render more, but the scrollbar does not trigger more photos to render
     // (on ligthbox navigation)
     while (
-      this.renderedPhotoIndex - 1 < index + 1 &&
-      this.renderARow() !== null
-      // eslint-disable-next-line no-empty
-      ) {
+        this.renderedPhotoIndex - 1 < index + 1 &&
+        this.renderARow() !== null
+        // eslint-disable-next-line no-empty
+        ) {
     }
   }
 
@@ -254,43 +265,6 @@ export class GalleryGridComponent
     this.photosToRender = [];
     this.renderedPhotoIndex = 0;
     this.changeDetector.detectChanges();
-  }
-
-  // TODO: This is deprecated,
-  // we do not post update galleries anymore since the cover member in the DriectoryDTO
-  private mergeNewPhotos(): void {
-    // merge new data with old one
-    let lastSameIndex = 0;
-    let lastRowId = null;
-    let i = 0;
-    for (; i < this.media.length && i < this.photosToRender.length; ++i) {
-      // If a media changed the whole row has to be removed
-      if (this.photosToRender[i].rowId !== lastRowId) {
-        lastSameIndex = i;
-        lastRowId = this.photosToRender[i].rowId;
-      }
-      if (this.photosToRender[i].equals(this.media[i]) === false) {
-        break;
-      }
-    }
-    // if all the same
-    if (
-      this.photosToRender.length > 0 &&
-      i === this.photosToRender.length &&
-      i === this.media.length &&
-      this.photosToRender[i - 1].equals(this.media[i - 1])
-    ) {
-      lastSameIndex = i;
-    }
-    if (lastSameIndex > 0) {
-      this.photosToRender.splice(
-        lastSameIndex,
-        this.photosToRender.length - lastSameIndex
-      );
-      this.renderedPhotoIndex = lastSameIndex;
-    } else {
-      this.clearRenderedPhotos();
-    }
   }
 
   /**
@@ -302,13 +276,13 @@ export class GalleryGridComponent
   private shouldRenderMore(offset = 0): boolean {
     const bottomOffset = this.getMaxRowHeight() * 2;
     return (
-      Config.Gallery.enableOnScrollRendering === false ||
-      PageHelper.ScrollY >=
-      document.body.clientHeight +
-      offset -
-      window.innerHeight -
-      bottomOffset ||
-      (document.body.clientHeight + offset) * 0.85 < window.innerHeight
+        Config.Gallery.enableOnScrollRendering === false ||
+        PageHelper.ScrollY >=
+        document.body.clientHeight +
+        offset -
+        window.innerHeight -
+        bottomOffset ||
+        (document.body.clientHeight + offset) * 0.85 < window.innerHeight
     );
   }
 
@@ -317,9 +291,9 @@ export class GalleryGridComponent
       return;
     }
     if (
-      this.containerWidth === 0 ||
-      this.renderedPhotoIndex >= this.media.length ||
-      !this.shouldRenderMore()
+        this.containerWidth === 0 ||
+        this.renderedPhotoIndex >= this.media.length ||
+        !this.shouldRenderMore()
     ) {
       return;
     }
@@ -327,10 +301,10 @@ export class GalleryGridComponent
     let renderedContentHeight = 0;
 
     while (
-      this.renderedPhotoIndex < this.media.length &&
-      (this.shouldRenderMore(renderedContentHeight) === true ||
-        this.renderedPhotoIndex < numberOfPhotos)
-      ) {
+        this.renderedPhotoIndex < this.media.length &&
+        (this.shouldRenderMore(renderedContentHeight) === true ||
+            this.renderedPhotoIndex < numberOfPhotos)
+        ) {
       const ret = this.renderARow();
       if (ret === null) {
         throw new Error('Grid media rendering failed');
@@ -348,12 +322,12 @@ export class GalleryGridComponent
     PageHelper.showScrollY();
     // if the width changed a bit or the height changed a lot
     if (
-      this.containerWidth !== this.gridContainer.nativeElement.clientWidth ||
-      this.screenHeight < window.innerHeight * 0.75 ||
-      this.screenHeight > window.innerHeight * 1.25
+        this.containerWidth !== this.gridContainer.nativeElement.parentElement.clientWidth ||
+        this.screenHeight < window.innerHeight * 0.75 ||
+        this.screenHeight > window.innerHeight * 1.25
     ) {
       this.screenHeight = window.innerHeight;
-      this.containerWidth = this.gridContainer.nativeElement.clientWidth;
+      this.containerWidth = this.gridContainer.nativeElement.parentElement.clientWidth;
       this.clearRenderedPhotos();
       if (!pre) {
         PageHelper.hideScrollY();
