@@ -5,7 +5,7 @@ import {ProjectPath} from '../../ProjectPath';
 import {Config} from '../../../common/config/private/Config';
 import {SupportedFormats} from '../../../common/SupportedFormats';
 
-type gpxEntry = { '$': { lat: string, lon: string }, ele?: string[], time: string[], extensions?: unknown };
+type gpxEntry = { '$': { lat: string, lon: string }, ele?: string[], time?: string[], extensions?: unknown };
 
 export class GPXProcessing {
   private static readonly GPX_FLOAT_ACCURACY = 6;
@@ -22,24 +22,24 @@ export class GPXProcessing {
 
   public static generateConvertedPath(filePath: string): string {
     return path.join(
-      ProjectPath.TranscodedFolder,
-      ProjectPath.getRelativePathToImages(path.dirname(filePath)),
-      path.basename(filePath)
-      + '_' + Config.MetaFile.GPXCompressing.minDistance + 'm' +
-      Config.MetaFile.GPXCompressing.minTimeDistance + 'ms' +
-      Config.MetaFile.GPXCompressing.maxMiddleDeviance + 'm' +
-      path.extname(filePath));
+        ProjectPath.TranscodedFolder,
+        ProjectPath.getRelativePathToImages(path.dirname(filePath)),
+        path.basename(filePath)
+        + '_' + Config.MetaFile.GPXCompressing.minDistance + 'm' +
+        Config.MetaFile.GPXCompressing.minTimeDistance + 'ms' +
+        Config.MetaFile.GPXCompressing.maxMiddleDeviance + 'm' +
+        path.extname(filePath));
   }
 
   public static async isValidConvertedPath(
-    convertedPath: string
+      convertedPath: string
   ): Promise<boolean> {
     const origFilePath = path.join(
-      ProjectPath.ImageFolder,
-      path.relative(
-        ProjectPath.TranscodedFolder,
-        convertedPath.substring(0, convertedPath.lastIndexOf('_'))
-      )
+        ProjectPath.ImageFolder,
+        path.relative(
+            ProjectPath.TranscodedFolder,
+            convertedPath.substring(0, convertedPath.lastIndexOf('_'))
+        )
     );
 
 
@@ -54,7 +54,7 @@ export class GPXProcessing {
 
 
   static async compressedGPXExist(
-    filePath: string
+      filePath: string
   ): Promise<boolean> {
     // compressed gpx path
     const outPath = GPXProcessing.generateConvertedPath(filePath);
@@ -70,7 +70,7 @@ export class GPXProcessing {
   }
 
   public static async compressGPX(
-    filePath: string,
+      filePath: string,
   ): Promise<string> {
     // generate compressed gpx path
     const outPath = GPXProcessing.generateConvertedPath(filePath);
@@ -105,8 +105,8 @@ export class GPXProcessing {
         const Δλ = (lon2 - lon1) * Math.PI / 180;
 
         const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
-          Math.cos(φ1) * Math.cos(φ2) *
-          Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+            Math.cos(φ1) * Math.cos(φ2) *
+            Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
         const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
         const d = R * c; // in metres
@@ -116,11 +116,12 @@ export class GPXProcessing {
         if (i === 0 || i >= list.length - 1) { // always keep the first and last items
           return true;
         }
-        const timeDelta = (Date.parse(list[i].time[0]) - Date.parse(list[i - 1].time[0])); // mill sec.
+        const timeDelta = (Date.parse(list[i]?.time?.[0]) - Date.parse(list[i - 1]?.time?.[0])); // mill sec.
         const dist = distance(list[i - 1], list[i]); // meters
 
-        return !(timeDelta < Config.MetaFile.GPXCompressing.minTimeDistance &&
-          dist < Config.MetaFile.GPXCompressing.minDistance);
+        // if time is not available, consider it as all points are created the same time
+        return !((isNaN(timeDelta) || timeDelta < Config.MetaFile.GPXCompressing.minTimeDistance) &&
+            dist < Config.MetaFile.GPXCompressing.minDistance);
       };
 
       const postFilter = (i: number, list: gpxEntry[]) => {
@@ -133,9 +134,11 @@ export class GPXProcessing {
           $: {
             lat: avg(list[i - 1].$.lat, list[i + 1].$.lat),
             lon: avg(list[i - 1].$.lon, list[i + 1].$.lon)
-          },
-          time: list[i].time
+          }
         };
+        if (list[i].time) {
+          modPoint.time = list[i].time;
+        }
 
         const deviation = distance(modPoint, list[i]); // meters
         return !(deviation < Config.MetaFile.GPXCompressing.maxMiddleDeviance); // keep if deviation is too big
@@ -162,6 +165,7 @@ export class GPXProcessing {
         }
       }
     }
+    throw new Error('ds');
     await fsp.writeFile(outPath, (new xml2js.Builder({renderOpts: {pretty: false}})).buildObject(gpxObj));
 
     return outPath;
