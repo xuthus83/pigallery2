@@ -165,7 +165,6 @@ export class GPXProcessing {
         }
       }
     }
-    throw new Error('ds');
     await fsp.writeFile(outPath, (new xml2js.Builder({renderOpts: {pretty: false}})).buildObject(gpxObj));
 
     return outPath;
