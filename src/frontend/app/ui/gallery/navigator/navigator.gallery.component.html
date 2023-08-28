@@ -61,17 +61,37 @@
                 aria-controls="sorting-dropdown">
           <app-sorting-method-icon [method]="sortingService.sorting.value"></app-sorting-method-icon>
         </button>
-        <ul id="sorting-dropdown" *dropdownMenu class="dropdown-menu dropdown-menu-right"
-            role="menu" aria-labelledby="button-alignment">
-          <li class="row dropdown-item sorting-item" role="menuitem"
-              *ngFor="let type of sortingMethodsType"
-              (click)="setSorting(type.key)">
-            <div class="col-3">
-              <app-sorting-method-icon [method]="type.key"></app-sorting-method-icon>
+        <div id="sorting-dropdown" *dropdownMenu class="dropdown-menu dropdown-menu-right"
+             role="menu" aria-labelledby="button-alignment">
+          <div class="row flex-nowrap">
+            <div class="col-6">
+              Sorting
+              <div class="row">
+                <div class="dropdown-item sorting-grouping-item" role="menuitem"
+                    *ngFor="let type of sortingMethodsType"
+                    (click)="setSorting(type.key)">
+                  <div class="me-2 d-inline-block">
+                    <app-sorting-method-icon [method]="type.key"></app-sorting-method-icon>
+                  </div>
+                  <div class="d-inline-block">{{type.key | stringifySorting}}</div>
+                </div>
+              </div>
             </div>
-            <div class="col-9">{{type.key | stringifySorting}}</div>
-          </li>
-        </ul>
+            <div class="col-6">
+              Grouping
+              <div class="row">
+                <div class="dropdown-item sorting-grouping-item" role="menuitem"
+                    *ngFor="let type of sortingMethodsType"
+                    (click)="setGrouping(type.key)">
+                  <div class="me-2 d-inline-block">
+                    <app-sorting-method-icon [method]="type.key"></app-sorting-method-icon>
+                  </div>
+                  <div class="d-inline-block">{{type.key | stringifySorting}}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </nav>

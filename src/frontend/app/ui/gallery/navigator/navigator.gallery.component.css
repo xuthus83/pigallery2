@@ -11,9 +11,6 @@
   display: inline-block;
 }
 
-#sorting-dropdown .dropdown-item.row {
-  flex-wrap: nowrap;
-}
 
 .dropdown-item {
   padding: 0.25rem 0.25rem;
@@ -46,8 +43,9 @@ app-gallery-filter {
   border: none;
 }
 
-.sorting-item {
+.sorting-grouping-item {
   cursor: pointer;
+  flex-wrap: nowrap;
 }
 
 

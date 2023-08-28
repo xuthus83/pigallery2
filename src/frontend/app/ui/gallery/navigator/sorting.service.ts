@@ -1,4 +1,5 @@
 import {Injectable} from '@angular/core';
+import {DatePipe} from '@angular/common';
 import {NetworkService} from '../../../model/network/network.service';
 import {GalleryCacheService} from '../cache.gallery.service';
 import {BehaviorSubject, Observable} from 'rxjs';
@@ -10,20 +11,28 @@ import {PhotoDTO} from '../../../../../common/entities/PhotoDTO';
 import {map, switchMap} from 'rxjs/operators';
 import {SeededRandomService} from '../../../model/seededRandom.service';
 import {ContentWrapper} from '../../../../../common/entities/ConentWrapper';
+import {SubDirectoryDTO} from '../../../../../common/entities/DirectoryDTO';
+import {MediaDTO} from '../../../../../common/entities/MediaDTO';
+import {FileDTO} from '../../../../../common/entities/FileDTO';
 
 @Injectable()
 export class GallerySortingService {
   public sorting: BehaviorSubject<SortingMethods>;
+  public grouping: BehaviorSubject<SortingMethods>;
   private collator = new Intl.Collator(undefined, {numeric: true});
 
   constructor(
     private networkService: NetworkService,
     private galleryCacheService: GalleryCacheService,
     private galleryService: ContentService,
-    private rndService: SeededRandomService
+    private rndService: SeededRandomService,
+    private datePipe: DatePipe
   ) {
     this.sorting = new BehaviorSubject<SortingMethods>(
       Config.Gallery.defaultPhotoSortingMethod
+    );
+    this.grouping = new BehaviorSubject<SortingMethods>(
+      SortingMethods.ascDate // TODO: move to config
     );
     this.galleryService.content.subscribe((c) => {
       if (c) {
@@ -70,151 +79,212 @@ export class GallerySortingService {
     }
   }
 
+  setGrouping(grouping: SortingMethods): void {
+    this.grouping.next(grouping);
+  }
+
+  private sortMedia(sorting: SortingMethods, media: MediaDTO[]): void {
+    if (!media) {
+      return;
+    }
+    switch (sorting) {
+      case SortingMethods.ascName:
+        media.sort((a: PhotoDTO, b: PhotoDTO) =>
+          this.collator.compare(a.name, b.name)
+        );
+        break;
+      case SortingMethods.descName:
+        media.sort((a: PhotoDTO, b: PhotoDTO) =>
+          this.collator.compare(b.name, a.name)
+        );
+        break;
+      case SortingMethods.ascDate:
+        media.sort((a: PhotoDTO, b: PhotoDTO): number => {
+          return a.metadata.creationDate - b.metadata.creationDate;
+        });
+        break;
+      case SortingMethods.descDate:
+        media.sort((a: PhotoDTO, b: PhotoDTO): number => {
+          return b.metadata.creationDate - a.metadata.creationDate;
+        });
+        break;
+      case SortingMethods.ascRating:
+        media.sort(
+          (a: PhotoDTO, b: PhotoDTO) =>
+            (a.metadata.rating || 0) - (b.metadata.rating || 0)
+        );
+        break;
+      case SortingMethods.descRating:
+        media.sort(
+          (a: PhotoDTO, b: PhotoDTO) =>
+            (b.metadata.rating || 0) - (a.metadata.rating || 0)
+        );
+        break;
+      case SortingMethods.ascPersonCount:
+        media.sort(
+          (a: PhotoDTO, b: PhotoDTO) =>
+            (a.metadata?.faces?.length || 0) - (b.metadata?.faces?.length || 0)
+        );
+        break;
+      case SortingMethods.descPersonCount:
+        media.sort(
+          (a: PhotoDTO, b: PhotoDTO) =>
+            (b.metadata?.faces?.length || 0) - (a.metadata?.faces?.length || 0)
+        );
+        break;
+      case SortingMethods.random:
+        this.rndService.setSeed(media.length);
+        media.sort((a: PhotoDTO, b: PhotoDTO): number => {
+          if (a.name.toLowerCase() < b.name.toLowerCase()) {
+            return -1;
+          }
+          if (a.name.toLowerCase() > b.name.toLowerCase()) {
+            return 1;
+          }
+          return 0;
+        })
+          .sort((): number => {
+            return this.rndService.get() - 0.5;
+          });
+        break;
+    }
+    return;
+  }
+
   public applySorting(
     directoryContent: Observable<DirectoryContent>
-  ): Observable<DirectoryContent> {
+  ): Observable<GroupedDirectoryContent> {
     return directoryContent.pipe(
       switchMap((dirContent) => {
-        return this.sorting.pipe(
-          map((sorting: SortingMethods) => {
-            if (!dirContent) {
-              return dirContent;
-            }
-            const c = {
-              media: dirContent.media,
-              directories: dirContent.directories,
-              metaFile: dirContent.metaFile,
-            };
-            if (c.directories) {
-              switch (sorting) {
-                case SortingMethods.ascRating: // directories do not have rating
-                case SortingMethods.ascName:
-                  c.directories.sort((a, b) =>
-                    this.collator.compare(a.name, b.name)
-                  );
-                  break;
-                case SortingMethods.ascDate:
-                  if (
-                    Config.Gallery.enableDirectorySortingByDate === true
-                  ) {
-                    c.directories.sort(
-                      (a, b) => a.lastModified - b.lastModified
-                    );
-                    break;
+        return this.grouping.pipe(
+          switchMap((grouping) => {
+            return this.sorting.pipe(
+              map((sorting) => {
+                if (!dirContent) {
+                  return null;
+                }
+                const c: GroupedDirectoryContent = {
+                  mediaGroups: [],
+                  directories: dirContent.directories,
+                  metaFile: dirContent.metaFile,
+                };
+                if (c.directories) {
+                  switch (sorting) {
+                    case SortingMethods.ascRating: // directories do not have rating
+                    case SortingMethods.ascName:
+                      c.directories.sort((a, b) =>
+                        this.collator.compare(a.name, b.name)
+                      );
+                      break;
+                    case SortingMethods.ascDate:
+                      if (
+                        Config.Gallery.enableDirectorySortingByDate === true
+                      ) {
+                        c.directories.sort(
+                          (a, b) => a.lastModified - b.lastModified
+                        );
+                        break;
+                      }
+                      c.directories.sort((a, b) =>
+                        this.collator.compare(a.name, b.name)
+                      );
+                      break;
+                    case SortingMethods.descRating: // directories do not have rating
+                    case SortingMethods.descName:
+                      c.directories.sort((a, b) =>
+                        this.collator.compare(b.name, a.name)
+                      );
+                      break;
+                    case SortingMethods.descDate:
+                      if (
+                        Config.Gallery.enableDirectorySortingByDate === true
+                      ) {
+                        c.directories.sort(
+                          (a, b) => b.lastModified - a.lastModified
+                        );
+                        break;
+                      }
+                      c.directories.sort((a, b) =>
+                        this.collator.compare(b.name, a.name)
+                      );
+                      break;
+                    case SortingMethods.random:
+                      this.rndService.setSeed(c.directories.length);
+                      c.directories
+                        .sort((a, b): number => {
+                          if (a.name.toLowerCase() < b.name.toLowerCase()) {
+                            return 1;
+                          }
+                          if (a.name.toLowerCase() > b.name.toLowerCase()) {
+                            return -1;
+                          }
+                          return 0;
+                        })
+                        .sort((): number => {
+                          return this.rndService.get() - 0.5;
+                        });
+                      break;
                   }
-                  c.directories.sort((a, b) =>
-                    this.collator.compare(a.name, b.name)
-                  );
-                  break;
-                case SortingMethods.descRating: // directories do not have rating
-                case SortingMethods.descName:
-                  c.directories.sort((a, b) =>
-                    this.collator.compare(b.name, a.name)
-                  );
-                  break;
-                case SortingMethods.descDate:
-                  if (
-                    Config.Gallery.enableDirectorySortingByDate === true
-                  ) {
-                    c.directories.sort(
-                      (a, b) => b.lastModified - a.lastModified
-                    );
-                    break;
+                }
+
+                // group
+                if (dirContent.media) {
+                  const mCopy = dirContent.media;
+                  this.sortMedia(grouping, mCopy);
+                  let groupFN = (m: MediaDTO) => '';
+                  switch (grouping) {
+                    case SortingMethods.ascDate:
+                    case SortingMethods.descDate:
+                      groupFN = (m: MediaDTO) => this.datePipe.transform(m.metadata.creationDate, 'longDate');
+                      break;
+                    case SortingMethods.ascName:
+                    case SortingMethods.descName:
+                      groupFN = (m: MediaDTO) => m.name.at(0).toLowerCase();
+                      break;
+                    case SortingMethods.descRating:
+                    case SortingMethods.ascRating:
+                      groupFN = (m: MediaDTO) => ((m as PhotoDTO).metadata.rating || 0).toString();
+                      break;
+                    case SortingMethods.descPersonCount:
+                    case SortingMethods.ascPersonCount:
+                      groupFN = (m: MediaDTO) => ((m as PhotoDTO).metadata.faces || []).length.toString();
+                      break;
                   }
-                  c.directories.sort((a, b) =>
-                    this.collator.compare(b.name, a.name)
-                  );
-                  break;
-                case SortingMethods.random:
-                  this.rndService.setSeed(c.directories.length);
-                  c.directories
-                    .sort((a, b): number => {
-                      if (a.name.toLowerCase() < b.name.toLowerCase()) {
-                        return 1;
-                      }
-                      if (a.name.toLowerCase() > b.name.toLowerCase()) {
-                        return -1;
-                      }
-                      return 0;
-                    })
-                    .sort((): number => {
-                      return this.rndService.get() - 0.5;
-                    });
-                  break;
-              }
-            }
+                  c.mediaGroups = [];
+                  for (const m of mCopy) {
+                    const k = groupFN(m);
+                    if (c.mediaGroups.length == 0 || c.mediaGroups[c.mediaGroups.length - 1].name != k) {
+                      c.mediaGroups.push({name: k, media: []});
+                    }
+                    c.mediaGroups[c.mediaGroups.length - 1].media.push(m);
+                  }
+                  c.mediaGroups;
+                }
 
-            if (c.media) {
-              switch (sorting) {
-                case SortingMethods.ascName:
-                  c.media.sort((a: PhotoDTO, b: PhotoDTO) =>
-                    this.collator.compare(a.name, b.name)
-                  );
-                  break;
-                case SortingMethods.descName:
-                  c.media.sort((a: PhotoDTO, b: PhotoDTO) =>
-                    this.collator.compare(b.name, a.name)
-                  );
-                  break;
-                case SortingMethods.ascDate:
-                  c.media.sort((a: PhotoDTO, b: PhotoDTO): number => {
-                    return a.metadata.creationDate - b.metadata.creationDate;
-                  });
-                  break;
-                case SortingMethods.descDate:
-                  c.media.sort((a: PhotoDTO, b: PhotoDTO): number => {
-                    return b.metadata.creationDate - a.metadata.creationDate;
-                  });
-                  break;
-                case SortingMethods.ascRating:
-                  c.media.sort(
-                    (a: PhotoDTO, b: PhotoDTO) =>
-                      (a.metadata.rating || 0) - (b.metadata.rating || 0)
-                  );
-                  break;
-                case SortingMethods.descRating:
-                  c.media.sort(
-                    (a: PhotoDTO, b: PhotoDTO) =>
-                      (b.metadata.rating || 0) - (a.metadata.rating || 0)
-                  );
-                  break;
-                case SortingMethods.ascPersonCount:
-                  c.media.sort(
-                    (a: PhotoDTO, b: PhotoDTO) =>
-                      (a.metadata?.faces?.length || 0) - (b.metadata?.faces?.length || 0)
-                  );
-                  break;
-                case SortingMethods.descPersonCount:
-                  c.media.sort(
-                    (a: PhotoDTO, b: PhotoDTO) =>
-                      (b.metadata?.faces?.length || 0) - (a.metadata?.faces?.length || 0)
-                  );
-                  break;
-                case SortingMethods.random:
-                  this.rndService.setSeed(c.media.length);
-                  c.media
-                    .sort((a: PhotoDTO, b: PhotoDTO): number => {
-                      if (a.name.toLowerCase() < b.name.toLowerCase()) {
-                        return -1;
-                      }
-                      if (a.name.toLowerCase() > b.name.toLowerCase()) {
-                        return 1;
-                      }
-                      return 0;
-                    })
-                    .sort((): number => {
-                      return this.rndService.get() - 0.5;
-                    });
-                  break;
-              }
-            }
+                // sort groups
+                for (let i = 0; i < c.mediaGroups.length; ++i) {
+                  this.sortMedia(sorting, c.mediaGroups[i].media);
+                }
 
-            return c;
+                return c;
+              })
+            );
           })
         );
       })
     );
   }
+}
+
+export interface MediaGroup {
+  name: string;
+  media: MediaDTO[];
+}
+
+export interface GroupedDirectoryContent {
+  directories: SubDirectoryDTO[];
+  mediaGroups: MediaGroup[];
+  metaFile: FileDTO[];
 }
 
 

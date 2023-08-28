@@ -145,6 +145,10 @@ export class GalleryNavigatorComponent {
 
   setSorting(sorting: SortingMethods): void {
     this.sortingService.setSorting(sorting);
+    this.sortingService.setGrouping(sorting);
+  }
+  setGrouping(grouping: SortingMethods): void {
+    this.sortingService.setGrouping(grouping);
   }
 
   getDownloadZipLink(): string {
@@ -215,6 +219,7 @@ export class GalleryNavigatorComponent {
     }
     this.lastScroll.any = scrollPosition;
   }
+
 }
 
 interface NavigatorPath {

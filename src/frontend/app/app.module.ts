@@ -177,6 +177,7 @@ import {
 } from '@ng-icons/ionicons';
 import {SortingMethodIconComponent} from './ui/sorting-method-icon/sorting-method-icon.component';
 import {SafeHtmlPipe} from './pipes/SafeHTMLPipe';
+import {DatePipe} from '@angular/common';
 
 @Injectable()
 export class MyHammerConfig extends HammerGestureConfig {
@@ -190,7 +191,7 @@ export class MyHammerConfig extends HammerGestureConfig {
 
 export class CustomUrlSerializer implements UrlSerializer {
   private defaultUrlSerializer: DefaultUrlSerializer =
-    new DefaultUrlSerializer();
+      new DefaultUrlSerializer();
 
   parse(url: string): UrlTree {
     // Encode parentheses
@@ -201,9 +202,9 @@ export class CustomUrlSerializer implements UrlSerializer {
 
   serialize(tree: UrlTree): string {
     return this.defaultUrlSerializer
-      .serialize(tree)
-      .replace(/%28/g, '(')
-      .replace(/%29/g, ')');
+        .serialize(tree)
+        .replace(/%28/g, '(')
+        .replace(/%29/g, ')');
   }
 }
 
@@ -361,6 +362,7 @@ Marker.prototype.options.icon = MarkerFactory.defIcon;
     CookieService,
     GPXFilesFilterPipe,
     MDFilesFilterPipe,
+    DatePipe
   ],
   bootstrap: [AppComponent],
 })

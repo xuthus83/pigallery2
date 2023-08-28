@@ -1,11 +1,19 @@
 <div #gridContainer [style.width]="renderDelayTimer ? containerWidth+'px' : ''">
-    <app-gallery-grid-photo
-            *ngFor="let gridPhoto of photosToRender"
-            (click)="photoClicked(gridPhoto.media)"
-            [gridMedia]="gridPhoto"
-            [style.width.px]="gridPhoto.renderWidth"
-            [style.height.px]="gridPhoto.renderHeight"
-            [style.margin-left.px]="IMAGE_MARGIN"
-            [style.margin-right.px]="IMAGE_MARGIN">
-    </app-gallery-grid-photo>
+  <ng-container *ngIf="mediaToRender?.length > 0">
+    <ng-container *ngFor="let group of mediaToRender">
+      <div *ngIf="group.name" class="mt-4 mb-3"><h6 class="ms-2">{{group.name}}</h6></div>
+      <div class="media-grid">
+        <app-gallery-grid-photo
+          *ngFor="let gridPhoto of group.media"
+          (click)="photoClicked(gridPhoto.media)"
+          [gridMedia]="gridPhoto"
+          [style.width.px]="gridPhoto.renderWidth"
+          [style.height.px]="gridPhoto.renderHeight"
+          [style.margin-left.px]="IMAGE_MARGIN"
+          [style.margin-right.px]="IMAGE_MARGIN">
+        </app-gallery-grid-photo>
+      </div>
+    </ng-container>
+  </ng-container>
+
 </div>
