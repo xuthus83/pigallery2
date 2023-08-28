@@ -1,16 +1,15 @@
 import {Injectable} from '@angular/core';
-import {DirectoryPathDTO, ParentDirectoryDTO,} from '../../../../common/entities/DirectoryDTO';
+import {ParentDirectoryDTO,} from '../../../../common/entities/DirectoryDTO';
 import {Utils} from '../../../../common/Utils';
 import {Config} from '../../../../common/config/public/Config';
 import {IAutoCompleteItem} from '../../../../common/entities/AutoCompleteItem';
 import {MediaDTO} from '../../../../common/entities/MediaDTO';
-import {SortingMethods} from '../../../../common/entities/SortingMethods';
+import {SortingMethod} from '../../../../common/entities/SortingMethods';
 import {VersionService} from '../../model/version.service';
 import {SearchQueryDTO, SearchQueryTypes,} from '../../../../common/entities/SearchQueryDTO';
 import {ContentWrapper} from '../../../../common/entities/ConentWrapper';
 import {ContentWrapperWithError} from './content.service';
 import {ThemeModes} from '../../../../common/config/public/ClientConfig';
-import {SearchResultDTO} from '../../../../common/entities/SearchResultDTO';
 
 interface CacheItem<T> {
   timestamp: number;
@@ -97,7 +96,7 @@ export class GalleryCacheService {
     }
   }
 
-  public getSorting(cw: ContentWrapper): SortingMethods {
+  public getSorting(cw: ContentWrapper): SortingMethod {
     let key = GalleryCacheService.SORTING_PREFIX;
     if (cw?.searchResult?.searchQuery) {
       key += JSON.stringify(cw.searchResult.searchQuery);
@@ -106,7 +105,7 @@ export class GalleryCacheService {
     }
     const tmp = localStorage.getItem(key);
     if (tmp != null) {
-      return parseInt(tmp, 10);
+      return JSON.parse(tmp);
     }
     return null;
   }
@@ -128,8 +127,8 @@ export class GalleryCacheService {
 
   public setSorting(
     cw: ContentWrapper,
-    sorting: SortingMethods
-  ): SortingMethods {
+    sorting: SortingMethod
+  ): void {
     try {
       let key = GalleryCacheService.SORTING_PREFIX;
       if (cw?.searchResult?.searchQuery) {
@@ -137,12 +136,11 @@ export class GalleryCacheService {
       } else {
         key += cw?.directory?.path + '/' + cw?.directory?.name;
       }
-      localStorage.setItem(key, sorting.toString());
+      localStorage.setItem(key, JSON.stringify(sorting));
     } catch (e) {
       this.reset();
       console.error(e);
     }
-    return null;
   }
 
   public getAutoComplete(

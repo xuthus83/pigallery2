@@ -6,7 +6,7 @@ import {AuthenticationService} from '../../../model/network/authentication.servi
 import {QueryService} from '../../../model/query.service';
 import {ContentService, ContentWrapperWithError, DirectoryContent,} from '../content.service';
 import {Utils} from '../../../../../common/Utils';
-import {SortingMethods} from '../../../../../common/entities/SortingMethods';
+import {SortingByTypes, SortingMethod} from '../../../../../common/entities/SortingMethods';
 import {Config} from '../../../../../common/config/public/Config';
 import {SearchQueryTypes, TextSearch, TextSearchQueryMatchTypes,} from '../../../../../common/entities/SearchQueryDTO';
 import {Observable} from 'rxjs';
@@ -23,8 +23,8 @@ import {FilterService} from '../filter/filter.service';
   providers: [RouterLink],
 })
 export class GalleryNavigatorComponent {
-  public SortingMethods = SortingMethods;
-  public sortingMethodsType: { key: number; value: string }[] = [];
+  public SortingByTypes = SortingByTypes;
+  public sortingByTypes: { key: number; value: string }[] = [];
   public readonly config = Config;
   // DefaultSorting = Config.Gallery.defaultPhotoSortingMethod;
   public readonly SearchQueryTypes = SearchQueryTypes;
@@ -52,7 +52,7 @@ export class GalleryNavigatorComponent {
     private router: Router,
     public sanitizer: DomSanitizer
   ) {
-    this.sortingMethodsType = Utils.enumToArray(SortingMethods);
+    this.sortingByTypes = Utils.enumToArray(SortingByTypes);
     this.RootFolderName = $localize`Home`;
     this.wrappedContent = this.galleryService.content;
     this.directoryContent = this.wrappedContent.pipe(
@@ -137,19 +137,34 @@ export class GalleryNavigatorComponent {
         : 0;
   }
 
-  get DefaultSorting(): SortingMethods {
+  get DefaultSorting(): SortingMethod {
     return this.sortingService.getDefaultSorting(
       this.galleryService.content.value
     );
   }
 
-  setSorting(sorting: SortingMethods): void {
-    this.sortingService.setSorting(sorting);
-    this.sortingService.setGrouping(sorting);
+  setSortingBy(sorting: SortingByTypes): void {
+    const s = {method: sorting, ascending: this.sortingService.sorting.value.ascending};
+    this.sortingService.setSorting(s);
+    this.sortingService.setGrouping(s);
   }
-  setGrouping(grouping: SortingMethods): void {
-    this.sortingService.setGrouping(grouping);
+
+  setSortingAscending(asc: boolean) {
+    const s = {method: this.sortingService.sorting.value.method, ascending: asc};
+    this.sortingService.setSorting(s);
+    this.sortingService.setGrouping(s);
   }
+
+  setGroupingBy(grouping: SortingByTypes): void {
+    const s = {method: grouping, ascending: this.sortingService.grouping.value.ascending};
+    this.sortingService.setGrouping(s);
+  }
+
+  setGroupingAscending(asc: boolean) {
+    const s = {method: this.sortingService.grouping.value.method, ascending: asc};
+    this.sortingService.setGrouping(s);
+  }
+
 
   getDownloadZipLink(): string {
     const c = this.galleryService.content.value;

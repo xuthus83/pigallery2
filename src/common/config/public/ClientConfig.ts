@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-inferrable-types */
 import 'reflect-metadata';
-import {SortingMethods} from '../../entities/SortingMethods';
+import {SortingByTypes, SortingMethod} from '../../entities/SortingMethods';
 import {UserRoles} from '../../entities/UserDTO';
 import {ConfigProperty, SubConfigClass} from 'typeconfig/common';
 import {SearchQueryDTO} from '../../entities/SearchQueryDTO';
@@ -519,7 +519,7 @@ export class ClientMapConfig {
     arrayType: MapPathGroupConfig,
     tags: {
       name: $localize`Path theme groups`,
-      githubIssue:647,
+      githubIssue: 647,
       priority: ConfigPriority.underTheHood
     } as TAGS,
     description: $localize`Markers are grouped and themed by these settings`,
@@ -880,6 +880,30 @@ export class ThemesConfig {
     )];
 }
 
+@SubConfigClass<TAGS>({tags: {client: true}, softReadonly: true})
+export class ClientSortingConfig implements SortingMethod {
+
+
+  constructor(method: SortingByTypes = SortingByTypes.Date, ascending: boolean = true) {
+    this.method = method;
+    this.ascending = ascending;
+  }
+
+  @ConfigProperty({
+    type: SortingByTypes,
+    tags: {
+      name: $localize`Method`,
+    },
+  })
+  method: SortingByTypes = SortingByTypes.Date;
+
+  @ConfigProperty({
+    tags: {
+      name: $localize`Ascending`,
+    },
+  })
+  ascending: boolean = true;
+}
 
 @SubConfigClass<TAGS>({tags: {client: true}, softReadonly: true})
 export class ClientGalleryConfig {
@@ -901,22 +925,24 @@ export class ClientGalleryConfig {
   enableOnScrollRendering: boolean = true;
 
   @ConfigProperty({
-    type: SortingMethods, tags: {
+    type: ClientSortingConfig,
+    tags: {
       name: $localize`Default sorting`,
       priority: ConfigPriority.advanced,
     },
     description: $localize`Default sorting method for photo and video in a directory results.`
   })
-  defaultPhotoSortingMethod: SortingMethods = SortingMethods.ascDate;
+  defaultPhotoSortingMethod: ClientSortingConfig = new ClientSortingConfig(SortingByTypes.Date, true);
 
   @ConfigProperty({
-    type: SortingMethods, tags: {
+    type: ClientSortingConfig,
+    tags: {
       name: $localize`Default search sorting`,
       priority: ConfigPriority.advanced,
     },
     description: $localize`Default sorting method for photo and video in a search results.`
   })
-  defaultSearchSortingMethod: SortingMethods = SortingMethods.descDate;
+  defaultSearchSortingMethod: ClientSortingConfig = new ClientSortingConfig(SortingByTypes.Date, false);
 
   @ConfigProperty({
     tags: {

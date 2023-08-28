@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {SortingMethods} from '../../../../common/entities/SortingMethods';
+import {SortingByTypes} from '../../../../common/entities/SortingMethods';
 
 @Component({
   selector: 'app-sorting-method-icon',
@@ -7,6 +7,6 @@ import {SortingMethods} from '../../../../common/entities/SortingMethods';
   styleUrls: ['./sorting-method-icon.component.css']
 })
 export class SortingMethodIconComponent {
-  @Input() method: SortingMethods;
-  SortingMethods = SortingMethods;
+  @Input() method: SortingByTypes;
+  SortingByTypes = SortingByTypes;
 }

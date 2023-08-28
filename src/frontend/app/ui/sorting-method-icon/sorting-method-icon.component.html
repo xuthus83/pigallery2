@@ -1,37 +1,17 @@
 <ng-container [ngSwitch]="method">
-  <ng-container *ngSwitchCase="SortingMethods.descName">
-    <ng-icon name="ionArrowDownOutline"></ng-icon>
+  <ng-container *ngSwitchCase="SortingByTypes.Name">
     <span>A</span>
   </ng-container>
-  <ng-container *ngSwitchCase="SortingMethods.ascName">
-    <ng-icon name="ionArrowUpOutline"></ng-icon>
-    <span>A</span>
-  </ng-container>
-  <ng-container *ngSwitchCase="SortingMethods.descRating">
-    <ng-icon name="ionArrowDownOutline"></ng-icon>
+  <ng-container *ngSwitchCase="SortingByTypes.Rating">
     <ng-icon name="ionStarOutline"></ng-icon>
   </ng-container>
-  <ng-container *ngSwitchCase="SortingMethods.ascRating">
-    <ng-icon name="ionArrowUpOutline"></ng-icon>
-    <ng-icon name="ionStarOutline"></ng-icon>
-  </ng-container>
-  <ng-container *ngSwitchCase="SortingMethods.descDate">
-    <ng-icon name="ionArrowDownOutline"></ng-icon>
+  <ng-container *ngSwitchCase="SortingByTypes.Date">
     <ng-icon name="ionCalendarOutline"></ng-icon>
   </ng-container>
-  <ng-container *ngSwitchCase="SortingMethods.ascDate">
-    <ng-icon name="ionArrowUpOutline"></ng-icon>
-    <ng-icon name="ionCalendarOutline"></ng-icon>
-  </ng-container>
-  <ng-container *ngSwitchCase="SortingMethods.descPersonCount">
-    <ng-icon name="ionArrowDownOutline"></ng-icon>
+  <ng-container *ngSwitchCase="SortingByTypes.PersonCount">
     <ng-icon name="ionPersonOutline"></ng-icon>
   </ng-container>
-  <ng-container *ngSwitchCase="SortingMethods.ascPersonCount">
-    <ng-icon name="ionArrowUpOutline"></ng-icon>
-    <ng-icon name="ionPersonOutline"></ng-icon>
-  </ng-container>
-  <ng-container *ngSwitchCase="SortingMethods.random">
+  <ng-container *ngSwitchCase="SortingByTypes.random">
     <ng-icon name="ionShuffleOutline"></ng-icon>
   </ng-container>
 </ng-container>

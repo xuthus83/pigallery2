@@ -1,4 +1,4 @@
-import {SortingMethods} from './entities/SortingMethods';
+import {SortingByTypes, SortingMethod} from './entities/SortingMethods';
 
 /**
  * This contains the action of the supported list of *.pg2conf files.
@@ -6,15 +6,15 @@ import {SortingMethods} from './entities/SortingMethods';
  */
 export const PG2ConfMap = {
   sorting: {
-    '.order_descending_name.pg2conf': SortingMethods.descName,
-    '.order_ascending_name.pg2conf': SortingMethods.ascName,
-    '.order_descending_date.pg2conf': SortingMethods.descDate,
-    '.order_ascending_date.pg2conf': SortingMethods.ascDate,
-    '.order_descending_rating.pg2conf': SortingMethods.descRating,
-    '.order_ascending_rating.pg2conf': SortingMethods.ascRating,
-    '.order_random.pg2conf': SortingMethods.random,
-    '.order_descending_person_count.pg2conf': SortingMethods.descPersonCount,
-    '.order_ascending_person_count.pg2conf': SortingMethods.descPersonCount,
+    '.order_descending_name.pg2conf': {method: SortingByTypes.Name, ascending: false} as SortingMethod,
+    '.order_ascending_name.pg2conf': {method: SortingByTypes.Name, ascending: true} as SortingMethod,
+    '.order_descending_date.pg2conf': {method: SortingByTypes.Date, ascending: false} as SortingMethod,
+    '.order_ascending_date.pg2conf': {method: SortingByTypes.Date, ascending: true} as SortingMethod,
+    '.order_descending_rating.pg2conf': {method: SortingByTypes.Rating, ascending: false} as SortingMethod,
+    '.order_ascending_rating.pg2conf': {method: SortingByTypes.Rating, ascending: true} as SortingMethod,
+    '.order_random.pg2conf': {method: SortingByTypes.Rating, ascending: null} as SortingMethod,
+    '.order_descending_person_count.pg2conf': {method: SortingByTypes.PersonCount, ascending: false} as SortingMethod,
+    '.order_ascending_person_count.pg2conf': {method: SortingByTypes.PersonCount, ascending: true} as SortingMethod,
   },
 };
 

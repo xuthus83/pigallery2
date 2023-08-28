@@ -1,8 +1,8 @@
 import {SearchQueryDTO} from './SearchQueryDTO';
-import {SortingMethods} from './SortingMethods';
+import {SortingMethod} from './SortingMethods';
 
 export interface MediaPickDTO {
   searchQuery: SearchQueryDTO;
-  sortBy: SortingMethods[];
+  sortBy: SortingMethod[];
   pick: number;
 }
