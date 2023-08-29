@@ -32,17 +32,23 @@ export class GallerySortingService {
       {method: Config.Gallery.defaultPhotoSortingMethod.method, ascending: Config.Gallery.defaultPhotoSortingMethod.ascending}
     );
     this.grouping = new BehaviorSubject(
-      {method: Config.Gallery.defaultPhotoSortingMethod.method, ascending: Config.Gallery.defaultPhotoSortingMethod.ascending}
+      {method: Config.Gallery.defaultPhotoGroupingMethod.method, ascending: Config.Gallery.defaultPhotoGroupingMethod.ascending}
     );
     this.galleryService.content.subscribe((c) => {
       if (c) {
         const sort = this.galleryCacheService.getSorting(c);
+        const group = this.galleryCacheService.getGrouping(c);
         if (sort !== null) {
           this.sorting.next(sort);
-          return;
+        } else {
+          this.sorting.next(this.getDefaultSorting(c));
+        }
+        if (group !== null) {
+          this.grouping.next(group);
+        } else {
+          this.grouping.next(this.getDefaultGrouping(c));
         }
       }
-      this.sorting.next(this.getDefaultSorting(c));
     });
   }
 
@@ -98,6 +104,21 @@ export class GallerySortingService {
 
   setGrouping(grouping: SortingMethod): void {
     this.grouping.next(grouping);
+    if (this.galleryService.content.value) {
+      if (
+        grouping !==
+        this.getDefaultGrouping(this.galleryService.content.value)
+      ) {
+        this.galleryCacheService.setGrouping(
+          this.galleryService.content.value,
+          grouping
+        );
+      } else {
+        this.galleryCacheService.removeGrouping(
+          this.galleryService.content.value
+        );
+      }
+    }
   }
 
   private sortMedia(sorting: SortingMethod, media: MediaDTO[]): void {

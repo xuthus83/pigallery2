@@ -43,6 +43,7 @@ export class GalleryNavigatorComponent {
   };
   @ViewChild('dropdown', {static: true}) dropdown: BsDropdownDirective;
   @ViewChild('navigator', {read: ElementRef}) navigatorElement: ElementRef<HTMLInputElement>;
+  public groupingFollowSorting = true; // if grouping should be set after sorting automatically
 
   constructor(
     public authService: AuthenticationService,
@@ -157,13 +158,14 @@ export class GalleryNavigatorComponent {
     this.sortingService.setSorting(s);
 
     // you cannot group by random
-    if (sorting === SortingByTypes.random) {
+    if (sorting === SortingByTypes.random ||
+      // if grouping is disabled, do not update it
+      this.sortingService.grouping.value.method === null || !this.groupingFollowSorting
+    ) {
       return;
     }
-    // if grouping is disabled, do not update it
-    if (this.sortingService.grouping.value.method !== null) {
-      this.sortingService.setGrouping(s);
-    }
+
+    this.sortingService.setGrouping(s);
   }
 
   setSortingAscending(asc: boolean) {
@@ -171,9 +173,10 @@ export class GalleryNavigatorComponent {
     this.sortingService.setSorting(s);
 
     // if grouping is disabled, do not update it
-    if (this.sortingService.grouping.value.method !== null) {
-      this.sortingService.setGrouping(s);
+    if (this.sortingService.grouping.value.method !== null || !this.groupingFollowSorting) {
+      return;
     }
+    this.sortingService.setGrouping(s);
   }
 
   setGroupingBy(grouping: SortingByTypes): void {

@@ -23,6 +23,7 @@ export class GalleryCacheService {
   private static readonly INSTANT_SEARCH_PREFIX = 'INSTANT_SEARCH:';
   private static readonly SEARCH_PREFIX = 'SEARCH:';
   private static readonly SORTING_PREFIX = 'SORTING:';
+  private static readonly GROUPING_PREFIX = 'GROUPING:';
   private static readonly VERSION = 'VERSION';
   private static readonly SLIDESHOW_SPEED = 'SLIDESHOW_SPEED';
   private static THEME_MODE = 'THEME_MODE';
@@ -96,8 +97,34 @@ export class GalleryCacheService {
     }
   }
 
+  public getGrouping(cw: ContentWrapper): SortingMethod {
+    return this.getSortOrGroup(GalleryCacheService.GROUPING_PREFIX, cw);
+  }
+
   public getSorting(cw: ContentWrapper): SortingMethod {
-    let key = GalleryCacheService.SORTING_PREFIX;
+    return this.getSortOrGroup(GalleryCacheService.SORTING_PREFIX, cw);
+  }
+
+  public setGrouping(cw: ContentWrapper, sorting: SortingMethod): void {
+    return this.setSortOrGroup(GalleryCacheService.GROUPING_PREFIX, cw, sorting);
+  }
+
+  public setSorting(cw: ContentWrapper,
+                    sorting: SortingMethod): void {
+    return this.setSortOrGroup(GalleryCacheService.SORTING_PREFIX, cw, sorting);
+  }
+
+  public removeGrouping(cw: ContentWrapper): void {
+    return this.removeSortOrGroup(GalleryCacheService.GROUPING_PREFIX, cw);
+  }
+
+  public removeSorting(cw: ContentWrapper): void {
+    return this.removeSortOrGroup(GalleryCacheService.SORTING_PREFIX, cw);
+  }
+
+
+  private getSortOrGroup(prefix: string, cw: ContentWrapper): SortingMethod {
+    let key = prefix;
     if (cw?.searchResult?.searchQuery) {
       key += JSON.stringify(cw.searchResult.searchQuery);
     } else {
@@ -110,7 +137,8 @@ export class GalleryCacheService {
     return null;
   }
 
-  public removeSorting(cw: ContentWrapper): void {
+
+  private removeSortOrGroup(prefix: string, cw: ContentWrapper): void {
     try {
       let key = GalleryCacheService.SORTING_PREFIX;
       if (cw?.searchResult?.searchQuery) {
@@ -125,12 +153,13 @@ export class GalleryCacheService {
     }
   }
 
-  public setSorting(
+  private setSortOrGroup(
+    prefix: string,
     cw: ContentWrapper,
     sorting: SortingMethod
   ): void {
     try {
-      let key = GalleryCacheService.SORTING_PREFIX;
+      let key = prefix;
       if (cw?.searchResult?.searchQuery) {
         key += JSON.stringify(cw.searchResult.searchQuery);
       } else {

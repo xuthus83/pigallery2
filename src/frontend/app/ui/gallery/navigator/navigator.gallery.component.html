@@ -54,7 +54,7 @@
         <div class="divider">&nbsp;</div>
       </ng-container>
       <div class="btn-group" dropdown #dropdown="bs-dropdown" placement="bottom right"
-           [autoClose]="false"
+           [insideClick]="true"
            title="Sort and group" i18n-title>
         <button id="button-alignment" dropdownToggle type="button"
                 class="btn dropdown-toggle  btn-outline-secondary btn-navigator"
@@ -114,7 +114,30 @@
               </div>
             </div>
             <div class="col p-1">
-              <h6 class="ps-2">Grouping</h6>
+              <h6 class="ps-2">Grouping
+                <div class="btn-group  btn-group-sm" dropdown #dropdown="bs-dropdown" placement="bottom right">
+                  <button id="button-basic" dropdownToggle type="button" class="btn dropdown-toggle"
+                          [class.btn-primary]="groupingFollowSorting"
+                          [class.btn-secondary]="!groupingFollowSorting"
+                          aria-controls="dropdown-basic">
+                    <ng-container *ngIf="groupingFollowSorting" i18n>Follow</ng-container>
+                    <ng-container *ngIf="!groupingFollowSorting" i18n>Indep.</ng-container>
+                  </button>
+                  <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu dropdown-menu-right"
+                      role="menu" aria-labelledby="button-basic">
+                    <li class="dropdown-item"
+                        [class.active]="groupingFollowSorting"
+                        (click)="groupingFollowSorting=true"
+                        role="menuitem" i18n>Follow Sorting
+                    </li>
+                    <li class="dropdown-item"
+                        [class.active]="!groupingFollowSorting"
+                        (click)="groupingFollowSorting=false"
+                        role="menuitem" i18n>Independent
+                    </li>
+                  </ul>
+                </div>
+              </h6>
               <div class="row">
                 <div class="dropdown-item sorting-grouping-item ps-3 pe-3" role="menuitem"
                      [class.active]="sortingService.grouping.value.method == type.key"
