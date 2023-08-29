@@ -6,7 +6,7 @@ import {AuthenticationService} from '../../../model/network/authentication.servi
 import {QueryService} from '../../../model/query.service';
 import {ContentService, ContentWrapperWithError, DirectoryContent,} from '../content.service';
 import {Utils} from '../../../../../common/Utils';
-import {SortingByTypes, SortingMethod} from '../../../../../common/entities/SortingMethods';
+import {SortingByTypes} from '../../../../../common/entities/SortingMethods';
 import {Config} from '../../../../../common/config/public/Config';
 import {SearchQueryTypes, TextSearch, TextSearchQueryMatchTypes,} from '../../../../../common/entities/SearchQueryDTO';
 import {Observable} from 'rxjs';
@@ -23,8 +23,9 @@ import {FilterService} from '../filter/filter.service';
   providers: [RouterLink],
 })
 export class GalleryNavigatorComponent {
-  public SortingByTypes = SortingByTypes;
-  public sortingByTypes: { key: number; value: string }[] = [];
+  public readonly SortingByTypes = SortingByTypes;
+  public readonly sortingByTypes: { key: number; value: string }[] = [];
+  public readonly groupingByTypes: { key: number; value: string }[] = [];
   public readonly config = Config;
   // DefaultSorting = Config.Gallery.defaultPhotoSortingMethod;
   public readonly SearchQueryTypes = SearchQueryTypes;
@@ -53,6 +54,8 @@ export class GalleryNavigatorComponent {
     public sanitizer: DomSanitizer
   ) {
     this.sortingByTypes = Utils.enumToArray(SortingByTypes);
+    // can't group by random
+    this.groupingByTypes = this.sortingByTypes.filter(s => s.key !== SortingByTypes.random);
     this.RootFolderName = $localize`Home`;
     this.wrappedContent = this.galleryService.content;
     this.directoryContent = this.wrappedContent.pipe(
@@ -137,22 +140,40 @@ export class GalleryNavigatorComponent {
         : 0;
   }
 
-  get DefaultSorting(): SortingMethod {
-    return this.sortingService.getDefaultSorting(
+  isDefaultSortingAndGrouping(): boolean {
+    return this.sortingService.isDefaultSortingAndGrouping(
       this.galleryService.content.value
     );
   }
 
   setSortingBy(sorting: SortingByTypes): void {
     const s = {method: sorting, ascending: this.sortingService.sorting.value.ascending};
+    // random does not have a direction
+    if (sorting === SortingByTypes.random) {
+      s.ascending = null;
+    } else if (s.ascending === null) {
+      s.ascending = true;
+    }
     this.sortingService.setSorting(s);
-    this.sortingService.setGrouping(s);
+
+    // you cannot group by random
+    if (sorting === SortingByTypes.random) {
+      return;
+    }
+    // if grouping is disabled, do not update it
+    if (this.sortingService.grouping.value.method !== null) {
+      this.sortingService.setGrouping(s);
+    }
   }
 
   setSortingAscending(asc: boolean) {
     const s = {method: this.sortingService.sorting.value.method, ascending: asc};
     this.sortingService.setSorting(s);
-    this.sortingService.setGrouping(s);
+
+    // if grouping is disabled, do not update it
+    if (this.sortingService.grouping.value.method !== null) {
+      this.sortingService.setGrouping(s);
+    }
   }
 
   setGroupingBy(grouping: SortingByTypes): void {

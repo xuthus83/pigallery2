@@ -945,6 +945,26 @@ export class ClientGalleryConfig {
   defaultSearchSortingMethod: ClientSortingConfig = new ClientSortingConfig(SortingByTypes.Date, false);
 
   @ConfigProperty({
+    type: ClientSortingConfig,
+    tags: {
+      name: $localize`Default grouping`,
+      priority: ConfigPriority.advanced,
+    },
+    description: $localize`Default grouping method for photo and video in a directory results.`
+  })
+  defaultPhotoGroupingMethod: ClientSortingConfig = new ClientSortingConfig(SortingByTypes.Date, true);
+
+  @ConfigProperty({
+    type: ClientSortingConfig,
+    tags: {
+      name: $localize`Default search grouping`,
+      priority: ConfigPriority.advanced,
+    },
+    description: $localize`Default grouping method for photo and video in a search results.`
+  })
+  defaultSearchGroupingMethod: ClientSortingConfig = new ClientSortingConfig(SortingByTypes.Date, false);
+
+  @ConfigProperty({
     tags: {
       name: $localize`Sort directories by date`,
       priority: ConfigPriority.advanced,

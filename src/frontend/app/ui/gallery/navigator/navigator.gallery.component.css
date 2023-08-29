@@ -53,3 +53,10 @@ app-gallery-filter {
   --bs-text-opacity: 1;
   color: rgba(var(--bs-body-color-rgb), var(--bs-text-opacity)) !important;
 }
+
+.grouping-icon{
+  display: inline-block;
+  font-size: xx-small;
+  vertical-align: top;
+  line-height: 1;
+}

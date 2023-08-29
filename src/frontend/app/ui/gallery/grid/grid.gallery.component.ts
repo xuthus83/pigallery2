@@ -25,8 +25,8 @@ import {QueryService} from '../../../model/query.service';
 import {ContentService} from '../content.service';
 import {MediaDTO, MediaDTOUtils,} from '../../../../../common/entities/MediaDTO';
 import {QueryParams} from '../../../../../common/QueryParams';
-import {MediaGroup} from '../navigator/sorting.service';
-import {SimpleChanges} from '../../../../../../node_modules/@angular/core';
+import {GallerySortingService, MediaGroup} from '../navigator/sorting.service';
+import {SortingByTypes} from '../../../../../common/entities/SortingMethods';
 
 @Component({
   selector: 'app-gallery-grid',
@@ -58,6 +58,7 @@ export class GalleryGridComponent
   private onScrollFired = false;
   private helperTime: number = null;
   public renderDelayTimer: number = null; // delays render on resize
+  public readonly SortingByTypes = SortingByTypes;
 
   constructor(
     private overlayService: OverlayService,
@@ -65,13 +66,23 @@ export class GalleryGridComponent
     public queryService: QueryService,
     private router: Router,
     public galleryService: ContentService,
+    public sortingService: GallerySortingService,
     private route: ActivatedRoute
   ) {
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes);
-    this.onChange();
+  ngOnChanges(): void {
+    if (this.isAfterViewInit === false) {
+      return;
+    }
+    this.updateContainerDimensions();
+    this.mergeNewPhotos();
+    this.helperTime = window.setTimeout((): void => {
+      this.renderPhotos();
+      if (this.delayedRenderUpToPhoto) {
+        this.renderUpToMedia(this.delayedRenderUpToPhoto);
+      }
+    }, 0);
   }
 
   ngOnInit(): void {
@@ -91,20 +102,6 @@ export class GalleryGridComponent
       }
     );
   }
-
-  onChange = () => {
-    if (this.isAfterViewInit === false) {
-      return;
-    }
-    this.updateContainerDimensions();
-    this.mergeNewPhotos();
-    this.helperTime = window.setTimeout((): void => {
-      this.renderPhotos();
-      if (this.delayedRenderUpToPhoto) {
-        this.renderUpToMedia(this.delayedRenderUpToPhoto);
-      }
-    }, 0);
-  };
 
   ngOnDestroy(): void {
     if (this.helperTime != null) {
@@ -170,9 +167,15 @@ export class GalleryGridComponent
   }
 
 
-  // TODO: This is deprecated,
-  // we do not post update galleries anymore since the preview member in the DriectoryDTO
+  // Merging photos after new sorting and filter was applied
   private mergeNewPhotos(): void {
+    if (this.mediaToRender.length === 0) {
+      return;
+    }
+    if (this.mediaGroups?.length === 0) {
+      this.clearRenderedPhotos();
+      return;
+    }
     // merge new data with old one
     const lastSameIndex = {groups: 0, media: 0};
     let lastRowId = 0;
@@ -195,7 +198,7 @@ export class GalleryGridComponent
 
       // delete last row if the length of the two are not equal
       if (!diffFound && this.mediaGroups[i].media.length < this.mediaToRender[i].media.length) {
-        lastRowId = this.mediaToRender[i].media[this.mediaToRender[i].media.length].rowId;
+        lastRowId = this.mediaToRender[i].media[this.mediaToRender[i].media.length - 1].rowId;
         for (let j = this.mediaToRender[i].media.length - 2; j >= 0; --j) {
           const gridMedia = this.mediaToRender[i].media[j];
           if (gridMedia.rowId !== lastRowId) {
@@ -211,9 +214,17 @@ export class GalleryGridComponent
         this.clearRenderedPhotos();
         return;
       }
-      this.mediaToRender.splice(lastSameIndex.groups, this.mediaToRender.length - lastSameIndex.groups);
+      // only delete the whole group if all media is different
+      if (lastSameIndex.media === 0) {
+        this.mediaToRender.splice(lastSameIndex.groups, this.mediaToRender.length - lastSameIndex.groups);
+        return;
+      }
+      this.mediaToRender.splice(lastSameIndex.groups + 1, this.mediaToRender.length - lastSameIndex.groups);
+
       const media = this.mediaToRender[lastSameIndex.groups].media;
       media.splice(lastSameIndex.media, media.length - lastSameIndex.media);
+
+
     }
 
   }

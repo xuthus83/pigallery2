@@ -46,6 +46,15 @@ export class GallerySortingService {
     });
   }
 
+  isDefaultSortingAndGrouping(cw: ContentWrapper): boolean {
+    const defS = this.getDefaultSorting(cw);
+    const defG = this.getDefaultGrouping(cw);
+    const s = this.sorting.value;
+    const g = this.grouping.value;
+    return s.method === defS.method && s.ascending === defS.ascending &&
+      g.method === defG.method && g.ascending === defG.ascending;
+  }
+
   getDefaultSorting(cw: ContentWrapper): SortingMethod {
     if (cw.directory && cw.directory.metaFile) {
       for (const file in PG2ConfMap.sorting) {
@@ -58,6 +67,14 @@ export class GallerySortingService {
       return Config.Gallery.defaultSearchSortingMethod;
     }
     return Config.Gallery.defaultPhotoSortingMethod;
+  }
+
+
+  getDefaultGrouping(cw: ContentWrapper): SortingMethod {
+    if (cw.searchResult) {
+      return Config.Gallery.defaultSearchGroupingMethod;
+    }
+    return Config.Gallery.defaultPhotoGroupingMethod;
   }
 
   setSorting(sorting: SortingMethod): void {
@@ -204,7 +221,7 @@ export class GallerySortingService {
                       groupFN = (m: MediaDTO) => this.datePipe.transform(m.metadata.creationDate, 'longDate');
                       break;
                     case SortingByTypes.Name:
-                      groupFN = (m: MediaDTO) => m.name.at(0).toLowerCase();
+                      groupFN = (m: MediaDTO) => m.name.at(0).toUpperCase();
                       break;
                     case SortingByTypes.Rating:
                       groupFN = (m: MediaDTO) => ((m as PhotoDTO).metadata.rating || 0).toString();

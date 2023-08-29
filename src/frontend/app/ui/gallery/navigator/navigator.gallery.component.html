@@ -29,7 +29,7 @@
       <ng-container *ngIf="config.Gallery.enableDownloadZip && isDirectory && ItemCount > 0">
         <a [href]="getDownloadZipLink()"
            class="btn  btn-outline-secondary btn-navigator">
-          <ng-icon name="ionDownloadOutline" title="download" i18n-title></ng-icon>
+          <ng-icon name="ionDownloadOutline" title="Download" i18n-title></ng-icon>
         </a>
         <div class="divider">&nbsp;</div>
       </ng-container>
@@ -53,23 +53,35 @@
         </a>
         <div class="divider">&nbsp;</div>
       </ng-container>
-      <div class="btn-group" dropdown #dropdown="bs-dropdown" placement="bottom right">
+      <div class="btn-group" dropdown #dropdown="bs-dropdown" placement="bottom right"
+           [autoClose]="false"
+           title="Sort and group" i18n-title>
         <button id="button-alignment" dropdownToggle type="button"
                 class="btn dropdown-toggle  btn-outline-secondary btn-navigator"
-                [class.btn-secondary]="sortingService.sorting.value !== DefaultSorting"
-                [class.btn-outline-secondary]="sortingService.sorting.value == DefaultSorting"
+                [class.btn-secondary]="!isDefaultSortingAndGrouping()"
+                [class.btn-outline-secondary]="isDefaultSortingAndGrouping()"
                 aria-controls="sorting-dropdown">
-          <ng-icon
-            [name]="sortingService.sorting.value.ascending ? 'ionArrowDownOutline' : 'ionArrowUpOutline'"></ng-icon>
+          <ng-icon *ngIf="sortingService.sorting.value.ascending !== null"
+                   [name]="!sortingService.sorting.value.ascending ? 'ionArrowDownOutline' : 'ionArrowUpOutline'"></ng-icon>
           <app-sorting-method-icon [method]="sortingService.sorting.value.method"></app-sorting-method-icon>
+          <div class="grouping-icon" *ngIf="sortingService.grouping.value.method !== null">
+            <div>
+              <ng-icon
+                [name]="!sortingService.grouping.value.ascending ? 'ionArrowDownOutline' : 'ionArrowUpOutline'"></ng-icon>
+              <app-sorting-method-icon [method]="sortingService.grouping.value.method"></app-sorting-method-icon>
+            </div>
+            <div class="ps-1" i18n>
+              group
+            </div>
+          </div>
         </button>
         <div id="sorting-dropdown" *dropdownMenu class="dropdown-menu dropdown-menu-right"
              role="menu" aria-labelledby="button-alignment">
           <div class="row flex-nowrap">
-            <div class="col-6  p-1 border-end">
-              <span class="ps-2">Sorting</span>
+            <div class="col  p-1 border-end">
+              <h6 class="ps-2">Sorting</h6>
               <div class="row">
-                <div class="dropdown-item sorting-grouping-item ps-3 pe-3"  role="menuitem"
+                <div class="dropdown-item sorting-grouping-item ps-3 pe-3" role="menuitem"
                      [class.active]="sortingService.sorting.value.method == type.key"
                      *ngFor="let type of sortingByTypes"
                      (click)="setSortingBy(type.key)">
@@ -78,58 +90,69 @@
                   </div>
                   <div class="d-inline-block">{{type.key | stringifySorting}}</div>
                 </div>
-                <hr>
 
-                <div class="dropdown-item sorting-grouping-item ps-3 pe-3" role="menuitem"
-                     [class.active]="sortingService.sorting.value.ascending == true"
-                     (click)="setSortingAscending(true)">
-                  <div class="me-2 d-inline-block">
-                    <ng-icon name="">ionArrowUpOutline</ng-icon>
+                <ng-container *ngIf="sortingService.sorting.value.method != SortingByTypes.random">
+                  <hr>
+                  <div class="dropdown-item sorting-grouping-item ps-3 pe-3" role="menuitem"
+                       [class.active]="sortingService.sorting.value.ascending == true"
+                       (click)="setSortingAscending(true)">
+                    <div class="me-2 d-inline-block">
+                      <ng-icon name="ionArrowUpOutline"></ng-icon>
+                    </div>
+                    <div class="d-inline-block" i18n>ascending</div>
                   </div>
-                  <div class="d-inline-block" i18n>ascending</div>
-                </div>
 
-                <div class="dropdown-item sorting-grouping-item ps-3 pe-3" role="menuitem"
-                     [class.active]="sortingService.sorting.value.ascending == false"
-                     (click)="setSortingAscending(false)">
-                  <div class="me-2 d-inline-block">
-                    <ng-icon name="ionArrowDownOutline"></ng-icon>
+                  <div class="dropdown-item sorting-grouping-item ps-3 pe-3" role="menuitem"
+                       [class.active]="sortingService.sorting.value.ascending == false"
+                       (click)="setSortingAscending(false)">
+                    <div class="me-2 d-inline-block">
+                      <ng-icon name="ionArrowDownOutline"></ng-icon>
+                    </div>
+                    <div class="d-inline-block" i18n>descending</div>
                   </div>
-                  <div class="d-inline-block" i18n>descending</div>
-                </div>
-
+                </ng-container>
               </div>
             </div>
-            <div class="col-6 p-1">
-              <span class="ps-2">Grouping</span>
+            <div class="col p-1">
+              <h6 class="ps-2">Grouping</h6>
               <div class="row">
                 <div class="dropdown-item sorting-grouping-item ps-3 pe-3" role="menuitem"
                      [class.active]="sortingService.grouping.value.method == type.key"
-                     *ngFor="let type of sortingByTypes"
+                     *ngFor="let type of groupingByTypes"
                      (click)="setGroupingBy(type.key)">
                   <div class="me-2 d-inline-block">
                     <app-sorting-method-icon [method]="type.key"></app-sorting-method-icon>
                   </div>
                   <div class="d-inline-block">{{type.key | stringifySorting}}</div>
                 </div>
-                <hr>
+                <div class="dropdown-item sorting-grouping-item ps-3 pe-3" role="menuitem"
+                     [class.active]="sortingService.grouping.value.method == null"
+                     (click)="setGroupingBy(null)">
+                  <div class="me-2 d-inline-block">
+                    <ng-icon name="ionCloseOutline"></ng-icon>
+                  </div>
+                  <div class="d-inline-block" i18n>don't group</div>
+                </div>
+                <ng-container *ngIf="sortingService.grouping.value.method !== null">
+                  <hr>
 
-                <div class="dropdown-item sorting-grouping-item ps-3 pe-3" role="menuitem"
-                     [class.active]="sortingService.grouping.value.ascending == true"
-                     (click)="setGroupingAscending(true)">
-                  <div class="me-2 d-inline-block">
-                    <ng-icon name="ionArrowUpOutline"></ng-icon>
+                  <div class="dropdown-item sorting-grouping-item ps-3 pe-3" role="menuitem"
+                       [class.active]="sortingService.grouping.value.ascending == true"
+                       (click)="setGroupingAscending(true)">
+                    <div class="me-2 d-inline-block">
+                      <ng-icon name="ionArrowUpOutline"></ng-icon>
+                    </div>
+                    <div class="d-inline-block" i18n>ascending</div>
                   </div>
-                  <div class="d-inline-block" i18n>ascending</div>
-                </div>
-                <div class="dropdown-item sorting-grouping-item ps-3 pe-3" role="menuitem"
-                     [class.active]="sortingService.grouping.value.ascending == false"
-                     (click)="setGroupingAscending(false)">
-                  <div class="me-2 d-inline-block">
-                    <ng-icon name="ionArrowDownOutline"></ng-icon>
+                  <div class="dropdown-item sorting-grouping-item ps-3 pe-3" role="menuitem"
+                       [class.active]="sortingService.grouping.value.ascending == false"
+                       (click)="setGroupingAscending(false)">
+                    <div class="me-2 d-inline-block">
+                      <ng-icon name="ionArrowDownOutline"></ng-icon>
+                    </div>
+                    <div class="d-inline-block" i18n>descending</div>
                   </div>
-                  <div class="d-inline-block" i18n>descending</div>
-                </div>
+                </ng-container>
               </div>
             </div>
           </div>
