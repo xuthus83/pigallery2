@@ -969,8 +969,9 @@ export class ClientGalleryConfig {
     type: ClientGroupingConfig,
     tags: {
       name: $localize`Default grouping`,
+      githubIssue: 706,
       priority: ConfigPriority.advanced,
-    },
+    } as TAGS,
     description: $localize`Default grouping method for photo and video in a directory results.`
   })
   defaultPhotoGroupingMethod: ClientGroupingConfig = new ClientGroupingConfig(GroupByTypes.Date, true);
@@ -979,6 +980,7 @@ export class ClientGalleryConfig {
     type: ClientGroupingConfig,
     tags: {
       name: $localize`Default search grouping`,
+      githubIssue: 706,
       priority: ConfigPriority.advanced,
     },
     description: $localize`Default grouping method for photo and video in a search results.`
