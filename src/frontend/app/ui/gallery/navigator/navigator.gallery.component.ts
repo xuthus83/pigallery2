@@ -159,11 +159,10 @@ export class GalleryNavigatorComponent {
       s.ascending = true;
     }
     this.sortingService.setSorting(s);
-
     // you cannot group by random
-    if (this.isDirectionalSort(sorting) ||
+    if (!this.isDirectionalSort(sorting) ||
       // if grouping is disabled, do not update it
-      Utils.isValidEnumInt(GroupByTypes,sorting) || !this.groupingFollowSorting
+      this.sortingService.grouping.value.method === GroupByTypes.NoGrouping || !this.groupingFollowSorting
     ) {
       return;
     }
@@ -176,7 +175,7 @@ export class GalleryNavigatorComponent {
     this.sortingService.setSorting(s);
 
     // if grouping is disabled, do not update it
-    if (this.sortingService.grouping.value.method !== GroupByTypes.NoGrouping || !this.groupingFollowSorting) {
+    if (this.sortingService.grouping.value.method == GroupByTypes.NoGrouping || !this.groupingFollowSorting) {
       return;
     }
     this.sortingService.setGrouping(s as GroupingMethod);

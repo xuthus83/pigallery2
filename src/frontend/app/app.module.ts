@@ -170,6 +170,7 @@ import {
   ionTimeOutline,
   ionTimerOutline,
   ionTrashOutline,
+  ionUnlinkOutline,
   ionVideocamOutline,
   ionVolumeMediumOutline,
   ionVolumeMuteOutline,
@@ -243,7 +244,7 @@ Marker.prototype.options.icon = MarkerFactory.defIcon;
       ionFlagOutline, ionGlobeOutline, ionPieChartOutline, ionStopOutline,
       ionTimeOutline, ionCheckmarkOutline, ionPulseOutline, ionResizeOutline,
       ionCloudOutline, ionChatboxOutline, ionServerOutline, ionFileTrayFullOutline, ionBrushOutline,
-      ionBrowsersOutline
+      ionBrowsersOutline, ionUnlinkOutline
     }),
     ClipboardModule,
     TooltipModule.forRoot(),

@@ -54,9 +54,17 @@ app-gallery-filter {
   color: rgba(var(--bs-body-color-rgb), var(--bs-text-opacity)) !important;
 }
 
-.grouping-icon{
+.grouping-icon {
   display: inline-block;
   font-size: xx-small;
   vertical-align: top;
   line-height: 1;
+}
+
+.btn-group-follow {
+  float: right;
+  margin-right: -0.25em;
+  transform: translateX(50%);
+  padding: 0;
+  border: none;
 }
