@@ -12,10 +12,11 @@ import {VideoDTO} from '../../../../../src/common/entities/VideoDTO';
 import {FileDTO} from '../../../../../src/common/entities/FileDTO';
 import {CoverManager} from '../../../../../src/backend/model/database/CoverManager';
 import {Config} from '../../../../../src/common/config/private/Config';
-import {SortingMethods} from '../../../../../src/common/entities/SortingMethods';
+import {SortByTypes} from '../../../../../src/common/entities/SortingMethods';
 import {Utils} from '../../../../../src/common/Utils';
 import {SQLConnection} from '../../../../../src/backend/model/database/SQLConnection';
 import {DirectoryEntity} from '../../../../../src/backend/model/database/enitites/DirectoryEntity';
+import {ClientSortingConfig} from '../../../../../src/common/config/public/ClientConfig';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const deepEqualInAnyOrder = require('deep-equal-in-any-order');
@@ -161,7 +162,8 @@ describe('CoverManager', (sqlHelper: DBTestHelper) => {
 
   afterEach(() => {
     Config.AlbumCover.SearchQuery = null;
-    Config.AlbumCover.Sorting = [SortingMethods.descRating, SortingMethods.descDate];
+    Config.AlbumCover.Sorting = [new ClientSortingConfig(SortByTypes.Rating, false),
+      new ClientSortingConfig(SortByTypes.Date, false)];
   });
 
 
@@ -181,13 +183,15 @@ describe('CoverManager', (sqlHelper: DBTestHelper) => {
 
   it('should sort directory cover', async () => {
     const pm = new CoverManager();
-    Config.AlbumCover.Sorting = [SortingMethods.descRating, SortingMethods.descDate];
+    Config.AlbumCover.Sorting = [new ClientSortingConfig(SortByTypes.Rating, false),
+      new ClientSortingConfig(SortByTypes.Date, false)];
     expect(Utils.clone(await pm.setAndGetCoverForDirectory(subDir))).to.deep.equalInAnyOrder(previewifyMedia(p2));
-    Config.AlbumCover.Sorting = [SortingMethods.descDate];
+    Config.AlbumCover.Sorting = [
+      new ClientSortingConfig(SortByTypes.Date, false)];
     expect(Utils.clone(await pm.setAndGetCoverForDirectory(subDir))).to.deep.equalInAnyOrder(previewifyMedia(pFaceLess));
-    Config.AlbumCover.Sorting = [SortingMethods.descRating];
+    Config.AlbumCover.Sorting = [new ClientSortingConfig(SortByTypes.Rating, false)];
     expect(Utils.clone(await pm.setAndGetCoverForDirectory(dir))).to.deep.equalInAnyOrder(previewifyMedia(p4));
-    Config.AlbumCover.Sorting = [SortingMethods.descName];
+    Config.AlbumCover.Sorting = [new ClientSortingConfig(SortByTypes.Name, false)];
     expect(Utils.clone(await pm.setAndGetCoverForDirectory(dir))).to.deep.equalInAnyOrder(previewifyMedia(v));
   });
 

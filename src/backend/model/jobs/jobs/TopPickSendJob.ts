@@ -1,7 +1,7 @@
 import {ConfigTemplateEntry, DefaultsJobs,} from '../../../../common/entities/job/JobDTO';
 import {Job} from './Job';
 import {backendTexts} from '../../../../common/BackendTexts';
-import {SortingMethods} from '../../../../common/entities/SortingMethods';
+import {SortByTypes} from '../../../../common/entities/SortingMethods';
 import {DatePatternFrequency, DatePatternSearch, SearchQueryTypes} from '../../../../common/entities/SearchQueryDTO';
 import {ObjectManagers} from '../../ObjectManagers';
 import {PhotoEntity} from '../../database/enitites/PhotoEntity';
@@ -30,7 +30,8 @@ export class TopPickSendJob extends Job<{
           daysLength: 7,
           frequency: DatePatternFrequency.every_year
         } as DatePatternSearch,
-        sortBy: [SortingMethods.descRating, SortingMethods.descPersonCount],
+        sortBy: [{method: SortByTypes.Rating, ascending: false},
+          {method: SortByTypes.PersonCount, ascending: false}],
         pick: 5
       }] as MediaPickDTO[],
     }, {

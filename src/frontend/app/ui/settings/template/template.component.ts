@@ -16,6 +16,7 @@ import {UserRoles} from '../../../../../common/entities/UserDTO';
 import {WebConfigClassBuilder} from '../../../../../../node_modules/typeconfig/src/decorators/builders/WebConfigClassBuilder';
 import {ErrorDTO} from '../../../../../common/entities/Error';
 import {ISettingsComponent} from './ISettingsComponent';
+import {CustomSettingsEntries} from './CustomSettingsEntries';
 
 
 interface ConfigState {
@@ -271,7 +272,7 @@ export class TemplateComponent implements OnInit, OnChanges, OnDestroy, ISetting
   }
 
   isExpandableConfig(c: ConfigState) {
-    return c.isConfigType && c.tags?.uiType !== 'SVGIconConfig';
+    return c.isConfigType && !CustomSettingsEntries.iS(c);
   }
 
 

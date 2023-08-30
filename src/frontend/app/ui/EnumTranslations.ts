@@ -1,9 +1,9 @@
 import {UserRoles} from '../../../common/entities/UserDTO';
 import {ConfigPriority, MapProviders, NavigationLinkTypes, ScrollUpModes} from '../../../common/config/public/ClientConfig';
 import {ReIndexingSensitivity} from '../../../common/config/private/PrivateConfig';
-import {SortingMethods} from '../../../common/entities/SortingMethods';
 import {SearchQueryTypes} from '../../../common/entities/SearchQueryDTO';
 import {ConfigStyle} from './settings/settings.service';
+import {SortByTypes,GroupByTypes} from '../../../common/entities/SortingMethods';
 
 export const EnumTranslations: Record<string, string> = {};
 export const enumToTranslatedArray = (EnumType: any): { key: number; value: string }[] => {
@@ -44,15 +44,13 @@ EnumTranslations[ReIndexingSensitivity[ReIndexingSensitivity.high]] = $localize`
 EnumTranslations[ReIndexingSensitivity[ReIndexingSensitivity.medium]] = $localize`medium`;
 
 
-EnumTranslations[SortingMethods[SortingMethods.descDate]] = $localize`descending date`;
-EnumTranslations[SortingMethods[SortingMethods.ascDate]] = $localize`ascending date`;
-EnumTranslations[SortingMethods[SortingMethods.descName]] = $localize`descending name`;
-EnumTranslations[SortingMethods[SortingMethods.ascName]] = $localize`ascending name`;
-EnumTranslations[SortingMethods[SortingMethods.descRating]] = $localize`descending rating`;
-EnumTranslations[SortingMethods[SortingMethods.ascRating]] = $localize`ascending rating`;
-EnumTranslations[SortingMethods[SortingMethods.random]] = $localize`random`;
-EnumTranslations[SortingMethods[SortingMethods.ascPersonCount]] = $localize`ascending persons`;
-EnumTranslations[SortingMethods[SortingMethods.descPersonCount]] = $localize`descending persons`;
+EnumTranslations[SortByTypes[SortByTypes.Date]] = $localize`date`;
+EnumTranslations[SortByTypes[SortByTypes.Name]] = $localize`name`;
+EnumTranslations[SortByTypes[SortByTypes.Rating]] = $localize`rating`;
+EnumTranslations[SortByTypes[SortByTypes.Random]] = $localize`random`;
+EnumTranslations[SortByTypes[SortByTypes.PersonCount]] = $localize`persons`;
+
+EnumTranslations[GroupByTypes[GroupByTypes.NoGrouping]] = $localize`don't group`;
 
 
 EnumTranslations[NavigationLinkTypes[NavigationLinkTypes.url]] = $localize`Url`;

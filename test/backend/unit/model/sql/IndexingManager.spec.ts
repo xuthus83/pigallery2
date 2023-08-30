@@ -18,7 +18,8 @@ import {ProjectPath} from '../../../../../src/backend/ProjectPath';
 import * as path from 'path';
 import {DiskManager} from '../../../../../src/backend/model/DiskManger';
 import {AlbumManager} from '../../../../../src/backend/model/database/AlbumManager';
-import {SortingMethods} from '../../../../../src/common/entities/SortingMethods';
+import {SortByTypes} from '../../../../../src/common/entities/SortingMethods';
+import {ClientSortingConfig} from '../../../../../src/common/config/public/ClientConfig';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const deepEqualInAnyOrder = require('deep-equal-in-any-order');
@@ -71,7 +72,7 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
 
   afterEach(async () => {
     Config.loadSync();
-    Config.AlbumCover.Sorting = [SortingMethods.descRating];
+    Config.AlbumCover.Sorting = [new ClientSortingConfig(SortByTypes.Rating, false)];
     await sqlHelper.clearDB();
   });
 
@@ -358,7 +359,7 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
     const sp2 = TestHelper.getRandomizedPhotoEntry(subDir, 'subPhoto2', 0);
     sp2.metadata.rating = 3;
     subDir.cover = sp1;
-    Config.AlbumCover.Sorting = [SortingMethods.descRating];
+    Config.AlbumCover.Sorting = [new ClientSortingConfig(SortByTypes.Rating, false)];
 
     DirectoryDTOUtils.removeReferences(subDir);
     await im.saveToDB(Utils.clone(subDir) as ParentDirectoryDTO);
@@ -396,7 +397,7 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
     const sp2 = TestHelper.getRandomizedPhotoEntry(subDir, 'subPhoto2', 0);
     sp2.metadata.rating = 3;
     subDir.cover = sp1;
-    Config.AlbumCover.Sorting = [SortingMethods.descRating];
+    Config.AlbumCover.Sorting = [new ClientSortingConfig(SortByTypes.Rating, false)];
 
 
     DirectoryDTOUtils.removeReferences(subDir);
@@ -433,7 +434,7 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
     const sp2 = TestHelper.getRandomizedPhotoEntry(subDir, 'subPhoto2', 0);
     sp2.metadata.rating = 3;
     subDir.cover = sp1;
-    Config.AlbumCover.Sorting = [SortingMethods.descRating];
+    Config.AlbumCover.Sorting = [new ClientSortingConfig(SortByTypes.Rating, false)];
 
     DirectoryDTOUtils.removeReferences(parent);
     await im.saveToDB(Utils.clone(parent) as ParentDirectoryDTO);
@@ -563,7 +564,7 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
     const sp2 = TestHelper.getRandomizedPhotoEntry(subDir, 'subPhoto2', 1);
     sp2.metadata.rating = 3;
     subDir.cover = sp1;
-    Config.AlbumCover.Sorting = [SortingMethods.descRating];
+    Config.AlbumCover.Sorting = [new ClientSortingConfig(SortByTypes.Rating, false)];
 
     DirectoryDTOUtils.removeReferences(parent);
     const s1 = im.queueForSave(Utils.clone(parent) as ParentDirectoryDTO);

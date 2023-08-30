@@ -178,6 +178,10 @@ export class Utils {
     });
   }
 
+  public static isValidEnumInt(EnumType: any, value: number) {
+    return typeof EnumType[value] === 'string';
+  }
+
   public static enumToArray(EnumType: any): { key: number; value: string }[] {
     const arr: Array<{ key: number; value: string }> = [];
     for (const enumMember in EnumType) {

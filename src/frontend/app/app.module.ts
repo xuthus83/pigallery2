@@ -170,6 +170,7 @@ import {
   ionTimeOutline,
   ionTimerOutline,
   ionTrashOutline,
+  ionUnlinkOutline,
   ionVideocamOutline,
   ionVolumeMediumOutline,
   ionVolumeMuteOutline,
@@ -177,6 +178,11 @@ import {
 } from '@ng-icons/ionicons';
 import {SortingMethodIconComponent} from './ui/sorting-method-icon/sorting-method-icon.component';
 import {SafeHtmlPipe} from './pipes/SafeHTMLPipe';
+import {DatePipe} from '@angular/common';
+import {ParseIntPipe} from './pipes/ParseIntPipe';
+import {
+  SortingMethodSettingsEntryComponent
+} from './ui/settings/template/settings-entry/sorting-method/sorting-method.settings-entry.component';
 
 @Injectable()
 export class MyHammerConfig extends HammerGestureConfig {
@@ -238,7 +244,7 @@ Marker.prototype.options.icon = MarkerFactory.defIcon;
       ionFlagOutline, ionGlobeOutline, ionPieChartOutline, ionStopOutline,
       ionTimeOutline, ionCheckmarkOutline, ionPulseOutline, ionResizeOutline,
       ionCloudOutline, ionChatboxOutline, ionServerOutline, ionFileTrayFullOutline, ionBrushOutline,
-      ionBrowsersOutline
+      ionBrowsersOutline, ionUnlinkOutline
     }),
     ClipboardModule,
     TooltipModule.forRoot(),
@@ -319,10 +325,12 @@ Marker.prototype.options.icon = MarkerFactory.defIcon;
     StringifySearchType,
     FileDTOToPathPipe,
     PhotoFilterPipe,
+    ParseIntPipe,
     UsersComponent,
     SharingsListComponent,
     SortingMethodIconComponent,
-    SafeHtmlPipe
+    SafeHtmlPipe,
+    SortingMethodSettingsEntryComponent
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: CSRFInterceptor, multi: true},
@@ -361,6 +369,7 @@ Marker.prototype.options.icon = MarkerFactory.defIcon;
     CookieService,
     GPXFilesFilterPipe,
     MDFilesFilterPipe,
+    DatePipe
   ],
   bootstrap: [AppComponent],
 })

@@ -6,7 +6,7 @@ import {AuthenticationService} from '../../../model/network/authentication.servi
 import {QueryService} from '../../../model/query.service';
 import {ContentService, ContentWrapperWithError, DirectoryContent,} from '../content.service';
 import {Utils} from '../../../../../common/Utils';
-import {SortingMethods} from '../../../../../common/entities/SortingMethods';
+import {GroupByTypes, GroupingMethod, SortByDirectionalTypes, SortByTypes} from '../../../../../common/entities/SortingMethods';
 import {Config} from '../../../../../common/config/public/Config';
 import {SearchQueryTypes, TextSearch, TextSearchQueryMatchTypes,} from '../../../../../common/entities/SearchQueryDTO';
 import {Observable} from 'rxjs';
@@ -23,8 +23,8 @@ import {FilterService} from '../filter/filter.service';
   providers: [RouterLink],
 })
 export class GalleryNavigatorComponent {
-  public SortingMethods = SortingMethods;
-  public sortingMethodsType: { key: number; value: string }[] = [];
+  public readonly sortingByTypes: { key: number; value: string }[] = [];
+  public readonly groupingByTypes: { key: number; value: string }[] = [];
   public readonly config = Config;
   // DefaultSorting = Config.Gallery.defaultPhotoSortingMethod;
   public readonly SearchQueryTypes = SearchQueryTypes;
@@ -42,6 +42,7 @@ export class GalleryNavigatorComponent {
   };
   @ViewChild('dropdown', {static: true}) dropdown: BsDropdownDirective;
   @ViewChild('navigator', {read: ElementRef}) navigatorElement: ElementRef<HTMLInputElement>;
+  public groupingFollowSorting = true; // if grouping should be set after sorting automatically
 
   constructor(
     public authService: AuthenticationService,
@@ -52,7 +53,9 @@ export class GalleryNavigatorComponent {
     private router: Router,
     public sanitizer: DomSanitizer
   ) {
-    this.sortingMethodsType = Utils.enumToArray(SortingMethods);
+    this.sortingByTypes = Utils.enumToArray(SortByTypes);
+    // can't group by random
+    this.groupingByTypes = Utils.enumToArray(GroupByTypes);
     this.RootFolderName = $localize`Home`;
     this.wrappedContent = this.galleryService.content;
     this.directoryContent = this.wrappedContent.pipe(
@@ -137,15 +140,57 @@ export class GalleryNavigatorComponent {
         : 0;
   }
 
-  get DefaultSorting(): SortingMethods {
-    return this.sortingService.getDefaultSorting(
+  isDefaultSortingAndGrouping(): boolean {
+    return this.sortingService.isDefaultSortingAndGrouping(
       this.galleryService.content.value
     );
   }
 
-  setSorting(sorting: SortingMethods): void {
-    this.sortingService.setSorting(sorting);
+  isDirectionalSort(value: number) {
+    return Utils.isValidEnumInt(SortByDirectionalTypes, value);
   }
+
+  setSortingBy(sorting: number): void {
+    const s = {method: sorting, ascending: this.sortingService.sorting.value.ascending};
+    // random does not have a direction
+    if (!this.isDirectionalSort(sorting)) {
+      s.ascending = null;
+    } else if (s.ascending === null) {
+      s.ascending = true;
+    }
+    this.sortingService.setSorting(s);
+    // you cannot group by random
+    if (!this.isDirectionalSort(sorting) ||
+      // if grouping is disabled, do not update it
+      this.sortingService.grouping.value.method === GroupByTypes.NoGrouping || !this.groupingFollowSorting
+    ) {
+      return;
+    }
+
+    this.sortingService.setGrouping(s);
+  }
+
+  setSortingAscending(asc: boolean) {
+    const s = {method: this.sortingService.sorting.value.method, ascending: asc};
+    this.sortingService.setSorting(s);
+
+    // if grouping is disabled, do not update it
+    if (this.sortingService.grouping.value.method == GroupByTypes.NoGrouping || !this.groupingFollowSorting) {
+      return;
+    }
+    this.sortingService.setGrouping(s as GroupingMethod);
+  }
+
+  setGroupingBy(grouping: number): void {
+    const s = {method: grouping, ascending: this.sortingService.grouping.value.ascending};
+    this.sortingService.setGrouping(s);
+  }
+
+  setGroupingAscending(asc: boolean) {
+    const s = {method: this.sortingService.grouping.value.method, ascending: asc};
+    this.sortingService.setGrouping(s);
+  }
+
 
   getDownloadZipLink(): string {
     const c = this.galleryService.content.value;
@@ -215,6 +260,8 @@ export class GalleryNavigatorComponent {
     }
     this.lastScroll.any = scrollPosition;
   }
+
+  protected readonly GroupByTypes = GroupByTypes;
 }
 
 interface NavigatorPath {

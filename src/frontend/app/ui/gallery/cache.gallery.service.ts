@@ -1,16 +1,15 @@
 import {Injectable} from '@angular/core';
-import {DirectoryPathDTO, ParentDirectoryDTO,} from '../../../../common/entities/DirectoryDTO';
+import {ParentDirectoryDTO,} from '../../../../common/entities/DirectoryDTO';
 import {Utils} from '../../../../common/Utils';
 import {Config} from '../../../../common/config/public/Config';
 import {IAutoCompleteItem} from '../../../../common/entities/AutoCompleteItem';
 import {MediaDTO} from '../../../../common/entities/MediaDTO';
-import {SortingMethods} from '../../../../common/entities/SortingMethods';
+import {GroupingMethod, SortingMethod} from '../../../../common/entities/SortingMethods';
 import {VersionService} from '../../model/version.service';
 import {SearchQueryDTO, SearchQueryTypes,} from '../../../../common/entities/SearchQueryDTO';
 import {ContentWrapper} from '../../../../common/entities/ConentWrapper';
 import {ContentWrapperWithError} from './content.service';
 import {ThemeModes} from '../../../../common/config/public/ClientConfig';
-import {SearchResultDTO} from '../../../../common/entities/SearchResultDTO';
 
 interface CacheItem<T> {
   timestamp: number;
@@ -24,6 +23,7 @@ export class GalleryCacheService {
   private static readonly INSTANT_SEARCH_PREFIX = 'INSTANT_SEARCH:';
   private static readonly SEARCH_PREFIX = 'SEARCH:';
   private static readonly SORTING_PREFIX = 'SORTING:';
+  private static readonly GROUPING_PREFIX = 'GROUPING:';
   private static readonly VERSION = 'VERSION';
   private static readonly SLIDESHOW_SPEED = 'SLIDESHOW_SPEED';
   private static THEME_MODE = 'THEME_MODE';
@@ -97,8 +97,34 @@ export class GalleryCacheService {
     }
   }
 
-  public getSorting(cw: ContentWrapper): SortingMethods {
-    let key = GalleryCacheService.SORTING_PREFIX;
+  public getGrouping(cw: ContentWrapper): GroupingMethod {
+    return this.getSortOrGroup(GalleryCacheService.GROUPING_PREFIX, cw) as GroupingMethod;
+  }
+
+  public getSorting(cw: ContentWrapper): SortingMethod {
+    return this.getSortOrGroup(GalleryCacheService.SORTING_PREFIX, cw) as SortingMethod;
+  }
+
+  public setGrouping(cw: ContentWrapper, sorting: GroupingMethod): void {
+    return this.setSortOrGroup(GalleryCacheService.GROUPING_PREFIX, cw, sorting);
+  }
+
+  public setSorting(cw: ContentWrapper,
+                    sorting: SortingMethod): void {
+    return this.setSortOrGroup(GalleryCacheService.SORTING_PREFIX, cw, sorting);
+  }
+
+  public removeGrouping(cw: ContentWrapper): void {
+    return this.removeSortOrGroup(GalleryCacheService.GROUPING_PREFIX, cw);
+  }
+
+  public removeSorting(cw: ContentWrapper): void {
+    return this.removeSortOrGroup(GalleryCacheService.SORTING_PREFIX, cw);
+  }
+
+
+  private getSortOrGroup(prefix: string, cw: ContentWrapper): SortingMethod | GroupingMethod {
+    let key = prefix;
     if (cw?.searchResult?.searchQuery) {
       key += JSON.stringify(cw.searchResult.searchQuery);
     } else {
@@ -106,12 +132,13 @@ export class GalleryCacheService {
     }
     const tmp = localStorage.getItem(key);
     if (tmp != null) {
-      return parseInt(tmp, 10);
+      return JSON.parse(tmp);
     }
     return null;
   }
 
-  public removeSorting(cw: ContentWrapper): void {
+
+  private removeSortOrGroup(prefix: string, cw: ContentWrapper): void {
     try {
       let key = GalleryCacheService.SORTING_PREFIX;
       if (cw?.searchResult?.searchQuery) {
@@ -126,23 +153,23 @@ export class GalleryCacheService {
     }
   }
 
-  public setSorting(
+  private setSortOrGroup(
+    prefix: string,
     cw: ContentWrapper,
-    sorting: SortingMethods
-  ): SortingMethods {
+    sorting: SortingMethod | GroupingMethod
+  ): void {
     try {
-      let key = GalleryCacheService.SORTING_PREFIX;
+      let key = prefix;
       if (cw?.searchResult?.searchQuery) {
         key += JSON.stringify(cw.searchResult.searchQuery);
       } else {
         key += cw?.directory?.path + '/' + cw?.directory?.name;
       }
-      localStorage.setItem(key, sorting.toString());
+      localStorage.setItem(key, JSON.stringify(sorting));
     } catch (e) {
       this.reset();
       console.error(e);
     }
-    return null;
   }
 
   public getAutoComplete(

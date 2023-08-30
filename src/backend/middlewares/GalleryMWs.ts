@@ -16,7 +16,7 @@ import {SearchQueryDTO, SearchQueryTypes,} from '../../common/entities/SearchQue
 import {LocationLookupException} from '../exceptions/LocationLookupException';
 import {SupportedFormats} from '../../common/SupportedFormats';
 import {ServerTime} from './ServerTimingMWs';
-import {SortingMethods} from '../../common/entities/SortingMethods';
+import {SortByTypes} from '../../common/entities/SortingMethods';
 
 export class GalleryMWs {
   @ServerTime('1.db', 'List Directory')
@@ -322,7 +322,7 @@ export class GalleryMWs {
       );
 
       const photos =
-        await ObjectManagers.getInstance().SearchManager.getNMedia(query, [SortingMethods.random], 1, true);
+        await ObjectManagers.getInstance().SearchManager.getNMedia(query, [{method: SortByTypes.Random, ascending: null}], 1, true);
       if (!photos || photos.length !== 1) {
         return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, 'No photo found'));
       }

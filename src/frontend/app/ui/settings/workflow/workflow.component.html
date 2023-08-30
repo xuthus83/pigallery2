@@ -5,7 +5,8 @@
     <div class="card-header">
       <div class="d-flex justify-content-between">
         <div (click)="showDetails[schedule.name]=!showDetails[schedule.name]">
-          <ng-icon style="font-size: 1.3em; margin-left: -4px" [name]="showDetails[schedule.name] ? 'ionChevronDownOutline' : 'ionChevronForwardOutline'"></ng-icon>
+          <ng-icon style="font-size: 1.3em; margin-left: -4px"
+                   [name]="showDetails[schedule.name] ? 'ionChevronDownOutline' : 'ionChevronForwardOutline'"></ng-icon>
           {{schedule.name}}
           <ng-container [ngSwitch]="schedule.trigger.type">
             <ng-container *ngSwitchCase="JobTriggerType.periodic">
@@ -233,7 +234,8 @@
                               placeholder="Search Query">
                             </app-gallery-search-field>
                           </div>
-                          <small class="form-text text-muted" *ngIf="settingsService.configStyle == ConfigStyle.full" i18n>
+                          <small class="form-text text-muted" *ngIf="settingsService.configStyle == ConfigStyle.full"
+                                 i18n>
                             Search query to list photos and videos.
                           </small>
                         </div>
@@ -244,34 +246,33 @@
                                [for]="configEntry.id+'_'+i" i18n>Sort by</label>
                         <div class="col-md-10">
                           <div class="input-group">
-                            <ng-container *ngFor="let _ of mp.sortBy; let k=index">
-                              <div class="row col-12 mt-1 m-0 p-0">
-                                <div class="col p-0">
-                                  <select
-                                    [id]="configEntry.id+'_'+i+'_'+j+'_'+k"
-                                    [name]="configEntry.id+'_'+i+'_'+j+'_'+k"
-                                    (ngModelChange)="onChange($event)"
-                                    class="form-select"
-                                    [(ngModel)]="mp.sortBy[k]">
-                                    <option *ngFor="let opt of SortingMethods" [ngValue]="opt.key">{{opt.value}}
-                                    </option>
-                                  </select>
+                            <div
+                              *ngFor="let _ of mp.sortBy; let k=index"
+                              class="row col-12 mt-1 m-0 p-0">
+                              <div class="col p-0">
+
+                                <app-settings-entry-sorting-method
+                                  [(ngModel)]="mp.sortBy[k]"
+                                  [id]="configEntry.id+'_'+i+'_'+j+'_'+k"
+                                  [name]="configEntry.id+'_'+i+'_'+j+'_'+k"
+                                  [sortingByEnum]="SortByTypes"
+                                  (change)="onChange($event)">
+                                </app-settings-entry-sorting-method>
 
 
-                                </div>
-                                <div class="col-auto pe-0">
-                                  <button class="btn btn-danger float-end"
-                                          [class.btn-secondary]="mp.sortBy.length < 2"
-                                          [class.btn-danger]="mp.sortBy.length >= 2"
-                                          [disabled]="mp.sortBy.length < 2"
-                                          [id]="'list_btn_'+configEntry.id+'_'+i+'_'+j+'_'+k"
-                                          [name]="'list_btn_'+configEntry.id+'_'+i+'_'+j+'_'+k"
-                                          (click)="removeFromArray(mp.sortBy,k)">
-                                    <ng-icon name="ionTrashOutline" title="Delete" i18n-title></ng-icon>
-                                  </button>
-                                </div>
                               </div>
-                            </ng-container>
+                              <div class="col-auto pe-0">
+                                <button class="btn btn-danger float-end"
+                                        [class.btn-secondary]="mp.sortBy.length < 2"
+                                        [class.btn-danger]="mp.sortBy.length >= 2"
+                                        [disabled]="mp.sortBy.length < 2"
+                                        [id]="'list_btn_'+configEntry.id+'_'+i+'_'+j+'_'+k"
+                                        [name]="'list_btn_'+configEntry.id+'_'+i+'_'+j+'_'+k"
+                                        (click)="removeFromArray(mp.sortBy,k)">
+                                  <ng-icon name="ionTrashOutline" title="Delete" i18n-title></ng-icon>
+                                </button>
+                              </div>
+                            </div>
                             <div class="col-12 p-0">
                               <button class="btn btn-primary mt-1 float-end"
                                       [id]="'btn_add_'+configEntry.id+'_'+i+'_'+j"
@@ -282,7 +283,8 @@
                               </button>
                             </div>
                           </div>
-                          <small class="form-text text-muted" *ngIf="settingsService.configStyle == ConfigStyle.full" i18n>
+                          <small class="form-text text-muted" *ngIf="settingsService.configStyle == ConfigStyle.full"
+                                 i18n>
                             Sorts the photos and videos by this.
                           </small>
                         </div>
@@ -298,7 +300,8 @@
                                    (ngModelChange)="onChange($event)"
                                    [(ngModel)]="mp.pick" required>
                           </div>
-                          <small class="form-text text-muted" *ngIf="settingsService.configStyle == ConfigStyle.full" i18n>
+                          <small class="form-text text-muted" *ngIf="settingsService.configStyle == ConfigStyle.full"
+                                 i18n>
                             Number of photos and videos to pick.
                           </small>
                         </div>

@@ -18,6 +18,7 @@ import {
   ClientPhotoConvertingConfig,
   ClientServiceConfig,
   ClientSharingConfig,
+  ClientSortingConfig,
   ClientThumbnailConfig,
   ClientUserConfig,
   ClientVideoConfig,
@@ -28,7 +29,7 @@ import {SubConfigClass} from 'typeconfig/src/decorators/class/SubConfigClass';
 import {ConfigProperty} from 'typeconfig/src/decorators/property/ConfigPropoerty';
 import {DefaultsJobs} from '../../entities/job/JobDTO';
 import {SearchQueryDTO, SearchQueryTypes, TextSearch,} from '../../entities/SearchQueryDTO';
-import {SortingMethods} from '../../entities/SortingMethods';
+import {SortByTypes} from '../../entities/SortingMethods';
 import {UserRoles} from '../../entities/UserDTO';
 import {MediaPickDTO} from '../../entities/MediaPickDTO';
 import {MessagingConfig} from './MessagingConfig';
@@ -888,7 +889,7 @@ export class ServerAlbumCoverConfig {
     text: '',
   } as TextSearch;
   @ConfigProperty({
-    arrayType: SortingMethods,
+    arrayType: ClientSortingConfig,
     tags: {
       name: $localize`Cover Sorting`,
       uiResetNeeded: {db: true},
@@ -896,10 +897,10 @@ export class ServerAlbumCoverConfig {
     },
     description: $localize`If multiple cover is available sorts them by these methods and selects the first one.`,
   })
-  Sorting: SortingMethods[] = [
-    SortingMethods.descRating,
-    SortingMethods.descDate,
-    SortingMethods.descPersonCount,
+  Sorting: ClientSortingConfig[] = [
+    new ClientSortingConfig(SortByTypes.Rating, false),
+    new ClientSortingConfig(SortByTypes.Date, false),
+    new ClientSortingConfig(SortByTypes.PersonCount, false)
   ];
 }
 

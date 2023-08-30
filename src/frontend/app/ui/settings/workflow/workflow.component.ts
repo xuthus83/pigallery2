@@ -19,8 +19,7 @@ import {
   ScheduledJobTriggerConfig
 } from '../../../../../common/config/private/PrivateConfig';
 import {ControlValueAccessor, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator} from '@angular/forms';
-import {enumToTranslatedArray} from '../../EnumTranslations';
-import {SortingMethods} from '../../../../../common/entities/SortingMethods';
+import {SortByTypes, SortingMethod} from '../../../../../common/entities/SortingMethods';
 import {MediaPickDTO} from '../../../../../common/entities/MediaPickDTO';
 import {SearchQueryTypes, TextSearch} from '../../../../../common/entities/SearchQueryDTO';
 
@@ -65,15 +64,15 @@ export class WorkflowComponent implements ControlValueAccessor, Validator, OnIni
     allowParallelRun: false,
   };
   public readonly ConfigStyle = ConfigStyle;
-  SortingMethods = enumToTranslatedArray(SortingMethods);
+  protected readonly SortByTypes = SortByTypes;
 
 
   error: string;
 
   constructor(
-      public settingsService: SettingsService,
-      public jobsService: ScheduledJobsService,
-      public backendTextService: BackendtextService,
+    public settingsService: SettingsService,
+    public jobsService: ScheduledJobsService,
+    public backendTextService: BackendtextService,
   ) {
     this.JobTriggerTypeMap = [
       {key: JobTriggerType.after, value: $localize`after`},
@@ -91,6 +90,8 @@ export class WorkflowComponent implements ControlValueAccessor, Validator, OnIni
       $localize`Sunday`,
       $localize`day`,
     ]; // 7
+
+
   }
 
   atTimeLocal(atTime: number): Date {
@@ -115,27 +116,27 @@ export class WorkflowComponent implements ControlValueAccessor, Validator, OnIni
 
   remove(schedule: JobScheduleDTO): void {
     this.schedules.splice(
-        this.schedules.indexOf(schedule),
-        1
+      this.schedules.indexOf(schedule),
+      1
     );
   }
 
   jobTypeChanged(schedule: JobScheduleDTO): void {
     const job = this.jobsService.availableJobs.value.find(
-        (t) => t.Name === schedule.jobName
+      (t) => t.Name === schedule.jobName
     );
     schedule.config = schedule.config || {};
     if (job.ConfigTemplate) {
       job.ConfigTemplate.forEach(
-          (ct) => (schedule.config[ct.id] = ct.defaultValue)
+        (ct) => (schedule.config[ct.id] = ct.defaultValue)
       );
     }
   }
 
 
   jobTriggerTypeChanged(
-      triggerType: JobTriggerType,
-      schedule: JobScheduleDTO
+    triggerType: JobTriggerType,
+    schedule: JobScheduleDTO
   ): void {
     switch (triggerType) {
       case JobTriggerType.never:
@@ -165,7 +166,7 @@ export class WorkflowComponent implements ControlValueAccessor, Validator, OnIni
     value = value.replace(new RegExp(',', 'g'), ';');
     value = value.replace(new RegExp(' ', 'g'), ';');
     configElement[id] = value
-        .split(';').filter((i: string) => i != '');
+      .split(';').filter((i: string) => i != '');
   }
 
   getArray(configElement: Record<string, number[]>, id: string): string {
@@ -176,46 +177,46 @@ export class WorkflowComponent implements ControlValueAccessor, Validator, OnIni
     value = value.replace(new RegExp(',', 'g'), ';');
     value = value.replace(new RegExp(' ', 'g'), ';');
     configElement[id] = value
-        .split(';')
-        .map((s: string) => parseInt(s, 10))
-        .filter((i: number) => !isNaN(i) && i > 0);
+      .split(';')
+      .map((s: string) => parseInt(s, 10))
+      .filter((i: number) => !isNaN(i) && i > 0);
   }
 
 
   public shouldIdent(curr: JobScheduleDTO, prev: JobScheduleDTO): boolean {
     return (
-        curr &&
-        curr.trigger.type === JobTriggerType.after &&
-        prev &&
-        prev.name === curr.trigger.afterScheduleName
+      curr &&
+      curr.trigger.type === JobTriggerType.after &&
+      prev &&
+      prev.name === curr.trigger.afterScheduleName
     );
   }
 
   public sortedSchedules(): JobScheduleDTO[] {
     return (this.schedules || [])
-        .slice()
-        .sort((a: JobScheduleDTO, b: JobScheduleDTO) => {
-          return (
-              this.getNextRunningDate(a, this.schedules) -
-              this.getNextRunningDate(b, this.schedules)
-          );
-        });
+      .slice()
+      .sort((a: JobScheduleDTO, b: JobScheduleDTO) => {
+        return (
+          this.getNextRunningDate(a, this.schedules) -
+          this.getNextRunningDate(b, this.schedules)
+        );
+      });
   }
 
   prepareNewJob(): void {
     const jobName = this.jobsService.availableJobs.value[0].Name;
     this.newSchedule = new JobScheduleConfig('new job',
-        jobName,
-        new NeverJobTriggerConfig());
+      jobName,
+      new NeverJobTriggerConfig());
 
     // setup job specific config
     const job = this.jobsService.availableJobs.value.find(
-        (t) => t.Name === jobName
+      (t) => t.Name === jobName
     );
     this.newSchedule.config = this.newSchedule.config || {};
     if (job.ConfigTemplate) {
       job.ConfigTemplate.forEach(
-          (ct) => (this.newSchedule.config[ct.id] = ct.defaultValue)
+        (ct) => (this.newSchedule.config[ct.id] = ct.defaultValue)
       );
     }
     this.jobModalQL.first.show();
@@ -225,12 +226,12 @@ export class WorkflowComponent implements ControlValueAccessor, Validator, OnIni
     // make unique job name
     const jobName = this.newSchedule.jobName;
     const count = this.schedules.filter(
-        (s: JobScheduleDTO) => s.jobName === jobName
+      (s: JobScheduleDTO) => s.jobName === jobName
     ).length;
     this.newSchedule.name =
-        count === 0
-            ? jobName
-            : this.backendTextService.getJobName(jobName) + ' ' + (count + 1);
+      count === 0
+        ? jobName
+        : this.backendTextService.getJobName(jobName) + ' ' + (count + 1);
     this.schedules.push(this.newSchedule);
 
     this.jobModalQL.first.hide();
@@ -242,24 +243,24 @@ export class WorkflowComponent implements ControlValueAccessor, Validator, OnIni
   }
 
   private getNextRunningDate(
-      sch: JobScheduleDTO,
-      list: JobScheduleDTO[],
-      depth = 0
+    sch: JobScheduleDTO,
+    list: JobScheduleDTO[],
+    depth = 0
   ): number {
     if (depth > list.length) {
       return 0;
     }
     if (sch.trigger.type === JobTriggerType.never) {
       return (
-          list
-              .map((s) => s.name)
-              .sort()
-              .indexOf(sch.name) * -1
+        list
+          .map((s) => s.name)
+          .sort()
+          .indexOf(sch.name) * -1
       );
     }
     if (sch.trigger.type === JobTriggerType.after) {
       const parent = list.find(
-          (s) => s.name === (sch.trigger as AfterJobTrigger).afterScheduleName
+        (s) => s.name === (sch.trigger as AfterJobTrigger).afterScheduleName
       );
       if (parent) {
         return this.getNextRunningDate(parent, list, depth + 1) + 0.001;
@@ -294,10 +295,6 @@ export class WorkflowComponent implements ControlValueAccessor, Validator, OnIni
   }
 
 
-  AsSortArray(configElement: string | number | string[] | number[] | MediaPickDTO[]): SortingMethods[] {
-    return configElement as SortingMethods[];
-  }
-
   AsMediaPickDTOArray(configElement: string | number | string[] | number[] | MediaPickDTO[]): MediaPickDTO[] {
     return configElement as MediaPickDTO[];
   }
@@ -306,14 +303,14 @@ export class WorkflowComponent implements ControlValueAccessor, Validator, OnIni
     configElement.splice(i, 1);
   }
 
-  AddNewSorting(configElement: string | number | string[] | number[] | MediaPickDTO[]): void {
-    (configElement as SortingMethods[]).push(SortingMethods.ascDate);
+  AddNewSorting(configElement: string | number | string[] | number[] | MediaPickDTO[] | SortingMethod[]): void {
+    (configElement as SortingMethod[]).push({method: SortByTypes.Date, ascending: true});
   }
 
   AddNewMediaPickDTO(configElement: string | number | string[] | number[] | MediaPickDTO[]): void {
     (configElement as MediaPickDTO[]).push({
       searchQuery: {type: SearchQueryTypes.any_text, text: ''} as TextSearch,
-      sortBy: [SortingMethods.descRating],
+      sortBy: [{method: SortByTypes.Rating, ascending: true}],
       pick: 5
     });
   }
