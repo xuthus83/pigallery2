@@ -26,7 +26,7 @@ import {ContentService} from '../content.service';
 import {MediaDTO, MediaDTOUtils,} from '../../../../../common/entities/MediaDTO';
 import {QueryParams} from '../../../../../common/QueryParams';
 import {GallerySortingService, MediaGroup} from '../navigator/sorting.service';
-import { GroupByTypes } from '../../../../../common/entities/SortingMethods';
+import {GroupByTypes} from '../../../../../common/entities/SortingMethods';
 
 @Component({
   selector: 'app-gallery-grid',
@@ -181,6 +181,12 @@ export class GalleryGridComponent
     let lastRowId = 0;
     let diffFound = false;
     for (let i = 0; i < this.mediaGroups.length && i < this.mediaToRender.length; ++i) {
+      if (diffFound) {
+        break;
+      }
+
+      this.mediaToRender[i].name = this.mediaGroups[i].name; // update name if only this changed
+
       for (let j = 0; j < this.mediaGroups[i].media.length && j < this.mediaToRender[i].media.length; ++j) {
         const media = this.mediaGroups[i].media[j];
         const gridMedia = this.mediaToRender[i].media[j];
@@ -210,7 +216,7 @@ export class GalleryGridComponent
     }
     // if all the same
     if (diffFound) {
-      if (lastSameIndex.media == 0 && lastSameIndex.groups == 0) {
+      if (lastSameIndex.media == 0 && lastSameIndex.groups <= 0) {
         this.clearRenderedPhotos();
         return;
       }
