@@ -1,17 +1,20 @@
 <ng-container [ngSwitch]="method">
-  <ng-container *ngSwitchCase="SortingByTypes.Name">
+  <ng-container *ngSwitchCase="GroupSortByTypes.Name">
     <ng-icon name="ionTextOutline"></ng-icon>
   </ng-container>
-  <ng-container *ngSwitchCase="SortingByTypes.Rating">
+  <ng-container *ngSwitchCase="GroupSortByTypes.Rating">
     <ng-icon name="ionStarOutline"></ng-icon>
   </ng-container>
-  <ng-container *ngSwitchCase="SortingByTypes.Date">
+  <ng-container *ngSwitchCase="GroupSortByTypes.Date">
     <ng-icon name="ionCalendarOutline"></ng-icon>
   </ng-container>
-  <ng-container *ngSwitchCase="SortingByTypes.PersonCount">
+  <ng-container *ngSwitchCase="GroupSortByTypes.PersonCount">
     <ng-icon name="ionPersonOutline"></ng-icon>
   </ng-container>
-  <ng-container *ngSwitchCase="SortingByTypes.random">
+  <ng-container *ngSwitchCase="GroupSortByTypes.Random">
     <ng-icon name="ionShuffleOutline"></ng-icon>
+  </ng-container>
+  <ng-container *ngSwitchCase="GroupSortByTypes.NoGrouping">
+    <ng-icon name="ionCloseOutline"></ng-icon>
   </ng-container>
 </ng-container>

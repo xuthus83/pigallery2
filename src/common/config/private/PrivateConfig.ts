@@ -29,7 +29,7 @@ import {SubConfigClass} from 'typeconfig/src/decorators/class/SubConfigClass';
 import {ConfigProperty} from 'typeconfig/src/decorators/property/ConfigPropoerty';
 import {DefaultsJobs} from '../../entities/job/JobDTO';
 import {SearchQueryDTO, SearchQueryTypes, TextSearch,} from '../../entities/SearchQueryDTO';
-import {SortingByTypes} from '../../entities/SortingMethods';
+import {SortByTypes} from '../../entities/SortingMethods';
 import {UserRoles} from '../../entities/UserDTO';
 import {MediaPickDTO} from '../../entities/MediaPickDTO';
 import {MessagingConfig} from './MessagingConfig';
@@ -898,9 +898,9 @@ export class ServerAlbumCoverConfig {
     description: $localize`If multiple cover is available sorts them by these methods and selects the first one.`,
   })
   Sorting: ClientSortingConfig[] = [
-    new ClientSortingConfig(SortingByTypes.Rating, false),
-    new ClientSortingConfig(SortingByTypes.Date, false),
-    new ClientSortingConfig(SortingByTypes.PersonCount, false)
+    new ClientSortingConfig(SortByTypes.Rating, false),
+    new ClientSortingConfig(SortByTypes.Date, false),
+    new ClientSortingConfig(SortByTypes.PersonCount, false)
   ];
 }
 

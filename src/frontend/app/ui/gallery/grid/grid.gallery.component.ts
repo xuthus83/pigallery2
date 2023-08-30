@@ -26,7 +26,7 @@ import {ContentService} from '../content.service';
 import {MediaDTO, MediaDTOUtils,} from '../../../../../common/entities/MediaDTO';
 import {QueryParams} from '../../../../../common/QueryParams';
 import {GallerySortingService, MediaGroup} from '../navigator/sorting.service';
-import {SortingByTypes} from '../../../../../common/entities/SortingMethods';
+import { GroupByTypes } from '../../../../../common/entities/SortingMethods';
 
 @Component({
   selector: 'app-gallery-grid',
@@ -58,7 +58,7 @@ export class GalleryGridComponent
   private onScrollFired = false;
   private helperTime: number = null;
   public renderDelayTimer: number = null; // delays render on resize
-  public readonly SortingByTypes = SortingByTypes;
+  public readonly GroupByTypes = GroupByTypes;
 
   constructor(
     private overlayService: OverlayService,

@@ -3,7 +3,7 @@ import {ConfigPriority, MapProviders, NavigationLinkTypes, ScrollUpModes} from '
 import {ReIndexingSensitivity} from '../../../common/config/private/PrivateConfig';
 import {SearchQueryTypes} from '../../../common/entities/SearchQueryDTO';
 import {ConfigStyle} from './settings/settings.service';
-import {SortingByTypes} from '../../../common/entities/SortingMethods';
+import {SortByTypes,GroupByTypes} from '../../../common/entities/SortingMethods';
 
 export const EnumTranslations: Record<string, string> = {};
 export const enumToTranslatedArray = (EnumType: any): { key: number; value: string }[] => {
@@ -44,11 +44,13 @@ EnumTranslations[ReIndexingSensitivity[ReIndexingSensitivity.high]] = $localize`
 EnumTranslations[ReIndexingSensitivity[ReIndexingSensitivity.medium]] = $localize`medium`;
 
 
-EnumTranslations[SortingByTypes[SortingByTypes.Date]] = $localize`date`;
-EnumTranslations[SortingByTypes[SortingByTypes.Name]] = $localize`name`;
-EnumTranslations[SortingByTypes[SortingByTypes.Rating]] = $localize`rating`;
-EnumTranslations[SortingByTypes[SortingByTypes.random]] = $localize`random`;
-EnumTranslations[SortingByTypes[SortingByTypes.PersonCount]] = $localize`persons`;
+EnumTranslations[SortByTypes[SortByTypes.Date]] = $localize`date`;
+EnumTranslations[SortByTypes[SortByTypes.Name]] = $localize`name`;
+EnumTranslations[SortByTypes[SortByTypes.Rating]] = $localize`rating`;
+EnumTranslations[SortByTypes[SortByTypes.Random]] = $localize`random`;
+EnumTranslations[SortByTypes[SortByTypes.PersonCount]] = $localize`persons`;
+
+EnumTranslations[GroupByTypes[GroupByTypes.NoGrouping]] = $localize`don't group`;
 
 
 EnumTranslations[NavigationLinkTypes[NavigationLinkTypes.url]] = $localize`Url`;

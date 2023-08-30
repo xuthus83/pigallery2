@@ -1,4 +1,4 @@
-import {SortingByTypes, SortingMethod} from './entities/SortingMethods';
+import {SortByDirectionalTypes, SortByTypes, SortingMethod} from './entities/SortingMethods';
 import {Utils} from './Utils';
 
 /**
@@ -9,8 +9,8 @@ export const PG2ConfMap: { sorting: { [key: string]: SortingMethod } } = {
   sorting: {}
 };
 
-Utils.enumToArray(SortingByTypes).forEach(kv => {
-  if (kv.key === SortingByTypes.random) {
+Utils.enumToArray(SortByTypes).forEach(kv => {
+  if (!Utils.isValidEnumInt(SortByDirectionalTypes, kv.key)) {
     PG2ConfMap.sorting['.order_random.pg2conf'] = {method: kv.key, ascending: null} as SortingMethod;
     return;
   }

@@ -64,7 +64,7 @@
           <ng-icon *ngIf="sortingService.sorting.value.ascending !== null"
                    [name]="!sortingService.sorting.value.ascending ? 'ionArrowDownOutline' : 'ionArrowUpOutline'"></ng-icon>
           <app-sorting-method-icon [method]="sortingService.sorting.value.method"></app-sorting-method-icon>
-          <div class="grouping-icon" *ngIf="sortingService.grouping.value.method !== null">
+          <div class="grouping-icon" *ngIf="sortingService.grouping.value.method !== GroupByTypes.NoGrouping">
             <div>
               <ng-icon
                 [name]="!sortingService.grouping.value.ascending ? 'ionArrowDownOutline' : 'ionArrowUpOutline'"></ng-icon>
@@ -91,7 +91,7 @@
                   <div class="d-inline-block">{{type.key | stringifySorting}}</div>
                 </div>
 
-                <ng-container *ngIf="sortingService.sorting.value.method != SortingByTypes.random">
+                <ng-container *ngIf="isDirectionalSort(sortingService.sorting.value.method)">
                   <hr>
                   <div class="dropdown-item sorting-grouping-item ps-3 pe-3" role="menuitem"
                        [class.active]="sortingService.sorting.value.ascending == true"
@@ -148,15 +148,7 @@
                   </div>
                   <div class="d-inline-block">{{type.key | stringifySorting}}</div>
                 </div>
-                <div class="dropdown-item sorting-grouping-item ps-3 pe-3" role="menuitem"
-                     [class.active]="sortingService.grouping.value.method == null"
-                     (click)="setGroupingBy(null)">
-                  <div class="me-2 d-inline-block">
-                    <ng-icon name="ionCloseOutline"></ng-icon>
-                  </div>
-                  <div class="d-inline-block" i18n>don't group</div>
-                </div>
-                <ng-container *ngIf="sortingService.grouping.value.method !== null">
+                <ng-container *ngIf="isDirectionalSort(sortingService.grouping.value.method)">
                   <hr>
 
                   <div class="dropdown-item sorting-grouping-item ps-3 pe-3" role="menuitem"

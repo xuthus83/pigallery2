@@ -4,7 +4,7 @@ import {Utils} from '../../../../common/Utils';
 import {Config} from '../../../../common/config/public/Config';
 import {IAutoCompleteItem} from '../../../../common/entities/AutoCompleteItem';
 import {MediaDTO} from '../../../../common/entities/MediaDTO';
-import {SortingMethod} from '../../../../common/entities/SortingMethods';
+import {GroupingMethod, SortingMethod} from '../../../../common/entities/SortingMethods';
 import {VersionService} from '../../model/version.service';
 import {SearchQueryDTO, SearchQueryTypes,} from '../../../../common/entities/SearchQueryDTO';
 import {ContentWrapper} from '../../../../common/entities/ConentWrapper';
@@ -97,15 +97,15 @@ export class GalleryCacheService {
     }
   }
 
-  public getGrouping(cw: ContentWrapper): SortingMethod {
-    return this.getSortOrGroup(GalleryCacheService.GROUPING_PREFIX, cw);
+  public getGrouping(cw: ContentWrapper): GroupingMethod {
+    return this.getSortOrGroup(GalleryCacheService.GROUPING_PREFIX, cw) as GroupingMethod;
   }
 
   public getSorting(cw: ContentWrapper): SortingMethod {
-    return this.getSortOrGroup(GalleryCacheService.SORTING_PREFIX, cw);
+    return this.getSortOrGroup(GalleryCacheService.SORTING_PREFIX, cw) as SortingMethod;
   }
 
-  public setGrouping(cw: ContentWrapper, sorting: SortingMethod): void {
+  public setGrouping(cw: ContentWrapper, sorting: GroupingMethod): void {
     return this.setSortOrGroup(GalleryCacheService.GROUPING_PREFIX, cw, sorting);
   }
 
@@ -123,7 +123,7 @@ export class GalleryCacheService {
   }
 
 
-  private getSortOrGroup(prefix: string, cw: ContentWrapper): SortingMethod {
+  private getSortOrGroup(prefix: string, cw: ContentWrapper): SortingMethod | GroupingMethod {
     let key = prefix;
     if (cw?.searchResult?.searchQuery) {
       key += JSON.stringify(cw.searchResult.searchQuery);
@@ -156,7 +156,7 @@ export class GalleryCacheService {
   private setSortOrGroup(
     prefix: string,
     cw: ContentWrapper,
-    sorting: SortingMethod
+    sorting: SortingMethod | GroupingMethod
   ): void {
     try {
       let key = prefix;

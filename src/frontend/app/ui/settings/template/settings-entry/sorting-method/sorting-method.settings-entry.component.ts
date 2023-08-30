@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {
   ControlValueAccessor,
   NG_VALIDATORS,
@@ -7,11 +7,12 @@ import {
   ValidationErrors,
   Validator
 } from '../../../../../../../../node_modules/@angular/forms';
-import {SortingByTypes, SortingMethod} from '../../../../../../../common/entities/SortingMethods';
+import {SortByDirectionalTypes, SortingMethod} from '../../../../../../../common/entities/SortingMethods';
 import {enumToTranslatedArray} from '../../../../EnumTranslations';
 import {AutoCompleteService} from '../../../../gallery/search/autocomplete.service';
 import {RouterLink} from '../../../../../../../../node_modules/@angular/router';
 import {forwardRef} from '../../../../../../../../node_modules/@angular/core';
+import {Utils} from '../../../../../../../common/Utils';
 
 @Component({
   selector: 'app-settings-entry-sorting-method',
@@ -33,10 +34,16 @@ import {forwardRef} from '../../../../../../../../node_modules/@angular/core';
   ],
 })
 export class SortingMethodSettingsEntryComponent
-  implements ControlValueAccessor, Validator {
+  implements ControlValueAccessor, Validator, OnInit {
+  @Input() sortingByEnum: Record<string, number | string> & { [k: number]: string };
 
   public sortingMethod: SortingMethod;
-  public readonly sortingByTypes = enumToTranslatedArray(SortingByTypes);
+  public sortingByTypes: { key: number; value: string }[] = [];
+
+
+  ngOnInit(): void {
+    this.sortingByTypes = enumToTranslatedArray(this.sortingByEnum);
+  }
 
   public onTouched(): void {
     //ignoring
@@ -71,11 +78,13 @@ export class SortingMethodSettingsEntryComponent
     //ignoring
   };
 
-  protected readonly SortingByTypes = SortingByTypes;
+  public isBidirectional(value: number) {
+    return Utils.isValidEnumInt(SortByDirectionalTypes, value);
+  }
 
-  setSortingBy(key: SortingByTypes): void {
+  setSortingBy(key: number): void {
     this.sortingMethod.method = key;
-    if (key == SortingByTypes.random) {
+    if (!this.isBidirectional(key)) { // included in enum
       this.sortingMethod.ascending = null;
     } else if (this.sortingMethod.ascending == null) {
       this.sortingMethod.ascending = true;

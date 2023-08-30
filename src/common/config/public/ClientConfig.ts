@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-inferrable-types */
 import 'reflect-metadata';
-import {SortingByTypes, SortingMethod} from '../../entities/SortingMethods';
+import {GroupByTypes, GroupingMethod, SortByTypes, SortingMethod} from '../../entities/SortingMethods';
 import {UserRoles} from '../../entities/UserDTO';
 import {ConfigProperty, SubConfigClass} from 'typeconfig/common';
 import {SearchQueryDTO} from '../../entities/SearchQueryDTO';
@@ -882,20 +882,41 @@ export class ThemesConfig {
 
 @SubConfigClass<TAGS>({tags: {client: true}, softReadonly: true})
 export class ClientSortingConfig implements SortingMethod {
-
-
-  constructor(method: SortingByTypes = SortingByTypes.Date, ascending: boolean = true) {
+  constructor(method: number = SortByTypes.Date, ascending: boolean = true) {
     this.method = method;
     this.ascending = ascending;
   }
 
   @ConfigProperty({
-    type: SortingByTypes,
+    type: SortByTypes,
     tags: {
       name: $localize`Method`,
     },
   })
-  method: SortingByTypes = SortingByTypes.Date;
+  method: number = SortByTypes.Date;
+
+  @ConfigProperty({
+    tags: {
+      name: $localize`Ascending`,
+    },
+  })
+  ascending: boolean = true;
+}
+
+@SubConfigClass<TAGS>({tags: {client: true}, softReadonly: true})
+export class ClientGroupingConfig implements GroupingMethod {
+  constructor(method: number = GroupByTypes.Date, ascending: boolean = true) {
+    this.method = method;
+    this.ascending = ascending;
+  }
+
+  @ConfigProperty({
+    type: GroupByTypes,
+    tags: {
+      name: $localize`Method`,
+    },
+  })
+  method: number = GroupByTypes.Date;
 
   @ConfigProperty({
     tags: {
@@ -932,7 +953,7 @@ export class ClientGalleryConfig {
     },
     description: $localize`Default sorting method for photo and video in a directory results.`
   })
-  defaultPhotoSortingMethod: ClientSortingConfig = new ClientSortingConfig(SortingByTypes.Date, true);
+  defaultPhotoSortingMethod: ClientSortingConfig = new ClientSortingConfig(SortByTypes.Date, true);
 
   @ConfigProperty({
     type: ClientSortingConfig,
@@ -942,27 +963,27 @@ export class ClientGalleryConfig {
     },
     description: $localize`Default sorting method for photo and video in a search results.`
   })
-  defaultSearchSortingMethod: ClientSortingConfig = new ClientSortingConfig(SortingByTypes.Date, false);
+  defaultSearchSortingMethod: ClientSortingConfig = new ClientSortingConfig(SortByTypes.Date, false);
 
   @ConfigProperty({
-    type: ClientSortingConfig,
+    type: ClientGroupingConfig,
     tags: {
       name: $localize`Default grouping`,
       priority: ConfigPriority.advanced,
     },
     description: $localize`Default grouping method for photo and video in a directory results.`
   })
-  defaultPhotoGroupingMethod: ClientSortingConfig = new ClientSortingConfig(SortingByTypes.Date, true);
+  defaultPhotoGroupingMethod: ClientGroupingConfig = new ClientGroupingConfig(GroupByTypes.Date, true);
 
   @ConfigProperty({
-    type: ClientSortingConfig,
+    type: ClientGroupingConfig,
     tags: {
       name: $localize`Default search grouping`,
       priority: ConfigPriority.advanced,
     },
     description: $localize`Default grouping method for photo and video in a search results.`
   })
-  defaultSearchGroupingMethod: ClientSortingConfig = new ClientSortingConfig(SortingByTypes.Date, false);
+  defaultSearchGroupingMethod: ClientGroupingConfig = new ClientGroupingConfig(GroupByTypes.Date, false);
 
   @ConfigProperty({
     tags: {

@@ -6,7 +6,7 @@ import {AuthenticationService} from '../../../model/network/authentication.servi
 import {QueryService} from '../../../model/query.service';
 import {ContentService, ContentWrapperWithError, DirectoryContent,} from '../content.service';
 import {Utils} from '../../../../../common/Utils';
-import {SortingByTypes} from '../../../../../common/entities/SortingMethods';
+import {GroupByTypes, GroupingMethod, SortByDirectionalTypes, SortByTypes} from '../../../../../common/entities/SortingMethods';
 import {Config} from '../../../../../common/config/public/Config';
 import {SearchQueryTypes, TextSearch, TextSearchQueryMatchTypes,} from '../../../../../common/entities/SearchQueryDTO';
 import {Observable} from 'rxjs';
@@ -23,7 +23,6 @@ import {FilterService} from '../filter/filter.service';
   providers: [RouterLink],
 })
 export class GalleryNavigatorComponent {
-  public readonly SortingByTypes = SortingByTypes;
   public readonly sortingByTypes: { key: number; value: string }[] = [];
   public readonly groupingByTypes: { key: number; value: string }[] = [];
   public readonly config = Config;
@@ -54,9 +53,9 @@ export class GalleryNavigatorComponent {
     private router: Router,
     public sanitizer: DomSanitizer
   ) {
-    this.sortingByTypes = Utils.enumToArray(SortingByTypes);
+    this.sortingByTypes = Utils.enumToArray(SortByTypes);
     // can't group by random
-    this.groupingByTypes = this.sortingByTypes.filter(s => s.key !== SortingByTypes.random);
+    this.groupingByTypes = Utils.enumToArray(GroupByTypes);
     this.RootFolderName = $localize`Home`;
     this.wrappedContent = this.galleryService.content;
     this.directoryContent = this.wrappedContent.pipe(
@@ -147,10 +146,14 @@ export class GalleryNavigatorComponent {
     );
   }
 
-  setSortingBy(sorting: SortingByTypes): void {
+  isDirectionalSort(value: number) {
+    return Utils.isValidEnumInt(SortByDirectionalTypes, value);
+  }
+
+  setSortingBy(sorting: number): void {
     const s = {method: sorting, ascending: this.sortingService.sorting.value.ascending};
     // random does not have a direction
-    if (sorting === SortingByTypes.random) {
+    if (!this.isDirectionalSort(sorting)) {
       s.ascending = null;
     } else if (s.ascending === null) {
       s.ascending = true;
@@ -158,9 +161,9 @@ export class GalleryNavigatorComponent {
     this.sortingService.setSorting(s);
 
     // you cannot group by random
-    if (sorting === SortingByTypes.random ||
+    if (this.isDirectionalSort(sorting) ||
       // if grouping is disabled, do not update it
-      this.sortingService.grouping.value.method === null || !this.groupingFollowSorting
+      Utils.isValidEnumInt(GroupByTypes,sorting) || !this.groupingFollowSorting
     ) {
       return;
     }
@@ -173,13 +176,13 @@ export class GalleryNavigatorComponent {
     this.sortingService.setSorting(s);
 
     // if grouping is disabled, do not update it
-    if (this.sortingService.grouping.value.method !== null || !this.groupingFollowSorting) {
+    if (this.sortingService.grouping.value.method !== GroupByTypes.NoGrouping || !this.groupingFollowSorting) {
       return;
     }
-    this.sortingService.setGrouping(s);
+    this.sortingService.setGrouping(s as GroupingMethod);
   }
 
-  setGroupingBy(grouping: SortingByTypes): void {
+  setGroupingBy(grouping: number): void {
     const s = {method: grouping, ascending: this.sortingService.grouping.value.ascending};
     this.sortingService.setGrouping(s);
   }
@@ -259,6 +262,7 @@ export class GalleryNavigatorComponent {
     this.lastScroll.any = scrollPosition;
   }
 
+  protected readonly GroupByTypes = GroupByTypes;
 }
 
 interface NavigatorPath {

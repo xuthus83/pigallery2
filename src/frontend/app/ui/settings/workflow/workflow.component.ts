@@ -19,8 +19,7 @@ import {
   ScheduledJobTriggerConfig
 } from '../../../../../common/config/private/PrivateConfig';
 import {ControlValueAccessor, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator} from '@angular/forms';
-import {EnumTranslations} from '../../EnumTranslations';
-import {SortingByTypes, SortingMethod} from '../../../../../common/entities/SortingMethods';
+import {SortByTypes, SortingMethod} from '../../../../../common/entities/SortingMethods';
 import {MediaPickDTO} from '../../../../../common/entities/MediaPickDTO';
 import {SearchQueryTypes, TextSearch} from '../../../../../common/entities/SearchQueryDTO';
 
@@ -65,7 +64,7 @@ export class WorkflowComponent implements ControlValueAccessor, Validator, OnIni
     allowParallelRun: false,
   };
   public readonly ConfigStyle = ConfigStyle;
-  SortingByTypes: { key: SortingMethod; value: string }[];
+  protected readonly SortByTypes = SortByTypes;
 
 
   error: string;
@@ -92,27 +91,6 @@ export class WorkflowComponent implements ControlValueAccessor, Validator, OnIni
       $localize`day`,
     ]; // 7
 
-    this.SortingByTypes = [];
-    for (const enumMember in SortingByTypes) {
-      const key = parseInt(enumMember, 10);
-      if (key >= 0) {
-        if (key == SortingByTypes.random) {
-          this.SortingByTypes.push({
-            key: {method: key, ascending: null} as SortingMethod,
-            value: EnumTranslations[SortingByTypes[enumMember]]
-          });
-          continue;
-        }
-        this.SortingByTypes.push({
-          key: {method: key, ascending: true} as SortingMethod,
-          value: EnumTranslations[SortingByTypes[enumMember]] + ' ' + $localize`ascending`
-        });
-        this.SortingByTypes.push({
-          key: {method: key, ascending: false} as SortingMethod,
-          value: EnumTranslations[SortingByTypes[enumMember]] + ' ' + $localize`descending`
-        });
-      }
-    }
 
   }
 
@@ -326,13 +304,13 @@ export class WorkflowComponent implements ControlValueAccessor, Validator, OnIni
   }
 
   AddNewSorting(configElement: string | number | string[] | number[] | MediaPickDTO[] | SortingMethod[]): void {
-    (configElement as SortingMethod[]).push({method: SortingByTypes.Date, ascending: true});
+    (configElement as SortingMethod[]).push({method: SortByTypes.Date, ascending: true});
   }
 
   AddNewMediaPickDTO(configElement: string | number | string[] | number[] | MediaPickDTO[]): void {
     (configElement as MediaPickDTO[]).push({
       searchQuery: {type: SearchQueryTypes.any_text, text: ''} as TextSearch,
-      sortBy: [{method: SortingByTypes.Rating, ascending: true}],
+      sortBy: [{method: SortByTypes.Rating, ascending: true}],
       pick: 5
     });
   }

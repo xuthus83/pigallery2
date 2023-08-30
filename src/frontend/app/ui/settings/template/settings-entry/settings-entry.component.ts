@@ -19,6 +19,7 @@ import {enumToTranslatedArray} from '../../../EnumTranslations';
 import {BsModalService} from '../../../../../../../node_modules/ngx-bootstrap/modal';
 import {Config} from '../../../../../../common/config/public/Config';
 import {CustomSettingsEntries} from '../CustomSettingsEntries';
+import {GroupByTypes, SortByTypes} from '../../../../../../common/entities/SortingMethods';
 
 interface IState {
   shouldHide(): boolean;
@@ -82,6 +83,8 @@ export class SettingsEntryComponent
   iconModal: { ref?: any, error?: string };
   @Input() noChangeDetection = false;
   public readonly ConfigStyle = ConfigStyle;
+  protected readonly SortByTypes = SortByTypes;
+  protected readonly GroupByTypes = GroupByTypes;
 
 
   constructor(private searchQueryParserService: SearchQueryParserService,
@@ -470,7 +473,6 @@ export class SettingsEntryComponent
 
   }
 
-  protected readonly Config = Config;
 }
 
 
