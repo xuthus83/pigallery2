@@ -13,9 +13,11 @@ import {
   DatePatternFrequency,
   DatePatternSearch,
   DistanceSearch,
-  FromDateSearch, MaxPersonCountSearch,
+  FromDateSearch,
+  MaxPersonCountSearch,
   MaxRatingSearch,
-  MaxResolutionSearch, MinPersonCountSearch,
+  MaxResolutionSearch,
+  MinPersonCountSearch,
   MinRatingSearch,
   MinResolutionSearch,
   OrientationSearch,
@@ -34,7 +36,7 @@ import {DatabaseType} from '../../../common/config/private/PrivateConfig';
 import {Utils} from '../../../common/Utils';
 import {FileEntity} from './enitites/FileEntity';
 import {SQL_COLLATE} from './enitites/EntityUtils';
-import {SortingMethods} from '../../../common/entities/SortingMethods';
+import {GroupSortByTypes, SortByTypes, SortingMethod} from '../../../common/entities/SortingMethods';
 
 export class SearchManager {
   private DIRECTORY_SELECT = [
@@ -349,43 +351,31 @@ export class SearchManager {
   }
 
 
-  private static setSorting<T>(
+  public static setSorting<T>(
     query: SelectQueryBuilder<T>,
-    sortings: SortingMethods[]
+    sortings: SortingMethod[]
   ): SelectQueryBuilder<T> {
     if (!sortings || !Array.isArray(sortings)) {
       return query;
     }
-    if (sortings.includes(SortingMethods.random) && sortings.length > 1) {
-      throw new Error('Error during applying sorting: Can\' randomize and also sort the result. Bad input:' + sortings.map(s => SortingMethods[s]).join(', '));
+    if (sortings.findIndex(s => s.method == SortByTypes.Random) !== -1 && sortings.length > 1) {
+      throw new Error('Error during applying sorting: Can\' randomize and also sort the result. Bad input:' + sortings.map(s => GroupSortByTypes[s.method]).join(', '));
     }
     for (const sort of sortings) {
-      switch (sort) {
-        case SortingMethods.descDate:
-          query.addOrderBy('media.metadata.creationDate', 'DESC');
+      switch (sort.method) {
+        case SortByTypes.Date:
+          query.addOrderBy('media.metadata.creationDate', sort.ascending ? 'ASC' : 'DESC');
           break;
-        case SortingMethods.ascDate:
-          query.addOrderBy('media.metadata.creationDate', 'ASC');
+        case SortByTypes.Rating:
+          query.addOrderBy('media.metadata.rating', sort.ascending ? 'ASC' : 'DESC');
           break;
-        case SortingMethods.descRating:
-          query.addOrderBy('media.metadata.rating', 'DESC');
+        case SortByTypes.Name:
+          query.addOrderBy('media.name', sort.ascending ? 'ASC' : 'DESC');
           break;
-        case SortingMethods.ascRating:
-          query.addOrderBy('media.metadata.rating', 'ASC');
+        case SortByTypes.PersonCount:
+          query.addOrderBy('media.metadata.personsLength', sort.ascending ? 'ASC' : 'DESC');
           break;
-        case SortingMethods.descName:
-          query.addOrderBy('media.name', 'DESC');
-          break;
-        case SortingMethods.ascName:
-          query.addOrderBy('media.name', 'ASC');
-          break;
-        case SortingMethods.descPersonCount:
-          query.addOrderBy('media.metadata.personsLength', 'DESC');
-          break;
-        case SortingMethods.ascPersonCount:
-          query.addOrderBy('media.metadata.personsLength', 'ASC');
-          break;
-        case SortingMethods.random:
+        case SortByTypes.Random:
           if (Config.Database.type === DatabaseType.mysql) {
             query.groupBy('RAND(), media.id');
           } else {
@@ -398,7 +388,7 @@ export class SearchManager {
     return query;
   }
 
-  public async getNMedia(query: SearchQueryDTO, sortings: SortingMethods[], take: number, photoOnly = false) {
+  public async getNMedia(query: SearchQueryDTO, sortings: SortingMethod[], take: number, photoOnly = false) {
     const connection = await SQLConnection.getConnection();
     const sqlQuery: SelectQueryBuilder<PhotoEntity> = connection
       .getRepository(photoOnly ? PhotoEntity : MediaEntity)

@@ -4,7 +4,7 @@ import {MediaEntity} from './enitites/MediaEntity';
 import {DiskMangerWorker} from '../threading/DiskMangerWorker';
 import {ObjectManagers} from '../ObjectManagers';
 import {DatabaseType} from '../../../common/config/private/PrivateConfig';
-import {SortingMethods} from '../../../common/entities/SortingMethods';
+import {SortingMethod} from '../../../common/entities/SortingMethods';
 import {SQLConnection} from './SQLConnection';
 import {SearchQueryDTO, SearchQueryTypes, TextSearch,} from '../../../common/entities/SearchQueryDTO';
 import {DirectoryEntity} from './enitites/DirectoryEntity';
@@ -14,6 +14,7 @@ import {Utils} from '../../../common/Utils';
 import {CoverPhotoDTO} from '../../../common/entities/PhotoDTO';
 import {IObjectManager} from './IObjectManager';
 import {Logger} from '../../Logger';
+import {SearchManager} from './SearchManager';
 
 const LOG_TAG = '[CoverManager]';
 
@@ -25,34 +26,6 @@ export interface CoverPhotoDTOWithID extends CoverPhotoDTO {
 export class CoverManager implements IObjectManager {
   private static DIRECTORY_SELECT = ['directory.name', 'directory.path'];
 
-  private static setSorting<T>(
-    query: SelectQueryBuilder<T>
-  ): SelectQueryBuilder<T> {
-    for (const sort of Config.AlbumCover.Sorting) {
-      switch (sort) {
-        case SortingMethods.descDate:
-          query.addOrderBy('media.metadata.creationDate', 'DESC');
-          break;
-        case SortingMethods.ascDate:
-          query.addOrderBy('media.metadata.creationDate', 'ASC');
-          break;
-        case SortingMethods.descRating:
-          query.addOrderBy('media.metadata.rating', 'DESC');
-          break;
-        case SortingMethods.ascRating:
-          query.addOrderBy('media.metadata.rating', 'ASC');
-          break;
-        case SortingMethods.descName:
-          query.addOrderBy('media.name', 'DESC');
-          break;
-        case SortingMethods.ascName:
-          query.addOrderBy('media.name', 'ASC');
-          break;
-      }
-    }
-
-    return query;
-  }
 
   public async resetCovers(): Promise<void> {
     const connection = await SQLConnection.getConnection();
@@ -119,7 +92,7 @@ export class CoverManager implements IObjectManager {
         .innerJoin('media.directory', 'directory')
         .select(['media.name', 'media.id', ...CoverManager.DIRECTORY_SELECT])
         .where(albumQuery);
-      CoverManager.setSorting(query);
+      SearchManager.setSorting(query, Config.AlbumCover.Sorting);
       return query;
     };
     let coverMedia = null;
@@ -201,7 +174,7 @@ export class CoverManager implements IObjectManager {
         'ASC'
       );
 
-      CoverManager.setSorting(query);
+      SearchManager.setSorting(query, Config.AlbumCover.Sorting);
       return query;
     };
 
