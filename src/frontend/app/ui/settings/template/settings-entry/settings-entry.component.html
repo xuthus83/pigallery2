@@ -144,6 +144,17 @@
         </textarea>
 
 
+
+        <app-settings-entry-sorting-method
+          class="w-100"
+          *ngSwitchCase="'ClientSortingConfig'"
+          [(ngModel)]="state.value"
+          [id]="idName"
+          [name]="idName"
+          (ngModelChange)="onChange($event)">
+        </app-settings-entry-sorting-method>
+
+
         <app-settings-workflow
           class="w-100"
           *ngSwitchCase="'JobScheduleConfig'"

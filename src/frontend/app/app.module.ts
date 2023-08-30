@@ -179,6 +179,9 @@ import {SortingMethodIconComponent} from './ui/sorting-method-icon/sorting-metho
 import {SafeHtmlPipe} from './pipes/SafeHTMLPipe';
 import {DatePipe} from '@angular/common';
 import {ParseIntPipe} from './pipes/ParseIntPipe';
+import {
+  SortingMethodSettingsEntryComponent
+} from './ui/settings/template/settings-entry/sorting-method/sorting-method.settings-entry.component';
 
 @Injectable()
 export class MyHammerConfig extends HammerGestureConfig {
@@ -325,7 +328,8 @@ Marker.prototype.options.icon = MarkerFactory.defIcon;
     UsersComponent,
     SharingsListComponent,
     SortingMethodIconComponent,
-    SafeHtmlPipe
+    SafeHtmlPipe,
+    SortingMethodSettingsEntryComponent
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: CSRFInterceptor, multi: true},

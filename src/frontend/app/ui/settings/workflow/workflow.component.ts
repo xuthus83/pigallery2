@@ -96,13 +96,20 @@ export class WorkflowComponent implements ControlValueAccessor, Validator, OnIni
     for (const enumMember in SortingByTypes) {
       const key = parseInt(enumMember, 10);
       if (key >= 0) {
+        if (key == SortingByTypes.random) {
+          this.SortingByTypes.push({
+            key: {method: key, ascending: null} as SortingMethod,
+            value: EnumTranslations[SortingByTypes[enumMember]]
+          });
+          continue;
+        }
         this.SortingByTypes.push({
           key: {method: key, ascending: true} as SortingMethod,
-          value: EnumTranslations[SortingByTypes[enumMember]] || SortingByTypes[enumMember] + $localize`ascending`
+          value: EnumTranslations[SortingByTypes[enumMember]] + ' ' + $localize`ascending`
         });
         this.SortingByTypes.push({
           key: {method: key, ascending: false} as SortingMethod,
-          value: EnumTranslations[SortingByTypes[enumMember]] || SortingByTypes[enumMember] + $localize`descending`
+          value: EnumTranslations[SortingByTypes[enumMember]] + ' ' + $localize`descending`
         });
       }
     }

@@ -18,6 +18,7 @@ import {JobScheduleConfig, UserConfig} from '../../../../../../common/config/pri
 import {enumToTranslatedArray} from '../../../EnumTranslations';
 import {BsModalService} from '../../../../../../../node_modules/ngx-bootstrap/modal';
 import {Config} from '../../../../../../common/config/public/Config';
+import {CustomSettingsEntries} from '../CustomSettingsEntries';
 
 interface IState {
   shouldHide(): boolean;
@@ -234,11 +235,14 @@ export class SettingsEntryComponent
       this.state.isEnumType = true;
     }
     this.uiType = this.arrayType;
+    if(CustomSettingsEntries.iS(this.state)){
+      this.uiType = CustomSettingsEntries.getName(this.state);
+    }
     if (!this.state.isEnumType &&
       !this.state.isEnumArrayType &&
       this.type !== 'boolean' &&
       this.type !== 'SearchQuery' &&
-      this.type !== 'SVGIconConfig' &&
+      !CustomSettingsEntries.iS(this.state) &&
       this.arrayType !== 'MapLayers' &&
       this.arrayType !== 'NavigationLinkConfig' &&
       this.arrayType !== 'MapPathGroupConfig' &&
