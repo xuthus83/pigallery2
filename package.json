@@ -22,7 +22,8 @@
     "analyze": "webpack-bundle-analyzer dist/en/stats.json",
     "merge-new-translation": "gulp merge-new-translation",
     "generate-man": "gulp generate-man",
-    "lint": "ng lint"
+    "lint": "ng lint",
+    "ng-test": "ng test"
   },
   "repository": {
     "type": "git",
