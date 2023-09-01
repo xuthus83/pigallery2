@@ -716,7 +716,6 @@ export class NavBarConfig {
     tags: {
       name: $localize`Links`,
       priority: ConfigPriority.advanced,
-      experimental: true,
       githubIssue: 174
     },
     description: $localize`Visible links in the top menu.`
