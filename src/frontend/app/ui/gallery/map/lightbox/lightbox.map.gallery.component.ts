@@ -521,9 +521,9 @@ export class GalleryMapLightboxComponent implements OnChanges, OnDestroy {
     );
   }
 
-  private addArchForLongDistancePaths(parsedGPX: { name: string, path: LatLngLiteral[]; markers: LatLngLiteral[] }) {
+  private addArchForLongDistancePaths(path: LatLngLiteral[]) {
 
-    for (let i = 0; i < parsedGPX.path.length - 1; ++i) {
+    for (let i = 0; i < path.length - 1; ++i) {
       const dst = (a: LatLngLiteral, b: LatLngLiteral) => {
         return Math.sqrt(Math.pow(a.lat - b.lat, 2) +
           Math.pow(a.lng - b.lng, 2));
@@ -550,9 +550,9 @@ export class GalleryMapLightboxComponent implements OnChanges, OnDestroy {
         return `${a.lat.toFixed(KEY_PRECISION)},${a.lng.toFixed(KEY_PRECISION)},${b.lat.toFixed(KEY_PRECISION)},${b.lng.toFixed(KEY_PRECISION)}`;
 
       };
-      if (Math.abs(parsedGPX.path[i].lng - parsedGPX.path[i + 1].lng) > Config.Map.bendLongPathsTrigger) {
-        const s = parsedGPX.path[i];
-        const e = parsedGPX.path[i + 1];
+      if (Math.abs(path[i].lng - path[i + 1].lng) > Config.Map.bendLongPathsTrigger) {
+        const s = path[i];
+        const e = path[i + 1];
         const k = getKey(s, e);
         this.longPathSEPairs[k] = (this.longPathSEPairs[k] || 0) + 1;
         const occurrence = this.longPathSEPairs[k] - 1;
@@ -590,7 +590,7 @@ export class GalleryMapLightboxComponent implements OnChanges, OnDestroy {
           //   pathLayer.layer.addLayer(mkr);
         });
 
-        parsedGPX.path.splice(i + 1, 0, ...newPoints);
+        path.splice(i + 1, 0, ...newPoints);
         i += newPoints.length;
       }
     }
@@ -644,9 +644,9 @@ export class GalleryMapLightboxComponent implements OnChanges, OnDestroy {
         pathLayer = {layer: this.pathLayersConfigOrdered[0].layer, icon: MarkerFactory.defIcon};
       }
 
-      if (parsedGPX.path.length !== 0) {
+      if (parsedGPX.path.length !== 0 && parsedGPX.path[0].length !== 0) {
         // render the beginning of the path with a marker
-        const mkr = marker(parsedGPX.path[0]);
+        const mkr = marker(parsedGPX.path[0][0]);
         pathLayer.layer.addLayer(mkr);
 
         mkr.setIcon(pathLayer.icon);
@@ -655,16 +655,19 @@ export class GalleryMapLightboxComponent implements OnChanges, OnDestroy {
         mkr.bindPopup(file.name + ': ' + parsedGPX.name);
 
         //add arch for long paths
-        this.addArchForLongDistancePaths(parsedGPX);
+        parsedGPX.path.forEach(p => {
+          this.addArchForLongDistancePaths(p);
+          pathLayer.layer.addLayer(
+            polyline(p, {
+              smoothFactor: 3,
+              interactive: false,
+              color: pathLayer?.theme?.color,
+              dashArray: pathLayer?.theme?.dashArray
+            })
+          );
+        });
 
-        pathLayer.layer.addLayer(
-          polyline(parsedGPX.path, {
-            smoothFactor: 3,
-            interactive: false,
-            color: pathLayer?.theme?.color,
-            dashArray: pathLayer?.theme?.dashArray
-          })
-        );
+
       }
       parsedGPX.markers.forEach((mc) => {
         const mkr = marker(mc);
