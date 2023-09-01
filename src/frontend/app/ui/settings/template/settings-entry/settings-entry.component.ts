@@ -239,7 +239,7 @@ export class SettingsEntryComponent
     }
     this.uiType = this.arrayType;
     if(CustomSettingsEntries.iS(this.state)){
-      this.uiType = CustomSettingsEntries.getName(this.state);
+      this.uiType = CustomSettingsEntries.getFullName(this.state);
     }
     if (!this.state.isEnumType &&
       !this.state.isEnumArrayType &&

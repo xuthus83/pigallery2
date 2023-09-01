@@ -275,8 +275,9 @@
                          [name]="'list_ml_url_'+idName+i" [id]="'list_ml_url_'+idName+i" required>
                 </td>
                 <td>
-                  <button [disabled]="state.value.length == 1" (click)="removeLayer(layer)"
+                  <button [disabled]="state.value.length == 1"
                           [ngClass]="state.value.length > 1? 'btn-danger':'btn-secondary'"
+                          (click)="removeLayer(layer)"
                           class="btn float-end">
                     <ng-icon name="ionTrashOutline" title="Delete" i18n-title></ng-icon>
                   </button>
@@ -533,6 +534,48 @@
           </div>
         </ng-container>
 
+
+        <ng-container *ngSwitchCase="'ClientSortingConfig-Array'">
+          <ng-container *ngFor="let _ of state.value; let i=index">
+            <div class="row col-12 mt-1 m-0 p-0">
+              <div class="col p-0">
+                <app-settings-entry-sorting-method
+                  class="w-100"
+                  [(ngModel)]="state.value[i]"
+                  [sortingByEnum]="SortByTypes"
+                  [id]="'list_'+idName+i"
+                  [name]="'list_'+idName+i"
+                  (ngModelChange)="onChange($event)">
+                </app-settings-entry-sorting-method>
+
+
+              </div>
+              <ng-container>
+                <div class="col-auto pe-0">
+                  <button class="btn float-end"
+                          [disabled]="state.value.length == 1"
+                          [ngClass]="state.value.length > 1? 'btn-danger':'btn-secondary'"
+                          [id]="'list_btn_'+idName+i"
+                          [name]="'list_btn_'+idName+i" (click)="remove(i)">
+                    <ng-icon name="ionTrashOutline" title="Delete" i18n-title></ng-icon>
+                  </button>
+                </div>
+              </ng-container>
+            </div>
+          </ng-container>
+          <ng-container>
+            <div class="col-12 p-0">
+              <button class="btn btn-primary mt-1 float-end"
+                      [id]="'btn_add_'+idName"
+                      [name]="'btn_add_'+idName"
+                      (click)="AddNew()">
+                <ng-icon name="ionAddOutline" class="me-1"></ng-icon>
+                <span i18n>Add</span>
+              </button>
+            </div>
+          </ng-container>
+        </ng-container>
+
         <ng-container *ngSwitchCase="'EnumArray'">
           <ng-container *ngFor="let _ of state.value; let i=index">
             <div class="row col-12 mt-1 m-0 p-0">
@@ -552,7 +595,9 @@
               </div>
               <ng-container>
                 <div class="col-auto pe-0">
-                  <button class="btn btn-secondary float-end"
+                  <button class="btn float-end"
+                          [disabled]="state.value.length == 1"
+                          [ngClass]="state.value.length > 1? 'btn-danger':'btn-secondary'"
                           [id]="'list_btn_'+idName+i"
                           [name]="'list_btn_'+idName+i" (click)="remove(i)">
                     <ng-icon name="ionTrashOutline" title="Delete" i18n-title></ng-icon>
