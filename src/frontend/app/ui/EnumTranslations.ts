@@ -49,6 +49,7 @@ EnumTranslations[SortByTypes[SortByTypes.Name]] = $localize`name`;
 EnumTranslations[SortByTypes[SortByTypes.Rating]] = $localize`rating`;
 EnumTranslations[SortByTypes[SortByTypes.Random]] = $localize`random`;
 EnumTranslations[SortByTypes[SortByTypes.PersonCount]] = $localize`persons`;
+EnumTranslations[SortByTypes[SortByTypes.FileSize]] = $localize`file size`;
 
 EnumTranslations[GroupByTypes[GroupByTypes.NoGrouping]] = $localize`don't group`;
 

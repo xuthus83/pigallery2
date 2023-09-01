@@ -148,6 +148,12 @@ export class GallerySortingService {
             (a.metadata?.faces?.length || 0) - (b.metadata?.faces?.length || 0)
         );
         break;
+      case SortByTypes.FileSize:
+        media.sort(
+          (a: PhotoDTO, b: PhotoDTO) =>
+            (a.metadata?.fileSize || 0) - (b.metadata?.fileSize || 0)
+        );
+        break;
       case SortByTypes.Random:
         this.rndService.setSeed(media.length);
         media.sort((a: PhotoDTO, b: PhotoDTO): number => {
@@ -189,6 +195,8 @@ export class GallerySortingService {
                 };
                 if (c.directories) {
                   switch (sorting.method) {
+                    case SortByTypes.FileSize:
+                    case SortByTypes.PersonCount:
                     case SortByTypes.Rating: // directories do not have rating
                     case SortByTypes.Name:
                       c.directories.sort((a, b) =>
@@ -245,6 +253,20 @@ export class GallerySortingService {
                       break;
                     case SortByTypes.Rating:
                       groupFN = (m: MediaDTO) => ((m as PhotoDTO).metadata.rating || 0).toString();
+                      break;
+                    case SortByTypes.FileSize: {
+                      const groups = [0.5, 1, 2, 5, 10, 15, 20, 30, 50]; // MBs
+                      groupFN = (m: MediaDTO) => {
+                        const mbites = ((m as PhotoDTO).metadata.fileSize || 0) / 1024 / 1024;
+                        const i = groups.findIndex((s) => s > mbites);
+                        if (i == -1) {
+                          return '>' + groups[groups.length - 1] + ' MB';
+                        } else if (i == 0) {
+                          return '<' + groups[0] + ' MB';
+                        }
+                        return groups[i - 1] + ' - ' + groups[i] + ' MB';
+                      };
+                    }
                       break;
                     case SortByTypes.PersonCount:
                       groupFN = (m: MediaDTO) => ((m as PhotoDTO).metadata.faces || []).length.toString();

@@ -375,6 +375,9 @@ export class SearchManager {
         case SortByTypes.PersonCount:
           query.addOrderBy('media.metadata.personsLength', sort.ascending ? 'ASC' : 'DESC');
           break;
+        case SortByTypes.FileSize:
+          query.addOrderBy('media.metadata.fileSize', sort.ascending ? 'ASC' : 'DESC');
+          break;
         case SortByTypes.Random:
           if (Config.Database.type === DatabaseType.mysql) {
             query.groupBy('RAND(), media.id');
