@@ -6,9 +6,9 @@ import {ConfigClass, ConfigClassBuilder} from 'typeconfig/node';
 import {IConfigClass} from 'typeconfig/common';
 import {PasswordHelper} from '../../../backend/model/PasswordHelper';
 import {TAGS} from '../public/ClientConfig';
+import {NotificationManager} from '../../../backend/model/NotifocationManager';
 
 declare const process: any;
-
 const upTime = new Date().toISOString();
 // TODO: Refactor Config to be injectable globally.
 // This is a bad habit to let the Config know if its in a testing env.
@@ -87,7 +87,12 @@ export class PrivateConfigClass extends ServerConfig {
 
   async original(): Promise<PrivateConfigClass & IConfigClass> {
     const pc = ConfigClassBuilder.attachPrivateInterface(new PrivateConfigClass());
-    await pc.load();
+    try {
+      await pc.load();
+    }catch (e){
+      console.error('Error during loading original config. Reverting to defaults.');
+      console.error(e);
+    }
     return pc;
   }
 
@@ -96,5 +101,11 @@ export class PrivateConfigClass extends ServerConfig {
 export const Config = ConfigClassBuilder.attachInterface(
   new PrivateConfigClass()
 );
-Config.loadSync();
-
+try {
+  Config.loadSync();
+} catch (e) {
+  console.error('Error during loading config. Reverting to defaults.');
+  console.error('This is most likely due to: 1) you added a bad configuration in the server.json OR 2) The configuration changed in the latest release.');
+  console.error(e);
+  NotificationManager.error('Cant load config. Reverting to default. This is most likely due to: 1) you added a bad configuration in the server.json OR 2) The configuration changed in the latest release.', (e.toString ? e.toString() : JSON.stringify(e)));
+}
