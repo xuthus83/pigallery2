@@ -4,7 +4,8 @@ You can use [docker](https://docs.docker.com/install/) to run PiGallery2. See al
 available tags:
  - `v*` (stable): built from the release with the same version name.
  - `latest` (stable): same as the latest `v*`, built with debian buster
- - `nightly` : built from the current state of `master`. This might break from time to time. 
+ - `edge` : built from the current state of `master`. This might break from time to time.
+ - `nightly` : Deprecated. Rename to `edge`. See #708. 
 
 **Note**: Some changes may require database reset or config changes, see [#317](https://github.com/bpatrik/pigallery2/issues/317) (If you want to reduce the frequency of those, use stable builds (`latest`)
 

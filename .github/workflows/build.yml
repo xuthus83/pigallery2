@@ -132,16 +132,18 @@ jobs:
           platforms: ${{ matrix.platforms }}
           push: true
           tags: bpatrik/pigallery2:experimental-${{ matrix.container }}
-      - name: Push nightly on new master commit
+      - name: Push edge on new master commit
         # github.ref:  branches the format is refs/heads/<branch_name>  PRs and Tags are different
-        if: ${{github.ref == 'refs/heads/master' }} 
+        if: ${{github.ref == 'refs/heads/master' }}
         uses: docker/build-push-action@v3
         with:
           context: .
           file: docker/${{ matrix.container }}/Dockerfile.build
           platforms: ${{ matrix.platforms }}
           push: true
-          tags: bpatrik/pigallery2:nightly-${{ matrix.container }}
+          tags: |
+            bpatrik/pigallery2:edge-${{ matrix.container }}
+            bpatrik/pigallery2:nightly-${{ matrix.container }}
       - name: Push release on new Tag
         if: ${{ startsWith(github.ref_type , 'tag') &&  !github.event.issue.pull_request &&  matrix.container != 'debian-bullseye'}}
         uses: docker/build-push-action@v3
@@ -151,7 +153,7 @@ jobs:
           platforms: ${{ matrix.platforms }}
           push: true
           tags: |
-            bpatrik/pigallery2:nightly-${{ matrix.container }}
+            bpatrik/pigallery2:edge-${{ matrix.container }}
             bpatrik/pigallery2:${{ github.ref_name }}-${{ matrix.container }}
             bpatrik/pigallery2:latest-${{ matrix.container }}
       - name: Push latest on new Tag
@@ -163,7 +165,7 @@ jobs:
           platforms: ${{ matrix.platforms }}
           push: true
           tags: |
-            bpatrik/pigallery2:nightly-${{ matrix.container }}
+            bpatrik/pigallery2:edge-${{ matrix.container }}
             bpatrik/pigallery2:${{ github.ref_name }}-${{ matrix.container }}
             bpatrik/pigallery2:latest-${{ matrix.container }}
             bpatrik/pigallery2:${{ github.ref_name }}
