@@ -153,6 +153,7 @@ export abstract class Job<T extends Record<string, any> = Record<string, any>> i
         await new Promise(setImmediate);
         this.run();
       } catch (e) {
+        Logger.error(LOG_TAG, 'Job failed with:');
         Logger.error(LOG_TAG, e);
         this.Progress.log('Failed with: ' + (typeof e.toString === 'function') ? e.toString() : JSON.stringify(e));
         this.Progress.State = JobProgressStates.failed;
