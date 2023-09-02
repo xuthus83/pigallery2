@@ -39,6 +39,7 @@ EnumTranslations[MapProviders[MapProviders.OpenStreetMap]] = $localize`OpenStree
 EnumTranslations[MapProviders[MapProviders.Mapbox]] = $localize`Mapbox`;
 
 
+EnumTranslations[ReIndexingSensitivity[ReIndexingSensitivity.never]] = $localize`never`;
 EnumTranslations[ReIndexingSensitivity[ReIndexingSensitivity.low]] = $localize`low`;
 EnumTranslations[ReIndexingSensitivity[ReIndexingSensitivity.high]] = $localize`high`;
 EnumTranslations[ReIndexingSensitivity[ReIndexingSensitivity.medium]] = $localize`medium`;

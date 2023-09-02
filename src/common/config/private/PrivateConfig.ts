@@ -64,9 +64,12 @@ export enum SQLLogLevel {
 }
 
 export enum ReIndexingSensitivity {
-  low = 1,
-  medium = 2,
-  high = 3,
+  // Order is important. It also used to do relative comparison.
+  // Keep space between items for future
+  never = 10,
+  low = 20,
+  medium = 30,
+  high = 40,
 }
 
 export enum FFmpegPresets {
@@ -443,7 +446,7 @@ export class ServerIndexingConfig {
         name: $localize`Folder reindexing sensitivity`,
         priority: ConfigPriority.advanced
       },
-    description: $localize`Set the reindexing sensitivity. High value check the folders for change more often.`
+    description: $localize`Set the reindexing sensitivity. High value check the folders for change more often.  Setting to never only indexes if never indexed or explicit running the Indexing Job.`
   })
   reIndexingSensitivity: ReIndexingSensitivity = ReIndexingSensitivity.low;
   @ConfigProperty({

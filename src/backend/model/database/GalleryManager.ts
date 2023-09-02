@@ -40,16 +40,26 @@ export class GalleryManager  {
     const directoryPath = GalleryManager.parseRelativeDirePath(
       relativeDirectoryName
     );
+
     const connection = await SQLConnection.getConnection();
-    const stat = fs.statSync(
-      path.join(ProjectPath.ImageFolder, relativeDirectoryName)
-    );
-    const lastModified = DiskMangerWorker.calcLastModified(stat);
-
-
     const dir = await this.getDirIdAndTime(connection, directoryPath.name, directoryPath.parent);
 
+
     if (dir && dir.lastScanned != null) {
+      // Return as soon as possible without touching the original data source (hdd)
+      // See https://github.com/bpatrik/pigallery2/issues/613
+      if (
+        Config.Indexing.reIndexingSensitivity ===
+        ReIndexingSensitivity.never
+      ) {
+        return null;
+      }
+
+      const stat = fs.statSync(
+        path.join(ProjectPath.ImageFolder, relativeDirectoryName)
+      );
+      const lastModified = DiskMangerWorker.calcLastModified(stat);
+
       // If it seems that the content did not change, do not work on it
       if (
         knownLastModified &&
