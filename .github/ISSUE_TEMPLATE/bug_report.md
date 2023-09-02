@@ -32,7 +32,7 @@ In case of a server side error, provide logs:
 
 **Used app version**:
 - compiled from source
-- docker-nightly
+- docker-edge
 - docker-vXX
 - release vXX
 - ect...

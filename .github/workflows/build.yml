@@ -141,9 +141,7 @@ jobs:
           file: docker/${{ matrix.container }}/Dockerfile.build
           platforms: ${{ matrix.platforms }}
           push: true
-          tags: |
-            bpatrik/pigallery2:edge-${{ matrix.container }}
-            bpatrik/pigallery2:nightly-${{ matrix.container }}
+          tags: bpatrik/pigallery2:edge-${{ matrix.container }}
       - name: Push release on new Tag
         if: ${{ startsWith(github.ref_type , 'tag') &&  !github.event.issue.pull_request &&  matrix.container != 'debian-bullseye'}}
         uses: docker/build-push-action@v3
