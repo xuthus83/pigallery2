@@ -40,17 +40,10 @@
                                [directories]="directoryContent?.directories || []"></app-gallery-directories>
 
       <div class="blog-map-row" *ngIf="ShowMarkDown || ShowMap">
-        <div class="blog-wrapper"
-             [style.width]="blogOpen ?  '100%' : 'calc(100% - 100px)'"
-             *ngIf="ShowMarkDown">
-          <app-gallery-blog [collapsed]="!blogOpen"
-                            [mdFiles]="directoryContent.metaFile | mdFiles"></app-gallery-blog>
-
-
-          <button class="btn btn-blog-details text-body" (click)="blogOpen=!blogOpen">
-            <ng-icon [name]="blogOpen ? 'ionChevronUpOutline' : 'ionChevronDownOutline'"></ng-icon>
-          </button>
-        </div>
+        <app-gallery-blog
+          [style.width]="blogOpen ?  '100%' : 'calc(100% - 100px)'"
+          *ngIf="ShowMarkDown"
+          [(open)]="blogOpen"></app-gallery-blog>
         <app-gallery-map
           class="rounded"
           [class.rounded-start-0]="ShowMarkDown"

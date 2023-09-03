@@ -90,6 +90,26 @@ export class Utils {
     return true;
   }
 
+  static toIsoString(d: number | Date) {
+    if (!(d instanceof Date)) {
+      d = new Date(d);
+    }
+    return d.getUTCFullYear() + '-' + d.getUTCMonth() + '-' + d.getUTCDate();
+  }
+
+
+  static makeUTCMidnight(d: number | Date) {
+    if (!(d instanceof Date)) {
+      d = new Date(d);
+    }
+    d.setUTCHours(0);
+    d.setUTCMinutes(0);
+    d.setUTCSeconds(0);
+    d.setUTCMilliseconds(0);
+
+    return d;
+  }
+
   static renderDataSize(size: number): string {
     const postFixes = ['B', 'KB', 'MB', 'GB', 'TB'];
     let index = 0;

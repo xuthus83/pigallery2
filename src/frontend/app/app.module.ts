@@ -183,6 +183,7 @@ import {ParseIntPipe} from './pipes/ParseIntPipe';
 import {
   SortingMethodSettingsEntryComponent
 } from './ui/settings/template/settings-entry/sorting-method/sorting-method.settings-entry.component';
+import {ContentLoaderService} from './ui/gallery/contentLoader.service';
 
 @Injectable()
 export class MyHammerConfig extends HammerGestureConfig {
@@ -344,6 +345,7 @@ Marker.prototype.options.icon = MarkerFactory.defIcon;
     AlbumsService,
     GalleryCacheService,
     ContentService,
+    ContentLoaderService,
     FilterService,
     GallerySortingService,
     MapService,

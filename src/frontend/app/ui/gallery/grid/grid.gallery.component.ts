@@ -22,7 +22,6 @@ import {PageHelper} from '../../../model/page.helper';
 import {Subscription} from 'rxjs';
 import {ActivatedRoute, Params, Router} from '@angular/router';
 import {QueryService} from '../../../model/query.service';
-import {ContentService} from '../content.service';
 import {MediaDTO, MediaDTOUtils,} from '../../../../../common/entities/MediaDTO';
 import {QueryParams} from '../../../../../common/QueryParams';
 import {GallerySortingService, MediaGroup} from '../navigator/sorting.service';
@@ -65,7 +64,6 @@ export class GalleryGridComponent
     private changeDetector: ChangeDetectorRef,
     public queryService: QueryService,
     private router: Router,
-    public galleryService: ContentService,
     public sortingService: GallerySortingService,
     private route: ActivatedRoute
   ) {
@@ -191,7 +189,7 @@ export class GalleryGridComponent
 
     for (; i < this.mediaGroups.length && i < this.mediaToRender.length; ++i) {
 
-     if (diffFound) {
+      if (diffFound) {
         break;
       }
 
@@ -259,7 +257,11 @@ export class GalleryGridComponent
     if (this.mediaToRender.length == 0 ||
       this.mediaToRender[this.mediaToRender.length - 1].media.length >=
       this.mediaGroups[this.mediaToRender.length - 1].media.length) {
-      this.mediaToRender.push({name: this.mediaGroups[this.mediaToRender.length].name, media: []});
+      this.mediaToRender.push({
+        name: this.mediaGroups[this.mediaToRender.length].name,
+        date: this.mediaGroups[this.mediaToRender.length].date,
+        media: []
+      } as GridMediaGroup);
     }
 
     let maxRowHeight = this.getMaxRowHeight();
@@ -453,4 +455,5 @@ export class GalleryGridComponent
 interface GridMediaGroup {
   media: GridMedia[];
   name: string;
+  date?: Date;
 }

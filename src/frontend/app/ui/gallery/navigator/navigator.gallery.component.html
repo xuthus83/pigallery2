@@ -13,7 +13,7 @@
       <ol *ngIf="isSearch" class="mb-0 mt-1 breadcrumb">
         <li class="active">
           <ng-container i18n>Searching for:</ng-container>
-          <strong> {{galleryService.content.value?.searchResult?.searchQuery | searchQuery}}</strong>
+          <strong> {{contentLoaderService.content.value?.searchResult?.searchQuery | searchQuery}}</strong>
         </li>
       </ol>
 

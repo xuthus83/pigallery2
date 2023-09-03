@@ -4,7 +4,6 @@ import {DomSanitizer} from '@angular/platform-browser';
 import {UserDTOUtils} from '../../../../../common/entities/UserDTO';
 import {AuthenticationService} from '../../../model/network/authentication.service';
 import {QueryService} from '../../../model/query.service';
-import {ContentService, ContentWrapperWithError, DirectoryContent,} from '../content.service';
 import {Utils} from '../../../../../common/Utils';
 import {GroupByTypes, GroupingMethod, SortByDirectionalTypes, SortByTypes} from '../../../../../common/entities/SortingMethods';
 import {Config} from '../../../../../common/config/public/Config';
@@ -15,6 +14,7 @@ import {GallerySortingService} from './sorting.service';
 import {PageHelper} from '../../../model/page.helper';
 import {BsDropdownDirective} from 'ngx-bootstrap/dropdown';
 import {FilterService} from '../filter/filter.service';
+import {ContentLoaderService, ContentWrapperWithError, DirectoryContent} from '../contentLoader.service';
 
 @Component({
   selector: 'app-gallery-navbar',
@@ -47,7 +47,7 @@ export class GalleryNavigatorComponent {
   constructor(
     public authService: AuthenticationService,
     public queryService: QueryService,
-    public galleryService: ContentService,
+    public contentLoaderService: ContentLoaderService,
     public filterService: FilterService,
     public sortingService: GallerySortingService,
     private router: Router,
@@ -57,11 +57,11 @@ export class GalleryNavigatorComponent {
     // can't group by random
     this.groupingByTypes = Utils.enumToArray(GroupByTypes);
     this.RootFolderName = $localize`Home`;
-    this.wrappedContent = this.galleryService.content;
+    this.wrappedContent = this.contentLoaderService.content;
     this.directoryContent = this.wrappedContent.pipe(
       map((c) => (c.directory ? c.directory : c.searchResult))
     );
-    this.routes = this.galleryService.content.pipe(
+    this.routes = this.contentLoaderService.content.pipe(
       map((c) => {
         this.parentPath = null;
         if (!c.directory) {
@@ -124,15 +124,15 @@ export class GalleryNavigatorComponent {
   }
 
   get isDirectory(): boolean {
-    return !!this.galleryService.content.value.directory;
+    return !!this.contentLoaderService.content.value.directory;
   }
 
   get isSearch(): boolean {
-    return !!this.galleryService.content.value.searchResult;
+    return !!this.contentLoaderService.content.value.searchResult;
   }
 
   get ItemCount(): number {
-    const c = this.galleryService.content.value;
+    const c = this.contentLoaderService.content.value;
     return c.directory
       ? c.directory.mediaCount
       : c.searchResult
@@ -142,7 +142,7 @@ export class GalleryNavigatorComponent {
 
   isDefaultSortingAndGrouping(): boolean {
     return this.sortingService.isDefaultSortingAndGrouping(
-      this.galleryService.content.value
+      this.contentLoaderService.content.value
     );
   }
 
@@ -193,7 +193,7 @@ export class GalleryNavigatorComponent {
 
 
   getDownloadZipLink(): string {
-    const c = this.galleryService.content.value;
+    const c = this.contentLoaderService.content.value;
     if (!c.directory) {
       return null;
     }
@@ -212,7 +212,7 @@ export class GalleryNavigatorComponent {
   }
 
   getDirectoryFlattenSearchQuery(): string {
-    const c = this.galleryService.content.value;
+    const c = this.contentLoaderService.content.value;
     if (!c.directory) {
       return null;
     }
