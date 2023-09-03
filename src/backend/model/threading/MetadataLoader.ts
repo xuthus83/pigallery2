@@ -79,6 +79,36 @@ export class MetadataLoader {
                 break;
               }
             }
+
+            // For some filetypes (for instance Matroska), bitrate and duration are stored in
+            // the format section, not in the stream section.
+            
+            // Only use duration from container header if necessary (stream duration is usually more accurate)
+            if (
+              metadata.duration === 0 &&
+              data.format.duration !== undefined &&
+              Utils.isInt32(Math.floor(data.format.duration * 1000))
+            ) {
+              metadata.duration = Math.floor(data.format.duration * 1000);
+            }
+            
+            // Prefer bitrate from container header (includes video and audio)
+            if (
+              data.format.bit_rate !== undefined &&
+              Utils.isInt32(data.format.bit_rate)
+            ) {
+              metadata.bitRate = data.format.bit_rate;
+            }
+
+            if (
+              data.format.tags !== undefined && 
+              typeof data.format.tags.creation_time === 'string'
+            ) {
+              metadata.creationDate =
+                Date.parse(data.format.tags.creation_time) ||
+                metadata.creationDate;
+            }
+
             // eslint-disable-next-line no-empty
           } catch (err) {
           }
