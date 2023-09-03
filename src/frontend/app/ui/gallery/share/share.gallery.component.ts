@@ -12,6 +12,7 @@ import {Subscription} from 'rxjs';
 import {UserRoles} from '../../../../../common/entities/UserDTO';
 import {AuthenticationService} from '../../../model/network/authentication.service';
 import {ClipboardService} from 'ngx-clipboard';
+import {ContentLoaderService} from '../contentLoader.service';
 
 @Component({
   selector: 'app-gallery-share',
@@ -51,7 +52,7 @@ export class GalleryShareComponent implements OnInit, OnDestroy {
 
   constructor(
     public sharingService: ShareService,
-    public galleryService: ContentService,
+    public galleryService: ContentLoaderService,
     private notification: NotificationService,
     private modalService: BsModalService,
     public authService: AuthenticationService,

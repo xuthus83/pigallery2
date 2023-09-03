@@ -8,7 +8,7 @@ import {GroupingMethod, SortingMethod} from '../../../../common/entities/Sorting
 import {VersionService} from '../../model/version.service';
 import {SearchQueryDTO, SearchQueryTypes,} from '../../../../common/entities/SearchQueryDTO';
 import {ContentWrapper} from '../../../../common/entities/ConentWrapper';
-import {ContentWrapperWithError} from './content.service';
+import {ContentWrapperWithError} from './contentLoader.service';
 import {ThemeModes} from '../../../../common/config/public/ClientConfig';
 
 interface CacheItem<T> {

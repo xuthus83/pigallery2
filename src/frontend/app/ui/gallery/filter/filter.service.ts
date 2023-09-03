@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {PhotoDTO} from '../../../../../common/entities/PhotoDTO';
-import {DirectoryContent} from '../content.service';
+import {DirectoryContent} from '../contentLoader.service';
 import {map, switchMap} from 'rxjs/operators';
 
 export enum FilterRenderType {
