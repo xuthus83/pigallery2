@@ -255,7 +255,7 @@ export class GallerySortingService {
                       groupFN = (m: MediaDTO) => ((m as PhotoDTO).metadata.rating || 0).toString();
                       break;
                     case SortByTypes.FileSize: {
-                      const groups = [0.5, 1, 2, 5, 10, 15, 20, 30, 50]; // MBs
+                      const groups = [0.5, 1, 2, 5, 10, 15, 20, 30, 50, 100, 200, 500, 1000]; // MBs
                       groupFN = (m: MediaDTO) => {
                         const mbites = ((m as PhotoDTO).metadata.fileSize || 0) / 1024 / 1024;
                         const i = groups.findIndex((s) => s > mbites);
