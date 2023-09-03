@@ -11,6 +11,7 @@ import {AuthenticationService} from '../../../../model/network/authentication.se
 import {LatLngLiteral, marker, Marker, TileLayer, tileLayer} from 'leaflet';
 import {ContentService} from '../../content.service';
 import {ThemeService} from '../../../../model/theme.service';
+import { ContentLoaderService } from '../../contentLoader.service';
 
 @Component({
   selector: 'app-info-panel',
@@ -31,7 +32,7 @@ export class InfoPanelLightboxComponent implements OnInit, OnChanges {
 
   constructor(
     public queryService: QueryService,
-    public galleryService: ContentService,
+    public contentLoaderService: ContentLoaderService,
     public mapService: MapService,
     private authService: AuthenticationService,
     private themeService: ThemeService

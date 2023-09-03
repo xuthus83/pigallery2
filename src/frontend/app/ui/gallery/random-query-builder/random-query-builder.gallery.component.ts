@@ -15,6 +15,7 @@ import {
 import { ActivatedRoute, Params } from '@angular/router';
 import { QueryParams } from '../../../../../common/QueryParams';
 import { SearchQueryParserService } from '../search/search-query-parser.service';
+import {ContentLoaderService} from '../contentLoader.service';
 
 @Component({
   selector: 'app-gallery-random-query-builder',
@@ -36,7 +37,7 @@ export class RandomQueryBuilderGalleryComponent implements OnInit, OnDestroy {
   private readonly subscription: Subscription = null;
 
   constructor(
-    public galleryService: ContentService,
+    public contentLoaderService: ContentLoaderService,
     private notification: NotificationService,
     private searchQueryParserService: SearchQueryParserService,
     private route: ActivatedRoute,
@@ -65,7 +66,7 @@ export class RandomQueryBuilderGalleryComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.contentSubscription = this.galleryService.content.subscribe(
+    this.contentSubscription = this.contentLoaderService.content.subscribe(
       (content: ContentWrapper) => {
         this.enabled = !!content.directory;
         if (!this.enabled) {

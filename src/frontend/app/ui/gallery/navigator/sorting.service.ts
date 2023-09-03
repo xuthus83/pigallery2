@@ -4,9 +4,8 @@ import {NetworkService} from '../../../model/network/network.service';
 import {GalleryCacheService} from '../cache.gallery.service';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {Config} from '../../../../../common/config/public/Config';
-import {GroupingMethod, SortByTypes, SortingMethod} from '../../../../../common/entities/SortingMethods';
+import {GroupByTypes, GroupingMethod, SortByTypes, SortingMethod} from '../../../../../common/entities/SortingMethods';
 import {PG2ConfMap} from '../../../../../common/PG2ConfMap';
-import {ContentService, DirectoryContent} from '../content.service';
 import {PhotoDTO} from '../../../../../common/entities/PhotoDTO';
 import {map, switchMap} from 'rxjs/operators';
 import {SeededRandomService} from '../../../model/seededRandom.service';
@@ -14,6 +13,8 @@ import {ContentWrapper} from '../../../../../common/entities/ConentWrapper';
 import {SubDirectoryDTO} from '../../../../../common/entities/DirectoryDTO';
 import {MediaDTO} from '../../../../../common/entities/MediaDTO';
 import {FileDTO} from '../../../../../common/entities/FileDTO';
+import {Utils} from '../../../../../common/Utils';
+import {ContentLoaderService, DirectoryContent} from '../contentLoader.service';
 
 @Injectable()
 export class GallerySortingService {
@@ -24,7 +25,7 @@ export class GallerySortingService {
   constructor(
     private networkService: NetworkService,
     private galleryCacheService: GalleryCacheService,
-    private galleryService: ContentService,
+    private galleryService: ContentLoaderService,
     private rndService: SeededRandomService,
     private datePipe: DatePipe
   ) {
@@ -176,6 +177,38 @@ export class GallerySortingService {
     return;
   }
 
+  private getGroupByNameFn(grouping: GroupingMethod) {
+    switch (grouping.method) {
+      case SortByTypes.Date:
+        return (m: MediaDTO) => this.datePipe.transform(m.metadata.creationDate, 'longDate', 'UTC');
+
+      case SortByTypes.Name:
+        return (m: MediaDTO) => m.name.at(0).toUpperCase();
+
+      case SortByTypes.Rating:
+        return (m: MediaDTO) => ((m as PhotoDTO).metadata.rating || 0).toString();
+
+      case SortByTypes.FileSize: {
+        const groups = [0.5, 1, 2, 5, 10, 15, 20, 30, 50, 100, 200, 500, 1000]; // MBs
+        return (m: MediaDTO) => {
+          const mbites = ((m as PhotoDTO).metadata.fileSize || 0) / 1024 / 1024;
+          const i = groups.findIndex((s) => s > mbites);
+          if (i == -1) {
+            return '>' + groups[groups.length - 1] + ' MB';
+          } else if (i == 0) {
+            return '<' + groups[0] + ' MB';
+          }
+          return groups[i - 1] + ' - ' + groups[i] + ' MB';
+        };
+      }
+
+      case SortByTypes.PersonCount:
+        return (m: MediaDTO) => ((m as PhotoDTO).metadata.faces || []).length.toString();
+
+    }
+    return (m: MediaDTO) => '';
+  }
+
   public applySorting(
     directoryContent: Observable<DirectoryContent>
   ): Observable<GroupedDirectoryContent> {
@@ -243,36 +276,10 @@ export class GallerySortingService {
                 if (dirContent.media) {
                   const mCopy = dirContent.media;
                   this.sortMedia(grouping, mCopy);
-                  let groupFN = (m: MediaDTO) => '';
-                  switch (grouping.method) {
-                    case SortByTypes.Date:
-                      groupFN = (m: MediaDTO) => this.datePipe.transform(m.metadata.creationDate, 'longDate');
-                      break;
-                    case SortByTypes.Name:
-                      groupFN = (m: MediaDTO) => m.name.at(0).toUpperCase();
-                      break;
-                    case SortByTypes.Rating:
-                      groupFN = (m: MediaDTO) => ((m as PhotoDTO).metadata.rating || 0).toString();
-                      break;
-                    case SortByTypes.FileSize: {
-                      const groups = [0.5, 1, 2, 5, 10, 15, 20, 30, 50]; // MBs
-                      groupFN = (m: MediaDTO) => {
-                        const mbites = ((m as PhotoDTO).metadata.fileSize || 0) / 1024 / 1024;
-                        const i = groups.findIndex((s) => s > mbites);
-                        if (i == -1) {
-                          return '>' + groups[groups.length - 1] + ' MB';
-                        } else if (i == 0) {
-                          return '<' + groups[0] + ' MB';
-                        }
-                        return groups[i - 1] + ' - ' + groups[i] + ' MB';
-                      };
-                    }
-                      break;
-                    case SortByTypes.PersonCount:
-                      groupFN = (m: MediaDTO) => ((m as PhotoDTO).metadata.faces || []).length.toString();
-                      break;
-                  }
+                  const groupFN = this.getGroupByNameFn(grouping);
+
                   c.mediaGroups = [];
+
                   for (const m of mCopy) {
                     const k = groupFN(m);
                     if (c.mediaGroups.length == 0 || c.mediaGroups[c.mediaGroups.length - 1].name != k) {
@@ -280,7 +287,13 @@ export class GallerySortingService {
                     }
                     c.mediaGroups[c.mediaGroups.length - 1].media.push(m);
                   }
-                  c.mediaGroups;
+                }
+
+                if (grouping.method === GroupByTypes.Date) {
+                  // We do not need the youngest as we group by day. All photos are from the same day
+                  c.mediaGroups.forEach(g => {
+                    g.date = Utils.makeUTCMidnight(new Date(g.media?.[0]?.metadata?.creationDate));
+                  });
                 }
 
                 // sort groups
@@ -300,6 +313,7 @@ export class GallerySortingService {
 
 export interface MediaGroup {
   name: string;
+  date?: Date; // used for blog. It allows to chop off blog to smaller pieces
   media: MediaDTO[];
 }
 
