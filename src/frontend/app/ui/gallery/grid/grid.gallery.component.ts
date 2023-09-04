@@ -356,7 +356,7 @@ export class GalleryGridComponent
     // (on lightbox navigation)
     while (
       (this.mediaToRender.length - 1 < groupIndex &&
-        this.mediaToRender[this.mediaToRender.length - 1].media.length < mediaIndex) &&
+        this.mediaToRender[this.mediaToRender.length - 1]?.media?.length < mediaIndex) &&
       this.renderARow() !== null
       // eslint-disable-next-line no-empty
       ) {

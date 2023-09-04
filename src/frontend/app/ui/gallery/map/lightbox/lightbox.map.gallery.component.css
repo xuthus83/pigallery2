@@ -17,6 +17,11 @@
   -moz-transition: all 0.3s ease-in-out;
 }
 
+.controls-background {
+  display: inline-block;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
 .sebm-google-map-container {
   width: 100%;
   height: 100%;
@@ -49,7 +54,6 @@
   height: initial;
   text-align: right;
   width: 100%;
-  padding: 5px;
   font-size: large;
 }
 
