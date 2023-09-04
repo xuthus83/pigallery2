@@ -143,5 +143,11 @@ describe('MetadataLoader', () => {
     delete expected.duration;
     expect(Utils.clone(data)).to.be.deep.equal(expected);
   });
+  
+  it('should load mkv', async () => {
+    const data = await MetadataLoader.loadVideoMetadata(path.join(__dirname, '/../../../assets/video_mkv.mkv'));
+    const expected = require(path.join(__dirname, '/../../../assets/video_mkv.json'));
+    expect(Utils.clone(data)).to.be.deep.equal(expected);
+  });
 
 });
