@@ -2,18 +2,18 @@
   <div class="blog" *ngIf="markdowns.length > 0">
     <div class="card">
       <div class="card-body" style="min-height: 77px" [style.height]="!open ? '77px':''">
-        <ng-container *ngFor="let md of markdowns; let last = last">
+        <ng-container *ngFor="let md of markdowns; let last = last; let first = first">
           <markdown
             *ngIf="open"
             [data]="md.text">
           </markdown>
-          <span *ngIf="!open" class="text-preview">
+          <span *ngIf="!open && first" class="text-preview">
             <markdown
               [inline]="true"
-              [data]="md.text">
+              [data]="md.textShort">
             </markdown>
           </span>
-          <hr *ngIf="!last">
+          <hr *ngIf="open && !last">
         </ng-container>
       </div>
     </div>

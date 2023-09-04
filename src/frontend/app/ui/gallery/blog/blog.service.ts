@@ -55,11 +55,14 @@ export class BlogService {
       }];
     }
 
-    ret.push({
-      text: markdown.substring(0, matches[0].index),
-      file: file
-    });
-
+    const baseText = markdown.substring(0, matches[0].index).trim();
+    // don't show empty
+    if (baseText) {
+      ret.push({
+        text: baseText,
+        file: file
+      });
+    }
 
     for (let i = 0; i < matches.length; ++i) {
       const matchedStr = matches[i][0];
@@ -72,8 +75,12 @@ export class BlogService {
       if (groupDate === undefined) {
         groupDate = dates[dates.length - 1];
       }
-      const text = i + 1 >= matches.length ? markdown.substring(matches[i].index) : markdown.substring(matches[i].index, matches[i + 1].index);
+      const text = (i + 1 >= matches.length ? markdown.substring(matches[i].index) : markdown.substring(matches[i].index, matches[i + 1].index)).trim();
 
+      // don't show empty
+      if (!text) {
+        continue;
+      }
       // if it would be in the same group. Concatenate it
       const sameGroup = ret.find(g => g.date == groupDate);
       if (sameGroup) {
@@ -86,6 +93,8 @@ export class BlogService {
         file: file
       });
     }
+
+    ret.forEach(md => md.textShort = md.text.substring(0, 200));
 
     return ret;
   }
@@ -112,5 +121,6 @@ export class BlogService {
 export interface GroupedMarkdown {
   date?: number;
   text: string;
+  textShort?: string;
   file: FileDTO;
 }
