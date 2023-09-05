@@ -176,7 +176,6 @@ export class PublicRouter {
         vBs[3] += size * (p);
       };
 
-      addPadding(0.38);
       addPadding(paddingPercent);
 
 
@@ -233,7 +232,7 @@ export class PublicRouter {
       res.set('Cache-control', 'public, max-age=31536000');
       res.header('Content-Type', 'image/svg+xml');
       // Use 40% padding: https://w3c.github.io/manifest/#icon-masks
-      res.send(getIcon('auto', 0.3));
+      res.send(getIcon('auto', 0.7));
     });
 
 

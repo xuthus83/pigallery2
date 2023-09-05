@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
 import {DatePipe} from '@angular/common';
-import {NetworkService} from '../../../model/network/network.service';
 import {GalleryCacheService} from '../cache.gallery.service';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {Config} from '../../../../../common/config/public/Config';
@@ -23,7 +22,6 @@ export class GallerySortingService {
   private collator = new Intl.Collator(undefined, {numeric: true});
 
   constructor(
-    private networkService: NetworkService,
     private galleryCacheService: GalleryCacheService,
     private galleryService: ContentLoaderService,
     private rndService: SeededRandomService,

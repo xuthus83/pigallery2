@@ -11,7 +11,6 @@ import {PageHelper} from '../../../model/page.helper';
 import {QueryService} from '../../../model/query.service';
 import {MediaDTO} from '../../../../../common/entities/MediaDTO';
 import {QueryParams} from '../../../../../common/QueryParams';
-import {ContentService} from '../content.service';
 import {PhotoDTO} from '../../../../../common/entities/PhotoDTO';
 import {ControlsLightboxComponent} from './controls/controls.lightbox.gallery.component';
 import {SupportedFormats} from '../../../../../common/SupportedFormats';
@@ -73,7 +72,6 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
     private builder: AnimationBuilder,
     private router: Router,
     private queryService: QueryService,
-    private galleryService: ContentService,
     private route: ActivatedRoute,
     private piTitleService: PiTitleService
   ) {
@@ -105,7 +103,7 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
     this.infoPanelMaxWidth = 1000;
     this.updatePhotoFrameDim();
     this.subscription.route = this.route.queryParams.subscribe(
-      (params: Params): any => {
+      (params: Params) => {
         if (
           params[QueryParams.gallery.photo] &&
           params[QueryParams.gallery.photo] !== ''

@@ -12,17 +12,15 @@ import {ErrorCodes} from '../../../../common/entities/Error';
 import {map} from 'rxjs/operators';
 import {MediaDTO} from '../../../../common/entities/MediaDTO';
 import {FileDTO} from '../../../../common/entities/FileDTO';
-import {GroupedDirectoryContent} from './navigator/sorting.service';
 
 @Injectable()
 export class ContentLoaderService {
   public content: BehaviorSubject<ContentWrapperWithError>;
   public originalContent: Observable<DirectoryContent>;
-  public sortedFilteredContent: Observable<GroupedDirectoryContent>;
   lastRequest: { directory: string } = {
     directory: null,
   };
-  private searchId: any;
+  private searchId: number;
   private ongoingSearch: string = null;
 
   constructor(
@@ -54,7 +52,7 @@ export class ContentLoaderService {
     this.lastRequest.directory = directoryName;
 
     // prepare server request
-    const params: { [key: string]: any } = {};
+    const params: { [key: string]: unknown } = {};
     if (Config.Sharing.enabled === true) {
       if (this.shareService.isSharing()) {
         params[QueryParams.gallery.sharingKey_query] =

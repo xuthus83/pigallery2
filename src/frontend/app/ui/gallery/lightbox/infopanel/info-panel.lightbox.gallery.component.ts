@@ -9,9 +9,8 @@ import {MapService} from '../../map/map.service';
 import {SearchQueryTypes, TextSearch, TextSearchQueryMatchTypes,} from '../../../../../../common/entities/SearchQueryDTO';
 import {AuthenticationService} from '../../../../model/network/authentication.service';
 import {LatLngLiteral, marker, Marker, TileLayer, tileLayer} from 'leaflet';
-import {ContentService} from '../../content.service';
 import {ThemeService} from '../../../../model/theme.service';
-import { ContentLoaderService } from '../../contentLoader.service';
+import {ContentLoaderService} from '../../contentLoader.service';
 
 @Component({
   selector: 'app-info-panel',

@@ -1,20 +1,15 @@
-import { Component, OnDestroy, OnInit, TemplateRef } from '@angular/core';
-import { ContentService } from '../content.service';
-import { ContentWrapper } from '../../../../../common/entities/ConentWrapper';
-import { Config } from '../../../../../common/config/public/Config';
-import { NotificationService } from '../../../model/notification.service';
-import { BsModalService } from 'ngx-bootstrap/modal';
-import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
-import { NetworkService } from '../../../model/network/network.service';
-import { Subscription } from 'rxjs';
-import {
-  SearchQueryDTO,
-  SearchQueryTypes,
-  TextSearch,
-} from '../../../../../common/entities/SearchQueryDTO';
-import { ActivatedRoute, Params } from '@angular/router';
-import { QueryParams } from '../../../../../common/QueryParams';
-import { SearchQueryParserService } from '../search/search-query-parser.service';
+import {Component, OnDestroy, OnInit, TemplateRef} from '@angular/core';
+import {ContentWrapper} from '../../../../../common/entities/ConentWrapper';
+import {Config} from '../../../../../common/config/public/Config';
+import {NotificationService} from '../../../model/notification.service';
+import {BsModalService} from 'ngx-bootstrap/modal';
+import {BsModalRef} from 'ngx-bootstrap/modal/bs-modal-ref.service';
+import {NetworkService} from '../../../model/network/network.service';
+import {Subscription} from 'rxjs';
+import {SearchQueryDTO, SearchQueryTypes, TextSearch,} from '../../../../../common/entities/SearchQueryDTO';
+import {ActivatedRoute, Params} from '@angular/router';
+import {QueryParams} from '../../../../../common/QueryParams';
+import {SearchQueryParserService} from '../search/search-query-parser.service';
 import {ContentLoaderService} from '../contentLoader.service';
 
 @Component({
@@ -95,7 +90,7 @@ export class RandomQueryBuilderGalleryComponent implements OnInit, OnDestroy {
       this.modalRef.hide();
     }
 
-    this.modalRef = this.modalService.show(template, { class: 'modal-lg' });
+    this.modalRef = this.modalService.show(template, {class: 'modal-lg'});
     document.body.style.paddingRight = '0px';
     this.onQueryChange();
     return false;

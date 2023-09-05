@@ -1,16 +1,9 @@
 import {Component, OnDestroy, TemplateRef} from '@angular/core';
 import {AutoCompleteService} from './autocomplete.service';
 import {ActivatedRoute, Params, Router, RouterLink} from '@angular/router';
-import {ContentService} from '../content.service';
 import {Subscription} from 'rxjs';
-import {NavigationService} from '../../../model/navigation.service';
 import {QueryParams} from '../../../../../common/QueryParams';
-import {
-  MetadataSearchQueryTypes,
-  SearchQueryDTO,
-  SearchQueryTypes,
-  TextSearch,
-} from '../../../../../common/entities/SearchQueryDTO';
+import {MetadataSearchQueryTypes, SearchQueryDTO, SearchQueryTypes, TextSearch,} from '../../../../../common/entities/SearchQueryDTO';
 import {BsModalService} from 'ngx-bootstrap/modal';
 import {BsModalRef} from 'ngx-bootstrap/modal/bs-modal-ref.service';
 import {SearchQueryParserService} from './search-query-parser.service';
@@ -43,11 +36,8 @@ export class GallerySearchComponent implements OnDestroy {
   private saveSearchModalRef: BsModalRef;
 
   constructor(
-    private autoCompleteService: AutoCompleteService,
     private searchQueryParserService: SearchQueryParserService,
-    private galleryService: ContentService,
     private albumService: AlbumsService,
-    private navigationService: NavigationService,
     private route: ActivatedRoute,
     public router: Router,
     private modalService: BsModalService,

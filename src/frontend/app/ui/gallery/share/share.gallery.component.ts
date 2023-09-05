@@ -1,7 +1,6 @@
 import {Component, Input, OnDestroy, OnInit, TemplateRef} from '@angular/core';
 import {Utils} from '../../../../../common/Utils';
 import {ShareService} from '../share.service';
-import {ContentService} from '../content.service';
 import {ContentWrapper} from '../../../../../common/entities/ConentWrapper';
 import {SharingDTO} from '../../../../../common/entities/SharingDTO';
 import {Config} from '../../../../../common/config/public/Config';
