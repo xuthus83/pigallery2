@@ -16,22 +16,26 @@ export class BlogService {
               private mdFilesFilterPipe: MDFilesFilterPipe) {
 
     this.groupedMarkdowns = this.galleryService.sortedFilteredContent.pipe(
-      mergeMap(async content => {
-        if (!content) {
-          return [];
-        }
-        const dates = content.mediaGroups.map(g => g.date)
-          .filter(d => !!d).map(d => d.getTime());
+        mergeMap(async content => {
+          if (!content) {
+            return [];
+          }
+          const dates = content.mediaGroups.map(g => g.date)
+              .filter(d => !!d).map(d => d.getTime());
 
-        const files = this.mdFilesFilterPipe.transform(content.metaFile)
-          .map(f => this.splitMarkDown(f, dates));
+          const files = this.mdFilesFilterPipe.transform(content.metaFile)
+              .map(f => this.splitMarkDown(f, dates));
 
-        return (await Promise.all(files)).flat();
-      }), shareReplay(1));
+          return (await Promise.all(files)).flat();
+        }), shareReplay(1));
   }
 
   private async splitMarkDown(file: FileDTO, dates: number[]): Promise<GroupedMarkdown[]> {
-    const markdown = await this.getMarkDown(file);
+    const markdown = (await this.getMarkDown(file)).trim();
+
+    if (!markdown) {
+      return [];
+    }
 
     if (dates.length == 0) {
       return [{
@@ -101,13 +105,13 @@ export class BlogService {
 
   public getMarkDown(file: FileDTO): Promise<string> {
     const filePath = Utils.concatUrls(
-      file.directory.path,
-      file.directory.name,
-      file.name
+        file.directory.path,
+        file.directory.name,
+        file.name
     );
     if (!this.cache[filePath]) {
       this.cache[filePath] = this.networkService.getText(
-        '/gallery/content/' + filePath
+          '/gallery/content/' + filePath
       );
       (this.cache[filePath] as Promise<string>).then((val: string) => {
         this.cache[filePath] = val;
