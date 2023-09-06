@@ -12,7 +12,7 @@ describe('Faces', () => {
       url: '/pgapi/person',
     }).as('getPerson');
     cy.get('.col-sm-12 > .btn').click();
-    cy.get('nav .nav-item .nav-link').contains('Faces').click();
+    cy.get('nav .nav-item .nav-link').contains('Faces').click({force: true});
   });
   it('Show faces', () => {
     cy.wait('@getPerson', {timeout: 10000});
