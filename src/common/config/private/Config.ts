@@ -12,7 +12,7 @@ declare const process: any;
 const upTime = new Date().toISOString();
 // TODO: Refactor Config to be injectable globally.
 // This is a bad habit to let the Config know if its in a testing env.
-const isTesting = ['afterEach', 'after', 'beforeEach', 'before', 'describe', 'it']
+const isTesting = process.env['NODE_ENV'] == true || ['afterEach', 'after', 'beforeEach', 'before', 'describe', 'it']
   .every((fn) => (global as any)[fn] instanceof Function);
 
 @ConfigClass<IConfigClass<TAGS> & ServerConfig>({

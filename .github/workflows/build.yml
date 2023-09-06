@@ -64,6 +64,10 @@ jobs:
         MYSQL_PORT: ${{ job.services.mariadb.ports[3306] }}
         PORT: 35000
         CI: true
+    - name: Cypress run
+      uses: cypress-io/github-action@v6
+      with:
+        start: npm run start-e2e-server
 
   create-release:
     runs-on: [ubuntu-latest]

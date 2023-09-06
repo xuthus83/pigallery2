@@ -23,7 +23,9 @@
     "merge-new-translation": "gulp merge-new-translation",
     "generate-man": "gulp generate-man",
     "lint": "ng lint",
-    "ng-test": "ng test"
+    "start-e2e-server": "node ./test/folder-reset test/e2e && node ./src/backend/index --config-path=test/e2e/config.json --Database-dbFolder=test/e2e --Server-port=8080 --Server-Log-level=debug",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run"
   },
   "repository": {
     "type": "git",
@@ -110,6 +112,7 @@
     "codelyzer": "6.0.2",
     "core-js": "3.29.0",
     "coveralls": "3.1.1",
+    "cypress": "latest",
     "deep-equal-in-any-order": "2.0.5",
     "ejs-loader": "0.5.0",
     "eslint": "8.36.0",
