@@ -60,6 +60,7 @@ a {
   left: 0;
   padding: 5px;
   width: 100%;
+  line-height: normal;
 }
 
 a:hover .info {

@@ -3,6 +3,11 @@ app-album {
   display: inline-block;
 }
 
+
+.container-fluid {
+  line-height: 0;
+}
+
 .no-item-msg {
   height: 100vh;
   text-align: center;
