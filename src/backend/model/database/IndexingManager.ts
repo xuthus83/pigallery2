@@ -1,4 +1,4 @@
-import {DirectoryDTOUtils, DirectoryPathDTO, ParentDirectoryDTO} from '../../../common/entities/DirectoryDTO';
+import {DirectoryBaseDTO, DirectoryDTOUtils, DirectoryPathDTO, ParentDirectoryDTO} from '../../../common/entities/DirectoryDTO';
 import {DirectoryEntity} from './enitites/DirectoryEntity';
 import {SQLConnection} from './SQLConnection';
 import {DiskManager} from '../DiskManger';
@@ -261,8 +261,8 @@ export class IndexingManager {
         // directory found
         childDirectories.splice(dirIndex, 1);
       } else {
-        // dir does not exists yet
-        directory.parent = {id: currentDirId} as any;
+        // dir does not exist yet
+        directory.parent = {id: currentDirId} as ParentDirectoryDTO;
         (directory as DirectoryEntity).lastScanned = null; // new child dir, not fully scanned yet
         const d = await directoryRepository.insert(
           directory as DirectoryEntity
@@ -311,7 +311,7 @@ export class IndexingManager {
         item.directory = null;
         metaFile = Utils.clone(item);
         item.directory = scannedDirectory;
-        metaFile.directory = {id: currentDirID} as any;
+        metaFile.directory = {id: currentDirID} as DirectoryBaseDTO;
         metaFilesToSave.push(metaFile);
       }
     }
@@ -374,7 +374,7 @@ export class IndexingManager {
         // Media not in DB yet
         media[i].directory = null;
         mediaItem = Utils.clone(media[i]);
-        mediaItem.directory = {id: parentDirId} as any;
+        mediaItem.directory = {id: parentDirId} as DirectoryBaseDTO;
         (MediaDTOUtils.isPhoto(mediaItem)
             ? mediaChange.insertP
             : mediaChange.insertV

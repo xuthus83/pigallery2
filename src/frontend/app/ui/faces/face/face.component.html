@@ -7,10 +7,10 @@
        [style.height.px]="size">
 
     <div class="photo"
-         *ngIf="thumbnail && thumbnail.Available && false"
+         *ngIf="thumbnail && thumbnail.Available"
          [style.background-image]="getSanitizedThUrl()"></div>
 
-    <ng-icon *ngIf="!thumbnail || !thumbnail.Available || true"
+    <ng-icon *ngIf="!thumbnail || !thumbnail.Available"
              class="no-image" name="ionPersonOutline"></ng-icon>
   </div>
 

@@ -7,7 +7,6 @@ import {SearchQueryDTO} from '../../../common/entities/SearchQueryDTO';
 import {SavedSearchEntity} from './enitites/album/SavedSearchEntity';
 import {Logger} from '../../Logger';
 import {IObjectManager} from './IObjectManager';
-import {DirectoryEntity} from './enitites/DirectoryEntity';
 
 const LOG_TAG = '[AlbumManager]';
 
