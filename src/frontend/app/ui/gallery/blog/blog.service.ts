@@ -3,7 +3,7 @@ import {NetworkService} from '../../../model/network/network.service';
 import {FileDTO} from '../../../../../common/entities/FileDTO';
 import {Utils} from '../../../../../common/Utils';
 import {ContentService} from '../content.service';
-import {mergeMap, Observable} from 'rxjs';
+import {mergeMap, Observable, shareReplay} from 'rxjs';
 import {MDFilesFilterPipe} from '../../../pipes/MDFilesFilterPipe';
 
 @Injectable()
@@ -27,7 +27,7 @@ export class BlogService {
           .map(f => this.splitMarkDown(f, dates));
 
         return (await Promise.all(files)).flat();
-      }));
+      }), shareReplay(1));
   }
 
   private async splitMarkDown(file: FileDTO, dates: number[]): Promise<GroupedMarkdown[]> {

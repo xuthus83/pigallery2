@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs';
+import {Observable, shareReplay} from 'rxjs';
 import {GallerySortingService, GroupedDirectoryContent} from './navigator/sorting.service';
 import {FilterService} from './filter/filter.service';
 import {ContentLoaderService} from './contentLoader.service';
@@ -16,7 +16,7 @@ export class ContentService {
     this.sortedFilteredContent = this.sortingService
       .applySorting(
         this.filterService.applyFilters(this.contentLoaderService.originalContent)
-      );
+      ).pipe(shareReplay(1));
 
   }
 
