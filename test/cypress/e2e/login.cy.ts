@@ -26,8 +26,4 @@ describe('Login', () => {
     });
   });
 
-  it('Should fail', () => {
-    cy.visit('/');
-    cy.get('.does-not-exist', {timeout: 1});
-  });
 });
