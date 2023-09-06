@@ -4,7 +4,6 @@ import {MediaEntity} from './enitites/MediaEntity';
 import {DiskMangerWorker} from '../threading/DiskMangerWorker';
 import {ObjectManagers} from '../ObjectManagers';
 import {DatabaseType} from '../../../common/config/private/PrivateConfig';
-import {SortingMethod} from '../../../common/entities/SortingMethods';
 import {SQLConnection} from './SQLConnection';
 import {SearchQueryDTO, SearchQueryTypes, TextSearch,} from '../../../common/entities/SearchQueryDTO';
 import {DirectoryEntity} from './enitites/DirectoryEntity';
@@ -111,7 +110,7 @@ export class CoverManager implements IObjectManager {
           .limit(1)
           .getOne();
       } catch (e) {
-        Logger.error('Cant get album cover using:', JSON.stringify(album.searchQuery), JSON.stringify(Config.AlbumCover.SearchQuery));
+        Logger.error(LOG_TAG, 'Cant get album cover using:', JSON.stringify(album.searchQuery), JSON.stringify(Config.AlbumCover.SearchQuery));
         throw e;
       }
     }
@@ -120,7 +119,7 @@ export class CoverManager implements IObjectManager {
       try {
         coverMedia = await coverQuery().limit(1).getOne();
       } catch (e) {
-        Logger.error('Cant get album cover using:', JSON.stringify(album.searchQuery));
+        Logger.error(LOG_TAG, 'Cant get album cover using:', JSON.stringify(album.searchQuery));
         throw e;
       }
     }

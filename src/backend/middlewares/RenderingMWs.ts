@@ -9,7 +9,6 @@ import {SharingDTO} from '../../common/entities/SharingDTO';
 import {Utils} from '../../common/Utils';
 import {LoggerRouter} from '../routes/LoggerRouter';
 import {TAGS} from '../../common/config/public/ClientConfig';
-import {ConfigDiagnostics} from '../model/diagnostics/ConfigDiagnostics';
 
 const forcedDebug = process.env['NODE_ENV'] === 'debug';
 

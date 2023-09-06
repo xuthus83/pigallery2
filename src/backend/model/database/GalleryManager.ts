@@ -14,11 +14,10 @@ import {Logger} from '../../Logger';
 import {ObjectManagers} from '../ObjectManagers';
 import {DuplicatesDTO} from '../../../common/entities/DuplicatesDTO';
 import {ReIndexingSensitivity} from '../../../common/config/private/PrivateConfig';
-import {IObjectManager} from './IObjectManager';
 
 const LOG_TAG = '[GalleryManager]';
 
-export class GalleryManager  {
+export class GalleryManager {
   public static parseRelativeDirePath(relativeDirectoryName: string): {
     name: string;
     parent: string;
@@ -177,7 +176,7 @@ export class GalleryManager  {
     let duplicates = await mediaRepository
       .createQueryBuilder('media')
       .innerJoin(
-        (query): any =>
+        (query) =>
           query
             .from(MediaEntity, 'innerMedia')
             .select([
@@ -248,7 +247,7 @@ export class GalleryManager  {
     duplicates = await mediaRepository
       .createQueryBuilder('media')
       .innerJoin(
-        (query): any =>
+        (query) =>
           query
             .from(MediaEntity, 'innerMedia')
             .select([
@@ -319,7 +318,11 @@ export class GalleryManager  {
     dir.isPartial = true;
   }
 
-  protected async getDirIdAndTime(connection: Connection, name: string, path: string): Promise<{ id: number, lastScanned: number, lastModified: number }> {
+  protected async getDirIdAndTime(connection: Connection, name: string, path: string): Promise<{
+    id: number,
+    lastScanned: number,
+    lastModified: number
+  }> {
     return await connection
       .getRepository(DirectoryEntity)
       .createQueryBuilder('directory')
