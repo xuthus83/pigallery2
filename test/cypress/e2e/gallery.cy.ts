@@ -39,7 +39,7 @@ describe('Gallery', () => {
   it('Gallery should show infobar over photo', () => {
     cy.wait('@getContent');
     // contains a folder
-    cy.get(':nth-child(1) > .button > .photo-container');
+    cy.get('app-gallery-directories.directories > app-gallery-directory > .button > .photo-container');
 
 
     for (let i = 0; i < 5; ++i) {
@@ -56,10 +56,10 @@ describe('Gallery', () => {
     cy.get('.photo-container > .info > .photo-keywords a').contains('Alvin the Squirrel');
     cy.get('.photo-container > .info > .photo-keywords a').contains('USA');
   });
-  it('Gallery should open ligthbox', () => {
+  it('Gallery should open lightbox', () => {
     cy.wait('@getContent');
     // contains a folder
-    cy.get(':nth-child(1) > .button > .photo-container');
+    cy.get('app-gallery-directories.directories > app-gallery-directory > .button > .photo-container');
 
 
     for (let i = 0; i < 5; ++i) {
