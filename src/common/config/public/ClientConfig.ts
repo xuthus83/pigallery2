@@ -1056,6 +1056,25 @@ export class ClientGalleryConfig {
     description: $localize`Pigallery2 uses Bootstrap 5.3 (https://getbootstrap.com/docs/5.3) for design (css, layout). In dark mode it sets 'data-bs-theme="dark"' to the <html> to take advantage bootstrap's color modes. For theming, read more at: https://getbootstrap.com/docs/5.3/customize/color-modes/`
   })
   Themes: ThemesConfig = new ThemesConfig();
+  @ConfigProperty({
+    tags: {
+      name: $localize`Inline blog starts open`,
+      priority: ConfigPriority.advanced,
+      githubIssue: 711
+    },
+    description: $localize`Makes inline blog (*.md files content) to be auto open.`
+  })
+  InlineBlogStartsOpen: boolean = false;
+
+  @ConfigProperty({
+    tags: {
+      name: $localize`Top blog starts open`,
+      priority: ConfigPriority.advanced,
+      githubIssue: 711
+    },
+    description: $localize`Makes inline blog (*.md files content) to be auto open.`
+  })
+  TopBlogStartsOpen: boolean = false;
 }
 
 @SubConfigClass({tags: {client: true}, softReadonly: true})

@@ -32,7 +32,7 @@ export class GalleryComponent implements OnInit, OnDestroy {
   public showSearchBar = false;
   public showShare = false;
   public showRandomPhotoBuilder = false;
-  public blogOpen = false;
+  public blogOpen = Config.Gallery.TopBlogStartsOpen;
 
   config = Config;
   public isPhotoWithLocation = false;

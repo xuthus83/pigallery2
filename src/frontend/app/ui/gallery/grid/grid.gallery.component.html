@@ -19,7 +19,7 @@
       </ng-container>
 
       <ng-container *ngIf="group.date">
-        <app-gallery-blog [date]="group.date" [open]="false"></app-gallery-blog>
+        <app-gallery-blog [date]="group.date" [open]="blogOpen"></app-gallery-blog>
       </ng-container>
       <div class="media-grid">
         <app-gallery-grid-photo

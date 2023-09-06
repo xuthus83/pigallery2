@@ -58,6 +58,7 @@ export class GalleryGridComponent
   private helperTime: number = null;
   public renderDelayTimer: number = null; // delays render on resize
   public readonly GroupByTypes = GroupByTypes;
+  public readonly blogOpen = Config.Gallery.InlineBlogStartsOpen;
 
   constructor(
     private overlayService: OverlayService,
