@@ -39,7 +39,7 @@ describe('Gallery', () => {
   it('Gallery should show infobar over photo', () => {
     cy.wait('@getContent');
     // contains a folder
-    cy.get(':nth-child(1) > .button > .photo-container > .photo');
+    cy.get(':nth-child(1) > .button > .photo-container');
 
 
     for (let i = 0; i < 5; ++i) {
@@ -59,7 +59,7 @@ describe('Gallery', () => {
   it('Gallery should open ligthbox', () => {
     cy.wait('@getContent');
     // contains a folder
-    cy.get(':nth-child(1) > .button > .photo-container > .photo');
+    cy.get(':nth-child(1) > .button > .photo-container');
 
 
     for (let i = 0; i < 5; ++i) {
