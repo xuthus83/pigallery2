@@ -38,7 +38,8 @@ export class PersonManager  implements IObjectManager{
       '(Select person_junction_table.id from  media_entity ' +
       'left join person_junction_table on media_entity.id = person_junction_table.mediaId ' +
       'where person_junction_table.personId=person_entry.id ' +
-      'order by media_entity.metadataCreationdate desc ' +
+        'order by media_entity.metadataRating desc, ' +
+        'media_entity.metadataCreationdate desc ' +
       'limit 1)'
     );
   }
