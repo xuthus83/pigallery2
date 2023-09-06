@@ -5,8 +5,11 @@ export default defineConfig({
   e2e: {
     'baseUrl': 'http://localhost:8080',
     experimentalStudio: true,
-    supportFile: 'cypress/support/e2e.ts',
-    specPattern:'cypress/e2e/**/*.cy.ts'
+    supportFile: 'test/cypress/support/e2e.ts',
+    specPattern:'test/cypress/e2e/**/*.cy.ts',
+    fixturesFolder:false,
+    screenshotsFolder:'test/cypress/screenshots',
+    downloadsFolder:'test/cypress/downloads',
   },
 
   component: {

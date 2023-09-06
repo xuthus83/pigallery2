@@ -27,3 +27,4 @@ ffmpeg/
 locale.source.xlf
 test.*
 /db/
+/test/cypress/screenshots/
