@@ -68,7 +68,7 @@ describe('Gallery', () => {
 
     cy.get('.photo-container > img[alt="IMG_5910.jpg"]').click({scrollBehavior: 'center'});
     cy.get('app-lightbox-controls > #controllers-container > .controls-caption').contains('Squirrel at berkely');
-    cy.get('app-lightbox-controls > .faces-container > .face > .face-name').contains('Alvin the Squirrel');
+    cy.get('app-lightbox-controls  .faces-container > .face > .face-name').contains('Alvin the Squirrel');
 
   });
 });
