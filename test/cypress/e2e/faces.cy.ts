@@ -17,7 +17,7 @@ describe('Faces', () => {
   it('Show faces', () => {
     cy.wait('@getPerson', {timeout: 10000});
     // contains a folder
-    cy.get('app-face  a > .info').contains('Alvin the Squirrel').should('exist');
+    cy.get('app-face  a > .info', {timeout: 10000}).contains('Alvin the Squirrel').should('exist');
   });
   it('Faces should have photos', () => {
     cy.wait('@getPerson', {timeout: 10000});
