@@ -101,7 +101,6 @@ export class BlogService {
     }
 
     ret.forEach(md => md.textShort = md.text.substring(0, 200));
-    console.log(ret);
     return ret;
   }
 
