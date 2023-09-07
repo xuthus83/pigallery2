@@ -19,7 +19,7 @@
 
 .controls-background {
   display: inline-block;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba(var(--bs-body-bg-rgb),0.2);
 }
 
 .sebm-google-map-container {
@@ -55,14 +55,18 @@
   text-align: right;
   width: 100%;
   font-size: large;
+  line-height: 0;
 }
 
-#controls span {
-  margin-left: 6px;
-  margin-right: 6px;
-  color: black;
-  cursor: pointer;
+#controls ng-icon {
+  vertical-align: middle;
 }
+
+#controls ng-icon ::ng-deep svg {
+  vertical-align: top;
+}
+
+
 
 #controls .control-button {
   margin-left: 0.1em;

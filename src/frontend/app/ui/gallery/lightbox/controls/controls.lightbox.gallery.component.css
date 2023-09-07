@@ -88,6 +88,7 @@
   position: absolute;
   z-index: 4;
   top: 0;
+  line-height: 0;
 }
 .controls-top ng-icon {
   vertical-align: middle;
