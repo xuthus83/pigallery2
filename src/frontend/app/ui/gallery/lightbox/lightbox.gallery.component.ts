@@ -19,8 +19,9 @@ import {PiTitleService} from '../../../model/pi-title.service';
 
 export enum LightboxStates {
   Open = 1,
-  Closing = 2,
-  Closed = 3,
+  Opening = 2,
+  Closing = 3,
+  Closed = 4,
 }
 
 @Component({
@@ -220,7 +221,7 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
     if (this.controls) {
       this.controls.resetZoom();
     }
-    this.status = LightboxStates.Open;
+    this.status = LightboxStates.Opening;
     const selectedPhoto = this.findPhotoComponent(photo);
     if (selectedPhoto === null) {
       throw new Error('Can\'t find Photo');
@@ -234,6 +235,7 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
       this.calcLightBoxPhotoDimension(selectedPhoto.gridMedia.media)
     ).onDone((): void => {
       this.animating = false;
+      this.status = LightboxStates.Open;
     });
     this.animateLightbox(lightboxDimension, {
       top: 0,
