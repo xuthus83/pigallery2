@@ -265,7 +265,7 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
     const elem = this.builder
       .build([
         style(DimensionUtils.toString(from)),
-        animate(300, style(DimensionUtils.toString(to))),
+        animate('0.2s ease-in-out', style(DimensionUtils.toString(to))),
       ])
       .create(this.mediaElement.elementRef.nativeElement);
     elem.play();
@@ -285,7 +285,7 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
     const elem = this.builder
       .build([
         style(DimensionUtils.toString(from)),
-        animate(300, style(DimensionUtils.toString(to))),
+        animate('0.2s ease-in-out', style(DimensionUtils.toString(to))),
       ])
       .create(this.lightboxElement.nativeElement);
     elem.play();
