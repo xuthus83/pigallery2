@@ -1,6 +1,6 @@
 <div #navigator class="container-fluid pt-1 pb-1 pe-0 ps-0 bg-body-secondary">
   <nav class="d-md-flex row" aria-label="breadcrumb">
-    <div class="col-12 col-md-auto">
+    <div class="col-auto">
       <ol *ngIf="isDirectory" id="directory-path" class="mb-0 mt-1 breadcrumb">
         <li *ngFor="let path of routes | async" class="breadcrumb-item">
           <a *ngIf="path.route" [routerLink]="['/gallery',path.route]"
@@ -18,7 +18,7 @@
       </ol>
 
     </div>
-    <div class="ms-auto text-end col-12 col-md-auto">
+    <div class="ms-auto text-end col-auto">
       <ng-container *ngIf="ItemCount> 0 && config.Gallery.NavBar.showItemCount">
         <div class="photos-count">
           {{ItemCount}} <span i18n>items</span>
