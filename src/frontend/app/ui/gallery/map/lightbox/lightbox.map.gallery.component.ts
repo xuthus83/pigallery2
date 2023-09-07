@@ -614,14 +614,8 @@ export class GalleryMapLightboxComponent implements OnChanges, OnDestroy {
       return;
     }
 
-    // eslint-disable-next-line @typescript-eslint/prefer-for-of
-    for (let i = 0; i < this.gpxFiles.length; i++) {
-      const file = this.gpxFiles[i];
+    const loadAFile = async (file: FileDTO) => {
       const parsedGPX = await this.mapService.getMapCoordinates(file);
-      if (file !== this.gpxFiles[i]) {
-        // check race condition
-        return;
-      }
 
       let pathLayer: { layer: LayerGroup, icon?: DivIcon, theme?: { color?: string, dashArray?: string } };
       for (const pl of this.pathLayersConfigOrdered) {
@@ -675,7 +669,9 @@ export class GalleryMapLightboxComponent implements OnChanges, OnDestroy {
         pathLayer.layer.addLayer(mkr);
         mkr.bindPopup($localize`Latitude` + ': ' + mc.lat + ', ' + $localize`longitude` + ': ' + mc.lng);
       });
-    }
+    };
+
+    await Promise.all(this.gpxFiles.map(f => loadAFile(f)));
 
     // Add layer to the map
     this.pathLayersConfigOrdered.filter(pl => pl.layer.getLayers().length > 0).forEach((pl) => {
