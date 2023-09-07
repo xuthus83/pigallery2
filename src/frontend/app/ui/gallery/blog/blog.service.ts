@@ -16,18 +16,18 @@ export class BlogService {
               private mdFilesFilterPipe: MDFilesFilterPipe) {
 
     this.groupedMarkdowns = this.galleryService.sortedFilteredContent.pipe(
-        mergeMap(async content => {
-          if (!content) {
-            return [];
-          }
-          const dates = content.mediaGroups.map(g => g.date)
-              .filter(d => !!d).map(d => d.getTime());
+      mergeMap(async content => {
+        if (!content) {
+          return [];
+        }
+        const dates = content.mediaGroups.map(g => g.date)
+          .filter(d => !!d).map(d => d.getTime());
 
-          const files = this.mdFilesFilterPipe.transform(content.metaFile)
-              .map(f => this.splitMarkDown(f, dates));
+        const files = this.mdFilesFilterPipe.transform(content.metaFile)
+          .map(f => this.splitMarkDown(f, dates));
 
-          return (await Promise.all(files)).flat();
-        }), shareReplay(1));
+        return (await Promise.all(files)).flat();
+      }), shareReplay(1));
   }
 
   private async splitMarkDown(file: FileDTO, dates: number[]): Promise<GroupedMarkdown[]> {
@@ -40,7 +40,8 @@ export class BlogService {
     if (dates.length == 0) {
       return [{
         text: markdown,
-        file: file
+        file: file,
+        textShort: markdown.substring(0, 200)
       }];
     }
 
@@ -55,7 +56,8 @@ export class BlogService {
     if (matches.length == 0) {
       return [{
         text: markdown,
-        file: file
+        file: file,
+        textShort: markdown.substring(0, 200)
       }];
     }
 
@@ -99,19 +101,19 @@ export class BlogService {
     }
 
     ret.forEach(md => md.textShort = md.text.substring(0, 200));
-
+    console.log(ret);
     return ret;
   }
 
   public getMarkDown(file: FileDTO): Promise<string> {
     const filePath = Utils.concatUrls(
-        file.directory.path,
-        file.directory.name,
-        file.name
+      file.directory.path,
+      file.directory.name,
+      file.name
     );
     if (!this.cache[filePath]) {
       this.cache[filePath] = this.networkService.getText(
-          '/gallery/content/' + filePath
+        '/gallery/content/' + filePath
       );
       (this.cache[filePath] as Promise<string>).then((val: string) => {
         this.cache[filePath] = val;
