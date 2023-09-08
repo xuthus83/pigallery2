@@ -111,10 +111,14 @@ export class ContentLoaderService {
         cw = await this.networkService.getJson<ContentWrapperWithError>('/search/' + query);
         this.galleryCacheService.setSearch(cw);
       } catch (e) {
+        cw = cw || {
+          directory: null,
+          searchResult: null
+        };
         if (e.code === ErrorCodes.LocationLookUp_ERROR) {
-          cw.error = 'Cannot find location: ' + e.message;
+          cw.error = $localize`Cannot find location` + ': ' + e.message;
         } else {
-          throw e;
+          cw.error = $localize`Unknown server error` + ': ' + e.message;
         }
       }
     }

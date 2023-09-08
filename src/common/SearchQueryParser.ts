@@ -173,7 +173,11 @@ export class SearchQueryParser {
 
 
     const intFromRegexp = (str: string) => {
-      return parseInt(new RegExp(/\d+/).exec(str)[0], 10);
+      const numSTR = new RegExp(/\d+/).exec(str);
+      if (!numSTR) {
+        return 0;
+      }
+      return parseInt(numSTR[0], 10);
     };
     if (str.charAt(0) === '(' && str.charAt(str.length - 1) === ')') {
       str = str.slice(1, str.length - 1);

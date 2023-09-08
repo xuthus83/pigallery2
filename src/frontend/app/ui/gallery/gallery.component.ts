@@ -13,12 +13,11 @@ import {PhotoDTO} from '../../../../common/entities/PhotoDTO';
 import {QueryParams} from '../../../../common/QueryParams';
 import {take} from 'rxjs/operators';
 import {GallerySortingService, GroupedDirectoryContent} from './navigator/sorting.service';
-import {MediaDTO} from '../../../../common/entities/MediaDTO';
 import {FilterService} from './filter/filter.service';
 import {PiTitleService} from '../../model/pi-title.service';
 import {GPXFilesFilterPipe} from '../../pipes/GPXFilesFilterPipe';
 import {MDFilesFilterPipe} from '../../pipes/MDFilesFilterPipe';
-import { ContentLoaderService,ContentWrapperWithError } from './contentLoader.service';
+import {ContentLoaderService, ContentWrapperWithError} from './contentLoader.service';
 
 @Component({
   selector: 'app-gallery',

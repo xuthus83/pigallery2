@@ -9,14 +9,14 @@ import {PhotoDTO} from './PhotoDTO';
 
 
 export class ContentWrapper {
-  private map: {
+  private map?: {
     faces: string[],
     keywords: string[],
     lens: string[],
     camera: string[],
     directories: DirectoryPathDTO[]
   };
-  private reverseMap: {
+  private reverseMap?: {
     faces: Map<string, number>,
     keywords: Map<string, number>,
     lens: Map<string, number>,
@@ -25,7 +25,7 @@ export class ContentWrapper {
   };
   public directory: ParentDirectoryDTO;
   public searchResult: SearchResultDTO;
-  public notModified: boolean;
+  public notModified?: boolean;
 
   constructor(
     directory: ParentDirectoryDTO = null,
