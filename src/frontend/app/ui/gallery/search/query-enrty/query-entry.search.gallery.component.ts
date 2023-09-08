@@ -1,4 +1,4 @@
-import {Component, EventEmitter, forwardRef, Output} from '@angular/core';
+import {Component, EventEmitter, forwardRef, Input, Output} from '@angular/core';
 import {
   DatePatternFrequency,
   DatePatternSearch,
@@ -42,6 +42,7 @@ export class GallerySearchQueryEntryComponent
   public DatePatternFrequency = DatePatternFrequency;
   public TextSearchQueryMatchTypes = TextSearchQueryMatchTypes;
   @Output() delete = new EventEmitter<void>();
+  @Input() id = 'NA';
 
   constructor() {
     this.SearchQueryTypesEnum = Utils.enumToArray(SearchQueryTypes);

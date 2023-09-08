@@ -49,6 +49,7 @@ export class GallerySearchFieldBaseComponent
   };
   private autoCompleteItemsSubscription: Subscription = null;
   private autoCompleteItems: BehaviorSubject<RenderableAutoCompleteItem[]>;
+  inFocus: boolean;
 
   constructor(
     private autoCompleteService: AutoCompleteService,
@@ -68,6 +69,7 @@ export class GallerySearchFieldBaseComponent
       return '';
     }
     if (
+      !this.inFocus ||
       !this.autoCompleteItems ||
       !this.autoCompleteItems.value ||
       this.autoCompleteItems.value.length === 0
@@ -130,7 +132,12 @@ export class GallerySearchFieldBaseComponent
     this.mouseOverAutoComplete = value;
   }
 
+  onFocus(): void {
+    this.inFocus = true;
+  }
+
   public onFocusLost(): void {
+    this.inFocus = false;
     if (this.mouseOverAutoComplete === false) {
       this.autoCompleteRenders = [];
     }
@@ -160,6 +167,7 @@ export class GallerySearchFieldBaseComponent
         0,
         this.rawSearchText.length - token.current.length
       ) + item.queryHint;
+    console.log('aa');
     this.onChange();
     this.emptyAutoComplete();
   }
@@ -299,5 +307,6 @@ export class GallerySearchFieldBaseComponent
   // eslint-disable-next-line @typescript-eslint/no-unused-vars,@typescript-eslint/no-empty-function
   private propagateTouch = (_: never): void => {
   };
+
 }
 

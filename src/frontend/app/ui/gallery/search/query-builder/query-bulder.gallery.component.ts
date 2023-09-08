@@ -2,6 +2,7 @@ import {Component, EventEmitter, forwardRef, Input, Output,} from '@angular/core
 import {SearchQueryDTO, SearchQueryTypes, TextSearch,} from '../../../../../../common/entities/SearchQueryDTO';
 import {ControlValueAccessor, NG_VALIDATORS, NG_VALUE_ACCESSOR, UntypedFormControl, ValidationErrors, Validator,} from '@angular/forms';
 import {SearchQueryParserService} from '../search-query-parser.service';
+import {Utils} from '../../../../../../common/Utils';
 
 @Component({
   selector: 'app-gallery-search-query-builder',
@@ -34,10 +35,15 @@ export class GallerySearchQueryBuilderComponent
   }
 
   validateRawSearchText(): void {
+
     try {
-      this.searchQueryDTO = this.searchQueryParserService.parse(
+      const newDTO = this.searchQueryParserService.parse(
         this.rawSearchText
       );
+      if (Utils.equalsFilter(this.searchQueryDTO, newDTO)) {
+        return;
+      }
+      this.searchQueryDTO = newDTO;
       this.onChange();
     } catch (e) {
       console.error(e);
@@ -61,6 +67,17 @@ export class GallerySearchQueryBuilderComponent
   }
 
   public writeValue(obj: any): void {
+    try {
+      // do not trigger change if nothing changed
+      if (Utils.equalsFilter(this.searchQueryDTO, obj) &&
+        Utils.equalsFilter(this.searchQueryParserService.parse(
+          this.rawSearchText
+        ), obj)) {
+        return;
+      }
+    }catch (e) {
+      // if cant parse they are not the same
+    }
     this.searchQueryDTO = obj;
     this.rawSearchText = this.searchQueryParserService.stringify(
       this.searchQueryDTO
@@ -76,6 +93,14 @@ export class GallerySearchQueryBuilderComponent
   }
 
   public onChange(): void {
+    try {
+      if (Utils.equalsFilter(this.searchQueryParserService.parse(this.rawSearchText), this.searchQueryDTO)) {
+        this.propagateChange(this.searchQueryDTO);
+        return;
+      }
+    }catch (e) {
+      // if cant parse they are not the same
+    }
     this.rawSearchText = this.searchQueryParserService.stringify(
       this.searchQueryDTO
     );

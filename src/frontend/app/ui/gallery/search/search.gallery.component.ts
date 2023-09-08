@@ -11,6 +11,7 @@ import {AlbumsService} from '../../albums/albums.service';
 import {Config} from '../../../../../common/config/public/Config';
 import {UserRoles} from '../../../../../common/entities/UserDTO';
 import {AuthenticationService} from '../../../model/network/authentication.service';
+import {Utils} from '../../../../../common/Utils';
 
 @Component({
   selector: 'app-gallery-search',
@@ -102,11 +103,14 @@ export class GallerySearchComponent implements OnDestroy {
     this.saveSearchModalRef = null;
   }
 
-  onQueryChange(): void {
+  public onQueryChange(): void {
+    if (Utils.equalsFilter(this.searchQueryParserService.parse(this.rawSearchText), this.searchQueryDTO)) {
+      return;
+    }
+
     this.rawSearchText = this.searchQueryParserService.stringify(
       this.searchQueryDTO
     );
-    // this.validateRawSearchText();
   }
 
   validateRawSearchText(): void {

@@ -29,7 +29,7 @@
         name="search-query-builder"
         [(ngModel)]="searchQueryDTO"
         [placeholder]="placeholder"
-        (change)="onQueryChange()"
+        (ngModelChange)="onQueryChange()"
         (search)="search.emit()">
       </app-gallery-search-query-builder>
 

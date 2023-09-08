@@ -41,7 +41,7 @@ export class AdminComponent implements OnInit, AfterViewInit {
     this.configStyles = enumToTranslatedArray(ConfigStyle);
     const wc = WebConfigClassBuilder.attachPrivateInterface(new WebConfig());
     this.configPaths = Object.keys(wc.State)
-      .filter(s => !wc.__state[s].volatile);
+      .filter(s => !wc.__state[s].volatile && s === 'Jobs');
   }
 
   ngAfterViewInit(): void {

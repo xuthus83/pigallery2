@@ -1,10 +1,11 @@
-import {Component, EventEmitter, forwardRef, Input, Output,TemplateRef} from '@angular/core';
+import {Component, EventEmitter, forwardRef, Input, Output, TemplateRef} from '@angular/core';
 import {Router, RouterLink} from '@angular/router';
 import {AutoCompleteService} from '../autocomplete.service';
 import {SearchQueryDTO} from '../../../../../../common/entities/SearchQueryDTO';
-import {ControlValueAccessor, UntypedFormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator,} from '@angular/forms';
+import {ControlValueAccessor, NG_VALIDATORS, NG_VALUE_ACCESSOR, UntypedFormControl, ValidationErrors, Validator,} from '@angular/forms';
 import {SearchQueryParserService} from '../search-query-parser.service';
 import {BsModalRef, BsModalService,} from '../../../../../../../node_modules/ngx-bootstrap/modal';
+import {Utils} from '../../../../../../common/Utils';
 
 @Component({
   selector: 'app-gallery-search-field',
@@ -58,6 +59,16 @@ export class GallerySearchFieldComponent
   }
 
   public writeValue(obj: SearchQueryDTO): void {
+    try {
+      if (Utils.equalsFilter(this.searchQueryDTO, obj) &&
+        Utils.equalsFilter(this.searchQueryParserService.parse(
+          this.rawSearchText
+        ), obj)) {
+        return;
+      }
+    } catch (e) {
+      // if cant parse they are not the same
+    }
     this.searchQueryDTO = obj;
     this.rawSearchText = this.searchQueryParserService.stringify(
       this.searchQueryDTO
@@ -81,9 +92,18 @@ export class GallerySearchFieldComponent
   }
 
   onQueryChange(): void {
+    try {
+      if (Utils.equalsFilter(this.searchQueryParserService.parse(this.rawSearchText), this.searchQueryDTO)) {
+        this.onChange();
+        return;
+      }
+    } catch (e) {
+      // if cant parse they are not the same
+    }
     this.rawSearchText = this.searchQueryParserService.stringify(
       this.searchQueryDTO
     );
+
     this.onChange();
   }
 

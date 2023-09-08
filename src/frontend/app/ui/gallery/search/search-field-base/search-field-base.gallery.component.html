@@ -4,6 +4,7 @@
          [placeholder]="placeholder"
          (keyup)="onSearchChange($event)"
          (blur)="onFocusLost()"
+         (focus)="onFocus()"
          [(ngModel)]="rawSearchText"
          (ngModelChange)="onChange()"
          (keydown.enter)="OnEnter($event)"

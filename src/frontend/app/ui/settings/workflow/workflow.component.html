@@ -41,12 +41,13 @@
 
         <div class="col-md-12">
           <div class="mb-1 row">
-            <label class="col-md-2 control-label" [for]="'jobName'+i" i18n>Job:</label>
+            <label class="col-md-2 control-label" i18n>Job:</label>
             <div class="col-md-4">
               {{backendTextService.getJobName(schedule.jobName)}}
             </div>
             <div class="col-md-6">
               <app-settings-job-button class="float-end"
+                                       [id]="'jobName'+i"
                                        [jobName]="schedule.jobName"
                                        [allowParallelRun]="schedule.allowParallelRun"
                                        (jobError)="error=$event"
@@ -59,7 +60,9 @@
             <div class="col-md-10">
               <select class="form-select" [(ngModel)]="schedule.trigger.type"
                       (ngModelChange)="jobTriggerTypeChanged($event,schedule); onChange($event);"
-                      [name]="'repeatType'+i" required>
+                      [name]="'repeatType'+i"
+                      [id]="'repeatType'+i"
+                      required>
                 <option *ngFor="let jobTrigger of JobTriggerTypeMap"
                         [ngValue]="jobTrigger.key">{{jobTrigger.value}}
                 </option>
@@ -78,7 +81,8 @@
               <select class="form-select"
                       [(ngModel)]="schedule.trigger.afterScheduleName"
                       (ngModelChange)="onChange($event)"
-                      [name]="'triggerAfter'+i" required>
+                      [name]="'triggerAfter'+i"
+                      [id]="'triggerAfter'+i" required>
                 <ng-container *ngFor="let sch of sortedSchedules">
                   <option *ngIf="sch.name !== schedule.name"
                           [ngValue]="sch.name">{{sch.name}}
@@ -99,6 +103,7 @@
             <div class="col-md-10">
               <app-timestamp-datepicker
                 [name]="'triggerTime'+i"
+                [id]="'triggerTime'+i"
                 (timestampChange)="onChange($event)"
                 [(timestamp)]="schedule.trigger.time"></app-timestamp-datepicker>
             </div>
@@ -114,6 +119,7 @@
                 [(ngModel)]="schedule.trigger.periodicity"
                 (ngModelChange)="onChange($event)"
                 [name]="'periodicity' + i"
+                [id]="'periodicity' + i"
                 required>
                 <option *ngFor="let period of periods; let i = index"
                         [ngValue]="i">
@@ -292,7 +298,7 @@
                       <div class="mb-1 row"
                            [class.mb-3]="settingsService.configStyle == ConfigStyle.full">
                         <label class="col-md-2 control-label"
-                               [for]="configEntry.id+'_'+i" i18n>Pick</label>
+                               [for]="configEntry.id+'_'+i+'_'+j" i18n>Pick</label>
                         <div class="col-md-10">
                           <div class="input-group">
                             <input type="number" class="form-control" [name]="configEntry.id+'_'+i+'_'+j"
