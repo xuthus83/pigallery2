@@ -758,8 +758,8 @@ export class SearchManager {
             tq.frequency === DatePatternFrequency.weeks_ago ||
             tq.frequency === DatePatternFrequency.days_ago)) {
 
-            if (!tq.agoNumber) {
-              throw new Error('ago number is missing on date patter search query with frequency: ' + DatePatternFrequency[tq.frequency]);
+            if (isNaN(tq.agoNumber)) {
+              throw new Error('ago number is missing on date patter search query with frequency: ' + DatePatternFrequency[tq.frequency] + ', ago number: ' + tq.agoNumber);
             }
             const to = new Date();
             to.setHours(0, 0, 0, 0);

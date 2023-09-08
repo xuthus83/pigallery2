@@ -394,7 +394,7 @@ export class SearchQueryParser {
             str.startsWith(this.keywords.sameDay + '!:')) && {
             negate: true
           }),
-          ...(ago && {agoNumber: ago})
+          ...(!isNaN(ago) && {agoNumber: ago})
         } as DatePatternSearch;
       }
     }

@@ -136,6 +136,11 @@ describe('SearchQueryParser', () => {
         check({
           type: SearchQueryTypes.date_pattern, daysLength: i,
           frequency: DatePatternFrequency.days_ago,
+          agoNumber: 0
+        } as DatePatternSearch);
+        check({
+          type: SearchQueryTypes.date_pattern, daysLength: i,
+          frequency: DatePatternFrequency.days_ago,
           agoNumber: 1
         } as DatePatternSearch);
         check({
