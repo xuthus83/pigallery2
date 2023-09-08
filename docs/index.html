@@ -131,12 +131,12 @@
           before:2021<br/>
           orientation:portrait<br/>
           orientation:landscape<br/>
-          maxRating:1<br/>
-          maxRating:5<br/>
-          minResolution:1<br/>
-          maxResolution:10<br/>
-          minResolution:1<br/>
-          maxResolution:10<br/>
+          max-rating:1<br/>
+          max-rating:5<br/>
+          min-resolution:1<br/>
+          max-resolution:10<br/>
+          min-faces:1<br/>
+          max-faces:10<br/>
 
           keyword:"house"<br/>
           caption:"caption"<br/>
@@ -145,8 +145,16 @@
           person:"John",<br/>
           position:"USA" # use city, state, country names<br/>
           5-km-from:(New York) # photos 5 km from the center of New York <br/>
-          any_text:"apple", # searches for apple everywhere, "any_text:" can be omitted
+          any_text:"apple", # searches for apple everywhere, "any_text:" can be omitted <br/>
+          last-4-days:every-week <br/>
+          last-4-days:every-month <br/>
+          last-4-days:every-year <br/>
+          last-4-days:2-days-ago <br/>
+          last-4-days:2-weeks-ago <br/>
+          last-4-days:2-months-ago <br/>
+          last-4-days:2-years-ago <br/>
         </code>
+        See all here: <a href="https://github.com/bpatrik/pigallery2/blob/5368b4ed4e1a61097dbc88aa076aaf9c21524a8d/src/frontend/app/ui/gallery/search/search-query-parser.service.ts#L9">search-query-parser.service.ts</a>.
         <p/>
         <h5>Bool expressions</h5>
         <code class="code-block p-2 text-light rounded bg-secondary d-block">
