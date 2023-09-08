@@ -7,6 +7,7 @@ import {ObjectManagers} from '../../ObjectManagers';
 import {PhotoEntity} from '../../database/enitites/PhotoEntity';
 import {EmailMediaMessenger} from '../../mediamessengers/EmailMediaMessenger';
 import {MediaPickDTO} from '../../../../common/entities/MediaPickDTO';
+import {MediaDTOUtils} from '../../../../common/entities/MediaDTO';
 
 
 export class TopPickSendJob extends Job<{
@@ -83,10 +84,16 @@ export class TopPickSendJob extends Job<{
     this.Progress.log('Collecting Photos and videos to Send.');
     this.mediaList = [];
     for (let i = 0; i < this.config.mediaPick.length; ++i) {
-      const media = await ObjectManagers.getInstance().SearchManager.getNMedia(this.config.mediaPick[i].searchQuery, this.config.mediaPick[i].sortBy, this.config.mediaPick[i].pick);
+      const media = await ObjectManagers.getInstance().SearchManager
+        .getNMedia(this.config.mediaPick[i].searchQuery, this.config.mediaPick[i].sortBy, this.config.mediaPick[i].pick);
       this.Progress.log('Find ' + media.length + ' photos and videos from ' + (i + 1) + '. load');
       this.mediaList = this.mediaList.concat(media);
     }
+
+    // make the list unique
+    this.mediaList = this.mediaList
+      .filter((value, index, arr) =>
+        arr.findIndex(m => MediaDTOUtils.equals(m, value)) === index);
 
     this.Progress.Processed++;
     // console.log(this.mediaList);

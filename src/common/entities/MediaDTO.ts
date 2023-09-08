@@ -73,4 +73,10 @@ export const MediaDTOUtils = {
   calcAspectRatio: (photo: MediaDTO): number => {
     return (photo.metadata.size.width / photo.metadata.size.height) || 1; // NaN should be treated as square photo
   },
+
+  equals: (a: MediaDTO, b: MediaDTO): boolean => {
+    return a.directory.path === b.directory.path &&
+      a.directory.name === b.directory.name &&
+      a.name === b.name;
+  }
 };
