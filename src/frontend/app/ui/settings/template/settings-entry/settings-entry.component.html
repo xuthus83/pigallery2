@@ -10,8 +10,8 @@
        [class.changed-settings]="changed"
        [class.docker-warning]="dockerWarning"
        [hidden]="shouldHide">
-    <label class="col-md-2 control-label" [for]="idName">{{name}}</label>
-    <div class="col-md-10">
+    <label class="col-sm-3 col-md-2 control-label" [for]="idName">{{name}}</label>
+    <div class="col-12 col-sm">
 
       <div class="input-group" [ngSwitch]="uiType">
         <app-gallery-search-field
