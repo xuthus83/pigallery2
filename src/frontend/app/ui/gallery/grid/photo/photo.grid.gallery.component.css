@@ -19,6 +19,10 @@ img {
   vertical-align: unset;
 }
 
+img.loading{
+  background: var(--item-background) ;
+}
+
 @keyframes fadein {
   from {
     opacity: 0;

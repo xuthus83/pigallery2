@@ -1,7 +1,7 @@
 .static {
   width: 100%;
   height: 100%;
-  background-color: #bbbbbb;
+  background-color: var(--item-background);
   color: #7f7f7f;
   font-size: 50px;
 }
@@ -23,7 +23,7 @@
 .sk-cube-grid .sk-cube {
   width: calc(100% / 3);
   height: calc(100% / 3);
-  background-color: #bbbbbb;
+  background-color: var(--item-background);
   float: left;
 }
 

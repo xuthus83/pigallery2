@@ -29,6 +29,7 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, OnDestroy {
   searchEnabled = true;
 
   wasInView: boolean = null;
+  loaded = false;
 
   constructor(
     private thumbnailService: ThumbnailManagerService,
