@@ -144,6 +144,7 @@ export class ImageRendererFactory {
       const svg_buffer = Buffer.from((input as SvgRendererInput).svgString);
       image = sharp(svg_buffer, { density: 450 });
     }
+    image.rotate();
     const metadata: Metadata = await image.metadata();
     const kernel =
       input.useLanczos3 === true
@@ -171,14 +172,14 @@ export class ImageRendererFactory {
       });
     }
     if ((input as MediaRendererInput).mediaPath) {
-      await image.rotate().webp({
+      await image.webp({
         effort: 6,
         quality: input.quality,
         smartSubsample: (input as MediaRendererInput).smartSubsample
       }).toFile(input.outPath);
     } else {
       if ((input as SvgRendererInput).svgString) {
-        await image.rotate().png({effort: 6, quality: input.quality}).toFile(input.outPath);
+        await image.png({effort: 6, quality: input.quality}).toFile(input.outPath);
       }
     }
 
