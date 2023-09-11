@@ -5,6 +5,7 @@ import {Utils} from '../../../../../common/Utils';
 import {ContentService} from '../content.service';
 import {mergeMap, Observable, shareReplay} from 'rxjs';
 import {MDFilesFilterPipe} from '../../../pipes/MDFilesFilterPipe';
+import {MDFileDTO} from '../../../../../common/entities/MDFileDTO';
 
 @Injectable()
 export class BlogService {
@@ -23,14 +24,17 @@ export class BlogService {
         const dates = content.mediaGroups.map(g => g.date)
           .filter(d => !!d).map(d => d.getTime());
 
+        const firstMedia = content.mediaGroups[0].media.reduce((p, m) =>
+                Math.min(m.metadata.creationDate, p), Number.MAX_SAFE_INTEGER);
+
         const files = this.mdFilesFilterPipe.transform(content.metaFile)
-          .map(f => this.splitMarkDown(f, dates));
+          .map(f => this.splitMarkDown(f, dates, firstMedia));
 
         return (await Promise.all(files)).flat();
       }), shareReplay(1));
   }
 
-  private async splitMarkDown(file: FileDTO, dates: number[]): Promise<GroupedMarkdown[]> {
+  private async splitMarkDown(file: MDFileDTO, dates: number[], firstMedia: number): Promise<GroupedMarkdown[]> {
     const markdown = (await this.getMarkDown(file)).trim();
 
     if (!markdown) {
@@ -61,13 +65,33 @@ export class BlogService {
       }];
     }
 
+    const getDateGroup = (dateNum: number) => {
+      let groupDate = dates.find((d, i) => i > dates.length - 1 ? false : dates[i + 1] > dateNum);   //dates are sorted
+
+      // cant find the date. put to the last group (as it was later)
+      if (groupDate === undefined) {
+        groupDate = dates[dates.length - 1];
+      }
+      return groupDate;
+    };
+
+
     const baseText = markdown.substring(0, matches[0].index).trim();
+
     // don't show empty
     if (baseText) {
-      ret.push({
-        text: baseText,
-        file: file
-      });
+      if (file.date === firstMedia) {
+        ret.push({
+          text: baseText,
+          file: file
+        });
+      } else {
+        ret.push({
+          text: baseText,
+          file: file,
+          date: getDateGroup(file.date)
+        });
+      }
     }
 
     for (let i = 0; i < matches.length; ++i) {
@@ -75,12 +99,8 @@ export class BlogService {
       // get UTC midnight date
       const dateNum = Utils.makeUTCMidnight(new Date(matchedStr.match(dateRgx)[0])).getTime();
 
-      let groupDate = dates.find((d, i) => i > dates.length - 1 ? false : dates[i + 1] > dateNum);   //dates are sorted
+      const groupDate = getDateGroup(dateNum);
 
-      // cant find the date. put to the last group (as it was later)
-      if (groupDate === undefined) {
-        groupDate = dates[dates.length - 1];
-      }
       const text = (i + 1 >= matches.length ? markdown.substring(matches[i].index) : markdown.substring(matches[i].index, matches[i + 1].index)).trim();
 
       // don't show empty
