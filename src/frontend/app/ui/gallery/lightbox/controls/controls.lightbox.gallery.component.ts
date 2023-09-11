@@ -177,11 +177,11 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
     this.prevZoom = this.zoom;
   }
 
-  tap($event: { tapCount: number }): void {
+  tap($event: Event): void {
     if (!this.activePhoto || this.activePhoto.gridMedia.isVideo()) {
       return;
     }
-    if ($event.tapCount < 2) {
+    if (($event as unknown as { tapCount: number }).tapCount < 2) {
       return;
     }
 

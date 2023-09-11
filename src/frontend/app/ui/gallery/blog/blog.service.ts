@@ -24,8 +24,12 @@ export class BlogService {
           const dates = content.mediaGroups.map(g => g.date)
               .filter(d => !!d).map(d => d.getTime());
 
-          const firstMedia = content.mediaGroups[0].media.reduce((p, m) =>
-              Math.min(m.metadata.creationDate, p), Number.MAX_SAFE_INTEGER);
+
+          let firstMedia = Number.MAX_SAFE_INTEGER;
+          if (content.mediaGroups.length > 0) {
+            firstMedia = content.mediaGroups[0].media.reduce((p, m) =>
+                Math.min(m.metadata.creationDate, p), Number.MAX_SAFE_INTEGER);
+          }
 
           const files = this.mdFilesFilterPipe.transform(content.metaFile)
               .map(f => this.splitMarkDown(f, dates, firstMedia));
