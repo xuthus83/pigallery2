@@ -147,6 +147,8 @@ describe('CoverManager', (sqlHelper: DBTestHelper) => {
     delete (ret.directory as DirectoryBaseDTO).lastScanned;
     delete (ret.directory as DirectoryBaseDTO).lastModified;
     delete (ret.directory as DirectoryBaseDTO).mediaCount;
+    delete (ret.directory as DirectoryBaseDTO).youngestMedia;
+    delete (ret.directory as DirectoryBaseDTO).oldestMedia;
     delete (ret as PhotoDTO).metadata;
     tmpDir.directories = tmpD;
     tmpDir.media = tmpM;

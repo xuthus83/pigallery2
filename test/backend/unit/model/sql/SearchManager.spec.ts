@@ -229,6 +229,8 @@ describe('SearchManager', (sqlHelper: DBTestHelper) => {
     delete (ret.directory as DirectoryBaseDTO).lastScanned;
     delete (ret.directory as DirectoryBaseDTO).lastModified;
     delete (ret.directory as DirectoryBaseDTO).mediaCount;
+    delete (ret.directory as DirectoryBaseDTO).youngestMedia;
+    delete (ret.directory as DirectoryBaseDTO).oldestMedia;
     if ((ret as PhotoDTO).metadata &&
       ((ret as PhotoDTO).metadata as PhotoMetadata).faces && !((ret as PhotoDTO).metadata as PhotoMetadata).faces.length) {
       delete ((ret as PhotoDTO).metadata as PhotoMetadata).faces;

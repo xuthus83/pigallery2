@@ -16,11 +16,12 @@ export interface DirectoryBaseDTO<S extends FileDTO = MediaDTO>
   name: string;
   path: string;
   lastModified: number;
-  lastScanned: number;
+  lastScanned?: number;
   isPartial?: boolean;
   parent: DirectoryBaseDTO<S>;
   mediaCount: number;
-
+  youngestMedia?: number;
+  oldestMedia?: number;
   directories?: DirectoryBaseDTO<S>[];
   media?: S[];
   metaFile?: FileDTO[];
@@ -34,10 +35,12 @@ export interface ParentDirectoryDTO<S extends FileDTO = MediaDTO>
   name: string;
   path: string;
   lastModified: number;
-  lastScanned: number;
+  lastScanned?: number;
   isPartial?: boolean;
   parent: ParentDirectoryDTO<S>;
   mediaCount: number;
+  youngestMedia?: number;
+  oldestMedia?: number;
   directories: SubDirectoryDTO<S>[];
   media: S[];
   metaFile: FileDTO[];

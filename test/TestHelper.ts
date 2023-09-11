@@ -10,12 +10,12 @@ import {VideoEntity, VideoMetadataEntity} from '../src/backend/model/database/en
 import {MediaDimension, MediaDTO} from '../src/common/entities/MediaDTO';
 import {
   CameraMetadata,
+  CoverPhotoDTO,
   FaceRegion,
   GPSMetadata,
   PhotoDTO,
   PhotoMetadata,
-  PositionMetaData,
-  CoverPhotoDTO
+  PositionMetaData
 } from '../src/common/entities/PhotoDTO';
 import {DirectoryBaseDTO, DirectoryPathDTO} from '../src/common/entities/DirectoryDTO';
 import {FileDTO} from '../src/common/entities/FileDTO';
@@ -31,6 +31,8 @@ export class TestHelper {
     dir.name = name;
     dir.path = DiskMangerWorker.pathFromParent({path: '', name: '.'});
     dir.mediaCount = 0;
+    dir.youngestMedia = 10;
+    dir.oldestMedia = 1000;
     dir.directories = [];
     dir.metaFile = [];
     dir.media = [];
@@ -272,6 +274,8 @@ export class TestHelper {
       name: DiskMangerWorker.dirName(forceStr || Math.random().toString(36).substring(7)),
       path: DiskMangerWorker.pathFromParent({path: '', name: '.'}),
       mediaCount: 0,
+      youngestMedia: 10,
+      oldestMedia: 1000,
       directories: [],
       metaFile: [],
       cover: null,

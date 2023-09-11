@@ -208,6 +208,8 @@ export class IndexingManager {
       currentDir.lastModified = scannedDirectory.lastModified;
       currentDir.lastScanned = scannedDirectory.lastScanned;
       currentDir.mediaCount = scannedDirectory.mediaCount;
+      currentDir.youngestMedia = scannedDirectory.youngestMedia;
+      currentDir.oldestMedia = scannedDirectory.oldestMedia;
       await directoryRepository.save(currentDir);
       return currentDir.id;
     } else {
@@ -216,6 +218,8 @@ export class IndexingManager {
           mediaCount: scannedDirectory.mediaCount,
           lastModified: scannedDirectory.lastModified,
           lastScanned: scannedDirectory.lastScanned,
+          youngestMedia: scannedDirectory.youngestMedia,
+          oldestMedia: scannedDirectory.oldestMedia,
           name: scannedDirectory.name,
           path: scannedDirectory.path,
         } as DirectoryEntity)

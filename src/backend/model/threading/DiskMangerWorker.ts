@@ -1,9 +1,6 @@
 import {promises as fsp, Stats} from 'fs';
 import * as path from 'path';
-import {
-  ParentDirectoryDTO,
-  SubDirectoryDTO,
-} from '../../../common/entities/DirectoryDTO';
+import {ParentDirectoryDTO, SubDirectoryDTO,} from '../../../common/entities/DirectoryDTO';
 import {PhotoDTO} from '../../../common/entities/PhotoDTO';
 import {ProjectPath} from '../../ProjectPath';
 import {Config} from '../../../common/config/private/Config';
@@ -120,15 +117,17 @@ export class DiskMangerWorker {
       name: directoryName,
       path: directoryParent,
       lastModified: this.calcLastModified(stat),
-      lastScanned: Date.now(),
       directories: [],
-      isPartial: false,
+      isPartial: settings.coverOnly === true,
       mediaCount: 0,
       cover: null,
       validCover: false,
       media: [],
       metaFile: [],
     };
+    if (!settings.coverOnly) {
+      directory.lastScanned = Date.now();
+    }
 
     // nothing to scan, we are here for the empty dir
     if (
@@ -163,9 +162,6 @@ export class DiskMangerWorker {
             coverOnly: true,
           }
         )) as SubDirectoryDTO;
-
-        d.lastScanned = 0; // it was not a fully scanned
-        d.isPartial = true;
 
         directory.directories.push(d);
       } else if (PhotoProcessing.isPhoto(fullFilePath)) {
@@ -239,6 +235,16 @@ export class DiskMangerWorker {
     }
 
     directory.mediaCount = directory.media.length;
+    if (!directory.isPartial) {
+      directory.youngestMedia = Number.MAX_SAFE_INTEGER;
+      directory.oldestMedia = Number.MIN_SAFE_INTEGER;
+
+      directory.media.forEach((m) => {
+          directory.youngestMedia = Math.min(m.metadata.creationDate, directory.youngestMedia);
+          directory.oldestMedia = Math.max(m.metadata.creationDate, directory.oldestMedia);
+        }
+      );
+    }
 
     return directory;
   }

@@ -64,6 +64,24 @@ export class DirectoryEntity
   @Column('mediumint', { unsigned: true })
   mediaCount: number;
 
+  @Column('bigint', {
+    nullable: true,
+    transformer: {
+      from: (v) => parseInt(v, 10),
+      to: (v) => v,
+    },
+  })
+  oldestMedia: number;
+
+  @Column('bigint', {
+    nullable: true,
+    transformer: {
+      from: (v) => parseInt(v, 10),
+      to: (v) => v,
+    },
+  })
+  youngestMedia: number;
+
   @Index()
   @ManyToOne((type) => DirectoryEntity, (directory) => directory.directories, {
     onDelete: 'CASCADE',
