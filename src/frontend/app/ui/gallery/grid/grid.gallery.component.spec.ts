@@ -62,7 +62,7 @@ describe('GalleryGridComponent', () => {
       setGridPhotoQL: () => {
         // mock
       }
-    } as any;
+    } as unknown;
     fixture.detectChanges();
   });
 
@@ -73,7 +73,7 @@ describe('GalleryGridComponent', () => {
     const phs: PhotoDTO[] = [];
     const gPhs: GridMedia[] = [];
     for (let i = 0; i < 10; ++i) {
-      const p = {name: i + '.jpg', directory: {name: 'd' + i, path: 'p' + i}} as any;
+      const p = {name: i + '.jpg', directory: {name: 'd' + i, path: 'p' + i}} as unknown;
       phs.push(p);
       gPhs.push(new GridMedia(p, 1, 1, i));
     }

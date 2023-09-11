@@ -5,8 +5,8 @@ import {JobProgress} from './JobProgress';
 import {IJobListener} from './IJobListener';
 import {JobProgressStates} from '../../../../common/entities/job/JobProgressDTO';
 
-declare const process: any;
-declare const global: any;
+declare const process: { nextTick: (_: unknown) => void };
+declare const global: { gc: () => void };
 
 const LOG_TAG = '[JOB]';
 

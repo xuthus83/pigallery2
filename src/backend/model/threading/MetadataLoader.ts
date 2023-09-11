@@ -38,7 +38,7 @@ export class MetadataLoader {
         // ignoring errors
       }
       try {
-        ffmpeg(fullPath).ffprobe((err: any, data: FfprobeData) => {
+        ffmpeg(fullPath).ffprobe((err: unknown, data: FfprobeData) => {
           if (!!err || data === null || !data.streams[0]) {
             return resolve(metadata);
           }
@@ -346,11 +346,9 @@ export class MetadataLoader {
 
               if (Config.Faces.enabled) {
                 const faces: FaceRegion[] = [];
-                if (
-                    ((exif.Regions as any)?.value?.RegionList)?.value
-                ) {
-                  for (const regionRoot of (exif.Regions as any).value.RegionList
-                      .value as any[]) {
+                const regionListVal = ((exif.Regions?.value as any)?.RegionList)?.value;
+                if (regionListVal) {
+                  for (const regionRoot of regionListVal) {
                     let type;
                     let name;
                     let box;

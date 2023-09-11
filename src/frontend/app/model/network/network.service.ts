@@ -20,7 +20,7 @@ export class NetworkService {
   ) {
   }
 
-  public static buildUrl(url: string, data?: { [key: string]: any }): string {
+  public static buildUrl(url: string, data?: { [key: string]: unknown }): string {
     if (data) {
       const keys = Object.getOwnPropertyNames(data);
       if (keys.length > 0) {
@@ -36,7 +36,7 @@ export class NetworkService {
     return url;
   }
 
-  public getXML<T>(url: string): Promise<Document> {
+  public getXML(url: string): Promise<Document> {
     this.loadingBarService.useRef().start();
 
     const process = (res: string): Document => {
@@ -45,7 +45,7 @@ export class NetworkService {
       return parser.parseFromString(res, 'text/xml');
     };
 
-    const err = (error: any) => {
+    const err = <T>(error: T) => {
       this.loadingBarService.useRef().complete();
       return this.handleError(error);
     };
@@ -57,7 +57,7 @@ export class NetworkService {
         .catch(err);
   }
 
-  public getText<T>(url: string): Promise<string> {
+  public getText(url: string): Promise<string> {
     this.loadingBarService.useRef().start();
 
     const process = (res: string): string => {
@@ -65,7 +65,7 @@ export class NetworkService {
       return res;
     };
 
-    const err = (error: Error) => {
+    const err = <T>(error: T) => {
       this.loadingBarService.useRef().complete();
       return this.handleError(error);
     };
@@ -123,7 +123,7 @@ export class NetworkService {
       return msg.result;
     };
 
-    const err = (error: Error) => {
+    const err = <T>(error: T) => {
       this.loadingBarService.useRef().complete();
       return this.handleError(error);
     };
@@ -160,10 +160,10 @@ export class NetworkService {
     }
   }
 
-  private handleError(error: any): Promise<any> {
-    if (typeof error.code !== 'undefined') {
+  private handleError<T>(error: T): Promise<T> {
+    if (typeof (error as ErrorDTO).code !== 'undefined') {
       for (const item of this.globalErrorHandlers) {
-        if (item(error) === true) {
+        if (item(error as ErrorDTO) === true) {
           return;
         }
       }
@@ -171,6 +171,6 @@ export class NetworkService {
     }
     // instead of just logging it to the console
     console.error('error:', error);
-    return Promise.reject(error.message || error || 'Server error');
+    return Promise.reject((error as ErrorDTO).message || error || 'Server error');
   }
 }

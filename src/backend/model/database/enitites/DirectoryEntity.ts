@@ -87,9 +87,9 @@ export class DirectoryEntity
   @Column({type: 'boolean', default: false})
   validCover: boolean;
 
-  @OneToMany((type) => MediaEntity, (media) => media.directory)
+  @OneToMany(() => MediaEntity, (media) => media.directory)
   public media: MediaEntity[];
 
-  @OneToMany((type) => FileEntity, (file) => file.directory)
+  @OneToMany(() => FileEntity, (file) => file.directory)
   public metaFile: FileEntity[];
 }

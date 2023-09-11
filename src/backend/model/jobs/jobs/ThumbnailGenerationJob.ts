@@ -54,6 +54,7 @@ export class ThumbnailGenerationJob extends FileJob<{
     return files;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected async filterMetaFiles(files: FileDTO[]): Promise<FileDTO[]> {
     return undefined;
   }
