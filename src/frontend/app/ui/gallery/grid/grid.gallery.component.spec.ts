@@ -11,6 +11,7 @@ import {of} from 'rxjs';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {PhotoDTO} from '../../../../../common/entities/PhotoDTO';
 import {GridMedia} from './GridMedia';
+import {GalleryNavigatorService} from '../navigator/navigator.service';
 
 class MockQueryService {
 }
@@ -22,6 +23,9 @@ class MockContentService {
 }
 
 class MockGallerySortingService {
+}
+
+class MockGalleryNavigatorService {
 }
 
 describe('GalleryGridComponent', () => {
@@ -38,6 +42,7 @@ describe('GalleryGridComponent', () => {
         {provide: QueryService, useClass: MockQueryService},
         {provide: OverlayService, useClass: MockOverlayService},
         {provide: GallerySortingService, useClass: MockGallerySortingService},
+        {provide: GalleryNavigatorService, useClass: MockGalleryNavigatorService},
         {provide: OverlayService, useClass: MockOverlayService},
         {
           provide: ActivatedRoute,
@@ -74,7 +79,7 @@ describe('GalleryGridComponent', () => {
     component.mediaGroups = [{name: 'equal 1', media: [phs[0], phs[1]]}];
     component.mediaToRender = [{name: 'equal 1', media: [gPhs[0], gPhs[1]]}];
     component.mergeNewPhotos();
-    expect(component.mediaToRender).toEqual([{name: 'equal 1', media: [gPhs[0],gPhs[1]]}]);
+    expect(component.mediaToRender).toEqual([{name: 'equal 1', media: [gPhs[0], gPhs[1]]}]);
     /*-----------------------*/
     component.mediaGroups = [{name: 'empty render', media: [phs[0], phs[1]]}];
     component.mediaToRender = [];
@@ -111,36 +116,36 @@ describe('GalleryGridComponent', () => {
     component.mergeNewPhotos();
     expect(component.mediaToRender).toEqual([{name: 'removed 2nd 2', media: [gPhs[0], gPhs[1]]}, {name: '2', media: [gPhs[2], gPhs[5]]}]);
     /*-----------------------*/
-    component.mediaGroups = [{name: 'removed from 1st', media: [phs[0]]},{name: '2', media: [phs[2],phs[3],phs[4]]}];
-    component.mediaToRender = [{name: 'removed from 1st', media: [gPhs[0], gPhs[1]]},{name: '2', media: [gPhs[2], gPhs[3], gPhs[4]]}];
+    component.mediaGroups = [{name: 'removed from 1st', media: [phs[0]]}, {name: '2', media: [phs[2], phs[3], phs[4]]}];
+    component.mediaToRender = [{name: 'removed from 1st', media: [gPhs[0], gPhs[1]]}, {name: '2', media: [gPhs[2], gPhs[3], gPhs[4]]}];
     component.mergeNewPhotos();
     expect(component.mediaToRender).toEqual([{name: 'removed from 1st', media: [gPhs[0]]}]);
     /*-----------------------*/
-    component.mediaGroups = [{name: 'removed 2nd', media: [phs[0], phs[1]]},{name: '2', media: [phs[2]]}];
-    component.mediaToRender = [{name: 'removed 2nd', media: [gPhs[0], gPhs[1]]},{name: '2', media: [gPhs[2], gPhs[3]]}];
+    component.mediaGroups = [{name: 'removed 2nd', media: [phs[0], phs[1]]}, {name: '2', media: [phs[2]]}];
+    component.mediaToRender = [{name: 'removed 2nd', media: [gPhs[0], gPhs[1]]}, {name: '2', media: [gPhs[2], gPhs[3]]}];
     component.mergeNewPhotos();
-    expect(component.mediaToRender).toEqual([{name: 'removed 2nd', media: [gPhs[0], gPhs[1]]},{name: '2', media: [gPhs[2]]}]);
+    expect(component.mediaToRender).toEqual([{name: 'removed 2nd', media: [gPhs[0], gPhs[1]]}, {name: '2', media: [gPhs[2]]}]);
     /*-----------------------*/
-    component.mediaGroups = [{name: 'removed from 1st 2', media: [phs[0]]},{name: '2', media: [phs[2], phs[3]]}];
-    component.mediaToRender = [{name: 'removed from 1st 2', media: [gPhs[0], gPhs[1]]},{name: '2', media: [gPhs[2], gPhs[3]]}];
+    component.mediaGroups = [{name: 'removed from 1st 2', media: [phs[0]]}, {name: '2', media: [phs[2], phs[3]]}];
+    component.mediaToRender = [{name: 'removed from 1st 2', media: [gPhs[0], gPhs[1]]}, {name: '2', media: [gPhs[2], gPhs[3]]}];
     component.mergeNewPhotos();
     expect(component.mediaToRender).toEqual([{name: 'removed from 1st 2', media: [gPhs[0]]}]);
     /*-----------------------*/
-    component.mediaGroups = [{name: 'merged', media: [phs[0], phs[1],phs[2],phs[3]]}];
-    component.mediaToRender = [{name: 'merged dif name', media: [gPhs[0], gPhs[1]]},{name: '2', media: [gPhs[2], gPhs[3]]}];
+    component.mediaGroups = [{name: 'merged', media: [phs[0], phs[1], phs[2], phs[3]]}];
+    component.mediaToRender = [{name: 'merged dif name', media: [gPhs[0], gPhs[1]]}, {name: '2', media: [gPhs[2], gPhs[3]]}];
     component.mergeNewPhotos();
     expect(component.mediaToRender).toEqual([{name: 'merged', media: [gPhs[0]]}]);
     /*-----------------------*/
-    component.mediaGroups = [{name: '3', media: [phs[0], phs[1],phs[2],phs[3]]}];
-    component.mediaToRender = [{name: '1', media: [gPhs[0], gPhs[1],gPhs[3], gPhs[2]]}];
+    component.mediaGroups = [{name: '3', media: [phs[0], phs[1], phs[2], phs[3]]}];
+    component.mediaToRender = [{name: '1', media: [gPhs[0], gPhs[1], gPhs[3], gPhs[2]]}];
     component.mergeNewPhotos();
     expect(component.mediaToRender).toEqual([{name: '3', media: [gPhs[0], gPhs[1]]}]);
     /*-----------------------*/
     gPhs[1].rowId = 3;
     gPhs[3].rowId = 3;
     gPhs[2].rowId = 3;
-    component.mediaGroups = [{name: '3', media: [phs[0], phs[1],phs[2],phs[3]]}];
-    component.mediaToRender = [{name: '1', media: [gPhs[0], gPhs[1],gPhs[3], gPhs[2]]}];
+    component.mediaGroups = [{name: '3', media: [phs[0], phs[1], phs[2], phs[3]]}];
+    component.mediaToRender = [{name: '1', media: [gPhs[0], gPhs[1], gPhs[3], gPhs[2]]}];
     component.mergeNewPhotos();
     expect(component.mediaToRender).toEqual([{name: '3', media: [gPhs[0]]}]);
 
