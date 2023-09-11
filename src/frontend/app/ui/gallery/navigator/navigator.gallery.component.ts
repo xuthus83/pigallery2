@@ -15,6 +15,8 @@ import {PageHelper} from '../../../model/page.helper';
 import {BsDropdownDirective} from 'ngx-bootstrap/dropdown';
 import {FilterService} from '../filter/filter.service';
 import {ContentLoaderService, ContentWrapperWithError, DirectoryContent} from '../contentLoader.service';
+import {GalleryNavigatorService} from './navigator.service';
+import {GridSizes} from '../../../../../common/entities/GridSizes';
 
 @Component({
   selector: 'app-gallery-navbar',
@@ -25,6 +27,7 @@ import {ContentLoaderService, ContentWrapperWithError, DirectoryContent} from '.
 export class GalleryNavigatorComponent {
   public readonly sortingByTypes: { key: number; value: string }[] = [];
   public readonly groupingByTypes: { key: number; value: string }[] = [];
+  public readonly gridSizes: { key: number; value: string }[] = [];
   public readonly config = Config;
   // DefaultSorting = Config.Gallery.defaultPhotoSortingMethod;
   public readonly SearchQueryTypes = SearchQueryTypes;
@@ -45,81 +48,83 @@ export class GalleryNavigatorComponent {
   public groupingFollowSorting = true; // if grouping should be set after sorting automatically
 
   constructor(
-    public authService: AuthenticationService,
-    public queryService: QueryService,
-    public contentLoaderService: ContentLoaderService,
-    public filterService: FilterService,
-    public sortingService: GallerySortingService,
-    private router: Router,
-    public sanitizer: DomSanitizer
+      public authService: AuthenticationService,
+      public queryService: QueryService,
+      public contentLoaderService: ContentLoaderService,
+      public filterService: FilterService,
+      public sortingService: GallerySortingService,
+      public navigatorService: GalleryNavigatorService,
+      private router: Router,
+      public sanitizer: DomSanitizer
   ) {
     this.sortingByTypes = Utils.enumToArray(SortByTypes);
     // can't group by random
     this.groupingByTypes = Utils.enumToArray(GroupByTypes);
+    this.gridSizes = Utils.enumToArray(GridSizes);
     this.RootFolderName = $localize`Home`;
     this.wrappedContent = this.contentLoaderService.content;
     this.directoryContent = this.wrappedContent.pipe(
-      map((c) => (c.directory ? c.directory : c.searchResult))
+        map((c) => (c.directory ? c.directory : c.searchResult))
     );
     this.routes = this.contentLoaderService.content.pipe(
-      map((c) => {
-        this.parentPath = null;
-        if (!c.directory) {
-          return [];
-        }
-
-        const path = c.directory.path.replace(new RegExp('\\\\', 'g'), '/');
-
-        const dirs = path.split('/');
-        dirs.push(c.directory.name);
-
-        // removing empty strings
-        for (let i = 0; i < dirs.length; i++) {
-          if (!dirs[i] || 0 === dirs[i].length || '.' === dirs[i]) {
-            dirs.splice(i, 1);
-            i--;
+        map((c) => {
+          this.parentPath = null;
+          if (!c.directory) {
+            return [];
           }
-        }
 
-        const user = this.authService.user.value;
-        const arr: NavigatorPath[] = [];
+          const path = c.directory.path.replace(new RegExp('\\\\', 'g'), '/');
 
-        // create root link
-        if (dirs.length === 0) {
-          arr.push({name: this.RootFolderName, route: null});
-        } else {
-          arr.push({
-            name: this.RootFolderName,
-            route: UserDTOUtils.isDirectoryPathAvailable('/', user.permissions)
-              ? '/'
-              : null,
-          });
-        }
+          const dirs = path.split('/');
+          dirs.push(c.directory.name);
 
-        // create rest navigation
-        dirs.forEach((name, index) => {
-          const route = dirs.slice(0, index + 1).join('/');
-          if (dirs.length - 1 === index) {
-            arr.push({name, route: null});
+          // removing empty strings
+          for (let i = 0; i < dirs.length; i++) {
+            if (!dirs[i] || 0 === dirs[i].length || '.' === dirs[i]) {
+              dirs.splice(i, 1);
+              i--;
+            }
+          }
+
+          const user = this.authService.user.value;
+          const arr: NavigatorPath[] = [];
+
+          // create root link
+          if (dirs.length === 0) {
+            arr.push({name: this.RootFolderName, route: null});
           } else {
             arr.push({
-              name,
-              route: UserDTOUtils.isDirectoryPathAvailable(route, user.permissions)
-                ? route
-                : null,
+              name: this.RootFolderName,
+              route: UserDTOUtils.isDirectoryPathAvailable('/', user.permissions)
+                  ? '/'
+                  : null,
             });
-
           }
-        });
 
-        // parent directory has a shortcut to navigate to
-        if (arr.length >= 2 && arr[arr.length - 2].route) {
-          this.parentPath = arr[arr.length - 2].route;
-          arr[arr.length - 2].title = $localize`key: alt + up`;
-        }
-        return arr;
+          // create rest navigation
+          dirs.forEach((name, index) => {
+            const route = dirs.slice(0, index + 1).join('/');
+            if (dirs.length - 1 === index) {
+              arr.push({name, route: null});
+            } else {
+              arr.push({
+                name,
+                route: UserDTOUtils.isDirectoryPathAvailable(route, user.permissions)
+                    ? route
+                    : null,
+              });
 
-      })
+            }
+          });
+
+          // parent directory has a shortcut to navigate to
+          if (arr.length >= 2 && arr[arr.length - 2].route) {
+            this.parentPath = arr[arr.length - 2].route;
+            arr[arr.length - 2].title = $localize`key: alt + up`;
+          }
+          return arr;
+
+        })
     );
   }
 
@@ -134,17 +139,18 @@ export class GalleryNavigatorComponent {
   get ItemCount(): number {
     const c = this.contentLoaderService.content.value;
     return c.directory
-      ? c.directory.mediaCount
-      : c.searchResult
-        ? c.searchResult.media.length
-        : 0;
+        ? c.directory.mediaCount
+        : c.searchResult
+            ? c.searchResult.media.length
+            : 0;
   }
 
   isDefaultSortingAndGrouping(): boolean {
     return this.sortingService.isDefaultSortingAndGrouping(
-      this.contentLoaderService.content.value
+        this.contentLoaderService.content.value
     );
   }
+
 
   isDirectionalSort(value: number) {
     return Utils.isValidEnumInt(SortByDirectionalTypes, value);
@@ -161,8 +167,8 @@ export class GalleryNavigatorComponent {
     this.sortingService.setSorting(s);
     // you cannot group by random
     if (!this.isDirectionalSort(sorting) ||
-      // if grouping is disabled, do not update it
-      this.sortingService.grouping.value.method === GroupByTypes.NoGrouping || !this.groupingFollowSorting
+        // if grouping is disabled, do not update it
+        this.sortingService.grouping.value.method === GroupByTypes.NoGrouping || !this.groupingFollowSorting
     ) {
       return;
     }
@@ -202,12 +208,12 @@ export class GalleryNavigatorComponent {
       queryParams += e[0] + '=' + e[1];
     });
     return Utils.concatUrls(
-      Config.Server.urlBase,
-      Config.Server.apiPath,
-      '/gallery/zip/',
-      c.directory.path,
-      c.directory.name,
-      '?' + queryParams
+        Config.Server.urlBase,
+        Config.Server.apiPath,
+        '/gallery/zip/',
+        c.directory.path,
+        c.directory.name,
+        '?' + queryParams
     );
   }
 
@@ -229,8 +235,8 @@ export class GalleryNavigatorComponent {
       return;
     }
     this.router.navigate(['/gallery', this.parentPath],
-      {queryParams: this.queryService.getParams()})
-      .catch(console.error);
+        {queryParams: this.queryService.getParams()})
+        .catch(console.error);
   }
 
   @HostListener('window:keydown', ['$event'])

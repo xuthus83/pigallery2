@@ -5,6 +5,7 @@ import {UserRoles} from '../../entities/UserDTO';
 import {ConfigProperty, SubConfigClass} from 'typeconfig/common';
 import {SearchQueryDTO} from '../../entities/SearchQueryDTO';
 import {DefaultsJobs} from '../../entities/job/JobDTO';
+import {GridSizes} from '../../entities/GridSizes';
 
 declare let $localize: (s: TemplateStringsArray) => string;
 if (typeof $localize === 'undefined') {
@@ -985,6 +986,17 @@ export class ClientGalleryConfig {
     description: $localize`Default grouping method for photo and video in a search results.`
   })
   defaultSearchGroupingMethod: ClientGroupingConfig = new ClientGroupingConfig(GroupByTypes.Date, false);
+
+  @ConfigProperty({
+    type: GridSizes,
+    tags: {
+      name: $localize`Default grid size`,
+      githubIssue: 716,
+      priority: ConfigPriority.advanced,
+    },
+    description: $localize`Default grid size that is used to render photos and videos.`
+  })
+  defaultGidSize: GridSizes = GridSizes.medium;
 
   @ConfigProperty({
     tags: {

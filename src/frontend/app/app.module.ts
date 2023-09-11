@@ -112,6 +112,7 @@ import {NgIconsModule} from '@ng-icons/core';
 import {
   ionAddOutline,
   ionAlbumsOutline,
+  ionAppsOutline,
   ionArrowDownOutline,
   ionArrowUpOutline,
   ionBrowsersOutline,
@@ -137,6 +138,7 @@ import {
   ionFunnelOutline,
   ionGitBranchOutline,
   ionGlobeOutline,
+  ionGridOutline,
   ionHammerOutline,
   ionImageOutline,
   ionImagesOutline,
@@ -162,6 +164,7 @@ import {
   ionSettingsOutline,
   ionShareSocialOutline,
   ionShuffleOutline,
+  ionSquareOutline,
   ionStar,
   ionStarOutline,
   ionStopOutline,
@@ -176,7 +179,6 @@ import {
   ionVolumeMuteOutline,
   ionWarningOutline
 } from '@ng-icons/ionicons';
-import {SortingMethodIconComponent} from './ui/sorting-method-icon/sorting-method-icon.component';
 import {SafeHtmlPipe} from './pipes/SafeHTMLPipe';
 import {DatePipe} from '@angular/common';
 import {ParseIntPipe} from './pipes/ParseIntPipe';
@@ -185,6 +187,10 @@ import {
 } from './ui/settings/template/settings-entry/sorting-method/sorting-method.settings-entry.component';
 import {ContentLoaderService} from './ui/gallery/contentLoader.service';
 import {FileDTOToRelativePathPipe} from './pipes/FileDTOToRelativePathPipe';
+import {StringifyGridSize} from './pipes/StringifyGridSize';
+import {GalleryNavigatorService} from './ui/gallery/navigator/navigator.service';
+import {GridSizeIconComponent} from './ui/utils/grid-size-icon/grid-size-icon.component';
+import {SortingMethodIconComponent} from './ui/utils/sorting-method-icon/sorting-method-icon.component';
 
 @Injectable()
 export class MyHammerConfig extends HammerGestureConfig {
@@ -246,7 +252,8 @@ Marker.prototype.options.icon = MarkerFactory.defIcon;
       ionFlagOutline, ionGlobeOutline, ionPieChartOutline, ionStopOutline,
       ionTimeOutline, ionCheckmarkOutline, ionPulseOutline, ionResizeOutline,
       ionCloudOutline, ionChatboxOutline, ionServerOutline, ionFileTrayFullOutline, ionBrushOutline,
-      ionBrowsersOutline, ionUnlinkOutline
+      ionBrowsersOutline, ionUnlinkOutline, ionSquareOutline, ionGridOutline,
+      ionAppsOutline
     }),
     ClipboardModule,
     TooltipModule.forRoot(),
@@ -325,6 +332,7 @@ Marker.prototype.options.icon = MarkerFactory.defIcon;
     StringifySearchQuery,
     StringifyEnum,
     StringifySearchType,
+    StringifyGridSize,
     FileDTOToPathPipe,
     FileDTOToRelativePathPipe,
     PhotoFilterPipe,
@@ -332,6 +340,7 @@ Marker.prototype.options.icon = MarkerFactory.defIcon;
     UsersComponent,
     SharingsListComponent,
     SortingMethodIconComponent,
+    GridSizeIconComponent,
     SafeHtmlPipe,
     SortingMethodSettingsEntryComponent
   ],
@@ -350,6 +359,7 @@ Marker.prototype.options.icon = MarkerFactory.defIcon;
     ContentLoaderService,
     FilterService,
     GallerySortingService,
+    GalleryNavigatorService,
     MapService,
     BlogService,
     SearchQueryParserService,

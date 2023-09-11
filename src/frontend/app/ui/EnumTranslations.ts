@@ -4,6 +4,7 @@ import {ReIndexingSensitivity} from '../../../common/config/private/PrivateConfi
 import {SearchQueryTypes} from '../../../common/entities/SearchQueryDTO';
 import {ConfigStyle} from './settings/settings.service';
 import {SortByTypes,GroupByTypes} from '../../../common/entities/SortingMethods';
+import {GridSizes} from '../../../common/entities/GridSizes';
 
 export const EnumTranslations: Record<string, string> = {};
 export const enumToTranslatedArray = (EnumType: any): { key: number; value: string }[] => {
@@ -54,6 +55,12 @@ EnumTranslations[SortByTypes[SortByTypes.FileSize]] = $localize`file size`;
 
 EnumTranslations[GroupByTypes[GroupByTypes.NoGrouping]] = $localize`don't group`;
 
+
+EnumTranslations[GridSizes[GridSizes.extraSmall]] = $localize`extra small`;
+EnumTranslations[GridSizes[GridSizes.small]] = $localize`small`;
+EnumTranslations[GridSizes[GridSizes.medium]] = $localize`medium`;
+EnumTranslations[GridSizes[GridSizes.large]] = $localize`big`;
+EnumTranslations[GridSizes[GridSizes.extraLarge]] = $localize`extra large`;
 
 EnumTranslations[NavigationLinkTypes[NavigationLinkTypes.url]] = $localize`Url`;
 EnumTranslations[NavigationLinkTypes[NavigationLinkTypes.search]] = $localize`Search`;

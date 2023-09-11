@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {GroupSortByTypes} from '../../../../common/entities/SortingMethods';
+import {GroupSortByTypes} from '../../../../../common/entities/SortingMethods';
 
 @Component({
   selector: 'app-sorting-method-icon',
@@ -8,5 +8,5 @@ import {GroupSortByTypes} from '../../../../common/entities/SortingMethods';
 })
 export class SortingMethodIconComponent {
   @Input() method: number;
-  GroupSortByTypes = GroupSortByTypes;
+  public readonly GroupSortByTypes = GroupSortByTypes;
 }
