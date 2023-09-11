@@ -179,8 +179,8 @@ export class ObjectManagers {
   public static async reset(): Promise<void> {
     Logger.silly(LOG_TAG, 'Object manager reset begin');
     if (
-      ObjectManagers.getInstance().IndexingManager &&
-      ObjectManagers.getInstance().IndexingManager.IsSavingInProgress
+        ObjectManagers.getInstance().IndexingManager &&
+        ObjectManagers.getInstance().IndexingManager.IsSavingInProgress
     ) {
       await ObjectManagers.getInstance().IndexingManager.SavingReady;
     }
@@ -214,7 +214,7 @@ export class ObjectManagers {
   }
 
   public async onDataChange(
-    changedDir: ParentDirectoryDTO = null
+      changedDir: ParentDirectoryDTO = null
   ): Promise<void> {
     await this.VersionManager.onNewDataVersion();
 

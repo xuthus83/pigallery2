@@ -10,17 +10,17 @@ import {ContentLoaderService} from '../ui/gallery/contentLoader.service';
 @Injectable()
 export class QueryService {
   constructor(
-    private shareService: ShareService,
-    private galleryService: ContentLoaderService
+      private shareService: ShareService,
+      private galleryService: ContentLoaderService
   ) {
   }
 
   getMediaStringId(media: MediaDTO): string {
     if (this.galleryService.isSearchResult()) {
       return Utils.concatUrls(
-        media.directory.path,
-        media.directory.name,
-        media.name
+          media.directory.path,
+          media.directory.name,
+          media.name
       );
     } else {
       return media.name;
@@ -35,7 +35,7 @@ export class QueryService {
     if (Config.Sharing.enabled === true) {
       if (this.shareService.isSharing()) {
         query[QueryParams.gallery.sharingKey_query] =
-          this.shareService.getSharingKey();
+            this.shareService.getSharingKey();
       }
     }
     return query;
@@ -48,14 +48,14 @@ export class QueryService {
     if (Config.Sharing.enabled === true) {
       if (this.shareService.isSharing()) {
         params[QueryParams.gallery.sharingKey_query] =
-          this.shareService.getSharingKey();
+            this.shareService.getSharingKey();
       }
     }
     if (
-      directory &&
-      directory.lastModified &&
-      directory.lastScanned &&
-      !directory.isPartial
+        directory &&
+        directory.lastModified &&
+        directory.lastScanned &&
+        !directory.isPartial
     ) {
       params[QueryParams.gallery.knownLastModified] = directory.lastModified;
       params[QueryParams.gallery.knownLastScanned] = directory.lastScanned;

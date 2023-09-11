@@ -23,6 +23,6 @@ export class AlbumBaseEntity implements AlbumBaseDTO {
   @Column('int', {unsigned: true, default: 0})
   count: number;
 
-  @ManyToOne((type) => MediaEntity, {onDelete: 'SET NULL', nullable: true})
+  @ManyToOne(() => MediaEntity, {onDelete: 'SET NULL', nullable: true})
   public cover: MediaEntity;
 }

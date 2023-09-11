@@ -69,10 +69,10 @@ export abstract class FileJob<S extends { indexedOnly?: boolean } = { indexedOnl
 
   protected async step(): Promise<boolean> {
     if (
-      this.fileQueue.length === 0 &&
-      ((this.directoryQueue.length === 0 && !this.config.indexedOnly) ||
-        (this.config.indexedOnly &&
-          this.DBProcessing.hasMoreMedia === false))) {
+        this.fileQueue.length === 0 &&
+        ((this.directoryQueue.length === 0 && !this.config.indexedOnly) ||
+            (this.config.indexedOnly &&
+                this.DBProcessing.hasMoreMedia === false))) {
       return false;
     }
 
@@ -113,11 +113,11 @@ export abstract class FileJob<S extends { indexedOnly?: boolean } = { indexedOnl
     } catch (e) {
       console.error(e);
       Logger.error(
-        LOG_TAG,
-        'Error during processing file:' + filePath + ', ' + e.toString()
+          LOG_TAG,
+          'Error during processing file:' + filePath + ', ' + e.toString()
       );
       this.Progress.log(
-        'Error during processing file:' + filePath + ', ' + e.toString()
+          'Error during processing file:' + filePath + ', ' + e.toString()
       );
     }
 
@@ -128,8 +128,8 @@ export abstract class FileJob<S extends { indexedOnly?: boolean } = { indexedOnl
     const directory = this.directoryQueue.shift();
     this.Progress.log('scanning directory: ' + directory);
     const scanned = await DiskManager.scanDirectoryNoMetadata(
-      directory,
-      this.scanFilter
+        directory,
+        this.scanFilter
     );
     for (const item of scanned.directories) {
       this.directoryQueue.push(path.join(item.path, item.name));
@@ -144,12 +144,12 @@ export abstract class FileJob<S extends { indexedOnly?: boolean } = { indexedOnl
       }
       for (const item of scannedAndFiltered) {
         this.fileQueue.push(
-          path.join(
-            ProjectPath.ImageFolder,
-            item.directory.path,
-            item.directory.name,
-            item.name
-          )
+            path.join(
+                ProjectPath.ImageFolder,
+                item.directory.path,
+                item.directory.name,
+                item.name
+            )
         );
       }
     }
@@ -162,12 +162,12 @@ export abstract class FileJob<S extends { indexedOnly?: boolean } = { indexedOnl
       }
       for (const item of scannedAndFiltered) {
         this.fileQueue.push(
-          path.join(
-            ProjectPath.ImageFolder,
-            item.directory.path,
-            item.directory.name,
-            item.name
-          )
+            path.join(
+                ProjectPath.ImageFolder,
+                item.directory.path,
+                item.directory.name,
+                item.name
+            )
         );
       }
     }
@@ -175,8 +175,8 @@ export abstract class FileJob<S extends { indexedOnly?: boolean } = { indexedOnl
 
   private async loadMediaFilesFromDB(): Promise<void> {
     if (this.scanFilter.noVideo === true &&
-      this.scanFilter.noPhoto === true &&
-      this.scanFilter.noMetaFile === true) {
+        this.scanFilter.noPhoto === true &&
+        this.scanFilter.noMetaFile === true) {
       return;
     }
 
@@ -190,7 +190,7 @@ export abstract class FileJob<S extends { indexedOnly?: boolean } = { indexedOnl
     };
     const connection = await SQLConnection.getConnection();
     if (!this.scanFilter.noVideo ||
-      !this.scanFilter.noPhoto) {
+        !this.scanFilter.noPhoto) {
 
       let usedEntity = MediaEntity;
 
@@ -201,13 +201,13 @@ export abstract class FileJob<S extends { indexedOnly?: boolean } = { indexedOnl
       }
 
       const result = await connection
-        .getRepository(usedEntity)
-        .createQueryBuilder('media')
-        .select(['media.name', 'directory.name', 'directory.path'])
-        .leftJoin('media.directory', 'directory')
-        .offset(this.DBProcessing.mediaLoaded)
-        .limit(Config.Jobs.mediaProcessingBatchSize)
-        .getMany();
+          .getRepository(usedEntity)
+          .createQueryBuilder('media')
+          .select(['media.name', 'directory.name', 'directory.path'])
+          .leftJoin('media.directory', 'directory')
+          .offset(this.DBProcessing.mediaLoaded)
+          .limit(Config.Jobs.mediaProcessingBatchSize)
+          .getMany();
 
       hasMoreFile.media = result.length > 0;
       this.DBProcessing.mediaLoaded += result.length;
@@ -219,25 +219,25 @@ export abstract class FileJob<S extends { indexedOnly?: boolean } = { indexedOnl
       }
       for (const item of scannedAndFiltered) {
         this.fileQueue.push(
-          path.join(
-            ProjectPath.ImageFolder,
-            item.directory.path,
-            item.directory.name,
-            item.name
-          )
+            path.join(
+                ProjectPath.ImageFolder,
+                item.directory.path,
+                item.directory.name,
+                item.name
+            )
         );
       }
     }
     if (!this.scanFilter.noMetaFile) {
 
       const result = await connection
-        .getRepository(FileEntity)
-        .createQueryBuilder('file')
-        .select(['file.name', 'directory.name', 'directory.path'])
-        .leftJoin('file.directory', 'directory')
-        .offset(this.DBProcessing.mediaLoaded)
-        .limit(Config.Jobs.mediaProcessingBatchSize)
-        .getMany();
+          .getRepository(FileEntity)
+          .createQueryBuilder('file')
+          .select(['file.name', 'directory.name', 'directory.path'])
+          .leftJoin('file.directory', 'directory')
+          .offset(this.DBProcessing.mediaLoaded)
+          .limit(Config.Jobs.mediaProcessingBatchSize)
+          .getMany();
 
 
       hasMoreFile.metafile = result.length > 0;
@@ -250,12 +250,12 @@ export abstract class FileJob<S extends { indexedOnly?: boolean } = { indexedOnl
       }
       for (const item of scannedAndFiltered) {
         this.fileQueue.push(
-          path.join(
-            ProjectPath.ImageFolder,
-            item.directory.path,
-            item.directory.name,
-            item.name
-          )
+            path.join(
+                ProjectPath.ImageFolder,
+                item.directory.path,
+                item.directory.name,
+                item.name
+            )
         );
       }
     }
@@ -264,14 +264,14 @@ export abstract class FileJob<S extends { indexedOnly?: boolean } = { indexedOnl
 
   private async countMediaFromDB(): Promise<number> {
     if (this.scanFilter.noVideo === true &&
-      this.scanFilter.noPhoto === true &&
-      this.scanFilter.noMetaFile === true) {
+        this.scanFilter.noPhoto === true &&
+        this.scanFilter.noMetaFile === true) {
       return;
     }
     let count = 0;
     const connection = await SQLConnection.getConnection();
     if (!this.scanFilter.noVideo ||
-      !this.scanFilter.noPhoto) {
+        !this.scanFilter.noPhoto) {
 
       let usedEntity = MediaEntity;
 
@@ -282,16 +282,16 @@ export abstract class FileJob<S extends { indexedOnly?: boolean } = { indexedOnl
       }
 
       count += await connection
-        .getRepository(usedEntity)
-        .createQueryBuilder('media')
-        .getCount();
+          .getRepository(usedEntity)
+          .createQueryBuilder('media')
+          .getCount();
     }
     if (!this.scanFilter.noMetaFile) {
 
       count += await connection
-        .getRepository(FileEntity)
-        .createQueryBuilder('file')
-        .getCount();
+          .getRepository(FileEntity)
+          .createQueryBuilder('file')
+          .getCount();
 
     }
     return count;

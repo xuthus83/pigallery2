@@ -35,7 +35,7 @@ import {ControlValueAccessor, NG_VALIDATORS, NG_VALUE_ACCESSOR, UntypedFormContr
   ],
 })
 export class GallerySearchQueryEntryComponent
-  implements ControlValueAccessor, Validator {
+    implements ControlValueAccessor, Validator {
   public queryEntry: SearchQueryDTO;
   public SearchQueryTypesEnum: { value: string; key: SearchQueryTypes }[];
   public SearchQueryTypes = SearchQueryTypes;
@@ -48,19 +48,19 @@ export class GallerySearchQueryEntryComponent
     this.SearchQueryTypesEnum = Utils.enumToArray(SearchQueryTypes);
     // Range queries need to be added as AND with min and max sub entry
     this.SearchQueryTypesEnum = this.SearchQueryTypesEnum.filter(
-      (e): boolean => e.key !== SearchQueryTypes.UNKNOWN_RELATION
+        (e): boolean => e.key !== SearchQueryTypes.UNKNOWN_RELATION
     );
   }
 
   get IsTextQuery(): boolean {
     return (
-      this.queryEntry && TextSearchQueryTypes.includes(this.queryEntry.type)
+        this.queryEntry && TextSearchQueryTypes.includes(this.queryEntry.type)
     );
   }
 
   get IsListQuery(): boolean {
     return (
-      this.queryEntry && ListSearchQueryTypes.includes(this.queryEntry.type)
+        this.queryEntry && ListSearchQueryTypes.includes(this.queryEntry.type)
     );
   }
 

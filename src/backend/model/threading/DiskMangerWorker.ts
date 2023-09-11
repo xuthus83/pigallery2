@@ -25,15 +25,15 @@ export class DiskMangerWorker {
 
   public static pathFromRelativeDirName(relativeDirectoryName: string): string {
     return path.join(
-      path.dirname(this.normalizeDirPath(relativeDirectoryName)),
-      path.sep
+        path.dirname(this.normalizeDirPath(relativeDirectoryName)),
+        path.sep
     );
   }
 
   public static pathFromParent(parent: { path: string; name: string }): string {
     return path.join(
-      this.normalizeDirPath(path.join(parent.path, parent.name)),
-      path.sep
+        this.normalizeDirPath(path.join(parent.path, parent.name)),
+        path.sep
     );
   }
 
@@ -45,13 +45,13 @@ export class DiskMangerWorker {
   }
 
   public static async excludeDir(
-    name: string,
-    relativeDirectoryName: string,
-    absoluteDirectoryName: string
+      name: string,
+      relativeDirectoryName: string,
+      absoluteDirectoryName: string
   ): Promise<boolean> {
     if (
-      Config.Indexing.excludeFolderList.length === 0 &&
-      Config.Indexing.excludeFileList.length === 0
+        Config.Indexing.excludeFolderList.length === 0 &&
+        Config.Indexing.excludeFileList.length === 0
     ) {
       return false;
     }
@@ -87,30 +87,30 @@ export class DiskMangerWorker {
   }
 
   public static async scanDirectoryNoMetadata(
-    relativeDirectoryName: string,
-    settings: DirectoryScanSettings = {}
+      relativeDirectoryName: string,
+      settings: DirectoryScanSettings = {}
   ): Promise<ParentDirectoryDTO<FileDTO>> {
     settings.noMetadata = true;
     return (await this.scanDirectory(
-      relativeDirectoryName,
-      settings
+        relativeDirectoryName,
+        settings
     )) as ParentDirectoryDTO<FileDTO>;
   }
 
   public static async scanDirectory(
-    relativeDirectoryName: string,
-    settings: DirectoryScanSettings = {}
+      relativeDirectoryName: string,
+      settings: DirectoryScanSettings = {}
   ): Promise<ParentDirectoryDTO> {
     relativeDirectoryName = this.normalizeDirPath(relativeDirectoryName);
     const directoryName = DiskMangerWorker.dirName(relativeDirectoryName);
     const directoryParent = this.pathFromRelativeDirName(relativeDirectoryName);
     const absoluteDirectoryName = path.join(
-      ProjectPath.ImageFolder,
-      relativeDirectoryName
+        ProjectPath.ImageFolder,
+        relativeDirectoryName
     );
 
     const stat = await fsp.stat(
-      path.join(ProjectPath.ImageFolder, relativeDirectoryName)
+        path.join(ProjectPath.ImageFolder, relativeDirectoryName)
     );
     const directory: ParentDirectoryDTO = {
       id: null,
@@ -132,36 +132,36 @@ export class DiskMangerWorker {
 
     // nothing to scan, we are here for the empty dir
     if (
-      settings.noPhoto === true &&
-      settings.noMetaFile === true &&
-      settings.noVideo === true
+        settings.noPhoto === true &&
+        settings.noMetaFile === true &&
+        settings.noVideo === true
     ) {
       return directory;
     }
     const list = await fsp.readdir(absoluteDirectoryName);
     for (const file of list) {
       const fullFilePath = path.normalize(
-        path.join(absoluteDirectoryName, file)
+          path.join(absoluteDirectoryName, file)
       );
       if ((await fsp.stat(fullFilePath)).isDirectory()) {
         if (
-          settings.noDirectory === true ||
-          settings.coverOnly === true ||
-          (await DiskMangerWorker.excludeDir(
-            file,
-            relativeDirectoryName,
-            absoluteDirectoryName
-          ))
+            settings.noDirectory === true ||
+            settings.coverOnly === true ||
+            (await DiskMangerWorker.excludeDir(
+                file,
+                relativeDirectoryName,
+                absoluteDirectoryName
+            ))
         ) {
           continue;
         }
 
         // create cover directory
         const d = (await DiskMangerWorker.scanDirectory(
-          path.join(relativeDirectoryName, file),
-          {
-            coverOnly: true,
-          }
+            path.join(relativeDirectoryName, file),
+            {
+              coverOnly: true,
+            }
         )) as SubDirectoryDTO;
 
         directory.directories.push(d);
@@ -174,9 +174,9 @@ export class DiskMangerWorker {
           name: file,
           directory: null,
           metadata:
-            settings.noMetadata === true
-              ? null
-              : await MetadataLoader.loadPhotoMetadata(fullFilePath),
+              settings.noMetadata === true
+                  ? null
+                  : await MetadataLoader.loadPhotoMetadata(fullFilePath),
         } as PhotoDTO;
 
         if (!directory.cover) {
@@ -197,9 +197,9 @@ export class DiskMangerWorker {
         }
       } else if (VideoProcessing.isVideo(fullFilePath)) {
         if (
-          Config.Media.Video.enabled === false ||
-          settings.noVideo === true ||
-          settings.coverOnly === true
+            Config.Media.Video.enabled === false ||
+            settings.noVideo === true ||
+            settings.coverOnly === true
         ) {
           continue;
         }
@@ -208,23 +208,23 @@ export class DiskMangerWorker {
             name: file,
             directory: null,
             metadata:
-              settings.noMetadata === true
-                ? null
-                : await MetadataLoader.loadVideoMetadata(fullFilePath),
+                settings.noMetadata === true
+                    ? null
+                    : await MetadataLoader.loadVideoMetadata(fullFilePath),
           } as VideoDTO);
         } catch (e) {
           Logger.warn(
-            'Media loading error, skipping: ' +
-            file +
-            ', reason: ' +
-            e.toString()
+              'Media loading error, skipping: ' +
+              file +
+              ', reason: ' +
+              e.toString()
           );
         }
       } else if (GPXProcessing.isMetaFile(fullFilePath)) {
         if (
-          !DiskMangerWorker.isEnabledMetaFile(fullFilePath) ||
-          settings.noMetaFile === true ||
-          settings.coverOnly === true
+            !DiskMangerWorker.isEnabledMetaFile(fullFilePath) ||
+            settings.noMetaFile === true ||
+            settings.coverOnly === true
         ) {
           continue;
         }
@@ -242,9 +242,9 @@ export class DiskMangerWorker {
       directory.oldestMedia = Number.MIN_SAFE_INTEGER;
 
       directory.media.forEach((m) => {
-          directory.youngestMedia = Math.min(m.metadata.creationDate, directory.youngestMedia);
-          directory.oldestMedia = Math.max(m.metadata.creationDate, directory.oldestMedia);
-        }
+            directory.youngestMedia = Math.min(m.metadata.creationDate, directory.youngestMedia);
+            directory.oldestMedia = Math.max(m.metadata.creationDate, directory.oldestMedia);
+          }
       );
 
       directory.metaFile.forEach(mf => {

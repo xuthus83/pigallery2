@@ -1,7 +1,6 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {BlogService, GroupedMarkdown} from './blog.service';
 import {OnChanges} from '../../../../../../node_modules/@angular/core';
-import {Utils} from '../../../../../common/Utils';
 import {map, Observable} from 'rxjs';
 
 @Component({

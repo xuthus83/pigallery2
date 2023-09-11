@@ -1,4 +1,4 @@
-import { Utils } from '../../../common/Utils';
+import {Utils} from '../../../common/Utils';
 
 export interface TaskQueEntry<I, O> {
   data: I;
@@ -37,9 +37,9 @@ export class TaskQue<I, O> {
 
   private getSameTask(input: I): TaskQueEntry<I, O> {
     return (this.tasks.find((t) => Utils.equalsFilter(t.data, input)) ||
-      this.processing.find((t) =>
-        Utils.equalsFilter(t.data, input)
-      )) as TaskQueEntry<I, O>;
+        this.processing.find((t) =>
+            Utils.equalsFilter(t.data, input)
+        )) as TaskQueEntry<I, O>;
   }
 
   private putNewTask(input: I): TaskQueEntry<I, O> {
@@ -53,10 +53,10 @@ export class TaskQue<I, O> {
     };
     this.tasks.push(taskEntry);
     taskEntry.promise.obj = new Promise<O>(
-      (resolve: (ret: O) => void, reject: (err: any) => void) => {
-        taskEntry.promise.reject = reject;
-        taskEntry.promise.resolve = resolve;
-      }
+        (resolve: (ret: O) => void, reject: (err: any) => void) => {
+          taskEntry.promise.reject = reject;
+          taskEntry.promise.resolve = resolve;
+        }
     );
     return taskEntry;
   }

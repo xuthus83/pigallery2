@@ -9,33 +9,33 @@ import {SupportedFormats} from '../../../common/SupportedFormats';
 
 export class VideoProcessing {
   private static taskQue: ITaskExecuter<VideoConverterInput, void> =
-    new TaskExecuter(
-      1,
-      (input): Promise<void> => VideoConverterWorker.convert(input)
-    );
+      new TaskExecuter(
+          1,
+          (input): Promise<void> => VideoConverterWorker.convert(input)
+      );
 
   public static generateConvertedFilePath(videoPath: string): string {
     return path.join(
-      ProjectPath.TranscodedFolder,
-      ProjectPath.getRelativePathToImages(path.dirname(videoPath)),
-      path.basename(videoPath) + '_' + this.getConvertedFilePostFix()
+        ProjectPath.TranscodedFolder,
+        ProjectPath.getRelativePathToImages(path.dirname(videoPath)),
+        path.basename(videoPath) + '_' + this.getConvertedFilePostFix()
     );
   }
 
   public static async isValidConvertedPath(
-    convertedPath: string
+      convertedPath: string
   ): Promise<boolean> {
     const origFilePath = path.join(
-      ProjectPath.ImageFolder,
-      path.relative(
-        ProjectPath.TranscodedFolder,
-        convertedPath.substring(0, convertedPath.lastIndexOf('_'))
-      )
+        ProjectPath.ImageFolder,
+        path.relative(
+            ProjectPath.TranscodedFolder,
+            convertedPath.substring(0, convertedPath.lastIndexOf('_'))
+        )
     );
 
     const postfix = convertedPath.substring(
-      convertedPath.lastIndexOf('_') + 1,
-      convertedPath.length
+        convertedPath.lastIndexOf('_') + 1,
+        convertedPath.length
     );
 
     if (postfix !== this.getConvertedFilePostFix()) {
@@ -82,8 +82,8 @@ export class VideoProcessing {
       output: {
         path: outPath,
         codec: Config.Media.Video.transcoding.format === 'mp4' ?
-          Config.Media.Video.transcoding.mp4Codec :
-          Config.Media.Video.transcoding.webmCodec,
+            Config.Media.Video.transcoding.mp4Codec :
+            Config.Media.Video.transcoding.webmCodec,
         format: Config.Media.Video.transcoding.format,
         crf: Config.Media.Video.transcoding.crf,
         preset: Config.Media.Video.transcoding.preset,
@@ -93,17 +93,17 @@ export class VideoProcessing {
 
     if (metaData.bitRate > Config.Media.Video.transcoding.bitRate) {
       renderInput.output.bitRate =
-        Config.Media.Video.transcoding.bitRate;
+          Config.Media.Video.transcoding.bitRate;
     }
     if (metaData.fps > Config.Media.Video.transcoding.fps) {
       renderInput.output.fps = Config.Media.Video.transcoding.fps;
     }
 
     if (
-      Config.Media.Video.transcoding.resolution < metaData.size.height
+        Config.Media.Video.transcoding.resolution < metaData.size.height
     ) {
       renderInput.output.resolution =
-        Config.Media.Video.transcoding.resolution;
+          Config.Media.Video.transcoding.resolution;
     }
 
     const outDir = path.dirname(renderInput.output.path);
@@ -119,14 +119,14 @@ export class VideoProcessing {
 
   protected static getConvertedFilePostFix(): string {
     return (
-      Math.round(Config.Media.Video.transcoding.bitRate / 1024) +
-      'k' +
-      (Config.Media.Video.transcoding.format === 'mp4' ?
-        Config.Media.Video.transcoding.mp4Codec :
-        Config.Media.Video.transcoding.webmCodec).toString().toLowerCase() +
-      Config.Media.Video.transcoding.resolution +
-      '.' +
-      Config.Media.Video.transcoding.format.toLowerCase()
+        Math.round(Config.Media.Video.transcoding.bitRate / 1024) +
+        'k' +
+        (Config.Media.Video.transcoding.format === 'mp4' ?
+            Config.Media.Video.transcoding.mp4Codec :
+            Config.Media.Video.transcoding.webmCodec).toString().toLowerCase() +
+        Config.Media.Video.transcoding.resolution +
+        '.' +
+        Config.Media.Video.transcoding.format.toLowerCase()
     );
   }
 }

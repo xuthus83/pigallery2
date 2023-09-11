@@ -14,7 +14,7 @@ import {FileDTO} from '../../../../common/entities/FileDTO';
 const LOG_TAG = '[IndexingJob]';
 
 export class IndexingJob<
-  S extends { indexChangesOnly: boolean } = { indexChangesOnly: boolean }
+    S extends { indexChangesOnly: boolean } = { indexChangesOnly: boolean }
 > extends Job<S> {
   public readonly Name = DefaultsJobs[DefaultsJobs.Indexing];
   directoriesToIndex: string[] = [];
@@ -66,9 +66,9 @@ export class IndexingJob<
           scanned = await ObjectManagers.getInstance().GalleryManager.selectDirStructure(directory);
           // If not modified and it was scanned before, dir is up-to-date
           if (
-            scanned &&
-            scanned.lastModified === lastModified &&
-            scanned.lastScanned != null
+              scanned &&
+              scanned.lastModified === lastModified &&
+              scanned.lastScanned != null
           ) {
             dirChanged = false;
           }
@@ -80,9 +80,9 @@ export class IndexingJob<
           this.Progress.log('Indexing: ' + directory);
           this.Progress.Processed++;
           scanned =
-            await ObjectManagers.getInstance().IndexingManager.indexDirectory(
-              directory
-            );
+              await ObjectManagers.getInstance().IndexingManager.indexDirectory(
+                  directory
+              );
         } else {
           this.Progress.log('Skipping. No change for: ' + directory);
           this.Progress.Skipped++;

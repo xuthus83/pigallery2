@@ -30,18 +30,18 @@ export class AdminComponent implements OnInit, AfterViewInit {
   public readonly configPaths: string[] = [];
 
   constructor(
-    private authService: AuthenticationService,
-    private navigation: NavigationService,
-    public viewportScroller: ViewportScroller,
-    public notificationService: NotificationService,
-    public settingsService: SettingsService,
-    private piTitleService: PiTitleService
+      private authService: AuthenticationService,
+      private navigation: NavigationService,
+      public viewportScroller: ViewportScroller,
+      public notificationService: NotificationService,
+      public settingsService: SettingsService,
+      private piTitleService: PiTitleService
   ) {
     this.configPriorities = enumToTranslatedArray(ConfigPriority);
     this.configStyles = enumToTranslatedArray(ConfigStyle);
     const wc = WebConfigClassBuilder.attachPrivateInterface(new WebConfig());
     this.configPaths = Object.keys(wc.State)
-      .filter(s => !wc.__state[s].volatile);
+        .filter(s => !wc.__state[s].volatile);
   }
 
   ngAfterViewInit(): void {
@@ -50,8 +50,8 @@ export class AdminComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     if (
-      !this.authService.isAuthenticated() ||
-      this.authService.user.value.role < UserRoles.Admin
+        !this.authService.isAuthenticated() ||
+        this.authService.user.value.role < UserRoles.Admin
     ) {
       this.navigation.toLogin();
       return;

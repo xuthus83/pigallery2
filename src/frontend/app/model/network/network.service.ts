@@ -14,9 +14,9 @@ export class NetworkService {
   private globalErrorHandlers: Array<(error: ErrorDTO) => boolean> = [];
 
   constructor(
-    private http: HttpClient,
-    private loadingBarService: LoadingBarService,
-    private versionService: VersionService
+      private http: HttpClient,
+      private loadingBarService: LoadingBarService,
+      private versionService: VersionService
   ) {
   }
 
@@ -51,10 +51,10 @@ export class NetworkService {
     };
 
     return this.http
-      .get(this.apiBaseUrl + url, {responseType: 'text'})
-      .toPromise()
-      .then(process)
-      .catch(err);
+        .get(this.apiBaseUrl + url, {responseType: 'text'})
+        .toPromise()
+        .then(process)
+        .catch(err);
   }
 
   public getText<T>(url: string): Promise<string> {
@@ -71,10 +71,10 @@ export class NetworkService {
     };
 
     return this.http
-      .get(this.apiBaseUrl + url, {responseType: 'text'})
-      .toPromise()
-      .then(process)
-      .catch(err);
+        .get(this.apiBaseUrl + url, {responseType: 'text'})
+        .toPromise()
+        .then(process)
+        .catch(err);
   }
 
   public postJson<T>(url: string, data = {}): Promise<T> {
@@ -98,9 +98,9 @@ export class NetworkService {
   }
 
   private callJson<T>(
-    method: 'get' | 'post' | 'delete' | 'put',
-    url: string,
-    data = {}
+      method: 'get' | 'post' | 'delete' | 'put',
+      url: string,
+      data = {}
   ): Promise<T> {
     const body = data;
 
@@ -111,7 +111,7 @@ export class NetworkService {
       const msg = res.body;
       if (res.headers.has(CustomHeaders.dataVersion)) {
         this.versionService.onNewVersion(
-          res.headers.get(CustomHeaders.dataVersion)
+            res.headers.get(CustomHeaders.dataVersion)
         );
       }
       if (msg.error) {
@@ -131,30 +131,30 @@ export class NetworkService {
     switch (method) {
       case 'get':
         return this.http
-          .get<Message<T>>(this.apiBaseUrl + url, {observe: 'response'})
-          .toPromise()
-          .then(process)
-          .catch(err);
+            .get<Message<T>>(this.apiBaseUrl + url, {observe: 'response'})
+            .toPromise()
+            .then(process)
+            .catch(err);
       case 'delete':
         return this.http
-          .delete<Message<T>>(this.apiBaseUrl + url, {observe: 'response'})
-          .toPromise()
-          .then(process)
-          .catch(err);
+            .delete<Message<T>>(this.apiBaseUrl + url, {observe: 'response'})
+            .toPromise()
+            .then(process)
+            .catch(err);
       case 'post':
         return this.http
-          .post<Message<T>>(this.apiBaseUrl + url, body, {
-            observe: 'response',
-          })
-          .toPromise()
-          .then(process)
-          .catch(err);
+            .post<Message<T>>(this.apiBaseUrl + url, body, {
+              observe: 'response',
+            })
+            .toPromise()
+            .then(process)
+            .catch(err);
       case 'put':
         return this.http
-          .put<Message<T>>(this.apiBaseUrl + url, body, {observe: 'response'})
-          .toPromise()
-          .then(process)
-          .catch(err);
+            .put<Message<T>>(this.apiBaseUrl + url, body, {observe: 'response'})
+            .toPromise()
+            .then(process)
+            .catch(err);
       default:
         throw new Error('Unknown method');
     }

@@ -24,16 +24,16 @@ export class ContentLoaderService {
   private ongoingSearch: string = null;
 
   constructor(
-    private networkService: NetworkService,
-    private galleryCacheService: GalleryCacheService,
-    private shareService: ShareService,
-    private navigationService: NavigationService,
+      private networkService: NetworkService,
+      private galleryCacheService: GalleryCacheService,
+      private shareService: ShareService,
+      private navigationService: NavigationService,
   ) {
     this.content = new BehaviorSubject<ContentWrapperWithError>(
-      new ContentWrapperWithError()
+        new ContentWrapperWithError()
     );
     this.originalContent = this.content.pipe(
-      map((c) => (c.directory ? c.directory : c.searchResult))
+        map((c) => (c.directory ? c.directory : c.searchResult))
     );
 
   }
@@ -56,26 +56,26 @@ export class ContentLoaderService {
     if (Config.Sharing.enabled === true) {
       if (this.shareService.isSharing()) {
         params[QueryParams.gallery.sharingKey_query] =
-          this.shareService.getSharingKey();
+            this.shareService.getSharingKey();
       }
     }
 
     if (
-      cw.directory &&
-      cw.directory.lastModified &&
-      cw.directory.lastScanned &&
-      !cw.directory.isPartial
+        cw.directory &&
+        cw.directory.lastModified &&
+        cw.directory.lastScanned &&
+        !cw.directory.isPartial
     ) {
       params[QueryParams.gallery.knownLastModified] =
-        cw.directory.lastModified;
+          cw.directory.lastModified;
       params[QueryParams.gallery.knownLastScanned] =
-        cw.directory.lastScanned;
+          cw.directory.lastScanned;
     }
 
     try {
       const cw = await this.networkService.getJson<ContentWrapperWithError>(
-        '/gallery/content/' + encodeURIComponent(directoryName),
-        params
+          '/gallery/content/' + encodeURIComponent(directoryName),
+          params
       );
 
       if (!cw || cw.notModified === true) {

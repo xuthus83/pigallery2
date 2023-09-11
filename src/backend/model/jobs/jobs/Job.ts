@@ -10,7 +10,7 @@ declare const global: any;
 
 const LOG_TAG = '[JOB]';
 
-export abstract class Job<T extends Record<string, any> = Record<string, any>> implements IJob<T> {
+export abstract class Job<T extends Record<string, unknown> = Record<string, unknown>> implements IJob<T> {
   public allowParallelRun: boolean = null;
   protected progress: JobProgress = null;
   protected config: T;
@@ -35,36 +35,36 @@ export abstract class Job<T extends Record<string, any> = Record<string, any>> i
 
   public get InProgress(): boolean {
     return (
-      this.Progress !== null &&
-      (this.Progress.State === JobProgressStates.running ||
-        this.Progress.State === JobProgressStates.cancelling)
+        this.Progress !== null &&
+        (this.Progress.State === JobProgressStates.running ||
+            this.Progress.State === JobProgressStates.cancelling)
     );
   }
 
   public start(
-    config: T,
-    soloRun = false,
-    allowParallelRun = false
+      config: T,
+      soloRun = false,
+      allowParallelRun = false
   ): Promise<void> {
     if (this.InProgress === false && this.Supported === true) {
       Logger.info(
-        LOG_TAG,
-        'Running job ' + (soloRun === true ? 'solo' : '') + ': ' + this.Name
+          LOG_TAG,
+          'Running job ' + (soloRun === true ? 'solo' : '') + ': ' + this.Name
       );
       this.soloRun = soloRun;
       this.allowParallelRun = allowParallelRun;
       this.config = {} as T;
       if (this.ConfigTemplate) {
-        this.ConfigTemplate.forEach(ct => (this.config as any)[ct.id] = ct.defaultValue);
+        this.ConfigTemplate.forEach(ct => (this.config as Record<string, unknown>)[ct.id] = ct.defaultValue);
       }
       if (config) {
         for (const key of Object.keys(config)) {
-          (this.config as any)[key] = config[key];
+          (this.config as Record<string, unknown>)[key] = config[key];
         }
       }
       this.progress = new JobProgress(
-        this.Name,
-        JobDTOUtils.getHashName(this.Name, this.config)
+          this.Name,
+          JobDTOUtils.getHashName(this.Name, this.config)
       );
       this.progress.OnChange = this.jobListener.onProgressUpdate;
       const pr = new Promise<void>((resolve): void => {
@@ -79,11 +79,11 @@ export abstract class Job<T extends Record<string, any> = Record<string, any>> i
       return pr;
     } else {
       Logger.info(
-        LOG_TAG,
-        'Job already running or not supported: ' + this.Name
+          LOG_TAG,
+          'Job already running or not supported: ' + this.Name
       );
       return Promise.reject(
-        'Job already running or not supported: ' + this.Name
+          'Job already running or not supported: ' + this.Name
       );
     }
   }
@@ -137,8 +137,8 @@ export abstract class Job<T extends Record<string, any> = Record<string, any>> i
     process.nextTick(async (): Promise<void> => {
       try {
         if (
-          this.Progress == null ||
-          this.Progress.State !== JobProgressStates.running
+            this.Progress == null ||
+            this.Progress.State !== JobProgressStates.running
         ) {
           this.onFinish();
           return;

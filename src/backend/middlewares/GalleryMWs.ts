@@ -21,14 +21,14 @@ import {SortByTypes} from '../../common/entities/SortingMethods';
 export class GalleryMWs {
   @ServerTime('1.db', 'List Directory')
   public static async listDirectory(
-    req: Request,
-    res: Response,
-    next: NextFunction
+      req: Request,
+      res: Response,
+      next: NextFunction
   ): Promise<void> {
     const directoryName = req.params['directory'] || '/';
     const absoluteDirectoryName = path.join(
-      ProjectPath.ImageFolder,
-      directoryName
+        ProjectPath.ImageFolder,
+        directoryName
     );
     try {
       if ((await fsp.stat(absoluteDirectoryName)).isDirectory() === false) {
@@ -40,57 +40,57 @@ export class GalleryMWs {
 
     try {
       const directory =
-        await ObjectManagers.getInstance().GalleryManager.listDirectory(
-          directoryName,
-          parseInt(
-            req.query[QueryParams.gallery.knownLastModified] as string,
-            10
-          ),
-          parseInt(
-            req.query[QueryParams.gallery.knownLastScanned] as string,
-            10
-          )
-        );
+          await ObjectManagers.getInstance().GalleryManager.listDirectory(
+              directoryName,
+              parseInt(
+                  req.query[QueryParams.gallery.knownLastModified] as string,
+                  10
+              ),
+              parseInt(
+                  req.query[QueryParams.gallery.knownLastScanned] as string,
+                  10
+              )
+          );
 
       if (directory == null) {
         req.resultPipe = new ContentWrapper(null, null, true);
         return next();
       }
       if (
-        req.session['user'].permissions &&
-        req.session['user'].permissions.length > 0 &&
-        req.session['user'].permissions[0] !== '/*'
+          req.session['user'].permissions &&
+          req.session['user'].permissions.length > 0 &&
+          req.session['user'].permissions[0] !== '/*'
       ) {
         directory.directories = directory.directories.filter((d): boolean =>
-          UserDTOUtils.isDirectoryAvailable(d, req.session['user'].permissions)
+            UserDTOUtils.isDirectoryAvailable(d, req.session['user'].permissions)
         );
       }
       req.resultPipe = new ContentWrapper(directory, null);
       return next();
     } catch (err) {
       return next(
-        new ErrorDTO(
-          ErrorCodes.GENERAL_ERROR,
-          'Error during listing the directory',
-          err
-        )
+          new ErrorDTO(
+              ErrorCodes.GENERAL_ERROR,
+              'Error during listing the directory',
+              err
+          )
       );
     }
   }
 
   @ServerTime('1.zip', 'Zip Directory')
   public static async zipDirectory(
-    req: Request,
-    res: Response,
-    next: NextFunction
+      req: Request,
+      res: Response,
+      next: NextFunction
   ): Promise<void> {
     if (Config.Gallery.NavBar.enableDownloadZip === false) {
       return next();
     }
     const directoryName = req.params['directory'] || '/';
     const absoluteDirectoryName = path.join(
-      ProjectPath.ImageFolder,
-      directoryName
+        ProjectPath.ImageFolder,
+        directoryName
     );
     try {
       if ((await fsp.stat(absoluteDirectoryName)).isDirectory() === false) {
@@ -133,16 +133,16 @@ export class GalleryMWs {
       return next();
     } catch (err) {
       return next(
-        new ErrorDTO(ErrorCodes.GENERAL_ERROR, 'Error creating zip', err)
+          new ErrorDTO(ErrorCodes.GENERAL_ERROR, 'Error creating zip', err)
       );
     }
   }
 
   @ServerTime('3.pack', 'pack result')
   public static cleanUpGalleryResults(
-    req: Request,
-    res: Response,
-    next: NextFunction
+      req: Request,
+      res: Response,
+      next: NextFunction
   ): void {
     if (!req.resultPipe) {
       return next();
@@ -157,14 +157,14 @@ export class GalleryMWs {
       if (cw.directory) {
         const removeVideos = (dir: ParentDirectoryDTO): void => {
           dir.media = dir.media.filter(
-            (m): boolean => !MediaDTOUtils.isVideo(m)
+              (m): boolean => !MediaDTOUtils.isVideo(m)
           );
         };
         removeVideos(cw.directory);
       }
       if (cw.searchResult) {
         cw.searchResult.media = cw.searchResult.media.filter(
-          (m): boolean => !MediaDTOUtils.isVideo(m)
+            (m): boolean => !MediaDTOUtils.isVideo(m)
         );
       }
     }
@@ -175,16 +175,16 @@ export class GalleryMWs {
   }
 
   public static async loadFile(
-    req: Request,
-    res: Response,
-    next: NextFunction
+      req: Request,
+      res: Response,
+      next: NextFunction
   ): Promise<void> {
     if (!req.params['mediaPath']) {
       return next();
     }
     const fullMediaPath = path.join(
-      ProjectPath.ImageFolder,
-      req.params['mediaPath']
+        ProjectPath.ImageFolder,
+        req.params['mediaPath']
     );
 
     // check if file exist
@@ -194,11 +194,11 @@ export class GalleryMWs {
       }
     } catch (e) {
       return next(
-        new ErrorDTO(
-          ErrorCodes.GENERAL_ERROR,
-          'no such file:' + req.params['mediaPath'],
-          'can\'t find file: ' + fullMediaPath
-        )
+          new ErrorDTO(
+              ErrorCodes.GENERAL_ERROR,
+              'no such file:' + req.params['mediaPath'],
+              'can\'t find file: ' + fullMediaPath
+          )
       );
     }
 
@@ -207,9 +207,9 @@ export class GalleryMWs {
   }
 
   public static async loadBestFitVideo(
-    req: Request,
-    res: Response,
-    next: NextFunction
+      req: Request,
+      res: Response,
+      next: NextFunction
   ): Promise<void> {
     if (!req.resultPipe) {
       return next();
@@ -217,7 +217,7 @@ export class GalleryMWs {
     const fullMediaPath = req.resultPipe as string;
 
     const convertedVideo =
-      VideoProcessing.generateConvertedFilePath(fullMediaPath);
+        VideoProcessing.generateConvertedFilePath(fullMediaPath);
 
     // check if transcoded video exist
     try {
@@ -232,52 +232,52 @@ export class GalleryMWs {
 
   @ServerTime('1.db', 'Search')
   public static async search(
-    req: Request,
-    res: Response,
-    next: NextFunction
+      req: Request,
+      res: Response,
+      next: NextFunction
   ): Promise<void> {
     if (
-      Config.Search.enabled === false ||
-      !req.params['searchQueryDTO']
+        Config.Search.enabled === false ||
+        !req.params['searchQueryDTO']
     ) {
       return next();
     }
 
     const query: SearchQueryDTO = JSON.parse(
-      req.params['searchQueryDTO'] as string
+        req.params['searchQueryDTO'] as string
     );
 
     try {
       const result = await ObjectManagers.getInstance().SearchManager.search(
-        query
+          query
       );
 
       result.directories.forEach(
-        (dir): MediaDTO[] => (dir.media = dir.media || [])
+          (dir): MediaDTO[] => (dir.media = dir.media || [])
       );
       req.resultPipe = new ContentWrapper(null, result);
       return next();
     } catch (err) {
       if (err instanceof LocationLookupException) {
         return next(
-          new ErrorDTO(
-            ErrorCodes.LocationLookUp_ERROR,
-            'Cannot find location: ' + err.location,
-            err
-          )
+            new ErrorDTO(
+                ErrorCodes.LocationLookUp_ERROR,
+                'Cannot find location: ' + err.location,
+                err
+            )
         );
       }
       return next(
-        new ErrorDTO(ErrorCodes.GENERAL_ERROR, 'Error during searching', err)
+          new ErrorDTO(ErrorCodes.GENERAL_ERROR, 'Error during searching', err)
       );
     }
   }
 
   @ServerTime('1.db', 'Autocomplete')
   public static async autocomplete(
-    req: Request,
-    res: Response,
-    next: NextFunction
+      req: Request,
+      res: Response,
+      next: NextFunction
   ): Promise<void> {
     if (Config.Search.AutoComplete.enabled === false) {
       return next();
@@ -292,53 +292,53 @@ export class GalleryMWs {
     }
     try {
       req.resultPipe =
-        await ObjectManagers.getInstance().SearchManager.autocomplete(
-          req.params['text'],
-          type
-        );
+          await ObjectManagers.getInstance().SearchManager.autocomplete(
+              req.params['text'],
+              type
+          );
       return next();
     } catch (err) {
       return next(
-        new ErrorDTO(ErrorCodes.GENERAL_ERROR, 'Error during searching', err)
+          new ErrorDTO(ErrorCodes.GENERAL_ERROR, 'Error during searching', err)
       );
     }
   }
 
   public static async getRandomImage(
-    req: Request,
-    res: Response,
-    next: NextFunction
+      req: Request,
+      res: Response,
+      next: NextFunction
   ): Promise<void> {
     if (
-      Config.RandomPhoto.enabled === false ||
-      !req.params['searchQueryDTO']
+        Config.RandomPhoto.enabled === false ||
+        !req.params['searchQueryDTO']
     ) {
       return next();
     }
 
     try {
       const query: SearchQueryDTO = JSON.parse(
-        req.params['searchQueryDTO'] as string
+          req.params['searchQueryDTO'] as string
       );
 
       const photos =
-        await ObjectManagers.getInstance().SearchManager.getNMedia(query, [{method: SortByTypes.Random, ascending: null}], 1, true);
+          await ObjectManagers.getInstance().SearchManager.getNMedia(query, [{method: SortByTypes.Random, ascending: null}], 1, true);
       if (!photos || photos.length !== 1) {
         return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, 'No photo found'));
       }
 
       req.params['mediaPath'] = path.join(
-        photos[0].directory.path,
-        photos[0].directory.name,
-        photos[0].name
+          photos[0].directory.path,
+          photos[0].directory.name,
+          photos[0].name
       );
       return next();
     } catch (e) {
       return next(
-        new ErrorDTO(
-          ErrorCodes.GENERAL_ERROR,
-          'Can\'t get random photo: ' + e.toString()
-        )
+          new ErrorDTO(
+              ErrorCodes.GENERAL_ERROR,
+              'Can\'t get random photo: ' + e.toString()
+          )
       );
     }
   }

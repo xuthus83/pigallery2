@@ -50,12 +50,12 @@ export class GalleryShareComponent implements OnInit, OnDestroy {
   };
 
   constructor(
-    public sharingService: ShareService,
-    public galleryService: ContentLoaderService,
-    private notification: NotificationService,
-    private modalService: BsModalService,
-    public authService: AuthenticationService,
-    private clipboardService: ClipboardService
+      public sharingService: ShareService,
+      public galleryService: ContentLoaderService,
+      private notification: NotificationService,
+      private modalService: BsModalService,
+      public authService: AuthenticationService,
+      private clipboardService: ClipboardService
   ) {
     this.text.Yes = $localize`Yes`;
     this.text.No = $localize`No`;
@@ -67,18 +67,18 @@ export class GalleryShareComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.contentSubscription = this.galleryService.content.subscribe(
-      async (content: ContentWrapper) => {
-        this.activeShares = [];
-        this.enabled = !!content.directory;
-        if (!this.enabled) {
-          return;
+        async (content: ContentWrapper) => {
+          this.activeShares = [];
+          this.enabled = !!content.directory;
+          if (!this.enabled) {
+            return;
+          }
+          this.currentDir = Utils.concatUrls(
+              content.directory.path,
+              content.directory.name
+          );
+          await this.updateActiveSharesList();
         }
-        this.currentDir = Utils.concatUrls(
-          content.directory.path,
-          content.directory.name
-        );
-        await this.updateActiveSharesList();
-      }
     );
   }
 
@@ -126,11 +126,11 @@ export class GalleryShareComponent implements OnInit, OnDestroy {
     this.urlValid = false;
     this.url = $localize`loading..`;
     this.sharing = await this.sharingService.updateSharing(
-      this.currentDir,
-      this.sharing.id,
-      this.input.includeSubfolders,
-      this.input.password,
-      this.calcValidity()
+        this.currentDir,
+        this.sharing.id,
+        this.input.includeSubfolders,
+        this.input.password,
+        this.calcValidity()
     );
     this.urlValid = true;
     this.url = this.sharingService.getUrl(this.sharing);
@@ -141,9 +141,9 @@ export class GalleryShareComponent implements OnInit, OnDestroy {
     this.urlValid = false;
     this.url = $localize`loading..`;
     this.sharing = await this.sharingService.createSharing(
-      this.currentDir,
-      this.input.includeSubfolders,
-      this.calcValidity()
+        this.currentDir,
+        this.input.includeSubfolders,
+        this.calcValidity()
     );
     this.url = this.sharingService.getUrl(this.sharing);
     this.urlValid = true;

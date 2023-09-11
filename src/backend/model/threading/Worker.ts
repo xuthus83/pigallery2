@@ -17,8 +17,8 @@ export class Worker {
         switch (task.type) {
           case WorkerTaskTypes.diskManager:
             result = await DiskMangerWorker.scanDirectory(
-              (task as DiskManagerTask).relativeDirectoryName,
-              (task as DiskManagerTask).settings
+                (task as DiskManagerTask).relativeDirectoryName,
+                (task as DiskManagerTask).settings
             );
             if (global.gc) {
               global.gc();

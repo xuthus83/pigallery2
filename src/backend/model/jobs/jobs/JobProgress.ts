@@ -1,8 +1,4 @@
-import {
-  JobProgressDTO,
-  JobProgressLogDTO,
-  JobProgressStates,
-} from '../../../../common/entities/job/JobProgressDTO';
+import {JobProgressDTO, JobProgressLogDTO, JobProgressStates,} from '../../../../common/entities/job/JobProgressDTO';
 import {Config} from '../../../../common/config/private/Config';
 
 export class JobProgress {
@@ -20,9 +16,10 @@ export class JobProgress {
   private logs: { id: number; timestamp: string; comment: string }[] = [];
 
   constructor(
-    public readonly jobName: string,
-    public readonly HashName: string
-  ) {}
+      public readonly jobName: string,
+      public readonly HashName: string
+  ) {
+  }
 
   set OnChange(val: (progress: JobProgress) => void) {
     this.onChange = val;

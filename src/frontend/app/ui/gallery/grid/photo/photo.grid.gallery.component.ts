@@ -32,8 +32,8 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, OnDestroy {
   loaded = false;
 
   constructor(
-    private thumbnailService: ThumbnailManagerService,
-    private authService: AuthenticationService
+      private thumbnailService: ThumbnailManagerService,
+      private authService: AuthenticationService
   ) {
     this.searchEnabled = this.authService.canSearch();
   }
@@ -49,8 +49,8 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, OnDestroy {
     if ((this.gridMedia.media as PhotoDTO).metadata.caption) {
       if ((this.gridMedia.media as PhotoDTO).metadata.caption.length > 20) {
         return (
-          (this.gridMedia.media as PhotoDTO).metadata.caption.substring(0, 17) +
-          '...'
+            (this.gridMedia.media as PhotoDTO).metadata.caption.substring(0, 17) +
+            '...'
         );
       }
       return (this.gridMedia.media as PhotoDTO).metadata.caption;
@@ -62,28 +62,28 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, OnDestroy {
     this.thumbnail = this.thumbnailService.getThumbnail(this.gridMedia);
     const metadata = this.gridMedia.media.metadata as PhotoMetadata;
     if (
-      (metadata.keywords && metadata.keywords.length > 0) ||
-      (metadata.faces && metadata.faces.length > 0)
+        (metadata.keywords && metadata.keywords.length > 0) ||
+        (metadata.faces && metadata.faces.length > 0)
     ) {
       this.keywords = [];
       if (Config.Faces.enabled) {
         const names: string[] = (metadata.faces || []).map(
-          (f): string => f.name
+            (f): string => f.name
         );
         this.keywords = names
-          .filter((name, index): boolean => names.indexOf(name) === index)
-          .map((n): { type: SearchQueryTypes; value: string } => ({
-            value: n,
-            type: SearchQueryTypes.person,
-          }));
+            .filter((name, index): boolean => names.indexOf(name) === index)
+            .map((n): { type: SearchQueryTypes; value: string } => ({
+              value: n,
+              type: SearchQueryTypes.person,
+            }));
       }
       this.keywords = this.keywords.concat(
-        (metadata.keywords || []).map(
-          (k): { type: SearchQueryTypes; value: string } => ({
-            value: k,
-            type: SearchQueryTypes.keyword,
-          })
-        )
+          (metadata.keywords || []).map(
+              (k): { type: SearchQueryTypes; value: string } => ({
+                value: k,
+                type: SearchQueryTypes.keyword,
+              })
+          )
       );
     }
   }
@@ -98,11 +98,11 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, OnDestroy {
 
   isInView(): boolean {
     return (
-      PageHelper.ScrollY <
-      this.container.nativeElement.offsetTop +
-      this.container.nativeElement.clientHeight &&
-      PageHelper.ScrollY + window.innerHeight >
-      this.container.nativeElement.offsetTop
+        PageHelper.ScrollY <
+        this.container.nativeElement.offsetTop +
+        this.container.nativeElement.clientHeight &&
+        PageHelper.ScrollY + window.innerHeight >
+        this.container.nativeElement.offsetTop
     );
   }
 
@@ -138,9 +138,9 @@ export class GalleryPhotoComponent implements IRenderable, OnInit, OnDestroy {
       return '';
     }
     return (
-      (this.gridMedia.media as PhotoDTO).metadata.positionData.city ||
-      (this.gridMedia.media as PhotoDTO).metadata.positionData.state ||
-      (this.gridMedia.media as PhotoDTO).metadata.positionData.country || ''
+        (this.gridMedia.media as PhotoDTO).metadata.positionData.city ||
+        (this.gridMedia.media as PhotoDTO).metadata.positionData.state ||
+        (this.gridMedia.media as PhotoDTO).metadata.positionData.country || ''
     ).trim();
   }
 

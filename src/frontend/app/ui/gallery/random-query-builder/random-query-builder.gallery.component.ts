@@ -32,11 +32,11 @@ export class RandomQueryBuilderGalleryComponent implements OnInit, OnDestroy {
   private readonly subscription: Subscription = null;
 
   constructor(
-    public contentLoaderService: ContentLoaderService,
-    private notification: NotificationService,
-    private searchQueryParserService: SearchQueryParserService,
-    private route: ActivatedRoute,
-    private modalService: BsModalService
+      public contentLoaderService: ContentLoaderService,
+      private notification: NotificationService,
+      private searchQueryParserService: SearchQueryParserService,
+      private route: ActivatedRoute,
+      private modalService: BsModalService
   ) {
     this.subscription = this.route.params.subscribe((params: Params) => {
       if (!params[QueryParams.gallery.search.query]) {
@@ -56,19 +56,19 @@ export class RandomQueryBuilderGalleryComponent implements OnInit, OnDestroy {
 
   onQueryChange(): void {
     this.url = NetworkService.buildUrl(
-      Config.Server.publicUrl + Config.Server.apiPath + '/gallery/random/' + this.HTMLSearchQuery
+        Config.Server.publicUrl + Config.Server.apiPath + '/gallery/random/' + this.HTMLSearchQuery
     );
   }
 
   ngOnInit(): void {
     this.contentSubscription = this.contentLoaderService.content.subscribe(
-      (content: ContentWrapper) => {
-        this.enabled = !!content.directory;
-        if (!this.enabled) {
-          return;
+        (content: ContentWrapper) => {
+          this.enabled = !!content.directory;
+          if (!this.enabled) {
+            return;
+          }
+          // this.data.directory = Utils.concatUrls((<DirectoryDTO>content.directory).path, (<DirectoryDTO>content.directory).name);
         }
-        // this.data.directory = Utils.concatUrls((<DirectoryDTO>content.directory).path, (<DirectoryDTO>content.directory).name);
-      }
     );
   }
 
@@ -82,7 +82,7 @@ export class RandomQueryBuilderGalleryComponent implements OnInit, OnDestroy {
     }
   }
 
-  openModal(template: TemplateRef<any>): boolean {
+  openModal(template: TemplateRef<unknown>): boolean {
     if (!this.enabled) {
       return;
     }

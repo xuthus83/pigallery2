@@ -92,21 +92,21 @@ export class VideoRendererFactory {
           const folder = path.dirname(input.outPath);
           let executedCmd = '';
           command
-            .on('start', (cmd): void => {
-              executedCmd = cmd;
-            })
-            .on('end', (): void => {
-              resolve();
-            })
-            .on('error', (e): void => {
-              reject('[FFmpeg] ' + e.toString() + ' executed: ' + executedCmd);
-            })
-            .outputOptions(['-qscale:v 4']);
+              .on('start', (cmd): void => {
+                executedCmd = cmd;
+              })
+              .on('end', (): void => {
+                resolve();
+              })
+              .on('error', (e): void => {
+                reject('[FFmpeg] ' + e.toString() + ' executed: ' + executedCmd);
+              })
+              .outputOptions(['-qscale:v 4']);
           if (input.makeSquare === false) {
             const newSize =
-              width < height
-                ? Math.min(input.size, width) + 'x?'
-                : '?x' + Math.min(input.size, height);
+                width < height
+                    ? Math.min(input.size, width) + 'x?'
+                    : '?x' + Math.min(input.size, height);
             command.takeScreenshots({
               timemarks: ['10%'],
               size: newSize,
@@ -134,22 +134,22 @@ export class ImageRendererFactory {
     let image: Sharp;
     if ((input as MediaRendererInput).mediaPath) {
       Logger.silly(
-        '[SharpRenderer] rendering photo:' +
-        (input as MediaRendererInput).mediaPath +
-        ', size:' +
-        input.size
+          '[SharpRenderer] rendering photo:' +
+          (input as MediaRendererInput).mediaPath +
+          ', size:' +
+          input.size
       );
       image = sharp((input as MediaRendererInput).mediaPath, {failOnError: false});
     } else {
       const svg_buffer = Buffer.from((input as SvgRendererInput).svgString);
-      image = sharp(svg_buffer, { density: 450 });
+      image = sharp(svg_buffer, {density: 450});
     }
     image.rotate();
     const metadata: Metadata = await image.metadata();
     const kernel =
-      input.useLanczos3 === true
-        ? sharp.kernel.lanczos3
-        : sharp.kernel.nearest;
+        input.useLanczos3 === true
+            ? sharp.kernel.lanczos3
+            : sharp.kernel.nearest;
 
     if (input.cut) {
       image.extract(input.cut);

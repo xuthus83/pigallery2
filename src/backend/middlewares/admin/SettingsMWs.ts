@@ -19,8 +19,8 @@ export class SettingsMWs {
    */
   public static async updateSettings(req: Request, res: Response, next: NextFunction): Promise<void> {
     if ((typeof req.body === 'undefined')
-      || (typeof req.body.settings === 'undefined')
-      || (typeof req.body.settingsPath !== 'string')) {
+        || (typeof req.body.settings === 'undefined')
+        || (typeof req.body.settingsPath !== 'string')) {
       return next(new ErrorDTO(ErrorCodes.INPUT_ERROR, 'settings is needed'));
     }
 

@@ -24,8 +24,8 @@ export class ThemeService {
       this.setMode(Config.Gallery.Themes.defaultMode);
     }
     this.darkMode.subscribe((darkMode: boolean) => {
-        this.applyMode(darkMode);
-      }
+          this.applyMode(darkMode);
+        }
     );
   }
 

@@ -1,4 +1,4 @@
-import { CoverPhotoDTO } from '../PhotoDTO';
+import {CoverPhotoDTO} from '../PhotoDTO';
 
 export interface AlbumBaseDTO {
   id: number;

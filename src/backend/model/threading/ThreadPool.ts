@@ -64,23 +64,23 @@ export class ThreadPool<O> {
     worker.worker.on('online', (): void => {
       ThreadPool.WorkerCount++;
       Logger.debug(
-        LOG_TAG,
-        'Worker ' + worker.worker.process.pid + ' is online, worker count:',
-        ThreadPool.WorkerCount
+          LOG_TAG,
+          'Worker ' + worker.worker.process.pid + ' is online, worker count:',
+          ThreadPool.WorkerCount
       );
     });
     worker.worker.on('exit', (code, signal): void => {
       ThreadPool.WorkerCount--;
       Logger.warn(
-        LOG_TAG,
-        'Worker ' +
-        worker.worker.process.pid +
-        ' died with code: ' +
-        code +
-        ', and signal: ' +
-        signal +
-        ', worker count:',
-        ThreadPool.WorkerCount
+          LOG_TAG,
+          'Worker ' +
+          worker.worker.process.pid +
+          ' died with code: ' +
+          code +
+          ', and signal: ' +
+          signal +
+          ', worker count:',
+          ThreadPool.WorkerCount
       );
       Logger.debug(LOG_TAG, 'Starting a new worker');
       this.startWorker();
@@ -103,11 +103,11 @@ export class ThreadPool<O> {
 }
 
 export class DiskManagerTH
-  extends ThreadPool<ParentDirectoryDTO>
-  implements ITaskExecuter<string, ParentDirectoryDTO> {
+    extends ThreadPool<ParentDirectoryDTO>
+    implements ITaskExecuter<string, ParentDirectoryDTO> {
   execute(
-    relativeDirectoryName: string,
-    settings: DirectoryScanSettings = {}
+      relativeDirectoryName: string,
+      settings: DirectoryScanSettings = {}
   ): Promise<ParentDirectoryDTO> {
     return super.executeTask({
       type: WorkerTaskTypes.diskManager,

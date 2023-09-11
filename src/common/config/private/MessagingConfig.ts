@@ -2,7 +2,6 @@
 import {SubConfigClass} from '../../../../node_modules/typeconfig/src/decorators/class/SubConfigClass';
 import {ConfigPriority, TAGS} from '../public/ClientConfig';
 import {ConfigProperty} from '../../../../node_modules/typeconfig/src/decorators/property/ConfigPropoerty';
-import {ServerConfig} from './PrivateConfig';
 
 declare let $localize: (s: TemplateStringsArray) => string;
 
@@ -80,19 +79,19 @@ export class EmailMessagingConfig {
 
   @ConfigProperty({
     tags:
-      {
-        name: $localize`Sender email`,
-        priority: ConfigPriority.advanced,
-      } as TAGS,
+        {
+          name: $localize`Sender email`,
+          priority: ConfigPriority.advanced,
+        } as TAGS,
     description: $localize`Some services do not allow sending from random e-mail addresses. Set this accordingly.`
   })
   emailFrom: string = 'noreply@pigallery2.com';
 
   @ConfigProperty({
     tags:
-      {
-        name: $localize`SMTP`,
-      }
+        {
+          name: $localize`SMTP`,
+        }
   })
   smtp?: EmailSMTPMessagingConfig = new EmailSMTPMessagingConfig();
 
@@ -102,9 +101,9 @@ export class EmailMessagingConfig {
 export class MessagingConfig {
   @ConfigProperty({
     tags:
-      {
-        name: $localize`Email`,
-      },
+        {
+          name: $localize`Email`,
+        },
     description: $localize`The app uses Nodemailer in the background for sending e-mails. Refer to https://nodemailer.com/usage/ if some options are not clear.`
   })
   Email: EmailMessagingConfig = new EmailMessagingConfig();

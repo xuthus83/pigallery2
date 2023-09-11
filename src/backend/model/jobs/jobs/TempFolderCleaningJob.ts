@@ -38,8 +38,8 @@ export class TempFolderCleaningJob extends Job {
 
   protected async isValidDirectory(filePath: string): Promise<boolean> {
     const originalPath = path.join(
-      ProjectPath.ImageFolder,
-      path.relative(ProjectPath.TranscodedFolder, filePath)
+        ProjectPath.ImageFolder,
+        path.relative(ProjectPath.TranscodedFolder, filePath)
     );
     try {
       await fs.promises.access(originalPath);
@@ -52,7 +52,7 @@ export class TempFolderCleaningJob extends Job {
 
   protected async readDir(dirPath: string): Promise<string[]> {
     return (await fs.promises.readdir(dirPath)).map((f) =>
-      path.normalize(path.join(dirPath, f))
+        path.normalize(path.join(dirPath, f))
     );
   }
 
@@ -91,7 +91,7 @@ export class TempFolderCleaningJob extends Job {
         this.Progress.log('skipping: ' + filePath);
         this.Progress.Skipped++;
         this.directoryQueue = this.directoryQueue.concat(
-          await this.readDir(filePath)
+            await this.readDir(filePath)
         );
       }
     } else {

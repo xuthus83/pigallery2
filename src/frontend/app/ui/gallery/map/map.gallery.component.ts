@@ -53,9 +53,9 @@ export class GalleryMapComponent implements OnChanges, IRenderable {
         attribution: this.mapService.ShortAttributions,
       }),
       'dark':
-        tileLayer(this.mapService.DarkMapLayer.url, {
-          attribution: this.mapService.ShortAttributions,
-        })
+          tileLayer(this.mapService.DarkMapLayer.url, {
+            attribution: this.mapService.ShortAttributions,
+          })
     };
     if (this.themeService.darkMode.value) {
       this.options.layers = [this.layers.dark];
@@ -89,10 +89,10 @@ export class GalleryMapComponent implements OnChanges, IRenderable {
     if (this.markerLayer.length > 0) {
       this.leafletMap.setView(this.markerLayer[0].getLatLng(), 99);
       this.leafletMap.fitBounds(
-        this.markerLayer.map(
-          (mp): [number, number] =>
-            [mp.getLatLng().lat, mp.getLatLng().lng] as [number, number]
-        )
+          this.markerLayer.map(
+              (mp): [number, number] =>
+                  [mp.getLatLng().lat, mp.getLatLng().lng] as [number, number]
+          )
       );
     }
     this.leafletMap.setZoom(0);
@@ -100,31 +100,31 @@ export class GalleryMapComponent implements OnChanges, IRenderable {
 
   ngOnChanges(): void {
     this.markerLayer = this.photos
-      .filter((p): number => {
-        return (
-          p.metadata &&
-          p.metadata.positionData &&
-          p.metadata.positionData.GPSData &&
-          p.metadata.positionData.GPSData.latitude &&
-          p.metadata.positionData.GPSData.longitude
-        );
-      })
-      .slice(0, Config.Map.maxPreviewMarkers)
-      .map((p): Marker => {
-        return marker({
-          lat: p.metadata.positionData.GPSData.latitude,
-          lng: p.metadata.positionData.GPSData.longitude,
-        } as LatLngLiteral).setIcon(MarkerFactory.defIconSmall);
-      });
+        .filter((p): number => {
+          return (
+              p.metadata &&
+              p.metadata.positionData &&
+              p.metadata.positionData.GPSData &&
+              p.metadata.positionData.GPSData.latitude &&
+              p.metadata.positionData.GPSData.longitude
+          );
+        })
+        .slice(0, Config.Map.maxPreviewMarkers)
+        .map((p): Marker => {
+          return marker({
+            lat: p.metadata.positionData.GPSData.latitude,
+            lng: p.metadata.positionData.GPSData.longitude,
+          } as LatLngLiteral).setIcon(MarkerFactory.defIconSmall);
+        });
 
     if (this.leafletMap && this.markerLayer.length > 0) {
       this.options.center = this.markerLayer[0].getLatLng();
       this.leafletMap.setView(this.markerLayer[0].getLatLng(), 99);
       this.leafletMap.fitBounds(
-        this.markerLayer.map(
-          (mp): [number, number] =>
-            [mp.getLatLng().lat, mp.getLatLng().lng] as [number, number]
-        )
+          this.markerLayer.map(
+              (mp): [number, number] =>
+                  [mp.getLatLng().lat, mp.getLatLng().lng] as [number, number]
+          )
       );
       this.leafletMap.setZoom(0);
     }

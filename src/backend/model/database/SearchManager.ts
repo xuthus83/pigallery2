@@ -48,7 +48,7 @@ export class SearchManager {
   private queryIdBase = 0;
 
   private static autoCompleteItemsUnique(
-    array: Array<AutoCompleteItem>
+      array: Array<AutoCompleteItem>
   ): Array<AutoCompleteItem> {
     const a = array.concat();
     for (let i = 0; i < a.length; ++i) {
@@ -63,8 +63,8 @@ export class SearchManager {
   }
 
   async autocomplete(
-    text: string,
-    type: SearchQueryTypes
+      text: string,
+      type: SearchQueryTypes
   ): Promise<AutoCompleteItem[]> {
     const connection = await SQLConnection.getConnection();
 
@@ -76,184 +76,184 @@ export class SearchManager {
     const partialResult: AutoCompleteItem[][] = [];
 
     if (
-      type === SearchQueryTypes.any_text ||
-      type === SearchQueryTypes.keyword
+        type === SearchQueryTypes.any_text ||
+        type === SearchQueryTypes.keyword
     ) {
       const acList: AutoCompleteItem[] = [];
       (
-        await photoRepository
-          .createQueryBuilder('photo')
-          .select('DISTINCT(photo.metadata.keywords)')
-          .where('photo.metadata.keywords LIKE :text COLLATE ' + SQL_COLLATE, {
-            text: '%' + text + '%',
-          })
-          .limit(Config.Search.AutoComplete.ItemsPerCategory.keyword)
-          .getRawMany()
+          await photoRepository
+              .createQueryBuilder('photo')
+              .select('DISTINCT(photo.metadata.keywords)')
+              .where('photo.metadata.keywords LIKE :text COLLATE ' + SQL_COLLATE, {
+                text: '%' + text + '%',
+              })
+              .limit(Config.Search.AutoComplete.ItemsPerCategory.keyword)
+              .getRawMany()
       )
-        .map(
-          (r): Array<string> =>
-            (r.metadataKeywords as string).split(',') as Array<string>
-        )
-        .forEach((keywords): void => {
-          acList.push(
-            ...this.encapsulateAutoComplete(
-              keywords.filter(
-                (k): boolean =>
-                  k.toLowerCase().indexOf(text.toLowerCase()) !== -1
-              ),
-              SearchQueryTypes.keyword
-            )
-          );
-        });
+          .map(
+              (r): Array<string> =>
+                  (r.metadataKeywords as string).split(',') as Array<string>
+          )
+          .forEach((keywords): void => {
+            acList.push(
+                ...this.encapsulateAutoComplete(
+                    keywords.filter(
+                        (k): boolean =>
+                            k.toLowerCase().indexOf(text.toLowerCase()) !== -1
+                    ),
+                    SearchQueryTypes.keyword
+                )
+            );
+          });
       partialResult.push(acList);
     }
 
     if (
-      type === SearchQueryTypes.any_text ||
-      type === SearchQueryTypes.person
+        type === SearchQueryTypes.any_text ||
+        type === SearchQueryTypes.person
     ) {
       partialResult.push(
-        this.encapsulateAutoComplete(
-          (
-            await personRepository
-              .createQueryBuilder('person')
-              .select('DISTINCT(person.name), person.count')
-              .where('person.name LIKE :text COLLATE ' + SQL_COLLATE, {
-                text: '%' + text + '%',
-              })
-              .limit(
-                Config.Search.AutoComplete.ItemsPerCategory.person
-              )
-              .orderBy('person.count', 'DESC')
-              .getRawMany()
-          ).map((r) => r.name),
-          SearchQueryTypes.person
-        )
+          this.encapsulateAutoComplete(
+              (
+                  await personRepository
+                      .createQueryBuilder('person')
+                      .select('DISTINCT(person.name), person.count')
+                      .where('person.name LIKE :text COLLATE ' + SQL_COLLATE, {
+                        text: '%' + text + '%',
+                      })
+                      .limit(
+                          Config.Search.AutoComplete.ItemsPerCategory.person
+                      )
+                      .orderBy('person.count', 'DESC')
+                      .getRawMany()
+              ).map((r) => r.name),
+              SearchQueryTypes.person
+          )
       );
     }
 
     if (
-      type === SearchQueryTypes.any_text ||
-      type === SearchQueryTypes.position ||
-      type === SearchQueryTypes.distance
+        type === SearchQueryTypes.any_text ||
+        type === SearchQueryTypes.position ||
+        type === SearchQueryTypes.distance
     ) {
       const acList: AutoCompleteItem[] = [];
       (
-        await photoRepository
-          .createQueryBuilder('photo')
-          .select(
-            'photo.metadata.positionData.country as country, ' +
-            'photo.metadata.positionData.state as state, photo.metadata.positionData.city as city'
-          )
-          .where(
-            'photo.metadata.positionData.country LIKE :text COLLATE ' +
-            SQL_COLLATE,
-            {text: '%' + text + '%'}
-          )
-          .orWhere(
-            'photo.metadata.positionData.state LIKE :text COLLATE ' +
-            SQL_COLLATE,
-            {text: '%' + text + '%'}
-          )
-          .orWhere(
-            'photo.metadata.positionData.city LIKE :text COLLATE ' +
-            SQL_COLLATE,
-            {text: '%' + text + '%'}
-          )
-          .groupBy(
-            'photo.metadata.positionData.country, photo.metadata.positionData.state, photo.metadata.positionData.city'
-          )
-          .limit(Config.Search.AutoComplete.ItemsPerCategory.position)
-          .getRawMany()
-      )
-        .filter((pm): boolean => !!pm)
-        .map(
-          (pm): Array<string> =>
-            [pm.city || '', pm.country || '', pm.state || ''] as Array<string>
-        )
-        .forEach((positions): void => {
-          acList.push(
-            ...this.encapsulateAutoComplete(
-              positions.filter(
-                (p): boolean =>
-                  p.toLowerCase().indexOf(text.toLowerCase()) !== -1
-              ),
-              type === SearchQueryTypes.distance
-                ? type
-                : SearchQueryTypes.position
-            )
-          );
-        });
-      partialResult.push(acList);
-    }
-
-    if (
-      type === SearchQueryTypes.any_text ||
-      type === SearchQueryTypes.file_name
-    ) {
-      partialResult.push(
-        this.encapsulateAutoComplete(
-          (
-            await mediaRepository
-              .createQueryBuilder('media')
-              .select('DISTINCT(media.name)')
-              .where('media.name LIKE :text COLLATE ' + SQL_COLLATE, {
-                text: '%' + text + '%',
-              })
-              .limit(
-                Config.Search.AutoComplete.ItemsPerCategory.fileName
+          await photoRepository
+              .createQueryBuilder('photo')
+              .select(
+                  'photo.metadata.positionData.country as country, ' +
+                  'photo.metadata.positionData.state as state, photo.metadata.positionData.city as city'
               )
-              .getRawMany()
-          ).map((r) => r.name),
-          SearchQueryTypes.file_name
-        )
-      );
-    }
-
-    if (
-      type === SearchQueryTypes.any_text ||
-      type === SearchQueryTypes.caption
-    ) {
-      partialResult.push(
-        this.encapsulateAutoComplete(
-          (
-            await photoRepository
-              .createQueryBuilder('media')
-              .select('DISTINCT(media.metadata.caption) as caption')
               .where(
-                'media.metadata.caption LIKE :text COLLATE ' + SQL_COLLATE,
-                {text: '%' + text + '%'}
+                  'photo.metadata.positionData.country LIKE :text COLLATE ' +
+                  SQL_COLLATE,
+                  {text: '%' + text + '%'}
               )
-              .limit(
-                Config.Search.AutoComplete.ItemsPerCategory.caption
+              .orWhere(
+                  'photo.metadata.positionData.state LIKE :text COLLATE ' +
+                  SQL_COLLATE,
+                  {text: '%' + text + '%'}
               )
+              .orWhere(
+                  'photo.metadata.positionData.city LIKE :text COLLATE ' +
+                  SQL_COLLATE,
+                  {text: '%' + text + '%'}
+              )
+              .groupBy(
+                  'photo.metadata.positionData.country, photo.metadata.positionData.state, photo.metadata.positionData.city'
+              )
+              .limit(Config.Search.AutoComplete.ItemsPerCategory.position)
               .getRawMany()
-          ).map((r) => r.caption),
-          SearchQueryTypes.caption
-        )
+      )
+          .filter((pm): boolean => !!pm)
+          .map(
+              (pm): Array<string> =>
+                  [pm.city || '', pm.country || '', pm.state || ''] as Array<string>
+          )
+          .forEach((positions): void => {
+            acList.push(
+                ...this.encapsulateAutoComplete(
+                    positions.filter(
+                        (p): boolean =>
+                            p.toLowerCase().indexOf(text.toLowerCase()) !== -1
+                    ),
+                    type === SearchQueryTypes.distance
+                        ? type
+                        : SearchQueryTypes.position
+                )
+            );
+          });
+      partialResult.push(acList);
+    }
+
+    if (
+        type === SearchQueryTypes.any_text ||
+        type === SearchQueryTypes.file_name
+    ) {
+      partialResult.push(
+          this.encapsulateAutoComplete(
+              (
+                  await mediaRepository
+                      .createQueryBuilder('media')
+                      .select('DISTINCT(media.name)')
+                      .where('media.name LIKE :text COLLATE ' + SQL_COLLATE, {
+                        text: '%' + text + '%',
+                      })
+                      .limit(
+                          Config.Search.AutoComplete.ItemsPerCategory.fileName
+                      )
+                      .getRawMany()
+              ).map((r) => r.name),
+              SearchQueryTypes.file_name
+          )
       );
     }
 
     if (
-      type === SearchQueryTypes.any_text ||
-      type === SearchQueryTypes.directory
+        type === SearchQueryTypes.any_text ||
+        type === SearchQueryTypes.caption
     ) {
       partialResult.push(
-        this.encapsulateAutoComplete(
-          (
-            await directoryRepository
-              .createQueryBuilder('dir')
-              .select('DISTINCT(dir.name)')
-              .where('dir.name LIKE :text COLLATE ' + SQL_COLLATE, {
-                text: '%' + text + '%',
-              })
-              .limit(
-                Config.Search.AutoComplete.ItemsPerCategory.directory
-              )
-              .getRawMany()
-          ).map((r) => r.name),
-          SearchQueryTypes.directory
-        )
+          this.encapsulateAutoComplete(
+              (
+                  await photoRepository
+                      .createQueryBuilder('media')
+                      .select('DISTINCT(media.metadata.caption) as caption')
+                      .where(
+                          'media.metadata.caption LIKE :text COLLATE ' + SQL_COLLATE,
+                          {text: '%' + text + '%'}
+                      )
+                      .limit(
+                          Config.Search.AutoComplete.ItemsPerCategory.caption
+                      )
+                      .getRawMany()
+              ).map((r) => r.caption),
+              SearchQueryTypes.caption
+          )
+      );
+    }
+
+    if (
+        type === SearchQueryTypes.any_text ||
+        type === SearchQueryTypes.directory
+    ) {
+      partialResult.push(
+          this.encapsulateAutoComplete(
+              (
+                  await directoryRepository
+                      .createQueryBuilder('dir')
+                      .select('DISTINCT(dir.name)')
+                      .where('dir.name LIKE :text COLLATE ' + SQL_COLLATE, {
+                        text: '%' + text + '%',
+                      })
+                      .limit(
+                          Config.Search.AutoComplete.ItemsPerCategory.directory
+                      )
+                      .getRawMany()
+              ).map((r) => r.name),
+              SearchQueryTypes.directory
+          )
       );
     }
 
@@ -290,13 +290,13 @@ export class SearchManager {
     };
 
     result.media = await connection
-      .getRepository(MediaEntity)
-      .createQueryBuilder('media')
-      .select(['media', ...this.DIRECTORY_SELECT])
-      .where(this.buildWhereQuery(query))
-      .leftJoin('media.directory', 'directory')
-      .limit(Config.Search.maxMediaResult + 1)
-      .getMany();
+        .getRepository(MediaEntity)
+        .createQueryBuilder('media')
+        .select(['media', ...this.DIRECTORY_SELECT])
+        .where(this.buildWhereQuery(query))
+        .leftJoin('media.directory', 'directory')
+        .limit(Config.Search.maxMediaResult + 1)
+        .getMany();
 
 
     if (result.media.length > Config.Search.maxMediaResult) {
@@ -307,31 +307,31 @@ export class SearchManager {
     if (Config.Search.listMetafiles === true) {
       const dIds = Array.from(new Set(result.media.map(m => (m.directory as unknown as { id: number }).id)));
       result.metaFile = await connection
-        .getRepository(FileEntity)
-        .createQueryBuilder('file')
-        .select(['file', ...this.DIRECTORY_SELECT])
-        .where(`file.directoryId IN(${dIds})`)
-        .leftJoin('file.directory', 'directory')
-        .getMany();
+          .getRepository(FileEntity)
+          .createQueryBuilder('file')
+          .select(['file', ...this.DIRECTORY_SELECT])
+          .where(`file.directoryId IN(${dIds})`)
+          .leftJoin('file.directory', 'directory')
+          .getMany();
     }
 
     if (Config.Search.listDirectories === true) {
       const dirQuery = this.filterDirectoryQuery(query);
       if (dirQuery !== null) {
         result.directories = await connection
-          .getRepository(DirectoryEntity)
-          .createQueryBuilder('directory')
-          .where(this.buildWhereQuery(dirQuery, true))
-          .leftJoinAndSelect('directory.cover', 'cover')
-          .leftJoinAndSelect('cover.directory', 'coverDirectory')
-          .limit(Config.Search.maxDirectoryResult + 1)
-          .select([
-            'directory',
-            'cover.name',
-            'coverDirectory.name',
-            'coverDirectory.path',
-          ])
-          .getMany();
+            .getRepository(DirectoryEntity)
+            .createQueryBuilder('directory')
+            .where(this.buildWhereQuery(dirQuery, true))
+            .leftJoinAndSelect('directory.cover', 'cover')
+            .leftJoinAndSelect('cover.directory', 'coverDirectory')
+            .limit(Config.Search.maxDirectoryResult + 1)
+            .select([
+              'directory',
+              'cover.name',
+              'coverDirectory.name',
+              'coverDirectory.path',
+            ])
+            .getMany();
 
         // setting covers
         if (result.directories) {
@@ -340,7 +340,7 @@ export class SearchManager {
           }
         }
         if (
-          result.directories.length > Config.Search.maxDirectoryResult
+            result.directories.length > Config.Search.maxDirectoryResult
         ) {
           result.resultOverflow = true;
         }
@@ -352,8 +352,8 @@ export class SearchManager {
 
 
   public static setSorting<T>(
-    query: SelectQueryBuilder<T>,
-    sortings: SortingMethod[]
+      query: SelectQueryBuilder<T>,
+      sortings: SortingMethod[]
   ): SelectQueryBuilder<T> {
     if (!sortings || !Array.isArray(sortings)) {
       return query;
@@ -394,11 +394,11 @@ export class SearchManager {
   public async getNMedia(query: SearchQueryDTO, sortings: SortingMethod[], take: number, photoOnly = false) {
     const connection = await SQLConnection.getConnection();
     const sqlQuery: SelectQueryBuilder<PhotoEntity> = connection
-      .getRepository(photoOnly ? PhotoEntity : MediaEntity)
-      .createQueryBuilder('media')
-      .select(['media', ...this.DIRECTORY_SELECT])
-      .innerJoin('media.directory', 'directory')
-      .where(await this.prepareAndBuildWhereQuery(query));
+        .getRepository(photoOnly ? PhotoEntity : MediaEntity)
+        .createQueryBuilder('media')
+        .select(['media', ...this.DIRECTORY_SELECT])
+        .innerJoin('media.directory', 'directory')
+        .where(await this.prepareAndBuildWhereQuery(query));
     SearchManager.setSorting(sqlQuery, sortings);
 
     return sqlQuery.limit(take).getMany();
@@ -409,16 +409,16 @@ export class SearchManager {
     const connection = await SQLConnection.getConnection();
 
     return await connection
-      .getRepository(MediaEntity)
-      .createQueryBuilder('media')
-      .innerJoin('media.directory', 'directory')
-      .where(await this.prepareAndBuildWhereQuery(query))
-      .getCount();
+        .getRepository(MediaEntity)
+        .createQueryBuilder('media')
+        .innerJoin('media.directory', 'directory')
+        .where(await this.prepareAndBuildWhereQuery(query))
+        .getCount();
   }
 
   public async prepareAndBuildWhereQuery(
-    queryIN: SearchQueryDTO,
-    directoryOnly = false
+      queryIN: SearchQueryDTO,
+      directoryOnly = false
   ): Promise<Brackets> {
     const query = await this.prepareQuery(queryIN);
     return this.buildWhereQuery(query, directoryOnly);
@@ -438,24 +438,24 @@ export class SearchManager {
    * @private
    */
   public buildWhereQuery(
-    query: SearchQueryDTO,
-    directoryOnly = false
+      query: SearchQueryDTO,
+      directoryOnly = false
   ): Brackets {
     const queryId = (query as SearchQueryDTOWithID).queryId;
     switch (query.type) {
       case SearchQueryTypes.AND:
         return new Brackets((q): unknown => {
           (query as ANDSearchQuery).list.forEach((sq) => {
-              q.andWhere(this.buildWhereQuery(sq, directoryOnly));
-            }
+                q.andWhere(this.buildWhereQuery(sq, directoryOnly));
+              }
           );
           return q;
         });
       case SearchQueryTypes.OR:
         return new Brackets((q): unknown => {
           (query as ANDSearchQuery).list.forEach((sq) => {
-              q.orWhere(this.buildWhereQuery(sq, directoryOnly));
-            }
+                q.orWhere(this.buildWhereQuery(sq, directoryOnly));
+              }
           );
           return q;
         });
@@ -478,30 +478,30 @@ export class SearchManager {
         };
 
         const minLat = trimRange(
-          (query as DistanceSearch).from.GPSData.latitude -
-          (query as DistanceSearch).distance * latDelta,
-          -90,
-          90
+            (query as DistanceSearch).from.GPSData.latitude -
+            (query as DistanceSearch).distance * latDelta,
+            -90,
+            90
         );
         const maxLat = trimRange(
-          (query as DistanceSearch).from.GPSData.latitude +
-          (query as DistanceSearch).distance * latDelta,
-          -90,
-          90
+            (query as DistanceSearch).from.GPSData.latitude +
+            (query as DistanceSearch).distance * latDelta,
+            -90,
+            90
         );
         const minLon = trimRange(
-          (query as DistanceSearch).from.GPSData.longitude -
-          ((query as DistanceSearch).distance * lonDelta) /
-          Math.cos(minLat * (Math.PI / 180)),
-          -180,
-          180
+            (query as DistanceSearch).from.GPSData.longitude -
+            ((query as DistanceSearch).distance * lonDelta) /
+            Math.cos(minLat * (Math.PI / 180)),
+            -180,
+            180
         );
         const maxLon = trimRange(
-          (query as DistanceSearch).from.GPSData.longitude +
-          ((query as DistanceSearch).distance * lonDelta) /
-          Math.cos(maxLat * (Math.PI / 180)),
-          -180,
-          180
+            (query as DistanceSearch).from.GPSData.longitude +
+            ((query as DistanceSearch).distance * lonDelta) /
+            Math.cos(maxLat * (Math.PI / 180)),
+            -180,
+            180
         );
 
         return new Brackets((q): unknown => {
@@ -512,37 +512,37 @@ export class SearchManager {
           textParam['minLon' + queryId] = minLon;
           if (!(query as DistanceSearch).negate) {
             q.where(
-              `media.metadata.positionData.GPSData.latitude < :maxLat${queryId}`,
-              textParam
+                `media.metadata.positionData.GPSData.latitude < :maxLat${queryId}`,
+                textParam
             );
             q.andWhere(
-              `media.metadata.positionData.GPSData.latitude > :minLat${queryId}`,
-              textParam
+                `media.metadata.positionData.GPSData.latitude > :minLat${queryId}`,
+                textParam
             );
             q.andWhere(
-              `media.metadata.positionData.GPSData.longitude < :maxLon${queryId}`,
-              textParam
+                `media.metadata.positionData.GPSData.longitude < :maxLon${queryId}`,
+                textParam
             );
             q.andWhere(
-              `media.metadata.positionData.GPSData.longitude > :minLon${queryId}`,
-              textParam
+                `media.metadata.positionData.GPSData.longitude > :minLon${queryId}`,
+                textParam
             );
           } else {
             q.where(
-              `media.metadata.positionData.GPSData.latitude > :maxLat${queryId}`,
-              textParam
+                `media.metadata.positionData.GPSData.latitude > :maxLat${queryId}`,
+                textParam
             );
             q.orWhere(
-              `media.metadata.positionData.GPSData.latitude < :minLat${queryId}`,
-              textParam
+                `media.metadata.positionData.GPSData.latitude < :minLat${queryId}`,
+                textParam
             );
             q.orWhere(
-              `media.metadata.positionData.GPSData.longitude > :maxLon${queryId}`,
-              textParam
+                `media.metadata.positionData.GPSData.longitude > :maxLon${queryId}`,
+                textParam
             );
             q.orWhere(
-              `media.metadata.positionData.GPSData.longitude < :minLon${queryId}`,
-              textParam
+                `media.metadata.positionData.GPSData.longitude < :minLon${queryId}`,
+                textParam
             );
           }
           return q;
@@ -555,7 +555,7 @@ export class SearchManager {
         return new Brackets((q): unknown => {
           if (typeof (query as FromDateSearch).value === 'undefined') {
             throw new Error(
-              'Invalid search query: Date Query should contain from value'
+                'Invalid search query: Date Query should contain from value'
             );
           }
           const relation = (query as TextSearch).negate ? '<' : '>=';
@@ -563,8 +563,8 @@ export class SearchManager {
           const textParam: { [key: string]: unknown } = {};
           textParam['from' + queryId] = (query as FromDateSearch).value;
           q.where(
-            `media.metadata.creationDate ${relation} :from${queryId}`,
-            textParam
+              `media.metadata.creationDate ${relation} :from${queryId}`,
+              textParam
           );
 
           return q;
@@ -577,7 +577,7 @@ export class SearchManager {
         return new Brackets((q): unknown => {
           if (typeof (query as ToDateSearch).value === 'undefined') {
             throw new Error(
-              'Invalid search query: Date Query should contain to value'
+                'Invalid search query: Date Query should contain to value'
             );
           }
           const relation = (query as TextSearch).negate ? '>' : '<=';
@@ -585,8 +585,8 @@ export class SearchManager {
           const textParam: { [key: string]: unknown } = {};
           textParam['to' + queryId] = (query as ToDateSearch).value;
           q.where(
-            `media.metadata.creationDate ${relation} :to${queryId}`,
-            textParam
+              `media.metadata.creationDate ${relation} :to${queryId}`,
+              textParam
           );
 
           return q;
@@ -599,7 +599,7 @@ export class SearchManager {
         return new Brackets((q): unknown => {
           if (typeof (query as MinRatingSearch).value === 'undefined') {
             throw new Error(
-              'Invalid search query: Rating Query should contain minvalue'
+                'Invalid search query: Rating Query should contain minvalue'
             );
           }
 
@@ -608,8 +608,8 @@ export class SearchManager {
           const textParam: { [key: string]: unknown } = {};
           textParam['min' + queryId] = (query as MinRatingSearch).value;
           q.where(
-            `media.metadata.rating ${relation}  :min${queryId}`,
-            textParam
+              `media.metadata.rating ${relation}  :min${queryId}`,
+              textParam
           );
 
           return q;
@@ -621,7 +621,7 @@ export class SearchManager {
         return new Brackets((q): unknown => {
           if (typeof (query as MaxRatingSearch).value === 'undefined') {
             throw new Error(
-              'Invalid search query: Rating Query should contain  max value'
+                'Invalid search query: Rating Query should contain  max value'
             );
           }
 
@@ -631,8 +631,8 @@ export class SearchManager {
             const textParam: { [key: string]: unknown } = {};
             textParam['max' + queryId] = (query as MaxRatingSearch).value;
             q.where(
-              `media.metadata.rating ${relation}  :max${queryId}`,
-              textParam
+                `media.metadata.rating ${relation}  :max${queryId}`,
+                textParam
             );
           }
           return q;
@@ -645,7 +645,7 @@ export class SearchManager {
         return new Brackets((q): unknown => {
           if (typeof (query as MinPersonCountSearch).value === 'undefined') {
             throw new Error(
-              'Invalid search query: Person count Query should contain minvalue'
+                'Invalid search query: Person count Query should contain minvalue'
             );
           }
 
@@ -654,8 +654,8 @@ export class SearchManager {
           const textParam: { [key: string]: unknown } = {};
           textParam['min' + queryId] = (query as MinPersonCountSearch).value;
           q.where(
-            `media.metadata.personsLength ${relation}  :min${queryId}`,
-            textParam
+              `media.metadata.personsLength ${relation}  :min${queryId}`,
+              textParam
           );
 
           return q;
@@ -667,7 +667,7 @@ export class SearchManager {
         return new Brackets((q): unknown => {
           if (typeof (query as MaxPersonCountSearch).value === 'undefined') {
             throw new Error(
-              'Invalid search query: Person count Query should contain max value'
+                'Invalid search query: Person count Query should contain max value'
             );
           }
 
@@ -677,8 +677,8 @@ export class SearchManager {
             const textParam: { [key: string]: unknown } = {};
             textParam['max' + queryId] = (query as MaxPersonCountSearch).value;
             q.where(
-              `media.metadata.personsLength ${relation}  :max${queryId}`,
-              textParam
+                `media.metadata.personsLength ${relation}  :max${queryId}`,
+                textParam
             );
           }
           return q;
@@ -691,7 +691,7 @@ export class SearchManager {
         return new Brackets((q): unknown => {
           if (typeof (query as MinResolutionSearch).value === 'undefined') {
             throw new Error(
-              'Invalid search query: Resolution Query should contain min value'
+                'Invalid search query: Resolution Query should contain min value'
             );
           }
 
@@ -699,10 +699,10 @@ export class SearchManager {
 
           const textParam: { [key: string]: unknown } = {};
           textParam['min' + queryId] =
-            (query as MinResolutionSearch).value * 1000 * 1000;
+              (query as MinResolutionSearch).value * 1000 * 1000;
           q.where(
-            `media.metadata.size.width * media.metadata.size.height ${relation} :min${queryId}`,
-            textParam
+              `media.metadata.size.width * media.metadata.size.height ${relation} :min${queryId}`,
+              textParam
           );
 
           return q;
@@ -715,7 +715,7 @@ export class SearchManager {
         return new Brackets((q): unknown => {
           if (typeof (query as MaxResolutionSearch).value === 'undefined') {
             throw new Error(
-              'Invalid search query: Rating Query should contain min or max value'
+                'Invalid search query: Rating Query should contain min or max value'
             );
           }
 
@@ -723,10 +723,10 @@ export class SearchManager {
 
           const textParam: { [key: string]: unknown } = {};
           textParam['max' + queryId] =
-            (query as MaxResolutionSearch).value * 1000 * 1000;
+              (query as MaxResolutionSearch).value * 1000 * 1000;
           q.where(
-            `media.metadata.size.width * media.metadata.size.height ${relation} :max${queryId}`,
-            textParam
+              `media.metadata.size.width * media.metadata.size.height ${relation} :max${queryId}`,
+              textParam
           );
 
           return q;
@@ -754,9 +754,9 @@ export class SearchManager {
         return new Brackets((q): unknown => {
           // Fixed frequency
           if ((tq.frequency === DatePatternFrequency.years_ago ||
-            tq.frequency === DatePatternFrequency.months_ago ||
-            tq.frequency === DatePatternFrequency.weeks_ago ||
-            tq.frequency === DatePatternFrequency.days_ago)) {
+              tq.frequency === DatePatternFrequency.months_ago ||
+              tq.frequency === DatePatternFrequency.weeks_ago ||
+              tq.frequency === DatePatternFrequency.days_ago)) {
 
             if (isNaN(tq.agoNumber)) {
               throw new Error('ago number is missing on date patter search query with frequency: ' + DatePatternFrequency[tq.frequency] + ', ago number: ' + tq.agoNumber);
@@ -790,16 +790,16 @@ export class SearchManager {
             if (tq.negate) {
 
               q.where(
-                `media.metadata.creationDate >= :to${queryId}`,
-                textParam
+                  `media.metadata.creationDate >= :to${queryId}`,
+                  textParam
               ).orWhere(`media.metadata.creationDate < :from${queryId}`,
-                textParam);
+                  textParam);
             } else {
               q.where(
-                `media.metadata.creationDate < :to${queryId}`,
-                textParam
+                  `media.metadata.creationDate < :to${queryId}`,
+                  textParam
               ).andWhere(`media.metadata.creationDate >= :from${queryId}`,
-                textParam);
+                  textParam);
             }
 
           } else {
@@ -815,15 +815,15 @@ export class SearchManager {
 
               if (Config.Database.type === DatabaseType.sqlite) {
                 q.where(
-                  `CAST(strftime('${duration}',media.metadataCreationDate/1000, 'unixepoch') AS INTEGER) ${relationTop} CAST(strftime('${duration}','now') AS INTEGER)`
+                    `CAST(strftime('${duration}',media.metadataCreationDate/1000, 'unixepoch') AS INTEGER) ${relationTop} CAST(strftime('${duration}','now') AS INTEGER)`
                 ).andWhere(`CAST(strftime('${duration}',media.metadataCreationDate/1000, 'unixepoch') AS INTEGER) ${relationBottom} CAST(strftime('${duration}','now','-:diff${queryId} day') AS INTEGER)`,
-                  textParam);
+                    textParam);
               } else {
 
                 q.where(
-                  `CAST(FROM_UNIXTIME(media.metadataCreationDate/1000, '${duration}') AS SIGNED) ${relationTop} CAST(DATE_FORMAT(CURDATE(),'${duration}') AS SIGNED)`
+                    `CAST(FROM_UNIXTIME(media.metadataCreationDate/1000, '${duration}') AS SIGNED) ${relationTop} CAST(DATE_FORMAT(CURDATE(),'${duration}') AS SIGNED)`
                 ).andWhere(`CAST(FROM_UNIXTIME(media.metadataCreationDate/1000, '${duration}') AS SIGNED) ${relationBottom} CAST(DATE_FORMAT((DATE_ADD(curdate(), INTERVAL -:diff${queryId} DAY)),'${duration}') AS SIGNED)`,
-                  textParam);
+                    textParam);
               }
             };
             switch (tq.frequency) {
@@ -861,8 +861,8 @@ export class SearchManager {
     return new Brackets((q: WhereExpression) => {
       const createMatchString = (str: string): string => {
         if (
-          (query as TextSearch).matchType ===
-          TextSearchQueryMatchTypes.exact_match
+            (query as TextSearch).matchType ===
+            TextSearchQueryMatchTypes.exact_match
         ) {
           return str;
         }
@@ -882,148 +882,148 @@ export class SearchManager {
 
       const textParam: { [key: string]: unknown } = {};
       textParam['text' + queryId] = createMatchString(
-        (query as TextSearch).text
+          (query as TextSearch).text
       );
 
       if (
-        query.type === SearchQueryTypes.any_text ||
-        query.type === SearchQueryTypes.directory
+          query.type === SearchQueryTypes.any_text ||
+          query.type === SearchQueryTypes.directory
       ) {
         const dirPathStr = (query as TextSearch).text.replace(
-          new RegExp('\\\\', 'g'),
-          '/'
+            new RegExp('\\\\', 'g'),
+            '/'
         );
 
         textParam['fullPath' + queryId] = createMatchString(dirPathStr);
         q[whereFN](
-          `directory.path ${LIKE} :fullPath${queryId} COLLATE ` + SQL_COLLATE,
-          textParam
+            `directory.path ${LIKE} :fullPath${queryId} COLLATE ` + SQL_COLLATE,
+            textParam
         );
 
         const directoryPath = GalleryManager.parseRelativeDirePath(dirPathStr);
         q[whereFN](
-          new Brackets((dq): unknown => {
-            textParam['dirName' + queryId] = createMatchString(
-              directoryPath.name
-            );
-            dq[whereFNRev](
-              `directory.name ${LIKE} :dirName${queryId} COLLATE ${SQL_COLLATE}`,
-              textParam
-            );
-            if (dirPathStr.includes('/')) {
-              textParam['parentName' + queryId] = createMatchString(
-                directoryPath.parent
+            new Brackets((dq): unknown => {
+              textParam['dirName' + queryId] = createMatchString(
+                  directoryPath.name
               );
               dq[whereFNRev](
-                `directory.path ${LIKE} :parentName${queryId} COLLATE ${SQL_COLLATE}`,
-                textParam
+                  `directory.name ${LIKE} :dirName${queryId} COLLATE ${SQL_COLLATE}`,
+                  textParam
               );
-            }
-            return dq;
-          })
+              if (dirPathStr.includes('/')) {
+                textParam['parentName' + queryId] = createMatchString(
+                    directoryPath.parent
+                );
+                dq[whereFNRev](
+                    `directory.path ${LIKE} :parentName${queryId} COLLATE ${SQL_COLLATE}`,
+                    textParam
+                );
+              }
+              return dq;
+            })
         );
       }
 
       if (
-        (query.type === SearchQueryTypes.any_text && !directoryOnly) ||
-        query.type === SearchQueryTypes.file_name
+          (query.type === SearchQueryTypes.any_text && !directoryOnly) ||
+          query.type === SearchQueryTypes.file_name
       ) {
         q[whereFN](
-          `media.name ${LIKE} :text${queryId} COLLATE ${SQL_COLLATE}`,
-          textParam
+            `media.name ${LIKE} :text${queryId} COLLATE ${SQL_COLLATE}`,
+            textParam
         );
       }
 
       if (
-        (query.type === SearchQueryTypes.any_text && !directoryOnly) ||
-        query.type === SearchQueryTypes.caption
+          (query.type === SearchQueryTypes.any_text && !directoryOnly) ||
+          query.type === SearchQueryTypes.caption
       ) {
         q[whereFN](
-          `media.metadata.caption ${LIKE} :text${queryId} COLLATE ${SQL_COLLATE}`,
-          textParam
+            `media.metadata.caption ${LIKE} :text${queryId} COLLATE ${SQL_COLLATE}`,
+            textParam
         );
       }
 
       if (
-        (query.type === SearchQueryTypes.any_text && !directoryOnly) ||
-        query.type === SearchQueryTypes.position
+          (query.type === SearchQueryTypes.any_text && !directoryOnly) ||
+          query.type === SearchQueryTypes.position
       ) {
         q[whereFN](
-          `media.metadata.positionData.country ${LIKE} :text${queryId} COLLATE ${SQL_COLLATE}`,
-          textParam
+            `media.metadata.positionData.country ${LIKE} :text${queryId} COLLATE ${SQL_COLLATE}`,
+            textParam
         )[whereFN](
-          `media.metadata.positionData.state ${LIKE} :text${queryId} COLLATE ${SQL_COLLATE}`,
-          textParam
+            `media.metadata.positionData.state ${LIKE} :text${queryId} COLLATE ${SQL_COLLATE}`,
+            textParam
         )[whereFN](
-          `media.metadata.positionData.city ${LIKE} :text${queryId} COLLATE ${SQL_COLLATE}`,
-          textParam
+            `media.metadata.positionData.city ${LIKE} :text${queryId} COLLATE ${SQL_COLLATE}`,
+            textParam
         );
       }
 
       // Matching for array type fields
       const matchArrayField = (fieldName: string): void => {
         q[whereFN](
-          new Brackets((qbr): void => {
-            if (
-              (query as TextSearch).matchType !==
-              TextSearchQueryMatchTypes.exact_match
-            ) {
-              qbr[whereFN](
-                `${fieldName} ${LIKE} :text${queryId} COLLATE ${SQL_COLLATE}`,
-                textParam
-              );
-            } else {
-              qbr[whereFN](
-                new Brackets((qb): void => {
-                  textParam['CtextC' + queryId] = `%,${
-                    (query as TextSearch).text
-                  },%`;
-                  textParam['Ctext' + queryId] = `%,${
-                    (query as TextSearch).text
-                  }`;
-                  textParam['textC' + queryId] = `${
-                    (query as TextSearch).text
-                  },%`;
-                  textParam['text_exact' + queryId] = `${
-                    (query as TextSearch).text
-                  }`;
+            new Brackets((qbr): void => {
+              if (
+                  (query as TextSearch).matchType !==
+                  TextSearchQueryMatchTypes.exact_match
+              ) {
+                qbr[whereFN](
+                    `${fieldName} ${LIKE} :text${queryId} COLLATE ${SQL_COLLATE}`,
+                    textParam
+                );
+              } else {
+                qbr[whereFN](
+                    new Brackets((qb): void => {
+                      textParam['CtextC' + queryId] = `%,${
+                          (query as TextSearch).text
+                      },%`;
+                      textParam['Ctext' + queryId] = `%,${
+                          (query as TextSearch).text
+                      }`;
+                      textParam['textC' + queryId] = `${
+                          (query as TextSearch).text
+                      },%`;
+                      textParam['text_exact' + queryId] = `${
+                          (query as TextSearch).text
+                      }`;
 
-                  qb[whereFN](
-                    `${fieldName} ${LIKE} :CtextC${queryId} COLLATE ${SQL_COLLATE}`,
-                    textParam
-                  );
-                  qb[whereFN](
-                    `${fieldName} ${LIKE} :Ctext${queryId} COLLATE ${SQL_COLLATE}`,
-                    textParam
-                  );
-                  qb[whereFN](
-                    `${fieldName} ${LIKE} :textC${queryId} COLLATE ${SQL_COLLATE}`,
-                    textParam
-                  );
-                  qb[whereFN](
-                    `${fieldName} ${LIKE} :text_exact${queryId} COLLATE ${SQL_COLLATE}`,
-                    textParam
-                  );
-                })
-              );
-            }
-            if ((query as TextSearch).negate) {
-              qbr.orWhere(`${fieldName} IS NULL`);
-            }
-          })
+                      qb[whereFN](
+                          `${fieldName} ${LIKE} :CtextC${queryId} COLLATE ${SQL_COLLATE}`,
+                          textParam
+                      );
+                      qb[whereFN](
+                          `${fieldName} ${LIKE} :Ctext${queryId} COLLATE ${SQL_COLLATE}`,
+                          textParam
+                      );
+                      qb[whereFN](
+                          `${fieldName} ${LIKE} :textC${queryId} COLLATE ${SQL_COLLATE}`,
+                          textParam
+                      );
+                      qb[whereFN](
+                          `${fieldName} ${LIKE} :text_exact${queryId} COLLATE ${SQL_COLLATE}`,
+                          textParam
+                      );
+                    })
+                );
+              }
+              if ((query as TextSearch).negate) {
+                qbr.orWhere(`${fieldName} IS NULL`);
+              }
+            })
         );
       };
 
       if (
-        (query.type === SearchQueryTypes.any_text && !directoryOnly) ||
-        query.type === SearchQueryTypes.person
+          (query.type === SearchQueryTypes.any_text && !directoryOnly) ||
+          query.type === SearchQueryTypes.person
       ) {
         matchArrayField('media.metadata.persons');
       }
 
       if (
-        (query.type === SearchQueryTypes.any_text && !directoryOnly) ||
-        query.type === SearchQueryTypes.keyword
+          (query.type === SearchQueryTypes.any_text && !directoryOnly) ||
+          query.type === SearchQueryTypes.keyword
       ) {
         matchArrayField('media.metadata.keywords');
       }
@@ -1038,7 +1038,7 @@ export class SearchManager {
         return {
           type: query.type,
           list: ((query as SearchListQuery).list || []).map(
-            (q): SearchQueryDTO => this.flattenSameOfQueries(q)
+              (q): SearchQueryDTO => this.flattenSameOfQueries(q)
           ),
         } as SearchListQuery;
       case SearchQueryTypes.SOME_OF:
@@ -1060,9 +1060,9 @@ export class SearchManager {
         }
 
         const getAllCombinations = (
-          num: number,
-          arr: SearchQueryDTO[],
-          start = 0
+            num: number,
+            arr: SearchQueryDTO[],
+            start = 0
         ): SearchQueryDTO[] => {
           if (num <= 0 || num > arr.length || start >= arr.length) {
             return null;
@@ -1112,8 +1112,8 @@ export class SearchManager {
         return this.flattenSameOfQueries({
           type: SearchQueryTypes.OR,
           list: getAllCombinations(
-            someOfQ.min,
-            (query as SearchListQuery).list
+              someOfQ.min,
+              (query as SearchListQuery).list
           ),
         } as ORSearchQuery);
     }
@@ -1126,8 +1126,8 @@ export class SearchManager {
    * Witch SOME_OF query the number of WHERE constrains have O(N!) complexity
    */
   private assignQueryIDs(
-    queryIN: SearchQueryDTO,
-    id = {value: 1}
+      queryIN: SearchQueryDTO,
+      id = {value: 1}
   ): SearchQueryDTO {
     // It is possible that one SQL query contains multiple searchQueries
     // (like: where (<searchQuery1> AND (<searchQuery2>))
@@ -1140,12 +1140,12 @@ export class SearchManager {
     }
     if ((queryIN as SearchListQuery).list) {
       (queryIN as SearchListQuery).list.forEach((q) =>
-        this.assignQueryIDs(q, id)
+          this.assignQueryIDs(q, id)
       );
       return queryIN;
     }
     (queryIN as SearchQueryDTOWithID).queryId =
-      this.queryIdBase + '_' + id.value;
+        this.queryIdBase + '_' + id.value;
     id.value++;
     return queryIN;
   }
@@ -1159,7 +1159,7 @@ export class SearchManager {
         const andRet = {
           type: SearchQueryTypes.AND,
           list: (query as SearchListQuery).list.map((q) =>
-            this.filterDirectoryQuery(q)
+              this.filterDirectoryQuery(q)
           ),
         } as ANDSearchQuery;
         // if any of the queries contain non dir query thw whole and query is a non dir query
@@ -1172,8 +1172,8 @@ export class SearchManager {
         const orRet = {
           type: SearchQueryTypes.OR,
           list: (query as SearchListQuery).list
-            .map((q) => this.filterDirectoryQuery(q))
-            .filter((q) => q !== null),
+              .map((q) => this.filterDirectoryQuery(q))
+              .filter((q) => q !== null),
         } as ORSearchQuery;
         if (orRet.list.length === 0) {
           return null;
@@ -1194,31 +1194,31 @@ export class SearchManager {
   private async getGPSData(query: SearchQueryDTO): Promise<SearchQueryDTO> {
     if ((query as ANDSearchQuery | ORSearchQuery).list) {
       for (
-        let i = 0;
-        i < (query as ANDSearchQuery | ORSearchQuery).list.length;
-        ++i
+          let i = 0;
+          i < (query as ANDSearchQuery | ORSearchQuery).list.length;
+          ++i
       ) {
         (query as ANDSearchQuery | ORSearchQuery).list[i] =
-          await this.getGPSData(
-            (query as ANDSearchQuery | ORSearchQuery).list[i]
-          );
+            await this.getGPSData(
+                (query as ANDSearchQuery | ORSearchQuery).list[i]
+            );
       }
     }
     if (
-      query.type === SearchQueryTypes.distance &&
-      (query as DistanceSearch).from.text
+        query.type === SearchQueryTypes.distance &&
+        (query as DistanceSearch).from.text
     ) {
       (query as DistanceSearch).from.GPSData =
-        await ObjectManagers.getInstance().LocationManager.getGPSData(
-          (query as DistanceSearch).from.text
-        );
+          await ObjectManagers.getInstance().LocationManager.getGPSData(
+              (query as DistanceSearch).from.text
+          );
     }
     return query;
   }
 
   private encapsulateAutoComplete(
-    values: string[],
-    type: SearchQueryTypes
+      values: string[],
+      type: SearchQueryTypes
   ): Array<AutoCompleteItem> {
     const res: AutoCompleteItem[] = [];
     values.forEach((value): void => {

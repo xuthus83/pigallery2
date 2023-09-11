@@ -85,15 +85,15 @@ export class TopPickSendJob extends Job<{
     this.mediaList = [];
     for (let i = 0; i < this.config.mediaPick.length; ++i) {
       const media = await ObjectManagers.getInstance().SearchManager
-        .getNMedia(this.config.mediaPick[i].searchQuery, this.config.mediaPick[i].sortBy, this.config.mediaPick[i].pick);
+          .getNMedia(this.config.mediaPick[i].searchQuery, this.config.mediaPick[i].sortBy, this.config.mediaPick[i].pick);
       this.Progress.log('Find ' + media.length + ' photos and videos from ' + (i + 1) + '. load');
       this.mediaList = this.mediaList.concat(media);
     }
 
     // make the list unique
     this.mediaList = this.mediaList
-      .filter((value, index, arr) =>
-        arr.findIndex(m => MediaDTOUtils.equals(m, value)) === index);
+        .filter((value, index, arr) =>
+            arr.findIndex(m => MediaDTOUtils.equals(m, value)) === index);
 
     this.Progress.Processed++;
     // console.log(this.mediaList);

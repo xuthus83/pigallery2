@@ -54,7 +54,7 @@ export class GPSMetadataEntity implements GPSMetadata {
 }
 
 export class PositionMetaDataEntity implements PositionMetaData {
-  @Column((type) => GPSMetadataEntity)
+  @Column(() => GPSMetadataEntity)
   GPSData: GPSMetadataEntity;
 
   @Column({
@@ -86,7 +86,7 @@ export class MediaMetadataEntity implements MediaMetadata {
   @Column('text')
   caption: string;
 
-  @Column((type) => MediaDimensionEntity)
+  @Column(() => MediaDimensionEntity)
   size: MediaDimensionEntity;
 
   /**
@@ -113,17 +113,17 @@ export class MediaMetadataEntity implements MediaMetadata {
   })
   keywords: string[];
 
-  @Column((type) => CameraMetadataEntity)
+  @Column(() => CameraMetadataEntity)
   cameraData: CameraMetadataEntity;
 
-  @Column((type) => PositionMetaDataEntity)
+  @Column(() => PositionMetaDataEntity)
   positionData: PositionMetaDataEntity;
 
   @Column('tinyint', {unsigned: true})
   @Index()
   rating: 0 | 1 | 2 | 3 | 4 | 5;
 
-  @OneToMany((type) => PersonJunctionTable, (junctionTable) => junctionTable.media)
+  @OneToMany(() => PersonJunctionTable, (junctionTable) => junctionTable.media)
   personJunction: PersonJunctionTable[];
 
   @Column({
@@ -178,13 +178,13 @@ export abstract class MediaEntity implements MediaDTO {
   name: string;
 
   @Index()
-  @ManyToOne((type) => DirectoryEntity, (directory) => directory.media, {
+  @ManyToOne(() => DirectoryEntity, (directory) => directory.media, {
     onDelete: 'CASCADE',
     nullable: false,
   })
   directory: DirectoryEntity;
 
-  @Column((type) => MediaMetadataEntity)
+  @Column(() => MediaMetadataEntity)
   metadata: MediaMetadataEntity;
 
   missingThumbnails: number;

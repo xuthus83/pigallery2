@@ -43,20 +43,20 @@ export class VideoConverterWorker {
       const command: FfmpegCommand = this.ffmpeg(input.videoPath);
       let executedCmd = '';
       command
-        .on('start', (cmd: string) => {
-          Logger.silly('[FFmpeg] running:' + cmd);
-          executedCmd = cmd;
-        })
-        .on('end', () => {
-          resolve();
-        })
-        .on('error', (e: any) => {
-          reject('[FFmpeg] ' + e.toString() + ' executed: ' + executedCmd);
-        })
-        .on('stderr', function (line: string) {
-          // Although this is under `stderr` event, all of ffmpeg output come here.
-          Logger.debug('[FFmpeg] ' + line);
-        });
+          .on('start', (cmd: string) => {
+            Logger.silly('[FFmpeg] running:' + cmd);
+            executedCmd = cmd;
+          })
+          .on('end', () => {
+            resolve();
+          })
+          .on('error', (e: any) => {
+            reject('[FFmpeg] ' + e.toString() + ' executed: ' + executedCmd);
+          })
+          .on('stderr', function(line: string) {
+            // Although this is under `stderr` event, all of ffmpeg output come here.
+            Logger.debug('[FFmpeg] ' + line);
+          });
 
       // set custom input options
       if (input.input.customOptions) {
@@ -93,9 +93,9 @@ export class VideoConverterWorker {
 
       // set output format to force
       command
-        .format(input.output.format)
-        // save to file
-        .save(input.output.path);
+          .format(input.output.format)
+          // save to file
+          .save(input.output.path);
     });
   }
 }

@@ -22,7 +22,7 @@ export class GPXCompressionJob extends FileJob {
 
   protected async shouldProcess(fPath: string): Promise<boolean> {
     return !(await GPXProcessing.compressedGPXExist(
-      fPath
+        fPath
     ));
   }
 

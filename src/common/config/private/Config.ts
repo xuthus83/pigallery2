@@ -13,7 +13,7 @@ const upTime = new Date().toISOString();
 // TODO: Refactor Config to be injectable globally.
 // This is a bad habit to let the Config know if its in a testing env.
 const isTesting = process.env['NODE_ENV'] == true || ['afterEach', 'after', 'beforeEach', 'before', 'describe', 'it']
-  .every((fn) => (global as any)[fn] instanceof Function);
+    .every((fn) => (global as any)[fn] instanceof Function);
 
 @ConfigClass<IConfigClass<TAGS> & ServerConfig>({
   configPath: path.join(__dirname, !isTesting ? './../../../../config.json' : './../../../../test/backend/tmp/config.json'),
@@ -76,11 +76,11 @@ export class PrivateConfigClass extends ServerConfig {
     }
 
     this.Environment.appVersion =
-      require('../../../../package.json').version;
+        require('../../../../package.json').version;
     this.Environment.buildTime =
-      require('../../../../package.json').buildTime;
+        require('../../../../package.json').buildTime;
     this.Environment.buildCommitHash =
-      require('../../../../package.json').buildCommitHash;
+        require('../../../../package.json').buildCommitHash;
     this.Environment.upTime = upTime;
     this.Environment.isDocker = !!process.env.PI_DOCKER;
   }
@@ -89,7 +89,7 @@ export class PrivateConfigClass extends ServerConfig {
     const pc = ConfigClassBuilder.attachPrivateInterface(new PrivateConfigClass());
     try {
       await pc.load();
-    }catch (e){
+    } catch (e) {
       console.error('Error during loading original config. Reverting to defaults.');
       console.error(e);
     }
@@ -99,7 +99,7 @@ export class PrivateConfigClass extends ServerConfig {
 }
 
 export const Config = ConfigClassBuilder.attachInterface(
-  new PrivateConfigClass()
+    new PrivateConfigClass()
 );
 try {
   Config.loadSync();

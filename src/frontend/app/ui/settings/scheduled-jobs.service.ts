@@ -17,9 +17,9 @@ export class ScheduledJobsService {
   private subscribers = 0;
 
   constructor(
-    private networkService: NetworkService,
-    private notification: NotificationService,
-    private backendTextService: BackendtextService
+      private networkService: NetworkService,
+      private notification: NotificationService,
+      private backendTextService: BackendtextService
   ) {
     this.progress = new BehaviorSubject({});
     this.availableJobs = new BehaviorSubject([]);
@@ -28,13 +28,13 @@ export class ScheduledJobsService {
 
   public async getAvailableJobs(): Promise<void> {
     this.availableJobs.next(
-      await this.networkService.getJson<JobDTO[]>('/admin/jobs/available')
+        await this.networkService.getJson<JobDTO[]>('/admin/jobs/available')
     );
   }
 
   public getConfigTemplate(JobName: string): ConfigTemplateEntry[] {
     const job = this.availableJobs.value.find(
-      (t) => t.Name === JobName
+        (t) => t.Name === JobName
     );
     if (job && job.ConfigTemplate && job.ConfigTemplate.length > 0) {
       return job.ConfigTemplate;
@@ -55,8 +55,8 @@ export class ScheduledJobsService {
 
   getProgress(schedule: JobScheduleDTO): JobProgressDTO {
     return this.progress.value[
-      JobDTOUtils.getHashName(schedule.jobName, schedule.config)
-      ];
+        JobDTOUtils.getHashName(schedule.jobName, schedule.config)
+        ];
   }
 
   subscribeToProgress(): void {
@@ -72,20 +72,20 @@ export class ScheduledJobsService {
   }
 
   public async start(
-    jobName: string,
-    config?: any,
-    soloStart = false,
-    allowParallelRun = false
+      jobName: string,
+      config?: any,
+      soloStart = false,
+      allowParallelRun = false
   ): Promise<void> {
     try {
       this.jobStartingStopping[jobName] = true;
       await this.networkService.postJson(
-        '/admin/jobs/scheduled/' + jobName + '/start',
-        {
-          config,
-          allowParallelRun,
-          soloStart,
-        }
+          '/admin/jobs/scheduled/' + jobName + '/start',
+          {
+            config,
+            allowParallelRun,
+            soloStart,
+          }
       );
       // placeholder to force showing running job
       this.addDummyProgress(jobName, config);
@@ -98,7 +98,7 @@ export class ScheduledJobsService {
   public async stop(jobName: string): Promise<void> {
     this.jobStartingStopping[jobName] = true;
     await this.networkService.postJson(
-      '/admin/jobs/scheduled/' + jobName + '/stop'
+        '/admin/jobs/scheduled/' + jobName + '/stop'
     );
     delete this.jobStartingStopping[jobName];
     this.forceUpdate();
@@ -107,27 +107,27 @@ export class ScheduledJobsService {
   protected async loadProgress(): Promise<void> {
     const prevPrg = this.progress.value;
     this.progress.next(
-      await this.networkService.getJson<{ [key: string]: JobProgressDTO }>(
-        '/admin/jobs/scheduled/progress'
-      )
+        await this.networkService.getJson<{ [key: string]: JobProgressDTO }>(
+            '/admin/jobs/scheduled/progress'
+        )
     );
     for (const prg of Object.keys(prevPrg)) {
       if (
-        // eslint-disable-next-line no-prototype-builtins
-        !(this.progress.value).hasOwnProperty(prg) ||
-        // state changed from running to finished
-        ((prevPrg[prg].state === JobProgressStates.running ||
-            prevPrg[prg].state === JobProgressStates.cancelling) &&
-          !(
-            this.progress.value[prg].state === JobProgressStates.running ||
-            this.progress.value[prg].state === JobProgressStates.cancelling
-          ))
+          // eslint-disable-next-line no-prototype-builtins
+          !(this.progress.value).hasOwnProperty(prg) ||
+          // state changed from running to finished
+          ((prevPrg[prg].state === JobProgressStates.running ||
+                  prevPrg[prg].state === JobProgressStates.cancelling) &&
+              !(
+                  this.progress.value[prg].state === JobProgressStates.running ||
+                  this.progress.value[prg].state === JobProgressStates.cancelling
+              ))
       ) {
         this.onJobFinish.emit(prg);
         this.notification.success(
-          $localize`Job finished` +
-          ': ' +
-          this.backendTextService.getJobName(prevPrg[prg].jobName)
+            $localize`Job finished` +
+            ': ' +
+            this.backendTextService.getJobName(prevPrg[prg].jobName)
         );
       }
     }
@@ -135,8 +135,8 @@ export class ScheduledJobsService {
 
   protected isAnyJobRunning(): boolean {
     return Object.values(this.progress.value)
-      .findIndex(p => p.state === JobProgressStates.running ||
-        p.state === JobProgressStates.cancelling) !== -1;
+        .findIndex(p => p.state === JobProgressStates.running ||
+            p.state === JobProgressStates.cancelling) !== -1;
   }
 
   protected getProgressPeriodically(): void {

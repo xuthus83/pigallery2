@@ -53,12 +53,12 @@ export class FrameComponent {
   public readonly enableScrollUpButton: boolean;
 
   constructor(
-    private authService: AuthenticationService,
-    public notificationService: NotificationService,
-    public queryService: QueryService,
-    private router: Router,
-    public themeService: ThemeService,
-    private deviceService: DeviceDetectorService
+      private authService: AuthenticationService,
+      public notificationService: NotificationService,
+      public queryService: QueryService,
+      private router: Router,
+      public themeService: ThemeService,
+      private deviceService: DeviceDetectorService
   ) {
     this.enableScrollUpButton = Config.Gallery.NavBar.showScrollUpButton === ScrollUpModes.always || (Config.Gallery.NavBar.showScrollUpButton === ScrollUpModes.mobileOnly && !this.deviceService.isDesktop());
     this.user = this.authService.user;
@@ -70,9 +70,9 @@ export class FrameComponent {
 
   isFacesAvailable(): boolean {
     return (
-      Config.Faces.enabled &&
-      this.user.value &&
-      this.user.value.role >= Config.Faces.readAccessMinRole
+        Config.Faces.enabled &&
+        this.user.value &&
+        this.user.value.role >= Config.Faces.readAccessMinRole
     );
   }
 

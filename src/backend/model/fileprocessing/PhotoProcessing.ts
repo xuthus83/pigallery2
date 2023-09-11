@@ -24,11 +24,11 @@ export class PhotoProcessing {
     if (Config.Server.Threading.enabled === true) {
       if (Config.Server.Threading.thumbnailThreads > 0) {
         Config.Media.Thumbnail.concurrentThumbnailGenerations =
-          Config.Server.Threading.thumbnailThreads;
+            Config.Server.Threading.thumbnailThreads;
       } else {
         Config.Media.Thumbnail.concurrentThumbnailGenerations = Math.max(
-          1,
-          os.cpus().length - 1
+            1,
+            os.cpus().length - 1
         );
       }
     } else {
@@ -36,31 +36,31 @@ export class PhotoProcessing {
     }
 
     this.taskQue = new TaskExecuter(
-      Config.Media.Thumbnail.concurrentThumbnailGenerations,
-      (input): Promise<void> => PhotoWorker.render(input)
+        Config.Media.Thumbnail.concurrentThumbnailGenerations,
+        (input): Promise<void> => PhotoWorker.render(input)
     );
 
     this.initDone = true;
   }
 
   public static async generatePersonThumbnail(
-    person: PersonEntry
+      person: PersonEntry
   ): Promise<string> {
     // load parameters
     const photo: PhotoDTO = person.sampleRegion.media;
     const mediaPath = path.join(
-      ProjectPath.ImageFolder,
-      photo.directory.path,
-      photo.directory.name,
-      photo.name
+        ProjectPath.ImageFolder,
+        photo.directory.path,
+        photo.directory.name,
+        photo.name
     );
     const size: number = Config.Media.Thumbnail.personThumbnailSize;
     const faceRegion = person.sampleRegion.media.metadata.faces.find(f => f.name === person.name);
     // generate thumbnail path
     const thPath = PhotoProcessing.generatePersonThumbnailPath(
-      mediaPath,
-      faceRegion,
-      size
+        mediaPath,
+        faceRegion,
+        size
     );
 
     // check if thumbnail already exist
@@ -73,12 +73,12 @@ export class PhotoProcessing {
 
     const margin = {
       x: Math.round(
-        faceRegion.box.width *
-        Config.Media.Thumbnail.personFaceMargin
+          faceRegion.box.width *
+          Config.Media.Thumbnail.personFaceMargin
       ),
       y: Math.round(
-        faceRegion.box.height *
-        Config.Media.Thumbnail.personFaceMargin
+          faceRegion.box.height *
+          Config.Media.Thumbnail.personFaceMargin
       ),
     };
 
@@ -91,10 +91,10 @@ export class PhotoProcessing {
       makeSquare: false,
       cut: {
         left: Math.round(
-          Math.max(0, faceRegion.box.left - margin.x / 2)
+            Math.max(0, faceRegion.box.left - margin.x / 2)
         ),
         top: Math.round(
-          Math.max(0, faceRegion.box.top - margin.y / 2)
+            Math.max(0, faceRegion.box.top - margin.y / 2)
         ),
         width: faceRegion.box.width + margin.x,
         height: faceRegion.box.height + margin.y,
@@ -104,12 +104,12 @@ export class PhotoProcessing {
       smartSubsample: Config.Media.Thumbnail.smartSubsample,
     } as MediaRendererInput;
     input.cut.width = Math.min(
-      input.cut.width,
-      photo.metadata.size.width - input.cut.left
+        input.cut.width,
+        photo.metadata.size.width - input.cut.left
     );
     input.cut.height = Math.min(
-      input.cut.height,
-      photo.metadata.size.height - input.cut.top
+        input.cut.height,
+        photo.metadata.size.height - input.cut.top
     );
 
     await fsp.mkdir(ProjectPath.FacesFolder, {recursive: true});
@@ -120,34 +120,34 @@ export class PhotoProcessing {
   public static generateConvertedPath(mediaPath: string, size: number): string {
     const file = path.basename(mediaPath);
     return path.join(
-      ProjectPath.TranscodedFolder,
-      ProjectPath.getRelativePathToImages(path.dirname(mediaPath)),
-      file + '_' + size + 'q' + Config.Media.Thumbnail.quality + (Config.Media.Thumbnail.smartSubsample ? 'cs' : '') + PhotoProcessing.CONVERTED_EXTENSION
+        ProjectPath.TranscodedFolder,
+        ProjectPath.getRelativePathToImages(path.dirname(mediaPath)),
+        file + '_' + size + 'q' + Config.Media.Thumbnail.quality + (Config.Media.Thumbnail.smartSubsample ? 'cs' : '') + PhotoProcessing.CONVERTED_EXTENSION
     );
   }
 
   public static generatePersonThumbnailPath(
-    mediaPath: string,
-    faceRegion: FaceRegion,
-    size: number
+      mediaPath: string,
+      faceRegion: FaceRegion,
+      size: number
   ): string {
     return path.join(
-      ProjectPath.FacesFolder,
-      crypto
-        .createHash('md5')
-        .update(
-          mediaPath +
-          '_' +
-          faceRegion.name +
-          '_' +
-          faceRegion.box.left +
-          '_' +
-          faceRegion.box.top
-        )
-        .digest('hex') +
-      '_' +
-      size +
-      PhotoProcessing.CONVERTED_EXTENSION
+        ProjectPath.FacesFolder,
+        crypto
+            .createHash('md5')
+            .update(
+                mediaPath +
+                '_' +
+                faceRegion.name +
+                '_' +
+                faceRegion.box.left +
+                '_' +
+                faceRegion.box.top
+            )
+            .digest('hex') +
+        '_' +
+        size +
+        PhotoProcessing.CONVERTED_EXTENSION
     );
   }
 
@@ -156,14 +156,14 @@ export class PhotoProcessing {
    * @param convertedPath
    */
   public static async isValidConvertedPath(
-    convertedPath: string
+      convertedPath: string
   ): Promise<boolean> {
     const origFilePath = path.join(
-      ProjectPath.ImageFolder,
-      path.relative(
-        ProjectPath.TranscodedFolder,
-        convertedPath.substring(0, convertedPath.lastIndexOf('_'))
-      )
+        ProjectPath.ImageFolder,
+        path.relative(
+            ProjectPath.TranscodedFolder,
+            convertedPath.substring(0, convertedPath.lastIndexOf('_'))
+        )
     );
 
     if (path.extname(convertedPath) !== PhotoProcessing.CONVERTED_EXTENSION) {
@@ -171,24 +171,24 @@ export class PhotoProcessing {
     }
 
     const sizeStr = convertedPath.substring(
-      convertedPath.lastIndexOf('_') + 1,
-      convertedPath.lastIndexOf('q')
+        convertedPath.lastIndexOf('_') + 1,
+        convertedPath.lastIndexOf('q')
     );
 
     const size = parseInt(sizeStr, 10);
 
     if (
-      (size + '').length !== sizeStr.length ||
-      (Config.Media.Thumbnail.thumbnailSizes.indexOf(size) === -1 &&
-        Config.Media.Photo.Converting.resolution !== size)
+        (size + '').length !== sizeStr.length ||
+        (Config.Media.Thumbnail.thumbnailSizes.indexOf(size) === -1 &&
+            Config.Media.Photo.Converting.resolution !== size)
     ) {
       return false;
     }
 
 
     let qualityStr = convertedPath.substring(
-      convertedPath.lastIndexOf('q') + 1,
-      convertedPath.length - path.extname(convertedPath).length
+        convertedPath.lastIndexOf('q') + 1,
+        convertedPath.length - path.extname(convertedPath).length
     );
 
 
@@ -202,7 +202,7 @@ export class PhotoProcessing {
     const quality = parseInt(qualityStr, 10);
 
     if ((quality + '').length !== qualityStr.length ||
-      quality !== Config.Media.Thumbnail.quality) {
+        quality !== Config.Media.Thumbnail.quality) {
       return false;
     }
 
@@ -217,16 +217,16 @@ export class PhotoProcessing {
 
   public static async convertPhoto(mediaPath: string): Promise<string> {
     return this.generateThumbnail(
-      mediaPath,
-      Config.Media.Photo.Converting.resolution,
-      ThumbnailSourceType.Photo,
-      false
+        mediaPath,
+        Config.Media.Photo.Converting.resolution,
+        ThumbnailSourceType.Photo,
+        false
     );
   }
 
   static async convertedPhotoExist(
-    mediaPath: string,
-    size: number
+      mediaPath: string,
+      size: number
   ): Promise<boolean> {
     // generate thumbnail path
     const outPath = PhotoProcessing.generateConvertedPath(mediaPath, size);
@@ -243,10 +243,10 @@ export class PhotoProcessing {
 
 
   public static async generateThumbnail(
-    mediaPath: string,
-    size: number,
-    sourceType: ThumbnailSourceType,
-    makeSquare: boolean
+      mediaPath: string,
+      size: number,
+      sourceType: ThumbnailSourceType,
+      makeSquare: boolean
   ): Promise<string> {
     // generate thumbnail path
     const outPath = PhotoProcessing.generateConvertedPath(mediaPath, size);
@@ -284,9 +284,9 @@ export class PhotoProcessing {
   }
 
   public static async renderSVG(
-    svgString: SVGIconConfig,
-    outPath: string,
-    color = '#000'
+      svgString: SVGIconConfig,
+      outPath: string,
+      color = '#000'
   ): Promise<string> {
 
     // check if file already exist

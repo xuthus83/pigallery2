@@ -21,12 +21,12 @@ export class ShareService {
   inited = false;
   public ReadyPR: Promise<void>;
   public sharingSubject: BehaviorSubject<SharingDTO> = new BehaviorSubject(
-    null
+      null
   );
   public currentSharing = this.sharingSubject
-    .asObservable()
-    .pipe(filter((s) => s !== null))
-    .pipe(distinctUntilChanged());
+      .asObservable()
+      .pipe(filter((s) => s !== null))
+      .pipe(distinctUntilChanged());
 
   private resolve: () => void;
 
@@ -41,13 +41,13 @@ export class ShareService {
     this.router.events.subscribe(async (val) => {
       if (val instanceof RoutesRecognized) {
         this.param =
-          val.state.root.firstChild.params[
-            QueryParams.gallery.sharingKey_params
-            ] || null;
+            val.state.root.firstChild.params[
+                QueryParams.gallery.sharingKey_params
+                ] || null;
         this.queryParam =
-          val.state.root.firstChild.queryParams[
-            QueryParams.gallery.sharingKey_query
-            ] || null;
+            val.state.root.firstChild.queryParams[
+                QueryParams.gallery.sharingKey_query
+                ] || null;
 
         const changed = this.sharingKey !== (this.param || this.queryParam);
         if (changed) {
@@ -71,8 +71,8 @@ export class ShareService {
   onNewUser = async (user: UserDTO) => {
     if (user && !!user.usedSharingKey) {
       if (
-        user.usedSharingKey !== this.sharingKey ||
-        this.sharingSubject.value == null
+          user.usedSharingKey !== this.sharingKey ||
+          this.sharingSubject.value == null
       ) {
         this.sharingKey = user.usedSharingKey;
         await this.getSharing();
@@ -93,9 +93,9 @@ export class ShareService {
   }
 
   public createSharing(
-    dir: string,
-    includeSubFolders: boolean,
-    valid: number
+      dir: string,
+      includeSubFolders: boolean,
+      valid: number
   ): Promise<SharingDTO> {
     return this.networkService.postJson('/share/' + dir, {
       createSharing: {
@@ -106,11 +106,11 @@ export class ShareService {
   }
 
   public updateSharing(
-    dir: string,
-    sharingId: number,
-    includeSubFolders: boolean,
-    password: string,
-    valid: number
+      dir: string,
+      sharingId: number,
+      includeSubFolders: boolean,
+      password: string,
+      valid: number
   ): Promise<SharingDTO> {
     return this.networkService.putJson('/share/' + dir, {
       updateSharing: {
@@ -134,7 +134,7 @@ export class ShareService {
     try {
       this.sharingSubject.next(null);
       const sharing = await this.networkService.getJson<SharingDTO>(
-        '/share/' + this.getSharingKey()
+          '/share/' + this.getSharingKey()
       );
       this.sharingSubject.next(sharing);
     } catch (e) {
@@ -144,11 +144,10 @@ export class ShareService {
   }
 
   public async getSharingListForDir(
-    dir: string
+      dir: string
   ): Promise<SharingDTO[]> {
     return this.networkService.getJson('/share/list/' + dir);
   }
-
 
 
   public getSharingList(): Promise<SharingDTO[]> {

@@ -37,12 +37,12 @@ export class GallerySearchComponent implements OnDestroy {
   private saveSearchModalRef: BsModalRef;
 
   constructor(
-    private searchQueryParserService: SearchQueryParserService,
-    private albumService: AlbumsService,
-    private route: ActivatedRoute,
-    public router: Router,
-    private modalService: BsModalService,
-    public authenticationService: AuthenticationService
+      private searchQueryParserService: SearchQueryParserService,
+      private albumService: AlbumsService,
+      private route: ActivatedRoute,
+      public router: Router,
+      private modalService: BsModalService,
+      public authenticationService: AuthenticationService
   ) {
     this.SearchQueryTypes = SearchQueryTypes;
     this.MetadataSearchQueryTypes = MetadataSearchQueryTypes.map((v) => ({
@@ -64,8 +64,8 @@ export class GallerySearchComponent implements OnDestroy {
 
   get CanCreateAlbum(): boolean {
     return (
-      Config.Album.enabled &&
-      this.authenticationService.user.getValue().role >= UserRoles.Admin
+        Config.Album.enabled &&
+        this.authenticationService.user.getValue().role >= UserRoles.Admin
     );
   }
 
@@ -109,14 +109,14 @@ export class GallerySearchComponent implements OnDestroy {
     }
 
     this.rawSearchText = this.searchQueryParserService.stringify(
-      this.searchQueryDTO
+        this.searchQueryDTO
     );
   }
 
   validateRawSearchText(): void {
     try {
       this.searchQueryDTO = this.searchQueryParserService.parse(
-        this.rawSearchText
+          this.rawSearchText
       );
     } catch (e) {
       console.error(e);
@@ -125,14 +125,14 @@ export class GallerySearchComponent implements OnDestroy {
 
   Search(): void {
     this.router
-      .navigate(['/search', this.HTMLSearchQuery])
-      .catch(console.error);
+        .navigate(['/search', this.HTMLSearchQuery])
+        .catch(console.error);
   }
 
   async saveSearch(): Promise<void> {
     await this.albumService.addSavedSearch(
-      this.saveSearchName,
-      this.searchQueryDTO
+        this.saveSearchName,
+        this.searchQueryDTO
     );
     this.hideSaveSearchModal();
   }

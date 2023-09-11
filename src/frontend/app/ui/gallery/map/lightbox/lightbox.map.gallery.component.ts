@@ -72,12 +72,12 @@ export class GalleryMapLightboxComponent implements OnChanges, OnDestroy {
   defLayer: TileLayer;
   darkLayer: TileLayer;
   private smallIconSize = new Point(
-    Config.Media.Thumbnail.iconSize * 0.75,
-    Config.Media.Thumbnail.iconSize * 0.75
+      Config.Media.Thumbnail.iconSize * 0.75,
+      Config.Media.Thumbnail.iconSize * 0.75
   );
   private iconSize = new Point(
-    Config.Media.Thumbnail.iconSize,
-    Config.Media.Thumbnail.iconSize
+      Config.Media.Thumbnail.iconSize,
+      Config.Media.Thumbnail.iconSize
   );
   private usedIconSize = this.iconSize;
   private mapLayersControlOption: LeafletControlLayersConfig & {
@@ -132,10 +132,10 @@ export class GalleryMapLightboxComponent implements OnChanges, OnDestroy {
   private longPathSEPairs: { [key: string]: number } = {}; // stores how often a long distance path pair comes up
 
   constructor(
-    public fullScreenService: FullScreenService,
-    private thumbnailService: ThumbnailManagerService,
-    public mapService: MapService,
-    private themeService: ThemeService
+      public fullScreenService: FullScreenService,
+      private thumbnailService: ThumbnailManagerService,
+      public mapService: MapService,
+      private themeService: ThemeService
   ) {
     this.setUpPathLayers();
     this.mapOptions.layers = [this.mapLayersControlOption.overlays.Photos];
@@ -157,9 +157,9 @@ export class GalleryMapLightboxComponent implements OnChanges, OnDestroy {
     this.mapOptions.layers.push(this.themeService.darkMode.value ? this.darkLayer : this.defLayer);
 
     this.mapLayerControl = control.layers(
-      this.mapLayersControlOption.baseLayers,
-      this.mapLayersControlOption.overlays,
-      {position: 'bottomright'}
+        this.mapLayersControlOption.baseLayers,
+        this.mapLayersControlOption.overlays,
+        {position: 'bottomright'}
     );
 
     // update map theme on dark theme
@@ -169,7 +169,7 @@ export class GalleryMapLightboxComponent implements OnChanges, OnDestroy {
   setUpPathLayers() {
 
 
-    Config.Map.MapPathGroupConfig.forEach((conf, i) => {
+    Config.Map.MapPathGroupConfig.forEach((conf) => {
       let nameI18n = conf.name;
       switch (conf.name) {
         case 'Sport':
@@ -297,9 +297,9 @@ export class GalleryMapLightboxComponent implements OnChanges, OnDestroy {
 
     // if target image out of screen -> scroll to there
     if (
-      PageHelper.ScrollY > to.top ||
-      PageHelper.ScrollY + GalleryMapLightboxComponent.getScreenHeight() <
-      to.top
+        PageHelper.ScrollY > to.top ||
+        PageHelper.ScrollY + GalleryMapLightboxComponent.getScreenHeight() <
+        to.top
     ) {
       PageHelper.ScrollY = to.top;
     }
@@ -320,106 +320,106 @@ export class GalleryMapLightboxComponent implements OnChanges, OnDestroy {
 
     // make sure to enable photos layers when opening map
     if (
-      this.leafletMap &&
-      !this.leafletMap.hasLayer(this.mapLayersControlOption.overlays.Photos)
+        this.leafletMap &&
+        !this.leafletMap.hasLayer(this.mapLayersControlOption.overlays.Photos)
     ) {
       this.leafletMap.addLayer(this.mapLayersControlOption.overlays.Photos);
     }
     this.thumbnailsOnLoad = [];
     this.photos
-      .filter((p): number => {
-        return (
-          p.metadata &&
-          p.metadata.positionData &&
-          p.metadata.positionData.GPSData &&
-          p.metadata.positionData.GPSData.latitude &&
-          p.metadata.positionData.GPSData.longitude
-        );
-      })
-      .forEach((p): void => {
-        const mkr = marker({
-          lat: p.metadata.positionData.GPSData.latitude,
-          lng: p.metadata.positionData.GPSData.longitude,
-        });
-        this.mapLayersControlOption.overlays.Photos.addLayer(mkr);
-        let width = 500;
-        let height = 500;
-        const size = p.metadata.size;
-        if (size.width > size.height) {
-          height = width * (size.height / size.width);
-        } else {
-          width = height * (size.width / size.height);
-        }
-        const photoTh = this.thumbnailService.getLazyThumbnail(
-          new Media(p, width, height)
-        );
-        this.thumbnailsOnLoad.push(photoTh);
-
-        // Setting popup photo
-        const setPopUpPhoto = () => {
-          const photoPopup =
-            `<img style="width: ${width}px; height: ${height}px" ` +
-            `src="${photoTh.Src}" alt="preview">`;
-          if (!mkr.getPopup()) {
-            mkr.bindPopup(photoPopup, {minWidth: width});
+        .filter((p): number => {
+          return (
+              p.metadata &&
+              p.metadata.positionData &&
+              p.metadata.positionData.GPSData &&
+              p.metadata.positionData.GPSData.latitude &&
+              p.metadata.positionData.GPSData.longitude
+          );
+        })
+        .forEach((p): void => {
+          const mkr = marker({
+            lat: p.metadata.positionData.GPSData.latitude,
+            lng: p.metadata.positionData.GPSData.longitude,
+          });
+          this.mapLayersControlOption.overlays.Photos.addLayer(mkr);
+          let width = 500;
+          let height = 500;
+          const size = p.metadata.size;
+          if (size.width > size.height) {
+            height = width * (size.height / size.width);
           } else {
-            mkr.setPopupContent(photoPopup);
+            width = height * (size.width / size.height);
           }
-        };
+          const photoTh = this.thumbnailService.getLazyThumbnail(
+              new Media(p, width, height)
+          );
+          this.thumbnailsOnLoad.push(photoTh);
 
-        if (photoTh.Available) {
-          setPopUpPhoto();
-        } else {
-          const noPhotoPopup = `<div class="lightbox-map-gallery-component-preview-loading"
+          // Setting popup photo
+          const setPopUpPhoto = () => {
+            const photoPopup =
+                `<img style="width: ${width}px; height: ${height}px" ` +
+                `src="${photoTh.Src}" alt="preview">`;
+            if (!mkr.getPopup()) {
+              mkr.bindPopup(photoPopup, {minWidth: width});
+            } else {
+              mkr.setPopupContent(photoPopup);
+            }
+          };
+
+          if (photoTh.Available) {
+            setPopUpPhoto();
+          } else {
+            const noPhotoPopup = `<div class="lightbox-map-gallery-component-preview-loading"
                                  style="width: ${width}px; height: ${height}px">
                   ${photoTh.Error ? ionWarningOutline : ionImageOutline}
                   </div>`;
 
-          mkr.bindPopup(noPhotoPopup, {minWidth: width});
-          mkr.on('popupopen', () => {
-            photoTh.load();
-            photoTh.CurrentlyWaiting = true;
-          });
-          photoTh.OnLoad = setPopUpPhoto;
-        }
+            mkr.bindPopup(noPhotoPopup, {minWidth: width});
+            mkr.on('popupopen', () => {
+              photoTh.load();
+              photoTh.CurrentlyWaiting = true;
+            });
+            photoTh.OnLoad = setPopUpPhoto;
+          }
 
-        mkr.setIcon(MarkerFactory.defIcon);
-        // Setting photo icon
-        if (Config.Map.useImageMarkers === true) {
-          mkr.on('add', () => {
-            mkr.off('add');
-            const iconTh = this.thumbnailService.getIcon(new MediaIcon(p));
-            this.thumbnailsOnLoad.push(iconTh);
-            iconTh.Visible = true;
-            const setIcon = () => {
-              mkr.setIcon(
-                icon({
-                  iconUrl: iconTh.Src,
-                  iconSize: this.usedIconSize, // size of the icon
-                  className: 'photo-icon',
-                })
-              );
-              mkr.options.alt = p.name;
-              mkr.on('mouseover', () => {
-                mkr.getIcon().options.iconSize = [
-                  this.usedIconSize.x * 1.5,
-                  this.usedIconSize.y * 1.5,
-                ];
-                mkr.setIcon(mkr.getIcon());
-              });
-              mkr.on('mouseout', () => {
-                mkr.getIcon().options.iconSize = this.usedIconSize;
-                mkr.setIcon(mkr.getIcon());
-              });
-            };
-            if (iconTh.Available === true) {
-              setIcon();
-            } else {
-              iconTh.OnLoad = setIcon;
-            }
-          });
-        }
-      });
+          mkr.setIcon(MarkerFactory.defIcon);
+          // Setting photo icon
+          if (Config.Map.useImageMarkers === true) {
+            mkr.on('add', () => {
+              mkr.off('add');
+              const iconTh = this.thumbnailService.getIcon(new MediaIcon(p));
+              this.thumbnailsOnLoad.push(iconTh);
+              iconTh.Visible = true;
+              const setIcon = () => {
+                mkr.setIcon(
+                    icon({
+                      iconUrl: iconTh.Src,
+                      iconSize: this.usedIconSize, // size of the icon
+                      className: 'photo-icon',
+                    })
+                );
+                mkr.options.alt = p.name;
+                mkr.on('mouseover', () => {
+                  mkr.getIcon().options.iconSize = [
+                    this.usedIconSize.x * 1.5,
+                    this.usedIconSize.y * 1.5,
+                  ];
+                  mkr.setIcon(mkr.getIcon());
+                });
+                mkr.on('mouseout', () => {
+                  mkr.getIcon().options.iconSize = this.usedIconSize;
+                  mkr.setIcon(mkr.getIcon());
+                });
+              };
+              if (iconTh.Available === true) {
+                setIcon();
+              } else {
+                iconTh.OnLoad = setIcon;
+              }
+            });
+          }
+        });
     if (this.gpxFiles) {
       this.loadGPXFiles().catch(console.error);
     }
@@ -448,7 +448,7 @@ export class GalleryMapLightboxComponent implements OnChanges, OnDestroy {
     this.pathLayersConfigOrdered.forEach(p => {
       p.layer.clearLayers();
       this.mapLayerControl.removeLayer(
-        p.layer
+          p.layer
       );
     });
     this.longPathSEPairs = {};
@@ -487,17 +487,17 @@ export class GalleryMapLightboxComponent implements OnChanges, OnDestroy {
       return;
     }
     if (
-      (this.leafletMap.getZoom() < 15 &&
-        this.usedIconSize === this.smallIconSize) ||
-      (this.leafletMap.getZoom() >= 15 && this.usedIconSize === this.iconSize)
+        (this.leafletMap.getZoom() < 15 &&
+            this.usedIconSize === this.smallIconSize) ||
+        (this.leafletMap.getZoom() >= 15 && this.usedIconSize === this.iconSize)
     ) {
       // all set no change needed
       return;
     }
     this.usedIconSize =
-      this.leafletMap.getZoom() < 15 ? this.smallIconSize : this.iconSize;
+        this.leafletMap.getZoom() < 15 ? this.smallIconSize : this.iconSize;
     (
-      this.mapLayersControlOption.overlays.Photos.getLayers() as Marker[]
+        this.mapLayersControlOption.overlays.Photos.getLayers() as Marker[]
     ).forEach((mkr) => {
       // if alt is not present icon is not yet set, so do not change the size
       if (!mkr.options.alt) {
@@ -513,11 +513,11 @@ export class GalleryMapLightboxComponent implements OnChanges, OnDestroy {
       return;
     }
     this.leafletMap.fitBounds(
-      latLngBounds(
-        (
-          this.mapLayersControlOption.overlays.Photos.getLayers() as Marker[]
-        ).map((m) => m.getLatLng())
-      )
+        latLngBounds(
+            (
+                this.mapLayersControlOption.overlays.Photos.getLayers() as Marker[]
+            ).map((m) => m.getLatLng())
+        )
     );
   }
 
@@ -526,7 +526,7 @@ export class GalleryMapLightboxComponent implements OnChanges, OnDestroy {
     for (let i = 0; i < path.length - 1; ++i) {
       const dst = (a: LatLngLiteral, b: LatLngLiteral) => {
         return Math.sqrt(Math.pow(a.lat - b.lat, 2) +
-          Math.pow(a.lng - b.lng, 2));
+            Math.pow(a.lng - b.lng, 2));
       };
 
       /**
@@ -587,7 +587,6 @@ export class GalleryMapLightboxComponent implements OnChanges, OnDestroy {
 
           const mkr = marker(mc);
           mkr.setIcon(MarkerFactory.defIconSmall);
-          //   pathLayer.layer.addLayer(mkr);
         });
 
         path.splice(i + 1, 0, ...newPoints);
@@ -625,8 +624,8 @@ export class GalleryMapLightboxComponent implements OnChanges, OnDestroy {
         }
         const th = pl.themes.find((th) => {
           return !th.matchers || th.matchers.length == 0 || // null/empty matchers match everything
-            (parsedGPX.name &&
-              th.matchers.findIndex(m => m.test(parsedGPX.name)) !== -1);
+              (parsedGPX.name &&
+                  th.matchers.findIndex(m => m.test(parsedGPX.name)) !== -1);
         });
         if (th) {
           pathLayer.theme = th.theme;
@@ -652,12 +651,12 @@ export class GalleryMapLightboxComponent implements OnChanges, OnDestroy {
         parsedGPX.path.forEach(p => {
           this.addArchForLongDistancePaths(p);
           pathLayer.layer.addLayer(
-            polyline(p, {
-              smoothFactor: 3,
-              interactive: false,
-              color: pathLayer?.theme?.color,
-              dashArray: pathLayer?.theme?.dashArray
-            })
+              polyline(p, {
+                smoothFactor: 3,
+                interactive: false,
+                color: pathLayer?.theme?.color,
+                dashArray: pathLayer?.theme?.dashArray
+              })
           );
         });
 
@@ -677,12 +676,12 @@ export class GalleryMapLightboxComponent implements OnChanges, OnDestroy {
     this.pathLayersConfigOrdered.filter(pl => pl.layer.getLayers().length > 0).forEach((pl) => {
 
       this.mapLayerControl.addOverlay(
-        pl.layer,
-        pl.name
+          pl.layer,
+          pl.name
       );
       if (
-        this.leafletMap &&
-        !this.leafletMap.hasLayer(pl.layer)
+          this.leafletMap &&
+          !this.leafletMap.hasLayer(pl.layer)
       ) {
         this.leafletMap.addLayer(pl.layer);
       }

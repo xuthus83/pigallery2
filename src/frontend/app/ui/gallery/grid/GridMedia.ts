@@ -5,10 +5,10 @@ import {VideoDTO} from '../../../../../common/entities/VideoDTO';
 
 export class GridMedia extends Media {
   constructor(
-    media: MediaDTO,
-    renderWidth: number,
-    renderHeight: number,
-    public rowId: number
+      media: MediaDTO,
+      renderWidth: number,
+      renderHeight: number,
+      public rowId: number
   ) {
     super(media, renderWidth, renderHeight);
   }

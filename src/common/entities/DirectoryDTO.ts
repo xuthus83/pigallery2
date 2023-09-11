@@ -1,7 +1,7 @@
-import { MediaDTO, MediaDTOUtils } from './MediaDTO';
-import { FileDTO } from './FileDTO';
-import { PhotoDTO, CoverPhotoDTO } from './PhotoDTO';
-import { Utils } from '../Utils';
+import {MediaDTO} from './MediaDTO';
+import {FileDTO} from './FileDTO';
+import {CoverPhotoDTO} from './PhotoDTO';
+import {Utils} from '../Utils';
 
 export interface DirectoryPathDTO {
   name: string;
@@ -9,9 +9,8 @@ export interface DirectoryPathDTO {
 }
 
 
-
 export interface DirectoryBaseDTO<S extends FileDTO = MediaDTO>
-  extends DirectoryPathDTO {
+    extends DirectoryPathDTO {
   id: number;
   name: string;
   path: string;
@@ -30,7 +29,7 @@ export interface DirectoryBaseDTO<S extends FileDTO = MediaDTO>
 }
 
 export interface ParentDirectoryDTO<S extends FileDTO = MediaDTO>
-  extends DirectoryBaseDTO<S> {
+    extends DirectoryBaseDTO<S> {
   id: number;
   name: string;
   path: string;
@@ -47,7 +46,7 @@ export interface ParentDirectoryDTO<S extends FileDTO = MediaDTO>
 }
 
 export interface SubDirectoryDTO<S extends FileDTO = MediaDTO>
-  extends DirectoryBaseDTO<S> {
+    extends DirectoryBaseDTO<S> {
   id: number;
   name: string;
   path: string;

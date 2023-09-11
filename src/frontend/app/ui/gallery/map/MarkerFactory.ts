@@ -19,8 +19,8 @@ const SvgIcon: { new(options?: SvgIconOptions): DivIcon } = DivIcon.extend({
       popupAnchor: options.small ? [0, -15] : [0, -30],
       className: 'custom-div-icon' + (options.small ? ' marker-svg-small' : ''),
       html: '<div class="marker-svg-wrapper"><div class="marker-svg-shadow"></div>' +
-        '<div  class="marker-svg-pin" style="border-color: ' + options.color + '">' +
-        '</div>' + svg + '</div>',
+          '<div  class="marker-svg-pin" style="border-color: ' + options.color + '">' +
+          '</div>' + svg + '</div>',
     });
   }
 });

@@ -50,8 +50,8 @@ export class MetadataLoader {
                 metadata.size.height = stream.height;
 
                 if (
-                  Utils.isInt32(parseInt('' + stream.rotation, 10)) &&
-                  (Math.abs(parseInt('' + stream.rotation, 10)) / 90) % 2 === 1
+                    Utils.isInt32(parseInt('' + stream.rotation, 10)) &&
+                    (Math.abs(parseInt('' + stream.rotation, 10)) / 90) % 2 === 1
                 ) {
                   // noinspection JSSuspiciousNameCombination
                   metadata.size.width = stream.height;
@@ -60,10 +60,10 @@ export class MetadataLoader {
                 }
 
                 if (
-                  Utils.isInt32(Math.floor(parseFloat(stream.duration) * 1000))
+                    Utils.isInt32(Math.floor(parseFloat(stream.duration) * 1000))
                 ) {
                   metadata.duration = Math.floor(
-                    parseFloat(stream.duration) * 1000
+                      parseFloat(stream.duration) * 1000
                   );
                 }
 
@@ -74,39 +74,39 @@ export class MetadataLoader {
                   metadata.fps = parseInt(stream.avg_frame_rate, 10) || null;
                 }
                 metadata.creationDate =
-                  Date.parse(stream.tags.creation_time) ||
-                  metadata.creationDate;
+                    Date.parse(stream.tags.creation_time) ||
+                    metadata.creationDate;
                 break;
               }
             }
 
             // For some filetypes (for instance Matroska), bitrate and duration are stored in
             // the format section, not in the stream section.
-            
+
             // Only use duration from container header if necessary (stream duration is usually more accurate)
             if (
-              metadata.duration === 0 &&
-              data.format.duration !== undefined &&
-              Utils.isInt32(Math.floor(data.format.duration * 1000))
+                metadata.duration === 0 &&
+                data.format.duration !== undefined &&
+                Utils.isInt32(Math.floor(data.format.duration * 1000))
             ) {
               metadata.duration = Math.floor(data.format.duration * 1000);
             }
-            
+
             // Prefer bitrate from container header (includes video and audio)
             if (
-              data.format.bit_rate !== undefined &&
-              Utils.isInt32(data.format.bit_rate)
+                data.format.bit_rate !== undefined &&
+                Utils.isInt32(data.format.bit_rate)
             ) {
               metadata.bitRate = data.format.bit_rate;
             }
 
             if (
-              data.format.tags !== undefined && 
-              typeof data.format.tags.creation_time === 'string'
+                data.format.tags !== undefined &&
+                typeof data.format.tags.creation_time === 'string'
             ) {
               metadata.creationDate =
-                Date.parse(data.format.tags.creation_time) ||
-                metadata.creationDate;
+                  Date.parse(data.format.tags.creation_time) ||
+                  metadata.creationDate;
             }
 
             // eslint-disable-next-line no-empty
@@ -158,13 +158,13 @@ export class MetadataLoader {
             try {
               const exif = ExifParserFactory.create(data).parse();
               if (
-                exif.tags.ISO ||
-                exif.tags.Model ||
-                exif.tags.Make ||
-                exif.tags.FNumber ||
-                exif.tags.ExposureTime ||
-                exif.tags.FocalLength ||
-                exif.tags.LensModel
+                  exif.tags.ISO ||
+                  exif.tags.Model ||
+                  exif.tags.Make ||
+                  exif.tags.FNumber ||
+                  exif.tags.ExposureTime ||
+                  exif.tags.FocalLength ||
+                  exif.tags.LensModel
               ) {
                 if (exif.tags.Model && exif.tags.Model !== '') {
                   metadata.cameraData = metadata.cameraData || {};
@@ -185,50 +185,50 @@ export class MetadataLoader {
                 if (Utils.isFloat32(exif.tags.FocalLength)) {
                   metadata.cameraData = metadata.cameraData || {};
                   metadata.cameraData.focalLength = parseFloat(
-                    '' + exif.tags.FocalLength
+                      '' + exif.tags.FocalLength
                   );
                 }
                 if (Utils.isFloat32(exif.tags.ExposureTime)) {
                   metadata.cameraData = metadata.cameraData || {};
                   metadata.cameraData.exposure = parseFloat(
-                    parseFloat('' + exif.tags.ExposureTime).toFixed(6)
+                      parseFloat('' + exif.tags.ExposureTime).toFixed(6)
                   );
                 }
                 if (Utils.isFloat32(exif.tags.FNumber)) {
                   metadata.cameraData = metadata.cameraData || {};
                   metadata.cameraData.fStop = parseFloat(
-                    parseFloat('' + exif.tags.FNumber).toFixed(2)
+                      parseFloat('' + exif.tags.FNumber).toFixed(2)
                   );
                 }
               }
               if (
-                !isNaN(exif.tags.GPSLatitude) ||
-                exif.tags.GPSLongitude ||
-                exif.tags.GPSAltitude
+                  !isNaN(exif.tags.GPSLatitude) ||
+                  exif.tags.GPSLongitude ||
+                  exif.tags.GPSAltitude
               ) {
                 metadata.positionData = metadata.positionData || {};
                 metadata.positionData.GPSData = {};
 
                 if (Utils.isFloat32(exif.tags.GPSLongitude)) {
                   metadata.positionData.GPSData.longitude = parseFloat(
-                    exif.tags.GPSLongitude.toFixed(6)
+                      exif.tags.GPSLongitude.toFixed(6)
                   );
                 }
                 if (Utils.isFloat32(exif.tags.GPSLatitude)) {
                   metadata.positionData.GPSData.latitude = parseFloat(
-                    exif.tags.GPSLatitude.toFixed(6)
+                      exif.tags.GPSLatitude.toFixed(6)
                   );
                 }
               }
               if (
-                exif.tags.CreateDate ||
-                exif.tags.DateTimeOriginal ||
-                exif.tags.ModifyDate
+                  exif.tags.CreateDate ||
+                  exif.tags.DateTimeOriginal ||
+                  exif.tags.ModifyDate
               ) {
                 metadata.creationDate =
-                  (exif.tags.DateTimeOriginal ||
-                    exif.tags.CreateDate ||
-                    exif.tags.ModifyDate) * 1000;
+                    (exif.tags.DateTimeOriginal ||
+                        exif.tags.CreateDate ||
+                        exif.tags.ModifyDate) * 1000;
               }
               if (exif.imageSize) {
                 metadata.size = {
@@ -236,16 +236,16 @@ export class MetadataLoader {
                   height: exif.imageSize.height,
                 };
               } else if (
-                exif.tags.RelatedImageWidth &&
-                exif.tags.RelatedImageHeight
+                  exif.tags.RelatedImageWidth &&
+                  exif.tags.RelatedImageHeight
               ) {
                 metadata.size = {
                   width: exif.tags.RelatedImageWidth,
                   height: exif.tags.RelatedImageHeight,
                 };
               } else if (
-                exif.tags.ImageWidth &&
-                exif.tags.ImageHeight
+                  exif.tags.ImageWidth &&
+                  exif.tags.ImageHeight
               ) {
                 metadata.size = {
                   width: exif.tags.ImageWidth,
@@ -270,21 +270,21 @@ export class MetadataLoader {
               if (iptcData.country_or_primary_location_name) {
                 metadata.positionData = metadata.positionData || {};
                 metadata.positionData.country =
-                  iptcData.country_or_primary_location_name
-                    .replace(/\0/g, '')
-                    .trim();
+                    iptcData.country_or_primary_location_name
+                        .replace(/\0/g, '')
+                        .trim();
               }
               if (iptcData.province_or_state) {
                 metadata.positionData = metadata.positionData || {};
                 metadata.positionData.state = iptcData.province_or_state
-                  .replace(/\0/g, '')
-                  .trim();
+                    .replace(/\0/g, '')
+                    .trim();
               }
               if (iptcData.city) {
                 metadata.positionData = metadata.positionData || {};
                 metadata.positionData.city = iptcData.city
-                  .replace(/\0/g, '')
-                  .trim();
+                    .replace(/\0/g, '')
+                    .trim();
               }
               if (iptcData.caption) {
                 metadata.caption = iptcData.caption.replace(/\0/g, '').trim();
@@ -316,9 +316,9 @@ export class MetadataLoader {
                 }
               }
               if (
-                exif.subject &&
-                exif.subject.value &&
-                exif.subject.value.length > 0
+                  exif.subject &&
+                  exif.subject.value &&
+                  exif.subject.value.length > 0
               ) {
                 if (metadata.keywords === undefined) {
                   metadata.keywords = [];
@@ -332,8 +332,8 @@ export class MetadataLoader {
               let orientation = OrientationTypes.TOP_LEFT;
               if (exif.Orientation) {
                 orientation = parseInt(
-                  exif.Orientation.value as any,
-                  10
+                    exif.Orientation.value as any,
+                    10
                 ) as number;
               }
               if (OrientationTypes.BOTTOM_LEFT < orientation) {
@@ -347,18 +347,18 @@ export class MetadataLoader {
               if (Config.Faces.enabled) {
                 const faces: FaceRegion[] = [];
                 if (
-                  ((exif.Regions as any)?.value?.RegionList)?.value
+                    ((exif.Regions as any)?.value?.RegionList)?.value
                 ) {
                   for (const regionRoot of (exif.Regions as any).value.RegionList
-                    .value as any[]) {
+                      .value as any[]) {
                     let type;
                     let name;
                     let box;
                     const createFaceBox = (
-                      w: string,
-                      h: string,
-                      x: string,
-                      y: string
+                        w: string,
+                        h: string,
+                        x: string,
+                        y: string
                     ) => {
                       if (OrientationTypes.BOTTOM_LEFT < orientation) {
                         [x, y] = [y, x];
@@ -392,10 +392,10 @@ export class MetadataLoader {
 
                     /* Adobe Lightroom based face region structure */
                     if (
-                      regionRoot.value &&
-                      regionRoot.value['rdf:Description'] &&
-                      regionRoot.value['rdf:Description'].value &&
-                      regionRoot.value['rdf:Description'].value['mwg-rs:Area']
+                        regionRoot.value &&
+                        regionRoot.value['rdf:Description'] &&
+                        regionRoot.value['rdf:Description'].value &&
+                        regionRoot.value['rdf:Description'].value['mwg-rs:Area']
                     ) {
                       const region = regionRoot.value['rdf:Description'];
                       const regionBox = region.value['mwg-rs:Area'].attributes;
@@ -403,25 +403,25 @@ export class MetadataLoader {
                       name = region.attributes['mwg-rs:Name'];
                       type = region.attributes['mwg-rs:Type'];
                       box = createFaceBox(
-                        regionBox['stArea:w'],
-                        regionBox['stArea:h'],
-                        regionBox['stArea:x'],
-                        regionBox['stArea:y']
+                          regionBox['stArea:w'],
+                          regionBox['stArea:h'],
+                          regionBox['stArea:x'],
+                          regionBox['stArea:y']
                       );
                       /* Load exiftool edited face region structure, see github issue #191 */
                     } else if (
-                      regionRoot.Area &&
-                      regionRoot.Name &&
-                      regionRoot.Type
+                        regionRoot.Area &&
+                        regionRoot.Name &&
+                        regionRoot.Type
                     ) {
                       const regionBox = regionRoot.Area.value;
                       name = regionRoot.Name.value;
                       type = regionRoot.Type.value;
                       box = createFaceBox(
-                        regionBox.w.value,
-                        regionBox.h.value,
-                        regionBox.x.value,
-                        regionBox.y.value
+                          regionBox.w.value,
+                          regionBox.h.value,
+                          regionBox.x.value,
+                          regionBox.y.value
                       );
                     }
 

@@ -1,28 +1,16 @@
-import {
-  Column,
-  Entity,
-  Index,
-  ManyToOne,
-  OneToMany,
-  PrimaryGeneratedColumn,
-  Unique,
-} from 'typeorm';
-import {
-  ParentDirectoryDTO,
-  SubDirectoryDTO,
-} from '../../../../common/entities/DirectoryDTO';
-import { MediaEntity } from './MediaEntity';
-import { FileEntity } from './FileEntity';
-import { columnCharsetCS } from './EntityUtils';
-import { MediaDTO } from '../../../../common/entities/MediaDTO';
+import {Column, Entity, Index, ManyToOne, OneToMany, PrimaryGeneratedColumn, Unique,} from 'typeorm';
+import {ParentDirectoryDTO, SubDirectoryDTO,} from '../../../../common/entities/DirectoryDTO';
+import {MediaEntity} from './MediaEntity';
+import {FileEntity} from './FileEntity';
+import {columnCharsetCS} from './EntityUtils';
+import {MediaDTO} from '../../../../common/entities/MediaDTO';
 
 @Entity()
 @Unique(['name', 'path'])
 export class DirectoryEntity
-  implements ParentDirectoryDTO<MediaDTO>, SubDirectoryDTO<MediaDTO>
-{
+    implements ParentDirectoryDTO<MediaDTO>, SubDirectoryDTO<MediaDTO> {
   @Index()
-  @PrimaryGeneratedColumn({ unsigned: true })
+  @PrimaryGeneratedColumn({unsigned: true})
   id: number;
 
   @Index()
@@ -61,7 +49,7 @@ export class DirectoryEntity
 
   isPartial?: boolean;
 
-  @Column('mediumint', { unsigned: true })
+  @Column('mediumint', {unsigned: true})
   mediaCount: number;
 
   @Column('bigint', {
@@ -83,20 +71,20 @@ export class DirectoryEntity
   youngestMedia: number;
 
   @Index()
-  @ManyToOne((type) => DirectoryEntity, (directory) => directory.directories, {
+  @ManyToOne(() => DirectoryEntity, (directory) => directory.directories, {
     onDelete: 'CASCADE',
   })
   public parent: DirectoryEntity;
 
-  @OneToMany((type) => DirectoryEntity, (dir) => dir.parent)
+  @OneToMany(() => DirectoryEntity, (dir) => dir.parent)
   public directories: DirectoryEntity[];
 
   // not saving to database, it is only assigned when querying the DB
-  @ManyToOne((type) => MediaEntity, { onDelete: 'SET NULL' })
+  @ManyToOne(() => MediaEntity, {onDelete: 'SET NULL'})
   public cover: MediaEntity;
 
   // On galley change, cover will be invalid
-  @Column({ type: 'boolean', default: false })
+  @Column({type: 'boolean', default: false})
   validCover: boolean;
 
   @OneToMany((type) => MediaEntity, (media) => media.directory)

@@ -3,7 +3,7 @@ import {ConfigPriority, MapProviders, NavigationLinkTypes, ScrollUpModes} from '
 import {ReIndexingSensitivity} from '../../../common/config/private/PrivateConfig';
 import {SearchQueryTypes} from '../../../common/entities/SearchQueryDTO';
 import {ConfigStyle} from './settings/settings.service';
-import {SortByTypes,GroupByTypes} from '../../../common/entities/SortingMethods';
+import {GroupByTypes, SortByTypes} from '../../../common/entities/SortingMethods';
 import {GridSizes} from '../../../common/entities/GridSizes';
 
 export const EnumTranslations: Record<string, string> = {};

@@ -1,6 +1,6 @@
 import {Component, EventEmitter, forwardRef, Input, Output,} from '@angular/core';
 import {SearchQueryDTO, SearchQueryTypes, TextSearch,} from '../../../../../../common/entities/SearchQueryDTO';
-import {ControlValueAccessor, NG_VALIDATORS, NG_VALUE_ACCESSOR, UntypedFormControl, ValidationErrors, Validator,} from '@angular/forms';
+import {ControlValueAccessor, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator,} from '@angular/forms';
 import {SearchQueryParserService} from '../search-query-parser.service';
 import {Utils} from '../../../../../../common/Utils';
 
@@ -22,7 +22,7 @@ import {Utils} from '../../../../../../common/Utils';
   ],
 })
 export class GallerySearchQueryBuilderComponent
-  implements ControlValueAccessor, Validator {
+    implements ControlValueAccessor, Validator {
   public searchQueryDTO: SearchQueryDTO = {
     type: SearchQueryTypes.any_text,
     text: '',
@@ -38,7 +38,7 @@ export class GallerySearchQueryBuilderComponent
 
     try {
       const newDTO = this.searchQueryParserService.parse(
-        this.rawSearchText
+          this.rawSearchText
       );
       if (Utils.equalsFilter(this.searchQueryDTO, newDTO)) {
         return;
@@ -58,7 +58,7 @@ export class GallerySearchQueryBuilderComponent
     this.onChange();
   }
 
-  validate(control: UntypedFormControl): ValidationErrors {
+  validate(): ValidationErrors {
     return {required: true};
   }
 
@@ -66,25 +66,25 @@ export class GallerySearchQueryBuilderComponent
   public onTouched(): void {
   }
 
-  public writeValue(obj: any): void {
+  public writeValue(obj: SearchQueryDTO): void {
     try {
       // do not trigger change if nothing changed
       if (Utils.equalsFilter(this.searchQueryDTO, obj) &&
-        Utils.equalsFilter(this.searchQueryParserService.parse(
-          this.rawSearchText
-        ), obj)) {
+          Utils.equalsFilter(this.searchQueryParserService.parse(
+              this.rawSearchText
+          ), obj)) {
         return;
       }
-    }catch (e) {
+    } catch (e) {
       // if cant parse they are not the same
     }
     this.searchQueryDTO = obj;
     this.rawSearchText = this.searchQueryParserService.stringify(
-      this.searchQueryDTO
+        this.searchQueryDTO
     );
   }
 
-  registerOnChange(fn: (_: any) => void): void {
+  registerOnChange(fn: (_: SearchQueryDTO) => void): void {
     this.propagateChange = fn;
   }
 
@@ -98,20 +98,21 @@ export class GallerySearchQueryBuilderComponent
         this.propagateChange(this.searchQueryDTO);
         return;
       }
-    }catch (e) {
+    } catch (e) {
       // if cant parse they are not the same
     }
     this.rawSearchText = this.searchQueryParserService.stringify(
-      this.searchQueryDTO
+        this.searchQueryDTO
     );
     this.propagateChange(this.searchQueryDTO);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  private propagateChange = (_: unknown): void => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  private propagateChange = (_: SearchQueryDTO): void => {
+    // ignoring
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  private propagateTouch = (_: unknown): void => {
+  private propagateTouch = (): void => {
+    // ignoring
   };
 }

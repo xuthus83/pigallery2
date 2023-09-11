@@ -61,21 +61,21 @@ export const MaxRangeSearchQueryTypes = [
 ];
 
 export const RangeSearchQueryTypes = MinRangeSearchQueryTypes.concat(
-  MaxRangeSearchQueryTypes
+    MaxRangeSearchQueryTypes
 );
 
 export const MetadataSearchQueryTypes = [
   SearchQueryTypes.distance,
   SearchQueryTypes.orientation,
 ]
-  .concat(RangeSearchQueryTypes)
-  .concat(TextSearchQueryTypes);
+    .concat(RangeSearchQueryTypes)
+    .concat(TextSearchQueryTypes);
 
 export const rangedTypePairs: any = {};
 rangedTypePairs[SearchQueryTypes.from_date] = SearchQueryTypes.to_date;
 rangedTypePairs[SearchQueryTypes.min_rating] = SearchQueryTypes.max_rating;
 rangedTypePairs[SearchQueryTypes.min_resolution] =
-  SearchQueryTypes.max_resolution;
+    SearchQueryTypes.max_resolution;
 // add the other direction too
 for (const key of Object.keys(rangedTypePairs)) {
   rangedTypePairs[rangedTypePairs[key]] = key;
@@ -98,19 +98,19 @@ export const SearchQueryDTOUtils = {
       case SearchQueryTypes.AND:
         query.type = SearchQueryTypes.OR;
         (query as SearchListQuery).list = (query as SearchListQuery).list.map(
-          (q) => SearchQueryDTOUtils.negate(q)
+            (q) => SearchQueryDTOUtils.negate(q)
         );
         return query;
       case SearchQueryTypes.OR:
         query.type = SearchQueryTypes.AND;
         (query as SearchListQuery).list = (query as SearchListQuery).list.map(
-          (q) => SearchQueryDTOUtils.negate(q)
+            (q) => SearchQueryDTOUtils.negate(q)
         );
         return query;
 
       case SearchQueryTypes.orientation:
         (query as OrientationSearch).landscape = !(query as OrientationSearch)
-          .landscape;
+            .landscape;
         return query;
 
       case SearchQueryTypes.from_date:
@@ -128,7 +128,7 @@ export const SearchQueryDTOUtils = {
       case SearchQueryTypes.file_name:
       case SearchQueryTypes.directory:
         (query as NegatableSearchQuery).negate = !(
-          query as NegatableSearchQuery
+            query as NegatableSearchQuery
         ).negate;
         return query;
 
@@ -171,13 +171,13 @@ export interface SomeOfSearchQuery extends SearchQueryDTO, SearchListQuery {
 
 export interface TextSearch extends NegatableSearchQuery {
   type:
-    | SearchQueryTypes.any_text
-    | SearchQueryTypes.person
-    | SearchQueryTypes.keyword
-    | SearchQueryTypes.position
-    | SearchQueryTypes.caption
-    | SearchQueryTypes.file_name
-    | SearchQueryTypes.directory;
+      | SearchQueryTypes.any_text
+      | SearchQueryTypes.person
+      | SearchQueryTypes.keyword
+      | SearchQueryTypes.position
+      | SearchQueryTypes.caption
+      | SearchQueryTypes.file_name
+      | SearchQueryTypes.directory;
   matchType?: TextSearchQueryMatchTypes;
   text: string;
 }

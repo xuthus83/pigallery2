@@ -70,7 +70,7 @@ export class GallerySortingService {
     if (cw.directory && cw.directory.metaFile) {
       for (const file in PG2ConfMap.sorting) {
         if (cw.directory.metaFile.some((f) => f.name === file)) {
-          return (PG2ConfMap.sorting as any)[file];
+          return (PG2ConfMap.sorting)[file];
         }
       }
     }
@@ -210,7 +210,7 @@ export class GallerySortingService {
         return (m: MediaDTO) => ((m as PhotoDTO).metadata.faces || []).length.toString();
 
     }
-    return (m: MediaDTO) => '';
+    return () => '';
   }
 
   public applySorting(

@@ -1,9 +1,6 @@
-import { Injectable } from '@angular/core';
-import {
-  QueryKeywords,
-  SearchQueryParser,
-} from '../../../../../common/SearchQueryParser';
-import { SearchQueryDTO } from '../../../../../common/entities/SearchQueryDTO';
+import {Injectable} from '@angular/core';
+import {QueryKeywords, SearchQueryParser,} from '../../../../../common/SearchQueryParser';
+import {SearchQueryDTO} from '../../../../../common/entities/SearchQueryDTO';
 
 @Injectable()
 export class SearchQueryParserService {

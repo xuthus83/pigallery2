@@ -3,7 +3,6 @@ import {
   ControlValueAccessor,
   NG_VALIDATORS,
   NG_VALUE_ACCESSOR,
-  UntypedFormControl,
   ValidationErrors,
   Validator
 } from '../../../../../../../../node_modules/@angular/forms';
@@ -34,7 +33,7 @@ import {Utils} from '../../../../../../../common/Utils';
   ],
 })
 export class SortingMethodSettingsEntryComponent
-  implements ControlValueAccessor, Validator, OnInit {
+    implements ControlValueAccessor, Validator, OnInit {
   @Input() sortingByEnum: Record<string, number | string> & { [k: number]: string };
 
   public sortingMethod: SortingMethod;
@@ -65,16 +64,17 @@ export class SortingMethodSettingsEntryComponent
     this.propagateChange(this.sortingMethod);
   }
 
-  validate(control: UntypedFormControl): ValidationErrors {
+  validate(): ValidationErrors {
     return {required: true};
   }
 
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private propagateChange = (_: SortingMethod): void => {
     //ignoring
   };
 
-  private propagateTouch = (_: never): void => {
+  private propagateTouch = (): void => {
     //ignoring
   };
 

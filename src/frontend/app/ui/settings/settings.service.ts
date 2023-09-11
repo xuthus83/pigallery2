@@ -11,9 +11,6 @@ import {DefaultsJobs} from '../../../../common/entities/job/JobDTO';
 import {StatisticDTO} from '../../../../common/entities/settings/StatisticDTO';
 import {ScheduledJobsService} from './scheduled-jobs.service';
 import {IWebConfigClassPrivate} from '../../../../../node_modules/typeconfig/src/decorators/class/IWebConfigClass';
-import {SharingDTO} from '../../../../common/entities/SharingDTO';
-import {Utils} from '../../../../common/Utils';
-import {Config} from '../../../../common/config/public/Config';
 
 
 export enum ConfigStyle {
@@ -38,11 +35,11 @@ export class SettingsService {
 
     if (this.cookieService.check(CookieNames.configPriority)) {
       this.configPriority =
-        parseInt(this.cookieService.get(CookieNames.configPriority));
+          parseInt(this.cookieService.get(CookieNames.configPriority));
     }
     if (this.cookieService.check(CookieNames.configStyle)) {
       this.configStyle =
-        parseInt(this.cookieService.get(CookieNames.configStyle));
+          parseInt(this.cookieService.get(CookieNames.configStyle));
     }
 
 
@@ -51,8 +48,8 @@ export class SettingsService {
     });
     this.jobsService.onJobFinish.subscribe((jobName: string) => {
       if (
-        jobName === DefaultsJobs[DefaultsJobs.Indexing] ||
-        jobName === DefaultsJobs[DefaultsJobs['Gallery Reset']]
+          jobName === DefaultsJobs[DefaultsJobs.Indexing] ||
+          jobName === DefaultsJobs[DefaultsJobs['Gallery Reset']]
       ) {
         this.loadStatistic();
       }
@@ -68,7 +65,7 @@ export class SettingsService {
     try {
       const wcg = WebConfigClassBuilder.attachPrivateInterface(new WebConfig());
       wcg.load(
-        await this.networkService.getJson<Promise<WebConfig>>('/settings')
+          await this.networkService.getJson<Promise<WebConfig>>('/settings')
       );
       this.settings.next(wcg);
     } catch (e) {
@@ -85,21 +82,21 @@ export class SettingsService {
   configSetupChanged(): void {
     // save it for some years
     this.cookieService.set(
-      CookieNames.configPriority,
-      this.configPriority.toString(),
-      365 * 50
+        CookieNames.configPriority,
+        this.configPriority.toString(),
+        365 * 50
     );
     // save it for some years
     this.cookieService.set(
-      CookieNames.configStyle,
-      this.configStyle.toString(),
-      365 * 50
+        CookieNames.configStyle,
+        this.configStyle.toString(),
+        365 * 50
     );
   }
 
   async loadStatistic(): Promise<void> {
     this.statistic.next(
-      await this.networkService.getJson<StatisticDTO>('/admin/statistic')
+        await this.networkService.getJson<StatisticDTO>('/admin/statistic')
     );
   }
 }

@@ -9,14 +9,14 @@ export class ContentService {
   public sortedFilteredContent: Observable<GroupedDirectoryContent>;
 
   constructor(
-    private contentLoaderService: ContentLoaderService,
-    private sortingService: GallerySortingService,
-    private filterService: FilterService
+      private contentLoaderService: ContentLoaderService,
+      private sortingService: GallerySortingService,
+      private filterService: FilterService
   ) {
     this.sortedFilteredContent = this.sortingService
-      .applySorting(
-        this.filterService.applyFilters(this.contentLoaderService.originalContent)
-      ).pipe(shareReplay(1));
+        .applySorting(
+            this.filterService.applyFilters(this.contentLoaderService.originalContent)
+        ).pipe(shareReplay(1));
 
   }
 

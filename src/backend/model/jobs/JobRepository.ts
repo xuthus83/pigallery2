@@ -14,7 +14,7 @@ import {AlbumCoverRestJob} from './jobs/AlbumCoverResetJob';
 
 export class JobRepository {
   private static instance: JobRepository = null;
-  availableJobs: { [key: string]: IJob<any> } = {};
+  availableJobs: { [key: string]: IJob<unknown> } = {};
 
   public static get Instance(): JobRepository {
     if (JobRepository.instance == null) {
@@ -23,11 +23,11 @@ export class JobRepository {
     return JobRepository.instance;
   }
 
-  getAvailableJobs(): IJob<any>[] {
+  getAvailableJobs(): IJob<unknown>[] {
     return Object.values(this.availableJobs).filter((t) => t.Supported);
   }
 
-  register(job: IJob<any>): void {
+  register(job: IJob<unknown>): void {
     if (typeof this.availableJobs[job.Name] !== 'undefined') {
       throw new Error('Job already exist:' + job.Name);
     }

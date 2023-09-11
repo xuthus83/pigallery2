@@ -7,7 +7,6 @@ import {Media} from '../../Media';
 import {Thumbnail, ThumbnailManagerService,} from '../../thumbnailManager.service';
 import {QueryService} from '../../../../model/query.service';
 import {CoverPhotoDTO} from '../../../../../../common/entities/PhotoDTO';
-import {Config} from '../../../../../../common/config/public/Config';
 
 @Component({
   selector: 'app-gallery-directory',
@@ -21,9 +20,9 @@ export class GalleryDirectoryComponent implements OnInit, OnDestroy {
   thumbnail: Thumbnail = null;
 
   constructor(
-    private thumbnailService: ThumbnailManagerService,
-    private sanitizer: DomSanitizer,
-    public queryService: QueryService
+      private thumbnailService: ThumbnailManagerService,
+      private sanitizer: DomSanitizer,
+      public queryService: QueryService
   ) {
   }
 
@@ -33,11 +32,11 @@ export class GalleryDirectoryComponent implements OnInit, OnDestroy {
 
   getSanitizedThUrl(): SafeStyle {
     return this.sanitizer.bypassSecurityTrustStyle(
-      'url(' +
-      this.thumbnail.Src.replace(/\(/g, '%28')
-        .replace(/'/g, '%27')
-        .replace(/\)/g, '%29') +
-      ')'
+        'url(' +
+        this.thumbnail.Src.replace(/\(/g, '%28')
+            .replace(/'/g, '%27')
+            .replace(/\)/g, '%29') +
+        ')'
     );
   }
 
@@ -60,7 +59,7 @@ export class GalleryDirectoryComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     if (this.directory.cover) {
       this.thumbnail = this.thumbnailService.getThumbnail(
-        new Media(this.SamplePhoto, this.size, this.size)
+          new Media(this.SamplePhoto, this.size, this.size)
       );
     }
   }
