@@ -12,6 +12,7 @@ import {VideoProcessing} from '../fileprocessing/VideoProcessing';
 import {PhotoProcessing} from '../fileprocessing/PhotoProcessing';
 import {Utils} from '../../../common/Utils';
 import {GPXProcessing} from '../fileprocessing/GPXProcessing';
+import {MDFileDTO} from '../../../common/entities/MDFileDTO';
 
 export class DiskMangerWorker {
   public static calcLastModified(stat: Stats): number {
@@ -227,6 +228,7 @@ export class DiskMangerWorker {
         ) {
           continue;
         }
+
         directory.metaFile.push({
           name: file,
           directory: null,
@@ -244,6 +246,12 @@ export class DiskMangerWorker {
           directory.oldestMedia = Math.max(m.metadata.creationDate, directory.oldestMedia);
         }
       );
+
+      directory.metaFile.forEach(mf => {
+        if (DiskMangerWorker.isMarkdown(mf.name)) {
+          (mf as MDFileDTO).date = directory.youngestMedia;
+        }
+      });
     }
 
     return directory;
@@ -263,6 +271,12 @@ export class DiskMangerWorker {
     }
 
     return false;
+  }
+
+  private static isMarkdown(fullPath: string): boolean {
+    const extension = path.extname(fullPath).toLowerCase();
+
+    return extension == '.md';
   }
 }
 

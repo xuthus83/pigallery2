@@ -635,6 +635,32 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
     expect(selected.media.length).to.equal(subDir.media.length);
   }) as any).timeout(40000);
 
+  it('should save .md with date', async () => {
+    Config.Server.Threading.enabled = false;
+    Config.Album.enabled = true;
+    Config.Faces.enabled = true;
+
+    Config.Media.folder = path.join(__dirname, '/../../../assets');
+    ProjectPath.ImageFolder = path.join(__dirname, '/../../../assets');
+    const im = new IndexingManagerTest();
+    const gm = new GalleryManagerTest();
+
+    const d = await DiskManager.scanDirectory('/');
+
+    await im.saveToDB(d);
+
+    const dir = await gm.listDirectory('/');
+    expect(dir.metaFile).to.be.an('array');
+
+    expect(dir.metaFile).to.be.deep.equal([
+      {
+        date: 1126455782000,
+        id: 1,
+        name: 'index.md'
+      }
+    ]);
+  });
+
   DBTestHelper.savedDescribe('Test listDirectory', () => {
     const statSync = fs.statSync;
     let dirTime = 0;
@@ -690,7 +716,6 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
 
     });
   });
-
 
   DBTestHelper.savedDescribe('should index .pg2conf', () => {
 

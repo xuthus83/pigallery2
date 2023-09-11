@@ -22,6 +22,7 @@ import {AlbumBaseEntity} from './enitites/album/AlbumBaseEntity';
 import {SavedSearchEntity} from './enitites/album/SavedSearchEntity';
 import {NotificationManager} from '../NotifocationManager';
 import {PersonJunctionTable} from './enitites/PersonJunctionTable';
+import {MDFileEntity} from './enitites/MDFileEntity';
 
 const LOG_TAG = '[SQLConnection]';
 
@@ -36,6 +37,7 @@ export class SQLConnection {
       options.entities = [
         UserEntity,
         FileEntity,
+        MDFileEntity,
         PersonJunctionTable,
         PersonEntry,
         MediaEntity,
@@ -76,6 +78,7 @@ export class SQLConnection {
     options.entities = [
       UserEntity,
       FileEntity,
+      MDFileEntity,
       PersonJunctionTable,
       PersonEntry,
       MediaEntity,

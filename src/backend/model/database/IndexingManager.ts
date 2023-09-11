@@ -22,6 +22,8 @@ import * as fs from 'fs';
 import {SearchQueryDTO} from '../../../common/entities/SearchQueryDTO';
 import {PersonEntry} from './enitites/PersonEntry';
 import {PersonJunctionTable} from './enitites/PersonJunctionTable';
+import {MDFileEntity} from './enitites/MDFileEntity';
+import {MDFileDTO} from '../../../common/entities/MDFileDTO';
 
 const LOG_TAG = '[IndexingManager]';
 
@@ -292,6 +294,7 @@ export class IndexingManager {
     scannedDirectory: ParentDirectoryDTO
   ): Promise<void> {
     const fileRepository = connection.getRepository(FileEntity);
+    const MDfileRepository = connection.getRepository(MDFileEntity);
     // save files
     const indexedMetaFiles = await fileRepository
       .createQueryBuilder('file')
@@ -319,8 +322,14 @@ export class IndexingManager {
         metaFilesToSave.push(metaFile);
       }
     }
-    await fileRepository.save(metaFilesToSave, {
-      chunk: Math.max(Math.ceil(metaFilesToSave.length / 500), 1),
+
+    const MDFiles = metaFilesToSave.filter(f => !isNaN((f as MDFileDTO).date));
+    const generalFiles = metaFilesToSave.filter(f => isNaN((f as MDFileDTO).date));
+    await fileRepository.save(generalFiles, {
+      chunk: Math.max(Math.ceil(generalFiles.length / 500), 1),
+    });
+    await MDfileRepository.save(MDFiles, {
+      chunk: Math.max(Math.ceil(MDFiles.length / 500), 1),
     });
     await fileRepository.remove(indexedMetaFiles, {
       chunk: Math.max(Math.ceil(indexedMetaFiles.length / 500), 1),
