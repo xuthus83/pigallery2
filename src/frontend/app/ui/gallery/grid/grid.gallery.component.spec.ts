@@ -7,11 +7,12 @@ import {OverlayService} from '../overlay.service';
 import {ContentService} from '../content.service';
 import {GallerySortingService} from '../navigator/sorting.service';
 import {QueryService} from '../../../model/query.service';
-import {of} from 'rxjs';
+import {BehaviorSubject, of} from 'rxjs';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
 import {PhotoDTO} from '../../../../../common/entities/PhotoDTO';
 import {GridMedia} from './GridMedia';
 import {GalleryNavigatorService} from '../navigator/navigator.service';
+import {GridSizes} from '../../../../../common/entities/GridSizes';
 
 class MockQueryService {
 }
@@ -26,6 +27,7 @@ class MockGallerySortingService {
 }
 
 class MockGalleryNavigatorService {
+  girdSize = new BehaviorSubject(GridSizes.medium);
 }
 
 describe('GalleryGridComponent', () => {
