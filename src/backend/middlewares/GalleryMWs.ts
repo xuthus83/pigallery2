@@ -84,7 +84,7 @@ export class GalleryMWs {
     res: Response,
     next: NextFunction
   ): Promise<void> {
-    if (Config.Gallery.enableDownloadZip === false) {
+    if (Config.Gallery.NavBar.enableDownloadZip === false) {
       return next();
     }
     const directoryName = req.params['directory'] || '/';

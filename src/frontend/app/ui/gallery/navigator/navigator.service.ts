@@ -55,7 +55,7 @@ export class GalleryNavigatorService {
 
 
   getDefaultGridSize(): GridSizes {
-    return Config.Gallery.defaultGidSize;
+    return Config.Gallery.NavBar.defaultGidSize;
   }
 
 }
