@@ -330,15 +330,15 @@ export class ServerThumbnailConfig extends ClientThumbnailConfig {
   })
   smartSubsample = true;
   @ConfigProperty({
-    type: 'ratio',
+    type: 'float',
     tags:
         {
           name: $localize`Person face margin`,
           priority: ConfigPriority.underTheHood
         },
-    description: $localize`Person face size ratio on the face thumbnail.`
+    description: $localize`This ratio of the face bounding box will be added to the face as a margin. Higher number add more margin.`
   })
-  personFaceMargin: number = 0.6; // in ration [0-1]
+  personFaceMargin: number = 0.7; // in ratio [0-1]
 }
 
 @SubConfigClass({softReadonly: true})
