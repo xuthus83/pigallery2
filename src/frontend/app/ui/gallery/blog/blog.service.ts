@@ -55,7 +55,7 @@ export class BlogService {
 
     dates.sort();
 
-    const splitterRgx = new RegExp(/^\s*<!--\s*@pg-date:?\s*\d{4}-\d{1,2}-\d{1,2}\s*-->/, 'gi');
+    const splitterRgx = new RegExp(/^\s*<!--\s*@pg-date:?\s*\d{4}-\d{1,2}-\d{1,2}\s*-->/, 'gim');
     const dateRgx = new RegExp(/\d{4}-\d{1,2}-\d{1,2}/);
 
     const ret: GroupedMarkdown[] = [];
