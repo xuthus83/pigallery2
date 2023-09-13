@@ -64,6 +64,7 @@ export class BlogService {
     const matches = Array.from(markdown.matchAll(splitterRgx));
 
     const getDateGroup = (date: Date) => {
+      // get UTC midnight date
       const dateNum = Utils.makeUTCMidnight(date).getTime();
       let groupDate = dates.find((d, i) => i > dates.length - 1 ? false : dates[i + 1] > dateNum);   //dates are sorted
 
@@ -106,7 +107,6 @@ export class BlogService {
 
     for (let i = 0; i < matches.length; ++i) {
       const matchedStr = matches[i][0];
-      // get UTC midnight date
       const dateNum = new Date(matchedStr.match(dateRgx)[0]);
 
       const groupDate = getDateGroup(dateNum);
