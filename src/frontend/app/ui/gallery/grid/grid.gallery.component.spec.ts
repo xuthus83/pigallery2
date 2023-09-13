@@ -54,7 +54,7 @@ describe('GalleryGridComponent', () => {
           },
         }]
     })
-        .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(GalleryGridComponent);
     component = fixture.componentInstance;
@@ -70,14 +70,19 @@ describe('GalleryGridComponent', () => {
     expect(component).toBeTruthy();
   });
   it('should mergePhotos', () => {
-    const phs: PhotoDTO[] = [];
-    const gPhs: GridMedia[] = [];
-    for (let i = 0; i < 10; ++i) {
-      const p = {name: i + '.jpg', directory: {name: 'd' + i, path: 'p' + i}} as PhotoDTO;
-      phs.push(p);
-      gPhs.push(new GridMedia(p, 1, 1, i));
-    }
+    let phs: PhotoDTO[] = [];
+    let gPhs: GridMedia[] = [];
+    const resetData = () => {
+      phs = [];
+      gPhs = [];
+      for (let i = 0; i < 10; ++i) {
+        const p = {name: i + '.jpg', directory: {name: 'd' + i, path: 'p' + i}} as PhotoDTO;
+        phs.push(p);
+        gPhs.push(new GridMedia(p, 1, 1, i));
+      }
+    };
     /*-----------------------*/
+    resetData();
     component.mediaGroups = [{name: 'equal 1', media: [phs[0], phs[1]]}];
     component.mediaToRender = [{name: 'equal 1', media: [gPhs[0], gPhs[1]]}];
     component.mergeNewPhotos();
@@ -114,7 +119,10 @@ describe('GalleryGridComponent', () => {
     expect(component.mediaToRender).toEqual([{name: 'removed 2nd 2', media: [gPhs[0], gPhs[1]]}, {name: '2', media: [gPhs[2]]}]);
     /*-----------------------*/
     component.mediaGroups = [{name: 'removed 2nd 2', media: [phs[0], phs[1]]}, {name: '2', media: [phs[2], phs[5]]}];
-    component.mediaToRender = [{name: 'removed 2nd 2', media: [gPhs[0], gPhs[1]]}, {name: '2', media: [gPhs[2], gPhs[5], gPhs[3], gPhs[4]]}];
+    component.mediaToRender = [{name: 'removed 2nd 2', media: [gPhs[0], gPhs[1]]}, {
+      name: '2',
+      media: [gPhs[2], gPhs[5], gPhs[3], gPhs[4]]
+    }];
     component.mergeNewPhotos();
     expect(component.mediaToRender).toEqual([{name: 'removed 2nd 2', media: [gPhs[0], gPhs[1]]}, {name: '2', media: [gPhs[2], gPhs[5]]}]);
     /*-----------------------*/
@@ -143,6 +151,7 @@ describe('GalleryGridComponent', () => {
     component.mergeNewPhotos();
     expect(component.mediaToRender).toEqual([{name: '3', media: [gPhs[0], gPhs[1]]}]);
     /*-----------------------*/
+    resetData();
     gPhs[1].rowId = 3;
     gPhs[3].rowId = 3;
     gPhs[2].rowId = 3;
@@ -150,6 +159,30 @@ describe('GalleryGridComponent', () => {
     component.mediaToRender = [{name: '1', media: [gPhs[0], gPhs[1], gPhs[3], gPhs[2]]}];
     component.mergeNewPhotos();
     expect(component.mediaToRender).toEqual([{name: '3', media: [gPhs[0]]}]);
+    /*-----------------------*/
+    resetData();
+    gPhs[0].rowId = 1;
+    gPhs[1].rowId = 1;
+    gPhs[2].rowId = 3;
+    gPhs[3].rowId = 3;
+    gPhs[4].rowId = 4;
+    gPhs[5].rowId = 4;
+    component.mediaGroups = [{name: 'X', media: [phs[0], phs[1], phs[2], phs[3], phs[4], phs[5], phs[6]]}];
+    component.mediaToRender = [{name: '1', media: [gPhs[0], gPhs[1], gPhs[2], gPhs[3]]}, {name: '2', media: [gPhs[4], gPhs[5]]}];
+    component.mergeNewPhotos();
+    expect(component.mediaToRender).toEqual([{name: 'X', media: [gPhs[0], gPhs[1]]}]);
+    /*-----------------------*/
+    resetData();
+    gPhs[0].rowId = 1;
+    gPhs[1].rowId = 1;
+    gPhs[2].rowId = 3;
+    gPhs[3].rowId = 3;
+    gPhs[4].rowId = 5;
+    gPhs[5].rowId = 5;
+    component.mediaGroups = [{name: '1', media: [phs[0], phs[1], phs[2], phs[3]]}, {name: '2', media: [phs[4], phs[5]]}];
+    component.mediaToRender = [{name: 'X', media: [gPhs[0], gPhs[1], gPhs[2], gPhs[3], gPhs[4], gPhs[5]]}];
+    component.mergeNewPhotos();
+    expect(component.mediaToRender).toEqual([{name: '1', media: [gPhs[0], gPhs[1], gPhs[2], gPhs[3]]}]);
 
   });
 });
