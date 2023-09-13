@@ -17,25 +17,25 @@ export class BlogService {
               private mdFilesFilterPipe: MDFilesFilterPipe) {
 
     this.groupedMarkdowns = this.galleryService.sortedFilteredContent.pipe(
-        mergeMap(async content => {
-          if (!content) {
-            return [];
-          }
-          const dates = content.mediaGroups.map(g => g.date)
-              .filter(d => !!d).map(d => d.getTime());
+      mergeMap(async content => {
+        if (!content) {
+          return [];
+        }
+        const dates = content.mediaGroups.map(g => g.date)
+          .filter(d => !!d).map(d => d.getTime());
 
 
-          let firstMedia = Number.MAX_SAFE_INTEGER;
-          if (content.mediaGroups.length > 0) {
-            firstMedia = content.mediaGroups[0].media.reduce((p, m) =>
-                Math.min(m.metadata.creationDate, p), Number.MAX_SAFE_INTEGER);
-          }
+        let firstMedia = Number.MAX_SAFE_INTEGER;
+        if (content.mediaGroups.length > 0) {
+          firstMedia = content.mediaGroups[0].media.reduce((p, m) =>
+            Math.min(m.metadata.creationDate, p), Number.MAX_SAFE_INTEGER);
+        }
 
-          const files = this.mdFilesFilterPipe.transform(content.metaFile)
-              .map(f => this.splitMarkDown(f, dates, firstMedia));
+        const files = this.mdFilesFilterPipe.transform(content.metaFile)
+          .map(f => this.splitMarkDown(f, dates, firstMedia));
 
-          return (await Promise.all(files)).flat();
-        }), shareReplay(1));
+        return (await Promise.all(files)).flat();
+      }), shareReplay(1));
   }
 
   private async splitMarkDown(file: MDFileDTO, dates: number[], firstMedia: number): Promise<GroupedMarkdown[]> {
@@ -45,10 +45,12 @@ export class BlogService {
       return [];
     }
 
+    // there is no date group by
     if (dates.length == 0) {
       return [{
         text: markdown,
         file: file,
+        date: null,
         textShort: markdown.substring(0, 200)
       }];
     }
@@ -61,15 +63,8 @@ export class BlogService {
     const ret: GroupedMarkdown[] = [];
     const matches = Array.from(markdown.matchAll(splitterRgx));
 
-    if (matches.length == 0) {
-      return [{
-        text: markdown,
-        file: file,
-        textShort: markdown.substring(0, 200)
-      }];
-    }
-
-    const getDateGroup = (dateNum: number) => {
+    const getDateGroup = (date: Date) => {
+      const dateNum = Utils.makeUTCMidnight(date).getTime();
       let groupDate = dates.find((d, i) => i > dates.length - 1 ? false : dates[i + 1] > dateNum);   //dates are sorted
 
       // cant find the date. put to the last group (as it was later)
@@ -80,6 +75,16 @@ export class BlogService {
     };
 
 
+    if (matches.length == 0) {
+      return [{
+        text: markdown,
+        file: file,
+        textShort: markdown.substring(0, 200),
+        date: getDateGroup(new Date(file.date))
+      }];
+    }
+
+
     const baseText = markdown.substring(0, matches[0].index).trim();
 
     // don't show empty
@@ -87,13 +92,14 @@ export class BlogService {
       if (file.date === firstMedia) {
         ret.push({
           text: baseText,
-          file: file
+          file: file,
+          date: null
         });
       } else {
         ret.push({
           text: baseText,
           file: file,
-          date: getDateGroup(file.date)
+          date: getDateGroup(new Date(file.date))
         });
       }
     }
@@ -101,7 +107,7 @@ export class BlogService {
     for (let i = 0; i < matches.length; ++i) {
       const matchedStr = matches[i][0];
       // get UTC midnight date
-      const dateNum = Utils.makeUTCMidnight(new Date(matchedStr.match(dateRgx)[0])).getTime();
+      const dateNum = new Date(matchedStr.match(dateRgx)[0]);
 
       const groupDate = getDateGroup(dateNum);
 
@@ -130,13 +136,13 @@ export class BlogService {
 
   public getMarkDown(file: FileDTO): Promise<string> {
     const filePath = Utils.concatUrls(
-        file.directory.path,
-        file.directory.name,
-        file.name
+      file.directory.path,
+      file.directory.name,
+      file.name
     );
     if (!this.cache[filePath]) {
       this.cache[filePath] = this.networkService.getText(
-          '/gallery/content/' + filePath
+        '/gallery/content/' + filePath
       );
       (this.cache[filePath] as Promise<string>).then((val: string) => {
         this.cache[filePath] = val;
@@ -148,7 +154,7 @@ export class BlogService {
 
 
 export interface GroupedMarkdown {
-  date?: number;
+  date: number | null;
   text: string;
   textShort?: string;
   file: FileDTO;

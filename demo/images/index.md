@@ -83,10 +83,10 @@ Start numbering with offset:
 57. foo
 1. bar
 
-<!-- @pg-date 2015-06-12 -->
+<!-- @pg-date 2015-06-29 -->
 ## Day 1
 
-You can tag section in the `*.md` files  with `<!-- @pg-date <ISO_DATE> -->`, like: `<!-- @pg-date 2015-06-12 -->` to attach them to a date. 
+You can tag section in the `*.md` files  with `<!-- @pg-date <ISO_DATE> -->`, like: `<!-- @pg-date 2015-06-29 -->` to attach them to a date. 
 Then, if you group by date, they will show up at the assigned day.
 
 That part of the markdown will be removed from the main markdown at the top and shown only at that day.
