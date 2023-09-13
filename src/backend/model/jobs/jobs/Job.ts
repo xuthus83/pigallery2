@@ -35,21 +35,21 @@ export abstract class Job<T extends Record<string, unknown> = Record<string, unk
 
   public get InProgress(): boolean {
     return (
-        this.Progress !== null &&
-        (this.Progress.State === JobProgressStates.running ||
-            this.Progress.State === JobProgressStates.cancelling)
+      this.Progress !== null &&
+      (this.Progress.State === JobProgressStates.running ||
+        this.Progress.State === JobProgressStates.cancelling)
     );
   }
 
   public start(
-      config: T,
-      soloRun = false,
-      allowParallelRun = false
+    config: T,
+    soloRun = false,
+    allowParallelRun = false
   ): Promise<void> {
     if (this.InProgress === false && this.Supported === true) {
       Logger.info(
-          LOG_TAG,
-          'Running job ' + (soloRun === true ? 'solo' : '') + ': ' + this.Name
+        LOG_TAG,
+        'Running job ' + (soloRun === true ? 'solo' : '') + ': ' + this.Name
       );
       this.soloRun = soloRun;
       this.allowParallelRun = allowParallelRun;
@@ -63,8 +63,8 @@ export abstract class Job<T extends Record<string, unknown> = Record<string, unk
         }
       }
       this.progress = new JobProgress(
-          this.Name,
-          JobDTOUtils.getHashName(this.Name, this.config)
+        this.Name,
+        JobDTOUtils.getHashName(this.Name, this.config)
       );
       this.progress.OnChange = this.jobListener.onProgressUpdate;
       const pr = new Promise<void>((resolve): void => {
@@ -79,11 +79,11 @@ export abstract class Job<T extends Record<string, unknown> = Record<string, unk
       return pr;
     } else {
       Logger.info(
-          LOG_TAG,
-          'Job already running or not supported: ' + this.Name
+        LOG_TAG,
+        'Job already running or not supported: ' + this.Name
       );
       return Promise.reject(
-          'Job already running or not supported: ' + this.Name
+        'Job already running or not supported: ' + this.Name
       );
     }
   }
@@ -134,11 +134,12 @@ export abstract class Job<T extends Record<string, unknown> = Record<string, unk
   }
 
   private run(): void {
+    // we call setImmediate later.
     process.nextTick(async (): Promise<void> => {
       try {
         if (
-            this.Progress == null ||
-            this.Progress.State !== JobProgressStates.running
+          this.Progress == null ||
+          this.Progress.State !== JobProgressStates.running
         ) {
           this.onFinish();
           return;
