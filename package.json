@@ -1,9 +1,9 @@
 {
   "name": "pigallery2",
-  "version": "1.9.6-edge",
+  "version": "2.0.0-rc",
   "description": "This is a photo gallery optimised for running low resource servers (especially on raspberry pi)",
   "author": "Patrik J. Braun",
-  "homepage": "https://github.com/bpatrik/PiGallery2",
+  "homepage": "https://github.com/bpatrik/pigallery2",
   "license": "MIT",
   "main": "./src/backend/index.js",
   "bin": "./src/backend/index.js",
