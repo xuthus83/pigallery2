@@ -72,7 +72,7 @@
                let-confPath="confPath">
     <div class="alert alert-secondary" role="alert"
          *ngIf="rStates.description && settingsService.configStyle == ConfigStyle.full">
-      {{rStates.description}}
+      <ng-icon size="1.3em"  name="ionInformationCircleOutline"></ng-icon>  {{rStates.description}}
       <a *ngIf="rStates.tags?.githubIssue"
          [href]="'https://github.com/bpatrik/pigallery2/issues/'+rStates.tags?.githubIssue">
         <ng-container i18n>See</ng-container>
@@ -130,7 +130,7 @@
       <ng-container *ngFor="let job of uiJob; let i = index">
         <div class="alert alert-secondary" role="alert"
              *ngIf="job.description  && settingsService.configStyle == ConfigStyle.full">
-          {{job.description}}
+          <ng-icon size="1.3em"  name="ionInformationCircleOutline"></ng-icon>  {{job.description}}
         </div>
         <app-settings-job-button
           *ngIf="!job.relevant || job.relevant(settingsService.settings | async)"

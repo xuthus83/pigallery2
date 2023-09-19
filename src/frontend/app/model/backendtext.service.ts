@@ -60,13 +60,51 @@ export class BackendtextService {
       case DefaultsJobs['Temp Folder Cleaning']:
         return $localize`Temp folder cleaning`;
       case DefaultsJobs['Album Cover Filling']:
-        return $localize`Album cover filling`;
+        return $localize`Cover filling`;
       case DefaultsJobs['Album Cover Reset']:
-        return $localize`Album cover reset`;
+        return $localize`Cover reset`;
       case DefaultsJobs['GPX Compression']:
         return $localize`GPX compression`;
+      case DefaultsJobs['Delete Compressed GPX']:
+        return $localize`Delete Compressed GPX`;
+      case DefaultsJobs['Top Pick Sending']:
+        return $localize`Top Pick Sending`;
       default:
-        return DefaultsJobs[job as DefaultsJobs];
+        return null;
+    }
+  }
+
+  public getJobDescription(job: DefaultsJobs | string): string {
+    if (typeof job === 'string') {
+      job = DefaultsJobs[job as any];
+    }
+    switch (job as DefaultsJobs) {
+      case DefaultsJobs.Indexing:
+        return $localize`Scans the whole gallery from disk and indexes it to the DB.`;
+      case DefaultsJobs['Gallery Reset']:
+        return $localize`Deletes all directories, photos and videos from the DB.`;
+      case DefaultsJobs['Album Reset']:
+        return $localize`Removes all albums from the DB`;
+      case DefaultsJobs['Thumbnail Generation']:
+        return $localize`Generates thumbnails from all media files and stores them in the tmp folder.`;
+      case DefaultsJobs['Photo Converting']:
+        return $localize`Generates high res photos from all media files and stores them in the tmp folder.`;
+      case DefaultsJobs['Video Converting']:
+        return $localize`Transcodes all videos and stores them in the tmp folder.`;
+      case DefaultsJobs['Temp Folder Cleaning']:
+        return $localize`Removes unnecessary files from the tmp folder.`;
+      case DefaultsJobs['Album Cover Filling']:
+        return $localize`Updates the cover photo of all albums (both directories and saved searches) and and faces.`;
+      case DefaultsJobs['Album Cover Reset']:
+        return $localize`Deletes the cover photo of all albums and faces`;
+      case DefaultsJobs['GPX Compression']:
+        return $localize`Compresses all gpx files`;
+      case DefaultsJobs['Delete Compressed GPX']:
+        return $localize`Deletes all compressed GPX files`;
+      case DefaultsJobs['Top Pick Sending']:
+        return $localize`Gets the top photos of the selected search queries and sends them over email. You need to set up the SMTP server connection send e-mails.`;
+      default:
+        return null;
     }
   }
 }

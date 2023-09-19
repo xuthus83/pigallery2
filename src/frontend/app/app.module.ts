@@ -142,6 +142,7 @@ import {
   ionHammerOutline,
   ionImageOutline,
   ionImagesOutline,
+  ionInformationCircleOutline,
   ionInformationOutline,
   ionLinkOutline,
   ionLocationOutline,
@@ -204,7 +205,7 @@ export class MyHammerConfig extends HammerGestureConfig {
 
 export class CustomUrlSerializer implements UrlSerializer {
   private defaultUrlSerializer: DefaultUrlSerializer =
-      new DefaultUrlSerializer();
+    new DefaultUrlSerializer();
 
   parse(url: string): UrlTree {
     // Encode parentheses
@@ -215,9 +216,9 @@ export class CustomUrlSerializer implements UrlSerializer {
 
   serialize(tree: UrlTree): string {
     return this.defaultUrlSerializer
-        .serialize(tree)
-        .replace(/%28/g, '(')
-        .replace(/%29/g, ')');
+      .serialize(tree)
+      .replace(/%28/g, '(')
+      .replace(/%29/g, ')');
   }
 }
 
@@ -245,6 +246,7 @@ Marker.prototype.options.icon = MarkerFactory.defIcon;
       ionTextOutline, ionFolderOutline, ionDocumentOutline, ionImageOutline,
       ionPricetagOutline, ionLocationOutline,
       ionSunnyOutline, ionMoonOutline, ionVideocamOutline,
+      ionInformationCircleOutline,
       ionInformationOutline, ionContractOutline, ionExpandOutline, ionCloseOutline,
       ionTimerOutline,
       ionPlayOutline, ionPauseOutline, ionVolumeMediumOutline, ionVolumeMuteOutline,
