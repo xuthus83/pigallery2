@@ -303,7 +303,7 @@ export class ServerThumbnailConfig extends ClientThumbnailConfig {
   @ConfigProperty({
     tags:
         {
-          name: $localize`Enforced users`,
+          name: $localize`High quality resampling`,
           priority: ConfigPriority.underTheHood
         },
     description: $localize`if true, 'lanczos3' will used to scale photos, otherwise faster but lower quality 'nearest'.`
