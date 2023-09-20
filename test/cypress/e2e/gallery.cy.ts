@@ -81,8 +81,8 @@ describe('Gallery', () => {
   it('Gallery should auto open lightbox for IMG_1252.jpg', () => {
     cy.visit('/gallery/?p=IMG_1252.jpg');
 
-    cy.get('app-lightbox-controls > #controllers-container > .controls-caption').contains('Squirrel at berkely');
-    cy.get('app-lightbox-controls  .faces-container > .face > .face-name').contains('Alvin the Squirrel');
+    cy.get('app-lightbox-controls > #controllers-container > .controls-caption').contains('This is a super long title with special characters -.,űáéúőpóüö');
+    cy.get('app-lightbox-controls  .faces-container > .face > .face-name').should('not.exist');
 
   });
 });
@@ -118,8 +118,8 @@ describe('Gallery - dont wait for content load', () => {
 
     cy.visit('/gallery/?p=IMG_1252.jpg');
 
-    cy.get('app-lightbox-controls > #controllers-container > .controls-caption').contains('Squirrel at berkely');
-    cy.get('app-lightbox-controls  .faces-container > .face > .face-name').contains('Alvin the Squirrel');
+    cy.get('app-lightbox-controls > #controllers-container > .controls-caption').contains('This is a super long title with special characters -.,űáéúőpóüö');
+    cy.get('app-lightbox-controls  .faces-container > .face').should('not.exist');
 
   });
 });

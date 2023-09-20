@@ -405,7 +405,7 @@ export class GalleryGridComponent
     // so not required to render more, but the scrollbar does not trigger more photos to render
     // (on lightbox navigation)
     while (
-      (this.mediaToRender.length - 1 < groupIndex &&
+      (this.mediaToRender.length - 1 <= groupIndex ||
         this.mediaToRender[this.mediaToRender.length - 1]?.media?.length < mediaIndex) &&
       this.renderARow() !== null
       // eslint-disable-next-line no-empty
