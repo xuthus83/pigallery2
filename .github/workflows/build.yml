@@ -68,6 +68,13 @@ jobs:
       uses: cypress-io/github-action@v6
       with:
         start: npm run start-e2e-server
+      # after the test run completes store screenshots
+    - uses: actions/upload-artifact@v3
+      if: failure() # Store screenshots only on failures
+      with:
+         name: cypress-screenshots
+         path: test/cypress/screenshots
+         if-no-files-found: ignore # 'warn' or 'error' are also available, defaults to `warn`
 
   create-release:
     runs-on: [ubuntu-latest]
