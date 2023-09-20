@@ -21,7 +21,7 @@ describe('Gallery', () => {
     cy.get('app-gallery-navbar  ng-icon[name="ionFunnelOutline"]').click({scrollBehavior: false});
     cy.get('app-gallery-navbar #gallery-filter-0').select('City', {force: true});
     cy.get('app-gallery-navbar #gallery-filter-0').siblings('.filter-column').contains('Berkeley')
-        .parent().find('ng-icon[name="ionFlagOutline"]').click({scrollBehavior: false, force: true});
+      .parent().find('ng-icon[name="ionFlagOutline"]').click({scrollBehavior: false, force: true});
 
     cy.get('app-gallery-navbar  ng-icon[name="ionFunnelOutline"]').click({scrollBehavior: false});
     //should indicate that the filters have changed
@@ -73,6 +73,9 @@ describe('Gallery', () => {
   });
   it('Gallery should auto open lightbox for IMG_5910.jpg', () => {
     cy.visit('/gallery/?p=IMG_5910.jpg');
+    // at least one photo should be visible
+    cy.get('app-gallery-grid-photo', {timeout: 10000});
+    cy.get('.photo-container > img[alt="IMG_5910.jpg"]', {timeout: 10000}); //the main photo should be visible
 
     cy.get('app-lightbox-controls > #controllers-container > .controls-caption').contains('Squirrel at berkely');
     cy.get('app-lightbox-controls  .faces-container > .face > .face-name').contains('Alvin the Squirrel');
@@ -80,6 +83,9 @@ describe('Gallery', () => {
   });
   it('Gallery should auto open lightbox for IMG_1252.jpg', () => {
     cy.visit('/gallery/?p=IMG_1252.jpg');
+    // at least one photo should be visible
+    cy.get('app-gallery-grid-photo', {timeout: 10000});
+    cy.get('.photo-container > img[alt="IMG_1252.jpg"]', {timeout: 10000}); //the main photo should be visible
 
     cy.get('app-lightbox-controls > #controllers-container > .controls-caption').contains('This is a super long title with special characters -.,űáéúőpóüö');
     cy.get('app-lightbox-controls  .faces-container > .face > .face-name').should('not.exist');
@@ -100,6 +106,9 @@ describe('Gallery - dont wait for content load', () => {
     // contains a folder
 
     cy.visit('/gallery/?p=IMG_5910.jpg');
+    // at least one photo should be visible
+    cy.get('app-gallery-grid-photo', {timeout: 10000});
+    cy.get('.photo-container > img[alt="IMG_5910.jpg"]', {timeout: 10000}); //the main photo should be visible
 
     cy.get('app-lightbox-controls > #controllers-container > .controls-caption').contains('Squirrel at berkely');
     cy.get('app-lightbox-controls  .faces-container > .face > .face-name').contains('Alvin the Squirrel');
@@ -117,6 +126,10 @@ describe('Gallery - dont wait for content load', () => {
     // contains a folder
 
     cy.visit('/gallery/?p=IMG_1252.jpg');
+
+    // at least one photo should be visible
+    cy.get('app-gallery-grid-photo', {timeout: 10000});
+    cy.get('.photo-container > img[alt="IMG_1252.jpg"]', {timeout: 10000}); //the main photo should be visible
 
     cy.get('app-lightbox-controls > #controllers-container > .controls-caption').contains('This is a super long title with special characters -.,űáéúőpóüö');
     cy.get('app-lightbox-controls  .faces-container > .face').should('not.exist');
