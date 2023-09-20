@@ -1,4 +1,4 @@
-import {JobProgressDTO, JobProgressStates,} from '../../../common/entities/job/JobProgressDTO';
+import {JobProgressStates, OnTimerJobProgressDTO,} from '../../../common/entities/job/JobProgressDTO';
 import {IJob} from './jobs/IJob';
 import {JobRepository} from './JobRepository';
 import {Config} from '../../../common/config/private/Config';
@@ -8,6 +8,8 @@ import {NotificationManager} from '../NotifocationManager';
 import {IJobListener} from './jobs/IJobListener';
 import {JobProgress} from './jobs/JobProgress';
 import {JobProgressManager} from './JobProgressManager';
+import {JobDTOUtils} from '../../../common/entities/job/JobDTO';
+import {Utils} from '../../../common/Utils';
 
 const LOG_TAG = '[JobManager]';
 
@@ -22,33 +24,35 @@ export class JobManager implements IJobListener {
 
   protected get JobRunning(): boolean {
     return (
-        JobRepository.Instance.getAvailableJobs().findIndex(
-            (j): boolean => j.InProgress === true
-        ) !== -1
+      JobRepository.Instance.getAvailableJobs().findIndex(
+        (j): boolean => j.InProgress === true
+      ) !== -1
     );
   }
 
   protected get JobNoParallelRunning(): boolean {
     return (
-        JobRepository.Instance.getAvailableJobs().findIndex(
-            (j): boolean => j.InProgress === true && j.allowParallelRun
-        ) !== -1
+      JobRepository.Instance.getAvailableJobs().findIndex(
+        (j): boolean => j.InProgress === true && j.allowParallelRun
+      ) !== -1
     );
   }
 
-  getProgresses(): { [id: string]: JobProgressDTO } {
-    return this.progressManager.Progresses;
+  public getProgresses(): { [id: string]: OnTimerJobProgressDTO } {
+    const prg = Utils.clone(this.progressManager.Progresses);
+    this.timers.forEach(t => (prg[JobDTOUtils.getHashName(t.schedule.jobName, t.schedule.config)] as OnTimerJobProgressDTO).onTimer = true);
+    return prg;
   }
 
-  async run<T>(
-      jobName: string,
-      config: T,
-      soloRun: boolean,
-      allowParallelRun: boolean
+  public async run<T>(
+    jobName: string,
+    config: T,
+    soloRun: boolean,
+    allowParallelRun: boolean
   ): Promise<void> {
     if (
-        (allowParallelRun === false && this.JobRunning === true) ||
-        this.JobNoParallelRunning === true
+      (allowParallelRun === false && this.JobRunning === true) ||
+      this.JobNoParallelRunning === true
     ) {
       throw new Error('Can\'t start this job while another is running');
     }
@@ -62,7 +66,7 @@ export class JobManager implements IJobListener {
     }
   }
 
-  stop(jobName: string): void {
+  public stop(jobName: string): void {
     const t = this.findJob(jobName);
     if (t) {
       t.cancel();
@@ -71,40 +75,40 @@ export class JobManager implements IJobListener {
     }
   }
 
-  onProgressUpdate = (progress: JobProgress): void => {
+  public onProgressUpdate = (progress: JobProgress): void => {
     this.progressManager.onJobProgressUpdate(progress.toDTO());
   };
 
   onJobFinished = async (
-      job: IJob<unknown>,
-      state: JobProgressStates,
-      soloRun: boolean
+    job: IJob<unknown>,
+    state: JobProgressStates,
+    soloRun: boolean
   ): Promise<void> => {
     // if it was not finished peacefully or was a soloRun, do not start the next one
     if (state !== JobProgressStates.finished || soloRun === true) {
       return;
     }
     const sch = Config.Jobs.scheduled.find(
-        (s): boolean => s.jobName === job.Name
+      (s): boolean => s.jobName === job.Name
     );
     if (sch) {
       const children = Config.Jobs.scheduled.filter(
-          (s): boolean =>
-              s.trigger.type === JobTriggerType.after &&
-              (s.trigger as AfterJobTrigger).afterScheduleName === sch.name
+        (s): boolean =>
+          s.trigger.type === JobTriggerType.after &&
+          (s.trigger as AfterJobTrigger).afterScheduleName === sch.name
       );
       for (const item of children) {
         try {
           await this.run(
-              item.jobName,
-              item.config,
-              false,
-              item.allowParallelRun
+            item.jobName,
+            item.config,
+            false,
+            item.allowParallelRun
           );
         } catch (e) {
           NotificationManager.warning(
-              'Job running error:' + item.name,
-              e.toString()
+            'Job running error:' + item.name,
+            e.toString()
           );
         }
       }
@@ -138,25 +142,25 @@ export class JobManager implements IJobListener {
    */
   private runSchedule(schedule: JobScheduleDTO): void {
     const nextDate = JobScheduleDTOUtils.getNextRunningDate(
-        new Date(),
-        schedule
+      new Date(),
+      schedule
     );
     if (nextDate && nextDate.getTime() > Date.now()) {
       Logger.debug(
-          LOG_TAG,
-          'running schedule: ' +
-          schedule.jobName +
-          ' at ' +
-          nextDate.toLocaleString(undefined, {hour12: false})
+        LOG_TAG,
+        'running schedule: ' +
+        schedule.jobName +
+        ' at ' +
+        nextDate.toLocaleString(undefined, {hour12: false})
       );
 
       const timer: NodeJS.Timeout = setTimeout(async (): Promise<void> => {
         this.timers = this.timers.filter((t): boolean => t.timer !== timer);
         await this.run(
-            schedule.jobName,
-            schedule.config,
-            false,
-            schedule.allowParallelRun
+          schedule.jobName,
+          schedule.config,
+          false,
+          schedule.allowParallelRun
         );
         this.runSchedule(schedule);
       }, nextDate.getTime() - Date.now());

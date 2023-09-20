@@ -1,4 +1,5 @@
 <button class="btn {{danger ? 'btn-danger': 'btn-success'}}"
+        [class.progress-bar-striped]="Progress?.onTimer"
         title="Trigger job run manually"
         i18n-title
         *ngIf="!Running"

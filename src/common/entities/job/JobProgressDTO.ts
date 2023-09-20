@@ -28,3 +28,8 @@ export interface JobProgressDTO {
     end: number;
   };
 }
+
+
+export interface OnTimerJobProgressDTO extends JobProgressDTO {
+  onTimer?: boolean; // indicates if there is an active timer set for the job
+}

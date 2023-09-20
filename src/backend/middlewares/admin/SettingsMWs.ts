@@ -5,6 +5,7 @@ import {Config} from '../../../common/config/private/Config';
 import {ConfigDiagnostics} from '../../model/diagnostics/ConfigDiagnostics';
 import {ConfigClassBuilder} from '../../../../node_modules/typeconfig/node';
 import {TAGS} from '../../../common/config/public/ClientConfig';
+import {ObjectManagers} from '../../model/ObjectManagers';
 
 const LOG_TAG = '[SettingsMWs]';
 
@@ -47,6 +48,8 @@ export class SettingsMWs {
       Config[settingsPath] = settings;
       await original.save();
       await ConfigDiagnostics.runDiagnostics();
+      // restart all schedule timers. In case they have changed
+      ObjectManagers.getInstance().JobManager.runSchedules();
       Logger.info(LOG_TAG, 'new config:');
       Logger.info(LOG_TAG, JSON.stringify(Config.toJSON({attachDescription: false}), null, '\t'));
       return next();
