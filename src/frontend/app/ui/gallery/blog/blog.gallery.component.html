@@ -1,6 +1,6 @@
 <ng-container *ngIf="mkObservable | async as markdowns">
-  <div class="blog" *ngIf="markdowns.length > 0">
-    <div class="card">
+  <div class="blog h-100" *ngIf="markdowns.length > 0">
+    <div class="card h-100">
       <div class="card-body" style="min-height: 77px" [style.height]="!open ? '77px':''">
         <ng-container *ngFor="let md of markdowns; let last = last; let first = first">
           <ng-container *ngIf="open">
