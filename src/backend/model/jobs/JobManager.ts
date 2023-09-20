@@ -40,7 +40,12 @@ export class JobManager implements IJobListener {
 
   public getProgresses(): { [id: string]: OnTimerJobProgressDTO } {
     const prg = Utils.clone(this.progressManager.Progresses);
-    this.timers.forEach(t => (prg[JobDTOUtils.getHashName(t.schedule.jobName, t.schedule.config)] as OnTimerJobProgressDTO).onTimer = true);
+    this.timers.forEach(t => {
+      if (!prg[JobDTOUtils.getHashName(t.schedule.jobName, t.schedule.config)]) {
+        return;
+      }
+      (prg[JobDTOUtils.getHashName(t.schedule.jobName, t.schedule.config)] as OnTimerJobProgressDTO).onTimer = true;
+    });
     return prg;
   }
 
