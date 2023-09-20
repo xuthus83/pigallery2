@@ -67,14 +67,14 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
   };
 
   constructor(
-      public fullScreenService: FullScreenService,
-      private changeDetector: ChangeDetectorRef,
-      private overlayService: OverlayService,
-      private builder: AnimationBuilder,
-      private router: Router,
-      private queryService: QueryService,
-      private route: ActivatedRoute,
-      private piTitleService: PiTitleService
+    public fullScreenService: FullScreenService,
+    private changeDetector: ChangeDetectorRef,
+    private overlayService: OverlayService,
+    private builder: AnimationBuilder,
+    private router: Router,
+    private queryService: QueryService,
+    private route: ActivatedRoute,
+    private piTitleService: PiTitleService
   ) {
   }
 
@@ -104,22 +104,23 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
     this.infoPanelMaxWidth = 1000;
     this.updatePhotoFrameDim();
     this.subscription.route = this.route.queryParams.subscribe(
-        (params: Params) => {
-          if (
-              params[QueryParams.gallery.photo] &&
-              params[QueryParams.gallery.photo] !== ''
-          ) {
-            this.delayedMediaShow = params[QueryParams.gallery.photo]
-            // photos are not yet available to show
-            if (!this.gridPhotoQL) {
-              return;
-            }
-            this.onNavigateTo(params[QueryParams.gallery.photo]);
-          } else if (this.status === LightboxStates.Open) {
-            this.delayedMediaShow = null;
-            this.hideLightbox();
+      (params: Params) => {
+        this.delayedMediaShow = null;
+        if (
+          params[QueryParams.gallery.photo] &&
+          params[QueryParams.gallery.photo] !== ''
+        ) {
+          this.delayedMediaShow = params[QueryParams.gallery.photo];
+          // photos are not yet available to show
+          if (!this.gridPhotoQL) {
+            return;
           }
+          this.onNavigateTo(params[QueryParams.gallery.photo]);
+        } else if (this.status === LightboxStates.Open) {
+          this.delayedMediaShow = null;
+          this.hideLightbox();
         }
+      }
     );
   }
 
@@ -144,9 +145,9 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
 
   onNavigateTo(photoStringId: string): string {
     if (
-        this.activePhoto &&
-        this.queryService.getMediaStringId(this.activePhoto.gridMedia.media) ===
-        photoStringId
+      this.activePhoto &&
+      this.queryService.getMediaStringId(this.activePhoto.gridMedia.media) ===
+      photoStringId
     ) {
       return;
     }
@@ -155,8 +156,8 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
       this.controls.resetZoom();
     }
     const photo = this.gridPhotoQL.find(
-        (i): boolean =>
-            this.queryService.getMediaStringId(i.gridMedia.media) === photoStringId
+      (i): boolean =>
+        this.queryService.getMediaStringId(i.gridMedia.media) === photoStringId
     );
     if (!photo) {
       return (this.delayedMediaShow = photoStringId);
@@ -175,17 +176,17 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
     }
     this.gridPhotoQL = value;
     this.subscription.photosChange = this.gridPhotoQL.changes.subscribe(
-        (): void => {
-          if (
-              this.activePhotoId != null &&
-              this.gridPhotoQL.length > this.activePhotoId
-          ) {
-            this.updateActivePhoto(this.activePhotoId);
-          }
-          if (this.delayedMediaShow) {
-            this.onNavigateTo(this.delayedMediaShow);
-          }
+      (): void => {
+        if (
+          this.activePhotoId != null &&
+          this.gridPhotoQL.length > this.activePhotoId
+        ) {
+          this.updateActivePhoto(this.activePhotoId);
         }
+        if (this.delayedMediaShow) {
+          this.onNavigateTo(this.delayedMediaShow);
+        }
+      }
     );
 
     if (this.delayedMediaShow) {
@@ -233,8 +234,8 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
     lightboxDimension.top -= PageHelper.ScrollY;
     this.animating = true;
     this.animatePhoto(
-        selectedPhoto.getDimension(),
-        this.calcLightBoxPhotoDimension(selectedPhoto.gridMedia.media)
+      selectedPhoto.getDimension(),
+      this.calcLightBoxPhotoDimension(selectedPhoto.gridMedia.media)
     ).onDone((): void => {
       this.animating = false;
       this.status = LightboxStates.Open;
@@ -257,41 +258,41 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
 
   public hide(): void {
     this.router
-        .navigate([], {queryParams: this.queryService.getParams()})
-        .then(() => {
-          this.piTitleService.setLastNonMedia();
-        })
-        .catch(console.error);
+      .navigate([], {queryParams: this.queryService.getParams()})
+      .then(() => {
+        this.piTitleService.setLastNonMedia();
+      })
+      .catch(console.error);
 
   }
 
   animatePhoto(from: Dimension, to: Dimension = from): AnimationPlayer {
     const elem = this.builder
-        .build([
-          style(DimensionUtils.toString(from)),
-          animate('0.2s ease-in-out', style(DimensionUtils.toString(to))),
-        ])
-        .create(this.mediaElement.elementRef.nativeElement);
+      .build([
+        style(DimensionUtils.toString(from)),
+        animate('0.2s ease-in-out', style(DimensionUtils.toString(to))),
+      ])
+      .create(this.mediaElement.elementRef.nativeElement);
     elem.play();
 
     return elem;
   }
 
   animateLightbox(
-      from: Dimension = {
-        top: 0,
-        left: 0,
-        width: this.photoFrameDim.width,
-        height: this.photoFrameDim.height,
-      } as Dimension,
-      to: Dimension = from
+    from: Dimension = {
+      top: 0,
+      left: 0,
+      width: this.photoFrameDim.width,
+      height: this.photoFrameDim.height,
+    } as Dimension,
+    to: Dimension = from
   ): AnimationPlayer {
     const elem = this.builder
-        .build([
-          style(DimensionUtils.toString(from)),
-          animate('0.2s ease-in-out', style(DimensionUtils.toString(to))),
-        ])
-        .create(this.lightboxElement.nativeElement);
+      .build([
+        style(DimensionUtils.toString(from)),
+        animate('0.2s ease-in-out', style(DimensionUtils.toString(to))),
+      ])
+      .create(this.lightboxElement.nativeElement);
     elem.play();
     return elem;
   }
@@ -311,30 +312,30 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
     }, 1000);
 
     const starPhotoPos = this.calcLightBoxPhotoDimension(
-        this.activePhoto.gridMedia.media
+      this.activePhoto.gridMedia.media
     );
     this.infoPanelWidth = 0;
     this.updatePhotoFrameDim();
     const endPhotoPos = this.calcLightBoxPhotoDimension(
-        this.activePhoto.gridMedia.media
+      this.activePhoto.gridMedia.media
     );
     if (enableAnimate) {
       this.animatePhoto(starPhotoPos, endPhotoPos);
     }
     if (enableAnimate) {
       this.animateLightbox(
-          {
-            top: 0,
-            left: 0,
-            width: Math.max(this.photoFrameDim.width - this.infoPanelMaxWidth, 0),
-            height: this.photoFrameDim.height,
-          } as Dimension,
-          {
-            top: 0,
-            left: 0,
-            width: this.photoFrameDim.width,
-            height: this.photoFrameDim.height,
-          } as Dimension
+        {
+          top: 0,
+          left: 0,
+          width: Math.max(this.photoFrameDim.width - this.infoPanelMaxWidth, 0),
+          height: this.photoFrameDim.height,
+        } as Dimension,
+        {
+          top: 0,
+          left: 0,
+          width: this.photoFrameDim.width,
+          height: this.photoFrameDim.height,
+        } as Dimension
       );
     }
   }
@@ -348,27 +349,27 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
     this.infoPanelVisible = true;
 
     const starPhotoPos = this.calcLightBoxPhotoDimension(
-        this.activePhoto.gridMedia.media
+      this.activePhoto.gridMedia.media
     );
     this.infoPanelWidth = this.infoPanelMaxWidth;
     this.updatePhotoFrameDim();
     const endPhotoPos = this.calcLightBoxPhotoDimension(
-        this.activePhoto.gridMedia.media
+      this.activePhoto.gridMedia.media
     );
     this.animatePhoto(starPhotoPos, endPhotoPos);
     this.animateLightbox(
-        {
-          top: 0,
-          left: 0,
-          width: this.photoFrameDim.width + this.infoPanelMaxWidth,
-          height: this.photoFrameDim.height,
-        } as Dimension,
-        {
-          top: 0,
-          left: 0,
-          width: this.photoFrameDim.width,
-          height: this.photoFrameDim.height,
-        } as Dimension
+      {
+        top: 0,
+        left: 0,
+        width: this.photoFrameDim.width + this.infoPanelMaxWidth,
+        height: this.photoFrameDim.height,
+      } as Dimension,
+      {
+        top: 0,
+        left: 0,
+        width: this.photoFrameDim.width,
+        height: this.photoFrameDim.height,
+      } as Dimension
     );
     if (this.iPvisibilityTimer != null) {
       clearTimeout(this.iPvisibilityTimer);
@@ -394,28 +395,28 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
   private updatePhotoFrameDim = (): void => {
     this.photoFrameDim = {
       width: Math.max(
-          window.innerWidth - this.infoPanelWidth,
-          0
+        window.innerWidth - this.infoPanelWidth,
+        0
       ),
       height: window.innerHeight,
       aspect: 0
     };
     this.photoFrameDim.aspect =
-        Math.round((this.photoFrameDim.width / this.photoFrameDim.height) * 100) /
-        100;
+      Math.round((this.photoFrameDim.width / this.photoFrameDim.height) * 100) /
+      100;
   };
 
   private navigateToPhoto(photoIndex: number): void {
     this.router
-        .navigate([], {
-          queryParams: this.queryService.getParams(
-              this.gridPhotoQL.get(photoIndex).gridMedia.media
-          ),
-        })
-        .then(() => {
-          this.piTitleService.setMediaTitle(this.gridPhotoQL.get(photoIndex).gridMedia);
-        })
-        .catch(console.error);
+      .navigate([], {
+        queryParams: this.queryService.getParams(
+          this.gridPhotoQL.get(photoIndex).gridMedia.media
+        ),
+      })
+      .then(() => {
+        this.piTitleService.setMediaTitle(this.gridPhotoQL.get(photoIndex).gridMedia);
+      })
+      .catch(console.error);
 
   }
 
@@ -442,17 +443,17 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
     this.blackCanvasOpacity = 0;
 
     this.animatePhoto(
-        this.calcLightBoxPhotoDimension(this.activePhoto.gridMedia.media),
-        this.activePhoto.getDimension()
+      this.calcLightBoxPhotoDimension(this.activePhoto.gridMedia.media),
+      this.activePhoto.getDimension()
     );
     this.animateLightbox(
-        {
-          top: 0,
-          left: 0,
-          width: this.photoFrameDim.width,
-          height: this.photoFrameDim.height,
-        } as Dimension,
-        lightboxDimension
+      {
+        top: 0,
+        left: 0,
+        width: this.photoFrameDim.width,
+        height: this.photoFrameDim.height,
+      } as Dimension,
+      lightboxDimension
     ).onDone((): void => {
       this.status = LightboxStates.Closed;
       this.activePhoto = null;
@@ -473,7 +474,7 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
 
     if (resize) {
       this.animatePhoto(
-          this.calcLightBoxPhotoDimension(this.activePhoto.gridMedia.media)
+        this.calcLightBoxPhotoDimension(this.activePhoto.gridMedia.media)
       );
     }
     this.navigation.hasPrev = photoIndex > 0;
@@ -483,8 +484,8 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
 
     // if target image out of screen -> scroll to there
     if (
-        PageHelper.ScrollY > to.top ||
-        PageHelper.ScrollY + this.photoFrameDim.height < to.top
+      PageHelper.ScrollY > to.top ||
+      PageHelper.ScrollY + this.photoFrameDim.height < to.top
     ) {
       PageHelper.ScrollY = to.top;
     }
@@ -507,15 +508,15 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
     const windowAspect = this.photoFrameDim.aspect;
     if (photoAspect < windowAspect) {
       width = Math.round(
-          photo.metadata.size.width *
-          (this.photoFrameDim.height / photo.metadata.size.height)
+        photo.metadata.size.width *
+        (this.photoFrameDim.height / photo.metadata.size.height)
       );
       height = this.photoFrameDim.height;
     } else {
       width = this.photoFrameDim.width;
       height = Math.round(
-          photo.metadata.size.height *
-          (this.photoFrameDim.width / photo.metadata.size.width)
+        photo.metadata.size.height *
+        (this.photoFrameDim.width / photo.metadata.size.width)
       );
     }
     const top = this.photoFrameDim.height / 2 - height / 2;

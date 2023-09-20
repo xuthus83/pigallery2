@@ -385,6 +385,9 @@ export class GalleryGridComponent
    * Makes sure that the photo with the given mediaString is visible on the screen
    */
   private renderUpToMedia(mediaStringId: string): void {
+    if (!this.mediaGroups) {
+      return;
+    }
     let groupIndex = -1;
     let mediaIndex = -1;
     for (let i = 0; i < this.mediaGroups.length; ++i) {

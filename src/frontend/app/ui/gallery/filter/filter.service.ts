@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {PhotoDTO} from '../../../../../common/entities/PhotoDTO';
 import {DirectoryContent} from '../contentLoader.service';
-import {map, switchMap} from 'rxjs/operators';
+import {debounceTime, map, switchMap} from 'rxjs/operators';
 
 export enum FilterRenderType {
   enum = 1,
@@ -39,19 +39,19 @@ export class FilterService {
     {
       name: $localize`Faces`,
       mapFn: (m: PhotoDTO): string[] =>
-          m.metadata.faces
-              ? m.metadata.faces.map((f) => f.name)
-              : ['<' + $localize`no face` + '>'],
+        m.metadata.faces
+          ? m.metadata.faces.map((f) => f.name)
+          : ['<' + $localize`no face` + '>'],
       renderType: FilterRenderType.enum,
       isArrayValue: true,
     },
     {
       name: $localize`Faces groups`,
       mapFn: (m: PhotoDTO): string =>
-          m.metadata.faces
-              ?.map((f) => f.name)
-              .sort()
-              .join(', '),
+        m.metadata.faces
+          ?.map((f) => f.name)
+          .sort()
+          .join(', '),
       renderType: FilterRenderType.enum,
       isArrayValue: false,
     },
@@ -124,18 +124,18 @@ export class FilterService {
 
   private getStatistic(prefiltered: DirectoryContent): { date: Date, endDate: Date, dateStr: string, count: number, max: number }[] {
     if (!prefiltered ||
-        !prefiltered.media ||
-        prefiltered.media.length === 0) {
+      !prefiltered.media ||
+      prefiltered.media.length === 0) {
       return [];
     }
     const ret: { date: Date, endDate: Date, dateStr: string, count: number, max: number }[] = [];
     const minDate = prefiltered.media.reduce(
-        (p, curr) => Math.min(p, curr.metadata.creationDate),
-        Number.MAX_VALUE - 1
+      (p, curr) => Math.min(p, curr.metadata.creationDate),
+      Number.MAX_VALUE - 1
     );
     const maxDate = prefiltered.media.reduce(
-        (p, curr) => Math.max(p, curr.metadata.creationDate),
-        Number.MIN_VALUE + 1
+      (p, curr) => Math.max(p, curr.metadata.creationDate),
+      Number.MIN_VALUE + 1
     );
     const diff = (maxDate - minDate) / 1000;
     const H = 60 * 60;
@@ -221,124 +221,125 @@ export class FilterService {
   }
 
   public applyFilters(
-      directoryContent: Observable<DirectoryContent>
+    directoryContent: Observable<DirectoryContent>
   ): Observable<DirectoryContent> {
     return directoryContent.pipe(
-        switchMap((dirContent: DirectoryContent) => {
-          this.statistic = this.getStatistic(dirContent);
-          this.resetFilters(false);
-          return this.activeFilters.pipe(
-              map((afilters) => {
-                if (!dirContent || !dirContent.media || (!afilters.filtersVisible && !afilters.areFiltersActive)) {
-                  return dirContent;
+      debounceTime(1),
+      switchMap((dirContent: DirectoryContent) => {
+        this.statistic = this.getStatistic(dirContent);
+        this.resetFilters(false);
+        return this.activeFilters.pipe(
+          map((afilters) => {
+            if (!dirContent || !dirContent.media || (!afilters.filtersVisible && !afilters.areFiltersActive)) {
+              return dirContent;
+            }
+
+            // clone, so the original won't get overwritten
+            const c = {
+              media: dirContent.media,
+              directories: dirContent.directories,
+              metaFile: dirContent.metaFile,
+            };
+
+            /* Date Selector */
+            if (c.media.length > 0) {
+              // Update date filter range
+              afilters.dateFilter.minDate = c.media.reduce(
+                (p, curr) => Math.min(p, curr.metadata.creationDate),
+                Number.MAX_VALUE - 1
+              );
+              afilters.dateFilter.maxDate = c.media.reduce(
+                (p, curr) => Math.max(p, curr.metadata.creationDate),
+                Number.MIN_VALUE + 1
+              );
+              // Add a few sec padding
+              afilters.dateFilter.minDate -= (afilters.dateFilter.minDate % 1000) + 1000;
+              afilters.dateFilter.maxDate += (afilters.dateFilter.maxDate % 1000) + 1000;
+
+              if (afilters.dateFilter.minFilter === Number.MIN_VALUE) {
+                afilters.dateFilter.minFilter = afilters.dateFilter.minDate;
+              }
+              if (afilters.dateFilter.maxFilter === Number.MAX_VALUE) {
+                afilters.dateFilter.maxFilter = afilters.dateFilter.maxDate;
+              }
+
+              // Apply Date filter
+              c.media = c.media.filter(
+                (m) =>
+                  m.metadata.creationDate >= afilters.dateFilter.minFilter &&
+                  m.metadata.creationDate <= afilters.dateFilter.maxFilter
+              );
+            } else {
+              afilters.dateFilter.minDate = Number.MIN_VALUE;
+              afilters.dateFilter.maxDate = Number.MAX_VALUE;
+              afilters.dateFilter.minFilter = Number.MIN_VALUE;
+              afilters.dateFilter.maxFilter = Number.MAX_VALUE;
+            }
+
+            // filters
+            for (const f of afilters.selectedFilters) {
+
+              /* Update filter options */
+              const valueMap: { [key: string]: any } = {};
+              f.options.forEach((o) => {
+                valueMap[o.name] = o;
+                o.count = 0; // reset count so unknown option can be removed at the end
+              });
+
+              if (f.filter.isArrayValue) {
+                c.media.forEach((m) => {
+                  (f.filter.mapFn(m as PhotoDTO) as string[])?.forEach((v) => {
+                    valueMap[v] = valueMap[v] || {
+                      name: v,
+                      count: 0,
+                      selected: true,
+                    };
+                    valueMap[v].count++;
+                  });
+                });
+              } else {
+                c.media.forEach((m) => {
+                  const key = f.filter.mapFn(m as PhotoDTO) as string;
+                  valueMap[key] = valueMap[key] || {
+                    name: key,
+                    count: 0,
+                    selected: true,
+                  };
+                  valueMap[key].count++;
+                });
+              }
+
+              f.options = Object.values(valueMap)
+                .filter((o) => o.count > 0)
+                .sort((a, b) => b.count - a.count);
+
+              /* Apply filters */
+              f.options.forEach((opt) => {
+                if (opt.selected) {
+                  return;
                 }
-
-                // clone, so the original won't get overwritten
-                const c = {
-                  media: dirContent.media,
-                  directories: dirContent.directories,
-                  metaFile: dirContent.metaFile,
-                };
-
-                /* Date Selector */
-                if (c.media.length > 0) {
-                  // Update date filter range
-                  afilters.dateFilter.minDate = c.media.reduce(
-                      (p, curr) => Math.min(p, curr.metadata.creationDate),
-                      Number.MAX_VALUE - 1
-                  );
-                  afilters.dateFilter.maxDate = c.media.reduce(
-                      (p, curr) => Math.max(p, curr.metadata.creationDate),
-                      Number.MIN_VALUE + 1
-                  );
-                  // Add a few sec padding
-                  afilters.dateFilter.minDate -= (afilters.dateFilter.minDate % 1000) + 1000;
-                  afilters.dateFilter.maxDate += (afilters.dateFilter.maxDate % 1000) + 1000;
-
-                  if (afilters.dateFilter.minFilter === Number.MIN_VALUE) {
-                    afilters.dateFilter.minFilter = afilters.dateFilter.minDate;
-                  }
-                  if (afilters.dateFilter.maxFilter === Number.MAX_VALUE) {
-                    afilters.dateFilter.maxFilter = afilters.dateFilter.maxDate;
-                  }
-
-                  // Apply Date filter
-                  c.media = c.media.filter(
-                      (m) =>
-                          m.metadata.creationDate >= afilters.dateFilter.minFilter &&
-                          m.metadata.creationDate <= afilters.dateFilter.maxFilter
-                  );
+                if (f.filter.isArrayValue) {
+                  c.media = c.media.filter((m) => {
+                    const mapped = f.filter.mapFn(m as PhotoDTO) as string[];
+                    if (!mapped) {
+                      return true;
+                    }
+                    return mapped.indexOf(opt.name) === -1;
+                  });
                 } else {
-                  afilters.dateFilter.minDate = Number.MIN_VALUE;
-                  afilters.dateFilter.maxDate = Number.MAX_VALUE;
-                  afilters.dateFilter.minFilter = Number.MIN_VALUE;
-                  afilters.dateFilter.maxFilter = Number.MAX_VALUE;
+                  c.media = c.media.filter(
+                    (m) =>
+                      (f.filter.mapFn(m as PhotoDTO) as string) !== opt.name
+                  );
                 }
-
-                // filters
-                for (const f of afilters.selectedFilters) {
-
-                  /* Update filter options */
-                  const valueMap: { [key: string]: any } = {};
-                  f.options.forEach((o) => {
-                    valueMap[o.name] = o;
-                    o.count = 0; // reset count so unknown option can be removed at the end
-                  });
-
-                  if (f.filter.isArrayValue) {
-                    c.media.forEach((m) => {
-                      (f.filter.mapFn(m as PhotoDTO) as string[])?.forEach((v) => {
-                        valueMap[v] = valueMap[v] || {
-                          name: v,
-                          count: 0,
-                          selected: true,
-                        };
-                        valueMap[v].count++;
-                      });
-                    });
-                  } else {
-                    c.media.forEach((m) => {
-                      const key = f.filter.mapFn(m as PhotoDTO) as string;
-                      valueMap[key] = valueMap[key] || {
-                        name: key,
-                        count: 0,
-                        selected: true,
-                      };
-                      valueMap[key].count++;
-                    });
-                  }
-
-                  f.options = Object.values(valueMap)
-                      .filter((o) => o.count > 0)
-                      .sort((a, b) => b.count - a.count);
-
-                  /* Apply filters */
-                  f.options.forEach((opt) => {
-                    if (opt.selected) {
-                      return;
-                    }
-                    if (f.filter.isArrayValue) {
-                      c.media = c.media.filter((m) => {
-                        const mapped = f.filter.mapFn(m as PhotoDTO) as string[];
-                        if (!mapped) {
-                          return true;
-                        }
-                        return mapped.indexOf(opt.name) === -1;
-                      });
-                    } else {
-                      c.media = c.media.filter(
-                          (m) =>
-                              (f.filter.mapFn(m as PhotoDTO) as string) !== opt.name
-                      );
-                    }
-                  });
-                }
-                // If the number of photos did not change, the filters are not active
-                afilters.areFiltersActive = c.media.length !== dirContent.media.length;
-                return c;
-              })
-          );
-        })
+              });
+            }
+            // If the number of photos did not change, the filters are not active
+            afilters.areFiltersActive = c.media.length !== dirContent.media.length;
+            return c;
+          })
+        );
+      })
     );
   }
 
