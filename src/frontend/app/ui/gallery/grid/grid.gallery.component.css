@@ -10,7 +10,5 @@
 
 app-gallery-grid-photo {
     display: inline-block;
-
     cursor: pointer;
-    margin: 2px;
 }

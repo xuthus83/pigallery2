@@ -44,7 +44,6 @@ export class GalleryGridComponent
   mediaToRender: GridMediaGroup[] = [];
   containerWidth = 0;
   screenHeight = 0;
-  public IMAGE_MARGIN = 2;
   isAfterViewInit = false;
   subscriptions: {
     girdSize: Subscription;
@@ -58,6 +57,7 @@ export class GalleryGridComponent
   private TARGET_COL_COUNT = 5;
   private MIN_ROW_COUNT = 2;
   private MAX_ROW_COUNT = 5;
+  public IMAGE_MARGIN = 2;
   private onScrollFired = false;
   private helperTime: number = null;
   public renderDelayTimer: number = null; // delays render on resize
@@ -107,26 +107,31 @@ export class GalleryGridComponent
           this.TARGET_COL_COUNT = 12;
           this.MIN_ROW_COUNT = 5;
           this.MAX_ROW_COUNT = 10;
+          this.IMAGE_MARGIN = 1;
           break;
         case GridSizes.small:
           this.TARGET_COL_COUNT = 8;
           this.MIN_ROW_COUNT = 3;
           this.MAX_ROW_COUNT = 8;
+          this.IMAGE_MARGIN = 1.5;
           break;
         case GridSizes.medium:
           this.TARGET_COL_COUNT = 5;
           this.MIN_ROW_COUNT = 2;
           this.MAX_ROW_COUNT = 5;
+          this.IMAGE_MARGIN = 2;
           break;
         case GridSizes.large:
           this.TARGET_COL_COUNT = 2;
           this.MIN_ROW_COUNT = 1;
           this.MAX_ROW_COUNT = 3;
+          this.IMAGE_MARGIN = 2;
           break;
         case GridSizes.extraLarge:
           this.TARGET_COL_COUNT = 1;
           this.MIN_ROW_COUNT = 1;
           this.MAX_ROW_COUNT = 2;
+          this.IMAGE_MARGIN = 2;
           break;
       }
       this.clearRenderedPhotos();
