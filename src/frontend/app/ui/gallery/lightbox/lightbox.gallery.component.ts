@@ -109,8 +109,10 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
               params[QueryParams.gallery.photo] &&
               params[QueryParams.gallery.photo] !== ''
           ) {
+            this.delayedMediaShow = params[QueryParams.gallery.photo]
+            // photos are not yet available to show
             if (!this.gridPhotoQL) {
-              return (this.delayedMediaShow = params[QueryParams.gallery.photo]);
+              return;
             }
             this.onNavigateTo(params[QueryParams.gallery.photo]);
           } else if (this.status === LightboxStates.Open) {
