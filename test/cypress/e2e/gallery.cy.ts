@@ -71,4 +71,56 @@ describe('Gallery', () => {
     cy.get('app-lightbox-controls  .faces-container > .face > .face-name').contains('Alvin the Squirrel');
 
   });
+  it('Gallery should auto open lightbox for IMG_5910.jpg', () => {
+    cy.visit('/gallery/?p=IMG_5910.jpg');
+
+    cy.get('app-lightbox-controls > #controllers-container > .controls-caption').contains('Squirrel at berkely');
+    cy.get('app-lightbox-controls  .faces-container > .face > .face-name').contains('Alvin the Squirrel');
+
+  });
+  it('Gallery should auto open lightbox for IMG_1252.jpg', () => {
+    cy.visit('/gallery/?p=IMG_1252.jpg');
+
+    cy.get('app-lightbox-controls > #controllers-container > .controls-caption').contains('Squirrel at berkely');
+    cy.get('app-lightbox-controls  .faces-container > .face > .face-name').contains('Alvin the Squirrel');
+
+  });
 });
+
+describe('Gallery - dont wait for content load', () => {
+  it('Gallery should auto open lightbox for IMG_5910.jpg', () => {
+    cy.visit('/');
+    cy.get('.card-body');
+    cy.get('.col-sm-12').contains('Login');
+    /* ==== Generated with Cypress Studio ==== */
+    cy.get('#username').type('admin');
+    cy.get('#password').clear();
+    cy.get('#password').type('admin');
+    cy.get('.col-sm-12 > .btn').click();
+    // contains a folder
+
+    cy.visit('/gallery/?p=IMG_5910.jpg');
+
+    cy.get('app-lightbox-controls > #controllers-container > .controls-caption').contains('Squirrel at berkely');
+    cy.get('app-lightbox-controls  .faces-container > .face > .face-name').contains('Alvin the Squirrel');
+
+  });
+  it('Gallery should auto open lightbox for IMG_1252.jpg', () => {
+    cy.visit('/');
+    cy.get('.card-body');
+    cy.get('.col-sm-12').contains('Login');
+    /* ==== Generated with Cypress Studio ==== */
+    cy.get('#username').type('admin');
+    cy.get('#password').clear();
+    cy.get('#password').type('admin');
+    cy.get('.col-sm-12 > .btn').click();
+    // contains a folder
+
+    cy.visit('/gallery/?p=IMG_1252.jpg');
+
+    cy.get('app-lightbox-controls > #controllers-container > .controls-caption').contains('Squirrel at berkely');
+    cy.get('app-lightbox-controls  .faces-container > .face > .face-name').contains('Alvin the Squirrel');
+
+  });
+});
+
