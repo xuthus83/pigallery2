@@ -7,6 +7,10 @@ assignees: ''
 
 ---
 
+**Note:** Please always try reproducing the issue on the `:edge` build. There is a chance that it was already fixed. If it's an UI issue, you can try reporducing it on the [demo page](https://pigallery2.onrender.com/). 
+
+----------------------------------------------------------------------------------
+
 **Describe the bug**
 
 A clear and concise description of what the bug is.
