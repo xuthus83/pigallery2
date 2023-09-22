@@ -224,7 +224,6 @@ export class FilterService {
     directoryContent: Observable<DirectoryContent>
   ): Observable<DirectoryContent> {
     return directoryContent.pipe(
-      debounceTime(1),
       switchMap((dirContent: DirectoryContent) => {
         this.statistic = this.getStatistic(dirContent);
         this.resetFilters(false);
