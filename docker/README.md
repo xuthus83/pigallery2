@@ -52,7 +52,7 @@ Edit `nginx.conf` at the `# CHANGE ME` lines by replacing `yourdomain.com` to yo
 
 #### I.1.a get SSL certificate with certbot
 Install certbot: https://certbot.eff.org/. (Certbot uses letsencrypt to get free certificate).
-Than get your certificate: 
+Then get your certificate: 
 ```bash
 certbot certonly --standalone -d yourdomain.com
 ```
