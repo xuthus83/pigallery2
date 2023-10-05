@@ -71,6 +71,29 @@ describe('Gallery', () => {
     cy.get('app-lightbox-controls  .faces-container > .face > .face-name').contains('Alvin the Squirrel');
 
   });
+
+
+
+  it('Gallery should auto play in lightbox', () => {
+    cy.wait('@getContent');
+    // contains a folder
+    cy.get('app-gallery-directories.directories > app-gallery-directory > .button > .photo-container');
+
+
+    for (let i = 0; i < 5; ++i) {
+      cy.window().scrollTo(0, 9000, {ensureScrollable: false, duration: 100, easing: 'linear'}).wait(500);
+    }
+
+    cy.visit('/gallery/?p=IMG_5910.jpg');
+
+    cy.get('app-gallery-lightbox-media img[alt="IMG_5910.jpg"]');
+    cy.get('.controls-background ng-icon[name="ionPlayOutline"]').click({scrollBehavior: false});
+
+    cy.wait(5000); // autoplay default delay is 5s
+    cy.get('app-gallery-lightbox-media  img[alt="IMG_6220.jpg"]', {timeout: 2000});
+
+  });
+
   it('Gallery should auto open lightbox for IMG_5910.jpg', () => {
     // ignore noisy tests
     cy.on('fail', (err, runnable) => {
