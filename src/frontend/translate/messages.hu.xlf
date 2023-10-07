@@ -48,7 +48,7 @@
           <context context-type="sourcefile">src/common/config/private/MessagingConfig.ts</context>
           <context context-type="linenumber">32</context>
         </context-group>
-        <target>SMTP server's port</target>
+        <target>SMTP szerver port</target>
       </trans-unit>
       <trans-unit id="7417306416104386782" datatype="html">
         <source>isSecure</source>
@@ -56,7 +56,7 @@
           <context context-type="sourcefile">src/common/config/private/MessagingConfig.ts</context>
           <context context-type="linenumber">38</context>
         </context-group>
-        <target>isSecure</target>
+        <target>biztonságos</target>
       </trans-unit>
       <trans-unit id="3595369311836927260" datatype="html">
         <source>Is the connection secure. See https://nodemailer.com/smtp/#tls-options for more details</source>
@@ -72,7 +72,7 @@
           <context context-type="sourcefile">src/common/config/private/MessagingConfig.ts</context>
           <context context-type="linenumber">47</context>
         </context-group>
-        <target>TLS required</target>
+        <target>TLS sükséges</target>
       </trans-unit>
       <trans-unit id="4629987485563394658" datatype="html">
         <source>if this is true and secure is false then Nodemailer (used library in the background) tries to use STARTTLS. See https://nodemailer.com/smtp/#tls-options for more details</source>
@@ -152,7 +152,7 @@
           <context context-type="sourcefile">src/common/config/private/MessagingConfig.ts</context>
           <context context-type="linenumber">83</context>
         </context-group>
-        <target>Sender email</target>
+        <target>Küldő email</target>
       </trans-unit>
       <trans-unit id="5308313168080901236" datatype="html">
         <source>Some services do not allow sending from random e-mail addresses. Set this accordingly.</source>
@@ -2856,7 +2856,7 @@
           <context context-type="sourcefile">src/frontend/app/model/backendtext.service.ts</context>
           <context context-type="linenumber">23</context>
         </context-group>
-        <target>Media selectors</target>
+        <target>Media választók</target>
       </trans-unit>
       <trans-unit id="7534784716124739630" datatype="html">
         <source>Set these search queries to find photos and videos to email.</source>
@@ -2864,7 +2864,7 @@
           <context context-type="sourcefile">src/frontend/app/model/backendtext.service.ts</context>
           <context context-type="linenumber">25</context>
         </context-group>
-        <target>Set these search queries to find photos and videos to email.</target>
+        <target>Állítsd be ezt a keresőmezőt, hogy listázd a küldendő képeket.</target>
       </trans-unit>
       <trans-unit id="5298689875582975932" datatype="html">
         <source>E-mail to</source>
@@ -2872,7 +2872,7 @@
           <context context-type="sourcefile">src/frontend/app/model/backendtext.service.ts</context>
           <context context-type="linenumber">27</context>
         </context-group>
-        <target>E-mail to</target>
+        <target>E-mail címzett</target>
       </trans-unit>
       <trans-unit id="969387355003550756" datatype="html">
         <source>E-mail address of the recipient.</source>
@@ -2888,7 +2888,7 @@
           <context context-type="sourcefile">src/frontend/app/model/backendtext.service.ts</context>
           <context context-type="linenumber">31</context>
         </context-group>
-        <target>Subject</target>
+        <target>Tárgy</target>
       </trans-unit>
       <trans-unit id="8166565126925776930" datatype="html">
         <source>E-mail subject.</source>
@@ -2896,7 +2896,7 @@
           <context context-type="sourcefile">src/frontend/app/model/backendtext.service.ts</context>
           <context context-type="linenumber">33</context>
         </context-group>
-        <target>E-mail subject.</target>
+        <target>E-mail tárgy.</target>
       </trans-unit>
       <trans-unit id="8066608938393600549" datatype="html">
         <source>Message</source>
@@ -2904,7 +2904,7 @@
           <context context-type="sourcefile">src/frontend/app/model/backendtext.service.ts</context>
           <context context-type="linenumber">35</context>
         </context-group>
-        <target>Message</target>
+        <target>Üzenet</target>
       </trans-unit>
       <trans-unit id="2752906962332824457" datatype="html">
         <source>E-mail text.</source>
@@ -2912,7 +2912,7 @@
           <context context-type="sourcefile">src/frontend/app/model/backendtext.service.ts</context>
           <context context-type="linenumber">37</context>
         </context-group>
-        <target>E-mail text.</target>
+        <target>E-mail szöveg.</target>
       </trans-unit>
       <trans-unit id="9153059468211122141" datatype="html">
         <source>Gallery reset</source>
@@ -2920,7 +2920,7 @@
           <context context-type="sourcefile">src/frontend/app/model/backendtext.service.ts</context>
           <context context-type="linenumber">51</context>
         </context-group>
-        <target>Gallery reset</target>
+        <target>Gallértia visszaállítás</target>
       </trans-unit>
       <trans-unit id="2046036880411214558" datatype="html">
         <source>Album reset</source>
@@ -2928,7 +2928,7 @@
           <context context-type="sourcefile">src/frontend/app/model/backendtext.service.ts</context>
           <context context-type="linenumber">53</context>
         </context-group>
-        <target>Album reset</target>
+        <target>Album visszaállítás</target>
       </trans-unit>
       <trans-unit id="1623883110045208603" datatype="html">
         <source>Thumbnail generation</source>
@@ -2960,7 +2960,7 @@
           <context context-type="sourcefile">src/frontend/app/model/backendtext.service.ts</context>
           <context context-type="linenumber">63</context>
         </context-group>
-        <target>Cover filling</target>
+        <target>Borítókép készítés</target>
       </trans-unit>
       <trans-unit id="6795645469514395103" datatype="html">
         <source>Cover reset</source>
@@ -2968,7 +2968,7 @@
           <context context-type="sourcefile">src/frontend/app/model/backendtext.service.ts</context>
           <context context-type="linenumber">65</context>
         </context-group>
-        <target>Cover reset</target>
+        <target>Borítókép visszaállítás</target>
       </trans-unit>
       <trans-unit id="1170030142768130074" datatype="html">
         <source>Delete Compressed GPX</source>
@@ -2976,7 +2976,7 @@
           <context context-type="sourcefile">src/frontend/app/model/backendtext.service.ts</context>
           <context context-type="linenumber">69</context>
         </context-group>
-        <target>Delete Compressed GPX</target>
+        <target>Tümörített GPX törlése</target>
       </trans-unit>
       <trans-unit id="6422562246025271457" datatype="html">
         <source>Top Pick Sending</source>
@@ -2984,7 +2984,7 @@
           <context context-type="sourcefile">src/frontend/app/model/backendtext.service.ts</context>
           <context context-type="linenumber">71</context>
         </context-group>
-        <target>Top Pick Sending</target>
+        <target>Top Pick Küldés</target>
       </trans-unit>
       <trans-unit id="4793522720209559817" datatype="html">
         <source>Scans the whole gallery from disk and indexes it to the DB.</source>
@@ -3195,7 +3195,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/EnumTranslations.ts</context>
           <context context-type="linenumber">31</context>
         </context-group>
-        <target>Always</target>
+        <target>Minidig</target>
       </trans-unit>
       <trans-unit id="221578388510207648" datatype="html">
         <source>Mobile only</source>
@@ -3203,7 +3203,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/EnumTranslations.ts</context>
           <context context-type="linenumber">32</context>
         </context-group>
-        <target>Mobile only</target>
+        <target>Csak mobilon</target>
       </trans-unit>
       <trans-unit id="8372007266188249803" datatype="html">
         <source>Never</source>
@@ -3211,7 +3211,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/EnumTranslations.ts</context>
           <context context-type="linenumber">33</context>
         </context-group>
-        <target>Never</target>
+        <target>Soha</target>
       </trans-unit>
       <trans-unit id="1920513678812261969" datatype="html">
         <source>Full</source>
@@ -3219,7 +3219,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/EnumTranslations.ts</context>
           <context context-type="linenumber">35</context>
         </context-group>
-        <target>Full</target>
+        <target>Teljes</target>
       </trans-unit>
       <trans-unit id="4046649033157042513" datatype="html">
         <source>Compact</source>
@@ -3227,7 +3227,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/EnumTranslations.ts</context>
           <context context-type="linenumber">36</context>
         </context-group>
-        <target>Compact</target>
+        <target>Kompakt</target>
       </trans-unit>
       <trans-unit id="7590013429208346303" datatype="html">
         <source>Custom</source>
@@ -3339,7 +3339,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/EnumTranslations.ts</context>
           <context context-type="linenumber">53</context>
         </context-group>
-        <target>faces</target>
+        <target>arcok</target>
       </trans-unit>
       <trans-unit id="2999337676190296805" datatype="html">
         <source>file size</source>
@@ -3347,7 +3347,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/EnumTranslations.ts</context>
           <context context-type="linenumber">54</context>
         </context-group>
-        <target>file size</target>
+        <target>fájl méret</target>
       </trans-unit>
       <trans-unit id="2838693330548032903" datatype="html">
         <source>don't group</source>
@@ -3355,7 +3355,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/EnumTranslations.ts</context>
           <context context-type="linenumber">56</context>
         </context-group>
-        <target>don't group</target>
+        <target>ne csoportosíts</target>
       </trans-unit>
       <trans-unit id="4044854304763114941" datatype="html">
         <source>extra small</source>
@@ -3363,7 +3363,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/EnumTranslations.ts</context>
           <context context-type="linenumber">59</context>
         </context-group>
-        <target>extra small</target>
+        <target>extra kicsi</target>
       </trans-unit>
       <trans-unit id="704865667518683453" datatype="html">
         <source>small</source>
@@ -3371,7 +3371,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/EnumTranslations.ts</context>
           <context context-type="linenumber">60</context>
         </context-group>
-        <target>small</target>
+        <target>kicsi</target>
       </trans-unit>
       <trans-unit id="2765721507544664929" datatype="html">
         <source>big</source>
@@ -3379,7 +3379,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/EnumTranslations.ts</context>
           <context context-type="linenumber">62</context>
         </context-group>
-        <target>big</target>
+        <target>nagy</target>
       </trans-unit>
       <trans-unit id="782745584760781543" datatype="html">
         <source>extra large</source>
@@ -3387,7 +3387,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/EnumTranslations.ts</context>
           <context context-type="linenumber">63</context>
         </context-group>
-        <target>extra large</target>
+        <target>extra nagy</target>
       </trans-unit>
       <trans-unit id="5043933900720743682" datatype="html">
         <source>Albums</source>
@@ -3415,7 +3415,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/EnumTranslations.ts</context>
           <context context-type="linenumber">72</context>
         </context-group>
-        <target>And</target>
+        <target>És</target>
       </trans-unit>
       <trans-unit id="5504129468136884250" datatype="html">
         <source>Or</source>
@@ -3423,7 +3423,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/EnumTranslations.ts</context>
           <context context-type="linenumber">73</context>
         </context-group>
-        <target>Or</target>
+        <target>Vagy</target>
       </trans-unit>
       <trans-unit id="3114268147592827952" datatype="html">
         <source>Some of</source>
@@ -3431,7 +3431,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/EnumTranslations.ts</context>
           <context context-type="linenumber">74</context>
         </context-group>
-        <target>Some of</target>
+        <target>Néhány</target>
       </trans-unit>
       <trans-unit id="7166568209965309766" datatype="html">
         <source>Any text</source>
@@ -3439,7 +3439,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/EnumTranslations.ts</context>
           <context context-type="linenumber">75</context>
         </context-group>
-        <target>Any text</target>
+        <target>Bármilyen szöveg</target>
       </trans-unit>
       <trans-unit id="5203279511751768967" datatype="html">
         <source>From</source>
@@ -3459,7 +3459,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/EnumTranslations.ts</context>
           <context context-type="linenumber">77</context>
         </context-group>
-        <target>Until</target>
+        <target>Eddig</target>
       </trans-unit>
       <trans-unit id="1779552786277618671" datatype="html">
         <source>Distance</source>
@@ -3467,7 +3467,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/EnumTranslations.ts</context>
           <context context-type="linenumber">78</context>
         </context-group>
-        <target>Distance</target>
+        <target>Távolság</target>
       </trans-unit>
       <trans-unit id="157463387541377837" datatype="html">
         <source>Min rating</source>
@@ -3475,7 +3475,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/EnumTranslations.ts</context>
           <context context-type="linenumber">79</context>
         </context-group>
-        <target>Min rating</target>
+        <target>Min értékelés</target>
       </trans-unit>
       <trans-unit id="8686048867619829717" datatype="html">
         <source>Max rating</source>
@@ -3483,7 +3483,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/EnumTranslations.ts</context>
           <context context-type="linenumber">80</context>
         </context-group>
-        <target>Max rating</target>
+        <target>Max értékelés</target>
       </trans-unit>
       <trans-unit id="4492817943545541734" datatype="html">
         <source>Min faces</source>
@@ -3491,7 +3491,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/EnumTranslations.ts</context>
           <context context-type="linenumber">81</context>
         </context-group>
-        <target>Min faces</target>
+        <target>Min arcok</target>
       </trans-unit>
       <trans-unit id="142295387545931274" datatype="html">
         <source>Max faces</source>
@@ -3499,7 +3499,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/EnumTranslations.ts</context>
           <context context-type="linenumber">82</context>
         </context-group>
-        <target>Max faces</target>
+        <target>Max arcok</target>
       </trans-unit>
       <trans-unit id="2618179203175887603" datatype="html">
         <source>Min resolution</source>
@@ -3507,7 +3507,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/EnumTranslations.ts</context>
           <context context-type="linenumber">83</context>
         </context-group>
-        <target>Min resolution</target>
+        <target>Min felbontás</target>
       </trans-unit>
       <trans-unit id="8281989101801179201" datatype="html">
         <source>Max resolution</source>
@@ -3515,7 +3515,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/EnumTranslations.ts</context>
           <context context-type="linenumber">84</context>
         </context-group>
-        <target>Max resolution</target>
+        <target>Max felbontás</target>
       </trans-unit>
       <trans-unit id="5256256049865563765" datatype="html">
         <source>Directory</source>
@@ -3523,7 +3523,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/EnumTranslations.ts</context>
           <context context-type="linenumber">85</context>
         </context-group>
-        <target>Directory</target>
+        <target>Mappa</target>
       </trans-unit>
       <trans-unit id="2300247576851644080" datatype="html">
         <source>File name</source>
@@ -3531,7 +3531,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/EnumTranslations.ts</context>
           <context context-type="linenumber">86</context>
         </context-group>
-        <target>File name</target>
+        <target>Fájl név</target>
       </trans-unit>
       <trans-unit id="6838559377527923778" datatype="html">
         <source>Caption</source>
@@ -3551,7 +3551,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/EnumTranslations.ts</context>
           <context context-type="linenumber">88</context>
         </context-group>
-        <target>Orientation</target>
+        <target>Orientáció</target>
       </trans-unit>
       <trans-unit id="3177862278657494562" datatype="html">
         <source>Date pattern</source>
@@ -3559,7 +3559,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/EnumTranslations.ts</context>
           <context context-type="linenumber">89</context>
         </context-group>
-        <target>Date pattern</target>
+        <target>Dátum minta</target>
       </trans-unit>
       <trans-unit id="1172866303261737245" datatype="html">
         <source>Position</source>
@@ -3567,7 +3567,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/EnumTranslations.ts</context>
           <context context-type="linenumber">90</context>
         </context-group>
-        <target>Position</target>
+        <target>Pozíció</target>
       </trans-unit>
       <trans-unit id="4259420107141838090" datatype="html">
         <source>Person</source>
@@ -3575,7 +3575,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/EnumTranslations.ts</context>
           <context context-type="linenumber">91</context>
         </context-group>
-        <target>Person</target>
+        <target>Személy</target>
       </trans-unit>
       <trans-unit id="5206272431542421762" datatype="html">
         <source>Keyword</source>
@@ -3583,7 +3583,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/EnumTranslations.ts</context>
           <context context-type="linenumber">92</context>
         </context-group>
-        <target>Keyword</target>
+        <target>Kulcsszó</target>
       </trans-unit>
       <trans-unit id="3443810994372262728" datatype="html">
         <source>Server notifications</source>
@@ -3728,7 +3728,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/settings/workflow/workflow.component.html</context>
           <context context-type="linenumber">328</context>
         </context-group>
-        <target>Delete</target>
+        <target>Törlés</target>
       </trans-unit>
       <trans-unit id="3017479276216613525" datatype="html">
         <source>Album is locked, cannot be deleted from the webpage.</source>
@@ -3824,7 +3824,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/frame/frame.component.html</context>
           <context context-type="linenumber">97</context>
         </context-group>
-        <target>Light</target>
+        <target>Világos</target>
       </trans-unit>
       <trans-unit id="3892161059518616136" datatype="html">
         <source>Dark</source>
@@ -3832,7 +3832,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/frame/frame.component.html</context>
           <context context-type="linenumber">101</context>
         </context-group>
-        <target>Dark</target>
+        <target>Sötét</target>
       </trans-unit>
       <trans-unit id="616064537937996961" datatype="html">
         <source>Auto</source>
@@ -3848,7 +3848,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/frame/frame.component.html</context>
           <context context-type="linenumber">156</context>
         </context-group>
-        <target>Tools</target>
+        <target>Eszközök</target>
       </trans-unit>
       <trans-unit id="7990544842257386570" datatype="html">
         <source>key: c</source>
@@ -3868,7 +3868,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/frame/frame.component.html</context>
           <context context-type="linenumber">169</context>
         </context-group>
-        <target>Fix nabvar</target>
+        <target>Navigációs sáv fixálása</target>
       </trans-unit>
       <trans-unit id="4930506384627295710" datatype="html">
         <source>Settings</source>
@@ -3892,7 +3892,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/contentLoader.service.ts</context>
           <context context-type="linenumber">119</context>
         </context-group>
-        <target>Cannot find location</target>
+        <target>Poyíció nem található</target>
       </trans-unit>
       <trans-unit id="7436975022198908854" datatype="html">
         <source>Unknown server error</source>
@@ -3900,7 +3900,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/contentLoader.service.ts</context>
           <context context-type="linenumber">121</context>
         </context-group>
-        <target>Unknown server error</target>
+        <target>Ismeretlen szerverhiba</target>
       </trans-unit>
       <trans-unit id="1146494050504614738" datatype="html">
         <source>Select only this</source>
@@ -4080,7 +4080,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/navigator/navigator.gallery.component.html</context>
           <context context-type="linenumber">32</context>
         </context-group>
-        <target>Download</target>
+        <target>Letöltés</target>
       </trans-unit>
       <trans-unit id="6639312389704540885" datatype="html">
         <source>Slideshow playback speed</source>
@@ -4172,7 +4172,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/lightbox/controls/controls.lightbox.gallery.component.html</context>
           <context context-type="linenumber">206</context>
         </context-group>
-        <target>Pause</target>
+        <target>Szünet</target>
       </trans-unit>
       <trans-unit id="8597427582603336662" datatype="html">
         <source>Auto play</source>
@@ -4180,7 +4180,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/lightbox/controls/controls.lightbox.gallery.component.html</context>
           <context context-type="linenumber">213</context>
         </context-group>
-        <target>Auto play</target>
+        <target>Auto lejátszás</target>
       </trans-unit>
       <trans-unit id="314315645942131479" datatype="html">
         <source>Info</source>
@@ -4252,7 +4252,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/map/lightbox/lightbox.map.gallery.component.ts</context>
           <context context-type="linenumber">179</context>
         </context-group>
-        <target>Transportation</target>
+        <target>Utazás</target>
       </trans-unit>
       <trans-unit id="7953475258022164347" datatype="html">
         <source>Other paths</source>
@@ -4264,7 +4264,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/map/lightbox/lightbox.map.gallery.component.ts</context>
           <context context-type="linenumber">205</context>
         </context-group>
-        <target>Other paths</target>
+        <target>Egyéb ótvonalak</target>
       </trans-unit>
       <trans-unit id="8314090883669143391" datatype="html">
         <source>Latitude</source>
@@ -4272,7 +4272,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/map/lightbox/lightbox.map.gallery.component.ts</context>
           <context context-type="linenumber">669</context>
         </context-group>
-        <target>Latitude</target>
+        <target>Szélességi fok</target>
       </trans-unit>
       <trans-unit id="2703718513716530782" datatype="html">
         <source>longitude</source>
@@ -4280,7 +4280,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/map/lightbox/lightbox.map.gallery.component.ts</context>
           <context context-type="linenumber">669</context>
         </context-group>
-        <target>longitude</target>
+        <target>hosszúsági fok</target>
       </trans-unit>
       <trans-unit id="6560708001470959956" datatype="html">
         <source>street</source>
@@ -4288,7 +4288,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/map/map.service.ts</context>
           <context context-type="linenumber">23</context>
         </context-group>
-        <target>street</target>
+        <target>utca</target>
       </trans-unit>
       <trans-unit id="5616490555226013552" datatype="html">
         <source>satellite</source>
@@ -4296,7 +4296,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/map/map.service.ts</context>
           <context context-type="linenumber">30</context>
         </context-group>
-        <target>satellite</target>
+        <target>szatelit</target>
       </trans-unit>
       <trans-unit id="3574756324609227822" datatype="html">
         <source>hybrid</source>
@@ -4312,7 +4312,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/map/map.service.ts</context>
           <context context-type="linenumber">44</context>
         </context-group>
-        <target>dark</target>
+        <target>sötét</target>
       </trans-unit>
       <trans-unit id="7909798112576642157" datatype="html">
         <source>Searching for:</source>
@@ -4328,7 +4328,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/navigator/navigator.gallery.component.html</context>
           <context context-type="linenumber">24</context>
         </context-group>
-        <target>elem</target>
+        <target>elemek</target>
       </trans-unit>
       <trans-unit id="5686806460713319354" datatype="html">
         <source>Show all subdirectories</source>
@@ -4336,7 +4336,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/navigator/navigator.gallery.component.html</context>
           <context context-type="linenumber">42</context>
         </context-group>
-        <target>Show all subdirectories</target>
+        <target>Mutass minden almappát</target>
       </trans-unit>
       <trans-unit id="4163272119298020373" datatype="html">
         <source>Filters</source>
@@ -4356,7 +4356,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/settings/template/settings-entry/sorting-method/sorting-method.settings-entry.component.html</context>
           <context context-type="linenumber">3</context>
         </context-group>
-        <target>Sort and group</target>
+        <target>Rendezés és csoportosítás</target>
       </trans-unit>
       <trans-unit id="2317496634288800773" datatype="html">
         <source> group </source>
@@ -4364,11 +4364,11 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/navigator/navigator.gallery.component.html</context>
           <context context-type="linenumber">75,76</context>
         </context-group>
-        <target>group</target>
+        <target>csoport</target>
       </trans-unit>
       <trans-unit id="5598372450314952280" datatype="html">
         <source>
-          Sorting 
+          Sorting
           <x id="START_TAG_BUTTON" ctype="x-button" equiv-text="&lt;button class=&quot;btn btn-outline-primary btn-group-follow btn-sm&quot;&#xD;&#xA;                                        [class.btn-outline-primary]=&quot;groupingFollowSorting&quot;&#xD;&#xA;                                        [class.btn-outline-secondary]=&quot;!groupingFollowSorting&quot;&#xD;&#xA;                                        (click)=&quot;groupingFollowSorting=!groupingFollowSorting&quot;&#xD;&#xA;                                        title=&quot;Grouping follows sorting&quot; i18n-title>"/>
           <x id="START_TAG_NG_ICON" ctype="x-ng_icon" equiv-text="&lt;ng-icon class=&quot;&quot; name=&quot;ionLinkOutline&quot;>"/>
           <x id="CLOSE_TAG_NG_ICON" ctype="x-ng_icon"/>
@@ -4379,7 +4379,7 @@
           <context context-type="linenumber">84,92</context>
         </context-group>
         <target>
-          Sorting 
+          Sorting
           <x id="START_TAG_BUTTON" ctype="x-button" equiv-text="&lt;button class=&quot;btn btn-outline-primary btn-group-follow btn-sm&quot;&#xD;&#xA;                                        [class.btn-outline-primary]=&quot;groupingFollowSorting&quot;&#xD;&#xA;                                        [class.btn-outline-secondary]=&quot;!groupingFollowSorting&quot;&#xD;&#xA;                                        (click)=&quot;groupingFollowSorting=!groupingFollowSorting&quot;&#xD;&#xA;                                        title=&quot;Grouping follows sorting&quot; i18n-title>"/>
           <x id="START_TAG_NG_ICON" ctype="x-ng_icon" equiv-text="&lt;ng-icon class=&quot;&quot; name=&quot;ionLinkOutline&quot;>"/>
           <x id="CLOSE_TAG_NG_ICON" ctype="x-ng_icon"/>
@@ -4392,7 +4392,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/navigator/navigator.gallery.component.html</context>
           <context context-type="linenumber">88</context>
         </context-group>
-        <target>Grouping follows sorting</target>
+        <target>Csoportosítás a rendezést követi</target>
       </trans-unit>
       <trans-unit id="8007904845243402148" datatype="html">
         <source>ascending</source>
@@ -4408,7 +4408,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/settings/template/settings-entry/sorting-method/sorting-method.settings-entry.component.html</context>
           <context context-type="linenumber">32</context>
         </context-group>
-        <target>ascending</target>
+        <target>növekvő</target>
       </trans-unit>
       <trans-unit id="8583825692753174768" datatype="html">
         <source>descending</source>
@@ -4424,7 +4424,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/settings/template/settings-entry/sorting-method/sorting-method.settings-entry.component.html</context>
           <context context-type="linenumber">41</context>
         </context-group>
-        <target>descending</target>
+        <target>csökkenő</target>
       </trans-unit>
       <trans-unit id="877780134171662191" datatype="html">
         <source>Grouping</source>
@@ -4432,7 +4432,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/navigator/navigator.gallery.component.html</context>
           <context context-type="linenumber">128</context>
         </context-group>
-        <target>Grouping</target>
+        <target>Csoportosítás</target>
       </trans-unit>
       <trans-unit id="53284904959011055" datatype="html">
         <source>Grid size</source>
@@ -4444,7 +4444,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/navigator/navigator.gallery.component.html</context>
           <context context-type="linenumber">176</context>
         </context-group>
-        <target>Grid size</target>
+        <target>Rács méret</target>
       </trans-unit>
       <trans-unit id="7241451058585494578" datatype="html">
         <source>key: alt + up</source>
@@ -4452,7 +4452,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/navigator/navigator.gallery.component.ts</context>
           <context context-type="linenumber">123</context>
         </context-group>
-        <target>key: alt + up</target>
+        <target>key: alt + fel</target>
       </trans-unit>
       <trans-unit id="3445823735428564189" datatype="html">
         <source>Random link</source>
@@ -4532,7 +4532,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/settings/workflow/workflow.component.html</context>
           <context context-type="linenumber">341</context>
         </context-group>
-        <target>Add</target>
+        <target>Hozzáadás</target>
       </trans-unit>
       <trans-unit id="7051066787135970070" datatype="html">
         <source>Negate</source>
@@ -4540,7 +4540,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/search/query-enrty/query-entry.search.gallery.component.html</context>
           <context context-type="linenumber">75</context>
         </context-group>
-        <target>Negate</target>
+        <target>Negálás</target>
       </trans-unit>
       <trans-unit id="3548274206254483489" datatype="html">
         <source>Search text</source>
@@ -4548,7 +4548,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/search/query-enrty/query-entry.search.gallery.component.html</context>
           <context context-type="linenumber">88</context>
         </context-group>
-        <target>Search text</target>
+        <target>Keresés</target>
       </trans-unit>
       <trans-unit id="5027564160787173789" datatype="html">
         <source>From date</source>
@@ -4588,7 +4588,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/search/query-enrty/query-entry.search.gallery.component.html</context>
           <context context-type="linenumber">181</context>
         </context-group>
-        <target>Minimum Person count</target>
+        <target>Minimum szélyek</target>
       </trans-unit>
       <trans-unit id="5965220081582142268" datatype="html">
         <source>Maximum Person count</source>
@@ -4596,7 +4596,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/search/query-enrty/query-entry.search.gallery.component.html</context>
           <context context-type="linenumber">194</context>
         </context-group>
-        <target>Maximum Person count</target>
+        <target>Maximum szélyek</target>
       </trans-unit>
       <trans-unit id="1362128514258619168" datatype="html">
         <source>Minimum Resolution</source>
@@ -4604,7 +4604,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/search/query-enrty/query-entry.search.gallery.component.html</context>
           <context context-type="linenumber">208</context>
         </context-group>
-        <target>Minimum Resolution</target>
+        <target>Minimum felbontás</target>
       </trans-unit>
       <trans-unit id="6524138748702944953" datatype="html">
         <source>Maximum Resolution</source>
@@ -4612,7 +4612,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/search/query-enrty/query-entry.search.gallery.component.html</context>
           <context context-type="linenumber">224</context>
         </context-group>
-        <target>Maximum Resolution</target>
+        <target>Maximum felbontás</target>
       </trans-unit>
       <trans-unit id="1403507799985368460" datatype="html">
         <source>Landscape</source>
@@ -4644,7 +4644,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/search/query-enrty/query-entry.search.gallery.component.html</context>
           <context context-type="linenumber">256</context>
         </context-group>
-        <target>Last N Days</target>
+        <target>Utolsó N nap</target>
       </trans-unit>
       <trans-unit id="1841001414805444530" datatype="html">
         <source>Ago</source>
@@ -4652,7 +4652,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/search/query-enrty/query-entry.search.gallery.component.html</context>
           <context context-type="linenumber">272</context>
         </context-group>
-        <target>Ago</target>
+        <target>Óta</target>
       </trans-unit>
       <trans-unit id="7267191671332895261" datatype="html">
         <source>Day(s) ago</source>
@@ -4660,7 +4660,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/search/query-enrty/query-entry.search.gallery.component.html</context>
           <context context-type="linenumber">287</context>
         </context-group>
-        <target>Day(s) ago</target>
+        <target>Nap(ok) óta</target>
       </trans-unit>
       <trans-unit id="6246978557266811210" datatype="html">
         <source>Week(s) ago</source>
@@ -4668,7 +4668,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/search/query-enrty/query-entry.search.gallery.component.html</context>
           <context context-type="linenumber">288</context>
         </context-group>
-        <target>Week(s) ago</target>
+        <target>Hetek(ek) óta</target>
       </trans-unit>
       <trans-unit id="5214793274172992989" datatype="html">
         <source>Month(s) ago</source>
@@ -4676,7 +4676,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/search/query-enrty/query-entry.search.gallery.component.html</context>
           <context context-type="linenumber">289</context>
         </context-group>
-        <target>Month(s) ago</target>
+        <target>Hónap(ok) óta</target>
       </trans-unit>
       <trans-unit id="8760070733234838765" datatype="html">
         <source>Year(s) ago</source>
@@ -4684,7 +4684,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/search/query-enrty/query-entry.search.gallery.component.html</context>
           <context context-type="linenumber">290</context>
         </context-group>
-        <target>Year(s) ago</target>
+        <target>Év(ek) óta</target>
       </trans-unit>
       <trans-unit id="548935897521348324" datatype="html">
         <source>Every week</source>
@@ -4692,7 +4692,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/search/query-enrty/query-entry.search.gallery.component.html</context>
           <context context-type="linenumber">291</context>
         </context-group>
-        <target>Every week</target>
+        <target>Minden héten</target>
       </trans-unit>
       <trans-unit id="123874585581109714" datatype="html">
         <source>Every Month</source>
@@ -4700,7 +4700,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/search/query-enrty/query-entry.search.gallery.component.html</context>
           <context context-type="linenumber">292</context>
         </context-group>
-        <target>Every Month</target>
+        <target>Minden hónapban</target>
       </trans-unit>
       <trans-unit id="1723692577259921020" datatype="html">
         <source>Every year</source>
@@ -4708,7 +4708,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/search/query-enrty/query-entry.search.gallery.component.html</context>
           <context context-type="linenumber">293</context>
         </context-group>
-        <target>Every year</target>
+        <target>Minden évben</target>
       </trans-unit>
       <trans-unit id="3200342440195656274" datatype="html">
         <source>Insert</source>
@@ -4840,7 +4840,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/share/share.gallery.component.html</context>
           <context context-type="linenumber">135,136</context>
         </context-group>
-        <target>active share(s) for this folder.</target>
+        <target>aktív megosztás(ok) ehhez a mappához.</target>
       </trans-unit>
       <trans-unit id="1043390381565182083" datatype="html">
         <source>Creator</source>
@@ -4872,7 +4872,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/share/share.gallery.component.ts</context>
           <context context-type="linenumber">43</context>
         </context-group>
-        <target>Invalid settings</target>
+        <target>Hibás beállítás</target>
       </trans-unit>
       <trans-unit id="2807800733729323332" datatype="html">
         <source>Yes</source>
@@ -4908,7 +4908,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/share/share.gallery.component.ts</context>
           <context context-type="linenumber">154</context>
         </context-group>
-        <target>Click share to get a link.</target>
+        <target>Kattincs a megosztásra a link létrehozásához.</target>
       </trans-unit>
       <trans-unit id="5217966104824748038" datatype="html">
         <source>Sharing link has been copied to clipboard</source>
@@ -4916,7 +4916,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/share/share.gallery.component.ts</context>
           <context context-type="linenumber">165</context>
         </context-group>
-        <target>Sharing link has been copied to clipboard</target>
+        <target>Megosztási link a vágólapra lett másolva</target>
       </trans-unit>
       <trans-unit id="1692815930495952260" datatype="html">
         <source>Please log in</source>
@@ -5597,7 +5597,7 @@
       </trans-unit>
       <trans-unit id="5858606241766874213" datatype="html">
         <source>
-          Search Query - 
+          Search Query -
           <x id="INTERPOLATION" equiv-text="{{(j + 1)}}"/>
         </source>
         <context-group purpose="location">
@@ -5605,7 +5605,7 @@
           <context context-type="linenumber">236,237</context>
         </context-group>
         <target>
-          Search Query - 
+          Search Query -
           <x id="INTERPOLATION" equiv-text="{{(j + 1)}}"/>
         </target>
       </trans-unit>
@@ -5775,7 +5775,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/sharelogin/share-login.component.html</context>
           <context context-type="linenumber">11,12</context>
         </context-group>
-        <target>Unknown sharing key.</target>
+        <target>Ismeretlen megosztási kulcs.</target>
       </trans-unit>
       <trans-unit id="6314278975578272694" datatype="html">
         <source>Wrong password</source>
