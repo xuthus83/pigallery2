@@ -7,6 +7,7 @@ import {Config} from '../../../../common/config/public/Config';
 import {Utils} from '../../../../common/Utils';
 import {CustomHeaders} from '../../../../common/CustomHeaders';
 import {VersionService} from '../version.service';
+import { lastValueFrom } from 'rxjs';
 
 @Injectable()
 export class NetworkService {
@@ -50,9 +51,8 @@ export class NetworkService {
       return this.handleError(error);
     };
 
-    return this.http
-        .get(this.apiBaseUrl + url, {responseType: 'text'})
-        .toPromise()
+    return lastValueFrom(this.http
+        .get(this.apiBaseUrl + url, {responseType: 'text'}))
         .then(process)
         .catch(err);
   }
@@ -70,9 +70,8 @@ export class NetworkService {
       return this.handleError(error);
     };
 
-    return this.http
-        .get(this.apiBaseUrl + url, {responseType: 'text'})
-        .toPromise()
+    return lastValueFrom(this.http
+        .get(this.apiBaseUrl + url, {responseType: 'text'}))
         .then(process)
         .catch(err);
   }
@@ -130,29 +129,25 @@ export class NetworkService {
 
     switch (method) {
       case 'get':
-        return this.http
-            .get<Message<T>>(this.apiBaseUrl + url, {observe: 'response'})
-            .toPromise()
+        return lastValueFrom(this.http
+            .get<Message<T>>(this.apiBaseUrl + url, {observe: 'response'}))
             .then(process)
             .catch(err);
       case 'delete':
-        return this.http
-            .delete<Message<T>>(this.apiBaseUrl + url, {observe: 'response'})
-            .toPromise()
+        return lastValueFrom(this.http
+            .delete<Message<T>>(this.apiBaseUrl + url, {observe: 'response'}))
             .then(process)
             .catch(err);
       case 'post':
-        return this.http
+        return lastValueFrom(this.http
             .post<Message<T>>(this.apiBaseUrl + url, body, {
               observe: 'response',
-            })
-            .toPromise()
+            }))
             .then(process)
             .catch(err);
       case 'put':
-        return this.http
-            .put<Message<T>>(this.apiBaseUrl + url, body, {observe: 'response'})
-            .toPromise()
+        return lastValueFrom(this.http
+            .put<Message<T>>(this.apiBaseUrl + url, body, {observe: 'response'}))
             .then(process)
             .catch(err);
       default:
