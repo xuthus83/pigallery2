@@ -4366,25 +4366,13 @@
         </context-group>
         <target>group</target>
       </trans-unit>
-      <trans-unit id="5598372450314952280" datatype="html">
-        <source>
-          Sorting 
-          <x id="START_TAG_BUTTON" ctype="x-button" equiv-text="&lt;button class=&quot;btn btn-outline-primary btn-group-follow btn-sm&quot;&#xD;&#xA;                                        [class.btn-outline-primary]=&quot;groupingFollowSorting&quot;&#xD;&#xA;                                        [class.btn-outline-secondary]=&quot;!groupingFollowSorting&quot;&#xD;&#xA;                                        (click)=&quot;groupingFollowSorting=!groupingFollowSorting&quot;&#xD;&#xA;                                        title=&quot;Grouping follows sorting&quot; i18n-title>"/>
-          <x id="START_TAG_NG_ICON" ctype="x-ng_icon" equiv-text="&lt;ng-icon class=&quot;&quot; name=&quot;ionLinkOutline&quot;>"/>
-          <x id="CLOSE_TAG_NG_ICON" ctype="x-ng_icon"/>
-          <x id="CLOSE_TAG_BUTTON" ctype="x-button" equiv-text="&lt;/button>"/>
-        </source>
+      <trans-unit id="2774613742044941352" datatype="html">
+        <source>Sorting</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/gallery/navigator/navigator.gallery.component.html</context>
-          <context context-type="linenumber">84,92</context>
+          <context context-type="linenumber">83</context>
         </context-group>
-        <target>
-          Sorting 
-          <x id="START_TAG_BUTTON" ctype="x-button" equiv-text="&lt;button class=&quot;btn btn-outline-primary btn-group-follow btn-sm&quot;&#xD;&#xA;                                        [class.btn-outline-primary]=&quot;groupingFollowSorting&quot;&#xD;&#xA;                                        [class.btn-outline-secondary]=&quot;!groupingFollowSorting&quot;&#xD;&#xA;                                        (click)=&quot;groupingFollowSorting=!groupingFollowSorting&quot;&#xD;&#xA;                                        title=&quot;Grouping follows sorting&quot; i18n-title>"/>
-          <x id="START_TAG_NG_ICON" ctype="x-ng_icon" equiv-text="&lt;ng-icon class=&quot;&quot; name=&quot;ionLinkOutline&quot;>"/>
-          <x id="CLOSE_TAG_NG_ICON" ctype="x-ng_icon"/>
-          <x id="CLOSE_TAG_BUTTON" ctype="x-button" equiv-text="&lt;/button>"/>
-        </target>
+        <target>Sorting</target>
       </trans-unit>
       <trans-unit id="7266946560591201477" datatype="html">
         <source>Grouping follows sorting</source>
@@ -4998,11 +4986,19 @@
         </context-group>
         <target>Dimensiuni</target>
       </trans-unit>
+      <trans-unit id="6211757133507101662" datatype="html">
+        <source>Job failed</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/frontend/app/ui/settings/scheduled-jobs.service.ts</context>
+          <context context-type="linenumber">129</context>
+        </context-group>
+        <target>Job failed</target>
+      </trans-unit>
       <trans-unit id="7393380261620707212" datatype="html">
         <source>Job finished</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/scheduled-jobs.service.ts</context>
-          <context context-type="linenumber">128</context>
+          <context context-type="linenumber">135</context>
         </context-group>
         <target>Job finished</target>
       </trans-unit>
@@ -5315,7 +5311,7 @@
         <source>Trigger job run manually</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/workflow/button/job-button.settings.component.html</context>
-          <context context-type="linenumber">2</context>
+          <context context-type="linenumber">3</context>
         </context-group>
         <target>Trigger job run manually</target>
       </trans-unit>
@@ -5323,7 +5319,7 @@
         <source>Run now</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/workflow/button/job-button.settings.component.html</context>
-          <context context-type="linenumber">8</context>
+          <context context-type="linenumber">9</context>
         </context-group>
         <target>Run now</target>
       </trans-unit>
@@ -5331,7 +5327,7 @@
         <source>Cancel</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/settings/workflow/button/job-button.settings.component.html</context>
-          <context context-type="linenumber">17</context>
+          <context context-type="linenumber">18</context>
         </context-group>
         <target>Cancel</target>
       </trans-unit>
