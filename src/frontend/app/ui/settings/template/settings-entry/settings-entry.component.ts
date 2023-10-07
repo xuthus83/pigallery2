@@ -59,7 +59,7 @@ interface IState {
   ],
 })
 export class SettingsEntryComponent
-    implements ControlValueAccessor, Validator, OnChanges {
+  implements ControlValueAccessor, Validator, OnChanges {
   name: string;
   required: boolean;
   dockerWarning: boolean;
@@ -101,9 +101,9 @@ export class SettingsEntryComponent
       for (let i = 0; i < this.state.value?.length; ++i) {
         for (const k of Object.keys(this.state.value[i].__state)) {
           if (!Utils.equalsFilter(
-              this.state.value[i]?.__state[k]?.value,
-              this.state.default[i] ? this.state.default[i][k] : undefined,
-              ['default', '__propPath', '__created', '__prototype', '__rootConfig'])) {
+            this.state.value[i]?.__state[k]?.value,
+            this.state.default[i] ? this.state.default[i][k] : undefined,
+            ['default', '__propPath', '__created', '__prototype', '__rootConfig'])) {
 
             return true;
           }
@@ -129,7 +129,7 @@ export class SettingsEntryComponent
   get defaultStr(): string {
     if (this.type === 'SearchQuery') {
       return (
-          '\'' + this.searchQueryParserService.stringify(this.state.default) + '\''
+        '\'' + this.searchQueryParserService.stringify(this.state.default) + '\''
       );
     }
 
@@ -143,8 +143,8 @@ export class SettingsEntryComponent
 
   get StringValue(): string {
     if (
-        this.state.type === 'array' &&
-        (this.state.arrayType === 'string' || this.isNumberArray)
+      this.state.type === 'array' &&
+      (this.state.arrayType === 'string' || this.isNumberArray)
     ) {
       return (this.state.value || []).join(';');
     }
@@ -162,8 +162,8 @@ export class SettingsEntryComponent
 
   set StringValue(value: string) {
     if (
-        this.state.type === 'array' &&
-        (this.state.arrayType === 'string' || this.isNumberArray)
+      this.state.type === 'array' &&
+      (this.state.arrayType === 'string' || this.isNumberArray)
     ) {
       value = value.replace(new RegExp(',', 'g'), ';');
       if (!this.allowSpaces) {
@@ -172,8 +172,8 @@ export class SettingsEntryComponent
       this.state.value = value.split(';').filter((v: string) => v !== '');
       if (this.isNumberArray) {
         this.state.value = this.state.value
-            .map((v: string) => parseFloat(v))
-            .filter((v: number) => !isNaN(v));
+          .map((v: string) => parseFloat(v))
+          .filter((v: number) => !isNaN(v));
       }
       return;
     }
@@ -194,7 +194,7 @@ export class SettingsEntryComponent
       key: 'default',
       value: $localize`default`
     }, ...(this.state.rootConfig as any).__state.availableThemes.value
-        .map((th: ThemeConfig) => ({key: th.name, value: th.name}))];
+      .map((th: ThemeConfig) => ({key: th.name, value: th.name}))];
   }
 
 
@@ -241,16 +241,16 @@ export class SettingsEntryComponent
       this.uiType = CustomSettingsEntries.getFullName(this.state);
     }
     if (!this.state.isEnumType &&
-        !this.state.isEnumArrayType &&
-        this.type !== 'boolean' &&
-        this.type !== 'SearchQuery' &&
-        !CustomSettingsEntries.iS(this.state) &&
-        this.arrayType !== 'MapLayers' &&
-        this.arrayType !== 'NavigationLinkConfig' &&
-        this.arrayType !== 'MapPathGroupConfig' &&
-        this.arrayType !== 'MapPathGroupThemeConfig' &&
-        this.arrayType !== 'JobScheduleConfig' &&
-        this.arrayType !== 'UserConfig') {
+      !this.state.isEnumArrayType &&
+      this.type !== 'boolean' &&
+      this.type !== 'SearchQuery' &&
+      !CustomSettingsEntries.iS(this.state) &&
+      this.arrayType !== 'MapLayers' &&
+      this.arrayType !== 'NavigationLinkConfig' &&
+      this.arrayType !== 'MapPathGroupConfig' &&
+      this.arrayType !== 'MapPathGroupThemeConfig' &&
+      this.arrayType !== 'JobScheduleConfig' &&
+      this.arrayType !== 'UserConfig') {
       this.uiType = 'StringInput';
     }
     if (this.type === this.state.tags?.uiType) {
@@ -273,18 +273,18 @@ export class SettingsEntryComponent
     this.name = this.state?.tags?.name;
     if (this.name) {
       this.idName =
-          this.GUID + this.name.toLowerCase().replace(new RegExp(' ', 'gm'), '-');
+        this.GUID + this.name.toLowerCase().replace(new RegExp(' ', 'gm'), '-');
     }
     this.isNumberArray =
-        this.state.arrayType === 'unsignedInt' ||
-        this.state.arrayType === 'integer' ||
-        this.state.arrayType === 'float' ||
-        this.state.arrayType === 'positiveFloat';
+      this.state.arrayType === 'unsignedInt' ||
+      this.state.arrayType === 'integer' ||
+      this.state.arrayType === 'float' ||
+      this.state.arrayType === 'positiveFloat';
     this.isNumber =
-        this.state.type === 'unsignedInt' ||
-        this.state.type === 'integer' ||
-        this.state.type === 'float' ||
-        this.state.type === 'positiveFloat';
+      this.state.type === 'unsignedInt' ||
+      this.state.type === 'integer' ||
+      this.state.type === 'float' ||
+      this.state.type === 'positiveFloat';
 
 
     if (this.isNumber) {
@@ -306,29 +306,30 @@ export class SettingsEntryComponent
     }
   }
 
-  getOptionsView(state: IState) {
-    let optionsView: { key: number | string; value: string | number }[];
-    const eClass = state.isEnumType
+  getOptionsView(state: IState & { optionsView?: { key: number | string; value: string | number }[] }) {
+    if (!state.optionsView) {
+      const eClass = state.isEnumType
         ? state.type
         : state.arrayType;
-    if (state.tags?.uiOptions) {
-      optionsView = state.tags?.uiOptions.map(o => ({
-        key: o,
-        value: o + (state.tags?.unit ? state.tags?.unit : '')
-      }));
-    } else {
-      optionsView = enumToTranslatedArray(eClass);
+      if (state.tags?.uiOptions) {
+        state.optionsView = state.tags?.uiOptions.map(o => ({
+          key: o,
+          value: o + (state.tags?.unit ? state.tags?.unit : '')
+        }));
+      } else {
+        state.optionsView = enumToTranslatedArray(eClass);
+      }
     }
-    return optionsView;
+    return state.optionsView;
   }
 
   validate(): ValidationErrors {
     if (
-        !this.required ||
-        (this.state &&
-            typeof this.state.value !== 'undefined' &&
-            this.state.value !== null &&
-            this.state.value !== '')
+      !this.required ||
+      (this.state &&
+        typeof this.state.value !== 'undefined' &&
+        this.state.value !== null &&
+        this.state.value !== '')
     ) {
       return null;
     }
@@ -385,8 +386,8 @@ export class SettingsEntryComponent
 
   removeLayer(layer: MapLayers): void {
     this.state.value.splice(
-        this.state.value.indexOf(layer),
-        1
+      this.state.value.indexOf(layer),
+      1
     );
   }
 
@@ -394,7 +395,7 @@ export class SettingsEntryComponent
   addNewTheme(): void {
     const availableThemes = (this.state.rootConfig as any).__state.availableThemes;
     if (!this.newThemeName ||
-        (availableThemes.value as ThemeConfig[]).find(th => th.name === this.newThemeName)) {
+      (availableThemes.value as ThemeConfig[]).find(th => th.name === this.newThemeName)) {
       return;
     }
     this.state.value = this.newThemeName;
