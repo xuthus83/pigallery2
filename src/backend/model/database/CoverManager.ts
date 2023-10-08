@@ -161,7 +161,9 @@ export class CoverManager implements IObjectManager {
                   });
                 } else {
                   q.orWhere('directory.path GLOB :path', {
-                    path: DiskMangerWorker.pathFromParent(dir) + '*',
+                    path: DiskMangerWorker.pathFromParent(dir)
+                        // glob escaping. see https://github.com/bpatrik/pigallery2/issues/621
+                        .replaceAll('[', '[[]') + '*',
                   });
                 }
               })

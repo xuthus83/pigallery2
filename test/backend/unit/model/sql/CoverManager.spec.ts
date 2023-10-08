@@ -84,7 +84,7 @@ describe('CoverManager', (sqlHelper: DBTestHelper) => {
 
 
   const setUpTestGallery = async (): Promise<void> => {
-    const directory: ParentDirectoryDTO = TestHelper.getDirectoryEntry();
+    const directory: ParentDirectoryDTO = TestHelper.getDirectoryEntry(null, 'éűáúőóüöÉŰÚŐÓÜÖ[]^[[]]][asd]');
     subDir = TestHelper.getDirectoryEntry(directory, 'The Phantom Menace');
     subDir2 = TestHelper.getDirectoryEntry(directory, 'Return of the Jedi');
     p = TestHelper.getPhotoEntry1(subDir);
@@ -178,7 +178,7 @@ describe('CoverManager', (sqlHelper: DBTestHelper) => {
     const conn = await SQLConnection.getConnection();
 
     await conn.createQueryBuilder()
-      .update(DirectoryEntity).set({validCover: false}).execute();
+        .update(DirectoryEntity).set({validCover: false}).execute();
 
     expect(await pm.getPartialDirsWithoutCovers()).to.deep.equalInAnyOrder([dir, subDir, subDir2].map(d => partialDir(d)));
   });
@@ -279,13 +279,13 @@ describe('CoverManager', (sqlHelper: DBTestHelper) => {
     expect(subdir.cover.id).to.equal(p2.id);
 
     await conn.createQueryBuilder()
-      .update(DirectoryEntity)
-      .set({validCover: false, cover: null}).execute();
+        .update(DirectoryEntity)
+        .set({validCover: false, cover: null}).execute();
     expect((await selectDir()).cover).to.equal(null);
 
 
     const res = await gm.getParentDirFromId(conn,
-      (await gm.getDirIdAndTime(conn, dir.name, dir.path)).id);
+        (await gm.getDirIdAndTime(conn, dir.name, dir.path)).id);
     subdir = await selectDir();
     expect(subdir.validCover).to.equal(true);
     expect(subdir.cover.id).to.equal(p2.id);
