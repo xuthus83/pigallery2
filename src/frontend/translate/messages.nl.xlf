@@ -912,7 +912,7 @@
           <context context-type="sourcefile">src/common/config/private/PrivateConfig.ts</context>
           <context context-type="linenumber">871</context>
         </context-group>
-        <target>Foto afmetingen wijzigen</target>
+        <target>Foto afmeting conversie</target>
       </trans-unit>
       <trans-unit id="3200155866272065974" datatype="html">
         <source>Cover Filter query</source>
@@ -1932,7 +1932,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">791</context>
         </context-group>
-        <target>Standaard zoek groepering</target>
+        <target>Standaard groepering zoeken</target>
       </trans-unit>
       <trans-unit id="4276017218108240034" datatype="html">
         <source>Default grouping method for photo and video in a search results.</source>
@@ -2200,7 +2200,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">983</context>
         </context-group>
-        <target>Ste de standaard thema modus in voor de app.</target>
+        <target>Stel de standaard thema modus in voor de app.</target>
       </trans-unit>
       <trans-unit id="2756376392555555363" datatype="html">
         <source>Selected theme</source>
