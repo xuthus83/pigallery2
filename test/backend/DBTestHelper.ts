@@ -2,7 +2,7 @@ import {Config} from '../../src/common/config/private/Config';
 import * as path from 'path';
 import * as fs from 'fs';
 import {SQLConnection} from '../../src/backend/model/database/SQLConnection';
-import {DatabaseType} from '../../src/common/config/private/PrivateConfig';
+import {DatabaseType, LogLevel} from '../../src/common/config/private/PrivateConfig';
 import {ProjectPath} from '../../src/backend/ProjectPath';
 import {DirectoryBaseDTO, ParentDirectoryDTO, SubDirectoryDTO} from '../../src/common/entities/DirectoryDTO';
 import {ObjectManagers} from '../../src/backend/model/ObjectManagers';
@@ -129,7 +129,7 @@ export class DBTestHelper {
     const gm = new GalleryManagerTest();
 
     const dir = await gm.getParentDirFromId(connection,
-      (await gm.getDirIdAndTime(connection, directory.name, path.join(path.dirname('.'), path.sep))).id);
+      (await gm.getDirIdAndTime(connection, directory.name, path.join(directory.path, path.sep))).id);
 
     const populateDir = async (d: DirectoryBaseDTO) => {
       for (let i = 0; i < d.directories.length; i++) {

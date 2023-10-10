@@ -46,6 +46,34 @@ export class TestHelper {
     return dir;
   }
 
+
+  public static getBasePhotoEntry(dir: DirectoryPathDTO, name = 'base media.jpg'): PhotoEntity {
+    const sd = new MediaDimensionEntity();
+    sd.height = 400;
+    sd.width = 200;
+    const m = new PhotoMetadataEntity();
+    m.caption = null;
+    m.size = sd;
+    m.creationDate = 1656069387772;
+    m.fileSize = 123456789;
+    // m.rating = 0; no rating by default
+
+    // TODO: remove when typeorm is fixed
+    m.duration = null;
+    m.bitRate = null;
+
+
+    const d = new PhotoEntity();
+    d.name = name;
+    d.directory = (dir as any);
+    if ((dir as DirectoryBaseDTO).media) {
+      (dir as DirectoryBaseDTO).media.push(d);
+      (dir as DirectoryBaseDTO).mediaCount++;
+    }
+    d.metadata = m;
+    return d;
+  }
+
   public static getPhotoEntry(dir: DirectoryPathDTO): PhotoEntity {
     const sd = new MediaDimensionEntity();
     sd.height = 400;
