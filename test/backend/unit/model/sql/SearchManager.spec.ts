@@ -936,7 +936,7 @@ describe('SearchManager', (sqlHelper: DBTestHelper) => {
         await sqlHelper.clearDB();
         await setUpSqlDB();
         p5 = TestHelper.getBasePhotoEntry(subDir2, 'p5-23h-ago.jpg');
-        p5.metadata.creationDate = Date.now() - 60 * 60 * 23 * 1000;
+        p5.metadata.creationDate = Date.now() - 60 * 60 * 24 * 1000 - 1000;
         p6 = TestHelper.getBasePhotoEntry(subDir2, 'p6-300d-ago.jpg');
         p6.metadata.creationDate = Date.now() - 60 * 60 * 24 * 300 * 1000;
         p7 = TestHelper.getBasePhotoEntry(subDir2, 'p7-1y-1min-ago.jpg');
