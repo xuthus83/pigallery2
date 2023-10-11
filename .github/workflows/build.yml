@@ -57,6 +57,7 @@ jobs:
     - name: test
       run: |
         npm test
+        npm run coverage
       env:
         MYSQL_HOST: localhost
         MYSQL_USERNAME: root
@@ -64,6 +65,8 @@ jobs:
         MYSQL_PORT: ${{ job.services.mariadb.ports[3306] }}
         PORT: 35000
         CI: true
+    - name: Coveralls
+      uses: coverallsapp/github-action@v2
     - name: E2E test - Cypress run
       uses: cypress-io/github-action@v6
       env:
