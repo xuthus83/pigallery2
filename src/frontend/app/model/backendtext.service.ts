@@ -94,7 +94,7 @@ export class BackendtextService {
       case DefaultsJobs['Temp Folder Cleaning']:
         return $localize`Removes unnecessary files from the tmp folder.`;
       case DefaultsJobs['Album Cover Filling']:
-        return $localize`Updates the cover photo of all albums (both directories and saved searches) and and faces.`;
+        return $localize`Updates the cover photo of all albums (both directories and saved searches) and faces.`;
       case DefaultsJobs['Album Cover Reset']:
         return $localize`Deletes the cover photo of all albums and faces`;
       case DefaultsJobs['GPX Compression']:

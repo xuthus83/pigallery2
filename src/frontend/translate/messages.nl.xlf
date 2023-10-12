@@ -3075,7 +3075,7 @@
         <target>Verwijder alle ingepakte GPX bestanden</target>
       </trans-unit>
       <trans-unit id="873062862463132485" datatype="html">
-        <source>Gets the top photos of the selected search queries and sends them over email. You need to set up the SMTP server connection send e-mails.</source>
+        <source>Gets the top photos of the selected search queries and sends them over email. You need to set up the SMTP server connection to send e-mails.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/model/backendtext.service.ts</context>
           <context context-type="linenumber">105</context>
