@@ -102,7 +102,7 @@ export class BackendtextService {
       case DefaultsJobs['Delete Compressed GPX']:
         return $localize`Deletes all compressed GPX files`;
       case DefaultsJobs['Top Pick Sending']:
-        return $localize`Gets the top photos of the selected search queries and sends them over email. You need to set up the SMTP server connection send e-mails.`;
+        return $localize`Gets the top photos of the selected search queries and sends them over email. You need to set up the SMTP server connection to send e-mails.`;
       default:
         return null;
     }

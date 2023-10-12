@@ -233,7 +233,7 @@
                       <div class="mb-1 row"
                            [class.mb-3]="settingsService.configStyle == ConfigStyle.full">
                         <label class="col-md-2 control-label"
-                               [for]="configEntry.id+'_'+i" i18n>Search Query - {{(j + 1)}}</label>
+                               [for]="configEntry.id+'_'+i"><ng-container>Search Query</ng-container> - {{(j + 1)}}</label>
                         <div class="col-md-10">
                           <div class="input-group">
                             <app-gallery-search-field

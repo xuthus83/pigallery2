@@ -3042,13 +3042,13 @@
         </context-group>
         <target>Removes unnecessary files from the tmp folder.</target>
       </trans-unit>
-      <trans-unit id="4994974472324643337" datatype="html">
-        <source>Updates the cover photo of all albums (both directories and saved searches) and and faces.</source>
+      <trans-unit id="1886565118515809311" datatype="html">
+        <source>Updates the cover photo of all albums (both directories and saved searches) and faces.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/model/backendtext.service.ts</context>
           <context context-type="linenumber">97</context>
         </context-group>
-        <target>Updates the cover photo of all albums (both directories and saved searches) and and faces.</target>
+        <target>Updates the cover photo of all albums (both directories and saved searches) and faces.</target>
       </trans-unit>
       <trans-unit id="4106034977348030939" datatype="html">
         <source>Deletes the cover photo of all albums and faces</source>
@@ -3074,13 +3074,13 @@
         </context-group>
         <target>Deletes all compressed GPX files</target>
       </trans-unit>
-      <trans-unit id="873062862463132485" datatype="html">
-        <source>Gets the top photos of the selected search queries and sends them over email. You need to set up the SMTP server connection send e-mails.</source>
+      <trans-unit id="4246926023108353911" datatype="html">
+        <source>Gets the top photos of the selected search queries and sends them over email. You need to set up the SMTP server connection to send e-mails.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/model/backendtext.service.ts</context>
           <context context-type="linenumber">105</context>
         </context-group>
-        <target>Gets the top photos of the selected search queries and sends them over email. You need to set up the SMTP server connection send e-mails.</target>
+        <target>Gets the top photos of the selected search queries and sends them over email. You need to set up the SMTP server connection to send e-mails.</target>
       </trans-unit>
       <trans-unit id="1677142486230902467" datatype="html">
         <source>Server error</source>
@@ -3862,13 +3862,13 @@
         </context-group>
         <target>key: c</target>
       </trans-unit>
-      <trans-unit id="8343007644183539573" datatype="html">
-        <source>Fix nabvar</source>
+      <trans-unit id="2897959497810772660" datatype="html">
+        <source>Fix navbar</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/frame/frame.component.html</context>
           <context context-type="linenumber">169</context>
         </context-group>
-        <target>Fix nabvar</target>
+        <target>Fix navbar</target>
       </trans-unit>
       <trans-unit id="4930506384627295710" datatype="html">
         <source>Settings</source>
@@ -4270,7 +4270,7 @@
         <source>Latitude</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/gallery/map/lightbox/lightbox.map.gallery.component.ts</context>
-          <context context-type="linenumber">669</context>
+          <context context-type="linenumber">675</context>
         </context-group>
         <target>Latitude</target>
       </trans-unit>
@@ -4278,7 +4278,7 @@
         <source>longitude</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/frontend/app/ui/gallery/map/lightbox/lightbox.map.gallery.component.ts</context>
-          <context context-type="linenumber">669</context>
+          <context context-type="linenumber">675</context>
         </context-group>
         <target>longitude</target>
       </trans-unit>
@@ -5590,20 +5590,6 @@
           <context context-type="linenumber">159,160</context>
         </context-group>
         <target>Tillåter jobbet att köra även om ett annat jobb redan körs.</target>
-      </trans-unit>
-      <trans-unit id="5858606241766874213" datatype="html">
-        <source>
-          Search Query - 
-          <x id="INTERPOLATION" equiv-text="{{(j + 1)}}"/>
-        </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/frontend/app/ui/settings/workflow/workflow.component.html</context>
-          <context context-type="linenumber">236,237</context>
-        </context-group>
-        <target>
-          Search Query - 
-          <x id="INTERPOLATION" equiv-text="{{(j + 1)}}"/>
-        </target>
       </trans-unit>
       <trans-unit id="3941409331265855477" datatype="html">
         <source> Search query to list photos and videos. </source>
