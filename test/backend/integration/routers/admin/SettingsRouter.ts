@@ -19,7 +19,6 @@ describe('SettingsRouter', () => {
   const tempDir = path.join(__dirname, '../../tmp');
   beforeEach(async () => {
     await fs.promises.rm(tempDir, {recursive: true, force: true});
-    Config.Server.Threading.enabled = false;
     Config.Database.type = DatabaseType.sqlite;
     Config.Database.dbFolder = tempDir;
     ProjectPath.reset();

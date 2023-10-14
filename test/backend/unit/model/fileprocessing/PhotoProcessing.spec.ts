@@ -2,7 +2,7 @@ import {expect} from 'chai';
 import {Config} from '../../../../../src/common/config/private/Config';
 import {ProjectPath} from '../../../../../src/backend/ProjectPath';
 import * as path from 'path';
-import {PhotoProcessing} from '../../../../../src/backend/model/fileprocessing/PhotoProcessing';
+import {PhotoProcessing} from '../../../../../src/backend/model/fileaccess/fileprocessing/PhotoProcessing';
 
 
 describe('PhotoProcessing', () => {

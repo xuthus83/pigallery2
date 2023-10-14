@@ -11,15 +11,14 @@ import {FileDTO} from '../../../../../src/common/entities/FileDTO';
 import {IndexingManager} from '../../../../../src/backend/model/database/IndexingManager';
 import {ObjectManagers} from '../../../../../src/backend/model/ObjectManagers';
 import {DBTestHelper} from '../../../DBTestHelper';
-import {DiskMangerWorker} from '../../../../../src/backend/model/threading/DiskMangerWorker';
 import {ReIndexingSensitivity} from '../../../../../src/common/config/private/PrivateConfig';
 import {SearchQueryTypes, TextSearch, TextSearchQueryMatchTypes} from '../../../../../src/common/entities/SearchQueryDTO';
 import {ProjectPath} from '../../../../../src/backend/ProjectPath';
 import * as path from 'path';
-import {DiskManager} from '../../../../../src/backend/model/DiskManger';
 import {AlbumManager} from '../../../../../src/backend/model/database/AlbumManager';
 import {SortByTypes} from '../../../../../src/common/entities/SortingMethods';
 import {ClientSortingConfig} from '../../../../../src/common/config/public/ClientConfig';
+import { DiskManager } from '../../../../../src/backend/model/fileaccess/DiskManager';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const deepEqualInAnyOrder = require('deep-equal-in-any-order');
@@ -162,7 +161,6 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
 
     ProjectPath.reset();
     ProjectPath.ImageFolder = path.join(__dirname, '/../../../assets');
-    Config.Server.Threading.enabled = false;
 
     await ObjectManagers.getInstance().IndexingManager.indexDirectory('.');
     if (ObjectManagers.getInstance().IndexingManager.IsSavingInProgress) {
@@ -353,7 +351,7 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
     const p1 = TestHelper.getRandomizedPhotoEntry(parent, 'Photo1');
 
     const subDir = TestHelper.getRandomizedDirectoryEntry(null, 'subDir');
-    subDir.path = DiskMangerWorker.pathFromParent(parent);
+    subDir.path = DiskManager.pathFromParent(parent);
     const sp1 = TestHelper.getRandomizedPhotoEntry(subDir, 'subPhoto1', 0);
     sp1.metadata.rating = 5;
     const sp2 = TestHelper.getRandomizedPhotoEntry(subDir, 'subPhoto2', 0);
@@ -391,7 +389,7 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
     const p1 = TestHelper.getRandomizedPhotoEntry(parent, 'Photo1');
 
     const subDir = TestHelper.getRandomizedDirectoryEntry(null, 'subDir');
-    subDir.path = DiskMangerWorker.pathFromParent(parent);
+    subDir.path = DiskManager.pathFromParent(parent);
     const sp1 = TestHelper.getRandomizedPhotoEntry(subDir, 'subPhoto1', 0);
     sp1.metadata.rating = 5;
     const sp2 = TestHelper.getRandomizedPhotoEntry(subDir, 'subPhoto2', 0);
@@ -636,7 +634,6 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
   }) as any).timeout(40000);
 
   it('should save .md with date', async () => {
-    Config.Server.Threading.enabled = false;
     Config.Album.enabled = true;
     Config.Faces.enabled = true;
 
@@ -721,7 +718,6 @@ describe('IndexingManager', (sqlHelper: DBTestHelper) => {
 
 
     it('.saved_searches.pg2conf', async () => {
-      Config.Server.Threading.enabled = false;
       Config.Album.enabled = true;
       Config.Faces.enabled = true;
 

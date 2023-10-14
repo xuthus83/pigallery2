@@ -4,12 +4,12 @@ import * as fs from 'fs';
 import {Job} from './Job';
 import {ConfigTemplateEntry, DefaultsJobs,} from '../../../../common/entities/job/JobDTO';
 import {JobProgressStates} from '../../../../common/entities/job/JobProgressDTO';
-import {DiskMangerWorker} from '../../threading/DiskMangerWorker';
 import {ProjectPath} from '../../../ProjectPath';
 import {backendTexts} from '../../../../common/BackendTexts';
 import {ParentDirectoryDTO} from '../../../../common/entities/DirectoryDTO';
 import {Logger} from '../../../Logger';
 import {FileDTO} from '../../../../common/entities/FileDTO';
+import {DiskManager} from '../../fileaccess/DiskManager';
 
 const LOG_TAG = '[IndexingJob]';
 
@@ -62,7 +62,7 @@ export class IndexingJob<
         if (this.config.indexChangesOnly) {
 
           const stat = fs.statSync(absDirPath);
-          const lastModified = DiskMangerWorker.calcLastModified(stat);
+          const lastModified = DiskManager.calcLastModified(stat);
           scanned = await ObjectManagers.getInstance().GalleryManager.selectDirStructure(directory);
           // If not modified and it was scanned before, dir is up-to-date
           if (

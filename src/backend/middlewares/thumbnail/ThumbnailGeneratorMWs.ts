@@ -6,9 +6,9 @@ import {ContentWrapper} from '../../../common/entities/ConentWrapper';
 import {DirectoryPathDTO, ParentDirectoryDTO, SubDirectoryDTO,} from '../../../common/entities/DirectoryDTO';
 import {ProjectPath} from '../../ProjectPath';
 import {Config} from '../../../common/config/private/Config';
-import {ThumbnailSourceType} from '../../model/threading/PhotoWorker';
+import {ThumbnailSourceType} from '../../model/fileaccess/PhotoWorker';
 import {MediaDTO} from '../../../common/entities/MediaDTO';
-import {PhotoProcessing} from '../../model/fileprocessing/PhotoProcessing';
+import {PhotoProcessing} from '../../model/fileaccess/fileprocessing/PhotoProcessing';
 import {ServerTime} from '../ServerTimingMWs';
 import {PersonEntry} from '../../model/database/enitites/PersonEntry';
 

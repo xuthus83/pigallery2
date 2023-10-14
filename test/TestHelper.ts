@@ -19,7 +19,7 @@ import {
 } from '../src/common/entities/PhotoDTO';
 import {DirectoryBaseDTO, DirectoryPathDTO} from '../src/common/entities/DirectoryDTO';
 import {FileDTO} from '../src/common/entities/FileDTO';
-import {DiskMangerWorker} from '../src/backend/model/threading/DiskMangerWorker';
+import {DiskManager} from '../src/backend/model/fileaccess/DiskManager';
 
 export class TestHelper {
 
@@ -29,7 +29,7 @@ export class TestHelper {
 
     const dir = new DirectoryEntity();
     dir.name = name;
-    dir.path = DiskMangerWorker.pathFromParent({path: '', name: '.'});
+    dir.path = DiskManager.pathFromParent({path: '', name: '.'});
     dir.mediaCount = 0;
     dir.youngestMedia = 10;
     dir.oldestMedia = 1000;
@@ -40,7 +40,7 @@ export class TestHelper {
     dir.lastScanned = 1656069687773;
     // dir.parent = null;
     if (parent !== null) {
-      dir.path = DiskMangerWorker.pathFromParent(parent);
+      dir.path = DiskManager.pathFromParent(parent);
       parent.directories.push(dir);
     }
     return dir;
@@ -299,8 +299,8 @@ export class TestHelper {
 
     const dir: DirectoryBaseDTO = {
       id: null,
-      name: DiskMangerWorker.dirName(forceStr || Math.random().toString(36).substring(7)),
-      path: DiskMangerWorker.pathFromParent({path: '', name: '.'}),
+      name: DiskManager.dirName(forceStr || Math.random().toString(36).substring(7)),
+      path: DiskManager.pathFromParent({path: '', name: '.'}),
       mediaCount: 0,
       youngestMedia: 10,
       oldestMedia: 1000,
@@ -314,7 +314,7 @@ export class TestHelper {
       parent
     };
     if (parent !== null) {
-      dir.path = DiskMangerWorker.pathFromParent(parent);
+      dir.path = DiskManager.pathFromParent(parent);
       parent.directories.push(dir);
     }
     return dir;

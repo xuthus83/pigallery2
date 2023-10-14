@@ -11,7 +11,7 @@ import {Config} from '../../common/config/private/Config';
 import {UserDTOUtils} from '../../common/entities/UserDTO';
 import {MediaDTO, MediaDTOUtils} from '../../common/entities/MediaDTO';
 import {QueryParams} from '../../common/QueryParams';
-import {VideoProcessing} from '../model/fileprocessing/VideoProcessing';
+import {VideoProcessing} from '../model/fileaccess/fileprocessing/VideoProcessing';
 import {SearchQueryDTO, SearchQueryTypes,} from '../../common/entities/SearchQueryDTO';
 import {LocationLookupException} from '../exceptions/LocationLookupException';
 import {SupportedFormats} from '../../common/SupportedFormats';

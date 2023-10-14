@@ -6,7 +6,7 @@ import {DatabaseType, LogLevel} from '../../src/common/config/private/PrivateCon
 import {ProjectPath} from '../../src/backend/ProjectPath';
 import {DirectoryBaseDTO, ParentDirectoryDTO, SubDirectoryDTO} from '../../src/common/entities/DirectoryDTO';
 import {ObjectManagers} from '../../src/backend/model/ObjectManagers';
-import {DiskMangerWorker} from '../../src/backend/model/threading/DiskMangerWorker';
+import {DiskManager} from '../../src/backend/model/fileaccess/DiskManager';
 import {IndexingManager} from '../../src/backend/model/database/IndexingManager';
 import {GalleryManager} from '../../src/backend/model/database/GalleryManager';
 import {Connection} from 'typeorm';
@@ -135,7 +135,7 @@ export class DBTestHelper {
       for (let i = 0; i < d.directories.length; i++) {
         d.directories[i] = await gm.getParentDirFromId(connection,
           (await gm.getDirIdAndTime(connection, d.directories[i].name,
-            path.join(DiskMangerWorker.pathFromParent(d), path.sep))).id);
+            path.join(DiskManager.pathFromParent(d), path.sep))).id);
         await populateDir(d.directories[i]);
       }
     };

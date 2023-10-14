@@ -11,7 +11,7 @@ import {UserDTO} from '../../common/entities/UserDTO';
 import {ServerTimeEntry} from '../middlewares/ServerTimingMWs';
 import {ClientConfig, TAGS} from '../../common/config/public/ClientConfig';
 import {QueryParams} from '../../common/QueryParams';
-import {PhotoProcessing} from '../model/fileprocessing/PhotoProcessing';
+import {PhotoProcessing} from '../model/fileaccess/fileprocessing/PhotoProcessing';
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace

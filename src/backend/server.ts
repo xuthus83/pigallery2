@@ -10,12 +10,11 @@ import * as locale from 'locale';
 import {ObjectManagers} from './model/ObjectManagers';
 import {Logger} from './Logger';
 import {LoggerRouter} from './routes/LoggerRouter';
-import {DiskManager} from './model/DiskManger';
 import {ConfigDiagnostics} from './model/diagnostics/ConfigDiagnostics';
 import {Localizations} from './model/Localizations';
 import {CookieNames} from '../common/CookieNames';
 import {Router} from './routes/Router';
-import {PhotoProcessing} from './model/fileprocessing/PhotoProcessing';
+import {PhotoProcessing} from './model/fileaccess/fileprocessing/PhotoProcessing';
 import * as _csrf from 'csurf';
 import {Event} from '../common/event/Event';
 import {QueryParams} from '../common/QueryParams';
@@ -39,8 +38,8 @@ export class Server {
   constructor() {
     if (!(process.env.NODE_ENV === 'production')) {
       Logger.info(
-          LOG_TAG,
-          'Running in DEBUG mode, set env variable NODE_ENV=production to disable '
+        LOG_TAG,
+        'Running in DEBUG mode, set env variable NODE_ENV=production to disable '
       );
     }
     this.init().catch(console.error);
@@ -54,13 +53,13 @@ export class Server {
     Logger.info(LOG_TAG, 'running diagnostics...');
     await ConfigDiagnostics.runDiagnostics();
     Logger.verbose(
-        LOG_TAG,
-        'using config from ' +
-        (
-            ConfigClassBuilder.attachPrivateInterface(Config)
-                .__options as ConfigClassOptions<ServerConfig>
-        ).configPath +
-        ':'
+      LOG_TAG,
+      'using config from ' +
+      (
+        ConfigClassBuilder.attachPrivateInterface(Config)
+          .__options as ConfigClassOptions<ServerConfig>
+      ).configPath +
+      ':'
     );
     Logger.verbose(LOG_TAG, JSON.stringify(Config.toJSON({attachDescription: false}), null, '\t'));
 
@@ -75,10 +74,10 @@ export class Server {
      */
 
     this.app.use(
-        session({
-          name: CookieNames.session,
-          keys: Config.Server.sessionSecret,
-        })
+      session({
+        name: CookieNames.session,
+        keys: Config.Server.sessionSecret,
+      })
     );
 
     /**
@@ -90,29 +89,28 @@ export class Server {
     const csuf: any = _csrf();
     csuf.unless = unless;
     this.app.use(
-        csuf.unless((req: Request) => {
-          return (
-              Config.Users.authenticationRequired === false ||
-              [Config.Server.apiPath + '/user/login', Config.Server.apiPath + '/user/logout', Config.Server.apiPath + '/share/login'].indexOf(
-                  req.originalUrl
-              ) !== -1 ||
-              (Config.Sharing.enabled === true &&
-                  !!req.query[QueryParams.gallery.sharingKey_query])
-          );
-        })
+      csuf.unless((req: Request) => {
+        return (
+          Config.Users.authenticationRequired === false ||
+          [Config.Server.apiPath + '/user/login', Config.Server.apiPath + '/user/logout', Config.Server.apiPath + '/share/login'].indexOf(
+            req.originalUrl
+          ) !== -1 ||
+          (Config.Sharing.enabled === true &&
+            !!req.query[QueryParams.gallery.sharingKey_query])
+        );
+      })
     );
 
     // enable token generation but do not check it
     this.app.post(
-        [Config.Server.apiPath + '/user/login', Config.Server.apiPath + '/share/login'],
-        _csrf({ignoreMethods: ['POST']})
+      [Config.Server.apiPath + '/user/login', Config.Server.apiPath + '/share/login'],
+      _csrf({ignoreMethods: ['POST']})
     );
     this.app.get(
-        [Config.Server.apiPath + '/user/me', Config.Server.apiPath + '/share/:' + QueryParams.gallery.sharingKey_params],
-        _csrf({ignoreMethods: ['GET']})
+      [Config.Server.apiPath + '/user/me', Config.Server.apiPath + '/share/:' + QueryParams.gallery.sharingKey_params],
+      _csrf({ignoreMethods: ['GET']})
     );
 
-    DiskManager.init();
     PhotoProcessing.init();
     Localizations.init();
 
@@ -176,7 +174,7 @@ export class Server {
   private onListening = () => {
     const addr = this.server.address();
     const bind =
-        typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
+      typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
     Logger.info(LOG_TAG, 'Listening on ' + bind);
   };
 

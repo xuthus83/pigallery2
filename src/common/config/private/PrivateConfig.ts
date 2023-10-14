@@ -478,30 +478,6 @@ export class ServerIndexingConfig {
 }
 
 @SubConfigClass({softReadonly: true})
-export class ServerThreadingConfig {
-  @ConfigProperty({
-    tags:
-        {
-          name: $localize`Threading`,
-          uiResetNeeded: {server: true},
-          priority: ConfigPriority.underTheHood,
-        } as TAGS,
-    description: $localize`[Deprecated, will be removed in the next release] Runs directory scanning and thumbnail generation in a different thread.`
-  })
-  enabled: boolean = false;
-  @ConfigProperty({
-    tags:
-        {
-          name: $localize`Thumbnail threads`,
-          uiResetNeeded: {server: true},
-          priority: ConfigPriority.underTheHood
-        },
-    description: $localize`Number of threads that are used to generate thumbnails. If 0, number of 'CPU cores -1' threads will be used.`,
-  })
-  thumbnailThreads: number = 0; // if zero-> CPU count -1
-}
-
-@SubConfigClass({softReadonly: true})
 export class ServerDuplicatesConfig {
   @ConfigProperty({
     type: 'unsignedInt',
@@ -1027,14 +1003,6 @@ export class ServerServiceConfig extends ClientServiceConfig {
     description: $localize`Server will accept connections from this IPv6 or IPv4 address.`,
   })
   host: string = '0.0.0.0';
-
-  @ConfigProperty({
-    tags: {
-      name: $localize`Threading`,
-      priority: ConfigPriority.underTheHood,
-    }
-  })
-  Threading: ServerThreadingConfig = new ServerThreadingConfig();
 
   @ConfigProperty({
     tags: {

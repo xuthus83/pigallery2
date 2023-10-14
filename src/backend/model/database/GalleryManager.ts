@@ -9,11 +9,11 @@ import {Config} from '../../../common/config/private/Config';
 import {Connection} from 'typeorm';
 import {MediaEntity} from './enitites/MediaEntity';
 import {VideoEntity} from './enitites/VideoEntity';
-import {DiskMangerWorker} from '../threading/DiskMangerWorker';
 import {Logger} from '../../Logger';
 import {ObjectManagers} from '../ObjectManagers';
 import {DuplicatesDTO} from '../../../common/entities/DuplicatesDTO';
 import {ReIndexingSensitivity} from '../../../common/config/private/PrivateConfig';
+import { DiskManager } from '../fileaccess/DiskManager';
 
 const LOG_TAG = '[GalleryManager]';
 
@@ -22,7 +22,7 @@ export class GalleryManager {
     name: string;
     parent: string;
   } {
-    relativeDirectoryName = DiskMangerWorker.normalizeDirPath(
+    relativeDirectoryName = DiskManager.normalizeDirPath(
         relativeDirectoryName
     );
     return {
@@ -57,7 +57,7 @@ export class GalleryManager {
       const stat = fs.statSync(
           path.join(ProjectPath.ImageFolder, relativeDirectoryName)
       );
-      const lastModified = DiskMangerWorker.calcLastModified(stat);
+      const lastModified = DiskManager.calcLastModified(stat);
 
       // If it seems that the content did not change, do not work on it
       if (

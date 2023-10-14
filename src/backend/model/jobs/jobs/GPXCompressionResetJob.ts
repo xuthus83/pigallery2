@@ -1,6 +1,6 @@
 import {DefaultsJobs} from '../../../../common/entities/job/JobDTO';
 import {TempFolderCleaningJob} from './TempFolderCleaningJob';
-import {GPXProcessing} from '../../fileprocessing/GPXProcessing';
+import {GPXProcessing} from '../../fileaccess/fileprocessing/GPXProcessing';
 
 /**
  * Deletes all gpx file from the tmp folder

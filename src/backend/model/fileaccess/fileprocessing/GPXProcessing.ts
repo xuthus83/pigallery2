@@ -1,9 +1,9 @@
 import * as path from 'path';
 import {constants as fsConstants, promises as fsp} from 'fs';
 import * as xml2js from 'xml2js';
-import {ProjectPath} from '../../ProjectPath';
-import {Config} from '../../../common/config/private/Config';
-import {SupportedFormats} from '../../../common/SupportedFormats';
+import {ProjectPath} from '../../../ProjectPath';
+import {Config} from '../../../../common/config/private/Config';
+import {SupportedFormats} from '../../../../common/SupportedFormats';
 
 type gpxEntry = { '$': { lat: string, lon: string }, ele?: string[], time?: string[], extensions?: unknown };
 

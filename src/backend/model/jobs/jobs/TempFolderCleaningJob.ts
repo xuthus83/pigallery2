@@ -3,9 +3,9 @@ import * as path from 'path';
 import * as fs from 'fs';
 import {Job} from './Job';
 import {ProjectPath} from '../../../ProjectPath';
-import {PhotoProcessing} from '../../fileprocessing/PhotoProcessing';
-import {VideoProcessing} from '../../fileprocessing/VideoProcessing';
-import {GPXProcessing} from '../../fileprocessing/GPXProcessing';
+import {GPXProcessing} from '../../fileaccess/fileprocessing/GPXProcessing';
+import {PhotoProcessing} from '../../fileaccess/fileprocessing/PhotoProcessing';
+import {VideoProcessing} from '../../fileaccess/fileprocessing/VideoProcessing';
 
 export class TempFolderCleaningJob extends Job {
   public readonly Name = DefaultsJobs[DefaultsJobs['Temp Folder Cleaning']];
@@ -38,8 +38,8 @@ export class TempFolderCleaningJob extends Job {
 
   protected async isValidDirectory(filePath: string): Promise<boolean> {
     const originalPath = path.join(
-        ProjectPath.ImageFolder,
-        path.relative(ProjectPath.TranscodedFolder, filePath)
+      ProjectPath.ImageFolder,
+      path.relative(ProjectPath.TranscodedFolder, filePath)
     );
     try {
       await fs.promises.access(originalPath);
@@ -52,7 +52,7 @@ export class TempFolderCleaningJob extends Job {
 
   protected async readDir(dirPath: string): Promise<string[]> {
     return (await fs.promises.readdir(dirPath)).map((f) =>
-        path.normalize(path.join(dirPath, f))
+      path.normalize(path.join(dirPath, f))
     );
   }
 
@@ -91,7 +91,7 @@ export class TempFolderCleaningJob extends Job {
         this.Progress.log('skipping: ' + filePath);
         this.Progress.Skipped++;
         this.directoryQueue = this.directoryQueue.concat(
-            await this.readDir(filePath)
+          await this.readDir(filePath)
         );
       }
     } else {

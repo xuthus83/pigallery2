@@ -1,6 +1,6 @@
 import {NextFunction, Request, Response} from 'express';
 import * as fs from 'fs';
-import {PhotoProcessing} from '../../model/fileprocessing/PhotoProcessing';
+import {PhotoProcessing} from '../../model/fileaccess/fileprocessing/PhotoProcessing';
 import {Config} from '../../../common/config/private/Config';
 import {ErrorCodes, ErrorDTO} from '../../../common/entities/Error';
 

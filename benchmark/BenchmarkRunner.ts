@@ -1,6 +1,6 @@
 import {Config} from '../src/common/config/private/Config';
 import {ObjectManagers} from '../src/backend/model/ObjectManagers';
-import {DiskMangerWorker} from '../src/backend/model/threading/DiskMangerWorker';
+import {DiskManager} from '../src/backend/model/fileaccess/DiskManager';
 import {IndexingManager} from '../src/backend/model/database/IndexingManager';
 import * as path from 'path';
 import * as fs from 'fs';
@@ -84,7 +84,7 @@ export class BenchmarkRunner {
   }
 
   async bmSaveDirectory(): Promise<BenchmarkResult[]> {
-    const dir = await DiskMangerWorker.scanDirectory(this.biggestDirPath);
+    const dir = await DiskManager.scanDirectory(this.biggestDirPath);
     const bm = new Benchmark('Saving directory to DB', null,
       (): Promise<void> => this.resetDB(), null,
       async (): Promise<void> => {
@@ -110,7 +110,7 @@ export class BenchmarkRunner {
       });
     bm.addAStep({
       name: 'Scanning directory',
-      fn: async (): Promise<ContentWrapper> => new ContentWrapper(await DiskMangerWorker.scanDirectory(this.biggestDirPath))
+      fn: async (): Promise<ContentWrapper> => new ContentWrapper(await DiskManager.scanDirectory(this.biggestDirPath))
     });
     return await bm.run(this.RUNS);
   }
@@ -285,7 +285,6 @@ export class BenchmarkRunner {
 
 
   private resetDB = async (): Promise<void> => {
-    Config.Server.Threading.enabled = false;
     await ObjectManagers.reset();
     await fs.promises.rm(ProjectPath.DBFolder, {recursive: true, force: true});
     Config.Database.type = DatabaseType.sqlite;
@@ -294,7 +293,6 @@ export class BenchmarkRunner {
   };
 
   private async setupDB(): Promise<void> {
-    Config.Server.Threading.enabled = false;
     await this.resetDB();
     await new Promise<void>((resolve, reject): void => {
       try {

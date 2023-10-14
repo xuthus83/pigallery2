@@ -1,7 +1,6 @@
 import {DirectoryBaseDTO, DirectoryDTOUtils, DirectoryPathDTO, ParentDirectoryDTO} from '../../../common/entities/DirectoryDTO';
 import {DirectoryEntity} from './enitites/DirectoryEntity';
 import {SQLConnection} from './SQLConnection';
-import {DiskManager} from '../DiskManger';
 import {PhotoEntity, PhotoMetadataEntity} from './enitites/PhotoEntity';
 import {Utils} from '../../../common/Utils';
 import {PhotoMetadata,} from '../../../common/entities/PhotoDTO';
@@ -13,7 +12,6 @@ import {FileEntity} from './enitites/FileEntity';
 import {FileDTO} from '../../../common/entities/FileDTO';
 import {NotificationManager} from '../NotifocationManager';
 import {ObjectManagers} from '../ObjectManagers';
-import {DiskMangerWorker} from '../threading/DiskMangerWorker';
 import {Logger} from '../../Logger';
 import {ServerPG2ConfMap, ServerSidePG2ConfAction,} from '../../../common/PG2ConfMap';
 import {ProjectPath} from '../../ProjectPath';
@@ -24,6 +22,7 @@ import {PersonEntry} from './enitites/PersonEntry';
 import {PersonJunctionTable} from './enitites/PersonJunctionTable';
 import {MDFileEntity} from './enitites/MDFileEntity';
 import {MDFileDTO} from '../../../common/entities/MDFileDTO';
+import {DiskManager} from '../fileaccess/DiskManager';
 
 const LOG_TAG = '[IndexingManager]';
 
@@ -242,9 +241,9 @@ export class IndexingManager {
       .update(DirectoryEntity)
       .set({parent: currentDirId as unknown})
       .where('path = :path', {
-        path: DiskMangerWorker.pathFromParent(scannedDirectory),
+        path: DiskManager.pathFromParent(scannedDirectory),
       })
-      .andWhere('name NOT LIKE :root', {root: DiskMangerWorker.dirName('.')})
+      .andWhere('name NOT LIKE :root', {root: DiskManager.dirName('.')})
       .andWhere('parent IS NULL')
       .execute();
 

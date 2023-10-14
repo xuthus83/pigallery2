@@ -2,14 +2,14 @@ import * as path from 'path';
 import {constants as fsConstants, promises as fsp} from 'fs';
 import * as os from 'os';
 import * as crypto from 'crypto';
-import {ProjectPath} from '../../ProjectPath';
-import {Config} from '../../../common/config/private/Config';
-import {MediaRendererInput, PhotoWorker, SvgRendererInput, ThumbnailSourceType,} from '../threading/PhotoWorker';
-import {ITaskExecuter, TaskExecuter} from '../threading/TaskExecuter';
-import {FaceRegion, PhotoDTO} from '../../../common/entities/PhotoDTO';
-import {SupportedFormats} from '../../../common/SupportedFormats';
-import {PersonEntry} from '../database/enitites/PersonEntry';
-import {SVGIconConfig} from '../../../common/config/public/ClientConfig';
+import {ProjectPath} from '../../../ProjectPath';
+import {Config} from '../../../../common/config/private/Config';
+import {MediaRendererInput, PhotoWorker, SvgRendererInput, ThumbnailSourceType,} from '../PhotoWorker';
+import {ITaskExecuter, TaskExecuter} from '../TaskExecuter';
+import {FaceRegion, PhotoDTO} from '../../../../common/entities/PhotoDTO';
+import {SupportedFormats} from '../../../../common/SupportedFormats';
+import {PersonEntry} from '../../database/enitites/PersonEntry';
+import {SVGIconConfig} from '../../../../common/config/public/ClientConfig';
 
 export class PhotoProcessing {
   private static initDone = false;
@@ -21,19 +21,10 @@ export class PhotoProcessing {
       return;
     }
 
-    if (Config.Server.Threading.enabled === true) {
-      if (Config.Server.Threading.thumbnailThreads > 0) {
-        Config.Media.Thumbnail.concurrentThumbnailGenerations =
-          Config.Server.Threading.thumbnailThreads;
-      } else {
-        Config.Media.Thumbnail.concurrentThumbnailGenerations = Math.max(
-          1,
-          os.cpus().length - 1
-        );
-      }
-    } else {
-      Config.Media.Thumbnail.concurrentThumbnailGenerations = 1;
-    }
+    Config.Media.Thumbnail.concurrentThumbnailGenerations = Math.max(
+      1,
+      os.cpus().length - 1
+    );
 
     this.taskQue = new TaskExecuter(
       Config.Media.Thumbnail.concurrentThumbnailGenerations,

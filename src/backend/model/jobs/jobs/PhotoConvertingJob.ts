@@ -1,7 +1,7 @@
 import {Config} from '../../../../common/config/private/Config';
 import {DefaultsJobs} from '../../../../common/entities/job/JobDTO';
 import {FileJob} from './FileJob';
-import {PhotoProcessing} from '../../fileprocessing/PhotoProcessing';
+import {PhotoProcessing} from '../../fileaccess/fileprocessing/PhotoProcessing';
 
 export class PhotoConvertingJob extends FileJob {
   public readonly Name = DefaultsJobs[DefaultsJobs['Photo Converting']];
@@ -16,8 +16,8 @@ export class PhotoConvertingJob extends FileJob {
 
   protected async shouldProcess(mPath: string): Promise<boolean> {
     return !(await PhotoProcessing.convertedPhotoExist(
-        mPath,
-        Config.Media.Photo.Converting.resolution
+      mPath,
+      Config.Media.Photo.Converting.resolution
     ));
   }
 

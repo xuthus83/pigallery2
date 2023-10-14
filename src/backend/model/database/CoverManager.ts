@@ -1,7 +1,7 @@
 import {Config} from '../../../common/config/private/Config';
 import {Brackets, SelectQueryBuilder, WhereExpression} from 'typeorm';
 import {MediaEntity} from './enitites/MediaEntity';
-import {DiskMangerWorker} from '../threading/DiskMangerWorker';
+import {DiskManager} from '../fileaccess/DiskManager';
 import {ObjectManagers} from '../ObjectManagers';
 import {DatabaseType} from '../../../common/config/private/PrivateConfig';
 import {SQLConnection} from './SQLConnection';
@@ -37,7 +37,7 @@ export class CoverManager implements IObjectManager {
 
   public async onNewDataVersion(changedDir: ParentDirectoryDTO): Promise<void> {
     // Invalidating Album cover
-    let fullPath = DiskMangerWorker.normalizeDirPath(
+    let fullPath = DiskManager.normalizeDirPath(
         path.join(changedDir.path, changedDir.name)
     );
     const query = (await SQLConnection.getConnection())
@@ -46,10 +46,10 @@ export class CoverManager implements IObjectManager {
         .set({validCover: false});
 
     let i = 0;
-    const root = DiskMangerWorker.pathFromRelativeDirName('.');
+    const root = DiskManager.pathFromRelativeDirName('.');
     while (fullPath !== root) {
-      const name = DiskMangerWorker.dirName(fullPath);
-      const parentPath = DiskMangerWorker.pathFromRelativeDirName(fullPath);
+      const name = DiskManager.dirName(fullPath);
+      const parentPath = DiskManager.pathFromRelativeDirName(fullPath);
       fullPath = parentPath;
       ++i;
       query.orWhere(
@@ -67,8 +67,8 @@ export class CoverManager implements IObjectManager {
     query.orWhere(
         new Brackets((q: WhereExpression) => {
           const param: { [key: string]: string } = {};
-          param['name' + i] = DiskMangerWorker.dirName('.');
-          param['path' + i] = DiskMangerWorker.pathFromRelativeDirName('.');
+          param['name' + i] = DiskManager.dirName('.');
+          param['path' + i] = DiskManager.pathFromRelativeDirName('.');
           q.where(`path = :path${i}`, param);
           q.andWhere(`name = :name${i}`, param);
         })
@@ -157,11 +157,11 @@ export class CoverManager implements IObjectManager {
                 });
                 if (Config.Database.type === DatabaseType.mysql) {
                   q.orWhere('directory.path like :path || \'%\'', {
-                    path: DiskMangerWorker.pathFromParent(dir),
+                    path: DiskManager.pathFromParent(dir),
                   });
                 } else {
                   q.orWhere('directory.path GLOB :path', {
-                    path: DiskMangerWorker.pathFromParent(dir)
+                    path: DiskManager.pathFromParent(dir)
                         // glob escaping. see https://github.com/bpatrik/pigallery2/issues/621
                         .replaceAll('[', '[[]') + '*',
                   });
