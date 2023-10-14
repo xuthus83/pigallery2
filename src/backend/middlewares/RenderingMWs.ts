@@ -14,9 +14,9 @@ const forcedDebug = process.env['NODE_ENV'] === 'debug';
 
 export class RenderingMWs {
   public static renderResult(
-      req: Request,
-      res: Response,
-      next: NextFunction
+    req: Request,
+    res: Response,
+    next: NextFunction
   ): void {
     if (typeof req.resultPipe === 'undefined') {
       return next();
@@ -26,9 +26,9 @@ export class RenderingMWs {
   }
 
   public static renderSessionUser(
-      req: Request,
-      res: Response,
-      next: NextFunction
+    req: Request,
+    res: Response,
+    next: NextFunction
   ): void {
     if (!req.session['user']) {
       return next(new ErrorDTO(ErrorCodes.GENERAL_ERROR, 'User not exists'));
@@ -51,9 +51,9 @@ export class RenderingMWs {
   }
 
   public static renderSharing(
-      req: Request,
-      res: Response,
-      next: NextFunction
+    req: Request,
+    res: Response,
+    next: NextFunction
   ): void {
     if (!req.resultPipe) {
       return next();
@@ -65,9 +65,9 @@ export class RenderingMWs {
   }
 
   public static renderSharingList(
-      req: Request,
-      res: Response,
-      next: NextFunction
+    req: Request,
+    res: Response,
+    next: NextFunction
   ): void {
     if (!req.resultPipe) {
       return next();
@@ -82,9 +82,9 @@ export class RenderingMWs {
   }
 
   public static renderFile(
-      req: Request,
-      res: Response,
-      next: NextFunction
+    req: Request,
+    res: Response,
+    next: NextFunction
   ): void {
     if (!req.resultPipe) {
       return next();
@@ -96,52 +96,63 @@ export class RenderingMWs {
   }
 
   public static renderOK(
-      req: Request,
-      res: Response
+    req: Request,
+    res: Response
   ): void {
     const message = new Message<string>(null, 'ok');
     res.json(message);
   }
 
   public static async renderConfig(
-      req: Request,
-      res: Response
+    req: Request,
+    res: Response
   ): Promise<void> {
     const originalConf = await Config.original();
     // These are sensitive information, do not send to the client side
     originalConf.Server.sessionSecret = null;
     const message = new Message<PrivateConfigClass>(
-        null,
-        originalConf.toJSON({
-          attachState: true,
-          attachVolatile: true,
-          skipTags: {secret: true} as TAGS
-        }) as PrivateConfigClass
+      null,
+      originalConf.toJSON({
+        attachState: true,
+        attachVolatile: true,
+        skipTags: {secret: true} as TAGS
+      }) as PrivateConfigClass
     );
     res.json(message);
   }
 
   public static renderError(
-      err: Error,
-      req: Request,
-      res: Response,
-      next: NextFunction
+    err: Error,
+    req: Request,
+    res: Response,
+    next: NextFunction
   ): void {
     if (err instanceof ErrorDTO) {
       if (err.details) {
         Logger.warn('Handled error:');
         LoggerRouter.log(Logger.warn, req, res);
+        // use separate rendering for detailsStr
+        const d = err.detailsStr;
+        delete err.detailsStr;
         console.log(err);
+        if (err.detailsStr) {
+          try {
+            console.log('details:', JSON.stringify(err.detailsStr));
+          } catch (_) {
+            console.log(err.detailsStr);
+          }
+        }
+        err.detailsStr = d;
         delete err.details; // do not send back error object to the client side
 
         // hide error details for non developers
         if (
-            !(
-                forcedDebug ||
-                (req.session &&
-                    req.session['user'] &&
-                    req.session['user'].role >= UserRoles.Developer)
-            )
+          !(
+            forcedDebug ||
+            (req.session &&
+              req.session['user'] &&
+              req.session['user'].role >= UserRoles.Developer)
+          )
         ) {
           delete err.detailsStr;
         }

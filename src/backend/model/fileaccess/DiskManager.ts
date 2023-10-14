@@ -13,6 +13,7 @@ import {Utils} from '../../../common/Utils';
 import {GPXProcessing} from './fileprocessing/GPXProcessing';
 import {MDFileDTO} from '../../../common/entities/MDFileDTO';
 import {MetadataLoader} from './MetadataLoader';
+import {NotificationManager} from '../NotifocationManager';
 
 
 const LOG_TAG = '[DiskManager]';
@@ -148,66 +149,83 @@ export class DiskManager {
         path.join(absoluteDirectoryName, file)
       );
       if ((await fsp.stat(fullFilePath)).isDirectory()) {
-        if (
-          settings.noDirectory === true ||
-          settings.coverOnly === true ||
-          (await DiskManager.excludeDir(
-            file,
-            relativeDirectoryName,
-            absoluteDirectoryName
-          ))
-        ) {
-          continue;
-        }
-
-        // create cover directory
-        const d = (await DiskManager.scanDirectory(
-          path.join(relativeDirectoryName, file),
-          {
-            coverOnly: true,
+        try {
+          if (
+            settings.noDirectory === true ||
+            settings.coverOnly === true ||
+            (await DiskManager.excludeDir(
+              file,
+              relativeDirectoryName,
+              absoluteDirectoryName
+            ))
+          ) {
+            continue;
           }
-        )) as SubDirectoryDTO;
 
-        directory.directories.push(d);
+          // create cover directory
+          const d = (await DiskManager.scanDirectory(
+            path.join(relativeDirectoryName, file),
+            {
+              coverOnly: true,
+            }
+          )) as SubDirectoryDTO;
+
+          directory.directories.push(d);
+        } catch (err) {
+          NotificationManager.warning(
+            'Unknown directory reading error, skipping: ' + path.join(relativeDirectoryName, file),
+            err.toString()
+          );
+          console.error(err);
+        }
       } else if (PhotoProcessing.isPhoto(fullFilePath)) {
-        if (settings.noPhoto === true) {
-          continue;
-        }
+        try {
+          if (settings.noPhoto === true) {
+            continue;
+          }
 
-        const photo = {
-          name: file,
-          directory: null,
-          metadata:
-            settings.noMetadata === true
-              ? null
-              : await MetadataLoader.loadPhotoMetadata(fullFilePath),
-        } as PhotoDTO;
+          const photo = {
+            name: file,
+            directory: null,
+            metadata:
+              settings.noMetadata === true
+                ? null
+                : await MetadataLoader.loadPhotoMetadata(fullFilePath),
+          } as PhotoDTO;
 
-        if (!directory.cover) {
-          directory.cover = Utils.clone(photo);
+          if (!directory.cover) {
+            directory.cover = Utils.clone(photo);
 
-          directory.cover.directory = {
-            path: directory.path,
-            name: directory.name,
-          };
-        }
-        // add the cover photo to the list of media, so it will be saved to the DB
-        // and can be queried to populate covers,
-        // otherwise we do not return media list that is only partial
-        directory.media.push(photo);
+            directory.cover.directory = {
+              path: directory.path,
+              name: directory.name,
+            };
+          }
+          // add the cover photo to the list of media, so it will be saved to the DB
+          // and can be queried to populate covers,
+          // otherwise we do not return media list that is only partial
+          directory.media.push(photo);
 
-        if (settings.coverOnly === true) {
-          break;
+          if (settings.coverOnly === true) {
+            break;
+          }
+        } catch (err) {
+          NotificationManager.warning('Media loading error, skipping: ' +
+            fullFilePath +
+            ', reason: ' +
+            err.toString()
+          );
+          console.error(err);
         }
       } else if (VideoProcessing.isVideo(fullFilePath)) {
-        if (
-          Config.Media.Video.enabled === false ||
-          settings.noVideo === true ||
-          settings.coverOnly === true
-        ) {
-          continue;
-        }
         try {
+          if (
+            Config.Media.Video.enabled === false ||
+            settings.noVideo === true ||
+            settings.coverOnly === true
+          ) {
+            continue;
+          }
           directory.media.push({
             name: file,
             directory: null,
@@ -219,24 +237,34 @@ export class DiskManager {
         } catch (e) {
           Logger.warn(
             'Media loading error, skipping: ' +
-            file +
+            fullFilePath +
             ', reason: ' +
             e.toString()
           );
         }
       } else if (GPXProcessing.isMetaFile(fullFilePath)) {
-        if (
-          !DiskManager.isEnabledMetaFile(fullFilePath) ||
-          settings.noMetaFile === true ||
-          settings.coverOnly === true
-        ) {
-          continue;
-        }
 
-        directory.metaFile.push({
-          name: file,
-          directory: null,
-        } as FileDTO);
+        try {
+          if (
+            !DiskManager.isEnabledMetaFile(fullFilePath) ||
+            settings.noMetaFile === true ||
+            settings.coverOnly === true
+          ) {
+            continue;
+          }
+
+          directory.metaFile.push({
+            name: file,
+            directory: null,
+          } as FileDTO);
+        } catch (e) {
+          Logger.warn(
+            'Metafile loading error, skipping: ' +
+            fullFilePath +
+            ', reason: ' +
+            e.toString()
+          );
+        }
       }
     }
 
