@@ -10,14 +10,15 @@ import {JobProgress} from './jobs/JobProgress';
 import {JobProgressManager} from './JobProgressManager';
 import {JobDTOUtils} from '../../../common/entities/job/JobDTO';
 import {Utils} from '../../../common/Utils';
+import {IObjectManager} from '../database/IObjectManager';
 
 const LOG_TAG = '[JobManager]';
 
-export class JobManager implements IJobListener {
+export class JobManager implements IJobListener, IObjectManager {
   protected timers: { schedule: JobScheduleDTO; timer: NodeJS.Timeout }[] = [];
   protected progressManager: JobProgressManager = null;
 
-  constructor() {
+  async init(){
     this.progressManager = new JobProgressManager();
     this.runSchedules();
   }
@@ -124,7 +125,12 @@ export class JobManager implements IJobListener {
     return JobRepository.Instance.getAvailableJobs();
   }
 
+  public async cleanUp() {
+    this.stopSchedules();
+  }
+
   public stopSchedules(): void {
+    Logger.silly(LOG_TAG, 'Stopping all schedules');
     this.timers.forEach((t): void => clearTimeout(t.timer));
     this.timers = [];
   }

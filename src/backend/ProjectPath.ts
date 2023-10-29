@@ -2,13 +2,14 @@ import * as path from 'path';
 import * as fs from 'fs';
 import {Config} from '../common/config/private/Config';
 
-class ProjectPathClass {
+export class ProjectPathClass {
   public Root: string;
   public ImageFolder: string;
   public TempFolder: string;
   public TranscodedFolder: string;
   public FacesFolder: string;
   public FrontendFolder: string;
+  public ExtensionFolder: string;
   public DBFolder: string;
 
   constructor() {
@@ -35,6 +36,7 @@ class ProjectPathClass {
     this.TranscodedFolder = path.join(this.TempFolder, 'tc');
     this.FacesFolder = path.join(this.TempFolder, 'f');
     this.DBFolder = this.getAbsolutePath(Config.Database.dbFolder);
+    this.ExtensionFolder = path.join(this.Root, 'extension');
 
     // create thumbnail folder if not exist
     if (!fs.existsSync(this.TempFolder)) {

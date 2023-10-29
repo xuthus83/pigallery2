@@ -41,7 +41,7 @@ describe('PublicRouter', () => {
     server = new Server();
     await server.onStarted.wait();
 
-    await ObjectManagers.InitSQLManagers();
+    await ObjectManagers.InitManagers();
     await ObjectManagers.getInstance().UserManager.createUser(Utils.clone(testUser));
     await SQLConnection.close();
   };

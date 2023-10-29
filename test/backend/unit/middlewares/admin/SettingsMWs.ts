@@ -21,7 +21,7 @@ describe('Settings middleware', () => {
   beforeEach(async () => {
     await ObjectManagers.reset();
     await fs.promises.rm(tempDir, {recursive: true, force: true});
-    await ObjectManagers.InitSQLManagers();
+    await ObjectManagers.InitManagers();
   });
 
   it('should save empty enforced users settings', (done: (err?: any) => void) => {

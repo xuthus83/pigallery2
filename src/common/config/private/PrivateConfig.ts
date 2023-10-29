@@ -1013,6 +1013,14 @@ export class ServerServiceConfig extends ClientServiceConfig {
   Log: ServerLogConfig = new ServerLogConfig();
 }
 
+
+
+@SubConfigClass<TAGS>({softReadonly: true})
+export class ServerExtensionsConfig {
+  @ConfigProperty({volatile: true})
+  list: string[] = [];
+}
+
 @SubConfigClass({softReadonly: true})
 export class ServerEnvironmentConfig {
   @ConfigProperty({volatile: true})
@@ -1132,6 +1140,15 @@ export class ServerConfig extends ClientConfig {
     description: $localize`The App can send messages (like photos on the same day a year ago. aka: "Top Pick"). Here you can configure the delivery method.`
   })
   Messaging: MessagingConfig = new MessagingConfig();
+
+
+  @ConfigProperty({
+    tags: {
+      name: $localize`Extensions`,
+      uiIcon: 'ionCloudOutline'
+    } as TAGS,
+  })
+  Extensions: ServerExtensionsConfig = new ServerExtensionsConfig();
 
   @ConfigProperty({
     tags: {

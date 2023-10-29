@@ -32,8 +32,17 @@ const LOG_TAG = '[server]';
 
 export class Server {
   public onStarted = new Event<void>();
-  private app: express.Express;
+  public app: express.Express;
   private server: HttpServer;
+
+  static instance: Server;
+
+  public static getInstance(): Server {
+    if (this.instance === null) {
+      this.instance = new Server();
+    }
+    return this.instance;
+  }
 
   constructor() {
     if (!(process.env.NODE_ENV === 'production')) {
@@ -115,7 +124,7 @@ export class Server {
     Localizations.init();
 
     this.app.use(locale(Config.Server.languages, 'en'));
-    await ObjectManagers.InitSQLManagers();
+    await ObjectManagers.InitManagers();
 
     Router.route(this.app);
 

@@ -111,7 +111,7 @@ export class DBTestHelper {
   }
 
   public static async persistTestDir(directory: DirectoryBaseDTO): Promise<ParentDirectoryDTO> {
-    await ObjectManagers.InitSQLManagers();
+    await ObjectManagers.InitManagers();
     const connection = await SQLConnection.getConnection();
     ObjectManagers.getInstance().IndexingManager.indexDirectory = () => Promise.resolve(null);
 
@@ -197,7 +197,7 @@ export class DBTestHelper {
     const conn = await SQLConnection.getConnection();
     await conn.query('CREATE DATABASE IF NOT EXISTS ' + conn.options.database);
     await SQLConnection.close();
-    await ObjectManagers.InitSQLManagers();
+    await ObjectManagers.InitManagers();
   }
 
   private async clearUpMysql(): Promise<void> {
@@ -218,7 +218,7 @@ export class DBTestHelper {
   private async resetSQLite(): Promise<void> {
     Logger.debug(LOG_TAG, 'resetting sqlite');
     await this.clearUpSQLite();
-    await ObjectManagers.InitSQLManagers();
+    await ObjectManagers.InitManagers();
   }
 
   private async clearUpSQLite(): Promise<void> {

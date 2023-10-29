@@ -14,6 +14,7 @@ import {AlbumManager} from './database/AlbumManager';
 import {PersonManager} from './database/PersonManager';
 import {SharingManager} from './database/SharingManager';
 import {IObjectManager} from './database/IObjectManager';
+import {ExtensionManager} from './extension/ExtensionManager';
 
 const LOG_TAG = '[ObjectManagers]';
 
@@ -32,6 +33,7 @@ export class ObjectManagers {
   private jobManager: JobManager;
   private locationManager: LocationManager;
   private albumManager: AlbumManager;
+  private extensionManager: ExtensionManager;
 
   constructor() {
     this.managers = [];
@@ -169,6 +171,18 @@ export class ObjectManagers {
     this.managers.push(this.jobManager as IObjectManager);
   }
 
+  get ExtensionManager(): ExtensionManager {
+    return this.extensionManager;
+  }
+
+  set ExtensionManager(value: ExtensionManager) {
+    if (this.extensionManager) {
+      this.managers.splice(this.managers.indexOf(this.extensionManager as IObjectManager), 1);
+    }
+    this.extensionManager = value;
+    this.managers.push(this.extensionManager as IObjectManager);
+  }
+
   public static getInstance(): ObjectManagers {
     if (this.instance === null) {
       this.instance = new ObjectManagers();
@@ -179,27 +193,33 @@ export class ObjectManagers {
   public static async reset(): Promise<void> {
     Logger.silly(LOG_TAG, 'Object manager reset begin');
     if (
-        ObjectManagers.getInstance().IndexingManager &&
-        ObjectManagers.getInstance().IndexingManager.IsSavingInProgress
+      ObjectManagers.getInstance().IndexingManager &&
+      ObjectManagers.getInstance().IndexingManager.IsSavingInProgress
     ) {
       await ObjectManagers.getInstance().IndexingManager.SavingReady;
     }
-    if (ObjectManagers.getInstance().JobManager) {
-      ObjectManagers.getInstance().JobManager.stopSchedules();
+    for (const manager of ObjectManagers.getInstance().managers) {
+      if (manager === ObjectManagers.getInstance().versionManager) {
+        continue;
+      }
+      if (manager.cleanUp) {
+        await manager.cleanUp();
+      }
     }
+
     await SQLConnection.close();
     this.instance = null;
-    Logger.debug(LOG_TAG, 'Object manager reset');
+    Logger.debug(LOG_TAG, 'Object manager reset done');
   }
 
-  public static async InitSQLManagers(): Promise<void> {
+  public static async InitManagers(): Promise<void> {
     await ObjectManagers.reset();
     await SQLConnection.init();
-    this.initManagers();
+    await this.initManagers();
     Logger.debug(LOG_TAG, 'SQL DB inited');
   }
 
-  private static initManagers(): void {
+  private static async initManagers(): Promise<void> {
     ObjectManagers.getInstance().AlbumManager = new AlbumManager();
     ObjectManagers.getInstance().GalleryManager = new GalleryManager();
     ObjectManagers.getInstance().IndexingManager = new IndexingManager();
@@ -211,10 +231,20 @@ export class ObjectManagers {
     ObjectManagers.getInstance().VersionManager = new VersionManager();
     ObjectManagers.getInstance().JobManager = new JobManager();
     ObjectManagers.getInstance().LocationManager = new LocationManager();
+    ObjectManagers.getInstance().ExtensionManager = new ExtensionManager();
+
+    for (const manager of ObjectManagers.getInstance().managers) {
+      if (manager === ObjectManagers.getInstance().versionManager) {
+        continue;
+      }
+      if (manager.init) {
+        await manager.init();
+      }
+    }
   }
 
   public async onDataChange(
-      changedDir: ParentDirectoryDTO = null
+    changedDir: ParentDirectoryDTO = null
   ): Promise<void> {
     await this.VersionManager.onNewDataVersion();
 

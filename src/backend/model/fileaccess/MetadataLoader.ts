@@ -12,6 +12,7 @@ import {IptcParser} from 'ts-node-iptc';
 import {FFmpegFactory} from '../FFmpegFactory';
 import {FfprobeData} from 'fluent-ffmpeg';
 import {Utils} from '../../../common/Utils';
+import { ExtensionDecorator } from '../extension/ExtensionDecorator';
 
 const LOG_TAG = '[MetadataLoader]';
 const ffmpeg = FFmpegFactory.get();
@@ -128,6 +129,7 @@ export class MetadataLoader {
     fileSize: 0,
   };
 
+  @ExtensionDecorator(e=>e.gallery.MetadataLoader.loadPhotoMetadata)
   public static loadPhotoMetadata(fullPath: string): Promise<PhotoMetadata> {
     return new Promise<PhotoMetadata>((resolve, reject) => {
       try {

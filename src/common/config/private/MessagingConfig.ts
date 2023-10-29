@@ -96,7 +96,6 @@ export class EmailMessagingConfig {
   smtp?: EmailSMTPMessagingConfig = new EmailSMTPMessagingConfig();
 
 }
-
 @SubConfigClass<TAGS>({softReadonly: true})
 export class MessagingConfig {
   @ConfigProperty({
