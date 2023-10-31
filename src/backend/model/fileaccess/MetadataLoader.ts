@@ -18,6 +18,8 @@ const LOG_TAG = '[MetadataLoader]';
 const ffmpeg = FFmpegFactory.get();
 
 export class MetadataLoader {
+
+  @ExtensionDecorator(e=>e.gallery.MetadataLoader.loadVideoMetadata)
   public static loadVideoMetadata(fullPath: string): Promise<VideoMetadata> {
     return new Promise<VideoMetadata>((resolve) => {
       const metadata: VideoMetadata = {

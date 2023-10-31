@@ -16,15 +16,15 @@ export class ProjectPathClass {
     this.reset();
   }
 
-  normalizeRelative(pathStr: string): string {
+  public normalizeRelative(pathStr: string): string {
     return path.join(pathStr, path.sep);
   }
 
-  getAbsolutePath(pathStr: string): string {
+  public getAbsolutePath(pathStr: string): string {
     return path.isAbsolute(pathStr) ? pathStr : path.join(this.Root, pathStr);
   }
 
-  getRelativePathToImages(pathStr: string): string {
+  public getRelativePathToImages(pathStr: string): string {
     return path.relative(this.ImageFolder, pathStr);
   }
 
@@ -36,7 +36,7 @@ export class ProjectPathClass {
     this.TranscodedFolder = path.join(this.TempFolder, 'tc');
     this.FacesFolder = path.join(this.TempFolder, 'f');
     this.DBFolder = this.getAbsolutePath(Config.Database.dbFolder);
-    this.ExtensionFolder = path.join(this.Root, 'extension');
+    this.ExtensionFolder = path.join(this.Root, 'extensions');
 
     // create thumbnail folder if not exist
     if (!fs.existsSync(this.TempFolder)) {

@@ -5,6 +5,7 @@ import {Logger} from '../../Logger';
 import {FfmpegCommand, FfprobeData} from 'fluent-ffmpeg';
 import {FFmpegFactory} from '../FFmpegFactory';
 import * as path from 'path';
+import {ExtensionDecorator} from '../extension/ExtensionDecorator';
 
 
 sharp.cache(false);
@@ -129,6 +130,7 @@ export class VideoRendererFactory {
 
 export class ImageRendererFactory {
 
+  @ExtensionDecorator(e=>e.gallery.ImageRenderer.render)
   public static async render(input: MediaRendererInput | SvgRendererInput): Promise<void> {
 
     let image: Sharp;

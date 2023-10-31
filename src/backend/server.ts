@@ -35,7 +35,7 @@ export class Server {
   public app: express.Express;
   private server: HttpServer;
 
-  static instance: Server;
+  static instance: Server = null;
 
   public static getInstance(): Server {
     if (this.instance === null) {
@@ -70,7 +70,13 @@ export class Server {
       ).configPath +
       ':'
     );
-    Logger.verbose(LOG_TAG, JSON.stringify(Config.toJSON({attachDescription: false}), null, '\t'));
+    Logger.verbose(LOG_TAG, JSON.stringify(Config.toJSON({attachDescription: false}), (k, v) => {
+      const MAX_LENGTH = 80;
+      if (typeof v === 'string' && v.length > MAX_LENGTH) {
+        v = v.slice(0, MAX_LENGTH - 3) + '...';
+      }
+      return v;
+    }, 2));
 
     this.app = express();
 

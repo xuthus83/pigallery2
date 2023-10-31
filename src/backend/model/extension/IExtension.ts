@@ -2,7 +2,7 @@ import * as express from 'express';
 import {PrivateConfigClass} from '../../../common/config/private/Config';
 import {ObjectManagers} from '../ObjectManagers';
 import {ProjectPathClass} from '../../ProjectPath';
-import {ExtensionEvent} from './ExtensionEvent';
+import {ILogger} from '../../Logger';
 
 
 export type IExtensionBeforeEventHandler<I, O> = (input: { inputs: I }, event: { stopPropagation: boolean }) => Promise<{ inputs: I } | O>;
@@ -11,36 +11,66 @@ export type IExtensionAfterEventHandler<O> = (output: O) => Promise<O>;
 
 export interface IExtensionEvent<I, O> {
   before: (handler: IExtensionBeforeEventHandler<I, O>) => void;
-  after: (handler: IExtensionAfterEventHandler<O>) => void
+  after: (handler: IExtensionAfterEventHandler<O>) => void;
 }
 
+/**
+ * All main event callbacks in the app
+ */
 export interface IExtensionEvents {
   gallery: {
-  //  indexing: IExtensionEvent<any, any>;
-   // scanningDirectory: IExtensionEvent<any, any>;
+    /**
+     * Events for Directory and Album covers
+     */
+    CoverManager: {
+      getCoverForAlbum: IExtensionEvent<any, any>;
+      getCoverForDirectory: IExtensionEvent<any, any>
+      /**
+       * Invalidates directory covers for a given directory and every parent
+       */
+      invalidateDirectoryCovers: IExtensionEvent<any, any>;
+    },
+    ImageRenderer: {
+      /**
+       * Renders a thumbnail or photo
+       */
+      render: IExtensionEvent<any, any>
+    },
+    /**
+     * Reads exif, iptc, etc.. metadata for photos/videos
+     */
     MetadataLoader: {
+      loadVideoMetadata: IExtensionEvent<any, any>,
       loadPhotoMetadata: IExtensionEvent<any, any>
+    },
+    /**
+     * Scans the storage for a given directory and returns the list of child directories,
+     * photos, videos and metafiles
+     */
+    DiskManager: {
+      scanDirectory: IExtensionEvent<any, any>
     }
-
-    //listingDirectory: IExtensionEvent<any, any>;
-    //searching: IExtensionEvent<any, any>;
   };
 }
 
 export interface IExtensionApp {
   expressApp: express.Express;
-  config: PrivateConfigClass;
   objectManagers: ObjectManagers;
-  paths: ProjectPathClass;
+  config: PrivateConfigClass;
 }
 
 export interface IExtensionObject {
-  app: IExtensionApp;
+  _app: IExtensionApp;
+  paths: ProjectPathClass;
+  Logger: ILogger;
   events: IExtensionEvents;
 }
 
-export interface IServerExtension {
-  init(app: IExtensionObject): Promise<void>;
 
-  cleanUp?: () => Promise<void>;
+/**
+ * Extension interface. All extension is expected to implement and export these methods
+ */
+export interface IServerExtension {
+  init(extension: IExtensionObject): Promise<void>;
+  cleanUp?: (extension: IExtensionObject) => Promise<void>;
 }
