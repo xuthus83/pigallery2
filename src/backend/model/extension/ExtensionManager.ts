@@ -8,10 +8,14 @@ import {IExtensionEvents, IExtensionObject, IServerExtension} from './IExtension
 import {ObjectManagers} from '../ObjectManagers';
 import {Server} from '../../server';
 import {ExtensionEvent} from './ExtensionEvent';
+import {ExpressRouterWrapper} from './ExpressRouterWrapper';
+import * as express from 'express';
 
 const LOG_TAG = '[ExtensionManager]';
 
 export class ExtensionManager implements IObjectManager {
+
+  public static EXTENSION_API_PATH = Config.Server.apiPath + '/extension';
 
   events: IExtensionEvents = {
     gallery: {
@@ -32,8 +36,13 @@ export class ExtensionManager implements IObjectManager {
       }
     }
   };
+  extObjects: { [key: string]: IExtensionObject } = {};
+  router: express.Router;
 
   public async init() {
+    this.extObjects = {};
+    this.router = express.Router();
+    Server.getInstance().app.use(ExtensionManager.EXTENSION_API_PATH, this.router);
     this.loadExtensionsList();
     await this.initExtensions();
   }
@@ -69,16 +78,23 @@ export class ExtensionManager implements IObjectManager {
   }
 
   private createExtensionObject(name: string): IExtensionObject {
-    return {
-      _app: {
-        objectManagers: ObjectManagers.getInstance(),
-        expressApp: Server.getInstance().app,
-        config: Config
-      },
-      paths: ProjectPath,
-      Logger: createLoggerWrapper(`[Extension: ${name}]`),
-      events: this.events
-    };
+    if (!this.extObjects[name]) {
+      const rw = new ExpressRouterWrapper(this.router, name);
+      this.extObjects[name] = {
+        _app: {
+          get objectManagers() {
+            return ObjectManagers.getInstance();
+          },
+          expressApp: Server.getInstance().app,
+          config: Config
+        },
+        paths: ProjectPath,
+        Logger: createLoggerWrapper(`[Extension: ${name}]`),
+        events: this.events,
+        RESTApi: rw
+      };
+    }
+    return this.extObjects[name];
   }
 
   private async initExtensions() {
@@ -102,5 +118,7 @@ export class ExtensionManager implements IObjectManager {
 
   public async cleanUp() {
     await this.cleanUpExtensions();
+    Server.getInstance().app.use(ExtensionManager.EXTENSION_API_PATH, express.Router());
+    this.extObjects = {};
   }
 }

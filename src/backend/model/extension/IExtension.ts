@@ -1,8 +1,11 @@
 import * as express from 'express';
+import {NextFunction, Request, Response} from 'express';
 import {PrivateConfigClass} from '../../../common/config/private/Config';
 import {ObjectManagers} from '../ObjectManagers';
 import {ProjectPathClass} from '../../ProjectPath';
 import {ILogger} from '../../Logger';
+import {UserDTO, UserRoles} from '../../../common/entities/UserDTO';
+import {ParamsDictionary} from 'express-serve-static-core';
 
 
 export type IExtensionBeforeEventHandler<I, O> = (input: { inputs: I }, event: { stopPropagation: boolean }) => Promise<{ inputs: I } | O>;
@@ -59,11 +62,41 @@ export interface IExtensionApp {
   config: PrivateConfigClass;
 }
 
+export interface IExtensionRESTRoute {
+  jsonResponse(paths: string[], minRole: UserRoles, cb: (params?: ParamsDictionary, body?: any, user?: UserDTO) => Promise<unknown> | unknown): void;
+
+  rawMiddleware(paths: string[], minRole: UserRoles, mw: (req: Request, res: Response, next: NextFunction) => void | Promise<void>): void;
+}
+
+export interface IExtensionRESTApi {
+  use: IExtensionRESTRoute;
+  get: IExtensionRESTRoute;
+  post: IExtensionRESTRoute;
+  put: IExtensionRESTRoute;
+  delete: IExtensionRESTRoute;
+}
+
 export interface IExtensionObject {
+  /**
+   * Inner functionality of the app. Use this wit caution
+   */
   _app: IExtensionApp;
+  /**
+   * Paths to the main components of the app.
+   */
   paths: ProjectPathClass;
+  /**
+   * Logger of the app
+   */
   Logger: ILogger;
+  /**
+   * Main app events. Use this change indexing, cover or serving gallery
+   */
   events: IExtensionEvents;
+  /**
+   * Use this to define REST calls related to the extension
+   */
+  RESTApi: IExtensionRESTApi;
 }
 
 
@@ -72,5 +105,6 @@ export interface IExtensionObject {
  */
 export interface IServerExtension {
   init(extension: IExtensionObject): Promise<void>;
+
   cleanUp?: (extension: IExtensionObject) => Promise<void>;
 }
