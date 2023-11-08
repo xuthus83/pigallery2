@@ -1019,6 +1019,15 @@ export class ServerServiceConfig extends ClientServiceConfig {
 export class ServerExtensionsConfig {
   @ConfigProperty({volatile: true})
   list: string[] = [];
+
+  @ConfigProperty({
+    tags: {
+      name: $localize`Clean up unused tables`,
+      priority: ConfigPriority.underTheHood,
+    },
+    description: $localize`Automatically removes all tables from the DB that are not used anymore.`,
+  })
+  cleanUpUnusedTables: boolean = true;
 }
 
 @SubConfigClass({softReadonly: true})

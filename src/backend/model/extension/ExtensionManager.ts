@@ -5,11 +5,13 @@ import * as path from 'path';
 import {IObjectManager} from '../database/IObjectManager';
 import {createLoggerWrapper, Logger} from '../../Logger';
 import {IExtensionEvents, IExtensionObject, IServerExtension} from './IExtension';
-import {ObjectManagers} from '../ObjectManagers';
 import {Server} from '../../server';
 import {ExtensionEvent} from './ExtensionEvent';
 import {ExpressRouterWrapper} from './ExpressRouterWrapper';
 import * as express from 'express';
+import {ExtensionApp} from './ExtensionApp';
+import {ExtensionDB} from './ExtensionDB';
+import {SQLConnection} from '../database/SQLConnection';
 
 const LOG_TAG = '[ExtensionManager]';
 
@@ -17,34 +19,43 @@ export class ExtensionManager implements IObjectManager {
 
   public static EXTENSION_API_PATH = Config.Server.apiPath + '/extension';
 
-  events: IExtensionEvents = {
-    gallery: {
-      MetadataLoader: {
-        loadPhotoMetadata: new ExtensionEvent(),
-        loadVideoMetadata: new ExtensionEvent()
-      },
-      CoverManager: {
-        getCoverForDirectory: new ExtensionEvent(),
-        getCoverForAlbum: new ExtensionEvent(),
-        invalidateDirectoryCovers: new ExtensionEvent(),
-      },
-      DiskManager: {
-        scanDirectory: new ExtensionEvent()
-      },
-      ImageRenderer: {
-        render: new ExtensionEvent()
-      }
-    }
-  };
+  events: IExtensionEvents;
   extObjects: { [key: string]: IExtensionObject } = {};
   router: express.Router;
 
+  constructor() {
+    this.initEvents();
+  }
+
   public async init() {
     this.extObjects = {};
+    this.initEvents();
     this.router = express.Router();
     Server.getInstance().app.use(ExtensionManager.EXTENSION_API_PATH, this.router);
     this.loadExtensionsList();
     await this.initExtensions();
+  }
+
+  private initEvents() {
+    this.events = {
+      gallery: {
+        MetadataLoader: {
+          loadPhotoMetadata: new ExtensionEvent(),
+          loadVideoMetadata: new ExtensionEvent()
+        },
+        CoverManager: {
+          getCoverForDirectory: new ExtensionEvent(),
+          getCoverForAlbum: new ExtensionEvent(),
+          invalidateDirectoryCovers: new ExtensionEvent(),
+        },
+        DiskManager: {
+          scanDirectory: new ExtensionEvent()
+        },
+        ImageRenderer: {
+          render: new ExtensionEvent()
+        }
+      }
+    };
   }
 
   public loadExtensionsList() {
@@ -79,19 +90,14 @@ export class ExtensionManager implements IObjectManager {
 
   private createExtensionObject(name: string): IExtensionObject {
     if (!this.extObjects[name]) {
-      const rw = new ExpressRouterWrapper(this.router, name);
+      const logger = createLoggerWrapper(`[Extension][${name}]`);
       this.extObjects[name] = {
-        _app: {
-          get objectManagers() {
-            return ObjectManagers.getInstance();
-          },
-          expressApp: Server.getInstance().app,
-          config: Config
-        },
+        _app: new ExtensionApp(),
+        db: new ExtensionDB(logger),
         paths: ProjectPath,
-        Logger: createLoggerWrapper(`[Extension: ${name}]`),
+        Logger: logger,
         events: this.events,
-        RESTApi: rw
+        RESTApi: new ExpressRouterWrapper(this.router, name, logger)
       };
     }
     return this.extObjects[name];
@@ -104,6 +110,10 @@ export class ExtensionManager implements IObjectManager {
         await ext?.init(this.createExtensionObject(extName));
       }
     });
+    if (Config.Extensions.cleanUpUnusedTables) {
+      // Clean up tables after all Extension was initialized.
+      await SQLConnection.removeUnusedTables();
+    }
   }
 
   private async cleanUpExtensions() {
@@ -117,6 +127,7 @@ export class ExtensionManager implements IObjectManager {
 
 
   public async cleanUp() {
+    this.initEvents(); // reset events
     await this.cleanUpExtensions();
     Server.getInstance().app.use(ExtensionManager.EXTENSION_API_PATH, express.Router());
     this.extObjects = {};

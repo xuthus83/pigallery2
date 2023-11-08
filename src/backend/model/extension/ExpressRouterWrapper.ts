@@ -5,34 +5,36 @@ import {AuthenticationMWs} from '../../middlewares/user/AuthenticationMWs';
 import {RenderingMWs} from '../../middlewares/RenderingMWs';
 import {ParamsDictionary} from 'express-serve-static-core';
 import {IExtensionRESTApi, IExtensionRESTRoute} from './IExtension';
-import {Logger} from '../../Logger';
+import {ILogger} from '../../Logger';
 import {ExtensionManager} from './ExtensionManager';
 import {Utils} from '../../../common/Utils';
 
 
 export class ExpressRouterWrapper implements IExtensionRESTApi {
 
-  constructor(private readonly router: express.Router, private readonly name: string) {
+  constructor(private readonly router: express.Router,
+              private readonly name: string,
+              private readonly extLogger: ILogger) {
   }
 
   get use() {
-    return new ExpressRouteWrapper(this.router, this.name, 'use');
+    return new ExpressRouteWrapper(this.router, this.name, 'use', this.extLogger);
   }
 
   get get() {
-    return new ExpressRouteWrapper(this.router, this.name, 'get');
+    return new ExpressRouteWrapper(this.router, this.name, 'get', this.extLogger);
   }
 
   get put() {
-    return new ExpressRouteWrapper(this.router, this.name, 'put');
+    return new ExpressRouteWrapper(this.router, this.name, 'put', this.extLogger);
   }
 
   get post() {
-    return new ExpressRouteWrapper(this.router, this.name, 'post');
+    return new ExpressRouteWrapper(this.router, this.name, 'post', this.extLogger);
   }
 
   get delete() {
-    return new ExpressRouteWrapper(this.router, this.name, 'delete');
+    return new ExpressRouteWrapper(this.router, this.name, 'delete', this.extLogger);
   }
 
 }
@@ -41,7 +43,8 @@ export class ExpressRouteWrapper implements IExtensionRESTRoute {
 
   constructor(private readonly router: express.Router,
               private readonly name: string,
-              private readonly func: 'get' | 'use' | 'put' | 'post' | 'delete') {
+              private readonly func: 'get' | 'use' | 'put' | 'post' | 'delete',
+              private readonly extLogger: ILogger) {
   }
 
   private getAuthMWs(minRole: UserRoles) {
@@ -59,14 +62,14 @@ export class ExpressRouteWrapper implements IExtensionRESTRoute {
         },
         RenderingMWs.renderResult
       ])));
-    Logger.silly(`[ExtensionRest:${this.name}]`, `Listening on ${this.func} ${ExtensionManager.EXTENSION_API_PATH}${fullPaths}`);
+    this.extLogger.silly(`Listening on ${this.func} ${ExtensionManager.EXTENSION_API_PATH}${fullPaths}`);
   }
 
   public rawMiddleware(paths: string[], minRole: UserRoles, mw: (req: Request, res: Response, next: NextFunction) => void | Promise<void>) {
-    const fullPaths = paths.map(p =>  (Utils.concatUrls('/' + this.name + '/' + p)));
+    const fullPaths = paths.map(p => (Utils.concatUrls('/' + this.name + '/' + p)));
     this.router[this.func](fullPaths,
       ...this.getAuthMWs(minRole),
       mw);
-    Logger.silly(`[ExtensionRest:${this.name}]`, `Listening on ${this.func} ${ExtensionManager.EXTENSION_API_PATH}${fullPaths}`);
+    this.extLogger.silly(`Listening on ${this.func} ${ExtensionManager.EXTENSION_API_PATH}${fullPaths}`);
   }
 }

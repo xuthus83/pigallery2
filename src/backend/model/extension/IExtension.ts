@@ -6,6 +6,7 @@ import {ProjectPathClass} from '../../ProjectPath';
 import {ILogger} from '../../Logger';
 import {UserDTO, UserRoles} from '../../../common/entities/UserDTO';
 import {ParamsDictionary} from 'express-serve-static-core';
+import {Connection, EntitySchema} from 'typeorm';
 
 
 export type IExtensionBeforeEventHandler<I, O> = (input: { inputs: I }, event: { stopPropagation: boolean }) => Promise<{ inputs: I } | O>;
@@ -63,8 +64,20 @@ export interface IExtensionApp {
 }
 
 export interface IExtensionRESTRoute {
+  /**
+   * Sends a pigallery2 standard JSON object with payload or error message back to the client.
+   * @param paths
+   * @param minRole
+   * @param cb
+   */
   jsonResponse(paths: string[], minRole: UserRoles, cb: (params?: ParamsDictionary, body?: any, user?: UserDTO) => Promise<unknown> | unknown): void;
 
+  /**
+   * Exposes a standard expressjs middleware
+   * @param paths
+   * @param minRole
+   * @param mw
+   */
   rawMiddleware(paths: string[], minRole: UserRoles, mw: (req: Request, res: Response, next: NextFunction) => void | Promise<void>): void;
 }
 
@@ -76,11 +89,39 @@ export interface IExtensionRESTApi {
   delete: IExtensionRESTRoute;
 }
 
+export interface IExtensionDB {
+  /**
+   * Returns with a typeorm SQL connection
+   */
+  getSQLConnection(): Promise<Connection>;
+
+  /**
+   * Adds SQL tables to typeorm
+   * @param tables
+   */
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  setExtensionTables(tables: Function[]): Promise<void>;
+
+  /**
+   * Exposes all tables. You can use this if you van to have a foreign key to a built in table.
+   * Use with caution. This exposes the app's internal working.
+   */
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  _getAllTables(): Function[];
+}
+
 export interface IExtensionObject {
   /**
-   * Inner functionality of the app. Use this wit caution
+   * Inner functionality of the app. Use this with caution.
+   * If you want to go deeper than the standard exposed APIs, you can try doing so here.
    */
   _app: IExtensionApp;
+
+  /**
+   * Create new SQL tables and access SQL connection
+   */
+  db: IExtensionDB;
+
   /**
    * Paths to the main components of the app.
    */
@@ -104,6 +145,10 @@ export interface IExtensionObject {
  * Extension interface. All extension is expected to implement and export these methods
  */
 export interface IServerExtension {
+  /**
+   * Extension init function. Extension should at minimum expose this function.
+   * @param extension
+   */
   init(extension: IExtensionObject): Promise<void>;
 
   cleanUp?: (extension: IExtensionObject) => Promise<void>;
