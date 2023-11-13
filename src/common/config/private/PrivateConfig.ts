@@ -1014,11 +1014,13 @@ export class ServerServiceConfig extends ClientServiceConfig {
 }
 
 
-
 @SubConfigClass<TAGS>({softReadonly: true})
 export class ServerExtensionsConfig {
   @ConfigProperty({volatile: true})
   list: string[] = [];
+
+  @ConfigProperty({type: 'object'})
+  configs: Record<string, unknown> = {};
 
   @ConfigProperty({
     tags: {

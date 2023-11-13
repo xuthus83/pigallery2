@@ -9,6 +9,7 @@ import {UserRoles} from '../../../../../src/common/entities/UserDTO';
 import {ConfigClassBuilder} from '../../../../../node_modules/typeconfig/node';
 import * as fs from 'fs';
 import * as path from 'path';
+import {ExtensionConfigWrapper} from '../../../../../src/backend/model/extension/ExtensionConfigWrapper';
 
 
 declare const describe: any;
@@ -74,7 +75,7 @@ describe('Settings middleware', () => {
         expect(Config.Users.enforcedUsers.length).to.be.equal(1);
         expect(Config.Users.enforcedUsers[0].name).to.be.equal('Apple');
         expect(Config.Users.enforcedUsers.length).to.be.equal(1);
-        Config.original().then((cfg) => {
+        ExtensionConfigWrapper.original().then((cfg) => {
           try {
             expect(cfg.Users.enforcedUsers.length).to.be.equal(1);
             expect(cfg.Users.enforcedUsers[0].name).to.be.equal('Apple');

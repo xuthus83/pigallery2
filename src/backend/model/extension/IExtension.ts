@@ -6,7 +6,7 @@ import {ProjectPathClass} from '../../ProjectPath';
 import {ILogger} from '../../Logger';
 import {UserDTO, UserRoles} from '../../../common/entities/UserDTO';
 import {ParamsDictionary} from 'express-serve-static-core';
-import {Connection, EntitySchema} from 'typeorm';
+import {Connection} from 'typeorm';
 
 
 export type IExtensionBeforeEventHandler<I, O> = (input: { inputs: I }, event: { stopPropagation: boolean }) => Promise<{ inputs: I } | O>;
@@ -66,17 +66,17 @@ export interface IExtensionApp {
 export interface IExtensionRESTRoute {
   /**
    * Sends a pigallery2 standard JSON object with payload or error message back to the client.
-   * @param paths
-   * @param minRole
-   * @param cb
+   * @param paths RESTapi path, relative to the extension base endpoint
+   * @param minRole set to null to omit auer check (ie make the endpoint public)
+   * @param cb function callback
    */
   jsonResponse(paths: string[], minRole: UserRoles, cb: (params?: ParamsDictionary, body?: any, user?: UserDTO) => Promise<unknown> | unknown): void;
 
   /**
    * Exposes a standard expressjs middleware
-   * @param paths
-   * @param minRole
-   * @param mw
+   * @param paths RESTapi path, relative to the extension base endpoint
+   * @param minRole set to null to omit auer check (ie make the endpoint public)
+   * @param mw expressjs middleware
    */
   rawMiddleware(paths: string[], minRole: UserRoles, mw: (req: Request, res: Response, next: NextFunction) => void | Promise<void>): void;
 }
@@ -110,12 +110,23 @@ export interface IExtensionDB {
   _getAllTables(): Function[];
 }
 
-export interface IExtensionObject {
+export interface IExtensionConfig<C> {
+  setTemplate(template: new() => C): void;
+
+  getConfig(): C;
+}
+
+export interface IExtensionObject<C> {
   /**
    * Inner functionality of the app. Use this with caution.
    * If you want to go deeper than the standard exposed APIs, you can try doing so here.
    */
   _app: IExtensionApp;
+
+  /**
+   * Create extension related configuration
+   */
+  config: IExtensionConfig<C>;
 
   /**
    * Create new SQL tables and access SQL connection
@@ -144,12 +155,12 @@ export interface IExtensionObject {
 /**
  * Extension interface. All extension is expected to implement and export these methods
  */
-export interface IServerExtension {
+export interface IServerExtension<C> {
   /**
    * Extension init function. Extension should at minimum expose this function.
    * @param extension
    */
-  init(extension: IExtensionObject): Promise<void>;
+  init(extension: IExtensionObject<C>): Promise<void>;
 
-  cleanUp?: (extension: IExtensionObject) => Promise<void>;
+  cleanUp?: (extension: IExtensionObject<C>) => Promise<void>;
 }

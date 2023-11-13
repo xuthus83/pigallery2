@@ -3,15 +3,13 @@ import {Config} from '../../../common/config/private/Config';
 import * as fs from 'fs';
 import * as path from 'path';
 import {IObjectManager} from '../database/IObjectManager';
-import {createLoggerWrapper, Logger} from '../../Logger';
+import {Logger} from '../../Logger';
 import {IExtensionEvents, IExtensionObject, IServerExtension} from './IExtension';
 import {Server} from '../../server';
 import {ExtensionEvent} from './ExtensionEvent';
-import {ExpressRouterWrapper} from './ExpressRouterWrapper';
 import * as express from 'express';
-import {ExtensionApp} from './ExtensionApp';
-import {ExtensionDB} from './ExtensionDB';
 import {SQLConnection} from '../database/SQLConnection';
+import {ExtensionObject} from './ExtensionObject';
 
 const LOG_TAG = '[ExtensionManager]';
 
@@ -20,7 +18,7 @@ export class ExtensionManager implements IObjectManager {
   public static EXTENSION_API_PATH = Config.Server.apiPath + '/extension';
 
   events: IExtensionEvents;
-  extObjects: { [key: string]: IExtensionObject } = {};
+  extObjects: { [key: string]: ExtensionObject<unknown> } = {};
   router: express.Router;
 
   constructor() {
@@ -65,15 +63,15 @@ export class ExtensionManager implements IObjectManager {
     }
 
     Config.Extensions.list = fs
-      .readdirSync(ProjectPath.ExtensionFolder)
-      .filter((f): boolean =>
-        fs.statSync(path.join(ProjectPath.ExtensionFolder, f)).isDirectory()
-      );
+        .readdirSync(ProjectPath.ExtensionFolder)
+        .filter((f): boolean =>
+            fs.statSync(path.join(ProjectPath.ExtensionFolder, f)).isDirectory()
+        );
     Config.Extensions.list.sort();
     Logger.debug(LOG_TAG, 'Extensions found ', JSON.stringify(Config.Extensions.list));
   }
 
-  private async callServerFN(fn: (ext: IServerExtension, extName: string) => Promise<void>) {
+  private async callServerFN(fn: (ext: IServerExtension<unknown>, extName: string) => Promise<void>) {
     for (let i = 0; i < Config.Extensions.list.length; ++i) {
       const extName = Config.Extensions.list[i];
       const extPath = path.join(ProjectPath.ExtensionFolder, extName);
@@ -88,17 +86,9 @@ export class ExtensionManager implements IObjectManager {
     }
   }
 
-  private createExtensionObject(name: string): IExtensionObject {
+  private createExtensionObject(name: string): IExtensionObject<unknown> {
     if (!this.extObjects[name]) {
-      const logger = createLoggerWrapper(`[Extension][${name}]`);
-      this.extObjects[name] = {
-        _app: new ExtensionApp(),
-        db: new ExtensionDB(logger),
-        paths: ProjectPath,
-        Logger: logger,
-        events: this.events,
-        RESTApi: new ExpressRouterWrapper(this.router, name, logger)
-      };
+      this.extObjects[name] = new ExtensionObject(name, this.router, this.events);
     }
     return this.extObjects[name];
   }
