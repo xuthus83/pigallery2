@@ -15,4 +15,5 @@ export interface VideoMetadata extends MediaMetadata {
   duration: number; // in milliseconds
   fileSize: number;
   fps: number;
+  keywords?: string[];
 }
