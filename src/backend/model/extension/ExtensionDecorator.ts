@@ -8,8 +8,13 @@ export const ExtensionDecorator = <I extends [], O>(fn: (ee: IExtensionEvents) =
     propertyName: string,
     descriptor: PropertyDescriptor
   ) => {
+
     const targetMethod = descriptor.value;
     descriptor.value = async function(...args: I) {
+      if (!ObjectManagers.isReady()) {
+        return await targetMethod.apply(this, args);
+      }
+
       const event = fn(ObjectManagers.getInstance().ExtensionManager.events) as ExtensionEvent<I, O>;
       const eventObj = {stopPropagation: false};
       const input = await event.triggerBefore({inputs: args}, eventObj);

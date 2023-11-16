@@ -33,7 +33,7 @@ describe('AlbumManager', (sqlHelper: DBTestHelper) => {
   const setUpSqlDB = async () => {
     await sqlHelper.initDB();
     await sqlHelper.setUpTestGallery();
-    await ObjectManagers.InitManagers();
+    await ObjectManagers.getInstance().init();
   };
 
 

@@ -11,6 +11,7 @@ import {
 } from '../../entities/job/JobScheduleDTO';
 import {
   ClientConfig,
+  ClientExtensionsConfig,
   ClientGPXCompressingConfig,
   ClientMediaConfig,
   ClientMetaFileConfig,
@@ -1015,7 +1016,7 @@ export class ServerServiceConfig extends ClientServiceConfig {
 
 
 @SubConfigClass<TAGS>({softReadonly: true})
-export class ServerExtensionsConfig {
+export class ServerExtensionsConfig extends ClientExtensionsConfig {
   @ConfigProperty({volatile: true})
   list: string[] = [];
 

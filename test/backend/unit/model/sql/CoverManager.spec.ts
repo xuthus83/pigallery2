@@ -122,7 +122,7 @@ describe('CoverManager', (sqlHelper: DBTestHelper) => {
   const setUpSqlDB = async () => {
     await sqlHelper.initDB();
     await setUpTestGallery();
-    await ObjectManagers.InitManagers();
+    await ObjectManagers.getInstance().init();
   };
 
 

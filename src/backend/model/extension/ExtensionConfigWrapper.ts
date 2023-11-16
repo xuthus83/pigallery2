@@ -13,8 +13,10 @@ export class ExtensionConfigWrapper {
     const pc = ConfigClassBuilder.attachPrivateInterface(new PrivateConfigClass());
     try {
       await pc.load();
-      for (const ext of Object.values(ObjectManagers.getInstance().ExtensionManager.extObjects)) {
-        ext.config.loadToConfig(ConfigClassBuilder.attachPrivateInterface(pc));
+      if (ObjectManagers.isReady()) {
+        for (const ext of Object.values(ObjectManagers.getInstance().ExtensionManager.extObjects)) {
+          ext.config.loadToConfig(ConfigClassBuilder.attachPrivateInterface(pc));
+        }
       }
     } catch (e) {
       console.error('Error during loading original config. Reverting to defaults.');

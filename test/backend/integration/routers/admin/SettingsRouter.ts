@@ -38,7 +38,7 @@ describe('SettingsRouter', () => {
       const originalSettings = await ExtensionConfigWrapper.original();
       const srv = new Server();
       await srv.onStarted.wait();
-      const result = await chai.request(srv.App)
+      const result = await chai.request(srv.Server)
         .get(Config.Server.apiPath + '/settings');
 
       result.res.should.have.status(200);

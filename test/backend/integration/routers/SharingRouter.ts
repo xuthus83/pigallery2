@@ -42,7 +42,7 @@ describe('SharingRouter', () => {
     server = new Server();
     await server.onStarted.wait();
 
-    await ObjectManagers.InitManagers();
+    await ObjectManagers.getInstance().init();
     await ObjectManagers.getInstance().UserManager.createUser(Utils.clone(testUser));
     await SQLConnection.close();
   };
@@ -62,7 +62,7 @@ describe('SharingRouter', () => {
   };
 
   const shareLogin = async (srv: Server, sharingKey: string, password?: string): Promise<any> => {
-    return (chai.request(srv.App) as SuperAgentStatic)
+    return (chai.request(srv.Server) as SuperAgentStatic)
       .post(Config.Server.apiPath + '/share/login?' + QueryParams.gallery.sharingKey_query + '=' + sharingKey)
       .send({password});
 

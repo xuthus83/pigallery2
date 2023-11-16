@@ -28,6 +28,9 @@ export class ExtensionManager implements IObjectManager {
   public async init() {
     this.extObjects = {};
     this.initEvents();
+    if (!Config.Extensions.enabled) {
+      return;
+    }
     this.router = express.Router();
     Server.getInstance().app.use(ExtensionManager.EXTENSION_API_PATH, this.router);
     this.loadExtensionsList();
@@ -117,6 +120,9 @@ export class ExtensionManager implements IObjectManager {
 
 
   public async cleanUp() {
+    if (!Config.Extensions.enabled) {
+      return;
+    }
     this.initEvents(); // reset events
     await this.cleanUpExtensions();
     Server.getInstance().app.use(ExtensionManager.EXTENSION_API_PATH, express.Router());

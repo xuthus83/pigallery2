@@ -38,7 +38,7 @@ export class Server {
   static instance: Server = null;
 
   public static getInstance(): Server {
-    if (this.instance === null) {
+    if (!this.instance) {
       this.instance = new Server();
     }
     return this.instance;
@@ -54,11 +54,16 @@ export class Server {
     this.init().catch(console.error);
   }
 
-  get App(): any {
+  get Server(): HttpServer {
     return this.server;
   }
 
   async init(): Promise<void> {
+
+    this.app = express();
+    LoggerRouter.route(this.app);
+    this.app.set('view engine', 'ejs');
+
     Logger.info(LOG_TAG, 'running diagnostics...');
     await ConfigDiagnostics.runDiagnostics();
     Logger.verbose(
@@ -78,11 +83,6 @@ export class Server {
       return v;
     }, 2));
 
-    this.app = express();
-
-    LoggerRouter.route(this.app);
-
-    this.app.set('view engine', 'ejs');
 
     /**
      * Session above all
@@ -130,7 +130,7 @@ export class Server {
     Localizations.init();
 
     this.app.use(locale(Config.Server.languages, 'en'));
-    await ObjectManagers.InitManagers();
+    await ObjectManagers.getInstance().init();
 
     Router.route(this.app);
 
