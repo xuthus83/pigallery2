@@ -1,6 +1,6 @@
-import {IConfigClass} from '../../../../node_modules/typeconfig/common';
+import {IConfigClass} from 'typeconfig/common';
 import {Config, PrivateConfigClass} from '../../../common/config/private/Config';
-import {ConfigClassBuilder} from '../../../../node_modules/typeconfig/node';
+import {ConfigClassBuilder} from 'typeconfig/node';
 import {IExtensionConfig} from './IExtension';
 import {Utils} from '../../../common/Utils';
 import {ObjectManagers} from '../ObjectManagers';

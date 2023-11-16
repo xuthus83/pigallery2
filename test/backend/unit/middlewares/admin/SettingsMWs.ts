@@ -6,10 +6,10 @@ import {SettingsMWs} from '../../../../../src/backend/middlewares/admin/Settings
 import {ServerUserConfig} from '../../../../../src/common/config/private/PrivateConfig';
 import {Config} from '../../../../../src/common/config/private/Config';
 import {UserRoles} from '../../../../../src/common/entities/UserDTO';
-import {ConfigClassBuilder} from '../../../../../node_modules/typeconfig/node';
 import * as fs from 'fs';
 import * as path from 'path';
 import {ExtensionConfigWrapper} from '../../../../../src/backend/model/extension/ExtensionConfigWrapper';
+import {ConfigClassBuilder} from 'typeconfig/node';
 
 
 declare const describe: any;

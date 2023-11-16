@@ -16,7 +16,7 @@ import {ConfigStyle, SettingsService} from '../../settings.service';
 import {WebConfig} from '../../../../../../common/config/private/WebConfig';
 import {JobScheduleConfig, UserConfig} from '../../../../../../common/config/private/PrivateConfig';
 import {enumToTranslatedArray} from '../../../EnumTranslations';
-import {BsModalService} from '../../../../../../../node_modules/ngx-bootstrap/modal';
+import {BsModalService} from 'ngx-bootstrap/modal';
 import {CustomSettingsEntries} from '../CustomSettingsEntries';
 import {GroupByTypes, SortByTypes} from '../../../../../../common/entities/SortingMethods';
 

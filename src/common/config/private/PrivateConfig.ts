@@ -26,8 +26,7 @@ import {
   ConfigPriority,
   TAGS
 } from '../public/ClientConfig';
-import {SubConfigClass} from 'typeconfig/src/decorators/class/SubConfigClass';
-import {ConfigProperty} from 'typeconfig/src/decorators/property/ConfigPropoerty';
+import {ConfigProperty, SubConfigClass} from 'typeconfig/common';
 import {DefaultsJobs} from '../../entities/job/JobDTO';
 import {SearchQueryDTO, SearchQueryTypes, TextSearch,} from '../../entities/SearchQueryDTO';
 import {SortByTypes} from '../../entities/SortingMethods';

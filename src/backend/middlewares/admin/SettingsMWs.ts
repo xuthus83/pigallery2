@@ -3,7 +3,7 @@ import {ErrorCodes, ErrorDTO} from '../../../common/entities/Error';
 import {Logger} from '../../Logger';
 import {Config} from '../../../common/config/private/Config';
 import {ConfigDiagnostics} from '../../model/diagnostics/ConfigDiagnostics';
-import {ConfigClassBuilder} from '../../../../node_modules/typeconfig/node';
+import {ConfigClassBuilder} from 'typeconfig/node';
 import {TAGS} from '../../../common/config/public/ClientConfig';
 import {ObjectManagers} from '../../model/ObjectManagers';
 import {ExtensionConfigWrapper} from '../../model/extension/ExtensionConfigWrapper';
