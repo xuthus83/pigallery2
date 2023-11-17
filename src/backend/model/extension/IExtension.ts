@@ -118,6 +118,16 @@ export interface IExtensionConfig<C> {
 
 export interface IExtensionObject<C> {
   /**
+   * ID of the extension that is internally used. By default the name and ID matches if there is no collision.
+   */
+  extensionId: string,
+
+  /**
+   * Name of the extension
+   */
+  extensionName: string,
+
+  /**
    * Inner functionality of the app. Use this with caution.
    * If you want to go deeper than the standard exposed APIs, you can try doing so here.
    */

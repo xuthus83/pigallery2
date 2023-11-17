@@ -17,7 +17,11 @@ export class ExtensionObject<C> implements IExtensionObject<C> {
   public readonly events;
   public readonly RESTApi;
 
-  constructor(public readonly extensionId: string, extensionRouter: express.Router, events: IExtensionEvents) {
+  constructor(public readonly extensionId: string,
+              public readonly extensionName: string,
+              public readonly folder: string,
+              extensionRouter: express.Router,
+              events: IExtensionEvents) {
     const logger = createLoggerWrapper(`[Extension][${extensionId}]`);
     this._app = new ExtensionApp();
     this.config = new ExtensionConfig<C>(extensionId);

@@ -11,6 +11,9 @@ import * as express from 'express';
 import {SQLConnection} from '../database/SQLConnection';
 import {ExtensionObject} from './ExtensionObject';
 import {ExtensionDecoratorObject} from './ExtensionDecorator';
+import * as util from 'util';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const exec = util.promisify(require('child_process').exec);
 
 const LOG_TAG = '[ExtensionManager]';
 
@@ -68,43 +71,60 @@ export class ExtensionManager implements IObjectManager {
     }
 
     Config.Extensions.list = fs
-        .readdirSync(ProjectPath.ExtensionFolder)
-        .filter((f): boolean =>
-            fs.statSync(path.join(ProjectPath.ExtensionFolder, f)).isDirectory()
-        );
+      .readdirSync(ProjectPath.ExtensionFolder)
+      .filter((f): boolean =>
+        fs.statSync(path.join(ProjectPath.ExtensionFolder, f)).isDirectory()
+      );
     Config.Extensions.list.sort();
     Logger.debug(LOG_TAG, 'Extensions found ', JSON.stringify(Config.Extensions.list));
   }
 
-  private async callServerFN(fn: (ext: IServerExtension<unknown>, extName: string) => Promise<void>) {
-    for (let i = 0; i < Config.Extensions.list.length; ++i) {
-      const extName = Config.Extensions.list[i];
-      const extPath = path.join(ProjectPath.ExtensionFolder, extName);
-      const serverExt = path.join(extPath, 'server.js');
-      if (!fs.existsSync(serverExt)) {
-        Logger.silly(LOG_TAG, `Skipping ${extName} server initiation. server.js does not exists`);
-        continue;
+  private createUniqueExtensionObject(name: string, folder: string): IExtensionObject<unknown> {
+    let id = name;
+    if (this.extObjects[id]) {
+      let i = 0;
+      while (this.extObjects[`${name}_${++i}`]) { /* empty */
       }
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const ext = require(serverExt);
-      await fn(ext, extName);
+      id = `${name}_${++i}`;
     }
-  }
-
-  private createExtensionObject(name: string): IExtensionObject<unknown> {
-    if (!this.extObjects[name]) {
-      this.extObjects[name] = new ExtensionObject(name, this.router, this.events);
+    if (!this.extObjects[id]) {
+      this.extObjects[id] = new ExtensionObject(id, name, folder, this.router, this.events);
     }
-    return this.extObjects[name];
+    return this.extObjects[id];
   }
 
   private async initExtensions() {
-    await this.callServerFN(async (ext, extName) => {
-      if (typeof ext?.init === 'function') {
-        Logger.debug(LOG_TAG, 'Running init on extension: ' + extName);
-        await ext?.init(this.createExtensionObject(extName));
+
+    for (let i = 0; i < Config.Extensions.list.length; ++i) {
+      const extFolder = Config.Extensions.list[i];
+      let extName = extFolder;
+      const extPath = path.join(ProjectPath.ExtensionFolder, extFolder);
+      const serverExtPath = path.join(extPath, 'server.js');
+      const packageJsonPath = path.join(extPath, 'package.json');
+      if (!fs.existsSync(serverExtPath)) {
+        Logger.silly(LOG_TAG, `Skipping ${extFolder} server initiation. server.js does not exists`);
+        continue;
       }
-    });
+
+      if (fs.existsSync(packageJsonPath)) {
+        Logger.silly(LOG_TAG, `Running: "npm install --omit=dev" in ${extPath}`);
+        await exec('npm install --omit=dev' ,{
+          cwd:extPath
+        });
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
+        const pkg = require(packageJsonPath);
+        if (pkg.name) {
+          extName = pkg.name;
+        }
+      }
+
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const ext = require(serverExtPath);
+      if (typeof ext?.init === 'function') {
+        Logger.debug(LOG_TAG, 'Running init on extension: ' + extFolder);
+        await ext?.init(this.createUniqueExtensionObject(extName, extPath));
+      }
+    }
     if (Config.Extensions.cleanUpUnusedTables) {
       // Clean up tables after all Extension was initialized.
       await SQLConnection.removeUnusedTables();
@@ -112,12 +132,15 @@ export class ExtensionManager implements IObjectManager {
   }
 
   private async cleanUpExtensions() {
-    await this.callServerFN(async (ext, extName) => {
+    for (const extObj of Object.values(this.extObjects)) {
+      const serverExt = path.join(extObj.folder, 'server.js');
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const ext = require(serverExt);
       if (typeof ext?.cleanUp === 'function') {
-        Logger.debug(LOG_TAG, 'Running Init on extension:' + extName);
-        await ext?.cleanUp(this.createExtensionObject(extName));
+        Logger.debug(LOG_TAG, 'Running Init on extension:' + extObj.extensionName);
+        await ext?.cleanUp(ext);
       }
-    });
+    }
   }
 
 
