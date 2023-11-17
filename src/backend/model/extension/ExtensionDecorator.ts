@@ -1,6 +1,14 @@
 import {IExtensionEvent, IExtensionEvents} from './IExtension';
-import {ObjectManagers} from '../ObjectManagers';
 import {ExtensionEvent} from './ExtensionEvent';
+
+export class ExtensionDecoratorObject {
+  public static events: IExtensionEvents;
+
+  static init(events: IExtensionEvents) {
+    this.events = events;
+  }
+
+}
 
 export const ExtensionDecorator = <I extends [], O>(fn: (ee: IExtensionEvents) => IExtensionEvent<I, O>) => {
   return (
@@ -11,11 +19,11 @@ export const ExtensionDecorator = <I extends [], O>(fn: (ee: IExtensionEvents) =
 
     const targetMethod = descriptor.value;
     descriptor.value = async function(...args: I) {
-      if (!ObjectManagers.isReady()) {
+      if (!ExtensionDecoratorObject.events) {
         return await targetMethod.apply(this, args);
       }
 
-      const event = fn(ObjectManagers.getInstance().ExtensionManager.events) as ExtensionEvent<I, O>;
+      const event = fn(ExtensionDecoratorObject.events) as ExtensionEvent<I, O>;
       const eventObj = {stopPropagation: false};
       const input = await event.triggerBefore({inputs: args}, eventObj);
 

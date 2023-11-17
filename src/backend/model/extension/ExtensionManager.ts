@@ -10,6 +10,7 @@ import {ExtensionEvent} from './ExtensionEvent';
 import * as express from 'express';
 import {SQLConnection} from '../database/SQLConnection';
 import {ExtensionObject} from './ExtensionObject';
+import {ExtensionDecoratorObject} from './ExtensionDecorator';
 
 const LOG_TAG = '[ExtensionManager]';
 
@@ -57,6 +58,7 @@ export class ExtensionManager implements IObjectManager {
         }
       }
     };
+    ExtensionDecoratorObject.init(this.events);
   }
 
   public loadExtensionsList() {
