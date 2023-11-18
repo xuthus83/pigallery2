@@ -50,7 +50,7 @@ export class JobManager implements IJobListener, IObjectManager {
     return prg;
   }
 
-  public async run<T>(
+  public async run<T extends Record<string, unknown>>(
     jobName: string,
     config: T,
     soloRun: boolean,
@@ -86,7 +86,7 @@ export class JobManager implements IJobListener, IObjectManager {
   };
 
   onJobFinished = async (
-    job: IJob<unknown>,
+    job: IJob,
     state: JobProgressStates,
     soloRun: boolean
   ): Promise<void> => {
@@ -121,7 +121,7 @@ export class JobManager implements IJobListener, IObjectManager {
     }
   };
 
-  getAvailableJobs(): IJob<unknown>[] {
+  getAvailableJobs(): IJob[] {
     return JobRepository.Instance.getAvailableJobs();
   }
 
@@ -144,7 +144,7 @@ export class JobManager implements IJobListener, IObjectManager {
     Config.Jobs.scheduled.forEach((s): void => this.runSchedule(s));
   }
 
-  protected findJob<T = unknown>(jobName: string): IJob<T> {
+  protected findJob(jobName: string): IJob {
     return this.getAvailableJobs().find((t): boolean => t.Name === jobName);
   }
 

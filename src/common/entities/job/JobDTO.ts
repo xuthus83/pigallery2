@@ -1,7 +1,4 @@
-import {backendText} from '../../BackendTexts';
 import {DynamicConfig} from '../DynamicConfig';
-
-export type fieldType = 'string' | 'string-array' | 'number' | 'boolean' | 'number-array' | 'MediaPickDTO-array';
 
 export enum DefaultsJobs {
   Indexing = 1,
@@ -16,6 +13,12 @@ export enum DefaultsJobs {
   'Album Reset' = 10,
   'Delete Compressed GPX' = 11,
   'Top Pick Sending' = 12
+}
+
+
+export enum DefaultMessengers {
+  Email = 1,
+  Stdout = 2
 }
 
 

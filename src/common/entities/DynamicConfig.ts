@@ -1,5 +1,8 @@
 import {backendText} from '../BackendTexts';
-import {fieldType} from './job/JobDTO';
+
+
+export type fieldType = 'string' | 'string-array' | 'number' | 'boolean' | 'number-array' | 'MediaPickDTO-array' | 'messenger';
+
 
 /**
  * Dynamic configs are not part of the typeconfig maintained config.
@@ -14,4 +17,5 @@ export interface DynamicConfig {
   description: backendText | string;
   type: fieldType;
   defaultValue: unknown;
+  validIf?: { configFiled: string, equalsValue: string }; // only shows this config if this predicate is true
 }
