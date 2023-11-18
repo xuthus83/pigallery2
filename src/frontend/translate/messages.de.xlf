@@ -1840,7 +1840,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">747</context>
         </context-group>
-        <target>Ascending</target>
+        <target>Aufsteigend</target>
       </trans-unit>
       <trans-unit id="177392694971808911" datatype="html">
         <source>Default sorting</source>
@@ -3279,7 +3279,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/settings/template/settings-entry/settings-entry.component.html</context>
           <context context-type="linenumber">108</context>
         </context-group>
-        <target>name</target>
+        <target>Name</target>
       </trans-unit>
       <trans-unit id="8415080222848862490" datatype="html">
         <source>rating</source>
@@ -3287,7 +3287,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/EnumTranslations.ts</context>
           <context context-type="linenumber">51</context>
         </context-group>
-        <target>rating</target>
+        <target>Bewertung</target>
       </trans-unit>
       <trans-unit id="8893285757291009420" datatype="html">
         <source>random</source>
@@ -3303,7 +3303,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/EnumTranslations.ts</context>
           <context context-type="linenumber">53</context>
         </context-group>
-        <target>faces</target>
+        <target>Gesichter</target>
       </trans-unit>
       <trans-unit id="2999337676190296805" datatype="html">
         <source>file size</source>
@@ -3311,7 +3311,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/EnumTranslations.ts</context>
           <context context-type="linenumber">54</context>
         </context-group>
-        <target>file size</target>
+        <target>Dateigröße</target>
       </trans-unit>
       <trans-unit id="2838693330548032903" datatype="html">
         <source>don't group</source>
@@ -3319,7 +3319,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/EnumTranslations.ts</context>
           <context context-type="linenumber">56</context>
         </context-group>
-        <target>don't group</target>
+        <target>nicht gruppieren</target>
       </trans-unit>
       <trans-unit id="4044854304763114941" datatype="html">
         <source>extra small</source>
@@ -3928,7 +3928,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/filter/filter.service.ts</context>
           <context context-type="linenumber">64</context>
         </context-group>
-        <target>Rating</target>
+        <target>Bewertung</target>
       </trans-unit>
       <trans-unit id="5087678602655068553" datatype="html">
         <source>Camera</source>
@@ -4360,7 +4360,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/settings/template/settings-entry/sorting-method/sorting-method.settings-entry.component.html</context>
           <context context-type="linenumber">32</context>
         </context-group>
-        <target>ascending</target>
+        <target>aufsteigend</target>
       </trans-unit>
       <trans-unit id="8583825692753174768" datatype="html">
         <source>descending</source>
@@ -4376,7 +4376,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/settings/template/settings-entry/sorting-method/sorting-method.settings-entry.component.html</context>
           <context context-type="linenumber">41</context>
         </context-group>
-        <target>descending</target>
+        <target>absteigend</target>
       </trans-unit>
       <trans-unit id="877780134171662191" datatype="html">
         <source>Grouping</source>
@@ -4824,7 +4824,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/share/share.gallery.component.ts</context>
           <context context-type="linenumber">43</context>
         </context-group>
-        <target>Ungültige Einstellungen (kein Passwort?)</target>
+        <target>Ungültige Einstellungen (fehlendes Passwort?)</target>
       </trans-unit>
       <trans-unit id="2807800733729323332" datatype="html">
         <source>Yes</source>
