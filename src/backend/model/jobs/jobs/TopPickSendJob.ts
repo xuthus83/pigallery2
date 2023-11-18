@@ -8,6 +8,7 @@ import {PhotoEntity} from '../../database/enitites/PhotoEntity';
 import {EmailMediaMessenger} from '../../mediamessengers/EmailMediaMessenger';
 import {MediaPickDTO} from '../../../../common/entities/MediaPickDTO';
 import {MediaDTOUtils} from '../../../../common/entities/MediaDTO';
+import {DynamicConfig} from '../../../../common/entities/DynamicConfig';
 
 
 export class TopPickSendJob extends Job<{
@@ -19,7 +20,7 @@ export class TopPickSendJob extends Job<{
 }> {
   public readonly Name = DefaultsJobs[DefaultsJobs['Top Pick Sending']];
   public readonly Supported: boolean = true;
-  public readonly ConfigTemplate: ConfigTemplateEntry[] = [
+  public readonly ConfigTemplate: DynamicConfig[] = [
     {
       id: 'mediaPick',
       type: 'MediaPickDTO-array',

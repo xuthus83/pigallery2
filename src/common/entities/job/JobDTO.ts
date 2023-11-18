@@ -1,4 +1,5 @@
 import {backendText} from '../../BackendTexts';
+import {DynamicConfig} from '../DynamicConfig';
 
 export type fieldType = 'string' | 'string-array' | 'number' | 'boolean' | 'number-array' | 'MediaPickDTO-array';
 
@@ -17,17 +18,10 @@ export enum DefaultsJobs {
   'Top Pick Sending' = 12
 }
 
-export interface ConfigTemplateEntry {
-  id: string;
-  name: backendText;
-  description: backendText;
-  type: fieldType;
-  defaultValue: any;
-}
 
 export interface JobDTO {
   Name: string;
-  ConfigTemplate: ConfigTemplateEntry[];
+  ConfigTemplate: DynamicConfig[];
 }
 
 export const JobDTOUtils = {
