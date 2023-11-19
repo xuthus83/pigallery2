@@ -132,7 +132,7 @@ export interface IExtensionMessengers {
   }): void;
 }
 
-export interface IExtensionObject<C> {
+export interface IExtensionObject<C = void> {
   /**
    * ID of the extension that is internally used. By default, the name and ID matches if there is no collision.
    */

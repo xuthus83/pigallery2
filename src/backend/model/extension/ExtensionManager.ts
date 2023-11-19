@@ -107,8 +107,8 @@ export class ExtensionManager implements IObjectManager {
       }
 
       if (fs.existsSync(packageJsonPath)) {
-        Logger.silly(LOG_TAG, `Running: "npm install --omit=dev" in ${extPath}`);
-        await exec('npm install --omit=dev', {
+        Logger.silly(LOG_TAG, `Running: "npm install --prefer-offline --no-audit --progress=false --omit=dev" in ${extPath}`);
+        await exec('npm install  --no-audit --progress=false --omit=dev', {
           cwd: extPath
         });
         // eslint-disable-next-line @typescript-eslint/no-var-requires
