@@ -7,6 +7,8 @@ import {ILogger} from '../../Logger';
 import {UserDTO, UserRoles} from '../../../common/entities/UserDTO';
 import {ParamsDictionary} from 'express-serve-static-core';
 import {Connection} from 'typeorm';
+import {DynamicConfig} from '../../../common/entities/DynamicConfig';
+import {MediaDTOWithThPath} from '../messenger/Messenger';
 
 
 export type IExtensionBeforeEventHandler<I, O> = (input: { inputs: I }, event: { stopPropagation: boolean }) => Promise<{ inputs: I } | O>;
@@ -69,16 +71,18 @@ export interface IExtensionRESTRoute {
    * @param paths RESTapi path, relative to the extension base endpoint
    * @param minRole set to null to omit auer check (ie make the endpoint public)
    * @param cb function callback
+   * @return newly added REST api path
    */
-  jsonResponse(paths: string[], minRole: UserRoles, cb: (params?: ParamsDictionary, body?: any, user?: UserDTO) => Promise<unknown> | unknown): void;
+  jsonResponse(paths: string[], minRole: UserRoles, cb: (params?: ParamsDictionary, body?: any, user?: UserDTO) => Promise<unknown> | unknown): string;
 
   /**
    * Exposes a standard expressjs middleware
    * @param paths RESTapi path, relative to the extension base endpoint
    * @param minRole set to null to omit auer check (ie make the endpoint public)
    * @param mw expressjs middleware
+   * @return newly added REST api path
    */
-  rawMiddleware(paths: string[], minRole: UserRoles, mw: (req: Request, res: Response, next: NextFunction) => void | Promise<void>): void;
+  rawMiddleware(paths: string[], minRole: UserRoles, mw: (req: Request, res: Response, next: NextFunction) => void | Promise<void>): string;
 }
 
 export interface IExtensionRESTApi {
@@ -116,9 +120,21 @@ export interface IExtensionConfig<C> {
   getConfig(): C;
 }
 
+export interface IExtensionMessengers {
+  /**
+   * Adds a new messenger that the user can select e.g.: for sending top pick photos
+   * @param name Name of the messenger (also used as id)
+   * @param config config metadata for this messenger
+   * @param callbacks messenger logic
+   */
+  addMessenger<C extends Record<string, unknown> = Record<string, unknown>>(name: string, config: DynamicConfig[], callbacks: {
+    sendMedia: (config: C, media: MediaDTOWithThPath[]) => Promise<void>
+  }): void;
+}
+
 export interface IExtensionObject<C> {
   /**
-   * ID of the extension that is internally used. By default the name and ID matches if there is no collision.
+   * ID of the extension that is internally used. By default, the name and ID matches if there is no collision.
    */
   extensionId: string,
 
@@ -159,6 +175,13 @@ export interface IExtensionObject<C> {
    * Use this to define REST calls related to the extension
    */
   RESTApi: IExtensionRESTApi;
+
+  /**
+   * Object to manipulate messengers.
+   * Messengers are used to send messages (like emails) from the app.
+   * One type of message is a list of selected photos.
+   */
+  messengers: IExtensionMessengers;
 }
 
 

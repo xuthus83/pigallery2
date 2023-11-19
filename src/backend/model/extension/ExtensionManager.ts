@@ -4,7 +4,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import {IObjectManager} from '../database/IObjectManager';
 import {Logger} from '../../Logger';
-import {IExtensionEvents, IExtensionObject, IServerExtension} from './IExtension';
+import {IExtensionEvents, IExtensionObject} from './IExtension';
 import {Server} from '../../server';
 import {ExtensionEvent} from './ExtensionEvent';
 import * as express from 'express';
@@ -108,8 +108,8 @@ export class ExtensionManager implements IObjectManager {
 
       if (fs.existsSync(packageJsonPath)) {
         Logger.silly(LOG_TAG, `Running: "npm install --omit=dev" in ${extPath}`);
-        await exec('npm install --omit=dev' ,{
-          cwd:extPath
+        await exec('npm install --omit=dev', {
+          cwd: extPath
         });
         // eslint-disable-next-line @typescript-eslint/no-var-requires
         const pkg = require(packageJsonPath);
@@ -138,8 +138,9 @@ export class ExtensionManager implements IObjectManager {
       const ext = require(serverExt);
       if (typeof ext?.cleanUp === 'function') {
         Logger.debug(LOG_TAG, 'Running Init on extension:' + extObj.extensionName);
-        await ext?.cleanUp(ext);
+        await ext?.cleanUp(extObj);
       }
+      extObj.messengers.cleanUp();
     }
   }
 

@@ -18,6 +18,13 @@ export class MessengerRepository {
     return Object.values(this.messengers);
   }
 
+  remove(m: Messenger<Record<string, unknown>>): void {
+    if (!this.messengers[m.Name]) {
+      throw new Error('Messenger does not exist:' + m.Name);
+    }
+    delete this.messengers[m.Name];
+  }
+
   register(msgr: Messenger): void {
     if (typeof this.messengers[msgr.Name] !== 'undefined') {
       throw new Error('Messenger already exist:' + msgr.Name);

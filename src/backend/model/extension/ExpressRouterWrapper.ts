@@ -62,7 +62,9 @@ export class ExpressRouteWrapper implements IExtensionRESTRoute {
         },
         RenderingMWs.renderResult
       ])));
-    this.extLogger.silly(`Listening on ${this.func} ${ExtensionManager.EXTENSION_API_PATH}${fullPaths}`);
+    const p = ExtensionManager.EXTENSION_API_PATH + fullPaths;
+    this.extLogger.silly(`Listening on ${this.func} ${p}`);
+    return p;
   }
 
   public rawMiddleware(paths: string[], minRole: UserRoles, mw: (req: Request, res: Response, next: NextFunction) => void | Promise<void>) {
@@ -70,6 +72,8 @@ export class ExpressRouteWrapper implements IExtensionRESTRoute {
     this.router[this.func](fullPaths,
       ...this.getAuthMWs(minRole),
       mw);
-    this.extLogger.silly(`Listening on ${this.func} ${ExtensionManager.EXTENSION_API_PATH}${fullPaths}`);
+    const p = ExtensionManager.EXTENSION_API_PATH + fullPaths;
+    this.extLogger.silly(`Listening on ${this.func} ${p}`);
+    return p;
   }
 }
