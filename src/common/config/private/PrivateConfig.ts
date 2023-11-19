@@ -11,6 +11,7 @@ import {
 } from '../../entities/job/JobScheduleDTO';
 import {
   ClientConfig,
+  ClientExtensionsConfig,
   ClientGPXCompressingConfig,
   ClientMediaConfig,
   ClientMetaFileConfig,
@@ -25,8 +26,7 @@ import {
   ConfigPriority,
   TAGS
 } from '../public/ClientConfig';
-import {SubConfigClass} from 'typeconfig/src/decorators/class/SubConfigClass';
-import {ConfigProperty} from 'typeconfig/src/decorators/property/ConfigPropoerty';
+import {ConfigProperty, SubConfigClass} from 'typeconfig/common';
 import {DefaultsJobs} from '../../entities/job/JobDTO';
 import {SearchQueryDTO, SearchQueryTypes, TextSearch,} from '../../entities/SearchQueryDTO';
 import {SortByTypes} from '../../entities/SortingMethods';
@@ -1013,6 +1013,25 @@ export class ServerServiceConfig extends ClientServiceConfig {
   Log: ServerLogConfig = new ServerLogConfig();
 }
 
+
+@SubConfigClass<TAGS>({softReadonly: true})
+export class ServerExtensionsConfig extends ClientExtensionsConfig {
+  @ConfigProperty({volatile: true})
+  list: string[] = [];
+
+  @ConfigProperty({type: 'object'})
+  configs: Record<string, unknown> = {};
+
+  @ConfigProperty({
+    tags: {
+      name: $localize`Clean up unused tables`,
+      priority: ConfigPriority.underTheHood,
+    },
+    description: $localize`Automatically removes all tables from the DB that are not used anymore.`,
+  })
+  cleanUpUnusedTables: boolean = true;
+}
+
 @SubConfigClass({softReadonly: true})
 export class ServerEnvironmentConfig {
   @ConfigProperty({volatile: true})
@@ -1132,6 +1151,15 @@ export class ServerConfig extends ClientConfig {
     description: $localize`The App can send messages (like photos on the same day a year ago. aka: "Top Pick"). Here you can configure the delivery method.`
   })
   Messaging: MessagingConfig = new MessagingConfig();
+
+
+  @ConfigProperty({
+    tags: {
+      name: $localize`Extensions`,
+      uiIcon: 'ionCloudOutline'
+    } as TAGS,
+  })
+  Extensions: ServerExtensionsConfig = new ServerExtensionsConfig();
 
   @ConfigProperty({
     tags: {

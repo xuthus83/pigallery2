@@ -12,6 +12,7 @@ import {IptcParser} from 'ts-node-iptc';
 import {FFmpegFactory} from '../FFmpegFactory';
 import {FfprobeData} from 'fluent-ffmpeg';
 import {Utils} from '../../../common/Utils';
+import { ExtensionDecorator } from '../extension/ExtensionDecorator';
 import * as exifr from 'exifr';
 import * as path from 'path';
 
@@ -19,6 +20,8 @@ const LOG_TAG = '[MetadataLoader]';
 const ffmpeg = FFmpegFactory.get();
 
 export class MetadataLoader {
+
+  @ExtensionDecorator(e=>e.gallery.MetadataLoader.loadVideoMetadata)
   public static loadVideoMetadata(fullPath: string): Promise<VideoMetadata> {
     return new Promise<VideoMetadata>((resolve) => {
       const metadata: VideoMetadata = {
@@ -153,6 +156,7 @@ export class MetadataLoader {
     fileSize: 0,
   };
 
+  @ExtensionDecorator(e=>e.gallery.MetadataLoader.loadPhotoMetadata)
   public static loadPhotoMetadata(fullPath: string): Promise<PhotoMetadata> {
     return new Promise<PhotoMetadata>((resolve, reject) => {
       try {
@@ -189,7 +193,7 @@ export class MetadataLoader {
                 fullPathWithoutExt + '.xmp',
                 fullPathWithoutExt + '.XMP',
               ];
-      
+
               for (const sidecarPath of sidecarPaths) {
                 if (fs.existsSync(sidecarPath)) {
                   const sidecarData = exifr.sidecar(sidecarPath);
