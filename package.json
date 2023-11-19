@@ -49,7 +49,6 @@
     "fluent-ffmpeg": "2.1.2",
     "image-size": "1.0.2",
     "locale": "0.1.0",
-    "logger": "file:extensions/logger",
     "node-geocoder": "4.2.0",
     "nodemailer": "6.9.4",
     "reflect-metadata": "0.1.13",
