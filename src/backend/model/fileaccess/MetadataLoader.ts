@@ -13,6 +13,8 @@ import {FFmpegFactory} from '../FFmpegFactory';
 import {FfprobeData} from 'fluent-ffmpeg';
 import {Utils} from '../../../common/Utils';
 import { ExtensionDecorator } from '../extension/ExtensionDecorator';
+import * as exifr from 'exifr';
+import * as path from 'path';
 
 const LOG_TAG = '[MetadataLoader]';
 const ffmpeg = FFmpegFactory.get();
@@ -33,6 +35,29 @@ export class MetadataLoader {
         fileSize: 0,
         fps: 0,
       };
+
+      try {
+        // search for sidecar and merge metadata
+        const fullPathWithoutExt = path.parse(fullPath).name;
+        const sidecarPaths = [
+          fullPath + '.xmp',
+          fullPath + '.XMP',
+          fullPathWithoutExt + '.xmp',
+          fullPathWithoutExt + '.XMP',
+        ];
+
+        for (const sidecarPath of sidecarPaths) {
+          if (fs.existsSync(sidecarPath)) {
+            const sidecarData = exifr.sidecar(sidecarPath);
+            sidecarData.then((response) => {
+              metadata.keywords = [(response as any).dc.subject].flat();
+            });
+          }
+        }
+      } catch (err) {
+        // ignoring errors
+      }
+
       try {
         const stat = fs.statSync(fullPath);
         metadata.fileSize = stat.size;
@@ -155,6 +180,28 @@ export class MetadataLoader {
               const stat = fs.statSync(fullPath);
               metadata.fileSize = stat.size;
               metadata.creationDate = stat.mtime.getTime();
+            } catch (err) {
+              // ignoring errors
+            }
+
+            try {
+              // search for sidecar and merge metadata
+              const fullPathWithoutExt = path.parse(fullPath).name;
+              const sidecarPaths = [
+                fullPath + '.xmp',
+                fullPath + '.XMP',
+                fullPathWithoutExt + '.xmp',
+                fullPathWithoutExt + '.XMP',
+              ];
+
+              for (const sidecarPath of sidecarPaths) {
+                if (fs.existsSync(sidecarPath)) {
+                  const sidecarData = exifr.sidecar(sidecarPath);
+                  sidecarData.then((response) => {
+                    metadata.keywords = [(response as any).dc.subject].flat();
+                  });
+                }
+              }
             } catch (err) {
               // ignoring errors
             }
