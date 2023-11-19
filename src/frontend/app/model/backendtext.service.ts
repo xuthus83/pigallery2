@@ -38,6 +38,10 @@ export class BackendtextService {
         return $localize`Message`;
       case backendTexts.emailText.description:
         return $localize`E-mail text.`;
+      case backendTexts.messenger.name:
+        return $localize`Messenger`;
+      case backendTexts.messenger.description:
+        return $localize`Messenger to send this message with.`;
       default:
         return null;
     }
