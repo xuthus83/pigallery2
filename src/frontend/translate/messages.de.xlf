@@ -92,7 +92,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/EnumTranslations.ts</context>
           <context context-type="linenumber">22</context>
         </context-group>
-        <target>User</target>
+        <target>Benutzer</target>
       </trans-unit>
       <trans-unit id="5128106301085777888" datatype="html">
         <source>User to connect to the SMTP server.</source>
@@ -312,7 +312,7 @@
           <context context-type="sourcefile">src/common/config/private/PrivateConfig.ts</context>
           <context context-type="linenumber">251</context>
         </context-group>
-        <target>Ordner Datenbank</target>
+        <target>Datenbankordner</target>
       </trans-unit>
       <trans-unit id="631272345671042051" datatype="html">
         <source>All file-based data will be stored here (sqlite database, job history data).</source>
@@ -552,7 +552,7 @@
           <context context-type="sourcefile">src/common/config/private/PrivateConfig.ts</context>
           <context context-type="linenumber">456</context>
         </context-group>
-        <target>Ordnerliste ausschließen</target>
+        <target>Liste ausgeschlossener Verzeichnisse</target>
       </trans-unit>
       <trans-unit id="1610825524284664220" datatype="html">
         <source>Folders to exclude from indexing. If an entry starts with '/' it is treated as an absolute path. If it doesn't start with '/' but contains a '/', the path is relative to the image directory. If it doesn't contain a '/', any folder with this name will be excluded.</source>
@@ -1280,7 +1280,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">151</context>
         </context-group>
-        <target>Enable Autocomplete</target>
+        <target>Autovervollständigung aktivieren</target>
       </trans-unit>
       <trans-unit id="7703111577289302879" datatype="html">
         <source>Show hints while typing search query.</source>
@@ -1360,7 +1360,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">1158</context>
         </context-group>
-        <target>Enable</target>
+        <target>Aktivieren</target>
       </trans-unit>
       <trans-unit id="8338545895574711090" datatype="html">
         <source>Enables searching.</source>
@@ -1368,7 +1368,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">189</context>
         </context-group>
-        <target>Enables searching.</target>
+        <target>Aktiviere Suche.</target>
       </trans-unit>
       <trans-unit id="8206089520407978340" datatype="html">
         <source>Search cache timeout.</source>
@@ -1376,7 +1376,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">200</context>
         </context-group>
-        <target>Search cache timeout.</target>
+        <target>Such-Cache-Timeout.</target>
       </trans-unit>
       <trans-unit id="6507738516307254402" datatype="html">
         <source>Autocomplete</source>
@@ -1392,7 +1392,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">215</context>
         </context-group>
-        <target>Maximales Medienergebnis</target>
+        <target>Maximale Medienergebnis-Anzahl</target>
       </trans-unit>
       <trans-unit id="1471447046544934544" datatype="html">
         <source>Maximum number of photos and videos that are listed in one search result.</source>
@@ -1408,7 +1408,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">224</context>
         </context-group>
-        <target>Maximum directory result</target>
+        <target>Maximale Verzeichnisergebnis-Anzahl</target>
       </trans-unit>
       <trans-unit id="8397283408986431970" datatype="html">
         <source>Maximum number of directories that are listed in one search result.</source>
@@ -1668,7 +1668,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">481</context>
         </context-group>
-        <target>Map Provider</target>
+        <target>Kartendienst</target>
       </trans-unit>
       <trans-unit id="5860141610052555892" datatype="html">
         <source>Mapbox access token</source>
@@ -1848,7 +1848,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">760</context>
         </context-group>
-        <target>Default sorting</target>
+        <target>Standard-Sortierung</target>
       </trans-unit>
       <trans-unit id="8993065143187639036" datatype="html">
         <source>Default sorting method for photo and video in a directory results.</source>
@@ -1864,7 +1864,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">770</context>
         </context-group>
-        <target>Default search sorting</target>
+        <target>Standard-Sortierung von Suchergebnissen</target>
       </trans-unit>
       <trans-unit id="7941581315950625881" datatype="html">
         <source>Default sorting method for photo and video in a search results.</source>
@@ -1880,7 +1880,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">780</context>
         </context-group>
-        <target>Default grouping</target>
+        <target>Standard-Gruppierung</target>
       </trans-unit>
       <trans-unit id="5640283237212785034" datatype="html">
         <source>Default grouping method for photo and video in a directory results.</source>
@@ -1896,7 +1896,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">791</context>
         </context-group>
-        <target>Default search grouping</target>
+        <target>Standard-Gruppierung von Suchergebnissen</target>
       </trans-unit>
       <trans-unit id="4276017218108240034" datatype="html">
         <source>Default grouping method for photo and video in a search results.</source>
@@ -1912,7 +1912,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">805</context>
         </context-group>
-        <target>Download Zip</target>
+        <target>ZIP-Download</target>
       </trans-unit>
       <trans-unit id="3946771566659086037" datatype="html">
         <source>Enable download zip of a directory contents Directory flattening. (Does not work for searches.)</source>
@@ -1928,7 +1928,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">816</context>
         </context-group>
-        <target>Directory flattening</target>
+        <target>Verzeichnisse "glätten" (flattening)</target>
       </trans-unit>
       <trans-unit id="705617377096083016" datatype="html">
         <source>Adds a button to flattens the file structure, by listing the content of all subdirectories. (Won't work if the gallery has multiple folders with the same path.)</source>
@@ -1936,7 +1936,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">821</context>
         </context-group>
-        <target>Adds a button to flattens the file structure, by listing the content of all subdirectories. (Won't work if the gallery has multiple folders with the same path.)</target>
+        <target>Fügt ein Knopf hinzu, um die Dateistruktur zu "glätten" in dem der Inhalt aller Unterverzeichnisse aufgelistet wird. (Funktioniert nicht, falls die Galerie mehrere Verzeichnisse mit demselben Pfad hat.)</target>
       </trans-unit>
       <trans-unit id="2057017984457052518" datatype="html">
         <source>Default grid size</source>
@@ -1944,7 +1944,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">828</context>
         </context-group>
-        <target>Default grid size</target>
+        <target>Standard-Rastergröße</target>
       </trans-unit>
       <trans-unit id="783998631226539613" datatype="html">
         <source>Default grid size that is used to render photos and videos.</source>
@@ -2040,7 +2040,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">893</context>
         </context-group>
-        <target>Sorting and grouping</target>
+        <target>Sortieren und gruppieren</target>
       </trans-unit>
       <trans-unit id="8685965882892653885" datatype="html">
         <source>Default slideshow speed</source>
@@ -2048,7 +2048,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">906</context>
         </context-group>
-        <target>Default slideshow speed</target>
+        <target>Standard-Geschwindigkeit der Slideshow</target>
       </trans-unit>
       <trans-unit id="8391296346935301055" datatype="html">
         <source>Default time interval for displaying a photo in the slide show.</source>
@@ -2068,7 +2068,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/lightbox/controls/controls.lightbox.gallery.component.html</context>
           <context context-type="linenumber">66</context>
         </context-group>
-        <target>Always show captions</target>
+        <target>Beschreibung immer anzeigen</target>
       </trans-unit>
       <trans-unit id="1541637444630104645" datatype="html">
         <source>If enabled, lightbox will always show caption by default, not only on hover.</source>
@@ -2088,7 +2088,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/lightbox/controls/controls.lightbox.gallery.component.html</context>
           <context context-type="linenumber">79</context>
         </context-group>
-        <target>Always show faces</target>
+        <target>Gesichter immer anzeigen</target>
       </trans-unit>
       <trans-unit id="9050621730692215024" datatype="html">
         <source>If enabled, lightbox will always show faces by default, not only on hover.</source>
@@ -2104,7 +2104,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">933</context>
         </context-group>
-        <target>Loop Videos</target>
+        <target>Endloswiedergabe von Videos</target>
       </trans-unit>
       <trans-unit id="3583632647770258043" datatype="html">
         <source>If enabled, lightbox will loop videos by default.</source>
@@ -2260,7 +2260,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">1063</context>
         </context-group>
-        <target>Navigation bar</target>
+        <target>Navigationsleiste</target>
       </trans-unit>
       <trans-unit id="138256296895235303" datatype="html">
         <source>Caption first naming</source>
@@ -3199,7 +3199,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/EnumTranslations.ts</context>
           <context context-type="linenumber">38</context>
         </context-group>
-        <target>Custom</target>
+        <target>Benutzerdefiniert</target>
       </trans-unit>
       <trans-unit id="113099127945736504" datatype="html">
         <source>OpenStreetMap</source>
@@ -4060,7 +4060,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/lightbox/controls/controls.lightbox.gallery.component.html</context>
           <context context-type="linenumber">55</context>
         </context-group>
-        <target>Slideshow speed:</target>
+        <target>Slideshow-Geschwindigkeit:</target>
       </trans-unit>
       <trans-unit id="3118381885529786097" datatype="html">
         <source>key: a</source>
@@ -4396,7 +4396,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/gallery/navigator/navigator.gallery.component.html</context>
           <context context-type="linenumber">176</context>
         </context-group>
-        <target>Grid size</target>
+        <target>Rastergröße</target>
       </trans-unit>
       <trans-unit id="7241451058585494578" datatype="html">
         <source>key: alt + up</source>
@@ -5225,7 +5225,7 @@
           <context context-type="sourcefile">src/frontend/app/ui/settings/users/users.component.html</context>
           <context context-type="linenumber">4</context>
         </context-group>
-        <target>User list</target>
+        <target>Benutzerliste</target>
       </trans-unit>
       <trans-unit id="5918723526444903137" datatype="html">
         <source>Add user</source>
