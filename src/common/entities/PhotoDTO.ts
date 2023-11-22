@@ -26,8 +26,10 @@ export interface FaceRegion {
   box?: FaceRegionBox; // some faces don t have region ass they are coming from keywords
 }
 
+export type RatingTypes = 0 | 1 | 2 | 3 | 4 | 5;
+
 export interface PhotoMetadata extends MediaMetadata {
-  rating?: 0 | 1 | 2 | 3 | 4 | 5;
+  rating?: RatingTypes;
   caption?: string;
   keywords?: string[];
   cameraData?: CameraMetadata;
