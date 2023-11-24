@@ -36,7 +36,7 @@ export class ProjectPathClass {
     this.TranscodedFolder = path.join(this.TempFolder, 'tc');
     this.FacesFolder = path.join(this.TempFolder, 'f');
     this.DBFolder = this.getAbsolutePath(Config.Database.dbFolder);
-    this.ExtensionFolder = path.join(this.Root, 'extensions');
+    this.ExtensionFolder = this.getAbsolutePath(Config.Extensions.folder);
 
     // create thumbnail folder if not exist
     if (!fs.existsSync(this.TempFolder)) {
