@@ -1,6 +1,6 @@
 {
   "name": "pigallery2",
-  "version": "2.0.0",
+  "version": "2.0.2-edge",
   "description": "This is a photo gallery optimised for running low resource servers (especially on raspberry pi)",
   "author": "Patrik J. Braun",
   "homepage": "https://github.com/bpatrik/pigallery2",
@@ -25,7 +25,8 @@
     "lint": "ng lint",
     "start-e2e-server": "node ./test/folder-reset test/e2e && node ./src/backend/index --config-path=test/e2e/config.json --Database-dbFolder=test/e2e --Server-port=8080",
     "cypress:open": "cypress open",
-    "cypress:run": "cypress run"
+    "cypress:run": "cypress run",
+    "build-extension-interface": "tsc -p extension/ext-interface.tsconfig.json && tsc -p extension/ext-enums.tsconfig.json"
   },
   "repository": {
     "type": "git",
