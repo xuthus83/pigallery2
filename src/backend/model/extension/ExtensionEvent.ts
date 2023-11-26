@@ -1,6 +1,6 @@
 import {IExtensionAfterEventHandler, IExtensionBeforeEventHandler, IExtensionEvent} from './IExtension';
 
-export class ExtensionEvent<I, O> implements IExtensionEvent<I, O> {
+export class ExtensionEvent<I extends unknown[], O> implements IExtensionEvent<I, O> {
   protected beforeHandlers: IExtensionBeforeEventHandler<I, O>[] = [];
   protected afterHandlers: IExtensionAfterEventHandler<O>[] = [];
 
@@ -28,7 +28,7 @@ export class ExtensionEvent<I, O> implements IExtensionEvent<I, O> {
 
 
   public async triggerBefore(input: { inputs: I }, event: { stopPropagation: boolean }): Promise<{ inputs: I } | O> {
-    let pipe: { inputs: I } | O = input;
+    let pipe: { inputs: I} | O = input;
     if (this.beforeHandlers && this.beforeHandlers.length > 0) {
       const s = this.beforeHandlers.slice(0);
       for (let i = 0; i < s.length; ++i) {

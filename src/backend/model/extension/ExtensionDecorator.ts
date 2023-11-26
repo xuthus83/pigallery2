@@ -10,11 +10,11 @@ export class ExtensionDecoratorObject {
 
 }
 
-export const ExtensionDecorator = <I extends [], O>(fn: (ee: IExtensionEvents) => IExtensionEvent<I, O>) => {
+export const ExtensionDecorator = <I extends unknown[], O>(fn: (ee: IExtensionEvents) => IExtensionEvent<I, O>) => {
   return (
     target: unknown,
     propertyName: string,
-    descriptor: PropertyDescriptor
+    descriptor: TypedPropertyDescriptor<(...args:I)=>Promise<O>>
   ) => {
 
     const targetMethod = descriptor.value;

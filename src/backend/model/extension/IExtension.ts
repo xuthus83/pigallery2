@@ -9,13 +9,22 @@ import {ParamsDictionary} from 'express-serve-static-core';
 import {Connection} from 'typeorm';
 import {DynamicConfig} from '../../../common/entities/DynamicConfig';
 import {MediaDTOWithThPath} from '../messenger/Messenger';
+import {PhotoMetadata} from '../../../common/entities/PhotoDTO';
+import {VideoMetadata} from '../../../common/entities/VideoDTO';
+import {MediaRendererInput, SvgRendererInput} from '../fileaccess/PhotoWorker';
+import {SearchQueryDTO} from '../../../common/entities/SearchQueryDTO';
+import {CoverPhotoDTOWithID} from '../database/CoverManager';
+import {ParentDirectoryDTO} from '../../../common/entities/DirectoryDTO';
+import {DirectoryScanSettings} from '../fileaccess/DiskManager';
 
 
-export type IExtensionBeforeEventHandler<I, O> = (input: { inputs: I }, event: { stopPropagation: boolean }) => Promise<{ inputs: I } | O>;
+export type IExtensionBeforeEventHandler<I extends unknown[], O> = (input: { inputs: I }, event: { stopPropagation: boolean }) => Promise<{
+  inputs: I
+} | O>;
 export type IExtensionAfterEventHandler<O> = (output: O) => Promise<O>;
 
 
-export interface IExtensionEvent<I, O> {
+export interface IExtensionEvent<I extends unknown[], O> {
   before: (handler: IExtensionBeforeEventHandler<I, O>) => void;
   after: (handler: IExtensionAfterEventHandler<O>) => void;
 }
@@ -29,32 +38,40 @@ export interface IExtensionEvents {
      * Events for Directory and Album covers
      */
     CoverManager: {
-      getCoverForAlbum: IExtensionEvent<any, any>;
-      getCoverForDirectory: IExtensionEvent<any, any>
+      getCoverForAlbum: IExtensionEvent<[{
+        searchQuery: SearchQueryDTO;
+      }], CoverPhotoDTOWithID>;
+      getCoverForDirectory: IExtensionEvent<[{
+        id: number;
+        name: string;
+        path: string;
+      }], CoverPhotoDTOWithID>
       /**
        * Invalidates directory covers for a given directory and every parent
        */
-      invalidateDirectoryCovers: IExtensionEvent<any, any>;
+      invalidateDirectoryCovers: IExtensionEvent<[ParentDirectoryDTO], void>;
     },
     ImageRenderer: {
       /**
        * Renders a thumbnail or photo
        */
-      render: IExtensionEvent<any, any>
+      render: IExtensionEvent<[MediaRendererInput | SvgRendererInput], void>
     },
     /**
      * Reads exif, iptc, etc.. metadata for photos/videos
      */
     MetadataLoader: {
-      loadVideoMetadata: IExtensionEvent<any, any>,
-      loadPhotoMetadata: IExtensionEvent<any, any>
+      loadVideoMetadata: IExtensionEvent<[string], VideoMetadata>,
+      loadPhotoMetadata: IExtensionEvent<[string], PhotoMetadata>
     },
     /**
      * Scans the storage for a given directory and returns the list of child directories,
      * photos, videos and metafiles
      */
     DiskManager: {
-      scanDirectory: IExtensionEvent<any, any>
+      scanDirectory: IExtensionEvent<[
+        string,
+        DirectoryScanSettings], ParentDirectoryDTO>
     }
   };
 }
