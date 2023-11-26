@@ -329,6 +329,7 @@ export class ServerThumbnailConfig extends ClientThumbnailConfig {
     description: $localize`Use high quality chroma subsampling in webp. See: https://sharp.pixelplumbing.com/api-output#webp.`
   })
   smartSubsample = true;
+
   @ConfigProperty({
     type: 'float',
     tags:
@@ -339,6 +340,16 @@ export class ServerThumbnailConfig extends ClientThumbnailConfig {
     description: $localize`This ratio of the face bounding box will be added to the face as a margin. Higher number add more margin.`
   })
   personFaceMargin: number = 0.7; // in ratio [0-1]
+  @ConfigProperty({
+    type: 'boolean',
+    tags:
+      {
+        name: $localize`Keep Gif animation`,
+        priority: ConfigPriority.underTheHood
+      },
+    description: $localize`Converts Gif to animated webp.`
+  })
+  animateGif = true;
 }
 
 @SubConfigClass({softReadonly: true})
