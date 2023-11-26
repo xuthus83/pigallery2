@@ -25,13 +25,13 @@ export const ExtensionDecorator = <I extends unknown[], O>(fn: (ee: IExtensionEv
 
       const event = fn(ExtensionDecoratorObject.events) as ExtensionEvent<I, O>;
       const eventObj = {stopPropagation: false};
-      const input = await event.triggerBefore({inputs: args}, eventObj);
+      const input = await event.triggerBefore(args, eventObj);
 
       // skip the rest of the execution if the before handler asked for stop propagation
       if (eventObj.stopPropagation) {
         return input as O;
       }
-      const out = await targetMethod.apply(this, args);
+      const out = await targetMethod.apply(this, input);
       return await event.triggerAfter(out);
     };
 

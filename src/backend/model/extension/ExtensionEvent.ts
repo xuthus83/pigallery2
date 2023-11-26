@@ -27,15 +27,15 @@ export class ExtensionEvent<I extends unknown[], O> implements IExtensionEvent<I
   }
 
 
-  public async triggerBefore(input: { inputs: I }, event: { stopPropagation: boolean }): Promise<{ inputs: I } | O> {
-    let pipe: { inputs: I} | O = input;
+  public async triggerBefore(input: I, event: { stopPropagation: boolean }): Promise<I | O> {
+    let pipe: I | O = input;
     if (this.beforeHandlers && this.beforeHandlers.length > 0) {
       const s = this.beforeHandlers.slice(0);
       for (let i = 0; i < s.length; ++i) {
         if (event.stopPropagation) {
           break;
         }
-        pipe = await s[i](pipe as { inputs: I }, event);
+        pipe = await s[i](pipe as I, event);
       }
     }
     return pipe;

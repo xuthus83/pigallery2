@@ -18,9 +18,7 @@ import {ParentDirectoryDTO} from '../../../common/entities/DirectoryDTO';
 import {DirectoryScanSettings} from '../fileaccess/DiskManager';
 
 
-export type IExtensionBeforeEventHandler<I extends unknown[], O> = (input: { inputs: I }, event: { stopPropagation: boolean }) => Promise<{
-  inputs: I
-} | O>;
+export type IExtensionBeforeEventHandler<I extends unknown[], O> = (input: I, event: { stopPropagation: boolean }) => Promise<I | O>;
 export type IExtensionAfterEventHandler<O> = (output: O) => Promise<O>;
 
 
