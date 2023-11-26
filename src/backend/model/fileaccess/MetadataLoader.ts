@@ -51,6 +51,7 @@ export class MetadataLoader {
             const sidecarData = exifr.sidecar(sidecarPath);
             sidecarData.then((response) => {
               metadata.keywords = [(response as any).dc.subject].flat();
+              metadata.rating = (response as any).xmp.Rating;
             });
           }
         }
@@ -199,6 +200,7 @@ export class MetadataLoader {
                   const sidecarData = exifr.sidecar(sidecarPath);
                   sidecarData.then((response) => {
                     metadata.keywords = [(response as any).dc.subject].flat();
+                    metadata.rating = (response as any).xmp.Rating;
                   });
                 }
               }
