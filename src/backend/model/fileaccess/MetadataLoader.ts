@@ -23,7 +23,7 @@ export class MetadataLoader {
 
   @ExtensionDecorator(e=>e.gallery.MetadataLoader.loadVideoMetadata)
   public static loadVideoMetadata(fullPath: string): Promise<VideoMetadata> {
-    return new Promise<VideoMetadata>((resolve) => {
+    return new Promise<VideoMetadata>(async (resolve) => {
       const metadata: VideoMetadata = {
         size: {
           width: 1,
@@ -38,21 +38,24 @@ export class MetadataLoader {
 
       try {
         // search for sidecar and merge metadata
-        const fullPathWithoutExt = path.parse(fullPath).name;
+        const fullPathWithoutExt = await path.parse(fullPath).name;
         const sidecarPaths = [
           fullPath + '.xmp',
           fullPath + '.XMP',
           fullPathWithoutExt + '.xmp',
           fullPathWithoutExt + '.XMP',
         ];
-
         for (const sidecarPath of sidecarPaths) {
           if (fs.existsSync(sidecarPath)) {
-            const sidecarData = exifr.sidecar(sidecarPath);
-            sidecarData.then((response) => {
-              metadata.keywords = [(response as any).dc.subject].flat();
-              metadata.rating = (response as any).xmp.Rating;
-            });
+            const sidecarData = await exifr.sidecar(sidecarPath);
+            if (sidecarData !== undefined) {
+              if ((sidecarData as any).dc.subject !== undefined) {
+                metadata.keywords = (sidecarData as any).dc.subject.flat();
+              }
+              if ((sidecarData as any).xmp.Rating !== undefined) {
+                metadata.rating = (sidecarData as any).xmp.Rating;
+              }
+            }
           }
         }
       } catch (err) {
@@ -159,18 +162,46 @@ export class MetadataLoader {
 
   @ExtensionDecorator(e=>e.gallery.MetadataLoader.loadPhotoMetadata)
   public static loadPhotoMetadata(fullPath: string): Promise<PhotoMetadata> {
-    return new Promise<PhotoMetadata>((resolve, reject) => {
+    return new Promise<PhotoMetadata>(async (resolve, reject) => {
+      const metadata: PhotoMetadata = {
+        size: {width: 1, height: 1},
+        creationDate: 0,
+        fileSize: 0,
+      };
+
+      try {
+        // search for sidecar and merge metadata
+        const fullPathWithoutExt = await path.parse(fullPath).name;
+        const sidecarPaths = [
+          fullPath + '.xmp',
+          fullPath + '.XMP',
+          fullPathWithoutExt + '.xmp',
+          fullPathWithoutExt + '.XMP',
+        ];
+        for (const sidecarPath of sidecarPaths) {
+          if (fs.existsSync(sidecarPath)) {
+            const sidecarData = await exifr.sidecar(sidecarPath);
+            if (sidecarData !== undefined) {
+              if ((sidecarData as any).dc.subject !== undefined) {
+                metadata.keywords = (sidecarData as any).dc.subject.flat();
+              }
+              if ((sidecarData as any).xmp.Rating !== undefined) {
+                metadata.rating = (sidecarData as any).xmp.Rating;
+              }
+            }
+          }
+        }
+      } catch (err) {
+        // ignoring errors
+      }
+
       try {
         const fd = fs.openSync(fullPath, 'r');
 
         const data = Buffer.allocUnsafe(Config.Media.photoMetadataSize);
         fs.read(fd, data, 0, Config.Media.photoMetadataSize, 0, (err) => {
           fs.closeSync(fd);
-          const metadata: PhotoMetadata = {
-            size: {width: 1, height: 1},
-            creationDate: 0,
-            fileSize: 0,
-          };
+
           if (err) {
             Logger.error(LOG_TAG, 'Error during reading photo: ' + fullPath);
             console.error(err);
@@ -181,29 +212,6 @@ export class MetadataLoader {
               const stat = fs.statSync(fullPath);
               metadata.fileSize = stat.size;
               metadata.creationDate = stat.mtime.getTime();
-            } catch (err) {
-              // ignoring errors
-            }
-
-            try {
-              // search for sidecar and merge metadata
-              const fullPathWithoutExt = path.parse(fullPath).name;
-              const sidecarPaths = [
-                fullPath + '.xmp',
-                fullPath + '.XMP',
-                fullPathWithoutExt + '.xmp',
-                fullPathWithoutExt + '.XMP',
-              ];
-
-              for (const sidecarPath of sidecarPaths) {
-                if (fs.existsSync(sidecarPath)) {
-                  const sidecarData = exifr.sidecar(sidecarPath);
-                  sidecarData.then((response) => {
-                    metadata.keywords = [(response as any).dc.subject].flat();
-                    metadata.rating = (response as any).xmp.Rating;
-                  });
-                }
-              }
             } catch (err) {
               // ignoring errors
             }
@@ -343,7 +351,9 @@ export class MetadataLoader {
                 metadata.caption = iptcData.caption.replace(/\0/g, '').trim();
               }
               if (Array.isArray(iptcData.keywords)) {
-                metadata.keywords = iptcData.keywords;
+                if (metadata.keywords === undefined) {
+                  metadata.keywords = iptcData.keywords;
+                }
               }
 
               if (iptcData.date_time) {
@@ -363,9 +373,11 @@ export class MetadataLoader {
               //  and keep the minimum amount only
               const exif: ExifReader.Tags & ExifReader.XmpTags & ExifReader.IccTags = ExifReader.load(data);
               if (exif.Rating) {
-                metadata.rating = parseInt(exif.Rating.value as string, 10) as 0 | 1 | 2 | 3 | 4 | 5;
-                if (metadata.rating < 0) {
-                  metadata.rating = 0;
+                if (metadata.rating === undefined) {
+                  metadata.rating = parseInt(exif.Rating.value as string, 10) as 0 | 1 | 2 | 3 | 4 | 5;
+                  if (metadata.rating < 0) {
+                    metadata.rating = 0;
+                  }
                 }
               }
               if (
