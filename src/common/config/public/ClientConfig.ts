@@ -1335,7 +1335,7 @@ export class ClientServiceConfig {
   applicationTitle: string = 'PiGallery 2';
 
   @ConfigProperty({
-    description: $localize`If you access the page form local network its good to know the public url for creating sharing link.`,
+    description: $localize`If you access the page from local network its good to know the public url for creating sharing link.`,
     tags: {
       name: $localize`Page public url`,
       hint: typeof window !== 'undefined' ? window?.origin : '',
