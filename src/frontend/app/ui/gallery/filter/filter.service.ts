@@ -340,7 +340,7 @@ export class FilterService {
                 .filter((o) => o.count > 0)
                 // sort by count and alpha. if counts are the same
                 .sort((a, b) =>
-                  a.count == b.count ?
+                  a.count == b.count && (a.name !== undefined && b.name !== undefined) ?
                     Number.isFinite(a.name) && Number.isFinite(b.name) ? (a.name as number) - (b.name as number) : a.name.toString().localeCompare(b.name.toString()) :
                     b.count - a.count);
 
