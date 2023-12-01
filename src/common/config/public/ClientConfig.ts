@@ -273,12 +273,12 @@ export class ClientSharingConfig {
   @ConfigProperty({
     tags:
         {
-          name: $localize`Password protected`,
+          name: $localize`Require password`,
           priority: ConfigPriority.advanced
         },
-    description: $localize`Enables password protected sharing links.`,
+    description: $localize`Requires password protected sharing links.`,
   })
-  passwordProtected: boolean = true;
+  passwordRequired: boolean = false;
 }
 
 @SubConfigClass({tags: {client: true}, softReadonly: true})

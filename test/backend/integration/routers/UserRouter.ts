@@ -125,9 +125,9 @@ describe('UserRouter', () => {
     it('it should authenticate as user with sharing key', async () => {
       Config.Users.authenticationRequired = true;
       Config.Sharing.enabled = true;
-      Config.Sharing.passwordProtected = true;
+      Config.Sharing.passwordRequired = true;
 
-      const sharingKey = (await RouteTestingHelper.createSharing(testUser)).sharingKey;
+      const sharingKey = (await RouteTestingHelper.createSharing(testUser, 'pass')).sharingKey;
 
 
       const loginRes = await login(server);
@@ -146,7 +146,7 @@ describe('UserRouter', () => {
     it('it should authenticate with sharing key', async () => {
       Config.Users.authenticationRequired = true;
       Config.Sharing.enabled = true;
-      Config.Sharing.passwordProtected = true;
+      Config.Sharing.passwordRequired = false;
       const sharing = (await RouteTestingHelper.createSharing(testUser));
 
 
@@ -161,7 +161,7 @@ describe('UserRouter', () => {
     it('it should not authenticate with sharing key without password', async () => {
       Config.Users.authenticationRequired = true;
       Config.Sharing.enabled = true;
-      Config.Sharing.passwordProtected = true;
+      Config.Sharing.passwordRequired = true;
       const sharing = (await RouteTestingHelper.createSharing(testUser, 'pass_secret'));
 
 
