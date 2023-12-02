@@ -19,12 +19,16 @@ import {DirectoryScanSettings} from '../fileaccess/DiskManager';
 
 
 export type IExtensionBeforeEventHandler<I extends unknown[], O> = (input: I, event: { stopPropagation: boolean }) => Promise<I | O>;
-export type IExtensionAfterEventHandler<O> = (output: O) => Promise<O>;
+/**
+ * input: is the original input: this is output of all before handler. This value was also piped to app's function
+ * output: is the output of the app's function or the previous after handler
+ */
+export type IExtensionAfterEventHandler<I extends unknown[], O> = (data: { input: I, output: O }) => Promise<O>;
 
 
 export interface IExtensionEvent<I extends unknown[], O> {
   before: (handler: IExtensionBeforeEventHandler<I, O>) => void;
-  after: (handler: IExtensionAfterEventHandler<O>) => void;
+  after: (handler: IExtensionAfterEventHandler<I, O>) => void;
 }
 
 /**
@@ -59,7 +63,9 @@ export interface IExtensionEvents {
      * Reads exif, iptc, etc.. metadata for photos/videos
      */
     MetadataLoader: {
+      // input: file path
       loadVideoMetadata: IExtensionEvent<[string], VideoMetadata>,
+      // input: file path
       loadPhotoMetadata: IExtensionEvent<[string], PhotoMetadata>
     },
     /**
@@ -122,7 +128,7 @@ export interface IExtensionDB {
   setExtensionTables(tables: Function[]): Promise<void>;
 
   /**
-   * Exposes all tables. You can use this if you van to have a foreign key to a built in table.
+   * Exposes all tables. You can use this if you van to have a foreign key to a built-in table.
    * Use with caution. This exposes the app's internal working.
    */
   // eslint-disable-next-line @typescript-eslint/ban-types
