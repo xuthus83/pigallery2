@@ -59,7 +59,6 @@ export class Server {
   }
 
   async init(): Promise<void> {
-
     this.app = express();
     LoggerRouter.route(this.app);
     this.app.set('view engine', 'ejs');

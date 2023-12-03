@@ -14,7 +14,7 @@ export const ExtensionDecorator = <I extends unknown[], O>(fn: (ee: IExtensionEv
   return (
     target: unknown,
     propertyName: string,
-    descriptor: TypedPropertyDescriptor<(...args:I)=>Promise<O>>
+    descriptor: TypedPropertyDescriptor<(...args: I) => Promise<O>>
   ) => {
 
     const targetMethod = descriptor.value;
@@ -32,7 +32,7 @@ export const ExtensionDecorator = <I extends unknown[], O>(fn: (ee: IExtensionEv
         return input as O;
       }
       const out = await targetMethod.apply(this, input);
-      return await event.triggerAfter(out);
+      return await event.triggerAfter(input as I, out);
     };
 
     return descriptor;

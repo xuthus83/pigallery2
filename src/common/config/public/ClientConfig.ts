@@ -273,12 +273,12 @@ export class ClientSharingConfig {
   @ConfigProperty({
     tags:
         {
-          name: $localize`Password protected`,
+          name: $localize`Require password`,
           priority: ConfigPriority.advanced
         },
-    description: $localize`Enables password protected sharing links.`,
+    description: $localize`Requires password protected sharing links.`,
   })
-  passwordProtected: boolean = true;
+  passwordRequired: boolean = false;
 }
 
 @SubConfigClass({tags: {client: true}, softReadonly: true})
@@ -1335,7 +1335,7 @@ export class ClientServiceConfig {
   applicationTitle: string = 'PiGallery 2';
 
   @ConfigProperty({
-    description: $localize`If you access the page form local network its good to know the public url for creating sharing link.`,
+    description: $localize`If you access the page from local network its good to know the public url for creating sharing link.`,
     tags: {
       name: $localize`Page public url`,
       hint: typeof window !== 'undefined' ? window?.origin : '',
