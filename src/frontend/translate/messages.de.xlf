@@ -1936,7 +1936,7 @@
           <context context-type="sourcefile">src/common/config/public/ClientConfig.ts</context>
           <context context-type="linenumber">821</context>
         </context-group>
-        <target>Fügt ein Knopf hinzu, um die Dateistruktur zu "glätten" in dem der Inhalt aller Unterverzeichnisse aufgelistet wird. (Funktioniert nicht, falls die Galerie mehrere Verzeichnisse mit demselben Pfad hat.)</target>
+        <target>Fügt einen Knopf hinzu, um die Dateistruktur zu "glätten", indem der Inhalt aller Unterverzeichnisse aufgelistet wird. (Funktioniert nicht, falls die Galerie mehrere Verzeichnisse mit demselben Pfad hat.)</target>
       </trans-unit>
       <trans-unit id="2057017984457052518" datatype="html">
         <source>Default grid size</source>
