@@ -335,6 +335,9 @@ export class MetadataLoader {
               .replace(/\0/g, '')
               .trim();
           }
+          if (iptcData.object_name) {
+            metadata.title = iptcData.object_name.replace(/\0/g, '').trim();
+          }
           if (iptcData.caption) {
             metadata.caption = iptcData.caption.replace(/\0/g, '').trim();
           }

@@ -19,6 +19,8 @@ export interface MediaMetadata {
   fileSize: number;
   keywords?: string[];
   rating?: RatingTypes;
+  title?: string;
+  caption?: string;
 }
 
 export interface MediaDimension {
