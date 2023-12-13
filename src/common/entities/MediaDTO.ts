@@ -26,6 +26,19 @@ export interface MediaDimension {
   height: number;
 }
 
+export interface SideCar {
+  dc?: SideCarDc;
+  xmp?: SideCarXmp;
+}
+
+export interface SideCarDc {
+  subject?: string[];
+}
+
+export interface SideCarXmp {
+  Rating?: RatingTypes;
+}
+
 export const MediaDTOUtils = {
   hasPositionData: (media: MediaDTO): boolean => {
     return (
