@@ -19,6 +19,7 @@ import {enumToTranslatedArray} from '../../../EnumTranslations';
 import {BsModalService} from 'ngx-bootstrap/modal';
 import {CustomSettingsEntries} from '../CustomSettingsEntries';
 import {GroupByTypes, SortByTypes} from '../../../../../../common/entities/SortingMethods';
+import { ServerExtensionsEntryConfig } from '../../../../../../common/config/private/subconfigs/ServerExtensionsConfig';
 
 interface IState {
   shouldHide(): boolean;
@@ -232,6 +233,8 @@ export class SettingsEntryComponent
       this.arrayType = 'MapPathGroupThemeConfig';
     } else if (this.state.arrayType === UserConfig) {
       this.arrayType = 'UserConfig';
+    } else if (this.state.arrayType === ServerExtensionsEntryConfig) {
+      this.arrayType = 'ServerExtensionsEntryConfig';
     } else if (this.state.arrayType === JobScheduleConfig) {
       this.arrayType = 'JobScheduleConfig';
     } else {
@@ -253,6 +256,7 @@ export class SettingsEntryComponent
         this.arrayType !== 'MapLayers' &&
         this.arrayType !== 'NavigationLinkConfig' &&
         this.arrayType !== 'MapPathGroupConfig' &&
+        this.arrayType !== 'ServerExtensionsEntryConfig' &&
         this.arrayType !== 'MapPathGroupThemeConfig' &&
         this.arrayType !== 'JobScheduleConfig' &&
         this.arrayType !== 'UserConfig') {

@@ -12,6 +12,7 @@ import {SQLConnection} from '../database/SQLConnection';
 import {ExtensionObject} from './ExtensionObject';
 import {ExtensionDecoratorObject} from './ExtensionDecorator';
 import * as util from 'util';
+import {ServerExtensionsEntryConfig} from '../../../common/config/private/subconfigs/ServerExtensionsConfig';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const exec = util.promisify(require('child_process').exec);
 
@@ -70,13 +71,23 @@ export class ExtensionManager implements IObjectManager {
       return;
     }
 
-    Config.Extensions.list = fs
-      .readdirSync(ProjectPath.ExtensionFolder)
-      .filter((f): boolean =>
-        fs.statSync(path.join(ProjectPath.ExtensionFolder, f)).isDirectory()
-      );
-    Config.Extensions.list.sort();
-    Logger.debug(LOG_TAG, 'Extensions found ', JSON.stringify(Config.Extensions.list));
+
+    const extList = fs
+        .readdirSync(ProjectPath.ExtensionFolder)
+        .filter((f): boolean =>
+            fs.statSync(path.join(ProjectPath.ExtensionFolder, f)).isDirectory()
+        );
+    extList.sort();
+
+    // delete not existing extensions
+    Config.Extensions.extensions = Config.Extensions.extensions.filter(ec => extList.indexOf(ec.path) !== -1);
+
+    // Add new extensions
+    const ePaths = Config.Extensions.extensions.map(ec => ec.path);
+    extList.filter(ep => ePaths.indexOf(ep) === -1).forEach(ep =>
+        Config.Extensions.extensions.push(new ServerExtensionsEntryConfig(ep)));
+
+    Logger.debug(LOG_TAG, 'Extensions found ', JSON.stringify(Config.Extensions.extensions.map(ec => ec.path)));
   }
 
   private createUniqueExtensionObject(name: string, folder: string): IExtensionObject<unknown> {
@@ -95,8 +106,8 @@ export class ExtensionManager implements IObjectManager {
 
   private async initExtensions() {
 
-    for (let i = 0; i < Config.Extensions.list.length; ++i) {
-      const extFolder = Config.Extensions.list[i];
+    for (let i = 0; i < Config.Extensions.extensions.length; ++i) {
+      const extFolder = Config.Extensions.extensions[i].path;
       let extName = extFolder;
       const extPath = path.join(ProjectPath.ExtensionFolder, extFolder);
       const serverExtPath = path.join(extPath, 'server.js');
@@ -122,7 +133,7 @@ export class ExtensionManager implements IObjectManager {
       const ext = require(serverExtPath);
       if (typeof ext?.init === 'function') {
         Logger.debug(LOG_TAG, 'Running init on extension: ' + extFolder);
-        await ext?.init(this.createUniqueExtensionObject(extName, extPath));
+        await ext?.init(this.createUniqueExtensionObject(extName, extFolder));
       }
     }
     if (Config.Extensions.cleanUpUnusedTables) {
