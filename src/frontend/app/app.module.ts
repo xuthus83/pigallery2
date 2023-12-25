@@ -386,6 +386,7 @@ Marker.prototype.options.icon = MarkerFactory.defIcon;
     CookieService,
     GPXFilesFilterPipe,
     MDFilesFilterPipe,
+    FileSizePipe,
     DatePipe
   ],
   bootstrap: [AppComponent],
