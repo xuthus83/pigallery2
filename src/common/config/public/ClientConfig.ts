@@ -50,7 +50,6 @@ export enum LightBoxTitleTexts {
   persons,
   location,
   date,
-  rating,
 
   camera,
   lens,
