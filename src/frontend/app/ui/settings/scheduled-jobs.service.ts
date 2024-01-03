@@ -28,6 +28,9 @@ export class ScheduledJobsService {
     this.availableMessengers = new BehaviorSubject([]);
   }
 
+  public  isValidJob(name: string): boolean {
+    return !!this.availableJobs.value.find(j => j.Name === name);
+  }
 
   public async getAvailableJobs(): Promise<void> {
     this.availableJobs.next(

@@ -620,60 +620,6 @@ export class ClientMapConfig {
   bendLongPathsTrigger: number = 0.5;
 }
 
-@SubConfigClass({tags: {client: true}, softReadonly: true})
-export class ClientThumbnailConfig {
-  @ConfigProperty({
-    type: 'unsignedInt', max: 100,
-    tags: {
-      name: $localize`Map Icon size`,
-      unit: 'px',
-      priority: ConfigPriority.underTheHood
-    },
-    description: $localize`Icon size (used on maps).`,
-  })
-  iconSize: number = 45;
-  @ConfigProperty({
-    type: 'unsignedInt', tags: {
-      name: $localize`Person thumbnail size`,
-      unit: 'px',
-      priority: ConfigPriority.underTheHood
-    },
-    description: $localize`Person (face) thumbnail size.`,
-  })
-  personThumbnailSize: number = 200;
-  @ConfigProperty({
-    arrayType: 'unsignedInt', tags: {
-      name: $localize`Thumbnail sizes`,
-      priority: ConfigPriority.advanced
-    },
-    description: $localize`Size of the thumbnails. The best matching size will be generated. More sizes give better quality, but use more storage and CPU to render. If size is 240, that shorter side of the thumbnail will have 160 pixels.`,
-  })
-  thumbnailSizes: number[] = [240, 480];
-  @ConfigProperty({
-    volatile: true,
-    description: 'Updated to match he number of CPUs. This manny thumbnail will be concurrently generated.',
-  })
-  concurrentThumbnailGenerations: number = 1;
-
-  /**
-   * Generates a map for bitwise operation from icon and normal thumbnails
-   */
-  generateThumbnailMap(): { [key: number]: number } {
-    const m: { [key: number]: number } = {};
-    [this.iconSize, ...this.thumbnailSizes.sort()].forEach((v, i) => {
-      m[v] = Math.pow(2, i + 1);
-    });
-    return m;
-  }
-
-  /**
-   * Generates a map for bitwise operation from icon and normal thumbnails
-   */
-  generateThumbnailMapEntries(): { size: number, bit: number }[] {
-    return Object.entries(this.generateThumbnailMap()).map(v => ({size: parseInt(v[0]), bit: v[1]}));
-  }
-}
-
 export enum NavigationLinkTypes {
   gallery = 1, faces, albums, search, url
 }
@@ -1006,6 +952,16 @@ export class ClientLightboxConfig {
 
   @ConfigProperty({
     tags: {
+      name: $localize`Load full resolution image on zoom.`,
+      priority: ConfigPriority.advanced
+    },
+    description: $localize`Enables loading the full resolution image on zoom in the ligthbox (preview).`,
+  })
+  loadFullImageOnZoom: boolean = true;
+
+
+  @ConfigProperty({
+    tags: {
       name: $localize`Titles`,
       priority: ConfigPriority.advanced,
       githubIssue: 801,
@@ -1156,8 +1112,10 @@ export class ClientGalleryConfig {
   @ConfigProperty({
     tags: {
       name: $localize`Lightbox`,
+      uiIcon: 'ionImageOutline',
       priority: ConfigPriority.advanced,
-    },
+    } as TAGS,
+    description: $localize`Photo and video preview window.`
   })
   Lightbox: ClientLightboxConfig = new ClientLightboxConfig();
 
@@ -1229,36 +1187,64 @@ export class ClientVideoConfig {
 }
 
 @SubConfigClass({tags: {client: true}, softReadonly: true})
-export class ClientPhotoConvertingConfig {
-  @ConfigProperty({
-    tags: {
-      name: $localize`Enable`
-    } as TAGS,
-    description: $localize`Enable photo converting.`
-  })
-  enabled: boolean = true;
-
-  @ConfigProperty({
-    tags: {
-      name: $localize`Load full resolution image on zoom.`,
-      priority: ConfigPriority.advanced,
-      uiDisabled: (sc: ClientPhotoConvertingConfig) =>
-        !sc.enabled
-    },
-    description: $localize`Enables loading the full resolution image on zoom in the ligthbox (preview).`,
-  })
-  loadFullImageOnZoom: boolean = true;
-}
-
-@SubConfigClass({tags: {client: true}, softReadonly: true})
 export class ClientPhotoConfig {
+
+
   @ConfigProperty({
+    type: 'unsignedInt', max: 100,
     tags: {
-      name: $localize`Photo converting`,
-      priority: ConfigPriority.advanced
-    }
+      name: $localize`Map Icon size`,
+      unit: 'px',
+      priority: ConfigPriority.underTheHood
+    },
+    description: $localize`Icon size (used on maps).`,
   })
-  Converting: ClientPhotoConvertingConfig = new ClientPhotoConvertingConfig();
+  iconSize: number = 45;
+
+  @ConfigProperty({
+    type: 'unsignedInt', tags: {
+      name: $localize`Person thumbnail size`,
+      unit: 'px',
+      priority: ConfigPriority.underTheHood
+    },
+    description: $localize`Person (face) thumbnail size.`,
+  })
+  personThumbnailSize: number = 200;
+
+  @ConfigProperty({
+    arrayType: 'unsignedInt', tags: {
+      name: $localize`Thumbnail and photo preview sizes`,
+      priority: ConfigPriority.advanced,
+      githubIssue: 806
+    } as TAGS,
+    description: $localize`Size of the thumbnails and photo previews. The best matching size will be used (smaller for photo and video thumbnail, bigger for photo preview). More sizes give better quality, but use more storage and CPU to render. If size is 240, that shorter side of the thumbnail will be 240 pixels.`,
+  })
+  thumbnailSizes: number[] = [320, 540, 1080, 2160];
+
+  @ConfigProperty({
+    volatile: true,
+    description: 'Updated to match he number of CPUs. This manny thumbnail will be concurrently generated.',
+  })
+  concurrentThumbnailGenerations: number = 1;
+
+
+  /**
+   * Generates a map for bitwise operation from icon and normal thumbnails
+   */
+  generateThumbnailMap(): { [key: number]: number } {
+    const m: { [key: number]: number } = {};
+    [this.iconSize, ...this.thumbnailSizes.sort()].forEach((v, i) => {
+      m[v] = Math.pow(2, i + 1);
+    });
+    return m;
+  }
+
+  /**
+   * Generates a map for bitwise operation from icon and normal thumbnails
+   */
+  generateThumbnailMapEntries(): { size: number, bit: number }[] {
+    return Object.entries(this.generateThumbnailMap()).map(v => ({size: parseInt(v[0]), bit: v[1]}));
+  }
 
   @ConfigProperty({
     arrayType: 'string',
@@ -1288,13 +1274,6 @@ export class ClientGPXCompressingConfig {
 
 @SubConfigClass({tags: {client: true}, softReadonly: true})
 export class ClientMediaConfig {
-  @ConfigProperty({
-    tags: {
-      name: $localize`Thumbnail`,
-      priority: ConfigPriority.advanced
-    }
-  })
-  Thumbnail: ClientThumbnailConfig = new ClientThumbnailConfig();
   @ConfigProperty({
     tags: {
       name: $localize`Video`,

@@ -43,7 +43,7 @@
             role="menu" aria-labelledby="button-basic">
           <li role="menuitem">
             <a *ngIf="activePhoto"
-               [href]="activePhoto.gridMedia.getMediaPath()"
+               [href]="activePhoto.gridMedia.getOriginalMediaPath()"
                [download]="activePhoto.gridMedia.media.name"
                class="dropdown-item">
               <ng-icon class="me-2"

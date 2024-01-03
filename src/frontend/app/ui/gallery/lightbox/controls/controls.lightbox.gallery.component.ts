@@ -251,7 +251,7 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
         if (event.shiftKey) {
           const link = document.createElement('a');
           link.setAttribute('type', 'hidden');
-          link.href = this.activePhoto.gridMedia.getMediaPath();
+          link.href = this.activePhoto.gridMedia.getOriginalMediaPath();
           link.download = this.activePhoto.gridMedia.media.name;
           document.body.appendChild(link);
           link.click();
