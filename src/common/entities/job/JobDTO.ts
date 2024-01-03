@@ -26,6 +26,13 @@ export interface JobDTO {
   ConfigTemplate: DynamicConfig[];
 }
 
+
+export interface JobStartDTO {
+  soloRun: boolean;
+  config?: Record<string, unknown>;
+  allowParallelRun: boolean;
+}
+
 export const JobDTOUtils = {
   getHashName: (jobName: string, config: any = {}) => {
     const sorted = Object.keys(config).sort().reduce((ret, key) => `${ret},${key}:${JSON.stringify(config[key])}`, '');
