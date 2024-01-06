@@ -184,7 +184,6 @@ export class GalleryLightboxMediaComponent implements OnChanges {
       this.gridMedia &&
       !this.mediaLoaded &&
       this.thumbnailSrc !== null &&
-      !this.gridMedia.isPhotoAvailable(window.innerWidth, window.innerHeight) &&
       (this.gridMedia.isThumbnailAvailable() ||
         this.gridMedia.isReplacementThumbnailAvailable())
     );
