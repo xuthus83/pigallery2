@@ -180,7 +180,7 @@
        (click)="nextMediaManuallyTriggered()">
     <ng-icon name="ionChevronForwardOutline"></ng-icon>
     <canvas
-      *ngIf="playBackState == PlayBackStates.Play"
+      *ngIf="slideShowRunning"
       #canvas width="55px" height="55px"></canvas>
 
   </div>
@@ -211,17 +211,17 @@
        *ngIf="zoom == 1 && activePhoto && activePhoto.gridMedia.isPhoto()">
     <div class="controls-background rounded-start-top pe-1 pb-1">
       <ng-icon
-        *ngIf="playBackState == PlayBackStates.Play"
+        *ngIf="slideShowRunning"
         name="ionPauseOutline"
         class=" highlight control-button button-active me-2 mb-2"
-        (click)="pause()"
+        (click)="pauseClicked()"
         title="Pause" i18n-title></ng-icon>
 
       <ng-icon
-        *ngIf="playBackState == PlayBackStates.Paused"
+        *ngIf="!slideShowRunning"
         name="ionPlayOutline"
         class="highlight control-button me-2 mb-2"
-        (click)="play()"
+        (click)="playClicked()"
         title="Auto play" i18n-title></ng-icon>
     </div>
   </div>

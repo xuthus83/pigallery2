@@ -16,11 +16,6 @@ import {FileSizePipe} from '../../../../pipes/FileSizePipe';
 import {DatePipe} from '@angular/common';
 import {LightBoxTitleTexts} from '../../../../../../common/config/public/ClientConfig';
 
-export enum PlayBackStates {
-  Paused = 1,
-  Play = 2,
-}
-
 
 @Component({
   selector: 'app-lightbox-controls',
@@ -39,17 +34,17 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
   @Output() toggleFullScreen = new EventEmitter();
   @Output() nextPhoto = new EventEmitter();
   @Output() previousPhoto = new EventEmitter();
+  @Output() togglePlayback = new EventEmitter<boolean>();
 
   @Input() navigation = {hasPrev: true, hasNext: true};
   @Input() activePhoto: GalleryPhotoComponent;
   @Input() mediaElement: GalleryLightboxMediaComponent;
   @Input() photoFrameDim = {width: 1, height: 1, aspect: 1};
+  @Input() slideShowRunning: boolean;
 
   public readonly facesEnabled = Config.Faces.enabled;
 
   public zoom = 1;
-  public playBackState: PlayBackStates = PlayBackStates.Paused;
-  public PlayBackStates = PlayBackStates;
   public playBackDurations = [1, 2, 5, 10, 15, 20, 30, 60];
   public selectedSlideshowSpeed: number = null;
   public controllersDimmed = false;
@@ -94,7 +89,7 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
     if (this.zoom === zoom) {
       return;
     }
-    this.pause();
+    this.stopSlideShow();
     this.drag.x = (this.drag.x / this.zoom) * zoom;
     this.drag.y = (this.drag.y / this.zoom) * zoom;
     this.prevDrag.x = this.drag.x;
@@ -117,15 +112,19 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
   }
 
   ngOnDestroy(): void {
-    this.pause();
+    this.stopSlideShow();
 
     if (this.visibilityTimer != null) {
       clearTimeout(this.visibilityTimer);
+      this.visibilityTimer = null;
     }
   }
 
   ngOnChanges(): void {
     this.updateFaceContainerDim();
+    if (this.slideShowRunning) {
+      this.runSlideShow();
+    }
   }
 
   pan($event: { deltaY: number; deltaX: number; isFinal: boolean }): void {
@@ -312,14 +311,19 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
     this.ctx.stroke();
   }
 
-  resetSlideshowTimer(): void {
-    if (this.playBackState == PlayBackStates.Play) {
-      this.play();
+  private resetSlideshowTimer(): void {
+    if (this.slideShowRunning === true) {
+      this.stopSlideShow();
+      this.runSlideShow();
     }
   }
 
-  public play(): void {
-    this.pause();
+  public runSlideShow(): void {
+    //timer already running, do not reset it.
+    if (this.timerSub) {
+      return;
+    }
+    this.stopSlideShow();
     this.drawSliderProgress(0);
     this.timerSub = interval(100)
       .pipe(filter((t) => {
@@ -328,7 +332,6 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
       }))
       .pipe(skip(1)) // do not skip to next photo right away
       .subscribe(this.showNextMedia);
-    this.playBackState = PlayBackStates.Play;
   }
 
   public slideshowSpeedChanged() {
@@ -340,12 +343,20 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
     this.showControls();
   }
 
-  public pause(): void {
+  public stopSlideShow(): void {
     if (this.timerSub != null) {
       this.timerSub.unsubscribe();
+      this.timerSub = null;
     }
     this.ctx = null;
-    this.playBackState = PlayBackStates.Paused;
+  }
+
+  playClicked() {
+    this.togglePlayback.emit(true);
+  }
+
+  pauseClicked() {
+    this.togglePlayback.emit(false);
   }
 
   resetZoom(): void {
@@ -520,6 +531,7 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
   get BottomLeftTitle(): string {
     return this.getText(Config.Gallery.Lightbox.Titles.bottomLeftTitle);
   }
+
   get BottomLeftSubtitle(): string {
     return this.getText(Config.Gallery.Lightbox.Titles.bottomLeftSubtitle);
   }
