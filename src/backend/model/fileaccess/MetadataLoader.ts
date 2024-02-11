@@ -39,7 +39,7 @@ export class MetadataLoader {
     try {
       const stat = fs.statSync(fullPath);
       metadata.fileSize = stat.size;
-      metadata.creationDate = stat.mtime.getTime();
+      metadata.creationDate = stat.mtime.getTime(); //Default date is file system time of last modification
     } catch (err) {
       console.log(err);
       // ignoring errors
@@ -359,8 +359,10 @@ export class MetadataLoader {
             //if (exif.ifd0.ModifyDate) {} //Deferred to the exif-section where the other timestamps are
           }
 
-          //exif section
+          //exif section starting with the date sectino
           if (exif.exif) {
+            //Preceedence of dates: exif.DateTimeOriginal, exif.CreateDate, ifd0.ModifyDate, ihdr["Creation Time"], xmp.MetadataDate, file system date
+            //Filesystem is the absolute last resort, and it's hard to write tests for, since file system dates are changed on e.g. git clone.
             if (exif.exif.DateTimeOriginal) {
               //DateTimeOriginal is when the camera shutter closed
               if (exif.exif.OffsetTimeOriginal) { //OffsetTimeOriginal is the corresponding offset
@@ -391,6 +393,14 @@ export class MetadataLoader {
                 metadata.creationDate = timestampToMS(exif.ifd0.ModifyDate, alt_offset);
                 metadata.creationDateOffset = alt_offset;
               }
+            } else if (exif.ihdr && exif.ihdr["Creation Time"]) {// again else if (another fallback date if the good ones aren't there) {
+                const any_offset = exif.exif.DateTimeOriginal || exif.exif.OffsetTimeDigitized || exif.exif.OffsetTime || getTimeOffsetByGPSStamp(exif.ifd0.ModifyDate, exif.exif.GPSTimeStamp, exif.gps);
+                metadata.creationDate = timestampToMS(exif.ihdr["Creation Time"], any_offset);
+                metadata.creationDateOffset = any_offset;
+            } else if (exif.xmp?.MetadataDate) {// again else if (another fallback date if the good ones aren't there - metadata date is probably later than actual creation date, but much better than file time) {
+                const any_offset = exif.exif.DateTimeOriginal || exif.exif.OffsetTimeDigitized || exif.exif.OffsetTime || getTimeOffsetByGPSStamp(exif.ifd0.ModifyDate, exif.exif.GPSTimeStamp, exif.gps);
+                metadata.creationDate = timestampToMS(exif.xmp.MetadataDate, any_offset);
+                metadata.creationDateOffset = any_offset;
             }
             if (exif.exif.LensModel && exif.exif.LensModel !== '') {
               metadata.cameraData = metadata.cameraData || {};
