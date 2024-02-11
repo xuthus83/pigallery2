@@ -201,18 +201,19 @@ export class MetadataLoader {
       return Date.parse(timestamp.replace(':', '-').replace(':', '-') + (offset ? offset : '+00:00'));
     }
 
+    //function to calculate offset from exif.exif.gpsTimeStamp or exif.gps.GPSDateStamp + exif.gps.GPSTimestamp
     const getTimeOffsetByGPSStamp = (timestamp: string, gpsTimeStamp: string, gps: any) => {
-      let UTCTimestamp = gpsTimeStamp;
+      let UTCTimestamp = gpsTimeStamp; //use the exif.exif.gpsTimestamp if available
       if (!UTCTimestamp &&
         gps &&
         gps.GPSDateStamp &&
-        gps.GPSTimeStamp) {
+        gps.GPSTimeStamp) { //else use exif.gps.GPS*Stamp if available
         //GPS timestamp is always UTC (+00:00)
         UTCTimestamp = gps.GPSDateStamp.replaceAll(':', '-') + gps.GPSTimeStamp.join(':') + '+00:00';
       }
       if (UTCTimestamp) {
         //offset in minutes is the difference between gps timestamp and given timestamp
-        let offsetMinutes = (Date.parse(UTCTimestamp) - Date.parse(timestamp.replace(':', '-').replace(':', '-'))) / 1000 / 60;
+        const offsetMinutes = (Date.parse(UTCTimestamp) - Date.parse(timestamp.replace(':', '-').replace(':', '-'))) / 1000 / 60;
         if (-720 <= offsetMinutes && offsetMinutes <= 840) {
           //valid offset is within -12 and +14 hrs (https://en.wikipedia.org/wiki/List_of_UTC_offsets)
           return (offsetMinutes < 0 ? "-" : "+") +                              //leading +/-
@@ -224,6 +225,13 @@ export class MetadataLoader {
       } else {
         return undefined;
       }
+    }
+
+    //Function to convert html code for special characters into their corresponding character (used in exif.photoshop-section)
+    const unescape = (tag: string) => {
+      return tag.replace(/&#([0-9]{1,3});/gi, function (match, numStr) {
+        return String.fromCharCode(parseInt(numStr, 10));
+      });
     }
 
     try {
@@ -347,7 +355,7 @@ export class MetadataLoader {
                 metadata.creationDate = timestampToMS(exif.exif.DateTimeOriginal, exif.exif.OffsetTimeOriginal);
                 metadata.creationDateOffset = exif.exif.OffsetTimeOriginal;
               } else {
-                let alt_offset = exif.exif.OffsetTimeDigitized || exif.exif.OffsetTime || getTimeOffsetByGPSStamp(exif.exif.DateTimeOriginal, exif.exif.GPSTimeStamp, exif.gps);
+                const alt_offset = exif.exif.OffsetTimeDigitized || exif.exif.OffsetTime || getTimeOffsetByGPSStamp(exif.exif.DateTimeOriginal, exif.exif.GPSTimeStamp, exif.gps);
                 metadata.creationDate = timestampToMS(exif.exif.DateTimeOriginal, alt_offset);
                 metadata.creationDateOffset = alt_offset;
               }
@@ -357,7 +365,7 @@ export class MetadataLoader {
                 metadata.creationDate = timestampToMS(exif.exif.CreateDate, exif.exif.OffsetTimeDigitized);
                 metadata.creationDateOffset = exif.exif.OffsetTimeDigitized;
               } else {
-                let alt_offset = exif.exif.OffsetTimeOriginal || exif.exif.OffsetTime || getTimeOffsetByGPSStamp(exif.exif.DateTimeOriginal, exif.exif.GPSTimeStamp, exif.gps);
+                const alt_offset = exif.exif.OffsetTimeOriginal || exif.exif.OffsetTime || getTimeOffsetByGPSStamp(exif.exif.DateTimeOriginal, exif.exif.GPSTimeStamp, exif.gps);
                 metadata.creationDate = timestampToMS(exif.exif.DateTimeOriginal, alt_offset);
                 metadata.creationDateOffset = alt_offset;
               }
@@ -367,7 +375,7 @@ export class MetadataLoader {
                 metadata.creationDate = timestampToMS(exif.ifd0.ModifyDate, exif.exif?.OffsetTime);
                 metadata.creationDateOffset = exif.exif?.OffsetTime
               } else {
-                let alt_offset = exif.exif.DateTimeOriginal || exif.exif.OffsetTimeDigitized || getTimeOffsetByGPSStamp(exif.ifd0.ModifyDate, exif.exif.GPSTimeStamp, exif.gps);
+                const alt_offset = exif.exif.DateTimeOriginal || exif.exif.OffsetTimeDigitized || getTimeOffsetByGPSStamp(exif.ifd0.ModifyDate, exif.exif.GPSTimeStamp, exif.gps);
                 metadata.creationDate = timestampToMS(exif.ifd0.ModifyDate, alt_offset);
                 metadata.creationDateOffset = alt_offset;
               }
@@ -432,12 +440,6 @@ export class MetadataLoader {
           }
           //photoshop section (sometimes has City, Country and State)
           if (exif.photoshop) {
-            function unescape(tag: string) {
-              return tag.replace(/&#([0-9]{1,3});/gi, function (match, numStr) {
-                return String.fromCharCode(parseInt(numStr, 10));
-              });
-            }
-
             if (!metadata.positionData?.country && exif.photoshop.Country) {
               metadata.positionData = metadata.positionData || {};
               metadata.positionData.country = unescape(exif.photoshop.Country);
