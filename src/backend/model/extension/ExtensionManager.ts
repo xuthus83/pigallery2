@@ -73,10 +73,10 @@ export class ExtensionManager implements IObjectManager {
 
 
     const extList = fs
-        .readdirSync(ProjectPath.ExtensionFolder)
-        .filter((f): boolean =>
-            fs.statSync(path.join(ProjectPath.ExtensionFolder, f)).isDirectory()
-        );
+      .readdirSync(ProjectPath.ExtensionFolder)
+      .filter((f): boolean =>
+        fs.statSync(path.join(ProjectPath.ExtensionFolder, f)).isDirectory()
+      );
     extList.sort();
 
     // delete not existing extensions
@@ -85,7 +85,7 @@ export class ExtensionManager implements IObjectManager {
     // Add new extensions
     const ePaths = Config.Extensions.extensions.map(ec => ec.path);
     extList.filter(ep => ePaths.indexOf(ep) === -1).forEach(ep =>
-        Config.Extensions.extensions.push(new ServerExtensionsEntryConfig(ep)));
+      Config.Extensions.extensions.push(new ServerExtensionsEntryConfig(ep)));
 
     Logger.debug(LOG_TAG, 'Extensions found ', JSON.stringify(Config.Extensions.extensions.map(ec => ec.path)));
   }
@@ -118,10 +118,14 @@ export class ExtensionManager implements IObjectManager {
       }
 
       if (fs.existsSync(packageJsonPath)) {
-        Logger.silly(LOG_TAG, `Running: "npm install --prefer-offline --no-audit --progress=false --omit=dev" in ${extPath}`);
-        await exec('npm install  --no-audit --progress=false --omit=dev', {
-          cwd: extPath
-        });
+        if (fs.existsSync(path.join(extPath, 'node_modules'))) {
+          Logger.debug(LOG_TAG, `node_modules folder exists. Skipping "npm install".`);
+        } else {
+          Logger.silly(LOG_TAG, `Running: "npm install --prefer-offline --no-audit --progress=false --omit=dev" in ${extPath}`);
+          await exec('npm install  --no-audit --progress=false --omit=dev', {
+            cwd: extPath
+          });
+        }
         // eslint-disable-next-line @typescript-eslint/no-var-requires
         const pkg = require(packageJsonPath);
         if (pkg.name) {

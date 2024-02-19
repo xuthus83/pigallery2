@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-inferrable-types */
 import {ConfigProperty, SubConfigClass} from 'typeconfig/common';
 import {ClientExtensionsConfig, ConfigPriority, TAGS} from '../../public/ClientConfig';
-import {IConfigClassPrivate} from '../../../../../node_modules/typeconfig/src/decorators/class/IConfigClass';
+import {GenericConfigType} from 'typeconfig/src/GenericConfigType';
 
 @SubConfigClass<TAGS>({softReadonly: true})
 export class ServerExtensionsEntryConfig {
@@ -28,12 +28,13 @@ export class ServerExtensionsEntryConfig {
   path: string = '';
 
   @ConfigProperty({
+    type: GenericConfigType,
     tags: {
       name: $localize`Config`,
       priority: ConfigPriority.advanced
     }
   })
-  configs: IConfigClassPrivate<unknown>;
+  configs: GenericConfigType;
 }
 
 @SubConfigClass<TAGS>({softReadonly: true})
@@ -59,13 +60,6 @@ export class ServerExtensionsConfig extends ClientExtensionsConfig {
   })
   extensions: ServerExtensionsEntryConfig[] = [];
 
-  @ConfigProperty({
-    tags: {
-      name: $localize`Installed extensions2`,
-      priority: ConfigPriority.advanced
-    }
-  })
-  extensions2: Record<string, ServerExtensionsEntryConfig> = {};
 
   @ConfigProperty({
     tags: {
