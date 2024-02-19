@@ -258,7 +258,7 @@ export class SettingsEntryComponent
         this.arrayType !== 'MapPathGroupConfig' &&
         this.arrayType !== 'ServerExtensionsEntryConfig' &&
         this.arrayType !== 'MapPathGroupThemeConfig' &&
-        this.arrayType !== 'JobScheduleConfig' &&
+        this.arrayType !== 'JobScheduleConfig-Array' &&
         this.arrayType !== 'UserConfig') {
       this.uiType = 'StringInput';
     }

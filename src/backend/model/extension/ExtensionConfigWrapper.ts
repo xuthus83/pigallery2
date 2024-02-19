@@ -1,4 +1,4 @@
-import {ConfigProperty, IConfigClass} from 'typeconfig/common';
+import {IConfigClass} from 'typeconfig/common';
 import {Config, PrivateConfigClass} from '../../../common/config/private/Config';
 import {ConfigClassBuilder} from 'typeconfig/node';
 import {IExtensionConfig} from './IExtension';
@@ -32,22 +32,14 @@ export class ExtensionConfig<C> implements IExtensionConfig<C> {
   constructor(private readonly extensionFolder: string) {
   }
 
-  private findConfig(config: PrivateConfigClass) {
-    let c = (config.Extensions.extensions || []).find(e => e.path === this.extensionFolder);
-    if (!c) {
-      c = new ServerExtensionsEntryConfig(this.extensionFolder);
-      config.Extensions.extensions.push(c);
-    }
+  private findConfig(config: PrivateConfigClass): ServerExtensionsEntryConfig {
+      let c = (config.Extensions.extensions || []).find(e => e.path === this.extensionFolder);
+      if (!c) {
+        c = new ServerExtensionsEntryConfig(this.extensionFolder);
+        config.Extensions.extensions.push(c);
+      }
+      return c;
 
-    if (!config.Extensions.extensions2[this.extensionFolder]) {
-      Object.defineProperty(config.Extensions.extensions2, this.extensionFolder,
-        ConfigProperty({type: ServerExtensionsEntryConfig})(config.Extensions.extensions2, this.extensionFolder));
-      // config.Extensions.extensions2[this.extensionFolder] = c as any;
-
-      config.Extensions.extensions2[this.extensionFolder] = c;
-
-    }
-    return config.Extensions.extensions2[this.extensionFolder];
   }
 
   public getConfig(): C {
@@ -67,11 +59,12 @@ export class ExtensionConfig<C> implements IExtensionConfig<C> {
     const confTemplate = ConfigClassBuilder.attachPrivateInterface(new this.template());
     const extConf = this.findConfig(config);
     //   confTemplate.__loadJSONObject(Utils.clone(extConf.configs || {}));
-    //extConf.configs = confTemplate;
-    Object.defineProperty(config.Extensions.extensions2[this.extensionFolder].configs, this.extensionFolder,
-      ConfigProperty({type: this.template})(config.Extensions.extensions2[this.extensionFolder], this.extensionFolder));
-    console.log(config.Extensions.extensions2[this.extensionFolder].configs);
-    config.Extensions.extensions2[this.extensionFolder].configs = confTemplate as any;
-    console.log(config.Extensions.extensions2[this.extensionFolder].configs);
+    extConf.configs = confTemplate;
+    console.log(((config as any).toJSON({attachState: true})).Extensions.extensions);
+    /* Object.defineProperty(config.Extensions.extensions2[this.extensionFolder].configs, this.extensionFolder,
+       ConfigProperty({type: this.template})(config.Extensions.extensions2[this.extensionFolder], this.extensionFolder));
+     console.log(config.Extensions.extensions2[this.extensionFolder].configs);
+     config.Extensions.extensions2[this.extensionFolder].configs = confTemplate as any;
+     console.log(config.Extensions.extensions2[this.extensionFolder].configs);*/
   }
 }
