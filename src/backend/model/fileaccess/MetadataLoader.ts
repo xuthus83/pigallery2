@@ -128,7 +128,7 @@ export class MetadataLoader {
 
       try {
         // search for sidecar and merge metadata
-        const fullPathWithoutExt = path.parse(fullPath).name;
+        const fullPathWithoutExt = path.join(path.parse(fullPath).dir, path.parse(fullPath).name);
         const sidecarPaths = [
           fullPath + '.xmp',
           fullPath + '.XMP',
@@ -524,7 +524,7 @@ export class MetadataLoader {
 
         try {
           // search for sidecar and merge metadata
-          const fullPathWithoutExt = path.parse(fullPath).name;
+          const fullPathWithoutExt = path.join(path.parse(fullPath).dir, path.parse(fullPath).name);
           const sidecarPaths = [
             fullPath + '.xmp',
             fullPath + '.XMP',
