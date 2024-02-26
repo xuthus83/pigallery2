@@ -135,7 +135,7 @@ export class MetadataLoader {
           fullPathWithoutExt + '.xmp',
           fullPathWithoutExt + '.XMP',
         ];
-  
+
         for (const sidecarPath of sidecarPaths) {
           if (fs.existsSync(sidecarPath)) {
             const sidecarData = await exifr.sidecar(sidecarPath);
@@ -144,11 +144,16 @@ export class MetadataLoader {
                 if (metadata.keywords === undefined) {
                   metadata.keywords = [];
                 }
-                for (const kw of (sidecarData as SideCar).dc.subject) {
+                let keywords = (sidecarData as SideCar).dc.subject || [];
+                if (typeof keywords === 'string') {
+                  keywords = [keywords];
+                }
+                for (const kw of keywords) {
                   if (metadata.keywords.indexOf(kw) === -1) {
                     metadata.keywords.push(kw);
                   }
-                }              }
+                }
+              }
               if ((sidecarData as SideCar).xmp.Rating !== undefined) {
                 metadata.rating = (sidecarData as SideCar).xmp.Rating;
               }
@@ -305,7 +310,7 @@ export class MetadataLoader {
           }
         } catch (err) {
           Logger.debug(LOG_TAG, 'Error parsing exif', fullPath, err);
-        try {
+          try {
             const info = imageSize(fullPath);
             metadata.size = {width: info.width, height: info.height};
           } catch (e) {
@@ -368,9 +373,9 @@ export class MetadataLoader {
             gps: true,
             translateValues: false, //don't translate orientation from numbers to strings etc.
             mergeOutput: false //don't merge output, because things like Microsoft Rating (percent) and xmp.rating will be merged
-        };
-        
-        const exif = await exifr.parse(data, exifrOptions);
+          };
+
+          const exif = await exifr.parse(data, exifrOptions);
           if (exif.xmp && exif.xmp.Rating) {
             metadata.rating = exif.xmp.Rating;
             if (metadata.rating < 0) {
@@ -378,18 +383,18 @@ export class MetadataLoader {
             }
           }
           if (exif.dc &&
-              exif.dc.subject &&
-              exif.dc.subject.length > 0) {
+            exif.dc.subject &&
+            exif.dc.subject.length > 0) {
             const subj = Array.isArray(exif.dc.subject) ? exif.dc.subject : [exif.dc.subject];
             if (metadata.keywords === undefined) {
-                metadata.keywords = [];
+              metadata.keywords = [];
             }
             for (const kw of subj) {
-                if (metadata.keywords.indexOf(kw) === -1) {
-                    metadata.keywords.push(kw);
-                }
+              if (metadata.keywords.indexOf(kw) === -1) {
+                metadata.keywords.push(kw);
+              }
             }
-        }
+          }
           let orientation = OrientationTypes.TOP_LEFT;
           if (exif.ifd0 &&
             exif.ifd0.Orientation) {
@@ -536,7 +541,11 @@ export class MetadataLoader {
                   if (metadata.keywords === undefined) {
                     metadata.keywords = [];
                   }
-                  for (const kw of (sidecarData as SideCar).dc.subject) {
+                  let keywords = (sidecarData as SideCar).dc.subject || [];
+                  if (typeof keywords === 'string') {
+                    keywords = [keywords];
+                  }
+                  for (const kw of keywords) {
                     if (metadata.keywords.indexOf(kw) === -1) {
                       metadata.keywords.push(kw);
                     }
