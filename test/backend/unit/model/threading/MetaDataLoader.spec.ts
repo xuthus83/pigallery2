@@ -69,6 +69,55 @@ describe('MetadataLoader', () => {
     expect(Utils.clone(data)).to.be.deep.equal(expected);
   });
 
+  it('should load sidecar file with file extension for video', async () => {
+    const data = await MetadataLoader.loadVideoMetadata(path.join(__dirname, '/../../../assets/sidecar/bunny_1sec.mp4'));
+    const expected = require(path.join(__dirname, '/../../../assets/sidecar/bunny_1sec.mp4.json'));
+    expect(Utils.clone(data)).to.be.deep.equal(expected);
+  });
+
+  it('should load sidecar file without file extension for video', async () => {
+    const data = await MetadataLoader.loadVideoMetadata(path.join(__dirname, '/../../../assets/sidecar/bunny_1sec_v2.mp4'));
+    const expected = require(path.join(__dirname, '/../../../assets/sidecar/bunny_1sec.mp4.json'));//sidecar "bunny_1sec_v2.xmp" is identical to "bunny_1sec.mp4.xmp" so we expect the same result
+    expect(Utils.clone(data)).to.be.deep.equal(expected);
+  });
+
+  it('should retrieve both keywords from sidecar file for video', async () => {
+    const data = await MetadataLoader.loadVideoMetadata(path.join(__dirname, '/../../../assets/sidecar/bunny_1sec.mp4'));
+    const expected = require(path.join(__dirname, '/../../../assets/sidecar/bunny_1sec.mp4.json'));
+    expect(Utils.clone(data)).to.be.deep.equal(expected);
+  });
+
+  it('should retrieve one keyword from sidecar file for video', async () => {
+    const data = await MetadataLoader.loadVideoMetadata(path.join(__dirname, '/../../../assets/sidecar/bunny_1sec_v3.mp4'));
+    const expected = require(path.join(__dirname, '/../../../assets/sidecar/bunny_1sec_v3.mp4.json'));
+    expect(Utils.clone(data)).to.be.deep.equal(expected);
+  });
+
+  it('should load sidecar file with file extension for photo', async () => {
+    const data = await MetadataLoader.loadPhotoMetadata(path.join(__dirname, '/../../../assets/sidecar/no_metadata.jpg'));
+    const expected = require(path.join(__dirname, '/../../../assets/sidecar/no_metadata.jpg.json'));
+    expect(Utils.clone(data)).to.be.deep.equal(expected);
+  });
+
+  it('should load sidecar file without file extension for photo', async () => {
+    const data = await MetadataLoader.loadPhotoMetadata(path.join(__dirname, '/../../../assets/sidecar/no_metadata_v2.jpg'));
+    const expected = require(path.join(__dirname, '/../../../assets/sidecar/no_metadata.jpg.json'));//sidecar "no_metadata_v2.xmp" is identical to "no_metadata.jpg.xmp" so we expect the same result
+    expect(Utils.clone(data)).to.be.deep.equal(expected);
+  });
+
+  it('should retrieve both keywords from sidecar file for photo', async () => {
+    const data = await MetadataLoader.loadPhotoMetadata(path.join(__dirname, '/../../../assets/sidecar/no_metadata.jpg'));
+    const expected = require(path.join(__dirname, '/../../../assets/sidecar/no_metadata.jpg.json'));
+    expect(Utils.clone(data)).to.be.deep.equal(expected);
+  });
+
+  it('should retrieve one keyword from sidecar file for photo', async () => {
+    const data = await MetadataLoader.loadPhotoMetadata(path.join(__dirname, '/../../../assets/sidecar/no_metadata_v3.jpg'));
+    const expected = require(path.join(__dirname, '/../../../assets/sidecar/no_metadata_v3.jpg.json'));
+    expect(Utils.clone(data)).to.be.deep.equal(expected);
+  });
+
+
   describe('should load jpg with proper height and orientation', () => {
     it('jpg 1', async () => {
       const data = await MetadataLoader.loadPhotoMetadata(path.join(__dirname, '/../../../assets/orientation/broken_orientation_exif.jpg'));
