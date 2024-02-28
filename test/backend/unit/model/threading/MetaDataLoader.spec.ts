@@ -117,6 +117,17 @@ describe('MetadataLoader', () => {
     expect(Utils.clone(data)).to.be.deep.equal(expected);
   });
 
+  it('should read keywords from photo without sidecar file', async () => {
+    const data = await MetadataLoader.loadPhotoMetadata(path.join(__dirname, '/../../../assets/sidecar/metadata.jpg'));
+    const expected = require(path.join(__dirname, '/../../../assets/sidecar/metadata.jpg.json'));
+    expect(Utils.clone(data)).to.be.deep.equal(expected);
+  });
+
+  it('should merge keywords from photo with keywords from sidecar', async () => {
+    const data = await MetadataLoader.loadPhotoMetadata(path.join(__dirname, '/../../../assets/sidecar/metadata_v2.jpg'));
+    const expected = require(path.join(__dirname, '/../../../assets/sidecar/metadata_v2.jpg.json')); //"metadata_v2.jpg" is identical to "metadata.jpg" and "metadata_v2.xmp" contains 2 different keywords    expect(Utils.clone(data)).to.be.deep.equal(expected);
+  });
+
 
   describe('should load jpg with proper height and orientation', () => {
     it('jpg 1', async () => {
