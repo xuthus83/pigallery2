@@ -160,9 +160,30 @@ export class MetadataLoader {
                   }
                 }
               }
+              let hasPhotoshopDate = false;
+              if ((sidecarData as SideCar).photoshop !== undefined) {
+                if ((sidecarData as SideCar).photoshop.DateCreated !== undefined) {
+                  const date = Utils.timestampToMS((sidecarData as SideCar).photoshop.DateCreated, null);
+                  if (date) {
+                    metadata.creationDate = date;
+                    hasPhotoshopDate = true;
+                  }
+                }
+              }
               if ((sidecarData as SideCar).xmp !== undefined) {
                 if ((sidecarData as SideCar).xmp.Rating !== undefined) {
                   metadata.rating = (sidecarData as SideCar).xmp.Rating;
+                }
+                if (
+                  !hasPhotoshopDate && (
+                    (sidecarData as SideCar).xmp.CreateDate !== undefined ||
+                    (sidecarData as SideCar).xmp.ModifyDate !== undefined
+                  )
+                ) {
+                  metadata.creationDate =
+                    Utils.timestampToMS((sidecarData as SideCar).xmp.CreateDate, null) ||
+                    Utils.timestampToMS((sidecarData as SideCar).xmp.ModifyDate, null) ||
+                    metadata.creationDate;
                 }
               }
             }
@@ -611,12 +632,30 @@ export class MetadataLoader {
                     }
                   }
                 }
+                let hasPhotoshopDate = false;
+                if ((sidecarData as SideCar).photoshop !== undefined) {
+                  if ((sidecarData as SideCar).photoshop.DateCreated !== undefined) {
+                    const date = Utils.timestampToMS((sidecarData as SideCar).photoshop.DateCreated, null);
+                    if (date) {
+                      metadata.creationDate = date;
+                      hasPhotoshopDate = true;
+                    }
+                  }
+                }
                 if ((sidecarData as SideCar).xmp !== undefined) {
                   if ((sidecarData as SideCar).xmp.Rating !== undefined) {
                     metadata.rating = (sidecarData as SideCar).xmp.Rating;
                   }
-                  if ((sidecarData as SideCar).xmp.CreateDate) {
-                    metadata.creationDate = Utils.timestampToMS((sidecarData as SideCar).xmp.CreateDate, null);
+                  if (
+                    !hasPhotoshopDate && (
+                      (sidecarData as SideCar).xmp.CreateDate !== undefined ||
+                      (sidecarData as SideCar).xmp.ModifyDate !== undefined
+                    )
+                  ) {
+                    metadata.creationDate =
+                      Utils.timestampToMS((sidecarData as SideCar).xmp.CreateDate, null) ||
+                      Utils.timestampToMS((sidecarData as SideCar).xmp.ModifyDate, null) ||
+                      metadata.creationDate;
                   }
                 }
               }
