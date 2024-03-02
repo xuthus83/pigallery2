@@ -19,6 +19,7 @@ export class ServerExtensionsEntryConfig {
   enabled: boolean = true;
 
   @ConfigProperty({
+    readonly: true,
     tags: {
       name: $localize`Extension folder`,
       priority: ConfigPriority.underTheHood,

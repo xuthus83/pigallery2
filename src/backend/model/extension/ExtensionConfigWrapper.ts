@@ -12,12 +12,13 @@ export class ExtensionConfigWrapper {
   static async original(): Promise<PrivateConfigClass & IConfigClass> {
     const pc = ConfigClassBuilder.attachPrivateInterface(new PrivateConfigClass());
     try {
-      await pc.load();
+      await pc.load(); // loading the basic configs but we do not know the extension config hierarchy yet
       if (ObjectManagers.isReady()) {
         for (const ext of Object.values(ObjectManagers.getInstance().ExtensionManager.extObjects)) {
           ext.config.loadToConfig(ConfigClassBuilder.attachPrivateInterface(pc));
         }
       }
+      await pc.load(); // loading the extension related configs
     } catch (e) {
       console.error('Error during loading original config. Reverting to defaults.');
       console.error(e);
@@ -58,13 +59,6 @@ export class ExtensionConfig<C> implements IExtensionConfig<C> {
 
     const confTemplate = ConfigClassBuilder.attachPrivateInterface(new this.template());
     const extConf = this.findConfig(config);
-    //   confTemplate.__loadJSONObject(Utils.clone(extConf.configs || {}));
     extConf.configs = confTemplate;
-    console.log(((config as any).toJSON({attachState: true})).Extensions.extensions);
-    /* Object.defineProperty(config.Extensions.extensions2[this.extensionFolder].configs, this.extensionFolder,
-       ConfigProperty({type: this.template})(config.Extensions.extensions2[this.extensionFolder], this.extensionFolder));
-     console.log(config.Extensions.extensions2[this.extensionFolder].configs);
-     config.Extensions.extensions2[this.extensionFolder].configs = confTemplate as any;
-     console.log(config.Extensions.extensions2[this.extensionFolder].configs);*/
   }
 }
