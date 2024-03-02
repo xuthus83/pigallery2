@@ -109,6 +109,10 @@ export class ExtensionManager implements IObjectManager {
     for (let i = 0; i < Config.Extensions.extensions.length; ++i) {
       const extFolder = Config.Extensions.extensions[i].path;
       let extName = extFolder;
+
+      if(Config.Extensions.extensions[i].enabled === false){
+        Logger.silly(LOG_TAG, `Skipping ${extFolder} initiation. Extension is disabled.`);
+      }
       const extPath = path.join(ProjectPath.ExtensionFolder, extFolder);
       const serverExtPath = path.join(extPath, 'server.js');
       const packageJsonPath = path.join(extPath, 'package.json');

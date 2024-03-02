@@ -119,7 +119,6 @@ export class RenderingMWs {
         skipTags: {secret: true} as TAGS
       }) as PrivateConfigClass
     );
-    console.log(message.result.Extensions.extensions);
     res.json(message);
   }
 

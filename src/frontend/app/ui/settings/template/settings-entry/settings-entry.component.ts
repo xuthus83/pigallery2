@@ -467,7 +467,6 @@ export class SettingsEntryComponent
 
     const reader = new FileReader();
     reader.onload = () => {
-      console.log(reader.result);
       const parser = new DOMParser();
       const doc = parser.parseFromString(reader.result as string, 'image/svg+xml');
       try {
