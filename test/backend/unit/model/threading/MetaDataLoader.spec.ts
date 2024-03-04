@@ -131,7 +131,7 @@ describe('MetadataLoader', () => {
 
   it('should load sidecar file without file extension for photo', async () => {
     const data = await MetadataLoader.loadPhotoMetadata(path.join(__dirname, '/../../../assets/sidecar/no_metadata_v2.jpg'));
-    const expected = require(path.join(__dirname, '/../../../assets/sidecar/no_metadata.jpg.json'));//sidecar "no_metadata_v2.xmp" is identical to "no_metadata.jpg.xmp" so we expect the same result
+    const expected = require(path.join(__dirname, '/../../../assets/sidecar/no_metadata_v2.jpg.json'));
     expect(Utils.clone(data)).to.be.deep.equal(expected);
   });
 
