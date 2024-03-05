@@ -54,6 +54,7 @@ export class ExtensionManager implements IObjectManager {
           invalidateDirectoryCovers: new ExtensionEvent(),
         },
         DiskManager: {
+          excludeDir: new ExtensionEvent(),
           scanDirectory: new ExtensionEvent()
         },
         ImageRenderer: {
