@@ -165,7 +165,7 @@ export class Utils {
       dayOfYear++; //Add an extra day for march to december (mn>1) on leap years
     }
     return dayOfYear;
-  };
+  }
 
   static renderDataSize(size: number): string {
     const postFixes = ['B', 'KB', 'MB', 'GB', 'TB'];
