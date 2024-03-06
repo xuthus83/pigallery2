@@ -2,6 +2,13 @@
 import {ConfigProperty, SubConfigClass} from 'typeconfig/common';
 import {ClientExtensionsConfig, ConfigPriority, TAGS} from '../../public/ClientConfig';
 import {GenericConfigType} from 'typeconfig/src/GenericConfigType';
+declare let $localize: (s: TemplateStringsArray) => string;
+
+if (typeof $localize === 'undefined') {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  global.$localize = (s) => s;
+}
 
 @SubConfigClass<TAGS>({softReadonly: true})
 export class ServerExtensionsEntryConfig {
