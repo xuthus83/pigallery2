@@ -5,6 +5,7 @@ import {Utils} from '../../../../../src/common/Utils';
 import * as path from 'path';
 import * as fs from 'fs';
 import {PhotoProcessing} from '../../../../../src/backend/model/fileaccess/fileprocessing/PhotoProcessing';
+import {VideoProcessing} from '../../../../../src/backend/model/fileaccess/fileprocessing/VideoProcessing';
 import {Config} from '../../../../../src/common/config/private/Config';
 import {DatabaseType} from '../../../../../src/common/config/private/PrivateConfig';
 
@@ -257,4 +258,24 @@ describe('MetadataLoader', () => {
     expect(Utils.clone(data)).to.be.deep.equal(expected);
   });
 
+  describe('should load metadata from sidecar files', () => {
+    const root = path.join(__dirname, '/../../../assets/sidecar');
+    const files = fs.readdirSync(root);
+    for (const item of files) {
+      const fullFilePath = path.join(root, item);
+      if (PhotoProcessing.isPhoto(fullFilePath)) {
+        it(item, async () => {
+          const data = await MetadataLoader.loadPhotoMetadata(fullFilePath);
+          const expected = require(fullFilePath.split('.').slice(0, -1).join('.') + '.json');
+          expect(Utils.clone(data)).to.be.deep.equal(expected);
+        });
+      } else if (VideoProcessing.isVideo(fullFilePath)) {
+        it(item, async () => {
+          const data = await MetadataLoader.loadVideoMetadata(fullFilePath);
+          const expected = require(fullFilePath.split('.').slice(0, -1).join('.') + '.json');
+          expect(Utils.clone(data)).to.be.deep.equal(expected);
+        });
+      }
+    }
+  });
 });
