@@ -640,6 +640,9 @@ export class MetadataLoader {
                 if ((sidecarData as SideCar).xmp.Rating !== undefined) {
                   metadata.rating = (sidecarData as SideCar).xmp.Rating;
                 }
+                if ((sidecarData as SideCar).xmp.CreateDate) {
+                  metadata.creationDate = timestampToMS((sidecarData as SideCar).xmp.CreateDate, null);
+                }
               }
             }
           }
