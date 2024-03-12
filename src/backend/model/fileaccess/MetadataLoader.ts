@@ -127,7 +127,7 @@ export class MetadataLoader {
 
       try {
         // search for sidecar and merge metadata
-        const fullPathWithoutExt = path.parse(fullPath).name;
+        const fullPathWithoutExt = path.join(path.parse(fullPath).dir, path.parse(fullPath).name);
         const sidecarPaths = [
           fullPath + '.xmp',
           fullPath + '.XMP',
@@ -143,7 +143,11 @@ export class MetadataLoader {
                 if (metadata.keywords === undefined) {
                   metadata.keywords = [];
                 }
-                for (const kw of (sidecarData as SideCar).dc.subject) {
+                let keywords = (sidecarData as SideCar).dc.subject || [];
+                if (typeof keywords === 'string') {
+                  keywords = [keywords];
+                }
+                for (const kw of keywords) {
                   if (metadata.keywords.indexOf(kw) === -1) {
                     metadata.keywords.push(kw);
                   }
@@ -194,7 +198,7 @@ export class MetadataLoader {
       translateValues: false, //don't translate orientation from numbers to strings etc.
       mergeOutput: false //don't merge output, because things like Microsoft Rating (percent) and xmp.rating will be merged
     };
-    
+
     //function to convert timestamp into milliseconds taking offset into account
     const timestampToMS = (timestamp: string, offset: string) => {
       if (!timestamp) {
@@ -606,7 +610,7 @@ export class MetadataLoader {
 
         try {
           // search for sidecar and merge metadata
-          const fullPathWithoutExt = path.parse(fullPath).name;
+          const fullPathWithoutExt = path.join(path.parse(fullPath).dir, path.parse(fullPath).name);
           const sidecarPaths = [
             fullPath + '.xmp',
             fullPath + '.XMP',
@@ -623,7 +627,11 @@ export class MetadataLoader {
                   if (metadata.keywords === undefined) {
                     metadata.keywords = [];
                   }
-                  for (const kw of (sidecarData as SideCar).dc.subject) {
+                  let keywords = (sidecarData as SideCar).dc.subject || [];
+                  if (typeof keywords === 'string') {
+                    keywords = [keywords];
+                  }
+                  for (const kw of keywords) {
                     if (metadata.keywords.indexOf(kw) === -1) {
                       metadata.keywords.push(kw);
                     }
@@ -631,6 +639,9 @@ export class MetadataLoader {
                 }
                 if ((sidecarData as SideCar).xmp.Rating !== undefined) {
                   metadata.rating = (sidecarData as SideCar).xmp.Rating;
+                }
+                if ((sidecarData as SideCar).xmp.CreateDate) {
+                  metadata.creationDate = timestampToMS((sidecarData as SideCar).xmp.CreateDate, null);
                 }
               }
             }
