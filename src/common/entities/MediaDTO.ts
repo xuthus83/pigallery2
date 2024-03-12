@@ -40,6 +40,7 @@ export interface SideCarDc {
 
 export interface SideCarXmp {
   Rating?: RatingTypes;
+  CreateDate?: string;
 }
 
 export const MediaDTOUtils = {
