@@ -154,7 +154,7 @@ export class Utils {
     if (UTCTimestamp && timestamp) {
       //offset in minutes is the difference between gps timestamp and given timestamp
       //to calculate this correctly, we have to work with the same offset
-      const offsetMinutes = (timestampToMS(timestamp, '+00:00')- timestampToMS(UTCTimestamp, '+00:00')) / 1000 / 60;
+      const offsetMinutes = (Utils.timestampToMS(timestamp, '+00:00')- Utils.timestampToMS(UTCTimestamp, '+00:00')) / 1000 / 60;
       return Utils.getOffsetString(offsetMinutes);
     } else {
       return undefined;
