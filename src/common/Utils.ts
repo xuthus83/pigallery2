@@ -124,6 +124,43 @@ export class Utils {
     return new Date(new Date(d).toISOString().substring(0,19) + (offset ? offset : '')).getFullYear();
   }
 
+  //function to convert timestamp into milliseconds taking offset into account
+  static timestampToMS(timestamp: string, offset: string) {
+    if (!timestamp) {
+      return undefined;
+    }
+    //replace : with - in the yyyy-mm-dd part of the timestamp.
+    let formattedTimestamp = timestamp.substring(0,9).replaceAll(':', '-') + timestamp.substring(9,timestamp.length);
+    if (formattedTimestamp.indexOf("Z") > 0) { //replace Z (and what comes after the Z) with offset
+      formattedTimestamp.substring(0, formattedTimestamp.indexOf("Z")) + (offset ? offset : '+00:00');
+    } else if (formattedTimestamp.indexOf("+") > 0) { //don't do anything
+    } else { //add offset
+      formattedTimestamp = formattedTimestamp + (offset ? offset : '+00:00');
+    }
+    //parse into MS and return
+    return Date.parse(formattedTimestamp);
+  }
+
+  //function to calculate offset from exif.exif.gpsTimeStamp or exif.gps.GPSDateStamp + exif.gps.GPSTimestamp
+  static getTimeOffsetByGPSStamp(timestamp: string, gpsTimeStamp: string, gps: any) {
+    let UTCTimestamp = gpsTimeStamp;
+    if (!UTCTimestamp &&
+      gps &&
+      gps.GPSDateStamp &&
+      gps.GPSTimeStamp) { //else use exif.gps.GPS*Stamp if available
+      //GPS timestamp is always UTC (+00:00)
+      UTCTimestamp = gps.GPSDateStamp.replaceAll(':', '-') + gps.GPSTimeStamp.join(':');
+    }
+    if (UTCTimestamp && timestamp) {
+      //offset in minutes is the difference between gps timestamp and given timestamp
+      //to calculate this correctly, we have to work with the same offset
+      const offsetMinutes = (Utils.timestampToMS(timestamp, '+00:00')- Utils.timestampToMS(UTCTimestamp, '+00:00')) / 1000 / 60;
+      return Utils.getOffsetString(offsetMinutes);
+    } else {
+      return undefined;
+    }
+  }
+
   static getOffsetString(offsetMinutes: number) {
     if (-720 <= offsetMinutes && offsetMinutes <= 840) {
       //valid offset is within -12 and +14 hrs (https://en.wikipedia.org/wiki/List_of_UTC_offsets)

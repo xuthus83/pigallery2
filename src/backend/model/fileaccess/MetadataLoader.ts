@@ -82,9 +82,14 @@ export class MetadataLoader {
             if (Utils.isInt32(parseInt(stream.avg_frame_rate, 10))) {
               metadata.fps = parseInt(stream.avg_frame_rate, 10) || null;
             }
-            metadata.creationDate =
-              Date.parse(stream.tags.creation_time) ||
-              metadata.creationDate;
+            if (
+              stream.tags !== undefined &&
+              typeof stream.tags.creation_time === 'string'
+            ) {
+              metadata.creationDate =
+                Date.parse(stream.tags.creation_time) ||
+                metadata.creationDate;
+            }
             break;
           }
         }
@@ -139,22 +144,51 @@ export class MetadataLoader {
           if (fs.existsSync(sidecarPath)) {
             const sidecarData = await exifr.sidecar(sidecarPath);
             if (sidecarData !== undefined) {
-              if ((sidecarData as SideCar).dc.subject !== undefined) {
-                if (metadata.keywords === undefined) {
-                  metadata.keywords = [];
-                }
-                let keywords = (sidecarData as SideCar).dc.subject || [];
-                if (typeof keywords === 'string') {
-                  keywords = [keywords];
-                }
-                for (const kw of keywords) {
-                  if (metadata.keywords.indexOf(kw) === -1) {
-                    metadata.keywords.push(kw);
+              if ((sidecarData as SideCar).dc !== undefined) {
+                if ((sidecarData as SideCar).dc.subject !== undefined) {
+                  if (metadata.keywords === undefined) {
+                    metadata.keywords = [];
+                  }
+                  let keywords = (sidecarData as SideCar).dc.subject || [];
+                  if (typeof keywords === 'string') {
+                    keywords = [keywords];
+                  }
+                  for (const kw of keywords) {
+                    if (metadata.keywords.indexOf(kw) === -1) {
+                      metadata.keywords.push(kw);
+                    }
                   }
                 }
               }
-              if ((sidecarData as SideCar).xmp.Rating !== undefined) {
-                metadata.rating = (sidecarData as SideCar).xmp.Rating;
+              let hasPhotoshopDate = false;
+              if ((sidecarData as SideCar).photoshop !== undefined) {
+                if ((sidecarData as SideCar).photoshop.DateCreated !== undefined) {
+                  const date = Utils.timestampToMS((sidecarData as SideCar).photoshop.DateCreated, null);
+                  if (date) {
+                    metadata.creationDate = date;
+                    hasPhotoshopDate = true;
+                  }
+                }
+              }
+              if (Object.hasOwn(sidecarData, 'xap')) {
+                (sidecarData as any)['xmp'] = (sidecarData as any)['xap'];
+                delete (sidecarData as any)['xap'];
+              }
+              if ((sidecarData as SideCar).xmp !== undefined) {
+                if ((sidecarData as SideCar).xmp.Rating !== undefined) {
+                  metadata.rating = (sidecarData as SideCar).xmp.Rating;
+                }
+                if (
+                  !hasPhotoshopDate && (
+                    (sidecarData as SideCar).xmp.CreateDate !== undefined ||
+                    (sidecarData as SideCar).xmp.ModifyDate !== undefined
+                  )
+                ) {
+                  metadata.creationDate =
+                    Utils.timestampToMS((sidecarData as SideCar).xmp.CreateDate, null) ||
+                    Utils.timestampToMS((sidecarData as SideCar).xmp.ModifyDate, null) ||
+                    metadata.creationDate;
+                }
               }
             }
           }
@@ -198,43 +232,6 @@ export class MetadataLoader {
       translateValues: false, //don't translate orientation from numbers to strings etc.
       mergeOutput: false //don't merge output, because things like Microsoft Rating (percent) and xmp.rating will be merged
     };
-
-    //function to convert timestamp into milliseconds taking offset into account
-    const timestampToMS = (timestamp: string, offset: string) => {
-      if (!timestamp) {
-        return undefined;
-      }
-      //replace : with - in the yyyy-mm-dd part of the timestamp.
-      let formattedTimestamp = timestamp.substring(0,9).replaceAll(':', '-') + timestamp.substring(9,timestamp.length);
-      if (formattedTimestamp.indexOf("Z") > 0) { //replace Z (and what comes after the Z) with offset
-        formattedTimestamp.substring(0, formattedTimestamp.indexOf("Z")) + (offset ? offset : '+00:00');
-      } else if (formattedTimestamp.indexOf("+") > 0) { //don't do anything
-      } else { //add offset
-        formattedTimestamp = formattedTimestamp + (offset ? offset : '+00:00');
-      }
-      //parse into MS and return
-      return Date.parse(formattedTimestamp);
-    }
-
-    //function to calculate offset from exif.exif.gpsTimeStamp or exif.gps.GPSDateStamp + exif.gps.GPSTimestamp
-    const getTimeOffsetByGPSStamp = (timestamp: string, gpsTimeStamp: string, gps: any) => {
-      let UTCTimestamp = gpsTimeStamp;
-      if (!UTCTimestamp &&
-        gps &&
-        gps.GPSDateStamp &&
-        gps.GPSTimeStamp) { //else use exif.gps.GPS*Stamp if available
-        //GPS timestamp is always UTC (+00:00)
-        UTCTimestamp = gps.GPSDateStamp.replaceAll(':', '-') + gps.GPSTimeStamp.join(':');
-      }
-      if (UTCTimestamp && timestamp) {
-        //offset in minutes is the difference between gps timestamp and given timestamp
-        //to calculate this correctly, we have to work with the same offset
-        const offsetMinutes = (timestampToMS(timestamp, '+00:00')- timestampToMS(UTCTimestamp, '+00:00')) / 1000 / 60;
-        return Utils.getOffsetString(offsetMinutes);
-      } else {
-        return undefined;
-      }
-    }
 
     //Function to convert html code for special characters into their corresponding character (used in exif.photoshop-section)
     const unescape = (tag: string) => {
@@ -368,32 +365,32 @@ export class MetadataLoader {
               //DateTimeOriginal is when the camera shutter closed
               let offset = exif.exif.OffsetTimeOriginal; //OffsetTimeOriginal is the corresponding offset
               if (!offset) { //Find offset among other options if possible
-                offset = exif.exif.OffsetTimeDigitized || exif.exif.OffsetTime || getTimeOffsetByGPSStamp(exif.exif.DateTimeOriginal, exif.exif.GPSTimeStamp, exif.gps);
+                offset = exif.exif.OffsetTimeDigitized || exif.exif.OffsetTime || Utils.getTimeOffsetByGPSStamp(exif.exif.DateTimeOriginal, exif.exif.GPSTimeStamp, exif.gps);
               }
-              metadata.creationDate = timestampToMS(exif.exif.DateTimeOriginal, offset);
+              metadata.creationDate = Utils.timestampToMS(exif.exif.DateTimeOriginal, offset);
               metadata.creationDateOffset = offset;
             } else if (exif.exif.CreateDate) { //using else if here, because DateTimeOriginal has preceedence
               //Create is when the camera wrote the file (typically within the same ms as shutter close)
               let offset = exif.exif.OffsetTimeDigitized; //OffsetTimeDigitized is the corresponding offset
               if (!offset) { //Find offset among other options if possible
-                offset = exif.exif.OffsetTimeOriginal || exif.exif.OffsetTime || getTimeOffsetByGPSStamp(exif.exif.DateTimeOriginal, exif.exif.GPSTimeStamp, exif.gps);
+                offset = exif.exif.OffsetTimeOriginal || exif.exif.OffsetTime || Utils.getTimeOffsetByGPSStamp(exif.exif.DateTimeOriginal, exif.exif.GPSTimeStamp, exif.gps);
               }
-              metadata.creationDate = timestampToMS(exif.exif.CreateDate, offset);
+              metadata.creationDate = Utils.timestampToMS(exif.exif.CreateDate, offset);
               metadata.creationDateOffset = offset;
             } else if (exif.ifd0?.ModifyDate) { //using else if here, because DateTimeOriginal and CreatDate have preceedence
               let offset = exif.exif.OffsetTime; //exif.Offsettime is the offset corresponding to ifd0.ModifyDate
                if (!offset) { //Find offset among other options if possible
-                offset = exif.exif.DateTimeOriginal || exif.exif.OffsetTimeDigitized || getTimeOffsetByGPSStamp(exif.ifd0.ModifyDate, exif.exif.GPSTimeStamp, exif.gps);
+                offset = exif.exif.DateTimeOriginal || exif.exif.OffsetTimeDigitized || Utils.getTimeOffsetByGPSStamp(exif.ifd0.ModifyDate, exif.exif.GPSTimeStamp, exif.gps);
                }
-              metadata.creationDate = timestampToMS(exif.ifd0.ModifyDate, offset);
+              metadata.creationDate = Utils.timestampToMS(exif.ifd0.ModifyDate, offset);
               metadata.creationDateOffset = offset
             } else if (exif.ihdr && exif.ihdr["Creation Time"]) {// again else if (another fallback date if the good ones aren't there) {
-                const any_offset = exif.exif.DateTimeOriginal || exif.exif.OffsetTimeDigitized || exif.exif.OffsetTime || getTimeOffsetByGPSStamp(exif.ifd0.ModifyDate, exif.exif.GPSTimeStamp, exif.gps);
-                metadata.creationDate = timestampToMS(exif.ihdr["Creation Time"], any_offset);
+                const any_offset = exif.exif.DateTimeOriginal || exif.exif.OffsetTimeDigitized || exif.exif.OffsetTime || Utils.getTimeOffsetByGPSStamp(exif.ifd0.ModifyDate, exif.exif.GPSTimeStamp, exif.gps);
+                metadata.creationDate = Utils.timestampToMS(exif.ihdr["Creation Time"], any_offset);
                 metadata.creationDateOffset = any_offset;
             } else if (exif.xmp?.MetadataDate) {// again else if (another fallback date if the good ones aren't there - metadata date is probably later than actual creation date, but much better than file time) {
-                const any_offset = exif.exif.DateTimeOriginal || exif.exif.OffsetTimeDigitized || exif.exif.OffsetTime || getTimeOffsetByGPSStamp(exif.ifd0.ModifyDate, exif.exif.GPSTimeStamp, exif.gps);
-                metadata.creationDate = timestampToMS(exif.xmp.MetadataDate, any_offset);
+                const any_offset = exif.exif.DateTimeOriginal || exif.exif.OffsetTimeDigitized || exif.exif.OffsetTime || Utils.getTimeOffsetByGPSStamp(exif.ifd0.ModifyDate, exif.exif.GPSTimeStamp, exif.gps);
+                metadata.creationDate = Utils.timestampToMS(exif.xmp.MetadataDate, any_offset);
                 metadata.creationDateOffset = any_offset;
             }
             if (exif.exif.LensModel && exif.exif.LensModel !== '') {
@@ -623,25 +620,51 @@ export class MetadataLoader {
               const sidecarData = await exifr.sidecar(sidecarPath);
 
               if (sidecarData !== undefined) {
-                if ((sidecarData as SideCar).dc.subject !== undefined) {
-                  if (metadata.keywords === undefined) {
-                    metadata.keywords = [];
-                  }
-                  let keywords = (sidecarData as SideCar).dc.subject || [];
-                  if (typeof keywords === 'string') {
-                    keywords = [keywords];
-                  }
-                  for (const kw of keywords) {
-                    if (metadata.keywords.indexOf(kw) === -1) {
-                      metadata.keywords.push(kw);
+                if ((sidecarData as SideCar).dc !== undefined) {
+                  if ((sidecarData as SideCar).dc.subject !== undefined) {
+                    if (metadata.keywords === undefined) {
+                      metadata.keywords = [];
+                    }
+                    let keywords = (sidecarData as SideCar).dc.subject || [];
+                    if (typeof keywords === 'string') {
+                      keywords = [keywords];
+                    }
+                    for (const kw of keywords) {
+                      if (metadata.keywords.indexOf(kw) === -1) {
+                        metadata.keywords.push(kw);
+                      }
                     }
                   }
                 }
-                if ((sidecarData as SideCar).xmp.Rating !== undefined) {
-                  metadata.rating = (sidecarData as SideCar).xmp.Rating;
+                let hasPhotoshopDate = false;
+                if ((sidecarData as SideCar).photoshop !== undefined) {
+                  if ((sidecarData as SideCar).photoshop.DateCreated !== undefined) {
+                    const date = Utils.timestampToMS((sidecarData as SideCar).photoshop.DateCreated, null);
+                    if (date) {
+                      metadata.creationDate = date;
+                      hasPhotoshopDate = true;
+                    }
+                  }
                 }
-                if ((sidecarData as SideCar).xmp.CreateDate) {
-                  metadata.creationDate = timestampToMS((sidecarData as SideCar).xmp.CreateDate, null);
+                if (Object.hasOwn(sidecarData, 'xap')) {
+                  (sidecarData as any)['xmp'] = (sidecarData as any)['xap'];
+                  delete (sidecarData as any)['xap'];
+                }
+                if ((sidecarData as SideCar).xmp !== undefined) {
+                  if ((sidecarData as SideCar).xmp.Rating !== undefined) {
+                    metadata.rating = (sidecarData as SideCar).xmp.Rating;
+                  }
+                  if (
+                    !hasPhotoshopDate && (
+                      (sidecarData as SideCar).xmp.CreateDate !== undefined ||
+                      (sidecarData as SideCar).xmp.ModifyDate !== undefined
+                    )
+                  ) {
+                    metadata.creationDate =
+                      Utils.timestampToMS((sidecarData as SideCar).xmp.CreateDate, null) ||
+                      Utils.timestampToMS((sidecarData as SideCar).xmp.ModifyDate, null) ||
+                      metadata.creationDate;
+                  }
                 }
               }
             }
