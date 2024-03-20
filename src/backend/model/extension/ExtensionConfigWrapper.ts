@@ -50,6 +50,7 @@ export class ExtensionConfig<C> implements IExtensionConfig<C> {
   public setTemplate(template: new() => C): void {
     this.template = template;
     this.loadToConfig(Config);
+    Config.loadSync();
   }
 
   loadToConfig(config: PrivateConfigClass) {
