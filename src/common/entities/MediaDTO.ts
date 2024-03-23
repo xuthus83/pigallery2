@@ -30,9 +30,15 @@ export interface MediaDimension {
 }
 
 export interface SideCar {
+  exif?: SideCarExif;
   dc?: SideCarDc;
   xmp?: SideCarXmp;
   photoshop?: SideCarPhotoshop;
+}
+
+export interface SideCarExif {
+  GPSLatitude?: string;
+  GPSLongitude?: string;
 }
 
 export interface SideCarDc {
