@@ -175,7 +175,10 @@ export class MetadataLoader {
                 delete (sidecarData as any)['xap'];
               }
               if ((sidecarData as SideCar).xmp !== undefined) {
-                if ((sidecarData as SideCar).xmp.Rating !== undefined) {
+                if (
+                    (sidecarData as SideCar).xmp.Rating !== undefined &&
+                    (sidecarData as SideCar).xmp.Rating > 0
+                ) {
                   metadata.rating = (sidecarData as SideCar).xmp.Rating;
                 }
                 if (
@@ -651,7 +654,10 @@ export class MetadataLoader {
                   delete (sidecarData as any)['xap'];
                 }
                 if ((sidecarData as SideCar).xmp !== undefined) {
-                  if ((sidecarData as SideCar).xmp.Rating !== undefined) {
+                  if (
+                    (sidecarData as SideCar).xmp.Rating !== undefined &&
+                    (sidecarData as SideCar).xmp.Rating > 0
+                  ) {
                     metadata.rating = (sidecarData as SideCar).xmp.Rating;
                   }
                   if (
