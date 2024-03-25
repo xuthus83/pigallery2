@@ -1,7 +1,7 @@
 import {NextFunction, Request, Response} from 'express';
 import {ErrorCodes, ErrorDTO} from '../../common/entities/Error';
 import {Message} from '../../common/entities/Message';
-import {Config, PrivateConfigClass} from '../../common/config/private/Config';
+import {PrivateConfigClass} from '../../common/config/private/PrivateConfigClass';
 import {UserDTO, UserRoles} from '../../common/entities/UserDTO';
 import {NotificationManager} from '../model/NotifocationManager';
 import {Logger} from '../Logger';

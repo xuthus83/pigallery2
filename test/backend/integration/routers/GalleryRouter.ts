@@ -7,6 +7,7 @@ import {SuperAgentStatic} from 'superagent';
 import {ProjectPath} from '../../../../src/backend/ProjectPath';
 import {DBTestHelper} from '../../DBTestHelper';
 import {ReIndexingSensitivity} from '../../../../src/common/config/private/PrivateConfig';
+import {TestHelper} from '../../../TestHelper';
 
 
 process.env.NODE_ENV = 'test';
@@ -25,14 +26,13 @@ describe = DBTestHelper.describe({sqlite: true});
 describe('GalleryRouter', (sqlHelper: DBTestHelper) => {
   describe = tmpDescribe;
 
-  const tempDir = sqlHelper.tempDir;
   let server: Server;
   const setUp = async () => {
     await sqlHelper.initDB();
     Config.Users.authenticationRequired = false;
     Config.Media.Video.enabled = true;
     Config.Media.folder = path.join(__dirname, '../../assets');
-    Config.Media.tempFolder = tempDir;
+    Config.Media.tempFolder = TestHelper.TMP_DIR;
     ProjectPath.reset();
     server = new Server();
     await server.onStarted.wait();
