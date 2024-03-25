@@ -39,7 +39,6 @@ describe('UserRouter', () => {
     Config.Database.dbFolder = tempDir;
     ProjectPath.reset();
 
-
     server = new Server(false);
     await server.onStarted.wait();
     await ObjectManagers.getInstance().init();
@@ -47,7 +46,6 @@ describe('UserRouter', () => {
     await SQLConnection.close();
   };
   const tearDown = async () => {
-    await server.Stop();
     await ObjectManagers.reset();
     await fs.promises.rm(tempDir, {recursive: true, force: true});
   };

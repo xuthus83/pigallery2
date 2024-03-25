@@ -35,7 +35,7 @@ export class Server {
   public app: express.Express;
   private server: HttpServer;
 
-  static instance: Server = null;
+  public static instance: Server = null;
 
   public static getInstance(): Server {
     if (!this.instance) {
@@ -148,16 +148,19 @@ export class Server {
     this.server.on('close', this.onClose);
 
     // Sigterm handler
-    process.on('SIGTERM', () => {
-      Logger.info(LOG_TAG, 'SIGTERM signal received');
-      this.server.close(() => {
-        process.exit(0);
-      });
-    });
+    process.removeAllListeners('SIGTERM');
+    process.on('SIGTERM', this.SIGTERM);
 
     if (!listen) {
       this.onStarted.trigger();
     }
+  }
+
+  private SIGTERM = () =>{
+    Logger.info(LOG_TAG, 'SIGTERM signal received');
+    this.server.close(() => {
+      process.exit(0);
+    });
   }
 
   /**

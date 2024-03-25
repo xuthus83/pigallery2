@@ -2,11 +2,10 @@
 import {ServerConfig} from './PrivateConfig';
 import * as crypto from 'crypto';
 import * as path from 'path';
-import {ConfigClass, ConfigClassBuilder} from 'typeconfig/node';
+import {ConfigClass} from 'typeconfig/node';
 import {IConfigClass} from 'typeconfig/common';
 import {PasswordHelper} from '../../../backend/model/PasswordHelper';
 import {TAGS} from '../public/ClientConfig';
-import {NotificationManager} from '../../../backend/model/NotifocationManager';
 
 declare const process: any;
 const upTime = new Date().toISOString();

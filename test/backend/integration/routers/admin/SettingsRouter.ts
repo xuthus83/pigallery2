@@ -1,4 +1,3 @@
-import * as path from 'path';
 import * as fs from 'fs';
 import {Config} from '../../../../../src/common/config/private/Config';
 import {Server} from '../../../../../src/backend/server';
@@ -9,8 +8,6 @@ import {ObjectManagers} from '../../../../../src/backend/model/ObjectManagers';
 import {UserRoles} from '../../../../../src/common/entities/UserDTO';
 import {ExtensionConfigWrapper} from '../../../../../src/backend/model/extension/ExtensionConfigWrapper';
 import {TestHelper} from '../../../../TestHelper';
-import {Utils} from '../../../../../src/common/Utils';
-import {SQLConnection} from '../../../../../src/backend/model/database/SQLConnection';
 
 process.env.NODE_ENV = 'test';
 const chai: any = require('chai');
@@ -29,13 +26,11 @@ describe('SettingsRouter', () => {
 
     server = new Server(false);
     await server.onStarted.wait();
-    console.log('done');
     await ObjectManagers.getInstance().init();
   });
 
 
   afterEach(async () => {
-    await server.Stop();
     await ObjectManagers.reset();
     await fs.promises.rm(TestHelper.TMP_DIR, {recursive: true, force: true});
   });
@@ -44,9 +39,8 @@ describe('SettingsRouter', () => {
     it('it should GET the settings', async () => {
       Config.Users.authenticationRequired = false;
       Config.Users.unAuthenticatedUserRole = UserRoles.Admin;
-      const originalSettings =  await ExtensionConfigWrapper.original();
+      const originalSettings = await ExtensionConfigWrapper.original();
 
-      console.log('testing');
       const result = await chai.request(server.Server)
         .get(Config.Server.apiPath + '/settings');
 

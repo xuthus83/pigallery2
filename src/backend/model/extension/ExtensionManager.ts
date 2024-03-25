@@ -36,7 +36,7 @@ export class ExtensionManager implements IObjectManager {
       return;
     }
     this.router = express.Router();
-    Server.getInstance().app.use(ExtensionManager.EXTENSION_API_PATH, this.router);
+    Server.instance?.app.use(ExtensionManager.EXTENSION_API_PATH, this.router);
     this.loadExtensionsList();
     await this.initExtensions();
   }
@@ -163,7 +163,7 @@ export class ExtensionManager implements IObjectManager {
     }
     this.initEvents(); // reset events
     await this.cleanUpExtensions();
-    Server.getInstance().app.use(ExtensionManager.EXTENSION_API_PATH, express.Router());
+    Server.instance?.app.use(ExtensionManager.EXTENSION_API_PATH, this.router);
     this.extObjects = {};
   }
 }

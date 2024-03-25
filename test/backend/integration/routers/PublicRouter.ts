@@ -50,7 +50,6 @@ describe('PublicRouter', () => {
     await SQLConnection.close();
   };
   const tearDown = async () => {
-    await server.Stop();
     await ObjectManagers.reset();
     await fs.promises.rm(TestHelper.TMP_DIR, {recursive: true, force: true});
   };
