@@ -48,7 +48,7 @@ describe('SettingsRouter', () => {
         attachVolatile: true,
         skipTags: {secret: true} as TAGS
       })));
-      console.log(originalJSON);
+      console.log(JSON.stringify(originalJSON,null,4));
 
       const result = await chai.request(server.Server)
         .get(Config.Server.apiPath + '/settings');
