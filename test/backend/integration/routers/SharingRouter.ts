@@ -39,7 +39,7 @@ describe('SharingRouter', () => {
     Config.Database.type = DatabaseType.sqlite;
     Config.Database.dbFolder = tempDir;
 
-    server = new Server();
+    server = new Server(false);
     await server.onStarted.wait();
 
     await ObjectManagers.getInstance().init();
@@ -47,6 +47,7 @@ describe('SharingRouter', () => {
     await SQLConnection.close();
   };
   const tearDown = async () => {
+    await server.Stop();
     await ObjectManagers.reset();
     await fs.promises.rm(tempDir, {recursive: true, force: true});
   };

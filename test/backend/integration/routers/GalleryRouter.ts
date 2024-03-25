@@ -34,7 +34,7 @@ describe('GalleryRouter', (sqlHelper: DBTestHelper) => {
     Config.Media.folder = path.join(__dirname, '../../assets');
     Config.Media.tempFolder = TestHelper.TMP_DIR;
     ProjectPath.reset();
-    server = new Server();
+    server = new Server(false);
     await server.onStarted.wait();
   };
   const tearDown = async () => {

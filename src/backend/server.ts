@@ -44,21 +44,21 @@ export class Server {
     return this.instance;
   }
 
-  constructor() {
+  constructor(listen = true) {
     if (!(process.env.NODE_ENV === 'production')) {
       Logger.info(
         LOG_TAG,
         'Running in DEBUG mode, set env variable NODE_ENV=production to disable '
       );
     }
-    this.init().catch(console.error);
+    this.init(listen).catch(console.error);
   }
 
   get Server(): HttpServer {
     return this.server;
   }
 
-  async init(): Promise<void> {
+  async init(listen = true): Promise<void> {
     this.app = express();
     LoggerRouter.route(this.app);
     this.app.set('view engine', 'ejs');
@@ -68,11 +68,11 @@ export class Server {
     Logger.verbose(
       LOG_TAG,
       () => 'using config from ' +
-      (
-        ConfigClassBuilder.attachPrivateInterface(Config)
-          .__options as ConfigClassOptions<ServerConfig>
-      ).configPath +
-      ':'
+        (
+          ConfigClassBuilder.attachPrivateInterface(Config)
+            .__options as ConfigClassOptions<ServerConfig>
+        ).configPath +
+        ':'
     );
     Logger.verbose(LOG_TAG, () => JSON.stringify(Config.toJSON({attachDescription: false}), (k, v) => {
       const MAX_LENGTH = 80;
@@ -140,7 +140,9 @@ export class Server {
     this.server = _http.createServer(this.app);
 
     // Listen on provided PORT, on all network interfaces.
-    this.server.listen(Config.Server.port, Config.Server.host);
+    if (listen) {
+      this.server.listen(Config.Server.port, Config.Server.host);
+    }
     this.server.on('error', this.onError);
     this.server.on('listening', this.onListening);
     this.server.on('close', this.onClose);
@@ -153,7 +155,9 @@ export class Server {
       });
     });
 
-    this.onStarted.trigger();
+    if (!listen) {
+      this.onStarted.trigger();
+    }
   }
 
   /**
@@ -190,6 +194,7 @@ export class Server {
     const bind =
       typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
     Logger.info(LOG_TAG, 'Listening on ' + bind);
+    this.onStarted.trigger();
   };
 
   /**
@@ -198,6 +203,20 @@ export class Server {
   private onClose = () => {
     Logger.info(LOG_TAG, 'Closed http server');
   };
+
+  public Stop(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      if(!this.server.listening){
+        return resolve();
+      }
+      this.server.close((err) => {
+        if (!err) {
+          return resolve();
+        }
+        reject(err);
+      });
+    });
+  }
 }
 
 

@@ -40,13 +40,14 @@ describe('UserRouter', () => {
     ProjectPath.reset();
 
 
-    server = new Server();
+    server = new Server(false);
     await server.onStarted.wait();
     await ObjectManagers.getInstance().init();
     await ObjectManagers.getInstance().UserManager.createUser(Utils.clone(testUser));
     await SQLConnection.close();
   };
   const tearDown = async () => {
+    await server.Stop();
     await ObjectManagers.reset();
     await fs.promises.rm(tempDir, {recursive: true, force: true});
   };

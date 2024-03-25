@@ -8,6 +8,9 @@ import {TAGS} from '../../../../../src/common/config/public/ClientConfig';
 import {ObjectManagers} from '../../../../../src/backend/model/ObjectManagers';
 import {UserRoles} from '../../../../../src/common/entities/UserDTO';
 import {ExtensionConfigWrapper} from '../../../../../src/backend/model/extension/ExtensionConfigWrapper';
+import {TestHelper} from '../../../../TestHelper';
+import {Utils} from '../../../../../src/common/Utils';
+import {SQLConnection} from '../../../../../src/backend/model/database/SQLConnection';
 
 process.env.NODE_ENV = 'test';
 const chai: any = require('chai');
@@ -17,29 +20,34 @@ chai.use(chaiHttp);
 
 describe('SettingsRouter', () => {
 
-  const tempDir = path.join(__dirname, '../../tmp');
+  let server: Server;
   beforeEach(async () => {
-    await ObjectManagers.reset();
-    await fs.promises.rm(tempDir, {recursive: true, force: true});
+    await fs.promises.rm(TestHelper.TMP_DIR, {recursive: true, force: true});
     Config.Database.type = DatabaseType.sqlite;
-    Config.Database.dbFolder = tempDir;
+    Config.Database.dbFolder = TestHelper.TMP_DIR;
     ProjectPath.reset();
+
+    server = new Server(false);
+    await server.onStarted.wait();
+    console.log('done');
+    await ObjectManagers.getInstance().init();
   });
 
 
   afterEach(async () => {
+    await server.Stop();
     await ObjectManagers.reset();
-    await fs.promises.rm(tempDir, {recursive: true, force: true});
+    await fs.promises.rm(TestHelper.TMP_DIR, {recursive: true, force: true});
   });
 
   describe('/GET settings', () => {
     it('it should GET the settings', async () => {
       Config.Users.authenticationRequired = false;
       Config.Users.unAuthenticatedUserRole = UserRoles.Admin;
-      const originalSettings = await ExtensionConfigWrapper.original();
-      const srv = new Server();
-      await srv.onStarted.wait();
-      const result = await chai.request(srv.Server)
+      const originalSettings =  await ExtensionConfigWrapper.original();
+
+      console.log('testing');
+      const result = await chai.request(server.Server)
         .get(Config.Server.apiPath + '/settings');
 
       result.res.should.have.status(200);
