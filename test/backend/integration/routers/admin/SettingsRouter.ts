@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import {Config} from '../../../../../src/common/config/private/Config';
 import {Server} from '../../../../../src/backend/server';
-import {DatabaseType, ServerConfig} from '../../../../../src/common/config/private/PrivateConfig';
+import {DatabaseType, LogLevel, ServerConfig} from '../../../../../src/common/config/private/PrivateConfig';
 import {ProjectPath} from '../../../../../src/backend/ProjectPath';
 import {TAGS} from '../../../../../src/common/config/public/ClientConfig';
 import {ObjectManagers} from '../../../../../src/backend/model/ObjectManagers';
@@ -22,6 +22,7 @@ describe('SettingsRouter', () => {
     await fs.promises.rm(TestHelper.TMP_DIR, {recursive: true, force: true});
     Config.Database.type = DatabaseType.sqlite;
     Config.Database.dbFolder = TestHelper.TMP_DIR;
+    Config.Extensions.enabled = false;
     ProjectPath.reset();
 
     server = new Server(false);
