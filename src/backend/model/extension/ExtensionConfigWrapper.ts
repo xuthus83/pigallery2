@@ -12,17 +12,17 @@ const LOG_TAG = '[ExtensionConfigWrapper]';
  */
 export class ExtensionConfigWrapper {
 
-  static async original(showError = false): Promise<PrivateConfigClass & IConfigClass> {
+  static async original(showDetailedError = false): Promise<PrivateConfigClass & IConfigClass> {
     const pc = ConfigClassBuilder.attachPrivateInterface(new PrivateConfigClass());
     ExtensionConfigTemplateLoader.Instance.loadExtensionTemplates(pc);
     try {
       await pc.load(); // loading the basic configs, but we do not know the extension config hierarchy yet
 
     } catch (e) {
-      if(showError){
-        console.error(LOG_TAG,'Error during loading config. Reverting to defaults.');
-        console.error(LOG_TAG,'This is most likely due to: 1) you added a bad configuration in the server.json OR 2) The configuration changed in the latest release.');
-        console.error(e);
+      console.error(LOG_TAG, 'Error during loading config. Reverting to defaults.');
+      console.error(e);
+      if (showDetailedError) {
+        console.error(LOG_TAG, 'This is most likely due to: 1) you added a bad configuration in the server.json OR 2) The configuration changed in the latest release.');
         NotificationManager.error('Can\'t load config. Reverting to default. This is most likely due to: 1) you added a bad configuration in the server.json OR 2) The configuration changed in the latest release.', (e.toString ? e.toString() : JSON.stringify(e)));
       }
     }
@@ -30,17 +30,17 @@ export class ExtensionConfigWrapper {
   }
 
 
-  static originalSync(showError = false): PrivateConfigClass & IConfigClass {
+  static originalSync(showDetailedError = false): PrivateConfigClass & IConfigClass {
     const pc = ConfigClassBuilder.attachPrivateInterface(new PrivateConfigClass());
     ExtensionConfigTemplateLoader.Instance.loadExtensionTemplates(pc);
     try {
       pc.loadSync(); // loading the basic configs, but we do not know the extension config hierarchy yet
 
     } catch (e) {
-      if(showError){
-        console.error(LOG_TAG,'Error during loading config. Reverting to defaults.');
-        console.error(LOG_TAG,'This is most likely due to: 1) you added a bad configuration in the server.json OR 2) The configuration changed in the latest release.');
-        console.error(e);
+      console.error(LOG_TAG, 'Error during loading config. Reverting to defaults.');
+      console.error(e);
+      if (showDetailedError) {
+        console.error(LOG_TAG, 'This is most likely due to: 1) you added a bad configuration in the server.json OR 2) The configuration changed in the latest release.');
         NotificationManager.error('Ca\'nt load config. Reverting to default. This is most likely due to: 1) you added a bad configuration in the server.json OR 2) The configuration changed in the latest release.', (e.toString ? e.toString() : JSON.stringify(e)));
       }
     }

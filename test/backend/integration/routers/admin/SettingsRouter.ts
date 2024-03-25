@@ -41,6 +41,13 @@ describe('SettingsRouter', () => {
       Config.Users.unAuthenticatedUserRole = UserRoles.Admin;
       const originalSettings = await ExtensionConfigWrapper.original();
 
+      originalSettings.Environment.upTime = null;
+      const originalJSON = JSON.parse(JSON.stringify(originalSettings.toJSON({
+        attachState: true,
+        attachVolatile: true,
+        skipTags: {secret: true} as TAGS
+      })));
+
       const result = await chai.request(server.Server)
         .get(Config.Server.apiPath + '/settings');
 
@@ -48,12 +55,7 @@ describe('SettingsRouter', () => {
       result.body.should.be.a('object');
       should.equal(result.body.error, null);
       (result.body.result as ServerConfig).Environment.upTime = null;
-      originalSettings.Environment.upTime = null;
-      result.body.result.should.deep.equal(JSON.parse(JSON.stringify(originalSettings.toJSON({
-        attachState: true,
-        attachVolatile: true,
-        skipTags: {secret: true} as TAGS
-      }))));
+      result.body.result.should.deep.equal(originalJSON);
     });
   });
 });

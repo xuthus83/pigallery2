@@ -111,13 +111,15 @@ export class RenderingMWs {
     const originalConf = await ExtensionConfigWrapper.original();
     // These are sensitive information, do not send to the client side
     originalConf.Server.sessionSecret = null;
+    const originalConfJSON = JSON.parse(JSON.stringify(originalConf.toJSON({
+      attachState: true,
+      attachVolatile: true,
+      skipTags: {secret: true} as TAGS
+    }) as PrivateConfigClass));
+
     const message = new Message<PrivateConfigClass>(
       null,
-      originalConf.toJSON({
-        attachState: true,
-        attachVolatile: true,
-        skipTags: {secret: true} as TAGS
-      }) as PrivateConfigClass
+      originalConfJSON
     );
     res.json(message);
   }
