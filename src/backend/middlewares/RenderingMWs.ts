@@ -117,6 +117,7 @@ export class RenderingMWs {
       skipTags: {secret: true} as TAGS
     }) as PrivateConfigClass));
 
+    console.log(originalConfJSON);
     const message = new Message<PrivateConfigClass>(
       null,
       originalConfJSON

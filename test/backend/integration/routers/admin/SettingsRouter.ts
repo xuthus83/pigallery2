@@ -22,7 +22,7 @@ describe('SettingsRouter', () => {
     await fs.promises.rm(TestHelper.TMP_DIR, {recursive: true, force: true});
     Config.Database.type = DatabaseType.sqlite;
     Config.Database.dbFolder = TestHelper.TMP_DIR;
-    Config.Extensions.enabled = false;
+    Config.Extensions.folder = 'notexisting';
     ProjectPath.reset();
 
     server = new Server(false);
@@ -48,6 +48,7 @@ describe('SettingsRouter', () => {
         attachVolatile: true,
         skipTags: {secret: true} as TAGS
       })));
+      console.log(originalJSON);
 
       const result = await chai.request(server.Server)
         .get(Config.Server.apiPath + '/settings');
