@@ -30,8 +30,15 @@ export interface MediaDimension {
 }
 
 export interface SideCar {
+  exif?: SideCarExif;
   dc?: SideCarDc;
   xmp?: SideCarXmp;
+  photoshop?: SideCarPhotoshop;
+}
+
+export interface SideCarExif {
+  GPSLatitude?: string;
+  GPSLongitude?: string;
 }
 
 export interface SideCarDc {
@@ -40,6 +47,14 @@ export interface SideCarDc {
 
 export interface SideCarXmp {
   Rating?: RatingTypes;
+  CreateDate?: string;
+  ModifyDate?: string;
+}
+
+export interface SideCarPhotoshop {
+  // Corresponds to Exif.Photo.DateTimeOriginal. No corresponding key exists in
+  // the xmp namespace!
+  DateCreated?: string;
 }
 
 export const MediaDTOUtils = {
