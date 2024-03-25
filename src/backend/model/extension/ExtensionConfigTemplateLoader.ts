@@ -40,34 +40,36 @@ export class ExtensionConfigTemplateLoader {
     // already loaded
     if (!this.loaded) {
 
-      this.extensionList = (fs
-        .readdirSync(this.extensionsFolder))
-        .filter((f): boolean =>
-          fs.statSync(path.join(this.extensionsFolder, f)).isDirectory()
-        );
-      this.extensionList.sort();
-
       this.extensionTemplates = [];
-      for (let i = 0; i < this.extensionList.length; ++i) {
-        const extFolder = this.extensionList[i];
-        const extPath = path.join(this.extensionsFolder, extFolder);
-        const serverExtPath = path.join(extPath, 'server.js');
-        if (!fs.existsSync(serverExtPath)) {
-          continue;
-        }
+      if (fs.existsSync(this.extensionsFolder)) {
+        this.extensionList = (fs
+          .readdirSync(this.extensionsFolder))
+          .filter((f): boolean =>
+            fs.statSync(path.join(this.extensionsFolder, f)).isDirectory()
+          );
+        this.extensionList.sort();
+
+        for (let i = 0; i < this.extensionList.length; ++i) {
+          const extFolder = this.extensionList[i];
+          const extPath = path.join(this.extensionsFolder, extFolder);
+          const serverExtPath = path.join(extPath, 'server.js');
+          if (!fs.existsSync(serverExtPath)) {
+            continue;
+          }
 
 
-        // eslint-disable-next-line @typescript-eslint/no-var-requires
-        const ext = require(serverExtPath);
-        if (typeof ext?.initConfig === 'function') {
-          ext?.initConfig({
-            setConfigTemplate: (template: { new(): unknown }): void => {
-              this.extensionTemplates.push({folder: extFolder, template: template});
-            }
-          });
-        } else {
-          //also create basic config extensions that do not have any
-          this.extensionTemplates.push({folder: extFolder});
+          // eslint-disable-next-line @typescript-eslint/no-var-requires
+          const ext = require(serverExtPath);
+          if (typeof ext?.initConfig === 'function') {
+            ext?.initConfig({
+              setConfigTemplate: (template: { new(): unknown }): void => {
+                this.extensionTemplates.push({folder: extFolder, template: template});
+              }
+            });
+          } else {
+            //also create basic config extensions that do not have any
+            this.extensionTemplates.push({folder: extFolder});
+          }
         }
       }
       this.loaded = true;
@@ -75,8 +77,6 @@ export class ExtensionConfigTemplateLoader {
 
     this.setTemplatesToConfig(config);
   }
-
-
 
 
   private setTemplatesToConfig(config: PrivateConfigClass) {
@@ -100,7 +100,7 @@ export class ExtensionConfigTemplateLoader {
       if (!c) {
         c = new ServerExtensionsEntryConfig(ext.folder);
         if (ext.template) {
-          c.configs= new ext.template()
+          c.configs = new ext.template();
         }
         config.Extensions.extensions.push(c);
       }
