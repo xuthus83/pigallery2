@@ -118,7 +118,6 @@ export class SharingMWs {
         );
       return next();
     } catch (err) {
-      console.warn(err);
       return next(
         new ErrorDTO(
           ErrorCodes.GENERAL_ERROR,
