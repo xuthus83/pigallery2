@@ -132,8 +132,7 @@ export class RenderingMWs {
   ): void {
     if (err instanceof ErrorDTO) {
       if (err.details) {
-        Logger.warn('Handled error:');
-        LoggerRouter.log(Logger.warn, req, res);
+        LoggerRouter.log(logFn, req, res);
         // use separate rendering for detailsStr
         const d = err.detailsStr;
         delete err.detailsStr;

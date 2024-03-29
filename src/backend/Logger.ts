@@ -1,5 +1,6 @@
 import {Config} from '../common/config/private/Config';
 import {LogLevel} from '../common/config/private/PrivateConfig';
+import {ErrorCodes} from '../common/entities/Error';
 
 
 const forcedDebug = process.env['NODE_ENV'] === 'debug';
@@ -102,5 +103,26 @@ export class Logger {
       }
     });
     console.log(date + tag + LOG_TAG, ...args);
+  }
+
+  public static logLevelForError(e: ErrorCodes): LoggerFunction {
+    switch (e) {
+      case ErrorCodes.INPUT_ERROR:
+      case ErrorCodes.NOT_AUTHENTICATED:
+      case ErrorCodes.ALREADY_AUTHENTICATED:
+      case ErrorCodes.NOT_AUTHORISED:
+      case ErrorCodes.PERMISSION_DENIED:
+      case ErrorCodes.CREDENTIAL_NOT_FOUND:
+        return Logger.debug
+      case ErrorCodes.SETTINGS_ERROR:
+      case ErrorCodes.TASK_ERROR:
+      case ErrorCodes.JOB_ERROR:
+      case ErrorCodes.THUMBNAIL_GENERATION_ERROR:
+      case ErrorCodes.PHOTO_GENERATION_ERROR:
+      case ErrorCodes.SERVER_ERROR:
+        return Logger.error
+      default:
+        return Logger.warn
+    }
   }
 }
