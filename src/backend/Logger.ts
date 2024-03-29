@@ -1,7 +1,6 @@
 import {Config} from '../common/config/private/Config';
 import {LogLevel} from '../common/config/private/PrivateConfig';
 
-export type logFN = (...args: (string | number | (() => string))[]) => void;
 
 const forcedDebug = process.env['NODE_ENV'] === 'debug';
 
@@ -11,7 +10,8 @@ if (forcedDebug === true) {
   );
 }
 
-export type LoggerArgs = (string | number | (() => string))
+// Match `console.log` inputs
+export type LoggerArgs = Parameters<Console["log"]>[0]
 export type LoggerFunction = (...args: LoggerArgs[]) => void;
 
 export interface ILogger {
