@@ -17,6 +17,7 @@ import {LocationLookupException} from '../exceptions/LocationLookupException';
 import {SupportedFormats} from '../../common/SupportedFormats';
 import {ServerTime} from './ServerTimingMWs';
 import {SortByTypes} from '../../common/entities/SortingMethods';
+import {Logger} from '../Logger';
 
 export class GalleryMWs {
   @ServerTime('1.db', 'List Directory')
@@ -109,7 +110,7 @@ export class GalleryMWs {
       });
 
       res.on('close', () => {
-        console.log('zip ' + archive.pointer() + ' bytes');
+        Logger.info('zip ' + archive.pointer() + ' bytes');
       });
 
       archive.on('error', (err: Error) => {

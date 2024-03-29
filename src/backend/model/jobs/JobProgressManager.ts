@@ -3,6 +3,7 @@ import * as path from 'path';
 import {ProjectPath} from '../../ProjectPath';
 import {Config} from '../../../common/config/private/Config';
 import {JobProgressDTO, JobProgressStates,} from '../../../common/entities/job/JobProgressDTO';
+import { Logger } from '../../Logger';
 
 export class JobProgressManager {
   private static readonly VERSION = 3;
@@ -20,7 +21,7 @@ export class JobProgressManager {
 
   constructor() {
     this.dbPath = path.join(ProjectPath.DBFolder, 'jobs.db');
-    this.loadDB().catch(console.error);
+    this.loadDB().catch(Logger.error);
   }
 
   get Progresses(): { [key: string]: JobProgressDTO } {
@@ -89,7 +90,7 @@ export class JobProgressManager {
       return;
     }
     this.timer = setTimeout(async (): Promise<void> => {
-      this.saveDB().catch(console.error);
+      this.saveDB().catch(Logger.error);
       this.timer = null;
     }, 5000);
   }

@@ -93,8 +93,7 @@ export class IndexingJob<
     } catch (e) {
       this.Progress.log('Skipping. Indexing failed for: ' + directory);
       this.Progress.Skipped++;
-      Logger.warn(LOG_TAG, 'Skipping. Indexing failed for: ' + directory);
-      console.error(e);
+      Logger.warn(LOG_TAG, 'Skipping. Indexing failed for: ' + directory, + '\n', e);
     }
     if (this.Progress.State !== JobProgressStates.running) {
       return false;

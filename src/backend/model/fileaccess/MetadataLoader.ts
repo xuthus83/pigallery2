@@ -41,7 +41,7 @@ export class MetadataLoader {
       metadata.fileSize = stat.size;
       metadata.creationDate = stat.mtime.getTime(); //Default date is file system time of last modification
     } catch (err) {
-      console.log(err);
+      Logger.info(err);
       // ignoring errors
     }
     try {
@@ -214,8 +214,7 @@ export class MetadataLoader {
       try {
         await fileHandle.read(data, 0, bufferSize, 0);
       } catch (err) {
-        Logger.error(LOG_TAG, 'Error during reading photo: ' + fullPath);
-        console.error(err);
+        Logger.error(LOG_TAG, 'Error during reading photo: ' + fullPath + '\n', err);
         return MetadataLoader.EMPTY_METADATA;
       } finally {
         await fileHandle.close();
@@ -295,13 +294,11 @@ export class MetadataLoader {
           metadata.creationDate = 0;
         }
       } catch (err) {
-        Logger.error(LOG_TAG, 'Error during reading photo: ' + fullPath);
-        console.error(err);
+        Logger.error(LOG_TAG, 'Error during reading photo: ' + fullPath + '\n', err);
         return MetadataLoader.EMPTY_METADATA;
       }
     } catch (err) {
-      Logger.error(LOG_TAG, 'Error during reading photo: ' + fullPath);
-      console.error(err);
+      Logger.error(LOG_TAG, 'Error during reading photo: ' + fullPath + '\n', err);
       return MetadataLoader.EMPTY_METADATA;
     }
     return metadata;

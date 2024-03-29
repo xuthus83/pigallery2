@@ -51,7 +51,7 @@ export class Server {
         'Running in DEBUG mode, set env variable NODE_ENV=production to disable '
       );
     }
-    this.init(listen).catch(console.error);
+    this.init(listen).catch(Logger.error);
   }
 
   get Server(): HttpServer {

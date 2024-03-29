@@ -1,5 +1,6 @@
 import {TaskQue} from './TaskQue';
 import {EventLoopHandler} from '../EventLoopHandler';
+import { Logger } from '../../Logger';
 
 export interface ITaskExecuter<I, O> {
   execute(input: I): Promise<O>;
@@ -30,7 +31,7 @@ export class TaskExecuter<I, O> implements ITaskExecuter<I, O> {
 
   execute(input: I): Promise<O> {
     const promise = this.taskQue.add(input).promise.obj;
-    this.run().catch(console.error);
+    this.run().catch(Logger.error);
     return promise;
   }
 }
