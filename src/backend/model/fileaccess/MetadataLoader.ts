@@ -515,7 +515,7 @@ export class MetadataLoader {
     if (exif.xmp &&
       exif.xmp.Rating !== undefined) {
       const rting = Math.round(exif.xmp.Rating);
-      if (rting < 0) {
+      if (rting <= 0) {
         //We map all ratings below 0 to 0. Lightroom supports value -1, but most other tools (including this) don't.
         //Rating 0 means "unrated" according to adobe's spec, so we delete the attribute in pigallery for the same effect
         delete metadata.rating;
