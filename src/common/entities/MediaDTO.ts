@@ -29,34 +29,6 @@ export interface MediaDimension {
   height: number;
 }
 
-export interface SideCar {
-  exif?: SideCarExif;
-  dc?: SideCarDc;
-  xmp?: SideCarXmp;
-  photoshop?: SideCarPhotoshop;
-}
-
-export interface SideCarExif {
-  GPSLatitude?: string;
-  GPSLongitude?: string;
-}
-
-export interface SideCarDc {
-  subject?: string[];
-}
-
-export interface SideCarXmp {
-  Rating?: RatingTypes;
-  CreateDate?: string;
-  ModifyDate?: string;
-}
-
-export interface SideCarPhotoshop {
-  // Corresponds to Exif.Photo.DateTimeOriginal. No corresponding key exists in
-  // the xmp namespace!
-  DateCreated?: string;
-}
-
 export const MediaDTOUtils = {
   hasPositionData: (media: MediaDTO): boolean => {
     return (
