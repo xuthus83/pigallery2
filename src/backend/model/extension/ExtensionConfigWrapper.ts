@@ -3,7 +3,7 @@ import {PrivateConfigClass} from '../../../common/config/private/PrivateConfigCl
 import {ConfigClassBuilder} from 'typeconfig/node';
 import {ExtensionConfigTemplateLoader} from './ExtensionConfigTemplateLoader';
 import {NotificationManager} from '../NotifocationManager';
-import {Logger} from '../../Logger';
+
 
 const LOG_TAG = '[ExtensionConfigWrapper]';
 
@@ -19,9 +19,10 @@ export class ExtensionConfigWrapper {
       await pc.load(); // loading the basic configs, but we do not know the extension config hierarchy yet
 
     } catch (e) {
-      Logger.error(LOG_TAG, 'Error during loading config. Reverting to defaults.\n', e);
+      console.error(LOG_TAG, 'Error during loading config. Reverting to defaults.');
+      console.error(e);
       if (showDetailedError) {
-        Logger.error(LOG_TAG, 'This is most likely due to: 1) you added a bad configuration in the server.json OR 2) The configuration changed in the latest release.');
+        console.error(LOG_TAG, 'This is most likely due to: 1) you added a bad configuration in the server.json OR 2) The configuration changed in the latest release.');
         NotificationManager.error('Can\'t load config. Reverting to default. This is most likely due to: 1) you added a bad configuration in the server.json OR 2) The configuration changed in the latest release.', (e.toString ? e.toString() : JSON.stringify(e)));
       }
     }
@@ -36,9 +37,10 @@ export class ExtensionConfigWrapper {
       pc.loadSync(); // loading the basic configs, but we do not know the extension config hierarchy yet
 
     } catch (e) {
-      Logger.error(LOG_TAG, 'Error during loading config. Reverting to defaults.\n', e);
+      console.error(LOG_TAG, 'Error during loading config. Reverting to defaults.');
+      console.error(e);
       if (showDetailedError) {
-        Logger.error(LOG_TAG, 'This is most likely due to: 1) you added a bad configuration in the server.json OR 2) The configuration changed in the latest release.');
+        console.error(LOG_TAG, 'This is most likely due to: 1) you added a bad configuration in the server.json OR 2) The configuration changed in the latest release.');
         NotificationManager.error('Ca\'nt load config. Reverting to default. This is most likely due to: 1) you added a bad configuration in the server.json OR 2) The configuration changed in the latest release.', (e.toString ? e.toString() : JSON.stringify(e)));
       }
     }

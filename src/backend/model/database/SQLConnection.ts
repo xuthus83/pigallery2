@@ -155,7 +155,8 @@ export class SQLConnection {
         this.connection = null;
       }
     } catch (err) {
-      Logger.error('Error during closing sql db:\n', err);
+      console.error('Error during closing sql db:');
+      console.error(err);
     }
   }
 

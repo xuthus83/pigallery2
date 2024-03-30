@@ -71,7 +71,7 @@ export abstract class Job<T extends Record<string, unknown> = Record<string, unk
       const pr = new Promise<void>((resolve): void => {
         this.prResolve = resolve;
       });
-      this.init().catch(Logger.error);
+      this.init().catch(console.error);
       this.run();
       if (!this.IsInstant) {
         // if instant, wait for execution, otherwise, return right away

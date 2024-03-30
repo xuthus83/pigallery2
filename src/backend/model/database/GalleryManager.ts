@@ -123,7 +123,7 @@ export class GalleryManager {
         );
         ObjectManagers.getInstance()
             .IndexingManager.indexDirectory(relativeDirectoryName)
-            .catch(Logger.error);
+            .catch(console.error);
       }
       return await this.getParentDirFromId(connection, dir.id);
     }

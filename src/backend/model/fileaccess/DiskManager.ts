@@ -179,7 +179,7 @@ export class DiskManager {
             'Unknown directory reading error, skipping: ' + path.join(relativeDirectoryName, file),
             err.toString()
           );
-          Logger.error(err);
+          console.error(err);
         }
       } else if (PhotoProcessing.isPhoto(fullFilePath)) {
         try {
@@ -218,7 +218,7 @@ export class DiskManager {
             ', reason: ' +
             err.toString()
           );
-          Logger.error(err);
+          console.error(err);
         }
       } else if (VideoProcessing.isVideo(fullFilePath)) {
         try {

@@ -100,13 +100,13 @@ export class IndexingManager {
         resolve(dirClone);
 
         // save directory to DB
-        this.queueForSave(scannedDirectory).catch(Logger.error);
+        this.queueForSave(scannedDirectory).catch(console.error);
       } catch (error) {
         NotificationManager.warning(
           'Unknown indexing error for: ' + relativeDirectoryName,
           error.toString()
         );
-        Logger.error(error);
+        console.error(error);
         return reject(error);
       }
     });

@@ -38,7 +38,8 @@ export class ErrorRouter {
           }
 
           // Flush out the stack to the console
-          Logger.error('Unexpected error:\n', err);
+          Logger.error('Unexpected error:');
+          console.error(err);
           return next(
               new ErrorDTO(
                   ErrorCodes.SERVER_ERROR,
