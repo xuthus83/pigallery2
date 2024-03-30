@@ -110,6 +110,7 @@ export abstract class FileJob<S extends { indexedOnly?: boolean } = { indexedOnl
         this.Progress.Skipped++;
       }
     } catch (e) {
+      console.error(e);
       Logger.error(
         LOG_TAG,
         'Error during processing file:' + filePath + ', ' + e.toString()

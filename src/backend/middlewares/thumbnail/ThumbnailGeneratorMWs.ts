@@ -42,6 +42,7 @@ export class ThumbnailGeneratorMWs {
         ThumbnailGeneratorMWs.addThInfoToPhotos(cw.searchResult.media);
       }
     } catch (error) {
+      console.error(error);
       return next(
           new ErrorDTO(
               ErrorCodes.SERVER_ERROR,
@@ -119,6 +120,7 @@ export class ThumbnailGeneratorMWs {
       req.resultPipe = await PhotoProcessing.generatePersonThumbnail(person);
       return next();
     } catch (error) {
+      console.error(error);
       return next(
           new ErrorDTO(
               ErrorCodes.THUMBNAIL_GENERATION_ERROR,

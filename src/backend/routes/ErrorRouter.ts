@@ -37,6 +37,8 @@ export class ErrorRouter {
             );
           }
 
+          console.log(err);
+
           // Flush out the stack to the console
           Logger.error('Unexpected error:');
           console.error(err);
