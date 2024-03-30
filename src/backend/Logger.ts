@@ -11,8 +11,7 @@ if (forcedDebug === true) {
   );
 }
 
-// Match `console.log` inputs
-export type LoggerArgs = Parameters<Console["log"]>[0]
+export type LoggerArgs = (string | number | (() => string) | Record<any, unknown> | Error);
 export type LoggerFunction = (...args: LoggerArgs[]) => void;
 
 export interface ILogger {

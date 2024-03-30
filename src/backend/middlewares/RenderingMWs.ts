@@ -132,11 +132,12 @@ export class RenderingMWs {
   ): void {
     if (err instanceof ErrorDTO) {
       if (err.details) {
+        const logFn = Logger.logLevelForError(err.code)
         LoggerRouter.log(logFn, req, res);
         // use separate rendering for detailsStr
         const d = err.detailsStr;
         delete err.detailsStr;
-        console.log(err);
+        logFn(err);
         err.detailsStr = d;
         delete err.details; // do not send back error object to the client side
 
