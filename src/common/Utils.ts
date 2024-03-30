@@ -141,6 +141,22 @@ export class Utils {
     return Date.parse(formattedTimestamp);
   }
 
+  //function to extract offset string from timestamp string, returns undefined if timestamp does not contain offset
+  static timestampToOffsetString(timestamp: string) {
+    try {
+      const idx = timestamp.indexOf("+");
+      if (idx > 0) {
+        return timestamp.substring(idx, timestamp.length);
+      }
+      if (timestamp.indexOf("Z") > 0) {
+        return '+00:00';
+      }
+      return undefined;
+    } catch (err) {
+      return undefined;
+    }
+  }
+
   //function to calculate offset from exif.exif.gpsTimeStamp or exif.gps.GPSDateStamp + exif.gps.GPSTimestamp
   static getTimeOffsetByGPSStamp(timestamp: string, gpsTimeStamp: string, gps: any) {
     let UTCTimestamp = gpsTimeStamp;
@@ -383,11 +399,14 @@ export class Utils {
   }
 
   public static xmpExifGpsCoordinateToDecimalDegrees(text: string): number {
+    if (!text) {
+      return undefined;
+    }
     const parts = text.match(/^([0-9]+),([0-9.]+)([EWNS])$/);
     const degrees: number = parseInt(parts[1], 10);
     const minutes: number = parseFloat(parts[2]);
     const sign = (parts[3] === "N" || parts[3] === "E") ? 1 : -1;
-    return sign * (degrees + (minutes / 60.0))
+    return (sign * (degrees + (minutes / 60.0)))
   }
 }
 
