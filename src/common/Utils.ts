@@ -224,7 +224,7 @@ export class Utils {
   //this function makes sure that if date is the 31st and you add a month, you will get the last day of the next month
   //so adding or subtracting a month from 31st of march will give 30th of april or 28th of february respectively (29th on leap years).
   static addMonthToDate(date: Date, numMonths: number) {
-    let result = new Date(date)
+    const result = new Date(date)
     const expectedMonth = ((date.getMonth() + numMonths) % 12 + 12) % 12; //inner %12 + 12 makes correct handling of negative months
     result.setMonth(result.getMonth() + numMonths);
     if (result.getMonth() !== expectedMonth) {
