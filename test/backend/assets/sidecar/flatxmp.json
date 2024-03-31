@@ -29,5 +29,9 @@
   "keywords": [
     "Thing3"
   ],
-  "title": "The title"
+  "title": "The title",
+  "cameraData": {
+    "make": "Cam Make",
+    "model": "Cam Model"
+  }
 }

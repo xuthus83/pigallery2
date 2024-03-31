@@ -8,5 +8,9 @@
   "fileSize": 1430,
   "keywords": ["Person 1", "Person 2"],
   "caption": "XMP description",
-  "title": "Photoshop Headline"
+  "title": "Photoshop Headline",
+  "cameraData": {
+    "make": "CamMake",
+    "model": "CamModel"
+  }
 }
