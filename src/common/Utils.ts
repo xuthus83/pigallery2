@@ -133,7 +133,7 @@ export class Utils {
     let formattedTimestamp = timestamp.substring(0,9).replaceAll(':', '-') + timestamp.substring(9,timestamp.length);
     if (formattedTimestamp.indexOf("Z") > 0) { //replace Z (and what comes after the Z) with offset
       formattedTimestamp.substring(0, formattedTimestamp.indexOf("Z")) + (offset ? offset : '+00:00');
-    } else if (formattedTimestamp.indexOf("+") > 0) { //don't do anything
+    } else if (formattedTimestamp.indexOf("+") > 0 || formattedTimestamp.indexOf("-") > 0) { //don't do anything
     } else { //add offset
       formattedTimestamp = formattedTimestamp + (offset ? offset : '+00:00');
     }
