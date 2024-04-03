@@ -179,6 +179,11 @@ describe('MetadataLoader', () => {
     const expected = require(path.join(__dirname, '/../../../assets/wild-1-small.json'));
     expect(Utils.clone(data)).to.be.deep.equal(expected);
   });
+  it('should load wild-2-small image with xmp-CreateDate from 2015 and negative offset', async () => {
+    const data = await MetadataLoader.loadPhotoMetadata(path.join(__dirname, '/../../../assets/wild-2-small.jpg'));
+    const expected = require(path.join(__dirname, '/../../../assets/wild-2-small.json'));
+    expect(Utils.clone(data)).to.be.deep.equal(expected);
+  });
 
   describe('should load jpg with edge case exif data', () => {
     const root = path.join(__dirname, '/../../../assets/edge_case_exif_data');

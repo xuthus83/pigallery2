@@ -144,11 +144,11 @@ export class Utils {
   //function to extract offset string from timestamp string, returns undefined if timestamp does not contain offset
   static timestampToOffsetString(timestamp: string) {
     try {
-      const idx = timestamp.indexOf("+");
-      if (idx > 0) {
-        return timestamp.substring(idx, timestamp.length);
-      }
-      if (timestamp.indexOf("Z") > 0) {
+      const offsetRegex = /[+-]\d{2}:\d{2}$/;
+      var match = timestamp.match(offsetRegex);
+      if (match) {
+        return match[0];
+      } else if (timestamp.indexOf("Z") > 0) {
         return '+00:00';
       }
       return undefined;
