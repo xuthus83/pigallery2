@@ -145,7 +145,7 @@ export class Utils {
   static timestampToOffsetString(timestamp: string) {
     try {
       const offsetRegex = /[+-]\d{2}:\d{2}$/;
-      let match = timestamp.match(offsetRegex);
+      const match = timestamp.match(offsetRegex);
       if (match) {
         return match[0];
       } else if (timestamp.indexOf("Z") > 0) {
