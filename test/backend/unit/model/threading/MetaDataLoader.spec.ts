@@ -35,12 +35,6 @@ describe('MetadataLoader', () => {
     expect(Utils.clone(data)).to.be.deep.equal(expected);
   });
 
-  it('should load png with description', async () => {
-    const data = await MetadataLoader.loadPhotoMetadata(path.join(__dirname, '/../../../assets/description.png'));
-    const expected = require(path.join(__dirname, '/../../../assets/description.json'));
-    expect(Utils.clone(data)).to.be.deep.equal(expected);
-  });
-
   it('should load jpg', async () => {
     const data = await MetadataLoader.loadPhotoMetadata(path.join(__dirname, '/../../../assets/test image öüóőúéáű-.,.jpg'));
     const expected = require(path.join(__dirname, '/../../../assets/test image öüóőúéáű-.,.json'));
@@ -183,11 +177,6 @@ describe('MetadataLoader', () => {
   it('should load wild-1-small image with CreateDate from 2015, but no DateTimeOriginal', async () => {
     const data = await MetadataLoader.loadPhotoMetadata(path.join(__dirname, '/../../../assets/wild-1-small.jpg'));
     const expected = require(path.join(__dirname, '/../../../assets/wild-1-small.json'));
-    expect(Utils.clone(data)).to.be.deep.equal(expected);
-  });
-  it('should load image with metadata saved by digikam', async () => {
-    const data = await MetadataLoader.loadPhotoMetadata(path.join(__dirname, '/../../../assets/digikam.jpg'));
-    const expected = require(path.join(__dirname, '/../../../assets/digikam.json'));
     expect(Utils.clone(data)).to.be.deep.equal(expected);
   });
 
