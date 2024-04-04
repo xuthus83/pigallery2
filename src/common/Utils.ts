@@ -132,8 +132,8 @@ export class Utils {
     //replace : with - in the yyyy-mm-dd part of the timestamp.
     let formattedTimestamp = timestamp.substring(0,9).replaceAll(':', '-') + timestamp.substring(9,timestamp.length);
     if (formattedTimestamp.indexOf("Z") > 0) { //replace Z (and what comes after the Z) with offset
-      formattedTimestamp = formattedTimestamp.substring(0, formattedTimestamp.indexOf("Z")) + (offset ? offset : '+00:00');
-    } else if (formattedTimestamp.indexOf("+") > 0) { //don't do anything
+      formattedTimestamp.substring(0, formattedTimestamp.indexOf("Z")) + (offset ? offset : '+00:00');
+    } else if (formattedTimestamp.indexOf("+") > 0 || timestamp.substring(9,timestamp.length).indexOf("-") > 0) { //don't do anything
     } else { //add offset
       formattedTimestamp = formattedTimestamp + (offset ? offset : '+00:00');
     }
@@ -144,11 +144,11 @@ export class Utils {
   //function to extract offset string from timestamp string, returns undefined if timestamp does not contain offset
   static timestampToOffsetString(timestamp: string) {
     try {
-      const idx = timestamp.indexOf("+");
-      if (idx > 0) {
-        return timestamp.substring(idx, timestamp.length);
-      }
-      if (timestamp.indexOf("Z") > 0) {
+      const offsetRegex = /[+-]\d{2}:\d{2}$/;
+      const match = timestamp.match(offsetRegex);
+      if (match) {
+        return match[0];
+      } else if (timestamp.indexOf("Z") > 0) {
         return '+00:00';
       }
       return undefined;
