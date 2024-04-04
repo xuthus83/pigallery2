@@ -35,7 +35,7 @@ export class Utils {
             delete obj[key];
           }
         }
-      } else if (obj[key] === null) {
+      } else if (obj[key] === null || obj[key] === undefined) {
         delete obj[key];
       }
     }

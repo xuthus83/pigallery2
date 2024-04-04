@@ -418,18 +418,13 @@ export class MetadataLoader {
 
   private static mapCameraData(metadata: PhotoMetadata, exif: any) {
     metadata.cameraData = metadata.cameraData || {};
-    if (exif.ifd0) {
-      if (exif.ifd0.Make && exif.ifd0.Make !== '') {
-        metadata.cameraData.make = '' + exif.ifd0.Make;
-      }
-      if (exif.ifd0.Model && exif.ifd0.Model !== '') {
-        metadata.cameraData.model = '' + exif.ifd0.Model;
-      }
-    }
+    metadata.cameraData.make = exif.ifd0?.Make || exif.tiff?.Make || metadata.cameraData.make;
+
+    metadata.cameraData.model = exif.ifd0?.Model || exif.tiff?.Model || metadata.cameraData.model;
+
+    metadata.cameraData.lens = exif.exif?.LensModel || exif.exifEX?.LensModel || metadata.cameraData.lens;
+
     if (exif.exif) {
-      if (exif.exif.LensModel && exif.exif.LensModel !== '') {
-        metadata.cameraData.lens = '' + exif.exif.LensModel;
-      }
       if (Utils.isUInt32(exif.exif.ISO)) {
         metadata.cameraData.ISO = parseInt('' + exif.exif.ISO, 10);
       }
@@ -449,6 +444,7 @@ export class MetadataLoader {
         );
       }
     }
+    Utils.removeNullOrEmptyObj(metadata.cameraData);
     if (Object.keys(metadata.cameraData).length === 0) {
       delete metadata.cameraData;
     }
@@ -473,13 +469,8 @@ export class MetadataLoader {
     } catch (err) {
       Logger.error(LOG_TAG, 'Error during reading of GPS data: ' + err);
     } finally {
-      if (metadata.positionData?.GPSData &&
-          (Object.keys(metadata.positionData.GPSData).length === 0 ||
-          metadata.positionData.GPSData.longitude === undefined ||
-          metadata.positionData.GPSData.latitude === undefined)) {
-          delete metadata.positionData.GPSData;
-      }
       if (metadata.positionData) {
+        Utils.removeNullOrEmptyObj(metadata.positionData);
         if (Object.keys(metadata.positionData).length === 0) {
           delete metadata.positionData;
         }
