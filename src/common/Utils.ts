@@ -1,3 +1,5 @@
+import { HTMLChar } from './HTMLCharCodes';
+
 export class Utils {
   static GUID(): string {
     const s4 = (): string =>
@@ -97,6 +99,25 @@ export class Utils {
     return d.getUTCFullYear() + '-' + d.getUTCMonth() + '-' + d.getUTCDate();
   }
 
+  static toIsoTimestampString(YYYYMMDD: string, hhmmss: string): string {
+    if (YYYYMMDD && hhmmss) {
+      // Regular expression to match YYYYMMDD format
+      const dateRegex = /^(\d{4})(\d{2})(\d{2})$/;
+      // Regular expression to match hhmmss+/-ohom format
+      const timeRegex = /^(\d{2})(\d{2})(\d{2})([+-]\d{2})?(\d{2})?$/;
+      const [, year, month, day] = YYYYMMDD.match(dateRegex);
+      const [, hour, minute, second, offsetHour, offsetMinute] = hhmmss.match(timeRegex);
+      const isoTimestamp = `${year}-${month}-${day}T${hour}:${minute}:${second}`;
+      if (offsetHour && offsetMinute) {
+        return isoTimestamp + `${offsetHour}:${offsetMinute}`;
+      } else {
+        return isoTimestamp;
+      }
+    } else {
+      return undefined;
+    }
+  }
+
 
   static makeUTCMidnight(d: number | Date) {
     if (!(d instanceof Date)) {
@@ -125,7 +146,7 @@ export class Utils {
   }
 
   //function to convert timestamp into milliseconds taking offset into account
-  static timestampToMS(timestamp: string, offset: string) {
+  static timestampToMS(timestamp: string, offset: string): number {
     if (!timestamp) {
       return undefined;
     }
@@ -370,6 +391,31 @@ export class Utils {
 
     return curr;
   }
+
+  public static asciiToUTF8(text: string): string {
+    if (text) {
+      return Buffer.from(text, 'ascii').toString('utf-8');
+    } else {
+      return text;
+    }
+  }
+
+
+
+  public static decodeHTMLChars(text: string): string {
+    if (text) {
+      const newtext = text.replace(/&#([0-9]{1,3});/gi, function (match, numStr) {
+        return String.fromCharCode(parseInt(numStr, 10));
+      });
+      return newtext.replace(/&[^;]+;/g, function (match) {
+        const char = HTMLChar[match];
+        return char ? char : match;
+      });
+    } else {
+      return text;
+    }
+  }
+
 
   public static isUInt32(value: number, max = 4294967295): boolean {
     value = parseInt('' + value, 10);
