@@ -207,10 +207,10 @@ export class MetadataLoader {
         //in case of failure, set dimensions to 0 so they may be read via tags
         metadata.size = { width: 0, height: 0 };
       } finally {
-        if (metadata.size.width == undefined || metadata.size.width == null) {
+        if (isNaN(metadata.size.width) || metadata.size.width == null) {
           metadata.size.width = 0;
         }
-        if (metadata.size.height == undefined || metadata.size.height == null) {
+        if (isNaN(metadata.size.height) || metadata.size.height == null) {
           metadata.size.height = 0;
         }
       }
