@@ -102,6 +102,8 @@ export class ExtensionConfigTemplateLoader {
         if (ext.template) {
           c.configs = new ext.template();
         }
+        // TODO: this does not hold if the order of the extensions mixes up.
+        // TODO: experiment with a map instead of an array
         config.Extensions.extensions.push(c);
       }
 
