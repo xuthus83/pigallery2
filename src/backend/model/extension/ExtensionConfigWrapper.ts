@@ -27,6 +27,7 @@ export class ExtensionConfigWrapper {
 
       await pc.load(); // loading the basic configs, but we do not know the extension config hierarchy yet
 
+      // TODO make sure that all extensions are present even after loading them from file
     } catch (e) {
       console.error(LOG_TAG, 'Error during loading config. Reverting to defaults.');
       console.error(e);
@@ -49,7 +50,7 @@ export class ExtensionConfigWrapper {
         pc.saveSync();
       }
       pc.loadSync(); // loading the basic configs, but we do not know the extension config hierarchy yet
-
+      // TODO make sure that all extensions are present even after loading them from file
     } catch (e) {
       console.error(LOG_TAG, 'Error during loading config. Reverting to defaults.');
       console.error(e);

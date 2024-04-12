@@ -2,7 +2,9 @@ import {PrivateConfigClass} from '../../../common/config/private/PrivateConfigCl
 import * as fs from 'fs';
 import * as path from 'path';
 import {ServerExtensionsEntryConfig} from '../../../common/config/private/subconfigs/ServerExtensionsConfig';
+import * as child_process from 'child_process';
 
+const execSync = child_process.execSync;
 
 const LOG_TAG = '[ExtensionConfigTemplateLoader]';
 
@@ -52,20 +54,25 @@ export class ExtensionConfigTemplateLoader {
         for (let i = 0; i < this.extensionList.length; ++i) {
           const extFolder = this.extensionList[i];
           const extPath = path.join(this.extensionsFolder, extFolder);
+          const configExtPath = path.join(extPath, 'config.js');
           const serverExtPath = path.join(extPath, 'server.js');
+
+          // if server.js is missing, it's not a valid extension
           if (!fs.existsSync(serverExtPath)) {
             continue;
           }
 
 
-          // eslint-disable-next-line @typescript-eslint/no-var-requires
-          const ext = require(serverExtPath);
-          if (typeof ext?.initConfig === 'function') {
-            ext?.initConfig({
-              setConfigTemplate: (template: { new(): unknown }): void => {
-                this.extensionTemplates.push({folder: extFolder, template: template});
-              }
-            });
+          if (fs.existsSync(configExtPath)) {
+            // eslint-disable-next-line @typescript-eslint/no-var-requires
+            const extCfg = require(configExtPath);
+            if (typeof extCfg?.initConfig === 'function') {
+              extCfg?.initConfig({
+                setConfigTemplate: (template: { new(): unknown }): void => {
+                  this.extensionTemplates.push({folder: extFolder, template: template});
+                }
+              });
+            }
           } else {
             //also create basic config extensions that do not have any
             this.extensionTemplates.push({folder: extFolder});
