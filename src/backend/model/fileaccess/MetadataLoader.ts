@@ -380,27 +380,27 @@ export class MetadataLoader {
         if (!offset) { //Find offset among other options if possible
           offset = exif.exif.OffsetTimeDigitized || exif.exif.OffsetTime || Utils.getTimeOffsetByGPSStamp(exif.exif.DateTimeOriginal, exif.exif.GPSTimeStamp, exif.gps);
         }
-        metadata.creationDate = Utils.timestampToMS(exif.exif.DateTimeOriginal, offset);
+        metadata.creationDate = Utils.timestampToMS(exif.exif.DateTimeOriginal, offset) || metadata.creationDate;
       } else if (exif.exif.CreateDate) { //using else if here, because DateTimeOriginal has preceedence
         //Create is when the camera wrote the file (typically within the same ms as shutter close)
         offset = exif.exif.OffsetTimeDigitized; //OffsetTimeDigitized is the corresponding offset
         if (!offset) { //Find offset among other options if possible
           offset = exif.exif.OffsetTimeOriginal || exif.exif.OffsetTime || Utils.getTimeOffsetByGPSStamp(exif.exif.DateTimeOriginal, exif.exif.GPSTimeStamp, exif.gps);
         }
-        metadata.creationDate = Utils.timestampToMS(exif.exif.CreateDate, offset);
+        metadata.creationDate = Utils.timestampToMS(exif.exif.CreateDate, offset) || metadata.creationDate;
       } else if (exif.ifd0?.ModifyDate) { //using else if here, because DateTimeOriginal and CreatDate have preceedence
         offset = exif.exif.OffsetTime; //exif.Offsettime is the offset corresponding to ifd0.ModifyDate
         if (!offset) { //Find offset among other options if possible
           offset = exif.exif.DateTimeOriginal || exif.exif.OffsetTimeDigitized || Utils.getTimeOffsetByGPSStamp(exif.ifd0.ModifyDate, exif.exif.GPSTimeStamp, exif.gps);
         }
-        metadata.creationDate = Utils.timestampToMS(exif.ifd0.ModifyDate, offset);
+        metadata.creationDate = Utils.timestampToMS(exif.ifd0.ModifyDate, offset) || metadata.creationDate;
       } else if (exif.ihdr && exif.ihdr["Creation Time"]) {// again else if (another fallback date if the good ones aren't there) {
         const any_offset = exif.exif.DateTimeOriginal || exif.exif.OffsetTimeDigitized || exif.exif.OffsetTime || Utils.getTimeOffsetByGPSStamp(exif.ifd0.ModifyDate, exif.exif.GPSTimeStamp, exif.gps);
         metadata.creationDate = Utils.timestampToMS(exif.ihdr["Creation Time"], any_offset);
         offset = any_offset;
       } else if (exif.xmp?.MetadataDate) {// again else if (another fallback date if the good ones aren't there - metadata date is probably later than actual creation date, but much better than file time) {
         const any_offset = exif.exif.DateTimeOriginal || exif.exif.OffsetTimeDigitized || exif.exif.OffsetTime || Utils.getTimeOffsetByGPSStamp(exif.ifd0.ModifyDate, exif.exif.GPSTimeStamp, exif.gps);
-        metadata.creationDate = Utils.timestampToMS(exif.xmp.MetadataDate, any_offset);
+        metadata.creationDate = Utils.timestampToMS(exif.xmp.MetadataDate, any_offset) || metadata.creationDate;
         offset = any_offset;
       }
       metadata.creationDateOffset = offset || metadata.creationDateOffset;
