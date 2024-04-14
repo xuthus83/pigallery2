@@ -230,6 +230,10 @@ export class Utils {
     }
   }
 
+    static getLocalTimeMS(creationDate: number, creationDateOffset: string) {
+    const offsetMinutes = Utils.getOffsetMinutes(creationDateOffset);
+    return creationDate + (offsetMinutes ? (offsetMinutes * 60000) : 0);
+  }
   
   static isLeapYear(year: number) {
     return (0 == year % 4) && (0 != year % 100) || (0 == year % 400)
