@@ -12,4 +12,9 @@ try {
 }
 ExtensionConfigTemplateLoader.Instance.init(path.join(__dirname, '/../../../../', pre.Extensions.folder));
 
+console.log(process.env['default-Media-tempFolder']);
+console.log(ConfigClassBuilder.attachPrivateInterface(pre.Media).__defaults.tempFolder);
+
 export const Config = ExtensionConfigWrapper.originalSync(true);
+
+console.log(ConfigClassBuilder.attachPrivateInterface(Config.Media).__defaults.tempFolder);
