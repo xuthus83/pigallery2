@@ -186,12 +186,12 @@ export class Utils {
       gps.GPSDateStamp &&
       gps.GPSTimeStamp) { //else use exif.gps.GPS*Stamp if available
       //GPS timestamp is always UTC (+00:00)
-      UTCTimestamp = gps.GPSDateStamp.replaceAll(':', '-') + gps.GPSTimeStamp.join(':');
+      UTCTimestamp = gps.GPSDateStamp.replaceAll(':', '-') + " " + gps.GPSTimeStamp.map((num: any) => Utils.zeroPad(num ,2)).join(':');
     }
     if (UTCTimestamp && timestamp) {
       //offset in minutes is the difference between gps timestamp and given timestamp
       //to calculate this correctly, we have to work with the same offset
-      const offsetMinutes = (Utils.timestampToMS(timestamp, '+00:00')- Utils.timestampToMS(UTCTimestamp, '+00:00')) / 1000 / 60;
+      const offsetMinutes: number = Math.round((Utils.timestampToMS(timestamp, '+00:00')- Utils.timestampToMS(UTCTimestamp, '+00:00')) / 1000 / 60);
       return Utils.getOffsetString(offsetMinutes);
     } else {
       return undefined;
@@ -202,10 +202,19 @@ export class Utils {
     if (-720 <= offsetMinutes && offsetMinutes <= 840) {
       //valid offset is within -12 and +14 hrs (https://en.wikipedia.org/wiki/List_of_UTC_offsets)
       return (offsetMinutes < 0 ? "-" : "+") +                              //leading +/-
-        ("0" + Math.trunc(Math.abs(offsetMinutes) / 60)).slice(-2) + ":" +  //zeropadded hours and ':'
-        ("0" + Math.abs(offsetMinutes) % 60).slice(-2);                     //zeropadded minutes
+        Utils.zeroPad(Math.trunc(Math.abs(offsetMinutes) / 60), 2) + ":" +        //zeropadded hours and ':'
+        Utils.zeroPad((Math.abs(offsetMinutes) % 60), 2);                         //zeropadded minutes
     } else {
       return undefined;
+    }
+  }
+
+  static zeroPad(number: any, length: number): string {
+    if (!isNaN(number)) {
+      const zerosToAdd = Math.max(length - String(number).length, 0);
+      return '0'.repeat(zerosToAdd) + number;
+    } else {
+      return '0'.repeat(number);
     }
   }
 
