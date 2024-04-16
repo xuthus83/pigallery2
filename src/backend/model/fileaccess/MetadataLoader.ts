@@ -285,6 +285,7 @@ export class MetadataLoader {
     MetadataLoader.mapKeywords(metadata, exif);
     MetadataLoader.mapTitle(metadata, exif);
     MetadataLoader.mapCaption(metadata, exif);
+    MetadataLoader.mapTimestampAndOffset2(metadata, exif);
     MetadataLoader.mapTimestampAndOffset(metadata, exif);
     MetadataLoader.mapCameraData(metadata, exif);
     MetadataLoader.mapGPS(metadata, exif);
@@ -361,28 +362,23 @@ export class MetadataLoader {
     metadata.caption = exif.dc?.description?.value || Utils.asciiToUTF8(exif.iptc?.Caption) || metadata.caption || exif.ifd0?.ImageDescription || exif.exif?.UserComment?.value || exif.Iptc4xmpCore?.ExtDescrAccessibility?.value ||exif.acdsee?.notes;
   }
 
-  private static mapTimestampAndOffset2(metadata: PhotoMetadata, exif: any) {
-    function getValueFromPath(company: Company, path: string): any {
-      // Avoid using eval() due to security risks
-      return eval(`company.${path}`);
-  }
-  function getValueFromPath(company: Company, path: string): any {
+  private static getValue(exif: any, path: string): any {
     const pathElements = path.split('.');
-    let currentObject: any = company;
-
-    for (const element of pathElements) {
-        const tmp = currentObject[element];
+    let currentObject: any = exif;
+    for (const pathElm of pathElements) {
+        const tmp = currentObject[pathElm];
         if (tmp === undefined) {
-            // Handle case where path is invalid
             return undefined;
         }
         currentObject = tmp;
     }
-
     return currentObject;
-}
-    for (const [main, extra] of DateTags) {
-      const pathelms[] = main.split["."];
+  }
+
+  private static mapTimestampAndOffset2(metadata: PhotoMetadata, exif: any) {
+    let ts;
+    for (const [mainpath, extrapath, extratype] of DateTags) {
+      ts = MetadataLoader.getValue(exif, mainpath);
     }
       
 
