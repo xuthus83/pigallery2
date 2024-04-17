@@ -108,13 +108,15 @@ jobs:
     needs: [ create-release ]
     strategy:
       matrix:
-        container: [alpine, debian-buster, debian-bullseye ]
+        container: [alpine, debian-buster, debian-bullseye, debian-bookworm ]
         include:
           - container: alpine
             platforms: linux/amd64,linux/arm64,linux/arm/v7
           - container: debian-buster
             platforms: linux/amd64,linux/arm64,linux/arm/v7
           - container: debian-bullseye
+            platforms: linux/amd64,linux/arm64,linux/arm/v7
+          - container: debian-bookworm
             platforms: linux/amd64,linux/arm64,linux/arm/v7
 
     steps:
@@ -159,7 +161,7 @@ jobs:
           push: true
           tags: bpatrik/pigallery2:edge-${{ matrix.container }}
       - name: Push release on new Tag
-        if: ${{ startsWith(github.ref_type , 'tag') &&  !github.event.issue.pull_request &&  matrix.container != 'debian-bullseye'}}
+        if: ${{ startsWith(github.ref_type , 'tag') &&  !github.event.issue.pull_request &&  matrix.container != 'debian-bookworm'}}
         uses: docker/build-push-action@v5
         with:
           context: .
@@ -171,7 +173,7 @@ jobs:
             bpatrik/pigallery2:${{ github.ref_name }}-${{ matrix.container }}
             bpatrik/pigallery2:latest-${{ matrix.container }}
       - name: Push latest on new Tag
-        if: ${{ startsWith(github.ref_type, 'tag') &&  !github.event.issue.pull_request &&  matrix.container == 'debian-bullseye'}}
+        if: ${{ startsWith(github.ref_type, 'tag') &&  !github.event.issue.pull_request &&  matrix.container == 'debian-bookworm'}}
         uses: docker/build-push-action@v5
         with:
           context: .
