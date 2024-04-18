@@ -56,6 +56,7 @@ export class Utils {
     return c;
   }
 
+  //TODO: use zeroPad which works for longer values?
   static zeroPrefix(value: string | number, length: number): string {
     const ret = '00000' + value;
     return ret.substr(ret.length - length);
@@ -118,7 +119,6 @@ export class Utils {
     }
   }
 
-
   static makeUTCMidnight(d: number | Date) {
     if (!(d instanceof Date)) {
       d = new Date(d);
@@ -162,21 +162,21 @@ export class Utils {
     return Date.parse(formattedTimestamp);
   }
 
-  //function to extract offset string from timestamp string, returns undefined if timestamp does not contain offset
-  static timestampToOffsetString(timestamp: string) {
-    try {
-      const offsetRegex = /[+-]\d{2}:\d{2}$/;
-      const match = timestamp.match(offsetRegex);
-      if (match) {
-        return match[0];
-      } else if (timestamp.indexOf("Z") > 0) {
-        return '+00:00';
-      }
-      return undefined;
-    } catch (err) {
-      return undefined;
+  static splitTimestampAndOffset(timestamp: string): [string|undefined, string|undefined] {
+    if (!timestamp) {
+      return [undefined, undefined];
+    }
+    //                                 |---------------------TIMESTAMP WITH OPTIONAL MILLISECONDS--------------------||-OPTIONAL TZONE--|
+    //                                 |YYYY           MM           DD            HH         MM         SS (MS optio)||(timezone offset)|
+    const timestampWithOffsetRegex = /^(\d{4}[-.: ]\d{2}[-.: ]\d{2}[-.: T]\d{2}[-.: ]\d{2}[-.: ]\d{2}(?:\.\d+)?)([+-]\d{2}:\d{2})?$/;
+    const match = timestamp.match(timestampWithOffsetRegex);
+    if (match) {
+      return [match[1], match[2]]; //match[0] is the full string, not interested in that.
+    } else {
+      return [undefined, undefined];
     }
   }
+
 
   //function to calculate offset from exif.exif.gpsTimeStamp or exif.gps.GPSDateStamp + exif.gps.GPSTimestamp
   static getTimeOffsetByGPSStamp(timestamp: string, gpsTimeStamp: string, gps: any) {

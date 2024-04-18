@@ -13,13 +13,14 @@ export const DateTags: [string, string, string][] = [
   ["ifd0.ModifyDate",         undefined, undefined],            //The date and time of image creation. In Exif standard, it is the date and time the file was changed.
   ["ihdr.Creation Time",      undefined, undefined],            //Time of original image creation for PNG files
   ["photoshop.DateCreated",   undefined, undefined],            //The date the intellectual content of the document was created. Used and set by LightRoom among others
-  ["xmp:CreateDate",          undefined, undefined],            //Date and time when the image was created (XMP standard)
+  ["xmp.CreateDate",          undefined, undefined],            //Date and time when the image was created (XMP standard)
   ["iptc.DateCreated",        "iptc.TimeCreated",         'T'], //Designates the date and optionally the time the content of the image was created rather than the date of the creation of the digital representation
   ["quicktime.CreationDate",  undefined, undefined],            //Date and time when the QuickTime movie was created"],
   ["quicktime.CreateDate",    undefined, undefined],            //Date and time when the QuickTime movie was created in UTC"],
   ["heic.ContentCreateDate",  undefined, undefined],            //Date and time when the HEIC image content was created"],
   ["heic.CreationDate",       undefined, undefined],            //Date and time when the HEIC image was created"],
-  ["tiff.DateTime",           undefined, undefined],            //Date and time of image creation. This property is stored in XMP as xmp:ModifyDate.
-  ["xmp:ModifyDate",          "exif.OffsetTime",          'O'], //Date and time when the image was last modified (XMP standard)"]
+  ["tiff.DateTime",           undefined, undefined],            //Date and time of image creation.
+  ["exif.ModifyDate",         "exif.OffsetTime",          'O'], //Modification date
+  ["xmp.ModifyDate",          undefined, undefined],            //Date and time when the image was last modified (XMP standard)"]
   ["xmp.MetadataDate",        undefined, undefined],            //The date and time that any metadata for this resource was last changed. It should be the same as or more recent than xmp:ModifyDate.
 ];
