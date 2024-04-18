@@ -41,6 +41,12 @@ describe('MetadataLoader', () => {
     expect(Utils.clone(data)).to.be.deep.equal(expected);
   });
 
+  it('should load gif', async () => {
+    const data = await MetadataLoader.loadPhotoMetadata(path.join(__dirname, '/../../../assets/rotatingearthwmetadata.gif'));
+    const expected = require(path.join(__dirname, '/../../../assets/rotatingearthwmetadata.json'));
+    expect(Utils.clone(data)).to.be.deep.equal(expected);
+  });
+
   it('should load png', async () => {
     const data = await MetadataLoader.loadPhotoMetadata(path.join(__dirname, '/../../../assets/test_png.png'));
     const expected = require(path.join(__dirname, '/../../../assets/test_png.json'));
