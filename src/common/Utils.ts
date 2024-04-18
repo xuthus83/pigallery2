@@ -56,11 +56,15 @@ export class Utils {
     return c;
   }
 
-  //TODO: use zeroPad which works for longer values?
-  static zeroPrefix(value: string | number, length: number): string {
-    const ret = '00000' + value;
-    return ret.substr(ret.length - length);
+  static zeroPrefix(number: any, length: number): string {
+    if (!isNaN(number)) {
+      const zerosToAdd = Math.max(length - String(number).length, 0);
+      return '0'.repeat(zerosToAdd) + number;
+    } else {
+      return '0'.repeat(number);
+    }
   }
+
 
   /**
    * Checks if the two input (let them be objects or arrays or just primitives) are equal
@@ -186,7 +190,7 @@ export class Utils {
       gps.GPSDateStamp &&
       gps.GPSTimeStamp) { //else use exif.gps.GPS*Stamp if available
       //GPS timestamp is always UTC (+00:00)
-      UTCTimestamp = gps.GPSDateStamp.replaceAll(':', '-') + " " + gps.GPSTimeStamp.map((num: any) => Utils.zeroPad(num ,2)).join(':');
+      UTCTimestamp = gps.GPSDateStamp.replaceAll(':', '-') + " " + gps.GPSTimeStamp.map((num: any) => Utils.zeroPrefix(num ,2)).join(':');
     }
     if (UTCTimestamp && timestamp) {
       //offset in minutes is the difference between gps timestamp and given timestamp
@@ -202,19 +206,10 @@ export class Utils {
     if (-720 <= offsetMinutes && offsetMinutes <= 840) {
       //valid offset is within -12 and +14 hrs (https://en.wikipedia.org/wiki/List_of_UTC_offsets)
       return (offsetMinutes < 0 ? "-" : "+") +                              //leading +/-
-        Utils.zeroPad(Math.trunc(Math.abs(offsetMinutes) / 60), 2) + ":" +        //zeropadded hours and ':'
-        Utils.zeroPad((Math.abs(offsetMinutes) % 60), 2);                         //zeropadded minutes
+        Utils.zeroPrefix(Math.trunc(Math.abs(offsetMinutes) / 60), 2) + ":" +        //zeropadded hours and ':'
+        Utils.zeroPrefix((Math.abs(offsetMinutes) % 60), 2);                         //zeropadded minutes
     } else {
       return undefined;
-    }
-  }
-
-  static zeroPad(number: any, length: number): string {
-    if (!isNaN(number)) {
-      const zerosToAdd = Math.max(length - String(number).length, 0);
-      return '0'.repeat(zerosToAdd) + number;
-    } else {
-      return '0'.repeat(number);
     }
   }
 
