@@ -249,6 +249,7 @@ export class MetadataLoader {
             if (fs.existsSync(sidecarPath)) {
               const sidecarData: any = await exifr.sidecar(sidecarPath, exifrOptions);
               if (sidecarData !== undefined) {
+                //note that since side cars are loaded last, data loaded here overwrites embedded metadata (in Pigallery2, not in the actual files)
                 MetadataLoader.mapMetadata(metadata, sidecarData);
                 break;
               }
@@ -363,6 +364,7 @@ export class MetadataLoader {
   }
 
   private static mapTimestampAndOffset(metadata: PhotoMetadata, exif: any) {
+    //This method looks for date tags matching the priorized list 'DateTags' of 'MetadataCreationDate'
     let ts: string, offset: string;
     for (let i = 0; i < DateTags.length; i++) {
       const [mainpath, extrapath, extratype] = DateTags[i];

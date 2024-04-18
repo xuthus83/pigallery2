@@ -1,9 +1,12 @@
 //The elements are [tag-name1, tag-name2, type of tag-name2]
-//tagname1 is typically a full date time, but in some cases tagname1 and tagname2 together make up a full timestamp
+//tagname1 is typically a full date time, but in some cases tagname1 and tagname2 together make up a full timestamp. The type makes it easier to code correct concatenation of tag1 and tag2
 
 //Interesting exiftool forums posts about some of these tags:
-//exif.DateTimeOriginal, exif.CreateDate/exif.DateTimeDigitized and exif.ModifyDate: https://exiftool.org/forum/index.php?topic=13170.msg71174#msg71174 
+//https://exiftool.org/forum/index.php?topic=13170.msg71174#msg71174 - about the meaning of exif.DateTimeOriginal, exif.CreateDate/exif.DateTimeDigitized and exif.ModifyDate
 //https://exiftool.org/forum/index.php?topic=15555.msg83536#msg83536
+
+//This is the PRIORITIZED LIST of tags which Pigallery2 uses to determine the date of creation of pictures.
+//The list is used for embedded picture metadata and xmp-sidecar files for both pictures and vidoes.
 
 export const DateTags: [string, string, string][] = [
   // Date tag                 Offset or time tag          Type  //Description
