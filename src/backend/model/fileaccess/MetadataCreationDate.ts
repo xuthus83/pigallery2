@@ -1,5 +1,6 @@
-//The elements are [tag-name1, tag-name2, type of tag-name2]
-//tagname1 is typically a full date time, but in some cases tagname1 and tagname2 together make up a full timestamp. The type makes it easier to code correct concatenation of tag1 and tag2
+type MainDateTag = string;                         //The main date tag, where the date is to be found. Typically has both date, time and offset. Except (see SecondaryDateTag and -Type)
+type SecondaryDateTag = string | undefined;        //The secondary date tag, which is sometimes needed to get a full date (sometimes contains offset, sometimes the time part of a timestamp)
+type SecondaryDateTagType = 'O' | 'T' | undefined; //The secondary date tag type: 'O' for offset, 'T' for time undefined, if there is no secondary tag for the main tag
 
 //Interesting exiftool forums posts about some of these tags:
 //https://exiftool.org/forum/index.php?topic=13170.msg71174#msg71174 - about the meaning of exif.DateTimeOriginal, exif.CreateDate/exif.DateTimeDigitized and exif.ModifyDate
@@ -8,7 +9,7 @@
 //This is the PRIORITIZED LIST of tags which Pigallery2 uses to determine the date of creation of pictures.
 //The list is used for embedded picture metadata and xmp-sidecar files for both pictures and vidoes.
 
-export const DateTags: [string, string, string][] = [
+export const DateTags: [MainDateTag, SecondaryDateTag, SecondaryDateTagType][] = [
   // Date tag                 Offset or time tag          Type  //Description
   ["exif.DateTimeOriginal",   "exif.OffsetTimeOriginal",  'O'], //Date and time when the original image was taken - shutter close time
   ["exif.CreateDate",         "exif.OffsetTimeDigitized", 'O'], //Date and time when the image was created
