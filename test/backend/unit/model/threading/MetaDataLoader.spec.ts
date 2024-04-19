@@ -268,6 +268,7 @@ describe('MetadataLoader', () => {
         const expected = require(path.join(__dirname, '/../../../assets/orientation/Landscape.json'));
         delete data.fileSize;
         delete data.creationDate;
+        delete data.creationDateOffset;
         expect(Utils.clone(data)).to.be.deep.equal(expected);
       });
       it('Portrait ' + i, async () => {
@@ -275,6 +276,7 @@ describe('MetadataLoader', () => {
         const expected = require(path.join(__dirname, '/../../../assets/orientation/Portrait.json'));
         delete data.fileSize;
         delete data.creationDate;
+        delete data.creationDateOffset;
         expect(Utils.clone(data)).to.be.deep.equal(expected);
       });
     }
@@ -316,6 +318,27 @@ describe('MetadataLoader', () => {
 
   describe('should load metadata from sidecar files', () => {
     const root = path.join(__dirname, '/../../../assets/sidecar');
+    const files = fs.readdirSync(root);
+    for (const item of files) {
+      const fullFilePath = path.join(root, item);
+      if (PhotoProcessing.isPhoto(fullFilePath)) {
+        it(item, async () => {
+          const data = await MetadataLoader.loadPhotoMetadata(fullFilePath);
+          const expected = require(fullFilePath.split('.').slice(0, -1).join('.') + '.json');
+          expect(Utils.clone(data)).to.be.deep.equal(expected);
+        });
+      } else if (VideoProcessing.isVideo(fullFilePath)) {
+        it(item, async () => {
+          const data = await MetadataLoader.loadVideoMetadata(fullFilePath);
+          const expected = require(fullFilePath.split('.').slice(0, -1).join('.') + '.json');
+          expect(Utils.clone(data)).to.be.deep.equal(expected);
+        });
+      }
+    }
+  });
+
+  describe('should load metadata from files with times and coordinates in different parts of the world', () => {
+    const root = path.join(__dirname, '/../../../assets/4MinsAroundTheWorld');
     const files = fs.readdirSync(root);
     for (const item of files) {
       const fullFilePath = path.join(root, item);
