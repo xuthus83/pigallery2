@@ -92,16 +92,20 @@ export class ExtensionConfigTemplateLoader {
     }
 
     const ePaths = this.extensionTemplates.map(et => et.folder);
+
     // delete not existing extensions
-    config.Extensions.extensions = config.Extensions.extensions
-      .filter(ec => ePaths.indexOf(ec.path) !== -1);
+    for (const prop of config.Extensions.extensions.keys()) {
+      if (ePaths.indexOf(prop) > -1) {
+        continue;
+      }
+      config.Extensions.extensions.removeProperty(prop);
+    }
 
 
     for (let i = 0; i < this.extensionTemplates.length; ++i) {
       const ext = this.extensionTemplates[i];
 
-      let c = (config.Extensions.extensions || [])
-        .find(e => e.path === ext.folder);
+      let c = config.Extensions.extensions[ext.folder];
 
       // set the new structure with the new def values
       if (!c) {
@@ -109,9 +113,7 @@ export class ExtensionConfigTemplateLoader {
         if (ext.template) {
           c.configs = new ext.template();
         }
-        // TODO: this does not hold if the order of the extensions mixes up.
-        // TODO: experiment with a map instead of an array
-        config.Extensions.extensions.push(c);
+        config.Extensions.extensions.addProperty(ext.folder, {type: ServerExtensionsEntryConfig}, c);
       }
 
     }
