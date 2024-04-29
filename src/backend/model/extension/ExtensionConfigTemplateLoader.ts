@@ -2,11 +2,8 @@ import {PrivateConfigClass} from '../../../common/config/private/PrivateConfigCl
 import * as fs from 'fs';
 import * as path from 'path';
 import {ServerExtensionsEntryConfig} from '../../../common/config/private/subconfigs/ServerExtensionsConfig';
-import * as child_process from 'child_process';
+import {ProjectPath} from '../../ProjectPath';
 
-const execSync = child_process.execSync;
-
-const LOG_TAG = '[ExtensionConfigTemplateLoader]';
 
 /**
  * This class decouples the extension management and the config.
@@ -16,7 +13,6 @@ const LOG_TAG = '[ExtensionConfigTemplateLoader]';
 export class ExtensionConfigTemplateLoader {
 
   private static instance: ExtensionConfigTemplateLoader;
-  private extensionsFolder: string;
 
   private loaded = false;
   private extensionList: string[] = [];
@@ -31,29 +27,26 @@ export class ExtensionConfigTemplateLoader {
   }
 
 
-  init(extensionsFolder: string) {
-    this.extensionsFolder = extensionsFolder;
-  }
 
   public loadExtensionTemplates(config: PrivateConfigClass) {
-    if (!this.extensionsFolder) {
+    if (!ProjectPath.ExtensionFolder) {
       throw new Error('Unknown extensions folder.');
     }
     // already loaded
     if (!this.loaded) {
 
       this.extensionTemplates = [];
-      if (fs.existsSync(this.extensionsFolder)) {
+      if (fs.existsSync(ProjectPath.ExtensionFolder)) {
         this.extensionList = (fs
-          .readdirSync(this.extensionsFolder))
+          .readdirSync(ProjectPath.ExtensionFolder))
           .filter((f): boolean =>
-            fs.statSync(path.join(this.extensionsFolder, f)).isDirectory()
+            fs.statSync(path.join(ProjectPath.ExtensionFolder, f)).isDirectory()
           );
         this.extensionList.sort();
 
         for (let i = 0; i < this.extensionList.length; ++i) {
           const extFolder = this.extensionList[i];
-          const extPath = path.join(this.extensionsFolder, extFolder);
+          const extPath = path.join(ProjectPath.ExtensionFolder, extFolder);
           const configExtPath = path.join(extPath, 'config.js');
           const serverExtPath = path.join(extPath, 'server.js');
 
