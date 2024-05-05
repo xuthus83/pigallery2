@@ -150,7 +150,7 @@ export class GallerySortingService {
         break;
       case SortByTypes.Date:
         media.sort((a: PhotoDTO, b: PhotoDTO): number => {
-          return a.metadata.creationDate - b.metadata.creationDate;
+          return a.metadata.creationDate - b.metadata.creationDate; //TODO: Offset
         });
         break;
       case SortByTypes.Rating:
@@ -196,7 +196,7 @@ export class GallerySortingService {
   private getGroupByNameFn(grouping: GroupingMethod) {
     switch (grouping.method) {
       case SortByTypes.Date:
-        return (m: MediaDTO) => this.datePipe.transform(m.metadata.creationDate, 'longDate', m.metadata.creationDateOffset ? m.metadata.creationDateOffset : 'UTC');
+        return (m: MediaDTO) => this.datePipe.transform(m.metadata.creationDate, 'longDate', m.metadata.creationDateOffset ? m.metadata.creationDateOffset : 'UTC'); //TODO: Offset: 
 
       case SortByTypes.Name:
         return (m: MediaDTO) => m.name.at(0).toUpperCase();
@@ -308,7 +308,7 @@ export class GallerySortingService {
                       if (grouping.method === GroupByTypes.Date) {
                         // We do not need the youngest as we group by day. All photos are from the same day
                         c.mediaGroups.forEach(g => {
-                          g.date = Utils.makeUTCMidnight(new Date(g.media?.[0]?.metadata?.creationDate));
+                          g.date = Utils.makeUTCMidnight(new Date(g.media?.[0]?.metadata?.creationDate)); //TODO: Offset: 
                         });
                       }
 
@@ -338,5 +338,3 @@ export interface GroupedDirectoryContent {
   mediaGroups: MediaGroup[];
   metaFile: FileDTO[];
 }
-
-

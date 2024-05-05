@@ -159,11 +159,11 @@ export class FilterService {
     }
     const ret: { date: Date, endDate: Date, dateStr: string, count: number, max: number }[] = [];
     const minDate = prefiltered.media.reduce(
-      (p, curr) => Math.min(p, curr.metadata.creationDate),
+      (p, curr) => Math.min(p, curr.metadata.creationDate),  //TODO: Offset: 
       Number.MAX_VALUE - 1
     );
     const maxDate = prefiltered.media.reduce(
-      (p, curr) => Math.max(p, curr.metadata.creationDate),
+      (p, curr) => Math.max(p, curr.metadata.creationDate), //TODO: Offset: 
       Number.MIN_VALUE + 1
     );
     const diff = (maxDate - minDate) / 1000;
@@ -205,7 +205,7 @@ export class FilterService {
     const startMediaDate = new Date(floorDate(minDate));
 
     prefiltered.media.forEach(m => {
-      const key = Math.floor((floorDate(m.metadata.creationDate) - startMediaDate.getTime()) / 1000 / usedDiv); //TODO
+      const key = Math.floor((floorDate(m.metadata.creationDate) - startMediaDate.getTime()) / 1000 / usedDiv); //TODO: Offset:
 
       const getDate = (index: number) => {
         let d: Date;
@@ -273,11 +273,11 @@ export class FilterService {
             if (c.media.length > 0) {
               // Update date filter range
               afilters.dateFilter.minDate = c.media.reduce(
-                (p, curr) => Math.min(p, curr.metadata.creationDate),
+                (p, curr) => Math.min(p, curr.metadata.creationDate), //TODO: Offset: 
                 Number.MAX_VALUE - 1
               );
               afilters.dateFilter.maxDate = c.media.reduce(
-                (p, curr) => Math.max(p, curr.metadata.creationDate),
+                (p, curr) => Math.max(p, curr.metadata.creationDate), //TODO: Offset: 
                 Number.MIN_VALUE + 1
               );
               // Add a few sec padding
@@ -294,8 +294,8 @@ export class FilterService {
               // Apply Date filter
               c.media = c.media.filter(
                 (m) =>
-                  m.metadata.creationDate >= afilters.dateFilter.minFilter &&
-                  m.metadata.creationDate <= afilters.dateFilter.maxFilter
+                  m.metadata.creationDate >= afilters.dateFilter.minFilter && //TODO: Offset: 
+                  m.metadata.creationDate <= afilters.dateFilter.maxFilter    //TODO: Offset: 
               );
             } else {
               afilters.dateFilter.minDate = Number.MIN_VALUE;
@@ -398,5 +398,3 @@ export class FilterService {
     }
   }
 }
-
-

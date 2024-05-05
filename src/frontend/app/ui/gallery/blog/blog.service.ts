@@ -28,7 +28,7 @@ export class BlogService {
         let firstMedia = Number.MAX_SAFE_INTEGER;
         if (content.mediaGroups.length > 0) {
           firstMedia = content.mediaGroups[0].media.reduce((p, m) =>
-            Math.min(m.metadata.creationDate, p), Number.MAX_SAFE_INTEGER);
+            Math.min(m.metadata.creationDate, p), Number.MAX_SAFE_INTEGER); //TODO: Offset: 
         }
 
         const files = this.mdFilesFilterPipe.transform(content.metaFile)
