@@ -1084,6 +1084,15 @@ export class ClientGalleryConfig {
 
   @ConfigProperty({
     tags: {
+      name: $localize`Ignore timestamp offsets`,
+      priority: ConfigPriority.advanced,
+    },
+    description: $localize`If enabled, timestamp offsets are ignored and the local time of photos are used for searching, sorting and grouping. If disabled, global time is used and pictures with no timestamp are assumed to be in UTC (offset +00:00).`
+  })
+  ignoreTimestampOffset: boolean = true;
+
+  @ConfigProperty({
+    tags: {
       name: $localize`On scroll thumbnail prioritising`,
       priority: ConfigPriority.underTheHood,
     },
