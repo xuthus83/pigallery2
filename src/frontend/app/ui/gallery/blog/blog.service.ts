@@ -65,7 +65,7 @@ export class BlogService {
 
     const getDateGroup = (date: Date) => {
       // get UTC midnight date
-      const dateNum = Utils.makeUTCMidnight(date).getTime();
+      const dateNum = Utils.makeUTCMidnight(date, undefined).getTime();
       let groupDate = dates.find((d, i) => i > dates.length - 1 ? false : dates[i + 1] > dateNum);   //dates are sorted
 
       // cant find the date. put to the last group (as it was later)

@@ -123,10 +123,11 @@ export class Utils {
     }
   }
 
-  static makeUTCMidnight(d: number | Date) {
+  static makeUTCMidnight(d: number | Date, offset: string) {
     if (!(d instanceof Date)) {
       d = new Date(d);
     }
+    d = new Date(new Date(d).toISOString().substring(0,19) + (offset ? offset : '+00:00'))
     d.setUTCHours(0);
     d.setUTCMinutes(0);
     d.setUTCSeconds(0);
@@ -139,7 +140,7 @@ export class Utils {
     if (!(d instanceof Date)) {
       d = new Date(d);
     }
-    return new Date(new Date(d).toISOString().substring(0,19) + (offset ? offset : '')).getUTCFullYear();
+    return new Date(new Date(d).toISOString().substring(0,19) + (offset ? offset : '+00:00')).getUTCFullYear();
   }
 
   static getFullYear(d: number | Date, offset: string) {
@@ -225,7 +226,9 @@ export class Utils {
     }
   }
 
-    static getLocalTimeMS(creationDate: number, creationDateOffset: string) {
+  //Get the MS of the creationDate, adjusted for  the offset. Effectively getting the MS value as if the photo did not contain an offset.
+  //One can consider this "Local" time of the photo.
+  static getLocalTimeMS(creationDate: number, creationDateOffset: string) {
     const offsetMinutes = Utils.getOffsetMinutes(creationDateOffset);
     return creationDate + (offsetMinutes ? (offsetMinutes * 60000) : 0);
   }
