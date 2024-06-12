@@ -288,7 +288,7 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
 
   public hide(): void {
     this.router
-      .navigate([], {queryParams: this.queryService.getParams()})
+      .navigate([], {queryParams: this.queryService.getParams(),replaceUrl: true})
       .then(() => {
         this.piTitleService.setLastNonMedia();
       })
@@ -441,7 +441,7 @@ export class GalleryLightboxComponent implements OnDestroy, OnInit {
       .navigate([], {
         queryParams: this.queryService.getParams(
           {media: this.gridPhotoQL.get(photoIndex).gridMedia.media, playing: this.slideShowRunning}
-        ),
+        ), replaceUrl: true
       })
       .then(() => {
         this.piTitleService.setMediaTitle(this.gridPhotoQL.get(photoIndex).gridMedia);

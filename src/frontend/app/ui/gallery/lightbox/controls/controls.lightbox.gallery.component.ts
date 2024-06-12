@@ -15,6 +15,8 @@ import {Utils} from '../../../../../../common/Utils';
 import {FileSizePipe} from '../../../../pipes/FileSizePipe';
 import {DatePipe} from '@angular/common';
 import {LightBoxTitleTexts} from '../../../../../../common/config/public/ClientConfig';
+import { Router } from '@angular/router';
+
 
 
 @Component({
@@ -66,7 +68,9 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
     private authService: AuthenticationService,
     private cacheService: GalleryCacheService,
     private fileSizePipe: FileSizePipe,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private router: Router
+
   ) {
     this.searchEnabled = this.authService.canSearch();
   }
@@ -381,7 +385,8 @@ export class ControlsLightboxComponent implements OnDestroy, OnInit, OnChanges {
 
   public closeLightbox(): void {
     this.hideControls();
-    this.closed.emit();
+    // this.closed.emit();
+    this.router.navigate([], { replaceUrl: true });
   }
 
   getPersonSearchQuery(name: string): string {
