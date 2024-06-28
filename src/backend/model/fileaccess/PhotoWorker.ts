@@ -80,7 +80,7 @@ export class VideoRendererFactory {
           let width = null;
           let height = null;
           for (const stream of data.streams) {
-            if (stream.width) {
+            if (stream.width && stream.height && !isNaN(stream.width) && !isNaN(stream.height)) {
               width = stream.width;
               height = stream.height;
               break;
