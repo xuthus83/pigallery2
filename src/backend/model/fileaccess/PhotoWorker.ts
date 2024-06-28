@@ -86,8 +86,8 @@ export class VideoRendererFactory {
               break;
             }
           }
-          if (!width || !height) {
-            return reject('[FFmpeg] Can not read video dimension');
+          if (!width || !height || isNaN(width) || isNaN(height)) {
+            return reject(`[FFmpeg] Can not read video dimension. Found: ${{width}}x${{height}}`);
           }
           const command: FfmpegCommand = ffmpeg(input.mediaPath);
           const fileName = path.basename(input.outPath);
