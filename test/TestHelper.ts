@@ -201,7 +201,7 @@ export class TestHelper {
       name: 'Unkle Ben'
     } as FaceRegion, {
       box: {height: 10, width: 10, left: 105, top: 105},
-      name: 'Arvíztűrő Tükörfúrógép'
+      name: 'Árvíztűrő Tükörfúrógép'
     } as FaceRegion, {
       box: {height: 10, width: 10, left: 201, top: 201},
       name: 'R2-D2'
