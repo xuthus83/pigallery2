@@ -1091,8 +1091,8 @@ export class ClientGalleryConfig {
   })
   //DEVELOPER NOTE: The Database model stores the timestamp (creationDate) as milliseconds since 1970-01-01 UTC (global time). And stores and offset (creationDateOffset) as minutes.
   //Ignoring timestamp for the user is the opposite for the database. If the user wants to ignore the offset, we have to add the offset to the creationDate to give the user the right experience.
-  ignoreTimestampOffset: boolean = true; 
-  
+  ignoreTimestampOffset: boolean = true;
+
 
   @ConfigProperty({
     tags: {
@@ -1266,7 +1266,7 @@ export class ClientPhotoConfig {
     },
     description: $localize`Photo formats that are supported. Browser needs to support these formats natively. Also sharp (libvips) package should be able to convert these formats.`,
   })
-  supportedFormats: string[] = ['gif', 'jpeg', 'jpg', 'jpe', 'png', 'webp', 'svg'];
+  supportedFormats: string[] = ['gif', 'jpeg', 'jpg', 'jpe', 'png', 'webp', 'svg', 'avif', 'heic'];
 }
 
 @SubConfigClass({tags: {client: true}, softReadonly: true})
