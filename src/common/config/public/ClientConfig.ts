@@ -1084,7 +1084,7 @@ export class ClientGalleryConfig {
 
   @ConfigProperty({
     tags: {
-      name: $localize`Ignore timestamp offsets`,
+      name: $localize`Ignore timestamp offsets (use local time)`,
       priority: ConfigPriority.advanced,
     },
     description: $localize`If enabled, timestamp offsets are ignored, meaning that the local times of pictures are used for searching, sorting and grouping. If disabled, global time is used and pictures with no timestamp are assumed to be in UTC (offset +00:00).`
