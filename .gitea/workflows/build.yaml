@@ -19,11 +19,13 @@ jobs:
         with:
           node-version: '18'
       - name: Install dependencies
-        run: npm install
-      - name: Build with Npm build
-        run: npm run build
+        run: npm install --unsafe-perm
       - name: Build with Npm create-release
-        run: npm run create-release
+        run: npm run create-release -- --skip-opt-packages=ffmpeg-static,ffprobe-static --force-opt-packages
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pigallery2-release
+          path: release
       #build镜像并push到中央仓库中
       - name: Build and push
         id: docker_build
