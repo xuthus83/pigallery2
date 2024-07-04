@@ -1,19 +1,22 @@
 #-----------------BUILDER-----------------
 #-----------------------------------------
-FROM node:18.19-buster AS builder
-RUN apt update && apt install -y --no-install-recommends libvips-dev python3
-COPY pigallery2-release /app
-WORKDIR /app
-RUN npm install --unsafe-perm  --fetch-timeout=90000
-RUN mkdir -p /app/data/config && \
-    mkdir -p /app/data/db && \
-    mkdir -p /app/data/images && \
-    mkdir -p /app/data/tmp
-
+FROM node:18-bullseye AS builder
+# LABEL maintainer="Patrik J. Braun"
+# copying only package{-lock}.json to make node_modules cachable
+RUN git clone https://github.com/bpatrik/pigallery2.git /build
+WORKDIR /build
+RUN npm install --unsafe-perm \
+    && mkdir -p /build/release/data/config \
+    && mkdir -p /build/release/data/db \
+    && mkdir -p /build/release/data/images \
+    && mkdir -p /build/release/data/tmp \
+    && npm run create-release \
+    && cd /build/release \
+    && npm install --unsafe-perm
 
 #-----------------MAIN--------------------
 #-----------------------------------------
-FROM node:18-buster-slim AS main
+FROM node:18-bullseye-slim AS main
 WORKDIR /app
 ENV NODE_ENV=production \
     # overrides only the default value of the settings (the actualy value can be overwritten through config.json)
@@ -26,10 +29,10 @@ ENV NODE_ENV=production \
 
 EXPOSE 80
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends ca-certificates wget ffmpeg libvips42 \
+    && apt-get install -y --no-install-recommends ca-certificates wget ffmpeg \
     && apt-get clean -q -y \
     && rm -rf /var/lib/apt/lists/*
-COPY --from=builder /app /app
+COPY --from=builder /build/release /app
 VOLUME ["/app/data/config", "/app/data/db", "/app/data/images", "/app/data/tmp"]
 
 # Run build time diagnostics to make sure the app would work after build is finished
