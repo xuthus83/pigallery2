@@ -313,8 +313,10 @@ export class ConfigDiagnostics {
       // Check if a test available for this image format.
       // if not probably because it is trivial
       if (!fs.existsSync(testImage)) {
+        Logger.silly(LOG_TAG, `No test for ${ext} image format. skipping.`);
         continue;
       }
+      Logger.silly(LOG_TAG, `Testing ${ext} image formats.`);
       try {
         await PhotoWorker.renderFromImage({
             type: ThumbnailSourceType.Photo,
