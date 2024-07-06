@@ -28,6 +28,6 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ./
-          file: ./Dockerfile.build
+          file: Dockerfile.build
           push: true
           tags: k2.xuthus83.cn:6001/pigallery2:latest
