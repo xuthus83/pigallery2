@@ -3,7 +3,7 @@
 FROM node:18-alpine3.17 AS builder
 RUN apk add --update-cache --repository https://alpine.global.ssl.fastly.net/alpine/v3.17/community/ \
     python3 build-base sqlite-dev sqlite-libs vips-dev fftw-dev gcc g++ make libc6-compat && ln -snf /usr/bin/python3 /usr/bin/python
-COPY release /app
+COPY pigallery2-release /app
 WORKDIR /app
 RUN npm install --unsafe-perm
 RUN mkdir -p /app/data/config && \

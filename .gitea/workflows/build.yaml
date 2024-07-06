@@ -19,6 +19,10 @@ jobs:
         run: npm install --unsafe-perm
       - name: Build with Npm create-release
         run: npm run create-release -- --skip-opt-packages=ffmpeg-static,ffprobe-static --force-opt-packages
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pigallery2-release
+          path: release
       - name: Set up Docker Buildx
         id: buildx
         uses: docker/setup-buildx-action@v3
@@ -27,7 +31,7 @@ jobs:
         id: docker_build
         uses: docker/build-push-action@v5
         with:
-          context: ./
+          context: .
           file: Dockerfile.build
           push: true
           tags: k2.xuthus83.cn:6001/pigallery2:latest
