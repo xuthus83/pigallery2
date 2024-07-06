@@ -11,9 +11,6 @@ jobs:
     # 作业包含一系列任务，称为 steps
     steps:
       - uses: actions/checkout@v4
-      - name: Set up Docker Buildx
-        id: buildx
-        uses: docker/setup-buildx-action@v3
       - name: Set up node
         uses: actions/setup-node@v4
         with:
