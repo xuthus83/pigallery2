@@ -1418,8 +1418,9 @@ export class ClientServiceConfig {
       hint: '/myGallery',
       uiResetNeeded: {server: true},
       priority: ConfigPriority.advanced,
-      uiOptional: true
-    }
+      uiOptional: true,
+      githubIssue: 854
+    } as TAGS
   })
   urlBase: string = '';
 
