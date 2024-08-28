@@ -97,7 +97,7 @@ export class AutoCompleteItemsPerCategoryConfig {
         name: $localize`Maximum items`,
         priority: ConfigPriority.underTheHood
       },
-    description: $localize`Maximum number autocomplete items shown at once. If there is not enough items to reach this value, it takes upto double of the individual items.`
+    description: $localize`Maximum number autocomplete items shown at once. If there is not enough items to reach this value, it takes up to double of the individual items.`
   })
   maxItems: number = 20;
 
@@ -789,7 +789,7 @@ export class NavBarConfig {
       experimental: true,
       githubIssue: 174
     },
-    description: $localize`Adds a button to flattens the file structure, by listing the content of all subdirectories. (Won't work if the gallery has multiple folders with the same path.)`
+    description: $localize`Adds a button to flatten the file structure, by listing the content of all subdirectories. (Won't work if the gallery has multiple folders with the same path.)`
   })
   enableDirectoryFlattening: boolean = false;
 
@@ -1145,7 +1145,7 @@ export class ClientGalleryConfig {
       priority: ConfigPriority.advanced,
       githubIssue: 711
     },
-    description: $localize`Makes inline blog (*.md files content) to be auto open.`
+    description: $localize`Makes inline blog (*.md files content) auto-open.`
   })
   InlineBlogStartsOpen: boolean = false;
 
@@ -1155,7 +1155,7 @@ export class ClientGalleryConfig {
       priority: ConfigPriority.advanced,
       githubIssue: 711
     },
-    description: $localize`Makes inline blog (*.md files content) to be auto open.`
+    description: $localize`Makes inline blog (*.md files content) auto-open.`
   })
   TopBlogStartsOpen: boolean = false;
 }
@@ -1178,7 +1178,7 @@ export class ClientVideoConfig {
       uiDisabled: (sb: ClientVideoConfig) => !sb.enabled,
       uiResetNeeded: {db: true}
     } as TAGS,
-    description: $localize`Video formats that are supported after transcoding (with the build-in ffmpeg support).`
+    description: $localize`Video formats that are supported after transcoding (with the built-in ffmpeg support).`
   })
   supportedFormatsWithTranscoding: string[] = ['avi', 'mkv', 'mov', 'wmv', 'flv', 'mts', 'm2ts', 'mpg', '3gp', 'm4v', 'mpeg', 'vob', 'divx', 'xvid', 'ts'];
   // Browser supported video formats
@@ -1402,7 +1402,7 @@ export class ClientServiceConfig {
   applicationTitle: string = 'PiGallery 2';
 
   @ConfigProperty({
-    description: $localize`If you access the page from local network its good to know the public url for creating sharing link.`,
+    description: $localize`If you access the page from local network it's good to know the public url for creating sharing link.`,
     tags: {
       name: $localize`Page public url`,
       hint: typeof window !== 'undefined' ? window?.origin : '',
@@ -1438,7 +1438,7 @@ export class ClientServiceConfig {
   languages: string[] | undefined;
 
   @ConfigProperty({
-    description: $localize`Injects the content of this between the <head></head> HTML tags of the app. (You can use it add analytics or custom code to the app).`,
+    description: $localize`Injects the content of this between the <head></head> HTML tags of the app. (You can use it to add analytics or custom code to the app).`,
     tags: {
       name: $localize`Custom HTML Head`,
       priority: ConfigPriority.advanced,

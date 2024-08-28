@@ -27,10 +27,10 @@ Default values can be also overwritten by prefixing the options with 'default-',
 
 App CLI options: 
   --Server-applicationTitle                                                  (default: 'PiGallery 2')
-  --Server-publicUrl                                                        If you access the page form local network its good to know the public url for creating sharing link. (default: '')
+  --Server-publicUrl                                                        If you access the page from local network it's good to know the public url for creating sharing link. (default: '')
   --Server-urlBase                                                          If you access the gallery under a sub url (like: http://mydomain.com/myGallery), set it here. If it is not working you might miss the '/' from the beginning of the url. (default: '')
   --Server-apiPath                                                          PiGallery api path. (default: '/pgapi')
-  --Server-customHTMLHead                                                   Injects the content of this between the <head></head> HTML tags of the app. (You can use it add analytics or custom code to the app). (default: '')
+  --Server-customHTMLHead                                                   Injects the content of this between the <head></head> HTML tags of the app. (You can use it to add analytics or custom code to the app). (default: '')
   --Server-svgIcon-viewBox                                                  SVG path viewBox. See: https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/viewBox (default: '0 0 512 512')
   --Server-svgIcon-items                                                    Content elements (paths, circles, rects) of the SVG icon. Icons used on the map: fontawesome.com/icons. (default: '<path d="m185.92 0.042372c-3.1045 0.19567-6.2676 1.0899-9.1546 3.163-16.085-8.0588-25.565 1.6894-23.504 14.76-5.3047 4.0078-10.768 7.8463-6.3153 20.688-4.8283 4.5113-5.2702 11.17-1.2227 20.894-4.5731 7.1343-3.0927 13.944 1.4676 20.445-5.0506 10.26 3.7514 20.507 6.2389 23.943-0.99909 6.6761-0.49742 13.458 11.016 21.392-1.2207 10.005 5.7492 14.415 12.419 19.045 12.567 8.1824 17.213 7.2406 27.088 10.328l-0.13366-1.1862c-15.833 3e-3 -31.017 6.2997-42.211 17.506l-24.715 24.736c-11.194 11.206-26.378 17.503-42.211 17.506h-34.984c-32.972 3.6e-4 -59.702 26.751-59.701 59.749v179.24c3.6312e-4 32.997 26.729 59.746 59.701 59.747h358.21c32.972-3.6e-4 59.7-26.75 59.701-59.747v-179.24c-0.0162-23.02-13.245-43.983-34.008-53.889 3.0728-1.7781 5.0617-4.3071 6.7327-7.0379 4.1124-1.032 17.438-3.2179 20.159-14.327 7.7661-2.0112 13.273-6.2767 14.255-14.719 9.3465-4.8456 13.285-10.23 12.484-16.792 11.694-7.0704 9.9759-13.526 8.4511-19.912 9.9742-8.687 8.874-22.288-8.6236-26.461-3.1292-12.25-18.501-15.32-20.733-16.133-1.3931-4.0275-3.7026-7.9496-14.353-10.399-4.4451-8.3291-12.211-9.9464-20.904-9.9225-6.4476-10.379-14.548-6.8393-22.216-7.2124-9.6958-7.4917-13.951-3.6525-20.032-3.5572-11.02-6.8739-16.687-2.7782-24.497 0.86675l-6.6602-2.5355c-21.868 3.9146-38.57 22.031-45.765 31.84 0.78895-12.143-0.36806-36.764-14.606-53.831l-6.7327-2.3414c-3.6422-7.8167-5.3526-14.6-18.209-16.423-4.7287-3.9225-5.388-9.6636-17.627-10.162-3.9701-2.9861-7.0841-7.4205-11.972-9.091-2.5588-0.82206-5.6927-0.97346-9.6817 0.32356-6.6078-5.7069-13.63-9.3648-22.385-5.8437-9.7319-4.9749-14.082-3.5883-17.674-1.2668-1.3952-0.50821-7.2885-3.6439-14.018-4.1239-1.0094-0.071996-2.0376-0.084841-3.0724-0.019609zm1.017 13.578c10.104 0.93027 18.591 7.2129 24.705 11.86 3.989-1.297 1.8817-5.4748-0.67601-9.9264 7.4731 3.9321 13.922 8.2611 19.542 13.058 4.4921-1.7738-6e-3 -6.9333-1.6283-10.934 11.32 6.6532 15.299 11.732 19.277 16.811 4.96-2.1534 2.5609-6.4373 1.1326-10.368 7.9224 6.6257 11.087 12.731 14.482 18.808 2.4625-1.6331 5.6853-2.3301 4.5577-8.9008 5.1605 6.0597 8.5191 12.233 10.344 18.398 4.8979-1.076 4.6167-5.1376 5.7471-8.2459 4.8158 7.9142 7.0028 15.201 10.195 22.743 1.3502-0.38818 3.143-2.596 5.5002-6.3575 10.495 21.313 19.172 68.475-19.542 71.864-19.845-33.079-47.35-62.019-80.099-88.028 39.018 41.712 59.701 71.578 68.828 93.932-5.6123 8.2892-13.186 12.888-21.423 15.182h-31.496c-9.0855-1.8937-17.047-4.8048-21.968-6.9301 3.5034-0.26396 6.761-1.0578 8.553-3.265-2.8932-4.1339-16.942-6.6095-24.423-15.054 3.8384 0.62815 5.771 0.45179 8.3395-1.4727-7.7461-5.9015-16.277-11.759-20.149-18.339 3.0088 1.096 5.5764 2.7998 10.448 1.4943-6.3427-7.0404-13.489-13.382-17.696-22.065 4.1118 1.3877 8.4445 3.0751 10.271 1.9806-5.5926-6.9871-9.844-14.035-12.948-21.216 5.3821 2.7304 8.0206 3.0315 9.7326 2.5551-3.457-7.4192-8.6517-14.592-9.4172-22.461 3.6436 2.9772 7.3478 4.8776 10.904 3.8631-0.36036-4.7513-7.3377-10.044-8.4022-21.322 4.3234 2.0148 8.7693 4.2946 10.093 3.6768 0.9645-8.9987-0.93024-14.97-2.5963-20.967 9.547 3.3675 23.877 8.6978 23.48 7.6733zm202.89 68.954c-1.1657 3.2054-4.0535 6.0044-0.89552 10.015 5.3574-3.5486 11.898-6.1175 19.744-7.4399-5.0841 4.3081-3.1624 6.8795-2.228 9.7499 6.5043-2.4708 12.815-5.0123 23.175-5.0887-3.6187 2.0919-8.2066 3.8292-5.7902 8.6694 6.3098-1.3316 12.62-2.6636 25.565-0.47848-3.8128 2.0212-10.67 3.0443-8.2709 7.3281 7.289-0.095 15.142 0.67658 23.357 2.5689-4.9157 1.7295-9.1161 3.6077-6.8934 7.1673 7.6683 0.37321 18.204 1.0216 26.541 6.8085l-7.9768 3.8043c-0.96209 0.52956 13.473 5.5674 22.914 9.2263-5.2605 3.5839-10.415 6.8757-15.456 14.39 0.61731 1.3249 5.4871 2.4391 10.093 3.6768-8.059 7.9545-16.768 7.4235-20.131 10.928 2.0376 3.1622 6.0354 3.9567 10.836 4.0553-5.7375 5.5002-14.227 7.6885-21.64 11.148 1.0057 1.4663 3.2192 2.9338 9.0958 4.3043-6.9901 3.5039-14.773 6.1675-23.545 7.9223 0.73194 1.9166 5.0978 3.5087 9.1389 5.0907-8.7991 3.945-18.346 4.207-27.726 5.5201 2.9287 4.0367 5.9538 4.4791 8.9626 5.575-7.1926 2.5501-17.455 1.4514-27.215 1.0864 0.46776 2.1663 1.3155 3.4454 2.7961 4.6612h-13.75c-5.1274-1.4192-9.4503-2.9189-11.788-2.2747-0.0214 0.78201 0.12538 1.5366 0.37044 2.2747h-6.1841c-2.2143-0.16717-4.4175-0.45785-6.5995-0.87068-17.23-8.2945-37.615-23.515-35.198-47.897 21.35-11.254 56.342-20.728 113.06-27.679-41.792-1.1427-81.452 3.3317-117.9 15.905-27.674-27.57 9.2662-58.115 30.995-67.691-0.70716 4.3624-0.65582 7.2407 0.12836 8.4067 7.2901-3.7246 13.646-7.8991 22.418-10.864zm-186.04 100.82h69.97c7.9167 2e-3 15.508 3.1505 21.105 8.7538l24.717 24.736c16.798 16.816 39.584 26.262 63.343 26.259h34.984c16.486 1.9e-4 29.85 13.375 29.85 29.873v179.24c-1.9e-4 16.499-13.365 29.873-29.85 29.873h-358.21c-16.486-1.8e-4 -29.85-13.375-29.85-29.873v-179.24c1.88e-4 -16.499 13.365-29.873 29.85-29.873h34.984c23.739-0.0128 46.501-9.4579 63.285-26.259l24.775-24.736c5.582-5.5884 13.149-8.736 21.045-8.7538zm35.016 59.749c-57.625 0.10848-104.28 46.889-104.28 104.56 0 57.669 46.656 104.45 104.28 104.56 57.625-0.10848 104.28-46.889 104.28-104.56 0-57.669-46.656-104.45-104.28-104.56zm-164.18 29.873c-8.2429 9e-5 -14.925 6.6874-14.925 14.937 0.03875 8.2218 6.7096 14.866 14.925 14.866s14.886-6.6446 14.925-14.866c-9.1e-5 -8.2493-6.6823-14.937-14.925-14.937zm164.18 0c41.206 0.0135 74.603 33.447 74.603 74.684 0 41.238-33.397 74.671-74.603 74.684-41.206-0.0135-74.603-33.447-74.603-74.684 0-41.238 33.397-74.671 74.603-74.684z"/>')
   --Server-sessionSecret                                                     (default: [])
@@ -41,7 +41,7 @@ App CLI options:
   --Server-Threading-thumbnailThreads                                       Number of threads that are used to generate thumbnails. If 0, number of 'CPU cores -1' threads will be used. (default: 0)
   --Server-Log-level                                                        Logging level. (default: 'info')
   --Server-Log-sqlLevel                                                     Logging level for SQL queries. (default: 'error')
-  --Server-Log-logServerTiming                                              If enabled, the app ads "Server-Timing" http header to the response. (default: false)
+  --Server-Log-logServerTiming                                              If enabled, the app adds "Server-Timing" http header to the response. (default: false)
   --Users-authenticationRequired                                            Enables user management with login to password protect the gallery. (default: true)
   --Users-unAuthenticatedUserRole                                           Default user right when password protection is disabled. (default: 'Admin')
   --Users-enforcedUsers                                                     Creates these users in the DB during startup if they do not exist. If a user with this name exist, it won't be overwritten, even if the role is different. (default: [])
@@ -50,7 +50,7 @@ App CLI options:
   --Gallery-enableDirectorySortingByDate                                    If enabled, directories will be sorted by date, like photos, otherwise by name. Directory date is the last modification time of that directory not the creation date of the oldest photo. (default: false)
   --Gallery-enableOnScrollThumbnailPrioritising                             Those thumbnails will be rendered first that are in view. (default: true)
   --Gallery-NavBar-enableDownloadZip                                        Enable download zip of a directory contents Directory flattening. (Does not work for searches.) (default: false)
-  --Gallery-NavBar-enableDirectoryFlattening                                Adds a button to flattens the file structure, by listing the content of all subdirectories. (Won't work if the gallery has multiple folders with the same path.) (default: false)
+  --Gallery-NavBar-enableDirectoryFlattening                                Adds a button to flatten the file structure, by listing the content of all subdirectories. (Won't work if the gallery has multiple folders with the same path.) (default: false)
   --Gallery-NavBar-defaultGidSize                                           Default grid size that is used to render photos and videos. (default: 'medium')
   --Gallery-NavBar-showItemCount                                            Shows the number photos and videos on the navigation bar. (default: true)
   --Gallery-NavBar-links                                                    Visible links in the top menu. (default: [{"type":1},{"type":3},{"type":2}])
@@ -74,8 +74,8 @@ App CLI options:
   --Gallery-Themes-defaultMode                                              Sets the default theme mode that is used for the application. (default: 'auto')
   --Gallery-Themes-selectedTheme                                            Selected theme to use on the site. (default: 'classic')
   --Gallery-Themes-availableThemes                                          Adds these css settings as it is to the end of the body tag of the page. (default: [{"name":"classic","theme":":root nav.navbar {\n--bs-navbar-color: rgba(255, 255, 255, 0.55);\n--bs-navbar-hover-color: rgba(255, 255, 255, 0.75);\n--bs-navbar-disabled-color: rgba(255, 255, 255, 0.25);\n--bs-navbar-active-color: #fff;\n--bs-navbar-brand-color: #fff;\n--bs-navbar-brand-hover-color: #fff;\n--bs-bg-opacity: 1;\nbackground-color: rgba(var(--bs-dark-rgb), var(--bs-bg-opacity)) !important;\n}"}])
-  --Gallery-InlineBlogStartsOpen                                            Makes inline blog (*.md files content) to be auto open. (default: false)
-  --Gallery-TopBlogStartsOpen                                               Makes inline blog (*.md files content) to be auto open. (default: false)
+  --Gallery-InlineBlogStartsOpen                                            Makes inline blog (*.md files content) auto-open. (default: false)
+  --Gallery-TopBlogStartsOpen                                               Makes inline blog (*.md files content) auto-open. (default: false)
   --Media-Thumbnail-iconSize                                                Icon size (used on maps). (default: 45)
   --Media-Thumbnail-personThumbnailSize                                     Person (face) thumbnail size. (default: 200)
   --Media-Thumbnail-thumbnailSizes                                          Size of the thumbnails. The best matching size will be generated. More sizes give better quality, but use more storage and CPU to render. If size is 240, that shorter side of the thumbnail will have 160 pixels. (default: [240,480])
@@ -84,11 +84,11 @@ App CLI options:
   --Media-Thumbnail-smartSubsample                                          Use high quality chroma subsampling in webp. See: https://sharp.pixelplumbing.com/api-output#webp. (default: true)
   --Media-Thumbnail-personFaceMargin                                        This ratio of the face bounding box will be added to the face as a margin. Higher number add more margin. (default: 0.7)
   --Media-Video-enabled                                                      (default: true)
-  --Media-Video-supportedFormatsWithTranscoding                             Video formats that are supported after transcoding (with the build-in ffmpeg support). (default: ["avi","mkv","mov","wmv","flv","mts","m2ts","mpg","3gp","m4v","mpeg","vob","divx","xvid","ts"])
+  --Media-Video-supportedFormatsWithTranscoding                             Video formats that are supported after transcoding (with the built-in ffmpeg support). (default: ["avi","mkv","mov","wmv","flv","mts","m2ts","mpg","3gp","m4v","mpeg","vob","divx","xvid","ts"])
   --Media-Video-supportedFormats                                            Video formats that are supported also without transcoding. Browser supported formats: https://www.w3schools.com/html/html5_video.asp (default: ["mp4","webm","ogv","ogg"])
-  --Media-Video-transcoding-bitRate                                         Target bit rate of the output video will be scaled down this this. This should be less than the upload rate of your home server. (default: 5242880)
+  --Media-Video-transcoding-bitRate                                         Target bit rate of the output video will be scaled down to this. This should be less than the upload rate of your home server. (default: 5242880)
   --Media-Video-transcoding-resolution                                      The height of the output video will be scaled down to this, while keeping the aspect ratio. (default: 720)
-  --Media-Video-transcoding-fps                                             Target frame per second (fps) of the output video will be scaled down this this. (default: 25)
+  --Media-Video-transcoding-fps                                             Target frame per second (fps) of the output video will be scaled down to this. (default: 25)
   --Media-Video-transcoding-format                                           (default: 'mp4')
   --Media-Video-transcoding-mp4Codec                                         (default: 'libx264')
   --Media-Video-transcoding-webmCodec                                        (default: 'libvpx')
@@ -117,7 +117,7 @@ App CLI options:
   --Search-enabled                                                          Enables searching. (default: true)
   --Search-searchCacheTimeout                                               Search cache timeout. (default: 3600000)
   --Search-AutoComplete-enabled                                             Show hints while typing search query. (default: true)
-  --Search-AutoComplete-ItemsPerCategory-maxItems                           Maximum number autocomplete items shown at once. If there is not enough items to reach this value, it takes upto double of the individual items. (default: 20)
+  --Search-AutoComplete-ItemsPerCategory-maxItems                           Maximum number autocomplete items shown at once. If there is not enough items to reach this value, it takes up to double of the individual items. (default: 20)
   --Search-AutoComplete-ItemsPerCategory-fileName                           Maximum number autocomplete items shown per photo category. (default: 2)
   --Search-AutoComplete-ItemsPerCategory-directory                          Maximum number autocomplete items shown per directory category. (default: 2)
   --Search-AutoComplete-ItemsPerCategory-caption                            Maximum number autocomplete items shown per caption category. (default: 3)
@@ -168,15 +168,15 @@ App CLI options:
   --Messaging-Email-smtp-user                                               User to connect to the SMTP server. (default: '')
   --Messaging-Email-smtp-password                                           Password to connect to the SMTP server. (default: '')
   --Jobs-maxSavedProgress                                                   Job history size. (default: 20)
-  --Jobs-mediaProcessingBatchSize                                           Jobs load this many photos or videos form the DB for processing at once. (default: 1000)
+  --Jobs-mediaProcessingBatchSize                                           Jobs load this many photos or videos from the DB for processing at once. (default: 1000)
   --Jobs-scheduled                                                           (default: [{"name":"Indexing","jobName":"Indexing","config":{"indexChangesOnly":true},"allowParallelRun":false,"trigger":{"type":1}},{"name":"Album Cover Filling","jobName":"Album Cover Filling","config":{},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"Indexing"}},{"name":"Thumbnail Generation","jobName":"Thumbnail Generation","config":{"sizes":[240],"indexedOnly":true},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"Album Cover Filling"}},{"name":"Photo Converting","jobName":"Photo Converting","config":{"indexedOnly":true},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"Thumbnail Generation"}},{"name":"Video Converting","jobName":"Video Converting","config":{"indexedOnly":true},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"Photo Converting"}},{"name":"GPX Compression","jobName":"GPX Compression","config":{"indexedOnly":true},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"Video Converting"}},{"name":"Temp Folder Cleaning","jobName":"Temp Folder Cleaning","config":{"indexedOnly":true},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"GPX Compression"}}])
 
 Environmental variables: 
   Server-applicationTitle                                                (default: 'PiGallery 2')
-  Server-publicUrl                                                      If you access the page form local network its good to know the public url for creating sharing link. (default: '')
+  Server-publicUrl                                                      If you access the page from local network it's good to know the public url for creating sharing link. (default: '')
   Server-urlBase                                                        If you access the gallery under a sub url (like: http://mydomain.com/myGallery), set it here. If it is not working you might miss the '/' from the beginning of the url. (default: '')
   Server-apiPath                                                        PiGallery api path. (default: '/pgapi')
-  Server-customHTMLHead                                                 Injects the content of this between the <head></head> HTML tags of the app. (You can use it add analytics or custom code to the app). (default: '')
+  Server-customHTMLHead                                                 Injects the content of this between the <head></head> HTML tags of the app. (You can use it to add analytics or custom code to the app). (default: '')
   Server-svgIcon-viewBox                                                SVG path viewBox. See: https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/viewBox (default: '0 0 512 512')
   Server-svgIcon-items                                                  Content elements (paths, circles, rects) of the SVG icon. Icons used on the map: fontawesome.com/icons. (default: '<path d="m185.92 0.042372c-3.1045 0.19567-6.2676 1.0899-9.1546 3.163-16.085-8.0588-25.565 1.6894-23.504 14.76-5.3047 4.0078-10.768 7.8463-6.3153 20.688-4.8283 4.5113-5.2702 11.17-1.2227 20.894-4.5731 7.1343-3.0927 13.944 1.4676 20.445-5.0506 10.26 3.7514 20.507 6.2389 23.943-0.99909 6.6761-0.49742 13.458 11.016 21.392-1.2207 10.005 5.7492 14.415 12.419 19.045 12.567 8.1824 17.213 7.2406 27.088 10.328l-0.13366-1.1862c-15.833 3e-3 -31.017 6.2997-42.211 17.506l-24.715 24.736c-11.194 11.206-26.378 17.503-42.211 17.506h-34.984c-32.972 3.6e-4 -59.702 26.751-59.701 59.749v179.24c3.6312e-4 32.997 26.729 59.746 59.701 59.747h358.21c32.972-3.6e-4 59.7-26.75 59.701-59.747v-179.24c-0.0162-23.02-13.245-43.983-34.008-53.889 3.0728-1.7781 5.0617-4.3071 6.7327-7.0379 4.1124-1.032 17.438-3.2179 20.159-14.327 7.7661-2.0112 13.273-6.2767 14.255-14.719 9.3465-4.8456 13.285-10.23 12.484-16.792 11.694-7.0704 9.9759-13.526 8.4511-19.912 9.9742-8.687 8.874-22.288-8.6236-26.461-3.1292-12.25-18.501-15.32-20.733-16.133-1.3931-4.0275-3.7026-7.9496-14.353-10.399-4.4451-8.3291-12.211-9.9464-20.904-9.9225-6.4476-10.379-14.548-6.8393-22.216-7.2124-9.6958-7.4917-13.951-3.6525-20.032-3.5572-11.02-6.8739-16.687-2.7782-24.497 0.86675l-6.6602-2.5355c-21.868 3.9146-38.57 22.031-45.765 31.84 0.78895-12.143-0.36806-36.764-14.606-53.831l-6.7327-2.3414c-3.6422-7.8167-5.3526-14.6-18.209-16.423-4.7287-3.9225-5.388-9.6636-17.627-10.162-3.9701-2.9861-7.0841-7.4205-11.972-9.091-2.5588-0.82206-5.6927-0.97346-9.6817 0.32356-6.6078-5.7069-13.63-9.3648-22.385-5.8437-9.7319-4.9749-14.082-3.5883-17.674-1.2668-1.3952-0.50821-7.2885-3.6439-14.018-4.1239-1.0094-0.071996-2.0376-0.084841-3.0724-0.019609zm1.017 13.578c10.104 0.93027 18.591 7.2129 24.705 11.86 3.989-1.297 1.8817-5.4748-0.67601-9.9264 7.4731 3.9321 13.922 8.2611 19.542 13.058 4.4921-1.7738-6e-3 -6.9333-1.6283-10.934 11.32 6.6532 15.299 11.732 19.277 16.811 4.96-2.1534 2.5609-6.4373 1.1326-10.368 7.9224 6.6257 11.087 12.731 14.482 18.808 2.4625-1.6331 5.6853-2.3301 4.5577-8.9008 5.1605 6.0597 8.5191 12.233 10.344 18.398 4.8979-1.076 4.6167-5.1376 5.7471-8.2459 4.8158 7.9142 7.0028 15.201 10.195 22.743 1.3502-0.38818 3.143-2.596 5.5002-6.3575 10.495 21.313 19.172 68.475-19.542 71.864-19.845-33.079-47.35-62.019-80.099-88.028 39.018 41.712 59.701 71.578 68.828 93.932-5.6123 8.2892-13.186 12.888-21.423 15.182h-31.496c-9.0855-1.8937-17.047-4.8048-21.968-6.9301 3.5034-0.26396 6.761-1.0578 8.553-3.265-2.8932-4.1339-16.942-6.6095-24.423-15.054 3.8384 0.62815 5.771 0.45179 8.3395-1.4727-7.7461-5.9015-16.277-11.759-20.149-18.339 3.0088 1.096 5.5764 2.7998 10.448 1.4943-6.3427-7.0404-13.489-13.382-17.696-22.065 4.1118 1.3877 8.4445 3.0751 10.271 1.9806-5.5926-6.9871-9.844-14.035-12.948-21.216 5.3821 2.7304 8.0206 3.0315 9.7326 2.5551-3.457-7.4192-8.6517-14.592-9.4172-22.461 3.6436 2.9772 7.3478 4.8776 10.904 3.8631-0.36036-4.7513-7.3377-10.044-8.4022-21.322 4.3234 2.0148 8.7693 4.2946 10.093 3.6768 0.9645-8.9987-0.93024-14.97-2.5963-20.967 9.547 3.3675 23.877 8.6978 23.48 7.6733zm202.89 68.954c-1.1657 3.2054-4.0535 6.0044-0.89552 10.015 5.3574-3.5486 11.898-6.1175 19.744-7.4399-5.0841 4.3081-3.1624 6.8795-2.228 9.7499 6.5043-2.4708 12.815-5.0123 23.175-5.0887-3.6187 2.0919-8.2066 3.8292-5.7902 8.6694 6.3098-1.3316 12.62-2.6636 25.565-0.47848-3.8128 2.0212-10.67 3.0443-8.2709 7.3281 7.289-0.095 15.142 0.67658 23.357 2.5689-4.9157 1.7295-9.1161 3.6077-6.8934 7.1673 7.6683 0.37321 18.204 1.0216 26.541 6.8085l-7.9768 3.8043c-0.96209 0.52956 13.473 5.5674 22.914 9.2263-5.2605 3.5839-10.415 6.8757-15.456 14.39 0.61731 1.3249 5.4871 2.4391 10.093 3.6768-8.059 7.9545-16.768 7.4235-20.131 10.928 2.0376 3.1622 6.0354 3.9567 10.836 4.0553-5.7375 5.5002-14.227 7.6885-21.64 11.148 1.0057 1.4663 3.2192 2.9338 9.0958 4.3043-6.9901 3.5039-14.773 6.1675-23.545 7.9223 0.73194 1.9166 5.0978 3.5087 9.1389 5.0907-8.7991 3.945-18.346 4.207-27.726 5.5201 2.9287 4.0367 5.9538 4.4791 8.9626 5.575-7.1926 2.5501-17.455 1.4514-27.215 1.0864 0.46776 2.1663 1.3155 3.4454 2.7961 4.6612h-13.75c-5.1274-1.4192-9.4503-2.9189-11.788-2.2747-0.0214 0.78201 0.12538 1.5366 0.37044 2.2747h-6.1841c-2.2143-0.16717-4.4175-0.45785-6.5995-0.87068-17.23-8.2945-37.615-23.515-35.198-47.897 21.35-11.254 56.342-20.728 113.06-27.679-41.792-1.1427-81.452 3.3317-117.9 15.905-27.674-27.57 9.2662-58.115 30.995-67.691-0.70716 4.3624-0.65582 7.2407 0.12836 8.4067 7.2901-3.7246 13.646-7.8991 22.418-10.864zm-186.04 100.82h69.97c7.9167 2e-3 15.508 3.1505 21.105 8.7538l24.717 24.736c16.798 16.816 39.584 26.262 63.343 26.259h34.984c16.486 1.9e-4 29.85 13.375 29.85 29.873v179.24c-1.9e-4 16.499-13.365 29.873-29.85 29.873h-358.21c-16.486-1.8e-4 -29.85-13.375-29.85-29.873v-179.24c1.88e-4 -16.499 13.365-29.873 29.85-29.873h34.984c23.739-0.0128 46.501-9.4579 63.285-26.259l24.775-24.736c5.582-5.5884 13.149-8.736 21.045-8.7538zm35.016 59.749c-57.625 0.10848-104.28 46.889-104.28 104.56 0 57.669 46.656 104.45 104.28 104.56 57.625-0.10848 104.28-46.889 104.28-104.56 0-57.669-46.656-104.45-104.28-104.56zm-164.18 29.873c-8.2429 9e-5 -14.925 6.6874-14.925 14.937 0.03875 8.2218 6.7096 14.866 14.925 14.866s14.886-6.6446 14.925-14.866c-9.1e-5 -8.2493-6.6823-14.937-14.925-14.937zm164.18 0c41.206 0.0135 74.603 33.447 74.603 74.684 0 41.238-33.397 74.671-74.603 74.684-41.206-0.0135-74.603-33.447-74.603-74.684 0-41.238 33.397-74.671 74.603-74.684z"/>')
   Server-sessionSecret                                                   (default: [])
@@ -188,7 +188,7 @@ Environmental variables:
   Server-Threading-thumbnailThreads                                     Number of threads that are used to generate thumbnails. If 0, number of 'CPU cores -1' threads will be used. (default: 0)
   Server-Log-level                                                      Logging level. (default: 'info')
   Server-Log-sqlLevel                                                   Logging level for SQL queries. (default: 'error')
-  Server-Log-logServerTiming                                            If enabled, the app ads "Server-Timing" http header to the response. (default: false)
+  Server-Log-logServerTiming                                            If enabled, the app adds "Server-Timing" http header to the response. (default: false)
   Users-authenticationRequired                                          Enables user management with login to password protect the gallery. (default: true)
   Users-unAuthenticatedUserRole                                         Default user right when password protection is disabled. (default: 'Admin')
   Users-enforcedUsers                                                   Creates these users in the DB during startup if they do not exist. If a user with this name exist, it won't be overwritten, even if the role is different. (default: [])
@@ -197,7 +197,7 @@ Environmental variables:
   Gallery-enableDirectorySortingByDate                                  If enabled, directories will be sorted by date, like photos, otherwise by name. Directory date is the last modification time of that directory not the creation date of the oldest photo. (default: false)
   Gallery-enableOnScrollThumbnailPrioritising                           Those thumbnails will be rendered first that are in view. (default: true)
   Gallery-NavBar-enableDownloadZip                                      Enable download zip of a directory contents Directory flattening. (Does not work for searches.) (default: false)
-  Gallery-NavBar-enableDirectoryFlattening                              Adds a button to flattens the file structure, by listing the content of all subdirectories. (Won't work if the gallery has multiple folders with the same path.) (default: false)
+  Gallery-NavBar-enableDirectoryFlattening                              Adds a button to flatten the file structure, by listing the content of all subdirectories. (Won't work if the gallery has multiple folders with the same path.) (default: false)
   Gallery-NavBar-defaultGidSize                                         Default grid size that is used to render photos and videos. (default: 'medium')
   Gallery-NavBar-showItemCount                                          Shows the number photos and videos on the navigation bar. (default: true)
   Gallery-NavBar-links                                                  Visible links in the top menu. (default: [{"type":1},{"type":3},{"type":2}])
@@ -221,8 +221,8 @@ Environmental variables:
   Gallery-Themes-defaultMode                                            Sets the default theme mode that is used for the application. (default: 'auto')
   Gallery-Themes-selectedTheme                                          Selected theme to use on the site. (default: 'classic')
   Gallery-Themes-availableThemes                                        Adds these css settings as it is to the end of the body tag of the page. (default: [{"name":"classic","theme":":root nav.navbar {\n--bs-navbar-color: rgba(255, 255, 255, 0.55);\n--bs-navbar-hover-color: rgba(255, 255, 255, 0.75);\n--bs-navbar-disabled-color: rgba(255, 255, 255, 0.25);\n--bs-navbar-active-color: #fff;\n--bs-navbar-brand-color: #fff;\n--bs-navbar-brand-hover-color: #fff;\n--bs-bg-opacity: 1;\nbackground-color: rgba(var(--bs-dark-rgb), var(--bs-bg-opacity)) !important;\n}"}])
-  Gallery-InlineBlogStartsOpen                                          Makes inline blog (*.md files content) to be auto open. (default: false)
-  Gallery-TopBlogStartsOpen                                             Makes inline blog (*.md files content) to be auto open. (default: false)
+  Gallery-InlineBlogStartsOpen                                          Makes inline blog (*.md files content) auto-open. (default: false)
+  Gallery-TopBlogStartsOpen                                             Makes inline blog (*.md files content) auto-open. (default: false)
   Media-Thumbnail-iconSize                                              Icon size (used on maps). (default: 45)
   Media-Thumbnail-personThumbnailSize                                   Person (face) thumbnail size. (default: 200)
   Media-Thumbnail-thumbnailSizes                                        Size of the thumbnails. The best matching size will be generated. More sizes give better quality, but use more storage and CPU to render. If size is 240, that shorter side of the thumbnail will have 160 pixels. (default: [240,480])
@@ -231,11 +231,11 @@ Environmental variables:
   Media-Thumbnail-smartSubsample                                        Use high quality chroma subsampling in webp. See: https://sharp.pixelplumbing.com/api-output#webp. (default: true)
   Media-Thumbnail-personFaceMargin                                      This ratio of the face bounding box will be added to the face as a margin. Higher number add more margin. (default: 0.7)
   Media-Video-enabled                                                    (default: true)
-  Media-Video-supportedFormatsWithTranscoding                           Video formats that are supported after transcoding (with the build-in ffmpeg support). (default: ["avi","mkv","mov","wmv","flv","mts","m2ts","mpg","3gp","m4v","mpeg","vob","divx","xvid","ts"])
+  Media-Video-supportedFormatsWithTranscoding                           Video formats that are supported after transcoding (with the built-in ffmpeg support). (default: ["avi","mkv","mov","wmv","flv","mts","m2ts","mpg","3gp","m4v","mpeg","vob","divx","xvid","ts"])
   Media-Video-supportedFormats                                          Video formats that are supported also without transcoding. Browser supported formats: https://www.w3schools.com/html/html5_video.asp (default: ["mp4","webm","ogv","ogg"])
-  Media-Video-transcoding-bitRate                                       Target bit rate of the output video will be scaled down this this. This should be less than the upload rate of your home server. (default: 5242880)
+  Media-Video-transcoding-bitRate                                       Target bit rate of the output video will be scaled down to this. This should be less than the upload rate of your home server. (default: 5242880)
   Media-Video-transcoding-resolution                                    The height of the output video will be scaled down to this, while keeping the aspect ratio. (default: 720)
-  Media-Video-transcoding-fps                                           Target frame per second (fps) of the output video will be scaled down this this. (default: 25)
+  Media-Video-transcoding-fps                                           Target frame per second (fps) of the output video will be scaled down to this. (default: 25)
   Media-Video-transcoding-format                                         (default: 'mp4')
   Media-Video-transcoding-mp4Codec                                       (default: 'libx264')
   Media-Video-transcoding-webmCodec                                      (default: 'libvpx')
@@ -264,7 +264,7 @@ Environmental variables:
   Search-enabled                                                        Enables searching. (default: true)
   Search-searchCacheTimeout                                             Search cache timeout. (default: 3600000)
   Search-AutoComplete-enabled                                           Show hints while typing search query. (default: true)
-  Search-AutoComplete-ItemsPerCategory-maxItems                         Maximum number autocomplete items shown at once. If there is not enough items to reach this value, it takes upto double of the individual items. (default: 20)
+  Search-AutoComplete-ItemsPerCategory-maxItems                         Maximum number autocomplete items shown at once. If there is not enough items to reach this value, it takes up to double of the individual items. (default: 20)
   Search-AutoComplete-ItemsPerCategory-fileName                         Maximum number autocomplete items shown per photo category. (default: 2)
   Search-AutoComplete-ItemsPerCategory-directory                        Maximum number autocomplete items shown per directory category. (default: 2)
   Search-AutoComplete-ItemsPerCategory-caption                          Maximum number autocomplete items shown per caption category. (default: 3)
@@ -320,7 +320,7 @@ Environmental variables:
   Messaging-Email-smtp-user                                             User to connect to the SMTP server. (default: '')
   Messaging-Email-smtp-password                                         Password to connect to the SMTP server. (default: '')
   Jobs-maxSavedProgress                                                 Job history size. (default: 20)
-  Jobs-mediaProcessingBatchSize                                         Jobs load this many photos or videos form the DB for processing at once. (default: 1000)
+  Jobs-mediaProcessingBatchSize                                         Jobs load this many photos or videos from the DB for processing at once. (default: 1000)
   Jobs-scheduled                                                         (default: [{"name":"Indexing","jobName":"Indexing","config":{"indexChangesOnly":true},"allowParallelRun":false,"trigger":{"type":1}},{"name":"Album Cover Filling","jobName":"Album Cover Filling","config":{},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"Indexing"}},{"name":"Thumbnail Generation","jobName":"Thumbnail Generation","config":{"sizes":[240],"indexedOnly":true},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"Album Cover Filling"}},{"name":"Photo Converting","jobName":"Photo Converting","config":{"indexedOnly":true},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"Thumbnail Generation"}},{"name":"Video Converting","jobName":"Video Converting","config":{"indexedOnly":true},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"Photo Converting"}},{"name":"GPX Compression","jobName":"GPX Compression","config":{"indexedOnly":true},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"Video Converting"}},{"name":"Temp Folder Cleaning","jobName":"Temp Folder Cleaning","config":{"indexedOnly":true},"allowParallelRun":false,"trigger":{"type":4,"afterScheduleName":"GPX Compression"}}])
 ```
 
@@ -330,7 +330,7 @@ Environmental variables:
     "Server": {
         "applicationTitle": "PiGallery 2",
         "//[publicUrl]": [
-            "If you access the page form local network its good to know the public url for creating sharing link."
+            "If you access the page from local network it's good to know the public url for creating sharing link."
         ],
         "publicUrl": "",
         "//[urlBase]": [
@@ -340,7 +340,7 @@ Environmental variables:
         "//[apiPath]": "PiGallery api path.",
         "apiPath": "/pgapi",
         "//[customHTMLHead]": [
-            "Injects the content of this between the <head></head> HTML tags of the app. (You can use it add analytics or custom code to the app)."
+            "Injects the content of this between the <head></head> HTML tags of the app. (You can use it to add analytics or custom code to the app)."
         ],
         "customHTMLHead": "",
         "//[svgIcon]": [
@@ -431,7 +431,7 @@ Environmental variables:
             ],
             "enableDownloadZip": false,
             "//[enableDirectoryFlattening]": [
-                "Adds a button to flattens the file structure, by listing the content of all subdirectories. (Won't work if the gallery has multiple folders with the same path.)"
+                "Adds a button to flatten the file structure, by listing the content of all subdirectories. (Won't work if the gallery has multiple folders with the same path.)"
             ],
             "enableDirectoryFlattening": false,
             "//[defaultGidSize]": [
@@ -554,11 +554,11 @@ Environmental variables:
             ]
         },
         "//[InlineBlogStartsOpen]": [
-            "Makes inline blog (*.md files content) to be auto open."
+            "Makes inline blog (*.md files content) auto-open."
         ],
         "InlineBlogStartsOpen": false,
         "//[TopBlogStartsOpen]": [
-            "Makes inline blog (*.md files content) to be auto open."
+            "Makes inline blog (*.md files content) auto-open."
         ],
         "TopBlogStartsOpen": false
     },
@@ -602,7 +602,7 @@ Environmental variables:
         "Video": {
             "enabled": true,
             "//[supportedFormatsWithTranscoding]": [
-                "Video formats that are supported after transcoding (with the build-in ffmpeg support)."
+                "Video formats that are supported after transcoding (with the built-in ffmpeg support)."
             ],
             "supportedFormatsWithTranscoding": [
                 "avi",
@@ -631,11 +631,11 @@ Environmental variables:
                 "ogg"
             ],
             "//[transcoding]": [
-                "To ensure smooth video playback, video transcoding is recommended to a lower bit rate than the server's upload rate.   The transcoded videos will be save to the thumbnail folder.  You can trigger the transcoding manually, but you can also create an automatic encoding job in advanced settings mode."
+                "To ensure smooth video playback, video transcoding is recommended to a lower bit rate than the server's upload rate.   The transcoded videos will be saved to the thumbnail folder.  You can trigger the transcoding manually, but you can also create an automatic encoding job in advanced settings mode."
             ],
             "transcoding": {
                 "//[bitRate]": [
-                    "Target bit rate of the output video will be scaled down this this. This should be less than the upload rate of your home server."
+                    "Target bit rate of the output video will be scaled down to this. This should be less than the upload rate of your home server."
                 ],
                 "bitRate": 5242880,
                 "//[resolution]": [
@@ -643,7 +643,7 @@ Environmental variables:
                 ],
                 "resolution": 720,
                 "//[fps]": [
-                    "Target frame per second (fps) of the output video will be scaled down this this."
+                    "Target frame per second (fps) of the output video will be scaled down to this."
                 ],
                 "fps": 25,
                 "format": "mp4",
@@ -778,7 +778,7 @@ Environmental variables:
             ],
             "ItemsPerCategory": {
                 "//[maxItems]": [
-                    "Maximum number autocomplete items shown at once. If there is not enough items to reach this value, it takes upto double of the individual items."
+                    "Maximum number autocomplete items shown at once. If there is not enough items to reach this value, it takes up to double of the individual items."
                 ],
                 "maxItems": 20,
                 "//[fileName]": [
@@ -1381,7 +1381,7 @@ Environmental variables:
         ],
         "maxSavedProgress": 20,
         "//[mediaProcessingBatchSize]": [
-            "Jobs load this many photos or videos form the DB for processing at once."
+            "Jobs load this many photos or videos from the DB for processing at once."
         ],
         "mediaProcessingBatchSize": 1000,
         "scheduled": [

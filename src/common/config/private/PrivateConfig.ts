@@ -525,7 +525,7 @@ export class ServerLogConfig {
       name: $localize`Server timing`,
       priority: ConfigPriority.underTheHood,
     },
-    description: $localize`If enabled, the app ads "Server-Timing" http header to the response.`
+    description: $localize`If enabled, the app adds "Server-Timing" http header to the response.`
   })
   logServerTiming: boolean = false;
 }
@@ -638,7 +638,7 @@ export class ServerJobConfig {
         name: $localize`Processing batch size`,
         priority: ConfigPriority.underTheHood
       },
-    description: $localize`Jobs load this many photos or videos form the DB for processing at once.`
+    description: $localize`Jobs load this many photos or videos from the DB for processing at once.`
   })
   mediaProcessingBatchSize: number = 1000;
   @ConfigProperty({
@@ -698,7 +698,7 @@ export class VideoTranscodingConfig {
         priority: ConfigPriority.advanced,
         unit: 'bps'
       },
-    description: $localize`Target bit rate of the output video will be scaled down this this. This should be less than the upload rate of your home server.`
+    description: $localize`Target bit rate of the output video will be scaled down to this. This should be less than the upload rate of your home server.`
   })
   bitRate: number = 5 * 1024 * 1024;
   @ConfigProperty({
@@ -721,7 +721,7 @@ export class VideoTranscodingConfig {
         priority: ConfigPriority.underTheHood,
         uiOptions: [24, 25, 30, 48, 50, 60]
       },
-    description: $localize`Target frame per second (fps) of the output video will be scaled down this this.`
+    description: $localize`Target frame per second (fps) of the output video will be scaled down to this.`
   })
   fps: number = 25;
   @ConfigProperty({
@@ -810,7 +810,7 @@ export class ServerVideoConfig extends ClientVideoConfig {
       priority: ConfigPriority.advanced,
       uiDisabled: (sb: ClientVideoConfig) => !sb.enabled
     },
-    description: $localize`To ensure smooth video playback, video transcoding is recommended to a lower bit rate than the server's upload rate.   The transcoded videos will be save to the thumbnail folder.  You can trigger the transcoding manually, but you can also create an automatic encoding job in advanced settings mode.`
+    description: $localize`To ensure smooth video playback, video transcoding is recommended to a lower bit rate than the server's upload rate.   The transcoded videos will be saved to the thumbnail folder.  You can trigger the transcoding manually, but you can also create an automatic encoding job in advanced settings mode.`
   })
   transcoding: VideoTranscodingConfig = new VideoTranscodingConfig();
 }
