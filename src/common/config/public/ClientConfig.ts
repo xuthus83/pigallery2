@@ -1155,7 +1155,7 @@ export class ClientGalleryConfig {
       priority: ConfigPriority.advanced,
       githubIssue: 711
     },
-    description: $localize`Makes inline blog (*.md files content) auto-open.`
+    description: $localize`Makes top blog (*.md files content) auto-open.`
   })
   TopBlogStartsOpen: boolean = false;
 }
