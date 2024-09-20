@@ -16,7 +16,7 @@ export class SupportedFormats {
   // Read more:  https://www.w3schools.com/html/html5_video.asp
   static Videos = Config.Media.Video.supportedFormats;
   static MetaFiles = Config.MetaFile.supportedFormats;
-  // These formats need to be transcoded (with the build-in ffmpeg support)
+  // These formats need to be transcoded (with the built-in ffmpeg support)
   static TranscodeNeed = {
     // based on libvips, all supported formats for sharp: https://github.com/libvips/libvips
     Photos: [] as string[],
