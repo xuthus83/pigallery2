@@ -193,6 +193,7 @@ export class GalleryGridComponent
   photoClicked(media: MediaDTO): void {
     this.router.navigate([], {
       queryParams: this.queryService.getParams({media}),
+      replaceUrl: true,
     });
   }
 
@@ -400,7 +401,10 @@ export class GalleryGridComponent
       }
     }
     if (groupIndex === -1) {
-      this.router.navigate([], {queryParams: this.queryService.getParams()});
+      this.router.navigate([], {
+        queryParams: this.queryService.getParams(),
+        replaceUrl: true,
+      });
       return;
     }
     // Make sure that at leas one more row is rendered
