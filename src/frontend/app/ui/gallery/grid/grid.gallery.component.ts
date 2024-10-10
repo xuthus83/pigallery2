@@ -400,9 +400,7 @@ export class GalleryGridComponent
       }
     }
     if (groupIndex === -1) {
-      this.router.navigate([], {
-        queryParams: this.queryService.getParams(),
-      });
+      this.router.navigate([], {queryParams: this.queryService.getParams()});
       return;
     }
     // Make sure that at leas one more row is rendered
