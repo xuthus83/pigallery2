@@ -4,6 +4,7 @@ FROM node:18-alpine3.17 AS builder
 RUN apk add --no-cache --repository https://alpine.global.ssl.fastly.net/alpine/v3.17/community/ \
   python3 build-base sqlite-dev sqlite-libs imagemagick-dev libraw-dev vips-dev vips-heif vips-magick fftw-dev gcc g++ make libc6-compat && ln -snf /usr/bin/python3 /usr/bin/python
 COPY pigallery2-release /app
+RUN  rm /var/cache/apk/*
 WORKDIR /app
 RUN npm install --unsafe-perm  --fetch-timeout=90000
 RUN mkdir -p /app/data/config && \
@@ -29,6 +30,7 @@ EXPOSE 80
 RUN apk add --no-cache --repository https://alpine.global.ssl.fastly.net/alpine/v3.17/community/ \
     vips vips-cpp vips-heif vips-magick ffmpeg
 COPY --from=builder /app /app
+RUN  rm /var/cache/apk/*
 
 # Run build time diagnostics to make sure the app would work after build is finished
 RUN ["node", "./src/backend/index", "--expose-gc",  "--run-diagnostics", "--config-path=/app/diagnostics-config.json", "--Server-Log-level=silly"]
