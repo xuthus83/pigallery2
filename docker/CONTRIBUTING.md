@@ -10,8 +10,7 @@ To quality check your dockerfile changes you can use hadolint:
 3. Run hadolint on the alpine dockerfile: `docker run --rm -i -v ./.config/hadolint.yml:/.config/hadolint.yaml hadolint/hadolint < ./alpine/Dockerfile.build`
 4. Run hadolint on the debian-bookworm dockerfile: `docker run --rm -i -v ./.config/hadolint.yml:/.config/hadolint.yaml hadolint/hadolint < ./debian-bookworm/Dockerfile.build`
 5. Run hadolint on the debian-bullseye dockerfile: `docker run --rm -i -v ./.config/hadolint.yml:/.config/hadolint.yaml hadolint/hadolint < ./debian-bullseye/Dockerfile.build`
-6. Run hadolint on the debian-buster dockerfile: `docker run --rm -i -v ./.config/hadolint.yml:/.config/hadolint.yaml hadolint/hadolint < ./debian-buster/Dockerfile.build`
-7. Run hadolint on the debian-buster selfcontained dockerfile: `docker run --rm -i -v ./.config/hadolint.yml:/.config/hadolint.yaml hadolint/hadolint < ./debian-buster/selfcontained/Dockerfile`
+7. Run hadolint on the debian-bullseye selfcontained dockerfile: `docker run --rm -i -v ./.config/hadolint.yml:/.config/hadolint.yaml hadolint/hadolint < ./debian-bullseye/selfcontained/Dockerfile`
 8. Fix errors and warnings or add them to ignore list of the [hadolint configuration file](./.config/hadolint.yml) if there is a good reason for that. Read more [here](https://github.com/hadolint/hadolint).
 
 ### Building the docker image locally

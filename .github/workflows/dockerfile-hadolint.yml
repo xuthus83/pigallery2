@@ -35,13 +35,8 @@ jobs:
         with:
           dockerfile: ./docker/debian-bullseye/Dockerfile.build
           config: ./docker/.config/hadolint.yml
-      - name: Lint Debian Buster Dockerfile
+      - name: Lint Debian Bullseye Self-contained Dockerfile
         uses: hadolint/hadolint-action@v3.1.0
         with:
-          dockerfile: ./docker/debian-buster/Dockerfile.build
-          config: ./docker/.config/hadolint.yml
-      - name: Lint Debian Buster Self-contained Dockerfile
-        uses: hadolint/hadolint-action@v3.1.0
-        with:
-          dockerfile: ./docker/debian-buster/selfcontained/Dockerfile
+          dockerfile: ./docker/debian-bullseye/selfcontained/Dockerfile
           config: ./docker/.config/hadolint.yml
