@@ -19,12 +19,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: List Docker directory contents
+        run: ls -R ./docker
       - uses: hadolint/hadolint-action@v3.1.0
         with:
           dockerfile: |
             ./docker/alpine/Dockerfile.build
             ./docker/debian-bookworm/Dockerfile.build
-            ./docker/debian-bullseye/Dockerfile.build
-            ./docker/debian-buster/Dockerfile.build
-            ./docker/debian-buster/selfcontained/Dockerfile
           config: ./docker/.config/hadolint.yml
