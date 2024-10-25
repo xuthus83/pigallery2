@@ -23,7 +23,5 @@ jobs:
         run: ls -R ./docker
       - uses: hadolint/hadolint-action@v3.1.0
         with:
-          dockerfile: |
-            ./docker/alpine/Dockerfile.build
-            ./docker/debian-bookworm/Dockerfile.build
+          dockerfile: ./docker/alpine/Dockerfile.build
           config: ./docker/.config/hadolint.yml
