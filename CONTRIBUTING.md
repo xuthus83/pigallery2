@@ -105,3 +105,34 @@ Client side:
 15. Setting `content` BehaviorSubject (rxjs) with the `ContentWrapperWithError` from the server.
 16. Rendering gallery: UI is data binded to the `galleryService.content` [gallery.component.html]
    
+## Running the tests locally
+You can run tests in various ways. If you use VS Code, the built-in test explorer is a good way to visualize and run the tests. You can also run tests from the command line.
+
+- Run all tests:
+
+  `npx mocha`
+- Run all tests in parallel and report with very verbose output (to debug tests that don't run):
+  
+  `npx mocha --reporter spec --parallel`
+- Run a specific test (here the SettingsRouter in the backend):
+
+  `npx mocha ./test/backend/integration/routers/admin/SettingsRouter.js`
+
+### MySQL / MariaDB tests
+  The MySQL / MariaDB tests needs a separate database to be running during the test. If you have docker, you can start one with the required test-settings, using the command below:
+
+  `docker run --name pigallery_test -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=pigallery_test -e MYSQL_USER=user -e MYSQL_PASSWORD=password -p3306:3306 -d mariadb:10.3 --log-bin --binlog-format=MIXED`
+
+  Start this betfore running the tests in text explorer or the command line, if you want to include the MySQL tests.
+
+  Once you're finished with the testing, you can shut down the container again:
+
+  `docker stop pigallery_test`
+
+  or you can shut it down AND remove it:
+
+  `docker stop pigallery_test && docker rm pigallery_test`
+
+
+
+  
