@@ -10,9 +10,9 @@ RUN npm install --unsafe-perm \
     && mkdir -p /build/release/data/db \
     && mkdir -p /build/release/data/images \
     && mkdir -p /build/release/data/tmp \
-    && npm run create-release \
-    && cd /build/release \
-    && npm install --unsafe-perm
+    && npm run create-release
+WORKDIR /build/release
+RUN npm install --unsafe-perm
 
 #-----------------MAIN--------------------
 #-----------------------------------------
@@ -33,7 +33,6 @@ RUN apt-get update \
     && apt-get clean -q -y \
     && rm -rf /var/lib/apt/lists/*
 COPY --from=builder /build/release /app
-VOLUME ["/app/data/config", "/app/data/db", "/app/data/images", "/app/data/tmp"]
 
 # Run build time diagnostics to make sure the app would work after build is finished
 RUN ["node", "./src/backend/index", "--expose-gc",  "--run-diagnostics", "--config-path=/app/diagnostics-config.json"]
@@ -44,4 +43,3 @@ HEALTHCHECK --interval=40s --timeout=30s --retries=3 --start-period=60s \
 # after a extensive job (like video converting), pigallery calls gc, to clean up everthing as fast as possible
 # Exec form entrypoint is need otherwise (using shell form) ENV variables are not properly passed down to the app
 ENTRYPOINT ["node", "./src/backend/index", "--expose-gc",  "--config-path=/app/data/config/config.json"]
-

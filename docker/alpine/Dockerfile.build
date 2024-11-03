@@ -1,8 +1,9 @@
 #-----------------BUILDER-----------------
 #-----------------------------------------
 FROM node:18-alpine3.17 AS builder
-RUN apk add --update-cache --repository https://alpine.global.ssl.fastly.net/alpine/v3.17/community/ \
-  python3 build-base sqlite-dev sqlite-libs imagemagick-dev libraw-dev vips-dev vips-heif vips-magick fftw-dev gcc g++ make libc6-compat && ln -snf /usr/bin/python3 /usr/bin/python
+RUN apk add --no-cache --repository https://alpine.global.ssl.fastly.net/alpine/v3.17/community/ \
+  python3 build-base sqlite-dev sqlite-libs imagemagick-dev libraw-dev vips-dev vips-heif vips-magick fftw-dev gcc g++ make libc6-compat && ln -snf /usr/bin/python3 /usr/bin/python && \
+  rm /var/cache/apk/*
 COPY pigallery2-release /app
 WORKDIR /app
 RUN npm install --unsafe-perm  --fetch-timeout=90000
@@ -26,10 +27,10 @@ ENV NODE_ENV=production \
     PI_DOCKER=true
 
 EXPOSE 80
-RUN apk add --update-cache --repository https://alpine.global.ssl.fastly.net/alpine/v3.17/community/ \
-    vips vips-cpp vips-heif vips-magick ffmpeg
+RUN apk add --no-cache --repository https://alpine.global.ssl.fastly.net/alpine/v3.17/community/ \
+    vips vips-cpp vips-heif vips-magick ffmpeg && \
+    rm /var/cache/apk/*
 COPY --from=builder /app /app
-VOLUME ["/app/data/config", "/app/data/db", "/app/data/images", "/app/data/tmp"]
 
 # Run build time diagnostics to make sure the app would work after build is finished
 RUN ["node", "./src/backend/index", "--expose-gc",  "--run-diagnostics", "--config-path=/app/diagnostics-config.json", "--Server-Log-level=silly"]
@@ -40,4 +41,3 @@ HEALTHCHECK --interval=40s --timeout=30s --retries=3 --start-period=60s \
 # after a extensive job (like video converting), pigallery calls gc, to clean up everthing as fast as possible
 # Exec form entrypoint is need otherwise (using shell form) ENV variables are not properly passed down to the app
 ENTRYPOINT ["node", "./src/backend/index", "--expose-gc",  "--config-path=/app/data/config/config.json"]
-
