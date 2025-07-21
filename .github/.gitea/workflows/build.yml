@@ -1,0 +1,46 @@
+name: pigallery2
+on: [push]
+
+# 工作流程，可包含多个作业
+jobs:
+  # 作业1名称
+  pigallery2-Gitea-Actions:
+    # 指定的运行器环境
+    runs-on: node-lts
+
+    # 作业包含一系列任务，称为 steps
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      - name: Install dependencies
+        run: npm install --unsafe-perm
+      - name: Build with Npm create-release
+        run: npm run create-release -- --skip-opt-packages=ffmpeg-static,ffprobe-static --force-opt-packages
+      - uses: actions/upload-artifact@v3
+        with:
+          name: pigallery2-release
+          path: release
+  build-dockerx:
+    runs-on: node-lts
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - uses: actions/download-artifact@v3
+        with:
+          name: pigallery2-release
+          path: pigallery2-release
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v3
+      #build镜像并push到中央仓库中
+      - name: Build and push
+        id: docker_build
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: Dockerfile.build
+          push: true
+          tags: k2.xuthus83.cn:6001/pigallery2:latest          
